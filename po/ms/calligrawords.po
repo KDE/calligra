@@ -1,0 +1,6710 @@
+# translation of kword.po to Malay
+# Muhammad Najmi bin Ahmad Zabidi <najmi.zabidi@gmail.com>, 2004.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kword\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"PO-Revision-Date: 2006-10-05 19:47+0800\n"
+"Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
+"Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
+"Language: ms\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.3.1\n"
+"Plural-Forms: nplurals=2; plural=1;\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, fuzzy, kde-format
+msgid "&File"
+msgstr "&Tapis:"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "&Nota Hujung"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "&Baru"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, kde-format
+msgid "&Display Mode"
+msgstr "Mo&d Paparan"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Semantics"
+msgstr "Statistik"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, fuzzy, kde-format
+#| msgid "Style:"
+msgid "S&tyles"
+msgstr "Gaya:"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "Seting Pelbagai"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "Periksa ejaan"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "Isih Teks"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, kde-format
+msgid "Spell Check Result"
+msgstr "Keputusan Semak Eja"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, kde-format
+msgid "Change Variable To"
+msgstr "Ubah Variabel Ke"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr ""
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+#, fuzzy
+#| msgid "Framestyle:"
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "Gaya Bingkai:"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+#, fuzzy
+#| msgid "Insert Page"
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "Selitkan Halaman"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#, fuzzy
+#| msgid "Frame Properties"
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "Ciri Bingkai"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+#, fuzzy
+#| msgid "Create Text Frame"
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Cipta Bingkai Teks"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, fuzzy, kde-format
+#| msgid "Frame is inline"
+msgid "Baseline"
+msgstr "Bingkai dalam keadaan sebaris"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, fuzzy, kde-format
+msgid "Character"
+msgstr "Cipta Jadual"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, kde-format
+msgid "Row"
+msgstr "Baris"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, fuzzy, kde-format
+msgid "Page (entire) area"
+msgstr "Kursor dalam kawasan yang dilindungi"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, fuzzy, kde-format
+msgid "Page text area"
+msgstr "Kursor dalam kawasan yang dilindungi"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Paragraph area"
+msgstr "Perenggan"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings"
+msgid "Paragraph text area"
+msgstr "Seting Perenggan"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, fuzzy, kde-format
+msgid "Left page border"
+msgstr "Ubah Bingkai Sempadan Kiri"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, fuzzy, kde-format
+msgid "Right page border"
+msgstr "Ubah Bingkai Sempadan Kanan"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, fuzzy, kde-format
+msgid "Right paragraph border"
+msgstr "Ubah Bingkai Sempadan Kanan"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, fuzzy, kde-format
+msgid "Left paragraph border"
+msgstr "Ubah Bingkai Sempadan Kiri"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Positioning"
+msgstr "Garis Menegak"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, fuzzy, kde-format
+#| msgid "Left-Align Text"
+msgid "Top align with:"
+msgstr "Jajarkan Teks Ke kiri"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, fuzzy, kde-format
+#| msgid "Left-Align Text"
+msgid "Center align with:"
+msgstr "Jajarkan Teks Ke kiri"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, fuzzy, kde-format
+#| msgid "Left-Align Text"
+msgid "Bottom align with:"
+msgstr "Jajarkan Teks Ke kiri"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, fuzzy, kde-format
+#| msgid "From:"
+msgid "from:"
+msgstr "Daripada:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Positioning"
+msgstr "Garis Mendatar"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, fuzzy, kde-format
+#| msgid "Left-Align Text"
+msgid "Left align with:"
+msgstr "Jajarkan Teks Ke kiri"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, fuzzy, kde-format
+#| msgid "Right-Align Text"
+msgid "Right align with:"
+msgstr "Jajarkan Teks Ke kanan"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "C&onfigure..."
+msgid "Configure"
+msgstr "&Konfigur..."
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr "Pelbagai"
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Grid 1"
+msgid "Grid"
+msgstr "Grid 1"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, fuzzy, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Dokumen "
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, kde-format
+msgid "Document Settings"
+msgstr "Seting Dokumen"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, kde-format
+msgid "Create New Bookmark"
+msgstr "Cipta Tanda Buku Baru"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+"Tanda buku membenarkan anda melangkau antara bahagian dalam dokumen anda. \n"
+"Sila sediakan nama tanda buku anda. "
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "Nama:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, fuzzy, kde-format
+msgid "Columns:"
+msgstr "Kolum"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, fuzzy, kde-format
+#| msgid "Default column spacing:"
+msgid "Column spacing:"
+msgstr "Jarak lajur piawai:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, fuzzy, kde-format
+#| msgid "Fra&mes"
+msgid "frameset"
+msgstr "Kerang&ka"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, fuzzy, kde-format
+msgid "No framesets in document"
+msgstr "Papar teks dokumen sahaja."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "Nama set bingkai:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, fuzzy, kde-format
+#| msgid "Create a new frameset"
+msgid "Create a new frameset:"
+msgstr "Cipta set bingkai baru"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, fuzzy, kde-format
+#| msgid "Select existing frameset to connect frame to:"
+msgid "Select existing frameset to connect to:"
+msgstr "Pilih set bingkai sedia ada untuk menyambung bingkai ke:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "Nama Set Bingkai"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Smart Positioning"
+msgstr "Posisi"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, kde-format
+msgid "Text Run Around"
+msgstr "Teks Berada Di dalam"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "Sambung Bingkai Teks"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+#, fuzzy
+#| msgid "Frame Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "Ciri Bingkai"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, kde-format
+msgid "&Page"
+msgstr "&Halaman"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Para&graph"
+msgstr "Perenggan"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, fuzzy, kde-format
+msgid "&To Character"
+msgstr "Cipta Jadual"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, fuzzy, kde-format
+msgid "&As Character"
+msgstr "Cipta Jadual"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Alignment"
+msgstr "Garis Mendatar"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, fuzzy, kde-format
+#| msgctxt "Run Around"
+#| msgid "&Left"
+msgid "&Left"
+msgstr "&Di kiri"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, fuzzy, kde-format
+#| msgctxt "Position"
+#| msgid "Centered"
+msgid "&Center"
+msgstr "Tengah"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, fuzzy, kde-format
+#| msgctxt "Run Around"
+#| msgid "&Right"
+msgid "&Right"
+msgstr "&Di kanan"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Alignment"
+msgstr "Garis Menegak"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "&Bottom"
+msgstr "Bawah:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, fuzzy, kde-format
+#| msgid "Text Run Around"
+msgid "Text Wrap-around"
+msgstr "Teks Berada Di dalam"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run through this shape"
+msgstr "Teks akan berada &menerusi bingkai ini"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Skip below this shape"
+msgstr "Teks akan berada &menerusi bingkai ini"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on left side of this shape"
+msgstr "Teks akan berada &menerusi bingkai ini"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on right side of this shape"
+msgstr "Teks akan berada &menerusi bingkai ini"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on longest side of this shape"
+msgstr "Teks akan berada &menerusi bingkai ini"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on both sides of this shape"
+msgstr "Teks akan berada &menerusi bingkai ini"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, fuzzy, kde-format
+msgid "Distance Between Shape and Text:"
+msgstr "Jarak Antara Bingkai && Teks (%1)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, fuzzy, kde-format
+msgid "Columns"
+msgstr "Kolum"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, fuzzy, kde-format
+#| msgid "Style:"
+msgid "Style"
+msgstr "Gaya:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, fuzzy, kde-format
+#| msgid "Closing"
+msgid "Clone"
+msgstr "Penutup"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, fuzzy, kde-format
+msgid "Delete"
+msgstr "Hapuskan Baris"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+#, fuzzy
+#| msgid "Framestyle:"
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "Gaya Bingkai:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, fuzzy, kde-format
+#| msgid "Framestyle:"
+msgid "Clone Page Style"
+msgstr "Gaya Bingkai:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left by:"
+msgstr "Kiri:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right by:"
+msgstr "Kanan:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, fuzzy, kde-format
+msgid "&Rename"
+msgstr "&Namakan Semula"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, fuzzy, kde-format
+msgid "&Delete"
+msgstr "Hapuskan Baris"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Namakan Semula Penanda Buku"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, fuzzy, kde-format
+#| msgid ""
+#| "A frameset with the name '%1' already exists. Please enter another name."
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr "Set bingkai dengan nama '%1' sudah wujud. Sila masukkan nama lain."
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, kde-format
+msgid "Select Bookmark"
+msgstr "Pilih Tanda Buku"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "Geometri"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, fuzzy, kde-format
+#| msgid "Protect Size"
+msgid "Page Size && Margins"
+msgstr "Lindungi Saiz"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, fuzzy, kde-format
+msgid "Create"
+msgstr "Cipta Jadual"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, fuzzy, kde-format
+#| msgid "Salutation"
+msgid "Navigation"
+msgstr "Salam pengenalan"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+#| msgid "&Page"
+msgid "Page #"
+msgstr "&Halaman"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+#| msgid "Instructions"
+msgid "Section"
+msgstr "Arahan"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr ""
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "Statistik"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "Kata:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "Ayat:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "Suku kata:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (spaces):"
+msgstr "Aksara termasuk ruang:"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (no spaces):"
+msgstr "Aksara termasuk ruang:"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr "Baris:"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, fuzzy, kde-format
+#| msgid "Flesch reading ease:"
+msgid "Flesch reading ease"
+msgstr "Kesenangan membaca Flesch:"
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East asian characters:"
+msgstr "&Memformatkan Aksara"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, fuzzy, kde-format
+#| msgid "Words:"
+msgid "Words"
+msgstr "Kata:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, fuzzy, kde-format
+#| msgid "Sentences:"
+msgid "Sentences"
+msgstr "Ayat:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, fuzzy, kde-format
+#| msgid "Syllables:"
+msgid "Syllables"
+msgstr "Suku kata:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, fuzzy, kde-format
+#| msgid "Lines:"
+msgid "Lines"
+msgstr "Baris:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, fuzzy, kde-format
+#| msgid "Characters without spaces:"
+msgid "Characters With Spaces"
+msgstr "Aksara tanpa ruang:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, fuzzy, kde-format
+#| msgid "Characters without spaces:"
+msgid "Characters without spaces"
+msgstr "Aksara tanpa ruang:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East Asian characters"
+msgstr "&Memformatkan Aksara"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, fuzzy, kde-format
+#| msgid "Flesch reading ease:"
+msgid "Flesch Reading Ease"
+msgstr "Kesenangan membaca Flesch:"
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "Piawai"
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "Kepala 1"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "Kepala 2"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "Kepala 3"
+
+#: part/i18n/stylenames.cpp:12
+#, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr " Senarai Terhitung"
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "Senarai Berabjad"
+
+#: part/i18n/stylenames.cpp:14
+#, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "Senarai Bulet"
+
+#: part/i18n/stylenames.cpp:15
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "Tajuk Kandungan"
+
+#: part/i18n/stylenames.cpp:16
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "Kepala Kandungan 1"
+
+#: part/i18n/stylenames.cpp:17
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "Kepala Kandungan 2"
+
+#: part/i18n/stylenames.cpp:18
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "Kepala Kandungan 3"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "Tajuk Dokumen"
+
+#: part/i18n/stylenames.cpp:20
+#, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "Pengepala"
+
+#: part/i18n/stylenames.cpp:21
+#, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "Pengaki"
+
+#: part/i18n/stylenames.cpp:24
+#, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "Biasa"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "Sempadan 1"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "Sempadan 2"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "Sempadan 3"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "Baris"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "Lajur"
+
+#: part/i18n/stylenames.cpp:30
+#, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "Kelabu Muda"
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "Kelabu Tua"
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "Hitam"
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "Biru Muda"
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "Biru Tua"
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "Merah"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "Kuning"
+
+#: part/i18n/stylenames.cpp:37
+#, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "Berwarna-warni"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "Kebiruan"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr " Ringkas 1"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr " Ringkas 2"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "Ringkas 3"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "Pengepala 1"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr " Pengepala 2"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "Pengepala 3"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "Pengepala 4"
+
+#: part/i18n/stylenames.cpp:50
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "Lajur"
+
+#: part/i18n/stylenames.cpp:51
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "Lajur"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "Grid 1"
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "Grid 2"
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "Grid 3"
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "Pengepala Kelabu"
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "Pengepala Biru"
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "Biru Tradisional"
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "Kelabu Tradisional"
+
+#: part/i18n/stylenames.cpp:59
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "Biru Atas dan Bawah"
+
+#: part/i18n/stylenames.cpp:60
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "Kelabu Atas dan Bawah"
+
+#: part/KWAboutData.h:20
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "Pemproses Kata KOffice"
+
+#: part/KWAboutData.h:22
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgid "Word processor"
+msgstr "Pemproses Kata KOffice"
+
+#: part/KWAboutData.h:24
+#, fuzzy, kde-format
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "(c) 1998-2005, KWord Team"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr ""
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr ""
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr ""
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr ""
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr ""
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: part/KWAboutData.h:37
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Formatting stuff"
+msgstr "&Memformatkan Aksara"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, fuzzy, kde-format
+msgid "Filter"
+msgstr "&Tapis:"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistics docker"
+msgstr "Statistik"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, fuzzy, kde-format
+#| msgid "Footnotes"
+msgid "Foot and endnotes"
+msgstr "Nota Kaki"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr ""
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, fuzzy, kde-format
+#| msgid "&Style Manager"
+msgid "Style Manager"
+msgstr "Pengurus &Gaya"
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr ""
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr ""
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr ""
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr ""
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, fuzzy, kde-format
+#| msgid "Sorting Order"
+msgid "ODF Support"
+msgstr "Tertib Isih"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr ""
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr ""
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr ""
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr ""
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr ""
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr ""
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "KFormula"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr ""
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr ""
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr ""
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr ""
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr ""
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr ""
+
+#: part/KWAboutData.h:65
+#, fuzzy, kde-format
+#| msgid "Endnotes"
+msgid "Enno Bartels"
+msgstr "Nota Hujung"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr ""
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr ""
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page break icon"
+msgstr "Pemisah Halaman"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "MIMOS"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "opensource@mimos.my"
+
+#: part/KWDocument.cpp:495
+#, fuzzy, kde-format
+#| msgid "Copy%1-%2"
+msgid "Copy"
+msgstr "Salin%1-%2"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgid "Standard"
+msgstr "Piawai"
+
+#: part/KWDocument.cpp:546
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Document Title"
+msgid "Document Title"
+msgstr "Tajuk Dokumen"
+
+#: part/KWDocument.cpp:553
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 1"
+msgid "Head 1"
+msgstr "Kepala 1"
+
+#: part/KWDocument.cpp:559
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 2"
+msgid "Head 2"
+msgstr "Kepala 2"
+
+#: part/KWDocument.cpp:565
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 3"
+msgid "Head 3"
+msgstr "Kepala 3"
+
+#: part/KWDocument.cpp:571
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Bullet List"
+msgid "Bullet List"
+msgstr "Senarai Bulet"
+
+#: part/KWGui.cpp:69
+#, kde-format
+msgid "Tools"
+msgstr ""
+
+#: part/KWOdfLoader.cpp:83
+#, fuzzy, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr "Dokumen OASIS tak sah. Tiada teg office:isi ditemui"
+
+#: part/KWOdfLoader.cpp:95
+#, fuzzy, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr "Dokumen OASIS tak sah. Tiada teg office:isi ditemui"
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "Piawai"
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:36
+#, fuzzy, kde-format
+#| msgid "Save Failed"
+msgid "Saved"
+msgstr "Simpan Gagal"
+
+#: part/KWStatusBar.cpp:37
+#, fuzzy, kde-format
+msgid "Page %1 of %2"
+msgstr "Halaman %1/%2"
+
+#: part/KWStatusBar.cpp:38
+#, fuzzy, kde-format
+msgid "Page %1-%2 of %3"
+msgstr "Halaman %1/%2"
+
+#: part/KWStatusBar.cpp:39
+#, fuzzy, kde-format
+#| msgid "Lines:"
+msgid "Line %1"
+msgstr "Baris:"
+
+#: part/KWStatusBar.cpp:124
+#, fuzzy, kde-format
+msgid "Page Number"
+msgstr "Nombor halaman mula:"
+
+#: part/KWStatusBar.cpp:137
+#, fuzzy, kde-format
+#| msgid "Number"
+msgid "Line Number"
+msgstr "Nombor"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+#| msgid "Framestyle:"
+msgid "Change the page style"
+msgstr "Gaya Bingkai:"
+
+#: part/KWStatusBar.cpp:155
+#, fuzzy, kde-format
+#| msgid "Framestyle:"
+msgid "Page Style"
+msgstr "Gaya Bingkai:"
+
+#: part/KWStatusBar.cpp:169
+#, fuzzy, kde-format
+#| msgid "Protect Size"
+msgid "Page Size"
+msgstr "Lindungi Saiz"
+
+#: part/KWStatusBar.cpp:184
+#, kde-format
+msgid "Saved/Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:197
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr ""
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr ""
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Frame Properties"
+msgid "Shape Properties..."
+msgstr "Ciri Bingkai"
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr ""
+
+#: part/KWView.cpp:271
+#, fuzzy, kde-format
+#| msgid "&Create Template From Document..."
+msgid "Create Template From Document..."
+msgstr "&Cipta Templat Dari Dokumen..."
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr "Simpan dokumen ini dan gunakannya kemudian sebagai templat"
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+"Anda boleh simpan dokumen ini sebagai templat.<br><br>Anda boleh gunakan "
+"templat baru ini sebagai titik mula untuk dokumen lain. "
+
+#: part/KWView.cpp:292
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Show Formatting Characters"
+msgstr "&Memformatkan Aksara"
+
+#: part/KWView.cpp:298
+#, fuzzy, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr "Toggel paparan aksara tak cetak."
+
+#: part/KWView.cpp:299
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of non-printing characters.<br><br>When this is "
+#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#| "printing characters."
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+"Toggel paparan aksara tak cetak.<br><br>Apabila ini diaktifkan, KWord "
+"memaparkan tab, jarak, kembalian penyorong dan aksara tak cetak lain kepada "
+"anda."
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr ""
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr ""
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+
+#: part/KWView.cpp:310
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Text Shape Borders"
+msgstr "Konfigur Sempadan Jadual"
+
+#: part/KWView.cpp:311
+#, fuzzy, kde-format
+msgid "Turns the border display on and off"
+msgstr "Buka dan tutup paparan sempadan."
+
+#: part/KWView.cpp:317
+#, fuzzy, kde-format
+#| msgid ""
+#| "Turns the border display on and off.<br><br>The borders are never "
+#| "printed. This option is useful to see how the document will appear on the "
+#| "printed page."
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+"Buka dan tutup paparan sempadan.<br><br>Sempadan tidak akan dicetak. Pilihan "
+"ini berguna untuk melihat bagaimana rupa dokumen pada halaman bercetak. "
+
+#: part/KWView.cpp:319
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Table Borders"
+msgstr "Konfigur Sempadan Jadual"
+
+#: part/KWView.cpp:325
+#, fuzzy, kde-format
+msgid "Toggle the display of table borders"
+msgstr "Toggel paparan aksara tak cetak."
+
+#: part/KWView.cpp:326
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of non-printing characters.<br><br>When this is "
+#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#| "printing characters."
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+"Toggel paparan aksara tak cetak.<br><br>Apabila ini diaktifkan, KWord "
+"memaparkan tab, jarak, kembalian penyorong dan aksara tak cetak lain kepada "
+"anda."
+
+#: part/KWView.cpp:328
+#, fuzzy, kde-format
+msgid "Show Section Bounds"
+msgstr "Ubah pilihan autopembetulan."
+
+#: part/KWView.cpp:334
+#, fuzzy, kde-format
+msgid "Toggle the display of section bounds"
+msgstr "Toggel paparan aksara tak cetak."
+
+#: part/KWView.cpp:335
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of non-printing characters.<br><br>When this is "
+#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#| "printing characters."
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+"Toggel paparan aksara tak cetak.<br><br>Apabila ini diaktifkan, KWord "
+"memaparkan tab, jarak, kembalian penyorong dan aksara tak cetak lain kepada "
+"anda."
+
+#: part/KWView.cpp:337
+#, kde-format
+msgid "Show Rulers"
+msgstr "Papar Pembaris"
+
+#: part/KWView.cpp:339
+#, fuzzy, kde-format
+msgid "Shows or hides rulers"
+msgstr "Papar atau sembunyikan pembaris."
+
+#: part/KWView.cpp:340
+#, fuzzy, kde-format
+#| msgid ""
+#| "The rulers are the white measuring spaces top and left of the document. "
+#| "The rulers show the position and width of pages and of frames and can be "
+#| "used to position tabulators among others.<p>Uncheck this to disable the "
+#| "rulers from being displayed."
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+"Pembaris ialah ruang pengukur putih pada atas dan kiri dokumen. Pembaris "
+"memaparkan posisi serta lebar halaman dan bingkai. Antara lain ia boleh "
+"digunakan untuk menentukan posisi penjadual.<p>Nyahsemak ini untuk "
+"menyahaktifkan pembaris dari dipaparkan."
+
+#: part/KWView.cpp:351
+#, fuzzy, kde-format
+msgid "Snap to Grid"
+msgstr "Papar Pengaki"
+
+#: part/KWView.cpp:359
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Show Status Bar"
+msgstr "Papar bar &status"
+
+#: part/KWView.cpp:360
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Shows or hides the status bar"
+msgstr "Papar bar &status"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr ""
+
+#: part/KWView.cpp:374
+#, fuzzy, kde-format
+#| msgid "Import Styles..."
+msgid "Semantic Stylesheets..."
+msgstr "Import Gaya..."
+
+#: part/KWView.cpp:376
+#, fuzzy, kde-format
+#| msgid "Import Styles..."
+msgid "Modify and add semantic stylesheets"
+msgstr "Import Gaya..."
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+
+#: part/KWView.cpp:392
+#, fuzzy, kde-format
+#| msgid "C&onfigure..."
+msgid "Configure..."
+msgstr "&Konfigur..."
+
+#: part/KWView.cpp:401
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Page Layout..."
+msgstr "&Bentangan Halaman..."
+
+#: part/KWView.cpp:403
+#, fuzzy, kde-format
+msgid "Change properties of entire page"
+msgstr "Ubah ciri seluruh halaman."
+
+#: part/KWView.cpp:404
+#, fuzzy, kde-format
+#| msgid ""
+#| "Change properties of the entire page.<p>Currently you can change paper "
+#| "size, paper orientation, header and footer sizes, and column settings."
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+"Ubah ciri seluruh halaman.<p>Kini anda boleh ubah saiz kertas, orientasi "
+"kertas, saiz pengepala dan pengaki, dan seting lajur."
+
+#: part/KWView.cpp:407
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Create Header"
+msgstr "Cipta Bingkai Teks"
+
+#: part/KWView.cpp:413
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Create Footer"
+msgstr "Cipta Bingkai Teks"
+
+#: part/KWView.cpp:420
+#, fuzzy, kde-format
+#| msgid "Remove Comment"
+msgid "Show Comments"
+msgstr "Alih Keluar Komen"
+
+#: part/KWView.cpp:421
+#, fuzzy, kde-format
+msgid "Shows comments in the document"
+msgstr "Papar teks dokumen sahaja."
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr ""
+
+#: part/KWView.cpp:428
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Shows or hides word counting in status bar"
+msgstr "Papar bar &status"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, fuzzy, kde-format
+#| msgid "Protect Size"
+msgid "Page Setup"
+msgstr "Lindungi Saiz"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, fuzzy, kde-format
+#| msgid "Even Pages Footer"
+msgid "Header & Footer"
+msgstr "Pengaki Halaman Genap"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Page layout"
+msgstr "&Bentangan Halaman..."
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, fuzzy, kde-format
+#| msgid "New..."
+msgid "..."
+msgstr "Baru..."
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgctxt "Next search result"
+msgid "Next"
+msgstr "Selitkan Halaman"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, fuzzy, kde-format
+#| msgid "Preview"
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "Prapapar"
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, kde-format
+msgctxt "Search options"
+msgid "Options"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr "Gantikan Kata"
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr "Gantikan Kata"
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr "Gantikan Kata"
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgid "Replace"
+msgstr "Gantikan Kata"
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Pengepala Halaman Ganjil"
+
+#: part/Words.cpp:47
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Pengepala Halaman Genap"
+
+#: part/Words.cpp:49
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Pengaki Halaman Ganjil"
+
+#: part/Words.cpp:51
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Pengaki Halaman Genap"
+
+#: part/Words.cpp:53
+#, fuzzy, kde-format
+#| msgid "Plain text"
+msgid "Main text"
+msgstr "Teks mudah"
+
+#: part/Words.cpp:55
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgid "Other text"
+msgstr "Selitkan Halaman"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "&Halaman"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "Perenggan"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "Cipta Jadual"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "Cipta Jadual"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Garis Mendatar"
+
+#, fuzzy
+#~| msgctxt "Run Around"
+#~| msgid "&Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "&Di kiri"
+
+#, fuzzy
+#~| msgctxt "Position"
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Center"
+#~ msgstr "Tengah"
+
+#, fuzzy
+#~| msgctxt "Run Around"
+#~| msgid "&Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "&Di kanan"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Alignment"
+#~ msgstr "Garis Menegak"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "Bawah:"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Wrap-around"
+#~ msgstr "Teks Berada Di dalam"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "Teks akan berada &menerusi bingkai ini"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "Teks akan berada &menerusi bingkai ini"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "Teks akan berada &menerusi bingkai ini"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "Teks akan berada &menerusi bingkai ini"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "Teks akan berada &menerusi bingkai ini"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "Teks akan berada &menerusi bingkai ini"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance Between Shape and Text:"
+#~ msgstr "Jarak Antara Bingkai && Teks (%1)"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "Garis Menegak"
+
+#, fuzzy
+#~| msgid "Left-Align Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top align with:"
+#~ msgstr "Jajarkan Teks Ke kiri"
+
+#, fuzzy
+#~| msgid "Left-Align Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center align with:"
+#~ msgstr "Jajarkan Teks Ke kiri"
+
+#, fuzzy
+#~| msgid "Left-Align Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom align with:"
+#~ msgstr "Jajarkan Teks Ke kiri"
+
+#, fuzzy
+#~| msgid "From:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "Daripada:"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "Garis Mendatar"
+
+#, fuzzy
+#~| msgid "Left-Align Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left align with:"
+#~ msgstr "Jajarkan Teks Ke kiri"
+
+#, fuzzy
+#~| msgid "Right-Align Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right align with:"
+#~ msgstr "Jajarkan Teks Ke kanan"
+
+#, fuzzy
+#~| msgid "Name of frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "Nama set bingkai:"
+
+#, fuzzy
+#~| msgid "Create a new frameset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "Cipta set bingkai baru"
+
+#, fuzzy
+#~| msgid "Select existing frameset to connect frame to:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select existing frameset to connect to:"
+#~ msgstr "Pilih set bingkai sedia ada untuk menyambung bingkai ke:"
+
+#, fuzzy
+#~| msgid "Frameset Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "Nama Set Bingkai"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "&Namakan Semula"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "Hapuskan Baris"
+
+#, fuzzy
+#~| msgid ""
+#~| "Bookmarks allow you to jump between parts of your document.\n"
+#~| "Please provide the name of your bookmark."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Bookmarks allow you to jump between parts of your document.\n"
+#~ "Please provide the name of your bookmark."
+#~ msgstr ""
+#~ "Tanda buku membenarkan anda melangkau antara bahagian dalam dokumen "
+#~ "anda. \n"
+#~ "Sila sediakan nama tanda buku anda. "
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Nama:"
+
+#, fuzzy
+#~| msgid "Protect Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "Lindungi Saiz"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "Kiri:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "Kanan:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Kolum"
+
+#, fuzzy
+#~| msgid "Default column spacing:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "Jarak lajur piawai:"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "Kata:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "Ayat:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "Suku kata:"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Baris:"
+
+#, fuzzy
+#~| msgid "Characters without spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "Aksara tanpa ruang:"
+
+#, fuzzy
+#~| msgid "Characters without spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "Aksara tanpa ruang:"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "&Memformatkan Aksara"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch Reading Ease"
+#~ msgstr "Kesenangan membaca Flesch:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Tapis:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Nota Hujung"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Baru"
+
+#, fuzzy
+#~| msgid "&Display Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "Mo&d Paparan"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "Statistik"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&tyles"
+#~ msgstr "Gaya:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Seting Pelbagai"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "Periksa ejaan"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Isih Teks"
+
+#, fuzzy
+#~| msgid "Spell Check Result"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "Keputusan Semak Eja"
+
+#, fuzzy
+#~| msgid "Change Variable To"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "Ubah Variabel Ke"
+
+#, fuzzy
+#~| msgid "New..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "Baru..."
+
+#, fuzzy
+#~| msgid "Frame is inline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "Bingkai dalam keadaan sebaris"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "Cipta Jadual"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Baris"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "Kursor dalam kawasan yang dilindungi"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "Perenggan"
+
+#, fuzzy
+#~| msgid "Paragraph Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "Seting Perenggan"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "Ubah Bingkai Sempadan Kiri"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "Ubah Bingkai Sempadan Kanan"
+
+#, fuzzy
+#~| msgid "C&onfigure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "&Konfigur..."
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Pelbagai"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Grid 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokumen "
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Seting Dokumen"
+
+#, fuzzy
+#~| msgid "Create New Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "Cipta Tanda Buku Baru"
+
+#, fuzzy
+#~| msgid "Fra&mes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "Kerang&ka"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "Posisi"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Run Around"
+#~ msgstr "Teks Berada Di dalam"
+
+#, fuzzy
+#~| msgid "Connect Text Frames"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "Sambung Bingkai Teks"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "Kolum"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Gaya:"
+
+#, fuzzy
+#~| msgid "Closing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "Penutup"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Hapuskan Baris"
+
+#, fuzzy
+#~| msgid "Framestyle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "Gaya Bingkai:"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Namakan Semula Penanda Buku"
+
+#, fuzzy
+#~| msgid ""
+#~| "A frameset with the name '%1' already exists. Please enter another name."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr "Set bingkai dengan nama '%1' sudah wujud. Sila masukkan nama lain."
+
+#, fuzzy
+#~| msgid "Select Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "Pilih Tanda Buku"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Geometri"
+
+#, fuzzy
+#~| msgid "Salutation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "Salam pengenalan"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "&Halaman"
+
+#, fuzzy
+#~| msgid "Instructions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "Arahan"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "Statistik"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "Kata:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "Ayat:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "Suku kata:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "Aksara termasuk ruang:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "Aksara termasuk ruang:"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "Baris:"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch reading ease"
+#~ msgstr "Kesenangan membaca Flesch:"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "&Memformatkan Aksara"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Standard"
+#~ msgstr "Piawai"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "Kepala 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "Kepala 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "Kepala 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Enumerated List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr " Senarai Terhitung"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Alphabetical List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "Senarai Berabjad"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "Senarai Bulet"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "Tajuk Kandungan"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "Kepala Kandungan 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "Kepala Kandungan 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "Kepala Kandungan 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "Tajuk Dokumen"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "Pengepala"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "Pengaki"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Plain"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "Biasa"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "Sempadan 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "Sempadan 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "Sempadan 3"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "Baris"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "Kolum"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "Kelabu Muda"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "Kelabu Tua"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "Hitam"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "Biru Muda"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "Biru Tua"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "Merah"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "Kuning"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Colorful"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "Berwarna-warni"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bluish"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "Kebiruan"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr " Ringkas 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr " Ringkas 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "Ringkas 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "Pengepala 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr " Pengepala 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "Pengepala 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 4"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "Pengepala 4"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "Lajur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "Lajur"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "Grid 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "Grid 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "Grid 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "Pengepala Kelabu"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "Pengepala Biru"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "Biru Tradisional"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "Kelabu Tradisional"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "Biru Atas dan Bawah"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "Kelabu Atas dan Bawah"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "Pemproses Kata KOffice"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "Pemproses Kata KOffice"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "(c) 1998-2005, KWord Team"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "&Memformatkan Aksara"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "&Tapis:"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "Statistik"
+
+#, fuzzy
+#~| msgid "Footnotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "Nota Kaki"
+
+#, fuzzy
+#~| msgid "&Style Manager"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "Pengurus &Gaya"
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "KFormula"
+
+#, fuzzy
+#~| msgid "Endnotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "Nota Hujung"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "Pemisah Halaman"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "MIMOS"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "opensource@mimos.my"
+
+#, fuzzy
+#~| msgid "Copy%1-%2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Salin%1-%2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Piawai"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "Tajuk Dokumen"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "Kepala 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "Kepala 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "Kepala 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "Senarai Bulet"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr "Dokumen OASIS tak sah. Tiada teg office:isi ditemui"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr "Dokumen OASIS tak sah. Tiada teg office:isi ditemui"
+
+#, fuzzy
+#~| msgid "Save Failed"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "Simpan Gagal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "Halaman %1/%2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "Halaman %1/%2"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "Baris:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Nombor halaman mula:"
+
+#, fuzzy
+#~| msgid "Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "Nombor"
+
+#, fuzzy
+#~| msgid "Framestyle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "Gaya Bingkai:"
+
+#, fuzzy
+#~| msgid "Protect Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "Lindungi Saiz"
+
+#, fuzzy
+#~| msgid "Frame Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "Ciri Bingkai"
+
+#, fuzzy
+#~| msgid "&Create Template From Document..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template From Document..."
+#~ msgstr "&Cipta Templat Dari Dokumen..."
+
+#, fuzzy
+#~| msgid "Save this document and use it later as a template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save this document and use it later as a template"
+#~ msgstr "Simpan dokumen ini dan gunakannya kemudian sebagai templat"
+
+#, fuzzy
+#~| msgid ""
+#~| "You can save this document as a template.<br><br>You can use this new "
+#~| "template as a starting point for another document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "You can save this document as a template.<br><br>You can use this new "
+#~ "template as a starting point for another document."
+#~ msgstr ""
+#~ "Anda boleh simpan dokumen ini sebagai templat.<br><br>Anda boleh gunakan "
+#~ "templat baru ini sebagai titik mula untuk dokumen lain. "
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "&Memformatkan Aksara"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "Toggel paparan aksara tak cetak."
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br><br>When this is "
+#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~ "enabled, Words shows you tabs, spaces, carriage returns and other non-"
+#~ "printing characters."
+#~ msgstr ""
+#~ "Toggel paparan aksara tak cetak.<br><br>Apabila ini diaktifkan, KWord "
+#~ "memaparkan tab, jarak, kembalian penyorong dan aksara tak cetak lain "
+#~ "kepada anda."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Turns the border display on and off"
+#~ msgstr "Buka dan tutup paparan sempadan."
+
+#, fuzzy
+#~| msgid ""
+#~| "Turns the border display on and off.<br><br>The borders are never "
+#~| "printed. This option is useful to see how the document will appear on "
+#~| "the printed page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Turns the border display on and off.<br/><br/>The borders are never "
+#~ "printed. This option is useful to see how the document will appear on the "
+#~ "printed page."
+#~ msgstr ""
+#~ "Buka dan tutup paparan sempadan.<br><br>Sempadan tidak akan dicetak. "
+#~ "Pilihan ini berguna untuk melihat bagaimana rupa dokumen pada halaman "
+#~ "bercetak. "
+
+#, fuzzy
+#~| msgid "Configure Table Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "Konfigur Sempadan Jadual"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of table borders"
+#~ msgstr "Toggel paparan aksara tak cetak."
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br><br>When this is "
+#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+#~ "shows you any invisible table borders with a thin gray line."
+#~ msgstr ""
+#~ "Toggel paparan aksara tak cetak.<br><br>Apabila ini diaktifkan, KWord "
+#~ "memaparkan tab, jarak, kembalian penyorong dan aksara tak cetak lain "
+#~ "kepada anda."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of section bounds"
+#~ msgstr "Toggel paparan aksara tak cetak."
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br><br>When this is "
+#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+#~ "section bounds will be indicated with a thin gray horizontal brackets."
+#~ msgstr ""
+#~ "Toggel paparan aksara tak cetak.<br><br>Apabila ini diaktifkan, KWord "
+#~ "memaparkan tab, jarak, kembalian penyorong dan aksara tak cetak lain "
+#~ "kepada anda."
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Papar Pembaris"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Papar atau sembunyikan pembaris."
+
+#, fuzzy
+#~| msgid ""
+#~| "The rulers are the white measuring spaces top and left of the document. "
+#~| "The rulers show the position and width of pages and of frames and can be "
+#~| "used to position tabulators among others.<p>Uncheck this to disable the "
+#~| "rulers from being displayed."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The rulers are the white measuring spaces top and left of the document. "
+#~ "The rulers show the position and width of pages and of frames and can be "
+#~ "used to position tabulators among others.<p>Uncheck this to disable the "
+#~ "rulers from being displayed.</p>"
+#~ msgstr ""
+#~ "Pembaris ialah ruang pengukur putih pada atas dan kiri dokumen. Pembaris "
+#~ "memaparkan posisi serta lebar halaman dan bingkai. Antara lain ia boleh "
+#~ "digunakan untuk menentukan posisi penjadual.<p>Nyahsemak ini untuk "
+#~ "menyahaktifkan pembaris dari dipaparkan."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Papar Pengaki"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Papar bar &status"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Papar bar &status"
+
+#, fuzzy
+#~| msgid "Import Styles..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantic Stylesheets..."
+#~ msgstr "Import Gaya..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Cipta Jadual"
+
+#, fuzzy
+#~| msgid "C&onfigure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "&Konfigur..."
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "&Bentangan Halaman..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "Ubah ciri seluruh halaman."
+
+#, fuzzy
+#~| msgid ""
+#~| "Change properties of the entire page.<p>Currently you can change paper "
+#~| "size, paper orientation, header and footer sizes, and column settings."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Change properties of the entire page.<p>Currently you can change paper "
+#~ "size, paper orientation, header and footer sizes, and column settings.</p>"
+#~ msgstr ""
+#~ "Ubah ciri seluruh halaman.<p>Kini anda boleh ubah saiz kertas, orientasi "
+#~ "kertas, saiz pengepala dan pengaki, dan seting lajur."
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "Cipta Bingkai Teks"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "Cipta Bingkai Teks"
+
+#, fuzzy
+#~| msgid "Remove Comment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Comments"
+#~ msgstr "Alih Keluar Komen"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows comments in the document"
+#~ msgstr "Papar teks dokumen sahaja."
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "Papar bar &status"
+
+#, fuzzy
+#~| msgid "Protect Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "Lindungi Saiz"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "Pengaki Halaman Genap"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "&Bentangan Halaman..."
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "Selitkan Halaman"
+
+#, fuzzy
+#~| msgid "Preview"
+#~ msgctxt "(qtundo-format) Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Prapapar"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Label for the Replace text input box"
+#~ msgid "Replace:"
+#~ msgstr "Gantikan Kata"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Replace the current match"
+#~ msgid "Replace"
+#~ msgstr "Gantikan Kata"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Replace all found matches"
+#~ msgid "Replace All"
+#~ msgstr "Gantikan Kata"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Gantikan Kata"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Pengepala Halaman Ganjil"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Pengepala Halaman Genap"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Pengaki Halaman Ganjil"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Pengaki Halaman Genap"
+
+#, fuzzy
+#~| msgid "Plain text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "Teks mudah"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "Selitkan Halaman"
+
+#, fuzzy
+#~ msgid "Book"
+#~ msgstr "&Tanda Buku..."
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "Pemproses Kata KOffice"
+
+#, fuzzy
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "(c) 1998-2005, KWord Team"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Select Cover Image..."
+#~ msgstr "Selitkan Halaman"
+
+#, fuzzy
+#~| msgid "Open Existing..."
+#~ msgid "Open..."
+#~ msgstr "Buka Semasa..."
+
+#, fuzzy
+#~| msgid "Open Link"
+#~ msgid "Open Cover"
+#~ msgstr "Buka Pautan"
+
+#, fuzzy
+#~| msgid "Import Style"
+#~ msgid "Import problem"
+#~ msgstr "Import Gaya"
+
+#, fuzzy
+#~| msgid "Completion"
+#~ msgid "Cover selection"
+#~ msgstr "Pelengkapan"
+
+#, fuzzy
+#~| msgid "Border Outline"
+#~ msgid "Outliner"
+#~ msgstr "Garis Luar Sempadan"
+
+#, fuzzy
+#~ msgid "Edit section"
+#~ msgstr "Isih Teks"
+
+#, fuzzy
+#~| msgid "Plain text"
+#~ msgid "Main"
+#~ msgstr "Teks mudah"
+
+#, fuzzy
+#~| msgid "Enter entry name:"
+#~ msgid "Enter actor's name here"
+#~ msgstr "Masukkan nama entri"
+
+#, fuzzy
+#~| msgid "Type"
+#~ msgid "Type:"
+#~ msgstr "Jenis"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Actor description:"
+#~ msgstr "Periksa ejaan"
+
+#, fuzzy
+#~| msgid "&Bold"
+#~ msgid "Bold"
+#~ msgstr "&Tebal"
+
+#, fuzzy
+#~| msgid "&Italic"
+#~ msgid "Italic"
+#~ msgstr "&Italik"
+
+#, fuzzy
+#~| msgid "&Underline"
+#~ msgid "Underline"
+#~ msgstr "&Garis bawah"
+
+#, fuzzy
+#~| msgid "Left-Align Text"
+#~ msgid "LeftAlign"
+#~ msgstr "Jajarkan Teks Ke kiri"
+
+#, fuzzy
+#~| msgid "Left-Align Text"
+#~ msgid "CenterAlign"
+#~ msgstr "Jajarkan Teks Ke kiri"
+
+#, fuzzy
+#~| msgid "Right-Align Text"
+#~ msgid "RightAlign"
+#~ msgstr "Jajarkan Teks Ke kanan"
+
+#, fuzzy
+#~ msgid "1st Edit"
+#~ msgstr "Isih Teks"
+
+#, fuzzy
+#~ msgid "2nd Edit"
+#~ msgstr "Isih Teks"
+
+#, fuzzy
+#~ msgid "3rd Edit"
+#~ msgstr "Isih Teks"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Author's section"
+#~ msgstr "Periksa ejaan"
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgid "Badge:"
+#~ msgstr "Mod &Halaman"
+
+#, fuzzy
+#~| msgid "Instructions"
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "Arahan"
+
+#~ msgid "File to open"
+#~ msgstr "Fail hendak dibuka"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "Cipta Bingkai Teks"
+
+#, fuzzy
+#~| msgid "Delete Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "Hapuskan Bingkai"
+
+#~ msgid "General"
+#~ msgstr "Am"
+
+#~ msgid "Protect size and position"
+#~ msgstr "Lindungi saiz dan posisi"
+
+#~ msgid "Position"
+#~ msgstr "Posisi"
+
+#~ msgid "Width:"
+#~ msgstr "Lebar:"
+
+#~ msgid "Height:"
+#~ msgstr "Tinggi:"
+
+#, fuzzy
+#~ msgid "Margins"
+#~ msgstr "Jidar (%1)"
+
+#~ msgid "Synchronize changes"
+#~ msgstr "Segerakkan perubahan"
+
+#~ msgid "Bottom:"
+#~ msgstr "Bawah:"
+
+#~ msgid "Top:"
+#~ msgstr "Atas:"
+
+#~ msgid "Right:"
+#~ msgstr "Kanan:"
+
+#~ msgid "Left:"
+#~ msgstr "Kiri:"
+
+#~ msgid "Create a new page"
+#~ msgstr "Cipta halaman baru"
+
+#~ msgid "Resize last frame"
+#~ msgstr "Saiz semula bingkai dahulu"
+
+#, fuzzy
+#~ msgid "Do not show the extra text"
+#~ msgstr "Jangan papar teks tambahan"
+
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "Sambung semula bingkai ke aliran semasa"
+
+#~ msgid "Do not create a followup frame"
+#~ msgstr "Jangan cipta bingkai susulan"
+
+#, fuzzy
+#~| msgid "Connect Frame"
+#~ msgid "Copy this Frame"
+#~ msgstr "Sambung Bingkai"
+
+#~ msgid "Protect content"
+#~ msgstr "Lindungi kandungan"
+
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "Bingkai adalah salinan bingkai sebelumnya"
+
+#~ msgid "Changes will be applied to all frames in frameset"
+#~ msgstr "Perubahan akan digunakan untuk semua bingkai dalam set bingkai"
+
+#~ msgid "Retain original aspect ratio"
+#~ msgstr "Kekalkan nisbah aspek asal"
+
+#, fuzzy
+#~| msgid "Select All Frames"
+#~ msgid "Select All Shapes"
+#~ msgstr "Pilih Semua Bingkai"
+
+#~ msgid "Create Linked Copy"
+#~ msgstr "Cipta Salinan Terpaut"
+
+#~ msgid "Create a copy of the current frame, always showing the same contents"
+#~ msgstr "Cipta salinan bingkai semasa, sentiasa paparkan kandungan yang sama"
+
+#~ msgid ""
+#~ "Create a copy of the current frame, that remains linked to it. This means "
+#~ "they always show the same contents: modifying the contents in such a "
+#~ "frame will update all its linked copies."
+#~ msgstr ""
+#~ "Cipta salinan bingkai semasa, yang masih lagi dipautkan padanya. Ini "
+#~ "bermakna ia sentiasa memaparkan kandungan yang sama: mengubah suai "
+#~ "kandungan dalam bingkai itu akan mengemaskinikan semua salinan yang "
+#~ "dipautkan padanya."
+
+#, fuzzy
+#~| msgid "Create Linked Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "Cipta Salinan Terpaut"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "Selitkan Halaman"
+
+#, fuzzy
+#~| msgid "Remove entry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "Alih keluar entri"
+
+#, fuzzy
+#~| msgid "&Bookmark..."
+#~ msgid "Bookmark..."
+#~ msgstr "&Tanda Buku..."
+
+#, fuzzy
+#~| msgid "Select &Bookmark..."
+#~ msgid "Select Bookmark..."
+#~ msgstr "Pilih &Tanda Buku..."
+
+#, fuzzy
+#~ msgid "Bookmark"
+#~ msgstr "&Tanda Buku..."
+
+#, fuzzy
+#~| msgid "Page %1"
+#~ msgid "Page %1/%2"
+#~ msgstr "Halaman %1"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgid "Characters (excluding spaces):"
+#~ msgstr "Aksara termasuk ruang:"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgid "Flesch Reading Ease:"
+#~ msgstr "Kesenangan membaca Flesch:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgid "Preferences"
+#~ msgstr "Ayat:"
+
+#, fuzzy
+#~| msgid "Automatic hyphenation"
+#~ msgid "Automatically update"
+#~ msgstr "Penyempangan automatik"
+
+#~ msgid "F&ormat"
+#~ msgstr "F&ormat"
+
+#~ msgid "Invalid document. No mimetype specified."
+#~ msgstr "Dokumen tak sah. Tiada jenis mime ditetapkan."
+
+#, fuzzy
+#~| msgid ""
+#~| "Invalid document. Expected mimetype application/x-kword or application/"
+#~| "vnd.kde.kword, got %1"
+#~ msgid ""
+#~ "Invalid document. Expected mimetype application/x-words or application/"
+#~ "vnd.kde.words, got %1"
+#~ msgstr ""
+#~ "Dokumen tak sah. Aplikasi/x-kword atau aplikasi/vnd.kde.kword jenis mime "
+#~ "yang dijangka, dapat %1"
+
+#~ msgid "Invalid document. Paper size: %1x%2"
+#~ msgstr "Dokumen tak sah. Saiz kertas: %1x%2"
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate footnote text"
+#~ msgstr "Tidak dapat mencipta objek pangkalan data"
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate note-text"
+#~ msgstr "Tidak dapat mencipta objek pangkalan data"
+
+#, fuzzy
+#~| msgid "Inline Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "Sebariskan Bingkai"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgid "Create Frame-clip"
+#~ msgstr "Cipta Bingkai Teks"
+
+#, fuzzy
+#~| msgid "Remove record"
+#~ msgid "Remove Frame-clip"
+#~ msgstr "Alih keluar rekod"
+
+#, fuzzy
+#~ msgid "Force the remainder of the text into the next page"
+#~ msgstr "Paksa masuk teks selebihnya ke dalam halaman berikutnya."
+
+#, fuzzy
+#~| msgid ""
+#~| "This inserts a non-printing character at the current cursor position. "
+#~| "All text after this point will be moved into the next page."
+#~ msgid "All text after this point will be moved into the next page."
+#~ msgstr ""
+#~ "Ini akan menyelitkan aksara tak cetak pada kedudukan kursor semasa. Semua "
+#~ "teks selepas titik ini akan dialihkan ke dalam halaman berikutnya. "
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Enable Document Headers"
+#~ msgstr "Buat Dokumen Luaran"
+
+#, fuzzy
+#~ msgid "Enable Document Footers"
+#~ msgstr "Buat Dokumen Dalaman"
+
+#, fuzzy
+#~| msgid "Change Link"
+#~ msgid "Change Tracking"
+#~ msgstr "Ubah Pautan"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "Kata:"
+
+#~ msgid "Number of pages:"
+#~ msgstr "Bilangan halaman:"
+
+#~ msgid "Number of frames:"
+#~ msgstr "Bilangan bingkai:"
+
+#~ msgid "Number of pictures:"
+#~ msgstr "Bilangan gambar:"
+
+#~ msgid "Number of tables:"
+#~ msgstr "Bilangan jadual:"
+
+#~ msgid "Text"
+#~ msgstr "Teks"
+
+#, fuzzy
+#~| msgid "&Include text from foot- and endnotes"
+#~ msgid "Include text from foot- and endnotes"
+#~ msgstr "&Termasuk teks dari nota kaki dan nota hujung"
+
+#~ msgid "Characters without spaces:"
+#~ msgstr "Aksara tanpa ruang:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgid "Characters incl. spaces"
+#~ msgstr "Aksara termasuk ruang:"
+
+#~ msgid "approximately %1"
+#~ msgstr "lebih kurang %1"
+
+#~ msgid "Sentence, word and letter counts for this document"
+#~ msgstr "Kiraan ayat, kata dan huruf untuk dokumen ini"
+
+#, fuzzy
+#~| msgid ""
+#~| "Information on the number of letters, words, syllables and sentences for "
+#~| "this document.<p>Evaluates readability using the Flesch reading score."
+#~ msgid ""
+#~ "Information on the number of letters, words, syllables and sentences for "
+#~ "this document.<p>Evaluates readability using the Flesch reading score.</p>"
+#~ msgstr ""
+#~ "Maklumat tentang bilangan huruf, kata, suku kata dan ayat untuk dokumen "
+#~ "ini.<p>Menilai kebolehbacaan dengan menggunakan skor bacaan Flesch."
+
+#, fuzzy
+#~ msgid "Shows and hides header display"
+#~ msgstr "Papar dan sembunyikan paparan pengepala."
+
+#, fuzzy
+#~| msgid ""
+#~| "Selecting this option toggles the display of headers in KWord."
+#~| "<br><br>Headers are special frames at the top of each page which can "
+#~| "contain page numbers or other information."
+#~ msgid ""
+#~ "Selecting this option toggles the display of headers in Words.<br/><br/"
+#~ ">Headers are special frames at the top of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Dengan memilih pilihan ini, paparan pengepala dalam KWord dapat ditoggel."
+#~ "<br><br>Pengepala ialah bingkai khas pada bahagian atas setiap halaman "
+#~ "yang mengandungi nombor halaman atau maklumat lain. "
+
+#, fuzzy
+#~ msgid "Shows and hides footer display"
+#~ msgstr "Papar dan sembunyikan paparan pengaki."
+
+#, fuzzy
+#~| msgid ""
+#~| "Selecting this option toggles the display of footers in KWord. "
+#~| "<br><br>Footers are special frames at the bottom of each page which can "
+#~| "contain page numbers or other information."
+#~ msgid ""
+#~ "Selecting this option toggles the display of footers in Words. <br/><br/"
+#~ ">Footers are special shapes at the bottom of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Dengan memilih pilihan ini, paparan pengaki dalam KWord dapat ditoggel."
+#~ "<br><br>Pengaki ialah bingkai khas pada bahagian bawah setiap halaman "
+#~ "yang mengandungi nombor halaman atau maklumat lain."
+
+#, fuzzy
+#~| msgid "Raise Frame"
+#~ msgid "Raise Shape"
+#~ msgstr "Naikkan Bingkai"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames"
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shape"
+#~ msgstr ""
+#~ "Naikkan bingkai yang sedang dipilih supaya ia berada di atas semua "
+#~ "bingkai lain"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames. This is only useful if frames overlap each other. If "
+#~| "multiple frames are selected they are all raised in turn."
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shapes. This is only useful if shapes overlap each other. If multiple "
+#~ "shapes are selected they are all raised in turn."
+#~ msgstr ""
+#~ "Naikkan bingkai yang sedang dipilih supaya ia berada di atas semua "
+#~ "bingkai lain. Ini hanya berguna jika bingkai bertindan antara satu dengan "
+#~ "lain. Jika bingkai berbilang dipilih, ia akan dinaikkan mengikut giliran."
+
+#, fuzzy
+#~| msgid "Lower Frame"
+#~ msgid "Lower Shape"
+#~ msgstr "Turunkan Bingkai"
+
+#, fuzzy
+#~| msgid ""
+#~| "Lower the currently selected frame so that it disappears under any frame "
+#~| "that overlaps it"
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it"
+#~ msgstr ""
+#~ "Turunkan bingkai yang sedang dipilih supaya ia berada di bawah mana-mana "
+#~ "bingkai yang bertindan dengannya."
+
+#, fuzzy
+#~| msgid ""
+#~| "Lower the currently selected frame so that it disappears under any frame "
+#~| "that overlaps it. If multiple frames are selected they are all lowered "
+#~| "in turn."
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it. If multiple shape are selected they are all lowered in "
+#~ "turn."
+#~ msgstr ""
+#~ "Turunkan bingkai yang sedang dipilih supaya ia berada di bawah mana-mana "
+#~ "bingkai yang bertindan dengannya. Jika bingkai berbilang dipilih, ia akan "
+#~ "diturunkan mengikut giliran."
+
+#~ msgid "Bring to Front"
+#~ msgstr "Bawa Ke depan"
+
+#~ msgid "Send to Back"
+#~ msgstr "Hantar Ke belakang"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgid "After last page"
+#~ msgstr "Pengepala Halaman Pertama"
+
+#, fuzzy
+#~| msgid "Framestyle:"
+#~ msgid "Page style:"
+#~ msgstr "Gaya Bingkai:"
+
+#, fuzzy
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "Selitkan Baris"
+
+#, fuzzy
+#~| msgid "&Variable"
+#~ msgid "Variable"
+#~ msgstr "&Variabel"
+
+#, fuzzy
+#~ msgid "As Character"
+#~ msgstr "Cipta Jadual"
+
+#, fuzzy
+#~ msgid "Anchor the current shape as a character in the text"
+#~ msgstr "Selitkan jadual kandungan pada posisi semasa kursor."
+
+#, fuzzy
+#~ msgid "To Character"
+#~ msgstr "Cipta Jadual"
+
+#, fuzzy
+#~ msgid "Anchor the current shape to the character at the current position"
+#~ msgstr "Selitkan jadual kandungan pada posisi semasa kursor."
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgid "To Paragraph"
+#~ msgstr "Perenggan"
+
+#, fuzzy
+#~| msgid "Remove entry"
+#~ msgid "To Page"
+#~ msgstr "Alih keluar entri"
+
+#~ msgid "Page..."
+#~ msgstr "Halaman..."
+
+#~ msgid "Delete Page"
+#~ msgstr "Hapuskan Halaman"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Insert Image Options"
+#~ msgstr "Selitkan Halaman"
+
+#, fuzzy
+#~ msgid "Disable Document Headers"
+#~ msgstr "Buat Dokumen Luaran"
+
+#, fuzzy
+#~ msgid "Disable Document Footers"
+#~ msgstr "Buat Dokumen Luaran"
+
+#, fuzzy
+#~| msgid "Frame &Borders"
+#~ msgid "Page Borders"
+#~ msgstr "&Sempadan Bingkai"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Papar bar &status"
+
+#~ msgid "Numbering"
+#~ msgstr "Penomboran"
+
+#~ msgid "Automatic"
+#~ msgstr "Automatik"
+
+#~ msgid "Footnote"
+#~ msgstr "Nota kaki"
+
+#~ msgid "Endnote"
+#~ msgstr "Nota hujung"
+
+#~ msgid "Insert Footnote/Endnote"
+#~ msgstr "Selitkan Nota Kaki/Nota Hujung"
+
+#, fuzzy
+#~| msgid "&Footnote/Endnote..."
+#~ msgid "Footnote/Endnote..."
+#~ msgstr "&Nota kaki/Nota hujung..."
+
+#, fuzzy
+#~ msgid "Insert a footnote referencing the selected text"
+#~ msgstr "Selitkan nota kaki yang merujuk teks yang dipilih. "
+
+#, fuzzy
+#~| msgid "F&rame/Frameset Properties"
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "Ciri &Bingkai/Set Bingkai"
+
+#, fuzzy
+#~ msgid "Alter frameset properties"
+#~ msgstr "Pinda ciri set bingkai."
+
+#, fuzzy
+#~| msgid "P&icture..."
+#~ msgid "Picture..."
+#~ msgstr "&Gambar..."
+
+#, fuzzy
+#~| msgid "Insert picture inline"
+#~ msgid "Insert a picture into document"
+#~ msgstr "Selitkan gambar sebaris"
+
+#, fuzzy
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "Tukar bingkai semasa kepada bingkai sebaris."
+
+#~ msgid ""
+#~ "Convert the current frame to an inline frame.<br><br>Place the inline "
+#~ "frame within the text at the point nearest to the frames current position."
+#~ msgstr ""
+#~ "Tukar bingkai semasa kepada bingkai sebaris.<br><br>Letakkan bingkai "
+#~ "sebaris dalam teks pada titik yang paling hampir dengan posisi semasa "
+#~ "bingkai."
+
+#, fuzzy
+#~ msgid "Set Floating"
+#~ msgstr "Seting Pelbagai"
+
+#, fuzzy
+#~| msgid "&Filter output"
+#~ msgid "Filter stuff"
+#~ msgstr "&Tapis output"
+
+#, fuzzy
+#~| msgid "Fra&mestyle"
+#~ msgid "Fra&mes"
+#~ msgstr "Gaya &bingkai"
+
+#~ msgid "Tables"
+#~ msgstr "Jadual"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Selitkan Baris"
+
+#~ msgid "Layout of Text in Other Frames"
+#~ msgstr "Bentangan Teks dalam Bingkai Lain"
+
+#, fuzzy
+#~| msgid "Text will run &around the frame"
+#~ msgid "Text will run around this frame"
+#~ msgstr "Teks akan berada &dalam bingkai"
+
+#, fuzzy
+#~| msgid "Text will &not run around this frame"
+#~ msgid "Text will not run around this frame"
+#~ msgstr "Teks &tidak akan berada dalam bingkai ini"
+
+#~ msgid "Run Around Side"
+#~ msgstr "Berada Di sisi"
+
+#, fuzzy
+#~ msgid "Left"
+#~ msgstr "Kiri"
+
+#, fuzzy
+#~ msgid "Right"
+#~ msgstr "Kanan"
+
+#, fuzzy
+#~| msgctxt "Run Around"
+#~| msgid "Lon&gest side"
+#~ msgid "Longest side"
+#~ msgstr " Di sisi &terpanjang"
+
+#, fuzzy
+#~ msgid "Create custom outline"
+#~ msgstr "Cipta jadual."
+
+#, fuzzy
+#~ msgid "Create Custom Outline"
+#~ msgstr "Cipta jadual."
+
+#, fuzzy
+#~ msgid "Create outlines"
+#~ msgstr "Cipta jadual."
+
+#~ msgid "Borders"
+#~ msgstr "Sempadan"
+
+#~ msgid "MailMerge"
+#~ msgstr "Cantum Mel"
+
+#~ msgid "Table"
+#~ msgstr "Jadual"
+
+#, fuzzy
+#~ msgid "Font"
+#~ msgstr "Nota kaki"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgid "Format"
+#~ msgstr "F&ormat"
+
+#~ msgid "Formula"
+#~ msgstr "Formula"
+
+#~ msgid "KWord"
+#~ msgstr "KWord"
+
+#, fuzzy
+#~| msgid "Insert Picture"
+#~ msgid "Insert Picture..."
+#~ msgstr "Selitkan Gambar"
+
+#, fuzzy
+#~| msgid "Background"
+#~ msgid "Page Background"
+#~ msgstr "Latar belakang"
+
+#~ msgid "If Text is Too Long for Frame"
+#~ msgstr "Jika Teks terlalu Panjang untuk Bingkai"
+
+#~ msgid "On New Page Creation"
+#~ msgstr "Pada Penciptaan Halaman Baru"
+
+#~ msgid "Place a copy of this frame"
+#~ msgstr "Sediakan salinan bingkai ini"
+
+#~ msgid ""
+#~ "Alter frameset properties.<p>Currently you can change the frame "
+#~ "background."
+#~ msgstr ""
+#~ "Pinda ciri set bingkai.<p>Kini anda boleh ubah latar belakang bingkai."
+
+#, fuzzy
+#~ msgid "Show Grid"
+#~ msgstr "Papar Pengaki"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgid "Odd Pages Header %1"
+#~ msgstr "Pengepala Halaman Ganjil"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgid "Even Pages Header %1"
+#~ msgstr "Pengepala Halaman Genap"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgid "Odd Pages Footer %1"
+#~ msgstr "Pengaki Halaman Ganjil"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgid "Even Pages Footer %1"
+#~ msgstr "Pengaki Halaman Genap"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Set Bingkai Teks Utama"
+
+#~ msgid "Matrix"
+#~ msgstr "Matriks"
+
+#, fuzzy
+#~ msgid "Configure Frame Border"
+#~ msgstr "Konfigur Sempadan Bingkai"
+
+#~ msgid "Ta&ble"
+#~ msgstr "Me&ja"
+
+#~ msgid "Cell"
+#~ msgstr "Sel"
+
+#~ msgid "Configure Frame Borders"
+#~ msgstr "Konfigur Sempadan Bingkai"
+
+#, fuzzy
+#~| msgid "Create a new page"
+#~ msgid "Add a new page"
+#~ msgstr "Cipta halaman baru"
+
+#, fuzzy
+#~| msgid "Delete all selected cells?"
+#~ msgid "Delete selected pages"
+#~ msgstr "Hapuskan semua sel yang dipilih?"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgid "Delete Layer"
+#~ msgstr "Hapuskan Halaman"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "&Maklumat Dokumen"
+
+#~ msgid "&Available tables:"
+#~ msgstr "Jadual &yang boleh didapatkan:"
+
+#~ msgid "&Fields of the selected table:"
+#~ msgstr "&Medan bagi jadual yang dipilih:"
+
+#~ msgid "Query Result"
+#~ msgstr "Keputusan Pertanyaan"
+
+#~ msgid "&Query:"
+#~ msgstr "&Pertanyaan:"
+
+#~ msgid "&Execute"
+#~ msgstr "&Laksana"
+
+#~ msgid "&Setup"
+#~ msgstr "&Setkan"
+
+#~ msgid "&Table:"
+#~ msgstr "&Jadual:"
+
+#~ msgid "View or Edit Filter &Rules"
+#~ msgstr "Papar atau Edit &Peraturan Penapis "
+
+#~ msgid "&Used database records:"
+#~ msgstr "&Guna rekod pangkalan data:"
+
+#~ msgid "&Keep Settings..."
+#~ msgstr "&Kekalkan Seting..."
+
+#~ msgid "&Hostname:"
+#~ msgstr "&Nama hos:"
+
+#~ msgid "&Driver:"
+#~ msgstr "&Pemacu: "
+
+#~ msgid "Database &name:"
+#~ msgstr "&Nama pangkalan data:"
+
+#~ msgid "&Username:"
+#~ msgstr "&Nama pengguna:"
+
+#~ msgid "&Port:"
+#~ msgstr "&Port:"
+
+#~ msgid "default"
+#~ msgstr "piawai"
+
+#~ msgid "Address Selection"
+#~ msgstr "Pemilihan Alamat"
+
+#~ msgid "&Add >>"
+#~ msgstr "&Tambah >>"
+
+#~ msgid "<< &Remove"
+#~ msgstr "<< &Alih keluar"
+
+#~ msgid "Save as &Distribution List..."
+#~ msgstr "Simpan sebagai Senarai &Pengagihan..."
+
+#, fuzzy
+#~ msgid "Save selected single entries to a new distribution list"
+#~ msgstr "Simpan entri tunggal yang dipilih ke dalam senarai pengagihan baru."
+
+#~ msgid "&Filter on:"
+#~ msgstr "&Tapis:"
+
+#~ msgid "Name"
+#~ msgstr "Nama"
+
+#~ msgid "Distribution Lists"
+#~ msgstr "Senarai Pengagihan"
+
+#~ msgid "Single Entries"
+#~ msgstr "Entri Tunggal"
+
+#~ msgid "Address B&ook"
+#~ msgstr "&Buku Alamat"
+
+#~ msgid "Launch KAddressbook"
+#~ msgstr "Lancar KAddressbook"
+
+#~ msgid "&Address Book"
+#~ msgstr "Buku &Alamat"
+
+#~ msgid "&Selected Addresses"
+#~ msgstr "Alamat yang &Dipilih"
+
+#~ msgid "Personal"
+#~ msgstr "Peribadi"
+
+#~ msgid "Hi!"
+#~ msgstr "Hai"
+
+#~ msgid "Hello!"
+#~ msgstr "Helo!"
+
+#~ msgid "Bye!"
+#~ msgstr "Selamat tinggal!"
+
+#~ msgid "Good bye"
+#~ msgstr "Selamat jalan"
+
+#~ msgid "Professional"
+#~ msgstr "Profesional"
+
+#~ msgid "Good Morning"
+#~ msgstr "Selamat Pagi"
+
+#~ msgid "Good Afternoon"
+#~ msgstr "Selamat Tengah Hari"
+
+#~ msgid "Good Evening"
+#~ msgstr "Selamat Malam"
+
+#~ msgid "Email"
+#~ msgstr "E-mel"
+
+#~ msgid "To:"
+#~ msgstr "Kepada:"
+
+#~ msgid "Subject:"
+#~ msgstr "Subjek:"
+
+#~ msgid "CC:"
+#~ msgstr "CC:"
+
+#~ msgid "BCC:"
+#~ msgstr "BCC:"
+
+#~ msgid "Fwd:"
+#~ msgstr "Panjangkan:"
+
+#~ msgid "Best regards,"
+#~ msgstr "Salam mesra,"
+
+#~ msgid "Best wishes"
+#~ msgstr "Selamat maju jaya"
+
+#~ msgid "Cordially,"
+#~ msgstr "Salam mesra,"
+
+#~ msgid "Love,"
+#~ msgstr "Salam sayang,"
+
+#~ msgid "Regards,"
+#~ msgstr "Salam mesra,"
+
+#~ msgid "Thank you,"
+#~ msgstr "Terima kasih,"
+
+#~ msgid "Thanks,"
+#~ msgstr "Terima kasih,"
+
+#~ msgid "Subject"
+#~ msgstr "Subjek"
+
+#~ msgid "Dear Sir or Madam:"
+#~ msgstr "Ke hadapan Tuan/Puan:"
+
+#~ msgid "Ladies and Gentlemen:"
+#~ msgstr "Tuan dan Puan:"
+
+#~ msgid "Attention"
+#~ msgstr "Perhatian"
+
+#~ msgid "Attention:"
+#~ msgstr "Perhatian:"
+
+#~ msgid "ATTN:"
+#~ msgstr "PERHATIAN:"
+
+#~ msgid "Instructions"
+#~ msgstr "Arahan"
+
+#~ msgid "CERTIFIED"
+#~ msgstr "DISAHKAN"
+
+#~ msgid "CONFIDENTIAL"
+#~ msgstr "SULIT"
+
+#~ msgid "PERSONAL"
+#~ msgstr "PERIBADI"
+
+#~ msgid "FACSIMILE"
+#~ msgstr "FAKS"
+
+#~ msgid ">>>Illegal position within datasource<<<"
+#~ msgstr ">>>Posisi tak sah dalam sumber data<<<"
+
+#~ msgid ">>>Field %1 is unknown in the current database query<<<"
+#~ msgstr ""
+#~ ">>>Medan %1 adalah tak diketahui dalam pertanyaan pangkalan data semasa<<<"
+
+#~ msgid "Mail Merge - Editor"
+#~ msgstr "Cantum Mel - Editor"
+
+#~ msgid "Please enter the password for the database connection"
+#~ msgstr "Sila masukkan kata laluan untuk sambungan pangkalan data"
+
+#~ msgid "Mail Merge - Setup Database Connection"
+#~ msgstr "Cantum Mel - Setkan Sambungan Pangkalan Data"
+
+#~ msgid "<not saved>"
+#~ msgstr "<tidak disimpan>"
+
+#~ msgid "Store Settings"
+#~ msgstr "Seting Stor"
+
+#~ msgid "ascending"
+#~ msgstr "menaik"
+
+#~ msgid "descending"
+#~ msgstr "menurun"
+
+#~ msgid "contains"
+#~ msgstr "mengandungi"
+
+#~ msgid "Field"
+#~ msgstr "Medan"
+
+#, fuzzy
+#~ msgid "Include"
+#~ msgstr "termasuk"
+
+#~ msgid "Operator"
+#~ msgstr "Operator"
+
+#~ msgid "Condition"
+#~ msgstr "Keadaan"
+
+#~ msgid "Value"
+#~ msgstr "Nilai"
+
+#~ msgid "NOT"
+#~ msgstr "NOT"
+
+#~ msgid "KAddressbook entry '%1' not available."
+#~ msgstr "Entri KAddressbook '%1' tidak boleh didapatkan."
+
+#~ msgid "%1 South"
+#~ msgstr "%1 Selatan"
+
+#~ msgid "%1 North"
+#~ msgstr "%1 Utara"
+
+#~ msgid "%1 West"
+#~ msgstr "%1 Barat"
+
+#~ msgid "%1 East"
+#~ msgstr "%1 Timur"
+
+#~ msgctxt "Geographic coordinates"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#~ msgid "Unkown mail merge variable: %1"
+#~ msgstr "Variabel cantum mel tak diketahui: %1"
+
+#~ msgid "no category"
+#~ msgstr "tiada kategori"
+
+#~ msgid "New Distribution List"
+#~ msgstr "Senarai Pengagihan Baru"
+
+#~ msgid "Please enter name:"
+#~ msgstr "Sila masukkan nama:"
+
+#~ msgid ""
+#~ "<qt>Distribution list with the given name <b>%1</b> already exists. "
+#~ "Please select a different name.</qt>"
+#~ msgstr ""
+#~ "<qt>Senarai pengagihan dengan nama yang diberikan itu <b>%1</b> sudah "
+#~ "wujud. Sila pilih nama lain.</qt>"
+
+#, fuzzy
+#~ msgid "URL:"
+#~ msgstr "URL"
+
+#~ msgid "No Value"
+#~ msgstr "Tiada Nilai"
+
+#~ msgid "Add record"
+#~ msgstr "Tambah rekod"
+
+#~ msgid "Add entry"
+#~ msgstr "Tambah Entri"
+
+#~ msgid "Remove entry"
+#~ msgstr "Alih keluar entri"
+
+#~ msgid "Add Entry"
+#~ msgstr "Tambah Entri"
+
+#, fuzzy
+#~| msgid "&Hostname:"
+#~ msgid "Host:"
+#~ msgstr "&Nama hos:"
+
+#, fuzzy
+#~| msgid "&Port:"
+#~ msgid "Port:"
+#~ msgstr "&Port:"
+
+#, fuzzy
+#~| msgid "&Time"
+#~ msgid "Timeout:"
+#~ msgstr "&Masa"
+
+#, fuzzy
+#~| msgid "Table of Contents"
+#~ msgid "Table of Content"
+#~ msgstr "Jadual Kandungan"
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "&Halaman"
+
+#, fuzzy
+#~| msgid "Sort"
+#~ msgid "Slots"
+#~ msgstr "Isih"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "&Ciri"
+
+#, fuzzy
+#~| msgid "&Variable"
+#~ msgid "Variables"
+#~ msgstr "&Variabel"
+
+#, fuzzy
+#~ msgid "HTML Document"
+#~ msgstr "Dokumen "
+
+#, fuzzy
+#~| msgid "Move Text"
+#~ msgid "Encoded Text"
+#~ msgstr "Alihkan Teks"
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)"
+#~ msgstr "Hapuskan bingkai yang sedang dipilih."
+
+#~ msgid "Delete the currently selected frame(s)."
+#~ msgstr "Hapuskan bingkai yang sedang dipilih."
+
+#~ msgid "First Page Header"
+#~ msgstr "Pengepala Halaman Pertama"
+
+#~ msgid "First Page Footer"
+#~ msgstr "Pengaki Halaman Pertama"
+
+#~ msgid ""
+#~ "Invalid document. 'fo' has the wrong namespace. The application which "
+#~ "produced this document is not OASIS-compliant."
+#~ msgstr ""
+#~ "Dokumen tak sah. Nama jarak bagi 'fo' salah. Aplikasi yang mengeluarkan "
+#~ "dokumen ini tidak mematuhi OASIS."
+
+#, fuzzy
+#~| msgid "&Units:"
+#~ msgid "Unit:"
+#~ msgstr "&Unit:"
+
+#, fuzzy
+#~| msgid "Size (%1):"
+#~ msgid "Size:"
+#~ msgstr "Saiz (%1):"
+
+#, fuzzy
+#~| msgid "Attention:"
+#~ msgid "Orientation:"
+#~ msgstr "Perhatian:"
+
+#, fuzzy
+#~| msgid "Single Entries"
+#~ msgid "Single sided"
+#~ msgstr "Entri Tunggal"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgid "Whole document:"
+#~ msgstr "Dokumen "
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgid "Right to left"
+#~ msgstr "Biru Muda"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgid "Left Edge:"
+#~ msgstr "Kiri:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgid "Right Edge:"
+#~ msgstr "Kanan:"
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgid "Page Edge:"
+#~ msgstr "Mod &Halaman"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgid "Page spread"
+#~ msgstr "Pemisah Halaman"
+
+#~ msgid "Printing..."
+#~ msgstr "Mencetak..."
+
+#, fuzzy
+#~ msgid "Cancel"
+#~ msgstr "Sel"
+
+#~ msgid ""
+#~ "Read-only content cannot be changed. No modifications will be accepted."
+#~ msgstr ""
+#~ "Kandungan baca sahaja tidak boleh diubah. Pengubahsuaian tidak dibenarkan."
+
+#~ msgid "Insert Inline Table"
+#~ msgstr "Selitkan Jadual Sebaris"
+
+#~ msgid "Bookmark target: "
+#~ msgstr "Sasaran tanda buku:"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "Set Bingkai Teks %1"
+
+#~ msgid "Create Formula Frame"
+#~ msgstr "Cipta Bingkai Formula"
+
+#~ msgid ""
+#~ "KWord is unable to insert the table because there is not enough space "
+#~ "available."
+#~ msgstr "KWord tidak dapat menyelitkan jadual kerana tidak cukup ruang."
+
+#~ msgid "Create Table"
+#~ msgstr "Cipta Jadual"
+
+#~ msgid "Change Frame Background Color"
+#~ msgstr "Ubah Warna Latar Belakang Bingkai"
+
+#~ msgid "Delete Page %1"
+#~ msgstr "Hapuskan Halaman %1"
+
+#~ msgid "Resize Column"
+#~ msgstr "Saiz Semula Lajur"
+
+#, fuzzy
+#~ msgid "Resize Row"
+#~ msgstr "Alih Keluar Baris"
+
+#~ msgid "Configure KWord"
+#~ msgstr "Konfigur KWord"
+
+#~ msgid "Interface"
+#~ msgstr "Antara Muka"
+
+#~ msgid "Interface Settings"
+#~ msgstr "Seting Antara Muka"
+
+#~ msgid "Spelling"
+#~ msgstr "Ejaan"
+
+#~ msgid "Spell Checker Behavior"
+#~ msgstr "Perilaku Penyemak Eja"
+
+#~ msgid "Formula Defaults"
+#~ msgstr "Piawai Formula"
+
+#~ msgid "Misc Settings"
+#~ msgstr "Seting Pelbagai"
+
+#~ msgid "Path"
+#~ msgstr "Laluan"
+
+#~ msgid "Path Settings"
+#~ msgstr "Seting Laluan"
+
+#~ msgid "Change Config"
+#~ msgstr "Ubah Konfigur"
+
+#~ msgid ""
+#~ "Select the unit type used every time a distance or width/height is "
+#~ "displayed or entered. This one setting is for the whole of KWord: all "
+#~ "dialogs, the rulers etc. Note that KWord documents specify the unit which "
+#~ "was used to create them, so this setting only affects this document and "
+#~ "all documents that will be created later."
+#~ msgstr ""
+#~ "Pilih jenis unit yang digunakan setiap kali jarak atau lebar/tinggi "
+#~ "dipaparkan atau dimasukkan. Seting yang satu ini adalah untuk seluruh "
+#~ "KWord: semua dialog, pembaris dll. Perhatikan yang dokumen KWord "
+#~ "menetapkan unit yang digunakan untuk menciptanya, jadi seting ini hanya "
+#~ "akan menjejaskan dokumen ini dan semua dokumen yang akan dicipta selepas "
+#~ "ini. "
+
+#~ msgid "Show s&crollbar"
+#~ msgstr "Papar bar &skrol"
+
+#~ msgid "PageUp/PageDown &moves the caret"
+#~ msgstr "Halaman Ke atas/Halaman Ke bawah &mengalih karet"
+
+#~ msgid ""
+#~ "If this option is enabled, the PageUp and PageDown keys move the text "
+#~ "caret, as in other KDE applications. If it is disabled, they move the "
+#~ "scrollbars, as in most other word processors."
+#~ msgstr ""
+#~ "Jika pilihan diaktifkan, kekunci Halaman Ke atas dan Halaman Ke bawah "
+#~ "mengalihkan karet teks, seperti dalam aplikasi KDE yang lain. Jika ia "
+#~ "dinyahaktifkan, ia mengalihkan bar skrol, seperti dalam kebanyakan "
+#~ "pemproses kata yang lain."
+
+#, fuzzy
+#~ msgid ""
+#~ "The number of files remembered in the file open dialog and in the recent "
+#~ "files menu item."
+#~ msgstr ""
+#~ "Bilangan fail yang diingati dalam dialog buka fail dan dalam butiran menu "
+#~ "fail terbaru "
+
+#~ msgid "Number of recent &files:"
+#~ msgstr "Bilangan &fail terbaru:"
+
+#, fuzzy
+#~ msgid ""
+#~ "The grid size on which frames, tabs and other content snaps while moving "
+#~ "and scaling."
+#~ msgstr ""
+#~ "Saiz grid yang padanya bingkai, tab dan kandungan lain dipetik semasa "
+#~ "menggerakkan dan menskalakannya."
+
+#~ msgid "&Horizontal grid size:"
+#~ msgstr "Saiz grid &mendatar:"
+
+#, fuzzy
+#~ msgid ""
+#~ "The grid size on which frames and other content snaps while moving and "
+#~ "scaling."
+#~ msgstr ""
+#~ "Saiz grid yang padanya bingkai dan kandungan lain dipetik semasa "
+#~ "menggerakkan dan menskalakannya"
+
+#~ msgid "&Vertical grid size:"
+#~ msgstr "Saiz grid &menegak:"
+
+#~ msgid ""
+#~ "Configure the indent width used when using the 'Increase' or 'Decrease' "
+#~ "indentation buttons on a paragraph.<p>The lower the value, the more often "
+#~ "the buttons will have to be pressed to gain the same indentation."
+#~ msgstr ""
+#~ "Konfigur lebar inden yang digunakan apabila menggunakan butang "
+#~ "pengengsotan 'Tambah' atau 'Kurang' pada perenggan.<p>Semakin rendah "
+#~ "nilai, semakin kerap butang perlu ditekan untuk mendapatkan pengengsotan "
+#~ "yang sama. "
+
+#~ msgid "&Paragraph indent by toolbar buttons:"
+#~ msgstr "Inden &perenggan dengan butang bar alat:"
+
+#, fuzzy
+#~ msgid ""
+#~ "After selecting Preview Mode (from the \"View\" menu,) this is the number "
+#~ "of pages KWord will position on one horizontal row."
+#~ msgstr ""
+#~ "Selepas memilih mod prapapar (melalui menu \"Papar\", pilihan \"Mod Papar"
+#~ "\") ini jumlah halaman yang akan diletakkan oleh KWord dalam satu baris "
+#~ "mendatar"
+
+#~ msgid "Number of pa&ges per row in preview mode:"
+#~ msgstr "Bilangan &halaman setiap baris dalam mod prapapar:"
+
+#~ msgid "Undo/&redo limit:"
+#~ msgstr "Batal/&buat semula had:"
+
+#~ msgid "Display &links"
+#~ msgstr "Paparkan &pautan"
+
+#~ msgid "&Underline all links"
+#~ msgstr "&Garis bawah semua pautan"
+
+#~ msgid "Display c&omments"
+#~ msgstr "Paparkan &komen"
+
+#~ msgid "Display field code"
+#~ msgstr "Paparkan kod medan"
+
+#~ msgid "View Formatting"
+#~ msgstr "Paparkan Pemformatan"
+
+#~ msgid "View formatting end paragraph"
+#~ msgstr "Paparkan pemformatan perenggan akhir"
+
+#~ msgid "View formatting space"
+#~ msgstr "Paparkan pemformatan jarak"
+
+#~ msgid "View formatting tabs"
+#~ msgstr "Paparkan peformatan tab"
+
+#~ msgid "View formatting break"
+#~ msgstr "Papar pemisah pemformatan "
+
+#~ msgid "Change Display Link Command"
+#~ msgstr "Ubah Paparan Perintah Pautan"
+
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "Ubah Paparan Perintah Kod Medan"
+
+#~ msgid "Document Defaults"
+#~ msgstr "Piawai Dokumen"
+
+#~ msgid ""
+#~ "When setting a document to use more than one column this distance will be "
+#~ "used to separate the columns. This value is merely a default setting as "
+#~ "the column spacing can be changed per document"
+#~ msgstr ""
+#~ "Apabila mengeset dokumen supaya menggunakan lebih daripada satu lajur, "
+#~ "jarak ini akan digunakan untuk mengasingkan lajur. Nilai ini hanya seting "
+#~ "piawai kerana jarak lajur boleh diubah mengikut dokumen"
+
+#~ msgid "Default font:"
+#~ msgstr "Fon piawai:"
+
+#~ msgid "Choose..."
+#~ msgstr "Pilih..."
+
+#~ msgid "Global language:"
+#~ msgstr "Bahasa global:"
+
+#~ msgid "Autosave every (min):"
+#~ msgstr "Autosimpan setiap (minit):"
+
+#~ msgid ""
+#~ "A backup copy of the current document is created when a change has been "
+#~ "made. The interval used to create backup documents is set here."
+#~ msgstr ""
+#~ "Salinan sandaran bagi dokumen semasa dicipta apabila perubahan dibuat. "
+#~ "Sela yang digunakan untuk mencipta dokumen sandaran disetkan di sini."
+
+#~ msgid "No autosave"
+#~ msgstr "Tiada autosimpan"
+
+#~ msgid " min"
+#~ msgstr "minit"
+
+#~ msgid "Create backup file"
+#~ msgstr "Cipta fail sandaran"
+
+#~ msgid "Starting page number:"
+#~ msgstr "Nombor halaman mula:"
+
+#~ msgid "Tab stop (%1):"
+#~ msgstr "Tab henti (%1):"
+
+#~ msgid "Cursor"
+#~ msgstr "Kursor"
+
+#~ msgid "Cursor in protected area"
+#~ msgstr "Kursor dalam kawasan yang dilindungi"
+
+#~ msgid "Change Starting Page Number"
+#~ msgstr "Ubah Nombor Halaman Mula"
+
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "Ubah Nilai Tab Henti"
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "Tab henti (%1):"
+
+#~ msgid "Personal Expression"
+#~ msgstr "Ungkapan Peribadi"
+
+#~ msgid "Backup Path"
+#~ msgstr "Laluan Sandaran"
+
+#~ msgid "Modify Path..."
+#~ msgstr "Ubah Suai Laluan..."
+
+#~ msgid "Configure Endnote/Footnote"
+#~ msgstr "Konfigur Nota Hujung/Nota Kaki"
+
+#~ msgid "Separator Line"
+#~ msgstr "Garis Pemisah"
+
+#~ msgid ""
+#~ "Configure the separator line. The separator line is drawn directly above "
+#~ "the frame for the footnotes."
+#~ msgstr ""
+#~ "Konfigur garis pemisah. Garis pemisah dilukis betul-betul di atas bingkai "
+#~ "nota kaki. "
+
+#~ msgid ""
+#~ "The separator can be positioned horizontally by picking one of the three "
+#~ "alignments."
+#~ msgstr ""
+#~ "Pemisah boleh diletakkan secara mendatar dengan memilih satu daripada "
+#~ "tiga penjajaran. "
+
+#~ msgctxt "Position"
+#~ msgid "Left"
+#~ msgstr "Kiri"
+
+#~ msgctxt "Position"
+#~ msgid "Right"
+#~ msgstr "Kanan"
+
+#~ msgid " %"
+#~ msgstr " %"
+
+#, fuzzy
+#~ msgid "&Width:"
+#~ msgstr "Lebar:"
+
+#~ msgid ""
+#~ "The width is the thickness of the separator line, set to 0 for no "
+#~ "separator line."
+#~ msgstr ""
+#~ "Lebar adalah ketebalan garis pemisah, set 0 untuk garis bukan pemisah."
+
+#~ msgid "&Size on page:"
+#~ msgstr "&Saiz pada halaman:"
+
+#~ msgid ""
+#~ "The size of the separator line can be defined as a percentage of the "
+#~ "width of the page."
+#~ msgstr ""
+#~ "Saiz garis pemisah boleh ditakrifkan sebagai peratus lebar halaman. "
+
+#~ msgid "Solid"
+#~ msgstr "Penuh"
+
+#~ msgid "Dash Line"
+#~ msgstr "Garis Putus"
+
+#~ msgid "Dot Line"
+#~ msgstr "Garis Bintik "
+
+#~ msgid "Dash Dot Line"
+#~ msgstr "Garis Putus Bintik"
+
+#~ msgid "Dash Dot Dot Line"
+#~ msgstr "Garis Putus Bintik Bintik"
+
+#~ msgid ""
+#~ "The separator line can be drawn as a solid line or as a line which has a "
+#~ "pattern; the pattern can be set in the style-type."
+#~ msgstr ""
+#~ "Garis pemisah boleh dilukis sebagai garis penuh atau sebagai garis "
+#~ "bercorak; corak itu boleh disetkan dalam gaya taip. "
+
+#~ msgid "Change End-/Footnote Variable Settings"
+#~ msgstr "Ubah Seting Variabel Hujung-/Nota Kaki"
+
+#~ msgid "Change Footnote Line Separator Settings"
+#~ msgstr "Ubah Seting Pemisah Garis Nota Kaki"
+
+#, fuzzy
+#~ msgid "Rename Bookmark..."
+#~ msgstr "Namakan Semula Penanda Buku"
+
+#~ msgid "That name already exists, please choose another name."
+#~ msgstr "Nama itu sudah wujud, sila pilih nama lain."
+
+#~ msgid "Delete Bookmark"
+#~ msgstr "Hapuskan Penanda Buku"
+
+#~ msgid "Delete Row"
+#~ msgstr "Hapuskan Baris"
+
+#~ msgid "Delete Column"
+#~ msgstr "Hapuskan Lajur"
+
+#~ msgid "Delete the row from the table."
+#~ msgstr "Hapuskan baris dari jadual."
+
+#~ msgid "Delete the column from the table."
+#~ msgstr "Hapuskan lajur dari jadual."
+
+#~ msgid "Delete the whole table?"
+#~ msgstr "Hapuskan seluruh jadual?"
+
+#~ msgid "Delete all selected rows?"
+#~ msgstr "Hapuskan semua lajur yang dipilih?"
+
+#~ msgid "Delete row number %1?"
+#~ msgstr "Hapuskan baris nombor %1"
+
+#~ msgid "Delete column number %1?"
+#~ msgstr "Hapuskan lajur nombor %1?"
+
+#~ msgid "Delete rows: %1 ?"
+#~ msgstr "Hapuskan baris: %1?"
+
+#~ msgid "Delete columns: %1 ?"
+#~ msgstr "Hapuskan lajur: %1 ?"
+
+#~ msgid "Column %1"
+#~ msgstr "Lajur %1"
+
+#~ msgid "Text Frame %1"
+#~ msgstr "Bingkai Teks %1"
+
+#~ msgid "Empty"
+#~ msgstr "Kosong"
+
+#~ msgid "Formula Frame %1"
+#~ msgstr "Bingkai Formula %1"
+
+#~ msgid "Picture (%1) %2"
+#~ msgstr "Gambar (%1) %2"
+
+#~ msgid "Embedded Objects"
+#~ msgstr "Objek Terbenam"
+
+#~ msgid "Formula Frames"
+#~ msgstr "Bingkai Formula"
+
+#~ msgid "Pictures"
+#~ msgstr "Gambar"
+
+#~ msgid "Text Frames/Frame Sets"
+#~ msgstr "Bingkai Teks/Set Bingkai"
+
+#~ msgid "Document Structure"
+#~ msgstr "Struktur Dokumen"
+
+#~ msgid ""
+#~ "This document was created with a newer version of KWord (syntax version: "
+#~ "%1)\n"
+#~ "Opening it in this version of KWord will lose some information."
+#~ msgstr ""
+#~ "Dokumen ini telah dicipta dengan versi KWord yang lebih baru (versi "
+#~ "sintak:%1)\n"
+#~ "Membukanya dalam versi KWord ini akan mengakibatkan beberapa maklumat "
+#~ "hilang."
+
+#~ msgid "File Format Mismatch"
+#~ msgstr "Ketakpadanan Format Fail"
+
+#~ msgid "Create Part Frame"
+#~ msgstr "Cipta Bingkai Bahagian"
+
+#~ msgid "Delete Table"
+#~ msgstr "Hapuskan Jadual"
+
+#~ msgid "Delete Text Frame"
+#~ msgstr "Hapuskan Bingkai Teks"
+
+#~ msgid "Delete Formula Frame"
+#~ msgstr "Hapuskan Bingkai Formula"
+
+#~ msgid "Delete Picture Frame"
+#~ msgstr "Hapuskan Bingkai Gambar"
+
+#~ msgid "Delete Object Frame"
+#~ msgstr "Hapuskan Bingkai Objek"
+
+#~ msgid "Edit Personal Expression"
+#~ msgstr "Edit Ungkapan Peribadi"
+
+#~ msgid "Group name:"
+#~ msgstr "Nama kumpulan:"
+
+#~ msgid "Expressions"
+#~ msgstr "Ungkapan"
+
+#~ msgid "&New"
+#~ msgstr "&Baru"
+
+#~ msgid "New"
+#~ msgstr "Baru"
+
+#~ msgid "empty"
+#~ msgstr "kosong"
+
+#~ msgid "new group"
+#~ msgstr "kumpulan baru"
+
+#~ msgid "&Automatic"
+#~ msgstr "&Automatik"
+
+#~ msgid "&Manual"
+#~ msgstr "&Manual"
+
+#~ msgid "&Footnote"
+#~ msgstr "&Nota Kaki"
+
+#~ msgid "&Endnote"
+#~ msgstr "&Nota Hujung"
+
+#~ msgid "Formula %1"
+#~ msgstr "Formula %1"
+
+#~ msgid "Frame Properties for %1"
+#~ msgstr "Ciri Bingkai untuk %1"
+
+#~ msgid "Frame Properties for New Frame"
+#~ msgstr "Ciri Bingkai untuk Bingkai Baru"
+
+#~ msgid "Frames Properties"
+#~ msgstr "Ciri Bingkai"
+
+#~ msgid "Frame Settings for %1"
+#~ msgstr "Seting Bingkai untuk %1"
+
+#~ msgid ""
+#~ "<b>Reconnect frame to current flow:</b><br/>When a new page is created, a "
+#~ "new frame will be created for this frameset, so that the text can flow "
+#~ "from one page to the next if necessary. This is what happens for the "
+#~ "\"main text frameset\", but this option makes it possible to choose the "
+#~ "same behavior for other framesets, for instance in magazine layouts."
+#~ msgstr ""
+#~ "<b>Sambung semula bingkai ke aliran semasa:</b><br/>Apabila halaman baru "
+#~ "dicipta, bingkai baru akan dicipta untuk set bingkai ini, supaya teks "
+#~ "boleh dialirkan dari satu halaman ke halaman seterusnya jika perlu. Ini "
+#~ "yang akan berlaku untuk \"main text insert\", tetapi pilihan ini "
+#~ "membolehkan perilaku yang sama dipilih untuk set bingkai yang lain, "
+#~ "contohnya untuk bentangan majalah."
+
+#~ msgid ""
+#~ "<b>Do not create a followup frame:</b><br/>When a new page is created, no "
+#~ "frame will be created for this frameset."
+#~ msgstr ""
+#~ "<b>Jangan cipta bingkai susulan:</b><br/>Apabila halaman baru dicipta, "
+#~ "bingkai tidak akan dicipta untuk set bingkai ini."
+
+#~ msgid ""
+#~ "<b>Place a copy of this frame:</b><br/>When a new page is created, a "
+#~ "frame will be created for this frameset, which will always show the exact "
+#~ "same thing as the frame on the previous page. This is what happens for "
+#~ "headers and footers, but this option makes it possible to choose the same "
+#~ "behavior for other framesets, for instance a company logo and/or title "
+#~ "that should appear exactly the same on every page."
+#~ msgstr ""
+#~ "<b>Sediakan salinan bingkai ini:</b><br/>Apabila halaman baru dicipta, "
+#~ "bingkai akan dicipta untuk set bingkai ini, yang akan sentiasa memaparkan "
+#~ "perkara yang serupa seperti dalam bingkai bagi halaman sebelumnya. Ini "
+#~ "yang akan berlaku bagi pengepala dan pengaki, tetapi pilihan ini "
+#~ "membolehkan perilaku yang sama dipilih untuk set bingkai yang lain, "
+#~ "contohnya logo syarikat dan/atau tajuk yang sepatutnya kelihatan serupa "
+#~ "pada setiap halaman."
+
+#~ msgid "SideHead Definition"
+#~ msgstr "Takrif Kepala Sisi"
+
+#~ msgid "Gap size (%1):"
+#~ msgstr "Saiz sela (%1):"
+
+#~ msgid "Closest to Binding"
+#~ msgstr "Paling Hampir dengan Pengikat"
+
+#~ msgid "Closest to Page Edge"
+#~ msgstr "Paling Hampir dengan Sisi Halaman"
+
+#~ msgid ""
+#~ "<b>Protect content:</b><br/>Disallow changes to be made to the contents "
+#~ "of the frame(s)."
+#~ msgstr ""
+#~ "<b>Lindungi kandungan:</b><br/>Tidak membenarkan perubahan dibuat ke atas "
+#~ "kandungan bingkai."
+
+#~ msgid "No."
+#~ msgstr "Nombor"
+
+#~ msgid "Table is inline"
+#~ msgstr "Jadual dalam keadaan sebaris"
+
+#~ msgid "Set new color on all selected frames"
+#~ msgstr "Setkan warna baru bagi semua bingkai yang dipilih"
+
+#~ msgid "Transparent background"
+#~ msgstr "Latar belakang lutsinar"
+
+#~ msgid "Background color:"
+#~ msgstr "Warna latar belakang:"
+
+#~ msgid "Background style:"
+#~ msgstr "Gaya latar belakang:"
+
+#~ msgid "No Background Fill"
+#~ msgstr "Tiada Isian Latar Belakang"
+
+#~ msgid "100% Fill Pattern"
+#~ msgstr "100% Corak Isian"
+
+#~ msgid "94% Fill Pattern"
+#~ msgstr "94% Corak Isian"
+
+#~ msgid "88% Fill Pattern"
+#~ msgstr "88% Corak Isian"
+
+#~ msgid "63% Fill Pattern"
+#~ msgstr "63% Corak Isian"
+
+#~ msgid "50% Fill Pattern"
+#~ msgstr "50% Corak Isian"
+
+#~ msgid "37% Fill Pattern"
+#~ msgstr "37% Corak Isian"
+
+#~ msgid "12% Fill Pattern"
+#~ msgstr "12% Corak Isian"
+
+#~ msgid "6% Fill Pattern"
+#~ msgstr "6% Corak Isian"
+
+#~ msgid "Crossing Lines"
+#~ msgstr "Garis Menyilang"
+
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "Garis Pepenjuru (/)"
+
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "Garis Pepenjuru ( \\ )"
+
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "Garis Menyilang Pepenjuru"
+
+#, fuzzy
+#~ msgid "&Borders"
+#~ msgstr "Sempadan"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "Gaya:"
+
+#, fuzzy
+#~ msgid "Co&lor:"
+#~ msgstr "&Port:"
+
+#~ msgid "Rename Frameset"
+#~ msgstr "Namakan Semula Set Bingkai"
+
+#~ msgid ""
+#~ "A new frameset with the name '%1' can not be made because a frameset with "
+#~ "that name already exists. Please enter another name or select an existing "
+#~ "frameset from the list."
+#~ msgstr ""
+#~ "Set bingkai baru dengan nama '%1' tidak dapat dibuat kerana set bingkai "
+#~ "dengan nama itu sudah wujud. Sila masukkan nama lain atau pilih set "
+#~ "bingkai sedia ada dari senarai. "
+
+#~ msgid "Protect Content"
+#~ msgstr "Lindungi Kandungan"
+
+#~ msgid ""
+#~ "The frame will not be resized because the new size would be greater than "
+#~ "the size of the page."
+#~ msgstr ""
+#~ "Bingkai tidak akan disaizkan semula kerana saiz baru mungkin lebih besar "
+#~ "daripada saiz halaman. "
+
+#~ msgid "Make Frameset Inline"
+#~ msgstr "Jadikan Set Bingkai Sebaris"
+
+#~ msgid "Make Frameset Non-Inline"
+#~ msgstr "Jadikan Set Bingkai Tidak Sebaris"
+
+#~ msgid "Resize Frame"
+#~ msgstr "Saiz Semula Bingkai"
+
+#~ msgid "Change Margin Frame"
+#~ msgstr "Ubah Bingkai Jidar"
+
+#~ msgid "Change Border"
+#~ msgstr "Ubah Sempadan"
+
+#~ msgid "Change Left Border Frame"
+#~ msgstr "Ubah Bingkai Sempadan Kiri"
+
+#~ msgid "Change Right Border Frame"
+#~ msgstr "Ubah Bingkai Sempadan Kanan"
+
+#~ msgid "Change Top Border Frame"
+#~ msgstr "Ubah Bingkai Sempadan Atas"
+
+#~ msgid "Change Bottom Border Frame"
+#~ msgstr "Ubah Bingkai Sempadan Bawah"
+
+#~ msgid ""
+#~ "You are about to reconnect the last frame of the frameset '%1'. The "
+#~ "contents of this frameset will be deleted.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Anda hampir menyambung semula bingkai terakhir dalam set bingkai '%1'. "
+#~ "Kandungan set bingkai ini akan dihapuskan.\n"
+#~ "Anda pasti ingin melakukannya?"
+
+#~ msgid "Reconnect Frame"
+#~ msgstr "Sambung Semula Bingkai"
+
+#~ msgid "&Reconnect"
+#~ msgstr "&Sambung Semula"
+
+#~ msgid ""
+#~ "<b>Synchronize changes:</b><br/>When this is checked any change in "
+#~ "margins will be used for all directions."
+#~ msgstr ""
+#~ "<b>Segerakkan perubahan:</b><br/>Apabila ini disemak apa-apa perubahan "
+#~ "dalam jidar akan digunakan untuk semua arah."
+
+#~ msgid "Frame Style Manager"
+#~ msgstr "Pengurus Gaya Bingkai"
+
+#~ msgid "Import From File..."
+#~ msgstr "Import Dari Fail..."
+
+#~ msgid "New Framestyle Template (%1)"
+#~ msgstr "Templat Gaya Bingkai Baru (%1)"
+
+#, fuzzy
+#~ msgid "Frame background color:"
+#~ msgstr "Warna Latar Belakang Bingkai..."
+
+#~ msgid "Go to Footnote"
+#~ msgstr "Beralih ke Nota Kaki"
+
+#~ msgid "Go to Endnote"
+#~ msgstr "Beralih ke Nota Hujung"
+
+#~ msgid "File name is empty."
+#~ msgstr "Nama fail kosong."
+
+#~ msgid "File does not contain any styles. It may be the wrong version."
+#~ msgstr "Fail tidak mengandungi apa-apa gaya. Ia mungkin versi yang salah."
+
+#~ msgid "This file is not a KWord file!"
+#~ msgstr "Fail ini bukan fail KWord!"
+
+#~ msgid "Select style to import:"
+#~ msgstr "Pilih gaya untuk import:"
+
+#~ msgid "Insert Row"
+#~ msgstr "Selitkan Baris"
+
+#~ msgid "Insert Column"
+#~ msgstr "Selitkan Lajur"
+
+#~ msgid "Insert New Row"
+#~ msgstr "Selitkan Baris Baru"
+
+#~ msgid "Insert New Column"
+#~ msgstr "Selitkan Lajur Baru"
+
+#~ msgid "Before"
+#~ msgstr "Sebelum"
+
+#~ msgid "After"
+#~ msgstr "Selepas"
+
+#~ msgid "Row:"
+#~ msgstr "Baris:"
+
+#~ msgid "Column:"
+#~ msgstr "Lajur:"
+
+#~ msgid "Choose &Picture..."
+#~ msgstr "Pilih &Gambar..."
+
+#~ msgid "Choose Picture"
+#~ msgstr "Pilih Gambar"
+
+#, fuzzy
+#~ msgid "Contents Head %1"
+#~ msgstr "Kepala Kandungan 1"
+
+#~ msgid "No plugins supporting the requested action were found."
+#~ msgstr "Plugin yang menyokong tindakan yang diminta tidak ditemui."
+
+#~ msgid "Do you really want to replace the current datasource?"
+#~ msgstr "Anda pasti mahu menggantikan sumber data semasa?"
+
+#~ msgid "Mail Merge Setup"
+#~ msgstr "Binaan Cantum Mel"
+
+#~ msgid "&Available sources:"
+#~ msgstr "Sumber yang &boleh didapatkan:"
+
+#~ msgid "Datasource:"
+#~ msgstr "Sumber data:"
+
+#~ msgid "Edit Current..."
+#~ msgstr "Edit Semasa..."
+
+#~ msgid "Create New..."
+#~ msgstr "Cipta Baru..."
+
+#~ msgid "Merging:"
+#~ msgstr "Mencantum:"
+
+#~ msgid "Print Preview..."
+#~ msgstr "Prapapar Cetak..."
+
+#~ msgid "Create New Document"
+#~ msgstr "Cipta Dokumen Baru"
+
+#~ msgid "Mail Merge - Variable Name"
+#~ msgstr "Cantum Mel - Nama Variabel"
+
+#~ msgid "Unnamed Table"
+#~ msgstr "Jadual Tak Bernama"
+
+#~ msgid "Object %1"
+#~ msgstr "Objek %1"
+
+#~ msgid "Move/Resize Frame"
+#~ msgstr "Alih/Saiz Semula Bingkai"
+
+#~ msgid "Make Document External"
+#~ msgstr "Buat Dokumen Luaran"
+
+#~ msgid "Make Document Internal"
+#~ msgstr "Buat Dokumen Dalaman"
+
+#~ msgid "Picture %1"
+#~ msgstr "Gambar %1"
+
+#~ msgid "Reset"
+#~ msgstr "Set semula"
+
+#~ msgid "Sort Text"
+#~ msgstr "Isih Teks"
+
+#~ msgid "Increase"
+#~ msgstr "Tambah"
+
+#~ msgid "Decrease"
+#~ msgstr "Kurang"
+
+#~ msgid "Split Cell"
+#~ msgstr "Ceraikan Sel"
+
+#~ msgid "Number of rows:"
+#~ msgstr "Bilangan baris:"
+
+#~ msgid "Number of columns:"
+#~ msgstr "Bilangan lajur:"
+
+#~ msgid "Selected Text"
+#~ msgstr "Teks yang Dipilih"
+
+#~ msgid "Counting..."
+#~ msgstr "Mengira..."
+
+#~ msgid "Number of embedded objects:"
+#~ msgstr "Bilangan objek terbenam:"
+
+#~ msgid "Number of formula frameset:"
+#~ msgstr "Bilangan set bingkai formula:"
+
+#~ msgid "Table Settings"
+#~ msgstr "Seting Jadual"
+
+#~ msgid "Cell heights:"
+#~ msgstr "Tinggi sel:"
+
+#~ msgid "Manual"
+#~ msgstr "Manual"
+
+#~ msgid "Cell widths:"
+#~ msgstr "Lebar sel:"
+
+#~ msgid "The table is &inline"
+#~ msgstr "Jadual dalam keadaan &sebaris"
+
+#~ msgid "Reapply template to table"
+#~ msgstr "Guna semula templat pada jadual"
+
+#~ msgid "Templates"
+#~ msgstr "Templat"
+
+#~ msgid "Add New Rows to Table"
+#~ msgstr "Tambahkan Baris Baru kepada Jadual"
+
+#~ msgid "Remove Rows From Table"
+#~ msgstr "Alih Keluar Baris Dari Jadual"
+
+#~ msgid "Remove Row"
+#~ msgstr "Alih Keluar Baris"
+
+#~ msgid "Add New Columns to Table"
+#~ msgstr "Tambahkan Lajur Baru kepada Jadual"
+
+#~ msgid "Remove Columns From Table"
+#~ msgstr "Alih Keluar Lajur Dari Jadual"
+
+#~ msgid "Remove Column"
+#~ msgstr "Alih Keluar Lajur"
+
+#~ msgid "Apply Template to Table"
+#~ msgstr "Guna Templat pada Jadual"
+
+#~ msgid "Table Style Manager"
+#~ msgstr "Pengurus Gaya Jadual"
+
+#~ msgid "Tablestyles preview"
+#~ msgstr "Prapapar Gaya Jadual"
+
+#~ msgid "Adjust"
+#~ msgstr "Selaras"
+
+#~ msgid "Textstyle:"
+#~ msgstr "Gaya Teks:"
+
+#~ msgid "Change..."
+#~ msgstr "Ubah..."
+
+#~ msgid "New Tablestyle Template (%1)"
+#~ msgstr "Templat Gaya Jadual Baru (%1)"
+
+#~ msgid "&Customize"
+#~ msgstr "&Suaikan"
+
+#~ msgid "Apply To"
+#~ msgstr "Guna Pada "
+
+#~ msgid "First row"
+#~ msgstr "Baris pertama"
+
+#~ msgid "Last row"
+#~ msgstr "Baris terakhir"
+
+#~ msgid "Body"
+#~ msgstr "Isi"
+
+#~ msgid "First column"
+#~ msgstr "Lajur pertama"
+
+#~ msgid "Last column"
+#~ msgstr "Lajur terakhir"
+
+#~ msgid "--- Frame Break ---"
+#~ msgstr "--- Pemisah Bingkai ---"
+
+#~ msgid "Change Paragraph Attribute"
+#~ msgstr "Ubah Atribut Perenggan"
+
+#, fuzzy
+#~ msgid "Paste"
+#~ msgstr "Laluan"
+
+#~ msgid "Insert Table of Contents"
+#~ msgstr "Selitkan Jadual Kandungan"
+
+#~ msgid "Insert Break After Paragraph"
+#~ msgstr "Selitkan Pemisah Selepas Perenggan"
+
+#~ msgid "Endnote %1"
+#~ msgstr "Nota hujung %1"
+
+#~ msgid "Footnote %1"
+#~ msgstr "Nota kaki %1"
+
+#~ msgid "Insert Expression"
+#~ msgstr "Selitkan Ungkapan"
+
+#~ msgid "Insert Variable"
+#~ msgstr "Selitkan Variabel"
+
+#~ msgid "ERROR"
+#~ msgstr "ERROR"
+
+#, fuzzy
+#~ msgid "Select Frame"
+#~ msgstr "Pilih Set Bingkai"
+
+#~ msgid "Configure Mai&l Merge..."
+#~ msgstr "Konfigur Cantum &Mel..."
+
+#~ msgid "Drag Mail Merge Variable"
+#~ msgstr "Seret Variabel Cantum Mel"
+
+#~ msgid "&Delete Frame"
+#~ msgstr "&Hapuskan Bingkai"
+
+#~ msgid "Ra&ise Frame"
+#~ msgstr "&Naikkan Bingkai"
+
+#~ msgid "&Lower Frame"
+#~ msgstr "&Turunkan Bingkai"
+
+#~ msgid "Text Mode"
+#~ msgstr "Mod Teks"
+
+#~ msgid ""
+#~ "Do not show any pictures, formatting or layout. KWord will display only "
+#~ "the text for editing."
+#~ msgstr ""
+#~ "Jangan papar apa-apa gambar, pemformatan atau bentangan. KWord akan hanya "
+#~ "memaparkan teks untuk diedit."
+
+#~ msgid ""
+#~ "Switch to page mode.<br><br> Page mode is designed to make editing your "
+#~ "text easy.<br><br>This function is most frequently used to return to text "
+#~ "editing after switching to preview mode."
+#~ msgstr ""
+#~ "Tukar ke mod halaman.<br><br>Mod halaman direka bentuk supaya teks anda "
+#~ "mudah diedit.<br><br>Fungsi ini paling kerap digunakan untuk kembali ke "
+#~ "pengeditan teks selepas bertukar ke mod prapapar."
+
+#, fuzzy
+#~ msgid "Switch to page editing mode"
+#~ msgstr "Beralih ke mod pengeditan halaman"
+
+#~ msgid "Pre&view Mode"
+#~ msgstr "Mod &Prapapar"
+
+#~ msgid ""
+#~ "Zoom out from your document to get a look at several pages of your "
+#~ "document.<br><br>The number of pages per line can be customized."
+#~ msgstr ""
+#~ "Zum ke luar dokumen anda untuk melihat beberapa halaman dokumen anda."
+#~ "<br><br>Bilangan halaman setiap baris boleh diubah suai."
+
+#, fuzzy
+#~ msgid "Zoom out to a multiple page view"
+#~ msgstr "Zum ke luar ke papar halaman berbilang."
+
+#, fuzzy
+#~ msgid "Enable Document &Headers"
+#~ msgstr "Buat Dokumen Luaran"
+
+#, fuzzy
+#~ msgid "Enable Document Foo&ters"
+#~ msgstr "Buat Dokumen Luaran"
+
+#, fuzzy
+#~ msgid "Disable Document Foo&ters"
+#~ msgstr "Buat Dokumen Luaran"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "Aksara &Khas..."
+
+#, fuzzy
+#~ msgid "Insert one or more symbols or letters not found on the keyboard"
+#~ msgstr ""
+#~ "Selitkan satu simbol atau huruf, atau lebih  yang tidak ada pada papan "
+#~ "kekunci."
+
+#~ msgid "Insert one or more symbols or letters not found on the keyboard."
+#~ msgstr ""
+#~ "Selitkan satu simbol atau huruf, atau lebih  yang tidak ada pada papan "
+#~ "kekunci."
+
+#~ msgid "&Hard Frame Break"
+#~ msgstr "Pemisah Bingkai &Keras"
+
+#, fuzzy
+#~ msgid "Force the remainder of the text into the next frame"
+#~ msgstr "Paksa masuk teks selebihnya ke dalam bingkai berikutnya."
+
+#~ msgid ""
+#~ "This inserts a non-printing character at the current cursor position. All "
+#~ "text after this point will be moved into the next frame in the frameset."
+#~ msgstr ""
+#~ "Ini akan menyelitkan aksara tak cetak pada posisi kursor semasa. Semua "
+#~ "teks selepas titik ini akan dialihkan ke dalam bingkai berikutnya dalam "
+#~ "set bingkai. "
+
+#~ msgid "Link..."
+#~ msgstr "Pautan..."
+
+#, fuzzy
+#~ msgid "Insert a Web address, email address or hyperlink to a file"
+#~ msgstr "Selitkan alamat Web, alamat e-mel atau hiperpautan ke fail."
+
+#~ msgid "Insert a Web address, email address or hyperlink to a file."
+#~ msgstr "Selitkan alamat Web, alamat e-mel atau hiperpautan ke fail."
+
+#~ msgid "Comment..."
+#~ msgstr "Komen..."
+
+#, fuzzy
+#~ msgid "Insert a comment about the selected text"
+#~ msgstr "Selitkan komen tentang teks yang dipilih."
+
+#~ msgid ""
+#~ "Insert a comment about the selected text. These comments are not designed "
+#~ "to appear on the final page."
+#~ msgstr ""
+#~ "Selitkan komen tentang teks yang dipilih. Komen ini tidak dikehendaki "
+#~ "muncul pada halaman akhir. "
+
+#~ msgid "Edit Comment..."
+#~ msgstr "Edit Komen..."
+
+#, fuzzy
+#~ msgid "Change the content of a comment"
+#~ msgstr "Ubah kandungan komen."
+
+#~ msgid "Change the content of a comment."
+#~ msgstr "Ubah kandungan komen."
+
+#, fuzzy
+#~ msgid "Remove the selected document comment"
+#~ msgstr "Alih keluar komen dokumen yang dipilih."
+
+#~ msgid "Remove the selected document comment."
+#~ msgstr "Alih keluar komen dokumen yang dipilih."
+
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Salin Teks Komen..."
+
+#~ msgid "Insert a footnote referencing the selected text."
+#~ msgstr "Selitkan nota kaki yang merujuk teks yang dipilih. "
+
+#~ msgid "Table of &Contents"
+#~ msgstr "Jadual &Kandungan"
+
+#~ msgid "Insert table of contents at the current cursor position."
+#~ msgstr "Selitkan jadual kandungan pada posisi semasa kursor."
+
+#~ msgid "Document &Information"
+#~ msgstr "&Maklumat Dokumen"
+
+#~ msgid "&Date"
+#~ msgstr "&Tarikh"
+
+#~ msgid "&Statistic"
+#~ msgstr "&Statistik"
+
+#~ msgid "&Custom"
+#~ msgstr "&Biasa"
+
+#~ msgid "&Refresh All Variables"
+#~ msgstr "&Muat Semula Semua Variabel"
+
+#, fuzzy
+#~ msgid "Update all variables to current values"
+#~ msgstr "Kemas kini semua variabel kepada nilai semasa."
+
+#~ msgid ""
+#~ "Update all variables in the document to current values.<br><br>This will "
+#~ "update page numbers, dates or any other variables that need updating."
+#~ msgstr ""
+#~ "Kemas kini semua variabel dalam dokumen kepada nilai semasa.<br><br>Ini "
+#~ "akan mengemaskinikan nombor halaman, tarikh atau apa-apa pembolehubah "
+#~ "yang perlu dikemaskinikan. "
+
+#~ msgid "&Expression"
+#~ msgstr "&Ungkapan"
+
+#~ msgid "Te&xt Frame"
+#~ msgstr "Bingkai &Teks"
+
+#, fuzzy
+#~ msgid "Create a new text frame"
+#~ msgstr "Cipta bingkai teks baru."
+
+#~ msgid "Create a new text frame."
+#~ msgstr "Cipta bingkai teks baru."
+
+#~ msgid "For&mula"
+#~ msgstr "&Formula"
+
+#, fuzzy
+#~ msgid "Insert a formula into a new frame"
+#~ msgstr "Selitkan formula ke dalam bingkai baru."
+
+#~ msgid "Insert a formula into a new frame."
+#~ msgstr "Selitkan formula ke dalam bingkai baru."
+
+#~ msgid "&Table..."
+#~ msgstr "&Jadual..."
+
+#~ msgid ""
+#~ "Create a table.<br><br>The table can either exist in a frame of its own "
+#~ "or inline."
+#~ msgstr ""
+#~ "Cipta jadual.<br><br>Jadual boleh wujud dalam bingkainya sendiri atau "
+#~ "sebaris. "
+
+#, fuzzy
+#~ msgid "Create a new frame for a picture"
+#~ msgstr "Cipta bingkai baru untuk gambar."
+
+#~ msgid "Create a new frame for a picture or diagram."
+#~ msgstr "Cipta bingkai baru untuk gambar atau rajah."
+
+#~ msgid "&Object Frame"
+#~ msgstr "Bingkai &Objek"
+
+#, fuzzy
+#~ msgid "Insert an object into a new frame"
+#~ msgstr "Selitkan objek ke dalam bingkai baru."
+
+#~ msgid "Insert an object into a new frame."
+#~ msgstr "Selitkan objek ke dalam bingkai baru."
+
+#~ msgid "Fi&le..."
+#~ msgstr "&Fail..."
+
+#~ msgid "&Font..."
+#~ msgstr "&Fon..."
+
+#~ msgid "Change character size, font, boldface, italics etc."
+#~ msgstr "Ubah saiz aksara, fon, muka tebal, italik dll."
+
+#~ msgid "Change the attributes of the currently selected characters."
+#~ msgstr "Ubah atribut bagi aksara yang sedang dipilih."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&Perenggan..."
+
+#~ msgid ""
+#~ "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~ msgstr "Ubah jidar perenggan, aliran teks, sempadan, bulet, penomboran dll."
+
+#~ msgid ""
+#~ "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~ "<p>Select text in multiple paragraphs to change the formatting of all "
+#~ "selected paragraphs.<p>If no text is selected, the paragraph where the "
+#~ "cursor is located will be changed."
+#~ msgstr ""
+#~ "Ubah jidar perenggan, aliran teks, sempadan, bulet, penomboran dll."
+#~ "<p>Pilih teks dalam perenggan berbilang untuk mengubah pemformatan bagi "
+#~ "semua perenggan yang dipilih.<p>Jika teks tidak dipilih, perenggan di "
+#~ "mana kursor berada akan diubah. "
+
+#~ msgid "&Frame Style Manager"
+#~ msgstr "Pengurus Gaya &Bingkai"
+
+#, fuzzy
+#~ msgid "Change attributes of framestyles"
+#~ msgstr "Ubah atribut gaya bingkai."
+
+#~ msgid ""
+#~ "Change background and borders of framestyles.<p>Multiple framestyles can "
+#~ "be changed using the dialog box."
+#~ msgstr ""
+#~ "Ubah latar belakang dan sempadan gaya bingkai.<p>Gaya bingkai berbilang "
+#~ "boleh diubah dengan menggunakan kotak dialog."
+
+#, fuzzy
+#~ msgid "Change attributes of styles"
+#~ msgstr "Ubah atribut gaya."
+
+#~ msgid ""
+#~ "Change font and paragraph attributes of styles.<p>Multiple styles can be "
+#~ "changed using the dialog box."
+#~ msgstr ""
+#~ "Ubah atribut fon dan perenggan bagi gaya.<p>Gaya berbilang boleh diubah "
+#~ "dengan menggunakan kotak dialog."
+
+#, fuzzy
+#~ msgid "Font Size"
+#~ msgstr "Lindungi Saiz"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "Tambahkan Saiz Fon"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "Kurangkan Saiz Fon"
+
+#~ msgid "St&yle"
+#~ msgstr "&Gaya"
+
+#~ msgid "Default Format"
+#~ msgstr "Format Piawai"
+
+#, fuzzy
+#~ msgid "Change font and paragraph attributes to their default values"
+#~ msgstr "Ubah atribut fon dan perenggan kepada nilai piawainya."
+
+#~ msgid "Change font and paragraph attributes to their default values."
+#~ msgstr "Ubah atribut fon dan perenggan kepada nilai piawainya."
+
+#~ msgid "&Strike Out"
+#~ msgstr "&Garis lorek"
+
+#~ msgid "Align &Left"
+#~ msgstr "Jajarkan &Kiri"
+
+#~ msgid "Align &Center"
+#~ msgstr "Jajarkan &Tengah"
+
+#~ msgid "Align &Right"
+#~ msgstr "Jajarkan &Kanan"
+
+#~ msgid "Align &Block"
+#~ msgstr "Jajarkan &Blok"
+
+#~ msgid "Superscript"
+#~ msgstr "Superskrip"
+
+#~ msgid "Subscript"
+#~ msgstr "Subskrip"
+
+#~ msgid "Increase Indent"
+#~ msgstr "Tambahkan Inden"
+
+#~ msgid "Decrease Indent"
+#~ msgstr "Kurangkan Inden"
+
+#~ msgid "Text Color..."
+#~ msgstr "Warna Teks..."
+
+#~ msgid "Bullet"
+#~ msgstr "Bulet"
+
+#~ msgid "Framest&yle"
+#~ msgstr "&Gaya bingkai"
+
+#~ msgid "Border Left"
+#~ msgstr "Kiri Sempadan"
+
+#~ msgid "Border Right"
+#~ msgstr "Kanan Sempadan"
+
+#~ msgid "Border Top"
+#~ msgstr "Atas Sempadan"
+
+#~ msgid "Border Bottom"
+#~ msgstr "Bawah Sempadan"
+
+#~ msgid "Border Style"
+#~ msgstr "Gaya Sempadan"
+
+#~ msgid "Border Width"
+#~ msgstr "Lebar Sempadan"
+
+#~ msgid "Border Color"
+#~ msgstr "Warna Sempadan"
+
+#~ msgid "Text Background Color..."
+#~ msgstr "Warna Latar Belakang Teks..."
+
+#, fuzzy
+#~ msgid "Change background color for currently selected text"
+#~ msgstr "Ubah warna latar belakang bagi teks yang sedang dipilih."
+
+#~ msgid "Change background color for currently selected text."
+#~ msgstr "Ubah warna latar belakang bagi teks yang sedang dipilih."
+
+#~ msgid "&Properties"
+#~ msgstr "&Ciri"
+
+#, fuzzy
+#~ msgid "Adjust properties of the current table"
+#~ msgstr "Selaraskan ciri jadual semasa."
+
+#~ msgid "Adjust properties of the current table."
+#~ msgstr "Selaraskan ciri jadual semasa."
+
+#~ msgid "&Insert Row..."
+#~ msgstr "&Selitkan Baris..."
+
+#, fuzzy
+#~ msgid "Insert one or more rows at cursor location"
+#~ msgstr "Selitkan satu baris atau lebih pada lokasi kursor."
+
+#~ msgid "Insert one or more rows at current cursor location."
+#~ msgstr "Selitkan satu baris atau lebih pada lokasi semasa kursor."
+
+#~ msgid "I&nsert Column..."
+#~ msgstr "&Selitkan Lajur..."
+
+#, fuzzy
+#~ msgid "Insert one or more columns into the current table"
+#~ msgstr "Selitkan satu lajur atau lebih ke dalam jadual semasa."
+
+#~ msgid "Insert one or more columns into the current table."
+#~ msgstr "Selitkan satu lajur atau lebih ke dalam jadual semasa."
+
+#, fuzzy
+#~ msgid "Delete selected rows from the current table"
+#~ msgstr "Hapuskan baris yang dipilih dari jadual semasa."
+
+#~ msgid "Delete selected rows from the current table."
+#~ msgstr "Hapuskan baris yang dipilih dari jadual semasa."
+
+#, fuzzy
+#~ msgid "Delete selected columns from the current table"
+#~ msgstr "Hapuskan lajur yang dipilih dari jadual semasa."
+
+#~ msgid "Delete selected columns from the current table."
+#~ msgstr "Hapuskan lajur yang dipilih dari jadual semasa."
+
+#~ msgid "Resize Column..."
+#~ msgstr "Saiz Semula Lajur..."
+
+#, fuzzy
+#~ msgid "Change the width of the currently selected column"
+#~ msgstr "Ubah lebar lajur yang sedang dipilih."
+
+#~ msgid "Change the width of the currently selected column."
+#~ msgstr "Ubah lebar lajur yang sedang dipilih."
+
+#~ msgid "&Join Cells"
+#~ msgstr "&Sambung Sel"
+
+#, fuzzy
+#~ msgid "Join two or more cells into one large cell"
+#~ msgstr "Sambung dua sel atau lebih menjadi satu sel yang besar."
+
+#~ msgid ""
+#~ "Join two or more cells into one large cell.<p>This is a good way to "
+#~ "create titles and labels within a table."
+#~ msgstr ""
+#~ "Sambung dua sel atau lebih menjadi sel yang besar.<p>Ini cara yang baik "
+#~ "untuk mencipta tajuk dan label dalam jadual."
+
+#~ msgid "&Split Cell..."
+#~ msgstr "&Ceraikan Sel..."
+
+#, fuzzy
+#~ msgid "Split one cell into two or more cells"
+#~ msgstr "Ceraikan satu sel menjadi dua sel atau lebih."
+
+#~ msgid ""
+#~ "Split one cell into two or more cells.<p>Cells can be split horizontally, "
+#~ "vertically or both directions at once."
+#~ msgstr ""
+#~ "Ceraikan satu sel menjadi dua sel atau lebih.<p>Sel boleh diceraikan "
+#~ "secara mendatar, menegak atau dalam kedua-dua hala serentak."
+
+#~ msgid "Protect Cells"
+#~ msgstr "Lindungi Sel"
+
+#, fuzzy
+#~ msgid "Prevent changes to content of selected cells"
+#~ msgstr "Cegah perubahan pada kandungan dalam sel yang dipilih."
+
+#~ msgid ""
+#~ "Toggles cell protection on and off.<br><br>When cell protection is on, "
+#~ "the user can not alter the content or formatting of the text within the "
+#~ "cell."
+#~ msgstr ""
+#~ "Buka dan tutup toggel perlindungan sel.<br><br>Apabila perlindungan sel "
+#~ "dibuka, pengguna tidak boleh meminda kandungan atau pemformatan teks "
+#~ "dalam sel. "
+
+#~ msgid "&Ungroup Table"
+#~ msgstr "&Lerai Jadual"
+
+#, fuzzy
+#~ msgid "Break a table into individual frames"
+#~ msgstr "Pisahkan jadual kepada bingkai individu."
+
+#~ msgid ""
+#~ "Break a table into individual frames<p>Each frame can be moved "
+#~ "independently around the page."
+#~ msgstr ""
+#~ "Pisahkan jadual kepada bingkai individu<p>Setiap bingkai boleh dialihkan "
+#~ "secara berasingan di sekitar halaman. "
+
+#~ msgid "Delete &Table"
+#~ msgstr "Hapuskan & Jadual"
+
+#, fuzzy
+#~ msgid "Delete the entire table"
+#~ msgstr "Hapuskan seluruh jadual."
+
+#~ msgid ""
+#~ "Deletes all cells and the content within the cells of the currently "
+#~ "selected table."
+#~ msgstr ""
+#~ "Hapuskan semua sel dan kandungan dalam sel bagi jadual yang sedang "
+#~ "dipilih."
+
+#~ msgid "T&able Style Manager"
+#~ msgstr "Pengurus Gaya &Jadual"
+
+#, fuzzy
+#~ msgid "Change attributes of tablestyles"
+#~ msgstr "Ubah atribut gaya jadual."
+
+#~ msgid ""
+#~ "Change textstyle and framestyle of the tablestyles.<p>Multiple "
+#~ "tablestyles can be changed using the dialog box."
+#~ msgstr ""
+#~ "Ubah gaya teks dan gaya bingkai bagi gaya jadual.<p>Gaya jadual berbilang "
+#~ "boleh diubah dengan menggunakan kotak dialog."
+
+#~ msgid "Table&style"
+#~ msgstr "&Gaya jadual"
+
+#~ msgid "Convert Table to Text"
+#~ msgstr "Ubah Jadual ke Teks"
+
+#~ msgid "Sort Text..."
+#~ msgstr "Isih Teks..."
+
+#~ msgid "Add Expression"
+#~ msgstr "Tambah Ungkapan"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Aktifkan Autopembetulan"
+
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Nyahaktifkan Autopembetulan"
+
+#, fuzzy
+#~ msgid "Toggle autocorrection on and off"
+#~ msgstr "Buka dan tutup toggel autopembetulan."
+
+#~ msgid "Toggle autocorrection on and off."
+#~ msgstr "Buka dan tutup toggel autopembetulan."
+
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Konfigur &Autopembetulan..."
+
+#~ msgid ""
+#~ "Change autocorrection options including:<p> <UL><LI><P>exceptions to "
+#~ "autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> "
+#~ "<LI><P>and basic autocorrection options</P>."
+#~ msgstr ""
+#~ "Ubah pilihan autopembetulan termasuk;<p><UL><LI>pengecualian "
+#~ "autopembetulan</P><LI><P>tambah/alih keluar teks penggantian "
+#~ "autopembetulan</P><LI><P>dan pilihan autopembetulan asas</P>."
+
+#~ msgid "Custom &Variables..."
+#~ msgstr "&Variabel Biasa..."
+
+#~ msgid "Edit &Personal Expressions..."
+#~ msgstr "Edit Ungkapan &Peribadi..."
+
+#, fuzzy
+#~ msgid "Add or change one or more personal expressions"
+#~ msgstr "Tambah atau ubah satu ungkapan peribadi atau lebih. "
+
+#~ msgid ""
+#~ "Add or change one or more personal expressions.<p>Personal expressions "
+#~ "are a way to quickly insert commonly used phrases or text into your "
+#~ "document."
+#~ msgstr ""
+#~ "Tambah atau ubah satu ungkapan peribadi atau lebih.<p>Ungkapan peribadi "
+#~ "ialah satu cara untuk menyelit frasa atau teks yang kerap digunakan "
+#~ "dengan cepat ke dalam dokumen anda."
+
+#~ msgid "Change Case..."
+#~ msgstr "Ubah Huruf..."
+
+#, fuzzy
+#~ msgid "Alter the capitalization of selected text"
+#~ msgstr "Pinda huruf besar dalam teks yang dipilih."
+
+#~ msgid ""
+#~ "Alter the capitalization of selected text to one of five pre-defined "
+#~ "patterns.<p>You can also switch all letters from upper case to lower case "
+#~ "and from lower case to upper case in one move."
+#~ msgstr ""
+#~ "Pinda huruf besar dalam teks yang dipilih kepada satu daripada lima corak "
+#~ "pratentu.<p>Anda juga boleh menukar semua huruf besar kepada huruf kecil "
+#~ "dan huruf kecil kepada huruf besar dalam satu alihan. "
+
+#~ msgid "Change Picture..."
+#~ msgstr "Ubah Gambar..."
+
+#, fuzzy
+#~ msgid "Change the picture in the currently selected frame"
+#~ msgstr "Ubah gambar dalam bingkai yang sedang dipilih."
+
+#~ msgid ""
+#~ "You can specify a different picture in the current frame.<br><br>KWord "
+#~ "automatically resizes the new picture to fit within the old frame."
+#~ msgstr ""
+#~ "Anda boleh tetapkan gambar yang berbeza dalam bingkai semasa."
+#~ "<br><br>KWord akan mensaiz semula secara automatik gambar baru supaya "
+#~ "muat dalam bingkai lama. "
+
+#~ msgid "Configure Header/Footer..."
+#~ msgstr "Konfigur Pengepala/Kekaki..."
+
+#, fuzzy
+#~ msgid "Configure the currently selected header or footer"
+#~ msgstr "Konfigur pengepala atau pengaki yang sedang dipilih."
+
+#~ msgid "Configure the currently selected header or footer."
+#~ msgstr "Konfigur pengepala atau pengaki yang sedang dipilih."
+
+#, fuzzy
+#~ msgid "Open the link with the appropriate application"
+#~ msgstr "Buka pautan dengan aplikasi yang betul."
+
+#~ msgid ""
+#~ "Open the link with the appropriate application.<br><br>Web addresses are "
+#~ "opened in a browser.<br>Email addresses begin a new message addressed to "
+#~ "the link.<br>File links are opened by the appropriate viewer or editor."
+#~ msgstr ""
+#~ "Buka pautan dengan aplikasi yang betul.<br><br>Alamat web dibuka dalam "
+#~ "pelayar.<br>Alamat e-mel memulakan mesej baru yang dialamatkan ke pautan."
+#~ "<br>Pautan fail dibuka dengan menggunakan pemapar atau editor yang betul. "
+
+#~ msgid "Change Link..."
+#~ msgstr "Ubah Pautan..."
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected link"
+#~ msgstr "Ubah kandungan pautan yang sedang dipilih."
+
+#~ msgid "Change the details of the currently selected link."
+#~ msgstr "Ubah butiran dalam pautan yang sedang dipilih."
+
+#~ msgid "Copy Link"
+#~ msgstr "Salin Pautan"
+
+#~ msgid "Add to Bookmark"
+#~ msgstr "Tambah ke Penanda Buku"
+
+#~ msgid "Remove Link"
+#~ msgstr "Alih Keluar Pautan"
+
+#~ msgid "Show Doc Structure"
+#~ msgstr "Papar Struktur Dokumen"
+
+#~ msgid "Hide Doc Structure"
+#~ msgstr "Sembunyikan Struktur Dokumen"
+
+#, fuzzy
+#~ msgid "Open document structure sidebar"
+#~ msgstr "Buka bar sisi struktur dokumen."
+
+#~ msgid ""
+#~ "Open document structure sidebar.<p>This sidebar helps you organize your "
+#~ "document and quickly find pictures, tables etc."
+#~ msgstr ""
+#~ "Buka bar sisi struktur dokumen.<p>Bar sisi ini membantu menguruskan "
+#~ "dokumen anda dan dapat mencari gambar, jadual dll dengan cepat."
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Sembunyikan Pembaris"
+
+#, fuzzy
+#~ msgid "Hide Grid"
+#~ msgstr "Sembunyikan Pengaki"
+
+#~ msgid "Configure C&ompletion..."
+#~ msgstr "Konfigur &Penyiapan..."
+
+#, fuzzy
+#~ msgid "Change the words and options for autocompletion"
+#~ msgstr "Ubah kata dan pilihan untuk autopelengkapan."
+
+#~ msgid "Add words or change the options for autocompletion."
+#~ msgstr "Tambah kata atau ubah pilihan untuk autopelengkapan."
+
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "Selitkan Ruang Bukan Pemisah"
+
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Selitkan Tanda Sempang Bukan Pemisah"
+
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Selitkan Tanda Sempang Lembut"
+
+#~ msgid "Line Break"
+#~ msgstr "Pemisah Baris"
+
+#~ msgid "Increase Numbering Level"
+#~ msgstr "Tambah Tahap Penomboran"
+
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "Kurangkan Tahap Penomboran"
+
+#~ msgid "Edit Variable..."
+#~ msgstr "Edit Variabel..."
+
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Guna Autopembetulan"
+
+#, fuzzy
+#~ msgid ""
+#~ "Manually force KWord to scan the entire document and apply autocorrection"
+#~ msgstr ""
+#~ "Paksa KWord secara manual untuk mengimbas seluruh dokumen dan menggunakan "
+#~ "autopembetulan."
+
+#~ msgid ""
+#~ "Manually force KWord to scan the entire document and apply autocorrection."
+#~ msgstr ""
+#~ "Paksa KWord secara manual untuk mengimbas seluruh dokumen dan menggunakan "
+#~ "autopembetulan."
+
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Cipta Gaya Dari Pemilihan..."
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected text"
+#~ msgstr "Cipta gaya baru berasaskan teks yang sedang dipilih. "
+
+#~ msgid "Create a new style based on the currently selected text."
+#~ msgstr "Cipta gaya baru berasaskan teks yang sedang dipilih. "
+
+#~ msgid "&Footnote..."
+#~ msgstr "&Nota kaki..."
+
+#, fuzzy
+#~ msgid "Change the look of footnotes"
+#~ msgstr "Ubah rupa nota kaki."
+
+#~ msgid "Change the look of footnotes."
+#~ msgstr "Ubah rupa nota kaki."
+
+#~ msgid "Edit Footnote"
+#~ msgstr "Edit Nota Kaki"
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected footnote"
+#~ msgstr "Ubah kandungan nota kaki yang sedang dipilih."
+
+#~ msgid "Change the content of the currently selected footnote."
+#~ msgstr "Ubah kandungan nota kaki yang sedang dipilih."
+
+#~ msgid "Change Footnote/Endnote Parameter"
+#~ msgstr "Ubah Parameter Nota Kaki/Nota Hujung"
+
+#, fuzzy
+#~ msgid "Save Picture As..."
+#~ msgstr "Simpan Gambar..."
+
+#, fuzzy
+#~ msgid "Save the picture in a separate file"
+#~ msgstr "Simpan gambar dalam fail berasingan."
+
+#~ msgid ""
+#~ "Save the picture in the currently selected frame in a separate file, "
+#~ "outside the KWord document."
+#~ msgstr ""
+#~ "Simpan gambar dalam bingkai yang sedang dipilih dalam fail yang "
+#~ "berasingan, di luar dokumen KWord."
+
+#~ msgid "Autospellcheck"
+#~ msgstr "Autosemak eja"
+
+#~ msgid "&Create Framestyle From Frame..."
+#~ msgstr "&Cipta Gaya Bingkai Dari Bingkai..."
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected frame"
+#~ msgstr "Cipta gaya baru berasaskan bingkai yang sedang dipilih."
+
+#~ msgid "Create a new framestyle based on the currently selected frame."
+#~ msgstr "Cipta gaya bingkai baru berasaskan bingkai yang sedang dipilih."
+
+#~ msgid "Type Anywhere Cursor"
+#~ msgstr "Taip Kursor Di mana Sahaja"
+
+#~ msgid "Convert to Text Box"
+#~ msgstr "Tukar ke Kotak Teks"
+
+#~ msgid "Ignore All"
+#~ msgstr "Abaikan Semua"
+
+#~ msgid "Add Word to Dictionary"
+#~ msgstr "Tambah Kata ke Kamus"
+
+#~ msgid "Store Document Internally"
+#~ msgstr "Simpan Dokumen Secara Dalaman"
+
+#, fuzzy
+#~ msgid "Go to Document Structure"
+#~ msgstr "Struktur Dokumen"
+
+#~ msgid "Insert variable \"%1\" into the text"
+#~ msgstr "Selitkan variabel \"%1\" ke dalam teks"
+
+#, fuzzy
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr "%1. Bingkai: %2, %3  -  %4, %5 (lebar: %6, tinggi: %7) (%8)"
+
+#~ msgid "%1 frames selected"
+#~ msgstr "Bingkai %1 dipilih"
+
+#~ msgid "Frame Background Color..."
+#~ msgstr "Warna Latar Belakang Bingkai..."
+
+#, fuzzy
+#~ msgid "Apply a paragraph style"
+#~ msgstr "Guna Gaya Bingkai"
+
+#, fuzzy
+#~ msgid "Apply a frame style"
+#~ msgstr "Guna Gaya Bingkai"
+
+#, fuzzy
+#~ msgid "Apply a table style"
+#~ msgstr "Guna Gaya Bingkai"
+
+#~ msgid "Image"
+#~ msgstr "Imej"
+
+#~ msgid "Select paste format:"
+#~ msgstr "Pilih format tampal:"
+
+#~ msgid ""
+#~ "You are about to delete a table.\n"
+#~ "Doing so will delete all the text in the table.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Anda hampir menghapuskan jadual.\n"
+#~ "Melakukannya akan menghapuskan semua teks dalam jadual.\n"
+#~ "Anda pasti ingin lakukannya?"
+
+#~ msgid "Do you want to delete this frame?"
+#~ msgstr "Anda mahu hapuskan bingkai ini?"
+
+#~ msgid "Change Custom Variable"
+#~ msgstr "Ubah Variabel Biasa"
+
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#~ msgid "Insert Picture Inline"
+#~ msgstr "Selitkan Gambar Sebaris"
+
+#~ msgid "Set cursor where you want to insert inline frame."
+#~ msgstr "Setkan kursor di tempat anda hendak menyelitkan bingkai sebaris."
+
+#~ msgid "Insert Inline Frame"
+#~ msgstr "Selitkan Bingkai Sebaris"
+
+#~ msgid "You can only insert footnotes or endnotes into the first frameset."
+#~ msgstr ""
+#~ "Anda hanya boleh selitkan nota kaki atau nota hujung ke dalam set bingkai "
+#~ "pertama."
+
+#~ msgid "Insert Footnote"
+#~ msgstr "Selitkan Nota Kaki"
+
+#~ msgid "Update Table of &Contents"
+#~ msgstr "Kemas Kini Jadual &Kandungan"
+
+#~ msgid "Change Font"
+#~ msgstr "Ubah Fon"
+
+#~ msgid "Change Layout"
+#~ msgstr "Ubah Bentangan"
+
+#~ msgid "You must select a frame first."
+#~ msgstr "Anda mesti pilih bingkai dahulu."
+
+#~ msgid "Format Frameset"
+#~ msgstr "Formatkan Set Bingkai"
+
+#~ msgid "Insert Table"
+#~ msgstr "Selitkan Jadual"
+
+#~ msgid "Insert Formula"
+#~ msgstr "Selitkan Formula"
+
+#~ msgid "Remove Rows"
+#~ msgstr "Alih Keluar Baris"
+
+#~ msgid "Remove Columns"
+#~ msgstr "Alih Keluar Lajur"
+
+#~ msgid "Adjust Table"
+#~ msgstr "Selaraskan Jadual"
+
+#, fuzzy
+#~ msgid "Join Cells Failed"
+#~ msgstr "Sambung Sel"
+
+#~ msgid ""
+#~ "You have to select some cells which are next to each other and are not "
+#~ "already joined."
+#~ msgstr ""
+#~ "Anda perlu pilih beberapa sel yang bersebelahan antara satu dengan lain "
+#~ "dan belum disambungkan."
+
+#~ msgid "Join Cells"
+#~ msgstr "Sambung Sel"
+
+#~ msgid "You have to put the cursor into a table before splitting cells."
+#~ msgstr "Anda perlu letakkan kursor ke dalam jadual sebelum menceraikan sel."
+
+#~ msgid "Split Cells"
+#~ msgstr "Cerai Sel"
+
+#~ msgid ""
+#~ "There is not enough space to split the cell into that many parts, make it "
+#~ "bigger first"
+#~ msgstr ""
+#~ "Ruang tidak cukup untuk menceraikan sel ke dalam beberapa bahagian, "
+#~ "besarkannya dahulu"
+
+#~ msgid "Ungroup Table"
+#~ msgstr "Leraikan Jadual"
+
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Guna Gaya pada Bingkai"
+
+#~ msgid "Apply Style to Frames"
+#~ msgstr "Guna Gaya pada Bingkai"
+
+#~ msgid "Apply Framestyle to Frame"
+#~ msgstr "Guna Gaya Bingkai pada Bingkai"
+
+#~ msgid "Apply Framestyle to Frames"
+#~ msgstr "Guna Gaya Bingkai pada Bingkai"
+
+#~ msgid "Apply Framestyle"
+#~ msgstr "Guna Gaya Bingkai"
+
+#~ msgid "Apply Tablestyle to Frame"
+#~ msgstr "Guna Gaya Jadual pada Bingkai"
+
+#~ msgid "Apply Tablestyle to Frames"
+#~ msgstr "Guna Gaya Jadual pada Bingkai"
+
+#~ msgid "Change Text Size"
+#~ msgstr "Ubah Saiz Teks"
+
+#~ msgid "Change Text Font"
+#~ msgstr "Ubah Fon Teks"
+
+#~ msgid "Make Text Bold"
+#~ msgstr "Jadikan Teks Tebal"
+
+#~ msgid "Make Text Italic"
+#~ msgstr "Jadikan Teks Italik"
+
+#~ msgid "Underline Text"
+#~ msgstr "Garis Bawah Teks"
+
+#~ msgid "Strike Out Text"
+#~ msgstr "Garis Lorek Teks"
+
+#~ msgid "Set Text Color"
+#~ msgstr "Setkan Warna Teks"
+
+#~ msgid "Center Text"
+#~ msgstr "Ke tengahkan Teks"
+
+#~ msgid "Justify Text"
+#~ msgstr "Justifikasikan Teks"
+
+#~ msgid "Change List Type"
+#~ msgstr "Ubah Jenis Senarai"
+
+#~ msgid "Make Text Superscript"
+#~ msgstr "Jadikan Teks Superskrip"
+
+#~ msgid "Make Text Subscript"
+#~ msgstr "Jadikan Teks Subskrip"
+
+#~ msgid "Change Case of Text"
+#~ msgstr "Ubah Huruf Teks"
+
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "Tambah Kedalaman Perenggan"
+
+#~ msgid "Decrease Paragraph Depth"
+#~ msgstr "Kurangkan Kedalaman Perenggan"
+
+#, fuzzy
+#~ msgid "Change Top Frame Border"
+#~ msgstr "Ubah Bingkai Sempadan Atas"
+
+#, fuzzy
+#~ msgid "Change Bottom Frame Border"
+#~ msgstr "Ubah Bingkai Sempadan Bawah"
+
+#~ msgid "Change Tabulator"
+#~ msgstr "Ubah Penjadual"
+
+#~ msgid "Change First Line Indent"
+#~ msgstr "Ubah Inden Baris Pertama"
+
+#~ msgid "Change Indent"
+#~ msgstr "Ubah Inden"
+
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "Betulkan Kata Salah Eja"
+
+#~ msgid "Edit Endnote"
+#~ msgstr "Edit Nota Hujung"
+
+#~ msgid "Change Footnote Parameter"
+#~ msgstr "Ubah Parameter Nota Kaki"
+
+#~ msgid "Change Endnote Parameter"
+#~ msgstr "Ubah Parameter Nota Hujung"
+
+#, fuzzy
+#~ msgid "D&elete Current Column..."
+#~ msgstr "&Hapuskan Lajur yang Dipilih..."
+
+#~ msgid "D&elete Selected Columns..."
+#~ msgstr "&Hapuskan Lajur yang Dipilih..."
+
+#, fuzzy
+#~ msgid "&Delete Current Row..."
+#~ msgstr "&Hapuskan Baris yang Dipilih..."
+
+#~ msgid "&Delete Selected Rows..."
+#~ msgstr "&Hapuskan Baris yang Dipilih..."
+
+#~ msgid "Change Picture"
+#~ msgstr "Ubah Gambar"
+
+#~ msgid "Save Picture"
+#~ msgstr "Simpan Gambar"
+
+#~ msgid "Error during saving. Could not open '%1' for writing"
+#~ msgstr "Ralat semasa menyimpan. Tidak dapat buka '%1' untuk menulis"
+
+#~ msgid "Unable to save the file to '%1'. %2."
+#~ msgstr "Tidak boleh simpan fail ke '%1'.%2."
+
+#, fuzzy
+#~ msgid "Error during saving. Could not create temporary file."
+#~ msgstr "Ralat semasa menyimpan. Tidak dapat cipta fail sementara: %1."
+
+#~ msgid "URL %1 is invalid."
+#~ msgstr "URL %1 tidak sah."
+
+#~ msgid "Move Frame"
+#~ msgstr "Alih Bingkai"
+
+#~ msgid "Change Note Text"
+#~ msgstr "Ubah Teks Nota"
+
+#~ msgid "Apply Autoformat"
+#~ msgstr "Guna Autoformat"
+
+#~ msgid "Change Footnote Parameters"
+#~ msgstr "Ubah Parameter Nota Kaki"
+
+#~ msgid "Insert File"
+#~ msgstr "Selitkan Fail"
+
+#~ msgid "File name is not a KWord file!"
+#~ msgstr "Nama fail bukan KWord!"
+
+#~ msgid "Normal"
+#~ msgstr "Biasa"
+
+#~ msgid "Delete Frames"
+#~ msgstr "Hapuskan Bingkai"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Seting Stor"
+
+#~ msgid "Table %1"
+#~ msgstr "Jadual %1"
+
+#~ msgctxt ""
+#~ "Hello dear translator :), 1 is the table name, 2 and 3 are row and column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 Sel %2,%3"
+
+#~ msgid "Font Family"
+#~ msgstr "Keluarga Fon"
+
+#, fuzzy
+#~ msgid "Speak Text"
+#~ msgstr "Isih Teks"
+
+#~ msgid ""
+#~ "You are about to delete the last Frame of the Frameset '%1'. The contents "
+#~ "of this Frameset will not appear anymore!\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Anda hampir menghapuskan Bingkai terakhir dalam Set Bingkai '%1'. "
+#~ "Kandungan Set Bingkai ini tidak akan muncul lagi!\n"
+#~ "Anda pasti ingin lakukannya?"
+
+#~ msgid "Error during saving. Could not open '%1' temporary file for writing"
+#~ msgstr ""
+#~ "Ralat semasa menyimpan. Tidak dapat buka fail sementara '%1' untuk menulis"

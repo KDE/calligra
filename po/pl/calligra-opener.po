@@ -1,0 +1,176 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2015, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-12 00:45+0000\n"
+"PO-Revision-Date: 2022-01-24 20:26+0100\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 22.03.70\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Łukasz Wojniłowicz"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "lukasz.wojnilowicz@gmail.com"
+
+#: main.cpp:61
+#, kde-format
+msgctxt "@info"
+msgid "Mimetype for <filename>%1</filename> not found!"
+msgstr "Nie znaleziono typu mime dla <filename>%1</filename>!"
+
+#: main.cpp:119
+#, kde-format
+msgctxt "@action:button"
+msgid "Open with <application>%1</application>"
+msgstr "Otwórz w <application>%1</application>"
+
+#: main.cpp:124
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not find Calligra application suitable for opening <filename>%1</"
+"filename>.<nl/>Do you want to open the file using default application "
+"<application>%2</application>?"
+msgstr ""
+"Nie można znaleźć programu dla Calligry odpowiedniego do otwarcia <filename>"
+"%1</filename>.<nl/>Czy chcesz otworzyć plik przy użyciu domyślnego programu "
+"<application>%2</application>?"
+
+#: main.cpp:127
+#, kde-format
+msgctxt "@title:window"
+msgid "Calligra Application Not Found"
+msgstr "Nie znaleziono programu Calligra"
+
+#: main.cpp:157
+#, kde-format
+msgid "Calligra Opener"
+msgstr "Program otwierający dla Calligry"
+
+#: main.cpp:159
+#, kde-format
+msgid "Calligra Document Opener"
+msgstr "Program otwierający dokumenty dla Calligry"
+
+#: main.cpp:161
+#, kde-format
+msgid "Copyright 2010-%1 Calligra developers"
+msgstr "Prawa autorskie 2010-%1 Programiści Calligry"
+
+#: main.cpp:162
+#, kde-format
+msgid "Jarosław Staniek"
+msgstr "Jarosław Staniek"
+
+#: main.cpp:169
+#, kde-format
+msgid "Lists names of all available Calligra applications"
+msgstr "Stwórz wykaz nazw wszystkich dostępnych programów Calligra"
+
+#: main.cpp:170
+#, kde-format
+msgid "Files to open"
+msgstr "Pliki do otwarcia"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Łukasz Wojniłowicz"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lukasz.wojnilowicz@gmail.com"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid "Mimetype for <filename>%1</filename> not found!"
+#~ msgctxt "(qtundo-format) @info"
+#~ msgid "Mimetype for <filename>%1</filename> not found!"
+#~ msgstr "Nie znaleziono typu mime dla <filename>%1</filename>!"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Open with <application>%1</application>"
+#~ msgctxt "(qtundo-format) @action:button"
+#~ msgid "Open with <application>%1</application>"
+#~ msgstr "Otwórz za pomocą <application>%1</application>"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid ""
+#~| "Could not find Calligra application suitable for opening <filename>%1</"
+#~| "filename>.<nl/>Do you want to open the file using default application "
+#~| "<application>%2</application>?"
+#~ msgctxt "(qtundo-format) @info"
+#~ msgid ""
+#~ "Could not find Calligra application suitable for opening <filename>%1</"
+#~ "filename>.<nl/>Do you want to open the file using default application "
+#~ "<application>%2</application>?"
+#~ msgstr ""
+#~ "Nie można znaleźć programu dla Calligry odpowiedniego do otwarcia "
+#~ "<filename>%1</filename>.<nl/>Czy chcesz otworzyć plik przy użyciu "
+#~ "domyślnego programu <application>%2</application>?"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Calligra Application Not Found"
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Calligra Application Not Found"
+#~ msgstr "Nie znaleziono programu Calligra"
+
+#, fuzzy
+#~| msgid "Calligra Opener"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Opener"
+#~ msgstr "Program otwierający dla Calligry"
+
+#, fuzzy
+#~| msgid "Calligra Document Opener"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Opener"
+#~ msgstr "Program otwierający dokumenty dla Calligry"
+
+#, fuzzy
+#~| msgid "Copyright 2010-%1 Calligra developers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2010-%1 Calligra developers"
+#~ msgstr "Prawa autorskie 2010-%1 Programiści Calligry"
+
+#, fuzzy
+#~| msgid "Jarosław Staniek"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jarosław Staniek"
+#~ msgstr "Jarosław Staniek"
+
+#, fuzzy
+#~| msgid "Lists names of all available Calligra applications"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lists names of all available Calligra applications"
+#~ msgstr "Stwórz wykaz nazw wszystkich dostępnych programów Calligra"
+
+#, fuzzy
+#~| msgid "Files to open"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Files to open"
+#~ msgstr "Pliki do otwarcia"

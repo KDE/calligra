@@ -1,0 +1,5492 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdelibs_colors4\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-23 00:46+0000\n"
+"PO-Revision-Date: 2021-03-02 13:01+0000\n"
+"Last-Translator: Pedro Morais <morais@kde.org>\n"
+"Language-Team: pt <kde-i18n-pt@kde.org>\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-POFile-IgnoreConsistency: In\n"
+"X-POFile-IgnoreConsistency: &Lower\n"
+"X-POFile-SpellExtra: Khaki Azur Tojo Gainsboro Lavanda DL End HDR cc SHIFT\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-POFile-SpellExtra: am KoStore TextLabel pol OpenDocument DetailsPaneBase\n"
+"X-POFile-SpellExtra: Didot sheet pt Locator px QXml YCbCr OASIS PBKDF wmf\n"
+"X-POFile-SpellExtra: pm Chartreuse dm Tab maindoc dd AM PM SHA\n"
+"X-POFile-SpellExtra: KAddressbook Thistle org pages QCA name Chiffon qpic\n"
+"X-POFile-SpellExtra: mm XYZ saveXML Krita page Remote author PErfeito\n"
+"X-POFile-SpellExtra: Enter install rc email Resource Uniform Cyrille\n"
+"X-POFile-IgnoreConsistency: Tab\n"
+"X-POFile-IgnoreConsistency: End\n"
+"X-POFile-IgnoreConsistency: Single\n"
+"X-POFile-SpellExtra: graphs dot ps Slide ICC Cedric Hor Vert KoProperty\n"
+"X-POFile-SpellExtra: slide min pre foaf SPARQL space where rdf iCal prefix\n"
+"X-POFile-IgnoreConsistency: Light\n"
+"X-POFile-SpellExtra: RDF pkg wrap white geo select ODF Allanon bisel HSY\n"
+"X-POFile-IgnoreConsistency: Stylesheets\n"
+"X-POFile-SpellExtra: HSI HSL Oriya Abjad Malayalam Kannada Gurumukhi\n"
+"X-POFile-SpellExtra: AbjadMenor Marble Insert expr Kexi KexiDB aliases\n"
+"X-POFile-IgnoreConsistency: Clip\n"
+"X-POFile-IgnoreConsistency: Check\n"
+"X-POFile-SpellExtra: Photoshop Sketch NOT NULL EMPTY\n"
+"X-POFile-IgnoreConsistency: Update\n"
+"X-POFile-IgnoreConsistency: file\n"
+"X-POFile-SpellExtra: CorrespondênciaExacta Nomemarca PushButton\n"
+"X-POFile-SpellExtra: kbuildsycoca exe CMYK KoFileDialogTester blablabla\n"
+"X-POFile-SpellExtra: gpl desktop\n"
+"X-POFile-IgnoreConsistency: Layer\n"
+"X-POFile-IgnoreConsistency: delete\n"
+"X-POFile-IgnoreConsistency: Comment\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "José Nuno Pires"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "zepires@gmail.com"
+
+#: basicflakes/plugin/KoCreatePathToolFactory.cpp:17
+#, kde-format
+msgid "Draw path"
+msgstr "Desenhar um caminho"
+
+#: basicflakes/plugin/KoPencilToolFactory.cpp:16
+#, kde-format
+msgid "Freehand path"
+msgstr "Desenho livre de caminhos"
+
+#: basicflakes/tools/KoCreatePathTool.cpp:448
+#, kde-format
+msgid "Angle snapping delta:"
+msgstr "Delta de ajuste do ângulo:"
+
+#: basicflakes/tools/KoCreatePathTool.cpp:455
+#, kde-format
+msgid "Activate angle snap:"
+msgstr "Activar o ajuste do ângulo:"
+
+#: basicflakes/tools/KoCreatePathTool.cpp:463
+#, kde-format
+msgid "Angle Constraints"
+msgstr "Restrições do Ângulo"
+
+#: basicflakes/tools/KoCreatePathTool.cpp:467
+#: basicflakes/tools/KoPencilTool.cpp:336 widgets/KoGradientEditWidget.cpp:147
+#, kde-format
+msgid "Line"
+msgstr "Linha"
+
+#: basicflakes/tools/KoPencilTool.cpp:273
+#, kde-format
+msgid "Precision:"
+msgstr "Precisão:"
+
+#: basicflakes/tools/KoPencilTool.cpp:275
+#, kde-format
+msgctxt "The raw line data"
+msgid "Raw"
+msgstr "Em bruto"
+
+#: basicflakes/tools/KoPencilTool.cpp:276
+#: flake/KoConnectionShapeConfigWidget.cpp:20
+#, kde-format
+msgid "Curve"
+msgstr "Curva"
+
+#: basicflakes/tools/KoPencilTool.cpp:277
+#: flake/KoConnectionShapeConfigWidget.cpp:19
+#, kde-format
+msgid "Straight"
+msgstr "Direito"
+
+#: basicflakes/tools/KoPencilTool.cpp:286
+#: basicflakes/tools/KoPencilTool.cpp:292
+#, kde-format
+msgid "Optimize"
+msgstr "Optimizar"
+
+#: basicflakes/tools/KoPencilTool.cpp:298
+#, kde-format
+msgid "Exactness:"
+msgstr "Precisão:"
+
+#: basicflakes/tools/KoPencilTool.cpp:331
+#: basicflakes/tools/KoPencilTool.cpp:332
+#, kde-format
+msgid "Pencil"
+msgstr "Lápis"
+
+#: flake/commands/KoConnectionShapeTypeCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Change Connection"
+msgstr "Mudar a ligação"
+
+#: flake/commands/KoParameterHandleMoveCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Change parameter"
+msgstr "Modificar o parâmetro"
+
+#: flake/commands/KoParameterToPathCommand.cpp:31
+#: flake/commands/KoParameterToPathCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Convert to Path"
+msgstr "Converter para um Caminho"
+
+#: flake/commands/KoPathBreakAtPointCommand.cpp:29
+msgctxt "(qtundo-format)"
+msgid "Break subpath at points"
+msgstr "Quebrar o sub-caminho nos pontos"
+
+#: flake/commands/KoPathCombineCommand.cpp:45
+msgctxt "(qtundo-format)"
+msgid "Combine paths"
+msgstr "Combinar os caminhos"
+
+#: flake/commands/KoPathControlPointMoveCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Move control point"
+msgstr "Mover o ponto de controlo"
+
+#: flake/commands/KoPathFillRuleCommand.cpp:31
+msgctxt "(qtundo-format)"
+msgid "Set fill rule"
+msgstr "Definir a regra de preenchimento"
+
+#: flake/commands/KoPathPointInsertCommand.cpp:66
+msgctxt "(qtundo-format)"
+msgid "Insert points"
+msgstr "Inserir os pontos"
+
+#: flake/commands/KoPathPointMergeCommand.cpp:139
+msgctxt "(qtundo-format)"
+msgid "Merge points"
+msgstr "Reunir os pontos"
+
+#: flake/commands/KoPathPointMoveCommand.cpp:29
+#: flake/commands/KoPathPointMoveCommand.cpp:45
+msgctxt "(qtundo-format)"
+msgid "Move points"
+msgstr "Mover os pontos"
+
+#: flake/commands/KoPathPointRemoveCommand.cpp:91
+#: flake/commands/KoPathPointRemoveCommand.cpp:120
+msgctxt "(qtundo-format)"
+msgid "Remove points"
+msgstr "Remover os pontos"
+
+#: flake/commands/KoPathPointTypeCommand.cpp:35
+msgctxt "(qtundo-format)"
+msgid "Set point type"
+msgstr "Alterar o tipo de ponto"
+
+#: flake/commands/KoPathReverseCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Reverse paths"
+msgstr "Inverter os caminhos"
+
+#: flake/commands/KoPathSegmentBreakCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Break subpath"
+msgstr "Quebrar o sub-caminho"
+
+#: flake/commands/KoPathSegmentTypeCommand.cpp:121
+msgctxt "(qtundo-format)"
+msgid "Change segments to curves"
+msgstr "Mudar os segmentos para curvas"
+
+#: flake/commands/KoPathSegmentTypeCommand.cpp:123
+msgctxt "(qtundo-format)"
+msgid "Change segments to lines"
+msgstr "Mudar os segmentos para linhas"
+
+#: flake/commands/KoPathShapeMarkerCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Set marker"
+msgstr "Definir o marcador"
+
+#: flake/commands/KoShapeAlignCommand.cpp:74
+msgctxt "(qtundo-format)"
+msgid "Align shapes"
+msgstr "Alinhar as formas"
+
+#: flake/commands/KoShapeBackgroundCommand.cpp:50
+#: flake/commands/KoShapeBackgroundCommand.cpp:61
+#: flake/commands/KoShapeBackgroundCommand.cpp:76
+msgctxt "(qtundo-format)"
+msgid "Set background"
+msgstr "Mudar o fundo"
+
+#: flake/commands/KoShapeClipCommand.cpp:57
+#: flake/commands/KoShapeClipCommand.cpp:73
+msgctxt "(qtundo-format)"
+msgid "Clip Shape"
+msgstr "Recortar a forma"
+
+#: flake/commands/KoShapeCreateCommand.cpp:39
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Criar uma forma"
+
+#: flake/commands/KoShapeDeleteCommand.cpp:43
+msgctxt "(qtundo-format) Delete one shape"
+msgid "Delete shape"
+msgstr "Apagar a forma"
+
+#: flake/commands/KoShapeDeleteCommand.cpp:56
+msgctxt "(qtundo-format)"
+msgid "Delete shape"
+msgid_plural "Delete shapes"
+msgstr[0] "Apagar a forma"
+msgstr[1] "Apagar as formas"
+
+#: flake/commands/KoShapeDistributeCommand.cpp:117
+msgctxt "(qtundo-format)"
+msgid "Distribute shapes"
+msgstr "Distribuir as formas"
+
+#: flake/commands/KoShapeGroupCommand.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Group shapes"
+msgstr "Agrupar as formas"
+
+#: flake/commands/KoShapeGroupCommand.cpp:84
+msgctxt "(qtundo-format)"
+msgid "Add shapes to group"
+msgstr "Adicionar as formas ao grupo"
+
+#: flake/commands/KoShapeKeepAspectRatioCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Keep Aspect Ratio"
+msgstr "Manter as proporções"
+
+#: flake/commands/KoShapeLockCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Lock shapes"
+msgstr "Bloquear as formas"
+
+#: flake/commands/KoShapeMoveCommand.cpp:36
+#: flake/commands/KoShapeMoveCommand.cpp:54
+msgctxt "(qtundo-format)"
+msgid "Move shapes"
+msgstr "Mover as formas"
+
+#: flake/commands/KoShapeRenameCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Rename Shape"
+msgstr "Mudar o Nome da Forma"
+
+#: flake/commands/KoShapeReorderCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Reorder shapes"
+msgstr "Reordenar as formas"
+
+#: flake/commands/KoShapeRunAroundCommand.cpp:59
+msgctxt "(qtundo-format)"
+msgid "Change Shape RunAround"
+msgstr "Modificar a Circulação da Forma"
+
+#: flake/commands/KoShapeShadowCommand.cpp:54
+#: flake/commands/KoShapeShadowCommand.cpp:71
+#: flake/commands/KoShapeShadowCommand.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Set Shadow"
+msgstr "Definir a sombra"
+
+#: flake/commands/KoShapeShearCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Shear shapes"
+msgstr "Inclinar as formas"
+
+#: flake/commands/KoShapeSizeCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Resize shapes"
+msgstr "Dimensionar as formas"
+
+#: flake/commands/KoShapeStrokeCommand.cpp:59
+#: flake/commands/KoShapeStrokeCommand.cpp:78
+#: flake/commands/KoShapeStrokeCommand.cpp:89
+msgctxt "(qtundo-format)"
+msgid "Set stroke"
+msgstr "Definir o traço"
+
+#: flake/commands/KoShapeTransparencyCommand.cpp:35
+#: flake/commands/KoShapeTransparencyCommand.cpp:46
+#: flake/commands/KoShapeTransparencyCommand.cpp:59
+msgctxt "(qtundo-format)"
+msgid "Set opacity"
+msgstr "Definir a opacidade"
+
+#: flake/commands/KoShapeUnclipCommand.cpp:107
+msgctxt "(qtundo-format)"
+msgid "Unclip Shape"
+msgstr "Retirar o recorte da forma"
+
+#: flake/commands/KoShapeUnclipCommand.cpp:116
+msgctxt "(qtundo-format)"
+msgid "Unclip Shapes"
+msgstr "Retirar o recorte das formas"
+
+#: flake/commands/KoShapeUngroupCommand.cpp:46
+msgctxt "(qtundo-format)"
+msgid "Ungroup shapes"
+msgstr "Desagrupar as formas"
+
+#: flake/commands/KoSubpathJoinCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Close subpath"
+msgstr "Fechar o sub-caminho"
+
+#: flake/commands/KoSubpathJoinCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Join subpaths"
+msgstr "Reunir os sub-caminhos"
+
+#: flake/commands/KoSubpathRemoveCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove subpath"
+msgstr "Remover o sub-caminho"
+
+#: flake/KoConnectionShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Standard"
+msgstr "Normal"
+
+#: flake/KoConnectionShapeConfigWidget.cpp:18
+#, kde-format
+msgid "Lines"
+msgstr "Linhas"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#. i18n: ectx: property (text), widget (QLabel, lblTypeDesc)
+#: flake/KoConnectionShapeConfigWidget.ui:17
+#: widgets/koDocumentInfoAboutWidget.ui:141
+#: widgets/KoGradientEditWidget.cpp:152
+#, kde-format
+msgid "Type:"
+msgstr "Tipo:"
+
+#: flake/KoConnectionShapeFactory.cpp:22
+#, kde-format
+msgid "Tie"
+msgstr "Nó"
+
+#: flake/KoConnectionShapeFactory.cpp:24
+#, kde-format
+msgid "A connection between two other shapes"
+msgstr "Uma forma que desenha uma ligação entre outras duas formas"
+
+#: flake/KoGridData.cpp:210
+#, kde-format
+msgid "Show Grid"
+msgstr "Mostrar a Grelha"
+
+#: flake/KoGridData.cpp:211
+#, kde-format
+msgid "Shows or hides grid"
+msgstr "Mostra ou esconde a grelha"
+
+#: flake/KoPathShapeFactory.cpp:22
+#, kde-format
+msgid "Simple path shape"
+msgstr "Forma simples de caminho"
+
+#: flake/KoPathShapeFactory.cpp:24
+#, kde-format
+msgid "A simple path shape"
+msgstr "Uma forma simples de caminho"
+
+#: flake/KoShapeController.cpp:60 rdf/InsertSemanticObjectCreateAction.cpp:46
+#: rdf/InsertSemanticObjectReferenceAction.cpp:51
+#: text/InsertTextReferenceAction.cpp:50 text/InsertVariableAction.cpp:45
+#, kde-format
+msgid "%1 Options"
+msgstr "Opções do %1"
+
+#: flake/KoShapePaste.cpp:155
+msgctxt "(qtundo-format)"
+msgid "Paste Shapes"
+msgstr "Colar as Formas"
+
+#: flake/KoToolManager.cpp:451
+#, kde-format
+msgid "Active tool: %1"
+msgstr "Ferramenta activa: %1"
+
+#: flake/KoToolProxy.cpp:587
+msgctxt "(qtundo-format)"
+msgid "Paste Image"
+msgstr "Colar a Imagem"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nodeSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:30
+#, kde-format
+msgid "Nodes"
+msgstr "Nós"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, extensionSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:43
+#, kde-format
+msgid "Extension of lines"
+msgstr "Extensão das linhas"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, boundingBoxSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:56
+#, kde-format
+msgid "Bounding box of shape"
+msgstr "Zona envolvente da forma"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, snapDistance)
+#: flake/SnapGuideConfigWidget.ui:72
+#, kde-format
+msgid "Proximity distance where snapping happens"
+msgstr "Proximidade para ocorrer o ajuste"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, snapDistance)
+#: flake/SnapGuideConfigWidget.ui:75
+#, kde-format
+msgid " px"
+msgstr " pontos"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, orthogonalSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:85
+#, kde-format
+msgid "Orthogonal"
+msgstr "Ortogonal"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, intersectionSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:98
+#, kde-format
+msgid "Intersection of lines"
+msgstr "Intersecção de linhas"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lineGuideSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:111
+#, kde-format
+msgid "Guide lines"
+msgstr "Linhas-guia"
+
+#: flake/svg/SvgShapeFactory.cpp:23
+#, kde-format
+msgid "Embedded svg shape"
+msgstr "Forma SVG incorporada"
+
+#: flake/tools/KoCreateShapesToolFactory.cpp:16
+#, kde-format
+msgid "Create object"
+msgstr "Criar um objecto"
+
+#: flake/tools/KoPanToolFactory.cpp:17
+#, kde-format
+msgid "Pan"
+msgstr "Deslocamento"
+
+#: flake/tools/KoPathSegmentChangeStrategy.cpp:133
+msgctxt "(qtundo-format)"
+msgid "Change Segment"
+msgstr "Mudar o segmento"
+
+#: flake/tools/KoPathTool.cpp:97
+#, kde-format
+msgid "Corner point"
+msgstr "Ponto do canto"
+
+#: flake/tools/KoPathTool.cpp:102
+#, kde-format
+msgid "Smooth point"
+msgstr "Ponto suave"
+
+#: flake/tools/KoPathTool.cpp:107
+#, kde-format
+msgid "Symmetric Point"
+msgstr "Ponto Simétrico"
+
+#: flake/tools/KoPathTool.cpp:112
+#, kde-format
+msgid "Make curve point"
+msgstr "Criar um ponto da curva"
+
+#: flake/tools/KoPathTool.cpp:116
+#, kde-format
+msgid "Make line point"
+msgstr "Criar um ponto da linha"
+
+#: flake/tools/KoPathTool.cpp:120
+#, kde-format
+msgid "Segment to Line"
+msgstr "Segmento para Linha"
+
+#: flake/tools/KoPathTool.cpp:125
+#, kde-format
+msgid "Segment to Curve"
+msgstr "Segmento para Curva"
+
+#: flake/tools/KoPathTool.cpp:130
+#, kde-format
+msgid "Insert point"
+msgstr "Inserir um ponto"
+
+#: flake/tools/KoPathTool.cpp:135
+#, kde-format
+msgid "Remove point"
+msgstr "Remover o ponto"
+
+#: flake/tools/KoPathTool.cpp:140
+#, kde-format
+msgid "Break at point"
+msgstr "Quebrar num ponto"
+
+#: flake/tools/KoPathTool.cpp:144
+#, kde-format
+msgid "Break at segment"
+msgstr "Quebrar num segmento"
+
+#: flake/tools/KoPathTool.cpp:148
+#, kde-format
+msgid "Join with segment"
+msgstr "Reunir com um segmento"
+
+#: flake/tools/KoPathTool.cpp:153
+#, kde-format
+msgid "Merge points"
+msgstr "Reunir os pontos"
+
+#: flake/tools/KoPathTool.cpp:157
+#, kde-format
+msgid "To Path"
+msgstr "Para Caminho"
+
+#: flake/tools/KoPathTool.cpp:190
+#, kde-format
+msgid "Line/Curve"
+msgstr "Linha/Curva"
+
+#: flake/tools/KoPathTool.cpp:528
+#, kde-format
+msgid "Drag to move handle."
+msgstr "Arrastar para mover a pega."
+
+#: flake/tools/KoPathTool.cpp:592
+#, kde-format
+msgid "Drag to move point. Shift click to change point type."
+msgstr ""
+"Arrastar para mover o ponto. Carregue e pressione o Shift para mudar o tipo "
+"de ponto."
+
+#: flake/tools/KoPathTool.cpp:594
+#, kde-format
+msgid "Drag to move control point."
+msgstr "Arrastar para mover o ponto de controlo."
+
+#: flake/tools/KoPathTool.cpp:619
+#, kde-format
+msgid "Drag to change curve directly. Double click to insert new path point."
+msgstr ""
+"Arraste para mudar directamente a curva. Faça duplo-click para inserir um "
+"novo ponto no caminho."
+
+#: flake/tools/KoPathTool.cpp:626
+#, kde-format
+msgid "Press B to break path at selected point."
+msgstr "Carregar em B para quebrar o caminho no ponto seleccionado."
+
+#: flake/tools/KoPathTool.cpp:628
+#, kde-format
+msgid "Press B to break path at selected segments."
+msgstr "Carregue em B para quebrar o caminho em segmentos seleccionados."
+
+#: flake/tools/KoPathToolFactory.cpp:17
+#, kde-format
+msgid "Path editing"
+msgstr "Edição de caminhos"
+
+#: flake/tools/KoZoomToolFactory.cpp:17 widgets/KoZoomController_p.h:28
+#: widgets/KoZoomWidget.cpp:52
+#, kde-format
+msgid "Zoom"
+msgstr "Ampliação"
+
+#. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
+#: flake/tools/KoZoomToolWidget.ui:20
+#, kde-format
+msgid "Zoom In"
+msgstr "Ampliar"
+
+#. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
+#: flake/tools/KoZoomToolWidget.ui:30
+#, kde-format
+msgid "Zoom Out"
+msgstr "Reduzir"
+
+#. i18n: ectx: property (text), widget (QToolButton, corner)
+#. i18n: ectx: property (text), widget (QToolButton, smooth)
+#. i18n: ectx: property (text), widget (QToolButton, symmetric)
+#. i18n: ectx: property (text), widget (QToolButton, lineSegment)
+#. i18n: ectx: property (text), widget (QToolButton, curveSegment)
+#. i18n: ectx: property (text), widget (QToolButton, linePoint)
+#. i18n: ectx: property (text), widget (QToolButton, curvePoint)
+#. i18n: ectx: property (text), widget (QToolButton, addPoint)
+#. i18n: ectx: property (text), widget (QToolButton, removePoint)
+#. i18n: ectx: property (text), widget (QToolButton, breakPoint)
+#. i18n: ectx: property (text), widget (QToolButton, breakSegment)
+#. i18n: ectx: property (text), widget (QToolButton, joinSegment)
+#. i18n: ectx: property (text), widget (QToolButton, mergePoints)
+#. i18n: ectx: property (text), widget (QToolButton, add)
+#. i18n: ectx: property (text), widget (QToolButton, remove)
+#. i18n: ectx: property (text), widget (QToolButton, open)
+#. i18n: ectx: property (text), widget (QToolButton, save)
+#: flake/tools/PathToolOptionWidgetBase.ui:39
+#: flake/tools/PathToolOptionWidgetBase.ui:46
+#: flake/tools/PathToolOptionWidgetBase.ui:53
+#: flake/tools/PathToolOptionWidgetBase.ui:73
+#: flake/tools/PathToolOptionWidgetBase.ui:80
+#: flake/tools/PathToolOptionWidgetBase.ui:87
+#: flake/tools/PathToolOptionWidgetBase.ui:94
+#: flake/tools/PathToolOptionWidgetBase.ui:101
+#: flake/tools/PathToolOptionWidgetBase.ui:108
+#: flake/tools/PathToolOptionWidgetBase.ui:115
+#: flake/tools/PathToolOptionWidgetBase.ui:122
+#: flake/tools/PathToolOptionWidgetBase.ui:129
+#: flake/tools/PathToolOptionWidgetBase.ui:136 widgets/KoEditColorSet.ui:48
+#: widgets/KoEditColorSet.ui:58 widgets/KoEditColorSet.ui:68
+#: widgets/KoEditColorSet.ui:78
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QPushButton, convertToPath)
+#: flake/tools/PathToolOptionWidgetBase.ui:186
+#, kde-format
+msgid "Convert To Path"
+msgstr "Converter para um Caminho"
+
+#: kross/KoScriptingDocker.cpp:78 kross/KoScriptingPart.cpp:82
+#, kde-format
+msgid "Scripts"
+msgstr "Programas"
+
+#: kross/KoScriptingDocker.cpp:113 kross/KoScriptManager.cpp:146
+#, kde-format
+msgid "Script Manager"
+msgstr "Gestor de Programas"
+
+#: kross/KoScriptingPart.cpp:78
+#, kde-format
+msgid "Execute Script File..."
+msgstr "Executar um Ficheiro de Programa..."
+
+#: kross/KoScriptingPart.cpp:86
+#, kde-format
+msgid "Script Manager..."
+msgstr "Gestor de Programas..."
+
+#: kross/KoScriptingPart.cpp:160
+#, kde-format
+msgid "Execute Script File"
+msgstr "Executar um Ficheiro de Programa"
+
+#: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
+#, kde-format
+msgid "Save"
+msgstr "Gravar"
+
+#: kross/KoScriptManagerAdd.cpp:54
+#, kde-format
+msgid ""
+"<qt>This wizard will guide you through the process of adding a new resource "
+"to your scripts.</qt>"
+msgstr ""
+"<qt>Este assistente guiá-lo-á pelo processo de adição de um novo recurso aos "
+"seus programas.</qt>"
+
+#: kross/KoScriptManagerAdd.cpp:59
+#, kde-format
+msgid "Add script file"
+msgstr "Adicionar um ficheiro do programa"
+
+#: kross/KoScriptManagerAdd.cpp:64
+#, kde-format
+msgid "Add collection folder"
+msgstr "Adicionar uma pasta à colecção"
+
+#: kross/KoScriptManagerAdd.cpp:67
+#, kde-format
+msgid "Install script package file"
+msgstr "Instalar o ficheiro de pacote do programa"
+
+#: kross/KoScriptManagerAdd.cpp:71
+#, kde-format
+msgid "Install online script package"
+msgstr "Instalar um pacote de programas 'online'"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, add)
+#: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
+#: widgets/KoEditColorSet.ui:45
+#, kde-format
+msgid "Add"
+msgstr "Adicionar"
+
+#: kross/KoScriptManagerAdd.cpp:281
+#, kde-format
+msgid "Script File"
+msgstr "Ficheiro do Programa"
+
+#: kross/KoScriptManagerAdd.cpp:284
+#, kde-format
+msgid "Script"
+msgstr "Programa"
+
+#: kross/KoScriptManagerAdd.cpp:287
+#, kde-format
+msgid "Collection"
+msgstr "Colecção"
+
+#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#, kde-format
+msgctxt "Default text for undo action"
+msgid "Undo"
+msgstr "Desfazer"
+
+#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#: main/KoUndoStackAction.cpp:41
+#, kde-format
+msgid "Undo %1"
+msgstr "Desfazer: %1"
+
+#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#, kde-format
+msgctxt "Default text for redo action"
+msgid "Redo"
+msgstr "Refazer"
+
+#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#: main/KoUndoStackAction.cpp:41
+#, kde-format
+msgid "Redo %1"
+msgstr "Refazer: %1"
+
+#: kundo2/kundo2model.cpp:54
+#, kde-format
+msgid "<empty>"
+msgstr "<vazio>"
+
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1522
+#: main/KoUndoStackAction.cpp:33
+#, kde-format
+msgid "Redo"
+msgstr "Refazer"
+
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1521
+#: main/KoUndoStackAction.cpp:25
+#, kde-format
+msgid "Undo"
+msgstr "Desfazer"
+
+#. i18n: ectx: Menu (file)
+#: main/calligra_shell.rc:4
+#, kde-format
+msgid "&File"
+msgstr "&Ficheiro"
+
+#. i18n: ectx: Menu (settings)
+#: main/calligra_shell.rc:32
+#, kde-format
+msgid "&Settings"
+msgstr "&Configuração"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: main/calligra_shell.rc:46
+#, kde-format
+msgid "File"
+msgstr "Ficheiro"
+
+#: main/config/KoConfigDocumentPage.cpp:46
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, kde-format
+msgid "Document Settings"
+msgstr "Configuração do Documento"
+
+#: main/config/KoConfigDocumentPage.cpp:62
+#, kde-format
+msgid "No autosave"
+msgstr "Sem auto-gravação"
+
+#: main/config/KoConfigDocumentPage.cpp:63
+#, kde-format
+msgctxt "unit symbol for minutes, leading space as separator"
+msgid " min"
+msgstr " min"
+
+#: main/config/KoConfigDocumentPage.cpp:65
+#, kde-format
+msgid "Autosave interval:"
+msgstr "Gravar automaticamente a cada:"
+
+#: main/config/KoConfigDocumentPage.cpp:69
+#, kde-format
+msgid "Create backup file:"
+msgstr "Criar um ficheiro de salvaguarda:"
+
+#: main/config/KoConfigGridPage.cpp:55
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, kde-format
+msgid "Grid"
+msgstr "Grelha"
+
+#: main/config/KoConfigGridPage.cpp:63
+#, kde-format
+msgid "Show grid:"
+msgstr "Mostrar a grelha:"
+
+#: main/config/KoConfigGridPage.cpp:64
+#, kde-format
+msgid "Snap to grid:"
+msgstr "Alinhar à grelha:"
+
+#: main/config/KoConfigGridPage.cpp:65
+#, kde-format
+msgid "Grid color:"
+msgstr "Cor da grelha:"
+
+#: main/config/KoConfigGridPage.cpp:67
+#, kde-format
+msgid "Spacing"
+msgstr "Espaço"
+
+#: main/config/KoConfigGridPage.cpp:78
+#, kde-format
+msgctxt "Horizontal grid spacing"
+msgid "&Horizontal:"
+msgstr "&Horizontal:"
+
+#: main/config/KoConfigGridPage.cpp:79
+#, kde-format
+msgctxt "Vertical grid spacing"
+msgid "&Vertical:"
+msgstr "&Vertical:"
+
+#: main/config/KoConfigMiscPage.cpp:66
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:30
+#: pigment/KoCompositeOpRegistry.cpp:31
+#, kde-format
+msgid "Misc"
+msgstr "Diversos"
+
+#: main/config/KoConfigMiscPage.cpp:76
+#, kde-format
+msgid "Units:"
+msgstr "Unidades:"
+
+#: main/config/KoConfigMiscPage.cpp:85
+#, kde-format
+msgid "Handle radius:"
+msgstr "Raio da pega:"
+
+#: main/config/KoConfigMiscPage.cpp:92
+#, kde-format
+msgid "Grab sensitivity:"
+msgstr "Sensibilidade da pega:"
+
+#: main/config/KoConfigMiscPage.cpp:99
+#, kde-format
+msgid "Paste offset:"
+msgstr "Deslocamento da colagem:"
+
+#: main/config/KoConfigMiscPage.cpp:103
+#, kde-format
+msgid "Paste at Cursor:"
+msgstr "Colar no Cursor:"
+
+#: main/KoApplication.cpp:198
+#, kde-format
+msgid "Only print and exit"
+msgstr "Apenas imprimir e sair"
+
+#: main/KoApplication.cpp:199
+#, kde-format
+msgid "Open a new document based on the given template (desktopfile name)"
+msgstr ""
+"Abrir um novo documento com base no modelo indicado (nome do ficheiro '."
+"desktop')"
+
+#: main/KoApplication.cpp:200
+#, kde-format
+msgid "Open a new document based on the given template file"
+msgstr "Abrir um novo documento com base no ficheiro de modelo indicado"
+
+#: main/KoApplication.cpp:201
+#, kde-format
+msgid "Override display DPI"
+msgstr "Sobrepor os PPP do ecrã"
+
+#: main/KoApplication.cpp:202
+#, kde-format
+msgid "Only export to PDF and exit"
+msgstr "Apenas exportar para PDF e sair"
+
+#: main/KoApplication.cpp:203
+#, kde-format
+msgid "Filename for export-pdf"
+msgstr "Nome do ficheiro de exportação para PDF"
+
+#: main/KoApplication.cpp:204
+#, kde-format
+msgid "just load the file and then exit"
+msgstr "basta carregar o ficheiro e depois sair"
+
+#: main/KoApplication.cpp:205
+#, kde-format
+msgid "load the file, show the window and progressbar and then exit"
+msgstr ""
+"carregar o ficheiro, mostrar a janela e barra de progresso e depois sair"
+
+#: main/KoApplication.cpp:206
+#, kde-format
+msgid "Filename to write profiling information into."
+msgstr "O nome do ficheiro onde escrever os dados de análise de performance."
+
+#: main/KoApplication.cpp:207
+#, kde-format
+msgid "Load a file and save it as an ODF file. Meant for debugging."
+msgstr ""
+"Carregar um ficheiro e gravá-lo como um ficheiro ODF. Usado para depuração."
+
+#: main/KoApplication.cpp:208
+#, kde-format
+msgid "File(s) or URL(s) to open"
+msgstr "Ficheiro(s) ou URL(s) a abrir"
+
+#: main/KoApplication.cpp:218
+#, kde-format
+msgid ""
+"You are running a 32 bits build on a 64 bits Windows.\n"
+"This is not recommended.\n"
+"Please download and install the x64 build instead."
+msgstr ""
+"Está a executar um programa em 32 bits numa máquina Windows a 64 bits.\n"
+"Isto não é recomendado.\n"
+"Por favor, transfira e instale uma versão em x64 em alternativa."
+
+#: main/KoApplication.cpp:262
+#, kde-format
+msgid "%1: Critical Error"
+msgstr "%1: Erro Crítico"
+
+#: main/KoApplication.cpp:262
+#, kde-format
+msgid ""
+"Essential application components could not be found.\n"
+"This might be an installation issue.\n"
+"Try restarting or reinstalling."
+msgstr ""
+"Não foram encontrados alguns componentes essenciais para a aplicação.\n"
+"Isto poderá ser um problema de instalação.\n"
+"Tente reiniciar ou reinstalar."
+
+#: main/KoApplication.cpp:511
+#, kde-format
+msgid "No template found for: %1"
+msgstr "Nenhum modelo encontrado para: %1"
+
+#: main/KoApplication.cpp:514
+#, kde-format
+msgid "Too many templates found for: %1"
+msgstr "Demasiados modelos encontrados para: %1"
+
+#: main/KoApplication.cpp:536 main/KoApplication.cpp:554
+#, kde-format
+msgid "Template %1 failed to load."
+msgstr "Não foi possível carregar o modelo %1."
+
+#: main/KoApplication.cpp:544
+#, kde-format
+msgid "No template found at: %1"
+msgstr "Nenhum modelo encontrado em: %1"
+
+#: main/KoAutoSaveRecoveryDialog.cpp:166
+#, kde-format
+msgctxt "@title:window"
+msgid "Recover Files"
+msgstr "Recuperar os Ficheiros"
+
+#: main/KoAutoSaveRecoveryDialog.cpp:171
+#, kde-format
+msgid "The following autosave file can be recovered:"
+msgstr "Pode ser recuperado o seguinte ficheiro de gravação automática:"
+
+#: main/KoAutoSaveRecoveryDialog.cpp:174
+#, kde-format
+msgid "The following autosave files can be recovered:"
+msgstr "Podem ser recuperados os seguintes ficheiros de gravação automática:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
+#: main/KoDetailsPaneBase.ui:94
+#, kde-format
+msgid "Always use this template at application start up"
+msgstr "Usar sempre este modelo ao iniciar a aplicação"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
+#: main/KoDetailsPaneBase.ui:97
+#, kde-format
+msgid "Always use this template"
+msgstr "Usar sempre este modelo"
+
+#: main/KoDocument.cpp:549
+#, kde-format
+msgid "Making backup..."
+msgstr "A criar uma cópia de segurança..."
+
+#: main/KoDocument.cpp:564
+#, kde-format
+msgid "Saving..."
+msgstr "A gravar..."
+
+#: main/KoDocument.cpp:592
+#, kde-format
+msgid ""
+"Could not save\n"
+"%1"
+msgstr ""
+"Não foi possível gravar o\n"
+"%1"
+
+#: main/KoDocument.cpp:594
+#, kde-format
+msgid ""
+"Could not save %1\n"
+"Reason: %2"
+msgstr ""
+"Não foi possível gravar o %1\n"
+"Razão: %2"
+
+#: main/KoDocument.cpp:623
+#, kde-format
+msgid "Document <i>%1</i> saved"
+msgstr "O documento <i>%1</i> foi gravado"
+
+#: main/KoDocument.cpp:711
+#, kde-format
+msgid ""
+"The password of this encrypted document is not known. Autosave aborted! "
+"Please save your work manually."
+msgstr ""
+"A senha deste documento encriptado não é conhecida. A gravação automática "
+"foi interrompida! Grave por favor o seu trabalho manualmente."
+
+#: main/KoDocument.cpp:714
+#, kde-format
+msgid "Autosaving..."
+msgstr "A gravar automaticamente..."
+
+#: main/KoDocument.cpp:726
+#, kde-format
+msgid "Error during autosave! Partition full?"
+msgstr "Erro durante a gravação automática! A partição está cheia?"
+
+#: main/KoDocument.cpp:819
+#, kde-format
+msgid "Could not create the file for saving"
+msgstr "Não foi possível criar o ficheiro para o gravar"
+
+#: main/KoDocument.cpp:863 main/KoDocument.cpp:885 main/KoDocument.cpp:916
+#: main/KoDocument.cpp:950
+#, kde-format
+msgid "Not able to write '%1'. Partition full?"
+msgstr "Não é possível gravar em '%1'. A partição está cheia?"
+
+#: main/KoDocument.cpp:870
+#, kde-format
+msgid "Not able to write RDF metadata. Partition full?"
+msgstr "Não é possível gravar os meta-dados RDF. A partição está cheia?"
+
+#: main/KoDocument.cpp:878 main/KoDocument.cpp:925 main/KoDocument.cpp:1992
+#, kde-format
+msgid "Error while trying to write '%1'. Partition full?"
+msgstr "Erro ao tentar escrever no '%1'. A partição está cheia?"
+
+#: main/KoDocument.cpp:1204
+#, kde-format
+msgid ""
+"Malformed URL\n"
+"%1"
+msgstr ""
+"URL inválido\n"
+"%1"
+
+#: main/KoDocument.cpp:1220
+#, kde-format
+msgid ""
+"An autosaved file exists for this document.\n"
+"Do you want to open it instead?"
+msgstr ""
+"Já existe um ficheiro auto-gravado para este documento.\n"
+"Deseja abri-lo em alternativa?"
+
+#: main/KoDocument.cpp:1337 main/KoDocument.cpp:1685 main/KoMainWindow.cpp:705
+#, kde-format
+msgid "The file %1 does not exist."
+msgstr "O ficheiro %1 não existe."
+
+#: main/KoDocument.cpp:1463
+#, kde-format
+msgid "Opening Document"
+msgstr "A Abrir o Documento"
+
+#: main/KoDocument.cpp:1478
+#, kde-format
+msgid "Could not create the filter plugin"
+msgstr "Não foi possível criar o 'plugin' do filtro"
+
+#: main/KoDocument.cpp:1481
+#, kde-format
+msgid "Could not create the output document"
+msgstr "Não foi possível criar o documento de saída"
+
+#: main/KoDocument.cpp:1484
+#, kde-format
+msgid "File not found"
+msgstr "O ficheiro não foi encontrado"
+
+#: main/KoDocument.cpp:1487
+#, kde-format
+msgid "Cannot create storage"
+msgstr "Não é possível criar o armazenamento"
+
+#: main/KoDocument.cpp:1490
+#, kde-format
+msgid "Bad MIME type"
+msgstr "Tipo MIME inválido"
+
+#: main/KoDocument.cpp:1493
+#, kde-format
+msgid "Error in embedded document"
+msgstr "Erro no documento incorporado"
+
+#: main/KoDocument.cpp:1496
+#, kde-format
+msgid "Format not recognized"
+msgstr "O formato não é conhecido"
+
+#: main/KoDocument.cpp:1499
+#, kde-format
+msgid "Not implemented"
+msgstr "Não implementado"
+
+#: main/KoDocument.cpp:1502
+#, kde-format
+msgid "Parsing error"
+msgstr "Erro de processamento"
+
+#: main/KoDocument.cpp:1505
+#, kde-format
+msgid "Document is password protected"
+msgstr "O documento está protegido com uma senha"
+
+#: main/KoDocument.cpp:1508
+#, kde-format
+msgid "Invalid file format"
+msgstr "Formato de ficheiro inválido"
+
+#: main/KoDocument.cpp:1515
+#, kde-format
+msgid "Internal error"
+msgstr "Erro interno"
+
+#: main/KoDocument.cpp:1518
+#, kde-format
+msgid "Out of memory"
+msgstr "Sem memória"
+
+#: main/KoDocument.cpp:1521
+#, kde-format
+msgid "Empty Filter Plugin"
+msgstr "'Plugin' de Filtro Vazio"
+
+#: main/KoDocument.cpp:1524
+#, kde-format
+msgid "Trying to load into the wrong kind of document"
+msgstr "A tentar carregar o tipo de documento errado"
+
+#: main/KoDocument.cpp:1527
+#, kde-format
+msgid "Failed to download remote file"
+msgstr "Não foi possível obter o ficheiro remoto"
+
+#: main/KoDocument.cpp:1534
+#, kde-format
+msgid "Unknown error"
+msgstr "Erro desconhecido"
+
+#: main/KoDocument.cpp:1538
+#, kde-format
+msgid ""
+"Could not open %2.\n"
+"Reason: %1.\n"
+"%3"
+msgstr ""
+"Não foi possível abrir o %2.\n"
+"Razão: %1.\n"
+"%3"
+
+#: main/KoDocument.cpp:1596
+#, kde-format
+msgid "Document <i>%1</i> loaded"
+msgstr "O documento <i>%1</i> foi carregado"
+
+#: main/KoDocument.cpp:1659 odf/KoOdfReadStore.cpp:98
+#, kde-format
+msgid "Could not find %1"
+msgstr "Não foi possível encontrar o %1"
+
+#: main/KoDocument.cpp:1671
+#, kde-format
+msgid ""
+"Parsing error in %1 at line %2, column %3\n"
+"Error message: %4"
+msgstr ""
+"Erro de leitura no %1, na linha %2 e coluna %3\n"
+"Mensagem de erro: %4"
+
+#: main/KoDocument.cpp:1692
+#, kde-format
+msgid "%1 is not a file."
+msgstr "%1 não é um ficheiro."
+
+#: main/KoDocument.cpp:1707
+#, kde-format
+msgid "Could not open the file for reading (check read permissions)."
+msgstr ""
+"Não foi possível abrir o ficheiro para leitura (verifique as permissões de "
+"leitura)."
+
+#: main/KoDocument.cpp:1718
+#, kde-format
+msgid "Could not read the beginning of the file."
+msgstr "Não foi possível ler o início do ficheiro."
+
+#: main/KoDocument.cpp:1748
+#, kde-format
+msgid ""
+"parsing error in the main document at line %1, column %2\n"
+"Error message: %3"
+msgstr ""
+"erro de leitura no documento principal na linha %1, coluna %2\n"
+"Mensagem de erro: %3"
+
+#: main/KoDocument.cpp:1769
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr "Não é um ficheiro do Calligra válido: %1"
+
+#: main/KoDocument.cpp:1854
+#, kde-format
+msgid "Invalid document: no file 'maindoc.xml'."
+msgstr "Documento inválido: não existe o ficheiro 'maindoc.xml'."
+
+#: main/KoDocument.cpp:1878
+#, kde-format
+msgid ""
+"Document <i>%1</i> contains several versions. Go to File->Versions to open "
+"an old version."
+msgstr ""
+"O documento <i>%1</i> contém várias versões. Vá a Ficheiro->Versões para "
+"abrir uma versão antiga."
+
+#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2554 main/KoMainWindow.cpp:1227
+#: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
+#, kde-format
+msgid "Untitled"
+msgstr "Sem Título"
+
+#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1230
+#, kde-format
+msgid ""
+"<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
+"</p>"
+msgstr "<p>O documento <b>'%1'</b> foi modificado.</p><p>Deseja gravá-lo?</p>"
+
+#: main/KoDocument.cpp:2165
+#, kde-format
+msgid "Internal error: saveXML not implemented"
+msgstr "Erro interno: saveXML não implementado"
+
+#: main/KoDocument.cpp:2202
+#, kde-format
+msgid ""
+"Could not open\n"
+"%1"
+msgstr ""
+"Não foi possível abrir o\n"
+"%1"
+
+#: main/KoDocument.cpp:2205
+#, kde-format
+msgid ""
+"Could not open %1\n"
+"Reason: %2"
+msgstr ""
+"Não foi possível abrir %1\n"
+"Razão: %2"
+
+#: main/KoDocument.cpp:2262
+#, kde-format
+msgid "a word processing"
+msgstr "um processamento de texto"
+
+#: main/KoDocument.cpp:2263
+#, kde-format
+msgid "a spreadsheet"
+msgstr "uma folha de cálculo"
+
+#: main/KoDocument.cpp:2264
+#, kde-format
+msgid "a presentation"
+msgstr "uma apresentação"
+
+#: main/KoDocument.cpp:2265
+#, kde-format
+msgid "a chart"
+msgstr "um gráfico"
+
+#: main/KoDocument.cpp:2266
+#, kde-format
+msgid "a drawing"
+msgstr "um desenho"
+
+#: main/KoDocument.cpp:2558
+#, kde-format
+msgid ""
+"The document \"%1\" has been modified.\n"
+"Do you want to save your changes or discard them?"
+msgstr ""
+"O documento \"%1\" foi modificado.\n"
+"Deseja gravar as suas alterações ou ignorá-las?"
+
+#: main/KoDocument.cpp:2560
+#, kde-format
+msgid "Close Document"
+msgstr "Fechar o Documento"
+
+#: main/KoDocumentSectionDelegate.cpp:508
+#, kde-format
+msgid "%1 %"
+msgstr "%1 %"
+
+#: main/KoDocumentSectionToolTip.cpp:37
+#, kde-format
+msgid "No"
+msgstr "Não"
+
+#: main/KoDocumentSectionToolTip.cpp:37
+#, kde-format
+msgid "Yes"
+msgstr "Sim"
+
+#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#, kde-format
+msgid "Could not export file."
+msgstr "Não foi possível exportar o ficheiro."
+
+#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#, kde-format
+msgid "Missing Export Filter"
+msgstr "Filtro de Exportação em Falta"
+
+#: main/KoFilterManager.cpp:518
+#, kde-format
+msgid ""
+"Could not import file of type\n"
+"%1"
+msgstr ""
+"Não foi possível importar o ficheiro do tipo\n"
+"%1"
+
+#: main/KoFilterManager.cpp:520
+#, kde-format
+msgid "Missing Import Filter"
+msgstr "Filtro de Importação em Falta"
+
+#: main/KoFilterManager_p.cpp:30
+#, kde-format
+msgid "Choose Filter"
+msgstr "Escolher o Filtro"
+
+#: main/KoFindText.cpp:46
+#, kde-format
+msgid "Case Sensitive"
+msgstr "Distinguir Capitalização"
+
+#: main/KoFindText.cpp:46
+#, kde-format
+msgid "Match cases when searching"
+msgstr "Corresponder a capitalização ao pesquisar"
+
+#: main/KoFindText.cpp:47
+#, kde-format
+msgid "Match only whole words"
+msgstr "Corresponder apenas a palavras completas"
+
+#: main/KoFindText.cpp:47
+#, kde-format
+msgid "Whole Words Only"
+msgstr "Apenas Palavras Inteiras"
+
+#: main/KoFindText.cpp:48
+#, kde-format
+msgid "Find from Cursor"
+msgstr "Pesquisar a Partir do Cursor"
+
+#: main/KoFindText.cpp:48
+#, kde-format
+msgid "Start searching from the current cursor"
+msgstr "Iniciar a pesquisa a partir da posição actual do cursor"
+
+#: main/KoMainWindow.cpp:163
+#, kde-format
+msgid "%1 unsaved document (%2)"
+msgstr "%1 documento não-gravado (%2)"
+
+#: main/KoMainWindow.cpp:272
+#, kde-format
+msgid "Export as PDF..."
+msgstr "Exportar como PDF..."
+
+#: main/KoMainWindow.cpp:282
+#, kde-format
+msgid "Reload"
+msgstr "Actualizar"
+
+#: main/KoMainWindow.cpp:286
+#, kde-format
+msgid "Versions..."
+msgstr "Versões..."
+
+#: main/KoMainWindow.cpp:290
+#, kde-format
+msgid "Open ex&isting Document as Untitled Document..."
+msgstr "Abrir o Documento Ex&istente como um Documento sem Nome..."
+
+#: main/KoMainWindow.cpp:294
+#, kde-format
+msgid "E&xport..."
+msgstr "E&xportar..."
+
+#: main/KoMainWindow.cpp:298
+#, kde-format
+msgid "En&crypt Document"
+msgstr "En&criptar o Documento"
+
+#: main/KoMainWindow.cpp:303
+#, kde-format
+msgid "&Uncompress to Directory"
+msgstr "Descompr&imir para a Pasta"
+
+#: main/KoMainWindow.cpp:308
+#, kde-format
+msgid "&New View"
+msgstr "&Nova Vista"
+
+#: main/KoMainWindow.cpp:314 widgets/KoDocumentInfoDlg.cpp:86
+#, kde-format
+msgid "Document Information"
+msgstr "Informação do Documento"
+
+#: main/KoMainWindow.cpp:338
+#, kde-format
+msgid "Full Screen Mode"
+msgstr "Modo de Ecrã Completo"
+
+#: main/KoMainWindow.cpp:343
+#, kde-format
+msgid "Show Dockers"
+msgstr "Mostrar as Áreas Acopláveis"
+
+#: main/KoMainWindow.cpp:348
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Docker Titlebars"
+msgstr "Mostrar os Títulos nas Áreas Acopláveis"
+
+#: main/KoMainWindow.cpp:355
+#, kde-format
+msgid "Dockers"
+msgstr "Áreas Acopláveis"
+
+#: main/KoMainWindow.cpp:660
+#, kde-format
+msgid "(write protected)"
+msgstr "(com protecção de escrita)"
+
+#: main/KoMainWindow.cpp:665
+#, kde-format
+msgid "Save as %1"
+msgstr "Gravar como %1"
+
+#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:388
+#, kde-format
+msgid "%1 (unknown file type)"
+msgstr "%1 (tipo de ficheiro desconhecido)"
+
+#: main/KoMainWindow.cpp:855
+#, kde-format
+msgid ""
+"<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
+"want to save in this format?</qt>"
+msgstr ""
+"<qt>A gravação como um %1 pode causar algumas perdas de formatação.<p>Deseja "
+"à mesma gravar neste formato?</qt>"
+
+#: main/KoMainWindow.cpp:858
+#, kde-format
+msgid "Confirm Save"
+msgstr "Confirmar a Gravação"
+
+#: main/KoMainWindow.cpp:867
+#, kde-format
+msgid ""
+"<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
+"want to export to this format?</qt>"
+msgstr ""
+"<qt>A exportação como um %1 pode causar algumas perdas de formatação."
+"<p>Deseja à mesma exportar para este formato?</qt>"
+
+#: main/KoMainWindow.cpp:870
+#, kde-format
+msgid "Confirm Export"
+msgstr "Confirmar a Exportação"
+
+#: main/KoMainWindow.cpp:871
+#, kde-format
+msgid "Export"
+msgstr "Exportar"
+
+#: main/KoMainWindow.cpp:964
+#, kde-format
+msgid "untitled"
+msgstr "sem título"
+
+#: main/KoMainWindow.cpp:1292
+#, kde-format
+msgid "Open Document"
+msgstr "Abrir um Documento"
+
+#: main/KoMainWindow.cpp:1301 pageapp/KoPAView.cpp:524
+#, kde-format
+msgid "Import Document"
+msgstr "Importar um Documento"
+
+#: main/KoMainWindow.cpp:1465
+#, kde-format
+msgid "Export as PDF"
+msgstr "Exportar como PDF"
+
+#: main/KoMainWindow.cpp:1502
+#, kde-format
+msgid "Cannot export to the specified file"
+msgstr "Não é possível exportar para o ficheiro indicado"
+
+#: main/KoMainWindow.cpp:1701 pageapp/KoPADocumentStructureDocker.cpp:80
+#, kde-format
+msgid "Document"
+msgstr "Documento"
+
+#: main/KoMainWindow.cpp:1709
+#, kde-format
+msgid "Document - %1"
+msgstr "Documento - %1"
+
+#: main/KoMainWindow.cpp:1746
+#, kde-format
+msgid ""
+"You will lose all changes made since your last save\n"
+"Do you want to continue?"
+msgstr ""
+"Irá perder todas as alterações feitas desde a última gravação\n"
+"Deseja continuar?"
+
+#: main/KoMainWindow.cpp:1748
+#, kde-format
+msgid "Warning"
+msgstr "Aviso"
+
+#: main/KoMainWindow.cpp:2113
+#, kde-format
+msgid "Show %1 Toolbar"
+msgstr "Mostrar a Barra de Ferramentas %1"
+
+#: main/KoMainWindow.cpp:2115
+#, kde-format
+msgid "Hide %1 Toolbar"
+msgstr "Esconder a Barra de Ferramentas %1"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
+#: main/KoOpenPane.cpp:123 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
+#, kde-format
+msgid "Open Existing Document"
+msgstr "Abrir o Documento Existente"
+
+#: main/KoOpenPane.cpp:199
+#, kde-format
+msgid "Recent Documents"
+msgstr "Documentos Recentes"
+
+#: main/KoOpenPane.cpp:299
+#, kde-format
+msgid "Custom Document"
+msgstr "Documento Personalizado"
+
+#: main/KoPrintingDialog.cpp:43
+#, kde-format
+msgid "Stop"
+msgstr "Parar"
+
+#: main/KoPrintingDialog.cpp:132
+#, kde-format
+msgid "Printing"
+msgstr "A imprimir"
+
+#: main/KoPrintingDialog_p.h:136
+#, kde-format
+msgid "Printing done"
+msgstr "Impressão completa"
+
+#: main/KoPrintingDialog_p.h:137
+#, kde-format
+msgid "Close"
+msgstr "Fechar"
+
+#: main/KoPrintingDialog_p.h:157
+#, kde-format
+msgid "Stopped"
+msgstr "Parado"
+
+#: main/KoRecentDocumentsPane.cpp:71
+#, kde-format
+msgid "Open This Document"
+msgstr "Abrir Este Documento"
+
+#: main/KoRecentDocumentsPane.cpp:174
+#, kde-format
+msgctxt "File modification date and time. %1 is date time"
+msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
+msgstr "<tr><td><b>Modificado em:</b></td><td>%1</td></tr>"
+
+#: main/KoRecentDocumentsPane.cpp:177
+#, kde-format
+msgctxt "File access date and time. %1 is date time"
+msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
+msgstr "<tr><td><b>Acedido em:</b></td><td>%1</td></tr>"
+
+#: main/KoStandardAction.cpp:19
+#, kde-format
+msgid "Show Guides"
+msgstr "Mostrar as Guias"
+
+#: main/KoStandardAction.cpp:20
+#, kde-format
+msgid "Shows or hides guides"
+msgstr "Mostra ou esconde as guias"
+
+#: main/KoTemplateCreateDia.cpp:104
+#, kde-format
+msgid "Create Template"
+msgstr "Criar um Modelo"
+
+#: main/KoTemplateCreateDia.cpp:113
+#, kde-format
+msgctxt "Template name"
+msgid "Name:"
+msgstr "Nome:"
+
+#: main/KoTemplateCreateDia.cpp:123
+#, kde-format
+msgid "Group:"
+msgstr "Grupo:"
+
+#: main/KoTemplateCreateDia.cpp:138
+#, kde-format
+msgid "&Add Group..."
+msgstr "&Adicionar um Grupo..."
+
+#: main/KoTemplateCreateDia.cpp:141 main/KoVersionDialog.cpp:61
+#, kde-format
+msgid "&Remove"
+msgstr "&Remover"
+
+#: main/KoTemplateCreateDia.cpp:147
+#, kde-format
+msgid "Picture"
+msgstr "Imagem"
+
+#: main/KoTemplateCreateDia.cpp:150
+#, kde-format
+msgid "&Preview"
+msgstr "Ante&visão"
+
+#: main/KoTemplateCreateDia.cpp:155
+#, kde-format
+msgid "Custom:"
+msgstr "Personalizada:"
+
+#: main/KoTemplateCreateDia.cpp:159
+#, kde-format
+msgid "&Select..."
+msgstr "&Seleccionar..."
+
+#: main/KoTemplateCreateDia.cpp:168
+#, kde-format
+msgid "Use the new template as default"
+msgstr "Usar o novo modelo por omissão"
+
+#: main/KoTemplateCreateDia.cpp:308
+#, kde-format
+msgid "Do you really want to overwrite the existing '%1' template?"
+msgstr "Deseja mesmo sobrepor o modelo '%1' existente?"
+
+#: main/KoTemplateCreateDia.cpp:421 main/KoTemplateCreateDia.cpp:428
+#, kde-format
+msgid "Add Group"
+msgstr "Adicionar um Grupo"
+
+#: main/KoTemplateCreateDia.cpp:421
+#, kde-format
+msgid "Enter group name:"
+msgstr "Indique o nome do grupo:"
+
+#: main/KoTemplateCreateDia.cpp:428
+#, kde-format
+msgid "This name is already used."
+msgstr "Este nome já está a ser usado."
+
+#: main/KoTemplateCreateDia.cpp:452
+#, kde-format
+msgid "Do you really want to remove that group?"
+msgstr "Deseja mesmo remover este grupo?"
+
+#: main/KoTemplateCreateDia.cpp:453
+#, kde-format
+msgid "Remove Group"
+msgstr "Remover o Grupo"
+
+#: main/KoTemplateCreateDia.cpp:455
+#, kde-format
+msgid "Do you really want to remove that template?"
+msgstr "Deseja mesmo remover esse modelo?"
+
+#: main/KoTemplateCreateDia.cpp:456
+#, kde-format
+msgid "Remove Template"
+msgstr "Remover o Modelo"
+
+#: main/KoTemplateCreateDia.cpp:507
+#, kde-format
+msgid "Could not load picture."
+msgstr "Não foi possível abrir a imagem."
+
+#: main/KoTemplateCreateDia.cpp:510
+#, kde-format
+msgid "No picture available."
+msgstr "Não está nenhuma imagem disponível."
+
+#: main/KoTemplatesPane.cpp:37
+#, kde-format
+msgid "Use This Template"
+msgstr "Usar Este Modelo"
+
+#: main/KoVersionDialog.cpp:35
+#, kde-format
+msgid "Version"
+msgstr "Versão"
+
+#: main/KoVersionDialog.cpp:49
+#, kde-format
+msgid "Date & Time"
+msgstr "Data & Hora"
+
+#: main/KoVersionDialog.cpp:50
+#, kde-format
+msgid "Saved By"
+msgstr "Gravado Por"
+
+#: main/KoVersionDialog.cpp:51 main/KoVersionDialog.cpp:215
+#, kde-format
+msgid "Comment"
+msgstr "Comentário"
+
+#: main/KoVersionDialog.cpp:58
+#, kde-format
+msgid "&Add"
+msgstr "&Adicionar"
+
+#: main/KoVersionDialog.cpp:64
+#, kde-format
+msgid "&Modify"
+msgstr "&Modificar"
+
+#: main/KoVersionDialog.cpp:67
+#, kde-format
+msgid "&Open"
+msgstr "&Abrir"
+
+#: main/KoVersionDialog.cpp:120
+#, kde-format
+msgid "A new version could not be added"
+msgstr "Não foi possível adicionar uma versão nova"
+
+#: main/KoVersionDialog.cpp:227 main/KoVersionDialog.cpp:229
+#, kde-format
+msgid "Date: %1"
+msgstr "Data: %1"
+
+#: main/KoView.cpp:330
+#, kde-format
+msgid "Active Author Profile"
+msgstr "Perfil de Autor Activo"
+
+#: main/KoView.cpp:342 main/KoView.cpp:396
+#, kde-format
+msgctxt "choice for author profile"
+msgid "Anonymous"
+msgstr "Anónimo"
+
+#: main/KoView.cpp:395 widgets/KoConfigAuthorPage.cpp:69
+#, kde-format
+msgid "Default Author Profile"
+msgstr "Perfil Predefinido do Autor"
+
+#: odf/KoDocumentInfo.cpp:40
+#, kde-format
+msgid "Unknown"
+msgstr "Desconhecido"
+
+#: odf/KoOdfReadStore.cpp:91
+#, kde-format
+msgid "No store backend"
+msgstr "Não existe uma infra-estrutura de armazenamento"
+
+#: odf/KoOdfReadStore.cpp:126
+#, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2\n"
+"Error message: %3"
+msgstr ""
+"erro de leitura no documento principal na linha %1, coluna %2\n"
+"Mensagem de erro: %3"
+
+#: odf/KoPageFormat.cpp:53
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A3"
+msgstr "ISO A3"
+
+#: odf/KoPageFormat.cpp:54
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A4"
+msgstr "ISO A4"
+
+#: odf/KoPageFormat.cpp:55
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A5"
+msgstr "ISO A5"
+
+#: odf/KoPageFormat.cpp:56
+#, kde-format
+msgctxt "Page size"
+msgid "US Letter"
+msgstr "Carta EUA"
+
+#: odf/KoPageFormat.cpp:57
+#, kde-format
+msgctxt "Page size"
+msgid "US Legal"
+msgstr "Legal EUA"
+
+#: odf/KoPageFormat.cpp:58
+#, kde-format
+msgctxt "Page size"
+msgid "Screen"
+msgstr "Ecrã"
+
+#: odf/KoPageFormat.cpp:59
+#, kde-format
+msgctxt "Page size"
+msgid "Custom"
+msgstr "Personalizada"
+
+#: odf/KoPageFormat.cpp:60
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B5"
+msgstr "ISO B5"
+
+#: odf/KoPageFormat.cpp:61
+#, kde-format
+msgctxt "Page size"
+msgid "US Executive"
+msgstr "Executivo EUA"
+
+#: odf/KoPageFormat.cpp:62
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A0"
+msgstr "ISO A0"
+
+#: odf/KoPageFormat.cpp:63
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A1"
+msgstr "ISO A1"
+
+#: odf/KoPageFormat.cpp:64
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A2"
+msgstr "ISO A2"
+
+#: odf/KoPageFormat.cpp:65
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A6"
+msgstr "ISO A6"
+
+#: odf/KoPageFormat.cpp:66
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A7"
+msgstr "ISO A7"
+
+#: odf/KoPageFormat.cpp:67
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A8"
+msgstr "ISO A8"
+
+#: odf/KoPageFormat.cpp:68
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A9"
+msgstr "ISO A9"
+
+#: odf/KoPageFormat.cpp:69
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B0"
+msgstr "ISO B0"
+
+#: odf/KoPageFormat.cpp:70
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B1"
+msgstr "ISO B1"
+
+#: odf/KoPageFormat.cpp:71
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B10"
+msgstr "ISO B10"
+
+#: odf/KoPageFormat.cpp:72
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B2"
+msgstr "ISO B2"
+
+#: odf/KoPageFormat.cpp:73
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B3"
+msgstr "ISO B3"
+
+#: odf/KoPageFormat.cpp:74
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B4"
+msgstr "ISO B4"
+
+#: odf/KoPageFormat.cpp:75
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B6"
+msgstr "ISO B6"
+
+#: odf/KoPageFormat.cpp:76
+#, kde-format
+msgctxt "Page size"
+msgid "ISO C5"
+msgstr "ISO C5"
+
+#: odf/KoPageFormat.cpp:77
+#, kde-format
+msgctxt "Page size"
+msgid "US Common 10"
+msgstr "Comum 10 EUA"
+
+#: odf/KoPageFormat.cpp:78
+#, kde-format
+msgctxt "Page size"
+msgid "ISO DL"
+msgstr "ISO DL"
+
+#: odf/KoPageFormat.cpp:79
+#, kde-format
+msgctxt "Page size"
+msgid "US Folio"
+msgstr "Fólio EUA"
+
+#: odf/KoPageFormat.cpp:80
+#, kde-format
+msgctxt "Page size"
+msgid "US Ledger"
+msgstr "Panfleto EUA"
+
+#: odf/KoPageFormat.cpp:81
+#, kde-format
+msgctxt "Page size"
+msgid "US Tabloid"
+msgstr "Tablóide EUA"
+
+#: odf/KoUnit.cpp:37
+#, kde-format
+msgid "Millimeters (mm)"
+msgstr "Milímetros (mm)"
+
+#: odf/KoUnit.cpp:39
+#, kde-format
+msgid "Centimeters (cm)"
+msgstr "Centímetros (cm)"
+
+#: odf/KoUnit.cpp:41
+#, kde-format
+msgid "Decimeters (dm)"
+msgstr "Decímetros (dm)"
+
+#: odf/KoUnit.cpp:43
+#, kde-format
+msgid "Inches (in)"
+msgstr "Polegadas (pol)"
+
+#: odf/KoUnit.cpp:45
+#, kde-format
+msgid "Pica (pi)"
+msgstr "Pica (pi)"
+
+#: odf/KoUnit.cpp:47
+#, kde-format
+msgid "Cicero (cc)"
+msgstr "Cícero (cc)"
+
+#: odf/KoUnit.cpp:49
+#, kde-format
+msgid "Points (pt)"
+msgstr "Pontos (pt)"
+
+#: odf/KoUnit.cpp:51
+#, kde-format
+msgid "Pixels (px)"
+msgstr "Pixels (px)"
+
+#: odf/KoUnit.cpp:53
+#, kde-format
+msgid "Unsupported unit"
+msgstr "Unidade não suportada"
+
+#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Change master slide"
+msgstr "Modificar o 'slide'-mestre"
+
+#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Change master page"
+msgstr "Modificar a página-mestra"
+
+#: pageapp/commands/KoPAChangePageLayoutCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Set Page Layout"
+msgstr "Configurar a Disposição da Página"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Display master background"
+msgstr "Mostrar o fundo-mestre"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Display slide background"
+msgstr "Mostrar o fundo do 'slide'"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:25
+msgctxt "(qtundo-format)"
+msgid "Display page background"
+msgstr "Mostrar o fundo da página"
+
+#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Show master shapes"
+msgstr "Mostrar as formas-mestras"
+
+#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Hide master shapes"
+msgstr "Esconder as formas-mestras"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:26
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Apagar o 'slide'"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:29
+msgctxt "(qtundo-format) Delete one page"
+msgid "Delete page"
+msgstr "Apagar a página"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:50
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Apagar o 'slide'"
+msgstr[1] "Apagar os 'slides'"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:53
+msgctxt "(qtundo-format)"
+msgid "Delete page"
+msgid_plural "Delete pages"
+msgstr[0] "Apagar a página"
+msgstr[1] "Apagar as páginas"
+
+#: pageapp/commands/KoPAPageInsertCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Insert slide"
+msgstr "Inserir um 'slide'"
+
+#: pageapp/commands/KoPAPageInsertCommand.cpp:27
+msgctxt "(qtundo-format)"
+msgid "Insert page"
+msgstr "Inserir uma página"
+
+#: pageapp/commands/KoPAPageMoveCommand.cpp:45
+msgctxt "(qtundo-format)"
+msgid "Move slide"
+msgid_plural "Move slides"
+msgstr[0] "Mover o 'slide'"
+msgstr[1] "Mover os 'slides'"
+
+#: pageapp/commands/KoPAPageMoveCommand.cpp:48
+msgctxt "(qtundo-format)"
+msgid "Move page"
+msgid_plural "Move pages"
+msgstr[0] "Mover a página"
+msgstr[1] "Mover as páginas"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
+#, kde-format
+msgid "Configure"
+msgstr "Configurar"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Documento"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Autor"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
+#, kde-format
+msgid "Author"
+msgstr "Autoria"
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:27
+#, kde-format
+msgid "Select a master slide design:"
+msgstr "Seleccione um desenho de página-mestra:"
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:28
+#, kde-format
+msgid "Master Slide"
+msgstr "'Slide'-Mestre"
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:30
+#, kde-format
+msgid "Select a master page design:"
+msgstr "Seleccione um desenho de página-mestra:"
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:97
+#, kde-format
+msgid "Master Page"
+msgstr "Página-Mestra"
+
+#: pageapp/KoPADocumentModel.cpp:172 pageapp/KoPAPageThumbnailModel.cpp:54
+#, kde-format
+msgid "Slide %1"
+msgstr "'Slide' %1"
+
+#: pageapp/KoPADocumentModel.cpp:174
+#, kde-format
+msgid "Page  %1"
+msgstr "Página %1"
+
+#: pageapp/KoPADocumentModel.cpp:177
+#: pageapp/KoPADocumentStructureDocker.cpp:102
+#, kde-format
+msgid "Layer"
+msgstr "Camada"
+
+#: pageapp/KoPADocumentModel.cpp:179
+#, kde-format
+msgid "Group"
+msgstr "Grupo"
+
+#: pageapp/KoPADocumentModel.cpp:181
+#, kde-format
+msgid "Shape"
+msgstr "Forma"
+
+#: pageapp/KoPADocumentModel.cpp:272
+msgctxt "(qtundo-format)"
+msgid "Rename Slide"
+msgstr "Mudar o Nome do 'Slide'"
+
+#: pageapp/KoPADocumentModel.cpp:274
+msgctxt "(qtundo-format)"
+msgid "Rename Page"
+msgstr "Mudar o Nome da Página"
+
+#: pageapp/KoPADocumentModel.cpp:278
+msgctxt "(qtundo-format)"
+msgid "Rename Layer"
+msgstr "Mudar o Nome da Camada"
+
+#: pageapp/KoPADocumentModel.cpp:314
+#: pageapp/KoPADocumentStructureDocker.cpp:100
+#, kde-format
+msgid "Slide"
+msgstr "Deslizar"
+
+#: pageapp/KoPADocumentModel.cpp:317
+#, kde-format
+msgid "Visible"
+msgstr "Visível"
+
+#: pageapp/KoPADocumentModel.cpp:318
+#, kde-format
+msgid "Locked"
+msgstr "Bloqueado"
+
+#: pageapp/KoPADocumentModel.cpp:533 pageapp/KoPADocumentModel.cpp:552
+msgctxt "(qtundo-format)"
+msgid "Reparent shapes"
+msgstr "Mudar os Donos das Formas"
+
+#: pageapp/KoPADocumentModel.cpp:686
+#, kde-format
+msgid "&Move Here"
+msgstr "&Mover para Aqui"
+
+#: pageapp/KoPADocumentModel.cpp:690
+#, kde-format
+msgid "&Copy Here"
+msgstr "&Copiar para Aqui"
+
+#: pageapp/KoPADocumentModel.cpp:694
+#, kde-format
+msgid "C&ancel"
+msgstr "C&ancelar"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:89
+#, kde-format
+msgid "Add a new slide or layer"
+msgstr "Adicionar um 'slide' ou camada novo"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:92
+#, kde-format
+msgid "Add a new page or layer"
+msgstr "Adicionar uma página ou camada nova"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:100
+#: widgets/KoPageLayoutDialog.cpp:37
+#, kde-format
+msgid "Page"
+msgstr "Página"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:109
+#: pageapp/KoPADocumentStructureDocker.cpp:616
+#, kde-format
+msgid "Delete selected objects"
+msgstr "Apagar os objectos seleccionados"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:115
+#, kde-format
+msgid "Raise selected objects"
+msgstr "Elevar os objectos seleccionados"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:121
+#, kde-format
+msgid "Lower selected objects"
+msgstr "Baixar os objectos seleccionados"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:130
+#, kde-format
+msgid "Minimal View"
+msgstr "Vista Mínima"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:132
+#, kde-format
+msgid "Detailed View"
+msgstr "Vista Detalhada"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:134
+#, kde-format
+msgid "Thumbnail View"
+msgstr "Vista em Miniaturas"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:144
+#, kde-format
+msgid "View mode"
+msgstr "Modo de visualização"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:301
+#, kde-format
+msgid "Enter the name of the new layer:"
+msgstr "Indique o nome da camada nova:"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:301
+#, kde-format
+msgid "New Layer"
+msgstr "Nova Camada"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:302
+#, kde-format
+msgid "New layer"
+msgstr "Nova camada"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:315
+msgctxt "(qtundo-format)"
+msgid "Create Layer"
+msgstr "Criar uma Camada"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:341
+msgctxt "(qtundo-format)"
+msgid "Delete Layer"
+msgstr "Apagar a Camada"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:344
+#, kde-format
+msgid "Could not delete all layers. At least one layer is required."
+msgstr ""
+"Não é possível remover todas as camadas. É necessária pelo menos uma camada."
+
+#: pageapp/KoPADocumentStructureDocker.cpp:344
+#, kde-format
+msgid "Error deleting layers"
+msgstr "Erro ao apagar as camadas"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:611
+#, kde-format
+msgid "Add a new slide"
+msgstr "Adicionar um 'slide' novo"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:614
+#, kde-format
+msgid "Add a new page"
+msgstr "Adicionar uma página nova"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:618
+#, kde-format
+msgid "Cut"
+msgstr "Cortar"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:619
+#: pigment/compositeops/KoCompositeOpCopy.h:24
+#: pigment/compositeops/KoCompositeOpCopy2.h:32
+#: pigment/KoCompositeOpRegistry.cpp:87
+#, kde-format
+msgid "Copy"
+msgstr "Copiar"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:620
+#, kde-format
+msgid "Paste"
+msgstr "Colar"
+
+#: pageapp/KoPAPageThumbnailModel.cpp:56
+#, kde-format
+msgid "Page %1"
+msgstr "Página %1"
+
+#: pageapp/KoPAPastePage.cpp:118
+msgctxt "(qtundo-format)"
+msgid "Paste Slide"
+msgid_plural "Paste Slides"
+msgstr[0] "Colar o 'slide'"
+msgstr[1] "Colar os 'slides'"
+
+#: pageapp/KoPAPastePage.cpp:121
+msgctxt "(qtundo-format)"
+msgid "Paste Page"
+msgid_plural "Paste Pages"
+msgstr[0] "Colar a página"
+msgstr[1] "Colar as páginas"
+
+#: pageapp/KoPAView.cpp:307 widgets/KoToolBoxDocker.cpp:30
+#, kde-format
+msgid "Tools"
+msgstr "Ferramentas"
+
+#: pageapp/KoPAView.cpp:350
+#, kde-format
+msgid "D&elete"
+msgstr "Apa&gar"
+
+#: pageapp/KoPAView.cpp:361
+#, kde-format
+msgid "Snap to Grid"
+msgstr "Alinhar à Grelha"
+
+#: pageapp/KoPAView.cpp:371
+#, kde-format
+msgid "Show Master Pages"
+msgstr "Mostrar as Páginas-Mestras"
+
+#: pageapp/KoPAView.cpp:375
+#, kde-format
+msgid "Show Rulers"
+msgstr "Mostrar as Réguas"
+
+#: pageapp/KoPAView.cpp:377
+#, kde-format
+msgid "Show/hide the view's rulers"
+msgstr "Mostrar/esconder as réguas da janela"
+
+#: pageapp/KoPAView.cpp:381
+#, kde-format
+msgid "Show Page Margins"
+msgstr "Mostrar as Margens da Página"
+
+#: pageapp/KoPAView.cpp:383
+#, kde-format
+msgid "Show/hide the page margins"
+msgstr "Mostrar/esconder as margens da página"
+
+#: pageapp/KoPAView.cpp:387
+#, kde-format
+msgid "Insert Page"
+msgstr "Inserir uma Página"
+
+#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
+#, kde-format
+msgid "Insert a new page after the current one"
+msgstr "Inserir uma página nova a seguir à actual"
+
+#: pageapp/KoPAView.cpp:393
+#, kde-format
+msgid "Copy Page"
+msgstr "Copiar a Página"
+
+#: pageapp/KoPAView.cpp:395 pageapp/KoPAView.cpp:396
+#, kde-format
+msgid "Copy the current page"
+msgstr "Copiar a página actual"
+
+#: pageapp/KoPAView.cpp:399
+#, kde-format
+msgid "Delete Page"
+msgstr "Apagar a Página"
+
+#: pageapp/KoPAView.cpp:402 pageapp/KoPAView.cpp:403
+#, kde-format
+msgid "Delete the current page"
+msgstr "Apagar a página actual"
+
+#: pageapp/KoPAView.cpp:406
+#, kde-format
+msgid "Master Page..."
+msgstr "Página-Mestra..."
+
+#: pageapp/KoPAView.cpp:410
+#, kde-format
+msgid "Page Layout..."
+msgstr "Disposição da Página..."
+
+#. i18n: ectx: property (text), widget (QTableWidget, variables)
+#: pageapp/KoPAView.cpp:420 rdf/KoSemanticStylesheetsEditor.ui:57
+#, kde-format
+msgid "Variable"
+msgstr "Variável"
+
+#: pageapp/KoPAView.cpp:425
+#, kde-format
+msgid "Import Document..."
+msgstr "Importar um Documento..."
+
+#: pageapp/KoPAView.cpp:429
+#, kde-format
+msgid "Configure..."
+msgstr "Configurar..."
+
+#: pageapp/KoPAView.cpp:521
+#, kde-format
+msgid "Import Slideshow"
+msgstr "Importar uma Apresentação"
+
+#: pageapp/KoPAView.cpp:549 pageapp/KoPAView.cpp:553
+#, kde-format
+msgid ""
+"Could not import\n"
+"%1"
+msgstr ""
+"Não foi possível importar o\n"
+"%1"
+
+#: pageapp/KoPAView.cpp:666
+msgctxt "(qtundo-format)"
+msgid "Change page layout"
+msgstr "Modificar a disposição da página"
+
+#. i18n: ectx: property (text), widget (QPushButton, backgroundImage)
+#: pageapp/tools/backgroundTool/BackgroundToolWidget.ui:43
+#, kde-format
+msgid "Set image ..."
+msgstr "Mudar a imagem ..."
+
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
+#, kde-format
+msgid "Background"
+msgstr "Fundo"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#, kde-format
+msgid "Page Background"
+msgstr "Fundo da Página"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#, kde-format
+msgid "Page Design"
+msgstr "Desenho da Página"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#, kde-format
+msgid "Slide Design"
+msgstr "Desenho do 'Slide'"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#, kde-format
+msgid "Use background of master page"
+msgstr "Usar o fundo da página-mestra"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#, kde-format
+msgid "Use background of master slide"
+msgstr "Usar o fundo do 'slide'-mestre"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#, kde-format
+msgid "Display shapes of master page"
+msgstr "Mostrar as formas da página-mestra"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#, kde-format
+msgid "Display shapes of master slide"
+msgstr "Mostrar as formas do 'slide'-mestre"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:102
+msgctxt "(qtundo-format)"
+msgid "Change slide background image"
+msgstr "Mudar a imagem de fundo do 'slide'"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:103
+msgctxt "(qtundo-format)"
+msgid "Change page background image"
+msgstr "Mudar a imagem de fundo da página"
+
+#: pageapp/widgets/KoPageNavigator.cpp:55
+#, kde-format
+msgid "Master Slide %1/%2"
+msgstr "'Slide'-Mestre %1/%2"
+
+#: pageapp/widgets/KoPageNavigator.cpp:56
+#, kde-format
+msgid "Slide %1/%2"
+msgstr "'Slide' %1/%2"
+
+#: pageapp/widgets/KoPageNavigator.cpp:57
+#, kde-format
+msgid "Master Page %1/%2"
+msgstr "Página-Mestra %1/%2"
+
+#: pageapp/widgets/KoPageNavigator.cpp:58
+#, kde-format
+msgid "Page %1/%2"
+msgstr "Página %1/%2"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:37
+#, kde-format
+msgid "Clear"
+msgstr "Limpar"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:110
+#: pigment/compositeops/KoCompositeOps.h:127
+#: pigment/KoCompositeOpRegistry.cpp:38
+#, kde-format
+msgid "Subtract"
+msgstr "Subtrair"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:182
+#: pigment/compositeops/KoCompositeOps.h:129
+#: pigment/KoCompositeOpRegistry.cpp:39
+#, kde-format
+msgid "Multiply"
+msgstr "Multiplicar"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:248
+#: pigment/colorspaces/KoAlphaColorSpace.h:183
+#: pigment/KoColorModelStandardIds.cpp:12
+#, kde-format
+msgid "Alpha mask"
+msgstr "Máscara alfa"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:250
+#: pigment/colorspaces/KoLabColorSpace.cpp:34
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:36
+#, kde-format
+msgid "Alpha"
+msgstr "Alfa"
+
+#: pigment/colorspaces/KoAlphaColorSpace.h:128
+#: pigment/colorspaces/KoAlphaColorSpace.h:133
+#: pigment/colorspaces/KoAlphaColorSpace.h:137
+#: pigment/colorspaces/KoAlphaColorSpace.h:141
+#: pigment/colorspaces/KoAlphaColorSpace.h:144
+#: pigment/colorspaces/KoAlphaColorSpace.h:147
+#: pigment/colorspaces/KoAlphaColorSpace.h:150
+#: pigment/colorspaces/KoAlphaColorSpace.h:153
+#: pigment/colorspaces/KoAlphaColorSpace.h:159
+#: pigment/colorspaces/KoAlphaColorSpace.h:162
+#, kde-format
+msgid "Undefined operation in the alpha color space"
+msgstr "Operação indefinida no espaço de cores 'alfa'"
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:27
+#: pigment/colorspaces/KoLabColorSpace.h:63
+#, kde-format
+msgid "L*a*b* (16-bit integer/channel, unmanaged)"
+msgstr "L*a*b* (inteiros de 16-bits/canal, não gerido)"
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:31
+#: pigment/compositeops/KoCompositeOps.h:196
+#: pigment/KoCompositeOpRegistry.cpp:111
+#, kde-format
+msgid "Lightness"
+msgstr "Iluminação"
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:32
+#: pigment/KoBasicHistogramProducers.cpp:430
+#, kde-format
+msgid "a*"
+msgstr "a*"
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:33
+#: pigment/KoBasicHistogramProducers.cpp:431
+#, kde-format
+msgid "b*"
+msgstr "b*"
+
+#: pigment/colorspaces/KoRgbU16ColorSpace.cpp:26
+#: pigment/colorspaces/KoRgbU16ColorSpace.h:51
+#, kde-format
+msgid "RGB (16-bit integer/channel, unmanaged)"
+msgstr "RGB (inteiros de 16 bits/canal, não gerido)"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:28
+#: pigment/colorspaces/KoRgbU8ColorSpace.h:52
+#, kde-format
+msgid "RGB (8-bit integer/channel, unmanaged)"
+msgstr "RGB (inteiros de 8 bits/canal, não gerido)"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:33
+#, kde-format
+msgid "Blue"
+msgstr "Azul"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:34
+#, kde-format
+msgid "Green"
+msgstr "Verde"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:35
+#, kde-format
+msgid "Red"
+msgstr "Vermelho"
+
+#: pigment/colorspaces/KoSimpleColorSpace.h:60
+#: pigment/colorspaces/KoSimpleColorSpace.h:67
+#, kde-format
+msgid "Undefined operation in the %1 space"
+msgstr "Operação indefinida no espaço de cores %1"
+
+#: pigment/colorspaces/KoSimpleColorSpace.h:84
+#: pigment/colorspaces/KoSimpleColorSpace.h:89
+#: pigment/colorspaces/KoSimpleColorSpace.h:94
+#: pigment/colorspaces/KoSimpleColorSpace.h:99
+#: pigment/colorspaces/KoSimpleColorSpace.h:104
+#: pigment/colorspaces/KoSimpleColorSpace.h:108
+#: pigment/colorspaces/KoSimpleColorSpace.h:112
+#: pigment/colorspaces/KoSimpleColorSpace.h:115
+#: pigment/colorspaces/KoSimpleColorSpace.h:118
+#: pigment/colorspaces/KoSimpleColorSpace.h:124
+#: pigment/colorspaces/KoSimpleColorSpace.h:127
+#, kde-format
+msgid "Undefined operation in the %1 color space"
+msgstr "Operação indefinida no espaço de cores %1"
+
+#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
+#, kde-format
+msgid "Simple Color Conversion Engine"
+msgstr "Motor de Conversão de Cores Simples"
+
+#: pigment/compositeops/KoCompositeOpAlphaDarken.h:28
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:194
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken32.h:235
+#, kde-format
+msgid "Alpha darken"
+msgstr "Escurecer o alfa"
+
+#: pigment/compositeops/KoCompositeOpBehind.h:26
+#: pigment/KoCompositeOpRegistry.cpp:69
+#, kde-format
+msgid "Behind"
+msgstr "Atrás"
+
+#: pigment/compositeops/KoCompositeOpDissolve.h:48
+#: pigment/KoCompositeOpRegistry.cpp:83
+#, kde-format
+msgid "Dissolve"
+msgstr "Dissolver"
+
+#: pigment/compositeops/KoCompositeOpErase.h:27
+#: pigment/KoCompositeOpRegistry.cpp:72
+#, kde-format
+msgid "Erase"
+msgstr "Apagar"
+
+#: pigment/compositeops/KoCompositeOpGreater.h:40
+#: pigment/KoCompositeOpRegistry.cpp:70
+#, kde-format
+msgid "Greater"
+msgstr "Maior"
+
+#: pigment/compositeops/KoCompositeOpOver.h:49
+#: pigment/compositeops/KoOptimizedCompositeOpOver128.h:238
+#: pigment/compositeops/KoOptimizedCompositeOpOver32.h:196
+#: pigment/KoCompositeOpRegistry.cpp:68 pigment/KoCompositeOpRegistry.cpp:134
+#, kde-format
+msgid "Normal"
+msgstr "Normal"
+
+#: pigment/compositeops/KoCompositeOps.h:101
+#: pigment/KoCompositeOpRegistry.cpp:71
+#, kde-format
+msgid "Overlay"
+msgstr "Sobreposição"
+
+#: pigment/compositeops/KoCompositeOps.h:102
+#: pigment/KoCompositeOpRegistry.cpp:75
+#, kde-format
+msgid "Grain Merge"
+msgstr "Junção do Grão"
+
+#: pigment/compositeops/KoCompositeOps.h:103
+#: pigment/KoCompositeOpRegistry.cpp:76
+#, kde-format
+msgid "Grain Extract"
+msgstr "Extracção do Grão"
+
+#: pigment/compositeops/KoCompositeOps.h:104
+#: pigment/KoCompositeOpRegistry.cpp:74
+#, kde-format
+msgid "Hard Mix"
+msgstr "Mistura Forte"
+
+#: pigment/compositeops/KoCompositeOps.h:105
+#: pigment/KoCompositeOpRegistry.cpp:79
+#, kde-format
+msgid "Geometric Mean"
+msgstr "Média Geométrica"
+
+#: pigment/compositeops/KoCompositeOps.h:106
+#: pigment/KoCompositeOpRegistry.cpp:77
+#, kde-format
+msgid "Parallel"
+msgstr "Paralela"
+
+#: pigment/compositeops/KoCompositeOps.h:107
+#: pigment/KoCompositeOpRegistry.cpp:78
+#, kde-format
+msgid "Allanon"
+msgstr "Allanon"
+
+#: pigment/compositeops/KoCompositeOps.h:109
+#: pigment/KoCompositeOpRegistry.cpp:53
+#, kde-format
+msgid "Screen"
+msgstr "Ecrã"
+
+#: pigment/compositeops/KoCompositeOps.h:110
+#: pigment/KoCompositeOpRegistry.cpp:49
+#, kde-format
+msgid "Color Dodge"
+msgstr "Desvio da Cor"
+
+#: pigment/compositeops/KoCompositeOps.h:111
+#: pigment/KoCompositeOpRegistry.cpp:50
+#, kde-format
+msgid "Linear Dodge"
+msgstr "Desvio Linear"
+
+#: pigment/compositeops/KoCompositeOps.h:112 pigment/KoCompositeOp.cpp:23
+#: pigment/KoCompositeOpRegistry.cpp:28 pigment/KoCompositeOpRegistry.cpp:51
+#, kde-format
+msgid "Lighten"
+msgstr "Aclarar"
+
+#: pigment/compositeops/KoCompositeOps.h:113
+#: pigment/KoCompositeOpRegistry.cpp:56
+#, kde-format
+msgid "Hard Light"
+msgstr "Luz Forte"
+
+#: pigment/compositeops/KoCompositeOps.h:114
+#: pigment/KoCompositeOpRegistry.cpp:58
+#, kde-format
+msgid "Soft Light (SVG)"
+msgstr "Luz Suave (SVG)"
+
+#: pigment/compositeops/KoCompositeOps.h:115
+#: pigment/KoCompositeOpRegistry.cpp:57
+#, kde-format
+msgid "Soft Light (Photoshop)"
+msgstr "Luz Suave (Photoshop)"
+
+#: pigment/compositeops/KoCompositeOps.h:116
+#: pigment/KoCompositeOpRegistry.cpp:59
+#, kde-format
+msgid "Gamma Light"
+msgstr "Luz do Gama"
+
+#: pigment/compositeops/KoCompositeOps.h:117
+#: pigment/KoCompositeOpRegistry.cpp:55
+#, kde-format
+msgid "Vivid Light"
+msgstr "Luz Viva"
+
+#: pigment/compositeops/KoCompositeOps.h:118
+#: pigment/KoCompositeOpRegistry.cpp:54
+#, kde-format
+msgid "Pin Light"
+msgstr "Luz Pontual"
+
+#: pigment/compositeops/KoCompositeOps.h:119
+#: pigment/KoCompositeOpRegistry.cpp:52
+#, kde-format
+msgid "Linear Light"
+msgstr "Luz Linear"
+
+#: pigment/compositeops/KoCompositeOps.h:121
+#, kde-format
+msgid "Color Burn"
+msgstr "Queimadura de Cor"
+
+#: pigment/compositeops/KoCompositeOps.h:122
+#: pigment/KoCompositeOpRegistry.cpp:44
+#, kde-format
+msgid "Linear Burn"
+msgstr "Queimadura Linear"
+
+#: pigment/compositeops/KoCompositeOps.h:123 pigment/KoCompositeOp.cpp:24
+#: pigment/KoCompositeOpRegistry.cpp:27 pigment/KoCompositeOpRegistry.cpp:45
+#, kde-format
+msgid "Darken"
+msgstr "Escurecimento"
+
+#: pigment/compositeops/KoCompositeOps.h:124
+#: pigment/KoCompositeOpRegistry.cpp:46
+#, kde-format
+msgid "Gamma Dark"
+msgstr "Escurecer o Gama"
+
+#: pigment/compositeops/KoCompositeOps.h:126
+#: pigment/KoCompositeOpRegistry.cpp:37
+#, kde-format
+msgid "Addition"
+msgstr "Adição"
+
+#: pigment/compositeops/KoCompositeOps.h:128
+#, kde-format
+msgid "Inversed-Subtract"
+msgstr "Subtrair (Inverso)"
+
+#: pigment/compositeops/KoCompositeOps.h:130
+#: pigment/KoCompositeOpRegistry.cpp:40
+#, kde-format
+msgid "Divide"
+msgstr "Dividir"
+
+#: pigment/compositeops/KoCompositeOps.h:132
+#: pigment/KoCompositeOpRegistry.cpp:66
+#, kde-format
+msgid "Arcus Tangent"
+msgstr "Arco-Tangente"
+
+#: pigment/compositeops/KoCompositeOps.h:133
+#: pigment/KoCompositeOpRegistry.cpp:62
+#, kde-format
+msgid "Difference"
+msgstr "Diferença"
+
+#: pigment/compositeops/KoCompositeOps.h:134
+#: pigment/KoCompositeOpRegistry.cpp:65
+#, kde-format
+msgid "Exclusion"
+msgstr "Exclusão"
+
+#: pigment/compositeops/KoCompositeOps.h:135
+#: pigment/KoCompositeOpRegistry.cpp:63
+#, kde-format
+msgid "Equivalence"
+msgstr "Equivalência"
+
+#: pigment/compositeops/KoCompositeOps.h:136
+#, kde-format
+msgid "Additive-Subtractive"
+msgstr "Aditivo-Subtractivo"
+
+#: pigment/compositeops/KoCompositeOps.h:165
+#: pigment/KoCompositeOpRegistry.cpp:84
+#, kde-format
+msgid "Copy Red"
+msgstr "Copiar o Vermelho"
+
+#: pigment/compositeops/KoCompositeOps.h:166
+#: pigment/KoCompositeOpRegistry.cpp:85
+#, kde-format
+msgid "Copy Green"
+msgstr "Copiar o Verde"
+
+#: pigment/compositeops/KoCompositeOps.h:167
+#: pigment/KoCompositeOpRegistry.cpp:86
+#, kde-format
+msgid "Copy Blue"
+msgstr "Copiar o Azul"
+
+#: pigment/compositeops/KoCompositeOps.h:168
+#: pigment/KoCompositeOpRegistry.cpp:88
+#, kde-format
+msgid "Tangent Normalmap"
+msgstr "Mapa da Normal à Tangente"
+
+#: pigment/compositeops/KoCompositeOps.h:169
+#, kde-format
+msgid "Combine Normal Maps"
+msgstr "Combinar os Mapas da Normal"
+
+#: pigment/compositeops/KoCompositeOps.h:171 pigment/KoCompositeOp.cpp:18
+#: pigment/KoCompositeOpRegistry.cpp:90
+#, kde-format
+msgid "Color"
+msgstr "Cor"
+
+#: pigment/compositeops/KoCompositeOps.h:172
+#: pigment/KoCompositeOpRegistry.cpp:91
+#, kde-format
+msgid "Hue"
+msgstr "Tom"
+
+#: pigment/compositeops/KoCompositeOps.h:173
+#: pigment/KoCompositeOpRegistry.cpp:92
+#, kde-format
+msgid "Saturation"
+msgstr "Saturação"
+
+#: pigment/compositeops/KoCompositeOps.h:174
+#: pigment/KoCompositeOpRegistry.cpp:95
+#, kde-format
+msgid "Increase Saturation"
+msgstr "Aumentar a Saturação"
+
+#: pigment/compositeops/KoCompositeOps.h:175
+#: pigment/KoCompositeOpRegistry.cpp:94
+#, kde-format
+msgid "Decrease Saturation"
+msgstr "Diminuir a Saturação"
+
+#: pigment/compositeops/KoCompositeOps.h:176
+#: pigment/KoCompositeOpRegistry.cpp:93
+#, kde-format
+msgid "Luminosity"
+msgstr "Luminosidade"
+
+#: pigment/compositeops/KoCompositeOps.h:177
+#: pigment/KoCompositeOpRegistry.cpp:97
+#, kde-format
+msgid "Increase Luminosity"
+msgstr "Aumentar a Luminosidade"
+
+#: pigment/compositeops/KoCompositeOps.h:178
+#: pigment/KoCompositeOpRegistry.cpp:96
+#, kde-format
+msgid "Decrease Luminosity"
+msgstr "Diminuir a Luminosidade"
+
+#: pigment/compositeops/KoCompositeOps.h:179
+#: pigment/KoCompositeOpRegistry.cpp:47
+#, kde-format
+msgid "Darker Color"
+msgstr "Cor Mais Escura"
+
+#: pigment/compositeops/KoCompositeOps.h:180
+#: pigment/KoCompositeOpRegistry.cpp:60
+#, kde-format
+msgid "Lighter Color"
+msgstr "Cor Mais Clara"
+
+#: pigment/compositeops/KoCompositeOps.h:182
+#: pigment/KoCompositeOpRegistry.cpp:99
+#, kde-format
+msgid "Color HSI"
+msgstr "HSI da Cor"
+
+#: pigment/compositeops/KoCompositeOps.h:183
+#: pigment/KoCompositeOpRegistry.cpp:100
+#, kde-format
+msgid "Hue HSI"
+msgstr "HSI do Tom"
+
+#: pigment/compositeops/KoCompositeOps.h:184
+#: pigment/KoCompositeOpRegistry.cpp:101
+#, kde-format
+msgid "Saturation HSI"
+msgstr "HSI da Saturação"
+
+#: pigment/compositeops/KoCompositeOps.h:185
+#: pigment/KoCompositeOpRegistry.cpp:104
+#, kde-format
+msgid "Increase Saturation HSI"
+msgstr "Aumentar o HSI da Saturação"
+
+#: pigment/compositeops/KoCompositeOps.h:186
+#: pigment/KoCompositeOpRegistry.cpp:103
+#, kde-format
+msgid "Decrease Saturation HSI"
+msgstr "Diminuir o HSI da Saturação"
+
+#: pigment/compositeops/KoCompositeOps.h:187
+#: pigment/KoCompositeOpRegistry.cpp:102
+#, kde-format
+msgid "Intensity"
+msgstr "Intensidade"
+
+#: pigment/compositeops/KoCompositeOps.h:188
+#: pigment/KoCompositeOpRegistry.cpp:106
+#, kde-format
+msgid "Increase Intensity"
+msgstr "Aumentar a Intensidade"
+
+#: pigment/compositeops/KoCompositeOps.h:189
+#: pigment/KoCompositeOpRegistry.cpp:105
+#, kde-format
+msgid "Decrease Intensity"
+msgstr "Diminuir a Intensidade"
+
+#: pigment/compositeops/KoCompositeOps.h:191
+#: pigment/KoCompositeOpRegistry.cpp:108
+#, kde-format
+msgid "Color HSL"
+msgstr "HSL da Cor"
+
+#: pigment/compositeops/KoCompositeOps.h:192
+#: pigment/KoCompositeOpRegistry.cpp:109
+#, kde-format
+msgid "Hue HSL"
+msgstr "HSL do Tom"
+
+#: pigment/compositeops/KoCompositeOps.h:193
+#: pigment/KoCompositeOpRegistry.cpp:110
+#, kde-format
+msgid "Saturation HSL"
+msgstr "HSL da Saturação"
+
+#: pigment/compositeops/KoCompositeOps.h:194
+#: pigment/KoCompositeOpRegistry.cpp:113
+#, kde-format
+msgid "Increase Saturation HSL"
+msgstr "Aumentar o HSL da Saturação"
+
+#: pigment/compositeops/KoCompositeOps.h:195
+#: pigment/KoCompositeOpRegistry.cpp:112
+#, kde-format
+msgid "Decrease Saturation HSL"
+msgstr "Diminuir o HSL da Saturação"
+
+#: pigment/compositeops/KoCompositeOps.h:197
+#: pigment/KoCompositeOpRegistry.cpp:115
+#, kde-format
+msgid "Increase Lightness"
+msgstr "Aumentar a Luminosidade"
+
+#: pigment/compositeops/KoCompositeOps.h:198
+#: pigment/KoCompositeOpRegistry.cpp:114
+#, kde-format
+msgid "Decrease Lightness"
+msgstr "Diminuir a Luminosidade"
+
+#: pigment/compositeops/KoCompositeOps.h:200
+#: pigment/KoCompositeOpRegistry.cpp:117
+#, kde-format
+msgid "Color HSV"
+msgstr "HSV da Cor"
+
+#: pigment/compositeops/KoCompositeOps.h:201
+#: pigment/KoCompositeOpRegistry.cpp:118
+#, kde-format
+msgid "Hue HSV"
+msgstr "HSV do Tom"
+
+#: pigment/compositeops/KoCompositeOps.h:202
+#: pigment/KoCompositeOpRegistry.cpp:119
+#, kde-format
+msgid "Saturation HSV"
+msgstr "HSV da Saturação"
+
+#: pigment/compositeops/KoCompositeOps.h:203
+#: pigment/KoCompositeOpRegistry.cpp:122
+#, kde-format
+msgid "Increase Saturation HSV"
+msgstr "Aumentar o HSV da Saturação"
+
+#: pigment/compositeops/KoCompositeOps.h:204
+#: pigment/KoCompositeOpRegistry.cpp:121
+#, kde-format
+msgid "Decrease Saturation HSV"
+msgstr "Diminuir o HSV da Saturação"
+
+#: pigment/compositeops/KoCompositeOps.h:205
+#: pigment/KoCompositeOpRegistry.cpp:120
+#, kde-format
+msgid "Value"
+msgstr "Valor"
+
+#: pigment/compositeops/KoCompositeOps.h:206
+#: pigment/KoCompositeOpRegistry.cpp:124
+#, kde-format
+msgid "Increase Value"
+msgstr "Aumentar o Valor"
+
+#: pigment/compositeops/KoCompositeOps.h:207
+#: pigment/KoCompositeOpRegistry.cpp:123
+#, kde-format
+msgid "Decrease Value"
+msgstr "Diminuir o Valor"
+
+#: pigment/KoBasicHistogramProducers.cpp:352
+#: pigment/KoBasicHistogramProducers.cpp:419
+#, kde-format
+msgid "Generic RGB Histogram"
+msgstr "Histograma RGB Genérico"
+
+#: pigment/KoBasicHistogramProducers.cpp:356
+#, kde-format
+msgid "R"
+msgstr "R"
+
+#: pigment/KoBasicHistogramProducers.cpp:357
+#, kde-format
+msgid "G"
+msgstr "G"
+
+#: pigment/KoBasicHistogramProducers.cpp:358
+#, kde-format
+msgid "B"
+msgstr "B"
+
+#: pigment/KoBasicHistogramProducers.cpp:425
+#, kde-format
+msgid "L*a*b* Histogram"
+msgstr "Histograma L*a*b*"
+
+#: pigment/KoBasicHistogramProducers.cpp:429
+#, kde-format
+msgid "L*"
+msgstr "L*"
+
+#: pigment/KoBasicHistogramProducers.cpp:503
+#, kde-format
+msgid "Generic L*a*b* Histogram"
+msgstr "Histograma L*a*b* Genérico"
+
+#: pigment/KoColorModelStandardIds.cpp:13
+#, kde-format
+msgid "RGB"
+msgstr "RGB"
+
+#: pigment/KoColorModelStandardIds.cpp:14
+#, kde-format
+msgid "XYZ"
+msgstr "XYZ"
+
+#: pigment/KoColorModelStandardIds.cpp:15
+#, kde-format
+msgid "L*a*b*"
+msgstr "L*a*b*"
+
+#: pigment/KoColorModelStandardIds.cpp:16
+#, kde-format
+msgid "CMYK"
+msgstr "CMYK"
+
+#: pigment/KoColorModelStandardIds.cpp:17
+#, kde-format
+msgid "Grayscale"
+msgstr "Tons de Cinzento"
+
+#: pigment/KoColorModelStandardIds.cpp:18
+#, kde-format
+msgid "Grayscale (without transparency)"
+msgstr "Tons de cinzento (sem transparência)"
+
+#: pigment/KoColorModelStandardIds.cpp:19
+#, kde-format
+msgid "YCbCr"
+msgstr "YCbCr"
+
+#: pigment/KoColorModelStandardIds.cpp:21
+#, kde-format
+msgid "8 Bits"
+msgstr "8 Bits"
+
+#: pigment/KoColorModelStandardIds.cpp:22
+#, kde-format
+msgid "16 Bits"
+msgstr "16 Bits"
+
+#: pigment/KoColorModelStandardIds.cpp:23
+#, kde-format
+msgid "16 Bits Float"
+msgstr "Vírgula-flutuante a 16 'bits'"
+
+#: pigment/KoColorModelStandardIds.cpp:24
+#, kde-format
+msgid "32 Bits Float"
+msgstr "Vírgula-flutuante a 32 'bits'"
+
+#: pigment/KoColorModelStandardIds.cpp:25
+#, kde-format
+msgid "64 Bits Float"
+msgstr "Vírgula-flutuante a 64 'bits'"
+
+#: pigment/KoCompositeOp.cpp:21 pigment/KoCompositeOpRegistry.cpp:26
+#, kde-format
+msgid "Arithmetic"
+msgstr "Matemática"
+
+#: pigment/KoCompositeOp.cpp:22 pigment/KoCompositeOpRegistry.cpp:29
+#, kde-format
+msgid "Negative"
+msgstr "Negativo"
+
+#: pigment/KoCompositeOp.cpp:25 pigment/KoCompositeOpRegistry.cpp:32
+#, kde-format
+msgid "HSY"
+msgstr "HSY"
+
+#: pigment/KoCompositeOp.cpp:26 pigment/KoCompositeOpRegistry.cpp:33
+#, kde-format
+msgid "HSI"
+msgstr "HSI"
+
+#: pigment/KoCompositeOp.cpp:27 pigment/KoCompositeOpRegistry.cpp:34
+#, kde-format
+msgid "HSL"
+msgstr "HSL"
+
+#: pigment/KoCompositeOp.cpp:28 pigment/KoCompositeOpRegistry.cpp:35
+#, kde-format
+msgid "HSV"
+msgstr "HSV"
+
+#: pigment/KoCompositeOp.cpp:29 pigment/KoCompositeOpRegistry.cpp:30
+#, kde-format
+msgid "Mix"
+msgstr "Mistura"
+
+#: pigment/KoCompositeOpRegistry.cpp:41
+#, kde-format
+msgid "Inverse Subtract"
+msgstr "Subtrair (Inverso)"
+
+#: pigment/KoCompositeOpRegistry.cpp:43
+#, kde-format
+msgid "Burn"
+msgstr "Gravar"
+
+#: pigment/KoCompositeOpRegistry.cpp:64
+#, kde-format
+msgid "Additive Subtractive"
+msgstr "Aditivo-Subtractivo"
+
+#: pigment/KoCompositeOpRegistry.cpp:73
+#, kde-format
+msgid "Alpha Darken"
+msgstr "Escurecer o Alfa"
+
+#: pigment/KoCompositeOpRegistry.cpp:81
+#, kde-format
+msgid "Bumpmap"
+msgstr "Mapa de Relevo"
+
+#: pigment/KoCompositeOpRegistry.cpp:82
+#, kde-format
+msgid "Combine Normal Map"
+msgstr "Combinar o Mapa da Normal"
+
+#: pigment/resources/KoStopGradient.cpp:421
+#, kde-format
+msgid "SVG Gradient"
+msgstr "Gradiente SVG"
+
+#: rdf/InsertSemanticObjectReferenceAction.cpp:43
+#, kde-format
+msgid "Select the object you want to reference"
+msgstr "Seleccione o objecto que deseja referenciar"
+
+#: rdf/KoDocumentRdf.cpp:618
+#, kde-format
+msgid "Reference"
+msgstr "Referência"
+
+#: rdf/KoDocumentRdfEditWidget.cpp:229
+#, kde-format
+msgid "Set For All Existing"
+msgstr "Definir para Todos os Existentes"
+
+#: rdf/KoDocumentRdfEditWidget.cpp:297
+#, kde-format
+msgctxt "statement is an Rdf related term"
+msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
+msgid_plural ""
+"<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
+msgstr[0] ""
+"<qt>As edições perder-se-ão.<p>Existe ainda %1 instrução inválida.</qt>"
+msgstr[1] ""
+"<qt>As edições perder-se-ão.<p>Existem ainda %1 instruções inválidas.</qt>"
+
+#: rdf/KoDocumentRdfEditWidget.cpp:300
+#, kde-format
+msgctxt "statement is an Rdf related term"
+msgid "Discard invalid statements?"
+msgstr "Deseja eliminar as instruções inválidas?"
+
+#: rdf/KoDocumentRdfEditWidget.cpp:341
+#, kde-format
+msgid "Rdf"
+msgstr "RDF"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: rdf/KoDocumentRdfEditWidget.ui:21
+#, kde-format
+msgid "Triples"
+msgstr "Triplos"
+
+#. i18n: ectx: property (text), widget (QPushButton, newStylesheet)
+#. i18n: ectx: property (text), widget (QPushButton, newTripleButton)
+#. i18n: ectx: property (text), widget (QPushButton, newNamespaceButton)
+#: rdf/KoDocumentRdfEditWidget.ui:39 rdf/KoDocumentRdfEditWidget.ui:84
+#: rdf/KoSemanticStylesheetsEditor.ui:77
+#, kde-format
+msgid "new"
+msgstr "nova"
+
+#. i18n: ectx: property (text), widget (QPushButton, copyTripleButton)
+#: rdf/KoDocumentRdfEditWidget.ui:46
+#, kde-format
+msgid "copy"
+msgstr "cópia"
+
+#. i18n: ectx: property (text), widget (QPushButton, deleteStylesheet)
+#. i18n: ectx: property (text), widget (QPushButton, deleteTripleButton)
+#. i18n: ectx: property (text), widget (QPushButton, deleteNamespaceButton)
+#: rdf/KoDocumentRdfEditWidget.ui:53 rdf/KoDocumentRdfEditWidget.ui:91
+#: rdf/KoSemanticStylesheetsEditor.ui:84
+#, kde-format
+msgid "delete"
+msgstr "apagar"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: rdf/KoDocumentRdfEditWidget.ui:76
+#, kde-format
+msgid "Namespaces"
+msgstr "Espaços de nomes"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, m_namespaceView)
+#: rdf/KoDocumentRdfEditWidget.ui:123
+#, kde-format
+msgid "Prefix"
+msgstr "Prefixo"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, m_namespaceView)
+#: rdf/KoDocumentRdfEditWidget.ui:128
+#, kde-format
+msgid "Namespace"
+msgstr "Espaço de nomes"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: rdf/KoDocumentRdfEditWidget.ui:137
+#, kde-format
+msgid "Semantic"
+msgstr "Semântica"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
+#: rdf/KoDocumentRdfEditWidget.ui:156
+#, kde-format
+msgid "SPARQL"
+msgstr "SPARQL"
+
+#. i18n: ectx: property (html), widget (QTextEdit, m_sparqlQuery)
+#: rdf/KoDocumentRdfEditWidget.ui:182
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"># Insert your SPARQL query here<br /># "
+"Results are shown below.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix rdf:  &lt;http://www.w3."
+"org/1999/02/22-rdf-syntax-ns#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix foaf: &lt;http://xmlns.com/"
+"foaf/0.1/&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix pkg:  &lt;http://docs.oasis-open."
+"org/ns/office/1.2/meta/pkg#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix geo84: &lt;http://www.w3."
+"org/2003/01/geo/wgs84_pos#&gt;</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">select ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">where { </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"> ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">}</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"># Introduza aqui a sua pesquisa em "
+"SPARQL<br /># Os resultados são apresentados em baixo.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix rdf:  &lt;http://www.w3."
+"org/1999/02/22-rdf-syntax-ns#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix foaf: &lt;http://xmlns.com/"
+"foaf/0.1/&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix pkg:  &lt;http://docs.oasis-open."
+"org/ns/office/1.2/meta/pkg#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix geo84: &lt;http://www.w3."
+"org/2003/01/geo/wgs84_pos#&gt;</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">select ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">where { </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"> ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">}</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p></body></html>"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
+#: rdf/KoDocumentRdfEditWidget.ui:191
+#, kde-format
+msgid "Execute"
+msgstr "Executar"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_5)
+#: rdf/KoDocumentRdfEditWidget.ui:221
+#, kde-format
+msgid "Stylesheets"
+msgstr "Folhas de Estilo"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: rdf/KoDocumentRdfEditWidget.ui:227
+#, kde-format
+msgid ""
+"Set the default stylesheet for Semantic objects in this document. New RDF "
+"objects will use this stylesheet automatically. The buttons allow you to set "
+"the stylesheet for all existing semantic objects to the new default "
+"stylesheet as well."
+msgstr ""
+"Define a folha de estilo por omissão para os objectos semânticos neste "
+"documento. Os objectos RDF novos irão usar esta folha de estilo "
+"automaticamente. Os botões permitem-lhe definir a nova folha de estilo "
+"predefinida."
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:101
+#, kde-format
+msgid "Apply Stylesheet"
+msgstr "Aplicar a Folha de Estilo"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
+#: rdf/KoSemanticStylesheetsEditor.cpp:107
+#, kde-format
+msgid "System"
+msgstr "Sistema"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:112
+#: rdf/KoSemanticStylesheetsEditor.cpp:123
+#, kde-format
+msgid "User"
+msgstr "Utilizador"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:126
+#, kde-format
+msgid "Reapply Current"
+msgstr "Aplicar de Novo a Actual"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:131
+#, kde-format
+msgid "Disassociate"
+msgstr "Dissociar"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:151
+#, kde-format
+msgid "Edit %1"
+msgstr "Editar o %1"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: rdf/KoSemanticStylesheetsEditor.ui:17
+#, kde-format
+msgid "Stylesheet Definition"
+msgstr "Definição da Folha de Estilo"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: rdf/KoSemanticStylesheetsEditor.ui:29
+#, kde-format
+msgid "Variables Available"
+msgstr "Variáveis Disponíveis"
+
+#. i18n: ectx: property (text), widget (QTableWidget, variables)
+#: rdf/KoSemanticStylesheetsEditor.ui:62
+#, kde-format
+msgid "Description"
+msgstr "Descrição"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, stylesheets)
+#: rdf/KoSemanticStylesheetsEditor.ui:107
+#, kde-format
+msgid "Stylesheet Name"
+msgstr "Nome da Folha de Estilo"
+
+#: rdf/KoSopranoTableModel.cpp:71
+#, kde-format
+msgid "Empty"
+msgstr "Vazio"
+
+#: rdf/KoSopranoTableModel.cpp:73 rdf/KoSopranoTableModelDelegate.cpp:30
+#, kde-format
+msgid "URI"
+msgstr "URI"
+
+#: rdf/KoSopranoTableModel.cpp:75 rdf/KoSopranoTableModelDelegate.cpp:31
+#, kde-format
+msgid "Literal"
+msgstr "Literal"
+
+#: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:32
+#, kde-format
+msgid "Blank"
+msgstr "Em Branco"
+
+#: rdf/KoSopranoTableModel.cpp:119
+#, kde-format
+msgid "Valid"
+msgstr "Válido"
+
+#: rdf/KoSopranoTableModel.cpp:121
+#, kde-format
+msgid "Subject"
+msgstr "Assunto"
+
+#: rdf/KoSopranoTableModel.cpp:123
+#, kde-format
+msgid "Predicate"
+msgstr "Predicado"
+
+#: rdf/KoSopranoTableModel.cpp:125
+#, kde-format
+msgid "Object"
+msgstr "Objecto"
+
+#: rdf/KoSopranoTableModel.cpp:127
+#, kde-format
+msgid "Obj Type"
+msgstr "Tipo de Objecto"
+
+#: rdf/KoSopranoTableModel.cpp:129
+#, kde-format
+msgid "DataType"
+msgstr "Tipo de Dados"
+
+#: rdf/KoSopranoTableModel.cpp:131
+#, kde-format
+msgid "Stored In"
+msgstr "Guardado Em"
+
+#: store/KoEncryptedStore.cpp:228
+#, kde-format
+msgid ""
+"This document contains an unknown checksum. When you give a password it "
+"might not be verified."
+msgstr ""
+"Este documento contém um código desconhecido. Quando indicar uma senha, esta "
+"poderá não ser verificada."
+
+#: store/KoEncryptedStore.cpp:254 store/KoEncryptedStore.cpp:271
+#, kde-format
+msgid ""
+"This document contains an unknown encryption method. Some parts may be "
+"unreadable."
+msgstr ""
+"Este documento contém um método de encriptação desconhecido. Algumas partes "
+"poderão ficar inacessíveis."
+
+#: store/KoEncryptedStore.cpp:286
+#, kde-format
+msgid ""
+"This document contains incomplete encryption data. Some parts may be "
+"unreadable."
+msgstr ""
+"Este documento contém dados de encriptação incompletos. Algumas partes "
+"poderão ficar inacessíveis."
+
+#: store/KoEncryptedStore.cpp:300
+#, kde-format
+msgid ""
+"QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
+"not be opened."
+msgstr ""
+"O QCA não tem suporte de momento para o SHA1 ou o PBKDF2 a usar o SHA1. O "
+"documento não pode ser aberto."
+
+#: store/KoEncryptedStore.cpp:330
+#, kde-format
+msgid ""
+"The manifest file seems to be corrupted. It cannot be modified and the "
+"document will remain unreadable. Please try and save the document again to "
+"prevent losing your work."
+msgstr ""
+"O ficheiro do manifesto parece estar corrompido. Não pode ser modificado e, "
+"deste modo, o documento ficará inacessível. Por favor, tente gravar o "
+"documento de novo para evitar perder o seu trabalho."
+
+#: store/KoEncryptedStore.cpp:428
+#, kde-format
+msgid ""
+"The manifest file cannot be written. The document will remain unreadable. "
+"Please try and save the document again to prevent losing your work."
+msgstr ""
+"O ficheiro do manifesto não pode ser gravado. O documento ficará "
+"inacessível. Por favor, tente gravar o documento de novo para evitar perder "
+"o seu trabalho."
+
+#: store/KoEncryptedStore.cpp:549
+#, kde-format
+msgid "Please enter the password to open this file."
+msgstr "Por favor, indique a senha para abrir este ficheiro."
+
+#: store/KoEncryptedStore.cpp:724
+#, kde-format
+msgid "Please enter the password to encrypt the document with."
+msgstr "Por favor, indique a senha com a qual deseja encriptar o documento."
+
+#: store/KoEncryptedStore.cpp:738
+#, kde-format
+msgid "Do you want to save the password?"
+msgstr "Deseja gravar a senha?"
+
+#: store/KoNetAccess.cpp:90
+#, kde-format
+msgid "File '%1' is not readable"
+msgstr "Não foi possível ler o ficheiro '%1'"
+
+#: store/KoNetAccess.cpp:409
+#, kde-format
+msgid "ERROR: Unknown protocol '%1'"
+msgstr "ERRO: Protocolo desconhecido '%1'"
+
+#: store/KoStore.cpp:168
+#, kde-format
+msgid "The directory mode is not supported for remote locations."
+msgstr "O modo de pastas não é suportado para localizações remotas."
+
+#: store/KoStore.cpp:169
+#, kde-format
+msgid "Calligra Storage"
+msgstr "Armazenamento do Calligra"
+
+#: text/commands/ChangeListCommand.cpp:28
+#: text/commands/ChangeListCommand.cpp:76
+#: text/commands/ChangeListCommand.cpp:89
+msgctxt "(qtundo-format)"
+msgid "Change List"
+msgstr "Modificar a Lista"
+
+#: text/commands/ChangeStylesMacroCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Change Styles"
+msgstr "Mudar os Estilos"
+
+#: text/commands/ChangeTrackedDeleteCommand.cpp:263
+#, kde-format
+msgid "Delete"
+msgstr "Apagar"
+
+#: text/commands/ChangeTrackedDeleteCommand.cpp:318
+#: text/commands/DeleteCommand.cpp:506 text/KoTextEditor_undo.cpp:74
+#: text/KoTextEditor_undo.cpp:153 text/KoTextEditor_undo.cpp:188
+#: text/KoTextEditor_undo.cpp:205 text/KoTextEditor_undo.cpp:247
+msgctxt "(qtundo-format)"
+msgid "Text"
+msgstr "Texto"
+
+#: text/commands/DeleteCommand.cpp:57
+msgctxt "(qtundo-format)"
+msgid "Delete"
+msgstr "Apagar"
+
+#: text/commands/DeleteTableColumnCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Delete Column"
+msgstr "Apagar a coluna"
+
+#: text/commands/DeleteTableRowCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Delete Row"
+msgstr "Apagar a linha"
+
+#: text/commands/InsertNoteCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Insert Footnote"
+msgstr "Inserir uma Nota de Rodapé"
+
+#: text/commands/InsertNoteCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Insert Endnote"
+msgstr "Inserir uma Nota Final"
+
+#: text/commands/InsertTableColumnCommand.cpp:25
+msgctxt "(qtundo-format)"
+msgid "Insert Column Right"
+msgstr "Inserir uma coluna à direita"
+
+#: text/commands/InsertTableColumnCommand.cpp:27
+msgctxt "(qtundo-format)"
+msgid "Insert Column Left"
+msgstr "Inserir uma coluna à esquerda"
+
+#: text/commands/InsertTableRowCommand.cpp:25
+msgctxt "(qtundo-format)"
+msgid "Insert Row Below"
+msgstr "Inserir uma linha abaixo"
+
+#: text/commands/InsertTableRowCommand.cpp:27
+msgctxt "(qtundo-format)"
+msgid "Insert Row Above"
+msgstr "Inserir uma linha acima"
+
+#: text/commands/ListItemNumberingCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Change List Numbering"
+msgstr "Mudar a Numeração da Lista"
+
+#: text/commands/NewSectionCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "New Section"
+msgstr "Nova Secção"
+
+#: text/commands/ParagraphFormattingCommand.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Direct Paragraph Formatting"
+msgstr "Formatação Directa do Parágrafo"
+
+#: text/commands/RenameSectionCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Rename Section"
+msgstr "Mudar o Nome da Secção"
+
+#: text/commands/ResizeTableCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Adjust Column Width"
+msgstr "Ajustar a Largura da Coluna"
+
+#: text/commands/ResizeTableCommand.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Adjust Row Height"
+msgstr "Ajustar a Altura da Linha"
+
+#: text/commands/SplitSectionsCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Split sections startings"
+msgstr "Dividir os inícios das secções"
+
+#: text/commands/SplitSectionsCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Split sections endings"
+msgstr "Dividir os fins das secções"
+
+#: text/commands/TextPasteCommand.cpp:51
+msgctxt "(qtundo-format)"
+msgid "Paste As Text"
+msgstr "Colar como Texto"
+
+#: text/commands/TextPasteCommand.cpp:53
+msgctxt "(qtundo-format)"
+msgid "Paste"
+msgstr "Colar"
+
+#: text/InsertTextLocator.cpp:14
+#, kde-format
+msgid "Index Reference"
+msgstr "Referência do Índice"
+
+#: text/InsertTextReferenceAction.cpp:22 text/InsertTextReferenceAction.cpp:50
+#, kde-format
+msgid "Text Reference"
+msgstr "Referência de Texto"
+
+#: text/InsertTextReferenceAction.cpp:31
+#, kde-format
+msgid "Please create an index to reference first."
+msgstr "Crie por favor um índice para referenciar primeiro."
+
+#: text/InsertTextReferenceAction.cpp:40
+#, kde-format
+msgid "Select the index you want to reference"
+msgstr "Seleccione o índice que deseja referenciar"
+
+#: text/KoFindStrategy.cpp:51
+#, kde-format
+msgid "Found 1 match"
+msgid_plural "Found %1 matches"
+msgstr[0] "Foi encontrada uma referência"
+msgstr[1] "Foram encontradas %1 referências"
+
+#: text/KoFindStrategy.cpp:51
+#, kde-format
+msgid "Found no match"
+msgstr "Não foram encontradas referências"
+
+#: text/KoReplaceStrategy.cpp:43
+#, kde-format
+msgid ""
+"Found no match\n"
+"\n"
+"No text was replaced"
+msgstr ""
+"Não foram encontradas ocorrências\n"
+"\n"
+"Não foi substituído nenhum texto"
+
+#: text/KoReplaceStrategy.cpp:46
+#, kde-format
+msgid "1 replacement made"
+msgid_plural "%1 replacements made"
+msgstr[0] "Uma substituição feita"
+msgstr[1] "%1 substituições feitas"
+
+#: text/KoReplaceStrategy.cpp:59
+#, kde-format
+msgid "Replace %1 with %2?"
+msgstr "Substituir o %1 por %2?"
+
+#: text/KoSectionModel.cpp:87
+#, kde-format
+msgctxt "new numbered section name"
+msgid "New section %1"
+msgstr "Nova secção %1"
+
+#: text/KoText.cpp:19
+#, kde-format
+msgctxt "Underline Style"
+msgid "None"
+msgstr "Nenhum"
+
+#: text/KoText.cpp:20
+#, kde-format
+msgctxt "Underline Style"
+msgid "Single"
+msgstr "Simples"
+
+#: text/KoText.cpp:21
+#, kde-format
+msgctxt "Underline Style"
+msgid "Double"
+msgstr "Duplo"
+
+#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1501
+#: text/KoTextEditor.cpp:1503
+msgctxt "(qtundo-format)"
+msgid "New Paragraph"
+msgstr "Novo Parágrafo"
+
+#: text/KoTextEditor.cpp:470
+msgctxt "(qtundo-format)"
+msgid "Add Bookmark"
+msgstr "Adicionar um Favorito"
+
+#: text/KoTextEditor.cpp:485
+msgctxt "(qtundo-format)"
+msgid "Add Annotation"
+msgstr "Adicionar uma Anotação"
+
+#: text/KoTextEditor.cpp:509
+msgctxt "(qtundo-format)"
+msgid "Insert Index"
+msgstr "Inserir um Índice"
+
+#: text/KoTextEditor.cpp:535
+msgctxt "(qtundo-format)"
+msgid "Insert Variable"
+msgstr "Inserir uma Variável"
+
+#: text/KoTextEditor.cpp:602
+msgctxt "(qtundo-format)"
+msgid "Insert Break"
+msgstr "Inserir uma Quebra"
+
+#: text/KoTextEditor.cpp:923 text/KoTextEditor.cpp:925
+#: text/KoTextEditor.cpp:940
+msgctxt "(qtundo-format)"
+msgid "Insert Table"
+msgstr "Inserir uma Tabela"
+
+#: text/KoTextEditor.cpp:1080
+msgctxt "(qtundo-format)"
+msgid "Merge Cells"
+msgstr "Juntar as Células"
+
+#: text/KoTextEditor.cpp:1097
+msgctxt "(qtundo-format)"
+msgid "Split Cells"
+msgstr "Dividir as Células"
+
+#: text/KoTextEditor.cpp:1126
+msgctxt "(qtundo-format)"
+msgid "Adjust Table Width"
+msgstr "Ajustar a Largura da Tabela"
+
+#: text/KoTextEditor.cpp:1143
+msgctxt "(qtundo-format)"
+msgid "Change Border Formatting"
+msgstr "Mudar a Formatação do Contorno"
+
+#: text/KoTextEditor.cpp:1190 text/KoTextEditor.cpp:1192
+#: text/KoTextEditor.cpp:1210
+msgctxt "(qtundo-format)"
+msgid "Insert Table Of Contents"
+msgstr "Inserir um Índice Analítico"
+
+#: text/KoTextEditor.cpp:1249
+msgctxt "(qtundo-format)"
+msgid "Modify Table Of Contents"
+msgstr "Modificar o Índice Analítico"
+
+#: text/KoTextEditor.cpp:1266 text/KoTextEditor.cpp:1268
+#: text/KoTextEditor.cpp:1287
+msgctxt "(qtundo-format)"
+msgid "Insert Bibliography"
+msgstr "Inserir uma Bibliografia"
+
+#: text/KoTextEditor.cpp:1324 text/KoTextEditor.cpp:1326
+msgctxt "(qtundo-format)"
+msgid "Add Citation"
+msgstr "Adicionar uma Citação"
+
+#: text/KoTextEditor.cpp:1353 text/KoTextEditor.cpp:1355
+#: text/KoTextEditor.cpp:1393
+msgctxt "(qtundo-format)"
+msgid "Typing"
+msgstr "Escrita"
+
+#: text/KoTextEditor_format.cpp:54
+msgctxt "(qtundo-format)"
+msgid "Bold"
+msgstr "Negrito"
+
+#: text/KoTextEditor_format.cpp:67
+msgctxt "(qtundo-format)"
+msgid "Italic"
+msgstr "Itálico"
+
+#: text/KoTextEditor_format.cpp:80
+msgctxt "(qtundo-format)"
+msgid "Underline"
+msgstr "Sublinhado"
+
+#: text/KoTextEditor_format.cpp:99
+msgctxt "(qtundo-format)"
+msgid "Strike Out"
+msgstr "Traçado"
+
+#: text/KoTextEditor_format.cpp:132 text/KoTextEditor_format.cpp:133
+msgctxt "(qtundo-format)"
+msgid "Change Alignment"
+msgstr "Mudar o Alinhamento"
+
+#: text/KoTextEditor_format.cpp:150
+msgctxt "(qtundo-format)"
+msgid "Set Vertical Alignment"
+msgstr "Mudar o Alinhamento Vertical"
+
+#: text/KoTextEditor_format.cpp:184 text/KoTextEditor_format.cpp:185
+msgctxt "(qtundo-format)"
+msgid "Decrease Indent"
+msgstr "Diminuir a Indentação"
+
+#: text/KoTextEditor_format.cpp:220 text/KoTextEditor_format.cpp:221
+msgctxt "(qtundo-format)"
+msgid "Increase Indent"
+msgstr "Aumentar a Indentação"
+
+#: text/KoTextEditor_format.cpp:256 text/KoTextEditor_format.cpp:258
+msgctxt "(qtundo-format)"
+msgid "Decrease font size"
+msgstr "Diminuir o Tamanho da Letra"
+
+#: text/KoTextEditor_format.cpp:269 text/KoTextEditor_format.cpp:271
+msgctxt "(qtundo-format)"
+msgid "Increase font size"
+msgstr "Aumentar o Tamanho da Letra"
+
+#: text/KoTextEditor_format.cpp:282
+msgctxt "(qtundo-format)"
+msgid "Set Font"
+msgstr "Mudar o Tipo de Letra"
+
+#: text/KoTextEditor_format.cpp:295
+msgctxt "(qtundo-format)"
+msgid "Set Font Size"
+msgstr "Mudar o Tamanho do Texto"
+
+#: text/KoTextEditor_format.cpp:308
+msgctxt "(qtundo-format)"
+msgid "Set Background Color"
+msgstr "Mudar a Cor de Fundo"
+
+#: text/KoTextEditor_format.cpp:321
+msgctxt "(qtundo-format)"
+msgid "Set Text Color"
+msgstr "Mudar a Cor do Texto"
+
+#: text/KoTextEditor_format.cpp:349 text/KoTextEditor_format.cpp:388
+msgctxt "(qtundo-format)"
+msgid "Set Character Style"
+msgstr "Mudar o Estilo dos Caracteres"
+
+#: text/KoTextEditor_format.cpp:455
+msgctxt "(qtundo-format)"
+msgid "Set Paragraph Style"
+msgstr "Mudar o Estilo do Parágrafo"
+
+#: text/KoTextEditor_format.cpp:517
+msgctxt "(qtundo-format)"
+msgid "Formatting"
+msgstr "Formatação"
+
+#: text/KoTextEditor_p.h:145 text/KoTextEditor_p.h:181
+msgctxt "(qtundo-format)"
+msgid "Format"
+msgstr "Formato"
+
+#: text/styles/KoStyleManager.cpp:93 text/styles/KoStyleManager.cpp:98
+#, kde-format
+msgid "Default"
+msgstr "Predefinição"
+
+#: widgets/KoColorPopupAction.cpp:76
+#, kde-format
+msgid "Opacity"
+msgstr "Opacidade"
+
+#: widgets/KoColorSetWidget.cpp:148
+#, kde-format
+msgid "Recent:"
+msgstr "Recente:"
+
+#: widgets/KoColorSetWidget.cpp:161
+#, kde-format
+msgid "Add / Remove Colors..."
+msgstr "Adicionar / Remover Cores..."
+
+#: widgets/KoConfigAuthorPage.cpp:51
+#, kde-format
+msgid "Add new author profile (starts out as a copy of current)"
+msgstr "Adicionar um novo perfil de autor (começa com uma cópia do actual)"
+
+#: widgets/KoConfigAuthorPage.cpp:55
+#, kde-format
+msgid "Delete the author profile"
+msgstr "Apagar o perfil do autor"
+
+#: widgets/KoConfigAuthorPage.cpp:129
+#, kde-format
+msgid "Name (not duplicate or blank name):"
+msgstr "Nome (não duplicado nem vazio):"
+
+#: widgets/KoConfigAuthorPage.cpp:129
+#, kde-format
+msgid "Name of Profile"
+msgstr "Nome do Perfil"
+
+#. i18n: ectx: property (text), widget (QLabel, fullNameLabel)
+#: widgets/KoConfigAuthorPage.ui:20 widgets/koDocumentInfoAuthorWidget.ui:20
+#, kde-format
+msgid "Name:"
+msgstr "Nome:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblInitialsDesc)
+#: widgets/KoConfigAuthorPage.ui:40 widgets/koDocumentInfoAuthorWidget.ui:37
+#, kde-format
+msgid "Initials:"
+msgstr "Iniciais:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
+#: widgets/KoConfigAuthorPage.ui:63 widgets/koDocumentInfoAuthorWidget.ui:60
+#, kde-format
+msgid "Title:"
+msgstr "Título:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPositionDesc)
+#: widgets/KoConfigAuthorPage.ui:79 widgets/koDocumentInfoAuthorWidget.ui:77
+#, kde-format
+msgid "Position:"
+msgstr "Posição:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCompanyDesc)
+#: widgets/KoConfigAuthorPage.ui:95 widgets/koDocumentInfoAuthorWidget.ui:94
+#, kde-format
+msgid "Company:"
+msgstr "Companhia:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEmailDesc)
+#: widgets/KoConfigAuthorPage.ui:111 widgets/koDocumentInfoAuthorWidget.ui:104
+#, kde-format
+msgid "Email:"
+msgstr "E-mail:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPhoneHome)
+#: widgets/KoConfigAuthorPage.ui:127 widgets/koDocumentInfoAuthorWidget.ui:114
+#, kde-format
+msgid "Telephone (home):"
+msgstr "Telefone (casa):"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPhoneWork)
+#: widgets/KoConfigAuthorPage.ui:143 widgets/koDocumentInfoAuthorWidget.ui:124
+#, kde-format
+msgid "Telephone (work):"
+msgstr "Telefone (trabalho):"
+
+#. i18n: ectx: property (text), widget (QLabel, lblFaxDesc)
+#: widgets/KoConfigAuthorPage.ui:159 widgets/koDocumentInfoAuthorWidget.ui:134
+#, kde-format
+msgid "Fax:"
+msgstr "Fax:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblStreetDesc)
+#: widgets/KoConfigAuthorPage.ui:175 widgets/koDocumentInfoAuthorWidget.ui:144
+#, kde-format
+msgid "Street:"
+msgstr "Rua:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPostalDesc)
+#: widgets/KoConfigAuthorPage.ui:191 widgets/koDocumentInfoAuthorWidget.ui:154
+#, kde-format
+msgid "Postal code:"
+msgstr "Código postal:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCityDesc)
+#: widgets/KoConfigAuthorPage.ui:207 widgets/koDocumentInfoAuthorWidget.ui:164
+#, kde-format
+msgid "City:"
+msgstr "Cidade:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCountryDesc)
+#: widgets/KoConfigAuthorPage.ui:223 widgets/koDocumentInfoAuthorWidget.ui:174
+#, kde-format
+msgid "Country:"
+msgstr "País:"
+
+#: widgets/KoCsvImportDialog.cpp:85
+#, kde-format
+msgid "Import Data"
+msgstr "Importar os Dados"
+
+#: widgets/KoCsvImportDialog.cpp:88
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Recomendada ( %1 )"
+
+#: widgets/KoCsvImportDialog.cpp:89
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Local ( %1 )"
+
+#: widgets/KoCsvImportDialog.cpp:92
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Outro ( %1 )"
+
+#: widgets/KoCsvImportDialog.cpp:207 widgets/KoCsvImportDialog.cpp:547
+#: widgets/KoCsvImportDialog.cpp:570
+#, kde-format
+msgid "Generic"
+msgstr "Genérico"
+
+#: widgets/KoCsvImportDialog.cpp:209 widgets/KoCsvImportDialog.cpp:572
+#: widgets/KoModeBox.cpp:572
+#, kde-format
+msgid "Text"
+msgstr "Texto"
+
+#: widgets/KoCsvImportDialog.cpp:211 widgets/KoCsvImportDialog.cpp:574
+#, kde-format
+msgid "Date"
+msgstr "Data"
+
+#: widgets/KoCsvImportDialog.cpp:213 widgets/KoCsvImportDialog.cpp:576
+#, kde-format
+msgid "Currency"
+msgstr "Monetário"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.cpp:215 widgets/KoCsvImportDialog.cpp:578
+#: widgets/KoCsvImportDialog.cpp:685 widgets/KoCsvImportDialog.ui:265
+#, kde-format
+msgid "None"
+msgstr "Nenhum"
+
+#: widgets/KoCsvImportDialog.cpp:712
+#, kde-format
+msgid ""
+"Please check the ranges you specified. The start value must be lower than "
+"the end value."
+msgstr ""
+"Verifique por favor os intervalos que indicou. O valor inicial deverá ser "
+"menor que o final."
+
+#: widgets/KoCsvImportDialog.cpp:758
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "Não é possível encontrar a codificação: %1"
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_dataTab)
+#: widgets/KoCsvImportDialog.ui:52
+#, kde-format
+msgid "Data"
+msgstr "Dados"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
+#: widgets/KoCsvImportDialog.ui:63
+#, kde-format
+msgid "E&ncoding:"
+msgstr "&Codificação:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_firstRowHeader)
+#: widgets/KoCsvImportDialog.ui:107
+#, kde-format
+msgid "First row contains headers"
+msgstr "A primeira linha contém os cabeçalhos"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_firstColHeader)
+#: widgets/KoCsvImportDialog.ui:120
+#, kde-format
+msgid "First column contains headers"
+msgstr "A primeira coluna contém os cabeçalhos"
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_formatTab)
+#: widgets/KoCsvImportDialog.ui:144
+#, kde-format
+msgid "Format"
+msgstr "Formato"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
+#: widgets/KoCsvImportDialog.ui:156
+#, kde-format
+msgid "Delimiter"
+msgstr "Separador"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: widgets/KoCsvImportDialog.ui:162
+#, kde-format
+msgid "Comma"
+msgstr "Vírgula"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: widgets/KoCsvImportDialog.ui:172
+#, kde-format
+msgid "Semicolon"
+msgstr "Ponto-e-Vírgula"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: widgets/KoCsvImportDialog.ui:179
+#, kde-format
+msgid "Other"
+msgstr "Outro"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: widgets/KoCsvImportDialog.ui:186
+#, kde-format
+msgid "Tabulator"
+msgstr "Tabulação"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: widgets/KoCsvImportDialog.ui:193
+#, kde-format
+msgid "Space"
+msgstr "Espaço"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: widgets/KoCsvImportDialog.ui:238
+#, kde-format
+msgid "Text&quote:"
+msgstr "Cita&ção de texto:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.ui:255
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.ui:260
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QLabel, label3)
+#: widgets/KoCsvImportDialog.ui:289
+#, kde-format
+msgid "Decimal symbol:"
+msgstr "Símbolo decimal:"
+
+#. i18n: ectx: property (text), widget (QLabel, label4)
+#: widgets/KoCsvImportDialog.ui:318
+#, kde-format
+msgid "Thousands separator:"
+msgstr "Separador dos milhares:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_ignoreDuplicates)
+#: widgets/KoCsvImportDialog.ui:363
+#, kde-format
+msgid "Ignore duplicate delimiters"
+msgstr "Ignorar os separadores duplicados"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: widgets/KoCsvImportDialog.ui:370
+#, kde-format
+msgid "&Format:"
+msgstr "&Formato:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_rangesTab)
+#: widgets/KoCsvImportDialog.ui:384
+#, kde-format
+msgid "Ranges"
+msgstr "Intervalos"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_updateButton)
+#: widgets/KoCsvImportDialog.ui:390
+#, kde-format
+msgid "Update"
+msgstr "Actualizar"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
+#: widgets/KoCsvImportDialog.ui:457
+#, kde-format
+msgid "Import columns:"
+msgstr "Importar as colunas:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel3)
+#: widgets/KoCsvImportDialog.ui:476
+#, kde-format
+msgid "Import lines:"
+msgstr "Importar as linhas:"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: widgets/KoCsvImportDialog.ui:486 widgets/KoCsvImportDialog.ui:509
+#, kde-format
+msgid "to"
+msgstr "para"
+
+#: widgets/KoDialog.cpp:247
+#, kde-format
+msgid "&Try"
+msgstr "&Tentar"
+
+#: widgets/KoDialog.cpp:460
+#, kde-format
+msgid "modified"
+msgstr "modificado"
+
+#: widgets/KoDialog.cpp:471
+#, kde-format
+msgctxt "Document/application separator in titlebar"
+msgid " – "
+msgstr " – "
+
+#: widgets/KoDialog.cpp:846
+#, kde-format
+msgid "&Details"
+msgstr "&Detalhes"
+
+#: widgets/KoDialog.cpp:1004
+#, kde-format
+msgid "Get help..."
+msgstr "Ajuda..."
+
+#: widgets/KoDockWidgetTitleBar.cpp:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Float Docker"
+msgstr "Área Acoplável Flutuante"
+
+#: widgets/KoDockWidgetTitleBar.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close Docker"
+msgstr "Fechar a Área Acoplável"
+
+#: widgets/KoDockWidgetTitleBar.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Collapse Docker"
+msgstr "Recolher a Área Acoplável"
+
+#: widgets/KoDockWidgetTitleBar.cpp:76
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Lock Docker"
+msgstr "Bloquear a Área Acoplável"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:235
+#: widgets/KoDocumentInfoDlg.cpp:331
+#, kde-format
+msgid "&Encrypt"
+msgstr "&Encriptar"
+
+#. i18n: ectx: property (text), widget (QLabel, lblKeywordsDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:64
+#, kde-format
+msgid "Keywords:"
+msgstr "Palavras-chave:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblSubjectDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:111
+#, kde-format
+msgid "Subject:"
+msgstr "Assunto:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:124
+#, kde-format
+msgid "Last printed:"
+msgstr "Última impressão:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEditingDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:158
+#, kde-format
+msgid "Total editing time:"
+msgstr "Tempo total de edição:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEncryptedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:178
+#, kde-format
+msgid "Encryption:"
+msgstr "Encriptação:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:188
+#, kde-format
+msgctxt "Document title"
+msgid "Title:"
+msgstr "Título:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblRevisionDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:201
+#, kde-format
+msgid "Revision number:"
+msgstr "Número de versão:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblModifiedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:211
+#, kde-format
+msgid "Modified:"
+msgstr "Modificado:"
+
+#. i18n: ectx: property (text), widget (QLabel, lbCommentsDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:231
+#, kde-format
+msgid "Comments:"
+msgstr "Comentários:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCreatedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:251
+#, kde-format
+msgid "Created:"
+msgstr "Criado:"
+
+#. i18n: ectx: property (text), widget (QLabel, filePathInfoLabel)
+#: widgets/koDocumentInfoAboutWidget.ui:261
+#, kde-format
+msgid "Path:"
+msgstr "Localização:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbReset)
+#: widgets/koDocumentInfoAboutWidget.ui:280
+#, kde-format
+msgid "&Reset"
+msgstr "&Reiniciar"
+
+#. i18n: ectx: property (text), widget (QLabel, lbLanguageDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:297
+#, kde-format
+msgid "Language:"
+msgstr "Língua:"
+
+#: widgets/KoDocumentInfoDlg.cpp:104 widgets/KoDocumentInfoDlg.cpp:105
+#, kde-format
+msgid "General"
+msgstr "Geral"
+
+#: widgets/KoDocumentInfoDlg.cpp:132
+#, kde-format
+msgid "Last saved by"
+msgstr "Última gravação por"
+
+#: widgets/KoDocumentInfoDlg.cpp:189
+#, kde-format
+msgid "Use ';' (Example: Office;KDE;Calligra)"
+msgstr "Usar o ';' (Exemplo: Escritório;KDE;Calligra)"
+
+#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:315
+#, kde-format
+msgid "This document will be decrypted"
+msgstr "Este documento será descodificado"
+
+#: widgets/KoDocumentInfoDlg.cpp:221 widgets/KoDocumentInfoDlg.cpp:317
+#, kde-format
+msgid "Do not decrypt"
+msgstr "Não descodificar"
+
+#: widgets/KoDocumentInfoDlg.cpp:223 widgets/KoDocumentInfoDlg.cpp:319
+#, kde-format
+msgid "This document is encrypted"
+msgstr "Este documento está encriptado"
+
+#: widgets/KoDocumentInfoDlg.cpp:225 widgets/KoDocumentInfoDlg.cpp:321
+#, kde-format
+msgid "D&ecrypt"
+msgstr "D&escodificar"
+
+#: widgets/KoDocumentInfoDlg.cpp:229 widgets/KoDocumentInfoDlg.cpp:325
+#, kde-format
+msgid "This document will be encrypted."
+msgstr "Este documento será encriptado."
+
+#: widgets/KoDocumentInfoDlg.cpp:231 widgets/KoDocumentInfoDlg.cpp:327
+#, kde-format
+msgid "Do not encrypt"
+msgstr "Não encriptar"
+
+#: widgets/KoDocumentInfoDlg.cpp:233 widgets/KoDocumentInfoDlg.cpp:329
+#, kde-format
+msgid "This document is not encrypted"
+msgstr "Este documento não está encriptado"
+
+#: widgets/KoDocumentInfoDlg.cpp:239
+#, kde-format
+msgid "This document does not support encryption"
+msgstr "Este documento não suporta a encriptação"
+
+#: widgets/KoDocumentInfoDlg.cpp:351
+#, kde-format
+msgid ""
+"<qt>Decrypting the document will remove the password protection from it."
+"<p>Do you still want to decrypt the file?</qt>"
+msgstr ""
+"<qt>A descodificação do documento irá remover a protecção por senha dele."
+"<p>Deseja descodificar à mesma o ficheiro?</qt>"
+
+#: widgets/KoDocumentInfoDlg.cpp:353
+#, kde-format
+msgid "Confirm Decrypt"
+msgstr "Confirmar a Descodificação"
+
+#: widgets/KoDocumentInfoDlg.cpp:354
+#, kde-format
+msgid "Decrypt"
+msgstr "Descodificar"
+
+#: widgets/KoDocumentInfoDlg.cpp:365
+#, kde-format
+msgid ""
+"<qt>Your document could not be saved automatically.<p>To complete the "
+"decryption, please save the document.</qt>"
+msgstr ""
+"<qt>O seu documento não pôde ser gravado automaticamente.<p>Para terminar a "
+"descodificação, grave por favor o documento.</qt>"
+
+#: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
+#: widgets/KoDocumentInfoDlg.cpp:409 widgets/KoDocumentInfoDlg.cpp:417
+#, kde-format
+msgid "Save Document"
+msgstr "Gravar o Documento"
+
+#: widgets/KoDocumentInfoDlg.cpp:373
+#, kde-format
+msgid ""
+"<qt>The document has been changed since it was opened. To complete the "
+"decryption the document needs to be saved.<p>Do you want to save the "
+"document now?</qt>"
+msgstr ""
+"<qt>O documento foi alterado desde o seu último acesso. Para completar a "
+"descodificação, o documento tem de ser gravado.<p>Deseja gravar agora o "
+"documento?</qt>"
+
+#: widgets/KoDocumentInfoDlg.cpp:391
+#, kde-format
+msgid ""
+"<qt>The document is currently saved as %1. The document needs to be changed "
+"to <b>OASIS OpenDocument</b> to be encrypted.<p>Do you want to change the "
+"file to OASIS OpenDocument?</qt>"
+msgstr ""
+"<qt>O documento está guardado de momento como %1. O documento tem de ser "
+"alterado para o <b>OpenDocument da OASIS</b> para ser encriptado.<p>Deseja "
+"alterar o ficheiro para o OpenDocument da OASIS?</qt>"
+
+#: widgets/KoDocumentInfoDlg.cpp:393
+#, kde-format
+msgid "Change Filetype"
+msgstr "Mudar o Tipo de Ficheiro"
+
+#: widgets/KoDocumentInfoDlg.cpp:394
+#, kde-format
+msgid "Change"
+msgstr "Modificação"
+
+#: widgets/KoDocumentInfoDlg.cpp:407
+#, kde-format
+msgid ""
+"<qt>Your document could not be saved automatically.<p>To complete the "
+"encryption, please save the document.</qt>"
+msgstr ""
+"<qt>O seu documento não pôde ser gravado automaticamente.<p>Para terminar a "
+"encriptação, grave por favor o documento.</qt>"
+
+#: widgets/KoDocumentInfoDlg.cpp:415
+#, kde-format
+msgid ""
+"<qt>The document has been changed since it was opened. To complete the "
+"encryption the document needs to be saved.<p>Do you want to save the "
+"document now?</qt>"
+msgstr ""
+"<qt>O documento foi alterado desde o seu último acesso. Para completar a "
+"encriptação, o documento tem de ser gravado.<p>Deseja gravar agora o "
+"documento?</qt>"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, remove)
+#: widgets/KoEditColorSet.ui:55
+#, kde-format
+msgid "Remove"
+msgstr "Remover"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, open)
+#: widgets/KoEditColorSet.ui:65
+#, kde-format
+msgid "Open palette"
+msgstr "Abrir a paleta"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, save)
+#: widgets/KoEditColorSet.ui:75
+#, kde-format
+msgid "Save palette"
+msgstr "Gravar a paleta"
+
+#: widgets/KoEditColorSetDialog.cpp:146
+#, kde-format
+msgid "Add Color To Palette"
+msgstr "Adicionar a Cor à Paleta"
+
+#: widgets/KoEditColorSetDialog.cpp:146
+#, kde-format
+msgid "Color name:"
+msgstr "Nome da cor:"
+
+#: widgets/KoEditColorSetDialog.cpp:174
+#, kde-format
+msgid "Gimp Color Palette (*.gpl)"
+msgstr "Paleta de Cores do Gimp (*.gpl)"
+
+#: widgets/KoEditColorSetDialog.cpp:187
+#, kde-format
+msgid "Cannot write to palette file %1. Maybe it is read-only. "
+msgstr ""
+"Não é possível gravar no ficheiro da paleta %1. Talvez seja apenas para "
+"leitura. "
+
+#: widgets/KoEditColorSetDialog.cpp:187
+#, kde-format
+msgid "Palette"
+msgstr "Paleta"
+
+#: widgets/KoEditColorSetDialog.cpp:201
+#, kde-format
+msgid "Add/Remove Colors"
+msgstr "Adicionar/Remover Cores"
+
+#: widgets/KoFillConfigWidget.cpp:211
+#, kde-format
+msgctxt "No stroke or fill"
+msgid "None"
+msgstr "Nenhum"
+
+#: widgets/KoFillConfigWidget.cpp:219
+#, kde-format
+msgctxt "Solid color stroke or fill"
+msgid "Solid"
+msgstr "Sólido"
+
+#: widgets/KoFillConfigWidget.cpp:227
+#, kde-format
+msgid "Gradient"
+msgstr "Gradiente"
+
+#: widgets/KoFillConfigWidget.cpp:235
+#, kde-format
+msgid "Pattern"
+msgstr "Padrão"
+
+#: widgets/KoFillConfigWidget.cpp:249
+#, kde-format
+msgid "Change the filling color"
+msgstr "Mudar a cor de preenchimento"
+
+#: widgets/KoFillConfigWidget.cpp:260
+#, kde-format
+msgid "Change the filling gradient"
+msgstr "Mudar o gradiente de preenchimento"
+
+#: widgets/KoFillConfigWidget.cpp:267
+#, kde-format
+msgid "Change the filling pattern"
+msgstr "Mudar o padrão de preenchimento"
+
+#: widgets/KoGradientEditWidget.cpp:145
+#, kde-format
+msgid "Target:"
+msgstr "Destino:"
+
+#: widgets/KoGradientEditWidget.cpp:148
+#, kde-format
+msgid "Fill"
+msgstr "Preencher"
+
+#: widgets/KoGradientEditWidget.cpp:154
+#, kde-format
+msgctxt "Linear gradient type"
+msgid "Linear"
+msgstr "Linear"
+
+#: widgets/KoGradientEditWidget.cpp:155
+#, kde-format
+msgctxt "Radial gradient type"
+msgid "Radial"
+msgstr "Radial"
+
+#: widgets/KoGradientEditWidget.cpp:156
+#, kde-format
+msgctxt "Conical gradient type"
+msgid "Conical"
+msgstr "Cónico"
+
+#: widgets/KoGradientEditWidget.cpp:159
+#, kde-format
+msgid "Repeat:"
+msgstr "Repetição:"
+
+#: widgets/KoGradientEditWidget.cpp:161
+#, kde-format
+msgctxt "No gradient spread"
+msgid "None"
+msgstr "Nenhum"
+
+#: widgets/KoGradientEditWidget.cpp:162
+#, kde-format
+msgid "Reflect"
+msgstr "Reflexão"
+
+#: widgets/KoGradientEditWidget.cpp:163
+#, kde-format
+msgid "Repeat"
+msgstr "Repetir"
+
+#: widgets/KoGradientEditWidget.cpp:166
+#, kde-format
+msgid "Overall opacity:"
+msgstr "Opacidade global:"
+
+#: widgets/KoGradientEditWidget.cpp:171
+#, kde-format
+msgid "Color stop:"
+msgstr "Paragem da cor:"
+
+#: widgets/KoGradientEditWidget.cpp:179
+#, kde-format
+msgid "Stop color."
+msgstr "Cor de paragem."
+
+#: widgets/KoGradientEditWidget.cpp:182
+#, kde-format
+msgid "&Add to Predefined Gradients"
+msgstr "&Adicionar aos Gradientes Predefinidos"
+
+#: widgets/KoModeBox.cpp:575
+#, kde-format
+msgid "Icon and Text"
+msgstr "Ícone e Texto"
+
+#: widgets/KoModeBox.cpp:576
+#, kde-format
+msgid "Icon only"
+msgstr "Apenas o ícone"
+
+#: widgets/KoModeBox.cpp:579
+#, kde-format
+msgid "Tabs side"
+msgstr "Lado das páginas"
+
+#: widgets/KoModeBox.cpp:583
+#, kde-format
+msgid "Top side"
+msgstr "Topo"
+
+#: widgets/KoModeBox.cpp:584
+#, kde-format
+msgid "Bottom side"
+msgstr "Fundo"
+
+#: widgets/KoModeBox.cpp:587
+#, kde-format
+msgid "Left side"
+msgstr "Esquerda"
+
+#: widgets/KoModeBox.cpp:588
+#, kde-format
+msgid "Right side"
+msgstr "Direita"
+
+#: widgets/KoPageLayoutDialog.cpp:33
+#, kde-format
+msgid "Page Layout"
+msgstr "Disposição da Página"
+
+#: widgets/KoPageLayoutDialog.cpp:95
+#, kde-format
+msgid "Apply to document"
+msgstr "Aplicar ao documento"
+
+#: widgets/KoPageLayoutWidget.cpp:175
+#, kde-format
+msgid "Left Edge:"
+msgstr "Extremo Esquerdo:"
+
+#: widgets/KoPageLayoutWidget.cpp:176
+#, kde-format
+msgid "Right Edge:"
+msgstr "Extremo Direito:"
+
+#: widgets/KoPageLayoutWidget.cpp:179
+#, kde-format
+msgid "Binding Edge:"
+msgstr "Extremo de Encadernação:"
+
+#: widgets/KoPageLayoutWidget.cpp:180
+#, kde-format
+msgid "Page Edge:"
+msgstr "Extremo da Página:"
+
+#: widgets/KoPageLayoutWidget.cpp:276
+#, kde-format
+msgid "Facing Pages:"
+msgstr "Páginas em Face:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, facingPages)
+#: widgets/KoPageLayoutWidget.cpp:277 widgets/KoPageLayoutWidget.ui:160
+#, kde-format
+msgid "Facing pages"
+msgstr "Páginas em face"
+
+#: widgets/KoPageLayoutWidget.cpp:280
+#, kde-format
+msgid "Page Layout:"
+msgstr "Disposição da Página:"
+
+#: widgets/KoPageLayoutWidget.cpp:281
+#, kde-format
+msgid "Page spread"
+msgstr "Disposição da página"
+
+#. i18n: ectx: property (text), widget (QLabel, unitsLabel)
+#: widgets/KoPageLayoutWidget.ui:25
+#, kde-format
+msgid "Unit:"
+msgstr "Unidade:"
+
+#. i18n: ectx: property (text), widget (QLabel, stylesLabel)
+#: widgets/KoPageLayoutWidget.ui:45
+#, kde-format
+msgid "Follow style:"
+msgstr "Seguir o estilo:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/KoPageLayoutWidget.ui:61
+#, kde-format
+msgid "Size:"
+msgstr "Tamanho:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: widgets/KoPageLayoutWidget.ui:77
+#, kde-format
+msgid "Width:"
+msgstr "Largura:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:104
+#, kde-format
+msgid "Height:"
+msgstr "Altura:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:119
+#, kde-format
+msgid "Orientation:"
+msgstr "Orientação:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, portrait)
+#: widgets/KoPageLayoutWidget.ui:129
+#, kde-format
+msgid "Portrait"
+msgstr "Retrato"
+
+#. i18n: ectx: property (text), widget (QRadioButton, landscape)
+#: widgets/KoPageLayoutWidget.ui:136
+#, kde-format
+msgid "Landscape"
+msgstr "Paisagem"
+
+#. i18n: ectx: property (text), widget (QLabel, facingPageLabel)
+#: widgets/KoPageLayoutWidget.ui:143
+#, kde-format
+msgid "Facing pages:"
+msgstr "Páginas em face:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, singleSided)
+#: widgets/KoPageLayoutWidget.ui:153
+#, kde-format
+msgid "Single sided"
+msgstr "Lado único"
+
+#. i18n: ectx: property (text), widget (QLabel, directionLabel)
+#: widgets/KoPageLayoutWidget.ui:167
+#, kde-format
+msgid "Text direction:"
+msgstr "Direcção do texto:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:184
+#, kde-format
+msgid "Automatic"
+msgstr "Automática"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:189
+#, kde-format
+msgid "Left to right"
+msgstr "Esquerda para a direita"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:194
+#, kde-format
+msgid "Right to left"
+msgstr "Direita para a esquerda"
+
+#. i18n: ectx: property (title), widget (QGroupBox, margins)
+#: widgets/KoPageLayoutWidget.ui:204
+#, kde-format
+msgid "Margins"
+msgstr "Margens"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:210
+#, kde-format
+msgid "Top:"
+msgstr "Topo:"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.ui:230
+#, kde-format
+msgid "Binding edge:"
+msgstr "Extremo de encadernação:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.ui:250
+#, kde-format
+msgid "Page edge:"
+msgstr "Extremo da página:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_12)
+#: widgets/KoPageLayoutWidget.ui:270
+#, kde-format
+msgid "Bottom:"
+msgstr "Fundo:"
+
+#: widgets/KoResourceItemChooser.cpp:137
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Import resource"
+msgstr "Importar o recurso"
+
+#: widgets/KoResourceItemChooser.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete resource"
+msgstr "Apagar o recurso"
+
+#: widgets/KoResourceItemChooser.cpp:192
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose File to Add"
+msgstr "Escolher o Ficheiro a Adicionar"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:107
+#: widgets/KoTagToolButton.cpp:51
+#, kde-format
+msgid "New tag"
+msgstr "Nova marca"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:140
+#, kde-format
+msgid "Assign to tag"
+msgstr "Atribuir à marca"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:149
+#, kde-format
+msgid "Remove from this tag"
+msgstr "Remover desta marca"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:157
+#, kde-format
+msgid "Remove from other tag"
+msgstr "Remover da outra marca"
+
+#: widgets/KoResourceModel.cpp:78
+#, kde-format
+msgid "Tags"
+msgstr "Marcas"
+
+#: widgets/KoResourceTaggingManager.cpp:143
+#, kde-format
+msgid "Unable to undelete tag"
+msgstr "Não é possível recuperar a marca"
+
+#: widgets/KoResourceTaggingManager.cpp:144
+#, kde-format
+msgid ""
+"<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
+"enter a new, unique name for it.</qt>"
+msgstr ""
+"<qt>A marca que está a tentar recuperar já existe na lista de marcas.<br/"
+">Indique por favor um novo nome único para ela.</qt>"
+
+#: widgets/KoResourceTaggingManager.cpp:151
+#, kde-format
+msgid "Tag was not undeleted."
+msgstr "A marca não foi recuperada."
+
+#: widgets/KoRuler.cpp:1266
+#, kde-format
+msgid "First line indent"
+msgstr "Indentação da primeira linha"
+
+#: widgets/KoRuler.cpp:1267
+#, kde-format
+msgid "Left indent"
+msgstr "Indentar à esquerda"
+
+#: widgets/KoRuler.cpp:1268
+#, kde-format
+msgid "Right indent"
+msgstr "Indentar à direita"
+
+#: widgets/KoShadowConfigWidget.cpp:55
+#, kde-format
+msgid "Change the color of the shadow"
+msgstr "Mudar a cor da sombra"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/KoShadowConfigWidget.ui:67
+#, kde-format
+msgid "Blur:"
+msgstr "Borrão:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/KoShadowConfigWidget.ui:84
+#, kde-format
+msgid "Distance:"
+msgstr "Distância:"
+
+#: widgets/KoStrokeConfigWidget.cpp:83
+#, kde-format
+msgid "Butt cap"
+msgstr "Extremo interrompido"
+
+#: widgets/KoStrokeConfigWidget.cpp:90
+#, kde-format
+msgid "Round cap"
+msgstr "Extremo arredondado"
+
+#: widgets/KoStrokeConfigWidget.cpp:97
+#, kde-format
+msgid "Square cap"
+msgstr "Extremo quadrado"
+
+#: widgets/KoStrokeConfigWidget.cpp:108
+#, kde-format
+msgid "Miter join"
+msgstr "Junção média"
+
+#: widgets/KoStrokeConfigWidget.cpp:115
+#, kde-format
+msgid "Round join"
+msgstr "Junção arredondada"
+
+#: widgets/KoStrokeConfigWidget.cpp:122
+#, kde-format
+msgid "Bevel join"
+msgstr "Junção em bisel"
+
+#: widgets/KoStrokeConfigWidget.cpp:132
+#, kde-format
+msgid "Miter limit"
+msgstr "Limite da média"
+
+#: widgets/KoStrokeConfigWidget.cpp:203
+#, kde-format
+msgid "Thickness:"
+msgstr "Espessura:"
+
+#: widgets/KoStrokeConfigWidget.cpp:213
+#, kde-format
+msgid "Set line width of actual selection"
+msgstr "Definir a espessura do traço da selecção actual"
+
+#: widgets/KoStrokeConfigWidget.cpp:229
+#, kde-format
+msgid "Change the color of the line/border"
+msgstr "Mudar a cor da linha/contorno"
+
+#: widgets/KoTagChooserWidget.cpp:41
+#, kde-format
+msgid "Tag"
+msgstr "Marca"
+
+#: widgets/KoTagFilterWidget.cpp:39
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Entering search terms here will add to, or remove resources from the "
+"current tag view.<para>To filter based on the partial, case insensitive name "
+"of a resource:<br><icode>partialname</icode> or <icode>!partialname</icode>."
+"</para><para>In-/exclusion of other tag sets:<br><icode>[Tagname]</icode> or "
+"<icode>![Tagname]</icode>.</para><para>Case sensitive and full name matching "
+"in-/exclusion:<br><icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</"
+"icode>.</para>Filter results cannot be saved for the <interface>All Presets</"
+"interface> view.<br>In this view, pressing <interface>Enter</interface> or "
+"clearing the filter box will restore all items.<br>Create and/or switch to a "
+"different tag if you want to save filtered resources into named sets.</qt>"
+msgstr ""
+"<qt>A introdução de termos de pesquisa aqui ira adicionar ou remover os "
+"recursos da área de marcas actual.<para>Para filtrar com base no nome, sem "
+"distinção de maiúsculas, de um recurso:<br/><icode>nome-parcial</icode> ou "
+"<icode>!nome-parcial</icode>.</para><para>Inclusão/exclusão de outros "
+"conjuntos de marcas:<br/><icode>[Nomemarca]</icode> ou <icode>![Nomemarca]</"
+"icode>.</para><para>Distinção entre maiúsculas e minúsculas e "
+"correspondência ao nome completo para a inclusão/exclusão:<br/><icode>"
+"\"CorrespondênciaExacta\"</icode> ou <icode>!\"CorrespondênciaExacta\"</"
+"icode>.</para>Os resultados dos filtros não podem ser gravados para a área "
+"<interface>Todas as Predefinições</interface>.<br/>Nesta área, se carregar "
+"em <interface>Enter</interface> ou limpar o filtro irá repor todos os itens."
+"<br/>Crie e/ou mude para uma marca diferente se quiser gravar os resultados "
+"filtros para conjuntos com nome.</qt>"
+
+#: widgets/KoTagFilterWidget.cpp:53
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Entering search terms here will add to, or remove resources from the "
+"current tag view.<para>To filter based on the partial, case insensitive name "
+"of a resource:<br><icode>partialname</icode> or <icode>!partialname</icode>."
+"</para><para>In-/exclusion of other tag sets:<br><icode>[Tagname]</icode> or "
+"<icode>![Tagname]</icode>.</para><para>Case sensitive and full name matching "
+"in-/exclusion:<br><icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</"
+"icode>.</para>Pressing <interface>Enter</interface> or clicking the "
+"<interface>Save</interface> button will save the changes.</qt>"
+msgstr ""
+"<qt>A introdução de termos de pesquisa aqui ira adicionar ou remover os "
+"recursos da área de marcas actual.<para>Para filtrar com base no nome, sem "
+"distinção de maiúsculas, de um recurso:<br/><icode>nome-parcial</icode> ou "
+"<icode>!nome-parcial</icode>.</para><para>Inclusão/exclusão de outros "
+"conjuntos de marcas:<br/><icode>[Nomemarca]</icode> ou <icode>![Nomemarca]</"
+"icode>.</para><para>Distinção entre maiúsculas e minúsculas e "
+"correspondência ao nome completo para a inclusão/exclusão:<br/><icode>"
+"\"CorrespondênciaExacta\"</icode> ou <icode>!\"CorrespondênciaExacta\"</"
+"icode>.</para>Se carregar em <interface>Enter</interface> ou carregar no "
+"botão <interface>Gravar</interface>, irá gravar todas as alterações.</qt>"
+
+#: widgets/KoTagFilterWidget.cpp:68
+#, kde-format
+msgid "Enter resource filters here"
+msgstr "Indique os filtros de recursos aqui"
+
+#: widgets/KoTagFilterWidget.cpp:79
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Save the currently filtered set as the new members of the current tag.</"
+"qt>"
+msgstr ""
+"<qt>Grava o conjunto filtrado de momento como os novos membros da marca "
+"actual.</qt>"
+
+#: widgets/KoTagToolButton.cpp:44
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<qt>Show the tag box options.</qt>"
+msgstr "<qt>Mostrar as opções da área de marcas.</qt>"
+
+#: widgets/KoTagToolButton.cpp:60
+#, kde-format
+msgid "Rename tag"
+msgstr "Mudar o nome da marca"
+
+#: widgets/KoTagToolButton.cpp:71
+#, kde-format
+msgid "Delete this tag"
+msgstr "Apagar esta marca"
+
+#: widgets/KoTagToolButton.cpp:89
+#, kde-format
+msgid "Clear undelete list"
+msgstr "Limpar a lista de recuperações"
+
+#: widgets/KoTagToolButton.cpp:119
+#, kde-format
+msgid "Undelete"
+msgstr "Recuperar"
+
+#: widgets/KoToolBox.cpp:294
+#, kde-format
+msgid "Icon Size"
+msgstr "Tamanho dos Ícones"
+
+#: widgets/KoToolBox.cpp:295
+#, kde-format
+msgctxt "@item:inmenu Icon size"
+msgid "Default"
+msgstr "Predefinição"
+
+#: widgets/KoToolBox.cpp:302
+#, kde-format
+msgid "%1x%2"
+msgstr "%1x%2"
+
+#: widgets/KoToolBoxButton.cpp:55
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "%1"
+msgstr "%1"
+
+#: widgets/KoToolBoxButton.cpp:56
+#, kde-format
+msgctxt "@info:tooltip %2 is shortcut"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: widgets/KoToolBoxDocker.cpp:20
+#, kde-format
+msgid "Toolbox"
+msgstr "Caixa de ferramentas"
+
+#: widgets/KoToolDocker.cpp:184
+#, kde-format
+msgid "Tool Options"
+msgstr "Opções da Ferramenta"
+
+#: widgets/KoToolDocker.cpp:216
+#, kde-format
+msgid "Toggles organizing the options in tabs or not"
+msgstr "Activa/desactiva a organização das opções por páginas"
+
+#: widgets/KoViewItemContextBar.cpp:183
+#, kde-format
+msgid "deselect item"
+msgstr "deseleccionar o item"
+
+#: widgets/KoViewItemContextBar.cpp:183
+#, kde-format
+msgid "select item"
+msgstr "seleccionar o item"
+
+#: widgets/KoZoomAction.cpp:196 widgets/KoZoomAction.cpp:209
+#: widgets/KoZoomMode.cpp:13
+#, kde-format
+msgid "%1%"
+msgstr "%1%"
+
+#: widgets/KoZoomMode.cpp:14
+#, kde-format
+msgid "Fit Page Width"
+msgstr "Ajustar à Largura da Página"
+
+#: widgets/KoZoomMode.cpp:15
+#, kde-format
+msgid "Fit Page"
+msgstr "Ajustar à Página"
+
+#: widgets/KoZoomMode.cpp:17
+#, kde-format
+msgid "Actual Pixels"
+msgstr "Pixels Actuais"
+
+#: widgets/KoZoomMode.cpp:21
+#, kde-format
+msgid "Fit Text Width"
+msgstr "Ajustar à Largura do Texto"
+
+#: widgets/KoZoomWidget.cpp:69
+#, kde-format
+msgid "Use same aspect as pixels"
+msgstr "Usar as mesmas proporções dos pixels"
+
+#: widgets/KoZoomWidget.cpp:78
+#, kde-format
+msgid "Zoom to Selection"
+msgstr "Ampliar para a Selecção"
+
+#: widgets/KoZoomWidget.cpp:87
+#, kde-format
+msgid "Zoom to All"
+msgstr "Ampliar para Tudo"
+
+#: widgetutils/KoFileDialog.cpp:463
+#, kde-format
+msgid "All supported formats"
+msgstr "Todos os formatos suportados"
+
+#: widgetutils/KoGroupButton.cpp:131
+#, kde-format
+msgctxt "@info:tooltip of custom triple button"
+msgid "%1"
+msgstr "%1"
+
+#~ msgid "Key Press"
+#~ msgstr "Pressionar de Tecla"

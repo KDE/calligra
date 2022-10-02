@@ -1,0 +1,654 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Yuri Efremov <yur.arh@gmail.com>, 2010, 2011.
+# Alexander Potashev <aspotashev@gmail.com>, 2010.
+# Georgiy Syptchenko <superzhook@gmail.com>, 2014.
+# Alexander Yavorsky <kekcuha@gmail.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2022-05-11 21:24+0300\n"
+"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
+"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.08.3\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+"Виталий Лопатин,Андрей Черепанов,Николай Шафоростов,Zumus,Мария Шикунова"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+"vitls@chat.ru,sibskull@mail.ru,shafff@ukr.net,zumus@mail.ru,translation-"
+"team@basealt.ru"
+
+#: FormulaCommand.cpp:59
+msgctxt "(qtundo-format)"
+msgid "Add text to formula"
+msgstr ""
+"Добавление текста к формуле\n"
+"добавление текста к формуле"
+
+#: FormulaCommand.cpp:215
+msgctxt "(qtundo-format)"
+msgid "Change rows"
+msgstr ""
+"Изменение строки\n"
+"изменение строки"
+
+#: FormulaEditor.cpp:74
+msgctxt "(qtundo-format)"
+msgid "Add text"
+msgstr ""
+"Добавление текста\n"
+"добавление текста"
+
+#: FormulaEditor.cpp:107
+msgctxt "(qtundo-format)"
+msgid "Insert row"
+msgstr ""
+"Вставка строки\n"
+"вставку строки"
+
+#: FormulaEditor.cpp:112
+msgctxt "(qtundo-format)"
+msgid "Remove row"
+msgstr ""
+"Удаление строки\n"
+"удаление строки"
+
+#: FormulaEditor.cpp:120
+msgctxt "(qtundo-format)"
+msgid "Insert column"
+msgstr ""
+"Вставка столбца\n"
+"вставку столбца"
+
+#: FormulaEditor.cpp:125
+msgctxt "(qtundo-format)"
+msgid "Remove column"
+msgstr ""
+"Удаление столбца\n"
+"удаление столбца"
+
+#: FormulaEditor.cpp:151
+msgctxt "(qtundo-format)"
+msgid "Insert formula elements."
+msgstr ""
+"Вставка элементов формулы\n"
+"вставку элементов формулы"
+
+#: FormulaEditor.cpp:184
+msgctxt "(qtundo-format)"
+msgid "Remove formula elements"
+msgstr ""
+"Удаление элементов формулы\n"
+"удаление элементов формулы"
+
+#: FormulaToolWidget.cpp:72
+#, kde-format
+msgid "Arrows"
+msgstr "Стрелки"
+
+#: FormulaToolWidget.cpp:74
+#, kde-format
+msgid "Greek"
+msgstr "Греческие буквы"
+
+#: FormulaToolWidget.cpp:78
+#, kde-format
+msgid "Relations"
+msgstr "Отношения"
+
+#: FormulaToolWidget.cpp:81
+#, kde-format
+msgid "Operators"
+msgstr "Операторы"
+
+#: FormulaToolWidget.cpp:85
+#, kde-format
+msgid "Miscellaneous"
+msgstr "Разное"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: FormulaToolWidget.ui:24
+#, kde-format
+msgid "Insert"
+msgstr "Вставка"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupElements)
+#: FormulaToolWidget.ui:36
+#, kde-format
+msgid "Elements"
+msgstr "Элементы"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupSymbols)
+#: FormulaToolWidget.ui:132
+#, kde-format
+msgid "Symbols"
+msgstr "Символы"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupActions)
+#: FormulaToolWidget.ui:228
+#, kde-format
+msgid "Actions"
+msgstr "Действия"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
+#: FormulaToolWidget.ui:279
+#, kde-format
+msgctxt "This button opens a file dialog to load a MathML file"
+msgid "Load..."
+msgstr "Загрузить..."
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonSave)
+#: FormulaToolWidget.ui:286
+#, kde-format
+msgid "Save..."
+msgstr "Сохранить..."
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: FormulaToolWidget.ui:294
+#, kde-format
+msgid "Edit"
+msgstr "Правка"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupGeneralOptions)
+#: FormulaToolWidget.ui:300
+#, kde-format
+msgid "General options"
+msgstr "Общие параметры"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: FormulaToolWidget.ui:325
+#, kde-format
+msgid "Font:"
+msgstr "Шрифт:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColors)
+#: FormulaToolWidget.ui:341
+#, kde-format
+msgid "Colors:"
+msgstr "Цвета:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupSpecificOptions)
+#: FormulaToolWidget.ui:349
+#, kde-format
+msgid "Specific options"
+msgstr "Особые параметры"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: FormulaToolWidget.ui:371
+#, kde-format
+msgid "Rows:"
+msgstr "Строк:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: FormulaToolWidget.ui:378
+#, kde-format
+msgid "Columns:"
+msgstr "Столбцов:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton)
+#: FormulaToolWidget.ui:406
+#, kde-format
+msgid "View MathML"
+msgstr "Просмотр MathML"
+
+#: KoFormulaShape.cpp:210
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"Этот документ содержит ссылку на документ в сети\n"
+"%1"
+
+#: KoFormulaShape.cpp:211
+#, kde-format
+msgid "Confirmation Required"
+msgstr "Требуется подтверждение"
+
+#: KoFormulaShape.cpp:211
+#, kde-format
+msgid "Download"
+msgstr "Загрузить"
+
+#: KoFormulaShape.cpp:211
+#, kde-format
+msgid "Skip"
+msgstr "Пропустить"
+
+#: KoFormulaShapeFactory.cpp:21
+#, kde-format
+msgid "Formula"
+msgstr "Формула"
+
+#: KoFormulaShapeFactory.cpp:23
+#, kde-format
+msgid "A formula"
+msgstr "Формула"
+
+#: KoFormulaTool.cpp:407
+#, kde-format
+msgid "Insert fenced element"
+msgstr "Вставить изолированный элемент"
+
+#: KoFormulaTool.cpp:408
+#, kde-format
+msgid "Insert enclosed element"
+msgstr "Вставить закрытый элемент"
+
+#: KoFormulaTool.cpp:411
+#, kde-format
+msgid "Insert root"
+msgstr "Вставить корень"
+
+#: KoFormulaTool.cpp:412
+#, kde-format
+msgid "Insert square root"
+msgstr "Вставить квадратный корень"
+
+#: KoFormulaTool.cpp:414
+#, kde-format
+msgid "Insert fraction"
+msgstr "Вставить дробь"
+
+#: KoFormulaTool.cpp:416
+#, kde-format
+msgid "Insert bevelled fraction"
+msgstr "Вставить косую дробь"
+
+#: KoFormulaTool.cpp:419
+#, kde-format
+msgid "Insert 3x3 table"
+msgstr "Вставить таблицу 3x3"
+
+#: KoFormulaTool.cpp:423
+#, kde-format
+msgid "Insert 2 dimensional vector"
+msgstr "Вставить двухкомпонентный вектор"
+
+#: KoFormulaTool.cpp:426
+#, kde-format
+msgid "Insert subscript"
+msgstr "Вставить нижний индекс"
+
+#: KoFormulaTool.cpp:428
+#, kde-format
+msgid "Insert superscript"
+msgstr "Вставить верхний индекс"
+
+#: KoFormulaTool.cpp:430
+#, kde-format
+msgid "Insert sub- and superscript"
+msgstr "Вставить нижний и верхний индексы"
+
+#: KoFormulaTool.cpp:432
+#, kde-format
+msgid "Insert overscript"
+msgstr "Вставить надстрочный индекс"
+
+#: KoFormulaTool.cpp:434
+#, kde-format
+msgid "Insert underscript"
+msgstr "Вставить подстрочный индекс"
+
+#: KoFormulaTool.cpp:436
+#, kde-format
+msgid "Insert under- and overscript"
+msgstr "Вставить под- и надстрочный индексы"
+
+#: KoFormulaTool.cpp:445
+#, kde-format
+msgid "Insert row"
+msgstr "Вставить строку"
+
+#: KoFormulaTool.cpp:452
+#, kde-format
+msgid "Insert column"
+msgstr "Вставить столбец"
+
+#: KoFormulaTool.cpp:459
+#, kde-format
+msgid "Remove row"
+msgstr "Удалить строку"
+
+#: KoFormulaTool.cpp:466
+#, kde-format
+msgid "Remove column"
+msgstr "Удалить столбец"
+
+#: KoFormulaToolFactory.cpp:17
+#, kde-format
+msgid "Formula editing"
+msgstr "Редактирование формул"
+
+#: KoM2MMLForumulaTool.cpp:97
+#, kde-format
+msgid "Mode: "
+msgstr "Режим:"
+
+#: KoM2MMLForumulaTool.cpp:100
+#, kde-format
+msgid "LaTeX"
+msgstr "LaTeX"
+
+#: KoM2MMLForumulaTool.cpp:102
+#, kde-format
+msgid "Matlab"
+msgstr "Matlab"
+
+#: KoM2MMLForumulaTool.cpp:171
+#, kde-format
+msgid "Parse error."
+msgstr "Ошибка разбора."
+
+#: KoM2MMLForumulaTool.cpp:201
+#, kde-format
+msgid "Edit formula with LaTeX/Matlab syntax"
+msgstr "Редактировать формулу с синтаксисом LaTeX/Matlab"
+
+#: KoM2MMLForumulaTool.cpp:203
+#, kde-format
+msgid "Edit formula with LaTeX syntax"
+msgstr "Редактировать формулу с синтаксисом LaTeX"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Вставка"
+
+#, fuzzy
+#~| msgid "Elements"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Elements"
+#~ msgstr "Элементы"
+
+#, fuzzy
+#~| msgid "Symbols"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Symbols"
+#~ msgstr "Символы"
+
+#, fuzzy
+#~| msgid "Actions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Actions"
+#~ msgstr "Действия"
+
+#, fuzzy
+#~| msgctxt "This button opens a file dialog to load a MathML file"
+#~| msgid "Load..."
+#~ msgctxt ""
+#~ "(qtundo-format) This button opens a file dialog to load a MathML file"
+#~ msgid "Load..."
+#~ msgstr "Загрузить..."
+
+#, fuzzy
+#~| msgid "Save..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save..."
+#~ msgstr "Сохранить..."
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Правка"
+
+#, fuzzy
+#~| msgid "General options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General options"
+#~ msgstr "Общие параметры"
+
+#, fuzzy
+#~| msgid "Font:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Font:"
+#~ msgstr "Шрифт:"
+
+#, fuzzy
+#~| msgid "Colors:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Colors:"
+#~ msgstr "Цвета:"
+
+#, fuzzy
+#~| msgid "Specific options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Specific options"
+#~ msgstr "Особые параметры"
+
+#, fuzzy
+#~| msgid "Rows:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rows:"
+#~ msgstr "Строк:"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Столбцов:"
+
+#, fuzzy
+#~| msgid "View MathML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View MathML"
+#~ msgstr "Просмотр MathML"
+
+#, fuzzy
+#~| msgid "Arrows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "Стрелки"
+
+#, fuzzy
+#~| msgid "Greek"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Greek"
+#~ msgstr "Греческие буквы"
+
+#, fuzzy
+#~| msgid "Relations"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Relations"
+#~ msgstr "Отношения"
+
+#, fuzzy
+#~| msgid "Operators"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operators"
+#~ msgstr "Операторы"
+
+#, fuzzy
+#~| msgid "Miscellaneous"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Miscellaneous"
+#~ msgstr "Разное"
+
+#, fuzzy
+#~| msgid ""
+#~| "This document contains an external link to a remote document\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document contains an external link to a remote document\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Этот документ содержит ссылку на документ в сети\n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid "Confirmation Required"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirmation Required"
+#~ msgstr "Требуется подтверждение"
+
+#, fuzzy
+#~| msgid "Download"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Download"
+#~ msgstr "Загрузить"
+
+#, fuzzy
+#~| msgid "Skip"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip"
+#~ msgstr "Пропустить"
+
+#, fuzzy
+#~| msgid "Formula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formula"
+#~ msgstr "Формула"
+
+#, fuzzy
+#~| msgid "A formula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A formula"
+#~ msgstr "Формула"
+
+#, fuzzy
+#~| msgid "Insert fenced element"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert fenced element"
+#~ msgstr "Вставить изолированный элемент"
+
+#, fuzzy
+#~| msgid "Insert enclosed element"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert enclosed element"
+#~ msgstr "Вставить закрытый элемент"
+
+#, fuzzy
+#~| msgid "Insert root"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert root"
+#~ msgstr "Вставить корень"
+
+#, fuzzy
+#~| msgid "Insert square root"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert square root"
+#~ msgstr "Вставить квадратный корень"
+
+#, fuzzy
+#~| msgid "Insert fraction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert fraction"
+#~ msgstr "Вставить дробь"
+
+#, fuzzy
+#~| msgid "Insert bevelled fraction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert bevelled fraction"
+#~ msgstr "Вставить косую дробь"
+
+#, fuzzy
+#~| msgid "Insert 3x3 table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert 3x3 table"
+#~ msgstr "Вставить таблицу 3x3"
+
+#, fuzzy
+#~| msgid "Insert 2 dimensional vector"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert 2 dimensional vector"
+#~ msgstr "Вставить двухкомпонентный вектор"
+
+#, fuzzy
+#~| msgid "Insert subscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert subscript"
+#~ msgstr "Вставить нижний индекс"
+
+#, fuzzy
+#~| msgid "Insert superscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert superscript"
+#~ msgstr "Вставить верхний индекс"
+
+#, fuzzy
+#~| msgid "Insert sub- and superscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert sub- and superscript"
+#~ msgstr "Вставить нижний и верхний индексы"
+
+#, fuzzy
+#~| msgid "Insert overscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert overscript"
+#~ msgstr "Вставить надстрочный индекс"
+
+#, fuzzy
+#~| msgid "Insert underscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert underscript"
+#~ msgstr "Вставить подстрочный индекс"
+
+#, fuzzy
+#~| msgid "Insert under- and overscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert under- and overscript"
+#~ msgstr "Вставить под- и надстрочный индексы"
+
+#, fuzzy
+#~| msgid "Formula editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formula editing"
+#~ msgstr "Редактирование формул"
+
+#, fuzzy
+#~| msgid "Mode: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mode: "
+#~ msgstr "Режим:"
+
+#, fuzzy
+#~| msgid "LaTeX"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "LaTeX"
+#~ msgstr "LaTeX"
+
+#, fuzzy
+#~| msgid "Matlab"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Matlab"
+#~ msgstr "Matlab"
+
+#, fuzzy
+#~| msgid "Parse error."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parse error."
+#~ msgstr "Ошибка разбора."
+
+#, fuzzy
+#~| msgid "Edit formula with LaTeX/Matlab syntax"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit formula with LaTeX/Matlab syntax"
+#~ msgstr "Редактировать формулу с синтаксисом LaTeX/Matlab"
+
+#, fuzzy
+#~| msgid "Edit formula with LaTeX syntax"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit formula with LaTeX syntax"
+#~ msgstr "Редактировать формулу с синтаксисом LaTeX"

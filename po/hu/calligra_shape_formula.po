@@ -1,0 +1,628 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2011.
+# Balázs Úr <urbalazs@gmail.com>, 2013, 2014.
+# Kiszel Kristóf <kiszel.kristof@gmail.com>, 2017.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2017-02-14 23:27+0100\n"
+"Last-Translator: Kiszel Kristóf <kiszel.kristof@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Kiszel Kristóf"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "ulysses@kubuntu.org"
+
+#: FormulaCommand.cpp:59
+msgctxt "(qtundo-format)"
+msgid "Add text to formula"
+msgstr "Szöveg hozzáadása a képlethez"
+
+#: FormulaCommand.cpp:215
+msgctxt "(qtundo-format)"
+msgid "Change rows"
+msgstr "Sorok megváltoztatása"
+
+#: FormulaEditor.cpp:74
+msgctxt "(qtundo-format)"
+msgid "Add text"
+msgstr "Szöveg hozzáadása"
+
+#: FormulaEditor.cpp:107
+msgctxt "(qtundo-format)"
+msgid "Insert row"
+msgstr "Sor beszúrása"
+
+#: FormulaEditor.cpp:112
+msgctxt "(qtundo-format)"
+msgid "Remove row"
+msgstr "Sor eltávolítása"
+
+#: FormulaEditor.cpp:120
+msgctxt "(qtundo-format)"
+msgid "Insert column"
+msgstr "Oszlop beszúrása"
+
+#: FormulaEditor.cpp:125
+msgctxt "(qtundo-format)"
+msgid "Remove column"
+msgstr "Oszlop eltávolítása"
+
+#: FormulaEditor.cpp:151
+msgctxt "(qtundo-format)"
+msgid "Insert formula elements."
+msgstr "Képletelemek beszúrása."
+
+#: FormulaEditor.cpp:184
+msgctxt "(qtundo-format)"
+msgid "Remove formula elements"
+msgstr "Képletelemek eltávolítása"
+
+#: FormulaToolWidget.cpp:72
+#, kde-format
+msgid "Arrows"
+msgstr "Nyílak"
+
+#: FormulaToolWidget.cpp:74
+#, kde-format
+msgid "Greek"
+msgstr "Görög"
+
+#: FormulaToolWidget.cpp:78
+#, kde-format
+msgid "Relations"
+msgstr "Kapcsolatok"
+
+#: FormulaToolWidget.cpp:81
+#, kde-format
+msgid "Operators"
+msgstr "Operátorok"
+
+#: FormulaToolWidget.cpp:85
+#, kde-format
+msgid "Miscellaneous"
+msgstr "Vegyes"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: FormulaToolWidget.ui:24
+#, kde-format
+msgid "Insert"
+msgstr "Beszúrás"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupElements)
+#: FormulaToolWidget.ui:36
+#, kde-format
+msgid "Elements"
+msgstr "Elemek"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupSymbols)
+#: FormulaToolWidget.ui:132
+#, kde-format
+msgid "Symbols"
+msgstr "Szimbólumok"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupActions)
+#: FormulaToolWidget.ui:228
+#, kde-format
+msgid "Actions"
+msgstr "Műveletek"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
+#: FormulaToolWidget.ui:279
+#, kde-format
+msgctxt "This button opens a file dialog to load a MathML file"
+msgid "Load..."
+msgstr "Betöltés…"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonSave)
+#: FormulaToolWidget.ui:286
+#, kde-format
+msgid "Save..."
+msgstr "Mentés…"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: FormulaToolWidget.ui:294
+#, kde-format
+msgid "Edit"
+msgstr "Szerkesztés"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupGeneralOptions)
+#: FormulaToolWidget.ui:300
+#, kde-format
+msgid "General options"
+msgstr "Általános beállítások"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: FormulaToolWidget.ui:325
+#, kde-format
+msgid "Font:"
+msgstr "Betűtípus:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColors)
+#: FormulaToolWidget.ui:341
+#, kde-format
+msgid "Colors:"
+msgstr "Színek:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupSpecificOptions)
+#: FormulaToolWidget.ui:349
+#, kde-format
+msgid "Specific options"
+msgstr "Speciális beállítások"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: FormulaToolWidget.ui:371
+#, kde-format
+msgid "Rows:"
+msgstr "Sorok:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: FormulaToolWidget.ui:378
+#, kde-format
+msgid "Columns:"
+msgstr "Oszlopok:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton)
+#: FormulaToolWidget.ui:406
+#, kde-format
+msgid "View MathML"
+msgstr "MathML megjelenítése"
+
+#: KoFormulaShape.cpp:210
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"Ez a dokumentum egy külső hivatkozást tartalmaz egy másik dokumentumhoz\n"
+"%1"
+
+#: KoFormulaShape.cpp:211
+#, kde-format
+msgid "Confirmation Required"
+msgstr "Megerősítés szükséges"
+
+#: KoFormulaShape.cpp:211
+#, kde-format
+msgid "Download"
+msgstr "Letöltés"
+
+#: KoFormulaShape.cpp:211
+#, kde-format
+msgid "Skip"
+msgstr "Kihagyás"
+
+#: KoFormulaShapeFactory.cpp:21
+#, kde-format
+msgid "Formula"
+msgstr "Képlet"
+
+#: KoFormulaShapeFactory.cpp:23
+#, kde-format
+msgid "A formula"
+msgstr "Egy képlet"
+
+#: KoFormulaTool.cpp:407
+#, kde-format
+msgid "Insert fenced element"
+msgstr "Elkerített elem beszúrása"
+
+#: KoFormulaTool.cpp:408
+#, kde-format
+msgid "Insert enclosed element"
+msgstr "Elhatárolt elem beszúrása"
+
+#: KoFormulaTool.cpp:411
+#, kde-format
+msgid "Insert root"
+msgstr "Gyök beszúrása"
+
+#: KoFormulaTool.cpp:412
+#, kde-format
+msgid "Insert square root"
+msgstr "Négyzetgyök beszúrása"
+
+#: KoFormulaTool.cpp:414
+#, kde-format
+msgid "Insert fraction"
+msgstr "Hányados beszúrása"
+
+#: KoFormulaTool.cpp:416
+#, kde-format
+msgid "Insert bevelled fraction"
+msgstr "Ferde hányados beszúrása"
+
+#: KoFormulaTool.cpp:419
+#, kde-format
+msgid "Insert 3x3 table"
+msgstr "3x3-as táblázat beszúrása"
+
+#: KoFormulaTool.cpp:423
+#, kde-format
+msgid "Insert 2 dimensional vector"
+msgstr "2 dimenziós vektor beszúrása"
+
+#: KoFormulaTool.cpp:426
+#, kde-format
+msgid "Insert subscript"
+msgstr "Index beszúrása"
+
+#: KoFormulaTool.cpp:428
+#, kde-format
+msgid "Insert superscript"
+msgstr "Felirat beszúrása"
+
+#: KoFormulaTool.cpp:430
+#, kde-format
+msgid "Insert sub- and superscript"
+msgstr "Index és felirat beszúrása"
+
+#: KoFormulaTool.cpp:432
+#, kde-format
+msgid "Insert overscript"
+msgstr "Felső index beszúrása"
+
+#: KoFormulaTool.cpp:434
+#, kde-format
+msgid "Insert underscript"
+msgstr "Alsó index beszúrása"
+
+#: KoFormulaTool.cpp:436
+#, kde-format
+msgid "Insert under- and overscript"
+msgstr "Alsó- és felső index beszúrása"
+
+#: KoFormulaTool.cpp:445
+#, kde-format
+msgid "Insert row"
+msgstr "Sor beszúrása"
+
+#: KoFormulaTool.cpp:452
+#, kde-format
+msgid "Insert column"
+msgstr "Oszlop beszúrása"
+
+#: KoFormulaTool.cpp:459
+#, kde-format
+msgid "Remove row"
+msgstr "Sor eltávolítása"
+
+#: KoFormulaTool.cpp:466
+#, kde-format
+msgid "Remove column"
+msgstr "Oszlop eltávolítása"
+
+#: KoFormulaToolFactory.cpp:17
+#, kde-format
+msgid "Formula editing"
+msgstr "Képlet szerkesztés"
+
+#: KoM2MMLForumulaTool.cpp:97
+#, kde-format
+msgid "Mode: "
+msgstr "Mód: "
+
+#: KoM2MMLForumulaTool.cpp:100
+#, kde-format
+msgid "LaTeX"
+msgstr "LaTeX"
+
+#: KoM2MMLForumulaTool.cpp:102
+#, kde-format
+msgid "Matlab"
+msgstr "Matlab"
+
+#: KoM2MMLForumulaTool.cpp:171
+#, kde-format
+msgid "Parse error."
+msgstr "Feldolgozási hiba."
+
+#: KoM2MMLForumulaTool.cpp:201
+#, kde-format
+msgid "Edit formula with LaTeX/Matlab syntax"
+msgstr "Képlet szerkesztése LaTeX/Matlab szintaxissal"
+
+#: KoM2MMLForumulaTool.cpp:203
+#, kde-format
+msgid "Edit formula with LaTeX syntax"
+msgstr "Képlet szerkesztése LaTeX szintaxissal"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Beszúrás"
+
+#, fuzzy
+#~| msgid "Elements"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Elements"
+#~ msgstr "Elemek"
+
+#, fuzzy
+#~| msgid "Symbols"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Symbols"
+#~ msgstr "Szimbólumok"
+
+#, fuzzy
+#~| msgid "Actions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Actions"
+#~ msgstr "Műveletek"
+
+#, fuzzy
+#~| msgctxt "This button opens a file dialog to load a MathML file"
+#~| msgid "Load..."
+#~ msgctxt ""
+#~ "(qtundo-format) This button opens a file dialog to load a MathML file"
+#~ msgid "Load..."
+#~ msgstr "Betöltés…"
+
+#, fuzzy
+#~| msgid "Save..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save..."
+#~ msgstr "Mentés…"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Szerkesztés"
+
+#, fuzzy
+#~| msgid "General options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General options"
+#~ msgstr "Általános beállítások"
+
+#, fuzzy
+#~| msgid "Font:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Font:"
+#~ msgstr "Betűtípus:"
+
+#, fuzzy
+#~| msgid "Colors:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Colors:"
+#~ msgstr "Színek:"
+
+#, fuzzy
+#~| msgid "Specific options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Specific options"
+#~ msgstr "Speciális beállítások"
+
+#, fuzzy
+#~| msgid "Rows:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rows:"
+#~ msgstr "Sorok:"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Oszlopok:"
+
+#, fuzzy
+#~| msgid "View MathML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View MathML"
+#~ msgstr "MathML megjelenítése"
+
+#, fuzzy
+#~| msgid "Arrows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "Nyílak"
+
+#, fuzzy
+#~| msgid "Greek"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Greek"
+#~ msgstr "Görög"
+
+#, fuzzy
+#~| msgid "Relations"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Relations"
+#~ msgstr "Kapcsolatok"
+
+#, fuzzy
+#~| msgid "Operators"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operators"
+#~ msgstr "Operátorok"
+
+#, fuzzy
+#~| msgid "Miscellaneous"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Miscellaneous"
+#~ msgstr "Vegyes"
+
+#, fuzzy
+#~| msgid ""
+#~| "This document contains an external link to a remote document\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document contains an external link to a remote document\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Ez a dokumentum egy külső hivatkozást tartalmaz egy másik dokumentumhoz\n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid "Confirmation Required"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirmation Required"
+#~ msgstr "Megerősítés szükséges"
+
+#, fuzzy
+#~| msgid "Download"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Download"
+#~ msgstr "Letöltés"
+
+#, fuzzy
+#~| msgid "Skip"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip"
+#~ msgstr "Kihagyás"
+
+#, fuzzy
+#~| msgid "Formula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formula"
+#~ msgstr "Képlet"
+
+#, fuzzy
+#~| msgid "A formula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A formula"
+#~ msgstr "Egy képlet"
+
+#, fuzzy
+#~| msgid "Insert fenced element"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert fenced element"
+#~ msgstr "Elkerített elem beszúrása"
+
+#, fuzzy
+#~| msgid "Insert enclosed element"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert enclosed element"
+#~ msgstr "Elhatárolt elem beszúrása"
+
+#, fuzzy
+#~| msgid "Insert root"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert root"
+#~ msgstr "Gyök beszúrása"
+
+#, fuzzy
+#~| msgid "Insert square root"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert square root"
+#~ msgstr "Négyzetgyök beszúrása"
+
+#, fuzzy
+#~| msgid "Insert fraction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert fraction"
+#~ msgstr "Hányados beszúrása"
+
+#, fuzzy
+#~| msgid "Insert bevelled fraction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert bevelled fraction"
+#~ msgstr "Ferde hányados beszúrása"
+
+#, fuzzy
+#~| msgid "Insert 3x3 table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert 3x3 table"
+#~ msgstr "3x3-as táblázat beszúrása"
+
+#, fuzzy
+#~| msgid "Insert 2 dimensional vector"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert 2 dimensional vector"
+#~ msgstr "2 dimenziós vektor beszúrása"
+
+#, fuzzy
+#~| msgid "Insert subscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert subscript"
+#~ msgstr "Index beszúrása"
+
+#, fuzzy
+#~| msgid "Insert superscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert superscript"
+#~ msgstr "Felirat beszúrása"
+
+#, fuzzy
+#~| msgid "Insert sub- and superscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert sub- and superscript"
+#~ msgstr "Index és felirat beszúrása"
+
+#, fuzzy
+#~| msgid "Insert overscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert overscript"
+#~ msgstr "Felső index beszúrása"
+
+#, fuzzy
+#~| msgid "Insert underscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert underscript"
+#~ msgstr "Alsó index beszúrása"
+
+#, fuzzy
+#~| msgid "Insert under- and overscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert under- and overscript"
+#~ msgstr "Alsó- és felső index beszúrása"
+
+#, fuzzy
+#~| msgid "Formula editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formula editing"
+#~ msgstr "Képlet szerkesztés"
+
+#, fuzzy
+#~| msgid "Mode: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mode: "
+#~ msgstr "Mód: "
+
+#, fuzzy
+#~| msgid "LaTeX"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "LaTeX"
+#~ msgstr "LaTeX"
+
+#, fuzzy
+#~| msgid "Matlab"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Matlab"
+#~ msgstr "Matlab"
+
+#, fuzzy
+#~| msgid "Parse error."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parse error."
+#~ msgstr "Feldolgozási hiba."
+
+#, fuzzy
+#~| msgid "Edit formula with LaTeX/Matlab syntax"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit formula with LaTeX/Matlab syntax"
+#~ msgstr "Képlet szerkesztése LaTeX/Matlab szintaxissal"
+
+#, fuzzy
+#~| msgid "Edit formula with LaTeX syntax"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit formula with LaTeX syntax"
+#~ msgstr "Képlet szerkesztése LaTeX szintaxissal"

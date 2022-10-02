@@ -1,0 +1,652 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2012, 2013, 2014, 2015, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2016-11-21 13:03+0100\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: ectx: Menu (Shapes)
+#: data/braindumpui.rc:8
+#, kde-format
+msgctxt "@title:menu"
+msgid "Shapes"
+msgstr "Vormen"
+
+#. i18n: ectx: Menu (Shapes)
+#: data/braindumpview.rc:23
+#, kde-format
+msgid "Shapes"
+msgstr "Vormen"
+
+#. i18n: tag category attribute name
+#: data/states/states/states.xml:3
+#, kde-format
+msgid "Todo"
+msgstr "Taken"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:4
+#, kde-format
+msgid "Unchecked"
+msgstr "Deactiveren"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:5
+#, kde-format
+msgid "Checked"
+msgstr "Geactiveerd"
+
+#. i18n: tag category attribute name
+#: data/states/states/states.xml:7
+#, kde-format
+msgid "Progress"
+msgstr "Voortgang"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:8
+#, kde-format
+msgid "0 %"
+msgstr "0 %"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:9
+#, kde-format
+msgid "25 %"
+msgstr "25 %"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:10
+#, kde-format
+msgid "50 %"
+msgstr "50 %"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:11
+#, kde-format
+msgid "75 %"
+msgstr "75 %"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:12
+#, kde-format
+msgid "100 %"
+msgstr "100 %"
+
+#: plugins/quickstates/BraindumpQuickStatesPlugin.cpp:46
+#, kde-format
+msgid "States"
+msgstr "Statussen"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/stateshape/StateShapeConfigWidget.ui:17
+#, kde-format
+msgid "State:"
+msgstr "Status:"
+
+#: plugins/stateshape/StateShapeFactory.cpp:31
+#, kde-format
+msgid "State Shape"
+msgstr "Statusvorm"
+
+#: plugins/stateshape/StateShapeFactory.cpp:33
+#, kde-format
+msgid "A state shape"
+msgstr "Een statusvorm"
+
+#: plugins/stateshape/StateTool.cpp:107
+#, kde-format
+msgid "State tool options"
+msgstr "Opties van statushulpmiddel"
+
+#: plugins/stateshape/StateToolFactory.cpp:32
+#, kde-format
+msgid "State editing"
+msgstr "Bewerking van status"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/webshape/WebShapeConfigWidget.ui:17
+#, kde-format
+msgid "URL:"
+msgstr "URL-adres:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, useCache)
+#: plugins/webshape/WebShapeConfigWidget.ui:40
+#, kde-format
+msgid "Use a cache copy"
+msgstr "Een kopie uit de cache gebruiken"
+
+#: plugins/webshape/WebShapeFactory.cpp:34
+#, kde-format
+msgid "Web Shape"
+msgstr "Webvorm"
+
+#: plugins/webshape/WebShapeFactory.cpp:36
+#, kde-format
+msgid "A web shape"
+msgstr "Een webvorm"
+
+#: plugins/webshape/WebToolFactory.cpp:31
+#, kde-format
+msgid "Web shape editing"
+msgstr "Bewerking van webvorm"
+
+#: src/AboutData.h:31
+#, kde-format
+msgid "Braindump"
+msgstr "Braindump"
+
+#: src/AboutData.h:32
+#, kde-format
+msgid "Braindump: directly from your brain to the computer."
+msgstr "Braindump: direct vanuit uw hersenen in de computer."
+
+#: src/AboutData.h:34
+#, kde-format
+msgid ""
+"Unmaintained at the time of release of this version. The Calligra community "
+"welcomes interested persons to take over maintainership."
+msgstr ""
+"Niet onderhouden op het moment van uitgave van deze versie. De Calligra-"
+"gemeenschap verwelkomt geïnteresseerde personen om het onderhoud op zich te "
+"nemen."
+
+#: src/AboutData.h:35
+#, kde-format
+msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
+msgstr "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
+
+#: src/AboutData.h:39 src/AboutData.h:40
+#, kde-format
+msgid "Former maintainer"
+msgstr "Voormalige onderhouder"
+
+#: src/AboutData.h:39
+#, kde-format
+msgid "Somsubhra Bairi"
+msgstr "Somsubhra Bairi"
+
+#: src/AboutData.h:40
+#, kde-format
+msgid "Cyrille Berger"
+msgstr "Cyrille Berger"
+
+#. i18n translator strings
+#: src/AboutData.h:42
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Freek de Kruijf - 2011 t/m 2016"
+
+#: src/AboutData.h:43
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "freekdekruijf@kde.nl"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/forms/wdgsectionproperties.ui:17
+#, kde-format
+msgid "Layout:"
+msgstr "Opmaak:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnAdd)
+#: src/forms/wdgsectionsbox.ui:50
+#, kde-format
+msgid "Create a new whiteboard"
+msgstr "Een nieuw whiteboard gebruiken"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
+#: src/forms/wdgsectionsbox.ui:78
+#, kde-format
+msgid "Duplicate whiteboard"
+msgstr "Whiteboard dupliceren"
+
+#. i18n: ectx: property (whatsThis), widget (QToolButton, bnDuplicate)
+#: src/forms/wdgsectionsbox.ui:81
+#, kde-format
+msgid "Duplicate the currently selected whiteboard"
+msgstr "Het nu geselecteerde whiteboard dupliceren"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnLower)
+#: src/forms/wdgsectionsbox.ui:106
+#, kde-format
+msgid "Move whiteboard down"
+msgstr "Whiteboard omlaag verplaatsen"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
+#: src/forms/wdgsectionsbox.ui:131
+#, kde-format
+msgid "Move whiteboard up"
+msgstr "Whiteboard omhoog verplaatsen"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
+#: src/forms/wdgsectionsbox.ui:172
+#, kde-format
+msgid "Delete the whiteboard"
+msgstr "Het whiteboard verwijderen"
+
+#: src/import/DockerManager_p.h:51
+#, kde-format
+msgid "Tool Bars"
+msgstr "Werkbalken"
+
+#: src/import/ToolDocker.cpp:31
+#, kde-format
+msgid "Tool Options"
+msgstr "Hulpmiddelopties"
+
+#: src/import/ToolDocker.cpp:70
+#, kde-format
+msgid "Toggles showing a title bar"
+msgstr "Een titelbalk tonen in/uitschakelen"
+
+#: src/import/ToolDocker.cpp:78
+#, kde-format
+msgid "Toggles organising the options in tabs or not"
+msgstr "De opties in tabbladen organiseren in/uitschakelen"
+
+#: src/layouts/ColumnLayout.cpp:125
+#, kde-format
+msgid "Column"
+msgstr "Kolom"
+
+#: src/layouts/FreeLayout.cpp:60
+#, kde-format
+msgid "Free"
+msgstr "Vrij"
+
+#: src/MainWindow.cpp:118
+#, kde-format
+msgid "Dockers"
+msgstr "Vastzetters"
+
+#: src/SectionGroup.cpp:83
+#, kde-format
+msgid "Untitled %1"
+msgstr "Naamloos %1"
+
+#: src/SectionPropertiesDock.cpp:32
+#, kde-format
+msgid "Dump properties"
+msgstr "Eigenschappen van dump"
+
+#: src/SectionsBoxDock.cpp:40
+#, kde-format
+msgid "Whiteboards"
+msgstr "Whiteboards"
+
+#: src/SectionsBoxDock.cpp:54
+#, kde-format
+msgid "Minimal View"
+msgstr "Minimale weergave"
+
+#: src/SectionsBoxDock.cpp:56
+#, kde-format
+msgid "Detailed View"
+msgstr "Gedetailleerde weergave"
+
+#: src/SectionsBoxDock.cpp:58
+#, kde-format
+msgid "Thumbnail View"
+msgstr "Miniaturenweergave"
+
+#: src/SectionsBoxDock.cpp:69
+#, kde-format
+msgid "View mode"
+msgstr "Weergavemodus"
+
+#: src/SectionsBoxDock.cpp:81
+#, kde-format
+msgid "Add new whiteboard below current."
+msgstr "Een nieuw whiteboard toevoegen onder het huidige."
+
+#: src/SectionsBoxDock.cpp:82
+#, kde-format
+msgid "Add new whiteboard above current."
+msgstr "Een nieuw whiteboard toevoegen boven het huidige."
+
+#: src/SectionsBoxDock.cpp:83
+#, kde-format
+msgid "Add new whiteboard as child of current."
+msgstr "Een nieuw whiteboard toevoegen als dochter van het huidige."
+
+#: src/View.cpp:183
+#, kde-format
+msgid "D&elete"
+msgstr "V&erwijderen"
+
+#: src/View.cpp:190
+#, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "&Dupliceren"
+
+#: src/View.cpp:195
+#, kde-format
+msgid "Group Shapes"
+msgstr "Vormen groeperen"
+
+#: src/View.cpp:200
+#, kde-format
+msgid "Ungroup Shapes"
+msgstr "Vormengroepering opheffen"
+
+#: src/View.cpp:384
+msgctxt "(qtundo-format)"
+msgid "Group shapes"
+msgstr "Vormen groeperen"
+
+#: src/View.cpp:406
+msgctxt "(qtundo-format)"
+msgid "Ungroup shapes"
+msgstr "Vormengroepering opheffen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new whiteboard"
+#~ msgstr "Een nieuw whiteboard gebruiken"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate whiteboard"
+#~ msgstr "Whiteboard dupliceren"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate the currently selected whiteboard"
+#~ msgstr "Het nu geselecteerde whiteboard dupliceren"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move whiteboard down"
+#~ msgstr "Whiteboard omlaag verplaatsen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move whiteboard up"
+#~ msgstr "Whiteboard omhoog verplaatsen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the whiteboard"
+#~ msgstr "Het whiteboard verwijderen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout:"
+#~ msgstr "Indeling:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "State:"
+#~ msgstr "Status:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "URL:"
+#~ msgstr "URL-adres:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use a cache copy"
+#~ msgstr "Een kopie uit de cache gebruiken"
+
+#~ msgctxt "(qtundo-format) @title:menu"
+#~ msgid "Shapes"
+#~ msgstr "Vormen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shapes"
+#~ msgstr "Vormen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Todo"
+#~ msgstr "Te doen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unchecked"
+#~ msgstr "Gedeactiveerd"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Checked"
+#~ msgstr "Geactiveerd"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Progress"
+#~ msgstr "Voortgang"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "0 %"
+#~ msgstr "0 %"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "25 %"
+#~ msgstr "25 %"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "50 %"
+#~ msgstr "50 %"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "75 %"
+#~ msgstr "75 %"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "100 %"
+#~ msgstr "100 %"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "States"
+#~ msgstr "Statussen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "State Shape"
+#~ msgstr "Statusvorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A state shape"
+#~ msgstr "Een statusvorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "State tool options"
+#~ msgstr "Opties van statushulpmiddel"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "State editing"
+#~ msgstr "Bewerking van status"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Web Shape"
+#~ msgstr "Webvorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A web shape"
+#~ msgstr "Een webvorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Web shape editing"
+#~ msgstr "Bewerking van webvorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Braindump"
+#~ msgstr "Braindump"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Braindump: directly from your brain to the computer."
+#~ msgstr "Braindump: direct vanuit uw hersenen in de computer."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Niet onderhouden op het moment van uitgave van deze versie. De Calligra-"
+#~ "gemeenschap verwelkomt geïnteresseerde personen om het onderhoud op zich "
+#~ "te nemen."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
+#~ msgstr "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "Voormalige onderhouder"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Somsubhra Bairi"
+#~ msgstr "Somsubhra Bairi"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cyrille Berger"
+#~ msgstr "Cyrille Berger"
+
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr ""
+#~ "Niels Reedijk,Rinse de Vries,Karel van der Zande,Maarten Rütten,Sander "
+#~ "Koning, Bram Schoenmakers,Natalie Koning,Freek de Kruijf"
+
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "freekdekruijf@kde.nl"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tool Bars"
+#~ msgstr "Werkbalken"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tool Options"
+#~ msgstr "Hulpmiddelopties"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggles showing a title bar"
+#~ msgstr "Een titelbalk tonen in/uitschakelen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggles organising the options in tabs or not"
+#~ msgstr "De opties in tabbladen organiseren in/uitschakelen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column"
+#~ msgstr "Kolom"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Free"
+#~ msgstr "Vrij"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dockers"
+#~ msgstr "Vastzetters"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Untitled %1"
+#~ msgstr "Naamloos %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dump properties"
+#~ msgstr "Eigenschappen van dump"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whiteboards"
+#~ msgstr "Whiteboards"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minimal View"
+#~ msgstr "Minimale weergave"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Detailed View"
+#~ msgstr "Gedetailleerde weergave"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thumbnail View"
+#~ msgstr "Miniaturenweergave"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View mode"
+#~ msgstr "Weergavemodus"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new whiteboard below current."
+#~ msgstr "Een nieuw whiteboard toevoegen onder het huidige."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new whiteboard above current."
+#~ msgstr "Een nieuw whiteboard toevoegen boven het huidige."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new whiteboard as child of current."
+#~ msgstr "Een nieuw whiteboard toevoegen als dochter van het huidige."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "V&erwijderen"
+
+#~ msgctxt "(qtundo-format) Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Dupliceren"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Group Shapes"
+#~ msgstr "Vormen groeperen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ungroup Shapes"
+#~ msgstr "Vormengroepering opheffen"
+
+#~ msgid "Maintainer"
+#~ msgstr "Onderhouder"
+
+#~ msgid "State Tool"
+#~ msgstr "Statushulpmiddel"
+
+#~ msgid "Web Shape Tool"
+#~ msgstr "Hulpmiddel voor webvorm"
+
+#~ msgid "&Edit"
+#~ msgstr "B&ewerken"
+
+#~ msgid "&View"
+#~ msgstr "Beel&d"
+
+#~ msgid "Web tool options"
+#~ msgstr "Opties voor webhulpmiddelen"
+
+#~ msgid "Tools"
+#~ msgstr "Hulpmiddelen"
+
+#~ msgid ""
+#~ "Use this option when debugging so that Braindump is not launched as a "
+#~ "KUniqueApplication"
+#~ msgstr ""
+#~ "Deze optie gebruiken bij het debuggen zodat Braindump niet als een "
+#~ "KUniqueApplication wordt gestart"
+
+#~ msgid "Yes"
+#~ msgstr "Ja"
+
+#~ msgid "No"
+#~ msgstr "Nee"
+
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#~ msgid "Zoom"
+#~ msgstr "Zoomen"
+
+#~ msgid "Use same aspect as pixels"
+#~ msgstr "Dezelfde aspect als pixels gebruiken"
+
+#~ msgid "Zoom to Selection"
+#~ msgstr "Tot selectie inzoomen"
+
+#~ msgid "Zoom to All"
+#~ msgstr "Inzoomen tot alles"
+
+#~ msgid "Form"
+#~ msgstr "Formulier"
+
+#~ msgid "Url:"
+#~ msgstr "URL-adres:"

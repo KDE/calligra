@@ -1,0 +1,72 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrej Vernekar <andrej.vernekar@gmail.com>, 2012.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2020-01-23 15:47+0100\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Translator: Andrej Vernekar <andrej.vernekar@gmail.com>\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Poedit 2.2.4\n"
+
+#: ChangeSomethingCommand.cpp:34
+msgctxt "(qtundo-format)"
+msgid "Change something"
+msgstr "Spremeni nekaj"
+
+#: TemplateShapeFactory.cpp:32
+#, kde-format
+msgid "Template shape"
+msgstr "Oblika predloge"
+
+#: TemplateShapeFactory.cpp:34
+#, kde-format
+msgid "Simple shape that is used as a template for developing other shapes."
+msgstr "Preprosta oblika, ki se uporablja kot predloga za razvoj drugih oblik."
+
+#: TemplateTool.cpp:77
+#, kde-format
+msgid "Open"
+msgstr "Odpri"
+
+#: TemplateToolFactory.cpp:26
+#, kde-format
+msgid "Template shape editing"
+msgstr "Urejanje oblike predloge"
+
+#, fuzzy
+#~| msgid "Template shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Template shape"
+#~ msgstr "Oblika predloge"
+
+#, fuzzy
+#~| msgid ""
+#~| "Simple shape that is used as a template for developing other shapes."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Simple shape that is used as a template for developing other shapes."
+#~ msgstr ""
+#~ "Preprosta oblika, ki se uporablja kot predloga za razvoj drugih oblik."
+
+#, fuzzy
+#~| msgid "Open"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open"
+#~ msgstr "Odpri"
+
+#, fuzzy
+#~| msgid "Template shape editing tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Template shape editing"
+#~ msgstr "Orodje za urejanje oblike predloge"

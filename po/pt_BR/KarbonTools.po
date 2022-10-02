@@ -1,0 +1,908 @@
+# Translation of KarbonTools.po to Brazilian Portuguese
+# Copyright (C) 2007-2014 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marcus Gama <marcus.gama@gmail.com>, 2007, 2008, 2009, 2011.
+# Maj Gama <marcus.gama@gmail.com>, 2009.
+# Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>, 2009, 2012.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2010.
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2011, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: KarbonTools\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2014-04-04 21:20-0300\n"
+"Last-Translator: André Marcelo Alvarenga <alvarenga@kde.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_br@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:16
+#, kde-format
+msgid "A calligraphic shape"
+msgstr "Uma forma caligráfica"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:18
+#, kde-format
+msgid "Calligraphic Shape"
+msgstr "Forma caligráfica"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:56
+#, kde-format
+msgid "Save profile as..."
+msgstr "Salvar perfil como..."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
+#, kde-format
+msgid "Remove profile"
+msgstr "Remover perfil"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:69
+#, kde-format
+msgid "&Follow selected path"
+msgstr "Seguir o caminho &selecionado"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:72
+#, kde-format
+msgid "Use tablet &pressure"
+msgstr "Usar a &pressão da tablete"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:75
+#, kde-format
+msgid "Width:"
+msgstr "Largura:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:83
+#, kde-format
+msgid "Thinning:"
+msgstr "Afinação:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:92
+#, kde-format
+msgid "Use tablet &angle"
+msgstr "Us&ar o ângulo da tablete"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:95
+#, kde-format
+msgid "Angle:"
+msgstr "Ângulo:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:104
+#, kde-format
+msgid "Fixation:"
+msgstr "Fixação:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:113
+#, kde-format
+msgid "Caps:"
+msgstr "Extremos:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:122
+#, kde-format
+msgid "Mass:"
+msgstr "Massa:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:131
+#, kde-format
+msgid "Drag:"
+msgstr "Arrasto:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:188
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:213
+#, kde-format
+msgid "Current"
+msgstr "Atual"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:207
+#, kde-format
+msgid "Profile name"
+msgstr "Nome do perfil"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:208
+#, kde-format
+msgid "Please insert the name by which you want to save this profile:"
+msgstr "Por favor, insira o nome com o qual deseja salvar este perfil:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:215
+#, kde-format
+msgid "Sorry, the name you entered is invalid."
+msgstr "Desculpe, mas o nome que você inseriu é inválido."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
+#, kde-format
+msgctxt "invalid profile name"
+msgid "Invalid name."
+msgstr "Nome inválido."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:224
+#, kde-format
+msgid ""
+"A profile with that name already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"Já existe um perfil com esse nome.\n"
+"Deseja substituí-lo?"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:360
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:385
+#, kde-format
+msgid "Mouse"
+msgstr "Mouse"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:373
+#, kde-format
+msgid "Graphics Pen"
+msgstr "Caneta gráfica"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:338
+#, kde-format
+msgid "Fill"
+msgstr "Preencher"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:377
+#, kde-format
+msgid "Calligraphy: increase width"
+msgstr "Caligrafia: aumentar a espessura"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
+#, kde-format
+msgid "Calligraphy: decrease width"
+msgstr "Caligrafia: diminuir a espessura"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:387
+#, kde-format
+msgid "Calligraphy: increase angle"
+msgstr "Caligrafia: aumentar o ângulo"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:392
+#, kde-format
+msgid "Calligraphy: decrease angle"
+msgstr "Caligrafia: diminuir o ângulo"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:399
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:400
+#: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
+#, kde-format
+msgid "Calligraphy"
+msgstr "Caligrafia"
+
+#: filterEffectTool/FilterAddCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Add filter effect"
+msgstr "Adicionar um efeito de filtro"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:58
+#, kde-format
+msgid "Add effect to current filter stack"
+msgstr "Adicionar o efeito à pilha de filtros atual"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:68
+#, kde-format
+msgid "Add to filter presets"
+msgstr "Adicionar às predefinições do filtro"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:72
+#, kde-format
+msgid "Remove filter preset"
+msgstr "Remover a predefinição do filtro"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:335
+#, kde-format
+msgid "Effect name"
+msgstr "Nome do efeito"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:336
+#, kde-format
+msgid "Please enter a name for the filter effect"
+msgstr "Por favor, insira um nome para o efeito do filtro"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
+#: filterEffectTool/FilterEffectEditWidget.ui:32
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:314
+#, kde-format
+msgid "Filter Effect Editor"
+msgstr "Editor de efeitos em filtros"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: filterEffectTool/FilterEffectEditWidget.ui:40
+#, kde-format
+msgid "Effects and Connections"
+msgstr "Efeitos e conexões"
+
+#. i18n: ectx: property (text), widget (QToolButton, removeEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addEffect)
+#. i18n: ectx: property (text), widget (QToolButton, raiseEffect)
+#. i18n: ectx: property (text), widget (QToolButton, lowerEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addPreset)
+#. i18n: ectx: property (text), widget (QToolButton, removePreset)
+#: filterEffectTool/FilterEffectEditWidget.ui:57
+#: filterEffectTool/FilterEffectEditWidget.ui:67
+#: filterEffectTool/FilterEffectEditWidget.ui:74
+#: filterEffectTool/FilterEffectEditWidget.ui:81
+#: filterEffectTool/FilterEffectEditWidget.ui:102
+#: filterEffectTool/FilterEffectEditWidget.ui:109
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: filterEffectTool/FilterEffectEditWidget.ui:92
+#, kde-format
+msgid "Filter Presets"
+msgstr "Predefinições do filtro"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: filterEffectTool/FilterEffectEditWidget.ui:116
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:470
+#, kde-format
+msgid "Effect Properties"
+msgstr "Propriedades do efeito"
+
+#: filterEffectTool/FilterRemoveCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove filter effect"
+msgstr "Remover o efeito do filtro"
+
+#: filterEffectTool/FilterStackSetCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Set filter stack"
+msgstr "Configurar a pilha de filtros"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:433
+#, kde-format
+msgid "Effects"
+msgstr "Efeitos"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:443
+#, kde-format
+msgid "View and edit filter"
+msgstr "Ver e editar o filtro"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:449
+#, kde-format
+msgid "Remove filter from object"
+msgstr "Remover o filtro do objeto"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:453
+#, kde-format
+msgid "Add Filter"
+msgstr "Adicionar um Filtro"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:482
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:488
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:494
+#, kde-format
+msgid "W:"
+msgstr "L:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:500
+#, kde-format
+msgid "H:"
+msgstr "A:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:505
+#, kde-format
+msgid "Effect Region"
+msgstr "Região de efeito"
+
+#: filterEffectTool/KarbonFilterEffectsToolFactory.cpp:16
+#, kde-format
+msgid "Filter effects editing"
+msgstr "Edição de efeitos em filtros"
+
+#: KarbonGradientTool.cpp:198
+#, kde-format
+msgid "Drag to move gradient position."
+msgstr "Arraste para mover a posição do gradiente."
+
+#: KarbonGradientTool.cpp:207
+#, kde-format
+msgid "Drag to move color stop. Double click to remove color stop."
+msgstr ""
+"Arraste para mover a paragem da cor. Duplo-clique para remover a paragem da "
+"cor."
+
+#: KarbonGradientTool.cpp:209
+#, kde-format
+msgid "Drag to move color stop."
+msgstr "Arraste para mover a paragem da cor."
+
+#: KarbonGradientTool.cpp:216
+#, kde-format
+msgid "Drag to move gradient position. Double click to insert color stop."
+msgstr ""
+"Arraste para mover a posição do gradiente. Duplo-clique para inserir uma "
+"paragem de cor."
+
+#: KarbonGradientTool.cpp:494
+#, kde-format
+msgid "Edit Gradient"
+msgstr "Editar gradiente"
+
+#: KarbonGradientTool.cpp:496
+#, kde-format
+msgid "Predefined Gradients"
+msgstr "Gradientes predefinidos"
+
+#: KarbonGradientToolFactory.cpp:17
+#, kde-format
+msgid "Gradient editing"
+msgstr "Edição de gradientes"
+
+#: KarbonPatternOptionsWidget.cpp:21
+#, kde-format
+msgid "Original"
+msgstr "Original"
+
+#: KarbonPatternOptionsWidget.cpp:22
+#, kde-format
+msgid "Tiled"
+msgstr "Mosaico"
+
+#: KarbonPatternOptionsWidget.cpp:23
+#, kde-format
+msgid "Stretched"
+msgstr "Esticado"
+
+#: KarbonPatternOptionsWidget.cpp:25
+#, kde-format
+msgid "Top Left"
+msgstr "Superior esquerdo"
+
+#: KarbonPatternOptionsWidget.cpp:26
+#, kde-format
+msgid "Top"
+msgstr "Topo"
+
+#: KarbonPatternOptionsWidget.cpp:27
+#, kde-format
+msgid "Top Right"
+msgstr "Superior direito"
+
+#: KarbonPatternOptionsWidget.cpp:28
+#, kde-format
+msgid "Left"
+msgstr "Esquerda"
+
+#: KarbonPatternOptionsWidget.cpp:29
+#, kde-format
+msgid "Center"
+msgstr "Centro"
+
+#: KarbonPatternOptionsWidget.cpp:30
+#, kde-format
+msgid "Right"
+msgstr "Direita"
+
+#: KarbonPatternOptionsWidget.cpp:31
+#, kde-format
+msgid "Bottom Left"
+msgstr "Inferior esquerdo"
+
+#: KarbonPatternOptionsWidget.cpp:32
+#, kde-format
+msgid "Bottom"
+msgstr "Inferior"
+
+#: KarbonPatternOptionsWidget.cpp:33
+#, kde-format
+msgid "Bottom Right"
+msgstr "Inferior direito"
+
+#: KarbonPatternTool.cpp:273
+#, kde-format
+msgid "Pattern Options"
+msgstr "Opções do padrão"
+
+#: KarbonPatternTool.cpp:275
+#, kde-format
+msgid "Patterns"
+msgstr "Padrões"
+
+#: KarbonPatternToolFactory.cpp:17
+#, kde-format
+msgid "Pattern editing"
+msgstr "Edição de padrões"
+
+#, fuzzy
+#~| msgid "Effects and Connections"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects and Connections"
+#~ msgstr "Efeitos e conexões"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Filter Presets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter Presets"
+#~ msgstr "Predefinições do filtro"
+
+#, fuzzy
+#~| msgid "A calligraphic shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A calligraphic shape"
+#~ msgstr "Uma forma caligráfica"
+
+#, fuzzy
+#~| msgid "Calligraphic Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphic Shape"
+#~ msgstr "Forma caligráfica"
+
+#, fuzzy
+#~| msgid "Save profile as..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save profile as..."
+#~ msgstr "Salvar perfil como..."
+
+#, fuzzy
+#~| msgid "Remove profile"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove profile"
+#~ msgstr "Remover perfil"
+
+#, fuzzy
+#~| msgid "&Follow selected path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Follow selected path"
+#~ msgstr "Seguir o caminho &selecionado"
+
+#, fuzzy
+#~| msgid "Use tablet &pressure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use tablet &pressure"
+#~ msgstr "Usar a &pressão da tablete"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Largura:"
+
+#, fuzzy
+#~| msgid "Thinning:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thinning:"
+#~ msgstr "Afinação:"
+
+#, fuzzy
+#~| msgid "Use tablet &angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use tablet &angle"
+#~ msgstr "Us&ar o ângulo da tablete"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Ângulo:"
+
+#, fuzzy
+#~| msgid "Fixation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fixation:"
+#~ msgstr "Fixação:"
+
+#, fuzzy
+#~| msgid "Caps:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Caps:"
+#~ msgstr "Extremos:"
+
+#, fuzzy
+#~| msgid "Mass:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mass:"
+#~ msgstr "Massa:"
+
+#, fuzzy
+#~| msgid "Drag:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag:"
+#~ msgstr "Arrasto:"
+
+#, fuzzy
+#~| msgid "Current"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current"
+#~ msgstr "Atual"
+
+#, fuzzy
+#~| msgid "Profile name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Profile name"
+#~ msgstr "Nome do perfil"
+
+#, fuzzy
+#~| msgid "Please insert the name by which you want to save this profile:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please insert the name by which you want to save this profile:"
+#~ msgstr "Por favor, insira o nome com o qual deseja salvar este perfil:"
+
+#, fuzzy
+#~| msgid "Sorry, the name you entered is invalid."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sorry, the name you entered is invalid."
+#~ msgstr "Desculpe, mas o nome que você inseriu é inválido."
+
+#, fuzzy
+#~| msgctxt "invalid profile name"
+#~| msgid "Invalid name."
+#~ msgctxt "(qtundo-format) invalid profile name"
+#~ msgid "Invalid name."
+#~ msgstr "Nome inválido."
+
+#, fuzzy
+#~| msgid ""
+#~| "A profile with that name already exists.\n"
+#~| "Do you want to overwrite it?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "A profile with that name already exists.\n"
+#~ "Do you want to overwrite it?"
+#~ msgstr ""
+#~ "Já existe um perfil com esse nome.\n"
+#~ "Deseja substituí-lo?"
+
+#, fuzzy
+#~| msgid "Mouse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mouse"
+#~ msgstr "Mouse"
+
+#, fuzzy
+#~| msgid "Graphics Pen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Graphics Pen"
+#~ msgstr "Caneta gráfica"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill"
+#~ msgstr "Preencher"
+
+#, fuzzy
+#~| msgid "Calligraphy: increase width"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: increase width"
+#~ msgstr "Caligrafia: aumentar a espessura"
+
+#, fuzzy
+#~| msgid "Calligraphy: decrease width"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: decrease width"
+#~ msgstr "Caligrafia: diminuir a espessura"
+
+#, fuzzy
+#~| msgid "Calligraphy: increase angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: increase angle"
+#~ msgstr "Caligrafia: aumentar o ângulo"
+
+#, fuzzy
+#~| msgid "Calligraphy: decrease angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: decrease angle"
+#~ msgstr "Caligrafia: diminuir o ângulo"
+
+#, fuzzy
+#~| msgid "Calligraphy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy"
+#~ msgstr "Caligrafia"
+
+#, fuzzy
+#~| msgid "Add effect to current filter stack"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add effect to current filter stack"
+#~ msgstr "Adicionar o efeito à pilha de filtros atual"
+
+#, fuzzy
+#~| msgid "Add to filter presets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to filter presets"
+#~ msgstr "Adicionar às predefinições do filtro"
+
+#, fuzzy
+#~| msgid "Remove filter preset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove filter preset"
+#~ msgstr "Remover a predefinição do filtro"
+
+#, fuzzy
+#~| msgid "Effect name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect name"
+#~ msgstr "Nome do efeito"
+
+#, fuzzy
+#~| msgid "Please enter a name for the filter effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please enter a name for the filter effect"
+#~ msgstr "Por favor, insira um nome para o efeito do filtro"
+
+#, fuzzy
+#~| msgid "Filter Effect Editor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter Effect Editor"
+#~ msgstr "Editor de efeitos em filtros"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Efeitos"
+
+#, fuzzy
+#~| msgid "View and edit filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View and edit filter"
+#~ msgstr "Ver e editar o filtro"
+
+#, fuzzy
+#~| msgid "Remove filter from object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove filter from object"
+#~ msgstr "Remover o filtro do objeto"
+
+#, fuzzy
+#~| msgid "Add Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Filter"
+#~ msgstr "Adicionar um Filtro"
+
+#, fuzzy
+#~| msgid "Effect Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect Properties"
+#~ msgstr "Propriedades do efeito"
+
+#, fuzzy
+#~| msgid "X:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~| msgid "Y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "W:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W:"
+#~ msgstr "L:"
+
+#, fuzzy
+#~| msgid "H:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "H:"
+#~ msgstr "A:"
+
+#, fuzzy
+#~| msgid "Effect Region"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect Region"
+#~ msgstr "Região de efeito"
+
+#, fuzzy
+#~| msgid "Filter effects editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter effects editing"
+#~ msgstr "Edição de efeitos em filtros"
+
+#, fuzzy
+#~| msgid "Drag to move gradient position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move gradient position."
+#~ msgstr "Arraste para mover a posição do gradiente."
+
+#, fuzzy
+#~| msgid "Drag to move color stop. Double click to remove color stop."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move color stop. Double click to remove color stop."
+#~ msgstr ""
+#~ "Arraste para mover a paragem da cor. Duplo-clique para remover a paragem "
+#~ "da cor."
+
+#, fuzzy
+#~| msgid "Drag to move color stop."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move color stop."
+#~ msgstr "Arraste para mover a paragem da cor."
+
+#, fuzzy
+#~| msgid "Drag to move gradient position. Double click to insert color stop."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move gradient position. Double click to insert color stop."
+#~ msgstr ""
+#~ "Arraste para mover a posição do gradiente. Duplo-clique para inserir uma "
+#~ "paragem de cor."
+
+#, fuzzy
+#~| msgid "Edit Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Gradient"
+#~ msgstr "Editar gradiente"
+
+#, fuzzy
+#~| msgid "Predefined Gradients"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Predefined Gradients"
+#~ msgstr "Gradientes predefinidos"
+
+#, fuzzy
+#~| msgid "Gradient editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gradient editing"
+#~ msgstr "Edição de gradientes"
+
+#, fuzzy
+#~| msgid "Original"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original"
+#~ msgstr "Original"
+
+#, fuzzy
+#~| msgid "Tiled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tiled"
+#~ msgstr "Mosaico"
+
+#, fuzzy
+#~| msgid "Stretched"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stretched"
+#~ msgstr "Esticado"
+
+#, fuzzy
+#~| msgid "Top Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left"
+#~ msgstr "Superior esquerdo"
+
+#, fuzzy
+#~| msgid "Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top"
+#~ msgstr "Topo"
+
+#, fuzzy
+#~| msgid "Top Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right"
+#~ msgstr "Superior direito"
+
+#, fuzzy
+#~| msgid "Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "Esquerda"
+
+#, fuzzy
+#~| msgid "Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center"
+#~ msgstr "Centro"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "Direita"
+
+#, fuzzy
+#~| msgid "Bottom Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left"
+#~ msgstr "Inferior esquerdo"
+
+#, fuzzy
+#~| msgid "Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom"
+#~ msgstr "Inferior"
+
+#, fuzzy
+#~| msgid "Bottom Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right"
+#~ msgstr "Inferior direito"
+
+#, fuzzy
+#~| msgid "Pattern Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pattern Options"
+#~ msgstr "Opções do padrão"
+
+#, fuzzy
+#~| msgid "Patterns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Patterns"
+#~ msgstr "Padrões"
+
+#, fuzzy
+#~| msgid "Pattern editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pattern editing"
+#~ msgstr "Edição de padrões"
+
+#~ msgid "Target:"
+#~ msgstr "Destino:"
+
+#~ msgid "Line"
+#~ msgstr "Linha"
+
+#~ msgid "Type:"
+#~ msgstr "Tipo:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Linear"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Radial"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Cônico"
+
+#~ msgid "Repeat:"
+#~ msgstr "Repetição:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Nenhum"
+
+#~ msgid "Reflect"
+#~ msgstr "Reflexão"
+
+#~ msgid "Repeat"
+#~ msgstr "Repetir"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Opacidade global:"
+
+#~ msgid "Color stop:"
+#~ msgstr "Paragem da cor:"
+
+#~ msgid "Stop color."
+#~ msgstr "Cor de paragem."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Adicionar aos gradientes predefinidos"
+
+#~ msgid "Reference Point:"
+#~ msgstr "Ponto de referência:"
+
+#~ msgid "Reference Point Offset"
+#~ msgstr "Posição do ponto de referência"
+
+#~ msgid "Tile Offset"
+#~ msgstr "Posição do padrão"
+
+#~ msgid "Pattern Size"
+#~ msgstr "Tamanho do padrão"

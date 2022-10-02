@@ -1,0 +1,2215 @@
+# translation of kofficefilters.po to
+# Copyright (C) 2003, 2004, 2006 Free Software Foundation, Inc.
+#
+#
+# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003, 2004, 2006.
+# Nurali Abdurahmonov <mavnur@gamil.com>, 2006.
+msgid ""
+msgstr ""
+"Project-Id-Version: kofficefilters\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2006-12-17 13:44+0000\n"
+"Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
+"Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, fuzzy, kde-format
+#| msgid "PNG Export Options"
+msgid "%1 Export Options"
+msgstr "PNG eksport moslamalari"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, fuzzy, kde-format
+msgid "Page %1"
+msgstr "Bet "
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, fuzzy, kde-format
+msgid "Page:"
+msgstr "Sahifa: "
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, kde-format
+msgid "Size in Pixels"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgid "Image height:"
+msgstr "Uzunasi:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, kde-format
+msgid "Resolution:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, fuzzy, kde-format
+msgid "Color"
+msgstr "ranglar boʻshligʻi"
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr ""
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:299
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not open the requested file %1"
+msgstr "Fayldan oʻqib boʻlmadi."
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, fuzzy, kde-format
+#| msgid "Passwords"
+msgid "Enter password"
+msgstr "Maxfiy soʻzlar"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find path for type %1"
+msgstr "Fayldan oʻqib boʻlmadi."
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, fuzzy, kde-format
+msgid "Attribute \"%1\" not found"
+msgstr "Rasm %1"
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr "Fayldan oʻqib boʻlmadi."
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find relationships file \"%1\""
+msgstr "Fayldan oʻqib boʻlmadi."
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr "Fayldan oʻqib boʻlmadi."
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, fuzzy, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+"KWord faylini ajratishda xato roʻy berdi.\n"
+"Satr: %1, ustun: %2\n"
+"Xato xabari: %3"
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not write block"
+msgstr "Fayldan oʻqib boʻlmadi."
+
+#: sheets/csv/csvexport.cc:266
+#, fuzzy, kde-format
+msgid "<SHEETNAME>"
+msgstr "<SHEETNAME>"
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, fuzzy, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Boshqa (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, fuzzy, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Boshqa (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Boshqa (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:281 words/ascii/ImportDialog.cc:94
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "Quyidagi kodlash usulini topib boʻlmadi: %1"
+
+#: sheets/csv/csvimport.cc:74
+#, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "Kodlash usuli"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, kde-format
+msgid "E&ncoding:"
+msgstr "Ko&dlash usuli:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, kde-format
+msgid "End of Line"
+msgstr "Satrning oxiri"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, kde-format
+msgid "Sheets"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, fuzzy, kde-format
+msgid "Select sheets to export:"
+msgstr "Eksport qilish maydoni:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, fuzzy, kde-format
+msgid "Delimiter Line"
+msgstr "Ajratuvchi"
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, kde-format
+msgid "********<SHEETNAME>********"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, kde-format
+msgid "Cells"
+msgstr "Kataklar"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, kde-format
+msgid "Delimiter"
+msgstr "Ajratuvchi"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, kde-format
+msgid "Comma"
+msgstr "Vergul"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, kde-format
+msgid "Semicolon"
+msgstr "Nuqta vergul"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, kde-format
+msgid "Tabulator"
+msgstr "Tab"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, kde-format
+msgid "Space"
+msgstr "Boʻsh joy"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, kde-format
+msgid "Other:"
+msgstr "Boshqa:"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, kde-format
+msgid "Quotes:"
+msgstr "Qoʻshtirnoqlar:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, fuzzy, kde-format
+msgid "Export selection only"
+msgstr "Faqat tanlanganlarni eksport qilish"
+
+#: sheets/dbase/dbaseimport.cc:44
+#, fuzzy, kde-format
+msgid "File format is not supported."
+msgstr "Ushbu fayl turi qoʻllanilmaydi."
+
+#: sheets/dbase/dbaseimport.cc:49
+#, kde-format
+msgid "Could not read from file."
+msgstr "Fayldan oʻqib boʻlmadi."
+
+#: sheets/html/exportdialog.cc:21
+#, fuzzy, kde-format
+msgid "Export Sheet to HTML"
+msgstr "Jadvalni HTML'ga eksport qilish"
+
+#: sheets/html/exportdialog.cc:32
+#, kde-format
+msgid "Recommended: UTF-8"
+msgstr "Tavsiya qilinadi: UTF-8"
+
+#: sheets/html/exportdialog.cc:33
+#, fuzzy, kde-format
+msgid "Locale (%1)"
+msgstr "Jadval %1"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, kde-format
+msgid "En&coding:"
+msgstr "&Kodlash usuli:"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, fuzzy, kde-format
+msgid "Sheet Selection"
+msgstr "Betni tanlash"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, kde-format
+msgid "Select &All"
+msgstr "&Hammasini tanlash"
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, kde-format
+msgid "Desele&ct All"
+msgstr "Hammasini tanlashni b&ekor qilish"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, kde-format
+msgid "Use &separate files for each table"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, kde-format
+msgid "Style"
+msgstr "Uslub"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, kde-format
+msgid "Use &default style"
+msgstr "&Andoza uslubni qoʻllash"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, fuzzy, kde-format
+msgid "Use &external stylesheet:"
+msgstr "&Andoza uslubni qoʻllash"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, kde-format
+msgid "Layout"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, fuzzy, kde-format
+msgid "Use &borders"
+msgstr "&Chegaralardan foydalanish"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, kde-format
+msgid "Pi&xels between cells:"
+msgstr ""
+
+#: sheets/html/htmlexport.cc:200 sheets/html/htmlexport.cc:375
+#, kde-format
+msgid "Top"
+msgstr ""
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, fuzzy, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr "Esksport XSLT moslamasi"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, kde-format
+msgid "Document"
+msgstr "Hujjat"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, kde-format
+msgid "Document Style"
+msgstr "Hujjatning uslubi"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, kde-format
+msgid "Latex style"
+msgstr "LaTeX uslubi"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, fuzzy, kde-format
+#| msgid "KWord style"
+msgid "Words style"
+msgstr "KWord uslubi"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, kde-format
+msgid "Document Type"
+msgstr "Hujjatning turi"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, kde-format
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, kde-format
+msgid "Independent document"
+msgstr "Mustaqil hujjat"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, fuzzy, kde-format
+msgid "Document to include"
+msgstr "Hujjatning uslubi"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, kde-format
+msgid "Document class:"
+msgstr "Hujjatning sinfi:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, kde-format
+msgid "Quality:"
+msgstr "Sifati:"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, fuzzy, kde-format
+msgid "Final"
+msgstr "Final"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, fuzzy, kde-format
+msgid "Draft"
+msgstr "Namuna"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, kde-format
+msgid "Default font size:"
+msgstr "Shriftning andoza oʻlchami:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, kde-format
+msgid "Pictures"
+msgstr "Rasmlar"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, fuzzy, kde-format
+#| msgid "Convert the pictures"
+msgid "Convert the pictures:"
+msgstr "Rasmlarni aylantirish"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, kde-format
+msgid "Pictures directory:"
+msgstr "Rasmlar direktoriyasi:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, kde-format
+msgid "Language"
+msgstr "Til"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, kde-format
+msgid "Add"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, kde-format
+msgid "Remove"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, fuzzy, kde-format
+msgid "Contents"
+msgstr "Izohlar"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, fuzzy, kde-format
+#| msgid "Export informations about author"
+msgid "Export information about author:"
+msgstr "Muallif haqida maʼlumotni eksport qilish"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, fuzzy, kde-format
+#| msgid "Add a table of content"
+msgid "Add a table of content:"
+msgstr "Mundarijani qoʻshish"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, kde-format
+msgid "Notes"
+msgstr "Izohlar"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, kde-format
+msgid "Don't export"
+msgstr "Eksport qilinmasin"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, kde-format
+msgid "Export notes in margin notes"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, kde-format
+msgid "Export notes in comments"
+msgstr ""
+
+#: sheets/opencalc/opencalcexport.cc:890
+#, kde-format
+msgid "Page "
+msgstr "Bet "
+
+#: sheets/opencalc/opencalcimport.cc:1199
+#, fuzzy, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr "Fayl buzuq koʻrinadi. Jadvalga eʼtibor berilmadi."
+
+#: sheets/opencalc/opencalcimport.cc:1211
+#, fuzzy, kde-format
+msgid "Skipping a table."
+msgstr "Jadvalga eʼtibor berilmaydi."
+
+#: sheets/opencalc/opencalcimport.cc:1911
+#, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+
+#: sheets/opencalc/opencalcimport.cc:1912
+#, fuzzy, kde-format
+msgid "Unsupported document version"
+msgstr "Qoʻllanilmaydigan hujjat versiyasi"
+
+#: sheets/qpro/qproimport.cc:114
+#, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr ""
+
+#: sheets/qpro/qproimport.cc:219
+#, fuzzy, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr ""
+"Maxfiy soʻz bilan himoyalangan faylni ochib boʻlmadi.\n"
+"Shifrlash algoritmi berilmagan."
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Unable to find part for type %1"
+msgstr "Fayldan oʻqib boʻlmadi."
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:348
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1425
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr ""
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, fuzzy, kde-format
+msgid "Slide layout \"%1\" not found"
+msgstr "Rasm %1"
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, fuzzy, kde-format
+#| msgid "Slide Title"
+msgid "Slide %1"
+msgstr "Slaydning sarlavhasi"
+
+#: words/ascii/ImportDialog.cc:32
+#, fuzzy, kde-format
+#| msgid "KWord's Plain Text Import Filter"
+msgid "Words's Plain Text Import Filter"
+msgstr "KWord'ning odiy matnni import qilish filteri"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, fuzzy, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "KWord'ning odiy matnni import qilish filteri"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, kde-format
+msgid "End of Paragraph"
+msgstr "Paragrafning oxiri"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, kde-format
+msgid "&As is: At the end of line"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr ""
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, fuzzy, kde-format
+#| msgid "End of Line"
+msgid "End notes"
+msgstr "Satrning oxiri"
+
+#: words/msword-odf/conversion.cpp:828
+#, fuzzy, kde-format
+msgid "Even Pages Header"
+msgstr "Aniq sahifaning yuqori kolontituli"
+
+#: words/msword-odf/conversion.cpp:830
+#, fuzzy, kde-format
+msgid "Odd Pages Header"
+msgstr "Noaniq sahifa yuqori kolontituli"
+
+#: words/msword-odf/conversion.cpp:832
+#, fuzzy, kde-format
+msgid "Even Pages Footer"
+msgstr "Aniq sahifaning pastki kolontituli"
+
+#: words/msword-odf/conversion.cpp:834
+#, fuzzy, kde-format
+msgid "Odd Pages Footer"
+msgstr "Noaniq sahifa pastki kolontituli"
+
+#: words/msword-odf/conversion.cpp:836
+#, fuzzy, kde-format
+msgid "First Page Header"
+msgstr "Birinchi sahifa yuqori kolontituli"
+
+#: words/msword-odf/conversion.cpp:838
+#, fuzzy, kde-format
+msgid "First Page Footer"
+msgstr "Birinchi sahifa pastki kolontituli"
+
+#: words/msword-odf/texthandler.cpp:632
+#, kde-format
+msgid "Table %1"
+msgstr "Jadval %1"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr "Faylni yuklab boʻlmadi, u RTF hujjatiga oʻxshamaydi."
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, fuzzy, kde-format
+msgid "Words's RTF Import Filter"
+msgstr "KWord'ning PDF import filteri"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, fuzzy, kde-format
+msgid "The file cannot be loaded."
+msgstr "Faylni yuklab boʻlmadi, shuning uchun uni oʻqib ham boʻlmaydi."
+
+#~ msgid "Failed to read data."
+#~ msgstr "Maʼlumotni oʻqish muvaffaqiyatsiz tugadi."
+
+#~ msgid "Export Error"
+#~ msgstr "Eksport qilish xatosi"
+
+#, fuzzy
+#~ msgid "Malformed XML data."
+#~ msgstr "Xato XML maxlumotlari."
+
+#, fuzzy
+#~ msgid "Export to Image"
+#~ msgstr "Rasmlarni import qilish"
+
+#, fuzzy
+#~ msgid "Complete Page"
+#~ msgstr "Butun sahifa"
+
+#, fuzzy
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Sahifadagi obʼekt maydoni"
+
+#~ msgid "Area to export:"
+#~ msgstr "Eksport qilish maydoni:"
+
+#~ msgid "Height:"
+#~ msgstr "Uzunasi:"
+
+#~ msgid "Width:"
+#~ msgstr "Eni:"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image width:"
+#~ msgstr "Uzunasi:"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image height:"
+#~ msgstr "Uzunasi:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "ranglar boʻshligʻi"
+
+#, fuzzy
+#~| msgid "En&coding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&coding:"
+#~ msgstr "&Kodlash usuli:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet Selection"
+#~ msgstr "Betni tanlash"
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select &All"
+#~ msgstr "&Hammasini tanlash"
+
+#, fuzzy
+#~| msgid "Desele&ct All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Desele&ct All"
+#~ msgstr "Hammasini tanlashni b&ekor qilish"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Uslub"
+
+#, fuzzy
+#~| msgid "Use &default style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &default style"
+#~ msgstr "&Andoza uslubni qoʻllash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &external stylesheet:"
+#~ msgstr "&Andoza uslubni qoʻllash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &borders"
+#~ msgstr "&Chegaralardan foydalanish"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Hujjat"
+
+#, fuzzy
+#~| msgid "Document Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Style"
+#~ msgstr "Hujjatning uslubi"
+
+#, fuzzy
+#~| msgid "Latex style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex style"
+#~ msgstr "LaTeX uslubi"
+
+#, fuzzy
+#~| msgid "KWord style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words style"
+#~ msgstr "KWord uslubi"
+
+#, fuzzy
+#~| msgid "Document Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Type"
+#~ msgstr "Hujjatning turi"
+
+#, fuzzy
+#~| msgid "Independent document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Independent document"
+#~ msgstr "Mustaqil hujjat"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document to include"
+#~ msgstr "Hujjatning uslubi"
+
+#, fuzzy
+#~| msgid "Document class:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document class:"
+#~ msgstr "Hujjatning sinfi:"
+
+#, fuzzy
+#~| msgid "Quality:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quality:"
+#~ msgstr "Sifati:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Final"
+#~ msgstr "Final"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draft"
+#~ msgstr "Namuna"
+
+#, fuzzy
+#~| msgid "Default font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default font size:"
+#~ msgstr "Shriftning andoza oʻlchami:"
+
+#, fuzzy
+#~| msgid "Pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures"
+#~ msgstr "Rasmlar"
+
+#, fuzzy
+#~| msgid "Convert the pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convert the pictures:"
+#~ msgstr "Rasmlarni aylantirish"
+
+#, fuzzy
+#~| msgid "Pictures directory:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures directory:"
+#~ msgstr "Rasmlar direktoriyasi:"
+
+#, fuzzy
+#~| msgid "Language"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Til"
+
+#, fuzzy
+#~| msgid "Encoding"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encoding"
+#~ msgstr "Kodlash usuli"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "Izohlar"
+
+#, fuzzy
+#~| msgid "Export informations about author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export information about author:"
+#~ msgstr "Muallif haqida maʼlumotni eksport qilish"
+
+#, fuzzy
+#~| msgid "Add a table of content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a table of content:"
+#~ msgstr "Mundarijani qoʻshish"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Izohlar"
+
+#, fuzzy
+#~| msgid "Don't export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Don't export"
+#~ msgstr "Eksport qilinmasin"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in margin notes"
+#~ msgstr "Rasmlarni import qilish"
+
+#, fuzzy
+#~| msgid "E&ncoding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "Ko&dlash usuli:"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Line"
+#~ msgstr "Satrning oxiri"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select sheets to export:"
+#~ msgstr "Eksport qilish maydoni:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter Line"
+#~ msgstr "Ajratuvchi"
+
+#, fuzzy
+#~| msgid "Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cells"
+#~ msgstr "Kataklar"
+
+#, fuzzy
+#~| msgid "Delimiter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "Ajratuvchi"
+
+#, fuzzy
+#~| msgid "Comma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "Vergul"
+
+#, fuzzy
+#~| msgid "Semicolon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "Nuqta vergul"
+
+#, fuzzy
+#~| msgid "Tabulator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "Tab"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "Boʻsh joy"
+
+#, fuzzy
+#~| msgid "Other:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other:"
+#~ msgstr "Boshqa:"
+
+#, fuzzy
+#~| msgid "Quotes:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quotes:"
+#~ msgstr "Qoʻshtirnoqlar:"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export selection only"
+#~ msgstr "Faqat tanlanganlarni eksport qilish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page:"
+#~ msgstr "Sahifa: "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Complete Page"
+#~ msgstr "Butun sahifa"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Sahifadagi obʼekt maydoni"
+
+#, fuzzy
+#~| msgid "Area to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area to export:"
+#~ msgstr "Eksport qilish maydoni:"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "Uzunasi:"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Eni:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plain Text Import Dialog"
+#~ msgstr "KWord'ning odiy matnni import qilish filteri"
+
+#, fuzzy
+#~| msgid "End of Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Paragraph"
+#~ msgstr "Paragrafning oxiri"
+
+#, fuzzy
+#~| msgid "Export Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Error"
+#~ msgstr "Eksport qilish xatosi"
+
+#, fuzzy
+#~| msgid "Failed to read data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to read data."
+#~ msgstr "Maʼlumotni oʻqish muvaffaqiyatsiz tugadi."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Malformed XML data."
+#~ msgstr "Xato XML maxlumotlari."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to Image"
+#~ msgstr "Rasmlarni import qilish"
+
+#, fuzzy
+#~| msgid "PNG Export Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PNG Export Options"
+#~ msgstr "PNG eksport moslamalari"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace \"%1\" not found"
+#~ msgstr "Rasm %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open the requested file %1"
+#~ msgstr "Fayldan oʻqib boʻlmadi."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read ZIP directory of the requested file %1"
+#~ msgstr "Fayldan oʻqib boʻlmadi."
+
+#, fuzzy
+#~| msgid "Passwords"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter password"
+#~ msgstr "Maxfiy soʻzlar"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find path for type %1"
+#~ msgstr "Fayldan oʻqib boʻlmadi."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Element \"%1\" not found"
+#~ msgstr "Rasm %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attribute \"%1\" not found"
+#~ msgstr "Rasm %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgstr "Fayldan oʻqib boʻlmadi."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find relationships file \"%1\""
+#~ msgstr "Fayldan oʻqib boʻlmadi."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgstr "Fayldan oʻqib boʻlmadi."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Parsing error in the main document at line %1, column %2.\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "KWord faylini ajratishda xato roʻy berdi.\n"
+#~ "Satr: %1, ustun: %2\n"
+#~ "Xato xabari: %3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' not found."
+#~ msgstr "Rasm %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not write block"
+#~ msgstr "Fayldan oʻqib boʻlmadi."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME>"
+#~ msgstr "<SHEETNAME>"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Boshqa (%1)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Boshqa (%1)"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Other ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Boshqa (%1)"
+
+#, fuzzy
+#~| msgid "Cannot find encoding: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "Quyidagi kodlash usulini topib boʻlmadi: %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File format is not supported."
+#~ msgstr "Ushbu fayl turi qoʻllanilmaydi."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read from file."
+#~ msgstr "Fayldan oʻqib boʻlmadi."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Sheet to HTML"
+#~ msgstr "Jadvalni HTML'ga eksport qilish"
+
+#, fuzzy
+#~| msgid "Recommended: UTF-8"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recommended: UTF-8"
+#~ msgstr "Tavsiya qilinadi: UTF-8"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale (%1)"
+#~ msgstr "Jadval %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex Export Filter Configuration"
+#~ msgstr "Esksport XSLT moslamasi"
+
+#, fuzzy
+#~| msgid "Page "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page "
+#~ msgstr "Bet "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file seems to be corrupt. Skipping a table."
+#~ msgstr "Fayl buzuq koʻrinadi. Jadvalga eʼtibor berilmadi."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skipping a table."
+#~ msgstr "Jadvalga eʼtibor berilmaydi."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unsupported document version"
+#~ msgstr "Qoʻllanilmaydigan hujjat versiyasi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unable to open password protected files.\n"
+#~ "The password algorithm has not been published"
+#~ msgstr ""
+#~ "Maxfiy soʻz bilan himoyalangan faylni ochib boʻlmadi.\n"
+#~ "Shifrlash algoritmi berilmagan."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unable to find part for type %1"
+#~ msgstr "Fayldan oʻqib boʻlmadi."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide layout \"%1\" not found"
+#~ msgstr "Rasm %1"
+
+#, fuzzy
+#~| msgid "Slide Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Slaydning sarlavhasi"
+
+#, fuzzy
+#~| msgid "KWord's Plain Text Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's Plain Text Import Filter"
+#~ msgstr "KWord'ning odiy matnni import qilish filteri"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End notes"
+#~ msgstr "Satrning oxiri"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Aniq sahifaning yuqori kolontituli"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Noaniq sahifa yuqori kolontituli"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Aniq sahifaning pastki kolontituli"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Noaniq sahifa pastki kolontituli"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Header"
+#~ msgstr "Birinchi sahifa yuqori kolontituli"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Footer"
+#~ msgstr "Birinchi sahifa pastki kolontituli"
+
+#, fuzzy
+#~| msgid "Table %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table %1"
+#~ msgstr "Jadval %1"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgstr "Faylni yuklab boʻlmadi, u RTF hujjatiga oʻxshamaydi."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's RTF Import Filter"
+#~ msgstr "KWord'ning PDF import filteri"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded."
+#~ msgstr "Faylni yuklab boʻlmadi, shuning uchun uni oʻqib ham boʻlmaydi."
+
+#~ msgid "Failed to write file."
+#~ msgstr "Faylga yozish muvaffaqiyatsiz tugadi."
+
+#, fuzzy
+#~ msgid "%1 Export Error"
+#~ msgstr "Eksport qilish xatosi"
+
+#, fuzzy
+#~ msgid "Export Filter Parameters"
+#~ msgstr "Filtr moslamalarini eksport qilish"
+
+#~ msgid "Width (%):"
+#~ msgstr "Eni (%):"
+
+#~ msgid "Height (%):"
+#~ msgstr "Uzunasi (%):"
+
+#~ msgid "PNG Export Error"
+#~ msgstr "PNG eksport xatosi"
+
+#~ msgid "EPS Export"
+#~ msgstr "EPS eksport"
+
+#, fuzzy
+#~ msgid "Options"
+#~ msgstr "TIFF moslamalari"
+
+#, fuzzy
+#~ msgid "PostScript level 1"
+#~ msgstr "PostScript 1-chi daraja"
+
+#, fuzzy
+#~ msgid "PostScript level 2"
+#~ msgstr "PostScript 2-chi daraja"
+
+#, fuzzy
+#~ msgid "PostScript level 3"
+#~ msgstr "PostScript 3-chi daraja"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "PDF import"
+
+#~ msgid "Text"
+#~ msgstr "Matn"
+
+#~ msgid "Number"
+#~ msgstr "Son"
+
+#~ msgid "Currency"
+#~ msgstr "Pul belgisi"
+
+#~ msgid "Date"
+#~ msgstr "Sana"
+
+#~ msgid "None"
+#~ msgstr "Yoʻq"
+
+#, fuzzy
+#~ msgid "Common"
+#~ msgstr "Umumiy"
+
+#~ msgid "Other"
+#~ msgstr "Boshqa"
+
+#~ msgid "Ranges"
+#~ msgstr "Chegaralar"
+
+#~ msgid "Import lines:"
+#~ msgstr "Satrlarni import qilish:"
+
+#~ msgid "Import columns:"
+#~ msgstr "Ustunlarni import qilish:"
+
+#~ msgid "Update"
+#~ msgstr "Yangilash"
+
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#, fuzzy
+#~ msgid "&Cancel"
+#~ msgstr "Qoʻshimch&a"
+
+#, fuzzy
+#~| msgid ""
+#~| "An error has occurred while parsing the KWord file.\n"
+#~| "At line: %1, column %2\n"
+#~| "Error message: %3"
+#~ msgid ""
+#~ "An error has occurred while parsing the Words file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "KWord faylini ajratishda xato roʻy berdi.\n"
+#~ "Satr: %1, ustun: %2\n"
+#~ "Xato xabari: %3"
+
+#, fuzzy
+#~| msgid "KWord Export Filter Library"
+#~ msgid "Words Export Filter Library"
+#~ msgstr "KWord eksport filteri uchun kutubxona"
+
+#~ msgid "Export XSLT Configuration"
+#~ msgstr "Esksport XSLT moslamasi"
+
+#~ msgid "Open Document"
+#~ msgstr "Hujjatni ochish"
+
+#~ msgid "Import XSLT Configuration"
+#~ msgstr "Import XSLT moslamasi"
+
+#, fuzzy
+#~ msgid "Common xslt Files"
+#~ msgstr "Umumiy xslt fayllar"
+
+#, fuzzy
+#~ msgid "Personal xslt Files"
+#~ msgstr "Shaxsiy xslt fayllar"
+
+#~ msgid "Choose..."
+#~ msgstr "Tanlash"
+
+#~ msgid "SVG Export Error"
+#~ msgstr "SVG eksport xatosi"
+
+#~ msgid "LaTeX Export Error"
+#~ msgstr "LaTeX eksport xatosi"
+
+#, fuzzy
+#~ msgid "PNG Export Filter Parameters"
+#~ msgstr "PNG eksport filtri parametrlari"
+
+#, fuzzy
+#~ msgid "Height"
+#~ msgstr "Uzunasi:"
+
+#, fuzzy
+#~ msgid "Width"
+#~ msgstr "Eni:"
+
+#~ msgid "Height (%)"
+#~ msgstr "Uzunasi (%)"
+
+#~ msgid "Width (%)"
+#~ msgstr "Eni (%)"
+
+#~ msgid "Slide Title"
+#~ msgstr "Slaydning sarlavhasi"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Picture %1"
+#~ msgstr "Rasm %1"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Table %3, row %1, column %2"
+#~ msgstr "Jadval %3, satr %1, ustun %2"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the AbiWord file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "AbiWord faylini ajratishda xato roʻy berdi.\n"
+#~ "Satr: %1, ustun: %2\n"
+#~ "Xato xabari: %3"
+
+#~ msgid "AbiWord Import Filter"
+#~ msgstr "AbiWord import filteri"
+
+#, fuzzy
+#~ msgctxt "Frameset name"
+#~ msgid "Main Text Frameset"
+#~ msgstr "Rasm %1"
+
+#~ msgid "An error occurred during the load of the AbiWord file: %1"
+#~ msgstr "AbiWord faylini yuklashda xato roʻy berdi: %1"
+
+#~ msgid "Unable to save document information."
+#~ msgstr "Hujjat haqida maʼlumotni saqlab boʻlmadi."
+
+#~ msgid "Unable to save main document."
+#~ msgstr "Asosiy hujjatni saqlab boʻlmadi."
+
+#, fuzzy
+#~ msgctxt "Frameset name"
+#~ msgid "Footnote %1"
+#~ msgstr "Rasm %1"
+
+#, fuzzy
+#~| msgid "KWord's Plain Text Export Filter"
+#~ msgid "Words's Plain Text Export Filter"
+#~ msgstr "KWord uchun oddiy matn eksport filteri"
+
+#, fuzzy
+#~| msgid "KWord's HTML Export Filter"
+#~ msgid "Words's HTML Export Filter"
+#~ msgstr "KWord uchun HTML eksport filteri"
+
+#~ msgid "Untitled Document"
+#~ msgstr "Sarlavhasiz hujjat"
+
+#~ msgid "Latex Import Filter Parameters"
+#~ msgstr "LaTeX import filterining moslamalari"
+
+#~ msgid "Unicode"
+#~ msgstr "Yunikod"
+
+#~ msgid "latin1"
+#~ msgstr "Lotin1"
+
+#~ msgid "New document"
+#~ msgstr "Yangi hujjat"
+
+#, fuzzy
+#~ msgid "Embedded document"
+#~ msgstr "Oʻrnatilgan hajjat"
+
+#, fuzzy
+#~| msgid "KWord's MS Write Import Filter"
+#~ msgid "Words's MS Write Import Filter"
+#~ msgstr "KWord'ning MS Write import filteri"
+
+#, fuzzy
+#~ msgid "Header"
+#~ msgstr "Yuqori kolontitul"
+
+#, fuzzy
+#~ msgid "Footer"
+#~ msgstr "Pastki kolontitul"
+
+#, fuzzy
+#~ msgid "Main Text Frameset"
+#~ msgstr "Freymlar toʻplami %1"
+
+#~ msgctxt "Object name"
+#~ msgid "Table %1"
+#~ msgstr "Jadval %1"
+
+#, fuzzy
+#~ msgctxt "Object name"
+#~ msgid "Table Frame %1"
+#~ msgstr "Jadval %1"
+
+#, fuzzy
+#~| msgctxt "Pseudo-author for annotations"
+#~| msgid "KWord 1.3"
+#~ msgctxt "Pseudo-author for annotations"
+#~ msgid "KWord 1.3"
+#~ msgstr "KWord 1.3"
+
+#, fuzzy
+#~ msgid "Plain Text Export Dialog"
+#~ msgstr "KWord uchun oddiy matn eksport filteri"
+
+#, fuzzy
+#~ msgid "HTML Export Dialog"
+#~ msgstr "HTML eksporti"
+
+#~ msgid "&HTML 4.01"
+#~ msgstr "&HTML 4.01"
+
+#, fuzzy
+#~ msgid "HTML 4.01 (For older HTML user agents) "
+#~ msgstr "HTML 4.01 (eskicha HTML qoʻllovchi dasturlar uchun) "
+
+#~ msgid "&XHTML 1.0"
+#~ msgstr "&XHTML 1.0"
+
+#~ msgid "XHTML 1.0"
+#~ msgstr "XHTML 1.0"
+
+#, fuzzy
+#~ msgid "Mode"
+#~ msgstr "Usul"
+
+#, fuzzy
+#~ msgid "MS Write Import Dialog"
+#~ msgstr "KWord'ning MS Write import filteri"
+
+#~ msgid "&Encoding"
+#~ msgstr "&Kodlash usuli"
+
+#~ msgid "&Other encoding:"
+#~ msgstr "&Boshqa kodlash usuli:"
+
+#~ msgid "&Default encoding (CP 1252)"
+#~ msgstr "&Andoza kodlash usuli (CP 1252):"
+
+#~ msgid "&Advanced"
+#~ msgstr "Qoʻshimch&a"
+
+#, fuzzy
+#~| msgid "PDF Import"
+#~ msgid "DCM Import"
+#~ msgstr "PDF import"
+
+#, fuzzy
+#~ msgid "Import options"
+#~ msgstr "PNG eksport moslamalari"
+
+#, fuzzy
+#~ msgid ""
+#~ "The document cannot be loaded, as it seems not to follow the RTF syntax."
+#~ msgstr "Faylni yuklab boʻlmadi, u RTF hujjatiga oʻxshamaydi."
+
+#, fuzzy
+#~ msgid ""
+#~ "The RTF document cannot be loaded, as it has an unexpected first keyword: "
+#~ "\\%1."
+#~ msgstr "Faylni yuklab boʻlmadi, shuning uchun uni oʻqib ham boʻlmaydi."
+
+#, fuzzy
+#~ msgid "KFormula Import Error"
+#~ msgstr "Mathml import xatosi"
+
+#, fuzzy
+#~ msgid "KFormula1.3 Import Filter"
+#~ msgstr "AbiWord import filteri"
+
+#~ msgid "Picture %1"
+#~ msgstr "Rasm %1"
+
+#~ msgid "JPEG Export Options"
+#~ msgstr "JPEG eksport moslamalari"
+
+#~ msgid "TIFF Export Options"
+#~ msgstr "TIFF eksport moslamalari"
+
+#~ msgid "All Images"
+#~ msgstr "Hamma rasmlar"
+
+#, fuzzy
+#~ msgid "PDFImportWidget"
+#~ msgstr "PDF import"
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "Sahifa: "
+
+#, fuzzy
+#~ msgid "&All pages"
+#~ msgstr "Hamma rasmlar"
+
+#, fuzzy
+#~ msgid "&First page"
+#~ msgstr "Birinchi sahifa yuqori kolontituli"
+
+#, fuzzy
+#~ msgid "Options of Your PNG"
+#~ msgstr "PNG faylingiz moslamasi"
+
+#~ msgid "Compress:"
+#~ msgstr "Qisish:"
+
+#, fuzzy
+#~| msgid "Fast"
+#~ msgctxt "The file will save fast but will not be compressed a lot"
+#~ msgid "Fast"
+#~ msgstr "Tez"
+
+#, fuzzy
+#~| msgid "Small"
+#~ msgctxt "the file will be small"
+#~ msgid "Small"
+#~ msgstr "Kichik"
+
+#, fuzzy
+#~ msgid "Basic"
+#~ msgstr "Klassik"
+
+#, fuzzy
+#~| msgid "Small"
+#~ msgctxt ""
+#~ "the file will be much compressed, thus small, but quality will be bad"
+#~ msgid "Small"
+#~ msgstr "Kichik"
+
+#, fuzzy
+#~| msgid "&Advanced"
+#~ msgid "Advanced quality"
+#~ msgstr "Qoʻshimch&a"
+
+#, fuzzy
+#~ msgid "Formats:"
+#~ msgstr "Pastki kolontitul"
+
+#, fuzzy
+#~ msgid "Options of Your TIFF"
+#~ msgstr "TIFF faylingiz moslamasi"
+
+#~ msgid "TIFF Options"
+#~ msgstr "TIFF moslamalari"
+
+#~ msgid "Compression type:"
+#~ msgstr "Qisish usuli:"
+
+#, fuzzy
+#~ msgid "JPEG DCT Compression"
+#~ msgstr "JPEG DCT qisish turi"
+
+#, fuzzy
+#~ msgid "Deflate (ZIP)"
+#~ msgstr "Andoza (ZIP)"
+
+#, fuzzy
+#~ msgid "Predictor:"
+#~ msgstr "Rasmlar direktoriyasi:"
+
+#~ msgid "JPEG Compression Options"
+#~ msgstr "JPEG qisish moslamalari"
+
+#, fuzzy
+#~ msgid "Smallest"
+#~ msgstr "Juda kichkina"
+
+#, fuzzy
+#~ msgid "Best"
+#~ msgstr "Juda sifatli"
+
+#, fuzzy
+#~ msgid "Deflate Compression Options"
+#~ msgstr "JPEG qisish moslamalari"
+
+#, fuzzy
+#~| msgid "Fast"
+#~ msgctxt "save the file quickly, but do not compress very well"
+#~ msgid "Fast"
+#~ msgstr "Tez"
+
+#, fuzzy
+#~| msgid "Small"
+#~ msgctxt "make the file small, at the price of a longer saving time"
+#~ msgid "Small"
+#~ msgstr "Kichik"
+
+#, fuzzy
+#~ msgid "Fax mode:"
+#~ msgstr "Faks usuli:"
+
+#, fuzzy
+#~ msgid "Classic"
+#~ msgstr "Klassik"
+
+#, fuzzy
+#~ msgid "No RTC"
+#~ msgstr "RTC emas"
+
+#, fuzzy
+#~ msgid "No EOL"
+#~ msgstr "EOL emas"
+
+#, fuzzy
+#~ msgid "Pixar Log Compression Options"
+#~ msgstr "JPEG qisish moslamalari"
+
+#, fuzzy
+#~| msgid "Fast"
+#~ msgctxt "save quickly, but do not compress a lot"
+#~ msgid "Fast"
+#~ msgstr "Tez"
+
+#, fuzzy
+#~| msgid "Small"
+#~ msgctxt "make a very small file, but take a long time saving"
+#~ msgid "Small"
+#~ msgstr "Kichik"
+
+#~ msgid "Initializing..."
+#~ msgstr "Ishga tayorlanmoqda..."
+
+#~ msgid "First pass: page #%1..."
+#~ msgstr "Birinchi bosqich: bet #%1..."
+
+#~ msgid "Second pass: page #%1..."
+#~ msgstr "Ikkinchi bosqich: bet #%1..."
+
+#, fuzzy
+#~ msgid "Body Frameset #%1"
+#~ msgstr "Yuqori kolontitul #%1"
+
+#, fuzzy
+#~ msgid "Header Frameset #%1"
+#~ msgstr "Yuqori kolontitul #%1"
+
+#, fuzzy
+#~ msgid "Footer Frameset #%1"
+#~ msgstr "Pastki kolontitul #%1"
+
+#, fuzzy
+#~ msgid "Text Frameset %1"
+#~ msgstr "Freymlar toʻplami %1"
+
+#~ msgid "KWord's PDF Import Filter"
+#~ msgstr "KWord'ning PDF import filteri"
+
+#~ msgid "Page Selection"
+#~ msgstr "Betni tanlash"
+
+#~ msgid "All (%1 pages)"
+#~ msgstr "Hammasi (%1 bet)"
+
+#~ msgid "Range:"
+#~ msgstr "Chegara:"
+
+#~ msgid "Import images"
+#~ msgstr "Rasmlarni import qilish"
+
+#~ msgid "Owner:"
+#~ msgstr "Egasi:"
+
+#~ msgid "User:"
+#~ msgstr "Foydalanuvchi:"
+
+#~ msgctxt "Table_Name Cell row,column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 Katak %2,%3"
+
+#, fuzzy
+#~ msgid "Colorspace"
+#~ msgstr "ranglar boʻshligʻi"
+
+#, fuzzy
+#~ msgid "&Document mode"
+#~ msgstr "&Hujjatning turi"
+
+#, fuzzy
+#~ msgid "&RGB"
+#~ msgstr "&RGB"
+
+#, fuzzy
+#~ msgid "&16 bits per channel"
+#~ msgstr "Har bir kanal &16 bitdan"
+
+#, fuzzy
+#~ msgid "Alt+1"
+#~ msgstr "Alt+1"
+
+#, fuzzy
+#~ msgid "&8 bits per channel"
+#~ msgstr "Har bir kanal &8 bitdan"
+
+#, fuzzy
+#~ msgid "Alt+8"
+#~ msgstr "Alt+8"
+
+#~ msgid "&Update Preview"
+#~ msgstr "Koʻrib chiqishni yan&gilash"
+
+#~ msgid "Color Settings"
+#~ msgstr "Rang moslamalari"
+
+#~ msgid "Brightness:"
+#~ msgstr "Yorugʻlik:"
+
+#~ msgid "Brightness. 1.0 is default"
+#~ msgstr "Yorugʻlik. 1.0 - andoza"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "do not compress the file at all"
+#~ msgid "None"
+#~ msgstr "Yoʻq"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "do not use any predictor"
+#~ msgid "None"
+#~ msgstr "Yoʻq"
+
+#, fuzzy
+#~| msgid "Fast"
+#~ msgctxt "save the file quickly, but don't compress very well"
+#~ msgid "Fast"
+#~ msgstr "Tez"
+
+#, fuzzy
+#~ msgid "Alt+O"
+#~ msgstr "Alt+1"
+
+#~ msgid "Importing..."
+#~ msgstr "Import qilinmoqda..."
+
+#~ msgid "Saving..."
+#~ msgstr "Saqlanmoqda..."
+
+#~ msgid "Loading..."
+#~ msgstr "Yuklanmoqda..."
+
+#, fuzzy
+#~ msgid "Export hidden layers"
+#~ msgstr "Filtr moslamalarini eksport qilish"
+
+#~ msgid "BMP Export Error"
+#~ msgstr "BMP eksport xatosi"
+
+#~ msgid "MNG Export Error"
+#~ msgstr "MNG eksport xatosi"
+
+#~ msgid "Xbm Export Error"
+#~ msgstr "Xbm eksport xatosi"
+
+#~ msgid "Xpm Export Error"
+#~ msgstr "Xpm eksport xatosi"
+
+#~ msgid "JPEG Export Error"
+#~ msgstr "JPEG eksport xatosi"
+
+#, fuzzy
+#~ msgid "KSpread Kexi Import Filter"
+#~ msgstr "KWord 1.3 import filteri"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Son"
+
+#~ msgid "Unable to open output file."
+#~ msgstr "Natija faylni ochib boʻlmadi."
+
+#, fuzzy
+#~ msgid "Failed to open input file: %1"
+#~ msgstr "Natija faylni ochib boʻlmadi."
+
+#~ msgid "Failed to write formula."
+#~ msgstr "Formulani yozish muvaffaqiyatsiz tugadi."
+
+#~ msgid "MathML Export Error"
+#~ msgstr "Mathml eksport xatosi"

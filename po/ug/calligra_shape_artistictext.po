@@ -1,0 +1,270 @@
+# Uyghur translation for ArtisticTextShape.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sahran <sahran.ug@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ArtisticTextShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-09-08 07:04+0900\n"
+"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language: ug\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: AddTextRangeCommand.cpp:15 AddTextRangeCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Add text range"
+msgstr "تېكىست دائىرىسى قوشۇش"
+
+#: ArtisticTextShapeFactory.cpp:17
+#, kde-format
+msgid "ArtisticTextShape"
+msgstr "ھۆسنخەت شەكلى"
+
+#: ArtisticTextShapeFactory.cpp:19
+#, kde-format
+msgid "A shape which shows a single text line"
+msgstr "يەككە قۇرلۇق تېكىست كۆرسىتىدىغان شەكىل"
+
+#: ArtisticTextShapeFactory.cpp:29
+#, kde-format
+msgid "Artistic Text"
+msgstr "ھۆسنخەت"
+
+#: ArtisticTextTool.cpp:64
+#, kde-format
+msgid "Detach Path"
+msgstr "ئايرىلىش يولى"
+
+#: ArtisticTextTool.cpp:69
+#, kde-format
+msgid "Convert to Path"
+msgstr "يولغا ئۆزگەرت"
+
+#: ArtisticTextTool.cpp:74
+#, kde-format
+msgid "Bold text"
+msgstr "توم خەت"
+
+#: ArtisticTextTool.cpp:79
+#, kde-format
+msgid "Italic text"
+msgstr "يانتۇ خەت"
+
+#: ArtisticTextTool.cpp:84
+#, kde-format
+msgid "Superscript"
+msgstr "يۇقىرى ئىندېكس"
+
+#: ArtisticTextTool.cpp:89
+#, kde-format
+msgid "Subscript"
+msgstr "تۆۋەنكى ئىندېكس"
+
+#: ArtisticTextTool.cpp:94
+#, kde-format
+msgid "Anchor at Start"
+msgstr ""
+
+#: ArtisticTextTool.cpp:99
+#, kde-format
+msgid "Anchor at Middle"
+msgstr ""
+
+#: ArtisticTextTool.cpp:104
+#, kde-format
+msgid "Anchor at End"
+msgstr ""
+
+#: ArtisticTextTool.cpp:295
+#, kde-format
+msgid "Click to change cursor position."
+msgstr "چېكىلسە نۇربەلگە ئورنى ئۆزگىرىدۇ."
+
+#: ArtisticTextTool.cpp:297
+#, kde-format
+msgid "Click to select text shape."
+msgstr "چېكىلسە تېكىست شەكلى تاللىنىدۇ."
+
+#: ArtisticTextTool.cpp:300
+#, kde-format
+msgid "Double click to put text on path."
+msgstr "قوش چېكىلسە تېكىست يولغا قويۇلىدۇ."
+
+#: ArtisticTextTool.cpp:303
+#, kde-format
+msgid "Drag handle to change start offset."
+msgstr ""
+
+#: ArtisticTextTool.cpp:307
+#, fuzzy, kde-format
+#| msgid "Press return to finish editing."
+msgid "Press escape to finish editing."
+msgstr "Enter بېسىلسا تەھرىرلەش تاماملىنىدۇ."
+
+#: ArtisticTextTool.cpp:489
+#, kde-format
+msgid "Press return to finish editing."
+msgstr "Enter بېسىلسا تەھرىرلەش تاماملىنىدۇ."
+
+#: ArtisticTextTool.cpp:583
+msgctxt "(qtundo-format)"
+msgid "Convert to Path"
+msgstr "يولغا ئۆزگەرت"
+
+#: ArtisticTextTool.cpp:596
+#, kde-format
+msgid "Text Properties"
+msgstr "تېكىست خاسلىقى"
+
+#: ArtisticTextTool.cpp:606
+#, kde-format
+msgid "Text On Path"
+msgstr "يولدىكى تېكىست"
+
+#: ArtisticTextToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Artistic Text Editing Tool"
+msgid "Artistic text editing"
+msgstr "ھۆسنخەت تەھرىرلەش قورالى"
+
+#: AttachTextToPathCommand.cpp:15
+msgctxt "(qtundo-format)"
+msgid "Attach Path"
+msgstr "يول قوش"
+
+#: ChangeTextAnchorCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Change text anchor"
+msgstr "تېكىست لەڭگەر ئۆزگەرت"
+
+#: ChangeTextFontCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Change font"
+msgstr "خەت نۇسخا ئۆزگەرت"
+
+#: ChangeTextOffsetCommand.cpp:15
+msgctxt "(qtundo-format)"
+msgid "Change Text Offset"
+msgstr "تېكىست ئېغىشىنى ئۆزگەرت"
+
+#: DetachTextFromPathCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Detach Path"
+msgstr "ئايرىلىش يولى"
+
+#: RemoveTextRangeCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Remove text range"
+msgstr "تېكىست چىقىرىۋېتىش دائىرىسى"
+
+#: ReplaceTextRangeCommand.cpp:14 ReplaceTextRangeCommand.cpp:22
+#: ReplaceTextRangeCommand.cpp:30
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Remove text range"
+msgctxt "(qtundo-format)"
+msgid "Replace text range"
+msgstr "تېكىست چىقىرىۋېتىش دائىرىسى"
+
+#, fuzzy
+#~| msgid "ArtisticTextShape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArtisticTextShape"
+#~ msgstr "ھۆسنخەت شەكلى"
+
+#, fuzzy
+#~| msgid "A shape which shows a single text line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape which shows a single text line"
+#~ msgstr "يەككە قۇرلۇق تېكىست كۆرسىتىدىغان شەكىل"
+
+#, fuzzy
+#~| msgid "Artistic Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Artistic Text"
+#~ msgstr "ھۆسنخەت"
+
+#, fuzzy
+#~| msgid "Bold text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bold text"
+#~ msgstr "توم خەت"
+
+#, fuzzy
+#~| msgid "Italic text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Italic text"
+#~ msgstr "يانتۇ خەت"
+
+#, fuzzy
+#~| msgid "Superscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Superscript"
+#~ msgstr "يۇقىرى ئىندېكس"
+
+#, fuzzy
+#~| msgid "Subscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subscript"
+#~ msgstr "تۆۋەنكى ئىندېكس"
+
+#, fuzzy
+#~| msgid "Click to change cursor position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click to change cursor position."
+#~ msgstr "چېكىلسە نۇربەلگە ئورنى ئۆزگىرىدۇ."
+
+#, fuzzy
+#~| msgid "Click to select text shape."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click to select text shape."
+#~ msgstr "چېكىلسە تېكىست شەكلى تاللىنىدۇ."
+
+#, fuzzy
+#~| msgid "Double click to put text on path."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to put text on path."
+#~ msgstr "قوش چېكىلسە تېكىست يولغا قويۇلىدۇ."
+
+#, fuzzy
+#~| msgid "Press return to finish editing."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press return to finish editing."
+#~ msgstr "Enter بېسىلسا تەھرىرلەش تاماملىنىدۇ."
+
+#, fuzzy
+#~| msgid "Text Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Properties"
+#~ msgstr "تېكىست خاسلىقى"
+
+#, fuzzy
+#~| msgid "Text On Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text On Path"
+#~ msgstr "يولدىكى تېكىست"
+
+#, fuzzy
+#~| msgid "Artistic Text Editing Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Artistic text editing"
+#~ msgstr "ھۆسنخەت تەھرىرلەش قورالى"
+
+#~ msgid "Form"
+#~ msgstr "كۆزنەك"
+
+#~ msgid "Family:"
+#~ msgstr "خەت نۇسخا تۈرى:"
+
+#~ msgid "Size:"
+#~ msgstr "چوڭلۇقى:"
+
+#~ msgid "Offset:"
+#~ msgstr "ئېغىش:"

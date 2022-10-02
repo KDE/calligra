@@ -1,0 +1,70 @@
+# TemplateShape.po translation el
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stelios <sstavra@gmail.com>, 2012, 2017.
+msgid ""
+msgstr ""
+"Project-Id-Version: TemplateShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2017-04-29 00:20+0200\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: ChangeSomethingCommand.cpp:34
+msgctxt "(qtundo-format)"
+msgid "Change something"
+msgstr "Αλλάξτε κάτι"
+
+#: TemplateShapeFactory.cpp:32
+#, kde-format
+msgid "Template shape"
+msgstr "Σχήμα προτύπου"
+
+#: TemplateShapeFactory.cpp:34
+#, kde-format
+msgid "Simple shape that is used as a template for developing other shapes."
+msgstr "Απλό σχήμα που χρησιμεύει ως πρότυπο για την ανάπτυξη άλλων σχημάτων."
+
+#: TemplateTool.cpp:77
+#, kde-format
+msgid "Open"
+msgstr "Άνοιγμα"
+
+#: TemplateToolFactory.cpp:26
+#, kde-format
+msgid "Template shape editing"
+msgstr "Επεξεργασία σχήματος προτύπου"
+
+#, fuzzy
+#~| msgid "Template shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Template shape"
+#~ msgstr "Σχήμα προτύπου"
+
+#, fuzzy
+#~| msgid ""
+#~| "Simple shape that is used as a template for developing other shapes."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Simple shape that is used as a template for developing other shapes."
+#~ msgstr ""
+#~ "Απλό σχήμα που χρησιμεύει ως πρότυπο για την ανάπτυξη άλλων σχημάτων."
+
+#, fuzzy
+#~| msgid "Open"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open"
+#~ msgstr "Άνοιγμα"
+
+#, fuzzy
+#~| msgid "Template shape editing tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Template shape editing"
+#~ msgstr "Εργαλείο επεξεργασίας σχήματος προτύπου"

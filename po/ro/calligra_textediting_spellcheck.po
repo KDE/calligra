@@ -1,0 +1,92 @@
+# translation of SpellCheckPlugin to Romanian
+# Copyright (C) 2008 This_file_is_part_of_KDE
+# This file is distributed under the same license as the SpellCheckPlugin package.
+# Laurenţiu Buzdugan <lbuz@rolix.org>, 2008".
+# Sergiu Bivol <sergiu@cip.md>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2009-04-26 13:57+0300\n"
+"Last-Translator: Sergiu Bivol <sergiu@ase.md>\n"
+"Language-Team: Romanian <kde-i18n-ro@lists.kde.org>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "&Configurare verificare ortografică..."
+
+#: SpellCheck.cpp:49
+#, fuzzy, kde-format
+#| msgid "Configure Spell Check"
+msgid "Auto Spell Check"
+msgstr "Configurează verificarea ortografică"
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr ""
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr ""
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Configure &Spell Checking..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "&Configurare verificare ortografică..."
+
+#, fuzzy
+#~| msgid "Configure Spell Check"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Configurează verificarea ortografică"
+
+#, fuzzy
+#~| msgid "Ignore these words"
+#~ msgid "Ignore Word"
+#~ msgstr "Ignoră aceste cuvinte"
+
+#, fuzzy
+#~| msgid "Configure Spell Check"
+#~ msgid "Spell Check"
+#~ msgstr "Configurează verificarea ortografică"
+
+#~ msgid "Spell Check Configuration"
+#~ msgstr "Configurare verificare ortografică"
+
+#~ msgid "Default Language:"
+#~ msgstr "Limba implicită:"
+
+#~ msgid "Options"
+#~ msgstr "Opțiuni"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "Activează verificarea în f&undal a ortografiei"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "Sare peste cuvintele cu &MAJUSCULE"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "Sare peste cuvintele &compuse"
+
+#~ msgid "&Add"
+#~ msgstr "&Adaugă"
+
+#~ msgid "&Remove"
+#~ msgstr "&Elimină"

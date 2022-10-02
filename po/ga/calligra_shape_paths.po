@@ -1,0 +1,676 @@
+# Irish translation of PathShapes
+# Copyright (C) 2009 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PathShapes package.
+# Kevin Scannell <kscanne@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice/PathShapes.po\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2007-07-22 14:30-0500\n"
+"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
+"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
+"3 : 4\n"
+
+#: ellipse/EllipseShapeConfigCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change ellipse"
+msgstr "Athraigh an t-éilips"
+
+# ok
+#: ellipse/EllipseShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Arc"
+msgstr "Arc"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Pie"
+msgstr "Pióg"
+
+# geom. or music is cuma
+#: ellipse/EllipseShapeConfigWidget.cpp:18
+#, kde-format
+msgid "Chord"
+msgstr "Corda"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, EllipseShapeConfigWidget)
+#: ellipse/EllipseShapeConfigWidget.ui:13
+#, kde-format
+msgid "Ellipse Shape"
+msgstr "Giuirléid Éilips"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ellipse/EllipseShapeConfigWidget.ui:19 spiral/SpiralShapeConfigWidget.ui:19
+#, kde-format
+msgid "Type:"
+msgstr "Cineál:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ellipse/EllipseShapeConfigWidget.ui:29
+#, kde-format
+msgid "Start angle:"
+msgstr "Uillinn tosaigh:"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, startAngle)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, endAngle)
+#: ellipse/EllipseShapeConfigWidget.ui:39
+#: ellipse/EllipseShapeConfigWidget.ui:56
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ellipse/EllipseShapeConfigWidget.ui:46
+#, kde-format
+msgid "End angle:"
+msgstr "Uillinn deiridh:"
+
+#. i18n: ectx: property (text), widget (QPushButton, closeEllipse)
+#: ellipse/EllipseShapeConfigWidget.ui:63
+#, kde-format
+msgid "Close ellipse"
+msgstr "Dún an t-éilips"
+
+#: ellipse/EllipseShapeFactory.cpp:21
+#, kde-format
+msgid "Ellipse"
+msgstr "Éilips"
+
+#: ellipse/EllipseShapeFactory.cpp:23
+#, kde-format
+msgid "An ellipse"
+msgstr "Éilips"
+
+#: enhancedpath/CalloutShapeFactory.cpp:31
+#: enhancedpath/CalloutShapeFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "A callout"
+msgid "A callout shape"
+msgstr "Tagrán"
+
+#: enhancedpath/CalloutShapeFactory.cpp:149
+#, kde-format
+msgid "Rectangular Callout"
+msgstr ""
+
+#: enhancedpath/CalloutShapeFactory.cpp:151
+#, fuzzy, kde-format
+#| msgid "A rectangle shape"
+msgid "A rectangular callout"
+msgstr "Dronuilleog"
+
+#: enhancedpath/CalloutShapeFactory.cpp:231
+#, fuzzy, kde-format
+#| msgid "Callout"
+msgid "Rounded Callout"
+msgstr "Tagrán"
+
+#: enhancedpath/CalloutShapeFactory.cpp:233
+#, fuzzy, kde-format
+#| msgid "A rectangle shape"
+msgid "A rounded rectangular callout"
+msgstr "Dronuilleog"
+
+#: enhancedpath/CalloutToolFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Callout"
+msgid "Callout editing"
+msgstr "Tagrán"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:26
+#, kde-format
+msgid "An enhanced path shape"
+msgstr "Giuirléid fheabhsaithe chonaire"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:28
+#, kde-format
+msgid "An enhanced path"
+msgstr "Conair fheabhsaithe"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:145
+#, kde-format
+msgid "Cross"
+msgstr "Croisín"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:147
+#, kde-format
+msgid "A cross"
+msgstr "Croisín"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:180
+#: enhancedpath/EnhancedPathShapeFactory.cpp:213
+#: enhancedpath/EnhancedPathShapeFactory.cpp:246
+#: enhancedpath/EnhancedPathShapeFactory.cpp:279
+#, kde-format
+msgid "Arrow"
+msgstr "Saighead"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:182
+#: enhancedpath/EnhancedPathShapeFactory.cpp:215
+#: enhancedpath/EnhancedPathShapeFactory.cpp:248
+#: enhancedpath/EnhancedPathShapeFactory.cpp:281
+#, kde-format
+msgid "An arrow"
+msgstr "Saighead"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:324
+#: enhancedpath/EnhancedPathShapeFactory.cpp:326
+#, kde-format
+msgid "Smiley"
+msgstr "Straoiseog"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:404
+#, kde-format
+msgid "Circular Arrow"
+msgstr "Saighead Chiorclach"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:406
+#, kde-format
+msgid "A circular-arrow"
+msgstr "Saighead chiorclach"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:449
+#, kde-format
+msgid "Gearhead"
+msgstr "Giarcheann"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:451
+#, kde-format
+msgid "A gearhead"
+msgstr "Giarcheann"
+
+#: rectangle/RectangleShapeConfigCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change rectangle"
+msgstr "Athraigh an dronuilleog"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
+#: rectangle/RectangleShapeConfigWidget.ui:13
+#, kde-format
+msgid "Rectangle Shape"
+msgstr "Giuirléid Dronuilleoige"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rectangle/RectangleShapeConfigWidget.ui:19
+#, kde-format
+msgid "Corner radius x:"
+msgstr "Ga na gcoirnéal x:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: rectangle/RectangleShapeConfigWidget.ui:29
+#, kde-format
+msgid "Corner radius y:"
+msgstr "Ga na gcoirnéal y:"
+
+#: rectangle/RectangleShapeFactory.cpp:20
+#, kde-format
+msgid "Rectangle"
+msgstr "Dronuilleog"
+
+#: rectangle/RectangleShapeFactory.cpp:22
+#, kde-format
+msgid "A rectangle"
+msgstr "Dronuilleog"
+
+#: spiral/SpiralShapeConfigCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change spiral"
+msgstr "Athraigh an bhís"
+
+#: spiral/SpiralShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Curve"
+msgstr "Cuar"
+
+#: spiral/SpiralShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Line"
+msgstr "Líne"
+
+#: spiral/SpiralShapeConfigWidget.cpp:23
+#, kde-format
+msgid "Clockwise"
+msgstr ""
+
+#: spiral/SpiralShapeConfigWidget.cpp:24
+#, kde-format
+msgid "Anticlockwise"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
+#: spiral/SpiralShapeConfigWidget.ui:13
+#, kde-format
+msgid "Spiral Shape"
+msgstr "Giuirléid Bhíseach"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: spiral/SpiralShapeConfigWidget.ui:29
+#, kde-format
+msgid "Fade:"
+msgstr "Céimnigh:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: spiral/SpiralShapeConfigWidget.ui:55
+#, kde-format
+msgid "Direction:"
+msgstr "Treo:"
+
+#: spiral/SpiralShapeFactory.cpp:18
+#, kde-format
+msgid "Spiral"
+msgstr "Bís"
+
+#: spiral/SpiralShapeFactory.cpp:20
+#, kde-format
+msgid "A spiral shape"
+msgstr "Giuirléid bhíseach"
+
+#: star/StarShapeConfigCommand.cpp:21
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change star"
+msgstr "Athraigh an réiltín"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, StarShapeConfigWidget)
+#: star/StarShapeConfigWidget.ui:13
+#, kde-format
+msgid "Star shape"
+msgstr "Giuirléid réiltín"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: star/StarShapeConfigWidget.ui:19
+#, kde-format
+msgid "Polygon:"
+msgstr "Polagán:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: star/StarShapeConfigWidget.ui:36
+#, kde-format
+msgid "Corners:"
+msgstr "Cúinní:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: star/StarShapeConfigWidget.ui:46
+#, kde-format
+msgid "Inner radius:"
+msgstr "Ga istigh:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: star/StarShapeConfigWidget.ui:60
+#, kde-format
+msgid "Outer radius:"
+msgstr "Ga amuigh:"
+
+#: star/StarShapeFactory.cpp:24
+#, kde-format
+msgid "A star shape"
+msgstr "Giuirléid réiltín"
+
+#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:38
+#, kde-format
+msgid "A star"
+msgstr "Réiltín"
+
+#: star/StarShapeFactory.cpp:36
+#, kde-format
+msgid "Star"
+msgstr "Réiltín"
+
+#: star/StarShapeFactory.cpp:50
+#, kde-format
+msgid "Flower"
+msgstr "Bláth"
+
+#: star/StarShapeFactory.cpp:52
+#, kde-format
+msgid "A flower"
+msgstr "Bláth"
+
+#: star/StarShapeFactory.cpp:67
+#, kde-format
+msgid "Pentagon"
+msgstr "Peinteagán"
+
+#: star/StarShapeFactory.cpp:69
+#, kde-format
+msgid "A pentagon"
+msgstr "Peinteagán"
+
+#: star/StarShapeFactory.cpp:83
+#, kde-format
+msgid "Hexagon"
+msgstr "Heicseagán"
+
+#: star/StarShapeFactory.cpp:85
+#, kde-format
+msgid "A hexagon"
+msgstr "Heicseagán"
+
+#, fuzzy
+#~| msgid "Ellipse Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse Shape"
+#~ msgstr "Giuirléid Éilips"
+
+#, fuzzy
+#~| msgid "Type:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Type:"
+#~ msgstr "Cineál:"
+
+#, fuzzy
+#~| msgid "Start angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start angle:"
+#~ msgstr "Uillinn tosaigh:"
+
+#, fuzzy
+#~| msgid "°"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "°"
+#~ msgstr "°"
+
+#, fuzzy
+#~| msgid "End angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End angle:"
+#~ msgstr "Uillinn deiridh:"
+
+#, fuzzy
+#~| msgid "Close ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Close ellipse"
+#~ msgstr "Dún an t-éilips"
+
+#, fuzzy
+#~| msgid "Rectangle Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangle Shape"
+#~ msgstr "Giuirléid Dronuilleoige"
+
+#, fuzzy
+#~| msgid "Corner radius x:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corner radius x:"
+#~ msgstr "Ga na gcoirnéal x:"
+
+#, fuzzy
+#~| msgid "Corner radius y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corner radius y:"
+#~ msgstr "Ga na gcoirnéal y:"
+
+#, fuzzy
+#~| msgid "Star shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star shape"
+#~ msgstr "Giuirléid réiltín"
+
+#, fuzzy
+#~| msgid "Polygon:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Polygon:"
+#~ msgstr "Polagán:"
+
+#, fuzzy
+#~| msgid "Corners:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners:"
+#~ msgstr "Cúinní:"
+
+#, fuzzy
+#~| msgid "Inner radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inner radius:"
+#~ msgstr "Ga istigh:"
+
+#, fuzzy
+#~| msgid "Outer radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outer radius:"
+#~ msgstr "Ga amuigh:"
+
+#, fuzzy
+#~| msgid "Spiral Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral Shape"
+#~ msgstr "Giuirléid Bhíseach"
+
+#, fuzzy
+#~| msgid "Fade:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade:"
+#~ msgstr "Céimnigh:"
+
+#, fuzzy
+#~| msgid "Direction:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Direction:"
+#~ msgstr "Treo:"
+
+# ok
+#, fuzzy
+#~| msgid "Arc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arc"
+#~ msgstr "Arc"
+
+#, fuzzy
+#~| msgid "Pie"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pie"
+#~ msgstr "Pióg"
+
+# geom. or music is cuma
+#, fuzzy
+#~| msgid "Chord"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chord"
+#~ msgstr "Corda"
+
+#, fuzzy
+#~| msgid "Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Éilips"
+
+#, fuzzy
+#~| msgid "An ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An ellipse"
+#~ msgstr "Éilips"
+
+#, fuzzy
+#~| msgid "An enhanced path shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An enhanced path shape"
+#~ msgstr "Giuirléid fheabhsaithe chonaire"
+
+#, fuzzy
+#~| msgid "An enhanced path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An enhanced path"
+#~ msgstr "Conair fheabhsaithe"
+
+#, fuzzy
+#~| msgid "Cross"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cross"
+#~ msgstr "Croisín"
+
+#, fuzzy
+#~| msgid "A cross"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A cross"
+#~ msgstr "Croisín"
+
+#, fuzzy
+#~| msgid "Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrow"
+#~ msgstr "Saighead"
+
+#, fuzzy
+#~| msgid "An arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An arrow"
+#~ msgstr "Saighead"
+
+#, fuzzy
+#~| msgid "Callout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Callout"
+#~ msgstr "Tagrán"
+
+#, fuzzy
+#~| msgid "A callout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A callout"
+#~ msgstr "Tagrán"
+
+#, fuzzy
+#~| msgid "Smiley"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smiley"
+#~ msgstr "Straoiseog"
+
+#, fuzzy
+#~| msgid "Circular Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circular Arrow"
+#~ msgstr "Saighead Chiorclach"
+
+#, fuzzy
+#~| msgid "A circular-arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A circular-arrow"
+#~ msgstr "Saighead chiorclach"
+
+#, fuzzy
+#~| msgid "Gearhead"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gearhead"
+#~ msgstr "Giarcheann"
+
+#, fuzzy
+#~| msgid "A gearhead"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A gearhead"
+#~ msgstr "Giarcheann"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangle"
+#~ msgstr "Dronuilleog"
+
+#, fuzzy
+#~| msgid "A rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A rectangle"
+#~ msgstr "Dronuilleog"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Curve"
+#~ msgstr "Cuar"
+
+#, fuzzy
+#~| msgid "Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line"
+#~ msgstr "Líne"
+
+#, fuzzy
+#~| msgid "Spiral"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Bís"
+
+#, fuzzy
+#~| msgid "A spiral shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A spiral shape"
+#~ msgstr "Giuirléid bhíseach"
+
+#, fuzzy
+#~| msgid "A star shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A star shape"
+#~ msgstr "Giuirléid réiltín"
+
+#, fuzzy
+#~| msgid "A star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A star"
+#~ msgstr "Réiltín"
+
+#, fuzzy
+#~| msgid "Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "Réiltín"
+
+#, fuzzy
+#~| msgid "Flower"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flower"
+#~ msgstr "Bláth"
+
+#, fuzzy
+#~| msgid "A flower"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A flower"
+#~ msgstr "Bláth"
+
+#, fuzzy
+#~| msgid "Pentagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Peinteagán"
+
+#, fuzzy
+#~| msgid "A pentagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A pentagon"
+#~ msgstr "Peinteagán"
+
+#, fuzzy
+#~| msgid "Hexagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hexagon"
+#~ msgstr "Heicseagán"
+
+#, fuzzy
+#~| msgid "A hexagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A hexagon"
+#~ msgstr "Heicseagán"
+
+#~ msgid "A arrow shape"
+#~ msgstr "Saighead"
+
+#~ msgid "A arrow"
+#~ msgstr "Saighead"
+
+#~ msgid "Right Arrow"
+#~ msgstr "Saighead Dheas"
+
+#~ msgid "A right arrow"
+#~ msgstr "Saighead dheas"
+
+#~ msgid "Left Arrow"
+#~ msgstr "Saighead Chlé"
+
+#~ msgid "A left arrow"
+#~ msgstr "Saighead chlé"

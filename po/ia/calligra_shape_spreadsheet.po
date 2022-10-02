@@ -1,0 +1,275 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Giovanni Sora <g.sora@tiscali.it>, 2013, 2014, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2020-11-12 22:23+0100\n"
+"Last-Translator: Giovanni Sora <g.sora@tiscali.it>\n"
+"Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
+"Language: ia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Giovanni Sora"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "g.sora@tiscali.it"
+
+#: SheetsEditor.cpp:57 SheetsEditor.cpp:121
+#, kde-format
+msgid "Rename"
+msgstr "Renomina"
+
+#: SheetsEditor.cpp:61
+#, kde-format
+msgid "Add"
+msgstr "Adde"
+
+#: SheetsEditor.cpp:65
+#, kde-format
+msgid "Remove"
+msgstr "Remove"
+
+#: SheetsEditor.cpp:121
+#, kde-format
+msgid "Enter Name:"
+msgstr "Inserta le nomine:"
+
+#: TableShape.cpp:288
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"Iste documento contine un ligamine externe a un documento remote\n"
+"%1"
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Confirmation Required"
+msgstr "Confirmation Requirite"
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Download"
+msgstr "Discarga"
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Skip"
+msgstr "Salta"
+
+#: TableShapeFactory.cpp:37
+#, kde-format
+msgid "Spreadsheet"
+msgstr "Folio de calculo electronic"
+
+#: TableShapeFactory.cpp:39
+#, kde-format
+msgid "Spreadsheet Shape"
+msgstr "Forma de folio de calculo (Spreadsheet)"
+
+#: TableTool.cpp:218
+#, kde-format
+msgid "Import OpenDocument Spreadsheet File"
+msgstr "Importa file de Spreadsheet (folio de calculo) de OpenDocument"
+
+#: TableTool.cpp:219
+#, kde-format
+msgid "Import"
+msgstr "Importa"
+
+#: TableTool.cpp:223
+#, kde-format
+msgid "Export OpenDocument Spreadsheet File"
+msgstr "Exporta file de Spreadsheet (folio de calculo) de OpenDocument"
+
+#: TableTool.cpp:224
+#, kde-format
+msgid "Export"
+msgstr "Exporta"
+
+#: TableTool.cpp:704
+#, kde-format
+msgid "Sheets"
+msgstr "Sheets (Folios)"
+
+#: TableTool.cpp:746
+#, kde-format
+msgid "Sheet:"
+msgstr "Folio"
+
+#: TableTool.cpp:748
+#, kde-format
+msgid "Selected Sheet"
+msgstr "Folio seligite"
+
+#: TableTool.cpp:763
+#, kde-format
+msgid "View Options"
+msgstr "Optiones de vista"
+
+#: TableToolFactory.cpp:21
+#, kde-format
+msgid "Table editing"
+msgstr "Modificar tabella"
+
+#: ToolHeaders.cpp:286 ToolHeaders.cpp:884
+#, kde-format
+msgid "Area is too large."
+msgstr "Area es troppo grande."
+
+#: ToolHeaders.cpp:429
+#, kde-format
+msgid "Hide Row"
+msgstr "Cela rango"
+
+#: ToolHeaders.cpp:431
+#, kde-format
+msgid "Height: %1 %2"
+msgstr "Altessa: %1 %2"
+
+#: ToolHeaders.cpp:1059
+#, kde-format
+msgid "Hide Column"
+msgstr "Cela columna "
+
+#: ToolHeaders.cpp:1061
+#, kde-format
+msgid "Width: %1 %2"
+msgstr "Largessa: %1 %2"
+
+#~ msgid "Number of columns"
+#~ msgstr "Numero de columnas"
+
+#~ msgid "Rows:"
+#~ msgstr "Rangos:"
+
+#~ msgid "Number of rows"
+#~ msgstr "Numero de rangos"
+
+#, fuzzy
+#~| msgid "Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Renomina"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Adde"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Remove"
+
+#, fuzzy
+#~| msgid "Enter Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter Name:"
+#~ msgstr "Inserta le nomine:"
+
+#, fuzzy
+#~| msgid "Spreadsheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spreadsheet"
+#~ msgstr "Folio de calculo electronic"
+
+#, fuzzy
+#~| msgid "Spreadsheet Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spreadsheet Shape"
+#~ msgstr "Forma de folio de calculo (Spreadsheet)"
+
+#, fuzzy
+#~| msgid "Import OpenDocument Spreadsheet File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import OpenDocument Spreadsheet File"
+#~ msgstr "Importa file de Spreadsheet (folio de calculo) de OpenDocument"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Importa"
+
+#, fuzzy
+#~| msgid "Export OpenDocument Spreadsheet File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export OpenDocument Spreadsheet File"
+#~ msgstr "Exporta file de Spreadsheet (folio de calculo) de OpenDocument"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Exporta"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Sheets (Folios)"
+
+#, fuzzy
+#~| msgid "Sheet:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet:"
+#~ msgstr "Folio"
+
+#, fuzzy
+#~| msgid "Selected Sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Selected Sheet"
+#~ msgstr "Folio seligite"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Columnas"
+
+#, fuzzy
+#~| msgid "Number of columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of columns"
+#~ msgstr "Numero de columnas"
+
+#, fuzzy
+#~| msgid "Rows:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rows:"
+#~ msgstr "Rangos:"
+
+#, fuzzy
+#~| msgid "Number of rows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of rows"
+#~ msgstr "Numero de rangos"
+
+#, fuzzy
+#~| msgid "Table Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table Options"
+#~ msgstr "Optiones de tabella"
+
+#, fuzzy
+#~| msgid "Table editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table editing"
+#~ msgstr "Modificar tabella"

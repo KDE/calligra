@@ -1,0 +1,2501 @@
+# Copyright (C) 2002, kde i18n vi project, http://vi.i18n.kde.org/
+#
+# Nguyen Hung Vu( Nguyễn Vũ Hưng) <vuhung@fedu.uec.ac.jp>, 2002.
+# Hoàng Đức Hiếu <hieu.d.hoang@gmail.com>, 2008.
+# Lê Hoàng Phương <herophuong93@gmail.com>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: kpresenter VERSION\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2012-01-16 16:49+0700\n"
+"Last-Translator: Lê Hoàng Phương <herophuong93@gmail.com>\n"
+"Language-Team: Vietnamese <kde-i18n-vi@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, kde-format
+msgid "&Edit"
+msgstr "&Sửa"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, kde-format
+msgid "&View"
+msgstr "&Xem"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, kde-format
+msgid "&Insert"
+msgstr "&Chèn"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "Định &dạng"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, fuzzy, kde-format
+msgid "&Slide"
+msgstr "Slide"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, kde-format
+msgid "Sli&de Show"
+msgstr "&Trình diễn"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, kde-format
+msgid "&Settings"
+msgstr "&Thiết lập"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "Slideshow"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "Slide đã chọ&n"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Slide đã chọ&n"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Slide đã chọ&n"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "Presentation"
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "Slideshow"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+#, fuzzy
+#| msgid "Create page effect"
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "Hiệu ứng tạo trang"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+#, fuzzy
+#| msgid "Modify page effect"
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "Hiệu ứng sửa trang"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "Slide đã chọ&n"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "Đầu đề slide"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "Slideshow"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "Đầu đề slide"
+
+#: part/KPrAboutData.h:21
+#, fuzzy, kde-format
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "&Cấu hình trang ..."
+
+#: part/KPrAboutData.h:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Tool"
+msgstr "Trình diễn"
+
+#: part/KPrAboutData.h:25
+#, fuzzy, kde-format
+#| msgid "(c) 1998-2007, The KPresenter Team"
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "Bản quyền 1998-2007, nhóm KPresenter"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, fuzzy, kde-format
+#| msgid "current maintainer"
+msgid "Former maintainer"
+msgstr "người bảo trì hiện tại"
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr "Thorsten Zachmann"
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KPrAboutData.h:35
+#, fuzzy, kde-format
+#| msgid "original author"
+msgid "Original author"
+msgstr "Tác giả gốc"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr "Reginald Stadlbauer"
+
+#: part/KPrAboutData.h:36
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr "Toshitaka Fujioka"
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr "Lukáš Tinkl"
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr "Percy Leonhardt"
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KPrAboutData.h:43
+#, fuzzy, kde-format
+msgid "Peter Simonsson"
+msgstr "KPresenter - Quay"
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr ""
+
+#: part/KPrAboutData.h:45
+#, fuzzy, kde-format
+msgid "Carlos Licea "
+msgstr "Dòng đắc"
+
+#: part/KPrAboutData.h:46
+#, kde-format
+msgid "C. Boemann "
+msgstr ""
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr ""
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr ""
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr ""
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr ""
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr ""
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr ""
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Nguyen Hung Vu(Nguyễn Hưng Vũ) Nguyen Vu Hung, nhóm Việt hoá KDE"
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "vuhung@feduuec.ac.jp, kde-l10n-vi@lists.kde.org"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr ""
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, kde-format
+msgid "Slide %1"
+msgstr "Slide %1"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, fuzzy, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "Presentation"
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Layout"
+msgstr "&Kiểu Trang..."
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KPrPicturesImport.cpp:62
+#, fuzzy
+#| msgid "Insert Picture"
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "Chèn ảnh"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Pen Color"
+msgstr "Màu"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, fuzzy, kde-format
+msgid "Pen Size"
+msgstr "&Tăng độ sâu"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, fuzzy, kde-format
+msgid "Black"
+msgstr "Màu :"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, fuzzy, kde-format
+msgid "White"
+msgstr "Bề rộng bút:"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, fuzzy, kde-format
+msgid "Green"
+msgstr "Gradient"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, kde-format
+msgid "Red"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, fuzzy, kde-format
+msgid "Blue"
+msgstr "Danh sách &bullet"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, fuzzy, kde-format
+msgid "Yellow"
+msgstr "Slideshow"
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, fuzzy, kde-format
+msgid "Next Slide"
+msgstr "Bước &kế"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, kde-format
+msgid "Speaker Notes"
+msgstr ""
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, fuzzy, kde-format
+#| msgid "Create HTML Slideshow"
+msgid "Current Slide %1 of %2"
+msgstr "Tạo HTML Slideshow"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "End of Slide Show"
+msgstr "Trình diễn"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "start after previous animation"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "start with previous animation"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Animation"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/KPrShapeAnimations.cpp:201
+#, kde-format
+msgid "Shape"
+msgstr "Hình"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, fuzzy, kde-format
+msgid "&Move Here"
+msgstr "Slide"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, fuzzy, kde-format
+msgid "&Copy Here"
+msgstr "Slide"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, fuzzy, kde-format
+#| msgid "&Cancel"
+msgid "C&ancel"
+msgstr "&Huỷ bỏ"
+
+#: part/KPrView.cpp:73
+#, kde-format
+msgid "Normal"
+msgstr "Thông thường "
+
+#: part/KPrView.cpp:78
+#, fuzzy, kde-format
+msgid "Show Master Slides"
+msgstr "Slide"
+
+#: part/KPrView.cpp:79
+#, fuzzy, kde-format
+msgid "Import Slideshow..."
+msgstr "Nhảy tới Trang..."
+
+#: part/KPrView.cpp:80
+#, fuzzy, kde-format
+msgid "Insert Slide"
+msgstr "Chèn dòng"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr ""
+
+#: part/KPrView.cpp:83
+#, fuzzy, kde-format
+msgid "Copy Slide"
+msgstr "Slide"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, fuzzy, kde-format
+msgid "Copy the current slide"
+msgstr "Trước trang hiện tại"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, fuzzy, kde-format
+msgid "Delete Slide"
+msgstr "Slide đã chọ&n"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, fuzzy, kde-format
+msgid "Delete the current slide"
+msgstr "Trước trang hiện tại"
+
+#: part/KPrView.cpp:89
+#, fuzzy, kde-format
+msgid "Master Slide..."
+msgstr "Chèn dòng"
+
+#: part/KPrView.cpp:90
+#, fuzzy, kde-format
+msgid "Previous Slide"
+msgstr "Bước &trước"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, fuzzy, kde-format
+msgid "Go to previous slide"
+msgstr "Bước &trước"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, fuzzy, kde-format
+msgid "Go to next slide"
+msgstr "Nhảy  đến &cuối"
+
+#: part/KPrView.cpp:96
+#, fuzzy, kde-format
+msgid "First Slide"
+msgstr "Slide"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, fuzzy, kde-format
+msgid "Go to first slide"
+msgstr "Nhảy  đến &cuối"
+
+#: part/KPrView.cpp:99
+#, fuzzy, kde-format
+msgid "Last Slide"
+msgstr "Slide"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, fuzzy, kde-format
+msgid "Go to last slide"
+msgstr "Nhảy  đến &cuối"
+
+#: part/KPrView.cpp:102
+#, fuzzy, kde-format
+msgid "Configure Stage..."
+msgstr "&Cấu hình trang ..."
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr ""
+
+#: part/KPrView.cpp:251
+#, fuzzy, kde-format
+#| msgid "Insert Picture"
+msgid "Insert Pictures as Slides..."
+msgstr "Chèn ảnh"
+
+#: part/KPrView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Create Appear Animation"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/KPrView.cpp:264
+#, fuzzy, kde-format
+msgid "Edit Custom Slide Shows..."
+msgstr "&Cấu hình trang ..."
+
+#: part/KPrView.cpp:268
+#, kde-format
+msgid "Start Presentation"
+msgstr "Bắt đầu Trình diễn"
+
+#: part/KPrView.cpp:271
+#, fuzzy, kde-format
+msgid "From Current Slide"
+msgstr "Sau trang hiện tại"
+
+#: part/KPrView.cpp:275
+#, fuzzy, kde-format
+msgid "From First Slide"
+msgstr "Slide"
+
+#: part/KPrView.cpp:280
+#, fuzzy, kde-format
+msgid "Stop presentation"
+msgstr "Presentation"
+
+#: part/KPrView.cpp:286
+#, kde-format
+msgid "Show Status Bar"
+msgstr ""
+
+#: part/KPrView.cpp:287
+#, kde-format
+msgid "Hide Status Bar"
+msgstr ""
+
+#: part/KPrView.cpp:288
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr ""
+
+#: part/KPrView.cpp:297
+#, fuzzy, kde-format
+msgid "Configure Slide Show..."
+msgstr "&Cấu hình trang ..."
+
+#: part/KPrView.cpp:301
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter..."
+msgid "Configure Presenter View..."
+msgstr "Cấu hình KPresenter..."
+
+#: part/KPrView.cpp:305
+#, fuzzy, kde-format
+msgid "Draw on the presentation..."
+msgstr "&Thoát Presentation"
+
+#: part/KPrView.cpp:312
+#, fuzzy, kde-format
+msgid "Highlight the presentation..."
+msgstr "&Thoát Presentation"
+
+#: part/KPrView.cpp:319
+#, fuzzy, kde-format
+msgid "Blackscreen on the presentation..."
+msgstr "&Thoát Presentation"
+
+#: part/KPrViewModeNotes.cpp:36
+#, fuzzy, kde-format
+msgid "Notes"
+msgstr "Không bút"
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, fuzzy, kde-format
+msgid "Slides Sorter"
+msgstr "Đầu đề slide"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show: "
+msgstr "Trình diễn"
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new custom slide show"
+msgstr "Slideshow"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, fuzzy, kde-format
+msgid "Delete current custom slide show"
+msgstr "Trước trang hiện tại"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, fuzzy, kde-format
+msgid "Add slides to current custom slide show"
+msgstr "Slideshow"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, fuzzy, kde-format
+msgid "Remove slides from current custom slide show"
+msgstr "Slideshow"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, fuzzy, kde-format
+msgid "Duplicate Slide"
+msgstr "Slide đã chọ&n"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, fuzzy, kde-format
+#| msgid "Create HTML Slideshow"
+msgid "Start Slideshow"
+msgstr "Tạo HTML Slideshow"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new slide"
+msgstr "Slideshow"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, fuzzy, kde-format
+msgid "Delete selected slides"
+msgstr "Slide đã chọ&n"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, fuzzy, kde-format
+msgid "Rename"
+msgstr "&Thay tên trang"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, fuzzy, kde-format
+msgid "Cut"
+msgstr "Tuỳ biến"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, fuzzy, kde-format
+msgid "Copy"
+msgstr "Kiểu: "
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, fuzzy, kde-format
+msgid "Paste"
+msgstr "Đường dẫn:  "
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show %1"
+msgstr "Trình diễn"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, fuzzy, kde-format
+msgid "All slides"
+msgstr "&Mọi slide"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, fuzzy, kde-format
+#| msgid "Arrow"
+msgid "Error"
+msgstr "Mũi tên"
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr ""
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "&Kiểu Trang..."
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, kde-format
+msgid "Automatic animation preview"
+msgstr ""
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Preview animation"
+msgstr "Trình diễn"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, fuzzy, kde-format
+msgid "Slide Transitions"
+msgstr "Đầu đề slide"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Shape Click Actions"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Shape Animations"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, fuzzy, kde-format
+msgid "Manage animation delay and duration: "
+msgstr "Presentation"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, fuzzy, kde-format
+msgid "Start: "
+msgstr "Kí tự"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "after previous animation"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "with previous animation"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, fuzzy, kde-format
+msgid "Duration: "
+msgstr "Hướng"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Preview Shape Animation"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, kde-format
+msgid "No Effect"
+msgstr "Không hiệu ứng"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, kde-format
+msgid " sec"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, fuzzy, kde-format
+msgid "Slide Transition:"
+msgstr "Đầu đề slide"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, fuzzy, kde-format
+#| msgid "Apply Styles"
+msgid "Apply To All Slides"
+msgstr "Áp dụng kiểu"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr "Áp dụng kiểu"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, fuzzy, kde-format
+msgid "Custom"
+msgstr "Slideshow"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, fuzzy, kde-format
+msgid "Ole Action"
+msgstr "Hướng"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Edit animation"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Add new animation"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Remove animation"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Move animation up"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Move animation down"
+msgstr "Hoạt cảnh tạo hình"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new animation"
+msgstr "Slideshow"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, fuzzy, kde-format
+msgid "Delete current animation"
+msgstr "Trước trang hiện tại"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, fuzzy, kde-format
+msgid "Crop"
+msgstr "Kiểu: "
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, fuzzy, kde-format
+msgid "W&idth:"
+msgstr "Bề rộng bút:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, fuzzy, kde-format
+msgid "Will keep the width of the crop constant"
+msgstr "Tạo ảnh cho Slide"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, fuzzy, kde-format
+msgid "&Height:"
+msgstr "Đến từ bên phải"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, fuzzy, kde-format
+msgid "Will keep the height of the crop constant"
+msgstr "Tạo ảnh cho Slide"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, fuzzy, kde-format
+msgid "R&atio:"
+msgstr "Nhảy tới Trang:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, fuzzy, kde-format
+msgid "Will keep the ratio constant"
+msgstr "Tạo ảnh cho Slide"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, fuzzy, kde-format
+msgid "Image"
+msgstr "&Trang...."
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, fuzzy, kde-format
+msgid "&Crop"
+msgstr "Kiểu: "
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+#, fuzzy
+#| msgid "Shape"
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "Hình"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, fuzzy, kde-format
+msgid "Presentation monitor:"
+msgstr "Presentation"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Enable presenter view"
+msgstr "Cấu hình KPresenter"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Configure Presenter View"
+msgstr "Cấu hình KPresenter"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, fuzzy, kde-format
+msgid "Configure Slide Show"
+msgstr "&Cấu hình trang ..."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, fuzzy, kde-format
+msgid "Slides"
+msgstr "Slide"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Slides:"
+msgstr "Trình diễn"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, fuzzy, kde-format
+msgid "Edit Custom Slide Shows ..."
+msgstr "&Cấu hình trang ..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, fuzzy, kde-format
+msgid "Select all"
+msgstr "Chọn ..."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, fuzzy, kde-format
+msgid "Select template (.css) :"
+msgstr "Slide đã chọ&n"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, fuzzy, kde-format
+msgid "Deselect all"
+msgstr "Chọn ..."
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, fuzzy, kde-format
+msgid "Title"
+msgstr "Đầu đề "
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, kde-format
+msgid "Output preview"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, fuzzy, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, fuzzy, kde-format
+#| msgid "Author:"
+msgid "Author"
+msgstr "Tác giả:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, fuzzy, kde-format
+msgid "Delete Favorite"
+msgstr "Slide đã chọ&n"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, fuzzy, kde-format
+msgid "Delete Template"
+msgstr "Slide đã chọ&n"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, fuzzy, kde-format
+msgid "Add Template"
+msgstr "Slide đã chọ&n"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr ""
+"Bạn có muốn gỡ bỏ trang hiện tạỉ\n"
+"Thao tác này không thể undonẹ"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+#| msgid "Save Configuration..."
+msgid "Confirm remove"
+msgstr "Sao luư  Cấu hình."
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#, fuzzy
+#| msgid "Change Rotation"
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr "Thay đổi Góc Quay"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, kde-format
+msgid "No sound"
+msgstr ""
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, fuzzy, kde-format
+msgid "Import..."
+msgstr "Chèn dòng"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr ""
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "From Left"
+msgstr "Đến từ bên trái"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "From Top"
+msgstr "Đến từ trên"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "From Right"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "From Bottom"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Clock"
+msgstr "Màu :"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "From Twelve Clockwise"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "From Three Clockwise"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "From Six Clockwise"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "From Nine Clockwise"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "From Twelve Counterclockwise"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "From Three Counterclockwise"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "From Six Counterclockwise"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "From Nine Counterclockwise"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Double Fan"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Fan Out Vertical"
+msgstr "Mở theo chiều dọc"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Fan Out Horizontal"
+msgstr "Mở theo chiều ngang"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "Fan In Vertical"
+msgstr "Mở theo chiều dọc"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "Fan In Horizontal"
+msgstr "Mở theo chiều ngang"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Fan In Vertical Reverse"
+msgstr "Dòng thẳng đứng"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Fan In Horizontal Reverse"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Double Sweep"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Parallel Vertical"
+msgstr "Mở theo chiều dọc"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Opposite Vertical"
+msgstr "Mở theo chiều dọc"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Opposite Horizontal"
+msgstr "Mở theo chiều ngang"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Parallel Diagonal Top Left"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Bottom Left"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Parallel Vertical Reverse"
+msgstr "Dòng thẳng đứng"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal Reverse"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Opposite Vertical Reverse"
+msgstr "Dòng thẳng đứng"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Opposite Horizontal Reverse"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Fan"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Center Right"
+msgstr "Cuộn về phải"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Top"
+msgstr "Vào Giữa"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Left"
+msgstr "Vào Giữa"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Center Bottom"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Fan Out Top"
+msgstr "Mở theo chiều ngang"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Fan Out Right"
+msgstr "Mở theo chiều ngang"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "Fan Out Bottom"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Fan Out Left"
+msgstr "Mở theo chiều dọc"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Fan In Top"
+msgstr "Mở theo chiều ngang"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Fan In Right"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Fan In Bottom"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+msgid "Fan In Left"
+msgstr "Đến từ bên trái"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Pin Wheel"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Two Blades Vertical Clockwise"
+msgstr "Tắt theo chiều ngang"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Two Blades Horizontal Clockwise"
+msgstr "Tắt theo chiều ngang"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Four Blades Horizontal Clockwise"
+msgstr "Tắt theo chiều ngang"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "Tắt theo chiều ngang"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "Tắt theo chiều ngang"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "Tắt theo chiều ngang"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Saloon Door"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "To Top"
+msgstr "Đến từ trên"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "To Left"
+msgstr "Cuộn về trái"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "To Bottom"
+msgstr "Sắp hàng đá&y"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "To Right"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Single Sweep"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+msgid "Clockwise Top"
+msgstr "Đến từ bên trái"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+msgid "Clockwise Right"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+msgid "Clockwise Bottom"
+msgstr "Sắp hàng đá&y"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Clockwise Left"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+msgid "Clockwise Top Left"
+msgstr "Đến từ bên trái"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Left"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Right"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Right"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+msgid "Counterclockwise Top"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+msgid "Counterclockwise Right"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, fuzzy, kde-format
+msgid "Counterclockwise Left"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Left"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Left"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Right"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, fuzzy, kde-format
+msgid "Clockwise Top Right"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Windshield"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, fuzzy, kde-format
+msgid "Right"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Vertical"
+msgstr "Mở theo chiều dọc"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, fuzzy, kde-format
+msgid "Horizontal"
+msgstr "Mở theo chiều ngang"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Right Reverse"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Up Reverse"
+msgstr "Dòng thẳng đứng"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reverse"
+msgstr "Dòng thẳng đứng"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reverse"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Background color:"
+msgid "Barn Door"
+msgstr "Màu nền:"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Reverse"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Diagonal Top Left"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Diagonal Top Left Reverse"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Barn Zig Zag"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reversed"
+msgstr "Dòng thẳng đứng"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reversed"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "From Top Left"
+msgstr "Đến từ bên trái"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "From Top Right"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "From Bottom Left"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "From Bottom Right"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Diagonal"
+msgstr "Gradient chéo 1"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+msgid "Corners In"
+msgstr "Mà&u:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Corners In Reverse"
+msgstr "Mà&u:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Corners Out"
+msgstr "Mà&u:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Corners Out Reverse"
+msgstr "Mà&u:"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Misc Diagonal"
+msgstr "Gradient chéo 1"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, fuzzy, kde-format
+#| msgid "Background color:"
+msgid "Double Barn Door"
+msgstr "Màu nền:"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Double Diamond"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Zig Zag"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Fade"
+msgstr "Bóng"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr ""
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, fuzzy, kde-format
+msgid "Fade over Color"
+msgstr "Màu Text"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "ArrowHead"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, fuzzy, kde-format
+#| msgid "Done"
+msgid "Down"
+msgstr "Xong"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Down Reverse"
+msgstr "Dòng thẳng đứng"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, fuzzy, kde-format
+msgid "Left"
+msgstr "Cuộn về trái"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Left Reverse"
+msgstr "Dòng thẳng đứng"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Ellipse"
+msgstr "Chèn Elip"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Circle"
+msgstr "Hình tròn"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Circle Reverse"
+msgstr "Dòng thẳng đứng"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Hexagon"
+msgstr "Trình diễn"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Rectangular"
+msgstr "Hình chữ &nhật"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Rectangular Reverse"
+msgstr "Hình chữ &nhật"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Diamond"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Diamond Reverse"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Heart"
+msgstr "&Header"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Heart Reverse"
+msgstr "Dòng thẳng đứng"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole"
+msgstr "Dòng thẳng đứng"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole Reverse"
+msgstr "Dòng thẳng đứng"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Pentagon"
+msgstr "Trình diễn"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "RoundRect"
+msgstr "Không hiệu ứng"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Star"
+msgstr "Kí tự"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star Reverse"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star Reverse"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star Reverse"
+msgstr "Dòng ngang"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Tiled"
+msgid "Triangle"
+msgstr "Bị Lát"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Box Snakes"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Two Box Top In"
+msgstr "Sắp hàng đá&y"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Two Box Bottom In"
+msgstr "Sắp hàng đá&y"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Two Box Left In"
+msgstr "Cuộn về trái"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Two Box Right In"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Four Box Vertical In"
+msgstr "Mở theo chiều dọc"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Four Box Horizontal In"
+msgstr "Tắt theo chiều ngang"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Two Box Top Out"
+msgstr "Sắp hàng đá&y"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Two Box Bottom Out"
+msgstr "Sắp hàng đá&y"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "Two Box Left Out"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Two Box Right Out"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Four Box Vertical Out"
+msgstr "Mở theo chiều dọc"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Four Box Horizontal Out"
+msgstr "Tắt theo chiều ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Parallel Snakes"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same In"
+msgstr "Gradient thẳng đứng"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same Out"
+msgstr "Gradient thẳng đứng"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same In"
+msgstr "Gradient thẳng đứng"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same Out"
+msgstr "Gradient thẳng đứng"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite In"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite Out"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Left Opposite In"
+msgstr "Gradient thẳng đứng"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same In"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same Out"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same In"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same Out"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite In"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite Out"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite In"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite Out"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite In"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite Out"
+msgstr "Gradient ngang"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgid "Snake"
+msgstr "Hình"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Spiral"
+msgstr ""
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Clockwise Top Left In"
+msgstr "Đến từ bên trái"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Clockwise Top Left Out"
+msgstr "Đến từ bên trái"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Clockwise Top Right In"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Clockwise Top Right Out"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Left In"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Left Out"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Right In"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Right Out"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Left In"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Left Out"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Right In"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Right Out"
+msgstr "Đến từ bên phải"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Left In"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Left Out"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Right In"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Right Out"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Slide Wipe Effect"
+msgid "Waterfall"
+msgstr "Hiệu ứng Quét Trang trình diễn"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "Top Left Vertical"
+msgstr "Mở theo chiều dọc"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Top Left Horizontal"
+msgstr "Mở theo chiều ngang"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Top Right Vertical"
+msgstr "Mở theo chiều dọc"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Top Right Horizontal"
+msgstr "Mở theo chiều ngang"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Bottom Left Vertical"
+msgstr "Tắt theo chiều thẳng đứng"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Bottom Left Horizontal"
+msgstr "Tắt theo chiều ngang"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Bottom Right Vertical"
+msgstr "Đến từ đáy"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Bottom Right Horizontal"
+msgstr "Liên khoá ngang 1"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Slide"
+msgstr "Slide"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Space Rotation"
+msgstr "Nhảy tới Trang:"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Page effects"
+msgid "Swap effect"
+msgstr "Các hiệu ứng trang"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, fuzzy, kde-format
+msgid "Header"
+msgstr "&Header"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Footer"
+msgstr "&Footer"

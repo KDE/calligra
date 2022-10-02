@@ -1,0 +1,530 @@
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+          
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+   
+<chapter id="tutorial">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+&traductor.Rafael.Carreras; 
+</authorgroup>
+</chapterinfo>
+<title
+>Una guia d'aprenentatge pas a pas</title>
+
+<para
+>En aquest capítol, s'introdueix al &stage; usant una guia d'aprenentatge senzilla. Farem els passos més bàsics que concerneixen la creació d'una presentació, i afegint alguns efectes bàsics. </para>
+
+<sect1 id="start-new">
+<title
+>Iniciant un nou document</title>
+
+<para
+>Quan engegueu el &stage;, apareix el diàleg habitual d'inici del &calligra;. </para>
+
+<screenshot>
+<screeninfo
+>El diàleg d'inici del <guilabel
+>&calligra;</guilabel
+></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut01.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>El diàleg d'inici del &calligra;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Seleccioneu <guilabel
+>Pantalla</guilabel
+> a l'esquerra i seleccioneu la plantilla etiquetada com a <guilabel
+>Buit</guilabel
+> (marcada en blau a la captura de pantalla de dalt) clicant-hi en ella. Podeu marcar <guilabel
+>Usa sempre aquesta plantilla</guilabel
+> per a fer-la la plantilla per omissió. </para>
+
+<para
+>Ara cliqueu <guibutton
+>Usa aquesta plantilla</guibutton
+>. Això fa que aparegui la finestra de l'editor de diapositives, on podeu veure-les i editar-les (i també els objectes que hi ha a dins). </para>
+
+<para
+>De moment, només tenim una diapositiva buida, de manera que seleccionem la diapositiva superior esquerra amb el quadre de text senzill des de l'acoblador <guilabel
+>Disposició de la diapositiva</guilabel
+>.</para>
+
+<para
+>Feu doble clic al quadre de text. El cursor canvia a la barra vertical per a mostrar que ara podeu teclejar algun text. </para>
+
+<screenshot>
+<screeninfo
+>El cursor d'inserció de text</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut03.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>El cursor d'inserció de text</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Endavant, escriviu algun text! </para>
+
+<screenshot>
+<screeninfo
+>Afegint-hi text</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut04.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Afegint-hi text</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Cliqueu fora del text per a desseleccionar el quadre de text una vegada finalitzeu d'escriure. </para>
+
+</sect1>
+
+<sect1 id="insert-page">
+<title
+>Afegir una nova pàgina</title>
+
+<para
+>Ara afegirem una nova diapositiva al nostre document. Per a fer-ho, cliqueu el menú <guimenu
+>Diapositiva</guimenu
+>, i cliqueu a <guimenuitem
+>Insereix una diapositiva</guimenuitem
+>. </para>
+
+<para
+>Ara podeu decidir l'aspecte de la nova diapositiva. Aquest cop, seleccioneu una disposició en columnes (ressaltada en blau). </para>
+
+<screenshot>
+<screeninfo
+>Escollint una disposició per a la nova pàgina</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut07.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Escollint una disposició per a la nova pàgina</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>La nova disposició de la diapositiva apareixerà ara a la finestra d'edició. Per a canviar entre les pàgines de la vostra presentació, podeu seleccionar les diapositives a la subfinestra de l'esquerra (marcada en blau per a aquesta captura de pantalla). </para>
+
+<para
+>La nova diapositiva té dos quadres de text. N'hi ha un per a un títol i un altre per a posar-hi llistes d'elements. </para>
+
+<screenshot>
+<screeninfo
+>La nova diapositiva</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut09.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>La nova diapositiva</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Doblecliqueu-hi i escriviu un títol. Llavors doblecliqueu al segon quadre de text amb els pics. Noteu que apareix un punt automàticament quan comenceu a escriure. Escriviu algun text i finalitzeu el paràgraf amb les tecles <keycap
+>Intro</keycap
+> o <keycap
+>Retorn</keycap
+>. Tal com aneu escrivint nous paràgrafs, apareixeran nous pics al davant automàticament. </para>
+
+<screenshot>
+<screeninfo
+>Afegint text a la segona diapositiva</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut10.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Afegint text a la segona diapositiva</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Podeu desseleccionar el quadre de text clicant-hi a fora. </para>
+
+</sect1>
+
+<sect1 id="insert-pic">
+<title
+>Inserir una imatge</title>
+
+<para
+>Torneu ara a la primera diapositiva. Useu la llista de diapositives de l'esquerra de la vostra pantalla. </para>
+
+<para
+>En aquesta secció, donarem una mica de vida a la nostra presentació afegint-hi un bonic logotip a la pàgina del títol. Per a fer-ho, el primer pas és habilitar l'acoblador <guilabel
+>Afegeix una forma</guilabel
+> utilitzant <menuchoice
+><guimenu
+>Arranjament</guimenu
+> <guimenuitem
+>Acobladors</guimenuitem
+></menuchoice
+> des del menú. </para>
+
+<para
+>Ara seleccioneu una imatge a l'acoblador <guilabel
+>Afegeix una forma</guilabel
+> i feu clic amb el &BER; a on vulgueu posar el logotip amb la seva mida original o dibuixeu un rectangle amb el cursor del ratolí (feu clic amb el &BER; i manteniu-lo premut) per especificar la mida i la posició del logotip. </para>
+
+<para
+>Apareixerà un diàleg per a la selecció de fitxers. Per aprendre sobre aquest o d'altres diàlegs estàndards del &kde;, si us plau, consulteu la documentació del &kde;. Podeu navegar-hi clicant les icones de <guiicon
+>carpeta</guiicon
+> o usant els botons d'estil <guiicon
+>navegador</guiicon
+> de la barra d'eines. Clicant la <guiicon
+>fletxa amunt</guiicon
+> anireu un nivell de carpeta més amunt. </para>
+
+<para
+>Seleccioneu un fitxer i feu clic a <guibutton
+>D'acord</guibutton
+>. </para>
+
+<para
+>Ara la imatge s'inserirà a la diapositiva i hi haurà nanses de selecció (petits quadrats) visibles al voltant de la vora del gràfic. </para>
+
+<screenshot>
+<screeninfo
+>La nova imatge afegida</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut13.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>La nova imatge afegida</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Poseu el cursor dins del logotip i arrossegueu-lo cap al mig del títol de la pàgina. Llavors useu les nanses de selecció per a donar-li la mida apropiada. </para>
+
+<para
+>Ja està. Ara ja teniu una imatge al títol de la pàgina! </para>
+<!--FIXME Double click opens the file dialog to replace the image-->
+</sect1>
+
+<sect1 id="insert-object">
+<title
+>Inserir un objecte del &calligra;</title>
+<para
+>Inserirem un altre objecte del &calligra; sota la imatge, per exemple un diagrama.</para>
+
+<para
+>Cada objecte sostingut pel &calligra; es pot incrustar en una diapositiva al &stage;. Escollim un diagrama des de l'acoblador <guilabel
+>Afegeix una forma</guilabel
+>. </para>
+
+<para
+>Seleccioneu <guilabel
+>Diagrama</guilabel
+> i llavors enquadreu amb el ratolí l'àrea on voleu posar el vostre diagrama a la diapositiva del &stage;. </para>
+
+<screenshot>
+<screeninfo
+>Seleccionant l'àrea on voleu posar el diagrama</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut25.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Seleccionant l'àrea on voleu posar el diagrama</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Quan deixeu anar el botó del ratolí, s'afegirà una plantilla de diagrama a la diapositiva. Quan treballeu en el diagrama, les seves <guilabel
+>Opcions de l'eina</guilabel
+> apareixeran a l'acoblador. </para>
+
+<screenshot>
+<screeninfo
+>Opcions de l'eina &kchart;</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut26.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Opcions de l'eina &kchart;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Per a moure, canviar la mida o fins i tot suprimir el diagrama incrustat canvieu a l'eina <guibutton
+>Manipulació bàsica de la forma</guibutton
+> i feu clic dintre de qualsevol lloc de l'àrea del diagrama. Ara hauria d'aparèixer una vora ombrejada en diagonal i amb un petit quadrat groc a cada cantonada i al mig de cada vora. </para>
+<para
+>Si moveu el cursor sobre qualsevol dels quadrats, aquests haurien de canviar a una fletxa doble. Podeu canviar la mida del diagrama arrossegant un d'aquests quadrats amb el &BER; premut. Per suprimir el diagrama, feu clic <mousebutton
+>dret</mousebutton
+> sobre un dels quadrats i seleccioneu <guimenuitem
+>Suprimeix</guimenuitem
+>.</para>
+<para
+>Per a moure el diagrama moveu el cursor que està dins seu. El cursor s'hauria de convertir en una creu, premeu el &BER; i podreu arrossegar el diagrama a on voleu que resti.</para>
+<para
+>Per a restaurar el diagrama a la seva aparença normal simplement feu clic en algun lloc fora de l'àrea del diagrama.</para>
+<para
+>Per a canviar el format mateix del diagrama feu doble clic <mousebutton
+>esquerre</mousebutton
+> dintre de l'àrea del diagrama. El diagrama <guilabel
+>Opcions de l'eina</guilabel
+> hauria d'aparèixer a l'acoblador. Podeu usar aquestes eines per editar les propietats del diagrama, com el tipus de diagrama, les etiquetes, els eixos i les dades.</para>
+
+<para
+>Cliqueu amb el &BER; fora del diagrama per a tornar a la diapositiva del &stage;.</para>
+
+<para
+>Un simple clic al diagrama us permetrà de canviar-lo de lloc i també d'arrossegar les vores per a fer-lo més gran, com qualsevol objecte del &stage;. Doblecliqueu al diagrama per a anar al mode &kchart; i modifiqueu qualsevol propietat del diagrama.</para>
+
+</sect1>
+<!-- does not work in BETA6 here
+<sect1 id="addshadow">
+<title
+>Add a shadow to the title text</title>
+
+<para>
+Let's continue enhancing our title page by adding a shadow
+behind the title. <mousebutton
+>Right</mousebutton
+> click anywhere on the
+title text. This achieves two things: the text box containing the title
+is selected, and a menu pops up.
+</para>
+
+<para>
+Select the <guimenuitem
+>Shadow Objects...</guimenuitem
+> option in the popup menu.
+</para>
+
+<screenshot>
+<screeninfo
+>The context menu</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut15.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The context menu</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The <guilabel
+>Shadow</guilabel
+> dialog pops up. The distance between the
+shadow and the text is currently 0 so the shadow cannot be seen (this
+part of the dialog box is highlighted in red.)
+</para>
+
+<screenshot>
+<screeninfo
+>The <guilabel
+>Shadow</guilabel
+> dialog</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut16.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The <guilabel
+>Shadow</guilabel>
+dialog</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Increase the distance value to 3. The effect of changing the distance
+can be seen in the preview window. Now click <guibutton
+>OK</guibutton
+>.
+</para>
+
+<screenshot>
+<screeninfo
+>Adding a shadow to the title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut17.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Adding a shadow to the title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Now the title has a shadow!
+</para>
+
+<screenshot>
+<screeninfo
+>The new shadowed title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut18.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The new shadowed title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+</sect1>
+-->
+<sect1 id="textcolor">
+<title
+>Canviar el color del text del títol</title>
+
+<para
+>Acabarem canviant el color del text del títol de negre a blau. Per a fer-ho, seleccioneu el text del títol dobleclicant al quadre de text i seleccionant-ne el text. </para>
+<!-- Font from menu Format or contextmenu with a lot of options-->
+<para
+>Obrireu el selector de color fent clic sobre la icona <inlinemediaobject
+><imageobject
+> <imagedata fileref="22x22-actions-format-text-color.png" format="PNG"/></imageobject
+> </inlinemediaobject
+> a les opcions de l'edició de text (aquesta icona té un consell Color de text...)</para>
+
+<screenshot>
+<screeninfo
+>El selector de color</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut19.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>El selector de color</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<screenshot>
+<screeninfo
+>El selector de color</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut20.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>El selector de color</phrase
+></textobject>
+<caption
+><para
+>Canviar el color a blau.</para
+></caption>
+</mediaobject>
+</screenshot>
+
+<para
+>Canviar el color del text seleccionat canvia la seva aparença. El color exacte en què canvia el text depèn de l'esquema de colors del vostre sistema. </para>
+
+<note>
+<para
+>La selecció de color del text també està disponible a la pestanya <guilabel
+>Decoracions</guilabel
+> del diàleg <guilabel
+>Selecció del tipus de lletra</guilabel
+>. Obriu aquest diàleg amb <guimenuitem
+>Tipus de lletra</guimenuitem
+> al menú <guimenu
+>Format</guimenu
+> o des del menú contextual. </para>
+</note>
+
+<para
+>Ara cliqueu a fora del text per a desseleccionar-lo. </para>
+
+
+<screenshot>
+<screeninfo
+>El títol finalitzat</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut21.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>El títol finalitzat</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Ara que hi ha dues diapositives, per què no provar un passi de diapositives! Per a engegar el passi, premeu el botó <guiicon
+>Comença la presentació</guiicon
+> de la barra d'eines. Apareixerà la primera diapositiva a la vostra pantalla. </para>
+
+<para
+>Per a avançar de la primera diapositiva a la següent, cliqueu a qualsevol lloc de la pantalla, o useu la tecla <keycap
+>Av Pàg</keycap
+>. </para>
+
+<para
+>Per sortir del passi de diapositives, premeu la tecla &Esc;. </para>
+
+</sect1>
+
+</chapter>

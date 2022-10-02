@@ -1,0 +1,716 @@
+<chapter id="guides">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Brad</firstname
+> <surname
+>Hards</surname
+> <affiliation
+> <address
+><email
+>bradh@frogmouth.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Danny</firstname
+> <surname
+>Allen</surname
+> <affiliation
+> <address
+><email
+>danny@dannyallen.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+
+<othercredit role="translator"
+><firstname
+>Алексей</firstname
+><surname
+>Опарин</surname
+><affiliation
+><address
+><email
+>opaleksej@yandex.ru</email
+></address
+></affiliation
+><contrib
+>Перевод на русский</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Подробное руководство</title>
+
+<para
+>В этом разделе описываются типовые действия в &kpresenter;.</para>
+
+<sect1 id="html-wizard">
+<title
+>Создание презентации в формате <acronym
+>HTML</acronym
+></title>
+
+<para
+>Превратите существующую презентацию в стандартные страницы <acronym
+>HTML</acronym
+> с соответствующими навигационными возможностями.</para>
+
+<procedure>
+<step>
+<para
+>Во-первых, создайте новую презентацию или откройте существующую. Затем, выберите <guimenu
+>Файл</guimenu
+><guimenuitem
+>Создать презентацию в формате HTML...</guimenuitem
+></para>
+
+<screenshot>
+<screeninfo
+>Пункт меню Файл <guimenuitem
+>Создать презентацию в формате HTML...</guimenuitem
+></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow1.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Пункт меню Файл <guimenuitem
+>Создать презентацию в формате HTML...</guimenuitem
+></phrase
+></textobject>
+</mediaobject>
+</screenshot>
+</step>
+
+<step>
+<para
+>В появившемся диалоге будет задан вопрос об использовании ранее сохранённой настройки:</para>
+
+<screenshot>
+<screeninfo
+>Диалог ранее сохранённой настройки</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow2.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Диалог ранее сохранённой настройки</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Нажмите <guibutton
+>Нет</guibutton
+>, если вы создаёте такую презентацию впервые, или если хотите изменить имеющиеся параметры. Нажатие кнопки <guibutton
+>Да</guibutton
+> позволит вам использовать настройки, сделанные вами в ходе создания прежних презентаций в формате <acronym
+>HTML</acronym
+>, сэкономив тем самым время и силы.</para>
+</step>
+
+<step>
+<para
+>Затем появится диалог для уточнения некоторых деталей:</para>
+
+<screenshot>
+<screeninfo
+>Ввод данных для веб-презентации</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow3.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Ввод данных для веб-презентации</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Заполните каждое поле (в диалоге выводится информация из &kcontrol;, если она там есть) и убедитесь, что пути для сохранения файлов <acronym
+>HTML</acronym
+> и рисунков совпадают с теми, которые указаны в &kpresenter;. Нажмите кнопку <guibutton
+>Далее</guibutton
+> для продолжения.</para>
+
+<para
+>Если указанного каталога не существует, &kpresenter; предложит создать его.</para
+></step>
+
+<step>
+<para
+>Теперь можно настроить особые параметры <acronym
+>HTML</acronym
+>:</para>
+
+<screenshot>
+<screeninfo
+>Ввод дополнительных данных для веб-презентации</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow4.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Ввод дополнительных данных для веб-презентации</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Здесь вы можете настроить кодировку, формат страниц HTML и указать масштаб слайдов. Например, ваши слайды первоначально были созданы для просмотра на большом мониторе с разрешением 1280 x 1024. Так вот, для удобного просмотра в небольшом окне браузера их желательно уменьшить вдвое.</para>
+
+<para
+>В большинстве случаев бывает достаточно настроек по умолчанию, поэтому можно смело нажать кнопку <guibutton
+>Далее</guibutton
+> для перехода на следующую страницу.</para>
+</step>
+
+<step>
+<para
+>Теперь укажите цвета для на веб-страниц:</para>
+
+<screenshot>
+<screeninfo
+>Настройка стиля для веб-презентации</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow5.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Настройка стиля для веб-презентации</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>При создании веб-страниц выбранные вами цвета будут использованы для навигации по слайдам. Для изменения цвета щёлкните цветовую панель напротив соответствующей текстовой метки. Цвета самих слайдов останутся без изменений.</para>
+
+<tip
+><para
+>Выбирайте цвета, соответствующие теме вашей презентации.</para
+></tip>
+</step>
+
+<step
+><para
+>Кнопка <guibutton
+>Далее</guibutton
+> откроет вам диалог, в котором вы укажете заголовок страницы <acronym
+>HTML</acronym
+> для каждого слайда:</para>
+
+<screenshot>
+<screeninfo
+>Ввод названий слайдов</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow6.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Ввод названий слайдов</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</step>
+
+<step>
+<para
+>Если вы намереваетесь проводить презентацию в автоматизированном режиме (т.е. автоматический переход к следующему слайду и т.д.), вы можете соответствующим образом настроить и её гипертекстовую часть:</para>
+
+<screenshot>
+<screeninfo
+>Автоматизированные презентации</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow7.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Автоматизированные презентации</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Здесь можно указать промежуток времени, через который слайды будут сменять друг друга, а также возвращение презентации к началу после её завершения.</para>
+</step>
+
+<step>
+<para
+>Теперь самое время взяться за саму веб-презентацию, процесс изготовления которой показан в следующем диалоге:</para>
+
+<screenshot>
+<screeninfo
+>Сохранение настроек</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow8.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Сохранение настроек</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Закончив работу, можно сохранить сделанную настройку, нажав кнопку <guibutton
+>Сохранить настройку...</guibutton
+>. </para>
+</step>
+
+<step
+><para
+>Теперь у нас есть заново созданные папки <filename
+>html</filename
+> и <filename
+>pics</filename
+>, созданные в ранее указанном каталоге:</para>
+
+<screenshot>
+<screeninfo
+>Созданные каталоги с веб-презентацией</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow9.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Созданные каталоги с веб-презентацией</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+</step>
+</procedure>
+
+<para
+>Кроме того, в этом каталоге находится файл <filename
+>index.html</filename
+> для запуска вашей презентации.</para>
+
+<para
+>Теперь вы можете увидеть свою презентацию, открыв файл <filename
+>index.html</filename
+> в вашем файловом менеджере или браузере. Щелкните мышью на этом файле, и появится первый слайд. Он будет вести себя так же, как в презентации.</para>
+
+<para
+>Каждый щелчок мышью на слайде будет открывать следующий слайд.</para>
+
+<tip
+><para
+>Чтобы представить ваше произведение всему миру, перенесите созданные вами файлы в то место, где они будут доступны для всеобщего просмотра (то есть, в Интернет), не забыв сохранить правильную структуру директорий.</para
+></tip>
+</sect1>
+
+<sect1 id="ms-export">
+<title
+>Экспорт презентаций &kpresenter; на <trademark
+>Memory Stick</trademark
+> (флеш-карту)</title>
+<para
+>Некоторые проекторы Sony обладают способностью запускать презентации прямо из <trademark
+>Memory Stick</trademark
+> (флеш-карты), делая ненужным подключение к компьютеру. &kpresenter; может экспортировать презентации в такой формат, и этот учебник покажет вам, как это делается. </para>
+
+<para
+>Любая презентация состоит из последовательности графических файлов (по одному на каждый слайд собственно презентации, плюс два титульных слайда) и файла индекса. Они собраны в довольно сложную структуру, позволяющую разместить в одной флеш-карте несколько презентаций. В простом примере, показанном ниже, мы видим две. </para>
+
+<mediaobject id="ms-export-directory-structure">
+<imageobject>
+<imagedata format="PNG" fileref="msexport4.png"/>
+</imageobject>
+<textobject
+><phrase
+>Структура директорий <trademark
+>Memory Stick</trademark
+></phrase
+></textobject>
+</mediaobject>
+
+<procedure>
+
+
+<step>
+<para
+>Если нужная презентация ещё не открыта, воспользуйтесь пунктом <guimenu
+>Файл</guimenu
+><guimenuitem
+>Открыть...</guimenuitem
+> и выберите желаемую презентацию. </para>
+</step>
+
+<step>
+<para
+>Теперь выберите пункт меню <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Создать презентацию для Memory Stick...</guimenuitem
+>. </para>
+
+<screenshot>
+<screeninfo
+>Выбор пункта меню &kpresenter; <guimenuitem
+>Создать презентацию для Memory Stick...</guimenuitem
+>.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="msexport1.png"/>
+</imageobject>
+<textobject
+><phrase
+>Выбор пункта меню &kpresenter; <guimenuitem
+>Создать презентацию для Memory Stick...</guimenuitem
+>.</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+</step>
+
+<step>
+<para
+>Это вызовет появление диалога <guilabel
+>Создать презентацию для Memory Stick</guilabel
+>.</para>
+
+<screenshot>
+<screeninfo
+>Диалог &kpresenter; <guilabel
+>Создать презентацию для Memory Stick</guilabel
+>.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="msexport2.png"/>
+</imageobject>
+<textobject
+><phrase
+>Диалог &kpresenter; <guilabel
+>Создать презентацию для Memory Stick</guilabel
+>.</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+><guilabel
+>Путь</guilabel
+> указывает директорию, в которую ваши презентации будут экспортированы в виде папок (<filename
+>DCIM</filename
+> и <filename
+>MSSONY</filename
+>, смотрите <link linkend="ms-export-directory-structure"
+>directory structure diagram</link
+> выше). Если сможете, экспортируйте прямо в <trademark
+>Memory Stick</trademark
+>, в этом случае укажите путь к ней. </para>
+
+<para
+><guilabel
+>Заголовок</guilabel
+> определяет имя файла индекса и текст на титульном слайде. Заметьте, что этот заголовок не влияет на титры обычных слайдов презентации - титульный слайд, благодаря настройкам проектора Sony, бывает виден только до начала основной презентации. </para>
+
+<para
+>Выбрав параметр <guibutton
+>Цвета</guibutton
+>, вы развернёте диалог:</para>
+
+<screenshot>
+<screeninfo
+>Развёрнутый диалог &kpresenter; <guilabel
+>Создать презентацию для Memory Stick</guilabel
+>.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="msexport2b.png"/>
+</imageobject>
+<textobject
+><phrase
+>Развёрнутый диалог &kpresenter; <guilabel
+>Создать презентацию для Memory Stick</guilabel
+>.</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Эти два переключателя цветов влияют только на титульный слайд. Ими можно воспользоваться для того чтобы различать презентации во время работы за проектором, но совершенно безопасно оставить всё, как есть. </para>
+
+<para
+>Нажмите кнопку <guibutton
+>OK</guibutton
+>, и процесс экспорта начнётся. </para>
+</step>
+
+<step>
+
+<para
+>Ваша презентация будет экспортирована в нужный формат, а процесс экспорта будет отображаться в следующем диалоге: </para>
+
+<screenshot>
+<screeninfo
+>Диалог &kpresenter; <guilabel
+>Создать презентацию Memory Stick</guilabel
+>, отображающий процесс экспорта.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="msexport3.png"/>
+</imageobject>
+<textobject
+><phrase
+>Диалог &kpresenter; <guilabel
+>Создать презентацию Memory Stick</guilabel
+>, отображающий процесс экспорта.</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>По окончании экспорта нажмите кнопку <guibutton
+>Готово</guibutton
+>, и диалог закроется. </para>
+</step>
+
+<step>
+<para
+>Если вы не экспортировали презентацию непосредственно в <trademark
+>Memory Stick</trademark
+>, перед использованием проектора необходимо правильно скопировать туда файлы. Как говорилось выше, правильно будет скопировать папки и файлы, названия которых начинаются на <filename
+>DCIM</filename
+> и <filename
+>MSSONY</filename
+>, в "root", или <filename
+>/</filename
+>, <trademark
+>Memory Stick</trademark
+>. Очень важно сохранить структуру директорий, поэтому может оказаться проще скопировать папки <filename
+>DCIM</filename
+> и <filename
+>MSSONY</filename
+> полностью. </para>
+
+<para
+>В случае необходимости можно смело переименовать файл индекса (по умолчанию он называется <filename
+>Slideshow.SPP</filename
+>), но нельзя переименовывать ни сами слайды, ни директории, так как их названия прописаны в файле индекса. </para>
+</step>
+
+</procedure>
+
+</sect1>
+
+<sect1 id="creating-templates">
+<title
+>Создание шаблонов &kpresenter;</title>
+
+<para
+>Добавить новые шаблоны в базу &kpresenter; очень просто.</para>
+
+<para
+>Если вы создали презентацию в стиле, который желаете использовать повторно, можно сохранить его в виде шаблона.</para>
+
+<para
+>Это руководство покажет, как сделать новый шаблон и сохранить его.</para>
+
+<procedure>
+<step>
+<para
+>Откройте &kpresenter; и создайте новый документ.</para>
+</step>
+
+<step>
+<para
+>Чтобы оживить пустой слайд, изменим его фон - сделаем это через <guimenu
+>Формат</guimenu
+> 
+> <guimenuitem
+>Фон слайда...</guimenuitem
+> или выбрав этот же пункт из контекстного меню:</para>
+
+<screenshot>
+<screeninfo
+>Диалог &kpresenter; <guilabel
+>Фон слайда</guilabel
+>.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="template02.png"/>
+</imageobject>
+<textobject
+><phrase
+>Диалог &kpresenter; <guilabel
+>Фон слайда</guilabel
+>.</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Мы хотим, чтобы фон был приятным для глаза, поэтому давайте перейдем к выбору цвета через контекстное меню, а затем выберем нужный оттенок, щёлкнув подходящий цветной квадратик. Естественно, вы можете выбрать в качестве фонового любое изображение, перейдя на вкладку <guilabel
+>Рисунок</guilabel
+>: пробуйте смело, но не забывайте о красоте!</para>
+
+<screenshot>
+<screeninfo
+>Выбор фона для слайда</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="template03.png"/>
+</imageobject>
+<textobject
+><phrase
+>Выбор фона для слайда</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+</step>
+
+<step>
+<para
+>Теперь у слайда будет желаемый фон. Создайте текстовое поле и введите в нем заголовок слайда:</para>
+
+<screenshot>
+<screeninfo
+>Добавление заголовка в новый шаблон</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template04.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Добавление заголовка в новый шаблон</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Если вы довольны полученным результатом, выберите <guimenu
+>Файл</guimenu
+> 
+> <guimenuitem
+>Менеджер шаблонов</guimenuitem
+>:</para>
+
+<screenshot>
+<screeninfo
+><guimenu
+>Файл</guimenu
+><guimenuitem
+>Менеджер шаблонов</guimenuitem
+></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template05.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+><guimenu
+>Файл</guimenu
+><guimenuitem
+>Менеджер шаблонов</guimenuitem
+></phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>В появившемся диалоге укажите, где следует сохранить шаблон:</para>
+
+<screenshot>
+<screeninfo
+>Сохранение нового шаблона</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template06.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Сохранение нового шаблона</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Настоятельно рекомендую вам выбрать группу <guilabel
+>Экранные презентации</guilabel
+>. Называйте свой шаблон, как вам понравится, я назвал свой <userinput
+>Tutorial_Template</userinput
+>.Закончив настройку, нажмите кнопку <guibutton
+>OK</guibutton
+>, и ваш образец будет добавлен в коллекцию.</para>
+</step>
+
+<step>
+<para
+>Теперь закройте документ, с которым вы работали (сохранение не требуется), и при следующем запуске перед вами предстанет диалог &kpresenter; <guilabel
+>Создать документ</guilabel
+>, в котором вы сможете выбрать созданный своими руками шаблон!</para>
+
+<screenshot>
+<screeninfo
+>Ваш новый шаблон в диалоге &kpresenter; <guilabel
+>Создать документ</guilabel
+>.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template07.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Ваш новый шаблон в диалоге &kpresenter; <guilabel
+>Создать документ</guilabel
+>.</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+</step>
+</procedure>
+
+</sect1>
+
+</chapter>

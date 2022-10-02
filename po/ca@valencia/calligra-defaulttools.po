@@ -1,0 +1,530 @@
+# Translation of calligra-defaulttools.po to Catalan (Valencian)
+# Copyright (C) 2008-2021 This_file_is_part_of_KDE
+# This file is distributed under the same license as the koffice-defaulttools package.
+#
+# Rafael Carreras <rcarreras@caliu.cat>, 2008, 2011.
+# Josep M. Ferrer <txemaq@gmail.com>, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2021-04-02 22:36+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca@valencia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Poedit-Language: Catalan\n"
+"X-Generator: Lokalize 2.0\n"
+
+#. i18n: ectx: property (text), widget (QCheckBox, toggleEditMode)
+#: connectionTool/ConnectionPointWidget.ui:30
+#, kde-format
+msgid "Edit Mode"
+msgstr "Mode d'edició"
+
+#. i18n: ectx: property (text), widget (QLabel, labelEscape)
+#: connectionTool/ConnectionPointWidget.ui:37
+#, kde-format
+msgid "Escape Direction"
+msgstr "Direcció d'escapament"
+
+#. i18n: ectx: property (text), widget (QLabel, labelAlign)
+#: connectionTool/ConnectionPointWidget.ui:97
+#, kde-format
+msgid "Alignment"
+msgstr "Alineació"
+
+#. i18n: ectx: property (text), widget (QToolButton, alignPercent)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleXSpinBox)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleYSpinBox)
+#: connectionTool/ConnectionPointWidget.ui:116
+#: defaulttool/DefaultToolTransformWidget.ui:106
+#: defaulttool/DefaultToolTransformWidget.ui:138
+#, no-c-format, kde-format
+msgid "%"
+msgstr "%"
+
+#: connectionTool/ConnectionTool.cpp:66
+#, kde-format
+msgid "Edit connection points"
+msgstr "Edita els punts de connexió"
+
+#: connectionTool/ConnectionTool.cpp:73
+#, kde-format
+msgid "Align to left edge"
+msgstr "Alinea a la vora esquerra"
+
+#: connectionTool/ConnectionTool.cpp:76
+#, kde-format
+msgid "Align to horizontal center"
+msgstr "Alinea al centre horitzontal"
+
+#: connectionTool/ConnectionTool.cpp:79
+#, kde-format
+msgid "Align to right edge"
+msgstr "Alinea a la vora dreta"
+
+#: connectionTool/ConnectionTool.cpp:82
+#, kde-format
+msgid "Align to top edge"
+msgstr "Alinea a la vora de dalt"
+
+#: connectionTool/ConnectionTool.cpp:85
+#, kde-format
+msgid "Align to vertical center"
+msgstr "Alinea al centre vertical"
+
+#: connectionTool/ConnectionTool.cpp:88
+#, kde-format
+msgid "Align to bottom edge"
+msgstr "Alinea a la vora de baix"
+
+#: connectionTool/ConnectionTool.cpp:92
+#, kde-format
+msgid "Escape in all directions"
+msgstr "Escapament en totes les direccions"
+
+#: connectionTool/ConnectionTool.cpp:95
+#, kde-format
+msgid "Escape in horizontal directions"
+msgstr "Escapament en direccions horitzontals"
+
+#: connectionTool/ConnectionTool.cpp:98
+#, kde-format
+msgid "Escape in vertical directions"
+msgstr "Escapament en direccions verticals"
+
+#: connectionTool/ConnectionTool.cpp:101
+#, kde-format
+msgid "Escape in left direction"
+msgstr "Escapament en direcció esquerra"
+
+#: connectionTool/ConnectionTool.cpp:104
+#, kde-format
+msgid "Escape in right direction"
+msgstr "Escapament en direcció dreta"
+
+#: connectionTool/ConnectionTool.cpp:107
+#, kde-format
+msgid "Escape in up direction"
+msgstr "Escapament en direcció amunt"
+
+#: connectionTool/ConnectionTool.cpp:110
+#, kde-format
+msgid "Escape in down direction"
+msgstr "Escapament en direcció avall"
+
+#: connectionTool/ConnectionTool.cpp:434
+msgctxt "(qtundo-format)"
+msgid "Create Connection"
+msgstr "Crea una connexió"
+
+#: connectionTool/ConnectionTool.cpp:774 connectionTool/ConnectionTool.cpp:786
+#, kde-format
+msgid "Drag to edit connection."
+msgstr "Arrossegueu per a editar la connexió."
+
+#: connectionTool/ConnectionTool.cpp:776 connectionTool/ConnectionTool.cpp:788
+#, kde-format
+msgid "Double click connection or press delete to remove it."
+msgstr "Doble clic a la connexió o premeu suprimir per a eliminar-la."
+
+#: connectionTool/ConnectionTool.cpp:778
+#, kde-format
+msgid "Click to edit connection points."
+msgstr "Cliqueu per a editar els punts de connexió."
+
+#: connectionTool/ConnectionTool.cpp:792
+#, kde-format
+msgid ""
+"Drag to move connection point. Double click connection or press delete to "
+"remove it."
+msgstr ""
+"Arrossegueu per a moure el punt de connexió. Doble clic a la connexió o "
+"premeu suprimir per a eliminar-la."
+
+#: connectionTool/ConnectionTool.cpp:794
+#, kde-format
+msgid "Double click connection point or press delete to remove it."
+msgstr "Doble clic al punt de connexió o premeu suprimir per a eliminar-lo."
+
+#: connectionTool/ConnectionTool.cpp:796
+#, kde-format
+msgid "Double click to add connection point."
+msgstr "Doble clic per a afegir un punt de connexió."
+
+#: connectionTool/ConnectionTool.cpp:799
+#, kde-format
+msgid "Drag to create new connection."
+msgstr "Arrossegueu per a crear una connexió nova."
+
+#: connectionTool/ConnectionTool.cpp:827
+#, kde-format
+msgid "Connection"
+msgstr "Connexió"
+
+#: connectionTool/ConnectionTool.cpp:832 defaulttool/DefaultTool.cpp:1167
+#, kde-format
+msgid "Line"
+msgstr "Línia"
+
+#: connectionTool/ConnectionTool.cpp:837
+#, kde-format
+msgid "Connection Point"
+msgstr "Punt de connexió"
+
+#: connectionTool/ConnectionToolFactory.cpp:18
+#, kde-format
+msgid "Connect shapes"
+msgstr "Connecta les formes"
+
+#: defaulttool/DefaultTool.cpp:205
+#, kde-format
+msgid "Bring to &Front"
+msgstr "Porta al &davant"
+
+#: defaulttool/DefaultTool.cpp:210
+#, kde-format
+msgid "&Raise"
+msgstr "&Puja"
+
+#: defaulttool/DefaultTool.cpp:215
+#, kde-format
+msgid "&Lower"
+msgstr "&Baixa"
+
+#: defaulttool/DefaultTool.cpp:221
+#, kde-format
+msgid "Send to &Back"
+msgstr "Envia al da&rrere"
+
+#: defaulttool/DefaultTool.cpp:227
+#, kde-format
+msgid "Align Left"
+msgstr "Alinea a l'esquerra"
+
+#: defaulttool/DefaultTool.cpp:232
+#, kde-format
+msgid "Horizontally Center"
+msgstr "Centra horitzontalment"
+
+#: defaulttool/DefaultTool.cpp:237
+#, kde-format
+msgid "Align Right"
+msgstr "Alinea a la dreta"
+
+#: defaulttool/DefaultTool.cpp:241
+#, kde-format
+msgid "Align Top"
+msgstr "Alinea a dalt"
+
+#: defaulttool/DefaultTool.cpp:246
+#, kde-format
+msgid "Vertically Center"
+msgstr "Centra verticalment"
+
+#: defaulttool/DefaultTool.cpp:251
+#, kde-format
+msgid "Align Bottom"
+msgstr "Alinea a baix"
+
+#: defaulttool/DefaultTool.cpp:256
+#, kde-format
+msgid "Group"
+msgstr "Agrupa"
+
+#: defaulttool/DefaultTool.cpp:261
+#, kde-format
+msgid "Ungroup"
+msgstr "Desagrupa"
+
+#: defaulttool/DefaultTool.cpp:447 defaulttool/DefaultTool.cpp:522
+#, kde-format
+msgid "Click and drag to move guide line."
+msgstr "Cliqueu i arrossegueu per a moure la línia guia."
+
+#: defaulttool/DefaultTool.cpp:454
+#, kde-format
+msgid ""
+"Left click rotates around center, right click around highlighted position."
+msgstr ""
+"Amb el clic esquerre, es gira pel centre, amb el dret, per la posició "
+"marcada."
+
+#: defaulttool/DefaultTool.cpp:456
+#, kde-format
+msgid "Click and drag to shear selection."
+msgstr "Cliqueu i arrossegueu per a inclinar la selecció."
+
+#: defaulttool/DefaultTool.cpp:459
+#, kde-format
+msgid "Click and drag to resize selection."
+msgstr "Cliqueu i arrossegueu per a redimensionar la selecció."
+
+#: defaulttool/DefaultTool.cpp:511
+#, kde-format
+msgid "Click and drag to move selection."
+msgstr "Cliqueu i arrossegueu per a moure la selecció."
+
+#: defaulttool/DefaultTool.cpp:516
+#, kde-format
+msgid ""
+"Click and drag to resize selection. Middle click to set highlighted position."
+msgstr ""
+"Cliqueu i arrossegueu per a redimensionar la selecció. Clic del mig per a "
+"establir la posició marcada."
+
+#: defaulttool/DefaultTool.cpp:1039
+msgctxt "(qtundo-format)"
+msgid "Group shapes"
+msgstr "Agrupa les formes"
+
+#: defaulttool/DefaultTool.cpp:1071
+msgctxt "(qtundo-format)"
+msgid "Ungroup shapes"
+msgstr "Desagrupa les formes"
+
+#: defaulttool/DefaultTool.cpp:1161
+#, kde-format
+msgid "Arrange"
+msgstr "Organitza"
+
+#: defaulttool/DefaultTool.cpp:1164
+#, kde-format
+msgid "Geometry"
+msgstr "Geometria"
+
+#: defaulttool/DefaultTool.cpp:1172
+#, kde-format
+msgid "Fill"
+msgstr "Emplenat"
+
+#: defaulttool/DefaultTool.cpp:1177
+#, kde-format
+msgid "Shadow"
+msgstr "Ombra"
+
+#: defaulttool/DefaultToolFactory.cpp:17
+#, kde-format
+msgid "Shape handling"
+msgstr "Gestió de formes"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:100
+#: defaulttool/ShapeRotateStrategy.cpp:137
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "Gira"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:138
+msgctxt "(qtundo-format)"
+msgid "Shear X"
+msgstr "Inclina X"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:176
+msgctxt "(qtundo-format)"
+msgid "Shear Y"
+msgstr "Inclina Y"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:218
+#: defaulttool/DefaultToolTransformWidget.cpp:255
+msgctxt "(qtundo-format)"
+msgid "Scale"
+msgstr "Escala"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:287
+msgctxt "(qtundo-format)"
+msgid "Reset Transformations"
+msgstr "Reinicia les transformacions"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, rotateSpinBox)
+#: defaulttool/DefaultToolTransformWidget.ui:25
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (text), widget (QPushButton, rotateButton)
+#: defaulttool/DefaultToolTransformWidget.ui:38
+#, kde-format
+msgid "Rotate"
+msgstr "Gira"
+
+#. i18n: ectx: property (text), widget (QPushButton, shearXButton)
+#: defaulttool/DefaultToolTransformWidget.ui:64
+#, kde-format
+msgid "Shear X"
+msgstr "Inclina X"
+
+#. i18n: ectx: property (text), widget (QPushButton, shearYButton)
+#: defaulttool/DefaultToolTransformWidget.ui:90
+#, kde-format
+msgid "Shear Y"
+msgstr "Inclina Y"
+
+#. i18n: ectx: property (text), widget (QPushButton, scaleXButton)
+#: defaulttool/DefaultToolTransformWidget.ui:122
+#, kde-format
+msgid "Scale X"
+msgstr "Escala X"
+
+#. i18n: ectx: property (text), widget (QPushButton, scaleYButton)
+#: defaulttool/DefaultToolTransformWidget.ui:154
+#, kde-format
+msgid "Scale Y"
+msgstr "Escala Y"
+
+#. i18n: ectx: property (text), widget (QCheckBox, scaleAspectCheckBox)
+#: defaulttool/DefaultToolTransformWidget.ui:161
+#, kde-format
+msgid "Keep aspect ratio"
+msgstr "Mantín la relació d'aspecte"
+
+#. i18n: ectx: property (text), widget (QPushButton, resetButton)
+#: defaulttool/DefaultToolTransformWidget.ui:174
+#, kde-format
+msgid "Reset Transformations"
+msgstr "Reinicia les transformacions"
+
+#: defaulttool/DefaultToolWidget.cpp:225
+#: defaulttool/ShapeResizeStrategy.cpp:304
+msgctxt "(qtundo-format)"
+msgid "Resize"
+msgstr "Redimensiona"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: defaulttool/DefaultToolWidget.ui:29
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: defaulttool/DefaultToolWidget.ui:91
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#: defaulttool/ShapeMoveStrategy.cpp:53
+#, kde-format
+msgid "Press ALT to hold x- or y-position."
+msgstr "Premeu Alt per a mantindre les posicions X o Y."
+
+#: defaulttool/ShapeResizeStrategy.cpp:92
+#, kde-format
+msgid "Press CTRL to resize from center."
+msgstr "Premeu Ctrl per a redimensionar des del centre."
+
+#: defaulttool/ShapeRotateStrategy.cpp:49
+#, kde-format
+msgid "Press ALT to rotate in 45 degree steps."
+msgstr "Premeu Alt per a girar en passos de 45 graus."
+
+#: defaulttool/ShapeShearStrategy.cpp:169
+msgctxt "(qtundo-format)"
+msgid "Shear"
+msgstr "Inclina"
+
+#: guidestool/GuidesTool.cpp:133
+#, kde-format
+msgid "Double click to add guide line."
+msgstr "Feu doble clic per a afegir la línia guia."
+
+#: guidestool/GuidesTool.cpp:136
+#, kde-format
+msgid "Click and drag to move guide line. Double click to remove guide line."
+msgstr ""
+"Cliqueu i arrossegueu per a moure la línia guia. Feu doble clic per a "
+"eliminar la línia guia."
+
+#: guidestool/GuidesTool.cpp:374
+#, kde-format
+msgid "Guides Editor"
+msgstr "Editor de guies"
+
+#: guidestool/GuidesTool.cpp:382
+#, kde-format
+msgid "Guides Insertor"
+msgstr "Inseridor de guies"
+
+#: guidestool/GuidesToolFactory.cpp:14
+#, kde-format
+msgid "Edit guidelines"
+msgstr "Edita les línies guia"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: guidestool/GuidesToolOptionWidget.cpp:18
+#: guidestool/InsertGuidesToolOptionWidget.ui:25
+#, kde-format
+msgid "Horizontal"
+msgstr "Horitzontal"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: guidestool/GuidesToolOptionWidget.cpp:19
+#: guidestool/InsertGuidesToolOptionWidget.ui:65
+#, kde-format
+msgid "Vertical"
+msgstr "Vertical"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: guidestool/GuidesToolOptionWidget.ui:17
+#, kde-format
+msgid "Orientation:"
+msgstr "Orientació:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: guidestool/GuidesToolOptionWidget.ui:27
+#, kde-format
+msgid "Position:"
+msgstr "Posició:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#: guidestool/GuidesToolOptionWidget.ui:37
+#, kde-format
+msgid "Add"
+msgstr "Afig"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeButton)
+#: guidestool/GuidesToolOptionWidget.ui:44
+#, kde-format
+msgid "Remove"
+msgstr "Elimina"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, m_horizontalSpinBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:38
+#, kde-format
+msgid "Insert this number of horizontal equally spaced guides."
+msgstr "Inserix este nombre de guies horitzontals igualment espaiades."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, m_horizontalEdgesCheckBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:51
+#, kde-format
+msgid "Insert guides at the horizontal edges."
+msgstr "Inserix guies a les vores horitzontals."
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, m_verticalSpinBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:78
+#, kde-format
+msgid "Insert this number of vertical equally spaced guides."
+msgstr "Inserix este nombre de guies verticals igualment espaiades."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, m_verticalEdgesCheckBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:91
+#, kde-format
+msgid "Insert guides at the vertical edges."
+msgstr "Inserix guies a les vores verticals."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_erasePreviousCheckBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:105
+#, kde-format
+msgid "Erase previous guides"
+msgstr "Esborra les guies anteriors"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_createButton)
+#: guidestool/InsertGuidesToolOptionWidget.ui:112
+#, kde-format
+msgid "Create"
+msgstr "Crea"

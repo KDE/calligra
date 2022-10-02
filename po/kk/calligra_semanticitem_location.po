@@ -1,0 +1,150 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-11-07 04:02+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: KoLocationSemanticItemFactory.cpp:34
+#, kde-format
+msgctxt "displayname of the semantic item type Location"
+msgid "Location"
+msgstr "Орыны"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationEditWidget.ui:17
+#, kde-format
+msgid "&Name"
+msgstr "&Атауы"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationEditWidgetMarble.ui:17 KoRdfLocationViewWidgetMarble.ui:24
+#, kde-format
+msgid "Name"
+msgstr "Атауы"
+
+#. i18n: ectx: property (toolTip), widget (Marble::MarbleWidget, map)
+#: KoRdfLocationEditWidgetMarble.ui:30 KoRdfLocationViewWidgetMarble.ui:31
+#, kde-format
+msgid "The Earth"
+msgstr "Жер"
+
+#. i18n: ectx: property (whatsThis), widget (Marble::MarbleWidget, map)
+#: KoRdfLocationEditWidgetMarble.ui:33 KoRdfLocationViewWidgetMarble.ui:34
+#, kde-format
+msgid "The Marble widget displays a virtual globe."
+msgstr "Виртуалды глобусты көрсететін Marble виджеті."
+
+#. i18n: ectx: property (toolTip), widget (Marble::MarbleNavigator, zoomer)
+#: KoRdfLocationEditWidgetMarble.ui:40
+#, kde-format
+msgid "Navigation Control"
+msgstr "Шарлауды басқару"
+
+#. i18n: ectx: property (whatsThis), widget (Marble::MarbleNavigator, zoomer)
+#: KoRdfLocationEditWidgetMarble.ui:43
+#, kde-format
+msgid "Use this control to navigate."
+msgstr "Осы тізгінімен шарлауға болады."
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfLocationEditWidgetMarble.ui:50
+#, kde-format
+msgid "Latitude"
+msgstr "Ендігі"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: KoRdfLocationEditWidgetMarble.ui:60
+#, kde-format
+msgid "Longitude"
+msgstr "Бойлығы"
+
+#: KoRdfLocationTreeWidgetItem.cpp:42
+#, kde-format
+msgid "Location Information"
+msgstr "Орын мәліметі"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationViewWidget.ui:24
+#, kde-format
+msgid "&Name:"
+msgstr "&Атауы:"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name"
+#~ msgstr "Атауы"
+
+#, fuzzy
+#~| msgid "The Earth"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The Earth"
+#~ msgstr "Жер"
+
+#, fuzzy
+#~| msgid "The Marble widget displays a virtual globe."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The Marble widget displays a virtual globe."
+#~ msgstr "Виртуалды глобусты көрсететін Marble виджеті."
+
+#, fuzzy
+#~| msgid "Navigation Control"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation Control"
+#~ msgstr "Шарлауды басқару"
+
+#, fuzzy
+#~| msgid "Use this control to navigate."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use this control to navigate."
+#~ msgstr "Осы тізгінімен шарлауға болады."
+
+#, fuzzy
+#~| msgid "Latitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latitude"
+#~ msgstr "Ендігі"
+
+#, fuzzy
+#~| msgid "Longitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Longitude"
+#~ msgstr "Бойлығы"
+
+#, fuzzy
+#~| msgid "&Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Name:"
+#~ msgstr "&Атауы:"
+
+#, fuzzy
+#~| msgid "&Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Name"
+#~ msgstr "&Атауы"
+
+#, fuzzy
+#~| msgctxt "displayname of the semantic item type Location"
+#~| msgid "Location"
+#~ msgctxt "(qtundo-format) displayname of the semantic item type Location"
+#~ msgid "Location"
+#~ msgstr "Орыны"
+
+#, fuzzy
+#~| msgid "Location Information"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Location Information"
+#~ msgstr "Орын мәліметі"

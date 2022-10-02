@@ -1,0 +1,2367 @@
+# translation of karbon.po to Euskara/Basque (eu).
+#
+# Ion Gaztañaga <igaztanaga@gmail.com>, 2005.
+# Iñigo Salvador Azurmendi <xalba@euskalnet.net>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-12-23 16:03+0100\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@euskalnet.net>\n"
+"Language-Team: Basque <kde-i18n-doc@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, kde-format
+msgid "Blend"
+msgstr "Nahasi"
+
+#: BlendEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Blend mode"
+msgstr "Nahaste modua"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "Normala"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr "Biderkatu"
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr "Pantaila"
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr "Ilundu"
+
+#: BlendEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Lighten"
+msgstr "Argitu"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr "Gauss-en lausotzea"
+
+#: BlurEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Radius"
+msgstr "Erradioa"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr "Kolore-matrizea"
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr "Aplikatu kolore-matrizea"
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Saturate colors"
+msgstr "Ase koloreak"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Rotate hue"
+msgstr "Biratu ñabardura"
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr "Luminantzia alfara"
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Saturate value"
+msgstr "Ase balioa"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, kde-format
+msgid "Angle"
+msgstr "Angelua"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr "Kolore-matrizea"
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr "Osagai-transferentzia"
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr "Funtzioa"
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr "Identitatea"
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, kde-format
+msgid "Table"
+msgstr "Taula"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr "Diskretua"
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Linear"
+msgstr "Lineala"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr "Gamma"
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr "Balioak"
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, kde-format
+msgid "Slope"
+msgstr "Malda"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, kde-format
+msgid "Intercept"
+msgstr "Ebakipuntua"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr "Anplitudea"
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr "Berretzailea"
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr "Desplazamendua"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, kde-format
+msgid "Composite"
+msgstr "Konposatua"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, kde-format
+msgid "Operation"
+msgstr "Eragiketa"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr "Konboluzio-matrizea"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, kde-format
+msgid "Duplicate"
+msgstr "Bikoiztu"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr "Egokitu"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, kde-format
+msgid "None"
+msgstr "Bat ere ez"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, kde-format
+msgid "Edge mode:"
+msgstr "Ertz modua:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr "Nukleo-tamaina:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Target point:"
+msgstr "Helburu-puntua:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr "Zatitzailea:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr "Alborapena:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr "Mantendu alfa"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, kde-format
+msgid "Edit kernel"
+msgstr "Editatu nukleoa"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, kde-format
+msgid "Flood fill"
+msgstr "Betetzea"
+
+#: FloodEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Flood color"
+msgstr "Betetze-kolorea"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr "Irudia"
+
+#: ImageEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Select image..."
+msgstr "Irudia hautatu..."
+
+#: ImageEffectConfigWidget.cpp:54
+#, kde-format
+msgid "Select image"
+msgstr "Hautatu irudia"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr "Batu"
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr "Morfologia"
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr "Higatu"
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Dilate"
+msgstr "Zabaldu"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Operator:"
+msgstr "Eragilea:"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Radius x:"
+msgstr "X erradioa:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, kde-format
+msgid "Radius y:"
+msgstr "Y erradioa:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr "dx"
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr "dy"
+
+#, fuzzy
+#~| msgid "Blend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "Nahasi"
+
+#, fuzzy
+#~| msgid "Blend mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "Nahaste modua"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Normala"
+
+#, fuzzy
+#~| msgid "Multiply"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiply"
+#~ msgstr "Biderkatu"
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Screen"
+#~ msgstr "Pantaila"
+
+#, fuzzy
+#~| msgid "Darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "Ilundu"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Argitu"
+
+#, fuzzy
+#~| msgid "Gaussian blur"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gaussian blur"
+#~ msgstr "Gauss-en lausotzea"
+
+#, fuzzy
+#~| msgid "Radius"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "Erradioa"
+
+#, fuzzy
+#~| msgid "Color Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color Matrix"
+#~ msgstr "Kolore-matrizea"
+
+#, fuzzy
+#~| msgid "Apply color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply color matrix"
+#~ msgstr "Aplikatu kolore-matrizea"
+
+#, fuzzy
+#~| msgid "Saturate colors"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "Ase koloreak"
+
+#, fuzzy
+#~| msgid "Rotate hue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate hue"
+#~ msgstr "Biratu ñabardura"
+
+#, fuzzy
+#~| msgid "Luminance to alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Luminance to alpha"
+#~ msgstr "Luminantzia alfara"
+
+#, fuzzy
+#~| msgid "Saturate value"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "Ase balioa"
+
+#, fuzzy
+#~| msgid "Angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "Angelua"
+
+#, fuzzy
+#~| msgid "Color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color matrix"
+#~ msgstr "Kolore-matrizea"
+
+#, fuzzy
+#~| msgid "Component transfer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Component transfer"
+#~ msgstr "Osagai-transferentzia"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function"
+#~ msgstr "Funtzioa"
+
+#, fuzzy
+#~| msgid "Identity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Identity"
+#~ msgstr "Identitatea"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "Taula"
+
+#, fuzzy
+#~| msgid "Discrete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Discrete"
+#~ msgstr "Diskretua"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "Lineala"
+
+#, fuzzy
+#~| msgid "Gamma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gamma"
+#~ msgstr "Gamma"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Values"
+#~ msgstr "Balioak"
+
+#, fuzzy
+#~| msgid "Slope"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "Malda"
+
+#, fuzzy
+#~| msgid "Intercept"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "Ebakipuntua"
+
+#, fuzzy
+#~| msgid "Amplitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Amplitude"
+#~ msgstr "Anplitudea"
+
+#, fuzzy
+#~| msgid "Exponent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exponent"
+#~ msgstr "Berretzailea"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Desplazamendua"
+
+#, fuzzy
+#~| msgid "Composite"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "Konposatua"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "Eragiketa"
+
+#, fuzzy
+#~| msgid "Convolve Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convolve Matrix"
+#~ msgstr "Konboluzio-matrizea"
+
+#, fuzzy
+#~| msgid "Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "Bikoiztu"
+
+#, fuzzy
+#~| msgid "Wrap"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Wrap"
+#~ msgstr "Egokitu"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Bat ere ez"
+
+#, fuzzy
+#~| msgid "Edge mode:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "Ertz modua:"
+
+#, fuzzy
+#~| msgid "Kernel size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Kernel size:"
+#~ msgstr "Nukleo-tamaina:"
+
+#, fuzzy
+#~| msgid "Target point:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "Helburu-puntua:"
+
+#, fuzzy
+#~| msgid "Divisor:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Divisor:"
+#~ msgstr "Zatitzailea:"
+
+#, fuzzy
+#~| msgid "Bias:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bias:"
+#~ msgstr "Alborapena:"
+
+#, fuzzy
+#~| msgid "Preserve alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preserve alpha"
+#~ msgstr "Mantendu alfa"
+
+#, fuzzy
+#~| msgid "Edit kernel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "Editatu nukleoa"
+
+#, fuzzy
+#~| msgid "Flood fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "Betetzea"
+
+#, fuzzy
+#~| msgid "Flood color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "Betetze-kolorea"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Irudia"
+
+#, fuzzy
+#~| msgid "Select image..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image..."
+#~ msgstr "Irudia hautatu..."
+
+#, fuzzy
+#~| msgid "Select image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image"
+#~ msgstr "Hautatu irudia"
+
+#, fuzzy
+#~| msgid "Merge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Merge"
+#~ msgstr "Batu"
+
+#, fuzzy
+#~| msgid "Morphology"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Morphology"
+#~ msgstr "Morfologia"
+
+#, fuzzy
+#~| msgid "Erode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Erode"
+#~ msgstr "Higatu"
+
+#, fuzzy
+#~| msgid "Dilate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "Zabaldu"
+
+#, fuzzy
+#~| msgid "Operator:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "Eragilea:"
+
+#, fuzzy
+#~| msgid "Radius x:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "X erradioa:"
+
+#, fuzzy
+#~| msgid "Radius y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "Y erradioa:"
+
+#, fuzzy
+#~| msgid "dx"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#, fuzzy
+#~| msgid "dy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Ion Gaztañaga,Hizkuntza Politikarako Sailburuordetza"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "igaztanaga@gmail.com,hizpol@ej-gv.es"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "Eragiketa boolearra"
+
+#~ msgid "&Order"
+#~ msgstr "&Ordenatu"
+
+#~ msgid "&Align"
+#~ msgstr "Le&rrokatu"
+
+#~ msgid "&File"
+#~ msgstr "&Fitxategia"
+
+#~ msgid "&Edit"
+#~ msgstr "&Editatu"
+
+#~ msgid "&View"
+#~ msgstr "&Ikusi"
+
+#~ msgid "&Object"
+#~ msgstr "O&bjektua"
+
+#~ msgid "&Distribute"
+#~ msgstr "&Banatu"
+
+#~ msgid "&Path"
+#~ msgstr "I&bilbidea"
+
+#~ msgid "Effe&cts"
+#~ msgstr "Efe&ktuak"
+
+#~ msgid "&Settings"
+#~ msgstr "E&zarpenak"
+
+#~ msgid "Edit"
+#~ msgstr "Editatu"
+
+#~ msgid "Object"
+#~ msgstr "Objektua"
+
+#~ msgid "Align"
+#~ msgstr "Lerrokatu"
+
+#~ msgid "Effects"
+#~ msgstr "Efektuak"
+
+#~ msgid "View"
+#~ msgstr "Ikusi"
+
+#~ msgid "&Flatten Path..."
+#~ msgstr "&Bidea  lautu..."
+
+#~ msgid "Flatten Path"
+#~ msgstr "Bidea lautu"
+
+#~ msgid "Properties"
+#~ msgstr "Propietateak"
+
+#~ msgid "Flatness:"
+#~ msgstr "Lautasuna:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten path"
+#~ msgstr "Lautu bidea"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "Findu bidea"
+
+#~ msgid "&Refine Path..."
+#~ msgstr "Bidea findu..."
+
+#~ msgid "Refine Path"
+#~ msgstr "Bidea findu"
+
+#~ msgid "Subdivisions:"
+#~ msgstr "Azpizatiketak:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "Biribildu izkinak"
+
+#~ msgid "&Round Corners..."
+#~ msgstr "Izkinak &biribidu..."
+
+#~ msgid "Round Corners"
+#~ msgstr "Izkinak biribildu"
+
+#~ msgid "Radius:"
+#~ msgstr "Erradioa:"
+
+#, fuzzy
+#~| msgid "End angle:"
+#~ msgid "Expand all"
+#~ msgstr "Amaierako angelua:"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "Ikusi"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "Ikusi"
+
+#, fuzzy
+#~| msgid "Pencil Tool"
+#~ msgid "Stencil Box"
+#~ msgstr "Arkatza tresna"
+
+#, fuzzy
+#~ msgid "More shapes"
+#~ msgstr "Taldekatu objektuak"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl & pinch"
+#~ msgstr "Bihurritu eta tira"
+
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "Bihu&rritu/Tira..."
+
+#~ msgid "Whirl Pinch"
+#~ msgstr "Bihurritu eta tira"
+
+#~ msgid "Info"
+#~ msgstr "Informazioa"
+
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr ""
+#~ "Bidearen forma aldez aurretik finduz hobetu daiteke 'Bihurritu eta tira' "
+#~ "efektuaren emaitza."
+
+#~ msgid "Angle:"
+#~ msgstr "Angelua:"
+
+#~ msgid "Pinch:"
+#~ msgstr "Tira:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "Goratu geruza"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "Beheratu geruza"
+
+#~ msgid "Configure"
+#~ msgstr "Konfiguratu"
+
+#~ msgid "Interface"
+#~ msgstr "Interfazea"
+
+#~ msgid "Misc"
+#~ msgstr "Hainbat"
+
+#~ msgid "Grid"
+#~ msgstr "Sareta"
+
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokumentua"
+
+#~ msgid "Document Settings"
+#~ msgstr "Dokumentuaren ezarpenak"
+
+#~ msgctxt "@title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Egilea"
+
+#~ msgid "Author"
+#~ msgstr "Egilea"
+
+#~ msgid "Layer view"
+#~ msgstr "Geruza-ikuspegia"
+
+#~ msgid "Add a new layer"
+#~ msgstr "Erantsi beste geruza bat"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "Ezabatu hautatutako objektuak"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "Goratu hautatutako objektuak"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "Beheratu hautatutako objektuak"
+
+#~ msgid "Minimal View"
+#~ msgstr "Gutxieneko ikuspegia"
+
+#~ msgid "Detailed View"
+#~ msgstr "Ikuspegi xehatua"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "Koadro txikien ikuspegia"
+
+#~ msgid "View mode"
+#~ msgstr "Ikusi modua"
+
+#~ msgid "New Layer"
+#~ msgstr "Geruza berria"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Sartu geruza berriaren izena:"
+
+#~ msgid "New layer"
+#~ msgstr "Geruza berria"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Sortu geruza"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Ezabatu geruza"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr ""
+#~ "Ezin izan dira geruza guztiak ezabatu. Geruza bat behar da gutxienez."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Errorea gertatu da geruzak ezabatzean"
+
+#~ msgid "Layer"
+#~ msgstr "Geruza"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Taldea"
+
+#~ msgid "Shape"
+#~ msgstr "Forma"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Ikusgai"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Blokeatuta"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "Z indizea"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Opakutasuna"
+
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Ainguratuta"
+
+#~ msgid "no"
+#~ msgstr "ez"
+
+#~ msgid "yes"
+#~ msgstr "bai"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Aldatu formen gurasoa"
+
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "Bektore-grafikoak marrazteko aplikazioa."
+
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "(c) 2001-2013, Karbon garatzaileak"
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "Nahi duzun moduan parte hartzera gonbidatuta zaude."
+
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Akats-konponketak eta hobekuntzak"
+
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#~ msgid "Bug fixes"
+#~ msgstr "Akats-konponketak"
+
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Adabaki lagungarriak eta aholkuak"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "OASIS dokumentu baliogabea. Ez da aurkitu office:body etiketa."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "OASIS dokumentu baliogabea. Ez da aurkitu office:drawing etiketa."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "OASIS dokumentu baliogabea. Ez da aurkitu office:page etiketa."
+
+#~ msgid "Master Page"
+#~ msgstr "Orri maisua"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "Txertatu grafikoak"
+
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Aukeratu gehitu beharreko grafikoa"
+
+#~ msgid "Could not load image."
+#~ msgstr "Ezin izan da irudia kargatu."
+
+#~ msgid "Import graphic"
+#~ msgstr "Inportatu grafikoa"
+
+#~ msgid "Could not create image shape."
+#~ msgstr "Ezin izan da irudi-forma sortu."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally"
+#~ msgstr "Ispilatu horizontalki"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Vertically"
+#~ msgstr "Ispilatu bertikalki"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally and Vertically"
+#~ msgstr "Ispilatu horizontalki eta bertikalki"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "Bereizi bideak"
+
+#~ msgid "Outline &Mode"
+#~ msgstr "E&skema modua"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Erakutsi orri-marjinak"
+
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Grafikoa inportatu..."
+
+#~ msgid "D&elete"
+#~ msgstr "&Ezabatu"
+
+#~ msgid "Edit Guides"
+#~ msgstr "Editatu gidak"
+
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Bikoiztu"
+
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Banatu erdia (horizontalean)"
+
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Banatu tarteak (horizontalean)"
+
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Banatu ezkerreko ertzak"
+
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Banatu eskuineko ertzak"
+
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Banatu erdia (bertikalean)"
+
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Banatu tarteak (bertikalean)"
+
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Banatu beheko ertzak"
+
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Banatu goiko ertzak"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Erakutsi erregelak"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Erregelak erakusten edo ezkutatzen ditu"
+
+#~ msgid "Show Color Palette"
+#~ msgstr "Erakutsi kolore-paleta"
+
+#~ msgid "Show or hide color palette"
+#~ msgstr "Kolore-paleta erakusten edo ezkutatzen du"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Atxiki saretari"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "Saretari atxikitzen dio"
+
+#~ msgid "&Clip Object"
+#~ msgstr "Ain&guratu objektua"
+
+#~ msgid "&Unclip Objects"
+#~ msgstr "As&katu objektua"
+
+#~ msgid "Mirror Vertically"
+#~ msgstr "Ispilatu bertikalki"
+
+#~ msgid "Mirror Horizontally"
+#~ msgstr "Ispilatu horizontalki"
+
+#~ msgid "&Close Path"
+#~ msgstr "&Itxi bidea"
+
+#~ msgid "Com&bine Path"
+#~ msgstr "&Konbinatu bidea"
+
+#~ msgid "Se&parate Path"
+#~ msgstr "&Bereizi bidea"
+
+#~ msgid "Re&verse Path"
+#~ msgstr "&Alderantzikatu bidea"
+
+#~ msgid "Intersect Paths"
+#~ msgstr "Ebaki bideak"
+
+#~ msgid "Subtract Paths"
+#~ msgstr "Kendu bideak"
+
+#~ msgid "Unite Paths"
+#~ msgstr "Elkartu bideak"
+
+#~ msgid "Exclude Paths"
+#~ msgstr "Baztertu bideak"
+
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Moldatu bideak saretara"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Karbon konfiguratu..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "Orri-&diseinua..."
+
+#~ msgid "Zoom to Selection"
+#~ msgstr "Egin zoom hautapenera"
+
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Egin zoom marrazkira"
+
+#~ msgid "Zoom"
+#~ msgstr "Zoom egin"
+
+#~ msgid "Show status bar:"
+#~ msgstr "Egoera-barra erakutsi:"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "Fitxategi berrienen kopurua:"
+
+#~ msgid "Palette font size:"
+#~ msgstr "Paletako letra-tamaina:"
+
+#~ msgid "Canvas color:"
+#~ msgstr "Oihal-kolorea:"
+
+#~ msgid "Select palette"
+#~ msgstr "Hautatu paleta"
+
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "Sakatu hautapenari betegarria aplikatzeko"
+
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "Bat ere ez"
+
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "Sakatu hautapenari trazua aplikatzeko"
+
+#~ msgctxt "The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "Pertsonalizatua"
+
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Bat ere ez"
+
+#~ msgid "Stroke:"
+#~ msgstr "Trazua:"
+
+#~ msgid "Fill:"
+#~ msgstr "Betegarria:"
+
+#~ msgid "File to open"
+#~ msgstr "Ireki beharreko fitxategia"
+
+#~ msgid "Target:"
+#~ msgstr "Helburua:"
+
+#~ msgid "Line"
+#~ msgstr "Lerroa"
+
+#~ msgid "Fill"
+#~ msgstr "Betegarria"
+
+#~ msgid "Type:"
+#~ msgstr "Mota:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Lineala"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Erradiala"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Konikoa"
+
+#~ msgid "Repeat:"
+#~ msgstr "Errepikatu:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Bat ere ez"
+
+#~ msgid "Reflect"
+#~ msgstr "Isla"
+
+#~ msgid "Repeat"
+#~ msgstr "Errepikatu"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Opakotasun orokorra:"
+
+#~ msgid "Color stop:"
+#~ msgstr "Kolore-gelditzea:"
+
+#~ msgid "Stop color."
+#~ msgstr "Gelditze-kolorea."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Gehitu gradiente aurredefinituei"
+
+#~ msgid "Original"
+#~ msgstr "Jatorrizkoa"
+
+#~ msgid "Tiled"
+#~ msgstr "Mosaikoan"
+
+#~ msgid "Stretched"
+#~ msgstr "Luzatuta"
+
+#~ msgid "Top Left"
+#~ msgstr "Goian ezkerrean"
+
+#~ msgid "Top"
+#~ msgstr "Goian"
+
+#~ msgid "Top Right"
+#~ msgstr "Goian eskuinean"
+
+#~ msgid "Left"
+#~ msgstr "Ezkerrean"
+
+#~ msgid "Center"
+#~ msgstr "Erdian"
+
+#~ msgid "Right"
+#~ msgstr "Eskuinean"
+
+#~ msgid "Bottom Left"
+#~ msgstr "Behean ezkerrean"
+
+#~ msgid "Bottom"
+#~ msgstr "Behean"
+
+#~ msgid "Bottom Right"
+#~ msgstr "Behean eskuinean"
+
+#~ msgid "Stroke"
+#~ msgstr "Trazua"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Ezkutatu erregelak"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgid "Stop color:"
+#~ msgstr "Trazuaren kolorea"
+
+#, fuzzy
+#~| msgid "Toolbox"
+#~ msgid "Tools"
+#~ msgstr "Tresna-kutxa"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Kopiatu desplazamendua:"
+
+#, fuzzy
+#~| msgid "Show Grid"
+#~ msgid "Show Guides"
+#~ msgstr "Erakutsi sareta"
+
+#, fuzzy
+#~ msgid "Shows or hides guides"
+#~ msgstr "Sareta erakutsi edo ezkutatzen ditu."
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Bat ere ez"
+
+#, fuzzy
+#~| msgid "Solid"
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Solidoa"
+
+#~ msgid "Gradient"
+#~ msgstr "Gradientea"
+
+#~ msgid "Pattern"
+#~ msgstr "Eredua"
+
+#~ msgid "Units:"
+#~ msgstr "Unitateak:"
+
+#, fuzzy
+#~| msgid "Inner radius:"
+#~ msgid "Handle radius:"
+#~ msgstr "Barneko erradio:"
+
+#, fuzzy
+#~ msgid "Ungroup shapes"
+#~ msgstr "Bereizi objektuak"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Taldekatu objektuak"
+
+#, fuzzy
+#~| msgid "Show &grid"
+#~ msgid "Show grid:"
+#~ msgstr "Erakutsi &sareta"
+
+#, fuzzy
+#~ msgid "Snap to grid:"
+#~ msgstr "Saretari atxikitzen du"
+
+#, fuzzy
+#~| msgid "Grid &color:"
+#~ msgid "Grid color:"
+#~ msgstr "Saretaren &kolorea:"
+
+#, fuzzy
+#~| msgid "&Horizontal:"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Horizontala:"
+
+#, fuzzy
+#~| msgid "&Vertical:"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Bertikala:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Auto-gorde (min):"
+
+#~ msgid "No auto save"
+#~ msgstr "Ez auto-gorde"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "Create backup file"
+#~ msgstr "Sortu babes-kopia"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Hautatu eredua"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Hautatu gehitzeko eredua"
+
+#, fuzzy
+#~| msgid "Reference"
+#~ msgid "Reference Point:"
+#~ msgstr "Erreferntzia"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Pattern Size"
+#~ msgstr "Eredua"
+
+#~ msgid "W:"
+#~ msgstr "W:"
+
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgid "Edit Gradient"
+#~ msgstr "Editatu gradientea"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "Aurredefinitutako gradienteak"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgid "Gradient tool"
+#~ msgstr "Gradientea tresna"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Gradientea tresna"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Pattern tool"
+#~ msgstr "Eredua tresna"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Eredua tresna"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgid "Precision:"
+#~ msgstr "Posizioa:"
+
+#, fuzzy
+#~| msgid "Raw"
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Gordina"
+
+#~ msgid "Curve"
+#~ msgstr "Kurboa"
+
+#~ msgid "Straight"
+#~ msgstr "Zuzena"
+
+#~ msgid "Optimize"
+#~ msgstr "Optimizatu"
+
+#, fuzzy
+#~ msgid "Exactness:"
+#~ msgstr "Zehaztasuna"
+
+#, fuzzy
+#~ msgid "Combine angle:"
+#~ msgstr "Konbinatu angelua"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "&Follow selected path"
+#~ msgstr "Ezabatu objektuak"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "Trazuaren zabalera"
+
+#, fuzzy
+#~| msgid "Start angle:"
+#~ msgid "Use tablet &angle"
+#~ msgstr "Hasierako angelua:"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgid "Fixation:"
+#~ msgstr "Orientazioa:"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgid "Current"
+#~ msgstr "Kurboa"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Graphics Pen"
+#~ msgstr "Gradientea"
+
+#, fuzzy
+#~| msgid "Ellipse Tool"
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Elipsea tresna"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "Ekarri &aurrera"
+
+#~ msgid "&Raise"
+#~ msgstr "&Igo"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "&Jaitsi"
+
+#~ msgid "Send to &Back"
+#~ msgstr "&Bidali atzera"
+
+#~ msgid "Show Grid"
+#~ msgstr "Erakutsi sareta"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Ezkutatu sareta"
+
+#, fuzzy
+#~ msgid "Shows or hides grid"
+#~ msgstr "Sareta erakutsi edo ezkutatzen ditu."
+
+#~ msgid "Align Left"
+#~ msgstr "Lerrokatu ezkerrean"
+
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "Lerrokatu zentruan (horizontala)"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgid "Align Right"
+#~ msgstr "Lerrokatu ezkerrean"
+
+#~ msgid "Align Top"
+#~ msgstr "Lerrokatu goian"
+
+#, fuzzy
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Lerrokatu zentruan (bertikala)"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Align Bottom"
+#~ msgstr "Lerrokatu behean"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Stop opacity:"
+#~ msgstr "Opakotasuna:"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "Erakutsi egoera-barra"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern"
+#~ msgstr "Hautatu eredua"
+
+#, fuzzy
+#~| msgid "Predefined"
+#~ msgid "Undefined"
+#~ msgstr "Aurredefinitua"
+
+#~ msgid "Transform"
+#~ msgstr "Transformatu"
+
+#, fuzzy
+#~ msgid "Set x-position of actual selection"
+#~ msgstr "Hautapenik ez"
+
+#, fuzzy
+#~ msgid "Set y-position of actual selection"
+#~ msgstr "Hautapenik ez"
+
+#, fuzzy
+#~ msgid "Set width of actual selection"
+#~ msgstr "Hautapenik ez"
+
+#, fuzzy
+#~ msgid "Set height of actual selection"
+#~ msgstr "Hautapenik ez"
+
+#~ msgid "R:"
+#~ msgstr "R:"
+
+#, fuzzy
+#~ msgid "Rotate actual selection"
+#~ msgstr "Hautapenik ez"
+
+#, fuzzy
+#~ msgid "SX:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~ msgid "Shear actual selection in x-direction"
+#~ msgstr "Hautapenik ez"
+
+#, fuzzy
+#~ msgid "SY:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~ msgid "Shear actual selection in y-direction"
+#~ msgstr "Hautapenik ez"
+
+#~ msgid "Shear"
+#~ msgstr "Zizailatu"
+
+#, fuzzy
+#~ msgid "Attach Path"
+#~ msgstr "Lautu bidea"
+
+#, fuzzy
+#~ msgid "Detach Path"
+#~ msgstr "Lautu bidea"
+
+#, fuzzy
+#~| msgid "Convert to Shapes"
+#~ msgid "Convert to Path"
+#~ msgstr "Bihurtu formetara"
+
+#, fuzzy
+#~| msgid "Text Tool"
+#~ msgid "Simple Text Tool"
+#~ msgstr "Testua tresna"
+
+#~ msgid "Save as path"
+#~ msgstr "Gorde bide bezala"
+
+#~ msgid "Uniform Color"
+#~ msgstr "Kolore uniformea"
+
+#~ msgid "Old:"
+#~ msgstr "Zaharra:"
+
+#~ msgid "New:"
+#~ msgstr "Berria:"
+
+#~ msgid "G:"
+#~ msgstr "G:"
+
+#~ msgid "B:"
+#~ msgstr "B:"
+
+#~ msgctxt "Hue:"
+#~ msgid "H:"
+#~ msgstr "Ñ:"
+
+#~ msgctxt "Saturation:"
+#~ msgid "S:"
+#~ msgstr "S:"
+
+#~ msgctxt "Value:"
+#~ msgid "V:"
+#~ msgstr "B:"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "Type"
+#~ msgstr "Mota"
+
+#~ msgid "Cap"
+#~ msgstr "Estalkia"
+
+#~ msgid "Join"
+#~ msgstr "Lotura"
+
+#~ msgid "Layers:"
+#~ msgstr "Geruzak:"
+
+#~ msgid "Format:"
+#~ msgstr "Formatua:"
+
+#~ msgid "Patterns"
+#~ msgstr "Ereduak"
+
+#~ msgid "Clipart"
+#~ msgstr "Clilpart"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "&Inportatu"
+
+#~ msgid "Stroke: None"
+#~ msgstr "Trazua: Bat ere ez"
+
+#~ msgid "Fill: None"
+#~ msgstr "Betegarria: Bat ere ez"
+
+#~ msgid "Fill: RGB"
+#~ msgstr "Betegarria: RGB"
+
+#~ msgid "Fill: CMYK"
+#~ msgstr "Betegarria: CYMK"
+
+#~ msgid "Fill: HSB"
+#~ msgstr "Betegarria: HSB"
+
+#~ msgid "Fill: Grayscale"
+#~ msgstr "Betegarria: Gris-eskala"
+
+#~ msgid "Fill: Color"
+#~ msgstr "Betegarria: Kolorea"
+
+#~ msgid "Fill: Gradient"
+#~ msgstr "Betegarria: Gradientea"
+
+#~ msgid "Fill: Pattern"
+#~ msgstr "Betegarria: Eredua"
+
+#~ msgid "Stroke: RGB"
+#~ msgstr "Trazua: RGB"
+
+#~ msgid "Stroke: CMYK"
+#~ msgstr "Trazua: CYMK"
+
+#~ msgid "Stroke: HSB"
+#~ msgstr "Trazua: HSB"
+
+#~ msgid "Stroke: Grayscale"
+#~ msgstr "Trazua: Gris-eskala"
+
+#~ msgid "Stroke: Gradient"
+#~ msgstr "Trazua: Gradientea"
+
+#~ msgid "Stroke: Pattern"
+#~ msgstr "Trazua: Eredua"
+
+#~ msgid "Polygonize"
+#~ msgstr "Poligono bihurtu"
+
+#~ msgid "Round corners:"
+#~ msgstr "Biribildu izkinak:"
+
+#~ msgid "&Shadow Effect..."
+#~ msgstr "&Itzal-efektua..."
+
+#~ msgid "Create Shadow Effect"
+#~ msgstr "Sortu itzal-efektua"
+
+#~ msgid "Distance:"
+#~ msgstr "Distanzia:"
+
+#~ msgid "Create Shadow"
+#~ msgstr "Sortu itzala"
+
+#~ msgid "Object Properties"
+#~ msgstr "Objektuaren propietateak"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "&Ezabatu"
+
+#~ msgid "&Import"
+#~ msgstr "&Inportatu"
+
+#, fuzzy
+#~| msgid "Image Tool"
+#~ msgid "Unnamed Tool"
+#~ msgstr "Irudia tresna"
+
+#, fuzzy
+#~ msgid "&Undo"
+#~ msgstr "&Desegin: "
+
+#, fuzzy
+#~ msgid "&Redo"
+#~ msgstr "Be&rregin: "
+
+#~ msgid "&Undo: "
+#~ msgstr "&Desegin: "
+
+#~ msgid "&Redo: "
+#~ msgstr "Be&rregin: "
+
+#~ msgid "Fill Objects"
+#~ msgstr "Bete objektuak"
+
+#~ msgid "Fill Object"
+#~ msgstr "Bete objektua"
+
+#~ msgid "Insert Text"
+#~ msgstr "Txertatu testua"
+
+#~ msgid "Transform Objects"
+#~ msgstr "Transformatu objektuak"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Bikoiztu objektua"
+
+#~ msgid "Duplicate Objects"
+#~ msgstr "Bikoiztu objektuak"
+
+#~ msgid "Transform Object"
+#~ msgstr "Transformatu objektua"
+
+#~ msgid "Translate Objects"
+#~ msgstr "Mugitu objektuak"
+
+#~ msgid "Translate Object"
+#~ msgstr "Mugitu objektua"
+
+#~ msgid "Scale Objects"
+#~ msgstr "Eskalatu objektuak"
+
+#~ msgid "Scale Object"
+#~ msgstr "Eskalatu objektua"
+
+#~ msgid "Shear Objects"
+#~ msgstr "Zizailatu objektuak"
+
+#~ msgid "Shear Object"
+#~ msgstr "Zizailatu objektua"
+
+#~ msgid "Rotate Objects"
+#~ msgstr "Biratu objektuak"
+
+#~ msgid "Rotate Object"
+#~ msgstr "Biratu objektua"
+
+#~ msgid "Translate Bezier"
+#~ msgstr "Mugitu Bezier-a"
+
+#, fuzzy
+#~ msgid "Translate Points"
+#~ msgstr "Mugitu objektuak"
+
+#, fuzzy
+#~ msgid "Translate Point"
+#~ msgstr "Mugitu"
+
+#~ msgid "Ellipse"
+#~ msgstr "Elipsea"
+
+#~ msgid "Polygon"
+#~ msgstr "Poligonoa"
+
+#~ msgid "Polyline"
+#~ msgstr "Polilerroa"
+
+#~ msgid "Sinus"
+#~ msgstr "Sinua"
+
+#~ msgid "Spiral"
+#~ msgstr "Espirala"
+
+#~ msgid "Star"
+#~ msgstr "Izarra"
+
+#~ msgid "<qt><b>Shape tool</b><br>"
+#~ msgstr "<qt><b>Forma tresna</b><br>"
+
+#~ msgid "<i>Click and drag</i> to place your own shape.<br>"
+#~ msgstr ""
+#~ "<i>Klikatu eta arrastatu</i> zure forma pertsonalizatua kokatzeko.<br>"
+
+#~ msgid "<i>Click</i> to place a shape using the tool properties values.</qt>"
+#~ msgstr ""
+#~ "<i>Klikatu</i> tresnaren propietateen balioak erabiliz forma bat "
+#~ "kokatzeko.</qt>"
+
+#~ msgid "Periods:"
+#~ msgstr "Periodoak:"
+
+#~ msgid "Sinus Tool"
+#~ msgstr "Sinua tresna"
+
+#~ msgid "Insert Spiral"
+#~ msgstr "Txertatu espirala"
+
+#~ msgid "Round"
+#~ msgstr "Biribibildua"
+
+#~ msgid "Rectangular"
+#~ msgstr "Laukizuzena"
+
+#~ msgid "Segments:"
+#~ msgstr "Segmentuak"
+
+#~ msgid "Fade:"
+#~ msgstr "Iraungitzea:"
+
+#~ msgid "Clockwise"
+#~ msgstr "Erlojuaren noranzkoan"
+
+#~ msgid "Counter Clockwise"
+#~ msgstr "Erlojuaren noranzkoaren aurka"
+
+#~ msgid "Spiral Tool"
+#~ msgstr "Espirala tresna"
+
+#~ msgid "Insert Star"
+#~ msgstr "Txertatu izarra"
+
+#~ msgid "Star Outline"
+#~ msgstr "Izarraren eskema"
+
+#~ msgid "Wheel"
+#~ msgstr "Gurpila"
+
+#~ msgid "Framed Star"
+#~ msgstr "Markodun izarra"
+
+#~ msgid "Gear"
+#~ msgstr "Makineria"
+
+#~ msgid "Outer radius:"
+#~ msgstr "Kanpoko erradioa:"
+
+#~ msgid "Inner angle:"
+#~ msgstr "Barneko angelua:"
+
+#~ msgid "Roundness:"
+#~ msgstr "Biribiltasuna:"
+
+#~ msgid "Star Tool"
+#~ msgstr "Izarra tresna"
+
+#~ msgid "Shadow"
+#~ msgstr "Itzala"
+
+#~ msgid "Draw translucent shadow"
+#~ msgstr "Marraztu itzal transluzidoak"
+
+#~ msgid "Text"
+#~ msgstr "Testua"
+
+#~ msgid "Alignment:"
+#~ msgstr "Lerrokadura:"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "Posizioa:"
+
+#~ msgid "Edit Base Path"
+#~ msgstr "Editatu oinarriaren bidea"
+
+#, fuzzy
+#~ msgid "New text"
+#~ msgstr "testua"
+
+#, fuzzy
+#~ msgid "<qt><b>Text Tool</b><br>"
+#~ msgstr "<qt><b>Forma tresna</b><br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on document to place horizontal text.<br>"
+#~ msgstr ""
+#~ "<i>Klikatu eta arrastatu</i> zure forma pertsonalizatua kokatzeko.<br>"
+
+#, fuzzy
+#~ msgid "<i>Click and drag</i> in document to place directional text.<br>"
+#~ msgstr ""
+#~ "<i>Klikatu eta arrastatu</i> area laukizuzen batera zooma egiteko.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Click</i> on a selected path object to place text along its outline."
+#~ "<br>"
+#~ msgstr "<i>Klikatu</i> hautatzailean nahi duzun eredua.<br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on a selected text object to change it.<br></qt>"
+#~ msgstr "<i>Eskuin klikatu</i> kolore puntu batean kentzeko.</qt>"
+
+#~ msgid "Change Text"
+#~ msgstr "Aldatu testua"
+
+#~ msgid "Text Conversion"
+#~ msgstr "Testuaren bihurketa"
+
+#~ msgid "path"
+#~ msgstr "bidea"
+
+#~ msgid "text"
+#~ msgstr "testua"
+
+#~ msgid "image"
+#~ msgstr "irudia"
+
+#, fuzzy
+#~ msgid "Paste Object"
+#~ msgstr "Biratu objektua"
+
+#, fuzzy
+#~ msgid "Paste Objects"
+#~ msgstr "Biratu objektuak"
+
+#~ msgid "Flatten Curves"
+#~ msgstr "Lautu kurbak"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Trazuaren propietateak"
+
+#, fuzzy
+#~ msgid "Round cap"
+#~ msgstr "Biribibildua"
+
+#~ msgid "Join:"
+#~ msgstr "Lotura:"
+
+#, fuzzy
+#~ msgid "Round join"
+#~ msgstr "Biribildu izkinak"
+
+#, fuzzy
+#~ msgid "Set miter limit"
+#~ msgstr "Ezarri lerroaren zabalera"
+
+#~ msgid "P&urge"
+#~ msgstr "P&urgatu"
+
+#~ msgid "&History"
+#~ msgstr "&Historia"
+
+#~ msgid "&Insert Knots..."
+#~ msgstr "&Txertatu Knots..."
+
+#~ msgid "Insert Knots"
+#~ msgstr "Txertatu Knots"
+
+#~ msgid "Insert Clipart"
+#~ msgstr "Txertatu Clipart bat"
+
+#~ msgid "Stroke Objects"
+#~ msgstr "Trazatu objektuak"
+
+#~ msgid "Stroke Object"
+#~ msgstr "Trazatu objektua"
+
+#~ msgid "Stroke Width"
+#~ msgstr "Trazuaren zabalera"
+
+#, fuzzy
+#~ msgid "Dash Pattern"
+#~ msgstr "Eredua"
+
+#~ msgid "<qt><b>Zoom tool:</b><br>"
+#~ msgstr "<qt><b>Zoom tresna:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to zoom into a rectangular area.<br>"
+#~ msgstr ""
+#~ "<i>Klikatu eta arrastatu</i> area laukizuzen batera zooma egiteko.<br>"
+
+#, fuzzy
+#~ msgid "<i>Right click</i> to zoom out of canvas.<br>"
+#~ msgstr "<i>Eskuin klikatu</i> kolore puntu batean kentzeko.</qt>"
+
+#, fuzzy
+#~ msgid "<i>Pressing +/- keys</i><br>to zoom into/out of canvas."
+#~ msgstr ""
+#~ "<i>Zooma gezi-teklak erabiliz</i><br>Zooma handitu/txikiagotu goiko/"
+#~ "beheko geziak erabiliz."
+
+#~ msgid "Zoom Tool"
+#~ msgstr "Zoom tresna"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Desegin/berregin muga:"
+
+#~ msgid "<qt><b>Polyline tool:</b><br>"
+#~ msgstr "<qt><b>Polilerroa tresna:</b><br>"
+
+#~ msgid ""
+#~ "- <i>Click</i> to add a node and <i>drag</i> to set its bezier vector.<br>"
+#~ msgstr ""
+#~ "- <i>Klikatu</i> nodo bat gehitzeko eta <i>arrastatu</i> bere bezier-en "
+#~ "bektorea ezartzeko.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Ctrl</i> while dragging to edit the previous bezier vector.<br>"
+#~ msgstr ""
+#~ "- Sakatu <i>Ctrl</i> arrastatzen ari zaren bitartean aurreko bezier "
+#~ "bektorea editatzeko.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Shift</i> while dragging to change the curve in a straight "
+#~ "line.<br>"
+#~ msgstr ""
+#~ "- Sakatu <i>Shift</i> arrastatzen ari zaren bitartean kurba lerro zuzen "
+#~ "batera aldatzeko.<br>"
+
+#~ msgid "- Press <i>Backspace</i> to cancel the last curve.<br>"
+#~ msgstr "- Press <i>Atzera</i> azken kurba ezeztatzeko.<br>"
+
+#~ msgid "- Press <i>Esc</i> to cancel the whole polyline.<br>"
+#~ msgstr "- Sakatu <i>Esc</i> polilerro osoa ezeztatzeko.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Enter</i> or <i>double click</i> to end the polyline.</qt>"
+#~ msgstr ""
+#~ "- Sakatu <i>Enter</i> edo <i>klik bikoitza</i> polilerroa amaitzeko.</qt>"
+
+#~ msgid "Polyline Tool"
+#~ msgstr "Polilerroa tresna"
+
+#~ msgid "Translate"
+#~ msgstr "Mugitu"
+
+#~ msgid "Relative &position"
+#~ msgstr "&Posizio erlatiboa"
+
+#~ msgid "This action cannot be undone later. Do you really want to continue?"
+#~ msgstr ""
+#~ "Ekintza hau ezin da geroago desegin. Ziur zaude jarraitu nahi duzula?"
+
+#~ msgid "Purge History"
+#~ msgstr "Purgatu historia"
+
+#, fuzzy
+#~ msgid "Zoom Width"
+#~ msgstr "  Zabalera"
+
+#~ msgid "Whole Page"
+#~ msgstr "Orri osoa"
+
+#~ msgid "Wireframe"
+#~ msgstr "Burdin-haria"
+
+#, fuzzy
+#~ msgid "25%"
+#~ msgstr "   % 25"
+
+#, fuzzy
+#~ msgid "50%"
+#~ msgstr "   % 50"
+
+#, fuzzy
+#~ msgid "100%"
+#~ msgstr "   % 100"
+
+#, fuzzy
+#~ msgid "200%"
+#~ msgstr "   % 200"
+
+#, fuzzy
+#~ msgid "300%"
+#~ msgstr "   % 300"
+
+#, fuzzy
+#~ msgid "400%"
+#~ msgstr "   % 400"
+
+#, fuzzy
+#~ msgid "800%"
+#~ msgstr "   % 800"
+
+#, fuzzy
+#~ msgid "Line Style"
+#~ msgstr "E&stiloa"
+
+#~ msgid "History"
+#~ msgstr "Historia"
+
+#~ msgid "Align Objects"
+#~ msgstr "Lerrokatu objektuak"
+
+#~ msgid "Clean Up"
+#~ msgstr "Garbitu"
+
+#~ msgid "Delete Object"
+#~ msgstr "Ezabatu objektua"
+
+#~ msgid "Delete Node"
+#~ msgstr "Ezabatu nodoa"
+
+#~ msgid "Order Selection"
+#~ msgstr "Ordenaren hautapena"
+
+#~ msgid "Snap to g&rid"
+#~ msgstr "Atxiki sa&retari"
+
+#~ msgid "Snap Distance"
+#~ msgstr "Atxikitzeko distantzia"
+
+#~ msgid "V&ertical:"
+#~ msgstr "B&ertikala:"
+
+#~ msgid "New"
+#~ msgstr "Berria"
+
+#~ msgid "Raise"
+#~ msgstr "Igo"
+
+#~ msgid "Lower"
+#~ msgstr "Jaitsi"
+
+#~ msgid "Item"
+#~ msgstr "Elementua"
+
+#~ msgid "L"
+#~ msgstr "L"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "Current Object"
+#~ msgstr "Uneko objektua"
+
+#~ msgid "Change the name of the object:"
+#~ msgstr "Aldatu objektuaren izena:"
+
+#~ msgid "Change the name of the current layer:"
+#~ msgstr "Aldatu uneko geruzaren izena:"
+
+#~ msgid "Add Layer"
+#~ msgstr "Gehitu geruza"
+
+#~ msgid "Commands"
+#~ msgstr "Aginduak"
+
+#~ msgid "Group commands"
+#~ msgstr "Taldekatu aginduak"
+
+#~ msgid "Rectangle"
+#~ msgstr "Errektangelua"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Txertatu elipsea"
+
+#~ msgid "Full"
+#~ msgstr "Betea"
+
+#~ msgid "Pie"
+#~ msgstr "Tarta"
+
+#~ msgid "Arc"
+#~ msgstr "Arkua"
+
+#~ msgid "<qt><b>Gradient tool:</b><br>"
+#~ msgstr "<qt><b>Gradiente-tresna:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to choose the gradient vector.<br>"
+#~ msgstr "<i>Klikatu eta arrastatu</i> bektorearen gradientea hautatzeko.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Click and drag</i> a gradient vector handle to change the gradient "
+#~ "vector.<br>"
+#~ msgstr "<i>Klikatu eta arrastatu</i> bektorearen gradientea hautatzeko.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Shift click and drag</i> to move the radial gradient focal point.<br>"
+#~ msgstr "<i>Klikatu eta arrastatu</i> bektorearen gradientea hautatzeko.<br>"
+
+#~ msgid "<br><b>Gradient editing:</b><br>"
+#~ msgstr "<br><b>Gradientearen edizioa:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to move points.<br>"
+#~ msgstr "<i>Klikatu eta arrastatu</i> puntuak mugitzeko.<br>"
+
+#~ msgid "<i>Double click</i> on a color point to edit it.<br>"
+#~ msgstr "<i>Klik bikoitza</i> egin kolore batean editatzeko.<br>"
+
+#~ msgid "<i>Right click</i> on a color point to remove it.</qt>"
+#~ msgstr "<i>Eskuin klikatu</i> kolore puntu batean kentzeko.</qt>"
+
+#~ msgid "<qt><b>Pattern tool:</b><br>"
+#~ msgstr "<qt><b>Eredua tresna:</b><br>"
+
+#~ msgid "<i>Click</i> on the pattern you want in the chooser.<br>"
+#~ msgstr "<i>Klikatu</i> hautatzailean nahi duzun eredua.<br>"
+
+#~ msgid "<i>Click and drag</i> to choose the pattern vector.</qt>"
+#~ msgstr "<i>Klikatu eta arrastatu</i> eredu-bektorea hautatzeko.</qt>"
+
+#~ msgid "Please select a pattern."
+#~ msgstr "Hautatu eredu bat."
+
+#~ msgid "<qt><b>Pencil tool:</b><br>"
+#~ msgstr "<qt><b>Arkatza tresna:</b><br>"
+
+#~ msgid "- <i>Click</i> to begin drawing, release when you have finished."
+#~ msgstr "- <i>Klikatu</i> marrazten hasteko, askatu bukatu duzunean."
+
+#~ msgid "Pencil"
+#~ msgstr "Arkatza"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Txertatu poligonoa"
+
+#~ msgid "Polygon Tool"
+#~ msgstr "Poligonoa tresna"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Txertatu errektangelua"
+
+#~ msgid "Rectangle Tool"
+#~ msgstr "Errektangelua tresna"
+
+#~ msgid "Rotate Tool"
+#~ msgstr "Biratu tresna"
+
+#~ msgid "Insert Round Rect"
+#~ msgstr "Txertatu errektangelu biribildua"
+
+#, fuzzy
+#~ msgid "Height (%1):"
+#~ msgstr "Altuera:"
+
+#~ msgid "Edge radius X:"
+#~ msgstr "X ertzaren erradioa:"
+
+#~ msgid "Edge radius Y:"
+#~ msgstr "Y ertzaren erradioa:"
+
+#~ msgid "Round Rectangle Tool"
+#~ msgstr "Errektangelu biribildua tresna"
+
+#, fuzzy
+#~ msgid "Round Rectangle"
+#~ msgstr "Errektangelu biribildua tresna"
+
+#~ msgid "Editing Nodes"
+#~ msgstr "Editatu nodoak"
+
+#~ msgid "Select Nodes Tool"
+#~ msgstr "Hautatu nodoak tresna"
+
+#~ msgid "Selection Mode"
+#~ msgstr "Hautapen-modua"
+
+#~ msgid "Select in current layer"
+#~ msgstr "Hautatu uneko geruzan"
+
+#~ msgid "Select in visible layers"
+#~ msgstr "Hautatu ikusgai dauden geruzetan"
+
+#~ msgid "Select in selected layers"
+#~ msgstr "Hautatu hautatutako geruzetan"
+
+#~ msgid "Select"
+#~ msgstr "Hautatu"
+
+#~ msgid "<qt><b>Selection tool:</b><br>"
+#~ msgstr "<qt><b>Hautapena tresna:</b><br>"
+
+#~ msgid ""
+#~ "<i>Select in current layer:</i><br>The selection is made in the layer "
+#~ "selected in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Hautatu uneko geruzan:</i><br>Hautapena geruza-panelean hautatutako "
+#~ "geruzan egingo da.<br><br>"
+
+#~ msgid ""
+#~ "<i>Select in visible layers:</i><br>The selection is made in the visible "
+#~ "layers (eye in the layers docker).<br><br>"
+#~ msgstr ""
+#~ "<i>Hautatu ikusgai dauden geruzetan:</i><br>Hautapena geruza-panelean "
+#~ "begia dagoenetan egingo da.<br><br>"
+
+#~ msgid ""
+#~ "<i>Select in selected layers:</i><br>The selection is made in the checked "
+#~ "layers in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Hautapena hautatutko geruzetan:</i><br>Hautapena geruza-panelean "
+#~ "hautatuta daudenetan egingo da.<br><br>"
+
+#~ msgid ""
+#~ "<i>Position using arrow keys</i><br>The selection can be positioned up, "
+#~ "down, left and right using the corresponding arrow keys."
+#~ msgstr ""
+#~ "<i>Posizioa gezien teklak erabiliz</i><br>Hautapena goian, behean, "
+#~ "ezkerrean eta eskuinean kokatu daiteke, dagokien gezien teklak erabiliz."
+
+#~ msgid "No selection"
+#~ msgstr "Hautapenik ez"
+
+#~ msgid "Select Tool"
+#~ msgstr "Hautatu tresna"
+
+#~ msgid "Shear Tool"
+#~ msgstr "Zizailatu tresna"
+
+#~ msgid "<qt><b>Image tool:</b><br>"
+#~ msgstr "<qt><b>Irudia tresna:</b><br>"
+
+#~ msgid "Choose Image to Add"
+#~ msgstr "Hautatu gehitzeko irudia"
+
+#~ msgid "Knots:"
+#~ msgstr "Knots:"

@@ -1,0 +1,1479 @@
+# translation of kofficefilters.po to Lithuanian
+# Copyright (C) 2005 Free Software Foundation, Inc.
+# Donatas Glodenis <dgvirtual@akl.lt>, 2005.
+# Remigijus Jarmalavičius <remigijus@jarmalavicius.lt>, 2011, 2012.
+# Liudas Ališauskas <liudas.alisauskas@gmail.com>, 2012, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligrafilters\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2013-07-24 04:26+0300\n"
+"Last-Translator: Liudas Ališauskas <liudas@akmc.lt>\n"
+"Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
+"%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, fuzzy, kde-format
+#| msgid "PNG Export Options"
+msgid "%1 Export Options"
+msgstr "PNG eksportavimo nuostatos"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, fuzzy, kde-format
+#| msgid "Page "
+msgid "Page %1"
+msgstr "Puslapis "
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, kde-format
+msgid "Page:"
+msgstr "Puslapis:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, kde-format
+msgid "Size in Pixels"
+msgstr "Dydis pikseliais"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr "Paveikslėlio plotis:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, kde-format
+msgid "Image height:"
+msgstr "Paveikslėlio aukštis:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr "Dydis vienetais"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, kde-format
+msgid "Resolution:"
+msgstr "Raiška:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr "Vienetas:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr "Fono spalva"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, kde-format
+msgid "Color"
+msgstr "Spalva"
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr "Permatomumas"
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:299
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, kde-format
+msgid "Could not open the requested file %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, kde-format
+msgid "Enter password"
+msgstr "Įveskite slaptažodį"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, kde-format
+msgid "Could not find path for type %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, fuzzy, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr " Eilutė: %1   Stulpelis: %2 "
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, fuzzy, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr " Eilutė: %1   Stulpelis: %2 "
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, kde-format
+msgid "Attribute \"%1\" not found"
+msgstr "Atributas „%1“ nerastas"
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, kde-format
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr ""
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, kde-format
+msgid "Could not find relationships file \"%1\""
+msgstr ""
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, kde-format
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, kde-format
+msgid "Could not write block"
+msgstr ""
+
+#: sheets/csv/csvexport.cc:266
+#, kde-format
+msgid "<SHEETNAME>"
+msgstr ""
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Rekomenduojama ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Lokalė ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Kita ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:281 words/ascii/ImportDialog.cc:94
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr ""
+
+#: sheets/csv/csvimport.cc:74
+#, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "Koduotė"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, kde-format
+msgid "E&ncoding:"
+msgstr "&Koduotė:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, kde-format
+msgid "End of Line"
+msgstr "Eilutės pabaiga"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, kde-format
+msgid "Sheets"
+msgstr "Lakštai"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, kde-format
+msgid "Select sheets to export:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, kde-format
+msgid "Delimiter Line"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, kde-format
+msgid "********<SHEETNAME>********"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, kde-format
+msgid "Cells"
+msgstr "Langeliai"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, kde-format
+msgid "Delimiter"
+msgstr "Skyriklis"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, kde-format
+msgid "Comma"
+msgstr "Kablelis"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, kde-format
+msgid "Semicolon"
+msgstr "Kabliataškis"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, kde-format
+msgid "Tabulator"
+msgstr "Tabuliatorius"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, kde-format
+msgid "Space"
+msgstr "Tarpas"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, kde-format
+msgid "Other:"
+msgstr "Kita:"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, kde-format
+msgid "Quotes:"
+msgstr "Kabutės:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, kde-format
+msgid "Export selection only"
+msgstr ""
+
+#: sheets/dbase/dbaseimport.cc:44
+#, kde-format
+msgid "File format is not supported."
+msgstr ""
+
+#: sheets/dbase/dbaseimport.cc:49
+#, kde-format
+msgid "Could not read from file."
+msgstr "Nepavyko skaityti iš failo."
+
+#: sheets/html/exportdialog.cc:21
+#, kde-format
+msgid "Export Sheet to HTML"
+msgstr ""
+
+#: sheets/html/exportdialog.cc:32
+#, kde-format
+msgid "Recommended: UTF-8"
+msgstr ""
+
+#: sheets/html/exportdialog.cc:33
+#, kde-format
+msgid "Locale (%1)"
+msgstr "Lokalė ( %1 )"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, kde-format
+msgid "En&coding:"
+msgstr "Ko&duotė:"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, kde-format
+msgid "Sheet Selection"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, kde-format
+msgid "Select &All"
+msgstr "Pažymėti &viską"
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, kde-format
+msgid "Desele&ct All"
+msgstr "Atžymėti viską"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, kde-format
+msgid "Use &separate files for each table"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, kde-format
+msgid "Style"
+msgstr "Stilius"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, kde-format
+msgid "Use &default style"
+msgstr "Naudoti &numatytą stilių"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, kde-format
+msgid "Use &external stylesheet:"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, kde-format
+msgid "Layout"
+msgstr "Maketas"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, kde-format
+msgid "Use &borders"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, kde-format
+msgid "Pi&xels between cells:"
+msgstr ""
+
+#: sheets/html/htmlexport.cc:200 sheets/html/htmlexport.cc:375
+#, kde-format
+msgid "Top"
+msgstr "Viršus"
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, kde-format
+msgid "Document"
+msgstr "Dokumentas"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, kde-format
+msgid "Document Style"
+msgstr "Dokumento stilius"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, kde-format
+msgid "Latex style"
+msgstr "Latex stilius"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, kde-format
+msgid "Words style"
+msgstr "Words stilius"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, kde-format
+msgid "Document Type"
+msgstr "Dokumento tipas"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, kde-format
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, kde-format
+msgid "Independent document"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, kde-format
+msgid "Document to include"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, kde-format
+msgid "Document class:"
+msgstr "Dokumento klasė:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, kde-format
+msgid "Quality:"
+msgstr "Kokybė:"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, kde-format
+msgid "Final"
+msgstr "Galutinis"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, kde-format
+msgid "Draft"
+msgstr "Juodraštis"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, kde-format
+msgid "Default font size:"
+msgstr "Numatytas šrifto dydis:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, kde-format
+msgid "Pictures"
+msgstr "Paveikslėliai"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, kde-format
+msgid "Convert the pictures:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, kde-format
+msgid "Pictures directory:"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, kde-format
+msgid "Language"
+msgstr "Kalba"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, kde-format
+msgid "Add"
+msgstr "Pridėti"
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, kde-format
+msgid "Remove"
+msgstr "Pašalinti"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, kde-format
+msgid "Contents"
+msgstr "Turinys"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, kde-format
+msgid "Export information about author:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, kde-format
+msgid "Add a table of content:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, kde-format
+msgid "Notes"
+msgstr "Pastabos"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, kde-format
+msgid "Don't export"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, kde-format
+msgid "Export notes in margin notes"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, kde-format
+msgid "Export notes in comments"
+msgstr ""
+
+#: sheets/opencalc/opencalcexport.cc:890
+#, kde-format
+msgid "Page "
+msgstr "Puslapis "
+
+#: sheets/opencalc/opencalcimport.cc:1199
+#, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr ""
+
+#: sheets/opencalc/opencalcimport.cc:1211
+#, kde-format
+msgid "Skipping a table."
+msgstr ""
+
+#: sheets/opencalc/opencalcimport.cc:1911
+#, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+
+#: sheets/opencalc/opencalcimport.cc:1912
+#, kde-format
+msgid "Unsupported document version"
+msgstr ""
+
+#: sheets/qpro/qproimport.cc:114
+#, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr "QPRO filtras neatidaro įvesties failo - prašome pranešti."
+
+#: sheets/qpro/qproimport.cc:219
+#, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr ""
+"Nepavyksta atverti slaptažodžiu apsaugotų failų.\n"
+"Slaptažodžio algoritmas nebuvo paviešintas"
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, kde-format
+msgid "Unable to find part for type %1"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:348
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1425
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr ""
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, kde-format
+msgid "Slide layout \"%1\" not found"
+msgstr ""
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, kde-format
+msgid "Slide %1"
+msgstr "Skaidrė %1"
+
+#: words/ascii/ImportDialog.cc:32
+#, kde-format
+msgid "Words's Plain Text Import Filter"
+msgstr "Words grynojo teksto importavimo filtras"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "Gryno teksto importavimo dialogas"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, kde-format
+msgid "End of Paragraph"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, kde-format
+msgid "&As is: At the end of line"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr ""
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, kde-format
+msgid "End notes"
+msgstr ""
+
+#: words/msword-odf/conversion.cpp:828
+#, kde-format
+msgid "Even Pages Header"
+msgstr ""
+
+#: words/msword-odf/conversion.cpp:830
+#, kde-format
+msgid "Odd Pages Header"
+msgstr ""
+
+#: words/msword-odf/conversion.cpp:832
+#, kde-format
+msgid "Even Pages Footer"
+msgstr ""
+
+#: words/msword-odf/conversion.cpp:834
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr ""
+
+#: words/msword-odf/conversion.cpp:836
+#, kde-format
+msgid "First Page Header"
+msgstr ""
+
+#: words/msword-odf/conversion.cpp:838
+#, kde-format
+msgid "First Page Footer"
+msgstr ""
+
+#: words/msword-odf/texthandler.cpp:632
+#, kde-format
+msgid "Table %1"
+msgstr "Lentelė %1"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr ""
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, kde-format
+msgid "Words's RTF Import Filter"
+msgstr "Words RTF importavimo filtras"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, kde-format
+msgid "The file cannot be loaded."
+msgstr ""
+
+#~ msgid "Failed to read data."
+#~ msgstr "Nepavyko perskaityti duomenų."
+
+#~ msgid "Export Error"
+#~ msgstr "Eksportavimo klaida"
+
+#~ msgid "Malformed XML data."
+#~ msgstr "Blogai suformuoti XML duomenys."
+
+#~ msgid "Export to Image"
+#~ msgstr "Eksportuoti į paveikslėlį"
+
+#~ msgid "Height:"
+#~ msgstr "Aukštis:"
+
+#~ msgid "Width:"
+#~ msgstr "Plotis:"
+
+#~ msgid "Margin:"
+#~ msgstr "Paraštė:"
+
+#, fuzzy
+#~| msgid "Size in Pixels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Pixels"
+#~ msgstr "Dydis pikseliais"
+
+#, fuzzy
+#~| msgid "Image width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image width:"
+#~ msgstr "Paveikslėlio plotis:"
+
+#, fuzzy
+#~| msgid "Image height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image height:"
+#~ msgstr "Paveikslėlio aukštis:"
+
+#, fuzzy
+#~| msgid "Size in Units"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Units"
+#~ msgstr "Dydis vienetais"
+
+#, fuzzy
+#~| msgid "Resolution:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Resolution:"
+#~ msgstr "Raiška:"
+
+#, fuzzy
+#~| msgid "Unit:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unit:"
+#~ msgstr "Vienetas:"
+
+#, fuzzy
+#~| msgid "Background Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background Color"
+#~ msgstr "Fono spalva"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "Spalva"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opacity"
+#~ msgstr "Permatomumas"
+
+#, fuzzy
+#~| msgid "En&coding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&coding:"
+#~ msgstr "Ko&duotė:"
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select &All"
+#~ msgstr "Pažymėti &viską"
+
+#, fuzzy
+#~| msgid "Desele&ct All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Desele&ct All"
+#~ msgstr "Atžymėti viską"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Stilius"
+
+#, fuzzy
+#~| msgid "Use &default style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &default style"
+#~ msgstr "Naudoti &numatytą stilių"
+
+#, fuzzy
+#~| msgid "Use &default style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &external stylesheet:"
+#~ msgstr "Naudoti &numatytą stilių"
+
+#, fuzzy
+#~| msgid "Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Maketas"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Dokumentas"
+
+#, fuzzy
+#~| msgid "Document Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Style"
+#~ msgstr "Dokumento stilius"
+
+#, fuzzy
+#~| msgid "Latex style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex style"
+#~ msgstr "Latex stilius"
+
+#, fuzzy
+#~| msgid "Words style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words style"
+#~ msgstr "Words stilius"
+
+#, fuzzy
+#~| msgid "Document Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Type"
+#~ msgstr "Dokumento tipas"
+
+#, fuzzy
+#~| msgid "Document Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document to include"
+#~ msgstr "Dokumento stilius"
+
+#, fuzzy
+#~| msgid "Document class:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document class:"
+#~ msgstr "Dokumento klasė:"
+
+#, fuzzy
+#~| msgid "Quality:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quality:"
+#~ msgstr "Kokybė:"
+
+#, fuzzy
+#~| msgid "Final"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Final"
+#~ msgstr "Galutinis"
+
+#, fuzzy
+#~| msgid "Draft"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draft"
+#~ msgstr "Juodraštis"
+
+#, fuzzy
+#~| msgid "Default font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default font size:"
+#~ msgstr "Numatytas šrifto dydis:"
+
+#, fuzzy
+#~| msgid "Pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures"
+#~ msgstr "Paveikslėliai"
+
+#, fuzzy
+#~| msgid "Language"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Kalba"
+
+#, fuzzy
+#~| msgid "Encoding"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encoding"
+#~ msgstr "Koduotė"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Pridėti"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Pašalinti"
+
+#, fuzzy
+#~| msgid "Contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "Turinys"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Pastabos"
+
+#, fuzzy
+#~| msgid "Export to Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in margin notes"
+#~ msgstr "Eksportuoti į paveikslėlį"
+
+#, fuzzy
+#~| msgid "E&ncoding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "&Koduotė:"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Line"
+#~ msgstr "Eilutės pabaiga"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Lakštai"
+
+#, fuzzy
+#~| msgid "Delimiter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter Line"
+#~ msgstr "Skyriklis"
+
+#, fuzzy
+#~| msgid "Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cells"
+#~ msgstr "Langeliai"
+
+#, fuzzy
+#~| msgid "Delimiter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "Skyriklis"
+
+#, fuzzy
+#~| msgid "Comma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "Kablelis"
+
+#, fuzzy
+#~| msgid "Semicolon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "Kabliataškis"
+
+#, fuzzy
+#~| msgid "Tabulator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "Tabuliatorius"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "Tarpas"
+
+#, fuzzy
+#~| msgid "Other:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other:"
+#~ msgstr "Kita:"
+
+#, fuzzy
+#~| msgid "Quotes:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quotes:"
+#~ msgstr "Kabutės:"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Page:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page:"
+#~ msgstr "Puslapis:"
+
+#, fuzzy
+#~| msgid "Size in Pixels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "Dydis pikseliais"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "Aukštis:"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Plotis:"
+
+#, fuzzy
+#~| msgid "Margin:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Margin:"
+#~ msgstr "Paraštė:"
+
+#, fuzzy
+#~| msgid "Plain Text Import Dialog"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plain Text Import Dialog"
+#~ msgstr "Gryno teksto importavimo dialogas"
+
+#, fuzzy
+#~| msgid "Export Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Error"
+#~ msgstr "Eksportavimo klaida"
+
+#, fuzzy
+#~| msgid "Failed to read data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to read data."
+#~ msgstr "Nepavyko perskaityti duomenų."
+
+#, fuzzy
+#~| msgid "Malformed XML data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Malformed XML data."
+#~ msgstr "Blogai suformuoti XML duomenys."
+
+#, fuzzy
+#~| msgid "Export to Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to Image"
+#~ msgstr "Eksportuoti į paveikslėlį"
+
+#, fuzzy
+#~| msgid "PNG Export Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PNG Export Options"
+#~ msgstr "PNG eksportavimo nuostatos"
+
+#, fuzzy
+#~| msgid "Attribute \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace \"%1\" not found"
+#~ msgstr "Atributas „%1“ nerastas"
+
+#, fuzzy
+#~| msgid "Enter password"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter password"
+#~ msgstr "Įveskite slaptažodį"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (line %2, column %3)"
+#~ msgstr " Eilutė: %1   Stulpelis: %2 "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (%2, line %3, column %4)"
+#~ msgstr " Eilutė: %1   Stulpelis: %2 "
+
+#, fuzzy
+#~| msgid "Attribute \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Element \"%1\" not found"
+#~ msgstr "Atributas „%1“ nerastas"
+
+#, fuzzy
+#~| msgid "Attribute \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attribute \"%1\" not found"
+#~ msgstr "Atributas „%1“ nerastas"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find relationships file \"%1\""
+#~ msgstr "Nepavyko skaityti iš failo."
+
+#, fuzzy
+#~| msgid "Attribute \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' not found."
+#~ msgstr "Atributas „%1“ nerastas"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not write block"
+#~ msgstr "Nepavyko skaityti iš failo."
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Recommended ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Rekomenduojama ( %1 )"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Locale ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Lokalė ( %1 )"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Other ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Kita ( %1 )"
+
+#, fuzzy
+#~| msgid "QPRO filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV filter cannot open input file - please report."
+#~ msgstr "QPRO filtras neatidaro įvesties failo - prašome pranešti."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read from file."
+#~ msgstr "Nepavyko skaityti iš failo."
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Recommended ( %1 )"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recommended: UTF-8"
+#~ msgstr "Rekomenduojama ( %1 )"
+
+#, fuzzy
+#~| msgid "Locale (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale (%1)"
+#~ msgstr "Lokalė ( %1 )"
+
+#, fuzzy
+#~| msgid "Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top"
+#~ msgstr "Viršus"
+
+#, fuzzy
+#~| msgid "Page "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page "
+#~ msgstr "Puslapis "
+
+#, fuzzy
+#~| msgid "QPRO filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QPRO filter cannot open input file - please report."
+#~ msgstr "QPRO filtras neatidaro įvesties failo - prašome pranešti."
+
+#, fuzzy
+#~| msgid ""
+#~| "Unable to open password protected files.\n"
+#~| "The password algorithm has not been published"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unable to open password protected files.\n"
+#~ "The password algorithm has not been published"
+#~ msgstr ""
+#~ "Nepavyksta atverti slaptažodžiu apsaugotų failų.\n"
+#~ "Slaptažodžio algoritmas nebuvo paviešintas"
+
+#, fuzzy
+#~| msgid "Attribute \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide layout \"%1\" not found"
+#~ msgstr "Atributas „%1“ nerastas"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Skaidrė %1"
+
+#, fuzzy
+#~| msgid "Words's Plain Text Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's Plain Text Import Filter"
+#~ msgstr "Words grynojo teksto importavimo filtras"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End notes"
+#~ msgstr "Eilutės pabaiga"
+
+#, fuzzy
+#~| msgid "Table %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table %1"
+#~ msgstr "Lentelė %1"
+
+#, fuzzy
+#~| msgid "Words's RTF Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's RTF Import Filter"
+#~ msgstr "Words RTF importavimo filtras"

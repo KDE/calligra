@@ -1,0 +1,854 @@
+# translation of kocolorspaces.po to Francais
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Mickael Sibelle <kimael@gmail.com>, 2009, 2010.
+# xavier <xavier.besnard@neuf.fr>, 2013.
+# Sebastien Renard <renard@kde.org>, 2015.
+# Simon Depiets <sdepiets@gmail.com>, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kocolorspaces\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-12-20 00:43+0000\n"
+"PO-Revision-Date: 2018-07-13 14:59+0800\n"
+"Last-Translator: Simon Depiets <sdepiets@gmail.com>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 2.0\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:25
+#: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:20
+#: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:21
+#, kde-format
+msgid "Cyan"
+msgstr "Cyan"
+
+#: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:26
+#: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:21
+#: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:22
+#, kde-format
+msgid "Magenta"
+msgstr "Magenta"
+
+#: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:27
+#: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:22
+#: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:23
+#, kde-format
+msgid "Yellow"
+msgstr "Jaune"
+
+#: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:28
+#: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:23
+#: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:24
+#, kde-format
+msgid "Black"
+msgstr "Noir"
+
+#: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:29
+#: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:24
+#: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:25
+#: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.cpp:26
+#: lcms2/colorspaces/gray_f32/GrayF32ColorSpace.cpp:29
+#: lcms2/colorspaces/gray_u16/GrayU16ColorSpace.cpp:24
+#: lcms2/colorspaces/gray_u8/GrayU8ColorSpace.cpp:23
+#: lcms2/colorspaces/lab_f32/LabF32ColorSpace.cpp:28
+#: lcms2/colorspaces/lab_u16/LabColorSpace.cpp:23
+#: lcms2/colorspaces/lab_u8/LabU8ColorSpace.cpp:23
+#: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:26
+#: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:29
+#: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:23
+#: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:59
+#: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:23
+#: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:28
+#: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:23
+#: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:23
+#: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:28
+#: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:23
+#: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:24
+#, kde-format
+msgid "Alpha"
+msgstr "Alpha"
+
+#: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.h:78
+#, kde-format
+msgid "CMYK (32 bits floating/channel)"
+msgstr "CMJN (flottant sur 32 bits / canal)"
+
+#: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.h:74
+#, kde-format
+msgid "CMYK (16-bit integer/channel)"
+msgstr "CMJN (entier sur 16 bits / canal)"
+
+#: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.h:72
+#, kde-format
+msgid "CMYK (8-bit integer/channel)"
+msgstr "CMJN (entier sur 8 bits / canal)"
+
+#: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.cpp:25
+#: lcms2/colorspaces/gray_f32/GrayF32ColorSpace.cpp:28
+#: lcms2/colorspaces/gray_u16/GrayU16ColorSpace.cpp:23
+#: lcms2/colorspaces/gray_u8/GrayU8ColorSpace.cpp:22
+#, kde-format
+msgid "Gray"
+msgstr "Gris"
+
+#: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.h:74
+#, kde-format
+msgid "Grayscale/Alpha (16-bit float/channel)"
+msgstr "Niveaux de gris / Alpha (flottant sur 16 bits / canal)"
+
+#: lcms2/colorspaces/gray_f32/GrayF32ColorSpace.h:74
+#, kde-format
+msgid "Grayscale/Alpha (32-bit float/channel)"
+msgstr "Niveaux de gris / Alpha (flottant sur 32 bits / canal)"
+
+#: lcms2/colorspaces/gray_u16/GrayU16ColorSpace.h:68
+#, kde-format
+msgid "Grayscale (16-bit integer/channel)"
+msgstr "Niveaux de gris (entier sur 16 bits / canal)"
+
+#: lcms2/colorspaces/gray_u8/GrayU8ColorSpace.h:70
+#, kde-format
+msgid "Grayscale (8-bit integer/channel)"
+msgstr "Niveaux de gris (entier sur 8 bits / canal)"
+
+#: lcms2/colorspaces/lab_f32/LabF32ColorSpace.cpp:25
+#: lcms2/colorspaces/lab_u16/LabColorSpace.cpp:20
+#: lcms2/colorspaces/lab_u8/LabU8ColorSpace.cpp:20
+#, kde-format
+msgid "Lightness"
+msgstr "Luminosité"
+
+#: lcms2/colorspaces/lab_f32/LabF32ColorSpace.cpp:26
+#: lcms2/colorspaces/lab_u16/LabColorSpace.cpp:21
+#: lcms2/colorspaces/lab_u8/LabU8ColorSpace.cpp:21
+#, kde-format
+msgid "a*"
+msgstr "a*"
+
+#: lcms2/colorspaces/lab_f32/LabF32ColorSpace.cpp:27
+#: lcms2/colorspaces/lab_u16/LabColorSpace.cpp:22
+#: lcms2/colorspaces/lab_u8/LabU8ColorSpace.cpp:22
+#, kde-format
+msgid "b*"
+msgstr "b*"
+
+#: lcms2/colorspaces/lab_f32/LabF32ColorSpace.h:75
+#, kde-format
+msgid "L*a*b* (32-bit float/channel)"
+msgstr "L*a*b (flottant sur 32 bits / canal)"
+
+#: lcms2/colorspaces/lab_u16/LabColorSpace.h:78
+#, kde-format
+msgid "L*a*b* (16-bit integer/channel)"
+msgstr "L*a*b (entier sur 16 bits / canal)"
+
+#: lcms2/colorspaces/lab_u8/LabU8ColorSpace.h:70
+#, kde-format
+msgid "L*a*b* (8-bit integer/channel)"
+msgstr "L*a*b (entier sur 8 bits / canal)"
+
+#: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:23
+#: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:26
+#: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:22
+#: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:58
+#, kde-format
+msgid "Red"
+msgstr "Rouge"
+
+#: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:24
+#: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:27
+#: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:21
+#: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:57
+#, kde-format
+msgid "Green"
+msgstr "Vert"
+
+#: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:25
+#: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:28
+#: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:20
+#: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:56
+#, kde-format
+msgid "Blue"
+msgstr "Bleu"
+
+#: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.h:68
+#, kde-format
+msgid "RGBA (16-bit floating/channel)"
+msgstr "RVB (flottant sur 32 bits / canal)"
+
+#: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.h:68
+#, kde-format
+msgid "RGBA (32-bit floating/channel)"
+msgstr "RVB (flottant sur 32 bits / canal)"
+
+#: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.h:61
+#, kde-format
+msgid "RGB (16-bit integer/channel)"
+msgstr "RVB (entier sur 16 bits / canal)"
+
+#: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.h:77
+#, kde-format
+msgid "RGB (8-bit integer/channel)"
+msgstr "RVB (entier sur 8 bits / canal)"
+
+#: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:20
+#: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:25
+#: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:20
+#: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:20
+#, kde-format
+msgid "X"
+msgstr "X"
+
+#: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:21
+#: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:26
+#: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:21
+#: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:21
+#: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:25
+#: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:20
+#: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:21
+#, kde-format
+msgid "Y"
+msgstr "Y"
+
+#: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:22
+#: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:27
+#: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:22
+#: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:22
+#, kde-format
+msgid "Z"
+msgstr "Z"
+
+#: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.h:73
+#: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.h:73
+#, kde-format
+msgid "XYZ (32-bit float/channel)"
+msgstr "XYZ (flottant sur 32 bits / canal)"
+
+#: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.h:63
+#, kde-format
+msgid "XYZ (16-bit integer/channel)"
+msgstr "XYZ (entier sur 16 bits / canal)"
+
+#: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.h:68
+#, kde-format
+msgid "XYZ (8-bit integer/channel)"
+msgstr "XYZ (entier sur 8 bits / canal)"
+
+#: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:26
+#: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:21
+#: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:22
+#, kde-format
+msgid "Cb"
+msgstr "Cb"
+
+#: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:27
+#: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:22
+#: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:23
+#, kde-format
+msgid "Cr"
+msgstr "Cr"
+
+#: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.h:74
+#, kde-format
+msgid "YCBCR (32-bit float/channel)"
+msgstr "YCBCR (flottant sur 32 bits / canal)"
+
+#: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.h:68
+#, kde-format
+msgid "YCBCR (16-bit integer/channel)"
+msgstr "YCBCR (entier sur 16 bits / canal)"
+
+#: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.h:68
+#, kde-format
+msgid "YCBCR (8-bit integer/channel)"
+msgstr "YCBCR (entier sur 8 bits / canal)"
+
+#: lcms2/compositeops/RgbCompositeOpBumpmap.h:21
+#, kde-format
+msgid "Bumpmap"
+msgstr "Surface de matriçage"
+
+#: lcms2/compositeops/RgbCompositeOpClear.h:21
+#, kde-format
+msgid "Clear"
+msgstr "Effacer"
+
+#: lcms2/compositeops/RgbCompositeOpColor.h:26
+#, kde-format
+msgid "Color"
+msgstr "Couleur"
+
+#: lcms2/compositeops/RgbCompositeOpDarken.h:21
+#, kde-format
+msgid "Darken"
+msgstr "Assombrir"
+
+#: lcms2/compositeops/RgbCompositeOpDiff.h:23
+#, kde-format
+msgid "Diff"
+msgstr "Diff"
+
+#: lcms2/compositeops/RgbCompositeOpDissolve.h:21
+#, kde-format
+msgid "Dissolve"
+msgstr "Dissoudre"
+
+#: lcms2/compositeops/RgbCompositeOpHue.h:25
+#, kde-format
+msgid "Hue"
+msgstr "Teinte"
+
+#: lcms2/compositeops/RgbCompositeOpIn.h:24
+#, kde-format
+msgid "In"
+msgstr "Dedans"
+
+#: lcms2/compositeops/RgbCompositeOpLighten.h:21
+#, kde-format
+msgid "Lighten"
+msgstr "Éclaircir"
+
+#: lcms2/compositeops/RgbCompositeOpOut.h:24
+#, kde-format
+msgid "Out"
+msgstr "Dehors"
+
+#: lcms2/compositeops/RgbCompositeOpSaturation.h:25
+#, kde-format
+msgid "Saturation"
+msgstr "Saturation"
+
+#: lcms2/compositeops/RgbCompositeOpValue.h:25
+#, kde-format
+msgid "Value"
+msgstr "Valeur"
+
+#: lcms2/IccColorSpaceEngine.cpp:88
+#, kde-format
+msgid "ICC Engine"
+msgstr "Moteur ICC"
+
+#: lcms2/LcmsEnginePlugin.cpp:118 lcms2/LcmsEnginePlugin.cpp:122
+#: lcms2/LcmsEnginePlugin.cpp:126
+#, kde-format
+msgid "L*a*b* Histogram"
+msgstr "Histogramme « L*a*b* »"
+
+#: lcms2/LcmsEnginePlugin.cpp:142
+#, kde-format
+msgid "RGB8 Histogram"
+msgstr "Histogramme « RVB8 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:146
+#, kde-format
+msgid "RGB16 Histogram"
+msgstr "Histogramme « RGB16 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:151
+#, kde-format
+msgid "RGBF16 Histogram"
+msgstr "Histogramme « RGBF16 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:156
+#, kde-format
+msgid "RGBF32 Histogram"
+msgstr "Histogramme « RGBF32 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:175
+#, kde-format
+msgid "GRAY/Alpha8 Histogram"
+msgstr "Histogramme « Gris / Alpha8 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:179
+#, kde-format
+msgid "GRAY/Alpha16 Histogram"
+msgstr "Histogramme « Gris / Alpha16 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:183
+#, kde-format
+msgid "GRAYF16 Histogram"
+msgstr "Histogramme « GRAYF16 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:188
+#, kde-format
+msgid "GRAY/Alpha 32 float Histogram"
+msgstr "Histogramme « Gris / Alpha flottant sur 32 bits »"
+
+#: lcms2/LcmsEnginePlugin.cpp:198
+#, kde-format
+msgid "CMYK8 Histogram"
+msgstr "Histogramme « CMJN8 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:202
+#, kde-format
+msgid "CMYK16 Histogram"
+msgstr "Histogramme « CMJN16 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:206
+#, kde-format
+msgid "CMYK F32 Histogram"
+msgstr "Histogramme « CMJN F32 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:222
+#, kde-format
+msgid "XYZ8 Histogram"
+msgstr "Histogramme « XYZ8 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:226
+#, kde-format
+msgid "XYZ16 Histogram"
+msgstr "Histogramme « XYZ16 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:231
+#, kde-format
+msgid "XYZF16 Histogram"
+msgstr "Histogramme « XYZF16 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:236
+#, kde-format
+msgid "XYZF32 Histogram"
+msgstr "Histogramme « XYZF32 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:249
+#, kde-format
+msgid "YCBCR8 Histogram"
+msgstr "Histogramme « YCBCR8 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:253
+#, kde-format
+msgid "YCBCR16 Histogram"
+msgstr "Histogramme « YCBCR16 »"
+
+#: lcms2/LcmsEnginePlugin.cpp:257
+#, kde-format
+msgid "YCBCRF32 Histogram"
+msgstr "Histogramme « YCBCRF32 »"
+
+#, fuzzy
+#~| msgid "Cyan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cyan"
+#~ msgstr "Cyan"
+
+#, fuzzy
+#~| msgid "Magenta"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Magenta"
+#~ msgstr "Magenta"
+
+#, fuzzy
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "Jaune"
+
+#, fuzzy
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "Noir"
+
+#, fuzzy
+#~| msgid "Alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alpha"
+#~ msgstr "Alpha"
+
+#, fuzzy
+#~| msgid "CMYK (32 bits floating/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CMYK (32 bits floating/channel)"
+#~ msgstr "CMJN (flottant sur 32 bits / canal)"
+
+#, fuzzy
+#~| msgid "CMYK (16-bit integer/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CMYK (16-bit integer/channel)"
+#~ msgstr "CMJN (entier sur 16 bits / canal)"
+
+#, fuzzy
+#~| msgid "CMYK (8-bit integer/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CMYK (8-bit integer/channel)"
+#~ msgstr "CMJN (entier sur 8 bits / canal)"
+
+#, fuzzy
+#~| msgid "Gray"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gray"
+#~ msgstr "Gris"
+
+#, fuzzy
+#~| msgid "Grayscale/Alpha (32-bit float/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grayscale/Alpha (16-bit float/channel)"
+#~ msgstr "Niveaux de gris / Alpha (flottant sur 32 bits / canal)"
+
+#, fuzzy
+#~| msgid "Grayscale/Alpha (32-bit float/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grayscale/Alpha (32-bit float/channel)"
+#~ msgstr "Niveaux de gris / Alpha (flottant sur 32 bits / canal)"
+
+#, fuzzy
+#~| msgid "Grayscale (16-bit integer/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grayscale (16-bit integer/channel)"
+#~ msgstr "Niveaux de gris (entier sur 16 bits / canal)"
+
+#, fuzzy
+#~| msgid "Grayscale (8-bit integer/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grayscale (8-bit integer/channel)"
+#~ msgstr "Niveaux de gris (entier sur 8 bits / canal)"
+
+#, fuzzy
+#~| msgid "Lightness"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lightness"
+#~ msgstr "Luminosité"
+
+#, fuzzy
+#~| msgid "a*"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "a*"
+#~ msgstr "a*"
+
+#, fuzzy
+#~| msgid "b*"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "b*"
+#~ msgstr "b*"
+
+#, fuzzy
+#~| msgid "L*a*b* (32-bit float/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "L*a*b* (32-bit float/channel)"
+#~ msgstr "L*a*b (flottant sur 32 bits / canal)"
+
+#, fuzzy
+#~| msgid "L*a*b* (16-bit integer/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "L*a*b* (16-bit integer/channel)"
+#~ msgstr "L*a*b (entier sur 16 bits / canal)"
+
+#, fuzzy
+#~| msgid "L*a*b* (8-bit integer/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "L*a*b* (8-bit integer/channel)"
+#~ msgstr "L*a*b (entier sur 8 bits / canal)"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "Rouge"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Vert"
+
+#, fuzzy
+#~| msgid "Blue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Bleu"
+
+#, fuzzy
+#~| msgid "RGBA (16-bit floating/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RGBA (16-bit floating/channel)"
+#~ msgstr "RVB (flottant sur 32 bits / canal)"
+
+#, fuzzy
+#~| msgid "RGBA (32-bit floating/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RGBA (32-bit floating/channel)"
+#~ msgstr "RVB (flottant sur 32 bits / canal)"
+
+#, fuzzy
+#~| msgid "RGB (16-bit integer/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RGB (16-bit integer/channel)"
+#~ msgstr "RVB (entier sur 16 bits / canal)"
+
+#, fuzzy
+#~| msgid "RGB (8-bit integer/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RGB (8-bit integer/channel)"
+#~ msgstr "RVB (entier sur 8 bits / canal)"
+
+#, fuzzy
+#~| msgid "X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X"
+#~ msgstr "X"
+
+#, fuzzy
+#~| msgid "Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y"
+#~ msgstr "Y"
+
+#, fuzzy
+#~| msgid "Z"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Z"
+#~ msgstr "Z"
+
+#, fuzzy
+#~| msgid "XYZ (32-bit float/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "XYZ (32-bit float/channel)"
+#~ msgstr "XYZ (flottant sur 32 bits / canal)"
+
+#, fuzzy
+#~| msgid "XYZ (16-bit integer/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "XYZ (16-bit integer/channel)"
+#~ msgstr "XYZ (entier sur 16 bits / canal)"
+
+#, fuzzy
+#~| msgid "XYZ (8-bit integer/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "XYZ (8-bit integer/channel)"
+#~ msgstr "XYZ (entier sur 8 bits / canal)"
+
+#, fuzzy
+#~| msgid "Cb"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cb"
+#~ msgstr "Cb"
+
+#, fuzzy
+#~| msgid "Cr"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cr"
+#~ msgstr "Cr"
+
+#, fuzzy
+#~| msgid "YCBCR (32-bit float/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "YCBCR (32-bit float/channel)"
+#~ msgstr "YCBCR (flottant sur 32 bits / canal)"
+
+#, fuzzy
+#~| msgid "YCBCR (16-bit integer/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "YCBCR (16-bit integer/channel)"
+#~ msgstr "YCBCR (entier sur 16 bits / canal)"
+
+#, fuzzy
+#~| msgid "YCBCR (8-bit integer/channel)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "YCBCR (8-bit integer/channel)"
+#~ msgstr "YCBCR (entier sur 8 bits / canal)"
+
+#, fuzzy
+#~| msgid "Bumpmap"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bumpmap"
+#~ msgstr "Surface de matriçage"
+
+#, fuzzy
+#~| msgid "Clear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clear"
+#~ msgstr "Effacer"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "Couleur"
+
+#, fuzzy
+#~| msgid "Darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "Assombrir"
+
+#, fuzzy
+#~| msgid "Diff"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diff"
+#~ msgstr "Diff"
+
+#, fuzzy
+#~| msgid "Dissolve"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dissolve"
+#~ msgstr "Dissoudre"
+
+#, fuzzy
+#~| msgid "Hue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hue"
+#~ msgstr "Teinte"
+
+#, fuzzy
+#~| msgid "In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "In"
+#~ msgstr "Dedans"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Éclaircir"
+
+#, fuzzy
+#~| msgid "Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Out"
+#~ msgstr "Dehors"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturation"
+#~ msgstr "Saturation"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Value"
+#~ msgstr "Valeur"
+
+#, fuzzy
+#~| msgid "ICC Engine"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ICC Engine"
+#~ msgstr "Moteur ICC"
+
+#, fuzzy
+#~| msgid "L*a*b* Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "L*a*b* Histogram"
+#~ msgstr "Histogramme « L*a*b* »"
+
+#, fuzzy
+#~| msgid "RGB8 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RGB8 Histogram"
+#~ msgstr "Histogramme « RVB8 »"
+
+#, fuzzy
+#~| msgid "RGB16 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RGB16 Histogram"
+#~ msgstr "Histogramme « RGB16 »"
+
+#, fuzzy
+#~| msgid "RGBF16 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RGBF16 Histogram"
+#~ msgstr "Histogramme « RGBF16 »"
+
+#, fuzzy
+#~| msgid "RGBF32 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RGBF32 Histogram"
+#~ msgstr "Histogramme « RGBF32 »"
+
+#, fuzzy
+#~| msgid "GRAY/Alpha8 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "GRAY/Alpha8 Histogram"
+#~ msgstr "Histogramme « Gris / Alpha8 »"
+
+#, fuzzy
+#~| msgid "GRAY/Alpha16 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "GRAY/Alpha16 Histogram"
+#~ msgstr "Histogramme « Gris / Alpha16 »"
+
+#, fuzzy
+#~| msgid "RGBF16 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "GRAYF16 Histogram"
+#~ msgstr "Histogramme « RGBF16 »"
+
+#, fuzzy
+#~| msgid "GRAY/Alpha 32 float Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "GRAY/Alpha 32 float Histogram"
+#~ msgstr "Histogramme « Gris / Alpha flottant sur 32 bits »"
+
+#, fuzzy
+#~| msgid "CMYK8 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CMYK8 Histogram"
+#~ msgstr "Histogramme « CMJN8 »"
+
+#, fuzzy
+#~| msgid "CMYK16 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CMYK16 Histogram"
+#~ msgstr "Histogramme « CMJN16 »"
+
+#, fuzzy
+#~| msgid "CMYK F32 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CMYK F32 Histogram"
+#~ msgstr "Histogramme « CMJN F32 »"
+
+#, fuzzy
+#~| msgid "XYZ8 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "XYZ8 Histogram"
+#~ msgstr "Histogramme « XYZ8 »"
+
+#, fuzzy
+#~| msgid "XYZ16 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "XYZ16 Histogram"
+#~ msgstr "Histogramme « XYZ16 »"
+
+#, fuzzy
+#~| msgid "XYZF16 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "XYZF16 Histogram"
+#~ msgstr "Histogramme « XYZF16 »"
+
+#, fuzzy
+#~| msgid "XYZF32 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "XYZF32 Histogram"
+#~ msgstr "Histogramme « XYZF32 »"
+
+#, fuzzy
+#~| msgid "YCBCR8 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "YCBCR8 Histogram"
+#~ msgstr "Histogramme « YCBCR8 »"
+
+#, fuzzy
+#~| msgid "YCBCR16 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "YCBCR16 Histogram"
+#~ msgstr "Histogramme « YCBCR16 »"
+
+#, fuzzy
+#~| msgid "YCBCRF32 Histogram"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "YCBCRF32 Histogram"
+#~ msgstr "Histogramme « YCBCRF32 »"
+
+#~ msgid "Grayscale without alpha (8-bit integer/channel)"
+#~ msgstr "Niveaux de gris sans alpha (entier sur 8 bits / canal)"
+
+#~ msgid "Grayscale (no transparency) (8-bit integer/channel)"
+#~ msgstr "Niveaux de gris (sans transparence) (entier sur 8 bits / canal)"

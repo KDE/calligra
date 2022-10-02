@@ -1,0 +1,106 @@
+# translation of SpellCheckPlugin.po to Low Saxon
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sönke Dibbern <s_dibbern@web.de>, 2007.
+# Manfred Wiese <m.j.wiese@web.de>, 2008, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2010-10-18 07:25+0200\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "&Klookschriever instellen..."
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Auto-Klookschriever"
+
+#: SpellCheckFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Spelling"
+msgid "Check Spelling"
+msgstr "Schriefwies"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Schriefwies"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Na Wöörbook tofögen"
+
+#, fuzzy
+#~| msgid "Configure &Spell Checking..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "&Klookschriever instellen..."
+
+#, fuzzy
+#~| msgid "Auto Spell Check"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Auto-Klookschriever"
+
+#, fuzzy
+#~| msgid "Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Schriefwies"
+
+#, fuzzy
+#~| msgid "Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Schriefwies"
+
+#, fuzzy
+#~| msgid "Add to Dictionary"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Na Wöörbook tofögen"
+
+#~ msgid "Ignore Word"
+#~ msgstr "Woort övergahn"
+
+#~ msgid "Spell Check"
+#~ msgstr "Klookschriever"
+
+#~ msgid "Spell Check Configuration"
+#~ msgstr "Klookschriever-Instellen"
+
+#~ msgid "Default Language:"
+#~ msgstr "Standardspraak:"
+
+#~ msgid "Options"
+#~ msgstr "Optschonen"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "Schriefwies in &Achtergrund nakieken"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "Heel &grootschreven Wöör övergahn"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "&Tosamentrocken Wöör övergahn"
+
+#~ msgid "&Add"
+#~ msgstr "&Tofögen"
+
+#~ msgid "&Remove"
+#~ msgstr "&Wegmaken"

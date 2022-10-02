@@ -1,0 +1,92 @@
+# Translation of calligra-opener.po to Catalan
+# Copyright (C) 2011-2020 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kword package.
+#
+# Rafael Carreras <rcarreras@caliu.cat>, 2011.
+# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-12 00:45+0000\n"
+"PO-Revision-Date: 2020-07-09 15:25+0200\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Generator: Lokalize 20.07.70\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Rafael Carreras"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "rcarreras@caliu.cat"
+
+#: main.cpp:61
+#, kde-format
+msgctxt "@info"
+msgid "Mimetype for <filename>%1</filename> not found!"
+msgstr "No s'ha trobat el tipus MIME per a <filename>%1</filename>!"
+
+#: main.cpp:119
+#, kde-format
+msgctxt "@action:button"
+msgid "Open with <application>%1</application>"
+msgstr "Obre amb <application>%1</application>"
+
+#: main.cpp:124
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not find Calligra application suitable for opening <filename>%1</"
+"filename>.<nl/>Do you want to open the file using default application "
+"<application>%2</application>?"
+msgstr ""
+"No s'ha pogut trobar l'aplicació del Calligra adequada per a obrir <filename>"
+"%1</filename>.<nl/>Voleu obrir el fitxer usant l'aplicació per defecte "
+"<application>%2</application>?"
+
+#: main.cpp:127
+#, kde-format
+msgctxt "@title:window"
+msgid "Calligra Application Not Found"
+msgstr "No s'ha trobat l'aplicació del Calligra"
+
+#: main.cpp:157
+#, kde-format
+msgid "Calligra Opener"
+msgstr "Obridor del Calligra"
+
+#: main.cpp:159
+#, kde-format
+msgid "Calligra Document Opener"
+msgstr "Obridor de documents del Calligra"
+
+#: main.cpp:161
+#, kde-format
+msgid "Copyright 2010-%1 Calligra developers"
+msgstr "Copyright 2010-%1 Calligra developers"
+
+#: main.cpp:162
+#, kde-format
+msgid "Jarosław Staniek"
+msgstr "Jarosław Staniek"
+
+#: main.cpp:169
+#, kde-format
+msgid "Lists names of all available Calligra applications"
+msgstr "Llista els noms de totes les aplicacions disponibles del Calligra"
+
+#: main.cpp:170
+#, kde-format
+msgid "Files to open"
+msgstr "Fitxers a obrir"

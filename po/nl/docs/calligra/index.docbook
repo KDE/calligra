@@ -1,0 +1,329 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+ <!ENTITY sheets "<application
+>Calligra Sheets</application
+>">
+ <!ENTITY words "<application
+>Calligra Words</application
+>">
+ <!ENTITY stage "<application
+>Calligra Stage</application
+>">
+ <!ENTITY flow "<application
+>Calligra Flow</application
+>">
+ <!ENTITY plan "<application
+>Calligra Plan</application
+>">
+ <!ENTITY karbon "<application
+>Calligra Karbon</application
+>">
+ <!ENTITY calligra "Calligra">
+ <!ENTITY kappname "&calligra;">
+ <!ENTITY package "Calligra">
+ <!ENTITY % addindex "IGNORE">
+ <!ENTITY % Dutch "INCLUDE"
+> <!-- change language only here -->
+]>
+
+<!-- maintained by raphael.langerhorst@kdemail.net -->
+
+<book id="calligra" lang="&language;">
+<bookinfo>
+<title
+>&calligra;</title>
+<subtitle
+>Algemene inleiding</subtitle>
+<authorgroup>
+<author
+>&Raphael.Langerhorst; &Raphael.Langerhorst.mail; </author>
+<author
+>&Jost.Schenck; &Jost.Schenck.mail; </author>
+&Natalie.Koning; 
+</authorgroup>
+
+<date
+>2012-01-03</date>
+<releaseinfo
+>2.4.0</releaseinfo>
+
+<abstract>
+<para
+>&calligra; is voor illustraties en een kantoorsuite van &kde;. </para>
+</abstract>
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Calligra</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title
+>Inleiding</title>
+<sect1>
+<title
+>&calligra;-componenten</title>
+
+<important
+> <para
+>De nieuwste versie van dit document kunt u altijd vinden op <ulink url="http://docs.kde.org/development/en/calligra/calligra/index.html"
+>http://docs.kde.org</ulink
+>.</para
+></important>
+
+<para
+>&calligra; is voor illustraties en een officepakket voor &kde;. &calligra; bevat op dit ogenblik de volgende componenten: </para>
+
+<itemizedlist>
+<listitem
+><para
+>&words; (een op frames gebaseerde tekstverwerker)</para
+></listitem>
+<listitem
+><para
+>&sheets; (een rekenbladtoepassing)</para
+></listitem
+> 
+<listitem
+><para
+>&stage; (een toepassing voor diapresentaties)</para
+></listitem>
+<listitem
+><para
+>&flow; (een toepassing voor stroomdiagrammen)</para
+></listitem>
+<listitem
+><para
+>&karbon; (een vectortekenprogramma)</para
+></listitem>
+<listitem
+><para
+>&plan; (een projectbeheerapplicatie)</para
+></listitem>
+</itemizedlist>
+
+<para
+>De onderdelen van &calligra; zijn ontworpen op basis van Flake-technologie en werken bijgevolg uitstekend samen. Veel &calligra;-componenten kunnen worden geïntegreerd in een ander &calligra;-document. Zo kunt u een rekenblad dat in &sheets; werd gemaakt, rechtstreeks in een &words;-document opnemen. Door de verschillende &calligra;-componenten met elkaar te combineren kunnen complexe documenten worden gecreëerd. </para>
+
+<para
+>Door middel van plug-ins kan de functionaliteit van &calligra; verder uitgebreid worden. U kunt in sommige componenten veel plug-ins vinden en u kunt leren hoe u zelf plug-ins kunt schrijven. </para>
+
+<para
+>Dit handboek beschrijft alleen de algemene eigenschappen van &calligra; en de kenmerken die bij de meeste programma's identiek zijn. Voor gedetailleerde informatie over elk programma afzonderlijk, moet u de specifieke handboeken raadplegen. </para>
+
+</sect1>
+
+<sect1 id="features">
+<title
+>Overzicht van de eigenschappen van &calligra;</title>
+<sect2 id="featureintegration">
+<title
+>Integratie</title>
+<para
+>&calligra; bestaat uit een raamwerk (framework) waar alle componenten op gebouwd zijn. Dit raamwerk zorgt voor een hoge mate van integratie. U kunt zelf componenten ontwikkelen die even goed geïntegreerd worden. </para>
+</sect2>
+<sect2 id="featureleightweight">
+<title
+>Lichtgewicht</title>
+<para
+>Ondanks dat &calligra; veel componenten heeft, is het een zeer lichtgewicht, snel programma en gebruikt het weinig geheugen. Dit komt mede door het feit dat &calligra; gebouwd is op &kde;, dat een krachtig raamwerk voor het ontwikkelen van toepassingen is. </para>
+<para
+>&calligra; is zo ontworpen dat het de gebruikersinterface niet overlaadt met onnodige functies. Het resultaat is een strakke gebruikersinterface waardoor u efficiënt kunt werken. </para>
+<para
+>Het feit dat &calligra; een lichtgewicht programma is, kan soms betekenen dat speciale functies die u nodig hebt niet voorhanden zijn. In dat geval kunt u die functies zelf toevoegen. Zulke functies kunnen veel beter beschikbaar gemaakt worden door middel van plug-ins of scripts, zodat &calligra; zelf lichtgewicht blijft. </para>
+</sect2>
+<sect2 id="featurecompleteness">
+<title
+>Compleet afgewerkt</title>
+<para
+>&calligra; biedt een grote verzameling componenten, die zowel voor thuisgebruik als voor zakelijk gebruik geschikt zijn. Aanvullende functies kunnen toegevoegd worden door middel van scripts, plug-ins of andere componenten die op het raamwerk van &calligra; gebaseerd zijn. </para>
+</sect2>
+<sect2 id="featurefileformat">
+<title
+>OASIS OpenDocument formaat</title>
+<para
+>Voor elke kantoortoepassing is het uitermate belangrijk om aan de gevestigde standaarden te voldoen. Dit geldt vooral voor bestandstypen, om probleemloos documenten met andere kantoorpakketten te kunnen uitwisselen. Het voorkomt ook dat men aan de producten van één bepaalde leverancier gebonden is, wat voor zowel bedrijven als voor particulieren van belang is. </para>
+<para
+>Dit is de reden waarom &calligra; standaard het "OASIS OpenDocument" bestandsformaat gebruikt. </para>
+</sect2>
+<sect2 id="featurekde">
+<title
+>Mogelijkheden van &kde;</title>
+<para
+>Omdat &calligra; op &kde; gebouwd is, zijn alle eigenschappen van &kde;-toepassingen ook beschikbaar in &calligra;. Dit omvat &DBus;, KParts, Flake, integratie op het bureaublad, het aanpassen aan persoonlijke voorkeuren, enzovoort. Het gevolg is dat het uiterlijk van &calligra; herkenbaar is en dat &calligra; werkelijk met de rest van het bureaublad integreert, waardoor u zo efficiënt mogelijk kunt werken. </para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<chapter id="configuration">
+<title
+>&calligra; en uw systeem instellen</title>
+
+<para
+>Normaal moet &calligra; na de installatie zonder problemen werken, maar er zijn wel een paar dingen die u kunt optimaliseren om het onderste uit de kan te halen. In dit hoofdstuk kunt u nalezen wat u moet doen om optimaal met dit officepakket te kunnen werken. In &calligra; kunt u bijna alles aan uw voorkeuren aanpassen, ook de indeling van de werkbalken en de menu's.  </para>
+
+<sect1 id="custom-gui">
+<title
+>De &GUI; van &calligra; aanpassen</title>
+
+<para
+>&calligra; heeft een &GUI; (grafische gebruikerinterface) die geschikt is voor de meeste gebruikers. Toch kunnen er goede redenen zijn om het uiterlijk van het programma te wijzigen. </para>
+
+<para
+>Mijn moeder is bijvoorbeeld een beetje bang voor de vele knoppen en menukeuzes die ze niet begrijpt. Voor haar heb ik de &GUI; aangepast door de keuzes te beperken tot het absolute minimum. Omdat ze alleen wat brieven schrijft en slechts een paar sjablonen gebruikt, heeft ze niet veel meer nodig dan een paar commando's zoals opslaan, afdrukken, openen, &etc; </para>
+
+<para
+>Dankzij het <quote
+>action</quote
+>-concept van &Qt; en &kde; is het mogelijk de menu's en de werkbalken van &calligra; gemakkelijk aan te passen. Spijtig genoeg is er op dit ogenblik nog geen gebruikersinterface om dit op een eenvoudige manier te doen. De &GUI;-configuratie van &calligra; wordt opgeslagen in &XML;-bestanden en u zult deze rechtstreeks moeten bewerken. Hopelijk verandert deze situatie in de nabije toekomst, maar op dit ogenblik hebt u wel enige kennis van &XML;-documenten nodig (of &HTML;dat eigenlijk een subset is van &XML;). </para>
+
+<para
+>In principe heeft elke &calligra;-toepassing twee van deze &XML;-bestanden, het eerste met de elementen van de &GUI; wanneer er geen document is geopend, en een tweede dat de &GUI; beschrijft van de specifieke KPart, dus wat u te zien krijgt wanneer er wel een document geopend is. Voor &words;, bijvoorbeeld, heten deze twee &XML;-bestanden respectievelijk <filename
+>calligra_shell.rc</filename
+> en <filename
+>words.rc</filename
+>. </para>
+
+<para
+>Dit is een eenvoudig voorbeeld van zo'n rc-bestand. Opmerking: de menu-opties zijn in het Engels en worden niet vertaald. </para>
+
+<example>
+<title
+>Voorbeeld van een eenvoudig rc-bestand.</title>
+<screen
+>&lt;!DOCTYPE QConfig &gt;&lt;qconfig&gt;
+&lt;menubar&gt;
+&lt;menu name="Edit"&gt;&lt;text&gt;Edit&lt;/text&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;separator/&gt;
+&lt;action name="edit_find"/&gt;
+&lt;/menu&gt;
+&lt;menu name="Insert"&gt;&lt;text&gt;Insert&lt;/text&gt;
+&lt;action name="insert_picture"/&gt;
+&lt;action name="insert_clipart"/&gt;
+&lt;menu name="Variable"&gt;&lt;text&gt;Variable&lt;/text&gt;
+&lt;action name="insert_var_datefix"/&gt;
+&lt;action name="insert_var_datevar"/&gt;
+&lt;/menu&gt;
+&lt;/menu&gt;
+&lt;/menubar&gt;
+&lt;toolbars&gt;
+&lt;toolbar name="edit_toolbar" position="right"&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;/toolbar&gt;
+&lt;/toolbars&gt;
+&lt;/qconfig&gt;
+</screen>
+</example>
+
+</sect1>
+
+</chapter>
+
+<chapter id="more-info">
+<title
+>Meer informatie</title>
+
+<sect1 id="other-manuals">
+<title
+>Andere handboeken van &calligra;</title>
+
+<para
+>Gedetailleerde informatie over de verschillende &calligra;-toepassingen kunt u vinden in de afzonderlijke handboeken. </para>
+
+</sect1>
+
+<sect1 id="links">
+<title
+>Links</title>
+
+<para
+>U vindt meer informatie over &kde; of &calligra;.op de volgende websites: </para>
+
+<itemizedlist>
+<listitem>
+<para
+><ulink url="http://calligra.org"
+>De homepage van &calligra;</ulink
+>. Hier vindt u alle informatie over &calligra;, hoe u het programma kunt downloaden en installeren, het laatste nieuws over de ontwikkeling van &calligra;, schermafdrukken, &etc; </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://www.kde.org"
+>De homepage van &kde;</ulink
+>, de meest geavanceerde en absoluut vrije desktop omgeving voor besturingssystemen die verwant zijn aan UNIX. &calligra; maakt gebruik van de &kde;-bibliotheken. </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://qt-project.org"
+>Qt-pagina</ulink
+>. De makers van de C++-hulpmiddelen van &Qt;. Zowel &kde; als &calligra; maken gebruik van &Qt;. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="programmersinfo">
+<title
+>&calligra; verder ontwikkelen</title>
+
+<sect1 id="programmingintro">
+<title
+>Inleiding</title>
+<para
+>Indien u zelf toepassingen voor &calligra; wilt ontwikkelen, kunnen de volgende hulpmiddelen u zeker vooruit helpen: </para>
+
+<itemizedlist>
+<listitem
+><para
+>De website <ulink url="http://techbase.kde.org/Development"
+>http://techbase.kde.org/Development</ulink
+> bevat heel wat documentatie over programmeren met &Qt; en &kde;. U vindt er ook een online versie van de volledige &kde;-bibliotheekdocumentatie op <ulink url="http://api.kde.org/"
+>KDE API Reference</ulink
+> </para
+></listitem
+> 
+<listitem
+><para
+>De eerste stap voor het bijdragen van code is door <ulink url="http://community.kde.org/Calligra/Building/Building_Calligra"
+>deze instructies</ulink
+> te volgen om de broncode te verkrijgen en het te bouwen. </para
+></listitem>
+</itemizedlist>
+</sect1>
+
+</chapter>
+
+<chapter id="legal">
+<title
+>Copyright en licentie</title>
+
+<para
+>&calligra; is het resultaat van samenwerking tussen vele software-ontwikkelaars. Het copyright van elk bronbestand van &calligra; is eigendom van de mensen die eraan werkten en hun namen kunt u vinden aan het begin van elk bronbestand, samen met de licentie die erop van toepassing is. </para>
+
+<para
+>Het copyright van dit handboek is eigendom van &Jost.Schenck;. U mag dit werk vrij verspreiden indien deze tekst bij de kopieën ingesloten wordt. U mag wijzigingen aan dit document aanbrengen indien u mij deze wijzigingen doorstuurt of het oorspronkelijk werk in &kde;-<acronym
+>Git</acronym
+> aanpast. Ik ben niet aansprakelijk voor om het even welk feit dat terug te voeren is op het gebruik van dit handboek. </para>
+
+<para
+>Het copyright van de andere &calligra;-handboeken is eigendom van hun respectievelijke auteurs. </para>
+
+&meld.fouten;&vertaling.natalie; &underFDL; &underGPL; </chapter>
+
+&documentation.index; 
+</book>
+

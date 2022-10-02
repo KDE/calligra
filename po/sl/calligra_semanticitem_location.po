@@ -1,0 +1,85 @@
+# POT_PART_NORMAL only
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2020-11-01 08:17+0100\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+
+#: KoLocationSemanticItemFactory.cpp:34
+#, kde-format
+msgctxt "displayname of the semantic item type Location"
+msgid "Location"
+msgstr "Lokacija"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationEditWidget.ui:17
+#, kde-format
+msgid "&Name"
+msgstr "Ime"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationEditWidgetMarble.ui:17 KoRdfLocationViewWidgetMarble.ui:24
+#, kde-format
+msgid "Name"
+msgstr "Ime"
+
+#. i18n: ectx: property (toolTip), widget (Marble::MarbleWidget, map)
+#: KoRdfLocationEditWidgetMarble.ui:30 KoRdfLocationViewWidgetMarble.ui:31
+#, kde-format
+msgid "The Earth"
+msgstr "Zemlja"
+
+#. i18n: ectx: property (whatsThis), widget (Marble::MarbleWidget, map)
+#: KoRdfLocationEditWidgetMarble.ui:33 KoRdfLocationViewWidgetMarble.ui:34
+#, kde-format
+msgid "The Marble widget displays a virtual globe."
+msgstr "Gradnik Marble prikazuje virtualni globus."
+
+#. i18n: ectx: property (toolTip), widget (Marble::MarbleNavigator, zoomer)
+#: KoRdfLocationEditWidgetMarble.ui:40
+#, kde-format
+msgid "Navigation Control"
+msgstr "Kontrola navigacije"
+
+#. i18n: ectx: property (whatsThis), widget (Marble::MarbleNavigator, zoomer)
+#: KoRdfLocationEditWidgetMarble.ui:43
+#, kde-format
+msgid "Use this control to navigate."
+msgstr "Uporabite to za nadzor navigacije."
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfLocationEditWidgetMarble.ui:50
+#, kde-format
+msgid "Latitude"
+msgstr "Geografska širina"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: KoRdfLocationEditWidgetMarble.ui:60
+#, kde-format
+msgid "Longitude"
+msgstr "Geografska dolžina"
+
+#: KoRdfLocationTreeWidgetItem.cpp:42
+#, kde-format
+msgid "Location Information"
+msgstr "Informacije o lokaciji"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationViewWidget.ui:24
+#, kde-format
+msgid "&Name:"
+msgstr "Ime:"

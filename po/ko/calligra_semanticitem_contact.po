@@ -1,0 +1,135 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Shinjo Park <kde@peremen.name>, 2014.
+# Jung Hee Lee <daemul72@gmail.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2014-03-26 02:36+0900\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: KoContactSemanticItemFactory.cpp:46
+#, kde-format
+msgctxt "displayname of the semantic item type Contact"
+msgid "Contact"
+msgstr "연락처"
+
+#: KoRdfFoaF.cpp:179
+#, kde-format
+msgid "Select an address book for saving:"
+msgstr "저장할 주소록 선택:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfFoaFEditWidget.ui:26
+#, kde-format
+msgid "&Name:"
+msgstr "이름(&N):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfFoaFEditWidget.ui:36
+#, kde-format
+msgid "&Nick:"
+msgstr "별명(&N):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfFoaFEditWidget.ui:46
+#, kde-format
+msgid "&Phone Number:"
+msgstr "전화 번호(&P):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: KoRdfFoaFEditWidget.ui:59
+#, kde-format
+msgid "&Home Page:"
+msgstr "홈페이지(&H):"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:30
+#, kde-format
+msgid "Contact Information"
+msgstr "연락처 정보"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:48
+#, kde-format
+msgid "Edit..."
+msgstr "편집..."
+
+#: KoRdfFoaFTreeWidgetItem.cpp:51
+#, kde-format
+msgid "Import contact"
+msgstr "연락처 가져오기"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:54
+#, kde-format
+msgid "Export as vcard..."
+msgstr "vCard로 내보내기..."
+
+#, fuzzy
+#~| msgid "&Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Name:"
+#~ msgstr "이름(&N):"
+
+#, fuzzy
+#~| msgid "&Nick:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Nick:"
+#~ msgstr "별명(&N):"
+
+#, fuzzy
+#~| msgid "&Phone Number:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Phone Number:"
+#~ msgstr "전화 번호(&P):"
+
+#, fuzzy
+#~| msgid "&Home Page:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Home Page:"
+#~ msgstr "홈 페이지(&H):"
+
+#, fuzzy
+#~| msgctxt "displayname of the semantic item type Contact"
+#~| msgid "Contact"
+#~ msgctxt "(qtundo-format) displayname of the semantic item type Contact"
+#~ msgid "Contact"
+#~ msgstr "연락처"
+
+#, fuzzy
+#~| msgid "Select an address book for saving:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select an address book for saving:"
+#~ msgstr "저장할 주소록 선택:"
+
+#, fuzzy
+#~| msgid "Contact Information"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contact Information"
+#~ msgstr "연락처 정보"
+
+#, fuzzy
+#~| msgid "Edit..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit..."
+#~ msgstr "편집..."
+
+#, fuzzy
+#~| msgid "Import contact"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import contact"
+#~ msgstr "연락처 가져오기"
+
+#, fuzzy
+#~| msgid "Export as vcard..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as vcard..."
+#~ msgstr "vCard로 내보내기..."

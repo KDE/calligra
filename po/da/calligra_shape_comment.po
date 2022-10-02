@@ -1,0 +1,86 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Martin Schlander <mschlander@opensuse.org>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2010-09-23 12:57+0200\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "The plugin needed for displaying comments is not present."
+msgstr "Det nødvendige plugin til visning af kommentarer er ikke til stede."
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "Plugin Missing"
+msgstr "Plugin mangler"
+
+#: CommentShape.cpp:51
+#, kde-format
+msgid ""
+"The plugin needed for displaying the comment is not compatible with the "
+"current version of the comment shape."
+msgstr ""
+"Det nødvendige plugin til visning af kommentaren er ikke kompatibelt med den "
+"nuværende version af kommentar-formen."
+
+#: CommentShape.cpp:52
+#, kde-format
+msgid "Plugin Incompatible"
+msgstr "Inkompatibelt plugin"
+
+#: CommentShapeFactory.cpp:17 CommentToolFactory.cpp:17
+#, kde-format
+msgid "Comment"
+msgstr "Kommentar"
+
+#, fuzzy
+#~| msgid "Plugin Missing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Missing"
+#~ msgstr "Plugin mangler"
+
+#, fuzzy
+#~| msgid "The plugin needed for displaying comments is not present."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The plugin needed for displaying comments is not present."
+#~ msgstr "Det nødvendige plugin til visning af kommentarer er ikke til stede."
+
+#, fuzzy
+#~| msgid ""
+#~| "The plugin needed for displaying the comment is not compatible with the "
+#~| "current version of the comment shape."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The plugin needed for displaying the comment is not compatible with the "
+#~ "current version of the comment shape."
+#~ msgstr ""
+#~ "Det nødvendige plugin til visning af kommentaren er ikke kompatibelt med "
+#~ "den nuværende version af kommentar-formen."
+
+#, fuzzy
+#~| msgid "Plugin Incompatible"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Incompatible"
+#~ msgstr "Inkompatibelt plugin"
+
+#, fuzzy
+#~| msgid "Comment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comment"
+#~ msgstr "Kommentar"
+
+#~ msgid "Comment Tool"
+#~ msgstr "Kommenteringsværktøj"

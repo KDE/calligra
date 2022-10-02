@@ -1,0 +1,173 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2011, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-12 00:45+0000\n"
+"PO-Revision-Date: 2019-12-15 22:57+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.08.1\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Marek Laane"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "qiilaq69@gmail.com"
+
+#: main.cpp:61
+#, kde-format
+msgctxt "@info"
+msgid "Mimetype for <filename>%1</filename> not found!"
+msgstr "MIME tüüpi failile <filename>%1</filename> ei leitud!"
+
+#: main.cpp:119
+#, kde-format
+msgctxt "@action:button"
+msgid "Open with <application>%1</application>"
+msgstr "Ava rakendusega <application>%1</application>"
+
+#: main.cpp:124
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not find Calligra application suitable for opening <filename>%1</"
+"filename>.<nl/>Do you want to open the file using default application "
+"<application>%2</application>?"
+msgstr ""
+"Ei leitud Calligra rakendust, millega avada faili <filename>%1</filename>."
+"<nl/>Kas avada fail vaikimisi rakendusega <application>%2</application>?"
+
+#: main.cpp:127
+#, kde-format
+msgctxt "@title:window"
+msgid "Calligra Application Not Found"
+msgstr "Calligra rakendust ei leitud"
+
+#: main.cpp:157
+#, kde-format
+msgid "Calligra Opener"
+msgstr "Calligra avaja"
+
+#: main.cpp:159
+#, kde-format
+msgid "Calligra Document Opener"
+msgstr "Calligra dokumendiavaja"
+
+#: main.cpp:161
+#, kde-format
+msgid "Copyright 2010-%1 Calligra developers"
+msgstr "(c) 2010-%1: Calligra arendajad"
+
+#: main.cpp:162
+#, kde-format
+msgid "Jarosław Staniek"
+msgstr "Jarosław Staniek"
+
+#: main.cpp:169
+#, kde-format
+msgid "Lists names of all available Calligra applications"
+msgstr "Kõigi saadaolevate Calligra rakenduste loend"
+
+#: main.cpp:170
+#, kde-format
+msgid "Files to open"
+msgstr "Avatavad failid"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marek Laane"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "bald@smail.ee"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid "Mimetype for <filename>%1</filename> not found!"
+#~ msgctxt "(qtundo-format) @info"
+#~ msgid "Mimetype for <filename>%1</filename> not found!"
+#~ msgstr "MIME tüüpi failile <filename>%1</filename> ei leitud!"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Open with <application>%1</application>"
+#~ msgctxt "(qtundo-format) @action:button"
+#~ msgid "Open with <application>%1</application>"
+#~ msgstr "Ava rakendusega <application>%1</application>"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid ""
+#~| "Could not find Calligra application suitable for opening <filename>%1</"
+#~| "filename>.<nl/>Do you want to open the file using default application "
+#~| "<application>%2</application>?"
+#~ msgctxt "(qtundo-format) @info"
+#~ msgid ""
+#~ "Could not find Calligra application suitable for opening <filename>%1</"
+#~ "filename>.<nl/>Do you want to open the file using default application "
+#~ "<application>%2</application>?"
+#~ msgstr ""
+#~ "Ei leitud Calligra rakendust, millega avada faili <filename>%1</filename>."
+#~ "<nl/>Kas avada fail vaikimisi rakendusega <application>%2</application>?"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Calligra Application Not Found"
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Calligra Application Not Found"
+#~ msgstr "Calligra rakendust ei leitud"
+
+#, fuzzy
+#~| msgid "Calligra Opener"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Opener"
+#~ msgstr "Calligra avaja"
+
+#, fuzzy
+#~| msgid "Calligra Document Opener"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Opener"
+#~ msgstr "Calligra dokumendiavaja"
+
+#, fuzzy
+#~| msgid "(c) 2010-2011 Calligra developers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2010-%1 Calligra developers"
+#~ msgstr "(c) 2010-2011: Calligra arendajad"
+
+#, fuzzy
+#~| msgid "Jarosław Staniek"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jarosław Staniek"
+#~ msgstr "Jarosław Staniek"
+
+#, fuzzy
+#~| msgid "Lists names of all available Calligra applications"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lists names of all available Calligra applications"
+#~ msgstr "Kõigi saadaolevate Calligra rakenduste loend"
+
+#, fuzzy
+#~| msgid "Files to open"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Files to open"
+#~ msgstr "Avatavad failid"

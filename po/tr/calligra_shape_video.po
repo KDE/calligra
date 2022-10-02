@@ -1,0 +1,82 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Translators:
+# Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015.
+# Emir SARI <emir_sari@icloud.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra-kde4\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2022-08-11 15:04+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 22.04.3\n"
+
+#: ChangeVideoCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Change video"
+msgstr "Videoyu değiştir"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnVideoFile)
+#: forms/VideoToolWidget.ui:33
+#, kde-format
+msgid "Replace video..."
+msgstr "Videoyu değiştir..."
+
+#. i18n: ectx: property (text), widget (QPushButton, btnPlay)
+#: forms/VideoToolWidget.ui:40
+#, kde-format
+msgid "Play Video"
+msgstr "Video Oynat"
+
+#: FullScreenPlayer.cpp:54 VideoTool.cpp:34
+#, kde-format
+msgid "Play"
+msgstr "Oynat"
+
+#: FullScreenPlayer.cpp:59
+#, kde-format
+msgid "Pause"
+msgstr "Duraklat"
+
+#: FullScreenPlayer.cpp:64
+#, kde-format
+msgid "Stop"
+msgstr "Durdur"
+
+#: FullScreenPlayer.cpp:69
+#, kde-format
+msgid "Unmute"
+msgstr "Sesi Aç"
+
+#: FullScreenPlayer.cpp:74
+#, kde-format
+msgid "Mute"
+msgstr "Sesi Kapat"
+
+#: SelectVideoWidget.cpp:27
+#, kde-format
+msgid "Save as part of document"
+msgstr "Belgenin bir parçası olarak kaydet"
+
+#: VideoShapeFactory.cpp:24
+#, kde-format
+msgid "Video"
+msgstr "Video"
+
+#: VideoShapeFactory.cpp:26
+#, kde-format
+msgid "Video, embedded or fullscreen"
+msgstr "Video; gömülü veya tam ekran"
+
+#: VideoToolFactory.cpp:18
+#, kde-format
+msgid "Video handling"
+msgstr "Video işleme"

@@ -1,0 +1,3942 @@
+# translation of words.po to
+msgid ""
+msgstr ""
+"Project-Id-Version: words\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"PO-Revision-Date: 2011-06-25 12:31+0000\n"
+"Last-Translator: \n"
+"Language-Team:  <is@li.org>\n"
+"Language: is\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=n != 1;\n"
+"\n"
+"\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, fuzzy, kde-format
+msgid "&File"
+msgstr "&Skrá"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "Br&eyta"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "S&koða"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, kde-format
+msgid "&Display Mode"
+msgstr "&Birtingarhamur"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Semantics"
+msgstr "Tölfræði"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, fuzzy, kde-format
+msgid "S&tyles"
+msgstr "Stíll"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "&Stillingar"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "Athuga stafsetningu"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "Breyta"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, kde-format
+msgid "Spell Check Result"
+msgstr "Niðurstaða af stafsetningarskoðun"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, kde-format
+msgid "Change Variable To"
+msgstr "Skipta breytu í"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, fuzzy, kde-format
+msgid "&Tools"
+msgstr "Á&höld"
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+#, fuzzy
+#| msgid "Framestyle:"
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "Rammastíll:"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+#, fuzzy
+#| msgid "Insert Page"
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "Setja inn síðu"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#, fuzzy
+#| msgid "Frame Properties"
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "Eiginleikar ramma"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+#, fuzzy
+#| msgid "Create Text Frame"
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Búa til textaramma"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, fuzzy, kde-format
+#| msgid "Frame is inline"
+msgid "Baseline"
+msgstr "Ramminn er innfelldur"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "Character"
+msgstr "Stafur"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Row"
+msgid "Row"
+msgstr "Röð"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, fuzzy, kde-format
+#| msgid "Provide main text area"
+msgid "Page (entire) area"
+msgstr "Búa til aðal textasvæði"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, fuzzy, kde-format
+#| msgid "Provide main text area"
+msgid "Page text area"
+msgstr "Búa til aðal textasvæði"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, fuzzy, kde-format
+msgid "Paragraph area"
+msgstr "Í málsgrein"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, fuzzy, kde-format
+#| msgid "Provide main text area"
+msgid "Paragraph text area"
+msgstr "Búa til aðal textasvæði"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, fuzzy, kde-format
+#| msgid "Frame &Borders"
+msgid "Left page border"
+msgstr "Ra&mmamörk"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, fuzzy, kde-format
+#| msgid "Frame &Borders"
+msgid "Right page border"
+msgstr "Ra&mmamörk"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, fuzzy, kde-format
+#| msgid "Frame &Borders"
+msgid "Right paragraph border"
+msgstr "Ra&mmamörk"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, fuzzy, kde-format
+#| msgid "Frame &Borders"
+msgid "Left paragraph border"
+msgstr "Ra&mmamörk"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Vertical Positioning"
+msgstr "Staðsetning"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Top align with:"
+msgstr "Hægri:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Center align with:"
+msgstr "Hægri:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Bottom align with:"
+msgstr "Hægri:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, kde-format
+msgid "from:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Horizontal Positioning"
+msgstr "Staðsetning"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Left align with:"
+msgstr "Hægri:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right align with:"
+msgstr "Hægri:"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "P&icture..."
+msgid "Configure"
+msgstr "Mynd..."
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Grid 1"
+msgid "Grid"
+msgstr "Möskvi 1"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Document Title"
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Titill skjals"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Document Title"
+msgid "Document Settings"
+msgstr "Titill skjals"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, kde-format
+msgid "Create New Bookmark"
+msgstr "Búa til nýtt bókamerki"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+"Bókamerki gera þér kleyft að stökkva á milli hluta skjalsins.\n"
+"Sláðu inn nafn á bókamerkið."
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "Nafn:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, fuzzy, kde-format
+#| msgid "Columns"
+msgid "Columns:"
+msgstr "Dálkar:"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, fuzzy, kde-format
+#| msgid "Default column spacing:"
+msgid "Column spacing:"
+msgstr "Dálkabil:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, fuzzy, kde-format
+#| msgid "Fra&mes"
+msgid "frameset"
+msgstr "Ra&mmar"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, kde-format
+msgid "No framesets in document"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "Nafn á rammasetti:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, fuzzy, kde-format
+#| msgid "Create a new frameset"
+msgid "Create a new frameset:"
+msgstr "Búa til nýtt rammasett"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, fuzzy, kde-format
+#| msgid "Select existing frameset to connect frame to:"
+msgid "Select existing frameset to connect to:"
+msgstr "Velja rammasett sem á að tengjast:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "Nafn rammasetts"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Smart Positioning"
+msgstr "Staðsetning"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, kde-format
+msgid "Text Run Around"
+msgstr "Texti flæðir í kringum"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "Tengja textaramma"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+#, fuzzy
+#| msgid "Frame Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "Eiginleikar ramma"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, fuzzy, kde-format
+#| msgid "Remove entry"
+msgid "&Page"
+msgstr "Eyða reit"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, fuzzy, kde-format
+msgid "Para&graph"
+msgstr "Í málsgrein"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "&To Character"
+msgstr "Stafur"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "&As Character"
+msgstr "Stafur"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Horizontal Alignment"
+msgstr "Staðsetning"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "&Left"
+msgstr "Vinstri:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, kde-format
+msgid "&Center"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "&Right"
+msgstr "Hægri:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Vertical Alignment"
+msgstr "Staðsetning"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "&Bottom"
+msgstr "Botn:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, fuzzy, kde-format
+#| msgid "Text Run Around"
+msgid "Text Wrap-around"
+msgstr "Texti flæðir í kringum"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run through this shape"
+msgstr "&Texti mun flæða gegnum þennan ramma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Skip below this shape"
+msgstr "&Texti mun flæða gegnum þennan ramma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on left side of this shape"
+msgstr "&Texti mun flæða gegnum þennan ramma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on right side of this shape"
+msgstr "&Texti mun flæða gegnum þennan ramma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on longest side of this shape"
+msgstr "&Texti mun flæða gegnum þennan ramma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on both sides of this shape"
+msgstr "&Texti mun flæða gegnum þennan ramma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, fuzzy, kde-format
+#| msgid "Distance Between Frame && Text"
+msgid "Distance Between Shape and Text:"
+msgstr "Bil milli ramma og texta"
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, kde-format
+msgid "Columns"
+msgstr "Dálkar"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, fuzzy, kde-format
+msgid "Style"
+msgstr "Stíll"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, fuzzy, kde-format
+msgid "Clone"
+msgstr "Klóna"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, fuzzy, kde-format
+msgid "Delete"
+msgstr "Eyða"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+#, fuzzy
+#| msgid "Framestyle:"
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "Rammastíll:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, fuzzy, kde-format
+#| msgid "Framestyle:"
+msgid "Clone Page Style"
+msgstr "Rammastíll:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left by:"
+msgstr "Vinstri:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right by:"
+msgstr "Hægri:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, fuzzy, kde-format
+msgid "&Rename"
+msgstr "Endu&rnefna"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, fuzzy, kde-format
+msgid "&Delete"
+msgstr "&Eyða"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Endurnefna bókamerki"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, fuzzy, kde-format
+#| msgid ""
+#| "A frameset with the name '%1' already exists. Please enter another name."
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr ""
+"Rammasett nefnt: '%1' er til nú þegar. Vinsamlegast sláðu inn annað nafn."
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, kde-format
+msgid "Select Bookmark"
+msgstr "Veldu bókamerki"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "Stærð"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, kde-format
+msgid "Page Size && Margins"
+msgstr "Síðustærð og spássíur"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, kde-format
+msgid "Create"
+msgstr "Búa til"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, kde-format
+msgid "Navigation"
+msgstr ""
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+#| msgid "Remove entry"
+msgid "Page #"
+msgstr "Eyða reit"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, kde-format
+msgid "Section"
+msgstr ""
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr ""
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "Tölfræði"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "Orð:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "Setningar:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "Atkvæði:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (spaces):"
+msgstr "Stafir með bilum:"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (no spaces):"
+msgstr "Stafir með bilum:"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr "Línur:"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, fuzzy, kde-format
+#| msgid "Flesch reading ease:"
+msgid "Flesch reading ease"
+msgstr "Auðlæsi á Flesch skala:"
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East asian characters:"
+msgstr "&Sniðtákn"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, fuzzy, kde-format
+#| msgid "Words:"
+msgid "Words"
+msgstr "Orð"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, fuzzy, kde-format
+#| msgid "Sentences:"
+msgid "Sentences"
+msgstr "Setningar"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, fuzzy, kde-format
+#| msgid "Syllables:"
+msgid "Syllables"
+msgstr "Atkvæði:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, fuzzy, kde-format
+#| msgid "Lines:"
+msgid "Lines"
+msgstr "Línur"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, fuzzy, kde-format
+#| msgid "Characters without spaces:"
+msgid "Characters With Spaces"
+msgstr "Stafir án bila:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, fuzzy, kde-format
+#| msgid "Characters without spaces:"
+msgid "Characters without spaces"
+msgstr "Stafir án bila:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East Asian characters"
+msgstr "&Sniðtákn"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, fuzzy, kde-format
+#| msgid "Flesch reading ease:"
+msgid "Flesch Reading Ease"
+msgstr "Auðlæsi á Flesch skala:"
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "Venjulegt"
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "Haus 1"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "Haus 2"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "Haus 3"
+
+#: part/i18n/stylenames.cpp:12
+#, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "Númeraður listi"
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "Listi í stafrófsröð"
+
+#: part/i18n/stylenames.cpp:14
+#, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "Bólulisti"
+
+#: part/i18n/stylenames.cpp:15
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "Titill innihalds"
+
+#: part/i18n/stylenames.cpp:16
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "Haus innihalds 1"
+
+#: part/i18n/stylenames.cpp:17
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "Haus innihalds 2"
+
+#: part/i18n/stylenames.cpp:18
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "Haus innihalds 3"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "Titill skjals"
+
+#: part/i18n/stylenames.cpp:20
+#, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "Haus"
+
+#: part/i18n/stylenames.cpp:21
+#, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "Fótur"
+
+#: part/i18n/stylenames.cpp:24
+#, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "Venjulegt"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "Jaðrar 1"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "Jaðrar 2"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "Jaðrar 3"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "Röð"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "Dálkur"
+
+#: part/i18n/stylenames.cpp:30
+#, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "Ljósgrátt"
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "Dökkgrátt"
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "Svart"
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "Ljósblátt"
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "Dökkblátt"
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "Rautt"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "Gult"
+
+#: part/i18n/stylenames.cpp:37
+#, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "Litríkt"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "Bláleitt"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "Einfalt 1"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "Einfalt 2"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "Einfalt 3"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "Síðuhaus 1"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "Síðuhaus 2"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "Síðuhaus 3"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "Síðuhaus 4"
+
+#: part/i18n/stylenames.cpp:50
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "Dálkar 1"
+
+#: part/i18n/stylenames.cpp:51
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "Dálkar 2"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "Möskvi 1"
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "Möskvi 2"
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "Möskvi 3"
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "Grár síðuhaus"
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "Blár síðuhaus"
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "Hefðbundið blátt"
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "Hefðbundið grátt"
+
+#: part/i18n/stylenames.cpp:59
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "Blátt efst og neðst"
+
+#: part/i18n/stylenames.cpp:60
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "Grátt efst og neðst"
+
+#: part/KWAboutData.h:20
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "KOffice ritvinnsla"
+
+#: part/KWAboutData.h:22
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgid "Word processor"
+msgstr "KOffice ritvinnsla"
+
+#: part/KWAboutData.h:24
+#, fuzzy, kde-format
+#| msgid "(c) 1998-2006, The KWord Team"
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "(c) 1998-2006, KWord hópurinn"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr ""
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr ""
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr ""
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, fuzzy, kde-format
+msgid "Everything"
+msgstr "Allt"
+
+#: part/KWAboutData.h:34
+#, fuzzy, kde-format
+msgid "Sebastian Sauer"
+msgstr "Sebastian Sauer"
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: part/KWAboutData.h:37
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Formatting stuff"
+msgstr "&Sniðtákn"
+
+#: part/KWAboutData.h:37
+#, fuzzy, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, fuzzy, kde-format
+msgid "Filter"
+msgstr "&Skrá"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistics docker"
+msgstr "Tölfræði"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, fuzzy, kde-format
+#| msgid "&Footnote/Endnote..."
+msgid "Foot and endnotes"
+msgstr "Neðanmálsgrein/e&ftirmála..."
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr ""
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Style Manager"
+msgstr ""
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr ""
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr ""
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr ""
+
+#: part/KWAboutData.h:48
+#, fuzzy, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr ""
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, kde-format
+msgid "ODF Support"
+msgstr ""
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr ""
+
+#: part/KWAboutData.h:51
+#, fuzzy, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KWAboutData.h:52
+#, fuzzy, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr ""
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr ""
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr ""
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr ""
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr ""
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "KFormúla"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr ""
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr ""
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr ""
+
+#: part/KWAboutData.h:61
+#, fuzzy, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KWAboutData.h:63
+#, fuzzy, kde-format
+msgid "Clarence Dang"
+msgstr "Clarence Dang"
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr ""
+
+#: part/KWAboutData.h:65
+#, fuzzy, kde-format
+#| msgid "Endnotes"
+msgid "Enno Bartels"
+msgstr "Eftirmálar"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr ""
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr ""
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page break icon"
+msgstr "Síðuskil"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Ingimar Róbertsson, Arnar Leósson"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "iar@pjus.is, leosson@frisurf.no"
+
+#: part/KWDocument.cpp:495
+#, fuzzy, kde-format
+#| msgid "Copy%1-%2"
+msgid "Copy"
+msgstr "Afrita"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgid "Standard"
+msgstr "Venjulegt"
+
+#: part/KWDocument.cpp:546
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Document Title"
+msgid "Document Title"
+msgstr "Titill skjals"
+
+#: part/KWDocument.cpp:553
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 1"
+msgid "Head 1"
+msgstr "Haus 1"
+
+#: part/KWDocument.cpp:559
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 2"
+msgid "Head 2"
+msgstr "Haus 2"
+
+#: part/KWDocument.cpp:565
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 3"
+msgid "Head 3"
+msgstr "Haus 3"
+
+#: part/KWDocument.cpp:571
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Bullet List"
+msgid "Bullet List"
+msgstr "Bólulisti"
+
+#: part/KWGui.cpp:69
+#, fuzzy, kde-format
+msgid "Tools"
+msgstr "Áhöld"
+
+#: part/KWOdfLoader.cpp:83
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr "Ógild OASIS OpenDocument skrá. Ekkert office:body tag fannst."
+
+#: part/KWOdfLoader.cpp:95
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr "Ógild OASIS OpenDocument skrá. Ekkert tag fannst í office:body."
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+"Þetta er ekki ritvinnsluskjal, heldur %1. Reyndu að opna það með viðeigandi "
+"forriti."
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "Venjulegt"
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+
+#: part/KWPart.cpp:142
+#, fuzzy, kde-format
+msgid "Installation Error"
+msgstr "Innsetningarvilla"
+
+#: part/KWStatusBar.cpp:35
+#, fuzzy, kde-format
+msgid "Modified"
+msgstr "Breytt"
+
+#: part/KWStatusBar.cpp:36
+#, fuzzy, kde-format
+#| msgid "Save Failed"
+msgid "Saved"
+msgstr "Vistað"
+
+#: part/KWStatusBar.cpp:37
+#, fuzzy, kde-format
+#| msgid "Page %1"
+msgid "Page %1 of %2"
+msgstr "Síða %1"
+
+#: part/KWStatusBar.cpp:38
+#, fuzzy, kde-format
+#| msgid "Page %1"
+msgid "Page %1-%2 of %3"
+msgstr "Síða %1"
+
+#: part/KWStatusBar.cpp:39
+#, fuzzy, kde-format
+#| msgid "Lines:"
+msgid "Line %1"
+msgstr "Línur"
+
+#: part/KWStatusBar.cpp:124
+#, fuzzy, kde-format
+#| msgid "Frame &Borders"
+msgid "Page Number"
+msgstr "Ra&mmamörk"
+
+#: part/KWStatusBar.cpp:137
+#, fuzzy, kde-format
+#| msgid "Numbering"
+msgid "Line Number"
+msgstr "Tölusetning"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+#| msgid "Framestyle:"
+msgid "Change the page style"
+msgstr "Rammastíll:"
+
+#: part/KWStatusBar.cpp:155
+#, fuzzy, kde-format
+#| msgid "Framestyle:"
+msgid "Page Style"
+msgstr "Rammastíll:"
+
+#: part/KWStatusBar.cpp:169
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page Size"
+msgstr "Síðuskil"
+
+#: part/KWStatusBar.cpp:184
+#, fuzzy, kde-format
+msgid "Saved/Modified"
+msgstr "Breytt"
+
+#: part/KWStatusBar.cpp:197
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr ""
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr ""
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Frame Properties"
+msgid "Shape Properties..."
+msgstr "Eiginleikar ramma"
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr ""
+
+#: part/KWView.cpp:271
+#, kde-format
+msgid "Create Template From Document..."
+msgstr ""
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr ""
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+
+#: part/KWView.cpp:292
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Show Formatting Characters"
+msgstr "&Sniðtákn"
+
+#: part/KWView.cpp:298
+#, fuzzy, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr "Víxla sýn af táknum sem birtast ekki við prentun."
+
+#: part/KWView.cpp:299
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of non-printing characters.<br><br>When this is "
+#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#| "printing characters."
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+"Víxla sýn af táknum sem birtast ekki við prentun.<br><br>Þegar þetta er "
+"valið sýnir KWord inndrátt, bil, vendingu og önnur tákn sem birtast ekki  "
+"við útprentun."
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr ""
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr ""
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+
+#: part/KWView.cpp:310
+#, fuzzy, kde-format
+#| msgid "Frame &Borders"
+msgid "Show Text Shape Borders"
+msgstr "Ra&mmamörk"
+
+#: part/KWView.cpp:311
+#, fuzzy, kde-format
+msgid "Turns the border display on and off"
+msgstr "Sýna eða fela ramma."
+
+#: part/KWView.cpp:317
+#, fuzzy, kde-format
+#| msgid ""
+#| "Turns the border display on and off.<br><br>The borders are never "
+#| "printed. This option is useful to see how the document will appear on the "
+#| "printed page."
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+"Sýna eða fela ramma.<br><br>Rammarnir eru aldrei prentaðir. Þessi valkostur "
+"gagnast til að sýna hvernig skjalið mun líta út við prentun."
+
+#: part/KWView.cpp:319
+#, fuzzy, kde-format
+#| msgid "Frame &Borders"
+msgid "Show Table Borders"
+msgstr "Ra&mmamörk"
+
+#: part/KWView.cpp:325
+#, fuzzy, kde-format
+msgid "Toggle the display of table borders"
+msgstr "Víxla sýn af táknum sem birtast ekki við prentun."
+
+#: part/KWView.cpp:326
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of non-printing characters.<br><br>When this is "
+#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#| "printing characters."
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+"Víxla sýn af táknum sem birtast ekki við prentun.<br><br>Þegar þetta er "
+"valið sýnir KWord inndrátt, bil, vendingu og önnur tákn sem birtast ekki  "
+"við útprentun."
+
+#: part/KWView.cpp:328
+#, kde-format
+msgid "Show Section Bounds"
+msgstr ""
+
+#: part/KWView.cpp:334
+#, fuzzy, kde-format
+msgid "Toggle the display of section bounds"
+msgstr "Víxla sýn af táknum sem birtast ekki við prentun."
+
+#: part/KWView.cpp:335
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of non-printing characters.<br><br>When this is "
+#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#| "printing characters."
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+"Víxla sýn af táknum sem birtast ekki við prentun.<br><br>Þegar þetta er "
+"valið sýnir KWord inndrátt, bil, vendingu og önnur tákn sem birtast ekki  "
+"við útprentun."
+
+#: part/KWView.cpp:337
+#, kde-format
+msgid "Show Rulers"
+msgstr "Sýna stikur"
+
+#: part/KWView.cpp:339
+#, fuzzy, kde-format
+msgid "Shows or hides rulers"
+msgstr "Sýnir eða felur stikur."
+
+#: part/KWView.cpp:340
+#, fuzzy, kde-format
+#| msgid ""
+#| "The rulers are the white measuring spaces top and left of the document. "
+#| "The rulers show the position and width of pages and of frames and can be "
+#| "used to position tabulators among others.<p>Uncheck this to disable the "
+#| "rulers from being displayed."
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+"Stikurnar eru hvítu mælieiningarnar efst og til vinstri í skjalinu. Sýna þær "
+"staðsetningu og breidd síðna og ramma og má meðal annars nota þær til að "
+"staðsetja dálkstilla. <p>Afhakaðu þetta ef þú vilt ekki sjá mælistikurnar."
+
+#: part/KWView.cpp:351
+#, kde-format
+msgid "Snap to Grid"
+msgstr "Jafna við möskva"
+
+#: part/KWView.cpp:359
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Show Status Bar"
+msgstr "Sýna stöðustikuna"
+
+#: part/KWView.cpp:360
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Shows or hides the status bar"
+msgstr "Sýna &stöðuslá"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr ""
+
+#: part/KWView.cpp:374
+#, fuzzy, kde-format
+#| msgid "Import Styles..."
+msgid "Semantic Stylesheets..."
+msgstr "Flytja inn snið..."
+
+#: part/KWView.cpp:376
+#, fuzzy, kde-format
+#| msgid "Import Styles..."
+msgid "Modify and add semantic stylesheets"
+msgstr "Flytja inn snið..."
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+
+#: part/KWView.cpp:392
+#, fuzzy, kde-format
+#| msgid "P&icture..."
+msgid "Configure..."
+msgstr "Mynd..."
+
+#: part/KWView.cpp:401
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Page Layout..."
+msgstr "Uppsetning á síðu..."
+
+#: part/KWView.cpp:403
+#, fuzzy, kde-format
+msgid "Change properties of entire page"
+msgstr "Breyta eiginleikum allrar síðunnar."
+
+#: part/KWView.cpp:404
+#, fuzzy, kde-format
+#| msgid ""
+#| "Change properties of the entire page.<p>Currently you can change paper "
+#| "size, paper orientation, header and footer sizes, and column settings."
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+"Breyta eiginleikum allrar síðunnar. <p>Þú getur breytt blaðsíðustærð, stefnu "
+"síðunnar, stærð á haus og fót og stillingum dálka."
+
+#: part/KWView.cpp:407
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Create Header"
+msgstr "Búa til textaramma"
+
+#: part/KWView.cpp:413
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Create Footer"
+msgstr "Búa til textaramma"
+
+#: part/KWView.cpp:420
+#, kde-format
+msgid "Show Comments"
+msgstr ""
+
+#: part/KWView.cpp:421
+#, kde-format
+msgid "Shows comments in the document"
+msgstr ""
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr ""
+
+#: part/KWView.cpp:428
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Shows or hides word counting in status bar"
+msgstr "Sýna &stöðuslá"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page Setup"
+msgstr "Síðuskil"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, fuzzy, kde-format
+#| msgid "Even Pages Footer"
+msgid "Header & Footer"
+msgstr "Fótur á jafntölusíðum"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Page layout"
+msgstr "Uppsetning á síðu..."
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, fuzzy, kde-format
+#| msgid "New..."
+msgid "..."
+msgstr "..."
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgctxt "Next search result"
+msgid "Next"
+msgstr "Næsta síða"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, fuzzy, kde-format
+#| msgid "Preview"
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "Fyrri síða"
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, fuzzy, kde-format
+msgctxt "Search options"
+msgid "Options"
+msgstr "Valkostir"
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, kde-format
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, kde-format
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, kde-format
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, kde-format
+msgid "Replace"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Haus á oddatölusíðum"
+
+#: part/Words.cpp:47
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Haus á jafntölusíðum"
+
+#: part/Words.cpp:49
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Fótur á oddatölusíðum"
+
+#: part/Words.cpp:51
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Fótur á jafntölusíðum"
+
+#: part/Words.cpp:53
+#, fuzzy, kde-format
+#| msgid "Plain text"
+msgid "Main text"
+msgstr "Venjulegur texti"
+
+#: part/Words.cpp:55
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgid "Other text"
+msgstr "Setja inn síðu"
+
+#, fuzzy
+#~| msgid "Remove entry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "Eyða reit"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "Í málsgrein"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "Stafur"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "Stafur"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "Vinstri:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "Hægri:"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "Botn:"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Wrap-around"
+#~ msgstr "Texti flæðir í kringum"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "&Texti mun flæða gegnum þennan ramma"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "&Texti mun flæða gegnum þennan ramma"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "&Texti mun flæða gegnum þennan ramma"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "&Texti mun flæða gegnum þennan ramma"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "&Texti mun flæða gegnum þennan ramma"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "&Texti mun flæða gegnum þennan ramma"
+
+#, fuzzy
+#~| msgid "Distance Between Frame && Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance Between Shape and Text:"
+#~ msgstr "Bil milli ramma og texta"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "Staðsetning"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "Staðsetning"
+
+#, fuzzy
+#~| msgid "Name of frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "Nafn á rammasetti:"
+
+#, fuzzy
+#~| msgid "Create a new frameset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "Búa til nýtt rammasett"
+
+#, fuzzy
+#~| msgid "Select existing frameset to connect frame to:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select existing frameset to connect to:"
+#~ msgstr "Velja rammasett sem á að tengjast:"
+
+#, fuzzy
+#~| msgid "Frameset Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "Nafn rammasetts"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "Endu&rnefna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "&Eyða"
+
+#, fuzzy
+#~| msgid ""
+#~| "Bookmarks allow you to jump between parts of your document.\n"
+#~| "Please provide the name of your bookmark."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Bookmarks allow you to jump between parts of your document.\n"
+#~ "Please provide the name of your bookmark."
+#~ msgstr ""
+#~ "Bókamerki gera þér kleyft að stökkva á milli hluta skjalsins.\n"
+#~ "Sláðu inn nafn á bókamerkið."
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Nafn:"
+
+#, fuzzy
+#~| msgid "Page Size && Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "Síðustærð og spássíur"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "Vinstri:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "Hægri:"
+
+#, fuzzy
+#~| msgid "Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Dálkar:"
+
+#, fuzzy
+#~| msgid "Default column spacing:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "Dálkabil:"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "Orð"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "Setningar"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "Atkvæði:"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Línur"
+
+#, fuzzy
+#~| msgid "Characters without spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "Stafir án bila:"
+
+#, fuzzy
+#~| msgid "Characters without spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "Stafir án bila:"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "&Sniðtákn"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch Reading Ease"
+#~ msgstr "Auðlæsi á Flesch skala:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Skrá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "Br&eyta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "S&koða"
+
+#, fuzzy
+#~| msgid "&Display Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "&Birtingarhamur"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "Tölfræði"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&tyles"
+#~ msgstr "Stíll"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Stillingar"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "Athuga stafsetningu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Breyta"
+
+#, fuzzy
+#~| msgid "Spell Check Result"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "Niðurstaða af stafsetningarskoðun"
+
+#, fuzzy
+#~| msgid "Change Variable To"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "Skipta breytu í"
+
+#, fuzzy
+#~| msgid "New..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "Á&höld"
+
+#, fuzzy
+#~| msgid "Frame is inline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "Ramminn er innfelldur"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "Stafur"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Röð"
+
+#, fuzzy
+#~| msgid "Provide main text area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "Búa til aðal textasvæði"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "Í málsgrein"
+
+#, fuzzy
+#~| msgid "Provide main text area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "Búa til aðal textasvæði"
+
+#, fuzzy
+#~| msgid "Frame &Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "Ra&mmamörk"
+
+#, fuzzy
+#~| msgid "Frame &Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "Ra&mmamörk"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Möskvi 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Titill skjals"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Titill skjals"
+
+#, fuzzy
+#~| msgid "Create New Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "Búa til nýtt bókamerki"
+
+#, fuzzy
+#~| msgid "Fra&mes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "Ra&mmar"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "Staðsetning"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Run Around"
+#~ msgstr "Texti flæðir í kringum"
+
+#, fuzzy
+#~| msgid "Connect Text Frames"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "Tengja textaramma"
+
+#, fuzzy
+#~| msgid "Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "Dálkar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Stíll"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "Klóna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Eyða"
+
+#, fuzzy
+#~| msgid "Framestyle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "Rammastíll:"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Endurnefna bókamerki"
+
+#, fuzzy
+#~| msgid ""
+#~| "A frameset with the name '%1' already exists. Please enter another name."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr ""
+#~ "Rammasett nefnt: '%1' er til nú þegar. Vinsamlegast sláðu inn annað nafn."
+
+#, fuzzy
+#~| msgid "Select Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "Veldu bókamerki"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Stærð"
+
+#, fuzzy
+#~| msgid "Remove entry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "Eyða reit"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "Tölfræði"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "Orð:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "Setningar:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "Atkvæði:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "Stafir með bilum:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "Stafir með bilum:"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "Línur:"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch reading ease"
+#~ msgstr "Auðlæsi á Flesch skala:"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "&Sniðtákn"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Standard"
+#~ msgstr "Venjulegt"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "Haus 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "Haus 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "Haus 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Enumerated List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "Númeraður listi"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Alphabetical List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "Listi í stafrófsröð"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "Bólulisti"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "Titill innihalds"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "Haus innihalds 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "Haus innihalds 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "Haus innihalds 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "Titill skjals"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "Haus"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "Fótur"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Plain"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "Venjulegt"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "Jaðrar 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "Jaðrar 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "Jaðrar 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "Röð"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "Dálkur"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "Ljósgrátt"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "Dökkgrátt"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "Svart"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "Ljósblátt"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "Dökkblátt"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "Rautt"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "Gult"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Colorful"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "Litríkt"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bluish"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "Bláleitt"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "Einfalt 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "Einfalt 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "Einfalt 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "Síðuhaus 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "Síðuhaus 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "Síðuhaus 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 4"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "Síðuhaus 4"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "Dálkar 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "Dálkar 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "Möskvi 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "Möskvi 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "Möskvi 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "Grár síðuhaus"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "Blár síðuhaus"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "Hefðbundið blátt"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "Hefðbundið grátt"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "Blátt efst og neðst"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "Grátt efst og neðst"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "KOffice ritvinnsla"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "KOffice ritvinnsla"
+
+#, fuzzy
+#~| msgid "(c) 1998-2006, The KWord Team"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "(c) 1998-2006, KWord hópurinn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Everything"
+#~ msgstr "Allt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sebastian Sauer"
+#~ msgstr "Sebastian Sauer"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "&Sniðtákn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "&Skrá"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "Tölfræði"
+
+#, fuzzy
+#~| msgid "&Footnote/Endnote..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "Neðanmálsgrein/e&ftirmála..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "KFormúla"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "Nicolas Goutte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clarence Dang"
+#~ msgstr "Clarence Dang"
+
+#, fuzzy
+#~| msgid "Endnotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "Eftirmálar"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "Síðuskil"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Ingimar Róbertsson, Arnar Leósson"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "iar@pjus.is, leosson@frisurf.no"
+
+#, fuzzy
+#~| msgid "Copy%1-%2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Afrita"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Venjulegt"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "Titill skjals"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "Haus 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "Haus 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "Haus 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "Bólulisti"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "Áhöld"
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr "Ógild OASIS OpenDocument skrá. Ekkert office:body tag fannst."
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr "Ógild OASIS OpenDocument skrá. Ekkert tag fannst í office:body."
+
+#, fuzzy
+#~| msgid ""
+#~| "This is not a word processing document, but %1. Please try opening it "
+#~| "with the appropriate application."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This is not a word processing document, but %1. Please try opening it "
+#~ "with the appropriate application."
+#~ msgstr ""
+#~ "Þetta er ekki ritvinnsluskjal, heldur %1. Reyndu að opna það með "
+#~ "viðeigandi forriti."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Installation Error"
+#~ msgstr "Innsetningarvilla"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modified"
+#~ msgstr "Breytt"
+
+#, fuzzy
+#~| msgid "Save Failed"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "Vistað"
+
+#, fuzzy
+#~| msgid "Page %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "Síða %1"
+
+#, fuzzy
+#~| msgid "Page %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "Síða %1"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "Línur"
+
+#, fuzzy
+#~| msgid "Frame &Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Ra&mmamörk"
+
+#, fuzzy
+#~| msgid "Numbering"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "Tölusetning"
+
+#, fuzzy
+#~| msgid "Framestyle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "Rammastíll:"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "Síðuskil"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved/Modified"
+#~ msgstr "Breytt"
+
+#, fuzzy
+#~| msgid "Frame Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "Eiginleikar ramma"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "&Sniðtákn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "Víxla sýn af táknum sem birtast ekki við prentun."
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br><br>When this is "
+#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~ "enabled, Words shows you tabs, spaces, carriage returns and other non-"
+#~ "printing characters."
+#~ msgstr ""
+#~ "Víxla sýn af táknum sem birtast ekki við prentun.<br><br>Þegar þetta er "
+#~ "valið sýnir KWord inndrátt, bil, vendingu og önnur tákn sem birtast ekki  "
+#~ "við útprentun."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Turns the border display on and off"
+#~ msgstr "Sýna eða fela ramma."
+
+#, fuzzy
+#~| msgid ""
+#~| "Turns the border display on and off.<br><br>The borders are never "
+#~| "printed. This option is useful to see how the document will appear on "
+#~| "the printed page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Turns the border display on and off.<br/><br/>The borders are never "
+#~ "printed. This option is useful to see how the document will appear on the "
+#~ "printed page."
+#~ msgstr ""
+#~ "Sýna eða fela ramma.<br><br>Rammarnir eru aldrei prentaðir. Þessi "
+#~ "valkostur gagnast til að sýna hvernig skjalið mun líta út við prentun."
+
+#, fuzzy
+#~| msgid "Frame &Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "Ra&mmamörk"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of table borders"
+#~ msgstr "Víxla sýn af táknum sem birtast ekki við prentun."
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br><br>When this is "
+#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+#~ "shows you any invisible table borders with a thin gray line."
+#~ msgstr ""
+#~ "Víxla sýn af táknum sem birtast ekki við prentun.<br><br>Þegar þetta er "
+#~ "valið sýnir KWord inndrátt, bil, vendingu og önnur tákn sem birtast ekki  "
+#~ "við útprentun."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of section bounds"
+#~ msgstr "Víxla sýn af táknum sem birtast ekki við prentun."
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br><br>When this is "
+#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+#~ "section bounds will be indicated with a thin gray horizontal brackets."
+#~ msgstr ""
+#~ "Víxla sýn af táknum sem birtast ekki við prentun.<br><br>Þegar þetta er "
+#~ "valið sýnir KWord inndrátt, bil, vendingu og önnur tákn sem birtast ekki  "
+#~ "við útprentun."
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Sýna stikur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Sýnir eða felur stikur."
+
+#, fuzzy
+#~| msgid ""
+#~| "The rulers are the white measuring spaces top and left of the document. "
+#~| "The rulers show the position and width of pages and of frames and can be "
+#~| "used to position tabulators among others.<p>Uncheck this to disable the "
+#~| "rulers from being displayed."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The rulers are the white measuring spaces top and left of the document. "
+#~ "The rulers show the position and width of pages and of frames and can be "
+#~ "used to position tabulators among others.<p>Uncheck this to disable the "
+#~ "rulers from being displayed.</p>"
+#~ msgstr ""
+#~ "Stikurnar eru hvítu mælieiningarnar efst og til vinstri í skjalinu. Sýna "
+#~ "þær staðsetningu og breidd síðna og ramma og má meðal annars nota þær til "
+#~ "að staðsetja dálkstilla. <p>Afhakaðu þetta ef þú vilt ekki sjá "
+#~ "mælistikurnar."
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Jafna við möskva"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Sýna stöðustikuna"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Sýna &stöðuslá"
+
+#, fuzzy
+#~| msgid "Import Styles..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantic Stylesheets..."
+#~ msgstr "Flytja inn snið..."
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Búa til"
+
+#, fuzzy
+#~| msgid "P&icture..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "Mynd..."
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "Uppsetning á síðu..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "Breyta eiginleikum allrar síðunnar."
+
+#, fuzzy
+#~| msgid ""
+#~| "Change properties of the entire page.<p>Currently you can change paper "
+#~| "size, paper orientation, header and footer sizes, and column settings."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Change properties of the entire page.<p>Currently you can change paper "
+#~ "size, paper orientation, header and footer sizes, and column settings.</p>"
+#~ msgstr ""
+#~ "Breyta eiginleikum allrar síðunnar. <p>Þú getur breytt blaðsíðustærð, "
+#~ "stefnu síðunnar, stærð á haus og fót og stillingum dálka."
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "Búa til textaramma"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "Búa til textaramma"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "Sýna &stöðuslá"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "Síðuskil"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "Fótur á jafntölusíðum"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "Uppsetning á síðu..."
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "Næsta síða"
+
+#, fuzzy
+#~| msgid "Preview"
+#~ msgctxt "(qtundo-format) Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Fyrri síða"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Search options"
+#~ msgid "Options"
+#~ msgstr "Valkostir"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Haus á oddatölusíðum"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Haus á jafntölusíðum"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Fótur á oddatölusíðum"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Fótur á jafntölusíðum"
+
+#, fuzzy
+#~| msgid "Plain text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "Venjulegur texti"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "Setja inn síðu"
+
+#, fuzzy
+#~ msgid "Book"
+#~ msgstr "Bókamerki"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "KOffice ritvinnsla"
+
+#, fuzzy
+#~| msgid "(c) 1998-2006, The KWord Team"
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "(c) 1998-2006, KWord hópurinn"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Select Cover Image..."
+#~ msgstr "Setja inn síðu"
+
+#, fuzzy
+#~| msgid "Plain text"
+#~ msgid "Main"
+#~ msgstr "Venjulegur texti"
+
+#, fuzzy
+#~| msgid "Type"
+#~ msgid "Type:"
+#~ msgstr "Tegund"
+
+#, fuzzy
+#~ msgid "1st Edit"
+#~ msgstr "Breyta"
+
+#, fuzzy
+#~ msgid "2nd Edit"
+#~ msgstr "Breyta"
+
+#, fuzzy
+#~ msgid "3rd Edit"
+#~ msgstr "Breyta"
+
+#~ msgid "File to open"
+#~ msgstr "Skrá sem á að opna"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "Búa til textaramma"
+
+#, fuzzy
+#~| msgid "Delete Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "Eyða ramma"
+
+#~ msgid "General"
+#~ msgstr "Almennt"
+
+#~ msgid "Protect size and position"
+#~ msgstr "Vernda stærð og stöðu"
+
+#~ msgid "Position"
+#~ msgstr "Staðsetning"
+
+#, fuzzy
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgid "Width:"
+#~ msgstr "Breidd:"
+
+#~ msgid "Height:"
+#~ msgstr "Hæð:"
+
+#~ msgid "Margins"
+#~ msgstr "Spássíur"
+
+#~ msgid "Synchronize changes"
+#~ msgstr "Samræma breytingar"
+
+#~ msgid "Bottom:"
+#~ msgstr "Botn:"
+
+#~ msgid "Top:"
+#~ msgstr "Efst:"
+
+#~ msgid "Right:"
+#~ msgstr "Hægri:"
+
+#~ msgid "Left:"
+#~ msgstr "Vinstri:"
+
+#~ msgid "Create a new page"
+#~ msgstr "Búa til nýja síðu"
+
+#~ msgid "Resize last frame"
+#~ msgstr "Breyta stærð síðasta ramma"
+
+#, fuzzy
+#~ msgid "Do not show the extra text"
+#~ msgstr "Ekki sýna aukatextan"
+
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "Endurtengja ramma við virkt flæði"
+
+#~ msgid "Do not create a followup frame"
+#~ msgstr "Ekki setja ramma á eftir þessum"
+
+#, fuzzy
+#~| msgid "Connect Frame"
+#~ msgid "Copy this Frame"
+#~ msgstr "Tengja ramma"
+
+#~ msgid "Protect content"
+#~ msgstr "Vernda innihald"
+
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "Ramminn er afrit af þeim fyrri"
+
+#~ msgid "Changes will be applied to all frames in frameset"
+#~ msgstr "Breytingar ná til allra ramma í rammasettinu"
+
+#~ msgid "Retain original aspect ratio"
+#~ msgstr "Halda upphaflegum hlutföllum"
+
+#, fuzzy
+#~| msgid "Select All Frames"
+#~ msgid "Select All Shapes"
+#~ msgstr "Velja alla ramma"
+
+#~ msgid "Create Linked Copy"
+#~ msgstr "Búa til tengt afrit"
+
+#~ msgid "Create a copy of the current frame, always showing the same contents"
+#~ msgstr "Býr til afrit af núverandi ramma, sem sýnir alltaf sama innihald"
+
+#~ msgid ""
+#~ "Create a copy of the current frame, that remains linked to it. This means "
+#~ "they always show the same contents: modifying the contents in such a "
+#~ "frame will update all its linked copies."
+#~ msgstr ""
+#~ "Búa til afrit af núverandi ramma sem er alltaf tengt við hann. Sýna þeir "
+#~ "þá alltaf sama innihald. Sé innihaldi slíks ramma breytt, breytist það í "
+#~ "öllum römmum sem eru tengdir við hann."
+
+#, fuzzy
+#~| msgid "Create Linked Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "Búa til tengt afrit"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "Setja inn síðu"
+
+#, fuzzy
+#~| msgid "Remove entry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "Eyða reit"
+
+#, fuzzy
+#~| msgid "&Bookmark..."
+#~ msgid "Bookmark..."
+#~ msgstr "&Bókamerki..."
+
+#, fuzzy
+#~| msgid "Select &Bookmark..."
+#~ msgid "Select Bookmark..."
+#~ msgstr "Velja &bókamerki..."
+
+#, fuzzy
+#~ msgid "Bookmark"
+#~ msgstr "Bókamerki"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgid "Characters (excluding spaces):"
+#~ msgstr "Stafir með bilum:"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgid "Flesch Reading Ease:"
+#~ msgstr "Auðlæsi á Flesch skala:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgid "Preferences"
+#~ msgstr "Setningar"
+
+#, fuzzy
+#~| msgid "Automatic hyphenation"
+#~ msgid "Automatically update"
+#~ msgstr "Sjálfvirk orðskipting"
+
+#, fuzzy
+#~ msgid "update"
+#~ msgstr "uppfæra"
+
+#~ msgid "F&ormat"
+#~ msgstr "&Snið"
+
+#~ msgid "Invalid document. No mimetype specified."
+#~ msgstr "Ógilt skjal. Engin skráartegund skilgreind."
+
+#, fuzzy
+#~| msgid ""
+#~| "Invalid document. Expected mimetype application/x-kword or application/"
+#~| "vnd.kde.kword, got %1"
+#~ msgid ""
+#~ "Invalid document. Expected mimetype application/x-words or application/"
+#~ "vnd.kde.words, got %1"
+#~ msgstr ""
+#~ "Ógilt skjal. Bjóst við skráartegund application/x-kword eða application/"
+#~ "vnd.kde.kword, fékk %1"
+
+#~ msgid "Invalid document. Paper size: %1x%2"
+#~ msgstr "Ógilt skjal. Pappírsstærð: %1x%2"
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate footnote text"
+#~ msgstr "Get ekki útbúið gagnagrunnshlut"
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate note-text"
+#~ msgstr "Get ekki útbúið gagnagrunnshlut"
+
+#, fuzzy
+#~| msgid "Inline Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "Infelldur rammi"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgid "Create Frame-clip"
+#~ msgstr "Búa til textaramma"
+
+#, fuzzy
+#~| msgid "Remove record"
+#~ msgid "Remove Frame-clip"
+#~ msgstr "Eyða færslu"
+
+#, fuzzy
+#~ msgid "Force the remainder of the text into the next page"
+#~ msgstr "Þvinga restina af textanum yfir á næstu síðu."
+
+#, fuzzy
+#~| msgid ""
+#~| "This inserts a non-printing character at the current cursor position. "
+#~| "All text after this point will be moved into the next page."
+#~ msgid "All text after this point will be moved into the next page."
+#~ msgstr ""
+#~ "Þetta setur inn óprentanlegt tákn á núverandi stöðu bendilsins. Allur "
+#~ "texti sem kemur eftir verður fluttur yfir á næstu síðu."
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgid "Form"
+#~ msgstr "KFormúla"
+
+#~ msgid "Enable Document Headers"
+#~ msgstr "Virkja skjalahausa"
+
+#~ msgid "Enable Document Footers"
+#~ msgstr "Virkja skjalafætur"
+
+#, fuzzy
+#~| msgid "Change Link"
+#~ msgid "Change Tracking"
+#~ msgstr "Breyta tengli"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "Orð"
+
+#~ msgid "Number of pages:"
+#~ msgstr "Fjöldi síða:"
+
+#~ msgid "Number of frames:"
+#~ msgstr "Fjöldi ramma:"
+
+#~ msgid "Number of pictures:"
+#~ msgstr "Fjöldi mynda:"
+
+#~ msgid "Number of tables:"
+#~ msgstr "Fjöldi tafla:"
+
+#~ msgid "Text"
+#~ msgstr "Texti"
+
+#, fuzzy
+#~| msgid "&Include text from foot- and endnotes"
+#~ msgid "Include text from foot- and endnotes"
+#~ msgstr "&Taka með texta frá neðanmálsgreinum og eftirmálum"
+
+#~ msgid "Characters without spaces:"
+#~ msgstr "Stafir án bila:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgid "Characters incl. spaces"
+#~ msgstr "Stafir með bilum:"
+
+#~ msgid "approximately %1"
+#~ msgstr "um það bil %1"
+
+#~ msgid "Sentence, word and letter counts for this document"
+#~ msgstr "Setning, orða og stafatalning fyrir þetta skjal"
+
+#, fuzzy
+#~| msgid ""
+#~| "Information on the number of letters, words, syllables and sentences for "
+#~| "this document.<p>Evaluates readability using the Flesch reading score."
+#~ msgid ""
+#~ "Information on the number of letters, words, syllables and sentences for "
+#~ "this document.<p>Evaluates readability using the Flesch reading score.</p>"
+#~ msgstr ""
+#~ "Upplýsingar um fjölda stafa, orða, atkvæða. og setninga í skjalinu. "
+#~ "<p>Ákvarðar lesanleika með hjálp af Flesch stigakerfinu."
+
+#, fuzzy
+#~ msgid "Shows and hides header display"
+#~ msgstr "Sýnir og felur hausa."
+
+#, fuzzy
+#~| msgid ""
+#~| "Selecting this option toggles the display of headers in KWord."
+#~| "<br><br>Headers are special frames at the top of each page which can "
+#~| "contain page numbers or other information."
+#~ msgid ""
+#~ "Selecting this option toggles the display of headers in Words.<br/><br/"
+#~ ">Headers are special frames at the top of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Þessi valkostur víxlar sýn af hausum í KWord. <br> <br>Hausar eru "
+#~ "sérstakir rammar efst á hverri síðu sem geta innihaldið síðunúmer eða "
+#~ "aðrar upplýsingar."
+
+#, fuzzy
+#~ msgid "Shows and hides footer display"
+#~ msgstr "Sýnir og felur fætur."
+
+#, fuzzy
+#~| msgid ""
+#~| "Selecting this option toggles the display of footers in KWord. "
+#~| "<br><br>Footers are special frames at the bottom of each page which can "
+#~| "contain page numbers or other information."
+#~ msgid ""
+#~ "Selecting this option toggles the display of footers in Words. <br/><br/"
+#~ ">Footers are special shapes at the bottom of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Þessi valkostur víxlar sýn af fótum í KWord. <br><br>Fætur eru sérstakir "
+#~ "rammar neðst á hverri síðu sem geta innihaldið síðunúmer eða aðrar "
+#~ "upplýsingar."
+
+#, fuzzy
+#~| msgid "Raise Frame"
+#~ msgid "Raise Shape"
+#~ msgstr "Fleyta ramma upp"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames"
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shape"
+#~ msgstr ""
+#~ "Fleyta upp valda rammanum þannig að hann sé fyrir ofan alla aðra ramma."
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames. This is only useful if frames overlap each other. If "
+#~| "multiple frames are selected they are all raised in turn."
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shapes. This is only useful if shapes overlap each other. If multiple "
+#~ "shapes are selected they are all raised in turn."
+#~ msgstr ""
+#~ "Fleyta upp valda rammanum þannig að hann sé fyrir ofan alla aðra ramma. "
+#~ "Þetta er bara ganglegt ef rammar skarast. Ef margir rammar eru valdir er "
+#~ "þeim fleytt upp til skiptis."
+
+#, fuzzy
+#~| msgid "Lower Frame"
+#~ msgid "Lower Shape"
+#~ msgstr "Sökkva ramma"
+
+#, fuzzy
+#~| msgid ""
+#~| "Lower the currently selected frame so that it disappears under any frame "
+#~| "that overlaps it"
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it"
+#~ msgstr ""
+#~ "Sökkva valdar rammanum þannig að hann hverfi undir ramma sem skarast við "
+#~ "hann."
+
+#, fuzzy
+#~| msgid ""
+#~| "Lower the currently selected frame so that it disappears under any frame "
+#~| "that overlaps it. If multiple frames are selected they are all lowered "
+#~| "in turn."
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it. If multiple shape are selected they are all lowered in "
+#~ "turn."
+#~ msgstr ""
+#~ "Sökkva valdar rammanum þannig að hann hverfi undir ramma sem skarast við "
+#~ "hann. Ef margir rammar eru valdir er þeim sökkt til skiptist."
+
+#~ msgid "Bring to Front"
+#~ msgstr "Flytja fremst"
+
+#~ msgid "Send to Back"
+#~ msgstr "Setja aftast"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgid "After last page"
+#~ msgstr "Haus á fyrstu síðu"
+
+#, fuzzy
+#~| msgid "Framestyle:"
+#~ msgid "Page style:"
+#~ msgstr "Rammastíll:"
+
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "Setja &inn"
+
+#, fuzzy
+#~| msgid "&Variable"
+#~ msgid "Variable"
+#~ msgstr "Breyta"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgid "As Character"
+#~ msgstr "Stafur"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgid "To Character"
+#~ msgstr "Stafur"
+
+#, fuzzy
+#~ msgid "To Paragraph"
+#~ msgstr "Í málsgrein"
+
+#, fuzzy
+#~| msgid "Remove entry"
+#~ msgid "To Page"
+#~ msgstr "Eyða reit"
+
+#~ msgid "Page..."
+#~ msgstr "Síðu..."
+
+#~ msgid "Delete Page"
+#~ msgstr "Eyða síðu"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Insert Image Options"
+#~ msgstr "Setja inn síðu"
+
+#~ msgid "Disable Document Headers"
+#~ msgstr "Afvirkja skjalahausa"
+
+#~ msgid "Disable Document Footers"
+#~ msgstr "Afvirkja skjalafætur"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Sýna &stöðuslá"
+
+#~ msgid "Numbering"
+#~ msgstr "Tölusetning"
+
+#~ msgid "Automatic"
+#~ msgstr "Sjálfvirkt"
+
+#~ msgid "Footnote"
+#~ msgstr "Neðanmálsgrein"
+
+#~ msgid "Endnote"
+#~ msgstr "Eftirmáli"
+
+#~ msgid "Insert Footnote/Endnote"
+#~ msgstr "Setja inn neðanmálsgrein/eftirmála"
+
+#, fuzzy
+#~ msgid "Insert a footnote referencing the selected text"
+#~ msgstr "Setja inn neðanmálsgrein sem vísar í valinn texta."
+
+#, fuzzy
+#~| msgid "F&rame/Frameset Properties"
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "Eiginleika&r ramma/rammasetts"
+
+#, fuzzy
+#~ msgid "Alter frameset properties"
+#~ msgstr "Breyta eiginleikum rammasetts."
+
+#, fuzzy
+#~| msgid "Insert picture inline"
+#~ msgid "Insert a picture into document"
+#~ msgstr "Setja innfellda mynd"
+
+#, fuzzy
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "Umbreyta valda rammanum í innfelldan ramma."
+
+#~ msgid ""
+#~ "Convert the current frame to an inline frame.<br><br>Place the inline "
+#~ "frame within the text at the point nearest to the frames current position."
+#~ msgstr ""
+#~ "Umbreyta valda rammanum í innfelldan ramma. <br> <br>Setja innbyggða "
+#~ "ramman í textan sem næst núverandi staðsetningu."
+
+#, fuzzy
+#~ msgid "Set Floating"
+#~ msgstr "&Stillingar"
+
+#~ msgid ""
+#~ "<p><b>Check this option to have a text area created automatically for "
+#~ "each page.</b><br>\n"
+#~ "For letters and notes with one main text, possibly on several pages, you "
+#~ "should keep this checked. You should only uncheck it if you want to "
+#~ "define completely where each text frame should be positioned.</p>"
+#~ msgstr ""
+#~ "<p><b>Hakaðu við hér til að láta textasvæði vera búið til sjálfkrafa "
+#~ "fyrir hverja síðu.</b><br>\n"
+#~ "Fyrir bréf og minnismiða með eitt aðal textasvæði, sem getur náð yfir "
+#~ "fleiri síður, ættir þú að hafa þetta valið. Þú ættir bara að afvelja "
+#~ "þetta ef þú vilt hafa algera stjórn á stöðu hvers textaramma.</p>"
+
+#, fuzzy
+#~| msgid "&Filter output"
+#~ msgid "Filter stuff"
+#~ msgstr "&Síu-úttak"

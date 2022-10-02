@@ -1,0 +1,440 @@
+# Translation of thesaurus_tool to Croatian
+#
+# Marko Dimjasevic <marko@dimjasevic.net>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2009-06-29 23:09+0200\n"
+"Last-Translator: Marko Dimjasevic <marko@dimjasevic.net>\n"
+"Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
+"Language: hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 0.3\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: Thesaurus.cpp:81
+#, kde-format
+msgid "(No match)"
+msgstr "(Nema poklapanja)"
+
+#: Thesaurus.cpp:91
+#, kde-format
+msgid "&Search for:"
+msgstr "&Pretraži za:"
+
+#: Thesaurus.cpp:94
+#, kde-format
+msgid "S&earch"
+msgstr "&Traži"
+
+#: Thesaurus.cpp:101
+#, kde-format
+msgctxt "@action:button Go back to the previous word in history"
+msgid "Back"
+msgstr "Prethodna"
+
+#: Thesaurus.cpp:105
+#, kde-format
+msgctxt "@action:button Go forward to the next word in history"
+msgid "Forward"
+msgstr "Sljedeća"
+
+#: Thesaurus.cpp:108
+#, kde-format
+msgid "Change Language..."
+msgstr "Promijeni jezik …"
+
+#: Thesaurus.cpp:122
+#, kde-format
+msgid "&Thesaurus"
+msgstr "&Tezarus"
+
+#: Thesaurus.cpp:126
+#, kde-format
+msgid "Synonyms"
+msgstr "Sinonimi"
+
+#: Thesaurus.cpp:133
+#, kde-format
+msgid "More General Words"
+msgstr "Više općih riječi"
+
+#: Thesaurus.cpp:140
+#, kde-format
+msgid "More Specific Words"
+msgstr "Više određenih riječi"
+
+#: Thesaurus.cpp:170
+#, kde-format
+msgid "&Wordnet"
+msgstr "&Wordnet"
+
+#: Thesaurus.cpp:192
+#, kde-format
+msgid "&Replace with:"
+msgstr "&Zamijeni s:"
+
+#: Thesaurus.cpp:255
+#, kde-format
+msgid "&Replace"
+msgstr "&Zamijeni"
+
+#: Thesaurus.cpp:267
+#, kde-format
+msgid "Replace Word"
+msgstr "&Zamijeni riječ"
+
+#: Thesaurus.cpp:295
+#, kde-format
+msgid "Related Words - %1"
+msgstr "Povezane riječi – %1"
+
+#: Thesaurus.cpp:409
+#, kde-format
+msgid ""
+"The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+"select a thesaurus file."
+msgstr ""
+"Datoteka tezarusa '%1' nije pronađena. Upotrijebite opciju 'Promijeni jezik' "
+"da biste odabrali datoteku tezarusa."
+
+#: Thesaurus.cpp:429
+#, kde-format
+msgid "<b>Error:</b> Failed to execute grep."
+msgstr "<b>Greška:</b> Izvršavanje grep-a nije uspjelo."
+
+#: Thesaurus.cpp:581
+#, kde-format
+msgid "Synonyms/Hypernyms - Ordered by Frequency"
+msgstr "Sinonimi/Hipernimi – Poredani po učestalosti"
+
+#: Thesaurus.cpp:582
+#, kde-format
+msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+msgstr "Sinonimi – Poredani po sličnosti značenja (samo glagoli)"
+
+#: Thesaurus.cpp:583
+#, kde-format
+msgid "Antonyms - Words with Opposite Meanings"
+msgstr "Antonimi – Riječi suprotnog značenja"
+
+#: Thesaurus.cpp:584
+#, kde-format
+msgid "Hyponyms - ... is a (kind of) %1"
+msgstr "Hiponimi – … je (poput) %1"
+
+#: Thesaurus.cpp:585
+#, kde-format
+msgid "Meronyms - %1 has a ..."
+msgstr "Meronim – %1 ima …"
+
+#: Thesaurus.cpp:587
+#, kde-format
+msgid "Holonyms - ... has a %1"
+msgstr "Holonim – … ima %1"
+
+#: Thesaurus.cpp:588
+#, kde-format
+msgid "Attributes"
+msgstr "Atributi"
+
+#: Thesaurus.cpp:589
+#, kde-format
+msgid "Cause To (for some verbs only)"
+msgstr "Uzročnost (samo za neke glagole)"
+
+#: Thesaurus.cpp:590
+#, kde-format
+msgid "Verb Entailment (for some verbs only)"
+msgstr "Nepromjenjivost glagola (samo za neke glagole)"
+
+#: Thesaurus.cpp:591
+#, kde-format
+msgid "Familiarity & Polysemy Count"
+msgstr "Brojanje sličnosti i višesloženosti"
+
+#: Thesaurus.cpp:593
+#, kde-format
+msgid "Verb Frames (examples of use)"
+msgstr "Okviri glagola (primjeri upotrebe)"
+
+#: Thesaurus.cpp:594
+#, kde-format
+msgid "List of Compound Words"
+msgstr "Popis složenica"
+
+#: Thesaurus.cpp:595
+#, kde-format
+msgid "Overview of Senses"
+msgstr "Pregled smislova riječi"
+
+#: Thesaurus.cpp:623
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#| "installed on your computer if you want to use it, and 'wn' has to be in "
+#| "your PATH. You can get WordNet at <a href=\"http://www.cogsci.princeton."
+#| "edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet "
+#| "only supports the English language."
+msgid ""
+"<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+"installed on your computer if you want to use it, and 'wn' has to be in your "
+"PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+"\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+"English language."
+msgstr ""
+"<b>Pogreška:</b> Izvršavanje WordNet programa 'wn' nije uspjelo. Ako želite "
+"upotrebljavati WordNet potrebno je da ga instalirate na vaše računalo i 'wn' "
+"mora biti u vašoj varijabli PATH. WordNet možete preuzeti na adresi: <a href="
+"\"http://www.cogsci.princeton.edu/~wn/\">http://www.cogsci.princeton.edu/~wn/"
+"</a>. Napomena: WordNet ima podršku samo za engleski jezik."
+
+#: Thesaurus.cpp:635
+#, kde-format
+msgid "No match for '%1'."
+msgstr "Nema poklapanja za '%1'."
+
+#~ msgctxt "@action:button Close thesaurus dialog"
+#~ msgid "&Close"
+#~ msgstr "&Zatvori"
+
+#, fuzzy
+#~| msgid "(No match)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(No match)"
+#~ msgstr "(Nema poklapanja)"
+
+#, fuzzy
+#~| msgid "&Search for:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Search for:"
+#~ msgstr "&Pretraži za:"
+
+#, fuzzy
+#~| msgid "S&earch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&earch"
+#~ msgstr "&Traži"
+
+#, fuzzy
+#~| msgctxt "@action:button Go back to the previous word in history"
+#~| msgid "Back"
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go back to the previous word in history"
+#~ msgid "Back"
+#~ msgstr "Prethodna"
+
+#, fuzzy
+#~| msgctxt "@action:button Go forward to the next word in history"
+#~| msgid "Forward"
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go forward to the next word in history"
+#~ msgid "Forward"
+#~ msgstr "Sljedeća"
+
+#, fuzzy
+#~| msgid "Change Language..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Language..."
+#~ msgstr "Promijeni jezik …"
+
+#, fuzzy
+#~| msgid "&Thesaurus"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Thesaurus"
+#~ msgstr "&Tezarus"
+
+#, fuzzy
+#~| msgid "Synonyms"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms"
+#~ msgstr "Sinonimi"
+
+#, fuzzy
+#~| msgid "More General Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More General Words"
+#~ msgstr "Više općih riječi"
+
+#, fuzzy
+#~| msgid "More Specific Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More Specific Words"
+#~ msgstr "Više određenih riječi"
+
+#, fuzzy
+#~| msgid "&Wordnet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Wordnet"
+#~ msgstr "&Wordnet"
+
+#, fuzzy
+#~| msgid "&Replace with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace with:"
+#~ msgstr "&Zamijeni s:"
+
+#, fuzzy
+#~| msgctxt "@action:button Close thesaurus dialog"
+#~| msgid "&Close"
+#~ msgctxt "(qtundo-format) @action:button Close thesaurus dialog"
+#~ msgid "&Close"
+#~ msgstr "&Zatvori"
+
+#, fuzzy
+#~| msgid "&Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace"
+#~ msgstr "&Zamijeni"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace Word"
+#~ msgstr "&Zamijeni riječ"
+
+#, fuzzy
+#~| msgid "Related Words - %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Related Words - %1"
+#~ msgstr "Povezane riječi – %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "The thesaurus file '%1' was not found. Please use 'Change Language...' "
+#~| "to select a thesaurus file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+#~ "select a thesaurus file."
+#~ msgstr ""
+#~ "Datoteka tezarusa '%1' nije pronađena. Upotrijebite opciju 'Promijeni "
+#~ "jezik' da biste odabrali datoteku tezarusa."
+
+#, fuzzy
+#~| msgid "<b>Error:</b> Failed to execute grep."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<b>Error:</b> Failed to execute grep."
+#~ msgstr "<b>Greška:</b> Izvršavanje grep-a nije uspjelo."
+
+#, fuzzy
+#~| msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgstr "Sinonimi/Hipernimi – Poredani po učestalosti"
+
+#, fuzzy
+#~| msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgstr "Sinonimi – Poredani po sličnosti značenja (samo glagoli)"
+
+#, fuzzy
+#~| msgid "Antonyms - Words with Opposite Meanings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Antonyms - Words with Opposite Meanings"
+#~ msgstr "Antonimi – Riječi suprotnog značenja"
+
+#, fuzzy
+#~| msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgstr "Hiponimi – … je (poput) %1"
+
+#, fuzzy
+#~| msgid "Meronyms - %1 has a ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Meronyms - %1 has a ..."
+#~ msgstr "Meronim – %1 ima …"
+
+#, fuzzy
+#~| msgid "Holonyms - ... has a %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Holonyms - ... has a %1"
+#~ msgstr "Holonim – … ima %1"
+
+#, fuzzy
+#~| msgid "Attributes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attributes"
+#~ msgstr "Atributi"
+
+#, fuzzy
+#~| msgid "Cause To (for some verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cause To (for some verbs only)"
+#~ msgstr "Uzročnost (samo za neke glagole)"
+
+#, fuzzy
+#~| msgid "Verb Entailment (for some verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Entailment (for some verbs only)"
+#~ msgstr "Nepromjenjivost glagola (samo za neke glagole)"
+
+#, fuzzy
+#~| msgid "Familiarity & Polysemy Count"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Familiarity & Polysemy Count"
+#~ msgstr "Brojanje sličnosti i višesloženosti"
+
+#, fuzzy
+#~| msgid "Verb Frames (examples of use)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Frames (examples of use)"
+#~ msgstr "Okviri glagola (primjeri upotrebe)"
+
+#, fuzzy
+#~| msgid "List of Compound Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "List of Compound Words"
+#~ msgstr "Popis složenica"
+
+#, fuzzy
+#~| msgid "Overview of Senses"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overview of Senses"
+#~ msgstr "Pregled smislova riječi"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~| "installed on your computer if you want to use it, and 'wn' has to be in "
+#~| "your PATH. You can get WordNet at <a href=\"http://www.cogsci.princeton."
+#~| "edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet "
+#~| "only supports the English language."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~ "installed on your computer if you want to use it, and 'wn' has to be in "
+#~ "your PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+#~ "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+#~ "English language."
+#~ msgstr ""
+#~ "<b>Pogreška:</b> Izvršavanje WordNet programa 'wn' nije uspjelo. Ako "
+#~ "želite upotrebljavati WordNet potrebno je da ga instalirate na vaše "
+#~ "računalo i 'wn' mora biti u vašoj varijabli PATH. WordNet možete preuzeti "
+#~ "na adresi: <a href=\"http://www.cogsci.princeton.edu/~wn/\">http://www."
+#~ "cogsci.princeton.edu/~wn/</a>. Napomena: WordNet ima podršku samo za "
+#~ "engleski jezik."
+
+#, fuzzy
+#~| msgid "No match for '%1'."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No match for '%1'."
+#~ msgstr "Nema poklapanja za '%1'."
+
+#~ msgid "Failed to execute grep."
+#~ msgstr "Izvršavanje grep-a nije uspjelo."
+
+#~ msgid "<b>Error:</b> Failed to execute WordNet program 'wn'. Output:<br>%1"
+#~ msgstr ""
+#~ "<b>Pogreška:</b> Izvršavanje WordNet programa 'wn' nije uspjelo. Ispis:"
+#~ "<br>%1"

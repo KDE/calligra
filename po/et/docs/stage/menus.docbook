@@ -1,0 +1,2742 @@
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd">
+
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+
+<chapter id="menu-items">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Marek</firstname
+><surname
+>Laane</surname
+><affiliation
+><address
+><email
+>bald@smail.ee</email
+></address
+></affiliation
+><contrib
+>Tõlge eesti keelde</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Menüü ja tööriistariba elemendid</title>
+
+<para
+>&stage; pakub mitu erinevat võimalust iseendaga suhtlemiseks. Tõenäoliselt kõige tuttavam neist on menüüd, mis on näha &stage;'i akna ülaservas.</para>
+
+<para
+>Klõps menüüelemendil avab käskude nimekirja, mille seast saab valida just selle, mida parajasti vaja läheb. Paljusid käske saab kasutada ka otse, hoides all klahvi &Ctrl; või &Alt; ning vajutades mõnda muud klahvi. Järgnevalt kirjeldataksegi lühidalt kõiki menüükäske.</para>
+
+<sect1 id="toolbars">
+<title
+>Tööriistaribad</title>
+
+<sect2 id="manipulating-toolbars">
+<title
+>Tööriistaribade kasutamine</title>
+
+<para
+>Lisaks menüüdele võimaldab &stage; kasutada tööriistariba. See kujutab endast ikoonide kogumit. Tööriistariba ikoon kujutab üldjuhul endast mõne menüüs leiduva käsu mugavat kiirkorraldust.</para>
+
+<para
+>Lukustamata tööriistariba saab ka sangast haarates vabalt mujale lohistada. Lukustamata tööriistariba saab <quote
+>dokkida</quote
+> ehk asetada igale &stage;'i akna küljele. Soovi korral võib aga tööriistariba muuta <quote
+>hõljuvaks</quote
+>, nii et ta asub omaette aknas &stage;'i põhiaknast eraldi.</para>
+
+<para
+>Kui sulle tööriistaribade lohistamine miskipärast ei meeldi, võid klõpsata hiire <mousebutton
+>parema</mousebutton
+> nupuga sangal, mille peale ilmub kontekstimenüü. </para>
+
+<para
+>Kirje <guisubmenu
+>Teksti asend</guisubmenu
+> valimine võimaldab muuta tööriistaribal asuvate elementide väljanägemist. See menüü koos oma võimalustega näeb välja selline: </para>
+
+<screenshot>
+<screeninfo
+>Teksti asend</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Teksti asend</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Kuid ikoonide asemel võib tööriistaribadel näidata ka teksti või nii ikoone kui teksti. Kui soovid näha nii teksti kui ikoone, siis saab eespool vaadeldud kontekstimenüüs valida, kas tekst peaks asuma ikoonide kõrval või nende all. </para>
+
+<para
+>Kui näidatakse ainult ikoone ja sa ei tea, mida mingi ikoon teeb, võid hoida hiirekursorit ikooni kohal ning mõne hetke pärast ilmub hüpik-teatekast. </para>
+
+<para
+>Kontekstimenüü kirje <guilabel
+>Orientatsioon</guilabel
+> on seotud tööriistaribade asetusega. Need võivad asuvad &stage;'i akna kõigil neljal küljel. </para>
+
+
+<para
+>Järgnevalt tulevad vaatluse alla &stage;'i menüüd. </para>
+
+</sect2>
+</sect1>
+
+<sect1 id="file-menu">
+<title
+>Menüü Fail</title>
+
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fail</guimenu
+> <guimenuitem
+>Uus</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Avab uue esitluse.</action
+> Ilmuvas käivitamisdialoogis saab otsustada, millise malli põhjal uus dokument luua. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fail</guimenu
+> <guimenuitem
+>Ava...</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+><action
+>Avab olemasoleva esitluse.</action
+> Ilmub standardne &kde; failidialoog, mis võimaldab valida avatava faili. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Fail</guimenu
+> <guisubmenu
+>Ava hiljutine</guisubmenu
+> </menuchoice>
+</term>
+<listitem>
+<para>
+<action
+>Näitab nimekirja hiljuti kasutatud failidega, kust saab valida vajaliku faili.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fail</guimenu
+> <guimenuitem
+>Salvesta</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Salvestab parajasti avatud esitluse.</action
+> Kui seda ei ole varem salvestatud, palutakse sul sellele nimi anda. Kui esitlus on varem salvestatud, salvestatakse see sama nime all. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Salvesta kui...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para>
+<action
+>Salvestab parajasti avatud esitluse uue nimega.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Laadi uuesti</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Laeb parajasti avatud faili uuesti. </para>
+</listitem>
+</varlistentry>
+
+<!-- FIXME: Versions item missing-->
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Impordi...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Impordib varem loodud esitluse (see võib olla ka mõnes muus vormingus).</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Ekspordi...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Ekspordib parajasti avatud esitluse mõnda muusse vormingusse, et seda saaks kasutada mõni muu rakendus või isik, kel tõesti ei ole võimalust kasutada &stage;'i.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Saada...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Avab</action
+> sinu eelistatud e-posti kliendis uue kirja koostamise akna, kusjuures kirjale on juba lisatud parajasti avatud &stage;'i dokument. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Ekspordi HTML-ina...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Käivitab HTML-nõustaja</action
+>, mida kirjeldab <xref linkend="html-wizard"/>. </para>
+</listitem>
+</varlistentry>
+
+<!--FIXME Google Online Document item missing-->
+
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Template Manager</guimenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Allows you to save the current slide as a
+template.</action
+> In future the template will be available for you to
+use to build slides with. Creating a template is further discussed in
+section <xref linkend="creating-templates"/>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Use Current Slide as Default Template</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Sets the current slide as your default template</action
+>.
+Especially useful if you have created a template of your own to fit into
+corporate style guidelines, or if you just use a particular layout very
+often.</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fail</guimenu
+> <guimenuitem
+>Trüki...</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+><action
+>Trükib parajasti avatud esitluse.</action
+> Täpsemalt küll avab trükkimisseadistuste dialoogi, kus enne esitluse reaalset trükkimist saab veel üht-teist kohendada.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Trükkimise eelvaatlus...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Näitab esitlust</action
+> näitajaga, kus see on näha just nii, nagu hiljem trükituna paberil.</para>
+</listitem>
+</varlistentry>
+
+<!--FIXME Export as PDF item missing-->
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Dokumendi info</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Võimaldab sisestada infot dokumendi kohta</action
+>, sealhulgas autori nime ja aadressi ning dokumendi lühikokkuvõtte.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>W</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Fail</guimenu
+> <guimenuitem
+>Sulge</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Sulgeb parajasti avatud esitluse.</action
+> Ühtlasi pakutakse võimalus salvestada tehtud muudatused.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Fail</guimenu
+> <guimenuitem
+>Välju</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Lõpetab</action
+> &stage;'i töö. Ühtlasi pakutakse võimalust salvestada kõik muudatused igas avatud esitluses.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="edit-menu">
+<title
+>Menüü Redigeerimine</title>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Z</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Redigeerimine</guimenu
+> <guimenuitem
+>Võta tagasi: <replaceable
+>Viimane toiming</replaceable
+></guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Tühistab viimase toimingu.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Redigeerimine</guimenu
+> <guimenuitem
+>Tee uuesti: <replaceable
+>Viimane tagasivõetud toiming</replaceable
+></guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+><action
+>Sooritab uuesti viimase tühistatud tegevuse.</action
+> Kui ühtegi tegevust pole tühistatud või viimane toiming ei ole pööratav, siis seda võimalust kasutada ei saa.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Redigeerimine</guimenu
+> <guimenuitem
+>Lõika</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Kopeerib valitud elemendi lõikepuhvrisse ja eemaldab selle ühtlasi dokumendist.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Redigeerimine</guimenu
+> <guimenuitem
+>Kopeeri</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Kopeerib valitud elemendi lõikepuhvrisse, jättes selle alles ka esitlusse.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Redigeerimine</guimenu
+> <guimenuitem
+>Aseta</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Asetab lõikepuhvri sisu esitlusse.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Del</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Redigeerimine</guimenu
+> <guimenuitem
+>Kustuta</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Eemaldab parajasti valitud elemendi esitlusest.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>A</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Redigeerimine</guimenu
+> <guimenuitem
+>Vali kõik</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para>
+<action
+>Valib aktiivse slaidi kõik objektid ja kogu teksti.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>A</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Redigeerimine</guimenu
+> <guimenuitem
+>Tühista valik</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Tühistab kõigi parajasti valitud objektide valimise.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>F</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Redigeerimine</guimenu
+> <guimenuitem
+>Otsi...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para>
+<action
+>Otsib esitlusest teksti.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycap
+>F3</keycap
+> </shortcut
+> <guimenu
+>Redigeerimine</guimenu
+><guimenuitem
+>Otsi järgmine</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Otsib esitlusest teksti järgmist esinemiskorda.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>F3</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Redigeerimine</guimenu
+> <guimenuitem
+>Otsi eelmine</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Otsib esitlusest teksti eelmist esinemiskorda.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Redigeerimine</guimenu
+> <guimenuitem
+>Asenda...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Asendab esitluses teksti mingi muu tekstiga.</para>
+</listitem>
+</varlistentry>
+
+<!--FIXME Edit Custom Slide Shows item missing-->
+
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Duplicate Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Insert an exact copy of the current slide.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Duplicate Object...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Create a duplicate of the currently selected object. A dialog will
+display allowing you to set some options for the duplicate, &eg; if it
+should be rotated, or scaled, or offset to a new position on the
+slide.</para>
+</listitem>
+</varlistentry>
+-->
+</variablelist>
+
+</sect1>
+
+<sect1 id="view-menu">
+<title
+>Menüü Vaade</title>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Vaade</guimenu
+> <guimenuitem
+>Uus vaade</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+><action
+>Avab uue akna sama esitlusega</action
+>, mis võimaldab töötada enam kui ühe esitlusega.</para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>W</keycap
+></keycombo
+></shortcut>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Close All Views</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Close all views on the presentation.</action
+> You will be given
+a chance to save any changes, or to cancel closing.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Split View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Splits the window into two (or more) views on the same
+presentation.</action
+> The default split is horizontal.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Remove View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Close only the currently active view</action
+>. The
+presentation, and any other views you have open, remain open, and any
+changes you have made remain unsaved.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>View</guimenu>
+<guisubmenu
+>Splitter Orientation</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Toggle the split view</action
+> between
+<guimenuitem
+>Horizontal</guimenuitem
+> (the default) and
+<guimenuitem
+>Vertical</guimenuitem
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Show Sidebar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Toggle the display of the sidebar</action
+> where you can
+see an overview of all the slides in your presentation.</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+> <shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>F5</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Vaade</guimenu
+> <guimenuitem
+>Normaalne</guimenuitem
+> </menuchoice
+> <menuchoice
+> <shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>F6</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Vaade</guimenu
+> <guimenuitem
+>Märkmed</guimenuitem
+> </menuchoice
+> <menuchoice
+> <shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>F7</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Vaade</guimenu
+> <guimenuitem
+>Slaidide sortija</guimenuitem
+> </menuchoice
+> </term>
+<listitem>
+<para
+>Nende vahel lülitudes saab valida tavalise vaate, milles saab slaide redigeerida, märkmete vate, mis näitab slaidi eelvaatlust koos tekstikastiga, milles saab teha märkmeid slaidi juurde, ning slaidide sortija vaate, milles saab muuta slaidide nime, neid lõigata, kopeerida ja asetada ning muuta nende järjekorda.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>F8</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Vaade</guimenu
+> <guimenuitem
+>Näita juhtslaide</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Lülitab juhtslaidi näitamist.</action
+> Sellele saab seada objektid, mis peavad esinema esitluse kõigil slaididel.</para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Formatting Characters</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Show a visual representation of <quote
+>non-printing
+characters</quote
+>, such as tabs and paragraph markers. This can be
+a useful aid to precisely positioning text.</para>
+
+<para
+>This item can be toggled. If enabled, formatting characters are
+visible; if disabled, they are not.</para>
+</listitem>
+</varlistentry>
+-->
+
+<!--FIXME Show Rulers missing-->
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Vaade</guimenu
+> <guimenuitem
+>Näita alusvõrku</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Lubamise korral näitab &stage; punktidest alusvõrku, mis tähistavad kujutletavate rõht- ja püstjoonte lõikekohti. Nende punktide abil saab objektide asukohta slaidil täpsustada.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Vaade</guimenu
+> <guimenuitem
+>Tõmme alusvõrgule</guimenuitem
+></menuchoice>
+</term>
+<listitem
+><para
+>Kui see on sisse lülitatud, <quote
+>haarab</quote
+> alusvõrgu lähim punkt slaidile lohistatud või seal liigutatava objekti ülemise vasaku nurga.</para>
+<para
+>See kahandab mõnevõrra vabadust objekte omatahtsi slaidile asetada, kuid samas aitab neid ka võimalikult täpselt asetada. Samuti on seda võimalust hõlpus menüüst sisse või välja lülitada, mis lubab ära kasutada mõlema tegutsemisviisi parimad omadused.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Vaade</guimenu
+> <guimenuitem
+>Tõmbejoonte näitamine</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>&stage;'iga töötades võib dokumenti tõmmata rõht- või püstjoonlauast <quote
+>juhtjoone</quote
+>. Seda ei trükita, samuti pole seda näha valmis esitlusel, see on lihtsalt abiks objektide joondamisel ekraanil. Kui see võimalus on sees, on abijooned näha, kui väljas, siis mitte.</para>
+
+<para
+>Juhtjooned võivad kulgeda üle slaidide, lubades joondada objekte ühtmoodi mitmel slaidil korraga.</para>
+
+<para
+>Juhtjoonte keelamine (peitmine) ei kustuta neid. Kui oled juhtjooned juba loonud ja need seejärel välja lülitanud, toob sisselülitamine nad uuesti nähtavale.</para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Add Guide Line...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+Opens a dialog to select the <guilabel
+>Orientation</guilabel>
+(<guilabel
+>Horizontal</guilabel
+> or <guilabel
+>Vertical</guilabel
+>)
+and choose a <guilabel
+>Position:</guilabel>
+</para>
+</listitem>
+</varlistentry>
+-->
+<!--FIXME Zoom In / Zoom Out-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Vaade</guimenu
+> <guisubmenu
+>Suurendus</guisubmenu
+> </menuchoice>
+</term>
+<listitem>
+<para
+>See alammenüü võimaldab slaidi suurendada või vähendada. Kasutada saab mitmeid etteantud suurenduse tasemeid, sealhulgas <guimenuitem
+>Sobita lehele</guimenuitem
+>, mis sobitab kogu slaidi avatud akna suurusele, ning <guimenuitem
+>Sobita lehe laiusele</guimenuitem
+>, mis sobitab slaidi kogu akna laiusele, kuigi püstsuunas võib seda ka edaspidi olla vaja kerida. Ülejäänud suurendusvõimalused jäävad <guimenuitem
+>33%</guimenuitem
+> ja <guimenuitem
+>500%</guimenuitem
+> vahele.</para>
+</listitem>
+</varlistentry>
+
+<!--FIXME Full Screen Mode missing-->
+
+</variablelist>
+
+</sect1>
+
+<sect1 id="insert-menu">
+<title
+>Menüü Lisamine</title>
+
+<variablelist>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Alt;&Shift;<keycap
+>C</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Special Character...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Insert a special character. This might be a character
+you don't have a key for on your keyboard layout, for instance &uuml;
+on a US Keyboard.</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Lisamine</guimenu
+> <guisubmenu
+>Muutuja</guisubmenu
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Lisab muutuja, mille väärtust uuendatakse koos dokumendi uuendamisega.</para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Link...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Insert a hyperlink to a file, a website, or an email
+address. This enables these locations to be linked to directly from within active presentations, with resources being handled as appropriately by other applications installed on your system.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Comment...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Enter a small note that does not display during the
+real presentation. You might use this to comment on a colleague's
+text, or to leave a note for yourself about something to do
+later.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut
+><keycap
+>F2</keycap
+></shortcut>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Slide...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action
+>Add a new page to your presentation.</action
+> A dialog will open
+allowing you to choose a template, and whether to insert the new page
+before or after the currently selected page.
+</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Lisamine</guimenu
+> <guimenuitem
+>Impordi slaidiseanss...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Lisab olemasoleva esitluse.</action
+> Ilmub standardne &kde; failidialoog, mis võimaldab valida avatava <guilabel
+>OpenDocument esitluse</guilabel
+> (.odp). See lisatakse esitluse viimase slaidi järele.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Lisamine</guimenu
+> <guimenuitem
+>Lisa pilte slaidina...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Selle abil saab lisada ühe või ka rohkem pilte, kusjuures iga pilt lisatakse uuele slaidile. See on kasulik juhul, kui soovid &stage;'i abil luua slaidiseansse.</para>
+</listitem>
+</varlistentry>
+
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut
+><keycap
+>F10</keycap
+></shortcut>
+<guimenu
+>Insert</guimenu
+><guimenuitem
+>Text</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Add a new text object. Click and drag to create a frame where
+you wish the text to appear.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Chart</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Insert a chart. Click and drag to define the size of the
+chart. Some default data will be displayed. Double click to edit the
+data and choose the type of chart to display, using the embedded
+&kchart; editor.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut
+><keycap
+>F5</keycap
+></shortcut>
+<guimenu
+>Insert</guimenu
+><guimenuitem
+>Table</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Insert a table. Click and drag to define the size of
+the table.</para>
+
+<para
+>A &kspread; open dialog will display. You may import a
+spreadsheet that you have saved in one of many formats, including
+plain text files. You may also choose to create a new and empty
+table.</para>
+
+<para
+>Double clicking on the table will allow you to edit the
+contents.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Insert</guimenu>
+<guisubmenu
+>Object</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>An object is an embeddable file, in one of many formats.</para>
+
+<para
+>A common use of this action is to insert scaleable clipart in
+vector format.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Shift;<keycap
+>F5</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Picture...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Insert a raster image.</action
+> These are not as easily
+scaleable as vector images or <quote
+>clipart</quote
+>. &stage;
+currently understands many formats, including <literal
+role="extension"
+>.tiff</literal
+>, <literal
+role="extension"
+>.jpg</literal
+>, <literal
+role="extension"
+>.png</literal
+> and many more.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Insert</guimenu>
+<guisubmenu
+>Line</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>You can insert several types of lines. Line drawing is described
+further in the drawing tools section.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Insert</guimenu>
+<guisubmenu
+>Shape</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>You can insert several prepared shapes, in vector format. These are
+editable just like lines you have drawn yourself. Using the drawing
+tools is described in detail in the drawing tools
+section.</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Lisamine</guimenu
+> <guimenuitem
+>Skaneeri kujutis...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Võimaldab skannida kujutise skanneriga.</action
+> Selle eelduseks on mõistagi paigaldatud skanner. Avatakse dialoog, mille abil saab vajaliku kujutise skannida.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+
+<sect1 id="format-menu">
+<title
+>Menüü Vormindus</title>
+
+<variablelist>
+<!--FIXME Master Slide item missing--> 
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Vormindus</guimenu
+> <guimenuitem
+>Font...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+
+<para
+>Dialoog <guilabel
+>Fondi valik</guilabel
+> pakub mitmeid valikuid valitud teksti muutmiseks.</para>
+
+<para
+>Selles dialoogis saab <action
+>muuta valitud teksti fonti, stiili ja suurust</action
+>. All paiknev <interface
+>eelvaatluse kast</interface
+> võimaldab <action
+>ligilähedaselt hinnata muudatusi enne nende rakendamist</action
+>. </para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+> &Ctrl;&Alt;<keycap
+>P</keycap
+> </keycombo
+> </shortcut
+> <guimenu
+>Vormindus</guimenu
+> <guimenuitem
+>Lõik...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+
+<para
+>Dialoog <guilabel
+>Lõigu vormindus</guilabel
+> võimaldab muuta suurema tekstiploki ehk lõigu omadusi. Selles dialoogis saab määrata taande, reavahe, nummerdatud või täppnimekirjade ning piirete seadistusi.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Vormindus</guimenu
+> <guimenuitem
+>Stiilihaldur</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><guilabel
+>Stiilihaldur</guilabel
+> võimaldab luua atribuutide komplekti, mida saab valitud tekstile ühekorraga rakendada. </para>
+</listitem>
+</varlistentry>
+
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Select</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>If you have been using a tool such as the line drawing tool which does
+not allow you to select other objects, you can use this menu item to
+return to the normal selection cursor.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Rotate</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Changes the cursor to a double headed curved arrow. Click with the &LMB; onto an object
+and keep the button pressed. Drag with the cursor to rotate the object on the slide around its center. When you are
+happy with the position of the object, release the mousebutton to stop
+rotating.</para>
+
+<para
+>If you change your mind and wish to cancel the rotation, use
+<menuchoice
+><guimenu
+>Edit</guimenu
+><guimenuitem
+>Undo</guimenuitem>
+</menuchoice
+> to later undo it.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Zoom</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Allow you to zoom in or out in the current slide. You can see the zoom factor in the <guilabel
+>Edit</guilabel
+> toolbar, in the zoom indicator.</para>
+<screenshot>
+<screeninfo
+>The <guilabel
+>zoom factor</guilabel
+> indicator</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="zoomfactor.png"/>
+</imageobject>
+<textobject>
+<phrase
+>The <guilabel
+>zoom factor</guilabel
+> indicator</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+<para
+>Left clicking on the slide will <guimenuitem
+>Zoom In</guimenuitem
+>. Right clicking on the current slide will present you a menu to allow you to <guimenuitem
+>Zoom In</guimenuitem
+>, to <guimenuitem
+>Zoom Out</guimenuitem
+>, to <guimenuitem
+>Zoom Entire Slide</guimenuitem
+>, to <guimenuitem
+>Zoom Slide Width</guimenuitem
+> or <guimenuitem
+>Zoom Slide Height</guimenuitem
+>, to <guimenuitem
+>Zoom Selected Objects</guimenuitem
+> or <guimenuitem
+>Zoom All Objects</guimenuitem
+> which put back all objects in your view.
+</para>
+<para
+>This action has the same effect as <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem
+>Zoom</guimenuitem>
+</menuchoice
+> on another form.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Properties</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Open</action
+> the <guilabel
+>Properties</guilabel
+> dialog for the currently selected object on your slide.</para>
+<screenshot>
+<screeninfo
+>The <guilabel
+>Properties</guilabel
+> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="properties.png"/>
+</imageobject>
+<textobject>
+<phrase
+>The <guilabel
+>Properties</guilabel
+>dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+<para
+>The <guilabel
+>Properties</guilabel
+> dialog for an object allows you to manipulate it in a
+very detailed manner. You can change several properties for the selected object, like the text color if the object is text or the depth if the object is a picture.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guisubmenu
+>Arrange Objects</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>This is where you can manipulate the stacking order of
+objects on the slide.</para>
+
+<para
+>An object that is on top will cover, either partially or fully
+depending on its size, all other objects beneath it. Meanwhile an
+object on the bottom of the stack may not be visible at all, as it is
+covered up by other objects. An object in the middle may be partially
+covered by other objects, while partially covering yet more objects
+itself.</para>
+
+<para
+>You can send the selected object down or up a layer, or directly
+to the top or bottom of the stack.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guisubmenu
+>Align Objects</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+
+<para
+>In the submenu you can quickly align all the currently
+selected objects with a side of the slide, or center them either
+vertically or horizontally.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>G</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Group Objects</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>If you are drawing, you might want to make something out of
+several objects. Arrange the individual parts where you
+want them, select one, then hold down the &Ctrl; key
+as you click in the others you want to group together. Click
+<guimenuitem
+>Group Objects</guimenuitem
+> and from then on they act as
+if they are just one thing. It glues things together.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>G</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Ungroup Objects</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>If you decide that you want to alter an object that is made out
+of several pieces, you can unglue it with this tool. Click somewhere
+away from the object to deselect it, then click to select one of its
+parts.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Shadow Objects...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>This puts a colored copy of either text or a drawn object behind
+it. You can make nice <quote
+>dropped shadows</quote
+> for logos with
+this tool. To enable this item, ensure that you have object(s) 
+selected (you will see the eight small squares around the
+outline.) You choose the color, select which way the shadow is going to
+fall and select a distance. For text it looks nice if you set the
+distance to two or three. Click <guibutton
+>Apply</guibutton
+> 
+to see the result of your settings for all selected objects on the slide 
+without leaving the dialog.</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Vormindus</guimenu
+> <guimenuitem
+>Lehekülje paigutus...</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+>Võimaldab määrata lehekülje väljanägemist. Määrata saab veeriseid, suunda (see võib olla püstpaigutus ehk kõrgem kui laiem või rõhtpaigutus ehk laiem kui kõrgem), lehekülje suurust (selleks on hulganisti malle, näiteks ekraan, A4, US legal jne.).</para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Enable/Disable Document Header</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Toggle the display of the header field</action
+> on the current slide. Header content can only be added in the master slide but you can choose to display the header only on some slides with this action.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Enable/Disable Document Footer</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Toggle the display of the footer field</action
+> on the current slide. Footer content can only be added in the master slide but you can choose to display the footer only on some slides with this action.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Slide Background...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para
+>Allows you to alter the background to your presentation
+slides. Your options are <guilabel
+>Color/Gradient</guilabel
+>, (which lets you
+set either a plain color or one of many gradients)
+or <guilabel
+>Picture</guilabel
+>, which gives a dialog box to find the picture 
+you want. Set the <guilabel
+>View mode:</guilabel
+> for this picture
+to <guilabel
+>Scaled</guilabel
+>, <guilabel
+>Centered</guilabel
+>, 
+or <guilabel
+>Tiled</guilabel
+>.</para>
+
+<para
+> If you want a plain color, click in the box to select
+it. Gradients only work when you have chosen two colors. The picture
+option allows you to center the picture, zoom it to cover the entire
+slide (if it is smaller than the screen, this is very useful) or tile
+it. This is used when you want a small pattern to repeat across the
+page	. It's probably best used with patterns rather than pictures of
+logos.</para>
+
+<para
+>You can get rid of a picture by selecting another one or
+choosing a color/gradient.</para>
+
+</listitem>
+</varlistentry>
+-->
+</variablelist>
+
+</sect1>
+<!--FIXME this is now in Format -> Font / Paragraph etc
+<sect1 id="text-menu">
+<title
+><guimenu
+>Text</guimenu
+> Menu</title>
+
+<para
+>This menu modifies selected text and provides a few tools familiar from
+word processing applications for your convienience for when you are making
+presentations with large amounts
+of text in them. The <guimenu
+>Text</guimenu
+> menu will only effect selected or
+highlighted text.</para>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Default Format</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Restores selected text to the system default font size, style and
+formatting.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Color...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para
+>Use the <guilabel
+>Select Color</guilabel
+> dialog to have precise control
+over the color of selected text:</para>
+
+<screenshot>
+<screeninfo
+>The <guilabel
+>Select Color</guilabel
+> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="textmenu2.png"/>
+</imageobject>
+<textobject>
+<phrase
+>The <guilabel
+>Select Color</guilabel
+> dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Using the <interface
+>color spectrum box</interface
+> on the left,
+<action
+>colors can be precisely defined</action
+> for use in your document. The
+color tone can then be adjusted using the <interface
+>scale</interface
+> to the
+right of the spectrum box. The <interface
+>input boxes</interface
+> below the
+color spectrum allow <action
+>color values to be entered</action
+>, so that exact
+colors can be specified.</para>
+
+<tip>
+<para
+>Use the color picker to select colors from elsewhere in your document
+(&eg; images).</para>
+</tip>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Import Styles...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Here you can import styles that you have defined in another &stage;
+document.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guisubmenu
+>Style</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Using this submenu, you can apply a style that you have previously defined
+to the currently selected text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Create Style From Selection</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Copy the properties of the currently selected text and
+save them as a style that you may apply to other text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guisubmenu
+>Align</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+><guisubmenu
+>Align</guisubmenu
+> has a submenu with several options:
+<guimenuitem
+>Align Left</guimenuitem
+> (<keycombo action="simul"
+>&Alt;<keycap
+>L</keycap
+></keycombo
+>), 
+<guimenuitem
+>Align Center</guimenuitem
+> (<keycombo action="simul"
+>&Alt;<keycap
+>C</keycap
+></keycombo
+>), 
+<guimenuitem
+>Align Right</guimenuitem
+> (<keycombo action="simul"
+>&Alt;<keycap
+>R</keycap
+></keycombo
+>), and
+<guimenuitem
+>Align Block</guimenuitem
+> (<keycombo action="simul"
+>&Alt;<keycap
+>J</keycap
+></keycombo
+>) 
+which is also commonly known as <quote
+>Justify</quote
+>.</para>
+
+<para
+>Text is by default left-aligned.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guisubmenu
+>Type</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Using this submenu, you can format the currently selected text as a list,
+either of the numbered or bulleted type. If you choose numbered, you can then
+select a numbering style, and likewise if you choose bulleted, you can
+choose the style of bullets to use.</para>
+
+<para
+>To change a list back to plain text, select
+<guimenuitem
+>None</guimenuitem
+> as the style.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>+</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Increase Depth</guimenuitem>
+</menuchoice>
+</term>
+
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>-</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Decrease Depth</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><guimenuitem
+>Increase Depth</guimenuitem
+> and <guimenuitem
+>Decrease
+Depth</guimenuitem
+> move paragraphs in a list either to the right
+(<guimenuitem
+>Increase Depth</guimenuitem
+>) or back to the left
+(<guimenuitem
+>Decrease Depth</guimenuitem
+>).</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Extend Contents to Object Height</guimenuitem>
+</menuchoice
+></term>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Extend Object to Fit Contents</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><guimenuitem
+>Extend Contents to Object Height</guimenuitem
+> and
+<guimenuitem
+>Extend Object to Fit Contents</guimenuitem
+> help to
+resize text within the text box or make the text box fit the text you have typed
+or pasted into it.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Insert Slide Number</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Insert a dynamically-updated slide number. This page number will
+automatically update when slides are added or removed from your presentation to
+reflect the correct slide value.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Change Case...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Presents a dialog that provides a variety of different case/capitalization
+options for the currently selected text.</para>
+
+<para
+>You may choose between several styles of capitalization,
+including all lower or uppercase, book style capitalization where each
+word except conjunctions has an initial capital letter, and sentence
+style capitalization where the first word in a sentence is capitalized. You can
+also toggle the case, so that uppercase becomes lowercase, and vice
+versa.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guisubmenu
+>Spellcheck</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Use this submenu to utilize the spellcheck options. If you enable
+<guimenuitem
+>Autospellcheck</guimenuitem
+>, &stage; will automatically check
+text that you enter for spelling errors.</para>
+
+<para
+>If you prefer to check spelling explicitly, rather than automatically, you
+can also force a <guimenuitem
+>Spelling...</guimenuitem
+> check here.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guisubmenu
+>Autocorrection</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Use this submenu to utilize autocorrection options. If you 
+<guimenuitem
+>Enable Autocorrection</guimenuitem
+>, common spelling errors will be
+corrected as you type. For example, if you entered <userinput
+>Teh</userinput
+>,
+it would be autocorrected to <userinput
+>The</userinput
+>.</para>
+
+<para
+>If the autocorrection feature is not active, you can also
+<guimenuitem
+>Apply Autocorrection</guimenuitem
+> check here.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+-->
+
+<sect1 id="slide-menu">
+<title
+>Menüü Slaid</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Slaid</guimenu
+> <guimenuitem
+>Lisa slaid</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Lisab uue slaidi aktiivse järele.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Slaid</guimenu
+><guimenuitem
+>Kopeeri slaid</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Kopeerib aktiivse slaidi lõikepuhvrisse.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Slaid</guimenu
+> <guimenuitem
+>Kustuta slaid</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+><action
+>Kustutab aktiivse lehekülje esitlusest.</action
+> See käsk vajab kinnitamist.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycap
+>PageUp</keycap
+></shortcut
+> <guimenu
+>Slaid</guimenu
+> <guimenuitem
+>Eelmine slaid</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Liigub slaidiseansi eelmisele slaidile.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycap
+>PageDown</keycap
+></shortcut
+> <guimenu
+>Slaid</guimenu
+> <guimenuitem
+>Järgmine slaid</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Liigub slaidiseansi järgmisele slaidile.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>Home</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Slaid</guimenu
+> <guimenuitem
+>Esimene slaid</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Liigub slaidiseansi esimesele slaidile.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>End</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Slaid</guimenu
+> <guimenuitem
+>Viimane slaid</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Liigub slaidiseansi viimasele slaidile.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+
+<sect1 id="slide-show-menu">
+<title
+>Menüü Slaidiseanss</title>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>F5</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Slaidiseanss</guimenu
+> <guisubmenu
+>Alusta esitlust</guisubmenu
+> <guimenuitem
+>Aktiivsest slaidist</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Käivitab slaidiseansi parajasti avatud slaidist.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycap
+>F5</keycap
+></shortcut
+> <guimenu
+>Slaidiseanss</guimenu
+> <guisubmenu
+>Alusta esitlust</guisubmenu
+> <guimenuitem
+>Esimesest slaidist</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Käivitab slaidiseansi esimesest slaidist.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Slaidiseanss</guimenu
+> <guimenuitem
+>Slaidiseansi seadistamine...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Siin saab määrata kogu slaidiseansi omadusi, sealhulgas seda, kas näidata ekraanil kestust, milliseid slaide näidata ja nii edasi.</para>
+</listitem>
+</varlistentry>
+<!--FIXME Configure Presenter Wiew item mising-->
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Slide Show</guimenu>
+<guimenuitem
+>Edit Object Effect...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Choose what effect you want to apply for the highlighted object. This is where
+you can set the order of appearance, how the object will appear, if you want a sound while the object appears and if you want some disappearance effects too.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Slide Show</guimenu>
+<guimenuitem
+>Edit Slide Transition...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Apply transition effects to the currently open slide. This is where
+you can choose how the transition from one slide to the next
+will be handled.</para>
+
+<para
+>The transition effects you select here are applied on the
+transition <emphasis
+>from</emphasis
+> this slide
+<emphasis
+>to</emphasis
+> the next.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Slide Show</guimenu>
+<guimenuitem
+>Custom Slide Show...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Opens a dialog to <guibutton
+>Add...</guibutton
+>, <guibutton
+>Modify...</guibutton
+>, 
+<guibutton
+>Remove</guibutton
+> and <guibutton
+>Copy</guibutton
+> slides and
+<guibutton
+>Test</guibutton
+> the slide show in full screen mode.</para>
+</listitem>
+</varlistentry>
+-->
+</variablelist>
+
+</sect1>
+
+<sect1 id="settingsmenu">
+<title
+>Menüü Seadistused</title>
+
+<para
+>Menüü <guimenu
+>Seadistused</guimenu
+> võimaldab kohandada &stage;'i.</para>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Seadistused</guimenu
+> <guisubmenu
+>Tööriistariba näitamine</guisubmenu
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Sellega saab tööriistariba näitamist sisse ja välja lülitada.</para>
+</listitem>
+</varlistentry>
+
+<!--FIXME Dockers item missing -->
+
+<!--FIXME Show Status Bar item missing -->
+ 
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Seadistused</guimenu
+> <guimenuitem
+>Kiirklahvide seadistamine...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+
+<para
+><guimenuitem
+>Kiirklahvide seadistamine</guimenuitem
+> võimaldab määrata klahvikombinatsioone, millega rakendada &stage;'i menüüde või ikoonide taga peituvaid käske.</para>
+
+<screenshot>
+<screeninfo
+>Kiirklahvide muutmine</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="settings03.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Kiirklahvide muutmine</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Kui püüad määrata kiirklahvi, mis on juba kasutusel, saad veateate. Märgi ära toiming, millele soovid kiirklahvi määrata (pildil on selleks <guilabel
+>KDE info</guilabel
+>).</para>
+
+<para
+>Klõpsa raadionupul <guilabel
+>Kohandatud</guilabel
+> ning vajuta klahve, mida soovid kasutada. Mina määrasin näiteks <quote
+>KDE info</quote
+> dialoogi avamiseks klahvid <keycap
+>Ctrl</keycap
+> ja <keycap
+>Y</keycap
+>.</para>
+
+<para
+>Nupul saab näha, milline klahvikombinatsioon kehtib. Muutuste rakendamiseks klõpsa nupul <guibutton
+>OK</guibutton
+>. Kui soovid taastada vaikimisi valitsenud kiirklahvi, vajuta nupule <guibutton
+>Vaikeväärtus</guibutton
+>. Kui sa aga ei soovi midagi muuta, siis klõpsa nuppu <guibutton
+>Loobu</guibutton
+>.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Seadistused</guimenu
+> <guimenuitem
+>Tööristaribade seadistamine...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Tööriistaribade seadistamine võimaldab kõigile tööriistaribadele ikoone lisada või neid sealt eemaldada.</para>
+
+<screenshot>
+<screeninfo
+>&stage;'i tööriistaribade seadistamine</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="settings04.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>&stage;'i tööriistaribade seadistamine</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Üleval paiknevas hüpikkastis saab valida, millist tööriistariba muuta. Pildil on selleks <guilabel
+>faili</guilabel
+> tööriistariba. Kui soovid lisada sellele tööriistaribale <guiicon
+>dokkide</guiicon
+> ikooni, tuleb klõpsata selle nimel vasakus kastis. Seejärel muutub aktiivseks paremale osutava noolega nupp ja sellele klõpsates lisataksegi ikoon <guiicon
+>Dokid</guiicon
+> tööriistaribale. Vasakule osutav nool muutub aktiivseks siis, kui valida mingi ikoon paremas kastis. Noolele klõpsates saab ikooni tööriistaribalt eemaldada. Ükspuha kumbas kastis millegi valimine muudab aktiivseks ka üles ja alla osutavad nooled. Nende abil saab kastides olevate ikoonide nimetuste ja vastavalt ka ikoonide enda järjekorda muuta. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Seadistused</guimenu
+> <guimenuitem
+>Teemad</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Võimaldab valida &stage;'i akna värviteema.</action
+> Valida saab mõne valmisvärviskeemi seast, kuid võib ka valida <guimenuitem
+>Seadistamine...</guimenuitem
+>, mis avab <ulink url="help:/kcontrol/colors"
+>Süsteemi seadistuste värvi valimise mooduli</ulink
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Seadistused</guimenu
+> <guimenuitem
+>Stage'i seadistamine...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Täpsemalt räägib kõigist &stage;'i seadistustest osa <link linkend="configure-dialog"
+>&stage;'i seadistamine</link
+>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="helpmenu">
+<title
+>Menüü Abi</title>
+&help.menu.documentation; </sect1>
+
+</chapter>

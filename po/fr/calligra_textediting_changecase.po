@@ -1,0 +1,103 @@
+# translation of ChangecasePlugin.po to Francais
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Mickael Sibelle <kimael@gmail.com>, 2008.
+# xavier <xavier.besnard@neuf.fr>, 2012, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ChangecasePlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-07-09 18:50+0200\n"
+"Last-Translator: xavier <xavier.besnard@neuf.fr>\n"
+"Language-Team: French <kde-i18n-doc@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 1.5\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: Changecase.cpp:51 Changecase.cpp:79
+#, kde-format
+msgid "Change case"
+msgstr "Changer la casse"
+
+#: Changecase.cpp:56
+#, kde-format
+msgid "Sentence case"
+msgstr "Casse de la phrase"
+
+#: Changecase.cpp:57
+#, kde-format
+msgid "lowercase"
+msgstr "petite casse"
+
+#: Changecase.cpp:58
+#, kde-format
+msgid "UPPER CASE"
+msgstr "GRANDE CASSE"
+
+#: Changecase.cpp:59
+#, kde-format
+msgid "Initial Caps"
+msgstr "Capitales d'initiales"
+
+#: Changecase.cpp:60
+#, kde-format
+msgid "tOGGLE cASE"
+msgstr "iNVERSER LA CASSE"
+
+#: ChangecaseFactory.cpp:16
+#, kde-format
+msgid "Change Case..."
+msgstr "Changer la casse..."
+
+#, fuzzy
+#~| msgid "Change case"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change case"
+#~ msgstr "Changer la casse"
+
+#, fuzzy
+#~| msgid "Sentence case"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentence case"
+#~ msgstr "Casse de la phrase"
+
+#, fuzzy
+#~| msgid "lowercase"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "lowercase"
+#~ msgstr "petite casse"
+
+#, fuzzy
+#~| msgid "UPPER CASE"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "UPPER CASE"
+#~ msgstr "GRANDE CASSE"
+
+#, fuzzy
+#~| msgid "Initial Caps"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Initial Caps"
+#~ msgstr "Capitales d'initiales"
+
+#, fuzzy
+#~| msgid "tOGGLE cASE"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "tOGGLE cASE"
+#~ msgstr "iNVERSER LA CASSE"
+
+#, fuzzy
+#~| msgid "Change Case..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Case..."
+#~ msgstr "Changer la casse..."
+
+#~ msgid "Changecase"
+#~ msgstr "Changer la casse"

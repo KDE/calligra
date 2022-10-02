@@ -1,0 +1,1990 @@
+# Translation of calligra_shape_chart.po to Ukrainian
+# Copyright (C) 2008-2018 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2017, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra_shape_chart\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2018-10-05 08:29+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Юрій Чорноіван"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "yurchor@ukr.net"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
+#: AxesConfigWidget.cpp:80 AxesConfigWidget.cpp:86 LegendConfigWidget.ui:33
+#, kde-format
+msgid "Start"
+msgstr "Початок"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
+#: AxesConfigWidget.cpp:81 AxesConfigWidget.cpp:85 LegendConfigWidget.ui:43
+#, kde-format
+msgid "End"
+msgstr "Кінець"
+
+#: AxesConfigWidget.cpp:83
+#, kde-format
+msgid "Near-axis"
+msgstr "Поряд з віссю"
+
+#: AxesConfigWidget.cpp:84
+#, kde-format
+msgid "Other-side"
+msgstr "З іншого боку"
+
+#: AxesConfigWidget.cpp:253 AxesConfigWidget.cpp:261 ChartTool.cpp:994
+#: DataSetConfigWidget.cpp:353
+#, kde-format
+msgid "Axistitle"
+msgstr "Заголовок вісі"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShow)
+#: AxesConfigWidget.ui:45
+#, kde-format
+msgid "Show Axis"
+msgstr "Показувати вісь"
+
+#. i18n: ectx: property (text), widget (QToolButton, axisScalingButton)
+#: AxesConfigWidget.ui:58
+#, kde-format
+msgid "Scale"
+msgstr "Масштаб"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowLabels)
+#: AxesConfigWidget.ui:65
+#, kde-format
+msgid "Show Labels"
+msgstr "Показувати мітки"
+
+#. i18n: ectx: property (text), widget (QToolButton, axisEditFontButton)
+#: AxesConfigWidget.ui:72
+#, kde-format
+msgid "Font"
+msgstr "Шрифт"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
+#: AxesConfigWidget.ui:81
+#, kde-format
+msgid "Show Major Grid"
+msgstr "Показувати основну сітку"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowMinorGridLines)
+#: AxesConfigWidget.ui:88
+#, kde-format
+msgid "Show Minor Grid"
+msgstr "Показувати допоміжну сітку"
+
+#. i18n: ectx: property (text), widget (QLabel, barPropertiesLabel)
+#: AxesConfigWidget.ui:119
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"size:8pt; font-weight:600;\">Bar Properties</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"size:8pt; font-weight:600;\">Властивості стовпчиків</span></p></body></html>"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, explodeFactor)
+#. i18n: ectx: property (suffix), widget (QSpinBox, gapBetweenBars)
+#. i18n: ectx: property (suffix), widget (QSpinBox, gapBetweenSets)
+#: AxesConfigWidget.ui:132 AxesConfigWidget.ui:174 PieConfigWidget.ui:39
+#: widgets/RingConfigWidget.ui:147
+#, no-c-format, kde-format
+msgid "%"
+msgstr "%"
+
+#. i18n: ectx: property (text), widget (QLabel, gapBetweenSetsLabel)
+#: AxesConfigWidget.ui:154
+#, kde-format
+msgid "Gap Between Sets"
+msgstr "Відстань між наборами"
+
+#. i18n: ectx: property (text), widget (QLabel, gapBetweenBarsLabel)
+#: AxesConfigWidget.ui:167
+#, kde-format
+msgid "Gap Between Bars"
+msgstr "Відстань між стовпчиками"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowTitle)
+#: AxesConfigWidget.ui:193
+#, kde-format
+msgid "Show Title"
+msgstr "Показувати заголовок"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:201
+#, kde-format
+msgid "Primary X Axis"
+msgstr "Основна вісь X"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:206 DataSetConfigWidget.ui:95
+#, kde-format
+msgid "Primary Y Axis"
+msgstr "Основна вісь Y"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:211
+#, kde-format
+msgid "Secondary X Axis"
+msgstr "Вторинна вісь X"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:216 DataSetConfigWidget.ui:100
+#, kde-format
+msgid "Secondary Y Axis"
+msgstr "Вторинна вісь Y"
+
+#: ChartShape.cpp:311
+#, kde-format
+msgid ""
+"The plugin needed for displaying text labels in a chart is not available."
+msgstr ""
+"Додаток, який потрібен для показу текстових міток на діаграмі відсутній."
+
+#: ChartShape.cpp:312
+#, kde-format
+msgid "Plugin Missing"
+msgstr "Немає додатка"
+
+#: ChartShape.cpp:316
+#, kde-format
+msgid ""
+"The plugin needed for displaying text labels is not compatible with the "
+"current version of the chart Flake shape."
+msgstr ""
+"Додаток, потрібний для показу текстових міток, є несумісним з поточною "
+"версією форми діаграми."
+
+#: ChartShape.cpp:317
+#, kde-format
+msgid "Plugin Incompatible"
+msgstr "Несумісний додаток"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showTitle)
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: ChartShape.cpp:335 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
+#, kde-format
+msgid "Title"
+msgstr "Заголовок"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showSubTitle)
+#: ChartShape.cpp:365 TitlesConfigWidget.ui:85
+#, kde-format
+msgid "Subtitle"
+msgstr "Підзаголовок"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showFooter)
+#: ChartShape.cpp:395 TitlesConfigWidget.ui:126
+#, kde-format
+msgid "Footer"
+msgstr "Підвал"
+
+#: ChartShape.cpp:787
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"У цьому документі містить посилання на зовнішній документ\n"
+"%1"
+
+#: ChartShape.cpp:788
+#, kde-format
+msgid "Confirmation Required"
+msgstr "Потрібне підтвердження"
+
+#: ChartShape.cpp:788
+#, kde-format
+msgid "Download"
+msgstr "Отримати"
+
+#: ChartShape.cpp:788
+#, kde-format
+msgid "Skip"
+msgstr "Пропустити"
+
+#: ChartShapeFactory.cpp:57
+#, kde-format
+msgid "Chart"
+msgstr "Діаграма"
+
+#: ChartShapeFactory.cpp:60
+#, kde-format
+msgid "Business charts"
+msgstr "Бізнес-діаграма"
+
+#: ChartShapeFactory.cpp:79 DataSetConfigWidget.cpp:202
+#: PlotAreaConfigWidget.cpp:236
+#, kde-format
+msgid "Bar Chart"
+msgstr "Стовпчикова діаграма"
+
+#: ChartShapeFactory.cpp:80
+#, kde-format
+msgid "Normal bar chart"
+msgstr "Звичайна стовпчикова діаграма"
+
+#: ChartShapeFactory.cpp:90
+#, kde-format
+msgid "Stacked Bar Chart"
+msgstr ""
+"Стосова стовпчикова діаграма\n"
+"створення стосової стовпчикової діаграми"
+
+#: ChartShapeFactory.cpp:91
+#, kde-format
+msgid "Stacked bar chart"
+msgstr "Стосова стовпчикова діаграма"
+
+#: ChartShapeFactory.cpp:101
+#, kde-format
+msgid "Percent Bar Chart"
+msgstr ""
+"Відсоткова стовпчикова діаграма\n"
+"створення відсоткової стовпчикової діаграми"
+
+#: ChartShapeFactory.cpp:102
+#, kde-format
+msgid "Percent bar chart"
+msgstr "Відсоткова стовпчикова діаграма"
+
+#: ChartShapeFactory.cpp:112 DataSetConfigWidget.cpp:207
+#: PlotAreaConfigWidget.cpp:242
+#, kde-format
+msgid "Line Chart"
+msgstr "Лінійна діаграма"
+
+#: ChartShapeFactory.cpp:113
+#, kde-format
+msgid "Normal line chart"
+msgstr "Звичайна лінійна діаграма"
+
+#: ChartShapeFactory.cpp:123
+#, kde-format
+msgid "Stacked Line Chart"
+msgstr ""
+"Стосова лінійна діаграма\n"
+"створення стосової лінійної діаграми"
+
+#: ChartShapeFactory.cpp:124
+#, kde-format
+msgid "Stacked line chart"
+msgstr "Стосова лінійна діаграма"
+
+#: ChartShapeFactory.cpp:134
+#, kde-format
+msgid "Percent Line Chart"
+msgstr ""
+"Відсоткова лінійна діаграма\n"
+"створення відсоткової лінійної діаграми"
+
+#: ChartShapeFactory.cpp:135
+#, kde-format
+msgid "Percent line chart"
+msgstr "Відсоткова лінійна діаграма"
+
+#: ChartShapeFactory.cpp:145 DataSetConfigWidget.cpp:212
+#: PlotAreaConfigWidget.cpp:248
+#, kde-format
+msgid "Area Chart"
+msgstr "Двовимірна діаграма"
+
+#: ChartShapeFactory.cpp:146
+#, kde-format
+msgid "Normal area chart"
+msgstr "Звичайна діаграма з областями"
+
+#: ChartShapeFactory.cpp:156
+#, kde-format
+msgid "Stacked Area Chart"
+msgstr ""
+"Стосова діаграма з областями\n"
+"створення стосової діаграми з областями"
+
+#: ChartShapeFactory.cpp:157
+#, kde-format
+msgid "Stacked area chart"
+msgstr "Стосова діаграма з областями"
+
+#: ChartShapeFactory.cpp:167
+#, kde-format
+msgid "Percent Area Chart"
+msgstr ""
+"Відсоткова діаграма з областями\n"
+"створення відсоткової діаграми з областями"
+
+#: ChartShapeFactory.cpp:168
+#, kde-format
+msgid "Percent area chart"
+msgstr "Відсоткова діаграма з областями"
+
+#: ChartShapeFactory.cpp:178 DataSetConfigWidget.cpp:217
+#: PlotAreaConfigWidget.cpp:256
+#, kde-format
+msgid "Pie Chart"
+msgstr "Секторна діаграма"
+
+#: ChartShapeFactory.cpp:179
+#, kde-format
+msgid "Pie chart"
+msgstr "Кругова діаграма"
+
+#: ChartShapeFactory.cpp:189 DataSetConfigWidget.cpp:218
+#: PlotAreaConfigWidget.cpp:257
+#, kde-format
+msgid "Ring Chart"
+msgstr "Кільцева діаграма"
+
+#: ChartShapeFactory.cpp:190
+#, kde-format
+msgid "Ring chart"
+msgstr "Кільцева діаграма"
+
+#: ChartShapeFactory.cpp:200 DataSetConfigWidget.cpp:229
+#: PlotAreaConfigWidget.cpp:270
+#, kde-format
+msgid "Bubble Chart"
+msgstr "Бульбашкова діаграма"
+
+#: ChartShapeFactory.cpp:201
+#, kde-format
+msgid "Bubble chart"
+msgstr "Бульбашкова діаграма"
+
+#: ChartShapeFactory.cpp:211 DataSetConfigWidget.cpp:231
+#: PlotAreaConfigWidget.cpp:269
+#, kde-format
+msgid "Scatter Chart"
+msgstr "Діаграма розсіювання"
+
+#: ChartShapeFactory.cpp:212
+#, kde-format
+msgid "Scatter chart"
+msgstr "Діаграма розсіювання"
+
+#: ChartShapeFactory.cpp:222
+#, kde-format
+msgid "Radar Chart"
+msgstr ""
+"Пелюсткова діаграма\n"
+"створення пелюсткової діаграми"
+
+#: ChartShapeFactory.cpp:223
+#, kde-format
+msgid "Radar chart"
+msgstr "Пелюсткова діаграма"
+
+#: ChartShapeFactory.cpp:233
+#, kde-format
+msgid "Filled Radar Chart"
+msgstr ""
+"Заповнена пелюсткова діаграма\n"
+"створення заповненої пелюсткової діаграми"
+
+#: ChartShapeFactory.cpp:234
+#, kde-format
+msgid "Filled radar chart"
+msgstr "Заповнена пелюсткова діаграма"
+
+#: ChartShapeFactory.cpp:244
+#, kde-format
+msgid "Candle Stick Stock Chart"
+msgstr "Діаграма продажів «японські свічки»"
+
+#: ChartShapeFactory.cpp:245
+#, kde-format
+msgid "Japanese candle stick stock chart"
+msgstr "Діаграма продажів «японські свічки»"
+
+#: ChartShapeFactory.cpp:255
+#, kde-format
+msgid "OHLC Stock Chart"
+msgstr "Діаграма продажів OHLC"
+
+#: ChartShapeFactory.cpp:256
+#, kde-format
+msgid "Open High Low Close stock chart"
+msgstr "Діаграма продажів «відкриття-найвища-найнижче-закриття»"
+
+#: ChartShapeFactory.cpp:266
+#, kde-format
+msgid "HLC Stock Chart"
+msgstr "Діаграма продажів HLC"
+
+#: ChartShapeFactory.cpp:267
+#, kde-format
+msgid "High Low Close stock chart"
+msgstr "Діаграма продажів «найвища-найнижча-закриття»"
+
+#: ChartShapeFactory.cpp:364 ChartShapeFactory.cpp:550
+#: ChartShapeFactory.cpp:633
+#, kde-format
+msgid "January"
+msgstr "січень"
+
+#: ChartShapeFactory.cpp:365 ChartShapeFactory.cpp:551
+#: ChartShapeFactory.cpp:634
+#, kde-format
+msgid "July"
+msgstr "липень"
+
+#: ChartShapeFactory.cpp:366 ChartShapeFactory.cpp:552
+#: ChartShapeFactory.cpp:635
+#, kde-format
+msgid "December"
+msgstr "грудень"
+
+#: ChartShapeFactory.cpp:369 ChartShapeFactory.cpp:370
+#: ChartShapeFactory.cpp:371 ChartShapeFactory.cpp:372
+#: ChartShapeFactory.cpp:555 ChartShapeFactory.cpp:556
+#: ChartShapeFactory.cpp:557 ChartShapeFactory.cpp:558
+#: ChartShapeFactory.cpp:638 ChartShapeFactory.cpp:639
+#: dialogs/BubbleDataEditor.cpp:67 dialogs/ScatterDataEditor.cpp:71
+#, kde-format
+msgid "Column %1"
+msgstr "Стовпчик %1"
+
+#: ChartShapeFactory.cpp:396
+#, kde-format
+msgid "Month"
+msgstr "Місяць"
+
+#: ChartShapeFactory.cpp:398
+#, kde-format
+msgid "Growth in %"
+msgstr "Зростання у %"
+
+#: ChartShapeFactory.cpp:460
+#, kde-format
+msgid "Share A"
+msgstr "Акція A"
+
+#: ChartShapeFactory.cpp:461
+#, kde-format
+msgid "Share B"
+msgstr "Акція B"
+
+#: ChartShapeFactory.cpp:462
+#, kde-format
+msgid "Share C"
+msgstr "Акція C"
+
+#: ChartShapeFactory.cpp:465
+#, kde-format
+msgid "Open"
+msgstr "Відкриття"
+
+#: ChartShapeFactory.cpp:466
+#, kde-format
+msgid "High"
+msgstr "Найвищий"
+
+#: ChartShapeFactory.cpp:467
+#, kde-format
+msgid "Low"
+msgstr "Найнижчий"
+
+#: ChartShapeFactory.cpp:468
+#, kde-format
+msgid "Close"
+msgstr "Закриття"
+
+#: ChartShapeFactory.cpp:583
+#, kde-format
+msgid "Growth"
+msgstr "Ріст"
+
+#: ChartTool.cpp:103
+#, kde-format
+msgid "Do something"
+msgstr "Зробити щось"
+
+#: ChartTool.cpp:108
+#, kde-format
+msgid "Do something else"
+msgstr "Зробити щось інше"
+
+#: ChartTool.cpp:277
+#, kde-format
+msgid "Titles"
+msgstr "Заголовки"
+
+#: ChartTool.cpp:292
+#, kde-format
+msgid "Legend"
+msgstr "Умовні позначення"
+
+#: ChartTool.cpp:312
+#, kde-format
+msgid "Plot Area"
+msgstr "Область графіка"
+
+#: ChartTool.cpp:1142
+msgctxt "(qtundo-format)"
+msgid "Show Legend"
+msgstr "Показувати панель умовних позначень"
+
+#: ChartTool.cpp:1144
+msgctxt "(qtundo-format)"
+msgid "Hide Legend"
+msgstr ""
+"Приховати умовні позначення\n"
+"приховування умовних позначень"
+
+#: ChartToolFactory.cpp:29
+#, kde-format
+msgid "Chart editing"
+msgstr "Редагування діаграм"
+
+#: commands/AddRemoveAxisCommand.cpp:37
+msgctxt "(qtundo-format)"
+msgid "Add Axis"
+msgstr ""
+"Додати вісь\n"
+"додавання вісі"
+
+#: commands/AddRemoveAxisCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Remove Axis"
+msgstr ""
+"Вилучити вісь\n"
+"вилучення вісі"
+
+#: commands/AxisCommand.cpp:120
+msgctxt "(qtundo-format)"
+msgid "Show Axis Title"
+msgstr ""
+"Показати підпис вісі\n"
+"показ підпису вісі"
+
+#: commands/AxisCommand.cpp:122
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Title"
+msgstr ""
+"Приховати підпис до вісі\n"
+"приховування підпису до вісі"
+
+#: commands/AxisCommand.cpp:147
+msgctxt "(qtundo-format)"
+msgid "Show Axis"
+msgstr ""
+"Показати вісі\n"
+"показ вісі"
+
+#: commands/AxisCommand.cpp:149
+msgctxt "(qtundo-format)"
+msgid "Hide Axis"
+msgstr ""
+"Приховати вісь\n"
+"приховування вісі"
+
+#: commands/AxisCommand.cpp:158
+msgctxt "(qtundo-format)"
+msgid "Show Axis Labels"
+msgstr ""
+"Показати позначки осей\n"
+"показ позначок осей"
+
+#: commands/AxisCommand.cpp:160
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Labels"
+msgstr ""
+"Приховати позначки осей\n"
+"приховування позначок осей"
+
+#: commands/AxisCommand.cpp:169
+msgctxt "(qtundo-format)"
+msgid "Show Axis Major Gridlines"
+msgstr ""
+"Показати основні лінії сітки для вісі\n"
+"показ основних ліній сітки для вісі"
+
+#: commands/AxisCommand.cpp:171
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Major Gridlines"
+msgstr ""
+"Приховати основні лінії сітки для вісі\n"
+"приховування основних ліній сітки для вісі"
+
+#: commands/AxisCommand.cpp:180
+msgctxt "(qtundo-format)"
+msgid "Show Axis Minor Gridlines"
+msgstr ""
+"Показати допоміжні лінії сітки для вісі\n"
+"показ допоміжних ліній сітки для вісі"
+
+#: commands/AxisCommand.cpp:182
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Minor Gridlines"
+msgstr ""
+"Приховати допоміжні лінії сітки для вісі\n"
+"приховування допоміжних ліній сітки для вісі"
+
+#: commands/AxisCommand.cpp:191
+msgctxt "(qtundo-format)"
+msgid "Logarithmic Scaling"
+msgstr ""
+"Логарифмічний масштаб\n"
+"визначення логарифмічного масштабу"
+
+#: commands/AxisCommand.cpp:193
+msgctxt "(qtundo-format)"
+msgid "Linear Scaling"
+msgstr ""
+"Лінійний масштаб\n"
+"визначення лінійного масштабу"
+
+#: commands/AxisCommand.cpp:201
+msgctxt "(qtundo-format)"
+msgid "Set Axis Step Width"
+msgstr ""
+"Встановити ширину кроку за віссю\n"
+"встановлення ширини кроку за віссю"
+
+#: commands/AxisCommand.cpp:208
+msgctxt "(qtundo-format)"
+msgid "Set Axis Substep Width"
+msgstr ""
+"Встановити ширину підкроку за віссю\n"
+"встановлення ширини підкроку за віссю"
+
+#: commands/AxisCommand.cpp:216
+msgctxt "(qtundo-format)"
+msgid "Set Automatic Step Width"
+msgstr ""
+"Встановити автоматичну ширину кроку\n"
+"встановлення автоматичної ширини кроку"
+
+#: commands/AxisCommand.cpp:218
+msgctxt "(qtundo-format)"
+msgid "Set Manual Step Width"
+msgstr ""
+"Встановити ширину кроку вручну\n"
+"встановлення ширини кроку вручну"
+
+#: commands/AxisCommand.cpp:227
+msgctxt "(qtundo-format)"
+msgid "Automatic Substep Width"
+msgstr ""
+"Встановити автоматичну ширину підкроку\n"
+"встановлення автоматичної ширини підкроку"
+
+#: commands/AxisCommand.cpp:229
+msgctxt "(qtundo-format)"
+msgid "Manual Substep Width"
+msgstr ""
+"Встановити ширину підкроку вручну\n"
+"встановлення ширини підкроку вручну"
+
+#: commands/AxisCommand.cpp:237
+msgctxt "(qtundo-format)"
+msgid "Set Axis Label Font"
+msgstr ""
+"Встановити шрифт міток вісі\n"
+"встановлення шрифту міток вісі"
+
+#: commands/AxisCommand.cpp:243
+msgctxt "(qtundo-format)"
+msgid "Set Axis Position"
+msgstr ""
+"Встановити розташування вісі\n"
+"встановлення розташування вісі"
+
+#: commands/AxisCommand.cpp:264
+msgctxt "(qtundo-format)"
+msgid "Set Axis Labels Position"
+msgstr ""
+"Встановити розташування міток вісі\n"
+"встановлення розташування міток вісі"
+
+#: commands/ChartTextShapeCommand.cpp:36
+msgctxt "(qtundo-format)"
+msgid "Show Text Shape"
+msgstr ""
+"Показати форму тексту\n"
+"показ форми тексту"
+
+#: commands/ChartTextShapeCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Hide Text Shape"
+msgstr ""
+"Приховати форму тексту\n"
+"приховування форми тексту"
+
+#: commands/ChartTypeCommand.cpp:80
+msgctxt "(qtundo-format)"
+msgid "Normal Bar Chart"
+msgstr ""
+"Звичайна стовпчикова діаграма\n"
+"створення звичайної стовпчикової діаграми"
+
+#: commands/ChartTypeCommand.cpp:83
+msgctxt "(qtundo-format)"
+msgid "Stacked Bar Chart"
+msgstr ""
+"Стосова стовпчикова діаграма\n"
+"створення стосової стовпчикової діаграми"
+
+#: commands/ChartTypeCommand.cpp:86
+msgctxt "(qtundo-format)"
+msgid "Percent Bar Chart"
+msgstr ""
+"Відсоткова стовпчикова діаграма\n"
+"створення відсоткової стовпчикової діаграми"
+
+#: commands/ChartTypeCommand.cpp:95
+msgctxt "(qtundo-format)"
+msgid "Normal Line Chart"
+msgstr ""
+"Звичайна лінійна діаграма\n"
+"створення звичайної лінійної діаграми"
+
+#: commands/ChartTypeCommand.cpp:98
+msgctxt "(qtundo-format)"
+msgid "Stacked Line Chart"
+msgstr ""
+"Стосова лінійна діаграма\n"
+"створення стосової лінійної діаграми"
+
+#: commands/ChartTypeCommand.cpp:101
+msgctxt "(qtundo-format)"
+msgid "Percent Line Chart"
+msgstr ""
+"Відсоткова лінійна діаграма\n"
+"створення відсоткової лінійної діаграми"
+
+#: commands/ChartTypeCommand.cpp:110
+msgctxt "(qtundo-format)"
+msgid "Normal Area Chart"
+msgstr ""
+"Звичайна діаграма з областями\n"
+"створення звичайної діаграми з областями"
+
+#: commands/ChartTypeCommand.cpp:113
+msgctxt "(qtundo-format)"
+msgid "Stacked Area Chart"
+msgstr ""
+"Стосова діаграма з областями\n"
+"створення стосової діаграми з областями"
+
+#: commands/ChartTypeCommand.cpp:116
+msgctxt "(qtundo-format)"
+msgid "Percent Area Chart"
+msgstr ""
+"Відсоткова діаграма з областями\n"
+"створення відсоткової діаграми з областями"
+
+#: commands/ChartTypeCommand.cpp:123
+msgctxt "(qtundo-format)"
+msgid "Circle Chart"
+msgstr ""
+"Кругова діаграма\n"
+"створення кругової діаграми"
+
+#: commands/ChartTypeCommand.cpp:126
+msgctxt "(qtundo-format)"
+msgid "Ring Chart"
+msgstr ""
+"Кільцева діаграма\n"
+"створення кільцевої діаграми"
+
+#: commands/ChartTypeCommand.cpp:129
+msgctxt "(qtundo-format)"
+msgid "Scatter Chart"
+msgstr ""
+"Діаграма розсіювання\n"
+"створення діаграми розсіювання"
+
+#: commands/ChartTypeCommand.cpp:132
+msgctxt "(qtundo-format)"
+msgid "Radar Chart"
+msgstr ""
+"Пелюсткова діаграма\n"
+"створення пелюсткової діаграми"
+
+#: commands/ChartTypeCommand.cpp:135
+msgctxt "(qtundo-format)"
+msgid "Filled Radar Chart"
+msgstr ""
+"Заповнена пелюсткова діаграма\n"
+"створення заповненої пелюсткової діаграми"
+
+#: commands/ChartTypeCommand.cpp:138
+msgctxt "(qtundo-format)"
+msgid "Stock Chart"
+msgstr ""
+"Діаграма продажів\n"
+"створення діаграми продажів"
+
+#: commands/ChartTypeCommand.cpp:141
+msgctxt "(qtundo-format)"
+msgid "Bubble Chart"
+msgstr ""
+"Бульбашкова діаграма\n"
+"створення бульбашкової діаграми"
+
+#: commands/ChartTypeCommand.cpp:144
+msgctxt "(qtundo-format)"
+msgid "Surface Chart"
+msgstr ""
+"Діаграма-поверхня\n"
+"створення діаграми-поверхні"
+
+#: commands/ChartTypeCommand.cpp:147
+msgctxt "(qtundo-format)"
+msgid "Gantt Chart"
+msgstr ""
+"Діаграма Ґанта\n"
+"створення діаграми Ґанта"
+
+#: commands/DatasetCommand.cpp:144
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Chart Type"
+msgstr ""
+"Встановити тип діаграми для набору даних\n"
+"встановлення типу діаграми для набору даних"
+
+#: commands/DatasetCommand.cpp:152
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Category"
+msgstr ""
+"Показати категорію набору даних\n"
+"показ категорії набору даних"
+
+#: commands/DatasetCommand.cpp:154
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Category"
+msgstr ""
+"Приховати категорію набору даних\n"
+"приховування категорії набору даних"
+
+#: commands/DatasetCommand.cpp:163
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Number"
+msgstr ""
+"Показати числової характеристики набору даних\n"
+"показ числової характеристики набору даних"
+
+#: commands/DatasetCommand.cpp:165
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Number"
+msgstr ""
+"Приховати числову характеристику набору даних\n"
+"приховування числової характеристики набору даних"
+
+#: commands/DatasetCommand.cpp:174
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Percent"
+msgstr ""
+"Показати відсоткову характеристику набору даних\n"
+"показ відсоткової характеристики набору даних"
+
+#: commands/DatasetCommand.cpp:176
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Percent"
+msgstr ""
+"Приховати відсоткову характеристику набору даних\n"
+"приховування відсоткової характеристики набору даних"
+
+#: commands/DatasetCommand.cpp:185
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Symbol"
+msgstr ""
+"Показати символ набору даних\n"
+"показ символу набору даних"
+
+#: commands/DatasetCommand.cpp:187
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Symbol"
+msgstr ""
+"Приховати символ набору даних\n"
+"приховування символу набору даних"
+
+#: commands/DatasetCommand.cpp:195
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Brush Color"
+msgstr ""
+"Встановити колір пензля для набору даних\n"
+"встановлення кольору пензля для набору даних"
+
+#: commands/DatasetCommand.cpp:202
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Pen Color"
+msgstr ""
+"Встановити колір пера для набору даних\n"
+"встановлення кольору пера для набору даних"
+
+#: commands/DatasetCommand.cpp:211
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Marker"
+msgstr ""
+"Приховати позначку набору даних\n"
+"приховування позначки набору даних"
+
+#: commands/DatasetCommand.cpp:213
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Marker Symbol"
+msgstr ""
+"Показати позначку набору даних\n"
+"показ позначки набору даних"
+
+#: commands/DatasetCommand.cpp:221
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Axis"
+msgstr ""
+"Встановити вісь набору даних\n"
+"встановлення вісі набору даних"
+
+#: commands/GapCommand.cpp:61
+msgctxt "(qtundo-format)"
+msgid "Set Gap Between Bars"
+msgstr "Встановити відстань між стовпчиками"
+
+#: commands/GapCommand.cpp:68
+msgctxt "(qtundo-format)"
+msgid "Set Gap Between Sets"
+msgstr "Встановити відстань між наборами"
+
+#: commands/LegendCommand.cpp:78
+msgctxt "(qtundo-format)"
+msgid "Set Legend Title"
+msgstr ""
+"Встановити заголовок панелі умовних позначень\n"
+"встановлення заголовка панелі умовних позначень"
+
+#: commands/LegendCommand.cpp:86
+msgctxt "(qtundo-format)"
+msgid "Set Legend Font"
+msgstr ""
+"Встановити гарнітуру шрифту панелі умовних позначень\n"
+"встановлення гарнітури шрифту панелі умовних позначень"
+
+#: commands/LegendCommand.cpp:93
+msgctxt "(qtundo-format)"
+msgid "Set Legend Font size"
+msgstr ""
+"Встановити розмір шрифту панелі умовних позначень\n"
+"встановлення розміру шрифту панелі умовних позначень"
+
+#: commands/LegendCommand.cpp:100
+msgctxt "(qtundo-format)"
+msgid "Set Legend Orientation"
+msgstr ""
+"Встановити орієнтацію панелі умовних позначень\n"
+"встановлення орієнтації панелі умовних позначень"
+
+#: commands/PlotAreaCommand.cpp:59
+msgctxt "(qtundo-format)"
+msgid "Set Horizontal Bars"
+msgstr ""
+"Встановити горизонтальні стовпчики\n"
+"встановлення горизонтальних стовпчиків"
+
+#: commands/PlotAreaCommand.cpp:61
+msgctxt "(qtundo-format)"
+msgid "Set Vertical Bars"
+msgstr ""
+"Встановити вертикальні стовпчики\n"
+"встановлення вертикальних стовпчиків"
+
+#: DataSet.cpp:262
+#, kde-format
+msgid "Series %1"
+msgstr "Послідовність %1"
+
+#: DataSetConfigWidget.cpp:196 PlotAreaConfigWidget.cpp:232
+#, kde-format
+msgid "Chart Type"
+msgstr "Тип діаграми"
+
+#: DataSetConfigWidget.cpp:203 DataSetConfigWidget.cpp:208
+#: DataSetConfigWidget.cpp:213 DataSetConfigWidget.cpp:221
+#: PlotAreaConfigWidget.cpp:237 PlotAreaConfigWidget.cpp:243
+#: PlotAreaConfigWidget.cpp:249 PlotAreaConfigWidget.cpp:263
+#, kde-format
+msgid "Normal"
+msgstr "Звичайна"
+
+#: DataSetConfigWidget.cpp:204 DataSetConfigWidget.cpp:209
+#: DataSetConfigWidget.cpp:214 PlotAreaConfigWidget.cpp:238
+#: PlotAreaConfigWidget.cpp:244 PlotAreaConfigWidget.cpp:250
+#, kde-format
+msgid "Stacked"
+msgstr "Багатоярусна"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataPointShowPercent)
+#. i18n: ectx: property (text), widget (QCheckBox, datasetShowPercent)
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetShowPercent)
+#: DataSetConfigWidget.cpp:205 DataSetConfigWidget.cpp:210
+#: DataSetConfigWidget.cpp:215 DataSetConfigWidget.ui:245
+#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:239
+#: PlotAreaConfigWidget.cpp:245 PlotAreaConfigWidget.cpp:251
+#: widgets/RadarDataSetConfigWidget.ui:166 widgets/RingConfigWidget.ui:120
+#, kde-format
+msgid "Percent"
+msgstr "Відсотки"
+
+#: DataSetConfigWidget.cpp:220 PlotAreaConfigWidget.cpp:262
+#, kde-format
+msgid "Polar Chart"
+msgstr "Полярна діаграма"
+
+#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:264
+#, kde-format
+msgid "Filled"
+msgstr "Заповнена"
+
+#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:275
+#, kde-format
+msgid "Stock Chart"
+msgstr "Діаграма продажів"
+
+#: DataSetConfigWidget.cpp:225 PlotAreaConfigWidget.cpp:276
+#, kde-format
+msgid "Candlestick"
+msgstr "Японські свічки"
+
+#: DataSetConfigWidget.cpp:226 PlotAreaConfigWidget.cpp:277
+#, kde-format
+msgid "OpenHighLowClose"
+msgstr "OHLC-діаграма"
+
+#: DataSetConfigWidget.cpp:227 PlotAreaConfigWidget.cpp:278
+#, kde-format
+msgid "HighLowClose"
+msgstr "HLC-діаграма"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: DataSetConfigWidget.cpp:245 DataSetConfigWidget.cpp:387
+#: dialogs/FormatErrorBarDialog.ui:89 widgets/RadarDataSetConfigWidget.cpp:84
+#: widgets/RadarDataSetConfigWidget.cpp:188
+#, kde-format
+msgid "None"
+msgstr "Немає"
+
+#. i18n: ectx: property (text), widget (QCheckBox, automaticStepWidth)
+#. i18n: ectx: property (text), widget (QCheckBox, automaticSubStepWidth)
+#: DataSetConfigWidget.cpp:246 dialogs/AxisScalingDialog.ui:49
+#: dialogs/AxisScalingDialog.ui:85 widgets/RadarDataSetConfigWidget.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr "Автоматично"
+
+#: DataSetConfigWidget.cpp:248 widgets/RadarDataSetConfigWidget.cpp:87
+#, kde-format
+msgid "Select"
+msgstr "Вибрати"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerPositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerResize)
+#: DataSetConfigWidget.cpp:396 TitlesConfigWidget.ui:52
+#: TitlesConfigWidget.ui:66 TitlesConfigWidget.ui:93 TitlesConfigWidget.ui:107
+#: TitlesConfigWidget.ui:134 TitlesConfigWidget.ui:148
+#: widgets/RadarDataSetConfigWidget.cpp:197
+#, kde-format
+msgid "Auto"
+msgstr "Авто"
+
+#: DataSetConfigWidget.cpp:658 PlotAreaConfigWidget.cpp:638
+#: PlotAreaConfigWidget.cpp:689 PlotAreaConfigWidget.cpp:871
+#: widgets/RadarDataSetConfigWidget.cpp:303
+#, kde-format
+msgid "Data Set %1"
+msgstr "Набір даних %1"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, dataSets)
+#: DataSetConfigWidget.ui:23 widgets/RadarDataSetConfigWidget.ui:21
+#, kde-format
+msgid "Select a data set"
+msgstr "Обрати набір даних"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetHasChartType)
+#: DataSetConfigWidget.ui:33
+#, kde-format
+msgid "Use Plot Type"
+msgstr "Використати тип графіка"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: DataSetConfigWidget.ui:78
+#, kde-format
+msgid "Attach To Axis"
+msgstr "Долучити до вісі"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
+#: DataSetConfigWidget.ui:112 PieConfigWidget.ui:56
+#: widgets/RadarDataSetConfigWidget.ui:33 widgets/RingConfigWidget.ui:28
+#, kde-format
+msgid "Stroke"
+msgstr "Контур"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
+#: DataSetConfigWidget.ui:153 PieConfigWidget.ui:97
+#: widgets/RadarDataSetConfigWidget.ui:74 widgets/RingConfigWidget.ui:69
+#, kde-format
+msgid "Fill"
+msgstr "Заповнення"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetMarkerLabel)
+#: DataSetConfigWidget.ui:201 PieConfigWidget.ui:145
+#: widgets/RadarDataSetConfigWidget.ui:122
+#, kde-format
+msgid "Marker"
+msgstr "Позначка"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataPointShowCategory)
+#. i18n: ectx: property (text), widget (QCheckBox, datasetShowCategory)
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetShowCategory)
+#: DataSetConfigWidget.ui:231 dialogs/PieDataEditor.cpp:32
+#: PieConfigWidget.ui:175 widgets/RadarDataSetConfigWidget.ui:152
+#: widgets/RingConfigWidget.ui:106
+#, kde-format
+msgid "Category"
+msgstr "Категорія"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataPointShowNumber)
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetShowNumber)
+#: DataSetConfigWidget.ui:238 PieConfigWidget.ui:182
+#: widgets/RadarDataSetConfigWidget.ui:159 widgets/RingConfigWidget.ui:113
+#, kde-format
+msgid "Number"
+msgstr "Число"
+
+#. i18n: ectx: property (text), widget (QCheckBox, datasetShowErrorBar)
+#: DataSetConfigWidget.ui:287
+#, kde-format
+msgid "Error Bars"
+msgstr "Позначки похибок"
+
+#. i18n: ectx: property (text), widget (QPushButton, insertRow)
+#. i18n: ectx: property (text), widget (QToolButton, formatErrorBar)
+#: DataSetConfigWidget.ui:312 dialogs/PieDataEditor.cpp:61
+#: dialogs/PieDataEditor.ui:33
+#, kde-format
+msgid "Insert"
+msgstr "Вставити"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, CellRegionDialog)
+#. i18n: ectx: property (windowTitle), widget (QDialog, AxisScalingDialog)
+#: dialogs/AxisScalingDialog.ui:13 dialogs/CellRegionDialog.ui:14
+#, kde-format
+msgid "Dialog"
+msgstr "Діалогове вікно"
+
+#. i18n: ectx: property (text), widget (QCheckBox, logarithmicScaling)
+#: dialogs/AxisScalingDialog.ui:19
+#, kde-format
+msgid "Logarithmic Scaling"
+msgstr "Логарифмічний масштаб"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/AxisScalingDialog.ui:32
+#, kde-format
+msgid "Step Width:"
+msgstr "Ширина кроку:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/AxisScalingDialog.ui:65
+#, kde-format
+msgid "Substep Width:"
+msgstr "Ширина підкроку:"
+
+#: dialogs/BubbleDataEditor.cpp:105
+#, kde-format
+msgid "Bubble Data Editor"
+msgstr "Редактор даних бульбашок"
+
+#: dialogs/BubbleDataEditor.cpp:111 dialogs/ScatterDataEditor.cpp:117
+#, kde-format
+msgid "Insert Column Before"
+msgstr "Вставити стовпчик перед"
+
+#: dialogs/BubbleDataEditor.cpp:112 dialogs/ScatterDataEditor.cpp:118
+#, kde-format
+msgid "Insert Column After"
+msgstr "Вставити стовпчик після"
+
+#: dialogs/BubbleDataEditor.cpp:113 dialogs/ScatterDataEditor.cpp:119
+#: dialogs/StockDataEditor.cpp:96
+#, kde-format
+msgid "Insert Row Above"
+msgstr "Вставити рядок вище"
+
+#: dialogs/BubbleDataEditor.cpp:114 dialogs/ScatterDataEditor.cpp:120
+#: dialogs/StockDataEditor.cpp:97
+#, kde-format
+msgid "Insert Row Below"
+msgstr "Вставити рядок нижче"
+
+#. i18n: ectx: property (text), widget (QPushButton, deleteSelection)
+#: dialogs/BubbleDataEditor.cpp:115 dialogs/PieDataEditor.cpp:62
+#: dialogs/PieDataEditor.ui:46 dialogs/ScatterDataEditor.cpp:121
+#, kde-format
+msgid "Delete"
+msgstr "Вилучити"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ScatterDataEditor)
+#. i18n: ectx: property (windowTitle), widget (QWidget, BubbleDataEditor)
+#: dialogs/BubbleDataEditor.ui:26 dialogs/ScatterDataEditor.ui:26
+#, kde-format
+msgid "Bubbles Editor"
+msgstr "Редактор бульбашок"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnBefore)
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnLeft)
+#: dialogs/BubbleDataEditor.ui:39 dialogs/ChartTableEditor.ui:78
+#: dialogs/ScatterDataEditor.ui:39
+#, kde-format
+msgid "Insert data column before selected column"
+msgstr "Вставити стовпчик даних перед позначеним стовпчиком"
+
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnBefore)
+#. i18n: ectx: property (text), widget (QToolButton, insertRowBelow)
+#. i18n: ectx: property (text), widget (QToolButton, insertRowAbove)
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnAfter)
+#. i18n: ectx: property (text), widget (QToolButton, deleteSelection)
+#. i18n: ectx: property (text), widget (QToolButton, addDataSetAfter)
+#. i18n: ectx: property (text), widget (QToolButton, addDataSetBefore)
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnLeft)
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnRight)
+#: dialogs/BubbleDataEditor.ui:42 dialogs/BubbleDataEditor.ui:62
+#: dialogs/BubbleDataEditor.ui:82 dialogs/BubbleDataEditor.ui:102
+#: dialogs/BubbleDataEditor.ui:122 dialogs/BubbleDataEditor.ui:215
+#: dialogs/BubbleDataEditor.ui:235 dialogs/ChartTableEditor.ui:55
+#: dialogs/ChartTableEditor.ui:68 dialogs/ChartTableEditor.ui:81
+#: dialogs/ChartTableEditor.ui:94 dialogs/ChartTableEditor.ui:107
+#: dialogs/ScatterDataEditor.ui:42 dialogs/ScatterDataEditor.ui:62
+#: dialogs/ScatterDataEditor.ui:82 dialogs/ScatterDataEditor.ui:102
+#: dialogs/ScatterDataEditor.ui:122 dialogs/ScatterDataEditor.ui:215
+#: dialogs/ScatterDataEditor.ui:235 dialogs/StockDataEditor.ui:42
+#: dialogs/StockDataEditor.ui:61 dialogs/StockDataEditor.ui:80
+#, kde-format
+msgid "..."
+msgstr "…"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertRowBelow)
+#: dialogs/BubbleDataEditor.ui:59 dialogs/ChartTableEditor.ui:52
+#: dialogs/ScatterDataEditor.ui:59 dialogs/StockDataEditor.ui:39
+#, kde-format
+msgid "Insert data row below selected row"
+msgstr "Вставити рядок даних під позначеним рядком"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertRowAbove)
+#: dialogs/BubbleDataEditor.ui:79 dialogs/ChartTableEditor.ui:65
+#: dialogs/ScatterDataEditor.ui:79 dialogs/StockDataEditor.ui:58
+#, kde-format
+msgid "Insert data row above selected row"
+msgstr "Вставити рядок даних над позначеним рядком"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnAfter)
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnRight)
+#: dialogs/BubbleDataEditor.ui:99 dialogs/ChartTableEditor.ui:91
+#: dialogs/ScatterDataEditor.ui:99
+#, kde-format
+msgid "Insert data column after selected column"
+msgstr "Вставити рядок даних після позначеного рядка"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
+#: dialogs/BubbleDataEditor.ui:119 dialogs/ChartTableEditor.ui:104
+#: dialogs/ScatterDataEditor.ui:119
+#, kde-format
+msgid "Delete selection"
+msgstr "Вилучити позначене"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, manualControl)
+#: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
+#, kde-format
+msgid "Manual control of data sets"
+msgstr "Керування наборами даних вручну"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerPositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerResize)
+#. i18n: ectx: property (text), widget (QCheckBox, manualControl)
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: dialogs/BubbleDataEditor.ui:182 dialogs/ScatterDataEditor.ui:182
+#: LegendConfigWidget.ui:92 TitlesConfigWidget.ui:57 TitlesConfigWidget.ui:71
+#: TitlesConfigWidget.ui:98 TitlesConfigWidget.ui:112 TitlesConfigWidget.ui:139
+#: TitlesConfigWidget.ui:153
+#, kde-format
+msgid "Manual"
+msgstr "Вручну"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, removeDataSet)
+#: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
+#, kde-format
+msgid "Remove data set"
+msgstr "Вилучити набір даних"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetAfter)
+#. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetBefore)
+#: dialogs/BubbleDataEditor.ui:212 dialogs/BubbleDataEditor.ui:232
+#: dialogs/ScatterDataEditor.ui:212 dialogs/ScatterDataEditor.ui:232
+#, kde-format
+msgid "Add data set after selected data set"
+msgstr "Додати набір даних після позначеного набору даних"
+
+#: dialogs/BubbleDataSetTableModel.cpp:103
+#: dialogs/ScatterDataSetTableModel.cpp:103
+#, kde-format
+msgid "Dataset Name"
+msgstr "Назва набору даних"
+
+#: dialogs/BubbleDataSetTableModel.cpp:104
+#: dialogs/ScatterDataSetTableModel.cpp:104
+#, kde-format
+msgid "X-Values"
+msgstr "Значення за X"
+
+#: dialogs/BubbleDataSetTableModel.cpp:105
+#: dialogs/ScatterDataSetTableModel.cpp:105
+#, kde-format
+msgid "Y-Values"
+msgstr "Значення за Y"
+
+#: dialogs/BubbleDataSetTableModel.cpp:106
+#, kde-format
+msgid "Bubble Size"
+msgstr "Розмір бульбашки"
+
+#: dialogs/BubbleDataSetTableModel.cpp:146
+#: dialogs/ScatterDataSetTableModel.cpp:142
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Label: %1"
+msgstr "Мітка: %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:148
+#: dialogs/ScatterDataSetTableModel.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Default label: %1"
+msgstr "Типова мітка: %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:153
+#: dialogs/ScatterDataSetTableModel.cpp:149
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "X-Values cell region: %1"
+msgstr "Область комірки для значень X: %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:155
+#: dialogs/BubbleDataSetTableModel.cpp:162
+#: dialogs/BubbleDataSetTableModel.cpp:169
+#: dialogs/ScatterDataSetTableModel.cpp:151
+#: dialogs/ScatterDataSetTableModel.cpp:158
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Default values used"
+msgstr "Використані типові значення"
+
+#: dialogs/BubbleDataSetTableModel.cpp:160
+#: dialogs/ScatterDataSetTableModel.cpp:156
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Y-Values cell region: %1"
+msgstr "Область комірки для значень Y: %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:167
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Bubble size cell region: %1"
+msgstr "Область комірки для розміру бульбашки: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/CellRegionDialog.ui:49
+#, kde-format
+msgid "Y Values:"
+msgstr "Значення за Y:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/CellRegionDialog.ui:59
+#, kde-format
+msgid "X Values:"
+msgstr "Значення за X:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/CellRegionDialog.ui:72
+#, kde-format
+msgid "<b>Choose a Data Set</b>"
+msgstr "<b>Оберіть набір даних</b>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: dialogs/CellRegionDialog.ui:82
+#, kde-format
+msgid "Categories:"
+msgstr "Категорії:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: dialogs/CellRegionDialog.ui:96
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-weight:600;\">Name:</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-weight:600;\">Назва:</span></p></body></html>"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ChartTableEditor)
+#: dialogs/ChartTableEditor.ui:14
+#, kde-format
+msgid "Data Editor"
+msgstr "Редактор даних"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dataSetsInRows)
+#: dialogs/ChartTableEditor.ui:29
+#, kde-format
+msgid "&Data sets in rows"
+msgstr "Набори &даних у рядках"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dataSetsInColumns)
+#: dialogs/ChartTableEditor.ui:36
+#, kde-format
+msgid "Data sets in &columns"
+msgstr "Набори даних у с&товпчиках"
+
+#: dialogs/FontEditorDialog.cpp:20
+#, kde-format
+msgid "Select Font"
+msgstr "Виберіть шрифт"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, FormatErrorBarDialog)
+#: dialogs/FormatErrorBarDialog.ui:29
+#, kde-format
+msgid "Format Error Bars"
+msgstr "Форматування позначок похибок"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/FormatErrorBarDialog.ui:69
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Error Category</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"weight:600;\"></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Категорія помилок</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"weight:600;\"></p></body></html>"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:94
+#, kde-format
+msgid "Constant"
+msgstr "Сталі"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:99
+#, kde-format
+msgid "Percentage"
+msgstr "У відсотках"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:104
+#, kde-format
+msgid "Error Margin"
+msgstr "Межа помилки"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:109
+#, kde-format
+msgid "Standard Deviation"
+msgstr "Стандартне відхилення"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:114
+#, kde-format
+msgid "Variance"
+msgstr "Дисперсія"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:119
+#, kde-format
+msgid "From Data table"
+msgstr "З таблиці даних"
+
+#. i18n: ectx: property (text), widget (QLabel, valueLabel)
+#: dialogs/FormatErrorBarDialog.ui:144
+#, kde-format
+msgid "Positive "
+msgstr "Додатні"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QRadioButton, negIndicator)
+#: dialogs/FormatErrorBarDialog.ui:173 dialogs/FormatErrorBarDialog.ui:338
+#, kde-format
+msgid "Negative"
+msgstr "Від’ємні"
+
+#. i18n: ectx: property (text), widget (QCheckBox, sameValueForBoth)
+#: dialogs/FormatErrorBarDialog.ui:207
+#, kde-format
+msgid "Same for both"
+msgstr "Однакова для обох"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/FormatErrorBarDialog.ui:226 dialogs/PieDataEditor.cpp:33
+#, kde-format
+msgid "Value"
+msgstr "Значення"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, percentageValue)
+#: dialogs/FormatErrorBarDialog.ui:233
+#, no-c-format, kde-format
+msgid " %"
+msgstr " %"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/FormatErrorBarDialog.ui:303
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Error Indicator</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Індикатор помилок</span></p></body></html>"
+
+#. i18n: ectx: property (text), widget (QRadioButton, posIndicator)
+#: dialogs/FormatErrorBarDialog.ui:325
+#, kde-format
+msgid "Positive"
+msgstr "Додатні"
+
+#. i18n: ectx: property (text), widget (QRadioButton, posAndNegIndicator)
+#: dialogs/FormatErrorBarDialog.ui:351
+#, kde-format
+msgid "Both"
+msgstr "Всі"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, NewAxisDialog)
+#: dialogs/NewAxisDialog.ui:20
+#, kde-format
+msgid "New Axis"
+msgstr "Нова вісь"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dimensionIsX)
+#: dialogs/NewAxisDialog.ui:46
+#, kde-format
+msgctxt "Axis dimension"
+msgid "&X"
+msgstr "&X"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dimensionIsY)
+#: dialogs/NewAxisDialog.ui:56
+#, kde-format
+msgctxt "Axis dimension"
+msgid "&Y"
+msgstr "&Y"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/NewAxisDialog.ui:72
+#, kde-format
+msgid "Title:"
+msgstr "Заголовок:"
+
+#: dialogs/PieDataEditor.cpp:55
+#, kde-format
+msgid "Pie Data Editor"
+msgstr "Редактор даних секторів"
+
+#. i18n: ectx: property (shortcut), widget (QPushButton, deleteSelection)
+#: dialogs/PieDataEditor.ui:52
+#, kde-format
+msgid "Del"
+msgstr "Del"
+
+#: dialogs/ScatterDataEditor.cpp:94 widgets/RingConfigWidget.cpp:101
+#, kde-format
+msgid "Row %1"
+msgstr "Рядок %1"
+
+#: dialogs/ScatterDataEditor.cpp:111
+#, kde-format
+msgid "Scatter Data Editor"
+msgstr "Редактор розсіяних даних"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
+#: dialogs/StockDataEditor.cpp:88 dialogs/StockDataEditor.ui:26
+#, kde-format
+msgid "Stock Data Editor"
+msgstr "Редактор стосових даних"
+
+#: dialogs/StockDataEditor.cpp:98
+#, kde-format
+msgid "Delete Row"
+msgstr "Вилучення рядка"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
+#: dialogs/StockDataEditor.ui:77
+#, kde-format
+msgid "Delete row"
+msgstr "Вилучити рядок"
+
+#: dialogs/TableEditorDialog.cpp:58
+#, kde-format
+msgid "Insert Above"
+msgstr "Вставити вище"
+
+#: dialogs/TableEditorDialog.cpp:59
+#, kde-format
+msgid "Insert Below"
+msgstr "Вставити нижче"
+
+#: dialogs/TableEditorDialog.cpp:60
+#, kde-format
+msgid "Insert Before"
+msgstr "Вставити перед"
+
+#: dialogs/TableEditorDialog.cpp:61
+#, kde-format
+msgid "Insert After"
+msgstr "Вставити після"
+
+#: dialogs/TableEditorDialog.cpp:62
+#, kde-format
+msgid "Delete Selection"
+msgstr "Вилучити позначене"
+
+#: dialogs/TableEditorDialog.cpp:169 dialogs/TableEditorDialog.cpp:193
+#, kde-format
+msgid "New Row"
+msgstr "Новий рядок"
+
+#: dialogs/TableEditorDialog.cpp:217 dialogs/TableEditorDialog.cpp:241
+#, kde-format
+msgid "New Column"
+msgstr "Новий стовпчик"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
+#: LegendConfigWidget.ui:19
+#, kde-format
+msgid "Vertical"
+msgstr "Вертикально"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
+#: LegendConfigWidget.ui:24
+#, kde-format
+msgid "Horizontal"
+msgstr "Горизонтально"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
+#: LegendConfigWidget.ui:38
+#, kde-format
+msgid "Center"
+msgstr "За центром"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:52
+#, kde-format
+msgid "Right"
+msgstr "Праворуч"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:57
+#, kde-format
+msgid "Top"
+msgstr "Вгорі"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:62
+#, kde-format
+msgid "Bottom"
+msgstr "Внизу"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:67
+#, kde-format
+msgid "Left"
+msgstr "Ліворуч"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:72
+#, kde-format
+msgid "Top-left"
+msgstr "Вгорі ліворуч"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:77
+#, kde-format
+msgid "Top-right"
+msgstr "Вгорі праворуч"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:82
+#, kde-format
+msgid "Bottom-left"
+msgstr "Внизу ліворуч"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:87
+#, kde-format
+msgid "Bottom-right"
+msgstr "Внизу праворуч"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: LegendConfigWidget.ui:100
+#, kde-format
+msgid "Position"
+msgstr "Розташування"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showLegend)
+#: LegendConfigWidget.ui:107
+#, kde-format
+msgid "Show Legend"
+msgstr "Показувати панель умовних позначень"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: LegendConfigWidget.ui:130
+#, kde-format
+msgid "Orientation"
+msgstr "Орієнтація"
+
+#. i18n: ectx: property (text), widget (QPushButton, legendEditFontButton)
+#: LegendConfigWidget.ui:147
+#, kde-format
+msgid "Fonts..."
+msgstr "Шрифти…"
+
+#: PieConfigWidget.cpp:101
+#, kde-format
+msgid "Data Point %1"
+msgstr "Точка даних %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
+#, kde-format
+msgid "E&xplode Factor"
+msgstr "Коефіцієнт р&озсіювання"
+
+#: PlotAreaConfigWidget.cpp:281
+#, kde-format
+msgid "Surface Chart"
+msgstr "Двовимірна діаграма"
+
+#: PlotAreaConfigWidget.cpp:283
+#, kde-format
+msgid "Gantt Chart"
+msgstr "Діаграма Ґанта"
+
+#. i18n: ectx: property (text), widget (QCheckBox, threeDLook)
+#: PlotAreaConfigWidget.ui:61
+#, kde-format
+msgid "3D"
+msgstr "3D"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
+#: PlotAreaConfigWidget.ui:69
+#, kde-format
+msgid "Vertical Bars"
+msgstr "Вертикальні стовпчики"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
+#: PlotAreaConfigWidget.ui:74
+#, kde-format
+msgid "Horizontal Bars"
+msgstr "Горизонтальні стовпчики"
+
+#. i18n: ectx: property (text), widget (QPushButton, editData)
+#: PlotAreaConfigWidget.ui:82
+#, kde-format
+msgid "Edit Data..."
+msgstr "Редагувати дані..."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: PlotAreaConfigWidget.ui:98 PlotAreaConfigWidget.ui:181
+#, kde-format
+msgid "Axes"
+msgstr "Вісі"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: PlotAreaConfigWidget.ui:111 PlotAreaConfigWidget.ui:218
+#: widgets/RingConfigWidget.ui:171
+#, kde-format
+msgid "Data Sets"
+msgstr "Набори даних"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: PlotAreaConfigWidget.ui:131
+#, kde-format
+msgid "Data Points"
+msgstr "Точки даних"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
+#: StockConfigWidget.ui:18
+#, kde-format
+msgid "Range line"
+msgstr "Лінія діапазону"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
+#: StockConfigWidget.ui:47
+#, kde-format
+msgid "Gain marker"
+msgstr "Позначка прибутку"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetColorLabel_2)
+#: StockConfigWidget.ui:73
+#, kde-format
+msgid "Loss marker"
+msgstr "Позначка втрати"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: TitlesConfigWidget.ui:18
+#, kde-format
+msgid "Positioning"
+msgstr "Позиціонування"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: TitlesConfigWidget.ui:28
+#, kde-format
+msgid "Resize"
+msgstr "Змінити розмір"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/RingConfigWidget.ui:18
+#, kde-format
+msgid "Categories"
+msgstr "Категорії"
+
+#: widgets/StrokeConfigWidget.cpp:91
+#, kde-format
+msgid "Butt cap"
+msgstr "Плоскі"
+
+#: widgets/StrokeConfigWidget.cpp:98
+#, kde-format
+msgid "Round cap"
+msgstr "Округлені"
+
+#: widgets/StrokeConfigWidget.cpp:105
+#, kde-format
+msgid "Square cap"
+msgstr "Квадратні"
+
+#: widgets/StrokeConfigWidget.cpp:116
+#, kde-format
+msgid "Miter join"
+msgstr "Гостре"
+
+#: widgets/StrokeConfigWidget.cpp:123
+#, kde-format
+msgid "Round join"
+msgstr "Округлене"
+
+#: widgets/StrokeConfigWidget.cpp:130
+#, kde-format
+msgid "Bevel join"
+msgstr "Фасочне"
+
+#: widgets/StrokeConfigWidget.cpp:140
+#, kde-format
+msgid "Miter limit"
+msgstr "Обмеження фацета"
+
+#: widgets/StrokeConfigWidget.cpp:197
+#, kde-format
+msgid "Set line width of actual selection"
+msgstr "Встановити товщину лінії для позначення"
+
+#: widgets/StrokeConfigWidget.cpp:211
+#, kde-format
+msgid "Change the color of the line"
+msgstr "Змінити колір лінії"

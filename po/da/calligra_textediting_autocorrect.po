@@ -1,0 +1,748 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Martin Schlander <mschlander@opensuse.org>, 2008, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: AutocorrectPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2009-04-01 16:52+0200\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Autocorrect.cpp:25
+#, kde-format
+msgid "Configure &Autocorrection..."
+msgstr "Indstil &autokorrektur..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, AutocorrectConfig)
+#: Autocorrect.cpp:29 Autocorrect.cpp:78 AutocorrectConfig.ui:14
+#: AutocorrectConfigDialog.cpp:364
+#, kde-format
+msgid "Autocorrection"
+msgstr "Autokorrektur"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_1)
+#: AutocorrectConfig.ui:24
+#, kde-format
+msgid "Si&mple Autocorrection"
+msgstr "Si&mpel autokorrektur"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperCase)
+#: AutocorrectConfig.ui:30
+#, kde-format
+msgid ""
+"Detect when a new sentence is started and always ensure that the first "
+"character is an uppercase character"
+msgstr ""
+"Registrér når en ny sætning påbegyndes og sørg altid for at første tegn er "
+"med stort"
+
+#. i18n: ectx: property (text), widget (QCheckBox, upperCase)
+#: AutocorrectConfig.ui:34
+#, kde-format
+msgid ""
+"Convert &first letter of a sentence automatically to uppercase\n"
+"(e.g. \"my house. in this town\" to \"my house. In this town\")"
+msgstr ""
+"Konvertér automatisk &første bogstav i en sætning til stort\n"
+"(f.eks. \"mit hus. i denne by\" til \"mit hus. I denne by\")"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperUpper)
+#: AutocorrectConfig.ui:44
+#, kde-format
+msgid ""
+"All words are checked for the common mistake of holding the shift key down a "
+"bit too long. If some words must have two uppercase characters, then those "
+"exceptions should be added in the 'Exceptions' tab."
+msgstr ""
+"Alle ord kontrolleres for den udbredte fejl at holde Skift-tasten nede lidt "
+"for længe. Hvis nogle ord skal have to store bogstaver, så bør disse "
+"undtagelser tilføjes under fanebladet \"Undtagelser\"."
+
+#. i18n: ectx: property (text), widget (QCheckBox, upperUpper)
+#: AutocorrectConfig.ui:48
+#, kde-format
+msgid ""
+"Convert &two uppercase characters to one uppercase and one lowercase "
+"character\n"
+" (e.g. PErfect to Perfect)"
+msgstr ""
+"Konvertér &to store bogstaver til et stort og et lille bogstave\n"
+"(f.eks. PErfekt til Perfekt)"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoFormatUrl)
+#: AutocorrectConfig.ui:55
+#, kde-format
+msgid ""
+"Detect when a URL (Uniform Resource Locator) is typed and provide formatting "
+"that matches the way an Internet browser would show a URL."
+msgstr ""
+"Registrér når en URL (Uniform Resource Locator) skrives og lav formatering "
+"der svarer til måden hvorpå en internetbrowser viser en URL."
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoFormatUrl)
+#: AutocorrectConfig.ui:58
+#, kde-format
+msgid "Autoformat &URLs"
+msgstr "Autoformatér &URL'er"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, ignoreDoubleSpace)
+#: AutocorrectConfig.ui:65
+#, kde-format
+msgid ""
+"Make sure that more than one space cannot be typed, as this is a common "
+"mistake which is quite hard to find in formatted text."
+msgstr ""
+"Sørg for at mere end et mellemrum ikke kan indtastes, da dette er en udbredt "
+"fejl, som er ganske vanskelig at finde i formateret tekst."
+
+#. i18n: ectx: property (text), widget (QCheckBox, ignoreDoubleSpace)
+#: AutocorrectConfig.ui:68
+#, kde-format
+msgid "&Suppress double spaces"
+msgstr "Under&tryk dobbelte mellemrum"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, trimParagraphs)
+#: AutocorrectConfig.ui:75
+#, kde-format
+msgid ""
+"Keep correct formatting and indenting of sentences by automatically removing "
+"spaces typed at the beginning and end of a paragraph."
+msgstr ""
+"Behold korrekt formatering og indrykning af sætninger ved automatisk at "
+"fjerne mellemrum som indtastes ved begyndelsen og afslutningen af et afsnit."
+
+#. i18n: ectx: property (text), widget (QCheckBox, trimParagraphs)
+#: AutocorrectConfig.ui:78
+#, kde-format
+msgid "R&emove spaces at the beginning and end of paragraphs"
+msgstr "Fj&ern mellemrum ved begyndelsen og afslutningen af afsnit"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoChangeFormat)
+#: AutocorrectConfig.ui:85
+#, kde-format
+msgid ""
+"When you use _underline_ or *bold*, the text between the underscores or "
+"asterisks will be converted to underlined or bold text."
+msgstr ""
+"Når du bruger _understregning_ eller *fed*, vil teksten mellem "
+"understregerne eller stjernerne blive konverteret til understreget eller fed "
+"tekst."
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoChangeFormat)
+#: AutocorrectConfig.ui:88
+#, kde-format
+msgid "Automatically do &bold and underline formatting"
+msgstr "Udfør automatisk &fed- og understreg-formatering"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoReplaceNumber)
+#: AutocorrectConfig.ui:95
+#, kde-format
+msgid "Most standard fraction notations will be converted when available"
+msgstr "De fleste almindelige brøker vil blive konverteret når det er muligt"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoReplaceNumber)
+#: AutocorrectConfig.ui:98
+#, kde-format
+msgid "Re&place 1/2... with ½..."
+msgstr "Erst&at 1/2... med ½..."
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, useNumberStyle)
+#: AutocorrectConfig.ui:108
+#, kde-format
+msgid ""
+"When typing '1)' or similar in front of a paragraph, automatically convert "
+"the paragraph to use that numbering style. This has the advantage that "
+"further paragraphs will also be numbered and the spacing is done correctly."
+msgstr ""
+"Konvertér automatisk til nummeropstilling når der skrives \"1)\" eller "
+"lignende foran et afsnit. Dette har den fordel at yderligere afsnit også vil "
+"blive nummererede og indrykning udført korrekt."
+
+#. i18n: ectx: property (text), widget (QCheckBox, useNumberStyle)
+#: AutocorrectConfig.ui:111
+#, kde-format
+msgid "Use &autonumbering for numbered paragraphs"
+msgstr "Brug &autonummerering på nummererede afsnit"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoSuperScript)
+#: AutocorrectConfig.ui:121
+#, kde-format
+msgid "Rep&lace 1st... with 1^st..."
+msgstr "Ers&tat 1st... med 1^st..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, capitalizeDaysName)
+#: AutocorrectConfig.ui:128
+#, kde-format
+msgid "Capitalize name of days"
+msgstr "Brug stort forbogstav i navne på dage"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, useBulletStyle)
+#: AutocorrectConfig.ui:138
+#, kde-format
+msgid ""
+"When typing '*' or '-' in front of a paragraph, automatically convert the "
+"paragraph to use that list-style. Using a list-style formatting means that a "
+"correct bullet is used to draw the list."
+msgstr ""
+"Konvertér automatisk afsnittet til at bruge passende punktopstilling når der "
+"skrives \"*\" eller \"-\" foran et afsnit. Brug af punktliste-formatering "
+"betyder at et korrekt punkt bruges til at tegne listen."
+
+#. i18n: ectx: property (text), widget (QCheckBox, useBulletStyle)
+#: AutocorrectConfig.ui:141
+#, kde-format
+msgid "Use l&ist-formatting for bulleted paragraphs"
+msgstr "Brug punktl&iste-formatering til afsnit med punkter"
+
+#. i18n: ectx: property (text), widget (QPushButton, defaultBulletStyle)
+#. i18n: ectx: property (text), widget (QPushButton, doubleDefault)
+#. i18n: ectx: property (text), widget (QPushButton, singleDefault)
+#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
+#: AutocorrectConfig.ui:178 AutocorrectConfig.ui:253 AutocorrectConfig.ui:308
+#: AutocorrectConfig.ui:360
+#, kde-format
+msgid "Default"
+msgstr "Standard"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: AutocorrectConfig.ui:214
+#, kde-format
+msgid "Custom &Quotes"
+msgstr "Brugerdefinerede &citationstegn"
+
+#. i18n: ectx: property (text), widget (QCheckBox, typographicDoubleQuotes)
+#: AutocorrectConfig.ui:220
+#, kde-format
+msgid "Replace &double quotes with typographical quotes"
+msgstr "Erstat &dobbelte citationstegn med typografiske citationstegn"
+
+#. i18n: ectx: property (text), widget (QCheckBox, typographicSingleQuotes)
+#: AutocorrectConfig.ui:275
+#, kde-format
+msgid "Replace &single quotes with typographical quotes"
+msgstr "Erstat e&nkelte citationstegn med typografiske citationstegn"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: AutocorrectConfig.ui:344
+#, kde-format
+msgid "Ad&vanced Autocorrection"
+msgstr "A&vanceret autokorrektur"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: AutocorrectConfig.ui:352
+#, kde-format
+msgid "Replacements and exceptions for language:"
+msgstr "Erstatninger og undtagelser for sprog:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
+#: AutocorrectConfig.ui:365
+#, kde-format
+msgid "All Languages"
+msgstr "Alle sprog"
+
+#. i18n: ectx: property (text), widget (QCheckBox, advancedAutocorrection)
+#: AutocorrectConfig.ui:375
+#, kde-format
+msgid "&Enable word replacement"
+msgstr "&Aktivér orderstatning"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoCorrectionWithFormat)
+#: AutocorrectConfig.ui:385
+#, kde-format
+msgid "Replace &text with format"
+msgstr "Erstat &tekst i formatet"
+
+#. i18n: ectx: property (text), widget (QLabel, findLabel)
+#: AutocorrectConfig.ui:394
+#, kde-format
+msgid "&Find"
+msgstr "&Find"
+
+#. i18n: ectx: property (text), widget (QToolButton, specialChar1)
+#. i18n: ectx: property (text), widget (QToolButton, specialChar2)
+#: AutocorrectConfig.ui:407 AutocorrectConfig.ui:427
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QLabel, replaceLabel)
+#: AutocorrectConfig.ui:414
+#, kde-format
+msgid "Re&place"
+msgstr "E&rstat"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#. i18n: ectx: property (text), widget (QPushButton, add1)
+#: AutocorrectConfig.ui:438 AutocorrectConfig.ui:562
+#: AutocorrectConfigDialog.cpp:281
+#, kde-format
+msgid "&Add"
+msgstr "&Tilføj"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeButton)
+#. i18n: ectx: property (text), widget (QPushButton, remove2)
+#: AutocorrectConfig.ui:445 AutocorrectConfig.ui:637
+#, kde-format
+msgid "Remove"
+msgstr "Fjern"
+
+#. i18n: ectx: property (text), widget (QPushButton, changeFormat)
+#: AutocorrectConfig.ui:455
+#, kde-format
+msgid "C&hange Format..."
+msgstr "S&kift format..."
+
+#. i18n: ectx: property (text), widget (QPushButton, clearFormat)
+#: AutocorrectConfig.ui:465
+#, kde-format
+msgid "C&lear Format"
+msgstr "R&yd format"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
+#: AutocorrectConfig.ui:503
+#, kde-format
+msgid "Find"
+msgstr "Find"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
+#: AutocorrectConfig.ui:508
+#, kde-format
+msgid "Replace"
+msgstr "Erstat"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
+#: AutocorrectConfig.ui:517
+#, kde-format
+msgid "E&xceptions"
+msgstr "&Undtagelser"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: AutocorrectConfig.ui:525
+#, kde-format
+msgid "Do not treat as the end of a sentence:"
+msgstr "Behandl ikke som afslutning af en sætning:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoinclude1)
+#. i18n: ectx: property (text), widget (QCheckBox, autoinclude2)
+#: AutocorrectConfig.ui:551 AutocorrectConfig.ui:619
+#, kde-format
+msgid "Autoinclude"
+msgstr "Autoinkludér"
+
+#. i18n: ectx: property (text), widget (QPushButton, remove1)
+#: AutocorrectConfig.ui:569
+#, kde-format
+msgid "R&emove"
+msgstr "Fj&ern"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: AutocorrectConfig.ui:593
+#, kde-format
+msgid "Accept two uppercase letters in:"
+msgstr "Acceptér to store bogstaver i:"
+
+#. i18n: ectx: property (text), widget (QPushButton, add2)
+#: AutocorrectConfig.ui:630
+#, kde-format
+msgid "A&dd"
+msgstr "Til&føj"
+
+#: AutocorrectConfigDialog.cpp:277
+#, kde-format
+msgid "&Modify"
+msgstr "Æ&ndr"
+
+#: AutocorrectConfigDialog.cpp:378
+#, kde-format
+msgid "Select Character"
+msgstr "Vælg tegn"
+
+#: AutocorrectFactory.cpp:16
+#, kde-format
+msgid "Autocorrect"
+msgstr "Autokorrigér"
+
+#, fuzzy
+#~| msgid "Si&mple Autocorrection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Si&mple Autocorrection"
+#~ msgstr "Si&mpel autokorrektur"
+
+#, fuzzy
+#~| msgid ""
+#~| "Detect when a new sentence is started and always ensure that the first "
+#~| "character is an uppercase character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Detect when a new sentence is started and always ensure that the first "
+#~ "character is an uppercase character"
+#~ msgstr ""
+#~ "Registrér når en ny sætning påbegyndes og sørg altid for at første tegn "
+#~ "er med stort"
+
+#, fuzzy
+#~| msgid ""
+#~| "Convert &first letter of a sentence automatically to uppercase\n"
+#~| "(e.g. \"my house. in this town\" to \"my house. In this town\")"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Convert &first letter of a sentence automatically to uppercase\n"
+#~ "(e.g. \"my house. in this town\" to \"my house. In this town\")"
+#~ msgstr ""
+#~ "Konvertér automatisk &første bogstav i en sætning til stort\n"
+#~ "(f.eks. \"mit hus. i denne by\" til \"mit hus. I denne by\")"
+
+#, fuzzy
+#~| msgid ""
+#~| "All words are checked for the common mistake of holding the shift key "
+#~| "down a bit too long. If some words must have two uppercase characters, "
+#~| "then those exceptions should be added in the 'Exceptions' tab."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "All words are checked for the common mistake of holding the shift key "
+#~ "down a bit too long. If some words must have two uppercase characters, "
+#~ "then those exceptions should be added in the 'Exceptions' tab."
+#~ msgstr ""
+#~ "Alle ord kontrolleres for den udbredte fejl at holde Skift-tasten nede "
+#~ "lidt for længe. Hvis nogle ord skal have to store bogstaver, så bør disse "
+#~ "undtagelser tilføjes under fanebladet \"Undtagelser\"."
+
+#, fuzzy
+#~| msgid ""
+#~| "Convert &two uppercase characters to one uppercase and one lowercase "
+#~| "character\n"
+#~| " (e.g. PErfect to Perfect)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Convert &two uppercase characters to one uppercase and one lowercase "
+#~ "character\n"
+#~ " (e.g. PErfect to Perfect)"
+#~ msgstr ""
+#~ "Konvertér &to store bogstaver til et stort og et lille bogstave\n"
+#~ "(f.eks. PErfekt til Perfekt)"
+
+#, fuzzy
+#~| msgid ""
+#~| "Detect when a URL (Uniform Resource Locator) is typed and provide "
+#~| "formatting that matches the way an Internet browser would show a URL."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Detect when a URL (Uniform Resource Locator) is typed and provide "
+#~ "formatting that matches the way an Internet browser would show a URL."
+#~ msgstr ""
+#~ "Registrér når en URL (Uniform Resource Locator) skrives og lav "
+#~ "formatering der svarer til måden hvorpå en internetbrowser viser en URL."
+
+#, fuzzy
+#~| msgid "Autoformat &URLs"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Autoformat &URLs"
+#~ msgstr "Autoformatér &URL'er"
+
+#, fuzzy
+#~| msgid ""
+#~| "Make sure that more than one space cannot be typed, as this is a common "
+#~| "mistake which is quite hard to find in formatted text."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Make sure that more than one space cannot be typed, as this is a common "
+#~ "mistake which is quite hard to find in formatted text."
+#~ msgstr ""
+#~ "Sørg for at mere end et mellemrum ikke kan indtastes, da dette er en "
+#~ "udbredt fejl, som er ganske vanskelig at finde i formateret tekst."
+
+#, fuzzy
+#~| msgid "&Suppress double spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Suppress double spaces"
+#~ msgstr "Under&tryk dobbelte mellemrum"
+
+#, fuzzy
+#~| msgid ""
+#~| "Keep correct formatting and indenting of sentences by automatically "
+#~| "removing spaces typed at the beginning and end of a paragraph."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Keep correct formatting and indenting of sentences by automatically "
+#~ "removing spaces typed at the beginning and end of a paragraph."
+#~ msgstr ""
+#~ "Behold korrekt formatering og indrykning af sætninger ved automatisk at "
+#~ "fjerne mellemrum som indtastes ved begyndelsen og afslutningen af et "
+#~ "afsnit."
+
+#, fuzzy
+#~| msgid "R&emove spaces at the beginning and end of paragraphs"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&emove spaces at the beginning and end of paragraphs"
+#~ msgstr "Fj&ern mellemrum ved begyndelsen og afslutningen af afsnit"
+
+#, fuzzy
+#~| msgid ""
+#~| "When you use _underline_ or *bold*, the text between the underscores or "
+#~| "asterisks will be converted to underlined or bold text."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "When you use _underline_ or *bold*, the text between the underscores or "
+#~ "asterisks will be converted to underlined or bold text."
+#~ msgstr ""
+#~ "Når du bruger _understregning_ eller *fed*, vil teksten mellem "
+#~ "understregerne eller stjernerne blive konverteret til understreget eller "
+#~ "fed tekst."
+
+#, fuzzy
+#~| msgid "Automatically do &bold and underline formatting"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatically do &bold and underline formatting"
+#~ msgstr "Udfør automatisk &fed- og understreg-formatering"
+
+#, fuzzy
+#~| msgid "Most standard fraction notations will be converted when available"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Most standard fraction notations will be converted when available"
+#~ msgstr ""
+#~ "De fleste almindelige brøker vil blive konverteret når det er muligt"
+
+#, fuzzy
+#~| msgid "Re&place 1/2... with ½..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&place 1/2... with ½..."
+#~ msgstr "Erst&at 1/2... med ½..."
+
+#, fuzzy
+#~| msgid ""
+#~| "When typing '1)' or similar in front of a paragraph, automatically "
+#~| "convert the paragraph to use that numbering style. This has the "
+#~| "advantage that further paragraphs will also be numbered and the spacing "
+#~| "is done correctly."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "When typing '1)' or similar in front of a paragraph, automatically "
+#~ "convert the paragraph to use that numbering style. This has the advantage "
+#~ "that further paragraphs will also be numbered and the spacing is done "
+#~ "correctly."
+#~ msgstr ""
+#~ "Konvertér automatisk til nummeropstilling når der skrives \"1)\" eller "
+#~ "lignende foran et afsnit. Dette har den fordel at yderligere afsnit også "
+#~ "vil blive nummererede og indrykning udført korrekt."
+
+#, fuzzy
+#~| msgid "Use &autonumbering for numbered paragraphs"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &autonumbering for numbered paragraphs"
+#~ msgstr "Brug &autonummerering på nummererede afsnit"
+
+#, fuzzy
+#~| msgid "Rep&lace 1st... with 1^st..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rep&lace 1st... with 1^st..."
+#~ msgstr "Ers&tat 1st... med 1^st..."
+
+#, fuzzy
+#~| msgid "Capitalize name of days"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Capitalize name of days"
+#~ msgstr "Brug stort forbogstav i navne på dage"
+
+#, fuzzy
+#~| msgid ""
+#~| "When typing '*' or '-' in front of a paragraph, automatically convert "
+#~| "the paragraph to use that list-style. Using a list-style formatting "
+#~| "means that a correct bullet is used to draw the list."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "When typing '*' or '-' in front of a paragraph, automatically convert the "
+#~ "paragraph to use that list-style. Using a list-style formatting means "
+#~ "that a correct bullet is used to draw the list."
+#~ msgstr ""
+#~ "Konvertér automatisk afsnittet til at bruge passende punktopstilling når "
+#~ "der skrives \"*\" eller \"-\" foran et afsnit. Brug af punktliste-"
+#~ "formatering betyder at et korrekt punkt bruges til at tegne listen."
+
+#, fuzzy
+#~| msgid "Use l&ist-formatting for bulleted paragraphs"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use l&ist-formatting for bulleted paragraphs"
+#~ msgstr "Brug punktl&iste-formatering til afsnit med punkter"
+
+#, fuzzy
+#~| msgid "Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Standard"
+
+#, fuzzy
+#~| msgid "Custom &Quotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom &Quotes"
+#~ msgstr "Brugerdefinerede &citationstegn"
+
+#, fuzzy
+#~| msgid "Replace &double quotes with typographical quotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace &double quotes with typographical quotes"
+#~ msgstr "Erstat &dobbelte citationstegn med typografiske citationstegn"
+
+#, fuzzy
+#~| msgid "Replace &single quotes with typographical quotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace &single quotes with typographical quotes"
+#~ msgstr "Erstat e&nkelte citationstegn med typografiske citationstegn"
+
+#, fuzzy
+#~| msgid "Ad&vanced Autocorrection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ad&vanced Autocorrection"
+#~ msgstr "A&vanceret autokorrektur"
+
+#, fuzzy
+#~| msgid "Replacements and exceptions for language:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replacements and exceptions for language:"
+#~ msgstr "Erstatninger og undtagelser for sprog:"
+
+#, fuzzy
+#~| msgid "All Languages"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All Languages"
+#~ msgstr "Alle sprog"
+
+#, fuzzy
+#~| msgid "&Enable word replacement"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Enable word replacement"
+#~ msgstr "&Aktivér orderstatning"
+
+#, fuzzy
+#~| msgid "Replace &text with format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace &text with format"
+#~ msgstr "Erstat &tekst i formatet"
+
+#, fuzzy
+#~| msgid "&Find"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Find"
+#~ msgstr "&Find"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Re&place"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&place"
+#~ msgstr "E&rstat"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Fjern"
+
+#, fuzzy
+#~| msgid "C&hange Format..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&hange Format..."
+#~ msgstr "S&kift format..."
+
+#, fuzzy
+#~| msgid "C&lear Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&lear Format"
+#~ msgstr "R&yd format"
+
+#, fuzzy
+#~| msgid "Find"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Find"
+#~ msgstr "Find"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Erstat"
+
+#, fuzzy
+#~| msgid "E&xceptions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&xceptions"
+#~ msgstr "&Undtagelser"
+
+#, fuzzy
+#~| msgid "Do not treat as the end of a sentence:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do not treat as the end of a sentence:"
+#~ msgstr "Behandl ikke som afslutning af en sætning:"
+
+#, fuzzy
+#~| msgid "Autoinclude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Autoinclude"
+#~ msgstr "Autoinkludér"
+
+#, fuzzy
+#~| msgid "R&emove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&emove"
+#~ msgstr "Fj&ern"
+
+#, fuzzy
+#~| msgid "Accept two uppercase letters in:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Accept two uppercase letters in:"
+#~ msgstr "Acceptér to store bogstaver i:"
+
+#, fuzzy
+#~| msgid "A&dd"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A&dd"
+#~ msgstr "Til&føj"
+
+#, fuzzy
+#~| msgid "Configure &Autocorrection..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Indstil &autokorrektur..."
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Autocorrection"
+#~ msgstr "Autokorrektur"
+
+#, fuzzy
+#~| msgid "&Modify"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Modify"
+#~ msgstr "Æ&ndr"
+
+#, fuzzy
+#~| msgid "&Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Add"
+#~ msgstr "&Tilføj"
+
+#, fuzzy
+#~| msgid "Select Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Character"
+#~ msgstr "Vælg tegn"
+
+#, fuzzy
+#~| msgid "Autocorrect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Autocorrect"
+#~ msgstr "Autokorrigér"

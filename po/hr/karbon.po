@@ -1,0 +1,1931 @@
+# Translation of artwork to Croatian
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon 0\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2007-01-08 01:49+0100\n"
+"Last-Translator: Renato Pavicic <renato@translator-shop.org>\n"
+"Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
+"Language: hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: TransDict server\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+#, fuzzy
+#| msgid "Section"
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr "Odsječak"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "&Redoslijed"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "&Poravnanje"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, fuzzy, kde-format
+msgid "&File"
+msgstr "Ispuna"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr ""
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr ""
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "&Objekt …"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, fuzzy, kde-format
+msgid "&Distribute"
+msgstr "Obriši objekte"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, fuzzy, kde-format
+msgid "&Path"
+msgstr "putanja"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, fuzzy, kde-format
+msgid "Effe&cts"
+msgstr "Efekti"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "Postavke okvira"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr ""
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr ""
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, kde-format
+msgid "Object"
+msgstr "Objekt"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, fuzzy, kde-format
+msgid "Align"
+msgstr "&Poravnanje"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "Efekti"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, kde-format
+msgid "View"
+msgstr ""
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, fuzzy, kde-format
+msgid "&Flatten Path..."
+msgstr "Uzorak"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, fuzzy, kde-format
+msgid "Flatten Path"
+msgstr "Uzorak"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, fuzzy, kde-format
+msgid "Properties"
+msgstr "Svojstva objekata"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, fuzzy, kde-format
+msgid "Flatness:"
+msgstr "Pljosnatost:"
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "Uzorak"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr ""
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, fuzzy, kde-format
+msgid "&Refine Path..."
+msgstr "Uzorak"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, fuzzy, kde-format
+msgid "Refine Path"
+msgstr "Uzorak"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, kde-format
+msgid "Subdivisions:"
+msgstr ""
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr "Zaobljenost:"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, fuzzy, kde-format
+msgid "&Round Corners..."
+msgstr "Zaobljenost:"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, fuzzy, kde-format
+msgid "Round Corners"
+msgstr "Zaobljenost:"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "Polumjer:"
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr ""
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, kde-format
+msgid "&Whirl/Pinch..."
+msgstr ""
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, kde-format
+msgid "Whirl Pinch"
+msgstr ""
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, kde-format
+msgid "Info"
+msgstr ""
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr ""
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "Kut:"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, kde-format
+msgid "Pinch:"
+msgstr ""
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+#, fuzzy
+#| msgid "Raise Layer"
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "/Hrpa/Podigni Sloj"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+#, fuzzy
+#| msgid "Lower Layer"
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "/Hrpa/Spusti Sloj"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, kde-format
+msgid "Configure"
+msgstr ""
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "Sučelje"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "Razno"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, kde-format
+msgid "Grid"
+msgstr "Mreža"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, fuzzy, kde-format
+#| msgid "Document"
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Dokument"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "Postavke okvira"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#: ui/KarbonAboutData.h:22
+#, kde-format
+msgid "Karbon"
+msgstr ""
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr ""
+
+#: ui/KarbonAboutData.h:26
+#, kde-format
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr ""
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr ""
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr ""
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr ""
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr ""
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr ""
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr ""
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr ""
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr ""
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr ""
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr ""
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr ""
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr ""
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Renato_Pavičić"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "renato@translator-shop.org"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "&Uvoz"
+
+#: ui/KarbonView.cpp:346
+#, fuzzy, kde-format
+msgid "Choose Graphic to Add"
+msgstr "Stupnjevitost"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr ""
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, fuzzy, kde-format
+msgid "Import graphic"
+msgstr "&Uvoz"
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr ""
+
+#: ui/KarbonView.cpp:612
+#, fuzzy
+#| msgid "H&orizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "&Vodoravno:"
+
+#: ui/KarbonView.cpp:614
+#, fuzzy
+#| msgid "H&orizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "&Vodoravno:"
+
+#: ui/KarbonView.cpp:616
+#, fuzzy
+#| msgid "H&orizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "&Vodoravno:"
+
+#: ui/KarbonView.cpp:671
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "Uzorak"
+
+#: ui/KarbonView.cpp:852
+#, fuzzy, kde-format
+#| msgid "View &Mode"
+msgid "Outline &Mode"
+msgstr "&Način pogleda"
+
+#: ui/KarbonView.cpp:860
+#, fuzzy, kde-format
+msgid "&Import Graphic..."
+msgstr "&Uvoz"
+
+#: ui/KarbonView.cpp:864
+#, fuzzy, kde-format
+msgid "Edit Guides"
+msgstr "Mreža"
+
+#: ui/KarbonView.cpp:870
+#, fuzzy, kde-format
+#| msgid "&Duplicate"
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "&Udvostruči"
+
+#: ui/KarbonView.cpp:875
+#, fuzzy, kde-format
+msgid "Distribute Center (Horizontal)"
+msgstr "Obriši objekte"
+
+#: ui/KarbonView.cpp:879
+#, fuzzy, kde-format
+msgid "Distribute Gaps (Horizontal)"
+msgstr "Obriši objekte"
+
+#: ui/KarbonView.cpp:883
+#, fuzzy, kde-format
+msgid "Distribute Left Borders"
+msgstr "Obriši objekte"
+
+#: ui/KarbonView.cpp:887
+#, fuzzy, kde-format
+msgid "Distribute Right Borders"
+msgstr "Obriši objekte"
+
+#: ui/KarbonView.cpp:891
+#, fuzzy, kde-format
+msgid "Distribute Center (Vertical)"
+msgstr "Obriši objekte"
+
+#: ui/KarbonView.cpp:895
+#, fuzzy, kde-format
+msgid "Distribute Gaps (Vertical)"
+msgstr "Obriši objekte"
+
+#: ui/KarbonView.cpp:899
+#, fuzzy, kde-format
+msgid "Distribute Bottom Borders"
+msgstr "Obriši objekte"
+
+#: ui/KarbonView.cpp:903
+#, fuzzy, kde-format
+msgid "Distribute Top Borders"
+msgstr "Obriši objekte"
+
+#: ui/KarbonView.cpp:907
+#, fuzzy, kde-format
+msgid "Show Color Palette"
+msgstr "P&odnožje"
+
+#: ui/KarbonView.cpp:909
+#, fuzzy, kde-format
+msgid "Show or hide color palette"
+msgstr "P&odnožje"
+
+#: ui/KarbonView.cpp:913
+#, fuzzy, kde-format
+#| msgid "&Object"
+msgid "&Clip Object"
+msgstr "&Objekt …"
+
+#: ui/KarbonView.cpp:917
+#, fuzzy, kde-format
+#| msgid "&Group Objects"
+msgid "&Unclip Objects"
+msgstr "&Grupiraj objekte"
+
+#: ui/KarbonView.cpp:921
+#, fuzzy, kde-format
+#| msgid "H&orizontal:"
+msgid "Mirror Vertically"
+msgstr "&Vodoravno:"
+
+#: ui/KarbonView.cpp:925
+#, fuzzy, kde-format
+#| msgid "H&orizontal:"
+msgid "Mirror Horizontally"
+msgstr "&Vodoravno:"
+
+#: ui/KarbonView.cpp:932
+#, fuzzy, kde-format
+msgid "&Close Path"
+msgstr "Uzorak"
+
+#: ui/KarbonView.cpp:938
+#, fuzzy, kde-format
+msgid "Com&bine Path"
+msgstr "Uzorak"
+
+#: ui/KarbonView.cpp:944
+#, fuzzy, kde-format
+msgid "Se&parate Path"
+msgstr "Uzorak"
+
+#: ui/KarbonView.cpp:950
+#, fuzzy, kde-format
+msgid "Re&verse Path"
+msgstr "Uzorak"
+
+#: ui/KarbonView.cpp:956
+#, fuzzy, kde-format
+msgid "Intersect Paths"
+msgstr "Uzorak"
+
+#: ui/KarbonView.cpp:962
+#, fuzzy, kde-format
+msgid "Subtract Paths"
+msgstr "Uzorak"
+
+#: ui/KarbonView.cpp:968
+#, fuzzy, kde-format
+msgid "Unite Paths"
+msgstr "Uzorak"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr ""
+
+#: ui/KarbonView.cpp:980
+#, fuzzy, kde-format
+#| msgid "Snap to Grid"
+msgid "Snap Path to Grid"
+msgstr "Poravnaj s rešetkom"
+
+#: ui/KarbonView.cpp:988
+#, fuzzy, kde-format
+#| msgid "Selection"
+msgid "Zoom to Selection"
+msgstr "Odabir"
+
+#: ui/KarbonView.cpp:992
+#, fuzzy, kde-format
+#| msgid "Selection"
+msgid "Zoom to Drawing"
+msgstr "Odabir"
+
+#: ui/KarbonZoomController.cpp:51
+#, fuzzy, kde-format
+msgid "Zoom"
+msgstr "Alat za zumiranje"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Show status bar:"
+msgstr "Pokaži traku stanja"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr ""
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr ""
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, fuzzy, kde-format
+msgid "Select palette"
+msgstr "Način odabira"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "Nijedan"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "Nijedan"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, fuzzy, kde-format
+#| msgid "Stroke"
+msgid "Stroke:"
+msgstr "Potez kistom"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, fuzzy, kde-format
+#| msgid "Fill"
+msgid "Fill:"
+msgstr "Ispuna"
+
+#~ msgid "D&elete"
+#~ msgstr "O&briši"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgid "Layer view"
+#~ msgstr "Slojevi"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgid "Add a new layer"
+#~ msgstr "Novi sloj"
+
+#, fuzzy
+#~ msgid "Delete selected objects"
+#~ msgstr "Obriši objekte"
+
+#, fuzzy
+#~ msgid "Raise selected objects"
+#~ msgstr "Obriši objekte"
+
+#, fuzzy
+#~ msgid "Lower selected objects"
+#~ msgstr "Obriši objekte"
+
+#~ msgid "New Layer"
+#~ msgstr "Novi Sloj"
+
+#~ msgid "New layer"
+#~ msgstr "Novi sloj"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Preimenuj sloj"
+
+#, fuzzy
+#~| msgid "Delete Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Izbriši sloj"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgid "Layer"
+#~ msgstr "Slojevi"
+
+#, fuzzy
+#~| msgid "group"
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "grupa"
+
+#, fuzzy
+#~| msgid "Shear"
+#~ msgid "Shape"
+#~ msgstr "Striženje"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Neprozirnost"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgid "yes"
+#~ msgstr "Stil:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Grupiraj objekte"
+
+#, fuzzy
+#~| msgid "Insert Image"
+#~ msgid "Master Page"
+#~ msgstr "Umetni sliku"
+
+#~ msgid "Show Rulers"
+#~ msgstr "P&odnožje"
+
+#, fuzzy
+#~ msgid "Shows or hides rulers"
+#~ msgstr "P&odnožje"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Poravnaj s rešetkom"
+
+#, fuzzy
+#~ msgid "Snaps to grid"
+#~ msgstr "&Prijanjaj uz mrežu"
+
+#, fuzzy
+#~| msgid "&Order"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Order"
+#~ msgstr "&Redoslijed"
+
+#, fuzzy
+#~| msgid "&Align"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Align"
+#~ msgstr "&Poravnanje"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "Ispuna"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Object"
+#~ msgstr "&Objekt …"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Path"
+#~ msgstr "putanja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effe&cts"
+#~ msgstr "Efekti"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Postavke okvira"
+
+#, fuzzy
+#~| msgid "Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "Objekt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align"
+#~ msgstr "&Poravnanje"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Efekti"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Properties"
+#~ msgstr "Svojstva objekata"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatness:"
+#~ msgstr "Pljosnatost:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Round Corners..."
+#~ msgstr "Zaobljenost:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius:"
+#~ msgstr "Polumjer:"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Kut:"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interface"
+#~ msgstr "Sučelje"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Razno"
+
+#, fuzzy
+#~| msgid "Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Mreža"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Postavke okvira"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer view"
+#~ msgstr "Slojevi"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new layer"
+#~ msgstr "Novi sloj"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected objects"
+#~ msgstr "Obriši objekte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise selected objects"
+#~ msgstr "Obriši objekte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower selected objects"
+#~ msgstr "Obriši objekte"
+
+#, fuzzy
+#~| msgid "New Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "Novi Sloj"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New layer"
+#~ msgstr "Novi sloj"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Slojevi"
+
+#, fuzzy
+#~| msgid "group"
+#~ msgctxt "(qtundo-format) A group of shapes"
+#~ msgid "Group"
+#~ msgstr "grupa"
+
+#, fuzzy
+#~| msgid "Shear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Striženje"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format) The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Neprozirnost"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "yes"
+#~ msgstr "Stil:"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Renato_Pavičić"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "renato@translator-shop.org"
+
+#, fuzzy
+#~| msgid "Insert Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page"
+#~ msgstr "Umetni sliku"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Stupnjevitost"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import graphic"
+#~ msgstr "&Uvoz"
+
+#, fuzzy
+#~| msgid "View &Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outline &Mode"
+#~ msgstr "&Način pogleda"
+
+#, fuzzy
+#~| msgid "D&elete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "O&briši"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Guides"
+#~ msgstr "Mreža"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgctxt "(qtundo-format) Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Udvostruči"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Obriši objekte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Obriši objekte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Obriši objekte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Obriši objekte"
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "P&odnožje"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "P&odnožje"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show or hide color palette"
+#~ msgstr "P&odnožje"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Poravnaj s rešetkom"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snaps to grid"
+#~ msgstr "&Prijanjaj uz mrežu"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Clip Object"
+#~ msgstr "&Objekt …"
+
+#, fuzzy
+#~| msgid "&Group Objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Unclip Objects"
+#~ msgstr "&Grupiraj objekte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Close Path"
+#~ msgstr "Uzorak"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract Paths"
+#~ msgstr "Uzorak"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Poravnaj s rešetkom"
+
+#, fuzzy
+#~| msgid "Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Odabir"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "Alat za zumiranje"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show status bar:"
+#~ msgstr "Pokaži traku stanja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select palette"
+#~ msgstr "Način odabira"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no fill"
+#~ msgid "None"
+#~ msgstr "Nijedan"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Nijedan"
+
+#, fuzzy
+#~| msgid "Stroke"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stroke:"
+#~ msgstr "Potez kistom"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill:"
+#~ msgstr "Ispuna"
+
+#, fuzzy
+#~ msgid "Stencil Box"
+#~ msgstr "Uzorak"
+
+#~ msgid "File to open"
+#~ msgstr "Datoteka koju treba otvoriti"
+
+#, fuzzy
+#~| msgid "Bold"
+#~ msgid "Blend"
+#~ msgstr "Masno"
+
+#, fuzzy
+#~ msgid "Normal"
+#~ msgstr "Obično"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgid "Lighten"
+#~ msgstr "Visina:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgid "Radius"
+#~ msgstr "Polumjer:"
+
+#, fuzzy
+#~ msgid "Saturate colors"
+#~ msgstr "Potez kistom"
+
+#, fuzzy
+#~| msgid "Rotate"
+#~ msgid "Rotate hue"
+#~ msgstr "Rotiraj"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgid "Angle"
+#~ msgstr "Kut:"
+
+#, fuzzy
+#~ msgid "Table"
+#~ msgstr "Ispuna"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Linear"
+#~ msgstr "Linearni"
+
+#, fuzzy
+#~| msgid "Shear"
+#~ msgid "Slope"
+#~ msgstr "Striženje"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgid "Intercept"
+#~ msgstr "Sučelje"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgid "Offset"
+#~ msgstr "Efekti"
+
+#, fuzzy
+#~| msgid "Components"
+#~ msgid "Composite"
+#~ msgstr "Komponente"
+
+#, fuzzy
+#~| msgid "Section"
+#~ msgid "Operation"
+#~ msgstr "Odsječak"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgid "Duplicate"
+#~ msgstr "&Udvostruči"
+
+#, fuzzy
+#~| msgid "Target:"
+#~ msgid "Target point:"
+#~ msgstr "Cilj:"
+
+#, fuzzy
+#~| msgid "Cap:"
+#~ msgid "Bias:"
+#~ msgstr "Oblik:"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Edit kernel"
+#~ msgstr "Uzorak"
+
+#, fuzzy
+#~ msgid "Flood color"
+#~ msgstr "Potez kistom"
+
+#, fuzzy
+#~ msgid "Image"
+#~ msgstr "slika"
+
+#, fuzzy
+#~ msgid "Select image"
+#~ msgstr "Način odabira"
+
+#, fuzzy
+#~ msgid "Dilate"
+#~ msgstr "O&briši"
+
+#, fuzzy
+#~| msgid "Section"
+#~ msgid "Operator:"
+#~ msgstr "Odsječak"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgid "Radius x:"
+#~ msgstr "Polumjer:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgid "Radius y:"
+#~ msgstr "Polumjer:"
+
+#~ msgid "Target:"
+#~ msgstr "Cilj:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Line"
+#~ msgstr "Linearni"
+
+#~ msgid "Fill"
+#~ msgstr "Ispuna"
+
+#~ msgid "Type:"
+#~ msgstr "Tip:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Linearni"
+
+#, fuzzy
+#~| msgid "Radial"
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Radijalno"
+
+#~ msgid "Repeat:"
+#~ msgstr "Ponovi:"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Nijedan"
+
+#, fuzzy
+#~ msgid "Reflect"
+#~ msgstr "Reflektovano"
+
+#~ msgid "Repeat"
+#~ msgstr "Ponovi"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Overall opacity:"
+#~ msgstr "Neprozirnost:"
+
+#, fuzzy
+#~ msgid "Stop color."
+#~ msgstr "Potez kistom"
+
+#, fuzzy
+#~ msgid "Tiled"
+#~ msgstr "Ispuna"
+
+#, fuzzy
+#~| msgid "Align Right"
+#~ msgid "Top Right"
+#~ msgstr "Poravnaj desno"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgid "Right"
+#~ msgstr "Visina:"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Bottom"
+#~ msgstr "Poravnaj dolje"
+
+#~ msgid "Stroke"
+#~ msgstr "Potez kistom"
+
+#, fuzzy
+#~ msgid "Hide Rulers"
+#~ msgstr "P&odnožje"
+
+#, fuzzy
+#~ msgid "Stop color:"
+#~ msgstr "Potez kistom"
+
+#, fuzzy
+#~| msgid "Toolbox"
+#~ msgid "Tools"
+#~ msgstr "Alatni okvir"
+
+#, fuzzy
+#~| msgid "Show Grid"
+#~ msgid "Show Guides"
+#~ msgstr "Prikaži mrežu"
+
+#, fuzzy
+#~ msgid "Shows or hides guides"
+#~ msgstr "Prikaži rešetku"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Nijedan"
+
+#, fuzzy
+#~| msgid "Solid"
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Puno"
+
+#~ msgid "Gradient"
+#~ msgstr "Gradijent"
+
+#~ msgid "Pattern"
+#~ msgstr "Uzorak"
+
+#~ msgid "Units:"
+#~ msgstr "Mjere:"
+
+#, fuzzy
+#~| msgid "Inner radius:"
+#~ msgid "Handle radius:"
+#~ msgstr "Unutrašnji poluprečnik:"
+
+#, fuzzy
+#~ msgid "Ungroup shapes"
+#~ msgstr "Grupiraj objekte"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Grupiraj objekte"
+
+#, fuzzy
+#~| msgid "Show &grid"
+#~ msgid "Show grid:"
+#~ msgstr "Prikaži rešetku"
+
+#, fuzzy
+#~ msgid "Snap to grid:"
+#~ msgstr "&Prijanjaj uz mrežu"
+
+#, fuzzy
+#~| msgid "Grid &color:"
+#~ msgid "Grid color:"
+#~ msgstr "&Boja mreže:"
+
+#, fuzzy
+#~| msgid "&Horizontal:"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Vodoravno:"
+
+#, fuzzy
+#~| msgid "&Vertical:"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Okomito:"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "Create backup file"
+#~ msgstr "Napravi &tabelu"
+
+#, fuzzy
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Stupnjevitost"
+
+#, fuzzy
+#~| msgid "Reference"
+#~ msgid "Reference Point:"
+#~ msgstr "Referenca"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Pattern Size"
+#~ msgstr "Uzorak"
+
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Edit Gradient"
+#~ msgstr "Gradijent"
+
+#, fuzzy
+#~ msgid "Predefined Gradients"
+#~ msgstr "Gradijent"
+
+#, fuzzy
+#~ msgid "Gradient tool"
+#~ msgstr "Stupnjevitost"
+
+#, fuzzy
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Stupnjevitost"
+
+#, fuzzy
+#~ msgid "Pattern tool"
+#~ msgstr "Uzorak"
+
+#, fuzzy
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Uzorak"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgid "Precision:"
+#~ msgstr "Položaj:"
+
+#, fuzzy
+#~| msgid "Raw"
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Raw"
+
+#~ msgid "Curve"
+#~ msgstr "Krivulja"
+
+#~ msgid "Straight"
+#~ msgstr "Ravno"
+
+#~ msgid "Optimize"
+#~ msgstr "Optimiziraj"
+
+#, fuzzy
+#~ msgid "Exactness:"
+#~ msgstr "Pljosnatost:"
+
+#, fuzzy
+#~ msgid "&Follow selected path"
+#~ msgstr "Obriši objekte"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "  Širina"
+
+#, fuzzy
+#~| msgid "Start angle:"
+#~ msgid "Use tablet &angle"
+#~ msgstr "Početni kut:"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgid "Fixation:"
+#~ msgstr "Orijentacija:"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgid "Current"
+#~ msgstr "Krivulja"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Graphics Pen"
+#~ msgstr "Gradijent"
+
+#, fuzzy
+#~| msgid "Ellipse Tool"
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Eliptični alat"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "&Stavi ispred"
+
+#~ msgid "&Raise"
+#~ msgstr "&Povećaj"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "&Snizi"
+
+#~ msgid "Send to &Back"
+#~ msgstr "&Pošalji unazad"
+
+#~ msgid "Show Grid"
+#~ msgstr "Prikaži mrežu"
+
+#, fuzzy
+#~ msgid "Hide Grid"
+#~ msgstr "Mreža"
+
+#, fuzzy
+#~ msgid "Shows or hides grid"
+#~ msgstr "Prikaži rešetku"
+
+#~ msgid "Align Left"
+#~ msgstr "Poravnaj lijevo"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgid "Align Right"
+#~ msgstr "Poravnaj lijevo"
+
+#~ msgid "Align Top"
+#~ msgstr "Poravnato gore"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Align Bottom"
+#~ msgstr "Poravnaj dolje"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Stop opacity:"
+#~ msgstr "Neprozirnost:"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "Pokaži traku stanja"
+
+#~ msgid "Transform"
+#~ msgstr "Transformacija"
+
+#~ msgid "R:"
+#~ msgstr "R:"
+
+#, fuzzy
+#~ msgid "SX:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~ msgid "SY:"
+#~ msgstr "Y:"
+
+#~ msgid "Shear"
+#~ msgstr "Striženje"
+
+#, fuzzy
+#~| msgid "Text Tool"
+#~ msgid "Simple Text Tool"
+#~ msgstr "Tekst Alat"
+
+#~ msgid "Old:"
+#~ msgstr "Miješalica:"
+
+#~ msgid "New:"
+#~ msgstr "Novo:"
+
+#~ msgid "G:"
+#~ msgstr "G:"
+
+#~ msgid "B:"
+#~ msgstr "B:"
+
+#~ msgid "RGB"
+#~ msgstr "RBG"
+
+#~ msgid "Type"
+#~ msgstr "Tip"
+
+#~ msgid "Join"
+#~ msgstr "Spoji"
+
+#~ msgid "Format:"
+#~ msgstr "Format:"
+
+#~ msgid "Patterns"
+#~ msgstr "Uzorci"
+
+#~ msgid "Clipart"
+#~ msgstr "Slike za izrezivanje (clipart)"
+
+#, fuzzy
+#~ msgid "Stroke: None"
+#~ msgstr "Potez kistom"
+
+#, fuzzy
+#~ msgid "Fill: None"
+#~ msgstr "Boja ispune"
+
+#, fuzzy
+#~ msgid "Fill: RGB"
+#~ msgstr "Ispuna"
+
+#, fuzzy
+#~ msgid "Fill: CMYK"
+#~ msgstr "Boja ispune"
+
+#, fuzzy
+#~ msgid "Fill: HSB"
+#~ msgstr "Ispuna"
+
+#, fuzzy
+#~ msgid "Fill: Color"
+#~ msgstr "Boja ispune"
+
+#, fuzzy
+#~ msgid "Fill: Gradient"
+#~ msgstr "Gradijent"
+
+#, fuzzy
+#~ msgid "Fill: Pattern"
+#~ msgstr "Uzorak"
+
+#, fuzzy
+#~ msgid "Stroke: RGB"
+#~ msgstr "Potez kistom"
+
+#, fuzzy
+#~ msgid "Stroke: CMYK"
+#~ msgstr "Potez kistom"
+
+#, fuzzy
+#~ msgid "Stroke: HSB"
+#~ msgstr "Potez kistom"
+
+#, fuzzy
+#~ msgid "Polygonize"
+#~ msgstr "Mnogokut"
+
+#, fuzzy
+#~ msgid "Round corners:"
+#~ msgstr "Zaobljenost:"
+
+#~ msgid "Distance:"
+#~ msgstr "Udaljenost:"
+
+#~ msgid "Create Shadow"
+#~ msgstr "Kreiraj Sjenu"
+
+#~ msgid "Object Properties"
+#~ msgstr "Svojstva objekata"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "O&briši"
+
+#~ msgid "&Import"
+#~ msgstr "&Uvoz"
+
+#, fuzzy
+#~| msgid "Rotate Tool"
+#~ msgid "Unnamed Tool"
+#~ msgstr "Rotiraj alate"
+
+#, fuzzy
+#~ msgid "&Undo"
+#~ msgstr "&Vrati:"
+
+#~ msgid "&Undo: "
+#~ msgstr "&Vrati:"
+
+#~ msgid "Insert Text"
+#~ msgstr "Umetni objekt"
+
+#~ msgid "Rotate Object"
+#~ msgstr "Rotiraj objekt"
+
+#, fuzzy
+#~ msgid "Translate Points"
+#~ msgstr "Prevedi"
+
+#, fuzzy
+#~ msgid "Translate Point"
+#~ msgstr "Prevedi"
+
+#~ msgid "Ellipse"
+#~ msgstr "Elipsa"
+
+#~ msgid "Polygon"
+#~ msgstr "Poligon"
+
+#~ msgid "Polyline"
+#~ msgstr "Polilinija"
+
+#~ msgid "Sinus"
+#~ msgstr "Sinus"
+
+#~ msgid "Spiral"
+#~ msgstr "Spirala"
+
+#~ msgid "Star"
+#~ msgstr "Zvijezda"
+
+#~ msgid "Round"
+#~ msgstr "Okruglo"
+
+#~ msgid "Rectangular"
+#~ msgstr "Pravokutnik"
+
+#~ msgid "Clockwise"
+#~ msgstr "Smjer kazaljke"
+
+#, fuzzy
+#~ msgid "Spiral Tool"
+#~ msgstr "Spirala"
+
+#~ msgid "Wheel"
+#~ msgstr "Kotačić"
+
+#~ msgid "Roundness:"
+#~ msgstr "Zaobljenost:"
+
+#, fuzzy
+#~ msgid "Star Tool"
+#~ msgstr "Zvijezda"
+
+#~ msgid "Shadow"
+#~ msgstr "Sjena"
+
+#~ msgid "Text"
+#~ msgstr "Tekst"
+
+#~ msgid "Alignment:"
+#~ msgstr "Poravnanje:"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "Položaj:"
+
+#, fuzzy
+#~ msgid "New text"
+#~ msgstr "tekst"
+
+#~ msgid "Change Text"
+#~ msgstr "Promijeni kut"
+
+#~ msgid "path"
+#~ msgstr "putanja"
+
+#~ msgid "text"
+#~ msgstr "tekst"
+
+#~ msgid "image"
+#~ msgstr "slika"
+
+#, fuzzy
+#~ msgid "Paste Object"
+#~ msgstr "Rotiraj objekt"
+
+#, fuzzy
+#~ msgid "Paste Objects"
+#~ msgstr "Rotiraj objekt"
+
+#, fuzzy
+#~ msgid "Round cap"
+#~ msgstr "Okruglo"
+
+#~ msgid "Join:"
+#~ msgstr "Točka"
+
+#, fuzzy
+#~ msgid "Round join"
+#~ msgstr "Zaobljenost:"
+
+#~ msgid "&History"
+#~ msgstr "&Povijest"
+
+#, fuzzy
+#~ msgid "Insert Knots"
+#~ msgstr "Umetni objekt"
+
+#~ msgid "Insert Clipart"
+#~ msgstr "Umetni iz cliparta"
+
+#~ msgid "Zoom Tool"
+#~ msgstr "Alat za zumiranje"
+
+#~ msgid "Translate"
+#~ msgstr "Prevedi"
+
+#~ msgid "Whole Page"
+#~ msgstr "Cijela stranica"
+
+#~ msgid "Wireframe"
+#~ msgstr "Žičani okvir"
+
+#, fuzzy
+#~ msgid "25%"
+#~ msgstr "25%"
+
+#, fuzzy
+#~ msgid "100%"
+#~ msgstr "   100%"
+
+#, fuzzy
+#~ msgid "800%"
+#~ msgstr "   800%"
+
+#, fuzzy
+#~ msgid "Line Style"
+#~ msgstr "&Stil"
+
+#~ msgid "History"
+#~ msgstr "Povijest"
+
+#~ msgid "Clean Up"
+#~ msgstr "Očisti"
+
+#~ msgid "Snap to g&rid"
+#~ msgstr "&Prijanjaj uz mrežu"
+
+#~ msgid "Snap Distance"
+#~ msgstr "Razmak:"
+
+#~ msgid "V&ertical:"
+#~ msgstr "&Okomito:"
+
+#~ msgid "New"
+#~ msgstr "Novi"
+
+#~ msgid "Raise"
+#~ msgstr "Uzdigni"
+
+#~ msgid "Lower"
+#~ msgstr "Niže"
+
+#~ msgid "Item"
+#~ msgstr "Stavka"
+
+#~ msgid "L"
+#~ msgstr "L"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "Add Layer"
+#~ msgstr "/Dodaj Masku Sloja..."
+
+#~ msgid "Commands"
+#~ msgstr "Naredbe"
+
+#~ msgid "Rectangle"
+#~ msgstr "Pravokutnik"
+
+#~ msgid "Full"
+#~ msgstr "Puno"
+
+#~ msgid "Pie"
+#~ msgstr "Torta"
+
+#~ msgid "Arc"
+#~ msgstr "Luk"
+
+#~ msgid "Pencil"
+#~ msgstr "Olovka"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Umetni mnogokut"
+
+#, fuzzy
+#~ msgid "Polygon Tool"
+#~ msgstr "Mnogokut"
+
+#, fuzzy
+#~ msgid "Rectangle Tool"
+#~ msgstr "Pravokutnik"
+
+#, fuzzy
+#~ msgid "Height (%1):"
+#~ msgstr "Visina:"
+
+#, fuzzy
+#~ msgid "Round Rectangle Tool"
+#~ msgstr "Pravokutnik"
+
+#, fuzzy
+#~ msgid "Round Rectangle"
+#~ msgstr "Pravokutnik"
+
+#, fuzzy
+#~ msgid "Select Nodes Tool"
+#~ msgstr "Način odabira"
+
+#~ msgid "Selection Mode"
+#~ msgstr "Način odabira"
+
+#~ msgid "Select"
+#~ msgstr "Odaberi"
+
+#~ msgid "Select Tool"
+#~ msgstr "Alat za odabir"
+
+#~ msgid "Shear Tool"
+#~ msgstr "Alat za rezanje"

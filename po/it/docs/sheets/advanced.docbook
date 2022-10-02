@@ -1,0 +1,1417 @@
+<chapter id="hardsums">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Andrea</firstname
+><surname
+>Celli</surname
+><affiliation
+><address
+><email
+>andrea.celli@libero.it</email
+></address
+></affiliation
+><contrib
+>Traduzione italiana</contrib
+></othercredit
+><othercredit role="translator"
+> <firstname
+>Vincenzo</firstname
+><surname
+>Reale</surname
+><affiliation
+><address
+> <email
+>smart2128vr@gmail.com</email
+></address
+></affiliation
+> <contrib
+> Traduzione italiana</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>&sheets; avanzato</title>
+<sect1 id="series">
+<title
+>Serie</title>
+<para
+>Quando crei un foglio elettronico avrai spesso bisogno di includere una serie di valori come 10, 11, 12... allineati o incolonnati. In &sheets; ci sono diversi modi per farlo.</para>
+<para
+>Per una serie breve e semplice come 5, 6, 7, 8... il metodo <quote
+>Trascina e copia </quote
+> è il più semplice. Immetti il valore iniziale nella prima cella e il valore successivo nella cella vicina. Poi seleziona le due celle e posiziona il puntatore del mouse sul quadratino nell'angolo in basso a destra della cella. Il cursore si trasformerà in una freccia a due punte orientata in diagonale. Mantieni premuto il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse mentre trascini le celle come ti serve (in verticale o in orizzontale).</para>
+<para
+>Viene utilizzato l'incremento calcolato come differenza tra i due valori di partenza che hai fornito. Per esempio, se hai inserito <userinput
+>4</userinput
+> nella cella A1 e <userinput
+>3,5</userinput
+> nella cella A2, selezioni le due celle e trascini verso il basso, l'incremento sarà il valore di A2 meno A1, -0,5. Quindi otterrai la serie 4 ; 3,5 ; 3 ; 2,5 ; 2...</para>
+
+<para
+>Il metodo <quote
+>Trascina e copia</quote
+> funziona anche con delle serie in cui l'incremento non è un valore costante, ma è esso stesso una serie. Così, se parti con 1 ; 3 ; 4 ; 6, un "trascina e copia" lo espanderà in 1 ; 3 ; 4 ; 6 ; 7 ; 9 ; 10 ; 12 ; ... Infatti, in questo esempio, l'incremento è dato dalla serie 2 ; 1 ; 2 ; 1 ;...</para>
+
+ <!--FIXME does not work here -->
+<para
+>&sheets; riconosce anche alcune <quote
+>serie</quote
+> speciali, come i giorni della settimana. Prova a scrivere <userinput
+>venerdì</userinput
+> in una cella (se lavori in inglese, dovrà essere scritto maiuscolo: Friday), poi fai «trascina e copia» verso il basso. Per vedere quali serie speciali sono disponibili e, magari, crearne una tua, seleziona il menu <menuchoice
+><guimenu
+>Strumenti</guimenu
+><guimenuitem
+>Liste personalizzate...</guimenuitem
+></menuchoice
+></para>
+
+<para
+>Se selezioni una cella e scegli <guimenuitem
+>Serie...</guimenuitem
+> dal menu <guimenu
+>Inserisci</guimenu
+>, apparirà la finestra di dialogo <guilabel
+>Serie</guilabel
+>. Serve per creare delle serie che sono troppo lunghe per essere facilmente costruite con il metodo precedente, o per creare delle serie geometriche come 1; 1,5; 2,25; 3,375... dove il valore del passo, in questo caso 1,5, è usato come moltiplicatore.</para>
+<para
+>Se il tipo di serie che vuoi costruire è troppo complicato per tutti questi metodi, puoi utilizzare una formula e fare un "Trascina e copia". Per esempio, per creare una serie con i valori 2, 4, 16, 256... metti <userinput
+>2</userinput
+> in A1, <userinput
+>=A1*A1</userinput
+> in A2, e "Trascina e copia" la cella A2 verso il basso.</para>
+</sect1>
+
+<sect1 id="formulas">
+<title
+>Formule</title>
+<sect2 id="builtin">
+<title
+>Funzioni integrate</title>
+<para
+>&sheets; fornisce un'enorme quantità di <link linkend="functions"
+>funzioni</link
+> matematiche e di altro tipo, che possono essere utilizzate in una cella con formula. Si possono vedere ed utilizzare selezionando una cella e scegliendo <guimenuitem
+>Funzione...</guimenuitem
+> dal menu <guimenu
+>Inserisci</guimenu
+>. In questo modo si apre la finestra di dialogo <guilabel
+>Funzione</guilabel
+>.</para>
+<para
+>Seleziona la funzione che vuoi utilizzare dalla lista scorrevole sul lato sinistro della finestra di dialogo. La scheda <guilabel
+>Aiuto</guilabel
+> mostrerà alcune informazioni sulla funzione scelta: descrizione, tipo restituito, sintassi, parametri, e alcuni esempi. In più, verranno spesso forniti dei collegamenti a funzioni logicamente associabili.Infine aziona il pulsante con la freccia verso il basso per trasferirla nel riquadro di modifica che si trova nella parte bassa della finestra.</para>
+<para
+>Apparirà una scheda <guilabel
+>Parametri</guilabel
+> che ti permette di inserire i parametri richiesti dalla funzione che hai appena selezionato. Se vuoi fornire il valore effettivo di un parametro, basta scriverlo nel riquadro appropriato della scheda <guilabel
+>Parametri</guilabel
+>. Per fornire il riferimento a una cella invece che un valore, premi il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse prima sul relativo riquadro della scheda <guilabel
+>Parametri</guilabel
+> e poi sulla cella obiettivo nella tabella.</para>
+<para
+>Invece di utilizzare la scheda <guilabel
+>Parametri</guilabel
+>, i riferimenti alle celle come <userinput
+>B6</userinput
+> possono essere forniti scrivendoli direttamente nel riquadro di testo in basso nella finestra di dialogo <guilabel
+>Funzione</guilabel
+>. Se una funzione richiede più parametri, questi vanno separati con un punto e virgola (<keysym
+>;</keysym
+>).</para>
+<para
+>Premendo il pulsante <guibutton
+>OK</guibutton
+> la funzione verrà inserita nella cella attiva e il modulo <guilabel
+>Funzione</guilabel
+> verrà chiuso.</para>
+<para
+>Ovviamente, puoi fare a meno della finestra di dialogo <guilabel
+>Funzione</guilabel
+> e scrivere direttamente l'espressione completa nel riquadro di immissione delle formule delle opzioni dello strumento <guilabel
+>Editor delle celle</guilabel
+>, posta nella barra degli strumenti. I nomi delle funzioni possono essere scritti in maiuscolo o minuscolo. Non dimenticare che tutte le espressioni devono iniziare con un segno <keysym
+>=</keysym
+>.</para>
+</sect2>
+
+<sect2 id="logical">
+<title
+>Confronti logici</title>
+<para
+>Le funzioni logiche come IF(), AND(), OR() richiedono dei parametri che assumono i valori logici (booleani) True o False (NdT vanno sempre scritti in inglese). Questo tipo di valore può essere prodotto da altre funzioni logiche, come ISEVEN(), o dal confronto tra valori in celle della tabella tramite le funzioni di confronto elencate nella tabella seguente.</para>
+
+<informaltable
+><tgroup cols="3">
+<thead>
+<row>
+<entry
+>Espressione </entry>
+<entry
+>Descrizione </entry>
+<entry
+>Esempio </entry
+></row>
+</thead>
+<tbody>
+
+<row
+><entry
+><keysym
+>=</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>È uguale a</entry>
+<entry
+><userinput
+>A2==B3</userinput
+> è True se il valore in A2 è uguale al valore in B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>!</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>Non è uguale a</entry>
+<entry
+><userinput
+>A2!=B3</userinput
+> è True se il valore in A2 è diverso dal valore in B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>Non è uguale a</entry>
+<entry
+>Come <userinput
+>A2!=B3</userinput
+></entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+></entry>
+<entry
+>È minore di</entry>
+<entry
+><userinput
+>A2&lt;B3</userinput
+> è True se il valore in A2 è minore del il valore in B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>È minore o uguale di</entry>
+<entry
+><userinput
+>A2&lt;=B3</userinput
+> è True se il valore in A2 è minore o uguale del valore in B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>È maggiore di</entry>
+<entry
+><userinput
+>A2&gt;B3</userinput
+> è True se il valore in A2 è maggiore del valore in B3 </entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>È maggiore o uguale di</entry>
+<entry
+><userinput
+>A2&gt;=B3</userinput
+> è True se il valore in A2 è maggiore o uguale del valore in B3</entry>
+</row>
+
+</tbody
+></tgroup
+></informaltable>
+
+<para
+>Per esempio, se inserisci <userinput
+>=IF(B3&gt;B1;"MAGGIORE";"")</userinput
+> in una cella, comparirà la scritta "MAGGIORE" se il valore in B3 è più grande di quello in B1, in caso contrario non verrà scritto nulla nella cella.</para>
+</sect2>
+
+<sect2 id="absolute">
+<title
+>Riferimenti assoluti a celle</title>
+<para
+>Se una formula contiene un riferimento a una cella, questo riferimento sarà normalmente cambiato quando la cella viene copiata o spostata in un altro punto del foglio di lavoro. Per impedire questo comportamento, basta aggiungere un segno <keysym
+>$</keysym
+> davanti alla lettera di colonna e/o davanti al numero di riga. </para>
+
+<itemizedlist>
+<listitem
+><para
+>Se A1 contiene la formula <userinput
+>=D5</userinput
+>, una copia sulla cella B2 la trasformerà in <userinput
+>=E6</userinput
+> (comportamento normale). </para
+></listitem>
+<listitem
+><para
+>Se A1 contiene la formula <userinput
+>=$D5</userinput
+>, una copia sulla cella B2 la trasformerà in <userinput
+>=$D6</userinput
+> (la lettera di colonna non cambia). </para
+></listitem>
+<listitem
+><para
+>Se A1 contiene la formula <userinput
+>=D$5</userinput
+>, una copia sulla cella B2 la trasformerà in <userinput
+>=E$5</userinput
+> (il numero di riga non cambia). </para
+></listitem>
+<listitem
+><para
+>Se A1 contiene la formula <userinput
+>=$D$5</userinput
+>, dopo una copia sulla cella B2 resterà <userinput
+>=$D$5</userinput
+> (non cambia né la lettera di colonna né il numero di riga). </para
+></listitem>
+
+</itemizedlist>
+<para
+>Quando inserisci o modifichi un riferimento di cella in una formula, il tasto <keysym
+>F4</keysym
+> può essere utilizzato per passare dall'uno all'altro di questi quattro tipi di riferimento.</para>
+<para
+><link linkend="namedareas"
+>Celle con nome</link
+> può essere utilizzato in modo abbastanza simile per inserire in una formula un riferimento ad una cella fissata. </para>
+</sect2>
+</sect1>
+
+<sect1 id="sumspecialpaste">
+<title
+>Fare calcoli con Incolla speciale</title>
+<para
+>A volte, potresti voler sommare una stessa quantità ai valori contenuti in diverse celle o sottrarla, o usarla per moltiplicare o dividere i valori di tutte le celle. L'opzione <guimenuitem
+>Incolla speciale...</guimenuitem
+> ti permette di farlo in modo facile e veloce.</para>
+<para
+>Per prima cosa scrivi il valore del modificatore in una qualsiasi cella del tuo foglio e <guimenuitem
+>Copia</guimenuitem
+>lo. Poi, seleziona il gruppo di celle che vuoi modificare, scegli <guimenuitem
+>Incolla speciale...</guimenuitem
+> dal menu <guimenu
+>Modifica</guimenu
+> o dal menu contestuale e seleziona <guilabel
+>Addizione</guilabel
+>, <guilabel
+>Sottrazione</guilabel
+>, <guilabel
+>Moltiplicazione</guilabel
+> o <guilabel
+>Divisione</guilabel
+> dalla sezione <guilabel
+>Operazioni</guilabel
+> della finestra di dialogo.</para>
+<para
+>Puoi anche usare modificatori diversi per le varie righe o colonne del gruppo di celle di destinazione. Basta copiare tutto un blocco di celle con i modificatori prima di selezionare il gruppo di celle di destinazione e poi fare <guimenuitem
+>Incolla speciale...</guimenuitem
+>. Ad esempio, se scrivi <userinput
+>5</userinput
+> nella cella A1 e <userinput
+>10</userinput
+> in B1, selezioni le due celle, fai <guimenuitem
+>Copia</guimenuitem
+> e poi <guimenuitem
+>Incolla speciale...</guimenuitem
+><guilabel
+>Addizione</guilabel
+> sulle celle da A10 a D15, 5 viene sommato a A10:A15 e C10:C15, e 10 a B10:B15 e D10:D15.</para>
+<para
+>Nota che un modificatore può essere una formula così come un semplice numero. Se si tratta di una formula, &sheets; modificherà i riferimenti alle celle esattamente come se fosse un normale <guimenuitem
+>Incolla</guimenuitem
+>.</para>
+</sect1>
+
+<sect1 id="arrayformulas">
+<title
+>Formule matrice</title>
+<para
+>&sheets; ti consente di utilizzare formule il cui risultato è una matrice o un intervallo di valori. Di solito, in una cella viene visualizzato solo il primo valore. Se vuoi visualizzare l'intera matrice, utilizza semplicemente <keycombo
+>&Ctrl;&Alt;&Enter;</keycombo
+> quando modifichi una formula, e la formula sarà convertita in una formula matrice, occupando le celle adiacenti.</para>
+<para
+>Le celle che sono parte di una formula matrice non possono essere modificate.</para>
+</sect1>
+
+<sect1 id="goalseek">
+<title
+>Ricerca obiettivo</title>
+<para
+>&sheets; può essere utilizzato per risolvere delle espressioni algebriche come <emphasis
+>x+x^2=4</emphasis
+>, ossia <emphasis
+>Per quale valore di x, x+x al quadrato fa 4?</emphasis
+></para>
+<para
+>In questo esempio, potresti scrivere <userinput
+>=A2+A2*A2</userinput
+> in A1, poi provare a mettere diversi valori in A2 finché il risultato approssima <emphasis
+>4</emphasis
+> quanto tu desideri. Però è preferibile utilizzare la funzione <guimenuitem
+>Ricerca obiettivo....</guimenuitem
+> di &sheets; che modifica automaticamente il valore in una cella per cercare di rendere il valore di un'altra cella il più simile possibile ad un valore obiettivo.</para>
+<para
+>Puoi attivare questa funzione selezionando <guimenuitem
+>Ricerca obiettivo</guimenuitem
+> dal menu <guimenu
+>Dati</guimenu
+>. Verrà aperta una finestra di dialogo nella quale dovrai immettere il riferimento alla cella che dovrà assumere il valore assegnato (in questo caso <userinput
+>A1</userinput
+>), nel riquadro <guilabel
+>Imposta cella:</guilabel
+>, il valore obiettivo (<userinput
+>4</userinput
+>) nel riquadro <guilabel
+>Al valore:</guilabel
+> e il riferimento alla cella variabile (<userinput
+>A2</userinput
+>) nel riquadro <guilabel
+>Cambiando la cella:</guilabel
+>. Tieni presente che occorre assegnare un valore di partenza nella cella variabile prima di far partire la <guimenuitem
+>Ricerca obiettivo</guimenuitem
+>.</para>
+<para
+>La pressione del pulsante <guibutton
+>OK</guibutton
+> avvierà il calcolo. Una volta terminato e se avrà trovato una soluzione, potrai premere il pulsante <guibutton
+>OK</guibutton
+> per accettare il risultato o <guibutton
+>Annulla</guibutton
+> per conservare il valore di partenza. </para>
+</sect1>
+
+ <sect1 id="pivottable">
+   <title
+>Tabelle pivot</title>
+   <para
+>&sheets; può essere utilizzato per generare <ulink url="http://en.wikipedia.org/wiki/Pivot_table"
+>tabelle pivot</ulink
+> utilizzando i dati della tabella attuale. </para>
+   <para
+>Questa operazione può essere richiamata selezionando <guimenuitem
+>Pivot...</guimenuitem
+> dal menu <guimenu
+>Dati</guimenu
+>. Segue un esempio della creazione di una tabella pivot. </para>
+   <para
+>Supponiamo di aver i dati seguenti. </para>
+   <para>
+     <mediaobject>
+       <imageobject>
+	 <imagedata fileref="pivot1.png" format="PNG"/>
+       </imageobject>
+       <textobject>
+	 <phrase
+>Tabella iniziale</phrase>
+       </textobject>
+     </mediaobject>
+   </para>
+   <para
+>Vogliamo creare una tabella pivot che soddisfi le nostre esigenze. Scegliamo quindi <menuchoice
+> <guimenu
+>Dati</guimenu
+> <guimenuitem
+>Pivot...</guimenuitem
+> </menuchoice
+>. </para>
+     <para
+>La finestra che apparirà consente all'utente di selezionare la sorgente di dati. I dati possono essere ottenuti dal foglio di lavoro attuale o da una sorgente esterna come un database o un file <abbrev
+>ODS</abbrev
+>. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot2.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Scegliere la sorgente dei dati</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>Questa è la finestra che consente all'utente di personalizzare la tabella pivot. Le etichette delle colonne nei dati di origine sono convertite in etichette che servono da campi di ricerca. Le etichette possono essere trascinate e rilasciate in una delle tre aree (<guilabel
+>Righe</guilabel
+>, <guilabel
+>Colonne</guilabel
+> o <guilabel
+>Valori</guilabel
+>) per generare la tabella pivot. È possibile ripristinare le proprie scelte utilizzando il pulsante <guibutton
+>Ripristina trascinamento</guibutton
+> </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot3.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Finestra di personalizzazione della tabella pivot</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>Nel nostro esempio, <replaceable
+>Nome</replaceable
+> è trascinato su <guilabel
+>Righe</guilabel
+>, <replaceable
+>Categoria</replaceable
+> su <guilabel
+>Colonne</guilabel
+>, <replaceable
+>Punteggio</replaceable
+> su <guilabel
+>Valori</guilabel
+>. Le funzioni definite dall'utente come somma, media, massimo, minimo, conteggio, &etc; possono essere selezionate dall'elenco <guilabel
+>Seleziona opzione</guilabel
+>. </para>
+     <para
+>Il pulsante <guibutton
+>Aggiungi filtro</guibutton
+> può essere utilizzato per aprire la finestra per filtrare i dati desiderati. Utilizzando questa finestra, sarà possibile specificare diversi filtri basati sull'etichetta della colonna e la relazione tra di essi (<guimenuitem
+>E</guimenuitem
+> o <guimenuitem
+>O</guimenuitem
+>). Ciò consente un'ampia libertà di personalizzazione del risultato. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot4.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Finestra di filtro della tabella pivot</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+><guilabel
+>Righe totali</guilabel
+> e <guilabel
+>Colonne totali</guilabel
+>: marcando queste opzioni consente di sommare automaticamente le righe e colonne corrispondenti nella tabella pivot. </para>
+   </sect1>
+
+<sect1 id="worksheets">
+<title
+>Utilizzare più fogli di lavoro</title>
+<para
+>Quando apri un nuovo documento vuoto con &sheets;, esso creerà un certo numero di fogli vuoti. Il numero dei fogli creati è specificato dal modello selezionato.</para>
+<para
+><menuchoice
+><guimenu
+>Inserisci</guimenu
+><guimenuitem
+>Foglio</guimenuitem
+> </menuchoice
+> aggiungerà un nuovo foglio al documento.</para>
+<para
+>Puoi passare da un foglio all'altro anche utilizzando <keycombo action="simul"
+>&Ctrl;<keysym
+>Pag Giù</keysym
+></keycombo
+> per passare al foglio successivo e <keycombo action="simul"
+>&Ctrl;<keysym
+>Pag Su</keysym
+></keycombo
+> per tornare al precedente.</para>
+<para
+>I nomi predefiniti per i fogli sono <emphasis
+>Foglio1</emphasis
+>, <emphasis
+>Foglio2</emphasis
+>,... Puoi cambiare il nome di un foglio con un clic del tasto <mousebutton
+>destro</mousebutton
+> del mouse sulla sua linguetta e selezionando <guimenuitem
+>Rinomina foglio...</guimenuitem
+>.</para>
+<para
+>Per rimuovere un foglio dal documento puoi utilizzare l'opzione <guimenuitem
+>Rimuovi foglio</guimenuitem
+> dal menu contestuale che appare quando premi il tasto <mousebutton
+>destro</mousebutton
+> del mouse sulla linguetta del foglio che vuoi rimuovere.</para>
+<para
+>Le altre voci del menu <menuchoice
+><guimenu
+>Formato</guimenu
+> <guisubmenu
+>foglio</guisubmenu
+></menuchoice
+> permettono di nascondere o mostrare un foglio in modo del tutto analogo a come si fa con righe e colonne.</para>
+<para
+>Se vuoi che una formula in un foglio utilizzi una cella di un altro foglio, il riferimento alla cella deve incominciare con il nome del foglio seguito da un punto esclamativo (<keysym
+>!</keysym
+>). Per esempio, se scrivi <userinput
+>=Foglio2!A2</userinput
+> in una cella di Foglio1, questa assumerà il valore contenuto in A2 del Foglio2. Attenzione: i nomi dei fogli tengono conto della differenza tra maiuscole e minuscole.</para>
+
+
+<sect2 id="consolidate">
+<title
+>Consolidamento dei dati</title>
+<para
+>Potresti aver costruito un documento composto da diversi fogli che contengono dei dati simili, diciamo diversi mesi dell'anno, e vorresti avere un foglio di riepilogo che contenga i valori consolidati (ad es. somme o medie) dei corrispondenti elementi presenti negli altri fogli.</para>
+<para
+>Questa operazione è molto facilitata dall'utilizzo dell'opzione <guimenu
+>Consolida...</guimenu
+> del menu <guimenu
+>Dati</guimenu
+>.</para>
+<para
+>Quando selezioni questa opzione si apre la finestra di dialogo <guilabel
+>Consolida</guilabel
+>.</para>
+<para
+>Per ognuno dei fogli sorgente scrivi nel riquadro <guilabel
+>Riferimento:</guilabel
+> della finestra di dialogo <guilabel
+>Consolida</guilabel
+> il riferimento al gruppo di dati da utilizzare. Poi premi <guibutton
+>Aggiungi</guibutton
+> per trasferirlo nel riquadro <guilabel
+>Riferimenti inseriti:</guilabel
+>. Il riferimento deve comprendere il nome del foglio che contiene i dati sorgente (ad es. <userinput
+>gennaio!A1:A10</userinput
+> e può essere inserito automaticamente selezionando le celle nel relativo foglio.</para>
+<para
+>Dopo aver inserito i riferimenti per tutti i fogli da cui prelevare i dati, seleziona nel foglio riassuntivo la cella in cui deve comparire l'angolo superiore sinistro dell'area con i dati consolidati. Scegli la funzione che desideri dalla finestra <guilabel
+>Funzione:</guilabel
+> e premi il pulsante <guibutton
+>OK</guibutton
+>.</para>
+<para
+>Se fai clic su <guibutton
+>Dettagli 
+>
+></guibutton
+> nella finestra e marchi la casella <guilabel
+>Copia data</guilabel
+> i valori risultanti dal consolidamento saranno posizionati nelle celle di destinazione al posto delle le formule che servono a calcolarli. </para>
+</sect2>
+</sect1>
+<sect1 id="insertchart">
+<title
+>Inserire un grafico</title>
+<para
+>Puoi inserire un grafico in un foglio per dare una rappresentazione visiva dei tuoi dati.</para>
+<para
+>Abilita prima il gancio <guilabel
+>Aggiungi forma</guilabel
+> utilizzando la voce di menu <menuchoice
+> <guimenu
+>Impostazioni</guimenu
+><guimenuitem
+>Aree di aggancio</guimenuitem
+> </menuchoice
+>.</para>
+<para
+>Seleziona poi il blocco di celle che contiene i dati e scegli <guilabel
+>Grafico</guilabel
+> in <guilabel
+>Aggiungi forma</guilabel
+>. Trascina il cursore sul foglio tenendo premuto il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse per definire l'area dove vuoi che appaia il grafico. Per il momento non c'è bisogno di essere troppo precisi, visto che la dimensione del grafico può essere modificata facilmente in qualunque momento. Quando rilascerai il tasto del mouse, apparirà la finestra di dialogo <guilabel
+>Opzioni grafico</guilabel
+>.</para>
+<para
+>L'area dei dati è già popolata con l'intervallo di celle selezionato. Seleziona la prima riga e la prima colonna come etichette, marca <guilabel
+>Blocchi di dati su righe</guilabel
+> e fai clic sul pulsante <guibutton
+>OK</guibutton
+>. La finestra scomparirà e potrai vedere il grafico inserito nel foglio.</para>
+<para
+>Ora selezionare <guibutton
+>Strumento di modifica grafici</guibutton
+> dall'area di aggancio <guilabel
+>Strumenti</guilabel
+> e modifica le proprietà del grafico come il tipo, le etichette e gli assi in <guilabel
+>Modifica grafico</guilabel
+>.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="chart1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Immagine di un grafico inserito</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Per spostare, ridimensionare o addirittura eliminare un grafico integrato, passa allo strumento <guibutton
+>Manipolazione semplice forma</guibutton
+> e fai clic in un punto qualsiasi dell'area del grafico. Apparirà un contorno verde con un quadratino giallo a ogni angolo e al centro di ogni bordo. </para>
+<para
+>Se sposti il cursore su uno qualsiasi dei quadratini neri, esso dovrebbe trasformarsi in una freccia a due punte. Puoi ridimensionare il grafico trascinando uno di questi quadratini con il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse premuto. Per eliminare il grafico, fai clic con il tasto <mousebutton
+>destro</mousebutton
+> su uno dei quadratini e seleziona <guimenuitem
+>Elimina</guimenuitem
+>.</para>
+<para
+>Per spostare il grafico, posiziona il cursore sul grafico stesso.Il cursore prenderà la forma di una croce. Tieni premuto il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse e potrai trascinare il grafico ovunque tu voglia.</para>
+<para
+>Per restituire al grafico il suo aspetto normale basta un clic in un qualsiasi punto fuori dalla sua area.</para>
+<para
+>Per cambiare il formato del grafico stesso, fare clic due volte con il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse nell'area del grafico. La <guilabel
+>Modifica del grafico</guilabel
+> dovrebbe apparire nell'area di aggancio. A questo punto, puoi utilizzare questi strumenti per modificare il grafico.</para>
+</sect1>
+
+<sect1 id="insertdata">
+<title
+>Inserire dati esterni</title>
+<para
+>Puoi inserire in un foglio elettronico dei dati presi da file di testo o dagli appunti. Devi prima selezionare la cella nell'angolo in alto a sinistra dell'area in cui dovranno essere inseriti i dati, poi scegliere <guimenuitem
+>Da file di testo...</guimenuitem
+> o <guimenuitem
+>Dagli appunti...</guimenuitem
+> nel sottomenu <menuchoice
+><guimenu
+>Inserisci</guimenu
+><guisubmenu
+>Dati esterni</guisubmenu
+></menuchoice
+>.</para>
+<para
+>In entrambi i casi, &sheets; supporrà che i dati siano in formato <acronym
+>CSV</acronym
+> e aprirà una finestra di dialogo che permette di controllare come i dati vengono estratti dal file o dagli appunti e inseriti nelle celle del foglio di lavoro.</para>
+<para
+>Se il relativo supporto è stato incluso nel tuo sistema, &sheets; può anche prelevare dei dati da un database <acronym
+>SQL</acronym
+> per metterli in una tabella. Questo si ottiene utilizzando l'opzione <menuchoice
+><guimenu
+>Inserisci</guimenu
+><guisubmenu
+>Dati esterni</guisubmenu
+><guimenuitem
+>Da un database...</guimenuitem
+></menuchoice
+>.</para>
+</sect1>
+
+<sect1 id="hyper">
+<title
+>Celle con collegamento</title>
+<para
+>Una cella di una tabella può essere collegata ad una azione in modo tale che un clic del tasto <mousebutton
+>sinistro</mousebutton
+> su di essa apra, per esempio, il tuo navigatore. Affinché una cella agisca in questo modo, bisogna selezionarla e scegliere <menuchoice
+><guimenu
+>Inserisci</guimenu
+><guimenuitem
+>Collegamento...</guimenuitem
+></menuchoice
+>. Così si aprirà la finestra di dialogo <guilabel
+>Creare un collegamento</guilabel
+> che ti permette di scegliere tra quattro tipi di collegamenti:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Un collegamento <guilabel
+>Internet</guilabel
+>, quando farai clic su di esso, tenterà di aprire il tuo navigatore predefinito all'&URL; che hai inserito nel riquadro <guilabel
+>Indirizzo Internet:</guilabel
+> della finestra di dialogo <guilabel
+>Inserisci collegamento</guilabel
+>. Per esempio, potrebbe essere <userinput
+>http://www.calligra.org</userinput
+>. </para
+></listitem>
+
+<listitem
+><para
+>Se fai clic su una cella che contiene un collegamento <guilabel
+>Posta</guilabel
+>, si aprirà il compositore di messaggi con l'indirizzo che avevi inserito nella casella <guilabel
+>Posta elettronica:</guilabel
+> già impostato come indirizzo del destinatario (A:). Per esempio, <userinput
+>anon@example.com</userinput
+>. </para
+></listitem>
+
+<listitem
+><para
+>Una cella di collegamento <guilabel
+>File</guilabel
+> contiene il path di un file o di una cartella, scritto nella casella di testo <guilabel
+>Indirizzo file:</guilabel
+>, e tenterà di aprirlo con una applicazione adatta non appena si fa un clic su di essa. </para
+></listitem>
+
+<listitem
+><para
+>Una cella con un collegamento di tipo <guilabel
+>Cella</guilabel
+> contiene un riferimento ad una cella di &sheets;, digitato nella casella di testo <guilabel
+>Cella o area con nome</guilabel
+>. Un clic del tasto <mousebutton
+>sinistro</mousebutton
+> su questo tipo di cella-collegamento fa spostare il focus di &sheets; sulla cella collegata. </para
+></listitem>
+</itemizedlist>
+
+<para
+>Per tutti e quattro i tipi di collegamento occorre inserire un testo opportuno nel campo <guilabel
+>Testo da visualizzare</guilabel
+> della finestra di dialogo <guilabel
+>Inserisci collegamento</guilabel
+>. Questo sarà il testo che comparirà nella cella.</para>
+</sect1>
+
+<sect1 id="validcheck">
+<title
+>Verifiche di validità</title>
+<para
+>&sheets; può verificare automaticamente la validità formale, rispetto ad un certo numero di criteri, dei dati inseriti e, se un dato non è corretto, far apparire una finestra con un messaggio.</para>
+<para
+>Per attivare questa funzionalità, seleziona le celle da verificare e scegli <menuchoice
+><guimenu
+>Dati</guimenu
+><guimenuitem
+>Validità...</guimenuitem
+></menuchoice
+>. Si aprirà così la finestra di dialogo <guilabel
+>Validità</guilabel
+> di &sheets; contiene tre schede.</para>
+<para
+>Nella scheda <guilabel
+>Criteri</guilabel
+>, seleziona quale tipo di dati deve essere considerato valido, scegliendolo dalla finestra <guilabel
+>Permetti:</guilabel
+>, poi definisci l'intervallo di valori accettabili scegliendo una delle opzioni dalla finestra <guilabel
+>Dati:</guilabel
+> e scrivendo i valori appropriati in una o entrambe le apposite caselle.</para>
+<para
+>Quando hai finito, passa alla scheda <guilabel
+>Messaggio di errore</guilabel
+>. Qui, puoi decidere il tipo messaggio (<guimenuitem
+>Interrompi</guimenuitem
+>, <guimenuitem
+>Avvertimento</guimenuitem
+> o <guimenuitem
+>Informazioni</guimenuitem
+>) che apparirà quando un valore non accettabile sarà inserito e definire il titolo e il testo della finestra di segnalazione.</para>
+<!--FIXME missing Input Help tab-->
+<para
+>Tieni presente che questa funzione verifica solo i dati che tu scrivi direttamente nella cella. Puoi trovare un modo per verificare i risultati di formule nella sezione <link linkend="formatdata"
+>Attributi condizionali per le celle</link
+> di questo manuale.</para>
+</sect1>
+
+<sect1 id="protection">
+<title
+>Protezioni</title>
+
+<sect2 id="doc-protection">
+<title
+>Protezione del documento</title>
+<para
+>Proteggere un documento significa che nessun utente potrà aggiungere o rimuovere dei fogli senza fornire la password. La protezione al documento non protegge le singole celle.</para>
+<para
+>Seleziona <menuchoice
+><guimenu
+>Strumenti</guimenu
+><guimenuitem
+>Proteggi documento...</guimenuitem
+></menuchoice
+>. Apparirà una finestra con la richiesta di una password. L'indicatore di sicurezza <guilabel
+>Password:</guilabel
+> indica se la password è abbastanza sicura. Quanto più lungo è l'indicatore, tanto più sicura è la password.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Il modulo per la protezione dei documenti</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>D'ora in poi, sarà richiesta questa password per togliere la protezione al documento.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Il modulo per togliere la protezione al documento</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Quando un documento è protetto, non è possibile:</para>
+<itemizedlist>
+<listitem
+><para
+>Cambiare nome a un foglio </para
+></listitem>
+<listitem
+><para
+>Inserire un foglio </para
+></listitem>
+<listitem
+><para
+>Rimuovere un foglio </para
+></listitem>
+<listitem
+><para
+>Nascondere un foglio </para
+></listitem>
+<listitem
+><para
+>Mostrare un foglio nascosto </para
+></listitem>
+<listitem
+><para
+>Vedere le proprietà di un foglio </para
+></listitem>
+<listitem
+><para
+>Unire o separare celle </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="sheet-protection">
+<title
+>Proteggere un foglio</title>
+<para
+>Proteggere un foglio significa proteggere il contenuto di ogni cella od oggetto protetti contenuti nel foglio. All'interno di un foglio protetto si può togliere la protezione a singole celle o gruppi di celle, vedi la <link linkend="cell-protection"
+>prossima sezione</link
+>.</para>
+<para
+>Per proteggere un foglio seleziona <menuchoice
+><guimenu
+>Strumenti</guimenu
+><guimenuitem
+>Proteggi il foglio</guimenuitem
+></menuchoice
+>. Apparirà una finestra con la richiesta di stabilire una password. L'indicatore di sicurezza delle <guilabel
+>password</guilabel
+> indica se la tua password è abbastanza sicura. Quanto più lungo è l'indicatore, tanto più sicura è la password.</para>
+<para
+>D'ora in poi, sarà richiesta questa password per togliere la protezione al foglio.</para>
+<para
+>Quando un foglio è protetto, non è possibile:</para>
+<itemizedlist>
+<listitem
+><para
+>Inserire un oggetto o un grafico </para
+></listitem>
+<listitem
+><para
+>Cambiare il formato di qualsiasi cella </para
+></listitem>
+<listitem
+><para
+>Inserire una riga o una colonna </para
+></listitem>
+<listitem
+><para
+>Modificare il contenuto delle celle </para
+></listitem>
+<listitem
+><para
+>Cambiare qualsiasi contenuto del foglio </para
+></listitem>
+</itemizedlist>
+
+<note
+><para
+>Un caso in cui è molto utile proteggere un foglio è quando si vogliono evitare cancellazioni accidentali di formule.</para
+></note>
+</sect2>
+
+<sect2 id="cell-protection">
+<title
+>Proteggere celle o gruppi di celle</title>
+<warning
+><para
+>Come impostazione predefinita tutte le celle sono protette, questa protezione diventa effettiva solo nel momento in cui abiliti la protezione del foglio. Quindi, se non cambi le impostazioni e abiliti la protezione del foglio, tutte le celle saranno protette.</para
+></warning>
+<para
+>Se vuoi che solo alcune celle siano protette, devi disattivare la protezione predefinita di tutte le altre. Per esempio, potresti desiderare che la maggior parte delle celle possano accettare dei dati forniti dall'utilizzatore. Dovrai allora togliere il segno di spunta a <guilabel
+>Protetta</guilabel
+> per quelle celle e lasciare la protezione alle celle che vuoi che restino immutate (ad es. i titoli). Quindi, per proteggere solo alcune celle, dovrai compiere tre passi: togliere la protezione a tutte le celle, selezionare le celle da proteggere e attivare la protezione prima per loro e poi per l'intero foglio.</para>
+<para
+>Togliere la protezione a tutte le celle:</para>
+<itemizedlist>
+<listitem
+><para
+>Seleziona l'intero foglio con il mouse. </para
+></listitem>
+<listitem
+><para
+>Seleziona nella barra degli strumenti <menuchoice
+><guimenu
+>Formato</guimenu
+><guimenuitem
+>Formato cella...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>Vai alla scheda <guilabel
+>Protezione celle</guilabel
+> del modulo che apparirà. </para
+></listitem>
+<listitem
+><para
+>Per togliere la protezione a tutte le celle, metti un segno di spunta a <guilabel
+>Nascondi tutto</guilabel
+> e toglilo a <guilabel
+>Protetta</guilabel
+>. Ora tutte le celle sono non protette. </para
+></listitem>
+</itemizedlist>
+<para
+>Proteggere un gruppo di celle selezionate, contigue o sparse:</para>
+<itemizedlist>
+<listitem
+><para
+>Evidenzia con il mouse il rettangolo di celle da proteggere o utilizza  anche il tasto <keycombo action="simul"
+>&Ctrl;</keycombo
+> per selezionare celle non adiacenti. </para
+></listitem>
+<listitem
+><para
+>Quando hai selezionato tutte le celle che volevi, entra nel menu <menuchoice
+><guimenu
+>Formato</guimenu
+><guimenuitem
+>Formato cella...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>Vai alla scheda <guilabel
+>Protezione celle</guilabel
+> del modulo che apparirà. </para
+></listitem>
+<listitem
+><para
+>Metti un segno di spunta alla casella vicina a <guilabel
+>Protetta</guilabel
+> e poi premi il pulsante <guibutton
+>OK</guibutton
+>. </para
+></listitem>
+</itemizedlist>
+<para
+>Una volta che hai predisposto la protezione per le celle, dovrai attivarla a livello di foglio. Ossia devi proteggere l'intero foglio affinché le singole celle vengano effettivamente protette:</para>
+<itemizedlist>
+<listitem
+><para
+>Seleziona <menuchoice
+><guimenu
+>Strumenti</guimenu
+><guimenuitem
+>Proteggi il foglio</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>Inserisci una password sicura nella finestra che apparirà. Poi confermarla scrivendola di nuovo. Infine, premi il pulsante <guibutton
+>OK</guibutton
+>. </para
+></listitem>
+<listitem
+><para
+>Le celle protette presenti in un foglio protetto non possono essere modificate se prima non si toglie la protezione all'intero foglio. Anche qualsiasi modifica al foglio è inibita. Per esempio, non si possono inserire righe o colonne, cambiare l'ampiezza delle colonne o inserire nuovi grafici. </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="hide-formula">
+<title
+>Nascondere le formule nelle celle</title>
+<para
+>Potresti desiderare di nascondere le formule in modo che nessuno possa vederle. Come impostazione predefinita, ogni cella è protetta ma non nasconde i contenuti. Ma è importante ricordarsi che questi attributi non hanno effetto se il foglio non è protetto.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Una cella predefinita con una formula</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Per nascondere le formule contenute nelle celle, seleziona la cella che ti interessa (o l'intervallo di celle o le celle non contigue usando <keycombo action="simul"
+>&Ctrl;</keycombo
+>) e poi scegli la voce di menu <menuchoice
+><guimenu
+>Formato</guimenu
+><guimenuitem
+>Formato cella...</guimenuitem
+></menuchoice
+>. Nella finestra di dialogo che ti apparirà scegli la scheda <guilabel
+>Protezione cella</guilabel
+> e seleziona <guilabel
+>Nascondi formula</guilabel
+>. Dopo che avrai protetto il foglio, rimarranno visibili i risultati delle formule, ma non le formule. </para>
+<para
+>Adesso devi proteggere il foglio. Seleziona quindi <menuchoice
+><guimenu
+>Strumenti</guimenu
+><guimenuitem
+>Proteggi il foglio...</guimenuitem
+></menuchoice
+> per far apparire il modulo <guilabel
+>Proteggi foglio</guilabel
+>. Poi inserisci due volte una password sicura che serve per impedire ad altri di togliere la protezione al foglio. </para>
+<para
+>Quando <guilabel
+>Nascondi formula</guilabel
+> è attivato e <guilabel
+>Protetta</guilabel
+> è disattivato, dopo aver protetto il foglio la formula non potrà essere letta, ma il contenuto della cella potrà essere cambiato.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula5.png" format="PNG"/>
+</imageobject
+>    
+<textobject>
+<phrase
+><guilabel
+>Nascondi formula</guilabel
+> è attivato e il foglio è protetto, ma la cella non è protetta</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Quando <guilabel
+>Nascondi formula</guilabel
+> e <guilabel
+>Protetta</guilabel
+> sono attivi, dopo aver protetto anche il foglio, la formula non può essere vista e il contenuto della cella non può essere modificato.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>Nascondi formula</guilabel
+> e <guilabel
+>Protetta</guilabel
+> sono stati attivati nella scheda <guilabel
+>Protezione Cella</guilabel
+> e il foglio è protetto</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Ricordati che è molto facile forzare la password di un foglio protetto. Quindi, se cerchi una reale sicurezza, questa non è la soluzione migliore.</para>
+</sect2>
+
+<sect2 id="hide-all">
+<title
+>Nascondere tutto in una cella</title>
+<para
+>Puoi nascondere sia la formula che il contenuto di una cella attivando <guilabel
+>Nascondi tutto</guilabel
+> nella scheda "Protezione Cella" del menu <menuchoice
+><guimenu
+>Formato</guimenu
+><guimenuitem
+>Formato cella...</guimenuitem
+></menuchoice
+>. Nella schermata sottostante la cella non è protetta (non c'è il segno di spunta su <guilabel
+>Protetta</guilabel
+>), quindi il contenuto della cella può essere modificato.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>È attivo solo <guilabel
+>Nascondi tutto</guilabel
+> (non la protezione della cella) e il foglio è protetto</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Qui anche la cella è protetta. Quindi non può essere riscritta.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>Nascondi tutto</guilabel
+> e <guilabel
+>Protetta</guilabel
+> sono stati attivati nella scheda "Protezione Cella" e il foglio è protetto</phrase>
+</textobject>
+</mediaobject>
+</para>
+</sect2>
+</sect1>
+
+
+<sect1 id="other">
+<title
+>Altre funzionalità</title>
+<!-- no split view in 2.4
+<sect2 id="splitview">
+<title
+>Splitting the View</title>
+<para
+>If your spreadsheet is so large that you cannot see all of it at once, 
+splitting &sheets;'s window into two or more views can help you work on it. 
+This is done by selecting <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Split View</guimenuitem
+></menuchoice
+> which will split the current view into 
+two parts. <menuchoice
+><guimenu
+>View</guimenu
+><guisubmenu
+>Splitter Orientation
+</guisubmenu
+></menuchoice
+> lets you choose between 
+<guimenuitem
+>Horizontal</guimenuitem
+> and <guimenuitem
+>Vertical</guimenuitem
+> 
+splitting.</para>
+<para
+>This technique is particularly useful when you want to select an area 
+of the spreadsheet that is larger than can be shown in one view, perhaps to
+paste a copied cell into it. 
+Use the scrollbars to position the two views to show the top left and 
+bottom right cells of the wanted area, select the top left cell in one 
+view then hold the &Shift; key pressed while you select the 
+bottom right cell with the <mousebutton
+>left</mousebutton
+> mouse button.</para>
+<para
+>If there is more than one sheet in your document, you can show a 
+different sheet in each of the split views.</para>
+<para
+>The relative sizes of the views can be changed by dragging the thick bar 
+separating the views.</para>
+<para
+>To remove a view select <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Remove View</guimenuitem
+></menuchoice
+></para>
+</sect2>
+-->
+
+<sect2 id="namedareas">
+<title
+>Dare un nome a celle ed aree</title>
+<para
+>Puoi assegnare un nome come <userinput
+>pippo</userinput
+> ad una qualsiasi cella o area del tuo foglio. Basta selezionarla e poi attivare <guimenuitem
+>Nome area...</guimenuitem
+> dal menu associato al tasto <mousebutton
+>destro</mousebutton
+> del mouse. Ciò farà aprire la finestra di dialogo <guilabel
+>Nome area</guilabel
+> in cui potrai scrivere qualsiasi nome tu voglia.</para>
+<para
+>Per dare un nome ad una cella o ad un'area puoi anche selezionarla e poi scriverne il nome nella casella di testo all'estremità sinistra della barra delle formule, al posto del riferimento cella che vi appare normalmente.</para>
+<para
+>Se scrivi in questa casella un nome che è già stato utilizzato, la selezione di &sheets; si sposterà per mostrare le celle con quel nome.</para>
+<para
+>L'opzione <menuchoice
+><guimenu
+>Dati</guimenu
+><guimenuitem
+>Aree con nome...</guimenuitem
+></menuchoice
+> ti darà un elenco dei nomi già assegnati e ti permetterà di rimuoverne uno o di spostare il focus di &sheets; sull'area corrispondente. </para>
+<para
+>Le celle con nome sono particolarmente utili nelle formule come alternativa ai <link linkend="absolute"
+>riferimenti assoluti a celle</link
+>. Infatti, i nomi possono utilizzati al posto dei normali riferimenti a celle e non cambiano quando la cella che contiene la formula viene copiata altrove. Quando utilizzi un nome in questo modo, devi racchiuderlo tra apici semplici.</para>
+<para
+>Per esempio, se la cella A1 è stata chiamata <userinput
+>fred</userinput
+>, puoi scrivere una formula del tipo <userinput
+>='fred' + 2 </userinput
+> in un'altra cella, che dovrà dare sempre il risultato che si ottiene sommando 2 al valore della cella A1, indipendentemente da dove viene spostata.</para>
+<para
+>Nota che i nomi di celle e di aree vengono trattati come se fossero scritti in minuscolo.</para>
+</sect2>
+
+<sect2 id="cellcomments">
+<title
+>Commenti per le celle</title>
+<para
+>Una cella può contenere messaggio di commento che può essere visto solo mentre si lavora sulla tabella, ma che non viene inserito nella stampa e, se ci si limita a guardare il foglio, neppure mostrato.</para>
+<para
+>Per aggiungere un commento, seleziona la cella e scegli <guimenuitem
+>Commento...</guimenuitem
+> dal menu associato al tasto <mousebutton
+>destro</mousebutton
+> del mouse o dal menu <guimenu
+>Inserisci</guimenu
+> e scrivi il tuo commento nella finestra di dialogo <guilabel
+>Commento cella</guilabel
+> che viene aperta.</para>
+<para
+>Per vedere il commento, passa il puntatore del mouse sulla cella. Il commento apparirà come se fosse un suggerimento. </para>
+<para
+>Se sbarri la casella <guilabel
+>Mostra indicatore di commento</guilabel
+> nella scheda <guilabel
+>Proprietà del foglio</guilabel
+>, le celle che contengono dei commenti saranno evidenziate da un triangolino rosso nell'angolo superiore destro.</para>
+<para
+>Per aprire questo modulo, premi il tasto <mousebutton
+>destro</mousebutton
+> del mouse sulla linguetta del foglio visibile in fondo alla finestra principale e seleziona <guimenuitem
+>Proprietà del foglio</guimenuitem
+> nel menu che comparirà. Oppure seleziona questa voce dal menu <menuchoice
+><guimenu
+>Formato</guimenu
+><guisubmenu
+>Foglio</guisubmenu
+></menuchoice
+>.</para>
+
+<para
+>Per rimuovere un commento da una cella, seleziona <guimenuitem
+>Rimuovi commento</guimenuitem
+> del menu associato al tasto <mousebutton
+>destro</mousebutton
+> del mouse o scegli  <menuchoice
+><guimenu
+>Modifica</guimenu
+><guisubmenu
+>Pulisci</guisubmenu
+> <guimenuitem
+>Commento</guimenuitem
+></menuchoice
+>.</para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

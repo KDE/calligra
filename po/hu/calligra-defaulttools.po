@@ -1,0 +1,1048 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2011, 2012, 2015.
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2015-09-08 10:38+0200\n"
+"Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. i18n: ectx: property (text), widget (QCheckBox, toggleEditMode)
+#: connectionTool/ConnectionPointWidget.ui:30
+#, kde-format
+msgid "Edit Mode"
+msgstr "Szerkesztő mód"
+
+#. i18n: ectx: property (text), widget (QLabel, labelEscape)
+#: connectionTool/ConnectionPointWidget.ui:37
+#, kde-format
+msgid "Escape Direction"
+msgstr "Escape irány"
+
+#. i18n: ectx: property (text), widget (QLabel, labelAlign)
+#: connectionTool/ConnectionPointWidget.ui:97
+#, kde-format
+msgid "Alignment"
+msgstr "Igazítás"
+
+#. i18n: ectx: property (text), widget (QToolButton, alignPercent)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleXSpinBox)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleYSpinBox)
+#: connectionTool/ConnectionPointWidget.ui:116
+#: defaulttool/DefaultToolTransformWidget.ui:106
+#: defaulttool/DefaultToolTransformWidget.ui:138
+#, no-c-format, kde-format
+msgid "%"
+msgstr "%"
+
+#: connectionTool/ConnectionTool.cpp:66
+#, kde-format
+msgid "Edit connection points"
+msgstr "Kapcsolódási pontok szerkesztése"
+
+#: connectionTool/ConnectionTool.cpp:73
+#, kde-format
+msgid "Align to left edge"
+msgstr "Bal szélhez igazítás"
+
+#: connectionTool/ConnectionTool.cpp:76
+#, kde-format
+msgid "Align to horizontal center"
+msgstr "Vízszintesen középre igazítás"
+
+#: connectionTool/ConnectionTool.cpp:79
+#, kde-format
+msgid "Align to right edge"
+msgstr "Jobb szélhez igazítás"
+
+#: connectionTool/ConnectionTool.cpp:82
+#, kde-format
+msgid "Align to top edge"
+msgstr "Felső szélhez igazítás"
+
+#: connectionTool/ConnectionTool.cpp:85
+#, kde-format
+msgid "Align to vertical center"
+msgstr "Függőlegesen középre igazítás"
+
+#: connectionTool/ConnectionTool.cpp:88
+#, kde-format
+msgid "Align to bottom edge"
+msgstr "Alsó szélhez igazítás"
+
+#: connectionTool/ConnectionTool.cpp:92
+#, kde-format
+msgid "Escape in all directions"
+msgstr "Escape minden irányba"
+
+#: connectionTool/ConnectionTool.cpp:95
+#, kde-format
+msgid "Escape in horizontal directions"
+msgstr "Escape vízszintes irányba"
+
+#: connectionTool/ConnectionTool.cpp:98
+#, kde-format
+msgid "Escape in vertical directions"
+msgstr "Escape függőleges irányba"
+
+#: connectionTool/ConnectionTool.cpp:101
+#, kde-format
+msgid "Escape in left direction"
+msgstr "Escape balra"
+
+#: connectionTool/ConnectionTool.cpp:104
+#, kde-format
+msgid "Escape in right direction"
+msgstr "Escape jobbra"
+
+#: connectionTool/ConnectionTool.cpp:107
+#, kde-format
+msgid "Escape in up direction"
+msgstr "Escape felfelé"
+
+#: connectionTool/ConnectionTool.cpp:110
+#, kde-format
+msgid "Escape in down direction"
+msgstr "Escape lefelé"
+
+#: connectionTool/ConnectionTool.cpp:434
+#, fuzzy
+#| msgid "Connection"
+msgctxt "(qtundo-format)"
+msgid "Create Connection"
+msgstr "Kapcsolat"
+
+#: connectionTool/ConnectionTool.cpp:774 connectionTool/ConnectionTool.cpp:786
+#, kde-format
+msgid "Drag to edit connection."
+msgstr "Húzza a kapcsolat szerkesztéséhez."
+
+#: connectionTool/ConnectionTool.cpp:776 connectionTool/ConnectionTool.cpp:788
+#, kde-format
+msgid "Double click connection or press delete to remove it."
+msgstr ""
+"Kattintson duplán a kapcsolatra vagy nyomja meg a Delete gombot a törléséhez."
+
+#: connectionTool/ConnectionTool.cpp:778
+#, kde-format
+msgid "Click to edit connection points."
+msgstr "Kattintson a kapcsolódási pontok szerkesztéséhez."
+
+#: connectionTool/ConnectionTool.cpp:792
+#, kde-format
+msgid ""
+"Drag to move connection point. Double click connection or press delete to "
+"remove it."
+msgstr ""
+"Húzza a kapcsolódási pont mozgatásához. Kattintson duplán a kapcsolatra vagy "
+"nyomja meg a Delete gombot a törléshez."
+
+#: connectionTool/ConnectionTool.cpp:794
+#, kde-format
+msgid "Double click connection point or press delete to remove it."
+msgstr ""
+"Kattintson duplán a kapcsolódási pontra vagy nyomja meg a Delete gombot a "
+"törléséhez."
+
+#: connectionTool/ConnectionTool.cpp:796
+#, kde-format
+msgid "Double click to add connection point."
+msgstr "Kattintson duplán kapcsolódási pont hozzáadásához."
+
+#: connectionTool/ConnectionTool.cpp:799
+#, kde-format
+msgid "Drag to create new connection."
+msgstr "Húzza új kapcsolat létrehozásához."
+
+#: connectionTool/ConnectionTool.cpp:827
+#, kde-format
+msgid "Connection"
+msgstr "Kapcsolat"
+
+#: connectionTool/ConnectionTool.cpp:832 defaulttool/DefaultTool.cpp:1167
+#, kde-format
+msgid "Line"
+msgstr "Vonal"
+
+#: connectionTool/ConnectionTool.cpp:837
+#, kde-format
+msgid "Connection Point"
+msgstr "Kapcsolódási pont"
+
+#: connectionTool/ConnectionToolFactory.cpp:18
+#, kde-format
+msgid "Connect shapes"
+msgstr "Alakzatok összekapcsolása"
+
+#: defaulttool/DefaultTool.cpp:205
+#, kde-format
+msgid "Bring to &Front"
+msgstr "&Előrehozás"
+
+#: defaulttool/DefaultTool.cpp:210
+#, kde-format
+msgid "&Raise"
+msgstr "&Feljebb"
+
+#: defaulttool/DefaultTool.cpp:215
+#, kde-format
+msgid "&Lower"
+msgstr "&Lejjebb"
+
+#: defaulttool/DefaultTool.cpp:221
+#, kde-format
+msgid "Send to &Back"
+msgstr "&Hátraküldés"
+
+#: defaulttool/DefaultTool.cpp:227
+#, kde-format
+msgid "Align Left"
+msgstr "Balra igazítás"
+
+#: defaulttool/DefaultTool.cpp:232
+#, kde-format
+msgid "Horizontally Center"
+msgstr "Vízszintesen középre"
+
+#: defaulttool/DefaultTool.cpp:237
+#, kde-format
+msgid "Align Right"
+msgstr "Jobbra igazítás"
+
+#: defaulttool/DefaultTool.cpp:241
+#, kde-format
+msgid "Align Top"
+msgstr "Felülre igazítás"
+
+#: defaulttool/DefaultTool.cpp:246
+#, kde-format
+msgid "Vertically Center"
+msgstr "Függőlegesen középre"
+
+#: defaulttool/DefaultTool.cpp:251
+#, kde-format
+msgid "Align Bottom"
+msgstr "Alulra igazítás"
+
+#: defaulttool/DefaultTool.cpp:256
+#, kde-format
+msgid "Group"
+msgstr "Csoportosítás"
+
+#: defaulttool/DefaultTool.cpp:261
+#, kde-format
+msgid "Ungroup"
+msgstr "Csoport felbontása"
+
+#: defaulttool/DefaultTool.cpp:447 defaulttool/DefaultTool.cpp:522
+#, kde-format
+msgid "Click and drag to move guide line."
+msgstr "Kattintson és húzza az egeret a segédvonal elmozgatásához."
+
+#: defaulttool/DefaultTool.cpp:454
+#, kde-format
+msgid ""
+"Left click rotates around center, right click around highlighted position."
+msgstr ""
+"Bal kattintás a középpont körüli, jobb kattintás a kijelölt pozíció körüli "
+"forgatáshoz."
+
+#: defaulttool/DefaultTool.cpp:456
+#, kde-format
+msgid "Click and drag to shear selection."
+msgstr "Kattintson és húzza az egeret a kijelölés nyírásához."
+
+#: defaulttool/DefaultTool.cpp:459
+#, kde-format
+msgid "Click and drag to resize selection."
+msgstr "Kattintson és húzza az egeret a kijelölés átméretezéséhez."
+
+#: defaulttool/DefaultTool.cpp:511
+#, kde-format
+msgid "Click and drag to move selection."
+msgstr "Kattintson és húzza az egeret a kijelölés mozgatásához."
+
+#: defaulttool/DefaultTool.cpp:516
+#, kde-format
+msgid ""
+"Click and drag to resize selection. Middle click to set highlighted position."
+msgstr ""
+"Kattintson és húzza az egeret a kijelölés átméretezéséhez. Középső kattintás "
+"a kijelölt pozíció beállításához."
+
+#: defaulttool/DefaultTool.cpp:1039
+msgctxt "(qtundo-format)"
+msgid "Group shapes"
+msgstr "Alakzatok csoportosítása"
+
+#: defaulttool/DefaultTool.cpp:1071
+msgctxt "(qtundo-format)"
+msgid "Ungroup shapes"
+msgstr "Alakzatcsoport felbontása"
+
+#: defaulttool/DefaultTool.cpp:1161
+#, kde-format
+msgid "Arrange"
+msgstr "Rendezés"
+
+#: defaulttool/DefaultTool.cpp:1164
+#, kde-format
+msgid "Geometry"
+msgstr "Geometria"
+
+#: defaulttool/DefaultTool.cpp:1172
+#, kde-format
+msgid "Fill"
+msgstr "Kitöltés"
+
+#: defaulttool/DefaultTool.cpp:1177
+#, kde-format
+msgid "Shadow"
+msgstr "Árnyék"
+
+#: defaulttool/DefaultToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Shape Handling Tool"
+msgid "Shape handling"
+msgstr "Alakzatkezelő segédeszköz"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:100
+#: defaulttool/ShapeRotateStrategy.cpp:137
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "Forgatás"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:138
+msgctxt "(qtundo-format)"
+msgid "Shear X"
+msgstr "Nyírás X"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:176
+msgctxt "(qtundo-format)"
+msgid "Shear Y"
+msgstr "Nyírás Y"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:218
+#: defaulttool/DefaultToolTransformWidget.cpp:255
+msgctxt "(qtundo-format)"
+msgid "Scale"
+msgstr "Skálázás"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:287
+msgctxt "(qtundo-format)"
+msgid "Reset Transformations"
+msgstr "Transzformációk alaphelyzetbe állítása"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, rotateSpinBox)
+#: defaulttool/DefaultToolTransformWidget.ui:25
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (text), widget (QPushButton, rotateButton)
+#: defaulttool/DefaultToolTransformWidget.ui:38
+#, kde-format
+msgid "Rotate"
+msgstr "Forgatás"
+
+#. i18n: ectx: property (text), widget (QPushButton, shearXButton)
+#: defaulttool/DefaultToolTransformWidget.ui:64
+#, kde-format
+msgid "Shear X"
+msgstr "Nyírás X"
+
+#. i18n: ectx: property (text), widget (QPushButton, shearYButton)
+#: defaulttool/DefaultToolTransformWidget.ui:90
+#, kde-format
+msgid "Shear Y"
+msgstr "Nyírás Y"
+
+#. i18n: ectx: property (text), widget (QPushButton, scaleXButton)
+#: defaulttool/DefaultToolTransformWidget.ui:122
+#, kde-format
+msgid "Scale X"
+msgstr "Átméretezés X"
+
+#. i18n: ectx: property (text), widget (QPushButton, scaleYButton)
+#: defaulttool/DefaultToolTransformWidget.ui:154
+#, kde-format
+msgid "Scale Y"
+msgstr "Átméretezés Y"
+
+#. i18n: ectx: property (text), widget (QCheckBox, scaleAspectCheckBox)
+#: defaulttool/DefaultToolTransformWidget.ui:161
+#, kde-format
+msgid "Keep aspect ratio"
+msgstr "Méretarány megőrzése"
+
+#. i18n: ectx: property (text), widget (QPushButton, resetButton)
+#: defaulttool/DefaultToolTransformWidget.ui:174
+#, kde-format
+msgid "Reset Transformations"
+msgstr "Transzformációk alaphelyzetbe állítása"
+
+#: defaulttool/DefaultToolWidget.cpp:225
+#: defaulttool/ShapeResizeStrategy.cpp:304
+msgctxt "(qtundo-format)"
+msgid "Resize"
+msgstr "Átméretezés"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: defaulttool/DefaultToolWidget.ui:29
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: defaulttool/DefaultToolWidget.ui:91
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#: defaulttool/ShapeMoveStrategy.cpp:53
+#, kde-format
+msgid "Press ALT to hold x- or y-position."
+msgstr "Nyomja meg az ALT billentyűt az x- vagy y-pozíció tartásához."
+
+#: defaulttool/ShapeResizeStrategy.cpp:92
+#, kde-format
+msgid "Press CTRL to resize from center."
+msgstr "Nyomja meg a CTRL billentyűt a középről történő átméretezéshez."
+
+#: defaulttool/ShapeRotateStrategy.cpp:49
+#, kde-format
+msgid "Press ALT to rotate in 45 degree steps."
+msgstr ""
+"Nyomja meg az ALT billentyűt a 45 fokos lépésekben történő forgatáshoz."
+
+#: defaulttool/ShapeShearStrategy.cpp:169
+msgctxt "(qtundo-format)"
+msgid "Shear"
+msgstr "Nyírás"
+
+#: guidestool/GuidesTool.cpp:133
+#, kde-format
+msgid "Double click to add guide line."
+msgstr "Kattintson duplán segédvonal hozzáadásához."
+
+#: guidestool/GuidesTool.cpp:136
+#, kde-format
+msgid "Click and drag to move guide line. Double click to remove guide line."
+msgstr ""
+"Kattintson és húzza a segédvonal mozgatásához. Kattintson duplán a "
+"segédvonal eltávolításához."
+
+#: guidestool/GuidesTool.cpp:374
+#, kde-format
+msgid "Guides Editor"
+msgstr "Mutatószerkesztő"
+
+#: guidestool/GuidesTool.cpp:382
+#, kde-format
+msgid "Guides Insertor"
+msgstr "Mutatóbeszúró"
+
+#: guidestool/GuidesToolFactory.cpp:14
+#, kde-format
+msgid "Edit guidelines"
+msgstr "Segédvonalak szerkesztése"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: guidestool/GuidesToolOptionWidget.cpp:18
+#: guidestool/InsertGuidesToolOptionWidget.ui:25
+#, kde-format
+msgid "Horizontal"
+msgstr "Vízszintes"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: guidestool/GuidesToolOptionWidget.cpp:19
+#: guidestool/InsertGuidesToolOptionWidget.ui:65
+#, kde-format
+msgid "Vertical"
+msgstr "Függőleges"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: guidestool/GuidesToolOptionWidget.ui:17
+#, kde-format
+msgid "Orientation:"
+msgstr "Tájolás:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: guidestool/GuidesToolOptionWidget.ui:27
+#, kde-format
+msgid "Position:"
+msgstr "Pozíció:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#: guidestool/GuidesToolOptionWidget.ui:37
+#, kde-format
+msgid "Add"
+msgstr "Hozzáadás"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeButton)
+#: guidestool/GuidesToolOptionWidget.ui:44
+#, kde-format
+msgid "Remove"
+msgstr "Eltávolítás"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, m_horizontalSpinBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:38
+#, kde-format
+msgid "Insert this number of horizontal equally spaced guides."
+msgstr "Megadott számú azonos térközű vízszintes segédvonal beszúrása"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, m_horizontalEdgesCheckBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:51
+#, kde-format
+msgid "Insert guides at the horizontal edges."
+msgstr "Segédvonalak beszúrása a vízszintes szegélyekhez."
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, m_verticalSpinBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:78
+#, kde-format
+msgid "Insert this number of vertical equally spaced guides."
+msgstr "Megadott számú azonos térközű függőleges segédvonal beszúrása"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, m_verticalEdgesCheckBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:91
+#, kde-format
+msgid "Insert guides at the vertical edges."
+msgstr "Segédvonalak beszúrása a függőleges szegélyekhez."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_erasePreviousCheckBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:105
+#, kde-format
+msgid "Erase previous guides"
+msgstr "Korábbi segédvonalak törlése"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_createButton)
+#: guidestool/InsertGuidesToolOptionWidget.ui:112
+#, kde-format
+msgid "Create"
+msgstr "Létrehozás"
+
+#, fuzzy
+#~| msgid "X:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~| msgid "Y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "°"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "°"
+#~ msgstr "°"
+
+#, fuzzy
+#~| msgid "%"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%"
+#~ msgstr "%"
+
+#, fuzzy
+#~| msgid "Scale X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale X"
+#~ msgstr "Átméretezés X"
+
+#, fuzzy
+#~| msgid "Scale Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale Y"
+#~ msgstr "Átméretezés Y"
+
+#, fuzzy
+#~| msgid "Keep aspect ratio"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keep aspect ratio"
+#~ msgstr "Méretarány megőrzése"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Orientation:"
+#~ msgstr "Tájolás:"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Position:"
+#~ msgstr "Pozíció:"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Hozzáadás"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Eltávolítás"
+
+#, fuzzy
+#~| msgid "Insert this number of horizontal equally spaced guides."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert this number of horizontal equally spaced guides."
+#~ msgstr "Megadott számú azonos térközű vízszintes segédvonal beszúrása"
+
+#, fuzzy
+#~| msgid "Insert guides at the horizontal edges."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert guides at the horizontal edges."
+#~ msgstr "Segédvonalak beszúrása a vízszintes szegélyekhez."
+
+#, fuzzy
+#~| msgid "Insert this number of vertical equally spaced guides."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert this number of vertical equally spaced guides."
+#~ msgstr "Megadott számú azonos térközű függőleges segédvonal beszúrása"
+
+#, fuzzy
+#~| msgid "Insert guides at the vertical edges."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert guides at the vertical edges."
+#~ msgstr "Segédvonalak beszúrása a függőleges szegélyekhez."
+
+#, fuzzy
+#~| msgid "Erase previous guides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Erase previous guides"
+#~ msgstr "Korábbi segédvonalak törlése"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Létrehozás"
+
+#, fuzzy
+#~| msgid "Edit Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Mode"
+#~ msgstr "Szerkesztő mód"
+
+#, fuzzy
+#~| msgid "Escape Direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape Direction"
+#~ msgstr "Escape irány"
+
+#, fuzzy
+#~| msgid "Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alignment"
+#~ msgstr "Igazítás"
+
+#, fuzzy
+#~| msgid "Edit connection points"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit connection points"
+#~ msgstr "Kapcsolódási pontok szerkesztése"
+
+#, fuzzy
+#~| msgid "Align to left edge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to left edge"
+#~ msgstr "Bal szélhez igazítás"
+
+#, fuzzy
+#~| msgid "Align to horizontal center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to horizontal center"
+#~ msgstr "Vízszintesen középre igazítás"
+
+#, fuzzy
+#~| msgid "Align to right edge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to right edge"
+#~ msgstr "Jobb szélhez igazítás"
+
+#, fuzzy
+#~| msgid "Align to top edge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to top edge"
+#~ msgstr "Felső szélhez igazítás"
+
+#, fuzzy
+#~| msgid "Align to vertical center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to vertical center"
+#~ msgstr "Függőlegesen középre igazítás"
+
+#, fuzzy
+#~| msgid "Align to bottom edge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to bottom edge"
+#~ msgstr "Alsó szélhez igazítás"
+
+#, fuzzy
+#~| msgid "Escape in all directions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in all directions"
+#~ msgstr "Escape minden irányba"
+
+#, fuzzy
+#~| msgid "Escape in horizontal directions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in horizontal directions"
+#~ msgstr "Escape vízszintes irányba"
+
+#, fuzzy
+#~| msgid "Escape in vertical directions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in vertical directions"
+#~ msgstr "Escape függőleges irányba"
+
+#, fuzzy
+#~| msgid "Escape in left direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in left direction"
+#~ msgstr "Escape balra"
+
+#, fuzzy
+#~| msgid "Escape in right direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in right direction"
+#~ msgstr "Escape jobbra"
+
+#, fuzzy
+#~| msgid "Escape in up direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in up direction"
+#~ msgstr "Escape felfelé"
+
+#, fuzzy
+#~| msgid "Escape in down direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in down direction"
+#~ msgstr "Escape lefelé"
+
+#, fuzzy
+#~| msgid "Drag to edit connection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to edit connection."
+#~ msgstr "Húzza a kapcsolat szerkesztéséhez."
+
+#, fuzzy
+#~| msgid "Double click connection or press delete to remove it."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click connection or press delete to remove it."
+#~ msgstr ""
+#~ "Kattintson duplán a kapcsolatra vagy nyomja meg a Delete gombot a "
+#~ "törléséhez."
+
+#, fuzzy
+#~| msgid "Click to edit connection points."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click to edit connection points."
+#~ msgstr "Kattintson a kapcsolódási pontok szerkesztéséhez."
+
+#, fuzzy
+#~| msgid ""
+#~| "Drag to move connection point. Double click connection or press delete "
+#~| "to remove it."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Drag to move connection point. Double click connection or press delete to "
+#~ "remove it."
+#~ msgstr ""
+#~ "Húzza a kapcsolódási pont mozgatásához. Kattintson duplán a kapcsolatra "
+#~ "vagy nyomja meg a Delete gombot a törléshez."
+
+#, fuzzy
+#~| msgid "Double click connection point or press delete to remove it."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click connection point or press delete to remove it."
+#~ msgstr ""
+#~ "Kattintson duplán a kapcsolódási pontra vagy nyomja meg a Delete gombot a "
+#~ "törléséhez."
+
+#, fuzzy
+#~| msgid "Double click to add connection point."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add connection point."
+#~ msgstr "Kattintson duplán kapcsolódási pont hozzáadásához."
+
+#, fuzzy
+#~| msgid "Drag to create new connection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to create new connection."
+#~ msgstr "Húzza új kapcsolat létrehozásához."
+
+#, fuzzy
+#~| msgid "Connection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connection"
+#~ msgstr "Kapcsolat"
+
+#, fuzzy
+#~| msgid "Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line"
+#~ msgstr "Vonal"
+
+#, fuzzy
+#~| msgid "Connection Point"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connection Point"
+#~ msgstr "Kapcsolódási pont"
+
+#, fuzzy
+#~| msgid "Connect shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect shapes"
+#~ msgstr "Alakzatok összekapcsolása"
+
+#, fuzzy
+#~| msgid "Bring to &Front"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bring to &Front"
+#~ msgstr "&Előrehozás"
+
+#, fuzzy
+#~| msgid "&Raise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Raise"
+#~ msgstr "&Feljebb"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Lower"
+#~ msgstr "&Lejjebb"
+
+#, fuzzy
+#~| msgid "Send to &Back"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Send to &Back"
+#~ msgstr "&Hátraküldés"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Left"
+#~ msgstr "Balra igazítás"
+
+#, fuzzy
+#~| msgid "Horizontally Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontally Center"
+#~ msgstr "Vízszintesen középre"
+
+#, fuzzy
+#~| msgid "Align Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Right"
+#~ msgstr "Jobbra igazítás"
+
+#, fuzzy
+#~| msgid "Align Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Top"
+#~ msgstr "Felülre igazítás"
+
+#, fuzzy
+#~| msgid "Vertically Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertically Center"
+#~ msgstr "Függőlegesen középre"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Bottom"
+#~ msgstr "Alulra igazítás"
+
+#, fuzzy
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Group"
+#~ msgstr "Csoportosítás"
+
+#, fuzzy
+#~| msgid "Ungroup"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ungroup"
+#~ msgstr "Csoport felbontása"
+
+#, fuzzy
+#~| msgid "Click and drag to move guide line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click and drag to move guide line."
+#~ msgstr "Kattintson és húzza az egeret a segédvonal elmozgatásához."
+
+#, fuzzy
+#~| msgid ""
+#~| "Left click rotates around center, right click around highlighted "
+#~| "position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Left click rotates around center, right click around highlighted position."
+#~ msgstr ""
+#~ "Bal kattintás a középpont körüli, jobb kattintás a kijelölt pozíció "
+#~ "körüli forgatáshoz."
+
+#, fuzzy
+#~| msgid "Click and drag to shear selection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click and drag to shear selection."
+#~ msgstr "Kattintson és húzza az egeret a kijelölés nyírásához."
+
+#, fuzzy
+#~| msgid "Click and drag to resize selection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click and drag to resize selection."
+#~ msgstr "Kattintson és húzza az egeret a kijelölés átméretezéséhez."
+
+#, fuzzy
+#~| msgid "Click and drag to move selection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click and drag to move selection."
+#~ msgstr "Kattintson és húzza az egeret a kijelölés mozgatásához."
+
+#, fuzzy
+#~| msgid ""
+#~| "Click and drag to resize selection. Middle click to set highlighted "
+#~| "position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Click and drag to resize selection. Middle click to set highlighted "
+#~ "position."
+#~ msgstr ""
+#~ "Kattintson és húzza az egeret a kijelölés átméretezéséhez. Középső "
+#~ "kattintás a kijelölt pozíció beállításához."
+
+#, fuzzy
+#~| msgid "Arrange"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrange"
+#~ msgstr "Rendezés"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Geometria"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill"
+#~ msgstr "Kitöltés"
+
+#, fuzzy
+#~| msgid "Shadow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shadow"
+#~ msgstr "Árnyék"
+
+#, fuzzy
+#~| msgid "Shape Handling Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape handling"
+#~ msgstr "Alakzatkezelő segédeszköz"
+
+#, fuzzy
+#~| msgid "Press ALT to hold x- or y-position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press ALT to hold x- or y-position."
+#~ msgstr "Nyomja meg az ALT billentyűt az x- vagy y-pozíció tartásához."
+
+#, fuzzy
+#~| msgid "Press CTRL to resize from center."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press CTRL to resize from center."
+#~ msgstr "Nyomja meg a CTRL billentyűt a középről történő átméretezéshez."
+
+#, fuzzy
+#~| msgid "Press ALT to rotate in 45 degree steps."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press ALT to rotate in 45 degree steps."
+#~ msgstr ""
+#~ "Nyomja meg az ALT billentyűt a 45 fokos lépésekben történő forgatáshoz."
+
+#, fuzzy
+#~| msgid "Double click to add guide line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add guide line."
+#~ msgstr "Kattintson duplán segédvonal hozzáadásához."
+
+#, fuzzy
+#~| msgid ""
+#~| "Click and drag to move guide line. Double click to remove guide line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Click and drag to move guide line. Double click to remove guide line."
+#~ msgstr ""
+#~ "Kattintson és húzza a segédvonal mozgatásához. Kattintson duplán a "
+#~ "segédvonal eltávolításához."
+
+#, fuzzy
+#~| msgid "Guides Editor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Guides Editor"
+#~ msgstr "Mutatószerkesztő"
+
+#, fuzzy
+#~| msgid "Guides Insertor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Guides Insertor"
+#~ msgstr "Mutatóbeszúró"
+
+#, fuzzy
+#~| msgid "Edit guidelines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit guidelines"
+#~ msgstr "Segédvonalak szerkesztése"
+
+#, fuzzy
+#~| msgid "Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "Vízszintes"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "Függőleges"
+
+#~ msgid "None"
+#~ msgstr "Nincs"
+
+#~ msgid "Shape Opacity"
+#~ msgstr "Alakzat átlátszatlanság"
+
+#~ msgid "Snapping"
+#~ msgstr "Igazítás"
+
+#~ msgid "Basic shape manipulation"
+#~ msgstr "Egyszerű alakzatkezelés"
+
+#~ msgid "Default tool"
+#~ msgstr "Alapértelmezett eszköz"
+
+#~ msgid "Connection Shape"
+#~ msgstr "Kapcsolat alakzat"
+
+#~ msgid "Type:"
+#~ msgstr "Típus:"

@@ -1,0 +1,751 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Chetan Khona <chetan@kompkin.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-03-28 15:17+0530\n"
+"Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
+"Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
+"Language: mr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: ChapterVariable.cpp:202 UserVariableOptionsWidget.cpp:57
+#, kde-format
+msgid "Format:"
+msgstr "स्वरूप :"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number"
+msgstr "संख्या"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Name"
+msgstr "नाव"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number and name"
+msgstr "संख्या व नाव"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number without separator"
+msgstr "विभाजकाशिवाय संख्या"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number and name without separator"
+msgstr "विभाजकाशिवाय संख्या व नावा"
+
+#: ChapterVariable.cpp:211
+#, kde-format
+msgid "Level:"
+msgstr "पातळी :"
+
+#: ChapterVariableFactory.cpp:21
+#, kde-format
+msgid "Chapter"
+msgstr "प्रकरण"
+
+#: DateVariableFactory.cpp:22
+#, kde-format
+msgctxt "date that can not be changed later"
+msgid "Date (Fixed)"
+msgstr "दिनांक (ठराविक)"
+
+#: FixedDateFormat.cpp:34
+#, kde-format
+msgid "Locale date format"
+msgstr "मोठे दिनांक स्वरूप"
+
+#: FixedDateFormat.cpp:35
+#, kde-format
+msgid "Short locale date format"
+msgstr "लहान दिनांक स्वरूप"
+
+#: FixedDateFormat.cpp:36
+#, kde-format
+msgid "Locale date & time format"
+msgstr "स्थानिक दिनांक व वेळ स्वरूप"
+
+#: FixedDateFormat.cpp:37
+#, kde-format
+msgid "Short locale date & time format"
+msgstr "लहान स्थानिक दिनांक व वेळ स्वरूप"
+
+#: FixedDateFormat.cpp:108
+#, kde-format
+msgid "Day"
+msgstr "दिवस"
+
+#: FixedDateFormat.cpp:109
+#, kde-format
+msgid "Month"
+msgstr "महीना"
+
+#: FixedDateFormat.cpp:110
+#, kde-format
+msgid "Year"
+msgstr "वर्ष"
+
+#: FixedDateFormat.cpp:111
+#, kde-format
+msgid "Hour"
+msgstr "तास"
+
+#: FixedDateFormat.cpp:112
+#, kde-format
+msgid "Minute"
+msgstr "मिनिट"
+
+#: FixedDateFormat.cpp:113
+#, kde-format
+msgid "Second"
+msgstr "सेकंद"
+
+#: FixedDateFormat.cpp:121
+#, kde-format
+msgid "Flexible Digits (1-31)"
+msgstr "लवचिक अंक (1-31)"
+
+#: FixedDateFormat.cpp:122
+#, kde-format
+msgid "2 Digits (01-31)"
+msgstr "दोन अंक (01-31)"
+
+#: FixedDateFormat.cpp:123 FixedDateFormat.cpp:127
+#, kde-format
+msgid "Abbreviated Name"
+msgstr "संक्षिप्त नाव"
+
+#: FixedDateFormat.cpp:124 FixedDateFormat.cpp:128
+#, kde-format
+msgid "Long Name"
+msgstr "लांब नाव"
+
+#: FixedDateFormat.cpp:125
+#, kde-format
+msgid "Flexible Digits (1-12)"
+msgstr "लवचिक अंक (1-12)"
+
+#: FixedDateFormat.cpp:126
+#, kde-format
+msgid "2 Digits (01-12)"
+msgstr "दोन अंक (01-12)"
+
+#: FixedDateFormat.cpp:129
+#, kde-format
+msgid "Possessive Abbreviated Name"
+msgstr "पझेसिव्ह संक्षिप्त नाव"
+
+#: FixedDateFormat.cpp:130
+#, kde-format
+msgid "Possessive Long Name"
+msgstr "पझेसिव्ह लांब नाव"
+
+#: FixedDateFormat.cpp:131
+#, kde-format
+msgid "2 Digits (01-99)"
+msgstr "दोन अंक (01-99)"
+
+#: FixedDateFormat.cpp:132
+#, kde-format
+msgid "4 Digits"
+msgstr "चार अंक"
+
+#: FixedDateFormat.cpp:133
+#, kde-format
+msgid "Flexible Digits (1-23)"
+msgstr "लवचिक अंक (1-23)"
+
+#: FixedDateFormat.cpp:134
+#, kde-format
+msgid "2 Digits (01-23)"
+msgstr "दोन अंक (01-23)"
+
+#: FixedDateFormat.cpp:135 FixedDateFormat.cpp:137
+#, kde-format
+msgid "Flexible Digits (1-59)"
+msgstr "लवचिक अंक (1-59)"
+
+#: FixedDateFormat.cpp:136 FixedDateFormat.cpp:138
+#, kde-format
+msgid "2 Digits (01-59)"
+msgstr "दोन अंक (01-59)"
+
+#: FixedDateFormat.cpp:139
+#, kde-format
+msgid "am/pm"
+msgstr "am/pm"
+
+#: FixedDateFormat.cpp:140
+#, kde-format
+msgid "AM/PM"
+msgstr "AM/PM"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: FixedDateFormat.ui:21
+#, kde-format
+msgid "Date Correction:"
+msgstr "दिनांक सुधारणा :"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, correction)
+#: FixedDateFormat.ui:28
+#, kde-format
+msgid " days"
+msgstr " दिवस"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: FixedDateFormat.ui:53
+#, kde-format
+msgid "Select the way the date should be displayed:"
+msgstr "दिनांक कसा दर्शवायचा ते निवडा :"
+
+#. i18n: ectx: property (text), widget (QCheckBox, custom)
+#: FixedDateFormat.ui:60
+#, kde-format
+msgid "Custom format"
+msgstr "ऐच्छिक स्वरूप"
+
+#. i18n: ectx: property (text), widget (QToolButton, formatButton)
+#: FixedDateFormat.ui:101
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#: InfoVariableFactory.cpp:25
+#, kde-format
+msgid "Author Name"
+msgstr "लेखक नाव"
+
+#: InfoVariableFactory.cpp:33
+#, kde-format
+msgid "Title"
+msgstr "शिर्षक"
+
+#: InfoVariableFactory.cpp:41
+#, kde-format
+msgid "Subject"
+msgstr "विषय"
+
+#: InfoVariableFactory.cpp:49
+#, kde-format
+msgid "File Name"
+msgstr "फाईल नाव"
+
+#: InfoVariableFactory.cpp:57
+#, kde-format
+msgid "Keywords"
+msgstr "परवलीचे शब्द"
+
+#: InfoVariableFactory.cpp:65
+#, kde-format
+msgid "Comments"
+msgstr "टिपण्णी"
+
+#: PageVariableFactory.cpp:23
+#, kde-format
+msgid "Page Count"
+msgstr "पान संख्या"
+
+#: PageVariableFactory.cpp:31
+#, kde-format
+msgid "Page Number"
+msgstr "पान क्रमांक"
+
+#: UserVariableFactory.cpp:22
+#, kde-format
+msgid "Custom"
+msgstr "ऐच्छिक"
+
+#: UserVariableOptionsWidget.cpp:34
+#, kde-format
+msgid "Name:"
+msgstr "नाव :"
+
+#: UserVariableOptionsWidget.cpp:46
+#, kde-format
+msgid "New"
+msgstr "नवीन"
+
+#: UserVariableOptionsWidget.cpp:50
+#, kde-format
+msgid "Delete"
+msgstr "काढून टाका"
+
+#: UserVariableOptionsWidget.cpp:63
+#, kde-format
+msgid "String"
+msgstr "स्ट्रिंग"
+
+#: UserVariableOptionsWidget.cpp:64
+#, kde-format
+msgid "Boolean"
+msgstr "बूलियन"
+
+#: UserVariableOptionsWidget.cpp:65
+#, kde-format
+msgid "Float"
+msgstr "तरंगता"
+
+#: UserVariableOptionsWidget.cpp:66
+#, kde-format
+msgid "Percentage"
+msgstr "टक्केवारी"
+
+#: UserVariableOptionsWidget.cpp:67
+#, kde-format
+msgid "Currency"
+msgstr "चलन"
+
+#: UserVariableOptionsWidget.cpp:68
+#, kde-format
+msgid "Date"
+msgstr "दिनांक"
+
+#: UserVariableOptionsWidget.cpp:69
+#, kde-format
+msgid "Time"
+msgstr "वेळ"
+
+#: UserVariableOptionsWidget.cpp:70
+#, kde-format
+msgid "Formula"
+msgstr "फोर्म्युला"
+
+#: UserVariableOptionsWidget.cpp:71
+#, kde-format
+msgid "Void"
+msgstr "व्होइड"
+
+#: UserVariableOptionsWidget.cpp:76
+#, kde-format
+msgid "Value:"
+msgstr "मूल्य :"
+
+#: UserVariableOptionsWidget.cpp:149
+#, kde-format
+msgid "New Variable"
+msgstr "नवीन परिवर्तनीय"
+
+#: UserVariableOptionsWidget.cpp:149
+#, kde-format
+msgid "Name for new variable:"
+msgstr "नवीन परिवर्तनीयाचे नाव :"
+
+#: UserVariableOptionsWidget.cpp:165
+#, kde-format
+msgid "Delete variable <b>%1</b>?"
+msgstr "परिवर्तनीय काढून टाकायचे का <b>%1</b>?"
+
+#: UserVariableOptionsWidget.cpp:166
+#, kde-format
+msgid "Delete Variable"
+msgstr "परिवर्तनीय काढून टाका"
+
+#, fuzzy
+#~| msgid "Date Correction:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date Correction:"
+#~ msgstr "दिनांक सुधारणा :"
+
+#, fuzzy
+#~| msgid " days"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " days"
+#~ msgstr " दिवस"
+
+#, fuzzy
+#~| msgid "Select the way the date should be displayed:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select the way the date should be displayed:"
+#~ msgstr "दिनांक कसा दर्शवायचा ते निवडा :"
+
+#, fuzzy
+#~| msgid "Custom format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom format"
+#~ msgstr "ऐच्छिक स्वरूप"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Format:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format:"
+#~ msgstr "स्वरूप :"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name"
+#~ msgstr "नाव"
+
+#, fuzzy
+#~| msgid "Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number"
+#~ msgstr "संख्या"
+
+#, fuzzy
+#~| msgid "Number and name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number and name"
+#~ msgstr "संख्या व नाव"
+
+#, fuzzy
+#~| msgid "Number and name without separator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number and name without separator"
+#~ msgstr "विभाजकाशिवाय संख्या व नावा"
+
+#, fuzzy
+#~| msgid "Number without separator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number without separator"
+#~ msgstr "विभाजकाशिवाय संख्या"
+
+#, fuzzy
+#~| msgid "Level:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Level:"
+#~ msgstr "पातळी :"
+
+#, fuzzy
+#~| msgid "Chapter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chapter"
+#~ msgstr "प्रकरण"
+
+#, fuzzy
+#~| msgctxt "date that can not be changed later"
+#~| msgid "Date (Fixed)"
+#~ msgctxt "(qtundo-format) date that can not be changed later"
+#~ msgid "Date (Fixed)"
+#~ msgstr "दिनांक (ठराविक)"
+
+#, fuzzy
+#~| msgid "Locale date format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale date format"
+#~ msgstr "मोठे दिनांक स्वरूप"
+
+#, fuzzy
+#~| msgid "Short locale date format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short locale date format"
+#~ msgstr "लहान दिनांक स्वरूप"
+
+#, fuzzy
+#~| msgid "Locale date & time format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale date & time format"
+#~ msgstr "स्थानिक दिनांक व वेळ स्वरूप"
+
+#, fuzzy
+#~| msgid "Short locale date & time format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short locale date & time format"
+#~ msgstr "लहान स्थानिक दिनांक व वेळ स्वरूप"
+
+#, fuzzy
+#~| msgid "Day"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Day"
+#~ msgstr "दिवस"
+
+#, fuzzy
+#~| msgid "Month"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Month"
+#~ msgstr "महीना"
+
+#, fuzzy
+#~| msgid "Year"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Year"
+#~ msgstr "वर्ष"
+
+#, fuzzy
+#~| msgid "Hour"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hour"
+#~ msgstr "तास"
+
+#, fuzzy
+#~| msgid "Minute"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minute"
+#~ msgstr "मिनिट"
+
+#, fuzzy
+#~| msgid "Second"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Second"
+#~ msgstr "सेकंद"
+
+#, fuzzy
+#~| msgid "Flexible Digits (1-31)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flexible Digits (1-31)"
+#~ msgstr "लवचिक अंक (1-31)"
+
+#, fuzzy
+#~| msgid "2 Digits (01-31)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-31)"
+#~ msgstr "दोन अंक (01-31)"
+
+#, fuzzy
+#~| msgid "Abbreviated Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Abbreviated Name"
+#~ msgstr "संक्षिप्त नाव"
+
+#, fuzzy
+#~| msgid "Long Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Long Name"
+#~ msgstr "लांब नाव"
+
+#, fuzzy
+#~| msgid "Flexible Digits (1-12)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flexible Digits (1-12)"
+#~ msgstr "लवचिक अंक (1-12)"
+
+#, fuzzy
+#~| msgid "2 Digits (01-12)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-12)"
+#~ msgstr "दोन अंक (01-12)"
+
+#, fuzzy
+#~| msgid "Possessive Abbreviated Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Possessive Abbreviated Name"
+#~ msgstr "पझेसिव्ह संक्षिप्त नाव"
+
+#, fuzzy
+#~| msgid "Possessive Long Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Possessive Long Name"
+#~ msgstr "पझेसिव्ह लांब नाव"
+
+#, fuzzy
+#~| msgid "2 Digits (01-99)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-99)"
+#~ msgstr "दोन अंक (01-99)"
+
+#, fuzzy
+#~| msgid "4 Digits"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "4 Digits"
+#~ msgstr "चार अंक"
+
+#, fuzzy
+#~| msgid "Flexible Digits (1-23)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flexible Digits (1-23)"
+#~ msgstr "लवचिक अंक (1-23)"
+
+#, fuzzy
+#~| msgid "2 Digits (01-23)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-23)"
+#~ msgstr "दोन अंक (01-23)"
+
+#, fuzzy
+#~| msgid "Flexible Digits (1-59)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flexible Digits (1-59)"
+#~ msgstr "लवचिक अंक (1-59)"
+
+#, fuzzy
+#~| msgid "2 Digits (01-59)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-59)"
+#~ msgstr "दोन अंक (01-59)"
+
+#, fuzzy
+#~| msgid "am/pm"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "am/pm"
+#~ msgstr "am/pm"
+
+#, fuzzy
+#~| msgid "AM/PM"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "AM/PM"
+#~ msgstr "AM/PM"
+
+#, fuzzy
+#~| msgid "Author Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author Name"
+#~ msgstr "लेखक नाव"
+
+#, fuzzy
+#~| msgid "Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "शिर्षक"
+
+#, fuzzy
+#~| msgid "Subject"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subject"
+#~ msgstr "विषय"
+
+#, fuzzy
+#~| msgid "File Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File Name"
+#~ msgstr "फाईल नाव"
+
+#, fuzzy
+#~| msgid "Keywords"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keywords"
+#~ msgstr "परवलीचे शब्द"
+
+#, fuzzy
+#~| msgid "Comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comments"
+#~ msgstr "टिपण्णी"
+
+#, fuzzy
+#~| msgid "Page Count"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Count"
+#~ msgstr "पान संख्या"
+
+#, fuzzy
+#~| msgid "Page Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "पान क्रमांक"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "ऐच्छिक"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "नाव :"
+
+#, fuzzy
+#~| msgid "New"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New"
+#~ msgstr "नवीन"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "काढून टाका"
+
+#, fuzzy
+#~| msgid "String"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "String"
+#~ msgstr "स्ट्रिंग"
+
+#, fuzzy
+#~| msgid "Boolean"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean"
+#~ msgstr "बूलियन"
+
+#, fuzzy
+#~| msgid "Float"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Float"
+#~ msgstr "तरंगता"
+
+#, fuzzy
+#~| msgid "Percentage"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage"
+#~ msgstr "टक्केवारी"
+
+#, fuzzy
+#~| msgid "Currency"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency"
+#~ msgstr "चलन"
+
+#, fuzzy
+#~| msgid "Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date"
+#~ msgstr "दिनांक"
+
+#, fuzzy
+#~| msgid "Time"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time"
+#~ msgstr "वेळ"
+
+#, fuzzy
+#~| msgid "Formula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formula"
+#~ msgstr "फोर्म्युला"
+
+#, fuzzy
+#~| msgid "Void"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Void"
+#~ msgstr "व्होइड"
+
+#, fuzzy
+#~| msgid "Value:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Value:"
+#~ msgstr "मूल्य :"
+
+#, fuzzy
+#~| msgid "Name for new variable:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name for new variable:"
+#~ msgstr "नवीन परिवर्तनीयाचे नाव :"
+
+#, fuzzy
+#~| msgid "New Variable"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Variable"
+#~ msgstr "नवीन परिवर्तनीय"
+
+#, fuzzy
+#~| msgid "Delete variable <b>%1</b>?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete variable <b>%1</b>?"
+#~ msgstr "परिवर्तनीय काढून टाकायचे का <b>%1</b>?"
+
+#, fuzzy
+#~| msgid "Delete Variable"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Variable"
+#~ msgstr "परिवर्तनीय काढून टाका"

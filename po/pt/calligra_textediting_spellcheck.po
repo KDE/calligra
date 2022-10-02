@@ -1,0 +1,58 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2016-11-20 12:52+0000\n"
+"Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
+"Language-Team: pt <kde-i18n-pt@kde.org>\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "Configurar a &Verificação Ortográfica..."
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Verificação Ortográfica Automática"
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr "Verificação Ortográfica"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Ortografia"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Adicionar ao Dicionário"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "Configurar a &Verificação Ortográfica..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Verificação Ortográfica Automática"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Verificação Ortográfica"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Ortografia"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Adicionar ao Dicionário"

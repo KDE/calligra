@@ -1,0 +1,4660 @@
+# Translation of kword.po to Spanish
+#
+# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2009, 2010.
+# Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>, 2011.
+# Raul Gonzalez <raulgf83@gmail.com>, 2011, 2012, 2013, 2014.
+# Sofia Priego <spriego@darksylvania.net>, 2015, 2016, 2017, %Y.
+# Eloy Cuadra <ecuadra@eloihr.net>, 2015, 2016, 2017, 2019, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kword\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"PO-Revision-Date: 2021-08-08 21:00+0100\n"
+"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"Language-Team: Spanish <kde-l10n-es@kde.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.07.90\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, kde-format
+msgid "&File"
+msgstr "&Archivo"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, kde-format
+msgid "&Edit"
+msgstr "&Editar"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, kde-format
+msgid "&View"
+msgstr "&Ver"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, kde-format
+msgid "&Display Mode"
+msgstr "Modo &de visualización"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, kde-format
+msgid "Semantics"
+msgstr "Semántica"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, kde-format
+msgid "S&tyles"
+msgstr "Es&tilos"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, kde-format
+msgid "&Settings"
+msgstr "Preferencia&s"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "Verificación ortográfica"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, kde-format
+msgid "Edit"
+msgstr "Editar"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, kde-format
+msgid "Spell Check Result"
+msgstr "Resultado de la verificación ortográfica"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, kde-format
+msgid "Change Variable To"
+msgstr "Cambiar la variable a"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr "Herramien&tas"
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "Establecer el estilo de la página"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "Insertar un estilo de página"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "Propiedades de la página"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Crear una forma"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, kde-format
+msgid "Baseline"
+msgstr "Línea de base"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, kde-format
+msgid "Character"
+msgstr "Carácter"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, kde-format
+msgid "Row"
+msgstr "Fila"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, kde-format
+msgid "Page (entire) area"
+msgstr "Área (completa) de la página"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, kde-format
+msgid "Page text area"
+msgstr "Área de texto de la página"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, kde-format
+msgid "Paragraph area"
+msgstr "Área del párrafo"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, kde-format
+msgid "Paragraph text area"
+msgstr "Área del texto del párrafo"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, kde-format
+msgid "Left page border"
+msgstr "Borde izquierdo de la página"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, kde-format
+msgid "Right page border"
+msgstr "Borde derecho de la página"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, kde-format
+msgid "Right paragraph border"
+msgstr "Borde del párrafo derecho"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, kde-format
+msgid "Left paragraph border"
+msgstr "Borde del párrafo izquierdo"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr "La relación de la forma en cuanto al texto es:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr "En línea con el texto (se comporta como un carácter)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr "Flotante, pero anclada a la posición de un carácter"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr "Flotante, pero anclada a un párrafo"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr "Flotante libre (no anclada al texto)"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, kde-format
+msgid "Vertical Positioning"
+msgstr "Posicionamiento vertical"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, kde-format
+msgid "Top align with:"
+msgstr "Alinear superiormente con:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, kde-format
+msgid "Center align with:"
+msgstr "Centrar con:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, kde-format
+msgid "Bottom align with:"
+msgstr "Alinear inferiormente con:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr "Desplazamiento"
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, kde-format
+msgid "from:"
+msgstr "desde:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, kde-format
+msgid "Horizontal Positioning"
+msgstr "Posicionamiento horizontal"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, kde-format
+msgid "Left align with:"
+msgstr "Alinear a la izquierda con:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, kde-format
+msgid "Right align with:"
+msgstr "Alinear a la derecha con:"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, kde-format
+msgid "Configure"
+msgstr "Configurar"
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr "Miscelánea"
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, kde-format
+msgid "Grid"
+msgstr "Cuadrícula"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Documento"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, kde-format
+msgid "Document Settings"
+msgstr "Preferencias del documento"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Autor"
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr "Autor"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, kde-format
+msgid "Create New Bookmark"
+msgstr "Crear un nuevo marcador"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+"Los marcadores le permiten saltar entre partes de su documento.\n"
+"Proporcione el nombre de su marcador."
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "Nombre:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, kde-format
+msgid "Columns:"
+msgstr "Columnas:"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, kde-format
+msgid "Column spacing:"
+msgstr "Espacio entre columnas:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, kde-format
+msgid "frameset"
+msgstr "grupo de marcos"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, kde-format
+msgid "No framesets in document"
+msgstr "Ningún grupo de marcos en el documento"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "Nombre del grupo de marcos:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, kde-format
+msgid "Create a new frameset:"
+msgstr "Crear un nuevo grupo de marcos:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr "Seleccionar el grupo de marcos al que conectarse:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "Nombre del grupo de marcos"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, kde-format
+msgid "Smart Positioning"
+msgstr "Posicionamiento inteligente"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, kde-format
+msgid "Text Run Around"
+msgstr "Contorneo del texto"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "Vincular los marcos de texto"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "Cambiar las propiedades de la forma"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr "Anclar a..."
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, kde-format
+msgid "&Page"
+msgstr "&Página"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, kde-format
+msgid "Para&graph"
+msgstr "Párra&fo"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, kde-format
+msgid "&To Character"
+msgstr "Al carác&ter"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, kde-format
+msgid "&As Character"
+msgstr "Como c&arácter"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, kde-format
+msgid "Horizontal Alignment"
+msgstr "Alineación horizontal"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, kde-format
+msgid "&Left"
+msgstr "&Izquierda"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, kde-format
+msgid "&Center"
+msgstr "&Centro"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, kde-format
+msgid "&Right"
+msgstr "&Derecha"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, kde-format
+msgid "Vertical Alignment"
+msgstr "Alineación vertical"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr "&Superior"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr "Inter&media"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, kde-format
+msgid "&Bottom"
+msgstr "I&nferior"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, kde-format
+msgid "Text Wrap-around"
+msgstr "Contorno del texto"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, kde-format
+msgid "Run through this shape"
+msgstr "Atravesará esta forma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, kde-format
+msgid "Skip below this shape"
+msgstr "Saltará hacia abajo esta forma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, kde-format
+msgid "Run on left side of this shape"
+msgstr "Atravesará la parte izquierda de esta forma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, kde-format
+msgid "Run on right side of this shape"
+msgstr "Atravesará la parte derecha de esta forma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, kde-format
+msgid "Run on longest side of this shape"
+msgstr "Atravesará la parte más larga de esta forma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, kde-format
+msgid "Run on both sides of this shape"
+msgstr "Atravesará los dos lados de esta forma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr "Atravesará los lados que son mayores que:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, kde-format
+msgid "Distance Between Shape and Text:"
+msgstr "Distancia entre la forma y el texto:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, kde-format
+msgid "Columns"
+msgstr "Columnas"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, kde-format
+msgid "Style"
+msgstr "Estilo"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, kde-format
+msgid "Clone"
+msgstr "Clonar"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, kde-format
+msgid "Delete"
+msgstr "Borrar"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "Cambiar el estilo de la página"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr "Añadir un nuevo estilo de página con el nombre:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Clone Page Style"
+msgstr "Clonar el estilo de la página"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr "El texto situado en otra parte:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr "La forma afecta al texto por su:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr "Caja delimitadora"
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr "Contorno"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr "La forma y el texto están separados:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, kde-format
+msgid "Left by:"
+msgstr "A la izquierda por:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr "Superiormente por:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr "Inferiormente por:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, kde-format
+msgid "Right by:"
+msgstr "A la derecha por:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, kde-format
+msgid "&Rename"
+msgstr "Cambia&r el nombre"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, kde-format
+msgid "&Delete"
+msgstr "&Borrar"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Cambiar el nombre del marcador"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr "Proporcione un nuevo nombre para el marcador"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr "Ya existe un marcador llamado «%1»."
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, kde-format
+msgid "Select Bookmark"
+msgstr "Seleccionar el marcador"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "Geometría"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, kde-format
+msgid "Page Size && Margins"
+msgstr "Tamaño de página y márgenes"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, kde-format
+msgid "Create"
+msgstr "Crear"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr "Depurar"
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, kde-format
+msgid "Navigation"
+msgstr "Navegación"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, kde-format
+msgid "Page #"
+msgstr "Página #"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, kde-format
+msgid "Section"
+msgstr "Sección"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr "RDF"
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "Estadísticas"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "Palabras:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "Frases:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "Sílabas:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, kde-format
+msgid "Characters (spaces):"
+msgstr "Caracteres (espacios):"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, kde-format
+msgid "Characters (no spaces):"
+msgstr "Caracteres (sin espacios):"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr "Líneas:"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr "Legibilidad:"
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, kde-format
+msgid "Flesch reading ease"
+msgstr "Facilidad de lectura de Flesch"
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, kde-format
+msgid "East asian characters:"
+msgstr "Caracteres de Asia Oriental:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, kde-format
+msgid "Words"
+msgstr "Palabras"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, kde-format
+msgid "Sentences"
+msgstr "Frases"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, kde-format
+msgid "Syllables"
+msgstr "Sílabas"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, kde-format
+msgid "Lines"
+msgstr "Líneas"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, kde-format
+msgid "Characters With Spaces"
+msgstr "Caracteres con espacios"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, kde-format
+msgid "Characters without spaces"
+msgstr "Caracteres (sin espacios)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, kde-format
+msgid "East Asian characters"
+msgstr "Caracteres de Asia Oriental"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, kde-format
+msgid "Flesch Reading Ease"
+msgstr "Facilidad de lectura de Flesch"
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "Normal"
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "Encabezado 1"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "Encabezado 2"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "Encabezado 3"
+
+#: part/i18n/stylenames.cpp:12
+#, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "Lista numerada"
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "Lista alfabética"
+
+#: part/i18n/stylenames.cpp:14
+#, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "Lista de topos"
+
+#: part/i18n/stylenames.cpp:15
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "Título del contenido"
+
+#: part/i18n/stylenames.cpp:16
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "Encabezado de contenido 1"
+
+#: part/i18n/stylenames.cpp:17
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "Encabezado de contenido 2"
+
+#: part/i18n/stylenames.cpp:18
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "Encabezado de contenido 3"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "Título del documento"
+
+#: part/i18n/stylenames.cpp:20
+#, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "Cabecera"
+
+#: part/i18n/stylenames.cpp:21
+#, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "Pie"
+
+#: part/i18n/stylenames.cpp:24
+#, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "Sencillo"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "Bordes 1"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "Bordes 2"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "Bordes 3"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "Fila"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "Columna"
+
+#: part/i18n/stylenames.cpp:30
+#, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "Gris claro"
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "Gris oscuro"
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "Negro"
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "Azul claro"
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "Azul oscuro"
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "Rojo"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "Amarillo"
+
+#: part/i18n/stylenames.cpp:37
+#, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "Colorido"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "Azulado"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "Simple 1"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "Simple 2"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "Simple 3"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "Cabecera 1"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "Cabecera 2"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "Cabecera 3"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "Cabecera 4"
+
+#: part/i18n/stylenames.cpp:50
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "Columnas 1"
+
+#: part/i18n/stylenames.cpp:51
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "Columnas 2"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "Cuadrícula 1"
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "Cuadrícula 2"
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "Cuadrícula 3"
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "Encabezado gris"
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "Encabezado azul"
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "Tradicional azul"
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "Tradicional gris"
+
+#: part/i18n/stylenames.cpp:59
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "Superior e inferior azul"
+
+#: part/i18n/stylenames.cpp:60
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "Superior e inferior gris"
+
+#: part/KWAboutData.h:20
+#, kde-format
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "Calligra Words"
+
+#: part/KWAboutData.h:22
+#, kde-format
+msgid "Word processor"
+msgstr "Procesador de texto"
+
+#: part/KWAboutData.h:24
+#, kde-format
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "Copyright 1998-%1, el equipo de Words"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr "Co-encargado"
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr "Pierre Ducroquet"
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr "C. Boemann"
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr "Todo"
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr "Sebastian Sauer"
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Formatting stuff"
+msgstr "Elementos de formato"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr "Thorsten Zachmann"
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, kde-format
+msgid "Filter"
+msgstr "Filtro"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr "Matus Uzak"
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr "Diseño y pintura"
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr "Pavol Korinek"
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr "Shreya Pandit"
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Statistics docker"
+msgstr "Panel de estadísticas"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr "Brijesh Patel"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Foot and endnotes"
+msgstr "Notas al pie y al final"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr "Bibliografía"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr "Smit Patel"
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr "Mojtaba Shahi"
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Style Manager"
+msgstr "Gestor de estilos"
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr "Lassi Nieminen"
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr "Hanzes Matus"
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr "Lukáš Tvrdý"
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr "Girish Ramakrishnan"
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, kde-format
+msgid "ODF Support"
+msgstr "Implementación de ODF"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr "Robert Mathias Marmorstein"
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr "Sven Lüppken"
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr "Frank Dekervel"
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr "Krister Wicksell Eriksson"
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr "Dag Andersen"
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr "Nash Hoogwater"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "KFormula"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr "Ulrich Kuettler"
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr "Shaheed Haque"
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr "Clarence Dang"
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr "Robert Jacolin"
+
+#: part/KWAboutData.h:65
+#, kde-format
+msgid "Enno Bartels"
+msgstr "Enno Bartels"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr "Ewald Snel"
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr "Tomasz Grobelny"
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr "Michael Johnson"
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr "Hospedaje web Fatcow"
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Page break icon"
+msgstr "Icono de salto de página"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Sofía Priego,Raúl González,Enrique Matías Sánchez (Quique)"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "spriego@darksylvania.net,raulgf83@gmail.com,cronopios@gmail.com"
+
+#: part/KWDocument.cpp:495
+#, kde-format
+msgid "Copy"
+msgstr "Copiar"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, kde-format
+msgid "Standard"
+msgstr "Normal"
+
+#: part/KWDocument.cpp:546
+#, kde-format
+msgid "Document Title"
+msgstr "Título del documento"
+
+#: part/KWDocument.cpp:553
+#, kde-format
+msgid "Head 1"
+msgstr "Encabezado 1"
+
+#: part/KWDocument.cpp:559
+#, kde-format
+msgid "Head 2"
+msgstr "Encabezado 2"
+
+#: part/KWDocument.cpp:565
+#, kde-format
+msgid "Head 3"
+msgstr "Encabezado 3"
+
+#: part/KWDocument.cpp:571
+#, kde-format
+msgid "Bullet List"
+msgstr "Lista de topos"
+
+#: part/KWGui.cpp:69
+#, kde-format
+msgid "Tools"
+msgstr "Herramientas"
+
+#: part/KWOdfLoader.cpp:83
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr ""
+"Archivo de OASIS OpenDocument no válido. No se ha encontrado la etiqueta "
+"«office:body»."
+
+#: part/KWOdfLoader.cpp:95
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr ""
+"Archivo de OASIS OpenDocument no válido. No se ha encontrado ninguna "
+"etiqueta dentro de «office:body»."
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+"Este no es un documento de procesador de textos, sino un %1. Intente abrirlo "
+"con la aplicación adecuada."
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, kde-format
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "Estándar"
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+"No se encuentra el componente de texto necesario, Words finalizará ahora"
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr "Error de instalación"
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr "Modificado"
+
+#: part/KWStatusBar.cpp:36
+#, kde-format
+msgid "Saved"
+msgstr "Guardado"
+
+#: part/KWStatusBar.cpp:37
+#, kde-format
+msgid "Page %1 of %2"
+msgstr "Página %1 de %2"
+
+#: part/KWStatusBar.cpp:38
+#, kde-format
+msgid "Page %1-%2 of %3"
+msgstr "Página %1-%2 de %3"
+
+#: part/KWStatusBar.cpp:39
+#, kde-format
+msgid "Line %1"
+msgstr "Línea %1"
+
+#: part/KWStatusBar.cpp:124
+#, kde-format
+msgid "Page Number"
+msgstr "Número de página"
+
+#: part/KWStatusBar.cpp:137
+#, kde-format
+msgid "Line Number"
+msgstr "Número de línea"
+
+#: part/KWStatusBar.cpp:149
+#, kde-format
+msgid "Change the page style"
+msgstr "Cambiar el estilo de la página"
+
+#: part/KWStatusBar.cpp:155
+#, kde-format
+msgid "Page Style"
+msgstr "Estilo de la página"
+
+#: part/KWStatusBar.cpp:169
+#, kde-format
+msgid "Page Size"
+msgstr "Tamaño de la página"
+
+#: part/KWStatusBar.cpp:184
+#, kde-format
+msgid "Saved/Modified"
+msgstr "Guardado/modificado"
+
+#: part/KWStatusBar.cpp:197
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr "Cursor del ratón X:Y"
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr "Controlador del zum"
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr "Salir del modo a pantalla completa"
+
+#: part/KWView.cpp:260
+#, kde-format
+msgid "Shape Properties..."
+msgstr "Propiedades de la forma..."
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr "Cambiar el comportamiento de la forma"
+
+#: part/KWView.cpp:271
+#, kde-format
+msgid "Create Template From Document..."
+msgstr "Crear plantilla a partir del documento..."
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr "Guardar este documento y usarlo posteriormente como una plantilla"
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+"Puede guardar este documento como una plantilla.<br><br>Podrá usar esta "
+"nueva plantilla como punto de partida para otro documento."
+
+#: part/KWView.cpp:292
+#, kde-format
+msgid "Show Formatting Characters"
+msgstr "Mostrar los caracteres de formateo"
+
+#: part/KWView.cpp:298
+#, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr "Conmuta la visualización de los caracteres no imprimibles"
+
+#: part/KWView.cpp:299
+#, kde-format
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+"Conmuta la visualización de los caracteres no imprimibles.<br/><br/>Cuando "
+"esta opción está habilitada, Words le muestra los tabuladores, espacios, "
+"retornos de carro y otros caracteres no imprimibles."
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr "Mostrar las sombras de los campos"
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr "Conmutar el fondo sombreado de los campos"
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+"Conmuta la visualización de los campos (variables, etc.) dibujando su fondo "
+"con un color que haga contraste."
+
+#: part/KWView.cpp:310
+#, kde-format
+msgid "Show Text Shape Borders"
+msgstr "Mostrar los bordes de la forma Texto"
+
+#: part/KWView.cpp:311
+#, kde-format
+msgid "Turns the border display on and off"
+msgstr "Activa o desactiva la visualización del borde"
+
+#: part/KWView.cpp:317
+#, kde-format
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+"Activa o desactiva la visualización del borde.<br/><br/>Los bordes nunca se "
+"imprimen. Esta opción es útil para ver como aparecerá el documento en la "
+"página imprimida."
+
+#: part/KWView.cpp:319
+#, kde-format
+msgid "Show Table Borders"
+msgstr "Mostrar los bordes de las tablas"
+
+#: part/KWView.cpp:325
+#, kde-format
+msgid "Toggle the display of table borders"
+msgstr "Conmuta la visualización de los bordes de las tablas"
+
+#: part/KWView.cpp:326
+#, kde-format
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+"Conmuta la visualización de los bordes de las tablas.<br/><br/>Cuando esta "
+"opción está habilitada, Words le muestra los bordes de tabla invisibles con "
+"una línea gris delgada."
+
+#: part/KWView.cpp:328
+#, kde-format
+msgid "Show Section Bounds"
+msgstr "Mostrar los bordes de sección"
+
+#: part/KWView.cpp:334
+#, kde-format
+msgid "Toggle the display of section bounds"
+msgstr "Conmutar la visualización de los bordes de sección"
+
+#: part/KWView.cpp:335
+#, kde-format
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+"Conmuta la visualización de los bordes de sección.<br/><br/>Cuando esta "
+"opción está activada, se mostrarán los bordes de cualquier sección mediante "
+"una línea gris delgada."
+
+#: part/KWView.cpp:337
+#, kde-format
+msgid "Show Rulers"
+msgstr "Mostrar las reglas"
+
+#: part/KWView.cpp:339
+#, kde-format
+msgid "Shows or hides rulers"
+msgstr "Muestra u oculta las reglas"
+
+#: part/KWView.cpp:340
+#, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+"Las reglas son los espacios de medición blancos en la parte superior e "
+"izquierda del documento. Las reglas muestran la posición y anchura de las "
+"páginas y marcos, y se pueden usar para colocar tabuladores, entre otras "
+"cosas.<p>Desmarque esto para que no se muestren las reglas.</p>"
+
+#: part/KWView.cpp:351
+#, kde-format
+msgid "Snap to Grid"
+msgstr "Ajustar a la cuadrícula"
+
+#: part/KWView.cpp:359
+#, kde-format
+msgid "Show Status Bar"
+msgstr "Mostrar la barra de estado"
+
+#: part/KWView.cpp:360
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Muestra u oculta la barra de estado"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr "Modo a pantalla completa"
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr "Establecer la vista en el modo a pantalla completa"
+
+#: part/KWView.cpp:374
+#, kde-format
+msgid "Semantic Stylesheets..."
+msgstr "Hojas de estilo semánticas..."
+
+#: part/KWView.cpp:376
+#, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr "Modificar y añadir hojas de estilo semánticas"
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+"Las hojas de estilo se usan para formatear la visualización de la "
+"información almacenada en RDF."
+
+#: part/KWView.cpp:392
+#, kde-format
+msgid "Configure..."
+msgstr "Configurar..."
+
+#: part/KWView.cpp:401
+#, kde-format
+msgid "Page Layout..."
+msgstr "Disposición de la página..."
+
+#: part/KWView.cpp:403
+#, kde-format
+msgid "Change properties of entire page"
+msgstr "Cambiar las propiedades de la página entera"
+
+#: part/KWView.cpp:404
+#, kde-format
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+"Cambiar las propiedades de la página entera.<p>Actualmente puede cambiar el "
+"tamaño de papel, orientación del papel, tamaño de las cabeceras y pies, y "
+"ajustes de las columnas.</p>"
+
+#: part/KWView.cpp:407
+#, kde-format
+msgid "Create Header"
+msgstr "Crear encabezado"
+
+#: part/KWView.cpp:413
+#, kde-format
+msgid "Create Footer"
+msgstr "Crear pie de página"
+
+#: part/KWView.cpp:420
+#, kde-format
+msgid "Show Comments"
+msgstr "Mostrar comentarios"
+
+#: part/KWView.cpp:421
+#, kde-format
+msgid "Shows comments in the document"
+msgstr "Muestra comentarios en el documento"
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr "Recuento de palabras"
+
+#: part/KWView.cpp:428
+#, kde-format
+msgid "Shows or hides word counting in status bar"
+msgstr "Muestra u oculta el recuento de palabras en la barra de estado"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, kde-format
+msgid "Page Setup"
+msgstr "Configuración de página"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, kde-format
+msgid "Header & Footer"
+msgstr "Encabezado y pie de página"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, kde-format
+msgid "Page layout"
+msgstr "Diseño de página"
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr "Buscar:"
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, kde-format
+msgctxt "Next search result"
+msgid "Next"
+msgstr "Siguiente"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, kde-format
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "Anterior"
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, kde-format
+msgctxt "Search options"
+msgid "Options"
+msgstr "Opciones"
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, kde-format
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr "Sustituir:"
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, kde-format
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr "Sustituir"
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, kde-format
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr "Sustituir todo"
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, kde-format
+msgid "Replace"
+msgstr "Sustituir"
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] "1 coincidencia encontrada"
+msgstr[1] "%1 coincidencias encontradas"
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr "No se han encontrado coincidencias"
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr "La búsqueda ha llegado al final, se continúa por el principio."
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr "La búsqueda ha llegado al principio, se continúa por el final."
+
+#: part/Words.cpp:45
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Cabecera de las páginas impares"
+
+#: part/Words.cpp:47
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Cabecera de las páginas pares"
+
+#: part/Words.cpp:49
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Pie de las páginas impares"
+
+#: part/Words.cpp:51
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Pie de las páginas pares"
+
+#: part/Words.cpp:53
+#, kde-format
+msgid "Main text"
+msgstr "Texto principal"
+
+#: part/Words.cpp:55
+#, kde-format
+msgid "Other text"
+msgstr "Otro texto"
+
+#~ msgid "Distraction Free Mode"
+#~ msgstr "Modo «libre de distracciones»"
+
+#, fuzzy
+#~| msgid "Anchor to..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor to..."
+#~ msgstr "Anclar a..."
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "&Página"
+
+#, fuzzy
+#~| msgid "Para&graph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "Párra&fo"
+
+#, fuzzy
+#~| msgid "&To Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "Al carác&ter"
+
+#, fuzzy
+#~| msgid "&As Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "Como c&arácter"
+
+#, fuzzy
+#~| msgid "Horizontal Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Alineación horizontal"
+
+#, fuzzy
+#~| msgid "&Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "&Izquierda"
+
+#, fuzzy
+#~| msgid "&Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Center"
+#~ msgstr "&Centro"
+
+#, fuzzy
+#~| msgid "&Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "&Derecha"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Alignment"
+#~ msgstr "Alineación vertical"
+
+#, fuzzy
+#~| msgid "&Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Top"
+#~ msgstr "&Superior"
+
+#, fuzzy
+#~| msgid "&Middle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Middle"
+#~ msgstr "Inter&media"
+
+#, fuzzy
+#~| msgid "&Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "I&nferior"
+
+#, fuzzy
+#~| msgid "Text Wrap-around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Wrap-around"
+#~ msgstr "Contorno del texto"
+
+#, fuzzy
+#~| msgid "Run through this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "Atravesará esta forma"
+
+#, fuzzy
+#~| msgid "Skip below this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "Saltará hacia abajo esta forma"
+
+#, fuzzy
+#~| msgid "Run on left side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "Atravesará la parte izquierda de esta forma"
+
+#, fuzzy
+#~| msgid "Run on right side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "Atravesará la parte derecha de esta forma"
+
+#, fuzzy
+#~| msgid "Run on longest side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "Atravesará la parte más larga de esta forma"
+
+#, fuzzy
+#~| msgid "Run on both sides of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "Atravesará los dos lados de esta forma"
+
+#, fuzzy
+#~| msgid "Run on sides that are wider than:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on sides that are wider than:"
+#~ msgstr "Atravesará los lados que son mayores que:"
+
+#, fuzzy
+#~| msgid "Distance Between Shape and Text:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance Between Shape and Text:"
+#~ msgstr "Distancia entre la forma y el texto:"
+
+#, fuzzy
+#~| msgid "Shape relation to text is:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape relation to text is:"
+#~ msgstr "La relación de la forma en cuanto al texto es:"
+
+#, fuzzy
+#~| msgid "Inline with text (behaves as a character)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inline with text (behaves as a character)"
+#~ msgstr "En línea con el texto (se comporta como un carácter)"
+
+#, fuzzy
+#~| msgid "Floating, but anchored to a character position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Floating, but anchored to a character position"
+#~ msgstr "Flotante, pero anclada a la posición de un carácter"
+
+#, fuzzy
+#~| msgid "Floating, but anchored to a paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Floating, but anchored to a paragraph"
+#~ msgstr "Flotante, pero anclada a un párrafo"
+
+#, fuzzy
+#~| msgid "Floating free (not anchored to text)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Floating free (not anchored to text)"
+#~ msgstr "Flotante libre (no anclada al texto)"
+
+#, fuzzy
+#~| msgid "Vertical Positioning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "Posicionamiento vertical"
+
+#, fuzzy
+#~| msgid "Top align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top align with:"
+#~ msgstr "Alinear superiormente con:"
+
+#, fuzzy
+#~| msgid "Center align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center align with:"
+#~ msgstr "Centrar con:"
+
+#, fuzzy
+#~| msgid "Bottom align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom align with:"
+#~ msgstr "Alinear inferiormente con:"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Desplazamiento"
+
+#, fuzzy
+#~| msgid "from:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "desde:"
+
+#, fuzzy
+#~| msgid "Horizontal Positioning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "Posicionamiento horizontal"
+
+#, fuzzy
+#~| msgid "Left align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left align with:"
+#~ msgstr "Alinear a la izquierda con:"
+
+#, fuzzy
+#~| msgid "Right align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right align with:"
+#~ msgstr "Alinear a la derecha con:"
+
+#, fuzzy
+#~| msgid "Name of frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "Nombre del grupo de marcos:"
+
+#, fuzzy
+#~| msgid "Create a new frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "Crear un nuevo grupo de marcos:"
+
+#, fuzzy
+#~| msgid "Select existing frameset to connect to:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select existing frameset to connect to:"
+#~ msgstr "Seleccionar el grupo de marcos al que conectarse:"
+
+#, fuzzy
+#~| msgid "Frameset Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "Nombre del grupo de marcos"
+
+#, fuzzy
+#~| msgid "&Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "Cambia&r el nombre"
+
+#, fuzzy
+#~| msgid "&Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "&Borrar"
+
+#, fuzzy
+#~| msgid ""
+#~| "Bookmarks allow you to jump between parts of your document.\n"
+#~| "Please provide the name of your bookmark."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Bookmarks allow you to jump between parts of your document.\n"
+#~ "Please provide the name of your bookmark."
+#~ msgstr ""
+#~ "Los marcadores le permiten saltar entre partes de su documento.\n"
+#~ "Proporcione el nombre de su marcador."
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Nombre:"
+
+#, fuzzy
+#~| msgid "Page Size && Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "Tamaño de página y márgenes"
+
+#, fuzzy
+#~| msgid "Text elsewhere will:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text elsewhere will:"
+#~ msgstr "El texto situado en otra parte:"
+
+#, fuzzy
+#~| msgid "The shape affects the text by its:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The shape affects the text by its:"
+#~ msgstr "La forma afecta al texto por su:"
+
+#, fuzzy
+#~| msgid "Bounding box"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bounding box"
+#~ msgstr "Caja delimitadora"
+
+#, fuzzy
+#~| msgid "Contour"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contour"
+#~ msgstr "Contorno"
+
+#, fuzzy
+#~| msgid "Shape and text is separated:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape and text is separated:"
+#~ msgstr "La forma y el texto están separados:"
+
+#, fuzzy
+#~| msgid "Left by:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "A la izquierda por:"
+
+#, fuzzy
+#~| msgid "Above by:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Above by:"
+#~ msgstr "Superiormente por:"
+
+#, fuzzy
+#~| msgid "Below by:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Below by:"
+#~ msgstr "Inferiormente por:"
+
+#, fuzzy
+#~| msgid "Right by:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "A la derecha por:"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Columnas:"
+
+#, fuzzy
+#~| msgid "Column spacing:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "Espacio entre columnas:"
+
+#, fuzzy
+#~| msgid "Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "Palabras"
+
+#, fuzzy
+#~| msgid "Sentences"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "Frases"
+
+#, fuzzy
+#~| msgid "Syllables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "Sílabas"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Líneas"
+
+#, fuzzy
+#~| msgid "Characters With Spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "Caracteres con espacios"
+
+#, fuzzy
+#~| msgid "Characters without spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "Caracteres (sin espacios)"
+
+#, fuzzy
+#~| msgid "East Asian characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "Caracteres de Asia Oriental"
+
+#, fuzzy
+#~| msgid "Flesch Reading Ease"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch Reading Ease"
+#~ msgstr "Facilidad de lectura de Flesch"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Archivo"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Editar"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Ver"
+
+#, fuzzy
+#~| msgid "&Display Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "Modo &de visualización"
+
+#, fuzzy
+#~| msgid "Semantics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "Semántica"
+
+#, fuzzy
+#~| msgid "S&tyles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&tyles"
+#~ msgstr "Es&tilos"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Preferencia&s"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "Verificación ortográfica"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Editar"
+
+#, fuzzy
+#~| msgid "Spell Check Result"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "Resultado de la verificación ortográfica"
+
+#, fuzzy
+#~| msgid "Change Variable To"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "Cambiar la variable a"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "Herramien&tas"
+
+#, fuzzy
+#~| msgid "Baseline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "Línea de base"
+
+#, fuzzy
+#~| msgid "Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "Carácter"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Fila"
+
+#, fuzzy
+#~| msgid "Page (entire) area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page (entire) area"
+#~ msgstr "Área (completa) de la página"
+
+#, fuzzy
+#~| msgid "Page text area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "Área de texto de la página"
+
+#, fuzzy
+#~| msgid "Paragraph area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "Área del párrafo"
+
+#, fuzzy
+#~| msgid "Paragraph text area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "Área del texto del párrafo"
+
+#, fuzzy
+#~| msgid "Left page border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "Borde izquierdo de la página"
+
+#, fuzzy
+#~| msgid "Right page border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "Borde derecho de la página"
+
+#, fuzzy
+#~| msgid "Right paragraph border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right paragraph border"
+#~ msgstr "Borde del párrafo derecho"
+
+#, fuzzy
+#~| msgid "Left paragraph border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left paragraph border"
+#~ msgstr "Borde del párrafo izquierdo"
+
+#, fuzzy
+#~| msgid "Configure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Configurar"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Miscelánea"
+
+#, fuzzy
+#~| msgid "Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Cuadrícula"
+
+#, fuzzy
+#~| msgctxt "@title:tab Document settings page"
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Documento"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Preferencias del documento"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~| msgid "Create New Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "Crear un nuevo marcador"
+
+#, fuzzy
+#~| msgid "frameset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "grupo de marcos"
+
+#, fuzzy
+#~| msgid "No framesets in document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No framesets in document"
+#~ msgstr "Ningún grupo de marcos en el documento"
+
+#, fuzzy
+#~| msgid "Smart Positioning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "Posicionamiento inteligente"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Run Around"
+#~ msgstr "Contorneo del texto"
+
+#, fuzzy
+#~| msgid "Connect Text Frames"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "Vincular los marcos de texto"
+
+#, fuzzy
+#~| msgid "Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "Columnas"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Estilo"
+
+#, fuzzy
+#~| msgid "Clone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "Clonar"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Borrar"
+
+#, fuzzy
+#~| msgid "Add a new page style with the name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new page style with the name:"
+#~ msgstr "Añadir un nuevo estilo de página con el nombre:"
+
+#, fuzzy
+#~| msgid "Clone Page Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "Clonar el estilo de la página"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Cambiar el nombre del marcador"
+
+#, fuzzy
+#~| msgid "Please provide a new name for the bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please provide a new name for the bookmark"
+#~ msgstr "Proporcione un nuevo nombre para el marcador"
+
+#, fuzzy
+#~| msgid "A bookmark with the name \"%1\" already exists."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr "Ya existe un marcador llamado «%1»."
+
+#, fuzzy
+#~| msgid "Select Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "Seleccionar el marcador"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Geometría"
+
+#, fuzzy
+#~| msgid "Debug"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Debug"
+#~ msgstr "Depurar"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "Navegación"
+
+#, fuzzy
+#~| msgid "Page #"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "Página #"
+
+#, fuzzy
+#~| msgid "Section"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "Sección"
+
+#, fuzzy
+#~| msgid "RDF"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RDF"
+#~ msgstr "RDF"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "Estadísticas"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "Palabras:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "Frases:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "Sílabas:"
+
+#, fuzzy
+#~| msgid "Characters (spaces):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "Caracteres (espacios):"
+
+#, fuzzy
+#~| msgid "Characters (no spaces):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "Caracteres (sin espacios):"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "Líneas:"
+
+#, fuzzy
+#~| msgid "Readability:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Readability:"
+#~ msgstr "Legibilidad:"
+
+#, fuzzy
+#~| msgid "Flesch reading ease"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch reading ease"
+#~ msgstr "Facilidad de lectura de Flesch"
+
+#, fuzzy
+#~| msgid "East asian characters:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "Caracteres de Asia Oriental:"
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Standard"
+#~ msgstr "Normal"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "Encabezado 1"
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "Encabezado 2"
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "Encabezado 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Enumerated List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "Lista numerada"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Alphabetical List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "Lista alfabética"
+
+#, fuzzy
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "Lista de topos"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "Título del contenido"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "Encabezado de contenido 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "Encabezado de contenido 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "Encabezado de contenido 3"
+
+#, fuzzy
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "Título del documento"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "Cabecera"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "Pie"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Plain"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "Sencillo"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "Bordes 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "Bordes 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "Bordes 3"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "Fila"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "Columna"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "Gris claro"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "Gris oscuro"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "Negro"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "Azul claro"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "Azul oscuro"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "Rojo"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "Amarillo"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Colorful"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "Colorido"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bluish"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "Azulado"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "Simple 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "Simple 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "Simple 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "Cabecera 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "Cabecera 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "Cabecera 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 4"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "Cabecera 4"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "Columnas 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "Columnas 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "Cuadrícula 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "Cuadrícula 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "Cuadrícula 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "Encabezado gris"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "Encabezado azul"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "Tradicional azul"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "Tradicional gris"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "Superior e inferior azul"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "Superior e inferior gris"
+
+#, fuzzy
+#~| msgctxt "application name"
+#~| msgid "Calligra Words"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "Calligra Words"
+
+#, fuzzy
+#~| msgid "Word processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "Procesador de texto"
+
+#, fuzzy
+#~| msgid "Copyright 1998-%1, The Words Team"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "Copyright 1998-%1, el equipo de Words"
+
+#, fuzzy
+#~| msgid "Co maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Co maintainer"
+#~ msgstr "Co-encargado"
+
+#, fuzzy
+#~| msgid "Pierre Ducroquet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Ducroquet"
+#~ msgstr "Pierre Ducroquet"
+
+#, fuzzy
+#~| msgid "C. Boemann"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C. Boemann"
+#~ msgstr "C. Boemann"
+
+#, fuzzy
+#~| msgid "Everything"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Everything"
+#~ msgstr "Todo"
+
+#, fuzzy
+#~| msgid "Sebastian Sauer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sebastian Sauer"
+#~ msgstr "Sebastian Sauer"
+
+#, fuzzy
+#~| msgid "Boudewijn Rempt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#, fuzzy
+#~| msgid "Pierre Stirnweiss"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#, fuzzy
+#~| msgid "Formatting stuff"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "Elementos de formato"
+
+#, fuzzy
+#~| msgid "Inge Wallin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#, fuzzy
+#~| msgid "Thorsten Zachmann"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thorsten Zachmann"
+#~ msgstr "Thorsten Zachmann"
+
+#, fuzzy
+#~| msgid "Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "Filtro"
+
+#, fuzzy
+#~| msgid "Matus Uzak"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Matus Uzak"
+#~ msgstr "Matus Uzak"
+
+#, fuzzy
+#~| msgid "Layout and Painting"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout and Painting"
+#~ msgstr "Diseño y pintura"
+
+#, fuzzy
+#~| msgid "Pavol Korinek"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pavol Korinek"
+#~ msgstr "Pavol Korinek"
+
+#, fuzzy
+#~| msgid "Shreya Pandit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shreya Pandit"
+#~ msgstr "Shreya Pandit"
+
+#, fuzzy
+#~| msgid "Statistics docker"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "Panel de estadísticas"
+
+#, fuzzy
+#~| msgid "Brijesh Patel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Brijesh Patel"
+#~ msgstr "Brijesh Patel"
+
+#, fuzzy
+#~| msgid "Foot and endnotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "Notas al pie y al final"
+
+#, fuzzy
+#~| msgid "Bibliography"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bibliography"
+#~ msgstr "Bibliografia"
+
+#, fuzzy
+#~| msgid "Smit Patel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smit Patel"
+#~ msgstr "Smit Patel"
+
+#, fuzzy
+#~| msgid "Mojtaba Shahi"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mojtaba Shahi"
+#~ msgstr "Mojtaba Shahi"
+
+#, fuzzy
+#~| msgid "Style Manager"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "Gestor de estilos"
+
+#, fuzzy
+#~| msgid "Lassi Nieminen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lassi Nieminen"
+#~ msgstr "Lassi Nieminen"
+
+#, fuzzy
+#~| msgid "Hanzes Matus"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hanzes Matus"
+#~ msgstr "Hanzes Matus"
+
+#, fuzzy
+#~| msgid "Lukáš Tvrdý"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lukáš Tvrdý"
+#~ msgstr "Lukáš Tvrdý"
+
+#, fuzzy
+#~| msgid "Thomas Zander"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#, fuzzy
+#~| msgid "Girish Ramakrishnan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Girish Ramakrishnan"
+#~ msgstr "Girish Ramakrishnan"
+
+#, fuzzy
+#~| msgid "ODF Support"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ODF Support"
+#~ msgstr "Implementación de ODF"
+
+#, fuzzy
+#~| msgid "Robert Mathias Marmorstein"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Robert Mathias Marmorstein"
+#~ msgstr "Robert Mathias Marmorstein"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~| msgid "Laurent Montel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#, fuzzy
+#~| msgid "Sven Lüppken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sven Lüppken"
+#~ msgstr "Sven Lüppken"
+
+#, fuzzy
+#~| msgid "Frank Dekervel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frank Dekervel"
+#~ msgstr "Frank Dekervel"
+
+#, fuzzy
+#~| msgid "Krister Wicksell Eriksson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Krister Wicksell Eriksson"
+#~ msgstr "Krister Wicksell Eriksson"
+
+#, fuzzy
+#~| msgid "Dag Andersen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dag Andersen"
+#~ msgstr "Dag Andersen"
+
+#, fuzzy
+#~| msgid "Nash Hoogwater"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nash Hoogwater"
+#~ msgstr "Nash Hoogwater"
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "KFormula"
+
+#, fuzzy
+#~| msgid "Ulrich Kuettler"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ulrich Kuettler"
+#~ msgstr "Ulrich Kuettler"
+
+#, fuzzy
+#~| msgid "Shaheed Haque"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shaheed Haque"
+#~ msgstr "Shaheed Haque"
+
+#, fuzzy
+#~| msgid "Werner Trobin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Werner Trobin"
+
+#, fuzzy
+#~| msgid "Nicolas Goutte"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "Nicolas Goutte"
+
+#, fuzzy
+#~| msgid "Ariya Hidayat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "Ariya Hidayat"
+
+#, fuzzy
+#~| msgid "Clarence Dang"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clarence Dang"
+#~ msgstr "Clarence Dang"
+
+#, fuzzy
+#~| msgid "Robert Jacolin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Robert Jacolin"
+#~ msgstr "Robert Jacolin"
+
+#, fuzzy
+#~| msgid "Enno Bartels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "Enno Bartels"
+
+#, fuzzy
+#~| msgid "Ewald Snel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ewald Snel"
+#~ msgstr "Ewald Snel"
+
+#, fuzzy
+#~| msgid "Tomasz Grobelny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomasz Grobelny"
+#~ msgstr "Tomasz Grobelny"
+
+#, fuzzy
+#~| msgid "Michael Johnson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Michael Johnson"
+#~ msgstr "Michael Johnson"
+
+#, fuzzy
+#~| msgid "Fatcow Web Hosting"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fatcow Web Hosting"
+#~ msgstr "Hospedaje web Fatcow"
+
+#, fuzzy
+#~| msgid "Page break icon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "Icono de salto de página"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Sofía Priego,Raúl González,Enrique Matías Sánchez (Quique)"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "spriego@darksylvania.net,raulgf83@gmail.com,cronopios@gmail.com"
+
+#, fuzzy
+#~| msgid "Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Copiar"
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Normal"
+
+#, fuzzy
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "Título del documento"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "Encabezado 1"
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "Encabezado 2"
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "Encabezado 3"
+
+#, fuzzy
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "Lista de topos"
+
+#, fuzzy
+#~| msgid "Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "Herramientas"
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr ""
+#~ "Archivo de OASIS OpenDocument no válido. No se ha encontrado la etiqueta "
+#~ "«office:body»."
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr ""
+#~ "Archivo de OASIS OpenDocument no válido. No se ha encontrado ninguna "
+#~ "etiqueta dentro de «office:body»."
+
+#, fuzzy
+#~| msgid ""
+#~| "This is not a word processing document, but %1. Please try opening it "
+#~| "with the appropriate application."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This is not a word processing document, but %1. Please try opening it "
+#~ "with the appropriate application."
+#~ msgstr ""
+#~ "Este no es un documento de procesador de textos, sino un %1. Intente "
+#~ "abrirlo con la aplicación adecuada."
+
+#, fuzzy
+#~| msgid "Can not find needed text component, Words will quit now"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Can not find needed text component, Words will quit now"
+#~ msgstr ""
+#~ "No se encuentra el componente de texto necesario, Words finalizará ahora"
+
+#, fuzzy
+#~| msgid "Installation Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Installation Error"
+#~ msgstr "Error de instalación"
+
+#, fuzzy
+#~| msgid "Modified"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modified"
+#~ msgstr "Modificado"
+
+#, fuzzy
+#~| msgid "Saved"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "Guardado"
+
+#, fuzzy
+#~| msgid "Page %1 of %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "Página %1 de %2"
+
+#, fuzzy
+#~| msgid "Page %1-%2 of %3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "Página %1-%2 de %3"
+
+#, fuzzy
+#~| msgid "Line %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "Línea %1"
+
+#, fuzzy
+#~| msgid "Page Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Número de página"
+
+#, fuzzy
+#~| msgid "Line Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "Número de línea"
+
+#, fuzzy
+#~| msgid "Page Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "Estilo de la página"
+
+#, fuzzy
+#~| msgid "Page Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "Tamaño de la página"
+
+#, fuzzy
+#~| msgid "Saved/Modified"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved/Modified"
+#~ msgstr "Guardado/modificado"
+
+#, fuzzy
+#~| msgid "Mouse Cursor X:Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mouse Cursor X:Y"
+#~ msgstr "Cursor del ratón X:Y"
+
+#, fuzzy
+#~| msgid "Zoom Controller"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom Controller"
+#~ msgstr "Controlador del zum"
+
+#, fuzzy
+#~| msgid "Exit Distraction-Free Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exit Distraction-Free Mode"
+#~ msgstr "Salir del modo «libre de distracciones»"
+
+#, fuzzy
+#~| msgid "Shape Properties..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "Propiedades de la forma..."
+
+#, fuzzy
+#~| msgid "Change how the shape behave"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change how the shape behave"
+#~ msgstr "Cambiar el comportamiento de la forma"
+
+#, fuzzy
+#~| msgid "Create Template From Document..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template From Document..."
+#~ msgstr "Crear plantilla a partir de documento..."
+
+#, fuzzy
+#~| msgid "Save this document and use it later as a template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save this document and use it later as a template"
+#~ msgstr "Guardar este documento y utilizarlo más adelante como una plantilla"
+
+#, fuzzy
+#~| msgid ""
+#~| "You can save this document as a template.<br><br>You can use this new "
+#~| "template as a starting point for another document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "You can save this document as a template.<br><br>You can use this new "
+#~ "template as a starting point for another document."
+#~ msgstr ""
+#~ "Puede guardar este documento como una plantilla.<br><br>Podrá utilizar "
+#~ "esta nueva plantilla como punto de partida para otro documento."
+
+#, fuzzy
+#~| msgid "Show Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "Mostrar los caracteres de formateo"
+
+#, fuzzy
+#~| msgid "Toggle the display of non-printing characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "Conmuta la visualización de los caracteres no imprimibles"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~| "enabled, Words shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~ "enabled, Words shows you tabs, spaces, carriage returns and other non-"
+#~ "printing characters."
+#~ msgstr ""
+#~ "Conmuta la visualización de los caracteres no imprimibles.<br/><br/"
+#~ ">Cuando esta opción está habilitada, Words le muestra los tabuladores, "
+#~ "espacios, retornos de carro y otros caracteres no imprimibles."
+
+#, fuzzy
+#~| msgid "Show Field Shadings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Field Shadings"
+#~ msgstr "Mostrar las sombras de los campos"
+
+#, fuzzy
+#~| msgid "Toggle the shaded background of fields"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the shaded background of fields"
+#~ msgstr "Conmutar el fondo sombreado de los campos"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the visualization of fields (variables etc.) by drawing their "
+#~| "background in a contrasting color."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the visualization of fields (variables etc.) by drawing their "
+#~ "background in a contrasting color."
+#~ msgstr ""
+#~ "Conmuta la visualización de los campos (variables, etc.) dibujando su "
+#~ "fondo con un color que haga contraste."
+
+#, fuzzy
+#~| msgid "Show Text Shape Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Text Shape Borders"
+#~ msgstr "Mostrar los bordes de la forma Texto"
+
+#, fuzzy
+#~| msgid "Turns the border display on and off"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Turns the border display on and off"
+#~ msgstr "Activa o desactiva la visualización del borde"
+
+#, fuzzy
+#~| msgid ""
+#~| "Turns the border display on and off.<br/><br/>The borders are never "
+#~| "printed. This option is useful to see how the document will appear on "
+#~| "the printed page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Turns the border display on and off.<br/><br/>The borders are never "
+#~ "printed. This option is useful to see how the document will appear on the "
+#~ "printed page."
+#~ msgstr ""
+#~ "Activa o desactiva la visualización del borde.<br/><br/>Los bordes nunca "
+#~ "se imprimen. Esta opción es útil para ver como aparecerá el documento en "
+#~ "la página imprimida."
+
+#, fuzzy
+#~| msgid "Show Table Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "Mostrar los bordes de las tablas"
+
+#, fuzzy
+#~| msgid "Toggle the display of table borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of table borders"
+#~ msgstr "Conmuta la visualización de los bordes de las tablas"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of table borders.<br/><br/>When this is enabled, "
+#~| "Words shows you any invisible table borders with a thin gray line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+#~ "shows you any invisible table borders with a thin gray line."
+#~ msgstr ""
+#~ "Conmuta la visualización de los bordes de las tablas.<br/><br/>Cuando "
+#~ "esta opción está habilitada, Words le muestra los bordes de tabla "
+#~ "invisibles con una línea gris delgada."
+
+#, fuzzy
+#~| msgid "Show Section Bounds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Section Bounds"
+#~ msgstr "Mostrar los bordes de sección"
+
+#, fuzzy
+#~| msgid "Toggle the display of section bounds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of section bounds"
+#~ msgstr "Conmutar la visualización de los bordes de sección"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+#~| "section bounds will be indicated with a thin gray horizontal brackets."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+#~ "section bounds will be indicated with a thin gray horizontal brackets."
+#~ msgstr ""
+#~ "Conmuta la visualización de los bordes de sección.<br/><br/>Cuando esta "
+#~ "opción está activada, se mostrarán los bordes de cualquier sección "
+#~ "mediante una línea gris delgada."
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Mostrar las reglas"
+
+#, fuzzy
+#~| msgid "Shows or hides rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Muestra u oculta las reglas"
+
+#, fuzzy
+#~| msgid ""
+#~| "The rulers are the white measuring spaces top and left of the document. "
+#~| "The rulers show the position and width of pages and of frames and can be "
+#~| "used to position tabulators among others.<p>Uncheck this to disable the "
+#~| "rulers from being displayed.</p>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The rulers are the white measuring spaces top and left of the document. "
+#~ "The rulers show the position and width of pages and of frames and can be "
+#~ "used to position tabulators among others.<p>Uncheck this to disable the "
+#~ "rulers from being displayed.</p>"
+#~ msgstr ""
+#~ "Las reglas son los espacios de medición blancos en la parte superior e "
+#~ "izquierda del documento. Las reglas muestran la posición y anchura de las "
+#~ "páginas y marcos, y se pueden usar para colocar tabuladores, entre otras "
+#~ "cosas.<p>Desmarque esto para que no se muestren las reglas.</p>"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Ajustar a la cuadrícula"
+
+#, fuzzy
+#~| msgid "Show Status Bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Mostrar la barra de estado"
+
+#, fuzzy
+#~| msgid "Shows or hides the status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Muestra u oculta la barra de estado"
+
+#, fuzzy
+#~| msgid "Distraction Free Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distraction Free Mode"
+#~ msgstr "Modo «libre de distracciones»"
+
+#, fuzzy
+#~| msgid "Set view in distraction free mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set view in distraction free mode"
+#~ msgstr "Establecer la vista a modo «libre de distracciones»"
+
+#, fuzzy
+#~| msgid "Semantic Stylesheets..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantic Stylesheets..."
+#~ msgstr "Hojas de estilo semánticas..."
+
+#, fuzzy
+#~| msgid "Modify and add semantic stylesheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modify and add semantic stylesheets"
+#~ msgstr "Modificar y añadir hojas de estilo semánticas"
+
+#, fuzzy
+#~| msgid ""
+#~| "Stylesheets are used to format the display of information which is "
+#~| "stored in RDF."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Stylesheets are used to format the display of information which is stored "
+#~ "in RDF."
+#~ msgstr ""
+#~ "Las hojas de estilo se usan para formatear la visualización de la "
+#~ "información almacenada en RDF."
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Crear"
+
+#, fuzzy
+#~| msgid "Configure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "Configurar..."
+
+#, fuzzy
+#~| msgid "Page Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "Disposición de la página..."
+
+#, fuzzy
+#~| msgid "Change properties of entire page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "Cambiar las propiedades de la página entera"
+
+#, fuzzy
+#~| msgid ""
+#~| "Change properties of the entire page.<p>Currently you can change paper "
+#~| "size, paper orientation, header and footer sizes, and column settings.</"
+#~| "p>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Change properties of the entire page.<p>Currently you can change paper "
+#~ "size, paper orientation, header and footer sizes, and column settings.</p>"
+#~ msgstr ""
+#~ "Cambiar las propiedades de la página entera.<p>Actualmente puede cambiar "
+#~ "el tamaño de papel, orientación del papel, tamaño de las cabeceras y "
+#~ "pies, y ajustes de las columnas.</p>"
+
+#, fuzzy
+#~| msgid "Create Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "Crear encabezado"
+
+#, fuzzy
+#~| msgid "Create Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "Crear pie de página"
+
+#, fuzzy
+#~| msgid "Show Comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Comments"
+#~ msgstr "Mostrar comentarios"
+
+#, fuzzy
+#~| msgid "Shows comments in the document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows comments in the document"
+#~ msgstr "Muestra comentarios en el documento"
+
+#, fuzzy
+#~| msgid "Word Count"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word Count"
+#~ msgstr "Recuento de palabras"
+
+#, fuzzy
+#~| msgid "Shows or hides word counting in status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "Muestra u oculta el recuento de palabras en la barra de estado"
+
+#, fuzzy
+#~| msgid "Page Setup"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "Configuración de página"
+
+#, fuzzy
+#~| msgid "Header & Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "Encabezado y pie de página"
+
+#, fuzzy
+#~| msgid "Page layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "Diseño de página"
+
+#, fuzzy
+#~| msgctxt "Label for the Find text input box"
+#~| msgid "Find:"
+#~ msgctxt "(qtundo-format) Label for the Find text input box"
+#~ msgid "Find:"
+#~ msgstr "Buscar:"
+
+#, fuzzy
+#~| msgctxt "Next search result"
+#~| msgid "Next"
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "Siguiente"
+
+#, fuzzy
+#~| msgctxt "Previous search result"
+#~| msgid "Previous"
+#~ msgctxt "(qtundo-format) Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Anterior"
+
+#, fuzzy
+#~| msgctxt "Search options"
+#~| msgid "Options"
+#~ msgctxt "(qtundo-format) Search options"
+#~ msgid "Options"
+#~ msgstr "Opciones"
+
+#, fuzzy
+#~| msgctxt "Label for the Replace text input box"
+#~| msgid "Replace:"
+#~ msgctxt "(qtundo-format) Label for the Replace text input box"
+#~ msgid "Replace:"
+#~ msgstr "Sustituir:"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "(qtundo-format) Replace the current match"
+#~ msgid "Replace"
+#~ msgstr "Sustituir"
+
+#, fuzzy
+#~| msgctxt "Replace all found matches"
+#~| msgid "Replace All"
+#~ msgctxt "(qtundo-format) Replace all found matches"
+#~ msgid "Replace All"
+#~ msgstr "Sustituir todo"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Sustituir"
+
+#, fuzzy
+#~| msgctxt "Total number of matches"
+#~| msgid "1 match found"
+#~| msgid_plural "%1 matches found"
+#~ msgctxt "(qtundo-format) Total number of matches"
+#~ msgid "1 match found"
+#~ msgid_plural "%1 matches found"
+#~ msgstr[0] "1 coincidencia encontrada"
+#~ msgstr[1] "%1 coincidencias encontradas"
+
+#, fuzzy
+#~| msgid "No matches found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No matches found"
+#~ msgstr "No se han encontrado coincidencias"
+
+#, fuzzy
+#~| msgid "Search hit bottom, continuing from top."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Search hit bottom, continuing from top."
+#~ msgstr "La búsqueda ha llegado al final, se continúa por el principio."
+
+#, fuzzy
+#~| msgid "Search hit top, continuing from bottom."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Search hit top, continuing from bottom."
+#~ msgstr "La búsqueda ha llegado al principio, se continúa por el final."
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Cabecera de las páginas impares"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Cabecera de las páginas pares"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Pie de las páginas impares"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Pie de las páginas pares"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "Texto principal"
+
+#, fuzzy
+#~| msgid "Other text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "Otro texto"
+
+#~ msgid "Book"
+#~ msgstr "Libro"
+
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "Calligra Author"
+
+#~ msgid "Author tool"
+#~ msgstr "Herramienta autor"
+
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "Copyright 2012-%1, el equipo de Author"
+
+#~ msgid "Co-maintainer"
+#~ msgstr "Co-encargado"
+
+#~ msgid "Gopalakrishna Bhat"
+#~ msgstr "Gopalakrishna Bhat"
+
+#~ msgid "EPUB export"
+#~ msgstr "Exportar EPUB"
+
+#~ msgid "Mojtaba Shahi Senobari"
+#~ msgstr "Mojtaba Shahi Senobari"
+
+#~ msgid "Can not find needed text component, Author will quit now"
+#~ msgstr ""
+#~ "No se encuentra el componente de texto necesario, Author finalizará ahora"
+
+#~ msgid "Select Cover Image..."
+#~ msgstr "Seleccionar una imagen de carátula..."
+
+#~ msgid "Set cover for your ebook"
+#~ msgstr "Establece una carátula para el libro electrónico"
+
+#~ msgid "Open..."
+#~ msgstr "Abrir..."
+
+#~ msgid "Open Cover"
+#~ msgstr "Abrir carátula"
+
+#~ msgid "Import problem"
+#~ msgstr "Problema de importación"
+
+#~ msgid "Cover selection"
+#~ msgstr "Selección de carátula"
+
+#~ msgid "No cover selected yet"
+#~ msgstr "Aún no se ha seleccionado ninguna carátula"
+
+#~ msgid "Outliner"
+#~ msgstr "Delineador"
+
+#~ msgid "Edit section"
+#~ msgstr "Editar sección"
+
+#~ msgid "None"
+#~ msgstr "Ninguno"
+
+#~ msgid "Main"
+#~ msgstr "Principal"
+
+#~ msgid "Secondary"
+#~ msgstr "Secundario"
+
+#~ msgid "Protagonist"
+#~ msgstr "Protagonista"
+
+#~ msgid "Supporting"
+#~ msgstr "De reparto"
+
+#~ msgid "Neutral"
+#~ msgstr "Neutral"
+
+#~ msgid "Antagonist"
+#~ msgstr "Antagonista"
+
+#~ msgid "Author's actor"
+#~ msgstr "Actor de Author"
+
+#~ msgid "Enter actor's name here"
+#~ msgstr "Introduzca el nombre del actor aquí"
+
+#~ msgid "Aliases:"
+#~ msgstr "Seudónimos:"
+
+#~ msgid "Enter all actors aliases here, separating them with \",\""
+#~ msgstr ""
+#~ "Introduzca todos los seudónimos del actor aquí, separándolos con «,»"
+
+#~ msgid "Type:"
+#~ msgstr "Tipo:"
+
+#~ msgid "Role:"
+#~ msgstr "Papel:"
+
+#~ msgid "Age:"
+#~ msgstr "Edad:"
+
+#~ msgid "Not specified"
+#~ msgstr "Sin especificar"
+
+#~ msgid "One line description here to show in lists"
+#~ msgstr "Una línea descriptiva aquí para mostrar en listas"
+
+#~ msgid "Short description:"
+#~ msgstr "Descripción breve:"
+
+#~ msgid "Actor description:"
+#~ msgstr "Descripción del actor:"
+
+#~ msgid "Undo"
+#~ msgstr "Deshacer"
+
+#~ msgid "Redo"
+#~ msgstr "Rehacer"
+
+#~ msgid "Bold"
+#~ msgstr "Negrita"
+
+#~ msgid "Italic"
+#~ msgstr "Cursiva"
+
+#~ msgid "Underline"
+#~ msgstr "Subrayar"
+
+#~ msgid "LeftAlign"
+#~ msgstr "Alinear a la izquierda"
+
+#~ msgid "CenterAlign"
+#~ msgstr "Centrar"
+
+#~ msgid "RightAlign"
+#~ msgstr "Alinear a la derecha"
+
+#~ msgid "Enter actor's description here"
+#~ msgstr "Introduzca la descripción del actor aquí"
+
+#~ msgctxt "displayname of the semantic item type AuthorActor"
+#~ msgid "AuthorActor"
+#~ msgstr "Actor de Author"
+
+#~ msgid "Section's options"
+#~ msgstr "Opciones de la sección"
+
+#~ msgid "1st Draft"
+#~ msgstr "Primer borrador"
+
+#~ msgid "2nd Draft"
+#~ msgstr "Segundo borrador"
+
+#~ msgid "3rd Draft"
+#~ msgstr "Tercer borrador"
+
+#~ msgid "1st Edit"
+#~ msgstr "Primera edición"
+
+#~ msgid "2nd Edit"
+#~ msgstr "Segunda edición"
+
+#~ msgid "3rd Edit"
+#~ msgstr "Tercera edición"
+
+#~ msgid "Proofread"
+#~ msgstr "Revisado"
+
+#~ msgid "Finished"
+#~ msgstr "Finalizado"
+
+#~ msgid "Author's section"
+#~ msgstr "Sección de Author"
+
+#~ msgid "Badge:"
+#~ msgstr "Emblema:"
+
+#~ msgid "Badge is shown in outliner near section title"
+#~ msgstr "El emblema se muestra delineado junto al título de la sección"
+
+#~ msgid "Title:"
+#~ msgstr "Título:"
+
+#~ msgid "Enter title here"
+#~ msgstr "Introduzca el título aquí"
+
+#~ msgid "Status:"
+#~ msgstr "Estado:"
+
+#~ msgid "Section description:"
+#~ msgstr "Descripción de la sección:"
+
+#~ msgid "Enter synopsis here"
+#~ msgstr "Introduzca la sinopsis aquí"
+
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "Sección"
+
+#~ msgid "File to open"
+#~ msgstr "Archivo a abrir"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "Crear un marco"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "Borrar el marco"
+
+#~ msgid "General"
+#~ msgstr "General"
+
+#~ msgid "Protect size and position"
+#~ msgstr "Proteger el tamaño y la posición"
+
+#~ msgid "Position"
+#~ msgstr "Posición"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgid "Width:"
+#~ msgstr "Anchura:"
+
+#~ msgid "Height:"
+#~ msgstr "Altura:"
+
+#~ msgid "Margins"
+#~ msgstr "Márgenes"
+
+#~ msgid "Synchronize changes"
+#~ msgstr "Sincronizar los cambios"
+
+#~ msgid "Bottom:"
+#~ msgstr "Inferior:"
+
+#~ msgid "Top:"
+#~ msgstr "Superior:"
+
+#~ msgid "Right:"
+#~ msgstr "Derecha:"
+
+#~ msgid "Left:"
+#~ msgstr "Izquierda:"
+
+#~ msgid "If Frame Overflows"
+#~ msgstr "Si el marco rebosa"
+
+#~ msgid "Create a new page"
+#~ msgstr "Crear una página nueva"
+
+#~ msgid "Resize last frame"
+#~ msgstr "Redimensionar el último marco"
+
+#~ msgid "Do not show the extra text"
+#~ msgstr "No mostrar el texto extra"
+
+#~ msgid "When Creating a Page"
+#~ msgstr "Al crear una página"
+
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "Volver a vincular el marco al flujo actual"
+
+#~ msgid "Do not create a followup frame"
+#~ msgstr "No crear un marco de seguimiento"
+
+#~ msgid "Copy this Frame"
+#~ msgstr "Copiar este marco"
+
+#~ msgid "Only on even/odd pages"
+#~ msgstr "Solo en las páginas pares/impares"
+
+#~ msgid "Protect content"
+#~ msgstr "Proteger el contenido"
+
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "El marco es una copia del marco anterior"
+
+#~ msgid "Changes will be applied to all frames in frameset"
+#~ msgstr "Los cambios se aplicarán a todas los marcos del grupo de cuadros"
+
+#~ msgid "Retain original aspect ratio"
+#~ msgstr "Mantener las proporciones originales"
+
+#~ msgid "Select All Shapes"
+#~ msgstr "Seleccionar todas las formas"
+
+#~ msgid "Create Linked Copy"
+#~ msgstr "Crear una copia enlazada"
+
+#~ msgid "Create a copy of the current frame, always showing the same contents"
+#~ msgstr ""
+#~ "Crear una copia del marco actual, que mostrará siempre el mismo contenido"
+
+#~ msgid ""
+#~ "Create a copy of the current frame, that remains linked to it. This means "
+#~ "they always show the same contents: modifying the contents in such a "
+#~ "frame will update all its linked copies."
+#~ msgstr ""
+#~ "Crear una copia del marco actual, que queda enlazado a él. Esto significa "
+#~ "que siempre muestran el mismo contenido: modificar el contenido de uno de "
+#~ "estos marcos actualizará todas sus copias enlazadas."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "Crear una copia enlazada"
+
+#~ msgid "Images (*.png *.xpm *.jpg *.jpeg)"
+#~ msgstr "Imágenes (*.png *.xpm *.jpg *.jpeg)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "Insertar una página"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "Eliminar la página"
+
+#~ msgid "Bookmark..."
+#~ msgstr "Marcador..."
+
+#~ msgid "Select Bookmark..."
+#~ msgstr "Seleccionar el marcador..."
+
+#~ msgid "Bookmark"
+#~ msgstr "Marcador"
+
+#~ msgid "Characters (excluding spaces):"
+#~ msgstr "Caracteres (excluyendo espacios):"
+
+#~ msgid "Flesch Reading Ease:"
+#~ msgstr "Facilidad de lectura de Flesch:"
+
+#~ msgid "Preferences"
+#~ msgstr "Preferencias"
+
+#~ msgid "Automatically update"
+#~ msgstr "Actualizar automáticamente"
+
+#~ msgid "update"
+#~ msgstr "actualizar"
+
+#~ msgid "F&ormat"
+#~ msgstr "F&ormato"
+
+#~ msgid "Invalid document. No mimetype specified."
+#~ msgstr "Documento no válido. No se ha indicado el tipo MIME."
+
+#~ msgid ""
+#~ "Invalid document. Expected mimetype application/x-words or application/"
+#~ "vnd.kde.words, got %1"
+#~ msgstr ""
+#~ "Documento no válido. Se esperaba el tipo MIME application/x-words o "
+#~ "application/vnd.kde.words, pero se ha obtenido %1"
+
+#~ msgid "Invalid document. Paper size: %1x%2"
+#~ msgstr "Documento no válido. Tamaño de papel: %1x%2"
+
+#~ msgid "Unable to locate footnote text"
+#~ msgstr "No es posible localizar el texto de la nota a pie de página"
+
+#~ msgid "Unable to locate note-text"
+#~ msgstr "No se puede localizar el texto de la nota"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "Recortar el marco"
+
+#~ msgid "Create Frame-clip"
+#~ msgstr "Crear un recorte del cuadro"
+
+#~ msgid "Remove Frame-clip"
+#~ msgstr "Eliminar el recorte del cuadro"
+
+#~ msgid "Force the remainder of the text into the next page"
+#~ msgstr "Forzar el resto del texto a la siguiente página"
+
+#~ msgid "All text after this point will be moved into the next page."
+#~ msgstr "Todo el texto a partir de este punto irá a la siguiente página."
+
+#~ msgid "Form"
+#~ msgstr "Forma"
+
+#~ msgid "Enable Document Headers"
+#~ msgstr "Habilitar las cabeceras del documento"
+
+#~ msgid "Enable Document Footers"
+#~ msgstr "Habilitar los pies del documento"
+
+#~ msgid "Change Tracking"
+#~ msgstr "Seguimiento de los cambios"
+
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "Words"
+
+#~ msgid "Notes and fixes"
+#~ msgstr "Notas y correcciones"
+
+#~ msgid "Number of pages:"
+#~ msgstr "Número de páginas:"
+
+#~ msgid "Number of frames:"
+#~ msgstr "Número de cuadros:"
+
+#~ msgid "Number of pictures:"
+#~ msgstr "Número de imágenes:"
+
+#~ msgid "Number of tables:"
+#~ msgstr "Número de tablas:"
+
+#~ msgid "Text"
+#~ msgstr "Texto"
+
+#~ msgid "Include text from foot- and endnotes"
+#~ msgstr "Incluir el texto de las notas a pie de página y finales"
+
+#~ msgid "Characters without spaces:"
+#~ msgstr "Caracteres (sin los espacios):"
+
+#~ msgid "Characters incl. spaces"
+#~ msgstr "Caracteres (incluyendo espacios)"
+
+#~ msgid "Only count main text"
+#~ msgstr "Sólo mostrar el texto principal"
+
+#~ msgid "approximately %1"
+#~ msgstr "aproximadamente %1"
+
+#~ msgid "Sentence, word and letter counts for this document"
+#~ msgstr "Cantidad de frases, palabras y letras en este documento"
+
+#~ msgid ""
+#~ "Information on the number of letters, words, syllables and sentences for "
+#~ "this document.<p>Evaluates readability using the Flesch reading score.</p>"
+#~ msgstr ""
+#~ "Información sobre el número de letras, palabras, sílabas y frases en este "
+#~ "documento.<p>Evalúa la legibilidad usando la facilidad de lectura de "
+#~ "Flesch.</p>"
+
+#~ msgid "Shows and hides header display"
+#~ msgstr "Muestra y oculta la visualización de las cabeceras"
+
+#~ msgid ""
+#~ "Selecting this option toggles the display of headers in Words.<br/><br/"
+#~ ">Headers are special frames at the top of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Seleccionar esta opción conmuta la visualización de los encabezados en "
+#~ "Words.<br/><br/>Los encabezados son marcos especiales situados en la "
+#~ "parte superior de cada página que pueden contener números de página u "
+#~ "otro tipo de información."
+
+#~ msgid "Shows and hides footer display"
+#~ msgstr "Muestra y oculta la visualización de los pies"
+
+#~ msgid ""
+#~ "Selecting this option toggles the display of footers in Words. <br/><br/"
+#~ ">Footers are special shapes at the bottom of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Seleccionar esta opción conmuta la visualización de los pies de página en "
+#~ "Words. <br/><br/>Los pies de página son formas especiales situadas en la "
+#~ "parte inferior de cada página que pueden contener números de página u "
+#~ "otro tipo de información."
+
+#~ msgid "Raise Shape"
+#~ msgstr "Traer la forma al frente"
+
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shape"
+#~ msgstr ""
+#~ "Trae al frente la forma seleccionada actualmente para que aparezca por "
+#~ "encima de todas las demás formas"
+
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shapes. This is only useful if shapes overlap each other. If multiple "
+#~ "shapes are selected they are all raised in turn."
+#~ msgstr ""
+#~ "Trae al frente la forma seleccionada actualmente para que aparezca por "
+#~ "encima de todas las demás formas. Esto sólo es útil si las formas se "
+#~ "superponen entre sí. Si hay seleccionadas varias formas se alzan todas a "
+#~ "la vez."
+
+#~ msgid "Lower Shape"
+#~ msgstr "Enviar la forma al fondo"
+
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it"
+#~ msgstr ""
+#~ "Envía al fondo la forma seleccionada actualmente para que desaparezca "
+#~ "bajo cualquier forma que la superponga"
+
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it. If multiple shape are selected they are all lowered in "
+#~ "turn."
+#~ msgstr ""
+#~ "Envía al fondo la forma seleccionada actualmente para que desaparezca "
+#~ "bajo cualquier forma que la superponga. Si hay seleccionadas varias "
+#~ "formas se envían al fondo todas ellas a la vez."
+
+#~ msgid "Bring to Front"
+#~ msgstr "Traer al frente"
+
+#~ msgid "Send to Back"
+#~ msgstr "Enviar al fondo"
+
+#~ msgid "Before current page"
+#~ msgstr "Antes de la página actual"
+
+#~ msgid "After current page"
+#~ msgstr "Después de la página actual"
+
+#~ msgid "After last page"
+#~ msgstr "Después de la última página"
+
+#~ msgid "Page style:"
+#~ msgstr "Estilo de la página:"
+
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "&Insertar"
+
+#~ msgid "Variable"
+#~ msgstr "Variable"
+
+#~ msgid "Anchor"
+#~ msgstr "Anclaje"
+
+#~ msgid "As Character"
+#~ msgstr "Como carácter"
+
+#~ msgid "Anchor the current shape as a character in the text"
+#~ msgstr "Anclar la forma actual en el texto como si fuera un carácter"
+
+#~ msgid "To Character"
+#~ msgstr "Al carácter"
+
+#~ msgid "Anchor the current shape to the character at the current position"
+#~ msgstr "Anclar la forma actual al carácter en la posición actual"
+
+#~ msgid "To Paragraph"
+#~ msgstr "Al párrafo"
+
+#~ msgid "Anchor the current shape to current paragraph"
+#~ msgstr "Anclar la forma actual al párrafo actual"
+
+#~ msgid "To Page"
+#~ msgstr "A la página"
+
+#~ msgid "Anchor the current shape to current page"
+#~ msgstr "Anclar la forma actual a la página actual"
+
+#~ msgid "Page..."
+#~ msgstr "Página..."
+
+#~ msgid "Delete Page"
+#~ msgstr "Borrar la página"
+
+#~ msgid "Insert Image Options"
+#~ msgstr "Opciones de inserción de imagen"
+
+#~ msgid "<optimizations"
+#~ msgstr "Optimizaciones"
+
+#~ msgid "Disable Document Headers"
+#~ msgstr "Inhabilitar las cabeceras del documento"
+
+#~ msgid "Disable Document Footers"
+#~ msgstr "Inhabilitar los pies del documento"
+
+#~ msgid "Hide Status Bar"
+#~ msgstr "Ocultar la barra de estado"
+
+#~ msgid "Numbering"
+#~ msgstr "Numeración"
+
+#~ msgid "Automatic"
+#~ msgstr "Automática"
+
+#~ msgid "Footnote"
+#~ msgstr "Nota al pie"
+
+#~ msgid "Endnote"
+#~ msgstr "Nota al final"
+
+#~ msgid "Insert Footnote/Endnote"
+#~ msgstr "Insertar nota al pie/nota al final"
+
+#~ msgid "Insert a footnote referencing the selected text"
+#~ msgstr "Insertar una nota al pie que haga referencia al texto seleccionado"
+
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "Propiedades del cuadro/grupo de cuadros"
+
+#~ msgid "Alter frameset properties"
+#~ msgstr "Alterar las propiedades del grupo de cuadros"
+
+#~ msgid "Insert a picture into document"
+#~ msgstr "Insertar una imagen en el documento"
+
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "Convertir el marco actual en un marco incorporado"
+
+#~ msgid ""
+#~ "Convert the current frame to an inline frame.<br><br>Place the inline "
+#~ "frame within the text at the point nearest to the frames current position."
+#~ msgstr ""
+#~ "Convertir el marco actual en un marco incorporado<br><br>Coloca el marco "
+#~ "incorporado dentro del texto en el punto más cercano a la posición actual "
+#~ "del marco."
+
+#~ msgid "Set Floating"
+#~ msgstr "Establecer flotante"
+
+#~ msgid "Set the current shape floating"
+#~ msgstr "Establecer la forma actual como flotante"
+
+#~ msgid "Please select at least one non-locked shape and try again"
+#~ msgstr "Seleccione al menos una forma no bloqueada, e inténtelo de nuevo"
+
+#~ msgid ""
+#~ "<p><b>Check this option to have a text area created automatically for "
+#~ "each page.</b><br>\n"
+#~ "For letters and notes with one main text, possibly on several pages, you "
+#~ "should keep this checked. You should only uncheck it if you want to "
+#~ "define completely where each text frame should be positioned.</p>"
+#~ msgstr ""
+#~ "<p><b>Marque esta opción para que en cada página se cree automáticamente "
+#~ "un área de texto.</b><br>\n"
+#~ "En las cartas y notas con un texto principal, posiblemente en varias "
+#~ "páginas, debería dejar esta opción marcada. Sólo debería desactivarla "
+#~ "cuando desee definir por completo dónde se debería colocar cada cuadro de "
+#~ "texto.</p>"
+
+#~ msgid "Filter stuff"
+#~ msgstr "Elementos de filtrado"
+
+#~ msgid "Page: current/total"
+#~ msgstr "Página: actual/total"
+
+#~ msgid "Fra&mes"
+#~ msgstr "&Cuadros"
+
+#~ msgid "Tables"
+#~ msgstr "Tablas"
+
+#~ msgid "Insert"
+#~ msgstr "Insertar"
+
+#~ msgid "Add Text on Shape"
+#~ msgstr "Añadir un texto a la forma"
+
+#~ msgid "Layout of Text in Other Frames"
+#~ msgstr "Disposición del texto en otros cuadros"
+
+#~ msgid "Text will run around this frame"
+#~ msgstr "El texto contornea este cuadro"
+
+#~ msgid "Text will not run around this frame"
+#~ msgstr "El texto no contornea este cuadro"
+
+#~ msgid "Run Around Side"
+#~ msgstr "Contornear por el lado"
+
+#~ msgid "Longest side"
+#~ msgstr "Lado más largo"
+
+#~ msgid "Create custom outline"
+#~ msgstr "Crear un contorno personalizado"
+
+#~ msgid "Create Custom Outline"
+#~ msgstr "Crear un contorno personalizado"
+
+#~ msgid "Create a custom vector outline that text will run around"
+#~ msgstr "Crear un contorno vectorial personalizado que delineará el texto"
+
+#~ msgid ""
+#~ "Text normally runs around the content of a shape, when you want a custom "
+#~ "outline that is independent of the content you can create one and alter "
+#~ "it with the vector tools"
+#~ msgstr ""
+#~ "El texto normalmente discurre alrededor del contenido de una forma; "
+#~ "cuando quiera un contorno personalizado que sea independiente del "
+#~ "contenido, puede crear uno y modificarlo con las herramientas vectoriales"
+
+#~ msgid "Create outlines"
+#~ msgstr "Crear contornos"
+
+#~ msgid "Borders"
+#~ msgstr "Bordes"
+
+#~ msgid "MailMerge"
+#~ msgstr "Combinación de correspondencia"
+
+#~ msgid "Font"
+#~ msgstr "Tipo de letra"
+
+#~ msgid "Format"
+#~ msgstr "Formato"
+
+#~ msgid "Formula"
+#~ msgstr "Fórmula"
+
+#~ msgid "KWord"
+#~ msgstr "KWord"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgid "Page Background"
+#~ msgstr "Salto de página"
+
+#~ msgid "If Text is Too Long for Frame"
+#~ msgstr "Si el texto es demasiado largo para la caja"
+
+#~ msgid "On New Page Creation"
+#~ msgstr "Al crear una página nueva"
+
+#~ msgid ""
+#~ "Alter frameset properties.<p>Currently you can change the frame "
+#~ "background."
+#~ msgstr ""
+#~ "Alterar las propiedades del grupo de cuadros.<p>Actualmente puede cambiar "
+#~ "el fondo del cuadro."

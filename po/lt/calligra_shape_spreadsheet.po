@@ -1,0 +1,217 @@
+# Lithuanian translations for TableShape package.
+# This file is distributed under the same license as the TableShape package.
+#
+# Remigijus Jarmalavičius <remigijus@jarmalavicius.lt>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: TableShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2011-10-12 20:30+0300\n"
+"Last-Translator: Remigijus Jarmalavičius <remigijus@jarmalavicius.lt>\n"
+"Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
+"%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
+"X-Generator: Lokalize 1.2\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+
+#: SheetsEditor.cpp:57 SheetsEditor.cpp:121
+#, kde-format
+msgid "Rename"
+msgstr "Pervadinti"
+
+#: SheetsEditor.cpp:61
+#, kde-format
+msgid "Add"
+msgstr "Pridėti"
+
+#: SheetsEditor.cpp:65
+#, kde-format
+msgid "Remove"
+msgstr "Pašalinti"
+
+#: SheetsEditor.cpp:121
+#, kde-format
+msgid "Enter Name:"
+msgstr "Įveskite pavadinimą:"
+
+#: TableShape.cpp:288
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Confirmation Required"
+msgstr ""
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Download"
+msgstr ""
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Skip"
+msgstr ""
+
+#: TableShapeFactory.cpp:37
+#, kde-format
+msgid "Spreadsheet"
+msgstr ""
+
+#: TableShapeFactory.cpp:39
+#, kde-format
+msgid "Spreadsheet Shape"
+msgstr ""
+
+#: TableTool.cpp:218
+#, kde-format
+msgid "Import OpenDocument Spreadsheet File"
+msgstr ""
+
+#: TableTool.cpp:219
+#, kde-format
+msgid "Import"
+msgstr "Importuoti"
+
+#: TableTool.cpp:223
+#, kde-format
+msgid "Export OpenDocument Spreadsheet File"
+msgstr ""
+
+#: TableTool.cpp:224
+#, kde-format
+msgid "Export"
+msgstr "Eksportuoti"
+
+#: TableTool.cpp:704
+#, kde-format
+msgid "Sheets"
+msgstr ""
+
+#: TableTool.cpp:746
+#, kde-format
+msgid "Sheet:"
+msgstr ""
+
+#: TableTool.cpp:748
+#, kde-format
+msgid "Selected Sheet"
+msgstr ""
+
+#: TableTool.cpp:763
+#, fuzzy, kde-format
+#| msgid "Table Options"
+msgid "View Options"
+msgstr "Lentelės parinktys"
+
+#: TableToolFactory.cpp:21
+#, fuzzy, kde-format
+#| msgid "Table Options"
+msgid "Table editing"
+msgstr "Lentelės parinktys"
+
+#: ToolHeaders.cpp:286 ToolHeaders.cpp:884
+#, kde-format
+msgid "Area is too large."
+msgstr ""
+
+#: ToolHeaders.cpp:429
+#, kde-format
+msgid "Hide Row"
+msgstr ""
+
+#: ToolHeaders.cpp:431
+#, kde-format
+msgid "Height: %1 %2"
+msgstr ""
+
+#: ToolHeaders.cpp:1059
+#, fuzzy, kde-format
+#| msgid "Columns:"
+msgid "Hide Column"
+msgstr "Stulpeliai:"
+
+#: ToolHeaders.cpp:1061
+#, kde-format
+msgid "Width: %1 %2"
+msgstr ""
+
+#~ msgid "Rows:"
+#~ msgstr "Eilutės:"
+
+#, fuzzy
+#~| msgid "Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Pervadinti"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Pridėti"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Pašalinti"
+
+#, fuzzy
+#~| msgid "Enter Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter Name:"
+#~ msgstr "Įveskite pavadinimą:"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Importuoti"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Eksportuoti"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Stulpeliai:"
+
+#, fuzzy
+#~| msgid "Rows:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rows:"
+#~ msgstr "Eilutės:"
+
+#, fuzzy
+#~| msgid "Table Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table Options"
+#~ msgstr "Lentelės parinktys"
+
+#, fuzzy
+#~| msgid "Table Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table editing"
+#~ msgstr "Lentelės parinktys"

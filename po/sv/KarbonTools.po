@@ -1,0 +1,829 @@
+# translation of KarbonTools.po to Swedish
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: KarbonTools\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2014-04-04 18:07+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:16
+#, kde-format
+msgid "A calligraphic shape"
+msgstr "En kalligrafisk form"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:18
+#, kde-format
+msgid "Calligraphic Shape"
+msgstr "Kalligrafisk form"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:56
+#, kde-format
+msgid "Save profile as..."
+msgstr "Spara profil som..."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
+#, kde-format
+msgid "Remove profile"
+msgstr "Ta bort profil"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:69
+#, kde-format
+msgid "&Follow selected path"
+msgstr "&Följ vald kontur"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:72
+#, kde-format
+msgid "Use tablet &pressure"
+msgstr "Använd tryck mot styr&platta"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:75
+#, kde-format
+msgid "Width:"
+msgstr "Bredd:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:83
+#, kde-format
+msgid "Thinning:"
+msgstr "Avtunning:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:92
+#, kde-format
+msgid "Use tablet &angle"
+msgstr "&Använd vinkel mot styrplatta"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:95
+#, kde-format
+msgid "Angle:"
+msgstr "Vinkel:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:104
+#, kde-format
+msgid "Fixation:"
+msgstr "Fixering:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:113
+#, kde-format
+msgid "Caps:"
+msgstr "Avslutningar:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:122
+#, kde-format
+msgid "Mass:"
+msgstr "Massa:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:131
+#, kde-format
+msgid "Drag:"
+msgstr "Motstånd:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:188
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:213
+#, kde-format
+msgid "Current"
+msgstr "Nuvarande"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:207
+#, kde-format
+msgid "Profile name"
+msgstr "Profilnamn"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:208
+#, kde-format
+msgid "Please insert the name by which you want to save this profile:"
+msgstr "Ange namnet som du vill använda för att spara profilen:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:215
+#, kde-format
+msgid "Sorry, the name you entered is invalid."
+msgstr "Tyvärr är angivet namn ogiltigt."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
+#, kde-format
+msgctxt "invalid profile name"
+msgid "Invalid name."
+msgstr "Ogiltigt namn."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:224
+#, kde-format
+msgid ""
+"A profile with that name already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"En profil med samma namn finns redan.\n"
+"Vill du skriva över den?"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:360
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:385
+#, kde-format
+msgid "Mouse"
+msgstr "Mus"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:373
+#, kde-format
+msgid "Graphics Pen"
+msgstr "Grafikpenna"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:338
+#, kde-format
+msgid "Fill"
+msgstr "Fyll"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:377
+#, kde-format
+msgid "Calligraphy: increase width"
+msgstr "Kalligrafi: öka bredd"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
+#, kde-format
+msgid "Calligraphy: decrease width"
+msgstr "Kalligrafi: minska bredd"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:387
+#, kde-format
+msgid "Calligraphy: increase angle"
+msgstr "Kalligrafi: öka vinkel"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:392
+#, kde-format
+msgid "Calligraphy: decrease angle"
+msgstr "Kalligrafi: minska vinkel"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:399
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:400
+#: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
+#, kde-format
+msgid "Calligraphy"
+msgstr "Kalligrafi"
+
+#: filterEffectTool/FilterAddCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Add filter effect"
+msgstr "Lägg till filtereffekt"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:58
+#, kde-format
+msgid "Add effect to current filter stack"
+msgstr "Lägg till effekt i nuvarande filterkedja"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:68
+#, kde-format
+msgid "Add to filter presets"
+msgstr "Lägg till i förinställningar av filter"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:72
+#, kde-format
+msgid "Remove filter preset"
+msgstr "Ta bort förinställning av filter"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:335
+#, kde-format
+msgid "Effect name"
+msgstr "Effektnamn"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:336
+#, kde-format
+msgid "Please enter a name for the filter effect"
+msgstr "Ange ett namn på filtereffekten"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
+#: filterEffectTool/FilterEffectEditWidget.ui:32
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:314
+#, kde-format
+msgid "Filter Effect Editor"
+msgstr "Editor för filtereffekter"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: filterEffectTool/FilterEffectEditWidget.ui:40
+#, kde-format
+msgid "Effects and Connections"
+msgstr "Effekter och anslutningar"
+
+#. i18n: ectx: property (text), widget (QToolButton, removeEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addEffect)
+#. i18n: ectx: property (text), widget (QToolButton, raiseEffect)
+#. i18n: ectx: property (text), widget (QToolButton, lowerEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addPreset)
+#. i18n: ectx: property (text), widget (QToolButton, removePreset)
+#: filterEffectTool/FilterEffectEditWidget.ui:57
+#: filterEffectTool/FilterEffectEditWidget.ui:67
+#: filterEffectTool/FilterEffectEditWidget.ui:74
+#: filterEffectTool/FilterEffectEditWidget.ui:81
+#: filterEffectTool/FilterEffectEditWidget.ui:102
+#: filterEffectTool/FilterEffectEditWidget.ui:109
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: filterEffectTool/FilterEffectEditWidget.ui:92
+#, kde-format
+msgid "Filter Presets"
+msgstr "Förinställningar av filter"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: filterEffectTool/FilterEffectEditWidget.ui:116
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:470
+#, kde-format
+msgid "Effect Properties"
+msgstr "Effektegenskaper"
+
+#: filterEffectTool/FilterRemoveCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove filter effect"
+msgstr "Ta bort filtereffekt"
+
+#: filterEffectTool/FilterStackSetCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Set filter stack"
+msgstr "Ange filterkedja"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:433
+#, kde-format
+msgid "Effects"
+msgstr "Effekter"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:443
+#, kde-format
+msgid "View and edit filter"
+msgstr "Granska och redigera filter"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:449
+#, kde-format
+msgid "Remove filter from object"
+msgstr "Ta bort filter från objekt"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:453
+#, kde-format
+msgid "Add Filter"
+msgstr "Lägg till filter"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:482
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:488
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:494
+#, kde-format
+msgid "W:"
+msgstr "B:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:500
+#, kde-format
+msgid "H:"
+msgstr "H:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:505
+#, kde-format
+msgid "Effect Region"
+msgstr "Effektområde"
+
+#: filterEffectTool/KarbonFilterEffectsToolFactory.cpp:16
+#, kde-format
+msgid "Filter effects editing"
+msgstr "Filtereffektredigering"
+
+#: KarbonGradientTool.cpp:198
+#, kde-format
+msgid "Drag to move gradient position."
+msgstr "Dra för att flytta gradientposition."
+
+#: KarbonGradientTool.cpp:207
+#, kde-format
+msgid "Drag to move color stop. Double click to remove color stop."
+msgstr "Dra för att flytta färgstopp. Dubbelklicka för att ta bort färgstopp."
+
+#: KarbonGradientTool.cpp:209
+#, kde-format
+msgid "Drag to move color stop."
+msgstr "Dra för att flytta färgstopp."
+
+#: KarbonGradientTool.cpp:216
+#, kde-format
+msgid "Drag to move gradient position. Double click to insert color stop."
+msgstr ""
+"Dra för att flytta gradientposition. Dubbelklicka för att infoga färgstopp."
+
+#: KarbonGradientTool.cpp:494
+#, kde-format
+msgid "Edit Gradient"
+msgstr "Redigera toning"
+
+#: KarbonGradientTool.cpp:496
+#, kde-format
+msgid "Predefined Gradients"
+msgstr "Fördefinierade toningar"
+
+#: KarbonGradientToolFactory.cpp:17
+#, kde-format
+msgid "Gradient editing"
+msgstr "Toningsredigering"
+
+#: KarbonPatternOptionsWidget.cpp:21
+#, kde-format
+msgid "Original"
+msgstr "Original"
+
+#: KarbonPatternOptionsWidget.cpp:22
+#, kde-format
+msgid "Tiled"
+msgstr "Sida vid sida"
+
+#: KarbonPatternOptionsWidget.cpp:23
+#, kde-format
+msgid "Stretched"
+msgstr "Utsträckt"
+
+#: KarbonPatternOptionsWidget.cpp:25
+#, kde-format
+msgid "Top Left"
+msgstr "Uppe till vänster"
+
+#: KarbonPatternOptionsWidget.cpp:26
+#, kde-format
+msgid "Top"
+msgstr "Längst upp"
+
+#: KarbonPatternOptionsWidget.cpp:27
+#, kde-format
+msgid "Top Right"
+msgstr "Uppe till höger"
+
+#: KarbonPatternOptionsWidget.cpp:28
+#, kde-format
+msgid "Left"
+msgstr "Vänster"
+
+#: KarbonPatternOptionsWidget.cpp:29
+#, kde-format
+msgid "Center"
+msgstr "Centrera"
+
+#: KarbonPatternOptionsWidget.cpp:30
+#, kde-format
+msgid "Right"
+msgstr "Höger"
+
+#: KarbonPatternOptionsWidget.cpp:31
+#, kde-format
+msgid "Bottom Left"
+msgstr "Nere till vänster"
+
+#: KarbonPatternOptionsWidget.cpp:32
+#, kde-format
+msgid "Bottom"
+msgstr "Längst ner"
+
+#: KarbonPatternOptionsWidget.cpp:33
+#, kde-format
+msgid "Bottom Right"
+msgstr "Nere till höger"
+
+#: KarbonPatternTool.cpp:273
+#, kde-format
+msgid "Pattern Options"
+msgstr "Mönsteralternativ"
+
+#: KarbonPatternTool.cpp:275
+#, kde-format
+msgid "Patterns"
+msgstr "Mönster"
+
+#: KarbonPatternToolFactory.cpp:17
+#, kde-format
+msgid "Pattern editing"
+msgstr "Mönsterredigering"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects and Connections"
+#~ msgstr "Effekter och anslutningar"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter Presets"
+#~ msgstr "Förinställningar av filter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A calligraphic shape"
+#~ msgstr "En kalligrafisk form"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphic Shape"
+#~ msgstr "Kalligrafisk form"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save profile as..."
+#~ msgstr "Spara profil som..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove profile"
+#~ msgstr "Ta bort profil"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Follow selected path"
+#~ msgstr "&Följ vald kontur"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use tablet &pressure"
+#~ msgstr "Använd tryck mot styr&platta"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Bredd:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thinning:"
+#~ msgstr "Avtunning:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use tablet &angle"
+#~ msgstr "&Använd vinkel mot styrplatta"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Vinkel:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fixation:"
+#~ msgstr "Fixering:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Caps:"
+#~ msgstr "Avslutningar:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mass:"
+#~ msgstr "Massa:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag:"
+#~ msgstr "Motstånd:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current"
+#~ msgstr "Nuvarande"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Profile name"
+#~ msgstr "Profilnamn"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please insert the name by which you want to save this profile:"
+#~ msgstr "Ange namnet som du vill använda för att spara profilen:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sorry, the name you entered is invalid."
+#~ msgstr "Tyvärr är angivet namn ogiltigt."
+
+#~ msgctxt "(qtundo-format) invalid profile name"
+#~ msgid "Invalid name."
+#~ msgstr "Ogiltigt namn."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "A profile with that name already exists.\n"
+#~ "Do you want to overwrite it?"
+#~ msgstr ""
+#~ "En profil med samma namn finns redan.\n"
+#~ "Vill du skriva över den?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mouse"
+#~ msgstr "Mus"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Graphics Pen"
+#~ msgstr "Grafikpenna"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill"
+#~ msgstr "Fyll"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: increase width"
+#~ msgstr "Kalligrafi: öka bredd"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: decrease width"
+#~ msgstr "Kalligrafi: minska bredd"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: increase angle"
+#~ msgstr "Kalligrafi: öka vinkel"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: decrease angle"
+#~ msgstr "Kalligrafi: minska vinkel"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy"
+#~ msgstr "Kalligrafi"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add effect to current filter stack"
+#~ msgstr "Lägg till effekt i nuvarande filterkedja"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to filter presets"
+#~ msgstr "Lägg till i förinställningar av filter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove filter preset"
+#~ msgstr "Ta bort förinställning av filter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect name"
+#~ msgstr "Effektnamn"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please enter a name for the filter effect"
+#~ msgstr "Ange ett namn på filtereffekten"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter Effect Editor"
+#~ msgstr "Editor för filtereffekter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Effekter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View and edit filter"
+#~ msgstr "Granska och redigera filter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove filter from object"
+#~ msgstr "Ta bort filter från objekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Filter"
+#~ msgstr "Lägg till filter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect Properties"
+#~ msgstr "Effektegenskaper"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W:"
+#~ msgstr "B:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect Region"
+#~ msgstr "Effektområde"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter effects editing"
+#~ msgstr "Filtereffektredigering"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move gradient position."
+#~ msgstr "Dra för att flytta gradientposition."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move color stop. Double click to remove color stop."
+#~ msgstr ""
+#~ "Dra för att flytta färgstopp. Dubbelklicka för att ta bort färgstopp."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move color stop."
+#~ msgstr "Dra för att flytta färgstopp."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move gradient position. Double click to insert color stop."
+#~ msgstr ""
+#~ "Dra för att flytta gradientposition. Dubbelklicka för att infoga "
+#~ "färgstopp."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Gradient"
+#~ msgstr "Redigera toning"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Predefined Gradients"
+#~ msgstr "Fördefinierade toningar"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gradient editing"
+#~ msgstr "Toningsredigering"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original"
+#~ msgstr "Original"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tiled"
+#~ msgstr "Sida vid sida"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stretched"
+#~ msgstr "Utsträckt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left"
+#~ msgstr "Uppe till vänster"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top"
+#~ msgstr "Längst upp"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right"
+#~ msgstr "Uppe till höger"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "Vänster"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center"
+#~ msgstr "Centrera"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "Höger"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left"
+#~ msgstr "Nere till vänster"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom"
+#~ msgstr "Längst ner"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right"
+#~ msgstr "Nere till höger"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pattern Options"
+#~ msgstr "Mönsteralternativ"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Patterns"
+#~ msgstr "Mönster"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pattern editing"
+#~ msgstr "Mönsterredigering"
+
+#~ msgid "Target:"
+#~ msgstr "Resultat:"
+
+#~ msgid "Line"
+#~ msgstr "Linje"
+
+#~ msgid "Type:"
+#~ msgstr "Typ:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Linjär"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Radiell"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Konisk"
+
+#~ msgid "Repeat:"
+#~ msgstr "Upprepa:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Ingen"
+
+#~ msgid "Reflect"
+#~ msgstr "Reflektera"
+
+#~ msgid "Repeat"
+#~ msgstr "Upprepa"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Total ogenomskinlighet:"
+
+#~ msgid "Color stop:"
+#~ msgstr "Stoppfärg:"
+
+#~ msgid "Stop color."
+#~ msgstr "Färg vid stopp."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Lägg till i fördefinierade toningar"
+
+#~ msgid "Reference Point:"
+#~ msgstr "Referenspunkt:"
+
+#~ msgid "Reference Point Offset"
+#~ msgstr "Referenspunktens position"
+
+#~ msgid "Tile Offset"
+#~ msgstr "Rutans position"
+
+#~ msgid "Pattern Size"
+#~ msgstr "Mönsterstorlek"
+
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Kalligrafiverktyg"
+
+#~ msgid "Stroke"
+#~ msgstr "Streck"
+
+#~ msgid "Precision:"
+#~ msgstr "Noggrannhet:"
+
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Obehandlat"
+
+#~ msgid "Curve"
+#~ msgstr "Kurvat"
+
+#~ msgid "Straight"
+#~ msgstr "Rakt"
+
+#~ msgid "Optimize"
+#~ msgstr "Optimera"
+
+#~ msgid "Exactness:"
+#~ msgstr "Exakthet:"
+
+#~ msgid "Combine angle:"
+#~ msgstr "Kombinera vinkel:"
+
+#~ msgid "Freehand Path Drawing Tool"
+#~ msgstr "Verktyg för att rita frihandskonturer"
+
+#~ msgid "Stop color:"
+#~ msgstr "Färg vid stopp:"
+
+#~ msgid "Gradient tool"
+#~ msgstr "Toningsverktyg"
+
+#~ msgid "Pattern tool"
+#~ msgstr "Mönsterverktyg"
+
+#~ msgid "Pencil tool"
+#~ msgstr "Pennverktyg"
+
+#~ msgid "Calligraphy tool"
+#~ msgstr "Kalligrafiverktyg"
+
+#~ msgid "Filter effects tool"
+#~ msgstr "Filtereffektverktyg"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Ingen"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Heldragen"
+
+#~ msgid "Gradient"
+#~ msgstr "Toning"
+
+#~ msgid "Pattern"
+#~ msgstr "Mönster"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Fyll jämn-udda"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Fyll slingrande"
+
+#~ msgid "Remove filter effect from shape"
+#~ msgstr "Ta bort filtereffekt från form"

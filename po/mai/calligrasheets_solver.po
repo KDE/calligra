@@ -1,0 +1,116 @@
+# translation of kspreadsolver.po to Maithili
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sangeeta Kumari <sangeeta09@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: kspreadsolver\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2009-04-22 00:19+0530\n"
+"Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
+"Language-Team: Maithili <maithili.sf.net>\n"
+"Language: mai\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"\n"
+"\n"
+
+#: Solver.cpp:66
+#, kde-format
+msgid "Function Optimizer..."
+msgstr ""
+
+#: Solver.cpp:103
+#, fuzzy
+#| msgid "Maximize"
+msgctxt "(qtundo-format)"
+msgid "Optimize"
+msgstr "पैघ करू"
+
+#. i18n: ectx: Menu (tools)
+#: solver.rc:4
+#, kde-format
+msgid "&Tools"
+msgstr "अओजार (&T)"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: SolverDetailsWidget.ui:67
+#, kde-format
+msgid "Precision:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: SolverDetailsWidget.ui:74
+#, kde-format
+msgid "Maximum Iterations:"
+msgstr ""
+
+#: SolverDialog.cpp:18
+#, kde-format
+msgid "Function Optimizer"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: SolverMainWidget.ui:37
+#, kde-format
+msgid "Optimization"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, maximizeButton)
+#: SolverMainWidget.ui:43
+#, kde-format
+msgid "Maximize"
+msgstr "पैघ करू"
+
+#. i18n: ectx: property (text), widget (QRadioButton, minimizeButton)
+#: SolverMainWidget.ui:50
+#, kde-format
+msgid "Minimize"
+msgstr "छोट करू"
+
+#. i18n: ectx: property (text), widget (QRadioButton, valueButton)
+#: SolverMainWidget.ui:60
+#, kde-format
+msgid "Value:"
+msgstr "मान:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: SolverMainWidget.ui:73
+#, kde-format
+msgid "Parameters:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: SolverMainWidget.ui:83
+#, kde-format
+msgid "Function:"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Maximize"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Maximize"
+#~ msgstr "पैघ करू"
+
+#, fuzzy
+#~| msgid "Minimize"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minimize"
+#~ msgstr "छोट करू"
+
+#, fuzzy
+#~| msgid "Value:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Value:"
+#~ msgstr "मान:"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "अओजार (&T)"

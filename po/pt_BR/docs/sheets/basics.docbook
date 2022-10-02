@@ -1,0 +1,947 @@
+<chapter id="basics">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Marcus</firstname
+><surname
+>Gama</surname
+><affiliation
+><address
+><email
+>marcus.gama@gmail.com</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>André Marcelo</firstname
+><surname
+>Alvarenga</surname
+><affiliation
+><address
+><email
+>alvarenga@kde.org</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>&sheets; Básico</title>
+
+<note
+><para
+>Como o resto do &kde;, o &sheets; é altamente configurável, o que poderá causar alguns problemas para os leitores tentarem comparar o texto de um documento como este com o que eles veem na versão do &sheets; executada nos seus computadores. Para reduzir as chances de confusão, sugere-se que você executar pela primeira vez o &sheets; configure todas as opções do aplicativo com os valores padrão em todas as páginas da janela de configuração do &sheets;; (obtida selecionando-se a opção <menuchoice
+><guimenu
+>Configurações</guimenu
+><guimenuitem
+>Configurar o Sheets...</guimenuitem
+></menuchoice
+>). </para
+></note>
+
+<sect1 id="starting">
+<title
+>Planilhas para Iniciantes</title>
+
+<para
+>Esta seção procura explanar através de um exemplo o que um programa de planilha como o &sheets; atualmente faz, e por que ele é uma ferramenta útil em qualquer situação onde você tenha que lidar com números. Se você já usou um programa de planilha você pode pular para a próxima seção.</para>
+
+<para
+>A primeira coisa a fazer é iniciar o &sheets;. Você pode fazer isto clicando com o botão <mousebutton
+>esquerdo</mousebutton
+> no ícone do &sheets; se existe um em seu ambiente de trabalho ou painel, ou você pode selecionar <menuchoice
+><guimenu
+>Escritório</guimenu
+><guimenuitem
+>&sheets;</guimenuitem
+> </menuchoice
+> no &kmenu;.</para>
+
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="newdocument.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>O &sheets; na primeira execução</phrase>
+</textobject>
+</mediaobject
+>Quando tiver iniciado, você terá a opção de abrir um documento recente, criar um novo documento a partir de um modelo (com categorias de modelo) ou abrir um documento existente. Selecione a categoria <guilabel
+>Geral</guilabel
+> à esquerda e escolha o modelo <guilabel
+>Pasta de trabalho em branco</guilabel
+>. Clique depois no botão <guibutton
+>Usar este modelo</guibutton
+>.</para>
+
+<para
+>Olhando para o &sheets; logo após iniciar, você verá uma planilha com células retangulares vazias, organizadas em linhas com números e colunas com letras. Esta planilha é o local onde você insere os dados, fórmulas, texto ou gráficos. <mediaobject>
+<imageobject>
+<imagedata fileref="starting1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Captura de tela iniciando1</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Agora, insira o texto e valores mostrados nas primeiras 5 linhas da captura de tela abaixo nas mesmas células de sua planilha. Ignore que está na linha 7 no momento. Para inserir qualquer coisa em uma célula primeiro selecione a célula através de um clique <mousebutton
+>esquerdo</mousebutton
+> dentro dela, então digite o que você deseja, e então pressione o &Enter; ou use as teclas de seta para mover o ponto de seleção para outra célula. </para>
+<para
+>O que nós acabamos de inserir pode ser um simples orçamento para os próximos dois meses, listando quanto nós achamos que vamos gastar com Comida, Aluguel, Roupas ou qualquer Outro gasto. Agora selecione a célula B7 (coluna B, linha 7), digite <userinput
+>=B2+B3+B4+B5</userinput
+> e pressione &Enter;. Devido ao fato disto iniciar com o símbolo <keycap
+>=</keycap
+> o &sheets; enxerga isto como uma fórmula, algo como calcular, neste caso somar todos os valores das 4 células, B2 à B5, e o que é mostrado na célula B7 é o resultado deste cálculo.</para>
+<para
+>Você pode inserir uma fórmula similar na célula C7, exceto que neste caso você terá <userinput
+>=C2+C3+C4+C5</userinput
+>, mas há uma maneira mais fácil que é copiar a célula B7 e colá-la na C7. O &sheets; automaticamente ajustará as referências às células do B.. para C.. quando o colar for feito.</para>
+<para
+>Neste momento você poderá achar que o &sheets; não faz nada mais do que você conseguiria fazer com um papel, lápis e uma máquina de calcular, e até pode ter razão, mas lembre-se que isto é um exemplo muito pequeno de uma planilha, que faz apenas simples cálculos com alguns números. Para uma tabela de número razoável de valores, o uso de uma planilha para fazer as contas é muito mais rápido e preciso do que se fazê-las manualmente.</para>
+<para
+>Também, uma planilha permite-lhe jogar o jogo <quote
+>O que é se?</quote
+>. Devido ao fato de cada fórmula ser automaticamente recalculada sempre que qualquer dos valores a que ela se refere for mudado, você pode rapidamente ver o efeito da redução do gasto de comida em Dezembro apenas inserindo um novo valor na célula C2. Se você tiver uma planilha que modela o efeito estufa com precisão você pode talvez ver o efeito de 50 por cento de redução na quantidade de metano jogada na atmosfera.</para>
+</sect1>
+
+<sect1 id="selecting">
+<title
+>Selecionar Células</title>
+<para
+>Você poderá selecionar uma única célula ou uma área retangular de células na planilha. As células selecionadas são mostradas com um contorno preto mais grosso. </para>
+<itemizedlist>
+<title
+>Você poderá selecionar uma única célula de uma das seguintes formas</title>
+<listitem
+><para
+>clicando com o botão <mousebutton
+>esquerdo</mousebutton
+> nela</para
+></listitem>
+<listitem
+><para
+>inserindo a referência da célula (por exemplo <userinput
+>B5</userinput
+>) no campo de referência de células do lado esquerdo do <guilabel
+>Editor de células</guilabel
+> e pressione &Enter;</para
+></listitem>
+<listitem
+><para
+>usando a opção do menu <menuchoice
+><guimenu
+>Ir</guimenu
+><guimenuitem
+>Ir para célula...</guimenuitem
+></menuchoice
+></para
+></listitem>
+</itemizedlist>
+
+<para
+>Você pode também realizar sua navegação com as teclas de <keysym
+>seta</keysym
+>. Pressionar a tecla &Enter; irá mover a seleção atual uma posição para cima, baixo, esquerda ou direita, dependendo do configurado na página <guilabel
+>Interface</guilabel
+> da <link linkend="configinterface"
+>janela de configuração</link
+> do &sheets;.</para
+> <para
+>Se você mantiver a tecla <keycombo action="simul"
+>&Shift;</keycombo
+> pressionada enquanto usa as teclas dos <keysym
+>cursores</keysym
+>, a seleção irá passar para o início ou para o fim do bloco de células ocupadas.</para>
+<para
+>Para selecionar uma área de células arraste o cursor do mouse pela área desejada com o botão <mousebutton
+>esquerdo</mousebutton
+> do mouse pressionado ou insira as referências do cantos superior esquerdo e inferior direito separados por dois pontos no campo de referência de células do <guilabel
+>Editor de células</guilabel
+> (por exemplo <userinput
+>B7:C14</userinput
+>) e pressione &Enter; ou insira estas referências de células em um formato semelhante na janela que aparecem com a opção <menuchoice
+><guimenu
+>Exibir</guimenu
+><guimenuitem
+>Ir para a célula...</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Você pode também selecionar uma área de células, selecionando a célula de um canto da área desejada e mantendo a tecla <keycombo action="simul"
+>&Shift;</keycombo
+> pressionada, enquanto usa o botão <mousebutton
+>esquerdo</mousebutton
+> do mouse para selecionar a célula no canto oposto.</para>
+
+<para
+>Para selecionar células não-adjacentes, clique na primeira célula que deseja selecionar e depois mantenha pressionada a tecla <keycombo action="simul"
+>&Ctrl;</keycombo
+> para selecionar as outras células.</para>
+
+<para
+>Para selecionar uma linha completa ou coluna de células dê um clique <mousebutton
+>esquerdo</mousebutton
+> no número da linha à esquerda da pasta de trabalho ou na letra da coluna no topo. Para selecionar linhas adjacentes ou colunas arraste o ponteiro do mouse sobre os números apropriados das linhas ou letras das colunas com o botão <mousebutton
+>esquerdo</mousebutton
+> do mouse pressionado.</para>
+<para
+>Para selecionar linhas e colunas de células não contínuas, clique na primeira no primeiro número de linha ou letra de coluna e mantenha pressionada a tecla <keycombo action="simul"
+>&Ctrl;</keycombo
+> para selecionar as outras linhas e colunas de células.</para>
+
+</sect1>
+
+<sect1 id="entering">
+<title
+>Inserir Dados</title>
+<para
+>Inserir dados em uma célula pode ser tão simples como selecionar a célula, digitar seu dado, e então pressionar o &Enter; ou mover a seleção para outra célula com um tecla de <keysym
+>seta</keysym
+>. Dependendo de como você inserir seu dado, o &sheets; interpretará com um número, data, hora ou texto:</para>
+<itemizedlist>
+<listitem
+><para
+>Números são inseridos da maneira óbvia; <userinput
+>123</userinput
+>, <userinput
+> -123</userinput
+>, <userinput
+>456.7</userinput
+> ou em notação científica <userinput
+>-1.2E-5</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>As datas deverão ser inseridas no formato do seu <quote
+>Sistema</quote
+>, tal como está definido nas &systemsettings; na aba <menuchoice
+><guimenu
+> Localização</guimenu
+><guisubmenu
+>País/Região e Idioma</guisubmenu
+><guimenuitem
+>Hora e data</guimenuitem
+> </menuchoice
+>. Por exemplo, se estiver usando o formato do DD/MM/AAAA, você deverá inserir <userinput
+>30/03/2012</userinput
+> para o 30 de março de 2012. Os zeros antecedentes para o dia e o mês podem ser omitidos e apenas os últimos um ou dois algarismos do ano é que precisam de ser inseridos se a data estiver no ano atual, como por exemplo <userinput
+>9/1/9</userinput
+> para 9 de janeiro de 2009. </para
+></listitem>
+<listitem
+><para
+>As horas devem ser também inseridas segundo o formato do <quote
+>Sistema</quote
+>. Por exemplo, se você estiver usando um relógio de 12 horas, então insira as horas no formato HH:MIN am|pm ou HH:MIN:SS am|pm, como por exemplo <userinput
+>9:42 am</userinput
+> ou <userinput
+> 10:30:52 pm</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>O &sheets; define qualquer dado introduzido como <quote
+>texto</quote
+> se não conseguir reconhecê-lo como um número, uma data ou uma hora. </para
+></listitem>
+</itemizedlist>
+<note
+><para
+>Por padrão, o &sheets; alinha à direita números, datas e horas de uma célula e alinha à esquerda qualquer outra coisa. Isto pode ser um guia útil para verificar se você inseriu uma data ou hora no formato correto. Mas lembre-se de que a maneira como os itens são exibidos pode ser mudada com alteração do <link linkend="formatdata"
+>formato da célula</link
+>.</para
+></note>
+
+<para
+>O campo de entrada de texto principal no <guilabel
+>Editor de células</guilabel
+> oferece uma maneira fácil de editar o conteúdo de uma célula selecionada. Pressione &Enter; ou clique com o botão <mousebutton
+>esquerdo</mousebutton
+> na marca verde quando você estiver satisfeito com o que você inseriu ou clique na cruz vermelha para cancelar sua edição.</para>
+
+<sect2 id="genericformat">
+<title
+>Formato Genérico das Células</title>
+<para
+>O &sheets; usa o formato de células <quote
+>Genérico</quote
+> por padrão. Uma vez que este formato seja usado, o &sheets; detecta automaticamente o tipo de dados, com base nos dados da célula atual. Por exemplo, se você inserir algum texto na célula e depois introduzir um número na mesma célula, o &sheets; interpreta automaticamente os dados novos como um número. Se quiser definir você mesmo o tipo dos dados, poderá fazê-lo no <link linkend="formatdata"
+>formato da célula</link
+>. Você poderá alterar o formato de volta para o <quote
+>Genérico</quote
+> a qualquer momento. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="copypaste">
+<title
+>Copiar, Cortar e Colar</title>
+
+<para
+>Numa primeira análise, o <guimenuitem
+>Recortar</guimenuitem
+>, <guimenuitem
+>Copiar</guimenuitem
+> e <guimenuitem
+>Colar</guimenuitem
+> do &sheets; parecem ser similares a estas funções em outros aplicativos &kde;. Tendo selecionado uma célula ou células, você pode escolher <guimenuitem
+>Copiar</guimenuitem
+> ou <guimenuitem
+>Recortar</guimenuitem
+> no menu <guimenu
+>Editar</guimenu
+> ou do menu suspenso obtido clicando com o botão <mousebutton
+>direito</mousebutton
+> do mouse numa célula selecionada. Você pode também usar os atalhos de teclado <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> ou <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+>, e então mover a seleção para a célula alvo e escolher <guimenuitem
+>Colar</guimenuitem
+> ou pressionar <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+>. No entanto existem algumas sutilezas associadas com estas funções no &sheets; e elas serão discutidas a seguir.</para>
+
+<para
+>Se uma célula contém uma fórmula então a fórmula propriamente dita é copiada ao invés do resultado exibido, e se a fórmula contém uma referência para outra célula, então a referência é mudada pela operação de <guimenuitem
+>Recortar</guimenuitem
+> ou <guimenuitem
+>Copiar</guimenuitem
+> e <guimenuitem
+>Colar</guimenuitem
+> para o ponto da célula que possui a mesma posição relativa em relação à célula original. Por exemplo, se a célula A2 contém a fórmula <userinput
+> =B3</userinput
+> e é copiada para C4, a célula C4 conterá <userinput
+>=D5 </userinput
+>.</para>
+<para
+>Isto pode parecer uma maneira estranha de realizar uma cópia, mas 99 por cento do tempo isto é exatamente o que é desejado (se não for então veja a seção sobre <link linkend="absolute"
+>referência absoluta de célula </link
+>). Por exemplo, na simples lista de compras mostrada abaixo, a célula D2 deve conter <userinput
+>=B2 * C2</userinput
+>, D3 deve ser <userinput
+>=B3 * C3</userinput
+>, D4 deve ser <userinput
+>=B4 * C4</userinput
+> e assim por diante. Ao invés de ter que inserir uma fórmula diferente em cada célula, você pode apenas inserir a primeira fórmula em D2 e então copiá-la para as células abaixo, deixando o &sheets; ajustar as referências a células por ele mesmo.</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="copy1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Captura de tela copiar1</phrase>
+</textobject>
+</mediaobject>
+
+<sect2 id="copypasteareas">
+<title
+>Copiar e Colar Áreas de Células</title>
+<para
+>No exemplo acima D2 pode ser copiado para todas as três células de D3 à D5 de um vez só apenas copiando o D2 e então selecionando toda a área de D3:D5 antes de realizar o colar.</para>
+<para
+>Um área retangular de células pode ser cortada ou copiada em uma operação selecionando a área antes de realizar o cortar ou copiar. Então selecione o canto superior esquerdo da área que você deseja colar antes de realizar a colagem.</para>
+<para
+>Se você cortar ou copiar uma área retangular de células, como B2:C3, e colar em uma área maior como A10:D13 o padrão original de células será repetido para preencher a área alvo.</para>
+<para
+>O &sheets; também oferece um método de <quote
+>Arrastar e Copiar</quote
+> para copiar as células para outras imediatamente abaixo ou à direita das células originais. Para usar este método, selecione as células a serem copiadas, posicionando depois o cursor do mouse acima do pequeno quadrado preto que aparece no canto inferior direito das células selecionadas, de modo a que o cursor mude para uma seta com duas pontas. Depois mantenha o botão <mousebutton
+>esquerdo</mousebutton
+> do mouse pressionado enquanto arrasta as células selecionadas para o local que desejar. Lembre-se que as referências a células nas fórmulas são incrementadas de acordo com a mudança da posição relativa. As referências absolutas não são alteradas.</para>
+</sect2>
+
+<sect2 id="specialpaste">
+<title
+>Outros Modos de Colagem</title>
+<para
+>Um célula pode conter texto, um valor, ou uma fórmula, e pode também conter fonte especial, borda e fundo <link linkend="formatspread"
+>informação de formatação</link
+>. O &sheets; possui versões especiais do Colar que permite-lhe manipular estes itens de diferentes formas.</para>
+
+<para
+><menuchoice
+><guimenu
+>Editar</guimenu
+><guimenuitem
+>Colar especial...</guimenuitem
+></menuchoice
+> levanta a caixa de diálogo <guilabel
+>Colar especial</guilabel
+>. Selecionando o item apropriado à esquerda deste diálogo você pode escolher colar <guilabel
+>Tudo</guilabel
+>. somente <guilabel
+>Texto</guilabel
+>, o <guilabel
+>Formato</guilabel
+> da célula, qualquer <guilabel
+>Comentário</guilabel
+> na(s) célula(s) ou <guilabel
+>Tudo sem borda</guilabel
+>. Os itens na parte direita desta caixa de diálogo permite-lhe fazer <link linkend="sumspecialpaste"
+>aritméticas em uma área de células</link
+> simples. </para>
+
+<para
+><guimenuitem
+>Colar com inserção...</guimenuitem
+> insere as células copiadas na pasta movendo as células que de outro modo seriam sobrescritas um determinado número de linhas ou colunas para baixo ou para direita. Isto também pode ser usado para inserir uma linha ou coluna completamente copiada para a pasta de trabalho.</para>
+</sect2>
+
+</sect1>
+<!-- ME insdel -->
+<sect1 id="insdel">
+<title
+>Inserir e Excluir</title>
+<para
+>Use a tecla <keysym
+>Del</keysym
+> ou <menuchoice
+><guimenu
+>Editar</guimenu
+> <guisubmenu
+>Limpar</guisubmenu
+> <guimenuitem
+>Conteúdo</guimenuitem
+> </menuchoice
+> para remover o texto, valor ou fórmula das células selecionadas, linhas ou colunas sem afetar qualquer outra coisa.</para>
+
+<para
+>Para excluir tudo na(s) célula(s), linha(s) ou coluna(s) selecionada(s), incluindo comentários e formatação especial, escolha a opção <guimenuitem
+>Tudo</guimenuitem
+> do menu <menuchoice
+><guimenu
+>Editar</guimenu
+><guisubmenu
+>Limpar</guisubmenu
+></menuchoice
+> ou do menu instantâneo que você obtém quando clica com o botão <mousebutton
+>direito</mousebutton
+> em uma seleção. </para>
+<para
+>Para remover as linhas ou as colunas selecionadas por completo, use as opções <guimenuitem
+>Remover Linhas</guimenuitem
+> ou <guimenuitem
+>Remover Colunas</guimenuitem
+> do menu de contexto do botão <mousebutton
+>direito</mousebutton
+> do mouse.</para>
+<para
+>Se você selecionar uma célula ou células e escolher <guimenuitem
+>Remover Células... </guimenuitem
+> do menu popup acionado pelo botão <mousebutton
+>direito</mousebutton
+> do mouse, você pode então escolher que outras células na pasta de trabalho serão movidas para cima ou para esquerda para preencher o espaço deixado pela célula que você decidiu remover.</para>
+<para
+>Se você quiser inserir novas linhas ou colunas em branco na planilha, selecione as linhas ou colunas onde deseja colocar as novas linhas ou colunas e escolha a opção <guimenuitem
+>Inserir Linhas</guimenuitem
+>, <guimenuitem
+>Inserir Colunas</guimenuitem
+> do menu de contexto do botão <mousebutton
+>direito</mousebutton
+> do mouse.</para>
+<para
+>Você pode inserir novas células na pasta de trabalho selecionado a área onde você as quer e então escolher a opção <guimenuitem
+> Inserir Células...</guimenuitem
+> do menu popup acionado pelo clique <mousebutton
+>direito</mousebutton
+> do mouse. Você então será perguntado se as células existentes na área selecionada devem ser movidas para baixo ou para direita para criar espaço para as novas células.</para>
+
+</sect1>
+
+<sect1 id="simplesums">
+<title
+>Somas Simples</title>
+<para
+>Se o primeiro caractere em uma célula é igual a um sinal (<keycap
+>=</keycap
+>) o &sheets; tomará o conteúdo da célula como uma fórmula que será calculada. O resultado do cálculo será exibido na célula ao invés da fórmula propriamente dita. Por exemplo, insira <userinput
+>=2+3</userinput
+> numa célula e será exibido <emphasis
+>5</emphasis
+>.</para>
+<para
+>De maneira mais útil, uma fórmula pode conter referências para outras células, de modo que <userinput
+>=B4+A3</userinput
+> calculará a soma dos valores nas células B4 e A3, e este cálculo será atualizado sempre que as células B4 ou A3 forem mudadas.</para>
+<para
+>Assim como na adição, uma fórmula pode fazer uso do símbolo da subtração <keycap
+>-</keycap
+>, <keycap
+>*</keycap
+> para multiplicação, e <keycap
+> /</keycap
+> para realizar divisões. Os símbolos de parênteses <keycap
+>(</keycap
+> e <keycap
+>)</keycap
+> podem também ser usados como na álgebra normal, logo você pode inserir fórmulas mais complexas como um <userinput
+>=((B10 + C3) *5 - F11) / 2 </userinput
+>.</para>
+
+<para
+>Células contendo uma fórmula será marcada com um pequeno triângulo azul no canto inferior esquerdo se a caixa de verificação <guilabel
+>Mostrar indicador de fórmula</guilabel
+> da janela <menuchoice
+><guimenu
+>Formatar</guimenu
+> <guisubmenu
+>Planilha</guisubmenu
+><guisubmenu
+>Propriedades da Planilha</guisubmenu
+> </menuchoice
+> estiver habilitada.</para>
+<para
+>O &sheets; também inclui um grande número de funções internas para aplicativos como estatística, trigonometria e cálculos financeiros. Seu uso será examinado em maior profundidade numa <link linkend="formulas"
+>seção posterior</link
+> deste manual, mas se você estiver interessado agora selecione <guimenuitem
+>Função...</guimenuitem
+> do menu <guimenu
+>Inserir </guimenu
+> e dê uma olhada na caixa de diálogo <guilabel
+>Função</guilabel
+> que será exibida.</para>
+<para
+>Para iniciar, no entanto, a função <userinput
+>SUM</userinput
+> pode ser interessante para cálculos de somatórios de todos os valores em uma área específica de células. Por exemplo, <userinput
+>=SUM(B4:C10)</userinput
+> calcula a soma de todos os valores na área de células de B4 à C10.</para>
+<para
+>Se o &sheets; exibir <keycap
+>#VALUE!</keycap
+> quando você tiver inserido sua fórmula, isto normalmente significa que ele não compreende o que você inseriu, mas se a linha dos símbolos terminar com uma pequena seta vermelha isto apenas significa que a célula não é larga o suficiente para exibir o resultado completo, neste caso você pode tornar a célula mais larga ou mudar seu <link linkend="formatdata"
+>formato</link
+> para que o resultado seja exibido corretamente.</para>
+
+<sect2 id="recalc">
+<title
+>Recálculo</title>
+<para
+>Se a opção <guilabel
+>Recalcular automaticamente</guilabel
+> da página <menuchoice
+><guimenu
+>Formatar</guimenu
+><guisubmenu
+>Planilha</guisubmenu
+><guisubmenu
+>Propriedades da planilha</guisubmenu
+></menuchoice
+> estiver assinalada, o &sheets; irá calcular novamente os valores das células, sempre que algo que as afete seja alterado.</para>
+<para
+>Quando a opção <guilabel
+>Recalcular automaticamente</guilabel
+> não estiver assinalada para a planilha atual, você pode dizer ao &sheets; para efetuar um novo cálculo a qualquer momento, usando as opções <guimenuitem
+>Recalcular planilha</guimenuitem
+> ou <guimenuitem
+> Recalcular documento</guimenuitem
+> do menu <guimenu
+>Ferramentas</guimenu
+> ou os seus atalhos de teclado <keycombo action="simul"
+>&Shift;<keysym
+>F9</keysym
+> </keycombo
+> ou <keysym
+>F9</keysym
+>.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sort">
+<title
+>Ordenar Dados</title>
+<para
+>No exemplo simples mostrado abaixo, os dados consistem de nomes e países de um número de montanhas juntamente com sua altura acima do nível do mar. O &sheets; pode ordenar dados como este de diferentes maneiras.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sort1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Captura de tela de dados ordenados</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Nós podemos querer ordenar os dados, de forma que os nomes estejam por ordem alfabética. Para fazer isto, selecione a área que contém os dados (A2:C7, neste caso) e escolha <guimenuitem
+>Ordenar...</guimenuitem
+> no menu <guimenu
+>Dados</guimenu
+>. Isto abre a janela de <guilabel
+>Ordenar</guilabel
+>.</para
+> 
+<para
+>A ordenação é feita de maneira alfanumérica, e por padrão é sensível à caixa, com números vindo antes de letras maiúsculas que vem antes das letras minúsculas, de modo que as células contento as entradas <userinput
+>Cat</userinput
+>, <userinput
+>bar</userinput
+>, <userinput
+>77</userinput
+> e <userinput
+>Bat</userinput
+> devem ser ordenadas na seguinte ordem: <emphasis
+>77 Bat Cat bar</emphasis
+>.</para>
+<!-- Obsolete, AFAICT (Phil)
+<para
+>The <guimenuitem
+>Sort Increasing</guimenuitem
+> and <guimenuitem
+>Sort 
+Decreasing</guimenuitem
+> options from the <guimenu
+>Data</guimenu
+> menu options 
+sort the data according to the contents of the cells in the left column of the 
+selected area. For more complex sorting select <menuchoice
+><guimenu
+>Data
+</guimenu
+><guimenuitem
+>Sort...</guimenuitem
+></menuchoice
+> to bring up the 
+<guilabel
+>Sort</guilabel
+> dialog box.</para>
+-->
+<para
+>Na área <guilabel
+>Direção</guilabel
+> desta janela, escolha ordenar por linhas ou colunas. Se assinalar a opção <guilabel
+>A primeira linha contém os cabeçalhos das colunas</guilabel
+> ou <guilabel
+>A primeira coluna contém os cabeçalhos das linhas</guilabel
+>, a primeira linha ou coluna não será incluída na operação de ordenação.</para>
+<para
+>As linhas ou colunas são ordenadas pelo critério indicado, que pode ser alterado com os botões <guibutton
+>Mover para cima</guibutton
+> e <guibutton
+>Mover para baixo</guibutton
+>. Se usar o exemplo da imagem acima, ao escolher a coluna B como primeira chave e a coluna C como a segunda, iria ordenar os dados pelo país e, para cada país, pela altura.</para>
+<para
+>Desmarque a opção <guilabel
+>Diferenciar maiúsculas de minúsculas</guilabel
+> para obter uma ordenação que não dependa de maiúsculas/minúsculas e mude a ordem entre <guilabel
+>Crescente</guilabel
+> e <guilabel
+>Decrescente</guilabel
+> se clicar nas células na coluna <guilabel
+>Critério de ordenação</guilabel
+>. </para>
+
+<para
+>A extensão <guilabel
+>Detalhes 
+>
+></guilabel
+> da janela permite-lhe ordenar, usando a ordem dos itens de uma lista personalizada, como por exemplo Janeiro, Fevereiro..., em vez de uma ordenação alfanumérica. O formato da célula é movido com o conteúdo, se selecionar a opção <guilabel
+>Copiar formatação das células (Bordas, Cores, Estilo do texto)</guilabel
+>. </para>
+</sect1>
+
+
+<sect1 id="statusbarsum">
+<title
+>O Calculador Sumário da Barra de Estado</title>
+<para
+>A ponta esquerda da barra de status, por padrão mostra um sumário de valores da(s) célula(s) selecionada(s). De acordo com a configuração da <guilabel
+>Função exibida na barra de estado:</guilabel
+> na página <guilabel
+>Interface</guilabel
+> da janela de configuração do &sheets; o sumário pode ser:</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Nenhum</guilabel
+></term>
+<listitem
+><para
+>Nenhum cálculo sumário é realizado. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Média</guilabel
+></term>
+<listitem
+><para
+>O valor exibido é a média dos valores das células selecionadas. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Contagem</guilabel
+></term>
+<listitem
+><para
+>O valor exibido é o número de células contendo valores numéricos. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>ContagemA</guilabel
+></term>
+<listitem
+><para
+>O valor mostrado é o número de células não vazias. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Max</guilabel
+></term>
+<listitem
+><para
+>O valor exibido é o valor máximo das células selecionadas. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Min</guilabel
+></term>
+<listitem
+><para
+>O valor exibido é o valor mínimo das células selecionadas. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Sum</guilabel
+></term>
+<listitem
+><para
+>O valor exibido é o somatório dos valores das células selecionadas. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+<para
+>O método de cálculo pode também ser mudado dando um clique <mousebutton
+>direito</mousebutton
+> na área de resultado do cálculo sumário na Barra de Estado e escolhendo um item a partir do menu instantâneo.</para>
+
+</sect1>
+
+<sect1 id="saving">
+<title
+>Salvando seu Trabalho</title>
+<para
+>O &sheets; salva o documento por completo, o qual poderá incluir mais de uma planilha, como um único documento.</para>
+<para
+>Se você tiver criado um documento novo, ou se deseja salvar um existente com um nome novo, use a opção <menuchoice
+><guimenu
+>Arquivo</guimenu
+><guimenuitem
+> Salvar documento como...</guimenuitem
+></menuchoice
+>. Isto irá mostrar a janela normal do &kde; para <guilabel
+>Salvar documento como</guilabel
+>. Escolha a pasta onde deseja salvar o documento e insira um nome de arquivo adequado no campo <guilabel
+>Nome:</guilabel
+>. Os documentos do &sheets; são normalmente gravados com uma extensão <filename
+>.ods</filename
+>, assim você não precisa adicionar isto ao nome do arquivo, mas certifique-se que a seleção do <guilabel
+>Filtro:</guilabel
+> esteja configurada para o <guilabel
+>Planilha OpenDocument</guilabel
+>.</para>
+<para
+>Para salvar o seu documento sem alterar o seu nome, basta usar a opção <menuchoice
+> <guimenu
+>Arquivo</guimenu
+><guimenuitem
+>Salvar</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Você também pode salvar um documento do &sheets; em um formato antigo, se selecionar o formato na lista <guilabel
+>Filtro:</guilabel
+>.</para>
+<para
+>Quando você salva uma versão modificada de um documento existente, o &sheets; irá manter a versão anterior como uma cópia de segurança, adicionando um <literal
+>~</literal
+> ao fim do nome do arquivo.</para>
+<para
+>O &sheets; pode oferecer alguma proteção contra perdas do seu trabalho devido ao travamento de um computador ou porque você fechou o &sheets; sem ter salvo o documento atual. Ele faz isto, gravando automaticamente a última versão do documento em que você está trabalhando a cada conjunto de minutos, usando um nome de arquivo modificado. A versão salva automaticamente é normalmente removida quando você salvar a seguir o documento, de modo que só existe se for mais atualizada do que a última versão que foi gravada manualmente. Quando você abrir um documento, o &sheets; verifica se já existe uma versão gravada automaticamente e se encontrar uma irá oferecer-se para abrir essa versão em alternativa.</para>
+<para
+>Os documentos salvos automaticamente são gravados com um nome de arquivo do formato <filename
+>.seuarquivo.autosave</filename
+> (repare no ponto inicial), de modo que o <filename
+>planilha1.ods</filename
+> seria salvo automaticamente como <filename
+>.planilha1.ods.autosave</filename
+>. A função de salvamento automático é configurável pelo usuário na <link linkend="configopensave"
+>janela de configurações</link
+>.</para>
+
+<sect2 id="templates">
+<title
+>Modelos</title>
+<para
+>Se você vai criar um conjunto grande de documentos, você poderá poupar a si próprio algum tempo e problemas se criar primeiro um modelo e depois usá-lo como base para os documentos individuais.</para>
+<para
+>Para fazer isso, primeiro crie um documento que contém os elementos comuns, salvando-o depois como um modelo, escolhendo a opção <menuchoice
+><guimenu
+>Arquivo</guimenu
+> <guimenuitem
+>Criar modelo a partir do documento</guimenuitem
+></menuchoice
+>. Ao fazer isso, será aberta a janela <guilabel
+>Criar modelo</guilabel
+>. Insira um nome para o seu novo modelo no campo <guilabel
+>Nome:</guilabel
+> e pressione <guibutton
+>OK</guibutton
+>. Da próxima vez que você iniciar um novo documento, ao escolher <menuchoice
+><guimenu
+>Arquivo</guimenu
+><guimenuitem
+>Novo</guimenuitem
+></menuchoice
+> ou quando iniciar da próxima vez o &sheets;, a janela inicial fornecerá a opção de criar o novo documento a partir do seu modelo.</para>
+<para
+>A caixa de diálogo <guilabel
+>Criar modelo</guilabel
+> também permite-lhe escolher uma imagem diferente a ser exibida após o nome do modelo na janela inicial, e permite-lhe salvar seus modelos sob diferentes grupos de nomes, que aparecerão como diferentes páginas na janela.</para>
+<para
+>Os modelos são armazenados como arquivos <literal role="extension"
+>.kst</literal
+> em <filename
+>~/.kde/share/apps/tables/templates/</filename
+>. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="printing">
+<title
+>Imprimir uma Planilha</title>
+<para
+>Imprimir uma planilha é basicamente feito selecionando <menuchoice
+> <guimenu
+>Arquivo</guimenu
+><guimenuitem
+>Imprimir...</guimenuitem
+></menuchoice
+> que trará a caixa de diálogo padrão do &kde; <guilabel
+>Imprimir</guilabel
+> onde você pode escolher, além de outras opções, a impressora a ser usada, o número de cópias e se todas ou apenas as páginas selecionadas serão impressas.</para>
+<para
+>Por padrão o &sheets; imprimirá todos os itens na planilha atual, mas você pode restringir isto selecionando primeiro a área que você deseja imprimir e escolhendo <guimenuitem
+>Definir Intervalo de Impressão</guimenuitem
+> no <menuchoice
+><guimenu
+>Formatar</guimenu
+><guisubmenu
+>Intervalo de Impressão</guisubmenu
+> </menuchoice
+>.</para>
+<para
+>O &sheets; imprimirá tantas páginas quanto forem necessárias para incluir todos os itens na planilha atual. Você pode ver rapidamente como uma planilha será dividida em páginas separadas para impressão habilitando a caixa <menuchoice
+><guimenu
+>Exibir</guimenu
+> <guimenuitem
+>Bordas da página</guimenuitem
+></menuchoice
+>. As bordas de cada página impressa serão então marcadas por linhas coloridas na planilha.</para>
+
+<para
+>Para uma visão mais detalhada do que será enviado para impressora, incluindo qualquer coisa a ser incluída nos cabeçalhos e rodapés das páginas (veja abaixo), escolha <menuchoice
+><guimenu
+>Arquivo</guimenu
+><guimenuitem
+>Previsão da Impressão...</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Para melhorar a aparência da sua saída impressa, você pode mudar as fontes, cores, bordas e tamanhos das células da planilha. Veja a seção <link linkend="formatspread"
+>Formatação da Planilha</link
+> para maiores detalhes de como fazer isso.</para>
+
+<para
+>Você pode também usar a caixa de diálogo <guilabel
+>Layout da página</guilabel
+>, invocada selecionado <menuchoice
+><guimenu
+>Formatar</guimenu
+><guimenuitem
+>Layout da página...</guimenuitem
+></menuchoice
+>, para mudar a orientação das páginas impressas, o tamanho do papel (ele deve ser apropriado para sua impressora) e o tamanho das bordas de página.</para>
+<para
+>A <guilabel
+>Planilha</guilabel
+> permite selecionar mais opções. A seção <guilabel
+>Configurações de impressão</guilabel
+> permite selecionar se deseja ou não a impressão da grade, dos indicadores de comentários e de fórmulas, os objetos e os gráficos. A seção <guilabel
+>Repetições em cada página</guilabel
+> permite que você repita a(s) linha(s) ou coluna(s) selecionada(s) em cada página impressa. Na seção <guilabel
+>Escalonamento</guilabel
+>, você pode definir um fator de escala ou limitar o número de páginas para impressão.</para>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

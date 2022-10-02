@@ -1,0 +1,93 @@
+<!--    
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+       
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+
+<chapter id="hints-and-tips">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Natalie</firstname
+> <surname
+>Koning</surname
+><affiliation
+><address
+> <email
+>nat@switch.demon.nl</email
+></address
+></affiliation
+> <contrib
+>Vertaler</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Algemene tips om goede presentaties te maken</title>
+
+<para
+>Goed, u hebt dus besloten om uw presentatie in &stage; te maken. Voordat u begint met het maken van overheadsheets of dia's met animaties, kunt u het beste uw ideeën op papier uitwerken. Het maakt niet uit of u een lesprogramma voorbereidt, of dat u uw chef ervan wilt overtuigen dat uw plannen onmisbaar voor het bedrijf zijn, het gaat erom dat u weet wat u wilt zegen. Schrijf alle onderwerpen die u wilt behandelen op, zet ze in een logische volgorde. Details zijn nu nog niet belangrijk, bepaal voorlopig alleen de hoofdpunten en de structuur.</para>
+
+<para
+>Maak bij elk punt een aantekening over de feiten die u moet behandelen. De bedoeling is dat u overtuigende argumenten aanbiedt. Probeer de feiten in groepen onder te verdelen; de belangrijkste zaken, de wat minder belangrijke en de zaken die alleen aan de orde komen als u genoeg tijd over hebt.</para>
+
+<para
+>Wanneer alles op papier staat kunt u een schatting maken hoeveel tijd u nodig hebt. Tien minuten lijkt lang wanneer u begint, maar het is niet gemakkelijk om in zo'n korte tijd een overtuigend pleidooi te houden. Lees de tekst van papier en controleer de tijd die u nodig hebt. Oefen de presentatie verscheidene keren, dit levert een aantal voordelen op. Ten eerste, u blijft binnen de tijd, als u tien minuten spreektijd krijgt, moet u ook binnen die tien minuten uw verhaal doen. Ten tweede, wanneer u de presentatie voor publiek geeft, is dit niet de eerste keer. Ten derde, u kent de tekst, u weet wat u gaat zeggen en hoe u het gaat zeggen.  </para>
+
+<para
+>&stage; kan op dit moment nog geen notities maken. U kunt gewone dia's op papier afdrukken, gebruik een goed leesbaar lettertype zodat u de tekst gemakkelijk van een grotere afstand kunt lezen. Een 14- of 16-punts tekst is in de meeste gevallen groot genoeg, experimenteer om te vinden wat voor u het beste resultaat oplevert.</para>
+
+<para
+>Als u met een overheadprojector gaat werken, zorg dan dat u weet hoe u hem moet bedienen voordat u de presentatie geeft. Zorg ervoor dat de lamp werkt en dat er een werkende reservelamp is. Maak de lens en het scherm schoon. Als u nog niet eerder met projectors gewerkt hebt, oefen daar dan mee. Houdt rekening met de tijd die nodig is om een sheet of een dia te verwisselen, reken op ongeveer vijf seconden (<quote
+>een-en-twintig, twee-en-twintig...</quote
+>) zodat u niet in tijdnood komt. Als u iets op het scherm moet aanwijzen, kunt u een laser-pen gebruiken, of een gewoon potlood bij een overheadsheet. Houd er wel rekening mee dat potloden kunnen wegrollen waneer u tegen de tafel stoot.</para>
+
+<para
+>Houd rekening met de plaats waar u gaat staan. U kunt niet voor het scherm gaan staan, de beste keuze is waarschijnlijk er schuin voor. U kunt de dia's op een "whiteboard" projecteren en eroverheen tekenen. Als u een pc met een digitale projector gebruikt, kunt u over de dia's heen tekenen met de presentatiepen van &stage;. Houd er rekening mee dat tekenen met de muis oefening vereist. Als u een overheadprojector gebruikt, kunt u op extra sheets over de presentatie heen tekenen.</para>
+
+<para
+>Zorg dat de projector zo afgesteld is dat u niet recht in de lamp kunt kijken. Zet het apparaat uit als u het langer dan een paar minuten niet nodig hebt. Zorg dat u weet waar de contactdozen en de lichtschakelaars zich bevinden. Een goede voorbereiding kan veel vergissingen voorkomen (apparaten kunnen nachtmerries veroorzaken als u tijdens de presentatie moet ontdekken hoe ze werken), dit komt uw zelfvertrouwen ten goede. Maak een <quote
+>Plan B</quote
+> voor het geval dat een apparaat uitvalt. Zorg voor een afgedrukt exemplaar van de presentatie, zodat u fotokopieën kunt uitdelen als dat nodig is.</para>
+
+<para
+>We hebben nog niet veel over de inhoud gezegd. Op het ogenblik hebt u alleen een vel papier met de globale tekst. Probeer afbeeldingen te maken om hetgeen u gaat zeggen te verduidelijken. Slechte presentaties bestaan uit een reeks dia's met alleen tekst. De presentator leest de tekst voor, terwijl het publiek de tekst al gelezen heeft. Probeer zo weinig mogelijk op de dia te schrijven, alleen een titel en een nummer. Maak een afbeelding en leg aan de hand daarvan het onderwerp uit. Op die manier is het publiek niet sneller dan u (lezen gaat altijd sneller dan voorlezen). Gebruik de afbeelding als een geheugensteuntje voor de tekst. Een dia moet uw tekst ondersteunen, niet dupliceren. Een dia moet de aandacht van het publiek vasthouden.</para>
+
+<para
+>Een voorbeeld. Ik leer personeel van een spoorwegbedrijf hoe ze bij ongelukken moeten handelen. Ik wilde een dia maken om te verduidelijken hoe je gevaarlijke stoffen uit een ontspoorde of beschadigde spoorwagon naar een tankwagen overbrengt. Op de dia tekende ik een tankwagon, het soort dat gebruikt wordt om gas of olie te vervoeren. Op de zijkant schreef ik <quote
+>Dodelijk Chemisch Bedrijf</quote
+> zodat ik daar niet veel over hoef uit te leggen. Ik wilde verscheidene belangrijke punten duidelijk maken. Ten eerste, zorg dat er, binnen een bepaalde afstand, geen stroom op de bovenleidingen staat: een kabelmast met een pijl en de veilige afstand. Vervolgens wilde ik vertellen dat de inhoud van de wagon niet in het donker of bij onweer overgeheveld moet worden: een maan en een bliksemflits boven de wagon. Er is een specialist nodig die advies geeft: een vel papier met het woord <quote
+>Plan</quote
+>. De wagon mag niet bewegen als het gewicht vermindert: rode blokken voor de wielen. Alles wat ik wil zeggen staat nu op de tekening. Ik hoef alleen maar naar de afbeelding te kijken om te weten waar ik het over moet hebben. Wanneer ik alle onderdelen van de tekening besproken heb, is het onderwerp afgehandeld. </para>
+
+<para
+>Gebruik in het algemeen alleen een dia of een afbeelding als het iets toevoegt aan hetgeen u vertelt. En tot slot, blijf kalm en probeer niet door de presentatie heen te razen. Praat tegen uw publiek, niet tegen de muur en onthoud dat een presentatie er alleen is om hetgeen u wilt zeggen te verduidelijken. &stage; is een nuttig hulpmiddel, het kan u helpen, maar u moet zelf het werk doen.</para>
+
+</chapter>

@@ -1,0 +1,62 @@
+# translation of calligra_textediting_spellcheck.po to Slovak
+# Richard Fric <Richard.Fric@kdemail.net>, 2007, 2009.
+# Roman Paholik <wizzardsk@gmail.com>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra_textediting_spellcheck\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2016-11-20 19:53+0100\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "Nastaviť kontrolu pravopisu..."
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Automatická kontrola pravopisu"
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr "Kontrola pravopisu"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Pravopis"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Pridať do slovníka"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "Nastaviť kontrolu pravopisu..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Automatická kontrola pravopisu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Kontrola pravopisu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Pravopis"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Pridať do slovníka"

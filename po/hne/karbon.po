@@ -1,0 +1,1894 @@
+# translation of karbon.po to Hindi
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Ravishankar Shrivastava <raviratlami@yahoo.com>, 2008.
+# Ravishankar Shrivastava <raviratlami@aol.in>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2009-03-02 21:39+0530\n"
+"Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
+"Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
+"Language: hne\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+#, fuzzy
+#| msgid "Boolean Operation"
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr "बूलिए आपरेसन"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "अनुक्रम (&O)"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "पंक्तिबद्ध (&A)"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, kde-format
+msgid "&File"
+msgstr "फाइल (&F)"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr "संपादन (&E)"
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr "देखव (&V)"
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "चीज (&O)"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, kde-format
+msgid "&Distribute"
+msgstr "डिस्ट्रीब्यूट (&D)"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, kde-format
+msgid "&Path"
+msgstr "पथ (&P)"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, kde-format
+msgid "Effe&cts"
+msgstr "प्रभाव (&c)"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, kde-format
+msgid "&Settings"
+msgstr "सेटिंग (&S)"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr ""
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr "संपादन"
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, kde-format
+msgid "Object"
+msgstr "चीज"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, kde-format
+msgid "Align"
+msgstr "पंक्तिबद्ध करव"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "प्रभाव"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, kde-format
+msgid "View"
+msgstr "दृस्य"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, kde-format
+msgid "&Flatten Path..."
+msgstr "पथ चपटा करव... (&F)"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, kde-format
+msgid "Flatten Path"
+msgstr "पथ चपटा करव"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, kde-format
+msgid "Properties"
+msgstr "गुन"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, kde-format
+msgid "Flatness:"
+msgstr "समतलताः"
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+#, fuzzy
+#| msgid "Flatten path"
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "पथ चपटा करव"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+#, fuzzy
+#| msgid "Refine path"
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr "पथ रीफाइनइ करव"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, kde-format
+msgid "&Refine Path..."
+msgstr "पथ रीफाइनइ करव... (&R)"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, kde-format
+msgid "Refine Path"
+msgstr "पथ रीफाइनइ करव"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, kde-format
+msgid "Subdivisions:"
+msgstr "उप-विभाजन:"
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr ""
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, kde-format
+msgid "&Round Corners..."
+msgstr ""
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, kde-format
+msgid "Round Corners"
+msgstr ""
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "त्रिज्याः"
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+#, fuzzy
+#| msgid "Whirl & pinch"
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr "व्हिर्ल अउ पिंच"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "व्हिर्ल/पिंच... (&W)"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, kde-format
+msgid "Whirl Pinch"
+msgstr "व्हिर्ल पिंच"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, kde-format
+msgid "Info"
+msgstr "जानकारी "
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr ""
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "कोनः"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, kde-format
+msgid "Pinch:"
+msgstr "पिंच:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+#, fuzzy
+#| msgid "Raise Layer"
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "परत उठाव"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+#, fuzzy
+#| msgid "Lower Layer"
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "निचली परत"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, kde-format
+msgid "Configure"
+msgstr "कान्फिगर"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "इंटरफेस"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "विविध"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, kde-format
+msgid "Grid"
+msgstr "ग्रिड"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "कागद"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "कागद सेटिंग"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#: ui/KarbonAboutData.h:22
+#, fuzzy, kde-format
+#| msgid "Karbon14"
+msgid "Karbon"
+msgstr "कारबन14"
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr "वेक्टर ग्राफिक्स ड्राइंग अनुपरयोग."
+
+#: ui/KarbonAboutData.h:26
+#, fuzzy, kde-format
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr "(C) 2001-2008 कारबन डेवलपर"
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr ""
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr ""
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr "राब बुइस"
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr "टामिस्लाव लुकमान"
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr "बेनोईत वाउत्रिन"
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr "जेन हेमब्रेच्ट"
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr "बग फिक्स अउ कुछ सुधार"
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "पीटर साइमनसन"
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr "टिम ब्यूलेन"
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "बाउदेविन रेम्प्त"
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "पिएरे स्टाइर्नवेइस"
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr "इंग वालिन"
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr "बग फिक्स"
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr "एलन हारकन"
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr "मददगार पैच अउ एडवाइस"
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "रविसंकर सिरीवास्तव, जी. करूनाकर"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "raviratlami@aol.in,"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+#, fuzzy
+#| msgid "Intersect Paths"
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "रस्ता इंटरसेक्ट करव"
+
+#: ui/KarbonView.cpp:346
+#, fuzzy, kde-format
+msgid "Choose Graphic to Add"
+msgstr "जोड़े बर अनुपात चुनव"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr ""
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, fuzzy, kde-format
+#| msgid "Intersect Paths"
+msgid "Import graphic"
+msgstr "रस्ता इंटरसेक्ट करव"
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr ""
+
+#: ui/KarbonView.cpp:612
+#, fuzzy
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "आड़ा: (&H)"
+
+#: ui/KarbonView.cpp:614
+#, fuzzy
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "आड़ा: (&H)"
+
+#: ui/KarbonView.cpp:616
+#, fuzzy
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "आड़ा: (&H)"
+
+#: ui/KarbonView.cpp:671
+#, fuzzy
+#| msgid "Se&parate Path"
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "रस्ता अलग करव (&p)"
+
+#: ui/KarbonView.cpp:852
+#, kde-format
+msgid "Outline &Mode"
+msgstr ""
+
+#: ui/KarbonView.cpp:860
+#, fuzzy, kde-format
+#| msgid "Intersect Paths"
+msgid "&Import Graphic..."
+msgstr "रस्ता इंटरसेक्ट करव"
+
+#: ui/KarbonView.cpp:864
+#, fuzzy, kde-format
+#| msgid "Edit Gradient"
+msgid "Edit Guides"
+msgstr "अनुपात संपादित करव"
+
+#: ui/KarbonView.cpp:870
+#, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "दुहरी प्रति (&D)"
+
+#: ui/KarbonView.cpp:875
+#, fuzzy, kde-format
+#| msgid "Distribute Top Borders"
+msgid "Distribute Center (Horizontal)"
+msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
+
+#: ui/KarbonView.cpp:879
+#, fuzzy, kde-format
+#| msgid "Distribute Top Borders"
+msgid "Distribute Gaps (Horizontal)"
+msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
+
+#: ui/KarbonView.cpp:883
+#, fuzzy, kde-format
+#| msgid "Distribute Top Borders"
+msgid "Distribute Left Borders"
+msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
+
+#: ui/KarbonView.cpp:887
+#, fuzzy, kde-format
+#| msgid "Distribute Top Borders"
+msgid "Distribute Right Borders"
+msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
+
+#: ui/KarbonView.cpp:891
+#, fuzzy, kde-format
+#| msgid "Distribute Top Borders"
+msgid "Distribute Center (Vertical)"
+msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
+
+#: ui/KarbonView.cpp:895
+#, fuzzy, kde-format
+#| msgid "Distribute Top Borders"
+msgid "Distribute Gaps (Vertical)"
+msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
+
+#: ui/KarbonView.cpp:899
+#, fuzzy, kde-format
+#| msgid "Distribute Top Borders"
+msgid "Distribute Bottom Borders"
+msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
+
+#: ui/KarbonView.cpp:903
+#, kde-format
+msgid "Distribute Top Borders"
+msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
+
+#: ui/KarbonView.cpp:907
+#, fuzzy, kde-format
+#| msgid "Shows or hides grid"
+msgid "Show Color Palette"
+msgstr "ग्रिड देखाव या लुकाव"
+
+#: ui/KarbonView.cpp:909
+#, fuzzy, kde-format
+#| msgid "Shows or hides grid"
+msgid "Show or hide color palette"
+msgstr "ग्रिड देखाव या लुकाव"
+
+#: ui/KarbonView.cpp:913
+#, fuzzy, kde-format
+#| msgid "&Object"
+msgid "&Clip Object"
+msgstr "चीज (&O)"
+
+#: ui/KarbonView.cpp:917
+#, fuzzy, kde-format
+#| msgid "&Ungroup Objects"
+msgid "&Unclip Objects"
+msgstr "चीज मन से समूह हटाव (&U)"
+
+#: ui/KarbonView.cpp:921
+#, fuzzy, kde-format
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
+msgid "Mirror Vertically"
+msgstr "आड़ा: (&H)"
+
+#: ui/KarbonView.cpp:925
+#, fuzzy, kde-format
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
+msgid "Mirror Horizontally"
+msgstr "आड़ा: (&H)"
+
+#: ui/KarbonView.cpp:932
+#, kde-format
+msgid "&Close Path"
+msgstr "रस्ता बंद करव (&C)"
+
+#: ui/KarbonView.cpp:938
+#, kde-format
+msgid "Com&bine Path"
+msgstr "रस्ता कम्बाइन करव (&b)"
+
+#: ui/KarbonView.cpp:944
+#, kde-format
+msgid "Se&parate Path"
+msgstr "रस्ता अलग करव (&p)"
+
+#: ui/KarbonView.cpp:950
+#, kde-format
+msgid "Re&verse Path"
+msgstr "रस्ता उलटा करव (&v)"
+
+#: ui/KarbonView.cpp:956
+#, kde-format
+msgid "Intersect Paths"
+msgstr "रस्ता इंटरसेक्ट करव"
+
+#: ui/KarbonView.cpp:962
+#, kde-format
+msgid "Subtract Paths"
+msgstr "रस्ता सब्सट्रेक्ट करव"
+
+#: ui/KarbonView.cpp:968
+#, kde-format
+msgid "Unite Paths"
+msgstr "रस्ता यूनाइट करव"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr "रस्ता एक्सक्लूड"
+
+#: ui/KarbonView.cpp:980
+#, fuzzy, kde-format
+#| msgid "Snap to Grid"
+msgid "Snap Path to Grid"
+msgstr "ग्रिड मं स्नेप करव"
+
+#: ui/KarbonView.cpp:988
+#, kde-format
+msgid "Zoom to Selection"
+msgstr "चयन मं जूम करव"
+
+#: ui/KarbonView.cpp:992
+#, kde-format
+msgid "Zoom to Drawing"
+msgstr "ड्राइंग म जूम करव"
+
+#: ui/KarbonZoomController.cpp:51
+#, kde-format
+msgid "Zoom"
+msgstr "जूम"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Show status bar:"
+msgstr "स्थिति पट्टी देखाव"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr "हाल के फाइल मन के संख्या:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr "पैलेट फोंट आकार:"
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, kde-format
+msgid "Select palette"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "कुछ नइ"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr "मनमाफिक"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "कुछ नइ"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, kde-format
+msgid "Stroke:"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, kde-format
+msgid "Fill:"
+msgstr "भरव:"
+
+#~ msgid "D&elete"
+#~ msgstr "मेटाव (&e)"
+
+#~ msgid "Layer view"
+#~ msgstr "परत दृस्य"
+
+#~ msgid "Add a new layer"
+#~ msgstr "एक नवा परत जोड़व"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "चुने गे चीज मन ल मेटाव"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "चुने गे चीज मन ल ऊंचा करव"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "चुने गे चीज मन ल नीचे करव"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "View mode"
+#~ msgstr "दृस्य"
+
+#~ msgid "New Layer"
+#~ msgstr "नवा परत"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "नवा परत के नाम भरव:"
+
+#~ msgid "New layer"
+#~ msgstr "नवा परत"
+
+#, fuzzy
+#~| msgid "Create Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "परत बनाव"
+
+#, fuzzy
+#~| msgid "Delete Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "परत मेटाव"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "सब्बो परतों ल मिटा नइ सकिस. कम से कम एक परत चाही."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "परतों ल मेटाय मं गलती"
+
+#~ msgid "Layer"
+#~ msgstr "लेयर"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "समूह"
+
+#~ msgid "Shape"
+#~ msgstr "रूप"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "दिखत"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "तालाबंद"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "जेडइंडेक्स"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "पारदर्सिता"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgid "no"
+#~ msgstr "जानकारी "
+
+#, fuzzy
+#~| msgid "Styles"
+#~ msgid "yes"
+#~ msgstr "सैली"
+
+#, fuzzy
+#~| msgid "Reparent shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "रीपैरेन्ट आकार"
+
+#, fuzzy
+#~| msgid "Show Guides"
+#~ msgid "Show Rulers"
+#~ msgstr "ग्रिड देखाव"
+
+#, fuzzy
+#~| msgid "Shows or hides grid"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "ग्रिड देखाव या लुकाव"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "ग्रिड मं स्नेप करव"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "ग्रिड मं स्नेप करव"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "कारबन कान्फिगर करव..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "पेज ले-आउट... (&L)"
+
+#, fuzzy
+#~| msgid "&Order"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Order"
+#~ msgstr "अनुक्रम (&O)"
+
+#, fuzzy
+#~| msgid "&Align"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Align"
+#~ msgstr "पंक्तिबद्ध (&A)"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "फाइल (&F)"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "संपादन (&E)"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "देखव (&V)"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Object"
+#~ msgstr "चीज (&O)"
+
+#, fuzzy
+#~| msgid "&Distribute"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Distribute"
+#~ msgstr "डिस्ट्रीब्यूट (&D)"
+
+#, fuzzy
+#~| msgid "&Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Path"
+#~ msgstr "पथ (&P)"
+
+#, fuzzy
+#~| msgid "Effe&cts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effe&cts"
+#~ msgstr "प्रभाव (&c)"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "सेटिंग (&S)"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "संपादन"
+
+#, fuzzy
+#~| msgid "Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "चीज"
+
+#, fuzzy
+#~| msgid "Align"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align"
+#~ msgstr "पंक्तिबद्ध करव"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "प्रभाव"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View"
+#~ msgstr "दृस्य"
+
+#, fuzzy
+#~| msgid "&Flatten Path..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Flatten Path..."
+#~ msgstr "पथ चपटा करव... (&F)"
+
+#, fuzzy
+#~| msgid "Flatten Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten Path"
+#~ msgstr "पथ चपटा करव"
+
+#, fuzzy
+#~| msgid "Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Properties"
+#~ msgstr "गुन"
+
+#, fuzzy
+#~| msgid "Flatness:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatness:"
+#~ msgstr "समतलताः"
+
+#, fuzzy
+#~| msgid "&Refine Path..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Refine Path..."
+#~ msgstr "पथ रीफाइनइ करव... (&R)"
+
+#, fuzzy
+#~| msgid "Refine Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine Path"
+#~ msgstr "पथ रीफाइनइ करव"
+
+#, fuzzy
+#~| msgid "Subdivisions:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subdivisions:"
+#~ msgstr "उप-विभाजन:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius:"
+#~ msgstr "त्रिज्याः"
+
+#, fuzzy
+#~| msgid "&Whirl/Pinch..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "व्हिर्ल/पिंच... (&W)"
+
+#, fuzzy
+#~| msgid "Whirl Pinch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl Pinch"
+#~ msgstr "व्हिर्ल पिंच"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Info"
+#~ msgstr "जानकारी "
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "कोनः"
+
+#, fuzzy
+#~| msgid "Pinch:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pinch:"
+#~ msgstr "पिंच:"
+
+#, fuzzy
+#~| msgid "Configure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "कान्फिगर"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interface"
+#~ msgstr "इंटरफेस"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "विविध"
+
+#, fuzzy
+#~| msgid "Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "ग्रिड"
+
+#, fuzzy
+#~| msgctxt "@title:tab Document settings page"
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "कागद"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "कागद सेटिंग"
+
+#, fuzzy
+#~| msgid "Layer view"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer view"
+#~ msgstr "परत दृस्य"
+
+#, fuzzy
+#~| msgid "Add a new layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new layer"
+#~ msgstr "एक नवा परत जोड़व"
+
+#, fuzzy
+#~| msgid "Delete selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected objects"
+#~ msgstr "चुने गे चीज मन ल मेटाव"
+
+#, fuzzy
+#~| msgid "Raise selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise selected objects"
+#~ msgstr "चुने गे चीज मन ल ऊंचा करव"
+
+#, fuzzy
+#~| msgid "Lower selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower selected objects"
+#~ msgstr "चुने गे चीज मन ल नीचे करव"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View mode"
+#~ msgstr "दृस्य"
+
+#, fuzzy
+#~| msgid "New Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "नवा परत"
+
+#, fuzzy
+#~| msgid "Enter the name of the new layer:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "नवा परत के नाम भरव:"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New layer"
+#~ msgstr "नवा परत"
+
+#, fuzzy
+#~| msgid "Could not delete all layers. At least one layer is required."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "सब्बो परतों ल मिटा नइ सकिस. कम से कम एक परत चाही."
+
+#, fuzzy
+#~| msgid "Error deleting layers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error deleting layers"
+#~ msgstr "परतों ल मेटाय मं गलती"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "लेयर"
+
+#, fuzzy
+#~| msgctxt "A group of shapes"
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format) A group of shapes"
+#~ msgid "Group"
+#~ msgstr "समूह"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "रूप"
+
+#, fuzzy
+#~| msgctxt "Visibility state of the shape"
+#~| msgid "Visible"
+#~ msgctxt "(qtundo-format) Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "दिखत"
+
+#, fuzzy
+#~| msgctxt "Lock state of the shape"
+#~| msgid "Locked"
+#~ msgctxt "(qtundo-format) Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "तालाबंद"
+
+#, fuzzy
+#~| msgctxt "The z-index of the shape"
+#~| msgid "zIndex"
+#~ msgctxt "(qtundo-format) The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "जेडइंडेक्स"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format) The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "पारदर्सिता"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "no"
+#~ msgstr "जानकारी "
+
+#, fuzzy
+#~| msgid "Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "yes"
+#~ msgstr "सैली"
+
+#, fuzzy
+#~| msgid "Karbon14"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Karbon"
+#~ msgstr "कारबन14"
+
+#, fuzzy
+#~| msgid "A Vector Graphics Drawing Application."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "वेक्टर ग्राफिक्स ड्राइंग अनुपरयोग."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "(C) 2001-2008 कारबन डेवलपर"
+
+#, fuzzy
+#~| msgid "Rob Buis"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rob Buis"
+#~ msgstr "राब बुइस"
+
+#, fuzzy
+#~| msgid "Tomislav Lukman"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomislav Lukman"
+#~ msgstr "टामिस्लाव लुकमान"
+
+#, fuzzy
+#~| msgid "Benoît Vautrin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Benoît Vautrin"
+#~ msgstr "बेनोईत वाउत्रिन"
+
+#, fuzzy
+#~| msgid "Jan Hambrecht"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht"
+#~ msgstr "जेन हेमब्रेच्ट"
+
+#, fuzzy
+#~| msgid "Bug fixes and improvements"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "बग फिक्स अउ कुछ सुधार"
+
+#, fuzzy
+#~| msgid "Peter Simonsson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "पीटर साइमनसन"
+
+#, fuzzy
+#~| msgid "Tim Beaulen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tim Beaulen"
+#~ msgstr "टिम ब्यूलेन"
+
+#, fuzzy
+#~| msgid "Boudewijn Rempt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "बाउदेविन रेम्प्त"
+
+#, fuzzy
+#~| msgid "Pierre Stirnweiss"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "पिएरे स्टाइर्नवेइस"
+
+#, fuzzy
+#~| msgid "Inge Wallin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "इंग वालिन"
+
+#, fuzzy
+#~| msgid "Bug fixes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes"
+#~ msgstr "बग फिक्स"
+
+#, fuzzy
+#~| msgid "Alan Horkan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alan Horkan"
+#~ msgstr "एलन हारकन"
+
+#, fuzzy
+#~| msgid "Helpful patches and advice"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Helpful patches and advice"
+#~ msgstr "मददगार पैच अउ एडवाइस"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "रविसंकर सिरीवास्तव, जी. करूनाकर"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "raviratlami@aol.in,"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "जोड़े बर अनुपात चुनव"
+
+#, fuzzy
+#~| msgid "Intersect Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import graphic"
+#~ msgstr "रस्ता इंटरसेक्ट करव"
+
+#, fuzzy
+#~| msgid "D&elete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "मेटाव (&e)"
+
+#, fuzzy
+#~| msgid "Edit Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Guides"
+#~ msgstr "अनुपात संपादित करव"
+
+#, fuzzy
+#~| msgctxt "Duplicate selection"
+#~| msgid "&Duplicate"
+#~ msgctxt "(qtundo-format) Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "दुहरी प्रति (&D)"
+
+#, fuzzy
+#~| msgid "Distribute Top Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Top Borders"
+#~ msgstr "ऊपरी किनारा डिस्ट्रीब्यूट करव"
+
+#, fuzzy
+#~| msgid "Shows or hides grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show or hide color palette"
+#~ msgstr "ग्रिड देखाव या लुकाव"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "ग्रिड मं स्नेप करव"
+
+#, fuzzy
+#~| msgid "Snaps to grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snaps to grid"
+#~ msgstr "ग्रिड मं स्नेप करव"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Clip Object"
+#~ msgstr "चीज (&O)"
+
+#, fuzzy
+#~| msgid "&Ungroup Objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Unclip Objects"
+#~ msgstr "चीज मन से समूह हटाव (&U)"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Close Path"
+#~ msgstr "रस्ता बंद करव (&C)"
+
+#, fuzzy
+#~| msgid "Com&bine Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Com&bine Path"
+#~ msgstr "रस्ता कम्बाइन करव (&b)"
+
+#, fuzzy
+#~| msgid "Se&parate Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Se&parate Path"
+#~ msgstr "रस्ता अलग करव (&p)"
+
+#, fuzzy
+#~| msgid "Re&verse Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&verse Path"
+#~ msgstr "रस्ता उलटा करव (&v)"
+
+#, fuzzy
+#~| msgid "Intersect Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intersect Paths"
+#~ msgstr "रस्ता इंटरसेक्ट करव"
+
+#, fuzzy
+#~| msgid "Subtract Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract Paths"
+#~ msgstr "रस्ता सब्सट्रेक्ट करव"
+
+#, fuzzy
+#~| msgid "Unite Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unite Paths"
+#~ msgstr "रस्ता यूनाइट करव"
+
+#, fuzzy
+#~| msgid "Exclude Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exclude Paths"
+#~ msgstr "रस्ता एक्सक्लूड"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "ग्रिड मं स्नेप करव"
+
+#, fuzzy
+#~| msgid "Configure Karbon..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Karbon..."
+#~ msgstr "कारबन कान्फिगर करव..."
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page &Layout..."
+#~ msgstr "पेज ले-आउट... (&L)"
+
+#, fuzzy
+#~| msgid "Zoom to Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Selection"
+#~ msgstr "चयन मं जूम करव"
+
+#, fuzzy
+#~| msgid "Zoom to Drawing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Drawing"
+#~ msgstr "ड्राइंग म जूम करव"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "जूम"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show status bar:"
+#~ msgstr "स्थिति पट्टी देखाव"
+
+#, fuzzy
+#~| msgid "Number of recent files:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of recent files:"
+#~ msgstr "हाल के फाइल मन के संख्या:"
+
+#, fuzzy
+#~| msgid "Palette font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Palette font size:"
+#~ msgstr "पैलेट फोंट आकार:"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no fill"
+#~ msgid "None"
+#~ msgstr "कुछ नइ"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format) The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "मनमाफिक"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no stroking"
+#~ msgid "None"
+#~ msgstr "कुछ नइ"
+
+#, fuzzy
+#~| msgid "Fill:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill:"
+#~ msgstr "भरव:"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "दृस्य"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "दृस्य"
+
+#, fuzzy
+#~| msgid "Pencil tool"
+#~ msgid "Stencil Box"
+#~ msgstr "पेंसिल औजार"
+
+#, fuzzy
+#~| msgid "Reparent shapes"
+#~ msgid "More shapes"
+#~ msgstr "रीपैरेन्ट आकार"
+
+#~ msgid "File to open"
+#~ msgstr "फाइल जऊन ल खोलना हे"
+
+#, fuzzy
+#~| msgid "Tiled"
+#~ msgid "Blend"
+#~ msgstr "टाइल्ड"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Blend mode"
+#~ msgstr "दृस्य"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgid "Lighten"
+#~ msgstr "जेवनी"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgid "Radius"
+#~ msgstr "त्रिज्याः"
+
+#, fuzzy
+#~| msgid "Stop color:"
+#~ msgid "Saturate colors"
+#~ msgstr "स्टाप रंग:"
+
+#, fuzzy
+#~| msgid "Rotate"
+#~ msgid "Rotate hue"
+#~ msgstr "घुमाव"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgid "Angle"
+#~ msgstr "कोनः"
+
+#, fuzzy
+#~| msgid "Tiled"
+#~ msgid "Table"
+#~ msgstr "टाइल्ड"
+
+#, fuzzy
+#~| msgid "&Distribute"
+#~ msgid "Discrete"
+#~ msgstr "डिस्ट्रीब्यूट (&D)"
+
+#, fuzzy
+#~| msgctxt "Linear gradient type"
+#~| msgid "Linear"
+#~ msgid "Linear"
+#~ msgstr "लीनियर"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgid "Slope"
+#~ msgstr "रूप"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgid "Intercept"
+#~ msgstr "इंटरफेस"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgid "Offset"
+#~ msgstr "प्रभाव"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgid "Operation"
+#~ msgstr "बूलिए आपरेसन"
+
+#, fuzzy
+#~| msgctxt "Duplicate selection"
+#~| msgid "&Duplicate"
+#~ msgid "Duplicate"
+#~ msgstr "दुहरी प्रति (&D)"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Edge mode:"
+#~ msgstr "दृस्य"
+
+#, fuzzy
+#~| msgid "Target:"
+#~ msgid "Target point:"
+#~ msgstr "लक्छ्य:"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Edit kernel"
+#~ msgstr "पैटर्न"
+
+#, fuzzy
+#~| msgid "Stop color:"
+#~ msgid "Flood color"
+#~ msgstr "स्टाप रंग:"
+
+#, fuzzy
+#~| msgctxt "Duplicate selection"
+#~| msgid "&Duplicate"
+#~ msgid "Dilate"
+#~ msgstr "दुहरी प्रति (&D)"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgid "Operator:"
+#~ msgstr "बूलिए आपरेसन"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgid "Radius x:"
+#~ msgstr "त्रिज्याः"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgid "Radius y:"
+#~ msgstr "त्रिज्याः"
+
+#~ msgid "Target:"
+#~ msgstr "लक्छ्य:"
+
+#, fuzzy
+#~| msgctxt "Linear gradient type"
+#~| msgid "Linear"
+#~ msgid "Line"
+#~ msgstr "लीनियर"
+
+#~ msgid "Fill"
+#~ msgstr "भरव"
+
+#~ msgid "Type:"
+#~ msgstr "किसिमः"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "लीनियर"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "रेडियल"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "कुछ नइ"
+
+#, fuzzy
+#~ msgid "Stop color."
+#~ msgstr "स्टाप रंग:"
+
+#~ msgid "Original"
+#~ msgstr "असली"
+
+#~ msgid "Tiled"
+#~ msgstr "टाइल्ड"
+
+#~ msgid "Top Left"
+#~ msgstr "ऊपरी डेरी "
+
+#~ msgid "Top"
+#~ msgstr "ऊपर"
+
+#~ msgid "Top Right"
+#~ msgstr "ऊपरी जेवनी "
+
+#~ msgid "Left"
+#~ msgstr "डेरी"
+
+#~ msgid "Center"
+#~ msgstr "बीच में"
+
+#~ msgid "Right"
+#~ msgstr "जेवनी"
+
+#~ msgid "Bottom Left"
+#~ msgstr "निचला डेरी "
+
+#~ msgid "Bottom"
+#~ msgstr "नीचे"
+
+#~ msgid "Bottom Right"
+#~ msgstr "निचला जेवनी "
+
+#~ msgid "Stop color:"
+#~ msgstr "स्टाप रंग:"
+
+#~ msgid "Tools"
+#~ msgstr "औजार"
+
+#~ msgid "Copy offset:"
+#~ msgstr "आफसेट नकल:"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "कुछ नइ"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "ठोस"
+
+#~ msgid "Gradient"
+#~ msgstr "अनुपात"
+
+#~ msgid "Pattern"
+#~ msgstr "पैटर्न"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "सम/विसम भरव"
+
+#~ msgid "Winding Fill"
+#~ msgstr "वाइंडिंग भरव"
+
+#~ msgid "Units:"
+#~ msgstr "इकाईयाँ:"
+
+#~ msgid "&Group Objects"
+#~ msgstr "चीज मन ल समूह मं करव (&G)"
+
+#~ msgid "Show grid:"
+#~ msgstr "ग्रिड देखाव:"
+
+#~ msgid "Snap to grid:"
+#~ msgstr "ग्रिड मं स्नेप करव:"
+
+#~ msgid "Grid color:"
+#~ msgstr "ग्रिड रंग:"
+
+#~ msgid "Spacing"
+#~ msgstr "जगह"
+
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "खड़ा: (&V)"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "अपने अपन सहेजव (मिनट):"
+
+#~ msgid "No auto save"
+#~ msgstr "अपने अपन नइ सहेजव"
+
+#~ msgid "min"
+#~ msgstr "मि."
+
+#~ msgid "Create backup file"
+#~ msgstr "बैक-अप फाइल तैयार करव"
+
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "जोड़े बर पैटर्न चुनव"
+
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "जोड़े बर अनुपात चुनव"
+
+#~ msgid "X:"
+#~ msgstr "एक्स:"
+
+#~ msgid "Y:"
+#~ msgstr "वाय:"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Pattern Size"
+#~ msgstr "पैटर्न"
+
+#~ msgid "W:"
+#~ msgstr "W:"
+
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgid "Gradient tool"
+#~ msgstr "अनुपात औजार"
+
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "अनुपात संपादन औजार"
+
+#~ msgid "Pattern tool"
+#~ msgstr "पैटर्न औजार"
+
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "पैटर्न संपादन औजार"
+
+#~ msgid "Precision:"
+#~ msgstr "परिसुद्धताः"
+
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "रा"
+
+#~ msgid "Curve"
+#~ msgstr "वक्र"
+
+#~ msgid "Straight"
+#~ msgstr "सीधा"
+
+#~ msgid "Optimize"
+#~ msgstr "ओप्टीमाइज"
+
+#~ msgid "Exactness:"
+#~ msgstr "सटीकता:"
+
+#~ msgid "Combine angle:"
+#~ msgstr "सम्मिलित कोन:"
+
+#~ msgid "Freehand Path Drawing Tool"
+#~ msgstr "मुक्तहस्त (फ्री हेड) ड्राइंग औजार"
+
+#~ msgid "Save profile as..."
+#~ msgstr "प्रोफाइल अइसन सहेजव..."
+
+#~ msgid "Remove profile"
+#~ msgstr "प्रोफाइल मेटाव"
+
+#~ msgid "&Follow selected path"
+#~ msgstr "चुने गे रस्ता फालो करव (&F)"
+
+#~ msgid "Width:"
+#~ msgstr "चौडाईः"
+
+#~ msgid "Current"
+#~ msgstr "अभी हाल के"
+
+#~ msgid "Profile name"
+#~ msgstr "प्रोफाइल नाम"
+
+#, fuzzy
+#~ msgctxt "invalid profile name"
+#~ msgid "Invalid name."
+#~ msgstr "अवैध नाम!"
+
+#~ msgid "Mouse"
+#~ msgstr "मुसुवा"
+
+#~ msgid "Graphics Pen"
+#~ msgstr "ग्राफिक्स पेन"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "सामने लाव (&F)"
+
+#~ msgid "&Raise"
+#~ msgstr "ऊपर उठाव (&R)"
+
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "निचला (&L)"
+
+#~ msgid "Send to &Back"
+#~ msgstr "पीछू ले जाव (&B)"
+
+#~ msgid "Show Grid"
+#~ msgstr "ग्रिड देखाव"
+
+#~ msgid "Hide Grid"
+#~ msgstr "ग्रिड लुकाव"
+
+#~ msgid "Profile:"
+#~ msgstr "प्रोफाइलः"
+
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "विवरन देखाव >>"
+
+#~ msgid "Hide details <<"
+#~ msgstr "विवरन लुकाव<<"
+
+#~| msgid "Align"
+#~ msgid "Align Left"
+#~ msgstr "डेरी जमाव"
+
+#~| msgid "Align"
+#~ msgid "Align Right"
+#~ msgstr "जेवनी जमाव"
+
+#~| msgid "Align"
+#~ msgid "Align Top"
+#~ msgstr "ऊपर जमाव"
+
+#~ msgid "Align Bottom"
+#~ msgstr "तल मं जमाव"
+
+#~ msgid "Transform"
+#~ msgstr "रूपांतरन"
+
+#~ msgid "Set x-position of actual selection"
+#~ msgstr "सही चयन के वाय-स्थिति सेट करव"
+
+#~ msgid "Set y-position of actual selection"
+#~ msgstr "सही चयन के वाय-स्थिति सेट करव"
+
+#~ msgid "Set width of actual selection"
+#~ msgstr "सही चयन के चौड़ाई सेट करव"
+
+#~ msgid "Set height of actual selection"
+#~ msgstr "सही चयन के ऊँचाई सेट करव"
+
+#~ msgid "R:"
+#~ msgstr "आर:"
+
+#~ msgid "SX:"
+#~ msgstr "SX:"
+
+#~ msgid "Shear actual selection in x-direction"
+#~ msgstr "सही चयन ल एक्स-दिसा मं कतरें"
+
+#~ msgid "SY:"
+#~ msgstr "SY:"
+
+#~ msgid "Shear actual selection in y-direction"
+#~ msgstr "सही चयन ल वाय-दिसा मं कतरें"
+
+#~ msgid "Resize"
+#~ msgstr "आकार बदलव"
+
+#~ msgid "Shear"
+#~ msgstr "कतरें"
+
+#~ msgid "Simple Text"
+#~ msgstr "सादा पाठ"
+
+#~ msgid "SimpleTextShape"
+#~ msgstr "सादापाठआकार"
+
+#~ msgid "A shape which shows a single text line"
+#~ msgstr "एक आकार जऊन एकल पाठ लाइन देखाथे "
+
+#~ msgid "Detach Path"
+#~ msgstr "पथ अलग करव"
+
+#~ msgid "Simple Text Tool"
+#~ msgstr "सादा पाठ औजार"
+
+#~ msgid "Simple Text Editing Tool"
+#~ msgstr "सादा पाठ संपादन औजार"

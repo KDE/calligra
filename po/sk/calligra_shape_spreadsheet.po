@@ -1,0 +1,236 @@
+# translation of calligra_shape_spreadsheet.po to Slovak
+# Richard Fric <Richard.Fric@kdemail.net>, 2009.
+# Roman Paholík <wizzardsk@gmail.com>, 2014, 2016, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra_shape_spreadsheet\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2021-11-15 17:28+0100\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.08.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Roman Paholík"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "wizzardsk@gmail.com"
+
+#: SheetsEditor.cpp:57 SheetsEditor.cpp:121
+#, kde-format
+msgid "Rename"
+msgstr "Premenovať"
+
+#: SheetsEditor.cpp:61
+#, kde-format
+msgid "Add"
+msgstr "Pridať"
+
+#: SheetsEditor.cpp:65
+#, kde-format
+msgid "Remove"
+msgstr "Odstrániť"
+
+#: SheetsEditor.cpp:121
+#, kde-format
+msgid "Enter Name:"
+msgstr "Zadajte názov:"
+
+#: TableShape.cpp:288
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"Tento dokument obsahuje externý odkaz na vzdialený dokument\n"
+"%1"
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Confirmation Required"
+msgstr "Vyžaduje sa potvrdenie"
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Download"
+msgstr "Stiahnuť"
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Skip"
+msgstr "Preskočiť"
+
+#: TableShapeFactory.cpp:37
+#, kde-format
+msgid "Spreadsheet"
+msgstr "Zošit"
+
+#: TableShapeFactory.cpp:39
+#, kde-format
+msgid "Spreadsheet Shape"
+msgstr "Tvar zošita"
+
+#: TableTool.cpp:218
+#, kde-format
+msgid "Import OpenDocument Spreadsheet File"
+msgstr "Importovať súbor Zošit OpenDocument"
+
+#: TableTool.cpp:219
+#, kde-format
+msgid "Import"
+msgstr "Importovať"
+
+#: TableTool.cpp:223
+#, kde-format
+msgid "Export OpenDocument Spreadsheet File"
+msgstr "Exportovať súbor Zošit OpenDocument"
+
+#: TableTool.cpp:224
+#, kde-format
+msgid "Export"
+msgstr "Exportovať"
+
+#: TableTool.cpp:704
+#, kde-format
+msgid "Sheets"
+msgstr "Zošity"
+
+#: TableTool.cpp:746
+#, kde-format
+msgid "Sheet:"
+msgstr "List:"
+
+#: TableTool.cpp:748
+#, kde-format
+msgid "Selected Sheet"
+msgstr "Vybraný list"
+
+#: TableTool.cpp:763
+#, kde-format
+msgid "View Options"
+msgstr "Možnosti zobrazenia"
+
+#: TableToolFactory.cpp:21
+#, kde-format
+msgid "Table editing"
+msgstr "Úprava tabuliek"
+
+#: ToolHeaders.cpp:286 ToolHeaders.cpp:884
+#, kde-format
+msgid "Area is too large."
+msgstr "Príliš veľká oblasť."
+
+#: ToolHeaders.cpp:429
+#, kde-format
+msgid "Hide Row"
+msgstr "Skryť riadok"
+
+#: ToolHeaders.cpp:431
+#, kde-format
+msgid "Height: %1 %2"
+msgstr "Výška: %1 %2"
+
+#: ToolHeaders.cpp:1059
+#, kde-format
+msgid "Hide Column"
+msgstr "Skryť stĺpec"
+
+#: ToolHeaders.cpp:1061
+#, kde-format
+msgid "Width: %1 %2"
+msgstr "Šírka: %1 %2"
+
+#~ msgid "Number of columns"
+#~ msgstr "Počet stĺpcov"
+
+#~ msgid "Rows:"
+#~ msgstr "Riadky:"
+
+#~ msgid "Number of rows"
+#~ msgstr "Počet riadkov"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Premenovať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Pridať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Odstrániť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter Name:"
+#~ msgstr "Zadajte názov:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spreadsheet"
+#~ msgstr "Tabuľkový procesor"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spreadsheet Shape"
+#~ msgstr "Tvar zošita"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import OpenDocument Spreadsheet File"
+#~ msgstr "Importovať súbor Zošit OpenDocument"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Importovať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export OpenDocument Spreadsheet File"
+#~ msgstr "Exportovať súbor Zošit OpenDocument"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Exportovať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Zošity"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet:"
+#~ msgstr "List:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Selected Sheet"
+#~ msgstr "Vybraný list"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Stĺpce:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of columns"
+#~ msgstr "Počet stĺpcov"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rows:"
+#~ msgstr "Riadky:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of rows"
+#~ msgstr "Počet riadkov"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table Options"
+#~ msgstr "Možnosti tabuľky"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table editing"
+#~ msgstr "Úprava tabuliek"

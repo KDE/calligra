@@ -1,0 +1,727 @@
+# Translation of PathShapes.po to Finnish
+# Copyright © 2007, 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the calligra package.
+# Mikko Piippo <piippo@cc.helsinki.fi>, 2007.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2014, 2016.
+# Tommi Nieminen <translator@legisign.org>, 2012, 2021.
+#
+# KDE Finnish translation sprint participants:
+msgid ""
+msgstr ""
+"Project-Id-Version: PathShapes\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2021-03-25 11:28+0200\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2013-01-13 22:09:28+0000\n"
+"X-Generator: Lokalize 20.04.2\n"
+
+#: ellipse/EllipseShapeConfigCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change ellipse"
+msgstr ""
+"Muuta ellipsiä\n"
+"ellipsin muuttaminen"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Arc"
+msgstr "Kaari"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Pie"
+msgstr "Piirakka"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:18
+#, kde-format
+msgid "Chord"
+msgstr "Jänne"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, EllipseShapeConfigWidget)
+#: ellipse/EllipseShapeConfigWidget.ui:13
+#, kde-format
+msgid "Ellipse Shape"
+msgstr "Ellipsimuoto"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ellipse/EllipseShapeConfigWidget.ui:19 spiral/SpiralShapeConfigWidget.ui:19
+#, kde-format
+msgid "Type:"
+msgstr "Tyyppi:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ellipse/EllipseShapeConfigWidget.ui:29
+#, kde-format
+msgid "Start angle:"
+msgstr "Aloituskulma:"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, startAngle)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, endAngle)
+#: ellipse/EllipseShapeConfigWidget.ui:39
+#: ellipse/EllipseShapeConfigWidget.ui:56
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ellipse/EllipseShapeConfigWidget.ui:46
+#, kde-format
+msgid "End angle:"
+msgstr "Lopetuskulma:"
+
+#. i18n: ectx: property (text), widget (QPushButton, closeEllipse)
+#: ellipse/EllipseShapeConfigWidget.ui:63
+#, kde-format
+msgid "Close ellipse"
+msgstr "Sulje ellipsi"
+
+#: ellipse/EllipseShapeFactory.cpp:21
+#, kde-format
+msgid "Ellipse"
+msgstr "Ellipsi"
+
+#: ellipse/EllipseShapeFactory.cpp:23
+#, kde-format
+msgid "An ellipse"
+msgstr "Ellipsi"
+
+#: enhancedpath/CalloutShapeFactory.cpp:31
+#: enhancedpath/CalloutShapeFactory.cpp:33
+#, kde-format
+msgid "A callout shape"
+msgstr "Puhekuplamuoto"
+
+#: enhancedpath/CalloutShapeFactory.cpp:149
+#, kde-format
+msgid "Rectangular Callout"
+msgstr "Nelikulmainen puhekupla"
+
+#: enhancedpath/CalloutShapeFactory.cpp:151
+#, kde-format
+msgid "A rectangular callout"
+msgstr "Nelikulmainen puhekupla"
+
+#: enhancedpath/CalloutShapeFactory.cpp:231
+#, kde-format
+msgid "Rounded Callout"
+msgstr "Pyöristetty puhekupla"
+
+#: enhancedpath/CalloutShapeFactory.cpp:233
+#, kde-format
+msgid "A rounded rectangular callout"
+msgstr "Pyöristetty nelikulmainen puhekupla"
+
+#: enhancedpath/CalloutToolFactory.cpp:23
+#, kde-format
+msgid "Callout editing"
+msgstr "Puhekuplan muokkaus"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:26
+#, kde-format
+msgid "An enhanced path shape"
+msgstr "Paranneltu polkumuoto"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:28
+#, kde-format
+msgid "An enhanced path"
+msgstr "Paranneltu polku"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:145
+#, kde-format
+msgid "Cross"
+msgstr "Risti"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:147
+#, kde-format
+msgid "A cross"
+msgstr "Risti"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:180
+#: enhancedpath/EnhancedPathShapeFactory.cpp:213
+#: enhancedpath/EnhancedPathShapeFactory.cpp:246
+#: enhancedpath/EnhancedPathShapeFactory.cpp:279
+#, kde-format
+msgid "Arrow"
+msgstr "Nuoli"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:182
+#: enhancedpath/EnhancedPathShapeFactory.cpp:215
+#: enhancedpath/EnhancedPathShapeFactory.cpp:248
+#: enhancedpath/EnhancedPathShapeFactory.cpp:281
+#, kde-format
+msgid "An arrow"
+msgstr "Nuoli"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:324
+#: enhancedpath/EnhancedPathShapeFactory.cpp:326
+#, kde-format
+msgid "Smiley"
+msgstr "Hymiö"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:404
+#, kde-format
+msgid "Circular Arrow"
+msgstr "Kaareva nuoli"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:406
+#, kde-format
+msgid "A circular-arrow"
+msgstr "Kaareva nuoli"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:449
+#, kde-format
+msgid "Gearhead"
+msgstr "Ratas"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:451
+#, kde-format
+msgid "A gearhead"
+msgstr "Ratas"
+
+#: rectangle/RectangleShapeConfigCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change rectangle"
+msgstr ""
+"Muuta suorakulmiota\n"
+"suorakulmion muuttaminen"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
+#: rectangle/RectangleShapeConfigWidget.ui:13
+#, kde-format
+msgid "Rectangle Shape"
+msgstr "Suorakulmiomuoto"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rectangle/RectangleShapeConfigWidget.ui:19
+#, kde-format
+msgid "Corner radius x:"
+msgstr "Kulman x-säde:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: rectangle/RectangleShapeConfigWidget.ui:29
+#, kde-format
+msgid "Corner radius y:"
+msgstr "Kulman y-säde:"
+
+#: rectangle/RectangleShapeFactory.cpp:20
+#, kde-format
+msgid "Rectangle"
+msgstr "Suorakulmio"
+
+#: rectangle/RectangleShapeFactory.cpp:22
+#, kde-format
+msgid "A rectangle"
+msgstr "Suorakulmio"
+
+#: spiral/SpiralShapeConfigCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change spiral"
+msgstr ""
+"Muuta spiraalia\n"
+"spiraalin muuttaminen"
+
+#: spiral/SpiralShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Curve"
+msgstr "Kaari"
+
+#: spiral/SpiralShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Line"
+msgstr "Viiva"
+
+#: spiral/SpiralShapeConfigWidget.cpp:23
+#, kde-format
+msgid "Clockwise"
+msgstr "Myötäpäivään"
+
+#: spiral/SpiralShapeConfigWidget.cpp:24
+#, kde-format
+msgid "Anticlockwise"
+msgstr "Vastapäivään"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
+#: spiral/SpiralShapeConfigWidget.ui:13
+#, kde-format
+msgid "Spiral Shape"
+msgstr "Spiraalimuoto"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: spiral/SpiralShapeConfigWidget.ui:29
+#, kde-format
+msgid "Fade:"
+msgstr "Häivytys:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: spiral/SpiralShapeConfigWidget.ui:55
+#, kde-format
+msgid "Direction:"
+msgstr "Suunta:"
+
+#: spiral/SpiralShapeFactory.cpp:18
+#, kde-format
+msgid "Spiral"
+msgstr "Spiraali"
+
+#: spiral/SpiralShapeFactory.cpp:20
+#, kde-format
+msgid "A spiral shape"
+msgstr "Spiraalimuoto"
+
+#: star/StarShapeConfigCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Change star"
+msgstr ""
+"Muuta tähteä\n"
+"tähden muuttaminen"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, StarShapeConfigWidget)
+#: star/StarShapeConfigWidget.ui:13
+#, kde-format
+msgid "Star shape"
+msgstr "Tähtimuoto"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: star/StarShapeConfigWidget.ui:19
+#, kde-format
+msgid "Polygon:"
+msgstr "Monikulmio:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: star/StarShapeConfigWidget.ui:36
+#, kde-format
+msgid "Corners:"
+msgstr "Kulmat:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: star/StarShapeConfigWidget.ui:46
+#, kde-format
+msgid "Inner radius:"
+msgstr "Sisäsäde:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: star/StarShapeConfigWidget.ui:60
+#, kde-format
+msgid "Outer radius:"
+msgstr "Ulkosäde:"
+
+#: star/StarShapeFactory.cpp:24
+#, kde-format
+msgid "A star shape"
+msgstr "Tähtimuoto"
+
+#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:38
+#, kde-format
+msgid "A star"
+msgstr "Tähti"
+
+#: star/StarShapeFactory.cpp:36
+#, kde-format
+msgid "Star"
+msgstr "Tähti"
+
+#: star/StarShapeFactory.cpp:50
+#, kde-format
+msgid "Flower"
+msgstr "Kukka"
+
+#: star/StarShapeFactory.cpp:52
+#, kde-format
+msgid "A flower"
+msgstr "Kukka"
+
+#: star/StarShapeFactory.cpp:67
+#, kde-format
+msgid "Pentagon"
+msgstr "Viisikulmio"
+
+#: star/StarShapeFactory.cpp:69
+#, kde-format
+msgid "A pentagon"
+msgstr "Viisikulmio"
+
+#: star/StarShapeFactory.cpp:83
+#, kde-format
+msgid "Hexagon"
+msgstr "Kuusikulmio"
+
+#: star/StarShapeFactory.cpp:85
+#, kde-format
+msgid "A hexagon"
+msgstr "Kuusikulmio"
+
+#, fuzzy
+#~| msgid "Ellipse Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse Shape"
+#~ msgstr "Ellipsimuoto"
+
+#, fuzzy
+#~| msgid "Type:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Type:"
+#~ msgstr "Tyyppi:"
+
+#, fuzzy
+#~| msgid "Start angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start angle:"
+#~ msgstr "Aloituskulma:"
+
+#, fuzzy
+#~| msgid "°"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "°"
+#~ msgstr "°"
+
+#, fuzzy
+#~| msgid "End angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End angle:"
+#~ msgstr "Lopetuskulma:"
+
+#, fuzzy
+#~| msgid "Close ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Close ellipse"
+#~ msgstr "Sulje ellipsi"
+
+#, fuzzy
+#~| msgid "Rectangle Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangle Shape"
+#~ msgstr "Suorakulmiomuoto"
+
+#, fuzzy
+#~| msgid "Corner radius x:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corner radius x:"
+#~ msgstr "Kulman x-säde:"
+
+#, fuzzy
+#~| msgid "Corner radius y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corner radius y:"
+#~ msgstr "Kulman y-säde:"
+
+#, fuzzy
+#~| msgid "Star shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star shape"
+#~ msgstr "Tähtimuoto"
+
+#, fuzzy
+#~| msgid "Polygon:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Polygon:"
+#~ msgstr "Monikulmio:"
+
+#, fuzzy
+#~| msgid "Corners:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners:"
+#~ msgstr "Kulmat:"
+
+#, fuzzy
+#~| msgid "Inner radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inner radius:"
+#~ msgstr "Sisäsäde:"
+
+#, fuzzy
+#~| msgid "Outer radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outer radius:"
+#~ msgstr "Ulkosäde:"
+
+#, fuzzy
+#~| msgid "Spiral Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral Shape"
+#~ msgstr "Spiraalimuoto"
+
+#, fuzzy
+#~| msgid "Fade:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade:"
+#~ msgstr "Häivytys:"
+
+#, fuzzy
+#~| msgid "Direction:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Direction:"
+#~ msgstr "Suunta:"
+
+#, fuzzy
+#~| msgid "Arc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arc"
+#~ msgstr "Kaari"
+
+#, fuzzy
+#~| msgid "Pie"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pie"
+#~ msgstr "Piirakka"
+
+#, fuzzy
+#~| msgid "Chord"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chord"
+#~ msgstr "Jänne"
+
+#, fuzzy
+#~| msgid "Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Ellipsi"
+
+#, fuzzy
+#~| msgid "An ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An ellipse"
+#~ msgstr "Ellipsi"
+
+#, fuzzy
+#~| msgid "An enhanced path shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An enhanced path shape"
+#~ msgstr "Paranneltu polkumuoto"
+
+#, fuzzy
+#~| msgid "An enhanced path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An enhanced path"
+#~ msgstr "Paranneltu polku"
+
+#, fuzzy
+#~| msgid "Cross"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cross"
+#~ msgstr "Risti"
+
+#, fuzzy
+#~| msgid "A cross"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A cross"
+#~ msgstr "Risti"
+
+#, fuzzy
+#~| msgid "Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrow"
+#~ msgstr "Nuoli"
+
+#, fuzzy
+#~| msgid "An arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An arrow"
+#~ msgstr "Nuoli"
+
+#, fuzzy
+#~| msgid "Callout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Callout"
+#~ msgstr "Puhekupla"
+
+#, fuzzy
+#~| msgid "A callout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A callout"
+#~ msgstr "Puhekupla"
+
+#, fuzzy
+#~| msgid "Smiley"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smiley"
+#~ msgstr "Hymiö"
+
+#, fuzzy
+#~| msgid "Circular Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circular Arrow"
+#~ msgstr "Kaareva nuoli"
+
+#, fuzzy
+#~| msgid "A circular-arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A circular-arrow"
+#~ msgstr "Kaareva nuoli"
+
+#, fuzzy
+#~| msgid "Gearhead"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gearhead"
+#~ msgstr "Ratas"
+
+#, fuzzy
+#~| msgid "A gearhead"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A gearhead"
+#~ msgstr "Ratas"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangle"
+#~ msgstr "Suorakulmio"
+
+#, fuzzy
+#~| msgid "A rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A rectangle"
+#~ msgstr "Suorakulmio"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Curve"
+#~ msgstr "Kaari"
+
+#, fuzzy
+#~| msgid "Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line"
+#~ msgstr "Viiva"
+
+#, fuzzy
+#~| msgid "Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise"
+#~ msgstr "Myötäpäivään"
+
+#, fuzzy
+#~| msgid "Anticlockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anticlockwise"
+#~ msgstr "Vastapäivään"
+
+#, fuzzy
+#~| msgid "Spiral"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Spiraali"
+
+#, fuzzy
+#~| msgid "A spiral shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A spiral shape"
+#~ msgstr "Spiraalimuoto"
+
+#, fuzzy
+#~| msgid "A star shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A star shape"
+#~ msgstr "Tähtimuoto"
+
+#, fuzzy
+#~| msgid "A star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A star"
+#~ msgstr "Tähti"
+
+#, fuzzy
+#~| msgid "Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "Tähti"
+
+#, fuzzy
+#~| msgid "Flower"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flower"
+#~ msgstr "Kukka"
+
+#, fuzzy
+#~| msgid "A flower"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A flower"
+#~ msgstr "Kukka"
+
+#, fuzzy
+#~| msgid "Pentagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Viisikulmio"
+
+#, fuzzy
+#~| msgid "A pentagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A pentagon"
+#~ msgstr "Viisikulmio"
+
+#, fuzzy
+#~| msgid "Hexagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hexagon"
+#~ msgstr "Kuusikulmio"
+
+#, fuzzy
+#~| msgid "A hexagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A hexagon"
+#~ msgstr "Kuusikulmio"
+
+#~ msgid "A arrow shape"
+#~ msgstr "Nuolihahmo"
+
+#~ msgid "A arrow"
+#~ msgstr "Nuoli"
+
+#~ msgid "Right Arrow"
+#~ msgstr "Nuoli oikealle"
+
+#~ msgid "A right arrow"
+#~ msgstr "Nuoli oikealle"
+
+#~ msgid "Left Arrow"
+#~ msgstr "Nuoli vasemmalle"
+
+#~ msgid "A left arrow"
+#~ msgstr "Nuoli vasemmalle"
+
+#~ msgid "Top Arrow"
+#~ msgstr "Nuoli ylös"
+
+#~ msgid "A top arrow"
+#~ msgstr "Nuoli ylös"
+
+#~ msgid "Bottom Arrow"
+#~ msgstr "Nuoli alas"
+
+#~ msgid "A bottom arrow"
+#~ msgstr "Nuoli alas"
+
+#~ msgid "Left Down Arrow"
+#~ msgstr "Nuoli alas vasemmalle"
+
+#~ msgid "A left down arrow"
+#~ msgstr "Nuoli alas vasemmalle"
+
+#~ msgid "Left Top Arrow"
+#~ msgstr "Nuoli ylös vasemmalle"
+
+#~ msgid "A left top arrow"
+#~ msgstr "Nuoli ylös vasemmalle"
+
+#~ msgid "Right Down Arrow"
+#~ msgstr "Nuoli alas oikealle"
+
+#~ msgid "A right down arrow"
+#~ msgstr "Nuoli alas oikealle"
+
+#~ msgid "Right Top Arrow"
+#~ msgstr "Nuoli ylös oikealle"
+
+#~ msgid "A right top arrow"
+#~ msgstr "Nuoli ylös oikealle"
+
+#~ msgid "Enhanced Path"
+#~ msgstr "Paranneltu polku"

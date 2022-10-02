@@ -1,0 +1,652 @@
+# Translation of karbon.po to Catalan
+# Copyright (C) 2002-2019 This_file_is_part_of_KDE
+#
+# Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
+# Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
+# Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2010.
+# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2018, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2019-11-06 18:46+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Poedit-Language: Catalan\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr "Operació Booleana"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "&Ordre"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "&Alinea"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, kde-format
+msgid "&File"
+msgstr "&Fitxer"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr "&Edita"
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr "&Visualitza"
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "&Objecte"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, kde-format
+msgid "&Distribute"
+msgstr "&Distribueix"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, kde-format
+msgid "&Path"
+msgstr "&Camí"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, kde-format
+msgid "Effe&cts"
+msgstr "Efe&ctes"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, kde-format
+msgid "&Settings"
+msgstr "&Arranjaments"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr "&Pàgina"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr "Edita"
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, kde-format
+msgid "Object"
+msgstr "Objecte"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, kde-format
+msgid "Align"
+msgstr "Alinea"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "Efectes"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, kde-format
+msgid "View"
+msgstr "Visualitza"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, kde-format
+msgid "&Flatten Path..."
+msgstr "&Camí aplanat..."
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, kde-format
+msgid "Flatten Path"
+msgstr "Camí aplanat"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, kde-format
+msgid "Properties"
+msgstr "Propietats"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, kde-format
+msgid "Flatness:"
+msgstr "Planura:"
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "Camí aplanat"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr "Refina el camí"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, kde-format
+msgid "&Refine Path..."
+msgstr "&Refina el camí..."
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, kde-format
+msgid "Refine Path"
+msgstr "Refina el camí"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, kde-format
+msgid "Subdivisions:"
+msgstr "Subdivisions:"
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr "Cantonades arrodonides"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, kde-format
+msgid "&Round Corners..."
+msgstr "Cantonades a&rrodonides..."
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, kde-format
+msgid "Round Corners"
+msgstr "Cantonades arrodonides"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "Radi:"
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr "Gira i pessiga"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "&Gira/Pessiga..."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, kde-format
+msgid "Whirl Pinch"
+msgstr "Gira pessic"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, kde-format
+msgid "Info"
+msgstr "Informació"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr ""
+"El resultat de l'efecte Gira-pessic es pot millorar refinant abans la forma "
+"del camí."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "Angle:"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, kde-format
+msgid "Pinch:"
+msgstr "Pessiga:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "Puja la capa"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "Baixa la capa"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, kde-format
+msgid "Configure"
+msgstr "Configura"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "Interfície"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "Misc"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, kde-format
+msgid "Grid"
+msgstr "Quadrícula"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Document"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "Arranjaments del document"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Autor"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr "Autor"
+
+#: ui/KarbonAboutData.h:22
+#, kde-format
+msgid "Karbon"
+msgstr "Karbon"
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr "Una aplicació de dibuix de vectors gràfics."
+
+#: ui/KarbonAboutData.h:26
+#, kde-format
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr "(c) 2001-%1, The Karbon Developers"
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr "Anthony Fieroni"
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr "Mantenidor"
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr "Rob Buis"
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr "Tomislav Lukman"
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr "Benoît Vautrin"
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr "Jan Hambrecht"
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr "Correcció d'errors i millores generals"
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr "Tim Beaulen"
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr "Correcció d'errors"
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr "Alan Horkan"
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr "Pedaços útils i consells"
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Albert Astals Cid, Rafael Carreras"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "aacid@kde.org, rcarreras@caliu.cat"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "Insereix gràfics"
+
+#: ui/KarbonView.cpp:346
+#, kde-format
+msgid "Choose Graphic to Add"
+msgstr "Escolliu la gràfica a afegir"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr "No s'ha pogut carregar la imatge."
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Import graphic"
+msgstr "Importa un gràfic"
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr "No s'ha pogut crear la forma d'imatge."
+
+#: ui/KarbonView.cpp:612
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "Emmirallar horitzontalment"
+
+#: ui/KarbonView.cpp:614
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "Emmirallar verticalment"
+
+#: ui/KarbonView.cpp:616
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "Emmirallar horitzontalment i verticalment"
+
+#: ui/KarbonView.cpp:671
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "Separa els camins"
+
+#: ui/KarbonView.cpp:852
+#, kde-format
+msgid "Outline &Mode"
+msgstr "&Mode de contorn"
+
+#: ui/KarbonView.cpp:860
+#, kde-format
+msgid "&Import Graphic..."
+msgstr "&Importa un gràfic..."
+
+#: ui/KarbonView.cpp:864
+#, kde-format
+msgid "Edit Guides"
+msgstr "Edita les guies"
+
+#: ui/KarbonView.cpp:870
+#, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "&Duplica"
+
+#: ui/KarbonView.cpp:875
+#, kde-format
+msgid "Distribute Center (Horizontal)"
+msgstr "Distribueix centrat (horitzontalment)"
+
+#: ui/KarbonView.cpp:879
+#, kde-format
+msgid "Distribute Gaps (Horizontal)"
+msgstr "Distribueix els espais (horitzontalment)"
+
+#: ui/KarbonView.cpp:883
+#, kde-format
+msgid "Distribute Left Borders"
+msgstr "Distribueix les vores esquerres"
+
+#: ui/KarbonView.cpp:887
+#, kde-format
+msgid "Distribute Right Borders"
+msgstr "Distribueix les vores dretes"
+
+#: ui/KarbonView.cpp:891
+#, kde-format
+msgid "Distribute Center (Vertical)"
+msgstr "Distribueix centrat (verticalment)"
+
+#: ui/KarbonView.cpp:895
+#, kde-format
+msgid "Distribute Gaps (Vertical)"
+msgstr "Distribueix els espais (verticalment)"
+
+#: ui/KarbonView.cpp:899
+#, kde-format
+msgid "Distribute Bottom Borders"
+msgstr "Distribueix les vores de baix"
+
+#: ui/KarbonView.cpp:903
+#, kde-format
+msgid "Distribute Top Borders"
+msgstr "Distribueix les vores de dalt"
+
+#: ui/KarbonView.cpp:907
+#, kde-format
+msgid "Show Color Palette"
+msgstr "Mostra la paleta de colors"
+
+#: ui/KarbonView.cpp:909
+#, kde-format
+msgid "Show or hide color palette"
+msgstr "Mostra o oculta la paleta de colors"
+
+#: ui/KarbonView.cpp:913
+#, kde-format
+msgid "&Clip Object"
+msgstr "&Retalla l'objecte"
+
+#: ui/KarbonView.cpp:917
+#, kde-format
+msgid "&Unclip Objects"
+msgstr "&Desfés el retall d'objectes"
+
+#: ui/KarbonView.cpp:921
+#, kde-format
+msgid "Mirror Vertically"
+msgstr "Emmirallar verticalment"
+
+#: ui/KarbonView.cpp:925
+#, kde-format
+msgid "Mirror Horizontally"
+msgstr "Emmirallar horitzontalment"
+
+#: ui/KarbonView.cpp:932
+#, kde-format
+msgid "&Close Path"
+msgstr "Tan&ca el camí"
+
+#: ui/KarbonView.cpp:938
+#, kde-format
+msgid "Com&bine Path"
+msgstr "Com&bina el camí"
+
+#: ui/KarbonView.cpp:944
+#, kde-format
+msgid "Se&parate Path"
+msgstr "Se&para el camí"
+
+#: ui/KarbonView.cpp:950
+#, kde-format
+msgid "Re&verse Path"
+msgstr "Re&verteix el camí"
+
+#: ui/KarbonView.cpp:956
+#, kde-format
+msgid "Intersect Paths"
+msgstr "Interseca els camins"
+
+#: ui/KarbonView.cpp:962
+#, kde-format
+msgid "Subtract Paths"
+msgstr "Sostreu els camins"
+
+#: ui/KarbonView.cpp:968
+#, kde-format
+msgid "Unite Paths"
+msgstr "Uneix els camins"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr "Exclou els camins"
+
+#: ui/KarbonView.cpp:980
+#, kde-format
+msgid "Snap Path to Grid"
+msgstr "Ajusta el camí a la quadrícula"
+
+#: ui/KarbonView.cpp:988
+#, kde-format
+msgid "Zoom to Selection"
+msgstr "Zoom a la selecció"
+
+#: ui/KarbonView.cpp:992
+#, kde-format
+msgid "Zoom to Drawing"
+msgstr "Zoom al dibuix"
+
+#: ui/KarbonZoomController.cpp:51
+#, kde-format
+msgid "Zoom"
+msgstr "Zoom"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, kde-format
+msgid "Show status bar:"
+msgstr "Mostra la barra d'estat:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr "Nombre de fitxers recents:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr "Mida del tipus de lletra de la paleta:"
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, kde-format
+msgid "Select palette"
+msgstr "Selecció de paleta"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr "Premeu per a aplicar farciment a la selecció"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, kde-format
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "Cap"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr "Premeu per a aplicar un traç a la selecció"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr "Personalitzat"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, kde-format
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "Cap"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, kde-format
+msgid "Stroke:"
+msgstr "Traç:"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, kde-format
+msgid "Fill:"
+msgstr "Omple:"
+
+#~ msgid "D&elete"
+#~ msgstr "&Elimina"

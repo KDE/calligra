@@ -1,0 +1,133 @@
+# translation of koconverter.po to Chinese Traditional
+# traditional Chinese Translation of Koconverter
+# Copyright (C) 2002, 2006, 2007 Free Software Foundation, Inc.
+#
+# Translator: Chao-Hsiung Liao <pesder@seed.net.tw>, 2002.
+# Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2006.
+# Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007.
+# Franklin Weng <franklin@goodhorse.idv.tw>, 2010, 2011, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: koconverter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2012-06-14 08:33+0800\n"
+"Last-Translator: Franklin Weng <franklin@goodhorse.idv.tw>\n"
+"Language-Team: Chinese Traditional <zh-l10n@lists.linux.org.tw>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Chao-Hsiung Liao"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "pesder@seed.net.tw"
+
+#: calligraconverter.cpp:144
+#, kde-format
+msgid "CalligraConverter"
+msgstr "Calligra 轉換器"
+
+#: calligraconverter.cpp:146
+#, kde-format
+msgid "Calligra Document Converter"
+msgstr "Calligra 文件轉換器"
+
+#: calligraconverter.cpp:148
+#, fuzzy, kde-format
+#| msgid "(c) 2001-2011 Calligra developers"
+msgid "Copyright 2001-%1 Calligra developers"
+msgstr "(c) 2001-2011, Calligra 開發團隊"
+
+#: calligraconverter.cpp:149
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: calligraconverter.cpp:150
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: calligraconverter.cpp:151
+#, kde-format
+msgid "Dan Leinir Turthra Jensen"
+msgstr "Dan Leinir Turthra Jensen"
+
+#: calligraconverter.cpp:158
+#, kde-format
+msgid "Input file"
+msgstr "輸入檔案"
+
+#: calligraconverter.cpp:159
+#, kde-format
+msgid "Output file"
+msgstr "輸出檔案"
+
+#: calligraconverter.cpp:160
+#, kde-format
+msgid "Make a backup of the destination file"
+msgstr "產生目地檔的備份"
+
+#: calligraconverter.cpp:161
+#, kde-format
+msgid "Batch mode: do not show dialogs"
+msgstr "批次模式：不要顯示對話框"
+
+#: calligraconverter.cpp:162
+#, kde-format
+msgid "Interactive mode: show dialogs (default)"
+msgstr "互動模式：顯示對話框（預設）"
+
+#: calligraconverter.cpp:163
+#, kde-format
+msgid "Mimetype of the output file"
+msgstr "輸出檔案的 MIME 類型"
+
+#: calligraconverter.cpp:166
+#, kde-format
+msgid "The print orientation. This could be either Portrait or Landscape."
+msgstr "列印方向。直向或橫向。"
+
+#: calligraconverter.cpp:167
+#, kde-format
+msgid "The paper size. A4, Legal, Letter, ..."
+msgstr "紙張大小。如 A4，Legal，Letter，..."
+
+#: calligraconverter.cpp:168
+#, kde-format
+msgid "The size of the paper margin. By default this is 0.2."
+msgstr "紙張邊界大小。預設為 0.2。"
+
+#: calligraconverter.cpp:175
+#, kde-format
+msgid "Two arguments required"
+msgstr "需要兩個參數"
+
+#: calligraconverter.cpp:203
+#, kde-format
+msgid "Mimetype for input file %1 not found!"
+msgstr "找不到用於輸入檔案 %1 的 MIME 類型！"
+
+#: calligraconverter.cpp:212
+#, kde-format
+msgid "Mimetype not found %1"
+msgstr "找不到 MIME 類型 %1"
+
+#: calligraconverter.cpp:218
+#, kde-format
+msgid "Mimetype not found, try using the -mimetype option"
+msgstr "找不到 MIME 類型，請嘗試使用 -mimetype 選項"
+
+#: calligraconverter.cpp:242
+#, kde-format
+msgid "*** The conversion failed! ***"
+msgstr "*** 轉換失敗！ ***"

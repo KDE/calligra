@@ -1,0 +1,611 @@
+# translation of PathShapes.po to Dutch
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Rinse de Vries <rinsedevries@kde.nl>, 2007, 2008.
+# Kristof Bal <kristof.bal@gmail.com>, 2008.
+# Freek de Kruijf <f.de.kruijf@hetnet.nl>, 2009.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2009, 2011, 2016, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: PathShapes\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2018-12-21 09:48+0100\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: ellipse/EllipseShapeConfigCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change ellipse"
+msgstr "Ellips wijzigen"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Arc"
+msgstr "Boog"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Pie"
+msgstr "Taartpunt"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:18
+#, kde-format
+msgid "Chord"
+msgstr "Koorde"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, EllipseShapeConfigWidget)
+#: ellipse/EllipseShapeConfigWidget.ui:13
+#, kde-format
+msgid "Ellipse Shape"
+msgstr "Ellipsvorm"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ellipse/EllipseShapeConfigWidget.ui:19 spiral/SpiralShapeConfigWidget.ui:19
+#, kde-format
+msgid "Type:"
+msgstr "Type:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ellipse/EllipseShapeConfigWidget.ui:29
+#, kde-format
+msgid "Start angle:"
+msgstr "Beginhoek:"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, startAngle)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, endAngle)
+#: ellipse/EllipseShapeConfigWidget.ui:39
+#: ellipse/EllipseShapeConfigWidget.ui:56
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ellipse/EllipseShapeConfigWidget.ui:46
+#, kde-format
+msgid "End angle:"
+msgstr "Eindhoek:"
+
+#. i18n: ectx: property (text), widget (QPushButton, closeEllipse)
+#: ellipse/EllipseShapeConfigWidget.ui:63
+#, kde-format
+msgid "Close ellipse"
+msgstr "Ellips sluiten"
+
+#: ellipse/EllipseShapeFactory.cpp:21
+#, kde-format
+msgid "Ellipse"
+msgstr "Ellipse"
+
+#: ellipse/EllipseShapeFactory.cpp:23
+#, kde-format
+msgid "An ellipse"
+msgstr "Een ellipse"
+
+#: enhancedpath/CalloutShapeFactory.cpp:31
+#: enhancedpath/CalloutShapeFactory.cpp:33
+#, kde-format
+msgid "A callout shape"
+msgstr "Een tekstballonvorm"
+
+#: enhancedpath/CalloutShapeFactory.cpp:149
+#, kde-format
+msgid "Rectangular Callout"
+msgstr "Rechthoekige tekstballon"
+
+#: enhancedpath/CalloutShapeFactory.cpp:151
+#, kde-format
+msgid "A rectangular callout"
+msgstr "Een rechthoekige tekstballon"
+
+#: enhancedpath/CalloutShapeFactory.cpp:231
+#, kde-format
+msgid "Rounded Callout"
+msgstr "Afgeronde tekstballon"
+
+#: enhancedpath/CalloutShapeFactory.cpp:233
+#, kde-format
+msgid "A rounded rectangular callout"
+msgstr "Een afgeronde rechthoekige tekstballon"
+
+#: enhancedpath/CalloutToolFactory.cpp:23
+#, kde-format
+msgid "Callout editing"
+msgstr "Bewerken van een tekstballon"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:26
+#, kde-format
+msgid "An enhanced path shape"
+msgstr "Een verbeterde padvorm"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:28
+#, kde-format
+msgid "An enhanced path"
+msgstr "Een verbeterd pad"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:145
+#, kde-format
+msgid "Cross"
+msgstr "Kruis"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:147
+#, kde-format
+msgid "A cross"
+msgstr "Een kruis"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:180
+#: enhancedpath/EnhancedPathShapeFactory.cpp:213
+#: enhancedpath/EnhancedPathShapeFactory.cpp:246
+#: enhancedpath/EnhancedPathShapeFactory.cpp:279
+#, kde-format
+msgid "Arrow"
+msgstr "Pijl"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:182
+#: enhancedpath/EnhancedPathShapeFactory.cpp:215
+#: enhancedpath/EnhancedPathShapeFactory.cpp:248
+#: enhancedpath/EnhancedPathShapeFactory.cpp:281
+#, kde-format
+msgid "An arrow"
+msgstr "Een pijl"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:324
+#: enhancedpath/EnhancedPathShapeFactory.cpp:326
+#, kde-format
+msgid "Smiley"
+msgstr "Smiley"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:404
+#, kde-format
+msgid "Circular Arrow"
+msgstr "Cirkelpijl"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:406
+#, kde-format
+msgid "A circular-arrow"
+msgstr "Een cirkelpijl"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:449
+#, kde-format
+msgid "Gearhead"
+msgstr "Tandwiel"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:451
+#, kde-format
+msgid "A gearhead"
+msgstr "Een tandwiel"
+
+#: rectangle/RectangleShapeConfigCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change rectangle"
+msgstr "Rechthoek wijzigen"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
+#: rectangle/RectangleShapeConfigWidget.ui:13
+#, kde-format
+msgid "Rectangle Shape"
+msgstr "Rechthoekvorm"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rectangle/RectangleShapeConfigWidget.ui:19
+#, kde-format
+msgid "Corner radius x:"
+msgstr "Hoekstraal x:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: rectangle/RectangleShapeConfigWidget.ui:29
+#, kde-format
+msgid "Corner radius y:"
+msgstr "Hoekstraal y:"
+
+#: rectangle/RectangleShapeFactory.cpp:20
+#, kde-format
+msgid "Rectangle"
+msgstr "Rechthoek"
+
+#: rectangle/RectangleShapeFactory.cpp:22
+#, kde-format
+msgid "A rectangle"
+msgstr "Een rechthoek"
+
+#: spiral/SpiralShapeConfigCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change spiral"
+msgstr "Spiraal wijzigen"
+
+#: spiral/SpiralShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Curve"
+msgstr "Kromme"
+
+#: spiral/SpiralShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Line"
+msgstr "Lijn"
+
+#: spiral/SpiralShapeConfigWidget.cpp:23
+#, kde-format
+msgid "Clockwise"
+msgstr "Rechtsom"
+
+#: spiral/SpiralShapeConfigWidget.cpp:24
+#, kde-format
+msgid "Anticlockwise"
+msgstr "Linksom"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
+#: spiral/SpiralShapeConfigWidget.ui:13
+#, kde-format
+msgid "Spiral Shape"
+msgstr "Spiraalvorm"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: spiral/SpiralShapeConfigWidget.ui:29
+#, kde-format
+msgid "Fade:"
+msgstr "Vervagen:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: spiral/SpiralShapeConfigWidget.ui:55
+#, kde-format
+msgid "Direction:"
+msgstr "Richting:"
+
+#: spiral/SpiralShapeFactory.cpp:18
+#, kde-format
+msgid "Spiral"
+msgstr "Spiraal"
+
+#: spiral/SpiralShapeFactory.cpp:20
+#, kde-format
+msgid "A spiral shape"
+msgstr "Een spiraalvorm"
+
+#: star/StarShapeConfigCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Change star"
+msgstr "Ster wijzigen"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, StarShapeConfigWidget)
+#: star/StarShapeConfigWidget.ui:13
+#, kde-format
+msgid "Star shape"
+msgstr "Stervorm"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: star/StarShapeConfigWidget.ui:19
+#, kde-format
+msgid "Polygon:"
+msgstr "Veelhoek:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: star/StarShapeConfigWidget.ui:36
+#, kde-format
+msgid "Corners:"
+msgstr "Hoeken:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: star/StarShapeConfigWidget.ui:46
+#, kde-format
+msgid "Inner radius:"
+msgstr "Inwendige straal:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: star/StarShapeConfigWidget.ui:60
+#, kde-format
+msgid "Outer radius:"
+msgstr "Uitwendige straal:"
+
+#: star/StarShapeFactory.cpp:24
+#, kde-format
+msgid "A star shape"
+msgstr "Een stervorm"
+
+#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:38
+#, kde-format
+msgid "A star"
+msgstr "Een ster"
+
+#: star/StarShapeFactory.cpp:36
+#, kde-format
+msgid "Star"
+msgstr "Ster"
+
+#: star/StarShapeFactory.cpp:50
+#, kde-format
+msgid "Flower"
+msgstr "Bloem"
+
+#: star/StarShapeFactory.cpp:52
+#, kde-format
+msgid "A flower"
+msgstr "Een bloem"
+
+#: star/StarShapeFactory.cpp:67
+#, kde-format
+msgid "Pentagon"
+msgstr "Vijfhoek"
+
+#: star/StarShapeFactory.cpp:69
+#, kde-format
+msgid "A pentagon"
+msgstr "Een vijfhoek"
+
+#: star/StarShapeFactory.cpp:83
+#, kde-format
+msgid "Hexagon"
+msgstr "Zeshoek"
+
+#: star/StarShapeFactory.cpp:85
+#, kde-format
+msgid "A hexagon"
+msgstr "Een zeshoek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse Shape"
+#~ msgstr "Ellipsvorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Type:"
+#~ msgstr "Type:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start angle:"
+#~ msgstr "Beginhoek:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "°"
+#~ msgstr "°"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End angle:"
+#~ msgstr "Eindhoek:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Close ellipse"
+#~ msgstr "Ellips sluiten"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangle Shape"
+#~ msgstr "Rechthoekvorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corner radius x:"
+#~ msgstr "Hoekstraal x:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corner radius y:"
+#~ msgstr "Hoekstraal y:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star shape"
+#~ msgstr "Stervorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Polygon:"
+#~ msgstr "Veelhoek:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners:"
+#~ msgstr "Hoeken:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inner radius:"
+#~ msgstr "Inwendige straal:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outer radius:"
+#~ msgstr "Uitwendige straal:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral Shape"
+#~ msgstr "Spiraalvorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade:"
+#~ msgstr "Vervagen:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Direction:"
+#~ msgstr "Richting:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arc"
+#~ msgstr "Boog"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pie"
+#~ msgstr "Taartpunt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chord"
+#~ msgstr "Koorde"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Ellips"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An ellipse"
+#~ msgstr "Een ellipse"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An enhanced path shape"
+#~ msgstr "Een verbeterde padvorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An enhanced path"
+#~ msgstr "Een verbeterd pad"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cross"
+#~ msgstr "Kruis"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A cross"
+#~ msgstr "Een kruis"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrow"
+#~ msgstr "Pijl"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An arrow"
+#~ msgstr "Een pijl"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Callout"
+#~ msgstr "Een tekstballon"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A callout"
+#~ msgstr "Een tekstballon"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smiley"
+#~ msgstr "Smiley"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circular Arrow"
+#~ msgstr "Cirkelpijl"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A circular-arrow"
+#~ msgstr "Een cirkelpijl"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gearhead"
+#~ msgstr "Tandwiel"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A gearhead"
+#~ msgstr "Een tandwiel"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangle"
+#~ msgstr "Rechthoek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A rectangle"
+#~ msgstr "Een rechthoek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Curve"
+#~ msgstr "Kromme"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line"
+#~ msgstr "Lijn"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise"
+#~ msgstr "Rechtsom"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anticlockwise"
+#~ msgstr "Linksom"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Spiraal"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A spiral shape"
+#~ msgstr "Een spiraalvorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A star shape"
+#~ msgstr "Een stervorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A star"
+#~ msgstr "Een ster"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "Ster"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flower"
+#~ msgstr "Bloem"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A flower"
+#~ msgstr "Een bloem"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Vijfhoek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A pentagon"
+#~ msgstr "Een vijfhoek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hexagon"
+#~ msgstr "Zeshoek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A hexagon"
+#~ msgstr "Een zeshoek"
+
+#~ msgid "A arrow shape"
+#~ msgstr "Een pijlvorm"
+
+#~ msgid "A arrow"
+#~ msgstr "Een pijl"
+
+#~ msgid "Right Arrow"
+#~ msgstr "Pijl rechts"
+
+#~ msgid "A right arrow"
+#~ msgstr "Een pijl naar rechts"
+
+#~ msgid "Left Arrow"
+#~ msgstr "Pijl links"
+
+#~ msgid "A left arrow"
+#~ msgstr "Een pijl naar links"
+
+#~ msgid "Top Arrow"
+#~ msgstr "Pijl omhoog"
+
+#~ msgid "A top arrow"
+#~ msgstr "Een pijl naar boven"
+
+#~ msgid "Bottom Arrow"
+#~ msgstr "Pijl omlaag"
+
+#~ msgid "A bottom arrow"
+#~ msgstr "Een pijl naar beneden"
+
+#~ msgid "Left Down Arrow"
+#~ msgstr "Pijl linksonder"
+
+#~ msgid "A left down arrow"
+#~ msgstr "Een pijl naar linksonder"
+
+#~ msgid "Left Top Arrow"
+#~ msgstr "Pijl linksboven"
+
+#~ msgid "A left top arrow"
+#~ msgstr "Een pijl naar linksboven"
+
+#~ msgid "Right Down Arrow"
+#~ msgstr "Pijl rechtsonder"
+
+#~ msgid "A right down arrow"
+#~ msgstr "Een pijl naar rechtsonder"
+
+#~ msgid "Right Top Arrow"
+#~ msgstr "Pijl rechtsboven"
+
+#~ msgid "A right top arrow"
+#~ msgstr "Een pijl naar rechtsboven"

@@ -1,0 +1,1702 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2002-08-07 14:16+0700\n"
+"Last-Translator: Thanomsub Noppaburana <donga_n@yahoo.com>\n"
+"Language-Team: Thai <th@li.org>\n"
+"Language: th\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 0.9.6\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, fuzzy, kde-format
+msgid "Blend"
+msgstr "เติมสี"
+
+#: BlendEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+msgid "Blend mode"
+msgstr "เติมสี"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "ปกติ"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:28
+#, fuzzy, kde-format
+msgid "Lighten"
+msgstr "สูง (%1):"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr ""
+
+#: BlurEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius"
+msgstr "รัศมี:"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+msgid "Saturate colors"
+msgstr "สีเส้นการลาก"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, fuzzy, kde-format
+#| msgid "Rotate"
+msgid "Rotate hue"
+msgstr "หมุน"
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, fuzzy, kde-format
+msgid "Saturate value"
+msgstr "สีเส้นการลาก"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, fuzzy, kde-format
+#| msgid "Angle:"
+msgid "Angle"
+msgstr "มุม:"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr ""
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, fuzzy, kde-format
+msgid "Table"
+msgstr "เติมสี"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, fuzzy, kde-format
+#| msgid "Linear"
+msgid "Linear"
+msgstr "เส้นตรง"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, fuzzy, kde-format
+msgid "Slope"
+msgstr "การลาก"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Interface"
+msgid "Intercept"
+msgstr "ส่วนติดต่อผู้ใช้"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "Components"
+msgid "Composite"
+msgstr "คอมโพเน็นต์"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, fuzzy, kde-format
+msgid "Operation"
+msgstr "คุณ&สมบัติการเลือก"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, fuzzy, kde-format
+#| msgid "&Duplicate"
+msgid "Duplicate"
+msgstr "&ทำซ้ำ"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, fuzzy, kde-format
+#| msgid "None"
+msgid "None"
+msgstr "ไม่มี"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, fuzzy, kde-format
+#| msgid "Edges:"
+msgid "Edge mode:"
+msgstr "ขอบ:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Target point:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, fuzzy, kde-format
+msgid "Bias:"
+msgstr "หัวเส้น"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, fuzzy, kde-format
+msgid "Edit kernel"
+msgstr "แบน"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "Stroke Color"
+msgid "Flood fill"
+msgstr "สีเส้นการลาก"
+
+#: FloodEffectConfigWidget.cpp:24
+#, fuzzy, kde-format
+#| msgid "Stroke Color"
+msgid "Flood color"
+msgstr "สีเส้นการลาก"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, fuzzy, kde-format
+msgid "Image"
+msgstr "เลือก"
+
+#: ImageEffectConfigWidget.cpp:27
+#, fuzzy, kde-format
+msgid "Select image..."
+msgstr "คุณ&สมบัติการเลือก"
+
+#: ImageEffectConfigWidget.cpp:54
+#, fuzzy, kde-format
+msgid "Select image"
+msgstr "คุณ&สมบัติการเลือก"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr ""
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, fuzzy, kde-format
+msgid "Dilate"
+msgstr "&ลบ"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+msgid "Operator:"
+msgstr "คุณ&สมบัติการเลือก"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius x:"
+msgstr "รัศมี:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius y:"
+msgstr "รัศมี:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr ""
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr ""
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "เติมสี"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "เติมสี"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "ปกติ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "สูง (%1):"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "รัศมี:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~| msgid "Rotate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate hue"
+#~ msgstr "หมุน"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "มุม:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "เติมสี"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "เส้นตรง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "การลาก"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "ส่วนติดต่อผู้ใช้"
+
+#, fuzzy
+#~| msgid "Components"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "คอมโพเน็นต์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "คุณ&สมบัติการเลือก"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "&ทำซ้ำ"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "ไม่มี"
+
+#, fuzzy
+#~| msgid "Edges:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "ขอบ:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bias:"
+#~ msgstr "หัวเส้น"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "แบน"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "เลือก"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image..."
+#~ msgstr "คุณ&สมบัติการเลือก"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image"
+#~ msgstr "คุณ&สมบัติการเลือก"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "&ลบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "คุณ&สมบัติการเลือก"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "รัศมี:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "รัศมี:"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ถนอมทรัพย์ นพบูรณ์"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "donga_n@yahoo.com"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "คุณ&สมบัติการเลือก"
+
+#~ msgid "&Order"
+#~ msgstr "&ลำดับ"
+
+#, fuzzy
+#~ msgid "&Align"
+#~ msgstr "เซ็กเมนต์:"
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "เติมสี"
+
+#~ msgid "&Object"
+#~ msgstr "&วัตถุ"
+
+#, fuzzy
+#~ msgid "&Distribute"
+#~ msgstr "ลบวัตถุ"
+
+#, fuzzy
+#~ msgid "&Path"
+#~ msgstr "พท."
+
+#, fuzzy
+#~ msgid "&Settings"
+#~ msgstr "ตั้งค่าเอกสาร"
+
+#, fuzzy
+#~ msgid "Object"
+#~ msgstr "&วัตถุ"
+
+#, fuzzy
+#~ msgid "Align"
+#~ msgstr "เซ็กเมนต์:"
+
+#, fuzzy
+#~ msgid "&Flatten Path..."
+#~ msgstr "แ&บน"
+
+#, fuzzy
+#~ msgid "Flatten Path"
+#~ msgstr "แ&บน"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "คุณบัติการลาก"
+
+#~ msgid "Flatness:"
+#~ msgstr "ความแบน: "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten path"
+#~ msgstr "แ&บน"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "แ&บน"
+
+#, fuzzy
+#~ msgid "&Refine Path..."
+#~ msgstr "แ&บน"
+
+#, fuzzy
+#~ msgid "Refine Path"
+#~ msgstr "แ&บน"
+
+#, fuzzy
+#~| msgid "Round Corners"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "มุมโค้ง"
+
+#, fuzzy
+#~ msgid "&Round Corners..."
+#~ msgstr "มุมโ&ค้ง"
+
+#~ msgid "Round Corners"
+#~ msgstr "มุมโค้ง"
+
+#~ msgid "Radius:"
+#~ msgstr "รัศมี:"
+
+#, fuzzy
+#~ msgid "Expand all"
+#~ msgstr "แทรกสี่เหลี่ยม"
+
+#, fuzzy
+#~ msgid "Stencil Box"
+#~ msgstr "แบน"
+
+#, fuzzy
+#~ msgid "More shapes"
+#~ msgstr "จัดกลุ่มวัตถุ"
+
+#, fuzzy
+#~| msgid "Whirl Pinch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl & pinch"
+#~ msgstr "วน/บิด"
+
+#, fuzzy
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&วน/บิด"
+
+#~ msgid "Whirl Pinch"
+#~ msgstr "วน/บิด"
+
+#~ msgid "Angle:"
+#~ msgstr "มุม:"
+
+#~ msgid "Pinch:"
+#~ msgstr "บิด:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "เลเยอร์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "เลเยอร์"
+
+#, fuzzy
+#~ msgid "Configure"
+#~ msgstr "ปรับแต่งคาร์บอน..."
+
+#~ msgid "Interface"
+#~ msgstr "ส่วนติดต่อผู้ใช้"
+
+#~ msgid "Misc"
+#~ msgstr "เบ็ดเตล็ด"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "เอกสาร"
+
+#~ msgid "Document Settings"
+#~ msgstr "ตั้งค่าเอกสาร"
+
+#, fuzzy
+#~ msgid "Layer view"
+#~ msgstr "เลเยอร์"
+
+#, fuzzy
+#~ msgid "Add a new layer"
+#~ msgstr "เลเยอร์"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Delete selected objects"
+#~ msgstr "ลบวัตถุ"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Raise selected objects"
+#~ msgstr "ลบวัตถุ"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Lower selected objects"
+#~ msgstr "ลบวัตถุ"
+
+#, fuzzy
+#~ msgid "New Layer"
+#~ msgstr "เลเยอร์"
+
+#, fuzzy
+#~ msgid "New layer"
+#~ msgstr "เลเยอร์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "เลเยอร์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "ลบวัตถุ"
+
+#, fuzzy
+#~ msgid "Layer"
+#~ msgstr "เลเยอร์"
+
+#, fuzzy
+#~ msgid "Shape"
+#~ msgstr "การลาก"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "ความทึบแสง"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgid "yes"
+#~ msgstr "รูปแบบ:"
+
+#, fuzzy
+#~ msgid "Master Page"
+#~ msgstr "แทรกสี่เหลี่ยม"
+
+#, fuzzy
+#~| msgid "Insert Sinus"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "แทรกคลื่นไซน์"
+
+#, fuzzy
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~| msgid "Insert Sinus"
+#~ msgid "Import graphic"
+#~ msgstr "แทรกคลื่นไซน์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "แ&บน"
+
+#, fuzzy
+#~| msgid "View &Mode"
+#~ msgid "Outline &Mode"
+#~ msgstr "โหมดแ&สดงผล"
+
+#~ msgid "D&elete"
+#~ msgstr "&ลบ"
+
+#, fuzzy
+#~ msgid "Edit Guides"
+#~ msgstr "ไล่ระดับสี"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&ทำซ้ำ"
+
+#, fuzzy
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "เซ็กเมนต์:"
+
+#, fuzzy
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "เซ็กเมนต์:"
+
+#, fuzzy
+#~ msgid "Distribute Left Borders"
+#~ msgstr "ลบวัตถุ"
+
+#, fuzzy
+#~ msgid "Distribute Right Borders"
+#~ msgstr "ลบวัตถุ"
+
+#, fuzzy
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "เซ็กเมนต์:"
+
+#, fuzzy
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "เซ็กเมนต์:"
+
+#, fuzzy
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "ลบวัตถุ"
+
+#, fuzzy
+#~ msgid "Distribute Top Borders"
+#~ msgstr "ลบวัตถุ"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgid "&Clip Object"
+#~ msgstr "&วัตถุ"
+
+#, fuzzy
+#~| msgid "&Ungroup Objects"
+#~ msgid "&Unclip Objects"
+#~ msgstr "&ยกเลิกรวมกลุ่มวัตถุ"
+
+#, fuzzy
+#~ msgid "&Close Path"
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~ msgid "Com&bine Path"
+#~ msgstr "แ&บน"
+
+#, fuzzy
+#~ msgid "Se&parate Path"
+#~ msgstr "แ&บน"
+
+#, fuzzy
+#~ msgid "Re&verse Path"
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~ msgid "Intersect Paths"
+#~ msgstr "แ&บน"
+
+#, fuzzy
+#~ msgid "Subtract Paths"
+#~ msgstr "แ&บน"
+
+#, fuzzy
+#~ msgid "Unite Paths"
+#~ msgstr "แ&บน"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "ปรับแต่งคาร์บอน..."
+
+#, fuzzy
+#~ msgid "Page &Layout..."
+#~ msgstr "ปรับแต่งคาร์บอน..."
+
+#, fuzzy
+#~ msgid "Zoom to Selection"
+#~ msgstr "คุณ&สมบัติการเลือก"
+
+#, fuzzy
+#~ msgid "Zoom to Drawing"
+#~ msgstr "คุณ&สมบัติการเลือก"
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "เติมสีวัตถุ"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show status bar:"
+#~ msgstr "แสดงแถบสถานะ"
+
+#, fuzzy
+#~ msgid "Number of recent files:"
+#~ msgstr "จำนวนของแฟ้มที่เคยเรียกใช้:"
+
+#, fuzzy
+#~ msgid "Select palette"
+#~ msgstr "คุณ&สมบัติการเลือก"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "ไม่มี"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "ไม่มี"
+
+#, fuzzy
+#~| msgid "Stroke"
+#~ msgid "Stroke:"
+#~ msgstr "การลาก"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgid "Fill:"
+#~ msgstr "เติมสี"
+
+#, fuzzy
+#~ msgid "File to open"
+#~ msgstr "แฟ้มที่จะเปิด"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Line"
+#~ msgstr "เส้นตรง"
+
+#~ msgid "Fill"
+#~ msgstr "เติมสี"
+
+#, fuzzy
+#~ msgid "Type:"
+#~ msgstr "ประเภท"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "เส้นตรง"
+
+#, fuzzy
+#~| msgid "Radial"
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "รัศมีวงกลม"
+
+#, fuzzy
+#~| msgid "Conical"
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "รูปกรวย"
+
+#, fuzzy
+#~ msgid "Repeat:"
+#~ msgstr "ทำซ้ำ"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "ไม่มี"
+
+#~ msgid "Reflect"
+#~ msgstr "สะท้อน"
+
+#~ msgid "Repeat"
+#~ msgstr "ทำซ้ำ"
+
+#, fuzzy
+#~ msgid "Overall opacity:"
+#~ msgstr "ความทึบแสง"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgid "Stop color."
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "ไล่ระดับสี"
+
+#, fuzzy
+#~ msgid "Tiled"
+#~ msgstr "เติมสี"
+
+#, fuzzy
+#~ msgid "Top Right"
+#~ msgstr "เติมสีวัตถุ"
+
+#, fuzzy
+#~ msgid "Right"
+#~ msgstr "สูง (%1):"
+
+#, fuzzy
+#~ msgid "Bottom"
+#~ msgstr "เติมสีวัตถุ"
+
+#~ msgid "Stroke"
+#~ msgstr "การลาก"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgid "Stop color:"
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~| msgid "Toolbox"
+#~ msgid "Tools"
+#~ msgstr "กล่องเครื่องมือ"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "ไม่มี"
+
+#~ msgid "Gradient"
+#~ msgstr "ไล่ระดับสี"
+
+#, fuzzy
+#~ msgid "Pattern"
+#~ msgstr "แบน"
+
+#~ msgid "Units:"
+#~ msgstr "หน่วย:"
+
+#, fuzzy
+#~ msgid "Handle radius:"
+#~ msgstr "รัศมีภายใน (%1):"
+
+#, fuzzy
+#~ msgid "Ungroup shapes"
+#~ msgstr "&ยกเลิกรวมกลุ่มวัตถุ"
+
+#~ msgid "&Group Objects"
+#~ msgstr "รวมกลุ่&มวัตถุ"
+
+#, fuzzy
+#~ msgid "Grid color:"
+#~ msgstr "สีสิ้นสุด:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "บันทึกอัตโนมัติ (นาที):"
+
+#~ msgid "No auto save"
+#~ msgstr "ไม่บันทึกอัตโนมัติ"
+
+#~ msgid "min"
+#~ msgstr "นาที"
+
+#, fuzzy
+#~ msgid "Create backup file"
+#~ msgstr "แทรกลายก้นหอย"
+
+#, fuzzy
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~| msgid "Reference"
+#~ msgid "Reference Point:"
+#~ msgstr "อ้างอิง"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~ msgid "Y:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~ msgid "Pattern Size"
+#~ msgstr "แบน"
+
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#, fuzzy
+#~ msgid "Predefined Gradients"
+#~ msgstr "ไล่ระดับสี"
+
+#, fuzzy
+#~ msgid "Gradient tool"
+#~ msgstr "ไล่ระดับสี"
+
+#, fuzzy
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "ไล่ระดับสี"
+
+#, fuzzy
+#~ msgid "Pattern tool"
+#~ msgstr "แบน"
+
+#, fuzzy
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "แบน"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgid "Precision:"
+#~ msgstr "ตำแหน่ง:"
+
+#, fuzzy
+#~ msgid "Exactness:"
+#~ msgstr "ความแบน: "
+
+#, fuzzy
+#~ msgid "Combine angle:"
+#~ msgstr "แทรกสี่เหลี่ยม"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "&Follow selected path"
+#~ msgstr "ลบวัตถุ"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "ความกว้างเส้นการลาก"
+
+#, fuzzy
+#~ msgid "Use tablet &angle"
+#~ msgstr "สีเริ่มต้น:"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgid "Fixation:"
+#~ msgstr "การจัดวาง:"
+
+#, fuzzy
+#~ msgid "Current"
+#~ msgstr "ลบวัตถุ"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Graphics Pen"
+#~ msgstr "ไล่ระดับสี"
+
+#, fuzzy
+#~ msgid "Calligraphy Tool"
+#~ msgstr "&วงรี"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "นำมาไว้ด้าน&หน้าสุด"
+
+#~ msgid "&Raise"
+#~ msgstr "นำมาไว้ด้านห&น้า"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "นำไปไว้ด้านห&ลัง"
+
+#~ msgid "Send to &Back"
+#~ msgstr "นำไปไว้ด้านห&ลังสุด"
+
+#, fuzzy
+#~ msgid "Align Left"
+#~ msgstr "เซ็กเมนต์:"
+
+#, fuzzy
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "เซ็กเมนต์:"
+
+#, fuzzy
+#~ msgid "Align Right"
+#~ msgstr "เซ็กเมนต์:"
+
+#, fuzzy
+#~ msgid "Align Top"
+#~ msgstr "เติมสีวัตถุ"
+
+#, fuzzy
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "เซ็กเมนต์:"
+
+#, fuzzy
+#~ msgid "Align Bottom"
+#~ msgstr "เติมสีวัตถุ"
+
+#, fuzzy
+#~ msgid "Stop opacity:"
+#~ msgstr "ความทึบแสง"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "แสดงแถบสถานะ"
+
+#, fuzzy
+#~ msgid "Choose Pattern"
+#~ msgstr "สีเส้นการลาก"
+
+#~ msgid "Transform"
+#~ msgstr "แปลง"
+
+#, fuzzy
+#~ msgid "Set x-position of actual selection"
+#~ msgstr "ลำดับการเลือก"
+
+#, fuzzy
+#~ msgid "Set y-position of actual selection"
+#~ msgstr "ลำดับการเลือก"
+
+#, fuzzy
+#~ msgid "Set width of actual selection"
+#~ msgstr "ลำดับการเลือก"
+
+#, fuzzy
+#~ msgid "Set height of actual selection"
+#~ msgstr "ลำดับการเลือก"
+
+#, fuzzy
+#~ msgid "Rotate actual selection"
+#~ msgstr "ลำดับการเลือก"
+
+#, fuzzy
+#~ msgid "SX:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~ msgid "Shear actual selection in x-direction"
+#~ msgstr "ลำดับการเลือก"
+
+#, fuzzy
+#~ msgid "Shear actual selection in y-direction"
+#~ msgstr "ลำดับการเลือก"
+
+#~ msgid "Shear"
+#~ msgstr "เอน"
+
+#, fuzzy
+#~ msgid "Attach Path"
+#~ msgstr "แ&บน"
+
+#, fuzzy
+#~ msgid "Detach Path"
+#~ msgstr "แบน"
+
+#, fuzzy
+#~ msgid "Convert to Path"
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~ msgid "Simple Text Tool"
+#~ msgstr "เลือก"
+
+#~ msgid "Old:"
+#~ msgstr "เก่า:"
+
+#~ msgid "New:"
+#~ msgstr "ใหม่:"
+
+#~ msgid "Type"
+#~ msgstr "ประเภท"
+
+#~ msgid "Cap"
+#~ msgstr "หัวเส้น"
+
+#~ msgid "Join"
+#~ msgstr "เชื่อม"
+
+#, fuzzy
+#~ msgid "Color Chooser"
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~ msgid "Layers:"
+#~ msgstr "เลเยอร์"
+
+#, fuzzy
+#~ msgid "Format:"
+#~ msgstr "ปกติ"
+
+#, fuzzy
+#~ msgid "Patterns"
+#~ msgstr "แบน"
+
+#, fuzzy
+#~ msgid "Clipart"
+#~ msgstr "แทรกดาว"
+
+#, fuzzy
+#~ msgid "Stroke: None"
+#~ msgstr "การลาก"
+
+#, fuzzy
+#~ msgid "Fill: None"
+#~ msgstr "สี:"
+
+#, fuzzy
+#~ msgid "Fill: RGB"
+#~ msgstr "เติมสี"
+
+#, fuzzy
+#~ msgid "Fill: CMYK"
+#~ msgstr "สี:"
+
+#, fuzzy
+#~ msgid "Fill: HSB"
+#~ msgstr "เติมสี"
+
+#, fuzzy
+#~ msgid "Fill: Color"
+#~ msgstr "สี:"
+
+#, fuzzy
+#~ msgid "Fill: Gradient"
+#~ msgstr "ไล่ระดับสี"
+
+#, fuzzy
+#~ msgid "Fill: Pattern"
+#~ msgstr "ไล่ระดับสี"
+
+#, fuzzy
+#~ msgid "Stroke: RGB"
+#~ msgstr "การลาก"
+
+#, fuzzy
+#~ msgid "Stroke: CMYK"
+#~ msgstr "การลาก"
+
+#, fuzzy
+#~ msgid "Stroke: HSB"
+#~ msgstr "การลาก"
+
+#, fuzzy
+#~ msgid "Stroke: Gradient"
+#~ msgstr "ไล่ระดับสี"
+
+#, fuzzy
+#~ msgid "Stroke: Pattern"
+#~ msgstr "สีเส้นการลาก"
+
+#~ msgid "Polygonize"
+#~ msgstr "จำนวนเหลี่ยม"
+
+#, fuzzy
+#~ msgid "Round corners:"
+#~ msgstr "มุมโค้ง"
+
+#, fuzzy
+#~ msgid "Object Properties"
+#~ msgstr "คุณบัติการลาก"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "&ลบ"
+
+#, fuzzy
+#~ msgid "Unnamed Tool"
+#~ msgstr "เลือก"
+
+#~ msgid "Fill Objects"
+#~ msgstr "เติมสีวัตถุ"
+
+#~ msgid "Fill Object"
+#~ msgstr "เติมสีวัตถุ"
+
+#~ msgid "Insert Text"
+#~ msgstr "แทรกข้อความ"
+
+#~ msgid "Transform Objects"
+#~ msgstr "แปลงวัตถุ"
+
+#, fuzzy
+#~ msgid "Duplicate Object"
+#~ msgstr "ลบวัตถุ"
+
+#, fuzzy
+#~ msgid "Duplicate Objects"
+#~ msgstr "ลบวัตถุ"
+
+#~ msgid "Transform Object"
+#~ msgstr "แปลงวัตถุ"
+
+#~ msgid "Translate Objects"
+#~ msgstr "แปลงวัตถุ"
+
+#~ msgid "Translate Object"
+#~ msgstr "แปลงวัตถุ"
+
+#~ msgid "Scale Objects"
+#~ msgstr "ปรับขนาดวัตถุ"
+
+#~ msgid "Scale Object"
+#~ msgstr "ปรับขนาดวัตถุ"
+
+#~ msgid "Shear Objects"
+#~ msgstr "เอนวัตถุ"
+
+#~ msgid "Shear Object"
+#~ msgstr "เอนวัตถุ"
+
+#~ msgid "Rotate Objects"
+#~ msgstr "หมุนวัตถุ"
+
+#~ msgid "Rotate Object"
+#~ msgstr "หมุนวัตถุ"
+
+#, fuzzy
+#~ msgid "Translate Bezier"
+#~ msgstr "แปล"
+
+#, fuzzy
+#~ msgid "Translate Points"
+#~ msgstr "แปลงวัตถุ"
+
+#, fuzzy
+#~ msgid "Translate Point"
+#~ msgstr "แปล"
+
+#, fuzzy
+#~ msgid "Ellipse"
+#~ msgstr "&วงรี"
+
+#, fuzzy
+#~ msgid "Polygon"
+#~ msgstr "&รูปหลายเหลี่ยม"
+
+#, fuzzy
+#~ msgid "Polyline"
+#~ msgstr "จำนวนเหลี่ยม"
+
+#, fuzzy
+#~ msgid "Sinus"
+#~ msgstr "&คลื่นไซน์"
+
+#, fuzzy
+#~ msgid "Spiral"
+#~ msgstr "&ลายก้นหอย"
+
+#, fuzzy
+#~ msgid "Star"
+#~ msgstr "&ดวงดาว"
+
+#~ msgid "Periods:"
+#~ msgstr "ช่วง:"
+
+#, fuzzy
+#~ msgid "Sinus Tool"
+#~ msgstr "&คลื่นไซน์"
+
+#~ msgid "Insert Spiral"
+#~ msgstr "แทรกลายก้นหอย"
+
+#, fuzzy
+#~ msgid "Rectangular"
+#~ msgstr "รูป&สี่เหลี่ยม"
+
+#~ msgid "Segments:"
+#~ msgstr "เซ็กเมนต์:"
+
+#~ msgid "Fade:"
+#~ msgstr "จางลง:"
+
+#~ msgid "Clockwise"
+#~ msgstr "ตามเข็มนาฬิกา"
+
+#~ msgid "Counter Clockwise"
+#~ msgstr "ทวนเข็มนาฬิกา"
+
+#, fuzzy
+#~ msgid "Spiral Tool"
+#~ msgstr "&ลายก้นหอย"
+
+#~ msgid "Insert Star"
+#~ msgstr "แทรกดาว"
+
+#, fuzzy
+#~ msgid "Gear"
+#~ msgstr "เอน"
+
+#, fuzzy
+#~ msgid "Outer radius:"
+#~ msgstr "รัศมีภายนอก (%1):"
+
+#, fuzzy
+#~ msgid "Inner angle:"
+#~ msgstr "แทรกสี่เหลี่ยม"
+
+#, fuzzy
+#~ msgid "Roundness:"
+#~ msgstr "ความโค้งของมุม:"
+
+#, fuzzy
+#~ msgid "Star Tool"
+#~ msgstr "เอน"
+
+#, fuzzy
+#~ msgid "Text"
+#~ msgstr "เลือก"
+
+#, fuzzy
+#~ msgid "Alignment:"
+#~ msgstr "เซ็กเมนต์:"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "ตำแหน่ง:"
+
+#, fuzzy
+#~ msgid "New text"
+#~ msgstr "เลือก"
+
+#, fuzzy
+#~ msgid "Change Text"
+#~ msgstr "แทรกข้อความ"
+
+#, fuzzy
+#~ msgid "path"
+#~ msgstr "พท."
+
+#, fuzzy
+#~ msgid "text"
+#~ msgstr "เลือก"
+
+#, fuzzy
+#~ msgid "Paste Object"
+#~ msgstr "หมุนวัตถุ"
+
+#, fuzzy
+#~ msgid "Paste Objects"
+#~ msgstr "หมุนวัตถุ"
+
+#, fuzzy
+#~ msgid "Flatten Curves"
+#~ msgstr "แบน"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "คุณบัติการลาก"
+
+#, fuzzy
+#~ msgid "Round cap"
+#~ msgstr "มุมโค้ง"
+
+#, fuzzy
+#~ msgid "Join:"
+#~ msgstr "เชื่อม"
+
+#, fuzzy
+#~ msgid "Round join"
+#~ msgstr "มุมโค้ง"
+
+#, fuzzy
+#~ msgid "Set miter limit"
+#~ msgstr "ตั้งค่าความกว้างเส้น"
+
+#~ msgid "P&urge"
+#~ msgstr "&ล้าง"
+
+#~ msgid "&History"
+#~ msgstr "&ประวัติ"
+
+#, fuzzy
+#~ msgid "Insert Clipart"
+#~ msgstr "แทรกดาว"
+
+#~ msgid "This action cannot be undone later. Do you really want to continue?"
+#~ msgstr "การกระทำนี้ ไม่สามารถยกเลิกได้ในภายหลัง คุณต้องการจะทำต่อไปใช่หรือไม่ ?"
+
+#~ msgid "Purge History"
+#~ msgstr "ล้างประวัติ"
+
+#, fuzzy
+#~ msgid "Zoom Width"
+#~ msgstr "กว้าง:"
+
+#~ msgid "Wireframe"
+#~ msgstr "โครงร่าง"
+
+#, fuzzy
+#~ msgid "25%"
+#~ msgstr "   25%"
+
+#, fuzzy
+#~ msgid "50%"
+#~ msgstr "   50%"
+
+#, fuzzy
+#~ msgid "100%"
+#~ msgstr "  100%"
+
+#, fuzzy
+#~ msgid "200%"
+#~ msgstr "  200%"
+
+#, fuzzy
+#~ msgid "300%"
+#~ msgstr "  300%"
+
+#, fuzzy
+#~ msgid "400%"
+#~ msgstr "  400%"
+
+#, fuzzy
+#~ msgid "800%"
+#~ msgstr "  800%"
+
+#, fuzzy
+#~ msgid "Line Style"
+#~ msgstr "ตั้งค่ารูปแบบการเชื่อมต่อ"
+
+#, fuzzy
+#~ msgid "History"
+#~ msgstr "&ประวัติ"
+
+#, fuzzy
+#~ msgid "Align Objects"
+#~ msgstr "เติมสีวัตถุ"
+
+#~ msgid "Delete Object"
+#~ msgstr "ลบวัตถุ"
+
+#, fuzzy
+#~ msgid "Delete Node"
+#~ msgstr "ลบวัตถุ"
+
+#~ msgid "Stroke Objects"
+#~ msgstr "วัตถุที่ใช้ลาก"
+
+#~ msgid "Stroke Object"
+#~ msgstr "วัตถุที่ใช้ลาก"
+
+#~ msgid "Stroke Width"
+#~ msgstr "ความกว้างเส้นการลาก"
+
+#~ msgid "Order Selection"
+#~ msgstr "ลำดับการเลือก"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "จำกัดการเลิกทำ/ทำซ้ำ:"
+
+#, fuzzy
+#~ msgid "New"
+#~ msgstr "ใหม่:"
+
+#, fuzzy
+#~ msgid "Raise"
+#~ msgstr "นำมาไว้ด้านห&น้า"
+
+#, fuzzy
+#~ msgid "Lower"
+#~ msgstr "นำไปไว้ด้านห&ลัง"
+
+#, fuzzy
+#~ msgid "V"
+#~ msgstr "V:"
+
+#, fuzzy
+#~ msgid "Rectangle"
+#~ msgstr "รูป&สี่เหลี่ยม"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "แทรกรูปวงรี"
+
+#, fuzzy
+#~ msgid "Full"
+#~ msgstr "เติมสี"
+
+#, fuzzy
+#~ msgid "Gradient Tool"
+#~ msgstr "ไล่ระดับสี"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "แทรกรูปหลายเหลี่ยม"
+
+#, fuzzy
+#~ msgid "Polygon Tool"
+#~ msgstr "จำนวนเหลี่ยม"
+
+#, fuzzy
+#~ msgid "Polyline Tool"
+#~ msgstr "จำนวนเหลี่ยม"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "แทรกสี่เหลี่ยม"
+
+#, fuzzy
+#~ msgid "Rectangle Tool"
+#~ msgstr "รูป&สี่เหลี่ยม"
+
+#, fuzzy
+#~ msgid "Rotate Tool"
+#~ msgstr "หมุน"
+
+#, fuzzy
+#~ msgid "Insert Round Rect"
+#~ msgstr "แทรกสี่เหลี่ยมมุมมน"
+
+#, fuzzy
+#~ msgid "Height (%1):"
+#~ msgstr "สูง (%1):"
+
+#, fuzzy
+#~ msgid "Edge radius X:"
+#~ msgstr "ขอบรัศมี:"
+
+#, fuzzy
+#~ msgid "Edge radius Y:"
+#~ msgstr "ขอบรัศมี:"
+
+#, fuzzy
+#~ msgid "Round Rectangle Tool"
+#~ msgstr "รูปสี่เหลี่ยม&มุมโค้ง"
+
+#, fuzzy
+#~ msgid "Round Rectangle"
+#~ msgstr "รูปสี่เหลี่ยม&มุมโค้ง"
+
+#, fuzzy
+#~ msgid "Editing Nodes"
+#~ msgstr "แก้ไขโหนด"
+
+#, fuzzy
+#~ msgid "Select Nodes Tool"
+#~ msgstr "คุณ&สมบัติการเลือก"
+
+#, fuzzy
+#~ msgid "Selection Mode"
+#~ msgstr "คุณ&สมบัติการเลือก"
+
+#~ msgid "Select"
+#~ msgstr "เลือก"
+
+#, fuzzy
+#~ msgid "No selection"
+#~ msgstr "ลำดับการเลือก"
+
+#, fuzzy
+#~ msgid "Select Tool"
+#~ msgstr "เลือก"
+
+#, fuzzy
+#~ msgid "Shear Tool"
+#~ msgstr "เอน"
+
+#~ msgid "Translate"
+#~ msgstr "แปล"
+
+#~ msgid "Relative &position"
+#~ msgstr "&ตำแหน่งที่สัมพันธ์"
+
+#, fuzzy
+#~ msgid "Choose Image to Add"
+#~ msgstr "สีเส้นการลาก"
+
+#, fuzzy
+#~ msgid "&Insert Knots..."
+#~ msgstr "แ&ทรกปม"
+
+#~ msgid "Insert Knots"
+#~ msgstr "แทรกปม"
+
+#~ msgid "Knots:"
+#~ msgstr "ปม:"

@@ -1,0 +1,357 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Translators:
+# Ongun Kanat <ongun.kanat@gmail.com>, 2012.
+# obsoleteman <tulliana@gmail.com>, 2012-2013.
+# Volkan Gezer <volkangezer@gmail.com>, 2013, 2015.
+# Emir SARI <emir_sari@icloud.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra-kde4\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2022-08-11 11:53+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 22.04.3\n"
+
+#. i18n: ectx: Menu (Shapes)
+#: data/braindumpui.rc:8
+#, kde-format
+msgctxt "@title:menu"
+msgid "Shapes"
+msgstr "Şekiller"
+
+#. i18n: ectx: Menu (Shapes)
+#: data/braindumpview.rc:23
+#, kde-format
+msgid "Shapes"
+msgstr "Şekiller"
+
+#. i18n: tag category attribute name
+#: data/states/states/states.xml:3
+#, kde-format
+msgid "Todo"
+msgstr "Yapılacaklar"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:4
+#, kde-format
+msgid "Unchecked"
+msgstr "Seçili değil"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:5
+#, kde-format
+msgid "Checked"
+msgstr "Seçili"
+
+#. i18n: tag category attribute name
+#: data/states/states/states.xml:7
+#, kde-format
+msgid "Progress"
+msgstr "İlerleme"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:8
+#, kde-format
+msgid "0 %"
+msgstr "%​0"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:9
+#, kde-format
+msgid "25 %"
+msgstr "%​25"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:10
+#, kde-format
+msgid "50 %"
+msgstr "%​50"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:11
+#, kde-format
+msgid "75 %"
+msgstr "%​75"
+
+#. i18n: tag state attribute name
+#: data/states/states/states.xml:12
+#, kde-format
+msgid "100 %"
+msgstr "%​100"
+
+#: plugins/quickstates/BraindumpQuickStatesPlugin.cpp:46
+#, kde-format
+msgid "States"
+msgstr "Durumlar"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/stateshape/StateShapeConfigWidget.ui:17
+#, kde-format
+msgid "State:"
+msgstr "Durum:"
+
+#: plugins/stateshape/StateShapeFactory.cpp:31
+#, kde-format
+msgid "State Shape"
+msgstr "Durum Şekli"
+
+#: plugins/stateshape/StateShapeFactory.cpp:33
+#, kde-format
+msgid "A state shape"
+msgstr "Bir durum şekli"
+
+#: plugins/stateshape/StateTool.cpp:107
+#, kde-format
+msgid "State tool options"
+msgstr "Durum aracı seçenekleri"
+
+#: plugins/stateshape/StateToolFactory.cpp:32
+#, kde-format
+msgid "State editing"
+msgstr "Durum düzenleme"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/webshape/WebShapeConfigWidget.ui:17
+#, kde-format
+msgid "URL:"
+msgstr "URL:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, useCache)
+#: plugins/webshape/WebShapeConfigWidget.ui:40
+#, kde-format
+msgid "Use a cache copy"
+msgstr "Bir önbellek kopyası kullan"
+
+#: plugins/webshape/WebShapeFactory.cpp:34
+#, kde-format
+msgid "Web Shape"
+msgstr "Web Şekli"
+
+#: plugins/webshape/WebShapeFactory.cpp:36
+#, kde-format
+msgid "A web shape"
+msgstr "Bir web şekli"
+
+#: plugins/webshape/WebToolFactory.cpp:31
+#, kde-format
+msgid "Web shape editing"
+msgstr "Web şekli düzenleme"
+
+#: src/AboutData.h:31
+#, kde-format
+msgid "Braindump"
+msgstr "Braindump"
+
+#: src/AboutData.h:32
+#, kde-format
+msgid "Braindump: directly from your brain to the computer."
+msgstr "Braindump: Beyninizden bilgisayara."
+
+#: src/AboutData.h:34
+#, kde-format
+msgid ""
+"Unmaintained at the time of release of this version. The Calligra community "
+"welcomes interested persons to take over maintainership."
+msgstr ""
+"Bu sürümün çıkış tarihi itibarıyla ilgilenen kimse yok. Calligra topluluğu "
+"geliştiriciliği devralmaya ilgisi olan insanları hoş karşılamaktadır."
+
+#: src/AboutData.h:35
+#, kde-format
+msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
+msgstr "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
+
+#: src/AboutData.h:39 src/AboutData.h:40
+#, kde-format
+msgid "Former maintainer"
+msgstr "Önceki geliştirici"
+
+#: src/AboutData.h:39
+#, kde-format
+msgid "Somsubhra Bairi"
+msgstr "Somsubhra Bairi"
+
+#: src/AboutData.h:40
+#, kde-format
+msgid "Cyrille Berger"
+msgstr "Cyrille Berger"
+
+#. i18n translator strings
+#: src/AboutData.h:42
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Ongun Kanat"
+
+#: src/AboutData.h:43
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "ongun.kanat@gmail.com"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/forms/wdgsectionproperties.ui:17
+#, kde-format
+msgid "Layout:"
+msgstr "Yerleşim:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnAdd)
+#: src/forms/wdgsectionsbox.ui:50
+#, kde-format
+msgid "Create a new whiteboard"
+msgstr "Yeni bir beyaz tahta yarat"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
+#: src/forms/wdgsectionsbox.ui:78
+#, kde-format
+msgid "Duplicate whiteboard"
+msgstr "Beyaz tahtayı çoğalt"
+
+#. i18n: ectx: property (whatsThis), widget (QToolButton, bnDuplicate)
+#: src/forms/wdgsectionsbox.ui:81
+#, kde-format
+msgid "Duplicate the currently selected whiteboard"
+msgstr "Seçili olan beyaz tahtayı çoğalt"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnLower)
+#: src/forms/wdgsectionsbox.ui:106
+#, kde-format
+msgid "Move whiteboard down"
+msgstr "Beyaz tahtayı alta taşı"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
+#: src/forms/wdgsectionsbox.ui:131
+#, kde-format
+msgid "Move whiteboard up"
+msgstr "Beyaz tahtayı üste taşı"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
+#: src/forms/wdgsectionsbox.ui:172
+#, kde-format
+msgid "Delete the whiteboard"
+msgstr "Beyaz tahtayı sil"
+
+#: src/import/DockerManager_p.h:51
+#, kde-format
+msgid "Tool Bars"
+msgstr "Araç Çubukları"
+
+#: src/import/ToolDocker.cpp:31
+#, kde-format
+msgid "Tool Options"
+msgstr "Araç Seçenekleri"
+
+#: src/import/ToolDocker.cpp:70
+#, kde-format
+msgid "Toggles showing a title bar"
+msgstr "Başlık çubuğu gösterimini açar/kapatır"
+
+#: src/import/ToolDocker.cpp:78
+#, kde-format
+msgid "Toggles organising the options in tabs or not"
+msgstr "Seçenekleri sekmeler halinde düzenlemeyi açar/kapatır"
+
+#: src/layouts/ColumnLayout.cpp:125
+#, kde-format
+msgid "Column"
+msgstr "Sütun"
+
+#: src/layouts/FreeLayout.cpp:60
+#, kde-format
+msgid "Free"
+msgstr "Serbest"
+
+#: src/MainWindow.cpp:118
+#, kde-format
+msgid "Dockers"
+msgstr "Tutturucular"
+
+#: src/SectionGroup.cpp:83
+#, kde-format
+msgid "Untitled %1"
+msgstr "Adsız %1"
+
+#: src/SectionPropertiesDock.cpp:32
+#, kde-format
+msgid "Dump properties"
+msgstr "Gereksiz özellikler"
+
+#: src/SectionsBoxDock.cpp:40
+#, kde-format
+msgid "Whiteboards"
+msgstr "Beyaz Tahtalar"
+
+#: src/SectionsBoxDock.cpp:54
+#, kde-format
+msgid "Minimal View"
+msgstr "En Küçük Görünüm"
+
+#: src/SectionsBoxDock.cpp:56
+#, kde-format
+msgid "Detailed View"
+msgstr "Ayrıntılı Görünüm"
+
+#: src/SectionsBoxDock.cpp:58
+#, kde-format
+msgid "Thumbnail View"
+msgstr "Küçük Resim Görünümü"
+
+#: src/SectionsBoxDock.cpp:69
+#, kde-format
+msgid "View mode"
+msgstr "Görünüm Kipi"
+
+#: src/SectionsBoxDock.cpp:81
+#, kde-format
+msgid "Add new whiteboard below current."
+msgstr "Şimdikinin altına yeni bir beyaz tahta ekle."
+
+#: src/SectionsBoxDock.cpp:82
+#, kde-format
+msgid "Add new whiteboard above current."
+msgstr "Şimdikinin üstüne yeni bir beyaz tahta ekle."
+
+#: src/SectionsBoxDock.cpp:83
+#, kde-format
+msgid "Add new whiteboard as child of current."
+msgstr "Şimdikine yeni bir alt beyaz tahta ekle."
+
+#: src/View.cpp:183
+#, kde-format
+msgid "D&elete"
+msgstr "S&il"
+
+#: src/View.cpp:190
+#, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "&Çoğalt"
+
+#: src/View.cpp:195
+#, kde-format
+msgid "Group Shapes"
+msgstr "Şekilleri Grupla"
+
+#: src/View.cpp:200
+#, kde-format
+msgid "Ungroup Shapes"
+msgstr "Şekil Grubunu Çöz"
+
+#: src/View.cpp:384
+msgctxt "(qtundo-format)"
+msgid "Group shapes"
+msgstr "Şekilleri grupla"
+
+#: src/View.cpp:406
+msgctxt "(qtundo-format)"
+msgid "Ungroup shapes"
+msgstr "Şekil grubunu çöz"

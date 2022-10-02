@@ -1,0 +1,1191 @@
+# Translation of karbon.po to Slovenian
+# Copyright (C) 2002,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
+# $Id: KarbonFilterEffects.po 1599248 2021-04-25 01:08:01Z scripty $
+# $Source$
+#
+# Gregor Rakar <gregor.rakar@kiss.si>, 2002, 2003, 2004.
+# Andrej Vernekar <andrej.vernekar@gmail.com>, 2005, 2006, 2007, 2008, 2012.
+# Jure Repinc <jlp@holodeck1.com>, 2006.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2020-01-23 15:50+0100\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Translator: Andrej Vernekar <andrej.vernekar@gmail.com>\n"
+"X-Generator: Poedit 2.2.4\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, kde-format
+msgid "Blend"
+msgstr "Zmešaj"
+
+#: BlendEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Blend mode"
+msgstr "Način mešanja"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "Normalno"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr "Pomnoži"
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr "Zaslon"
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr "Potemni"
+
+#: BlendEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Lighten"
+msgstr "Posvetli"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr "Gaussova zabrisanost"
+
+#: BlurEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Radius"
+msgstr "Polmer"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr "Barvna matrika"
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr "Uporabi barvno matriko"
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Saturate colors"
+msgstr "Nasiti barve"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Rotate hue"
+msgstr "Zavrti odtenek"
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr "Osvetljenost v alfa"
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Saturate value"
+msgstr "Vrednost nasičenja"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, kde-format
+msgid "Angle"
+msgstr "Kot"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr "Barvna matrika"
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr "Prenos komponent"
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr "Funkcija"
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr "Identiteta"
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, kde-format
+msgid "Table"
+msgstr "Tabela"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr "Diskretno"
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Linear"
+msgstr "Linearno"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr "Gama"
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr "Vrednosti"
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, kde-format
+msgid "Slope"
+msgstr "Naklon"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, kde-format
+msgid "Intercept"
+msgstr "Prestrezi"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr "Amplituda"
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr "Eksponent"
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr "Zamik"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, kde-format
+msgid "Composite"
+msgstr "Kompozit"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, kde-format
+msgid "Operation"
+msgstr "Operacija"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr "Konvolucijska matrika"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, kde-format
+msgid "Duplicate"
+msgstr "Podvoji"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr "Zavihaj"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, kde-format
+msgid "None"
+msgstr "Brez"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, kde-format
+msgid "Edge mode:"
+msgstr "Robni način:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr "Velikost jedra:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Target point:"
+msgstr "Ciljna točka:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr "Delitelj:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr "Pristranost:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr "Ohrani alfo"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, kde-format
+msgid "Edit kernel"
+msgstr "Uredi jedro"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, kde-format
+msgid "Flood fill"
+msgstr "Zapolni"
+
+#: FloodEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Flood color"
+msgstr "Barva zapolnitve"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr "Slika"
+
+#: ImageEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Select image..."
+msgstr "Izberi sliko..."
+
+#: ImageEffectConfigWidget.cpp:54
+#, kde-format
+msgid "Select image"
+msgstr "Izberi sliko"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr "Združi"
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr "Morfologija"
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr "Erodiraj"
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Dilate"
+msgstr "Razširi"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Operator:"
+msgstr "Operator:"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Radius x:"
+msgstr "Polmer x:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, kde-format
+msgid "Radius y:"
+msgstr "Polmer y:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr "dx"
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr "dy"
+
+#, fuzzy
+#~| msgid "Blend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "Zmešaj"
+
+#, fuzzy
+#~| msgid "Blend mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "Način zlivanja"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Normalno"
+
+#, fuzzy
+#~| msgid "Multiply"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiply"
+#~ msgstr "Pomnoži"
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Screen"
+#~ msgstr "Zaslon"
+
+#, fuzzy
+#~| msgid "Darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "Potemni"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Posvetli"
+
+#, fuzzy
+#~| msgid "Gaussian blur"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gaussian blur"
+#~ msgstr "Gaussova zabrisanost"
+
+#, fuzzy
+#~| msgid "Radius"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "Polmer"
+
+#, fuzzy
+#~| msgid "Color Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color Matrix"
+#~ msgstr "Barvna matrika"
+
+#, fuzzy
+#~| msgid "Color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply color matrix"
+#~ msgstr "Barvna matrika"
+
+#, fuzzy
+#~| msgid "Stroke: Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "Poteza: barva"
+
+#, fuzzy
+#~| msgid "Rotate hue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate hue"
+#~ msgstr "Zavrti odtenek"
+
+#, fuzzy
+#~| msgid "Stroke: Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "Poteza: barva"
+
+#, fuzzy
+#~| msgid "Angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "Kot"
+
+#, fuzzy
+#~| msgid "Color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color matrix"
+#~ msgstr "Barvna matrika"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~| msgid "Identity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Identity"
+#~ msgstr "Identiteta"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "Tabela"
+
+#, fuzzy
+#~| msgid "Discrete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Discrete"
+#~ msgstr "Diskretno"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "Linearen"
+
+#, fuzzy
+#~| msgid "Gamma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gamma"
+#~ msgstr "Gama"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Values"
+#~ msgstr "Vrednosti"
+
+#, fuzzy
+#~| msgid "Slope"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "Naklon"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "Vmesnik"
+
+#, fuzzy
+#~| msgid "Amplitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Amplitude"
+#~ msgstr "Amplituda"
+
+#, fuzzy
+#~| msgid "Exponent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exponent"
+#~ msgstr "Eksponent"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Zamik"
+
+#, fuzzy
+#~| msgid "Components"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "Komponente"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "Operacija"
+
+#, fuzzy
+#~| msgid "Color Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convolve Matrix"
+#~ msgstr "Barvna matrika"
+
+#, fuzzy
+#~| msgid "Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "Podvoji"
+
+#, fuzzy
+#~| msgid "Wrap"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Wrap"
+#~ msgstr "Prelomi"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Brez"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "Pogled"
+
+#, fuzzy
+#~| msgid "Kernel size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Kernel size:"
+#~ msgstr "Velikost jedra:"
+
+#, fuzzy
+#~| msgid "Target point:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "Ciljna točka:"
+
+#, fuzzy
+#~| msgid "Cap:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bias:"
+#~ msgstr "Zaključek:"
+
+#, fuzzy
+#~| msgid "Preserve alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preserve alpha"
+#~ msgstr "Ohrani alfo"
+
+#, fuzzy
+#~| msgid "Edit kernel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "Uredi jedro"
+
+#, fuzzy
+#~| msgid "Flood fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "Zapolnitev"
+
+#, fuzzy
+#~| msgid "Flood color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "Barva zapolnitve"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Slika"
+
+#, fuzzy
+#~| msgid "Select image..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image..."
+#~ msgstr "Izberi sliko..."
+
+#, fuzzy
+#~| msgid "Select image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image"
+#~ msgstr "Izberi sliko "
+
+#, fuzzy
+#~| msgid "Merge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Merge"
+#~ msgstr "Združi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "&Zbriši"
+
+#, fuzzy
+#~| msgid "Operator:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "Operator:"
+
+#, fuzzy
+#~| msgid "Radius x:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "Polmer x:"
+
+#, fuzzy
+#~| msgid "Radius y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "Polmer y:"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Gregor Rakar,Andrej Vernekar,Jure Repinc"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "gregor.rakar@kiss.si,andrej.vernekar@moj.net,jlp@holodeck1.com"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "Boolova operacija"
+
+#~ msgid "&Order"
+#~ msgstr "&Vrstni red"
+
+#~ msgid "&Align"
+#~ msgstr "&Poravnaj"
+
+#~ msgid "&File"
+#~ msgstr "&Datoteka"
+
+#~ msgid "&Edit"
+#~ msgstr "&Uredi"
+
+#~ msgid "&View"
+#~ msgstr "Po&gled"
+
+#~ msgid "&Object"
+#~ msgstr "&Predmet"
+
+#~ msgid "&Distribute"
+#~ msgstr "Poraz&deli"
+
+#~ msgid "&Path"
+#~ msgstr "Po&t"
+
+#~ msgid "Effe&cts"
+#~ msgstr "U&činki"
+
+#~ msgid "&Settings"
+#~ msgstr "Na&stavitve"
+
+#~ msgid "Edit"
+#~ msgstr "Uredi"
+
+#~ msgid "Object"
+#~ msgstr "Predmet"
+
+#~ msgid "Align"
+#~ msgstr "Poravnaj"
+
+#~ msgid "Effects"
+#~ msgstr "Učinki"
+
+#~ msgid "View"
+#~ msgstr "Pogled"
+
+#~ msgid "&Flatten Path..."
+#~ msgstr "Z&ravnaj pot ..."
+
+#~ msgid "Flatten Path"
+#~ msgstr "Zravnaj pot"
+
+#~ msgid "Properties"
+#~ msgstr "Lastnosti"
+
+#~ msgid "Flatness:"
+#~ msgstr "Zravnanost:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten path"
+#~ msgstr "Zravnaj pot"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "Zapri pot"
+
+#, fuzzy
+#~| msgid "&Flatten Path..."
+#~ msgid "&Refine Path..."
+#~ msgstr "Z&ravnaj pot ..."
+
+#, fuzzy
+#~ msgid "Refine Path"
+#~ msgstr "Zapri pot"
+
+#~ msgid "Subdivisions:"
+#~ msgstr "Podrazdelki:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "Zaobljeni koti"
+
+#~ msgid "&Round Corners..."
+#~ msgstr "Zao&bljeni koti ..."
+
+#~ msgid "Round Corners"
+#~ msgstr "Zaobljeni koti"
+
+#~ msgid "Radius:"
+#~ msgstr "Polmer:"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "Pogled"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "Pogled"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl & pinch"
+#~ msgstr "Vrtinec in udarec"
+
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Vrtinec/Udarec ..."
+
+#~ msgid "Whirl Pinch"
+#~ msgstr "Vrtinčen udarec"
+
+#~ msgid "Info"
+#~ msgstr "Informacije"
+
+#~ msgid "Angle:"
+#~ msgstr "Kot:"
+
+#~ msgid "Pinch:"
+#~ msgstr "Udarec:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "Dvigni plast"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "Spusti plast"
+
+#~ msgid "Configure"
+#~ msgstr "Nastavi"
+
+#~ msgid "Interface"
+#~ msgstr "Vmesnik"
+
+#~ msgid "Misc"
+#~ msgstr "Razno"
+
+#~ msgid "Grid"
+#~ msgstr "Mreža"
+
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#~ msgid "Document Settings"
+#~ msgstr "Nastavitve dokumenta"
+
+#~ msgctxt "@title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Avtor"
+
+#~ msgid "Author"
+#~ msgstr "Avtor"
+
+#~ msgid "Layer view"
+#~ msgstr "Pogled plasti"
+
+#~ msgid "Add a new layer"
+#~ msgstr "Dodaj novo plast"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "Izbriši izbrane predmete"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "Dvigni izbrane predmete"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "Spusti izbrane predmete"
+
+#~ msgid "Minimal View"
+#~ msgstr "Minimalni pogled"
+
+#~ msgid "Detailed View"
+#~ msgstr "Podrobni pogled"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "Pogled sličic"
+
+#~ msgid "View mode"
+#~ msgstr "Način pogleda"
+
+#~ msgid "New Layer"
+#~ msgstr "Nova plast"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Vnesite ime trenutne plasti:"
+
+#~ msgid "New layer"
+#~ msgstr "Nova plast"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Ustvari plast"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Izbriši plast"
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Napaka pri brisanju plasti"
+
+#~ msgid "Layer"
+#~ msgstr "Plast"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Skupina"
+
+#~ msgid "Shape"
+#~ msgstr "Oblika"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Vidna"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Zaklenjena"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Motnost"
+
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Odrezan"
+
+#~ msgid "no"
+#~ msgstr "ne"
+
+#~ msgid "yes"
+#~ msgstr "da"
+
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "Program za vektorsko risanje"
+
+#, fuzzy
+#~| msgid "(c) 2001-2011, The Karbon Developers"
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "(c) 2001-2011, Razvijalci Karbona"
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "Vabljeni ste, da sodelujete na kakršenkoli način."
+
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht "
+
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Odpravljanje hroščev in izboljšave"
+
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#~ msgid "Bug fixes"
+#~ msgstr "Popravki hroščev"
+
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Koristni popravki in nasveti"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Neveljaven dokument OASIS. Značka office:body ni bila najdena."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Neveljaven dokument OASIS. Značka office:drawing ni bila najdena."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Neveljaven dokument OASIS. Značka draw:page ni bila najdena."
+
+#~ msgid "Master Page"
+#~ msgstr "Glavna stran"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "Vstavi grafiko"
+
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Izberite grafiko za dodajanje"
+
+#~ msgid "Could not load image."
+#~ msgstr "Ni moč naložiti slike."
+
+#~ msgid "Import graphic"
+#~ msgstr "Uvozi grafiko"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally"
+#~ msgstr "Zrcali vodoravno"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Vertically"
+#~ msgstr "Zrcali navpično"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally and Vertically"
+#~ msgstr "Zrcali vodoravno in navpično"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "Loči poti"
+
+#~ msgid "Outline &Mode"
+#~ msgstr "Način o&risa"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Prikaži robove papirja"
+
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Uvozi grafiko ..."
+
+#~ msgid "D&elete"
+#~ msgstr "&Zbriši"
+
+#~ msgid "Edit Guides"
+#~ msgstr "Uredi vodila"
+
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "Po&dvoji"
+
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Porazdeli po sredini (vodoravno)"
+
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Porazdeli vrzeli (vodoravno)"
+
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Porazdeli leve robove"
+
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Porazdeli desne robove"
+
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Porazdeli po sredini (navpično)"
+
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Porazdeli vrzeli (navpično)"
+
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Porazdeli spodnje robove"
+
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Porazdeli zgornje robove"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Prikaži ravnila"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Prikaže ali skrije ravnila"
+
+#~ msgid "Show Color Palette"
+#~ msgstr "Prikaži barvno paleto"
+
+#~ msgid "Show or hide color palette"
+#~ msgstr "Prikaže ali skrije barvno paleto"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Pripni k mreži"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "Pripne k mreži"
+
+#~ msgid "&Clip Object"
+#~ msgstr "Iz&reži predmet"
+
+#, fuzzy
+#~| msgid "&Ungroup Objects"
+#~ msgid "&Unclip Objects"
+#~ msgstr "&Razdruži predmete"
+
+#~ msgid "Mirror Vertically"
+#~ msgstr "Zrcali navpično"
+
+#~ msgid "Mirror Horizontally"
+#~ msgstr "Zrcali vodoravno"
+
+#~ msgid "&Close Path"
+#~ msgstr "Zapri po&t"
+
+#~ msgid "Com&bine Path"
+#~ msgstr "Z&druži pot"
+
+#~ msgid "Se&parate Path"
+#~ msgstr "&Loči pot"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgid "Re&verse Path"
+#~ msgstr "Zapri po&t"
+
+#, fuzzy
+#~| msgid "Edit Base Path"
+#~ msgid "Intersect Paths"
+#~ msgstr "Uredi osnovno pot"
+
+#~ msgid "Subtract Paths"
+#~ msgstr "Odvzemi poti"
+
+#~ msgid "Unite Paths"
+#~ msgstr "Združi poti"
+
+#~ msgid "Exclude Paths"
+#~ msgstr "Izloči poti"
+
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Pripni pot k mreži"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Nastavi Karbon ..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "Pos&tavitev strani ..."
+
+#~ msgid "Zoom to Selection"
+#~ msgstr "Povečaj izbrano"
+
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Približaj za risanje"
+
+#~ msgid "Zoom"
+#~ msgstr "Povečava"
+
+#~ msgid "Show status bar:"
+#~ msgstr "Prikaži vrstico stanja:"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "Število nedavnih datotek:"
+
+#~ msgid "Palette font size:"
+#~ msgstr "Velikost pisave za paleto:"
+
+#~ msgid "Canvas color:"
+#~ msgstr "Barva platna:"
+
+#~ msgid "Select palette"
+#~ msgstr "Izberite barvni nabor"
+
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "Brez"
+
+#~ msgctxt "The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "Po meri"
+
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Brez"
+
+#~ msgid "Stroke:"
+#~ msgstr "Poteza:"
+
+#~ msgid "Fill:"
+#~ msgstr "Polnilo:"
+
+#~ msgid "File to open"
+#~ msgstr "Datoteka za odprtje"
+
+#~ msgid "Target:"
+#~ msgstr "Cilj:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Line"
+#~ msgstr "Linearen"
+
+#~ msgid "Fill"
+#~ msgstr "Zapolni"
+
+#~ msgid "Type:"
+#~ msgstr "Vrsta:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Linearen"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Radialen"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Stožčast"
+
+#~ msgid "Repeat:"
+#~ msgstr "Ponovi:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Brez"
+
+#~ msgid "Reflect"
+#~ msgstr "Odbij"
+
+#~ msgid "Repeat"
+#~ msgstr "Ponovi"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Skupna motnost:"
+
+#~ msgid "Stop color."
+#~ msgstr "Zaustavi barvo."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Dodaj k vnaprej določenim prelivom"
+
+#~ msgid "Original"
+#~ msgstr "Izvirnik"
+
+#~ msgid "Tiled"
+#~ msgstr "Tlakovano"
+
+#~ msgid "Stretched"
+#~ msgstr "Raztegnjeno"
+
+#~ msgid "Top Left"
+#~ msgstr "Zgoraj levo"
+
+#~ msgid "Top"
+#~ msgstr "Na vrhu"
+
+#~ msgid "Top Right"
+#~ msgstr "Zgoraj desno"
+
+#~ msgid "Left"
+#~ msgstr "Levo"
+
+#~ msgid "Center"
+#~ msgstr "Na sredino"
+
+#~ msgid "Right"
+#~ msgstr "Desno"
+
+#~ msgid "Bottom Left"
+#~ msgstr "Spodaj levo"
+
+#~ msgid "Bottom"
+#~ msgstr "Na dnu"
+
+#~ msgid "Bottom Right"
+#~ msgstr "Spodaj desno"

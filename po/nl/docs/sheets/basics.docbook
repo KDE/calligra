@@ -1,0 +1,927 @@
+<chapter id="basics">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Natalie</firstname
+> <surname
+>Koning</surname
+><affiliation
+><address
+> <email
+>nat@switch.demon.nl</email
+></address
+></affiliation
+> <contrib
+>Vertaler</contrib
+></othercredit
+> &Sander.Koning; 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>&sheets;: de basis</title>
+
+<note
+><para
+>Zoals alles in &kde;, is &sheets; op alle mogelijke manieren aan te passen. Dit kan lastig zijn als u probeert de tekst in bijvoorbeeld dit document te vergelijken met wat u in uw eigen (aangepaste) versie van &sheets; ziet. Om de kans op verwarring kleiner te maken raden we u aan om, wanneer u voor het eerst met &sheets; gaat werken, de standaard opties in te stellen in alle pagina's van de instellingendialoog van &sheets; (die u krijgt door <menuchoice
+><guimenu
+>Instellingen</guimenu
+><guimenuitem
+>Sheets instellen...</guimenuitem
+></menuchoice
+> te selecteren). </para
+></note>
+
+<sect1 id="starting">
+<title
+>Rekenbladen voor beginners</title>
+
+<para
+>In dit deel proberen we aan de hand van voorbeelden te laten zien wat een rekenbladprogramma als &sheets; feitelijk doet en waarom het zo'n handig hulpmiddel is in alle gevallen waar u met getallen werkt. Als u al eerder met rekenbladprogramma's gewerkt hebt, kunt u dit gedeelte overslaan.</para>
+
+<para
+>Allereerst moet &sheets; gestart worden. U kunt dit doen door <mousebutton
+>links</mousebutton
+> te klikken op een &sheets;-pictogram (eventueel op het bureaublad of op het paneel) of door <menuchoice
+><guimenu
+>Kantoortoepassingen</guimenu
+> <guimenuitem
+>&sheets;</guimenuitem
+></menuchoice
+> in het &kmenu; te kiezen.</para>
+
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="newdocument.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>&sheets;, de eerste keer</phrase>
+</textobject>
+</mediaobject
+>U krijgt eerst de keuze om een nieuw document van een sjabloon te creëren, een bestaand of recent bestand te openen of met een leeg document te beginnen. Klik op het tabblad "Document aanmaken", klik op het pictogram "Algemeen" en selecteer <guilabel
+>Leeg werkblad</guilabel
+>. Klik daarna op <guilabel
+>OK</guilabel
+></para>
+
+<para
+>Als &sheets; de eerste keer wordt gestart, ziet u een werkblad met lege rechthoekige cellen, ingedeeld in rijen en kolommen. Elke rij heeft een nummer en elke kolom heeft een letter. In deze cellen komen straks de gegevens, formules, teksten en grafieken. <mediaobject>
+<imageobject>
+<imagedata fileref="starting1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Schermafdruk begin1</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Vul nu volgens het voorbeeld hierboven de tekst en de getallen van de eerste 5 rijen in dezelfde cellen op het werkblad in. Voorlopig hoeft u zich nog niets aan te trekken van wat er in de zevende rij staat. Om iets in een cel in te vullen selecteert u de cel door er met de <mousebutton
+>linker</mousebutton
+>muisknop op te klikken. Typ daarna iets in, en druk op &Enter; of gebruik de pijltoetsen om met de muisaanwijzer naar een andere cel te gaan. </para>
+<para
+>De gegevens die we ingevuld hebben kunnen een eenvoudig budget voor twee maanden zijn, de verwachte uitgaven voor voedsel, woonlasten, kleding en andere uitgaven. Selecteer nu cel B7 (kolom B, rij 7) en typ het volgende in: <userinput
+>=B2+B3+B4+B5</userinput
+> en druk op &Enter;. Omdat de inhoud van de cel met een <keycap
+>=</keycap
+> begint, behandelt &sheets; dit als een formule, en berekent deze formule. In dit geval moeten de waarden in de vier cellen B2 tot en met B5 worden opgeteld en de uitkomst van de berekening wordt in cel B7 getoond.</para>
+<para
+>U zou net zo'n formule in cel C7 kunnen intypen, in dat geval zou de formule er zo uitzien: <userinput
+>=C2+C3+C4+C5</userinput
+>. Een gemakkelijkere methode is om de inhoud van cel B7 te kopiëren en in cel C7 te plakken. &sheets; verandert dan automatisch de celverwijzing van B.. naar C..</para>
+<para
+>Tot nu toe denkt u misschien dat &sheets; niet meer voor u kan doen dan wat u met met potlood en papier of met een rekenmachine zou kunnen. Maar dit is slechts een heel eenvoudig voorbeeld, een eenvoudige berekening met weinig getallen. Zodra de tabel groter wordt en er meer getallen zijn, kunt u de berekeningen veel sneller en nauwkeuriger in een rekenblad doen. </para>
+<para
+>Met een rekenblad kunt u ook <quote
+>Stel dat...</quote
+> berekeningen uit laten voeren. Omdat een formule automatisch herberekend wordt zodra één van de waarden waarnaar verwezen wordt verandert, kunt u snel zien wat er met de uitkomst gebeurt wanneer u een waarde verandert. In ons voorbeeld kunt u bijvoorbeeld het effect zien als u bij de kosten voor voedsel in de maand december (C2) een lager bedrag invult. Zo zou u in een werkblad dat het broeikaseffect berekent kunnen zien wat het effect is als de methaanuitstoot met 50 procent vermindert.</para>
+</sect1>
+
+<sect1 id="selecting">
+<title
+>Cellen selecteren</title>
+<para
+>U kunt één enkele cel of een rechthoekig gebied van cellen op een werkblad selecteren. De geselecteerde cellen worden weergegeven met een dikke zwarte rand eromheen. </para>
+<itemizedlist>
+<title
+>U kunt een enkele cel op één van de volgende manieren selecteren</title>
+<listitem
+><para
+>Klik erop met de <mousebutton
+>linker</mousebutton
+>muisknop</para
+></listitem>
+<listitem
+><para
+>Voer de celverwijzing in (bijvoorbeeld <userinput
+>B5</userinput
+>) in het tekstvak links in de <guilabel
+>Celbewerker</guilabel
+> en druk op &Enter;.</para
+></listitem>
+<listitem
+><para
+>Kies <menuchoice
+><guimenu
+>Ga</guimenu
+> <guimenuitem
+>Ga naar cel...</guimenuitem
+></menuchoice
+> op de menubalk.</para
+></listitem>
+</itemizedlist>
+
+<para
+>U kunt ook in het werkblad navigeren met de <keysym
+>pijl</keysym
+>-toetsen. Als u op &Enter; drukt, wordt de celcursor één cel omhoog, omlaag, naar links of naar rechts verplaatst, afhankelijk van de instelling in de pagina voor de  <guilabel
+>Interface</guilabel
+> in de <link linkend="configinterface"
+>instellingendialoog</link
+> van &sheets;.</para
+> <para
+>Als u de <keycombo action="simul"
+>&Shift;</keycombo
+>-toets ingedrukt houdt terwijl u de <keysym
+>pijl</keysym
+>toetsen gebruikt, wordt de celcursor naar het begin of eind van het blok cellen dat gegevens bevat verplaatst.</para>
+<para
+>Om een gebied van aaneengesloten cellen te selecteren sleept u met de muis terwijl u de <mousebutton
+>linker</mousebutton
+>muisknop ingedrukt houdt over de cellen die u wilt selecteren. U kunt ook de verwijzingen van de cel linksboven en de cel rechtsonder (bijvoorbeeld <userinput
+>B7:C14</userinput
+>) in het tekstvak links in de <guilabel
+>Celbewerker</guilabel
+> typen en daarna op &Enter; drukken, of <menuchoice
+><guimenu
+>Ga</guimenu
+><guimenuitem
+>Ga naar cel...</guimenuitem
+></menuchoice
+> op de menubalk kiezen.</para>
+<para
+>U kunt ook een celbereik selecteren door eerst de cel in één hoek van het bereik te selecteren, de <keycombo action="simul"
+>&Shift;</keycombo
+>-toets in te drukken en met de <mousebutton
+>linker</mousebutton
+>muisknop de cel in de hoek er diagonaal tegenover te klikken.</para>
+
+<para
+>Om een aantal niet-aaneengesloten cellen te selecteren klikt u op de eerste cel, houd dan de <keycombo action="simul"
+>&Ctrl;</keycombo
+>-ingedrukt en klik op de volgende cellen.</para>
+
+<para
+>Om een gehele rij of kolom te selecteren klikt u met de <mousebutton
+>linker</mousebutton
+>muisknop op de rijkop (het rijnummer) of op de kolomkop (de kolomletter). Om aangrenzende rijen of kolommen te selecteren sleept u de muis over de gewenste rijnummers of kolomletters terwijl u de <mousebutton
+>linker</mousebutton
+>muisknop ingedrukt houdt.</para>
+<para
+>Om niet aaneengesloten rijen of kolommen met cellen te selecteren klikt u op het eerste rijnummer of op de eerste kolomletter, en houdt u daarna de <keycombo action="simul"
+>&Ctrl;</keycombo
+>-toets ingedrukt terwijl  u de andere rijen of kolommen met cellen selecteert.</para>
+
+</sect1>
+
+<sect1 id="entering">
+<title
+>Gegevens invoeren</title>
+<para
+>Om gegevens in een cel in te voeren moet u de cel eerst selecteren. Typ de gegevens in en druk op &Enter; of verplaats de celcursor naar een andere cel met één van de <keysym
+>pijl</keysym
+>-toetsen. Afhankelijk van hoe de gegevens worden ingevoerd, zal &sheets; die interpreteren als getal, datum, tijd of tekst:</para>
+<itemizedlist>
+<listitem
+><para
+>Getallen worden op de gangbare manier ingetypt; <userinput
+>123</userinput
+>, <userinput
+>-123</userinput
+>, <userinput
+>456,7</userinput
+> of in wetenschappelijke notatie <userinput
+>-1,2E-5</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>De datum wordt volgens de lokale <quote
+>systeem</quote
+> opmaak ingevoerd. Deze is ingesteld in het &systemsettings; bij <menuchoice
+><guimenu
+>Regio &amp; toegankelijkheid</guimenu
+> <guisubmenu
+>Land &amp; taal</guisubmenu
+> <guimenuitem
+>Tijd &amp; datum</guimenuitem
+></menuchoice
+>. Als u bijvoorbeeld de notatie DD/MM/JJJJ gebruikt, moet u <userinput
+>30/03/2012</userinput
+> intypen voor 30 maart 2012. Voorloopnullen kunnen bij dagen en maanden weggelaten worden en voor jaren in de huidige eeuw zijn alleen de laatste één of twee cijfers noodzakelijk, bijvoorbeeld <userinput
+>9/1/9</userinput
+> voor 9 januari 2009. </para
+></listitem>
+<listitem
+><para
+>De tijd wordt ook volgens de lokale <quote
+>systeem</quote
+>opmaak ingevoerd. Als u bijvoorbeeld de 12-uurs notatie gebruikt, typt u de tijd in als HH:MIN am|pm of HH:MIN:SS am|pm: <userinput
+>9:42 am</userinput
+> of <userinput
+>10:30:52 pm</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>&sheets; beschouwt alle ingevoerde gegevens als <quote
+>tekst</quote
+> wanneer het de gegevens niet als getal, datum of tijd kan herkennen. </para
+></listitem>
+</itemizedlist>
+<note
+><para
+>&sheets; zal getallen, data en tijden in een cel gewoonlijk rechts uitlijnen en alle andere gegevens links. Dit kan gemakkelijk zijn om snel te zien of de tijd of de datum in de juiste opmaak is ingevuld. Het is belangrijk te onthouden dat de manier waarop gegevens weergegeven worden veranderd kan worden door de <link linkend="formatdata"
+>celopmaak</link
+> te wijzigen.</para
+></note>
+
+<para
+>U kunt de inhoud van een cel bewerken in de <guilabel
+>Celbewerker</guilabel
+> op de formulebalk. Druk op &Enter; of klik met de <mousebutton
+>linker</mousebutton
+>muisknop op het groene vinkje om de wijzigingen te accepteren, klik op het rode kruisje om de bewerking te annuleren.</para>
+
+<sect2 id="genericformat">
+<title
+>Algemene celopmaak</title>
+<para
+>&sheets; gebruikt als standaard de celopmaak <quote
+>Algemeen</quote
+>. Zolang deze celopmaak gebruikt wordt, herkent &sheets; automatisch het gegevenstype, (Vert.: on?)afhankelijk van de huidige inhoud van de cel. Als u bijvoorbeeld eerst tekst in een cel invoert en daarna een getal in dezelfde cel plaatst, interpreteert &sheets; dit automatisch als een getal. Als u zelf het gegevenstype wilt bepalen, kunt u dit expliciet opgeven in de <link linkend="formatdata"
+>celopmaak</link
+>. U kunt de opmaak op elk moment weer veranderen naar <quote
+>Algemeen</quote
+>. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="copypaste">
+<title
+>Kopiëren, knippen en plakken</title>
+
+<para
+>Op het eerste gezicht functioneren <guimenuitem
+>Knippen</guimenuitem
+>, <guimenuitem
+>Kopiëren</guimenuitem
+> en <guimenuitem
+>Plakken</guimenuitem
+> in &sheets; op dezelfde manier als in andere &kde;-toepassingen. Als u één of meer cellen selecteert, kunt u daarna <guimenuitem
+>Kopiëren</guimenuitem
+> of <guimenuitem
+>Knippen</guimenuitem
+> in het menu <guimenu
+>Bewerken</guimenu
+> kiezen of in het contextmenu als u met de <mousebutton
+>rechter</mousebutton
+>muisknop op een cel klikt. U kunt ook de sneltoetsen <keycombo action="simul"
+>&Ctrl;<keycap
+> C</keycap
+></keycombo
+> of <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> gebruiken, daarna de celcursor verplaatsen en <guimenuitem
+>Plakken</guimenuitem
+> kiezen of de sneltoetsen <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> gebruiken. Er zijn echter subtiele verschillen in deze functies in &sheets;, deze worden hieronder besproken.</para>
+
+<para
+>Als een cel een formule bevat, wordt de formule zelf gekopieerd en niet het getoonde resultaat. Als een formule een verwijzing naar een andere cel bevat, wordt die verwijzing door te <guimenuitem
+>Knippen</guimenuitem
+> of te <guimenuitem
+>Kopiëren</guimenuitem
+> en te <guimenuitem
+>Plakken</guimenuitem
+> gewijzigd zodat deze naar de cel verwijst die zich op dezelfde relatieve plaats bevindt als de oorspronkelijke cel. Bijvoorbeeld: als cel A2 de formule <userinput
+>=B3</userinput
+> bevat en naar cel C4 gekopieerd wordt, zal de formule in cel C4 <userinput
+>=D5</userinput
+> worden.</para>
+<para
+>Dit kan een nogal vreemde manier van kopiëren lijken, maar in 99 procent van de gevallen is het precies wat we nodig hebben (zie <link linkend="absolute"
+>absolute celverwijzingen</link
+> als dit niet het geval is). Bijvoorbeeld, in het onderstaande boodschappenlijstje zou de inhoud van cel D2 <userinput
+>=B2 * C2</userinput
+> moeten zijn, van cel D3 <userinput
+>=B3 * C3</userinput
+>, van cel D4 <userinput
+>=B4 * C4</userinput
+>, enzovoort. In plaats van in iedere cel een andere formule in te typen, kunt u de eerste formule in D2 intypen, deze naar de cellen eronder kopiëren en het aan &sheets; overlaten om de verwijzingen aan te passen.</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="copy1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Schermafdruk kopie1</phrase>
+</textobject>
+</mediaobject>
+
+<sect2 id="copypasteareas">
+<title
+>Celbereiken kopiëren en plakken</title>
+<para
+>In het bovenstaande voorbeeld kan D2 naar alledrie de cellen D3 tot en met D5 gekopieerd worden door D2 te kopiëren en het celbereik D3:D5 te selecteren alvorens te plakken.</para>
+<para
+>Een celbereik kan in één keer geknipt of gekopieerd worden door het bereik te selecteren voordat u gaat knippen of kopiëren. Selecteer de cel in de linkerbovenhoek van het bereik waar u de inhoud wilt plakken vóórdat u de inhoud gaat plakken.</para>
+<para
+>Als u een celbereik, bijvoorbeeld B2:C3 knipt of kopieert, en dat in een groter celbereik plakt, bijvoorbeeld A10:D13, zal de oorspronkelijke inhoud van de cellen herhaald worden om het doelbereik geheel te vullen.</para>
+<para
+>In &sheets; kunt u ook de methode <quote
+>Slepen en Kopiëren</quote
+> gebruiken om cellen naar aangrenzende cellen eronder of rechts ernaast te kopiëren. Om deze methode te gebruiken selecteert u de cel(len) die u wilt kopiëren en plaatst u de muiswijzer op het zwarte vierkantje in de rechterbenedenhoek van de geselecteerde cel(len). De muiswijzer verandert in een dubbele pijl. Houd de <mousebutton
+>linker</mousebutton
+>muisknop ingedrukt terwijl u de geselecteerde cellen versleept. Celverwijzingen in formules worden ook nu weer afhankelijk van hun nieuwe locatie gewijzigd. Absolute verwijzingen worden niet gewijzigd.</para>
+</sect2>
+
+<sect2 id="specialpaste">
+<title
+>Overige methoden om te plakken</title>
+<para
+>Een cel kan tekst, een getal of een formule bevatten, maar ook <link linkend="formatspread"
+>opmaakinformatie</link
+> over een speciaal lettertype, een rand of een achtergrond. &sheets; heeft speciale mogelijkheden om te plakken waarmee u deze gegevens op verschillende manieren kunt manipuleren.</para>
+
+<para
+><menuchoice
+><guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Speciaal Plakken...</guimenuitem
+></menuchoice
+> opent het dialoogvenster <guilabel
+>Speciaal Plakken</guilabel
+>. Door wat u wenst links in dit dialoogvenster te kiezen kunt u <guilabel
+>Alles</guilabel
+>, alleen <guilabel
+>Tekst</guilabel
+>, de <guilabel
+>Opmaak</guilabel
+> van de cel, <guilabel
+>Commentaar</guilabel
+> in de cel of <guilabel
+>Alles zonder rand</guilabel
+> plakken. Met behulp van de onderwerpen in het rechter gedeelte van dit dialoogvenster kunt u eenvoudige <link linkend="sumspecialpaste"
+> rekenkundige bewerkingen uitvoeren</link
+> op een celbereik. </para>
+
+<para
+><guimenuitem
+>Plakken met invoeging</guimenuitem
+> voegt de gekopieerde cellen in door de cellen, die anders overschreven zouden worden, het juiste aantal rijen of kolommen naar beneden of naar rechts te verplaatsen. Deze methode kan ook gebruikt worden om gehele rijen of kolommen in het werkblad te kopiëren.</para>
+</sect2>
+
+</sect1>
+<!-- ME insdel -->
+<sect1 id="insdel">
+<title
+>Invoegen en verwijderen</title>
+<para
+>Gebruik de <keysym
+>Delete</keysym
+>-toets of <menuchoice
+><guimenu
+>Bewerken</guimenu
+> <guisubmenu
+>Wissen</guisubmenu
+> <guimenuitem
+>Inhoud</guimenuitem
+></menuchoice
+> om de tekst, het getal of de formule uit de geselecteerde cel(len), rij(en) of kolom(men) te verwijderen zonder andere gegevens te beïnvloeden.</para>
+
+<para
+>Om alles uit de geselecteerde cel(len), rij(en) of kolom(men) te verwijderen, met inbegrip van commentaar en speciale opmaak, gebruikt u de optie <guimenuitem
+>Alles</guimenuitem
+> in het menu <menuchoice
+><guimenu
+>Bewerken</guimenu
+><guisubmenu
+>Wissen</guisubmenu
+></menuchoice
+> , of het contextmenu dat verschijnt wanneer u met de <mousebutton
+>rechter</mousebutton
+> muisknop op een selectie klikt. </para>
+<para
+>Om geselecteerde rij(en) of kolom(men) helemaal te verwijderen gebruikt u de opties <guimenuitem
+>Rijen verwijderen</guimenuitem
+> of <guimenuitem
+>Kolommen verwijderen</guimenuitem
+> in het contextmenu dat na <mousebutton
+>rechts</mousebutton
+>klikken verschijnt.</para>
+<para
+>Als u met de <mousebutton
+>rechter</mousebutton
+>muisknop op geselecteerde cellen klikt en <guimenuitem
+>Cellen verwijderen</guimenuitem
+> in het contextmenu selecteert, kunt u kiezen of de andere cellen in het werkblad naar boven of naar links verplaatst zullen worden om de plaats van de verwijderde cellen in te nemen.</para>
+<para
+>Als u nieuwe, lege rijen of kolommen in het werkblad wilt invoegen, selecteert u de rijen of kolommen waar de nieuwe rijen of kolommen moeten komen, klik met de <mousebutton
+>rechter</mousebutton
+>muisknop en kies dan <guimenuitem
+>Rijen invoegen</guimenuitem
+> of <guimenuitem
+>Kolommen invoegen</guimenuitem
+> in het contextmenu.</para>
+<para
+>U kunt nieuwe cellen op het werkblad invoegen door het bereik te selecteren waar de nieuwe cellen moeten komen. Klik daarna met de <mousebutton
+>rechter</mousebutton
+>muisknop en kies <guimenuitem
+>Cellen invoegen</guimenuitem
+> in het contextmenu. U kunt dan kiezen of de bestaande cellen in het geselecteerde celbereik naar beneden of naar rechts verplaatst moeten worden om plaats te maken voor de nieuwe cellen.</para>
+
+</sect1>
+
+<sect1 id="simplesums">
+<title
+>Eenvoudige berekeningen</title>
+<para
+>Als het eerste teken in een cel een is-gelijkteken is (<keycap
+>=</keycap
+>) beschouwt &sheets; de inhoud van de cel als een formule die berekend moet worden. Het resultaat van de berekening wordt in de cel getoond, niet de formule. Als u bijvoorbeeld <userinput
+>=2+3</userinput
+> in een cel typt, ziet u het antwoord: <emphasis
+>5</emphasis
+>.</para>
+<para
+>Van groter nut is, dat een formule verwijzingen naar andere cellen kan bevatten, zodat bij <userinput
+>=B4+A3</userinput
+> de som van de waarden in de cellen B4 en A3 berekend wordt. Deze berekening zal opnieuw gedaan worden wanneer de waarde in B4 of A3 veranderd wordt.</para>
+<para
+>Een formule kan zowel een optelling, een aftrekking (<keycap
+>-</keycap
+>), een vermenigvuldiging (<keycap
+>*</keycap
+>) en een deling (<keycap
+>/</keycap
+>) bevatten. Ronde haakjes (<keycap
+>(</keycap
+> en <keycap
+>)</keycap
+>) kunnen in berekeningen gebruikt worden, zodat u ook ingewikkelde formules, zoals <userinput
+>=((B10 + C3) *5 - F11) / 2 </userinput
+> kunt gebruiken.</para>
+
+<para
+>Cellen die een formule bevatten, worden gemarkeerd met een blauw driehoekje in de linkerbenedenhoek als het keuzevakje <guilabel
+>Formule-indicator tonen</guilabel
+> in het dialoogvenster <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guisubmenu
+>Werkblad</guisubmenu
+> <guisubmenu
+>Werkbladeigenschappen</guisubmenu
+> </menuchoice
+> gemarkeerd is.</para>
+<para
+>&sheets; beschikt ook over een groot aantal ingebouwde functies voor statistische, goniometrische en financiële berekeningen. Het gebruik hiervan wordt in <link linkend="formulas"
+>een later hoofdstuk</link
+> van dit handboek uitgelegd. U kunt zien welke functies beschikbaar zijn, in het dialoogvenster van het menu <guimenu
+>Invoegen</guimenu
+><guimenuitem
+>Functie...</guimenuitem
+>.</para>
+<para
+>Voorlopig berekent de <userinput
+>SUM()</userinput
+>-functie de som van alle waarden in een gespecificeerd celbereik. Bijvoorbeeld  <userinput
+>=SUM(B4:C10)</userinput
+> berekent de som van alle waarden in het celbereik B4 tot en met C10.</para>
+<para
+>Als <keycap
+>#VALUE!</keycap
+> in een cel verschijnt na het invoeren van een formule, betekent dit dat &sheets; de invoer niet begrijpt, maar als u aan het eind hiervan een rood driehoekje ziet, betekent dit dat de cel niet breed genoeg is om de complete inhoud te tonen. U kunt dan ofwel de cel(len) breder maken, ofwel de cel zo <link linkend="formatdata"
+>opmaken</link
+> dat de inhoud in de cel past.</para>
+
+<sect2 id="recalc">
+<title
+>Herberekenen</title>
+<para
+>Als u <guilabel
+>Automatische herberekening</guilabel
+> in het dialoogvenster, dat verschijnt als u <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guisubmenu
+>Werkblad</guisubmenu
+> <guisubmenu
+>Werkbladeigenschappen</guisubmenu
+> </menuchoice
+> kiest, zal &sheets; de waarde in cellen opnieuw berekenen zodra er iets verandert dat invloed op die waarden heeft.</para>
+<para
+>Wanneer u <guilabel
+>Automatische herberekening</guilabel
+> niet kiest voor het huidige werkblad, kunt u &sheets; op elk moment de opdracht geven om een herberekening te doen door <guimenuitem
+>Werkblad opnieuw berekenen</guimenuitem
+> of <guimenuitem
+>Document opnieuw berekenen</guimenuitem
+> in het menu <guimenu
+>Hulpmiddelen</guimenu
+> te kiezen, of door de sneltoetsen <keycombo action="simul"
+>&Shift;<keysym
+>F9</keysym
+></keycombo
+> of <keysym
+>F9</keysym
+> te gebruiken.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sort">
+<title
+>Gegevens sorteren</title>
+<para
+>In het onderstaande eenvoudige voorbeeld bestaan de gegevens uit de namen en landen van een aantal bergen, samen met hun hoogtes boven de zeespiegel. &sheets; kan dit soort gegevens op verschillende manieren sorteren.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sort1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Schermafdruk van gesorteerde gegevens</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>We kunnen de gegevens zo sorteren, dat de namen in alfabetische volgorde staan. Selecteer het bereik dat de gegevens bevat (A2:C7 in dit geval) en kies<guimenuitem
+>Sorteren...</guimenuitem
+> in het menu <guimenu
+>Gegevens</guimenu
+>. Het dialoogvenster <guilabel
+>Sorteren</guilabel
+> wordt geopend.</para
+> 
+<para
+>Het sorteren gebeurt alfanumeriek en is standaard hoofdlettergevoelig, cijfers komen  voor hoofdletters, die weer voor kleine letters komen. Cellen met de inhoud <userinput
+>Dak</userinput
+>, <userinput
+>bad</userinput
+>, <userinput
+>77</userinput
+> en <userinput
+>Bar</userinput
+> zullen als volgt gesorteerd worden: <emphasis
+>77 Bar Dak bad</emphasis
+>.</para>
+<!-- Obsolete, AFAICT (Phil)
+<para
+>The <guimenuitem
+>Sort Increasing</guimenuitem
+> and <guimenuitem
+>Sort 
+Decreasing</guimenuitem
+> options from the <guimenu
+>Data</guimenu
+> menu options 
+sort the data according to the contents of the cells in the left column of the 
+selected area. For more complex sorting select <menuchoice
+><guimenu
+>Data
+</guimenu
+><guimenuitem
+>Sort...</guimenuitem
+></menuchoice
+> to bring up the 
+<guilabel
+>Sort</guilabel
+> dialog box.</para>
+-->
+<para
+>In het <guilabel
+>richtings</guilabel
+>-gedeelte in deze dialoog, kunt u selecteren of rijen of kolommen moeten worden geselecteerd. Indien u <guilabel
+>Eerste rij bevat kolomkoppen</guilabel
+> of <guilabel
+>Eerste kolom bevat rijnummers</guilabel
+> selecteert, worden de eerste rij of kolom niet meegenomen bij de sorteeractie.</para>
+<para
+>De rijen of kolommen worden op de opgegeven manier gesorteerd, die kan worden gewijzigd met de knoppen <guibutton
+>Naar boven</guibutton
+> en <guibutton
+>Naar beneden</guibutton
+>. In het voorbeeld in het schermbeeld hierboven, wanneer we kolom B als eerste criterium (sleutel) kiezen en kolom C als tweede, worden de gegevens gesorteerd op land, en voor elk land, op hoogte.</para>
+<para
+>Als u de optie <guilabel
+>hoofdlettergevoelig</guilabel
+> uitzet, dan is de sorteeractie onafhankelijk van eventuele hoofdletters. Het sorteren kan <guilabel
+>Oplopend</guilabel
+> en <guilabel
+>Aflopend</guilabel
+> worden gemaakt door te klikken op de cellen in de kolom  <guilabel
+>Sorteervolgorde</guilabel
+>. </para>
+
+<para
+>In het tabblad <guilabel
+>Details</guilabel
+> van de dialoog kunt u instellen volgens een aangepaste lijst te sorteren, zoals op januari, februari... in plaats van alfabetisch. De opmaak van de cel wordt tegelijk met de celinhoud verplaatst als u het keuzevakje <guilabel
+>Celopmaak kopiëren (Randen, kleuren, tekststijl)</guilabel
+> kiest. </para>
+</sect1>
+
+
+<sect1 id="statusbarsum">
+<title
+>De overzichtsrekenmachine op de statusbalk</title>
+<para
+>Aan de linkerkant van de statusbalk ziet u standaard een samenvatting van de waarden in de geselecteerde cel(len). Afhankelijk van de instelling van  <guilabel
+>Functie getoond in de statusbalk</guilabel
+> in de pagina <guilabel
+>Interface</guilabel
+> in de instellingen van &sheets;, kan het overzicht één van de volgende waarden hebben:</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Geen</guilabel
+></term>
+<listitem
+><para
+>Er wordt geen samenvatting gemaakt. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Gemiddeld</guilabel
+></term>
+<listitem
+><para
+>Toont het gemiddelde van alle waarden in de geselecteerde cellen. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Tellen</guilabel
+></term>
+<listitem
+><para
+>Toont het aantal cellen dat numerieke waarden bevat. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>CountA</guilabel
+></term>
+<listitem
+><para
+>Toont het aantal cellen dat geen numerieke waarden bevat. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Max</guilabel
+></term>
+<listitem
+><para
+>Toont de hoogste waarde die voorkomt in de geselecteerde cellen. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Min</guilabel
+></term>
+<listitem
+><para
+>Toont de laagste waarde die voorkomt in de geselecteerde cellen. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Som</guilabel
+></term>
+<listitem
+><para
+>Toont de som van de waarden in de geselecteerde cellen. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+<para
+>De berekeningsmethode kan ook veranderd worden door er met de <mousebutton
+>rechter</mousebutton
+>muisknop op te klikken en een methode te kiezen.</para>
+
+</sect1>
+
+<sect1 id="saving">
+<title
+>Uw werk opslaan</title>
+<para
+>&sheets; slaat het gehele document, dat meer dan één werkblad kan bevatten, als een enkel document op.</para>
+<para
+>Na het aanmaken van een nieuw document, of als u een bestaand document onder een andere naam wilt opslaan, kies dan <menuchoice
+><guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Opslaan als...</guimenuitem
+></menuchoice
+>. Er verschijnt een standaard &kde;-dialoogvenster: <guilabel
+>Document opslaan als</guilabel
+>. Kies de map waarin u het document wilt opslaan en vul een naam in bij <guilabel
+>Naam</guilabel
+>. &sheets;-documenten worden gewoonlijk automatisch opgeslagen met de extensie <filename
+>.ods</filename
+>, u hoeft dit niet aan de bestandsnaam toe te voegen als u bij <guilabel
+>Filter</guilabel
+> <guilabel
+>Opendocument Rekenblad</guilabel
+> kiest.</para>
+<para
+>Om het document op te slaan zonder de naam te wijzigen kunt u het menu <menuchoice
+><guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Opslaan</guimenuitem
+></menuchoice
+> gebruiken.</para>
+
+<para
+>U kunt een &sheets;-document ook met een ander bestandstype opslaan. Dit kunt u kiezen in het keuzemenu <guilabel
+>Filter</guilabel
+>.</para>
+<para
+>Wanneer u een gewijzigde versie van een document opslaat, zal &sheets; de voorgaande versie als een reservekopie bewaren en een <literal
+>~</literal
+> (tilde) aan het eind van de bestandsnaam toevoegen.</para>
+<para
+>&sheets; kan enige bescherming bieden tegen het verlies van uw werk door een computercrash of als u onverhoopt &sheets; afsluit zonder het document op te slaan. Dit wordt gedaan door automatisch om de zoveel minuten de laatste versie van het document waar u aan werkt onder een andere bestandsnaam op te slaan. De automatisch opgeslagen versie wordt gewoonlijk verwijderd wanneer het  document opnieuw wordt opgeslagen, zodat het alleen bestaat als het nieuwer is dan de laatste met de hand opgeslagen versie. Wanneer u een document opent, controleert &sheets; of daarvan een automatisch opgeslagen versie bestaat, en als die er is, kunt u kiezen die versie te openen.</para>
+<para
+>Automatisch opgeslagen documenten krijgen een naam van het type <filename
+>.uwbestandsnaam.autosave</filename
+> (let op de punt aan het begin), <filename
+>spread1.ods</filename
+> krijgt dan de naam <filename
+>.spread1.ods.autosave</filename
+>. U kunt zelf de opties voor het automatisch opslaan instellen inde <link linkend="configinterface"
+>instellingendialoog</link
+>.</para>
+
+<sect2 id="templates">
+<title
+>Sjablonen</title>
+<para
+>Als u veel gelijksoortige documenten maakt, kunt u tijd besparen door eerst een sjabloon te creëren en deze als de basis voor de documenten te gebruiken.</para>
+<para
+>Maak eerst een document aan dat alle gebruikelijke elementen bevat en sla dit op als een sjabloon door <menuchoice
+><guimenu
+>Bestand</guimenu
+><guimenuitem
+>Sjabloon van document maken...</guimenuitem
+></menuchoice
+> te kiezen. Het dialoogvenster <guilabel
+>Sjabloon maken</guilabel
+> verschijnt. Typ een naam in voor de sjabloon in het tekstvak <guilabel
+>Naam</guilabel
+> en klik op <guibutton
+>OK</guibutton
+>. De volgende keer dat u een nieuw document opent door <menuchoice
+><guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Nieuw</guimenuitem
+></menuchoice
+> te kiezen, of wanneer u &sheets; start, kunt u in de getoonde dialoog kiezen een document met de nieuwe sjabloon aan te maken.</para>
+<para
+>In het dialoogvenster <guilabel
+>Sjabloon maken</guilabel
+> kunt u een ander pictogram kiezen dat boven de sjabloonnaam getoond wordt in het opstartdialoogvenster. U kunt ook de sjabloon aan een andere groep toevoegen. De groepen worden als verschillende pagina's in het dialoogvenster getoond.</para>
+<para
+>Sjablonen worden opgeslagen als <literal role="extension"
+>.kst</literal
+>-bestanden in de map <filename
+>~/.kde/share/apps/tables/templates/</filename
+>. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="printing">
+<title
+>Een werkblad afdrukken</title>
+<para
+>Om een werkblad af te drukken kiest u <menuchoice
+><guimenu
+>Bestand</guimenu
+> <guimenuitem
+> Afdrukken...</guimenuitem
+></menuchoice
+>, het standaard &kde;-dialoogvenster <guilabel
+>Afdrukken</guilabel
+> verschijnt. Hier kunt u onder ander de printer kiezen, het aantal kopieën, en of alle of alleen geselecteerde pagina's afgedrukt moeten worden.</para>
+<para
+>Standaard zal &sheets; alles dat in het huidige werkblad staat afdrukken, maar u kunt dit beperken door eerst het bereik te selecteren dat u afgedrukt wilt hebben en daarna <guimenuitem
+>Afdrukbereik definiëren</guimenuitem
+> in het menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guisubmenu
+>Afdrukbereik</guisubmenu
+></menuchoice
+> te kiezen.</para>
+<para
+>&sheets; zal net zoveel pagina's afdrukken als nodig is voor alle gegevens in het huidige werkblad. U kunt snel zien hoe het werkblad in afzonderlijke pagina's gesplitst zal worden door <menuchoice
+><guimenu
+>Beeld</guimenu
+><guimenuitem
+>Paginaranden tonen</guimenuitem
+></menuchoice
+> te kiezen. De randen van elke afgedrukte pagina worden in het werkblad gemarkeerd met gekleurde lijnen.</para>
+
+<para
+>Voor een gedetailleerder overzicht, inclusief kopteksten en voetteksten kunt u <menuchoice
+><guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Afdrukvoorbeeld...</guimenuitem
+></menuchoice
+> kiezen.</para>
+
+<para
+>Om het uiterlijk van afgedrukte documenten te verbeteren kunt u het lettertype, de randen en afmetingen van cellen in het werkblad wijzigen. Meer informatie over opmaak kunt u in het hoofdstuk <link linkend="formatspread"
+>Werkbladen opmaken</link
+> vinden.</para>
+
+<para
+>U kunt ook het dialoogvenster <guilabel
+>Paginaopmaak</guilabel
+> gebruiken, dit wordt geopend door <menuchoice
+><guimenu
+> Opmaak</guimenu
+><guimenuitem
+>Paginaopmaak</guimenuitem
+></menuchoice
+> te kiezen. In dit dialoogvenster kunt u onder andere de oriëntatie van de afgedrukte pagina's, de paginagrootte (deze moet geschikt zijn voor uw printer) en de marges instellen.</para>
+<para
+>Het submenu <guilabel
+>Werkblad</guilabel
+> geeft meer opties. In het deel <guilabel
+>Afdrukinstellingen</guilabel
+> kunt u selecteren niet de hulplijnen af te drukken, noch de commentaar- en formuleindicatoren, objecten en grafieken. Het deel <guilabel
+>Herhalingen op elke pagina</guilabel
+> maakt het mogelijk geselecteerde kolom(men) en rij(en) op elke afgedrukte pagina te herhalen. In het deel <guilabel
+>Schalen</guilabel
+> kunt u een schaalfactor opgeven of het aantal pagina's van de afdruk beperken.</para>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

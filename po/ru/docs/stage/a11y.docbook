@@ -1,0 +1,529 @@
+<chapter id="a11y">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Gary</firstname
+> <surname
+>Cramblitt</surname
+> </author>
+<othercredit role="translator"
+><firstname
+>Евгений</firstname
+><surname
+>Иванов</surname
+><affiliation
+><address
+><email
+>lolkaantimat@gmail.com</email
+></address
+></affiliation
+><contrib
+>Перевод на русский</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Леонид</firstname
+><surname
+>Моргун</surname
+><affiliation
+><address
+><email
+>morgunl@gmail.com</email
+></address
+></affiliation
+><contrib
+>Перевод на русский</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+
+<title
+>Для людей с ограниченными возможностями</title>
+<para
+>Эта часть документации посвящена функциям &kpresenter; для людей с ограниченными возможностями. Некоторые из них реализованы непосредственно в &kde; и настраиваются с помощью <ulink url="help:kcontrol"
+>&kcontrolcenter;</ulink
+>. Некоторые же специфичны только приложениям &koffice;, часть же - только &kpresenter;.</para>
+
+<sect1 id="a11y-install">
+<title
+>Установка модуля <command
+>kdeaccessibility</command
+> (Специальные возможности KDE)</title>
+<indexterm
+><primary
+>Специальные возможности KDE</primary
+></indexterm>
+<para
+>Большая часть возможностей, описываемых в этой главе, доступны после установки модуля <command
+>kdeaccessibility</command
+>. <command
+>kdeaccessibility</command
+>) является частью проекта &kde;. <ulink url="http://www.kde.org"
+>http://www.kde.org</ulink
+> Данный модуль может быть получен с &kde-ftp;, главного ftp зеркала проекта &kde;. </para>
+
+<para
+>Многие дистрибутивы предоставляют возможность загрузить бинарный дистрибутив приложения со своего ftp-зеркала. Для получения дополнительной информации обратитесь к сайту вашего дистрибутива.</para>
+
+<para
+>Дополнительную информацию по &kde; accessibility можно найти, посетив <ulink url="http://accessibility.kde.org/"
+>http://accessibility.kde.org/</ulink
+>. </para>
+</sect1>
+
+<sect1 id="a11y-sight">
+<title
+>Ухудшение зрения</title>
+<indexterm
+><primary
+>Ухудшение зрения</primary
+></indexterm>
+
+<note
+><para
+>Использование &kpresenter; полностью слепыми людьми невозможно. Мы надеемся, что в будущих версиях &kde; появится универсальная система чтения текста для слепых людей. </para
+></note>
+
+<sect2 id="a11y-theming">
+<title
+>Создание тем</title>
+<indexterm
+><primary
+>Создание тем</primary
+></indexterm>
+<para
+>Для людей с плохим зрением или непереносимостью яркого света существует несколько настроек в &kcontrolcenter; <menuchoice
+><guimenu
+>Внешний вид и темы</guimenu
+><guimenuitem
+>Менеджер тем</guimenuitem
+></menuchoice
+>, как, например, высококонтрастные темы. Если у вас непереносимость света, то использование тем<guilabel
+>HighContrastDark</guilabel
+> или <guilabel
+>HighContrastLight</guilabel
+> может помочь. Если чтение небольших шрифтов и маленьких значков для вас проблематично, <guilabel
+>HighContrastDark-big</guilabel
+> or <guilabel
+>HighContrastLight-big</guilabel
+> увеличат размер текста, кнопок и иконок. Также прямо в этом диалоговом окне возможно настроить задний фон, цветовую схему, шрифты и иконок. Доступен набор монохромных значков. </para>
+
+<tip
+><para
+>Если выбрана одна из <guilabel
+>Больших</guilabel
+> тем, то возможно, что некоторые окна не соответствуют размеру экрана. Покупка большего монитора может стать выходом из ситуации. Возможно перемещение невидимых частей окна в видимую область, с помощью &Alt; и перетаскивания с &LMB; везде, кроме дисплея. Если есть проблемы с манипуляцией мышкой, то возможно использование <keycombo action="simul"
+>&Alt;<keycap
+>F3</keycap
+></keycombo
+>. В выпадающем меню операций с окнами выберите <menuchoice
+><guimenuitem
+>Переместить</guimenuitem
+></menuchoice
+>. Переместите дисплей с помощью стрелочек и нажмите &Esc; для завершение перемещения. </para
+></tip>
+
+</sect2>
+
+<sect2 id="a11y-kmagnifier">
+<title
+>&kmagnifier;</title>
+<indexterm
+><primary
+>экранная лупа</primary
+></indexterm>
+<para
+>Модуль <command
+>kdeaccessibility</command
+> включает в себя приложение "экранная лупа", названное <ulink url="help:kmag"
+>&kmagnifier;</ulink
+>. Если модуль установлен, то возможно запустить утилиту при помощи <menuchoice
+><guimenu
+>Кнопка K</guimenu
+><guimenuitem
+>Утилиты</guimenuitem
+> <guimenuitem
+>KMag (Экранная лупа)</guimenuitem
+></menuchoice
+>. </para>
+</sect2>
+
+<sect2 id="a11y-tts">
+<title
+>Преобразование текста в речь</title>
+<indexterm
+><primary
+>Преобразование текста в речь</primary
+></indexterm>
+<indexterm
+><primary
+>TTS</primary
+></indexterm>
+<para
+>Модуль <command
+>kdeaccessibility</command
+> содержит компонент Текст-в-речь, названный KTTS. Если KTTS установлен, то можно настроить &kword;, чтобы он озвучивал текст, находящийся под курсором мыши или в каждом окне, получившем фокус. перед использованием этой возможности следует настроить KTTS. Для получения дополнительной информации обратитесь к <ulink url="help:kttsd"
+>The KTTS Handbook</ulink
+>. Для того чтобы активировать TTS в &kpresenter;, выберите в панели меню <menuchoice
+><guimenu
+>Настройки</guimenu
+><guimenuitem
+>Настроить &kpresenter;...</guimenuitem
+></menuchoice
+>. В появившемся диалоговом окне кликните по <guilabel
+>TTS</guilabel
+>, что позволит настроить следующее:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject
+><imagedata fileref="tts.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Озвучка элемента интерфейса под указателем мыши</guilabel
+></term>
+<listitem
+><para
+>Если выбрано, будет озвучиваться текст, связанный с элементами интерфейса, по которым перемещается указатель мыши.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Озвучка активного элемента интерфейса</guilabel
+></term>
+<listitem
+><para
+>Если выбрано, будет озвучиваться текст, связанный с элементами интерфейса, которые получают фокус.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Озвучка подсказок</guilabel
+></term>
+<listitem
+><para
+>Если выбрано, &kpresenter; будет озвучивать всплывающую подсказку для каждого интерфейса, в дополнение к тексту интерфейса.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Speak What's This?</guilabel
+></term>
+<listitem
+><para
+>When checked, &kpresenter; will speak the <quote
+>What's This?</quote
+> help for each widget in addition to the text of the widget.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Оповестить если недоступно</guilabel
+></term>
+<listitem
+><para
+>Если выбрано, &kpresenter; будет произносить слово "недоступно", если элемент интерфейса не доступен в данный момент (отмечен серым).</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Произносить горячие клавиши</guilabel
+></term>
+<listitem
+><para
+>Если выбрано, &kpresenter; будет произносить горячие клавиши элемента интерфейса в дополнение к тексту. Горячие клавиши - это подчёркнутые буквы, которые вы видите в тексте элемента. Например, в главном меню в элементе <menuchoice
+><guimenuitem
+>Выход</guimenuitem
+></menuchoice
+> подчёркнута буква "х". Вы можете выбрать его нажимая <keycap
+>х</keycap
+>. Чтобы произнести горячую клавишу, выберите эту опцию и выберите слово, которое должно произноситься перед горячей клавишей. в <guilabel
+>Вводное слово</guilabel
+>. В этом примере &kpresenter; произнесёт "Горячая клавиша х".</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Интервал опроса</guilabel
+></term>
+<listitem
+><para
+>Эта опция определяет насколько часто &kpresenter; будет проверять изменился ли элемент находящийся под курсором мыши или элемент с фокусом ввода. Вы можете оставить эту опцию по умолчанию.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<note
+><para
+>Если опция <guibutton
+>TTS</guibutton
+> не появилась на экране, в вашей системе не установлен компонент KTTS. </para
+></note>
+
+<note
+><para
+>Не все элементы интрефейса произносятся. Например, не произносятся элементы панели главного меню. </para
+></note>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="a11y-motor">
+<title
+>Ухудшенная моторная деятельность и операции без мыши</title>
+<indexterm
+><primary
+>Ухудшенная моторная деятельность</primary
+></indexterm>
+<indexterm
+><primary
+>операции без мыши</primary
+></indexterm>
+
+<sect2 id="a11y-kmousetool">
+<title
+>&kmousetool;</title>
+<para
+>Если вы можете работать с мышкой, но возникают проблемы с нажатием, вам может помочь приложение <ulink url="help:kmousetool"
+>&kmousetool;</ulink
+>. Запустите его из <menuchoice
+><guimenu
+>K-Button</guimenu
+><guimenuitem
+>Утилиты</guimenuitem
+><guimenuitem
+>KMouseTool (Автоклик)</guimenuitem
+></menuchoice
+>. </para>
+</sect2>
+
+<sect2 id="a11y-kbd-xaccess">
+<title
+>Функции XAccess</title>
+<indexterm
+><primary
+>XAccess</primary
+></indexterm>
+<indexterm
+><primary
+>Залипание клавиш</primary
+></indexterm>
+<indexterm
+><primary
+>Замедление нажатий клавиш</primary
+></indexterm>
+<indexterm
+><primary
+>Запрет повторых нажатий</primary
+></indexterm>
+
+<para
+>&kcontrolcenter; предоставляет несколько возможностей работы с клавиатурой под общим названием XAccess. Они включают:</para>
+<variablelist>
+<varlistentry>
+<term
+>Залипание клавиш</term>
+<listitem
+><para
+>Эта возможность позволяет работать с клавишами-модификаторами, такими как &Alt;, &Ctrl;, &Shift; не держа их нажатыми. Это удобно, если вы можете использовать только один палец или одну руку для работы с клавиатурой. При включённой <guilabel
+>Залипание клавиш</guilabel
+> нажмите и отпустите &Alt;, &Ctrl; или &Shift;, а потом нажмите любую другую клавишу. Результат будет таким же, как если бы вы нажали обе клавиши одновременно. Нажмите клавишу-модификатор ещё раз для выключения залипания клавиш. Включить эту возможность можно в <menuchoice
+><guimenu
+>K</guimenu
+><guimenuitem
+>&kcontrolcenter;</guimenuitem
+> <guimenuitem
+>Региональные и специальные возможности</guimenuitem
+><guimenuitem
+>Специальные возможности</guimenuitem
+> <guimenuitem
+>Клавиши-модификаторы</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+>Замедление нажатий клавиш</term>
+<listitem
+><para
+>Эта возможность полезна, если у вас дрожат руки или вам тяжело точно нажимать на клавиши. Она предотвращает неосторожные нажатия требуя, чтобы клавиша была нажата некоторое время перед тем, как она будет принята. Включить эту возможность можно в <menuchoice
+><guimenu
+>K</guimenu
+><guimenuitem
+>&kcontrolcenter;</guimenuitem
+> <guimenuitem
+>Региональные и специальные возможности</guimenuitem
+><guimenuitem
+>Специальные возможности</guimenuitem
+> <guimenuitem
+>Фильтры клавиатуры</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+>Запрет повторных нажатий</term>
+<listitem
+><para
+>Эта возможность также полезна, если у вас дрожат руки. Она предотвращает неосторожные повторения. Включить её можно в <menuchoice
+><guimenu
+>K</guimenu
+><guimenuitem
+>&kcontrolcenter;</guimenuitem
+> <guimenuitem
+>Региональные и специальные возможности</guimenuitem
+><guimenuitem
+>Специальные возможности</guimenuitem
+> <guimenuitem
+>Фильтры клавиатуры</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="a11y-mouse-emulation">
+<title
+>Эмуляция мыши</title>
+<indexterm
+><primary
+>Эмуляция мыши</primary
+></indexterm>
+<para
+>Эмуляция мыши позволяет перемещать курсор мыши и нажимать на кнопки используя клавиатуру. Нажмите <keycombo
+>&Alt;<keycap
+>F12</keycap
+></keycombo
+> для активации. Используйте стрелки курсора для перемещения указателя в желаемую область и нажмите <keycap
+>пробел</keycap
+> чтобы "кликнуть" мышкой. К сожалению, эмуляция мыши не позволяет имитировать нажатие правой кнопки и переноса. </para>
+</sect2>
+
+<sect2 id="a11y-mouse-navigation">
+<title
+>Навигация мышью</title>
+<indexterm
+><primary
+>Навигация курсором мыши</primary
+></indexterm>
+<para
+>Эта возможность позволяет вам эмулировать мышку используя цифровую клавиатуру. Для активации используйте меню <menuchoice
+><guimenu
+>K</guimenu
+><guimenuitem
+>&kcontrolcenter;</guimenuitem
+> <guimenuitem
+>Периферия</guimenuitem
+><guimenuitem
+>Мышь</guimenuitem
+> <guimenuitem
+>Управление курсором мыши с клавиатуры</guimenuitem
+></menuchoice
+>. Включите <guilabel
+>Курсор мыши передвигается с клавиатуры</guilabel
+>. Если вы сделаете это, станут доступны остальные настройки, и вы сможете настроить указатель на свой вкус. Имейте в виду, что вы можете перемещаться по диагонали, также как и вверх, вниз, влево и вправо. Клавиша <keycap
+>5</keycap
+> эмулирует нажатие на кнопку мыши, обычно левую. Вы выбираете, какая кнопка эмулируется нажимая <keycap
+>/</keycap
+> (выставляет левую), <keycap
+>*</keycap
+> (выставляет среднюю кнопку мыши) или<keycap
+>-</keycap
+> (выставляет правую). Клавиша <keycap
+>+</keycap
+> эмулирует двойное нажатие на выбранную кнопку. Вы можете использовать клавишу <keycap
+>0</keycap
+> для эмуляции зажатия выбранной кнопки мыши (для переноса), а также <keycap
+>.</keycap
+> для отпускания выбранной кнопки мыши. </para>
+
+<screenshot>
+<mediaobject>
+<imageobject
+><imagedata fileref="mousenav.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+</sect2>
+
+<sect2 id="a11y-motor-shortcuts">
+<title
+>Комбинации клавиш</title>
+
+<para
+>Используйте клавишу <keycap
+>Menu</keycap
+> для вызова всплывающего контекстного меню. На большинстве клавиатур кнопка  <keycap
+>Menu</keycap
+> находится в правой части клавиатуры между клавишами <keycap
+>&Windows;</keycap
+> и &Ctrl;. На этой клавише есть значок меню. </para>
+
+</sect2>
+
+<sect2 id="a11y-motor-panel-sizing">
+<title
+>Изменение размеров панелей</title>
+
+<para
+>Эмуляция мыши позволяет перемещать курсор мыши и нажимать на кнопки используя клавиатуру. Нажмите <keycombo
+>&Alt;<keycap
+>F12</keycap
+></keycombo
+> для активации. Используйте стрелки курсора для перемещения указателя в желаемую область и нажмите <keycap
+>пробел</keycap
+> чтобы "кликнуть" мышкой. К сожалению, эмуляция мыши не позволяет имитировать нажатие правой кнопки и переноса. </para>
+
+</sect2>
+
+<sect2 id="a11y-motor-moving-focus">
+<title
+>Установка фокуса на элементы интерфейса</title>
+
+<para
+>Обычно можно использовать &Tab; и <keycombo action="simul"
+>&Shift;&Tab;</keycombo
+> для перемещения фокуса от одного элемента к другому в любом приложении. Однако, когда фокус находится на основном документе, нажатие &Tab; не переместит фокус, а вставит в документ символ табуляции. Вы можете установить фокус на любой элемент, который может его получить нажимая <keycombo action="simul"
+>&Alt;<keycap
+>F8</keycap
+></keycombo
+>. Маленькая буковка появится над каждым элементом, который может получить фокус. </para>
+
+<screenshot>
+<mediaobject>
+<imageobject
+><imagedata fileref="kbd-focus-ext.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Нажмите на букву для перемещения фокуса на соответствующий элемент интерфейса. Нажмите <keycombo action="simul"
+>&Alt;<keycap
+>F8</keycap
+></keycombo
+> ещё раз или &Esc;, чтобы отменить перемещение фокуса. </para>
+
+</sect2>
+
+</sect1
+> 
+
+</chapter>

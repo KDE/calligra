@@ -1,0 +1,2590 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Vincent Pinon <vpinon@kde.org>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2015-06-11 15:34+0200\n"
+"Last-Translator: Vincent Pinon <vpinon@kde.org>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 1.5\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, kde-format
+msgid "Blend"
+msgstr "Mélange"
+
+#: BlendEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Blend mode"
+msgstr "Mode de mélange"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "Normal"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr "Multiplier"
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr "Écran"
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr "Assombrir"
+
+#: BlendEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Lighten"
+msgstr "Éclaircir"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr "Flou gaussien"
+
+#: BlurEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Radius"
+msgstr "Rayon"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr "Matrice de couleur"
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr "Appliquer la matrice de couleur"
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Saturate colors"
+msgstr "Saturer les couleur"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Rotate hue"
+msgstr "Faire tourner la teinte"
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr "Luminosité vers alpha"
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Saturate value"
+msgstr "Valeur de saturation"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, kde-format
+msgid "Angle"
+msgstr "Angle"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr "Matrice de couleur"
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr "Transfert de composant"
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr "Fonction"
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr "Identité"
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, kde-format
+msgid "Table"
+msgstr "Table"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr "Discret"
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Linear"
+msgstr "Linéaire"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr "Gamma"
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr "Valeurs"
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, kde-format
+msgid "Slope"
+msgstr "Pente"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, kde-format
+msgid "Intercept"
+msgstr "Interception"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr "Amplitude"
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr "Exposant"
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr "Décalage"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, kde-format
+msgid "Composite"
+msgstr "Composition"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, kde-format
+msgid "Operation"
+msgstr "Opération"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr "Convoluer la matrice"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, kde-format
+msgid "Duplicate"
+msgstr "Dupliquer"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr "Enrouler"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, kde-format
+msgid "None"
+msgstr "Aucun"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, kde-format
+msgid "Edge mode:"
+msgstr "Mode de contour :"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr "Taille du noyau :"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Target point:"
+msgstr "Point cible :"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr "Diviseur :"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr "Polarisation :"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr "Préserver le canal alpha"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, kde-format
+msgid "Edit kernel"
+msgstr "Éditer le noyau"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, kde-format
+msgid "Flood fill"
+msgstr "Pot de peinture"
+
+#: FloodEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Flood color"
+msgstr "Couleur du remplissage"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr "Image"
+
+#: ImageEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Select image..."
+msgstr "Sélectionner une image..."
+
+#: ImageEffectConfigWidget.cpp:54
+#, kde-format
+msgid "Select image"
+msgstr "Sélectionner une image"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr "Fusionner"
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr "Morphologie"
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr "Éroder"
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Dilate"
+msgstr "Dilater"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Operator:"
+msgstr "Opérateur :"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Radius x:"
+msgstr "Rayon x :"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, kde-format
+msgid "Radius y:"
+msgstr "Rayon y :"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr "dx"
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr "dy"
+
+#, fuzzy
+#~| msgid "Blend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "Mélange"
+
+#, fuzzy
+#~| msgid "Blend mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "Mode de mélange"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Normal"
+
+#, fuzzy
+#~| msgid "Multiply"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiply"
+#~ msgstr "Multiplier"
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Screen"
+#~ msgstr "Écran"
+
+#, fuzzy
+#~| msgid "Darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "Assombrir"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Éclaircir"
+
+#, fuzzy
+#~| msgid "Gaussian blur"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gaussian blur"
+#~ msgstr "Flou gaussien"
+
+#, fuzzy
+#~| msgid "Radius"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "Rayon"
+
+#, fuzzy
+#~| msgid "Color Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color Matrix"
+#~ msgstr "Matrice de couleur"
+
+#, fuzzy
+#~| msgid "Apply color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply color matrix"
+#~ msgstr "Appliquer la matrice de couleur"
+
+#, fuzzy
+#~| msgid "Saturate colors"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "Saturer les couleur"
+
+#, fuzzy
+#~| msgid "Rotate hue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate hue"
+#~ msgstr "Faire tourner la teinte"
+
+#, fuzzy
+#~| msgid "Luminance to alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Luminance to alpha"
+#~ msgstr "Luminosité vers alpha"
+
+#, fuzzy
+#~| msgid "Saturate value"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "Valeur de saturation"
+
+#, fuzzy
+#~| msgid "Angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "Angle"
+
+#, fuzzy
+#~| msgid "Color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color matrix"
+#~ msgstr "Matrice de couleur"
+
+#, fuzzy
+#~| msgid "Component transfer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Component transfer"
+#~ msgstr "Transfert de composant"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function"
+#~ msgstr "Fonction"
+
+#, fuzzy
+#~| msgid "Identity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Identity"
+#~ msgstr "Identité"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "Table"
+
+#, fuzzy
+#~| msgid "Discrete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Discrete"
+#~ msgstr "Discret"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "Linéaire"
+
+#, fuzzy
+#~| msgid "Gamma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gamma"
+#~ msgstr "Gamma"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Values"
+#~ msgstr "Valeurs"
+
+#, fuzzy
+#~| msgid "Slope"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "Pente"
+
+#, fuzzy
+#~| msgid "Intercept"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "Interception"
+
+#, fuzzy
+#~| msgid "Amplitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Amplitude"
+#~ msgstr "Amplitude"
+
+#, fuzzy
+#~| msgid "Exponent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exponent"
+#~ msgstr "Exposant"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Décalage"
+
+#, fuzzy
+#~| msgid "Composite"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "Composition"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "Opération"
+
+#, fuzzy
+#~| msgid "Convolve Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convolve Matrix"
+#~ msgstr "Convoluer la matrice"
+
+#, fuzzy
+#~| msgid "Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "Dupliquer"
+
+#, fuzzy
+#~| msgid "Wrap"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Wrap"
+#~ msgstr "Enrouler"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Aucun"
+
+#, fuzzy
+#~| msgid "Edge mode:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "Mode de contour :"
+
+#, fuzzy
+#~| msgid "Kernel size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Kernel size:"
+#~ msgstr "Taille du noyau :"
+
+#, fuzzy
+#~| msgid "Target point:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "Point cible :"
+
+#, fuzzy
+#~| msgid "Divisor:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Divisor:"
+#~ msgstr "Diviseur :"
+
+#, fuzzy
+#~| msgid "Bias:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bias:"
+#~ msgstr "Polarisation :"
+
+#, fuzzy
+#~| msgid "Preserve alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preserve alpha"
+#~ msgstr "Préserver le canal alpha"
+
+#, fuzzy
+#~| msgid "Edit kernel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "Éditer le noyau"
+
+#, fuzzy
+#~| msgid "Flood fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "Pot de peinture"
+
+#, fuzzy
+#~| msgid "Flood color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "Couleur du remplissage"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Image"
+
+#, fuzzy
+#~| msgid "Select image..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image..."
+#~ msgstr "Sélectionner une image..."
+
+#, fuzzy
+#~| msgid "Select image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image"
+#~ msgstr "Sélectionner une image"
+
+#, fuzzy
+#~| msgid "Merge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Merge"
+#~ msgstr "Fusionner"
+
+#, fuzzy
+#~| msgid "Morphology"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Morphology"
+#~ msgstr "Morphologie"
+
+#, fuzzy
+#~| msgid "Erode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Erode"
+#~ msgstr "Éroder"
+
+#, fuzzy
+#~| msgid "Dilate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "Dilater"
+
+#, fuzzy
+#~| msgid "Operator:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "Opérateur :"
+
+#, fuzzy
+#~| msgid "Radius x:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "Rayon x :"
+
+#, fuzzy
+#~| msgid "Radius y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "Rayon y :"
+
+#, fuzzy
+#~| msgid "dx"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#, fuzzy
+#~| msgid "dy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#, fuzzy
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Xavier Besnard, Gérard Delafond,Matthieu Robin,Geoffray Levasseur"
+
+#, fuzzy
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "xavier.besnard@neuf.fr, gerard@delafond.org, kde@macolu.org, geoffray."
+#~ "levasseurbrandin@numericable.fr"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "Opération booléenne"
+
+#, fuzzy
+#~ msgid "&Order"
+#~ msgstr "Or&dre"
+
+#, fuzzy
+#~ msgid "&Align"
+#~ msgstr "&Aligner"
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "&Fichier"
+
+#, fuzzy
+#~ msgid "&Edit"
+#~ msgstr "&Éditer"
+
+#, fuzzy
+#~ msgid "&View"
+#~ msgstr "&Affichage"
+
+#, fuzzy
+#~ msgid "&Object"
+#~ msgstr "&Objet"
+
+#, fuzzy
+#~ msgid "&Distribute"
+#~ msgstr "&Distribuer"
+
+# Need context informations: is path used in graphic meaning (translated as Chemin) or is it directory / file path (translated as Emplacement) ?
+#, fuzzy
+#~ msgid "&Path"
+#~ msgstr "Em&placement"
+
+#, fuzzy
+#~ msgid "Effe&cts"
+#~ msgstr "E&ffets"
+
+#, fuzzy
+#~ msgid "&Settings"
+#~ msgstr "&Paramètres"
+
+#, fuzzy
+#~ msgid "Edit"
+#~ msgstr "Éditer"
+
+#, fuzzy
+#~ msgid "Object"
+#~ msgstr "Objet"
+
+#, fuzzy
+#~ msgid "Align"
+#~ msgstr "Aligner"
+
+#, fuzzy
+#~ msgid "Effects"
+#~ msgstr "Effets"
+
+#, fuzzy
+#~ msgid "View"
+#~ msgstr "Affichage"
+
+#, fuzzy
+#~ msgid "&Flatten Path..."
+#~ msgstr "A&planir le tracé..."
+
+# unreviewed-context
+#, fuzzy
+#~ msgid "Flatten Path"
+#~ msgstr "Aplanir le tracé"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Propriétés"
+
+#, fuzzy
+#~ msgid "Flatness:"
+#~ msgstr "Planéité :"
+
+# unreviewed-context
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten path"
+#~ msgstr "Aplanir le tracé"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "Affiner le tracé"
+
+#, fuzzy
+#~ msgid "&Refine Path..."
+#~ msgstr "Affine&r le tracé..."
+
+#, fuzzy
+#~ msgid "Refine Path"
+#~ msgstr "Affiner le tracé"
+
+#, fuzzy
+#~ msgid "Subdivisions:"
+#~ msgstr "Subdivisions :"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "Coins arrondis"
+
+#, fuzzy
+#~ msgid "&Round Corners..."
+#~ msgstr "&Coins arrondis..."
+
+#, fuzzy
+#~ msgid "Round Corners"
+#~ msgstr "Coins arrondis"
+
+#, fuzzy
+#~ msgid "Radius:"
+#~ msgstr "Rayon :"
+
+#, fuzzy
+#~| msgid "End angle:"
+#~ msgid "Expand all"
+#~ msgstr "Angle de fin :"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "Affichage"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "Affichage"
+
+#, fuzzy
+#~| msgid "Pencil Tool"
+#~ msgid "Stencil Box"
+#~ msgstr "Outil crayon"
+
+#, fuzzy
+#~ msgid "More shapes"
+#~ msgstr "Grouper les objets"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl & pinch"
+#~ msgstr "Tournoyer et resserrer"
+
+#, fuzzy
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Tournoyer / resserrer..."
+
+#, fuzzy
+#~ msgid "Whirl Pinch"
+#~ msgstr "Tournoyer et resserrer"
+
+#, fuzzy
+#~ msgid "Info"
+#~ msgstr "Information"
+
+#, fuzzy
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr ""
+#~ "Le résultat de l'effet tournoyer et resserrer peut être amélioré en "
+#~ "affinant la forme du tracé à la main."
+
+#, fuzzy
+#~ msgid "Angle:"
+#~ msgstr "Angle :"
+
+#, fuzzy
+#~ msgid "Pinch:"
+#~ msgstr "Resserrer :"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "Élever le calque"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "Abaisser le calque"
+
+#, fuzzy
+#~ msgid "Configure"
+#~ msgstr "Configurer"
+
+#, fuzzy
+#~ msgid "Interface"
+#~ msgstr "Interface"
+
+#, fuzzy
+#~ msgid "Misc"
+#~ msgstr "Divers"
+
+#, fuzzy
+#~ msgid "Grid"
+#~ msgstr "Grille"
+
+#, fuzzy
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Document"
+
+#, fuzzy
+#~ msgid "Document Settings"
+#~ msgstr "Paramétrages du document"
+
+#, fuzzy
+#~ msgctxt "@title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Auteur"
+
+#, fuzzy
+#~ msgid "Author"
+#~ msgstr "Auteur"
+
+#, fuzzy
+#~ msgid "Layer view"
+#~ msgstr "Affichage de calques"
+
+#, fuzzy
+#~ msgid "Add a new layer"
+#~ msgstr "Ajouter un nouveau calque"
+
+#, fuzzy
+#~ msgid "Delete selected objects"
+#~ msgstr "Supprimer les objets sélectionnés"
+
+#, fuzzy
+#~ msgid "Raise selected objects"
+#~ msgstr "Faire monter les objets sélectionnés"
+
+#, fuzzy
+#~ msgid "Lower selected objects"
+#~ msgstr "Faire descendre les objets sélectionnés"
+
+#, fuzzy
+#~ msgid "Minimal View"
+#~ msgstr "Vue minimale"
+
+#, fuzzy
+#~ msgid "Detailed View"
+#~ msgstr "Vue détaillée"
+
+#, fuzzy
+#~ msgid "Thumbnail View"
+#~ msgstr "Vue des vignettes"
+
+#, fuzzy
+#~ msgid "View mode"
+#~ msgstr "Mode d'affichage"
+
+#, fuzzy
+#~ msgid "New Layer"
+#~ msgstr "Nouveau calque"
+
+#, fuzzy
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Saisissez le nom du nouveau calque :"
+
+#, fuzzy
+#~ msgid "New layer"
+#~ msgstr "Nouveau calque"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Créer un calque"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Supprimer le calque"
+
+#, fuzzy
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr ""
+#~ "Impossible d'effacer tous les calques. Au moins un calque doit exister."
+
+#, fuzzy
+#~ msgid "Error deleting layers"
+#~ msgstr "Erreur en effaçant les calques"
+
+#, fuzzy
+#~ msgid "Layer"
+#~ msgstr "Calque"
+
+#, fuzzy
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Groupe"
+
+#, fuzzy
+#~ msgid "Shape"
+#~ msgstr "Forme"
+
+#, fuzzy
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Visible"
+
+#, fuzzy
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Verrouillé"
+
+#, fuzzy
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "zIndex"
+
+#, fuzzy
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Opacité"
+
+#, fuzzy
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Attaché"
+
+#, fuzzy
+#~ msgid "no"
+#~ msgstr "non"
+
+#, fuzzy
+#~ msgid "yes"
+#~ msgstr "oui"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Ré-apparenter les formes"
+
+#, fuzzy
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#, fuzzy
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "Une application de dessin de graphiques vectoriels."
+
+#, fuzzy
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "(c) 2001-2013, Les développeurs de Karbon"
+
+#, fuzzy
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "Vous êtes invité à participer de n'importe quelle manière."
+
+#, fuzzy
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#, fuzzy
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#, fuzzy
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#, fuzzy
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#, fuzzy
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Correction de bogues et améliorations"
+
+#, fuzzy
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#, fuzzy
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#, fuzzy
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#, fuzzy
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#, fuzzy
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#, fuzzy
+#~ msgid "Bug fixes"
+#~ msgstr "Correction de bogues"
+
+#, fuzzy
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#, fuzzy
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Patches et conseils utiles"
+
+#, fuzzy
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Document OASIS non valable. Aucune balise office:body trouvé."
+
+#, fuzzy
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Document OASIS non valable. Aucune balise office:drawing trouvé."
+
+#, fuzzy
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Document OASIS non valable. Aucune balise draw:page trouvé."
+
+#, fuzzy
+#~ msgid "Master Page"
+#~ msgstr "Page maître"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "Insérer des graphiques"
+
+#, fuzzy
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Choisissez le graphique à ajouter"
+
+#, fuzzy
+#~ msgid "Could not load image."
+#~ msgstr "Impossible de charger l'image."
+
+#, fuzzy
+#~ msgid "Import graphic"
+#~ msgstr "&Importer un graphique"
+
+#, fuzzy
+#~ msgid "Could not create image shape."
+#~ msgstr "Impossible de créer la forme de l'image."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally"
+#~ msgstr "Miroir horizontal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Vertically"
+#~ msgstr "Miroir vertical"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally and Vertically"
+#~ msgstr "Miroir horizontal et vertical"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "Séparer les tracés"
+
+#, fuzzy
+#~ msgid "Outline &Mode"
+#~ msgstr "&Mode fil de fer"
+
+#, fuzzy
+#~ msgid "Show Page Margins"
+#~ msgstr "Afficher les marges de la page"
+
+#, fuzzy
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Importer une image..."
+
+#, fuzzy
+#~ msgid "D&elete"
+#~ msgstr "&Supprimer"
+
+#, fuzzy
+#~ msgid "Edit Guides"
+#~ msgstr "Éditer les guides"
+
+# unreviewed-context
+#, fuzzy
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Dupliquer"
+
+#, fuzzy
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Distribuer le centrage (horizontalement)"
+
+#, fuzzy
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Distribuer les espaces (horizontalement)"
+
+#, fuzzy
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Distribuer les bordures de gauche"
+
+#, fuzzy
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Distribuer les bordures de droite"
+
+#, fuzzy
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Distribuer le centrage (verticalement)"
+
+#, fuzzy
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Distribuer les espaces (verticalement)"
+
+#, fuzzy
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Distribuer les bordures inférieures"
+
+#, fuzzy
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Distribuer les bordures supérieures"
+
+#, fuzzy
+#~ msgid "Show Rulers"
+#~ msgstr "Afficher les règles"
+
+#, fuzzy
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Affiche ou cache les règles"
+
+#, fuzzy
+#~ msgid "Show Color Palette"
+#~ msgstr "Afficher la palette de couleur"
+
+#, fuzzy
+#~ msgid "Show or hide color palette"
+#~ msgstr "Affiche ou cache la palette de couleur"
+
+#, fuzzy
+#~ msgid "Snap to Grid"
+#~ msgstr "Ajuster à la grille"
+
+#, fuzzy
+#~ msgid "Snaps to grid"
+#~ msgstr "Ajuste à la grille"
+
+#, fuzzy
+#~ msgid "&Clip Object"
+#~ msgstr "Atta&cher l'objet"
+
+#, fuzzy
+#~ msgid "&Unclip Objects"
+#~ msgstr "&Détacher les objets"
+
+#, fuzzy
+#~ msgid "Mirror Vertically"
+#~ msgstr "Miroir vertical"
+
+#, fuzzy
+#~ msgid "Mirror Horizontally"
+#~ msgstr "Miroir horizontal"
+
+#, fuzzy
+#~ msgid "&Close Path"
+#~ msgstr "&Fermer le tracé"
+
+#, fuzzy
+#~ msgid "Com&bine Path"
+#~ msgstr "Combiner le tracé"
+
+#, fuzzy
+#~ msgid "Se&parate Path"
+#~ msgstr "Séparer le tracé"
+
+#, fuzzy
+#~ msgid "Re&verse Path"
+#~ msgstr "In&verser le tracé"
+
+#, fuzzy
+#~ msgid "Intersect Paths"
+#~ msgstr "Entrecouper les tracés"
+
+#, fuzzy
+#~ msgid "Subtract Paths"
+#~ msgstr "Soustraire les tracés"
+
+#, fuzzy
+#~ msgid "Unite Paths"
+#~ msgstr "Unifier les tracés"
+
+#, fuzzy
+#~ msgid "Exclude Paths"
+#~ msgstr "Exclure les tracés"
+
+#, fuzzy
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Aligner le tracé sur la grille"
+
+#, fuzzy
+#~ msgid "Configure Karbon..."
+#~ msgstr "Configurer Karbon..."
+
+#, fuzzy
+#~ msgid "Page &Layout..."
+#~ msgstr "&Mise en page..."
+
+#, fuzzy
+#~ msgid "Zoom to Selection"
+#~ msgstr "Zoomer sur la sélection"
+
+#, fuzzy
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Zoomer sur le dessin"
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "Zoom"
+
+#, fuzzy
+#~ msgid "Show status bar:"
+#~ msgstr "Afficher la barre d'état :"
+
+#, fuzzy
+#~ msgid "Number of recent files:"
+#~ msgstr "Nombre de fichiers récents :"
+
+#, fuzzy
+#~ msgid "Palette font size:"
+#~ msgstr "Taille de la police de la palette :"
+
+#, fuzzy
+#~ msgid "Canvas color:"
+#~ msgstr "Couleur du canevas :"
+
+#, fuzzy
+#~ msgid "Select palette"
+#~ msgstr "Sélectionner une palette"
+
+#, fuzzy
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "Cliquez pour appliquer le remplissage à la sélection"
+
+#, fuzzy
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "Aucun"
+
+#, fuzzy
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "Cliquez pour appliquer le barrage à la sélection"
+
+#, fuzzy
+#~ msgctxt "The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "Personnalisé"
+
+#, fuzzy
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Aucun"
+
+#, fuzzy
+#~ msgid "Stroke:"
+#~ msgstr "Barrer :"
+
+#, fuzzy
+#~ msgid "Fill:"
+#~ msgstr "Remplir :"
+
+#~ msgid "File to open"
+#~ msgstr "Fichier à ouvrir"
+
+#~ msgid "Target:"
+#~ msgstr "Cible :"
+
+# unreviewed-context
+#~ msgid "Line"
+#~ msgstr "Ligne"
+
+#~ msgid "Fill"
+#~ msgstr "Remplir"
+
+#~ msgid "Type:"
+#~ msgstr "Type :"
+
+# unreviewed-context
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Linéaire"
+
+# unreviewed-context
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Radial"
+
+# unreviewed-context
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Conique"
+
+#~ msgid "Repeat:"
+#~ msgstr "Répétition :"
+
+# unreviewed-context
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Aucune"
+
+#~ msgid "Reflect"
+#~ msgstr "Reflet"
+
+#~ msgid "Repeat"
+#~ msgstr "Répétition"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Opacité globale :"
+
+#~ msgid "Color stop:"
+#~ msgstr "Couleur d'arrêt :"
+
+#~ msgid "Stop color."
+#~ msgstr "Couleur d'arrêt"
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Ajouter aux dégradés prédéfinis"
+
+#~ msgid "Original"
+#~ msgstr "Original"
+
+#~ msgid "Tiled"
+#~ msgstr "Mosaïque"
+
+#~ msgid "Stretched"
+#~ msgstr "Étiré"
+
+#~ msgid "Top Left"
+#~ msgstr "Haut à gauche"
+
+#~ msgid "Top"
+#~ msgstr "Haut"
+
+#~ msgid "Top Right"
+#~ msgstr "Haut à droite"
+
+#~ msgid "Left"
+#~ msgstr "Gauche"
+
+#~ msgid "Center"
+#~ msgstr "Centre"
+
+#~ msgid "Right"
+#~ msgstr "Droite"
+
+#~ msgid "Bottom Left"
+#~ msgstr "Bas à gauche"
+
+#~ msgid "Bottom"
+#~ msgstr "Bas"
+
+#~ msgid "Bottom Right"
+#~ msgstr "Bas à droite"
+
+#~ msgid "Stroke"
+#~ msgstr "Barrer"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Masquer les marges de la page"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Cacher les règles"
+
+#~ msgid "Stop color:"
+#~ msgstr "Couleur d'arrêt :"
+
+#~ msgid "Tools"
+#~ msgstr "Outils"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Chevauchement des copies :"
+
+#, fuzzy
+#~| msgid "Show Grid"
+#~ msgid "Show Guides"
+#~ msgstr "Afficher la grille"
+
+#, fuzzy
+#~ msgid "Shows or hides guides"
+#~ msgstr "Affiche ou cache la grille."
+
+# unreviewed-context
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Aucune"
+
+# unreviewed-context
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Plein"
+
+#~ msgid "Gradient"
+#~ msgstr "Dégradé"
+
+#~ msgid "Pattern"
+#~ msgstr "Motif"
+
+#~ msgid "Units:"
+#~ msgstr "Unités :"
+
+#, fuzzy
+#~| msgid "Inner radius:"
+#~ msgid "Handle radius:"
+#~ msgstr "Rayon interne :"
+
+#, fuzzy
+#~ msgid "Ungroup shapes"
+#~ msgstr "Dégrouper les objets"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Grouper les objets"
+
+#, fuzzy
+#~| msgid "Show &grid"
+#~ msgid "Show grid:"
+#~ msgstr "Afficher la &grille"
+
+#, fuzzy
+#~ msgid "Snap to grid:"
+#~ msgstr "Ajuste à la grille."
+
+#, fuzzy
+#~| msgid "Grid &color:"
+#~ msgid "Grid color:"
+#~ msgstr "C&ouleur de la grille :"
+
+#, fuzzy
+#~| msgid "&Horizontal:"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Horizontal :"
+
+#, fuzzy
+#~| msgid "&Vertical:"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Vertical :"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Auto-enregistrement (min.) :"
+
+#~ msgid "No auto save"
+#~ msgstr "Pas d'auto-enregistrement"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "Create backup file"
+#~ msgstr "Créer un fichier de sauvegarde"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Choisir le motif"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Choisissez le motif à ajouter"
+
+#, fuzzy
+#~| msgid "Reference"
+#~ msgid "Reference Point:"
+#~ msgstr "Référence"
+
+#~ msgid "X:"
+#~ msgstr "X :"
+
+#~ msgid "Y:"
+#~ msgstr "J :"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Pattern Size"
+#~ msgstr "Motif"
+
+#~ msgid "W:"
+#~ msgstr "L :"
+
+#~ msgid "H:"
+#~ msgstr "H :"
+
+#~ msgid "Edit Gradient"
+#~ msgstr "Modifier le dégradé"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "Dégradés prédéfinis"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgid "Gradient tool"
+#~ msgstr "Outil dégradé"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Outil dégradé"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Pattern tool"
+#~ msgstr "Outil motif"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Outil motif"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgid "Precision:"
+#~ msgstr "Position :"
+
+#, fuzzy
+#~| msgid "Raw"
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Grossier"
+
+#~ msgid "Curve"
+#~ msgstr "Courbe"
+
+#~ msgid "Straight"
+#~ msgstr "Droit"
+
+#~ msgid "Optimize"
+#~ msgstr "Optimiser"
+
+#~ msgid "Exactness:"
+#~ msgstr "Exactitude :"
+
+#~ msgid "Combine angle:"
+#~ msgstr "Angle combiné :"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "&Follow selected path"
+#~ msgstr "Supprimer les objets"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "Largeur :"
+
+#, fuzzy
+#~| msgid "Start angle:"
+#~ msgid "Use tablet &angle"
+#~ msgstr "Angle de démarrage :"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgid "Fixation:"
+#~ msgstr "Orientation :"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgid "Current"
+#~ msgstr "Courbe"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Graphics Pen"
+#~ msgstr "Dégradé"
+
+#, fuzzy
+#~| msgid "Ellipse Tool"
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Outil ellipse"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "&Amener au premier plan"
+
+#~ msgid "&Raise"
+#~ msgstr "&Élever"
+
+# unreviewed-context
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "A&baisser"
+
+#~ msgid "Send to &Back"
+#~ msgstr "Envoyer en a&rrière"
+
+#~ msgid "Show Grid"
+#~ msgstr "Afficher la grille"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Masquer la grille"
+
+#, fuzzy
+#~ msgid "Shows or hides grid"
+#~ msgstr "Affiche ou cache la grille."
+
+#~ msgid "Align Left"
+#~ msgstr "Aligner à gauche"
+
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "Centrer (horizontalement)"
+
+#~ msgid "Align Right"
+#~ msgstr "Aligner à droite"
+
+#~ msgid "Align Top"
+#~ msgstr "Aligner en haut"
+
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Centrer (verticalement)"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Align Bottom"
+#~ msgstr "Aligner en bas"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Stop opacity:"
+#~ msgstr "Opacité :"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "Afficher la barre d'état"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern"
+#~ msgstr "Choisir le motif"
+
+#~ msgid "Transform"
+#~ msgstr "Transformer"
+
+#~ msgid "Set x-position of actual selection"
+#~ msgstr "Définir la position horizontale de la sélection actuelle"
+
+#~ msgid "Set y-position of actual selection"
+#~ msgstr "Définir la position verticale de la sélection actuelle"
+
+#~ msgid "Set width of actual selection"
+#~ msgstr "Définir la largeur de la sélection actuelle"
+
+#~ msgid "Set height of actual selection"
+#~ msgstr "Définir la hauteur de la sélection actuelle"
+
+#~ msgid "R:"
+#~ msgstr "R :"
+
+#~ msgid "Rotate actual selection"
+#~ msgstr "Pivoter la sélection actuelle"
+
+#~ msgid "SX:"
+#~ msgstr "SX :"
+
+#~ msgid "Shear actual selection in x-direction"
+#~ msgstr "Rogner la sélection courante horizontalement"
+
+#~ msgid "SY:"
+#~ msgstr "SY :"
+
+#~ msgid "Shear actual selection in y-direction"
+#~ msgstr "Rogner la sélection courante verticalement"
+
+#~ msgid "Shear"
+#~ msgstr "Découper"
+
+#, fuzzy
+#~ msgid "Attach Path"
+#~ msgstr "Aplanir le chemin"
+
+#, fuzzy
+#~ msgid "Detach Path"
+#~ msgstr "Aplanir le chemin"
+
+#, fuzzy
+#~| msgid "Convert to Shapes"
+#~ msgid "Convert to Path"
+#~ msgstr "Convertir en formes"
+
+#, fuzzy
+#~| msgid "Text Tool"
+#~ msgid "Simple Text Tool"
+#~ msgstr "Outil texte"
+
+#~ msgid "Save as path"
+#~ msgstr "Enregistrer comme chemin"
+
+#~ msgid "Uniform Color"
+#~ msgstr "Couleur uniforme"
+
+#~ msgid "Old:"
+#~ msgstr "Ancien :"
+
+#~ msgid "New:"
+#~ msgstr "Nouveau :"
+
+#~ msgid "G:"
+#~ msgstr "V :"
+
+#~ msgid "B:"
+#~ msgstr "B :"
+
+#~ msgctxt "Hue:"
+#~ msgid "H:"
+#~ msgstr "T :"
+
+#~ msgctxt "Saturation:"
+#~ msgid "S:"
+#~ msgstr "S :"
+
+#~ msgctxt "Value:"
+#~ msgid "V:"
+#~ msgstr "V :"
+
+#~ msgid "RGB"
+#~ msgstr "RVB"
+
+#~ msgid "Type"
+#~ msgstr "Type"
+
+#~ msgid "Cap"
+#~ msgstr "Maj"
+
+#~ msgid "Join"
+#~ msgstr "Joindre"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Sélecteur de couleurs"
+
+#~ msgid "Height:"
+#~ msgstr "Hauteur :"
+
+#~ msgid "Layers:"
+#~ msgstr "Calques :"
+
+#~ msgid "Format:"
+#~ msgstr "Format :"
+
+#~ msgid "Resources"
+#~ msgstr "Ressources"
+
+#~ msgid "Patterns"
+#~ msgstr "Motifs"
+
+#~ msgid "Clipart"
+#~ msgstr "Clipart"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "&Importer"
+
+#~ msgid "Stroke: None"
+#~ msgstr "Barrer : Aucun"
+
+#~ msgid "Fill: None"
+#~ msgstr "Remplir : Aucun"
+
+#~ msgid "Fill: RGB"
+#~ msgstr "Remplir : RVB"
+
+#~ msgid "Fill: CMYK"
+#~ msgstr "Remplir : CMYK"
+
+#~ msgid "Fill: HSB"
+#~ msgstr "Remplir : HSB"
+
+#~ msgid "Fill: Grayscale"
+#~ msgstr "Remplir : Niveaux de gris"
+
+#~ msgid "Fill: Color"
+#~ msgstr "Remplir : Couleur"
+
+#~ msgid "Fill: Gradient"
+#~ msgstr "Remplir : Dégradé"
+
+#~ msgid "Fill: Pattern"
+#~ msgstr "Remplir : Motif"
+
+#~ msgid "Stroke: RGB"
+#~ msgstr "Barrer : RVB"
+
+#~ msgid "Stroke: CMYK"
+#~ msgstr "Barrer : CMYK"
+
+#~ msgid "Stroke: HSB"
+#~ msgstr "Barrer : HSB"
+
+#~ msgid "Stroke: Grayscale"
+#~ msgstr "Barrer : Niveaux de gris"
+
+#~ msgid "Stroke: Gradient"
+#~ msgstr "Barrer : Dégradé"
+
+#~ msgid "Stroke: Pattern"
+#~ msgstr "Barrer : Motif"
+
+#~ msgid "Polygonize"
+#~ msgstr "Transformer en polygone"
+
+#~ msgid "Round corners:"
+#~ msgstr "Coins arrondis :"
+
+#~ msgid "&Shadow Effect..."
+#~ msgstr "Effet d'om&bre..."
+
+#~ msgid "Create Shadow Effect"
+#~ msgstr "Créer un effet d'ombre"
+
+#~ msgid "Distance:"
+#~ msgstr "Distance :"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Create Shadow"
+#~ msgstr "Créer une ombre"
+
+#~ msgid "Object Properties"
+#~ msgstr "Propriétés de l'objet"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "&Supprimer"
+
+#~ msgid "&Import"
+#~ msgstr "&Importer"
+
+#, fuzzy
+#~| msgid "Image Tool"
+#~ msgid "Unnamed Tool"
+#~ msgstr "Outil image"
+
+#, fuzzy
+#~ msgid "&Undo"
+#~ msgstr "&Annuler : "
+
+#, fuzzy
+#~ msgid "&Redo"
+#~ msgstr "&Refaire : "
+
+#~ msgid "&Undo: "
+#~ msgstr "&Annuler : "
+
+#~ msgid "&Redo: "
+#~ msgstr "&Refaire : "
+
+#~ msgid "Fill Objects"
+#~ msgstr "Remplir les objets"
+
+#~ msgid "Fill Object"
+#~ msgstr "Remplir l'objet"
+
+#~ msgid "Insert Text"
+#~ msgstr "Insérer du texte"
+
+#~ msgid "Transform Objects"
+#~ msgstr "Transformer les objets"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Dupliquer l'objet"
+
+#~ msgid "Duplicate Objects"
+#~ msgstr "Dupliquer les objets"
+
+#~ msgid "Transform Object"
+#~ msgstr "Transformer l'objet"
+
+#~ msgid "Translate Objects"
+#~ msgstr "Déplacer les objets"
+
+#~ msgid "Translate Object"
+#~ msgstr "Déplacer l'objet"
+
+#~ msgid "Scale Objects"
+#~ msgstr "Changer l'échelle des objets"
+
+#~ msgid "Scale Object"
+#~ msgstr "Changer l'échelle de l'objet"
+
+#~ msgid "Shear Objects"
+#~ msgstr "Découper les objets"
+
+#~ msgid "Shear Object"
+#~ msgstr "Découper l'objet"
+
+#~ msgid "Rotate Objects"
+#~ msgstr "Tourner les objets"
+
+#~ msgid "Rotate Object"
+#~ msgstr "Tourner l'objet"
+
+#~ msgid "Translate Bezier"
+#~ msgstr "Déplacer une courbe de Bézier"
+
+#~ msgid "Translate Points"
+#~ msgstr "Translater les points"
+
+#~ msgid "Translate Point"
+#~ msgstr "Déplacer le point"
+
+#~ msgid "Ellipse"
+#~ msgstr "Ellipse"
+
+#~ msgid "Polygon"
+#~ msgstr "Polygone"
+
+#~ msgid "Polyline"
+#~ msgstr "Ligne brisée"
+
+#~ msgid "Sinus"
+#~ msgstr "Sinusoïde"
+
+#~ msgid "Spiral"
+#~ msgstr "Spirale"
+
+#~ msgid "Star"
+#~ msgstr "Étoile"
+
+#~ msgid "<qt><b>Shape tool</b><br>"
+#~ msgstr "<qt><b>Outil forme</b><br>"
+
+#~ msgid "<i>Click and drag</i> to place your own shape.<br>"
+#~ msgstr "<i>Cliquez et tirez</i> pour placer votre propre forme.<br>"
+
+#~ msgid "<i>Click</i> to place a shape using the tool properties values.</qt>"
+#~ msgstr ""
+#~ "<i>Cliquez</i> pour placer une forme à l'aide des valeurs de propriétés "
+#~ "de l'outil.</qt>"
+
+#~ msgid "Periods:"
+#~ msgstr "Périodes :"
+
+#~ msgid "Sinus Tool"
+#~ msgstr "Outil sinusoïde"
+
+#~ msgid "Insert Spiral"
+#~ msgstr "Insérer une spirale"
+
+#~ msgid "Round"
+#~ msgstr "Ronde"
+
+#~ msgid "Rectangular"
+#~ msgstr "Rectangulaire"
+
+#~ msgid "Segments:"
+#~ msgstr "Segments :"
+
+#~ msgid "Fade:"
+#~ msgstr "Fondu :"
+
+#~ msgid "Clockwise"
+#~ msgstr "Sens des aiguilles d'une montre"
+
+#~ msgid "Counter Clockwise"
+#~ msgstr "Sens inverse des aiguilles d'une montre"
+
+#~ msgid "Spiral Tool"
+#~ msgstr "Outil spirale"
+
+#~ msgid "Insert Star"
+#~ msgstr "Insérer une étoile"
+
+#~ msgid "Star Outline"
+#~ msgstr "Contour d'étoile"
+
+#~ msgid "Wheel"
+#~ msgstr "Roue"
+
+#~ msgid "Framed Star"
+#~ msgstr "Étoile encadrée"
+
+#~ msgid "Gear"
+#~ msgstr "Engrenage"
+
+#~ msgid "Outer radius:"
+#~ msgstr "Rayon externe :"
+
+#~ msgid "Inner angle:"
+#~ msgstr "Angle interne :"
+
+#~ msgid "Roundness:"
+#~ msgstr "Rotondité :"
+
+#~ msgid "Star Tool"
+#~ msgstr "Outil étoile"
+
+#~ msgid "Draw a star"
+#~ msgstr "Dessiner une étoile"
+
+#~ msgid "Shadow"
+#~ msgstr "Ombre"
+
+#~ msgid "Draw translucent shadow"
+#~ msgstr "Dessiner une ombre translucide"
+
+#~ msgid "Text"
+#~ msgstr "Texte"
+
+#~ msgid "Alignment:"
+#~ msgstr "Alignement :"
+
+#~ msgid "Position"
+#~ msgstr "Position"
+
+#~ msgid "Edit Base Path"
+#~ msgstr "Modifier le chemin de base"
+
+#~ msgid "New text"
+#~ msgstr "Nouveau texte"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "Above"
+#~ msgstr "En haut"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "On"
+#~ msgstr "Au milieu"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "Under"
+#~ msgstr "En bas"
+
+#~ msgid "<qt><b>Text Tool</b><br>"
+#~ msgstr "<qt><b>Outil texte</b><br>"
+
+#~ msgid "<i>Click</i> on document to place horizontal text.<br>"
+#~ msgstr "<i>Cliquez</i> sur le document pour placer du texte horizontal.<br>"
+
+#~ msgid "<i>Click and drag</i> in document to place directional text.<br>"
+#~ msgstr ""
+#~ "<i>Cliquez et tirez</i> dans le document pour placer du texte "
+#~ "directionnel.<br>"
+
+#~ msgid ""
+#~ "<i>Click</i> on a selected path object to place text along its outline."
+#~ "<br>"
+#~ msgstr ""
+#~ "<i>Cliquez</i> sur un objet sélectionné pour placer le texte le long de "
+#~ "sa bordure.<br>"
+
+#~ msgid "<i>Click</i> on a selected text object to change it.<br></qt>"
+#~ msgstr "<i>Cliquez</i> sur un texte sélectionné pour le modifier.</qt>"
+
+#~ msgid "Change Text"
+#~ msgstr "Changer le texte"
+
+#~ msgid "Text Conversion"
+#~ msgstr "Conversion de texte"
+
+#~ msgid "One object"
+#~ msgid_plural "%1 objects"
+#~ msgstr[0] "%1 objet"
+#~ msgstr[1] "%1 objets"
+
+#~ msgid "path"
+#~ msgstr "chemin"
+
+#~ msgid "One group, containing one object"
+#~ msgid_plural "One group, containing %1 objects"
+#~ msgstr[0] "Un groupe, contenant %1 objet"
+#~ msgstr[1] "Un groupe, contenant %1 objets"
+
+#~ msgid "text"
+#~ msgstr "texte"
+
+#~ msgid "image"
+#~ msgstr "image"
+
+#~ msgid "Paste Object"
+#~ msgstr "Coller l'objet"
+
+#~ msgid "Paste Objects"
+#~ msgstr "Coller les objets"
+
+#~ msgid "Flatten Curves"
+#~ msgstr "Aplanir les courbes"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Propriétés du trait"
+
+#~ msgid "Set line width of actual selection"
+#~ msgstr "Définir l'épaisseur de la ligne de la sélection actuelle"
+
+#~ msgid "Butt cap"
+#~ msgstr "Extrémité"
+
+#~ msgid "Round cap"
+#~ msgstr "Arrondi"
+
+#~ msgid "Square cap"
+#~ msgstr "Carré"
+
+#~ msgid "Join:"
+#~ msgstr "Joindre :"
+
+#~ msgid "Miter join"
+#~ msgstr "Mitre"
+
+#~ msgid "Round join"
+#~ msgstr "Arrondi"
+
+#~ msgid "Bevel join"
+#~ msgstr "Oblique"
+
+#, fuzzy
+#~ msgid "Miter limit:"
+#~ msgstr "Mitre"
+
+#, fuzzy
+#~ msgid "Set miter limit"
+#~ msgstr "Régler la largeur de ligne"
+
+#~ msgid "P&urge"
+#~ msgstr "Pur&ger"
+
+#~ msgid "&History"
+#~ msgstr "&Historique"
+
+#~ msgid "&Insert Knots..."
+#~ msgstr "&Insérer des nœuds..."
+
+#~ msgid "Insert Knots"
+#~ msgstr "Insérer des nœuds"
+
+#~ msgid "Insert Clipart"
+#~ msgstr "Insérer un clipart"
+
+#~ msgid "Stroke Objects"
+#~ msgstr "Barrer les objets"
+
+#~ msgid "Stroke Object"
+#~ msgstr "Barrer l'objet"
+
+#~ msgid "Stroke Width"
+#~ msgstr "Largeur du trait"
+
+#~ msgid "Dash Pattern"
+#~ msgstr "Motif pointillé"
+
+#~ msgid "<qt><b>Zoom tool:</b><br>"
+#~ msgstr "<qt><b>Outil zoom :</b><br>"
+
+#~ msgid "<i>Click and drag</i> to zoom into a rectangular area.<br>"
+#~ msgstr ""
+#~ "<i>Cliquez et tirez</i> pour zoomer dans une zone rectangulaire.<br>"
+
+#~ msgid "<i>Right click</i> to zoom out of canvas.<br>"
+#~ msgstr ""
+#~ "<i>Cliquez avec le bouton droit</i> pour dézoomer la vue du canevas.</qt>"
+
+#~ msgid "<i>Pressing +/- keys</i><br>to zoom into/out of canvas."
+#~ msgstr ""
+#~ "<i>Appuyez sur les touches + et -</i> pour zoomer et dézoomer dans le "
+#~ "canevas."
+
+#~ msgid "Zoom Tool"
+#~ msgstr "Outil zoom"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Limite des annuler / refaire :"
+
+#~ msgid "<qt><b>Polyline tool:</b><br>"
+#~ msgstr "<qt><b>Outil ligne brisée :</b><br>"
+
+#~ msgid ""
+#~ "- <i>Click</i> to add a node and <i>drag</i> to set its bezier vector.<br>"
+#~ msgstr ""
+#~ "- <i>Cliquez</i> pour ajouter un nœud et <i>tirez</i> pour déterminer son "
+#~ "vecteur de Bézier.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Ctrl</i> while dragging to edit the previous bezier vector.<br>"
+#~ msgstr ""
+#~ "- Appuyez sur <i>Ctrl</i> en tirant pour modifier le vecteur de Bézier "
+#~ "précédent.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Shift</i> while dragging to change the curve in a straight "
+#~ "line.<br>"
+#~ msgstr ""
+#~ "- Appuyez sur <i>Maj</i> tout en tirant pour transformer la courbe en "
+#~ "ligne droite.<br>"
+
+#~ msgid "- Press <i>Backspace</i> to cancel the last curve.<br>"
+#~ msgstr ""
+#~ "- Appuyez sur <i>Retour arrière</i> pour annuler la dernière courbe.<br>"
+
+#~ msgid "- Press <i>Esc</i> to cancel the whole polyline.<br>"
+#~ msgstr ""
+#~ "- Appuyez sur <i>Échap</i> pour annuler la ligne brisée entière.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Enter</i> or <i>double click</i> to end the polyline.</qt>"
+#~ msgstr ""
+#~ "- Appuyez sur <i>Entrée</i> ou <i>double-cliquez</i> pour terminer la "
+#~ "ligne brisée.</qt>"
+
+#~ msgid "Polyline Tool"
+#~ msgstr "Outil ligne brisée"
+
+#~ msgid "Translate"
+#~ msgstr "Déplacer"
+
+#~ msgid "Relative &position"
+#~ msgstr "&Position relative"
+
+#~ msgid "This action cannot be undone later. Do you really want to continue?"
+#~ msgstr ""
+#~ "Cette action ne pourra pas être annulée ensuite. Voulez-vous vraiment "
+#~ "continuer ?"
+
+#~ msgid "Purge History"
+#~ msgstr "Purger l'historique"
+
+#~ msgid "Zoom Width"
+#~ msgstr "Largeur de zoom"
+
+#~ msgid "Whole Page"
+#~ msgstr "Pleine page"
+
+#~ msgid "Wireframe"
+#~ msgstr "Fil de fer"
+
+#~ msgid "25%"
+#~ msgstr "25 %"
+
+#~ msgid "50%"
+#~ msgstr "50 %"
+
+#~ msgid "100%"
+#~ msgstr "100 %"
+
+#~ msgid "200%"
+#~ msgstr "200 %"
+
+#~ msgid "300%"
+#~ msgstr "300 %"
+
+#~ msgid "400%"
+#~ msgstr "400 %"
+
+#~ msgid "800%"
+#~ msgstr "800 %"
+
+#~ msgid "Line Style"
+#~ msgstr "Style de ligne"
+
+#~ msgid "History"
+#~ msgstr "Historique"
+
+#~ msgid "Align Objects"
+#~ msgstr "Aligner les objets"
+
+#~ msgid "Clean Up"
+#~ msgstr "Nettoyer"
+
+#~ msgid "Delete Object"
+#~ msgstr "Supprimer l'objet"
+
+#~ msgid "Delete Node"
+#~ msgstr "Supprimer le nœud"
+
+#~ msgid "Distribute Objects"
+#~ msgstr "Distribuer les objets"
+
+#~ msgid "Order Selection"
+#~ msgstr "Ordonner la sélection"
+
+#~ msgid "Snap to g&rid"
+#~ msgstr "A&juster à la grille"
+
+#~ msgid "Snap Distance"
+#~ msgstr "Ajuster la distance"
+
+#~ msgid "V&ertical:"
+#~ msgstr "V&erticale :"
+
+#~ msgid "HSV"
+#~ msgstr "HSV"
+
+#~ msgid "Alpha (opacity)"
+#~ msgstr "Alpha (opacité)"
+
+#~ msgctxt "document width"
+#~ msgid "Width:"
+#~ msgstr "Largeur :"
+
+#~ msgid "New"
+#~ msgstr "Nouveau"
+
+#~ msgid "Raise"
+#~ msgstr "Élever"
+
+#~ msgid "Lower"
+#~ msgstr "Abaisser"
+
+#~ msgid "Item"
+#~ msgstr "Élément"
+
+#~ msgid "L"
+#~ msgstr "L"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "Current Object"
+#~ msgstr "Objet actuel"
+
+#~ msgid "Change the name of the object:"
+#~ msgstr "Changer le nom de l'objet :"
+
+#~ msgid "Change the name of the current layer:"
+#~ msgstr "Changer le nom du calque actuel :"
+
+#~ msgid "Add Layer"
+#~ msgstr "Ajouter un calque"
+
+#~ msgid "Commands"
+#~ msgstr "Commandes"
+
+#~ msgid "Group commands"
+#~ msgstr "Grouper les commandes"
+
+#~ msgid "Rectangle"
+#~ msgstr "Rectangle"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Insérer une ellipse"
+
+#~ msgid "Full"
+#~ msgstr "Plein"
+
+#~ msgid "Pie"
+#~ msgstr "Camembert"
+
+#~ msgid "Arc"
+#~ msgstr "Arc"
+
+#~ msgctxt "object width"
+#~ msgid "Width:"
+#~ msgstr "Largeur :"
+
+#~ msgid "<qt><b>Gradient tool:</b><br>"
+#~ msgstr "<qt><b>Outil dégradé :</b><br>"
+
+#~ msgid "<i>Click and drag</i> to choose the gradient vector.<br>"
+#~ msgstr "<i>Cliquez et tirez</i> pour choisir le vecteur de dégradé.<br>"
+
+#~ msgid ""
+#~ "<i>Click and drag</i> a gradient vector handle to change the gradient "
+#~ "vector.<br>"
+#~ msgstr ""
+#~ "<i>Cliquez et tirez</i> une poignée du vecteur du dégradé pour le changer."
+#~ "<br>"
+
+#~ msgid ""
+#~ "<i>Shift click and drag</i> to move the radial gradient focal point.<br>"
+#~ msgstr ""
+#~ "<i>Cliquez en maintenant Maj appuyé et tirez</i> pour déplacer la focale "
+#~ "du dégradé radial.<br>"
+
+#~ msgid ""
+#~ "<i>Press i or Shift+i</i> to decrease or increase the handle size.<br>"
+#~ msgstr ""
+#~ "<i>Appuyez sur i ou Maj + i</i> pour diminuer ou augmenter la taille de "
+#~ "la poignée.<br>"
+
+#~ msgid "<br><b>Gradient editing:</b><br>"
+#~ msgstr "<br><b>Édition de dégradé :</b><br>"
+
+#~ msgid "<i>Click and drag</i> to move points.<br>"
+#~ msgstr "<i>Cliquez et tirez</i> pour déplacer les points.<br>"
+
+#~ msgid "<i>Double click</i> on a color point to edit it.<br>"
+#~ msgstr "<i>Double-cliquez</i> sur un point de couleur pour le modifier.<br>"
+
+#~ msgid "<i>Right click</i> on a color point to remove it.</qt>"
+#~ msgstr ""
+#~ "<i>Cliquez avec le bouton droit</i> sur un point de couleur pour le "
+#~ "supprimer.</qt>"
+
+#~ msgid "<qt><b>Pattern tool:</b><br>"
+#~ msgstr "<qt><b>Outil motifs :</b><br>"
+
+#~ msgid "<i>Click</i> on the pattern you want in the chooser.<br>"
+#~ msgstr "<i>Cliquez</i> sur le motif que vous voulez dans le sélecteur.<br>"
+
+#~ msgid "<i>Click and drag</i> to choose the pattern vector.</qt>"
+#~ msgstr "<i>Cliquez et tirez pour choisir le vecteur de motif.</i>"
+
+#~ msgid "Please select a pattern."
+#~ msgstr "Veuillez choisir un motif."
+
+#~ msgid "<qt><b>Pencil tool:</b><br>"
+#~ msgstr "<qt><b>Outil crayon :</b><br>"
+
+#~ msgid "- <i>Click</i> to begin drawing, release when you have finished."
+#~ msgstr ""
+#~ "- <i>Cliquez</i> pour commencer à dessiner, relâchez lorsque vous avez "
+#~ "fini."
+
+#~ msgid "Pencil"
+#~ msgstr "Crayon"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Insérer un polygone"
+
+#~ msgid "Polygon Tool"
+#~ msgstr "Outil polygone"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Insérer un rectangle"
+
+#~ msgid "Rectangle Tool"
+#~ msgstr "Outil rectangle"
+
+#~ msgid "Rotate Tool"
+#~ msgstr "Outil rotation"
+
+#~ msgid "Insert Round Rect"
+#~ msgstr "Insérer un rectangle arrondi"
+
+#~ msgid "Height (%1):"
+#~ msgstr "Hauteur (%1) :"
+
+#~ msgid "Edge radius X:"
+#~ msgstr "Rayon du bord X :"
+
+#~ msgid "Edge radius Y:"
+#~ msgstr "Rayon du bord Y :"
+
+#~ msgid "Round Rectangle Tool"
+#~ msgstr "Outil rectangle arrondi"
+
+#~ msgid "Round Rectangle"
+#~ msgstr "Rectangle arrondi"
+
+#~ msgid "Editing Nodes"
+#~ msgstr "Modifier les nœuds"
+
+#~ msgid "Select Nodes Tool"
+#~ msgstr "Outil nœud de sélection"
+
+#~ msgid "Selection Mode"
+#~ msgstr "Mode de sélection"
+
+#~ msgid "Select in current layer"
+#~ msgstr "Sélectionner dans le calque actuel"
+
+#~ msgid "Select in visible layers"
+#~ msgstr "Sélectionner dans les calques visibles"
+
+#~ msgid "Select in selected layers"
+#~ msgstr "Sélectionner dans les calques sélectionnés"
+
+#~ msgid "Select"
+#~ msgstr "Sélectionner"
+
+#~ msgid "<qt><b>Selection tool:</b><br>"
+#~ msgstr "<qt><b>Outil sélection :</b><br>"
+
+#~ msgid ""
+#~ "<i>Select in current layer:</i><br>The selection is made in the layer "
+#~ "selected in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Sélectionner dans le calque actuel :</i> <br>La sélection s'effectue "
+#~ "dans le calque sélectionné dans la boîte à calques.<br><br>"
+
+#~ msgid ""
+#~ "<i>Select in visible layers:</i><br>The selection is made in the visible "
+#~ "layers (eye in the layers docker).<br><br>"
+#~ msgstr ""
+#~ "<i>Sélectionner dans les calques visibles :</i><br>La sélection "
+#~ "s'effectue dans les calques visibles (œil dans la boîte à calques)."
+#~ "<br><br>"
+
+#~ msgid ""
+#~ "<i>Select in selected layers:</i><br>The selection is made in the checked "
+#~ "layers in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Sélectionner dans les calques sélectionnés :</i><br>La sélection "
+#~ "s'effectue dans les calques cochés dans la boîte à calques.<br><br>"
+
+#~ msgid ""
+#~ "<i>Position using arrow keys</i><br>The selection can be positioned up, "
+#~ "down, left and right using the corresponding arrow keys."
+#~ msgstr ""
+#~ "<i>Positionner à l'aide des touches fléchées</i> <br>La sélection peut "
+#~ "être positionnée vers le haut, le bas, la gauche et la droite à l'aide "
+#~ "des touches fléchées correspondantes."
+
+#~ msgctxt "[(left,bottom), (right,top)] (actual unit)"
+#~ msgid "Selection [(%1, %2), (%3, %4)] (%5)"
+#~ msgstr "Sélection [(%1, %2), (%3, %4)] (%5)"
+
+#~ msgid "No selection"
+#~ msgstr "Pas de sélection"
+
+#~ msgid "Select Tool"
+#~ msgstr "Outil sélectionner"
+
+#~ msgid "Shear Tool"
+#~ msgstr "Outil découper"
+
+#~ msgid "Predefined"
+#~ msgstr "Prédéfini"
+
+#~ msgctxt "selection width"
+#~ msgid "Width:"
+#~ msgstr "Largeur :"
+
+#~ msgid "<qt><b>Image tool:</b><br>"
+#~ msgstr "<qt><b>Outil image :</b><br>"
+
+#~ msgid "Choose Image to Add"
+#~ msgstr "Choisissez l'image à ajouter"
+
+#~ msgid "Knots:"
+#~ msgstr "Nœuds :"

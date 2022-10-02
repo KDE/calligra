@@ -1,0 +1,755 @@
+# Translation of calligra_textinlineobject_variables.po to Brazilian Portuguese
+# Copyright (C) 2007-2015 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marcus Gama <marcus.gama@gmail.com>, 2007, 2011.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2009.
+# Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>, 2010, 2012.
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2011, 2012, 2014, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra_textinlineobject_variables\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2015-06-28 09:41-0300\n"
+"Last-Translator: André Marcelo Alvarenga <alvarenga@kde.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_br@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: ChapterVariable.cpp:202 UserVariableOptionsWidget.cpp:57
+#, kde-format
+msgid "Format:"
+msgstr "Formato:"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number"
+msgstr "Número"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Name"
+msgstr "Nome"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number and name"
+msgstr "Número e nome"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number without separator"
+msgstr "Número sem separador"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number and name without separator"
+msgstr "Número e nome sem separador"
+
+#: ChapterVariable.cpp:211
+#, kde-format
+msgid "Level:"
+msgstr "Nível:"
+
+#: ChapterVariableFactory.cpp:21
+#, kde-format
+msgid "Chapter"
+msgstr "Capítulo"
+
+#: DateVariableFactory.cpp:22
+#, kde-format
+msgctxt "date that can not be changed later"
+msgid "Date (Fixed)"
+msgstr "Data (Fixa)"
+
+#: FixedDateFormat.cpp:34
+#, kde-format
+msgid "Locale date format"
+msgstr "Formato local da data"
+
+#: FixedDateFormat.cpp:35
+#, kde-format
+msgid "Short locale date format"
+msgstr "Formato local abreviado da data"
+
+#: FixedDateFormat.cpp:36
+#, kde-format
+msgid "Locale date & time format"
+msgstr "Formato local da data e hora"
+
+#: FixedDateFormat.cpp:37
+#, kde-format
+msgid "Short locale date & time format"
+msgstr "Formato local abreviado da data e hora"
+
+#: FixedDateFormat.cpp:108
+#, kde-format
+msgid "Day"
+msgstr "Dia"
+
+#: FixedDateFormat.cpp:109
+#, kde-format
+msgid "Month"
+msgstr "Mês"
+
+#: FixedDateFormat.cpp:110
+#, kde-format
+msgid "Year"
+msgstr "Ano"
+
+#: FixedDateFormat.cpp:111
+#, kde-format
+msgid "Hour"
+msgstr "Hora"
+
+#: FixedDateFormat.cpp:112
+#, kde-format
+msgid "Minute"
+msgstr "Minuto"
+
+#: FixedDateFormat.cpp:113
+#, kde-format
+msgid "Second"
+msgstr "Segundo"
+
+#: FixedDateFormat.cpp:121
+#, kde-format
+msgid "Flexible Digits (1-31)"
+msgstr "Dígitos Flexíveis (1-31)"
+
+#: FixedDateFormat.cpp:122
+#, kde-format
+msgid "2 Digits (01-31)"
+msgstr "2 Dígitos (01-31)"
+
+#: FixedDateFormat.cpp:123 FixedDateFormat.cpp:127
+#, kde-format
+msgid "Abbreviated Name"
+msgstr "Nome Abreviado"
+
+#: FixedDateFormat.cpp:124 FixedDateFormat.cpp:128
+#, kde-format
+msgid "Long Name"
+msgstr "Nome Comprido"
+
+#: FixedDateFormat.cpp:125
+#, kde-format
+msgid "Flexible Digits (1-12)"
+msgstr "Dígitos Flexíveis (1-12)"
+
+#: FixedDateFormat.cpp:126
+#, kde-format
+msgid "2 Digits (01-12)"
+msgstr "2 Dígitos (01-12)"
+
+#: FixedDateFormat.cpp:129
+#, kde-format
+msgid "Possessive Abbreviated Name"
+msgstr "Nome Abreviado Possessivo"
+
+#: FixedDateFormat.cpp:130
+#, kde-format
+msgid "Possessive Long Name"
+msgstr "Nome Comprido Possessivo"
+
+#: FixedDateFormat.cpp:131
+#, kde-format
+msgid "2 Digits (01-99)"
+msgstr "2 Dígitos (01-99)"
+
+#: FixedDateFormat.cpp:132
+#, kde-format
+msgid "4 Digits"
+msgstr "4 Dígitos"
+
+#: FixedDateFormat.cpp:133
+#, kde-format
+msgid "Flexible Digits (1-23)"
+msgstr "Dígitos Flexíveis (1-23)"
+
+#: FixedDateFormat.cpp:134
+#, kde-format
+msgid "2 Digits (01-23)"
+msgstr "2 Dígitos (01-23)"
+
+#: FixedDateFormat.cpp:135 FixedDateFormat.cpp:137
+#, kde-format
+msgid "Flexible Digits (1-59)"
+msgstr "Dígitos Flexíveis (1-59)"
+
+#: FixedDateFormat.cpp:136 FixedDateFormat.cpp:138
+#, kde-format
+msgid "2 Digits (01-59)"
+msgstr "2 Dígitos (01-59)"
+
+#: FixedDateFormat.cpp:139
+#, kde-format
+msgid "am/pm"
+msgstr "am/pm"
+
+#: FixedDateFormat.cpp:140
+#, kde-format
+msgid "AM/PM"
+msgstr "AM/PM"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: FixedDateFormat.ui:21
+#, kde-format
+msgid "Date Correction:"
+msgstr "Correção de Datas:"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, correction)
+#: FixedDateFormat.ui:28
+#, kde-format
+msgid " days"
+msgstr " dias"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: FixedDateFormat.ui:53
+#, kde-format
+msgid "Select the way the date should be displayed:"
+msgstr "Selecione a forma como a data deverá ser apresentada:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, custom)
+#: FixedDateFormat.ui:60
+#, kde-format
+msgid "Custom format"
+msgstr "Formato personalizado"
+
+#. i18n: ectx: property (text), widget (QToolButton, formatButton)
+#: FixedDateFormat.ui:101
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#: InfoVariableFactory.cpp:25
+#, kde-format
+msgid "Author Name"
+msgstr "Nome do autor"
+
+#: InfoVariableFactory.cpp:33
+#, kde-format
+msgid "Title"
+msgstr "Título"
+
+#: InfoVariableFactory.cpp:41
+#, kde-format
+msgid "Subject"
+msgstr "Assunto"
+
+#: InfoVariableFactory.cpp:49
+#, kde-format
+msgid "File Name"
+msgstr "Nome do arquivo"
+
+#: InfoVariableFactory.cpp:57
+#, kde-format
+msgid "Keywords"
+msgstr "Palavras-chave"
+
+#: InfoVariableFactory.cpp:65
+#, kde-format
+msgid "Comments"
+msgstr "Comentários"
+
+#: PageVariableFactory.cpp:23
+#, kde-format
+msgid "Page Count"
+msgstr "Número de páginas"
+
+#: PageVariableFactory.cpp:31
+#, kde-format
+msgid "Page Number"
+msgstr "Número da página"
+
+#: UserVariableFactory.cpp:22
+#, kde-format
+msgid "Custom"
+msgstr "Personalizado"
+
+#: UserVariableOptionsWidget.cpp:34
+#, kde-format
+msgid "Name:"
+msgstr "Nome:"
+
+#: UserVariableOptionsWidget.cpp:46
+#, kde-format
+msgid "New"
+msgstr "Nova"
+
+#: UserVariableOptionsWidget.cpp:50
+#, kde-format
+msgid "Delete"
+msgstr "Excluir"
+
+#: UserVariableOptionsWidget.cpp:63
+#, kde-format
+msgid "String"
+msgstr "Texto"
+
+#: UserVariableOptionsWidget.cpp:64
+#, kde-format
+msgid "Boolean"
+msgstr "Booleano"
+
+#: UserVariableOptionsWidget.cpp:65
+#, kde-format
+msgid "Float"
+msgstr "Flutuante"
+
+#: UserVariableOptionsWidget.cpp:66
+#, kde-format
+msgid "Percentage"
+msgstr "Porcentagem"
+
+#: UserVariableOptionsWidget.cpp:67
+#, kde-format
+msgid "Currency"
+msgstr "Monetário"
+
+#: UserVariableOptionsWidget.cpp:68
+#, kde-format
+msgid "Date"
+msgstr "Data"
+
+#: UserVariableOptionsWidget.cpp:69
+#, kde-format
+msgid "Time"
+msgstr "Hora"
+
+#: UserVariableOptionsWidget.cpp:70
+#, kde-format
+msgid "Formula"
+msgstr "Fórmula"
+
+#: UserVariableOptionsWidget.cpp:71
+#, kde-format
+msgid "Void"
+msgstr "Nenhum"
+
+#: UserVariableOptionsWidget.cpp:76
+#, kde-format
+msgid "Value:"
+msgstr "Valor:"
+
+#: UserVariableOptionsWidget.cpp:149
+#, kde-format
+msgid "New Variable"
+msgstr "Nova variável"
+
+#: UserVariableOptionsWidget.cpp:149
+#, kde-format
+msgid "Name for new variable:"
+msgstr "Nome da nova variável:"
+
+#: UserVariableOptionsWidget.cpp:165
+#, kde-format
+msgid "Delete variable <b>%1</b>?"
+msgstr "Deseja apagar a variável <b>%1</b>?"
+
+#: UserVariableOptionsWidget.cpp:166
+#, kde-format
+msgid "Delete Variable"
+msgstr "Apagar a variável"
+
+#, fuzzy
+#~| msgid "Date Correction:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date Correction:"
+#~ msgstr "Correção de Datas:"
+
+#, fuzzy
+#~| msgid " days"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " days"
+#~ msgstr " dias"
+
+#, fuzzy
+#~| msgid "Select the way the date should be displayed:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select the way the date should be displayed:"
+#~ msgstr "Selecione a forma como a data deverá ser apresentada:"
+
+#, fuzzy
+#~| msgid "Custom format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom format"
+#~ msgstr "Formato personalizado"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Format:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format:"
+#~ msgstr "Formato:"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name"
+#~ msgstr "Nome"
+
+#, fuzzy
+#~| msgid "Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number"
+#~ msgstr "Número"
+
+#, fuzzy
+#~| msgid "Number and name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number and name"
+#~ msgstr "Número e nome"
+
+#, fuzzy
+#~| msgid "Number and name without separator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number and name without separator"
+#~ msgstr "Número e nome sem separador"
+
+#, fuzzy
+#~| msgid "Number without separator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number without separator"
+#~ msgstr "Número sem separador"
+
+#, fuzzy
+#~| msgid "Level:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Level:"
+#~ msgstr "Nível:"
+
+#, fuzzy
+#~| msgid "Chapter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chapter"
+#~ msgstr "Capítulo"
+
+#, fuzzy
+#~| msgctxt "date that can not be changed later"
+#~| msgid "Date (Fixed)"
+#~ msgctxt "(qtundo-format) date that can not be changed later"
+#~ msgid "Date (Fixed)"
+#~ msgstr "Data (Fixa)"
+
+#, fuzzy
+#~| msgid "Locale date format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale date format"
+#~ msgstr "Formato local da data"
+
+#, fuzzy
+#~| msgid "Short locale date format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short locale date format"
+#~ msgstr "Formato local abreviado da data"
+
+#, fuzzy
+#~| msgid "Locale date & time format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale date & time format"
+#~ msgstr "Formato local da data e hora"
+
+#, fuzzy
+#~| msgid "Short locale date & time format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short locale date & time format"
+#~ msgstr "Formato local abreviado da data e hora"
+
+#, fuzzy
+#~| msgid "Day"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Day"
+#~ msgstr "Dia"
+
+#, fuzzy
+#~| msgid "Month"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Month"
+#~ msgstr "Mês"
+
+#, fuzzy
+#~| msgid "Year"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Year"
+#~ msgstr "Ano"
+
+#, fuzzy
+#~| msgid "Hour"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hour"
+#~ msgstr "Hora"
+
+#, fuzzy
+#~| msgid "Minute"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minute"
+#~ msgstr "Minuto"
+
+#, fuzzy
+#~| msgid "Second"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Second"
+#~ msgstr "Segundo"
+
+#, fuzzy
+#~| msgid "Flexible Digits (1-31)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flexible Digits (1-31)"
+#~ msgstr "Dígitos Flexíveis (1-31)"
+
+#, fuzzy
+#~| msgid "2 Digits (01-31)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-31)"
+#~ msgstr "2 Dígitos (01-31)"
+
+#, fuzzy
+#~| msgid "Abbreviated Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Abbreviated Name"
+#~ msgstr "Nome Abreviado"
+
+#, fuzzy
+#~| msgid "Long Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Long Name"
+#~ msgstr "Nome Comprido"
+
+#, fuzzy
+#~| msgid "Flexible Digits (1-12)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flexible Digits (1-12)"
+#~ msgstr "Dígitos Flexíveis (1-12)"
+
+#, fuzzy
+#~| msgid "2 Digits (01-12)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-12)"
+#~ msgstr "2 Dígitos (01-12)"
+
+#, fuzzy
+#~| msgid "Possessive Abbreviated Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Possessive Abbreviated Name"
+#~ msgstr "Nome Abreviado Possessivo"
+
+#, fuzzy
+#~| msgid "Possessive Long Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Possessive Long Name"
+#~ msgstr "Nome Comprido Possessivo"
+
+#, fuzzy
+#~| msgid "2 Digits (01-99)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-99)"
+#~ msgstr "2 Dígitos (01-99)"
+
+#, fuzzy
+#~| msgid "4 Digits"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "4 Digits"
+#~ msgstr "4 Dígitos"
+
+#, fuzzy
+#~| msgid "Flexible Digits (1-23)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flexible Digits (1-23)"
+#~ msgstr "Dígitos Flexíveis (1-23)"
+
+#, fuzzy
+#~| msgid "2 Digits (01-23)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-23)"
+#~ msgstr "2 Dígitos (01-23)"
+
+#, fuzzy
+#~| msgid "Flexible Digits (1-59)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flexible Digits (1-59)"
+#~ msgstr "Dígitos Flexíveis (1-59)"
+
+#, fuzzy
+#~| msgid "2 Digits (01-59)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-59)"
+#~ msgstr "2 Dígitos (01-59)"
+
+#, fuzzy
+#~| msgid "am/pm"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "am/pm"
+#~ msgstr "am/pm"
+
+#, fuzzy
+#~| msgid "AM/PM"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "AM/PM"
+#~ msgstr "AM/PM"
+
+#, fuzzy
+#~| msgid "Author Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author Name"
+#~ msgstr "Nome do autor"
+
+#, fuzzy
+#~| msgid "Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Título"
+
+#, fuzzy
+#~| msgid "Subject"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subject"
+#~ msgstr "Assunto"
+
+#, fuzzy
+#~| msgid "File Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File Name"
+#~ msgstr "Nome do arquivo"
+
+#, fuzzy
+#~| msgid "Keywords"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keywords"
+#~ msgstr "Palavras-chave"
+
+#, fuzzy
+#~| msgid "Comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comments"
+#~ msgstr "Comentários"
+
+#, fuzzy
+#~| msgid "Page Count"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Count"
+#~ msgstr "Número de páginas"
+
+#, fuzzy
+#~| msgid "Page Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Número da página"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "Personalizado"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Nome:"
+
+#, fuzzy
+#~| msgid "New"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New"
+#~ msgstr "Nova"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Excluir"
+
+#, fuzzy
+#~| msgid "String"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "String"
+#~ msgstr "Texto"
+
+#, fuzzy
+#~| msgid "Boolean"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean"
+#~ msgstr "Booleano"
+
+#, fuzzy
+#~| msgid "Float"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Float"
+#~ msgstr "Flutuante"
+
+#, fuzzy
+#~| msgid "Percentage"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage"
+#~ msgstr "Porcentagem"
+
+#, fuzzy
+#~| msgid "Currency"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency"
+#~ msgstr "Monetário"
+
+#, fuzzy
+#~| msgid "Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date"
+#~ msgstr "Data"
+
+#, fuzzy
+#~| msgid "Time"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time"
+#~ msgstr "Hora"
+
+#, fuzzy
+#~| msgid "Formula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formula"
+#~ msgstr "Fórmula"
+
+#, fuzzy
+#~| msgid "Void"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Void"
+#~ msgstr "Nenhum"
+
+#, fuzzy
+#~| msgid "Value:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Value:"
+#~ msgstr "Valor:"
+
+#, fuzzy
+#~| msgid "Name for new variable:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name for new variable:"
+#~ msgstr "Nome da nova variável:"
+
+#, fuzzy
+#~| msgid "New Variable"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Variable"
+#~ msgstr "Nova variável"
+
+#, fuzzy
+#~| msgid "Delete variable <b>%1</b>?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete variable <b>%1</b>?"
+#~ msgstr "Deseja apagar a variável <b>%1</b>?"
+
+#, fuzzy
+#~| msgid "Delete Variable"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Variable"
+#~ msgstr "Apagar a variável"

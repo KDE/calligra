@@ -1,0 +1,216 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Giovanni Sora <g.sora@tiscali.it>, 2013, 2016, 2017.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2017-02-05 23:19+0100\n"
+"Last-Translator: giovanni <g.sora@tiscali.it>\n"
+"Language-Team: Interlingua <kde-i18n-it@kde.org>\n"
+"Language: ia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: ChangeImageCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change image"
+msgstr "Cambia  imagine"
+
+#: ChangeImageCommand.cpp:43
+msgctxt "(qtundo-format)"
+msgid "Crop image"
+msgstr "Talia imagine"
+
+#: ChangeImageCommand.cpp:57
+msgctxt "(qtundo-format)"
+msgid "Change image color mode"
+msgstr "Cambia  modo de color de imagine"
+
+#: ClipCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Contour image (by image analysis)"
+msgstr ""
+
+#: ClipCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Remove image contour"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, bnImageFile)
+#: forms/wdgPictureTool.ui:20
+#, kde-format
+msgid "Replace image..."
+msgstr "Reimplacia imagine..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbAspect)
+#: forms/wdgPictureTool.ui:32
+#, kde-format
+msgid "Keep proportions"
+msgstr "Manteni proportiones"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: forms/wdgPictureTool.ui:58
+#, kde-format
+msgid "Left:"
+msgstr "Sinistra:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: forms/wdgPictureTool.ui:68
+#, kde-format
+msgid "Right:"
+msgstr "Dextera:"
+
+#. i18n: ectx: property (text), widget (QLabel, bottomLabel)
+#: forms/wdgPictureTool.ui:91
+#, kde-format
+msgid "Bottom:"
+msgstr "Basso:"
+
+#. i18n: ectx: property (text), widget (QLabel, topLabel)
+#: forms/wdgPictureTool.ui:111
+#, kde-format
+msgid "Top:"
+msgstr "Alto (culmine):"
+
+#. i18n: ectx: property (text), widget (QToolButton, bnFill)
+#: forms/wdgPictureTool.ui:131
+#, kde-format
+msgid "Reset"
+msgstr "Reinitialisa"
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbContour)
+#: forms/wdgPictureTool.ui:148
+#, kde-format
+msgid "Contour (by image analysis)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: forms/wdgPictureTool.ui:178
+#, kde-format
+msgid "Color mode:"
+msgstr "Modo de color:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: forms/wdgPictureTool.ui:193
+#, kde-format
+msgid "Crop"
+msgstr "Talia"
+
+#: PictureShapeFactory.cpp:31
+#, kde-format
+msgid "Image"
+msgstr "Imagine"
+
+#: PictureShapeFactory.cpp:33
+#, kde-format
+msgid "Image shape that can display jpg, png etc."
+msgstr ""
+
+#: PictureTool.cpp:95
+#, kde-format
+msgid "Standard"
+msgstr "Standard"
+
+#: PictureTool.cpp:96
+#, kde-format
+msgid "Greyscale"
+msgstr "Scala de gris"
+
+#: PictureTool.cpp:97
+#, kde-format
+msgid "Monochrome"
+msgstr "Monochrome"
+
+#: PictureTool.cpp:98
+#, kde-format
+msgid "Watermark"
+msgstr ""
+
+#: PictureToolFactory.cpp:19
+#, kde-format
+msgid "Picture editing"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Replace image..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace image..."
+#~ msgstr "Reimplacia imagine..."
+
+#, fuzzy
+#~| msgid "Keep proportions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keep proportions"
+#~ msgstr "Manteni proportiones"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left:"
+#~ msgstr "Sinistra:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right:"
+#~ msgstr "Dextera:"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom:"
+#~ msgstr "Basso:"
+
+#, fuzzy
+#~| msgid "Top:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top:"
+#~ msgstr "Alto (culmine):"
+
+#, fuzzy
+#~| msgid "Reset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset"
+#~ msgstr "Reinitialisa"
+
+#, fuzzy
+#~| msgid "Color mode:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color mode:"
+#~ msgstr "Modo de color:"
+
+#, fuzzy
+#~| msgid "Crop"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Talia"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Imagine"
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Standard"
+
+#, fuzzy
+#~| msgid "Greyscale"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Greyscale"
+#~ msgstr "Scala de gris"
+
+#, fuzzy
+#~| msgid "Monochrome"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monochrome"
+#~ msgstr "Monochrome"

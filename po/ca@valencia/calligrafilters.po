@@ -1,0 +1,969 @@
+# Translation of calligrafilters.po to Catalan (Valencian)
+# Copyright (C) 2004-2022 This_file_is_part_of_KDE
+#
+# Albert Astals Cid <aacid@kde.org>, 2004, 2005, 2006.
+# Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
+# Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
+# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2022-03-21 19:26+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca@valencia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Poedit-Language: Catalan\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, kde-format
+msgid "%1 Export Options"
+msgstr "Opcions d'exportació a %1"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, kde-format
+msgid "Page %1"
+msgstr "Pàgina %1"
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, kde-format
+msgid "Page:"
+msgstr "Pàgina:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, kde-format
+msgid "Size in Pixels"
+msgstr "Mida en píxels"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr "Amplària de la imatge:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, kde-format
+msgid "Image height:"
+msgstr "Alçària de la imatge:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr "Mida en unitats"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, kde-format
+msgid "Resolution:"
+msgstr "Resolució:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr "Unitat:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr "Color de fons"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, kde-format
+msgid "Color"
+msgstr "Color"
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr "Opacitat"
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:299
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr "No s'ha trobat l'espai de nom «%1»"
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, kde-format
+msgid "Could not open the requested file %1"
+msgstr "No s'ha pogut obrir el fitxer demanat %1"
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr "No s'ha pogut llegir el directori ZIP del fitxer demanat %1"
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, kde-format
+msgid "Enter password"
+msgstr "Introduïu la contrasenya"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr ""
+"Este document està encriptat, introduïu la contrasenya per a desencriptar-lo:"
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr ""
+"Contrasenya incorrecta. Introduïu la contrasenya per a desencriptar este "
+"document:"
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, kde-format
+msgid "Could not find path for type %1"
+msgstr "No s'ha pogut trobar el camí per al tipus %1"
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr "%1 (línia %2, columna %3)"
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr "%1 (%2, línia %3, columna %4)"
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr "L'element «%1» no s'ha trobat"
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, kde-format
+msgid "Attribute \"%1\" not found"
+msgstr "No s'ha trobat l'atribut «%1»"
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr "Valor inesperat «%1» de l'atribut «%2»"
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr "Segona ocurrència inesperada de l'element «%1»"
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr "Tancament esperat de l'element «%1»"
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr "No s'ha trobat cap dels elements esperats: %1"
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, kde-format
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr "No s'ha pogut trobar l'objectiu per a l'ID «%1» en el fitxer «%2»"
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, kde-format
+msgid "Could not find relationships file \"%1\""
+msgstr "No s'ha pogut trobar el fitxer de relacions «%1»"
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, kde-format
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr "No s'ha pogut trobar l'objectiu per relació «%1» en el fitxer «%2»"
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+"S'ha produït un error d'anàlisi en el document principal a la línia %1, "
+"columna %2.\n"
+"Missatge d'error: %3"
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr "No s'ha trobat l'entrada «%1»."
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr "L'entrada «%1» no és un fitxer."
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr "No s'ha pogut obrir l'entrada «%1» per a escriure-hi."
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, kde-format
+msgid "Could not write block"
+msgstr "No s'ha pogut llegir el bloc"
+
+#: sheets/csv/csvexport.cc:266
+#, kde-format
+msgid "<SHEETNAME>"
+msgstr "<NOMDEFULL>"
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Recomanat (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Configuració regional (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Altres (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:281 words/ascii/ImportDialog.cc:94
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "No s'ha pogut trobar la codificació: %1"
+
+#: sheets/csv/csvimport.cc:74
+#, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr "El filtre CSV no ha pogut obrir el fitxer d'entrada - informeu-ne."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "Codificació"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, kde-format
+msgid "E&ncoding:"
+msgstr "C&odificació:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, kde-format
+msgid "End of Line"
+msgstr "Final de línia"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr "Estil &UNIX (recomanat; només salt de línia (\\n))"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr "Estil &Windows (tecla de retorn «\\r» i salt de línia «\\n»)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr "&Estil MacOS (només tecla de retorn)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, kde-format
+msgid "Sheets"
+msgstr "Fulls"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, kde-format
+msgid "Select sheets to export:"
+msgstr "Seleccioneu els fulls a exportar:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, kde-format
+msgid "Delimiter Line"
+msgstr "Línia delimitadora"
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, kde-format
+msgid "********<SHEETNAME>********"
+msgstr "********<NOMDEFULL>********"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr "<NOMDEFULL> se substituïx pel nom del següent full."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr "Imprimix una línia delimitadora sobre cada full"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, kde-format
+msgid "Cells"
+msgstr "Cel·les"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, kde-format
+msgid "Delimiter"
+msgstr "Delimitador"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, kde-format
+msgid "Comma"
+msgstr "Coma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, kde-format
+msgid "Semicolon"
+msgstr "Punt i coma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, kde-format
+msgid "Tabulator"
+msgstr "Tabulador"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, kde-format
+msgid "Space"
+msgstr "Espai"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, kde-format
+msgid "Other:"
+msgstr "Altres:"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, kde-format
+msgid "Quotes:"
+msgstr "Cites:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, kde-format
+msgid "\""
+msgstr "\""
+
+# skip-rule: t-apo_fim
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, kde-format
+msgid "Export selection only"
+msgstr "Exporta només la selecció"
+
+#: sheets/dbase/dbaseimport.cc:44
+#, kde-format
+msgid "File format is not supported."
+msgstr "El format del fitxer no està permés."
+
+#: sheets/dbase/dbaseimport.cc:49
+#, kde-format
+msgid "Could not read from file."
+msgstr "No s'ha pogut llegir del fitxer."
+
+#: sheets/html/exportdialog.cc:21
+#, kde-format
+msgid "Export Sheet to HTML"
+msgstr "Exporta el full a HTML"
+
+#: sheets/html/exportdialog.cc:32
+#, kde-format
+msgid "Recommended: UTF-8"
+msgstr "Recomanat: UTF-8"
+
+#: sheets/html/exportdialog.cc:33
+#, kde-format
+msgid "Locale (%1)"
+msgstr "Configuració regional (%1)"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, kde-format
+msgid "En&coding:"
+msgstr "Co&dificació:"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr ""
+"Amb esta opció, podeu definir la codificació del fitxer HTML. La recomanada "
+"(UTF8) és la seleccionada de manera predeterminada."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, kde-format
+msgid "Sheet Selection"
+msgstr "Seleccioneu el full"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr "Cliqueu ací per a seleccionar tots els fulls de la llista."
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, kde-format
+msgid "Select &All"
+msgstr "Selecciona-ho &tot"
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, kde-format
+msgid "Desele&ct All"
+msgstr "Dessele&cciona-ho tot"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+"Esta opció fa que el filtre d'exportació HTML genere una pàgina nova per a "
+"cada full. Si la desactiveu, tots els fulls s'escriuran en una sola pàgina."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, kde-format
+msgid "Use &separate files for each table"
+msgstr "Utilitza fitxers &separats per a cada taula"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, kde-format
+msgid "Style"
+msgstr "Estil"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr ""
+"Seleccioneu esta opció per a utilitzar els tipus de lletra i els colors "
+"predeterminats per a la pàgina HTML."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, kde-format
+msgid "Use &default style"
+msgstr "Utilitza l'estil pre&determinat"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr ""
+"Seleccioneu esta opció per a especificar estils de full per a la pàgina "
+"HTML. Podeu seleccionar o teclejar en el camp de davall."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, kde-format
+msgid "Use &external stylesheet:"
+msgstr "Utilitza estil de full &extern:"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+"En este camp, podeu introduir un URL per al vostre estil de full. Es pot "
+"apuntar a un estil al disc, o a algun lloc en Internet."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, kde-format
+msgid "Layout"
+msgstr "Disposició"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr ""
+"Utilitzeu esta opció per a activar o desactivar les vores al voltant de les "
+"cel·les."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, kde-format
+msgid "Use &borders"
+msgstr "Utilitza &vores"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+"Utilitzeu esta opció per a definir quants píxels hi ha d'haver entre les "
+"cel·les. Este efecte és més visible si també activeu <b>Utilitza vores</b>."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, kde-format
+msgid "Pi&xels between cells:"
+msgstr "Pí&xels entre les cel·les:"
+
+#: sheets/html/htmlexport.cc:200 sheets/html/htmlexport.cc:375
+#, kde-format
+msgid "Top"
+msgstr "Dalt"
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr "Configuració del filtre d'exportació a LaTeX"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, kde-format
+msgid "Document"
+msgstr "Document"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, kde-format
+msgid "Document Style"
+msgstr "Estil del document"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, kde-format
+msgid "Latex style"
+msgstr "Estil LaTeX"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, kde-format
+msgid "Words style"
+msgstr "Estil Words"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, kde-format
+msgid "Document Type"
+msgstr "Tipus de document"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr "Este document es podrà compilar sol"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, kde-format
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+"Es generarà el document com a un document complet en LaTeX atés que totes "
+"les inclusions es generaran abans de les ordres \\begin{document} i "
+"\\end{document}."
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, kde-format
+msgid "Independent document"
+msgstr "Document independent"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr "No genereu ni la capçalera LaTeX ni l'entorn del document"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+"El document es generarà com un document LaTeX que s'haurà d'incloure en un "
+"document LaTeX principal. Açò permet general diversos fitxers petits per a "
+"cada capítol del vostre document."
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, kde-format
+msgid "Document to include"
+msgstr "Document que s'haja d'incloure"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, kde-format
+msgid "Document class:"
+msgstr "Classe de document:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, kde-format
+msgid "Quality:"
+msgstr "Qualitat:"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, kde-format
+msgid "Final"
+msgstr "Final"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, kde-format
+msgid "Draft"
+msgstr "Esborrany"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, kde-format
+msgid "Default font size:"
+msgstr "Mida del tipus de lletra predeterminat:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, kde-format
+msgid "Pictures"
+msgstr "Imatges"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, kde-format
+msgid "Convert the pictures:"
+msgstr "Convertix les imatges:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, kde-format
+msgid "Pictures directory:"
+msgstr "Directori de les imatges:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, kde-format
+msgid "Language"
+msgstr "Idioma"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, kde-format
+msgid "Add"
+msgstr "Afig"
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, kde-format
+msgid "Remove"
+msgstr "Elimina"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, kde-format
+msgid "Contents"
+msgstr "Contingut"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, kde-format
+msgid "Export information about author:"
+msgstr "Exporta la informació sobre l'autoria:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, kde-format
+msgid "Add a table of content:"
+msgstr "Afig una taula de contingut:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, kde-format
+msgid "Notes"
+msgstr "Notes"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, kde-format
+msgid "Don't export"
+msgstr "No exportes"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, kde-format
+msgid "Export notes in margin notes"
+msgstr "Exporta les notes dins les notes al marge"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, kde-format
+msgid "Export notes in comments"
+msgstr "Exporta les notes dins els comentaris"
+
+#: sheets/opencalc/opencalcexport.cc:890
+#, kde-format
+msgid "Page "
+msgstr "Pàgina "
+
+#: sheets/opencalc/opencalcimport.cc:1199
+#, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr "El fitxer pareix que està corrupte. Se saltarà la taula."
+
+#: sheets/opencalc/opencalcimport.cc:1211
+#, kde-format
+msgid "Skipping a table."
+msgstr "S'està saltant la taula."
+
+#: sheets/opencalc/opencalcimport.cc:1911
+#, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+"Este document ha sigut creat amb OpenOffice versió «%1». Este filtre ha "
+"sigut escrit per a la versió 1.0. Llegir este fitxer pot causar un "
+"comportament estrany, penjades o que les dades no es mostren correctament. "
+"Voleu continuar convertint el document?"
+
+#: sheets/opencalc/opencalcimport.cc:1912
+#, kde-format
+msgid "Unsupported document version"
+msgstr "Versió del document no permesa"
+
+#: sheets/qpro/qproimport.cc:114
+#, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr "El filtre QPRO no ha pogut obrir el fitxer d'entrada - informeu-ne."
+
+#: sheets/qpro/qproimport.cc:219
+#, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr ""
+"No es poden obrir fitxers protegits per contrasenya.\n"
+"L'algorisme de contrasenya no ha sigut publicat"
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, kde-format
+msgid "Unable to find part for type %1"
+msgstr "No s'ha pogut trobar la part per al tipus %1"
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr "El nombre declarat de cadenes compartides és massa xicotet (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr "El nombre declarat d'estils de tipus de lletra és massa xicotet (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr "El nombre declarat de format de cel·la és massa xicotet (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr "El nombre declarat d'estils de farciment és massa xicotet (%1)"
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:348
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+"Les dades no s'han pogut carregar completament perquè s'ha superat la mida "
+"màxima del full."
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1425
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr "S'esperava un nombre enter o de coma flotant"
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, kde-format
+msgid "Slide layout \"%1\" not found"
+msgstr "No s'ha trobat la diapositiva «%1»"
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, kde-format
+msgid "Slide %1"
+msgstr "Diapositiva %1"
+
+#: words/ascii/ImportDialog.cc:32
+#, kde-format
+msgid "Words's Plain Text Import Filter"
+msgstr "Filtre d'importació de text net de Words"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "Diàleg d'importació de text"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, kde-format
+msgid "End of Paragraph"
+msgstr "Final de paràgraf"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, kde-format
+msgid "&As is: At the end of line"
+msgstr "&Tal com està: Al final de la línia"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr "&Frase: Si el final de la línia és el final d'una frase"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr "Línia &Buida: si la línia està buida"
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, kde-format
+msgid "End notes"
+msgstr "Final de notes"
+
+#: words/msword-odf/conversion.cpp:828
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Capçalera de les pàgines parelles"
+
+#: words/msword-odf/conversion.cpp:830
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Capçalera de les pàgines senars"
+
+#: words/msword-odf/conversion.cpp:832
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Peu de pàgina de les pàgines parelles"
+
+#: words/msword-odf/conversion.cpp:834
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Peu de pàgina de les pàgines senars"
+
+#: words/msword-odf/conversion.cpp:836
+#, kde-format
+msgid "First Page Header"
+msgstr "Capçalera de la primera pàgina"
+
+#: words/msword-odf/conversion.cpp:838
+#, kde-format
+msgid "First Page Footer"
+msgstr "Peu de pàgina de la primera pàgina"
+
+#: words/msword-odf/texthandler.cpp:632
+#, kde-format
+msgid "Table %1"
+msgstr "Taula %1"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr "No s'ha pogut carregar el fitxer, ja que no pareix un document RTF."
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, kde-format
+msgid "Words's RTF Import Filter"
+msgstr "Filtre d'importació RTF de Words"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, kde-format
+msgid "The file cannot be loaded."
+msgstr "No s'ha pogut carregar el fitxer."

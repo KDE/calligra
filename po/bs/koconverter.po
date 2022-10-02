@@ -1,0 +1,263 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2014-10-20 19:57+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 17341)\n"
+"X-Launchpad-Export-Date: 2015-02-15 06:05+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Nedim Hadžimahmutović,Samir Ribić"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "Grungy@linux.org.ba,samir.ribic@etf.unsa.ba"
+
+#: calligraconverter.cpp:144
+#, kde-format
+msgid "CalligraConverter"
+msgstr "Calligra Konverter Dokumenata"
+
+#: calligraconverter.cpp:146
+#, kde-format
+msgid "Calligra Document Converter"
+msgstr "Calligra Konverter Dokumenata"
+
+#: calligraconverter.cpp:148
+#, fuzzy, kde-format
+#| msgid "(c) 2001-2011 Calligra developers"
+msgid "Copyright 2001-%1 Calligra developers"
+msgstr "© 2001-2011, razvijači Calligra"
+
+#: calligraconverter.cpp:149
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: calligraconverter.cpp:150
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: calligraconverter.cpp:151
+#, kde-format
+msgid "Dan Leinir Turthra Jensen"
+msgstr "Dan Lejnir Turtra Jensen"
+
+#: calligraconverter.cpp:158
+#, kde-format
+msgid "Input file"
+msgstr "Ulazna datoteka"
+
+#: calligraconverter.cpp:159
+#, kde-format
+msgid "Output file"
+msgstr "Izlazna datoteka"
+
+#: calligraconverter.cpp:160
+#, kde-format
+msgid "Make a backup of the destination file"
+msgstr "Napravi rezervnu kopiju odredišne datoteke"
+
+#: calligraconverter.cpp:161
+#, kde-format
+msgid "Batch mode: do not show dialogs"
+msgstr "Paketni režim: ne prikazuj dijaloge"
+
+#: calligraconverter.cpp:162
+#, kde-format
+msgid "Interactive mode: show dialogs (default)"
+msgstr "Interaktivni režim: prikazuj dijaloge (podrazumevano)"
+
+#: calligraconverter.cpp:163
+#, kde-format
+msgid "Mimetype of the output file"
+msgstr "Mimevrsta izlazne datoteke"
+
+#: calligraconverter.cpp:166
+#, kde-format
+msgid "The print orientation. This could be either Portrait or Landscape."
+msgstr ""
+"Orijentacija štampe. Može biti uspravno (portret) ili položeno (pejzaž)."
+
+#: calligraconverter.cpp:167
+#, kde-format
+msgid "The paper size. A4, Legal, Letter, ..."
+msgstr "Veličina papira. A4, Legal, Letter, ..."
+
+#: calligraconverter.cpp:168
+#, kde-format
+msgid "The size of the paper margin. By default this is 0.2."
+msgstr "Veličina margine papira. Podrazumijevano to je 0.2."
+
+#: calligraconverter.cpp:175
+#, kde-format
+msgid "Two arguments required"
+msgstr "Dva argumenta se zahtijevaju"
+
+#: calligraconverter.cpp:203
+#, kde-format
+msgid "Mimetype for input file %1 not found!"
+msgstr "Mimevrsta za ulaznu datoteku %1 nije nađena!"
+
+#: calligraconverter.cpp:212
+#, kde-format
+msgid "Mimetype not found %1"
+msgstr "Mimevrsta nije nađena %1"
+
+#: calligraconverter.cpp:218
+#, kde-format
+msgid "Mimetype not found, try using the -mimetype option"
+msgstr "Mimevrsta nije nađena, pokušaj koristiti mimevrsta opciju"
+
+#: calligraconverter.cpp:242
+#, kde-format
+msgid "*** The conversion failed! ***"
+msgstr "*** Konverzija nije uspjela! ***"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Nedim Hadžimahmutović,Samir Ribić"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "Grungy@linux.org.ba,samir.ribic@etf.unsa.ba"
+
+#, fuzzy
+#~| msgid "CalligraConverter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CalligraConverter"
+#~ msgstr "Calligra Konverter Dokumenata"
+
+#, fuzzy
+#~| msgid "Calligra Document Converter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Converter"
+#~ msgstr "Calligra Konverter Dokumenata"
+
+#, fuzzy
+#~| msgid "(c) 2001-2011 Calligra developers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2001-%1 Calligra developers"
+#~ msgstr "© 2001-2011, razvijači Calligra"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~| msgid "Nicolas Goutte"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "Nicolas Goutte"
+
+#, fuzzy
+#~| msgid "Dan Leinir Turthra Jensen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dan Leinir Turthra Jensen"
+#~ msgstr "Dan Lejnir Turtra Jensen"
+
+#, fuzzy
+#~| msgid "Input file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Input file"
+#~ msgstr "Ulazna datoteka"
+
+#, fuzzy
+#~| msgid "Output file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output file"
+#~ msgstr "Izlazna datoteka"
+
+#, fuzzy
+#~| msgid "Make a backup of the destination file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Make a backup of the destination file"
+#~ msgstr "Napravi rezervnu kopiju odredišne datoteke"
+
+#, fuzzy
+#~| msgid "Batch mode: do not show dialogs"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Batch mode: do not show dialogs"
+#~ msgstr "Paketni režim: ne prikazuj dijaloge"
+
+#, fuzzy
+#~| msgid "Interactive mode: show dialogs (default)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interactive mode: show dialogs (default)"
+#~ msgstr "Interaktivni režim: prikazuj dijaloge (podrazumevano)"
+
+#, fuzzy
+#~| msgid "Mimetype of the output file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype of the output file"
+#~ msgstr "Mimevrsta izlazne datoteke"
+
+#, fuzzy
+#~| msgid "The print orientation. This could be either Portrait or Landscape."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The print orientation. This could be either Portrait or Landscape."
+#~ msgstr ""
+#~ "Orijentacija štampe. Može biti uspravno (portret) ili položeno (pejzaž)."
+
+#, fuzzy
+#~| msgid "The paper size. A4, Legal, Letter, ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The paper size. A4, Legal, Letter, ..."
+#~ msgstr "Veličina papira. A4, Legal, Letter, ..."
+
+#, fuzzy
+#~| msgid "The size of the paper margin. By default this is 0.2."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The size of the paper margin. By default this is 0.2."
+#~ msgstr "Veličina margine papira. Podrazumijevano to je 0.2."
+
+#, fuzzy
+#~| msgid "Two arguments required"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two arguments required"
+#~ msgstr "Dva argumenta se zahtijevaju"
+
+#, fuzzy
+#~| msgid "Mimetype for input file %1 not found!"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype for input file %1 not found!"
+#~ msgstr "Mimevrsta za ulaznu datoteku %1 nije nađena!"
+
+#, fuzzy
+#~| msgid "Mimetype not found %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found %1"
+#~ msgstr "Mimevrsta nije nađena %1"
+
+#, fuzzy
+#~| msgid "Mimetype not found, try using the -mimetype option"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found, try using the -mimetype option"
+#~ msgstr "Mimevrsta nije nađena, pokušaj koristiti mimevrsta opciju"
+
+#, fuzzy
+#~| msgid "*** The conversion failed! ***"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "*** The conversion failed! ***"
+#~ msgstr "*** Konverzija nije uspjela! ***"

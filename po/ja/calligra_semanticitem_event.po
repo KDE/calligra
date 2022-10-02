@@ -1,0 +1,113 @@
+# Tsugumi Harabayashi <tu.hrby@gmail.com>, 2014.
+# Fumiaki Okushi <fumiaki.okushi@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra_semanticitem_event\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2014-11-29 22:54-0800\n"
+"Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
+"Language-Team: Japanese <kde-jp@kde.org>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: KoEventSemanticItemFactory.cpp:31
+#, kde-format
+msgctxt "displayname of the semantic item type Event"
+msgid "Event"
+msgstr ""
+
+#: KoRdfCalendarEvent.cpp:158
+#, kde-format
+msgid "Area"
+msgstr ""
+
+#: KoRdfCalendarEvent.cpp:159
+#, kde-format
+msgid "Region"
+msgstr ""
+
+#: KoRdfCalendarEvent.cpp:381
+#, kde-format
+msgid "Select a calendar for saving:"
+msgstr "選択したカレンダーに保存:"
+
+#: KoRdfCalendarEvent.cpp:401
+#, kde-format
+msgid ""
+"Could not add entry\n"
+"%1"
+msgstr ""
+"エントリの追加ができませんでした\n"
+"%1"
+
+#: KoRdfCalendarEvent.cpp:428
+#, kde-format
+msgid ""
+"Could not save iCal file\n"
+"%1"
+msgstr ""
+"iCal ファイルに保存できませんでした\n"
+"%1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfCalendarEventEditWidget.ui:20
+#, kde-format
+msgid "&Summary:"
+msgstr "要約(&S):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfCalendarEventEditWidget.ui:30
+#, kde-format
+msgid "&Location:"
+msgstr "場所(&L):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfCalendarEventEditWidget.ui:43
+#, kde-format
+msgid "&Start:"
+msgstr "開始(&S):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: KoRdfCalendarEventEditWidget.ui:56
+#, kde-format
+msgid "&End:"
+msgstr "終了(&N):"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tadtab)
+#: KoRdfCalendarEventEditWidget.ui:80
+#, kde-format
+msgid "Time and Date"
+msgstr "時間と日にち"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tztab)
+#: KoRdfCalendarEventEditWidget.ui:93
+#, kde-format
+msgid "Timezone"
+msgstr "タイムゾーン"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:30
+#, kde-format
+msgid "Calendar Event"
+msgstr "イベントの日程"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:37
+#, kde-format
+msgid "Edit..."
+msgstr "編集..."
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:40
+#, kde-format
+msgid "Import event to Calendar"
+msgstr "カレンダーからイベントをインポート"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:43
+#, kde-format
+msgid "Export event to iCal file..."
+msgstr "イベントを iCal ファイルにエクスポート"

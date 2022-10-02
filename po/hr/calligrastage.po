@@ -1,0 +1,5584 @@
+# Translation of showcase to Croatian
+#
+# Translators: Jerko Škifić <skific@riteh.hr>,Nikola Planinac <>,Robert Pezer <rpezer@phy.hr>,
+# Marko Dimjasevic <marko@dimjasevic.net>, 2009.
+# Marko Dimjašević <marko@dimjasevic.net>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kpresenter 0\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2011-03-18 18:22+0100\n"
+"Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
+"Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
+"Language: hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 1.2\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, kde-format
+msgid "&Edit"
+msgstr "&Uređivanje"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, kde-format
+msgid "&View"
+msgstr "&Pogled"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, fuzzy, kde-format
+msgid "&Insert"
+msgstr "Umetni datoteku"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "F&ormat"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "&Slide"
+msgstr "&Slajdovi"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, kde-format
+msgid "Sli&de Show"
+msgstr "&Pokaz prezentacije"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, kde-format
+msgid "&Settings"
+msgstr "Po&stavke"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "Pokaz prezentacije"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+#, fuzzy
+#| msgid "Rotation"
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "Zakretanje"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "Prijelazno stanje slajda"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+#, fuzzy
+#| msgid "Remove Link"
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "Ukloni vezu"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "Izbriši slajd"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Izbriši slajd"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Izbriši slajd"
+msgstr[1] "Izbriši slajd"
+msgstr[2] "Izbriši slajd"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "Prijelazno stanje slajda"
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "Pokaz prezentacije"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "Bez efekta"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "Bez efekta"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "Izbriši slajd"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "Prijelazno stanje slajda"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "Pokaz prezentacije"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+#, fuzzy
+#| msgid "Slide Transition"
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "Prijelazno stanje slajda"
+
+#: part/KPrAboutData.h:21
+#, fuzzy, kde-format
+#| msgid "&Configure Completion..."
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "Podesi fusnotu"
+
+#: part/KPrAboutData.h:23
+#, fuzzy, kde-format
+#| msgid "KOffice Presentation Tool"
+msgid "Presentation Tool"
+msgstr "Prezentacijski alat KOfficea"
+
+#: part/KPrAboutData.h:25
+#, fuzzy, kde-format
+#| msgid "(c) 1998-2008, The KPresenter Team"
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "© 1998–2008 The KPresenter Team"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, fuzzy, kde-format
+#| msgid "Maintainer"
+msgid "Former maintainer"
+msgstr "Održavatelj"
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr "Thorsten Zachmann"
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Original author"
+msgstr "Izvorni autor"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr "Reginald Stadlbauer"
+
+#: part/KPrAboutData.h:36
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr "Toshitaka Fujioka"
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr "Lukáš Tinkl"
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr "Percy Leonhardt"
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KPrAboutData.h:43
+#, fuzzy, kde-format
+msgid "Peter Simonsson"
+msgstr "Prezentacija"
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr "Boudewijn Rempt "
+
+#: part/KPrAboutData.h:45
+#, kde-format
+msgid "Carlos Licea "
+msgstr "Carlos Licea "
+
+#: part/KPrAboutData.h:46
+#, fuzzy, kde-format
+#| msgid "Casper Boemann "
+msgid "C. Boemann "
+msgstr "Casper Boemann "
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr "Fredy Yanardi "
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr "Jan Hambrecht "
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr "Marijn Kruisselbrink "
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr "Martin Pfeiffer "
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr "Sven Langkamp "
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr "Timothée Lacroix "
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Jerko Škifić, Nikola Planinac, Robert Pezer, Marko Dimjašević"
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+"lokalizacija@linux.hr, lokalizacija@linux.hr, lokalizacija@linux.hr, "
+"marko@dimjasevic.net"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr ""
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, fuzzy, kde-format
+#| msgid "Slide"
+msgid "Slide %1"
+msgstr "Slajd"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, fuzzy, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "Prezentacija"
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Layout"
+msgstr "Osvježi tabulatore"
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KPrPicturesImport.cpp:62
+#, fuzzy
+#| msgid "Insert Picture"
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "Umetni sliku"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Pen Color"
+msgstr "Boja"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, fuzzy, kde-format
+msgid "Pen Size"
+msgstr "Povećaj veličinu fonta"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, kde-format
+msgid "Black"
+msgstr "Crna"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, kde-format
+msgid "White"
+msgstr "Bijela"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, kde-format
+msgid "Green"
+msgstr "Zelena"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, kde-format
+msgid "Red"
+msgstr "Crvena"
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, kde-format
+msgid "Blue"
+msgstr "Plava"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, kde-format
+msgid "Yellow"
+msgstr "Žuta"
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, fuzzy, kde-format
+#| msgid "&Next Slide"
+msgid "Next Slide"
+msgstr "&Sljedeći slajd"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, kde-format
+msgid "Speaker Notes"
+msgstr "Bilješke govornika"
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, fuzzy, kde-format
+msgid "Current Slide %1 of %2"
+msgstr "Pokaz prezentacije"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "End of Slide Show"
+msgstr "Pokaz prezentacije"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "start after previous animation"
+msgstr "Prezentacija"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "start with previous animation"
+msgstr "Prezentacija"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, fuzzy, kde-format
+#| msgid "Save Configuration..."
+msgid "Animation"
+msgstr "Spremi postavu..."
+
+#: part/KPrShapeAnimations.cpp:201
+#, kde-format
+msgid "Shape"
+msgstr "Oblik"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "&Move Here"
+msgstr "&Slajdovi"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "&Copy Here"
+msgstr "&Slajdovi"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, kde-format
+msgid "C&ancel"
+msgstr ""
+
+#: part/KPrView.cpp:73
+#, kde-format
+msgid "Normal"
+msgstr "Obično"
+
+#: part/KPrView.cpp:78
+#, fuzzy, kde-format
+#| msgid "Show rulers"
+msgid "Show Master Slides"
+msgstr "Prikaži ravnala"
+
+#: part/KPrView.cpp:79
+#, fuzzy, kde-format
+#| msgid "&Configure Completion..."
+msgid "Import Slideshow..."
+msgstr "Podesi fusnotu"
+
+#: part/KPrView.cpp:80
+#, kde-format
+msgid "Insert Slide"
+msgstr "Umetni slajd"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr ""
+
+#: part/KPrView.cpp:83
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "Copy Slide"
+msgstr "&Slajdovi"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, fuzzy, kde-format
+msgid "Copy the current slide"
+msgstr "Pokaz prezentacije"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Slide"
+msgstr "Izbriši slajd"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete the current slide"
+msgstr "Izbriši slajd"
+
+#: part/KPrView.cpp:89
+#, fuzzy, kde-format
+#| msgid "Insert &Slide..."
+msgid "Master Slide..."
+msgstr "&Umetni slajd..."
+
+#: part/KPrView.cpp:90
+#, fuzzy, kde-format
+#| msgid "&Previous Slide"
+msgid "Previous Slide"
+msgstr "&Prethodni slajd"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, fuzzy, kde-format
+#| msgid "&Previous Slide"
+msgid "Go to previous slide"
+msgstr "&Prethodni slajd"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Go to next slide"
+msgstr "Pokaz prezentacije"
+
+#: part/KPrView.cpp:96
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "First Slide"
+msgstr "Umetni slajd"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Go to first slide"
+msgstr "Umetni slajd"
+
+#: part/KPrView.cpp:99
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Last Slide"
+msgstr "Umetni slajd"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Go to last slide"
+msgstr "Umetni slajd"
+
+#: part/KPrView.cpp:102
+#, fuzzy, kde-format
+#| msgid "&Configure Completion..."
+msgid "Configure Stage..."
+msgstr "Podesi fusnotu"
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr ""
+
+#: part/KPrView.cpp:251
+#, fuzzy, kde-format
+#| msgid "Insert Picture"
+msgid "Insert Pictures as Slides..."
+msgstr "Umetni sliku"
+
+#: part/KPrView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Rotation"
+msgid "Create Appear Animation"
+msgstr "Zakretanje"
+
+#: part/KPrView.cpp:264
+#, fuzzy, kde-format
+msgid "Edit Custom Slide Shows..."
+msgstr "Pokaz prezentacije"
+
+#: part/KPrView.cpp:268
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Start Presentation"
+msgstr "Prezentacija"
+
+#: part/KPrView.cpp:271
+#, fuzzy, kde-format
+msgid "From Current Slide"
+msgstr "Pokaz prezentacije"
+
+#: part/KPrView.cpp:275
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "From First Slide"
+msgstr "Umetni slajd"
+
+#: part/KPrView.cpp:280
+#, fuzzy, kde-format
+msgid "Stop presentation"
+msgstr "Prezentacija"
+
+#: part/KPrView.cpp:286
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Show Status Bar"
+msgstr "Pokaži traku stanja"
+
+#: part/KPrView.cpp:287
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Hide Status Bar"
+msgstr "Pokaži traku stanja"
+
+#: part/KPrView.cpp:288
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Shows or hides the status bar"
+msgstr "Pokaži traku stanja"
+
+#: part/KPrView.cpp:297
+#, fuzzy, kde-format
+#| msgid "&Configure Completion..."
+msgid "Configure Slide Show..."
+msgstr "Podesi fusnotu"
+
+#: part/KPrView.cpp:301
+#, fuzzy, kde-format
+#| msgid "&Configure Completion..."
+msgid "Configure Presenter View..."
+msgstr "Podesi fusnotu"
+
+#: part/KPrView.cpp:305
+#, fuzzy, kde-format
+msgid "Draw on the presentation..."
+msgstr "Prezentacija"
+
+#: part/KPrView.cpp:312
+#, fuzzy, kde-format
+msgid "Highlight the presentation..."
+msgstr "Prezentacija"
+
+#: part/KPrView.cpp:319
+#, fuzzy, kde-format
+msgid "Blackscreen on the presentation..."
+msgstr "Prezentacija"
+
+#: part/KPrViewModeNotes.cpp:36
+#, kde-format
+msgid "Notes"
+msgstr "Bilješke"
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, fuzzy, kde-format
+msgid "Slides Sorter"
+msgstr "&Zaglavlje"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show: "
+msgstr "Pokaz prezentacije"
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new custom slide show"
+msgstr "Pokaz prezentacije"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete current custom slide show"
+msgstr "Izbriši slajd"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, fuzzy, kde-format
+msgid "Add slides to current custom slide show"
+msgstr "Pokaz prezentacije"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, fuzzy, kde-format
+msgid "Remove slides from current custom slide show"
+msgstr "Pokaz prezentacije"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Duplicate Slide"
+msgstr "Izbriši slajd"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, fuzzy, kde-format
+msgid "Start Slideshow"
+msgstr "Pokaz prezentacije"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new slide"
+msgstr "Pokaz prezentacije"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, fuzzy, kde-format
+msgid "Delete selected slides"
+msgstr "Izbriši slajd"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, fuzzy, kde-format
+msgid "Rename"
+msgstr "Ukloni vezu"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, fuzzy, kde-format
+#| msgid "&Custom"
+msgid "Cut"
+msgstr "&Prilagodi"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, fuzzy, kde-format
+#| msgid "Group"
+msgid "Copy"
+msgstr "Grupa"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, fuzzy, kde-format
+#| msgid "Path"
+msgid "Paste"
+msgstr "Putanja"
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show %1"
+msgstr "Pokaz prezentacije"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, fuzzy, kde-format
+#| msgid "All Files"
+msgid "All slides"
+msgstr "Sve datoteke"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, fuzzy, kde-format
+#| msgid "Arrow"
+msgid "Error"
+msgstr "Strelica"
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr ""
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+#, fuzzy
+#| msgid "Page &Layout..."
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "Osvježi tabulatore"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, fuzzy, kde-format
+#| msgid "Automatic hyphenation"
+msgid "Automatic animation preview"
+msgstr "Samo&ispravljanje..."
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Preview animation"
+msgstr "Prezentacija"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, fuzzy, kde-format
+msgid "Slide Transitions"
+msgstr "Prijelazno stanje slajda"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, fuzzy, kde-format
+#| msgid "Rotation"
+msgid "Shape Click Actions"
+msgstr "Zakretanje"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, fuzzy, kde-format
+#| msgid "Rotation"
+msgid "Shape Animations"
+msgstr "Zakretanje"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, fuzzy, kde-format
+msgid "Manage animation delay and duration: "
+msgstr "Prijelazno stanje slajda"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, fuzzy, kde-format
+#| msgid "Star"
+msgid "Start: "
+msgstr "Zvijezda"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "after previous animation"
+msgstr "Prezentacija"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "with previous animation"
+msgstr "Prezentacija"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, fuzzy, kde-format
+#| msgid "Direction"
+msgid "Duration: "
+msgstr "Smjer"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Preview Shape Animation"
+msgstr "Prezentacija"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, kde-format
+msgid "No Effect"
+msgstr "Bez efekta"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, kde-format
+msgid " sec"
+msgstr " sekundi"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, fuzzy, kde-format
+msgid "Slide Transition:"
+msgstr "Prijelazno stanje slajda"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, fuzzy, kde-format
+#| msgid "Apply Styles"
+msgid "Apply To All Slides"
+msgstr "Primijeni stilove"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#, fuzzy
+#| msgid "Apply Styles"
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr "Primijeni stilove"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, fuzzy, kde-format
+msgid "Custom"
+msgstr "Pokaz prezentacije"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, fuzzy, kde-format
+#| msgid "Elevation:"
+msgid "Ole Action"
+msgstr "Nagib:"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, fuzzy, kde-format
+msgid "Edit animation"
+msgstr "Prijelazno stanje slajda"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add new animation"
+msgstr "Pokaz prezentacije"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, fuzzy, kde-format
+#| msgid "Remove Link"
+msgid "Remove animation"
+msgstr "Ukloni vezu"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, fuzzy, kde-format
+#| msgid "Remove Link"
+msgid "Move animation up"
+msgstr "Ukloni vezu"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, fuzzy, kde-format
+#| msgid "Remove Link"
+msgid "Move animation down"
+msgstr "Ukloni vezu"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new animation"
+msgstr "Pokaz prezentacije"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete current animation"
+msgstr "Izbriši slajd"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, fuzzy, kde-format
+#| msgid "Group"
+msgid "Crop"
+msgstr "Grupa"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, kde-format
+msgid "W&idth:"
+msgstr "Š&irina:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, kde-format
+msgid "Will keep the width of the crop constant"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, kde-format
+msgid "&Height:"
+msgstr "&Visina:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, kde-format
+msgid "Will keep the height of the crop constant"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, kde-format
+msgid "R&atio:"
+msgstr "Omj&er:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, kde-format
+msgid "Will keep the ratio constant"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr "Sloj"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, kde-format
+msgid "Image"
+msgstr "Slika"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, fuzzy, kde-format
+msgid "&Crop"
+msgstr "Vrh:"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+#, fuzzy
+#| msgid "Edit Shape"
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "Uredi oblik"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation monitor:"
+msgstr "Prezentacija"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, fuzzy, kde-format
+#| msgid "&Configure Completion..."
+msgid "Enable presenter view"
+msgstr "Podesi fusnotu"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, fuzzy, kde-format
+#| msgid "&Configure Completion..."
+msgid "Configure Presenter View"
+msgstr "Podesi fusnotu"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, fuzzy, kde-format
+msgid "Configure Slide Show"
+msgstr "Pokaz prezentacije"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "Slides"
+msgstr "&Slajdovi"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Slides:"
+msgstr "Prezentacija"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, fuzzy, kde-format
+msgid "Edit Custom Slide Shows ..."
+msgstr "Pokaz prezentacije"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, fuzzy, kde-format
+#| msgid "Select &All"
+msgid "Select all"
+msgstr "Odabrana polja"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, fuzzy, kde-format
+msgid "Select template (.css) :"
+msgstr "Izbriši slajd"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, fuzzy, kde-format
+#| msgid "&Deselect All"
+msgid "Deselect all"
+msgstr "O&dznači sve"
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, fuzzy, kde-format
+#| msgid "Title:"
+msgid "Title"
+msgstr "Naslov:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, kde-format
+msgid "Output preview"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, fuzzy, kde-format
+#| msgid "New..."
+msgid "..."
+msgstr "Novi..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, fuzzy, kde-format
+#| msgid "Author:"
+msgid "Author"
+msgstr "Autor:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Favorite"
+msgstr "Izbriši slajd"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Template"
+msgstr "Izbriši slajd"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Add Template"
+msgstr "Izbriši slajd"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+#| msgid "Save Configuration..."
+msgid "Confirm remove"
+msgstr "Spremi postavu..."
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#, fuzzy
+#| msgid "Change Config"
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr "Osvježi tabulatore"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, kde-format
+msgid "No sound"
+msgstr "Bez zvuka"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, fuzzy, kde-format
+msgid "Import..."
+msgstr "Stil ruba okvira..."
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr ""
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Wipe From Left"
+msgid "From Left"
+msgstr "Prebriši s lijeva"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Wipe From Top"
+msgid "From Top"
+msgstr "Prebriši s vrha"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "From Right"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "From Bottom"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Clock"
+msgstr "Sat"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "From Twelve Clockwise"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "From Three Clockwise"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "From Six Clockwise"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "From Nine Clockwise"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "From Twelve Counterclockwise"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "From Three Counterclockwise"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "From Six Counterclockwise"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "From Nine Counterclockwise"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Fan"
+msgstr "Dvostruka strelica"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Fan Out Vertical"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Fan Out Horizontal"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "Fan In Vertical"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "Fan In Horizontal"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Fan In Vertical Reverse"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Fan In Horizontal Reverse"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Double Sweep"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Parallel Vertical"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Opposite Vertical"
+msgstr "Desno:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Opposite Horizontal"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Top Left"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Parallel Diagonal Bottom Left"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Parallel Vertical Reverse"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal Reverse"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Opposite Vertical Reverse"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Opposite Horizontal Reverse"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Fan"
+msgstr "12% Ispuni šablonu"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "Center Right"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Top"
+msgstr "Centrirano"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Left"
+msgstr "Centrirano"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Center Bottom"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Fan Out Top"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Fan Out Right"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Fan Out Bottom"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Fan Out Left"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Fan In Top"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "Fan In Right"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Fan In Bottom"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Wipe From Left"
+msgid "Fan In Left"
+msgstr "Prebriši s lijeva"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Pin Wheel"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Two Blades Vertical Clockwise"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Two Blades Horizontal Clockwise"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Four Blades Horizontal Clockwise"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Saloon Door"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Wipe From Top"
+msgid "To Top"
+msgstr "Prebriši s vrha"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "To Left"
+msgstr "Duljina:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "To Bottom"
+msgstr "Dno:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "To Right"
+msgstr "Desno:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Single Sweep"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Wipe From Left"
+msgid "Clockwise Top"
+msgstr "Prebriši s lijeva"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+msgid "Clockwise Right"
+msgstr "Desno:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+#| msgid "Align Bottom"
+msgid "Clockwise Bottom"
+msgstr "Poravnaj dolje"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+msgid "Clockwise Left"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+#| msgid "Wipe From Left"
+msgid "Clockwise Top Left"
+msgstr "Prebriši s lijeva"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Counterclockwise Bottom Left"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Clockwise Bottom Right"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "Counterclockwise Top Right"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "Counterclockwise Top"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "Counterclockwise Right"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Counterclockwise Bottom"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Counterclockwise Left"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Counterclockwise Top Left"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Clockwise Bottom Left"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Counterclockwise Bottom Right"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "Clockwise Top Right"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Windshield"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, kde-format
+msgid "Right"
+msgstr "Desno"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr "Gore"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Vertical"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, fuzzy, kde-format
+msgid "Horizontal"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Right Reverse"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Up Reverse"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reverse"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reverse"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Barn Door"
+msgstr "Dvostruka strelica"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Diagonal Bottom Left"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Diagonal Bottom Left Reverse"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Diagonal Top Left"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Reverse"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Barn Zig Zag"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reversed"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reversed"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Wipe From Left"
+msgid "From Top Left"
+msgstr "Prebriši s lijeva"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "From Top Right"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "From Bottom Left"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "From Bottom Right"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Diagonal"
+msgstr "Dvostruka strelica"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+msgid "Corners In"
+msgstr "Uglovi:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Corners In Reverse"
+msgstr "Uglovi:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Corners Out"
+msgstr "Uglovi:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Corners Out Reverse"
+msgstr "Uglovi:"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Misc Diagonal"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Barn Door"
+msgstr "Dvostruka strelica"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Diamond"
+msgstr "Dvostruka strelica"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, kde-format
+msgid "Zig Zag"
+msgstr "Cik cak"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, kde-format
+msgid "Fade"
+msgstr "Izblijedi"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr ""
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Set Text Color"
+msgid "Fade over Color"
+msgstr "&Boja..."
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "ArrowHead"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, kde-format
+msgid "Down"
+msgstr "Dolje"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Down Reverse"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, kde-format
+msgid "Left"
+msgstr "Lijevo"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Left Reverse"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Ellipse"
+msgstr "Elipsa"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Circle"
+msgstr "Krug"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Circle Reverse"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Hexagon"
+msgstr "Prezentacija"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular"
+msgstr "Pravokutnik"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular Reverse"
+msgstr "Pravokutnik"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Diamond"
+msgstr "Dvostruka strelica"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Diamond Reverse"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, kde-format
+msgid "Misc"
+msgstr "Razno"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Header"
+msgid "Heart"
+msgstr "Zaglavlje"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Heart Reverse"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole Reverse"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Pentagon"
+msgstr "Prezentacija"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "RoundRect"
+msgstr "Pravokutnik"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Star"
+msgstr "Zvijezda"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star Reverse"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star Reverse"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star Reverse"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Triangle"
+msgstr "Trokut"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Box Snakes"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Two Box Top In"
+msgstr "Dno:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Two Box Bottom In"
+msgstr "Dno:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Two Box Left In"
+msgstr "Duljina:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Two Box Right In"
+msgstr "Desno:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Four Box Vertical In"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Four Box Horizontal In"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Two Box Top Out"
+msgstr "Dno:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Two Box Bottom Out"
+msgstr "Dno:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Two Box Left Out"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Two Box Right Out"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Four Box Vertical Out"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Four Box Horizontal Out"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Parallel Snakes"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same In"
+msgstr "Stupnjevit prijelaz uspravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same Out"
+msgstr "Stupnjevit prijelaz uspravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same In"
+msgstr "Stupnjevit prijelaz uspravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same Out"
+msgstr "Stupnjevit prijelaz uspravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite In"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite Out"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Left Opposite In"
+msgstr "Stupnjevit prijelaz uspravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same In"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same Out"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same In"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same Out"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite In"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite Out"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite In"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite Out"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite In"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite Out"
+msgstr "Stupnjevit prijelaz vodoravno"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Snake"
+msgstr "Zmija"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Swirl"
+msgid "Spiral"
+msgstr "Vrtlog"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Wipe From Left"
+msgid "Clockwise Top Left In"
+msgstr "Prebriši s lijeva"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Wipe From Left"
+msgid "Clockwise Top Left Out"
+msgstr "Prebriši s lijeva"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "Clockwise Top Right In"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "Clockwise Top Right Out"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Clockwise Bottom Left In"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Clockwise Bottom Left Out"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Clockwise Bottom Right In"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Clockwise Bottom Right Out"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Counterclockwise Top Left In"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Counterclockwise Top Left Out"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "Counterclockwise Top Right In"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+#| msgid "Wipe From Right"
+msgid "Counterclockwise Top Right Out"
+msgstr "Prebriši s desna"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Counterclockwise Bottom Left In"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Counterclockwise Bottom Left Out"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Counterclockwise Bottom Right In"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Counterclockwise Bottom Right Out"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Waterfall"
+msgstr "Bez efekta"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "Top Left Vertical"
+msgstr "Okomite crte"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Top Left Horizontal"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Top Right Vertical"
+msgstr "Desno:"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Top Right Horizontal"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Bottom Left Vertical"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Bottom Left Horizontal"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Wipe From Bottom"
+msgid "Bottom Right Vertical"
+msgstr "Prebriši s dna"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Bottom Right Horizontal"
+msgstr "Vodoraven crte"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "Slide"
+msgstr "&Slajdovi"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Rotation"
+msgid "Space Rotation"
+msgstr "Zakretanje"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Swap effect"
+msgstr "Bez efekta"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, fuzzy, kde-format
+#| msgid "Header"
+msgid "Header"
+msgstr "Zaglavlje"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Footer"
+msgstr "Podnožje"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Uređivanje"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Pogled"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "Umetni datoteku"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "F&ormat"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "&Slajdovi"
+
+#, fuzzy
+#~| msgid "Sli&de Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "&Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Po&stavke"
+
+#, fuzzy
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Grupa"
+
+#, fuzzy
+#~| msgid "X:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~| msgid "W&idth:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr "Š&irina:"
+
+#, fuzzy
+#~| msgid "&Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "&Visina:"
+
+#, fuzzy
+#~| msgid "Y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "R&atio:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "Omj&er:"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Sloj"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Slika"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "Vrh:"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "&Slajdovi"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "Prezentacija"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select all"
+#~ msgstr "Odabrana polja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select template (.css) :"
+#~ msgstr "Izbriši slajd"
+
+#, fuzzy
+#~| msgid "&Deselect All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deselect all"
+#~ msgstr "O&dznači sve"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Naslov:"
+
+#, fuzzy
+#~| msgid "New..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "Novi..."
+
+#, fuzzy
+#~| msgid "Author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Autor:"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "Izbriši slajd"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "Prezentacija"
+
+#, fuzzy
+#~| msgid "&Configure Completion..."
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "Podesi fusnotu"
+
+#, fuzzy
+#~| msgid "KOffice Presentation Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "Prezentacijski alat KOfficea"
+
+#, fuzzy
+#~| msgid "(c) 1998-2008, The KPresenter Team"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Stage Team"
+#~ msgstr "© 1998–2008 The KPresenter Team"
+
+#, fuzzy
+#~| msgid "Thorsten Zachmann"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thorsten Zachmann"
+#~ msgstr "Thorsten Zachmann"
+
+#, fuzzy
+#~| msgid "Laurent Montel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#, fuzzy
+#~| msgid "Original author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "Izvorni autor"
+
+#, fuzzy
+#~| msgid "Reginald Stadlbauer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reginald Stadlbauer"
+#~ msgstr "Reginald Stadlbauer"
+
+#, fuzzy
+#~| msgid "Werner Trobin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Werner Trobin"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~| msgid "Toshitaka Fujioka"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toshitaka Fujioka"
+#~ msgstr "Toshitaka Fujioka"
+
+#, fuzzy
+#~| msgid "Lukáš Tinkl"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lukáš Tinkl"
+#~ msgstr "Lukáš Tinkl"
+
+#, fuzzy
+#~| msgid "Ariya Hidayat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "Ariya Hidayat"
+
+#, fuzzy
+#~| msgid "Percy Leonhardt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percy Leonhardt"
+#~ msgstr "Percy Leonhardt"
+
+#, fuzzy
+#~| msgid "Thomas Zander"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Prezentacija"
+
+#, fuzzy
+#~| msgid "Boudewijn Rempt "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt "
+#~ msgstr "Boudewijn Rempt "
+
+#, fuzzy
+#~| msgid "Carlos Licea "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Carlos Licea "
+#~ msgstr "Carlos Licea "
+
+#, fuzzy
+#~| msgid "Casper Boemann "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C. Boemann "
+#~ msgstr "Casper Boemann "
+
+#, fuzzy
+#~| msgid "Fredy Yanardi "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fredy Yanardi "
+#~ msgstr "Fredy Yanardi "
+
+#, fuzzy
+#~| msgid "Jan Hambrecht "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht "
+#~ msgstr "Jan Hambrecht "
+
+#, fuzzy
+#~| msgid "Marijn Kruisselbrink "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Marijn Kruisselbrink "
+#~ msgstr "Marijn Kruisselbrink "
+
+#, fuzzy
+#~| msgid "Martin Pfeiffer "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Martin Pfeiffer "
+#~ msgstr "Martin Pfeiffer "
+
+#, fuzzy
+#~| msgid "Sven Langkamp "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sven Langkamp "
+#~ msgstr "Sven Langkamp "
+
+#, fuzzy
+#~| msgid "Timothée Lacroix "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Timothée Lacroix "
+#~ msgstr "Timothée Lacroix "
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Jerko Škifić, Nikola Planinac, Robert Pezer, Marko Dimjašević"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "lokalizacija@linux.hr, lokalizacija@linux.hr, lokalizacija@linux.hr, "
+#~ "marko@dimjasevic.net"
+
+#, fuzzy
+#~| msgid "Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Slajd"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of presentation. Click to exit."
+#~ msgstr "Prezentacija"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Osvježi tabulatore"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "Boja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Size"
+#~ msgstr "Povećaj veličinu fonta"
+
+#, fuzzy
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "Crna"
+
+#, fuzzy
+#~| msgid "White"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "White"
+#~ msgstr "Bijela"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Zelena"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "Crvena"
+
+#, fuzzy
+#~| msgid "Blue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Plava"
+
+#, fuzzy
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "Žuta"
+
+#, fuzzy
+#~| msgid "&Next Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "&Sljedeći slajd"
+
+#, fuzzy
+#~| msgid "Speaker Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Speaker Notes"
+#~ msgstr "Bilješke govornika"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "Spremi postavu..."
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Oblik"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "&Slajdovi"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Obično"
+
+#, fuzzy
+#~| msgid "Show rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Master Slides"
+#~ msgstr "Prikaži ravnala"
+
+#, fuzzy
+#~| msgid "&Configure Completion..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "Podesi fusnotu"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "Umetni slajd"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "&Slajdovi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "Izbriši slajd"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "Izbriši slajd"
+
+#, fuzzy
+#~| msgid "Insert &Slide..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide..."
+#~ msgstr "&Umetni slajd..."
+
+#, fuzzy
+#~| msgid "&Previous Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "&Prethodni slajd"
+
+#, fuzzy
+#~| msgid "&Previous Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "&Prethodni slajd"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "Umetni slajd"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "Umetni slajd"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "Umetni slajd"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "Umetni slajd"
+
+#, fuzzy
+#~| msgid "&Configure Completion..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "Podesi fusnotu"
+
+#, fuzzy
+#~| msgid "Insert Picture"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "Umetni sliku"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows..."
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "Prezentacija"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "Prezentacija"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Pokaži traku stanja"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Pokaži traku stanja"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Pokaži traku stanja"
+
+#, fuzzy
+#~| msgid "&Configure Completion..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "Podesi fusnotu"
+
+#, fuzzy
+#~| msgid "&Configure Completion..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "Podesi fusnotu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "Prezentacija"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Bilješke"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "&Zaglavlje"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new custom slide show"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "Izbriši slajd"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add slides to current custom slide show"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "Izbriši slajd"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new slide"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "Izbriši slajd"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Ukloni vezu"
+
+#, fuzzy
+#~| msgid "&Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "&Prilagodi"
+
+#, fuzzy
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Grupa"
+
+#, fuzzy
+#~| msgid "Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "Putanja"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "All Files"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All slides"
+#~ msgstr "Sve datoteke"
+
+#, fuzzy
+#~| msgid "Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Strelica"
+
+#, fuzzy
+#~| msgid "Automatic hyphenation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic animation preview"
+#~ msgstr "Samo&ispravljanje..."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "Prezentacija"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "Prijelazno stanje slajda"
+
+#, fuzzy
+#~| msgid "Rotation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "Zakretanje"
+
+#, fuzzy
+#~| msgid "Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start: "
+#~ msgstr "Zvijezda"
+
+#, fuzzy
+#~| msgid "Direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "Smjer"
+
+#, fuzzy
+#~| msgid "No Effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~| msgid " sec"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr " sekundi"
+
+#, fuzzy
+#~| msgid "Apply Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply To All Slides"
+#~ msgstr "Primijeni stilove"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Elevation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ole Action"
+#~ msgstr "Nagib:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "Prijelazno stanje slajda"
+
+#, fuzzy
+#~| msgid "Remove Link"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "Ukloni vezu"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "Izbriši slajd"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "Izbriši slajd"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm remove"
+#~ msgstr "Spremi postavu..."
+
+#, fuzzy
+#~| msgid "No sound"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr "Bez zvuka"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import..."
+#~ msgstr "Stil ruba okvira..."
+
+#, fuzzy
+#~| msgid "Wipe From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Left"
+#~ msgstr "Prebriši s lijeva"
+
+#, fuzzy
+#~| msgid "Wipe From Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top"
+#~ msgstr "Prebriši s vrha"
+
+#, fuzzy
+#~| msgid "Wipe From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Right"
+#~ msgstr "Prebriši s desna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Clock"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "Sat"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "Dvostruka strelica"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Vertical"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Horizontal"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical Reverse"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal Reverse"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "Desno:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical Reverse"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Reverse"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan"
+#~ msgstr "12% Ispuni šablonu"
+
+#, fuzzy
+#~| msgid "Wipe From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "Prebriši s desna"
+
+#, fuzzy
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Top"
+#~ msgstr "Centrirano"
+
+#, fuzzy
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Left"
+#~ msgstr "Centrirano"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Top"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Left"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~| msgid "Wipe From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "Prebriši s desna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Left"
+#~ msgstr "Prebriši s lijeva"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "Duljina:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "Dno:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "Desno:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "Desno:"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "Poravnaj dolje"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~| msgid "Wipe From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "Prebriši s lijeva"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "Prebriši s desna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "Prebriši s desna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "Desno"
+
+#, fuzzy
+#~| msgid "Up"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up"
+#~ msgstr "Gore"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Reverse"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up Reverse"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reverse"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reverse"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "Dvostruka strelica"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Wipe From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "Prebriši s lijeva"
+
+#, fuzzy
+#~| msgid "Wipe From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "Prebriši s desna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "Dvostruka strelica"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "Uglovi:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "Uglovi:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Barn Door"
+#~ msgstr "Dvostruka strelica"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Diamond"
+#~ msgstr "Dvostruka strelica"
+
+#, fuzzy
+#~| msgid "Zig Zag"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zig Zag"
+#~ msgstr "Cik cak"
+
+#, fuzzy
+#~| msgid "Fade"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "Izblijedi"
+
+#, fuzzy
+#~| msgid "Set Text Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade over Color"
+#~ msgstr "&Boja..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~| msgid "Down"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down"
+#~ msgstr "Dolje"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~| msgid "Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "Lijevo"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~| msgid "Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Elipsa"
+
+#, fuzzy
+#~| msgid "Circle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "Krug"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular"
+#~ msgstr "Pravokutnik"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "Pravokutnik"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond"
+#~ msgstr "Dvostruka strelica"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Razno"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart"
+#~ msgstr "Zaglavlje"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Prezentacija"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "Pravokutnik"
+
+#, fuzzy
+#~| msgid "Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "Zvijezda"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Triangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triangle"
+#~ msgstr "Trokut"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box Snakes"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "Dno:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "Duljina:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "Desno:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical In"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "Dno:"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "Stupnjevit prijelaz uspravno"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "Stupnjevit prijelaz uspravno"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same In"
+#~ msgstr "Stupnjevit prijelaz uspravno"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "Stupnjevit prijelaz vodoravno"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same Out"
+#~ msgstr "Stupnjevit prijelaz vodoravno"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same In"
+#~ msgstr "Stupnjevit prijelaz vodoravno"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same Out"
+#~ msgstr "Stupnjevit prijelaz vodoravno"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite In"
+#~ msgstr "Stupnjevit prijelaz vodoravno"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "Stupnjevit prijelaz vodoravno"
+
+#, fuzzy
+#~| msgid "Snake"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "Zmija"
+
+#, fuzzy
+#~| msgid "Swirl"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Vrtlog"
+
+#, fuzzy
+#~| msgid "Wipe From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "Prebriši s lijeva"
+
+#, fuzzy
+#~| msgid "Wipe From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "Prebriši s lijeva"
+
+#, fuzzy
+#~| msgid "Wipe From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "Prebriši s desna"
+
+#, fuzzy
+#~| msgid "Wipe From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "Prebriši s desna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "Prebriši s desna"
+
+#, fuzzy
+#~| msgid "Wipe From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "Prebriši s desna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Vertical"
+#~ msgstr "Okomite crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Horizontal"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "Desno:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Horizontal"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Horizontal"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Wipe From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "Prebriši s dna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "&Slajdovi"
+
+#, fuzzy
+#~| msgid "Rotation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space Rotation"
+#~ msgstr "Zakretanje"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "Zaglavlje"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "Podnožje"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "Slika"
+
+#~ msgid "File to open"
+#~ msgstr "Datoteka koju treba otvoriti"
+
+#, fuzzy
+#~| msgid "&Configure Completion..."
+#~ msgid "Configure KPresenter..."
+#~ msgstr "Podesi fusnotu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete page effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgid "Slide Layouts"
+#~ msgstr "Osvježi tabulatore"
+
+#~ msgid "&File"
+#~ msgstr "&Datoteka"
+
+#~ msgid "Line"
+#~ msgstr "Crta"
+
+#~ msgid "Te&xt"
+#~ msgstr "&Tekst"
+
+#~ msgid "&Align"
+#~ msgstr "&Poravnanje"
+
+#~ msgid "T&ype"
+#~ msgstr "&Tip"
+
+#~ msgid "Spellcheck"
+#~ msgstr "Provjera pravopisa"
+
+#, fuzzy
+#~ msgid "Autocorrection"
+#~ msgstr "Samo&ispravljanje..."
+
+#~ msgid "File"
+#~ msgstr "Datoteka"
+
+#~ msgid "Edit"
+#~ msgstr "Uredi"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Umetni datoteku"
+
+#~ msgid "Tools"
+#~ msgstr "Alati"
+
+#~ msgid "Format"
+#~ msgstr "Oblikovanje"
+
+#~ msgid "Text"
+#~ msgstr "Tekst"
+
+#~ msgid "Slide Show"
+#~ msgstr "Pokaz prezentacije"
+
+#~ msgid "Navigation"
+#~ msgstr "Navigacija"
+
+#~ msgid "Vertical Alignment"
+#~ msgstr "uspravno ravnanje, uspravno poravnavanje"
+
+#~ msgid "Spell Check Result"
+#~ msgstr "Provjera pisanja"
+
+#, fuzzy
+#~ msgid "Slide Title"
+#~ msgstr "&Zaglavlje"
+
+#, fuzzy
+#~| msgid "&Deselect All"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "O&dznači sve"
+
+#, fuzzy
+#~| msgid "Select"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "Odaberi"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Uredi"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgid "New Slide Show %1"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~ msgid "Custom Slideshows editor"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~ msgid "Customs Slideshows"
+#~ msgstr "Pokaz prezentacije"
+
+#, fuzzy
+#~| msgid "Duplicate Slide"
+#~ msgid "Available Slides"
+#~ msgstr "Dupliciraj slajd"
+
+#, fuzzy
+#~| msgid "Copy Slide"
+#~ msgid "Add Slide"
+#~ msgstr "Kopiraj slajd"
+
+#~ msgid "Undo"
+#~ msgstr "Poništi"
+
+#~ msgid "Close"
+#~ msgstr "Zatvori"
+
+#~ msgid "KPresenter"
+#~ msgstr "KPresenter"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgid "Page Layouts"
+#~ msgstr "Osvježi tabulatore"
+
+#~ msgid "&Page"
+#~ msgstr "Broj &stranice"
+
+#, fuzzy
+#~ msgid "Click to preview the page effect."
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Spiral Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Snake Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Pentagon Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "RoundRect Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Misc Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Ellipse Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Iris Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Eye Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Hexagon Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Triangle Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Star Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Fan Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Clock Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Double Fan Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Bar Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Slide Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Four Box Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Barn Vee Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Zig Zag Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Barn Door Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Diagonal Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Vee Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "Box Wipe Effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Oblikovanje"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgid "Navigate to:"
+#~ msgstr "Navigacija"
+
+#, fuzzy
+#~ msgid "Cover down effect"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "A&ngle:"
+#~ msgstr "Kut:"
+
+#, fuzzy
+#~ msgid " °"
+#~ msgstr "0°"
+
+#~ msgid "Pie"
+#~ msgstr "Torta"
+
+#, fuzzy
+#~ msgid "&Type:"
+#~ msgstr "Tip:"
+
+#, fuzzy
+#~ msgid "&Length:"
+#~ msgstr "Duljina:"
+
+#, fuzzy
+#~ msgid "Set here the start position."
+#~ msgstr "Poasonova"
+
+#, fuzzy
+#~ msgid "Start position:"
+#~ msgstr "Poasonova"
+
+#~ msgid "Preview"
+#~ msgstr "Pregled"
+
+#, fuzzy
+#~ msgid "Channel Intensity"
+#~ msgstr "Jačina"
+
+#~ msgid "Intensity"
+#~ msgstr "Jačina"
+
+#~ msgid "Desaturate"
+#~ msgstr "Odzasićeno"
+
+#~ msgid "Contrast"
+#~ msgstr "Kontrast"
+
+#~ msgid "Normalize"
+#~ msgstr "Normaliziraj"
+
+#~ msgid "Equalize"
+#~ msgstr "Izjednači"
+
+#~ msgid "Threshold"
+#~ msgstr "Prag"
+
+#, fuzzy
+#~ msgid "Solarize"
+#~ msgstr "Slajd"
+
+#~ msgid "Emboss"
+#~ msgstr "Reljef"
+
+#~ msgid "Despeckle"
+#~ msgstr "Despeckle..."
+
+#~ msgid "Charcoal"
+#~ msgstr "Drveni ugljen"
+
+#~ msgid "Noise"
+#~ msgstr "Buka"
+
+#~ msgid "Blur"
+#~ msgstr "Zamućivanje"
+
+#, fuzzy
+#~ msgid "Edge"
+#~ msgstr "Rub"
+
+#~ msgid "Sharpen"
+#~ msgstr "Izoštri"
+
+#~ msgid "Spread"
+#~ msgstr "Rastezanje"
+
+#~ msgid "Shade"
+#~ msgstr "Sjena"
+
+#~ msgid "Wave"
+#~ msgstr "Val"
+
+#~ msgid "Value:"
+#~ msgstr "Vrijednost:"
+
+#~ msgid " %"
+#~ msgstr " %"
+
+#~ msgid "Gray"
+#~ msgstr "Siva"
+
+#~ msgid "All"
+#~ msgstr "Sve"
+
+#~ msgid "Color:"
+#~ msgstr "Boja:"
+
+#~ msgid "Color 1:"
+#~ msgstr "Boja 1:"
+
+#~ msgid "Color 2:"
+#~ msgstr "Boja 2:"
+
+#~ msgid "Intensity:"
+#~ msgstr "Jačina:"
+
+#~ msgid "Factor:"
+#~ msgstr "Adresa:"
+
+#~ msgid "Type:"
+#~ msgstr "Tip:"
+
+#~ msgid "Uniform"
+#~ msgstr "Ravnomjerno"
+
+#~ msgid "Poisson"
+#~ msgstr "Poasonova"
+
+#~ msgid "Radius:"
+#~ msgstr "Polumjer:"
+
+#~ msgid "Azimuth:"
+#~ msgstr "Azimut:"
+
+#~ msgid "Angle:"
+#~ msgstr "Kut:"
+
+#, fuzzy
+#~ msgid "Wave length:"
+#~ msgstr "Duljina:"
+
+#, fuzzy
+#~ msgid "Pen"
+#~ msgstr "&Olovka"
+
+#~ msgid "Arrow Style"
+#~ msgstr "Stil strelice"
+
+#, fuzzy
+#~ msgid "&End:"
+#~ msgstr "Kraj:"
+
+#, fuzzy
+#~ msgid "&Width:"
+#~ msgstr "Širina:"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "&Stil:"
+
+#, fuzzy
+#~ msgid "C&olor:"
+#~ msgstr "Boja:"
+
+#~ msgid " pt"
+#~ msgstr " točka"
+
+#, fuzzy
+#~ msgid "Vertical declination:"
+#~ msgstr "Stupnjevit prijelaz uspravno"
+
+#, fuzzy
+#~ msgid "Horizontal declination:"
+#~ msgstr "Stupnjevit prijelaz vodoravno"
+
+#, fuzzy
+#~ msgid "Set the horizontal declination."
+#~ msgstr "Stupnjevit prijelaz vodoravno"
+
+#, fuzzy
+#~ msgid "Set the vertical declination."
+#~ msgstr "Stupnjevit prijelaz uspravno"
+
+#~ msgid "Polygon"
+#~ msgstr "Poligon"
+
+#, fuzzy
+#~ msgid "&Sharpness:"
+#~ msgstr "Oštrina:"
+
+#~ msgid "Brush"
+#~ msgstr "Kist"
+
+#, fuzzy
+#~ msgid "&Style:"
+#~ msgstr "Stil:"
+
+#, fuzzy
+#~ msgid "&Preview"
+#~ msgstr "Pregled"
+
+#, fuzzy
+#~ msgid "&Effect:"
+#~ msgstr "Bez efekta"
+
+#, fuzzy
+#~ msgid "&Speed:"
+#~ msgstr "Brzina:"
+
+#, fuzzy
+#~ msgid "&File:"
+#~ msgstr "Naslov:"
+
+#~ msgid "Gradient"
+#~ msgstr "Gradijent"
+
+#, fuzzy
+#~ msgid "Gradient:"
+#~ msgstr "Gradijent"
+
+#, fuzzy
+#~ msgid "X-fac&tor:"
+#~ msgstr "Adresa:"
+
+#, fuzzy
+#~ msgid "&Y-factor:"
+#~ msgstr "Adresa:"
+
+#, fuzzy
+#~ msgid "Margin"
+#~ msgstr "Margine u %1"
+
+#, fuzzy
+#~ msgid "Margins"
+#~ msgstr "Margine u %1"
+
+#, fuzzy
+#~ msgid "S&ynchronize changes"
+#~ msgstr "Sinkroniziraj"
+
+#, fuzzy
+#~ msgid "General"
+#~ msgstr "&Općenito"
+
+#, fuzzy
+#~ msgid "Na&me:"
+#~ msgstr "&Ime:"
+
+#, fuzzy
+#~ msgid "Keep &aspect ratio"
+#~ msgstr "Sačuvaj odnos"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "Poasonova"
+
+#~ msgid "Shadow"
+#~ msgstr "Sjena"
+
+#~ msgid "Distance:"
+#~ msgstr "Udaljenost:"
+
+#, fuzzy
+#~ msgid "Orientation"
+#~ msgstr "Prezentacija"
+
+#~ msgid "Picture"
+#~ msgstr "Slika"
+
+#~ msgid "Depth"
+#~ msgstr "Dubina"
+
+#, fuzzy
+#~ msgid "&1 bit color mode"
+#~ msgstr "1 bitni mod boje"
+
+#, fuzzy
+#~ msgid "&8 bit color mode"
+#~ msgstr "1 bitni mod boje"
+
+#, fuzzy
+#~ msgid "1&6 bit color mode"
+#~ msgstr "16 bitni mod boje"
+
+#, fuzzy
+#~ msgid "&32 bit color mode"
+#~ msgstr "1 bitni mod boje"
+
+#, fuzzy
+#~ msgid "&Default color mode"
+#~ msgstr "1 bitni mod boje"
+
+#, fuzzy
+#~ msgid "%"
+#~ msgstr " %"
+
+#, fuzzy
+#~ msgid "Gra&yscale"
+#~ msgstr "Sivi tonovi"
+
+#, fuzzy
+#~ msgid "&Brightness:"
+#~ msgstr "Sjajnost:"
+
+#, fuzzy
+#~ msgid "&Qt::DockLeft:"
+#~ msgstr "Lijevo:"
+
+#, fuzzy
+#~ msgid "Qt::Orientation"
+#~ msgstr "Prezentacija"
+
+#, fuzzy
+#~ msgid "Use slide master background"
+#~ msgstr "Pozadina slajda"
+
+#~ msgid "Plain"
+#~ msgstr "Obično"
+
+#~ msgid "Pyramid Gradient"
+#~ msgstr "Pyramid Gradient"
+
+#~ msgid "&Reset"
+#~ msgstr "&Vrati na početak"
+
+#, fuzzy
+#~ msgid "Single Color"
+#~ msgstr "&Boja..."
+
+#, fuzzy
+#~ msgid "%1% Fill Pattern"
+#~ msgstr "12% Ispuni šablonu"
+
+#, fuzzy
+#~ msgid "Pyramid"
+#~ msgstr "Pyramid Gradient"
+
+#~ msgid "&Drawing Mode"
+#~ msgstr "&Režim crtanja"
+
+#~ msgid "Change Text Font"
+#~ msgstr "Osvježi tabulatore"
+
+#, fuzzy
+#~ msgid "Make Text Bold"
+#~ msgstr "Tekstualni okvir %1"
+
+#~ msgid "Make Text Italic"
+#~ msgstr "Okvir lebdi"
+
+#~ msgid "Underline Text"
+#~ msgstr "&Podvučeno"
+
+#~ msgid "Change Text Size"
+#~ msgstr "Uvuci"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "Povećaj veličinu fonta"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "Smanji veličinu pisma"
+
+#~ msgid "Change First Line Indent"
+#~ msgstr "&Boja..."
+
+#~ msgid "Printing..."
+#~ msgstr "Ispisivanje..."
+
+#~ msgid "Close Object"
+#~ msgstr "Zatvori objekt"
+
+#, fuzzy
+#~ msgid "Modify Slide Transition For All Pages"
+#~ msgstr "Prijelazno stanje slajda"
+
+#~ msgid "Interface"
+#~ msgstr "Sučelje"
+
+#~ msgid "Spelling"
+#~ msgstr "Provjera pravopisa"
+
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#~ msgid "Document Settings"
+#~ msgstr "Postavke okvira"
+
+#~ msgid "Paths"
+#~ msgstr "Putanje"
+
+#~ msgid "Path Settings"
+#~ msgstr "Postavke odlomka"
+
+#~ msgid "Grid color:"
+#~ msgstr "Boja mreže:"
+
+#~ msgid "&Underline all links"
+#~ msgstr "&Podvučeno"
+
+#~ msgid "Grid"
+#~ msgstr "Mreža"
+
+#, fuzzy
+#~ msgid "Vertical grid size:"
+#~ msgstr "Stupnjevit prijelaz uspravno"
+
+#~ msgid "Document Defaults"
+#~ msgstr "Struktura dokumenta"
+
+#~ msgid "Default font:"
+#~ msgstr "Obriši okvir"
+
+#~ msgid "Choose..."
+#~ msgstr "Odaberi..."
+
+#~ msgid "Create backup file"
+#~ msgstr "Napravi &tabelu"
+
+#~ msgid "No autosave"
+#~ msgstr "Nema vrijednost"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "Veličina pukotine ( %1 ):"
+
+#~ msgid "Cursor"
+#~ msgstr "Pokazivač"
+
+#~ msgid "Change Starting Page Number"
+#~ msgstr "&Korisničke varijable..."
+
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "&Korisničke varijable..."
+
+#, fuzzy
+#~ msgid "Outl&ine"
+#~ msgstr "Kontura"
+
+#~ msgid "&Rectangle"
+#~ msgstr "&Pravokutnik"
+
+#, fuzzy
+#~ msgid "Polygo&n"
+#~ msgstr "Poligon"
+
+#, fuzzy
+#~ msgid "&Pie"
+#~ msgstr "Torta"
+
+#~ msgid "Type"
+#~ msgstr "Tip"
+
+#, fuzzy
+#~ msgid "Picture Path"
+#~ msgstr "Slika (%1) %2"
+
+#, fuzzy
+#~ msgid "Backup Path"
+#~ msgstr "Slika (%1) %2"
+
+#, fuzzy
+#~ msgid "&Remove"
+#~ msgstr "Ukloni vezu"
+
+#, fuzzy
+#~ msgid "Test"
+#~ msgstr "Tekst"
+
+#, fuzzy
+#~ msgid "Name:"
+#~ msgstr "&Ime:"
+
+#, fuzzy
+#~ msgid "Custom Slide Show name is already used."
+#~ msgstr "Pokaz prezentacije"
+
+#~ msgid "Insert File"
+#~ msgstr "Umetni datoteku"
+
+#~ msgid "Insert New Slide"
+#~ msgstr "Umetni novi slajd"
+
+#~ msgid "Number of copies:"
+#~ msgstr "Broj kopija:"
+
+#, fuzzy
+#~ msgid "Increase width:"
+#~ msgstr "Povećaj veličinu fonta"
+
+#, fuzzy
+#~ msgid "Increase height:"
+#~ msgstr "Povećaj veličinu fonta"
+
+#~ msgid "Appear"
+#~ msgstr "Pojavi se"
+
+#~ msgid "Speed:"
+#~ msgstr "Brzina:"
+
+#~ msgid "Fast"
+#~ msgstr "Brzo"
+
+#~ msgid "File name:"
+#~ msgstr "Naziv datoteke:"
+
+#~ msgid "Play"
+#~ msgstr "Sviraj"
+
+#~ msgid "*.%1|%2 Files"
+#~ msgstr "*.%1|%2 Datoteke"
+
+#~ msgid "All Supported Files"
+#~ msgstr "Sve podržane datoteke"
+
+#~ msgid "Import Style"
+#~ msgstr "Stil ruba okvira"
+
+#~ msgid "Path:"
+#~ msgstr "Putanja:"
+
+#, fuzzy
+#~ msgid "&Set Colors"
+#~ msgstr "&Boja..."
+
+#~ msgid "Text color:"
+#~ msgstr "Boja teksta:"
+
+#~ msgid "Background color:"
+#~ msgstr "Boja pozadine:"
+
+#, fuzzy
+#~ msgid "Position:"
+#~ msgstr "Poasonova"
+
+#, fuzzy
+#~ msgid "X position:"
+#~ msgstr "Poasonova"
+
+#, fuzzy
+#~ msgid "Y position:"
+#~ msgstr "Poasonova"
+
+#, fuzzy
+#~ msgid "Delete Objects"
+#~ msgstr "Obriši objekte"
+
+#~ msgid "Resize"
+#~ msgstr "Promjena veličine"
+
+#~ msgid "Group Objects"
+#~ msgstr "Grupiraj objekte"
+
+#~ msgid "Insert Line"
+#~ msgstr "Umetni crtu"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Umetni mnogokut"
+
+#, fuzzy
+#~ msgid "Move Objects"
+#~ msgstr "Premjesti objekte"
+
+#~ msgid "Change Shadow"
+#~ msgstr "Rubovi strane"
+
+#~ msgid "Change Vertical Alignment"
+#~ msgstr "Promijeni ime tabele"
+
+#, fuzzy
+#~ msgid "No Outline"
+#~ msgstr "Kontura"
+
+#~ msgid "Square"
+#~ msgstr "Kvadrat"
+
+#~ msgid "Dimension Line"
+#~ msgstr "Dimenzijska linija"
+
+#~ msgid "&General"
+#~ msgstr "&Općenito"
+
+#, fuzzy
+#~ msgid "&Transition Type"
+#~ msgstr "Prijelazno stanje slajda"
+
+#, fuzzy
+#~ msgid "Measure presentation &duration"
+#~ msgstr "Spremi postavu..."
+
+#~ msgid "Arc"
+#~ msgstr "Luk"
+
+#, fuzzy
+#~ msgid "Slides in the pages:"
+#~ msgstr "Izbriši slajd"
+
+#~ msgid "Name Object"
+#~ msgstr "Imenuj objekt"
+
+#, fuzzy
+#~ msgid "Change Size"
+#~ msgstr "Promijeni veličinu"
+
+#, fuzzy
+#~ msgid "Pict&ure"
+#~ msgstr "Slika"
+
+#~ msgid "pt"
+#~ msgstr "tč"
+
+#~ msgid "Rename Slide"
+#~ msgstr "Preimenuj slajd"
+
+#~ msgid "Dissolve"
+#~ msgstr "Otapanje"
+
+#~ msgid "Paste Text"
+#~ msgstr "&Promijeni tekst"
+
+#~ msgid "Insert Variable"
+#~ msgstr "Umetni tablicu"
+
+#~ msgid "Protect content"
+#~ msgstr "Spoji ćelije"
+
+#, fuzzy
+#~ msgid "Remove Slide"
+#~ msgstr "Preimenuj slajd"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "&Podaci"
+
+#~ msgid "Save Picture"
+#~ msgstr "Uvuci"
+
+#, fuzzy
+#~ msgid "Save Failed"
+#~ msgstr "Uvuci"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "$Postavke..."
+
+#~ msgid "Slide Background"
+#~ msgstr "Pozadina slajda"
+
+#~ msgid "Only local files are currently supported."
+#~ msgstr "Samo su lokalne datoteke trenutno podržane."
+
+#~ msgid "Change List Type"
+#~ msgstr "Uvuci"
+
+#, fuzzy
+#~ msgid "Change Fill Color"
+#~ msgstr "Osvježi tabulatore"
+
+#, fuzzy
+#~ msgid "Change Outline Style"
+#~ msgstr "Uvuci"
+
+#, fuzzy
+#~ msgid "Change Outline Width"
+#~ msgstr "&Boja..."
+
+#, fuzzy
+#~ msgid "Hide Sidebar"
+#~ msgstr "&Zaglavlje"
+
+#, fuzzy
+#~ msgid "Hide Notebar"
+#~ msgstr "P&odnožje"
+
+#~ msgid "&Formatting Characters"
+#~ msgstr "&Formatiranje znakova"
+
+#, fuzzy
+#~ msgid "Slide &Master"
+#~ msgstr "&Zaglavlje"
+
+#, fuzzy
+#~ msgid "Guide Lines"
+#~ msgstr "Linija zaglavlja:"
+
+#, fuzzy
+#~ msgid "Show &Grid"
+#~ msgstr "Poravnaj s rešetkom"
+
+#, fuzzy
+#~ msgid "Hide &Grid"
+#~ msgstr "&Zaglavlje"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Poravnaj s rešetkom"
+
+#~ msgid "P&icture..."
+#~ msgstr "Slike"
+
+#~ msgid "&Rotate"
+#~ msgstr "&Rotiraj"
+
+#, fuzzy
+#~ msgid "&Zoom"
+#~ msgstr "Zumiraj:"
+
+#~ msgid "&Shape"
+#~ msgstr "&Oblik"
+
+#~ msgid "&Text"
+#~ msgstr "&Tekst"
+
+#~ msgid "&Chart"
+#~ msgstr "&Grafikon"
+
+#~ msgid "Ta&ble"
+#~ msgstr "Ta&blica"
+
+#~ msgid "&Object"
+#~ msgstr "&Objekt ..."
+
+#~ msgid "&Line"
+#~ msgstr "&Linija"
+
+#~ msgid "&Freehand"
+#~ msgstr "&Prostoručno"
+
+#~ msgid "Po&lyline"
+#~ msgstr "&Polilinija"
+
+#~ msgid "&Font..."
+#~ msgstr "&Pismo..."
+
+#~ msgid "Font Family"
+#~ msgstr "Obitelj pisma"
+
+#~ msgid "&Bold"
+#~ msgstr "&Masno"
+
+#~ msgid "&Italic"
+#~ msgstr "Kurz&iv"
+
+#~ msgid "&Underline"
+#~ msgstr "&Podvučeno"
+
+#~ msgid "&Color..."
+#~ msgstr "&Boja..."
+
+#~ msgid "Align &Left"
+#~ msgstr "&Lijevo poravnato"
+
+#~ msgid "Align &Center"
+#~ msgstr "&Centrirano"
+
+#~ msgid "Align &Right"
+#~ msgstr "&Desno poravnato"
+
+#~ msgid "Number"
+#~ msgstr "Broj"
+
+#~ msgid "Bullet"
+#~ msgstr "Grafička oznaka"
+
+#, fuzzy
+#~ msgid "&Insert Slide Number"
+#~ msgstr "&Umetni broj stranice"
+
+#~ msgid "&Properties"
+#~ msgstr "$Postavke..."
+
+#~ msgid "Bring to Front"
+#~ msgstr "Stavi ispred"
+
+#~ msgid "Send to Back"
+#~ msgstr "Pošalji unazad"
+
+#~ msgid "Align &Top"
+#~ msgstr "&Poravnato gore"
+
+#~ msgid "Align &Bottom"
+#~ msgstr "&Poravnaj dolje"
+
+#, fuzzy
+#~ msgid "Outline Style"
+#~ msgstr "Kontura"
+
+#, fuzzy
+#~ msgid "Outline Width"
+#~ msgstr "Kontura"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Grupiraj objekte"
+
+#~ msgid "&Go to Start"
+#~ msgstr "&Idi na početak"
+
+#~ msgid "Go to &End"
+#~ msgstr "&Idi na kraj"
+
+#, fuzzy
+#~ msgid "Fill Color..."
+#~ msgstr "&Boja..."
+
+#, fuzzy
+#~ msgid "Outline Color..."
+#~ msgstr "Boja olovke..."
+
+#~ msgid "640x480"
+#~ msgstr "640x480"
+
+#~ msgid "800x600"
+#~ msgstr "800x600"
+
+#~ msgid "1024x768"
+#~ msgstr "1024x768"
+
+#~ msgid "1280x1024"
+#~ msgstr "1280x1024"
+
+#~ msgid "1600x1200"
+#~ msgstr "1600x1200"
+
+#~ msgid "Superscript"
+#~ msgstr "Eksponent"
+
+#~ msgid "Subscript"
+#~ msgstr "Indeks"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "&Posebni znak..."
+
+#~ msgid "Link..."
+#~ msgstr "Link..."
+
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Samo&ispravljanje..."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&Odlomak..."
+
+#~ msgid "Default Format"
+#~ msgstr "Obriši okvir"
+
+#~ msgid "Open Link"
+#~ msgstr "Osvježi tabulatore"
+
+#~ msgid "Change Link..."
+#~ msgstr "Osvježi tabulatore"
+
+#~ msgid "Copy Link"
+#~ msgstr "Kopiraj link"
+
+#~ msgid "Add to Bookmark"
+#~ msgstr "Obriši Stupac"
+
+#~ msgid "&Custom Variables..."
+#~ msgstr "&Korisničke varijable..."
+
+#~ msgid "Edit Variable..."
+#~ msgstr "&Korisničke varijable..."
+
+#~ msgid "&Variable"
+#~ msgstr "&Varijabla"
+
+#~ msgid "&Property"
+#~ msgstr "Postavke..."
+
+#~ msgid "&Date"
+#~ msgstr "&Podaci"
+
+#~ msgid "&Time"
+#~ msgstr "&Vrijeme"
+
+#~ msgid "Change Case..."
+#~ msgstr "VELIKA/mala slova..."
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "Zumiraj:"
+
+#~ msgid "&Style Manager"
+#~ msgstr "Postavke tabele"
+
+#~ msgid "St&yle"
+#~ msgstr "&Stil:"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Samo&ispravljanje..."
+
+#, fuzzy
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Samo&ispravljanje..."
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Umetni blagi rastav"
+
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Umetni blagi rastav"
+
+#~ msgid "Line Break"
+#~ msgstr "Prijelom retka"
+
+#~ msgid "Completion"
+#~ msgstr "Spremi dokument pod novim imenom"
+
+#, fuzzy
+#~ msgid "Increase Numbering Level"
+#~ msgstr "Povećaj veličinu fonta"
+
+#, fuzzy
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "Smanji veličinu pisma"
+
+#~ msgid "Comment..."
+#~ msgstr "Komentar..."
+
+#~ msgid "Edit Comment..."
+#~ msgstr "Dodaj zapis"
+
+#~ msgid "Remove Comment"
+#~ msgstr "Ukloni slog"
+
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Dodaj zapis"
+
+#~ msgid "Zoom Out"
+#~ msgstr "Umanji"
+
+#~ msgid "Zoom In"
+#~ msgstr "Povećaj"
+
+#, fuzzy
+#~ msgid "Zoom Selected Objects"
+#~ msgstr "Obriši objekte"
+
+#, fuzzy
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Primjeni Samo&ispravljanje..."
+
+#~ msgid "Align Top"
+#~ msgstr "Poravnato gore"
+
+#~ msgid "Align Middle"
+#~ msgstr "Poravnaj po sredini"
+
+#~ msgid "Save Picture..."
+#~ msgstr "&Boja..."
+
+#~ msgid "File..."
+#~ msgstr "Datoteka..."
+
+#~ msgid "Ignore All"
+#~ msgstr "Zanemari sve"
+
+#~ msgid "Add Word to Dictionary"
+#~ msgstr "Dodaj riječ u rječnik"
+
+#, fuzzy
+#~ msgid "Hide Background"
+#~ msgstr "Pozadina slajda"
+
+#, fuzzy
+#~ msgid "Display Background"
+#~ msgstr "Pozadina slajda"
+
+#~ msgid "Change Link"
+#~ msgstr "Promijeni vezu"
+
+#~ msgid "Paragraph Settings"
+#~ msgstr "Postavke odlomka"
+
+#~ msgid "Change Custom Variable"
+#~ msgstr "&Korisničke varijable..."
+
+#~ msgid "Change Case of Text"
+#~ msgstr "&Boja..."
+
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#, fuzzy
+#~ msgid "Enable Document Footer"
+#~ msgstr "Vrsta dokumenta:"
+
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Change Note Text"
+#~ msgstr "&Boja..."
+
+#~ msgid "Apply Autoformat"
+#~ msgstr "Obriši okvir"
+
+#~ msgid "Replace Word"
+#~ msgstr "&Ukloni pogled"
+
+#~ msgid "First"
+#~ msgstr "Prvi"
+
+#~ msgid "Previous"
+#~ msgstr "Prethodni"
+
+#~ msgid "Next"
+#~ msgstr "Dalje"
+
+#~ msgid "Last"
+#~ msgstr "Zadnji"
+
+#~ msgid "Home"
+#~ msgstr "Polazno"
+
+#~ msgid "Table of Contents"
+#~ msgstr "Tablica sadržaja"
+
+#~ msgid "Email address:"
+#~ msgstr "Poštanska adresa"
+
+#~ msgid "Zoom:"
+#~ msgstr "Zumiraj:"
+
+#, fuzzy
+#~ msgid "Encoding:"
+#~ msgstr "Kraj:"
+
+#~ msgid "Document type:"
+#~ msgstr "Vrsta dokumenta:"
+
+#~ msgid "Title color:"
+#~ msgstr "Boja naslova:"
+
+#, fuzzy
+#~ msgid "Disabled"
+#~ msgstr "Otapanje"
+
+#, fuzzy
+#~ msgid "Save Web Presentation Configuration"
+#~ msgstr "Spremi postavu..."
+
+#~ msgid "Freehand"
+#~ msgstr "Prostoručno"
+
+#~ msgid "Polyline"
+#~ msgstr "Polilinija"
+
+#, fuzzy
+#~ msgid "Prot&ect content"
+#~ msgstr "Spoji ćelije"
+
+#, fuzzy
+#~ msgid "Spellchecker Behavior"
+#~ msgstr "Ponašanje provjere pravopisa"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Postavke odlomka"

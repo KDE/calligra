@@ -1,0 +1,103 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Translators:
+# Anıl Özbek <ozbekanil@gmail.com>, 2012-2013.
+# obsoleteman <tulliana@gmail.com>, 2008-2009,2012.
+# Volkan Gezer <volkangezer@gmail.com>, 2014.
+# Emir SARI <emir_sari@icloud.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra-kde4\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2022-08-12 13:00+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 22.04.3\n"
+
+#: shapecollection/OdfCollectionLoader.cpp:63
+#, kde-format
+msgid "Found no shapes in the collection! %1"
+msgstr "Koleksiyonda hiç şekil yok! %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:132
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr "Geçerli bir Calligra dosyası değil: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:157
+#, kde-format
+msgid "No body tag found in file: %1"
+msgstr "Dosyada hiçbir body etiketi bulunamadı: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:165
+#, kde-format
+msgid "No office:drawing tag found in file: %1"
+msgstr "Dosyada hiçbir office:drawing etiketi bulunamadı: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:173
+#: shapecollection/OdfCollectionLoader.cpp:181
+#, kde-format
+msgid "No shapes found in file: %1"
+msgstr "Dosyada hiçbir şekil bulunamadı: %1"
+
+#: shapecollection/ShapeCollectionDocker.cpp:111
+#, kde-format
+msgid "Add Shape"
+msgstr "Şekil Ekle"
+
+#: shapecollection/ShapeCollectionDocker.cpp:146
+#, kde-format
+msgid "More"
+msgstr "Daha Fazla"
+
+#: shapecollection/ShapeCollectionDocker.cpp:176
+#, kde-format
+msgid "Open Shape Collection"
+msgstr "Şekil Koleksiyonu Aç"
+
+#: shapecollection/ShapeCollectionDocker.cpp:184
+#, kde-format
+msgid "Remove Shape Collection"
+msgstr "Şekil Koleksiyonunu Kaldır"
+
+#: shapecollection/ShapeCollectionDocker.cpp:330
+#, kde-format
+msgid "Default"
+msgstr "Öntanımlı"
+
+#: shapecollection/ShapeCollectionDocker.cpp:334
+#, kde-format
+msgid "Geometrics"
+msgstr "Geometrik Şekiller"
+
+#: shapecollection/ShapeCollectionDocker.cpp:345
+#, kde-format
+msgid "Arrows"
+msgstr "Oklar"
+
+#: shapecollection/ShapeCollectionDocker.cpp:349
+#, kde-format
+msgid "Funny"
+msgstr "Eğlenceli"
+
+#: shapecollection/ShapeCollectionDocker.cpp:522
+#, kde-format
+msgid "Collection Error"
+msgstr "Koleksiyon Hatası"
+
+#: shapeproperties/ShapePropertiesDocker.cpp:35
+#, kde-format
+msgid "Shape Properties"
+msgstr "Şekil Özellikleri"
+
+#: snapguidedocker/SnapGuideDocker.cpp:39
+#, kde-format
+msgid "Snap Settings"
+msgstr "Yapıştırma Ayarları"

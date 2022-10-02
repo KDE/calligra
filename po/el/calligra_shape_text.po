@@ -1,0 +1,6590 @@
+# translation of TextShape.po to greek
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2007, 2008, 2009.
+# Spiros Georgaras <sng@hellug.gr>, 2007.
+# Stelios <sstavra@gmail.com>, 2011, 2012, 2013, 2020.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: TextShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"PO-Revision-Date: 2020-10-11 17:05+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.04.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
+#, kde-format
+msgid "Annotation"
+msgstr "Σχόλιο"
+
+#: AnnotationTextShapeFactory.cpp:33
+#, kde-format
+msgid "Annotation shape to show annotation content"
+msgstr "Σχήμα σχολίου για εμφάνιση του περιεχομένου του σχολίου"
+
+#: AnnotationTextShapeFactory.cpp:41
+#, kde-format
+msgid "Annotation Shape"
+msgstr "Σχήμα σχολίου"
+
+#: commands/AcceptChangeCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Accept change"
+msgstr "Αποδοχή τροποποίησης"
+
+#: commands/AutoResizeCommand.cpp:19
+#, kde-format
+msgctxt "Disable Shrink To Fit"
+msgid "Disable"
+msgstr "Απενεργοποίηση"
+
+#: commands/AutoResizeCommand.cpp:19
+#, kde-format
+msgctxt "Enable Shrink To Fit"
+msgid "Enable"
+msgstr "Ενεργοποίηση"
+
+#: commands/AutoResizeCommand.cpp:22
+#, kde-format
+msgctxt "(qtundo-format) Enable/Disable Grow To Fit Width"
+msgid "%1 Grow To Fit Width"
+msgstr "%1 ανάπτυξη για προσαρμογή στο πλάτος"
+
+#: commands/AutoResizeCommand.cpp:25
+#, kde-format
+msgctxt "(qtundo-format) Enable/Disable Grow To Fit Height"
+msgid "%1 Grow To Fit Height"
+msgstr "%1 ανάπτυξη για προσαρμογή στο ύψος"
+
+#: commands/AutoResizeCommand.cpp:28
+#, kde-format
+msgctxt "(qtundo-format) Enable/Disable Shrink To Fit"
+msgid "%1 Shrink To Fit"
+msgstr "%1 συρρίκνωση για προσαρμογή"
+
+#: commands/ChangeListLevelCommand.cpp:29
+msgctxt "(qtundo-format)"
+msgid "Change List Level"
+msgstr "Τροποποίηση επιπέδου λίστας"
+
+#: commands/RejectChangeCommand.cpp:34
+msgctxt "(qtundo-format)"
+msgid "Reject change"
+msgstr "Απόρριψη τροποποίησης"
+
+#: commands/ShowChangesCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Show Changes"
+msgstr "Εμφάνιση τροποποιήσεων"
+
+#: commands/ShowChangesCommand.cpp:42
+msgctxt "(qtundo-format)"
+msgid "Hide Changes"
+msgstr "Απόκρυψη τροποποιήσεων"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, TableOfContentsStyleConfigure)
+#. i18n: ectx: property (windowTitle), widget (QDialog, AcceptRejectChangeDialog)
+#. i18n: ectx: property (windowTitle), widget (QDialog, TableOfContentsConfigure)
+#: dialogs/AcceptRejectChangeDialog.ui:26
+#: dialogs/TableOfContentsConfigure.ui:14
+#: dialogs/TableOfContentsStyleConfigure.ui:14
+#, kde-format
+msgid "Dialog"
+msgstr "Διάλογος"
+
+#. i18n: ectx: property (text), widget (QPushButton, acceptButton)
+#: dialogs/AcceptRejectChangeDialog.ui:44
+#, kde-format
+msgid "Accept"
+msgstr "Αποδοχή"
+
+#. i18n: ectx: property (text), widget (QPushButton, rejectButton)
+#: dialogs/AcceptRejectChangeDialog.ui:57
+#, kde-format
+msgid "Reject"
+msgstr "Απόρριψη"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: dialogs/AcceptRejectChangeDialog.ui:70
+#, kde-format
+msgid "Cancel"
+msgstr "Ακύρωση"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/AcceptRejectChangeDialog.ui:96
+#, kde-format
+msgid "Change Log"
+msgstr "Τροποποίηση καταγραφής"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/AcceptRejectChangeDialog.ui:109
+#, kde-format
+msgid "Author"
+msgstr "Συγγραφέας"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/AcceptRejectChangeDialog.ui:122
+#, kde-format
+msgid "Date"
+msgstr "Ημερομηνία"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/AcceptRejectChangeDialog.ui:135
+#, kde-format
+msgid "Type"
+msgstr "Τύπος"
+
+#: dialogs/BibliographyConfigureDialog.cpp:96
+#, kde-format
+msgid "Ascending"
+msgstr "Αύξουσα"
+
+#: dialogs/BibliographyConfigureDialog.cpp:97
+#, kde-format
+msgid "Descending"
+msgstr "Φθίνουσα"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, BibliographyConfigureDialog)
+#. i18n: ectx: property (toolTip), widget (QToolButton, configureBibliography)
+#: dialogs/BibliographyConfigureDialog.ui:14
+#: dialogs/SimpleCitationBibliographyWidget.ui:52
+#, kde-format
+msgid "Configure bibliography"
+msgstr "Διαμόρφωση βιβλιογραφίας"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/BibliographyConfigureDialog.ui:20
+#, kde-format
+msgid "Formatting of bibliography entries"
+msgstr "Μορφοποίηση βιβλιογραφικών παραθέσεων"
+
+#. i18n: ectx: property (text), widget (QLabel, prefixLabel)
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/BibliographyConfigureDialog.ui:28 dialogs/ListLevelWidget.ui:396
+#: dialogs/ParagraphBulletsNumbers.ui:70
+#, kde-format
+msgid "Prefix:"
+msgstr "Πρόθεμα:"
+
+#. i18n: ectx: property (text), widget (QLabel, suffixLabel)
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: dialogs/BibliographyConfigureDialog.ui:48 dialogs/ListLevelWidget.ui:373
+#: dialogs/ParagraphBulletsNumbers.ui:86
+#, kde-format
+msgid "Suffix:"
+msgstr "Κατάληξη:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, numberedEntries)
+#: dialogs/BibliographyConfigureDialog.ui:70
+#, kde-format
+msgid "Number entries"
+msgstr "Αρίθμηση παραθέσεων"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/BibliographyConfigureDialog.ui:80
+#, kde-format
+msgid "Sort"
+msgstr "Ταξινόμηση"
+
+#. i18n: ectx: property (text), widget (QCheckBox, sortByPosition)
+#: dialogs/BibliographyConfigureDialog.ui:86
+#, kde-format
+msgid "Sort by position"
+msgstr "Ταξινόμηση ανά θέση"
+
+#. i18n: ectx: property (title), widget (QGroupBox, sortKeyGroupBox)
+#: dialogs/BibliographyConfigureDialog.ui:93
+#, kde-format
+msgid "Sort keys"
+msgstr "Κλειδιά ταξινόμησης"
+
+#. i18n: ectx: property (text), widget (QPushButton, addSortKeyButton)
+#: dialogs/BibliographyConfigureDialog.ui:103
+#, kde-format
+msgid "Add sort key"
+msgstr "Προσθήκη κλειδιού ταξινόμησης"
+
+#. i18n: ectx: property (text), widget (QLabel, sortAlgorithmLabel)
+#: dialogs/BibliographyConfigureDialog.ui:131
+#, kde-format
+msgid "Sort algorithm:"
+msgstr "Αλγόριθμος ταξινόμησης:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sortAlgorithm)
+#: dialogs/BibliographyConfigureDialog.ui:139
+#, kde-format
+msgid "Alphanumeric"
+msgstr "Αλφαριθμητικό"
+
+#: dialogs/BibliographyTemplate.cpp:30
+#, kde-format
+msgid "Bibliography"
+msgstr "Βιβλιογραφία"
+
+#: dialogs/BibliographyTemplate.cpp:42 ReferencesToolFactory.cpp:19
+#, kde-format
+msgid "References"
+msgstr "Παραπομπές"
+
+#: dialogs/ChangeConfigureDialog.cpp:136
+#, kde-format
+msgid "This is a line of inserted text."
+msgstr "Αυτή είναι γραμμή εισαχθέντος κειμένου"
+
+#: dialogs/ChangeConfigureDialog.cpp:142
+#, kde-format
+msgid "This is a line of deleted text."
+msgstr "Αυτή είναι γραμμή διαγραφέντος κειμένου"
+
+#: dialogs/ChangeConfigureDialog.cpp:148
+#, kde-format
+msgid "This is a line of text whose format has been changed."
+msgstr "Αυτή είναι γραμμή κειμένου η μορφή του οποίου έχει αλλάξει."
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ChangeConfigureDialog)
+#: dialogs/ChangeConfigureDialog.ui:17
+#, kde-format
+msgid "Configure Change Tracking"
+msgstr "Διαμόρφωση ιχνηλάτησης αλλαγών"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/ChangeConfigureDialog.ui:30
+#, kde-format
+msgid "General Settings"
+msgstr "Γενικές ρυθμίσεις"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/ChangeConfigureDialog.ui:37
+#, kde-format
+msgid "Saving Format"
+msgstr "Τύπος αποθήκευσης"
+
+#. i18n: ectx: property (text), widget (QRadioButton, odf12RadioButton)
+#: dialogs/ChangeConfigureDialog.ui:44
+#, kde-format
+msgid "ODF 1.2"
+msgstr "ODF 1.2"
+
+#. i18n: ectx: property (text), widget (QRadioButton, deltaXmlRadioButton)
+#: dialogs/ChangeConfigureDialog.ui:51
+#, kde-format
+msgid "DeltaXML (Experimental)"
+msgstr "DeltaXML (πειραματικό)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/ChangeConfigureDialog.ui:58
+#, kde-format
+msgid "Author Name"
+msgstr "Όνομα συγγραφέα"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/ChangeConfigureDialog.ui:75
+#, kde-format
+msgid "Change Visualization Settings"
+msgstr "Τροποποίηση ρυθμίσεων οπτικοποίησης"
+
+#. i18n: ectx: property (title), widget (QGroupBox, insertionGroupBox)
+#: dialogs/ChangeConfigureDialog.ui:89
+#, kde-format
+msgid "Insertions"
+msgstr "Εισαγωγές"
+
+#. i18n: ectx: property (text), widget (QLabel, insertionColorLabel)
+#. i18n: ectx: property (text), widget (QLabel, deletionColorLabel)
+#. i18n: ectx: property (text), widget (QLabel, formatColorLabel)
+#: dialogs/ChangeConfigureDialog.ui:105 dialogs/ChangeConfigureDialog.ui:188
+#: dialogs/ChangeConfigureDialog.ui:247
+#, kde-format
+msgid "Background Color"
+msgstr "Χρώμα φόντου"
+
+#. i18n: ectx: property (text), widget (QToolButton, moreOptions)
+#. i18n: ectx: property (text), widget (QToolButton, toolAutoSpellCheck)
+#. i18n: ectx: property (text), widget (QToolButton, configureSection)
+#. i18n: ectx: property (text), widget (QToolButton, splitSections)
+#. i18n: ectx: property (text), widget (QToolButton, insertSection)
+#. i18n: ectx: property (text), widget (QuickTableButton, quickTable)
+#. i18n: ectx: property (text), widget (QToolButton, insertVariable)
+#. i18n: ectx: property (text), widget (QToolButton, insertSpecialChar)
+#. i18n: ectx: property (text), widget (QToolButton, insertPageBreak)
+#. i18n: ectx: property (text), widget (FormattingButton, bulletListButton)
+#. i18n: ectx: property (text), widget (QToolButton, resetBackground)
+#. i18n: ectx: property (text), widget (QToolButton, resetTextColor)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_5)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_7)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_4)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_8)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_3)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_6)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_2)
+#. i18n: ectx: property (text), widget (QToolButton, splitCells)
+#. i18n: ectx: property (text), widget (QToolButton, mergeCells)
+#. i18n: ectx: property (text), widget (FormattingButton, border)
+#. i18n: ectx: property (text), widget (QToolButton, resetBackgroundColor)
+#. i18n: ectx: property (text), widget (QPushButton, insertionColorButton)
+#. i18n: ectx: property (text), widget (QPushButton, deletionColorButton)
+#. i18n: ectx: property (text), widget (QPushButton, formatColorButton)
+#. i18n: ectx: property (text), widget (QToolButton, customCharacter)
+#: dialogs/ChangeConfigureDialog.ui:127 dialogs/ChangeConfigureDialog.ui:207
+#: dialogs/ChangeConfigureDialog.ui:266 dialogs/CharacterHighlighting.ui:40
+#: dialogs/CharacterHighlighting.ui:84 dialogs/FontDecorations.ui:36
+#: dialogs/FontDecorations.ui:62 dialogs/FontDecorations.ui:109
+#: dialogs/FontDecorations.ui:122 dialogs/FontDecorations.ui:135
+#: dialogs/FontDecorations.ui:148 dialogs/FontDecorations.ui:161
+#: dialogs/FontDecorations.ui:174 dialogs/FontDecorations.ui:187
+#: dialogs/FontDecorations.ui:200 dialogs/ParagraphBulletsNumbers.ui:221
+#: dialogs/ParagraphDecorations.ui:55 dialogs/SimpleCharacterWidget.ui:128
+#: dialogs/SimpleInsertWidget.ui:49 dialogs/SimpleInsertWidget.ui:62
+#: dialogs/SimpleInsertWidget.ui:75 dialogs/SimpleInsertWidget.ui:88
+#: dialogs/SimpleInsertWidget.ui:101 dialogs/SimpleInsertWidget.ui:114
+#: dialogs/SimpleInsertWidget.ui:124 dialogs/SimpleParagraphWidget.ui:80
+#: dialogs/SimpleParagraphWidget.ui:204 dialogs/SimpleSpellCheckingWidget.ui:23
+#: dialogs/SimpleTableWidget.ui:101 dialogs/SimpleTableWidget.ui:111
+#: dialogs/SimpleTableWidget.ui:137
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (html), widget (QTextEdit, previewTextEdit)
+#: dialogs/ChangeConfigureDialog.ui:158
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-family:'MS Shell Dlg 2'; font-size:11pt; font-weight:600; text-"
+"decoration: underline;\">Preview</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:600;"
+"\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Inserted Text</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before the "
+"inserted text. This is a line of inserted text. This is a line after the "
+"inserted text.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'MS Shell Dlg 2';\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Deleted Text</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before the "
+"deleted text. This is a line of deleted text. This is a line after the "
+"deleted text.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'MS Shell Dlg 2';\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Formatted Text</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before the "
+"format-change text. This is a line of text whose format has been changed. "
+"This is a line of text after the format-change text.</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-family:'MS Shell Dlg 2'; font-size:11pt; font-weight:600; text-"
+"decoration: underline;\">Προεπισκόπηση</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:600;"
+"\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Εισαχθέν κείμενο</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">Αυτή είναι γραμμή κειμένου πριν το "
+"εισαχθέν κείμενο. Αυτή είναι γραμμή εισαχθέντος κειμένου. Αυτή είναι γραμμή "
+"μετά την εισαγωγή κειμένου.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'MS Shell Dlg 2';\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Διαγραφέν κείμενο</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">Αυτή είναι γραμμή κειμένου πριν το "
+"διαγραφέν κείμενο. Αυτή είναι γραμμή διαγραφέντος κειμένου. Αυτή είναι "
+"γραμμή μετά τη διαγραφή κειμένου.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'MS Shell Dlg 2';\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Μορφοποιημένο κείμενο</span></"
+"p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">Αυτή είναι γραμμή κειμένου πριν "
+"την αλλαγή μορφής του κειμένου. Αυτή είναι γραμμή κειμένου η μορφή του "
+"οποίου έχει αλλάξει. Αυτή είναι γραμμή κειμένου μετά από την αλλαγή μορφής "
+"του κειμένου.</span></p></body></html>"
+
+#. i18n: ectx: property (title), widget (QGroupBox, deletionGroupBox)
+#: dialogs/ChangeConfigureDialog.ui:172
+#, kde-format
+msgid "Deletions"
+msgstr "Διαγραφές"
+
+#. i18n: ectx: property (title), widget (QGroupBox, formatGroupBox)
+#: dialogs/ChangeConfigureDialog.ui:231
+#, kde-format
+msgid "Format Changes"
+msgstr "Τροποποιήσεις τύπων αποθήκευσης"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ChangeTrackingOptions)
+#: dialogs/ChangeTrackingOptionsWidget.ui:14
+#, kde-format
+msgid "Change Tracking Options"
+msgstr "Τροποποίηση επιλογών ιχνηλάτησης"
+
+#. i18n: ectx: property (text), widget (QPushButton, configureChangeTrackingButton)
+#: dialogs/ChangeTrackingOptionsWidget.ui:142
+#, kde-format
+msgid "Configure Settings"
+msgstr "Διαμόρφωση ρυθμίσεων"
+
+#. i18n: ectx: property (text), widget (QCheckBox, recordChangesCheckBox)
+#: dialogs/ChangeTrackingOptionsWidget.ui:175
+#, kde-format
+msgid "Record Changes"
+msgstr "Τροποποιήσεις εγγραφών"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showChangesCheckBox)
+#: dialogs/ChangeTrackingOptionsWidget.ui:182
+#, kde-format
+msgid "Show Changes"
+msgstr "Εμφάνιση τροποποιήσεων"
+
+#: dialogs/CharacterGeneral.cpp:59 dialogs/FormattingPreview.cpp:38
+#, kde-format
+msgid "Font"
+msgstr "Γραμματοσειρά"
+
+#. i18n: ectx: attribute (title), widget (QWidget, generalTab)
+#: dialogs/CharacterGeneral.ui:27
+#, kde-format
+msgid "General"
+msgstr "Γενικά"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/CharacterGeneral.ui:33
+#, kde-format
+msgctxt "Name of the style"
+msgid "Name:"
+msgstr "Όνομα:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/CharacterGeneral.ui:46
+#, kde-format
+msgid "Next style:"
+msgstr "Επόμενο στιλ:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/CharacterGeneral.ui:62
+#, kde-format
+msgid "Parent style:"
+msgstr "Στιλ προγόνου:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, inToc)
+#: dialogs/CharacterGeneral.ui:78
+#, kde-format
+msgid "Include in table of contents"
+msgstr "Συμπερίληψη στον πίνακα των περιεχομένων"
+
+#: dialogs/CharacterHighlighting.cpp:260 dialogs/CharacterHighlighting.cpp:271
+#, kde-format
+msgid "Normal"
+msgstr "Κανονικό"
+
+#: dialogs/CharacterHighlighting.cpp:261
+#, kde-format
+msgid "Small Caps"
+msgstr "Μικρά κεφαλαία"
+
+#: dialogs/CharacterHighlighting.cpp:262
+#, kde-format
+msgid "Uppercase"
+msgstr "Κεφαλαία"
+
+#: dialogs/CharacterHighlighting.cpp:263
+#, kde-format
+msgid "Lowercase"
+msgstr "Πεζά"
+
+#: dialogs/CharacterHighlighting.cpp:264
+#, kde-format
+msgid "Capitalize"
+msgstr "Μετατροπή σε κεφαλαία"
+
+#: dialogs/CharacterHighlighting.cpp:272 TextTool.cpp:279
+#, kde-format
+msgid "Superscript"
+msgstr "Εκθέτης"
+
+#: dialogs/CharacterHighlighting.cpp:273 TextTool.cpp:285
+#, kde-format
+msgid "Subscript"
+msgstr "Δείκτης"
+
+#. i18n: ectx: property (text), widget (QLabel, textColorLabel)
+#: dialogs/CharacterHighlighting.ui:27 dialogs/FontDecorations.ui:49
+#, kde-format
+msgid "Text color:"
+msgstr "Χρώμα κειμένου:"
+
+#. i18n: ectx: property (text), widget (QLabel, backgroundColorLabel)
+#: dialogs/CharacterHighlighting.ui:71 dialogs/FontDecorations.ui:69
+#, kde-format
+msgid "Background color:"
+msgstr "Χρώμα φόντου:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/CharacterHighlighting.ui:110
+#, kde-format
+msgid "Underlining:"
+msgstr "Υπογράμμιση:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/CharacterHighlighting.ui:141
+#, kde-format
+msgid "Strikethrough:"
+msgstr "Επιγράμμιση:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/CharacterHighlighting.ui:172
+#, kde-format
+msgid "Capitalization:"
+msgstr "Μετατροπή σε κεφαλαία:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/CharacterHighlighting.ui:185
+#, kde-format
+msgctxt "Character position"
+msgid "Position:"
+msgstr "Θέση:"
+
+#: dialogs/CitationInsertionDialog.cpp:25
+#, kde-format
+msgid "Select"
+msgstr "Επιλογή"
+
+#: dialogs/CitationInsertionDialog.cpp:40
+#, kde-format
+msgid ""
+"The document already contains the bibliography entry with different data.\n"
+"Do you want to adjust existing entries?"
+msgstr ""
+"Το έγγραφο περιέχει ήδη τη βιβλιογραφική παράθεση με διαφορετικά δεδομένα.\n"
+"Θέλετε να διευθετήσετε τις υφιστάμενες παραθέσεις;"
+
+#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:426
+#, kde-format
+msgid "Warning"
+msgstr "Προειδοποίηση"
+
+#: dialogs/CitationInsertionDialog.cpp:55
+#: dialogs/CitationInsertionDialog.cpp:73
+#, kde-format
+msgid "Short name%1"
+msgstr "Σύντομο όνομα%1"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, CitationInsertionDialog)
+#: dialogs/CitationInsertionDialog.ui:20
+#, kde-format
+msgid "Insert Bibliography entry"
+msgstr "Εισαγωγή βιβλιογραφικής παράθεσης"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/CitationInsertionDialog.ui:32
+#, kde-format
+msgid "Insert Bibliography Entry Details"
+msgstr "Εισαγωγή λεπτομερειών βιβλιογραφικής παράθεσης"
+
+#. i18n: ectx: property (text), widget (QLabel, shortnameLabel)
+#: dialogs/CitationInsertionDialog.ui:38
+#, kde-format
+msgid "Short Name:"
+msgstr "Σύντομο όνομα:"
+
+#. i18n: ectx: property (text), widget (QLabel, sourcetypeLabel)
+#: dialogs/CitationInsertionDialog.ui:52
+#, kde-format
+msgid "Source:"
+msgstr "Πηγή:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:60 dialogs/InsertBibliographyDialog.ui:61
+#, kde-format
+msgid "Article"
+msgstr "Άρθρο"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:65 dialogs/InsertBibliographyDialog.ui:66
+#, kde-format
+msgid "Book"
+msgstr "Βιβλίο"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:70 dialogs/InsertBibliographyDialog.ui:71
+#, kde-format
+msgid "Booklet"
+msgstr "Βιβλιάριο"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:75 dialogs/InsertBibliographyDialog.ui:76
+#, kde-format
+msgid "Conference"
+msgstr "Συνέδριο"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:80 dialogs/InsertBibliographyDialog.ui:81
+#, kde-format
+msgid "Email"
+msgstr "Email"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:85
+#, kde-format
+msgid "Inbook"
+msgstr "Inbook"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:90
+#, kde-format
+msgid "Incollection"
+msgstr "Incollection"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:95
+#, kde-format
+msgid "Inproceedings"
+msgstr "Inproceedings"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:100
+#: dialogs/InsertBibliographyDialog.ui:101
+#, kde-format
+msgid "Journal"
+msgstr "Περιοδικό"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:105
+#: dialogs/InsertBibliographyDialog.ui:106
+#, kde-format
+msgid "Manual"
+msgstr "Εγχειρίδιο"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:110
+#: dialogs/InsertBibliographyDialog.ui:111
+#, kde-format
+msgid "Masters thesis"
+msgstr "Μεταπτυχιακή διατριβή"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:115
+#: dialogs/InsertBibliographyDialog.ui:116
+#, kde-format
+msgid "Misc"
+msgstr "Διάφορα"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:120
+#: dialogs/InsertBibliographyDialog.ui:121
+#, kde-format
+msgid "PhD thesis"
+msgstr "Διδακτορική διατριβή"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:125
+#: dialogs/InsertBibliographyDialog.ui:126
+#, kde-format
+msgid "Proceedings"
+msgstr "Πρακτικά"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:130
+#, kde-format
+msgid "Tech Report"
+msgstr "Τεχνική έκθεση"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:135
+#: dialogs/InsertBibliographyDialog.ui:136
+#, kde-format
+msgid "Unpublished"
+msgstr "Αδημοσίευτο"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:140
+#: dialogs/InsertBibliographyDialog.ui:141
+#, kde-format
+msgid "WWW"
+msgstr "WWW"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:145
+#, kde-format
+msgid "custom 1"
+msgstr "προσαρμοσμένο 1"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:150
+#, kde-format
+msgid "custom 2"
+msgstr "προσαρμοσμένο 2"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:155
+#, kde-format
+msgid "custom 3"
+msgstr "προσαρμοσμένο 3"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:160
+#, kde-format
+msgid "custom 4"
+msgstr "προσαρμοσμένο 4"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:165
+#, kde-format
+msgid "custom 5"
+msgstr "προσαρμοσμένο 5"
+
+#. i18n: ectx: property (text), widget (QLabel, authorLabel)
+#: dialogs/CitationInsertionDialog.ui:173
+#, kde-format
+msgid "Author:"
+msgstr "Συγγραφέας:"
+
+#. i18n: ectx: property (text), widget (QLabel, titleLabel)
+#: dialogs/CitationInsertionDialog.ui:183
+#: dialogs/InsertBibliographyDialog.ui:32
+#, kde-format
+msgid "Title:"
+msgstr "Τίτλος:"
+
+#. i18n: ectx: property (text), widget (QLabel, yearLabel)
+#: dialogs/CitationInsertionDialog.ui:193
+#, kde-format
+msgid "Year:"
+msgstr "Έτος:"
+
+#. i18n: ectx: property (text), widget (QLabel, publisherLabel)
+#: dialogs/CitationInsertionDialog.ui:203
+#, kde-format
+msgid "Publisher:"
+msgstr "Εκδότης:"
+
+#. i18n: ectx: property (text), widget (QLabel, addressLabel)
+#: dialogs/CitationInsertionDialog.ui:213
+#, kde-format
+msgid "Address:"
+msgstr "Διεύθυνση:"
+
+#. i18n: ectx: property (text), widget (QLabel, isbnLabel)
+#: dialogs/CitationInsertionDialog.ui:223
+#, kde-format
+msgid "ISBN:"
+msgstr "ISBN:"
+
+#. i18n: ectx: property (text), widget (QLabel, chapterLabel)
+#: dialogs/CitationInsertionDialog.ui:233
+#, kde-format
+msgid "Chapter:"
+msgstr "Κεφάλαιο:"
+
+#. i18n: ectx: property (text), widget (QLabel, issnLabel)
+#: dialogs/CitationInsertionDialog.ui:243
+#, kde-format
+msgid "ISSN:"
+msgstr "ISSN:"
+
+#. i18n: ectx: property (text), widget (QLabel, editorLabel)
+#: dialogs/CitationInsertionDialog.ui:253
+#, kde-format
+msgid "Editor:"
+msgstr "Συντάκτης:"
+
+#. i18n: ectx: property (text), widget (QLabel, pagesLabel)
+#: dialogs/CitationInsertionDialog.ui:263
+#, kde-format
+msgid "Page(s):"
+msgstr "Σελίδες:"
+
+#. i18n: ectx: property (text), widget (QLabel, booktitleLabel)
+#: dialogs/CitationInsertionDialog.ui:273
+#, kde-format
+msgid "Book title:"
+msgstr "Τίτλος βιβλίου:"
+
+#. i18n: ectx: property (text), widget (QLabel, editionLabel)
+#: dialogs/CitationInsertionDialog.ui:283
+#, kde-format
+msgid "Edition:"
+msgstr "Έκδοση:"
+
+#. i18n: ectx: property (text), widget (QLabel, publicationLabel)
+#: dialogs/CitationInsertionDialog.ui:293
+#, kde-format
+msgid "Publication:"
+msgstr "Δημοσίευση:"
+
+#. i18n: ectx: property (text), widget (QLabel, volumeLabel)
+#: dialogs/CitationInsertionDialog.ui:303
+#, kde-format
+msgid "Volume:"
+msgstr "Τόμος:"
+
+#. i18n: ectx: property (text), widget (QLabel, institutionLabel)
+#: dialogs/CitationInsertionDialog.ui:313
+#, kde-format
+msgid "Institution:"
+msgstr "Ίδρυμα:"
+
+#. i18n: ectx: property (text), widget (QLabel, organisationLabel)
+#: dialogs/CitationInsertionDialog.ui:323
+#, kde-format
+msgid "Organisation:"
+msgstr "Οργανισμός:"
+
+#. i18n: ectx: property (text), widget (QLabel, reporttypeLabel)
+#: dialogs/CitationInsertionDialog.ui:333
+#, kde-format
+msgid "Type of Report:"
+msgstr "Τύπος έκθεσης:"
+
+#. i18n: ectx: property (text), widget (QLabel, schoolLabel)
+#: dialogs/CitationInsertionDialog.ui:343
+#, kde-format
+msgid "University:"
+msgstr "Πανεπιστήμιο:"
+
+#. i18n: ectx: property (text), widget (QLabel, journalLabel)
+#: dialogs/CitationInsertionDialog.ui:353
+#, kde-format
+msgid "Journal:"
+msgstr "Περιοδικό:"
+
+#. i18n: ectx: property (text), widget (QLabel, monthLabel)
+#: dialogs/CitationInsertionDialog.ui:363
+#, kde-format
+msgid "Month:"
+msgstr "Μήνας:"
+
+#. i18n: ectx: property (text), widget (QLabel, seriesLabel)
+#: dialogs/CitationInsertionDialog.ui:373
+#, kde-format
+msgid "Series:"
+msgstr "Σειρά:"
+
+#. i18n: ectx: property (text), widget (QLabel, numberLabel)
+#: dialogs/CitationInsertionDialog.ui:383
+#, kde-format
+msgid "Number:"
+msgstr "Αριθμός:"
+
+#. i18n: ectx: property (text), widget (QLabel, noteLabel)
+#: dialogs/CitationInsertionDialog.ui:393
+#, kde-format
+msgid "Note:"
+msgstr "Σημείωση:"
+
+#. i18n: ectx: property (text), widget (QLabel, annotationLabel)
+#: dialogs/CitationInsertionDialog.ui:403
+#, kde-format
+msgid "Annotation:"
+msgstr "Σχόλιο:"
+
+#. i18n: ectx: property (text), widget (QLabel, urlLabel)
+#: dialogs/CitationInsertionDialog.ui:413
+#, kde-format
+msgid "URL:"
+msgstr "URL:"
+
+#. i18n: ectx: property (text), widget (QLabel, ud1Label)
+#: dialogs/CitationInsertionDialog.ui:423
+#, kde-format
+msgid "User-defined 1:"
+msgstr "User-defined 1:"
+
+#. i18n: ectx: property (text), widget (QLabel, ud3Label)
+#: dialogs/CitationInsertionDialog.ui:433
+#, kde-format
+msgid "User-defined 3:"
+msgstr "User-defined 3:"
+
+#. i18n: ectx: property (text), widget (QLabel, ud2Label)
+#: dialogs/CitationInsertionDialog.ui:440
+#, kde-format
+msgid "User-defined 2:"
+msgstr "User-defined 2:"
+
+#. i18n: ectx: property (text), widget (QLabel, ud4Label)
+#: dialogs/CitationInsertionDialog.ui:453
+#, kde-format
+msgid "User-defined 4:"
+msgstr "User-defined 4:"
+
+#. i18n: ectx: property (text), widget (QLabel, ud5Label)
+#: dialogs/CitationInsertionDialog.ui:463
+#, kde-format
+msgid "User-defined 5:"
+msgstr "User-defined 5:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/CitationInsertionDialog.ui:485
+#, kde-format
+msgid "OR"
+msgstr "OR"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/CitationInsertionDialog.ui:509
+#, kde-format
+msgid "From the document:"
+msgstr "Από το έγγραφο:"
+
+#: dialogs/DockerStylesComboModel.cpp:61
+#, kde-format
+msgid "Used Styles"
+msgstr "Μεταχειρισμένα στιλ"
+
+#: dialogs/DockerStylesComboModel.cpp:64
+#, kde-format
+msgid "Unused Styles"
+msgstr "Αχρησιμοποίητα στιλ"
+
+#. i18n: ectx: property (title), widget (QGroupBox)
+#: dialogs/FontDecorations.ui:17
+#, kde-format
+msgid "Colors"
+msgstr "Χρώματα"
+
+#. i18n: ectx: property (title), widget (QGroupBox, shadowGroupBox)
+#: dialogs/FontDecorations.ui:95
+#, kde-format
+msgid "Text Shadow"
+msgstr "Σκιά κειμένου"
+
+#. i18n: ectx: property (text), widget (QLabel, shadowColorLabel)
+#: dialogs/FontDecorations.ui:244
+#, kde-format
+msgid "Color:"
+msgstr "Χρώμα:"
+
+#. i18n: ectx: property (text), widget (QLabel, shadowDistanceLabel)
+#: dialogs/FontDecorations.ui:257
+#, kde-format
+msgid "Distance:"
+msgstr "Απόσταση:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, positionGroupBox)
+#: dialogs/FontDecorations.ui:289
+#, kde-format
+msgid "Position"
+msgstr "Θέση"
+
+#. i18n: ectx: property (text), widget (QCheckBox, hyphenate)
+#: dialogs/FontDecorations.ui:295
+#, kde-format
+msgid "Automatic hyphenation"
+msgstr "Αυτόματος συλλαβισμός"
+
+#: dialogs/FontDia.cpp:34
+#, kde-format
+msgid "Select Font"
+msgstr "Επιλογή γραμματοσειράς"
+
+#: dialogs/FontDia.cpp:68
+msgctxt "(qtundo-format)"
+msgid "Font"
+msgstr "Γραμματοσειρά"
+
+#. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
+#. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
+#: dialogs/InsertBibliographyDialog.ui:17
+#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:162
+#, kde-format
+msgid "Insert Bibliography"
+msgstr "Εισαγωγή βιβλιογραφίας"
+
+#. i18n: ectx: property (title), widget (QGroupBox, titlegroupBox)
+#: dialogs/InsertBibliographyDialog.ui:26
+#, kde-format
+msgid "Bibliography title"
+msgstr "τίτλος βιβλιογραφίας"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/InsertBibliographyDialog.ui:45
+#, kde-format
+msgid "Bibliography entries"
+msgstr "Βιβλιογραφικές παραθέσεις"
+
+#. i18n: ectx: property (text), widget (QLabel, bibTypesLabel)
+#: dialogs/InsertBibliographyDialog.ui:53
+#, kde-format
+msgid "Bibliography type:"
+msgstr "Τύπος βιβλιογραφίας:"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:86
+#, kde-format
+msgid "In book"
+msgstr "Στο βιβλίο"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:91
+#, kde-format
+msgid "In collection"
+msgstr "Στη συλλογή"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:96
+#, kde-format
+msgid "In proceedings"
+msgstr "Στα πρακτικά"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:131
+#, kde-format
+msgid "Tech report"
+msgstr "Τεχνική έκθεση"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:146
+#, kde-format
+msgid "custom1"
+msgstr "προσαρμοσμένο1"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:151
+#, kde-format
+msgid "custom2"
+msgstr "προσαρμοσμένο2"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:156
+#, kde-format
+msgid "custom3"
+msgstr "προσαρμοσμένο3"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:161
+#, kde-format
+msgid "custom4"
+msgstr "προσαρμοσμένο4"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:166
+#, kde-format
+msgid "custom5"
+msgstr "προσαρμοσμένο5"
+
+#. i18n: ectx: property (text), widget (QLabel, availableFieldsLabel)
+#: dialogs/InsertBibliographyDialog.ui:178
+#, kde-format
+msgid "Available fields "
+msgstr "Διαθέσιμα πεδία "
+
+#. i18n: ectx: property (text), widget (QPushButton, add)
+#: dialogs/InsertBibliographyDialog.ui:192
+#, kde-format
+msgid "Add >>"
+msgstr "Προσθήκη >>"
+
+#. i18n: ectx: property (text), widget (QPushButton, span)
+#: dialogs/InsertBibliographyDialog.ui:199
+#, kde-format
+msgid "Span"
+msgstr "Επέκταση"
+
+#. i18n: ectx: property (text), widget (QPushButton, remove)
+#: dialogs/InsertBibliographyDialog.ui:206
+#, kde-format
+msgid "<<Remove"
+msgstr "<<Αφαίρεση"
+
+#. i18n: ectx: property (text), widget (QLabel, addedFieldsLabel)
+#: dialogs/InsertBibliographyDialog.ui:217
+#, kde-format
+msgid "Fields added"
+msgstr "Πεδία προστέθηκαν"
+
+#: dialogs/InsertCharacter.cpp:16
+#, kde-format
+msgid "Special Characters"
+msgstr "Ειδικοί χαρακτήρες"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
+#: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
+#: ReferencesTool.cpp:114 TextTool.cpp:2259
+#, kde-format
+msgid "Insert"
+msgstr "Εισαγωγή"
+
+#: dialogs/InsertCharacter.cpp:28
+#, kde-format
+msgctxt "Close dialog"
+msgid "Close"
+msgstr "Κλείσιμο"
+
+#. i18n: ectx: property (text), widget (QLabel, filterLabel)
+#: dialogs/LanguageTab.ui:19
+#, kde-format
+msgid "Quick search:"
+msgstr "Γρήγορη αναζήτηση:"
+
+#: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
+#: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:279
+#, kde-format
+msgid "The URL is invalid"
+msgstr "Το URL δεν είναι έγκυρο"
+
+#: dialogs/LinkInsertionDialog.cpp:88
+#, kde-format
+msgid "Bookmark does not exist"
+msgstr "Ο σελιδοδείκτης δεν υπάρχει"
+
+#: dialogs/LinkInsertionDialog.cpp:190
+#, no-c-format, kde-format
+msgid "Fetching the title: 0% complete"
+msgstr "Προσκόμιση τίτλου: 0% συμπληρωμένο"
+
+#: dialogs/LinkInsertionDialog.cpp:213
+#, kde-format
+msgid "Fetch timed out"
+msgstr "Λήξη χρόνου προσκόμισης"
+
+#: dialogs/LinkInsertionDialog.cpp:268
+#, no-c-format, kde-format
+msgid "Fetching the title: %1% complete"
+msgstr "Προσκόμιση τίτλου: %1% συμπληρωμένο"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, LinkInsertionDialog)
+#: dialogs/LinkInsertionDialog.ui:14
+#, kde-format
+msgid "Link"
+msgstr "Σύνδεσμος"
+
+#. i18n: ectx: attribute (title), widget (QWidget, weblinkInsertionTab)
+#: dialogs/LinkInsertionDialog.ui:30
+#, kde-format
+msgid "Web Link"
+msgstr "Σύνδεσμος ιστού"
+
+#. i18n: ectx: attribute (toolTip), widget (QWidget, weblinkInsertionTab)
+#: dialogs/LinkInsertionDialog.ui:34
+#, kde-format
+msgid ""
+"Insert links to web documents. You can provide both URL and a label for the "
+"link,\n"
+" or just enter the URL and hit \"Fetch the title from URL\""
+msgstr ""
+"Εισάγετε συνδέσμους σε έγγραφα ιστού. Μπορείτε αν δώσετε και το URL και μια "
+"ετικέτα για το σύνδεσμο,\n"
+" ή απλά εισαγάγετε το URL και πατήστε «Προσκόμιση τίτλου από το URL»"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_2)
+#: dialogs/LinkInsertionDialog.ui:42
+#, kde-format
+msgid "The address of your document (Uniform Resource Locator)"
+msgstr "Η διεύθυνση του εγγράφου σας (Uniform Resource Locator)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/LinkInsertionDialog.ui:45
+#, kde-format
+msgid " URL:"
+msgstr " URL:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, fetchTitleButton)
+#: dialogs/LinkInsertionDialog.ui:58
+#, kde-format
+msgid ""
+"Hit this button to get the title from the URL. Redirections are also "
+"handled. "
+msgstr ""
+"Πατήστε αυτό το κουμπί για να φέρετε το τίτλο από το URL. Γίνεται και "
+"χειρισμός ανακατεύθυνσης. "
+
+#. i18n: ectx: property (text), widget (QPushButton, fetchTitleButton)
+#: dialogs/LinkInsertionDialog.ui:61
+#, kde-format
+msgid "Fetch Title From URL"
+msgstr "Προσκόμιση τίτλου από URL"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QLabel, label_6)
+#: dialogs/LinkInsertionDialog.ui:81 dialogs/LinkInsertionDialog.ui:165
+#, kde-format
+msgid "The text that will be displayed for your link"
+msgstr "Το κείμενο που θα εμφανιστεί για το σύνδεσμό σας"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: dialogs/LinkInsertionDialog.ui:84 dialogs/LinkInsertionDialog.ui:168
+#, kde-format
+msgid " Text:"
+msgstr " Κείμενο:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, bookmarkLinkInsertionTab)
+#: dialogs/LinkInsertionDialog.ui:113
+#, kde-format
+msgid "Link To Bookmark"
+msgstr "Σύνδεσμος σε σελιδοδείκτη"
+
+#. i18n: ectx: attribute (toolTip), widget (QWidget, bookmarkLinkInsertionTab)
+#: dialogs/LinkInsertionDialog.ui:117
+#, kde-format
+msgid ""
+"Insert links to Bookmarks. To create bookmarks,\n"
+"click \"Bookmarks\" in the Links and Bookmarks section"
+msgstr ""
+"Εισαγωγή συνδέσμων σε σελιδοδείκτες. Δημιουργείτε σελιδοδείκτες,\n"
+"με κλικ στους «Σελιδοδείκτες» στους συνδέσμους και στην ενότητα των "
+"σελιδοδεικτών"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_5)
+#: dialogs/LinkInsertionDialog.ui:132
+#, kde-format
+msgid "The name of the bookmark to where the link has to point to"
+msgstr "Το όνομα του σελιδοδείκτη στον οποίο πρέπει να δείχνει ο σύνδεσμος"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: dialogs/LinkInsertionDialog.ui:135
+#, kde-format
+msgid " Name:"
+msgstr " Όνομα:"
+
+#. i18n: ectx: property (whatsThis), widget (QWidget, ParagraphIndentSpacing)
+#. i18n: ectx: property (whatsThis), widget (QGroupBox)
+#. i18n: ectx: property (whatsThis), widget (QWidget, ListLevelWidget)
+#: dialogs/ListLevelWidget.ui:14 dialogs/ParagraphIndentSpacing.ui:14
+#: dialogs/ParagraphIndentSpacing.ui:97
+#, kde-format
+msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
+msgstr "<p><ul><li><b>Απλή</b>: Η κανονική απόσταση γραμμών</li></ul></p> "
+
+#. i18n: ectx: property (text), widget (QCheckBox, addTabStop)
+#: dialogs/ListLevelWidget.ui:47
+#, kde-format
+msgid "Add tab stop"
+msgstr "Προσθήκη τέρματος καρτέλας"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
+#: dialogs/ListLevelWidget.ui:71
+#, kde-format
+msgid "Tab character"
+msgstr "Στηλοθέτης"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
+#: dialogs/ListLevelWidget.ui:76
+#, kde-format
+msgid "Space character"
+msgstr "Κενός χαρακτήρας"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
+#: dialogs/ListLevelWidget.ui:81
+#, kde-format
+msgid "Nothing"
+msgstr "Τίποτε"
+
+#. i18n: ectx: property (text), widget (QLabel, loremIpsum)
+#: dialogs/ListLevelWidget.ui:95
+#, kde-format
+msgid ""
+"              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed "
+"do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad "
+"minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex "
+"ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+"velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat "
+"cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id "
+"est laborum."
+msgstr ""
+"              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed "
+"do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad "
+"minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex "
+"ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+"velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat "
+"cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id "
+"est laborum."
+
+#. i18n: ectx: property (text), widget (QLabel, labelLabel)
+#: dialogs/ListLevelWidget.ui:117
+#, kde-format
+msgid "LABEL"
+msgstr "ΕΤΙΚΕΤΑ"
+
+#. i18n: ectx: property (text), widget (QLabel, tabStopLabel)
+#: dialogs/ListLevelWidget.ui:149
+#, kde-format
+msgid "First line separated from label by:"
+msgstr "Η πρώτη γραμμή διαωρισμένη από την ετικέτα με:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#. i18n: ectx: property (text), item, widget (QComboBox, alignment)
+#: dialogs/ListLevelWidget.ui:204 dialogs/ParagraphLayout.ui:23
+#, kde-format
+msgid "Left"
+msgstr "Αριστερά"
+
+#. i18n: ectx: property (text), widget (QRadioButton, center)
+#. i18n: ectx: property (text), item, widget (QComboBox, alignment)
+#: dialogs/ListLevelWidget.ui:209 dialogs/ParagraphLayout.ui:30
+#, kde-format
+msgid "Center"
+msgstr "Κέντρο"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#. i18n: ectx: property (text), item, widget (QComboBox, alignment)
+#: dialogs/ListLevelWidget.ui:214 dialogs/ParagraphLayout.ui:37
+#, kde-format
+msgid "Right"
+msgstr "Δεξιά"
+
+#. i18n: ectx: property (text), widget (QLabel, increaseLabel)
+#: dialogs/ListLevelWidget.ui:300
+#, kde-format
+msgid "Per level increase:"
+msgstr "Αύξηση ανά επίπεδο:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, numberTab)
+#: dialogs/ListLevelWidget.ui:334
+#, kde-format
+msgid "Number"
+msgstr "Αριθμός"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/ListLevelWidget.ui:366
+#, kde-format
+msgid "Format:"
+msgstr "Μορφή:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/ListLevelWidget.ui:429
+#, kde-format
+msgid "Display levels above:"
+msgstr "Εμφάνιση επιπέδων πάνω:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, synchro)
+#: dialogs/ListLevelWidget.ui:436
+#, kde-format
+msgid "Letter synchronization"
+msgstr "Συγχρονισμός γραμμάτων"
+
+#. i18n: ectx: attribute (title), widget (QWidget, bulletTab)
+#: dialogs/ListLevelWidget.ui:454
+#, kde-format
+msgid "Bullet"
+msgstr "Κουκκίδα"
+
+#. i18n: ectx: attribute (title), widget (QWidget, imageTab)
+#: dialogs/ListLevelWidget.ui:459
+#, kde-format
+msgid "Picture"
+msgstr "Φωτογραφία"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton)
+#: dialogs/ListLevelWidget.ui:481
+#, kde-format
+msgid "Load Image..."
+msgstr "Φόρτωση εικόνας..."
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: dialogs/ManageBookmark.ui:20
+#, kde-format
+msgid "&Rename"
+msgstr "&Μετονομασία"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: dialogs/ManageBookmark.ui:27
+#, kde-format
+msgid "&Delete"
+msgstr "&Διαγραφή"
+
+#: dialogs/ManageBookmarkDialog.cpp:69
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Μετονομασία σελιδοδείκτη"
+
+#: dialogs/ManageBookmarkDialog.cpp:70
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr "Δώστε νέο όνομα στον σελιδοδείκτη"
+
+#: dialogs/ManageBookmarkDialog.cpp:77 dialogs/ManageBookmarkDialog.cpp:118
+#, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr "Σελιδοδείκτης με όνομα \"%1\" ήδη υπάρχει."
+
+#: dialogs/ManageBookmarkDialog.cpp:110
+#, kde-format
+msgid "Insert Bookmark"
+msgstr "Εισαγωγή σελιδοδείκτη"
+
+#: dialogs/ManageBookmarkDialog.cpp:111
+#, kde-format
+msgid "Please provide a name for the bookmark"
+msgstr "Δώστε όνομα στον σελιδοδείκτη"
+
+#: dialogs/ManageBookmarkDialog.cpp:134 ReferencesTool.cpp:193
+#, kde-format
+msgid "Manage Bookmarks"
+msgstr "Διαχείριση σελιδοδεικτών"
+
+#: dialogs/NotesConfigurationDialog.cpp:24
+#, kde-format
+msgid "Footnote Settings"
+msgstr "Ρυθμίσεις υποσημειώσεων"
+
+#: dialogs/NotesConfigurationDialog.cpp:27
+#, kde-format
+msgid "Endnote Settings"
+msgstr "Ρυθμίσεις σημειώσεων τέλους"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/NotesConfigurationDialog.ui:54
+#, kde-format
+msgid "Automatic Numbering:"
+msgstr "Αυτόματη αρίθμηση:"
+
+#. i18n: ectx: property (text), widget (QLabel, prefix)
+#: dialogs/NotesConfigurationDialog.ui:75
+#, kde-format
+msgid " Prefix:"
+msgstr " Πρόθεμα:"
+
+#. i18n: ectx: property (text), widget (QLabel, startAt)
+#: dialogs/NotesConfigurationDialog.ui:85
+#, kde-format
+msgid " Start at:"
+msgstr " Αρχή στο:"
+
+#. i18n: ectx: property (text), widget (QLabel, numStyle)
+#: dialogs/NotesConfigurationDialog.ui:95
+#, kde-format
+msgid " Format:"
+msgstr "Μορφή:"
+
+#. i18n: ectx: property (text), widget (QLabel, suffix)
+#: dialogs/NotesConfigurationDialog.ui:111
+#, kde-format
+msgid " Suffix:"
+msgstr " Κατάληξη:"
+
+#. i18n: ectx: property (text), widget (QLabel, beginAt)
+#: dialogs/NotesConfigurationDialog.ui:127
+#, kde-format
+msgid "Starts over at:"
+msgstr "Επανεκκίνηση στο:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
+#: dialogs/NotesConfigurationDialog.ui:144
+#, kde-format
+msgid "Page"
+msgstr "Σελίδα"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
+#: dialogs/NotesConfigurationDialog.ui:149
+#, kde-format
+msgid "Chapter"
+msgstr "Κεφάλαιο"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
+#: dialogs/NotesConfigurationDialog.ui:154
+#, kde-format
+msgid "Document"
+msgstr "Έγγραφο"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:233
+#, kde-format
+msgid "1, 2, 3, ..."
+msgstr "1, 2, 3, ..."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:238
+#, kde-format
+msgid "a, b, c, ..., aa, ab, ..., ba, bb, ..."
+msgstr "a, b, c, ..., aa, ab, ..., ba, bb, ..."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:243
+#, kde-format
+msgid "A, B, C, ..., AA, AB, ..., BA, BB, ..."
+msgstr "A, B, C, ..., AA, AB, ..., BA, BB, ..."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:248
+#, kde-format
+msgid "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
+msgstr "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:253
+#, kde-format
+msgid "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
+msgstr "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:258
+#, kde-format
+msgid "i, ii, iii, ..."
+msgstr "i, ii, iii, ..."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:263
+#, kde-format
+msgid "I,II,III, ..."
+msgstr "I,II,III, ..."
+
+#. i18n: ectx: property (title), widget (QGroupBox, continuationBox)
+#: dialogs/NotesConfigurationDialog.ui:290
+#, kde-format
+msgid "Continuation Notice:"
+msgstr "Σημείωση συνέχειας:"
+
+#. i18n: ectx: property (text), widget (QLabel, cont2)
+#: dialogs/NotesConfigurationDialog.ui:305
+#, kde-format
+msgid "Text saying it is a continuation:"
+msgstr "Κείμενο που λέει ότι είναι συνέχεια:"
+
+#. i18n: ectx: property (text), widget (QLabel, cont1)
+#: dialogs/NotesConfigurationDialog.ui:315
+#, kde-format
+msgid " Text saying it will continue:"
+msgstr "Κείμενο που λέει ότι συνεχίζεται:"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:34
+#, kde-format
+msgctxt "Automatic horizontal alignment"
+msgid "Auto"
+msgstr "Αυτόματη"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:35
+#, kde-format
+msgctxt "Text alignment"
+msgid "Left"
+msgstr "Αριστερά"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:36
+#, kde-format
+msgctxt "Text alignment"
+msgid "Right"
+msgstr "Δεξιά"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:37
+#, kde-format
+msgctxt "Text alignment"
+msgid "Centered"
+msgstr "Στο κέντρο"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:39
+#, kde-format
+msgctxt "Tab follows the bullet or number"
+msgid "Tab Stop"
+msgstr "Τέλος στηλοθέτη"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:40
+#, kde-format
+msgctxt "Space"
+msgid "Space"
+msgstr "Διάστημα"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:41
+#, kde-format
+msgctxt "None"
+msgid "Nothing"
+msgstr "Τίποτε"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:335
+#, kde-format
+msgid "Select a list image"
+msgstr "Επιλογή εικόνας λίστας"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/ParagraphBulletsNumbers.ui:31
+#, kde-format
+msgid "Start at:"
+msgstr "Αρχή στο:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: dialogs/ParagraphBulletsNumbers.ui:57
+#, kde-format
+msgid "Alignment:"
+msgstr "Στοίχιση:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/ParagraphBulletsNumbers.ui:105
+#, kde-format
+msgid "Depth:"
+msgstr "Βάθος:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: dialogs/ParagraphBulletsNumbers.ui:128
+#, kde-format
+msgid "Display Levels:"
+msgstr "Επίπεδα εμφάνισης:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: dialogs/ParagraphBulletsNumbers.ui:148
+#, kde-format
+msgid "Bullet/Number followed by"
+msgstr "Κουκκίδες/αριθμοί ακολουθούμενοι από"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox_2)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox_3)
+#: dialogs/ParagraphBulletsNumbers.ui:158
+#: dialogs/ParagraphBulletsNumbers.ui:175
+#: dialogs/ParagraphBulletsNumbers.ui:192
+#, kde-format
+msgid " cm"
+msgstr " cm"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: dialogs/ParagraphBulletsNumbers.ui:165
+#, kde-format
+msgid "at"
+msgstr "σε"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: dialogs/ParagraphBulletsNumbers.ui:182
+#, kde-format
+msgid "Aligned at"
+msgstr "Στοίχιση σε"
+
+#. i18n: ectx: property (text), widget (QLabel, label_11)
+#: dialogs/ParagraphBulletsNumbers.ui:199
+#, kde-format
+msgid "Indented at"
+msgstr "Εσοχή σε"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/ParagraphBulletsNumbers.ui:211
+#, kde-format
+msgid "Custom character:"
+msgstr "Προσαρμοσμένος χαρακτήρας:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, restartNumbering)
+#: dialogs/ParagraphBulletsNumbers.ui:241
+#, kde-format
+msgid "Restart numbering at this paragraph"
+msgstr "Επανεκκίνηση αρίθμησης σε αυτήν την παράγραφο"
+
+#. i18n: ectx: property (text), widget (QCheckBox, letterSynchronization)
+#: dialogs/ParagraphBulletsNumbers.ui:248
+#, kde-format
+msgid "Letter Synchronization"
+msgstr "Συγχρονισμός γραμμάτων"
+
+#. i18n: ectx: property (text), widget (QLabel, widthLabel)
+#: dialogs/ParagraphBulletsNumbers.ui:257
+#, kde-format
+msgid "Width"
+msgstr "Πλάτος"
+
+#. i18n: ectx: property (text), widget (QLabel, insertImageLabel)
+#: dialogs/ParagraphBulletsNumbers.ui:264
+#, kde-format
+msgid "Insert Image"
+msgstr "Εισαγωγή εικόνας"
+
+#. i18n: ectx: property (text), widget (QLabel, heightLabel)
+#: dialogs/ParagraphBulletsNumbers.ui:274
+#, kde-format
+msgid "Height"
+msgstr "Ύψος"
+
+#. i18n: ectx: property (text), widget (QPushButton, insertImage)
+#: dialogs/ParagraphBulletsNumbers.ui:284
+#, kde-format
+msgid "Browse..."
+msgstr "Περιήγηση..."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:385
+#, kde-format
+msgid "Background"
+msgstr "Φόντο"
+
+#. i18n: ectx: property (text), widget (QLabel, backgroundColorLabel)
+#: dialogs/ParagraphDecorations.ui:65
+#, kde-format
+msgid "Background color"
+msgstr "Χρώμα φόντου"
+
+#: dialogs/ParagraphDropCaps.cpp:20
+#, kde-format
+msgid "Whole Word"
+msgstr "Ολόκληρη λέξη"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/ParagraphDropCaps.ui:32
+#, kde-format
+msgid "Drop caps:"
+msgstr "Απόρριψη κεφαλαίων:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/ParagraphDropCaps.ui:84
+#, kde-format
+msgid "Distance to paragraph:"
+msgstr "Απόσταση από παράγραφο:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/ParagraphDropCaps.ui:94
+#, kde-format
+msgid "Number of characters:"
+msgstr "Αριθμός χαρακτήρων:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/ParagraphDropCaps.ui:104
+#, kde-format
+msgid "Number of lines it covers:"
+msgstr "Αριθμός γραμμών που καλύπτει:"
+
+#: dialogs/ParagraphGeneral.cpp:40
+#, kde-format
+msgid "Indent/Spacing"
+msgstr "Εσοχή/διάστιχο"
+
+#: dialogs/ParagraphGeneral.cpp:45
+#, kde-format
+msgid "General Layout"
+msgstr "Γενική διάταξη"
+
+#: dialogs/ParagraphGeneral.cpp:50
+#, kde-format
+msgid "Bullets/Numbers"
+msgstr "Κουκκίδες/αριθμοί"
+
+#: dialogs/ParagraphGeneral.cpp:55
+#, kde-format
+msgid "Decorations"
+msgstr "Διακοσμήσεις"
+
+#: dialogs/ParagraphGeneral.cpp:60
+#, kde-format
+msgid "Drop Caps"
+msgstr "Απόρριψη κεφαλαίων"
+
+#: dialogs/ParagraphIndentSpacing.cpp:25
+#, kde-format
+msgctxt "Line spacing value"
+msgid "Single"
+msgstr "Μονό"
+
+#: dialogs/ParagraphIndentSpacing.cpp:26
+#, kde-format
+msgctxt "Line spacing value"
+msgid "1.5 Lines"
+msgstr "1.5 γραμμές"
+
+#: dialogs/ParagraphIndentSpacing.cpp:27
+#, kde-format
+msgctxt "Line spacing value"
+msgid "Double"
+msgstr "Διπλή γραμμή"
+
+#: dialogs/ParagraphIndentSpacing.cpp:28
+#, kde-format
+msgctxt "Line spacing type"
+msgid "Proportional"
+msgstr "Αναλογικό"
+
+#: dialogs/ParagraphIndentSpacing.cpp:29
+#, kde-format
+msgctxt "Line spacing type"
+msgid "Additional"
+msgstr "Επιπρόσθετο"
+
+#: dialogs/ParagraphIndentSpacing.cpp:30
+#, kde-format
+msgctxt "Line spacing type"
+msgid "Fixed"
+msgstr "Σταθερό"
+
+#: dialogs/ParagraphIndentSpacing.cpp:31
+#, kde-format
+msgctxt "Line spacing type"
+msgid "At least"
+msgstr "Στο ελάχιστο"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/ParagraphIndentSpacing.ui:20
+#, kde-format
+msgid "Indent"
+msgstr "Εσοχή"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:26
+#, kde-format
+msgid "Left:"
+msgstr "Αριστερά:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:55
+#, kde-format
+msgid "Right:"
+msgstr "Δεξιά:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:71
+#, kde-format
+msgid "First Line:"
+msgstr "Πρώτη γραμμή:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
+#: dialogs/ParagraphIndentSpacing.ui:87
+#, kde-format
+msgid "Auto-infer from text size"
+msgstr "Αυτόματη επιλογή από μέγεθος κειμένου"
+
+#. i18n: ectx: property (title), widget (QGroupBox)
+#: dialogs/ParagraphIndentSpacing.ui:100
+#, kde-format
+msgid "Line Spacing"
+msgstr "Απόσταση γραμμών"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, proportional)
+#: dialogs/ParagraphIndentSpacing.ui:134
+#, no-c-format, kde-format
+msgid " %"
+msgstr " %"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:180
+#, kde-format
+msgid "Use Font Metrics:"
+msgstr "Χρήση μετρήσεων γραμματοσειράς:"
+
+#. i18n: ectx: property (title), widget (QGroupBox)
+#: dialogs/ParagraphIndentSpacing.ui:202
+#, kde-format
+msgid "Paragraph Space"
+msgstr "Κενό παραγράφου"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:208
+#, kde-format
+msgid "Before:"
+msgstr "Πριν:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:221
+#, kde-format
+msgid "After:"
+msgstr "Μετά:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/ParagraphLayout.ui:17
+#, kde-format
+msgid "Alignment"
+msgstr "Στοίχιση"
+
+#. i18n: ectx: property (text), widget (QRadioButton, justify)
+#: dialogs/ParagraphLayout.ui:44
+#, kde-format
+msgid "Justify"
+msgstr "Ομοιόμορφη"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/ParagraphLayout.ui:54
+#, kde-format
+msgid "Behavior at End of Frame/Page"
+msgstr "Συμπεριφορά στο τέλος πλαισίου/σελίδας"
+
+#. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
+#: dialogs/ParagraphLayout.ui:60
+#, kde-format
+msgid "Keep lines together"
+msgstr "Διατήρηση γραμμών μαζί"
+
+#. i18n: ectx: property (text), widget (QCheckBox, breakBefore)
+#: dialogs/ParagraphLayout.ui:67
+#, kde-format
+msgid "Insert break before paragraph"
+msgstr "Εισαγωγή διακοπής πριν την παράγραφο"
+
+#. i18n: ectx: property (text), widget (QCheckBox, breakAfter)
+#: dialogs/ParagraphLayout.ui:74
+#, kde-format
+msgid "Insert break after paragraph"
+msgstr "Εισαγωγή διακοπής μετά την παράγραφο"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/ParagraphLayout.ui:83
+#, kde-format
+msgid "Leave at least this many lines (orphans):"
+msgstr "Αφήστε τουλάχιστον τόσες γραμμές (ορφανά):"
+
+#: dialogs/ParagraphSettingsDialog.cpp:28
+#, kde-format
+msgid "Paragraph Format"
+msgstr "Μορφή παραγράφου"
+
+#: dialogs/QuickTableButton.cpp:146
+#, kde-format
+msgid "Insert a table"
+msgstr "Εισαγωγή πίνακα"
+
+#: dialogs/SectionFormatDialog.cpp:41
+#, kde-format
+msgid "Section name"
+msgstr "Όνομα ενότητας"
+
+#: dialogs/SectionFormatDialog.cpp:103 dialogs/SectionsSplitDialog.cpp:20
+#, kde-format
+msgid "Configure sections"
+msgstr "Διαμόρφωση ρυθμίσεων"
+
+#: dialogs/SectionFormatDialog.cpp:154
+#, kde-format
+msgid "Invalid characters or section with such name exists."
+msgstr "Μη έγκυροι χαρακτήρες ή υπάρχει ενότητα με τέτοιο όνομα."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/SectionFormatDialog.ui:29
+#, kde-format
+msgid "Section name:"
+msgstr "Όνομα ενότητας:"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, SectionsSplitDialog)
+#: dialogs/SectionsSplitDialog.ui:6
+#, kde-format
+msgid "Split sections"
+msgstr "Διαίρεση ενοτήτων"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/SectionsSplitDialog.ui:12
+#, kde-format
+msgid "Insert paragraph..."
+msgstr "Εισαγωγή παραγράφου..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/SectionsSplitDialog.ui:23
+#, kde-format
+msgid "before start of section:"
+msgstr "πριν την αρχή της ενότητας:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/SectionsSplitDialog.ui:37
+#, kde-format
+msgid "after end of section:"
+msgstr "μετά το τέλος της ενότητας:"
+
+#. i18n: ectx: property (text), widget (QToolButton, insertAnnotation)
+#: dialogs/SimpleAnnotationWidget.ui:29
+#, kde-format
+msgid "Insert Note"
+msgstr "Εισαγωγή σημείωσης"
+
+#. i18n: ectx: property (text), widget (QToolButton, removeAnnotation)
+#: dialogs/SimpleAnnotationWidget.ui:39
+#, kde-format
+msgid "Remove Note"
+msgstr "Αφαίρεση σημείωσης"
+
+#. i18n: ectx: property (text), widget (QToolButton, addCitation)
+#: dialogs/SimpleCaptionsWidget.ui:34
+#, kde-format
+msgid "Add caption"
+msgstr "Προσθήκη λεζάντας"
+
+#: dialogs/SimpleCharacterWidget.cpp:53
+#, kde-format
+msgid "Change font format"
+msgstr "Αλλαγή διαμόρφωσης γραμματοσειράς"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, addCitation)
+#: dialogs/SimpleCitationBibliographyWidget.ui:23
+#, kde-format
+msgid "Insert citation at current position"
+msgstr "Εισαγωγή παραπομπής στην τρέχουσα θέση"
+
+#. i18n: ectx: property (text), widget (QToolButton, addCitation)
+#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:157
+#, kde-format
+msgid "Insert Citation"
+msgstr "Εισαγωγή παραπομπής"
+
+#. i18n: ectx: property (text), widget (QToolButton, configureBibliography)
+#: dialogs/SimpleCitationBibliographyWidget.ui:55
+#, kde-format
+msgid "Configure Bibliography"
+msgstr "Διαμόρφωση βιβλιογραφίας"
+
+#: dialogs/SimpleFootEndNotesWidget.cpp:27
+#, kde-format
+msgid "Inserts a footnote at the current cursor position"
+msgstr "Εισαγωγή υποσημείωσης στην τρέχουσα θέση του δρομέα"
+
+#: dialogs/SimpleFootEndNotesWidget.cpp:32
+#, kde-format
+msgid "Inserts an endnote at the current cursor position"
+msgstr "Εισαγωγή σημείωσης τέλους στην τρέχουσα θέση του δρομέα"
+
+#. i18n: ectx: property (text), widget (FormattingButton, addEndnote)
+#: dialogs/SimpleFootEndNotesWidget.ui:29
+#, kde-format
+msgid "Endnote"
+msgstr "Σημείωση τέλους"
+
+#. i18n: ectx: property (text), widget (FormattingButton, addFootnote)
+#: dialogs/SimpleFootEndNotesWidget.ui:48
+#, kde-format
+msgid "Footnote"
+msgstr "Υποσημείωση"
+
+#. i18n: ectx: property (toolTip), widget (QWidget, SimpleInsertWidget)
+#: dialogs/SimpleInsertWidget.ui:20
+#, kde-format
+msgid "Other insertions from \"References\"  below and in \"Add Shape\" docker"
+msgstr ""
+"Άλλες εισαγωγές από «Παραπομπές» πιο κάτω και στην προσάρτηση «Προσθήκη "
+"σχήματος»"
+
+#. i18n: ectx: property (text), widget (QToolButton, insertLink)
+#: dialogs/SimpleLinksWidget.ui:34
+#, kde-format
+msgid "Hyperlinks"
+msgstr "Σύνδεσμοι"
+
+#. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
+#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:189
+#, kde-format
+msgid "Bookmarks"
+msgstr "Σελιδοδείκτες"
+
+#: dialogs/SimpleParagraphWidget.cpp:84
+#, kde-format
+msgid "Change paragraph format"
+msgstr "Αλλαγή διαμόρφωσης παραγράφου"
+
+#: dialogs/SimpleParagraphWidget.cpp:292
+#, kde-format
+msgid "Recently Used Level Formats"
+msgstr "Πρόσφατα χρησιμοποιημένες μορφές επιπέδων"
+
+#: dialogs/SimpleParagraphWidget.cpp:297
+#, kde-format
+msgid "Library of Level Formats"
+msgstr "Βιβλιοθήκη μορφών επιπέδων"
+
+#. i18n: ectx: property (text), widget (QPushButton, bDelete)
+#: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
+#: dialogs/StyleManager.ui:75 TextTool.cpp:2621
+#, kde-format
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: dialogs/SimpleParagraphWidget.cpp:304 dialogs/SimpleParagraphWidget.cpp:359
+#, kde-format
+msgid "Edit..."
+msgstr "Επεξεργασία..."
+
+#: dialogs/SimpleParagraphWidget.cpp:312
+#, kde-format
+msgid "Define New Level Format..."
+msgstr "Ορισμός νέας μορφής επιπέδου..."
+
+#: dialogs/SimpleParagraphWidget.cpp:313
+#, kde-format
+msgid "Define new bullet or numbering format"
+msgstr "Ορισμός νέας μορφής κουκίδας ή αρίθμησης..."
+
+#: dialogs/SimpleParagraphWidget.cpp:333
+#, kde-format
+msgid "Define New List Level Format"
+msgstr "Ορισμός νέας μορφής επιπέδου λίστας"
+
+#: dialogs/SimpleParagraphWidget.cpp:532
+#, kde-format
+msgid "Edit List Level Format"
+msgstr "Επεξεργασία μορφής επιπέδου λίστας"
+
+#. i18n: ectx: property (text), widget (FormattingButton, addToC)
+#: dialogs/SimpleTableOfContentsWidget.ui:34
+#: dialogs/TableOfContentsTemplate.cpp:38
+#, kde-format
+msgid "Contents"
+msgstr "Περιεχόμενα"
+
+#: dialogs/SimpleTableWidget.cpp:45
+#, kde-format
+msgid "Set Border Color..."
+msgstr "Ορισμός χρώματος περιγράμματος..."
+
+#: dialogs/SimpleTableWidget.cpp:170
+#, kde-format
+msgctxt "No border - has to fit in 48pixels"
+msgid "None"
+msgstr "Κανένα"
+
+#: dialogs/SimpleTableWidget.cpp:171
+#, kde-format
+msgid "No Border"
+msgstr "Κανένα περίγραμμα"
+
+#: dialogs/StyleManager.cpp:38
+#, kde-format
+msgid "Create a new style inheriting the current style"
+msgstr "Δημιουργία νέου στιλ που να κληρονομεί το τρέχον στιλ"
+
+#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:356
+#, kde-format
+msgid "New Style"
+msgstr "Νέο στιλ"
+
+#: dialogs/StyleManager.cpp:426
+#, kde-format
+msgid "Another style named '%1' already exist. Please choose another name."
+msgstr "Ένα άλλο στιλ με όνομα '%1' ήδη υπάρχει. Επιλέξτε άλλο όνομα."
+
+#. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
+#: dialogs/StyleManager.ui:46 TextTool.cpp:2251
+#, kde-format
+msgid "Paragraph"
+msgstr "Παράγραφος"
+
+#. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
+#: dialogs/StyleManager.ui:60 TextTool.cpp:2249
+#, kde-format
+msgid "Character"
+msgstr "Χαρακτήρας"
+
+#. i18n: ectx: property (text), widget (QPushButton, bNew)
+#: dialogs/StyleManager.ui:68
+#, kde-format
+msgid "&New"
+msgstr "&Νέο"
+
+#: dialogs/StyleManagerDialog.cpp:20
+#, kde-format
+msgid "Style Manager"
+msgstr "Διαχειριστής στιλ"
+
+#: dialogs/StyleManagerDialog.cpp:49
+#, kde-format
+msgid "Save Changes"
+msgstr "Αποθήκευση τροποποιήσεων"
+
+#: dialogs/StyleManagerDialog.cpp:49
+#, kde-format
+msgid ""
+"You have changes that are not applied. What do you want to do with those "
+"changes?"
+msgstr ""
+"Έχετε τροποποιήσεις που δεν έχουν εφαρμοστεί. Τι θέλετε να κάνετε με αυτές "
+"τις τροποποιήσεις;"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/StyleManagerWelcome.ui:42
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">It is possible to assign a "
+"named style to text and alter the style properties to change all text with "
+"that style.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Applying a style change "
+"will reformat all text that previously got the named style assigned to it. "
+"Use the Styles docker to apply styles to text.</p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Είναι δυνατό να οριστεί "
+"επώνυμο στιλ σε κείμενο και να τροποποιηθούν οι ιδιότητες του στιλ για την "
+"αλλαγή όλου του κειμένου με το στιλ αυτό.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Η εφαρμογή αλλαγής σε στιλ "
+"θα αναμορφώσει όλο το κείμενο με το επώνυμο στιλ με το οποίο προηγουμένως "
+"είχε οριστεί. Χρησιμοποιήστε την προσάρτηση στιλ για να ορίσετε στιλ σε "
+"κείμενο.</p></body></html>"
+
+#: dialogs/StylesComboPreview.cpp:68
+#, kde-format
+msgid "Create a new style with the current properties"
+msgstr "δημιουργία νέου στιλ με τις τρέχουσες ιδιότητες"
+
+#: dialogs/StylesComboPreview.cpp:179
+#, kde-format
+msgid "New style"
+msgstr "Νέο στιλ"
+
+#: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:113
+#: dialogs/StylesModel.cpp:197
+#, kde-format
+msgid "None"
+msgstr "Κανένα"
+
+#: dialogs/TableDialog.cpp:14
+#, kde-format
+msgid "Insert Table"
+msgstr "Εισαγωγή πίνακα"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupLogical)
+#: dialogs/TableDialog.ui:23
+#, kde-format
+msgid "Columns and rows"
+msgstr "Στήλες και γραμμές"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColumns)
+#: dialogs/TableDialog.ui:32
+#, kde-format
+msgid "Number of columns:"
+msgstr "Αριθμός στηλών:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelRows)
+#: dialogs/TableDialog.ui:55
+#, kde-format
+msgid "Number of rows:"
+msgstr "Αριθμός γραμμών:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupPhysical)
+#: dialogs/TableDialog.ui:97
+#, kde-format
+msgid "Width strategy"
+msgstr "Στρατηγική πλάτους"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioFixed)
+#: dialogs/TableDialog.ui:112
+#, kde-format
+msgid "Fixed column width:"
+msgstr "Σταθερό πλάτος στήλης:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioFitContents)
+#: dialogs/TableDialog.ui:125
+#, kde-format
+msgid "Fit to contents"
+msgstr "Προσαρμογή στα περιεχόμενα"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioFitAvail)
+#: dialogs/TableDialog.ui:138
+#, kde-format
+msgid "Fit to available surrounding"
+msgstr "Προσαρμογή στο διαθέσιμο περιβάλλον"
+
+#: dialogs/TableOfContentsConfigure.cpp:62
+#, kde-format
+msgid "Table of Contents - Configure"
+msgstr "Περιεχόμενα - Διαμόρφωση"
+
+#: dialogs/TableOfContentsConfigure.cpp:64
+#, kde-format
+msgid "Table Title"
+msgstr "Τίτλος πίνακα"
+
+#: dialogs/TableOfContentsConfigure.cpp:65
+#, kde-format
+msgid "Use outline"
+msgstr "Χρήση περιγράμματος"
+
+#: dialogs/TableOfContentsConfigure.cpp:66
+#, kde-format
+msgid "Use styles"
+msgstr "Χρήση στιλ"
+
+#: dialogs/TableOfContentsConfigure.cpp:67 ReferencesTool.cpp:170
+#, kde-format
+msgid "Configure"
+msgstr "Διαμόρφωση"
+
+#: dialogs/TableOfContentsConfigure.cpp:68
+#, kde-format
+msgid "Index"
+msgstr "Ευρετήριο"
+
+#: dialogs/TableOfContentsConfigure.cpp:69
+#: dialogs/TableOfContentsStyleModel.cpp:232
+#, kde-format
+msgid "Styles"
+msgstr "Στιλ"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: dialogs/TableOfContentsConfigure.ui:49
+#, kde-format
+msgid "Tab 1"
+msgstr "Στηλοθέτης 1"
+
+#. i18n: ectx: property (text), widget (QLabel, labelTitle)
+#: dialogs/TableOfContentsConfigure.ui:57
+#: dialogs/TableOfContentsEntryModel.cpp:27
+#, kde-format
+msgid "Title"
+msgstr "Τίτλος"
+
+#. i18n: ectx: property (text), widget (QCheckBox, useOutline)
+#. i18n: ectx: property (text), widget (QCheckBox, useStyles)
+#: dialogs/TableOfContentsConfigure.ui:69
+#: dialogs/TableOfContentsConfigure.ui:78
+#, kde-format
+msgid "CheckBox"
+msgstr "Πλαίσιο"
+
+#. i18n: ectx: property (text), widget (QPushButton, configureStyles)
+#: dialogs/TableOfContentsConfigure.ui:85
+#, kde-format
+msgid "PushButton"
+msgstr "Κουμπί"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: dialogs/TableOfContentsConfigure.ui:108
+#, kde-format
+msgid "Tab 2"
+msgstr "Στηλοθέτης 2"
+
+#: dialogs/TableOfContentsEntryModel.cpp:30
+#, kde-format
+msgid "Level %1"
+msgstr "Επίπεδο %1"
+
+#: dialogs/TableOfContentsEntryModel.cpp:137
+#: dialogs/TableOfContentsStyleModel.cpp:234
+#, kde-format
+msgid "Level"
+msgstr "Επίπεδο"
+
+#: dialogs/TableOfContentsEntryModel.cpp:139
+#, kde-format
+msgid "Style"
+msgstr "Στιλ"
+
+#: dialogs/TableOfContentsStyleConfigure.cpp:26
+#, kde-format
+msgid "Table of Contents - Configure Styles"
+msgstr "Περιεχόμενα - Διαμόρφωση στιλ"
+
+#: dialogs/TableOfContentsStyleConfigure.cpp:30
+#, kde-format
+msgid "Styles available"
+msgstr "Διαθέσιμα στιλ"
+
+#. i18n: ectx: property (text), widget (QLabel, stylesAvailableLabel)
+#: dialogs/TableOfContentsStyleConfigure.ui:20
+#, kde-format
+msgid "TextLabel"
+msgstr "TextLabel"
+
+#: dialogs/TableOfContentsStyleDelegate.cpp:43
+#: dialogs/TableOfContentsStyleModel.cpp:97
+#, kde-format
+msgid "Disabled"
+msgstr "Ανενεργό"
+
+#: dialogs/TableOfContentsTemplate.cpp:27
+#, kde-format
+msgid "Table Of Contents"
+msgstr "Πίνακας περιεχομένων"
+
+#: ReferencesTool.cpp:116
+#, kde-format
+msgid "Insert a Table of Contents into the document."
+msgstr "Εισαγωγή πίνακα περιεχομένων στο έγγραφο."
+
+#: ReferencesTool.cpp:118 TextTool.cpp:410
+#, kde-format
+msgid "Insert Custom..."
+msgstr "Εισαγωγή προσαρμογής..."
+
+#: ReferencesTool.cpp:120
+#, kde-format
+msgid "Insert a custom Table of Contents into the document."
+msgstr "Εισαγωγή προσαρμοσμένου πίνακα περιεχομένων στο έγγραφο."
+
+#: ReferencesTool.cpp:122
+#, kde-format
+msgid "Configure..."
+msgstr "Διαμόρφωση..."
+
+#: ReferencesTool.cpp:124
+#, kde-format
+msgid "Configure the Table of Contents"
+msgstr "Διαμόρφωση του πίνακα περιεχομένων"
+
+#: ReferencesTool.cpp:127
+#, kde-format
+msgid "Insert footnote with auto number"
+msgstr "Εισαγωγή υποσέλιδου με αυτόματη αρίθμηση"
+
+#: ReferencesTool.cpp:132
+#, kde-format
+msgid "Insert Labeled Footnote"
+msgstr "Εισαγωγή υποσημείωσης με τίτλο"
+
+#: ReferencesTool.cpp:133 ReferencesTool.cpp:144
+#, kde-format
+msgid "Insert with label:"
+msgstr "Εισαγωγή με ετικέτα:"
+
+#: ReferencesTool.cpp:138
+#, kde-format
+msgid "Insert endnote with auto number"
+msgstr "Εισαγωγή σημείωσης τέλους με αυτόματη αρίθμηση"
+
+#: ReferencesTool.cpp:143
+#, kde-format
+msgid "Insert Labeled Endnote"
+msgstr "Εισαγωγή σημείωσης τέλους με τίτλο"
+
+#: ReferencesTool.cpp:149 ReferencesTool.cpp:153
+#, kde-format
+msgid "Settings..."
+msgstr "Ρυθμίσεις..."
+
+#: ReferencesTool.cpp:159
+#, kde-format
+msgid "Insert a citation into the document."
+msgstr "Εισαγωγή παράθεσης στο έγγραφο."
+
+#: ReferencesTool.cpp:164
+#, kde-format
+msgid "Insert a bibliography into the document."
+msgstr "Εισαγωγή βιβλιογραφίας στο έγγραφο."
+
+#: ReferencesTool.cpp:166
+#, kde-format
+msgid "Insert Custom Bibliography"
+msgstr "Εισαγωγή προσαρμοσμένης βιβλιογραφίας"
+
+#: ReferencesTool.cpp:168
+#, kde-format
+msgid "Insert a custom Bibliography into the document."
+msgstr "Εισαγωγή προσαρμοσμένης βιβλιογραφίας στο έγγραφο."
+
+#: ReferencesTool.cpp:172
+#, kde-format
+msgid "Configure the bibliography"
+msgstr "Διαμόρφωση της βιβλιογραφίας"
+
+#: ReferencesTool.cpp:175
+#, kde-format
+msgid "Insert Link"
+msgstr "Εισαγωγή συνδέσμου"
+
+#: ReferencesTool.cpp:177
+#, kde-format
+msgid "Insert a weblink or link to a bookmark."
+msgstr "Εισαγάγετε ιστοσύνδεσμο ή σύνδεσμο σε σελιδοδείκτη."
+
+#: ReferencesTool.cpp:181
+#, kde-format
+msgid "Add Bookmark"
+msgstr "Προσθήκη σελιδοδείκτη"
+
+#: ReferencesTool.cpp:182
+#, kde-format
+msgid "Add Bookmark :"
+msgstr "Προσθήκη σελιδοδείκτη :"
+
+#: ReferencesTool.cpp:187
+#, kde-format
+msgid ""
+"Insert a Bookmark. This is useful to create links that point to areas within "
+"the document"
+msgstr ""
+"Εισάγετε σελιδοδείκτη. Χρησιμεύει στη δημιουργία συνδέσμων που δείχνουν σε "
+"περιοχές του εγγράφου"
+
+#: ReferencesTool.cpp:191
+#, kde-format
+msgid ""
+"Display a pop up that hosts the options to add new Bookmark or handle "
+"existing Bookmarks"
+msgstr ""
+"Εμφανίζει ένα αναδυόμενο πλαίσιο επιλογών για προσθήκη νέου σελιδοδείκτη ή "
+"για το χειρισμό των υφισταμένων σελιδοδεικτών"
+
+#: ReferencesTool.cpp:195
+#, kde-format
+msgid ""
+"Manage your Bookmarks. Check where are they pointing to, Delete or Rename."
+msgstr ""
+"Διαχειριστείτε τους σελιδοδείκτες σας. Ελέγξτε που δείχνουν, διαγράψτε ή "
+"μετονομάστε τους."
+
+#: ReferencesTool.cpp:231
+#, kde-format
+msgctxt "as in table of contents, list of pictures, index"
+msgid "Tables, Lists & Indexes"
+msgstr "Πίνακες, λίστες & δείκτες"
+
+#: ReferencesTool.cpp:234
+#, kde-format
+msgid "Footnotes and Endnotes"
+msgstr "Υποσημειώσεις και Σημειώσεις τέλους"
+
+#: ReferencesTool.cpp:237
+#, kde-format
+msgid "Citations and Bibliography"
+msgstr "Παραθέσεις και Βιβλιογραφία"
+
+#: ReferencesTool.cpp:240
+#, kde-format
+msgid "Links and Bookmarks"
+msgstr "Σύνδεσμοι και σελιδοδείκτες"
+
+#: ReferencesTool.cpp:366
+#, kde-format
+msgid "Bookmark cannot be empty"
+msgstr "Ο σελιδοδείκτης δεν γίνεται να είναι κενός"
+
+#: ReferencesTool.cpp:373
+#, kde-format
+msgid "Duplicate Name. Click \"Manage Bookmarks\""
+msgstr "Αντίγραφο ονόματος. Κάνετε κλικ στη «Διαχείριση σελιδοδεικτών»"
+
+#: ReferencesTool.cpp:374
+#, kde-format
+msgid "to Rename or Delete Bookmarks"
+msgstr "για να μετονομάσετε ή να διαγράψετε σελιδοδείκτες"
+
+#: ReviewTool.cpp:53 ReviewTool.cpp:54
+#, kde-format
+msgid "Remove Comment"
+msgstr "Αφαίρεση σχολίου"
+
+#: ReviewTool.cpp:98
+#, kde-format
+msgid "Spell check"
+msgstr "Ορθογραφικός έλεγχος"
+
+#: ReviewTool.cpp:101
+#, kde-format
+msgid "Comments"
+msgstr "Σχόλια"
+
+#: ReviewToolFactory.cpp:24
+#, kde-format
+msgid "Review"
+msgstr "Επιθεώρηση"
+
+#: TextShapeFactory.cpp:31 TextShapeFactory.cpp:41
+#, kde-format
+msgid "Text"
+msgstr "Κείμενο"
+
+#: TextShapeFactory.cpp:33
+#, kde-format
+msgid "A shape that shows text"
+msgstr "Ένα σχήμα που εμφανίζει κάποιο κείμενο"
+
+#: TextShapeFactory.cpp:43
+#, kde-format
+msgid "Text Shape"
+msgstr "Text Shape"
+
+#: TextTool.cpp:201
+#, kde-format
+msgid "Configure current section"
+msgstr "Διαμόρφωση τρέχουσας ενότητας"
+
+#: TextTool.cpp:205
+#, kde-format
+msgid "Insert new section"
+msgstr "Εισαγωγή τρέχουσας ενότητας"
+
+#: TextTool.cpp:209
+#, kde-format
+msgid "Insert paragraph between sections"
+msgstr "Εισαγωγή παραγράφου μεταξύ ενοτήτων"
+
+#: TextTool.cpp:213
+#, kde-format
+msgid "Paste As Text"
+msgstr "Επικόλληση ως κείμενο"
+
+#: TextTool.cpp:218
+#, kde-format
+msgid "Bold"
+msgstr "Έντονα"
+
+#: TextTool.cpp:224
+#, kde-format
+msgid "Italic"
+msgstr "Πλάγια"
+
+#: TextTool.cpp:230
+#, kde-format
+msgctxt "Text formatting"
+msgid "Underline"
+msgstr "Υπογράμμιση"
+
+#: TextTool.cpp:236
+#, kde-format
+msgid "Strikethrough"
+msgstr "Επιγράμμιση"
+
+#: TextTool.cpp:242
+#, kde-format
+msgid "Align Left"
+msgstr "Στοίχιση αριστερά"
+
+#: TextTool.cpp:249
+#, kde-format
+msgid "Align Right"
+msgstr "Στοίχιση δεξιά"
+
+#: TextTool.cpp:256
+#, kde-format
+msgid "Align Center"
+msgstr "Στοίχιση στο κέντρο"
+
+#: TextTool.cpp:264
+#, kde-format
+msgid "Align Block"
+msgstr "Στοίχιση τμήματος"
+
+#: TextTool.cpp:271
+#, kde-format
+msgid "Change text direction"
+msgstr "Αλλαγή κατεύθυνσης κειμένου"
+
+#: TextTool.cpp:273
+#, kde-format
+msgid "Change writing direction"
+msgstr "Αλλαγή κατεύθυνσης γραφής"
+
+#: TextTool.cpp:295
+#, kde-format
+msgid "Increase Indent"
+msgstr "Αύξηση εσοχής"
+
+#: TextTool.cpp:302
+#, kde-format
+msgid "Decrease Indent"
+msgstr "Μείωση εσοχής"
+
+#: TextTool.cpp:306
+#, kde-format
+msgid "Toggle List or List Level Formatting"
+msgstr "Εναλλαγή λίστας ή μορφής επιπέδου λίστας"
+
+#: TextTool.cpp:307
+#, kde-format
+msgid "Toggle list on/off, or change format of current level"
+msgstr "Εναλλαγή λίστας on/off, ή αλλαγή μορφής του τρέχοντος επιπέδου"
+
+#: TextTool.cpp:310
+#, kde-format
+msgid "Increase Font Size"
+msgstr "Αύξηση μεγέθους γραμματοσειράς"
+
+#: TextTool.cpp:315
+#, kde-format
+msgid "Decrease Font Size"
+msgstr "Μείωση μεγέθους γραμματοσειράς"
+
+#: TextTool.cpp:321
+#, kde-format
+msgid "Font Family"
+msgstr "Οικογένεια γραμματοσειράς"
+
+#: TextTool.cpp:326
+#, kde-format
+msgid "Variable"
+msgstr "Μεταβλητή"
+
+#: TextTool.cpp:330
+#, kde-format
+msgid "Insert Non-Breaking Space"
+msgstr "Εισαγωγή κενού χωρίς διακοπή"
+
+#: TextTool.cpp:335
+#, kde-format
+msgid "Insert Non-Breaking Hyphen"
+msgstr "Εισαγωγή παύλας χωρίς διακοπή"
+
+#: TextTool.cpp:340
+#, kde-format
+msgid "Insert Index"
+msgstr "Εισαγωγή ευρετηρίου"
+
+#: TextTool.cpp:345
+#, kde-format
+msgid "Insert Soft Hyphen"
+msgstr "Εισαγωγή παύλας συλλαβισμού"
+
+#: TextTool.cpp:351
+#, kde-format
+msgid "Line Break"
+msgstr "Αλλαγή γραμμής"
+
+#: TextTool.cpp:356
+#, kde-format
+msgid "Page Break"
+msgstr "Αλλαγή σελίδας"
+
+#: TextTool.cpp:360
+#, kde-format
+msgid "Insert a page break"
+msgstr "Εισαγωγή χαρακτήρα αλλαγής σελίδας"
+
+#: TextTool.cpp:361
+#, kde-format
+msgid "All text after this point will be moved into the next page."
+msgstr ""
+"Όλο το κείμενο μετά από το σημείο αυτό θα μεταφερθεί στην επόμενη σελίδα."
+
+#: TextTool.cpp:364
+#, kde-format
+msgid "Font..."
+msgstr "Γραμματοσειρά..."
+
+#: TextTool.cpp:367
+#, kde-format
+msgid "Change character size, font, boldface, italics etc."
+msgstr "Τροποποίηση μεγέθους, γραμματοσειράς, έντονων, πλαγίων χαρακτήρων κτλ."
+
+#: TextTool.cpp:368
+#, kde-format
+msgid "Change the attributes of the currently selected characters."
+msgstr "Τροποποίηση των ιδιοτήτων των τρεχόντων επιλεγμένων χαρακτήρων."
+
+#: TextTool.cpp:371
+#, kde-format
+msgid "Font Size"
+msgstr "Μέγεθος γραμματοσειράς"
+
+#: TextTool.cpp:377
+#, kde-format
+msgid "Text Color..."
+msgstr "Χρώμα κειμένου..."
+
+#: TextTool.cpp:378
+#, kde-format
+msgid "Text Color"
+msgstr "Χρώμα κειμένου"
+
+#: TextTool.cpp:384
+#, kde-format
+msgid "Background Color..."
+msgstr "Χρώμα φόντου..."
+
+#: TextTool.cpp:389
+#, kde-format
+msgid "Auto Resize To Content"
+msgstr "Αυτόματη προσαρμογή μεγέθους στο περιεχόμενο"
+
+#: TextTool.cpp:394
+#, kde-format
+msgid "Grow To Fit Width"
+msgstr "Ανάπτυξη για προσαρμογή στο πλάτος"
+
+#: TextTool.cpp:399
+#, kde-format
+msgid "Grow To Fit Height"
+msgstr "Ανάπτυξη για προσαρμογή στο ύψος"
+
+#: TextTool.cpp:404
+#, kde-format
+msgid "Shrink To Fit"
+msgstr "Συρρίκνωση για προσαρμογή"
+
+#: TextTool.cpp:412
+#, kde-format
+msgid "Insert a table into the document."
+msgstr "Εισαγωγή πίνακα στο έγγραφο."
+
+#: TextTool.cpp:415
+#, kde-format
+msgid "Row Above"
+msgstr "Προηγούμενη γραμμή"
+
+#: TextTool.cpp:416
+#, kde-format
+msgid "Insert Row Above"
+msgstr "Εισαγωγή προηγούμενης γραμμής"
+
+#: TextTool.cpp:420
+#, kde-format
+msgid "Row Below"
+msgstr "Επόμενη γραμμή"
+
+#: TextTool.cpp:421
+#, kde-format
+msgid "Insert Row Below"
+msgstr "Εισαγωγή επόμενης γραμμής"
+
+#: TextTool.cpp:425
+#, kde-format
+msgid "Column Left"
+msgstr "Στήλη αριστερά"
+
+#: TextTool.cpp:426
+#, kde-format
+msgid "Insert Column Left"
+msgstr "Εισαγωγή στήλης αριστερά"
+
+#: TextTool.cpp:430
+#, kde-format
+msgid "Column Right"
+msgstr "Στήλη δεξιά"
+
+#: TextTool.cpp:431
+#, kde-format
+msgid "Insert Column Right"
+msgstr "Εισαγωγή στήλης δεξιά"
+
+#: TextTool.cpp:435
+#, kde-format
+msgid "Column"
+msgstr "Στήλη"
+
+#: TextTool.cpp:436
+#, kde-format
+msgid "Delete Column"
+msgstr "Διαγραφή στήλης"
+
+#: TextTool.cpp:440
+#, kde-format
+msgid "Row"
+msgstr "Γραμμή"
+
+#: TextTool.cpp:441
+#, kde-format
+msgid "Delete Row"
+msgstr "Διαγραφή γραμμής"
+
+#: TextTool.cpp:445
+#, kde-format
+msgid "Merge Cells"
+msgstr "Συγχώνευση κελιών"
+
+#: TextTool.cpp:449
+#, kde-format
+msgid "Split Cells"
+msgstr "Διαχωρισμός κελιών"
+
+#: TextTool.cpp:454
+#, kde-format
+msgid "Select a border style and paint that style onto a table"
+msgstr "Επιλέξτε στιλ περιγράμματος και ζωγραφίστε το στιλ αυτό σε έναν πίνακα"
+
+#: TextTool.cpp:458
+#, kde-format
+msgid "Paragraph..."
+msgstr "Παράγραφος..."
+
+#: TextTool.cpp:461
+#, kde-format
+msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
+msgstr ""
+"Τροποποίηση των περιθωρίων, της ροής κειμένου, των περιγραμμάτων, των "
+"κουκίδων, της αρίθμησης, κτλ της παραγράφου."
+
+#: TextTool.cpp:462
+#, kde-format
+msgid ""
+"<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</"
+"p><p>Select text in multiple paragraphs to change the formatting of all "
+"selected paragraphs.</p><p>If no text is selected, the paragraph where the "
+"cursor is located will be changed.</p>"
+msgstr ""
+"<p>Τροποποίηση των περιθωρίων, της ροής κειμένου, των περιγραμμάτων, των "
+"κουκκίδων κτλ, της παραγράφου.</p><p>Επιλέξτε κείμενο σε πολλαπλές "
+"παραγράφους για την τροποποίηση της μορφοποίησης σε όλη την επιλογή.</"
+"p><p>Αν δεν επιλεγεί κείμενο, θα γίνει τροποποίηση της παραγράφου στην οποία "
+"βρίσκεται ο δρομέας.</p>"
+
+#: TextTool.cpp:465
+#, kde-format
+msgid "Style Manager..."
+msgstr "Διαχειριστής στιλ..."
+
+#: TextTool.cpp:467
+#, kde-format
+msgid "Change attributes of styles"
+msgstr "Τροποποίηση ιδιοτήτων των στιλ"
+
+#: TextTool.cpp:468
+#, kde-format
+msgid ""
+"<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can "
+"be changed using the dialog box.</p>"
+msgstr ""
+"<p>Τροποποίηση ιδιοτήτων γραμματοσειράς και παραγράφου των στιλ.</"
+"p><p>Μπορεί να γίνει τροποποίηση πολλαπλών στιλ με αυτό το πλαίσιο διαλόγου."
+"</p>"
+
+#: TextTool.cpp:475
+#, kde-format
+msgid "Special Character..."
+msgstr "Ειδικός χαρακτήρας..."
+
+#: TextTool.cpp:479
+#, kde-format
+msgid "Insert one or more symbols or characters not found on the keyboard"
+msgstr ""
+"Εισαγωγή ενός ή περισσότερων συμβόλων ή χαρακτήρων που δε βρίσκονται στο "
+"πληκτρολόγιο"
+
+#: TextTool.cpp:480
+#, kde-format
+msgid "Insert one or more symbols or characters not found on the keyboard."
+msgstr ""
+"Εισαγωγή ενός ή περισσότερων συμβόλων ή χαρακτήρων που δε βρίσκονται στο "
+"πληκτρολόγιο."
+
+#: TextTool.cpp:483
+#, kde-format
+msgid "Repaint"
+msgstr "Ανασχεδίαση"
+
+#: TextTool.cpp:488
+#, kde-format
+msgid "Insert Comment"
+msgstr "Εισαγωγή σχολίου"
+
+#: TextTool.cpp:574
+#, kde-format
+msgid "Insertion"
+msgstr "Εισαγωγή"
+
+#: TextTool.cpp:576
+#, kde-format
+msgid "Deletion"
+msgstr "Διαγραφή"
+
+#: TextTool.cpp:578
+#, kde-format
+msgid "Formatting"
+msgstr "Μορφοποίηση"
+
+#: TextTool.cpp:593
+#, kde-format
+msgid "Ctrl+click to go to link "
+msgstr "Ctrl και κλικ για μετάβαση στο σύνδεσμο "
+
+#: TextTool.cpp:600
+#, kde-format
+msgid "Ctrl+click to go to the note "
+msgstr "Ctrl και κλικ για μετάβαση στη σημείωση "
+
+#: TextTool.cpp:606
+#, kde-format
+msgid "Ctrl+click to go to the note reference"
+msgstr "Ctrl και κλικ για μετάβαση στην παραπομπή σημείωσης"
+
+#: TextTool.cpp:707
+#, kde-format
+msgid "follows along"
+msgstr "ακολουθεί την"
+
+#: TextTool.cpp:737
+#, kde-format
+msgid "Press shift to not resize this"
+msgstr "Πιέστε shift για να μη γίνει αλλαγή μεγέθους"
+
+#: TextTool.cpp:939
+msgctxt "(qtundo-format)"
+msgid "Change Border Formatting"
+msgstr "Αλλαγή διαμόρφωσης περιγράμματος"
+
+#: TextTool.cpp:1158
+msgctxt "(qtundo-format)"
+msgid "Cut"
+msgstr "Αποκοπή"
+
+#: TextTool.cpp:1418
+msgctxt "(qtundo-format)"
+msgid "Adjust Column Width"
+msgstr "Προσαρμογή πλάτους στήλης"
+
+#: TextTool.cpp:1461
+msgctxt "(qtundo-format)"
+msgid "Adjust Row Height"
+msgstr "Προσαρμογή ύψους γραμμής"
+
+#: TextTool.cpp:2257
+#, kde-format
+msgid "Table"
+msgstr "Πίνακας"
+
+#: TextTool.cpp:2616 TextTool.cpp:2621
+#, kde-format
+msgid "Autocorrection"
+msgstr "Αυτόματη διόρθωση"
+
+#: TextTool.cpp:2616
+#, kde-format
+msgid "Key Press"
+msgstr "Πίεση πλήκτρου"
+
+#: TextTool.cpp:2912
+#, kde-format
+msgid ""
+"This link points to the program or script '%1'.\n"
+"Malicious programs can harm your computer. Are you sure that you want to run "
+"this program?"
+msgstr ""
+"Αυτός ο σύνδεσμος δείχνει στο πρόγραμμα ή σενάριο '%1'.\n"
+"Τα κακόβουλα προγράμματα μπορούν να κάνουν ζημιά στον υπολογιστή σας. "
+"Επιθυμείτε σίγουρα την εκτέλεση αυτού του προγράμματος;"
+
+#: TextTool.cpp:2917
+#, kde-format
+msgid "Open Link?"
+msgstr "Άνοιγμα συνδέσμου;"
+
+#: TextToolFactory.cpp:18
+#, kde-format
+msgid "Text editing"
+msgstr "Επεξεργασία κειμένου"
+
+#, fuzzy
+#~| msgid "Quick search:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quick search:"
+#~ msgstr "Γρήγορη αναζήτηση:"
+
+#, fuzzy
+#~| msgid "Insert a table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Note"
+#~ msgstr "Εισαγωγή πίνακα"
+
+#, fuzzy
+#~| msgid "<<Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Note"
+#~ msgstr "<<Αφαίρεση"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Dialog"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dialog"
+#~ msgstr "Διάλογος"
+
+#, fuzzy
+#~| msgid "Accept"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Accept"
+#~ msgstr "Αποδοχή"
+
+#, fuzzy
+#~| msgid "Reject"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reject"
+#~ msgstr "Απόρριψη"
+
+#, fuzzy
+#~| msgid "Cancel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cancel"
+#~ msgstr "Ακύρωση"
+
+#, fuzzy
+#~| msgid "Change Log"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Log"
+#~ msgstr "Τροποποίηση καταγραφής"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Συγγραφέας"
+
+#, fuzzy
+#~| msgid "Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date"
+#~ msgstr "Ημερομηνία"
+
+#, fuzzy
+#~| msgid "Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Type"
+#~ msgstr "Τύπος"
+
+#, fuzzy
+#~| msgid "Start at:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start at:"
+#~ msgstr "Αρχή στο:"
+
+#, fuzzy
+#~| msgid "Alignment:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alignment:"
+#~ msgstr "Στοίχιση:"
+
+#, fuzzy
+#~| msgid "Prefix:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Prefix:"
+#~ msgstr "Πρόθεμα:"
+
+#, fuzzy
+#~| msgid "Suffix:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Suffix:"
+#~ msgstr "Κατάληξη:"
+
+#, fuzzy
+#~| msgid "Depth:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Depth:"
+#~ msgstr "Βάθος:"
+
+#, fuzzy
+#~| msgid "Display Levels:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Display Levels:"
+#~ msgstr "Επίπεδα εμφάνισης:"
+
+#, fuzzy
+#~| msgid "Bullet/Number followed by"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet/Number followed by"
+#~ msgstr "Κουκκίδες/αριθμοί ακολουθούμενοι από"
+
+#, fuzzy
+#~| msgid " cm"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " cm"
+#~ msgstr " cm"
+
+#, fuzzy
+#~| msgid "at"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "at"
+#~ msgstr "σε"
+
+#, fuzzy
+#~| msgid "Aligned at"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Aligned at"
+#~ msgstr "Στοίχιση σε"
+
+#, fuzzy
+#~| msgid "Indented at"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Indented at"
+#~ msgstr "Εσοχή σε"
+
+#, fuzzy
+#~| msgid "Custom character:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom character:"
+#~ msgstr "Προσαρμοσμένος χαρακτήρας:"
+
+#, fuzzy
+#~| msgid "Restart numbering at this paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Restart numbering at this paragraph"
+#~ msgstr "Επανεκκίνηση αρίθμησης σε αυτήν την παράγραφο"
+
+#, fuzzy
+#~| msgid "Letter Synchronization"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Letter Synchronization"
+#~ msgstr "Συγχρονισμός γραμμάτων"
+
+#, fuzzy
+#~| msgid "Width"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width"
+#~ msgstr "Πλάτος"
+
+#, fuzzy
+#~| msgid "Insert Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Image"
+#~ msgstr "Εισαγωγή εικόνας"
+
+#, fuzzy
+#~| msgid "Height"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height"
+#~ msgstr "Ύψος"
+
+#, fuzzy
+#~| msgid "Browse..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Browse..."
+#~ msgstr "Περιήγηση..."
+
+#, fuzzy
+#~| msgid "Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alignment"
+#~ msgstr "Στοίχιση"
+
+#, fuzzy
+#~| msgid "Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "Αριστερά"
+
+#, fuzzy
+#~| msgid "Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center"
+#~ msgstr "Κέντρο"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "Δεξιά"
+
+#, fuzzy
+#~| msgid "Justify"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Justify"
+#~ msgstr "Ομοιόμορφη"
+
+#, fuzzy
+#~| msgid "Behavior at End of Frame/Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Behavior at End of Frame/Page"
+#~ msgstr "Συμπεριφορά στο τέλος πλαισίου/σελίδας"
+
+#, fuzzy
+#~| msgid "Keep lines together"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keep lines together"
+#~ msgstr "Διατήρηση γραμμών μαζί"
+
+#, fuzzy
+#~| msgid "Insert break before paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert break before paragraph"
+#~ msgstr "Εισαγωγή διακοπής πριν την παράγραφο"
+
+#, fuzzy
+#~| msgid "Insert break after paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert break after paragraph"
+#~ msgstr "Εισαγωγή διακοπής μετά την παράγραφο"
+
+#, fuzzy
+#~| msgid "Leave at least this many lines (orphans):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Leave at least this many lines (orphans):"
+#~ msgstr "Αφήστε τουλάχιστον τόσες γραμμές (ορφανά):"
+
+#, fuzzy
+#~| msgid "&Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "&Μετονομασία"
+
+#, fuzzy
+#~| msgid "&Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "&Διαγραφή"
+
+#, fuzzy
+#~| msgid "Add caption"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add caption"
+#~ msgstr "Προσθήκη λεζάντας"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General"
+#~ msgstr "Γενικά"
+
+#, fuzzy
+#~| msgctxt "Name of the style"
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format) Name of the style"
+#~ msgid "Name:"
+#~ msgstr "Όνομα:"
+
+#, fuzzy
+#~| msgid "Next style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next style:"
+#~ msgstr "Επόμενο στιλ:"
+
+#, fuzzy
+#~| msgid "Parent style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parent style:"
+#~ msgstr "Στιλ προγόνου:"
+
+#, fuzzy
+#~| msgid "Include in table of contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Include in table of contents"
+#~ msgstr "Συμπερίληψη στον πίνακα των περιεχομένων"
+
+#, fuzzy
+#~| msgid "Tab 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tab 1"
+#~ msgstr "Στηλοθέτης 1"
+
+#, fuzzy
+#~| msgid "CheckBox"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CheckBox"
+#~ msgstr "Πλαίσιο"
+
+#, fuzzy
+#~| msgid "PushButton"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PushButton"
+#~ msgstr "Κουμπί"
+
+#, fuzzy
+#~| msgid "Tab 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tab 2"
+#~ msgstr "Στηλοθέτης 2"
+
+#, fuzzy
+#~| msgid "Text color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text color:"
+#~ msgstr "Χρώμα κειμένου:"
+
+#, fuzzy
+#~| msgid "Background color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background color:"
+#~ msgstr "Χρώμα φόντου:"
+
+#, fuzzy
+#~| msgid "Underlining:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Underlining:"
+#~ msgstr "Υπογράμμιση:"
+
+#, fuzzy
+#~| msgid "Strikethrough:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Strikethrough:"
+#~ msgstr "Επιγράμμιση:"
+
+#, fuzzy
+#~| msgid "Capitalization:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Capitalization:"
+#~ msgstr "Μετατροπή σε κεφαλαία:"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgctxt "(qtundo-format) Character position"
+#~ msgid "Position:"
+#~ msgstr "Θέση:"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; "
+#~| "font-weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\">It is possible to "
+#~| "assign a named style to text and alter the style properties to change "
+#~| "all text with that style.</p>\n"
+#~| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\">Applying a style "
+#~| "change will reformat all text that previously got the named style "
+#~| "assigned to it. Use the Styles docker to apply styles to text.</p></"
+#~| "body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">It is possible to "
+#~ "assign a named style to text and alter the style properties to change all "
+#~ "text with that style.</p>\n"
+#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Applying a style change "
+#~ "will reformat all text that previously got the named style assigned to "
+#~ "it. Use the Styles docker to apply styles to text.</p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Είναι δυνατό να οριστεί "
+#~ "επώνυμο στιλ σε κείμενο και να τροποποιηθούν οι ιδιότητες του στιλ για "
+#~ "την αλλαγή όλου του κειμένου με το στιλ αυτό.</p>\n"
+#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Η εφαρμογή αλλαγής σε "
+#~ "στιλ θα αναμορφώσει όλο το κείμενο με το επώνυμο στιλ με το οποίο "
+#~ "προηγουμένως είχε οριστεί. Χρησιμοποιήστε την προσάρτηση στιλ για να "
+#~ "ορίσετε στιλ σε κείμενο.</p></body></html>"
+
+#, fuzzy
+#~| msgid "Insert Bibliography entry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Bibliography entry"
+#~ msgstr "Εισαγωγή βιβλιογραφικής παράθεσης"
+
+#, fuzzy
+#~| msgid "Insert Bibliography Entry Details"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Bibliography Entry Details"
+#~ msgstr "Εισαγωγή λεπτομερειών βιβλιογραφικής παράθεσης"
+
+#, fuzzy
+#~| msgid "Short Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short Name:"
+#~ msgstr "Σύντομο όνομα:"
+
+#, fuzzy
+#~| msgid "Source:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Source:"
+#~ msgstr "Πηγή:"
+
+#, fuzzy
+#~| msgid "Article"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Article"
+#~ msgstr "Άρθρο"
+
+#, fuzzy
+#~| msgid "Book"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Book"
+#~ msgstr "Βιβλίο"
+
+#, fuzzy
+#~| msgid "Booklet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Booklet"
+#~ msgstr "Βιβλιάριο"
+
+#, fuzzy
+#~| msgid "Conference"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Conference"
+#~ msgstr "Συνέδριο"
+
+#, fuzzy
+#~| msgid "Email"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Email"
+#~ msgstr "Email"
+
+#, fuzzy
+#~| msgid "Inbook"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inbook"
+#~ msgstr "Inbook"
+
+#, fuzzy
+#~| msgid "Incollection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Incollection"
+#~ msgstr "Incollection"
+
+#, fuzzy
+#~| msgid "Inproceedings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inproceedings"
+#~ msgstr "Inproceedings"
+
+#, fuzzy
+#~| msgid "Journal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Journal"
+#~ msgstr "Περιοδικό"
+
+#, fuzzy
+#~| msgid "Manual"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manual"
+#~ msgstr "Εγχειρίδιο"
+
+#, fuzzy
+#~| msgid "Masters thesis"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Masters thesis"
+#~ msgstr "Μεταπτυχιακή διατριβή"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Διάφορα"
+
+#, fuzzy
+#~| msgid "PhD thesis"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PhD thesis"
+#~ msgstr "Διδακτορική διατριβή"
+
+#, fuzzy
+#~| msgid "Proceedings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Proceedings"
+#~ msgstr "Πρακτικά"
+
+#, fuzzy
+#~| msgid "Tech Report"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tech Report"
+#~ msgstr "Τεχνική έκθεση"
+
+#, fuzzy
+#~| msgid "Unpublished"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unpublished"
+#~ msgstr "Αδημοσίευτο"
+
+#, fuzzy
+#~| msgid "WWW"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "WWW"
+#~ msgstr "WWW"
+
+#, fuzzy
+#~| msgid "custom 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 1"
+#~ msgstr "προσαρμοσμένο 1"
+
+#, fuzzy
+#~| msgid "custom 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 2"
+#~ msgstr "προσαρμοσμένο 2"
+
+#, fuzzy
+#~| msgid "custom 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 3"
+#~ msgstr "προσαρμοσμένο 3"
+
+#, fuzzy
+#~| msgid "custom 4"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 4"
+#~ msgstr "προσαρμοσμένο 4"
+
+#, fuzzy
+#~| msgid "custom 5"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 5"
+#~ msgstr "προσαρμοσμένο 5"
+
+#, fuzzy
+#~| msgid "Author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author:"
+#~ msgstr "Συγγραφέας:"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title:"
+#~ msgstr "Τίτλος:"
+
+#, fuzzy
+#~| msgid "Year:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Year:"
+#~ msgstr "Έτος:"
+
+#, fuzzy
+#~| msgid "Publisher:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Publisher:"
+#~ msgstr "Εκδότης:"
+
+#, fuzzy
+#~| msgid "Address:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Address:"
+#~ msgstr "Διεύθυνση:"
+
+#, fuzzy
+#~| msgid "ISBN:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ISBN:"
+#~ msgstr "ISBN:"
+
+#, fuzzy
+#~| msgid "Chapter:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chapter:"
+#~ msgstr "Κεφάλαιο:"
+
+#, fuzzy
+#~| msgid "ISSN:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ISSN:"
+#~ msgstr "ISSN:"
+
+#, fuzzy
+#~| msgid "Editor:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Editor:"
+#~ msgstr "Συντάκτης:"
+
+#, fuzzy
+#~| msgid "Page(s):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page(s):"
+#~ msgstr "Σελίδες:"
+
+#, fuzzy
+#~| msgid "Book title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Book title:"
+#~ msgstr "Τίτλος βιβλίου:"
+
+#, fuzzy
+#~| msgid "Edition:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edition:"
+#~ msgstr "Έκδοση:"
+
+#, fuzzy
+#~| msgid "Publication:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Publication:"
+#~ msgstr "Δημοσίευση:"
+
+#, fuzzy
+#~| msgid "Volume:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Volume:"
+#~ msgstr "Τόμος:"
+
+#, fuzzy
+#~| msgid "Institution:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Institution:"
+#~ msgstr "Ίδρυμα:"
+
+#, fuzzy
+#~| msgid "Organisation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Organisation:"
+#~ msgstr "Οργανισμός:"
+
+#, fuzzy
+#~| msgid "Type of Report:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Type of Report:"
+#~ msgstr "Τύπος έκθεσης:"
+
+#, fuzzy
+#~| msgid "University:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "University:"
+#~ msgstr "Πανεπιστήμιο:"
+
+#, fuzzy
+#~| msgid "Journal:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Journal:"
+#~ msgstr "Περιοδικό:"
+
+#, fuzzy
+#~| msgid "Month:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Month:"
+#~ msgstr "Μήνας:"
+
+#, fuzzy
+#~| msgid "Series:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Series:"
+#~ msgstr "Σειρά:"
+
+#, fuzzy
+#~| msgid "Number:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number:"
+#~ msgstr "Αριθμός:"
+
+#, fuzzy
+#~| msgid "Note:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Note:"
+#~ msgstr "Σημείωση:"
+
+#, fuzzy
+#~| msgid "Annotation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Annotation:"
+#~ msgstr "Σχόλιο:"
+
+#, fuzzy
+#~| msgid "URL:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#, fuzzy
+#~| msgid "User-defined 1:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "User-defined 1:"
+#~ msgstr "User-defined 1:"
+
+#, fuzzy
+#~| msgid "User-defined 3:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "User-defined 3:"
+#~ msgstr "User-defined 3:"
+
+#, fuzzy
+#~| msgid "User-defined 2:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "User-defined 2:"
+#~ msgstr "User-defined 2:"
+
+#, fuzzy
+#~| msgid "User-defined 4:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "User-defined 4:"
+#~ msgstr "User-defined 4:"
+
+#, fuzzy
+#~| msgid "User-defined 5:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "User-defined 5:"
+#~ msgstr "User-defined 5:"
+
+#, fuzzy
+#~| msgid "OR"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "OR"
+#~ msgstr "OR"
+
+#, fuzzy
+#~| msgid "From the document:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From the document:"
+#~ msgstr "Από το έγγραφο:"
+
+#, fuzzy
+#~| msgid "Background color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background color"
+#~ msgstr "Χρώμα φόντου"
+
+#, fuzzy
+#~| msgid ""
+#~| "Other insertions from \"References\"  below and in \"Add Shape\" docker"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Other insertions from \"References\"  below and in \"Add Shape\" docker"
+#~ msgstr ""
+#~ "Άλλες εισαγωγές από «Παραπομπές» πιο κάτω και στην προσάρτηση «Προσθήκη "
+#~ "σχήματος»"
+
+#, fuzzy
+#~| msgid "Insert citation at current position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert citation at current position"
+#~ msgstr "Εισαγωγή παραπομπής στην τρέχουσα θέση"
+
+#, fuzzy
+#~| msgid "Configure bibliography"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure bibliography"
+#~ msgstr "Διαμόρφωση βιβλιογραφίας"
+
+#, fuzzy
+#~| msgid "Configure Bibliography"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Bibliography"
+#~ msgstr "Διαμόρφωση βιβλιογραφίας"
+
+#, fuzzy
+#~| msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
+#~ msgstr "<p><ul><li><b>Απλή</b>: Η κανονική απόσταση γραμμών</li></ul></p> "
+
+#, fuzzy
+#~| msgid "Add caption"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add tab stop"
+#~ msgstr "Προσθήκη λεζάντας"
+
+#, fuzzy
+#~| msgid "Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tab character"
+#~ msgstr "Χαρακτήρας"
+
+#, fuzzy
+#~| msgid "Special Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space character"
+#~ msgstr "Ειδικοί χαρακτήρες"
+
+#, fuzzy
+#~| msgctxt "None"
+#~| msgid "Nothing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nothing"
+#~ msgstr "Τίποτε"
+
+#, fuzzy
+#~| msgid "Number:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number"
+#~ msgstr "Αριθμός:"
+
+#, fuzzy
+#~| msgid " Format:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format:"
+#~ msgstr "Μορφή:"
+
+#, fuzzy
+#~| msgid "Display Levels:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Display levels above:"
+#~ msgstr "Επίπεδα εμφάνισης:"
+
+#, fuzzy
+#~| msgid "Letter Synchronization"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Letter synchronization"
+#~ msgstr "Συγχρονισμός γραμμάτων"
+
+#, fuzzy
+#~| msgid "No Bullet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet"
+#~ msgstr "Χωρίς κουκκίδα"
+
+#, fuzzy
+#~| msgid "Configure Change Tracking"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Change Tracking"
+#~ msgstr "Διαμόρφωση ιχνηλάτησης αλλαγών"
+
+#, fuzzy
+#~| msgid "General Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General Settings"
+#~ msgstr "Γενικές ρυθμίσεις"
+
+#, fuzzy
+#~| msgid "Saving Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saving Format"
+#~ msgstr "Τύπος αποθήκευσης"
+
+#, fuzzy
+#~| msgid "ODF 1.2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ODF 1.2"
+#~ msgstr "ODF 1.2"
+
+#, fuzzy
+#~| msgid "DeltaXML (Experimental)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "DeltaXML (Experimental)"
+#~ msgstr "DeltaXML (πειραματικό)"
+
+#, fuzzy
+#~| msgid "Author Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author Name"
+#~ msgstr "Όνομα συγγραφέα"
+
+#, fuzzy
+#~| msgid "Change Visualization Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Visualization Settings"
+#~ msgstr "Τροποποίηση ρυθμίσεων οπτικοποίησης"
+
+#, fuzzy
+#~| msgid "Insertions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insertions"
+#~ msgstr "Εισαγωγές"
+
+#, fuzzy
+#~| msgid "Background Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background Color"
+#~ msgstr "Χρώμα φόντου"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+#~| "size:9pt; font-weight:400; font-style:normal;\">\n"
+#~| "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+#~| "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+#~| "style=\" font-family:'MS Shell Dlg 2'; font-size:11pt; font-weight:600; "
+#~| "text-decoration: underline;\">Preview</span></p>\n"
+#~| "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+#~| "margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+#~| "indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:12pt; "
+#~| "font-weight:600;\"></p>\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "family:'MS Shell Dlg 2'; font-weight:600;\">Inserted Text</span></p>\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before "
+#~| "the inserted text. This is a line of inserted text. This is a line after "
+#~| "the inserted text.</span></p>\n"
+#~| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+#~| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+#~| "font-family:'MS Shell Dlg 2';\"></p>\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "family:'MS Shell Dlg 2'; font-weight:600;\">Deleted Text</span></p>\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before "
+#~| "the deleted text. This is a line of deleted text. This is a line after "
+#~| "the deleted text.</span></p>\n"
+#~| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+#~| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+#~| "font-family:'MS Shell Dlg 2';\"></p>\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "family:'MS Shell Dlg 2'; font-weight:600;\">Formatted Text</span></p>\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before "
+#~| "the format-change text. This is a line of text whose format has been "
+#~| "changed. This is a line of text after the format-change text.</span></"
+#~| "p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+#~ "size:9pt; font-weight:400; font-style:normal;\">\n"
+#~ "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+#~ "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+#~ "style=\" font-family:'MS Shell Dlg 2'; font-size:11pt; font-weight:600; "
+#~ "text-decoration: underline;\">Preview</span></p>\n"
+#~ "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+#~ "margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; "
+#~ "text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:12pt; font-"
+#~ "weight:600;\"></p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'MS Shell Dlg 2'; font-weight:600;\">Inserted Text</span></p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before "
+#~ "the inserted text. This is a line of inserted text. This is a line after "
+#~ "the inserted text.</span></p>\n"
+#~ "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+#~ "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+#~ "font-family:'MS Shell Dlg 2';\"></p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'MS Shell Dlg 2'; font-weight:600;\">Deleted Text</span></p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before "
+#~ "the deleted text. This is a line of deleted text. This is a line after "
+#~ "the deleted text.</span></p>\n"
+#~ "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+#~ "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+#~ "font-family:'MS Shell Dlg 2';\"></p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'MS Shell Dlg 2'; font-weight:600;\">Formatted Text</span></p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before "
+#~ "the format-change text. This is a line of text whose format has been "
+#~ "changed. This is a line of text after the format-change text.</span></p></"
+#~ "body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+#~ "size:9pt; font-weight:400; font-style:normal;\">\n"
+#~ "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+#~ "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+#~ "style=\" font-family:'MS Shell Dlg 2'; font-size:11pt; font-weight:600; "
+#~ "text-decoration: underline;\">Προεπισκόπηση</span></p>\n"
+#~ "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; "
+#~ "margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; "
+#~ "text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:12pt; font-"
+#~ "weight:600;\"></p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'MS Shell Dlg 2'; font-weight:600;\">Εισαχθέν κείμενο</span></p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'MS Shell Dlg 2'; font-size:8pt;\">Αυτή είναι γραμμή κειμένου πριν "
+#~ "το εισαχθέν κείμενο. Αυτή είναι γραμμή εισαχθέντος κειμένου. Αυτή είναι "
+#~ "γραμμή μετά την εισαγωγή κειμένου.</span></p>\n"
+#~ "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+#~ "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+#~ "font-family:'MS Shell Dlg 2';\"></p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'MS Shell Dlg 2'; font-weight:600;\">Διαγραφέν κείμενο</span></p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'MS Shell Dlg 2'; font-size:8pt;\">Αυτή είναι γραμμή κειμένου πριν "
+#~ "το διαγραφέν κείμενο. Αυτή είναι γραμμή διαγραφέντος κειμένου. Αυτή είναι "
+#~ "γραμμή μετά τη διαγραφή κειμένου.</span></p>\n"
+#~ "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+#~ "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+#~ "font-family:'MS Shell Dlg 2';\"></p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'MS Shell Dlg 2'; font-weight:600;\">Μορφοποιημένο κείμενο</span></"
+#~ "p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'MS Shell Dlg 2'; font-size:8pt;\">Αυτή είναι γραμμή κειμένου πριν "
+#~ "την αλλαγή μορφής του κειμένου. Αυτή είναι γραμμή κειμένου η μορφή του "
+#~ "οποίου έχει αλλάξει. Αυτή είναι γραμμή κειμένου μετά από την αλλαγή "
+#~ "μορφής του κειμένου.</span></p></body></html>"
+
+#, fuzzy
+#~| msgid "Deletions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deletions"
+#~ msgstr "Διαγραφές"
+
+#, fuzzy
+#~| msgid "Format Changes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format Changes"
+#~ msgstr "Τροποποιήσεις τύπων αποθήκευσης"
+
+#, fuzzy
+#~| msgid "Link"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Link"
+#~ msgstr "Σύνδεσμος"
+
+#, fuzzy
+#~| msgid "Web Link"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Web Link"
+#~ msgstr "Σύνδεσμος ιστού"
+
+#, fuzzy
+#~| msgid ""
+#~| "Insert links to web documents. You can provide both URL and a label for "
+#~| "the link,\n"
+#~| " or just enter the URL and hit \"Fetch the title from URL\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Insert links to web documents. You can provide both URL and a label for "
+#~ "the link,\n"
+#~ " or just enter the URL and hit \"Fetch the title from URL\""
+#~ msgstr ""
+#~ "Εισάγετε συνδέσμους σε έγγραφα ιστού. Μπορείτε αν δώσετε και το URL και "
+#~ "μια ετικέτα για το σύνδεσμο,\n"
+#~ " ή απλά εισαγάγετε το URL και πατήστε «Προσκόμιση τίτλου από το URL»"
+
+#, fuzzy
+#~| msgid "The address of your document (Uniform Resource Locator)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The address of your document (Uniform Resource Locator)"
+#~ msgstr "Η διεύθυνση του εγγράφου σας (Uniform Resource Locator)"
+
+#, fuzzy
+#~| msgid " URL:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " URL:"
+#~ msgstr " URL:"
+
+#, fuzzy
+#~| msgid ""
+#~| "Hit this button to get the title from the URL. Redirections are also "
+#~| "handled. "
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Hit this button to get the title from the URL. Redirections are also "
+#~ "handled. "
+#~ msgstr ""
+#~ "Πατήστε αυτό το κουμπί για να φέρετε το τίτλο από το URL. Γίνεται και "
+#~ "χειρισμός ανακατεύθυνσης. "
+
+#, fuzzy
+#~| msgid "Fetch Title From URL"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fetch Title From URL"
+#~ msgstr "Προσκόμιση τίτλου από URL"
+
+#, fuzzy
+#~| msgid "The text that will be displayed for your link"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The text that will be displayed for your link"
+#~ msgstr "Το κείμενο που θα εμφανιστεί για το σύνδεσμό σας"
+
+#, fuzzy
+#~| msgid " Text:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Text:"
+#~ msgstr " Κείμενο:"
+
+#, fuzzy
+#~| msgid "Link To Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Link To Bookmark"
+#~ msgstr "Σύνδεσμος σε σελιδοδείκτη"
+
+#, fuzzy
+#~| msgid ""
+#~| "Insert links to Bookmarks. To create bookmarks,\n"
+#~| "click \"Bookmarks\" in the Links and Bookmarks section"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Insert links to Bookmarks. To create bookmarks,\n"
+#~ "click \"Bookmarks\" in the Links and Bookmarks section"
+#~ msgstr ""
+#~ "Εισαγωγή συνδέσμων σε σελιδοδείκτες. Δημιουργείτε σελιδοδείκτες,\n"
+#~ "με κλικ στους «Σελιδοδείκτες» στους συνδέσμους και στην ενότητα των "
+#~ "σελιδοδεικτών"
+
+#, fuzzy
+#~| msgid "The name of the bookmark to where the link has to point to"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The name of the bookmark to where the link has to point to"
+#~ msgstr "Το όνομα του σελιδοδείκτη στον οποίο πρέπει να δείχνει ο σύνδεσμος"
+
+#, fuzzy
+#~| msgid " Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Name:"
+#~ msgstr " Όνομα:"
+
+#, fuzzy
+#~| msgid "Bibliography title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bibliography title"
+#~ msgstr "τίτλος βιβλιογραφίας"
+
+#, fuzzy
+#~| msgid "Bibliography entries"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bibliography entries"
+#~ msgstr "Βιβλιογραφικές παραθέσεις"
+
+#, fuzzy
+#~| msgid "Bibliography type:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bibliography type:"
+#~ msgstr "Τύπος βιβλιογραφίας:"
+
+#, fuzzy
+#~| msgid "In book"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "In book"
+#~ msgstr "Στο βιβλίο"
+
+#, fuzzy
+#~| msgid "In collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "In collection"
+#~ msgstr "Στη συλλογή"
+
+#, fuzzy
+#~| msgid "In proceedings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "In proceedings"
+#~ msgstr "Στα πρακτικά"
+
+#, fuzzy
+#~| msgid "Tech report"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tech report"
+#~ msgstr "Τεχνική έκθεση"
+
+#, fuzzy
+#~| msgid "custom1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom1"
+#~ msgstr "προσαρμοσμένο1"
+
+#, fuzzy
+#~| msgid "custom2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom2"
+#~ msgstr "προσαρμοσμένο2"
+
+#, fuzzy
+#~| msgid "custom3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom3"
+#~ msgstr "προσαρμοσμένο3"
+
+#, fuzzy
+#~| msgid "custom4"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom4"
+#~ msgstr "προσαρμοσμένο4"
+
+#, fuzzy
+#~| msgid "custom5"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom5"
+#~ msgstr "προσαρμοσμένο5"
+
+#, fuzzy
+#~| msgid "Available fields "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Available fields "
+#~ msgstr "Διαθέσιμα πεδία "
+
+#, fuzzy
+#~| msgid "Add >>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add >>"
+#~ msgstr "Προσθήκη >>"
+
+#, fuzzy
+#~| msgid "Span"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Span"
+#~ msgstr "Επέκταση"
+
+#, fuzzy
+#~| msgid "<<Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<<Remove"
+#~ msgstr "<<Αφαίρεση"
+
+#, fuzzy
+#~| msgid "Fields added"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fields added"
+#~ msgstr "Πεδία προστέθηκαν"
+
+#, fuzzy
+#~| msgid "Endnote"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Endnote"
+#~ msgstr "Σημείωση τέλους"
+
+#, fuzzy
+#~| msgid "Footnote"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footnote"
+#~ msgstr "Υποσημείωση"
+
+#, fuzzy
+#~| msgid "&New"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&New"
+#~ msgstr "&Νέο"
+
+#, fuzzy
+#~| msgid "Change Tracking Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Tracking Options"
+#~ msgstr "Τροποποίηση επιλογών ιχνηλάτησης"
+
+#, fuzzy
+#~| msgid "Configure Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Settings"
+#~ msgstr "Διαμόρφωση ρυθμίσεων"
+
+#, fuzzy
+#~| msgid "Record Changes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Record Changes"
+#~ msgstr "Τροποποιήσεις εγγραφών"
+
+#, fuzzy
+#~| msgid "Colors"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Colors"
+#~ msgstr "Χρώματα"
+
+#, fuzzy
+#~| msgid "Text Shadow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Shadow"
+#~ msgstr "Σκιά κειμένου"
+
+#, fuzzy
+#~| msgid "Color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color:"
+#~ msgstr "Χρώμα:"
+
+#, fuzzy
+#~| msgid "Distance:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance:"
+#~ msgstr "Απόσταση:"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Position"
+#~ msgstr "Θέση"
+
+#, fuzzy
+#~| msgid "Automatic hyphenation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic hyphenation"
+#~ msgstr "Αυτόματος συλλαβισμός"
+
+#, fuzzy
+#~| msgid "Hyperlinks"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hyperlinks"
+#~ msgstr "Σύνδεσμοι"
+
+#, fuzzy
+#~| msgid "TextLabel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "TextLabel"
+#~ msgstr "TextLabel"
+
+#, fuzzy
+#~| msgid "Drop caps:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drop caps:"
+#~ msgstr "Απόρριψη κεφαλαίων:"
+
+#, fuzzy
+#~| msgid "Distance to paragraph:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance to paragraph:"
+#~ msgstr "Απόσταση από παράγραφο:"
+
+#, fuzzy
+#~| msgid "Number of characters:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of characters:"
+#~ msgstr "Αριθμός χαρακτήρων:"
+
+#, fuzzy
+#~| msgid "Number of lines it covers:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of lines it covers:"
+#~ msgstr "Αριθμός γραμμών που καλύπτει:"
+
+#, fuzzy
+#~| msgid "Columns and rows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns and rows"
+#~ msgstr "Στήλες και γραμμές"
+
+#, fuzzy
+#~| msgid "Number of columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of columns:"
+#~ msgstr "Αριθμός στηλών:"
+
+#, fuzzy
+#~| msgid "Number of rows:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of rows:"
+#~ msgstr "Αριθμός γραμμών:"
+
+#, fuzzy
+#~| msgid "Width strategy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width strategy"
+#~ msgstr "Στρατηγική πλάτους"
+
+#, fuzzy
+#~| msgid "Fixed column width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fixed column width:"
+#~ msgstr "Σταθερό πλάτος στήλης:"
+
+#, fuzzy
+#~| msgid "Fit to contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fit to contents"
+#~ msgstr "Προσαρμογή στα περιεχόμενα"
+
+#, fuzzy
+#~| msgid "Fit to available surrounding"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fit to available surrounding"
+#~ msgstr "Προσαρμογή στο διαθέσιμο περιβάλλον"
+
+#, fuzzy
+#~| msgid "Formatting of bibliography entries"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting of bibliography entries"
+#~ msgstr "Μορφοποίηση βιβλιογραφικών παραθέσεων"
+
+#, fuzzy
+#~| msgid "Number entries"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number entries"
+#~ msgstr "Αρίθμηση παραθέσεων"
+
+#, fuzzy
+#~| msgid "Sort"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sort"
+#~ msgstr "Ταξινόμηση"
+
+#, fuzzy
+#~| msgid "Sort by position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sort by position"
+#~ msgstr "Ταξινόμηση ανά θέση"
+
+#, fuzzy
+#~| msgid "Sort keys"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sort keys"
+#~ msgstr "Κλειδιά ταξινόμησης"
+
+#, fuzzy
+#~| msgid "Add sort key"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add sort key"
+#~ msgstr "Προσθήκη κλειδιού ταξινόμησης"
+
+#, fuzzy
+#~| msgid "Sort algorithm:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sort algorithm:"
+#~ msgstr "Αλγόριθμος ταξινόμησης:"
+
+#, fuzzy
+#~| msgid "Alphanumeric"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alphanumeric"
+#~ msgstr "Αλφαριθμητικό"
+
+#, fuzzy
+#~| msgid "Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Indent"
+#~ msgstr "Εσοχή"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left:"
+#~ msgstr "Αριστερά:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right:"
+#~ msgstr "Δεξιά:"
+
+#, fuzzy
+#~| msgid "First Line:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Line:"
+#~ msgstr "Πρώτη γραμμή:"
+
+#, fuzzy
+#~| msgid "Auto-infer from text size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto-infer from text size"
+#~ msgstr "Αυτόματη επιλογή από μέγεθος κειμένου"
+
+#, fuzzy
+#~| msgid "Line Spacing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Spacing"
+#~ msgstr "Απόσταση γραμμών"
+
+#, fuzzy
+#~| msgid " %"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " %"
+#~ msgstr " %"
+
+#, fuzzy
+#~| msgid "Use Font Metrics:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use Font Metrics:"
+#~ msgstr "Χρήση μετρήσεων γραμματοσειράς:"
+
+#, fuzzy
+#~| msgid "Paragraph Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph Space"
+#~ msgstr "Κενό παραγράφου"
+
+#, fuzzy
+#~| msgid "Before:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Before:"
+#~ msgstr "Πριν:"
+
+#, fuzzy
+#~| msgid "After:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "After:"
+#~ msgstr "Μετά:"
+
+#, fuzzy
+#~| msgid "Split Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Split sections"
+#~ msgstr "Διαχωρισμός κελιών"
+
+#, fuzzy
+#~| msgid "Paragraph..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert paragraph..."
+#~ msgstr "Παράγραφος..."
+
+#, fuzzy
+#~| msgid "Insert Citation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after end of section:"
+#~ msgstr "Εισαγωγή παραπομπής"
+
+#, fuzzy
+#~| msgid "Automatic Numbering:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic Numbering:"
+#~ msgstr "Αυτόματη αρίθμηση:"
+
+#, fuzzy
+#~| msgid " Prefix:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Prefix:"
+#~ msgstr " Πρόθεμα:"
+
+#, fuzzy
+#~| msgid " Start at:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Start at:"
+#~ msgstr " Αρχή στο:"
+
+#, fuzzy
+#~| msgid " Format:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Format:"
+#~ msgstr "Μορφή:"
+
+#, fuzzy
+#~| msgid " Suffix:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Suffix:"
+#~ msgstr " Κατάληξη:"
+
+#, fuzzy
+#~| msgid "Starts over at:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Starts over at:"
+#~ msgstr "Επανεκκίνηση στο:"
+
+#, fuzzy
+#~| msgid "Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page"
+#~ msgstr "Σελίδα"
+
+#, fuzzy
+#~| msgid "Chapter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chapter"
+#~ msgstr "Κεφάλαιο"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Έγγραφο"
+
+#, fuzzy
+#~| msgid "1, 2, 3, ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "1, 2, 3, ..."
+#~ msgstr "1, 2, 3, ..."
+
+#, fuzzy
+#~| msgid "a, b, c, ..., aa, ab, ..., ba, bb, ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "a, b, c, ..., aa, ab, ..., ba, bb, ..."
+#~ msgstr "a, b, c, ..., aa, ab, ..., ba, bb, ..."
+
+#, fuzzy
+#~| msgid "A, B, C, ..., AA, AB, ..., BA, BB, ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A, B, C, ..., AA, AB, ..., BA, BB, ..."
+#~ msgstr "A, B, C, ..., AA, AB, ..., BA, BB, ..."
+
+#, fuzzy
+#~| msgid "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
+#~ msgstr "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
+
+#, fuzzy
+#~| msgid "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
+#~ msgstr "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
+
+#, fuzzy
+#~| msgid "i, ii, iii, ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "i, ii, iii, ..."
+#~ msgstr "i, ii, iii, ..."
+
+#, fuzzy
+#~| msgid "I,II,III, ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "I,II,III, ..."
+#~ msgstr "I,II,III, ..."
+
+#, fuzzy
+#~| msgid "Continuation Notice:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Continuation Notice:"
+#~ msgstr "Σημείωση συνέχειας:"
+
+#, fuzzy
+#~| msgid "Text saying it is a continuation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text saying it is a continuation:"
+#~ msgstr "Κείμενο που λέει ότι είναι συνέχεια:"
+
+#, fuzzy
+#~| msgid " Text saying it will continue:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Text saying it will continue:"
+#~ msgstr "Κείμενο που λέει ότι συνεχίζεται:"
+
+#, fuzzy
+#~| msgid "Annotation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Annotation"
+#~ msgstr "Σχόλιο:"
+
+#, fuzzy
+#~| msgid "Annotation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Annotation Shape"
+#~ msgstr "Σχόλιο:"
+
+#, fuzzy
+#~| msgctxt "Disable Shrink To Fit"
+#~| msgid "Disable"
+#~ msgctxt "(qtundo-format) Disable Shrink To Fit"
+#~ msgid "Disable"
+#~ msgstr "Απενεργοποίηση"
+
+#, fuzzy
+#~| msgctxt "Enable Shrink To Fit"
+#~| msgid "Enable"
+#~ msgctxt "(qtundo-format) Enable Shrink To Fit"
+#~ msgid "Enable"
+#~ msgstr "Ενεργοποίηση"
+
+#, fuzzy
+#~| msgid "Ascending"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ascending"
+#~ msgstr "Αύξουσα"
+
+#, fuzzy
+#~| msgid "Descending"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Descending"
+#~ msgstr "Φθίνουσα"
+
+#, fuzzy
+#~| msgid "Bibliography"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bibliography"
+#~ msgstr "Βιβλιογραφία"
+
+#, fuzzy
+#~| msgid "References"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "References"
+#~ msgstr "Παραπομπές"
+
+#, fuzzy
+#~| msgid "This is a line of inserted text."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "This is a line of inserted text."
+#~ msgstr "Αυτή είναι γραμμή εισαχθέντος κειμένου"
+
+#, fuzzy
+#~| msgid "This is a line of deleted text."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "This is a line of deleted text."
+#~ msgstr "Αυτή είναι γραμμή διαγραφέντος κειμένου"
+
+#, fuzzy
+#~| msgid "This is a line of text whose format has been changed."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "This is a line of text whose format has been changed."
+#~ msgstr "Αυτή είναι γραμμή κειμένου η μορφή του οποίου έχει αλλάξει."
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Κανονικό"
+
+#, fuzzy
+#~| msgid "Small Caps"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Small Caps"
+#~ msgstr "Μικρά κεφαλαία"
+
+#, fuzzy
+#~| msgid "Uppercase"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Uppercase"
+#~ msgstr "Κεφαλαία"
+
+#, fuzzy
+#~| msgid "Lowercase"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lowercase"
+#~ msgstr "Πεζά"
+
+#, fuzzy
+#~| msgid "Capitalize"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Capitalize"
+#~ msgstr "Μετατροπή σε κεφαλαία"
+
+#, fuzzy
+#~| msgid "Superscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Superscript"
+#~ msgstr "Εκθέτης"
+
+#, fuzzy
+#~| msgid "Subscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subscript"
+#~ msgstr "Δείκτης"
+
+#, fuzzy
+#~| msgid "Select"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select"
+#~ msgstr "Επιλογή"
+
+#, fuzzy
+#~| msgid ""
+#~| "The document already contains the bibliography entry with different "
+#~| "data.\n"
+#~| "Do you want to adjust existing entries?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document already contains the bibliography entry with different "
+#~ "data.\n"
+#~ "Do you want to adjust existing entries?"
+#~ msgstr ""
+#~ "Το έγγραφο περιέχει ήδη τη βιβλιογραφική παράθεση με διαφορετικά "
+#~ "δεδομένα.\n"
+#~ "Θέλετε να διευθετήσετε τις υφιστάμενες παραθέσεις;"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "Προειδοποίηση"
+
+#, fuzzy
+#~| msgid "Short name%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short name%1"
+#~ msgstr "Σύντομο όνομα%1"
+
+#, fuzzy
+#~| msgid "Used Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Used Styles"
+#~ msgstr "Μεταχειρισμένα στιλ"
+
+#, fuzzy
+#~| msgid "Unused Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unused Styles"
+#~ msgstr "Αχρησιμοποίητα στιλ"
+
+#, fuzzy
+#~| msgid "Select Font"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Font"
+#~ msgstr "Επιλογή γραμματοσειράς"
+
+#, fuzzy
+#~| msgid "Special Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Special Characters"
+#~ msgstr "Ειδικοί χαρακτήρες"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Εισαγωγή"
+
+#, fuzzy
+#~| msgctxt "Close dialog"
+#~| msgid "Close"
+#~ msgctxt "(qtundo-format) Close dialog"
+#~ msgid "Close"
+#~ msgstr "Κλείσιμο"
+
+#, fuzzy
+#~| msgid "The URL is invalid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The URL is invalid"
+#~ msgstr "Το URL δεν είναι έγκυρο"
+
+#, fuzzy
+#~| msgid "Bookmark does not exist"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bookmark does not exist"
+#~ msgstr "Ο σελιδοδείκτης δεν υπάρχει"
+
+#, fuzzy
+#~| msgid "Fetching the title: 0% complete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fetching the title: 0% complete"
+#~ msgstr "Προσκόμιση τίτλου: 0% συμπληρωμένο"
+
+#, fuzzy
+#~| msgid "Fetch timed out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fetch timed out"
+#~ msgstr "Λήξη χρόνου προσκόμισης"
+
+#, fuzzy
+#~| msgid "Fetching the title: %1% complete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fetching the title: %1% complete"
+#~ msgstr "Προσκόμιση τίτλου: %1% συμπληρωμένο"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Μετονομασία σελιδοδείκτη"
+
+#, fuzzy
+#~| msgid "Please provide a new name for the bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please provide a new name for the bookmark"
+#~ msgstr "Δώστε νέο όνομα στον σελιδοδείκτη"
+
+#, fuzzy
+#~| msgid "A bookmark with the name \"%1\" already exists."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr "Σελιδοδείκτης με όνομα \"%1\" ήδη υπάρχει."
+
+#, fuzzy
+#~| msgid "Insert Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Bookmark"
+#~ msgstr "Εισαγωγή σελιδοδείκτη"
+
+#, fuzzy
+#~| msgid "Please provide a name for the bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please provide a name for the bookmark"
+#~ msgstr "Δώστε όνομα στον σελιδοδείκτη"
+
+#, fuzzy
+#~| msgid "Manage Bookmarks"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage Bookmarks"
+#~ msgstr "Διαχείριση σελιδοδεικτών"
+
+#, fuzzy
+#~| msgid "Footnote Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footnote Settings"
+#~ msgstr "Ρυθμίσεις υποσημειώσεων"
+
+#, fuzzy
+#~| msgid "Endnote Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Endnote Settings"
+#~ msgstr "Ρυθμίσεις σημειώσεων τέλους"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Automatic horizontal alignment"
+#~ msgid "Auto"
+#~ msgstr "Αυτόματη"
+
+#, fuzzy
+#~| msgid "Left"
+#~ msgctxt "(qtundo-format) Text alignment"
+#~ msgid "Left"
+#~ msgstr "Αριστερά"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format) Text alignment"
+#~ msgid "Right"
+#~ msgstr "Δεξιά"
+
+#, fuzzy
+#~| msgctxt "Text alignment"
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format) Text alignment"
+#~ msgid "Centered"
+#~ msgstr "Στο κέντρο"
+
+#, fuzzy
+#~| msgctxt "Tab follows the bullet or number"
+#~| msgid "Tab Stop"
+#~ msgctxt "(qtundo-format) Tab follows the bullet or number"
+#~ msgid "Tab Stop"
+#~ msgstr "Τέλος στηλοθέτη"
+
+#, fuzzy
+#~| msgctxt "Space"
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format) Space"
+#~ msgid "Space"
+#~ msgstr "Διάστημα"
+
+#, fuzzy
+#~| msgctxt "None"
+#~| msgid "Nothing"
+#~ msgctxt "(qtundo-format) None"
+#~ msgid "Nothing"
+#~ msgstr "Τίποτε"
+
+#, fuzzy
+#~| msgid "Whole Word"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whole Word"
+#~ msgstr "Ολόκληρη λέξη"
+
+#, fuzzy
+#~| msgid "Indent/Spacing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Indent/Spacing"
+#~ msgstr "Εσοχή/διάστιχο"
+
+#, fuzzy
+#~| msgid "General Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General Layout"
+#~ msgstr "Γενική διάταξη"
+
+#, fuzzy
+#~| msgid "Bullets/Numbers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullets/Numbers"
+#~ msgstr "Κουκκίδες/αριθμοί"
+
+#, fuzzy
+#~| msgid "Decorations"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decorations"
+#~ msgstr "Διακοσμήσεις"
+
+#, fuzzy
+#~| msgid "Drop Caps"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drop Caps"
+#~ msgstr "Απόρριψη κεφαλαίων"
+
+#, fuzzy
+#~| msgctxt "Line spacing value"
+#~| msgid "Single"
+#~ msgctxt "(qtundo-format) Line spacing value"
+#~ msgid "Single"
+#~ msgstr "Μονό"
+
+#, fuzzy
+#~| msgctxt "Line spacing value"
+#~| msgid "1.5 Lines"
+#~ msgctxt "(qtundo-format) Line spacing value"
+#~ msgid "1.5 Lines"
+#~ msgstr "1.5 γραμμές"
+
+#, fuzzy
+#~| msgctxt "Line spacing value"
+#~| msgid "Double"
+#~ msgctxt "(qtundo-format) Line spacing value"
+#~ msgid "Double"
+#~ msgstr "Διπλή γραμμή"
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "Proportional"
+#~ msgctxt "(qtundo-format) Line spacing type"
+#~ msgid "Proportional"
+#~ msgstr "Αναλογικό"
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "Additional"
+#~ msgctxt "(qtundo-format) Line spacing type"
+#~ msgid "Additional"
+#~ msgstr "Επιπρόσθετο"
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "Fixed"
+#~ msgctxt "(qtundo-format) Line spacing type"
+#~ msgid "Fixed"
+#~ msgstr "Σταθερό"
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "At least"
+#~ msgctxt "(qtundo-format) Line spacing type"
+#~ msgid "At least"
+#~ msgstr "Στο ελάχιστο"
+
+#, fuzzy
+#~| msgid "Paragraph Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph Format"
+#~ msgstr "Μορφή παραγράφου"
+
+#, fuzzy
+#~| msgid "Insert a table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a table"
+#~ msgstr "Εισαγωγή πίνακα"
+
+#, fuzzy
+#~| msgid "Enter style name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section name"
+#~ msgstr "Εισάγετε όνομα στυλ:"
+
+#, fuzzy
+#~| msgid "Configure Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure sections"
+#~ msgstr "Διαμόρφωση ρυθμίσεων"
+
+#, fuzzy
+#~| msgid "Change font format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change font format"
+#~ msgstr "Αλλαγή διαμόρφωσης γραμματοσειράς"
+
+#, fuzzy
+#~| msgid "Inserts a footnote at the current cursor position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inserts a footnote at the current cursor position"
+#~ msgstr "Εισαγωγή υποσημείωσης στην τρέχουσα θέση του δρομέα"
+
+#, fuzzy
+#~| msgid "Inserts an endnote at the current cursor position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inserts an endnote at the current cursor position"
+#~ msgstr "Εισαγωγή σημείωσης τέλους στην τρέχουσα θέση του δρομέα"
+
+#, fuzzy
+#~| msgid "Change paragraph format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change paragraph format"
+#~ msgstr "Αλλαγή διαμόρφωσης παραγράφου"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Διαγραφή"
+
+#, fuzzy
+#~| msgid "Set Border Color..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set Border Color..."
+#~ msgstr "Ορισμός χρώματος περιγράμματος..."
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) No border - has to fit in 48pixels"
+#~ msgid "None"
+#~ msgstr "Κανένα"
+
+#, fuzzy
+#~| msgid "No Border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Border"
+#~ msgstr "Κανένα περίγραμμα"
+
+#, fuzzy
+#~| msgid "Create a new style inheriting the current style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new style inheriting the current style"
+#~ msgstr "Δημιουργία νέου στιλ που να κληρονομεί το τρέχον στιλ"
+
+#, fuzzy
+#~| msgid "New Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Style"
+#~ msgstr "Νέο στιλ"
+
+#, fuzzy
+#~| msgid "Another style named '%1' already exist. Please choose another name."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Another style named '%1' already exist. Please choose another name."
+#~ msgstr "Ένα άλλο στιλ με όνομα '%1' ήδη υπάρχει. Επιλέξτε άλλο όνομα."
+
+#, fuzzy
+#~| msgid "Style Manager"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "Διαχειριστής στιλ"
+
+#, fuzzy
+#~| msgid "Save Changes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save Changes"
+#~ msgstr "Αποθήκευση τροποποιήσεων"
+
+#, fuzzy
+#~| msgid ""
+#~| "You have changes that are not applied. What do you want to do with those "
+#~| "changes?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "You have changes that are not applied. What do you want to do with those "
+#~ "changes?"
+#~ msgstr ""
+#~ "Έχετε τροποποιήσεις που δεν έχουν εφαρμοστεί. Τι θέλετε να κάνετε με "
+#~ "αυτές τις τροποποιήσεις;"
+
+#, fuzzy
+#~| msgid "Create a new style with the current properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new style with the current properties"
+#~ msgstr "δημιουργία νέου στιλ με τις τρέχουσες ιδιότητες"
+
+#, fuzzy
+#~| msgid "New style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New style"
+#~ msgstr "Νέο στιλ"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Κανένα"
+
+#, fuzzy
+#~| msgid "Insert Table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Table"
+#~ msgstr "Εισαγωγή πίνακα"
+
+#, fuzzy
+#~| msgid "Table of Contents - Configure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table of Contents - Configure"
+#~ msgstr "Περιεχόμενα - Διαμόρφωση"
+
+#, fuzzy
+#~| msgid "Table Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table Title"
+#~ msgstr "Τίτλος πίνακα"
+
+#, fuzzy
+#~| msgid "Use outline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use outline"
+#~ msgstr "Χρήση περιγράμματος"
+
+#, fuzzy
+#~| msgid "Use styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use styles"
+#~ msgstr "Χρήση στιλ"
+
+#, fuzzy
+#~| msgid "Configure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Διαμόρφωση"
+
+#, fuzzy
+#~| msgid "Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Index"
+#~ msgstr "Ευρετήριο"
+
+#, fuzzy
+#~| msgid "Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Styles"
+#~ msgstr "Στιλ"
+
+#, fuzzy
+#~| msgid "Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Τίτλος"
+
+#, fuzzy
+#~| msgid "Level %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Level %1"
+#~ msgstr "Επίπεδο %1"
+
+#, fuzzy
+#~| msgid "Level"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Level"
+#~ msgstr "Επίπεδο"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Στιλ"
+
+#, fuzzy
+#~| msgid "Table of Contents - Configure Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table of Contents - Configure Styles"
+#~ msgstr "Περιεχόμενα - Διαμόρφωση στιλ"
+
+#, fuzzy
+#~| msgid "Styles available"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Styles available"
+#~ msgstr "Διαθέσιμα στιλ"
+
+#, fuzzy
+#~| msgid "Disabled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Disabled"
+#~ msgstr "Ανενεργό"
+
+#, fuzzy
+#~| msgid "Table Of Contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table Of Contents"
+#~ msgstr "Πίνακας περιεχομένων"
+
+#, fuzzy
+#~| msgid "Contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "Περιεχόμενα"
+
+#, fuzzy
+#~| msgid "Insert a Table of Contents into the document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a Table of Contents into the document."
+#~ msgstr "Εισαγωγή πίνακα περιεχομένων στο έγγραφο."
+
+#, fuzzy
+#~| msgid "Insert Custom..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Custom..."
+#~ msgstr "Εισαγωγή προσαρμογής..."
+
+#, fuzzy
+#~| msgid "Insert a custom Table of Contents into the document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a custom Table of Contents into the document."
+#~ msgstr "Εισαγωγή προσαρμοσμένου πίνακα περιεχομένων στο έγγραφο."
+
+#, fuzzy
+#~| msgid "Configure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "Διαμόρφωση..."
+
+#, fuzzy
+#~| msgid "Configure the Table of Contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure the Table of Contents"
+#~ msgstr "Διαμόρφωση του πίνακα περιεχομένων"
+
+#, fuzzy
+#~| msgid "Insert footnote with auto number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert footnote with auto number"
+#~ msgstr "Εισαγωγή υποσέλιδου με αυτόματη αρίθμηση"
+
+#, fuzzy
+#~| msgid "Insert Labeled Footnote"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Labeled Footnote"
+#~ msgstr "Εισαγωγή υποσημείωσης με τίτλο"
+
+#, fuzzy
+#~| msgid "Insert with label:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert with label:"
+#~ msgstr "Εισαγωγή με ετικέτα:"
+
+#, fuzzy
+#~| msgid "Insert endnote with auto number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert endnote with auto number"
+#~ msgstr "Εισαγωγή σημείωσης τέλους με αυτόματη αρίθμηση"
+
+#, fuzzy
+#~| msgid "Insert Labeled Endnote"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Labeled Endnote"
+#~ msgstr "Εισαγωγή σημείωσης τέλους με τίτλο"
+
+#, fuzzy
+#~| msgid "Settings..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Settings..."
+#~ msgstr "Ρυθμίσεις..."
+
+#, fuzzy
+#~| msgid "Insert Citation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Citation"
+#~ msgstr "Εισαγωγή παραπομπής"
+
+#, fuzzy
+#~| msgid "Insert a citation into the document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a citation into the document."
+#~ msgstr "Εισαγωγή παράθεσης στο έγγραφο."
+
+#, fuzzy
+#~| msgid "Insert Bibliography"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Bibliography"
+#~ msgstr "Εισαγωγή βιβλιογραφίας"
+
+#, fuzzy
+#~| msgid "Insert a bibliography into the document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a bibliography into the document."
+#~ msgstr "Εισαγωγή βιβλιογραφίας στο έγγραφο."
+
+#, fuzzy
+#~| msgid "Insert Custom Bibliography"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Custom Bibliography"
+#~ msgstr "Εισαγωγή προσαρμοσμένης βιβλιογραφίας"
+
+#, fuzzy
+#~| msgid "Insert a custom Bibliography into the document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a custom Bibliography into the document."
+#~ msgstr "Εισαγωγή προσαρμοσμένης βιβλιογραφίας στο έγγραφο."
+
+#, fuzzy
+#~| msgid "Configure the bibliography"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure the bibliography"
+#~ msgstr "Διαμόρφωση της βιβλιογραφίας"
+
+#, fuzzy
+#~| msgid "Insert Link"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Link"
+#~ msgstr "Εισαγωγή συνδέσμου"
+
+#, fuzzy
+#~| msgid "Insert a weblink or link to a bookmark."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a weblink or link to a bookmark."
+#~ msgstr "Εισαγάγετε ιστοσύνδεσμο ή σύνδεσμο σε σελιδοδείκτη."
+
+#, fuzzy
+#~| msgid "Add Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Bookmark"
+#~ msgstr "Προσθήκη σελιδοδείκτη"
+
+#, fuzzy
+#~| msgid "Add Bookmark :"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Bookmark :"
+#~ msgstr "Προσθήκη σελιδοδείκτη :"
+
+#, fuzzy
+#~| msgid ""
+#~| "Insert a Bookmark. This is useful to create links that point to areas "
+#~| "within the document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Insert a Bookmark. This is useful to create links that point to areas "
+#~ "within the document"
+#~ msgstr ""
+#~ "Εισάγετε σελιδοδείκτη. Χρησιμεύει στη δημιουργία συνδέσμων που δείχνουν "
+#~ "σε περιοχές του εγγράφου"
+
+#, fuzzy
+#~| msgid "Bookmarks"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bookmarks"
+#~ msgstr "Σελιδοδείκτες"
+
+#, fuzzy
+#~| msgid ""
+#~| "Display a pop up that hosts the options to add new Bookmark or handle "
+#~| "existing Bookmarks"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Display a pop up that hosts the options to add new Bookmark or handle "
+#~ "existing Bookmarks"
+#~ msgstr ""
+#~ "Εμφανίζει ένα αναδυόμενο πλαίσιο επιλογών για προσθήκη νέου σελιδοδείκτη "
+#~ "ή για το χειρισμό των υφισταμένων σελιδοδεικτών"
+
+#, fuzzy
+#~| msgid ""
+#~| "Manage your Bookmarks. Check where are they pointing to, Delete or "
+#~| "Rename."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Manage your Bookmarks. Check where are they pointing to, Delete or Rename."
+#~ msgstr ""
+#~ "Διαχειριστείτε τους σελιδοδείκτες σας. Ελέγξτε που δείχνουν, διαγράψτε ή "
+#~ "μετονομάστε τους."
+
+#, fuzzy
+#~| msgid "Footnotes and Endnotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footnotes and Endnotes"
+#~ msgstr "Υποσημειώσεις και Σημειώσεις τέλους"
+
+#, fuzzy
+#~| msgid "Citations and Bibliography"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Citations and Bibliography"
+#~ msgstr "Παραθέσεις και Βιβλιογραφία"
+
+#, fuzzy
+#~| msgid "Links and Bookmarks"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Links and Bookmarks"
+#~ msgstr "Σύνδεσμοι και σελιδοδείκτες"
+
+#, fuzzy
+#~| msgid "Bookmark cannot be empty"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bookmark cannot be empty"
+#~ msgstr "Ο σελιδοδείκτης δεν γίνεται να είναι κενός"
+
+#, fuzzy
+#~| msgid "Duplicate Name. Click \"Manage Bookmarks\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Name. Click \"Manage Bookmarks\""
+#~ msgstr "Αντίγραφο ονόματος. Κάνετε κλικ στη «Διαχείριση σελιδοδεικτών»"
+
+#, fuzzy
+#~| msgid "to Rename or Delete Bookmarks"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "to Rename or Delete Bookmarks"
+#~ msgstr "για να μετονομάσετε ή να διαγράψετε σελιδοδείκτες"
+
+#, fuzzy
+#~| msgid "Comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Comment"
+#~ msgstr "Σχόλια"
+
+#, fuzzy
+#~| msgid "Spell checking"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell check"
+#~ msgstr "Ορθογραφικός έλεγχος"
+
+#, fuzzy
+#~| msgid "Comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comments"
+#~ msgstr "Σχόλια"
+
+#, fuzzy
+#~| msgid "Review"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Review"
+#~ msgstr "Επιθεώρηση"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text"
+#~ msgstr "Κείμενο"
+
+#, fuzzy
+#~| msgid "A shape that shows text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape that shows text"
+#~ msgstr "Ένα σχήμα που εμφανίζει κάποιο κείμενο"
+
+#, fuzzy
+#~| msgid "Text Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Shape"
+#~ msgstr "Text Shape"
+
+#, fuzzy
+#~| msgid "Configure Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure current section"
+#~ msgstr "Διαμόρφωση ρυθμίσεων"
+
+#, fuzzy
+#~| msgid "Insert Citation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert new section"
+#~ msgstr "Εισαγωγή παραπομπής"
+
+#, fuzzy
+#~| msgid "Insert Citation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert paragraph between sections"
+#~ msgstr "Εισαγωγή παραπομπής"
+
+#, fuzzy
+#~| msgid "Paste As Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste As Text"
+#~ msgstr "Επικόλληση ως κείμενο"
+
+#, fuzzy
+#~| msgid "Bold"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bold"
+#~ msgstr "Έντονα"
+
+#, fuzzy
+#~| msgid "Italic"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Italic"
+#~ msgstr "Πλάγια"
+
+#, fuzzy
+#~| msgctxt "Text formatting"
+#~| msgid "Underline"
+#~ msgctxt "(qtundo-format) Text formatting"
+#~ msgid "Underline"
+#~ msgstr "Υπογράμμιση"
+
+#, fuzzy
+#~| msgid "Strikethrough"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Strikethrough"
+#~ msgstr "Επιγράμμιση"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Left"
+#~ msgstr "Στοίχιση αριστερά"
+
+#, fuzzy
+#~| msgid "Align Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Right"
+#~ msgstr "Στοίχιση δεξιά"
+
+#, fuzzy
+#~| msgid "Align Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Center"
+#~ msgstr "Στοίχιση στο κέντρο"
+
+#, fuzzy
+#~| msgid "Align Block"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Block"
+#~ msgstr "Στοίχιση τμήματος"
+
+#, fuzzy
+#~| msgid "Change text direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change text direction"
+#~ msgstr "Αλλαγή κατεύθυνσης κειμένου"
+
+#, fuzzy
+#~| msgid "Change writing direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change writing direction"
+#~ msgstr "Αλλαγή κατεύθυνσης γραφής"
+
+#, fuzzy
+#~| msgid "Increase Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Indent"
+#~ msgstr "Αύξηση εσοχής"
+
+#, fuzzy
+#~| msgid "Decrease Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Indent"
+#~ msgstr "Μείωση εσοχής"
+
+#, fuzzy
+#~| msgid "Increase Font Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Font Size"
+#~ msgstr "Αύξηση μεγέθους γραμματοσειράς"
+
+#, fuzzy
+#~| msgid "Decrease Font Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Font Size"
+#~ msgstr "Μείωση μεγέθους γραμματοσειράς"
+
+#, fuzzy
+#~| msgid "Font Family"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Font Family"
+#~ msgstr "Οικογένεια γραμματοσειράς"
+
+#, fuzzy
+#~| msgid "Variable"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Variable"
+#~ msgstr "Μεταβλητή"
+
+#, fuzzy
+#~| msgid "Insert Non-Breaking Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "Εισαγωγή κενού χωρίς διακοπή"
+
+#, fuzzy
+#~| msgid "Insert Non-Breaking Hyphen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Εισαγωγή παύλας χωρίς διακοπή"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Index"
+#~ msgstr "Εισαγωγή ευρετηρίου"
+
+#, fuzzy
+#~| msgid "Insert Soft Hyphen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Εισαγωγή παύλας συλλαβισμού"
+
+#, fuzzy
+#~| msgid "Line Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Break"
+#~ msgstr "Αλλαγή γραμμής"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Break"
+#~ msgstr "Αλλαγή σελίδας"
+
+#, fuzzy
+#~| msgid "Insert a page break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a page break"
+#~ msgstr "Εισαγωγή χαρακτήρα αλλαγής σελίδας"
+
+#, fuzzy
+#~| msgid "All text after this point will be moved into the next page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All text after this point will be moved into the next page."
+#~ msgstr ""
+#~ "Όλο το κείμενο μετά από το σημείο αυτό θα μεταφερθεί στην επόμενη σελίδα."
+
+#, fuzzy
+#~| msgid "Font..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Font..."
+#~ msgstr "Γραμματοσειρά..."
+
+#, fuzzy
+#~| msgid "Change character size, font, boldface, italics etc."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change character size, font, boldface, italics etc."
+#~ msgstr ""
+#~ "Τροποποίηση μεγέθους, γραμματοσειράς, έντονων, πλαγίων χαρακτήρων κτλ."
+
+#, fuzzy
+#~| msgid "Change the attributes of the currently selected characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change the attributes of the currently selected characters."
+#~ msgstr "Τροποποίηση των ιδιοτήτων των τρεχόντων επιλεγμένων χαρακτήρων."
+
+#, fuzzy
+#~| msgid "Font Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Font Size"
+#~ msgstr "Μέγεθος γραμματοσειράς"
+
+#, fuzzy
+#~| msgid "Text Color..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Color..."
+#~ msgstr "Χρώμα κειμένου..."
+
+#, fuzzy
+#~| msgid "Text Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Color"
+#~ msgstr "Χρώμα κειμένου"
+
+#, fuzzy
+#~| msgid "Background Color..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background Color..."
+#~ msgstr "Χρώμα φόντου..."
+
+#, fuzzy
+#~| msgid "Background"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background"
+#~ msgstr "Φόντο"
+
+#, fuzzy
+#~| msgid "Grow To Fit Width"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grow To Fit Width"
+#~ msgstr "Ανάπτυξη για προσαρμογή στο πλάτος"
+
+#, fuzzy
+#~| msgid "Grow To Fit Height"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grow To Fit Height"
+#~ msgstr "Ανάπτυξη για προσαρμογή στο ύψος"
+
+#, fuzzy
+#~| msgid "Shrink To Fit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shrink To Fit"
+#~ msgstr "Συρρίκνωση για προσαρμογή"
+
+#, fuzzy
+#~| msgid "Insert a table into the document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a table into the document."
+#~ msgstr "Εισαγωγή πίνακα στο έγγραφο."
+
+#, fuzzy
+#~| msgid "Row Above"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row Above"
+#~ msgstr "Προηγούμενη γραμμή"
+
+#, fuzzy
+#~| msgid "Insert Row Above"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Row Above"
+#~ msgstr "Εισαγωγή προηγούμενης γραμμής"
+
+#, fuzzy
+#~| msgid "Row Below"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row Below"
+#~ msgstr "Επόμενη γραμμή"
+
+#, fuzzy
+#~| msgid "Insert Row Below"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Row Below"
+#~ msgstr "Εισαγωγή επόμενης γραμμής"
+
+#, fuzzy
+#~| msgid "Column Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column Left"
+#~ msgstr "Στήλη αριστερά"
+
+#, fuzzy
+#~| msgid "Insert Column Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Column Left"
+#~ msgstr "Εισαγωγή στήλης αριστερά"
+
+#, fuzzy
+#~| msgid "Column Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column Right"
+#~ msgstr "Στήλη δεξιά"
+
+#, fuzzy
+#~| msgid "Insert Column Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Column Right"
+#~ msgstr "Εισαγωγή στήλης δεξιά"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column"
+#~ msgstr "Στήλη"
+
+#, fuzzy
+#~| msgid "Delete Column"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Column"
+#~ msgstr "Διαγραφή στήλης"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Γραμμή"
+
+#, fuzzy
+#~| msgid "Delete Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Row"
+#~ msgstr "Διαγραφή γραμμής"
+
+#, fuzzy
+#~| msgid "Merge Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Merge Cells"
+#~ msgstr "Συγχώνευση κελιών"
+
+#, fuzzy
+#~| msgid "Split Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Split Cells"
+#~ msgstr "Διαχωρισμός κελιών"
+
+#, fuzzy
+#~| msgid "Select a border style and paint that style onto a table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select a border style and paint that style onto a table"
+#~ msgstr ""
+#~ "Επιλέξτε στιλ περιγράμματος και ζωγραφίστε το στιλ αυτό σε έναν πίνακα"
+
+#, fuzzy
+#~| msgid "Paragraph..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph..."
+#~ msgstr "Παράγραφος..."
+
+#, fuzzy
+#~| msgid ""
+#~| "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~ msgstr ""
+#~ "Τροποποίηση των περιθωρίων, της ροής κειμένου, των περιγραμμάτων, των "
+#~ "κουκίδων, της αρίθμησης, κτλ της παραγράφου."
+
+#, fuzzy
+#~| msgid ""
+#~| "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~| "<p>Select text in multiple paragraphs to change the formatting of all "
+#~| "selected paragraphs.<p>If no text is selected, the paragraph where the "
+#~| "cursor is located will be changed.</p>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</"
+#~ "p><p>Select text in multiple paragraphs to change the formatting of all "
+#~ "selected paragraphs.</p><p>If no text is selected, the paragraph where "
+#~ "the cursor is located will be changed.</p>"
+#~ msgstr ""
+#~ "Τροποποίηση των περιθωρίων, της ροής κειμένου, των περιγραμμάτων, των "
+#~ "κουκκίδων , κτλ, της παραγράφου.<p>Επιλέξτε κείμενο σε πολλαπλές "
+#~ "παραγράφους για την τροποποίηση της μορφοποίησης σε όλη την επιλογή.<p>Αν "
+#~ "δεν επιλεγεί κείμενο, θα γίνει τροποποίηση της παραγράφου στην οποία "
+#~ "βρίσκεται ο δρομέας.</p>"
+
+#, fuzzy
+#~| msgid "Style Manager..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager..."
+#~ msgstr "Διαχειριστής στιλ..."
+
+#, fuzzy
+#~| msgid "Change attributes of styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change attributes of styles"
+#~ msgstr "Τροποποίηση ιδιοτήτων των στιλ"
+
+#, fuzzy
+#~| msgid ""
+#~| "Change font and paragraph attributes of styles.<p>Multiple styles can be "
+#~| "changed using the dialog box."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<p>Change font and paragraph attributes of styles.</p><p>Multiple styles "
+#~ "can be changed using the dialog box.</p>"
+#~ msgstr ""
+#~ "Τροποποίηση ιδιοτήτων γραμματοσειράς και παραγράφου των στιλ. <p>Μπορεί "
+#~ "να γίνει τροποποίηση πολλαπλών στιλ με αυτό το παράθυρο διαλόγου."
+
+#, fuzzy
+#~| msgid "Special Character..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Special Character..."
+#~ msgstr "Ειδικός χαρακτήρας..."
+
+#, fuzzy
+#~| msgid "Insert one or more symbols or characters not found on the keyboard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert one or more symbols or characters not found on the keyboard"
+#~ msgstr ""
+#~ "Εισαγωγή ενός ή περισσότερων συμβόλων ή χαρακτήρων που δε βρίσκονται στο "
+#~ "πληκτρολόγιο"
+
+#, fuzzy
+#~| msgid "Insert one or more symbols or characters not found on the keyboard."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert one or more symbols or characters not found on the keyboard."
+#~ msgstr ""
+#~ "Εισαγωγή ενός ή περισσότερων συμβόλων ή χαρακτήρων που δε βρίσκονται στο "
+#~ "πληκτρολόγιο."
+
+#, fuzzy
+#~| msgid "Repaint"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Repaint"
+#~ msgstr "Ανασχεδίαση"
+
+#, fuzzy
+#~| msgid "Insert Column Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Comment"
+#~ msgstr "Εισαγωγή στήλης αριστερά"
+
+#, fuzzy
+#~| msgid "Insertion"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insertion"
+#~ msgstr "Εισαγωγή"
+
+#, fuzzy
+#~| msgid "Deletion"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deletion"
+#~ msgstr "Διαγραφή"
+
+#, fuzzy
+#~| msgid "Formatting"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting"
+#~ msgstr "Μορφοποίηση"
+
+#, fuzzy
+#~| msgid "Ctrl+click to go to link "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ctrl+click to go to link "
+#~ msgstr "Ctrl και κλικ για μετάβαση στο σύνδεσμο "
+
+#, fuzzy
+#~| msgid "Ctrl+click to go to the note "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ctrl+click to go to the note "
+#~ msgstr "Ctrl και κλικ για μετάβαση στη σημείωση "
+
+#, fuzzy
+#~| msgid "Ctrl+click to go to the note reference"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ctrl+click to go to the note reference"
+#~ msgstr "Ctrl και κλικ για μετάβαση στην παραπομπή σημείωσης"
+
+#, fuzzy
+#~| msgid "follows along"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "follows along"
+#~ msgstr "ακολουθεί την"
+
+#, fuzzy
+#~| msgid "Press shift to not resize this"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press shift to not resize this"
+#~ msgstr "Πιέστε shift για να μη γίνει αλλαγή μεγέθους"
+
+#, fuzzy
+#~| msgid "Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "Χαρακτήρας"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph"
+#~ msgstr "Παράγραφος"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "Πίνακας"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Autocorrection"
+#~ msgstr "Αυτόματη διόρθωση"
+
+#, fuzzy
+#~| msgid "Key Press"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Key Press"
+#~ msgstr "Πίεση πλήκτρου"
+
+#, fuzzy
+#~| msgid ""
+#~| "This link points to the program or script '%1'.\n"
+#~| "Malicious programs can harm your computer. Are you sure that you want to "
+#~| "run this program?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This link points to the program or script '%1'.\n"
+#~ "Malicious programs can harm your computer. Are you sure that you want to "
+#~ "run this program?"
+#~ msgstr ""
+#~ "Αυτός ο σύνδεσμος δείχνει στο πρόγραμμα ή σενάριο '%1'.\n"
+#~ "Τα κακόβουλα προγράμματα μπορούν να κάνουν ζημιά στον υπολογιστή σας. "
+#~ "Επιθυμείτε σίγουρα την εκτέλεση αυτού του προγράμματος;"
+
+#, fuzzy
+#~| msgid "Open Link?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Link?"
+#~ msgstr "Άνοιγμα συνδέσμου;"
+
+#, fuzzy
+#~| msgid "Text editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text editing"
+#~ msgstr "Επεξεργασία κειμένου"
+
+#~ msgid "Custom Bullet"
+#~ msgstr "Προσαρμοσμένη κουκκίδα"
+
+#~ msgid "Change List Level"
+#~ msgstr "Τροποποίηση επιπέδου λίστας"
+
+#~ msgid "Change the level the list is at"
+#~ msgstr "Αλλαγή επιπέδου της λίστας"
+
+#~ msgid "Bullet list"
+#~ msgstr "Λίστα κουκκίδων"
+
+#~ msgid "Numbered list"
+#~ msgstr "Αριθμημένη λίστα"
+
+#~ msgid "Form"
+#~ msgstr "Φόρμα"
+
+#~ msgid "Table of Contents"
+#~ msgstr "Πίνακας περιεχομένων"
+
+#~ msgid "Tracked change manager"
+#~ msgstr "Διαχειριστής ανιχνευθείσας αλλαγής"
+
+#~ msgid "Configure Change Tracking..."
+#~ msgstr "Διαμόρφωση ιχνηλάτησης αλλαγών..."
+
+#~ msgid "Changes"
+#~ msgstr "Τροποποιήσεις"
+
+#~ msgid "Paragraph Settings"
+#~ msgstr "Ρυθμίσεις παραγράφου"
+
+#~ msgid "Insert Custom ..."
+#~ msgstr "Εισαγωγή προσαρμογής..."
+
+#~ msgid "Format Notes"
+#~ msgstr "Σημειώσεις διαμόρφωσης"
+
+#, fuzzy
+#~| msgid "Configure the Table of Contents"
+#~ msgid "Configure the notes"
+#~ msgstr "Διαμόρφωση του πίνακα περιεχομένων"
+
+#~ msgid "Location"
+#~ msgstr "Θέση"
+
+#~ msgid "Foot Note"
+#~ msgstr "Υποσημείωση"
+
+#~ msgid "End Note"
+#~ msgstr "Σημείωση τέλους"
+
+#~ msgid " Start at "
+#~ msgstr " Αρχή στο "
+
+#~ msgid " Prefix"
+#~ msgstr " Πρόθεμα"
+
+#~ msgid " Begin at "
+#~ msgstr " Αρχή σε "
+
+#~ msgid " Suffix"
+#~ msgstr " Κατάληξη"
+
+#~ msgid " End of Footnote "
+#~ msgstr " Τέλος υποσημείωσης "
+
+#~ msgid " Start of next page "
+#~ msgstr " Αρχή επόμενης σελίδας "
+
+#~ msgid "Inherit style:"
+#~ msgstr "Κληρονόμηση στιλ:"
+
+#~ msgid "<b>Paragraph style properties</b>"
+#~ msgstr "<b>Ιδιότητες στιλ παραγράφου</b>"
+
+#~ msgid "Strike Out"
+#~ msgstr "Επιγράμμιση"
+
+#~ msgid "Type:"
+#~ msgstr "Τύπος:"
+
+#~ msgid "Paragraph style"
+#~ msgstr "Στυλ παραγράφου"
+
+#~ msgid "Character style"
+#~ msgstr "Στυλ χαρακτήρα"
+
+#~ msgid "Create"
+#~ msgstr "Δημιουργία"
+
+#~ msgid "Force the remainder of the text into the next page"
+#~ msgstr "Εξαναγκασμός του υπόλοιπου κειμένου στην επόμενη σελίδα"
+
+#~ msgid "Minimum:"
+#~ msgstr "Ελάχιστο:"
+
+#~ msgid "Highlighting"
+#~ msgstr "Τονισμός"
+
+#~ msgid "["
+#~ msgstr "["
+
+#~ msgid "]"
+#~ msgstr "]"
+
+#~ msgid "address"
+#~ msgstr "διεύθυνση"
+
+#~ msgid "annote"
+#~ msgstr "σχόλιο"
+
+#~ msgid "author"
+#~ msgstr "συγγραφέα"
+
+#~ msgid "bibliography-type"
+#~ msgstr "τύπο-βιβλιογραφίας"
+
+#~ msgid "booktitle"
+#~ msgstr "τίτλο βιβλίου"
+
+#~ msgid "chapter"
+#~ msgstr "κεφάλαιο"
+
+#~ msgid "edition"
+#~ msgstr "έκδοση"
+
+#~ msgid "editor"
+#~ msgstr "εκδότη"
+
+#~ msgid "howpublished"
+#~ msgstr "howpublished"
+
+#~ msgid "identifier"
+#~ msgstr "αναγνωριστικό"
+
+#~ msgid "institution"
+#~ msgstr "ίδρυμα"
+
+#~ msgid "isbn"
+#~ msgstr "isbn"
+
+#~ msgid "issn"
+#~ msgstr "issn"
+
+#~ msgid "journal"
+#~ msgstr "περιοδικό"
+
+#~ msgid "month"
+#~ msgstr "μήνα"
+
+#~ msgid "note"
+#~ msgstr "σημείωση"
+
+#~ msgid "number"
+#~ msgstr "αριθμό"
+
+#~ msgid "organizations"
+#~ msgstr "οργανισμούς"
+
+#~ msgid "pages"
+#~ msgstr "σελίδες"
+
+#~ msgid "publisher"
+#~ msgstr "εκδότη"
+
+#~ msgid "report-type"
+#~ msgstr "τύπο-έκθεσης"
+
+#~ msgid "school"
+#~ msgstr "σχολή"
+
+#~ msgid "series"
+#~ msgstr "σειρά"
+
+#~ msgid "title"
+#~ msgstr "τίτλο"
+
+#~ msgid "url"
+#~ msgstr "url"
+
+#~ msgid "volume"
+#~ msgstr "τόμο"
+
+#~ msgid "year"
+#~ msgstr "έτος"
+
+#~ msgid "Insert bibliography at current position"
+#~ msgstr "Εισαγωγή βιβλιογραφίας στην τρέχουσα θέση"
+
+#~ msgid "Configure bibiliography"
+#~ msgstr "Διαμόρφωση βιβλιογραφίας"
+
+#~ msgid "Offset:"
+#~ msgstr "Μετατόπιση:"
+
+#~ msgid "Custom"
+#~ msgstr "Προσαρμοσμένο"
+
+#~ msgid "Default Format"
+#~ msgstr "Προκαθορισμένη μορφή"
+
+#~ msgid "Change text attributes to their default values"
+#~ msgstr "Τροποποίηση ιδιοτήτων κειμένου στις προκαθορισμένες τιμές"
+
+#~ msgid "Table..."
+#~ msgstr "Πίνακας..."
+
+#~ msgctxt "Short for LeftToRight"
+#~ msgid "LTR"
+#~ msgstr "ΑπΔ"
+
+#~ msgctxt "Short for RightToLeft"
+#~ msgid "RTL"
+#~ msgstr "ΔπΑ"
+
+#~ msgctxt "Automatic direction detection"
+#~ msgid "Auto"
+#~ msgstr "Αυτόματο"
+
+#~ msgid "<b>Character style properties</b>"
+#~ msgstr "<b>Ιδιότητες στυλ χαρακτήρα</b>"
+
+#~ msgid "Use named character style"
+#~ msgstr "Χρήση στυλ χαρακτήρα με όνομα"
+
+#~ msgid "Style:"
+#~ msgstr "Στυλ:"
+
+#, fuzzy
+#~ msgid "Review tool"
+#~ msgstr "Εργαλείο κειμένου"
+
+#, fuzzy
+#~ msgid "Label"
+#~ msgstr "Σχήμα κειμένου"
+
+#, fuzzy
+#~ msgid "Citation"
+#~ msgstr "Μετατροπή σε κεφαλαία"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change List Numbering"
+#~ msgstr "Τροποποίηση αρίθμησης λίστας"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change List"
+#~ msgstr "Τροποποίηση λίστας"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "Διαγραφή"
+
+#, fuzzy
+#~ msgid "Table of Contents..."
+#~ msgstr "Συμπερίληψη στον πίνακα των περιεχομένων"
+
+#, fuzzy
+#~ msgid "Captions"
+#~ msgstr "Επιλογές..."
+
+#~ msgctxt "Text list-style"
+#~ msgid "None"
+#~ msgstr "Κανένα"
+
+#~ msgid "Arabic"
+#~ msgstr "Αραβική"
+
+#~ msgid "Lower Alphabetical"
+#~ msgstr "Πεζά αλφαβητικά"
+
+#~ msgid "Upper Alphabetical"
+#~ msgstr "Κεφαλαία αλφαβητικά"
+
+#~ msgid "Lower Roman"
+#~ msgstr "Πεζά ορθά"
+
+#~ msgid "Upper Roman"
+#~ msgstr "Κεφαλαία ορθά"
+
+#, fuzzy
+#~ msgid "Small Bullet"
+#~ msgstr "Κουκκίδα Χ"
+
+#, fuzzy
+#~ msgid "Large Bullet"
+#~ msgstr "Κουκκίδα τετράγωνο"
+
+#~ msgid "Circle Bullet"
+#~ msgstr "Κουκκίδα κύκλος"
+
+#~ msgid "Square Bullet"
+#~ msgstr "Κουκκίδα τετράγωνο"
+
+#~ msgid "Rhombus Bullet"
+#~ msgstr "Κουκκίδα ρόμβος"
+
+#~ msgid "Check Mark Bullet"
+#~ msgstr "Κουκκίδα σημείωσης"
+
+#~ msgid "Ballot X Bullet"
+#~ msgstr "Κουκκίδα Χ"
+
+#~ msgid "Rightwards Arrow Bullet"
+#~ msgstr "Κουκκίδα δεξιού βέλους"
+
+#~ msgid "Rightwards Arrow Head Bullet"
+#~ msgstr "Κουκκίδα δεξιάς κεφαλής βέλους"
+
+#~ msgid "Bengali"
+#~ msgstr "Μπενγκάλι"
+
+#~ msgid "Gujarati"
+#~ msgstr "Γκουαράτι"
+
+#~ msgid "Gurumukhi"
+#~ msgstr "Γκουρουμούχι"
+
+#~ msgid "Kannada"
+#~ msgstr "Κανάντα"
+
+#~ msgid "Malayalam"
+#~ msgstr "Μαλεϊγιάλαμ"
+
+#~ msgid "Oriya"
+#~ msgstr "Ορίγια"
+
+#~ msgid "Tamil"
+#~ msgstr "Ταμίλ"
+
+#~ msgid "Telugu"
+#~ msgstr "Τελούγκου"
+
+#~ msgid "Tibetan"
+#~ msgstr "Θιβετιανή"
+
+#~ msgid "Thai"
+#~ msgstr "Ταϊλανδική"
+
+#~ msgid "Abjad"
+#~ msgstr "Αμπτζάντ"
+
+#~ msgid "AbjadMinor"
+#~ msgstr "Αμπτζάντ δευτερεύον"
+
+#~ msgid "ArabicAlphabet"
+#~ msgstr "Αραβικό αλφάβητο"
+
+#~ msgid "Disc Bullet"
+#~ msgstr "Κουκκίδα δίσκος"
+
+#~ msgid "Box Bullet"
+#~ msgstr "Κουκκίδα κουτί"
+
+#~ msgid "Create New Style"
+#~ msgstr "Δημιουργία νέου στυλ"
+
+#~ msgid "Edit Paragraph Style"
+#~ msgstr "Επεξεργασία στυλ παραγράφου"
+
+#~ msgid "Edit Character Style"
+#~ msgstr "Επεξεργασία στυλ χαρακτήρα"
+
+#~ msgid "Apply selected style to text"
+#~ msgstr "Εφαρμογή επιλεγμένου στυλ στο κείμενο"
+
+#~ msgid "Show properties"
+#~ msgstr "Εμφάνιση ιδιοτήτων"
+
+#~ msgid "Add a new style"
+#~ msgstr "Προσθήκη ενός νέου στυλ"
+
+#~ msgid "Abc"
+#~ msgstr "Abc"
+
+#~ msgid "List Style:"
+#~ msgstr "Εμφάνιση στυλ:"
+
+#, fuzzy
+#~ msgid "BackGround Color"
+#~ msgstr "Χρώμα φόντου"
+
+#~ msgid "Record"
+#~ msgstr "Εγγραφή"
+
+#~ msgid "Language"
+#~ msgstr "Γλώσσα"
+
+#~ msgctxt "Inherit style"
+#~ msgid "None"
+#~ msgstr "Κανένα"
+
+#~ msgid "horizontalSpacer"
+#~ msgstr "οριζόντιο διάστημα"
+
+#~ msgid "Indent:"
+#~ msgstr "Εσοχή:"
+
+#~ msgid "Align:"
+#~ msgstr "Στοίχιση:"
+
+#~ msgid "Apply parent style to ruler"
+#~ msgstr "Εφαρμογή γονικού στυλ στον κανόνα"
+
+#~ msgid "Paragraph Style:"
+#~ msgstr "Στυλ παραγράφου:"
+
+#~ msgid "n/a"
+#~ msgstr "μ/δ"
+
+#~ msgid "Apply to all of paragraphs of this style"
+#~ msgstr "Εφαρμογή αυτού του στυλ σε όλες τις παραγράφους"
+
+#~ msgid "Enable Smooth Movement"
+#~ msgstr "Ενεργοποίηση ομαλής κίνησης"
+
+#~ msgid "Font:"
+#~ msgstr "Γραμματοσειρά:"
+
+#~ msgid "Size:"
+#~ msgstr "Μέγεθος:"
+
+#~ msgid "Colors:"
+#~ msgstr "Χρώματα:"
+
+#~ msgid "List Options"
+#~ msgstr "Εμφάνιση επιλογών"
+
+#~ msgid "¶"
+#~ msgstr "¶"
+
+#~ msgid "T"
+#~ msgstr "T"

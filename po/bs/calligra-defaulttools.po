@@ -1,0 +1,1014 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2015-02-04 15:46+0000\n"
+"Last-Translator: Emrah Dautbegovic <edautbegov1@etf.unsa.ba>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2015-02-05 06:37+0000\n"
+"X-Generator: Launchpad (build 17331)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#. i18n: ectx: property (text), widget (QCheckBox, toggleEditMode)
+#: connectionTool/ConnectionPointWidget.ui:30
+#, kde-format
+msgid "Edit Mode"
+msgstr "_Režim za promjene"
+
+#. i18n: ectx: property (text), widget (QLabel, labelEscape)
+#: connectionTool/ConnectionPointWidget.ui:37
+#, kde-format
+msgid "Escape Direction"
+msgstr "Pravac iskoka"
+
+#. i18n: ectx: property (text), widget (QLabel, labelAlign)
+#: connectionTool/ConnectionPointWidget.ui:97
+#, kde-format
+msgid "Alignment"
+msgstr "Poravnanje"
+
+#. i18n: ectx: property (text), widget (QToolButton, alignPercent)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleXSpinBox)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleYSpinBox)
+#: connectionTool/ConnectionPointWidget.ui:116
+#: defaulttool/DefaultToolTransformWidget.ui:106
+#: defaulttool/DefaultToolTransformWidget.ui:138
+#, no-c-format, kde-format
+msgid "%"
+msgstr "%"
+
+#: connectionTool/ConnectionTool.cpp:66
+#, kde-format
+msgid "Edit connection points"
+msgstr "Izmijeni tačke konekcije"
+
+#: connectionTool/ConnectionTool.cpp:73
+#, kde-format
+msgid "Align to left edge"
+msgstr "Poravnaj na lijevu ivicu"
+
+#: connectionTool/ConnectionTool.cpp:76
+#, kde-format
+msgid "Align to horizontal center"
+msgstr "Poravnaj na horizontalni centar"
+
+#: connectionTool/ConnectionTool.cpp:79
+#, kde-format
+msgid "Align to right edge"
+msgstr "Poravnaj na desnu ivicu"
+
+#: connectionTool/ConnectionTool.cpp:82
+#, kde-format
+msgid "Align to top edge"
+msgstr "Poravnaj na gornju ivicu"
+
+#: connectionTool/ConnectionTool.cpp:85
+#, kde-format
+msgid "Align to vertical center"
+msgstr "Poravnaj na vertikalni centar"
+
+#: connectionTool/ConnectionTool.cpp:88
+#, kde-format
+msgid "Align to bottom edge"
+msgstr "Poravnaj na donju ivicu"
+
+#: connectionTool/ConnectionTool.cpp:92
+#, kde-format
+msgid "Escape in all directions"
+msgstr "Iskok u svim pravcima"
+
+#: connectionTool/ConnectionTool.cpp:95
+#, kde-format
+msgid "Escape in horizontal directions"
+msgstr "Iskok horizontalnim pravcima"
+
+#: connectionTool/ConnectionTool.cpp:98
+#, kde-format
+msgid "Escape in vertical directions"
+msgstr "Iskok vertikalnim pravcima"
+
+#: connectionTool/ConnectionTool.cpp:101
+#, kde-format
+msgid "Escape in left direction"
+msgstr "Iskok u desnom pravcu"
+
+#: connectionTool/ConnectionTool.cpp:104
+#, kde-format
+msgid "Escape in right direction"
+msgstr "Iskok u lijevom pravcu"
+
+#: connectionTool/ConnectionTool.cpp:107
+#, kde-format
+msgid "Escape in up direction"
+msgstr "Iskok u gornjem pravcu"
+
+#: connectionTool/ConnectionTool.cpp:110
+#, kde-format
+msgid "Escape in down direction"
+msgstr "Iskok u donjem pravcu"
+
+#: connectionTool/ConnectionTool.cpp:434
+#, fuzzy
+#| msgid "Connection"
+msgctxt "(qtundo-format)"
+msgid "Create Connection"
+msgstr "Veza"
+
+#: connectionTool/ConnectionTool.cpp:774 connectionTool/ConnectionTool.cpp:786
+#, kde-format
+msgid "Drag to edit connection."
+msgstr "Prevuci za izmjenu konekcije."
+
+#: connectionTool/ConnectionTool.cpp:776 connectionTool/ConnectionTool.cpp:788
+#, kde-format
+msgid "Double click connection or press delete to remove it."
+msgstr "Dva puta klikni na konekciju ili pritisni delete za njeno brisanje."
+
+#: connectionTool/ConnectionTool.cpp:778
+#, kde-format
+msgid "Click to edit connection points."
+msgstr "Klikni za uređivanje konekcijskih tačaka."
+
+#: connectionTool/ConnectionTool.cpp:792
+#, kde-format
+msgid ""
+"Drag to move connection point. Double click connection or press delete to "
+"remove it."
+msgstr ""
+"Prevuci za pomijernje konekcijske tačke. Dupli kliki na konekciju ili Delete "
+"za njeno uklanjanje."
+
+#: connectionTool/ConnectionTool.cpp:794
+#, kde-format
+msgid "Double click connection point or press delete to remove it."
+msgstr "Dupli kliki na konekcijsku tačku ili Delete za njeno uklanjanje."
+
+#: connectionTool/ConnectionTool.cpp:796
+#, kde-format
+msgid "Double click to add connection point."
+msgstr "Dupli kliki na za dodavanje konekcijske tačke."
+
+#: connectionTool/ConnectionTool.cpp:799
+#, kde-format
+msgid "Drag to create new connection."
+msgstr "Prevlačenje za kreiranje nove konekcije."
+
+#: connectionTool/ConnectionTool.cpp:827
+#, kde-format
+msgid "Connection"
+msgstr "Veza"
+
+#: connectionTool/ConnectionTool.cpp:832 defaulttool/DefaultTool.cpp:1167
+#, kde-format
+msgid "Line"
+msgstr "Linija"
+
+#: connectionTool/ConnectionTool.cpp:837
+#, kde-format
+msgid "Connection Point"
+msgstr "Tačka veze"
+
+#: connectionTool/ConnectionToolFactory.cpp:18
+#, kde-format
+msgid "Connect shapes"
+msgstr "Povezivanje oblika"
+
+#: defaulttool/DefaultTool.cpp:205
+#, kde-format
+msgid "Bring to &Front"
+msgstr "Dovedi &Ispred"
+
+#: defaulttool/DefaultTool.cpp:210
+#, kde-format
+msgid "&Raise"
+msgstr "&Podigni"
+
+#: defaulttool/DefaultTool.cpp:215
+#, kde-format
+msgid "&Lower"
+msgstr "&Spusti"
+
+#: defaulttool/DefaultTool.cpp:221
+#, kde-format
+msgid "Send to &Back"
+msgstr "Pošalji u &Pozadinu"
+
+#: defaulttool/DefaultTool.cpp:227
+#, kde-format
+msgid "Align Left"
+msgstr "Poravnaj lijevo"
+
+#: defaulttool/DefaultTool.cpp:232
+#, kde-format
+msgid "Horizontally Center"
+msgstr "Horizontalno centriranje"
+
+#: defaulttool/DefaultTool.cpp:237
+#, kde-format
+msgid "Align Right"
+msgstr "Poravnaj desno"
+
+#: defaulttool/DefaultTool.cpp:241
+#, kde-format
+msgid "Align Top"
+msgstr "Poravnaj uz vrh"
+
+#: defaulttool/DefaultTool.cpp:246
+#, kde-format
+msgid "Vertically Center"
+msgstr "Vertikalno centriranje"
+
+#: defaulttool/DefaultTool.cpp:251
+#, kde-format
+msgid "Align Bottom"
+msgstr "Poravnaj uz dno"
+
+#: defaulttool/DefaultTool.cpp:256
+#, kde-format
+msgid "Group"
+msgstr "Grupiši"
+
+#: defaulttool/DefaultTool.cpp:261
+#, kde-format
+msgid "Ungroup"
+msgstr "Razgrupiši"
+
+#: defaulttool/DefaultTool.cpp:447 defaulttool/DefaultTool.cpp:522
+#, kde-format
+msgid "Click and drag to move guide line."
+msgstr "Kliknite i povucite za pomjeranje pomoćne linije."
+
+#: defaulttool/DefaultTool.cpp:454
+#, kde-format
+msgid ""
+"Left click rotates around center, right click around highlighted position."
+msgstr "Lijevi klik rotira oko centra, desni klik oko istaknute pozicije."
+
+#: defaulttool/DefaultTool.cpp:456
+#, kde-format
+msgid "Click and drag to shear selection."
+msgstr "Kliknite i povucite za smicanje označenog."
+
+#: defaulttool/DefaultTool.cpp:459
+#, kde-format
+msgid "Click and drag to resize selection."
+msgstr "Kliknite i povucite za promjenu velicine označenog."
+
+#: defaulttool/DefaultTool.cpp:511
+#, kde-format
+msgid "Click and drag to move selection."
+msgstr "Kliknite i povucite za pomjeranje označenog."
+
+#: defaulttool/DefaultTool.cpp:516
+#, kde-format
+msgid ""
+"Click and drag to resize selection. Middle click to set highlighted position."
+msgstr ""
+"Kliknite i povucite za početni oblik označenog. Srednji klik za postavljanje "
+"istaknute pozicije."
+
+#: defaulttool/DefaultTool.cpp:1039
+msgctxt "(qtundo-format)"
+msgid "Group shapes"
+msgstr "Grupisanje oblika"
+
+#: defaulttool/DefaultTool.cpp:1071
+msgctxt "(qtundo-format)"
+msgid "Ungroup shapes"
+msgstr "Razgrupisanje oblika"
+
+#: defaulttool/DefaultTool.cpp:1161
+#, kde-format
+msgid "Arrange"
+msgstr "Organizuj"
+
+#: defaulttool/DefaultTool.cpp:1164
+#, kde-format
+msgid "Geometry"
+msgstr "Geometrija"
+
+#: defaulttool/DefaultTool.cpp:1172
+#, kde-format
+msgid "Fill"
+msgstr "Ispuni"
+
+#: defaulttool/DefaultTool.cpp:1177
+#, kde-format
+msgid "Shadow"
+msgstr "Sijenka"
+
+#: defaulttool/DefaultToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Shape handling"
+msgid "Shape handling"
+msgstr "Upravljanje oblicima"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:100
+#: defaulttool/ShapeRotateStrategy.cpp:137
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "Rotiraj"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:138
+msgctxt "(qtundo-format)"
+msgid "Shear X"
+msgstr "Skraćenje X"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:176
+msgctxt "(qtundo-format)"
+msgid "Shear Y"
+msgstr "Skraćenje Y"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:218
+#: defaulttool/DefaultToolTransformWidget.cpp:255
+msgctxt "(qtundo-format)"
+msgid "Scale"
+msgstr "Razmjer"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:287
+msgctxt "(qtundo-format)"
+msgid "Reset Transformations"
+msgstr "Reset Transformacije"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, rotateSpinBox)
+#: defaulttool/DefaultToolTransformWidget.ui:25
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (text), widget (QPushButton, rotateButton)
+#: defaulttool/DefaultToolTransformWidget.ui:38
+#, kde-format
+msgid "Rotate"
+msgstr "Rotiraj"
+
+#. i18n: ectx: property (text), widget (QPushButton, shearXButton)
+#: defaulttool/DefaultToolTransformWidget.ui:64
+#, kde-format
+msgid "Shear X"
+msgstr "Skraćenje X"
+
+#. i18n: ectx: property (text), widget (QPushButton, shearYButton)
+#: defaulttool/DefaultToolTransformWidget.ui:90
+#, kde-format
+msgid "Shear Y"
+msgstr "Skraćenje Y"
+
+#. i18n: ectx: property (text), widget (QPushButton, scaleXButton)
+#: defaulttool/DefaultToolTransformWidget.ui:122
+#, kde-format
+msgid "Scale X"
+msgstr "Razmjera X"
+
+#. i18n: ectx: property (text), widget (QPushButton, scaleYButton)
+#: defaulttool/DefaultToolTransformWidget.ui:154
+#, kde-format
+msgid "Scale Y"
+msgstr "Razmjera Y"
+
+#. i18n: ectx: property (text), widget (QCheckBox, scaleAspectCheckBox)
+#: defaulttool/DefaultToolTransformWidget.ui:161
+#, kde-format
+msgid "Keep aspect ratio"
+msgstr "Zadrži odnos širine i visine"
+
+#. i18n: ectx: property (text), widget (QPushButton, resetButton)
+#: defaulttool/DefaultToolTransformWidget.ui:174
+#, kde-format
+msgid "Reset Transformations"
+msgstr "Reset Transformacije"
+
+#: defaulttool/DefaultToolWidget.cpp:225
+#: defaulttool/ShapeResizeStrategy.cpp:304
+msgctxt "(qtundo-format)"
+msgid "Resize"
+msgstr "Promijeni veličinu"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: defaulttool/DefaultToolWidget.ui:29
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: defaulttool/DefaultToolWidget.ui:91
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#: defaulttool/ShapeMoveStrategy.cpp:53
+#, kde-format
+msgid "Press ALT to hold x- or y-position."
+msgstr "Pritisni ALT za zadržavanje x- ili y- pozicije."
+
+#: defaulttool/ShapeResizeStrategy.cpp:92
+#, kde-format
+msgid "Press CTRL to resize from center."
+msgstr "Pritisni CTRL da bi promjenio veličinu od centra."
+
+#: defaulttool/ShapeRotateStrategy.cpp:49
+#, kde-format
+msgid "Press ALT to rotate in 45 degree steps."
+msgstr "Pritisnii ALT da bi rotirao sa uglom od 45 stepeni."
+
+#: defaulttool/ShapeShearStrategy.cpp:169
+msgctxt "(qtundo-format)"
+msgid "Shear"
+msgstr "Ostriži"
+
+#: guidestool/GuidesTool.cpp:133
+#, kde-format
+msgid "Double click to add guide line."
+msgstr "Dupli klik za dodavanje linije vođice."
+
+#: guidestool/GuidesTool.cpp:136
+#, kde-format
+msgid "Click and drag to move guide line. Double click to remove guide line."
+msgstr ""
+"Klik i prevlačenje za premještanje linije vođice. Dupli klik za uklanajnje "
+"vođice."
+
+#: guidestool/GuidesTool.cpp:374
+#, kde-format
+msgid "Guides Editor"
+msgstr "Uređivač pomoćnih linija"
+
+#: guidestool/GuidesTool.cpp:382
+#, kde-format
+msgid "Guides Insertor"
+msgstr "Ubacivač pomoćnih linija"
+
+#: guidestool/GuidesToolFactory.cpp:14
+#, kde-format
+msgid "Edit guidelines"
+msgstr "Uredi pomočne linije"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: guidestool/GuidesToolOptionWidget.cpp:18
+#: guidestool/InsertGuidesToolOptionWidget.ui:25
+#, kde-format
+msgid "Horizontal"
+msgstr "Horizontalno"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: guidestool/GuidesToolOptionWidget.cpp:19
+#: guidestool/InsertGuidesToolOptionWidget.ui:65
+#, kde-format
+msgid "Vertical"
+msgstr "Vertikalno"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: guidestool/GuidesToolOptionWidget.ui:17
+#, kde-format
+msgid "Orientation:"
+msgstr "Orijentacija:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: guidestool/GuidesToolOptionWidget.ui:27
+#, kde-format
+msgid "Position:"
+msgstr "Pozicija:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#: guidestool/GuidesToolOptionWidget.ui:37
+#, kde-format
+msgid "Add"
+msgstr "Dodaj"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeButton)
+#: guidestool/GuidesToolOptionWidget.ui:44
+#, kde-format
+msgid "Remove"
+msgstr "Ukloni"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, m_horizontalSpinBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:38
+#, kde-format
+msgid "Insert this number of horizontal equally spaced guides."
+msgstr "Umetnite ovaj broj od horizontalno jednako raspoređenih vodiča."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, m_horizontalEdgesCheckBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:51
+#, kde-format
+msgid "Insert guides at the horizontal edges."
+msgstr "Umetnite vodiče na horizontalne ivice."
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, m_verticalSpinBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:78
+#, kde-format
+msgid "Insert this number of vertical equally spaced guides."
+msgstr "Umetnite ovaj broj od vertikalno jednako raspoređenih vodiča."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, m_verticalEdgesCheckBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:91
+#, kde-format
+msgid "Insert guides at the vertical edges."
+msgstr "Umetnite vodiče na vertikalne ivice."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_erasePreviousCheckBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:105
+#, kde-format
+msgid "Erase previous guides"
+msgstr "Brisanje prethodnih vodiča."
+
+#. i18n: ectx: property (text), widget (QPushButton, m_createButton)
+#: guidestool/InsertGuidesToolOptionWidget.ui:112
+#, kde-format
+msgid "Create"
+msgstr "Kreiraj"
+
+#, fuzzy
+#~| msgid "X:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~| msgid "Y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "°"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "°"
+#~ msgstr "°"
+
+#, fuzzy
+#~| msgid "%"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%"
+#~ msgstr "%"
+
+#, fuzzy
+#~| msgid "Scale X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale X"
+#~ msgstr "Razmjera X"
+
+#, fuzzy
+#~| msgid "Scale Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale Y"
+#~ msgstr "Razmjera Y"
+
+#, fuzzy
+#~| msgid "Keep aspect ratio"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keep aspect ratio"
+#~ msgstr "Zadrži odnos širine i visine"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Orientation:"
+#~ msgstr "Orijentacija:"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Position:"
+#~ msgstr "Pozicija:"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Dodaj"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Ukloni"
+
+#, fuzzy
+#~| msgid "Insert this number of horizontal equally spaced guides."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert this number of horizontal equally spaced guides."
+#~ msgstr "Umetnite ovaj broj od horizontalno jednako raspoređenih vodiča."
+
+#, fuzzy
+#~| msgid "Insert guides at the horizontal edges."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert guides at the horizontal edges."
+#~ msgstr "Umetnite vodiče na horizontalne ivice."
+
+#, fuzzy
+#~| msgid "Insert this number of vertical equally spaced guides."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert this number of vertical equally spaced guides."
+#~ msgstr "Umetnite ovaj broj od vertikalno jednako raspoređenih vodiča."
+
+#, fuzzy
+#~| msgid "Insert guides at the vertical edges."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert guides at the vertical edges."
+#~ msgstr "Umetnite vodiče na vertikalne ivice."
+
+#, fuzzy
+#~| msgid "Erase previous guides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Erase previous guides"
+#~ msgstr "Brisanje prethodnih vodiča."
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Kreiraj"
+
+#, fuzzy
+#~| msgid "Edit Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Mode"
+#~ msgstr "_Režim za promjene"
+
+#, fuzzy
+#~| msgid "Escape Direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape Direction"
+#~ msgstr "Pravac iskoka"
+
+#, fuzzy
+#~| msgid "Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alignment"
+#~ msgstr "Poravnanje"
+
+#, fuzzy
+#~| msgid "Edit connection points"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit connection points"
+#~ msgstr "Izmijeni tačke konekcije"
+
+#, fuzzy
+#~| msgid "Align to left edge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to left edge"
+#~ msgstr "Poravnaj na lijevu ivicu"
+
+#, fuzzy
+#~| msgid "Align to horizontal center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to horizontal center"
+#~ msgstr "Poravnaj na horizontalni centar"
+
+#, fuzzy
+#~| msgid "Align to right edge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to right edge"
+#~ msgstr "Poravnaj na desnu ivicu"
+
+#, fuzzy
+#~| msgid "Align to top edge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to top edge"
+#~ msgstr "Poravnaj na gornju ivicu"
+
+#, fuzzy
+#~| msgid "Align to vertical center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to vertical center"
+#~ msgstr "Poravnaj na vertikalni centar"
+
+#, fuzzy
+#~| msgid "Align to bottom edge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to bottom edge"
+#~ msgstr "Poravnaj na donju ivicu"
+
+#, fuzzy
+#~| msgid "Escape in all directions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in all directions"
+#~ msgstr "Iskok u svim pravcima"
+
+#, fuzzy
+#~| msgid "Escape in horizontal directions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in horizontal directions"
+#~ msgstr "Iskok horizontalnim pravcima"
+
+#, fuzzy
+#~| msgid "Escape in vertical directions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in vertical directions"
+#~ msgstr "Iskok vertikalnim pravcima"
+
+#, fuzzy
+#~| msgid "Escape in left direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in left direction"
+#~ msgstr "Iskok u desnom pravcu"
+
+#, fuzzy
+#~| msgid "Escape in right direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in right direction"
+#~ msgstr "Iskok u lijevom pravcu"
+
+#, fuzzy
+#~| msgid "Escape in up direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in up direction"
+#~ msgstr "Iskok u gornjem pravcu"
+
+#, fuzzy
+#~| msgid "Escape in down direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in down direction"
+#~ msgstr "Iskok u donjem pravcu"
+
+#, fuzzy
+#~| msgid "Drag to edit connection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to edit connection."
+#~ msgstr "Prevuci za izmjenu konekcije."
+
+#, fuzzy
+#~| msgid "Double click connection or press delete to remove it."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click connection or press delete to remove it."
+#~ msgstr "Dva puta klikni na konekciju ili pritisni delete za njeno brisanje."
+
+#, fuzzy
+#~| msgid "Click to edit connection points."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click to edit connection points."
+#~ msgstr "Klikni za uređivanje konekcijskih tačaka."
+
+#, fuzzy
+#~| msgid ""
+#~| "Drag to move connection point. Double click connection or press delete "
+#~| "to remove it."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Drag to move connection point. Double click connection or press delete to "
+#~ "remove it."
+#~ msgstr ""
+#~ "Prevuci za pomijernje konekcijske tačke. Dupli kliki na konekciju ili "
+#~ "Delete za njeno uklanjanje."
+
+#, fuzzy
+#~| msgid "Double click connection point or press delete to remove it."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click connection point or press delete to remove it."
+#~ msgstr "Dupli kliki na konekcijsku tačku ili Delete za njeno uklanjanje."
+
+#, fuzzy
+#~| msgid "Double click to add connection point."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add connection point."
+#~ msgstr "Dupli kliki na za dodavanje konekcijske tačke."
+
+#, fuzzy
+#~| msgid "Drag to create new connection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to create new connection."
+#~ msgstr "Prevlačenje za kreiranje nove konekcije."
+
+#, fuzzy
+#~| msgid "Connection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connection"
+#~ msgstr "Veza"
+
+#, fuzzy
+#~| msgid "Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line"
+#~ msgstr "Linija"
+
+#, fuzzy
+#~| msgid "Connection Point"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connection Point"
+#~ msgstr "Tačka veze"
+
+#, fuzzy
+#~| msgid "Connect shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect shapes"
+#~ msgstr "Povezivanje oblika"
+
+#, fuzzy
+#~| msgid "Bring to &Front"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bring to &Front"
+#~ msgstr "Dovedi &Ispred"
+
+#, fuzzy
+#~| msgid "&Raise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Raise"
+#~ msgstr "&Podigni"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Lower"
+#~ msgstr "&Spusti"
+
+#, fuzzy
+#~| msgid "Send to &Back"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Send to &Back"
+#~ msgstr "Pošalji u &Pozadinu"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Left"
+#~ msgstr "Poravnaj lijevo"
+
+#, fuzzy
+#~| msgid "Horizontally Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontally Center"
+#~ msgstr "Horizontalno centriranje"
+
+#, fuzzy
+#~| msgid "Align Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Right"
+#~ msgstr "Poravnaj desno"
+
+#, fuzzy
+#~| msgid "Align Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Top"
+#~ msgstr "Poravnaj uz vrh"
+
+#, fuzzy
+#~| msgid "Vertically Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertically Center"
+#~ msgstr "Vertikalno centriranje"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Bottom"
+#~ msgstr "Poravnaj uz dno"
+
+#, fuzzy
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Group"
+#~ msgstr "Grupiši"
+
+#, fuzzy
+#~| msgid "Ungroup"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ungroup"
+#~ msgstr "Razgrupiši"
+
+#, fuzzy
+#~| msgid "Click and drag to move guide line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click and drag to move guide line."
+#~ msgstr "Kliknite i povucite za pomjeranje pomoćne linije."
+
+#, fuzzy
+#~| msgid ""
+#~| "Left click rotates around center, right click around highlighted "
+#~| "position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Left click rotates around center, right click around highlighted position."
+#~ msgstr "Lijevi klik rotira oko centra, desni klik oko istaknute pozicije."
+
+#, fuzzy
+#~| msgid "Click and drag to shear selection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click and drag to shear selection."
+#~ msgstr "Kliknite i povucite za smicanje označenog."
+
+#, fuzzy
+#~| msgid "Click and drag to resize selection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click and drag to resize selection."
+#~ msgstr "Kliknite i povucite za promjenu velicine označenog."
+
+#, fuzzy
+#~| msgid "Click and drag to move selection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click and drag to move selection."
+#~ msgstr "Kliknite i povucite za pomjeranje označenog."
+
+#, fuzzy
+#~| msgid ""
+#~| "Click and drag to resize selection. Middle click to set highlighted "
+#~| "position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Click and drag to resize selection. Middle click to set highlighted "
+#~ "position."
+#~ msgstr ""
+#~ "Kliknite i povucite za početni oblik označenog. Srednji klik za "
+#~ "postavljanje istaknute pozicije."
+
+#, fuzzy
+#~| msgid "Arrange"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrange"
+#~ msgstr "Organizuj"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Geometrija"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill"
+#~ msgstr "Ispuni"
+
+#, fuzzy
+#~| msgid "Shadow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shadow"
+#~ msgstr "Sijenka"
+
+#, fuzzy
+#~| msgid "Shape handling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape handling"
+#~ msgstr "Upravljanje oblicima"
+
+#, fuzzy
+#~| msgid "Press ALT to hold x- or y-position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press ALT to hold x- or y-position."
+#~ msgstr "Pritisni ALT za zadržavanje x- ili y- pozicije."
+
+#, fuzzy
+#~| msgid "Press CTRL to resize from center."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press CTRL to resize from center."
+#~ msgstr "Pritisni CTRL da bi promjenio veličinu od centra."
+
+#, fuzzy
+#~| msgid "Press ALT to rotate in 45 degree steps."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press ALT to rotate in 45 degree steps."
+#~ msgstr "Pritisnii ALT da bi rotirao sa uglom od 45 stepeni."
+
+#, fuzzy
+#~| msgid "Double click to add guide line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add guide line."
+#~ msgstr "Dupli klik za dodavanje linije vođice."
+
+#, fuzzy
+#~| msgid ""
+#~| "Click and drag to move guide line. Double click to remove guide line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Click and drag to move guide line. Double click to remove guide line."
+#~ msgstr ""
+#~ "Klik i prevlačenje za premještanje linije vođice. Dupli klik za "
+#~ "uklanajnje vođice."
+
+#, fuzzy
+#~| msgid "Guides Editor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Guides Editor"
+#~ msgstr "Uređivač pomoćnih linija"
+
+#, fuzzy
+#~| msgid "Guides Insertor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Guides Insertor"
+#~ msgstr "Ubacivač pomoćnih linija"
+
+#, fuzzy
+#~| msgid "Edit guidelines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit guidelines"
+#~ msgstr "Uredi pomočne linije"
+
+#, fuzzy
+#~| msgid "Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "Horizontalno"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "Vertikalno"
+
+#~ msgid "None"
+#~ msgstr "Nijedan"

@@ -1,0 +1,429 @@
+# translation of thesaurus_tool.po to Latvian
+# Copyright (C) 2006, 2008 Free Software Foundation, Inc.
+#
+# Maris Nartiss <maris.kde@gmail.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: thesaurus_tool\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2008-12-29 11:15+0200\n"
+"Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
+"Language-Team: Latvian <locale@laka.lv>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+
+#: Thesaurus.cpp:81
+#, kde-format
+msgid "(No match)"
+msgstr "(Nesakrīt)"
+
+#: Thesaurus.cpp:91
+#, kde-format
+msgid "&Search for:"
+msgstr "&Meklēt:"
+
+#: Thesaurus.cpp:94
+#, kde-format
+msgid "S&earch"
+msgstr "M&eklēt:"
+
+#: Thesaurus.cpp:101
+#, kde-format
+msgctxt "@action:button Go back to the previous word in history"
+msgid "Back"
+msgstr "Atpakaļ"
+
+#: Thesaurus.cpp:105
+#, kde-format
+msgctxt "@action:button Go forward to the next word in history"
+msgid "Forward"
+msgstr "Uz priekšu"
+
+#: Thesaurus.cpp:108
+#, kde-format
+msgid "Change Language..."
+msgstr "Mainīt valodu..."
+
+#: Thesaurus.cpp:122
+#, kde-format
+msgid "&Thesaurus"
+msgstr "&Tēzaurs"
+
+#: Thesaurus.cpp:126
+#, kde-format
+msgid "Synonyms"
+msgstr "Sinonīmi"
+
+#: Thesaurus.cpp:133
+#, kde-format
+msgid "More General Words"
+msgstr "Vairāk pamata vārdu"
+
+#: Thesaurus.cpp:140
+#, kde-format
+msgid "More Specific Words"
+msgstr "Vairāk specifisku vārdu"
+
+#: Thesaurus.cpp:170
+#, kde-format
+msgid "&Wordnet"
+msgstr "&Wordnet"
+
+#: Thesaurus.cpp:192
+#, kde-format
+msgid "&Replace with:"
+msgstr "&Aizvietot ar:"
+
+#: Thesaurus.cpp:255
+#, kde-format
+msgid "&Replace"
+msgstr "&Aizvietot"
+
+#: Thesaurus.cpp:267
+#, kde-format
+msgid "Replace Word"
+msgstr "Aizvietot vārdu"
+
+#: Thesaurus.cpp:295
+#, kde-format
+msgid "Related Words - %1"
+msgstr "Saistīti vārdi - %1"
+
+#: Thesaurus.cpp:409
+#, kde-format
+msgid ""
+"The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+"select a thesaurus file."
+msgstr ""
+"Tēzaura fails '%1' netika atrasts. Izmantojiet 'Mainīt valodu...' un "
+"izvēlieties citu tēzaura failu."
+
+#: Thesaurus.cpp:429
+#, kde-format
+msgid "<b>Error:</b> Failed to execute grep."
+msgstr "<b>Kļūda:</b> Neizdevās darbināt grep."
+
+#: Thesaurus.cpp:581
+#, kde-format
+msgid "Synonyms/Hypernyms - Ordered by Frequency"
+msgstr "Sinonīmi/Hipernīmi - sakārtoti pēc biežuma"
+
+#: Thesaurus.cpp:582
+#, kde-format
+msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+msgstr "Sinonīmi - sakārtoti pēc līdzības (tikai darbības vārdi)"
+
+#: Thesaurus.cpp:583
+#, kde-format
+msgid "Antonyms - Words with Opposite Meanings"
+msgstr "Antonīmi - vārdi ar pretēju nozīmi"
+
+#: Thesaurus.cpp:584
+#, kde-format
+msgid "Hyponyms - ... is a (kind of) %1"
+msgstr "Hiponīmi - ... ir (veida) %1"
+
+#: Thesaurus.cpp:585
+#, kde-format
+msgid "Meronyms - %1 has a ..."
+msgstr "Meronīmi - %1 pieder ..."
+
+#: Thesaurus.cpp:587
+#, kde-format
+msgid "Holonyms - ... has a %1"
+msgstr "Holonīmi - ... pieder %1"
+
+#: Thesaurus.cpp:588
+#, kde-format
+msgid "Attributes"
+msgstr "Atribūti"
+
+#: Thesaurus.cpp:589
+#, kde-format
+msgid "Cause To (for some verbs only)"
+msgstr "Rezultāts ir (tikai dažiem darbības vārdiem)"
+
+#: Thesaurus.cpp:590
+#, kde-format
+msgid "Verb Entailment (for some verbs only)"
+msgstr "Darbības vārda piederība (dažiem darbības vārdiem)"
+
+#: Thesaurus.cpp:591
+#, kde-format
+msgid "Familiarity & Polysemy Count"
+msgstr "Līdzības un polēmijas skaitītājs"
+
+#: Thesaurus.cpp:593
+#, kde-format
+msgid "Verb Frames (examples of use)"
+msgstr "Darbības vārdu rāmji (lietošanas piemēri)"
+
+#: Thesaurus.cpp:594
+#, kde-format
+msgid "List of Compound Words"
+msgstr "Salikteņu saraksts"
+
+#: Thesaurus.cpp:595
+#, kde-format
+msgid "Overview of Senses"
+msgstr "Nozīmju pārskats"
+
+#: Thesaurus.cpp:623
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#| "installed on your computer if you want to use it, and 'wn' has to be in "
+#| "your PATH. You can get WordNet at <a href=\"http://www.cogsci.princeton."
+#| "edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet "
+#| "only supports the English language."
+msgid ""
+"<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+"installed on your computer if you want to use it, and 'wn' has to be in your "
+"PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+"\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+"English language."
+msgstr ""
+"<b>Kļūda:</b> Neizdevās palaist WordNet programmu 'wn'. Jūsu datorā ir jābūt "
+"uzinstalētam WordNet ja vēlaties to lietot, un 'wn' ir jābūt jūsu PATH. Jūs "
+"variet iegūt WordNet no <a href=\"http://www.cogsci.princeton.edu/~wn/"
+"\">http://www.cogsci.princeton.edu/~wn/</a>. Ņemiet vērā, ka WordNet "
+"atbalsta tikai Angļu valodu."
+
+#: Thesaurus.cpp:635
+#, kde-format
+msgid "No match for '%1'."
+msgstr "Nav atbilstību vārdam '%1'."
+
+#~ msgctxt "@action:button Close thesaurus dialog"
+#~ msgid "&Close"
+#~ msgstr "&Aizvērt"
+
+#, fuzzy
+#~| msgid "(No match)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(No match)"
+#~ msgstr "(Nesakrīt)"
+
+#, fuzzy
+#~| msgid "&Search for:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Search for:"
+#~ msgstr "&Meklēt:"
+
+#, fuzzy
+#~| msgid "S&earch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&earch"
+#~ msgstr "M&eklēt:"
+
+#, fuzzy
+#~| msgctxt "@action:button Go back to the previous word in history"
+#~| msgid "Back"
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go back to the previous word in history"
+#~ msgid "Back"
+#~ msgstr "Atpakaļ"
+
+#, fuzzy
+#~| msgctxt "@action:button Go forward to the next word in history"
+#~| msgid "Forward"
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go forward to the next word in history"
+#~ msgid "Forward"
+#~ msgstr "Uz priekšu"
+
+#, fuzzy
+#~| msgid "Change Language..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Language..."
+#~ msgstr "Mainīt valodu..."
+
+#, fuzzy
+#~| msgid "&Thesaurus"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Thesaurus"
+#~ msgstr "&Tēzaurs"
+
+#, fuzzy
+#~| msgid "Synonyms"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms"
+#~ msgstr "Sinonīmi"
+
+#, fuzzy
+#~| msgid "More General Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More General Words"
+#~ msgstr "Vairāk pamata vārdu"
+
+#, fuzzy
+#~| msgid "More Specific Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More Specific Words"
+#~ msgstr "Vairāk specifisku vārdu"
+
+#, fuzzy
+#~| msgid "&Wordnet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Wordnet"
+#~ msgstr "&Wordnet"
+
+#, fuzzy
+#~| msgid "&Replace with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace with:"
+#~ msgstr "&Aizvietot ar:"
+
+#, fuzzy
+#~| msgctxt "@action:button Close thesaurus dialog"
+#~| msgid "&Close"
+#~ msgctxt "(qtundo-format) @action:button Close thesaurus dialog"
+#~ msgid "&Close"
+#~ msgstr "&Aizvērt"
+
+#, fuzzy
+#~| msgid "&Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace"
+#~ msgstr "&Aizvietot"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace Word"
+#~ msgstr "Aizvietot vārdu"
+
+#, fuzzy
+#~| msgid "Related Words - %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Related Words - %1"
+#~ msgstr "Saistīti vārdi - %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "The thesaurus file '%1' was not found. Please use 'Change Language...' "
+#~| "to select a thesaurus file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+#~ "select a thesaurus file."
+#~ msgstr ""
+#~ "Tēzaura fails '%1' netika atrasts. Izmantojiet 'Mainīt valodu...' un "
+#~ "izvēlieties citu tēzaura failu."
+
+#, fuzzy
+#~| msgid "<b>Error:</b> Failed to execute grep."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<b>Error:</b> Failed to execute grep."
+#~ msgstr "<b>Kļūda:</b> Neizdevās darbināt grep."
+
+#, fuzzy
+#~| msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgstr "Sinonīmi/Hipernīmi - sakārtoti pēc biežuma"
+
+#, fuzzy
+#~| msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgstr "Sinonīmi - sakārtoti pēc līdzības (tikai darbības vārdi)"
+
+#, fuzzy
+#~| msgid "Antonyms - Words with Opposite Meanings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Antonyms - Words with Opposite Meanings"
+#~ msgstr "Antonīmi - vārdi ar pretēju nozīmi"
+
+#, fuzzy
+#~| msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgstr "Hiponīmi - ... ir (veida) %1"
+
+#, fuzzy
+#~| msgid "Meronyms - %1 has a ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Meronyms - %1 has a ..."
+#~ msgstr "Meronīmi - %1 pieder ..."
+
+#, fuzzy
+#~| msgid "Holonyms - ... has a %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Holonyms - ... has a %1"
+#~ msgstr "Holonīmi - ... pieder %1"
+
+#, fuzzy
+#~| msgid "Attributes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attributes"
+#~ msgstr "Atribūti"
+
+#, fuzzy
+#~| msgid "Cause To (for some verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cause To (for some verbs only)"
+#~ msgstr "Rezultāts ir (tikai dažiem darbības vārdiem)"
+
+#, fuzzy
+#~| msgid "Verb Entailment (for some verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Entailment (for some verbs only)"
+#~ msgstr "Darbības vārda piederība (dažiem darbības vārdiem)"
+
+#, fuzzy
+#~| msgid "Familiarity & Polysemy Count"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Familiarity & Polysemy Count"
+#~ msgstr "Līdzības un polēmijas skaitītājs"
+
+#, fuzzy
+#~| msgid "Verb Frames (examples of use)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Frames (examples of use)"
+#~ msgstr "Darbības vārdu rāmji (lietošanas piemēri)"
+
+#, fuzzy
+#~| msgid "List of Compound Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "List of Compound Words"
+#~ msgstr "Salikteņu saraksts"
+
+#, fuzzy
+#~| msgid "Overview of Senses"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overview of Senses"
+#~ msgstr "Nozīmju pārskats"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~| "installed on your computer if you want to use it, and 'wn' has to be in "
+#~| "your PATH. You can get WordNet at <a href=\"http://www.cogsci.princeton."
+#~| "edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet "
+#~| "only supports the English language."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~ "installed on your computer if you want to use it, and 'wn' has to be in "
+#~ "your PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+#~ "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+#~ "English language."
+#~ msgstr ""
+#~ "<b>Kļūda:</b> Neizdevās palaist WordNet programmu 'wn'. Jūsu datorā ir "
+#~ "jābūt uzinstalētam WordNet ja vēlaties to lietot, un 'wn' ir jābūt jūsu "
+#~ "PATH. Jūs variet iegūt WordNet no <a href=\"http://www.cogsci.princeton."
+#~ "edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. Ņemiet vērā, ka "
+#~ "WordNet atbalsta tikai Angļu valodu."
+
+#, fuzzy
+#~| msgid "No match for '%1'."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No match for '%1'."
+#~ msgstr "Nav atbilstību vārdam '%1'."

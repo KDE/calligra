@@ -1,0 +1,1086 @@
+# translation of karbon.po to தமிழ்
+# Copyright (C) 2004, 2008 Free Software Foundation, Inc.
+#
+# root <root@localhost.localdomain>, 2004.
+# தங்கமணி அருண்<thangam.arunx@gmail.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2008-04-29 13:34+0530\n"
+"Last-Translator: தங்கமணி அருண் <thangam.arunx@gmail.com>\n"
+"Language-Team:  உபண்டு தமிழ் குழுமம் <ubuntu-l10n-tam@lists.ubuntu.co>>\n"
+"Language: ta\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "&File"
+msgid "Blend"
+msgstr "&கோப்பு"
+
+#: BlendEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+#| msgid "View"
+msgid "Blend mode"
+msgstr "தோற்றம்"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:28
+#, fuzzy, kde-format
+#| msgid "Straight"
+msgid "Lighten"
+msgstr "நேர்"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr ""
+
+#: BlurEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius"
+msgstr "ஆரம்:"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Grid color:"
+msgid "Saturate colors"
+msgstr "கட்ட வண்ணம்:"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Rotate hue"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, fuzzy, kde-format
+#| msgid "Grid color:"
+msgid "Saturate value"
+msgstr "கட்ட வண்ணம்:"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, fuzzy, kde-format
+#| msgid "Angle:"
+msgid "Angle"
+msgstr "கோணம்:"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr ""
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, fuzzy, kde-format
+#| msgid "&File"
+msgid "Table"
+msgstr "&கோப்பு"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, fuzzy, kde-format
+#| msgid "&Distribute"
+msgid "Discrete"
+msgstr "&வழங்கு"
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Linear"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgid "Slope"
+msgstr "வடிவம்"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Interface"
+msgid "Intercept"
+msgstr "இடைமுகம்"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, fuzzy, kde-format
+#| msgid "Effects"
+msgid "Offset"
+msgstr "விளைவுகள்"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, kde-format
+msgid "Composite"
+msgstr ""
+
+#: CompositeEffectConfigWidget.cpp:23
+#, fuzzy, kde-format
+#| msgid "Boolean Operation"
+msgid "Operation"
+msgstr "பூலியன் செயல்"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, fuzzy, kde-format
+#| msgid "Delete Layer"
+msgid "Duplicate"
+msgstr "அடுக்கை நீக்கு"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, fuzzy, kde-format
+#| msgctxt "No stroke or fill"
+#| msgid "None"
+msgid "None"
+msgstr "ஏதுமில்லை"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, fuzzy, kde-format
+#| msgid "View"
+msgid "Edge mode:"
+msgstr "தோற்றம்"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Target point:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, fuzzy, kde-format
+#| msgid "Pattern"
+msgid "Edit kernel"
+msgstr "மாதிரி"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "Grid color:"
+msgid "Flood fill"
+msgstr "கட்ட வண்ணம்:"
+
+#: FloodEffectConfigWidget.cpp:24
+#, fuzzy, kde-format
+#| msgid "Grid color:"
+msgid "Flood color"
+msgstr "கட்ட வண்ணம்:"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr ""
+
+#: ImageEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Select image..."
+msgstr ""
+
+#: ImageEffectConfigWidget.cpp:54
+#, kde-format
+msgid "Select image"
+msgstr ""
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr ""
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, fuzzy, kde-format
+#| msgid "Delete Layer"
+msgid "Dilate"
+msgstr "அடுக்கை நீக்கு"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Boolean Operation"
+msgid "Operator:"
+msgstr "பூலியன் செயல்"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius x:"
+msgstr "ஆரம்:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius y:"
+msgstr "ஆரம்:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr ""
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr ""
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "&கோப்பு"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "தோற்றம்"
+
+#, fuzzy
+#~| msgid "Straight"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "நேர்"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "ஆரம்:"
+
+#, fuzzy
+#~| msgid "Grid color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "கட்ட வண்ணம்:"
+
+#, fuzzy
+#~| msgid "Grid color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "கட்ட வண்ணம்:"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "கோணம்:"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "&கோப்பு"
+
+#, fuzzy
+#~| msgid "&Distribute"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Discrete"
+#~ msgstr "&வழங்கு"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "வடிவம்"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "இடைமுகம்"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "விளைவுகள்"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "பூலியன் செயல்"
+
+#, fuzzy
+#~| msgid "Delete Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "அடுக்கை நீக்கு"
+
+#, fuzzy
+#~| msgctxt "No stroke or fill"
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "ஏதுமில்லை"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "தோற்றம்"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "மாதிரி"
+
+#, fuzzy
+#~| msgid "Grid color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "கட்ட வண்ணம்:"
+
+#, fuzzy
+#~| msgid "Grid color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "கட்ட வண்ணம்:"
+
+#, fuzzy
+#~| msgid "Delete Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "அடுக்கை நீக்கு"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "பூலியன் செயல்"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "ஆரம்:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "ஆரம்:"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "தங்கமணி அருண்"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "thangam.arunx@gmail.com"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "பூலியன் செயல்"
+
+#~ msgid "&Order"
+#~ msgstr "&வரிசை"
+
+#~ msgid "&Align"
+#~ msgstr "&வரிசைப்படுத்து"
+
+#~ msgid "&File"
+#~ msgstr "&கோப்பு"
+
+#~ msgid "&Edit"
+#~ msgstr "&தொகு"
+
+#~ msgid "&View"
+#~ msgstr "&தோற்றம்"
+
+#~ msgid "&Object"
+#~ msgstr "&பொருள்"
+
+#~ msgid "&Distribute"
+#~ msgstr "&வழங்கு"
+
+#~ msgid "&Path"
+#~ msgstr "&தடம்"
+
+#~ msgid "Effe&cts"
+#~ msgstr "&விளைவுகள்"
+
+#~ msgid "&Settings"
+#~ msgstr "&அமைப்புகள்"
+
+#~ msgid "Edit"
+#~ msgstr "தொகு"
+
+#~ msgid "Object"
+#~ msgstr "பொருள்"
+
+#~ msgid "Align"
+#~ msgstr "வரிசை படுத்து"
+
+#~ msgid "Effects"
+#~ msgstr "விளைவுகள்"
+
+#~ msgid "View"
+#~ msgstr "தோற்றம்"
+
+#~ msgid "&Flatten Path..."
+#~ msgstr "&தட்டையான பாதை..."
+
+#~ msgid "Flatten Path"
+#~ msgstr "தட்டையான பாதை"
+
+#~ msgid "Properties"
+#~ msgstr "பண்புகள்"
+
+#~ msgid "Flatness:"
+#~ msgstr "தட்டையான:"
+
+#, fuzzy
+#~| msgid "Flatten path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten path"
+#~ msgstr "தட்டையான பாதை"
+
+#, fuzzy
+#~| msgid "Refine path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "பாதையை சரியாக்கு"
+
+#~ msgid "&Refine Path..."
+#~ msgstr "&பாதையை சரியாக்கு"
+
+#~ msgid "Refine Path"
+#~ msgstr "பாதையை சரியாக்கு"
+
+#~ msgid "Subdivisions:"
+#~ msgstr "கிளை பிரிவுகள்"
+
+#, fuzzy
+#~| msgid "Round Corners"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "வட்ட மூலைகள்."
+
+#~ msgid "&Round Corners..."
+#~ msgstr " &வட்ட மூலைகள்..."
+
+#~ msgid "Round Corners"
+#~ msgstr "வட்ட மூலைகள்."
+
+#~ msgid "Radius:"
+#~ msgstr "ஆரம்:"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "தோற்றம்"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "தோற்றம்"
+
+#, fuzzy
+#~| msgid "Pencil tool"
+#~ msgid "Stencil Box"
+#~ msgstr "பென்ஸில் கருவி"
+
+#, fuzzy
+#~| msgid "Reparent shapes"
+#~ msgid "More shapes"
+#~ msgstr "மறுதாயின் வடிவங்கள்"
+
+#, fuzzy
+#~| msgid "Whirl & pinch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl & pinch"
+#~ msgstr "சுழல் துளி"
+
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr " &சுழல்/ துளி..."
+
+#~ msgid "Whirl Pinch"
+#~ msgstr "சுழல் துளி"
+
+#~ msgid "Info"
+#~ msgstr "தகவல்"
+
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr "சுழல்துளியின் தாக்கத்தை அதிகரிக்க பாதைவடிவத்தை கை முன்னாடி சரியாக்க வெண்டும்"
+
+#~ msgid "Angle:"
+#~ msgstr "கோணம்:"
+
+#~ msgid "Pinch:"
+#~ msgstr "துளி:"
+
+#, fuzzy
+#~| msgid "Raise Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "அடுக்கை உயர்த்து"
+
+#, fuzzy
+#~| msgid "Lower Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "அடுக்கை குறை"
+
+#~ msgid "Configure"
+#~ msgstr "வடிவமைப்பு"
+
+#~ msgid "Interface"
+#~ msgstr "இடைமுகம்"
+
+#~ msgid "Misc"
+#~ msgstr "இதர"
+
+#~ msgid "Grid"
+#~ msgstr "பல் கட்டம்"
+
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "ஆவணம்"
+
+#~ msgid "Document Settings"
+#~ msgstr "ஆவண அமைப்புகள்"
+
+#~ msgid "Layer view"
+#~ msgstr "அடுக்கு பார்வை"
+
+#~ msgid "Add a new layer"
+#~ msgstr "புதிய அடுக்கை சேர்"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "தேர்ந்தெடுத்த பொருட்களை நீக்குக"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "தேர்ந்தெடுத்த பொருட்களை உயர்த்து"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "தேர்ந்தெடுத்த பொருட்களை கீழ் வைக்க"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "View mode"
+#~ msgstr "தோற்றம்"
+
+#~ msgid "New Layer"
+#~ msgstr "பதிய அடுக்கு"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "புதிய அடுக்கின் பெயரை பதிக:"
+
+#~ msgid "New layer"
+#~ msgstr "புதிய அடுக்கு"
+
+#, fuzzy
+#~| msgid "Create Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "அடிக்குகை உருவாக்கு"
+
+#, fuzzy
+#~| msgid "Delete Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "அடுக்கை நீக்கு"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "எல்லா அடுக்குகளையும் நீக்க முடியாது. ஒரு அடுக்காவது இருத்தல் வேண்டும்."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "அடுக்குகளை நீக்குவதில் பிழை"
+
+#~ msgid "Layer"
+#~ msgstr "அடுக்கு"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "குழு"
+
+#~ msgid "Shape"
+#~ msgstr "வடிவம்"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "தெறிந்த"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "முடங்கிய"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "இசட் சுட்டெண்"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgid "no"
+#~ msgstr "தகவல்"
+
+#, fuzzy
+#~| msgid "Styles"
+#~ msgid "yes"
+#~ msgstr "பாணிகள்"
+
+#, fuzzy
+#~| msgid "Reparent shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "மறுதாயின் வடிவங்கள்"
+
+#, fuzzy
+#~| msgid "Choose Gradient to Add"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "சேர்ப்பதற்கான சரிவானை தேர்ந்தெடுதெடு"
+
+#, fuzzy
+#~| msgctxt "Horizontal grid spacing"
+#~| msgid "&Horizontal:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally"
+#~ msgstr "&கிடைமட்டம்:"
+
+#, fuzzy
+#~| msgctxt "Horizontal grid spacing"
+#~| msgid "&Horizontal:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Vertically"
+#~ msgstr "&கிடைமட்டம்:"
+
+#, fuzzy
+#~| msgctxt "Horizontal grid spacing"
+#~| msgid "&Horizontal:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally and Vertically"
+#~ msgstr "&கிடைமட்டம்:"
+
+#, fuzzy
+#~| msgid "Flatten Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "தட்டையான பாதை"
+
+#, fuzzy
+#~| msgid "Delete Layer"
+#~ msgid "D&elete"
+#~ msgstr "அடுக்கை நீக்கு"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Edit Guides"
+#~ msgstr "சரிவு"
+
+#, fuzzy
+#~| msgid "&Distribute"
+#~ msgid "Distribute Top Borders"
+#~ msgstr "&வழங்கு"
+
+#, fuzzy
+#~| msgid "Show grid:"
+#~ msgid "Show or hide color palette"
+#~ msgstr "கட்டத்தை காட்டு:"
+
+#, fuzzy
+#~| msgid "Snap to grid:"
+#~ msgid "Snap to Grid"
+#~ msgstr "தடீர் கட்டம்:"
+
+#, fuzzy
+#~| msgid "Snap to grid:"
+#~ msgid "Snaps to grid"
+#~ msgstr "தடீர் கட்டம்:"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgid "&Clip Object"
+#~ msgstr "&பொருள்"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgid "&Unclip Objects"
+#~ msgstr "&பொருள்"
+
+#, fuzzy
+#~| msgctxt "Horizontal grid spacing"
+#~| msgid "&Horizontal:"
+#~ msgid "Mirror Horizontally"
+#~ msgstr "&கிடைமட்டம்:"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgid "&Close Path"
+#~ msgstr "சேர்ப்பதற்கான மாதிரியை தேர்ந்தெடு"
+
+#, fuzzy
+#~| msgid "Refine Path"
+#~ msgid "Com&bine Path"
+#~ msgstr "பாதையை சரியாக்கு"
+
+#, fuzzy
+#~| msgid "Flatten Path"
+#~ msgid "Se&parate Path"
+#~ msgstr "தட்டையான பாதை"
+
+#, fuzzy
+#~| msgid "Refine Path"
+#~ msgid "Re&verse Path"
+#~ msgstr "பாதையை சரியாக்கு"
+
+#, fuzzy
+#~| msgid "Refine Path"
+#~ msgid "Unite Paths"
+#~ msgstr "பாதையை சரியாக்கு"
+
+#, fuzzy
+#~| msgid "Snap to grid:"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "தடீர் கட்டம்:"
+
+#, fuzzy
+#~| msgid "Configure"
+#~ msgid "Configure Karbon..."
+#~ msgstr "வடிவமைப்பு"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show status bar:"
+#~ msgstr "நிலை பட்டையை காட்டு"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "தற்சமய கோப்புகளின் எண்ணிக்கை:"
+
+#~ msgid "Palette font size:"
+#~ msgstr "வண்ணத்தட்டின் எழுத்துரு அளவு"
+
+#, fuzzy
+#~| msgctxt "No stroke or fill"
+#~| msgid "None"
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "ஏதுமில்லை"
+
+#, fuzzy
+#~| msgctxt "No stroke or fill"
+#~| msgid "None"
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "ஏதுமில்லை"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgid "Fill:"
+#~ msgstr "&கோப்பு"
+
+#~ msgid "File to open"
+#~ msgstr "திறப்பதற்க்கான கோப்பு"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgid "Fill"
+#~ msgstr "&கோப்பு"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "ஆரம்:"
+
+#, fuzzy
+#~| msgctxt "No stroke or fill"
+#~| msgid "None"
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "ஏதுமில்லை"
+
+#, fuzzy
+#~| msgid "Grid color:"
+#~ msgid "Stop color."
+#~ msgstr "கட்ட வண்ணம்:"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgid "Tiled"
+#~ msgstr "&கோப்பு"
+
+#, fuzzy
+#~| msgid "Straight"
+#~ msgid "Right"
+#~ msgstr "நேர்"
+
+#, fuzzy
+#~| msgid "Grid color:"
+#~ msgid "Stop color:"
+#~ msgstr "கட்ட வண்ணம்:"
+
+#~ msgid "Copy offset:"
+#~ msgstr "எதிரிடை நகலெடு:"
+
+#, fuzzy
+#~| msgid "Show grid:"
+#~ msgid "Show Guides"
+#~ msgstr "கட்டத்தை காட்டு:"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "ஏதுமில்லை"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "திடமான"
+
+#~ msgid "Gradient"
+#~ msgstr "சரிவு"
+
+#~ msgid "Pattern"
+#~ msgstr "மாதிரி"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "இரட்டை-ஒற்றை மூடல்"
+
+#~ msgid "Winding Fill"
+#~ msgstr "காற்று மூடல்"
+
+#~ msgid "Units:"
+#~ msgstr "அலகுகள்:"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgid "&Group Objects"
+#~ msgstr "&பொருள்"
+
+#~ msgid "Show grid:"
+#~ msgstr "கட்டத்தை காட்டு:"
+
+#~ msgid "Snap to grid:"
+#~ msgstr "தடீர் கட்டம்:"
+
+#~ msgid "Grid color:"
+#~ msgstr "கட்ட வண்ணம்:"
+
+#~ msgid "Spacing"
+#~ msgstr "இடைவெளிகளுடன்"
+
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&செங்குத்து:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "தானியங்கு சேமிப்பு  (நொடி):"
+
+#~ msgid "No auto save"
+#~ msgstr "தானியங்கு சேமிப்பு இல்லைலை"
+
+#~ msgid "min"
+#~ msgstr "நொடி"
+
+#~ msgid "Create backup file"
+#~ msgstr "காப்புநகல் கோப்பை உருவாக்குக"
+
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "சேர்ப்பதற்கான மாதிரியை தேர்ந்தெடு"
+
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "சேர்ப்பதற்கான சரிவானை தேர்ந்தெடுதெடு"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Pattern Size"
+#~ msgstr "மாதிரி"
+
+#~ msgid "Gradient tool"
+#~ msgstr "சரிவுக் கருவி"
+
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "சரிவுக் கருவி"
+
+#~ msgid "Pattern tool"
+#~ msgstr "தோரணிக் கருவி"
+
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "தோரணிக் கருவி"
+
+#~ msgid "Precision:"
+#~ msgstr "நிலை:"
+
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "வெறும்"
+
+#~ msgid "Curve"
+#~ msgstr "வளைவு"
+
+#~ msgid "Straight"
+#~ msgstr "நேர்"
+
+#~ msgid "Optimize"
+#~ msgstr "உகப்பாக்கு"
+
+#~ msgid "Exactness:"
+#~ msgstr "மிகச்சரியான"
+
+#~ msgid "Combine angle:"
+#~ msgstr "கோணங்களை இணை:"
+
+#, fuzzy
+#~| msgid "Freehand Drawing Tool"
+#~ msgid "Freehand Path Drawing Tool"
+#~ msgstr "கை மூலம் வரையும் கருவி"
+
+#, fuzzy
+#~| msgid "Lower selected objects"
+#~ msgid "&Follow selected path"
+#~ msgstr "தேர்ந்தெடுத்த பொருட்களை கீழ் வைக்க"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgid "Current"
+#~ msgstr "வளைவு"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Graphics Pen"
+#~ msgstr "சரிவு"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgid "&Raise"
+#~ msgstr "ஆரம்:"
+
+#, fuzzy
+#~| msgid "Show grid:"
+#~ msgid "Show Grid"
+#~ msgstr "கட்டத்தை காட்டு:"
+
+#, fuzzy
+#~| msgid "Grid"
+#~ msgid "Hide Grid"
+#~ msgstr "பல் கட்டம்"
+
+#, fuzzy
+#~| msgid "Align"
+#~ msgid "Align Left"
+#~ msgstr "வரிசை படுத்து"
+
+#, fuzzy
+#~| msgid "Align"
+#~ msgid "Align Right"
+#~ msgstr "வரிசை படுத்து"
+
+#, fuzzy
+#~| msgid "Align"
+#~ msgid "Align Top"
+#~ msgstr "வரிசை படுத்து"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "நிலை பட்டையை காட்டு"

@@ -1,0 +1,375 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+ <!ENTITY sheets "<application
+>Calligra Sheets</application
+>">
+ <!ENTITY words "<application
+>Calligra Words</application
+>">
+ <!ENTITY stage "<application
+>Calligra Stage</application
+>">
+ <!ENTITY flow "<application
+>Calligra Flow</application
+>">
+ <!ENTITY plan "<application
+>Calligra Plan</application
+>">
+ <!ENTITY karbon "<application
+>Calligra Karbon</application
+>">
+ <!ENTITY calligra "Calligra">
+ <!ENTITY kappname "&calligra;">
+ <!ENTITY package "Calligra">
+ <!ENTITY % addindex "IGNORE">
+ <!ENTITY % German "INCLUDE"
+> <!-- change language only here -->
+]>
+
+<!-- maintained by raphael.langerhorst@kdemail.net -->
+
+<book id="calligra" lang="&language;">
+<bookinfo>
+<title
+>&calligra;</title>
+<subtitle
+>Eine allgemeine Einführung</subtitle>
+<authorgroup>
+<author
+>&Raphael.Langerhorst; &Raphael.Langerhorst.mail; </author>
+<author
+>&Jost.Schenck; &Jost.Schenck.mail; </author>
+<othercredit role="translator"
+><firstname
+>Maren</firstname
+><surname
+>Pakura</surname
+><affiliation
+><address
+><email
+>maren@kde.org</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+> <othercredit role="translator"
+><firstname
+>Marco</firstname
+><surname
+>Wegner</surname
+><affiliation
+><address
+><email
+>mail@marcowegner.de</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Hans-Frieder</firstname
+><surname
+>Hirsch</surname
+><affiliation
+><address
+><email
+>f.hirsch@t-online.de</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+> 
+</authorgroup>
+
+<date
+>2012-01-03</date>
+<releaseinfo
+>2.4.0</releaseinfo>
+
+<abstract>
+<para
+>&calligra; ist eine Sammlung von Grafik- und Büroprogrammen von &kde; </para>
+</abstract>
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Calligra</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title
+>Einführung</title>
+<sect1>
+<title
+>&calligra;-Komponenten</title>
+
+<important
+> <para
+>Aktualisierte Versionen dieses Dokuments finden Sie unter <ulink url="http://docs.kde.org/development/en/calligra/calligra/index.html"
+>http://docs.kde.org</ulink
+>.</para
+></important>
+
+<para
+>&calligra; ist eine Sammlung von Grafik- und Büroprogrammen von &kde;. &calligra; besteht zurzeit aus den folgenden Programmen: </para>
+
+<itemizedlist>
+<listitem
+><para
+>&words; (Rahmenbasiertes Textverarbeitungsprogramm)</para
+></listitem>
+<listitem
+><para
+>&sheets; (Tabellen-Kalkulationsprogramm)</para
+></listitem
+> 
+<listitem
+><para
+>&stage; (Bildschirm- und Folienpräsentationen)</para
+></listitem>
+<listitem
+><para
+>&flow; (Flussdiagramme)</para
+></listitem>
+<listitem
+><para
+>Karbon (Vektorgrafik)</para
+></listitem>
+<listitem
+><para
+>&plan; (Programm zur Projektplanung und -verwaltung)</para
+></listitem>
+</itemizedlist>
+
+<para
+>Die einzelnen Programme benutzen die Flake-Technologie und wurden mit dem Ziel entwickelt, zusammen in Dokumenten benutzt zu werden. Jede &calligra;-Komponente kann in ein beliebiges &calligra;-Dokument eingebettet werden. Sie können z. B. eine in &sheets; erstellte Tabelle direkt in ein &words;-Dokument einfügen. Damit ist es möglich, mit den &calligra;-Programmen komplexe zusammengesetzte Dokumente zu erstellen. </para>
+
+<para
+>Durch das Einbinden von Modulen können Sie die Fähigkeiten von &calligra; erweitern. Sie finden viele Module in den einzelnen Programmen und können sehr leicht lernen, eigene Module zu entwickeln. </para>
+
+<para
+>In diesem Dokument werden nur die allgemeinen Eigenschaften von &calligra; für alle Teilprogramme erläutert. Weitere Informationen zu den einzelnen Programmen finden Sie in den jeweiligen Handbüchern. </para>
+
+</sect1>
+
+<sect1 id="features">
+<title
+>Überblick der Eigenschaften von &calligra;</title>
+<sect2 id="featureintegration">
+<title
+>Integration</title>
+<para
+>&calligra; enthält die Grundlage für alle Anwendungen. Dadurch sind alle Anwendungen gut eingebunden. Ihre eigenen Programme können Sie ebenfalls so gut integrieren. </para>
+</sect2>
+<sect2 id="featureleightweight">
+<title
+>Geringe Anforderung an Computerleistung</title>
+<para
+>Obwohl &calligra; so viele Programme enthält, stellt es nur geringe Anforderungen an die Rechnerleistung, ist schnell und benötigt wenig Arbeitsspeicher. Dies ist auch deshalb möglich, weil &calligra; auf &kde; aufbaut, das die Grundlage für leistungsfähige Programme bereitstellt. </para>
+<para
+>Ein Ziel von &calligra; ist es auch, die Benutzeroberfläche nicht mit selten gebrauchten Funktionen zu überladen. Das führt zu einer gut überschaubaren Benutzerschnittstelle, die ein effektives Arbeiten ermöglicht. </para>
+<para
+>Geringe Anforderungen bedeutet manchmal auch, das selten benötigte Fähigkeiten nicht vorhanden sind. In diesem Fall können Sie erforderlichen Fähigkeiten durch Erweiterung von &calligra; selbst hinzufügen.  Diese Fähigkeiten können jederzeit durch zusätzliche Module oder Skripte eingefügt werden, damit &calligra; in der Grundversion keine hohen Anforderungen an den Computer stellt und leicht zu bedienen bleibt. </para>
+</sect2>
+<sect2 id="featurecompleteness">
+<title
+>Umfassend</title>
+<para
+>&calligra; enthält Programme für einen großen Anwendungsbereich und deckt damit die meisten Anforderungen von Privat- und Geschäftsleuten ab. Zusätzliche Fähigkeiten können jederzeit durch Skripte, Module und sogar ganze Anwendungen auf der Basis von &calligra; eingefügt werden. </para>
+</sect2>
+<sect2 id="featurefileformat">
+<title
+>OASIS OpenDocument Format</title>
+<para
+>Es ist für einen Sammlung von Büroprogrammen sehr wichtig, sich an weit verbreitete Standards zu halten. Das gilt besonders für die Dateiformate, damit Dokumente problemlos mit anderen Büroprogrammen bearbeitet werden können. Damit verringert sich die Abhängigkeit von Softwareherstellern, besonders wichtig für Firmen und auch für Privatleute. </para>
+<para
+>Aus diesem Grund benutzt &calligra; das OASIS-OpenDocument-Format als Standardformat.  </para>
+</sect2>
+<sect2 id="featurekde">
+<title
+>Fähigkeiten von &kde;</title>
+<para
+>Da &calligra; auf der Grundlage von &kde; entwickelt wurde, sind alle Eigenschaften eines &kde;-Programms auch in &calligra; vorhanden, also &DBus;, KParts, Flake, Einbindung in die Arbeitsumgebung und viele Möglichkeiten zur Einstellung von Eigenschaften. Damit passt sich &calligra; gut in die &kde;-Arbeitsumgebung ein und erleichtert die Arbeitsabläufe. </para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<chapter id="configuration">
+<title
+>Die Einrichtung von &calligra; für Ihr System</title>
+
+<para
+>Obwohl mit &calligra; in den Standardeinstellungen bereits gut gearbeitet werden kann, gibt es noch die Möglichkeit, mehr aus &calligra; herauszuholen. Dieses Kapitel zeigt Ihnen, wie Sie noch besser mit Ihrem neuen Büro-Programmpaket arbeiten und es an Ihre Erfordernisse anpassen können. In &calligra; können Sie viele Einstellungen ändern, bis hin zu eigenen Werkzeugleisten und Menüs. </para>
+
+<sect1 id="custom-gui">
+<title
+>Die Oberfläche (&GUI;) von &calligra; anpassen</title>
+
+<para
+>Obwohl die Oberfläche (&GUI;) von &calligra; in der Standardeinstellung sinnvoll vorkonfiguriert ist, gibt es Möglichkeiten, das Erscheinungsbild der Programme an die eigenen Vorstellungen anzupassen. </para>
+
+<para
+>Um z. B. die Funktionen, die durch Knöpfe und Menüeinträge sichtbar sind, auf ein Minimum zu reduzieren, können Sie das &GUI; von &calligra; entsprechend anpassen. Falls Sie z. B. nur einfache Briefe schreiben möchten, benötigen Sie nicht viel mehr Funktionen als speichern, laden, drucken &etc; </para>
+
+<para
+>Mit Hilfe des <quote
+>Aktionen</quote
+>-Konzeptes von &Qt; und &kde; kann man die Menüleiste und die Werkzeugleisten von &calligra; beliebig verändern. Leider gibt es dazu bisher keine einfach anzuwendenden Dialoge. Die &GUI; -Konfiguration von &calligra; ist in &XML;-Dateien gespeichert. Diese müssen verändert werden. Dafür benötigen Sie bis auf Weiteres noch Grundkenntnisse darüber wie &XML; Dateien (oder &HTML;, da &HTML; eine Untermenge von &XML; ist) funktionieren. </para>
+
+<para
+>Für jedes &calligra;;-Programm gibt es zwei &XML;-Dateien: Eine beschreibt das &GUI;, des Programmrahmens (shell) (das Aussehen des Programms ohne geöffnetes Dokument) und eine weitere, die das &GUI; der Komponente beschreibt (dieses sieht man normalerweise). Für &words; befinden sich diese zwei &XML;-Dateien unter <filename
+>calligra_shell.rc</filename
+> und <filename
+>words.rc</filename
+>. </para>
+
+<para
+>Hier sehen Sie ein Beispiel für eine einfache rc-Datei. </para>
+
+<example>
+<title
+>Beispiel einer einfachen rc-Datei</title>
+<screen
+>&lt;!DOCTYPE QConfig &gt;&lt;qconfig&gt;
+&lt;menubar&gt;
+&lt;menu name="Edit"&gt;&lt;text&gt;Edit&lt;/text&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;separator/&gt;
+&lt;action name="edit_find"/&gt;
+&lt;/menu&gt;
+&lt;menu name="Insert"&gt;&lt;text&gt;Insert&lt;/text&gt;
+&lt;action name="insert_picture"/&gt;
+&lt;action name="insert_clipart"/&gt;
+&lt;menu name="Variable"&gt;&lt;text&gt;Variable&lt;/text&gt;
+&lt;action name="insert_var_datefix"/&gt;
+&lt;action name="insert_var_datevar"/&gt;
+&lt;/menu&gt;
+&lt;/menu&gt;
+&lt;/menubar&gt;
+&lt;toolbars&gt;
+&lt;toolbar name="edit_toolbar" position="right"&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;/toolbar&gt;
+&lt;/toolbars&gt;
+&lt;/qconfig&gt;
+</screen>
+</example>
+
+</sect1>
+
+</chapter>
+
+<chapter id="more-info">
+<title
+>Wie Sie mehr Information erhalten</title>
+
+<sect1 id="other-manuals">
+<title
+>Andere &calligra;-Handbücher</title>
+
+<para
+>Genaue Informationen für jedes &calligra;-Programm sind im zugehörigen Hilfe-Dokument zu finden. </para>
+
+</sect1>
+
+<sect1 id="links">
+<title
+>Verknüpfungen</title>
+
+<para
+>Die folgenden Links sind nützlich, wenn Sie weitere Informationen über &kde; und &calligra; suchen. </para>
+
+<itemizedlist>
+<listitem>
+<para
+>Die Internetseite von <ulink url="http://calligra.org"
+>&calligra;</ulink
+>. Dort finden Sie Informationen wie Sie &calligra; bekommen und installieren können, Neues zur Entwicklung von &calligra; Bildschirmfotos &etc; </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://www.kde.org"
+>Die &kde;-Seite</ulink
+>. &kde; ist die fortgeschrittenste und absolut freie Arbeitsplatzumgebung für Unix-ähnliche Betriebssysteme. &calligra; verwendet die &kde;-Bibliotheken. </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://qt-project.org/"
+>&Qt;-Internetseite</ulink
+>. Die Entwickler der C++-Bibliothek &Qt;. &kde; und &calligra; verwenden &Qt;. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="programmersinfo">
+<title
+>Programmierung von &calligra;</title>
+
+<sect1 id="programmingintro">
+<title
+>Einführung</title>
+<para
+>Falls Sie sich an der weiteren Entwicklung von &calligra; beteiligen möchten, könnten die folgenden Informationen Ihr Interesse finden: </para>
+
+<itemizedlist>
+<listitem
+><para
+>Viele Dokumente zur Programmierung mit &Qt; und &kde; finden Sie unter <ulink url="http://techbase.kde.org/Development"
+>http://techbase.kde.org/Development</ulink
+>. Die Online-Version der vollständigen Dokumentation zur &kde;-Bibliothek finden Sie auf der Seite <ulink url="http://api.kde.org/"
+>KDE API Reference</ulink
+>. </para
+></listitem
+> 
+<listitem
+><para
+>Als ersten Schritt zur Mitarbeit an der Entwicklung lesen Sie bitte diese <ulink url="http://community.kde.org/Calligra/Building/Building_Calligra"
+>Anleitung</ulink
+>, um den Quelltext herunterzuladen und ui installieren. </para
+></listitem>
+</itemizedlist>
+</sect1>
+
+</chapter>
+
+<chapter id="legal">
+<title
+>Copyright und Lizenz</title>
+
+<para
+>&calligra; ist das Ergebnis gemeinsamer Anstrengungen vieler Entwickler. Jede Quelldatei ist urheberrechtlich geschützt für die Menschen, die diese besondere Datei geschrieben haben. Ihre Namen finden sich am Anfang jeder Quelldatei, zusammen mit der Lizenz unter der die Datei veröffentlicht wurde. </para>
+
+<para
+>Dieses Dokument steht unter dem Copyright von &Jost.Schenck;. Solange dieses Copyright enthalten ist, darf es frei weitergegeben werden. Änderungen dürfen vorgenommen werden, wenn diese an den Autor geschickt oder in das &kde;-<acronym
+>Git</acronym
+> aufgenommen werden. Ich bin nicht für irgendwelche Auswirkungen der Benutzung dieses Dokuments verantwortlich. </para>
+
+<para
+>Die anderen &calligra;-Dokumentationen stehen unter dem Copyright der jeweiligen Autoren. </para>
+
+<para
+>Übersetzung Burkhard Lück<email
+>lueck@hube-lueck.de</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+&documentation.index; 
+</book>
+

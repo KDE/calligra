@@ -1,0 +1,3030 @@
+# translation of kofficefilters.po to Low Saxon
+# Translation of kofficefilters.po to Low Saxon
+#
+# Manfred Wiese <m.j.wiese@web.de>, 2007, 2008, 2009, 2010, 2011.
+# Sönke Dibbern <s_dibbern@web.de>, 2007, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: kofficefilters\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2011-09-29 07:20+0200\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, fuzzy, kde-format
+#| msgid "PNG Export Options"
+msgid "%1 Export Options"
+msgstr "Export-Optschonen för PNG-Dateien"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, kde-format
+msgid "Page %1"
+msgstr "Siet %1"
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, kde-format
+msgid "Page:"
+msgstr "Siet:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, kde-format
+msgid "Size in Pixels"
+msgstr "Grött in Pixels"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr "Bildbreed:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, kde-format
+msgid "Image height:"
+msgstr "Bildhööchde:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr "Grött in Eenheiten:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, kde-format
+msgid "Resolution:"
+msgstr "Oplösen:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr "Eenheit:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr "Achtergrundklöör"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, kde-format
+msgid "Color"
+msgstr "Klöör"
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr "Deckstärk"
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:299
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr "Naamruum \"%1\" lett sik nich finnen."
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, kde-format
+msgid "Could not open the requested file %1"
+msgstr "De angeven Datei (%1) lett sik nich opmaken."
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr "De angeven Datei (%1) ehr ZIP-Orner lett sik nich opmaken."
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, kde-format
+msgid "Enter password"
+msgstr "Passwoort ingeven"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr ""
+"Dit Dokment is verslötelt, bitte dat Passwoort för't Opslöteln angeven:"
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr ""
+"Leeg Passwoort. Giff bitte dat Passwoort in, wenn Du dat Dokment opslöteln "
+"wullt:"
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, kde-format
+msgid "Could not find path for type %1"
+msgstr "Padd för Typ \"%1\" lett sik nich finnen."
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr "%1 (Reeg %2, Striep %3)"
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr "%1 (%2, Reeg %3, Striep %4)"
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr "Element \"%1\" lett sik nich finnen."
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, kde-format
+msgid "Attribute \"%1\" not found"
+msgstr "Attribut \"%1\" lett sik nich finnen."
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr "Weert \"%1\" vun Attribut \"%2\" nich verwacht"
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr "Element: \"%1\" kummt unverwachtens nochmaal vör."
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr "Tomaken vun Element \"%1\" verwacht"
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr "Keen verwacht Elementen funnen: %1"
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, kde-format
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr "Teel för ID \"%1\" lett sik binnen Datei \"%2\" nich finnen."
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, kde-format
+msgid "Could not find relationships file \"%1\""
+msgstr "Betogdatei \"%1\" lett sik nich finnen."
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, kde-format
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr "Teel för Betog \"%1\" lett sik binnen Datei \"%2\" nich finnen."
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+"Inleesfehler in'n Hööftdokment bi Reeg %1, Striep %2.\n"
+"Fehlermellen: %3"
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr "Indrag \"%1\" lett sik nich finnen."
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr "Indrag \"%1\" is keen Datei."
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr "Indrag \"%1\" lett sik nich schrieven."
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, kde-format
+msgid "Could not write block"
+msgstr "Block lett sik nich schrieven."
+
+#: sheets/csv/csvexport.cc:266
+#, kde-format
+msgid "<SHEETNAME>"
+msgstr "<BLATTNAAM>"
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Anraadt ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Spraakinstellen ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Anner (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:281 words/ascii/ImportDialog.cc:94
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "De Koderen lett sik nich finnen: %1"
+
+#: sheets/csv/csvimport.cc:74
+#, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr ""
+"Ingaavdatei lett sik mit den CSV-Filter nich opmaken - bitte mell den Fehler."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "Koderen"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, kde-format
+msgid "E&ncoding:"
+msgstr "&Koderen:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, kde-format
+msgid "End of Line"
+msgstr "Enn vun de Reeg"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr "&Unix-Stil (anraadt; bloots ReegDaal)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr "&Windows-Stil (WagenRetuur un ReegDaal)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr "&Mac-Stil (bloots WagenRetuur)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, kde-format
+msgid "Sheets"
+msgstr "Blääd"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, kde-format
+msgid "Select sheets to export:"
+msgstr "Tabellen för't Exporteren utsöken:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, kde-format
+msgid "Delimiter Line"
+msgstr "Trennlien"
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, kde-format
+msgid "********<SHEETNAME>********"
+msgstr "********<BLATTNAAM>********"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr "<BLATTNAAM> warrt mit den Naam vun't nakamen Blatt utwesselt."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr "Trenner baven elk Blatt drucken"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, kde-format
+msgid "Cells"
+msgstr "Zellen"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, kde-format
+msgid "Delimiter"
+msgstr "Trennteken"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, kde-format
+msgid "Comma"
+msgstr "Komma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, kde-format
+msgid "Semicolon"
+msgstr "Streekpunkt"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, kde-format
+msgid "Tabulator"
+msgstr "Tabulator"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, kde-format
+msgid "Space"
+msgstr "Freeteken"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, kde-format
+msgid "Other:"
+msgstr "Anner:"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, kde-format
+msgid "Quotes:"
+msgstr "Goosfööt:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, kde-format
+msgid "Export selection only"
+msgstr "Bloots Köör exporteren"
+
+#: sheets/dbase/dbaseimport.cc:44
+#, kde-format
+msgid "File format is not supported."
+msgstr "Dateiformaat nich ünnerstütt."
+
+#: sheets/dbase/dbaseimport.cc:49
+#, kde-format
+msgid "Could not read from file."
+msgstr "Datei lett sik nich lesen."
+
+#: sheets/html/exportdialog.cc:21
+#, kde-format
+msgid "Export Sheet to HTML"
+msgstr "Blatt na HTML exporteren"
+
+#: sheets/html/exportdialog.cc:32
+#, kde-format
+msgid "Recommended: UTF-8"
+msgstr "Anraadt: UTF-8"
+
+#: sheets/html/exportdialog.cc:33
+#, kde-format
+msgid "Locale (%1)"
+msgstr "Spraakinstellen (%1)"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, kde-format
+msgid "En&coding:"
+msgstr "&Koderen:"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr ""
+"Mit disse Optschoon lett sik De Koderen vun de HTML-Datei fastleggen. De "
+"anraadt Koderen (UTF-8) is as Standard utsöcht."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, kde-format
+msgid "Sheet Selection"
+msgstr "Blattköör"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr "Klick hier, wenn Du all Blääd ut de List utsöken wullt."
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, kde-format
+msgid "Select &All"
+msgstr "&All utsöken"
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, kde-format
+msgid "Desele&ct All"
+msgstr "Heel Köör &torüchnehmen"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+"Mit disse Optschoon stellt de HTML-Exportfilter för elk Blatt en egen Siet "
+"op. Wenn dit utmaakt is, warrt all Blääd tosamen na een Siet schreven."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, kde-format
+msgid "Use &separate files for each table"
+msgstr "För elk Tabell &egen Dateien bruken"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, kde-format
+msgid "Style"
+msgstr "Stil"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr ""
+"Söök dit ut, wenn Du de Standard-Schriftoorden un -Klören för de Nettsiet "
+"bruken wullt."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, kde-format
+msgid "Use &default style"
+msgstr "&Standard-Stil bruken"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr ""
+"Söök dit ut, wenn Du en egen Stilvörlaag för de Nettsiet bruken wullt. Se "
+"lett sik ut dat Feld nerrn utsöken oder ingeven."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, kde-format
+msgid "Use &external stylesheet:"
+msgstr "&Extern Stilvörlaag bruken:"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+"Hier lett sik en URL för Dien Stilvörlaag ingeven. Se kann na en Vörlaag op "
+"Fastplaat oder in't Internet wiesen."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, kde-format
+msgid "Layout"
+msgstr "Utsehn"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr "Mit disse Optschoon laat sik Ränners rund de Zellen an-/utmaken."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, kde-format
+msgid "Use &borders"
+msgstr "&Ränners bruken"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+"Mit disse Optschoon lett sik de Tall vun Pixels twischen de Zellen "
+"fastleggen. De Effekt is beter sichtbor, wenn <b>Ränners bruken</b> anmaakt "
+"is."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, kde-format
+msgid "Pi&xels between cells:"
+msgstr "Pi&xels twischen Zellen:"
+
+#: sheets/html/htmlexport.cc:200 sheets/html/htmlexport.cc:375
+#, kde-format
+msgid "Top"
+msgstr "Baven"
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr "Instellen vun den LaTeX-Exportfilter"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, kde-format
+msgid "Document"
+msgstr "Dokment"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, kde-format
+msgid "Document Style"
+msgstr "Dokmentstil"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, kde-format
+msgid "Latex style"
+msgstr "LaTeX-Stil"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, kde-format
+msgid "Words style"
+msgstr "Words-Stil"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, kde-format
+msgid "Document Type"
+msgstr "Dokmenttyp"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr "Dat Dokment lett sik enkel kompileren."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, fuzzy, kde-format
+#| msgid ""
+#| "The document will be generated as a full latex document since all the "
+#| "include will be generated before the \\begin[document} and "
+#| "\\end{document} commands."
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+"Dat Dokment warrt as heel LaTeX-Dokment opstellt, wiel all Infögen vör de "
+"Befehlen \"\\begin[document}\" un \"\\end{document}\" opstellt warrt."
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, kde-format
+msgid "Independent document"
+msgstr "Nich reedschapafhangig Dokment"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr "Keen LaTeX-Koppindrag oder Dokment-Ümgeven opstellen."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+"Dat Dokment warrt as LaTeX-Dokment opstellt, dat binnen en LaTeX-"
+"Hööftdokment inslaten warrn mutt. So laat sik enkelte lütte Dateien för elk "
+"Afsnitt vun Dien Dokment opstellen."
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, kde-format
+msgid "Document to include"
+msgstr "Dokment för't Insluten"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, kde-format
+msgid "Document class:"
+msgstr "Dokmentklass:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, kde-format
+msgid "Quality:"
+msgstr "Gööd:"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, kde-format
+msgid "Final"
+msgstr "Ennverschoon"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, kde-format
+msgid "Draft"
+msgstr "Vörverschoon"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, kde-format
+msgid "Default font size:"
+msgstr "Standard-Schriftgrött:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, kde-format
+msgid "Pictures"
+msgstr "Biller"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, fuzzy, kde-format
+#| msgid "Convert the pictures"
+msgid "Convert the pictures:"
+msgstr "Biller ümwanneln"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, kde-format
+msgid "Pictures directory:"
+msgstr "Bildorner:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, kde-format
+msgid "Language"
+msgstr "Spraak"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, kde-format
+msgid "Add"
+msgstr "Tofögen"
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, kde-format
+msgid "Remove"
+msgstr "Wegmaken"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, kde-format
+msgid "Contents"
+msgstr "Inholt"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, fuzzy, kde-format
+#| msgid "Export information about author"
+msgid "Export information about author:"
+msgstr "Informatschonen över den Schriever exporteren"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, fuzzy, kde-format
+#| msgid "Add a table of content"
+msgid "Add a table of content:"
+msgstr "Inholtverteken tofögen"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, kde-format
+msgid "Notes"
+msgstr "Notizen"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, kde-format
+msgid "Don't export"
+msgstr "Nich exporteren"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, kde-format
+msgid "Export notes in margin notes"
+msgstr "Notizen in Randnotizen exporteren"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, kde-format
+msgid "Export notes in comments"
+msgstr "Notizen in Kommentaren exporteren"
+
+#: sheets/opencalc/opencalcexport.cc:890
+#, kde-format
+msgid "Page "
+msgstr "Siet "
+
+#: sheets/opencalc/opencalcimport.cc:1199
+#, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr "As dat lett is de Datei schaadhaftig. En Tabell warrt övergahn."
+
+#: sheets/opencalc/opencalcimport.cc:1211
+#, kde-format
+msgid "Skipping a table."
+msgstr "Tabell warrt övergahn."
+
+#: sheets/opencalc/opencalcimport.cc:1911
+#, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+"Dit Dokment wöör mit Verschoon \"%1\" vun OpenOffice.org opstellt. Disse "
+"Filter wöör för Verschoon 1.0 schreven. Dat Lesen vun disse Datei kann to "
+"snaaksch Bedregen, Afstörten oder leeg Dorstellen vun Daten föhren. Wullt Du "
+"dat Dokment wieder ümwanneln?"
+
+#: sheets/opencalc/opencalcimport.cc:1912
+#, kde-format
+msgid "Unsupported document version"
+msgstr "Nich ünnerstütt Dokment-Verschoon"
+
+#: sheets/qpro/qproimport.cc:114
+#, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr ""
+"Ingaavdatei lett sik mit den QPRO-Filter nich opmaken - bitte mell den "
+"Fehler."
+
+#: sheets/qpro/qproimport.cc:219
+#, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr ""
+"Passwoortschuult Dateien laat sik nich opmaken.\n"
+"De Passwoort-Algoritmus wöör noch nich apen maakt"
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, kde-format
+msgid "Unable to find part for type %1"
+msgstr "Komponent för Typ \"%1\" lett sik nich finnen."
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr "Verkloort Tall vun deelt Tekenkeden to lütt (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr "Verkloort Tall vun Schriftstilen to lütt (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr "Verkloort Tall vun Zellformaten to lütt (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr "Verkloort Tall vun Vullmaakstilen to lütt (%1)"
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:348
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+"De Daten laat sik nich heel laden, wiel dat mehr sünd, as dat Blatt dat "
+"tolett."
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1425
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr "Verwacht Heeltall oder Fleetkommatall"
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, kde-format
+msgid "Slide layout \"%1\" not found"
+msgstr "Dia-Toornen \"%1\" lett sik nich finnen."
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, kde-format
+msgid "Slide %1"
+msgstr "Dia %1"
+
+#: words/ascii/ImportDialog.cc:32
+#, kde-format
+msgid "Words's Plain Text Import Filter"
+msgstr "Importfilter vun Words för eenfach Text"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "Importdialoog för eenfach Text"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, kde-format
+msgid "End of Paragraph"
+msgstr "Enn vun den Afsnitt"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, kde-format
+msgid "&As is: At the end of line"
+msgstr "&So laten: An't Enn vun de Reeg"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr "&Satz: Wenn dat Enn vun de Reeg dat Enn vun en Satz is"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr "L&eddig Reeg: Wenn de Reeg leddig is"
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, fuzzy, kde-format
+#| msgid "Endnote %1"
+msgid "End notes"
+msgstr "Enn-Notiz %1"
+
+#: words/msword-odf/conversion.cpp:828
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Koppreeg för even Sieden"
+
+#: words/msword-odf/conversion.cpp:830
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Koppreeg för nich even Sieden"
+
+#: words/msword-odf/conversion.cpp:832
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Footreeg för even Sieden"
+
+#: words/msword-odf/conversion.cpp:834
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Footreeg för nich even Sieden"
+
+#: words/msword-odf/conversion.cpp:836
+#, kde-format
+msgid "First Page Header"
+msgstr "Koppreeg för eerst Siet"
+
+#: words/msword-odf/conversion.cpp:838
+#, kde-format
+msgid "First Page Footer"
+msgstr "Footreeg för eerst Siet"
+
+#: words/msword-odf/texthandler.cpp:632
+#, kde-format
+msgid "Table %1"
+msgstr "Tabell %1"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr "De Datei lett sik nich laden, wiel se wull keen RTF-Dokment is."
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, kde-format
+msgid "Words's RTF Import Filter"
+msgstr "RTF-Importfilter vun Words"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, kde-format
+msgid "The file cannot be loaded."
+msgstr "De Datei lett sik nich laden"
+
+#~ msgid "Failed to read data."
+#~ msgstr "Daten laat sik nich lesen."
+
+#~ msgid "Export Error"
+#~ msgstr "Exportfehler"
+
+#~ msgid "Malformed XML data."
+#~ msgstr "Leeg XML-Daten."
+
+#~ msgid "Export to Image"
+#~ msgstr "As Bild exporteren"
+
+#~ msgid "Complete Page"
+#~ msgstr "Heel Siet"
+
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Rebeet vun Objekten op de Siet"
+
+#~ msgid "Area to export:"
+#~ msgstr "Rebeet för't Exporteren:"
+
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "Egen Grött (in Pixels):"
+
+#~ msgid "Height:"
+#~ msgstr "Hööchde:"
+
+#~ msgid "Width:"
+#~ msgstr "Breed:"
+
+#~ msgid "Margin:"
+#~ msgstr "Rand:"
+
+#~ msgid "QXml"
+#~ msgstr "QXml"
+
+#, fuzzy
+#~| msgid "Size in Pixels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Pixels"
+#~ msgstr "Grött in Pixels"
+
+#, fuzzy
+#~| msgid "Image width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image width:"
+#~ msgstr "Bildbreed:"
+
+#, fuzzy
+#~| msgid "Image height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image height:"
+#~ msgstr "Bildhööchde:"
+
+#, fuzzy
+#~| msgid "Size in Units"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Units"
+#~ msgstr "Grött in Eenheiten:"
+
+#, fuzzy
+#~| msgid "Resolution:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Resolution:"
+#~ msgstr "Oplösen:"
+
+#, fuzzy
+#~| msgid "Unit:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unit:"
+#~ msgstr "Eenheit:"
+
+#, fuzzy
+#~| msgid "Background Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background Color"
+#~ msgstr "Achtergrundklöör"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "Klöör"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opacity"
+#~ msgstr "Deckstärk"
+
+#, fuzzy
+#~| msgid "En&coding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&coding:"
+#~ msgstr "&Koderen:"
+
+#, fuzzy
+#~| msgid ""
+#~| "With this option you can define the encoding of the HTML file. The "
+#~| "recommended encoding (UTF8) is selected as default."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "With this option you can define the encoding of the HTML file. The "
+#~ "recommended encoding (UTF8) is selected as default."
+#~ msgstr ""
+#~ "Mit disse Optschoon lett sik De Koderen vun de HTML-Datei fastleggen. De "
+#~ "anraadt Koderen (UTF-8) is as Standard utsöcht."
+
+#, fuzzy
+#~| msgid "Sheet Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet Selection"
+#~ msgstr "Blattköör"
+
+#, fuzzy
+#~| msgid "Click here to select all sheets in the list."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click here to select all sheets in the list."
+#~ msgstr "Klick hier, wenn Du all Blääd ut de List utsöken wullt."
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select &All"
+#~ msgstr "&All utsöken"
+
+#, fuzzy
+#~| msgid "Desele&ct All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Desele&ct All"
+#~ msgstr "Heel Köör &torüchnehmen"
+
+#, fuzzy
+#~| msgid ""
+#~| "This option will make the HTML export filter generate a new page for "
+#~| "each sheet. If you disable this option, all sheets are written on one "
+#~| "page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This option will make the HTML export filter generate a new page for each "
+#~ "sheet. If you disable this option, all sheets are written on one page."
+#~ msgstr ""
+#~ "Mit disse Optschoon stellt de HTML-Exportfilter för elk Blatt en egen "
+#~ "Siet op. Wenn dit utmaakt is, warrt all Blääd tosamen na een Siet "
+#~ "schreven."
+
+#, fuzzy
+#~| msgid "Use &separate files for each table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &separate files for each table"
+#~ msgstr "För elk Tabell &egen Dateien bruken"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Stil"
+
+#, fuzzy
+#~| msgid ""
+#~| "Select this option to use the default fonts and colors for the HTML page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to use the default fonts and colors for the HTML page."
+#~ msgstr ""
+#~ "Söök dit ut, wenn Du de Standard-Schriftoorden un -Klören för de Nettsiet "
+#~ "bruken wullt."
+
+#, fuzzy
+#~| msgid "Use &default style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &default style"
+#~ msgstr "&Standard-Stil bruken"
+
+#, fuzzy
+#~| msgid ""
+#~| "Select this option to specify a separate stylesheet for the HTML page. "
+#~| "You can select or type on in the field below."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to specify a separate stylesheet for the HTML page. "
+#~ "You can select or type on in the field below."
+#~ msgstr ""
+#~ "Söök dit ut, wenn Du en egen Stilvörlaag för de Nettsiet bruken wullt. Se "
+#~ "lett sik ut dat Feld nerrn utsöken oder ingeven."
+
+#, fuzzy
+#~| msgid "Use &external stylesheet:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &external stylesheet:"
+#~ msgstr "&Extern Stilvörlaag bruken:"
+
+#, fuzzy
+#~| msgid ""
+#~| "In this field you can enter an URL for your stylesheet. It is possible "
+#~| "to point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "In this field you can enter an URL for your stylesheet. It is possible to "
+#~ "point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgstr ""
+#~ "Hier lett sik en URL för Dien Stilvörlaag ingeven. Se kann na en Vörlaag "
+#~ "op Fastplaat oder in't Internet wiesen."
+
+#, fuzzy
+#~| msgid "Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Utsehn"
+
+#, fuzzy
+#~| msgid "Use this option to enable or disable borders around the cells."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use this option to enable or disable borders around the cells."
+#~ msgstr "Mit disse Optschoon laat sik Ränners rund de Zellen an-/utmaken."
+
+#, fuzzy
+#~| msgid "Use &borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &borders"
+#~ msgstr "&Ränners bruken"
+
+#, fuzzy
+#~| msgid ""
+#~| "Use this option to define how many pixels there should be between the "
+#~| "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Use this option to define how many pixels there should be between the "
+#~ "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgstr ""
+#~ "Mit disse Optschoon lett sik de Tall vun Pixels twischen de Zellen "
+#~ "fastleggen. De Effekt is beter sichtbor, wenn <b>Ränners bruken</b> "
+#~ "anmaakt is."
+
+#, fuzzy
+#~| msgid "Pi&xels between cells:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pi&xels between cells:"
+#~ msgstr "Pi&xels twischen Zellen:"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Dokment"
+
+#, fuzzy
+#~| msgid "Document Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Style"
+#~ msgstr "Dokmentstil"
+
+#, fuzzy
+#~| msgid "Latex style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex style"
+#~ msgstr "LaTeX-Stil"
+
+#, fuzzy
+#~| msgid "Words style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words style"
+#~ msgstr "Words-Stil"
+
+#, fuzzy
+#~| msgid "Document Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Type"
+#~ msgstr "Dokmenttyp"
+
+#, fuzzy
+#~| msgid "The document will be able to be compiled alone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The document will be able to be compiled alone"
+#~ msgstr "Dat Dokment lett sik enkel kompileren."
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a full latex document since all the "
+#~| "include will be generated before the \\begin[document} and "
+#~| "\\end{document} commands."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a full latex document since all the "
+#~ "include will be generated before the \\begin[document} and "
+#~ "\\end{document} commands."
+#~ msgstr ""
+#~ "Dat Dokment warrt as heel LaTeX-Dokment opstellt, wiel all Infögen vör de "
+#~ "Befehlen \"\\begin[document}\" un \"\\end{document}\" opstellt warrt."
+
+#, fuzzy
+#~| msgid "Independent document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Independent document"
+#~ msgstr "Nich reedschapafhangig Dokment"
+
+#, fuzzy
+#~| msgid "Do not generate either the latex header or the document environment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do not generate either the latex header or the document environment"
+#~ msgstr "Keen LaTeX-Koppindrag oder Dokment-Ümgeven opstellen."
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a latex document which will have to be "
+#~| "included in a main latex document. It will allow you to generate several "
+#~| "little files for each chapter of your document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a latex document which will have to be "
+#~ "included in a main latex document. It will allow you to generate several "
+#~ "little files for each chapter of your document."
+#~ msgstr ""
+#~ "Dat Dokment warrt as LaTeX-Dokment opstellt, dat binnen en LaTeX-"
+#~ "Hööftdokment inslaten warrn mutt. So laat sik enkelte lütte Dateien för "
+#~ "elk Afsnitt vun Dien Dokment opstellen."
+
+#, fuzzy
+#~| msgid "Document to include"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document to include"
+#~ msgstr "Dokment för't Insluten"
+
+#, fuzzy
+#~| msgid "Document class:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document class:"
+#~ msgstr "Dokmentklass:"
+
+#, fuzzy
+#~| msgid "Quality:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quality:"
+#~ msgstr "Gööd:"
+
+#, fuzzy
+#~| msgid "Final"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Final"
+#~ msgstr "Ennverschoon"
+
+#, fuzzy
+#~| msgid "Draft"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draft"
+#~ msgstr "Vörverschoon"
+
+#, fuzzy
+#~| msgid "Default font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default font size:"
+#~ msgstr "Standard-Schriftgrött:"
+
+#, fuzzy
+#~| msgid "Pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures"
+#~ msgstr "Biller"
+
+#, fuzzy
+#~| msgid "Convert the pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convert the pictures:"
+#~ msgstr "Biller ümwanneln"
+
+#, fuzzy
+#~| msgid "Pictures directory:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures directory:"
+#~ msgstr "Bildorner:"
+
+#, fuzzy
+#~| msgid "Language"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Spraak"
+
+#, fuzzy
+#~| msgid "Encoding"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encoding"
+#~ msgstr "Koderen"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Tofögen"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Wegmaken"
+
+#, fuzzy
+#~| msgid "Contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "Inholt"
+
+#, fuzzy
+#~| msgid "Export information about author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export information about author:"
+#~ msgstr "Informatschonen över den Schriever exporteren"
+
+#, fuzzy
+#~| msgid "Add a table of content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a table of content:"
+#~ msgstr "Inholtverteken tofögen"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Notizen"
+
+#, fuzzy
+#~| msgid "Don't export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Don't export"
+#~ msgstr "Nich exporteren"
+
+#, fuzzy
+#~| msgid "Export notes in margin notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in margin notes"
+#~ msgstr "Notizen in Randnotizen exporteren"
+
+#, fuzzy
+#~| msgid "Export notes in comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in comments"
+#~ msgstr "Notizen in Kommentaren exporteren"
+
+#, fuzzy
+#~| msgid "E&ncoding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "&Koderen:"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Line"
+#~ msgstr "Enn vun de Reeg"
+
+#, fuzzy
+#~| msgid "&UNIX style (recommended; line feed only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&UNIX style (recommended; line feed only)"
+#~ msgstr "&Unix-Stil (anraadt; bloots ReegDaal)"
+
+#, fuzzy
+#~| msgid "&Windows style (carriage return and line feed)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Windows style (carriage return and line feed)"
+#~ msgstr "&Windows-Stil (WagenRetuur un ReegDaal)"
+
+#, fuzzy
+#~| msgid "&MacOS style (carriage return only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&MacOS style (carriage return only)"
+#~ msgstr "&Mac-Stil (bloots WagenRetuur)"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Blääd"
+
+#, fuzzy
+#~| msgid "Select sheets to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select sheets to export:"
+#~ msgstr "Tabellen för't Exporteren utsöken:"
+
+#, fuzzy
+#~| msgid "Delimiter Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter Line"
+#~ msgstr "Trennlien"
+
+#, fuzzy
+#~| msgid "********<SHEETNAME>********"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "********<SHEETNAME>********"
+#~ msgstr "********<BLATTNAAM>********"
+
+#, fuzzy
+#~| msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgstr "<BLATTNAAM> warrt mit den Naam vun't nakamen Blatt utwesselt."
+
+#, fuzzy
+#~| msgid "Print delimiter line above every sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Print delimiter line above every sheet"
+#~ msgstr "Trenner baven elk Blatt drucken"
+
+#, fuzzy
+#~| msgid "Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cells"
+#~ msgstr "Zellen"
+
+#, fuzzy
+#~| msgid "Delimiter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "Trennteken"
+
+#, fuzzy
+#~| msgid "Comma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "Komma"
+
+#, fuzzy
+#~| msgid "Semicolon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "Streekpunkt"
+
+#, fuzzy
+#~| msgid "Tabulator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "Tabulator"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "Freeteken"
+
+#, fuzzy
+#~| msgid "Other:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other:"
+#~ msgstr "Anner:"
+
+#, fuzzy
+#~| msgid "Quotes:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quotes:"
+#~ msgstr "Goosfööt:"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Export selection only"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export selection only"
+#~ msgstr "Bloots Köör exporteren"
+
+#, fuzzy
+#~| msgid "Page:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page:"
+#~ msgstr "Siet:"
+
+#, fuzzy
+#~| msgid "Complete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Complete Page"
+#~ msgstr "Heel Siet"
+
+#, fuzzy
+#~| msgid "Area of Objects on Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Rebeet vun Objekten op de Siet"
+
+#, fuzzy
+#~| msgid "Area to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area to export:"
+#~ msgstr "Rebeet för't Exporteren:"
+
+#, fuzzy
+#~| msgid "Custom size (in pixels):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "Egen Grött (in Pixels):"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "Hööchde:"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Breed:"
+
+#, fuzzy
+#~| msgid "Margin:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Margin:"
+#~ msgstr "Rand:"
+
+#, fuzzy
+#~| msgid "Plain Text Import Dialog"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plain Text Import Dialog"
+#~ msgstr "Importdialoog för eenfach Text"
+
+#, fuzzy
+#~| msgid "End of Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Paragraph"
+#~ msgstr "Enn vun den Afsnitt"
+
+#, fuzzy
+#~| msgid "&As is: At the end of line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As is: At the end of line"
+#~ msgstr "&So laten: An't Enn vun de Reeg"
+
+#, fuzzy
+#~| msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgstr "&Satz: Wenn dat Enn vun de Reeg dat Enn vun en Satz is"
+
+#, fuzzy
+#~| msgid "&Empty Line: If the line is empty"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Empty Line: If the line is empty"
+#~ msgstr "L&eddig Reeg: Wenn de Reeg leddig is"
+
+#, fuzzy
+#~| msgid "Export Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Error"
+#~ msgstr "Exportfehler"
+
+#, fuzzy
+#~| msgid "Failed to read data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to read data."
+#~ msgstr "Daten laat sik nich lesen."
+
+#, fuzzy
+#~| msgid "Malformed XML data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Malformed XML data."
+#~ msgstr "Leeg XML-Daten."
+
+#, fuzzy
+#~| msgid "Export to Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to Image"
+#~ msgstr "As Bild exporteren"
+
+#, fuzzy
+#~| msgid "PNG Export Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PNG Export Options"
+#~ msgstr "Export-Optschonen för PNG-Dateien"
+
+#, fuzzy
+#~| msgid "Namespace \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace \"%1\" not found"
+#~ msgstr "Naamruum \"%1\" lett sik nich finnen."
+
+#, fuzzy
+#~| msgid "Could not open the requested file %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open the requested file %1"
+#~ msgstr "De angeven Datei (%1) lett sik nich opmaken."
+
+#, fuzzy
+#~| msgid "Could not read ZIP directory of the requested file %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read ZIP directory of the requested file %1"
+#~ msgstr "De angeven Datei (%1) ehr ZIP-Orner lett sik nich opmaken."
+
+#, fuzzy
+#~| msgid "Enter password"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter password"
+#~ msgstr "Passwoort ingeven"
+
+#, fuzzy
+#~| msgid ""
+#~| "This document is encrypted, please enter the password to decrypt it:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "This document is encrypted, please enter the password to decrypt it:"
+#~ msgstr ""
+#~ "Dit Dokment is verslötelt, bitte dat Passwoort för't Opslöteln angeven:"
+
+#, fuzzy
+#~| msgid ""
+#~| "Incorrect password, please enter the password to decrypt this document:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Incorrect password, please enter the password to decrypt this document:"
+#~ msgstr ""
+#~ "Leeg Passwoort. Giff bitte dat Passwoort in, wenn Du dat Dokment "
+#~ "opslöteln wullt:"
+
+#, fuzzy
+#~| msgid "Could not find path for type %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find path for type %1"
+#~ msgstr "Padd för Typ \"%1\" lett sik nich finnen."
+
+#, fuzzy
+#~| msgid "%1 (line %2, column %3)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (line %2, column %3)"
+#~ msgstr "%1 (Reeg %2, Striep %3)"
+
+#, fuzzy
+#~| msgid "%1 (%2, line %3, column %4)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (%2, line %3, column %4)"
+#~ msgstr "%1 (%2, Reeg %3, Striep %4)"
+
+#, fuzzy
+#~| msgid "Element \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Element \"%1\" not found"
+#~ msgstr "Element \"%1\" lett sik nich finnen."
+
+#, fuzzy
+#~| msgid "Attribute \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attribute \"%1\" not found"
+#~ msgstr "Attribut \"%1\" lett sik nich finnen."
+
+#, fuzzy
+#~| msgid "Unexpected value \"%1\" of attribute \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unexpected value \"%1\" of attribute \"%2\""
+#~ msgstr "Weert \"%1\" vun Attribut \"%2\" nich verwacht"
+
+#, fuzzy
+#~| msgid "Unexpected second occurrence of \"%1\" element"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unexpected second occurrence of \"%1\" element"
+#~ msgstr "Element: \"%1\" kummt unverwachtens nochmaal vör."
+
+#, fuzzy
+#~| msgid "Expected closing of element \"%1\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Expected closing of element \"%1\""
+#~ msgstr "Tomaken vun Element \"%1\" verwacht"
+
+#, fuzzy
+#~| msgid "None of expected elements found: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None of expected elements found: %1"
+#~ msgstr "Keen verwacht Elementen funnen: %1"
+
+#, fuzzy
+#~| msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgstr "Teel för ID \"%1\" lett sik binnen Datei \"%2\" nich finnen."
+
+#, fuzzy
+#~| msgid "Could not find relationships file \"%1\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find relationships file \"%1\""
+#~ msgstr "Betogdatei \"%1\" lett sik nich finnen."
+
+#, fuzzy
+#~| msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgstr "Teel för Betog \"%1\" lett sik binnen Datei \"%2\" nich finnen."
+
+#, fuzzy
+#~| msgid ""
+#~| "Parsing error in the main document at line %1, column %2.\n"
+#~| "Error message: %3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Parsing error in the main document at line %1, column %2.\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Inleesfehler in'n Hööftdokment bi Reeg %1, Striep %2.\n"
+#~ "Fehlermellen: %3"
+
+#, fuzzy
+#~| msgid "QXml"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QXml"
+#~ msgstr "QXml"
+
+#, fuzzy
+#~| msgid "Entry '%1' not found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' not found."
+#~ msgstr "Indrag \"%1\" lett sik nich finnen."
+
+#, fuzzy
+#~| msgid "Entry '%1' is not a file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' is not a file."
+#~ msgstr "Indrag \"%1\" is keen Datei."
+
+#, fuzzy
+#~| msgid "Could not open entry \"%1\" for writing."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open entry \"%1\" for writing."
+#~ msgstr "Indrag \"%1\" lett sik nich schrieven."
+
+#, fuzzy
+#~| msgid "Could not write block"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not write block"
+#~ msgstr "Block lett sik nich schrieven."
+
+#, fuzzy
+#~| msgid "<SHEETNAME>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME>"
+#~ msgstr "<BLATTNAAM>"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Recommended ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Anraadt ( %1 )"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Locale ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Spraakinstellen ( %1 )"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Other ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Anner (%1)"
+
+#, fuzzy
+#~| msgid "Cannot find encoding: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "De Koderen lett sik nich finnen: %1"
+
+#, fuzzy
+#~| msgid "CSV filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV filter cannot open input file - please report."
+#~ msgstr ""
+#~ "Ingaavdatei lett sik mit den CSV-Filter nich opmaken - bitte mell den "
+#~ "Fehler."
+
+#, fuzzy
+#~| msgid "File format is not supported."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File format is not supported."
+#~ msgstr "Dateiformaat nich ünnerstütt."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read from file."
+#~ msgstr "Datei lett sik nich lesen."
+
+#, fuzzy
+#~| msgid "Export Sheet to HTML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Sheet to HTML"
+#~ msgstr "Blatt na HTML exporteren"
+
+#, fuzzy
+#~| msgid "Recommended: UTF-8"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recommended: UTF-8"
+#~ msgstr "Anraadt: UTF-8"
+
+#, fuzzy
+#~| msgid "Locale (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale (%1)"
+#~ msgstr "Spraakinstellen (%1)"
+
+#, fuzzy
+#~| msgid "Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top"
+#~ msgstr "Baven"
+
+#, fuzzy
+#~| msgid "Latex Export Filter Configuration"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex Export Filter Configuration"
+#~ msgstr "Instellen vun den LaTeX-Exportfilter"
+
+#, fuzzy
+#~| msgid "Page "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page "
+#~ msgstr "Siet "
+
+#, fuzzy
+#~| msgid "The file seems to be corrupt. Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file seems to be corrupt. Skipping a table."
+#~ msgstr "As dat lett is de Datei schaadhaftig. En Tabell warrt övergahn."
+
+#, fuzzy
+#~| msgid "Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skipping a table."
+#~ msgstr "Tabell warrt övergahn."
+
+#, fuzzy
+#~| msgid ""
+#~| "This document was created with OpenOffice.org version '%1'. This filter "
+#~| "was written for version 1.0. Reading this file could cause strange "
+#~| "behavior, crashes or incorrect display of the data. Do you want to "
+#~| "continue converting the document?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document was created with OpenOffice.org version '%1'. This filter "
+#~ "was written for version 1.0. Reading this file could cause strange "
+#~ "behavior, crashes or incorrect display of the data. Do you want to "
+#~ "continue converting the document?"
+#~ msgstr ""
+#~ "Dit Dokment wöör mit Verschoon \"%1\" vun OpenOffice.org opstellt. Disse "
+#~ "Filter wöör för Verschoon 1.0 schreven. Dat Lesen vun disse Datei kann to "
+#~ "snaaksch Bedregen, Afstörten oder leeg Dorstellen vun Daten föhren. Wullt "
+#~ "Du dat Dokment wieder ümwanneln?"
+
+#, fuzzy
+#~| msgid "Unsupported document version"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unsupported document version"
+#~ msgstr "Nich ünnerstütt Dokment-Verschoon"
+
+#, fuzzy
+#~| msgid "QPRO filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QPRO filter cannot open input file - please report."
+#~ msgstr ""
+#~ "Ingaavdatei lett sik mit den QPRO-Filter nich opmaken - bitte mell den "
+#~ "Fehler."
+
+#, fuzzy
+#~| msgid ""
+#~| "Unable to open password protected files.\n"
+#~| "The password algorithm has not been published"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unable to open password protected files.\n"
+#~ "The password algorithm has not been published"
+#~ msgstr ""
+#~ "Passwoortschuult Dateien laat sik nich opmaken.\n"
+#~ "De Passwoort-Algoritmus wöör noch nich apen maakt"
+
+#, fuzzy
+#~| msgid "Unable to find part for type %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unable to find part for type %1"
+#~ msgstr "Komponent för Typ \"%1\" lett sik nich finnen."
+
+#, fuzzy
+#~| msgid "Declared number of shared strings too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of shared strings too small (%1)"
+#~ msgstr "Verkloort Tall vun deelt Tekenkeden to lütt (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of font styles too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of font styles too small (%1)"
+#~ msgstr "Verkloort Tall vun Schriftstilen to lütt (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of cell formats too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of cell formats too small (%1)"
+#~ msgstr "Verkloort Tall vun Zellformaten to lütt (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of fill styles too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of fill styles too small (%1)"
+#~ msgstr "Verkloort Tall vun Vullmaakstilen to lütt (%1)"
+
+#, fuzzy
+#~| msgid ""
+#~| "The data could not be loaded completely because the maximum size of "
+#~| "sheet was exceeded."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The data could not be loaded completely because the maximum size of sheet "
+#~ "was exceeded."
+#~ msgstr ""
+#~ "De Daten laat sik nich heel laden, wiel dat mehr sünd, as dat Blatt dat "
+#~ "tolett."
+
+#, fuzzy
+#~| msgid "Expected integer or floating point number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Expected integer or floating point number"
+#~ msgstr "Verwacht Heeltall oder Fleetkommatall"
+
+#, fuzzy
+#~| msgid "Slide layout \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide layout \"%1\" not found"
+#~ msgstr "Dia-Toornen \"%1\" lett sik nich finnen."
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Dia %1"
+
+#, fuzzy
+#~| msgid "Words's Plain Text Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's Plain Text Import Filter"
+#~ msgstr "Importfilter vun Words för eenfach Text"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End notes"
+#~ msgstr "Enn-Notiz %1"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Koppreeg för even Sieden"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Koppreeg för nich even Sieden"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Footreeg för even Sieden"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Footreeg för nich even Sieden"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Header"
+#~ msgstr "Koppreeg för eerst Siet"
+
+#, fuzzy
+#~| msgid "First Page Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Footer"
+#~ msgstr "Footreeg för eerst Siet"
+
+#, fuzzy
+#~| msgid "Table %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table %1"
+#~ msgstr "Tabell %1"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgstr "De Datei lett sik nich laden, wiel se wull keen RTF-Dokment is."
+
+#, fuzzy
+#~| msgid "Words's RTF Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's RTF Import Filter"
+#~ msgstr "RTF-Importfilter vun Words"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded."
+#~ msgstr "De Datei lett sik nich laden"
+
+#~ msgid "Failed to write file."
+#~ msgstr "Datei lett sik nich schrieven."
+
+#~ msgid "%1 Export Error"
+#~ msgstr "%1-Exportfehler"
+
+#~ msgid "Export Filter Parameters"
+#~ msgstr "Parameters för Exportfilter"
+
+#~ msgid "Keep ratio"
+#~ msgstr "Proportschoon wohren"
+
+#~ msgid "Width (%):"
+#~ msgstr "Breed (%):"
+
+#~ msgid "Height (%):"
+#~ msgstr "Hööchde (%):"
+
+#~ msgid "PNG Export Error"
+#~ msgstr "PNG-Exportfehler"
+
+#~ msgid "EPS Export"
+#~ msgstr "EPS-Export"
+
+#~ msgid "Options"
+#~ msgstr "Optschonen"
+
+#~ msgid "PostScript level 1"
+#~ msgstr "PostScript Laag 1"
+
+#~ msgid "PostScript level 2"
+#~ msgstr "PostScript Laag 2"
+
+#~ msgid "PostScript level 3"
+#~ msgstr "PostScript Laag 3"
+
+#~ msgid "Import"
+#~ msgstr "Importeren"
+
+#~ msgid "Text"
+#~ msgstr "Text"
+
+#~ msgid "Number"
+#~ msgstr "Tall"
+
+#~ msgid "Currency"
+#~ msgstr "Geld"
+
+#~ msgid "Date"
+#~ msgstr "Datum"
+
+#~ msgid "Decimal Comma Number"
+#~ msgstr "Dezimaaltall mit Komma"
+
+#~ msgid "Decimal Point Number"
+#~ msgstr "Dezimaaltall mit Punkt"
+
+#~ msgid "None"
+#~ msgstr "Keen"
+
+#~ msgid ""
+#~ "Please check the ranges you specified. The start value must be lower than "
+#~ "the end value."
+#~ msgstr ""
+#~ "Bitte prööv de angeven Rebeden. De Startweert mutt sieter wesen as de "
+#~ "Ennweert."
+
+#~ msgid "Common"
+#~ msgstr "Allgemeen"
+
+#~ msgid "Other"
+#~ msgstr "Annerswat"
+
+#~ msgid "Ignore duplicate delimiters"
+#~ msgstr "Dubbelte Trenntekens övergahn"
+
+#~ msgid "Text&quote:"
+#~ msgstr "Text&zitaat:"
+
+#~ msgid "&Format:"
+#~ msgstr "&Formaat:"
+
+#~ msgid "Ranges"
+#~ msgstr "Rebeden"
+
+#~ msgid "to"
+#~ msgstr "bet"
+
+#~ msgid "Import lines:"
+#~ msgstr "Regen importeren:"
+
+#~ msgid "Import columns:"
+#~ msgstr "Striepen importeren:"
+
+#~ msgid "Update"
+#~ msgstr "Opfrischen"
+
+#~ msgid "&Help"
+#~ msgstr "&Hülp"
+
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#~ msgid "&OK"
+#~ msgstr "&OK"
+
+#~ msgid "&Cancel"
+#~ msgstr "&Afbreken"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the Words file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Bi't Inlesen vun de Words-Datei hett dat en Fehler geven.\n"
+#~ "Reeg: %1, Striep %2.\n"
+#~ "Fehlermellen: %3"
+
+#~ msgid "Words Export Filter Library"
+#~ msgstr "Exportfilter-Bibliotheek vun Words"
+
+#~ msgid "Export XSLT Configuration"
+#~ msgstr "XSLT-Export instellen"
+
+#~ msgid "Open Document"
+#~ msgstr "Dokment opmaken"
+
+#~ msgid "Import XSLT Configuration"
+#~ msgstr "XSLT-Import instellen"
+
+#~ msgid "Common xslt Files"
+#~ msgstr "Allgemeen XSLT-Dateien"
+
+#~ msgid "Personal xslt Files"
+#~ msgstr "Persöönlich XSLT-Dateien"
+
+#~ msgid "Choose..."
+#~ msgstr "Utsöken..."
+
+#~ msgid "SVG Export Error"
+#~ msgstr "SVG-Exportfehler"
+
+#~ msgid "LaTeX Export Error"
+#~ msgstr "LaTeX-Exportfehler"
+
+#~ msgid "PNG Export Filter Parameters"
+#~ msgstr "Parameters för PNG-Exportfilter"
+
+#~ msgid "Height"
+#~ msgstr "Hööchde"
+
+#~ msgid "Width"
+#~ msgstr "Breed"
+
+#~ msgid "Height (%)"
+#~ msgstr "Hööchde (%)"
+
+#~ msgid "Width (%)"
+#~ msgstr "Breed (%)"
+
+#~ msgid "Slide Title"
+#~ msgstr "Dia-Titel"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Picture %1"
+#~ msgstr "Bild %1"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Table %3, row %1, column %2"
+#~ msgstr "Tabell %3, Reeg %1, Striep %2"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the AbiWord file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Bi't Inlesen vun de \"AbiWord\"-Datei hett dat en Fehler geven.\n"
+#~ "Reeg: %1, Striep %2.\n"
+#~ "Fehlermellen: %3"
+
+#~ msgid "AbiWord Import Filter"
+#~ msgstr "\"AbiWord\"-Importfilter"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Main Text Frameset"
+#~ msgstr "Hööfttext-Rahmensett"
+
+#~ msgid "An error occurred during the load of the AbiWord file: %1"
+#~ msgstr "Bi't Laden vun de \"AbiWord\"-Datei hett dat en Fehler geven: %1"
+
+#~ msgid "Unable to save document information."
+#~ msgstr "Dokmentinformatschonen laat sik nich sekern."
+
+#~ msgid "Unable to save main document."
+#~ msgstr "Hööftdokment lett sik nich sekern."
+
+#~ msgctxt "Frameset name"
+#~ msgid "Footnote %1"
+#~ msgstr "Footnotiz %1"
+
+#~ msgid "Words's Plain Text Export Filter"
+#~ msgstr "Exportfilter vun Words för eenfach Text"
+
+#~ msgid "Words's HTML Export Filter"
+#~ msgstr "HTML-Exportfilter vun Words"
+
+#~ msgid "Untitled Document"
+#~ msgstr "Dokment ahn Naam"
+
+#~ msgid "Latex Import Filter Parameters"
+#~ msgstr "Parameters för LaTeX-Importfilter"
+
+#~ msgid "Unicode"
+#~ msgstr "Unicode"
+
+#~ msgid "latin1"
+#~ msgstr "Latin1"
+
+#~ msgid "New document"
+#~ msgstr "Nieg Dokment"
+
+#~ msgid "Embedded document"
+#~ msgstr "Inbett Dokment"
+
+#~ msgid "Words's MS Write Import Filter"
+#~ msgstr "\"Microsoft Write\"-Importfilter vun Words"
+
+#~ msgid "Header"
+#~ msgstr "Koppreeg"
+
+#~ msgid "Footer"
+#~ msgstr "Footreeg"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Hööfttext-Rahmensett"
+
+#~ msgctxt "Object name"
+#~ msgid "Table %1"
+#~ msgstr "Tabell %1"
+
+#~ msgctxt "Object name"
+#~ msgid "Table Frame %1"
+#~ msgstr "Tabellenrahmen %1"
+
+#~ msgctxt "Pseudo-author for annotations"
+#~ msgid "KWord 1.3"
+#~ msgstr "KWord 1.3"
+
+#~ msgid "Plain Text Export Dialog"
+#~ msgstr "Exportdialoog för eenfach Text"
+
+#~ msgid "HTML Export Dialog"
+#~ msgstr "HTML-Exportdialoog"
+
+#~ msgid "&HTML 4.01"
+#~ msgstr "&HTML 4.01"
+
+#~ msgid "HTML 4.01 (For older HTML user agents) "
+#~ msgstr "HTML 4.01 (för öller HTML-Brukerkennen) "
+
+#~ msgid "&XHTML 1.0"
+#~ msgstr "&XHTML 1.0"
+
+#~ msgid "XHTML 1.0"
+#~ msgstr "XHTML 1.0"
+
+#~ msgid "Mode"
+#~ msgstr "Bedriefoort"
+
+#~ msgid "L&ight: Convert to strict (X)HTML"
+#~ msgstr "&Minimaal: Ümwanneln na streng (X)HTML"
+
+#~ msgid ""
+#~ "Convert mainly the document structure (Recommended for exporting to "
+#~ "browsers with limited capabilities)"
+#~ msgstr ""
+#~ "Mehrstendeels de Dokment-Struktuur ümwanneln (för't Exporteren na "
+#~ "Nettkiekers mit weniger Könen anraadt)"
+
+#~ msgid "&Basic: Convert to transitional (X)HTML"
+#~ msgstr "&Eenfach: Ümwanneln na Transitional (X)HTML"
+
+#~ msgid ""
+#~ "Convert most of the document (Recommended for re-importing in Words or "
+#~ "for exporting to older browsers)"
+#~ msgstr ""
+#~ "Meist all vun't Dokment ümwanneln (för't Wedderimporteren na Words oder "
+#~ "för't Exporteren na öller Nettkiekers anraadt)"
+
+#~ msgid "&Enhanced: Convert to (X)HTML with CSS"
+#~ msgstr "&Verwiedert: Ümwanneln na (X)HTML mit CSS"
+
+#~ msgid ""
+#~ "Convert as much as possible of the Words document (Recommended for "
+#~ "exporting to other modern word processors or to modern browsers)"
+#~ msgstr ""
+#~ "As veel as mööglich vun dat \"Words\"-Dokment ümwanneln (för't Exporteren "
+#~ "na anner modeern Textverarbeiden oder modeern Nettkiekers anraadt)"
+
+#~ msgid "Use external CSS sheet:"
+#~ msgstr "Extern CSS-Stilvörlaag bruken:"
+
+#~ msgid "Enter the location of the CSS file in this field"
+#~ msgstr "Hier den Spiekeroort vun de CSS-Datei ingeven"
+
+#~ msgid "This directory will contains the eps pictures of your document"
+#~ msgstr "Disse Orner bargt de EPS-Biller vun Dien Dokment."
+
+#~ msgid "MS Write Import Dialog"
+#~ msgstr "\"Microsoft Write\"-Importdialoog"
+
+#~ msgid "&Encoding"
+#~ msgstr "&Koderen"
+
+#~ msgid ""
+#~ "Select the encoding of the Write document.<br><br>Try the Default  "
+#~ "Encoding (CP 1252), if unsure."
+#~ msgstr ""
+#~ "De Koderen vun't \"Write\"-Dokment fastleggen.<br><br>Wenn Du nich seker "
+#~ "büst, versöök de Standardkoderen (CP 1252)."
+
+#~ msgid "&Other encoding:"
+#~ msgstr "&Anner Koderen:"
+
+#~ msgid "&Default encoding (CP 1252)"
+#~ msgstr "&Standard-Koderen (CP 1252)"
+
+#~ msgid ""
+#~ "Most Write documents are stored using this encoding (also known as "
+#~ "windows-1252).<br><br>Select this if unsure."
+#~ msgstr ""
+#~ "De mehrsten \"Write\"-Dokmenten warrt mit disse Koderen (ok begäng as "
+#~ "\"Windows 1252\") sekert.<br><br>Söök dit ut, wenn Du nich seker büst."
+
+#~ msgid "&Advanced"
+#~ msgstr "&Verwiedert"
+
+#~ msgid ""
+#~ "These advanced options allow you to fine-tune the importing of formatting "
+#~ "information. They compensate for differences between Words and MS Write "
+#~ "by adding extra formatting information (not found in the original "
+#~ "document), to try to make the imported document look as close to the "
+#~ "original as possible.<br><br>It is safe to use the defaults, if unsure."
+#~ msgstr ""
+#~ "Mit disse verwiedert Optschonen lett sik de Import vun Formateren-"
+#~ "Informatschonen nauer instellen. Se glieken dör't Tofögen vun mehr "
+#~ "Formateren (de dat Orginaal-Dokment nich bargt) de Verschelen twischen "
+#~ "Words un \"Microsoft Word\" ut. So warrt dat importeerte Dokment as liek "
+#~ "dat Orginaaldorstellt, as mööglich.<br><br>Du kannst ahn Bedenken de "
+#~ "Standardinstellen bruken, wenn Du nich seker büst."
+
+#~ msgid "Compensate for &linespacing differences"
+#~ msgstr "&Regenafstand-Verschelen utglieken"
+
+#~ msgid ""
+#~ "Try to simulate Write's linespacing by adding some spaces before each "
+#~ "paragraph."
+#~ msgstr ""
+#~ "Regenafstand vun \"Write\" dör Infögen vun Freetekens vör elk Afsnitt "
+#~ "namaken."
+
+#~ msgid "Enable &image positioning"
+#~ msgstr "&Bildutrichten anmaken"
+
+#~ msgid "Use paragraph indentation to position images."
+#~ msgstr "Afsnitt-Inrücken för't Utrichten vun Biller bruken."
+
+#~ msgid "DCM Import"
+#~ msgstr "DCM-Import"
+
+#~ msgid "Import options"
+#~ msgstr "Import-Optschonen"
+
+#~ msgid "Read digital signatures from the dataset"
+#~ msgstr "Digitaal Ünnerschriften ut Datensett lesen"
+
+#~ msgid "Ignore relationship constraints"
+#~ msgstr "Betogbedingen övergahn"
+
+#~ msgid ""
+#~ "Do not abort on content item errors\n"
+#~ "(e.g. missing value type specific attributes)"
+#~ msgstr ""
+#~ "Bi Inholtindragfehlers nich afbreken.\n"
+#~ "(a.B. bi fehlen Weerttyp-fastleggen Attributen)"
+
+#~ msgid "Skip invalid content item subtree"
+#~ msgstr "Leeg Inholtindrag-Ünnerboom övergahn"
+
+#~ msgid "Note \"%1\" already exists"
+#~ msgstr "Notiz \"%1\" gifft dat al."
+
+#~ msgid ""
+#~ "The document cannot be loaded, as it seems not to follow the RTF syntax."
+#~ msgstr ""
+#~ "Dat Dokment lett sik nich laden, wiel dat wull nich na de RTF-Schriefwies "
+#~ "opstellt is."
+
+#~ msgid ""
+#~ "The RTF (Rich Text Format) document has an unexpected version number: %1. "
+#~ "Continuing might result in an erroneous conversion. Do you want to "
+#~ "continue?"
+#~ msgstr ""
+#~ "Dat RTF-Dokment (\"Rich Text\"-Formaat) hett en nich verwacht Verschoon-"
+#~ "Nummer: %1. Dat Wiedermaken kann villicht to en schaadhaftig Ümwanneln "
+#~ "föhren. Wullt Du wiedermaken?"
+
+#~ msgid ""
+#~ "The PWD (PocketWord's Rich Text Format) document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Dat PWD-Dokment (\"Rich Text\" -Formaat vun \"PocketWord\") hett en nich "
+#~ "verwacht Verschoon-Nummer: %1. Dat Wiedermaken kann villicht to en "
+#~ "schaadhaftig Ümwanneln föhren. Wullt Du wiedermaken?"
+
+#~ msgid ""
+#~ "The URTF (\"Unicode Rich Text Format\") document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Dat URTF-Dokment (\"Unicode Rich Text Format\") hett en nich verwacht "
+#~ "Verschoon-Nummer: %1. Dat Wiedermaken kann villicht to en schaadhaftig "
+#~ "Ümwanneln föhren. Wullt Du wiedermaken?"
+
+#~ msgid ""
+#~ "The RTF document cannot be loaded, as it has an unexpected first keyword: "
+#~ "\\%1."
+#~ msgstr ""
+#~ "Dat RTF-Dokment lett sik nich laden, wiel dat en nich verwacht eerst "
+#~ "Slötelwoort bargt: \\%1."
+
+#~ msgid "Declared number of border styles too small (%1)"
+#~ msgstr "Verkloort Tall vun Rahmenstilen to lütt (%1)"
+
+#~ msgid "Old &method: If the line is empty or has less than 40 characters"
+#~ msgstr ""
+#~ "Oolt &Metood: Wenn de Reeg leddig is oder weniger as 40 Tekens bargt"
+
+#~ msgid "KFormula Import Error"
+#~ msgstr "KFormula-Importfehler"
+
+#~ msgid "KFormula1.3 Import Filter"
+#~ msgstr "\"KFormula1.3\"-Importfilter"
+
+#~ msgid "Available Sheets"
+#~ msgstr "Verföögbor Blääd"
+
+#~ msgid "Endnote \"%1\" not found"
+#~ msgstr "Enn-Notiz \"%1\" lett sik nich finnen."
+
+#~ msgid "Comment \"%1\" not found"
+#~ msgstr "Kommentar \"%1\" lett sik nich finnen."
+
+#~ msgid "Footnote \"%1\" not found"
+#~ msgstr "Footnotiz \"%1\" lett sik nich finnen."
+
+#~ msgid "Invalid comment date \"%1\""
+#~ msgstr "Leeg Kommentardatum: \"%1\""
+
+#~ msgid "Picture %1"
+#~ msgstr "Bild %1"
+
+#~ msgid "A password is required to read that pdf"
+#~ msgstr "För't Lesen vun disse PDF-Datei deit en Passwoort noot"
+
+#~ msgid "Cannot export images in %1.\n"
+#~ msgstr "Biller laat sik nich as %1 exporteren.\n"
+
+#~ msgid "JPEG Export Options"
+#~ msgstr "Export-Optschonen för JPEG-Dateien"
+
+#~ msgid "TIFF Export Options"
+#~ msgstr "Export-Optschonen för TIFF-Dateien"
+
+#~ msgid "All Images"
+#~ msgstr "All Biller"
+
+#~ msgid ""
+#~ "The image is using an unsupported color space. Please convert to 16-bit "
+#~ "floating point RGB/Alpha before saving in the OpenEXR format."
+#~ msgstr ""
+#~ "Dat Bild bruukt en nich ünnerstütt Klörenruum. Bitte ehr't Sekern na dat "
+#~ "\"OpenEXR\"-Formaat toeerst na 16-Bit Fleetkomma RGB/Alpha ümwanneln."
+
+#~ msgid "PDFImportWidget"
+#~ msgstr "Import-Stüerelement för PDF-Dateien"
+
+#~ msgid "Pages"
+#~ msgstr "Sieden"
+
+#~ msgid "&All pages"
+#~ msgstr "&All Sieden"
+
+#~ msgid "&First page"
+#~ msgstr "&Eerst Siet"
+
+#~ msgid "&Selection of page"
+#~ msgstr "&Sietköör"
+
+#~ msgid "Dimensions"
+#~ msgstr "Afmeten"
+
+#~ msgctxt "vertical resolution"
+#~ msgid "Vertical:"
+#~ msgstr "Pielrecht:"
+
+#~ msgctxt "horizontal resolution"
+#~ msgid "Horizontal:"
+#~ msgstr "Kimmrecht:"
+
+#~ msgid "Size:"
+#~ msgstr "Grött:"
+
+#~ msgid "Options of Your PNG"
+#~ msgstr "Optschonen vun Dien PNG-Datei"
+
+#~ msgid ""
+#~ "Note: the compression level does not change the quality of the result"
+#~ msgstr "Henwies: De Komprimeren-Stoop ännert nich de Gööd vun't Resultaat"
+
+#~ msgid ""
+#~ "<p>Adjust the compression time. Better compression takes longer.\n"
+#~ "<br>Note: the compression level does not change the quality of the result."
+#~ "</p>"
+#~ msgstr ""
+#~ "<p>Topassen vun de Komprimeren-Tiet. Beter Komprimeren duert länger.\n"
+#~ "<br>Henwies: De Komprimeren-Stoop ännert nich de Gööd vun't Resultaat.</p>"
+
+#~ msgid "Compress:"
+#~ msgstr "Komprimeren:"
+
+#~ msgctxt ""
+#~ "The compression will take a long time; saving the file will be slow."
+#~ msgid "Slow"
+#~ msgstr "Langsam"
+
+#~ msgctxt "The file will save fast but will not be compressed a lot"
+#~ msgid "Fast"
+#~ msgstr "Gau"
+
+#~ msgctxt "the file will be small"
+#~ msgid "Small"
+#~ msgstr "Lütt"
+
+#~ msgctxt "the file will be big"
+#~ msgid "Big"
+#~ msgstr "Groot"
+
+#~ msgid "Use interlacing when publishing on the Internet"
+#~ msgstr "Regenflechten bi't Praatstellen in't Internet bruken"
+
+#~ msgid ""
+#~ "<p>Interlacing is useful if you intend to publish your image on the "
+#~ "Internet.<br>\n"
+#~ "Enabling interlacing will cause the image to be displayed by the browser "
+#~ "even while downloading.</p>"
+#~ msgstr ""
+#~ "<p>Regenflechten is goot för't Praatstellen vun Biller in't Internet."
+#~ "<br>\n"
+#~ "Dör \"Regenflechten\" wiest de Nettkieker dat Bild al bi't Daalladen.</p>"
+
+#~ msgid "Interlacing"
+#~ msgstr "Regenflechten"
+
+#~ msgid "Disable to get smaller files if your image has no transparency"
+#~ msgstr ""
+#~ "Wenn Dien Bild keen Transparenz bargt, maak dit ut, dormit lütter Dateien "
+#~ "opstellt warrt"
+
+#~ msgid ""
+#~ "<p>The Portable Network Graphics (PNG) file format allows transparency in "
+#~ "your image to be stored by saving an alpha channel.\n"
+#~ "You can uncheck the box if you are not using transparency and you want to "
+#~ "make the resulting file smaller .<br>Always saving the alpha channel is "
+#~ "recommended.</p>"
+#~ msgstr ""
+#~ "<p>Mit dat PNG-Dateiformaat (Portable Network Graphics) lett sik dör dat "
+#~ "Sekern vun en Alphakanaal de Transparenz vun Dien Bild sekern.\n"
+#~ "Du kannst dit utmaken, wenn Du keen Transparenz bruukst, dormit dat "
+#~ "rutkamen Bild en lütter Dateigrött kriggt.<br>Dat Sekern vun den "
+#~ "Alphakanaal is anraadt.</p>"
+
+#~ msgid "Store alpha channel (transparency)"
+#~ msgstr "Alphakanaal sekern (Transparenz)"
+
+#~ msgid "No image loaded"
+#~ msgstr "Keen Bild laadt"
+
+#~ msgctxt ""
+#~ "Show a preview of the image after saving to assess the quality difference"
+#~ msgid "Preview image"
+#~ msgstr "Bildvöransicht"
+
+#~ msgid "Size: 100KB"
+#~ msgstr "Grött: 100KB"
+
+#~ msgid "Basic"
+#~ msgstr "Eenfach"
+
+#~ msgid "File size:"
+#~ msgstr "Dateigrött:"
+
+#~ msgctxt ""
+#~ "the file will be much compressed, thus small, but quality will be bad"
+#~ msgid "Small"
+#~ msgstr "Lütt"
+
+#~ msgctxt "the file will be good quality, but big"
+#~ msgid "Big"
+#~ msgstr "Groot"
+
+#~ msgid ""
+#~ "These settings determine how much information is lost during compression"
+#~ msgstr ""
+#~ "Disse Instellen leggt fast, woveel Informatschonen dör Komprimeren "
+#~ "verloren gaht"
+
+#~ msgctxt "the file will be much compressed, so the quality will be bad"
+#~ msgid "Bad"
+#~ msgstr "Leeg"
+
+#~ msgctxt "the quality will be good but the file will not be much compressed"
+#~ msgid "Good"
+#~ msgstr "Goot"
+
+#~ msgctxt "A progressive jpeg file can be displayed while loading."
+#~ msgid "Progressive"
+#~ msgstr "Progressiv"
+
+#~ msgid "Advanced quality"
+#~ msgstr "Verwiedert Gööd"
+
+#~ msgid "Optimize"
+#~ msgstr "Optimeren"
+
+#~ msgctxt "the result will be artificially smoothed to hide jpeg artefacts"
+#~ msgid "Smooth:"
+#~ msgstr "Weekheit:"
+
+#~ msgid "Force baseline JPEG"
+#~ msgstr "Baseline-JPEG verdwingen"
+
+#~ msgid "Subsampling:"
+#~ msgstr "Daalreken:"
+
+#~ msgid "2x2, 1x1, 1x1 (smallest file)"
+#~ msgstr "2x2, 1x1, 1x1 (lüttst Datei)"
+
+#~ msgid "2x1, 1x1, 1x1"
+#~ msgstr "2x1, 1x1, 1x1"
+
+#~ msgid "1x2, 1x1, 1x1"
+#~ msgstr "1x2, 1x1, 1x1"
+
+#~ msgid "1x1, 1x1, 1x1 (best quality)"
+#~ msgstr "1x1, 1x1, 1x1 (best Gööd)"
+
+#~ msgid "Metadata"
+#~ msgstr "Metadaten"
+
+#~ msgid "Formats:"
+#~ msgstr "Formaten:"
+
+#~ msgid "Exif"
+#~ msgstr "Exif"
+
+#~ msgid "IPTC"
+#~ msgstr "IPTC"
+
+#~ msgid "XMP"
+#~ msgstr "XMP"
+
+#~ msgid "Filters:"
+#~ msgstr "Filters:"
+
+#~ msgid "Options of Your TIFF"
+#~ msgstr "Optschonen vun Dien TIFF-Datei"
+
+#~ msgid "TIFF Options"
+#~ msgstr "TIFF-Optschonen"
+
+#~ msgid "Compression type:"
+#~ msgstr "Komprimerentyp:"
+
+#~ msgid "JPEG DCT Compression"
+#~ msgstr "\"JPEG DCT\"-Komprimeren"
+
+#~ msgid "Deflate (ZIP)"
+#~ msgstr "Deflate (ZIP)"
+
+#~ msgid "Lempel-Ziv & Welch (LZW)"
+#~ msgstr "\"Lempel-Ziv un Welch\" (LZW)"
+
+#~ msgid "Leadtools JPEG2000"
+#~ msgstr "Leadtools JPEG2000"
+
+#~ msgid "CCITT Modified Huffman RLE"
+#~ msgstr "CCITT ännert Huffman RLE"
+
+#~ msgid "CCITT Group 3 Fax Encoding"
+#~ msgstr "\"CCITT Koppel 3\"-Faxkoderen"
+
+#~ msgid "CCITT Group 4 Fax Encoding"
+#~ msgstr "\"CCITT Koppel 4\"-Faxkoderen"
+
+#~ msgid "Pixar Log"
+#~ msgstr "Pixar Log"
+
+#~ msgid "Predictor:"
+#~ msgstr "Vörlaat:"
+
+#~ msgid ""
+#~ "Using a predictor can improve the compression (mostly for LZW and deflate)"
+#~ msgstr ""
+#~ "Mit en Vörlaat (Prognoos) lett sik de Komprimeren verbetern (tomehrst för "
+#~ "LZW un Deflate)"
+
+#~ msgid "Horizontal Differencing"
+#~ msgstr "Kimmrecht Schelen"
+
+#~ msgid "Floating Point Horizontal Differencing"
+#~ msgstr "Kimmrecht Fleetkomma-Schelen"
+
+#~ msgid "Store alpha &channel (transparency)"
+#~ msgstr "Alpha&kanaal sekern (Transparenz)"
+
+#~ msgid ""
+#~ "This option will merge all layers. It is advisable to check this option, "
+#~ "otherwise other applications might not be able to read your file correctly"
+#~ msgstr ""
+#~ "Disse Optschoon versmölt all Lagen. Dat is anraadt, dat Du disse "
+#~ "Optschoon anmaakst. Anners köönt anner Programmen de Datei villicht nich "
+#~ "richtig lesen."
+
+#~ msgid "Flatten the &image"
+#~ msgstr "&Bild glattmaken"
+
+#~ msgid "JPEG Compression Options"
+#~ msgstr "Optschonen för JPEG-Komprimeren"
+
+#~ msgid "Smallest"
+#~ msgstr "Lüttst"
+
+#~ msgid "Best"
+#~ msgstr "Best"
+
+#~ msgid "Deflate Compression Options"
+#~ msgstr "Optschonen för Deflate-Komprimeren"
+
+#~ msgctxt "save the file quickly, but do not compress very well"
+#~ msgid "Fast"
+#~ msgstr "Gau"
+
+#~ msgctxt "make the file small, at the price of a longer saving time"
+#~ msgid "Small"
+#~ msgstr "Lütt"
+
+#~ msgid "CCITT Group 3 fax encoding Options"
+#~ msgstr "Optschonen för't Komprimeren vun \"CCITT Koppel 3\"-Faxkoderen"
+
+#~ msgid "Fax mode:"
+#~ msgstr "Faxbedrief:"
+
+#~ msgid "Classic"
+#~ msgstr "Klass'sch"
+
+#~ msgid "No RTC"
+#~ msgstr "Keen RTC"
+
+#~ msgid "No EOL"
+#~ msgstr "Keen EOL"
+
+#~ msgid "Pixar Log Compression Options"
+#~ msgstr "Optschonen för \"Pixar Log\"-Komprimeren"
+
+#~ msgctxt "save quickly, but do not compress a lot"
+#~ msgid "Fast"
+#~ msgstr "Gau"
+
+#~ msgctxt "make a very small file, but take a long time saving"
+#~ msgid "Small"
+#~ msgstr "Lütt"
+
+#~ msgid "Initializing..."
+#~ msgstr "An't Torechtmaken..."
+
+#~ msgid "First pass: page #%1..."
+#~ msgstr "Eerst Dörgang: Siet #%1..."
+
+#~ msgid "Second pass: page #%1..."
+#~ msgstr "Tweet Dörgang: Siet #%1..."
+
+#~ msgid "Body Frameset #%1"
+#~ msgstr "Hööftdeel-Rahmensett #%1"
+
+#~ msgid "Header Frameset #%1"
+#~ msgstr "Koppindrag-Rahmensett #%1"
+
+#~ msgid "Footer Frameset #%1"
+#~ msgstr "Footindrag-Rahmensett #%1"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "Text-Rahmensett %1"
+
+#~ msgid "KWord's PDF Import Filter"
+#~ msgstr "PDF-Importfilter vun KWord"
+
+#~ msgid "Page Selection"
+#~ msgstr "Sieden utsöken"
+
+#~ msgid "All (%1 pages)"
+#~ msgstr "All (%1 Sieden)"
+
+#~ msgid "Range:"
+#~ msgstr "Rebeet:"
+
+#~ msgid "Import images"
+#~ msgstr "Biller importeren"
+
+#~ msgid "\"Smart\" mode"
+#~ msgstr "\"Plietsch\" Bedrief"
+
+#~ msgid ""
+#~ "Removes returns and hyphens at end of line. Also tries to compute the "
+#~ "paragraph alignment. Note that the layout of some pages can get messed up."
+#~ msgstr ""
+#~ "Deit Wagenretuur-Tekens un Binnstreken an't Reegenn weg. Versöcht ok, dat "
+#~ "de Utrichten vun den Afsnitt rutfunnen warrt. Beacht, dat villicht dat "
+#~ "Utsehn vun en poor Sieden Heel un Deel leeg wiest warrt."
+
+#~ msgid "Owner:"
+#~ msgstr "Eegner:"
+
+#~ msgid "User:"
+#~ msgstr "Bruker:"
+
+#~ msgid "Footnote %1"
+#~ msgstr "Foot-Notiz %1"
+
+#~ msgctxt "Table_Name Cell row,column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 Reeg %2,%3"
+
+#~ msgid ""
+#~ "Cannot convert RAW files because the dcraw executable could not be "
+#~ "started."
+#~ msgstr ""
+#~ "RAW-Dateien laat sik nich ümwanneln, wiel sik dat Programm \"dcraw\" nich "
+#~ "starten lett."
+
+#~ msgid "Colorspace"
+#~ msgstr "Klörenruum"
+
+#~ msgid "&Document mode"
+#~ msgstr "&Dokment-Bedrief"
+
+#~ msgid "&RGB"
+#~ msgstr "&RGB"
+
+#~ msgid "Channel Depth"
+#~ msgstr "Kanaaldeepde"
+
+#~ msgid "&16 bits per channel"
+#~ msgstr "&16-Bit per Kanaal"
+
+#~ msgid "Alt+1"
+#~ msgstr "Alt+1"
+
+#~ msgid "&8 bits per channel"
+#~ msgstr "&8-Bit per Kanaal"
+
+#~ msgid "Alt+8"
+#~ msgstr "Alt+8"
+
+#~ msgid "&Interpolate RGB as four colors"
+#~ msgstr "RGB as veer Klören &estemeren"
+
+#~ msgid ""
+#~ "Interpolate RGB as four colors. This blurs the image a little, but it "
+#~ "eliminates false 2x2 mesh patterns"
+#~ msgstr ""
+#~ "RGB as veer Klören estemeren. Dit verwischt dat Bild en beten, man maakt "
+#~ "falsche 2x2 Gaddermustern weg. "
+
+#~ msgid "&Update Preview"
+#~ msgstr "Vöransicht &opfrischen"
+
+#~ msgid "Color Settings"
+#~ msgstr "Klöörinstellen"
+
+#~ msgid "&White Balance"
+#~ msgstr "&Wittbalangs"
+
+#~ msgid "White card in sunlight"
+#~ msgstr "Witt Koort bi Sünnlicht"
+
+#~ msgid "Automatic white balance"
+#~ msgstr "Automaatsch Wittbalangs"
+
+#~ msgid ""
+#~ "Automatic color balance. The default is to use a fixed color balance "
+#~ "based on a white card photographed in sunlight"
+#~ msgstr ""
+#~ "Automaatsch Klöörbalangs. As Standard warrt em Wittbalangs bruukt, de op "
+#~ "en witte Koort opbuut, de bi Sünnlicht opnahmen wöör."
+
+#~ msgid "Camera white balance"
+#~ msgstr "Kamera-Wittbalangs"
+
+#~ msgid ""
+#~ "Use the color balance specified by the camera. If this cannot be found, "
+#~ "dcraw prints a warning and reverts to the default"
+#~ msgstr ""
+#~ "De vun de Kamera fastleggt Wittbalangs bruken. Wenn se sik nich finnen "
+#~ "lett, wiest \"dcraw\" en Wohrschoen un bruukt de Standardweerten. "
+
+#~ msgid "Brightness:"
+#~ msgstr "Helligkeit:"
+
+#~ msgid "Blackpoint:"
+#~ msgstr "Swattpunkt:"
+
+#~ msgid "Red multiplier:"
+#~ msgstr "Root-Multiplikator:"
+
+#~ msgid "Blue multiplier:"
+#~ msgstr "Blaag-Multiplikator:"
+
+#~ msgid "Brightness. 1.0 is default"
+#~ msgstr "Helligkeit. 1.0 is Standard"
+
+#~ msgid "Clip colors to prevent pink highlights"
+#~ msgstr "För't Verhöden vun rosa Gleemrebeden de Klören aftrennen"
+
+#~ msgid ""
+#~ "By default, dcraw clips all colors to prevent pink hues in the "
+#~ "highlights. Combine this option with -b 0.25 to leave the image data "
+#~ "completely unclipped"
+#~ msgstr ""
+#~ "Standardwies trennt \"dcraw\" all Klören  för't Verhöden vun rosa "
+#~ "Klöörtöön binnen Gleemrebeden af. Tosamen mit de Optschoon \"-b 0.25\" "
+#~ "warrt de Bilddaten nich aftrennt laten."
+
+#~ msgid "Use camera raw colors, not sRGB"
+#~ msgstr "Kamera-Rohklören ansteed vun sRGB bruken"

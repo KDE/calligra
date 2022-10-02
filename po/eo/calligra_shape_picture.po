@@ -1,0 +1,206 @@
+# Translation of PictureShape into esperanto.
+# Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PictureShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2009-11-15 12:06+0100\n"
+"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: pology\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: ChangeImageCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change image"
+msgstr ""
+
+#: ChangeImageCommand.cpp:43
+msgctxt "(qtundo-format)"
+msgid "Crop image"
+msgstr ""
+
+#: ChangeImageCommand.cpp:57
+msgctxt "(qtundo-format)"
+msgid "Change image color mode"
+msgstr ""
+
+#: ClipCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Contour image (by image analysis)"
+msgstr ""
+
+#: ClipCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Remove image contour"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, bnImageFile)
+#: forms/wdgPictureTool.ui:20
+#, kde-format
+msgid "Replace image..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbAspect)
+#: forms/wdgPictureTool.ui:32
+#, kde-format
+msgid "Keep proportions"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: forms/wdgPictureTool.ui:58
+#, kde-format
+msgid "Left:"
+msgstr "Maldekstre:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: forms/wdgPictureTool.ui:68
+#, kde-format
+msgid "Right:"
+msgstr "Dekstre:"
+
+#. i18n: ectx: property (text), widget (QLabel, bottomLabel)
+#: forms/wdgPictureTool.ui:91
+#, kde-format
+msgid "Bottom:"
+msgstr "Sube:"
+
+#. i18n: ectx: property (text), widget (QLabel, topLabel)
+#: forms/wdgPictureTool.ui:111
+#, kde-format
+msgid "Top:"
+msgstr "Supre:"
+
+#. i18n: ectx: property (text), widget (QToolButton, bnFill)
+#: forms/wdgPictureTool.ui:131
+#, kde-format
+msgid "Reset"
+msgstr "Rekomencigi"
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbContour)
+#: forms/wdgPictureTool.ui:148
+#, kde-format
+msgid "Contour (by image analysis)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: forms/wdgPictureTool.ui:178
+#, kde-format
+msgid "Color mode:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: forms/wdgPictureTool.ui:193
+#, kde-format
+msgid "Crop"
+msgstr "Stuci"
+
+#: PictureShapeFactory.cpp:31
+#, kde-format
+msgid "Image"
+msgstr "Bildo"
+
+#: PictureShapeFactory.cpp:33
+#, kde-format
+msgid "Image shape that can display jpg, png etc."
+msgstr ""
+
+#: PictureTool.cpp:95
+#, kde-format
+msgid "Standard"
+msgstr "Defaŭlta"
+
+#: PictureTool.cpp:96
+#, kde-format
+msgid "Greyscale"
+msgstr "Grize"
+
+#: PictureTool.cpp:97
+#, kde-format
+msgid "Monochrome"
+msgstr "Unukolora"
+
+#: PictureTool.cpp:98
+#, kde-format
+msgid "Watermark"
+msgstr "Akvosigno"
+
+#: PictureToolFactory.cpp:19
+#, kde-format
+msgid "Picture editing"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left:"
+#~ msgstr "Maldekstre:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right:"
+#~ msgstr "Dekstre:"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom:"
+#~ msgstr "Sube:"
+
+#, fuzzy
+#~| msgid "Top:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top:"
+#~ msgstr "Supre:"
+
+#, fuzzy
+#~| msgid "Reset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset"
+#~ msgstr "Rekomencigi"
+
+#, fuzzy
+#~| msgid "Crop"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Stuci"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Bildo"
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Defaŭlta"
+
+#, fuzzy
+#~| msgid "Greyscale"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Greyscale"
+#~ msgstr "Grize"
+
+#, fuzzy
+#~| msgid "Monochrome"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monochrome"
+#~ msgstr "Unukolora"
+
+#, fuzzy
+#~| msgid "Watermark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Watermark"
+#~ msgstr "Akvosigno"
+
+#~ msgid "Open"
+#~ msgstr "Malfermi"

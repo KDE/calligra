@@ -1,0 +1,345 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+ <!ENTITY sheets "<application
+>Calligra Sheets</application
+>">
+ <!ENTITY words "<application
+>Calligra Words</application
+>">
+ <!ENTITY stage "<application
+>Calligra Stage</application
+>">
+ <!ENTITY flow "<application
+>Calligra Flow</application
+>">
+ <!ENTITY plan "<application
+>Calligra Plan</application
+>">
+ <!ENTITY karbon "<application
+>Calligra Karbon</application
+>">
+ <!ENTITY calligra "Calligra">
+ <!ENTITY kappname "&calligra;">
+ <!ENTITY package "Calligra">
+ <!ENTITY % addindex "IGNORE">
+ <!ENTITY % Ukrainian "INCLUDE"
+> <!-- change language only here -->
+]>
+
+<!-- maintained by raphael.langerhorst@kdemail.net -->
+
+<book id="calligra" lang="&language;">
+<bookinfo>
+<title
+>&calligra;</title>
+<subtitle
+>Загальний вступ</subtitle>
+<authorgroup>
+<author
+>&Raphael.Langerhorst; &Raphael.Langerhorst.mail; </author>
+<author
+>&Jost.Schenck; &Jost.Schenck.mail; </author>
+<othercredit role="translator"
+><firstname
+>Юрій</firstname
+><surname
+>Чорноіван</surname
+><affiliation
+><address
+><email
+>yurchor@ukr.net</email
+></address
+></affiliation
+><contrib
+>Переклад українською</contrib
+></othercredit
+> 
+</authorgroup>
+
+<date
+>3 січня 2012 року</date>
+<releaseinfo
+>2.4.0</releaseinfo>
+
+<abstract>
+<para
+>&calligra; — комплекс програм для роботи з графікою та офісними даними, створений &kde;. </para>
+</abstract>
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Calligra</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title
+>Вступ</title>
+<sect1>
+<title
+>Компоненти &calligra;</title>
+
+<important
+> <para
+>Оновлені версії цього документа можна знайти за адресою <ulink url="http://docs.kde.org/development/en/calligra/calligra/index.html"
+>http://docs.kde.org</ulink
+>.</para
+></important>
+
+<para
+>&calligra; є комплексним офісним пакетом програм для стільничного середовища &kde;. Поточна версія &calligra; складається з таких компонентів: </para>
+
+<itemizedlist>
+<listitem
+><para
+>&words; (заснований на блоках текстовий процесор)</para
+></listitem>
+<listitem
+><para
+>&sheets; (програма для роботи з електронними таблицями)</para
+></listitem
+> 
+<listitem
+><para
+>&stage; (програма для екранних і слайдових презентацій)</para
+></listitem>
+<listitem
+><para
+>&flow; (програма для побудови блок-схем)</para
+></listitem>
+<listitem
+><para
+>&karbon; (програма для роботи з векторною графікою)</para
+></listitem>
+<listitem
+><para
+>&plan; (програма для роботи з електронними таблицями)</para
+></listitem>
+</itemizedlist>
+
+<para
+>Оскільки ці компоненти створено на основі технології Flake, компоненти &calligra; від початку дуже добре працюють один з одним. Багато компонентів &calligra; можна вбудувати до іншого документа &calligra;. Наприклад, ви можете вставити електронну таблицю, яку ви створили у &sheets; безпосередньо до документа &words;. Таким чином, за допомогою &calligra; можна створювати складні документи з багатьма компонентами. </para>
+
+<para
+>За допомогою механізму додатків ви можете легко розширити функціональні можливості &calligra;. Деякі з компонентів мають досить багато додатків. Вивчення коду цих додатків може допомогти вам у написанні власних додатків. </para>
+
+<para
+>У цьому підручнику висвітлено лише загальні можливості &calligra;, які є спільними для більшості з компонентів комплексу програм. Докладніші відомості щодо окремих компонентів ви зможете знайти у підручниках цих компонентів. </para>
+
+</sect1>
+
+<sect1 id="features">
+<title
+>Огляд можливостей &calligra;</title>
+<sect2 id="featureintegration">
+<title
+>Інтеграція</title>
+<para
+>&calligra; — це база, на якій побудовано всі компоненти. За допомогою цієї бази досягається високий степінь інтегрованості комплексу програм. Ви самі можете створити власний компонент, який також буде добре інтегрованим з іншими компонентами. </para>
+</sect2>
+<sect2 id="featureleightweight">
+<title
+>Незначні вимоги</title>
+<para
+>Хоча комплекс програм і складається з великої кількості компонентів, &calligra; має зовсім невеликі розміри, швидкий і споживає досить мало оперативної пам’яті вашого комп’ютера. Це є результатом того, що &calligra; побудовано на основі &kde;, системи, яка є достатньо потужною оболонкою для програм. </para>
+<para
+>Крім того, метою &calligra; є створення інтерфейсу, який не було б перевантажено не часто використовуваними можливостями. Отже, інтерфейс програм комплексу є простим і зрозумілим, що робить вашу роботу ефективнішою. </para>
+<para
+>Незначні вимоги до системи іноді можуть означати, що у програмах не буде дуже специфічних функціональних можливостей, які вам будуть потрібні. У цьому випадку ви завжди можете додати ці функціональні можливості власноруч за рахунок розширення можливостей &calligra;. Доступ до додаткових можливостей завжди можна реалізувати у додатках або скриптах, таким чином залишаючи &calligra; невибагливим до характеристик системи. </para>
+</sect2>
+<sect2 id="featurecompleteness">
+<title
+>Завершеність</title>
+<para
+>У &calligra; передбачено широкий спектр компонентів, за допомогою яких можливе виконання більшості завдань домашнього та офісного документообігу. Додаткові можливості завжди може бути реалізовано за рахунок скриптів, додатків або навіть цілих компонентів, заснованих на бібліотеках &calligra;. </para>
+</sect2>
+<sect2 id="featurefileformat">
+<title
+>Формат OASIS OpenDocument</title>
+<para
+>Однією з основних вимог до комплексів офісних програм є сумісність з поширеними стандартами. Це особливо важливо на рівні формату файлів: комплекс має використовувати такий формат, який забезпечує безперешкодний обмін документами між комплексами офісних програм. Використання подібного формату також дозволяє уникнути залежності від постачальника програмного забезпечення, що особливо важливо для компаній та індивідуальних користувачів. </para>
+<para
+>З цієї причини у &calligra; було використано формат OASIS OpenDocument як основний формат файлів документів. </para>
+</sect2>
+<sect2 id="featurekde">
+<title
+>Можливості &kde;</title>
+<para
+>Оскільки &calligra; побудовано на базі &kde;, у програмах &calligra; ви знайдете всі можливості, які реалізовано у більшості програм &kde;. Це зокрема &DBus;, KParts, Flake, інтеграція зі стільницею, можливості налаштування тощо. Все це робить вигляд і поведінку &calligra; звичними, а також насправді включає &calligra; до стільничного середовища, що дозволяє не перемикати уваги під час роботи з різними програмами. </para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<chapter id="configuration">
+<title
+>Налаштування &calligra; і вашої системи</title>
+
+<para
+>Хоча &calligra; має працювати досить добре без додаткового налаштування, ви можете дещо оптимізувати роботу комплексу програм, щоб користуватися &calligra; у якомога ефективніший спосіб. У цій главі ми покажемо як найкращим чином налаштувати ваш новий офісний комплекс програм відповідно до ваших потреб. Програми &calligra; мають дуже гнучкі налаштування, ви можете навіть змінити вигляд панелі інструментів або компонування меню. </para>
+
+<sect1 id="custom-gui">
+<title
+>Налаштування графічного інтерфейсу &calligra;</title>
+
+<para
+>Хоча &calligra; постачається з графічним інтерфейсом користувача (&GUI;), який може задовольнити потреби більшості користувачів, можуть існувати вагомі причини для зміни вигляду програм офісного комплексу. </para>
+
+<para
+>Наприклад, мати автора цього підручника, не дуже полюбляє кнопки і пункти меню, призначення яких їй не зрозуміле. Щоб налаштувати &calligra; відповідно до її потреб, автор зменшив кількість елементів графічного інтерфейсу до мінімуму. Оскільки потрібне було лише написання листів і деякі з шаблонів, всі функціональні можливості, окрім збереження, завантаження і друку було просто усунуто з головного вікна програм. </para>
+
+<para
+>Завдяки концепції <quote
+>дій</quote
+>, що використовується у &Qt; і &kde;, ви можете довільним чином налаштувати смужки меню та панелі інструментів програм &calligra;. На жаль, у поточній версії комплексу програм не передбачено простого у користуванні графічного інтерфейсу для виконання подібних налаштувань. У &calligra; налаштування графічного інтерфейсу користувача зберігаються у файлах &XML;, вам слід їх просто змінити відповідним чином. На щастя, ймовірно, цю проблему буде вирішено у наступних версіях комплексу програм; у поточній же версії вам знадобляться певні знання щодо структури документів &XML; (або &HTML;, документів, які є підмножиною документів &XML;). </para>
+
+<para
+>Зазвичай, налаштування кожної з програм &calligra; зберігаються у двох файлах &XML;: у одному зберігається опис графічного інтерфейсу оболонки програми (загалом кажучи, того, що ви бачите на екрані, коли у програмі не відкрито жодного документа), а у іншому — опис графічного інтерфейсу відповідної частини (те, що ви бачите під час редагування документа). Наприклад, для &kword; ці два файли &XML; мають назви <filename
+>calligra_shell.rc</filename
+> і <filename
+>words.rc</filename
+>. </para>
+
+<para
+>Ось простий приклад такого файла rc. </para>
+
+<example>
+<title
+>Приклад простого файла rc</title>
+<screen
+>&lt;!DOCTYPE QConfig &gt;&lt;qconfig&gt;
+&lt;menubar&gt;
+&lt;menu name="Edit"&gt;&lt;text&gt;Edit&lt;/text&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;separator/&gt;
+&lt;action name="edit_find"/&gt;
+&lt;/menu&gt;
+&lt;menu name="Insert"&gt;&lt;text&gt;Insert&lt;/text&gt;
+&lt;action name="insert_picture"/&gt;
+&lt;action name="insert_clipart"/&gt;
+&lt;menu name="Variable"&gt;&lt;text&gt;Variable&lt;/text&gt;
+&lt;action name="insert_var_datefix"/&gt;
+&lt;action name="insert_var_datevar"/&gt;
+&lt;/menu&gt;
+&lt;/menu&gt;
+&lt;/menubar&gt;
+&lt;toolbars&gt;
+&lt;toolbar name="edit_toolbar" position="right"&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;/toolbar&gt;
+&lt;/toolbars&gt;
+&lt;/qconfig&gt;
+</screen>
+</example>
+
+</sect1>
+
+</chapter>
+
+<chapter id="more-info">
+<title
+>Де отримати докладніші відомості</title>
+
+<sect1 id="other-manuals">
+<title
+>У інших підручниках з &calligra;</title>
+
+<para
+>Докладніші відомості щодо різних програм &calligra; ви можете отримати у підручниках з цих програм. </para>
+
+</sect1>
+
+<sect1 id="links">
+<title
+>Посилання</title>
+
+<para
+>Наведені нижче посилання будуть корисними, якщо вам потрібні додаткові відомості щодо &kde; або &calligra;. </para>
+
+<itemizedlist>
+<listitem>
+<para
+><ulink url="http://calligra.org"
+>Домашня сторінка &calligra;</ulink
+>. Тут ви можете дізнатися про те як отримати і встановити &calligra;, новини щодо розробки &calligra;, знімки вікон програм тощо. </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://www.kde.org"
+>Домашня сторінка &kde;</ulink
+>. &kde; є найдосконалішим і абсолютно безкоштовним стільничним середовищем для unix-подібних операційних систем. &calligra; використовує бібліотеки &kde;. </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://qt-project.org/"
+>Сторінка &Qt;</ulink
+>. Сайт розробників набору інструментів для розробки мовою програмування C++, &Qt;. &kde; і &calligra; використовують для роботи бібліотеки &Qt;. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="programmersinfo">
+<title
+>Створення програмної частини &calligra;</title>
+
+<sect1 id="programmingintro">
+<title
+>Вступ</title>
+<para
+>Якщо ви бажаєте долучитися до розробки &calligra;, вас можуть зацікавити такі ресурси: </para>
+
+<itemizedlist>
+<listitem
+><para
+>За адресою <ulink url="http://techbase.kde.org/Development"
+>http://techbase.kde.org/Development</ulink
+> ви знайдете багато документації, присвяченої програмування за допомогою &Qt; і &kde;. Інтернет-версії повної документації з бібліотек &kde; можна знайти на сторінці <ulink url="http://api.kde.org/"
+>Довідника з API KDE</ulink
+>. </para
+></listitem
+> 
+<listitem
+><para
+>Першим кроком до участі у розробці є виконання <ulink url="http://community.kde.org/Calligra/Building/Building_Calligra"
+>цих настанов</ulink
+> з метою отримання та збирання початкового коду комплексу програм. </para
+></listitem>
+</itemizedlist>
+</sect1>
+
+</chapter>
+
+<chapter id="legal">
+<title
+>Авторські права та ліцензування</title>
+
+<para
+>&calligra; є результатом спільної роботи багатьох розробників. Авторські права на кожен з файлів &calligra; належать програмістам, причетним до створення цього файла. Імена цих програмістів можна знайти на початку кожного з файлів початкових кодів програми разом з ліцензійними умовами використання цього файла. </para>
+
+<para
+>Авторські права на цей підручник належать &Jost.Schenck;. Підручний можна вільно розповсюджувати у разі збереження цієї примітки щодо авторський прав. Ви можете змінювати цей підручник шляхом надсилання відповідних змін авторові або внесків до сховища Git &kde;. Автор не несе відповідальності за жодні наслідки, до яких може призвести використання цього підручника. </para>
+
+<para
+>Авторські права на інші підручники з &calligra; належать авторам відповідних підручників. </para>
+
+<para
+>Переклад українською: Юрій Чорноіван <email
+>yurchor@ukr.net</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+&documentation.index; 
+</book>
+

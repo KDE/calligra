@@ -1,0 +1,91 @@
+# translation of SpellCheckPlugin.po to Hindi
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Ravishankar Shrivastava <raviratlami@yahoo.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2008-03-05 20:52+0530\n"
+"Last-Translator: Ravishankar Shrivastava <aviratlami@aol.in>\n"
+"Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "वर्तनी जांच कॉन्फ़िगर करें... (&S)"
+
+#: SpellCheck.cpp:49
+#, fuzzy, kde-format
+#| msgid "Configure Spell Check"
+msgid "Auto Spell Check"
+msgstr "वर्तनी जांच कॉन्फ़िगर करें"
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr ""
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr ""
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Configure &Spell Checking..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "वर्तनी जांच कॉन्फ़िगर करें... (&S)"
+
+#, fuzzy
+#~| msgid "Configure Spell Check"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "वर्तनी जांच कॉन्फ़िगर करें"
+
+#, fuzzy
+#~| msgid "Ignore these words"
+#~ msgid "Ignore Word"
+#~ msgstr "इन शब्दों को नज़रअंदाज़ करें"
+
+#, fuzzy
+#~| msgid "Configure Spell Check"
+#~ msgid "Spell Check"
+#~ msgstr "वर्तनी जांच कॉन्फ़िगर करें"
+
+#~ msgid "Spell Check Configuration"
+#~ msgstr "वर्तनी जांच कॉन्फ़िगरेशन"
+
+#~ msgid "Default Language:"
+#~ msgstr "डिफ़ॉल्ट भाषाः"
+
+#~ msgid "Options"
+#~ msgstr "विकल्प"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "पृष्ठभूमि में वर्तनी जाँच सक्षम करें (&b)"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "सभी अपरकेस शब्दों को छोड़ें (&u)"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "एक साथ लिखे शब्दों को छोड़ें (&k)"
+
+#~ msgid "&Add"
+#~ msgstr "जोड़ें (&A)"
+
+#~ msgid "&Remove"
+#~ msgstr "मिटाएँ (&R)"

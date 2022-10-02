@@ -1,0 +1,176 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-12 00:45+0000\n"
+"PO-Revision-Date: 2011-11-12 22:55+0100\n"
+"Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Kiszel Kristóf,Úr Balázs"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "ulysses@kubuntu.org,urbalazs@gmail.com"
+
+#: main.cpp:61
+#, kde-format
+msgctxt "@info"
+msgid "Mimetype for <filename>%1</filename> not found!"
+msgstr "Nem található MIME-típus a(z) <filename>%1</filename> fájlhoz."
+
+#: main.cpp:119
+#, kde-format
+msgctxt "@action:button"
+msgid "Open with <application>%1</application>"
+msgstr "Megnyitás ezzel: <application>%1</application>"
+
+#: main.cpp:124
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not find Calligra application suitable for opening <filename>%1</"
+"filename>.<nl/>Do you want to open the file using default application "
+"<application>%2</application>?"
+msgstr ""
+"Nem található a(z) <filename>%1</filename> fájl megnyitásához megfelelő "
+"Calligra alkalmazás.<nl/>Szeretné megnyitni a fájlt az alapértelmezett "
+"<application>%2</application> alkalmazás használatával?"
+
+#: main.cpp:127
+#, kde-format
+msgctxt "@title:window"
+msgid "Calligra Application Not Found"
+msgstr "Nem található Calligra alkalmazás"
+
+#: main.cpp:157
+#, kde-format
+msgid "Calligra Opener"
+msgstr "Calligra megnyitó"
+
+#: main.cpp:159
+#, kde-format
+msgid "Calligra Document Opener"
+msgstr "Calligra dokumentummegnyitó"
+
+#: main.cpp:161
+#, fuzzy, kde-format
+#| msgid "(c) 2010-2011 Calligra developers"
+msgid "Copyright 2010-%1 Calligra developers"
+msgstr "© A Calligra fejlesztői, 2010-2011."
+
+#: main.cpp:162
+#, kde-format
+msgid "Jarosław Staniek"
+msgstr "Jarosław Staniek"
+
+#: main.cpp:169
+#, kde-format
+msgid "Lists names of all available Calligra applications"
+msgstr "Az összes elérhető Calligra alkalmazás nevének listázása"
+
+#: main.cpp:170
+#, kde-format
+msgid "Files to open"
+msgstr "Megnyitandó fájlok"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kiszel Kristóf,Úr Balázs"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ulysses@kubuntu.org,urbalazs@gmail.com"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid "Mimetype for <filename>%1</filename> not found!"
+#~ msgctxt "(qtundo-format) @info"
+#~ msgid "Mimetype for <filename>%1</filename> not found!"
+#~ msgstr "Nem található MIME-típus a(z) <filename>%1</filename> fájlhoz."
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Open with <application>%1</application>"
+#~ msgctxt "(qtundo-format) @action:button"
+#~ msgid "Open with <application>%1</application>"
+#~ msgstr "Megnyitás ezzel: <application>%1</application>"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid ""
+#~| "Could not find Calligra application suitable for opening <filename>%1</"
+#~| "filename>.<nl/>Do you want to open the file using default application "
+#~| "<application>%2</application>?"
+#~ msgctxt "(qtundo-format) @info"
+#~ msgid ""
+#~ "Could not find Calligra application suitable for opening <filename>%1</"
+#~ "filename>.<nl/>Do you want to open the file using default application "
+#~ "<application>%2</application>?"
+#~ msgstr ""
+#~ "Nem található a(z) <filename>%1</filename> fájl megnyitásához megfelelő "
+#~ "Calligra alkalmazás.<nl/>Szeretné megnyitni a fájlt az alapértelmezett "
+#~ "<application>%2</application> alkalmazás használatával?"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Calligra Application Not Found"
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Calligra Application Not Found"
+#~ msgstr "Nem található Calligra alkalmazás"
+
+#, fuzzy
+#~| msgid "Calligra Opener"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Opener"
+#~ msgstr "Calligra megnyitó"
+
+#, fuzzy
+#~| msgid "Calligra Document Opener"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Opener"
+#~ msgstr "Calligra dokumentummegnyitó"
+
+#, fuzzy
+#~| msgid "(c) 2010-2011 Calligra developers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2010-%1 Calligra developers"
+#~ msgstr "© A Calligra fejlesztői, 2010-2011."
+
+#, fuzzy
+#~| msgid "Jarosław Staniek"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jarosław Staniek"
+#~ msgstr "Jarosław Staniek"
+
+#, fuzzy
+#~| msgid "Lists names of all available Calligra applications"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lists names of all available Calligra applications"
+#~ msgstr "Az összes elérhető Calligra alkalmazás nevének listázása"
+
+#, fuzzy
+#~| msgid "Files to open"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Files to open"
+#~ msgstr "Megnyitandó fájlok"

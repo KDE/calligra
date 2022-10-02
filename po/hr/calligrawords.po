@@ -1,0 +1,5265 @@
+# Translation of kword to Croatian
+#
+# Marko Dimjasevic <marko@dimjasevic.net>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: kword 0\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"PO-Revision-Date: 2009-09-29 21:20+0200\n"
+"Last-Translator: Marko Dimjasevic <marko@dimjasevic.net>\n"
+"Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
+"Language: hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 1.0\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, kde-format
+msgid "&File"
+msgstr "&Datoteka"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, kde-format
+msgid "&Edit"
+msgstr "Ur&eđivanje"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, kde-format
+msgid "&View"
+msgstr "&Pogled"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, fuzzy, kde-format
+msgid "&Display Mode"
+msgstr "Broj &stranice"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Semantics"
+msgstr "Statistike"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, fuzzy, kde-format
+#| msgid "Style:"
+msgid "S&tyles"
+msgstr "Stil:"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, kde-format
+msgid "&Settings"
+msgstr "&Postavke"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "Provjera pravopisa"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, kde-format
+msgid "Edit"
+msgstr "Izmijeni"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, kde-format
+msgid "Spell Check Result"
+msgstr "Provjera pisanja"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, fuzzy, kde-format
+msgid "Change Variable To"
+msgstr "&Korisničke varijable..."
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr "Ala&ti"
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "Ime skupa okvira"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+#, fuzzy
+#| msgid "Insert Page"
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "Umetni stranicu"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#, fuzzy
+#| msgid "Page Properties"
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "Svojstva stranice"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "&Napravi tekstualni okvir"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, fuzzy, kde-format
+msgid "Baseline"
+msgstr "Okvir lebdi"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "Character"
+msgstr "Napravi"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, kde-format
+msgid "Row"
+msgstr "Redak"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page (entire) area"
+msgstr "Prijelom stranice"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page text area"
+msgstr "Prijelom stranice"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Paragraph area"
+msgstr "Odlomak"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings"
+msgid "Paragraph text area"
+msgstr "Postavke odlomka"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, fuzzy, kde-format
+msgid "Left page border"
+msgstr "Uvuci"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, fuzzy, kde-format
+msgid "Right page border"
+msgstr "Uvuci"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, fuzzy, kde-format
+msgid "Right paragraph border"
+msgstr "Uvuci"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, fuzzy, kde-format
+msgid "Left paragraph border"
+msgstr "Uvuci"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Vertical Positioning"
+msgstr "Vodoraven crte"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, fuzzy, kde-format
+msgid "Top align with:"
+msgstr "&Podvučeno"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, fuzzy, kde-format
+msgid "Center align with:"
+msgstr "&Podvučeno"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, fuzzy, kde-format
+msgid "Bottom align with:"
+msgstr "&Podvučeno"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, fuzzy, kde-format
+#| msgid "From:"
+msgid "from:"
+msgstr "Od:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Positioning"
+msgstr "Vodoraven crte"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, fuzzy, kde-format
+msgid "Left align with:"
+msgstr "&Podvučeno"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, fuzzy, kde-format
+msgid "Right align with:"
+msgstr "&Podvučeno"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "C&onfigure..."
+msgid "Configure"
+msgstr "&Podešavanje..."
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr "Razno"
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, fuzzy, kde-format
+msgid "Grid"
+msgstr "Brojčana lista"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, fuzzy, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Dokument"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, kde-format
+msgid "Document Settings"
+msgstr "Postavke okvira"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, kde-format
+msgid "Create New Bookmark"
+msgstr "Dodaj novu knjišku oznaku"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+"Knjiške oznake vam omogućuju skok između dijelova vašeg dokumenta.\n"
+" Molim navedite ime vaše knjiške oznake."
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "Ime:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, kde-format
+msgid "Columns:"
+msgstr "Stupci:"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, fuzzy, kde-format
+msgid "Column spacing:"
+msgstr "Obriši stupac:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, fuzzy, kde-format
+#| msgid "Fra&mes"
+msgid "frameset"
+msgstr "&Okviri"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, fuzzy, kde-format
+msgid "No framesets in document"
+msgstr "Ne prikazuj dodatni tekst"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "Ime skupa okvira:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, kde-format
+msgid "Create a new frameset:"
+msgstr "Napravi novi skup okvira:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr "Označi postojeći skup okvira na koji se treba spojiti:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "Ime skupa okvira"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Smart Positioning"
+msgstr "Položaj"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, kde-format
+msgid "Text Run Around"
+msgstr ""
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "Spoji tekstualne okvire"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+#, fuzzy
+#| msgid "Page Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "Svojstva stranice"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, fuzzy, kde-format
+msgid "&Page"
+msgstr "Broj &stranice"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Para&graph"
+msgstr "Odlomak"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "&To Character"
+msgstr "Napravi"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "&As Character"
+msgstr "Napravi"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Alignment"
+msgstr "Vodoraven crte"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, fuzzy, kde-format
+#| msgid "Left"
+msgid "&Left"
+msgstr "Lijevo:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, fuzzy, kde-format
+#| msgid "Align &Center"
+msgid "&Center"
+msgstr "&Centrirano"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, fuzzy, kde-format
+#| msgid "Right"
+msgid "&Right"
+msgstr "Desno:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Vertical Alignment"
+msgstr "Vodoraven crte"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, fuzzy, kde-format
+#| msgid "Top:"
+msgid "&Top"
+msgstr "Vrh:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, fuzzy, kde-format
+#| msgid "&File"
+msgid "&Middle"
+msgstr "&Datoteka"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "&Bottom"
+msgstr "Dno:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, kde-format
+msgid "Text Wrap-around"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, fuzzy, kde-format
+#| msgid "Text will run through this frame"
+msgid "Run through this shape"
+msgstr "Tekst će se protezati kroz ovaj okvir"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, fuzzy, kde-format
+#| msgid "Text will run through this frame"
+msgid "Skip below this shape"
+msgstr "Tekst će se protezati kroz ovaj okvir"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, fuzzy, kde-format
+#| msgid "Text will run through this frame"
+msgid "Run on left side of this shape"
+msgstr "Tekst će se protezati kroz ovaj okvir"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, fuzzy, kde-format
+#| msgid "Text will run through this frame"
+msgid "Run on right side of this shape"
+msgstr "Tekst će se protezati kroz ovaj okvir"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Text will run through this frame"
+msgid "Run on longest side of this shape"
+msgstr "Tekst će se protezati kroz ovaj okvir"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, fuzzy, kde-format
+#| msgid "Text will run through this frame"
+msgid "Run on both sides of this shape"
+msgstr "Tekst će se protezati kroz ovaj okvir"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, kde-format
+msgid "Distance Between Shape and Text:"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, kde-format
+msgid "Columns"
+msgstr "Stupci"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, fuzzy, kde-format
+#| msgid "Style:"
+msgid "Style"
+msgstr "Stil:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, fuzzy, kde-format
+#| msgid "Closing"
+msgid "Clone"
+msgstr "Zatvaram"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, fuzzy, kde-format
+msgid "Delete"
+msgstr "Obriši Red"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "Ime skupa okvira"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, fuzzy, kde-format
+msgid "Clone Page Style"
+msgstr "Ime skupa okvira"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left by:"
+msgstr "Lijevo:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right by:"
+msgstr "Desno:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, kde-format
+msgid "&Rename"
+msgstr "&Preimenuj"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, kde-format
+msgid "&Delete"
+msgstr "&Izbriši"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Preimenuj knjiške oznake"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, kde-format
+msgid "Select Bookmark"
+msgstr "Označi knjiške oznake"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "Geometrija"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, fuzzy, kde-format
+msgid "Page Size && Margins"
+msgstr "Spoji ćelije"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, kde-format
+msgid "Create"
+msgstr "Napravi"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, fuzzy, kde-format
+#| msgid "Salutation"
+msgid "Navigation"
+msgstr "Pozdrav"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Page #"
+msgstr "Broj &stranice"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+#| msgid "Instructions"
+msgid "Section"
+msgstr "Instrukcije"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr ""
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "Statistike"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "Riječi:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "Rečenica:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "Slogova:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, fuzzy, kde-format
+#| msgid "Characters incl. spaces"
+msgid "Characters (spaces):"
+msgstr "Znakova uključujući praznine"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, fuzzy, kde-format
+#| msgid "Characters incl. spaces"
+msgid "Characters (no spaces):"
+msgstr "Znakova uključujući praznine"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr "Redaka:"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, kde-format
+msgid "Flesch reading ease"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East asian characters:"
+msgstr "&Formatiranje znakova"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, fuzzy, kde-format
+#| msgid "Words"
+msgid "Words"
+msgstr "Riječi"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, kde-format
+msgid "Sentences"
+msgstr "Rečenica"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, kde-format
+msgid "Syllables"
+msgstr "Slogova"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, kde-format
+msgid "Lines"
+msgstr "Redaka"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, fuzzy, kde-format
+#| msgid "Characters without spaces"
+msgid "Characters With Spaces"
+msgstr "Znakova bez praznina"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, kde-format
+msgid "Characters without spaces"
+msgstr "Znakova bez praznina"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East Asian characters"
+msgstr "&Formatiranje znakova"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, kde-format
+msgid "Flesch Reading Ease"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "Naslov 1"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "Naslov 2"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "Naslov 3"
+
+#: part/i18n/stylenames.cpp:12
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "Brojčana lista"
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "Abecedan redoslijed"
+
+#: part/i18n/stylenames.cpp:14
+#, fuzzy, kde-format
+#| msgid "Bullet"
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "Grafička oznaka"
+
+#: part/i18n/stylenames.cpp:15
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "Brojčana lista"
+
+#: part/i18n/stylenames.cpp:16
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "Brojčana lista"
+
+#: part/i18n/stylenames.cpp:17
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "Brojčana lista"
+
+#: part/i18n/stylenames.cpp:18
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "Brojčana lista"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "Naslov dokumenta"
+
+#: part/i18n/stylenames.cpp:20
+#, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "Zaglavlje"
+
+#: part/i18n/stylenames.cpp:21
+#, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "Podnožje"
+
+#: part/i18n/stylenames.cpp:24
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "Brojčana lista"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "Rubovi 1"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "Rubovi 2"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "Rubovi 3"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "Redak"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "Stupac"
+
+#: part/i18n/stylenames.cpp:30
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "Desno:"
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "Crna"
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "Crvena"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "Žuta"
+
+#: part/i18n/stylenames.cpp:37
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "Brojčana lista"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "Plavkasta"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "Jednostavno 1"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "Jednostavno 2"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "Jednostavno 3"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "Zaglavlje 1"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "Zaglavlje 2"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "Zaglavlje 3"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "Zaglavlje 4"
+
+#: part/i18n/stylenames.cpp:50
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "Stupci 1"
+
+#: part/i18n/stylenames.cpp:51
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "Stupci 3"
+
+#: part/i18n/stylenames.cpp:52
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "Brojčana lista"
+
+#: part/i18n/stylenames.cpp:53
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "Brojčana lista"
+
+#: part/i18n/stylenames.cpp:54
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "Brojčana lista"
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:59
+#, fuzzy, kde-format
+#| msgid "Border Bottom"
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "Donji rub"
+
+#: part/i18n/stylenames.cpp:60
+#, fuzzy, kde-format
+#| msgid "Border Bottom"
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "Donji rub"
+
+#: part/KWAboutData.h:20
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "KOffice tekst procesor"
+
+#: part/KWAboutData.h:22
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgid "Word processor"
+msgstr "KOffice tekst procesor"
+
+#: part/KWAboutData.h:24
+#, fuzzy, kde-format
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "(c) 1998-2001, KWord tim"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr ""
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr ""
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr ""
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr ""
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr ""
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: part/KWAboutData.h:37
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Formatting stuff"
+msgstr "&Formatiranje znakova"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, fuzzy, kde-format
+#| msgid "&File"
+msgid "Filter"
+msgstr "&Datoteka"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistics docker"
+msgstr "Statistike"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, fuzzy, kde-format
+#| msgid "Footnotes"
+msgid "Foot and endnotes"
+msgstr "Fusnote"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr ""
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, fuzzy, kde-format
+msgid "Style Manager"
+msgstr "Postavke tabele"
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr ""
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr ""
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr ""
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr ""
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, kde-format
+msgid "ODF Support"
+msgstr ""
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr ""
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr ""
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr ""
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr ""
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr ""
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr ""
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "KFormula"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr ""
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr ""
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr ""
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr ""
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr ""
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr ""
+
+#: part/KWAboutData.h:65
+#, fuzzy, kde-format
+#| msgid "Endnotes"
+msgid "Enno Bartels"
+msgstr "Krajnje bilješke"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr ""
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr ""
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page break icon"
+msgstr "Prijelom stranice"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+"Darko Bednjanec, Denis Lackovic, Hrvoje Spoljar, Igor Jagec, Jerko Škifić, "
+"Nikola Planinac, Vjekoslav Matausic, Marko Dimjašević"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+"lokalizacija@linux.hr, lokalizacija@linux.hr, lokalizacija@linux.hr, "
+"lokalizacija@linux.hr, lokalizacija@linux.hr, lokalizacija@linux.hr, "
+"lokalizacija@linux.hr, marko@dimjasevic.net"
+
+#: part/KWDocument.cpp:495
+#, kde-format
+msgid "Copy"
+msgstr "Kopiraj"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, kde-format
+msgid "Standard"
+msgstr ""
+
+#: part/KWDocument.cpp:546
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Document Title"
+msgid "Document Title"
+msgstr "Naslov dokumenta"
+
+#: part/KWDocument.cpp:553
+#, kde-format
+msgid "Head 1"
+msgstr "Naslov 1"
+
+#: part/KWDocument.cpp:559
+#, kde-format
+msgid "Head 2"
+msgstr "Naslov 2"
+
+#: part/KWDocument.cpp:565
+#, kde-format
+msgid "Head 3"
+msgstr "Naslov 3"
+
+#: part/KWDocument.cpp:571
+#, fuzzy, kde-format
+#| msgid "Bullet"
+msgid "Bullet List"
+msgstr "Grafička oznaka"
+
+#: part/KWGui.cpp:69
+#, fuzzy, kde-format
+#| msgid "&Tools"
+msgid "Tools"
+msgstr "Ala&ti"
+
+#: part/KWOdfLoader.cpp:83
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr ""
+
+#: part/KWOdfLoader.cpp:95
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr ""
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, kde-format
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr ""
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:36
+#, kde-format
+msgid "Saved"
+msgstr "Spremljeno"
+
+#: part/KWStatusBar.cpp:37
+#, fuzzy, kde-format
+msgid "Page %1 of %2"
+msgstr "Stranica %1"
+
+#: part/KWStatusBar.cpp:38
+#, fuzzy, kde-format
+msgid "Page %1-%2 of %3"
+msgstr "Stranica %1"
+
+#: part/KWStatusBar.cpp:39
+#, fuzzy, kde-format
+#| msgid "Lines"
+msgid "Line %1"
+msgstr "Redaka"
+
+#: part/KWStatusBar.cpp:124
+#, fuzzy, kde-format
+#| msgid "Number"
+msgid "Page Number"
+msgstr "Broj"
+
+#: part/KWStatusBar.cpp:137
+#, fuzzy, kde-format
+#| msgid "Number"
+msgid "Line Number"
+msgstr "Broj"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+msgid "Change the page style"
+msgstr "Ime skupa okvira"
+
+#: part/KWStatusBar.cpp:155
+#, fuzzy, kde-format
+msgid "Page Style"
+msgstr "Ime skupa okvira"
+
+#: part/KWStatusBar.cpp:169
+#, fuzzy, kde-format
+msgid "Page Size"
+msgstr "Spoji ćelije"
+
+#: part/KWStatusBar.cpp:184
+#, kde-format
+msgid "Saved/Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:197
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr ""
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr ""
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Page Properties"
+msgid "Shape Properties..."
+msgstr "Svojstva stranice"
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr ""
+
+#: part/KWView.cpp:271
+#, fuzzy, kde-format
+#| msgid "&Create Template From Document..."
+msgid "Create Template From Document..."
+msgstr "&Stvori predložak na osnovu dokumenta..."
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr ""
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+
+#: part/KWView.cpp:292
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Show Formatting Characters"
+msgstr "&Formatiranje znakova"
+
+#: part/KWView.cpp:298
+#, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr ""
+
+#: part/KWView.cpp:299
+#, kde-format
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr ""
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr ""
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+
+#: part/KWView.cpp:310
+#, fuzzy, kde-format
+msgid "Show Text Shape Borders"
+msgstr "Podesi krajnju bilješku"
+
+#: part/KWView.cpp:311
+#, kde-format
+msgid "Turns the border display on and off"
+msgstr ""
+
+#: part/KWView.cpp:317
+#, kde-format
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+
+#: part/KWView.cpp:319
+#, fuzzy, kde-format
+msgid "Show Table Borders"
+msgstr "Podesi krajnju bilješku"
+
+#: part/KWView.cpp:325
+#, kde-format
+msgid "Toggle the display of table borders"
+msgstr ""
+
+#: part/KWView.cpp:326
+#, kde-format
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+
+#: part/KWView.cpp:328
+#, fuzzy, kde-format
+msgid "Show Section Bounds"
+msgstr "Samo&ispravljanje..."
+
+#: part/KWView.cpp:334
+#, kde-format
+msgid "Toggle the display of section bounds"
+msgstr ""
+
+#: part/KWView.cpp:335
+#, kde-format
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+
+#: part/KWView.cpp:337
+#, kde-format
+msgid "Show Rulers"
+msgstr "P&odnožje"
+
+#: part/KWView.cpp:339
+#, fuzzy, kde-format
+msgid "Shows or hides rulers"
+msgstr "P&odnožje"
+
+#: part/KWView.cpp:340
+#, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+
+#: part/KWView.cpp:351
+#, fuzzy, kde-format
+msgid "Snap to Grid"
+msgstr "P&odnožje"
+
+#: part/KWView.cpp:359
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Show Status Bar"
+msgstr "&Prikaži traku stanja"
+
+#: part/KWView.cpp:360
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Shows or hides the status bar"
+msgstr "&Prikaži traku stanja"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr ""
+
+#: part/KWView.cpp:374
+#, fuzzy, kde-format
+msgid "Semantic Stylesheets..."
+msgstr "Stil ruba okvira..."
+
+#: part/KWView.cpp:376
+#, fuzzy, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr "Stil ruba okvira..."
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+
+#: part/KWView.cpp:392
+#, fuzzy, kde-format
+#| msgid "C&onfigure..."
+msgid "Configure..."
+msgstr "&Podešavanje..."
+
+#: part/KWView.cpp:401
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Page Layout..."
+msgstr "Osvježi tabulatore"
+
+#: part/KWView.cpp:403
+#, kde-format
+msgid "Change properties of entire page"
+msgstr "Promijeni svojstva cijele stranice"
+
+#: part/KWView.cpp:404
+#, kde-format
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+
+#: part/KWView.cpp:407
+#, fuzzy, kde-format
+msgid "Create Header"
+msgstr "&Napravi tekstualni okvir"
+
+#: part/KWView.cpp:413
+#, fuzzy, kde-format
+msgid "Create Footer"
+msgstr "&Napravi tekstualni okvir"
+
+#: part/KWView.cpp:420
+#, fuzzy, kde-format
+#| msgid "Remove Comment"
+msgid "Show Comments"
+msgstr "Ukloni slog"
+
+#: part/KWView.cpp:421
+#, fuzzy, kde-format
+msgid "Shows comments in the document"
+msgstr "Ne prikazuj dodatni tekst"
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr ""
+
+#: part/KWView.cpp:428
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Shows or hides word counting in status bar"
+msgstr "&Prikaži traku stanja"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, fuzzy, kde-format
+msgid "Page Setup"
+msgstr "Spoji ćelije"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, fuzzy, kde-format
+#| msgid "Even Pages Footer"
+msgid "Header & Footer"
+msgstr "Podnožje parnih stranica"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Page layout"
+msgstr "Osvježi tabulatore"
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, kde-format
+msgid "..."
+msgstr "…"
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgctxt "Next search result"
+msgid "Next"
+msgstr "Umetni stranicu"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, fuzzy, kde-format
+#| msgid "Preview"
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "Pregled"
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, fuzzy, kde-format
+#| msgid "Options"
+msgctxt "Search options"
+msgid "Options"
+msgstr "Opcije"
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr "&Ukloni pogled"
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr "&Ukloni pogled"
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr "&Ukloni pogled"
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgid "Replace"
+msgstr "&Ukloni pogled"
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Zaglavlje neparnih stranica"
+
+#: part/Words.cpp:47
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Zaglavlje parnih stranica"
+
+#: part/Words.cpp:49
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Podnožje neparnih stranica"
+
+#: part/Words.cpp:51
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Podnožje parnih stranica"
+
+#: part/Words.cpp:53
+#, kde-format
+msgid "Main text"
+msgstr "Glavni tekst"
+
+#: part/Words.cpp:55
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgid "Other text"
+msgstr "Umetni stranicu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "Broj &stranice"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "Odlomak"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "Napravi"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "Napravi"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~| msgid "Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "Lijevo:"
+
+#, fuzzy
+#~| msgid "Align &Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Center"
+#~ msgstr "&Centrirano"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "Desno:"
+
+#, fuzzy
+#~| msgid "Top:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Top"
+#~ msgstr "Vrh:"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Middle"
+#~ msgstr "&Datoteka"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "Dno:"
+
+#, fuzzy
+#~| msgid "Text will run through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "Tekst će se protezati kroz ovaj okvir"
+
+#, fuzzy
+#~| msgid "From:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "Od:"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "Vodoraven crte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left align with:"
+#~ msgstr "&Podvučeno"
+
+#, fuzzy
+#~| msgid "Name of frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "Ime skupa okvira:"
+
+#, fuzzy
+#~| msgid "Create a new frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "Napravi novi skup okvira:"
+
+#, fuzzy
+#~| msgid "Select existing frameset to connect to:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select existing frameset to connect to:"
+#~ msgstr "Označi postojeći skup okvira na koji se treba spojiti:"
+
+#, fuzzy
+#~| msgid "Frameset Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "Ime skupa okvira"
+
+#, fuzzy
+#~| msgid "&Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "&Preimenuj"
+
+#, fuzzy
+#~| msgid "&Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "&Izbriši"
+
+#, fuzzy
+#~| msgid ""
+#~| "Bookmarks allow you to jump between parts of your document.\n"
+#~| "Please provide the name of your bookmark."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Bookmarks allow you to jump between parts of your document.\n"
+#~ "Please provide the name of your bookmark."
+#~ msgstr ""
+#~ "Knjiške oznake vam omogućuju skok između dijelova vašeg dokumenta.\n"
+#~ " Molim navedite ime vaše knjiške oznake."
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Ime:"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "Lijevo:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "Desno:"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Stupci:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "Obriši stupac:"
+
+#, fuzzy
+#~| msgid "Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "Riječi"
+
+#, fuzzy
+#~| msgid "Sentences"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "Rečenica"
+
+#, fuzzy
+#~| msgid "Syllables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "Slogova"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Redaka"
+
+#, fuzzy
+#~| msgid "Characters without spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "Znakova bez praznina"
+
+#, fuzzy
+#~| msgid "Characters without spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "Znakova bez praznina"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "&Formatiranje znakova"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Datoteka"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "Ur&eđivanje"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Pogled"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "Broj &stranice"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "Statistike"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&tyles"
+#~ msgstr "Stil:"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Postavke"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "Provjera pravopisa"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Izmijeni"
+
+#, fuzzy
+#~| msgid "Spell Check Result"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "Provjera pisanja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "&Korisničke varijable..."
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "…"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "Ala&ti"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "Okvir lebdi"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "Napravi"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Redak"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "Prijelom stranice"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "Odlomak"
+
+#, fuzzy
+#~| msgid "Paragraph Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "Postavke odlomka"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "Uvuci"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "Uvuci"
+
+#, fuzzy
+#~| msgid "C&onfigure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "&Podešavanje..."
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Razno"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Brojčana lista"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Postavke okvira"
+
+#, fuzzy
+#~| msgid "Create New Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "Dodaj novu knjišku oznaku"
+
+#, fuzzy
+#~| msgid "Fra&mes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "&Okviri"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "Položaj"
+
+#, fuzzy
+#~| msgid "Connect Text Frames"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "Spoji tekstualne okvire"
+
+#, fuzzy
+#~| msgid "Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "Stupci"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Stil:"
+
+#, fuzzy
+#~| msgid "Closing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "Zatvaram"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Obriši Red"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "Ime skupa okvira"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Preimenuj knjiške oznake"
+
+#, fuzzy
+#~| msgid "Select Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "Označi knjiške oznake"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Geometrija"
+
+#, fuzzy
+#~| msgid "Salutation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "Pozdrav"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "Broj &stranice"
+
+#, fuzzy
+#~| msgid "Instructions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "Instrukcije"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "Statistike"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "Riječi:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "Rečenica:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "Slogova:"
+
+#, fuzzy
+#~| msgid "Characters incl. spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "Znakova uključujući praznine"
+
+#, fuzzy
+#~| msgid "Characters incl. spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "Znakova uključujući praznine"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "Redaka:"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "&Formatiranje znakova"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "Naslov 1"
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "Naslov 2"
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "Naslov 3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "Brojčana lista"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Alphabetical List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "Abecedan redoslijed"
+
+#, fuzzy
+#~| msgid "Bullet"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "Grafička oznaka"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "Brojčana lista"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "Brojčana lista"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "Brojčana lista"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "Brojčana lista"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "Naslov dokumenta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "&Zaglavlje"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "Fusnota"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "Brojčana lista"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "Rubovi 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "Rubovi 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "Rubovi 3"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "Redak"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "Stupac"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "Crna"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "Crvena"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "Žuta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "Brojčana lista"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bluish"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "Plavkasta"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "Jednostavno 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "Jednostavno 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "Jednostavno 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "Zaglavlje 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "Zaglavlje 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "Zaglavlje 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 4"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "Zaglavlje 4"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "Stupci 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "Stupci 3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "Brojčana lista"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "Brojčana lista"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "Brojčana lista"
+
+#, fuzzy
+#~| msgid "Border Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "Donji rub"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "KOffice tekst procesor"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "KOffice tekst procesor"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "(c) 1998-2001, KWord tim"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "&Formatiranje znakova"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "&Datoteka"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "Statistike"
+
+#, fuzzy
+#~| msgid "Footnotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "Fusnote"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "Postavke tabele"
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "KFormula"
+
+#, fuzzy
+#~| msgid "Endnotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "Krajnje bilješke"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "Prijelom stranice"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr ""
+#~ "Darko Bednjanec, Denis Lackovic, Hrvoje Spoljar, Igor Jagec, Jerko "
+#~ "Škifić, Nikola Planinac, Vjekoslav Matausic, Marko Dimjašević"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "lokalizacija@linux.hr, lokalizacija@linux.hr, lokalizacija@linux.hr, "
+#~ "lokalizacija@linux.hr, lokalizacija@linux.hr, lokalizacija@linux.hr, "
+#~ "lokalizacija@linux.hr, marko@dimjasevic.net"
+
+#, fuzzy
+#~| msgid "Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Kopiraj"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "Naslov dokumenta"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "Naslov 1"
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "Naslov 2"
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "Naslov 3"
+
+#, fuzzy
+#~| msgid "Bullet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "Grafička oznaka"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "Ala&ti"
+
+#, fuzzy
+#~| msgid "Saved"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "Spremljeno"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "Stranica %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "Stranica %1"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "Redaka"
+
+#, fuzzy
+#~| msgid "Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Broj"
+
+#, fuzzy
+#~| msgid "Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "Broj"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "Ime skupa okvira"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "Spoji ćelije"
+
+#, fuzzy
+#~| msgid "Page Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "Svojstva stranice"
+
+#, fuzzy
+#~| msgid "&Create Template From Document..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template From Document..."
+#~ msgstr "&Stvori predložak na osnovu dokumenta..."
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "&Formatiranje znakova"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "Podesi krajnju bilješku"
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "P&odnožje"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "P&odnožje"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "P&odnožje"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "&Prikaži traku stanja"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "&Prikaži traku stanja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantic Stylesheets..."
+#~ msgstr "Stil ruba okvira..."
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Napravi"
+
+#, fuzzy
+#~| msgid "C&onfigure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "&Podešavanje..."
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "Osvježi tabulatore"
+
+#, fuzzy
+#~| msgid "Change properties of entire page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "Promijeni svojstva cijele stranice"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "&Napravi tekstualni okvir"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "&Napravi tekstualni okvir"
+
+#, fuzzy
+#~| msgid "Remove Comment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Comments"
+#~ msgstr "Ukloni slog"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows comments in the document"
+#~ msgstr "Ne prikazuj dodatni tekst"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "&Prikaži traku stanja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "Spoji ćelije"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "Podnožje parnih stranica"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "Osvježi tabulatore"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "Umetni stranicu"
+
+#, fuzzy
+#~| msgid "Preview"
+#~ msgctxt "(qtundo-format) Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Pregled"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgctxt "(qtundo-format) Search options"
+#~ msgid "Options"
+#~ msgstr "Opcije"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Label for the Replace text input box"
+#~ msgid "Replace:"
+#~ msgstr "&Ukloni pogled"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Replace the current match"
+#~ msgid "Replace"
+#~ msgstr "&Ukloni pogled"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Replace all found matches"
+#~ msgid "Replace All"
+#~ msgstr "&Ukloni pogled"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "&Ukloni pogled"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Zaglavlje neparnih stranica"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Zaglavlje parnih stranica"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Podnožje neparnih stranica"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Podnožje parnih stranica"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "Glavni tekst"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "Umetni stranicu"
+
+#, fuzzy
+#~| msgid "Bookmarks"
+#~ msgid "Book"
+#~ msgstr "Knjišne oznake"
+
+#, fuzzy
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "(c) 1998-2001, KWord tim"
+
+#, fuzzy
+#~ msgid "Select Cover Image..."
+#~ msgstr "Obriši Stupac"
+
+#, fuzzy
+#~ msgid "Open..."
+#~ msgstr "Osvježi tabulatore"
+
+#, fuzzy
+#~| msgid "Import Style"
+#~ msgid "Import problem"
+#~ msgstr "Stil ruba okvira"
+
+#, fuzzy
+#~| msgid "Completion"
+#~ msgid "Cover selection"
+#~ msgstr "Spremi dokument pod novim imenom"
+
+#, fuzzy
+#~| msgid "Border Outline"
+#~ msgid "Outliner"
+#~ msgstr "Kontura ruba"
+
+#, fuzzy
+#~ msgid "Edit section"
+#~ msgstr "&Promijeni tekst"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgid "Main"
+#~ msgstr "Glavni tekst"
+
+#, fuzzy
+#~ msgid "Type:"
+#~ msgstr "Tip"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Actor description:"
+#~ msgstr "Samo&ispravljanje …"
+
+#, fuzzy
+#~| msgid "&Bold"
+#~ msgid "Bold"
+#~ msgstr "&Masno"
+
+#, fuzzy
+#~| msgid "&Italic"
+#~ msgid "Italic"
+#~ msgstr "Kurz&iv"
+
+#, fuzzy
+#~| msgid "&Underline"
+#~ msgid "Underline"
+#~ msgstr "&Podvučeno"
+
+#, fuzzy
+#~ msgid "LeftAlign"
+#~ msgstr "&Podvučeno"
+
+#, fuzzy
+#~| msgid "Align &Center"
+#~ msgid "CenterAlign"
+#~ msgstr "&Centrirano"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgid "RightAlign"
+#~ msgstr "Desno:"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "1st Edit"
+#~ msgstr "Izmijeni"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "2nd Edit"
+#~ msgstr "Izmijeni"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "3rd Edit"
+#~ msgstr "Izmijeni"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Author's section"
+#~ msgstr "Samo&ispravljanje …"
+
+#, fuzzy
+#~ msgid "Badge:"
+#~ msgstr "Broj &stranice"
+
+#, fuzzy
+#~| msgid "Instructions"
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "Instrukcije"
+
+#~ msgid "File to open"
+#~ msgstr "Datoteka koju treba otvoriti"
+
+#~ msgid "Protect size and position"
+#~ msgstr "Čuvaj veličinu i položaj"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgid "Width:"
+#~ msgstr "Širina:"
+
+#~ msgid "Height:"
+#~ msgstr "Visina:"
+
+#~ msgid "Margins"
+#~ msgstr "Margine"
+
+#~ msgid "Synchronize changes"
+#~ msgstr "Uskladi promjene"
+
+#~ msgid "Bottom:"
+#~ msgstr "Dno:"
+
+#~ msgid "Top:"
+#~ msgstr "Vrh:"
+
+#~ msgid "Create a new page"
+#~ msgstr "Dodaj novu stranicu"
+
+#~ msgid "Resize last frame"
+#~ msgstr "Promijeni veličinu zadnjeg okvira"
+
+#~ msgid "Do not show the extra text"
+#~ msgstr "Ne prikazuj dodatni tekst"
+
+#, fuzzy
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "Ponovo spoji okvir"
+
+#, fuzzy
+#~ msgid "Do not create a followup frame"
+#~ msgstr "Stvori novi okvir"
+
+#, fuzzy
+#~ msgid "Copy this Frame"
+#~ msgstr "Spoji okvir"
+
+#~ msgid "Only on even/odd pages"
+#~ msgstr "Samo na parnim/neparnim stranicama"
+
+#~ msgid "Protect content"
+#~ msgstr "Spoji ćelije"
+
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "Okvir je kopija prethodnog okvira"
+
+#~ msgid "Changes will be applied to all frames in frameset"
+#~ msgstr "Promjene će biti primijenjene na sve okvire u skupu okvira"
+
+#, fuzzy
+#~ msgid "Numbering"
+#~ msgstr "Numeriranje"
+
+#, fuzzy
+#~ msgid "Automatic"
+#~ msgstr "Automatski"
+
+#, fuzzy
+#~ msgid "Footnote"
+#~ msgstr "Fusnota"
+
+#, fuzzy
+#~ msgid "Endnote"
+#~ msgstr "Krajnja bilješka"
+
+#~ msgid "Insert Page"
+#~ msgstr "Umetni stranicu"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgid "After last page"
+#~ msgstr "Zaglavlje prve stranice"
+
+#, fuzzy
+#~ msgid "Page style:"
+#~ msgstr "Ime skupa okvira"
+
+#~ msgid "General"
+#~ msgstr "Općenito"
+
+#~ msgid "Number of pages:"
+#~ msgstr "Broj stranica:"
+
+#~ msgid "Number of frames:"
+#~ msgstr "Broj okvira:"
+
+#~ msgid "Number of pictures:"
+#~ msgstr "Broj slika:"
+
+#~ msgid "Number of tables:"
+#~ msgstr "Broj tablica:"
+
+#~ msgid "Text"
+#~ msgstr "Tekst"
+
+#~ msgid "Characters including spaces:"
+#~ msgstr "Znakova uključujući praznine:"
+
+#~ msgid "Characters without spaces:"
+#~ msgstr "Znakova bez praznina:"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Oblikovanje"
+
+#, fuzzy
+#~| msgid "Automatic hyphenation"
+#~ msgid "Automatically update"
+#~ msgstr "Samo&ispravljanje..."
+
+#, fuzzy
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "Umetni red"
+
+#~ msgid "F&ormat"
+#~ msgstr "F&ormat"
+
+#, fuzzy
+#~| msgid "Change Link"
+#~ msgid "Change Tracking"
+#~ msgstr "Promijeni vezu"
+
+#, fuzzy
+#~| msgid "Page: %1/%2"
+#~ msgid "Page %1/%2"
+#~ msgstr "Stranica: %1/%2"
+
+#, fuzzy
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "&Okvir/Skup okvira..."
+
+#, fuzzy
+#~ msgid "Alter frameset properties"
+#~ msgstr "Postavke okvira"
+
+#~ msgid "Enable Document Headers"
+#~ msgstr "Omogući zaglavlja dokumenta"
+
+#~ msgid "Disable Document Headers"
+#~ msgstr "Onemogući zaglavlja dokumenta"
+
+#, fuzzy
+#~ msgid "Shows and hides header display"
+#~ msgstr "P&odnožje"
+
+#~ msgid "Enable Document Footers"
+#~ msgstr "Omogući podnožja dokumenta"
+
+#~ msgid "Disable Document Footers"
+#~ msgstr "Omogući podnožja dokumenta"
+
+#, fuzzy
+#~ msgid "Shows and hides footer display"
+#~ msgstr "P&odnožje"
+
+#, fuzzy
+#~ msgid "Raise Frame"
+#~ msgstr "Promijeni veličinu zadnjeg okvira"
+
+#, fuzzy
+#~ msgid ""
+#~ "Raise the currently selected frame so that it appears above all the other "
+#~ "frames"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Lower Frame"
+#~ msgstr "Spoji okvir"
+
+#~ msgid "Bring to Front"
+#~ msgstr "Stavi ispred"
+
+#~ msgid "Send to Back"
+#~ msgstr "Pošalji unazad"
+
+#~ msgid "Variable"
+#~ msgstr "Varijabla"
+
+#~ msgid "Bookmark..."
+#~ msgstr "Oznaka …"
+
+#, fuzzy
+#~| msgid "P&icture..."
+#~ msgid "Picture..."
+#~ msgstr "Slike"
+
+#, fuzzy
+#~ msgid "Insert a picture into document"
+#~ msgstr "Umetni sliku"
+
+#, fuzzy
+#~ msgid "Footnote/Endnote..."
+#~ msgstr "&Fusnota"
+
+#, fuzzy
+#~| msgid "Frame Borders"
+#~ msgid "Page Borders"
+#~ msgstr "Rubovi okvira"
+
+#, fuzzy
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "Napravi okvir s &formulom"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgid "As Character"
+#~ msgstr "Napravi"
+
+#, fuzzy
+#~ msgid "Anchor the current shape as a character in the text"
+#~ msgstr "Obriši tabelu"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgid "To Character"
+#~ msgstr "Napravi"
+
+#, fuzzy
+#~ msgid "Anchor the current shape to the character at the current position"
+#~ msgstr "Obriši tabelu"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgid "To Paragraph"
+#~ msgstr "Odlomak"
+
+#, fuzzy
+#~| msgid "Remove Page"
+#~ msgid "To Page"
+#~ msgstr "Ukloni stranicu"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "Set Floating"
+#~ msgstr "&Postavke"
+
+#, fuzzy
+#~ msgid "Page..."
+#~ msgstr "Stranica..."
+
+#~ msgid "Delete Page"
+#~ msgstr "Izbriši tabelu"
+
+#, fuzzy
+#~ msgid "Select All Frames"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Create Linked Copy"
+#~ msgstr "Dodaj novu stranicu"
+
+#, fuzzy
+#~ msgid "Create Frame-clip"
+#~ msgstr "&Napravi tekstualni okvir"
+
+#, fuzzy
+#~ msgid "Remove Frame-clip"
+#~ msgstr "Ukloni slog"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgid "Hide Status Bar"
+#~ msgstr "&Prikaži traku stanja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "Dodaj novu stranicu"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Insert Image Options"
+#~ msgstr "Umetni stranicu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "Ponovo spoji okvir"
+
+#, fuzzy
+#~| msgid "Delete Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "Izbriši okvir"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "Umetni stranicu"
+
+#, fuzzy
+#~| msgid "Remove Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "Ukloni stranicu"
+
+#, fuzzy
+#~ msgid "Insert Footnote/Endnote"
+#~ msgstr "Umetni fusnotu/krajnju bilješku"
+
+#, fuzzy
+#~| msgid "Words"
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "Riječi"
+
+#~ msgid ""
+#~ "<p><b>Check this option to have a text area created automatically for "
+#~ "each page.</b><br>\n"
+#~ "For letters and notes with one main text, possibly on several pages, you "
+#~ "should keep this checked. You should only uncheck it if you want to "
+#~ "define completely where each text frame should be positioned.</p>"
+#~ msgstr ""
+#~ "<p><b>Označite ovu opciju ukoliko želite automatski stvoreno područje "
+#~ "teksta za svaku stranicu.</b><br>\n"
+#~ "Za pisma i bilješke s jednim glavnim tekstom koji se eventualno proteže "
+#~ "preko više stranica, ostavite ovu opciju označenom. Odznačite ovu opciju "
+#~ "jedino ako za svaki tekstualni okvir želite točno odrediti njegovu "
+#~ "poziciju.</p>"
+
+#, fuzzy
+#~| msgid "&Filter output"
+#~ msgid "Filter stuff"
+#~ msgstr "&Ispis filtera"
+
+#~ msgid "Fra&mes"
+#~ msgstr "&Okviri"
+
+#, fuzzy
+#~ msgid "Tables"
+#~ msgstr "Tablice"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Umetni red"
+
+#, fuzzy
+#~ msgid "Layout of Text in Other Frames"
+#~ msgstr "Tekst u ostalim okvirima će:"
+
+#~ msgid "Text will run around this frame"
+#~ msgstr "Tekst će se protezati oko ovog okvira"
+
+#~ msgid "Text will not run around this frame"
+#~ msgstr "Tekst se neće protezati oko ovog okvira"
+
+#, fuzzy
+#~ msgid "Create custom outline"
+#~ msgstr "Napravi &tabelu"
+
+#, fuzzy
+#~ msgid "Create Custom Outline"
+#~ msgstr "Napravi &tabelu"
+
+#, fuzzy
+#~ msgid "Create outlines"
+#~ msgstr "Napravi &tabelu"
+
+#~ msgid "Borders"
+#~ msgstr "Rubovi"
+
+#~ msgid "MailMerge"
+#~ msgstr "SkupnoPismo"
+
+#~ msgid "Table"
+#~ msgstr "Tablica"
+
+#~ msgid "Font"
+#~ msgstr "Pismo"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgid "Format"
+#~ msgstr "F&ormat"
+
+#~ msgid "Formula"
+#~ msgstr "Formula"
+
+#~ msgid "KWord"
+#~ msgstr "KWord"
+
+#~ msgid "Insert Picture..."
+#~ msgstr "Umetni sliku …"
+
+#, fuzzy
+#~| msgid "Background"
+#~ msgid "Page Background"
+#~ msgstr "Pozadina"
+
+#~ msgid "If Text is Too Long for Frame"
+#~ msgstr "Ako je tekst predug za okvir:"
+
+#~ msgid "On New Page Creation"
+#~ msgstr "Prilikom dodavanja nove stranice"
+
+#~ msgid "Place a copy of this frame"
+#~ msgstr "Položi kopiju ovo okvira"
+
+#, fuzzy
+#~ msgid "Show Grid"
+#~ msgstr "P&odnožje"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgid "Odd Pages Header %1"
+#~ msgstr "Zaglavlje prve stranice"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgid "Even Pages Header %1"
+#~ msgstr "Zaglavlje prve stranice"
+
+#, fuzzy
+#~| msgid "First Page Footer"
+#~ msgid "Odd Pages Footer %1"
+#~ msgstr "Podnožje prve stranice"
+
+#, fuzzy
+#~| msgid "First Page Footer"
+#~ msgid "Even Pages Footer %1"
+#~ msgstr "Podnožje prve stranice"
+
+#, fuzzy
+#~ msgid "Main Text Frameset"
+#~ msgstr "Tekstualni skup okvira %1"
+
+#~ msgid "Matrix"
+#~ msgstr "Matrica"
+
+#, fuzzy
+#~ msgid "Configure Frame Border"
+#~ msgstr "&Rub okvira"
+
+#~ msgid "Ta&ble"
+#~ msgstr "Ta&blica"
+
+#~ msgid "Cell"
+#~ msgstr "Ćelija"
+
+#, fuzzy
+#~ msgid "Configure Frame Borders"
+#~ msgstr "&Rub okvira"
+
+#, fuzzy
+#~| msgid "Create a new page"
+#~ msgid "Add a new page"
+#~ msgstr "Dodaj novu stranicu"
+
+#, fuzzy
+#~ msgid "Delete selected pages"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgid "Delete Layer"
+#~ msgstr "Obriši tabelu"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "&Informacije o dokumentu"
+
+#~ msgid "&Available tables:"
+#~ msgstr "&Dostupne tabele:"
+
+#~ msgid "&Fields of the selected table:"
+#~ msgstr "&Polja zadane tabele:"
+
+#~ msgid "&Query:"
+#~ msgstr "&Upit:"
+
+#~ msgid "&Execute"
+#~ msgstr "&Izvrši"
+
+#~ msgid "&Setup"
+#~ msgstr "&Postavke"
+
+#~ msgid "&Table:"
+#~ msgstr "&Tablica:"
+
+#, fuzzy
+#~ msgid "&Keep Settings..."
+#~ msgstr "Postavke okvira"
+
+#~ msgid "&Hostname:"
+#~ msgstr "&Ime računala:"
+
+#~ msgid "&Driver:"
+#~ msgstr "&Upravljački program:"
+
+#, fuzzy
+#~ msgid "Database &name:"
+#~ msgstr "&Ime baze podataka:"
+
+#~ msgid "&Username:"
+#~ msgstr "&Korisničko ime:"
+
+#~ msgid "&Port:"
+#~ msgstr "&Port:"
+
+#~ msgid "default"
+#~ msgstr "uobičajeno"
+
+#~ msgid "Name"
+#~ msgstr "Ime"
+
+#~ msgid "Personal"
+#~ msgstr "Osobni podaci"
+
+#, fuzzy
+#~ msgid "Hello!"
+#~ msgstr "Brojčana lista"
+
+#~ msgid "Good bye"
+#~ msgstr "Doviđenja"
+
+#~ msgid "Professional"
+#~ msgstr "Profesionalna"
+
+#, fuzzy
+#~| msgid "Good bye"
+#~ msgid "Good Evening"
+#~ msgstr "Doviđenja"
+
+#~ msgid "Email"
+#~ msgstr "E-pošta"
+
+#~ msgid "To:"
+#~ msgstr "Za:"
+
+#~ msgid "Subject:"
+#~ msgstr "Tema:"
+
+#~ msgid "CC:"
+#~ msgstr "Kopije:"
+
+#~ msgid "BCC:"
+#~ msgstr "Osobna kopija:"
+
+#~ msgid "Fwd:"
+#~ msgstr "Lebdi:"
+
+#, fuzzy
+#~ msgid "Thank you,"
+#~ msgstr "Osvježi tabulatore"
+
+#~ msgid "Thanks,"
+#~ msgstr "Hvala,"
+
+#~ msgid "Subject"
+#~ msgstr "Subjekt"
+
+#~ msgid "Attention"
+#~ msgstr "Samo&ispravljanje..."
+
+#~ msgid "Attention:"
+#~ msgstr "Poštovanje:"
+
+#~ msgid "Instructions"
+#~ msgstr "Instrukcije"
+
+#~ msgid "Mail Merge - Editor"
+#~ msgstr "Osvježi postavu"
+
+#, fuzzy
+#~ msgid "Mail Merge - Setup Database Connection"
+#~ msgstr "Osvježi postavu"
+
+#, fuzzy
+#~ msgid "<not saved>"
+#~ msgstr "Nema vrijednost"
+
+#, fuzzy
+#~ msgid "Store Settings"
+#~ msgstr "Postavke okvira"
+
+#~ msgid "ascending"
+#~ msgstr "uzlazno"
+
+#~ msgid "descending"
+#~ msgstr "silazno"
+
+#~ msgid "contains"
+#~ msgstr "sadrži"
+
+#~ msgid "Field"
+#~ msgstr "Polje"
+
+#, fuzzy
+#~ msgid "Include"
+#~ msgstr "uključi"
+
+#~ msgid "Operator"
+#~ msgstr "Operator"
+
+#~ msgid "Condition"
+#~ msgstr "Uvjet"
+
+#~ msgid "Value"
+#~ msgstr "Vrijednost"
+
+#~ msgid "NOT"
+#~ msgstr "NE"
+
+#, fuzzy
+#~ msgid "Please enter name:"
+#~ msgstr "Dio skupa okvira %1"
+
+#~ msgid "No Value"
+#~ msgstr "Bez vrijednosti"
+
+#~ msgid "Add entry"
+#~ msgstr "Dodaj stavku"
+
+#~ msgid "Remove entry"
+#~ msgstr "Ukloni zapis"
+
+#, fuzzy
+#~ msgid "Add Entry"
+#~ msgstr "Dodaj stavku"
+
+#, fuzzy
+#~| msgid "&Hostname:"
+#~ msgid "Host:"
+#~ msgstr "&Ime računala:"
+
+#, fuzzy
+#~| msgid "&Port:"
+#~ msgid "Port:"
+#~ msgstr "&Port:"
+
+#, fuzzy
+#~| msgid "&Time"
+#~ msgid "Timeout:"
+#~ msgstr "&Vrijeme"
+
+#, fuzzy
+#~| msgid "Table of Contents"
+#~ msgid "Table of Content"
+#~ msgstr "Tablica sadržaja"
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "Broj &stranice"
+
+#, fuzzy
+#~| msgid "Sort"
+#~ msgid "Slots"
+#~ msgstr "Razvrstavanje"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Postavke okvira"
+
+#, fuzzy
+#~| msgid "&Variable"
+#~ msgid "Variables"
+#~ msgstr "&Varijabla"
+
+#, fuzzy
+#~ msgid "HTML Document"
+#~ msgstr "Dokument"
+
+#, fuzzy
+#~ msgid "Encoded Text"
+#~ msgstr "&Promijeni tekst"
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)."
+#~ msgstr "Obriši okvir"
+
+#~ msgid "First Page Header"
+#~ msgstr "Zaglavlje prve stranice"
+
+#~ msgid "First Page Footer"
+#~ msgstr "Podnožje prve stranice"
+
+#, fuzzy
+#~| msgid "&Units:"
+#~ msgid "Unit:"
+#~ msgstr "&Mjere:"
+
+#, fuzzy
+#~ msgid "Size:"
+#~ msgstr "Veličina ( %1 ):"
+
+#, fuzzy
+#~| msgid "Attention:"
+#~ msgid "Orientation:"
+#~ msgstr "Poštovanje:"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgid "Whole document:"
+#~ msgstr "Dokument"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgid "Left Edge:"
+#~ msgstr "Lijevo:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgid "Right Edge:"
+#~ msgstr "Desno:"
+
+#, fuzzy
+#~ msgid "Page Edge:"
+#~ msgstr "Broj &stranice"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgid "Page spread"
+#~ msgstr "Prijelom stranice"
+
+#~ msgid "Printing..."
+#~ msgstr "Ispisivanje..."
+
+#, fuzzy
+#~ msgid "Cancel"
+#~ msgstr "Ćelija"
+
+#, fuzzy
+#~ msgid "Insert Inline Table"
+#~ msgstr "Umetni tablicu"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "Tekstualni skup okvira %1"
+
+#, fuzzy
+#~ msgid "Create Formula Frame"
+#~ msgstr "Napravi okvir s &formulom"
+
+#, fuzzy
+#~ msgid "Create Table"
+#~ msgstr "Napravi &tabelu"
+
+#, fuzzy
+#~ msgid "Change Frame Background Color"
+#~ msgstr "Boja pozadine okvira"
+
+#, fuzzy
+#~ msgid "Delete Page %1"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Resize Column"
+#~ msgstr "Obriši Stupac"
+
+#, fuzzy
+#~ msgid "Resize Row"
+#~ msgstr "Ukloni red"
+
+#, fuzzy
+#~ msgid "Configure KWord"
+#~ msgstr "Podesi krajnju bilješku"
+
+#~ msgid "Interface"
+#~ msgstr "Sučelje"
+
+#~ msgid "Interface Settings"
+#~ msgstr "Postavke sučelja"
+
+#~ msgid "Spelling"
+#~ msgstr "Provjera pravopisa"
+
+#~ msgid "Spell Checker Behavior"
+#~ msgstr "Ponašanje provjere pravopisa"
+
+#, fuzzy
+#~ msgid "Formula Defaults"
+#~ msgstr "Struktura dokumenta"
+
+#~ msgid "Misc Settings"
+#~ msgstr "Postavke tabele"
+
+#~ msgid "Path"
+#~ msgstr "Putanja"
+
+#~ msgid "Path Settings"
+#~ msgstr "Postavke odlomka"
+
+#~ msgid "Change Config"
+#~ msgstr "Osvježi tabulatore"
+
+#, fuzzy
+#~ msgid "Show s&crollbar"
+#~ msgstr "Struktura dokumenta"
+
+#, fuzzy
+#~ msgid "Number of recent &files:"
+#~ msgstr "Broj stupaca:"
+
+#~ msgid "&Horizontal grid size:"
+#~ msgstr "&Horizontalna veličina mreže:"
+
+#~ msgid "&Underline all links"
+#~ msgstr "&Podvučeno"
+
+#~ msgid "Document Defaults"
+#~ msgstr "Struktura dokumenta"
+
+#~ msgid "Default font:"
+#~ msgstr "Obriši okvir"
+
+#~ msgid "Choose..."
+#~ msgstr "Odaberi..."
+
+#~ msgid "No autosave"
+#~ msgstr "Nema vrijednost"
+
+#~ msgid " min"
+#~ msgstr " min"
+
+#~ msgid "Create backup file"
+#~ msgstr "Napravi &tabelu"
+
+#~ msgid "Tab stop (%1):"
+#~ msgstr "Veličina pukotine ( %1 ):"
+
+#~ msgid "Cursor"
+#~ msgstr "Pokazivač"
+
+#~ msgid "Change Starting Page Number"
+#~ msgstr "&Korisničke varijable..."
+
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "&Korisničke varijable..."
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "Veličina pukotine ( %1 ):"
+
+#, fuzzy
+#~ msgid "Personal Expression"
+#~ msgstr "Regularni izraz"
+
+#, fuzzy
+#~ msgid "Backup Path"
+#~ msgstr "Slika (%1) %2"
+
+#, fuzzy
+#~ msgid "Configure Endnote/Footnote"
+#~ msgstr "Podesi fusnotu"
+
+#~ msgid " %"
+#~ msgstr " %"
+
+#, fuzzy
+#~ msgid "&Width:"
+#~ msgstr "Širina:"
+
+#~ msgid "Solid"
+#~ msgstr "Puno"
+
+#~ msgid "Dash Line"
+#~ msgstr "inčima"
+
+#~ msgid "Dot Line"
+#~ msgstr "Crtkana linija"
+
+#~ msgid "Dash Dot Line"
+#~ msgstr "inčima"
+
+#~ msgid "Dash Dot Dot Line"
+#~ msgstr "inčima"
+
+#~ msgid "Change End-/Footnote Variable Settings"
+#~ msgstr "Izmijeni krajnju-/fusnotu postavku varijable "
+
+#, fuzzy
+#~ msgid "Change Footnote Line Separator Settings"
+#~ msgstr "&Korisničke varijable..."
+
+#, fuzzy
+#~ msgid "Rename Bookmark..."
+#~ msgstr "Preimenuj knjiške oznake"
+
+#~ msgid "Delete Bookmark"
+#~ msgstr "Obriši knjišku oznaku"
+
+#~ msgid "Delete Row"
+#~ msgstr "Obriši Red"
+
+#~ msgid "Delete Column"
+#~ msgstr "Obriši Stupac"
+
+#, fuzzy
+#~ msgid "Delete the whole table?"
+#~ msgstr "Obriši tabelu"
+
+#, fuzzy
+#~ msgid "Delete all selected rows?"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Delete row number %1?"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Delete column number %1?"
+#~ msgstr "Obriši stupac:"
+
+#, fuzzy
+#~ msgid "Delete rows: %1 ?"
+#~ msgstr "Obriši red:"
+
+#, fuzzy
+#~ msgid "Delete columns: %1 ?"
+#~ msgstr "Obriši stupac:"
+
+#~ msgid "Column %1"
+#~ msgstr "Stupac %1"
+
+#~ msgid "Text Frame %1"
+#~ msgstr "Tekstualni okvir %1"
+
+#~ msgid "Empty"
+#~ msgstr "Prazno"
+
+#, fuzzy
+#~ msgid "Formula Frame %1"
+#~ msgstr "Zbroj formule"
+
+#~ msgid "Picture (%1) %2"
+#~ msgstr "Slika (%1) %2"
+
+#~ msgid "Embedded Objects"
+#~ msgstr "Ugrađeni objekti"
+
+#, fuzzy
+#~ msgid "Formula Frames"
+#~ msgstr "Format skupa okvira"
+
+#~ msgid "Pictures"
+#~ msgstr "Slike"
+
+#~ msgid "Document Structure"
+#~ msgstr "Struktura dokumenta"
+
+#, fuzzy
+#~ msgid "Create Part Frame"
+#~ msgstr "&Napravi tekstualni okvir"
+
+#~ msgid "Delete Table"
+#~ msgstr "Obriši tabelu"
+
+#, fuzzy
+#~ msgid "Delete Text Frame"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Delete Formula Frame"
+#~ msgstr "Napravi okvir s &formulom"
+
+#, fuzzy
+#~ msgid "Delete Picture Frame"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Delete Object Frame"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Edit Personal Expression"
+#~ msgstr "Regularni izraz"
+
+#~ msgid "Group name:"
+#~ msgstr "Ime grupe:"
+
+#~ msgid "Expressions"
+#~ msgstr "Regularni izraz"
+
+#~ msgid "&New"
+#~ msgstr "&Novi"
+
+#~ msgid "New"
+#~ msgstr "Novi"
+
+#~ msgid "empty"
+#~ msgstr "prazno"
+
+#, fuzzy
+#~ msgid "new group"
+#~ msgstr "Obriši Red"
+
+#~ msgid "&Automatic"
+#~ msgstr "&Automatski"
+
+#~ msgid "&Manual"
+#~ msgstr "&Ručno"
+
+#~ msgid "&Footnote"
+#~ msgstr "&Fusnota"
+
+#~ msgid "&Endnote"
+#~ msgstr "K&rajnja bilješka"
+
+#, fuzzy
+#~ msgid "Formula %1"
+#~ msgstr "Formula"
+
+#, fuzzy
+#~ msgid "Frame Properties for %1"
+#~ msgstr "Postavke okvira"
+
+#, fuzzy
+#~ msgid "Frame Properties for New Frame"
+#~ msgstr "Postavke okvira"
+
+#, fuzzy
+#~ msgid "Frames Properties"
+#~ msgstr "Postavke okvira"
+
+#, fuzzy
+#~ msgid "Frame Settings for %1"
+#~ msgstr "Postavke okvira"
+
+#, fuzzy
+#~ msgid "Gap size (%1):"
+#~ msgstr "Veličina pukotine ( %1 ):"
+
+#~ msgid "No."
+#~ msgstr "&Ne"
+
+#, fuzzy
+#~ msgid "Table is inline"
+#~ msgstr "Tablica lebdi"
+
+#, fuzzy
+#~ msgid "Set new color on all selected frames"
+#~ msgstr "Obriši okvir"
+
+#~ msgid "Background color:"
+#~ msgstr "Boja pozadine:"
+
+#~ msgid "Background style:"
+#~ msgstr "Boja pozadine okvira"
+
+#~ msgid "No Background Fill"
+#~ msgstr "Boja pozadine okvira"
+
+#~ msgid "100% Fill Pattern"
+#~ msgstr "100% Ispuni šablonu"
+
+#~ msgid "12% Fill Pattern"
+#~ msgstr "12% Ispuni šablonu"
+
+#, fuzzy
+#~ msgid "&Borders"
+#~ msgstr "Rubovi"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "Stil:"
+
+#, fuzzy
+#~ msgid "Co&lor:"
+#~ msgstr "&Port:"
+
+#, fuzzy
+#~ msgid "Rename Frameset"
+#~ msgstr "Ime novog skupa okvira:"
+
+#, fuzzy
+#~ msgid "Make Frameset Inline"
+#~ msgstr "Okvir lebdi"
+
+#, fuzzy
+#~ msgid "Make Frameset Non-Inline"
+#~ msgstr "Okvir lebdi"
+
+#, fuzzy
+#~ msgid "Resize Frame"
+#~ msgstr "Promijeni veličinu zadnjeg okvira"
+
+#, fuzzy
+#~ msgid "Change Margin Frame"
+#~ msgstr "&Korisničke varijable..."
+
+#~ msgid "Change Border"
+#~ msgstr "Promijeni rubove"
+
+#, fuzzy
+#~ msgid "Change Left Border Frame"
+#~ msgstr "Uvuci"
+
+#, fuzzy
+#~ msgid "Change Right Border Frame"
+#~ msgstr "Uvuci"
+
+#, fuzzy
+#~ msgid "Change Top Border Frame"
+#~ msgstr "Uvuci"
+
+#~ msgid "Change Bottom Border Frame"
+#~ msgstr "Izmijeni doljnje rubove okvira"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to reconnect the last frame of the frameset '%1'. The "
+#~ "contents of this frameset will be deleted.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Izabrani okvir je zadnji okvir u skupu okvira\n"
+#~ "%1.\n"
+#~ "Ako ga obrišete cijeli skup okvira + tekst će također biti obrisani!\n"
+#~ "Da li ipak želite nastaviti?"
+
+#~ msgid "Reconnect Frame"
+#~ msgstr "Ponovo spoji okvir"
+
+#, fuzzy
+#~ msgid "&Reconnect"
+#~ msgstr "Ponovo spoji okvir"
+
+#, fuzzy
+#~ msgid "Frame Style Manager"
+#~ msgstr "Postavke okvira"
+
+#, fuzzy
+#~ msgid "Frame background color:"
+#~ msgstr "Boja pozadine okvira..."
+
+#~ msgid "Go to Footnote"
+#~ msgstr "Idi na fusnotu"
+
+#~ msgid "Go to Endnote"
+#~ msgstr "Idi na krajnju bilješku"
+
+#~ msgid "Insert Row"
+#~ msgstr "Umetni red"
+
+#~ msgid "Insert Column"
+#~ msgstr "Umetni stupac"
+
+#, fuzzy
+#~ msgid "Insert New Row"
+#~ msgstr "Umetni novi red"
+
+#~ msgid "Insert New Column"
+#~ msgstr "Umetni novi stupac"
+
+#~ msgid "Before"
+#~ msgstr "Prije"
+
+#~ msgid "After"
+#~ msgstr "Poslije"
+
+#~ msgid "Row:"
+#~ msgstr "Redak:"
+
+#~ msgid "Column:"
+#~ msgstr "Stupac:"
+
+#, fuzzy
+#~ msgid "Choose &Picture..."
+#~ msgstr "&Boja..."
+
+#, fuzzy
+#~ msgid "Choose Picture"
+#~ msgstr "Uvuci"
+
+#, fuzzy
+#~ msgid "Do you really want to replace the current datasource?"
+#~ msgstr "&Neće prolaziti oko ovog okvira"
+
+#, fuzzy
+#~ msgid "Mail Merge Setup"
+#~ msgstr "SkupnoPismo"
+
+#~ msgid "&Available sources:"
+#~ msgstr "&Dostupni izvori:"
+
+#, fuzzy
+#~ msgid "Edit Current..."
+#~ msgstr "Dodaj zapis"
+
+#~ msgid "Create New..."
+#~ msgstr "Napravi novi..."
+
+#~ msgid "Print Preview..."
+#~ msgstr "Pregled tiskanja..."
+
+#~ msgid "Create New Document"
+#~ msgstr "Napravi novi dokument"
+
+#, fuzzy
+#~ msgid "Unnamed Table"
+#~ msgstr "Napravi &tabelu"
+
+#~ msgid "Object %1"
+#~ msgstr "Ugrađeni objekt %1"
+
+#, fuzzy
+#~ msgid "Move/Resize Frame"
+#~ msgstr "Promijeni veličinu zadnjeg okvira"
+
+#, fuzzy
+#~ msgid "Make Document External"
+#~ msgstr "Struktura dokumenta"
+
+#, fuzzy
+#~ msgid "Make Document Internal"
+#~ msgstr "Okvir lebdi"
+
+#, fuzzy
+#~ msgid "Picture %1"
+#~ msgstr "Slika (%1) %2"
+
+#, fuzzy
+#~ msgid "Sort Text"
+#~ msgstr "&Promijeni tekst"
+
+#~ msgid "Increase"
+#~ msgstr "Povećaj"
+
+#~ msgid "Decrease"
+#~ msgstr "Smanji"
+
+#~ msgid "Split Cell"
+#~ msgstr "Podijeli ćeliju"
+
+#~ msgid "Number of rows:"
+#~ msgstr "Broj redova:"
+
+#~ msgid "Number of columns:"
+#~ msgstr "Broj stupaca:"
+
+#~ msgid "Selected Text"
+#~ msgstr "Odabrani tekst"
+
+#~ msgid "Counting..."
+#~ msgstr "Brojanje..."
+
+#, fuzzy
+#~ msgid "Number of embedded objects:"
+#~ msgstr "Ugrađeni objekti"
+
+#, fuzzy
+#~ msgid "Number of formula frameset:"
+#~ msgstr "Broj redova:"
+
+#, fuzzy
+#~ msgid "Table Settings"
+#~ msgstr "Postavke tabele"
+
+#~ msgid "Cell heights:"
+#~ msgstr "Visine ćelije:"
+
+#~ msgid "Manual"
+#~ msgstr "Ručno"
+
+#~ msgid "Cell widths:"
+#~ msgstr "Širina ćelija:"
+
+#, fuzzy
+#~ msgid "The table is &inline"
+#~ msgstr "Tablica lebdi"
+
+#, fuzzy
+#~ msgid "Reapply template to table"
+#~ msgstr "Obriši okvir"
+
+#~ msgid "Templates"
+#~ msgstr "Predlošci"
+
+#~ msgid "Add New Rows to Table"
+#~ msgstr "Umetni tablicu"
+
+#, fuzzy
+#~ msgid "Remove Rows From Table"
+#~ msgstr "Ukloni slog"
+
+#~ msgid "Remove Row"
+#~ msgstr "Ukloni red"
+
+#~ msgid "Add New Columns to Table"
+#~ msgstr "Dodaj nove kolone u tabelu"
+
+#, fuzzy
+#~ msgid "Remove Columns From Table"
+#~ msgstr "Ukloni slog"
+
+#~ msgid "Remove Column"
+#~ msgstr "Ukloni stupac"
+
+#~ msgid "Apply Template to Table"
+#~ msgstr "Primijeni predložak na tablicu"
+
+#, fuzzy
+#~ msgid "Table Style Manager"
+#~ msgstr "Postavke tabele"
+
+#~ msgid "Adjust"
+#~ msgstr "Podesi"
+
+#~ msgid "Change..."
+#~ msgstr "Promijeni..."
+
+#~ msgid "&Customize"
+#~ msgstr "&Prilagodi"
+
+#~ msgid "Apply To"
+#~ msgstr "Primjeni na"
+
+#~ msgid "First row"
+#~ msgstr "Umetni red"
+
+#~ msgid "Last row"
+#~ msgstr "Posljednji redak"
+
+#~ msgid "Body"
+#~ msgstr "Tijelo"
+
+#~ msgid "First column"
+#~ msgstr "Prvi stupac"
+
+#~ msgid "Last column"
+#~ msgstr "Posljednji stupac"
+
+#, fuzzy
+#~ msgid "Change Paragraph Attribute"
+#~ msgstr "Razmak između odlomaka"
+
+#, fuzzy
+#~ msgid "Paste"
+#~ msgstr "Putanja"
+
+#, fuzzy
+#~ msgid "Insert Table of Contents"
+#~ msgstr "Tablica sadržaja"
+
+#, fuzzy
+#~ msgid "Endnote %1"
+#~ msgstr "K&rajnja bilješka"
+
+#, fuzzy
+#~ msgid "Footnote %1"
+#~ msgstr "&Fusnota"
+
+#, fuzzy
+#~ msgid "Insert Expression"
+#~ msgstr "Regularni izraz"
+
+#~ msgid "Insert Variable"
+#~ msgstr "Umetni tablicu"
+
+#~ msgid "ERROR"
+#~ msgstr "GREŠKA"
+
+#, fuzzy
+#~ msgid "Select Frame"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Configure Mai&l Merge..."
+#~ msgstr "Podesi krajnju bilješku"
+
+#~ msgid "&Delete Frame"
+#~ msgstr "O&briši okvir"
+
+#, fuzzy
+#~ msgid "Ra&ise Frame"
+#~ msgstr "Promijeni veličinu zadnjeg okvira"
+
+#~ msgid "Text Mode"
+#~ msgstr "Tekstualni način rada"
+
+#, fuzzy
+#~ msgid "Pre&view Mode"
+#~ msgstr "Pregled"
+
+#, fuzzy
+#~ msgid "Enable Document &Headers"
+#~ msgstr "Struktura dokumenta"
+
+#, fuzzy
+#~ msgid "Enable Document Foo&ters"
+#~ msgstr "Struktura dokumenta"
+
+#, fuzzy
+#~ msgid "Disable Document Foo&ters"
+#~ msgstr "Struktura dokumenta"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "&Posebni znak..."
+
+#~ msgid "Link..."
+#~ msgstr "Link..."
+
+#~ msgid "Comment..."
+#~ msgstr "Komentar..."
+
+#~ msgid "Edit Comment..."
+#~ msgstr "Dodaj zapis"
+
+#, fuzzy
+#~ msgid "Change the content of a comment"
+#~ msgstr "Obriši okvir"
+
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Dodaj zapis"
+
+#~ msgid "Table of &Contents"
+#~ msgstr "&Tablica sadržaja"
+
+#, fuzzy
+#~ msgid "Document &Information"
+#~ msgstr "&Informacije o dokumentu"
+
+#~ msgid "&Date"
+#~ msgstr "&Podaci"
+
+#, fuzzy
+#~ msgid "&Statistic"
+#~ msgstr "Statistike"
+
+#~ msgid "&Custom"
+#~ msgstr "&Prilagodi"
+
+#~ msgid "&Expression"
+#~ msgstr "&Izraz"
+
+#~ msgid "Te&xt Frame"
+#~ msgstr "&Tekstni okvir"
+
+#, fuzzy
+#~ msgid "Create a new text frame"
+#~ msgstr "&Napravi tekstualni okvir"
+
+#, fuzzy
+#~ msgid "Create a new text frame."
+#~ msgstr "&Napravi tekstualni okvir"
+
+#~ msgid "For&mula"
+#~ msgstr "&Formula"
+
+#, fuzzy
+#~ msgid "Insert a formula into a new frame"
+#~ msgstr "Napravi okvir s &formulom"
+
+#, fuzzy
+#~ msgid "Insert a formula into a new frame."
+#~ msgstr "Napravi okvir s &formulom"
+
+#~ msgid "&Table..."
+#~ msgstr "&Tablica..."
+
+#, fuzzy
+#~ msgid "Create a new frame for a picture"
+#~ msgstr "Dodaj novu stranicu"
+
+#, fuzzy
+#~ msgid "Create a new frame for a picture or diagram."
+#~ msgstr "Dodaj novu stranicu"
+
+#, fuzzy
+#~ msgid "&Object Frame"
+#~ msgstr "&Napravi tekstualni okvir"
+
+#, fuzzy
+#~ msgid "Insert an object into a new frame"
+#~ msgstr "Umetni tablicu"
+
+#, fuzzy
+#~ msgid "Insert an object into a new frame."
+#~ msgstr "Umetni tablicu"
+
+#~ msgid "Fi&le..."
+#~ msgstr "&Datoteka..."
+
+#~ msgid "&Font..."
+#~ msgstr "&Pismo..."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&Odlomak..."
+
+#, fuzzy
+#~ msgid "&Frame Style Manager"
+#~ msgstr "Postavke okvira"
+
+#, fuzzy
+#~ msgid "Change attributes of framestyles"
+#~ msgstr "&Korisničke varijable..."
+
+#, fuzzy
+#~ msgid "Change attributes of styles"
+#~ msgstr "&Korisničke varijable..."
+
+#, fuzzy
+#~ msgid "Font Size"
+#~ msgstr "Spoji ćelije"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "Povećaj veličinu fonta"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "Smanji veličinu pisma"
+
+#~ msgid "St&yle"
+#~ msgstr "&Stil:"
+
+#~ msgid "Default Format"
+#~ msgstr "Obriši okvir"
+
+#~ msgid "Align &Left"
+#~ msgstr "&Lijevo poravnato"
+
+#~ msgid "Align &Right"
+#~ msgstr "&Desno poravnato"
+
+#~ msgid "Superscript"
+#~ msgstr "Eksponent"
+
+#~ msgid "Subscript"
+#~ msgstr "Indeks"
+
+#~ msgid "Increase Indent"
+#~ msgstr "Povećaj uvlaku"
+
+#~ msgid "Decrease Indent"
+#~ msgstr "Smanji uvlaku"
+
+#~ msgid "Text Color..."
+#~ msgstr "Boja teksta..."
+
+#, fuzzy
+#~ msgid "Framest&yle"
+#~ msgstr "Ime skupa okvira"
+
+#~ msgid "Border Left"
+#~ msgstr "Lijevi rub okvira"
+
+#~ msgid "Border Right"
+#~ msgstr "Desni rub"
+
+#~ msgid "Border Top"
+#~ msgstr "Gornji rub"
+
+#~ msgid "Border Style"
+#~ msgstr "Stil ruba okvira"
+
+#~ msgid "Border Width"
+#~ msgstr "Širina obruba"
+
+#~ msgid "Border Color"
+#~ msgstr "Boja Ruba"
+
+#, fuzzy
+#~ msgid "Text Background Color..."
+#~ msgstr "Boja pozadine okvira"
+
+#, fuzzy
+#~ msgid "Change background color for currently selected text"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "&Properties"
+#~ msgstr "Postavke okvira"
+
+#, fuzzy
+#~ msgid "Adjust properties of the current table"
+#~ msgstr "Obriši tabelu"
+
+#~ msgid "&Insert Row..."
+#~ msgstr "&Umetni red..."
+
+#, fuzzy
+#~ msgid "Insert one or more rows at cursor location"
+#~ msgstr "Obriši tabelu"
+
+#, fuzzy
+#~ msgid "I&nsert Column..."
+#~ msgstr "U&metni stupac"
+
+#, fuzzy
+#~ msgid "Insert one or more columns into the current table"
+#~ msgstr "Obriši tabelu"
+
+#, fuzzy
+#~ msgid "Delete selected rows from the current table"
+#~ msgstr "Obriši tabelu"
+
+#, fuzzy
+#~ msgid "Delete selected rows from the current table."
+#~ msgstr "Obriši tabelu"
+
+#, fuzzy
+#~ msgid "Delete selected columns from the current table"
+#~ msgstr "Obriši tabelu"
+
+#, fuzzy
+#~ msgid "Resize Column..."
+#~ msgstr "U&metni stupac"
+
+#, fuzzy
+#~ msgid "Change the width of the currently selected column"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Change the width of the currently selected column."
+#~ msgstr "Obriši okvir"
+
+#~ msgid "&Join Cells"
+#~ msgstr "S&poji ćelije"
+
+#, fuzzy
+#~ msgid "&Split Cell..."
+#~ msgstr "&Podijeli ćelije..."
+
+#~ msgid "Protect Cells"
+#~ msgstr "Zaštiti ćelije"
+
+#, fuzzy
+#~ msgid "Prevent changes to content of selected cells"
+#~ msgstr "Obriši okvir"
+
+#~ msgid "&Ungroup Table"
+#~ msgstr "R&azgrupiraj tabelu"
+
+#~ msgid "Delete &Table"
+#~ msgstr "&Izbriši tablicu"
+
+#, fuzzy
+#~ msgid "Delete the entire table"
+#~ msgstr "Obriši tabelu"
+
+#, fuzzy
+#~ msgid "T&able Style Manager"
+#~ msgstr "Postavke tabele"
+
+#, fuzzy
+#~ msgid "Change attributes of tablestyles"
+#~ msgstr "&Korisničke varijable..."
+
+#, fuzzy
+#~ msgid "Table&style"
+#~ msgstr "Tabele"
+
+#~ msgid "Convert Table to Text"
+#~ msgstr "Pretvori tablicu u tekst"
+
+#, fuzzy
+#~ msgid "Sort Text..."
+#~ msgstr "&Promijeni tekst"
+
+#~ msgid "Add Expression"
+#~ msgstr "Dodaj izraz"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Samo&ispravljanje..."
+
+#, fuzzy
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Samo&ispravljanje..."
+
+#, fuzzy
+#~ msgid "Toggle autocorrection on and off"
+#~ msgstr "Samo&ispravljanje..."
+
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Samo&ispravljanje..."
+
+#, fuzzy
+#~ msgid "Custom &Variables..."
+#~ msgstr "&Korisničke varijable..."
+
+#, fuzzy
+#~ msgid "Edit &Personal Expressions..."
+#~ msgstr "Regularni izraz"
+
+#, fuzzy
+#~ msgid "Add or change one or more personal expressions"
+#~ msgstr "Dodaj ili promjeni regularni izraz"
+
+#~ msgid "Change Case..."
+#~ msgstr "VELIKA/mala slova..."
+
+#, fuzzy
+#~ msgid "Change Picture..."
+#~ msgstr "&Boja..."
+
+#, fuzzy
+#~ msgid "Change the picture in the currently selected frame"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Configure Header/Footer..."
+#~ msgstr "Podesi krajnju bilješku"
+
+#, fuzzy
+#~ msgid "Configure the currently selected header or footer"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Configure the currently selected header or footer."
+#~ msgstr "Obriši okvir"
+
+#~ msgid "Open Link"
+#~ msgstr "Osvježi tabulatore"
+
+#~ msgid "Change Link..."
+#~ msgstr "Osvježi tabulatore"
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected link"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Change the details of the currently selected link."
+#~ msgstr "Obriši okvir"
+
+#~ msgid "Copy Link"
+#~ msgstr "Kopiraj link"
+
+#~ msgid "Add to Bookmark"
+#~ msgstr "Obriši Stupac"
+
+#~ msgid "Remove Link"
+#~ msgstr "Ukloni vezu"
+
+#, fuzzy
+#~ msgid "Show Doc Structure"
+#~ msgstr "Struktura dokumenta"
+
+#, fuzzy
+#~ msgid "Hide Doc Structure"
+#~ msgstr "Struktura dokumenta"
+
+#, fuzzy
+#~ msgid "Open document structure sidebar"
+#~ msgstr "Struktura dokumenta"
+
+#, fuzzy
+#~ msgid "Hide Rulers"
+#~ msgstr "P&odnožje"
+
+#, fuzzy
+#~ msgid "Hide Grid"
+#~ msgstr "P&odnožje"
+
+#, fuzzy
+#~ msgid "Configure C&ompletion..."
+#~ msgstr "Podesi fusnotu"
+
+#, fuzzy
+#~ msgid "Change the words and options for autocompletion"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Umetni blagi rastav"
+
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Umetni blagi rastav"
+
+#~ msgid "Line Break"
+#~ msgstr "Prijelom retka"
+
+#, fuzzy
+#~ msgid "Increase Numbering Level"
+#~ msgstr "Povećaj veličinu fonta"
+
+#, fuzzy
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "Smanji veličinu pisma"
+
+#~ msgid "Edit Variable..."
+#~ msgstr "&Korisničke varijable..."
+
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Primjeni Samo&ispravljanje..."
+
+#, fuzzy
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Napravi okvir s &formulom"
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected text"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected text."
+#~ msgstr "Obriši okvir"
+
+#~ msgid "&Footnote..."
+#~ msgstr "&Fusnota..."
+
+#~ msgid "Edit Footnote"
+#~ msgstr "Podesi fusnotu"
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected footnote"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected footnote."
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Change Footnote/Endnote Parameter"
+#~ msgstr "Umetni fusnotu/krajnju bilješku"
+
+#, fuzzy
+#~ msgid "Save Picture As..."
+#~ msgstr "&Boja..."
+
+#, fuzzy
+#~ msgid "Save the picture in a separate file"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "&Create Framestyle From Frame..."
+#~ msgstr "Napravi okvir s &formulom"
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected frame"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Create a new framestyle based on the currently selected frame."
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Convert to Text Box"
+#~ msgstr "Tablica sadržaja"
+
+#~ msgid "Ignore All"
+#~ msgstr "Zanemari sve"
+
+#~ msgid "Add Word to Dictionary"
+#~ msgstr "Dodaj riječ u rječnik"
+
+#, fuzzy
+#~ msgid "Go to Document Structure"
+#~ msgstr "Struktura dokumenta"
+
+#~ msgid "%1 frames selected"
+#~ msgstr "%1 frames odabran"
+
+#~ msgid "Frame Background Color..."
+#~ msgstr "Boja pozadine okvira..."
+
+#, fuzzy
+#~ msgid "Apply a paragraph style"
+#~ msgstr "Primjeni na zaglavlje"
+
+#, fuzzy
+#~ msgid "Apply a frame style"
+#~ msgstr "Primjeni na zaglavlje"
+
+#, fuzzy
+#~ msgid "Apply a table style"
+#~ msgstr "Primjeni na zaglavlje"
+
+#, fuzzy
+#~ msgid "Image"
+#~ msgstr "Broj &stranice"
+
+#, fuzzy
+#~ msgid "Select paste format:"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to delete a table.\n"
+#~ "Doing so will delete all the text in the table.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Izabrali ste brisanje tabele\n"
+#~ "Ako obrišete tabelu izgubiti će te sav tekst u tabeli\n"
+#~ "Da li ste sigurni da to želite učiniti?"
+
+#, fuzzy
+#~ msgid "Do you want to delete this frame?"
+#~ msgstr "&Neće prolaziti oko ovog okvira"
+
+#~ msgid "Change Custom Variable"
+#~ msgstr "&Korisničke varijable..."
+
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#, fuzzy
+#~ msgid "Insert Picture Inline"
+#~ msgstr "Umetni sliku"
+
+#, fuzzy
+#~ msgid "Insert Inline Frame"
+#~ msgstr "Umetni tablicu"
+
+#~ msgid "Insert Footnote"
+#~ msgstr "Umetni fusnotu"
+
+#~ msgid "Update Table of &Contents"
+#~ msgstr "&Ažuriraj tablicu sadržaja"
+
+#~ msgid "Change Font"
+#~ msgstr "Promijeni pismo"
+
+#, fuzzy
+#~ msgid "Change Layout"
+#~ msgstr "Osvježi tabulatore"
+
+#, fuzzy
+#~ msgid "You must select a frame first."
+#~ msgstr "Žalim međutim morate prvo izabrati okvir."
+
+#~ msgid "Format Frameset"
+#~ msgstr "Format skupa okvira"
+
+#~ msgid "Insert Table"
+#~ msgstr "Umetni tablicu"
+
+#~ msgid "Insert Formula"
+#~ msgstr "Umetni formulu"
+
+#, fuzzy
+#~ msgid "Remove Rows"
+#~ msgstr "Ukloni slog"
+
+#, fuzzy
+#~ msgid "Remove Columns"
+#~ msgstr "Ukloni slog"
+
+#~ msgid "Adjust Table"
+#~ msgstr "Umetni tablicu"
+
+#, fuzzy
+#~ msgid "Join Cells Failed"
+#~ msgstr "Spoji ćelije"
+
+#~ msgid "Join Cells"
+#~ msgstr "Spoji ćelije"
+
+#~ msgid "Split Cells"
+#~ msgstr "Razdvoji ćelije"
+
+#~ msgid "Ungroup Table"
+#~ msgstr "Razgrupiraj tabelu"
+
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Obriši okvir"
+
+#~ msgid "Apply Framestyle to Frame"
+#~ msgstr "Primijeni stil na okvir"
+
+#~ msgid "Apply Framestyle to Frames"
+#~ msgstr "Primijeni stil okvira na okvire"
+
+#~ msgid "Apply Framestyle"
+#~ msgstr "Primjeni na zaglavlje"
+
+#~ msgid "Apply Tablestyle to Frame"
+#~ msgstr "Primijeni stil tablice na okvir"
+
+#~ msgid "Apply Tablestyle to Frames"
+#~ msgstr "Primijeni stil tablice na okvir"
+
+#~ msgid "Change Text Size"
+#~ msgstr "Uvuci"
+
+#~ msgid "Change Text Font"
+#~ msgstr "Osvježi tabulatore"
+
+#, fuzzy
+#~ msgid "Make Text Bold"
+#~ msgstr "Tekstualni okvir %1"
+
+#~ msgid "Make Text Italic"
+#~ msgstr "Okvir lebdi"
+
+#~ msgid "Underline Text"
+#~ msgstr "&Podvučeno"
+
+#, fuzzy
+#~ msgid "Strike Out Text"
+#~ msgstr "&Promijeni tekst"
+
+#~ msgid "Set Text Color"
+#~ msgstr "&Boja..."
+
+#~ msgid "Center Text"
+#~ msgstr "Centritaj tekst"
+
+#, fuzzy
+#~ msgid "Justify Text"
+#~ msgstr "&Promijeni tekst"
+
+#~ msgid "Change List Type"
+#~ msgstr "Uvuci"
+
+#, fuzzy
+#~ msgid "Make Text Superscript"
+#~ msgstr "Eksponent"
+
+#, fuzzy
+#~ msgid "Make Text Subscript"
+#~ msgstr "Eksponent"
+
+#~ msgid "Change Case of Text"
+#~ msgstr "&Boja..."
+
+#, fuzzy
+#~ msgid "Change Top Frame Border"
+#~ msgstr "Uvuci"
+
+#, fuzzy
+#~ msgid "Change Bottom Frame Border"
+#~ msgstr "Izmijeni doljnje rubove okvira"
+
+#~ msgid "Change Tabulator"
+#~ msgstr "Promijeni tabulator"
+
+#~ msgid "Change First Line Indent"
+#~ msgstr "&Boja..."
+
+#~ msgid "Change Indent"
+#~ msgstr "Osvježi tabulatore"
+
+#, fuzzy
+#~ msgid "Edit Endnote"
+#~ msgstr "Podesi fusnotu"
+
+#, fuzzy
+#~ msgid "Change Footnote Parameter"
+#~ msgstr "&Korisničke varijable..."
+
+#~ msgid "Change Endnote Parameter"
+#~ msgstr "&Korisničke varijable..."
+
+#, fuzzy
+#~ msgid "D&elete Current Column..."
+#~ msgstr "&Obriši stupac..."
+
+#, fuzzy
+#~ msgid "D&elete Selected Columns..."
+#~ msgstr "&Obriši stupac..."
+
+#, fuzzy
+#~ msgid "&Delete Current Row..."
+#~ msgstr "O&briši red..."
+
+#, fuzzy
+#~ msgid "&Delete Selected Rows..."
+#~ msgstr "O&briši red..."
+
+#, fuzzy
+#~ msgid "Change Picture"
+#~ msgstr "Uvuci"
+
+#~ msgid "Save Picture"
+#~ msgstr "Uvuci"
+
+#, fuzzy
+#~ msgid "Move Frame"
+#~ msgstr "Okvir"
+
+#, fuzzy
+#~ msgid "Change Note Text"
+#~ msgstr "&Boja..."
+
+#~ msgid "Apply Autoformat"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Change Footnote Parameters"
+#~ msgstr "&Korisničke varijable..."
+
+#~ msgid "Insert File"
+#~ msgstr "Umetni datoteku"
+
+#~ msgid "Normal"
+#~ msgstr "Obično"
+
+#, fuzzy
+#~ msgid "Delete Frames"
+#~ msgstr "Obriši okvir"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Postavke okvira"
+
+#~ msgid "Table %1"
+#~ msgstr "Tablica %1"
+
+#~ msgid "Font Family"
+#~ msgstr "Obitelj pisma"
+
+#, fuzzy
+#~ msgid "Speak Text"
+#~ msgstr "&Promijeni tekst"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to delete the last Frame of the Frameset '%1'. The contents "
+#~ "of this Frameset will not appear anymore!\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Izabrani okvir je zadnji okvir u skupu okvira\n"
+#~ "%1.\n"
+#~ "Ako ga obrišete cijeli skup okvira + tekst će također biti obrisani!\n"
+#~ "Da li ipak želite nastaviti?"

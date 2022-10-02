@@ -1,0 +1,198 @@
+# Translation of calligra_textediting_thesaurus to Norwegian Bokmål
+#
+# Gaute Hvoslef Kvalnes <gaute@verdsveven.com>, 2003.
+# Axel Bojer <fri_programvare@bojer.no>, 2005.
+# Bjørn Steensrud <bjornst@skogkatt.homelinux.org>, 2008, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: thesaurus_tool\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2010-06-14 18:03+0200\n"
+"Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
+"Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
+"Language: nb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: Thesaurus.cpp:81
+#, kde-format
+msgid "(No match)"
+msgstr "(Ingen treff)"
+
+#: Thesaurus.cpp:91
+#, kde-format
+msgid "&Search for:"
+msgstr "&Søk etter:"
+
+#: Thesaurus.cpp:94
+#, kde-format
+msgid "S&earch"
+msgstr "Sø&k"
+
+#: Thesaurus.cpp:101
+#, kde-format
+msgctxt "@action:button Go back to the previous word in history"
+msgid "Back"
+msgstr "Tilbake"
+
+#: Thesaurus.cpp:105
+#, kde-format
+msgctxt "@action:button Go forward to the next word in history"
+msgid "Forward"
+msgstr "Forover"
+
+#: Thesaurus.cpp:108
+#, kde-format
+msgid "Change Language..."
+msgstr "Endre språk …"
+
+#: Thesaurus.cpp:122
+#, kde-format
+msgid "&Thesaurus"
+msgstr "&Synonymordliste"
+
+#: Thesaurus.cpp:126
+#, kde-format
+msgid "Synonyms"
+msgstr "Synonymer"
+
+#: Thesaurus.cpp:133
+#, kde-format
+msgid "More General Words"
+msgstr "Mer generelle ord"
+
+#: Thesaurus.cpp:140
+#, kde-format
+msgid "More Specific Words"
+msgstr "Mer spesifikke ord"
+
+#: Thesaurus.cpp:170
+#, kde-format
+msgid "&Wordnet"
+msgstr "&WordNet"
+
+#: Thesaurus.cpp:192
+#, kde-format
+msgid "&Replace with:"
+msgstr "&Erstatt med:"
+
+#: Thesaurus.cpp:255
+#, kde-format
+msgid "&Replace"
+msgstr "&Erstatt"
+
+#: Thesaurus.cpp:267
+#, kde-format
+msgid "Replace Word"
+msgstr "Erstatt ord"
+
+#: Thesaurus.cpp:295
+#, kde-format
+msgid "Related Words - %1"
+msgstr "Beslektede ord – %1"
+
+#: Thesaurus.cpp:409
+#, kde-format
+msgid ""
+"The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+"select a thesaurus file."
+msgstr ""
+"Fant ikke synonymordlista «%1». Bruk «Endre språk» for å velge en "
+"ordlistefil."
+
+#: Thesaurus.cpp:429
+#, kde-format
+msgid "<b>Error:</b> Failed to execute grep."
+msgstr "<b>Feil:</b> Klarte ikke å kjøre grep."
+
+#: Thesaurus.cpp:581
+#, kde-format
+msgid "Synonyms/Hypernyms - Ordered by Frequency"
+msgstr "Synonymer/hypernymer – ordnet etter bruksfrekvens"
+
+#: Thesaurus.cpp:582
+#, kde-format
+msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+msgstr "Synonymer – ordnet etter likhet i betydning (bare verb)"
+
+#: Thesaurus.cpp:583
+#, kde-format
+msgid "Antonyms - Words with Opposite Meanings"
+msgstr "Antonymer – ord med motsatt betydning"
+
+#: Thesaurus.cpp:584
+#, kde-format
+msgid "Hyponyms - ... is a (kind of) %1"
+msgstr "Hyponymer – … er (et slags) %1"
+
+#: Thesaurus.cpp:585
+#, kde-format
+msgid "Meronyms - %1 has a ..."
+msgstr "Meronymer ‒ %1 har …"
+
+#: Thesaurus.cpp:587
+#, kde-format
+msgid "Holonyms - ... has a %1"
+msgstr "Holonymer ‒ … har en %1"
+
+#: Thesaurus.cpp:588
+#, kde-format
+msgid "Attributes"
+msgstr "Kjennemerke"
+
+#: Thesaurus.cpp:589
+#, kde-format
+msgid "Cause To (for some verbs only)"
+msgstr "Grunn til (bare for noen verb)"
+
+#: Thesaurus.cpp:590
+#, kde-format
+msgid "Verb Entailment (for some verbs only)"
+msgstr "Verbavledning (bare for noen verb)"
+
+#: Thesaurus.cpp:591
+#, kde-format
+msgid "Familiarity & Polysemy Count"
+msgstr "Antall nært beslektede og flertydige ord"
+
+#: Thesaurus.cpp:593
+#, kde-format
+msgid "Verb Frames (examples of use)"
+msgstr "Verbstruktur (eksempler på bruk)"
+
+#: Thesaurus.cpp:594
+#, kde-format
+msgid "List of Compound Words"
+msgstr "Liste over sammensatte ord"
+
+#: Thesaurus.cpp:595
+#, kde-format
+msgid "Overview of Senses"
+msgstr "Oversikt over betydninger"
+
+#: Thesaurus.cpp:623
+#, kde-format
+msgid ""
+"<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+"installed on your computer if you want to use it, and 'wn' has to be in your "
+"PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+"\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+"English language."
+msgstr ""
+"<b>Feil:</b> Klarte ikke starte WordNet­programmet «wn». Du må installere "
+"WordNet på maskinen din om du ønsker å bruke programmet, og 'wn' må være i "
+"din søkesti (PATH). Du finner WordNet på <a href=\"http://wordnet.princeton."
+"edu/\"> http://wordnet.princeton.edu/</a>. Merk at WordNet bare finnes på "
+"engelsk."
+
+#: Thesaurus.cpp:635
+#, kde-format
+msgid "No match for '%1'."
+msgstr "Ingen treff for «%1»."

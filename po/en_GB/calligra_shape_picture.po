@@ -1,0 +1,247 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Andrew Coles <andrew_coles@yahoo.co.uk>, 2009.
+# Steve Allewell <steve.allewell@gmail.com>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2014-07-01 00:32+0100\n"
+"Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
+"Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: ChangeImageCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change image"
+msgstr "Change image"
+
+#: ChangeImageCommand.cpp:43
+msgctxt "(qtundo-format)"
+msgid "Crop image"
+msgstr "Crop image"
+
+#: ChangeImageCommand.cpp:57
+msgctxt "(qtundo-format)"
+msgid "Change image color mode"
+msgstr "Change image colour mode"
+
+#: ClipCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Contour image (by image analysis)"
+msgstr "Contour image (by image analysis)"
+
+#: ClipCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Remove image contour"
+msgstr "Remove image contour"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnImageFile)
+#: forms/wdgPictureTool.ui:20
+#, kde-format
+msgid "Replace image..."
+msgstr "Replace image..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbAspect)
+#: forms/wdgPictureTool.ui:32
+#, kde-format
+msgid "Keep proportions"
+msgstr "Keep proportions"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: forms/wdgPictureTool.ui:58
+#, kde-format
+msgid "Left:"
+msgstr "Left:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: forms/wdgPictureTool.ui:68
+#, kde-format
+msgid "Right:"
+msgstr "Right:"
+
+#. i18n: ectx: property (text), widget (QLabel, bottomLabel)
+#: forms/wdgPictureTool.ui:91
+#, kde-format
+msgid "Bottom:"
+msgstr "Bottom:"
+
+#. i18n: ectx: property (text), widget (QLabel, topLabel)
+#: forms/wdgPictureTool.ui:111
+#, kde-format
+msgid "Top:"
+msgstr "Top:"
+
+#. i18n: ectx: property (text), widget (QToolButton, bnFill)
+#: forms/wdgPictureTool.ui:131
+#, kde-format
+msgid "Reset"
+msgstr "Reset"
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbContour)
+#: forms/wdgPictureTool.ui:148
+#, kde-format
+msgid "Contour (by image analysis)"
+msgstr "Contour (by image analysis)"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: forms/wdgPictureTool.ui:178
+#, kde-format
+msgid "Color mode:"
+msgstr "Colour mode:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: forms/wdgPictureTool.ui:193
+#, kde-format
+msgid "Crop"
+msgstr "Crop"
+
+#: PictureShapeFactory.cpp:31
+#, kde-format
+msgid "Image"
+msgstr "Image"
+
+#: PictureShapeFactory.cpp:33
+#, kde-format
+msgid "Image shape that can display jpg, png etc."
+msgstr "Image shape that can display jpg, png etc."
+
+#: PictureTool.cpp:95
+#, kde-format
+msgid "Standard"
+msgstr "Standard"
+
+#: PictureTool.cpp:96
+#, kde-format
+msgid "Greyscale"
+msgstr "Greyscale"
+
+#: PictureTool.cpp:97
+#, kde-format
+msgid "Monochrome"
+msgstr "Monochrome"
+
+#: PictureTool.cpp:98
+#, kde-format
+msgid "Watermark"
+msgstr "Watermark"
+
+#: PictureToolFactory.cpp:19
+#, kde-format
+msgid "Picture editing"
+msgstr "Picture editing"
+
+#, fuzzy
+#~| msgid "Replace image..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace image..."
+#~ msgstr "Replace image..."
+
+#, fuzzy
+#~| msgid "Keep proportions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keep proportions"
+#~ msgstr "Keep proportions"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left:"
+#~ msgstr "Left:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right:"
+#~ msgstr "Right:"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom:"
+#~ msgstr "Bottom:"
+
+#, fuzzy
+#~| msgid "Top:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top:"
+#~ msgstr "Top:"
+
+#, fuzzy
+#~| msgid "Reset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset"
+#~ msgstr "Reset"
+
+#, fuzzy
+#~| msgid "Contour (by image analysis)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contour (by image analysis)"
+#~ msgstr "Contour (by image analysis)"
+
+#, fuzzy
+#~| msgid "Color mode:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color mode:"
+#~ msgstr "Colour mode:"
+
+#, fuzzy
+#~| msgid "Crop"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Crop"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Image"
+
+#, fuzzy
+#~| msgid "Image shape that can display jpg, png etc."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image shape that can display jpg, png etc."
+#~ msgstr "Image shape that can display jpg, png etc."
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Standard"
+
+#, fuzzy
+#~| msgid "Greyscale"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Greyscale"
+#~ msgstr "Greyscale"
+
+#, fuzzy
+#~| msgid "Monochrome"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monochrome"
+#~ msgstr "Monochrome"
+
+#, fuzzy
+#~| msgid "Watermark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Watermark"
+#~ msgstr "Watermark"
+
+#, fuzzy
+#~| msgid "Picture editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Picture editing"
+#~ msgstr "Picture editing"
+
+#~ msgid "Open"
+#~ msgstr "Open"
+
+#~ msgid "Picture Tool"
+#~ msgstr "Picture Tool"

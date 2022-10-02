@@ -1,0 +1,304 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY package "calligra">
+  <!ENTITY calligra "Calligra">
+  <!ENTITY tables "<application
+>Calligra Tables</application
+>">
+  <!ENTITY words "<application
+>Calligra Words</application
+>">
+  <!ENTITY stage "<application
+>Calligra Stage</application
+>">
+  <!ENTITY plan "<application
+>Calligra Plan</application
+>">
+  <!-- the following author entities have been added to user.entities in 4.10 branch and trunk of svn
+       they can be removed from this file once they are present in the kdelibs minimum version required by &kappname; -->
+  <!ENTITY traducteurFrederickAngelique      '<othercredit role="translator"
+><firstname
+>Frederick</firstname
+><surname
+>Angelique</surname
+><affiliation
+><address
+><email
+>ti_orion@hotmail.fr</email
+></address
+></affiliation
+><contrib
+>Traduction française&nbsp;</contrib
+></othercredit
+>'>
+  <!ENTITY relecteurFrederickAngelique        '<othercredit role="reviewer"
+><firstname
+>Frederick</firstname
+><surname
+>Angelique</surname
+><affiliation
+><address
+><email
+>ti_orion@hotmail.fr</email
+></address
+></affiliation
+><contrib
+>Relecture de la documentation française&nbsp;</contrib
+></othercredit
+>'>
+  <!ENTITY FrederickAngelique 'Frederick Angelique <email
+>ti_orion@hotmail.fr</email
+>'>
+
+  <!ENTITY kappname "&stage;">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY tutorial SYSTEM "tutorial.docbook">
+  <!ENTITY guides SYSTEM "guides.docbook">
+  <!ENTITY great SYSTEM "great-presentations.docbook">
+  <!ENTITY menus SYSTEM "menus.docbook">
+  <!ENTITY options SYSTEM "options.docbook">
+  <!ENTITY % Dutch "INCLUDE"
+> <!-- change language only here -->
+]>
+
+<book id="stage" lang="&language;">
+<bookinfo>
+<title
+>Het handboek van &stage;</title>
+
+<authorgroup>
+<author
+>&Neil.Lucock; &Neil.Lucock.mail; </author>
+
+<author
+>&Krishna.Tateneni; &Krishna.Tateneni.mail; </author>
+
+<author
+>&Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail; </author>
+
+<author
+><personname
+> <firstname
+>Gary</firstname
+> <surname
+>Cramblitt</surname
+> </personname
+> <email
+>garycramblitt@comcast.net</email
+> </author>
+
+<othercredit role="translator"
+><firstname
+>Natalie</firstname
+> <surname
+>Koning</surname
+><affiliation
+><address
+> <email
+>nat@switch.demon.nl</email
+></address
+></affiliation
+> <contrib
+>Vertaler</contrib
+></othercredit
+> 
+</authorgroup>
+
+<date
+>2012-12-09</date>
+<releaseinfo
+>2.6</releaseinfo>
+
+<copyright>
+<year
+>1999</year
+><year
+>2000</year>
+<holder
+>&Krishna.Tateneni;</holder>
+</copyright>
+
+<copyright>
+<year
+>2001</year
+><year
+>2002</year>
+<holder
+>&Neil.Lucock;</holder>
+</copyright>
+
+<copyright>
+<year
+>2005</year>
+<holder
+>&Anne-Marie.Mahfouf;</holder>
+</copyright>
+
+<copyright>
+<year
+>2006</year>
+<holder
+>Gary Cramblitt</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<abstract>
+<para
+>&stage; is het presentatieprogramma van het &calligra; productiviteitssuite. </para>
+</abstract>
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Stage</keyword>
+<keyword
+>Calligra</keyword>
+<keyword
+>Afbeeldingen</keyword>
+<keyword
+>Presentaties</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title
+>Inleiding</title>
+
+<important
+> <para
+>De nieuwste versie van dit document kunt u altijd vinden op <ulink url="http://docs.kde.org/en/calligra/stage/index.html"
+>http://docs.kde.org</ulink
+>.</para
+></important>
+
+<para
+>&stage; is het presentatieprogramma van het &calligra;-pakket Met &stage; kunt u een diapresentatie creëren die op het scherm getoond of die afgedrukt kan worden. De dia's kunnen tekst en afbeeldingen in verschillende bestandstypen bevatten, bovendien kunt u allerlei objecten inbedden met behulp van KParts. </para>
+
+<para
+>Het &calligra;-pakket bestaat uit een aantal toepassingen die ontworpen zijn om met elkaar samen te werken. Zowel algemene documentatie voor &calligra; als handboeken voor de aparte onderdelen van het pakket zijn beschikbaar. Enkele componenten van &calligra; zijn: </para>
+
+<itemizedlist>
+<listitem>
+<para
+>&words; een tekstverwerker die gebaseerd is op frames. </para>
+</listitem>
+
+<listitem
+><para
+>&tables; een rekenbladprogramma. </para>
+</listitem>
+
+</itemizedlist>
+
+<para
+>&calligra; is een vrij-verkrijgbaar (of open source) software-project dat beschikbaar is onder de voorwaarden van de &GNU; General Public License. </para>
+
+</chapter>
+
+&tutorial;
+
+&guides;
+
+&great;
+
+&menus;
+
+&options;
+
+<chapter id="credits">
+<title
+>Dankbetuigingen en licentie</title>
+
+<para
+>&stage; </para>
+
+<para
+>Programma copyright 1998-2000 Reginald Stadlbauer <email
+>reggie@kde.org</email
+> </para>
+
+<para
+>De huidige onderhouder is Laurent Montel <email
+>montel@kde.org</email
+>. </para>
+
+
+<itemizedlist>
+<title
+>Met dank aan:</title>
+
+<listitem>
+<para
+>Werner Trobin <email
+>trobin@kde.org</email
+>. </para>
+</listitem>
+
+<listitem>
+<para
+>&David.Faure; &David.Faure.mail; </para>
+</listitem>
+
+<listitem>
+<para
+>Toshitaka Fujioka <email
+>fujioka@kde.org</email
+> </para>
+</listitem>
+
+<listitem>
+<para
+>Luk&aacute;&scaron; Tinkl <email
+>lukas@kde.org</email
+> </para>
+</listitem>
+
+<listitem>
+<para
+>&Thorsten.Zachmann; &Thorsten.Zachmann.mail; </para>
+</listitem>
+
+<listitem>
+<para
+>Ariya Hidayat <email
+>ariya@kde.org</email
+> </para>
+</listitem>
+
+<listitem>
+<para
+>Percy Leonhardt <email
+>percy@eris23.de</email
+> </para>
+</listitem>
+</itemizedlist>
+
+<para
+>Documentatie gebaseerd op het werk copyright 1999-2000 door &Krishna.Tateneni; . Gedeelten copyright 2000-2002 &Neil.Lucock; &Neil.Lucock.mail; en 2005 &Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail; </para>
+
+<para
+>Dit document is vertaald in het Nederlands door <othercredit role="translator"
+><firstname
+>Natalie</firstname
+> <surname
+>Koning</surname
+><affiliation
+><address
+> <email
+>nat@switch.demon.nl</email
+></address
+></affiliation
+> <contrib
+>Vertaler</contrib
+></othercredit
+>.</para
+> &underFDL; &underGPL; </chapter>
+
+&documentation.index; 
+
+</book>
+

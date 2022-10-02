@@ -1,0 +1,323 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY kappname "&kspread;">
+  <!ENTITY package "koffice">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Russian "INCLUDE">
+  <!ENTITY basics SYSTEM "basics.docbook">
+  <!ENTITY format SYSTEM "format.docbook">
+  <!ENTITY advanced SYSTEM "advanced.docbook">
+  <!ENTITY importexport SYSTEM "importexport.docbook">
+  <!ENTITY config SYSTEM "config.docbook">
+  <!ENTITY configdialog SYSTEM "configdialog.docbook">
+  <!ENTITY a11y SYSTEM "a11y.docbook">
+  <!ENTITY commands SYSTEM "commands.docbook">
+  <!ENTITY faq SYSTEM "faq.docbook">
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title
+>Руководство по &kspread;</title>
+
+<!-- MAINTAINED BY raphael.langerhorst@kdemail.net -->
+
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Roberts</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Gary</firstname
+> <surname
+>Cramblitt</surname
+> <affiliation
+> <address
+><email
+>garycramblitt@comcast.net</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Андрей</firstname
+> <surname
+>Черепанов</surname
+> <affiliation
+><address
+><email
+>sibskull@mail.ru</email
+></address
+></affiliation
+><contrib
+>Перевод на русский</contrib
+></othercredit
+> 
+</authorgroup>
+
+<copyright>
+<year
+>2002</year>
+<holder
+>Pamela Roberts</holder>
+</copyright>
+
+<copyright>
+<year
+>2005</year>
+<holder
+>Anne-Marie Mahfouf</holder>
+</copyright>
+
+<copyright>
+<year
+>2006</year>
+<holder
+>Gary Cramblitt</holder>
+</copyright>
+
+<!-- Translators: put here the copyright notice of the translation -->
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>2006-06-12</date>
+<releaseinfo
+>1.5.2</releaseinfo>
+
+
+<abstract>
+<para
+>&kspread; является полнофункциональной программой для работы с электронными таблицами. </para>
+</abstract>
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>KOffice</keyword>
+<keyword
+>KSpread</keyword>
+<keyword
+>Электронная таблица</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title
+>Введение</title>
+
+<para
+>Это руководство посвящается светлой памяти <ulink url="http://www.bricklin.com/visicalc.htm"
+>Visicalc.</ulink
+></para>
+<para
+>&kspread; -- полноценная программа работы с электронными таблицами. Она является частью &koffice; - пакета офисных приложений для KDE.</para>
+<para
+>Помимо &kspread;, в &koffice; входят &kword;, (текстовый процессор), &kpresenter; (программа подготовки презентаций) и &kchart; (генератор диаграмм и графиков).</para>
+
+<para
+>На сайте <ulink url="http://www.kde.org"
+> http://www.kde.org</ulink
+> вы можете получить общую информацию о &kde;, а о &koffice; на сайте <ulink url="http://www.koffice.org" 
+>http://www.koffice.org</ulink
+>.</para>
+
+</chapter>
+
+&basics;
+
+&format;
+
+&advanced;
+
+&config;
+
+&configdialog;
+
+&a11y;
+
+&commands;
+
+&faq;
+
+<chapter id="credits">
+
+<title
+>Благодарности и лицензия</title>
+
+<para
+>&kspread; </para>
+<para
+>&copy; 1998-2002 Команда KSpread: </para>
+<para>
+<itemizedlist>
+<listitem
+><para
+>Торбен Вайс (Torben Weis) <email
+>weis@kde.org</email
+></para>
+</listitem>
+<listitem
+><para
+>Лоран Монтель (Laurent Montel) <email
+>lmontel@mandrakesoft.com</email
+></para>
+</listitem>
+<listitem
+><para
+>Дэвид Фаур (David Faure) <email
+>faure@kde.org</email
+></para>
+</listitem>
+<listitem
+><para
+>Джон Дейли (John Dailey) <email
+>dailey@vt.edu</email
+></para>
+</listitem>
+<listitem
+><para
+>Филипп Мюллер (Philipp Müller) <email
+>philipp.mueller@gmx.de</email
+></para>
+</listitem>
+<listitem
+><para
+>Ария Хидаят (Ariya Hidayat) <email
+>ariya@kde.org</email
+></para>
+</listitem>
+<listitem
+><para
+>Норберт Андре (Norbert Andres) <email
+>nandres@web.de</email
+></para>
+</listitem>
+<listitem
+><para
+>Шахид Хак (Shaheed Haque) <email
+>srhaque@iee.org</email
+></para>
+</listitem>
+<listitem
+><para
+>Вернер Тробин (Werner Trobin) <email
+>trobin@kde.org</email
+></para>
+</listitem>
+<listitem
+><para
+>Николас Зиммерман (Nikolas Zimmerman) <email
+>wildfox@kde.org</email
+></para>
+</listitem>
+<listitem
+><para
+>Хельге Деллер (Helge Deller) <email
+>deller@gmx.de</email
+></para>
+</listitem>
+<listitem
+><para
+>Перси Леонгарт (Percy Leonhart) <email
+>percy@eris23.org</email
+></para>
+</listitem>
+<listitem
+><para
+>Эва Бручерзайвер (Eva Brucherseifer) <email
+>eva@kde.org</email
+></para>
+</listitem>
+<listitem
+><para
+>Филлип Эзольт (Phillip Ezolt) <email
+>phillipezolt@hotmail.com</email
+></para>
+</listitem>
+<listitem
+><para
+>Энно Бартелс (Enno Bartels) <email
+>ebartels@nwn.de</email
+></para>
+</listitem>
+<listitem
+><para
+>Грэхам Шорт (Graham Short) <email
+>grahshrt@netscape.net</email
+></para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para
+>Документация &copy; 2002 Памела Робертс (Pamela Roberts) <email
+>pamroberts@blueyonder.co.uk</email
+> </para>
+
+<para
+>Небольшие доработки документации для &koffice; 1.3 - Филип Родригес (&Philip.Rodrigues;) &Philip.Rodrigues.mail;.</para>
+<para
+>Перевод: Андрей Черепанов <email
+>sibskull@mail.ru</email
+>, Иван Петров <email
+>pis00593@udmglzs.udmene.ru</email
+>, Пётр Скляр <email
+>deusextranslation@rambler.ru</email
+></para
+> 
+&underFDL; &underGPL; </chapter>
+
+<appendix id="installation">
+<title
+>Установка</title>
+
+<para
+>&kspread; является частью пакета &koffice; и использует его библиотеки. &koffice;, в свою очередь, является частью &kde; и зависит от его библиотек.</para>
+<para
+>Для подробностей обратитесь к <ulink url="http://www.kde.org"
+>http://www.kde.org</ulink
+> и <ulink url="http://www.koffice.org"
+>http://www.koffice.org</ulink
+>.</para>
+
+</appendix>
+
+&documentation.index;
+</book>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->
+

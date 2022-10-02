@@ -1,0 +1,2196 @@
+# translation of karbon.po to greek
+# translation of karbon.po to
+#
+# Yannis Kollias <jonnie_kgr@inMail24.com>, 2005.
+# Spiros Georgaras <sng@hellug.gr>, 2005, 2006, 2007, 2008.
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2006, 2007, 2008, 2009.
+# Spiros Georgaras <sngeorgaras@otenet.gr>, 2008.
+# Petros <pvidalis@gmail.com>, 2009.
+# Stelios <sstavra@gmail.com>, 2011, 2017.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2017-04-28 23:17+0200\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr "Δυαδική λειτουργία"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "Σει&ρά"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "&Στοίχιση"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, kde-format
+msgid "&File"
+msgstr "&Αρχείο"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr "&Επεξεργασία"
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr "&Προβολή"
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "Α&ντικείμενο"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, kde-format
+msgid "&Distribute"
+msgstr "&Κατανομή"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, kde-format
+msgid "&Path"
+msgstr "&Διαδρομή"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, kde-format
+msgid "Effe&cts"
+msgstr "&Εφέ"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, kde-format
+msgid "&Settings"
+msgstr "Ρ&υθμίσεις"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr "&Σελίδα"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr "Επεξεργασία"
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, kde-format
+msgid "Object"
+msgstr "Αντικείμενο"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, kde-format
+msgid "Align"
+msgstr "Στοίχιση"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "Εφέ"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, kde-format
+msgid "View"
+msgstr "Προβολή"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, kde-format
+msgid "&Flatten Path..."
+msgstr "&Εξομάλυνση διαδρομής..."
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, kde-format
+msgid "Flatten Path"
+msgstr "Εξομάλυνση διαδρομής"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, kde-format
+msgid "Properties"
+msgstr "Ιδιότητες"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, kde-format
+msgid "Flatness:"
+msgstr "Ομαλότητα:"
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "Εξομάλυνση διαδρομής"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr "Εκλέπτυνση διαδρομής"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, kde-format
+msgid "&Refine Path..."
+msgstr "Εκλέπ&τυνση διαδρομής..."
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, kde-format
+msgid "Refine Path"
+msgstr "Εκλέπτυνση διαδρομής"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, kde-format
+msgid "Subdivisions:"
+msgstr "Υποδιαιρέσεις:"
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr "Στρογγύλευση γωνιών"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, kde-format
+msgid "&Round Corners..."
+msgstr "Στ&ρογγύλευση γωνιών..."
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, kde-format
+msgid "Round Corners"
+msgstr "Στρογγύλευση γωνιών"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "Ακτίνα:"
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr "Δίνη & τράβηγμα"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "&Δίνη/τράβηγμα..."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, kde-format
+msgid "Whirl Pinch"
+msgstr "Δίνη τράβηγμα"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, kde-format
+msgid "Info"
+msgstr "Πληροφορίες"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr ""
+"Το αποτέλεσμα του εφέ δίνης τράβηγμα μπορεί να βελτιωθεί, κάνοντας από πριν "
+"αλλαγές στη διαδρομή."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "Γωνία:"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, kde-format
+msgid "Pinch:"
+msgstr "Τράβηγμα:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "Ανύψωση στρώματος"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "Βύθιση στρώματος"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, kde-format
+msgid "Configure"
+msgstr "Διαμόρφωση"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "Περιβάλλον"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "Διάφορα"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, kde-format
+msgid "Grid"
+msgstr "Πλέγμα"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Έγγραφο"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "Ρυθμίσεις εγγράφου"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Συγγραφέας"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr "Συγγραφέας"
+
+#: ui/KarbonAboutData.h:22
+#, kde-format
+msgid "Karbon"
+msgstr "Karbon"
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr "Μια εφαρμογή σχεδίασης διανυσματικών γραφικών."
+
+#: ui/KarbonAboutData.h:26
+#, kde-format
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr "(c) 2001-%1, οι προγραμματιστές του Karbon"
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr "Anthony Fieroni"
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr "Συντηρητής"
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr "Rob Buis"
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr "Tomislav Lukman"
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr "Benoît Vautrin"
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr "Jan Hambrecht"
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr "Διόρθωση σφαλμάτων και βελτιώσεις"
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr "Tim Beaulen"
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr "Διόρθωση σφαλμάτων"
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr "Alan Horkan"
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr "Χρήσιμες διορθώσεις και συμβουλές"
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Σπύρος Γεωργαράς,Τούσης Μανώλης,Stelios"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "sng@hellug.gr,manolis@koppermind.homelinux.org,sstavra@gmail.com"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "Εισαγωγή γραφικών"
+
+#: ui/KarbonView.cpp:346
+#, kde-format
+msgid "Choose Graphic to Add"
+msgstr "Επιλέξτε γραφικό για προσθήκη"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr "Αδυναμία φόρτωσης εικόνας."
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Import graphic"
+msgstr "Εισαγωγή γραφικού"
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr "Αδυναμία δημιουργίας σχήματος εικόνας."
+
+#: ui/KarbonView.cpp:612
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "Οριζόντια αντανάκλαση"
+
+#: ui/KarbonView.cpp:614
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "Κάθετη αντανάκλαση"
+
+#: ui/KarbonView.cpp:616
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "Οριζόντια και κάθετη αντανάκλαση"
+
+#: ui/KarbonView.cpp:671
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "Διαχωρισμός διαδρομών"
+
+#: ui/KarbonView.cpp:852
+#, kde-format
+msgid "Outline &Mode"
+msgstr "&Λειτουργία περιγράμματος"
+
+#: ui/KarbonView.cpp:860
+#, kde-format
+msgid "&Import Graphic..."
+msgstr "&Εισαγωγή γραφικού..."
+
+#: ui/KarbonView.cpp:864
+#, kde-format
+msgid "Edit Guides"
+msgstr "Επεξεργασία οδηγών"
+
+#: ui/KarbonView.cpp:870
+#, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "&Αντίγραφο"
+
+#: ui/KarbonView.cpp:875
+#, kde-format
+msgid "Distribute Center (Horizontal)"
+msgstr "Κατανομή στο κέντρο (οριζόντια)"
+
+#: ui/KarbonView.cpp:879
+#, kde-format
+msgid "Distribute Gaps (Horizontal)"
+msgstr "Κατανομή κενών (οριζόντια)"
+
+#: ui/KarbonView.cpp:883
+#, kde-format
+msgid "Distribute Left Borders"
+msgstr "Κατανομή αριστερών περιγραμμάτων"
+
+#: ui/KarbonView.cpp:887
+#, kde-format
+msgid "Distribute Right Borders"
+msgstr "Κατανομή δεξιών περιγραμμάτων"
+
+#: ui/KarbonView.cpp:891
+#, kde-format
+msgid "Distribute Center (Vertical)"
+msgstr "Κατανομή κεντρικά (κατακόρυφα)"
+
+#: ui/KarbonView.cpp:895
+#, kde-format
+msgid "Distribute Gaps (Vertical)"
+msgstr "Κατανομή κενών (κατακόρυφα)"
+
+#: ui/KarbonView.cpp:899
+#, kde-format
+msgid "Distribute Bottom Borders"
+msgstr "Κατανομή κάτω ορίων"
+
+#: ui/KarbonView.cpp:903
+#, kde-format
+msgid "Distribute Top Borders"
+msgstr "Κατανομή πάνω ορίων"
+
+#: ui/KarbonView.cpp:907
+#, kde-format
+msgid "Show Color Palette"
+msgstr "Εμφάνιση παλέτας χρωμάτων"
+
+#: ui/KarbonView.cpp:909
+#, kde-format
+msgid "Show or hide color palette"
+msgstr "Εμφάνιση ή απόκρυψη παλέτας χρωμάτων"
+
+#: ui/KarbonView.cpp:913
+#, kde-format
+msgid "&Clip Object"
+msgstr "Δέσμευση α&ντικειμένου"
+
+#: ui/KarbonView.cpp:917
+#, kde-format
+msgid "&Unclip Objects"
+msgstr "Απ&οδέσμευση αντικειμένων"
+
+#: ui/KarbonView.cpp:921
+#, kde-format
+msgid "Mirror Vertically"
+msgstr "Κάθετη αντανάκλαση"
+
+#: ui/KarbonView.cpp:925
+#, kde-format
+msgid "Mirror Horizontally"
+msgstr "Οριζόντια αντανάκλαση"
+
+#: ui/KarbonView.cpp:932
+#, kde-format
+msgid "&Close Path"
+msgstr "&Κλείσιμο διαδρομής"
+
+#: ui/KarbonView.cpp:938
+#, kde-format
+msgid "Com&bine Path"
+msgstr "Συν&δυασμός διαδρομής"
+
+#: ui/KarbonView.cpp:944
+#, kde-format
+msgid "Se&parate Path"
+msgstr "Δια&χωρισμός διαδρομής"
+
+#: ui/KarbonView.cpp:950
+#, kde-format
+msgid "Re&verse Path"
+msgstr "Αντιστ&ροφή διαδρομής"
+
+#: ui/KarbonView.cpp:956
+#, kde-format
+msgid "Intersect Paths"
+msgstr "Τομή διαδρομών"
+
+#: ui/KarbonView.cpp:962
+#, kde-format
+msgid "Subtract Paths"
+msgstr "Αφαίρεση διαδρομών"
+
+#: ui/KarbonView.cpp:968
+#, kde-format
+msgid "Unite Paths"
+msgstr "Ένωση διαδρομών"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr "Εξαίρεση διαδρομών"
+
+#: ui/KarbonView.cpp:980
+#, kde-format
+msgid "Snap Path to Grid"
+msgstr "Προσαρμογή διαδρομής στο πλέγμα"
+
+#: ui/KarbonView.cpp:988
+#, kde-format
+msgid "Zoom to Selection"
+msgstr "Εστίαση στην επιλογή"
+
+#: ui/KarbonView.cpp:992
+#, kde-format
+msgid "Zoom to Drawing"
+msgstr "Εστίαση στο σχέδιο"
+
+#: ui/KarbonZoomController.cpp:51
+#, kde-format
+msgid "Zoom"
+msgstr "Εστίαση"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, kde-format
+msgid "Show status bar:"
+msgstr "Εμφάνιση γραμμής κατάστασης:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr "Αριθμός πρόσφατων αρχείων:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr "Μέγεθος γραμματοσειράς παλέτας:"
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, kde-format
+msgid "Select palette"
+msgstr "Επιλογή παλέτας"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr "Πιέστε για εφαρμογή γεμίσματος στην επιλογή"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, kde-format
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "Κανένα"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr "Πιέστε για εφαρμογή της γραφής στην επιλογή"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr "Προσαρμοσμένη"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, kde-format
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "Καμία"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, kde-format
+msgid "Stroke:"
+msgstr "Ιχνογράφηση:"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, kde-format
+msgid "Fill:"
+msgstr "Γέμισμα:"
+
+#~ msgid "D&elete"
+#~ msgstr "Δ&ιαγραφή"
+
+#~ msgid "Layer view"
+#~ msgstr "Προβολή στρώματος"
+
+#~ msgid "Add a new layer"
+#~ msgstr "Προσθήκη νέου στρώματος"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "Ανύψωση επιλεγμένων αντικειμένων"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "Βύθιση επιλεγμένων αντικειμένων"
+
+#~ msgid "Minimal View"
+#~ msgstr "Ελάχιστη προβολή"
+
+#~ msgid "Detailed View"
+#~ msgstr "Λεπτομερής προβολή"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "Προβολή επισκόπησης"
+
+#~ msgid "View mode"
+#~ msgstr "Λειτουργία προβολής"
+
+#~ msgid "New Layer"
+#~ msgstr "Νέο στρώμα"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Εισαγάγετε το όνομα του νέου στρώματος:"
+
+#~ msgid "New layer"
+#~ msgstr "Νέο στρώμα"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Δημιουργία στρώματος"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Διαγραφή στρώματος"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr ""
+#~ "Αδυναμία διαγραφής όλων των στρωμάτων. Απαιτείται τουλάχιστον ένα στρώμα."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Σφάλμα διαγραφής στρωμάτων"
+
+#~ msgid "Layer"
+#~ msgstr "Στρώμα"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Ομάδα"
+
+#~ msgid "Shape"
+#~ msgstr "Σχήμα"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Ορατό"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Κλειδωμένο"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "δείκτης z"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Αδιαφάνεια"
+
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Με αποκόμματα"
+
+#~ msgid "no"
+#~ msgstr "όχι"
+
+#~ msgid "yes"
+#~ msgstr "ναι"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Αναδιάταξη σχημάτων"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Μη έγκυρο έγγραφο OASIS. Δε βρέθηκε ετικέτα office:body."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Μη έγκυρο έγγραφο OASIS. Δε βρέθηκε ετικέτα office:drawing."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Μη έγκυρο έγγραφο OASIS. Δε βρέθηκε ετικέτα draw:page."
+
+#~ msgid "Master Page"
+#~ msgstr "Κύρια σελίδα"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Εμφάνιση περιθωρίων σελίδας"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Εμφάνιση κανόνων"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Εμφάνιση ή απόκρυψη κανόνων"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Προσαρμογή στο πλέγμα"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "Προσαρμογή στο πλέγμα"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Ρύθμιση του Karbon..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "Σε&λιδοποίηση..."
+
+#~ msgid "Canvas color:"
+#~ msgstr "Χρώμα καμβά:"
+
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Χωρίς συντηρητή κατά τη διάθεση αυτής της έκδοσης. Η κοινότητα του "
+#~ "Calligra καλωσορίζει τους ενδιαφερόμενους να αναλάβουν τη συντήρηση."
+
+#, fuzzy
+#~| msgid "&Order"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Order"
+#~ msgstr "Σει&ρά"
+
+#, fuzzy
+#~| msgid "&Align"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Align"
+#~ msgstr "&Στοίχιση"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Αρχείο"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Επεξεργασία"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Προβολή"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Object"
+#~ msgstr "Α&ντικείμενο"
+
+#, fuzzy
+#~| msgid "&Distribute"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Distribute"
+#~ msgstr "&Κατανομή"
+
+#, fuzzy
+#~| msgid "&Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Path"
+#~ msgstr "&Διαδρομή"
+
+#, fuzzy
+#~| msgid "Effe&cts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effe&cts"
+#~ msgstr "&Εφέ"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Ρ&υθμίσεις"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Επεξεργασία"
+
+#, fuzzy
+#~| msgid "Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "Αντικείμενο"
+
+#, fuzzy
+#~| msgid "Align"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align"
+#~ msgstr "Στοίχιση"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Εφέ"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View"
+#~ msgstr "Προβολή"
+
+#, fuzzy
+#~| msgid "&Flatten Path..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Flatten Path..."
+#~ msgstr "&Εξομάλυνση διαδρομής..."
+
+#, fuzzy
+#~| msgid "Flatten Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten Path"
+#~ msgstr "Εξομάλυνση διαδρομής"
+
+#, fuzzy
+#~| msgid "Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Properties"
+#~ msgstr "Ιδιότητες"
+
+#, fuzzy
+#~| msgid "Flatness:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatness:"
+#~ msgstr "Ομαλότητα:"
+
+#, fuzzy
+#~| msgid "&Refine Path..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Refine Path..."
+#~ msgstr "Εκλέπ&τυνση διαδρομής..."
+
+#, fuzzy
+#~| msgid "Refine Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine Path"
+#~ msgstr "Εκλέπτυνση διαδρομής"
+
+#, fuzzy
+#~| msgid "Subdivisions:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subdivisions:"
+#~ msgstr "Υποδιαιρέσεις:"
+
+#, fuzzy
+#~| msgid "&Round Corners..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Round Corners..."
+#~ msgstr "Στ&ρογγύλευση γωνιών..."
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius:"
+#~ msgstr "Ακτίνα:"
+
+#, fuzzy
+#~| msgid "&Whirl/Pinch..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Δίνη/τράβηγμα..."
+
+#, fuzzy
+#~| msgid "Whirl Pinch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl Pinch"
+#~ msgstr "Δίνη τράβηγμα"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Info"
+#~ msgstr "Πληροφορίες"
+
+#, fuzzy
+#~| msgid ""
+#~| "The result of the Whirlpinch effect can be improved by refining the path "
+#~| "shape beforehand."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr ""
+#~ "Το αποτέλεσμα του εφέ δίνης τράβηγμα μπορεί να βελτιωθεί, κάνοντας από "
+#~ "πριν αλλαγές στη διαδρομή."
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Γωνία:"
+
+#, fuzzy
+#~| msgid "Pinch:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pinch:"
+#~ msgstr "Τράβηγμα:"
+
+#, fuzzy
+#~| msgid "Configure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Διαμόρφωση"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interface"
+#~ msgstr "Περιβάλλον"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Διάφορα"
+
+#, fuzzy
+#~| msgid "Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Πλέγμα"
+
+#, fuzzy
+#~| msgctxt "@title:tab Document settings page"
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Έγγραφο"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Ρυθμίσεις εγγράφου"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Συγγραφέας"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Συγγραφέας"
+
+#, fuzzy
+#~| msgid "Layer view"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer view"
+#~ msgstr "Προβολή στρώματος"
+
+#, fuzzy
+#~| msgid "Add a new layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new layer"
+#~ msgstr "Προσθήκη νέου στρώματος"
+
+#, fuzzy
+#~| msgid "Delete selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected objects"
+#~ msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+
+#, fuzzy
+#~| msgid "Raise selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise selected objects"
+#~ msgstr "Ανύψωση επιλεγμένων αντικειμένων"
+
+#, fuzzy
+#~| msgid "Lower selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower selected objects"
+#~ msgstr "Βύθιση επιλεγμένων αντικειμένων"
+
+#, fuzzy
+#~| msgid "Minimal View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minimal View"
+#~ msgstr "Ελάχιστη προβολή"
+
+#, fuzzy
+#~| msgid "Detailed View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Detailed View"
+#~ msgstr "Λεπτομερής προβολή"
+
+#, fuzzy
+#~| msgid "Thumbnail View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thumbnail View"
+#~ msgstr "Προβολή επισκόπησης"
+
+#, fuzzy
+#~| msgid "View mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View mode"
+#~ msgstr "Λειτουργία προβολής"
+
+#, fuzzy
+#~| msgid "New Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "Νέο στρώμα"
+
+#, fuzzy
+#~| msgid "Enter the name of the new layer:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Εισαγάγετε το όνομα του νέου στρώματος:"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New layer"
+#~ msgstr "Νέο στρώμα"
+
+#, fuzzy
+#~| msgid "Could not delete all layers. At least one layer is required."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr ""
+#~ "Αδυναμία διαγραφής όλων των στρωμάτων. Απαιτείται τουλάχιστον ένα στρώμα."
+
+#, fuzzy
+#~| msgid "Error deleting layers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error deleting layers"
+#~ msgstr "Σφάλμα διαγραφής στρωμάτων"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Στρώμα"
+
+#, fuzzy
+#~| msgctxt "A group of shapes"
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format) A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Ομάδα"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Σχήμα"
+
+#, fuzzy
+#~| msgctxt "Visibility state of the shape"
+#~| msgid "Visible"
+#~ msgctxt "(qtundo-format) Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Ορατό"
+
+#, fuzzy
+#~| msgctxt "Lock state of the shape"
+#~| msgid "Locked"
+#~ msgctxt "(qtundo-format) Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Κλειδωμένο"
+
+#, fuzzy
+#~| msgctxt "The z-index of the shape"
+#~| msgid "zIndex"
+#~ msgctxt "(qtundo-format) The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "δείκτης z"
+
+#, fuzzy
+#~| msgctxt "The opacity of the shape"
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format) The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Αδιαφάνεια"
+
+#, fuzzy
+#~| msgctxt "Clipped state of the shape"
+#~| msgid "Clipped"
+#~ msgctxt "(qtundo-format) Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Με αποκόμματα"
+
+#, fuzzy
+#~| msgid "no"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "no"
+#~ msgstr "όχι"
+
+#, fuzzy
+#~| msgid "yes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "yes"
+#~ msgstr "ναι"
+
+#, fuzzy
+#~| msgid "Karbon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#, fuzzy
+#~| msgid "A Vector Graphics Drawing Application."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "Μια εφαρμογή σχεδίασης διανυσματικών γραφικών."
+
+#, fuzzy
+#~| msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "(c) 2001-2013, οι προγραμματιστές του Karbon"
+
+#, fuzzy
+#~| msgid "Rob Buis"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#, fuzzy
+#~| msgid "Tomislav Lukman"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#, fuzzy
+#~| msgid "Benoît Vautrin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#, fuzzy
+#~| msgid "Jan Hambrecht"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#, fuzzy
+#~| msgid "Bug fixes and improvements"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Διόρθωση σφαλμάτων και βελτιώσεις"
+
+#, fuzzy
+#~| msgid "Peter Simonsson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#, fuzzy
+#~| msgid "Tim Beaulen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#, fuzzy
+#~| msgid "Boudewijn Rempt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#, fuzzy
+#~| msgid "Pierre Stirnweiss"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#, fuzzy
+#~| msgid "Inge Wallin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#, fuzzy
+#~| msgid "Bug fixes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes"
+#~ msgstr "Διόρθωση σφαλμάτων"
+
+#, fuzzy
+#~| msgid "Alan Horkan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#, fuzzy
+#~| msgid "Helpful patches and advice"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Χρήσιμες διορθώσεις και συμβουλές"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Σπύρος Γεωργαράς,Τούσης Μανώλης,Stelios"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sng@hellug.gr,manolis@koppermind.homelinux.org,sstavra@gmail.com"
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Μη έγκυρο έγγραφο OASIS. Δε βρέθηκε ετικέτα office:body."
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Μη έγκυρο έγγραφο OASIS. Δε βρέθηκε ετικέτα office:drawing."
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Μη έγκυρο έγγραφο OASIS. Δε βρέθηκε ετικέτα draw:page."
+
+#, fuzzy
+#~| msgid "Master Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page"
+#~ msgstr "Κύρια σελίδα"
+
+#, fuzzy
+#~| msgid "Choose Graphic to Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Επιλέξτε γραφικό για προσθήκη"
+
+#, fuzzy
+#~| msgid "Could not load image."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not load image."
+#~ msgstr "Αδυναμία φόρτωσης εικόνας."
+
+#, fuzzy
+#~| msgid "Import graphic"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import graphic"
+#~ msgstr "Εισαγωγή γραφικού"
+
+#, fuzzy
+#~| msgid "Could not create image shape."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not create image shape."
+#~ msgstr "Αδυναμία δημιουργίας σχήματος εικόνας."
+
+#, fuzzy
+#~| msgid "Outline &Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outline &Mode"
+#~ msgstr "&Λειτουργία περιγράμματος"
+
+#, fuzzy
+#~| msgid "Show Page Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Page Margins"
+#~ msgstr "Εμφάνιση περιθωρίων σελίδας"
+
+#, fuzzy
+#~| msgid "&Import Graphic..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Εισαγωγή γραφικού..."
+
+#, fuzzy
+#~| msgid "D&elete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "Δ&ιαγραφή"
+
+#, fuzzy
+#~| msgid "Edit Guides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Guides"
+#~ msgstr "Επεξεργασία οδηγών"
+
+#, fuzzy
+#~| msgctxt "Duplicate selection"
+#~| msgid "&Duplicate"
+#~ msgctxt "(qtundo-format) Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Αντίγραφο"
+
+#, fuzzy
+#~| msgid "Distribute Center (Horizontal)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Κατανομή στο κέντρο (οριζόντια)"
+
+#, fuzzy
+#~| msgid "Distribute Gaps (Horizontal)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Κατανομή κενών (οριζόντια)"
+
+#, fuzzy
+#~| msgid "Distribute Left Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Κατανομή αριστερών περιγραμμάτων"
+
+#, fuzzy
+#~| msgid "Distribute Right Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Κατανομή δεξιών περιγραμμάτων"
+
+#, fuzzy
+#~| msgid "Distribute Center (Vertical)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Κατανομή κεντρικά (κατακόρυφα)"
+
+#, fuzzy
+#~| msgid "Distribute Gaps (Vertical)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Κατανομή κενών (κατακόρυφα)"
+
+#, fuzzy
+#~| msgid "Distribute Bottom Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Κατανομή κάτω ορίων"
+
+#, fuzzy
+#~| msgid "Distribute Top Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Κατανομή πάνω ορίων"
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Εμφάνιση κανόνων"
+
+#, fuzzy
+#~| msgid "Shows or hides rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Εμφάνιση ή απόκρυψη κανόνων"
+
+#, fuzzy
+#~| msgid "Show Color Palette"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Color Palette"
+#~ msgstr "Εμφάνιση παλέτας χρωμάτων"
+
+#, fuzzy
+#~| msgid "Show or hide color palette"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show or hide color palette"
+#~ msgstr "Εμφάνιση ή απόκρυψη παλέτας χρωμάτων"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Προσαρμογή στο πλέγμα"
+
+#, fuzzy
+#~| msgid "Snaps to grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snaps to grid"
+#~ msgstr "Προσαρμογή στο πλέγμα"
+
+#, fuzzy
+#~| msgid "&Clip Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Clip Object"
+#~ msgstr "Δέσμευση α&ντικειμένου"
+
+#, fuzzy
+#~| msgid "&Unclip Objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Unclip Objects"
+#~ msgstr "Απ&οδέσμευση αντικειμένων"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Close Path"
+#~ msgstr "&Κλείσιμο διαδρομής"
+
+#, fuzzy
+#~| msgid "Com&bine Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Com&bine Path"
+#~ msgstr "Συν&δυασμός διαδρομής"
+
+#, fuzzy
+#~| msgid "Se&parate Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Se&parate Path"
+#~ msgstr "Δια&χωρισμός διαδρομής"
+
+#, fuzzy
+#~| msgid "Re&verse Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&verse Path"
+#~ msgstr "Αντιστ&ροφή διαδρομής"
+
+#, fuzzy
+#~| msgid "Intersect Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intersect Paths"
+#~ msgstr "Τομή διαδρομών"
+
+#, fuzzy
+#~| msgid "Subtract Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract Paths"
+#~ msgstr "Αφαίρεση διαδρομών"
+
+#, fuzzy
+#~| msgid "Unite Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unite Paths"
+#~ msgstr "Ένωση διαδρομών"
+
+#, fuzzy
+#~| msgid "Exclude Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exclude Paths"
+#~ msgstr "Εξαίρεση διαδρομών"
+
+#, fuzzy
+#~| msgid "Snap Path to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Προσαρμογή διαδρομής στο πλέγμα"
+
+#, fuzzy
+#~| msgid "Configure Karbon..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Karbon..."
+#~ msgstr "Ρύθμιση του Karbon..."
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page &Layout..."
+#~ msgstr "Σε&λιδοποίηση..."
+
+#, fuzzy
+#~| msgid "Zoom to Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Εστίαση στην επιλογή"
+
+#, fuzzy
+#~| msgid "Zoom to Drawing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Εστίαση στο σχέδιο"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "Εστίαση"
+
+#, fuzzy
+#~| msgid "Show status bar:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show status bar:"
+#~ msgstr "Εμφάνιση γραμμής κατάστασης:"
+
+#, fuzzy
+#~| msgid "Number of recent files:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of recent files:"
+#~ msgstr "Αριθμός πρόσφατων αρχείων:"
+
+#, fuzzy
+#~| msgid "Palette font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Palette font size:"
+#~ msgstr "Μέγεθος γραμματοσειράς παλέτας:"
+
+#, fuzzy
+#~| msgid "Canvas color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Canvas color:"
+#~ msgstr "Χρώμα καμβά:"
+
+#, fuzzy
+#~| msgid "Select palette"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select palette"
+#~ msgstr "Επιλογή παλέτας"
+
+#, fuzzy
+#~| msgid "Press to apply fill to selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "Πιέστε για εφαρμογή γεμίσματος στην επιλογή"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no fill"
+#~ msgid "None"
+#~ msgstr "Κανένα"
+
+#, fuzzy
+#~| msgid "Press to apply stroke to selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "Πιέστε για εφαρμογή της γραφής στην επιλογή"
+
+#, fuzzy
+#~| msgctxt "The style has a custom stroking"
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format) The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "Προσαρμοσμένη"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Κανένα"
+
+#, fuzzy
+#~| msgid "Stroke:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stroke:"
+#~ msgstr "Ιχνογράφηση:"
+
+#, fuzzy
+#~| msgid "Fill:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill:"
+#~ msgstr "Γέμισμα:"
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "Προσκαλείστε να συμμετέχετε με κάθε τρόπο."
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "Προβολή"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "Προβολή"
+
+#, fuzzy
+#~| msgid "Pencil tool"
+#~ msgid "Stencil Box"
+#~ msgstr "Εργαλείο μολυβιού"
+
+#, fuzzy
+#~| msgid "Group shapes"
+#~ msgid "More shapes"
+#~ msgstr "Ομαδοποίηση σχημάτων"
+
+#~ msgid "File to open"
+#~ msgstr "Αρχείο για άνοιγμα"
+
+#~ msgid "Blend"
+#~ msgstr "Μίξη"
+
+#~ msgid "Blend mode"
+#~ msgstr "Λειτουργία μίξης"
+
+#~ msgid "Normal"
+#~ msgstr "Κανονικό"
+
+#~ msgid "Multiply"
+#~ msgstr "Πολλαπλασίασε"
+
+#~ msgid "Screen"
+#~ msgstr "Οθόνη"
+
+#~ msgid "Darken"
+#~ msgstr "Σκίαση"
+
+#~ msgid "Lighten"
+#~ msgstr "Φωτισμός"
+
+#~ msgid "Gaussian blur"
+#~ msgstr "Gaussian blur"
+
+#~ msgid "Radius"
+#~ msgstr "Ακτίνα"
+
+#~ msgid "Color Matrix"
+#~ msgstr "Πίνακας χρωμάτων"
+
+#~ msgid "Apply color matrix"
+#~ msgstr "Εφαρμογή πίνακα χρωμάτων"
+
+#~ msgid "Saturate colors"
+#~ msgstr "Κορεσμός χρωμάτων"
+
+#~ msgid "Rotate hue"
+#~ msgstr "Περιστροφή απόχρωσης"
+
+#~ msgid "Luminance to alpha"
+#~ msgstr "Φίλτρο άλφα σύνθεσης από τιμές ακτινοβολίας"
+
+#~ msgid "Saturate value"
+#~ msgstr "Κορεσμός τιμής"
+
+#~ msgid "Angle"
+#~ msgstr "Γωνία"
+
+#~ msgid "Color matrix"
+#~ msgstr "Πίνακας χρωμάτων"
+
+#~ msgid "Component transfer"
+#~ msgstr "Μεταφορά συστατικού"
+
+#~ msgid "Function"
+#~ msgstr "Συνάρτηση"
+
+#~ msgid "Identity"
+#~ msgstr "Ταυτότητα"
+
+#~ msgid "Table"
+#~ msgstr "Πίνακας"
+
+#~ msgid "Discrete"
+#~ msgstr "Διακριτό"
+
+#~ msgid "Linear"
+#~ msgstr "Γραμμική"
+
+#~ msgid "Gamma"
+#~ msgstr "Γάμμα"
+
+#~ msgid "Values"
+#~ msgstr "Τιμές"
+
+#~ msgid "Slope"
+#~ msgstr "Κλίση"
+
+#~ msgid "Intercept"
+#~ msgstr "Σημείο τομής"
+
+#~ msgid "Amplitude"
+#~ msgstr "Πλάτος"
+
+#~ msgid "Exponent"
+#~ msgstr "Εκθέτης"
+
+#~ msgid "Offset"
+#~ msgstr "Μετατόπιση"
+
+#~ msgid "Composite"
+#~ msgstr "Σύνθετο"
+
+#~ msgid "Operation"
+#~ msgstr "Λειτουργία"
+
+#~ msgid "Convolve Matrix"
+#~ msgstr "Περιέλιξη πίνακα"
+
+#~ msgid "Duplicate"
+#~ msgstr "Αντίγραφο"
+
+#~ msgid "Wrap"
+#~ msgstr "Αναδίπλωση"
+
+#~ msgid "Edge mode:"
+#~ msgstr "Λειτουργία άκρων:"
+
+#~ msgid "Kernel size:"
+#~ msgstr "Μέγεθος πυρήνα:"
+
+#~ msgid "Target point:"
+#~ msgstr "Σημείο προορισμού:"
+
+#~ msgid "Divisor:"
+#~ msgstr "Διαιρέτης"
+
+#~ msgid "Bias:"
+#~ msgstr "Πόλωση:"
+
+#~ msgid "Preserve alpha"
+#~ msgstr "Διατήρηση άλφα"
+
+#~ msgid "Edit kernel"
+#~ msgstr "Επεξεργασία πυρήνα"
+
+#~ msgid "Flood fill"
+#~ msgstr "Κάλυψη χρώματος"
+
+#~ msgid "Flood color"
+#~ msgstr "Χρώμα κάλυψης"
+
+#~ msgid "Image"
+#~ msgstr "Εικόνα"
+
+#~ msgid "Select image..."
+#~ msgstr "Επιλογή εικόνας..."
+
+#~ msgid "Select image"
+#~ msgstr "Επιλογή εικόνας"
+
+#~ msgid "Merge"
+#~ msgstr "Συγχώνευση"
+
+#~ msgid "Morphology"
+#~ msgstr "Μορφολογία"
+
+#~ msgid "Erode"
+#~ msgstr "Διάβρωση"
+
+#~ msgid "Dilate"
+#~ msgstr "Διαστολή"
+
+#~ msgid "Operator:"
+#~ msgstr "Τελεστής:"
+
+#~ msgid "Radius x:"
+#~ msgstr "Ακτίνα x:"
+
+#~ msgid "Radius y:"
+#~ msgstr "Ακτίνα y:"
+
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgid "Target:"
+#~ msgstr "Προορισμός:"
+
+#~ msgid "Line"
+#~ msgstr "Γραμμή"
+
+#~ msgid "Fill"
+#~ msgstr "Γέμισμα"
+
+#~ msgid "Type:"
+#~ msgstr "Τύπος:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Γραμμική"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Ακτινική"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Κωνική"
+
+#~ msgid "Repeat:"
+#~ msgstr "Επανάληψη:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Καμία"
+
+#~ msgid "Reflect"
+#~ msgstr "Ανάκλαση"
+
+#~ msgid "Repeat"
+#~ msgstr "Επανάληψη"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Συνολική αδιαφάνεια:"
+
+#~ msgid "Color stop:"
+#~ msgstr "Τέλος χρώματος:"
+
+#~ msgid "Stop color."
+#~ msgstr "Διακοπή χρωματισμού."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Προσθήκη στις προκαθορισμένες διαβαθμίσεις"
+
+#~ msgid "Original"
+#~ msgstr "Αρχικό"
+
+#~ msgid "Tiled"
+#~ msgstr "Σε παράθεση"
+
+#~ msgid "Stretched"
+#~ msgstr "Σε έκταση"
+
+#~ msgid "Top Left"
+#~ msgstr "Πάνω αριστερά"
+
+#~ msgid "Top"
+#~ msgstr "Πάνω"
+
+#~ msgid "Top Right"
+#~ msgstr "Πάνω δεξιά"
+
+#~ msgid "Left"
+#~ msgstr "Αριστερά"
+
+#~ msgid "Center"
+#~ msgstr "Κέντρο"
+
+#~ msgid "Right"
+#~ msgstr "Δεξιά"
+
+#~ msgid "Bottom Left"
+#~ msgstr "Κάτω αριστερά"
+
+#~ msgid "Bottom"
+#~ msgstr "Κάτω"
+
+#~ msgid "Bottom Right"
+#~ msgstr "Κάτω δεξιά"
+
+#~ msgid "Stroke"
+#~ msgstr "Γραφή"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Απόκρυψη περιθωρίων σελίδας"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Απόκρυψη κανόνων"
+
+#~ msgid "Stop color:"
+#~ msgstr "Τελικό χρώμα:"
+
+#~ msgid "Tools"
+#~ msgstr "Εργαλεία"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Μετατόπιση αντιγραφής:"
+
+#~ msgid "Show Guides"
+#~ msgstr "Εμφάνιση οδηγών"
+
+#~ msgid "Shows or hides guides"
+#~ msgstr "Εμφάνιση ή απόκρυψη οδηγών"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Κανένα"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Συμπαγές"
+
+#~ msgid "Gradient"
+#~ msgstr "Διαβάθμιση"
+
+#~ msgid "Pattern"
+#~ msgstr "Μοτίβο"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Ζυγό-μονό γέμισμα"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Κυκλικό γέμισμα"
+
+#~ msgid "Units:"
+#~ msgstr "Μονάδες:"
+
+#~ msgid "Ungroup shapes"
+#~ msgstr "Αναίρεση ομαδοποίησης σχημάτων"
+
+#~ msgid "&Group Objects"
+#~ msgstr "Ο&μαδοποίηση αντικειμένων"
+
+#~ msgid "Show grid:"
+#~ msgstr "Εμφάνιση καννάβου:"
+
+#~ msgid "Snap to grid:"
+#~ msgstr "Προσαρμογή στον κάνναβο:"
+
+#~ msgid "Grid color:"
+#~ msgstr "Χρώμα καννάβου"
+
+#~ msgid "Spacing"
+#~ msgstr "Απόσταση"
+
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Κατακόρυφα:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Αυτόματη αποθήκευση (λεπτά):"
+
+#~ msgid "No auto save"
+#~ msgstr "Χωρίς αυτόματη αποθήκευση"
+
+#~ msgid "min"
+#~ msgstr "λεπτά"
+
+#~ msgid "Create backup file"
+#~ msgstr "Δημιουργία αντιγράφου ασφαλείας"
+
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Επιλέξτε μοτίβο για προσθήκη"
+
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Επιλέξτε διαβάθμιση για προσθήκη"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Pattern Size"
+#~ msgstr "Μοτίβο"
+
+#~ msgid "Drag to move gradient position."
+#~ msgstr "Σύρετε για τη μετακίνηση της θέσης διαβάθμισης."
+
+#~ msgid "Drag to move color stop. Double click to remove color stop."
+#~ msgstr ""
+#~ "Σύρετε για τη μετακίνηση της στάσης του χρώματος. Διπλό κλικ για την "
+#~ "αφαίρεση της στάσης του χρώματος."
+
+#~ msgid "Drag to move color stop."
+#~ msgstr "Σύρετε για τη μετακίνηση στάσης του χρώματος."
+
+#~ msgid "Drag to move gradient position. Double click to insert color stop."
+#~ msgstr ""
+#~ "Σύρετε και μετακινήστε τη θέση της διαβάθμισης. Διπλό κλικ για εισαγωγή "
+#~ "στάσης του χρώματος."
+
+#~ msgid "Edit Gradient"
+#~ msgstr "Επεξεργασία διαβάθμισης"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "Προκαθορισμένες διαβαθμίσεις"
+
+#~ msgid "Gradient tool"
+#~ msgstr "Εργαλείο διαβάθμισης"
+
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Εργαλείο επεξεργασίας διαβάθμισης"
+
+#~ msgid "Pattern tool"
+#~ msgstr "Εργαλείο μοτίβου"
+
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Εργαλείο επεξεργασίας μοτίβου"
+
+#~ msgid "Precision:"
+#~ msgstr "Ακρίβεια:"
+
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Ακατέργαστο"
+
+#~ msgid "Curve"
+#~ msgstr "Καμπύλη"
+
+#~ msgid "Straight"
+#~ msgstr "Ευθεία"
+
+#~ msgid "Optimize"
+#~ msgstr "Βελτιστοποίηση"
+
+#~ msgid "Exactness:"
+#~ msgstr "Συνέπεια:"
+
+#~ msgid "Combine angle:"
+#~ msgstr "Γωνία συνδυασμού:"
+
+#~ msgid "Freehand Path Drawing Tool"
+#~ msgstr "Εργαλείο ελεύθερης σχεδίασης διαδρομών"
+
+#~ msgid "A calligraphic shape"
+#~ msgstr "Ένα καλλιγραφικό σχήμα"
+
+#~ msgid "Calligraphic Shape"
+#~ msgstr "Καλλιγραφικό σχήμα"
+
+#~ msgid "Save profile as..."
+#~ msgstr "Αποθήκευση προφίλ ως..."
+
+#~ msgid "Remove profile"
+#~ msgstr "Αφαίρεση προφίλ"
+
+#~ msgid "&Follow selected path"
+#~ msgstr "&Ακολούθηση επιλεγμένης διαδρομής"
+
+#~ msgid "Use tablet &pressure"
+#~ msgstr "Χρήση &πίεσης γραφίδας"
+
+#~ msgid "Width:"
+#~ msgstr "Πλάτος:"
+
+#~ msgid "Thinning:"
+#~ msgstr "Λεπτότητα:"
+
+#~ msgid "Use tablet &angle"
+#~ msgstr "Χρήση &γωνίας γραφίδας"
+
+#~ msgid "Fixation:"
+#~ msgstr "Καθήλωση:"
+
+#~ msgid "Mass:"
+#~ msgstr "Μάζα:"
+
+#~ msgid "Drag:"
+#~ msgstr "Βραδύτητα:"
+
+#~ msgid "Current"
+#~ msgstr "Τρέχον"
+
+#~ msgid "Profile name"
+#~ msgstr "Όνομα προφίλ"
+
+#~ msgid "Please insert the name by which you want to save this profile:"
+#~ msgstr "Παρακαλώ εισάγετε ένα όνομα για την αποθήκευση αυτού του προφίλ:"
+
+#, fuzzy
+#~| msgid "Sorry, the name you entered is invalid!"
+#~ msgid "Sorry, the name you entered is invalid."
+#~ msgstr "Δυστυχώς, το όνομα που εισάγατε δεν είναι έγκυρο!"
+
+#, fuzzy
+#~| msgctxt "invalid profile name"
+#~| msgid "Invalid name!"
+#~ msgctxt "invalid profile name"
+#~ msgid "Invalid name."
+#~ msgstr "Μη έγκυρο όνομα!"
+
+#, fuzzy
+#~| msgid ""
+#~| "A profile with that name already exists!\n"
+#~| "Do you want to overwrite it?"
+#~ msgid ""
+#~ "A profile with that name already exists.\n"
+#~ "Do you want to overwrite it?"
+#~ msgstr ""
+#~ "Ένα προφίλ με αυτό το όνομα υπάρχει ήδη!\n"
+#~ " Επιθυμείτε την αντικατάστασή του;"
+
+#~ msgid "Mouse"
+#~ msgstr "Ποντίκι"
+
+#~ msgid "Graphics Pen"
+#~ msgstr "Γραφίδα"
+
+#~ msgid "Calligraphy: increase width"
+#~ msgstr "Καλλιγραφία: αύξηση πλάτους"
+
+#~ msgid "Calligraphy: decrease width"
+#~ msgstr "Καλλιγραφία: μείωση πλάτους"
+
+#~ msgid "Calligraphy: increase angle"
+#~ msgstr "Καλλιγραφία: αύξηση γωνίας"
+
+#~ msgid "Calligraphy: decrease angle"
+#~ msgstr "Καλλιγραφία: μείωση γωνίας"
+
+#~ msgid "Calligraphy tool"
+#~ msgstr "Εργαλείο καλλιγραφίας"
+
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Εργαλείο καλλιγραφίας"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "Μεταφορά &εμπρός"
+
+#~ msgid "&Raise"
+#~ msgstr "&Ανύψωση"
+
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "&Βύθιση"
+
+#~ msgid "Send to &Back"
+#~ msgstr "Αποστολή &πίσω"
+
+#~ msgid "Show Grid"
+#~ msgstr "Εμφάνιση καννάβου"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Απόκρυψη καννάβου"
+
+#~ msgid "Shows or hides grid"
+#~ msgstr "Εμφανίζει ή αποκρύπτει τον κάνναβο"
+
+#~ msgid "Align Left"
+#~ msgstr "Στοίχιση αριστερά"
+
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "Στοίχιση στο κέντρο (οριζόντια)"
+
+#~ msgid "Align Right"
+#~ msgstr "Στοίχιση δεξιά"
+
+#~ msgid "Align Top"
+#~ msgstr "Στοίχιση πάνω"
+
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Στοίχιση στο κέντρο (κατακόρυφα)"
+
+#~ msgid "Align Bottom"
+#~ msgstr "Στοίχιση κάτω"
+
+#~ msgid "Stop opacity:"
+#~ msgstr "Τελική αδιαφάνεια:"
+
+#~ msgid "Profile:"
+#~ msgstr "Προφίλ:"
+
+#~ msgid "Show details >>"
+#~ msgstr "Εμφάνιση λεπτομερειών >>"
+
+#~ msgid "Hide details <<"
+#~ msgstr "Απόκρυψη λεπτομερειών <<"

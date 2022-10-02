@@ -1,0 +1,333 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Юрій</firstname
+><surname
+>Чорноіван</surname
+><affiliation
+><address
+><email
+>yurchor@ukr.net</email
+></address
+></affiliation
+><contrib
+>Переклад українською</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Налаштовування &stage;</title>
+
+<sect1 id="configure-dialog">
+<title
+>Діалогове вікно «Налаштування Stage»</title>
+
+<sect2 id="configure-misc">
+<title
+>Інше</title>
+
+<screenshot>
+<screeninfo
+>Різне</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-misc.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Різне</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Одиниці</guilabel
+></term>
+<listitem
+><para
+>Виберіть типові одиниці для цього слайда.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Радіус елемента керування</guilabel
+></term>
+<listitem
+><para
+>Після позначення форми за допомогою типового інструмента (стрілочки) ви побачите жовту рамку з червоними квадратиками. Ці квадратики називаються елементами керування (ними можна скористатися для зміни розмірів, обертання тощо). Значення параметра «Радіус елемента керування» змінює розміри елементів керування. Більші елементи керування простіше захопити вказівником миші.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Радіус захоплення</guilabel
+></term>
+<listitem
+><para
+>За допомогою цього пункту ви можете визначити точність позиціювання вказівника миші під час клацання з метою позначення елемента керування.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Відступ вставлення</guilabel
+></term>
+<listitem
+><para
+>Цим пунктом можна буде скористатися, лише якщо не позначено пункт <guilabel
+>Вставляти під вказівником</guilabel
+>. Якщо ви копіюєте форму за допомогою клавіатурного скорочення <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+>, а потім вставляєте її за допомогою клавіатурного скорочення <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+>, причому робите це на місці, на якому вже розташовано форму, вставлену форму буде розташовано з вказаним відступом вниз і праворуч від поточної форми.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Вставляти під вказівником</guilabel
+></term>
+<listitem
+><para
+>Вимикає відступ під час вставляння: вставлену форму буде розташовано точно у точці, де розташовано вказівник миші.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-grid">
+<title
+>Ґратка</title>
+
+<screenshot>
+<screeninfo
+>Ґратка</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-grid.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Ґратка</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Ґратка</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Показати ґратку</guilabel
+></term>
+<listitem
+><para
+>Якщо буде позначено цей пункт, &stage; показуватиме пунктирну сітку з уявних горизонтальних і вертикальних ліній. Ви можете скористатися цими лініями для точнішого позиціювання об’єктів на слайді.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Чіплятися до ґратки</guilabel
+></term>
+<listitem
+><para
+>Якщо буде позначено цей пункт, під час перетягування або пересування об’єктів на слайді верхній лівий кут об’єкта <quote
+>прилипатиме</quote
+> або пересуватиметься до найближчої точки сітки.</para>
+<para
+>Це дещо обмежить ваші можливості щодо довільного розташування об’єктів на слайді, але також допоможе у точному вирівнюванні об’єктів. Подібне прилипання можна легко увімкнути або вимкнути за допомогою цього пункту, отже ви зможете скористатися перевагами обох методів розташування об’єктів на слайді.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Колір ґратки:</guilabel
+></term>
+<listitem
+><para
+>За допомогою цього пункту ви зможете змінити колір ґратки, який типово є чорним.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Інтервал</guilabel
+></title>
+<para
+>Ви можете вказати, що слід зберігати співвідношення між двома наведеними нижче параметрами встановленням такого вигляду піктограми: <inlinemediaobject
+><imageobject
+> <imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+>, або зробити два параметри незалежними встановленням такого вигляду піктограми: <inlinemediaobject
+><imageobject
+> <imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+>.</para>
+<varlistentry>
+<term
+><guilabel
+>Горизонтальний:</guilabel
+></term>
+<listitem
+><para
+>Встановлює проміжок у сантиметрах між двома точками на горизонтальній лінії ґратки. Типовим значенням є 0,5 сантиметри.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Вертикальний:</guilabel
+></term>
+<listitem
+><para
+>Встановлює проміжок у сантиметрах між двома точками на вертикальній лінії ґратки. Типовим значенням є 0,5 сантиметри.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-document">
+<title
+>Документ</title>
+
+<screenshot>
+<screeninfo
+>Документ</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-document.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Документ</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Параметри документа</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Інтервал автозбереження:</guilabel
+></term>
+<listitem
+><para
+>Цим пунктом ви можете скористатися для визначення частоти, з якою &stage; зберігатиме дані до тимчасового файла. Якщо ви вкажете у цьому пункті значення <guilabel
+>Без автозбереження</guilabel
+>, &stage; не виконуватиме спроб автоматичного збереження файла. Ви можете вказати проміжок часу між послідовними автоматичними збереженням у межах від 1 до 60 хвилин.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Створити резервний файл:</guilabel
+></term>
+<listitem
+><para
+>Якщо буде позначено цей пункт, програма створюватиме файл <filename
+>.&lt;назва&gt;.odp.autosave.odp</filename
+> у теці, де зберігається ваш файл. Цим резервним файлом можна буде скористатися у разі виникнення проблем. Резервний файл оновлюватиметься кожного разу, коли ви зберігатимете документ або коли документ зберігатиметься у режимі автоматичного збереження.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-author">
+<title
+>Автор</title>
+
+<screenshot>
+<screeninfo
+>Автор</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Документ</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Виберіть профіль автора для вашого документа. </para>
+<para
+>Додати новий профіль або вилучити поточний можна за допомогою кнопок, розташованих праворуч від спадного списку профілів. </para>
+</sect2>
+
+</sect1>
+
+</chapter>

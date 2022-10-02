@@ -1,0 +1,202 @@
+# Translation of calligra_textediting_thesaurus.po to Catalan
+# Copyright (C) 2002-2021 This_file_is_part_of_KDE
+# This file is distributed under the same license as the thesaurus_tool package.
+#
+# Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2005, 2006.
+# Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
+# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2010, 2012, 2015, 2016, 2017, 2020, 2021.
+# Rafael Carreras <rcarreras@caliu.cat>, 2008, 2010.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2021-11-06 19:40+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+
+#: Thesaurus.cpp:81
+#, kde-format
+msgid "(No match)"
+msgstr "(No s'ha trobat cap paraula)"
+
+#: Thesaurus.cpp:91
+#, kde-format
+msgid "&Search for:"
+msgstr "&Cerca a:"
+
+#: Thesaurus.cpp:94
+#, kde-format
+msgid "S&earch"
+msgstr "&Cerca"
+
+#: Thesaurus.cpp:101
+#, kde-format
+msgctxt "@action:button Go back to the previous word in history"
+msgid "Back"
+msgstr "Enrere"
+
+#: Thesaurus.cpp:105
+#, kde-format
+msgctxt "@action:button Go forward to the next word in history"
+msgid "Forward"
+msgstr "Endavant"
+
+#: Thesaurus.cpp:108
+#, kde-format
+msgid "Change Language..."
+msgstr "Canvia l'idioma..."
+
+#: Thesaurus.cpp:122
+#, kde-format
+msgid "&Thesaurus"
+msgstr "&Tesaurus"
+
+#: Thesaurus.cpp:126
+#, kde-format
+msgid "Synonyms"
+msgstr "Sinònims"
+
+#: Thesaurus.cpp:133
+#, kde-format
+msgid "More General Words"
+msgstr "Paraules més generals"
+
+#: Thesaurus.cpp:140
+#, kde-format
+msgid "More Specific Words"
+msgstr "Paraules més específiques"
+
+#: Thesaurus.cpp:170
+#, kde-format
+msgid "&Wordnet"
+msgstr "&Wordnet"
+
+#: Thesaurus.cpp:192
+#, kde-format
+msgid "&Replace with:"
+msgstr "&Substitueix per:"
+
+#: Thesaurus.cpp:255
+#, kde-format
+msgid "&Replace"
+msgstr "&Substitueix"
+
+#: Thesaurus.cpp:267
+#, kde-format
+msgid "Replace Word"
+msgstr "Substitueix la paraula"
+
+#: Thesaurus.cpp:295
+#, kde-format
+msgid "Related Words - %1"
+msgstr "Paraules relacionades - %1"
+
+#: Thesaurus.cpp:409
+#, kde-format
+msgid ""
+"The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+"select a thesaurus file."
+msgstr ""
+"No s'ha trobat el fitxer tesaurus «%1». Si us plau, useu «Canvia idioma...» "
+"per a escollir un fitxer tesaurus."
+
+#: Thesaurus.cpp:429
+#, kde-format
+msgid "<b>Error:</b> Failed to execute grep."
+msgstr "<b>Error:</b> No s'ha pogut executar el grep."
+
+#: Thesaurus.cpp:581
+#, kde-format
+msgid "Synonyms/Hypernyms - Ordered by Frequency"
+msgstr "Sinònims/Hiperònims - Ordenats per freqüència"
+
+#: Thesaurus.cpp:582
+#, kde-format
+msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+msgstr "Sinònims - Ordenats per similitud de sentit (només verbs)"
+
+#: Thesaurus.cpp:583
+#, kde-format
+msgid "Antonyms - Words with Opposite Meanings"
+msgstr "Antònims - Paraules que signifiquen el contrari"
+
+# skip-rule: t-sp_pu
+#: Thesaurus.cpp:584
+#, kde-format
+msgid "Hyponyms - ... is a (kind of) %1"
+msgstr "Hipònims - ...són un (tipus de) %1"
+
+#: Thesaurus.cpp:585
+#, kde-format
+msgid "Meronyms - %1 has a ..."
+msgstr "Merònims - %1 té un..."
+
+# skip-rule: t-sp_pu
+#: Thesaurus.cpp:587
+#, kde-format
+msgid "Holonyms - ... has a %1"
+msgstr "Holònims - ... té un %1"
+
+#: Thesaurus.cpp:588
+#, kde-format
+msgid "Attributes"
+msgstr "Atributs"
+
+#: Thesaurus.cpp:589
+#, kde-format
+msgid "Cause To (for some verbs only)"
+msgstr "Provoca (només per a alguns verbs)"
+
+#: Thesaurus.cpp:590
+#, kde-format
+msgid "Verb Entailment (for some verbs only)"
+msgstr "Vinculacions del verb (només per a alguns verbs)"
+
+#: Thesaurus.cpp:591
+#, kde-format
+msgid "Familiarity & Polysemy Count"
+msgstr "Familiaritat i grau de polisèmia"
+
+#: Thesaurus.cpp:593
+#, kde-format
+msgid "Verb Frames (examples of use)"
+msgstr "Estructura verbal (exemples d'ús)"
+
+#: Thesaurus.cpp:594
+#, kde-format
+msgid "List of Compound Words"
+msgstr "Llista de paraules compostes"
+
+#: Thesaurus.cpp:595
+#, kde-format
+msgid "Overview of Senses"
+msgstr "Resum de significats"
+
+#: Thesaurus.cpp:623
+#, kde-format
+msgid ""
+"<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+"installed on your computer if you want to use it, and 'wn' has to be in your "
+"PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+"\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+"English language."
+msgstr ""
+"<b>Error:</b> No s'ha pogut executar el programa WordNet «wn». El Wordnet ha "
+"d'estar instal·lat al vostre ordinador si voleu usar-lo i, a més a més, ha "
+"de ser a la variable d'entorn PATH. Podeu aconseguir el WordNet a <a href="
+"\"http://www.wordnet.princeton.edu/\">http://www.wordnet.princeton.edu/</a>. "
+"Cal tenir en compte que el WordNet només accepta l'anglès."
+
+#: Thesaurus.cpp:635
+#, kde-format
+msgid "No match for '%1'."
+msgstr "No s'ha trobat cap coincidència amb «%1»."

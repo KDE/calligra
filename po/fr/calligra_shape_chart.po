@@ -1,0 +1,3012 @@
+# translation of ChartShape.po to
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Mickael Sibelle <kimael@gmail.com>, 2010.
+# xavier <xavier.besnard@neuf.fr>, 2013, 2015, 2020, 2021.
+# Sophie ABBAD <abbadsophie@gmail.com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ChartShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2021-12-13 21:15+0100\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Generator: Lokalize 21.12.0\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Geoffray Levasseur, Matthieu Robin, Xavier Besnard"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+"geoffray.levasseurbrandin@numericable.fr, kde@macolu.org, xavier."
+"besnard@neuf.fr"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
+#: AxesConfigWidget.cpp:80 AxesConfigWidget.cpp:86 LegendConfigWidget.ui:33
+#, kde-format
+msgid "Start"
+msgstr "Début"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
+#: AxesConfigWidget.cpp:81 AxesConfigWidget.cpp:85 LegendConfigWidget.ui:43
+#, kde-format
+msgid "End"
+msgstr "Fin"
+
+#: AxesConfigWidget.cpp:83
+#, kde-format
+msgid "Near-axis"
+msgstr "Proche de l'axe"
+
+#: AxesConfigWidget.cpp:84
+#, kde-format
+msgid "Other-side"
+msgstr "Autre coté "
+
+#: AxesConfigWidget.cpp:253 AxesConfigWidget.cpp:261 ChartTool.cpp:994
+#: DataSetConfigWidget.cpp:353
+#, kde-format
+msgid "Axistitle"
+msgstr "Titre de l'axe"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShow)
+#: AxesConfigWidget.ui:45
+#, kde-format
+msgid "Show Axis"
+msgstr "Afficher l'axe"
+
+#. i18n: ectx: property (text), widget (QToolButton, axisScalingButton)
+#: AxesConfigWidget.ui:58
+#, kde-format
+msgid "Scale"
+msgstr "Échelle"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowLabels)
+#: AxesConfigWidget.ui:65
+#, kde-format
+msgid "Show Labels"
+msgstr "Afficher les libellés"
+
+#. i18n: ectx: property (text), widget (QToolButton, axisEditFontButton)
+#: AxesConfigWidget.ui:72
+#, kde-format
+msgid "Font"
+msgstr "Police"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
+#: AxesConfigWidget.ui:81
+#, kde-format
+msgid "Show Major Grid"
+msgstr "Afficher la grille principale"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowMinorGridLines)
+#: AxesConfigWidget.ui:88
+#, kde-format
+msgid "Show Minor Grid"
+msgstr "afficher la grille secondaire"
+
+#. i18n: ectx: property (text), widget (QLabel, barPropertiesLabel)
+#: AxesConfigWidget.ui:119
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"size:8pt; font-weight:600;\">Bar Properties</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"size:8pt; font-weight:600;\">Propriétés de barre</span></p></body></html>"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, explodeFactor)
+#. i18n: ectx: property (suffix), widget (QSpinBox, gapBetweenBars)
+#. i18n: ectx: property (suffix), widget (QSpinBox, gapBetweenSets)
+#: AxesConfigWidget.ui:132 AxesConfigWidget.ui:174 PieConfigWidget.ui:39
+#: widgets/RingConfigWidget.ui:147
+#, no-c-format, kde-format
+msgid "%"
+msgstr "%"
+
+#. i18n: ectx: property (text), widget (QLabel, gapBetweenSetsLabel)
+#: AxesConfigWidget.ui:154
+#, kde-format
+msgid "Gap Between Sets"
+msgstr "Espacement entre les séries"
+
+#. i18n: ectx: property (text), widget (QLabel, gapBetweenBarsLabel)
+#: AxesConfigWidget.ui:167
+#, kde-format
+msgid "Gap Between Bars"
+msgstr "Espacement entre les barres"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowTitle)
+#: AxesConfigWidget.ui:193
+#, kde-format
+msgid "Show Title"
+msgstr "Afficher le titre"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:201
+#, kde-format
+msgid "Primary X Axis"
+msgstr "Axe X principal"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:206 DataSetConfigWidget.ui:95
+#, kde-format
+msgid "Primary Y Axis"
+msgstr "Axe Y principal"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:211
+#, kde-format
+msgid "Secondary X Axis"
+msgstr "Axe X secondaire"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:216 DataSetConfigWidget.ui:100
+#, kde-format
+msgid "Secondary Y Axis"
+msgstr "Axe Y secondaire"
+
+#: ChartShape.cpp:311
+#, kde-format
+msgid ""
+"The plugin needed for displaying text labels in a chart is not available."
+msgstr ""
+"Le module externe nécessaire à l'affichage des étiquettes dans un diagramme "
+"est non disponible."
+
+#: ChartShape.cpp:312
+#, kde-format
+msgid "Plugin Missing"
+msgstr "Module externe manquant"
+
+#: ChartShape.cpp:316
+#, kde-format
+msgid ""
+"The plugin needed for displaying text labels is not compatible with the "
+"current version of the chart Flake shape."
+msgstr ""
+"Le module externe nécessaire à l'affichage des étiquettes est non compatible "
+"avec la version actuelle."
+
+#: ChartShape.cpp:317
+#, kde-format
+msgid "Plugin Incompatible"
+msgstr "Module externe incompatible"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showTitle)
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: ChartShape.cpp:335 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
+#, kde-format
+msgid "Title"
+msgstr "Titre"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showSubTitle)
+#: ChartShape.cpp:365 TitlesConfigWidget.ui:85
+#, kde-format
+msgid "Subtitle"
+msgstr "Sous-titre"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showFooter)
+#: ChartShape.cpp:395 TitlesConfigWidget.ui:126
+#, kde-format
+msgid "Footer"
+msgstr "Pied de page"
+
+#: ChartShape.cpp:787
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"Ce document contient un lien externe vers un document distant\n"
+"%1"
+
+#: ChartShape.cpp:788
+#, kde-format
+msgid "Confirmation Required"
+msgstr "Confirmation requise"
+
+#: ChartShape.cpp:788
+#, kde-format
+msgid "Download"
+msgstr "Télécharger"
+
+#: ChartShape.cpp:788
+#, kde-format
+msgid "Skip"
+msgstr "Ignorer"
+
+#: ChartShapeFactory.cpp:57
+#, kde-format
+msgid "Chart"
+msgstr "Diagramme"
+
+#: ChartShapeFactory.cpp:60
+#, kde-format
+msgid "Business charts"
+msgstr "Diagrammes d'organigramme"
+
+#: ChartShapeFactory.cpp:79 DataSetConfigWidget.cpp:202
+#: PlotAreaConfigWidget.cpp:236
+#, kde-format
+msgid "Bar Chart"
+msgstr "Histogramme"
+
+#: ChartShapeFactory.cpp:80
+#, kde-format
+msgid "Normal bar chart"
+msgstr "Histogramme standard"
+
+#: ChartShapeFactory.cpp:90
+#, kde-format
+msgid "Stacked Bar Chart"
+msgstr "Histogramme avec empilement"
+
+#: ChartShapeFactory.cpp:91
+#, kde-format
+msgid "Stacked bar chart"
+msgstr "Histogramme avec empilement"
+
+#: ChartShapeFactory.cpp:101
+#, kde-format
+msgid "Percent Bar Chart"
+msgstr "Histogramme en pourcentage"
+
+#: ChartShapeFactory.cpp:102
+#, kde-format
+msgid "Percent bar chart"
+msgstr "Histogramme en pourcentage"
+
+#: ChartShapeFactory.cpp:112 DataSetConfigWidget.cpp:207
+#: PlotAreaConfigWidget.cpp:242
+#, kde-format
+msgid "Line Chart"
+msgstr "Courbe"
+
+#: ChartShapeFactory.cpp:113
+#, kde-format
+msgid "Normal line chart"
+msgstr "Courbe standard"
+
+#: ChartShapeFactory.cpp:123
+#, kde-format
+msgid "Stacked Line Chart"
+msgstr "Diagramme de courbes empilées"
+
+#: ChartShapeFactory.cpp:124
+#, kde-format
+msgid "Stacked line chart"
+msgstr "Diagramme de courbes empilées"
+
+#: ChartShapeFactory.cpp:134
+#, kde-format
+msgid "Percent Line Chart"
+msgstr "Diagramme en lignes par pourcentage"
+
+#: ChartShapeFactory.cpp:135
+#, kde-format
+msgid "Percent line chart"
+msgstr "Diagramme en lignes par pourcentage"
+
+#: ChartShapeFactory.cpp:145 DataSetConfigWidget.cpp:212
+#: PlotAreaConfigWidget.cpp:248
+#, kde-format
+msgid "Area Chart"
+msgstr "Diagramme de zones"
+
+#: ChartShapeFactory.cpp:146
+#, kde-format
+msgid "Normal area chart"
+msgstr "Diagramme standard par surfaces"
+
+#: ChartShapeFactory.cpp:156
+#, kde-format
+msgid "Stacked Area Chart"
+msgstr "Diagramme par surfaces empilées"
+
+#: ChartShapeFactory.cpp:157
+#, kde-format
+msgid "Stacked area chart"
+msgstr "Diagramme par surfaces empilées"
+
+#: ChartShapeFactory.cpp:167
+#, kde-format
+msgid "Percent Area Chart"
+msgstr "Diagramme par surfaces en pourcentage"
+
+#: ChartShapeFactory.cpp:168
+#, kde-format
+msgid "Percent area chart"
+msgstr "Diagramme par surfaces en pourcentage"
+
+#: ChartShapeFactory.cpp:178 DataSetConfigWidget.cpp:217
+#: PlotAreaConfigWidget.cpp:256
+#, kde-format
+msgid "Pie Chart"
+msgstr "Camembert"
+
+#: ChartShapeFactory.cpp:179
+#, kde-format
+msgid "Pie chart"
+msgstr "Diagramme en secteurs"
+
+#: ChartShapeFactory.cpp:189 DataSetConfigWidget.cpp:218
+#: PlotAreaConfigWidget.cpp:257
+#, kde-format
+msgid "Ring Chart"
+msgstr "Diagramme en anneaux"
+
+#: ChartShapeFactory.cpp:190
+#, kde-format
+msgid "Ring chart"
+msgstr "Diagramme en anneau"
+
+#: ChartShapeFactory.cpp:200 DataSetConfigWidget.cpp:229
+#: PlotAreaConfigWidget.cpp:270
+#, kde-format
+msgid "Bubble Chart"
+msgstr "Diagramme en bulles"
+
+#: ChartShapeFactory.cpp:201
+#, kde-format
+msgid "Bubble chart"
+msgstr "Diagramme en bulles"
+
+#: ChartShapeFactory.cpp:211 DataSetConfigWidget.cpp:231
+#: PlotAreaConfigWidget.cpp:269
+#, kde-format
+msgid "Scatter Chart"
+msgstr "Nuage de points"
+
+#: ChartShapeFactory.cpp:212
+#, kde-format
+msgid "Scatter chart"
+msgstr "Diagramme en nuage de points"
+
+#: ChartShapeFactory.cpp:222
+#, kde-format
+msgid "Radar Chart"
+msgstr "Diagramme en radar"
+
+#: ChartShapeFactory.cpp:223
+#, kde-format
+msgid "Radar chart"
+msgstr "Diagramme en radar"
+
+#: ChartShapeFactory.cpp:233
+#, kde-format
+msgid "Filled Radar Chart"
+msgstr "Diagramme en radar avec remplissage"
+
+#: ChartShapeFactory.cpp:234
+#, kde-format
+msgid "Filled radar chart"
+msgstr "Diagramme en radar avec remplissage"
+
+#: ChartShapeFactory.cpp:244
+#, kde-format
+msgid "Candle Stick Stock Chart"
+msgstr "Diagramme boursier avec chandeliers"
+
+#: ChartShapeFactory.cpp:245
+#, kde-format
+msgid "Japanese candle stick stock chart"
+msgstr "Diagramme boursier avec chandeliers japonais"
+
+#: ChartShapeFactory.cpp:255
+#, kde-format
+msgid "OHLC Stock Chart"
+msgstr "Courbe boursière « Ouverture / Haut / Bas /Clôture »"
+
+#: ChartShapeFactory.cpp:256
+#, kde-format
+msgid "Open High Low Close stock chart"
+msgstr "Courbe boursière « Ouverture / Haut / Bas /Clôture »"
+
+#: ChartShapeFactory.cpp:266
+#, kde-format
+msgid "HLC Stock Chart"
+msgstr "Courbe boursière « Haut / Bas /Clôture »"
+
+#: ChartShapeFactory.cpp:267
+#, kde-format
+msgid "High Low Close stock chart"
+msgstr "Courbe boursière « Haut / Bas /Clôture »"
+
+#: ChartShapeFactory.cpp:364 ChartShapeFactory.cpp:550
+#: ChartShapeFactory.cpp:633
+#, kde-format
+msgid "January"
+msgstr "Janvier"
+
+#: ChartShapeFactory.cpp:365 ChartShapeFactory.cpp:551
+#: ChartShapeFactory.cpp:634
+#, kde-format
+msgid "July"
+msgstr "Juillet"
+
+#: ChartShapeFactory.cpp:366 ChartShapeFactory.cpp:552
+#: ChartShapeFactory.cpp:635
+#, kde-format
+msgid "December"
+msgstr "Décembre"
+
+#: ChartShapeFactory.cpp:369 ChartShapeFactory.cpp:370
+#: ChartShapeFactory.cpp:371 ChartShapeFactory.cpp:372
+#: ChartShapeFactory.cpp:555 ChartShapeFactory.cpp:556
+#: ChartShapeFactory.cpp:557 ChartShapeFactory.cpp:558
+#: ChartShapeFactory.cpp:638 ChartShapeFactory.cpp:639
+#: dialogs/BubbleDataEditor.cpp:67 dialogs/ScatterDataEditor.cpp:71
+#, kde-format
+msgid "Column %1"
+msgstr "Colonne %1"
+
+#: ChartShapeFactory.cpp:396
+#, kde-format
+msgid "Month"
+msgstr "Mois"
+
+#: ChartShapeFactory.cpp:398
+#, kde-format
+msgid "Growth in %"
+msgstr "Croissance en %"
+
+#: ChartShapeFactory.cpp:460
+#, kde-format
+msgid "Share A"
+msgstr "Partager A"
+
+#: ChartShapeFactory.cpp:461
+#, kde-format
+msgid "Share B"
+msgstr "Partager B"
+
+#: ChartShapeFactory.cpp:462
+#, kde-format
+msgid "Share C"
+msgstr "Partager C"
+
+#: ChartShapeFactory.cpp:465
+#, kde-format
+msgid "Open"
+msgstr "Ouvrir"
+
+#: ChartShapeFactory.cpp:466
+#, kde-format
+msgid "High"
+msgstr "Élevé"
+
+#: ChartShapeFactory.cpp:467
+#, kde-format
+msgid "Low"
+msgstr "Faible"
+
+#: ChartShapeFactory.cpp:468
+#, kde-format
+msgid "Close"
+msgstr "Fermer"
+
+#: ChartShapeFactory.cpp:583
+#, kde-format
+msgid "Growth"
+msgstr "Croissance"
+
+#: ChartTool.cpp:103
+#, kde-format
+msgid "Do something"
+msgstr "Faire quelque chose"
+
+#: ChartTool.cpp:108
+#, kde-format
+msgid "Do something else"
+msgstr "Faire quelque chose d'autre"
+
+#: ChartTool.cpp:277
+#, kde-format
+msgid "Titles"
+msgstr "Titres"
+
+#: ChartTool.cpp:292
+#, kde-format
+msgid "Legend"
+msgstr "Légende"
+
+#: ChartTool.cpp:312
+#, kde-format
+msgid "Plot Area"
+msgstr "Zone de tracé"
+
+#: ChartTool.cpp:1142
+msgctxt "(qtundo-format)"
+msgid "Show Legend"
+msgstr "Afficher une légende"
+
+#: ChartTool.cpp:1144
+msgctxt "(qtundo-format)"
+msgid "Hide Legend"
+msgstr "Masquer la légende"
+
+#: ChartToolFactory.cpp:29
+#, kde-format
+msgid "Chart editing"
+msgstr "Édition de diagrammes"
+
+#: commands/AddRemoveAxisCommand.cpp:37
+msgctxt "(qtundo-format)"
+msgid "Add Axis"
+msgstr "Ajouter un axe"
+
+#: commands/AddRemoveAxisCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Remove Axis"
+msgstr "Supprimer un axe"
+
+#: commands/AxisCommand.cpp:120
+msgctxt "(qtundo-format)"
+msgid "Show Axis Title"
+msgstr "Afficher la légende de l'axe"
+
+#: commands/AxisCommand.cpp:122
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Title"
+msgstr "Masquer la légende de l'axe"
+
+#: commands/AxisCommand.cpp:147
+msgctxt "(qtundo-format)"
+msgid "Show Axis"
+msgstr "Afficher un axe"
+
+#: commands/AxisCommand.cpp:149
+msgctxt "(qtundo-format)"
+msgid "Hide Axis"
+msgstr "Masquer un axe"
+
+#: commands/AxisCommand.cpp:158
+msgctxt "(qtundo-format)"
+msgid "Show Axis Labels"
+msgstr "Afficher les libellés d'un axe"
+
+#: commands/AxisCommand.cpp:160
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Labels"
+msgstr "Masquer les libellés d'un axe"
+
+#: commands/AxisCommand.cpp:169
+msgctxt "(qtundo-format)"
+msgid "Show Axis Major Gridlines"
+msgstr "Afficher le quadrillage principal de l'axe"
+
+#: commands/AxisCommand.cpp:171
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Major Gridlines"
+msgstr "Masquer le quadrillage principal de l'axe"
+
+#: commands/AxisCommand.cpp:180
+msgctxt "(qtundo-format)"
+msgid "Show Axis Minor Gridlines"
+msgstr "Afficher le quadrillage secondaire de l'axe"
+
+#: commands/AxisCommand.cpp:182
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Minor Gridlines"
+msgstr "Masquer le quadrillage secondaire de l'axe"
+
+#: commands/AxisCommand.cpp:191
+msgctxt "(qtundo-format)"
+msgid "Logarithmic Scaling"
+msgstr "Échelle logarithmique"
+
+#: commands/AxisCommand.cpp:193
+msgctxt "(qtundo-format)"
+msgid "Linear Scaling"
+msgstr "Échelle linéaire"
+
+#: commands/AxisCommand.cpp:201
+msgctxt "(qtundo-format)"
+msgid "Set Axis Step Width"
+msgstr "Définir le pas de la graduation :"
+
+#: commands/AxisCommand.cpp:208
+msgctxt "(qtundo-format)"
+msgid "Set Axis Substep Width"
+msgstr "Définir le pas de la sous-graduation :"
+
+#: commands/AxisCommand.cpp:216
+msgctxt "(qtundo-format)"
+msgid "Set Automatic Step Width"
+msgstr "Graduation automatique"
+
+#: commands/AxisCommand.cpp:218
+msgctxt "(qtundo-format)"
+msgid "Set Manual Step Width"
+msgstr "Graduation manuelle"
+
+#: commands/AxisCommand.cpp:227
+msgctxt "(qtundo-format)"
+msgid "Automatic Substep Width"
+msgstr "Pas de la sous-graduation automatique :"
+
+#: commands/AxisCommand.cpp:229
+msgctxt "(qtundo-format)"
+msgid "Manual Substep Width"
+msgstr "Pas de la sous-graduation manuelle :"
+
+#: commands/AxisCommand.cpp:237
+msgctxt "(qtundo-format)"
+msgid "Set Axis Label Font"
+msgstr "Définir la police de la légende de l'axe"
+
+#: commands/AxisCommand.cpp:243
+msgctxt "(qtundo-format)"
+msgid "Set Axis Position"
+msgstr "Définir la position d'un axe"
+
+#: commands/AxisCommand.cpp:264
+msgctxt "(qtundo-format)"
+msgid "Set Axis Labels Position"
+msgstr "Définir la position des libellés de l'axe"
+
+#: commands/ChartTextShapeCommand.cpp:36
+msgctxt "(qtundo-format)"
+msgid "Show Text Shape"
+msgstr "Afficher la forme du texte"
+
+#: commands/ChartTextShapeCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Hide Text Shape"
+msgstr "Masquer la forme du texte"
+
+#: commands/ChartTypeCommand.cpp:80
+msgctxt "(qtundo-format)"
+msgid "Normal Bar Chart"
+msgstr "Histogramme"
+
+#: commands/ChartTypeCommand.cpp:83
+msgctxt "(qtundo-format)"
+msgid "Stacked Bar Chart"
+msgstr "Histogramme (empilé)"
+
+#: commands/ChartTypeCommand.cpp:86
+msgctxt "(qtundo-format)"
+msgid "Percent Bar Chart"
+msgstr "Histogramme (pourcentages)"
+
+#: commands/ChartTypeCommand.cpp:95
+msgctxt "(qtundo-format)"
+msgid "Normal Line Chart"
+msgstr "Courbes"
+
+#: commands/ChartTypeCommand.cpp:98
+msgctxt "(qtundo-format)"
+msgid "Stacked Line Chart"
+msgstr "Courbes (empilées)"
+
+#: commands/ChartTypeCommand.cpp:101
+msgctxt "(qtundo-format)"
+msgid "Percent Line Chart"
+msgstr "Courbes (pourcentages)"
+
+#: commands/ChartTypeCommand.cpp:110
+msgctxt "(qtundo-format)"
+msgid "Normal Area Chart"
+msgstr "Diagramme de zones"
+
+#: commands/ChartTypeCommand.cpp:113
+msgctxt "(qtundo-format)"
+msgid "Stacked Area Chart"
+msgstr "Diagramme de zones (empilées)"
+
+#: commands/ChartTypeCommand.cpp:116
+msgctxt "(qtundo-format)"
+msgid "Percent Area Chart"
+msgstr "Diagramme de zones (pourcentages)"
+
+#: commands/ChartTypeCommand.cpp:123
+msgctxt "(qtundo-format)"
+msgid "Circle Chart"
+msgstr "Camembert"
+
+#: commands/ChartTypeCommand.cpp:126
+msgctxt "(qtundo-format)"
+msgid "Ring Chart"
+msgstr "Diagramme en anneaux"
+
+#: commands/ChartTypeCommand.cpp:129
+msgctxt "(qtundo-format)"
+msgid "Scatter Chart"
+msgstr "Nuage de points"
+
+#: commands/ChartTypeCommand.cpp:132
+msgctxt "(qtundo-format)"
+msgid "Radar Chart"
+msgstr "Radar, creux"
+
+#: commands/ChartTypeCommand.cpp:135
+msgctxt "(qtundo-format)"
+msgid "Filled Radar Chart"
+msgstr "Radar, plein"
+
+#: commands/ChartTypeCommand.cpp:138
+msgctxt "(qtundo-format)"
+msgid "Stock Chart"
+msgstr "Courbe financière"
+
+#: commands/ChartTypeCommand.cpp:141
+msgctxt "(qtundo-format)"
+msgid "Bubble Chart"
+msgstr "Diagramme en bulles"
+
+#: commands/ChartTypeCommand.cpp:144
+msgctxt "(qtundo-format)"
+msgid "Surface Chart"
+msgstr "Diagramme de surface"
+
+#: commands/ChartTypeCommand.cpp:147
+msgctxt "(qtundo-format)"
+msgid "Gantt Chart"
+msgstr "Diagramme de Gantt"
+
+#: commands/DatasetCommand.cpp:144
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Chart Type"
+msgstr "Définit le type de diagramme"
+
+#: commands/DatasetCommand.cpp:152
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Category"
+msgstr "Afficher la catégorie de la série de données"
+
+#: commands/DatasetCommand.cpp:154
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Category"
+msgstr "Masquer la catégorie"
+
+#: commands/DatasetCommand.cpp:163
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Number"
+msgstr "Afficher le numéro de la série de données"
+
+#: commands/DatasetCommand.cpp:165
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Number"
+msgstr "Masquer le numéro"
+
+#: commands/DatasetCommand.cpp:174
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Percent"
+msgstr "Afficher le pourcentage pour la série de données"
+
+#: commands/DatasetCommand.cpp:176
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Percent"
+msgstr "Masquer le pourcentage"
+
+#: commands/DatasetCommand.cpp:185
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Symbol"
+msgstr "Afficher le symbole pour la série de données"
+
+#: commands/DatasetCommand.cpp:187
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Symbol"
+msgstr "Masquer le symbole"
+
+#: commands/DatasetCommand.cpp:195
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Brush Color"
+msgstr "Définir la couleur du motif"
+
+#: commands/DatasetCommand.cpp:202
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Pen Color"
+msgstr "Définir la couleur"
+
+#: commands/DatasetCommand.cpp:211
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Marker"
+msgstr "Masquer le marqueur pour la série de données"
+
+#: commands/DatasetCommand.cpp:213
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Marker Symbol"
+msgstr "Afficher le symbole de marqueur pour la série de données"
+
+#: commands/DatasetCommand.cpp:221
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Axis"
+msgstr "Définir l'axe"
+
+#: commands/GapCommand.cpp:61
+msgctxt "(qtundo-format)"
+msgid "Set Gap Between Bars"
+msgstr "Définir l'espacement entre les barres"
+
+#: commands/GapCommand.cpp:68
+msgctxt "(qtundo-format)"
+msgid "Set Gap Between Sets"
+msgstr "Définir l'espacement entre séries"
+
+#: commands/LegendCommand.cpp:78
+msgctxt "(qtundo-format)"
+msgid "Set Legend Title"
+msgstr "Définir la légende"
+
+#: commands/LegendCommand.cpp:86
+msgctxt "(qtundo-format)"
+msgid "Set Legend Font"
+msgstr "Changer la police de la légende"
+
+#: commands/LegendCommand.cpp:93
+msgctxt "(qtundo-format)"
+msgid "Set Legend Font size"
+msgstr "Définir la taille de la police pour la légende"
+
+#: commands/LegendCommand.cpp:100
+msgctxt "(qtundo-format)"
+msgid "Set Legend Orientation"
+msgstr "Changer l'orientation de la légende"
+
+#: commands/PlotAreaCommand.cpp:59
+msgctxt "(qtundo-format)"
+msgid "Set Horizontal Bars"
+msgstr "Définir les barres horizontales"
+
+#: commands/PlotAreaCommand.cpp:61
+msgctxt "(qtundo-format)"
+msgid "Set Vertical Bars"
+msgstr "Définir les barres verticales"
+
+#: DataSet.cpp:262
+#, kde-format
+msgid "Series %1"
+msgstr "Séries %1"
+
+#: DataSetConfigWidget.cpp:196 PlotAreaConfigWidget.cpp:232
+#, kde-format
+msgid "Chart Type"
+msgstr "Type de diagramme"
+
+#: DataSetConfigWidget.cpp:203 DataSetConfigWidget.cpp:208
+#: DataSetConfigWidget.cpp:213 DataSetConfigWidget.cpp:221
+#: PlotAreaConfigWidget.cpp:237 PlotAreaConfigWidget.cpp:243
+#: PlotAreaConfigWidget.cpp:249 PlotAreaConfigWidget.cpp:263
+#, kde-format
+msgid "Normal"
+msgstr "Classique"
+
+#: DataSetConfigWidget.cpp:204 DataSetConfigWidget.cpp:209
+#: DataSetConfigWidget.cpp:214 PlotAreaConfigWidget.cpp:238
+#: PlotAreaConfigWidget.cpp:244 PlotAreaConfigWidget.cpp:250
+#, kde-format
+msgid "Stacked"
+msgstr "Empilé"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataPointShowPercent)
+#. i18n: ectx: property (text), widget (QCheckBox, datasetShowPercent)
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetShowPercent)
+#: DataSetConfigWidget.cpp:205 DataSetConfigWidget.cpp:210
+#: DataSetConfigWidget.cpp:215 DataSetConfigWidget.ui:245
+#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:239
+#: PlotAreaConfigWidget.cpp:245 PlotAreaConfigWidget.cpp:251
+#: widgets/RadarDataSetConfigWidget.ui:166 widgets/RingConfigWidget.ui:120
+#, kde-format
+msgid "Percent"
+msgstr "Pourcentage"
+
+#: DataSetConfigWidget.cpp:220 PlotAreaConfigWidget.cpp:262
+#, kde-format
+msgid "Polar Chart"
+msgstr "Diagramme polaire"
+
+#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:264
+#, kde-format
+msgid "Filled"
+msgstr "Rempli"
+
+#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:275
+#, kde-format
+msgid "Stock Chart"
+msgstr "Courbe financière"
+
+#: DataSetConfigWidget.cpp:225 PlotAreaConfigWidget.cpp:276
+#, kde-format
+msgid "Candlestick"
+msgstr "Chandelier"
+
+#: DataSetConfigWidget.cpp:226 PlotAreaConfigWidget.cpp:277
+#, kde-format
+msgid "OpenHighLowClose"
+msgstr "OpenHighLowClose"
+
+#: DataSetConfigWidget.cpp:227 PlotAreaConfigWidget.cpp:278
+#, kde-format
+msgid "HighLowClose"
+msgstr "HighLowClose"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: DataSetConfigWidget.cpp:245 DataSetConfigWidget.cpp:387
+#: dialogs/FormatErrorBarDialog.ui:89 widgets/RadarDataSetConfigWidget.cpp:84
+#: widgets/RadarDataSetConfigWidget.cpp:188
+#, kde-format
+msgid "None"
+msgstr "Aucun"
+
+#. i18n: ectx: property (text), widget (QCheckBox, automaticStepWidth)
+#. i18n: ectx: property (text), widget (QCheckBox, automaticSubStepWidth)
+#: DataSetConfigWidget.cpp:246 dialogs/AxisScalingDialog.ui:49
+#: dialogs/AxisScalingDialog.ui:85 widgets/RadarDataSetConfigWidget.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr "Automatique"
+
+#: DataSetConfigWidget.cpp:248 widgets/RadarDataSetConfigWidget.cpp:87
+#, kde-format
+msgid "Select"
+msgstr "Sélectionner"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerPositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerResize)
+#: DataSetConfigWidget.cpp:396 TitlesConfigWidget.ui:52
+#: TitlesConfigWidget.ui:66 TitlesConfigWidget.ui:93 TitlesConfigWidget.ui:107
+#: TitlesConfigWidget.ui:134 TitlesConfigWidget.ui:148
+#: widgets/RadarDataSetConfigWidget.cpp:197
+#, kde-format
+msgid "Auto"
+msgstr "Auto"
+
+#: DataSetConfigWidget.cpp:658 PlotAreaConfigWidget.cpp:638
+#: PlotAreaConfigWidget.cpp:689 PlotAreaConfigWidget.cpp:871
+#: widgets/RadarDataSetConfigWidget.cpp:303
+#, kde-format
+msgid "Data Set %1"
+msgstr "Série de données %1"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, dataSets)
+#: DataSetConfigWidget.ui:23 widgets/RadarDataSetConfigWidget.ui:21
+#, kde-format
+msgid "Select a data set"
+msgstr "Sélectionnez une série de données"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetHasChartType)
+#: DataSetConfigWidget.ui:33
+#, kde-format
+msgid "Use Plot Type"
+msgstr "Utiliser un type de tracé"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: DataSetConfigWidget.ui:78
+#, kde-format
+msgid "Attach To Axis"
+msgstr "Associer à un axe"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
+#: DataSetConfigWidget.ui:112 PieConfigWidget.ui:56
+#: widgets/RadarDataSetConfigWidget.ui:33 widgets/RingConfigWidget.ui:28
+#, kde-format
+msgid "Stroke"
+msgstr "Trait"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
+#: DataSetConfigWidget.ui:153 PieConfigWidget.ui:97
+#: widgets/RadarDataSetConfigWidget.ui:74 widgets/RingConfigWidget.ui:69
+#, kde-format
+msgid "Fill"
+msgstr "Remplir"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetMarkerLabel)
+#: DataSetConfigWidget.ui:201 PieConfigWidget.ui:145
+#: widgets/RadarDataSetConfigWidget.ui:122
+#, kde-format
+msgid "Marker"
+msgstr "Marqueur"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataPointShowCategory)
+#. i18n: ectx: property (text), widget (QCheckBox, datasetShowCategory)
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetShowCategory)
+#: DataSetConfigWidget.ui:231 dialogs/PieDataEditor.cpp:32
+#: PieConfigWidget.ui:175 widgets/RadarDataSetConfigWidget.ui:152
+#: widgets/RingConfigWidget.ui:106
+#, kde-format
+msgid "Category"
+msgstr "Catégorie"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataPointShowNumber)
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetShowNumber)
+#: DataSetConfigWidget.ui:238 PieConfigWidget.ui:182
+#: widgets/RadarDataSetConfigWidget.ui:159 widgets/RingConfigWidget.ui:113
+#, kde-format
+msgid "Number"
+msgstr "Nombre"
+
+#. i18n: ectx: property (text), widget (QCheckBox, datasetShowErrorBar)
+#: DataSetConfigWidget.ui:287
+#, kde-format
+msgid "Error Bars"
+msgstr "Barres d'erreurs"
+
+#. i18n: ectx: property (text), widget (QPushButton, insertRow)
+#. i18n: ectx: property (text), widget (QToolButton, formatErrorBar)
+#: DataSetConfigWidget.ui:312 dialogs/PieDataEditor.cpp:61
+#: dialogs/PieDataEditor.ui:33
+#, kde-format
+msgid "Insert"
+msgstr "Insérer"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, CellRegionDialog)
+#. i18n: ectx: property (windowTitle), widget (QDialog, AxisScalingDialog)
+#: dialogs/AxisScalingDialog.ui:13 dialogs/CellRegionDialog.ui:14
+#, kde-format
+msgid "Dialog"
+msgstr "Boîte de dialogue"
+
+#. i18n: ectx: property (text), widget (QCheckBox, logarithmicScaling)
+#: dialogs/AxisScalingDialog.ui:19
+#, kde-format
+msgid "Logarithmic Scaling"
+msgstr "Échelle logarithmique"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/AxisScalingDialog.ui:32
+#, kde-format
+msgid "Step Width:"
+msgstr "Pas de la graduation :"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/AxisScalingDialog.ui:65
+#, kde-format
+msgid "Substep Width:"
+msgstr "Pas de la sous-graduation :"
+
+#: dialogs/BubbleDataEditor.cpp:105
+#, kde-format
+msgid "Bubble Data Editor"
+msgstr "Éditeur de données en bulles"
+
+#: dialogs/BubbleDataEditor.cpp:111 dialogs/ScatterDataEditor.cpp:117
+#, kde-format
+msgid "Insert Column Before"
+msgstr "Insérer une colonne à gauche"
+
+#: dialogs/BubbleDataEditor.cpp:112 dialogs/ScatterDataEditor.cpp:118
+#, kde-format
+msgid "Insert Column After"
+msgstr "Insérer une colonne à droite"
+
+#: dialogs/BubbleDataEditor.cpp:113 dialogs/ScatterDataEditor.cpp:119
+#: dialogs/StockDataEditor.cpp:96
+#, kde-format
+msgid "Insert Row Above"
+msgstr "Insérer une ligne au-dessus"
+
+#: dialogs/BubbleDataEditor.cpp:114 dialogs/ScatterDataEditor.cpp:120
+#: dialogs/StockDataEditor.cpp:97
+#, kde-format
+msgid "Insert Row Below"
+msgstr "Insérer une ligne au-dessous"
+
+#. i18n: ectx: property (text), widget (QPushButton, deleteSelection)
+#: dialogs/BubbleDataEditor.cpp:115 dialogs/PieDataEditor.cpp:62
+#: dialogs/PieDataEditor.ui:46 dialogs/ScatterDataEditor.cpp:121
+#, kde-format
+msgid "Delete"
+msgstr "Supprimer"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ScatterDataEditor)
+#. i18n: ectx: property (windowTitle), widget (QWidget, BubbleDataEditor)
+#: dialogs/BubbleDataEditor.ui:26 dialogs/ScatterDataEditor.ui:26
+#, kde-format
+msgid "Bubbles Editor"
+msgstr "Éditeur de bulles"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnBefore)
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnLeft)
+#: dialogs/BubbleDataEditor.ui:39 dialogs/ChartTableEditor.ui:78
+#: dialogs/ScatterDataEditor.ui:39
+#, kde-format
+msgid "Insert data column before selected column"
+msgstr "Insérer une colonne de données avant la colonne sélectionnée"
+
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnBefore)
+#. i18n: ectx: property (text), widget (QToolButton, insertRowBelow)
+#. i18n: ectx: property (text), widget (QToolButton, insertRowAbove)
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnAfter)
+#. i18n: ectx: property (text), widget (QToolButton, deleteSelection)
+#. i18n: ectx: property (text), widget (QToolButton, addDataSetAfter)
+#. i18n: ectx: property (text), widget (QToolButton, addDataSetBefore)
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnLeft)
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnRight)
+#: dialogs/BubbleDataEditor.ui:42 dialogs/BubbleDataEditor.ui:62
+#: dialogs/BubbleDataEditor.ui:82 dialogs/BubbleDataEditor.ui:102
+#: dialogs/BubbleDataEditor.ui:122 dialogs/BubbleDataEditor.ui:215
+#: dialogs/BubbleDataEditor.ui:235 dialogs/ChartTableEditor.ui:55
+#: dialogs/ChartTableEditor.ui:68 dialogs/ChartTableEditor.ui:81
+#: dialogs/ChartTableEditor.ui:94 dialogs/ChartTableEditor.ui:107
+#: dialogs/ScatterDataEditor.ui:42 dialogs/ScatterDataEditor.ui:62
+#: dialogs/ScatterDataEditor.ui:82 dialogs/ScatterDataEditor.ui:102
+#: dialogs/ScatterDataEditor.ui:122 dialogs/ScatterDataEditor.ui:215
+#: dialogs/ScatterDataEditor.ui:235 dialogs/StockDataEditor.ui:42
+#: dialogs/StockDataEditor.ui:61 dialogs/StockDataEditor.ui:80
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertRowBelow)
+#: dialogs/BubbleDataEditor.ui:59 dialogs/ChartTableEditor.ui:52
+#: dialogs/ScatterDataEditor.ui:59 dialogs/StockDataEditor.ui:39
+#, kde-format
+msgid "Insert data row below selected row"
+msgstr "Insérer une ligne de données au dessus de la ligne sélectionnée."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertRowAbove)
+#: dialogs/BubbleDataEditor.ui:79 dialogs/ChartTableEditor.ui:65
+#: dialogs/ScatterDataEditor.ui:79 dialogs/StockDataEditor.ui:58
+#, kde-format
+msgid "Insert data row above selected row"
+msgstr "Insérer une ligne de données sous la ligne sélectionnée."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnAfter)
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnRight)
+#: dialogs/BubbleDataEditor.ui:99 dialogs/ChartTableEditor.ui:91
+#: dialogs/ScatterDataEditor.ui:99
+#, kde-format
+msgid "Insert data column after selected column"
+msgstr "Insérer une colonne de données après la colonne sélectionnée"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
+#: dialogs/BubbleDataEditor.ui:119 dialogs/ChartTableEditor.ui:104
+#: dialogs/ScatterDataEditor.ui:119
+#, kde-format
+msgid "Delete selection"
+msgstr "Supprimer la sélection"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, manualControl)
+#: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
+#, kde-format
+msgid "Manual control of data sets"
+msgstr "Contrôle manuel des séries de données"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerPositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerResize)
+#. i18n: ectx: property (text), widget (QCheckBox, manualControl)
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: dialogs/BubbleDataEditor.ui:182 dialogs/ScatterDataEditor.ui:182
+#: LegendConfigWidget.ui:92 TitlesConfigWidget.ui:57 TitlesConfigWidget.ui:71
+#: TitlesConfigWidget.ui:98 TitlesConfigWidget.ui:112 TitlesConfigWidget.ui:139
+#: TitlesConfigWidget.ui:153
+#, kde-format
+msgid "Manual"
+msgstr "Manuel"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, removeDataSet)
+#: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
+#, kde-format
+msgid "Remove data set"
+msgstr "Supprimer une série de données"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetAfter)
+#. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetBefore)
+#: dialogs/BubbleDataEditor.ui:212 dialogs/BubbleDataEditor.ui:232
+#: dialogs/ScatterDataEditor.ui:212 dialogs/ScatterDataEditor.ui:232
+#, kde-format
+msgid "Add data set after selected data set"
+msgstr "Ajouter une série de données après la série de données sélectionnée."
+
+#: dialogs/BubbleDataSetTableModel.cpp:103
+#: dialogs/ScatterDataSetTableModel.cpp:103
+#, kde-format
+msgid "Dataset Name"
+msgstr "Nom de la série de données"
+
+#: dialogs/BubbleDataSetTableModel.cpp:104
+#: dialogs/ScatterDataSetTableModel.cpp:104
+#, kde-format
+msgid "X-Values"
+msgstr "Valeurs en X"
+
+#: dialogs/BubbleDataSetTableModel.cpp:105
+#: dialogs/ScatterDataSetTableModel.cpp:105
+#, kde-format
+msgid "Y-Values"
+msgstr "Valeurs en Y"
+
+#: dialogs/BubbleDataSetTableModel.cpp:106
+#, kde-format
+msgid "Bubble Size"
+msgstr "Taille des bulles"
+
+#: dialogs/BubbleDataSetTableModel.cpp:146
+#: dialogs/ScatterDataSetTableModel.cpp:142
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Label: %1"
+msgstr "Libellé : %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:148
+#: dialogs/ScatterDataSetTableModel.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Default label: %1"
+msgstr "Libellé par défaut : %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:153
+#: dialogs/ScatterDataSetTableModel.cpp:149
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "X-Values cell region: %1"
+msgstr "Zone de cellules pour les valeurs en X : %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:155
+#: dialogs/BubbleDataSetTableModel.cpp:162
+#: dialogs/BubbleDataSetTableModel.cpp:169
+#: dialogs/ScatterDataSetTableModel.cpp:151
+#: dialogs/ScatterDataSetTableModel.cpp:158
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Default values used"
+msgstr "Valeurs par défaut utilisées"
+
+#: dialogs/BubbleDataSetTableModel.cpp:160
+#: dialogs/ScatterDataSetTableModel.cpp:156
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Y-Values cell region: %1"
+msgstr "Zone de cellules pour les valeurs en Y : %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:167
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Bubble size cell region: %1"
+msgstr "Taille de bulles pour les cellules de la zone : %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/CellRegionDialog.ui:49
+#, kde-format
+msgid "Y Values:"
+msgstr "Valeurs de Y :"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/CellRegionDialog.ui:59
+#, kde-format
+msgid "X Values:"
+msgstr "Valeurs de X :"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/CellRegionDialog.ui:72
+#, kde-format
+msgid "<b>Choose a Data Set</b>"
+msgstr "<b>Sélectionnez une série de données</b>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: dialogs/CellRegionDialog.ui:82
+#, kde-format
+msgid "Categories:"
+msgstr "Catégories :"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: dialogs/CellRegionDialog.ui:96
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-weight:600;\">Name:</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-weight:600;\">Nom :</span></p></body></html>"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ChartTableEditor)
+#: dialogs/ChartTableEditor.ui:14
+#, kde-format
+msgid "Data Editor"
+msgstr "Éditeur de données"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dataSetsInRows)
+#: dialogs/ChartTableEditor.ui:29
+#, kde-format
+msgid "&Data sets in rows"
+msgstr "Séries de &données en ligne"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dataSetsInColumns)
+#: dialogs/ChartTableEditor.ui:36
+#, kde-format
+msgid "Data sets in &columns"
+msgstr "Séries de données en &colonne"
+
+#: dialogs/FontEditorDialog.cpp:20
+#, kde-format
+msgid "Select Font"
+msgstr "Sélectionner une police"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, FormatErrorBarDialog)
+#: dialogs/FormatErrorBarDialog.ui:29
+#, kde-format
+msgid "Format Error Bars"
+msgstr "Mettre en forme les barres d'erreurs"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/FormatErrorBarDialog.ui:69
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Error Category</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"weight:600;\"></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Catégorie d'erreurs</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"weight:600;\"></p></body></html>"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:94
+#, kde-format
+msgid "Constant"
+msgstr "Constante"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:99
+#, kde-format
+msgid "Percentage"
+msgstr "Pourcentage"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:104
+#, kde-format
+msgid "Error Margin"
+msgstr "Marge d'erreurs"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:109
+#, kde-format
+msgid "Standard Deviation"
+msgstr "Écart type"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:114
+#, kde-format
+msgid "Variance"
+msgstr "Variance"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:119
+#, kde-format
+msgid "From Data table"
+msgstr "A partir de la table de données"
+
+#. i18n: ectx: property (text), widget (QLabel, valueLabel)
+#: dialogs/FormatErrorBarDialog.ui:144
+#, kde-format
+msgid "Positive "
+msgstr "Positif "
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QRadioButton, negIndicator)
+#: dialogs/FormatErrorBarDialog.ui:173 dialogs/FormatErrorBarDialog.ui:338
+#, kde-format
+msgid "Negative"
+msgstr "Négatif"
+
+#. i18n: ectx: property (text), widget (QCheckBox, sameValueForBoth)
+#: dialogs/FormatErrorBarDialog.ui:207
+#, kde-format
+msgid "Same for both"
+msgstr "Identique pour les deux"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/FormatErrorBarDialog.ui:226 dialogs/PieDataEditor.cpp:33
+#, kde-format
+msgid "Value"
+msgstr "Valeur"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, percentageValue)
+#: dialogs/FormatErrorBarDialog.ui:233
+#, no-c-format, kde-format
+msgid " %"
+msgstr "%"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/FormatErrorBarDialog.ui:303
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Error Indicator</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Indicateur d'erreurs</span></p></body></html>"
+
+#. i18n: ectx: property (text), widget (QRadioButton, posIndicator)
+#: dialogs/FormatErrorBarDialog.ui:325
+#, kde-format
+msgid "Positive"
+msgstr "Positif"
+
+#. i18n: ectx: property (text), widget (QRadioButton, posAndNegIndicator)
+#: dialogs/FormatErrorBarDialog.ui:351
+#, kde-format
+msgid "Both"
+msgstr "Les deux"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, NewAxisDialog)
+#: dialogs/NewAxisDialog.ui:20
+#, kde-format
+msgid "New Axis"
+msgstr "Nouvel axe"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dimensionIsX)
+#: dialogs/NewAxisDialog.ui:46
+#, kde-format
+msgctxt "Axis dimension"
+msgid "&X"
+msgstr "&X"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dimensionIsY)
+#: dialogs/NewAxisDialog.ui:56
+#, kde-format
+msgctxt "Axis dimension"
+msgid "&Y"
+msgstr "&Y"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/NewAxisDialog.ui:72
+#, kde-format
+msgid "Title:"
+msgstr "Titre :"
+
+#: dialogs/PieDataEditor.cpp:55
+#, kde-format
+msgid "Pie Data Editor"
+msgstr "Éditeur de secteurs de données"
+
+#. i18n: ectx: property (shortcut), widget (QPushButton, deleteSelection)
+#: dialogs/PieDataEditor.ui:52
+#, kde-format
+msgid "Del"
+msgstr "Suppr."
+
+#: dialogs/ScatterDataEditor.cpp:94 widgets/RingConfigWidget.cpp:101
+#, kde-format
+msgid "Row %1"
+msgstr "Ligne %1"
+
+#: dialogs/ScatterDataEditor.cpp:111
+#, kde-format
+msgid "Scatter Data Editor"
+msgstr "Éditeur de données en nuage de points"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
+#: dialogs/StockDataEditor.cpp:88 dialogs/StockDataEditor.ui:26
+#, kde-format
+msgid "Stock Data Editor"
+msgstr "Éditeur de données en format boursier"
+
+#: dialogs/StockDataEditor.cpp:98
+#, kde-format
+msgid "Delete Row"
+msgstr "Supprimer des lignes"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
+#: dialogs/StockDataEditor.ui:77
+#, kde-format
+msgid "Delete row"
+msgstr "Supprimer une ligne"
+
+#: dialogs/TableEditorDialog.cpp:58
+#, kde-format
+msgid "Insert Above"
+msgstr "Insérer au-dessus"
+
+#: dialogs/TableEditorDialog.cpp:59
+#, kde-format
+msgid "Insert Below"
+msgstr "Insérer au dessous"
+
+#: dialogs/TableEditorDialog.cpp:60
+#, kde-format
+msgid "Insert Before"
+msgstr "Insérer avant"
+
+#: dialogs/TableEditorDialog.cpp:61
+#, kde-format
+msgid "Insert After"
+msgstr "Insérer après"
+
+#: dialogs/TableEditorDialog.cpp:62
+#, kde-format
+msgid "Delete Selection"
+msgstr "Supprimer la sélection"
+
+#: dialogs/TableEditorDialog.cpp:169 dialogs/TableEditorDialog.cpp:193
+#, kde-format
+msgid "New Row"
+msgstr "Nouvelle ligne"
+
+#: dialogs/TableEditorDialog.cpp:217 dialogs/TableEditorDialog.cpp:241
+#, kde-format
+msgid "New Column"
+msgstr "Nouvelle colonne"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
+#: LegendConfigWidget.ui:19
+#, kde-format
+msgid "Vertical"
+msgstr "Vertical"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
+#: LegendConfigWidget.ui:24
+#, kde-format
+msgid "Horizontal"
+msgstr "Horizontal"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
+#: LegendConfigWidget.ui:38
+#, kde-format
+msgid "Center"
+msgstr "Centrer"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:52
+#, kde-format
+msgid "Right"
+msgstr "Droite"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:57
+#, kde-format
+msgid "Top"
+msgstr "Haut"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:62
+#, kde-format
+msgid "Bottom"
+msgstr "Bas"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:67
+#, kde-format
+msgid "Left"
+msgstr "Gauche"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:72
+#, kde-format
+msgid "Top-left"
+msgstr "En haut à gauche"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:77
+#, kde-format
+msgid "Top-right"
+msgstr "En haut à droite"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:82
+#, kde-format
+msgid "Bottom-left"
+msgstr "En bas à gauche"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:87
+#, kde-format
+msgid "Bottom-right"
+msgstr "En bas à droite"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: LegendConfigWidget.ui:100
+#, kde-format
+msgid "Position"
+msgstr "Position"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showLegend)
+#: LegendConfigWidget.ui:107
+#, kde-format
+msgid "Show Legend"
+msgstr "Afficher une légende"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: LegendConfigWidget.ui:130
+#, kde-format
+msgid "Orientation"
+msgstr "Orientation"
+
+#. i18n: ectx: property (text), widget (QPushButton, legendEditFontButton)
+#: LegendConfigWidget.ui:147
+#, kde-format
+msgid "Fonts..."
+msgstr "Polices..."
+
+#: PieConfigWidget.cpp:101
+#, kde-format
+msgid "Data Point %1"
+msgstr "Point de données %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
+#, kde-format
+msgid "E&xplode Factor"
+msgstr "Facteur de dispersion"
+
+#: PlotAreaConfigWidget.cpp:281
+#, kde-format
+msgid "Surface Chart"
+msgstr "Diagramme de surface"
+
+#: PlotAreaConfigWidget.cpp:283
+#, kde-format
+msgid "Gantt Chart"
+msgstr "Diagramme de Gantt"
+
+#. i18n: ectx: property (text), widget (QCheckBox, threeDLook)
+#: PlotAreaConfigWidget.ui:61
+#, kde-format
+msgid "3D"
+msgstr "3D"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
+#: PlotAreaConfigWidget.ui:69
+#, kde-format
+msgid "Vertical Bars"
+msgstr "Barres verticales"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
+#: PlotAreaConfigWidget.ui:74
+#, kde-format
+msgid "Horizontal Bars"
+msgstr "Barres horizontales"
+
+#. i18n: ectx: property (text), widget (QPushButton, editData)
+#: PlotAreaConfigWidget.ui:82
+#, kde-format
+msgid "Edit Data..."
+msgstr "Modifier les données..."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: PlotAreaConfigWidget.ui:98 PlotAreaConfigWidget.ui:181
+#, kde-format
+msgid "Axes"
+msgstr "Axes"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: PlotAreaConfigWidget.ui:111 PlotAreaConfigWidget.ui:218
+#: widgets/RingConfigWidget.ui:171
+#, kde-format
+msgid "Data Sets"
+msgstr "Séries de données"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: PlotAreaConfigWidget.ui:131
+#, kde-format
+msgid "Data Points"
+msgstr "Points de données"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
+#: StockConfigWidget.ui:18
+#, kde-format
+msgid "Range line"
+msgstr "Alignement"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
+#: StockConfigWidget.ui:47
+#, kde-format
+msgid "Gain marker"
+msgstr "Marqueur de gains"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetColorLabel_2)
+#: StockConfigWidget.ui:73
+#, kde-format
+msgid "Loss marker"
+msgstr "Marqueur de pertes"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: TitlesConfigWidget.ui:18
+#, kde-format
+msgid "Positioning"
+msgstr "Positionnement"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: TitlesConfigWidget.ui:28
+#, kde-format
+msgid "Resize"
+msgstr "Re-dimensionner"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/RingConfigWidget.ui:18
+#, kde-format
+msgid "Categories"
+msgstr "Catégories"
+
+#: widgets/StrokeConfigWidget.cpp:91
+#, kde-format
+msgid "Butt cap"
+msgstr "Bout tronqué"
+
+#: widgets/StrokeConfigWidget.cpp:98
+#, kde-format
+msgid "Round cap"
+msgstr "Bout arrondi"
+
+#: widgets/StrokeConfigWidget.cpp:105
+#, kde-format
+msgid "Square cap"
+msgstr "Bout carré"
+
+#: widgets/StrokeConfigWidget.cpp:116
+#, kde-format
+msgid "Miter join"
+msgstr "Limites de raccord"
+
+#: widgets/StrokeConfigWidget.cpp:123
+#, kde-format
+msgid "Round join"
+msgstr "Raccord arrondi"
+
+#: widgets/StrokeConfigWidget.cpp:130
+#, kde-format
+msgid "Bevel join"
+msgstr "Raccord en biseau"
+
+#: widgets/StrokeConfigWidget.cpp:140
+#, kde-format
+msgid "Miter limit"
+msgstr "Limite d'angle"
+
+#: widgets/StrokeConfigWidget.cpp:197
+#, kde-format
+msgid "Set line width of actual selection"
+msgstr "Définir l'épaisseur de la ligne de la sélection actuelle"
+
+#: widgets/StrokeConfigWidget.cpp:211
+#, kde-format
+msgid "Change the color of the line"
+msgstr "Modifier la couleur de la ligne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set Dataset Marker Style"
+#~ msgstr "Définir le style de marqueur"
+
+#~ msgid "Symbol"
+#~ msgstr "Symbole"
+
+#~ msgid "Data Format"
+#~ msgstr "Format des données"
+
+#~ msgid "Actions"
+#~ msgstr "Actions"
+
+#~ msgid "Insert Rows"
+#~ msgstr "Insérer des lignes"
+
+#~ msgid "Delete Columns"
+#~ msgstr "Supprimer des colonnes"
+
+#~ msgid "Bar chart"
+#~ msgstr "Diagramme en barres"
+
+#~ msgid "Bar"
+#~ msgstr "Barre"
+
+#~ msgid "Line chart"
+#~ msgstr "Diagramme en ligne"
+
+#~ msgid "Line"
+#~ msgstr "Ligne"
+
+#, fuzzy
+#~| msgid "Area Chart"
+#~ msgid "Area chart"
+#~ msgstr "Diagramme de zones"
+
+#~ msgid "Area"
+#~ msgstr "Zone"
+
+#~ msgid "Pie"
+#~ msgstr "Camembert"
+
+#~ msgid "Ring"
+#~ msgstr "Anneau"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Radar Chart"
+#~ msgid "Radar"
+#~ msgstr "Radar, creux"
+
+#~ msgid "Scatter"
+#~ msgstr "Dispersion"
+
+#, fuzzy
+#~| msgid "Bubble Chart"
+#~ msgid "Bubbles"
+#~ msgstr "Diagramme en bulles"
+
+#, fuzzy
+#~| msgid "Stock Chart"
+#~ msgid "Stock HLC"
+#~ msgstr "Courbe financière"
+
+#~ msgid "Data Ranges..."
+#~ msgstr "Plage de données..."
+
+#~ msgid "Axis %1"
+#~ msgstr "Axe %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~| "weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Pie Properties</"
+#~| "span></p></body></html>"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Chart Titles</"
+#~ "span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Propriétés de camembert</span></p></body></"
+#~ "html>"
+
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
+
+#~ msgid "Scaling..."
+#~ msgstr "Mise à l'échelle en cours..."
+
+#, fuzzy
+#~| msgid "Edit Fonts..."
+#~ msgid "Edit Label Fonts..."
+#~ msgstr "Modifier les polices..."
+
+#~ msgid "Custom Type"
+#~ msgstr "Type personnalisé"
+
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Pie Properties</"
+#~ "span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Propriétés de camembert</span></p></body></"
+#~ "html>"
+
+#~ msgid "v"
+#~ msgstr "v"
+
+#~ msgid "h"
+#~ msgstr "h"
+
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
+#~ "style=\" font-weight:600;\">Labels</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
+#~ "style=\" font-weight:600;\">Étiquettes</span></p></body></html>"
+
+#~ msgid "Show Frame"
+#~ msgstr "Afficher une trame"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Legend Frame"
+#~ msgstr "Afficher le cadre de la légende"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Legend Frame"
+#~ msgstr "Masquer le cadre de la légende"
+
+#~ msgid ""
+#~ "Are you sure you want to remove this axis? All settings specific to this "
+#~ "axis will be lost."
+#~ msgstr ""
+#~ "Voulez-vous vraiment supprimer cet axe ? Tous les paramètres spécifiques "
+#~ "à cet axe seront perdus."
+
+#~ msgid "Axis Removal Confirmation"
+#~ msgstr "Confirmation de la suppression de l'axe"
+
+#, fuzzy
+#~| msgid "Dialog"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dialog"
+#~ msgstr "Boîte de dialogue"
+
+#, fuzzy
+#~| msgid "Step Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Step Width:"
+#~ msgstr "Pas de la graduation :"
+
+#, fuzzy
+#~| msgid "Substep Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Substep Width:"
+#~ msgstr "Pas de la sous-graduation :"
+
+#, fuzzy
+#~| msgid "Format Error Bars"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format Error Bars"
+#~ msgstr "Mettre en forme les barres d'erreurs"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~| "weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "weight:600;\">Error Category</span></p>\n"
+#~| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+#~| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+#~| "font-weight:600;\"></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "weight:600;\">Error Category</span></p>\n"
+#~ "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+#~ "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+#~ "font-weight:600;\"></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "weight:600;\">Catégorie d'erreurs</span></p>\n"
+#~ "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+#~ "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+#~ "font-weight:600;\"></p></body></html>"
+
+#, fuzzy
+#~| msgid "Constant"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Constant"
+#~ msgstr "Constante"
+
+#, fuzzy
+#~| msgid "Percentage"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage"
+#~ msgstr "Pourcentage"
+
+#, fuzzy
+#~| msgid "Error Margin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error Margin"
+#~ msgstr "Marge d'erreurs"
+
+#, fuzzy
+#~| msgid "Standard Deviation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard Deviation"
+#~ msgstr "Écart type"
+
+#, fuzzy
+#~| msgid "Variance"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Variance"
+#~ msgstr "Variance"
+
+#, fuzzy
+#~| msgid "From Data table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Data table"
+#~ msgstr "A partir de la table de données"
+
+#, fuzzy
+#~| msgid "Positive "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Positive "
+#~ msgstr "Positif "
+
+#, fuzzy
+#~| msgid "Negative"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Negative"
+#~ msgstr "Négatif"
+
+#, fuzzy
+#~| msgid "Same for both"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Same for both"
+#~ msgstr "Identique pour les deux"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Value"
+#~ msgstr "Valeur"
+
+#, fuzzy
+#~| msgid " %"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " %"
+#~ msgstr "%"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~| "weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "weight:600;\">Error Indicator</span></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "weight:600;\">Error Indicator</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "weight:600;\">Indicateur d'erreurs</span></p></body></html>"
+
+#, fuzzy
+#~| msgid "Positive"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Positive"
+#~ msgstr "Positif"
+
+#, fuzzy
+#~| msgid "Both"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Both"
+#~ msgstr "Les deux"
+
+#, fuzzy
+#~| msgid "New Axis"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Axis"
+#~ msgstr "Nouvel axe"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title:"
+#~ msgstr "Titre :"
+
+#, fuzzy
+#~| msgid "Y Values:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y Values:"
+#~ msgstr "Valeurs de Y :"
+
+#, fuzzy
+#~| msgid "X Values:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X Values:"
+#~ msgstr "Valeurs de X :"
+
+#, fuzzy
+#~| msgid "<b>Choose a Data Set</b>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<b>Choose a Data Set</b>"
+#~ msgstr "<b>Sélectionnez une série de données</b>"
+
+#, fuzzy
+#~| msgid "Categories:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Categories:"
+#~ msgstr "Catégories :"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~| "font-weight:400; font-style:normal;\">\n"
+#~| "<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+#~| "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+#~| "style=\" font-weight:600;\">Name:</span></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+#~ "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+#~ "style=\" font-weight:600;\">Name:</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+#~ "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+#~ "style=\" font-weight:600;\">Nom :</span></p></body></html>"
+
+#, fuzzy
+#~| msgid "Data Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data Format"
+#~ msgstr "Format des données"
+
+#, fuzzy
+#~| msgid "Data sets in rows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data sets in rows"
+#~ msgstr "Séries de données en ligne"
+
+#, fuzzy
+#~| msgid "Data sets in columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data sets in columns"
+#~ msgstr "Séries de données en colonne"
+
+#, fuzzy
+#~| msgid "Actions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Actions"
+#~ msgstr "Actions"
+
+#, fuzzy
+#~| msgid "3D"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "3D"
+#~ msgstr "3D"
+
+#, fuzzy
+#~| msgid "Edit Data..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Data..."
+#~ msgstr "Modifier les données..."
+
+#, fuzzy
+#~| msgid "Plot Area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plot Area"
+#~ msgstr "Zone de tracé"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~| "font-weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
+#~| "style=\" font-weight:600;\">Labels</span></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
+#~ "style=\" font-weight:600;\">Labels</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
+#~ "style=\" font-weight:600;\">Étiquettes</span></p></body></html>"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~| "font-weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
+
+#, fuzzy
+#~| msgid "Label"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Label"
+#~ msgstr "Étiquette"
+
+#, fuzzy
+#~| msgid "Show Grid Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Grid Lines"
+#~ msgstr "Afficher le quadrillage"
+
+#, fuzzy
+#~| msgid "Scaling..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scaling..."
+#~ msgstr "Mise à l'échelle en cours..."
+
+#, fuzzy
+#~| msgid "Edit Fonts..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Fonts..."
+#~ msgstr "Modifier les polices..."
+
+#, fuzzy
+#~| msgid "Data Sets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data Sets"
+#~ msgstr "Séries de données"
+
+#, fuzzy
+#~| msgid "Select a data set"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select a data set"
+#~ msgstr "Sélectionnez une série de données"
+
+#, fuzzy
+#~| msgid "Custom Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom Type"
+#~ msgstr "Type personnalisé"
+
+#, fuzzy
+#~| msgid "Gap Between Bars"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gap Between Bars"
+#~ msgstr "Espacement entre les barres"
+
+#, fuzzy
+#~| msgid "%"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%"
+#~ msgstr "%"
+
+#, fuzzy
+#~| msgid "Gap Between Sets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gap Between Sets"
+#~ msgstr "Espacement entre les séries"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~| "font-weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "size:8pt; font-weight:600;\">Bar Properties</span></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Bar Properties</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Propriétés de barre</span></p></body></html>"
+
+#, fuzzy
+#~| msgid "Explode Factor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Explode Factor"
+#~ msgstr "Facteur d'explosion"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~| "weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Pie Properties</"
+#~| "span></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Pie Properties</"
+#~ "span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Propriétés de camembert</span></p></body></"
+#~ "html>"
+
+#, fuzzy
+#~| msgid "Attached Axis"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attached Axis"
+#~ msgstr "Axe lié"
+
+#, fuzzy
+#~| msgid "Marker"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Marker"
+#~ msgstr "Marqueur"
+
+#, fuzzy
+#~| msgid "Stroke"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stroke"
+#~ msgstr "Trait"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill"
+#~ msgstr "Remplir"
+
+#, fuzzy
+#~| msgid "Error Bars"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error Bars"
+#~ msgstr "Barres d'erreurs"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Insérer"
+
+#, fuzzy
+#~| msgid "Category"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Category"
+#~ msgstr "Catégorie"
+
+#, fuzzy
+#~| msgid "Symbol"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Symbol"
+#~ msgstr "Symbole"
+
+#, fuzzy
+#~| msgid "Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number"
+#~ msgstr "Nombre"
+
+#, fuzzy
+#~| msgid "Legend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Legend"
+#~ msgstr "Légende"
+
+#, fuzzy
+#~| msgid "Show Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Frame"
+#~ msgstr "Afficher une trame"
+
+#, fuzzy
+#~| msgid "Orientation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Orientation"
+#~ msgstr "Orientation"
+
+#, fuzzy
+#~| msgid "v"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "v"
+#~ msgstr "v"
+
+#, fuzzy
+#~| msgid "h"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "h"
+#~ msgstr "h"
+
+#, fuzzy
+#~| msgid "Bar Chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bar Chart"
+#~ msgstr "Histogramme"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Classique"
+
+#, fuzzy
+#~| msgid "Stacked"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stacked"
+#~ msgstr "Empilé"
+
+#, fuzzy
+#~| msgid "Percent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percent"
+#~ msgstr "Pourcentage"
+
+#, fuzzy
+#~| msgid "Line Chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Chart"
+#~ msgstr "Courbe"
+
+#, fuzzy
+#~| msgid "Area Chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area Chart"
+#~ msgstr "Diagramme de zones"
+
+#, fuzzy
+#~| msgid "Pie Chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pie Chart"
+#~ msgstr "Camembert"
+
+#, fuzzy
+#~| msgid "Polar Chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Polar Chart"
+#~ msgstr "Diagramme polaire"
+
+#, fuzzy
+#~| msgid "Filled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filled"
+#~ msgstr "Rempli"
+
+#, fuzzy
+#~| msgid "HighLowClose"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "HighLowClose"
+#~ msgstr "HighLowClose"
+
+#, fuzzy
+#~| msgid "OpenHighLowClose"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "OpenHighLowClose"
+#~ msgstr "OpenHighLowClose"
+
+#, fuzzy
+#~| msgid "Candlestick"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Candlestick"
+#~ msgstr "Chandelier"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Aucun"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic"
+#~ msgstr "Automatique"
+
+#, fuzzy
+#~| msgid "Select"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select"
+#~ msgstr "Sélectionner"
+
+#, fuzzy
+#~| msgid "Data Ranges..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data Ranges..."
+#~ msgstr "Plage de données..."
+
+#, fuzzy
+#~| msgid "Axis %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Axis %1"
+#~ msgstr "Axe %1"
+
+#, fuzzy
+#~| msgid "Data Set %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data Set %1"
+#~ msgstr "Série de données %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "Are you sure you want to remove this axis? All settings specific to this "
+#~| "axis will be lost."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Are you sure you want to remove this axis? All settings specific to this "
+#~ "axis will be lost."
+#~ msgstr ""
+#~ "Voulez-vous vraiment supprimer cet axe ? Tous les paramètres spécifiques "
+#~ "à cet axe seront perdus."
+
+#, fuzzy
+#~| msgid "Axis Removal Confirmation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Axis Removal Confirmation"
+#~ msgstr "Confirmation de la suppression de l'axe"
+
+#, fuzzy
+#~| msgid ""
+#~| "The plugin needed for displaying text labels in a chart is not available."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The plugin needed for displaying text labels in a chart is not available."
+#~ msgstr ""
+#~ "Le module externe nécessaire à l'affichage des étiquettes dans un "
+#~ "diagramme est non disponible."
+
+#, fuzzy
+#~| msgid "Plugin Missing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Missing"
+#~ msgstr "Module externe manquant"
+
+#, fuzzy
+#~| msgid ""
+#~| "The plugin needed for displaying text labels is not compatible with the "
+#~| "current version of the chart Flake shape."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The plugin needed for displaying text labels is not compatible with the "
+#~ "current version of the chart Flake shape."
+#~ msgstr ""
+#~ "Le module externe nécessaire à l'affichage des étiquettes est non "
+#~ "compatible avec la version actuelle."
+
+#, fuzzy
+#~| msgid "Plugin Incompatible"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Incompatible"
+#~ msgstr "Module externe incompatible"
+
+#, fuzzy
+#~| msgid "Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Titre"
+
+#, fuzzy
+#~| msgid "Subtitle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtitle"
+#~ msgstr "Sous-titre"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "Pied de page"
+
+#, fuzzy
+#~| msgid ""
+#~| "This document contains an external link to a remote document\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document contains an external link to a remote document\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Ce document contient un lien externe vers un document distant\n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid "Confirmation Required"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirmation Required"
+#~ msgstr "Confirmation requise"
+
+#, fuzzy
+#~| msgid "Download"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Download"
+#~ msgstr "Télécharger"
+
+#, fuzzy
+#~| msgid "Skip"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip"
+#~ msgstr "Ignorer"
+
+#, fuzzy
+#~| msgid "Chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chart"
+#~ msgstr "Diagramme"
+
+#, fuzzy
+#~| msgid "Business charts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Business charts"
+#~ msgstr "Diagrammes d'organigramme"
+
+#, fuzzy
+#~| msgid "January"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "January"
+#~ msgstr "Janvier"
+
+#, fuzzy
+#~| msgid "July"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "July"
+#~ msgstr "Juillet"
+
+#, fuzzy
+#~| msgid "December"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "December"
+#~ msgstr "Décembre"
+
+#, fuzzy
+#~| msgid "Column %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column %1"
+#~ msgstr "Colonne %1"
+
+#, fuzzy
+#~| msgid "Month"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Month"
+#~ msgstr "Mois"
+
+#, fuzzy
+#~| msgid "Growth in %"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Growth in %"
+#~ msgstr "Croissance en %"
+
+#, fuzzy
+#~| msgid "Do something"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do something"
+#~ msgstr "Faire quelque chose"
+
+#, fuzzy
+#~| msgid "Do something else"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do something else"
+#~ msgstr "Faire quelque chose d'autre"
+
+#, fuzzy
+#~| msgid "Chart editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chart editing"
+#~ msgstr "Édition de diagrammes"
+
+#, fuzzy
+#~| msgid "Series %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Series %1"
+#~ msgstr "Séries %1"
+
+#, fuzzy
+#~| msgid "Select Font"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Font"
+#~ msgstr "Sélectionner une police"
+
+#, fuzzy
+#~| msgid "Insert Rows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Rows"
+#~ msgstr "Insérer des lignes"
+
+#, fuzzy
+#~| msgid "Delete Rows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Rows"
+#~ msgstr "Supprimer des lignes"
+
+#, fuzzy
+#~| msgid "Insert Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Columns"
+#~ msgstr "Insérer des colonnes"
+
+#, fuzzy
+#~| msgid "Delete Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Columns"
+#~ msgstr "Supprimer des colonnes"
+
+#~ msgid "Color"
+#~ msgstr "Couleur"
+
+#~ msgid "sdf"
+#~ msgstr "sdf"
+
+#~ msgid "Data Area"
+#~ msgstr "Zone de données"
+
+#~ msgid "Use first row for labels"
+#~ msgstr "Utiliser la première ligne comme étiquette"
+
+#~ msgid "Use first column for labels"
+#~ msgstr "Utiliser la première colonne comme étiquette"
+
+#~ msgid "Cut Rows"
+#~ msgstr "Couper les lignes"
+
+#~ msgid "Cut Columns"
+#~ msgstr "Couper les colonnes"
+
+#~ msgid "Cut Cells"
+#~ msgstr "Couper le cellules"
+
+#~ msgid "Copy Rows"
+#~ msgstr "Copier les lignes"
+
+#~ msgid "Copy Columns"
+#~ msgstr "Copier les colonnes"
+
+#~ msgid "Copy Cells"
+#~ msgstr "Copier les cellules"
+
+#~ msgid "Insert Cells"
+#~ msgstr "Insérer des cellules"
+
+#~ msgid "Position and Alignment..."
+#~ msgstr "Positionnement et alignement"

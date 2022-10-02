@@ -1,0 +1,1561 @@
+# translation of karbon.po to Karakh
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2008, 2011, 2012, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-09-30 03:23+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, kde-format
+msgid "Blend"
+msgstr "Араластыру"
+
+#: BlendEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Blend mode"
+msgstr "Араластыру режімі"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "Қәдімгі"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr "Көбейту"
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr "Экран"
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr "Күңгірттеу"
+
+#: BlendEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Lighten"
+msgstr "Жарықтау"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr "Гауссиан бойынша бұлдырлау"
+
+#: BlurEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Radius"
+msgstr "Радиус"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr "Түс матрицасы"
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr "Түс матрицасын қолдану"
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Saturate colors"
+msgstr "Қанық түстер"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Rotate hue"
+msgstr "Реңкті бұрмалау"
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr "Мөлдірлікке дейін жарық қылу "
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Saturate value"
+msgstr "Қанықтық деңгейі"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, kde-format
+msgid "Angle"
+msgstr "Бұрышы"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr "Түс матрицасы"
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr "Компонентін тасмалдау"
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr "Функция"
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr "Әлпеті"
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, kde-format
+msgid "Table"
+msgstr "Кесте"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr "Бөлек&Үлестіру"
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Linear"
+msgstr "Сызықты"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr "Гамма"
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr "Мәндері"
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, kde-format
+msgid "Slope"
+msgstr "Еңіс"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, kde-format
+msgid "Intercept"
+msgstr "Y-пен қиылысуы"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr "Амплитудасы"
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr "Экспонента"
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr "Шегініс"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, kde-format
+msgid "Composite"
+msgstr "Композиті"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, kde-format
+msgid "Operation"
+msgstr "Амал"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr "Үйірткі матрицасы"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, kde-format
+msgid "Duplicate"
+msgstr "Қосарлау"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr "Орауы"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, kde-format
+msgid "None"
+msgstr "Жоқ"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, kde-format
+msgid "Edge mode:"
+msgstr "Шет күйі:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr "Өзектің өлшемі:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Target point:"
+msgstr "Көздеген нүктесі:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr "Бөлгіші:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr "Ығысуы:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr "Альфасын сақтау"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, kde-format
+msgid "Edit kernel"
+msgstr "Өзегін өңдеу"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, kde-format
+msgid "Flood fill"
+msgstr "Құйып толтыру"
+
+#: FloodEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Flood color"
+msgstr "Толтыру түсі"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr "Кескін"
+
+#: ImageEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Select image..."
+msgstr "Кескінді таңдау..."
+
+#: ImageEffectConfigWidget.cpp:54
+#, kde-format
+msgid "Select image"
+msgstr "Кескінді таңдау"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr "Біріктіру"
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr "Морфологиясы"
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr "Эрозия"
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Dilate"
+msgstr "Созылу"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Operator:"
+msgstr "Операторы:"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Radius x:"
+msgstr "x радиусы:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, kde-format
+msgid "Radius y:"
+msgstr "y радиусы:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr "dx"
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr "dy"
+
+#, fuzzy
+#~| msgid "Blend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "Араластыру"
+
+#, fuzzy
+#~| msgid "Blend mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "Араластыру режімі"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Қәдімгі"
+
+#, fuzzy
+#~| msgid "Multiply"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiply"
+#~ msgstr "Көбейту"
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Screen"
+#~ msgstr "Экран"
+
+#, fuzzy
+#~| msgid "Darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "Күңгірттеу"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Жарықтау"
+
+#, fuzzy
+#~| msgid "Gaussian blur"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gaussian blur"
+#~ msgstr "Гауссиан бойынша бұлдырлау"
+
+#, fuzzy
+#~| msgid "Radius"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "Радиус"
+
+#, fuzzy
+#~| msgid "Color Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color Matrix"
+#~ msgstr "Түс матрицасы"
+
+#, fuzzy
+#~| msgid "Apply color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply color matrix"
+#~ msgstr "Түс матрицасын қолдану"
+
+#, fuzzy
+#~| msgid "Saturate colors"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "Қанық түстер"
+
+#, fuzzy
+#~| msgid "Rotate hue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate hue"
+#~ msgstr "Реңкті бұрмалау"
+
+#, fuzzy
+#~| msgid "Luminance to alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Luminance to alpha"
+#~ msgstr "Мөлдірлікке дейін жарық қылу "
+
+#, fuzzy
+#~| msgid "Saturate value"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "Қанықтық деңгейі"
+
+#, fuzzy
+#~| msgid "Angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "Бұрышы"
+
+#, fuzzy
+#~| msgid "Color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color matrix"
+#~ msgstr "Түс матрицасы"
+
+#, fuzzy
+#~| msgid "Component transfer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Component transfer"
+#~ msgstr "Компонентін тасмалдау"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function"
+#~ msgstr "Функция"
+
+#, fuzzy
+#~| msgid "Identity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Identity"
+#~ msgstr "Әлпеті"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "Кесте"
+
+#, fuzzy
+#~| msgid "Discrete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Discrete"
+#~ msgstr "Бөлек&Үлестіру"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "Сызықты"
+
+#, fuzzy
+#~| msgid "Gamma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gamma"
+#~ msgstr "Гамма"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Values"
+#~ msgstr "Мәндері"
+
+#, fuzzy
+#~| msgid "Slope"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "Еңіс"
+
+#, fuzzy
+#~| msgid "Intercept"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "Y-пен қиылысуы"
+
+#, fuzzy
+#~| msgid "Amplitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Amplitude"
+#~ msgstr "Амплитудасы"
+
+#, fuzzy
+#~| msgid "Exponent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exponent"
+#~ msgstr "Экспонента"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Шегініс"
+
+#, fuzzy
+#~| msgid "Composite"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "Композиті"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "Амал"
+
+#, fuzzy
+#~| msgid "Convolve Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convolve Matrix"
+#~ msgstr "Үйірткі матрицасы"
+
+#, fuzzy
+#~| msgid "Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "Қосарлау"
+
+#, fuzzy
+#~| msgid "Wrap"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Wrap"
+#~ msgstr "Орауы"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Жоқ"
+
+#, fuzzy
+#~| msgid "Edge mode:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "Шет күйі:"
+
+#, fuzzy
+#~| msgid "Kernel size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Kernel size:"
+#~ msgstr "Өзектің өлшемі:"
+
+#, fuzzy
+#~| msgid "Target point:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "Көздеген нүктесі:"
+
+#, fuzzy
+#~| msgid "Divisor:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Divisor:"
+#~ msgstr "Бөлгіші:"
+
+#, fuzzy
+#~| msgid "Bias:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bias:"
+#~ msgstr "Ығысуы:"
+
+#, fuzzy
+#~| msgid "Preserve alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preserve alpha"
+#~ msgstr "Альфасын сақтау"
+
+#, fuzzy
+#~| msgid "Edit kernel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "Өзегін өңдеу"
+
+#, fuzzy
+#~| msgid "Flood fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "Құйып толтыру"
+
+#, fuzzy
+#~| msgid "Flood color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "Толтыру түсі"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Кескін"
+
+#, fuzzy
+#~| msgid "Select image..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image..."
+#~ msgstr "Кескінді таңдау..."
+
+#, fuzzy
+#~| msgid "Select image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image"
+#~ msgstr "Кескінді таңдау"
+
+#, fuzzy
+#~| msgid "Merge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Merge"
+#~ msgstr "Біріктіру"
+
+#, fuzzy
+#~| msgid "Morphology"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Morphology"
+#~ msgstr "Морфологиясы"
+
+#, fuzzy
+#~| msgid "Erode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Erode"
+#~ msgstr "Эрозия"
+
+#, fuzzy
+#~| msgid "Dilate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "Созылу"
+
+#, fuzzy
+#~| msgid "Operator:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "Операторы:"
+
+#, fuzzy
+#~| msgid "Radius x:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "x радиусы:"
+
+#, fuzzy
+#~| msgid "Radius y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "y радиусы:"
+
+#, fuzzy
+#~| msgid "dx"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#, fuzzy
+#~| msgid "dy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Сайран Киккарин"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sairan@computer.org"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "Логикалық амал"
+
+#~ msgid "&Order"
+#~ msgstr "&Реті"
+
+#~ msgid "&Align"
+#~ msgstr "&Туралау"
+
+#~ msgid "&File"
+#~ msgstr "&Файл"
+
+#~ msgid "&Edit"
+#~ msgstr "Өңд&еу"
+
+#~ msgid "&View"
+#~ msgstr "&Көрініс"
+
+#~ msgid "&Object"
+#~ msgstr "&Нысан"
+
+#~ msgid "&Distribute"
+#~ msgstr "&Үлестіру"
+
+#~ msgid "&Path"
+#~ msgstr "&Сызық"
+
+#~ msgid "Effe&cts"
+#~ msgstr "Эффек&тер"
+
+#~ msgid "&Settings"
+#~ msgstr "&Баптау"
+
+#~ msgid "Edit"
+#~ msgstr "Өңдеу"
+
+#~ msgid "Object"
+#~ msgstr "Нысан"
+
+#~ msgid "Align"
+#~ msgstr "Туралау"
+
+#~ msgid "Effects"
+#~ msgstr "Эффекттер"
+
+#~ msgid "View"
+#~ msgstr "Көрініс"
+
+#~ msgid "&Flatten Path..."
+#~ msgstr "Қисықты &түзеу..."
+
+#~ msgid "Flatten Path"
+#~ msgstr "Қисықты түзеу"
+
+#~ msgid "Properties"
+#~ msgstr "Қасиеттері"
+
+#~ msgid "Flatness:"
+#~ msgstr "Түзеулігі:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten path"
+#~ msgstr "Қисықты түзеу"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "Сызығын айқындату"
+
+#~ msgid "&Refine Path..."
+#~ msgstr "&Сызығын айқындату..."
+
+#~ msgid "Refine Path"
+#~ msgstr "Сызығын айқындату"
+
+#~ msgid "Subdivisions:"
+#~ msgstr "Бөлшектері:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "Дөңгеленген бұрыштар"
+
+#~ msgid "&Round Corners..."
+#~ msgstr "Бұрыштарды &дөңгелету..."
+
+#~ msgid "Round Corners"
+#~ msgstr "Дөңгеленген бұрыштар"
+
+#~ msgid "Radius:"
+#~ msgstr "Радиусы:"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "Көрініс"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "Көрініс"
+
+#, fuzzy
+#~| msgid "Pencil tool"
+#~ msgid "Stencil Box"
+#~ msgstr "Қарындаш құралы"
+
+#, fuzzy
+#~| msgid "Group shapes"
+#~ msgid "More shapes"
+#~ msgstr "Пішіндерді топтастыру"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl & pinch"
+#~ msgstr "Бұрау және қысу"
+
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Бұрау/Қысу..."
+
+#~ msgid "Whirl Pinch"
+#~ msgstr "Бұрау және қысу"
+
+#~ msgid "Info"
+#~ msgstr "Мәліметтер"
+
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr ""
+#~ "Бұрау және қысудың нәтижесін сызығын алдын-ала айқындатумен жақсартуға "
+#~ "болады."
+
+#~ msgid "Angle:"
+#~ msgstr "Бұрышы:"
+
+#~ msgid "Pinch:"
+#~ msgstr "Қысуы:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "Қабатты алға шығару"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "Қабатты артқа тығу"
+
+#~ msgid "Configure"
+#~ msgstr "Баптау"
+
+#~ msgid "Interface"
+#~ msgstr "Интерфейсі"
+
+#~ msgid "Misc"
+#~ msgstr "Түрлі басқа"
+
+#~ msgid "Grid"
+#~ msgstr "Тор"
+
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Құжат"
+
+#~ msgid "Document Settings"
+#~ msgstr "Құжаттың параметрлері"
+
+#~ msgctxt "@title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Авторы"
+
+#~ msgid "Author"
+#~ msgstr "Авторы"
+
+#~ msgid "Layer view"
+#~ msgstr "Қабаттың көрінісі"
+
+#~ msgid "Add a new layer"
+#~ msgstr "Жаңа қабатты қосу"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "Таңдалған нысандарды кетіру"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "Таңдалған нысандарды алға шығару"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "Таңдалған нысандарды артқа шығару"
+
+#~ msgid "Minimal View"
+#~ msgstr "Ықшам көрініс"
+
+#~ msgid "Detailed View"
+#~ msgstr "Егжей-тегжейлі көрініс"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "Нобайлы көрініс"
+
+#~ msgid "View mode"
+#~ msgstr "Көрсету режімі"
+
+#~ msgid "New Layer"
+#~ msgstr "Жаңа қабат"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Жаңа қабаттың атауы:"
+
+#~ msgid "New layer"
+#~ msgstr "Жаңа қабат"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Қабатты құру"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Қабатты алып тастау"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "Бүкіл қабаттарды өшіруге болмайды. Кемінде біреуі қалу керек."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Қабаттарды өшіру қатесі"
+
+#~ msgid "Layer"
+#~ msgstr "Қабаты"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Тобы"
+
+#~ msgid "Shape"
+#~ msgstr "Пішін"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Көрінетін"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Бұғатталған"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "z-индексі"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Мөлдірсіздік"
+
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Бекітілген"
+
+#~ msgid "no"
+#~ msgstr "жоқ"
+
+#~ msgid "yes"
+#~ msgstr "иә"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Пішіндерді қайта еншілеу"
+
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "Векторлы графиканы салу бағдарламасы"
+
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "(c) 2001-2013, Karbon құрастырушылар"
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "Қатысуға шақырыласыз."
+
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Қателерді түзеу, жақсартуы"
+
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#~ msgid "Bug fixes"
+#~ msgstr "Қателерді түзеу"
+
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Пайдалы жамаулар мен кеңестер"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Жарамсыз OASIS құжаты. office:body деген тег жоқ."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Жарамсыз OASIS құжаты. office:drawing деген тег жоқ."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Жарамсыз OASIS құжаты. draw:page деген тег жоқ."
+
+#~ msgid "Master Page"
+#~ msgstr "Үлгі бет"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "Суретті ендіру"
+
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Қосатын суретті таңдау"
+
+#~ msgid "Could not load image."
+#~ msgstr "Кескін жүктелмеді."
+
+#~ msgid "Import graphic"
+#~ msgstr "Суретті импорттау"
+
+#~ msgid "Could not create image shape."
+#~ msgstr "Кескін қалыпы құрылмады."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally"
+#~ msgstr "Аунату"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Vertically"
+#~ msgstr "Төңкеру"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally and Vertically"
+#~ msgstr "Тігінен және жатығынан терістеу"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "Сүрлеудерді бөлу"
+
+#~ msgid "Outline &Mode"
+#~ msgstr "Сұлбалау &режімі"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Парақтың жиектері көрсетілсін"
+
+#~ msgid "&Import Graphic..."
+#~ msgstr "Графиканы &импорттау..."
+
+#~ msgid "D&elete"
+#~ msgstr "Ө&шіру"
+
+#~ msgid "Edit Guides"
+#~ msgstr "Бағыттауыштарын өзгерту"
+
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Көбейту"
+
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Ортасын үлестіру (жатығынан)"
+
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Аралытарын үлестіру (жатығынан)"
+
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Сол шектерін үлестіру"
+
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Оң шектерін үлестіру"
+
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Ортасын үлестіру (тігінен)"
+
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Аралытарын үлестіру (тігінен)"
+
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Төменгі шектерін үлестіру"
+
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Жоғары шектерін үлестіру"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Өлшегіштерін көрсету"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Өлшегіштерін көрсету/жасыру"
+
+#~ msgid "Show Color Palette"
+#~ msgstr "Түс палитрасын көрсету"
+
+#~ msgid "Show or hide color palette"
+#~ msgstr "Түс палитрасын көрсету/жасыру"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Торға келтіру"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "Торға келтіру"
+
+#~ msgid "&Clip Object"
+#~ msgstr "Нысанды &бекіту"
+
+#~ msgid "&Unclip Objects"
+#~ msgstr "Нысандарды б&осату"
+
+#~ msgid "Mirror Vertically"
+#~ msgstr "Төңкеру"
+
+#~ msgid "Mirror Horizontally"
+#~ msgstr "Аунату"
+
+#~ msgid "&Close Path"
+#~ msgstr "Сүрлеуін тұй&ықтау"
+
+#~ msgid "Com&bine Path"
+#~ msgstr "Сүрлеуін бі&ріктіру"
+
+#~ msgid "Se&parate Path"
+#~ msgstr "Сүрлеуін &бөліп алу"
+
+#~ msgid "Re&verse Path"
+#~ msgstr "Сүрлеуін теріс &бұру"
+
+#~ msgid "Intersect Paths"
+#~ msgstr "Сүрлеулерін қиыстыру"
+
+#~ msgid "Subtract Paths"
+#~ msgstr "Сүрлеулерін бір-бірінен алып тастау"
+
+#~ msgid "Unite Paths"
+#~ msgstr "Сүрлеулерін біріктіру"
+
+#~ msgid "Exclude Paths"
+#~ msgstr "Сүрлеулерін алып тастау"
+
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Сүрлеуін торға келтіру"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Karbon баптауы..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "Парақ &пішімі..."
+
+#~ msgid "Zoom to Selection"
+#~ msgstr "Таңдағанды жақындату"
+
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Суретті жақындату"
+
+#~ msgid "Zoom"
+#~ msgstr "Масштабтау"
+
+#~ msgid "Show status bar:"
+#~ msgstr "Күй-жай жолағын көрсету"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "Жуырдағылардың саны:"
+
+#~ msgid "Palette font size:"
+#~ msgstr "Палитра қаріпінің өлшемі:"
+
+#~ msgid "Canvas color:"
+#~ msgstr "Өрісінің түсі:"
+
+#~ msgid "Select palette"
+#~ msgstr "Палитраны таңдау"
+
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "Таңдалғанды толтыру үшін басыңыз"
+
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "Жоқ"
+
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "Таңдалғанды штрихтау үшін басыңыз"
+
+#~ msgctxt "The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "Өзгеше"
+
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Жоқ"
+
+#~ msgid "Stroke:"
+#~ msgstr "Штрихі:"
+
+#~ msgid "Fill:"
+#~ msgstr "Толтыруы:"
+
+#~ msgid "File to open"
+#~ msgstr "Ашатын файл"
+
+#~ msgid "Target:"
+#~ msgstr "Көздегені:"
+
+#~ msgid "Line"
+#~ msgstr "Сызық"
+
+#~ msgid "Fill"
+#~ msgstr "Толтыру"
+
+#~ msgid "Type:"
+#~ msgstr "Түрі:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Сызықты"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Радиалды"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Конусты"
+
+#~ msgid "Repeat:"
+#~ msgstr "Қайталауы:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Жоқ"
+
+#~ msgid "Reflect"
+#~ msgstr "Шағылу"
+
+#~ msgid "Repeat"
+#~ msgstr "Қайталау"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Жалпы мөлдірсіздігі:"
+
+#~ msgid "Color stop:"
+#~ msgstr "Шек түсі:"
+
+#~ msgid "Stop color."
+#~ msgstr "Шек түсі."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "Дайын градиенттерді қ&осу"
+
+#~ msgid "Original"
+#~ msgstr "Өзіндік"
+
+#~ msgid "Tiled"
+#~ msgstr "Қатарлап"
+
+#~ msgid "Stretched"
+#~ msgstr "Созып"
+
+#~ msgid "Top Left"
+#~ msgstr "Жоғары сол жақта"
+
+#~ msgid "Top"
+#~ msgstr "Жоғары"
+
+#~ msgid "Top Right"
+#~ msgstr "Жоғары оң жақта"
+
+#~ msgid "Left"
+#~ msgstr "Солға"
+
+#~ msgid "Center"
+#~ msgstr "Ортаға"
+
+#~ msgid "Right"
+#~ msgstr "Оңға"
+
+#~ msgid "Bottom Left"
+#~ msgstr "Төменгі сол жақта"
+
+#~ msgid "Bottom"
+#~ msgstr "Төменге"
+
+#~ msgid "Bottom Right"
+#~ msgstr "Төменгі оң жақта"
+
+#~ msgid "Stroke"
+#~ msgstr "Штрих"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Парақтың жиектері жасырылсын"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Өлшегіштерін жасыру"
+
+#~ msgid "Stop color:"
+#~ msgstr "Шек түсі:"
+
+#~ msgid "Tools"
+#~ msgstr "Құралдар"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Көшірудегі шегінісі:"
+
+#~ msgid "Show Guides"
+#~ msgstr "Бағыттауыштарын көрсету"
+
+#~ msgid "Shows or hides guides"
+#~ msgstr "Бағыттауыштарын көрсету/жасыру"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Жоқ"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Тұтас"
+
+#~ msgid "Gradient"
+#~ msgstr "Градиент"
+
+#~ msgid "Pattern"
+#~ msgstr "Өрнек"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Кезетесіп толтыру"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Иректеп толтыру"
+
+#~ msgid "Units:"
+#~ msgstr "Өлшем бірлігі:"
+
+#~ msgid "Ungroup shapes"
+#~ msgstr "Пішіндерді ыдырату"
+
+#~ msgid "&Group Objects"
+#~ msgstr "Нысандарды &топтастыру"
+
+#~ msgid "Show grid:"
+#~ msgstr "Торын көрсету:"
+
+#~ msgid "Snap to grid:"
+#~ msgstr "Торға келтіруі:"
+
+#~ msgid "Grid color:"
+#~ msgstr "Тордың түсі:"
+
+#~ msgid "Spacing"
+#~ msgstr "Аралық"
+
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Тігінен:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Автосақтау (мин):"
+
+#~ msgid "No auto save"
+#~ msgstr "Автосақтауы жоқ"
+
+#~ msgid "min"
+#~ msgstr "мин"
+
+#~ msgid "Create backup file"
+#~ msgstr "Сақтық көшірмесін жасау"
+
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Қосатын өрнекті таңдау"
+
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Қосатын градиентті таңдау"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Pattern Size"
+#~ msgstr "Өрнек"
+
+#~ msgid "Drag to move gradient position."
+#~ msgstr "Градиенттің орналасуын жылжыту үшін сүйреңіз."
+
+#~ msgid "Drag to move color stop. Double click to remove color stop."
+#~ msgstr ""
+#~ "Түсті таңдау белгісін жылжыту үшін сүйреңіз. Белгісін кетіру үшін қос "
+#~ "түртім жасаңыз."
+
+#~ msgid "Drag to move color stop."
+#~ msgstr "Түсті таңдау белгісін жылжыту үшін сүйреңіз."
+
+#~ msgid "Drag to move gradient position. Double click to insert color stop."
+#~ msgstr ""
+#~ "Градиенттің орналасуын жылжыту үшін сүйреңіз. Түсті таңдау белгісін қою "
+#~ "үшін қос түртім жасаңыз."
+
+#~ msgid "Edit Gradient"
+#~ msgstr "Градиентті өңдеу"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "Дайын градиенттер"
+
+#~ msgid "Gradient tool"
+#~ msgstr "Градиент құралы"
+
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Градиент жасау құралы"
+
+#~ msgid "Pattern tool"
+#~ msgstr "Өрнек құралы"
+
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Өрнек салу құралы"
+
+#~ msgid "Precision:"
+#~ msgstr "Дәлдігі:"
+
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Өңделмеген"
+
+#~ msgid "Curve"
+#~ msgstr "Қисық"
+
+#~ msgid "Straight"
+#~ msgstr "Түзу"
+
+#~ msgid "Optimize"
+#~ msgstr "Оңтайландыру"
+
+#~ msgid "Exactness:"
+#~ msgstr "Нақтылығы:"
+
+#~ msgid "Combine angle:"
+#~ msgstr "Құрастырма бұрышы:"
+
+#~ msgid "Freehand Path Drawing Tool"
+#~ msgstr "Қолмен сызу құралы"
+
+#~ msgid "A calligraphic shape"
+#~ msgstr "Каллиграфикалық пішін"
+
+#~ msgid "Calligraphic Shape"
+#~ msgstr "Каллиграфикалық пішін"
+
+#~ msgid "Save profile as..."
+#~ msgstr "Профилін былай сақтау..."
+
+#~ msgid "Remove profile"
+#~ msgstr "Профилін өшіру"
+
+#~ msgid "&Follow selected path"
+#~ msgstr "Таңдалған сызыққа &еру"
+
+#~ msgid "Use tablet &pressure"
+#~ msgstr "Планшетке &басуы қолданылсын"
+
+#~ msgid "Width:"
+#~ msgstr "Қалыңдығы:"
+
+#~ msgid "Thinning:"
+#~ msgstr "Ұштауы:"
+
+#~ msgid "Use tablet &angle"
+#~ msgstr "Планшеттегі бұрылыс &бұрышы қолданылсын"
+
+#~ msgid "Fixation:"
+#~ msgstr "Бекіту:"
+
+#~ msgid "Mass:"
+#~ msgstr "Масса:"
+
+#~ msgid "Drag:"
+#~ msgstr "Сүйреу:"
+
+#~ msgid "Current"
+#~ msgstr "Қолданыстағы"
+
+#~ msgid "Profile name"
+#~ msgstr "Профилінің атауы"
+
+#~ msgid "Please insert the name by which you want to save this profile:"
+#~ msgstr "Сақтағыңыз келген профильге атау беріңіз:"
+
+#, fuzzy
+#~| msgid "Sorry, the name you entered is invalid!"
+#~ msgid "Sorry, the name you entered is invalid."
+#~ msgstr "Келтірген атауыңыз жарамсыз!"
+
+#, fuzzy
+#~| msgctxt "invalid profile name"
+#~| msgid "Invalid name!"
+#~ msgctxt "invalid profile name"
+#~ msgid "Invalid name."
+#~ msgstr "Атауы жарамсыз!"
+
+#, fuzzy
+#~| msgid ""
+#~| "A profile with that name already exists!\n"
+#~| "Do you want to overwrite it?"
+#~ msgid ""
+#~ "A profile with that name already exists.\n"
+#~ "Do you want to overwrite it?"
+#~ msgstr ""
+#~ "Былай аталған профиль бар ғой!\n"
+#~ "Үстінен жазыла берсін бе?"
+
+#~ msgid "Mouse"
+#~ msgstr "Тышқан"
+
+#~ msgid "Graphics Pen"
+#~ msgstr "Графикалық қалам"
+
+#~ msgid "Calligraphy: increase width"
+#~ msgstr "Каллиграфия: қалыңдығын үлкейту"
+
+#~ msgid "Calligraphy: decrease width"
+#~ msgstr "Каллиграфия: қалыңдығын азайту"
+
+#~ msgid "Calligraphy: increase angle"
+#~ msgstr "Каллиграфия: көлбеулігін үлкейту"
+
+#~ msgid "Calligraphy: decrease angle"
+#~ msgstr "Каллиграфия: көлбеулігін азайту"
+
+#~ msgid "Calligraphy tool"
+#~ msgstr "Каллиграфия құралы"
+
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Каллиграфия құралы"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "&Алға шығару"
+
+#~ msgid "&Raise"
+#~ msgstr "&Жақындату"
+
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "А&лыстату"
+
+#~ msgid "Send to &Back"
+#~ msgstr "&Артына тығу"
+
+#~ msgid "Show Grid"
+#~ msgstr "Торын көрсету"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Торын жасыру"
+
+#~ msgid "Shows or hides grid"
+#~ msgstr "Торын көрсету/жасыру"
+
+#~ msgid "Align Left"
+#~ msgstr "Солға туралау"
+
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "Ортаға туралау (жатығынан)"
+
+#~ msgid "Align Right"
+#~ msgstr "Оңға туралау"
+
+#~ msgid "Align Top"
+#~ msgstr "Жоғарға туралау"
+
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Ортаға туралау (тігінен)"
+
+#~ msgid "Align Bottom"
+#~ msgstr "Төменге туралау"
+
+#~ msgid "Stop opacity:"
+#~ msgstr "Шек мөлдірсіздігі:"
+
+#~ msgid "Profile:"
+#~ msgstr "Профилі:"
+
+#~ msgid "Show details >>"
+#~ msgstr "Егжей-тегжейі >>"
+
+#~ msgid "Hide details <<"
+#~ msgstr "Егжей-тегжейі <<"

@@ -1,0 +1,1028 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Miguel Branco <mgl.branco@gmail.com>, 2008, 2009, 2012.
+# Marce Villarino <mvillarino@kde-espana.es>, 2013.
+# Adrián Chaves Fernández (Gallaecio) <adriyetichaves@gmail.com>, 2015.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice-defaulttools\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2019-02-15 23:15+0100\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: ectx: property (text), widget (QCheckBox, toggleEditMode)
+#: connectionTool/ConnectionPointWidget.ui:30
+#, kde-format
+msgid "Edit Mode"
+msgstr "Modo de edición"
+
+#. i18n: ectx: property (text), widget (QLabel, labelEscape)
+#: connectionTool/ConnectionPointWidget.ui:37
+#, kde-format
+msgid "Escape Direction"
+msgstr "Direccións de escapada"
+
+#. i18n: ectx: property (text), widget (QLabel, labelAlign)
+#: connectionTool/ConnectionPointWidget.ui:97
+#, kde-format
+msgid "Alignment"
+msgstr "Aliñamento"
+
+#. i18n: ectx: property (text), widget (QToolButton, alignPercent)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleXSpinBox)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleYSpinBox)
+#: connectionTool/ConnectionPointWidget.ui:116
+#: defaulttool/DefaultToolTransformWidget.ui:106
+#: defaulttool/DefaultToolTransformWidget.ui:138
+#, no-c-format, kde-format
+msgid "%"
+msgstr "%"
+
+#: connectionTool/ConnectionTool.cpp:66
+#, kde-format
+msgid "Edit connection points"
+msgstr "Editar os puntos de conexión."
+
+#: connectionTool/ConnectionTool.cpp:73
+#, kde-format
+msgid "Align to left edge"
+msgstr "Aliñar ao bordo esquerdo"
+
+#: connectionTool/ConnectionTool.cpp:76
+#, kde-format
+msgid "Align to horizontal center"
+msgstr "Aliñar ao centro horizontal"
+
+#: connectionTool/ConnectionTool.cpp:79
+#, kde-format
+msgid "Align to right edge"
+msgstr "Aliñar ao bordo esquerdo"
+
+#: connectionTool/ConnectionTool.cpp:82
+#, kde-format
+msgid "Align to top edge"
+msgstr "Aliñar ao bordo superior"
+
+#: connectionTool/ConnectionTool.cpp:85
+#, kde-format
+msgid "Align to vertical center"
+msgstr "Centrar ao centro vertical"
+
+#: connectionTool/ConnectionTool.cpp:88
+#, kde-format
+msgid "Align to bottom edge"
+msgstr "Aliñar ao bordo inferior"
+
+#: connectionTool/ConnectionTool.cpp:92
+#, kde-format
+msgid "Escape in all directions"
+msgstr "Escapar en todas as direccións"
+
+#: connectionTool/ConnectionTool.cpp:95
+#, kde-format
+msgid "Escape in horizontal directions"
+msgstr "Escapar polas direccións horizontais"
+
+#: connectionTool/ConnectionTool.cpp:98
+#, kde-format
+msgid "Escape in vertical directions"
+msgstr "Escapar polas direccións verticais"
+
+#: connectionTool/ConnectionTool.cpp:101
+#, kde-format
+msgid "Escape in left direction"
+msgstr "Escapar pola dirección esquerda"
+
+#: connectionTool/ConnectionTool.cpp:104
+#, kde-format
+msgid "Escape in right direction"
+msgstr "Escapar pola dirección dereita"
+
+#: connectionTool/ConnectionTool.cpp:107
+#, kde-format
+msgid "Escape in up direction"
+msgstr "Escapar pola dirección superior"
+
+#: connectionTool/ConnectionTool.cpp:110
+#, kde-format
+msgid "Escape in down direction"
+msgstr "Escapar pola dirección inferior"
+
+#: connectionTool/ConnectionTool.cpp:434
+msgctxt "(qtundo-format)"
+msgid "Create Connection"
+msgstr "Crear unha conexión"
+
+#: connectionTool/ConnectionTool.cpp:774 connectionTool/ConnectionTool.cpp:786
+#, kde-format
+msgid "Drag to edit connection."
+msgstr "Arrastrar para editar a conexión."
+
+#: connectionTool/ConnectionTool.cpp:776 connectionTool/ConnectionTool.cpp:788
+#, kde-format
+msgid "Double click connection or press delete to remove it."
+msgstr "Premer eliminar ou facer un dobre clic retíraa."
+
+#: connectionTool/ConnectionTool.cpp:778
+#, kde-format
+msgid "Click to edit connection points."
+msgstr "Clic para editar os puntos de conexión."
+
+#: connectionTool/ConnectionTool.cpp:792
+#, kde-format
+msgid ""
+"Drag to move connection point. Double click connection or press delete to "
+"remove it."
+msgstr ""
+"Arrastrar fai mover os puntos de conexión. Un dobre clic ou premer eliminar "
+"retíraa."
+
+#: connectionTool/ConnectionTool.cpp:794
+#, kde-format
+msgid "Double click connection point or press delete to remove it."
+msgstr "Fai dobre clic no punto de conexión ou premer eliminar para retirala."
+
+#: connectionTool/ConnectionTool.cpp:796
+#, kde-format
+msgid "Double click to add connection point."
+msgstr "Dobre clic para engadir un punto de conexión."
+
+#: connectionTool/ConnectionTool.cpp:799
+#, kde-format
+msgid "Drag to create new connection."
+msgstr "Arrastrar para crear unha nova conexión."
+
+#: connectionTool/ConnectionTool.cpp:827
+#, kde-format
+msgid "Connection"
+msgstr "Conexión"
+
+#: connectionTool/ConnectionTool.cpp:832 defaulttool/DefaultTool.cpp:1167
+#, kde-format
+msgid "Line"
+msgstr "Liña"
+
+#: connectionTool/ConnectionTool.cpp:837
+#, kde-format
+msgid "Connection Point"
+msgstr "Punto de conexión"
+
+#: connectionTool/ConnectionToolFactory.cpp:18
+#, kde-format
+msgid "Connect shapes"
+msgstr "Unir as formas"
+
+#: defaulttool/DefaultTool.cpp:205
+#, kde-format
+msgid "Bring to &Front"
+msgstr "Trae cara a &diante"
+
+#: defaulttool/DefaultTool.cpp:210
+#, kde-format
+msgid "&Raise"
+msgstr "&Elevar"
+
+#: defaulttool/DefaultTool.cpp:215
+#, kde-format
+msgid "&Lower"
+msgstr "&Baixar"
+
+#: defaulttool/DefaultTool.cpp:221
+#, kde-format
+msgid "Send to &Back"
+msgstr "Enviar ao &fondo"
+
+#: defaulttool/DefaultTool.cpp:227
+#, kde-format
+msgid "Align Left"
+msgstr "Aliñar á esquerda"
+
+#: defaulttool/DefaultTool.cpp:232
+#, kde-format
+msgid "Horizontally Center"
+msgstr "Centrar horizontalmente"
+
+#: defaulttool/DefaultTool.cpp:237
+#, kde-format
+msgid "Align Right"
+msgstr "Aliñar á dereita"
+
+#: defaulttool/DefaultTool.cpp:241
+#, kde-format
+msgid "Align Top"
+msgstr "Aliñar á cima"
+
+#: defaulttool/DefaultTool.cpp:246
+#, kde-format
+msgid "Vertically Center"
+msgstr "Centrar na vertical"
+
+#: defaulttool/DefaultTool.cpp:251
+#, kde-format
+msgid "Align Bottom"
+msgstr "Aliñar ao fondo"
+
+#: defaulttool/DefaultTool.cpp:256
+#, kde-format
+msgid "Group"
+msgstr "Agrupar"
+
+#: defaulttool/DefaultTool.cpp:261
+#, kde-format
+msgid "Ungroup"
+msgstr "Desagrupar"
+
+#: defaulttool/DefaultTool.cpp:447 defaulttool/DefaultTool.cpp:522
+#, kde-format
+msgid "Click and drag to move guide line."
+msgstr "Prema e arrastre para mover a liña de guía."
+
+#: defaulttool/DefaultTool.cpp:454
+#, kde-format
+msgid ""
+"Left click rotates around center, right click around highlighted position."
+msgstr ""
+"Os clic no esquerdo rota arredor do centro e co dereito na posición realzada."
+
+#: defaulttool/DefaultTool.cpp:456
+#, kde-format
+msgid "Click and drag to shear selection."
+msgstr "Faga clic e arrastre para separar a selección."
+
+#: defaulttool/DefaultTool.cpp:459
+#, kde-format
+msgid "Click and drag to resize selection."
+msgstr "Faga clic e arrastre para redimensionar a selección."
+
+#: defaulttool/DefaultTool.cpp:511
+#, kde-format
+msgid "Click and drag to move selection."
+msgstr "Faga clic e arrastre para mover a selección."
+
+#: defaulttool/DefaultTool.cpp:516
+#, kde-format
+msgid ""
+"Click and drag to resize selection. Middle click to set highlighted position."
+msgstr ""
+"Faga clic e arrastre para redimensionar a selección. O clic no medio realza "
+"unha posición."
+
+#: defaulttool/DefaultTool.cpp:1039
+msgctxt "(qtundo-format)"
+msgid "Group shapes"
+msgstr "Grupo de formas"
+
+#: defaulttool/DefaultTool.cpp:1071
+msgctxt "(qtundo-format)"
+msgid "Ungroup shapes"
+msgstr "Desagrupar as formas"
+
+#: defaulttool/DefaultTool.cpp:1161
+#, kde-format
+msgid "Arrange"
+msgstr "Dispor"
+
+#: defaulttool/DefaultTool.cpp:1164
+#, kde-format
+msgid "Geometry"
+msgstr "Xeometría"
+
+#: defaulttool/DefaultTool.cpp:1172
+#, kde-format
+msgid "Fill"
+msgstr "Recheo"
+
+#: defaulttool/DefaultTool.cpp:1177
+#, kde-format
+msgid "Shadow"
+msgstr "Sombra"
+
+#: defaulttool/DefaultToolFactory.cpp:17
+#, kde-format
+msgid "Shape handling"
+msgstr "Xestión de formas"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:100
+#: defaulttool/ShapeRotateStrategy.cpp:137
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "Rotar"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:138
+msgctxt "(qtundo-format)"
+msgid "Shear X"
+msgstr "Separar X"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:176
+msgctxt "(qtundo-format)"
+msgid "Shear Y"
+msgstr "Separar Y"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:218
+#: defaulttool/DefaultToolTransformWidget.cpp:255
+msgctxt "(qtundo-format)"
+msgid "Scale"
+msgstr "Escala"
+
+#: defaulttool/DefaultToolTransformWidget.cpp:287
+msgctxt "(qtundo-format)"
+msgid "Reset Transformations"
+msgstr "Reiniciar as transformacións"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, rotateSpinBox)
+#: defaulttool/DefaultToolTransformWidget.ui:25
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (text), widget (QPushButton, rotateButton)
+#: defaulttool/DefaultToolTransformWidget.ui:38
+#, kde-format
+msgid "Rotate"
+msgstr "Rotar"
+
+#. i18n: ectx: property (text), widget (QPushButton, shearXButton)
+#: defaulttool/DefaultToolTransformWidget.ui:64
+#, kde-format
+msgid "Shear X"
+msgstr "Separar X"
+
+#. i18n: ectx: property (text), widget (QPushButton, shearYButton)
+#: defaulttool/DefaultToolTransformWidget.ui:90
+#, kde-format
+msgid "Shear Y"
+msgstr "Separar Y"
+
+#. i18n: ectx: property (text), widget (QPushButton, scaleXButton)
+#: defaulttool/DefaultToolTransformWidget.ui:122
+#, kde-format
+msgid "Scale X"
+msgstr "Escala X"
+
+#. i18n: ectx: property (text), widget (QPushButton, scaleYButton)
+#: defaulttool/DefaultToolTransformWidget.ui:154
+#, kde-format
+msgid "Scale Y"
+msgstr "Escala Y"
+
+#. i18n: ectx: property (text), widget (QCheckBox, scaleAspectCheckBox)
+#: defaulttool/DefaultToolTransformWidget.ui:161
+#, kde-format
+msgid "Keep aspect ratio"
+msgstr "Manter as proporcións"
+
+#. i18n: ectx: property (text), widget (QPushButton, resetButton)
+#: defaulttool/DefaultToolTransformWidget.ui:174
+#, kde-format
+msgid "Reset Transformations"
+msgstr "Reiniciar as transformacións"
+
+#: defaulttool/DefaultToolWidget.cpp:225
+#: defaulttool/ShapeResizeStrategy.cpp:304
+msgctxt "(qtundo-format)"
+msgid "Resize"
+msgstr "Redimensionar"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: defaulttool/DefaultToolWidget.ui:29
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: defaulttool/DefaultToolWidget.ui:91
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#: defaulttool/ShapeMoveStrategy.cpp:53
+#, kde-format
+msgid "Press ALT to hold x- or y-position."
+msgstr "Prema ALT para manter as posicións en x ou y."
+
+#: defaulttool/ShapeResizeStrategy.cpp:92
+#, kde-format
+msgid "Press CTRL to resize from center."
+msgstr "Prema CTRL para redimensionar desde o centro."
+
+#: defaulttool/ShapeRotateStrategy.cpp:49
+#, kde-format
+msgid "Press ALT to rotate in 45 degree steps."
+msgstr "Prema ALT para rotar en pasos de 45 graos."
+
+#: defaulttool/ShapeShearStrategy.cpp:169
+msgctxt "(qtundo-format)"
+msgid "Shear"
+msgstr "Separar"
+
+#: guidestool/GuidesTool.cpp:133
+#, kde-format
+msgid "Double click to add guide line."
+msgstr "Dobre clic para engadir a liña de guía."
+
+#: guidestool/GuidesTool.cpp:136
+#, kde-format
+msgid "Click and drag to move guide line. Double click to remove guide line."
+msgstr ""
+"As liñas de guía móvense cun clic e arrastrando. Cun dobre clic retíranse as "
+"liñas de guía."
+
+#: guidestool/GuidesTool.cpp:374
+#, kde-format
+msgid "Guides Editor"
+msgstr "Editor de guías"
+
+#: guidestool/GuidesTool.cpp:382
+#, kde-format
+msgid "Guides Insertor"
+msgstr "Insertor de guías"
+
+#: guidestool/GuidesToolFactory.cpp:14
+#, kde-format
+msgid "Edit guidelines"
+msgstr "Editar as liñas de guía"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: guidestool/GuidesToolOptionWidget.cpp:18
+#: guidestool/InsertGuidesToolOptionWidget.ui:25
+#, kde-format
+msgid "Horizontal"
+msgstr "Horizontal"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: guidestool/GuidesToolOptionWidget.cpp:19
+#: guidestool/InsertGuidesToolOptionWidget.ui:65
+#, kde-format
+msgid "Vertical"
+msgstr "Vertical"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: guidestool/GuidesToolOptionWidget.ui:17
+#, kde-format
+msgid "Orientation:"
+msgstr "Orientación:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: guidestool/GuidesToolOptionWidget.ui:27
+#, kde-format
+msgid "Position:"
+msgstr "Posición:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#: guidestool/GuidesToolOptionWidget.ui:37
+#, kde-format
+msgid "Add"
+msgstr "Engadir"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeButton)
+#: guidestool/GuidesToolOptionWidget.ui:44
+#, kde-format
+msgid "Remove"
+msgstr "Retirar"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, m_horizontalSpinBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:38
+#, kde-format
+msgid "Insert this number of horizontal equally spaced guides."
+msgstr "Inserir este número de guías horizontais equidistantes."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, m_horizontalEdgesCheckBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:51
+#, kde-format
+msgid "Insert guides at the horizontal edges."
+msgstr "Insira as guías nas marxes horizontais."
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, m_verticalSpinBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:78
+#, kde-format
+msgid "Insert this number of vertical equally spaced guides."
+msgstr "Insira este número de guías verticais equidistantes."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, m_verticalEdgesCheckBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:91
+#, kde-format
+msgid "Insert guides at the vertical edges."
+msgstr "Inserir as guías nas marxes verticais."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_erasePreviousCheckBox)
+#: guidestool/InsertGuidesToolOptionWidget.ui:105
+#, kde-format
+msgid "Erase previous guides"
+msgstr "Borrar as guías anteriores"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_createButton)
+#: guidestool/InsertGuidesToolOptionWidget.ui:112
+#, kde-format
+msgid "Create"
+msgstr "Crear"
+
+#, fuzzy
+#~| msgid "X:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~| msgid "Y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "°"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "°"
+#~ msgstr "°"
+
+#, fuzzy
+#~| msgid "%"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%"
+#~ msgstr "%"
+
+#, fuzzy
+#~| msgid "Scale X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale X"
+#~ msgstr "Escala X"
+
+#, fuzzy
+#~| msgid "Scale Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale Y"
+#~ msgstr "Escala Y"
+
+#, fuzzy
+#~| msgid "Keep aspect ratio"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keep aspect ratio"
+#~ msgstr "Manter as proporcións"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Orientation:"
+#~ msgstr "Orientación:"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Position:"
+#~ msgstr "Posición:"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Engadir"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Eliminar"
+
+#, fuzzy
+#~| msgid "Insert this number of horizontal equally spaced guides."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert this number of horizontal equally spaced guides."
+#~ msgstr "Inserir este número de guías horizontais equidistantes."
+
+#, fuzzy
+#~| msgid "Insert guides at the horizontal edges."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert guides at the horizontal edges."
+#~ msgstr "Insira as guías nas marxes horizontais."
+
+#, fuzzy
+#~| msgid "Insert this number of vertical equally spaced guides."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert this number of vertical equally spaced guides."
+#~ msgstr "Insira este número de guías verticais equidistantes."
+
+#, fuzzy
+#~| msgid "Insert guides at the vertical edges."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert guides at the vertical edges."
+#~ msgstr "Inserir as guías nas marxes verticais."
+
+#, fuzzy
+#~| msgid "Erase previous guides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Erase previous guides"
+#~ msgstr "Eliminar as guías anteriores"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Crear"
+
+#, fuzzy
+#~| msgid "Edit Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Mode"
+#~ msgstr "Modo de edición"
+
+#, fuzzy
+#~| msgid "Escape Direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape Direction"
+#~ msgstr "Direccións de escapada"
+
+#, fuzzy
+#~| msgid "Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alignment"
+#~ msgstr "Aliñamento"
+
+#, fuzzy
+#~| msgid "Edit connection points"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit connection points"
+#~ msgstr "Editar os puntos de conexión. "
+
+#, fuzzy
+#~| msgid "Align to left edge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to left edge"
+#~ msgstr "Aliñar ao borde esquerdo"
+
+#, fuzzy
+#~| msgid "Align to horizontal center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to horizontal center"
+#~ msgstr "Aliñar ao centro horizontal"
+
+#, fuzzy
+#~| msgid "Align to right edge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to right edge"
+#~ msgstr "Aliñar ao borde esquerdo"
+
+#, fuzzy
+#~| msgid "Align to top edge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to top edge"
+#~ msgstr "Aliñar ao borde superior"
+
+#, fuzzy
+#~| msgid "Align to vertical center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to vertical center"
+#~ msgstr "Centrar ao centro vertical"
+
+#, fuzzy
+#~| msgid "Align to bottom edge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align to bottom edge"
+#~ msgstr "Aliñar ao borde inferior"
+
+#, fuzzy
+#~| msgid "Escape in all directions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in all directions"
+#~ msgstr "Escapar en tódalas direccións"
+
+#, fuzzy
+#~| msgid "Escape in horizontal directions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in horizontal directions"
+#~ msgstr "Escapar polas direccións horizontais"
+
+#, fuzzy
+#~| msgid "Escape in vertical directions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in vertical directions"
+#~ msgstr "Escapar polas direccións verticais"
+
+#, fuzzy
+#~| msgid "Escape in left direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in left direction"
+#~ msgstr "Escapar pola dirección esquerda"
+
+#, fuzzy
+#~| msgid "Escape in right direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in right direction"
+#~ msgstr "Escapar pola dirección dereita"
+
+#, fuzzy
+#~| msgid "Escape in up direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in up direction"
+#~ msgstr "Escapar pola dirección superior"
+
+#, fuzzy
+#~| msgid "Escape in down direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape in down direction"
+#~ msgstr "Escapar pola dirección inferior"
+
+#, fuzzy
+#~| msgid "Drag to edit connection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to edit connection."
+#~ msgstr "Arrastrar para editar a conexión"
+
+#, fuzzy
+#~| msgid "Double click connection or press delete to remove it."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click connection or press delete to remove it."
+#~ msgstr "Premer eliminar ou facer un dobre clic bórraa."
+
+#, fuzzy
+#~| msgid "Click to edit connection points."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click to edit connection points."
+#~ msgstr "Clic para editar os puntos de conexión. "
+
+#, fuzzy
+#~| msgid ""
+#~| "Drag to move connection point. Double click connection or press delete "
+#~| "to remove it."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Drag to move connection point. Double click connection or press delete to "
+#~ "remove it."
+#~ msgstr ""
+#~ "Arrastrar fai mover os puntos de conexión. Un dobre clic ou premer "
+#~ "eliminarbórraa."
+
+#, fuzzy
+#~| msgid "Double click connection point or press delete to remove it."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click connection point or press delete to remove it."
+#~ msgstr ""
+#~ "Fai dobre clic no punto de conexión ou premer eliminar para borrala."
+
+#, fuzzy
+#~| msgid "Double click to add connection point."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add connection point."
+#~ msgstr "Dobre clic para engadir un punto de conexión."
+
+#, fuzzy
+#~| msgid "Drag to create new connection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to create new connection."
+#~ msgstr "Arrastrar para crear unha nova conexión."
+
+#, fuzzy
+#~| msgid "Connection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connection"
+#~ msgstr "Conexión"
+
+#, fuzzy
+#~| msgid "Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line"
+#~ msgstr "Liña"
+
+#, fuzzy
+#~| msgid "Connection Point"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connection Point"
+#~ msgstr "Punto de conexión"
+
+#, fuzzy
+#~| msgid "Connect shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect shapes"
+#~ msgstr "Unir as formas"
+
+#, fuzzy
+#~| msgid "Bring to &Front"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bring to &Front"
+#~ msgstr "Trae cara a &diante"
+
+#, fuzzy
+#~| msgid "&Raise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Raise"
+#~ msgstr "&Elevar"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Lower"
+#~ msgstr "&Baixar"
+
+#, fuzzy
+#~| msgid "Send to &Back"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Send to &Back"
+#~ msgstr "Enviar ao &fondo"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Left"
+#~ msgstr "Aliñar á esquerda"
+
+#, fuzzy
+#~| msgid "Horizontally Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontally Center"
+#~ msgstr "Aliñar ao centro"
+
+#, fuzzy
+#~| msgid "Align Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Right"
+#~ msgstr "Aliñar á esquerda "
+
+#, fuzzy
+#~| msgid "Align Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Top"
+#~ msgstr "Aliñar á cima"
+
+#, fuzzy
+#~| msgid "Vertically Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertically Center"
+#~ msgstr "Centrar na vertical"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Bottom"
+#~ msgstr "Aliñar ao fondo"
+
+#, fuzzy
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Group"
+#~ msgstr "Agrupar"
+
+#, fuzzy
+#~| msgid "Ungroup"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ungroup"
+#~ msgstr "Desagrupar"
+
+#, fuzzy
+#~| msgid "Click and drag to move guide line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click and drag to move guide line."
+#~ msgstr "Prema e arrastre para mover a liña de guía."
+
+#, fuzzy
+#~| msgid ""
+#~| "Left click rotates around center, right click around highlighted "
+#~| "position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Left click rotates around center, right click around highlighted position."
+#~ msgstr ""
+#~ "Os clic no esquerdo rota arredor do centro e co dereito na posición "
+#~ "resaltada."
+
+#, fuzzy
+#~| msgid "Click and drag to shear selection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click and drag to shear selection."
+#~ msgstr "Faga clic e arrastre para separar a selección."
+
+#, fuzzy
+#~| msgid "Click and drag to resize selection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click and drag to resize selection."
+#~ msgstr "Faga clic e arrastre para redimensionar a selección."
+
+#, fuzzy
+#~| msgid "Click and drag to move selection."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click and drag to move selection."
+#~ msgstr "Faga clic e arrastre para mover a selección."
+
+#, fuzzy
+#~| msgid ""
+#~| "Click and drag to resize selection. Middle click to set highlighted "
+#~| "position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Click and drag to resize selection. Middle click to set highlighted "
+#~ "position."
+#~ msgstr ""
+#~ "Faga clic e arrastre para redimensionar a selección. O clic no medio "
+#~ "resalta unha posición."
+
+#, fuzzy
+#~| msgid "Arrange"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrange"
+#~ msgstr "Dispor"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Xeometría"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill"
+#~ msgstr "Recheo"
+
+#, fuzzy
+#~| msgid "Shadow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shadow"
+#~ msgstr "Sombra"
+
+#, fuzzy
+#~| msgid "Shape handling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape handling"
+#~ msgstr "Xestión de formas"
+
+#, fuzzy
+#~| msgid "Press ALT to hold x- or y-position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press ALT to hold x- or y-position."
+#~ msgstr "Prema ALT para manter as posicións en x ou y."
+
+#, fuzzy
+#~| msgid "Press CTRL to resize from center."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press CTRL to resize from center."
+#~ msgstr "Prema CTRL para redimensionar desde o centro."
+
+#, fuzzy
+#~| msgid "Press ALT to rotate in 45 degree steps."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press ALT to rotate in 45 degree steps."
+#~ msgstr "Prema ALT para rotar en pasos de 45 graos."
+
+#, fuzzy
+#~| msgid "Double click to add guide line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add guide line."
+#~ msgstr "Dobre clic para engadir a liña de guía."
+
+#, fuzzy
+#~| msgid ""
+#~| "Click and drag to move guide line. Double click to remove guide line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Click and drag to move guide line. Double click to remove guide line."
+#~ msgstr ""
+#~ "As liñas de guía móvense cun clic e arrastrando. Cun dobre clic "
+#~ "elimínanse as liñas de guía. "
+
+#, fuzzy
+#~| msgid "Guides Editor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Guides Editor"
+#~ msgstr "Editor de guías"
+
+#, fuzzy
+#~| msgid "Guides Insertor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Guides Insertor"
+#~ msgstr "Insertor de guías"
+
+#, fuzzy
+#~| msgid "Edit guidelines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit guidelines"
+#~ msgstr "Editar as liñas de guía"
+
+#, fuzzy
+#~| msgid "Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "Horizontal"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "Vertical"
+
+#~ msgid "None"
+#~ msgstr "Ningún"
+
+#~ msgid "Shape Opacity"
+#~ msgstr "Opacidade da forma"
+
+#~ msgid "Snapping"
+#~ msgstr "Axuste"
+
+#~ msgid "Basic shape manipulation"
+#~ msgstr "Manipulación básica das formas"

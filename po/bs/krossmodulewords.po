@@ -1,0 +1,626 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 02:41+0200\n"
+"PO-Revision-Date: 2012-10-03 13:16+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2014-10-21 06:52+0000\n"
+"X-Generator: Launchpad (build 17203)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#. i18n: ectx: Menu (tools)
+#: scripting.rc:4
+#, kde-format
+msgid "&Tools"
+msgstr "Ala&tke"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:7
+#, kde-format
+msgid "Import"
+msgstr "Uvezi"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:7
+#, kde-format
+msgid "Import content"
+msgstr "Sadržaj uvoza"
+
+#. i18n: tag script attribute text
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:8 scripts/scripts.rc:26
+#, kde-format
+msgid "Text or HTML File"
+msgstr "Tekst ili HTML datoteka"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:8
+#, kde-format
+msgid "Python script to import content from a text or html file"
+msgstr "Python skripta za uvoz sadržaja iz tekstualne ili HTML datoteke"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:12
+#, kde-format
+msgid "Doxygen XML"
+msgstr "Doxygen XML"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:12
+#, kde-format
+msgid "Python script to import content from a combined doxygen XML file"
+msgstr "Python skripta za uvoz sadržaja iz kombinovane doxiygen XML datoteke"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:16
+#, kde-format
+msgid "OpenOffice.org UNO"
+msgstr "OpenOffice.org UNO"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:16
+#, kde-format
+msgid "Python script to import content using OpenOffice.org PyUNO"
+msgstr "Python skripta za uvoz sadržaja koristeći OpenOffice.org PyUNO"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:25
+#, kde-format
+msgid "Export"
+msgstr "Izvoz"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:25
+#, kde-format
+msgid "Export content"
+msgstr "Izvoz sadržaja"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:26
+#, kde-format
+msgid "Python script to export content to a text or html file"
+msgstr "Python skripta za izvoz sadržaja u tekstualnu ili HTML datoteku"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:30
+#, kde-format
+msgid "ReportLab.org PDF"
+msgstr "ReportLab.org PDF"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:30
+#, kde-format
+msgid "Python script to export content to a PDF file using ReportLab.org"
+msgstr ""
+"Python skripta za izvoz sadržaja u PDF datoteku koristeći  ReportLab.org"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:40
+#, kde-format
+msgid "Tools"
+msgstr "Alati"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:40
+#, kde-format
+msgid "Miscellaneous scripts"
+msgstr "Razne skripte"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:41
+#, kde-format
+msgid "XML Viewer"
+msgstr "XML preglednik"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:41
+#, kde-format
+msgid ""
+"Python script to view the OpenDocument XML representation of the current "
+"document"
+msgstr ""
+"Python skripta za pregled OpenDocument XML predstave trenutnog dokumenta"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:45
+#, kde-format
+msgid "Document Tree"
+msgstr "Stablo dokumenta"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:45
+#, kde-format
+msgid "QtRuby script that displays the document structure within a treeview"
+msgstr "QtRuby skripta koja prikazuje strukturu dokumenta u stablu"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:49
+#, kde-format
+msgid "Online Help"
+msgstr "Online pomoć"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:49
+#, kde-format
+msgid ""
+"Python script that uses the KHTML Part to display the Words Scripting online "
+"help"
+msgstr ""
+"Python skripta koja koristi KHTML Part za prikaz Words Scripting pomoći"
+
+#. i18n: tag collection attribute text
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:60 scripts/scripts.rc:118
+#, kde-format
+msgid "Variables"
+msgstr "Promjenljive"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:60
+#, kde-format
+msgid "Scripting variables for Words"
+msgstr "Skriptne promjenjive za Words"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:62
+#, kde-format
+msgid "Read From File..."
+msgstr "Čitaj iz datoteke..."
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:62
+#, kde-format
+msgid "Python script to read a variable from a file"
+msgstr "Python skripta za čitanje varijable iz datoteke"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:80
+#, kde-format
+msgid "Samples"
+msgstr "Primjeri"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:80
+#, kde-format
+msgid "Samples to demonstrate scripting with Words"
+msgstr "Primjeri koji demonstriraju skriptiranje s Words"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:81
+#, kde-format
+msgid "Insert Shape..."
+msgstr "Ubaci lik..."
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:81
+#, kde-format
+msgid "Python script to insert a shape"
+msgstr "Python skripta za ubacivanje lika"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:85
+#, kde-format
+msgid "Control Cursor..."
+msgstr "Kontrola kursora..."
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:85
+#, kde-format
+msgid "Ruby script that demonstrates how to control the cursor"
+msgstr "Ruby skripta koja demonstrira kako kontrolisati kursor"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:89
+#, kde-format
+msgid "Execute Action..."
+msgstr "Izvrši akciju..."
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:89
+#, kde-format
+msgid "Python script that demonstrates usage of actions"
+msgstr "Python skripta koja demonstrira upotrebu akcija"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:93
+#, kde-format
+msgid "Tool Actions..."
+msgstr "Alatne akcije..."
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:93
+#, kde-format
+msgid "Python script that demonstrates usage of tool actions"
+msgstr "Python skripta koja demostrira upotrebu alatnih akcija"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:97
+#, kde-format
+msgid "Progressbar"
+msgstr "Progres traka"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:97
+#, kde-format
+msgid "Python script that demonstrates how to use the progressbar"
+msgstr "Python skripta koja demostrira upotrebu progres trake"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:101
+#, kde-format
+msgid "Text"
+msgstr "Tekst"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:101
+#, kde-format
+msgid "Python script that demonstrates usage of the text engine"
+msgstr "Python skripta koja demostrira upotrebu tekstualnog pogona"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:105
+#, kde-format
+msgid "Lists with HTML"
+msgstr "Liste s HTML"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:105
+#, kde-format
+msgid "Python script that demonstrates how to create lists with HTML"
+msgstr "Python skripta koja demostrira upotrebu listi s HTML"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:110
+#, kde-format
+msgid "Lists with Cursor"
+msgstr "Liste s kursorom"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:110
+#, kde-format
+msgid "Python script that demonstrates how to create lists with a cursor"
+msgstr "Python skripta koja demostrira kako kreirati liste s kursorom"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:114
+#, kde-format
+msgid "Tables"
+msgstr "Tabele"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:114
+#, kde-format
+msgid "Python script that demonstrates how to deal with tables"
+msgstr "Python skripta koja demostrira kako raditi s tabelama"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:118
+#, kde-format
+msgid "Python script that demonstrates how to handle variables"
+msgstr "Python skripta koja demostrira kako rukovati varijablama"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:122
+#, kde-format
+msgid "All Shapes"
+msgstr "Svi likovi"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:122
+#, kde-format
+msgid "Python script adds all shapes"
+msgstr "Python skripta dodaje sve likove"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "Ala&tke"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Uvezi"
+
+#, fuzzy
+#~| msgid "Import content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import content"
+#~ msgstr "Sadržaj uvoza"
+
+#, fuzzy
+#~| msgid "Text or HTML File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text or HTML File"
+#~ msgstr "Tekst ili HTML datoteka"
+
+#, fuzzy
+#~| msgid "Python script to import content from a text or html file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to import content from a text or html file"
+#~ msgstr "Python skripta za uvoz sadržaja iz tekstualne ili HTML datoteke"
+
+#, fuzzy
+#~| msgid "Doxygen XML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Doxygen XML"
+#~ msgstr "Doxygen XML"
+
+#, fuzzy
+#~| msgid "Python script to import content from a combined doxygen XML file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to import content from a combined doxygen XML file"
+#~ msgstr ""
+#~ "Python skripta za uvoz sadržaja iz kombinovane doxiygen XML datoteke"
+
+#, fuzzy
+#~| msgid "OpenOffice.org UNO"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "OpenOffice.org UNO"
+#~ msgstr "OpenOffice.org UNO"
+
+#, fuzzy
+#~| msgid "Python script to import content using OpenOffice.org PyUNO"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to import content using OpenOffice.org PyUNO"
+#~ msgstr "Python skripta za uvoz sadržaja koristeći OpenOffice.org PyUNO"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Izvoz"
+
+#, fuzzy
+#~| msgid "Export content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export content"
+#~ msgstr "Izvoz sadržaja"
+
+#, fuzzy
+#~| msgid "Python script to export content to a text or html file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to export content to a text or html file"
+#~ msgstr "Python skripta za izvoz sadržaja u tekstualnu ili HTML datoteku"
+
+#, fuzzy
+#~| msgid "ReportLab.org PDF"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ReportLab.org PDF"
+#~ msgstr "ReportLab.org PDF"
+
+#, fuzzy
+#~| msgid "Python script to export content to a PDF file using ReportLab.org"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to export content to a PDF file using ReportLab.org"
+#~ msgstr ""
+#~ "Python skripta za izvoz sadržaja u PDF datoteku koristeći  ReportLab.org"
+
+#, fuzzy
+#~| msgid "Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "Alati"
+
+#, fuzzy
+#~| msgid "Miscellaneous scripts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Miscellaneous scripts"
+#~ msgstr "Razne skripte"
+
+#, fuzzy
+#~| msgid "XML Viewer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "XML Viewer"
+#~ msgstr "XML preglednik"
+
+#, fuzzy
+#~| msgid ""
+#~| "Python script to view the OpenDocument XML representation of the current "
+#~| "document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Python script to view the OpenDocument XML representation of the current "
+#~ "document"
+#~ msgstr ""
+#~ "Python skripta za pregled OpenDocument XML predstave trenutnog dokumenta"
+
+#, fuzzy
+#~| msgid "Document Tree"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Tree"
+#~ msgstr "Stablo dokumenta"
+
+#, fuzzy
+#~| msgid ""
+#~| "QtRuby script that displays the document structure within a treeview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QtRuby script that displays the document structure within a treeview"
+#~ msgstr "QtRuby skripta koja prikazuje strukturu dokumenta u stablu"
+
+#, fuzzy
+#~| msgid "Online Help"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Online Help"
+#~ msgstr "Online pomoć"
+
+#, fuzzy
+#~| msgid ""
+#~| "Python script that uses the KHTML Part to display the Words Scripting "
+#~| "online help"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Python script that uses the KHTML Part to display the Words Scripting "
+#~ "online help"
+#~ msgstr ""
+#~ "Python skripta koja koristi KHTML Part za prikaz Words Scripting pomoći"
+
+#, fuzzy
+#~| msgid "Variables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Variables"
+#~ msgstr "Promjenljive"
+
+#, fuzzy
+#~| msgid "Scripting variables for Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scripting variables for Words"
+#~ msgstr "Skriptne promjenjive za Words"
+
+#, fuzzy
+#~| msgid "Read From File..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Read From File..."
+#~ msgstr "Čitaj iz datoteke..."
+
+#, fuzzy
+#~| msgid "Python script to read a variable from a file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to read a variable from a file"
+#~ msgstr "Python skripta za čitanje varijable iz datoteke"
+
+#, fuzzy
+#~| msgid "Samples"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Samples"
+#~ msgstr "Primjeri"
+
+#, fuzzy
+#~| msgid "Samples to demonstrate scripting with Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Samples to demonstrate scripting with Words"
+#~ msgstr "Primjeri koji demonstriraju skriptiranje s Words"
+
+#, fuzzy
+#~| msgid "Insert Shape..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Shape..."
+#~ msgstr "Ubaci lik..."
+
+#, fuzzy
+#~| msgid "Python script to insert a shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to insert a shape"
+#~ msgstr "Python skripta za ubacivanje lika"
+
+#, fuzzy
+#~| msgid "Control Cursor..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Control Cursor..."
+#~ msgstr "Kontrola kursora..."
+
+#, fuzzy
+#~| msgid "Ruby script that demonstrates how to control the cursor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ruby script that demonstrates how to control the cursor"
+#~ msgstr "Ruby skripta koja demonstrira kako kontrolisati kursor"
+
+#, fuzzy
+#~| msgid "Execute Action..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Execute Action..."
+#~ msgstr "Izvrši akciju..."
+
+#, fuzzy
+#~| msgid "Python script that demonstrates usage of actions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates usage of actions"
+#~ msgstr "Python skripta koja demonstrira upotrebu akcija"
+
+#, fuzzy
+#~| msgid "Tool Actions..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tool Actions..."
+#~ msgstr "Alatne akcije..."
+
+#, fuzzy
+#~| msgid "Python script that demonstrates usage of tool actions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates usage of tool actions"
+#~ msgstr "Python skripta koja demostrira upotrebu alatnih akcija"
+
+#, fuzzy
+#~| msgid "Progressbar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Progressbar"
+#~ msgstr "Progres traka"
+
+#, fuzzy
+#~| msgid "Python script that demonstrates how to use the progressbar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates how to use the progressbar"
+#~ msgstr "Python skripta koja demostrira upotrebu progres trake"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text"
+#~ msgstr "Tekst"
+
+#, fuzzy
+#~| msgid "Python script that demonstrates usage of the text engine"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates usage of the text engine"
+#~ msgstr "Python skripta koja demostrira upotrebu tekstualnog pogona"
+
+#, fuzzy
+#~| msgid "Lists with HTML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lists with HTML"
+#~ msgstr "Liste s HTML"
+
+#, fuzzy
+#~| msgid "Python script that demonstrates how to create lists with HTML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates how to create lists with HTML"
+#~ msgstr "Python skripta koja demostrira upotrebu listi s HTML"
+
+#, fuzzy
+#~| msgid "Lists with Cursor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lists with Cursor"
+#~ msgstr "Liste s kursorom"
+
+#, fuzzy
+#~| msgid "Python script that demonstrates how to create lists with a cursor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates how to create lists with a cursor"
+#~ msgstr "Python skripta koja demostrira kako kreirati liste s kursorom"
+
+#, fuzzy
+#~| msgid "Tables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tables"
+#~ msgstr "Tabele"
+
+#, fuzzy
+#~| msgid "Python script that demonstrates how to deal with tables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates how to deal with tables"
+#~ msgstr "Python skripta koja demostrira kako raditi s tabelama"
+
+#, fuzzy
+#~| msgid "Python script that demonstrates how to handle variables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates how to handle variables"
+#~ msgstr "Python skripta koja demostrira kako rukovati varijablama"
+
+#, fuzzy
+#~| msgid "All Shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All Shapes"
+#~ msgstr "Svi likovi"
+
+#, fuzzy
+#~| msgid "Python script adds all shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script adds all shapes"
+#~ msgstr "Python skripta dodaje sve likove"

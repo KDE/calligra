@@ -1,0 +1,130 @@
+# Burkhard Lück <lueck@hube-lueck.de>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-11-04 05:26+0100\n"
+"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: KoContactSemanticItemFactory.cpp:46
+#, kde-format
+msgctxt "displayname of the semantic item type Contact"
+msgid "Contact"
+msgstr "Kontakt"
+
+#: KoRdfFoaF.cpp:179
+#, kde-format
+msgid "Select an address book for saving:"
+msgstr "Wählen Sie ein Adressbuch zum Speichern:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfFoaFEditWidget.ui:26
+#, kde-format
+msgid "&Name:"
+msgstr "&Name:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfFoaFEditWidget.ui:36
+#, kde-format
+msgid "&Nick:"
+msgstr "Spitz&name:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfFoaFEditWidget.ui:46
+#, kde-format
+msgid "&Phone Number:"
+msgstr "&Telefonnummer:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: KoRdfFoaFEditWidget.ui:59
+#, kde-format
+msgid "&Home Page:"
+msgstr "&Webseite:"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:30
+#, kde-format
+msgid "Contact Information"
+msgstr "Kontaktinformation"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:48
+#, kde-format
+msgid "Edit..."
+msgstr "Bearbeiten ..."
+
+#: KoRdfFoaFTreeWidgetItem.cpp:51
+#, kde-format
+msgid "Import contact"
+msgstr "Kontakt importieren"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:54
+#, kde-format
+msgid "Export as vcard..."
+msgstr "Als vCard exportieren ..."
+
+#, fuzzy
+#~| msgid "&Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Name:"
+#~ msgstr "&Name:"
+
+#, fuzzy
+#~| msgid "&Nick:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Nick:"
+#~ msgstr "Spitz&name:"
+
+#, fuzzy
+#~| msgid "&Phone Number:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Phone Number:"
+#~ msgstr "&Telefonnummer:"
+
+#, fuzzy
+#~| msgid "&Home Page:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Home Page:"
+#~ msgstr "&Webseite:"
+
+#, fuzzy
+#~| msgctxt "displayname of the semantic item type Contact"
+#~| msgid "Contact"
+#~ msgctxt "(qtundo-format) displayname of the semantic item type Contact"
+#~ msgid "Contact"
+#~ msgstr "Kontakt"
+
+#, fuzzy
+#~| msgid "Select an address book for saving:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select an address book for saving:"
+#~ msgstr "Wählen Sie ein Adressbuch zum Speichern:"
+
+#, fuzzy
+#~| msgid "Contact Information"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contact Information"
+#~ msgstr "Kontaktinformation"
+
+#, fuzzy
+#~| msgid "Edit..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit..."
+#~ msgstr "Bearbeiten ..."
+
+#, fuzzy
+#~| msgid "Import contact"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import contact"
+#~ msgstr "Kontakt importieren"
+
+#, fuzzy
+#~| msgid "Export as vcard..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as vcard..."
+#~ msgstr "Als vCard exportieren ..."

@@ -1,0 +1,778 @@
+# translation of karbon.po to Chinese Traditional
+# traditional Chinese Translation of Karbon
+# Copyright (C) 2002, 2006, 2007, 2008 Free Software Foundation, Inc.
+#
+# Translator: Chao-Hsiung Liao <pesder.liao@msa.hinet.net>, 2002.
+# Goodhorse <franklin@goodhorse.idv.tw>, 2008.
+# Franklin Weng <franklin@goodhorse.idv.tw>, 2010, 2011, 2012.
+# Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2006, 2008, 2009, 2010.
+# Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007, 2008.
+# pan93412 <pan93412@gmail.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2020-01-16 14:40+0800\n"
+"Last-Translator: pan93412 <pan93412@gmail.com>\n"
+"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.12.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr "布林運算"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "排序(&O)"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "對齊(&A)"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, kde-format
+msgid "&File"
+msgstr "檔案(&F)"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr "編輯(&E)"
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr "檢視(&V)"
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "物件(&O)"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, kde-format
+msgid "&Distribute"
+msgstr "分配(&D)"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, kde-format
+msgid "&Path"
+msgstr "路徑(&P)"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, kde-format
+msgid "Effe&cts"
+msgstr "效果(&C)"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, kde-format
+msgid "&Settings"
+msgstr "設定(&S)"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr ""
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr "編輯"
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, kde-format
+msgid "Object"
+msgstr "物件"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, kde-format
+msgid "Align"
+msgstr "對齊"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "效果"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, kde-format
+msgid "View"
+msgstr "檢視"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, kde-format
+msgid "&Flatten Path..."
+msgstr "使路徑平坦(&F)..."
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, kde-format
+msgid "Flatten Path"
+msgstr "使路徑平坦"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, kde-format
+msgid "Properties"
+msgstr "屬性"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, kde-format
+msgid "Flatness:"
+msgstr "平坦："
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "使路徑平坦"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr "微調路徑"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, kde-format
+msgid "&Refine Path..."
+msgstr "微調路徑(&R)..."
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, kde-format
+msgid "Refine Path"
+msgstr "微調路徑"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, kde-format
+msgid "Subdivisions:"
+msgstr "細分："
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr "圓角"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, kde-format
+msgid "&Round Corners..."
+msgstr "圓角(&R)..."
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, kde-format
+msgid "Round Corners"
+msgstr "圓角"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "半徑："
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr "漩渦/擠壓"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "漩渦/擠壓(&W)..."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, kde-format
+msgid "Whirl Pinch"
+msgstr "漩渦/擠壓"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, kde-format
+msgid "Info"
+msgstr "資訊"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr "漩渦/擠壓後的結果可以用微調路徑元件來改善。"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "角度："
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, kde-format
+msgid "Pinch:"
+msgstr "擠壓:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "提升圖層"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "降低圖層"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, kde-format
+msgid "Configure"
+msgstr "設定"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "介面"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "雜項"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, kde-format
+msgid "Grid"
+msgstr "格線"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "文件"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "文件設定"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "作者"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr "作者"
+
+#: ui/KarbonAboutData.h:22
+#, kde-format
+msgid "Karbon"
+msgstr "Karbon"
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr "一個向量式的繪圖程式。"
+
+#: ui/KarbonAboutData.h:26
+#, fuzzy, kde-format
+#| msgid "(c) 2001-2013, The Karbon Developers"
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr "(c) 2001-2013, Karbon 開發團隊"
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr ""
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr ""
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr "Rob Buis"
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr "Tomislav Lukman"
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr "Benoît Vautrin"
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr "Jan Hambrecht"
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr "錯誤修正與改進"
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr "Tim Beaulen"
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr "錯誤修正"
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr "Alan Horkan"
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr "修正程式，提供有用的建議"
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Chao-Hsiung Liao"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "pesder.liao@msa.hinet.net"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "插入圖片"
+
+#: ui/KarbonView.cpp:346
+#, kde-format
+msgid "Choose Graphic to Add"
+msgstr "選擇要加入的圖片"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr "無法載入影像。"
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Import graphic"
+msgstr "匯入圖片"
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr "無法建立影像物件。"
+
+#: ui/KarbonView.cpp:612
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "水平映射"
+
+#: ui/KarbonView.cpp:614
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "垂直映射"
+
+#: ui/KarbonView.cpp:616
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "水平與垂直映射"
+
+#: ui/KarbonView.cpp:671
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "分離路徑"
+
+#: ui/KarbonView.cpp:852
+#, kde-format
+msgid "Outline &Mode"
+msgstr "大綱模式(&M)"
+
+#: ui/KarbonView.cpp:860
+#, kde-format
+msgid "&Import Graphic..."
+msgstr "匯入圖片(&I)..."
+
+#: ui/KarbonView.cpp:864
+#, kde-format
+msgid "Edit Guides"
+msgstr "編輯引導"
+
+#: ui/KarbonView.cpp:870
+#, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "複製(&D)"
+
+#: ui/KarbonView.cpp:875
+#, kde-format
+msgid "Distribute Center (Horizontal)"
+msgstr "水平分散置中"
+
+#: ui/KarbonView.cpp:879
+#, kde-format
+msgid "Distribute Gaps (Horizontal)"
+msgstr "水平分散攤開"
+
+#: ui/KarbonView.cpp:883
+#, kde-format
+msgid "Distribute Left Borders"
+msgstr "分散置左邊框"
+
+#: ui/KarbonView.cpp:887
+#, kde-format
+msgid "Distribute Right Borders"
+msgstr "分散置右邊框"
+
+#: ui/KarbonView.cpp:891
+#, kde-format
+msgid "Distribute Center (Vertical)"
+msgstr "分散垂直置中"
+
+#: ui/KarbonView.cpp:895
+#, kde-format
+msgid "Distribute Gaps (Vertical)"
+msgstr "分散垂直攤開"
+
+#: ui/KarbonView.cpp:899
+#, kde-format
+msgid "Distribute Bottom Borders"
+msgstr "分散置底邊框"
+
+#: ui/KarbonView.cpp:903
+#, kde-format
+msgid "Distribute Top Borders"
+msgstr "分散置頂邊框"
+
+#: ui/KarbonView.cpp:907
+#, kde-format
+msgid "Show Color Palette"
+msgstr "顯示調色盤"
+
+#: ui/KarbonView.cpp:909
+#, kde-format
+msgid "Show or hide color palette"
+msgstr "顯示或隱藏調色盤"
+
+#: ui/KarbonView.cpp:913
+#, kde-format
+msgid "&Clip Object"
+msgstr "修剪物件(&C)"
+
+#: ui/KarbonView.cpp:917
+#, kde-format
+msgid "&Unclip Objects"
+msgstr "反修剪物件(&U)"
+
+#: ui/KarbonView.cpp:921
+#, kde-format
+msgid "Mirror Vertically"
+msgstr "垂直映射"
+
+#: ui/KarbonView.cpp:925
+#, kde-format
+msgid "Mirror Horizontally"
+msgstr "水平映射"
+
+#: ui/KarbonView.cpp:932
+#, kde-format
+msgid "&Close Path"
+msgstr "關閉路徑(&C)"
+
+#: ui/KarbonView.cpp:938
+#, kde-format
+msgid "Com&bine Path"
+msgstr "組合路徑(&B)"
+
+#: ui/KarbonView.cpp:944
+#, kde-format
+msgid "Se&parate Path"
+msgstr "分離路徑(&P)"
+
+#: ui/KarbonView.cpp:950
+#, kde-format
+msgid "Re&verse Path"
+msgstr "反轉路徑(&V)"
+
+#: ui/KarbonView.cpp:956
+#, kde-format
+msgid "Intersect Paths"
+msgstr "相交路徑"
+
+#: ui/KarbonView.cpp:962
+#, kde-format
+msgid "Subtract Paths"
+msgstr "減去路徑"
+
+#: ui/KarbonView.cpp:968
+#, kde-format
+msgid "Unite Paths"
+msgstr "統一路徑"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr "排除路徑"
+
+#: ui/KarbonView.cpp:980
+#, kde-format
+msgid "Snap Path to Grid"
+msgstr "將路徑貼齊格線"
+
+#: ui/KarbonView.cpp:988
+#, kde-format
+msgid "Zoom to Selection"
+msgstr "縮放到選取區"
+
+#: ui/KarbonView.cpp:992
+#, kde-format
+msgid "Zoom to Drawing"
+msgstr "縮放到繪圖區"
+
+#: ui/KarbonZoomController.cpp:51
+#, kde-format
+msgid "Zoom"
+msgstr "縮放"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, kde-format
+msgid "Show status bar:"
+msgstr "顯示狀態列："
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr "最近檔案的數量："
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr "調色盤字型大小："
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, kde-format
+msgid "Select palette"
+msgstr "選擇調色盤"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr "按下以套用填滿選擇區"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, kde-format
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "無"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr "按下以套用劃線選擇區"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr "自訂"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, kde-format
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "無"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, kde-format
+msgid "Stroke:"
+msgstr "劃線："
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, kde-format
+msgid "Fill:"
+msgstr "填滿："
+
+#~ msgid "D&elete"
+#~ msgstr "刪除(&E)"
+
+#~ msgid "Layer view"
+#~ msgstr "圖層檢視"
+
+#~ msgid "Add a new layer"
+#~ msgstr "新增圖層"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "刪除選取的物件"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "提升選取的物件"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "降低選取的物件"
+
+#~ msgid "Minimal View"
+#~ msgstr "最小檢視"
+
+#~ msgid "Detailed View"
+#~ msgstr "詳細檢視"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "縮圖檢視"
+
+#~ msgid "View mode"
+#~ msgstr "檢視模式"
+
+#~ msgid "New Layer"
+#~ msgstr "新圖層"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "輸入新圖層的名稱："
+
+#~ msgid "New layer"
+#~ msgstr "新圖層"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "建立圖層"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "刪除圖層"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "無法刪除所有的圖層，至少要留一個。"
+
+#~ msgid "Error deleting layers"
+#~ msgstr "刪除圖層發生錯誤"
+
+#~ msgid "Layer"
+#~ msgstr "圖層"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "群組"
+
+#~ msgid "Shape"
+#~ msgstr "物件"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "可看見"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "鎖定"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "zIndex"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "不透明度"
+
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "已修剪"
+
+#~ msgid "no"
+#~ msgstr "否"
+
+#~ msgid "yes"
+#~ msgstr "是"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "重設物件的父物件"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "不合法的 OASIS 文件。找不到 office:body 標籤。"
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "不合法的 OASIS 文件。找不到 office:drawing 標籤。"
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "不合法的 OASIS 文件。找不到 draw:page 標籤。"
+
+#~ msgid "Master Page"
+#~ msgstr "主頁面"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "顯示頁面邊界"
+
+#~ msgid "Show Rulers"
+#~ msgstr "顯示尺規"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "顯示或隱藏尺規"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "貼齊格線"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "貼齊格線"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "設定 Karbon..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "頁面佈局(&L)..."
+
+#~ msgid "Canvas color:"
+#~ msgstr "畫布顏色："

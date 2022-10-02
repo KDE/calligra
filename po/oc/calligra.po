@@ -1,0 +1,8650 @@
+# translation of koffice.po to Occitan (lengadocian)
+# Copyright (C) 2008 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>, 2007, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-23 00:46+0000\n"
+"PO-Revision-Date: 2008-08-05 22:28+0200\n"
+"Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
+"Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
+"Language: oc\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#, fuzzy, kde-format
+#| msgid "Collection"
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Colleccion"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+
+#: basicflakes/plugin/KoCreatePathToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Remove Group"
+msgid "Draw path"
+msgstr "Suprimir un grop"
+
+#: basicflakes/plugin/KoPencilToolFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Remove Group"
+msgid "Freehand path"
+msgstr "Suprimir un grop"
+
+#: basicflakes/tools/KoCreatePathTool.cpp:448
+#, kde-format
+msgid "Angle snapping delta:"
+msgstr ""
+
+#: basicflakes/tools/KoCreatePathTool.cpp:455
+#, kde-format
+msgid "Activate angle snap:"
+msgstr ""
+
+#: basicflakes/tools/KoCreatePathTool.cpp:463
+#, kde-format
+msgid "Angle Constraints"
+msgstr ""
+
+#: basicflakes/tools/KoCreatePathTool.cpp:467
+#: basicflakes/tools/KoPencilTool.cpp:336 widgets/KoGradientEditWidget.cpp:147
+#, fuzzy, kde-format
+#| msgid "Lines"
+msgid "Line"
+msgstr "Linhas"
+
+#: basicflakes/tools/KoPencilTool.cpp:273
+#, fuzzy, kde-format
+#| msgid "Position:"
+msgid "Precision:"
+msgstr "Posicion :"
+
+#: basicflakes/tools/KoPencilTool.cpp:275
+#, kde-format
+msgctxt "The raw line data"
+msgid "Raw"
+msgstr ""
+
+#: basicflakes/tools/KoPencilTool.cpp:276
+#: flake/KoConnectionShapeConfigWidget.cpp:20
+#, kde-format
+msgid "Curve"
+msgstr "Corba"
+
+#: basicflakes/tools/KoPencilTool.cpp:277
+#: flake/KoConnectionShapeConfigWidget.cpp:19
+#, fuzzy, kde-format
+#| msgid "Portrait"
+msgid "Straight"
+msgstr "Contrast"
+
+#: basicflakes/tools/KoPencilTool.cpp:286
+#: basicflakes/tools/KoPencilTool.cpp:292
+#, kde-format
+msgid "Optimize"
+msgstr ""
+
+#: basicflakes/tools/KoPencilTool.cpp:298
+#, kde-format
+msgid "Exactness:"
+msgstr ""
+
+#: basicflakes/tools/KoPencilTool.cpp:331
+#: basicflakes/tools/KoPencilTool.cpp:332
+#, kde-format
+msgid "Pencil"
+msgstr ""
+
+#: flake/commands/KoConnectionShapeTypeCommand.cpp:18
+#, fuzzy
+#| msgid "Collection"
+msgctxt "(qtundo-format)"
+msgid "Change Connection"
+msgstr "Colleccion"
+
+#: flake/commands/KoParameterHandleMoveCommand.cpp:21
+#, fuzzy
+#| msgid "Change"
+msgctxt "(qtundo-format)"
+msgid "Change parameter"
+msgstr "Cambiar"
+
+#: flake/commands/KoParameterToPathCommand.cpp:31
+#: flake/commands/KoParameterToPathCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Convert to Path"
+msgstr ""
+
+#: flake/commands/KoPathBreakAtPointCommand.cpp:29
+#, fuzzy
+#| msgid "Margins"
+msgctxt "(qtundo-format)"
+msgid "Break subpath at points"
+msgstr "Marges"
+
+#: flake/commands/KoPathCombineCommand.cpp:45
+msgctxt "(qtundo-format)"
+msgid "Combine paths"
+msgstr ""
+
+#: flake/commands/KoPathControlPointMoveCommand.cpp:28
+#, fuzzy
+#| msgid "Margins"
+msgctxt "(qtundo-format)"
+msgid "Move control point"
+msgstr "Marges"
+
+#: flake/commands/KoPathFillRuleCommand.cpp:31
+msgctxt "(qtundo-format)"
+msgid "Set fill rule"
+msgstr ""
+
+#: flake/commands/KoPathPointInsertCommand.cpp:66
+#, fuzzy
+#| msgid "Margins"
+msgctxt "(qtundo-format)"
+msgid "Insert points"
+msgstr "Marges"
+
+#: flake/commands/KoPathPointMergeCommand.cpp:139
+#, fuzzy
+#| msgid "Margins"
+msgctxt "(qtundo-format)"
+msgid "Merge points"
+msgstr "Marges"
+
+#: flake/commands/KoPathPointMoveCommand.cpp:29
+#: flake/commands/KoPathPointMoveCommand.cpp:45
+#, fuzzy
+#| msgid "Remove Group"
+msgctxt "(qtundo-format)"
+msgid "Move points"
+msgstr "Suprimir un grop"
+
+#: flake/commands/KoPathPointRemoveCommand.cpp:91
+#: flake/commands/KoPathPointRemoveCommand.cpp:120
+#, fuzzy
+#| msgid "Remove Group"
+msgctxt "(qtundo-format)"
+msgid "Remove points"
+msgstr "Suprimir un grop"
+
+#: flake/commands/KoPathPointTypeCommand.cpp:35
+#, fuzzy
+#| msgid "Opacity"
+msgctxt "(qtundo-format)"
+msgid "Set point type"
+msgstr "Opacitat"
+
+#: flake/commands/KoPathReverseCommand.cpp:38
+#, fuzzy
+#| msgid "Remove Group"
+msgctxt "(qtundo-format)"
+msgid "Reverse paths"
+msgstr "Suprimir un grop"
+
+#: flake/commands/KoPathSegmentBreakCommand.cpp:28
+#, fuzzy
+#| msgid "Remove Group"
+msgctxt "(qtundo-format)"
+msgid "Break subpath"
+msgstr "Suprimir un grop"
+
+#: flake/commands/KoPathSegmentTypeCommand.cpp:121
+#, fuzzy
+#| msgid "Change"
+msgctxt "(qtundo-format)"
+msgid "Change segments to curves"
+msgstr "Cambiar"
+
+#: flake/commands/KoPathSegmentTypeCommand.cpp:123
+#, fuzzy
+#| msgid "Change"
+msgctxt "(qtundo-format)"
+msgid "Change segments to lines"
+msgstr "Cambiar"
+
+#: flake/commands/KoPathShapeMarkerCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Set marker"
+msgstr ""
+
+#: flake/commands/KoShapeAlignCommand.cpp:74
+#, fuzzy
+#| msgid "Shape"
+msgctxt "(qtundo-format)"
+msgid "Align shapes"
+msgstr "Forma"
+
+#: flake/commands/KoShapeBackgroundCommand.cpp:50
+#: flake/commands/KoShapeBackgroundCommand.cpp:61
+#: flake/commands/KoShapeBackgroundCommand.cpp:76
+#, fuzzy
+#| msgid "&Background color:"
+msgctxt "(qtundo-format)"
+msgid "Set background"
+msgstr "Color de &fons :"
+
+#: flake/commands/KoShapeClipCommand.cpp:57
+#: flake/commands/KoShapeClipCommand.cpp:73
+#, fuzzy
+#| msgid "Shape"
+msgctxt "(qtundo-format)"
+msgid "Clip Shape"
+msgstr "Forma"
+
+#: flake/commands/KoShapeCreateCommand.cpp:39
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Suprimir pagina"
+
+#: flake/commands/KoShapeDeleteCommand.cpp:43
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format) Delete one shape"
+msgid "Delete shape"
+msgstr "Suprimir pagina"
+
+#: flake/commands/KoShapeDeleteCommand.cpp:56
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Delete shape"
+msgid_plural "Delete shapes"
+msgstr[0] "Suprimir pagina"
+msgstr[1] "Suprimir pagina"
+
+#: flake/commands/KoShapeDistributeCommand.cpp:117
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Distribute shapes"
+msgstr "Suprimir pagina"
+
+#: flake/commands/KoShapeGroupCommand.cpp:82
+#, fuzzy
+#| msgid "Actions"
+msgctxt "(qtundo-format)"
+msgid "Group shapes"
+msgstr "Accions"
+
+#: flake/commands/KoShapeGroupCommand.cpp:84
+msgctxt "(qtundo-format)"
+msgid "Add shapes to group"
+msgstr ""
+
+#: flake/commands/KoShapeKeepAspectRatioCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Keep Aspect Ratio"
+msgstr ""
+
+#: flake/commands/KoShapeLockCommand.cpp:23
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Lock shapes"
+msgstr "Suprimir pagina"
+
+#: flake/commands/KoShapeMoveCommand.cpp:36
+#: flake/commands/KoShapeMoveCommand.cpp:54
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Move shapes"
+msgstr "Suprimir pagina"
+
+#: flake/commands/KoShapeRenameCommand.cpp:28
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Rename Shape"
+msgstr "Suprimir pagina"
+
+#: flake/commands/KoShapeReorderCommand.cpp:40
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Reorder shapes"
+msgstr "Suprimir pagina"
+
+#: flake/commands/KoShapeRunAroundCommand.cpp:59
+#, fuzzy
+#| msgid "Change"
+msgctxt "(qtundo-format)"
+msgid "Change Shape RunAround"
+msgstr "Cambiar"
+
+#: flake/commands/KoShapeShadowCommand.cpp:54
+#: flake/commands/KoShapeShadowCommand.cpp:71
+#: flake/commands/KoShapeShadowCommand.cpp:82
+#, fuzzy
+#| msgid "Snap to Grid"
+msgctxt "(qtundo-format)"
+msgid "Set Shadow"
+msgstr "Alinhar s~us la gresilha"
+
+#: flake/commands/KoShapeShearCommand.cpp:38
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Shear shapes"
+msgstr "Suprimir pagina"
+
+#: flake/commands/KoShapeSizeCommand.cpp:30
+#, fuzzy
+#| msgid "Resize"
+msgctxt "(qtundo-format)"
+msgid "Resize shapes"
+msgstr "Redimensionar"
+
+#: flake/commands/KoShapeStrokeCommand.cpp:59
+#: flake/commands/KoShapeStrokeCommand.cpp:78
+#: flake/commands/KoShapeStrokeCommand.cpp:89
+msgctxt "(qtundo-format)"
+msgid "Set stroke"
+msgstr ""
+
+#: flake/commands/KoShapeTransparencyCommand.cpp:35
+#: flake/commands/KoShapeTransparencyCommand.cpp:46
+#: flake/commands/KoShapeTransparencyCommand.cpp:59
+#, fuzzy
+#| msgid "Opacity"
+msgctxt "(qtundo-format)"
+msgid "Set opacity"
+msgstr "Opacitat"
+
+#: flake/commands/KoShapeUnclipCommand.cpp:107
+#, fuzzy
+#| msgid "Shape"
+msgctxt "(qtundo-format)"
+msgid "Unclip Shape"
+msgstr "Forma"
+
+#: flake/commands/KoShapeUnclipCommand.cpp:116
+#, fuzzy
+#| msgid "Shape"
+msgctxt "(qtundo-format)"
+msgid "Unclip Shapes"
+msgstr "Forma"
+
+#: flake/commands/KoShapeUngroupCommand.cpp:46
+#, fuzzy
+#| msgid "Actions"
+msgctxt "(qtundo-format)"
+msgid "Ungroup shapes"
+msgstr "Accions"
+
+#: flake/commands/KoSubpathJoinCommand.cpp:38
+#, fuzzy
+#| msgid "Remove Group"
+msgctxt "(qtundo-format)"
+msgid "Close subpath"
+msgstr "Suprimir un grop"
+
+#: flake/commands/KoSubpathJoinCommand.cpp:40
+#, fuzzy
+#| msgid "Remove Group"
+msgctxt "(qtundo-format)"
+msgid "Join subpaths"
+msgstr "Suprimir un grop"
+
+#: flake/commands/KoSubpathRemoveCommand.cpp:19
+#, fuzzy
+#| msgid "Remove Group"
+msgctxt "(qtundo-format)"
+msgid "Remove subpath"
+msgstr "Suprimir un grop"
+
+#: flake/KoConnectionShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Standard"
+msgstr "Estandard"
+
+#: flake/KoConnectionShapeConfigWidget.cpp:18
+#, kde-format
+msgid "Lines"
+msgstr "Linhas"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#. i18n: ectx: property (text), widget (QLabel, lblTypeDesc)
+#: flake/KoConnectionShapeConfigWidget.ui:17
+#: widgets/koDocumentInfoAboutWidget.ui:141
+#: widgets/KoGradientEditWidget.cpp:152
+#, kde-format
+msgid "Type:"
+msgstr "Mena :"
+
+#: flake/KoConnectionShapeFactory.cpp:22
+#, fuzzy, kde-format
+#| msgid "Time:"
+msgid "Tie"
+msgstr "Títol:"
+
+#: flake/KoConnectionShapeFactory.cpp:24
+#, kde-format
+msgid "A connection between two other shapes"
+msgstr ""
+
+#: flake/KoGridData.cpp:210
+#, fuzzy, kde-format
+#| msgid "Snap to Grid"
+msgid "Show Grid"
+msgstr "Alinhar s~us la gresilha"
+
+#: flake/KoGridData.cpp:211
+#, fuzzy, kde-format
+#| msgid "Snap to Grid"
+msgid "Shows or hides grid"
+msgstr "Alinhar s~us la gresilha"
+
+#: flake/KoPathShapeFactory.cpp:22
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Simple path shape"
+msgstr "Suprimir pagina"
+
+#: flake/KoPathShapeFactory.cpp:24
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "A simple path shape"
+msgstr "Suprimir pagina"
+
+#: flake/KoShapeController.cpp:60 rdf/InsertSemanticObjectCreateAction.cpp:46
+#: rdf/InsertSemanticObjectReferenceAction.cpp:51
+#: text/InsertTextReferenceAction.cpp:50 text/InsertVariableAction.cpp:45
+#, fuzzy, kde-format
+#| msgid "Tool Options"
+msgid "%1 Options"
+msgstr "Opcions dels espleches"
+
+#: flake/KoShapePaste.cpp:155
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Paste Shapes"
+msgstr "Suprimir pagina"
+
+#: flake/KoToolManager.cpp:451
+#, kde-format
+msgid "Active tool: %1"
+msgstr ""
+
+#: flake/KoToolProxy.cpp:587
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Paste Image"
+msgstr "Suprimir pagina"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nodeSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:30
+#, fuzzy, kde-format
+#| msgid "None"
+msgid "Nodes"
+msgstr "Pas cap"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, extensionSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:43
+#, kde-format
+msgid "Extension of lines"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, boundingBoxSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:56
+#, kde-format
+msgid "Bounding box of shape"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, snapDistance)
+#: flake/SnapGuideConfigWidget.ui:72
+#, kde-format
+msgid "Proximity distance where snapping happens"
+msgstr ""
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, snapDistance)
+#: flake/SnapGuideConfigWidget.ui:75
+#, kde-format
+msgid " px"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, orthogonalSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:85
+#, kde-format
+msgid "Orthogonal"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, intersectionSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:98
+#, kde-format
+msgid "Intersection of lines"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lineGuideSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:111
+#, fuzzy, kde-format
+#| msgid "Underline"
+msgid "Guide lines"
+msgstr "Soslinhat"
+
+#: flake/svg/SvgShapeFactory.cpp:23
+#, kde-format
+msgid "Embedded svg shape"
+msgstr ""
+
+#: flake/tools/KoCreateShapesToolFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Create object"
+msgstr "Suprimir pagina"
+
+#: flake/tools/KoPanToolFactory.cpp:17
+#, kde-format
+msgid "Pan"
+msgstr "Pan"
+
+#: flake/tools/KoPathSegmentChangeStrategy.cpp:133
+#, fuzzy
+#| msgid "Change"
+msgctxt "(qtundo-format)"
+msgid "Change Segment"
+msgstr "Cambiar"
+
+#: flake/tools/KoPathTool.cpp:97
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Corner point"
+msgstr "Marges"
+
+#: flake/tools/KoPathTool.cpp:102
+#, fuzzy, kde-format
+#| msgid "Remove Group"
+msgid "Smooth point"
+msgstr "Suprimir un grop"
+
+#: flake/tools/KoPathTool.cpp:107
+#, kde-format
+msgid "Symmetric Point"
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:112
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Make curve point"
+msgstr "Marges"
+
+#: flake/tools/KoPathTool.cpp:116
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Make line point"
+msgstr "Marges"
+
+#: flake/tools/KoPathTool.cpp:120
+#, fuzzy, kde-format
+#| msgid "Change"
+msgid "Segment to Line"
+msgstr "Cambiar"
+
+#: flake/tools/KoPathTool.cpp:125
+#, fuzzy, kde-format
+#| msgid "Change"
+msgid "Segment to Curve"
+msgstr "Cambiar"
+
+#: flake/tools/KoPathTool.cpp:130
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Insert point"
+msgstr "Marges"
+
+#: flake/tools/KoPathTool.cpp:135
+#, fuzzy, kde-format
+#| msgid "Remove Group"
+msgid "Remove point"
+msgstr "Suprimir un grop"
+
+#: flake/tools/KoPathTool.cpp:140
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Break at point"
+msgstr "Marges"
+
+#: flake/tools/KoPathTool.cpp:144
+#, kde-format
+msgid "Break at segment"
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:148
+#, kde-format
+msgid "Join with segment"
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:153
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Merge points"
+msgstr "Marges"
+
+#: flake/tools/KoPathTool.cpp:157
+#, fuzzy, kde-format
+#| msgid "Date:"
+msgid "To Path"
+msgstr "Camin:"
+
+#: flake/tools/KoPathTool.cpp:190
+#, fuzzy, kde-format
+#| msgid "Curve"
+msgid "Line/Curve"
+msgstr "Corba"
+
+#: flake/tools/KoPathTool.cpp:528
+#, kde-format
+msgid "Drag to move handle."
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:592
+#, kde-format
+msgid "Drag to move point. Shift click to change point type."
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:594
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Drag to move control point."
+msgstr "Marges"
+
+#: flake/tools/KoPathTool.cpp:619
+#, kde-format
+msgid "Drag to change curve directly. Double click to insert new path point."
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:626
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Press B to break path at selected point."
+msgstr "Marges"
+
+#: flake/tools/KoPathTool.cpp:628
+#, kde-format
+msgid "Press B to break path at selected segments."
+msgstr ""
+
+#: flake/tools/KoPathToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgid "Path editing"
+msgstr "En espèra"
+
+#: flake/tools/KoZoomToolFactory.cpp:17 widgets/KoZoomController_p.h:28
+#: widgets/KoZoomWidget.cpp:52
+#, kde-format
+msgid "Zoom"
+msgstr "Zoom"
+
+#. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
+#: flake/tools/KoZoomToolWidget.ui:20
+#, fuzzy, kde-format
+#| msgid "Zoom"
+msgid "Zoom In"
+msgstr "Agrandir lo zoom"
+
+#. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
+#: flake/tools/KoZoomToolWidget.ui:30
+#, fuzzy, kde-format
+#| msgid "Zoom"
+msgid "Zoom Out"
+msgstr "Reduire el zoom"
+
+#. i18n: ectx: property (text), widget (QToolButton, corner)
+#. i18n: ectx: property (text), widget (QToolButton, smooth)
+#. i18n: ectx: property (text), widget (QToolButton, symmetric)
+#. i18n: ectx: property (text), widget (QToolButton, lineSegment)
+#. i18n: ectx: property (text), widget (QToolButton, curveSegment)
+#. i18n: ectx: property (text), widget (QToolButton, linePoint)
+#. i18n: ectx: property (text), widget (QToolButton, curvePoint)
+#. i18n: ectx: property (text), widget (QToolButton, addPoint)
+#. i18n: ectx: property (text), widget (QToolButton, removePoint)
+#. i18n: ectx: property (text), widget (QToolButton, breakPoint)
+#. i18n: ectx: property (text), widget (QToolButton, breakSegment)
+#. i18n: ectx: property (text), widget (QToolButton, joinSegment)
+#. i18n: ectx: property (text), widget (QToolButton, mergePoints)
+#. i18n: ectx: property (text), widget (QToolButton, add)
+#. i18n: ectx: property (text), widget (QToolButton, remove)
+#. i18n: ectx: property (text), widget (QToolButton, open)
+#. i18n: ectx: property (text), widget (QToolButton, save)
+#: flake/tools/PathToolOptionWidgetBase.ui:39
+#: flake/tools/PathToolOptionWidgetBase.ui:46
+#: flake/tools/PathToolOptionWidgetBase.ui:53
+#: flake/tools/PathToolOptionWidgetBase.ui:73
+#: flake/tools/PathToolOptionWidgetBase.ui:80
+#: flake/tools/PathToolOptionWidgetBase.ui:87
+#: flake/tools/PathToolOptionWidgetBase.ui:94
+#: flake/tools/PathToolOptionWidgetBase.ui:101
+#: flake/tools/PathToolOptionWidgetBase.ui:108
+#: flake/tools/PathToolOptionWidgetBase.ui:115
+#: flake/tools/PathToolOptionWidgetBase.ui:122
+#: flake/tools/PathToolOptionWidgetBase.ui:129
+#: flake/tools/PathToolOptionWidgetBase.ui:136 widgets/KoEditColorSet.ui:48
+#: widgets/KoEditColorSet.ui:58 widgets/KoEditColorSet.ui:68
+#: widgets/KoEditColorSet.ui:78
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QPushButton, convertToPath)
+#: flake/tools/PathToolOptionWidgetBase.ui:186
+#, fuzzy, kde-format
+#| msgid "Date:"
+msgid "Convert To Path"
+msgstr "Camin:"
+
+#: kross/KoScriptingDocker.cpp:78 kross/KoScriptingPart.cpp:82
+#, fuzzy, kde-format
+#| msgid "Script"
+msgid "Scripts"
+msgstr "Escript"
+
+#: kross/KoScriptingDocker.cpp:113 kross/KoScriptManager.cpp:146
+#, fuzzy, kde-format
+#| msgid "Script"
+msgid "Script Manager"
+msgstr "Escript"
+
+#: kross/KoScriptingPart.cpp:78
+#, fuzzy, kde-format
+#| msgid "Object"
+msgid "Execute Script File..."
+msgstr "Objècte"
+
+#: kross/KoScriptingPart.cpp:86
+#, fuzzy, kde-format
+#| msgid "Script"
+msgid "Script Manager..."
+msgstr "Escript"
+
+#: kross/KoScriptingPart.cpp:160
+#, fuzzy, kde-format
+#| msgid "Object"
+msgid "Execute Script File"
+msgstr "Objècte"
+
+#: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
+#, kde-format
+msgid "Save"
+msgstr "Enregistrar"
+
+#: kross/KoScriptManagerAdd.cpp:54
+#, kde-format
+msgid ""
+"<qt>This wizard will guide you through the process of adding a new resource "
+"to your scripts.</qt>"
+msgstr ""
+
+#: kross/KoScriptManagerAdd.cpp:59
+#, fuzzy, kde-format
+#| msgid "Script"
+msgid "Add script file"
+msgstr "Escript"
+
+#: kross/KoScriptManagerAdd.cpp:64
+#, kde-format
+msgid "Add collection folder"
+msgstr ""
+
+#: kross/KoScriptManagerAdd.cpp:67
+#, kde-format
+msgid "Install script package file"
+msgstr ""
+
+#: kross/KoScriptManagerAdd.cpp:71
+#, kde-format
+msgid "Install online script package"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, add)
+#: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
+#: widgets/KoEditColorSet.ui:45
+#, kde-format
+msgid "Add"
+msgstr "Apondre"
+
+#: kross/KoScriptManagerAdd.cpp:281
+#, fuzzy, kde-format
+#| msgid "Script"
+msgid "Script File"
+msgstr "Escript"
+
+#: kross/KoScriptManagerAdd.cpp:284
+#, kde-format
+msgid "Script"
+msgstr "Escript"
+
+#: kross/KoScriptManagerAdd.cpp:287
+#, kde-format
+msgid "Collection"
+msgstr "Colleccion"
+
+#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#, fuzzy, kde-format
+#| msgid "Red"
+msgctxt "Default text for undo action"
+msgid "Undo"
+msgstr "Roge"
+
+#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#: main/KoUndoStackAction.cpp:41
+#, fuzzy, kde-format
+#| msgid "Red"
+msgid "Undo %1"
+msgstr "Roge"
+
+#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#, fuzzy, kde-format
+#| msgid "Red"
+msgctxt "Default text for redo action"
+msgid "Redo"
+msgstr "Roge"
+
+#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#: main/KoUndoStackAction.cpp:41
+#, fuzzy, kde-format
+#| msgid "Red"
+msgid "Redo %1"
+msgstr "Roge"
+
+#: kundo2/kundo2model.cpp:54
+#, kde-format
+msgid "<empty>"
+msgstr ""
+
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1522
+#: main/KoUndoStackAction.cpp:33
+#, fuzzy, kde-format
+#| msgid "Red"
+msgid "Redo"
+msgstr "Roge"
+
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1521
+#: main/KoUndoStackAction.cpp:25
+#, fuzzy, kde-format
+#| msgid "Red"
+msgid "Undo"
+msgstr "Roge"
+
+#. i18n: ectx: Menu (file)
+#: main/calligra_shell.rc:4
+#, kde-format
+msgid "&File"
+msgstr "&Fichièr"
+
+#. i18n: ectx: Menu (settings)
+#: main/calligra_shell.rc:32
+#, kde-format
+msgid "&Settings"
+msgstr "&Paramètres"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: main/calligra_shell.rc:46
+#, kde-format
+msgid "File"
+msgstr "Fichièr"
+
+#: main/config/KoConfigDocumentPage.cpp:46
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, fuzzy, kde-format
+#| msgid "Document Information"
+msgid "Document Settings"
+msgstr "Document d'informacion"
+
+#: main/config/KoConfigDocumentPage.cpp:62
+#, kde-format
+msgid "No autosave"
+msgstr ""
+
+#: main/config/KoConfigDocumentPage.cpp:63
+#, kde-format
+msgctxt "unit symbol for minutes, leading space as separator"
+msgid " min"
+msgstr ""
+
+#: main/config/KoConfigDocumentPage.cpp:65
+#, kde-format
+msgid "Autosave interval:"
+msgstr ""
+
+#: main/config/KoConfigDocumentPage.cpp:69
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Create backup file:"
+msgstr "Suprimir pagina"
+
+#: main/config/KoConfigGridPage.cpp:55
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, fuzzy, kde-format
+#| msgid "Snap to Grid"
+msgid "Grid"
+msgstr "Alinhar s~us la gresilha"
+
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+#| msgid "Snap to Grid"
+msgid "Show grid:"
+msgstr "Alinhar s~us la gresilha"
+
+#: main/config/KoConfigGridPage.cpp:64
+#, fuzzy, kde-format
+#| msgid "Snap to Grid"
+msgid "Snap to grid:"
+msgstr "Alinhar s~us la gresilha"
+
+#: main/config/KoConfigGridPage.cpp:65
+#, fuzzy, kde-format
+#| msgid "&Background color:"
+msgid "Grid color:"
+msgstr "Color de &fons :"
+
+#: main/config/KoConfigGridPage.cpp:67
+#, fuzzy, kde-format
+#| msgid "Space"
+msgid "Spacing"
+msgstr "Espaci"
+
+#: main/config/KoConfigGridPage.cpp:78
+#, fuzzy, kde-format
+#| msgid "&Horizontal"
+msgctxt "Horizontal grid spacing"
+msgid "&Horizontal:"
+msgstr "&Orizontal"
+
+#: main/config/KoConfigGridPage.cpp:79
+#, fuzzy, kde-format
+#| msgid "&Vertical"
+msgctxt "Vertical grid spacing"
+msgid "&Vertical:"
+msgstr "&Vertical"
+
+#: main/config/KoConfigMiscPage.cpp:66
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:30
+#: pigment/KoCompositeOpRegistry.cpp:31
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: main/config/KoConfigMiscPage.cpp:76
+#, fuzzy, kde-format
+#| msgid "Unit:"
+msgid "Units:"
+msgstr "_Unitats :"
+
+#: main/config/KoConfigMiscPage.cpp:85
+#, kde-format
+msgid "Handle radius:"
+msgstr ""
+
+#: main/config/KoConfigMiscPage.cpp:92
+#, kde-format
+msgid "Grab sensitivity:"
+msgstr ""
+
+#: main/config/KoConfigMiscPage.cpp:99
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Paste offset:"
+msgstr "Suprimir pagina"
+
+#: main/config/KoConfigMiscPage.cpp:103
+#, kde-format
+msgid "Paste at Cursor:"
+msgstr ""
+
+#: main/KoApplication.cpp:198
+#, fuzzy, kde-format
+#| msgid "Export as PDF..."
+msgid "Only print and exit"
+msgstr "Exportar al format PDF..."
+
+#: main/KoApplication.cpp:199
+#, kde-format
+msgid "Open a new document based on the given template (desktopfile name)"
+msgstr ""
+
+#: main/KoApplication.cpp:200
+#, kde-format
+msgid "Open a new document based on the given template file"
+msgstr ""
+
+#: main/KoApplication.cpp:201
+#, kde-format
+msgid "Override display DPI"
+msgstr ""
+
+#: main/KoApplication.cpp:202
+#, fuzzy, kde-format
+#| msgid "Export as PDF..."
+msgid "Only export to PDF and exit"
+msgstr "Exportar al format PDF..."
+
+#: main/KoApplication.cpp:203
+#, kde-format
+msgid "Filename for export-pdf"
+msgstr ""
+
+#: main/KoApplication.cpp:204
+#, kde-format
+msgid "just load the file and then exit"
+msgstr ""
+
+#: main/KoApplication.cpp:205
+#, kde-format
+msgid "load the file, show the window and progressbar and then exit"
+msgstr ""
+
+#: main/KoApplication.cpp:206
+#, kde-format
+msgid "Filename to write profiling information into."
+msgstr ""
+
+#: main/KoApplication.cpp:207
+#, kde-format
+msgid "Load a file and save it as an ODF file. Meant for debugging."
+msgstr ""
+
+#: main/KoApplication.cpp:208
+#, kde-format
+msgid "File(s) or URL(s) to open"
+msgstr ""
+
+#: main/KoApplication.cpp:218
+#, kde-format
+msgid ""
+"You are running a 32 bits build on a 64 bits Windows.\n"
+"This is not recommended.\n"
+"Please download and install the x64 build instead."
+msgstr ""
+
+#: main/KoApplication.cpp:262
+#, kde-format
+msgid "%1: Critical Error"
+msgstr ""
+
+#: main/KoApplication.cpp:262
+#, kde-format
+msgid ""
+"Essential application components could not be found.\n"
+"This might be an installation issue.\n"
+"Try restarting or reinstalling."
+msgstr ""
+
+#: main/KoApplication.cpp:511
+#, kde-format
+msgid "No template found for: %1"
+msgstr ""
+
+#: main/KoApplication.cpp:514
+#, kde-format
+msgid "Too many templates found for: %1"
+msgstr ""
+
+#: main/KoApplication.cpp:536 main/KoApplication.cpp:554
+#, kde-format
+msgid "Template %1 failed to load."
+msgstr ""
+
+#: main/KoApplication.cpp:544
+#, kde-format
+msgid "No template found at: %1"
+msgstr ""
+
+#: main/KoAutoSaveRecoveryDialog.cpp:166
+#, fuzzy, kde-format
+#| msgid "Palette"
+msgctxt "@title:window"
+msgid "Recover Files"
+msgstr "Paleta"
+
+#: main/KoAutoSaveRecoveryDialog.cpp:171
+#, kde-format
+msgid "The following autosave file can be recovered:"
+msgstr ""
+
+#: main/KoAutoSaveRecoveryDialog.cpp:174
+#, kde-format
+msgid "The following autosave files can be recovered:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
+#: main/KoDetailsPaneBase.ui:94
+#, kde-format
+msgid "Always use this template at application start up"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
+#: main/KoDetailsPaneBase.ui:97
+#, kde-format
+msgid "Always use this template"
+msgstr ""
+
+#: main/KoDocument.cpp:549
+#, kde-format
+msgid "Making backup..."
+msgstr ""
+
+#: main/KoDocument.cpp:564
+#, kde-format
+msgid "Saving..."
+msgstr "Enregistrament..."
+
+#: main/KoDocument.cpp:592
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid ""
+"Could not save\n"
+"%1"
+msgstr "Impossible de trobar lo fichièr"
+
+#: main/KoDocument.cpp:594
+#, kde-format
+msgid ""
+"Could not save %1\n"
+"Reason: %2"
+msgstr ""
+
+#: main/KoDocument.cpp:623
+#, kde-format
+msgid "Document <i>%1</i> saved"
+msgstr ""
+
+#: main/KoDocument.cpp:711
+#, kde-format
+msgid ""
+"The password of this encrypted document is not known. Autosave aborted! "
+"Please save your work manually."
+msgstr ""
+
+#: main/KoDocument.cpp:714
+#, fuzzy, kde-format
+#| msgid "Saving..."
+msgid "Autosaving..."
+msgstr "Enregistrament..."
+
+#: main/KoDocument.cpp:726
+#, kde-format
+msgid "Error during autosave! Partition full?"
+msgstr ""
+
+#: main/KoDocument.cpp:819
+#, kde-format
+msgid "Could not create the file for saving"
+msgstr ""
+
+#: main/KoDocument.cpp:863 main/KoDocument.cpp:885 main/KoDocument.cpp:916
+#: main/KoDocument.cpp:950
+#, kde-format
+msgid "Not able to write '%1'. Partition full?"
+msgstr ""
+
+#: main/KoDocument.cpp:870
+#, kde-format
+msgid "Not able to write RDF metadata. Partition full?"
+msgstr ""
+
+#: main/KoDocument.cpp:878 main/KoDocument.cpp:925 main/KoDocument.cpp:1992
+#, kde-format
+msgid "Error while trying to write '%1'. Partition full?"
+msgstr ""
+
+#: main/KoDocument.cpp:1204
+#, kde-format
+msgid ""
+"Malformed URL\n"
+"%1"
+msgstr ""
+
+#: main/KoDocument.cpp:1220
+#, kde-format
+msgid ""
+"An autosaved file exists for this document.\n"
+"Do you want to open it instead?"
+msgstr ""
+
+#: main/KoDocument.cpp:1337 main/KoDocument.cpp:1685 main/KoMainWindow.cpp:705
+#, kde-format
+msgid "The file %1 does not exist."
+msgstr ""
+
+#: main/KoDocument.cpp:1463
+#, fuzzy, kde-format
+#| msgid "Open Document"
+msgid "Opening Document"
+msgstr "Dobrir un document"
+
+#: main/KoDocument.cpp:1478
+#, kde-format
+msgid "Could not create the filter plugin"
+msgstr ""
+
+#: main/KoDocument.cpp:1481
+#, kde-format
+msgid "Could not create the output document"
+msgstr ""
+
+#: main/KoDocument.cpp:1484
+#, kde-format
+msgid "File not found"
+msgstr "Impossible de trobar lo fichièr"
+
+#: main/KoDocument.cpp:1487
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Cannot create storage"
+msgstr "Suprimir pagina"
+
+#: main/KoDocument.cpp:1490
+#, kde-format
+msgid "Bad MIME type"
+msgstr ""
+
+#: main/KoDocument.cpp:1493
+#, kde-format
+msgid "Error in embedded document"
+msgstr ""
+
+#: main/KoDocument.cpp:1496
+#, kde-format
+msgid "Format not recognized"
+msgstr ""
+
+#: main/KoDocument.cpp:1499
+#, kde-format
+msgid "Not implemented"
+msgstr ""
+
+#: main/KoDocument.cpp:1502
+#, kde-format
+msgid "Parsing error"
+msgstr ""
+
+#: main/KoDocument.cpp:1505
+#, kde-format
+msgid "Document is password protected"
+msgstr ""
+
+#: main/KoDocument.cpp:1508
+#, kde-format
+msgid "Invalid file format"
+msgstr ""
+
+#: main/KoDocument.cpp:1515
+#, kde-format
+msgid "Internal error"
+msgstr "Error intèrna"
+
+#: main/KoDocument.cpp:1518
+#, kde-format
+msgid "Out of memory"
+msgstr "Pas pro de memòria"
+
+#: main/KoDocument.cpp:1521
+#, kde-format
+msgid "Empty Filter Plugin"
+msgstr ""
+
+#: main/KoDocument.cpp:1524
+#, kde-format
+msgid "Trying to load into the wrong kind of document"
+msgstr ""
+
+#: main/KoDocument.cpp:1527
+#, kde-format
+msgid "Failed to download remote file"
+msgstr ""
+
+#: main/KoDocument.cpp:1534
+#, kde-format
+msgid "Unknown error"
+msgstr "Error desconeguda"
+
+#: main/KoDocument.cpp:1538
+#, kde-format
+msgid ""
+"Could not open %2.\n"
+"Reason: %1.\n"
+"%3"
+msgstr ""
+
+#: main/KoDocument.cpp:1596
+#, kde-format
+msgid "Document <i>%1</i> loaded"
+msgstr ""
+
+#: main/KoDocument.cpp:1659 odf/KoOdfReadStore.cpp:98
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid "Could not find %1"
+msgstr "Impossible de trobar lo fichièr"
+
+#: main/KoDocument.cpp:1671
+#, kde-format
+msgid ""
+"Parsing error in %1 at line %2, column %3\n"
+"Error message: %4"
+msgstr ""
+
+#: main/KoDocument.cpp:1692
+#, kde-format
+msgid "%1 is not a file."
+msgstr ""
+
+#: main/KoDocument.cpp:1707
+#, kde-format
+msgid "Could not open the file for reading (check read permissions)."
+msgstr ""
+
+#: main/KoDocument.cpp:1718
+#, kde-format
+msgid "Could not read the beginning of the file."
+msgstr ""
+
+#: main/KoDocument.cpp:1748
+#, kde-format
+msgid ""
+"parsing error in the main document at line %1, column %2\n"
+"Error message: %3"
+msgstr ""
+
+#: main/KoDocument.cpp:1769
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr ""
+
+#: main/KoDocument.cpp:1854
+#, kde-format
+msgid "Invalid document: no file 'maindoc.xml'."
+msgstr ""
+
+#: main/KoDocument.cpp:1878
+#, kde-format
+msgid ""
+"Document <i>%1</i> contains several versions. Go to File->Versions to open "
+"an old version."
+msgstr ""
+
+#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2554 main/KoMainWindow.cpp:1227
+#: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
+#, kde-format
+msgid "Untitled"
+msgstr "Sens nom"
+
+#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1230
+#, kde-format
+msgid ""
+"<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
+"</p>"
+msgstr ""
+
+#: main/KoDocument.cpp:2165
+#, kde-format
+msgid "Internal error: saveXML not implemented"
+msgstr ""
+
+#: main/KoDocument.cpp:2202
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid ""
+"Could not open\n"
+"%1"
+msgstr "Impossible de trobar lo fichièr"
+
+#: main/KoDocument.cpp:2205
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid ""
+"Could not open %1\n"
+"Reason: %2"
+msgstr "Impossible de trobar lo fichièr"
+
+#: main/KoDocument.cpp:2262
+#, kde-format
+msgid "a word processing"
+msgstr ""
+
+#: main/KoDocument.cpp:2263
+#, fuzzy, kde-format
+#| msgid "Page Preview"
+msgid "a spreadsheet"
+msgstr "Previsualizacion"
+
+#: main/KoDocument.cpp:2264
+#, fuzzy, kde-format
+#| msgid "Orientation"
+msgid "a presentation"
+msgstr "Orientacion"
+
+#: main/KoDocument.cpp:2265
+#, fuzzy, kde-format
+#| msgid "Street:"
+msgid "a chart"
+msgstr "Carrièra :"
+
+#: main/KoDocument.cpp:2266
+#, kde-format
+msgid "a drawing"
+msgstr ""
+
+#: main/KoDocument.cpp:2558
+#, kde-format
+msgid ""
+"The document \"%1\" has been modified.\n"
+"Do you want to save your changes or discard them?"
+msgstr ""
+
+#: main/KoDocument.cpp:2560
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgid "Close Document"
+msgstr "Enregistrar lo document"
+
+#: main/KoDocumentSectionDelegate.cpp:508
+#, fuzzy, kde-format
+#| msgid "%1%"
+msgid "%1 %"
+msgstr "%1 %"
+
+#: main/KoDocumentSectionToolTip.cpp:37
+#, kde-format
+msgid "No"
+msgstr "Non"
+
+#: main/KoDocumentSectionToolTip.cpp:37
+#, kde-format
+msgid "Yes"
+msgstr "Òc"
+
+#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid "Could not export file."
+msgstr "Impossible de trobar lo fichièr"
+
+#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "Missing Export Filter"
+msgstr "Importar un document"
+
+#: main/KoFilterManager.cpp:518
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid ""
+"Could not import file of type\n"
+"%1"
+msgstr "Impossible de trobar lo fichièr"
+
+#: main/KoFilterManager.cpp:520
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "Missing Import Filter"
+msgstr "Importar un document"
+
+#: main/KoFilterManager_p.cpp:30
+#, fuzzy, kde-format
+#| msgid "Insert Break"
+msgid "Choose Filter"
+msgstr "Inserir un saut"
+
+#: main/KoFindText.cpp:46
+#, kde-format
+msgid "Case Sensitive"
+msgstr ""
+
+#: main/KoFindText.cpp:46
+#, kde-format
+msgid "Match cases when searching"
+msgstr ""
+
+#: main/KoFindText.cpp:47
+#, kde-format
+msgid "Match only whole words"
+msgstr ""
+
+#: main/KoFindText.cpp:47
+#, kde-format
+msgid "Whole Words Only"
+msgstr ""
+
+#: main/KoFindText.cpp:48
+#, kde-format
+msgid "Find from Cursor"
+msgstr ""
+
+#: main/KoFindText.cpp:48
+#, kde-format
+msgid "Start searching from the current cursor"
+msgstr ""
+
+#: main/KoMainWindow.cpp:163
+#, fuzzy, kde-format
+#| msgid "Save Document As"
+msgid "%1 unsaved document (%2)"
+msgstr "Enregistrar lo document jos"
+
+#: main/KoMainWindow.cpp:272
+#, kde-format
+msgid "Export as PDF..."
+msgstr "Exportar al format PDF..."
+
+#: main/KoMainWindow.cpp:282
+#, kde-format
+msgid "Reload"
+msgstr "Tornar cargar"
+
+#: main/KoMainWindow.cpp:286
+#, kde-format
+msgid "Versions..."
+msgstr "Versions..."
+
+#: main/KoMainWindow.cpp:290
+#, fuzzy, kde-format
+#| msgid "Open Document"
+msgid "Open ex&isting Document as Untitled Document..."
+msgstr "Dobrir un document"
+
+#: main/KoMainWindow.cpp:294
+#, fuzzy, kde-format
+#| msgid "Export"
+msgid "E&xport..."
+msgstr "Exportar"
+
+#: main/KoMainWindow.cpp:298
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "En&crypt Document"
+msgstr "Importar un document"
+
+#: main/KoMainWindow.cpp:303
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "&Uncompress to Directory"
+msgstr "Importar un document"
+
+#: main/KoMainWindow.cpp:308
+#, kde-format
+msgid "&New View"
+msgstr "Vista &novèla"
+
+#: main/KoMainWindow.cpp:314 widgets/KoDocumentInfoDlg.cpp:86
+#, kde-format
+msgid "Document Information"
+msgstr "Document d'informacion"
+
+#: main/KoMainWindow.cpp:338
+#, kde-format
+msgid "Full Screen Mode"
+msgstr ""
+
+#: main/KoMainWindow.cpp:343
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgid "Show Dockers"
+msgstr "Enregistrar lo document"
+
+#: main/KoMainWindow.cpp:348
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgctxt "@action:inmenu"
+msgid "Show Docker Titlebars"
+msgstr "Enregistrar lo document"
+
+#: main/KoMainWindow.cpp:355
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgid "Dockers"
+msgstr "Enregistrar lo document"
+
+#: main/KoMainWindow.cpp:660
+#, kde-format
+msgid "(write protected)"
+msgstr ""
+
+#: main/KoMainWindow.cpp:665
+#, fuzzy, kde-format
+#| msgid "Palette"
+msgid "Save as %1"
+msgstr "Paleta"
+
+#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:388
+#, kde-format
+msgid "%1 (unknown file type)"
+msgstr ""
+
+#: main/KoMainWindow.cpp:855
+#, kde-format
+msgid ""
+"<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
+"want to save in this format?</qt>"
+msgstr ""
+
+#: main/KoMainWindow.cpp:858
+#, fuzzy, kde-format
+#| msgid "Export"
+msgid "Confirm Save"
+msgstr "Exportar"
+
+#: main/KoMainWindow.cpp:867
+#, kde-format
+msgid ""
+"<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
+"want to export to this format?</qt>"
+msgstr ""
+
+#: main/KoMainWindow.cpp:870
+#, fuzzy, kde-format
+#| msgid "Export"
+msgid "Confirm Export"
+msgstr "Exportar"
+
+#: main/KoMainWindow.cpp:871
+#, kde-format
+msgid "Export"
+msgstr "Exportar"
+
+#: main/KoMainWindow.cpp:964
+#, fuzzy, kde-format
+#| msgid "Untitled"
+msgid "untitled"
+msgstr "Sens nom"
+
+#: main/KoMainWindow.cpp:1292
+#, kde-format
+msgid "Open Document"
+msgstr "Dobrir un document"
+
+#: main/KoMainWindow.cpp:1301 pageapp/KoPAView.cpp:524
+#, kde-format
+msgid "Import Document"
+msgstr "Importar un document"
+
+#: main/KoMainWindow.cpp:1465
+#, fuzzy, kde-format
+#| msgid "Export as PDF..."
+msgid "Export as PDF"
+msgstr "Exportar al format PDF..."
+
+#: main/KoMainWindow.cpp:1502
+#, kde-format
+msgid "Cannot export to the specified file"
+msgstr ""
+
+#: main/KoMainWindow.cpp:1701 pageapp/KoPADocumentStructureDocker.cpp:80
+#, kde-format
+msgid "Document"
+msgstr "Document"
+
+#: main/KoMainWindow.cpp:1709
+#, fuzzy, kde-format
+#| msgid "Document"
+msgid "Document - %1"
+msgstr "Document"
+
+#: main/KoMainWindow.cpp:1746
+#, kde-format
+msgid ""
+"You will lose all changes made since your last save\n"
+"Do you want to continue?"
+msgstr ""
+
+#: main/KoMainWindow.cpp:1748
+#, kde-format
+msgid "Warning"
+msgstr "Alèrta"
+
+#: main/KoMainWindow.cpp:2113
+#, kde-format
+msgid "Show %1 Toolbar"
+msgstr ""
+
+#: main/KoMainWindow.cpp:2115
+#, kde-format
+msgid "Hide %1 Toolbar"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
+#: main/KoOpenPane.cpp:123 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
+#, fuzzy, kde-format
+#| msgid "Open Document"
+msgid "Open Existing Document"
+msgstr "Dobrir un document"
+
+#: main/KoOpenPane.cpp:199
+#, kde-format
+msgid "Recent Documents"
+msgstr "Documents recents"
+
+#: main/KoOpenPane.cpp:299
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgid "Custom Document"
+msgstr "Enregistrar lo document"
+
+#: main/KoPrintingDialog.cpp:43
+#, kde-format
+msgid "Stop"
+msgstr "Arrestar"
+
+#: main/KoPrintingDialog.cpp:132
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgid "Printing"
+msgstr "En espèra"
+
+#: main/KoPrintingDialog_p.h:136
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgid "Printing done"
+msgstr "En espèra"
+
+#: main/KoPrintingDialog_p.h:137
+#, kde-format
+msgid "Close"
+msgstr "Tampar"
+
+#: main/KoPrintingDialog_p.h:157
+#, kde-format
+msgid "Stopped"
+msgstr "Arrestat"
+
+#: main/KoRecentDocumentsPane.cpp:71
+#, fuzzy, kde-format
+#| msgid "Open Document"
+msgid "Open This Document"
+msgstr "Dobrir un document"
+
+#: main/KoRecentDocumentsPane.cpp:174
+#, kde-format
+msgctxt "File modification date and time. %1 is date time"
+msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
+msgstr ""
+
+#: main/KoRecentDocumentsPane.cpp:177
+#, kde-format
+msgctxt "File access date and time. %1 is date time"
+msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
+msgstr ""
+
+#: main/KoStandardAction.cpp:19
+#, fuzzy, kde-format
+#| msgid "Snap to Grid"
+msgid "Show Guides"
+msgstr "Alinhar s~us la gresilha"
+
+#: main/KoStandardAction.cpp:20
+#, fuzzy, kde-format
+#| msgid "Snap to Grid"
+msgid "Shows or hides guides"
+msgstr "Alinhar s~us la gresilha"
+
+#: main/KoTemplateCreateDia.cpp:104
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Create Template"
+msgstr "Suprimir pagina"
+
+#: main/KoTemplateCreateDia.cpp:113
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgctxt "Template name"
+msgid "Name:"
+msgstr "Nom :"
+
+#: main/KoTemplateCreateDia.cpp:123
+#, kde-format
+msgid "Group:"
+msgstr "Grop :"
+
+#: main/KoTemplateCreateDia.cpp:138
+#, fuzzy, kde-format
+#| msgid "Add Group"
+msgid "&Add Group..."
+msgstr "Apondre un grop"
+
+#: main/KoTemplateCreateDia.cpp:141 main/KoVersionDialog.cpp:61
+#, kde-format
+msgid "&Remove"
+msgstr "&Suprimir "
+
+#: main/KoTemplateCreateDia.cpp:147
+#, kde-format
+msgid "Picture"
+msgstr "Imatge"
+
+#: main/KoTemplateCreateDia.cpp:150
+#, fuzzy, kde-format
+#| msgid "Preview:"
+msgid "&Preview"
+msgstr "Ulhada :"
+
+#: main/KoTemplateCreateDia.cpp:155
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "Custom:"
+msgstr "Personalizat"
+
+#: main/KoTemplateCreateDia.cpp:159
+#, kde-format
+msgid "&Select..."
+msgstr ""
+
+#: main/KoTemplateCreateDia.cpp:168
+#, kde-format
+msgid "Use the new template as default"
+msgstr ""
+
+#: main/KoTemplateCreateDia.cpp:308
+#, kde-format
+msgid "Do you really want to overwrite the existing '%1' template?"
+msgstr ""
+
+#: main/KoTemplateCreateDia.cpp:421 main/KoTemplateCreateDia.cpp:428
+#, kde-format
+msgid "Add Group"
+msgstr "Apondre un grop"
+
+#: main/KoTemplateCreateDia.cpp:421
+#, kde-format
+msgid "Enter group name:"
+msgstr ""
+
+#: main/KoTemplateCreateDia.cpp:428
+#, kde-format
+msgid "This name is already used."
+msgstr ""
+
+#: main/KoTemplateCreateDia.cpp:452
+#, kde-format
+msgid "Do you really want to remove that group?"
+msgstr ""
+
+#: main/KoTemplateCreateDia.cpp:453
+#, kde-format
+msgid "Remove Group"
+msgstr "Suprimir un grop"
+
+#: main/KoTemplateCreateDia.cpp:455
+#, kde-format
+msgid "Do you really want to remove that template?"
+msgstr ""
+
+#: main/KoTemplateCreateDia.cpp:456
+#, fuzzy, kde-format
+#| msgid "Remove Group"
+msgid "Remove Template"
+msgstr "Suprimir un grop"
+
+#: main/KoTemplateCreateDia.cpp:507
+#, kde-format
+msgid "Could not load picture."
+msgstr ""
+
+#: main/KoTemplateCreateDia.cpp:510
+#, kde-format
+msgid "No picture available."
+msgstr ""
+
+#: main/KoTemplatesPane.cpp:37
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Use This Template"
+msgstr "Suprimir pagina"
+
+#: main/KoVersionDialog.cpp:35
+#, kde-format
+msgid "Version"
+msgstr "Version"
+
+#: main/KoVersionDialog.cpp:49
+#, kde-format
+msgid "Date & Time"
+msgstr "Data e ora"
+
+#: main/KoVersionDialog.cpp:50
+#, fuzzy, kde-format
+#| msgid "Save"
+msgid "Saved By"
+msgstr "Enregistrar"
+
+#: main/KoVersionDialog.cpp:51 main/KoVersionDialog.cpp:215
+#, kde-format
+msgid "Comment"
+msgstr "Comentari"
+
+#: main/KoVersionDialog.cpp:58
+#, kde-format
+msgid "&Add"
+msgstr "&Apondre"
+
+#: main/KoVersionDialog.cpp:64
+#, kde-format
+msgid "&Modify"
+msgstr "&Modificar"
+
+#: main/KoVersionDialog.cpp:67
+#, kde-format
+msgid "&Open"
+msgstr "&Dobrir"
+
+#: main/KoVersionDialog.cpp:120
+#, kde-format
+msgid "A new version could not be added"
+msgstr ""
+
+#: main/KoVersionDialog.cpp:227 main/KoVersionDialog.cpp:229
+#, fuzzy, kde-format
+#| msgid "Date:"
+msgid "Date: %1"
+msgstr "Data :"
+
+#: main/KoView.cpp:330
+#, kde-format
+msgid "Active Author Profile"
+msgstr ""
+
+#: main/KoView.cpp:342 main/KoView.cpp:396
+#, kde-format
+msgctxt "choice for author profile"
+msgid "Anonymous"
+msgstr ""
+
+#: main/KoView.cpp:395 widgets/KoConfigAuthorPage.cpp:69
+#, kde-format
+msgid "Default Author Profile"
+msgstr ""
+
+#: odf/KoDocumentInfo.cpp:40
+#, kde-format
+msgid "Unknown"
+msgstr "Desconegut"
+
+#: odf/KoOdfReadStore.cpp:91
+#, kde-format
+msgid "No store backend"
+msgstr ""
+
+#: odf/KoOdfReadStore.cpp:126
+#, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2\n"
+"Error message: %3"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:53
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A3"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:54
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A4"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:55
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A5"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:56
+#, kde-format
+msgctxt "Page size"
+msgid "US Letter"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:57
+#, kde-format
+msgctxt "Page size"
+msgid "US Legal"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:58
+#, fuzzy, kde-format
+#| msgid "Screen"
+msgctxt "Page size"
+msgid "Screen"
+msgstr "Ecran"
+
+#: odf/KoPageFormat.cpp:59
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgctxt "Page size"
+msgid "Custom"
+msgstr "Personalizat"
+
+#: odf/KoPageFormat.cpp:60
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B5"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:61
+#, kde-format
+msgctxt "Page size"
+msgid "US Executive"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:62
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A0"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:63
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A1"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:64
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A2"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:65
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A6"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:66
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A7"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:67
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A8"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:68
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A9"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:69
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B0"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:70
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B1"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:71
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B10"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:72
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B2"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:73
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B3"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:74
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B4"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:75
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B6"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:76
+#, kde-format
+msgctxt "Page size"
+msgid "ISO C5"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:77
+#, kde-format
+msgctxt "Page size"
+msgid "US Common 10"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:78
+#, kde-format
+msgctxt "Page size"
+msgid "ISO DL"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:79
+#, kde-format
+msgctxt "Page size"
+msgid "US Folio"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:80
+#, kde-format
+msgctxt "Page size"
+msgid "US Ledger"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:81
+#, kde-format
+msgctxt "Page size"
+msgid "US Tabloid"
+msgstr ""
+
+#: odf/KoUnit.cpp:37
+#, kde-format
+msgid "Millimeters (mm)"
+msgstr ""
+
+#: odf/KoUnit.cpp:39
+#, kde-format
+msgid "Centimeters (cm)"
+msgstr ""
+
+#: odf/KoUnit.cpp:41
+#, kde-format
+msgid "Decimeters (dm)"
+msgstr ""
+
+#: odf/KoUnit.cpp:43
+#, kde-format
+msgid "Inches (in)"
+msgstr ""
+
+#: odf/KoUnit.cpp:45
+#, kde-format
+msgid "Pica (pi)"
+msgstr ""
+
+#: odf/KoUnit.cpp:47
+#, kde-format
+msgid "Cicero (cc)"
+msgstr ""
+
+#: odf/KoUnit.cpp:49
+#, kde-format
+msgid "Points (pt)"
+msgstr ""
+
+#: odf/KoUnit.cpp:51
+#, kde-format
+msgid "Pixels (px)"
+msgstr ""
+
+#: odf/KoUnit.cpp:53
+#, kde-format
+msgid "Unsupported unit"
+msgstr ""
+
+#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:21
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Change master slide"
+msgstr "Suprimir pagina"
+
+#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:24
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Change master page"
+msgstr "Suprimir pagina"
+
+#: pageapp/commands/KoPAChangePageLayoutCommand.cpp:19
+#, fuzzy
+#| msgid "Change"
+msgctxt "(qtundo-format)"
+msgid "Set Page Layout"
+msgstr "Cambiar"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:18
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Display master background"
+msgstr "Suprimir pagina"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:22
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Display slide background"
+msgstr "Suprimir pagina"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:25
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Display page background"
+msgstr "Suprimir pagina"
+
+#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:18
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Show master shapes"
+msgstr "Suprimir pagina"
+
+#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:21
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Hide master shapes"
+msgstr "Suprimir pagina"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:26
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Suprimir pagina"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:29
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format) Delete one page"
+msgid "Delete page"
+msgstr "Suprimir pagina"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:50
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Suprimir pagina"
+msgstr[1] "Suprimir pagina"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:53
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Delete page"
+msgid_plural "Delete pages"
+msgstr[0] "Suprimir pagina"
+msgstr[1] "Suprimir pagina"
+
+#: pageapp/commands/KoPAPageInsertCommand.cpp:24
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert slide"
+msgstr "Inserir un saut"
+
+#: pageapp/commands/KoPAPageInsertCommand.cpp:27
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert page"
+msgstr "Inserir un saut"
+
+#: pageapp/commands/KoPAPageMoveCommand.cpp:45
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Move slide"
+msgid_plural "Move slides"
+msgstr[0] "Suprimir pagina"
+msgstr[1] "Suprimir pagina"
+
+#: pageapp/commands/KoPAPageMoveCommand.cpp:48
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Move page"
+msgid_plural "Move pages"
+msgstr[0] "Suprimir pagina"
+msgstr[1] "Suprimir pagina"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
+#, kde-format
+msgid "Configure"
+msgstr ""
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
+#, fuzzy, kde-format
+#| msgid "Document"
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Document"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
+#, fuzzy, kde-format
+#| msgid "Author"
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Autor"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
+#, kde-format
+msgid "Author"
+msgstr "Autor"
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:27
+#, kde-format
+msgid "Select a master slide design:"
+msgstr ""
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Master Slide"
+msgstr "Suprimir pagina"
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:30
+#, kde-format
+msgid "Select a master page design:"
+msgstr ""
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:97
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Master Page"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPADocumentModel.cpp:172 pageapp/KoPAPageThumbnailModel.cpp:54
+#, fuzzy, kde-format
+#| msgid "Time:"
+msgid "Slide %1"
+msgstr "Talha :"
+
+#: pageapp/KoPADocumentModel.cpp:174
+#, fuzzy, kde-format
+#| msgid "Page"
+msgid "Page  %1"
+msgstr "Pagina %1"
+
+#: pageapp/KoPADocumentModel.cpp:177
+#: pageapp/KoPADocumentStructureDocker.cpp:102
+#, kde-format
+msgid "Layer"
+msgstr "Jaç"
+
+#: pageapp/KoPADocumentModel.cpp:179
+#, kde-format
+msgid "Group"
+msgstr "Grop"
+
+#: pageapp/KoPADocumentModel.cpp:181
+#, kde-format
+msgid "Shape"
+msgstr "Forma"
+
+#: pageapp/KoPADocumentModel.cpp:272
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Rename Slide"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPADocumentModel.cpp:274
+#, fuzzy
+#| msgid "Page"
+msgctxt "(qtundo-format)"
+msgid "Rename Page"
+msgstr "Pagina"
+
+#: pageapp/KoPADocumentModel.cpp:278
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Rename Layer"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPADocumentModel.cpp:314
+#: pageapp/KoPADocumentStructureDocker.cpp:100
+#, fuzzy, kde-format
+#| msgid "Time:"
+msgid "Slide"
+msgstr "Talha :"
+
+#: pageapp/KoPADocumentModel.cpp:317
+#, kde-format
+msgid "Visible"
+msgstr "Visible"
+
+#: pageapp/KoPADocumentModel.cpp:318
+#, kde-format
+msgid "Locked"
+msgstr "Varrolhat"
+
+#: pageapp/KoPADocumentModel.cpp:533 pageapp/KoPADocumentModel.cpp:552
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Reparent shapes"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPADocumentModel.cpp:686
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "&Move Here"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPADocumentModel.cpp:690
+#, fuzzy, kde-format
+#| msgid "Green"
+msgid "&Copy Here"
+msgstr "Vèrd"
+
+#: pageapp/KoPADocumentModel.cpp:694
+#, fuzzy, kde-format
+#| msgid "Change"
+msgid "C&ancel"
+msgstr "Cambiar"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:89
+#, kde-format
+msgid "Add a new slide or layer"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:92
+#, kde-format
+msgid "Add a new page or layer"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:100
+#: widgets/KoPageLayoutDialog.cpp:37
+#, kde-format
+msgid "Page"
+msgstr "Pagina"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:109
+#: pageapp/KoPADocumentStructureDocker.cpp:616
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Delete selected objects"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:115
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Raise selected objects"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:121
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Lower selected objects"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:130
+#, kde-format
+msgid "Minimal View"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:132
+#, kde-format
+msgid "Detailed View"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:134
+#, kde-format
+msgid "Thumbnail View"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:144
+#, kde-format
+msgid "View mode"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:301
+#, kde-format
+msgid "Enter the name of the new layer:"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:301
+#, fuzzy, kde-format
+#| msgid "Layer"
+msgid "New Layer"
+msgstr "Jaç"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:302
+#, fuzzy, kde-format
+#| msgid "Layer"
+msgid "New layer"
+msgstr "Jaç"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:315
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Create Layer"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:341
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Delete Layer"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:344
+#, kde-format
+msgid "Could not delete all layers. At least one layer is required."
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:344
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Error deleting layers"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:611
+#, kde-format
+msgid "Add a new slide"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:614
+#, kde-format
+msgid "Add a new page"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:618
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "Cut"
+msgstr "Personalizat"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:619
+#: pigment/compositeops/KoCompositeOpCopy.h:24
+#: pigment/compositeops/KoCompositeOpCopy2.h:32
+#: pigment/KoCompositeOpRegistry.cpp:87
+#, fuzzy, kde-format
+#| msgid "Blue"
+msgid "Copy"
+msgstr "Blau"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:620
+#, fuzzy, kde-format
+#| msgid "Date"
+msgid "Paste"
+msgstr "Data"
+
+#: pageapp/KoPAPageThumbnailModel.cpp:56
+#, fuzzy, kde-format
+#| msgid "Page"
+msgid "Page %1"
+msgstr "Pagina %1"
+
+#: pageapp/KoPAPastePage.cpp:118
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Paste Slide"
+msgid_plural "Paste Slides"
+msgstr[0] "Suprimir pagina"
+msgstr[1] "Suprimir pagina"
+
+#: pageapp/KoPAPastePage.cpp:121
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Paste Page"
+msgid_plural "Paste Pages"
+msgstr[0] "Suprimir pagina"
+msgstr[1] "Suprimir pagina"
+
+#: pageapp/KoPAView.cpp:307 widgets/KoToolBoxDocker.cpp:30
+#, kde-format
+msgid "Tools"
+msgstr ""
+
+#: pageapp/KoPAView.cpp:350
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "D&elete"
+msgstr "Suprimir"
+
+#: pageapp/KoPAView.cpp:361
+#, kde-format
+msgid "Snap to Grid"
+msgstr "Alinhar s~us la gresilha"
+
+#: pageapp/KoPAView.cpp:371
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Show Master Pages"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPAView.cpp:375
+#, fuzzy, kde-format
+#| msgid "Snap to Grid"
+msgid "Show Rulers"
+msgstr "Alinhar s~us la gresilha"
+
+#: pageapp/KoPAView.cpp:377
+#, kde-format
+msgid "Show/hide the view's rulers"
+msgstr ""
+
+#: pageapp/KoPAView.cpp:381
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Show Page Margins"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPAView.cpp:383
+#, kde-format
+msgid "Show/hide the page margins"
+msgstr ""
+
+#: pageapp/KoPAView.cpp:387
+#, fuzzy, kde-format
+#| msgid "Insert Break"
+msgid "Insert Page"
+msgstr "Inserir un saut"
+
+#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
+#, kde-format
+msgid "Insert a new page after the current one"
+msgstr ""
+
+#: pageapp/KoPAView.cpp:393
+#, fuzzy, kde-format
+#| msgid "Blue"
+msgid "Copy Page"
+msgstr "Blau"
+
+#: pageapp/KoPAView.cpp:395 pageapp/KoPAView.cpp:396
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Copy the current page"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPAView.cpp:399
+#, kde-format
+msgid "Delete Page"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPAView.cpp:402 pageapp/KoPAView.cpp:403
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Delete the current page"
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPAView.cpp:406
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Master Page..."
+msgstr "Suprimir pagina"
+
+#: pageapp/KoPAView.cpp:410
+#, fuzzy, kde-format
+#| msgid "Change"
+msgid "Page Layout..."
+msgstr "Cambiar"
+
+#. i18n: ectx: property (text), widget (QTableWidget, variables)
+#: pageapp/KoPAView.cpp:420 rdf/KoSemanticStylesheetsEditor.ui:57
+#, kde-format
+msgid "Variable"
+msgstr "Variable"
+
+#: pageapp/KoPAView.cpp:425
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "Import Document..."
+msgstr "Importar un document"
+
+#: pageapp/KoPAView.cpp:429
+#, kde-format
+msgid "Configure..."
+msgstr ""
+
+#: pageapp/KoPAView.cpp:521
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "Import Slideshow"
+msgstr "Importar un document"
+
+#: pageapp/KoPAView.cpp:549 pageapp/KoPAView.cpp:553
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid ""
+"Could not import\n"
+"%1"
+msgstr "Impossible de trobar lo fichièr"
+
+#: pageapp/KoPAView.cpp:666
+#, fuzzy
+#| msgid "Change"
+msgctxt "(qtundo-format)"
+msgid "Change page layout"
+msgstr "Cambiar"
+
+#. i18n: ectx: property (text), widget (QPushButton, backgroundImage)
+#: pageapp/tools/backgroundTool/BackgroundToolWidget.ui:43
+#, kde-format
+msgid "Set image ..."
+msgstr ""
+
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
+#, fuzzy, kde-format
+#| msgid "&Background color:"
+msgid "Background"
+msgstr "Color de &fons :"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#, fuzzy, kde-format
+#| msgid "&Background color:"
+msgid "Page Background"
+msgstr "Color de &fons :"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Page Preview"
+msgid "Page Design"
+msgstr "Previsualizacion"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Page Preview"
+msgid "Slide Design"
+msgstr "Previsualizacion"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Use background of master page"
+msgstr "Suprimir pagina"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Use background of master slide"
+msgstr "Suprimir pagina"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Display shapes of master page"
+msgstr "Suprimir pagina"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Display shapes of master slide"
+msgstr "Suprimir pagina"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:102
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Change slide background image"
+msgstr "Suprimir pagina"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:103
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Change page background image"
+msgstr "Suprimir pagina"
+
+#: pageapp/widgets/KoPageNavigator.cpp:55
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Master Slide %1/%2"
+msgstr "Suprimir pagina"
+
+#: pageapp/widgets/KoPageNavigator.cpp:56
+#, fuzzy, kde-format
+#| msgid "Time:"
+msgid "Slide %1/%2"
+msgstr "Talha :"
+
+#: pageapp/widgets/KoPageNavigator.cpp:57
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Master Page %1/%2"
+msgstr "Suprimir pagina"
+
+#: pageapp/widgets/KoPageNavigator.cpp:58
+#, fuzzy, kde-format
+#| msgid "Page"
+msgid "Page %1/%2"
+msgstr "Pagina %1"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:37
+#, kde-format
+msgid "Clear"
+msgstr "Netejar"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:110
+#: pigment/compositeops/KoCompositeOps.h:127
+#: pigment/KoCompositeOpRegistry.cpp:38
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Subtract"
+msgstr "Saturacion"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:182
+#: pigment/compositeops/KoCompositeOps.h:129
+#: pigment/KoCompositeOpRegistry.cpp:39
+#, kde-format
+msgid "Multiply"
+msgstr ""
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:248
+#: pigment/colorspaces/KoAlphaColorSpace.h:183
+#: pigment/KoColorModelStandardIds.cpp:12
+#, fuzzy, kde-format
+#| msgid "Alpha"
+msgid "Alpha mask"
+msgstr "Alfa"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:250
+#: pigment/colorspaces/KoLabColorSpace.cpp:34
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:36
+#, kde-format
+msgid "Alpha"
+msgstr "Alfa"
+
+#: pigment/colorspaces/KoAlphaColorSpace.h:128
+#: pigment/colorspaces/KoAlphaColorSpace.h:133
+#: pigment/colorspaces/KoAlphaColorSpace.h:137
+#: pigment/colorspaces/KoAlphaColorSpace.h:141
+#: pigment/colorspaces/KoAlphaColorSpace.h:144
+#: pigment/colorspaces/KoAlphaColorSpace.h:147
+#: pigment/colorspaces/KoAlphaColorSpace.h:150
+#: pigment/colorspaces/KoAlphaColorSpace.h:153
+#: pigment/colorspaces/KoAlphaColorSpace.h:159
+#: pigment/colorspaces/KoAlphaColorSpace.h:162
+#, kde-format
+msgid "Undefined operation in the alpha color space"
+msgstr ""
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:27
+#: pigment/colorspaces/KoLabColorSpace.h:63
+#, kde-format
+msgid "L*a*b* (16-bit integer/channel, unmanaged)"
+msgstr ""
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:31
+#: pigment/compositeops/KoCompositeOps.h:196
+#: pigment/KoCompositeOpRegistry.cpp:111
+#, kde-format
+msgid "Lightness"
+msgstr "Clar"
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:32
+#: pigment/KoBasicHistogramProducers.cpp:430
+#, kde-format
+msgid "a*"
+msgstr ""
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:33
+#: pigment/KoBasicHistogramProducers.cpp:431
+#, kde-format
+msgid "b*"
+msgstr ""
+
+#: pigment/colorspaces/KoRgbU16ColorSpace.cpp:26
+#: pigment/colorspaces/KoRgbU16ColorSpace.h:51
+#, kde-format
+msgid "RGB (16-bit integer/channel, unmanaged)"
+msgstr ""
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:28
+#: pigment/colorspaces/KoRgbU8ColorSpace.h:52
+#, kde-format
+msgid "RGB (8-bit integer/channel, unmanaged)"
+msgstr ""
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:33
+#, kde-format
+msgid "Blue"
+msgstr "Blau"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:34
+#, kde-format
+msgid "Green"
+msgstr "Vèrd"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:35
+#, kde-format
+msgid "Red"
+msgstr "Roge"
+
+#: pigment/colorspaces/KoSimpleColorSpace.h:60
+#: pigment/colorspaces/KoSimpleColorSpace.h:67
+#, kde-format
+msgid "Undefined operation in the %1 space"
+msgstr ""
+
+#: pigment/colorspaces/KoSimpleColorSpace.h:84
+#: pigment/colorspaces/KoSimpleColorSpace.h:89
+#: pigment/colorspaces/KoSimpleColorSpace.h:94
+#: pigment/colorspaces/KoSimpleColorSpace.h:99
+#: pigment/colorspaces/KoSimpleColorSpace.h:104
+#: pigment/colorspaces/KoSimpleColorSpace.h:108
+#: pigment/colorspaces/KoSimpleColorSpace.h:112
+#: pigment/colorspaces/KoSimpleColorSpace.h:115
+#: pigment/colorspaces/KoSimpleColorSpace.h:118
+#: pigment/colorspaces/KoSimpleColorSpace.h:124
+#: pigment/colorspaces/KoSimpleColorSpace.h:127
+#, kde-format
+msgid "Undefined operation in the %1 color space"
+msgstr ""
+
+#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
+#, kde-format
+msgid "Simple Color Conversion Engine"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOpAlphaDarken.h:28
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:194
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken32.h:235
+#, fuzzy, kde-format
+#| msgid "Alpha"
+msgid "Alpha darken"
+msgstr "Alfa"
+
+#: pigment/compositeops/KoCompositeOpBehind.h:26
+#: pigment/KoCompositeOpRegistry.cpp:69
+#, kde-format
+msgid "Behind"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOpDissolve.h:48
+#: pigment/KoCompositeOpRegistry.cpp:83
+#, kde-format
+msgid "Dissolve"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOpErase.h:27
+#: pigment/KoCompositeOpRegistry.cpp:72
+#, kde-format
+msgid "Erase"
+msgstr "Suprimir"
+
+#: pigment/compositeops/KoCompositeOpGreater.h:40
+#: pigment/KoCompositeOpRegistry.cpp:70
+#, fuzzy, kde-format
+#| msgid "Created:"
+msgid "Greater"
+msgstr "Creat :"
+
+#: pigment/compositeops/KoCompositeOpOver.h:49
+#: pigment/compositeops/KoOptimizedCompositeOpOver128.h:238
+#: pigment/compositeops/KoOptimizedCompositeOpOver32.h:196
+#: pigment/KoCompositeOpRegistry.cpp:68 pigment/KoCompositeOpRegistry.cpp:134
+#, kde-format
+msgid "Normal"
+msgstr "Normal"
+
+#: pigment/compositeops/KoCompositeOps.h:101
+#: pigment/KoCompositeOpRegistry.cpp:71
+#, fuzzy, kde-format
+#| msgid "Opacity:"
+msgid "Overlay"
+msgstr "Opacitat :"
+
+#: pigment/compositeops/KoCompositeOps.h:102
+#: pigment/KoCompositeOpRegistry.cpp:75
+#, kde-format
+msgid "Grain Merge"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:103
+#: pigment/KoCompositeOpRegistry.cpp:76
+#, kde-format
+msgid "Grain Extract"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:104
+#: pigment/KoCompositeOpRegistry.cpp:74
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgid "Hard Mix"
+msgstr "Nautor"
+
+#: pigment/compositeops/KoCompositeOps.h:105
+#: pigment/KoCompositeOpRegistry.cpp:79
+#, kde-format
+msgid "Geometric Mean"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:106
+#: pigment/KoCompositeOpRegistry.cpp:77
+#, fuzzy, kde-format
+#| msgid "Variable"
+msgid "Parallel"
+msgstr "Variable"
+
+#: pigment/compositeops/KoCompositeOps.h:107
+#: pigment/KoCompositeOpRegistry.cpp:78
+#, kde-format
+msgid "Allanon"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:109
+#: pigment/KoCompositeOpRegistry.cpp:53
+#, kde-format
+msgid "Screen"
+msgstr "Ecran"
+
+#: pigment/compositeops/KoCompositeOps.h:110
+#: pigment/KoCompositeOpRegistry.cpp:49
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Color Dodge"
+msgstr "Color"
+
+#: pigment/compositeops/KoCompositeOps.h:111
+#: pigment/KoCompositeOpRegistry.cpp:50
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Linear Dodge"
+msgstr "Esclarzir"
+
+#: pigment/compositeops/KoCompositeOps.h:112 pigment/KoCompositeOp.cpp:23
+#: pigment/KoCompositeOpRegistry.cpp:28 pigment/KoCompositeOpRegistry.cpp:51
+#, kde-format
+msgid "Lighten"
+msgstr "Esclarzir"
+
+#: pigment/compositeops/KoCompositeOps.h:113
+#: pigment/KoCompositeOpRegistry.cpp:56
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgid "Hard Light"
+msgstr "Nautor"
+
+#: pigment/compositeops/KoCompositeOps.h:114
+#: pigment/KoCompositeOpRegistry.cpp:58
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Soft Light (SVG)"
+msgstr "Esclarzir"
+
+#: pigment/compositeops/KoCompositeOps.h:115
+#: pigment/KoCompositeOpRegistry.cpp:57
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Soft Light (Photoshop)"
+msgstr "Esclarzir"
+
+#: pigment/compositeops/KoCompositeOps.h:116
+#: pigment/KoCompositeOpRegistry.cpp:59
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Gamma Light"
+msgstr "Esclarzir"
+
+#: pigment/compositeops/KoCompositeOps.h:117
+#: pigment/KoCompositeOpRegistry.cpp:55
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Vivid Light"
+msgstr "Esclarzir"
+
+#: pigment/compositeops/KoCompositeOps.h:118
+#: pigment/KoCompositeOpRegistry.cpp:54
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Pin Light"
+msgstr "Esclarzir"
+
+#: pigment/compositeops/KoCompositeOps.h:119
+#: pigment/KoCompositeOpRegistry.cpp:52
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Linear Light"
+msgstr "Esclarzir"
+
+#: pigment/compositeops/KoCompositeOps.h:121
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Color Burn"
+msgstr "Color"
+
+#: pigment/compositeops/KoCompositeOps.h:122
+#: pigment/KoCompositeOpRegistry.cpp:44
+#, fuzzy, kde-format
+#| msgid "Insert Break"
+msgid "Linear Burn"
+msgstr "Inserir un saut"
+
+#: pigment/compositeops/KoCompositeOps.h:123 pigment/KoCompositeOp.cpp:24
+#: pigment/KoCompositeOpRegistry.cpp:27 pigment/KoCompositeOpRegistry.cpp:45
+#, kde-format
+msgid "Darken"
+msgstr "Escuresir"
+
+#: pigment/compositeops/KoCompositeOps.h:124
+#: pigment/KoCompositeOpRegistry.cpp:46
+#, kde-format
+msgid "Gamma Dark"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:126
+#: pigment/KoCompositeOpRegistry.cpp:37
+#, fuzzy, kde-format
+#| msgid "Position:"
+msgid "Addition"
+msgstr "Posicion :"
+
+#: pigment/compositeops/KoCompositeOps.h:128
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Inversed-Subtract"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:130
+#: pigment/KoCompositeOpRegistry.cpp:40
+#, kde-format
+msgid "Divide"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:132
+#: pigment/KoCompositeOpRegistry.cpp:66
+#, kde-format
+msgid "Arcus Tangent"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:133
+#: pigment/KoCompositeOpRegistry.cpp:62
+#, kde-format
+msgid "Difference"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:134
+#: pigment/KoCompositeOpRegistry.cpp:65
+#, kde-format
+msgid "Exclusion"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:135
+#: pigment/KoCompositeOpRegistry.cpp:63
+#, kde-format
+msgid "Equivalence"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:136
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Additive-Subtractive"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:165
+#: pigment/KoCompositeOpRegistry.cpp:84
+#, fuzzy, kde-format
+#| msgid "Blue"
+msgid "Copy Red"
+msgstr "Blau"
+
+#: pigment/compositeops/KoCompositeOps.h:166
+#: pigment/KoCompositeOpRegistry.cpp:85
+#, fuzzy, kde-format
+#| msgid "Green"
+msgid "Copy Green"
+msgstr "Vèrd"
+
+#: pigment/compositeops/KoCompositeOps.h:167
+#: pigment/KoCompositeOpRegistry.cpp:86
+#, fuzzy, kde-format
+#| msgid "Blue"
+msgid "Copy Blue"
+msgstr "Blau"
+
+#: pigment/compositeops/KoCompositeOps.h:168
+#: pigment/KoCompositeOpRegistry.cpp:88
+#, kde-format
+msgid "Tangent Normalmap"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:169
+#, kde-format
+msgid "Combine Normal Maps"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:171 pigment/KoCompositeOp.cpp:18
+#: pigment/KoCompositeOpRegistry.cpp:90
+#, kde-format
+msgid "Color"
+msgstr "Color"
+
+#: pigment/compositeops/KoCompositeOps.h:172
+#: pigment/KoCompositeOpRegistry.cpp:91
+#, kde-format
+msgid "Hue"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:173
+#: pigment/KoCompositeOpRegistry.cpp:92
+#, kde-format
+msgid "Saturation"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:174
+#: pigment/KoCompositeOpRegistry.cpp:95
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Increase Saturation"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:175
+#: pigment/KoCompositeOpRegistry.cpp:94
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Decrease Saturation"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:176
+#: pigment/KoCompositeOpRegistry.cpp:93
+#, fuzzy, kde-format
+#| msgid "Increase Indent"
+msgid "Luminosity"
+msgstr "Aumentar l'alinèa"
+
+#: pigment/compositeops/KoCompositeOps.h:177
+#: pigment/KoCompositeOpRegistry.cpp:97
+#, fuzzy, kde-format
+#| msgid "Increase Indent"
+msgid "Increase Luminosity"
+msgstr "Aumentar l'alinèa"
+
+#: pigment/compositeops/KoCompositeOps.h:178
+#: pigment/KoCompositeOpRegistry.cpp:96
+#, fuzzy, kde-format
+#| msgid "Decrease Indent"
+msgid "Decrease Luminosity"
+msgstr "Reduire l'alinèa"
+
+#: pigment/compositeops/KoCompositeOps.h:179
+#: pigment/KoCompositeOpRegistry.cpp:47
+#, fuzzy, kde-format
+#| msgid "&Background color:"
+msgid "Darker Color"
+msgstr "Color de &fons :"
+
+#: pigment/compositeops/KoCompositeOps.h:180
+#: pigment/KoCompositeOpRegistry.cpp:60
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Lighter Color"
+msgstr "Color"
+
+#: pigment/compositeops/KoCompositeOps.h:182
+#: pigment/KoCompositeOpRegistry.cpp:99
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Color HSI"
+msgstr "Color"
+
+#: pigment/compositeops/KoCompositeOps.h:183
+#: pigment/KoCompositeOpRegistry.cpp:100
+#, kde-format
+msgid "Hue HSI"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:184
+#: pigment/KoCompositeOpRegistry.cpp:101
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Saturation HSI"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:185
+#: pigment/KoCompositeOpRegistry.cpp:104
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Increase Saturation HSI"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:186
+#: pigment/KoCompositeOpRegistry.cpp:103
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Decrease Saturation HSI"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:187
+#: pigment/KoCompositeOpRegistry.cpp:102
+#, fuzzy, kde-format
+#| msgid "Increase Indent"
+msgid "Intensity"
+msgstr "Aumentar l'alinèa"
+
+#: pigment/compositeops/KoCompositeOps.h:188
+#: pigment/KoCompositeOpRegistry.cpp:106
+#, fuzzy, kde-format
+#| msgid "Increase Indent"
+msgid "Increase Intensity"
+msgstr "Aumentar l'alinèa"
+
+#: pigment/compositeops/KoCompositeOps.h:189
+#: pigment/KoCompositeOpRegistry.cpp:105
+#, fuzzy, kde-format
+#| msgid "Decrease Indent"
+msgid "Decrease Intensity"
+msgstr "Reduire l'alinèa"
+
+#: pigment/compositeops/KoCompositeOps.h:191
+#: pigment/KoCompositeOpRegistry.cpp:108
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Color HSL"
+msgstr "Color"
+
+#: pigment/compositeops/KoCompositeOps.h:192
+#: pigment/KoCompositeOpRegistry.cpp:109
+#, kde-format
+msgid "Hue HSL"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:193
+#: pigment/KoCompositeOpRegistry.cpp:110
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Saturation HSL"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:194
+#: pigment/KoCompositeOpRegistry.cpp:113
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Increase Saturation HSL"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:195
+#: pigment/KoCompositeOpRegistry.cpp:112
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Decrease Saturation HSL"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:197
+#: pigment/KoCompositeOpRegistry.cpp:115
+#, fuzzy, kde-format
+#| msgid "Increase Indent"
+msgid "Increase Lightness"
+msgstr "Aumentar l'alinèa"
+
+#: pigment/compositeops/KoCompositeOps.h:198
+#: pigment/KoCompositeOpRegistry.cpp:114
+#, fuzzy, kde-format
+#| msgid "Decrease Indent"
+msgid "Decrease Lightness"
+msgstr "Reduire l'alinèa"
+
+#: pigment/compositeops/KoCompositeOps.h:200
+#: pigment/KoCompositeOpRegistry.cpp:117
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Color HSV"
+msgstr "Color"
+
+#: pigment/compositeops/KoCompositeOps.h:201
+#: pigment/KoCompositeOpRegistry.cpp:118
+#, kde-format
+msgid "Hue HSV"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:202
+#: pigment/KoCompositeOpRegistry.cpp:119
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Saturation HSV"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:203
+#: pigment/KoCompositeOpRegistry.cpp:122
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Increase Saturation HSV"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:204
+#: pigment/KoCompositeOpRegistry.cpp:121
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Decrease Saturation HSV"
+msgstr "Saturacion"
+
+#: pigment/compositeops/KoCompositeOps.h:205
+#: pigment/KoCompositeOpRegistry.cpp:120
+#, kde-format
+msgid "Value"
+msgstr "Valor"
+
+#: pigment/compositeops/KoCompositeOps.h:206
+#: pigment/KoCompositeOpRegistry.cpp:124
+#, fuzzy, kde-format
+#| msgid "Increase Indent"
+msgid "Increase Value"
+msgstr "Aumentar l'alinèa"
+
+#: pigment/compositeops/KoCompositeOps.h:207
+#: pigment/KoCompositeOpRegistry.cpp:123
+#, fuzzy, kde-format
+#| msgid "Decrease Indent"
+msgid "Decrease Value"
+msgstr "Reduire l'alinèa"
+
+#: pigment/KoBasicHistogramProducers.cpp:352
+#: pigment/KoBasicHistogramProducers.cpp:419
+#, kde-format
+msgid "Generic RGB Histogram"
+msgstr ""
+
+#: pigment/KoBasicHistogramProducers.cpp:356
+#, kde-format
+msgid "R"
+msgstr "R"
+
+#: pigment/KoBasicHistogramProducers.cpp:357
+#, kde-format
+msgid "G"
+msgstr "G"
+
+#: pigment/KoBasicHistogramProducers.cpp:358
+#, kde-format
+msgid "B"
+msgstr "B"
+
+#: pigment/KoBasicHistogramProducers.cpp:425
+#, kde-format
+msgid "L*a*b* Histogram"
+msgstr ""
+
+#: pigment/KoBasicHistogramProducers.cpp:429
+#, kde-format
+msgid "L*"
+msgstr ""
+
+#: pigment/KoBasicHistogramProducers.cpp:503
+#, kde-format
+msgid "Generic L*a*b* Histogram"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:13
+#, kde-format
+msgid "RGB"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:14
+#, kde-format
+msgid "XYZ"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:15
+#, kde-format
+msgid "L*a*b*"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:16
+#, kde-format
+msgid "CMYK"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:17
+#, kde-format
+msgid "Grayscale"
+msgstr "Escala de grises"
+
+#: pigment/KoColorModelStandardIds.cpp:18
+#, kde-format
+msgid "Grayscale (without transparency)"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:19
+#, kde-format
+msgid "YCbCr"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:21
+#, kde-format
+msgid "8 Bits"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:22
+#, kde-format
+msgid "16 Bits"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:23
+#, kde-format
+msgid "16 Bits Float"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:24
+#, kde-format
+msgid "32 Bits Float"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:25
+#, kde-format
+msgid "64 Bits Float"
+msgstr ""
+
+#: pigment/KoCompositeOp.cpp:21 pigment/KoCompositeOpRegistry.cpp:26
+#, fuzzy, kde-format
+#| msgid "Automatic"
+msgid "Arithmetic"
+msgstr "Automatic"
+
+#: pigment/KoCompositeOp.cpp:22 pigment/KoCompositeOpRegistry.cpp:29
+#, kde-format
+msgid "Negative"
+msgstr ""
+
+#: pigment/KoCompositeOp.cpp:25 pigment/KoCompositeOpRegistry.cpp:32
+#, kde-format
+msgid "HSY"
+msgstr ""
+
+#: pigment/KoCompositeOp.cpp:26 pigment/KoCompositeOpRegistry.cpp:33
+#, kde-format
+msgid "HSI"
+msgstr ""
+
+#: pigment/KoCompositeOp.cpp:27 pigment/KoCompositeOpRegistry.cpp:34
+#, kde-format
+msgid "HSL"
+msgstr ""
+
+#: pigment/KoCompositeOp.cpp:28 pigment/KoCompositeOpRegistry.cpp:35
+#, kde-format
+msgid "HSV"
+msgstr ""
+
+#: pigment/KoCompositeOp.cpp:29 pigment/KoCompositeOpRegistry.cpp:30
+#, kde-format
+msgid "Mix"
+msgstr ""
+
+#: pigment/KoCompositeOpRegistry.cpp:41
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Inverse Subtract"
+msgstr "Saturacion"
+
+#: pigment/KoCompositeOpRegistry.cpp:43
+#, kde-format
+msgid "Burn"
+msgstr ""
+
+#: pigment/KoCompositeOpRegistry.cpp:64
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Additive Subtractive"
+msgstr "Saturacion"
+
+#: pigment/KoCompositeOpRegistry.cpp:73
+#, fuzzy, kde-format
+#| msgid "Alpha"
+msgid "Alpha Darken"
+msgstr "Alfa"
+
+#: pigment/KoCompositeOpRegistry.cpp:81
+#, kde-format
+msgid "Bumpmap"
+msgstr ""
+
+#: pigment/KoCompositeOpRegistry.cpp:82
+#, kde-format
+msgid "Combine Normal Map"
+msgstr ""
+
+#: pigment/resources/KoStopGradient.cpp:421
+#, kde-format
+msgid "SVG Gradient"
+msgstr ""
+
+#: rdf/InsertSemanticObjectReferenceAction.cpp:43
+#, kde-format
+msgid "Select the object you want to reference"
+msgstr ""
+
+#: rdf/KoDocumentRdf.cpp:618
+#, kde-format
+msgid "Reference"
+msgstr ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:229
+#, kde-format
+msgid "Set For All Existing"
+msgstr ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:297
+#, kde-format
+msgctxt "statement is an Rdf related term"
+msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
+msgid_plural ""
+"<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:300
+#, kde-format
+msgctxt "statement is an Rdf related term"
+msgid "Discard invalid statements?"
+msgstr ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:341
+#, fuzzy, kde-format
+#| msgid "Red"
+msgid "Rdf"
+msgstr "Roge"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: rdf/KoDocumentRdfEditWidget.ui:21
+#, fuzzy, kde-format
+#| msgid "Title:"
+msgid "Triples"
+msgstr "Títol:"
+
+#. i18n: ectx: property (text), widget (QPushButton, newStylesheet)
+#. i18n: ectx: property (text), widget (QPushButton, newTripleButton)
+#. i18n: ectx: property (text), widget (QPushButton, newNamespaceButton)
+#: rdf/KoDocumentRdfEditWidget.ui:39 rdf/KoDocumentRdfEditWidget.ui:84
+#: rdf/KoSemanticStylesheetsEditor.ui:77
+#, kde-format
+msgid "new"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, copyTripleButton)
+#: rdf/KoDocumentRdfEditWidget.ui:46
+#, kde-format
+msgid "copy"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, deleteStylesheet)
+#. i18n: ectx: property (text), widget (QPushButton, deleteTripleButton)
+#. i18n: ectx: property (text), widget (QPushButton, deleteNamespaceButton)
+#: rdf/KoDocumentRdfEditWidget.ui:53 rdf/KoDocumentRdfEditWidget.ui:91
+#: rdf/KoSemanticStylesheetsEditor.ui:84
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "delete"
+msgstr "Suprimir"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: rdf/KoDocumentRdfEditWidget.ui:76
+#, fuzzy, kde-format
+#| msgid "Replace"
+msgid "Namespaces"
+msgstr "Remplaçar"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, m_namespaceView)
+#: rdf/KoDocumentRdfEditWidget.ui:123
+#, kde-format
+msgid "Prefix"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QTreeWidget, m_namespaceView)
+#: rdf/KoDocumentRdfEditWidget.ui:128
+#, fuzzy, kde-format
+#| msgid "Replace"
+msgid "Namespace"
+msgstr "Remplaçar"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: rdf/KoDocumentRdfEditWidget.ui:137
+#, kde-format
+msgid "Semantic"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
+#: rdf/KoDocumentRdfEditWidget.ui:156
+#, kde-format
+msgid "SPARQL"
+msgstr ""
+
+#. i18n: ectx: property (html), widget (QTextEdit, m_sparqlQuery)
+#: rdf/KoDocumentRdfEditWidget.ui:182
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"># Insert your SPARQL query here<br /># "
+"Results are shown below.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix rdf:  &lt;http://www.w3."
+"org/1999/02/22-rdf-syntax-ns#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix foaf: &lt;http://xmlns.com/"
+"foaf/0.1/&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix pkg:  &lt;http://docs.oasis-open."
+"org/ns/office/1.2/meta/pkg#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix geo84: &lt;http://www.w3."
+"org/2003/01/geo/wgs84_pos#&gt;</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">select ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">where { </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"> ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">}</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
+#: rdf/KoDocumentRdfEditWidget.ui:191
+#, kde-format
+msgid "Execute"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_5)
+#: rdf/KoDocumentRdfEditWidget.ui:221
+#, fuzzy, kde-format
+#| msgid "Styles"
+msgid "Stylesheets"
+msgstr "Estils"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: rdf/KoDocumentRdfEditWidget.ui:227
+#, kde-format
+msgid ""
+"Set the default stylesheet for Semantic objects in this document. New RDF "
+"objects will use this stylesheet automatically. The buttons allow you to set "
+"the stylesheet for all existing semantic objects to the new default "
+"stylesheet as well."
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:101
+#, fuzzy, kde-format
+#| msgid "Styles"
+msgid "Apply Stylesheet"
+msgstr "Estils"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
+#: rdf/KoSemanticStylesheetsEditor.cpp:107
+#, kde-format
+msgid "System"
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:112
+#: rdf/KoSemanticStylesheetsEditor.cpp:123
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "User"
+msgstr "Inserir"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:126
+#, kde-format
+msgid "Reapply Current"
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:131
+#, kde-format
+msgid "Disassociate"
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add..."
+msgid "Edit %1"
+msgstr "Apondre..."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: rdf/KoSemanticStylesheetsEditor.ui:17
+#, fuzzy, kde-format
+#| msgid "Styles"
+msgid "Stylesheet Definition"
+msgstr "Estils"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: rdf/KoSemanticStylesheetsEditor.ui:29
+#, kde-format
+msgid "Variables Available"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QTableWidget, variables)
+#: rdf/KoSemanticStylesheetsEditor.ui:62
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Description"
+msgstr "Posicion"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, stylesheets)
+#: rdf/KoSemanticStylesheetsEditor.ui:107
+#, fuzzy, kde-format
+#| msgid "Styles"
+msgid "Stylesheet Name"
+msgstr "Estils"
+
+#: rdf/KoSopranoTableModel.cpp:71
+#, kde-format
+msgid "Empty"
+msgstr ""
+
+#: rdf/KoSopranoTableModel.cpp:73 rdf/KoSopranoTableModelDelegate.cpp:30
+#, kde-format
+msgid "URI"
+msgstr ""
+
+#: rdf/KoSopranoTableModel.cpp:75 rdf/KoSopranoTableModelDelegate.cpp:31
+#, kde-format
+msgid "Literal"
+msgstr ""
+
+#: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:32
+#, fuzzy, kde-format
+#| msgid "Black"
+msgid "Blank"
+msgstr "Negre"
+
+#: rdf/KoSopranoTableModel.cpp:119
+#, fuzzy, kde-format
+#| msgid "Time:"
+msgid "Valid"
+msgstr "Talha :"
+
+#: rdf/KoSopranoTableModel.cpp:121
+#, fuzzy, kde-format
+#| msgid "Subject:"
+msgid "Subject"
+msgstr "Subjècte :"
+
+#: rdf/KoSopranoTableModel.cpp:123
+#, fuzzy, kde-format
+#| msgid "Picture"
+msgid "Predicate"
+msgstr "Imatge"
+
+#: rdf/KoSopranoTableModel.cpp:125
+#, kde-format
+msgid "Object"
+msgstr "Objècte"
+
+#: rdf/KoSopranoTableModel.cpp:127
+#, fuzzy, kde-format
+#| msgid "Type"
+msgid "Obj Type"
+msgstr "Tipe"
+
+#: rdf/KoSopranoTableModel.cpp:129
+#, fuzzy, kde-format
+#| msgid "Data"
+msgid "DataType"
+msgstr "Donadas"
+
+#: rdf/KoSopranoTableModel.cpp:131
+#, fuzzy, kde-format
+#| msgid "Stopped"
+msgid "Stored In"
+msgstr "Arrestat"
+
+#: store/KoEncryptedStore.cpp:228
+#, kde-format
+msgid ""
+"This document contains an unknown checksum. When you give a password it "
+"might not be verified."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:254 store/KoEncryptedStore.cpp:271
+#, kde-format
+msgid ""
+"This document contains an unknown encryption method. Some parts may be "
+"unreadable."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:286
+#, kde-format
+msgid ""
+"This document contains incomplete encryption data. Some parts may be "
+"unreadable."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:300
+#, kde-format
+msgid ""
+"QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
+"not be opened."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:330
+#, kde-format
+msgid ""
+"The manifest file seems to be corrupted. It cannot be modified and the "
+"document will remain unreadable. Please try and save the document again to "
+"prevent losing your work."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:428
+#, kde-format
+msgid ""
+"The manifest file cannot be written. The document will remain unreadable. "
+"Please try and save the document again to prevent losing your work."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:549
+#, kde-format
+msgid "Please enter the password to open this file."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:724
+#, kde-format
+msgid "Please enter the password to encrypt the document with."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:738
+#, kde-format
+msgid "Do you want to save the password?"
+msgstr ""
+
+#: store/KoNetAccess.cpp:90
+#, kde-format
+msgid "File '%1' is not readable"
+msgstr ""
+
+#: store/KoNetAccess.cpp:409
+#, kde-format
+msgid "ERROR: Unknown protocol '%1'"
+msgstr ""
+
+#: store/KoStore.cpp:168
+#, kde-format
+msgid "The directory mode is not supported for remote locations."
+msgstr ""
+
+#: store/KoStore.cpp:169
+#, kde-format
+msgid "Calligra Storage"
+msgstr ""
+
+#: text/commands/ChangeListCommand.cpp:28
+#: text/commands/ChangeListCommand.cpp:76
+#: text/commands/ChangeListCommand.cpp:89
+#, fuzzy
+#| msgid "Change"
+msgctxt "(qtundo-format)"
+msgid "Change List"
+msgstr "Cambiar"
+
+#: text/commands/ChangeStylesMacroCommand.cpp:24
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Change Styles"
+msgstr "Inserir un saut"
+
+#: text/commands/ChangeTrackedDeleteCommand.cpp:263
+#, kde-format
+msgid "Delete"
+msgstr "Suprimir"
+
+#: text/commands/ChangeTrackedDeleteCommand.cpp:318
+#: text/commands/DeleteCommand.cpp:506 text/KoTextEditor_undo.cpp:74
+#: text/KoTextEditor_undo.cpp:153 text/KoTextEditor_undo.cpp:188
+#: text/KoTextEditor_undo.cpp:205 text/KoTextEditor_undo.cpp:247
+#, fuzzy
+#| msgid "Text"
+msgctxt "(qtundo-format)"
+msgid "Text"
+msgstr "Tèxt"
+
+#: text/commands/DeleteCommand.cpp:57
+#, fuzzy
+#| msgid "Delete"
+msgctxt "(qtundo-format)"
+msgid "Delete"
+msgstr "Suprimir"
+
+#: text/commands/DeleteTableColumnCommand.cpp:23
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Delete Column"
+msgstr "Suprimir pagina"
+
+#: text/commands/DeleteTableRowCommand.cpp:23
+#, fuzzy
+#| msgid "Delete"
+msgctxt "(qtundo-format)"
+msgid "Delete Row"
+msgstr "Suprimir"
+
+#: text/commands/InsertNoteCommand.cpp:21
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Footnote"
+msgstr "Inserir un saut"
+
+#: text/commands/InsertNoteCommand.cpp:23
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Endnote"
+msgstr "Inserir un saut"
+
+#: text/commands/InsertTableColumnCommand.cpp:25
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Column Right"
+msgstr "Inserir un saut"
+
+#: text/commands/InsertTableColumnCommand.cpp:27
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Column Left"
+msgstr "Inserir un saut"
+
+#: text/commands/InsertTableRowCommand.cpp:25
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Row Below"
+msgstr "Inserir un saut"
+
+#: text/commands/InsertTableRowCommand.cpp:27
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Row Above"
+msgstr "Inserir un saut"
+
+#: text/commands/ListItemNumberingCommand.cpp:22
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Change List Numbering"
+msgstr "Suprimir pagina"
+
+#: text/commands/NewSectionCommand.cpp:22
+#, fuzzy
+#| msgid "Actions"
+msgctxt "(qtundo-format)"
+msgid "New Section"
+msgstr "Accions"
+
+#: text/commands/ParagraphFormattingCommand.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Direct Paragraph Formatting"
+msgstr ""
+
+#: text/commands/RenameSectionCommand.cpp:20
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Rename Section"
+msgstr "Suprimir pagina"
+
+#: text/commands/ResizeTableCommand.cpp:30
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Adjust Column Width"
+msgstr "Inserir un saut"
+
+#: text/commands/ResizeTableCommand.cpp:32
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Adjust Row Height"
+msgstr "Inserir un saut"
+
+#: text/commands/SplitSectionsCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Split sections startings"
+msgstr ""
+
+#: text/commands/SplitSectionsCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Split sections endings"
+msgstr ""
+
+#: text/commands/TextPasteCommand.cpp:51
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Paste As Text"
+msgstr "Suprimir pagina"
+
+#: text/commands/TextPasteCommand.cpp:53
+#, fuzzy
+#| msgid "Date"
+msgctxt "(qtundo-format)"
+msgid "Paste"
+msgstr "Data"
+
+#: text/InsertTextLocator.cpp:14
+#, kde-format
+msgid "Index Reference"
+msgstr ""
+
+#: text/InsertTextReferenceAction.cpp:22 text/InsertTextReferenceAction.cpp:50
+#, kde-format
+msgid "Text Reference"
+msgstr ""
+
+#: text/InsertTextReferenceAction.cpp:31
+#, kde-format
+msgid "Please create an index to reference first."
+msgstr ""
+
+#: text/InsertTextReferenceAction.cpp:40
+#, kde-format
+msgid "Select the index you want to reference"
+msgstr ""
+
+#: text/KoFindStrategy.cpp:51
+#, kde-format
+msgid "Found 1 match"
+msgid_plural "Found %1 matches"
+msgstr[0] ""
+msgstr[1] ""
+
+#: text/KoFindStrategy.cpp:51
+#, kde-format
+msgid "Found no match"
+msgstr ""
+
+#: text/KoReplaceStrategy.cpp:43
+#, kde-format
+msgid ""
+"Found no match\n"
+"\n"
+"No text was replaced"
+msgstr ""
+
+#: text/KoReplaceStrategy.cpp:46
+#, kde-format
+msgid "1 replacement made"
+msgid_plural "%1 replacements made"
+msgstr[0] ""
+msgstr[1] ""
+
+#: text/KoReplaceStrategy.cpp:59
+#, kde-format
+msgid "Replace %1 with %2?"
+msgstr ""
+
+#: text/KoSectionModel.cpp:87
+#, fuzzy, kde-format
+#| msgid "Actions"
+msgctxt "new numbered section name"
+msgid "New section %1"
+msgstr "Accions"
+
+#: text/KoText.cpp:19
+#, kde-format
+msgctxt "Underline Style"
+msgid "None"
+msgstr "Pas cap"
+
+#: text/KoText.cpp:20
+#, kde-format
+msgctxt "Underline Style"
+msgid "Single"
+msgstr "Simple"
+
+#: text/KoText.cpp:21
+#, kde-format
+msgctxt "Underline Style"
+msgid "Double"
+msgstr "Doble"
+
+#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1501
+#: text/KoTextEditor.cpp:1503
+msgctxt "(qtundo-format)"
+msgid "New Paragraph"
+msgstr ""
+
+#: text/KoTextEditor.cpp:470
+#, fuzzy
+#| msgid "Add Bookmark"
+msgctxt "(qtundo-format)"
+msgid "Add Bookmark"
+msgstr "Apondre un favorit"
+
+#: text/KoTextEditor.cpp:485
+#, fuzzy
+#| msgid "Position:"
+msgctxt "(qtundo-format)"
+msgid "Add Annotation"
+msgstr "Posicion :"
+
+#: text/KoTextEditor.cpp:509
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Index"
+msgstr "Inserir un saut"
+
+#: text/KoTextEditor.cpp:535
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Variable"
+msgstr "Inserir un saut"
+
+#: text/KoTextEditor.cpp:602
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Break"
+msgstr "Inserir un saut"
+
+#: text/KoTextEditor.cpp:923 text/KoTextEditor.cpp:925
+#: text/KoTextEditor.cpp:940
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Table"
+msgstr "Inserir un saut"
+
+#: text/KoTextEditor.cpp:1080
+#, fuzzy
+#| msgid "Margins"
+msgctxt "(qtundo-format)"
+msgid "Merge Cells"
+msgstr "Marges"
+
+#: text/KoTextEditor.cpp:1097
+#, fuzzy
+#| msgid "Vertical"
+msgctxt "(qtundo-format)"
+msgid "Split Cells"
+msgstr "Vertical"
+
+#: text/KoTextEditor.cpp:1126
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Adjust Table Width"
+msgstr "Inserir un saut"
+
+#: text/KoTextEditor.cpp:1143
+msgctxt "(qtundo-format)"
+msgid "Change Border Formatting"
+msgstr ""
+
+#: text/KoTextEditor.cpp:1190 text/KoTextEditor.cpp:1192
+#: text/KoTextEditor.cpp:1210
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Table Of Contents"
+msgstr "Inserir un saut"
+
+#: text/KoTextEditor.cpp:1249
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Modify Table Of Contents"
+msgstr "Inserir un saut"
+
+#: text/KoTextEditor.cpp:1266 text/KoTextEditor.cpp:1268
+#: text/KoTextEditor.cpp:1287
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Bibliography"
+msgstr "Inserir un saut"
+
+#: text/KoTextEditor.cpp:1324 text/KoTextEditor.cpp:1326
+#, fuzzy
+#| msgid "Position:"
+msgctxt "(qtundo-format)"
+msgid "Add Citation"
+msgstr "Posicion :"
+
+#: text/KoTextEditor.cpp:1353 text/KoTextEditor.cpp:1355
+#: text/KoTextEditor.cpp:1393
+msgctxt "(qtundo-format)"
+msgid "Typing"
+msgstr ""
+
+#: text/KoTextEditor_format.cpp:54
+#, fuzzy
+#| msgid "Bold"
+msgctxt "(qtundo-format)"
+msgid "Bold"
+msgstr "Gras"
+
+#: text/KoTextEditor_format.cpp:67
+#, fuzzy
+#| msgid "Italic"
+msgctxt "(qtundo-format)"
+msgid "Italic"
+msgstr "Italic"
+
+#: text/KoTextEditor_format.cpp:80
+#, fuzzy
+#| msgid "Underline"
+msgctxt "(qtundo-format)"
+msgid "Underline"
+msgstr "Soslinhat"
+
+#: text/KoTextEditor_format.cpp:99
+msgctxt "(qtundo-format)"
+msgid "Strike Out"
+msgstr ""
+
+#: text/KoTextEditor_format.cpp:132 text/KoTextEditor_format.cpp:133
+#, fuzzy
+#| msgid "Change"
+msgctxt "(qtundo-format)"
+msgid "Change Alignment"
+msgstr "Cambiar"
+
+#: text/KoTextEditor_format.cpp:150
+#, fuzzy
+#| msgid "Horizontal"
+msgctxt "(qtundo-format)"
+msgid "Set Vertical Alignment"
+msgstr "Orizontal"
+
+#: text/KoTextEditor_format.cpp:184 text/KoTextEditor_format.cpp:185
+#, fuzzy
+#| msgid "Decrease Indent"
+msgctxt "(qtundo-format)"
+msgid "Decrease Indent"
+msgstr "Reduire l'alinèa"
+
+#: text/KoTextEditor_format.cpp:220 text/KoTextEditor_format.cpp:221
+#, fuzzy
+#| msgid "Increase Indent"
+msgctxt "(qtundo-format)"
+msgid "Increase Indent"
+msgstr "Aumentar l'alinèa"
+
+#: text/KoTextEditor_format.cpp:256 text/KoTextEditor_format.cpp:258
+#, fuzzy
+#| msgid "Decrease Indent"
+msgctxt "(qtundo-format)"
+msgid "Decrease font size"
+msgstr "Reduire l'alinèa"
+
+#: text/KoTextEditor_format.cpp:269 text/KoTextEditor_format.cpp:271
+#, fuzzy
+#| msgid "Increase Indent"
+msgctxt "(qtundo-format)"
+msgid "Increase font size"
+msgstr "Aumentar l'alinèa"
+
+#: text/KoTextEditor_format.cpp:282
+#, fuzzy
+#| msgid "Format"
+msgctxt "(qtundo-format)"
+msgid "Set Font"
+msgstr "Format"
+
+#: text/KoTextEditor_format.cpp:295
+#, fuzzy
+#| msgid "Opacity"
+msgctxt "(qtundo-format)"
+msgid "Set Font Size"
+msgstr "Opacitat"
+
+#: text/KoTextEditor_format.cpp:308
+#, fuzzy
+#| msgid "&Background color:"
+msgctxt "(qtundo-format)"
+msgid "Set Background Color"
+msgstr "Color de &fons :"
+
+#: text/KoTextEditor_format.cpp:321
+msgctxt "(qtundo-format)"
+msgid "Set Text Color"
+msgstr ""
+
+#: text/KoTextEditor_format.cpp:349 text/KoTextEditor_format.cpp:388
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Set Character Style"
+msgstr "Inserir un saut"
+
+#: text/KoTextEditor_format.cpp:455
+#, fuzzy
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Set Paragraph Style"
+msgstr "Inserir un saut"
+
+#: text/KoTextEditor_format.cpp:517
+#, fuzzy
+#| msgid "Format"
+msgctxt "(qtundo-format)"
+msgid "Formatting"
+msgstr "Format"
+
+#: text/KoTextEditor_p.h:145 text/KoTextEditor_p.h:181
+#, fuzzy
+#| msgid "Format"
+msgctxt "(qtundo-format)"
+msgid "Format"
+msgstr "Format"
+
+#: text/styles/KoStyleManager.cpp:93 text/styles/KoStyleManager.cpp:98
+#, fuzzy, kde-format
+#| msgid "Make Default"
+msgid "Default"
+msgstr "Defaut"
+
+#: widgets/KoColorPopupAction.cpp:76
+#, kde-format
+msgid "Opacity"
+msgstr "Opacitat"
+
+#: widgets/KoColorSetWidget.cpp:148
+#, kde-format
+msgid "Recent:"
+msgstr ""
+
+#: widgets/KoColorSetWidget.cpp:161
+#, fuzzy, kde-format
+#| msgid "Remove Group"
+msgid "Add / Remove Colors..."
+msgstr "Suprimir un grop"
+
+#: widgets/KoConfigAuthorPage.cpp:51
+#, kde-format
+msgid "Add new author profile (starts out as a copy of current)"
+msgstr ""
+
+#: widgets/KoConfigAuthorPage.cpp:55
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Delete the author profile"
+msgstr "Suprimir pagina"
+
+#: widgets/KoConfigAuthorPage.cpp:129
+#, kde-format
+msgid "Name (not duplicate or blank name):"
+msgstr ""
+
+#: widgets/KoConfigAuthorPage.cpp:129
+#, kde-format
+msgid "Name of Profile"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, fullNameLabel)
+#: widgets/KoConfigAuthorPage.ui:20 widgets/koDocumentInfoAuthorWidget.ui:20
+#, kde-format
+msgid "Name:"
+msgstr "Nom :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblInitialsDesc)
+#: widgets/KoConfigAuthorPage.ui:40 widgets/koDocumentInfoAuthorWidget.ui:37
+#, fuzzy, kde-format
+#| msgid "Untitled"
+msgid "Initials:"
+msgstr "Sens nom"
+
+#. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
+#: widgets/KoConfigAuthorPage.ui:63 widgets/koDocumentInfoAuthorWidget.ui:60
+#, kde-format
+msgid "Title:"
+msgstr "Títol:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPositionDesc)
+#: widgets/KoConfigAuthorPage.ui:79 widgets/koDocumentInfoAuthorWidget.ui:77
+#, kde-format
+msgid "Position:"
+msgstr "Posicion :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCompanyDesc)
+#: widgets/KoConfigAuthorPage.ui:95 widgets/koDocumentInfoAuthorWidget.ui:94
+#, kde-format
+msgid "Company:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lblEmailDesc)
+#: widgets/KoConfigAuthorPage.ui:111 widgets/koDocumentInfoAuthorWidget.ui:104
+#, kde-format
+msgid "Email:"
+msgstr "Adreça electronica :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPhoneHome)
+#: widgets/KoConfigAuthorPage.ui:127 widgets/koDocumentInfoAuthorWidget.ui:114
+#, kde-format
+msgid "Telephone (home):"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lblPhoneWork)
+#: widgets/KoConfigAuthorPage.ui:143 widgets/koDocumentInfoAuthorWidget.ui:124
+#, kde-format
+msgid "Telephone (work):"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lblFaxDesc)
+#: widgets/KoConfigAuthorPage.ui:159 widgets/koDocumentInfoAuthorWidget.ui:134
+#, kde-format
+msgid "Fax:"
+msgstr "Fax :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblStreetDesc)
+#: widgets/KoConfigAuthorPage.ui:175 widgets/koDocumentInfoAuthorWidget.ui:144
+#, kde-format
+msgid "Street:"
+msgstr "Carrièra :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPostalDesc)
+#: widgets/KoConfigAuthorPage.ui:191 widgets/koDocumentInfoAuthorWidget.ui:154
+#, kde-format
+msgid "Postal code:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lblCityDesc)
+#: widgets/KoConfigAuthorPage.ui:207 widgets/koDocumentInfoAuthorWidget.ui:164
+#, kde-format
+msgid "City:"
+msgstr "Ciutat :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCountryDesc)
+#: widgets/KoConfigAuthorPage.ui:223 widgets/koDocumentInfoAuthorWidget.ui:174
+#, kde-format
+msgid "Country:"
+msgstr "Païs :"
+
+#: widgets/KoCsvImportDialog.cpp:85
+#, kde-format
+msgid "Import Data"
+msgstr "Importar de donadas"
+
+#: widgets/KoCsvImportDialog.cpp:88
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr ""
+
+#: widgets/KoCsvImportDialog.cpp:89
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr ""
+
+#: widgets/KoCsvImportDialog.cpp:92
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr ""
+
+#: widgets/KoCsvImportDialog.cpp:207 widgets/KoCsvImportDialog.cpp:547
+#: widgets/KoCsvImportDialog.cpp:570
+#, kde-format
+msgid "Generic"
+msgstr "Generic"
+
+#: widgets/KoCsvImportDialog.cpp:209 widgets/KoCsvImportDialog.cpp:572
+#: widgets/KoModeBox.cpp:572
+#, kde-format
+msgid "Text"
+msgstr "Tèxt"
+
+#: widgets/KoCsvImportDialog.cpp:211 widgets/KoCsvImportDialog.cpp:574
+#, kde-format
+msgid "Date"
+msgstr "Data"
+
+#: widgets/KoCsvImportDialog.cpp:213 widgets/KoCsvImportDialog.cpp:576
+#, kde-format
+msgid "Currency"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.cpp:215 widgets/KoCsvImportDialog.cpp:578
+#: widgets/KoCsvImportDialog.cpp:685 widgets/KoCsvImportDialog.ui:265
+#, kde-format
+msgid "None"
+msgstr "Pas cap"
+
+#: widgets/KoCsvImportDialog.cpp:712
+#, kde-format
+msgid ""
+"Please check the ranges you specified. The start value must be lower than "
+"the end value."
+msgstr ""
+
+#: widgets/KoCsvImportDialog.cpp:758
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_dataTab)
+#: widgets/KoCsvImportDialog.ui:52
+#, kde-format
+msgid "Data"
+msgstr "Donadas"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
+#: widgets/KoCsvImportDialog.ui:63
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgid "E&ncoding:"
+msgstr "Alèrta"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_firstRowHeader)
+#: widgets/KoCsvImportDialog.ui:107
+#, kde-format
+msgid "First row contains headers"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_firstColHeader)
+#: widgets/KoCsvImportDialog.ui:120
+#, kde-format
+msgid "First column contains headers"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_formatTab)
+#: widgets/KoCsvImportDialog.ui:144
+#, kde-format
+msgid "Format"
+msgstr "Format"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
+#: widgets/KoCsvImportDialog.ui:156
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Delimiter"
+msgstr "Suprimir pagina"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: widgets/KoCsvImportDialog.ui:162
+#, kde-format
+msgid "Comma"
+msgstr "Virgula"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: widgets/KoCsvImportDialog.ui:172
+#, kde-format
+msgid "Semicolon"
+msgstr "Punt virgula"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: widgets/KoCsvImportDialog.ui:179
+#, kde-format
+msgid "Other"
+msgstr "Autre"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: widgets/KoCsvImportDialog.ui:186
+#, kde-format
+msgid "Tabulator"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: widgets/KoCsvImportDialog.ui:193
+#, kde-format
+msgid "Space"
+msgstr "Espaci"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: widgets/KoCsvImportDialog.ui:238
+#, kde-format
+msgid "Text&quote:"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.ui:255
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.ui:260
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QLabel, label3)
+#: widgets/KoCsvImportDialog.ui:289
+#, kde-format
+msgid "Decimal symbol:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label4)
+#: widgets/KoCsvImportDialog.ui:318
+#, kde-format
+msgid "Thousands separator:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_ignoreDuplicates)
+#: widgets/KoCsvImportDialog.ui:363
+#, kde-format
+msgid "Ignore duplicate delimiters"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: widgets/KoCsvImportDialog.ui:370
+#, fuzzy, kde-format
+#| msgid "Format"
+msgid "&Format:"
+msgstr "Format"
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_rangesTab)
+#: widgets/KoCsvImportDialog.ui:384
+#, fuzzy, kde-format
+#| msgid "Change"
+msgid "Ranges"
+msgstr "Cambiar"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_updateButton)
+#: widgets/KoCsvImportDialog.ui:390
+#, kde-format
+msgid "Update"
+msgstr "Actualizar"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
+#: widgets/KoCsvImportDialog.ui:457
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "Import columns:"
+msgstr "Importar un document"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel3)
+#: widgets/KoCsvImportDialog.ui:476
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "Import lines:"
+msgstr "Importar un document"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: widgets/KoCsvImportDialog.ui:486 widgets/KoCsvImportDialog.ui:509
+#, kde-format
+msgid "to"
+msgstr "cap a"
+
+#: widgets/KoDialog.cpp:247
+#, kde-format
+msgid "&Try"
+msgstr ""
+
+#: widgets/KoDialog.cpp:460
+#, fuzzy, kde-format
+#| msgid "Modified:"
+msgid "modified"
+msgstr "Modificat :"
+
+#: widgets/KoDialog.cpp:471
+#, kde-format
+msgctxt "Document/application separator in titlebar"
+msgid " – "
+msgstr ""
+
+#: widgets/KoDialog.cpp:846
+#, fuzzy, kde-format
+#| msgid "Make Default"
+msgid "&Details"
+msgstr "Defaut"
+
+#: widgets/KoDialog.cpp:1004
+#, kde-format
+msgid "Get help..."
+msgstr ""
+
+#: widgets/KoDockWidgetTitleBar.cpp:52
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgctxt "@info:tooltip"
+msgid "Float Docker"
+msgstr "Enregistrar lo document"
+
+#: widgets/KoDockWidgetTitleBar.cpp:59
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgctxt "@info:tooltip"
+msgid "Close Docker"
+msgstr "Enregistrar lo document"
+
+#: widgets/KoDockWidgetTitleBar.cpp:67
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgctxt "@info:tooltip"
+msgid "Collapse Docker"
+msgstr "Enregistrar lo document"
+
+#: widgets/KoDockWidgetTitleBar.cpp:76
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgctxt "@info:tooltip"
+msgid "Lock Docker"
+msgstr "Enregistrar lo document"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:235
+#: widgets/KoDocumentInfoDlg.cpp:331
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "&Encrypt"
+msgstr "Posicion"
+
+#. i18n: ectx: property (text), widget (QLabel, lblKeywordsDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:64
+#, kde-format
+msgid "Keywords:"
+msgstr "Mots-clau :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblSubjectDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:111
+#, kde-format
+msgid "Subject:"
+msgstr "Subjècte :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:124
+#, kde-format
+msgid "Last printed:"
+msgstr "Estampat lo :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEditingDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:158
+#, kde-format
+msgid "Total editing time:"
+msgstr "Durada totala de modificacion :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEncryptedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:178
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Encryption:"
+msgstr "Posicion"
+
+#. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:188
+#, fuzzy, kde-format
+#| msgid "Title:"
+msgctxt "Document title"
+msgid "Title:"
+msgstr "Títol:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblRevisionDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:201
+#, kde-format
+msgid "Revision number:"
+msgstr "Numerò de revision :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblModifiedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:211
+#, kde-format
+msgid "Modified:"
+msgstr "Modificat :"
+
+#. i18n: ectx: property (text), widget (QLabel, lbCommentsDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:231
+#, kde-format
+msgid "Comments:"
+msgstr "Comentaris :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCreatedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:251
+#, kde-format
+msgid "Created:"
+msgstr "Creat :"
+
+#. i18n: ectx: property (text), widget (QLabel, filePathInfoLabel)
+#: widgets/koDocumentInfoAboutWidget.ui:261
+#, fuzzy, kde-format
+#| msgid "Date:"
+msgid "Path:"
+msgstr "Camin:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbReset)
+#: widgets/koDocumentInfoAboutWidget.ui:280
+#, kde-format
+msgid "&Reset"
+msgstr "&Reïnicializar"
+
+#. i18n: ectx: property (text), widget (QLabel, lbLanguageDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:297
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Language:"
+msgstr "Suprimir pagina"
+
+#: widgets/KoDocumentInfoDlg.cpp:104 widgets/KoDocumentInfoDlg.cpp:105
+#, kde-format
+msgid "General"
+msgstr "General"
+
+#: widgets/KoDocumentInfoDlg.cpp:132
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Last saved by"
+msgstr "Suprimir pagina"
+
+#: widgets/KoDocumentInfoDlg.cpp:189
+#, kde-format
+msgid "Use ';' (Example: Office;KDE;Calligra)"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:315
+#, kde-format
+msgid "This document will be decrypted"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:221 widgets/KoDocumentInfoDlg.cpp:317
+#, kde-format
+msgid "Do not decrypt"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:223 widgets/KoDocumentInfoDlg.cpp:319
+#, kde-format
+msgid "This document is encrypted"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:225 widgets/KoDocumentInfoDlg.cpp:321
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "D&ecrypt"
+msgstr "Posicion"
+
+#: widgets/KoDocumentInfoDlg.cpp:229 widgets/KoDocumentInfoDlg.cpp:325
+#, kde-format
+msgid "This document will be encrypted."
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:231 widgets/KoDocumentInfoDlg.cpp:327
+#, kde-format
+msgid "Do not encrypt"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:233 widgets/KoDocumentInfoDlg.cpp:329
+#, kde-format
+msgid "This document is not encrypted"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:239
+#, kde-format
+msgid "This document does not support encryption"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:351
+#, kde-format
+msgid ""
+"<qt>Decrypting the document will remove the password protection from it."
+"<p>Do you still want to decrypt the file?</qt>"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:353
+#, fuzzy, kde-format
+#| msgid "Export"
+msgid "Confirm Decrypt"
+msgstr "Exportar"
+
+#: widgets/KoDocumentInfoDlg.cpp:354
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Decrypt"
+msgstr "Posicion"
+
+#: widgets/KoDocumentInfoDlg.cpp:365
+#, kde-format
+msgid ""
+"<qt>Your document could not be saved automatically.<p>To complete the "
+"decryption, please save the document.</qt>"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
+#: widgets/KoDocumentInfoDlg.cpp:409 widgets/KoDocumentInfoDlg.cpp:417
+#, kde-format
+msgid "Save Document"
+msgstr "Enregistrar lo document"
+
+#: widgets/KoDocumentInfoDlg.cpp:373
+#, kde-format
+msgid ""
+"<qt>The document has been changed since it was opened. To complete the "
+"decryption the document needs to be saved.<p>Do you want to save the "
+"document now?</qt>"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:391
+#, kde-format
+msgid ""
+"<qt>The document is currently saved as %1. The document needs to be changed "
+"to <b>OASIS OpenDocument</b> to be encrypted.<p>Do you want to change the "
+"file to OASIS OpenDocument?</qt>"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:393
+#, fuzzy, kde-format
+#| msgid "Insert Break"
+msgid "Change Filetype"
+msgstr "Inserir un saut"
+
+#: widgets/KoDocumentInfoDlg.cpp:394
+#, kde-format
+msgid "Change"
+msgstr "Cambiar"
+
+#: widgets/KoDocumentInfoDlg.cpp:407
+#, kde-format
+msgid ""
+"<qt>Your document could not be saved automatically.<p>To complete the "
+"encryption, please save the document.</qt>"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:415
+#, kde-format
+msgid ""
+"<qt>The document has been changed since it was opened. To complete the "
+"encryption the document needs to be saved.<p>Do you want to save the "
+"document now?</qt>"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, remove)
+#: widgets/KoEditColorSet.ui:55
+#, kde-format
+msgid "Remove"
+msgstr "Suprimir"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, open)
+#: widgets/KoEditColorSet.ui:65
+#, fuzzy, kde-format
+#| msgid "Palette"
+msgid "Open palette"
+msgstr "Paleta"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, save)
+#: widgets/KoEditColorSet.ui:75
+#, fuzzy, kde-format
+#| msgid "Palette"
+msgid "Save palette"
+msgstr "Paleta"
+
+#: widgets/KoEditColorSetDialog.cpp:146
+#, kde-format
+msgid "Add Color To Palette"
+msgstr ""
+
+#: widgets/KoEditColorSetDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Collection"
+msgid "Color name:"
+msgstr "Colleccion"
+
+#: widgets/KoEditColorSetDialog.cpp:174
+#, kde-format
+msgid "Gimp Color Palette (*.gpl)"
+msgstr ""
+
+#: widgets/KoEditColorSetDialog.cpp:187
+#, kde-format
+msgid "Cannot write to palette file %1. Maybe it is read-only. "
+msgstr ""
+
+#: widgets/KoEditColorSetDialog.cpp:187
+#, kde-format
+msgid "Palette"
+msgstr "Paleta"
+
+#: widgets/KoEditColorSetDialog.cpp:201
+#, fuzzy, kde-format
+#| msgid "Remove Group"
+msgid "Add/Remove Colors"
+msgstr "Suprimir un grop"
+
+#: widgets/KoFillConfigWidget.cpp:211
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "No stroke or fill"
+msgid "None"
+msgstr "Pas cap"
+
+#: widgets/KoFillConfigWidget.cpp:219
+#, kde-format
+msgctxt "Solid color stroke or fill"
+msgid "Solid"
+msgstr ""
+
+#: widgets/KoFillConfigWidget.cpp:227
+#, kde-format
+msgid "Gradient"
+msgstr ""
+
+#: widgets/KoFillConfigWidget.cpp:235
+#, kde-format
+msgid "Pattern"
+msgstr ""
+
+#: widgets/KoFillConfigWidget.cpp:249
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Change the filling color"
+msgstr "Suprimir pagina"
+
+#: widgets/KoFillConfigWidget.cpp:260
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Change the filling gradient"
+msgstr "Suprimir pagina"
+
+#: widgets/KoFillConfigWidget.cpp:267
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Change the filling pattern"
+msgstr "Suprimir pagina"
+
+#: widgets/KoGradientEditWidget.cpp:145
+#, kde-format
+msgid "Target:"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:148
+#, kde-format
+msgid "Fill"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:154
+#, fuzzy, kde-format
+#| msgid "Lines"
+msgctxt "Linear gradient type"
+msgid "Linear"
+msgstr "Linhas"
+
+#: widgets/KoGradientEditWidget.cpp:155
+#, kde-format
+msgctxt "Radial gradient type"
+msgid "Radial"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:156
+#, kde-format
+msgctxt "Conical gradient type"
+msgid "Conical"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:159
+#, kde-format
+msgid "Repeat:"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:161
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "No gradient spread"
+msgid "None"
+msgstr "Pas cap"
+
+#: widgets/KoGradientEditWidget.cpp:162
+#, kde-format
+msgid "Reflect"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:163
+#, kde-format
+msgid "Repeat"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:166
+#, fuzzy, kde-format
+#| msgid "Opacity:"
+msgid "Overall opacity:"
+msgstr "Opacitat :"
+
+#: widgets/KoGradientEditWidget.cpp:171
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Color stop:"
+msgstr "Color"
+
+#: widgets/KoGradientEditWidget.cpp:179
+#, kde-format
+msgid "Stop color."
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:182
+#, kde-format
+msgid "&Add to Predefined Gradients"
+msgstr ""
+
+#: widgets/KoModeBox.cpp:575
+#, fuzzy, kde-format
+#| msgid "Text"
+msgid "Icon and Text"
+msgstr "Tèxt"
+
+#: widgets/KoModeBox.cpp:576
+#, kde-format
+msgid "Icon only"
+msgstr ""
+
+#: widgets/KoModeBox.cpp:579
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "Tabs side"
+msgstr "Aval:"
+
+#: widgets/KoModeBox.cpp:583
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "Top side"
+msgstr "Aval:"
+
+#: widgets/KoModeBox.cpp:584
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "Bottom side"
+msgstr "Aval:"
+
+#: widgets/KoModeBox.cpp:587
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left side"
+msgstr "Esquèrra:"
+
+#: widgets/KoModeBox.cpp:588
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right side"
+msgstr "Drecha:"
+
+#: widgets/KoPageLayoutDialog.cpp:33
+#, fuzzy, kde-format
+#| msgid "Change"
+msgid "Page Layout"
+msgstr "Cambiar"
+
+#: widgets/KoPageLayoutDialog.cpp:95
+#, fuzzy, kde-format
+#| msgid "Open Document"
+msgid "Apply to document"
+msgstr "Dobrir un document"
+
+#: widgets/KoPageLayoutWidget.cpp:175
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left Edge:"
+msgstr "Esquèrra:"
+
+#: widgets/KoPageLayoutWidget.cpp:176
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right Edge:"
+msgstr "Drecha:"
+
+#: widgets/KoPageLayoutWidget.cpp:179
+#, fuzzy, kde-format
+#| msgid "Page Preview"
+msgid "Binding Edge:"
+msgstr "Previsualizacion"
+
+#: widgets/KoPageLayoutWidget.cpp:180
+#, fuzzy, kde-format
+#| msgid "Page Preview"
+msgid "Page Edge:"
+msgstr "Previsualizacion"
+
+#: widgets/KoPageLayoutWidget.cpp:276
+#, fuzzy, kde-format
+#| msgid "Page"
+msgid "Facing Pages:"
+msgstr "Pagina"
+
+#. i18n: ectx: property (text), widget (QRadioButton, facingPages)
+#: widgets/KoPageLayoutWidget.cpp:277 widgets/KoPageLayoutWidget.ui:160
+#, fuzzy, kde-format
+#| msgid "Page"
+msgid "Facing pages"
+msgstr "Pagina"
+
+#: widgets/KoPageLayoutWidget.cpp:280
+#, fuzzy, kde-format
+#| msgid "Change"
+msgid "Page Layout:"
+msgstr "Cambiar"
+
+#: widgets/KoPageLayoutWidget.cpp:281
+#, fuzzy, kde-format
+#| msgid "Page Preview"
+msgid "Page spread"
+msgstr "Previsualizacion"
+
+#. i18n: ectx: property (text), widget (QLabel, unitsLabel)
+#: widgets/KoPageLayoutWidget.ui:25
+#, kde-format
+msgid "Unit:"
+msgstr "_Unitats :"
+
+#. i18n: ectx: property (text), widget (QLabel, stylesLabel)
+#: widgets/KoPageLayoutWidget.ui:45
+#, kde-format
+msgid "Follow style:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/KoPageLayoutWidget.ui:61
+#, fuzzy, kde-format
+#| msgid "Time:"
+msgid "Size:"
+msgstr "Talha :"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: widgets/KoPageLayoutWidget.ui:77
+#, kde-format
+msgid "Width:"
+msgstr "Largor :"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:104
+#, kde-format
+msgid "Height:"
+msgstr "Nautor :"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:119
+#, fuzzy, kde-format
+#| msgid "Orientation"
+msgid "Orientation:"
+msgstr "Orientacion :"
+
+#. i18n: ectx: property (text), widget (QRadioButton, portrait)
+#: widgets/KoPageLayoutWidget.ui:129
+#, kde-format
+msgid "Portrait"
+msgstr "Contrast"
+
+#. i18n: ectx: property (text), widget (QRadioButton, landscape)
+#: widgets/KoPageLayoutWidget.ui:136
+#, kde-format
+msgid "Landscape"
+msgstr "Païsatge"
+
+#. i18n: ectx: property (text), widget (QLabel, facingPageLabel)
+#: widgets/KoPageLayoutWidget.ui:143
+#, fuzzy, kde-format
+#| msgid "Page"
+msgid "Facing pages:"
+msgstr "Pagina"
+
+#. i18n: ectx: property (text), widget (QRadioButton, singleSided)
+#: widgets/KoPageLayoutWidget.ui:153
+#, fuzzy, kde-format
+#| msgctxt "Underline Style"
+#| msgid "Single"
+msgid "Single sided"
+msgstr "Simple"
+
+#. i18n: ectx: property (text), widget (QLabel, directionLabel)
+#: widgets/KoPageLayoutWidget.ui:167
+#, fuzzy, kde-format
+#| msgid "Collection"
+msgid "Text direction:"
+msgstr "Colleccion"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:184
+#, kde-format
+msgid "Automatic"
+msgstr "Automatic"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:189
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Left to right"
+msgstr "Esclarzir"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:194
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right to left"
+msgstr "Drecha:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, margins)
+#: widgets/KoPageLayoutWidget.ui:204
+#, kde-format
+msgid "Margins"
+msgstr "Marges"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:210
+#, kde-format
+msgid "Top:"
+msgstr "Amont:"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.ui:230
+#, fuzzy, kde-format
+#| msgid "Page Preview"
+msgid "Binding edge:"
+msgstr "Previsualizacion"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.ui:250
+#, fuzzy, kde-format
+#| msgid "Page Preview"
+msgid "Page edge:"
+msgstr "Previsualizacion"
+
+#. i18n: ectx: property (text), widget (QLabel, label_12)
+#: widgets/KoPageLayoutWidget.ui:270
+#, kde-format
+msgid "Bottom:"
+msgstr "Aval:"
+
+#: widgets/KoResourceItemChooser.cpp:137
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgctxt "@info:tooltip"
+msgid "Import resource"
+msgstr "Importar un document"
+
+#: widgets/KoResourceItemChooser.cpp:144
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgctxt "@info:tooltip"
+msgid "Delete resource"
+msgstr "Suprimir"
+
+#: widgets/KoResourceItemChooser.cpp:192
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose File to Add"
+msgstr ""
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:107
+#: widgets/KoTagToolButton.cpp:51
+#, fuzzy, kde-format
+#| msgid "Layer"
+msgid "New tag"
+msgstr "Jaç"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:140
+#, kde-format
+msgid "Assign to tag"
+msgstr ""
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:149
+#, fuzzy, kde-format
+#| msgid "Remove Group"
+msgid "Remove from this tag"
+msgstr "Suprimir un grop"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:157
+#, fuzzy, kde-format
+#| msgid "Remove Group"
+msgid "Remove from other tag"
+msgstr "Suprimir un grop"
+
+#: widgets/KoResourceModel.cpp:78
+#, kde-format
+msgid "Tags"
+msgstr ""
+
+#: widgets/KoResourceTaggingManager.cpp:143
+#, kde-format
+msgid "Unable to undelete tag"
+msgstr ""
+
+#: widgets/KoResourceTaggingManager.cpp:144
+#, kde-format
+msgid ""
+"<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
+"enter a new, unique name for it.</qt>"
+msgstr ""
+
+#: widgets/KoResourceTaggingManager.cpp:151
+#, kde-format
+msgid "Tag was not undeleted."
+msgstr ""
+
+#: widgets/KoRuler.cpp:1266
+#, kde-format
+msgid "First line indent"
+msgstr "Retirament de primièra linha"
+
+#: widgets/KoRuler.cpp:1267
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left indent"
+msgstr "Esquèrra:"
+
+#: widgets/KoRuler.cpp:1268
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right indent"
+msgstr "Drecha:"
+
+#: widgets/KoShadowConfigWidget.cpp:55
+#, kde-format
+msgid "Change the color of the shadow"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/KoShadowConfigWidget.ui:67
+#, kde-format
+msgid "Blur:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/KoShadowConfigWidget.ui:84
+#, kde-format
+msgid "Distance:"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:83
+#, kde-format
+msgid "Butt cap"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:90
+#, kde-format
+msgid "Round cap"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:97
+#, kde-format
+msgid "Square cap"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:108
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Miter join"
+msgstr "Suprimir pagina"
+
+#: widgets/KoStrokeConfigWidget.cpp:115
+#, kde-format
+msgid "Round join"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:122
+#, kde-format
+msgid "Bevel join"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:132
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Miter limit"
+msgstr "Suprimir pagina"
+
+#: widgets/KoStrokeConfigWidget.cpp:203
+#, kde-format
+msgid "Thickness:"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:213
+#, kde-format
+msgid "Set line width of actual selection"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:229
+#, kde-format
+msgid "Change the color of the line/border"
+msgstr ""
+
+#: widgets/KoTagChooserWidget.cpp:41
+#, kde-format
+msgid "Tag"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:39
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Entering search terms here will add to, or remove resources from the "
+"current tag view.<para>To filter based on the partial, case insensitive name "
+"of a resource:<br><icode>partialname</icode> or <icode>!partialname</icode>."
+"</para><para>In-/exclusion of other tag sets:<br><icode>[Tagname]</icode> or "
+"<icode>![Tagname]</icode>.</para><para>Case sensitive and full name matching "
+"in-/exclusion:<br><icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</"
+"icode>.</para>Filter results cannot be saved for the <interface>All Presets</"
+"interface> view.<br>In this view, pressing <interface>Enter</interface> or "
+"clearing the filter box will restore all items.<br>Create and/or switch to a "
+"different tag if you want to save filtered resources into named sets.</qt>"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:53
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Entering search terms here will add to, or remove resources from the "
+"current tag view.<para>To filter based on the partial, case insensitive name "
+"of a resource:<br><icode>partialname</icode> or <icode>!partialname</icode>."
+"</para><para>In-/exclusion of other tag sets:<br><icode>[Tagname]</icode> or "
+"<icode>![Tagname]</icode>.</para><para>Case sensitive and full name matching "
+"in-/exclusion:<br><icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</"
+"icode>.</para>Pressing <interface>Enter</interface> or clicking the "
+"<interface>Save</interface> button will save the changes.</qt>"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:68
+#, kde-format
+msgid "Enter resource filters here"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:79
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Save the currently filtered set as the new members of the current tag.</"
+"qt>"
+msgstr ""
+
+#: widgets/KoTagToolButton.cpp:44
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<qt>Show the tag box options.</qt>"
+msgstr ""
+
+#: widgets/KoTagToolButton.cpp:60
+#, fuzzy, kde-format
+#| msgid "Page"
+msgid "Rename tag"
+msgstr "Pagina"
+
+#: widgets/KoTagToolButton.cpp:71
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Delete this tag"
+msgstr "Suprimir pagina"
+
+#: widgets/KoTagToolButton.cpp:89
+#, kde-format
+msgid "Clear undelete list"
+msgstr ""
+
+#: widgets/KoTagToolButton.cpp:119
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Undelete"
+msgstr "Suprimir"
+
+#: widgets/KoToolBox.cpp:294
+#, fuzzy, kde-format
+#| msgid "Opacity"
+msgid "Icon Size"
+msgstr "Opacitat"
+
+#: widgets/KoToolBox.cpp:295
+#, fuzzy, kde-format
+#| msgid "Make Default"
+msgctxt "@item:inmenu Icon size"
+msgid "Default"
+msgstr "Defaut"
+
+#: widgets/KoToolBox.cpp:302
+#, kde-format
+msgid "%1x%2"
+msgstr ""
+
+#: widgets/KoToolBoxButton.cpp:55
+#, fuzzy, kde-format
+#| msgid "%1%"
+msgctxt "@info:tooltip"
+msgid "%1"
+msgstr "%1%"
+
+#: widgets/KoToolBoxButton.cpp:56
+#, kde-format
+msgctxt "@info:tooltip %2 is shortcut"
+msgid "%1 (%2)"
+msgstr ""
+
+#: widgets/KoToolBoxDocker.cpp:20
+#, kde-format
+msgid "Toolbox"
+msgstr ""
+
+#: widgets/KoToolDocker.cpp:184
+#, kde-format
+msgid "Tool Options"
+msgstr "Opcions dels espleches"
+
+#: widgets/KoToolDocker.cpp:216
+#, kde-format
+msgid "Toggles organizing the options in tabs or not"
+msgstr ""
+
+#: widgets/KoViewItemContextBar.cpp:183
+#, kde-format
+msgid "deselect item"
+msgstr ""
+
+#: widgets/KoViewItemContextBar.cpp:183
+#, kde-format
+msgid "select item"
+msgstr ""
+
+#: widgets/KoZoomAction.cpp:196 widgets/KoZoomAction.cpp:209
+#: widgets/KoZoomMode.cpp:13
+#, kde-format
+msgid "%1%"
+msgstr "%1%"
+
+#: widgets/KoZoomMode.cpp:14
+#, fuzzy, kde-format
+#| msgid "Insert Break"
+msgid "Fit Page Width"
+msgstr "Inserir un saut"
+
+#: widgets/KoZoomMode.cpp:15
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Fit Page"
+msgstr "Suprimir pagina"
+
+#: widgets/KoZoomMode.cpp:17
+#, kde-format
+msgid "Actual Pixels"
+msgstr ""
+
+#: widgets/KoZoomMode.cpp:21
+#, fuzzy, kde-format
+#| msgid "Insert Break"
+msgid "Fit Text Width"
+msgstr "Inserir un saut"
+
+#: widgets/KoZoomWidget.cpp:69
+#, kde-format
+msgid "Use same aspect as pixels"
+msgstr ""
+
+#: widgets/KoZoomWidget.cpp:78
+#, fuzzy, kde-format
+#| msgid "Collection"
+msgid "Zoom to Selection"
+msgstr "Colleccion"
+
+#: widgets/KoZoomWidget.cpp:87
+#, fuzzy, kde-format
+#| msgid "Zoom"
+msgid "Zoom to All"
+msgstr "Reduire el zoom"
+
+#: widgetutils/KoFileDialog.cpp:463
+#, kde-format
+msgid "All supported formats"
+msgstr ""
+
+#: widgetutils/KoGroupButton.cpp:131
+#, fuzzy, kde-format
+#| msgid "%1%"
+msgctxt "@info:tooltip of custom triple button"
+msgid "%1"
+msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Script"
+#~ msgid "Install Script Package"
+#~ msgstr "Escript"
+
+#~ msgid "Replace"
+#~ msgstr "Remplaçar"
+
+#, fuzzy
+#~| msgid "Download"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Download resource"
+#~ msgstr "Telecargar"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Share Resource"
+#~ msgstr "Suprimir"
+
+#~ msgid "&Delete"
+#~ msgstr "&Suprimir"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Fichièr"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Paramètres"
+
+#, fuzzy
+#~| msgid "File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File"
+#~ msgstr "Fichièr"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nodes"
+#~ msgstr "Pas cap"
+
+#, fuzzy
+#~| msgid "Underline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Guide lines"
+#~ msgstr "Soslinhat"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom In"
+#~ msgstr "Agrandir lo zoom"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom Out"
+#~ msgstr "Reduire el zoom"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Nom :"
+
+#, fuzzy
+#~| msgid "Untitled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Initials:"
+#~ msgstr "Sens nom"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title:"
+#~ msgstr "Títol:"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Position:"
+#~ msgstr "Posicion :"
+
+#, fuzzy
+#~| msgid "Email:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Email:"
+#~ msgstr "Adreça electronica :"
+
+#, fuzzy
+#~| msgid "Fax:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fax:"
+#~ msgstr "Fax :"
+
+#, fuzzy
+#~| msgid "Street:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Street:"
+#~ msgstr "Carrièra :"
+
+#, fuzzy
+#~| msgid "City:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "City:"
+#~ msgstr "Ciutat :"
+
+#, fuzzy
+#~| msgid "Country:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Country:"
+#~ msgstr "Païs :"
+
+#, fuzzy
+#~| msgid "Data"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data"
+#~ msgstr "Donadas"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "Alèrta"
+
+#, fuzzy
+#~| msgid "Comma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "Virgula"
+
+#, fuzzy
+#~| msgid "Semicolon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "Punt virgula"
+
+#, fuzzy
+#~| msgid "Other"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other"
+#~ msgstr "Autre"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "Espaci"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Format:"
+#~ msgstr "Format"
+
+#, fuzzy
+#~| msgid "Change"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ranges"
+#~ msgstr "Cambiar"
+
+#, fuzzy
+#~| msgid "Update"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Update"
+#~ msgstr "Actualizar"
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import columns:"
+#~ msgstr "Importar un document"
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import lines:"
+#~ msgstr "Importar un document"
+
+#, fuzzy
+#~| msgid "to"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "to"
+#~ msgstr "cap a"
+
+#, fuzzy
+#~| msgid "Unit:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unit:"
+#~ msgstr "_Unitats :"
+
+#, fuzzy
+#~| msgid "Time:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size:"
+#~ msgstr "Talha :"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Largor :"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "Nautor :"
+
+#, fuzzy
+#~| msgid "Orientation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Orientation:"
+#~ msgstr "Orientacion :"
+
+#, fuzzy
+#~| msgid "Portrait"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Portrait"
+#~ msgstr "Contrast"
+
+#, fuzzy
+#~| msgid "Landscape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Landscape"
+#~ msgstr "Païsatge"
+
+#, fuzzy
+#~| msgctxt "Underline Style"
+#~| msgid "Single"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single sided"
+#~ msgstr "Simple"
+
+#, fuzzy
+#~| msgid "Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text direction:"
+#~ msgstr "Colleccion"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic"
+#~ msgstr "Automatic"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left to right"
+#~ msgstr "Esclarzir"
+
+#, fuzzy
+#~| msgid "Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Margins"
+#~ msgstr "Marges"
+
+#, fuzzy
+#~| msgid "Top:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top:"
+#~ msgstr "Amont:"
+
+#, fuzzy
+#~| msgid "Page Preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Binding edge:"
+#~ msgstr "Previsualizacion"
+
+#, fuzzy
+#~| msgid "Page Preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page edge:"
+#~ msgstr "Previsualizacion"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom:"
+#~ msgstr "Aval:"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Suprimir"
+
+#, fuzzy
+#~| msgid "Palette"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open palette"
+#~ msgstr "Paleta"
+
+#, fuzzy
+#~| msgid "Palette"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save palette"
+#~ msgstr "Paleta"
+
+#, fuzzy
+#~| msgid "Keywords:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keywords:"
+#~ msgstr "Mots-clau :"
+
+#, fuzzy
+#~| msgid "Subject:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subject:"
+#~ msgstr "Subjècte :"
+
+#, fuzzy
+#~| msgid "Last printed:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last printed:"
+#~ msgstr "Estampat lo :"
+
+#, fuzzy
+#~| msgid "Total editing time:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Total editing time:"
+#~ msgstr "Durada totala de modificacion :"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encryption:"
+#~ msgstr "Posicion"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format) Document title"
+#~ msgid "Title:"
+#~ msgstr "Títol:"
+
+#, fuzzy
+#~| msgid "Revision number:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Revision number:"
+#~ msgstr "Numerò de revision :"
+
+#, fuzzy
+#~| msgid "Modified:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modified:"
+#~ msgstr "Modificat :"
+
+#, fuzzy
+#~| msgid "Comments:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comments:"
+#~ msgstr "Comentaris :"
+
+#, fuzzy
+#~| msgid "Created:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Created:"
+#~ msgstr "Creat :"
+
+#, fuzzy
+#~| msgid "Date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Path:"
+#~ msgstr "Camin:"
+
+#, fuzzy
+#~| msgid "&Reset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Reset"
+#~ msgstr "&Reïnicializar"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language:"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stylesheet Definition"
+#~ msgstr "Estils"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Description"
+#~ msgstr "Posicion"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "delete"
+#~ msgstr "Suprimir"
+
+#, fuzzy
+#~| msgid "Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stylesheet Name"
+#~ msgstr "Estils"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triples"
+#~ msgstr "Títol:"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespaces"
+#~ msgstr "Remplaçar"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace"
+#~ msgstr "Remplaçar"
+
+#, fuzzy
+#~| msgid "Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stylesheets"
+#~ msgstr "Estils"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line"
+#~ msgstr "Linhas"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Precision:"
+#~ msgstr "Posicion :"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Curve"
+#~ msgstr "Corba"
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Estandard"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Linhas"
+
+#, fuzzy
+#~| msgid "Time:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tie"
+#~ msgstr "Títol:"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Grid"
+#~ msgstr "Alinhar s~us la gresilha"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Simple path shape"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Pan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pan"
+#~ msgstr "Pan"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line/Curve"
+#~ msgstr "Corba"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Path editing"
+#~ msgstr "En espèra"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "Zoom"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Remplaçar"
+
+#, fuzzy
+#~| msgid "Save"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save"
+#~ msgstr "Enregistrar"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Apondre"
+
+#, fuzzy
+#~| msgid "Script"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Script"
+#~ msgstr "Escript"
+
+#, fuzzy
+#~| msgid "Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Collection"
+#~ msgstr "Colleccion"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Default text for redo action"
+#~ msgid "Redo"
+#~ msgstr "Roge"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Redo %1"
+#~ msgstr "Roge"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Redo"
+#~ msgstr "Roge"
+
+#, fuzzy
+#~| msgid "Document Information"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Document d'informacion"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create backup file:"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Alinhar s~us la gresilha"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show grid:"
+#~ msgstr "Alinhar s~us la gresilha"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to grid:"
+#~ msgstr "Alinhar s~us la gresilha"
+
+#, fuzzy
+#~| msgid "&Background color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid color:"
+#~ msgstr "Color de &fons :"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spacing"
+#~ msgstr "Espaci"
+
+#, fuzzy
+#~| msgid "&Horizontal"
+#~ msgctxt "(qtundo-format) Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Orizontal"
+
+#, fuzzy
+#~| msgid "&Vertical"
+#~ msgctxt "(qtundo-format) Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Vertical"
+
+#, fuzzy
+#~| msgid "Unit:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Units:"
+#~ msgstr "_Unitats :"
+
+#, fuzzy
+#~| msgid "Saving..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saving..."
+#~ msgstr "Enregistrament..."
+
+#, fuzzy
+#~| msgid "Open Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opening Document"
+#~ msgstr "Dobrir un document"
+
+#, fuzzy
+#~| msgid "File not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File not found"
+#~ msgstr "Impossible de trobar lo fichièr"
+
+#, fuzzy
+#~| msgid "Internal error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Internal error"
+#~ msgstr "Error intèrna"
+
+#, fuzzy
+#~| msgid "Out of memory"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Out of memory"
+#~ msgstr "Pas pro de memòria"
+
+#, fuzzy
+#~| msgid "Unknown error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown error"
+#~ msgstr "Error desconeguda"
+
+#, fuzzy
+#~| msgid "Untitled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Untitled"
+#~ msgstr "Sens nom"
+
+#, fuzzy
+#~| msgid "Save Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Close Document"
+#~ msgstr "Enregistrar lo document"
+
+#, fuzzy
+#~| msgid "%1%"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 %"
+#~ msgstr "%1 %"
+
+#, fuzzy
+#~| msgid "No"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No"
+#~ msgstr "Non"
+
+#, fuzzy
+#~| msgid "Yes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yes"
+#~ msgstr "Òc"
+
+#, fuzzy
+#~| msgid "Export as PDF..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as PDF..."
+#~ msgstr "Exportar al format PDF..."
+
+#, fuzzy
+#~| msgid "Reload"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reload"
+#~ msgstr "Tornar cargar"
+
+#, fuzzy
+#~| msgid "Versions..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Versions..."
+#~ msgstr "Versions..."
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&crypt Document"
+#~ msgstr "Importar un document"
+
+#, fuzzy
+#~| msgid "&New View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&New View"
+#~ msgstr "Vista &novèla"
+
+#, fuzzy
+#~| msgid "Document Information"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Information"
+#~ msgstr "Document d'informacion"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Exportar"
+
+#, fuzzy
+#~| msgid "Untitled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "untitled"
+#~ msgstr "Sens nom"
+
+#, fuzzy
+#~| msgid "Open Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Document"
+#~ msgstr "Dobrir un document"
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Document"
+#~ msgstr "Importar un document"
+
+#, fuzzy
+#~| msgid "Export as PDF..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as PDF"
+#~ msgstr "Exportar al format PDF..."
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Document"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "Alèrta"
+
+#, fuzzy
+#~| msgid "Open Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Existing Document"
+#~ msgstr "Dobrir un document"
+
+#, fuzzy
+#~| msgid "Recent Documents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recent Documents"
+#~ msgstr "Documents recents"
+
+#, fuzzy
+#~| msgid "Stop"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop"
+#~ msgstr "Arrestar"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Printing"
+#~ msgstr "En espèra"
+
+#, fuzzy
+#~| msgid "Close"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Close"
+#~ msgstr "Tampar"
+
+#, fuzzy
+#~| msgid "Stopped"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stopped"
+#~ msgstr "Arrestat"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format) Template name"
+#~ msgid "Name:"
+#~ msgstr "Nom :"
+
+#, fuzzy
+#~| msgid "Group:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Group:"
+#~ msgstr "Grop :"
+
+#, fuzzy
+#~| msgid "&Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Remove"
+#~ msgstr "&Suprimir "
+
+#, fuzzy
+#~| msgid "Picture"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Picture"
+#~ msgstr "Imatge"
+
+#, fuzzy
+#~| msgid "Preview:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Preview"
+#~ msgstr "Ulhada :"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom:"
+#~ msgstr "Personalizat"
+
+#, fuzzy
+#~| msgid "Add Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Group"
+#~ msgstr "Apondre un grop"
+
+#, fuzzy
+#~| msgid "Remove Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Group"
+#~ msgstr "Suprimir un grop"
+
+#, fuzzy
+#~| msgid "&Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "&Suprimir"
+
+#, fuzzy
+#~| msgid "Version"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Version"
+#~ msgstr "Version"
+
+#, fuzzy
+#~| msgid "Date & Time"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date & Time"
+#~ msgstr "Data e ora"
+
+#, fuzzy
+#~| msgid "Comment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comment"
+#~ msgstr "Comentari"
+
+#, fuzzy
+#~| msgid "&Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Add"
+#~ msgstr "&Apondre"
+
+#, fuzzy
+#~| msgid "&Modify"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Modify"
+#~ msgstr "&Modificar"
+
+#, fuzzy
+#~| msgid "&Open"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Open"
+#~ msgstr "&Dobrir"
+
+#, fuzzy
+#~| msgid "Unknown"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown"
+#~ msgstr "Desconegut"
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "Screen"
+#~ msgstr "Ecran"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "Custom"
+#~ msgstr "Personalizat"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Document"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page  %1"
+#~ msgstr "Pagina %1"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Jaç"
+
+#, fuzzy
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Group"
+#~ msgstr "Grop"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Forma"
+
+#, fuzzy
+#~| msgid "Time:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "Talha :"
+
+#, fuzzy
+#~| msgid "Visible"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Visible"
+#~ msgstr "Visible"
+
+#, fuzzy
+#~| msgid "Locked"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locked"
+#~ msgstr "Varrolhat"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "Vèrd"
+
+#, fuzzy
+#~| msgid "Change"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&ancel"
+#~ msgstr "Cambiar"
+
+#, fuzzy
+#~| msgid "Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page"
+#~ msgstr "Pagina"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "Personalizat"
+
+#, fuzzy
+#~| msgid "Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1"
+#~ msgstr "Pagina %1"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "Suprimir"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Alinhar s~us la gresilha"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Page"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Variable"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Variable"
+#~ msgstr "Variable"
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Document..."
+#~ msgstr "Importar un document"
+
+#, fuzzy
+#~| msgid "&Background color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background"
+#~ msgstr "Color de &fons :"
+
+#, fuzzy
+#~| msgid "&Background color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Background"
+#~ msgstr "Color de &fons :"
+
+#, fuzzy
+#~| msgid "Page Preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Design"
+#~ msgstr "Previsualizacion"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use background of master page"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use background of master slide"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Display shapes of master page"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Display shapes of master slide"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide %1/%2"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Time:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1/%2"
+#~ msgstr "Talha :"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page %1/%2"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1/%2"
+#~ msgstr "Pagina %1"
+
+#, fuzzy
+#~| msgid "Clear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clear"
+#~ msgstr "Netejar"
+
+#, fuzzy
+#~| msgid "Alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alpha"
+#~ msgstr "Alfa"
+
+#, fuzzy
+#~| msgid "Lightness"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lightness"
+#~ msgstr "Clar"
+
+#, fuzzy
+#~| msgid "Blue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Blau"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Vèrd"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "Roge"
+
+#, fuzzy
+#~| msgid "Alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alpha darken"
+#~ msgstr "Alfa"
+
+#, fuzzy
+#~| msgid "Erase"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Erase"
+#~ msgstr "Suprimir"
+
+#, fuzzy
+#~| msgid "Created:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Greater"
+#~ msgstr "Creat :"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Normal"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hard Mix"
+#~ msgstr "Nautor"
+
+#, fuzzy
+#~| msgid "Variable"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel"
+#~ msgstr "Variable"
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Screen"
+#~ msgstr "Ecran"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color Dodge"
+#~ msgstr "Color"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear Dodge"
+#~ msgstr "Esclarzir"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Esclarzir"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hard Light"
+#~ msgstr "Nautor"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Soft Light (SVG)"
+#~ msgstr "Esclarzir"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Soft Light (Photoshop)"
+#~ msgstr "Esclarzir"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gamma Light"
+#~ msgstr "Esclarzir"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vivid Light"
+#~ msgstr "Esclarzir"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Light"
+#~ msgstr "Esclarzir"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear Light"
+#~ msgstr "Esclarzir"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color Burn"
+#~ msgstr "Color"
+
+#, fuzzy
+#~| msgid "Insert Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear Burn"
+#~ msgstr "Inserir un saut"
+
+#, fuzzy
+#~| msgid "Darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "Escuresir"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Addition"
+#~ msgstr "Posicion :"
+
+#, fuzzy
+#~| msgid "Blue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Red"
+#~ msgstr "Blau"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Green"
+#~ msgstr "Vèrd"
+
+#, fuzzy
+#~| msgid "Blue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Blue"
+#~ msgstr "Blau"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "Color"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturation"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Saturation"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Saturation"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Increase Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Luminosity"
+#~ msgstr "Aumentar l'alinèa"
+
+#, fuzzy
+#~| msgid "Decrease Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Luminosity"
+#~ msgstr "Reduire l'alinèa"
+
+#, fuzzy
+#~| msgid "&Background color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darker Color"
+#~ msgstr "Color de &fons :"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighter Color"
+#~ msgstr "Color"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color HSI"
+#~ msgstr "Color"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturation HSI"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Saturation HSI"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Saturation HSI"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Increase Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Intensity"
+#~ msgstr "Aumentar l'alinèa"
+
+#, fuzzy
+#~| msgid "Decrease Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Intensity"
+#~ msgstr "Reduire l'alinèa"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color HSL"
+#~ msgstr "Color"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturation HSL"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Saturation HSL"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Saturation HSL"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Increase Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Lightness"
+#~ msgstr "Aumentar l'alinèa"
+
+#, fuzzy
+#~| msgid "Decrease Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Lightness"
+#~ msgstr "Reduire l'alinèa"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color HSV"
+#~ msgstr "Color"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturation HSV"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Saturation HSV"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Saturation HSV"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Value"
+#~ msgstr "Valor"
+
+#, fuzzy
+#~| msgid "Increase Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Value"
+#~ msgstr "Aumentar l'alinèa"
+
+#, fuzzy
+#~| msgid "Decrease Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Value"
+#~ msgstr "Reduire l'alinèa"
+
+#, fuzzy
+#~| msgid "R"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R"
+#~ msgstr "R"
+
+#, fuzzy
+#~| msgid "G"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "G"
+#~ msgstr "G"
+
+#, fuzzy
+#~| msgid "B"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "B"
+#~ msgstr "B"
+
+#, fuzzy
+#~| msgid "Grayscale"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grayscale"
+#~ msgstr "Escala de grises"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arithmetic"
+#~ msgstr "Automatic"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inverse Subtract"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Additive Subtractive"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alpha Darken"
+#~ msgstr "Alfa"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rdf"
+#~ msgstr "Roge"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "User"
+#~ msgstr "Inserir"
+
+#, fuzzy
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blank"
+#~ msgstr "Negre"
+
+#, fuzzy
+#~| msgid "Time:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Valid"
+#~ msgstr "Talha :"
+
+#, fuzzy
+#~| msgid "Subject:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subject"
+#~ msgstr "Subjècte :"
+
+#, fuzzy
+#~| msgid "Picture"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Predicate"
+#~ msgstr "Imatge"
+
+#, fuzzy
+#~| msgid "Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "Objècte"
+
+#, fuzzy
+#~| msgid "Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Obj Type"
+#~ msgstr "Tipe"
+
+#, fuzzy
+#~| msgid "Data"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "DataType"
+#~ msgstr "Donadas"
+
+#, fuzzy
+#~| msgid "Stopped"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stored In"
+#~ msgstr "Arrestat"
+
+#, fuzzy
+#~| msgid "Actions"
+#~ msgctxt "(qtundo-format) new numbered section name"
+#~ msgid "New section %1"
+#~ msgstr "Accions"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) Underline Style"
+#~ msgid "None"
+#~ msgstr "Pas cap"
+
+#, fuzzy
+#~| msgctxt "Underline Style"
+#~| msgid "Single"
+#~ msgctxt "(qtundo-format) Underline Style"
+#~ msgid "Single"
+#~ msgstr "Simple"
+
+#, fuzzy
+#~| msgctxt "Underline Style"
+#~| msgid "Double"
+#~ msgctxt "(qtundo-format) Underline Style"
+#~ msgid "Double"
+#~ msgstr "Doble"
+
+#, fuzzy
+#~| msgid "Make Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Defaut"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opacity"
+#~ msgstr "Opacitat"
+
+#, fuzzy
+#~| msgid "Import Data"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Data"
+#~ msgstr "Importar de donadas"
+
+#, fuzzy
+#~| msgid "Generic"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Generic"
+#~ msgstr "Generic"
+
+#, fuzzy
+#~| msgid "Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date"
+#~ msgstr "Data"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Pas cap"
+
+#, fuzzy
+#~| msgid "Modified:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "modified"
+#~ msgstr "Modificat :"
+
+#, fuzzy
+#~| msgid "Make Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Details"
+#~ msgstr "Defaut"
+
+#, fuzzy
+#~| msgid "Save Document"
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Close Docker"
+#~ msgstr "Enregistrar lo document"
+
+#, fuzzy
+#~| msgid "Save Document"
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Collapse Docker"
+#~ msgstr "Enregistrar lo document"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General"
+#~ msgstr "General"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last saved by"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Save Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save Document"
+#~ msgstr "Enregistrar lo document"
+
+#, fuzzy
+#~| msgid "Change"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change"
+#~ msgstr "Cambiar"
+
+#, fuzzy
+#~| msgid "Palette"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Palette"
+#~ msgstr "Paleta"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Pas cap"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change the filling gradient"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Type:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Type:"
+#~ msgstr "Mena :"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format) Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Linhas"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) No gradient spread"
+#~ msgid "None"
+#~ msgstr "Pas cap"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overall opacity:"
+#~ msgstr "Opacitat :"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color stop:"
+#~ msgstr "Color"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Icon and Text"
+#~ msgstr "Tèxt"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom side"
+#~ msgstr "Aval:"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left side"
+#~ msgstr "Esquèrra:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right side"
+#~ msgstr "Drecha:"
+
+#, fuzzy
+#~| msgid "Open Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply to document"
+#~ msgstr "Dobrir un document"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Edge:"
+#~ msgstr "Esquèrra:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Edge:"
+#~ msgstr "Drecha:"
+
+#, fuzzy
+#~| msgid "Page Preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page spread"
+#~ msgstr "Previsualizacion"
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Import resource"
+#~ msgstr "Importar un document"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Delete resource"
+#~ msgstr "Suprimir"
+
+#, fuzzy
+#~| msgid "Download"
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Download resource"
+#~ msgstr "Telecargar"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Share Resource"
+#~ msgstr "Suprimir"
+
+#, fuzzy
+#~| msgid "Remove Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove from this tag"
+#~ msgstr "Suprimir un grop"
+
+#, fuzzy
+#~| msgid "First line indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First line indent"
+#~ msgstr "Retirament de primièra linha"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Miter limit"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename tag"
+#~ msgstr "Pagina"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete this tag"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Undelete"
+#~ msgstr "Suprimir"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Icon Size"
+#~ msgstr "Opacitat"
+
+#, fuzzy
+#~| msgid "Make Default"
+#~ msgctxt "(qtundo-format) @item:inmenu Icon size"
+#~ msgid "Default"
+#~ msgstr "Defaut"
+
+#, fuzzy
+#~| msgid "%1%"
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "%1"
+#~ msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Tool Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tool Options"
+#~ msgstr "Opcions dels espleches"
+
+#, fuzzy
+#~| msgid "%1%"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Insert Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fit Text Width"
+#~ msgstr "Inserir un saut"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to All"
+#~ msgstr "Reduire el zoom"
+
+#, fuzzy
+#~| msgid "%1%"
+#~ msgctxt "(qtundo-format) @info:tooltip of custom triple button"
+#~ msgid "%1"
+#~ msgstr "%1%"
+
+#, fuzzy
+#~| msgid "File"
+#~ msgctxt "Label for the Find text input box"
+#~ msgid "Find:"
+#~ msgstr "Fixe"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgctxt "Next search result"
+#~ msgid "Next"
+#~ msgstr "Tèxt"
+
+#, fuzzy
+#~| msgid "Preview:"
+#~ msgctxt "Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Ulhada :"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "Label for the Replace text input box"
+#~ msgid "Replace:"
+#~ msgstr "Remplaçar"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "Replace the current match"
+#~ msgid "Replace"
+#~ msgstr "Remplaçar"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "Replace all found matches"
+#~ msgid "Replace All"
+#~ msgstr "Remplaçar"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "Text list-style"
+#~ msgid "None"
+#~ msgstr "Pas cap"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgid "Tamil"
+#~ msgstr "Títol:"
+
+#, fuzzy
+#~| msgid "Time:"
+#~ msgid "Tibetan"
+#~ msgstr "Títol:"
+
+#, fuzzy
+#~| msgid "Page"
+#~ msgid "Image"
+#~ msgstr "Pagina"
+
+#, fuzzy
+#~| msgid "Palette"
+#~ msgid "Open File"
+#~ msgstr "Paleta"
+
+#, fuzzy
+#~| msgid "Palette"
+#~ msgid "Open Files"
+#~ msgstr "Paleta"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgid "TextLabel"
+#~ msgstr "Jaç"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgid "Named"
+#~ msgstr "Nom"
+
+#, fuzzy
+#~| msgid "Palette"
+#~ msgid "Save File"
+#~ msgstr "Paleta"
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgid "Import Files"
+#~ msgstr "Importar un document"
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgid "Import File"
+#~ msgstr "Importar un document"
+
+#, fuzzy
+#~| msgid "Palette"
+#~ msgid "Testing: OpenFile"
+#~ msgstr "Paleta"
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgid "Testing: ImportFiles"
+#~ msgstr "Importar un document"
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgid "Testing: Import Directory"
+#~ msgstr "Importar un document"
+
+#, fuzzy
+#~| msgid "Palette"
+#~ msgid "Testing: SaveFile"
+#~ msgstr "Paleta"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgid "Creating table failed."
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgid "Begin transaction failed."
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Unknown error"
+#~ msgid "Unknown error."
+#~ msgstr "Error desconeguda"
+
+#, fuzzy
+#~| msgid "File not found"
+#~ msgid "Table not found"
+#~ msgstr "Impossible de trobar lo fichièr"
+
+#, fuzzy
+#~| msgid "Revision number:"
+#~ msgid "Short Integer Number"
+#~ msgstr "Numerò de revision :"
+
+#, fuzzy
+#~| msgid "Revision number:"
+#~ msgid "Integer Number"
+#~ msgstr "Numerò de revision :"
+
+#, fuzzy
+#~| msgid "Increase Indent"
+#~ msgid "Yes/No Value"
+#~ msgstr "Aumentar l'alinèa"
+
+#, fuzzy
+#~| msgid "Date & Time"
+#~ msgid "Date and Time"
+#~ msgstr "Data e ora"
+
+#, fuzzy
+#~| msgid "Time:"
+#~ msgid "Time"
+#~ msgstr "Títol:"
+
+#, fuzzy
+#~| msgid "Revision number:"
+#~ msgid "Single Precision Number"
+#~ msgstr "Numerò de revision :"
+
+#, fuzzy
+#~| msgid "Revision number:"
+#~ msgid "Double Precision Number"
+#~ msgstr "Numerò de revision :"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgid "Long Text"
+#~ msgstr "Tèxt"
+
+#, fuzzy
+#~| msgid "Add Group"
+#~ msgid "Invalid Group"
+#~ msgstr "Apondre un grop"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgid "Floating Point Number"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Date & Time"
+#~ msgid "Date/Time"
+#~ msgstr "Data e ora"
+
+#, fuzzy
+#~| msgid "Internal error"
+#~ msgid "Syntax Error"
+#~ msgstr "Error intèrna"
+
+#, fuzzy
+#~| msgid "Internal error"
+#~ msgid "Syntax error."
+#~ msgstr "Error intèrna"
+
+#, fuzzy
+#~| msgid "Error!"
+#~ msgid "Error"
+#~ msgstr "Enganada !"
+
+#, fuzzy
+#~| msgid "Internal error"
+#~ msgid "Error near \"%1\"."
+#~ msgstr "Error intèrna"
+
+#, fuzzy
+#~| msgid "Revision number:"
+#~ msgid "Server's port number"
+#~ msgstr "Numerò de revision :"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgid "Record inserting failed."
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Revision number:"
+#~ msgid "Number"
+#~ msgstr "Numerò de revision :"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgid "Name"
+#~ msgstr "Nom"
+
+#, fuzzy
+#~| msgid "Object"
+#~ msgid "Object Name"
+#~ msgstr "Objècte"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgid "Line Weight"
+#~ msgstr "Esclarzir"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgid "Line Color"
+#~ msgstr "Color"
+
+#, fuzzy
+#~| msgid "Insert Break"
+#~ msgid "Line Style"
+#~ msgstr "Inserir un saut"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgid "Position"
+#~ msgstr "Posicion :"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgid "Height"
+#~ msgstr "Nautor"
+
+#, fuzzy
+#~| msgid "&Background color:"
+#~ msgid "Background Color"
+#~ msgstr "Color de &fons :"
+
+#, fuzzy
+#~| msgid "Time:"
+#~ msgid "Size"
+#~ msgstr "Talha :"
+
+#, fuzzy
+#~| msgid "Close"
+#~ msgid "Cross"
+#~ msgstr "Crotz"
+
+#, fuzzy
+#~| msgid "Styles"
+#~ msgid "Style"
+#~ msgstr "Estils"
+
+#, fuzzy
+#~| msgid "&Background color:"
+#~ msgid "Foreground Color"
+#~ msgstr "Color de &fons :"
+
+#, fuzzy
+#~| msgid "File"
+#~ msgid "Field"
+#~ msgstr "Fixe"
+
+#, fuzzy
+#~| msgid "Comment"
+#~ msgid "Center"
+#~ msgstr "Comentari"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgid "Left"
+#~ msgstr "Esquèrra:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgid "Right"
+#~ msgstr "Drecha:"
+
+#, fuzzy
+#~| msgid "Horizontal"
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Orizontal"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgid "Bottom"
+#~ msgstr "Aval:"
+
+#, fuzzy
+#~| msgid "Top:"
+#~ msgid "Top"
+#~ msgstr "Amont:"
+
+#, fuzzy
+#~| msgid "Horizontal"
+#~ msgid "Vertical Alignment"
+#~ msgstr "Orizontal"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Font"
+#~ msgstr "Format"
+
+#, fuzzy
+#~| msgid "&Background color:"
+#~ msgid "Background Opacity"
+#~ msgstr "Color de &fons :"
+
+#, fuzzy
+#~| msgid "Street:"
+#~ msgid "Stretch"
+#~ msgstr "Carrièra :"
+
+#, fuzzy
+#~| msgid "Resize"
+#~ msgid "Resize Mode"
+#~ msgstr "Redimensionar"
+
+#, fuzzy
+#~| msgid "Collection"
+#~ msgid "Caption"
+#~ msgstr "Colleccion"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgid "Label"
+#~ msgstr "Jaç"
+
+#, fuzzy
+#~| msgid "Actions"
+#~ msgid "Group Section Editor"
+#~ msgstr "Accions"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgid "Column:"
+#~ msgstr "Colomnas :"
+
+#, fuzzy
+#~| msgid "Street:"
+#~ msgid "Sort:"
+#~ msgstr "Carrièra :"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgid "Show group header:"
+#~ msgstr "Alinhar s~us la gresilha"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgid "Show group footer:"
+#~ msgstr "Alinhar s~us la gresilha"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgid "Report Header"
+#~ msgstr "Encap"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgid "Report Footer"
+#~ msgstr "Pè"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgid "Title"
+#~ msgstr "Títol:"
+
+#~ msgid "Page Size"
+#~ msgstr "Talha de la pagina"
+
+#, fuzzy
+#~| msgid "Page Size"
+#~ msgid "Page Unit"
+#~ msgstr "Talha de la pagina"
+
+#, fuzzy
+#~| msgid "Margins"
+#~ msgid "Left Margin"
+#~ msgstr "Marges"
+
+#, fuzzy
+#~| msgid "Margins"
+#~ msgid "Right Margin"
+#~ msgstr "Marges"
+
+#, fuzzy
+#~| msgid "Margins"
+#~ msgid "Top Margin"
+#~ msgstr "Marges"
+
+#, fuzzy
+#~| msgid "Margins"
+#~ msgid "Bottom Margin"
+#~ msgstr "Marges"
+
+#, fuzzy
+#~| msgid "%1%"
+#~ msgctxt "<data-source>: <object>"
+#~ msgid "%1: %2"
+#~ msgstr "%1 %"
+
+#, fuzzy
+#~| msgid "Add..."
+#~ msgid "Edit..."
+#~ msgstr "Apondre..."
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgid "Move Up"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgid "Show report footer"
+#~ msgstr "Alinhar s~us la gresilha"
+
+#, fuzzy
+#~| msgid "Page Preview"
+#~ msgid "Page Header"
+#~ msgstr "Previsualizacion"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgid "First page:"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgid "Last page:"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgid "Page Footer"
+#~ msgstr "Pè"
+
+#, fuzzy
+#~| msgid "Actions"
+#~ msgid "Group Sections"
+#~ msgstr "Accions"
+
+#, fuzzy
+#~| msgid "Collection"
+#~ msgid "Section"
+#~ msgstr "Colleccion"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgctxt "Static Image"
+#~ msgid "Static"
+#~ msgstr "Automatic"
+
+#~ msgid "Yellow"
+#~ msgstr "Rossèl"
+
+#~ msgid "Black"
+#~ msgstr "Negre"
+
+#, fuzzy
+#~| msgid "Make Default"
+#~ msgctxt "default theme name"
+#~ msgid "Default"
+#~ msgstr "Defaut"
+
+#, fuzzy
+#~| msgctxt "Size Policy"
+#~| msgid "Ignored"
+#~ msgid "Ignored"
+#~ msgstr "Ignorat"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgid "Grid Snap"
+#~ msgstr "Alinhar s~us la gresilha"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Formatting"
+#~ msgstr "Format"
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgid "Testing: OpenDirectories"
+#~ msgstr "Importar un document"
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgid "Testing: ImportDirectories"
+#~ msgstr "Importar un document"
+
+#, fuzzy
+#~| msgid "Palette"
+#~ msgid "Testing: SaveFiles"
+#~ msgstr "Paleta"
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgid "Import Directories"
+#~ msgstr "Importar un document"
+
+#~ msgid "Error!"
+#~ msgstr "Enganada !"
+
+#, fuzzy
+#~| msgid "Actions"
+#~ msgid "Locations"
+#~ msgstr "Accions"
+
+#, fuzzy
+#~| msgid "Version"
+#~ msgid "Region"
+#~ msgstr "Version"
+
+#, fuzzy
+#~| msgid "Collection"
+#~ msgid "&Location:"
+#~ msgstr "Colleccion"
+
+#, fuzzy
+#~| msgid "Street:"
+#~ msgid "&Start:"
+#~ msgstr "Carrièra :"
+
+#, fuzzy
+#~| msgid "Time:"
+#~ msgid "Timezone"
+#~ msgstr "Títol:"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgid "&Name:"
+#~ msgstr "Nom :"
+
+#, fuzzy
+#~| msgid "Revision number:"
+#~ msgid "&Phone Number:"
+#~ msgstr "Numerò de revision :"
+
+#, fuzzy
+#~| msgid "Page"
+#~ msgid "&Home Page:"
+#~ msgstr "Pagina"
+
+#, fuzzy
+#~| msgid "Document Information"
+#~ msgid "Contact Information"
+#~ msgstr "Document d'informacion"
+
+#, fuzzy
+#~| msgid "Import Data"
+#~ msgid "Import contact"
+#~ msgstr "Importar de donadas"
+
+#, fuzzy
+#~| msgid "Export as PDF..."
+#~ msgid "Export as vcard..."
+#~ msgstr "Exportar al format PDF..."
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgid "&Name"
+#~ msgstr "Nom"
+
+#, fuzzy
+#~| msgid "Document Information"
+#~ msgid "Location Information"
+#~ msgstr "Document d'informacion"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgid "People"
+#~ msgstr "Remplaçar"
+
+#, fuzzy
+#~| msgid "Import Document"
+#~ msgid "Export Document As"
+#~ msgstr "Importar un document"
+
+#, fuzzy
+#~| msgid "&Background color:"
+#~ msgid "Slide Background"
+#~ msgstr "Color de &fons :"
+
+#, fuzzy
+#~| msgid "&Background color:"
+#~ msgid "Document background"
+#~ msgstr "Color de &fons :"
+
+#, fuzzy
+#~| msgid "Change"
+#~ msgid "&Cancel"
+#~ msgstr "Cambiar"
+
+#, fuzzy
+#~| msgid "Close"
+#~ msgid "&Close"
+#~ msgstr "Tampar"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgid "Dodge"
+#~ msgstr "Pas cap"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgid "Hard light"
+#~ msgstr "Nautor"
+
+#, fuzzy
+#~| msgctxt "Underline Style"
+#~| msgid "Single"
+#~ msgid "Angle:"
+#~ msgstr "Simple"
+
+#, fuzzy
+#~| msgid "Styles"
+#~ msgid "Style:"
+#~ msgstr "Estils"
+
+#, fuzzy
+#~| msgid "Insert Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Bookmark"
+#~ msgstr "Inserir un saut"
+
+#, fuzzy
+#~| msgid "Insert Break"
+#~ msgid "Insert Table"
+#~ msgstr "Inserir un saut"
+
+#, fuzzy
+#~| msgid "Insert Break"
+#~ msgid "Insert Row Above"
+#~ msgstr "Inserir un saut"
+
+#, fuzzy
+#~| msgid "Insert Break"
+#~ msgid "Insert Column Left"
+#~ msgstr "Inserir un saut"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgid "Delete Column"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgid "Delete Row"
+#~ msgstr "Suprimir"
+
+#, fuzzy
+#~| msgid "Insert Break"
+#~ msgid "Insert Table Of Contents"
+#~ msgstr "Inserir un saut"
+
+#, fuzzy
+#~| msgid "Insert Break"
+#~ msgid "Insert Bibliography"
+#~ msgstr "Inserir un saut"
+
+#, fuzzy
+#~| msgid "&Background color:"
+#~ msgid "Background Tool"
+#~ msgstr "Color de &fons :"
+
+#, fuzzy
+#~| msgid "&Background color:"
+#~ msgid "Background editing tool"
+#~ msgstr "Color de &fons :"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete shapes"
+#~ msgstr "Suprimir pagina"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgid "Inverse Substract"
+#~ msgstr "Saturacion"
+
+#, fuzzy
+#~| msgid "Insert Break"
+#~ msgid "Line Break"
+#~ msgstr "Inserir un saut"
+
+#~ msgid "&Horizontal"
+#~ msgstr "&Orizontal"
+
+#~ msgid "&Vertical"
+#~ msgstr "&Vertical"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Format"
+
+#~ msgid "Import"
+#~ msgstr "Importar"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgid "Share"
+#~ msgstr "Forma"
+
+#, fuzzy
+#~| msgid "Alpha"
+#~ msgid "Copy Opacy"
+#~ msgstr "Alfa"
+
+#, fuzzy
+#~| msgid "Alpha"
+#~ msgid "Copy Alpha"
+#~ msgstr "Alfa"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgid "Light"
+#~ msgstr "Esclarzir"
+
+#, fuzzy
+#~| msgid "Stop"
+#~ msgid "Atop"
+#~ msgstr "Arrestar"
+
+#~ msgid "KOffice"
+#~ msgstr "KOffice"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Barcode"
+#~ msgstr "Format"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Barcode Format"
+#~ msgstr "Format"
+
+#, fuzzy
+#~| msgid "Time:"
+#~ msgid "Pie"
+#~ msgstr "Títol:"
+
+#, fuzzy
+#~| msgid "Version"
+#~ msgid "Ring"
+#~ msgstr "Version"
+
+#, fuzzy
+#~| msgid "Clear"
+#~ msgid "Polar"
+#~ msgstr "Netejar"
+
+#, fuzzy
+#~| msgid "Data"
+#~ msgid "Chart Type"
+#~ msgstr "Donadas"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgid "Stacked"
+#~ msgstr "Espaci"
+
+#, fuzzy
+#~| msgctxt "Mouse Cursor Shape"
+#~| msgid "I"
+#~ msgid "In"
+#~ msgstr "I"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgid "Out"
+#~ msgstr "Personalizat"
+
+#~ msgid "&Insert"
+#~ msgstr "&Inserir"
+
+#~ msgid "Make Default"
+#~ msgstr "Valeurs par défaut"
+
+#~ msgid "C&ustom"
+#~ msgstr "&Personalizat"
+
+#~ msgid "Borders"
+#~ msgstr "Bordaduras"
+
+#~ msgid "true"
+#~ msgstr "verai"
+
+#~ msgid "false"
+#~ msgstr "fals"
+
+#~ msgid "Horizontal"
+#~ msgstr "Orizontal"
+
+#~ msgid "Vertical"
+#~ msgstr "Vertical"
+
+#~ msgid "Confirmation Required"
+#~ msgstr "Confirmacion necessària"
+
+#~ msgid "Skip"
+#~ msgstr "Sautar"
+
+#~ msgid "Na&me:"
+#~ msgstr "No&m :"
+
+#~ msgid "Context Help"
+#~ msgstr "Ajuda contèxtuala"
+
+#~ msgctxt "Custom size"
+#~ msgid "Custom"
+#~ msgstr "Personalizat"
+
+#~ msgid "Insert Object"
+#~ msgstr "Inserir un objècte"
+
+#~ msgid "Page Preview"
+#~ msgstr "Previsualizacion"
+
+#~ msgid "&Help"
+#~ msgstr "&Ajuda"
+
+#~ msgid "Rotate"
+#~ msgstr "እንደገና አስጀምሩ"
+
+#~ msgctxt "Mouse Cursor Shape"
+#~ msgid "Arrow"
+#~ msgstr "Flècha"
+
+#~ msgctxt "Mouse Cursor Shape"
+#~ msgid "Up Arrow"
+#~ msgstr "Sageta cap al naut"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgctxt "Mouse Cursor Shape"
+#~ msgid "Size Vertical"
+#~ msgstr "Vertical"
+
+#, fuzzy
+#~| msgid "Horizontal"
+#~ msgctxt "Mouse Cursor Shape"
+#~ msgid "Size Horizontal"
+#~ msgstr "Orizontal"
+
+#, fuzzy
+#~| msgid "Time:"
+#~ msgctxt "Mouse Cursor Shape"
+#~ msgid "Size All"
+#~ msgstr "Títol:"
+
+#, fuzzy
+#~| msgid "Horizontal"
+#~ msgctxt "Mouse Cursor Shape"
+#~ msgid "Split Horizontal"
+#~ msgstr "Orizontal"
+
+#~ msgctxt "Mouse Cursor Shape"
+#~ msgid "What's This?"
+#~ msgstr "Qu'es aquò ?"
+
+#~ msgctxt "Size Policy"
+#~ msgid "Minimum"
+#~ msgstr "Minim"
+
+#~ msgctxt "Size Policy"
+#~ msgid "Maximum"
+#~ msgstr "Maxim"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgctxt "General properties"
+#~ msgid "General"
+#~ msgstr "General"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgid "Width"
+#~ msgstr "Largor"
+
+#~ msgid "X"
+#~ msgstr "X"
+
+#~ msgid "Y"
+#~ msgstr "O"
+
+#, fuzzy
+#~| msgid "Horizontal"
+#~ msgid "Horizontal Size Type"
+#~ msgstr "Orizontal"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgid "Vertical Size Type"
+#~ msgstr "Vertical"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgid "Vertical Stretch"
+#~ msgstr "Vertical"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgid "Snap Guides"
+#~ msgstr "Alinhar s~us la gresilha"
+
+#, fuzzy
+#~| msgid "Tool Options"
+#~ msgid "Tool Option"
+#~ msgstr "Opcions dels espleches"

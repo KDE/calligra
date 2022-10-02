@@ -1,0 +1,943 @@
+<chapter id="basics">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Hans-Frieder</firstname
+><surname
+>Hirsch</surname
+><affiliation
+><address
+><email
+>f.hirsch@t-online.de</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+> <othercredit role="translator"
+><firstname
+>Johannes</firstname
+><surname
+>Schwall</surname
+><affiliation
+><address
+><email
+>johannes.schwall@gmail.com</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>&sheets;-Grundlagen</title>
+
+<note
+><para
+>Wie alle anderen &kde;-Programme kann &sheets; in großem Umfang auf die individuellen Bedürfnisse der Benutzer eingestellt werden. Das kann problematisch sein, wenn Sie den Text in diesem Dokument mit &sheets; auf Ihrem Bildschirm vergleichen. Um die mögliche Verwirrung zu verringern, ist es empfehlenswert, dass Sie beim ersten Start von &sheets; auf allen Seiten des &sheets;-Einstellungsdialogs die Voreinstellungen auswählen. Den Einstellungsdialog öffnen Sie mit <menuchoice
+><guimenu
+>Einstellungen</guimenu
+><guimenuitem
+>&sheets; einrichten ...</guimenuitem
+></menuchoice
+> </para
+></note>
+
+<sect1 id="starting">
+<title
+>Tabellenkalkulation für Anfänger</title>
+
+<para
+>Dieser Abschnitt versucht beispielhaft zu erklären, was ein Tabellenkalkulationsprogramm wie &sheets; tatsächlich tut und warum es in jeder Situation, in der Sie mit Zahlen umgehen müssen, ein so nützliches Werkzeug ist. Wenn Sie schon ein Tabellenkalkulationsprogramm benutzt haben können Sie im nächsten Abschnitt weiterlesen.</para>
+
+<para
+>Zuerst müssen Sie &sheets; starten, indem Sie mit der <mousebutton
+>linken</mousebutton
+> Maustaste auf das &sheets;-Symbol auf Ihrem Arbeitsfläche oder in der Kontrollleiste klicken. Sie können aber auch im &kmenu; <menuchoice
+><guimenu
+>Büroprogramme</guimenu
+> <guimenuitem
+>&sheets;</guimenuitem
+> </menuchoice
+> auswählen.</para>
+
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="newdocument.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>&sheets; beim ersten Start</phrase>
+</textobject>
+</mediaobject
+>Wenn &sheets; gestartet ist,haben Sie die Möglichkeit, ein kürzlich bearbeitetes Dokument zu öffnen, ein neues Dokument aus einer Vorlage zu erstellen oder ein vorhandenes Dokument zu öffnen. Klicken Sie auf die Kategorie <guilabel
+>Allgemein</guilabel
+> auf der linken Seite des Dialogs und wählen Sie die Vorlage <guilabel
+>Leeres Arbeitsblatt</guilabel
+>. Klicken Sie dann auf den Knopf <guibutton
+>Diese Vorlage verwenden</guibutton
+>.</para>
+
+<para
+>Nach den Start von &sheets; sehen Sie eine Tabelle mit leeren rechteckigen Zellen, angeordnet in nummerierten Zeilen und mit Buchstaben benannten Spalten. Hier können Sie Daten, Formeln, Text oder Diagramme eingeben. <mediaobject>
+<imageobject>
+<imagedata fileref="starting1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Bildschirmfoto Starten1</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Geben Sie jetzt den Text und die Werte, die in den ersten fünf Zeilen des Bildschirmfotos oben zu sehen sind, in dieselben Zellen in Ihrer Kalkulationstabelle ein. Ignorieren Sie im Moment das, was in Zeile 7 steht. Um in eine Zelle irgend etwas einzutragen, wählen Sie zunächst eine Zelle aus, indem Sie mit der <mousebutton
+>linken</mousebutton
+> Maustaste in die Zelle klicken. Dann geben Sie in die Zelle beliebige Werte oder Texte ein. Danach drücken Sie die Taste &Enter; oder wählen Sie mit den Pfeiltasten eine andere Zelle aus. </para>
+<para
+>Was bis jetzt eingetragen ist könnte ein kleiner Haushaltsplan für die nächsten zwei Monate sein, der auflistet wieviel Sie für Nahrungsmittel, Miete, Kleidung und irgendwelche andere Ausgaben ausgeben wollen. Wählen Sie jetzt die Zelle B7 (Spalte B, Zeile 7) aus und tippen Sie <userinput
+>=B2+B3+B4+B5</userinput
+> ein. Danach bestätigen Sie die Eingabe mit der Taste &Enter;. Weil die Eingabe mit dem Symbol <keycap
+>=</keycap
+>-beginn, erkennt &sheets; diese als eine Formel, die berechnet werden soll, in diesem Fall durch Addition der Werte in den 4 Zellen B2 bis B5. Was in der Zelle B7 zu sehen ist, ist das Ergebnis dieser Berechnung.</para>
+<para
+>Sie könnten die gleiche Formel auch in die Zelle C7 eingeben. Allerdings müssten Sie dann <userinput
+>=C2+C3+C4+C5</userinput
+> eintippen. Es gibt aber einen einfacheren Weg: Kopieren Sie die Zelle B7 und fügen sie in C7 ein. &sheets; wird dann die Zellverweise automatisch von B nach C umstellen, wenn das Einfügen beendet ist.</para>
+<para
+>An dieser Stelle könnten Sie denken, dass &sheets; nicht mehr als Sie mit Bleistift, Papier und Taschenrechner kann und damit haben Sie Recht. Denken Sie aber daran, dass das ein Beispiel einer sehr kleinen Kalkulationstabelle ist, in der nur wenige Zahlen berechnet werden. Jede große Wertetabelle kann aber mit einem Tabellenkalkulationsprogramm viel schneller und genauer berechnet werden als von Hand.</para>
+<para
+>Mit einer Tabellenkalkulation können Sie auch das <quote
+>Was wäre wenn?</quote
+>-Spiel spielen. Denn jede Formel wird automatisch neu berechnet, wenn irgendeiner der Werte, auf die sie sich bezieht, verändert wird. Sie können sofort sehen was geschieht, wenn Sie einen der Werte verändern. In unserem Beispiel können Sie sehen welche Auswirkung es hat, wenn Sie die Ausgaben für Nahrungsmittel im Dezember verringern indem Sie einen neuen Wert in Zelle C2 eingeben. Hätten Sie eine Tabellenkalkulation, die den Treibhauseffekt genau abbildet, könnten Sie etwa die Auswirkung sehen, die eine Verringerung der Menge des in die Atmosphäre eingebrachten Methan um 50 % hätte.</para>
+</sect1>
+
+<sect1 id="selecting">
+<title
+>Zellen auswählen</title>
+<para
+>Sie können eine einzelne Zelle oder einen rechteckigen Zellenbereich in der Tabelle auswählen. Die ausgewählten Zellen werden mit einem dicken schwarzen Rand angezeigt. </para>
+<itemizedlist>
+<title
+>Eine einzelne Zelle können Sie folgendermaßen auswählen:</title>
+<listitem
+><para
+>Klicken Sie mit der <mousebutton
+>linken</mousebutton
+> Maustaste auf die Zelle</para
+></listitem>
+<listitem
+><para
+>Geben Sie die Adresse der Zelle (zum Beispiel <userinput
+>B5</userinput
+>) in das Adressfeld oben links im Zelleneditor ein und drücken Sie die Taste &Enter;.</para
+></listitem>
+<listitem
+><para
+>Wählen Sie die Zelle mit <menuchoice
+><guimenu
+>Gehe zu</guimenu
+> <guimenuitem
+>Gehe zu Zelle ...</guimenuitem
+></menuchoice
+></para
+></listitem>
+</itemizedlist>
+
+<para
+>Sie können den Cursor auch mit den <keysym
+>Pfeiltasten</keysym
+> verschieben. Die Taste &Enter; bewegt die aktuelle Auswahl einer Zelle nach unten, nach oben, nach links oder nach rechts, abhängig von der Einstellung auf der Seite <guilabel
+>Oberfläche</guilabel
+> im <link linkend="configinterface"
+>Einrichtungsdialog von &sheets;</link
+>.</para
+> <para
+>Wenn Sie die <keycombo action="simul"
+>&Shift;</keycombo
+>-taste gedrückt halten und die <keysym
+>Pfeiltasten</keysym
+> drücken, bewegt sich die Auswahlmarkierung an den Anfang oder das Ende des Blocks der belegten Zellen.</para>
+<para
+>Um einen zusammenhängenden Bereich von Zellen auszuwählen, ziehen Sie entweder mit gedrückter <mousebutton
+>linker</mousebutton
+> Maustaste den Mauszeiger über den gewünschten Bereich oder geben Sie die Adresse der Zelle links oben und der Zelle rechts unten, getrennt durch einen Doppelpunkt, in das Adressfeld oben links im Zelleneditor ein (Beispiel: <userinput
+>B7:C14</userinput
+>) und drücken Sie die Taste &Enter;. Sie können die Zelladressen auch im gleichen Format in das Dialogfenster eingeben, das Sie <menuchoice
+><guimenu
+>Gehe zu</guimenu
+> <guimenuitem
+>Gehe zu Zelle ...</guimenuitem
+></menuchoice
+> öffnen.</para>
+<para
+>Sie können einen Bereich von Zellen auch auswählen, indem Sie eine Zelle in einer Ecke des gewünschten Bereichs auswählen und dann die <keycombo action="simul"
+> &Shift;</keycombo
+>taste gedrückt halten, wenn Sie mit der <mousebutton
+>linken</mousebutton
+> Maustaste in die Zelle in der gegenüberliegenden Ecke klicken.</para>
+
+<para
+>Um nicht zusammenhängende Zellen auszuwählen, klicken Sie in der erste Zelle, drücken dann die <keycombo action="simul"
+>&Ctrl;</keycombo
+>-Taste und wählen die anderen Zellen aus.</para>
+
+<para
+>Eine ganze Zeile oder Spalte von Zellen wählen Sie aus, indem Sie mit der <mousebutton
+>linken</mousebutton
+> Maustaste auf die Zahl links von der Zeile oder auf den Buchstaben über der Spalte klicken. Um angrenzende Zeilen oder Spalten auszuwählen ziehen Sie den Mauszeiger mit gedrückter <mousebutton
+>linker</mousebutton
+> Maustaste über die entsprechenden Zeilenzahlen oder Spaltenbuchstaben.</para>
+<para
+>Um nicht zusammenhängende Zeilen oder Spalten auszuwählen, klicken Sie in  Nummer der ersten Zeile oder auf den Buchstaben der ersten Spalte, drücken dann die <keycombo action="simul"
+>&Ctrl;</keycombo
+>-Taste und wählen die anderen Zeilen oder Spalten aus aus.</para>
+
+</sect1>
+
+<sect1 id="entering">
+<title
+>Dateneingabe</title>
+<para
+>Das Eingeben von Daten in eine Zelle ist recht einfach. Wählen Sie die Zelle aus, geben Sie die Daten ein und drücken Sie Taste &Enter; oder bewegen Sie den Cursor (die Auswahlmarkierung) mit einer der <keysym
+>Pfeiltasten</keysym
+> in eine andere Zelle. Abhängig davon, wie Sie die Daten eingeben, erkennt &sheets; sie als Zahl, Datum, Zeit oder Text:</para>
+<itemizedlist>
+<listitem
+><para
+>Zahlen werden normalerweise so eingetragen: <userinput
+>123</userinput
+>, <userinput
+>-123</userinput
+>, <userinput
+>456,7</userinput
+> oder in wissenschaftlicher Darstellung so: <userinput
+>-1.2E-5</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>Daten sollten im <quote
+>System</quote
+>-Format eingegeben werden, wie Sie es in den &systemsettings; in <menuchoice
+><guimenu
+>Regionales</guimenu
+> <guisubmenu
+> Land/Region &amp; Sprache</guisubmenu
+><guimenuitem
+>Datum &amp; Zeit</guimenuitem
+> </menuchoice
+> eingestellt haben. Wenn Sie beispielsweise das TT.MM.JJJJ-Format verwenden, sollten Sie <userinput
+>30.03.2012</userinput
+> für den 30. März 2012 eingeben. Führende Nullen können Sie bei der Eingabe der Tages- und Monatszahlen weglassen und für die Jahreszahl nur die letzte oder die zwei letzten Zahlen eingeben, wenn es ein Jahr im aktuellen Jahrhundert ist. Beispiel: <userinput
+>9.1.9 </userinput
+> für den 9. Januar 2009. </para
+></listitem>
+<listitem
+><para
+>Uhrzeiten sollten ebenfalls im <quote
+>System</quote
+>-Format eingegeben werden. Wenn Sie eine 12-Stunden-Uhr benutzen, geben Sie Zeiten im Format HH:MIN am|pm oder HH:MIN:SS am|pm ein, wie z. B. <userinput
+>9:42 am</userinput
+> oder <userinput
+>10:30:52 pm</userinput
+>. <userinput
+>am</userinput
+> bedeutet dann vormittags, und <userinput
+>pm</userinput
+> nachmittags. </para
+></listitem>
+<listitem
+><para
+>&sheets; behandelt jede Dateneingabe als <quote
+>Text</quote
+> wenn es die Eingabe nicht als Zahl, Datum oder Zeit erkennt. </para
+></listitem>
+</itemizedlist>
+<note
+><para
+>Als Standard richtet &sheets; Zahlen, Daten und Zeiten innerhalb einer Zelle rechtsbündig und alles andere linksbündig aus. Das kann ein nützlicher Hinweis darauf sein, ob Sie ein Datum oder eine Zeit im korrekten Format eingegeben haben. Aber bedenken Sie, das das Aussehen der Eingaben durch Ändern des <link linkend="formatdata"
+>Zellen-Formats</link
+> geändert werden kann.</para
+></note>
+
+<para
+>Das große Texteingabefeld des <guilabel
+>Zelleneditors</guilabel
+> in den Werkzeugoptionen stellt eine einfache Möglichkeit zum Eingeben und Ändern des Inhalts einer ausgewählten Zelle dar. Wenn Sie mit ihrer Eingabe zufrieden sind, drücken Sie &Enter; oder klicken Sie mit der &LMBn; auf die grüne Häkchenmarkierung, oder klicken Sie auf das rote Stoppsymbol, um Ihre Änderungen zu verwerfen.</para>
+
+<sect2 id="genericformat">
+<title
+>Allgemeines Zellenformat</title>
+<para
+>&sheets; verwendet als Standard das Zellenformat <quote
+>Allgemein</quote
+>. Für Zellen in diesem Format bestimmt &sheets; automatisch den Datentyp aus dem Zelleninhalt. Wenn Sie zum Beispiel Text in eine Zelle eingeben und später eine Zahl in dieselbe Zelle, betrachtet &sheets; die neuen Daten automatisch als Zahl. Wenn Sie den Datentyp einer Zelle direkt festlegen wollen, stellen Sie das Format im Dialog <link linkend="formatdata"
+>Zellenformat</link
+> ein. Sie können ein Zellenformat jederzeit wieder auf <quote
+>Allgemein</quote
+> zurückstellen. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="copypaste">
+<title
+>Kopieren, Ausschneiden und Einfügen</title>
+
+<para
+>Auf den ersten Blick scheinen &sheets;s <guimenuitem
+>Ausschneiden</guimenuitem
+>, <guimenuitem
+>Kopieren</guimenuitem
+> und <guimenuitem
+>Einfügen</guimenuitem
+> jenen Funktionen in anderen &kde;-Anwendungen ähnlich zu sein. Wenn Sie eine Zelle oder Zellen ausgewählt haben, können Sie <guimenuitem
+>Kopieren</guimenuitem
+> oder <guimenuitem
+>Ausschneiden</guimenuitem
+> im Menü <guimenu
+>Bearbeiten</guimenu
+> oder im Auswahlmenü, das Sie bekommen, wenn Sie mit der <mousebutton
+>rechten</mousebutton
+> Maustaste auf eine ausgewählte Zelle klicken, auswählen. Sie können auch die Tastenkürzel<keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> oder <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> verwenden. Danach bewegen Sie die Auswahl zu der gewünschten Zelle und wählen <guimenuitem
+> Einfügen</guimenuitem
+> oder <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+>. Es gibt in &sheets; jedoch einige mit diesen Funktionen verknüpfte Feinheiten, die weiter unten erläutert werden.</para>
+
+<para
+>Wenn eine Zelle eine Formel enthält, dann wird die Formel anstatt des angezeigten Wertes kopiert. Wenn die Formel einen Verweis auf eine andere Zelle enthält, dann wird dieser Verweis durch <guimenuitem
+>Ausschneiden</guimenuitem
+> oder <guimenuitem
+>Kopieren</guimenuitem
+> und <guimenuitem
+>Einfügen</guimenuitem
+> so geändert, dass er auf die Zelle zeigt, die in der gleichen relativen Position zur Einfügezelle steht, wie die Zelle, auf die in der ausgeschnittenen oder kopierten Zelle verwiesen wird. Wenn z. B. Zelle A2 die Formel <userinput
+>=B3</userinput
+> enthält und nach C4 kopiert wird, enthält Zelle C4 <userinput
+>=D5</userinput
+>.</para>
+<para
+>Das kann als eine ziemlich merkwürdige Art des Kopierens erscheinen, aber in 99 Prozent der Fälle ist es genau das, was gewünscht wird (wenn Sie es in einem Fall nicht wünschen, dann lesen den Abschnitt über <link linkend="absolute"
+>absolute Zellenverweise</link
+>. Z. B. in der einfachen Einkaufsliste, die unten gezeigt wird, soll Zelle D2 <userinput
+>=B2*C2</userinput
+> enthalten, D3 soll <userinput
+>=B3*C3</userinput
+> enthalten, D4 soll <userinput
+>=B4*C4</userinput
+> enthalten und so weiter. Anstatt dass Sie eine andere Formel in jede Zelle eintragen müssen, müssen Sie nur die erste Formel in D2 eintragen und sie in die Zellen weiter unten kopieren und lassen &sheets; die Zellenverweise automatisch anpassen.</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="copy1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Bildschirmfoto Kopieren1</phrase>
+</textobject>
+</mediaobject>
+
+<sect2 id="copypasteareas">
+<title
+>Kopieren und Einfügen von Zellenbereichen</title>
+<para
+>Im oben genannten Beispiel kann D2 auf einmal in alle drei Zellen D3 bis D5 kopiert werden. Kopieren Sie dazu einmalig D2 und wählen dann den kompletten Zellenbereich D3:D5 aus, in den Sie dann den Inhalt von D2 einfügen.</para>
+<para
+>Ein rechteckiger Bereich von Zellen kann in einem Schritt ausgeschnitten oder kopiert werden, indem man den Bereich auswählt, bevor man ihn ausschneidet oder kopiert. Wählen Sie dann die obere linke Eckzelle des Bereichs aus, in den eingefügt werden soll, bevor Sie den Bereich einfügen.</para>
+<para
+>Wenn Sie einen rechteckigen Bereich von Zellen ausschneiden oder kopieren, z. B. B2:C3 und Sie ihn in einen größeren Bereich, wie z. B. A10:D13 einfügen, wird der ursprüngliche Block von Zellen regelmäßig wiederholt, um den Zielbereich zu füllen.</para>
+<para
+>Im &sheets; können Sie auch den Inhalt von Zellen mit <quote
+>Ziehen und Kopieren</quote
+>in andere Zellen unmittelbar unterhalb oder rechts von der Ausgangszelle kopieren. Dazu  wählen Sie die zu kopierenden Zellen aus und bewegen den Mauszeiger über das kleine schwarzen Quadrat an der unteren rechten Ecke der Ausgangszellen. Der Mauszeiger wird dann als einem Pfeil mit zwei Spitzen dargestellt. Halten Sie dann die <mousebutton
+>linke</mousebutton
+> Maustaste gedrückt, während Sie den ausgewählten Bereich durch Ziehen mit der Maus wie gewünscht vergrößern. Zellverweise in Formeln werden dabei an die geänderte Position angepasst, nur absolute Verweise bleiben erhalten.</para>
+</sect2>
+
+<sect2 id="specialpaste">
+<title
+>Andere Einfügungsarten</title>
+<para
+>Eine Zelle kann Text, einen Wert oder eine Formel enthalten und kann auch eine besondere Schriftart-, Rand- oder Hintergrund-<link linkend="formatspread"
+>Formatierungsinformation</link
+> enthalten. &sheets; verfügt über spezielle Versionen der Funktion „Einfügen“, mit denen Sie diese Formatierungen in unterschiedlicher Weise handhaben können.</para>
+
+<para
+>Wenn Sie <menuchoice
+><guimenu
+>Bearbeiten</guimenu
+><guimenuitem
+>Einfügen spezial ...</guimenuitem
+></menuchoice
+> auswählen,wird der Dialog <guilabel
+>Einfügen spezial</guilabel
+>geöffnet. Wenn Sie im linken Teil des Dialogs den gewünschten Eintrag auswählen, können Sie <guilabel
+>Text</guilabel
+>, das <guilabel
+>Format</guilabel
+> der Zellen, einen<guilabel
+>Kommentar</guilabel
+> in der/den Zelle(n) oder<guilabel
+>Alles ohne Umrandung</guilabel
+> auswählen. Mit den Einträgen im rechten Teil des Dialogs können Sie <link linkend="sumspecialpaste"
+>Rechenoperationen auf einen Zellbereich</link
+> anwenden. </para>
+
+<para
+><guimenuitem
+>Einfügen mit Zusätzen ...</guimenuitem
+> setzt die kopierte(n) Zelle(n) in das Blatt ein, indem die Zellen nach rechts oder unten verschoben werden, die sonst überschrieben werden würden. Sie kann auch verwendet werden, um komplette kopierte Zeilen oder Spalten in die Tabelle einzufügen.</para>
+</sect2>
+
+</sect1>
+<!-- ME insdel -->
+<sect1 id="insdel">
+<title
+>Einfügen und löschen</title>
+<para
+>Verwenden Sie die Taste <keysym
+>Entf</keysym
+> oder <menuchoice
+><guimenu
+>Bearbeiten</guimenu
+><guisubmenu
+>Leeren</guisubmenu
+><guimenuitem
+>Inhalt</guimenuitem
+></menuchoice
+>, um den Text, den Wert oder die Formel in den ausgewählten Zellen, Zeile(n) oder Spalte(n) zu entfernen, ohne etwas anderes, wie z. B. Formatierungen, zu beeinflussen.</para>
+
+<para
+>Um alles in den ausgewählten Zellen, Zeilen oder Spalten, einschließlich der Kommentare und speziellen Formatierung, zu löschen, wählen Sie <guimenuitem
+>Alle</guimenuitem
+> aus dem Menü <menuchoice
+><guimenu
+>Bearbeiten</guimenu
+><guimenuitem
+>Leeren</guimenuitem
+></menuchoice
+> oder aus dem Kontextmenü, das Sie durch Klicken mit der &LMBn; auf eine Zelle oder ausgewählten Bereich öffnen. </para>
+<para
+>Um markierte Zeilen oder Spalten komplett aus der Tabelle zu entfernen, benutzen Sie <guimenuitem
+>Zeilen löschen</guimenuitem
+> oder <guimenuitem
+>Spalten löschen</guimenuitem
+> aus dem Kontextmenü der<mousebutton
+>rechten</mousebutton
+> Maustaste.</para>
+<para
+>Wenn Sie eine oder mehrere Zellen auswählen und <guimenuitem
+>Zellen entfernen ...</guimenuitem
+> aus dem Kontextmenü der <mousebutton
+>rechten</mousebutton
+> Maustasten wählen, können Sie eingeben, ob andere Zellen von unten in der Tabelle nach oben oder von rechts nach links verschoben werden, um den Bereich der gelöschten Zellen auszufüllen.</para>
+<para
+>Wenn Sie neue leere Zeilen oder Spalten in die Tabelle einfügen wollen, markieren Sie die Spalte oder Zeile, in der die neuen Zeilen oder Spalten eingefügt werden sollen und wählen Sie <guimenuitem
+>Zeilen einfügen</guimenuitem
+> oder <guimenuitem
+>Spalten einfügen</guimenuitem
+> aus dem Kontextmenü der <mousebutton
+>rechten</mousebutton
+> Maustaste.</para>
+<para
+>Sie können neue Zellen in die Tabelle einfügen, indem Sie einen Bereich dafür auswählen. Dann wählen Sie <guimenuitem
+>Zellen einfügen ...</guimenuitem
+> aus dem Kontextmenü der <mousebutton
+>rechten</mousebutton
+> Maustaste. Geben Sie dann ein, ob die vorhandenen Zellen im ausgewählten Bereich nach rechts oder unten zum Einfügen der neuen Zellen verschoben werden sollen.</para>
+
+</sect1>
+
+<sect1 id="simplesums">
+<title
+>Einfache Summen</title>
+<para
+>Wenn der erste Buchstabe in einer Zelle ein Gleichheitszeichen (<keycap
+>=</keycap
+>) ist, erkennt &sheets; den Zelleninhalt als eine Formel, die berechnet werden soll. Das Resultat der Berechnung wird in der Zelle anstatt der Formel selbst angezeigt. Z. B. tragen Sie <userinput
+>=2+3</userinput
+> in eine Zelle ein, sollte sie <emphasis
+>5</emphasis
+> anzeigen.</para>
+<para
+>Eine Formel kann auch Verweise auf andere Zellen enthalten, so kann mit <userinput
+>=B4+A3</userinput
+> die Summe der Werte in den Zellen B4 und A3 berechnet werden. Diese Berechnung wird immer aktualisiert, wenn eine der Zellen B4 oder A3 geändert wird.</para>
+<para
+>Genauso wie <keycap
+>+</keycap
+> für Addition kann eine Formel die Zeichen <keycap
+>-</keycap
+> für Subtraktion, <keycap
+>*</keycap
+> für Multiplikation und <keycap
+>/</keycap
+> für Division enthalten. Auch die runden Klammern <keycap
+>(</keycap
+> und <keycap
+>)</keycap
+> können genau wie in der Mathematik verwendet werden. Sie können also auch kompliziertere Formeln wie <userinput
+>=((B10+C3)*5-F11)/2</userinput
+> eingeben.</para>
+
+<para
+>Zellen, die eine Formel enthalten, werden mit einem blauen Dreieck in der linken unteren Ecke markiert, wenn die Einstellung <guilabel
+>Formelmarkierung anzeigen</guilabel
+> im Dialog <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Tabelle</guisubmenu
+> <guisubmenu
+>Tabellen-Eigenschaften</guisubmenu
+> </menuchoice
+> eingeschaltet ist.</para>
+<para
+>&sheets; enthält auch viele eingebaute Funktionen wie statistische, trigonometrische und finanzielle Berechnungen. Ihre Anwendung wird genauer in einem späteren <link linkend="formulas"
+>Abschnitt</link
+> dieses Handbuches beschrieben. Um eine einen ersten Eindruck zu erhalten, wählen Sie <guimenuitem
+>Funktion ...</guimenuitem
+> aus dem Menü <guimenu
+>Einfügen</guimenu
+> und im Dialog <guilabel
+>Funktion</guilabel
+> werden dann alle vorhandenen Funktionen angezeigt.</para>
+<para
+>Häufig gebraucht wird die Funktion <userinput
+>SUM</userinput
+>. Sie berechnet die Summe aller Werte in einem angegebenen Bereich von Zellen. Zum Beispiel berechnet <userinput
+>=SUM(B4:C10)</userinput
+> die Summe aller Werte im Zellenbereich B4 bis C10.</para>
+<para
+>Wenn &sheets; mehrere <keycap
+>#VALUE!</keycap
+>-Symbolen anzeigt, wenn Sie eine Formel eingegeben haben, bedeutet das meistens, dass &sheets; Ihre Eingabe nicht versteht. Wenn die Zeichen aber mit einem kleinen roten Pfeil enden, ist die Zelle nicht breit genug, um das gesamte Ergebnis anzuzeigen. In diesem Fall sollten Sie die Zellen verbreitern oder ihr <link linkend="formatdata"
+>Format</link
+> ändern, damit das Ergebnis in die Zellen passt. </para>
+
+<sect2 id="recalc">
+<title
+>Neuberechnung</title>
+<para
+>Wenn <guilabel
+>Automatische Neuberechnung</guilabel
+> im Dialog <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Tabelle</guisubmenu
+> <guisubmenu
+>Tabelleneigenschaften</guisubmenu
+> </menuchoice
+> ausgewählt ist, berechnet &sheets; die Werte der Zellen neu, wenn irgend ein Wert geändert wird, der in diese Berechnung eingeht.</para>
+<para
+>Wenn <guilabel
+>Automatische Neuberechnung</guilabel
+> nicht für das aktuelle Dokument eingeschaltet ist, können eine jederzeit Neuberechnung durchführen, indem Sie <guimenuitem
+>Tabelle neu berechnen</guimenuitem
+> oder <guimenuitem
+>Dokument neu berechnen</guimenuitem
+> aus dem Menü <guimenu
+>Extras</guimenu
+>wählen oder die entsprechenden Kurzbefehle <keycombo action="simul"
+>&Shift;<keysym
+>F9</keysym
+> </keycombo
+> oder <keysym
+>F9</keysym
+> benutzen.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sort">
+<title
+>Daten sortieren</title>
+<para
+>In dem unten gezeigten Beispiel bestehen die Daten aus den Namen von Bergen, den Ländern in denen sie stehen, und der Höhe über der Meeresspiegel. &sheets; kann diese Daten auf verschiedene Weise sortieren.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sort1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Bildschirmfoto der sortierten Daten</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Um Daten alphabetisch zu sortieren, wählen Sie die Zellen mit den Daten aus (in diesem Beispiel A2:C7) und wählen Sie <guimenuitem
+>Sortieren ...</guimenuitem
+> im Menü <guimenu
+>Daten</guimenu
+>. Damit öffnen Sie den Dialog <guilabel
+>Sortieren</guilabel
+>.</para
+> 
+<para
+>Die Sortierung erfolgt alphanumerisch und berücksichtigt in der Voreinstellung Groß- und Kleinschreibung. Zahlen kommen vor Großbuchstaben und diese vor Kleinbuchstaben, sodass Zellen mit den Einträgen <userinput
+>Cat</userinput
+>, <userinput
+>bar</userinput
+>, <userinput
+>77</userinput
+> und <userinput
+>Bat</userinput
+> in der folgenden Reihenfolge sortiert werden:<emphasis
+>77 Bat Cat bar</emphasis
+>.</para>
+<!-- Obsolete, AFAICT (Phil)
+<para
+>The <guimenuitem
+>Sort Increasing</guimenuitem
+> and <guimenuitem
+>Sort 
+Decreasing</guimenuitem
+> options from the <guimenu
+>Data</guimenu
+> menu options 
+sort the data according to the contents of the cells in the left column of the 
+selected area. For more complex sorting select <menuchoice
+><guimenu
+>Data
+</guimenu
+><guimenuitem
+>Sort...</guimenuitem
+></menuchoice
+> to bring up the 
+<guilabel
+>Sort</guilabel
+> dialog box.</para>
+-->
+<para
+>Im Bereich <guilabel
+>Richtung</guilabel
+> diese Dialogs geben Sie an ob nach Zeilen oder Spalten sortiert werden soll. Aktivieren Sie <guilabel
+>Erste Zeile enthält Spaltenüberschriften</guilabel
+> oder <guilabel
+>Erste Spalte enthält Zeilenüberschriften</guilabel
+>, dann werden die Daten in der ersten Zeile oder Spalte bei der Sortierung nicht berücksichtigt. </para>
+<para
+>Die Zeilen oder Spalten werden in der angegeben Reihenfolge sortiert. Die kann mit den Knöpfen <guibutton
+>Nach oben</guibutton
+> und <guibutton
+>Nach unten</guibutton
+> geändert werden. Mit dem Beispiel aus dem oben gezeigten Bildschirmfoto werden bei einer Sortierung zuerst nach Spalte B und dann nach Spalte C die Daten nach Ländern und dann für jedes Land nach Höhe sortiert.</para>
+<para
+>Schalten Sie die Einstellung <guilabel
+>Groß-/Kleinschreibung beachten</guilabel
+> ab, um die Schreibung beim Sortieren nicht zu berücksichtigen. Sie konnen die zwischen aufsteigender und absteigender Sortierung wechseln, indem Sie auf die Zellen in der Spalte <guilabel
+>Sortier-Reihenfolge</guilabel
+> klicken. </para>
+
+<para
+>Auf der Erweiterung <guilabel
+>Details 
+>
+></guilabel
+> des Dialogs können Sie einstellen, ob statt alphanumerisch nach den Einträgen in einer benutzerdefinierten Liste sortiert werden soll wie beispielsweise Januar, Februar ... Die Formatierungen der Zellen werden zusammen mit dem Inhalt der Zellen bei der Sortierung verschoben, wenn Sie die Einstellung <guilabel
+>Zellenformatierung verschieben (Umrandungen, Format, Textstil)</guilabel
+> aktivieren. </para>
+</sect1>
+
+
+<sect1 id="statusbarsum">
+<title
+>Das Ergebnisfeld in der Statusleiste</title>
+<para
+>Auf der linken Seite der Statuszeile wird das Ergebnis einer Berechnung mit den Werten in den ausgewählten Zellen angezeigt. Je nach Einstellung von <guilabel
+>In der Statusleiste gezeigte Funktion</guilabel
+> im Auswahlfeld der Seite <guilabel
+>Oberfläche</guilabel
+> im Einrichtungsdialog  von &sheets; wird als Ergebnis der Berechnung folgendes angezeigt:</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Keine</guilabel
+></term>
+<listitem
+><para
+>Es wird keine Berechnung durchgeführt. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Durchschnitt</guilabel
+></term>
+<listitem
+><para
+>Der Durchschnitt der Werte in den ausgewählten Zellen wird angezeigt. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Anzahl</guilabel
+></term>
+<listitem
+><para
+>Die Anzahl der Zellen mit numerischen Werten wird angezeigt. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>CountA</guilabel
+></term>
+<listitem
+><para
+>Die Anzahl der nicht leeren Zellen wird angezeigt. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Maximum</guilabel
+></term>
+<listitem
+><para
+>Das Maximum der Werte in den ausgewählten Zellen wird angezeigt. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Minimum</guilabel
+></term>
+<listitem
+><para
+>Das Minimum der Werte in den ausgewählten Zellen wird angezeigt. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Summe</guilabel
+></term>
+<listitem
+><para
+>Die Summe der Werte in den ausgewählten Zellen wird angezeigt. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+<para
+>Die Berechnungsmethode können Sie ändern, indem Sie mit der <mousebutton
+>rechten</mousebutton
+> Maustaste auf das Ergebnisfeld in der Statusleiste klicken und einen Eintrag aus dem Kontextmenü auswählen.</para>
+
+</sect1>
+
+<sect1 id="saving">
+<title
+>Speichern der Arbeit</title>
+<para
+>&sheets; speichert das gesamte Dokument, das mehr als eine Tabelle enthalten kann, in einer einzigen Datei.</para>
+<para
+>Wenn Sie eine neues Dokument erstellt haben oder ein Dokument unter einem anderem Namen speichern wollen, verwenden Sie <menuchoice
+><guimenu
+>Datei</guimenu
+><guimenuitem
+>Speichern unter ...</guimenuitem
+></menuchoice
+>. Damit öffnen Sie den &kde;-Standarddialog <guilabel
+>Dokument speichern unter</guilabel
+>. Wählen Sie einen Ordner für das Dokument aus und geben Sie einen aussagekräftigen Namen in das Textfeld <guilabel
+>Name</guilabel
+> ein. &sheets;-Dokumente werden normalerweise automatisch mit der Dateinamenerweiterung <filename
+>.ods</filename
+> gespeichert. Deshalb müssen Sie die Erweiterung nicht zum Dateinamen hinzufügen. Vergewissern Sie sich aber, das im Feld <guilabel
+>Filter:</guilabel
+> <guilabel
+>ODS-Tabelle</guilabel
+> eingestellt ist.</para>
+<para
+>Um Ihr Dokument unter dem gleichen Namen erneut zu speichern, wählen Sie <menuchoice
+><guimenu
+>Datei</guimenu
+><guimenuitem
+>Speichern</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Sie können ein &sheets;-Dokument auch in einem anderen (fremden) Format speichern, indem das gewünschte Format im Auswahlfeld <guilabel
+>Filter</guilabel
+> einstellen.</para>
+<para
+>Wenn Sie eine geänderte Version eines bereits vorhandenen Dokuments speichern, speichert &sheets; die vorige Version als Sicherungs-(Backup-)Datei und fügt ein <literal
+>~</literal
+> am Ende des Dateinamens hinzu.</para>
+<para
+>&sheets; bietet einen begrenzten Schutz gegen den Verlust Ihrer Arbeit durch einen Rechnerabsturz, oder weil Sie &sheets; beendet haben, ohne das aktuelle Dokument zu speichern. Die wird dadurch erreicht, dass die aktuelle Version, an der Sie arbeiten, automatisch in einem einstellbaren Zeitabstand unter einem anderen Dateinamen gesichert wird. Diese automatisch gesicherte Version wird gelöscht, wenn Sie Ihr Dokument speichern. Daher ist die automatisch gesicherte Version nur dann vorhanden, wenn sie aktueller als die von Ihnen gespeicherte Version ist. Wenn Sie ein Dokument öffnen, überprüft &sheets;, ob eine automatisch gesicherte Version vorhanden ist. Dann haben Sie die Möglichkeit, diese automatisch gesicherte Version statt der älteren Version zu öffnen.</para>
+<para
+>Automatisch gesicherte Dokumente werden mit einem Dateinamen in der Formn<filename
+>.IhrDateiname.autosave</filename
+> gespeichert (beachten Sie den Punkt am Beginn des Dateinamens), zum Beispiel die Datei <filename
+>spread1.ods</filename
+>wird automatisch als <filename
+>.spread1.ods.autosave</filename
+>gespeichert. Die Einstellungen für <emphasis
+>Automatische Sicherung</emphasis
+> finden Sie im <link linkend ="configinterface"
+><guilabel
+>Einrichtungsdialog</guilabel
+></link
+>.</para>
+
+<sect2 id="templates">
+<title
+>Vorlagen</title>
+<para
+>Wenn Sie eine Menge ähnlicher Dokumente verwenden. sollten Sie zuerst eine Vorlage erstellen und diese dann als Grundlage für die einzelnen Dokumente verwenden.</para>
+<para
+>Dazu erstellen Sie zuerst ein Dokument mit den gemeinsamen Elementen, dann speichern Sie die Vorlage mit <menuchoice
+><guimenu
+>Datei</guimenu
+> <guimenuitem
+>Vorlage aus Dokument erstellen ...</guimenuitem
+></menuchoice
+>. Damit öffnen Sie den Dialog <guilabel
+>Vorlage erstellen</guilabel
+>. Tragen Sie hier einen Namen für Ihre neue Vorlage in das Textfeld <guilabel
+>Name:</guilabel
+> ein und drücken Sie auf <guibutton
+>OK</guibutton
+>. Wenn Sie das nächste Mal &sheets; starten oder mit <menuchoice
+><guimenu
+>Datei</guimenu
+> <guimenuitem
+>Neu</guimenuitem
+></menuchoice
+> mit einen neuen Dokument beginnen, können Sie im Startdialog Ihre Vorlage für das neue Dokument benutzen.</para>
+<para
+>Im Dialog <guilabel
+>Vorlage erstellen</guilabel
+> können Sie auch ein anderes Bild wählen, das zusätzlich zum Namen der Vorlage im Startdialog angezeigt wird. Sie können ihre Vorlagen unter verschiedenen Gruppennamen abspeichern, die als verschiedene Seiten im Startdialog angezeigt werden.</para>
+<para
+>Vorlagen werden als <literal role="extension"
+>.kst</literal
+> Dateien unter <filename
+>~/.kde/share/apps/tables/templates/</filename
+> gespeichert. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="printing">
+<title
+>Drucken einer Tabelle</title>
+<para
+>Um eine Tabelle zu drucken, wählen Sie im Menü <menuchoice
+><guimenu
+>Datei</guimenu
+> <guimenuitem
+>Drucken ...</guimenuitem
+></menuchoice
+>. Damit öffnen den Standarddialog  <guilabel
+>Drucken</guilabel
+> von &kde;. Hier können Sie unter anderem den Drucker und die Anzahl der Kopien sowie die zu druckenden Seiten eingeben.</para>
+<para
+>In der Standardeinstellung druckt &sheets; alle Daten in der aktuellen Tabelle, aber Sie können den zu druckenden Bereich ändern, indem Sie ihn zuerst markieren und dann <guimenuitem
+>Druckbereich festlegen</guimenuitem
+> aus dem Menü <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Druckbereich</guisubmenu
+> </menuchoice
+> wählen.</para>
+<para
+>&sheets; druckt alle erforderlichen Seiten für die gesamten Daten der aktuellen Tabelle. Sie können sofort erkennen, wie eine Tabelle in unterschiedliche Seiten für den Druck aufgeteilt wird, indem Sie die Einstellung <menuchoice
+><guimenu
+>Ansicht</guimenu
+> <guimenuitem
+>Seitenumrandungen</guimenuitem
+></menuchoice
+> aktivieren. Die Ränder jeder Seite im Druckbild werden dann durch rote Linien in der Tabelle gekennzeichnet.</para>
+
+<para
+>Für eine Vorschau der Druckansicht mit Kopf- und Fußzeilen (siehe unten), wählen Sie <menuchoice
+><guimenu
+>Datei</guimenu
+> <guimenuitem
+> Druckvorschau ...</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Um das Aussehen der Druckdaten zu verbessern, können Sie die Schriftarten, Farben, Ränder und Größen der Zellen in der Tabelle ändern, lesen Sie dazu den Abschnitt <link linkend="formatspread"
+>Tabellen-Formatierung</link
+>.</para>
+
+<para
+>Sie können auch den Dialog <guilabel
+>Seitenlayout</guilabel
+> benutzen, indem Sie <menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Seitenlayout ...</guimenuitem
+></menuchoice
+> auswählen. Hier können Sie die Ausrichtung der gedruckten Seite, die Papiergröße (diese sollte zu Ihrem Drucker passen) und die Größe der Seitenränder einstellen.</para>
+<para
+>Auf der Karteikarte <guilabel
+>Tabelle</guilabel
+> finden Sie noch weitere Einstellungen. Im Bereich <guilabel
+>Druckeinstellungen</guilabel
+> können Sie festlegen, ob Gitterlinien, Kommentar- und Formelmarkierungen, Objekte und Diagramme gedruckt werden sollen. Außerdem können Sie im Abschnitt <guilabel
+>Wiederholungen auf jeder Seite</guilabel
+> Zeilen und Spalten auswählen, die auf jeder Seite gedruckt werden. Im Abschnitt <guilabel
+>Skalierung</guilabel
+> setzen Sie einen Vergrößerungsfaktor oder geben Seitenbegrenzungen für den Druck an.</para>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

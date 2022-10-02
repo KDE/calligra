@@ -1,0 +1,86 @@
+# Translation for calligra_semanticitem_location.po to Euskara/Basque (eu).
+# Copyright (C) 2021, This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# KDE euskaratzeko proiektuko arduraduna <xalba@euskalnet.net>.
+#
+# Translators:
+# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2021-01-15 07:57+0100\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.12.1\n"
+
+#: KoLocationSemanticItemFactory.cpp:34
+#, kde-format
+msgctxt "displayname of the semantic item type Location"
+msgid "Location"
+msgstr "Kokalekua"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationEditWidget.ui:17
+#, kde-format
+msgid "&Name"
+msgstr "&Izena"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationEditWidgetMarble.ui:17 KoRdfLocationViewWidgetMarble.ui:24
+#, kde-format
+msgid "Name"
+msgstr "Izena"
+
+#. i18n: ectx: property (toolTip), widget (Marble::MarbleWidget, map)
+#: KoRdfLocationEditWidgetMarble.ui:30 KoRdfLocationViewWidgetMarble.ui:31
+#, kde-format
+msgid "The Earth"
+msgstr "Lurra"
+
+#. i18n: ectx: property (whatsThis), widget (Marble::MarbleWidget, map)
+#: KoRdfLocationEditWidgetMarble.ui:33 KoRdfLocationViewWidgetMarble.ui:34
+#, kde-format
+msgid "The Marble widget displays a virtual globe."
+msgstr "Marble trepetak alegiazko globo bat azaltzen du."
+
+#. i18n: ectx: property (toolTip), widget (Marble::MarbleNavigator, zoomer)
+#: KoRdfLocationEditWidgetMarble.ui:40
+#, kde-format
+msgid "Navigation Control"
+msgstr "Nabigatzeko agintea"
+
+#. i18n: ectx: property (whatsThis), widget (Marble::MarbleNavigator, zoomer)
+#: KoRdfLocationEditWidgetMarble.ui:43
+#, kde-format
+msgid "Use this control to navigate."
+msgstr "Erabili aginte hau nabigatzeko."
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfLocationEditWidgetMarble.ui:50
+#, kde-format
+msgid "Latitude"
+msgstr "Latitudea"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: KoRdfLocationEditWidgetMarble.ui:60
+#, kde-format
+msgid "Longitude"
+msgstr "Longitudea"
+
+#: KoRdfLocationTreeWidgetItem.cpp:42
+#, kde-format
+msgid "Location Information"
+msgstr "Kokalekuari buruzko informazioa"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationViewWidget.ui:24
+#, kde-format
+msgid "&Name:"
+msgstr "&Izena:"

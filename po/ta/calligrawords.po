@@ -1,0 +1,4287 @@
+# translation of kword.po to தமிழ்
+# translation of kword.po to
+# translation of kword.po to
+# translation of kword.po to
+# Copyright (C) 2004, 2008 Free Software Foundation, Inc.
+#
+# Ambalam <tamilpc@ambalam.com>, 2004.
+# root <root@localhost.localdomain>, 2004.
+# ஸ்ரீராமதாஸ் <shriramadhas@gmail.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: kword\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"PO-Revision-Date: 2008-02-08 20:05+0530\n"
+"Last-Translator: ஸ்ரீராமதாஸ் <shriramadhas@gmail.com>\n"
+"Language-Team: தமிழ் <ubuntu-l10n-tam@lists.ubuntu.com>\n"
+"Language: ta\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, fuzzy, kde-format
+msgid "&File"
+msgstr "வடிகட்டி :"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "முடிவுக்குறிப்பு"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "&புதிய"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, kde-format
+msgid "&Display Mode"
+msgstr "&தெரியும் வகை"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Semantics"
+msgstr "புள்ளிவிவரம்"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, fuzzy, kde-format
+#| msgid "&Page Mode"
+msgid "S&tyles"
+msgstr "&பக்க முறை"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "Misc  அமைப்புகள்"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "எழுத்து பிழை திருத்தி"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "உரையை வரிசையாக்கம் செய்."
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, kde-format
+msgid "Spell Check Result"
+msgstr "சொல் திருத்தி முடிவுகள் "
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, kde-format
+msgid "Change Variable To"
+msgstr "மாறிகளை மாற்றுக..."
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr ""
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+#, fuzzy
+#| msgid "&Page Mode"
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "&பக்க முறை"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+#, fuzzy
+#| msgid "Insert Page"
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "பக்கத்தை செருகு"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#, fuzzy
+#| msgid "Frame Properties"
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "சட்ட பண்புகள்"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+#, fuzzy
+#| msgid "Create Text Frame"
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "உரை சட்டத்தை உருவாக்குக"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, fuzzy, kde-format
+#| msgid "Frame is inline"
+msgid "Baseline"
+msgstr "சட்டம் உள்ளடங்கும்"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, fuzzy, kde-format
+msgid "Character"
+msgstr "அட்டவணையை உருவாக்கு"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, kde-format
+msgid "Row"
+msgstr "கிடக்கை:"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, fuzzy, kde-format
+msgid "Page (entire) area"
+msgstr "பாதுகாக்கப்பட்ட இடத்தில் இடம் காட்டி"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, fuzzy, kde-format
+msgid "Page text area"
+msgstr "பாதுகாக்கப்பட்ட இடத்தில் இடம் காட்டி"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Paragraph area"
+msgstr "பத்தி"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, fuzzy, kde-format
+msgid "Paragraph text area"
+msgstr "பாதுகாக்கப்பட்ட இடத்தில் இடம் காட்டி"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, fuzzy, kde-format
+#| msgid "Frame &Borders"
+msgid "Left page border"
+msgstr "சட்ட ஓரங்கள்"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, fuzzy, kde-format
+#| msgid "Frame &Borders"
+msgid "Right page border"
+msgstr "சட்ட ஓரங்கள்"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, fuzzy, kde-format
+#| msgid "Frame &Borders"
+msgid "Right paragraph border"
+msgstr "சட்ட ஓரங்கள்"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, fuzzy, kde-format
+#| msgid "Frame &Borders"
+msgid "Left paragraph border"
+msgstr "சட்ட ஓரங்கள்"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Vertical Positioning"
+msgstr "நிலை"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, fuzzy, kde-format
+msgid "Top align with:"
+msgstr "வலது"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, fuzzy, kde-format
+msgid "Center align with:"
+msgstr "வலது"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, fuzzy, kde-format
+msgid "Bottom align with:"
+msgstr "வலது"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, fuzzy, kde-format
+#| msgid "From:"
+msgid "from:"
+msgstr "அனுப்புநர்:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Horizontal Positioning"
+msgstr "நிலை"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, fuzzy, kde-format
+msgid "Left align with:"
+msgstr "வலது"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, fuzzy, kde-format
+msgid "Right align with:"
+msgstr "வலது"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgid "Configure"
+msgstr "பக்கத்தை செருகு"
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Grid 1"
+msgid "Grid"
+msgstr "கட்டம் 1"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, fuzzy, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "ஆவணம்"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, fuzzy, kde-format
+#| msgid "Store Settings"
+msgid "Document Settings"
+msgstr "சேமிப்பு  அமைப்புகள்"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, fuzzy, kde-format
+#| msgid "Create a new page"
+msgid "Create New Bookmark"
+msgstr "புதிய பக்கத்தை படை"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "பெயர்:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, fuzzy, kde-format
+msgid "Columns:"
+msgstr "நெடுக்கை:"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, fuzzy, kde-format
+#| msgid "Default column spacing:"
+msgid "Column spacing:"
+msgstr "முன்இருப்பு நெடுவரி இடைவெளி:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, fuzzy, kde-format
+#| msgid "Fra&mes"
+msgid "frameset"
+msgstr "சட்டங்கள்"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, kde-format
+msgid "No framesets in document"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "சட்டதொகுதியின் பெயர்"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, fuzzy, kde-format
+#| msgid "Create a new frameset"
+msgid "Create a new frameset:"
+msgstr "புதிய சட்டத்தொகுதியை படை"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, fuzzy, kde-format
+#| msgid "Select existing frameset to connect frame to:"
+msgid "Select existing frameset to connect to:"
+msgstr "சட்டத்தை இணைக்க இருக்கும் சட்டத்தொகுதியை தேர்வு செய்யவும்"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "சட்டத்தொகுதி பெயர்"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Smart Positioning"
+msgstr "நிலை"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, kde-format
+msgid "Text Run Around"
+msgstr "உரை சுற்றி ஓடும்"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "உரை சட்டங்களை இணை"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+#, fuzzy
+#| msgid "Frame Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "சட்ட பண்புகள்"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, fuzzy, kde-format
+msgid "&Page"
+msgstr "&பக்கம் "
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Para&graph"
+msgstr "பத்தி"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, fuzzy, kde-format
+msgid "&To Character"
+msgstr "அட்டவணையை உருவாக்கு"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, fuzzy, kde-format
+msgid "&As Character"
+msgstr "அட்டவணையை உருவாக்கு"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Horizontal Alignment"
+msgstr "நிலை"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, fuzzy, kde-format
+msgid "&Left"
+msgstr "இடது"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, kde-format
+msgid "&Center"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, fuzzy, kde-format
+msgid "&Right"
+msgstr "வலது"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Vertical Alignment"
+msgstr "நிலை"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "&Bottom"
+msgstr "கீழ்:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, fuzzy, kde-format
+#| msgid "Text Run Around"
+msgid "Text Wrap-around"
+msgstr "உரை சுற்றி ஓடும்"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run through this shape"
+msgstr "இந்த சட்டத்தை முழுமையாக சுற்றி உரை ஓடாது"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Skip below this shape"
+msgstr "இந்த சட்டத்தை முழுமையாக சுற்றி உரை ஓடாது"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on left side of this shape"
+msgstr "இந்த சட்டத்தை முழுமையாக சுற்றி உரை ஓடாது"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on right side of this shape"
+msgstr "இந்த சட்டத்தை முழுமையாக சுற்றி உரை ஓடாது"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on longest side of this shape"
+msgstr "இந்த சட்டத்தை முழுமையாக சுற்றி உரை ஓடாது"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on both sides of this shape"
+msgstr "இந்த சட்டத்தை முழுமையாக சுற்றி உரை ஓடாது"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, fuzzy, kde-format
+msgid "Distance Between Shape and Text:"
+msgstr "சட்டம் மற்றும் உரையின் இடைவெளி (%1)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, fuzzy, kde-format
+msgid "Columns"
+msgstr "நெடுக்கை:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, fuzzy, kde-format
+#| msgid "&Page Mode"
+msgid "Style"
+msgstr "&பக்க முறை"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, fuzzy, kde-format
+#| msgid "Closing"
+msgid "Clone"
+msgstr "மூடப்படுகிறது"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Delete"
+msgstr "பக்கத்தை நீக்கு"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+#, fuzzy
+#| msgid "&Page Mode"
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "&பக்க முறை"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, fuzzy, kde-format
+#| msgid "&Page Mode"
+msgid "Clone Page Style"
+msgstr "&பக்க முறை"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left by:"
+msgstr "இடது:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right by:"
+msgstr "வலது:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, fuzzy, kde-format
+#| msgid "&Username:"
+msgid "&Rename"
+msgstr "பயனர்பெயர்:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "&Delete"
+msgstr "பக்கத்தை நீக்கு"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, fuzzy, kde-format
+#| msgid "Create a new page"
+msgid "Rename Bookmark"
+msgstr "புதிய பக்கத்தை படை"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, fuzzy, kde-format
+#| msgid "Create a new page"
+msgid "Select Bookmark"
+msgstr "புதிய பக்கத்தை படை"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "வடிவியல்"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page Size && Margins"
+msgstr "பக்க முறிவு "
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, fuzzy, kde-format
+msgid "Create"
+msgstr "அட்டவணையை உருவாக்கு"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, fuzzy, kde-format
+#| msgid "Salutation"
+msgid "Navigation"
+msgstr "வரவேற்பு"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Page #"
+msgstr "&பக்கம் "
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+#| msgid "Instructions"
+msgid "Section"
+msgstr "ஆணைகள் "
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr ""
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "புள்ளிவிவரம்"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "சொற்கள்:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "வரிகள்:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "நிரைகள்:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (spaces):"
+msgstr "இடைவெளிகள் உட்பட உருக்கள்:"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (no spaces):"
+msgstr "இடைவெளிகள் உட்பட உருக்கள்:"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr "கோடுகள்"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, fuzzy, kde-format
+#| msgid "Flesch reading ease:"
+msgid "Flesch reading ease"
+msgstr "ஃபிளச் எளிதான வாசிப்பு:"
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East asian characters:"
+msgstr "வடிவ எழுத்துக்கள்"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, fuzzy, kde-format
+#| msgid "Words:"
+msgid "Words"
+msgstr "சொற்கள்:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, fuzzy, kde-format
+#| msgid "Sentences:"
+msgid "Sentences"
+msgstr "வரிகள்:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, fuzzy, kde-format
+#| msgid "Syllables:"
+msgid "Syllables"
+msgstr "நிரைகள்:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, fuzzy, kde-format
+#| msgid "Lines:"
+msgid "Lines"
+msgstr "கோடுகள்"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, fuzzy, kde-format
+#| msgid "Characters without spaces:"
+msgid "Characters With Spaces"
+msgstr "இடைவெளிகள் அல்லாத உருக்கள்:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, fuzzy, kde-format
+#| msgid "Characters without spaces:"
+msgid "Characters without spaces"
+msgstr "இடைவெளிகள் அல்லாத உருக்கள்:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East Asian characters"
+msgstr "வடிவ எழுத்துக்கள்"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, fuzzy, kde-format
+#| msgid "Flesch reading ease:"
+msgid "Flesch Reading Ease"
+msgstr "ஃபிளச் எளிதான வாசிப்பு:"
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "தரம் "
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "தலைப்பு 1"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "தலைப்பு 2"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "தலைப்பு 3"
+
+#: part/i18n/stylenames.cpp:12
+#, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "கணக்கீடு பட்டியல்"
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "அகரவரிசை பட்டியல்"
+
+#: part/i18n/stylenames.cpp:14
+#, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "பொட்டு பட்டியல்"
+
+#: part/i18n/stylenames.cpp:15
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "உள்ளடக்கப் பட்டியல்"
+
+#: part/i18n/stylenames.cpp:16
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "உள்ளடக்கத் தலைப்பு 1"
+
+#: part/i18n/stylenames.cpp:17
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "உள்ளடக்கத் தலைப்பு 2"
+
+#: part/i18n/stylenames.cpp:18
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "உள்ளடக்கத் தலைப்பு 3"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "ஆவணம் தலைப்பு"
+
+#: part/i18n/stylenames.cpp:20
+#, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "தலைப்பு"
+
+#: part/i18n/stylenames.cpp:21
+#, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "அடிப்பகுதி "
+
+#: part/i18n/stylenames.cpp:24
+#, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "சாதாரண"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "எல்லைகள் 1"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "எல்லைகள் 2"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "எல்லைகள் 3"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "கிடக்கை"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "நெடுக்கை"
+
+#: part/i18n/stylenames.cpp:30
+#, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "மென்பழுப்பு"
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "கரும்பழுப்பு"
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "கருப்பு"
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "வெளிர் நீலம்"
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "கருநீலம்"
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "சிவப்பு"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "மஞ்சள்"
+
+#: part/i18n/stylenames.cpp:37
+#, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "நிறம்"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "நீலநிறம்"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "சாதாரண 1"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "சாதாரண 2"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "சாதாரண 3"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "தலைப்பு 1"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "தலைப்பு 2"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "தலைப்பு 3"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "தலைப்பு 4"
+
+#: part/i18n/stylenames.cpp:50
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "நெடுக்கை"
+
+#: part/i18n/stylenames.cpp:51
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "நெடுக்கை"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "கட்டம் 1"
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "கட்டம் 2"
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "கட்டம் 3"
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "பழுப்பு தலைப்புகள்"
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "நீல தலைப்புகள்"
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "பாரம்பரிய நீலம்"
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "பாரம்பரிய பழுப்பு "
+
+#: part/i18n/stylenames.cpp:59
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "மேல் மற்றும் கீழ் நீலம்"
+
+#: part/i18n/stylenames.cpp:60
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "மேல் மற்றும் கீழ் பழுப்பு"
+
+#: part/KWAboutData.h:20
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "Kஅலுவல் சொல் செயலி"
+
+#: part/KWAboutData.h:22
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgid "Word processor"
+msgstr "Kஅலுவல் சொல் செயலி"
+
+#: part/KWAboutData.h:24
+#, fuzzy, kde-format
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "(c) 1998-2001, The KWord Team"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr ""
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr ""
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr ""
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr ""
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr ""
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: part/KWAboutData.h:37
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Formatting stuff"
+msgstr "வடிவ எழுத்துக்கள்"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, fuzzy, kde-format
+msgid "Filter"
+msgstr "வடிகட்டி :"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistics docker"
+msgstr "புள்ளிவிவரம்"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, fuzzy, kde-format
+#| msgid "Footer"
+msgid "Foot and endnotes"
+msgstr "அடிக்குறிப்பு"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr ""
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Style Manager"
+msgstr ""
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr ""
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr ""
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr ""
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr ""
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, fuzzy, kde-format
+#| msgid "Sorting Order"
+msgid "ODF Support"
+msgstr "வரிசைப்படுத்து"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr ""
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr ""
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr ""
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr ""
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr ""
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr ""
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "K வாய்ப்பாடு "
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr ""
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr ""
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr ""
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr ""
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr ""
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr ""
+
+#: part/KWAboutData.h:65
+#, fuzzy, kde-format
+#| msgid "Endnotes"
+msgid "Enno Bartels"
+msgstr "முடிவுக்குறிப்புகள்"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr ""
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr ""
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page break icon"
+msgstr "பக்க முறிவு "
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "தங்கம் அருண்"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "thangam.arunx@gmail.com"
+
+#: part/KWDocument.cpp:495
+#, fuzzy, kde-format
+#| msgid "Copy%1-%2"
+msgid "Copy"
+msgstr "நகல்%1-%2"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgid "Standard"
+msgstr "தரம் "
+
+#: part/KWDocument.cpp:546
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Document Title"
+msgid "Document Title"
+msgstr "ஆவணம் தலைப்பு"
+
+#: part/KWDocument.cpp:553
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 1"
+msgid "Head 1"
+msgstr "தலைப்பு 1"
+
+#: part/KWDocument.cpp:559
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 2"
+msgid "Head 2"
+msgstr "தலைப்பு 2"
+
+#: part/KWDocument.cpp:565
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 3"
+msgid "Head 3"
+msgstr "தலைப்பு 3"
+
+#: part/KWDocument.cpp:571
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Bullet List"
+msgid "Bullet List"
+msgstr "பொட்டு பட்டியல்"
+
+#: part/KWGui.cpp:69
+#, kde-format
+msgid "Tools"
+msgstr ""
+
+#: part/KWOdfLoader.cpp:83
+#, fuzzy, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr "வலிதற்ற ஆவணம். மைம் வகை குறிக்கப்படவில்லை."
+
+#: part/KWOdfLoader.cpp:95
+#, fuzzy, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr "வலிதற்ற ஆவணம். மைம் வகை குறிக்கப்படவில்லை."
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "தரம் "
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:36
+#, fuzzy, kde-format
+msgid "Saved"
+msgstr "படத்தை சேமி"
+
+#: part/KWStatusBar.cpp:37
+#, fuzzy, kde-format
+#| msgid "Page %1"
+msgid "Page %1 of %2"
+msgstr "பக்கம் %1"
+
+#: part/KWStatusBar.cpp:38
+#, fuzzy, kde-format
+#| msgid "Page %1"
+msgid "Page %1-%2 of %3"
+msgstr "பக்கம் %1"
+
+#: part/KWStatusBar.cpp:39
+#, fuzzy, kde-format
+#| msgid "Lines:"
+msgid "Line %1"
+msgstr "கோடுகள்"
+
+#: part/KWStatusBar.cpp:124
+#, fuzzy, kde-format
+msgid "Page Number"
+msgstr "துவக்க பக்க எண்:"
+
+#: part/KWStatusBar.cpp:137
+#, fuzzy, kde-format
+msgid "Line Number"
+msgstr "துவக்க பக்க எண்:"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+#| msgid "&Page Mode"
+msgid "Change the page style"
+msgstr "&பக்க முறை"
+
+#: part/KWStatusBar.cpp:155
+#, fuzzy, kde-format
+#| msgid "&Page Mode"
+msgid "Page Style"
+msgstr "&பக்க முறை"
+
+#: part/KWStatusBar.cpp:169
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page Size"
+msgstr "பக்க முறிவு "
+
+#: part/KWStatusBar.cpp:184
+#, kde-format
+msgid "Saved/Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:197
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr ""
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr ""
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Frame Properties"
+msgid "Shape Properties..."
+msgstr "சட்ட பண்புகள்"
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr ""
+
+#: part/KWView.cpp:271
+#, kde-format
+msgid "Create Template From Document..."
+msgstr ""
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr ""
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+
+#: part/KWView.cpp:292
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Show Formatting Characters"
+msgstr "வடிவ எழுத்துக்கள்"
+
+#: part/KWView.cpp:298
+#, fuzzy, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr "அச்சிடப்படாத எழுத்துகளை நிலைமாற்றி காண்பிக்கவும்."
+
+#: part/KWView.cpp:299
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of non-printing characters.<br><br>When this is "
+#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#| "printing characters."
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+"அச்சிடப்படாத எழுத்துகளை நிலைமாற்றி காண்பிக்கவும்.<br><br>இது செயலாக்கப்பட்ட பின், தத்தல், "
+"இடைவெளிகள், நகர்த்தி திரும்புகை மற்றும் மற்ற அச்சிடப்படாத எழுத்துகளை KWord காண்பிக்கும்."
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr ""
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr ""
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+
+#: part/KWView.cpp:310
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Text Shape Borders"
+msgstr "அட்டவணை ஓரங்களை உள்ளமை"
+
+#: part/KWView.cpp:311
+#, fuzzy, kde-format
+msgid "Turns the border display on and off"
+msgstr "எல்லை காட்சி நிறுத்து/தொடங்கு "
+
+#: part/KWView.cpp:317
+#, fuzzy, kde-format
+#| msgid ""
+#| "Turns the border display on and off.<br><br>The borders are never "
+#| "printed. This option is useful to see how the document will appear on the "
+#| "printed page."
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+"எல்லை காட்சியை காட்டுக மற்றும் மறைக்க செய்யும்.<br><br>எல்லைகள் அச்சிடப்படாது. ஆவணங்கள் "
+"அச்சிட்ட பக்கத்தில் எப்படி இருக்கும் என்பதை இந்த தேர்வு காண்பிக்க உபயோகிக்கலாம்."
+
+#: part/KWView.cpp:319
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Table Borders"
+msgstr "அட்டவணை ஓரங்களை உள்ளமை"
+
+#: part/KWView.cpp:325
+#, fuzzy, kde-format
+msgid "Toggle the display of table borders"
+msgstr "அச்சிடப்படாத எழுத்துகளை நிலைமாற்றி காண்பிக்கவும்."
+
+#: part/KWView.cpp:326
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of non-printing characters.<br><br>When this is "
+#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#| "printing characters."
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+"அச்சிடப்படாத எழுத்துகளை நிலைமாற்றி காண்பிக்கவும்.<br><br>இது செயலாக்கப்பட்ட பின், தத்தல், "
+"இடைவெளிகள், நகர்த்தி திரும்புகை மற்றும் மற்ற அச்சிடப்படாத எழுத்துகளை KWord காண்பிக்கும்."
+
+#: part/KWView.cpp:328
+#, kde-format
+msgid "Show Section Bounds"
+msgstr ""
+
+#: part/KWView.cpp:334
+#, fuzzy, kde-format
+msgid "Toggle the display of section bounds"
+msgstr "அச்சிடப்படாத எழுத்துகளை நிலைமாற்றி காண்பிக்கவும்."
+
+#: part/KWView.cpp:335
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of non-printing characters.<br><br>When this is "
+#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#| "printing characters."
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+"அச்சிடப்படாத எழுத்துகளை நிலைமாற்றி காண்பிக்கவும்.<br><br>இது செயலாக்கப்பட்ட பின், தத்தல், "
+"இடைவெளிகள், நகர்த்தி திரும்புகை மற்றும் மற்ற அச்சிடப்படாத எழுத்துகளை KWord காண்பிக்கும்."
+
+#: part/KWView.cpp:337
+#, kde-format
+msgid "Show Rulers"
+msgstr "அளவுகோல்களை காட்டு."
+
+#: part/KWView.cpp:339
+#, fuzzy, kde-format
+msgid "Shows or hides rulers"
+msgstr "அளவுகோல்களை  காட்டு அல்லது மறை."
+
+#: part/KWView.cpp:340
+#, fuzzy, kde-format
+#| msgid ""
+#| "The rulers are the white measuring spaces top and left of the document. "
+#| "The rulers show the position and width of pages and of frames and can be "
+#| "used to position tabulators among others.<p>Uncheck this to disable the "
+#| "rulers from being displayed."
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+"வரைகோல்கள் என்பது ஆவணத்தின் மேல் மற்றும் இடதுபுறம் உள்ள வெண்மையான அளவுகோல்களாகும். இவை "
+"பக்கங்களின் இடம் மற்றும் அகல்த்தை காட்டும். பட்டியலாக்கியின் இடத்தையும் மற்றும் பலவற்றுக்கு "
+"உதவும்.<p>வரைகோல்களை நீக்க இந்த குறிப்புப்பெட்டியின் குறியை நீக்குக."
+
+#: part/KWView.cpp:351
+#, fuzzy, kde-format
+msgid "Snap to Grid"
+msgstr "முடிப்பியை காட்டு"
+
+#: part/KWView.cpp:359
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Show Status Bar"
+msgstr "நிலைப்பட்டையை காட்டு"
+
+#: part/KWView.cpp:360
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Shows or hides the status bar"
+msgstr "நிலைப்பட்டையை காட்டு"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr ""
+
+#: part/KWView.cpp:374
+#, kde-format
+msgid "Semantic Stylesheets..."
+msgstr ""
+
+#: part/KWView.cpp:376
+#, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr ""
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+
+#: part/KWView.cpp:392
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgid "Configure..."
+msgstr "பக்கத்தை செருகு"
+
+#: part/KWView.cpp:401
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Page Layout..."
+msgstr "பக்கம் உருவரை"
+
+#: part/KWView.cpp:403
+#, fuzzy, kde-format
+msgid "Change properties of entire page"
+msgstr "முழு பக்கத்தின் பண்புகளை மாற்று."
+
+#: part/KWView.cpp:404
+#, fuzzy, kde-format
+#| msgid ""
+#| "Change properties of the entire page.<p>Currently you can change paper "
+#| "size, paper orientation, header and footer sizes, and column settings."
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+"முழு பக்கத்தின் பண்புகளை மாற்று.<p>தற்போது உங்களால் பக்கத்தின் அளவு, பக்கத்தின் "
+"ஆற்றுபடுத்தல், தலைப்பு மற்றும் முடிப்பு அளவுகள், மற்றும் நெடுக்கை அமைப்புகள் மாற்றலாம்."
+
+#: part/KWView.cpp:407
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Create Header"
+msgstr "உரை சட்டத்தை உருவாக்குக"
+
+#: part/KWView.cpp:413
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Create Footer"
+msgstr "உரை சட்டத்தை உருவாக்குக"
+
+#: part/KWView.cpp:420
+#, kde-format
+msgid "Show Comments"
+msgstr ""
+
+#: part/KWView.cpp:421
+#, kde-format
+msgid "Shows comments in the document"
+msgstr ""
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr ""
+
+#: part/KWView.cpp:428
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Shows or hides word counting in status bar"
+msgstr "நிலைப்பட்டையை காட்டு"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page Setup"
+msgstr "பக்க முறிவு "
+
+#: part/pagetool/KWPageTool.cpp:89
+#, fuzzy, kde-format
+#| msgid "Even Pages Footer"
+msgid "Header & Footer"
+msgstr "இரட்டைப்படையான பக்கங்கள் அடிகுறிப்பு"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Page layout"
+msgstr "பக்கம் உருவரை"
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, fuzzy, kde-format
+#| msgid "New..."
+msgid "..."
+msgstr "புதிய... "
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgctxt "Next search result"
+msgid "Next"
+msgstr "பக்கத்தை செருகு"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, kde-format
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, kde-format
+msgctxt "Search options"
+msgid "Options"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, kde-format
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, kde-format
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, kde-format
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, kde-format
+msgid "Replace"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "ஒற்றைப்படையான பக்கங்களின் தலைப்பு"
+
+#: part/Words.cpp:47
+#, kde-format
+msgid "Even Pages Header"
+msgstr "இரட்டைப்படையான பக்கங்களின் தலைப்பு"
+
+#: part/Words.cpp:49
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "ஒற்றைப்படையான பக்கங்கள் அடிகுறிப்பு"
+
+#: part/Words.cpp:51
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "இரட்டைப்படையான பக்கங்கள் அடிகுறிப்பு"
+
+#: part/Words.cpp:53
+#, fuzzy, kde-format
+msgid "Main text"
+msgstr "உரையை ஒட்டு"
+
+#: part/Words.cpp:55
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgid "Other text"
+msgstr "பக்கத்தை செருகு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "&பக்கம் "
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "பத்தி"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "அட்டவணையை உருவாக்கு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "அட்டவணையை உருவாக்கு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "இடது"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "வலது"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "கீழ்:"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Wrap-around"
+#~ msgstr "உரை சுற்றி ஓடும்"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "இந்த சட்டத்தை முழுமையாக சுற்றி உரை ஓடாது"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "இந்த சட்டத்தை முழுமையாக சுற்றி உரை ஓடாது"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "இந்த சட்டத்தை முழுமையாக சுற்றி உரை ஓடாது"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "இந்த சட்டத்தை முழுமையாக சுற்றி உரை ஓடாது"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "இந்த சட்டத்தை முழுமையாக சுற்றி உரை ஓடாது"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "இந்த சட்டத்தை முழுமையாக சுற்றி உரை ஓடாது"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance Between Shape and Text:"
+#~ msgstr "சட்டம் மற்றும் உரையின் இடைவெளி (%1)"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "நிலை"
+
+#, fuzzy
+#~| msgid "From:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "அனுப்புநர்:"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "நிலை"
+
+#, fuzzy
+#~| msgid "Name of frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "சட்டதொகுதியின் பெயர்"
+
+#, fuzzy
+#~| msgid "Create a new frameset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "புதிய சட்டத்தொகுதியை படை"
+
+#, fuzzy
+#~| msgid "Select existing frameset to connect frame to:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select existing frameset to connect to:"
+#~ msgstr "சட்டத்தை இணைக்க இருக்கும் சட்டத்தொகுதியை தேர்வு செய்யவும்"
+
+#, fuzzy
+#~| msgid "Frameset Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "சட்டத்தொகுதி பெயர்"
+
+#, fuzzy
+#~| msgid "&Username:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "பயனர்பெயர்:"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "பக்கத்தை நீக்கு"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "பெயர்:"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "பக்க முறிவு "
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "இடது:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "வலது:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "நெடுக்கை:"
+
+#, fuzzy
+#~| msgid "Default column spacing:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "முன்இருப்பு நெடுவரி இடைவெளி:"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "சொற்கள்:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "வரிகள்:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "நிரைகள்:"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "கோடுகள்"
+
+#, fuzzy
+#~| msgid "Characters without spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "இடைவெளிகள் அல்லாத உருக்கள்:"
+
+#, fuzzy
+#~| msgid "Characters without spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "இடைவெளிகள் அல்லாத உருக்கள்:"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "வடிவ எழுத்துக்கள்"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch Reading Ease"
+#~ msgstr "ஃபிளச் எளிதான வாசிப்பு:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "வடிகட்டி :"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "முடிவுக்குறிப்பு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&புதிய"
+
+#, fuzzy
+#~| msgid "&Display Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "&தெரியும் வகை"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "புள்ளிவிவரம்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Misc  அமைப்புகள்"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "எழுத்து பிழை திருத்தி"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "உரையை வரிசையாக்கம் செய்."
+
+#, fuzzy
+#~| msgid "Spell Check Result"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "சொல் திருத்தி முடிவுகள் "
+
+#, fuzzy
+#~| msgid "Change Variable To"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "மாறிகளை மாற்றுக..."
+
+#, fuzzy
+#~| msgid "New..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "புதிய... "
+
+#, fuzzy
+#~| msgid "Frame is inline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "சட்டம் உள்ளடங்கும்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "அட்டவணையை உருவாக்கு"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "கிடக்கை:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "பாதுகாக்கப்பட்ட இடத்தில் இடம் காட்டி"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "பத்தி"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "பாதுகாக்கப்பட்ட இடத்தில் இடம் காட்டி"
+
+#, fuzzy
+#~| msgid "Frame &Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "சட்ட ஓரங்கள்"
+
+#, fuzzy
+#~| msgid "Frame &Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "சட்ட ஓரங்கள்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "கட்டம் 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "ஆவணம்"
+
+#, fuzzy
+#~| msgid "Store Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "சேமிப்பு  அமைப்புகள்"
+
+#, fuzzy
+#~| msgid "Create a new page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "புதிய பக்கத்தை படை"
+
+#, fuzzy
+#~| msgid "Fra&mes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "சட்டங்கள்"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "நிலை"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Run Around"
+#~ msgstr "உரை சுற்றி ஓடும்"
+
+#, fuzzy
+#~| msgid "Connect Text Frames"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "உரை சட்டங்களை இணை"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "நெடுக்கை:"
+
+#, fuzzy
+#~| msgid "Closing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "மூடப்படுகிறது"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "பக்கத்தை நீக்கு"
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "&பக்க முறை"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "வடிவியல்"
+
+#, fuzzy
+#~| msgid "Salutation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "வரவேற்பு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "&பக்கம் "
+
+#, fuzzy
+#~| msgid "Instructions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "ஆணைகள் "
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "புள்ளிவிவரம்"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "சொற்கள்:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "வரிகள்:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "நிரைகள்:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "இடைவெளிகள் உட்பட உருக்கள்:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "இடைவெளிகள் உட்பட உருக்கள்:"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "கோடுகள்"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch reading ease"
+#~ msgstr "ஃபிளச் எளிதான வாசிப்பு:"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "வடிவ எழுத்துக்கள்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Standard"
+#~ msgstr "தரம் "
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "தலைப்பு 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "தலைப்பு 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "தலைப்பு 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Enumerated List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "கணக்கீடு பட்டியல்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Alphabetical List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "அகரவரிசை பட்டியல்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "பொட்டு பட்டியல்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "உள்ளடக்கப் பட்டியல்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "உள்ளடக்கத் தலைப்பு 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "உள்ளடக்கத் தலைப்பு 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "உள்ளடக்கத் தலைப்பு 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "ஆவணம் தலைப்பு"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "தலைப்பு"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "அடிப்பகுதி "
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Plain"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "சாதாரண"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "எல்லைகள் 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "எல்லைகள் 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "எல்லைகள் 3"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "கிடக்கை:"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "நெடுக்கை:"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "மென்பழுப்பு"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "கரும்பழுப்பு"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "கருப்பு"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "வெளிர் நீலம்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "கருநீலம்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "சிவப்பு"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "மஞ்சள்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Colorful"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "நிறம்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bluish"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "நீலநிறம்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "சாதாரண 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "சாதாரண 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "சாதாரண 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "தலைப்பு 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "தலைப்பு 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "தலைப்பு 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 4"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "தலைப்பு 4"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "நெடுக்கை"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "நெடுக்கை"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "கட்டம் 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "கட்டம் 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "கட்டம் 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "பழுப்பு தலைப்புகள்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "நீல தலைப்புகள்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "பாரம்பரிய நீலம்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "பாரம்பரிய பழுப்பு "
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "மேல் மற்றும் கீழ் நீலம்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "மேல் மற்றும் கீழ் பழுப்பு"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "Kஅலுவல் சொல் செயலி"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "Kஅலுவல் சொல் செயலி"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "(c) 1998-2001, The KWord Team"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "வடிவ எழுத்துக்கள்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "வடிகட்டி :"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "புள்ளிவிவரம்"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "அடிக்குறிப்பு"
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "K வாய்ப்பாடு "
+
+#, fuzzy
+#~| msgid "Endnotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "முடிவுக்குறிப்புகள்"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "பக்க முறிவு "
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "தங்கம் அருண்"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "thangam.arunx@gmail.com"
+
+#, fuzzy
+#~| msgid "Copy%1-%2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "நகல்%1-%2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "தரம் "
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "ஆவணம் தலைப்பு"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "தலைப்பு 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "தலைப்பு 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "தலைப்பு 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "பொட்டு பட்டியல்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr "வலிதற்ற ஆவணம். மைம் வகை குறிக்கப்படவில்லை."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr "வலிதற்ற ஆவணம். மைம் வகை குறிக்கப்படவில்லை."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "படத்தை சேமி"
+
+#, fuzzy
+#~| msgid "Page %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "பக்கம் %1"
+
+#, fuzzy
+#~| msgid "Page %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "பக்கம் %1"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "கோடுகள்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "துவக்க பக்க எண்:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "துவக்க பக்க எண்:"
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "&பக்க முறை"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "பக்க முறிவு "
+
+#, fuzzy
+#~| msgid "Frame Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "சட்ட பண்புகள்"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "வடிவ எழுத்துக்கள்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "அச்சிடப்படாத எழுத்துகளை நிலைமாற்றி காண்பிக்கவும்."
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br><br>When this is "
+#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~ "enabled, Words shows you tabs, spaces, carriage returns and other non-"
+#~ "printing characters."
+#~ msgstr ""
+#~ "அச்சிடப்படாத எழுத்துகளை நிலைமாற்றி காண்பிக்கவும்.<br><br>இது செயலாக்கப்பட்ட பின், "
+#~ "தத்தல், இடைவெளிகள், நகர்த்தி திரும்புகை மற்றும் மற்ற அச்சிடப்படாத எழுத்துகளை KWord "
+#~ "காண்பிக்கும்."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Turns the border display on and off"
+#~ msgstr "எல்லை காட்சி நிறுத்து/தொடங்கு "
+
+#, fuzzy
+#~| msgid ""
+#~| "Turns the border display on and off.<br><br>The borders are never "
+#~| "printed. This option is useful to see how the document will appear on "
+#~| "the printed page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Turns the border display on and off.<br/><br/>The borders are never "
+#~ "printed. This option is useful to see how the document will appear on the "
+#~ "printed page."
+#~ msgstr ""
+#~ "எல்லை காட்சியை காட்டுக மற்றும் மறைக்க செய்யும்.<br><br>எல்லைகள் அச்சிடப்படாது. ஆவணங்கள் "
+#~ "அச்சிட்ட பக்கத்தில் எப்படி இருக்கும் என்பதை இந்த தேர்வு காண்பிக்க உபயோகிக்கலாம்."
+
+#, fuzzy
+#~| msgid "Configure Table Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "அட்டவணை ஓரங்களை உள்ளமை"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of table borders"
+#~ msgstr "அச்சிடப்படாத எழுத்துகளை நிலைமாற்றி காண்பிக்கவும்."
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br><br>When this is "
+#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+#~ "shows you any invisible table borders with a thin gray line."
+#~ msgstr ""
+#~ "அச்சிடப்படாத எழுத்துகளை நிலைமாற்றி காண்பிக்கவும்.<br><br>இது செயலாக்கப்பட்ட பின், "
+#~ "தத்தல், இடைவெளிகள், நகர்த்தி திரும்புகை மற்றும் மற்ற அச்சிடப்படாத எழுத்துகளை KWord "
+#~ "காண்பிக்கும்."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of section bounds"
+#~ msgstr "அச்சிடப்படாத எழுத்துகளை நிலைமாற்றி காண்பிக்கவும்."
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br><br>When this is "
+#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+#~ "section bounds will be indicated with a thin gray horizontal brackets."
+#~ msgstr ""
+#~ "அச்சிடப்படாத எழுத்துகளை நிலைமாற்றி காண்பிக்கவும்.<br><br>இது செயலாக்கப்பட்ட பின், "
+#~ "தத்தல், இடைவெளிகள், நகர்த்தி திரும்புகை மற்றும் மற்ற அச்சிடப்படாத எழுத்துகளை KWord "
+#~ "காண்பிக்கும்."
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "அளவுகோல்களை காட்டு."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "அளவுகோல்களை  காட்டு அல்லது மறை."
+
+#, fuzzy
+#~| msgid ""
+#~| "The rulers are the white measuring spaces top and left of the document. "
+#~| "The rulers show the position and width of pages and of frames and can be "
+#~| "used to position tabulators among others.<p>Uncheck this to disable the "
+#~| "rulers from being displayed."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The rulers are the white measuring spaces top and left of the document. "
+#~ "The rulers show the position and width of pages and of frames and can be "
+#~ "used to position tabulators among others.<p>Uncheck this to disable the "
+#~ "rulers from being displayed.</p>"
+#~ msgstr ""
+#~ "வரைகோல்கள் என்பது ஆவணத்தின் மேல் மற்றும் இடதுபுறம் உள்ள வெண்மையான அளவுகோல்களாகும். இவை "
+#~ "பக்கங்களின் இடம் மற்றும் அகல்த்தை காட்டும். பட்டியலாக்கியின் இடத்தையும் மற்றும் பலவற்றுக்கு "
+#~ "உதவும்.<p>வரைகோல்களை நீக்க இந்த குறிப்புப்பெட்டியின் குறியை நீக்குக."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "முடிப்பியை காட்டு"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "நிலைப்பட்டையை காட்டு"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "நிலைப்பட்டையை காட்டு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "அட்டவணையை உருவாக்கு"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "பக்கத்தை செருகு"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "பக்கம் உருவரை"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "முழு பக்கத்தின் பண்புகளை மாற்று."
+
+#, fuzzy
+#~| msgid ""
+#~| "Change properties of the entire page.<p>Currently you can change paper "
+#~| "size, paper orientation, header and footer sizes, and column settings."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Change properties of the entire page.<p>Currently you can change paper "
+#~ "size, paper orientation, header and footer sizes, and column settings.</p>"
+#~ msgstr ""
+#~ "முழு பக்கத்தின் பண்புகளை மாற்று.<p>தற்போது உங்களால் பக்கத்தின் அளவு, பக்கத்தின் "
+#~ "ஆற்றுபடுத்தல், தலைப்பு மற்றும் முடிப்பு அளவுகள், மற்றும் நெடுக்கை அமைப்புகள் மாற்றலாம்."
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "உரை சட்டத்தை உருவாக்குக"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "உரை சட்டத்தை உருவாக்குக"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "நிலைப்பட்டையை காட்டு"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "பக்க முறிவு "
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "இரட்டைப்படையான பக்கங்கள் அடிகுறிப்பு"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "பக்கம் உருவரை"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "பக்கத்தை செருகு"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "ஒற்றைப்படையான பக்கங்களின் தலைப்பு"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "இரட்டைப்படையான பக்கங்களின் தலைப்பு"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "ஒற்றைப்படையான பக்கங்கள் அடிகுறிப்பு"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "இரட்டைப்படையான பக்கங்கள் அடிகுறிப்பு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "உரையை ஒட்டு"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "பக்கத்தை செருகு"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "Kஅலுவல் சொல் செயலி"
+
+#, fuzzy
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "(c) 1998-2001, The KWord Team"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Select Cover Image..."
+#~ msgstr "பக்கத்தை செருகு"
+
+#, fuzzy
+#~| msgid "Address Selection"
+#~ msgid "Cover selection"
+#~ msgstr "முகவரி தேர்வு"
+
+#, fuzzy
+#~| msgid "Instructions"
+#~ msgid "Edit section"
+#~ msgstr "ஆணைகள் "
+
+#, fuzzy
+#~ msgid "Main"
+#~ msgstr "உரையை ஒட்டு"
+
+#, fuzzy
+#~| msgid "Enter entry name:"
+#~ msgid "Enter actor's name here"
+#~ msgstr "பெயரை உள்ளிடு: "
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Actor description:"
+#~ msgstr "தானியக்க சரிபடுத்து..."
+
+#, fuzzy
+#~ msgid "1st Edit"
+#~ msgstr "உரையை வரிசையாக்கம் செய்."
+
+#, fuzzy
+#~ msgid "2nd Edit"
+#~ msgstr "உரையை வரிசையாக்கம் செய்."
+
+#, fuzzy
+#~ msgid "3rd Edit"
+#~ msgstr "உரையை வரிசையாக்கம் செய்."
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Author's section"
+#~ msgstr "தானியக்க சரிபடுத்து..."
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgid "Badge:"
+#~ msgstr "&பக்க முறை"
+
+#, fuzzy
+#~| msgid "Instructions"
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "ஆணைகள் "
+
+#~ msgid "File to open"
+#~ msgstr "திறக்க வேண்டிய கோப்பு"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "உரை சட்டத்தை உருவாக்குக"
+
+#, fuzzy
+#~| msgid "Delete Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "சட்டத்தை நீக்கு"
+
+#~ msgid "General"
+#~ msgstr "பொது"
+
+#~ msgid "Protect size and position"
+#~ msgstr "அளவை மற்றும் நிலையை காத்திடுக."
+
+#~ msgid "Position"
+#~ msgstr "நிலை"
+
+#~ msgid "Width:"
+#~ msgstr "அகலம்:"
+
+#~ msgid "Height:"
+#~ msgstr "உயரம்:"
+
+#, fuzzy
+#~ msgid "Margins"
+#~ msgstr " %1ல் ஓரப்பகுதி"
+
+#~ msgid "Synchronize changes"
+#~ msgstr "ஒத்தியக்கு மாறுதல்"
+
+#~ msgid "Bottom:"
+#~ msgstr "கீழ்:"
+
+#~ msgid "Top:"
+#~ msgstr "மேல்:"
+
+#~ msgid "Right:"
+#~ msgstr "வலது:"
+
+#~ msgid "Left:"
+#~ msgstr "இடது:"
+
+#~ msgid "Create a new page"
+#~ msgstr "புதிய பக்கத்தை படை"
+
+#~ msgid "Resize last frame"
+#~ msgstr "கடைசி சட்டத்தின் அளவு மாற்று"
+
+#, fuzzy
+#~ msgid "Do not show the extra text"
+#~ msgstr "இதர உரைகளை காட்ட வேண்டாம்"
+
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "தற்போதைய ஓட்டத்துடன் சட்டத்தை மீண்டும் இணை"
+
+#, fuzzy
+#~ msgid "Do not create a followup frame"
+#~ msgstr "தொடர்ச்சியான சட்டத்தை படைக்காதே"
+
+#, fuzzy
+#~| msgid "Place a copy of this frame"
+#~ msgid "Copy this Frame"
+#~ msgstr "இந்த சட்டத்தின நகலை வை"
+
+#~ msgid "Protect content"
+#~ msgstr "உள்ளடக்கம் காத்திடுக"
+
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "இந்த சட்டம் முந்தைய சட்டத்தின் நகல்"
+
+#~ msgid "Changes will be applied to all frames in frameset"
+#~ msgstr "சட்டத்தொகுதியில் உள்ள அனைத்து சட்டங்களும் மாற்றப்படும்"
+
+#~ msgid "Retain original aspect ratio"
+#~ msgstr "மூல வடிவ-விகிதத்தை தக்கவை"
+
+#, fuzzy
+#~| msgid "Select All Frames"
+#~ msgid "Select All Shapes"
+#~ msgstr "எல்லா சட்டத்தொகுப்புகளை தேர்ந்தெடு."
+
+#~ msgid "Create Linked Copy"
+#~ msgstr "தொடுப்புடைய இணை நகலை உருவாக்கு "
+
+#~ msgid "Create a copy of the current frame, always showing the same contents"
+#~ msgstr "நடப்பு சட்டத்தின் ஒரு நகலை உருவாக்கு, எப்போதும் ஒரே பொருளடக்கத்தை "
+
+#~ msgid ""
+#~ "Create a copy of the current frame, that remains linked to it. This means "
+#~ "they always show the same contents: modifying the contents in such a "
+#~ "frame will update all its linked copies."
+#~ msgstr ""
+#~ "தற்போதுள்ள சட்டத்தின் நகலை உருவாக்கு, அது இணைக்கப்பட்டதாகவே இருக்கும். அப்படியென்றால் "
+#~ "அது எப்போதும் ஒரே உள்ளடகத்தை காண்பிக்கும்: அது போன்ற சட்டத்தின் உள்ளடகத்தை நீங்கள் "
+#~ "மாற்றினால் இணைக்கப்பட்ட நகல்களை மேம்படுத்திவிடும். "
+
+#, fuzzy
+#~| msgid "Create Linked Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "தொடுப்புடைய இணை நகலை உருவாக்கு "
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "பக்கத்தை செருகு"
+
+#, fuzzy
+#~| msgid "Remove entry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "உள்ளீட்டை நீக்கு"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgid "Characters (excluding spaces):"
+#~ msgstr "இடைவெளிகள் உட்பட உருக்கள்:"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgid "Flesch Reading Ease:"
+#~ msgstr "ஃபிளச் எளிதான வாசிப்பு:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgid "Preferences"
+#~ msgstr "வரிகள்:"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgid "Automatically update"
+#~ msgstr "தன்னியக்க"
+
+#~ msgid "F&ormat"
+#~ msgstr "வடிவமை"
+
+#~ msgid "Invalid document. No mimetype specified."
+#~ msgstr "வலிதற்ற ஆவணம். மைம் வகை குறிக்கப்படவில்லை."
+
+#, fuzzy
+#~| msgid ""
+#~| "Invalid document. Expected mimetype application/x-kword or application/"
+#~| "vnd.kde.kword, got %1"
+#~ msgid ""
+#~ "Invalid document. Expected mimetype application/x-words or application/"
+#~ "vnd.kde.words, got %1"
+#~ msgstr ""
+#~ "வலிதற்ற ஆவணம். எதிர்பார்க்கபட்டது மைம் வகை application/x-kword அல்லது application/"
+#~ "vnd.kde.kword, கிடைத்ததோ %1"
+
+#~ msgid "Invalid document. Paper size: %1x%2"
+#~ msgstr "வலிதற்ற ஆவணம். மைம் வகை குறிக்கப்படவில்லை %1x%2."
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate footnote text"
+#~ msgstr "தகவல்தள பொருளை உருவாக்க முடியவில்லை"
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate note-text"
+#~ msgstr "தகவல்தள பொருளை உருவாக்க முடியவில்லை"
+
+#, fuzzy
+#~| msgid "Raise Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "சட்டத்தை நகர்த்து"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgid "Create Frame-clip"
+#~ msgstr "உரை சட்டத்தை உருவாக்குக"
+
+#, fuzzy
+#~| msgid "Remove record"
+#~ msgid "Remove Frame-clip"
+#~ msgstr "பதிவை நீக்கு"
+
+#, fuzzy
+#~ msgid "Force the remainder of the text into the next page"
+#~ msgstr "அடுத்த பக்கத்திற்கு உறையின் நினைவூட்டியை அனுப்பவும்."
+
+#, fuzzy
+#~| msgid ""
+#~| "This inserts a non-printing character at the current cursor position. "
+#~| "All text after this point will be moved into the next page."
+#~ msgid "All text after this point will be moved into the next page."
+#~ msgstr ""
+#~ "தற்போதுள்ள காட்டி இடத்தில் அச்சிடப்படாத எழுத்துகளை சொருகும். இந்தப் புள்ளிக்கு பின்வரும் "
+#~ "உரைகளை அடுத்த பக்கத்திற்கு அனுப்பப்படும்."
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgid "Form"
+#~ msgstr "வடிவமை"
+
+#, fuzzy
+#~ msgid "Enable Document Headers"
+#~ msgstr "வெளி ஆவணம் பயன்பாட்டில்"
+
+#, fuzzy
+#~ msgid "Enable Document Footers"
+#~ msgstr "உள் ஆவணம் பயன்பாட்டில்"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "சொற்கள்:"
+
+#~ msgid "Number of pages:"
+#~ msgstr "பக்கங்களின் எண்ணிக்கை:"
+
+#~ msgid "Number of frames:"
+#~ msgstr "சட்டத்தின்  எண்ணிக்கை:"
+
+#~ msgid "Number of pictures:"
+#~ msgstr "படத்தின் எண்ணிக்கை:"
+
+#~ msgid "Number of tables:"
+#~ msgstr "அட்டவணையின் எண்ணிக்கை:"
+
+#~ msgid "Text"
+#~ msgstr "உரை"
+
+#, fuzzy
+#~| msgid "&Include text from foot- and endnotes"
+#~ msgid "Include text from foot- and endnotes"
+#~ msgstr "அடி மற்றும் நிறைவு குறிப்பில் இருந்து உரையை சேர்"
+
+#~ msgid "Characters without spaces:"
+#~ msgstr "இடைவெளிகள் அல்லாத உருக்கள்:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgid "Characters incl. spaces"
+#~ msgstr "இடைவெளிகள் உட்பட உருக்கள்:"
+
+#~ msgid "approximately %1"
+#~ msgstr "கிட்டதட்ட %1"
+
+#~ msgid "Sentence, word and letter counts for this document"
+#~ msgstr "இந்த ஆவணத்தின் வரி, வார்தை மற்றும் எழுத்து எண்ணிக்கை"
+
+#, fuzzy
+#~| msgid ""
+#~| "Information on the number of letters, words, syllables and sentences for "
+#~| "this document.<p>Evaluates readability using the Flesch reading score."
+#~ msgid ""
+#~ "Information on the number of letters, words, syllables and sentences for "
+#~ "this document.<p>Evaluates readability using the Flesch reading score.</p>"
+#~ msgstr ""
+#~ "இந்த ஆவணத்தின் கடிதம், வார்தை மற்றும் எழுத்து எண்ணிக்கை பற்றிய தகவல்.<p>Evaluates "
+#~ "readability using the Flesch reading score.."
+
+#, fuzzy
+#~ msgid "Shows and hides header display"
+#~ msgstr " தலைப்புப் காட்சியாய் மறைத்து  காண்பி"
+
+#, fuzzy
+#~| msgid ""
+#~| "Selecting this option toggles the display of headers in KWord."
+#~| "<br><br>Headers are special frames at the top of each page which can "
+#~| "contain page numbers or other information."
+#~ msgid ""
+#~ "Selecting this option toggles the display of headers in Words.<br/><br/"
+#~ ">Headers are special frames at the top of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "இந்த தேர்வை தேர்வு செய்வதால் KWordல் உள்ள தலைப்பின் காட்சியை நிலைமாற்றலாம் ."
+#~ "<br><br>ஒவ்வொரு பக்கத்தின் மேல் பக்க எண் அல்லது மற்ற விவரங்கள் உள்ள தலைப்புகள் சிறப்பான "
+#~ "சட்டங்களாகும்."
+
+#, fuzzy
+#~ msgid "Shows and hides footer display"
+#~ msgstr "அடிப்பகுதியை காட்சியாய் மறைத்து காண்பி"
+
+#, fuzzy
+#~| msgid ""
+#~| "Selecting this option toggles the display of footers in KWord. "
+#~| "<br><br>Footers are special frames at the bottom of each page which can "
+#~| "contain page numbers or other information."
+#~ msgid ""
+#~ "Selecting this option toggles the display of footers in Words. <br/><br/"
+#~ ">Footers are special shapes at the bottom of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "இந்த விருப்பத்தை தேர்வு செய்வதால் KWordல் உள்ள அடிப்பகுதியின் காட்சியை நிலைமாற்றலாம் ."
+#~ "<br><br>ஒவ்வொரு பக்கத்தின் கீழ் பக்க எண் அல்லது மற்ற விவரங்கள் உள்ள அடிப்பகுதிகள் "
+#~ "சிறப்பான சட்டங்களாகும்."
+
+#, fuzzy
+#~| msgid "Raise Frame"
+#~ msgid "Raise Shape"
+#~ msgstr "சட்டத்தை நகர்த்து"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames"
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shape"
+#~ msgstr "தற்போதுள்ள தேர்வு செய்த சட்டத்தை அனைத்து சட்டத்திற்கும் மேல் அதனை வைக்கவும்."
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames. This is only useful if frames overlap each other. If "
+#~| "multiple frames are selected they are all raised in turn."
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shapes. This is only useful if shapes overlap each other. If multiple "
+#~ "shapes are selected they are all raised in turn."
+#~ msgstr ""
+#~ "தற்போதுள்ள தேர்வு செய்த சட்டத்தை அனைத்து சட்டத்திற்கும் மேல் அதனை வைக்கவும்.சட்டங்கள் "
+#~ "மேலுக்குமேல் ஆகும் பொழுது மட்டும் இது உபயோகப்படும்.பலவித சட்டங்கள் தேர்வு செய்யப்பட்டால் "
+#~ "ஒன்று ஒன்றாக மேல் ஏற்றப்படும்."
+
+#, fuzzy
+#~| msgid "Lower Frame"
+#~ msgid "Lower Shape"
+#~ msgstr "சட்டத்தை இறக்கு"
+
+#, fuzzy
+#~| msgid ""
+#~| "Lower the currently selected frame so that it disappears under any frame "
+#~| "that overlaps it"
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it"
+#~ msgstr "கீழ் உள்ள தற்போது தேர்வு செய்யப்பட்ட சட்டம் மேல் கவிழ்ந்த சட்டத்தினால் மறையப்படும்."
+
+#, fuzzy
+#~| msgid ""
+#~| "Lower the currently selected frame so that it disappears under any frame "
+#~| "that overlaps it. If multiple frames are selected they are all lowered "
+#~| "in turn."
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it. If multiple shape are selected they are all lowered in "
+#~ "turn."
+#~ msgstr ""
+#~ "கீழ் உள்ள தற்போது தேர்வு செய்யப்பட்ட சட்டம் மேல் கவிழ்ந்த சட்டத்தினால் மறையப்படும். பலவித "
+#~ "சட்டங்கள் தேர்வு செய்பட்டால் ஒன்றுஒன்றாக அனைத்தும் கீழாக்கப்படும்."
+
+#~ msgid "Bring to Front"
+#~ msgstr "முன்னால் கொண்டு வா"
+
+#~ msgid "Send to Back"
+#~ msgstr "பின்பக்கம் அனுப்பு"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgid "After last page"
+#~ msgstr "முதல் பக்கம் தலைப்பு"
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgid "Page style:"
+#~ msgstr "&பக்க முறை"
+
+#, fuzzy
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "குறுக்குவரியை செருகு"
+
+#, fuzzy
+#~| msgid "&Variable"
+#~ msgid "Variable"
+#~ msgstr "மாறி"
+
+#, fuzzy
+#~ msgid "As Character"
+#~ msgstr "அட்டவணையை உருவாக்கு"
+
+#, fuzzy
+#~ msgid "To Character"
+#~ msgstr "அட்டவணையை உருவாக்கு"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgid "To Paragraph"
+#~ msgstr "பத்தி"
+
+#, fuzzy
+#~| msgid "Remove entry"
+#~ msgid "To Page"
+#~ msgstr "உள்ளீட்டை நீக்கு"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgid "Page..."
+#~ msgstr "பக்கம் உருவரை"
+
+#~ msgid "Delete Page"
+#~ msgstr "பக்கத்தை நீக்கு"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Insert Image Options"
+#~ msgstr "பக்கத்தை செருகு"
+
+#, fuzzy
+#~ msgid "Disable Document Headers"
+#~ msgstr "வெளி ஆவணம் பயன்பாட்டில்"
+
+#, fuzzy
+#~ msgid "Disable Document Footers"
+#~ msgstr "வெளி ஆவணம் பயன்பாட்டில்"
+
+#, fuzzy
+#~| msgid "Frame &Borders"
+#~ msgid "Page Borders"
+#~ msgstr "சட்ட ஓரங்கள்"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgid "Hide Status Bar"
+#~ msgstr "நிலைப்பட்டையை காட்டு"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgid "Automatic"
+#~ msgstr "தன்னியக்க"
+
+#, fuzzy
+#~| msgid "Endnotes"
+#~ msgid "Endnote"
+#~ msgstr "முடிவுக்குறிப்புகள்"
+
+#, fuzzy
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "தொகுப்பு சட்டம் "
+
+#, fuzzy
+#~ msgid "Alter frameset properties"
+#~ msgstr "பெயர் பண்புகளை மாற்று"
+
+#, fuzzy
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "நடப்பு சட்டத்தினை ஓர் உள் தட சட்டமாக மாற்று."
+
+#~ msgid ""
+#~ "Convert the current frame to an inline frame.<br><br>Place the inline "
+#~ "frame within the text at the point nearest to the frames current position."
+#~ msgstr ""
+#~ "நடப்பு சட்டத்தினை ஓர் உள் தட சட்டமாக மாற்று.<br><br> சட்டத்தின் தற்போதைய நிலையில் உள்ள "
+#~ "குறியின் அருகில் உள் தட சட்டத்தினை உரையினுள் இடு"
+
+#, fuzzy
+#~ msgid "Set Floating"
+#~ msgstr "Misc  அமைப்புகள்"
+
+#, fuzzy
+#~| msgid "&Filter output"
+#~ msgid "Filter stuff"
+#~ msgstr "வெளியீடு வடிகட்டி "
+
+#, fuzzy
+#~| msgid "Fra&mestyle"
+#~ msgid "Fra&mes"
+#~ msgstr "சட்டம்"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgid "Tables"
+#~ msgstr "அட்டவணை"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "குறுக்குவரியை செருகு"
+
+#~ msgid "Layout of Text in Other Frames"
+#~ msgstr "மற்ற சட்டங்களில் உருவரையில் உள்ள உரை: "
+
+#, fuzzy
+#~| msgid "Text will run &around the frame"
+#~ msgid "Text will run around this frame"
+#~ msgstr "இந்த சட்டத்தை சுற்றி உரை ஓடும்"
+
+#, fuzzy
+#~| msgid "Text will &not run around this frame"
+#~ msgid "Text will not run around this frame"
+#~ msgstr "இந்த சட்டத்தை சுற்றி உரை ஓடாது"
+
+#~ msgid "Run Around Side"
+#~ msgstr "ஓரங்களில் சுற்றி ஓடும்"
+
+#, fuzzy
+#~| msgctxt "Run Around"
+#~| msgid "Lon&gest side"
+#~ msgid "Longest side"
+#~ msgstr "பெரிய பக்கம்"
+
+#, fuzzy
+#~ msgid "Create custom outline"
+#~ msgstr "அட்டவணை உருவாக்கு"
+
+#, fuzzy
+#~ msgid "Create Custom Outline"
+#~ msgstr "அட்டவணை உருவாக்கு"
+
+#, fuzzy
+#~ msgid "Create outlines"
+#~ msgstr "அட்டவணை உருவாக்கு"
+
+#~ msgid "Borders"
+#~ msgstr "ஓரங்கள்"
+
+#~ msgid "MailMerge"
+#~ msgstr "அஞ்சலிணை "
+
+#, fuzzy
+#~ msgid "Font"
+#~ msgstr "அடிக்குறிப்பு"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgid "Format"
+#~ msgstr "வடிவமை"
+
+#~ msgid "Formula"
+#~ msgstr "சூத்திரம்"
+
+#~ msgid "KWord"
+#~ msgstr "Kசொல்"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgid "Page Background"
+#~ msgstr "பக்க முறிவு "
+
+#~ msgid "If Text is Too Long for Frame"
+#~ msgstr "சட்டத்தை விட உரை மிக நீளமாக இருந்தால்:"
+
+#~ msgid "On New Page Creation"
+#~ msgstr "புதிய பக்கங்களின் படைப்பின் போது:"
+
+#~ msgid ""
+#~ "Alter frameset properties.<p>Currently you can change the frame "
+#~ "background."
+#~ msgstr "சட்ட அமைப்பின் பண்புகளை மாற்று.<p>தற்போது உங்கள் சட்டத்தின் பின்னணியை மாற்றலாம்."
+
+#, fuzzy
+#~ msgid "Show Grid"
+#~ msgstr "முடிப்பியை காட்டு"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgid "Odd Pages Header %1"
+#~ msgstr "ஒற்றைப்படையான பக்கங்களின் தலைப்பு"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgid "Even Pages Header %1"
+#~ msgstr "இரட்டைப்படையான பக்கங்களின் தலைப்பு"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgid "Odd Pages Footer %1"
+#~ msgstr "ஒற்றைப்படையான பக்கங்கள் அடிகுறிப்பு"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgid "Even Pages Footer %1"
+#~ msgstr "இரட்டைப்படையான பக்கங்கள் அடிகுறிப்பு"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "சட்டத்தொகுப்பு உரை திருத்து"
+
+#~ msgid "Matrix"
+#~ msgstr "அணி"
+
+#, fuzzy
+#~ msgid "Configure Frame Border"
+#~ msgstr "சட்ட ஓரங்கள் உள்ளமைப்பு"
+
+#~ msgid "Ta&ble"
+#~ msgstr "அட்டவணை"
+
+#~ msgid "Cell"
+#~ msgstr "அறை"
+
+#~ msgid "Configure Frame Borders"
+#~ msgstr "சட்ட ஓரங்கள் உள்ளமைப்பு"
+
+#, fuzzy
+#~| msgid "Create a new page"
+#~ msgid "Add a new page"
+#~ msgstr "புதிய பக்கத்தை படை"
+
+#, fuzzy
+#~ msgid "Delete selected pages"
+#~ msgstr "அட்டவணையில் இருந்து நெடுவரியை நீக்கு. தேர்ந்தெடுத்த சட்டத்தை நீக்கு "
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgid "Delete Layer"
+#~ msgstr "பக்கத்தை நீக்கு"
+
+#~ msgid "Information"
+#~ msgstr "தகவல்"
+
+#~ msgid "&Available tables:"
+#~ msgstr "&கிடைக்கக்கூடிய அட்டவணைகள்:"
+
+#~ msgid "&Fields of the selected table:"
+#~ msgstr "தேர்வுசெய்யப்ட்ட அட்டவணையின் &களங்கள்:"
+
+#~ msgid "Query Result"
+#~ msgstr "வினவல் முடிவுகள்"
+
+#~ msgid "&Query:"
+#~ msgstr "&வினவல்:"
+
+#~ msgid "&Execute"
+#~ msgstr "&செய்க"
+
+#~ msgid "&Setup"
+#~ msgstr "&அமைக்க"
+
+#~ msgid "&Table:"
+#~ msgstr "&அட்டவணை:"
+
+#~ msgid "View or Edit Filter &Rules"
+#~ msgstr "சட்டகம் மற்றும் வடிகட்டியை பார்க்க அல்லது தொகு"
+
+#~ msgid "&Used database records:"
+#~ msgstr "பயன்படுத்தப்பட்ட தரவுத்தள பதிவு."
+
+#, fuzzy
+#~ msgid "&Keep Settings..."
+#~ msgstr "அமைவுகள் அமைத்திடுக"
+
+#~ msgid "&Hostname:"
+#~ msgstr "புரவன் பெயர் :"
+
+#~ msgid "&Driver:"
+#~ msgstr "இயக்கி:"
+
+#~ msgid "Database &name:"
+#~ msgstr "தகவல்தளத்தின் பெயர்:"
+
+#~ msgid "&Username:"
+#~ msgstr "பயனர்பெயர்:"
+
+#~ msgid "&Port:"
+#~ msgstr "துறை:"
+
+#~ msgid "default"
+#~ msgstr "முன்னிருப்பு"
+
+#~ msgid "&Add >>"
+#~ msgstr "&கூட்டு >>"
+
+#~ msgid "<< &Remove"
+#~ msgstr "<<& நீக்கு"
+
+#~ msgid "Save as &Distribution List..."
+#~ msgstr "என்று சேமி &பகிர்ந்தளித்தல் பட்டியல்..."
+
+#, fuzzy
+#~ msgid "Save selected single entries to a new distribution list"
+#~ msgstr "தேர்வு செய்த பதிப்புகளை புதிய பகிர்ந்தளித்தல் பட்டியலை சேமி."
+
+#~ msgid "&Filter on:"
+#~ msgstr "வடிகட்டி :"
+
+#~ msgid "Name"
+#~ msgstr "பெயர்"
+
+#~ msgid "Distribution Lists"
+#~ msgstr "பகிர்ந்தளித்தல் பட்டியல்"
+
+#~ msgid "Single Entries"
+#~ msgstr "ஒற்றை உள்ளிடுகள்"
+
+#, fuzzy
+#~ msgid "Address B&ook"
+#~ msgstr "&முகவரி புத்தகம்"
+
+#~ msgid "Launch KAddressbook"
+#~ msgstr "கேமுகவரி புத்தகத்தை ஏற்று"
+
+#~ msgid "&Address Book"
+#~ msgstr "&முகவரி புத்தகம்"
+
+#~ msgid "&Selected Addresses"
+#~ msgstr "&தேர்வு செய்யப்பட்ட முகவரிகள்"
+
+#~ msgid "Personal"
+#~ msgstr "சொந்தமான"
+
+#~ msgid "Hi!"
+#~ msgstr "வணக்கம்!"
+
+#~ msgid "Hello!"
+#~ msgstr "ஹலோ!"
+
+#~ msgid "Bye!"
+#~ msgstr "வணக்கம்!"
+
+#~ msgid "Good bye"
+#~ msgstr "வணக்கம்"
+
+#~ msgid "Professional"
+#~ msgstr "தொழிலுக்குரிய"
+
+#~ msgid "Good Morning"
+#~ msgstr "காலை வணக்கம்"
+
+#~ msgid "Good Afternoon"
+#~ msgstr "மதிய வணக்கம்"
+
+#~ msgid "Good Evening"
+#~ msgstr "மாலை வணக்கம்"
+
+#~ msgid "Email"
+#~ msgstr "மின்அஞ்சல்"
+
+#~ msgid "To:"
+#~ msgstr "பெறுநர்:"
+
+#~ msgid "Subject:"
+#~ msgstr "பொருள்:"
+
+#~ msgid "CC:"
+#~ msgstr "நகல்:"
+
+#~ msgid "BCC:"
+#~ msgstr "மறை நகல்:"
+
+#~ msgid "Fwd:"
+#~ msgstr "அனுப்பு:"
+
+#~ msgid "Best regards,"
+#~ msgstr "நல் வாழ்த்துக்கள்,"
+
+#~ msgid "Best wishes"
+#~ msgstr "நல் வாழ்த்துக்கள்"
+
+#~ msgid "Cordially,"
+#~ msgstr "மனமார்ந்த,"
+
+#~ msgid "Love,"
+#~ msgstr "அன்புடன்,"
+
+#~ msgid "Regards,"
+#~ msgstr "வாழ்த்துக்கள்,"
+
+#~ msgid "Thank you,"
+#~ msgstr "நன்றி,"
+
+#~ msgid "Thanks,"
+#~ msgstr "நன்றி,"
+
+#~ msgid "Subject"
+#~ msgstr "பொருள்"
+
+#~ msgid "Dear Sir or Madam:"
+#~ msgstr "அன்புள்ள ஐயா அல்லது அம்மா:"
+
+#~ msgid "Ladies and Gentlemen:"
+#~ msgstr "சீமான்களே சீமாட்டியர்களே"
+
+#~ msgid "Attention"
+#~ msgstr "கவனமாக"
+
+#~ msgid "Attention:"
+#~ msgstr "கவனம்:"
+
+#~ msgid "ATTN:"
+#~ msgstr "ATTN:"
+
+#~ msgid "Instructions"
+#~ msgstr "ஆணைகள் "
+
+#~ msgid "CERTIFIED"
+#~ msgstr "CERTIFIED"
+
+#~ msgid "CONFIDENTIAL"
+#~ msgstr "CONFIDENTIAL"
+
+#~ msgid "PERSONAL"
+#~ msgstr "PERSONAL"
+
+#~ msgid "FACSIMILE"
+#~ msgstr "FACSIMILE"
+
+#~ msgid ">>>Illegal position within datasource<<<"
+#~ msgstr "தகவல் மூலத்தின் முறையற்ற நிலை"
+
+#~ msgid ">>>Field %1 is unknown in the current database query<<<"
+#~ msgstr "தற்போதைய தகவல்தள வினவலில் புலம் %1 அறியப்படவில்லை"
+
+#~ msgid "Mail Merge - Editor"
+#~ msgstr "அஞ்சலிணை -  தொகுப்பான் "
+
+#~ msgid "Please enter the password for the database connection"
+#~ msgstr "தகவல்தளத் தொடர்புக்கான கடவுச்சொல்லை உள்ளீடுக"
+
+#~ msgid "Mail Merge - Setup Database Connection"
+#~ msgstr "அஞ்சலிணை- தகவல்தளத் தொடர்புக்கான அமைப்பு"
+
+#~ msgid "<not saved>"
+#~ msgstr " சேமிக்கவில்லை"
+
+#~ msgid "ascending"
+#~ msgstr "ஏறுவரிசை"
+
+#~ msgid "descending"
+#~ msgstr "இறங்குவரிசை"
+
+#~ msgid "contains"
+#~ msgstr "உள்ளடக்கியது"
+
+#~ msgid "Field"
+#~ msgstr "புலம்"
+
+#, fuzzy
+#~ msgid "Include"
+#~ msgstr "சேர்த்துக் கொள்"
+
+#~ msgid "Operator"
+#~ msgstr "செயலி"
+
+#~ msgid "Condition"
+#~ msgstr "நிபந்தனை"
+
+#~ msgid "Value"
+#~ msgstr "மதிப்பு"
+
+#~ msgid "NOT"
+#~ msgstr "இல்லை"
+
+#~ msgid "KAddressbook entry '%1' not available."
+#~ msgstr "கேமுகவரிபுத்தகத்தில் '%1' பதிவு செய்யப்பட்ட பதிப்பு சரியானது இல்லை."
+
+#~ msgid "%1 South"
+#~ msgstr "%1 தெற்கு"
+
+#~ msgid "%1 North"
+#~ msgstr "%1 வடக்கு"
+
+#~ msgid "%1 West"
+#~ msgstr "%1 மேற்கு"
+
+#~ msgid "%1 East"
+#~ msgstr "%1 கிழக்கு"
+
+#~ msgctxt "Geographic coordinates"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#~ msgid "Unkown mail merge variable: %1"
+#~ msgstr "தெரியாத அஞ்சலிணை மாறிலி: %1"
+
+#~ msgid "no category"
+#~ msgstr "வகையினம் இல்லை"
+
+#~ msgid "New Distribution List"
+#~ msgstr "புதிய பகிர்ந்தளித்தல் பட்டியல்"
+
+#~ msgid "Please enter name:"
+#~ msgstr "பெயரை உள்ளிடவும்: "
+
+#~ msgid ""
+#~ "<qt>Distribution list with the given name <b>%1</b> already exists. "
+#~ "Please select a different name.</qt>"
+#~ msgstr ""
+#~ "'%1' <qt>என்ற பெயரில் <b>ஏற்கனவே ஒரு பகிர்ந்தளித்தல் பட்டியல்</b> உள்ளது தயவு செய்து "
+#~ "வேறு பெயரை நுழைக்கவும்.</qt>"
+
+#~ msgid "No Value"
+#~ msgstr "மதிப்பு இல்லை"
+
+#~ msgid "Add record"
+#~ msgstr "பதிவை சேர்"
+
+#~ msgid "Add entry"
+#~ msgstr "நுழைவைச் சேர்"
+
+#~ msgid "Remove entry"
+#~ msgstr "உள்ளீட்டை நீக்கு"
+
+#, fuzzy
+#~ msgid "Add Entry"
+#~ msgstr "நுழைவைச் சேர்"
+
+#, fuzzy
+#~| msgid "&Hostname:"
+#~ msgid "Host:"
+#~ msgstr "புரவன் பெயர் :"
+
+#, fuzzy
+#~| msgid "&Port:"
+#~ msgid "Port:"
+#~ msgstr "துறை:"
+
+#, fuzzy
+#~| msgid "&Time"
+#~ msgid "Timeout:"
+#~ msgstr "நேரம்"
+
+#, fuzzy
+#~| msgid "Table of Contents"
+#~ msgid "Table of Content"
+#~ msgstr "உள்ளடக்க அட்டவணை"
+
+#, fuzzy
+#~| msgid "Sort"
+#~ msgid "Slots"
+#~ msgstr "வரிசை"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "சட்ட பண்புகள்"
+
+#, fuzzy
+#~| msgid "&Variable"
+#~ msgid "Variables"
+#~ msgstr "மாறி"
+
+#, fuzzy
+#~ msgid "HTML Document"
+#~ msgstr "ஆவணம்"
+
+#, fuzzy
+#~ msgid "Encoded Text"
+#~ msgstr "உரையை வரிசையாக்கம் செய்."
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)"
+#~ msgstr "அட்டவணையில் இருந்து நெடுவரியை நீக்கு. தேர்ந்தெடுத்த சட்டத்தை நீக்கு "
+
+#~ msgid "Delete the currently selected frame(s)."
+#~ msgstr "அட்டவணையில் இருந்து நெடுவரியை நீக்கு. தேர்ந்தெடுத்த சட்டத்தை நீக்கு "
+
+#~ msgid "First Page Header"
+#~ msgstr "முதல் பக்கம் தலைப்பு"
+
+#~ msgid "First Page Footer"
+#~ msgstr "முதல் பக்கம் அடிகுறிப்பு"
+
+#, fuzzy
+#~| msgid "&Units:"
+#~ msgid "Unit:"
+#~ msgstr "&அலகுகள்:"
+
+#, fuzzy
+#~| msgid "Size (%1):"
+#~ msgid "Size:"
+#~ msgstr "அளவு ( %1 ):"
+
+#, fuzzy
+#~| msgid "Attention:"
+#~ msgid "Orientation:"
+#~ msgstr "கவனம்:"
+
+#, fuzzy
+#~| msgid "Single Entries"
+#~ msgid "Single sided"
+#~ msgstr "ஒற்றை உள்ளிடுகள்"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgid "Whole document:"
+#~ msgstr "ஆவணம்"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgid "Right to left"
+#~ msgstr "வெளிர் நீலம்"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgid "Left Edge:"
+#~ msgstr "இடது:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgid "Right Edge:"
+#~ msgstr "வலது:"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgid "Page spread"
+#~ msgstr "பக்க முறிவு "

@@ -1,0 +1,65 @@
+# Copyright © 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the calligra package.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2012.
+#
+# KDE Finnish translation sprint participants:
+# Author: Artnay
+msgid ""
+msgstr ""
+"Project-Id-Version: PluginShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2012-07-04 13:39:04+0000\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2013-01-13 22:09:29+0000\n"
+"X-Generator: MediaWiki 1.21alpha (963ddae); Translate 2012-11-08\n"
+
+#: PluginShape.cpp:36
+#, kde-format
+msgid "Unknown"
+msgstr "Tuntematon"
+
+#: PluginShape.cpp:40
+#, kde-format
+msgid "Plugin of mimetype: %1"
+msgstr "Liitännäinen MIME-tyypille: %1"
+
+#: PluginShapeFactory.cpp:22
+#, kde-format
+msgid "Plugin Placeholder"
+msgstr "Liitännäisen paikanvaraus"
+
+#: PluginShapeFactory.cpp:24
+#, kde-format
+msgid "Plugin Placeholder, embedded or fullscreen"
+msgstr "Liitännäisen paikanvaraus, upotettu tai koko näyttö"
+
+#, fuzzy
+#~| msgid "Unknown"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown"
+#~ msgstr "Tuntematon"
+
+#, fuzzy
+#~| msgid "Plugin of mimetype: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin of mimetype: %1"
+#~ msgstr "Liitännäinen MIME-tyypille: %1"
+
+#, fuzzy
+#~| msgid "Plugin Placeholder"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Placeholder"
+#~ msgstr "Liitännäisen paikanvaraus"
+
+#, fuzzy
+#~| msgid "Plugin Placeholder, embedded or fullscreen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Placeholder, embedded or fullscreen"
+#~ msgstr "Liitännäisen paikanvaraus, upotettu tai koko näyttö"

@@ -1,0 +1,2734 @@
+<chapter id="commands">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Juan Manuel</firstname
+><surname
+>García Molina</surname
+><affiliation
+><address
+><email
+>juanma@superiodico.net</email
+></address
+></affiliation
+><contrib
+>Traductor</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Referencia de los comandos</title>
+
+<sect1 id="filemenu">
+<title
+>El menú «Archivo»</title>
+<para>
+<variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Nuevo</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Crea un documento nuevo.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Abrir...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Abre un documento existente.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Abrir reciente</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Abre un documento existente</action
+>, seleccionado de una lista desplegable de archivos recientemente usados.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Guardar</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Guarda el documento.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Guardar como...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Guarda y modifica el nombre o el formato del documento actual. Si desea mantener el nombre y el formato del documento utilice <guimenuitem
+>Exportar...</guimenuitem
+></action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Recargar</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Recarga el documento.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Versions</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME define different versions of the document + open them in new windows</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Importar...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Importar otros documentos.</action>
+</para>
+<para
+>Las tablas de datos suelen almacenarse en archivos de texto con los valores de una línea separados por comas, espacios, tabuladores u otros caracteres; por ejemplo <emphasis
+>123, 456, 789, abcd, efgh</emphasis
+>. Estos archivos se suelen denominar archivos <quote
+><acronym
+>CSV</acronym
+></quote
+> («Comma Separated Value», valores separados por comas), a pesar de que el carácter separador no tiene porque ser una coma.</para>
+<para
+>Si le pide a &sheets; que abra un archivo de texto, este asumirá que el archivo se encuentra en formato <acronym
+>CSV</acronym
+> y lanzará un cuadro de diálogo que le permitirá especificar el delimitador (carácter de separación) utilizado por el archivo, además de mostrar como se colocarán los datos en las diferentes celdas de la hoja de cálculo.</para>
+<para
+>Otras opciones de este cuadro de diálogo le permiten definir el <guilabel
+>Formato</guilabel
+> de las celdas de la hoja de cálculo, si los caracteres de las comillas textuales deben eliminarse, y si la(s) primera(s) línea(s) del archivo deben ser ignoradas.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Exportar...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Guarda un documento en cualquier formato admisible.</action
+> El documento no se convierte en el archivo exportado. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Correo...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Envía el archivo como un adjunto de correo.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Crear plantilla desde documento...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Crear una <link linkend="templates"
+>plantilla</link
+> de &sheets; basada en este documento. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Imprimir...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Imprime el documento.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Vista preliminar...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visualiza el documento como si estuviera impreso.</action
+></para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Export as PDF...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action
+></para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Información del documento</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visualiza o introduce información sobre el documento y el autor.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>W</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Cerrar</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Cierra el documento actual pero deja &sheets; en ejecución. </action
+></para
+></listitem>
+</varlistentry>
+<varlistentry>
+
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Salir</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Sale</action
+> de &sheets;.</para
+></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect1>
+
+<sect1 id="editmenu">
+<title
+>El menú Editar</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Deshacer</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Deshace la última acción.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Rehacer</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Rehace la última acción deshecha.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Cortar</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Poner los elementos seleccionados en el portapapeles y eliminarlos de la ubicación original.</action
+> Si a continuación hace la operación <guimenuitem
+>Pegar</guimenuitem
+>, los elementos se insertarán en la nueva ubicación. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Copiar</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Copia el(los) elemento(s) seleccionado(s) al portapapeles.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Pegar</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Pega el(los) elemento(s) del portapapeles a la(s) celda(s) seleccionada(s).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Editar</guimenu
+> <guimenuitem
+>Pegado especial...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Formas de pegado especial</action
+>. Vea las secciones <link linkend="specialpaste"
+>Otros modos de pegado</link
+> y <link linkend="sumspecialpaste"
+>Aritmética usando pegado especial</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Editar</guimenu
+> <guimenuitem
+>Pegar con inserción</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Mueve el contenido del área de pegado a la derecha o debajo y pega los elementos del portapapeles a las celdas seleccionadas.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Editar</guimenu
+> <guimenuitem
+>Rellenar</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Rellena el área seleccionada con los valores del primer juego de elementos.</action
+> Se admiten las cuatro direcciones. Tenga en cuenta que el término «juego de elementos» describe el primer juego de valores que se ven en la dirección de relleno. Si la dirección de relleno es la Izquierda, entonces el primer elemento del conjunto es la última columna de la selección. </para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>A</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Select All</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Buscar...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Busca las celdas que contengan un texto dado.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keysym
+>F3</keysym
+> </shortcut
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Encontrar siguiente</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Busca la siguiente celda que contenga el texto dado.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>F3</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Encontrar anterior</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Busca la celda anterior que contenga el texto dado.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Reemplazar...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Busca y reemplaza el texto dado en la(s) celda(s).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Editar</guimenu
+> <guimenuitem
+>Limpiar</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Limpia <guimenuitem
+>Todo</guimenuitem
+> o <guimenuitem
+>Contenido</guimenuitem
+>, <guimenuitem
+>Comentarios</guimenuitem
+>, <guimenuitem
+>Estilos condicionales</guimenuitem
+>, <guimenuitem
+>Enlace</guimenuitem
+> o <guimenuitem
+>Validez</guimenuitem
+> de la(s) celda(s) seleccionadas.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Editar</guimenu
+> <guimenuitem
+>Borrar</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Borra <guimenuitem
+>Celdas</guimenuitem
+>, <guimenuitem
+>Columnas</guimenuitem
+>, <guimenuitem
+>Filas</guimenuitem
+> o <guimenuitem
+>Hoja</guimenuitem
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Conditional Cell Attributes...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add or modify conditional cell attributes.</action>
+</para
+></listitem>
+</varlistentry>
+
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycap
+>F2</keycap
+> </shortcut
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Modificar la celda</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Para modificar in situ las celdas seleccionadas.</action>
+</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="viewmenu">
+<title
+>El menú «Ver»</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Ver</guimenu
+> <guimenuitem
+>Nueva vista</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Abre una nueva instancia de &sheets; con el mismo documento.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>W</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Close All Views</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Close all open instances of &sheets;</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Split View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Split current view into two parts.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Remove View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Remove current view.</action
+> (Where the window 
+contains two or more views)
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guisubmenu
+>Splitter Orientation</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change view split to <guilabel
+>Horizontal</guilabel
+> or <guilabel
+>Vertical</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Goto Cell...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change &sheets;'s focus to show defined cell.</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Ver</guimenu
+> <guimenuitem
+>Bordes de la página</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Cambia el marcado de los bordes de página impresos en la hoja con líneas rojas. </action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Show/Hide Comment Indicator</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Toggle marking of cell comments.</action>
+If a cell contains a comment and this option is selected, a small red triangle
+is shown in the upper right corner of the cell.
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing Zoom In Zoom Out-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Ver</guimenu
+> <guimenuitem
+>Ampliar</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Aumenta o disminuye la ampliación usada para visualizar la hoja de cálculo. El rango va del 33% al 500%. </action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME Full Screen Mode-->
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="gomenu">
+<title
+>El menú «Ir»</title>
+<para
+>En este menú se encuentran las acciones para navegar entre las hojas de la hoja de cálculo abierta actualmente y la acción <guimenuitem
+>Ir a la celda</guimenuitem
+> para saltar a una única celda o para seleccionar un intervalo de celdas.</para>
+</sect1>
+
+<sect1 id="insertmenu">
+<title
+>El menú «Insertar»</title>
+<para>
+<variablelist>
+
+<!-- OBSOLETE <varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Sheet</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add another worksheet.</action>
+</para
+></listitem>
+</varlistentry
+>-->
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Insertar</guimenu
+> <guisubmenu
+>Comentario</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+>Añade o modifica un comentario </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Insertar</guimenu
+> <guimenuitem
+>Función...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Inserta una función matemática.</action
+> Vea la sección <link linkend="formulas"
+>Fórmulas</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Insertar</guimenu
+> <guimenuitem
+>Serie...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Inserta una serie.</action
+> Vea la sección <link linkend="series"
+>Series</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Insertar</guimenu
+> <guimenuitem
+>Enlace...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Inserta un enlace.</action
+> Vea la sección <link linkend="hyper"
+>Celdas de enlace</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Insertar</guimenu
+> <guimenuitem
+>Carácter especial...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Inserta un carácter especial en la celda seleccionada.</action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME missing Cells Columns Rows Sheet-->
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guisubmenu
+>Object</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Embed another &koffice; document into the sheet.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Chart</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a chart.</action
+> See the section 
+<link linkend="insertchart"
+>Inserting a Chart</link
+> for more details.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Picture</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the standard &kde; file dialog</action>
+to insert a picture.
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Insertar</guimenu
+> <guimenuitem
+>Datos externos</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Inserta datos <guilabel
+>Desde base de datos...</guilabel
+>, <guilabel
+>Desde archivo de texto...</guilabel
+> oo <guilabel
+>Desde portapapeles...</guilabel
+>.</action
+> Tiene más información en la sección <link linkend="insertdata"
+>Insertar datos externos</link
+>. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="formatmenu">
+<title
+>El menú «Formato»</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Alt;&Ctrl;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Formato</guimenu
+> <guimenuitem
+>Formato de celda...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Formatea la(s) celda(s) seleccionada(s)</action
+>. Vea la sección <link linkend="formatspread"
+>Formateando hojas de cálculo</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Formato</guimenu
+> <guimenuitem
+>Gestor de estilos</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Crea, modifica o borra estilos de formato de celda.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Formato</guimenu
+> <guimenuitem
+>Estilo</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Aplica un estilo a las celdas seleccionadas.</action
+> Para gestionar los estilos, use <menuchoice
+> <guimenu
+>Formato</guimenu
+><guimenuitem
+>Gestor de estilos...</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Formato</guimenu
+> <guimenuitem
+>Crear estilo desde celda...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Crea un estilo nuevo desde el formato de la celda seleccionada.</action
+> Para gestionar los estilo, use <menuchoice
+> <guimenu
+>Formato</guimenu
+><guimenuitem
+>Gestor de estilos...</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Conditional Styles-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Formato</guimenu
+> <guimenuitem
+>Autoformato...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Da formato automáticamente a las celdas seleccionadas: un diálogo le permite elegir entre los dos formatos propuestos.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Formato</guimenu
+> <guimenuitem
+>Fusionar las celdas</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Combina las celdas seleccionadas.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Formato</guimenu
+> <guimenuitem
+>Disociar celdas</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Disocia (separa) las celdas previamente combinadas. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Formato</guimenu
+> <guimenuitem
+>Ajustar fila y columna</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Fija los tamaños de filas y columnas para mostrar la(s) celda(s) seleccionada(s) adecuadamente.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Formato</guimenu
+> <guimenuitem
+>Fila</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Cambia el tamaño, iguala, oculta o muestra fila(s).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Formato</guimenu
+> <guimenuitem
+>Columna</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Cambia el tamaño, iguala, oculta o muestra columna(s).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Formato</guimenu
+> <guimenuitem
+>Hoja</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Oculta, muestra la hoja de trabajo o configura las propiedades avanzadas de la hoja.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Formato</guimenu
+> <guimenuitem
+>Disposición de página...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Formato de distribución del papel impreso.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Formato</guimenu
+> <guimenuitem
+>Imprimir rango</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Define o reinicia el rango de impresión.</action>
+</para
+></listitem>
+</varlistentry>
+
+ <!--FIXME missing Manual Page Breaks, Anchors, Document Settings-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="datamenu">
+<title
+>El menú «Datos»</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Datos</guimenu
+> <guimenuitem
+>Ordenar...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Ordena los datos de las celdas seleccionadas</action
+>. Vea la sección <link linkend="sort"
+>Ordenando los datos</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Filter-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Datos</guimenu
+> <guimenuitem
+>Texto en columnas...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Esta opción intenta interpretar el texto de las celdas seleccionadas como datos <acronym
+>CSV</acronym
+>, poniendo cada elemento en una celda distinta de la fila. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>G</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Datos</guimenu
+> <guimenuitem
+>Áreas con nombre...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Abre</action
+> el diálogo <guilabel
+>Áreas con nombres</guilabel
+> para seleccionar, añadir, editar y eliminar áreas con nombre. Consulte la sección <link linkend="namedareas"
+>Celdas y áreas con nombre</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Datos</guimenu
+> <guimenuitem
+>Concentrar...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Concentra los datos</action
+>. Vea la sección <link linkend="consolidate"
+>Concentrando datos</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Datos</guimenu
+> <guimenuitem
+>Subtotales...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Crea diferentes tipos de subtotales en una base de datos.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Datos</guimenu
+> <guimenuitem
+>Validez...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Fija o modifica los criterios de comprobación de error y emite mensajes de error si procede en la(s) celda(s) seleccionada(s).</action
+> Vea <link linkend="validcheck"
+>Comprobación de validez</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Datos</guimenu
+> <guimenuitem
+>Conseguir objetivo..</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Abre el cuadro de diálogo Conseguir objetivo</action
+>. Vea <link linkend="goalseek"
+>Consiguiendo objetivos</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Datos</guimenu
+> <guimenuitem
+>Tabla dinámica...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Abre el diálogo de configuración «Tabla dinámica»</action
+>. Consulte <link linkend="pivottable"
+>Tabla dinámica</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="toolsmenu">
+<title
+>El menú «Herramientas»</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Herramientas</guimenu
+> <guimenuitem
+>Ortografía...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Comprueba la ortografía de las palabras de la hoja de trabajo.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Herramientas</guimenu
+> <guimenuitem
+>Listas personalizadas...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Ver o corregir las series especiales de palabras reconocidas por &sheets;. Esta lista se puede utilizar para insertar <link linkend="series"
+>series</link
+> especiales en la hoja de trabajo.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Herramientas</guimenu
+> <guimenuitem
+>Proteger hoja...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>Protege la hoja con una contraseña. Surge un cuadro de diálogo para pedirle una contraseña. Al quitar la marca de esta opción se le pide la contraseña para desproteger la hoja. Proteger una hoja significa proteger todas las celdas de la hoja. En una hoja protegida, las celdas no se pueden volver a formatear ni sobreescribir.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Herramientas</guimenu
+> <guimenuitem
+>Proteger documento...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>Protege el documento completo con una contraseña. Un diálogo aparece para pedirle una contraseña. Al quitar la marca de esta opción se le pide la contraseña para quitar la protección del documento. En un documento protegido no puede cambiar el nombre ni eliminar una hoja. La protección del documento no significa que cada hoja individual está protegida.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keysym
+>F9</keysym
+></keycombo
+> </shortcut
+> <guimenu
+>Herramientas</guimenu
+> <guimenuitem
+>Recalcular hoja</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Vuelve a calcular las fórmulas de la hoja actual.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keysym
+>F9</keysym
+> </shortcut
+> <guimenu
+>Herramientas</guimenu
+> <guimenuitem
+>Recalcular documento</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Vuelve a calcular todas las hojas.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Tools</guimenu>
+<guimenuitem
+>Insert Calendar...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a calendar in your sheet. A dialog asks you for the start and end dates. The corresponding calendar is then inserted from the current cell.
+</action>
+</para
+></listitem>
+</varlistentry>
+-->
+  
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Herramientas</guimenu
+> <guimenuitem
+>Ejecutar un guion...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Ejecuta el guion externo seleccionado en &sheets;. &sheets; soporta la ejecución de guiones escritos en JavaScript, Python y Ruby. Los ejemplos predeterminados de guiones se pueden encontrar en el submenú <menuchoice
+><guimenu
+>Herramientas</guimenu
+><guisubmenu
+>Guiones</guisubmenu
+></menuchoice
+>.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Herramientas</guimenu
+> <guimenuitem
+>Scritps</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Aquí puede ejecutar el script para exportar o importar datos en varios formatos, guardar el registro de &sheets; en un archivo, utilizar <ulink url="https://live.gnome.org/Orca"
+>Orca speech</ulink
+> para accesibilidad, depurar scripts escritos Python y Ruby o añadir funciones para mostrar los valores de las acciones o de las condiciones meteorológicas. Puede incluso utilizar algunas <ulink url="http://www.r-project.org/"
+>funciones de R</ulink
+> (se debe instalar el <ulink url="http://rpy.sourceforge.net/rpy.html"
+>módulo RPy</ulink
+> </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Herramientas</guimenu
+> <guimenuitem
+>Administrador de scripts...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Abre</action
+> el diálogo del <guilabel
+>Administrador de scritps</guilabel
+> para ejecutar, cargar, descargar, instalar, desinstalar y obtener más scripts. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Herramientas</guimenu
+> <guimenuitem
+>Optimizador de funciones...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Abre</action
+> el diálogo <guilabel
+>Optimizador de funciones</guilabel
+> en el que se puede elegir una celda con una función de objetivo, un objetivo de optimización (<guilabel
+>Maximizar</guilabel
+>, <guilabel
+>Minimizar</guilabel
+> o introducir el <guilabel
+>Valor</guilabel
+>) y un conjunto de celdas con parámetros de decisión. </para
+></listitem>
+</varlistentry>
+  </variablelist
+></para>
+</sect1>
+
+<sect1 id="settingsmenu">
+<title
+>El menú «Preferencias»</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Preferencias</guimenu
+> <guisubmenu
+>Barras de herramientas mostradas</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Muestra u oculta las barras de herramientas: <guilabel
+>Archivo</guilabel
+>, <guilabel
+>Editar</guilabel
+>, <guilabel
+>Navegación</guilabel
+>, <guilabel
+>Tipo de letra</guilabel
+>, <guilabel
+>Formato</guilabel
+> y <guilabel
+>Color/borde</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Settings</guimenu>
+<guimenuitem
+>Dockers</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+>FIXME
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing:
+Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
+ -->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Preferencias</guimenu
+> <guimenuitem
+>Barra de estado</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Muestra u oculta la barra de estado</action
+>. La barra de estado muestra información adicional para los elementos seleccionados y los cálculos instantáneos de las celdas seleccionadas. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Preferencias</guimenu
+> <guimenuitem
+>Barra de pestañas</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Muestra u oculta la barra de pestañas.</action
+> Se puede acceder a todas las hojas del documento actual a través de la barra de pestañas. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Preferencias</guimenu
+> <guimenuitem
+>Configurar los accesos rápidos...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Configura los accesos rápidos de teclado utilizados por &sheets;. </action
+> Consulte la sección sobre <link linkend="configshort"
+>configuración de accesos rápidos </link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Preferencias</guimenu
+> <guimenuitem
+>Configurar barras de herramientas...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Configura las barras de herramientas</action
+>. La sección <link linkend="configtoolbars"
+>Configurando las barras de herramientas</link
+> tiene más información. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Preferencias</guimenu
+> <guimenuitem
+>Temas</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Selecciona el tema de colores para la ventana de &sheets;.</action
+> Puede elegir uno de los esquemas de color predefinidos o seleccionar <guimenuitem
+>Configuración...</guimenuitem
+> para abrir el <ulink url="help:/kcontrol/colors"
+>módulo de selección de color de &systemsettings;</ulink
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Preferencias</guimenu
+> <guimenuitem
+>Activar perfil de autor</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Configura el perfil de autor para el documento actual.</action
+> Puede elegir uno de los perfiles definidos utilizando la <link linkend="configauthor"
+>ventana de configuración de &sheets;</link
+>, <guimenuitem
+>Perfil de autor predeterminado</guimenuitem
+> tal como está definido por los datos de &systemsettings; o un perfil vacío <guimenuitem
+>Anónimo</guimenuitem
+> que puede garantizar su privacidad. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Preferencias</guimenu
+> <guimenuitem
+>Configurar notificaciones...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Configura el sistema de notificaciones de &sheets;.</action
+> No hay ninguna acción de la que pueda ser notificado en la versión actual de &sheets;. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Preferencias</guimenu
+> <guimenuitem
+>Configurar &sheets;...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Configuración general de &sheets;</action
+>. Consulte la sección sobre <link linkend="configdialog"
+>Configuración de &sheets;</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="helpmenu">
+<title
+>El menú «Ayuda»</title
+>&help.menu.documentation; </sect1>
+
+<sect1 id="rmbmenu">
+<title
+>El menú del botón derecho del ratón</title>
+<para
+>Esta sección describe los elementos del menú emergenete obtenido al hacer clic <mousebutton
+>derecho</mousebutton
+> sobre una celda o celdas, filas o columnas seleccionadas. </para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Formato de celda...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Formatea la(s) celda(s) seleccionada(s)</action
+>. Vea la sección <link linkend="formatspread"
+>Formateando hojas de cálculo</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Cortar</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Pone los elementos seleccionados en el portapapeles</action
+>. Si luego hace <guilabel
+>Pegar</guilabel
+>, los elementos se moverán de la ubicación original a la nueva. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Copiar</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Copia los elementos seleccionados al portapapeles.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Pegar</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Pega los elementos del portapapeles en las celdas seleccionadas. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Pegado especial...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Formas de pegado especial</action
+>. Vea las secciones <link linkend="specialpaste"
+>Otros modos de pegado</link
+> y <link linkend="sumspecialpaste"
+>Aritmética usando pegado especial</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Pega con inserción</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Pega desde el portapapeles a las celdas seleccionadas, moviendo las celdas anteriores para hacer sitio.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Todo</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Borra los contenidos de las celdas seleccionadas.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Ajustar fila y columna</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Cambia el tamaño de la fila y la columna para que muestren las celdas seleccionadas completamente.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Predeterminado</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Fija los formatos predeterminados para las celdas seleccionadas.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Nombre del área...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Da nombre al área seleccionada</action
+>. Vea la sección <link linkend="namedareas"
+>Áreas con nombre</link
+> para más detalles. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Redimensionar fila...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Cambia la altura de la fila seleccionada.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Ajustar fila</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Cambia la altura de la fila seleccionada para mostrar las celdas completamente.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Redimensionar columna...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Cambia el ancho de la columna seleccionada.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Ajustar columna</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Cambia el ancho de la columna seleccionada para mostrar las celdas completamente.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Insertar celdas...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Inserta nuevas celdas en la ubicación seleccionada, moviendo las celdas existentes para hacer sitio.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Borrar celdas...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Borra las celdas seleccionadas, moviendo las otras celdas para que ocupen el espacio dejado por las celdas borradas.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Insertar filas</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Inserta nueva(s) fila(s) debajo de la la(s) fila(s) seleccionada(s). </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Eliminar filas</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Borra la(s) fila(s) seleccionada(s).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Ocultar filas</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Oculta las filas seleccionadas.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Mostrar filas</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Muestra las filas seleccionadas. Para mostrar las filas ocultas, tiene que seleccionar un rango de filas que incluya dichas filas ocultas.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Insertar columnas</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Inserta columna(s) nueva(s) a la izquierda de la(s) columna(s) seleccionada(s). </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Eliminar columnas</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Borra la(s) columna(s) seleccionada(s).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Ocultar columnas</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Oculta las columnas seleccionadas.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Mostrar columnas</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Muestra las columnas seleccionadas. Para mostrar las columnas ocultas, tiene que seleccionar un rango que incluya dichas columnas ocultas.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Comentario...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Añade o modifica un comentario en la celda seleccionada.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Lista de selección...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Le permite seleccionar y pegar texto de cualquier celda de la selección actual en la celda seleccionada.</action>
+</para
+></listitem>
+</varlistentry>
+<!-- not in 2.4.0
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Show Related Words</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the <guilabel
+>Related Words</guilabel
+> dialog box.</action
+> 
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="othershort">
+<title
+>Otros atajos</title>
+<para
+>Esta sección describe aquellos accesos rápidos de teclado de &sheets; utilizados para operaciones que no aparecen en ninguno de los menús.</para>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo>
+</term>
+<listitem
+><para
+>Conmuta la visualización de los paneles.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>flechas de dirección</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Si la celda seleccionada está ocupada, mueve el cursor de la celda al comienzo o al final del bloque ocupado de la fila o columna actual. Si la celda seleccionada no está ocupada, entonces mueve el cursor de la celda al comienzo o al final del bloque de celdas no ocupadas de la fila o columna actual. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keysym
+>flechas de dirección</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Si la celda seleccionada está ocupada, selecciona todas las celdas ocupadas hasta el comienzo o el fin de ese bloque de celdas ocupadas de la fila o columna actual. Si la celda no está ocupada, selecciona todas las celdas no ocupadas hasta el comienzo o el final de ese bloque de celdas no ocupadas de la fila o columna actual. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>AvPág</keysym>
+</term>
+<listitem
+><para
+><action
+>Mueve el cursor 10 celdas hacia abajo.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>RePág</keysym>
+</term>
+<listitem
+><para
+><action
+>Mueve el cursor 10 celdas hacia arriba.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>AvPág</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Pasa a la siguiente hoja.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>RePág</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Pasa a la hoja anterior.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycap
+>F4</keycap>
+</term>
+<listitem
+><para
+><action
+>Cambia la referencia a la celda</action
+> entre los tipos de referencia normal y <link linkend="absolute"
+>absoluta</link
+>. </para
+></listitem>
+</varlistentry>
+<!-- does not work in 2.4.0
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>&amp;</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Add a border to the selected cell(s).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>$</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in Money
+format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>%</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Percentage format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>^</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Scientific format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>#</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Date format</action
+>. The value is taken as the number of days since 
+1 January 1900.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>@</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+Time format</action
+>. The value is taken as the number of seconds since
+midnight.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>!</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+normal Number format</action
+>.
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

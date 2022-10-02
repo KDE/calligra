@@ -1,0 +1,648 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2012-10-03 13:29+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-10-19 05:22+0000\n"
+"X-Generator: Launchpad (build 16807)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: ellipse/EllipseShapeConfigCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change ellipse"
+msgstr "Promijeni elipsu"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Arc"
+msgstr "Luk"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Pie"
+msgstr "Pita"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:18
+#, kde-format
+msgid "Chord"
+msgstr "Struna"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, EllipseShapeConfigWidget)
+#: ellipse/EllipseShapeConfigWidget.ui:13
+#, kde-format
+msgid "Ellipse Shape"
+msgstr "Oblik elipse"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ellipse/EllipseShapeConfigWidget.ui:19 spiral/SpiralShapeConfigWidget.ui:19
+#, kde-format
+msgid "Type:"
+msgstr "Vrsta:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ellipse/EllipseShapeConfigWidget.ui:29
+#, kde-format
+msgid "Start angle:"
+msgstr "Početni ugao:"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, startAngle)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, endAngle)
+#: ellipse/EllipseShapeConfigWidget.ui:39
+#: ellipse/EllipseShapeConfigWidget.ui:56
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ellipse/EllipseShapeConfigWidget.ui:46
+#, kde-format
+msgid "End angle:"
+msgstr "Završni Ugao:"
+
+#. i18n: ectx: property (text), widget (QPushButton, closeEllipse)
+#: ellipse/EllipseShapeConfigWidget.ui:63
+#, kde-format
+msgid "Close ellipse"
+msgstr "Zatvorena elipsa"
+
+#: ellipse/EllipseShapeFactory.cpp:21
+#, kde-format
+msgid "Ellipse"
+msgstr "Elipsa"
+
+#: ellipse/EllipseShapeFactory.cpp:23
+#, kde-format
+msgid "An ellipse"
+msgstr "Elipsa"
+
+#: enhancedpath/CalloutShapeFactory.cpp:31
+#: enhancedpath/CalloutShapeFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "A callout"
+msgid "A callout shape"
+msgstr "Oblačić"
+
+#: enhancedpath/CalloutShapeFactory.cpp:149
+#, kde-format
+msgid "Rectangular Callout"
+msgstr ""
+
+#: enhancedpath/CalloutShapeFactory.cpp:151
+#, fuzzy, kde-format
+#| msgid "A rectangle"
+msgid "A rectangular callout"
+msgstr "Pravougaonik"
+
+#: enhancedpath/CalloutShapeFactory.cpp:231
+#, fuzzy, kde-format
+#| msgid "Callout"
+msgid "Rounded Callout"
+msgstr "Oblačić"
+
+#: enhancedpath/CalloutShapeFactory.cpp:233
+#, fuzzy, kde-format
+#| msgid "A rectangle"
+msgid "A rounded rectangular callout"
+msgstr "Pravougaonik"
+
+#: enhancedpath/CalloutToolFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Callout"
+msgid "Callout editing"
+msgstr "Oblačić"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:26
+#, kde-format
+msgid "An enhanced path shape"
+msgstr "Lik poboljšane putanje"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:28
+#, kde-format
+msgid "An enhanced path"
+msgstr "Poboljšana putanja"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:145
+#, kde-format
+msgid "Cross"
+msgstr "Krst"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:147
+#, kde-format
+msgid "A cross"
+msgstr "Krst"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:180
+#: enhancedpath/EnhancedPathShapeFactory.cpp:213
+#: enhancedpath/EnhancedPathShapeFactory.cpp:246
+#: enhancedpath/EnhancedPathShapeFactory.cpp:279
+#, kde-format
+msgid "Arrow"
+msgstr "Strijela"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:182
+#: enhancedpath/EnhancedPathShapeFactory.cpp:215
+#: enhancedpath/EnhancedPathShapeFactory.cpp:248
+#: enhancedpath/EnhancedPathShapeFactory.cpp:281
+#, kde-format
+msgid "An arrow"
+msgstr "Strijela"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:324
+#: enhancedpath/EnhancedPathShapeFactory.cpp:326
+#, kde-format
+msgid "Smiley"
+msgstr "Smiješak"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:404
+#, kde-format
+msgid "Circular Arrow"
+msgstr "Kružna strijela"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:406
+#, kde-format
+msgid "A circular-arrow"
+msgstr "Kružna strijela"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:449
+#, kde-format
+msgid "Gearhead"
+msgstr "Zupčanik"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:451
+#, kde-format
+msgid "A gearhead"
+msgstr "Zupčanik"
+
+#: rectangle/RectangleShapeConfigCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change rectangle"
+msgstr "Promjena pravougaonika"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
+#: rectangle/RectangleShapeConfigWidget.ui:13
+#, kde-format
+msgid "Rectangle Shape"
+msgstr "Pravougaoni lik"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rectangle/RectangleShapeConfigWidget.ui:19
+#, kde-format
+msgid "Corner radius x:"
+msgstr "Radijus ugla x:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: rectangle/RectangleShapeConfigWidget.ui:29
+#, kde-format
+msgid "Corner radius y:"
+msgstr "Radijus ugla y:"
+
+#: rectangle/RectangleShapeFactory.cpp:20
+#, kde-format
+msgid "Rectangle"
+msgstr "Pravougaonik"
+
+#: rectangle/RectangleShapeFactory.cpp:22
+#, kde-format
+msgid "A rectangle"
+msgstr "Pravougaonik"
+
+#: spiral/SpiralShapeConfigCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change spiral"
+msgstr "Promjena spirale"
+
+#: spiral/SpiralShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Curve"
+msgstr "Krivulja"
+
+#: spiral/SpiralShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Line"
+msgstr "Linija"
+
+#: spiral/SpiralShapeConfigWidget.cpp:23
+#, kde-format
+msgid "Clockwise"
+msgstr ""
+
+#: spiral/SpiralShapeConfigWidget.cpp:24
+#, kde-format
+msgid "Anticlockwise"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
+#: spiral/SpiralShapeConfigWidget.ui:13
+#, kde-format
+msgid "Spiral Shape"
+msgstr "Spiralni lik"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: spiral/SpiralShapeConfigWidget.ui:29
+#, kde-format
+msgid "Fade:"
+msgstr "Izblijedi:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: spiral/SpiralShapeConfigWidget.ui:55
+#, kde-format
+msgid "Direction:"
+msgstr "Pravac:"
+
+#: spiral/SpiralShapeFactory.cpp:18
+#, kde-format
+msgid "Spiral"
+msgstr "Spirala"
+
+#: spiral/SpiralShapeFactory.cpp:20
+#, kde-format
+msgid "A spiral shape"
+msgstr "Spiralni lik"
+
+#: star/StarShapeConfigCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Change star"
+msgstr "Promijeni zvijezdu"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, StarShapeConfigWidget)
+#: star/StarShapeConfigWidget.ui:13
+#, kde-format
+msgid "Star shape"
+msgstr "Zvjezdasti lik"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: star/StarShapeConfigWidget.ui:19
+#, kde-format
+msgid "Polygon:"
+msgstr "Poligon:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: star/StarShapeConfigWidget.ui:36
+#, kde-format
+msgid "Corners:"
+msgstr "Uglovi:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: star/StarShapeConfigWidget.ui:46
+#, kde-format
+msgid "Inner radius:"
+msgstr "Unutrašnji radijus:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: star/StarShapeConfigWidget.ui:60
+#, kde-format
+msgid "Outer radius:"
+msgstr "Spoljašnji radijus:"
+
+#: star/StarShapeFactory.cpp:24
+#, kde-format
+msgid "A star shape"
+msgstr "Zvjezdasti lik"
+
+#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:38
+#, kde-format
+msgid "A star"
+msgstr "Zvijezda"
+
+#: star/StarShapeFactory.cpp:36
+#, kde-format
+msgid "Star"
+msgstr "Zvijezda"
+
+#: star/StarShapeFactory.cpp:50
+#, kde-format
+msgid "Flower"
+msgstr "Cvijet"
+
+#: star/StarShapeFactory.cpp:52
+#, kde-format
+msgid "A flower"
+msgstr "Cvijet"
+
+#: star/StarShapeFactory.cpp:67
+#, kde-format
+msgid "Pentagon"
+msgstr "Petougao"
+
+#: star/StarShapeFactory.cpp:69
+#, kde-format
+msgid "A pentagon"
+msgstr "Petougao"
+
+#: star/StarShapeFactory.cpp:83
+#, kde-format
+msgid "Hexagon"
+msgstr "Šestougao"
+
+#: star/StarShapeFactory.cpp:85
+#, kde-format
+msgid "A hexagon"
+msgstr "Šestougao"
+
+#, fuzzy
+#~| msgid "Ellipse Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse Shape"
+#~ msgstr "Oblik elipse"
+
+#, fuzzy
+#~| msgid "Type:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Type:"
+#~ msgstr "Vrsta:"
+
+#, fuzzy
+#~| msgid "Start angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start angle:"
+#~ msgstr "Početni ugao:"
+
+#, fuzzy
+#~| msgid "°"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "°"
+#~ msgstr "°"
+
+#, fuzzy
+#~| msgid "End angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End angle:"
+#~ msgstr "Završni Ugao:"
+
+#, fuzzy
+#~| msgid "Close ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Close ellipse"
+#~ msgstr "Zatvorena elipsa"
+
+#, fuzzy
+#~| msgid "Rectangle Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangle Shape"
+#~ msgstr "Pravougaoni lik"
+
+#, fuzzy
+#~| msgid "Corner radius x:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corner radius x:"
+#~ msgstr "Radijus ugla x:"
+
+#, fuzzy
+#~| msgid "Corner radius y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corner radius y:"
+#~ msgstr "Radijus ugla y:"
+
+#, fuzzy
+#~| msgid "Star shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star shape"
+#~ msgstr "Zvjezdasti lik"
+
+#, fuzzy
+#~| msgid "Polygon:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Polygon:"
+#~ msgstr "Poligon:"
+
+#, fuzzy
+#~| msgid "Corners:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners:"
+#~ msgstr "Uglovi:"
+
+#, fuzzy
+#~| msgid "Inner radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inner radius:"
+#~ msgstr "Unutrašnji radijus:"
+
+#, fuzzy
+#~| msgid "Outer radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outer radius:"
+#~ msgstr "Spoljašnji radijus:"
+
+#, fuzzy
+#~| msgid "Spiral Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral Shape"
+#~ msgstr "Spiralni lik"
+
+#, fuzzy
+#~| msgid "Fade:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade:"
+#~ msgstr "Izblijedi:"
+
+#, fuzzy
+#~| msgid "Direction:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Direction:"
+#~ msgstr "Pravac:"
+
+#, fuzzy
+#~| msgid "Arc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arc"
+#~ msgstr "Luk"
+
+#, fuzzy
+#~| msgid "Pie"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pie"
+#~ msgstr "Pita"
+
+#, fuzzy
+#~| msgid "Chord"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chord"
+#~ msgstr "Struna"
+
+#, fuzzy
+#~| msgid "Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Elipsa"
+
+#, fuzzy
+#~| msgid "An ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An ellipse"
+#~ msgstr "Elipsa"
+
+#, fuzzy
+#~| msgid "An enhanced path shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An enhanced path shape"
+#~ msgstr "Lik poboljšane putanje"
+
+#, fuzzy
+#~| msgid "An enhanced path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An enhanced path"
+#~ msgstr "Poboljšana putanja"
+
+#, fuzzy
+#~| msgid "Cross"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cross"
+#~ msgstr "Krst"
+
+#, fuzzy
+#~| msgid "A cross"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A cross"
+#~ msgstr "Krst"
+
+#, fuzzy
+#~| msgid "Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrow"
+#~ msgstr "Strijela"
+
+#, fuzzy
+#~| msgid "An arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An arrow"
+#~ msgstr "Strijela"
+
+#, fuzzy
+#~| msgid "Callout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Callout"
+#~ msgstr "Oblačić"
+
+#, fuzzy
+#~| msgid "A callout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A callout"
+#~ msgstr "Oblačić"
+
+#, fuzzy
+#~| msgid "Smiley"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smiley"
+#~ msgstr "Smiješak"
+
+#, fuzzy
+#~| msgid "Circular Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circular Arrow"
+#~ msgstr "Kružna strijela"
+
+#, fuzzy
+#~| msgid "A circular-arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A circular-arrow"
+#~ msgstr "Kružna strijela"
+
+#, fuzzy
+#~| msgid "Gearhead"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gearhead"
+#~ msgstr "Zupčanik"
+
+#, fuzzy
+#~| msgid "A gearhead"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A gearhead"
+#~ msgstr "Zupčanik"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangle"
+#~ msgstr "Pravougaonik"
+
+#, fuzzy
+#~| msgid "A rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A rectangle"
+#~ msgstr "Pravougaonik"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Curve"
+#~ msgstr "Krivulja"
+
+#, fuzzy
+#~| msgid "Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line"
+#~ msgstr "Linija"
+
+#, fuzzy
+#~| msgid "Spiral"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Spirala"
+
+#, fuzzy
+#~| msgid "A spiral shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A spiral shape"
+#~ msgstr "Spiralni lik"
+
+#, fuzzy
+#~| msgid "A star shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A star shape"
+#~ msgstr "Zvjezdasti lik"
+
+#, fuzzy
+#~| msgid "A star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A star"
+#~ msgstr "Zvijezda"
+
+#, fuzzy
+#~| msgid "Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "Zvijezda"
+
+#, fuzzy
+#~| msgid "Flower"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flower"
+#~ msgstr "Cvijet"
+
+#, fuzzy
+#~| msgid "A flower"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A flower"
+#~ msgstr "Cvijet"
+
+#, fuzzy
+#~| msgid "Pentagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Petougao"
+
+#, fuzzy
+#~| msgid "A pentagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A pentagon"
+#~ msgstr "Petougao"
+
+#, fuzzy
+#~| msgid "Hexagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hexagon"
+#~ msgstr "Šestougao"
+
+#, fuzzy
+#~| msgid "A hexagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A hexagon"
+#~ msgstr "Šestougao"

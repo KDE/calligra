@@ -1,0 +1,654 @@
+# translation of PathShapes.po to Hindi
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Ravishankar Shrivastava <raviratlami@yahoo.com>, 2008.
+# Ravishankar Shrivastava <raviratlami@aol.in>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: PathShapes\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2009-03-03 11:10+0530\n"
+"Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
+"Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
+"Language: hne\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: ellipse/EllipseShapeConfigCommand.cpp:19
+#, fuzzy
+#| msgid "Change ellipse"
+msgctxt "(qtundo-format)"
+msgid "Change ellipse"
+msgstr "दीर्घवृत्त बदलव"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Arc"
+msgstr "चाप"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Pie"
+msgstr "पाई"
+
+#: ellipse/EllipseShapeConfigWidget.cpp:18
+#, kde-format
+msgid "Chord"
+msgstr "कार्ड"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, EllipseShapeConfigWidget)
+#: ellipse/EllipseShapeConfigWidget.ui:13
+#, fuzzy, kde-format
+#| msgid "A ellipse shape"
+msgid "Ellipse Shape"
+msgstr "दीर्घवृत्त आकार"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ellipse/EllipseShapeConfigWidget.ui:19 spiral/SpiralShapeConfigWidget.ui:19
+#, kde-format
+msgid "Type:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ellipse/EllipseShapeConfigWidget.ui:29
+#, fuzzy, kde-format
+#| msgid "A rectangle"
+msgid "Start angle:"
+msgstr "चतुर्भुज"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, startAngle)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, endAngle)
+#: ellipse/EllipseShapeConfigWidget.ui:39
+#: ellipse/EllipseShapeConfigWidget.ui:56
+#, kde-format
+msgid "°"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ellipse/EllipseShapeConfigWidget.ui:46
+#, fuzzy, kde-format
+#| msgid "A rectangle"
+msgid "End angle:"
+msgstr "चतुर्भुज"
+
+#. i18n: ectx: property (text), widget (QPushButton, closeEllipse)
+#: ellipse/EllipseShapeConfigWidget.ui:63
+#, fuzzy, kde-format
+#| msgid "Change ellipse"
+msgid "Close ellipse"
+msgstr "दीर्घवृत्त बदलव"
+
+#: ellipse/EllipseShapeFactory.cpp:21
+#, kde-format
+msgid "Ellipse"
+msgstr "दीर्घवृत्त"
+
+#: ellipse/EllipseShapeFactory.cpp:23
+#, kde-format
+msgid "An ellipse"
+msgstr "दीर्घवृत्त"
+
+#: enhancedpath/CalloutShapeFactory.cpp:31
+#: enhancedpath/CalloutShapeFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "A callout"
+msgid "A callout shape"
+msgstr "कालाउट"
+
+#: enhancedpath/CalloutShapeFactory.cpp:149
+#, kde-format
+msgid "Rectangular Callout"
+msgstr ""
+
+#: enhancedpath/CalloutShapeFactory.cpp:151
+#, fuzzy, kde-format
+#| msgid "A rectangle shape"
+msgid "A rectangular callout"
+msgstr "चतुर्भुज आकार"
+
+#: enhancedpath/CalloutShapeFactory.cpp:231
+#, fuzzy, kde-format
+#| msgid "Callout"
+msgid "Rounded Callout"
+msgstr "कालाउट"
+
+#: enhancedpath/CalloutShapeFactory.cpp:233
+#, fuzzy, kde-format
+#| msgid "A rectangle shape"
+msgid "A rounded rectangular callout"
+msgstr "चतुर्भुज आकार"
+
+#: enhancedpath/CalloutToolFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Callout"
+msgid "Callout editing"
+msgstr "कालाउट"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:26
+#, kde-format
+msgid "An enhanced path shape"
+msgstr "उन्नत रस्ता आकार"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:28
+#, kde-format
+msgid "An enhanced path"
+msgstr "उन्नत पथ"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:145
+#, kde-format
+msgid "Cross"
+msgstr "क्रास"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:147
+#, kde-format
+msgid "A cross"
+msgstr "क्रास"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:180
+#: enhancedpath/EnhancedPathShapeFactory.cpp:213
+#: enhancedpath/EnhancedPathShapeFactory.cpp:246
+#: enhancedpath/EnhancedPathShapeFactory.cpp:279
+#, kde-format
+msgid "Arrow"
+msgstr "तीर"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:182
+#: enhancedpath/EnhancedPathShapeFactory.cpp:215
+#: enhancedpath/EnhancedPathShapeFactory.cpp:248
+#: enhancedpath/EnhancedPathShapeFactory.cpp:281
+#, kde-format
+msgid "An arrow"
+msgstr "तीर"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:324
+#: enhancedpath/EnhancedPathShapeFactory.cpp:326
+#, kde-format
+msgid "Smiley"
+msgstr "स्माइली"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:404
+#, kde-format
+msgid "Circular Arrow"
+msgstr "गोलाकार तीर"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:406
+#, kde-format
+msgid "A circular-arrow"
+msgstr "गोलाकार तीर"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:449
+#, kde-format
+msgid "Gearhead"
+msgstr "गीयर हेड"
+
+#: enhancedpath/EnhancedPathShapeFactory.cpp:451
+#, kde-format
+msgid "A gearhead"
+msgstr "गीयर हेड"
+
+#: rectangle/RectangleShapeConfigCommand.cpp:19
+#, fuzzy
+#| msgid "Change rectangle"
+msgctxt "(qtundo-format)"
+msgid "Change rectangle"
+msgstr "चतुर्भुज बदलव"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
+#: rectangle/RectangleShapeConfigWidget.ui:13
+#, fuzzy, kde-format
+#| msgid "A rectangle shape"
+msgid "Rectangle Shape"
+msgstr "चतुर्भुज आकार"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rectangle/RectangleShapeConfigWidget.ui:19
+#, kde-format
+msgid "Corner radius x:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: rectangle/RectangleShapeConfigWidget.ui:29
+#, kde-format
+msgid "Corner radius y:"
+msgstr ""
+
+#: rectangle/RectangleShapeFactory.cpp:20
+#, fuzzy, kde-format
+#| msgid "A rectangle"
+msgid "Rectangle"
+msgstr "चतुर्भुज"
+
+#: rectangle/RectangleShapeFactory.cpp:22
+#, kde-format
+msgid "A rectangle"
+msgstr "चतुर्भुज"
+
+#: spiral/SpiralShapeConfigCommand.cpp:19
+#, fuzzy
+#| msgid "Change spiral"
+msgctxt "(qtundo-format)"
+msgid "Change spiral"
+msgstr "सर्पिल बदलव"
+
+#: spiral/SpiralShapeConfigWidget.cpp:16
+#, kde-format
+msgid "Curve"
+msgstr "वक्र"
+
+#: spiral/SpiralShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Line"
+msgstr "पंक्ति"
+
+#: spiral/SpiralShapeConfigWidget.cpp:23
+#, kde-format
+msgid "Clockwise"
+msgstr ""
+
+#: spiral/SpiralShapeConfigWidget.cpp:24
+#, kde-format
+msgid "Anticlockwise"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
+#: spiral/SpiralShapeConfigWidget.ui:13
+#, fuzzy, kde-format
+#| msgid "A spiral shape"
+msgid "Spiral Shape"
+msgstr "सर्पिल आकार"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: spiral/SpiralShapeConfigWidget.ui:29
+#, kde-format
+msgid "Fade:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: spiral/SpiralShapeConfigWidget.ui:55
+#, kde-format
+msgid "Direction:"
+msgstr ""
+
+#: spiral/SpiralShapeFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "A spiral shape"
+msgid "Spiral"
+msgstr "सर्पिल आकार"
+
+#: spiral/SpiralShapeFactory.cpp:20
+#, kde-format
+msgid "A spiral shape"
+msgstr "सर्पिल आकार"
+
+#: star/StarShapeConfigCommand.cpp:21
+#, fuzzy
+#| msgid "Change star"
+msgctxt "(qtundo-format)"
+msgid "Change star"
+msgstr "तारा बदलव"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, StarShapeConfigWidget)
+#: star/StarShapeConfigWidget.ui:13
+#, fuzzy, kde-format
+#| msgid "A star shape"
+msgid "Star shape"
+msgstr "तारा आकार"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: star/StarShapeConfigWidget.ui:19
+#, kde-format
+msgid "Polygon:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: star/StarShapeConfigWidget.ui:36
+#, kde-format
+msgid "Corners:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: star/StarShapeConfigWidget.ui:46
+#, kde-format
+msgid "Inner radius:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: star/StarShapeConfigWidget.ui:60
+#, kde-format
+msgid "Outer radius:"
+msgstr ""
+
+#: star/StarShapeFactory.cpp:24
+#, kde-format
+msgid "A star shape"
+msgstr "तारा आकार"
+
+#: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:38
+#, kde-format
+msgid "A star"
+msgstr "तारा"
+
+#: star/StarShapeFactory.cpp:36
+#, kde-format
+msgid "Star"
+msgstr "तारा"
+
+#: star/StarShapeFactory.cpp:50
+#, kde-format
+msgid "Flower"
+msgstr "फूल"
+
+#: star/StarShapeFactory.cpp:52
+#, kde-format
+msgid "A flower"
+msgstr "फूल"
+
+#: star/StarShapeFactory.cpp:67
+#, kde-format
+msgid "Pentagon"
+msgstr "पंचभुज"
+
+#: star/StarShapeFactory.cpp:69
+#, kde-format
+msgid "A pentagon"
+msgstr "पंचभुज"
+
+#: star/StarShapeFactory.cpp:83
+#, kde-format
+msgid "Hexagon"
+msgstr "सट्कोन"
+
+#: star/StarShapeFactory.cpp:85
+#, kde-format
+msgid "A hexagon"
+msgstr "सट्कोन"
+
+#, fuzzy
+#~| msgid "A ellipse shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse Shape"
+#~ msgstr "दीर्घवृत्त आकार"
+
+#, fuzzy
+#~| msgid "A rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start angle:"
+#~ msgstr "चतुर्भुज"
+
+#, fuzzy
+#~| msgid "Change ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Close ellipse"
+#~ msgstr "दीर्घवृत्त बदलव"
+
+#, fuzzy
+#~| msgid "A rectangle shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangle Shape"
+#~ msgstr "चतुर्भुज आकार"
+
+#, fuzzy
+#~| msgid "A star shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star shape"
+#~ msgstr "तारा आकार"
+
+#, fuzzy
+#~| msgid "A spiral shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral Shape"
+#~ msgstr "सर्पिल आकार"
+
+#, fuzzy
+#~| msgid "Arc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arc"
+#~ msgstr "चाप"
+
+#, fuzzy
+#~| msgid "Pie"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pie"
+#~ msgstr "पाई"
+
+#, fuzzy
+#~| msgid "Chord"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chord"
+#~ msgstr "कार्ड"
+
+#, fuzzy
+#~| msgid "Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "दीर्घवृत्त"
+
+#, fuzzy
+#~| msgid "An ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An ellipse"
+#~ msgstr "दीर्घवृत्त"
+
+#, fuzzy
+#~| msgid "An enhanced path shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An enhanced path shape"
+#~ msgstr "उन्नत रस्ता आकार"
+
+#, fuzzy
+#~| msgid "An enhanced path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An enhanced path"
+#~ msgstr "उन्नत पथ"
+
+#, fuzzy
+#~| msgid "Cross"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cross"
+#~ msgstr "क्रास"
+
+#, fuzzy
+#~| msgid "A cross"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A cross"
+#~ msgstr "क्रास"
+
+#, fuzzy
+#~| msgid "Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrow"
+#~ msgstr "तीर"
+
+#, fuzzy
+#~| msgid "An arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "An arrow"
+#~ msgstr "तीर"
+
+#, fuzzy
+#~| msgid "Callout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Callout"
+#~ msgstr "कालाउट"
+
+#, fuzzy
+#~| msgid "A callout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A callout"
+#~ msgstr "कालाउट"
+
+#, fuzzy
+#~| msgid "Smiley"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smiley"
+#~ msgstr "स्माइली"
+
+#, fuzzy
+#~| msgid "Circular Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circular Arrow"
+#~ msgstr "गोलाकार तीर"
+
+#, fuzzy
+#~| msgid "A circular-arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A circular-arrow"
+#~ msgstr "गोलाकार तीर"
+
+#, fuzzy
+#~| msgid "Gearhead"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gearhead"
+#~ msgstr "गीयर हेड"
+
+#, fuzzy
+#~| msgid "A gearhead"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A gearhead"
+#~ msgstr "गीयर हेड"
+
+#, fuzzy
+#~| msgid "A rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangle"
+#~ msgstr "चतुर्भुज"
+
+#, fuzzy
+#~| msgid "A rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A rectangle"
+#~ msgstr "चतुर्भुज"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Curve"
+#~ msgstr "वक्र"
+
+#, fuzzy
+#~| msgid "Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line"
+#~ msgstr "पंक्ति"
+
+#, fuzzy
+#~| msgid "A spiral shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A spiral shape"
+#~ msgstr "सर्पिल आकार"
+
+#, fuzzy
+#~| msgid "A star shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A star shape"
+#~ msgstr "तारा आकार"
+
+#, fuzzy
+#~| msgid "A star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A star"
+#~ msgstr "तारा"
+
+#, fuzzy
+#~| msgid "Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "तारा"
+
+#, fuzzy
+#~| msgid "Flower"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flower"
+#~ msgstr "फूल"
+
+#, fuzzy
+#~| msgid "A flower"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A flower"
+#~ msgstr "फूल"
+
+#, fuzzy
+#~| msgid "Pentagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "पंचभुज"
+
+#, fuzzy
+#~| msgid "A pentagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A pentagon"
+#~ msgstr "पंचभुज"
+
+#, fuzzy
+#~| msgid "Hexagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hexagon"
+#~ msgstr "सट्कोन"
+
+#, fuzzy
+#~| msgid "A hexagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A hexagon"
+#~ msgstr "सट्कोन"
+
+#~ msgid "A arrow shape"
+#~ msgstr "तीर आकार"
+
+#~ msgid "A arrow"
+#~ msgstr "तीर"
+
+#~ msgid "Right Arrow"
+#~ msgstr "जेवनी तीर"
+
+#~ msgid "A right arrow"
+#~ msgstr "जेवनी तीर"
+
+#~ msgid "Left Arrow"
+#~ msgstr "डेरी तीर"
+
+#~ msgid "A left arrow"
+#~ msgstr "डेरी तीर"
+
+#~ msgid "Top Arrow"
+#~ msgstr "ऊपर तीर"
+
+#~ msgid "A top arrow"
+#~ msgstr "ऊपर तीर"
+
+#~ msgid "Bottom Arrow"
+#~ msgstr "नीचे तीर"
+
+#~ msgid "A bottom arrow"
+#~ msgstr "नीचे तीर"
+
+#~ msgid "Left Down Arrow"
+#~ msgstr "डेरी नीचे तीर"
+
+#~ msgid "A left down arrow"
+#~ msgstr "डेरी नीचे तीर"
+
+#~ msgid "Left Top Arrow"
+#~ msgstr "डेरी ऊपर तीर"
+
+#~ msgid "A left top arrow"
+#~ msgstr "डेरी ऊपर तीर"
+
+#~ msgid "Right Down Arrow"
+#~ msgstr "जेवनी नीचे तीर"
+
+#~ msgid "A right down arrow"
+#~ msgstr "जेवनी नीचे तीर"
+
+#~ msgid "Right Top Arrow"
+#~ msgstr "जेवनी ऊपर तीर"
+
+#~ msgid "A right top arrow"
+#~ msgstr "जेवनी ऊपर तीर"
+
+#~ msgid "Enhanced Path"
+#~ msgstr "उन्नत पथ"

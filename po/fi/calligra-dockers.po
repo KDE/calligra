@@ -1,0 +1,351 @@
+# Finnish messages for calligra-dockers.
+# Copyright © 2007, 2008, 2011, 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the calligra package.
+# Mikko Piippo <piippo@cc.helsinki.fi>, 2007, 2008.
+# Jorma Karvonen <karvonen.jorma@gmail.com>, 2011.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2014.
+#
+# KDE Finnish translation sprint participants:
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice-dockers\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2014-02-28 23:54+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2013-01-13 22:09:46+0000\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: shapecollection/OdfCollectionLoader.cpp:63
+#, kde-format
+msgid "Found no shapes in the collection! %1"
+msgstr "Kokoelmasta ei löytynyt muotoja! %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:132
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr "Ei ole kelvollinen Calligra-tiedosto: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:157
+#, kde-format
+msgid "No body tag found in file: %1"
+msgstr "Tunnistetta body ei löytynyt tiedostosta: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:165
+#, kde-format
+msgid "No office:drawing tag found in file: %1"
+msgstr "Ei löytynyt office:drawing -tunnistetta tiedostosta: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:173
+#: shapecollection/OdfCollectionLoader.cpp:181
+#, kde-format
+msgid "No shapes found in file: %1"
+msgstr "Muotoa ei löytynyt tiedostosta: %1"
+
+# @title:window
+#: shapecollection/ShapeCollectionDocker.cpp:111
+#, kde-format
+msgid "Add Shape"
+msgstr "Muodon lisäys"
+
+#: shapecollection/ShapeCollectionDocker.cpp:146
+#, kde-format
+msgid "More"
+msgstr "Lisää"
+
+#: shapecollection/ShapeCollectionDocker.cpp:176
+#, kde-format
+msgid "Open Shape Collection"
+msgstr "Avaa muotokokoelma"
+
+#: shapecollection/ShapeCollectionDocker.cpp:184
+#, kde-format
+msgid "Remove Shape Collection"
+msgstr "Poista muotokokoelma"
+
+#: shapecollection/ShapeCollectionDocker.cpp:330
+#, kde-format
+msgid "Default"
+msgstr "Oletus"
+
+#: shapecollection/ShapeCollectionDocker.cpp:334
+#, kde-format
+msgid "Geometrics"
+msgstr "Geometriset"
+
+#: shapecollection/ShapeCollectionDocker.cpp:345
+#, kde-format
+msgid "Arrows"
+msgstr "Nuolet"
+
+#: shapecollection/ShapeCollectionDocker.cpp:349
+#, kde-format
+msgid "Funny"
+msgstr "Hauska"
+
+#: shapecollection/ShapeCollectionDocker.cpp:522
+#, kde-format
+msgid "Collection Error"
+msgstr "Kokoelmavirhe"
+
+#: shapeproperties/ShapePropertiesDocker.cpp:35
+#, kde-format
+msgid "Shape Properties"
+msgstr "Muodon ominaisuudet"
+
+#: snapguidedocker/SnapGuideDocker.cpp:39
+#, kde-format
+msgid "Snap Settings"
+msgstr "Kiinnittymisasetukset"
+
+#, fuzzy
+#~| msgid "Found no shapes in the collection! %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Kokoelmasta ei löytynyt muotoja! %1"
+
+#, fuzzy
+#~| msgid "Not a valid Calligra file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Ei ole kelvollinen Calligra-tiedosto: %1"
+
+#, fuzzy
+#~| msgid "No body tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Tunnistetta body ei löytynyt tiedostosta: %1"
+
+#, fuzzy
+#~| msgid "No office:drawing tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Ei löytynyt office:drawing -tunnistetta tiedostosta: %1"
+
+#, fuzzy
+#~| msgid "No shapes found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Muotoa ei löytynyt tiedostosta: %1"
+
+# @title:window
+#, fuzzy
+#~| msgid "Add Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Shape"
+#~ msgstr "Muodon lisäys"
+
+#, fuzzy
+#~| msgid "More"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More"
+#~ msgstr "Lisää"
+
+#, fuzzy
+#~| msgid "Open Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Shape Collection"
+#~ msgstr "Avaa muotokokoelma"
+
+#, fuzzy
+#~| msgid "Remove Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Poista muotokokoelma"
+
+#, fuzzy
+#~| msgid "Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Oletus"
+
+#, fuzzy
+#~| msgid "Geometrics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometrics"
+#~ msgstr "Geometriset"
+
+#, fuzzy
+#~| msgid "Arrows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "Nuolet"
+
+#, fuzzy
+#~| msgid "Funny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Funny"
+#~ msgstr "Hauska"
+
+#, fuzzy
+#~| msgid "Collection Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Collection Error"
+#~ msgstr "Kokoelmavirhe"
+
+#, fuzzy
+#~| msgid "Shape Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties"
+#~ msgstr "Muodon ominaisuudet"
+
+#, fuzzy
+#~| msgid "Snap Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Settings"
+#~ msgstr "Kiinnittymisasetukset"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Värivalitsin"
+
+#~ msgid "Shadow Properties"
+#~ msgstr "Varjon ominaisuudet"
+
+#~ msgid "Creation error"
+#~ msgstr "Luontivirhe"
+
+#~ msgid "File not found"
+#~ msgstr "Tiedostoa ei löytynyt"
+
+#~ msgid "Cannot create storage"
+#~ msgstr "Ei voida luoda varastoa"
+
+#~ msgid "Bad MIME type"
+#~ msgstr "Väärä MIME-tyyppi"
+
+#~ msgid "Error in embedded document"
+#~ msgstr "Virhe upotetussa tiedostossa"
+
+#~ msgid "Format not recognized"
+#~ msgstr "Muotoa ei tunnistettu"
+
+#~ msgid "Not implemented"
+#~ msgstr "Ei ole toteutettu"
+
+#~ msgid "Parsing error"
+#~ msgstr "Jäsentämisvirhe"
+
+#~ msgid "Document is password protected"
+#~ msgstr "Tiedosto on salasanasuojattu"
+
+#~ msgid "Internal error"
+#~ msgstr "Sisäinen virhe"
+
+#~ msgid "Out of memory"
+#~ msgstr "Muisti loppui"
+
+#~ msgid "Unknown error"
+#~ msgstr "Tuntematon virhe"
+
+#~ msgid ""
+#~ "Could not open\n"
+#~ "%2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Ei voitu avata\n"
+#~ "%2.\n"
+#~ "Syy: %1"
+
+#~ msgid "Failed to import the file: %1"
+#~ msgstr "Tiedoston tuonti epäonnistui: %1"
+
+#~ msgid "Opacity:"
+#~ msgstr "Peittävyys:"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Ei mitään"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Tasainen"
+
+#~ msgid "Gradient"
+#~ msgstr "Liukuväri"
+
+#~ msgid "Pattern"
+#~ msgstr "Kuvio"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Parillinen-pariton täyttö"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Mutkainen täyttö"
+
+#~ msgid "Stroke and Fill"
+#~ msgstr "Viiva ja täyttö"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Viivan ominaisuudet"
+
+#~ msgid "Style:"
+#~ msgstr "Tyyli:"
+
+#~ msgid "Width:"
+#~ msgstr "Leveys:"
+
+#~ msgid "Set line width of actual selection"
+#~ msgstr "Aseta valitun viivan leveys"
+
+#~ msgid "Cap:"
+#~ msgstr "Huippu:"
+
+#~ msgid "Butt cap"
+#~ msgstr "Rajahuippu"
+
+#~ msgid "Round cap"
+#~ msgstr "Pyöristetty huippu"
+
+#~ msgid "Square cap"
+#~ msgstr "Kulmikas huippu"
+
+#~ msgid "Join:"
+#~ msgstr "Liitos:"
+
+#~ msgid "Miter join"
+#~ msgstr "Miter-liitos"
+
+#~ msgid "Round join"
+#~ msgstr "Pyöristetty liitos"
+
+#~ msgid "Bevel join"
+#~ msgstr "Bevel-liitos"
+
+#~ msgid "Miter limit:"
+#~ msgstr "Miter-liitos:"
+
+#~ msgid "Set miter limit"
+#~ msgstr "Aseta miter-raja"
+
+#~ msgid "Shapes"
+#~ msgstr "Hahmot"
+
+#~ msgid "Open..."
+#~ msgstr "Avaa..."
+
+#~ msgid "Save Book..."
+#~ msgstr "Tallenna kirja..."
+
+#~ msgid "New Folder..."
+#~ msgstr "Uusi kansio..."
+
+#~ msgid "Zoom In"
+#~ msgstr "Lähennä"
+
+#~ msgid "Zoom Out"
+#~ msgstr "Loitonna"
+
+#~ msgid "Remove Folder"
+#~ msgstr "Poista kansio"
+
+#~ msgid "Templates"
+#~ msgstr "Mallinteet"
+
+#~ msgid "Styles"
+#~ msgstr "Tyylit"

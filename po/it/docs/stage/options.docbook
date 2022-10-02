@@ -1,0 +1,347 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Federico</firstname
+><surname
+>Zenith</surname
+><affiliation
+><address
+><email
+>federico.zenith@member.fsf.org</email
+></address
+></affiliation
+><contrib
+>Traduzione della documentazione</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Vincenzo</firstname
+><surname
+>Reale</surname
+><affiliation
+><address
+><email
+>smart2128vr@gmail.com</email
+></address
+></affiliation
+><contrib
+>Traduzione della documentazione</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Configurare &stage;</title>
+
+<sect1 id="configure-dialog">
+<title
+>La finestra Configura - Stage</title>
+
+<sect2 id="configure-misc">
+<title
+>Varie</title>
+
+<screenshot>
+<screeninfo
+>Varie</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-misc.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Varie</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Unità</guilabel
+></term>
+<listitem
+><para
+>Scegli l'unità predefinita che sarà utilizzata nelle diapositive.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Raggio delle maniglie</guilabel
+></term>
+<listitem
+><para
+>Se selezioni una forma con lo strumento predefinito (freccia), vedrai i rettangoli rossi e gialli. Questi sono definiti maniglie (usate per ridimensionare, ruotare, ...). Il raggio della maniglia cambia la dimensione delle maniglie. Se le ingrandisci, sarà più semplice utilizzarle.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Sensibilità di cattura</guilabel
+></term>
+<listitem
+><para
+>Questa opzione definisce come premere esattamente una maniglia per utilizzarla. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Scostamento di incollaggio</guilabel
+></term>
+<listitem
+><para
+>Questa è attiva solo se <guilabel
+>Incolla al cursore</guilabel
+> è disabilitata. Se copi una forma con la scorciatoia <keycombo action="simul"
+>&Ctrl; <keycap
+>C</keycap
+></keycombo
+>, la incolli con <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> e lo fai in un punto dove è già presente una forma, questo scostamento è utilizzato per incollare la nuova forma in basso/a destra.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Incolla al cursore</guilabel
+></term>
+<listitem
+><para
+>Disabilita lo scostamento di incollaggio e inserisce una forma incollata alla posizione del puntatore del mouse.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-grid">
+<title
+>Griglia</title>
+
+<screenshot>
+<screeninfo
+>Griglia</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-grid.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Griglia</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Griglia</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Mostra la griglia</guilabel
+></term>
+<listitem
+><para
+>Se abilitata, &stage; visualizzerà una griglia di punti che rappresentano le intersezioni di linee orizzontali e verticali immaginarie. Puoi usare questi punti per posizionare precisamente gli oggetti sulla diapositiva.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Aggancia alla griglia</guilabel
+></term>
+<listitem
+><para
+>Se abilitato, quando sganci o sposti gli oggetti sulla diapositiva, l'angolo in alto a sinistra dell'oggetto si <quote
+>aggancerà</quote
+> o sposterà al punto della griglia più vicino.</para>
+<para
+>Ciò riduce la tua libertà di posizionare gli oggetti sulla diapositiva, ma ti aiuta anche ad allinearli precisamente. È facilmente abilitato o disabilitato con questa voce del menu, permettendoti il meglio dei due mondi.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Colore della griglia:</guilabel
+></term>
+<listitem
+><para
+>Qui puoi cambiare il colore della griglia, che come impostazione predefinita è nera.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Spaziatura</guilabel
+></title>
+<para
+>Puoi scegliere di mantenere le stesse proporzioni per le due impostazioni sotto premendo l'icona <inlinemediaobject
+><imageobject
+><imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+> o separare le due impostazioni usando l'icona <inlinemediaobject
+><imageobject
+><imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+>.</para>
+<varlistentry>
+<term
+><guilabel
+>Orizzontale:</guilabel
+></term>
+<listitem
+><para
+>Imposta lo spazio, in centimetri, tra due punti su una riga orizzontale sulla griglia. Il valore predefinito è 0,5 centimetri.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Verticale:</guilabel
+></term>
+<listitem
+><para
+>Imposta lo spazio, in centimetri, tra due punti su una riga verticale sulla griglia. Il valore predefinito è 0,5 centimetri.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-document">
+<title
+>Documento</title>
+
+<screenshot>
+<screeninfo
+>Documento</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-document.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Documento</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Impostazioni del documento</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Intervallo di salvataggio automatico:</guilabel
+></term>
+<listitem
+><para
+>Puoi usare questa impostazione per regolare quanto spesso &stage; salva un file temporaneo. Se imposti questo valore a <guilabel
+>Nessun salvataggio automatico</guilabel
+>, &stage; non effettuerà il salvataggio automatico. Puoi regolare il salvataggio automatico da 1 a 60 minuti.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Crea copia di sicurezza:</guilabel
+></term>
+<listitem
+><para
+>Se marcata, creerà un <filename
+>.&lt;nome&gt;.opd.autosave.odp</filename
+> nella cartella dove è il tuo file. Questa copia di sicurezza può poi essere usata in caso di problemi. La copia di sicurezza viene aggiornata ogni volta che salvi il tuo documento o ogni volta che c'è un salvataggio automatico.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-author">
+<title
+>Author</title>
+
+<screenshot>
+<screeninfo
+>Author</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Documento</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Scegli un profilo di author per il tuo documento. </para>
+<para
+>Puoi aggiungere un nuovo profilo o eliminare il profilo attuale utilizzando i pulsanti alla destra dell'elenco a tendina dei profili. </para>
+</sect2>
+
+</sect1>
+
+</chapter>

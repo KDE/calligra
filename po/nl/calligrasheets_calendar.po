@@ -1,0 +1,204 @@
+# translation of kspread_plugin_tool_calendar.po to Dutch
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristof Bal <kristof.bal@gmail.com>, 2008.
+# Freek de Kruijf <f.de.kruijf@hetnet.nl>, 2008, 2014, 2016.
+# Jaap Woldringh <jjhwoldringh@kde.nl>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: kspread_plugin_tool_calendar\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2016-11-22 13:40+0100\n"
+"Last-Translator: Freek de Kruijf <f.de.kruijf@gmail.com>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: CalendarTool.cpp:63
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+"De einddatum ligt voor de begindatum. Zorg er voor dat de einddatum na de "
+"begindatum ligt."
+
+#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#, kde-format
+msgid "Error"
+msgstr "Fout"
+
+#: CalendarTool.cpp:68
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+"Agenda's hebben een maximum lengte van 10 jaar. Als u een langere periode "
+"nodig hebt, dan dient u de agenda op te splitsen."
+
+#: CalendarTool.cpp:73
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+"De begin- en einddatum zijn gelijk. Er zal slechts 1 dag worden ingevoegd. "
+"Wilt u doorgaan?"
+
+#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#, kde-format
+msgid "Warning"
+msgstr "Waarschuwing"
+
+#: CalendarTool.cpp:78
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+"Een agenda die groter is dan een jaar kan veel ruimte in beslag nemen. Wilt "
+"u doorgaan?"
+
+#: CalendarTool.cpp:95
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+"Het gebied waar u de agenda wilt invoegen bevat gegevens. Deze zullen worden "
+"overschreven met de agenda. Wilt u dat? Als u \"Nee\" kiest, dan zal het "
+"gebied dat door de agenda zou worden overschreven geaccentueerd, zodat u "
+"kunt zien welke gegevens het betreft."
+
+#: CalendarTool.cpp:102
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "Agenda invoegen"
+
+#: CalendarTool.cpp:108
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "Agenda van %1 tot %2"
+
+#: CalendarTool.cpp:150
+#, kde-format
+msgid "week"
+msgstr "week"
+
+#: CalendarToolFactory.cpp:24
+#, kde-format
+msgid "Calendar"
+msgstr "Agenda"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:14
+#, kde-format
+msgid "Calendar Tool"
+msgstr "Agendahulpmiddel"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:20
+#, kde-format
+msgid "Insert"
+msgstr "Invoegen"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:27
+#, kde-format
+msgid "End date:"
+msgstr "Einddatum:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:47
+#, kde-format
+msgid "Start date:"
+msgstr "Startdatum:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Tool"
+#~ msgstr "Agendahulpmiddel"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start date:"
+#~ msgstr "Startdatum:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End date:"
+#~ msgstr "Einddatum:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "End date is before start date! Please make sure that end date comes after "
+#~ "start date."
+#~ msgstr ""
+#~ "De einddatum ligt voor de begindatum. Zorg er voor dat de einddatum na de "
+#~ "begindatum ligt."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Fout"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Calendars should not be longer than 10 years. If you really need such "
+#~ "long periods you need to split them up."
+#~ msgstr ""
+#~ "Agenda's hebben een maximum lengte van 10 jaar. Als u een langere periode "
+#~ "nodig hebt, dan dient u de agenda op te splitsen."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Start and end dates are equal! Only one day will be inserted, do you want "
+#~ "to continue?"
+#~ msgstr ""
+#~ "De begin- en einddatum zijn gelijk. Er zal slechts 1 dag worden "
+#~ "ingevoegd. Wilt u doorgaan?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "Waarschuwing"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Creating a calendar for a longer period than a year can take up a lot of "
+#~ "space, do you want to continue?"
+#~ msgstr ""
+#~ "Een agenda voor meer dan een jaar kan veel ruimte in beslag nemen. Wilt u "
+#~ "doorgaan?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The area where the calendar is inserted is NOT empty, are you sure you "
+#~ "want to continue, overwriting existing data? If you choose No the area "
+#~ "that would be required for the desired calendar will be selected so you "
+#~ "can see what data would be overwritten."
+#~ msgstr ""
+#~ "Het gebied waar u de agenda wilt invoegen bevat gegevens. Deze zullen "
+#~ "worden overschreven met de agenda. Wilt u dat? Als u Nee kiest, dan zal "
+#~ "het gebied dat door de agenda zou worden overschreven geaccentueerd, "
+#~ "zodat u kunt zien welke gegevens het betreft."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar from %1 to %2"
+#~ msgstr "Agenda van %1 tot %2"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "week"
+#~ msgstr "week"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar"
+#~ msgstr "Agenda"

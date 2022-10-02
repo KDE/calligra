@@ -1,0 +1,103 @@
+# Translation of calligra-dockers.po to Catalan
+# Copyright (C) 2008-2019 This_file_is_part_of_KDE
+# This file is distributed under the same license as the koffice-dockers package.
+#
+# Rafael Carreras <rcarreras@caliu.cat>, 2008, 2010.
+# Josep M. Ferrer <txemaq@gmail.com>, 2009, 2010, 2011, 2013, 2014, 2016, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2019-07-28 10:45+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Poedit-Language: Catalan\n"
+
+#: shapecollection/OdfCollectionLoader.cpp:63
+#, kde-format
+msgid "Found no shapes in the collection! %1"
+msgstr "No s'ha trobat cap forma a la col·lecció! %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:132
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr "No és un fitxer Calligra vàlid: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:157
+#, kde-format
+msgid "No body tag found in file: %1"
+msgstr "No s'ha trobat cap etiqueta al fitxer: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:165
+#, kde-format
+msgid "No office:drawing tag found in file: %1"
+msgstr "No s'ha trobat cap etiqueta de dibuix:oficina al fitxer: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:173
+#: shapecollection/OdfCollectionLoader.cpp:181
+#, kde-format
+msgid "No shapes found in file: %1"
+msgstr "No s'han trobat formes al fitxer: %1"
+
+#: shapecollection/ShapeCollectionDocker.cpp:111
+#, kde-format
+msgid "Add Shape"
+msgstr "Afegeix una forma"
+
+#: shapecollection/ShapeCollectionDocker.cpp:146
+#, kde-format
+msgid "More"
+msgstr "Més"
+
+#: shapecollection/ShapeCollectionDocker.cpp:176
+#, kde-format
+msgid "Open Shape Collection"
+msgstr "Obre la col·lecció de formes"
+
+#: shapecollection/ShapeCollectionDocker.cpp:184
+#, kde-format
+msgid "Remove Shape Collection"
+msgstr "Elimina la col·lecció de formes"
+
+#: shapecollection/ShapeCollectionDocker.cpp:330
+#, kde-format
+msgid "Default"
+msgstr "Per defecte"
+
+#: shapecollection/ShapeCollectionDocker.cpp:334
+#, kde-format
+msgid "Geometrics"
+msgstr "Geometries"
+
+#: shapecollection/ShapeCollectionDocker.cpp:345
+#, kde-format
+msgid "Arrows"
+msgstr "Fletxes"
+
+#: shapecollection/ShapeCollectionDocker.cpp:349
+#, kde-format
+msgid "Funny"
+msgstr "Divertit"
+
+#: shapecollection/ShapeCollectionDocker.cpp:522
+#, kde-format
+msgid "Collection Error"
+msgstr "Error en la col·lecció"
+
+#: shapeproperties/ShapePropertiesDocker.cpp:35
+#, kde-format
+msgid "Shape Properties"
+msgstr "Propietats de forma"
+
+#: snapguidedocker/SnapGuideDocker.cpp:39
+#, kde-format
+msgid "Snap Settings"
+msgstr "Arranjament de l'ajust"

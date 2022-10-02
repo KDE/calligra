@@ -1,0 +1,244 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2011.
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2014-06-15 01:05+0200\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ChangeImageCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change image"
+msgstr "Kép megváltoztatása"
+
+#: ChangeImageCommand.cpp:43
+msgctxt "(qtundo-format)"
+msgid "Crop image"
+msgstr "Kép levágása"
+
+#: ChangeImageCommand.cpp:57
+msgctxt "(qtundo-format)"
+msgid "Change image color mode"
+msgstr "Kép színmódjának megváltoztatása"
+
+#: ClipCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Contour image (by image analysis)"
+msgstr "Körvonal kép (képanalízis alapján)"
+
+#: ClipCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Remove image contour"
+msgstr "Kép körvonalának eltávolítása"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnImageFile)
+#: forms/wdgPictureTool.ui:20
+#, kde-format
+msgid "Replace image..."
+msgstr "Kép cseréje…"
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbAspect)
+#: forms/wdgPictureTool.ui:32
+#, kde-format
+msgid "Keep proportions"
+msgstr "Arányok megtartása"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: forms/wdgPictureTool.ui:58
+#, kde-format
+msgid "Left:"
+msgstr "Balra:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: forms/wdgPictureTool.ui:68
+#, kde-format
+msgid "Right:"
+msgstr "Jobbra:"
+
+#. i18n: ectx: property (text), widget (QLabel, bottomLabel)
+#: forms/wdgPictureTool.ui:91
+#, kde-format
+msgid "Bottom:"
+msgstr "Alul:"
+
+#. i18n: ectx: property (text), widget (QLabel, topLabel)
+#: forms/wdgPictureTool.ui:111
+#, kde-format
+msgid "Top:"
+msgstr "Felül:"
+
+#. i18n: ectx: property (text), widget (QToolButton, bnFill)
+#: forms/wdgPictureTool.ui:131
+#, kde-format
+msgid "Reset"
+msgstr "Visszaállítás"
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbContour)
+#: forms/wdgPictureTool.ui:148
+#, kde-format
+msgid "Contour (by image analysis)"
+msgstr "Körvonal (képanalízis alapján)"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: forms/wdgPictureTool.ui:178
+#, kde-format
+msgid "Color mode:"
+msgstr "Színmód:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: forms/wdgPictureTool.ui:193
+#, kde-format
+msgid "Crop"
+msgstr "Levágás"
+
+#: PictureShapeFactory.cpp:31
+#, kde-format
+msgid "Image"
+msgstr "Kép"
+
+#: PictureShapeFactory.cpp:33
+#, kde-format
+msgid "Image shape that can display jpg, png etc."
+msgstr "Kép alakzat, ami megjeleníthet JPG, PNG, stb. fájlokat."
+
+#: PictureTool.cpp:95
+#, kde-format
+msgid "Standard"
+msgstr "Szabványos"
+
+#: PictureTool.cpp:96
+#, kde-format
+msgid "Greyscale"
+msgstr "Szürkeárnyalatos"
+
+#: PictureTool.cpp:97
+#, kde-format
+msgid "Monochrome"
+msgstr "Fekete-fehér"
+
+#: PictureTool.cpp:98
+#, kde-format
+msgid "Watermark"
+msgstr "Vízjel"
+
+#: PictureToolFactory.cpp:19
+#, kde-format
+msgid "Picture editing"
+msgstr "Képszerkesztés"
+
+#, fuzzy
+#~| msgid "Replace image..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace image..."
+#~ msgstr "Kép cseréje…"
+
+#, fuzzy
+#~| msgid "Keep proportions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keep proportions"
+#~ msgstr "Arányok megtartása"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left:"
+#~ msgstr "Balra:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right:"
+#~ msgstr "Jobbra:"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom:"
+#~ msgstr "Alul:"
+
+#, fuzzy
+#~| msgid "Top:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top:"
+#~ msgstr "Felül:"
+
+#, fuzzy
+#~| msgid "Reset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset"
+#~ msgstr "Visszaállítás"
+
+#, fuzzy
+#~| msgid "Contour (by image analysis)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contour (by image analysis)"
+#~ msgstr "Körvonal (képanalízis alapján)"
+
+#, fuzzy
+#~| msgid "Color mode:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color mode:"
+#~ msgstr "Színmód:"
+
+#, fuzzy
+#~| msgid "Crop"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Levágás"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Kép"
+
+#, fuzzy
+#~| msgid "Image shape that can display jpg, png etc."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image shape that can display jpg, png etc."
+#~ msgstr "Kép alakzat, ami megjeleníthet JPG, PNG, stb. fájlokat."
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Szabványos"
+
+#, fuzzy
+#~| msgid "Greyscale"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Greyscale"
+#~ msgstr "Szürkeárnyalatos"
+
+#, fuzzy
+#~| msgid "Monochrome"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monochrome"
+#~ msgstr "Fekete-fehér"
+
+#, fuzzy
+#~| msgid "Watermark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Watermark"
+#~ msgstr "Vízjel"
+
+#, fuzzy
+#~| msgid "Picture editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Picture editing"
+#~ msgstr "Képszerkesztés"
+
+#~ msgid "Open"
+#~ msgstr "Megnyitás"

@@ -1,0 +1,2711 @@
+# translation of calligrafilters.po to Euskara/Basque (eu).
+#
+# Ion Gaztañaga <igaztanaga@gmail.com>, 2005.
+# Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2013.
+# Iñigo Salvador Azurmendi <xalba@euskalnet.net>, 2013, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligrafilters\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2022-08-29 22:08+0200\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 22.04.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, fuzzy, kde-format
+#| msgid "PNG Export Options"
+msgid "%1 Export Options"
+msgstr "PNG esportazio-aukerak"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, fuzzy, kde-format
+msgid "Page %1"
+msgstr "Orria "
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, kde-format
+msgid "Page:"
+msgstr "Orria:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, kde-format
+msgid "Size in Pixels"
+msgstr "Tamaina pixeletan"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr "Irudi-zabalera:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, kde-format
+msgid "Image height:"
+msgstr "Irudi-altuera:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr "Tamaina unitatetan"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, kde-format
+msgid "Resolution:"
+msgstr "Bereizmena:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr "Unitatea:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr "Atzeko planoaren kolorea"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, kde-format
+msgid "Color"
+msgstr "Kolorea"
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr "Opakutasuna"
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:299
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr "\"%1\" izen-lekua ez da aurkitu"
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, kde-format
+msgid "Could not open the requested file %1"
+msgstr "Ezin izan da ireki eskatutako %1 fitxategia."
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr "Ezin izan da irakurri eskatutako %1 fitxategiaren ZIP direktorioa."
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, kde-format
+msgid "Enter password"
+msgstr "Idatzi pasahitza"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr ""
+"Dokumentu hau enkriptatuta dago. Idatzi hura desenkriptatzeko pasahitza:"
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr "Pasahitz okerra. Idatzi dokumentu hau desenkriptatzeko pasahitza:"
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, kde-format
+msgid "Could not find path for type %1"
+msgstr "Ezin izan da bide-izenik aurkitu %1 motarako."
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr "%1 (%2 lerroa, %3 zutabea)"
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr "%1 (%2, %3 lerroa, %4 zutabea)"
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr "\"%1\" elementua ez da aurkitu"
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, kde-format
+msgid "Attribute \"%1\" not found"
+msgstr "\"%1\" atributua ez da aurkitu"
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr "\"%2\" atributuaren \"%1\" ustekabeko balioa"
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr "\"%1\" elementuaren bigarren ustekabeko agerraldia"
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr "\"%1\" elementuaren itxiera espero zen"
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr "Espero ziren elementuetako bat ere ez da aurkitu: %1"
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, kde-format
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr "Ezin izan da helbururik aurkitu \"%2\" fitxategiko \"%1\" IDrako."
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, kde-format
+msgid "Could not find relationships file \"%1\""
+msgstr "Ezin izan da aurkitu \"%1\" erlazio-fitxategia"
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, kde-format
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr "Ezin izan da helbururik aurkitu \"%2\" fitxategiko \"%1\" erlaziorako."
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+"Analisi-errorea gertatu da dokumentu nagusian, %1 lerroan, %2 zutabean.\n"
+"Errore-mezua: %3"
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr "'%1' sarrera ez da aurkitu."
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr "'%1' sarrera ez da fitxategi bat."
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr "Ezin izan da \"%1\" ireki idazteko."
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, kde-format
+msgid "Could not write block"
+msgstr "Ezin izan da blokea idatzi"
+
+#: sheets/csv/csvexport.cc:266
+#, kde-format
+msgid "<SHEETNAME>"
+msgstr "<ORRIAREN_IZENA>"
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Gomendatua (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Eskualde-ezarpenak (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Beste bat (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:281 words/ascii/ImportDialog.cc:94
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "Ezin da kodeketa aurkitu: %1"
+
+#: sheets/csv/csvimport.cc:74
+#, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr "CSV iragazkiak ezin du sarrerako fitxategia ireki. Eman horren berri."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "Kodeketa"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, kde-format
+msgid "E&ncoding:"
+msgstr "&Kodeketa:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, kde-format
+msgid "End of Line"
+msgstr "Lerro-amaiera"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr "&UNIX estiloa (gomendatua; lerro-jauzia soilik)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr "&Windows estiloa (orga-itzulera eta lerro-jauzia)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr "&MacOS estiloa (orga-itzulera soilik)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, kde-format
+msgid "Sheets"
+msgstr "Orriak"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, kde-format
+msgid "Select sheets to export:"
+msgstr "Hautatu esportatzeko orriak:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, kde-format
+msgid "Delimiter Line"
+msgstr "Bereizlearen lerroa"
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, kde-format
+msgid "********<SHEETNAME>********"
+msgstr "********<ORRIAREN_IZENA>********"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr "<ORRIAREN_IZENA> hurrengo orriaren izenarekin ordezkatzen da."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr "Inprimatu bereizle-lerroa orri bakoitzaren gainean"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, kde-format
+msgid "Cells"
+msgstr "Gelaxkak"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, kde-format
+msgid "Delimiter"
+msgstr "Bereizlea"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, kde-format
+msgid "Comma"
+msgstr "Koma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, kde-format
+msgid "Semicolon"
+msgstr "Puntu eta koma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, kde-format
+msgid "Tabulator"
+msgstr "Tabuladorea"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, kde-format
+msgid "Space"
+msgstr "Zuriunea"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, kde-format
+msgid "Other:"
+msgstr "Beste bat:"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, kde-format
+msgid "Quotes:"
+msgstr "Aipuak:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, kde-format
+msgid "Export selection only"
+msgstr "Esportatu hautapena soilik"
+
+#: sheets/dbase/dbaseimport.cc:44
+#, kde-format
+msgid "File format is not supported."
+msgstr "Fitxategi-formatua ez da onartzen."
+
+#: sheets/dbase/dbaseimport.cc:49
+#, kde-format
+msgid "Could not read from file."
+msgstr "Ezin izan du fitxategitik irakurri."
+
+#: sheets/html/exportdialog.cc:21
+#, kde-format
+msgid "Export Sheet to HTML"
+msgstr "Esportatu orria HTMLra"
+
+#: sheets/html/exportdialog.cc:32
+#, kde-format
+msgid "Recommended: UTF-8"
+msgstr "Gomendatua: UTF-8"
+
+#: sheets/html/exportdialog.cc:33
+#, kde-format
+msgid "Locale (%1)"
+msgstr "Eskualde-ezarpenak (%1)"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, kde-format
+msgid "En&coding:"
+msgstr "&Kodeketa:"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr ""
+"Aukera honen bidez, HTML-fitxategiaren kodeketa defini dezakezu. Kodeketa "
+"gomendatua (UTF8) dago hautatuta lehenetsi gisa."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, kde-format
+msgid "Sheet Selection"
+msgstr "Orri-hautapena"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr "Klikatu hemen zerrendako orri guztiak hautatzeko."
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, kde-format
+msgid "Select &All"
+msgstr "&Hautatu dena"
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, kde-format
+msgid "Desele&ct All"
+msgstr "&Desautatu dena"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+"Aukera honen bidez, HTML esportatzeko iragazkiak HTML orri bat sortuko du "
+"kalkulu-orri bakoitzeko. Aukera hau desgaitzen baduzu, kalkulu-orri guztiak "
+"HTML orri bakarrean idatziko dira."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, kde-format
+msgid "Use &separate files for each table"
+msgstr "Erabili fitxategi &bereiziak taula bakoitzerako"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, kde-format
+msgid "Style"
+msgstr "Estiloa"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr ""
+"Hautatu aukera hau HTML orrian letra-tipo eta kolore lehenetsiak erabiltzeko."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, kde-format
+msgid "Use &default style"
+msgstr "Erabili estilo &lehenetsia"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr ""
+"Hautatu aukera hau HTML orrirako estilo-orri bereizi bat zehazteko. Hautatu "
+"egin dezakezu edo beheko eremuan idatzi."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, kde-format
+msgid "Use &external stylesheet:"
+msgstr "Erabili &kanpoko estilo-orria:"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+"Eremu honetan, URL bat idatz dezakezu zure estilo-orrirako. Diskoko edo "
+"Interneteko estilo-orri bat adieraz daiteke."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, kde-format
+msgid "Layout"
+msgstr "Diseinua"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr "Erabili aukera hau gelaxken inguruko ertzak gaitzeko edo desgaitzeko."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, kde-format
+msgid "Use &borders"
+msgstr "Erabili &ertzak"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+"Erabili aukera hau gelaxken artean zenbat pixel egon behar duten "
+"definitzeko. Efektu hau hobeto nabarituko da <b>Erabili ertzak</b> ere "
+"markatzen baduzu."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, kde-format
+msgid "Pi&xels between cells:"
+msgstr "Gelaxken arteko pi&xelak:"
+
+#: sheets/html/htmlexport.cc:200 sheets/html/htmlexport.cc:375
+#, kde-format
+msgid "Top"
+msgstr "Goian"
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr "LaTeX esportatzeko iragazkiaren konfigurazioa"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, kde-format
+msgid "Document"
+msgstr "Dokumentua"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, kde-format
+msgid "Document Style"
+msgstr "Dokumentu-estiloa"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, kde-format
+msgid "Latex style"
+msgstr "LaTeX estiloa"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, kde-format
+msgid "Words style"
+msgstr "Words estiloa"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, kde-format
+msgid "Document Type"
+msgstr "Dokumentu mota"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr "Dokumentua bakarrik konpilatu ahal izango da"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, fuzzy, kde-format
+#| msgid ""
+#| "The document will be generated as a full latex document since all the "
+#| "include will be generated before the \\begin[document} and "
+#| "\\end{document} commands."
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+"Dokumentua LaTeX dokumentu oso gisa sortuko da, sartzeko elementu guztiak "
+"\\begin[document} eta \\end{document} aginduen aurretik sortuko baitira."
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, kde-format
+msgid "Independent document"
+msgstr "Dokumentu independentea"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr "Ez sortu LaTeX goiburua edo dokumentu-ingurunea"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+"LaTeX dokumentu gisa sortuko da dokumentua, eta LaTeX dokumentu nagusi "
+"batean sartu beharko da. Hainbat fitxategi txiki sortu ahal izango dituzu "
+"dokumentuaren kapitulu bakoitzerako."
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, kde-format
+msgid "Document to include"
+msgstr "Sartu beharreko dokumentua"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, kde-format
+msgid "Document class:"
+msgstr "Dokumentu klasea:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, kde-format
+msgid "Quality:"
+msgstr "Kalitatea:"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, kde-format
+msgid "Final"
+msgstr "Azkena"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, kde-format
+msgid "Draft"
+msgstr "Zirriborroa"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, kde-format
+msgid "Default font size:"
+msgstr "Letra-tamaina lehenetsia:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, kde-format
+msgid "Pictures"
+msgstr "Irudiak"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, kde-format
+msgid "Convert the pictures:"
+msgstr "Bihurtu irudiak:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, kde-format
+msgid "Pictures directory:"
+msgstr "Irudi-direktorioa:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, kde-format
+msgid "Language"
+msgstr "Hizkuntza"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, kde-format
+msgid "Add"
+msgstr "Gehitu"
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, kde-format
+msgid "Remove"
+msgstr "Kendu"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, kde-format
+msgid "Contents"
+msgstr "Edukiak"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, kde-format
+msgid "Export information about author:"
+msgstr "Esportatu egileari buruzko informazioa:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, kde-format
+msgid "Add a table of content:"
+msgstr "Gehitu edukien aurkibidea:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, kde-format
+msgid "Notes"
+msgstr "Oharrak"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, kde-format
+msgid "Don't export"
+msgstr "Ez esportatu"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, kde-format
+msgid "Export notes in margin notes"
+msgstr "Esportatu marjinetako oharrak"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, kde-format
+msgid "Export notes in comments"
+msgstr "Esportatu iruzkinetako oharrak"
+
+#: sheets/opencalc/opencalcexport.cc:890
+#, kde-format
+msgid "Page "
+msgstr "Orria"
+
+#: sheets/opencalc/opencalcimport.cc:1199
+#, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr "Fitxategia hondatuta dagoela dirudi. Taula bat saltatzen."
+
+#: sheets/opencalc/opencalcimport.cc:1211
+#, kde-format
+msgid "Skipping a table."
+msgstr "Taula bat saltatzen."
+
+#: sheets/opencalc/opencalcimport.cc:1911
+#, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+"OpenOffice.org '%1' bertsioarekin sortu da dokumentu hau. Iragazki hau 1.0 "
+"bertsioarekin idatzi da. Fitxategi hau irakurtzeak portaera arraroa, "
+"kraskadurak edo datuak oker bistaratzea eragin lezake. Dokumentua bihurtzen "
+"jarraitu nahi duzu?"
+
+#: sheets/opencalc/opencalcimport.cc:1912
+#, kde-format
+msgid "Unsupported document version"
+msgstr "Dokumentu-bertsioa ez da onartzen"
+
+#: sheets/qpro/qproimport.cc:114
+#, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr "QPRO iragazkiak ezin du sarrerako fitxategia ireki. Eman horren berri."
+
+#: sheets/qpro/qproimport.cc:219
+#, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr ""
+"Ezin dira ireki pasahitz bidez babestutako fitxategiak.\n"
+"Pasahitzen algoritmoa ez da argitaratu"
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, kde-format
+msgid "Unable to find part for type %1"
+msgstr "Ezin izan da aurkitu %1 motarako zatia"
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr "Kate partekatu kopuru deklaratua txikiegia da (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr "Letra-estilo kopuru deklaratua txikiegia da (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr "Gelaxka-formatu kopuru deklaratua txikiegia da (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr "Betetze-estilo kopuru deklaratua txikiegia da (%1)"
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:348
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+"Datuak ezin izan dira osorik kargatu, gainditu egin baita gehieneko orri-"
+"tamaina."
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1425
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr "Espero den osoko zenbakia edo koma mugikorreko zenbakia"
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, kde-format
+msgid "Slide layout \"%1\" not found"
+msgstr "\"%1\" diapositiba-diseinua ez da aurkitu"
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, kde-format
+msgid "Slide %1"
+msgstr "%1 diapositiba"
+
+#: words/ascii/ImportDialog.cc:32
+#, kde-format
+msgid "Words's Plain Text Import Filter"
+msgstr "Testu arrunta inportatzeko Words-en iragazkia"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "Testu arrunta inportatzeko elkarrizketa"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, kde-format
+msgid "End of Paragraph"
+msgstr "Paragrafo-amaiera"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, kde-format
+msgid "&As is: At the end of line"
+msgstr "&Dagoen bezala: lerro-amaieran"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr "E&saldia: lerro-amaiera esaldi baten amaiera bada"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr "Lerro &hutsa: lerroa hutsik badago"
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, kde-format
+msgid "End notes"
+msgstr "Amaiera-oharrak"
+
+#: words/msword-odf/conversion.cpp:828
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Orri bikoitien goiburua"
+
+#: words/msword-odf/conversion.cpp:830
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Orri bakoitien goiburua"
+
+#: words/msword-odf/conversion.cpp:832
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Orri bikoitien orri-oina"
+
+#: words/msword-odf/conversion.cpp:834
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Orri bakoitien orri-oina"
+
+#: words/msword-odf/conversion.cpp:836
+#, kde-format
+msgid "First Page Header"
+msgstr "Lehen orriaren goiburua"
+
+#: words/msword-odf/conversion.cpp:838
+#, kde-format
+msgid "First Page Footer"
+msgstr "Lehen orriaren orri-oina"
+
+#: words/msword-odf/texthandler.cpp:632
+#, kde-format
+msgid "Table %1"
+msgstr "%1 taula"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr "Fitxategia ezin da kargatu, RTF dokumentua ez dela baitirudi."
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, kde-format
+msgid "Words's RTF Import Filter"
+msgstr "RTF inportatzeko Words-en iragazkia"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, kde-format
+msgid "The file cannot be loaded."
+msgstr "Fitxategia ezin da kargatu."
+
+#~ msgid "Failed to read data."
+#~ msgstr "Huts egin du datuak irakurtzean."
+
+#~ msgid "Export Error"
+#~ msgstr "Esportazio-errorea"
+
+#~ msgid "Malformed XML data."
+#~ msgstr "Gaizki osatutako XML datuak."
+
+#~ msgid "Export to Image"
+#~ msgstr "Esportatu irudira"
+
+#~ msgid "Complete Page"
+#~ msgstr "Orri osoa"
+
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Objektuek orrian duten area"
+
+#~ msgid "Area to export:"
+#~ msgstr "Esportatzeko area:"
+
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "Tamaina pertsonalizatua (pixeletan):"
+
+#~ msgid "Height:"
+#~ msgstr "Altuera:"
+
+#~ msgid "Width:"
+#~ msgstr "Zabalera:"
+
+#~ msgid "Margin:"
+#~ msgstr "Marjina:"
+
+#~ msgid "QXml"
+#~ msgstr "QXml"
+
+#, fuzzy
+#~| msgid "Size in Pixels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Pixels"
+#~ msgstr "Tamaina pixeletan"
+
+#, fuzzy
+#~| msgid "Image width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image width:"
+#~ msgstr "Irudi-zabalera:"
+
+#, fuzzy
+#~| msgid "Image height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image height:"
+#~ msgstr "Irudi-altuera:"
+
+#, fuzzy
+#~| msgid "Size in Units"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Units"
+#~ msgstr "Tamaina unitatetan"
+
+#, fuzzy
+#~| msgid "Resolution:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Resolution:"
+#~ msgstr "Bereizmena:"
+
+#, fuzzy
+#~| msgid "Unit:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unit:"
+#~ msgstr "Unitatea:"
+
+#, fuzzy
+#~| msgid "Background Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background Color"
+#~ msgstr "Atzeko planoaren kolorea"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "Kolorea"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opacity"
+#~ msgstr "Opakutasuna"
+
+#, fuzzy
+#~| msgid "En&coding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&coding:"
+#~ msgstr "&Kodeketa:"
+
+#, fuzzy
+#~| msgid ""
+#~| "With this option you can define the encoding of the HTML file. The "
+#~| "recommended encoding (UTF8) is selected as default."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "With this option you can define the encoding of the HTML file. The "
+#~ "recommended encoding (UTF8) is selected as default."
+#~ msgstr ""
+#~ "Aukera honen bidez, HTML-fitxategiaren kodeketa defini dezakezu. Kodeketa "
+#~ "gomendatua (UTF8) dago hautatuta lehenetsi gisa."
+
+#, fuzzy
+#~| msgid "Sheet Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet Selection"
+#~ msgstr "Orri-hautapena"
+
+#, fuzzy
+#~| msgid "Click here to select all sheets in the list."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click here to select all sheets in the list."
+#~ msgstr "Klikatu hemen zerrendako orri guztiak hautatzeko."
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select &All"
+#~ msgstr "&Hautatu dena"
+
+#, fuzzy
+#~| msgid "Desele&ct All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Desele&ct All"
+#~ msgstr "&Desautatu dena"
+
+#, fuzzy
+#~| msgid ""
+#~| "This option will make the HTML export filter generate a new page for "
+#~| "each sheet. If you disable this option, all sheets are written on one "
+#~| "page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This option will make the HTML export filter generate a new page for each "
+#~ "sheet. If you disable this option, all sheets are written on one page."
+#~ msgstr ""
+#~ "Aukera honen bidez, HTML esportatzeko iragazkiak HTML orri bat sortuko du "
+#~ "kalkulu-orri bakoitzeko. Aukera hau desgaitzen baduzu, kalkulu-orri "
+#~ "guztiak HTML orri bakarrean idatziko dira."
+
+#, fuzzy
+#~| msgid "Use &separate files for each table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &separate files for each table"
+#~ msgstr "Erabili fitxategi &bereiziak taula bakoitzerako"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Estiloa"
+
+#, fuzzy
+#~| msgid ""
+#~| "Select this option to use the default fonts and colors for the HTML page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to use the default fonts and colors for the HTML page."
+#~ msgstr ""
+#~ "Hautatu aukera hau HTML orrian letra-tipo eta kolore lehenetsiak "
+#~ "erabiltzeko."
+
+#, fuzzy
+#~| msgid "Use &default style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &default style"
+#~ msgstr "Erabili estilo &lehenetsia"
+
+#, fuzzy
+#~| msgid ""
+#~| "Select this option to specify a separate stylesheet for the HTML page. "
+#~| "You can select or type on in the field below."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to specify a separate stylesheet for the HTML page. "
+#~ "You can select or type on in the field below."
+#~ msgstr ""
+#~ "Hautatu aukera hau HTML orrirako estilo-orri bereizi bat zehazteko. "
+#~ "Hautatu egin dezakezu edo beheko eremuan idatzi."
+
+#, fuzzy
+#~| msgid "Use &external stylesheet:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &external stylesheet:"
+#~ msgstr "Erabili &kanpoko estilo-orria:"
+
+#, fuzzy
+#~| msgid ""
+#~| "In this field you can enter an URL for your stylesheet. It is possible "
+#~| "to point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "In this field you can enter an URL for your stylesheet. It is possible to "
+#~ "point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgstr ""
+#~ "Eremu honetan, URL bat idatz dezakezu zure estilo-orrirako. Diskoko edo "
+#~ "Interneteko estilo-orri bat adieraz daiteke."
+
+#, fuzzy
+#~| msgid "Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Diseinua"
+
+#, fuzzy
+#~| msgid "Use this option to enable or disable borders around the cells."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use this option to enable or disable borders around the cells."
+#~ msgstr ""
+#~ "Erabili aukera hau gelaxken inguruko ertzak gaitzeko edo desgaitzeko."
+
+#, fuzzy
+#~| msgid "Use &borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &borders"
+#~ msgstr "Erabili &ertzak"
+
+#, fuzzy
+#~| msgid ""
+#~| "Use this option to define how many pixels there should be between the "
+#~| "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Use this option to define how many pixels there should be between the "
+#~ "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgstr ""
+#~ "Erabili aukera hau gelaxken artean zenbat pixel egon behar duten "
+#~ "definitzeko. Efektu hau hobeto nabarituko da <b>Erabili ertzak</b> ere "
+#~ "markatzen baduzu."
+
+#, fuzzy
+#~| msgid "Pi&xels between cells:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pi&xels between cells:"
+#~ msgstr "Gelaxken arteko pi&xelak:"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Dokumentua"
+
+#, fuzzy
+#~| msgid "Document Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Style"
+#~ msgstr "Dokumentu-estiloa"
+
+#, fuzzy
+#~| msgid "Latex style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex style"
+#~ msgstr "LaTeX estiloa"
+
+#, fuzzy
+#~| msgid "Words style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words style"
+#~ msgstr "Words estiloa"
+
+#, fuzzy
+#~| msgid "Document Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Type"
+#~ msgstr "Dokumentu mota"
+
+#, fuzzy
+#~| msgid "The document will be able to be compiled alone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The document will be able to be compiled alone"
+#~ msgstr "Dokumentua bakarrik konpilatu ahal izango da"
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a full latex document since all the "
+#~| "include will be generated before the \\begin[document} and "
+#~| "\\end{document} commands."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a full latex document since all the "
+#~ "include will be generated before the \\begin[document} and "
+#~ "\\end{document} commands."
+#~ msgstr ""
+#~ "Dokumentua LaTeX dokumentu oso gisa sortuko da, sartzeko elementu guztiak "
+#~ "\\begin[document} eta \\end{document} aginduen aurretik sortuko baitira."
+
+#, fuzzy
+#~| msgid "Independent document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Independent document"
+#~ msgstr "Dokumentu independentea"
+
+#, fuzzy
+#~| msgid "Do not generate either the latex header or the document environment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do not generate either the latex header or the document environment"
+#~ msgstr "Ez sortu LaTeX goiburua edo dokumentu-ingurunea"
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a latex document which will have to be "
+#~| "included in a main latex document. It will allow you to generate several "
+#~| "little files for each chapter of your document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a latex document which will have to be "
+#~ "included in a main latex document. It will allow you to generate several "
+#~ "little files for each chapter of your document."
+#~ msgstr ""
+#~ "LaTeX dokumentu gisa sortuko da dokumentua, eta LaTeX dokumentu nagusi "
+#~ "batean sartu beharko da. Hainbat fitxategi txiki sortu ahal izango dituzu "
+#~ "dokumentuaren kapitulu bakoitzerako."
+
+#, fuzzy
+#~| msgid "Document to include"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document to include"
+#~ msgstr "Sartu beharreko dokumentua"
+
+#, fuzzy
+#~| msgid "Document class:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document class:"
+#~ msgstr "Dokumentu klasea:"
+
+#, fuzzy
+#~| msgid "Quality:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quality:"
+#~ msgstr "Kalitatea:"
+
+#, fuzzy
+#~| msgid "Final"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Final"
+#~ msgstr "Azkena"
+
+#, fuzzy
+#~| msgid "Draft"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draft"
+#~ msgstr "Zirriborroa"
+
+#, fuzzy
+#~| msgid "Default font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default font size:"
+#~ msgstr "Letra-tamaina lehenetsia:"
+
+#, fuzzy
+#~| msgid "Pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures"
+#~ msgstr "Irudiak"
+
+#, fuzzy
+#~| msgid "Convert the pictures:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convert the pictures:"
+#~ msgstr "Bihurtu irudiak:"
+
+#, fuzzy
+#~| msgid "Pictures directory:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures directory:"
+#~ msgstr "Irudi-direktorioa:"
+
+#, fuzzy
+#~| msgid "Language"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Hizkuntza"
+
+#, fuzzy
+#~| msgid "Encoding"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encoding"
+#~ msgstr "Kodeketa"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Gehitu"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Kendu"
+
+#, fuzzy
+#~| msgid "Contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "Edukiak"
+
+#, fuzzy
+#~| msgid "Export information about author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export information about author:"
+#~ msgstr "Esportatu egileari buruzko informazioa:"
+
+#, fuzzy
+#~| msgid "Add a table of content:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a table of content:"
+#~ msgstr "Gehitu edukien aurkibidea:"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Oharrak"
+
+#, fuzzy
+#~| msgid "Don't export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Don't export"
+#~ msgstr "Ez esportatu"
+
+#, fuzzy
+#~| msgid "Export notes in margin notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in margin notes"
+#~ msgstr "Esportatu marjinetako oharrak"
+
+#, fuzzy
+#~| msgid "Export notes in comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in comments"
+#~ msgstr "Esportatu iruzkinetako oharrak"
+
+#, fuzzy
+#~| msgid "E&ncoding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "&Kodeketa:"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Line"
+#~ msgstr "Lerro-amaiera"
+
+#, fuzzy
+#~| msgid "&UNIX style (recommended; line feed only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&UNIX style (recommended; line feed only)"
+#~ msgstr "&UNIX estiloa (gomendatua; lerro-jauzia soilik)"
+
+#, fuzzy
+#~| msgid "&Windows style (carriage return and line feed)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Windows style (carriage return and line feed)"
+#~ msgstr "&Windows estiloa (orga-itzulera eta lerro-jauzia)"
+
+#, fuzzy
+#~| msgid "&MacOS style (carriage return only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&MacOS style (carriage return only)"
+#~ msgstr "&MacOS estiloa (orga-itzulera soilik)"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Orriak"
+
+#, fuzzy
+#~| msgid "Select sheets to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select sheets to export:"
+#~ msgstr "Hautatu esportatzeko orriak:"
+
+#, fuzzy
+#~| msgid "Delimiter Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter Line"
+#~ msgstr "Bereizlearen lerroa"
+
+#, fuzzy
+#~| msgid "********<SHEETNAME>********"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "********<SHEETNAME>********"
+#~ msgstr "********<ORRIAREN_IZENA>********"
+
+#, fuzzy
+#~| msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgstr "<ORRIAREN_IZENA> hurrengo orriaren izenarekin ordezkatzen da."
+
+#, fuzzy
+#~| msgid "Print delimiter line above every sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Print delimiter line above every sheet"
+#~ msgstr "Inprimatu bereizle-lerroa orri bakoitzaren gainean"
+
+#, fuzzy
+#~| msgid "Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cells"
+#~ msgstr "Gelaxkak"
+
+#, fuzzy
+#~| msgid "Delimiter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "Bereizlea"
+
+#, fuzzy
+#~| msgid "Comma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "Koma"
+
+#, fuzzy
+#~| msgid "Semicolon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "Puntu eta koma"
+
+#, fuzzy
+#~| msgid "Tabulator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "Tabuladorea"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "Zuriunea"
+
+#, fuzzy
+#~| msgid "Other:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other:"
+#~ msgstr "Beste bat:"
+
+#, fuzzy
+#~| msgid "Quotes:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quotes:"
+#~ msgstr "Aipuak:"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Export selection only"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export selection only"
+#~ msgstr "Esportatu hautapena soilik"
+
+#, fuzzy
+#~| msgid "Page:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page:"
+#~ msgstr "Orria:"
+
+#, fuzzy
+#~| msgid "Complete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Complete Page"
+#~ msgstr "Orri osoa"
+
+#, fuzzy
+#~| msgid "Area of Objects on Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Objektuek orrian duten area"
+
+#, fuzzy
+#~| msgid "Area to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area to export:"
+#~ msgstr "Esportatzeko area:"
+
+#, fuzzy
+#~| msgid "Custom size (in pixels):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "Tamaina pertsonalizatua (pixeletan):"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "Altuera:"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Zabalera:"
+
+#, fuzzy
+#~| msgid "Margin:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Margin:"
+#~ msgstr "Marjina:"
+
+#, fuzzy
+#~| msgid "Plain Text Import Dialog"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plain Text Import Dialog"
+#~ msgstr "Testu arrunta inportatzeko elkarrizketa"
+
+#, fuzzy
+#~| msgid "End of Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Paragraph"
+#~ msgstr "Paragrafo-amaiera"
+
+#, fuzzy
+#~| msgid "&As is: At the end of line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As is: At the end of line"
+#~ msgstr "&Dagoen bezala: lerro-amaieran"
+
+#, fuzzy
+#~| msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgstr "E&saldia: lerro-amaiera esaldi baten amaiera bada"
+
+#, fuzzy
+#~| msgid "&Empty Line: If the line is empty"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Empty Line: If the line is empty"
+#~ msgstr "Lerro &hutsa: lerroa hutsik badago"
+
+#, fuzzy
+#~| msgid "Export Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Error"
+#~ msgstr "Esportazio-errorea"
+
+#, fuzzy
+#~| msgid "Failed to read data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to read data."
+#~ msgstr "Huts egin du datuak irakurtzean."
+
+#, fuzzy
+#~| msgid "Malformed XML data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Malformed XML data."
+#~ msgstr "Gaizki osatutako XML datuak."
+
+#, fuzzy
+#~| msgid "Export to Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to Image"
+#~ msgstr "Esportatu irudira"
+
+#, fuzzy
+#~| msgid "PNG Export Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PNG Export Options"
+#~ msgstr "PNG esportazio-aukerak"
+
+#, fuzzy
+#~| msgid "Namespace \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace \"%1\" not found"
+#~ msgstr "\"%1\" izen-lekua ez da aurkitu"
+
+#, fuzzy
+#~| msgid "Could not open the requested file %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open the requested file %1"
+#~ msgstr "Ezin izan da ireki eskatutako %1 fitxategia."
+
+#, fuzzy
+#~| msgid "Could not read ZIP directory of the requested file %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read ZIP directory of the requested file %1"
+#~ msgstr "Ezin izan da irakurri eskatutako %1 fitxategiaren ZIP direktorioa."
+
+#, fuzzy
+#~| msgid "Enter password"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter password"
+#~ msgstr "Idatzi pasahitza"
+
+#, fuzzy
+#~| msgid ""
+#~| "This document is encrypted, please enter the password to decrypt it:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "This document is encrypted, please enter the password to decrypt it:"
+#~ msgstr ""
+#~ "Dokumentu hau enkriptatuta dago. Idatzi hura desenkriptatzeko pasahitza:"
+
+#, fuzzy
+#~| msgid ""
+#~| "Incorrect password, please enter the password to decrypt this document:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Incorrect password, please enter the password to decrypt this document:"
+#~ msgstr "Pasahitz okerra. Idatzi dokumentu hau desenkriptatzeko pasahitza:"
+
+#, fuzzy
+#~| msgid "Could not find path for type %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find path for type %1"
+#~ msgstr "Ezin izan da bide-izenik aurkitu %1 motarako."
+
+#, fuzzy
+#~| msgid "%1 (line %2, column %3)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (line %2, column %3)"
+#~ msgstr "%1 (%2 lerroa, %3 zutabea)"
+
+#, fuzzy
+#~| msgid "%1 (%2, line %3, column %4)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (%2, line %3, column %4)"
+#~ msgstr "%1 (%2, %3 lerroa, %4 zutabea)"
+
+#, fuzzy
+#~| msgid "Element \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Element \"%1\" not found"
+#~ msgstr "\"%1\" elementua ez da aurkitu"
+
+#, fuzzy
+#~| msgid "Attribute \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attribute \"%1\" not found"
+#~ msgstr "\"%1\" atributua ez da aurkitu"
+
+#, fuzzy
+#~| msgid "Unexpected value \"%1\" of attribute \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unexpected value \"%1\" of attribute \"%2\""
+#~ msgstr "\"%2\" atributuaren \"%1\" ustekabeko balioa"
+
+#, fuzzy
+#~| msgid "Unexpected second occurrence of \"%1\" element"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unexpected second occurrence of \"%1\" element"
+#~ msgstr "\"%1\" elementuaren bigarren ustekabeko agerraldia"
+
+#, fuzzy
+#~| msgid "Expected closing of element \"%1\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Expected closing of element \"%1\""
+#~ msgstr "\"%1\" elementuaren itxiera espero zen"
+
+#, fuzzy
+#~| msgid "None of expected elements found: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None of expected elements found: %1"
+#~ msgstr "Espero ziren elementuetako bat ere ez da aurkitu: %1"
+
+#, fuzzy
+#~| msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgstr "Ezin izan da helbururik aurkitu \"%2\" fitxategiko \"%1\" IDrako."
+
+#, fuzzy
+#~| msgid "Could not find relationships file \"%1\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find relationships file \"%1\""
+#~ msgstr "Ezin izan da aurkitu \"%1\" erlazio-fitxategia"
+
+#, fuzzy
+#~| msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgstr ""
+#~ "Ezin izan da helbururik aurkitu \"%2\" fitxategiko \"%1\" erlaziorako."
+
+#, fuzzy
+#~| msgid ""
+#~| "Parsing error in the main document at line %1, column %2.\n"
+#~| "Error message: %3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Parsing error in the main document at line %1, column %2.\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Analisi-errorea gertatu da dokumentu nagusian, %1 lerroan, %2 zutabean.\n"
+#~ "Errore-mezua: %3"
+
+#, fuzzy
+#~| msgid "QXml"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QXml"
+#~ msgstr "QXml"
+
+#, fuzzy
+#~| msgid "Entry '%1' not found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' not found."
+#~ msgstr "'%1' sarrera ez da aurkitu."
+
+#, fuzzy
+#~| msgid "Entry '%1' is not a file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' is not a file."
+#~ msgstr "'%1' sarrera ez da fitxategi bat."
+
+#, fuzzy
+#~| msgid "Could not open entry \"%1\" for writing."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open entry \"%1\" for writing."
+#~ msgstr "Ezin izan da \"%1\" ireki idazteko."
+
+#, fuzzy
+#~| msgid "Could not write block"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not write block"
+#~ msgstr "Ezin izan da blokea idatzi"
+
+#, fuzzy
+#~| msgid "<SHEETNAME>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME>"
+#~ msgstr "<ORRIAREN_IZENA>"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Recommended ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Gomendatua (%1)"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Locale ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Eskualde-ezarpenak (%1)"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Other ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Beste bat (%1)"
+
+#, fuzzy
+#~| msgid "Cannot find encoding: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "Ezin da kodeketa aurkitu: %1"
+
+#, fuzzy
+#~| msgid "CSV filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV filter cannot open input file - please report."
+#~ msgstr ""
+#~ "CSV iragazkiak ezin du sarrerako fitxategia ireki. Eman horren berri."
+
+#, fuzzy
+#~| msgid "File format is not supported."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File format is not supported."
+#~ msgstr "Fitxategi-formatua ez da onartzen."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read from file."
+#~ msgstr "Ezin izan da fitxategitik irakurri."
+
+#, fuzzy
+#~| msgid "Export Sheet to HTML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Sheet to HTML"
+#~ msgstr "Esportatu orria HTMLra"
+
+#, fuzzy
+#~| msgid "Recommended: UTF-8"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recommended: UTF-8"
+#~ msgstr "Gomendatua: UTF-8"
+
+#, fuzzy
+#~| msgid "Locale (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale (%1)"
+#~ msgstr "Eskualde-ezarpenak (%1)"
+
+#, fuzzy
+#~| msgid "Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top"
+#~ msgstr "Goian"
+
+#, fuzzy
+#~| msgid "Latex Export Filter Configuration"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex Export Filter Configuration"
+#~ msgstr "LaTeX esportatzeko iragazkiaren konfigurazioa"
+
+#, fuzzy
+#~| msgid "Page "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page "
+#~ msgstr "Orria"
+
+#, fuzzy
+#~| msgid "The file seems to be corrupt. Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file seems to be corrupt. Skipping a table."
+#~ msgstr "Fitxategia hondatuta dagoela dirudi. Taula bat saltatzen."
+
+#, fuzzy
+#~| msgid "Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skipping a table."
+#~ msgstr "Taula bat saltatzen."
+
+#, fuzzy
+#~| msgid ""
+#~| "This document was created with OpenOffice.org version '%1'. This filter "
+#~| "was written for version 1.0. Reading this file could cause strange "
+#~| "behavior, crashes or incorrect display of the data. Do you want to "
+#~| "continue converting the document?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document was created with OpenOffice.org version '%1'. This filter "
+#~ "was written for version 1.0. Reading this file could cause strange "
+#~ "behavior, crashes or incorrect display of the data. Do you want to "
+#~ "continue converting the document?"
+#~ msgstr ""
+#~ "OpenOffice.org '%1' bertsioarekin sortu da dokumentu hau. Iragazki hau "
+#~ "1.0 bertsioarekin idatzi da. Fitxategi hau irakurtzeak portaera arraroa, "
+#~ "kraskadurak edo datuak oker bistaratzea eragin lezake. Dokumentua "
+#~ "bihurtzen jarraitu nahi duzu?"
+
+#, fuzzy
+#~| msgid "Unsupported document version"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unsupported document version"
+#~ msgstr "Dokumentu-bertsioa ez da onartzen"
+
+#, fuzzy
+#~| msgid "QPRO filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QPRO filter cannot open input file - please report."
+#~ msgstr ""
+#~ "QPRO iragazkiak ezin du sarrerako fitxategia ireki. Eman horren berri."
+
+#, fuzzy
+#~| msgid ""
+#~| "Unable to open password protected files.\n"
+#~| "The password algorithm has not been published"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unable to open password protected files.\n"
+#~ "The password algorithm has not been published"
+#~ msgstr ""
+#~ "Ezin dira ireki pasahitz bidez babestutako fitxategiak.\n"
+#~ "Pasahitzen algoritmoa ez da argitaratu"
+
+#, fuzzy
+#~| msgid "Unable to find part for type %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unable to find part for type %1"
+#~ msgstr "Ezin izan da aurkitu %1 motarako zatia"
+
+#, fuzzy
+#~| msgid "Declared number of shared strings too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of shared strings too small (%1)"
+#~ msgstr "Kate partekatu kopuru deklaratua txikiegia da (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of font styles too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of font styles too small (%1)"
+#~ msgstr "Letra-estilo kopuru deklaratua txikiegia da (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of cell formats too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of cell formats too small (%1)"
+#~ msgstr "Gelaxka-formatu kopuru deklaratua txikiegia da (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of fill styles too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of fill styles too small (%1)"
+#~ msgstr "Betetze-estilo kopuru deklaratua txikiegia da (%1)"
+
+#, fuzzy
+#~| msgid ""
+#~| "The data could not be loaded completely because the maximum size of "
+#~| "sheet was exceeded."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The data could not be loaded completely because the maximum size of sheet "
+#~ "was exceeded."
+#~ msgstr ""
+#~ "Datuak ezin izan dira osorik kargatu, gainditu egin baita gehieneko orri-"
+#~ "tamaina."
+
+#, fuzzy
+#~| msgid "Expected integer or floating point number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Expected integer or floating point number"
+#~ msgstr "Espero den osoko zenbakia edo koma mugikorreko zenbakia"
+
+#, fuzzy
+#~| msgid "Slide layout \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide layout \"%1\" not found"
+#~ msgstr "\"%1\" diapositiba-diseinua ez da aurkitu"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "%1 diapositiba"
+
+#, fuzzy
+#~| msgid "Words's Plain Text Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's Plain Text Import Filter"
+#~ msgstr "Testu arrunta inportatzeko Words-en iragazkia"
+
+#, fuzzy
+#~| msgid "End notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End notes"
+#~ msgstr "Amaiera-oharrak"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Orri bikoitien goiburua"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Orri bakoitien goiburua"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Orri bikoitien orri-oina"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Orri bakoitien orri-oina"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Header"
+#~ msgstr "Lehen orriaren goiburua"
+
+#, fuzzy
+#~| msgid "First Page Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Footer"
+#~ msgstr "Lehen orriaren orri-oina"
+
+#, fuzzy
+#~| msgid "Table %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table %1"
+#~ msgstr "%1 taula"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgstr "Fitxategia ezin da kargatu, RTF dokumentua ez dela baitirudi."
+
+#, fuzzy
+#~| msgid "Words's RTF Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's RTF Import Filter"
+#~ msgstr "RTF inportatzeko Words-en iragazkia"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded."
+#~ msgstr "Fitxategia ezin da kargatu."
+
+#~ msgid "Failed to write file."
+#~ msgstr "Errorea fitxategira idaztean."
+
+#, fuzzy
+#~ msgid "%1 Export Error"
+#~ msgstr "SVG esportazioaren errorea"
+
+#, fuzzy
+#~ msgid "Export Filter Parameters"
+#~ msgstr "PNG esportaziorako iragazkiaren parametroak"
+
+#~ msgid "Keep ratio"
+#~ msgstr "Mantendu poportzioa"
+
+#~ msgid "Width (%):"
+#~ msgstr "Zabalera (%):"
+
+#~ msgid "Height (%):"
+#~ msgstr "Altuera (%):"
+
+#~ msgid "PNG Export Error"
+#~ msgstr "PNG esportazio errorea"
+
+#~ msgid "EPS Export"
+#~ msgstr "EPS esportazioa"
+
+#~ msgid "PostScript level 1"
+#~ msgstr "PostScript 1. maila"
+
+#~ msgid "PostScript level 2"
+#~ msgstr "PostScript 2. maila"
+
+#~ msgid "PostScript level 3"
+#~ msgstr "PostScript 3. maila"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "PDF inportazioa"
+
+#~ msgid "Text"
+#~ msgstr "Testua"
+
+#~ msgid "Number"
+#~ msgstr "Zenbakia"
+
+#~ msgid "Currency"
+#~ msgstr "Moneta"
+
+#~ msgid "Date"
+#~ msgstr "Data"
+
+#~ msgid "Decimal Comma Number"
+#~ msgstr "Komadun zenbaki hamartarra"
+
+#~ msgid "Decimal Point Number"
+#~ msgstr "Puntudun zenbaki hamartarra"
+
+#~ msgid "None"
+#~ msgstr "Bat ere ez"
+
+#~ msgid ""
+#~ "Please check the ranges you specified. The start value must be lower than "
+#~ "the end value."
+#~ msgstr ""
+#~ "Egiaztatu zehaztutako barrutiak. Hasierako balioak amaierako balioa baina "
+#~ "txikiagoa izan behar du."
+
+#~ msgid "Common"
+#~ msgstr "Komuna"
+
+#~ msgid "Other"
+#~ msgstr "Beste"
+
+#~ msgid "Ignore duplicate delimiters"
+#~ msgstr "Ezikusi bikoiztutako mugatzaileak"
+
+#~ msgid "Text&quote:"
+#~ msgstr "Testuaren &zita:"
+
+#~ msgid "&Format:"
+#~ msgstr "&Formatua:"
+
+#~ msgid "Ranges"
+#~ msgstr "Barrutiak"
+
+#~ msgid "to"
+#~ msgstr "hona"
+
+#~ msgid "Import lines:"
+#~ msgstr "Inportatu lerroak:"
+
+#~ msgid "Import columns:"
+#~ msgstr "Inportatu zutabeak:"
+
+#~ msgid "Update"
+#~ msgstr "Eguneratu"
+
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#, fuzzy
+#~ msgid "&Cancel"
+#~ msgstr "&Aurreratua"
+
+#, fuzzy
+#~| msgid ""
+#~| "An error has occurred while parsing the KWord file.\n"
+#~| "At line: %1, column %2\n"
+#~| "Error message: %3"
+#~ msgid ""
+#~ "An error has occurred while parsing the Words file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Errore bat gertatu da KWord fitxategia prozesatzean.\n"
+#~ "Lerroa: %1. Zutabea: %2\n"
+#~ "Errore-mezua: %3"
+
+#, fuzzy
+#~| msgid "KWord Export Filter Library"
+#~ msgid "Words Export Filter Library"
+#~ msgstr "KWord-en esportaziorako iragazkien liburutegia"
+
+#~ msgid "Export XSLT Configuration"
+#~ msgstr "Esportatu XSLT konfigurazioa"
+
+#~ msgid "Open Document"
+#~ msgstr "Ireki dokumentua"
+
+#~ msgid "Import XSLT Configuration"
+#~ msgstr "Inportatu XSLT konfigurazioa"
+
+#~ msgid "Common xslt Files"
+#~ msgstr "Xslt fitxategi komunak"
+
+#~ msgid "Personal xslt Files"
+#~ msgstr "Xslt fitxategi pertsonalak"
+
+#~ msgid "Choose..."
+#~ msgstr "Hautatu..."
+
+#~ msgid "SVG Export Error"
+#~ msgstr "SVG esportazioaren errorea"
+
+#~ msgid "LaTeX Export Error"
+#~ msgstr "LaTeX esportaziorako errorea"
+
+#~ msgid "PNG Export Filter Parameters"
+#~ msgstr "PNG esportaziorako iragazkiaren parametroak"
+
+#, fuzzy
+#~ msgid "Height"
+#~ msgstr "Altuera:"
+
+#, fuzzy
+#~ msgid "Width"
+#~ msgstr "Zabalera:"
+
+#~ msgid "Height (%)"
+#~ msgstr "Altuera (%)"
+
+#~ msgid "Width (%)"
+#~ msgstr "Zabalera (%)"
+
+#~ msgid "Slide Title"
+#~ msgstr "Diapositibaren izenburua"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Picture %1"
+#~ msgstr "Irudia %1"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Table %3, row %1, column %2"
+#~ msgstr "Taula: %3, lerroa: %1, zutabea: %2"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the AbiWord file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Errore bat gertatu da AbiWord fitxategia prozesatzean.\n"
+#~ "Lerroa: %1. Zutabea: %2\n"
+#~ "Errore-mezua: %3"
+
+#~ msgid "AbiWord Import Filter"
+#~ msgstr "AbiWord-en inportaziorako iragazkia"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Main Text Frameset"
+#~ msgstr "Testu nagusiaren marko-sorta"
+
+#~ msgid "An error occurred during the load of the AbiWord file: %1"
+#~ msgstr "Errore bat gertatu da AbiWord fitxategia kargatzean: %1"
+
+#~ msgid "Unable to save document information."
+#~ msgstr "Ezin da dokumentuaren informazioa kargatu."
+
+#~ msgid "Unable to save main document."
+#~ msgstr "Ezin da dokumentu nagusia gorde."
+
+#~ msgctxt "Frameset name"
+#~ msgid "Footnote %1"
+#~ msgstr "Orri-oina %1"
+
+#, fuzzy
+#~| msgid "KWord's Plain Text Export Filter"
+#~ msgid "Words's Plain Text Export Filter"
+#~ msgstr "KWord-en testu arruntaren esportaziorako liburutegia"
+
+#, fuzzy
+#~| msgid "KWord's HTML Export Filter"
+#~ msgid "Words's HTML Export Filter"
+#~ msgstr "KWord-en HTML esporatziorako iragazkia"
+
+#~ msgid "Untitled Document"
+#~ msgstr "Izenik gabeko dokumentua"
+
+#~ msgid "Latex Import Filter Parameters"
+#~ msgstr "Latex-en inportaziorako iragazkiaren parametroak"
+
+#~ msgid "Unicode"
+#~ msgstr "Unicode"
+
+#~ msgid "latin1"
+#~ msgstr "latin1"
+
+#~ msgid "New document"
+#~ msgstr "Dokumentu berria"
+
+#~ msgid "Embedded document"
+#~ msgstr "Kapsulatutako dokumentua"
+
+#, fuzzy
+#~| msgid "KWord's MS Write Import Filter"
+#~ msgid "Words's MS Write Import Filter"
+#~ msgstr "KWord-en MS Write inportaziorako iragazkia"
+
+#~ msgid "Header"
+#~ msgstr "Goiburua"
+
+#~ msgid "Footer"
+#~ msgstr "Orri-oina"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Testu nagusiaren marko-sorta"
+
+#~ msgctxt "Object name"
+#~ msgid "Table %1"
+#~ msgstr "Taula %1"
+
+#~ msgctxt "Object name"
+#~ msgid "Table Frame %1"
+#~ msgstr "Taularen markoa  %1"
+
+#, fuzzy
+#~| msgctxt "Pseudo-author for annotations"
+#~| msgid "KWord 1.3"
+#~ msgctxt "Pseudo-author for annotations"
+#~ msgid "KWord 1.3"
+#~ msgstr "KWord 1.3"
+
+#~ msgid "Plain Text Export Dialog"
+#~ msgstr "Testu arruntaren esportaziorako elkarrizketa"
+
+#~ msgid "HTML Export Dialog"
+#~ msgstr "HTML esportazioaren elkarrizketa"
+
+#~ msgid "&HTML 4.01"
+#~ msgstr "&HTML 4.01"
+
+#~ msgid "HTML 4.01 (For older HTML user agents) "
+#~ msgstr "HTML 4.01 (HTML bezero zaharrentzat) "
+
+#~ msgid "&XHTML 1.0"
+#~ msgstr "&XHTML 1.0"
+
+#~ msgid "XHTML 1.0"
+#~ msgstr "XHTML 1.0"
+
+#~ msgid "Mode"
+#~ msgstr "Modua"
+
+#~ msgid "L&ight: Convert to strict (X)HTML"
+#~ msgstr "Ar&ina: Bihurtu (X)HTML zorrotzera"
+
+#~ msgid ""
+#~ "Convert mainly the document structure (Recommended for exporting to "
+#~ "browsers with limited capabilities)"
+#~ msgstr ""
+#~ "Bihurtu gehienbat dokumentuaren egitura (gaitasun mugatudun arakatzaile "
+#~ "zaharrentzat gomendatua)"
+
+#~ msgid "&Basic: Convert to transitional (X)HTML"
+#~ msgstr "&Oinarrizkoa: Bihurtu behin-behineko (X)HTML-ra"
+
+#, fuzzy
+#~| msgid ""
+#~| "Convert most of the document (Recommended for re-importing in KWord or "
+#~| "for exporting to older browsers)"
+#~ msgid ""
+#~ "Convert most of the document (Recommended for re-importing in Words or "
+#~ "for exporting to older browsers)"
+#~ msgstr ""
+#~ "Bihurtu dokumentuaren gehiengoa (KWord-en berriro inportatzeko edo "
+#~ "arakatzaile zaharretara esportatzeko gomendatua)"
+
+#~ msgid "&Enhanced: Convert to (X)HTML with CSS"
+#~ msgstr "&Hobetua: Bihurtu CSS-dun (X)HTML-ra"
+
+#, fuzzy
+#~| msgid ""
+#~| "Convert as much as possible of the KWord document (Recommended for "
+#~| "exporting to other modern word processors or to modern browsers)"
+#~ msgid ""
+#~ "Convert as much as possible of the Words document (Recommended for "
+#~ "exporting to other modern word processors or to modern browsers)"
+#~ msgstr ""
+#~ "Bihurtu ahalik eta gehien KWord-en dokumentua (testu-prozesadore edo "
+#~ "arakatzaile modernoentzat gomendatua)"
+
+#~ msgid "Use external CSS sheet:"
+#~ msgstr "Erabili kanpoko CSS orria:"
+
+#~ msgid "Enter the location of the CSS file in this field"
+#~ msgstr "Sartu CSS fitxategiaren kokalekua eremu honetan"
+
+#, fuzzy
+#~ msgid "This directory will contains the eps pictures of your document"
+#~ msgstr "Direktorio honek zure dokumentuaren eps irudiak izango ditu."
+
+#~ msgid "MS Write Import Dialog"
+#~ msgstr "MS Write inportaziorako elkarrizketa"
+
+#~ msgid "&Encoding"
+#~ msgstr "&Kodeketa"
+
+#~ msgid ""
+#~ "Select the encoding of the Write document.<br><br>Try the Default  "
+#~ "Encoding (CP 1252), if unsure."
+#~ msgstr ""
+#~ "Hautatu Write dokumentuaren kodeketa. <br><br>Saiatu kodeketa lehenetsia "
+#~ "(CP 1252) ziur ez bazaude."
+
+#~ msgid "&Other encoding:"
+#~ msgstr "&Beste kodeketa:"
+
+#~ msgid "&Default encoding (CP 1252)"
+#~ msgstr "Kodeketa &lehenetsia (CP 1252)"
+
+#~ msgid ""
+#~ "Most Write documents are stored using this encoding (also known as "
+#~ "windows-1252).<br><br>Select this if unsure."
+#~ msgstr ""
+#~ "Write dokumentu gehienak kodeketa hau erabiliz gordetzen dira "
+#~ "(windows-1252 bezala ere ezagutzen da).<br><br>Hautatu hau ziur ez "
+#~ "bazaude."
+
+#~ msgid "&Advanced"
+#~ msgstr "&Aurreratua"
+
+#, fuzzy
+#~| msgid ""
+#~| "These advanced options allow you to fine-tune the importing of "
+#~| "formatting information. They compensate for differences between KWord "
+#~| "and MS Write by adding extra formatting information (not found in the "
+#~| "original document), to try to make the imported document look as close "
+#~| "to the original as possible.<br><br>It is safe to use the defaults, if "
+#~| "unsure."
+#~ msgid ""
+#~ "These advanced options allow you to fine-tune the importing of formatting "
+#~ "information. They compensate for differences between Words and MS Write "
+#~ "by adding extra formatting information (not found in the original "
+#~ "document), to try to make the imported document look as close to the "
+#~ "original as possible.<br><br>It is safe to use the defaults, if unsure."
+#~ msgstr ""
+#~ "Aukera aurreratu hauek formatuaren informazioaren inportazioa doitzeko "
+#~ "aukera ematen dizute. Hauek KWord eta MS Write-en arteko ezberdintasunak "
+#~ "konpentsatzen dituzte formatuaren informazioa gehigarria (jatorrizko "
+#~ "dokumentuan ez dagoena) gehituz. Honekin, inportatutako dokumentuak "
+#~ "jatorrizkoaren ahalik eta itxura handiena izan dezan lortu nahi da."
+#~ "<br><br>Ziur ez bazaude, erabili lehenespenak."
+
+#~ msgid "Compensate for &linespacing differences"
+#~ msgstr "Konpentsatu &lerro tarteen ezberdintasunak"
+
+#~ msgid ""
+#~ "Try to simulate Write's linespacing by adding some spaces before each "
+#~ "paragraph."
+#~ msgstr ""
+#~ "Simulatu Write-en lerro tarteak parrafo bakoitzaren aurretik tarte batzuk "
+#~ "txertatuz."
+
+#~ msgid "Enable &image positioning"
+#~ msgstr "Gaitu &irudien kokapena"
+
+#~ msgid "Use paragraph indentation to position images."
+#~ msgstr "Erabili parrafoaren koskak irudiak kokatzeko."
+
+#, fuzzy
+#~| msgid "PDF Import"
+#~ msgid "DCM Import"
+#~ msgstr "PDF inportazioa"
+
+#, fuzzy
+#~ msgid "Import options"
+#~ msgstr "PNG esportazio errorea"
+
+#~ msgid ""
+#~ "The document cannot be loaded, as it seems not to follow the RTF syntax."
+#~ msgstr ""
+#~ "Ezin da fitxategia kargatu, badirudi ez duela RTF sintaxia jarraitzen."
+
+#~ msgid ""
+#~ "The RTF (Rich Text Format) document has an unexpected version number: %1. "
+#~ "Continuing might result in an erroneous conversion. Do you want to "
+#~ "continue?"
+#~ msgstr ""
+#~ "RTF (Rich Text Format - Testu Aberatseko Formatua) dokumentuak espero ez "
+#~ "den bertsio zenbaki bat du: %1. Jarraitzen baduzu bihurketa okerra lor "
+#~ "dezakezu. Jarraitu nahi duzu?"
+
+#~ msgid ""
+#~ "The PWD (PocketWord's Rich Text Format) document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "PWD (PocketWord's Rich Text Format) dokumentuak espero ez den bertsio "
+#~ "zenbaki bat du: %1. Jarraitzen baduzu bihurketa okerra lor dezakezu. "
+#~ "Jarraitu nahi duzu?"
+
+#~ msgid ""
+#~ "The URTF (\"Unicode Rich Text Format\") document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "URTF (\"Unicode Rich Text Format\") dokumentuak espero ez den bertsio "
+#~ "zenbaki bat du: %1. Jarraitzen baduzu bihurketa okerra lor dezakezu. "
+#~ "Jarraitu nahi duzu?"
+
+#~ msgid ""
+#~ "The RTF document cannot be loaded, as it has an unexpected first keyword: "
+#~ "\\%1."
+#~ msgstr ""
+#~ "Ezin da RTF dokumentua kargatu, espero ez zehen lehenengo gako-hitz bat "
+#~ "duelako: \\%1."
+
+#~ msgid "Old &method: If the line is empty or has less than 40 characters"
+#~ msgstr ""
+#~ "&Metodo zaharra: Lerroa hutsik badago edo 40 karaktere baina gutxiago "
+#~ "baditu."
+
+#, fuzzy
+#~ msgid "KFormula Import Error"
+#~ msgstr "MathML inportaziorako errorea"
+
+#, fuzzy
+#~ msgid "KFormula1.3 Import Filter"
+#~ msgstr "AbiWord-en inportaziorako iragazkia"
+
+#~ msgid "Available Sheets"
+#~ msgstr "Orri eskuragarriak"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgid "Endnote \"%1\" not found"
+#~ msgstr "Amaiera-oharra %1"
+
+#, fuzzy
+#~| msgid "Footnote %1"
+#~ msgid "Footnote \"%1\" not found"
+#~ msgstr "Orri-oina %1"
+
+#~ msgid "Picture %1"
+#~ msgstr "%1 irudia"
+
+#, fuzzy
+#~ msgid "JPEG Export Options"
+#~ msgstr "PNG esportazio errorea"
+
+#, fuzzy
+#~ msgid "All Images"
+#~ msgstr "Guztiak (%1 orri)"
+
+#, fuzzy
+#~ msgid "PDFImportWidget"
+#~ msgstr "PDF inportazioa"
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "Orria "
+
+#, fuzzy
+#~ msgid "&All pages"
+#~ msgstr "Guztiak (%1 orri)"
+
+#, fuzzy
+#~ msgid "&First page"
+#~ msgstr "Lehenengo orriaren goiburua"
+
+#, fuzzy
+#~| msgid "&Advanced"
+#~ msgid "Advanced quality"
+#~ msgstr "&Aurreratua"
+
+#, fuzzy
+#~| msgid "&Format:"
+#~ msgid "Formats:"
+#~ msgstr "&Formatua:"
+
+#, fuzzy
+#~ msgid "Predictor:"
+#~ msgstr "Irudien direktorioa:"
+
+#~ msgid "Initializing..."
+#~ msgstr "Hasieratzen..."
+
+#~ msgid "First pass: page #%1..."
+#~ msgstr "Lehenengo pasaldia: %1. orria..."
+
+#~ msgid "Second pass: page #%1..."
+#~ msgstr "Bigarren pasaldia: %1. orria..."
+
+#~ msgid "Body Frameset #%1"
+#~ msgstr "%1. gorputzaren marko-sorta"
+
+#~ msgid "Header Frameset #%1"
+#~ msgstr "%1. goiburuaren marko-sorta"
+
+#~ msgid "Footer Frameset #%1"
+#~ msgstr "%1. orri-oinaren marko-sorta"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "%1. testuaren marko-sorta"
+
+#~ msgid "KWord's PDF Import Filter"
+#~ msgstr "KWord-en PDF inportaziorako iragazkia"
+
+#~ msgid "Page Selection"
+#~ msgstr "Orriaren hautapena"
+
+#~ msgid "All (%1 pages)"
+#~ msgstr "Guztiak (%1 orri)"
+
+#~ msgid "Range:"
+#~ msgstr "Barrutia:"
+
+#~ msgid "Import images"
+#~ msgstr "Inportatu irudiak"
+
+#~ msgid "\"Smart\" mode"
+#~ msgstr "Modu \"adimentsua\""
+
+#~ msgid ""
+#~ "Removes returns and hyphens at end of line. Also tries to compute the "
+#~ "paragraph alignment. Note that the layout of some pages can get messed up."
+#~ msgstr ""
+#~ "Lerro amaierako itzulerak eta marratxoak kentzen ditu. Parrafoaren "
+#~ "lerrokadura kalkulatzen ere saiatzen da. Kontuan izan zenbait orriren "
+#~ "diseinua nahas daitekeela."
+
+#~ msgid "Owner:"
+#~ msgstr "Jabea:"
+
+#~ msgid "User:"
+#~ msgstr "Erabiltzailea:"
+
+#~ msgctxt "Table_Name Cell row,column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 Gelaxka: %2,%3"
+
+#, fuzzy
+#~ msgid "&Document mode"
+#~ msgstr "Dokumentu mota"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "do not compress the file at all"
+#~ msgid "None"
+#~ msgstr "Bat ere ez"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "do not use any predictor"
+#~ msgid "None"
+#~ msgstr "Bat ere ez"
+
+#, fuzzy
+#~ msgid "Importing..."
+#~ msgstr "Inportatu irudiak"
+
+#, fuzzy
+#~| msgid "&Format:"
+#~ msgid "Form"
+#~ msgstr "&Formatua:"
+
+#, fuzzy
+#~ msgid "Export hidden layers"
+#~ msgstr "PNG esportaziorako iragazkiaren parametroak"
+
+#, fuzzy
+#~ msgid "BMP Export Error"
+#~ msgstr "PNG esportazio errorea"
+
+#, fuzzy
+#~ msgid "MNG Export Error"
+#~ msgstr "PNG esportazio errorea"
+
+#, fuzzy
+#~ msgid "Xbm Export Error"
+#~ msgstr "LaTeX esportaziorako errorea"
+
+#, fuzzy
+#~ msgid "Xpm Export Error"
+#~ msgstr "LaTeX esportaziorako errorea"
+
+#, fuzzy
+#~ msgid "JPEG Export Error"
+#~ msgstr "PNG esportazio errorea"
+
+#, fuzzy
+#~ msgid "KSpread Kexi Import Filter"
+#~ msgstr "KWord-en PDF inportaziorako iragazkia"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Zenbakia"
+
+#~ msgid "Unable to open output file."
+#~ msgstr "Ezin da irteerako fitxategia ireki."
+
+#~ msgid "Failed to open input file: %1"
+#~ msgstr "Errorea sarrerako fitxategia irekitzean: %1"
+
+#~ msgid "Failed to write formula."
+#~ msgstr "Errorea formula idaztean."
+
+#~ msgid "MathML Export Error"
+#~ msgstr "MathML esportazioaren errorea"

@@ -1,0 +1,5027 @@
+# Translation of kpresenter.po to Spanish
+# translation of kpresenter.po to Spanish
+# Translation of kpresenter to Spanish
+#
+# Juan Manuel Garcia Molina <juanma@superiodico.net>, 2001, 2002, 2003, 2004, 2005, 2006.
+# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2007, 2009, 2010.
+# Jaime Robles <jaime@kde.org>, 2007.
+# Raul Gonzalez <raulgf83@gmail.com>, 2011, 2012, 2013, 2014.
+# Sofia Priego <spriego@darksylvania.net>, 2015, 2016, %Y.
+# Eloy Cuadra <ecuadra@eloihr.net>, 2015, 2016, 2020, 2021.
+# Sofía Priego <spriego@darksylvania.net>, %Y.
+msgid ""
+msgstr ""
+"Project-Id-Version: kpresenter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2021-10-07 16:18+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
+"Language-Team: Spanish <kde-l10n-es@kde.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, kde-format
+msgid "&Edit"
+msgstr "&Editar"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, kde-format
+msgid "&View"
+msgstr "&Ver"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, kde-format
+msgid "&Insert"
+msgstr "&Insertar"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "F&ormato"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, kde-format
+msgid "&Slide"
+msgstr "&Diapositiva"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, kde-format
+msgid "Sli&de Show"
+msgstr "&Presentación"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, kde-format
+msgid "&Settings"
+msgstr "Preferencia&s"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "Añadir presentación personalizada"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "Crear una animación de la forma"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "Editar el evento de desencadenamiento de la animación"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "Eliminar una animación de la forma"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "Borrar presentación personalizada"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Borrar diapositiva"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Borrar diapositiva"
+msgstr[1] "Borrar diapositivas"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "Editar retraso/duración de la animación"
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "Editar presentación personalizada"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "Crear efecto de diapositiva"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "Modificar efecto de diapositiva"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "Borrar efecto de diapositiva"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "Modificar transición de diapositivas"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "Renombrar presentación personalizada"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "Reordenar animaciones"
+
+#: part/KPrAboutData.h:21
+#, kde-format
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "Calligra Stage"
+
+#: part/KPrAboutData.h:23
+#, kde-format
+msgid "Presentation Tool"
+msgstr "Herramienta de presentaciones"
+
+#: part/KPrAboutData.h:25
+#, kde-format
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "Copyright 1998-%1, el equipo de Stage"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, kde-format
+msgid "Former maintainer"
+msgstr "Anterior encargado"
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr "Thorsten Zachmann"
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Original author"
+msgstr "Autor original"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr "Reginald Stadlbauer"
+
+#: part/KPrAboutData.h:36
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr "Toshitaka Fujioka"
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr "Lukáš Tinkl"
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr "Percy Leonhardt"
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KPrAboutData.h:43
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr "Boudewijn Rempt "
+
+#: part/KPrAboutData.h:45
+#, kde-format
+msgid "Carlos Licea "
+msgstr "Carlos Licea "
+
+#: part/KPrAboutData.h:46
+#, kde-format
+msgid "C. Boemann "
+msgstr "C. Boemann "
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr "Fredy Yanardi "
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr "Jan Hambrecht "
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr "Marijn Kruisselbrink "
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr "Martin Pfeiffer "
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr "Sven Langkamp "
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr "Timothée Lacroix "
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+"Sofía Priego,Raúl González,Juan Manuel García Molina,Enrique Matías Sánchez "
+"(Quique)"
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+"spriego@darksylvania.net,raulgf83@gmail.com,juanma@superiodico.net,"
+"cronopios@gmail.com"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr "Desconocido"
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, kde-format
+msgid "Slide %1"
+msgstr "Diapositiva %1"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "Fin de la presentación. Pulse para salir."
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, kde-format
+msgid "Layout"
+msgstr "Disposición"
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+"No se ha podido encontrar el componente de texto necesario, Calligra Stage "
+"se cerrará ahora."
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+"No se ha podido encontrar el componente de imagen necesario, Calligra Stage "
+"se cerrará ahora."
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr "Error de instalación"
+
+#: part/KPrPicturesImport.cpp:62
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "Insertar imágenes"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr "Forma para reservar espacio"
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr "Doble clic para añadir un título"
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr "Doble clic para añadir un contorno"
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr "Doble clic para añadir un texto"
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr "Doble clic para añadir notas"
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr "Doble clic para añadir una imagen"
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr "Doble clic para añadir una gráfica"
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr "Doble clic para añadir un objeto"
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, kde-format
+msgid "Pen Color"
+msgstr "Color del bolígrafo"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, kde-format
+msgid "Pen Size"
+msgstr "Tamaño del bolígrafo"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, kde-format
+msgid "Black"
+msgstr "Negro"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, kde-format
+msgid "White"
+msgstr "Blanco"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, kde-format
+msgid "Green"
+msgstr "Verde"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, kde-format
+msgid "Red"
+msgstr "Rojo"
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, kde-format
+msgid "Blue"
+msgstr "Azul"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, kde-format
+msgid "Yellow"
+msgstr "Amarillo"
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, kde-format
+msgid "Next Slide"
+msgstr "Diapositiva siguiente"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, kde-format
+msgid "Speaker Notes"
+msgstr "Notas del orador"
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, kde-format
+msgid "Current Slide %1 of %2"
+msgstr "Diapositiva actual %1 de %2"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, kde-format
+msgid "End of Slide Show"
+msgstr "Fin de la presentación"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr "iniciar con un clic del ratón"
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, kde-format
+msgid "start after previous animation"
+msgstr "iniciar tras la animación anterior"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, kde-format
+msgid "start with previous animation"
+msgstr "iniciar con la animación anterior"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr "Iniciar tras %1 segundos. Duración de %2 segundos."
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, kde-format
+msgid "Animation"
+msgstr "Animación"
+
+#: part/KPrShapeAnimations.cpp:201
+#, kde-format
+msgid "Shape"
+msgstr "Forma"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, kde-format
+msgid "&Move Here"
+msgstr "&Mover aquí"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, kde-format
+msgid "&Copy Here"
+msgstr "&Copiar aquí"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, kde-format
+msgid "C&ancel"
+msgstr "C&ancelar"
+
+#: part/KPrView.cpp:73
+#, kde-format
+msgid "Normal"
+msgstr "Normal"
+
+#: part/KPrView.cpp:78
+#, kde-format
+msgid "Show Master Slides"
+msgstr "Mostrar las diapositivas maestras"
+
+#: part/KPrView.cpp:79
+#, kde-format
+msgid "Import Slideshow..."
+msgstr "Importar una presentación..."
+
+#: part/KPrView.cpp:80
+#, kde-format
+msgid "Insert Slide"
+msgstr "Insertar una diapositiva"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr "Insertar una diapositiva nueva tras la actual"
+
+#: part/KPrView.cpp:83
+#, kde-format
+msgid "Copy Slide"
+msgstr "Copiar la diapositiva"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, kde-format
+msgid "Copy the current slide"
+msgstr "Copiar la diapositiva actual"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, kde-format
+msgid "Delete Slide"
+msgstr "Borrar la diapositiva"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, kde-format
+msgid "Delete the current slide"
+msgstr "Borrar la diapositiva actual"
+
+#: part/KPrView.cpp:89
+#, kde-format
+msgid "Master Slide..."
+msgstr "Diapositiva maestra..."
+
+#: part/KPrView.cpp:90
+#, kde-format
+msgid "Previous Slide"
+msgstr "Diapositiva anterior"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, kde-format
+msgid "Go to previous slide"
+msgstr "Ir a la diapositiva anterior"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, kde-format
+msgid "Go to next slide"
+msgstr "Ir a la diapositiva siguiente"
+
+#: part/KPrView.cpp:96
+#, kde-format
+msgid "First Slide"
+msgstr "Primera diapositiva"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, kde-format
+msgid "Go to first slide"
+msgstr "Ir a la la primera diapositiva"
+
+#: part/KPrView.cpp:99
+#, kde-format
+msgid "Last Slide"
+msgstr "Última diapositiva"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, kde-format
+msgid "Go to last slide"
+msgstr "Ir a la última diapositiva"
+
+#: part/KPrView.cpp:102
+#, kde-format
+msgid "Configure Stage..."
+msgstr "Configurar Stage..."
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr "Exportar como HTML..."
+
+#: part/KPrView.cpp:251
+#, kde-format
+msgid "Insert Pictures as Slides..."
+msgstr "Insertar imágenes como diapositivas..."
+
+#: part/KPrView.cpp:260
+#, kde-format
+msgid "Create Appear Animation"
+msgstr "Crear una animación de aparición"
+
+#: part/KPrView.cpp:264
+#, kde-format
+msgid "Edit Custom Slide Shows..."
+msgstr "Editar las presentaciones personalizadas..."
+
+#: part/KPrView.cpp:268
+#, kde-format
+msgid "Start Presentation"
+msgstr "Iniciar presentación"
+
+#: part/KPrView.cpp:271
+#, kde-format
+msgid "From Current Slide"
+msgstr "Desde la diapositiva actual"
+
+#: part/KPrView.cpp:275
+#, kde-format
+msgid "From First Slide"
+msgstr "Desde la primera diapositiva"
+
+#: part/KPrView.cpp:280
+#, kde-format
+msgid "Stop presentation"
+msgstr "Detener presentación"
+
+#: part/KPrView.cpp:286
+#, kde-format
+msgid "Show Status Bar"
+msgstr "Mostrar la barra de estado"
+
+#: part/KPrView.cpp:287
+#, kde-format
+msgid "Hide Status Bar"
+msgstr "Ocultar la barra de estado"
+
+#: part/KPrView.cpp:288
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Mostrar u ocultar la barra de estado"
+
+#: part/KPrView.cpp:297
+#, kde-format
+msgid "Configure Slide Show..."
+msgstr "Configurar la presentación..."
+
+#: part/KPrView.cpp:301
+#, kde-format
+msgid "Configure Presenter View..."
+msgstr "Configurar la vista del presentador..."
+
+#: part/KPrView.cpp:305
+#, kde-format
+msgid "Draw on the presentation..."
+msgstr "Dibujar en la presentación..."
+
+#: part/KPrView.cpp:312
+#, kde-format
+msgid "Highlight the presentation..."
+msgstr "Realzar la presentación..."
+
+#: part/KPrView.cpp:319
+#, kde-format
+msgid "Blackscreen on the presentation..."
+msgstr "Pantalla negra en la presentación..."
+
+#: part/KPrViewModeNotes.cpp:36
+#, kde-format
+msgid "Notes"
+msgstr "Notas"
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, kde-format
+msgid "Slides Sorter"
+msgstr "Clasificador de diapositivas"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, kde-format
+msgid "Slide Show: "
+msgstr "Presentación:"
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, kde-format
+msgid "Add a new custom slide show"
+msgstr "Añadir una nueva presentación personalizada"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, kde-format
+msgid "Delete current custom slide show"
+msgstr "Borrar la presentación personalizada actual"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, kde-format
+msgid "Add slides to current custom slide show"
+msgstr "Añadir diapositivas a la presentación personalizada actual"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, kde-format
+msgid "Remove slides from current custom slide show"
+msgstr "Eliminar diapositivas de la presentación personalizada actual"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, kde-format
+msgid "Duplicate Slide"
+msgstr "Duplicar diapositiva"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, kde-format
+msgid "Start Slideshow"
+msgstr "Iniciar presentación"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, kde-format
+msgid "Add a new slide"
+msgstr "Añadir una nueva diapositiva"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, kde-format
+msgid "Delete selected slides"
+msgstr "Borrar la diapositiva actual"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, kde-format
+msgid "Rename"
+msgstr "Renombrar"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, kde-format
+msgid "Cut"
+msgstr "Cortar"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, kde-format
+msgid "Copy"
+msgstr "Copiar"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, kde-format
+msgid "Paste"
+msgstr "Pegar"
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, kde-format
+msgid "Slide Show %1"
+msgstr "Presentación %1"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, kde-format
+msgid "All slides"
+msgstr "Todas las diapositivas"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, kde-format
+msgid "Error"
+msgstr "Error"
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr "No puede haber dos presentaciones con el mismo nombre."
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "Establecer disposición"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, kde-format
+msgid "Automatic animation preview"
+msgstr "Vista previa automática de la animación"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, kde-format
+msgid "Preview animation"
+msgstr "Vista previa de la animación"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, kde-format
+msgid "Slide Transitions"
+msgstr "Transiciones de diapositivas"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, kde-format
+msgid "Shape Click Actions"
+msgstr "Acciones a pulsar en la forma"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, kde-format
+msgid "Shape Animations"
+msgstr "Animaciones de forma"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, kde-format
+msgid "Manage animation delay and duration: "
+msgstr "Administrar el retraso y la duración de la animación: "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, kde-format
+msgid "Start: "
+msgstr "Iniciar: "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr "con un clic de ratón"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, kde-format
+msgid "after previous animation"
+msgstr "tras la animación anterior"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, kde-format
+msgid "with previous animation"
+msgstr "con la animación anterior"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr "Retraso "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, kde-format
+msgid "Duration: "
+msgstr "Duración: "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, kde-format
+msgid "Preview Shape Animation"
+msgstr "Vista previa de la animación de la forma"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, kde-format
+msgid "No Effect"
+msgstr "Sin efecto"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, kde-format
+msgid " sec"
+msgstr " s"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr "Manual"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr "Automática"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, kde-format
+msgid "Slide Transition:"
+msgstr "Transición de diapositivas:"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, kde-format
+msgid "Apply To All Slides"
+msgstr "Aplicar a todas las diapositivas"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr "Aplicar efectos de diapositiva a todas las diapositivas"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr "Entrada"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr "Salida"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr "Énfasis"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, kde-format
+msgid "Custom"
+msgstr "Personalizado"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr "Trayectoria del movimiento"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, kde-format
+msgid "Ole Action"
+msgstr "Acción ole"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr "Llamada multimedia"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, kde-format
+msgid "Edit animation"
+msgstr "Editar animación"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, kde-format
+msgid "Add new animation"
+msgstr "Añadir una nueva animación"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, kde-format
+msgid "Remove animation"
+msgstr "Eliminar animación"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr "Orden: "
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, kde-format
+msgid "Move animation up"
+msgstr "Mover animación hacia arriba"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, kde-format
+msgid "Move animation down"
+msgstr "Mover animación hacia abajo"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, kde-format
+msgid "Add a new animation"
+msgstr "Añadir una nueva animación"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, kde-format
+msgid "Delete current animation"
+msgstr "Borrar la animación actual"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr "segundos"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, kde-format
+msgid "Crop"
+msgstr "Recortar"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, kde-format
+msgid "W&idth:"
+msgstr "&Anchura:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, kde-format
+msgid "Will keep the width of the crop constant"
+msgstr "Mantendrá constante la anchura del recorte"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, kde-format
+msgid "&Height:"
+msgstr "A&ltura:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, kde-format
+msgid "Will keep the height of the crop constant"
+msgstr "Mantendrá constante la altura del recorte"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, kde-format
+msgid "R&atio:"
+msgstr "&Proporciones:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, kde-format
+msgid "Will keep the ratio constant"
+msgstr "Mantendrá constantes las proporciones"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr "Capa"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, kde-format
+msgid "Image"
+msgstr "Imagen"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, kde-format
+msgid "&Crop"
+msgstr "Re&cortar"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "Editar forma"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr "Varios monitores"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, kde-format
+msgid "Presentation monitor:"
+msgstr "Monitor de la presentación:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, kde-format
+msgid "Enable presenter view"
+msgstr "Habilitar la vista del presentador"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr "Monitor %1 (primario)"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr "Monitor %1"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, kde-format
+msgid "Configure Presenter View"
+msgstr "Configurar la vista del presentador"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, kde-format
+msgid "Configure Slide Show"
+msgstr "Configurar la presentación"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, kde-format
+msgid "Slides"
+msgstr "Diapositivas"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, kde-format
+msgid "Presentation Slides:"
+msgstr "Diapositivas de la presentación:"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, kde-format
+msgid "Edit Custom Slide Shows ..."
+msgstr "Editar las presentaciones personalizadas..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr "Exportar HTML"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr "Marque la diapositiva que debe ser exportada:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, kde-format
+msgid "Select all"
+msgstr "Seleccionar todo"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, kde-format
+msgid "Select template (.css) :"
+msgstr "Seleccionar plantilla (.css):"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, kde-format
+msgid "Deselect all"
+msgstr "Deseleccionar todo"
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, kde-format
+msgid "Title"
+msgstr "Título"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, kde-format
+msgid "Output preview"
+msgstr "Vista previa de la salida"
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr "Explorar"
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, kde-format
+msgid "Author"
+msgstr "Autor"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, kde-format
+msgid "Delete Favorite"
+msgstr "Borrar favorito"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr "Abrir en un navegador"
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr "Exportación HTML"
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr "Exportar"
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr "Ya existe un archivo favorito con este nombre"
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr "Archivo incorrecto, se trata de un simple .zip o de un zip dañado"
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr "El archivo zip debe contener un style.css"
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, kde-format
+msgid "Delete Template"
+msgstr "Borrar la plantilla"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr "No puede eliminar las plantillas proporcionadas con la aplicación"
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, kde-format
+msgid "Add Template"
+msgstr "Añadir plantilla"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "¿Está seguro de querer eliminar «%1»?"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, kde-format
+msgid "Confirm remove"
+msgstr "Confirmar la eliminación"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr "Cambiar la acción del sonido"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, kde-format
+msgid "No sound"
+msgstr "Sin sonido"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, kde-format
+msgid "Import..."
+msgstr "Importar..."
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr "Barra"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, kde-format
+msgid "From Left"
+msgstr "Desde la izquierda"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, kde-format
+msgid "From Top"
+msgstr "Desde arriba"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, kde-format
+msgid "From Right"
+msgstr "Desde la derecha"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, kde-format
+msgid "From Bottom"
+msgstr "Desde abajo"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr "Subtipo desconocido"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Clock"
+msgstr "Reloj"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, kde-format
+msgid "From Twelve Clockwise"
+msgstr "Horario a partir de las 12"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, kde-format
+msgid "From Three Clockwise"
+msgstr "Horario a partir de las 3"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, kde-format
+msgid "From Six Clockwise"
+msgstr "Horario a partir de las 6"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, kde-format
+msgid "From Nine Clockwise"
+msgstr "Horario a partir de las 9"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, kde-format
+msgid "From Twelve Counterclockwise"
+msgstr "Antihorario a partir de las 12"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, kde-format
+msgid "From Three Counterclockwise"
+msgstr "Antihorario a partir de las 3"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, kde-format
+msgid "From Six Counterclockwise"
+msgstr "Antihorario a partir de las 6"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, kde-format
+msgid "From Nine Counterclockwise"
+msgstr "Antihorario a partir de las 9"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Double Fan"
+msgstr "Ventilador doble"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, kde-format
+msgid "Fan Out Vertical"
+msgstr "Salida ventilador vertical"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, kde-format
+msgid "Fan Out Horizontal"
+msgstr "Salida ventilador horizontal"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, kde-format
+msgid "Fan In Vertical"
+msgstr "Entrada ventilador vertical"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, kde-format
+msgid "Fan In Horizontal"
+msgstr "Entrada ventilador horizontal"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, kde-format
+msgid "Fan In Vertical Reverse"
+msgstr "Entrada ventilador vertical al revés"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Fan In Horizontal Reverse"
+msgstr "Entrada ventilador horizontal al revés"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Double Sweep"
+msgstr "Doble barrido"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Parallel Vertical"
+msgstr "Vertical paralelo"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Parallel Diagonal"
+msgstr "Diagonal paralelo"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Opposite Vertical"
+msgstr "Vertical opuesto"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Opposite Horizontal"
+msgstr "Horizontal opuesto"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Parallel Diagonal Top Left"
+msgstr "Diagonal paralelo arriba a la izquierda"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Parallel Diagonal Bottom Left"
+msgstr "Diagonal paralelo abajo a la izquierda"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Parallel Vertical Reverse"
+msgstr "Vertical paralelo al revés"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Parallel Diagonal Reverse"
+msgstr "Diagonal paralelo al revés"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Opposite Vertical Reverse"
+msgstr "Vertical opuesto al revés"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Opposite Horizontal Reverse"
+msgstr "Horizontal opuesto al revés"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "Diagonal paralelo arriba a la izquierda al revés"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "Diagonal paralelo abajo a la izquierda al revés"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Fan"
+msgstr "Ventilador"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Center Right"
+msgstr "Centro derecha"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Center Top"
+msgstr "Centro arriba"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Center Left"
+msgstr "Centro izquierda"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Center Bottom"
+msgstr "Centro abajo"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Fan Out Top"
+msgstr "Salida ventilador arriba"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Fan Out Right"
+msgstr "Salida ventilador derecha"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Fan Out Bottom"
+msgstr "Salida ventilador abajo"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Fan Out Left"
+msgstr "Salida ventilador izquierda"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Fan In Top"
+msgstr "Entrada ventilador arriba"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Fan In Right"
+msgstr "Entrada ventilador derecha"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Fan In Bottom"
+msgstr "Entrada ventilador abajo"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Fan In Left"
+msgstr "Entrada ventilador izquierda"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Pin Wheel"
+msgstr "Molinillo de viento"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, kde-format
+msgid "Two Blades Vertical Clockwise"
+msgstr "Dos aspas verticales en sentido horario"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, kde-format
+msgid "Two Blades Horizontal Clockwise"
+msgstr "Dos aspas horizontales en sentido horario"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, kde-format
+msgid "Four Blades Horizontal Clockwise"
+msgstr "Cuatro aspas horizontales en sentido horario"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, kde-format
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "Dos aspas verticales en sentido antihorario"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, kde-format
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "Dos aspas horizontales en sentido antihorario"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, kde-format
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "Cuatro aspas horizontales en sentido antihorario"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Saloon Door"
+msgstr "Puerta de salón"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, kde-format
+msgid "To Top"
+msgstr "Hacia arriba"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, kde-format
+msgid "To Left"
+msgstr "Hacia la izquierda"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, kde-format
+msgid "To Bottom"
+msgstr "Hacia abajo"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, kde-format
+msgid "To Right"
+msgstr "Hacia la derecha"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Single Sweep"
+msgstr "Barrido único"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, kde-format
+msgid "Clockwise Top"
+msgstr "Horario arriba"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, kde-format
+msgid "Clockwise Right"
+msgstr "Horario a la derecha"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, kde-format
+msgid "Clockwise Bottom"
+msgstr "Horario abajo"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, kde-format
+msgid "Clockwise Left"
+msgstr "Horario a la izquierda"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, kde-format
+msgid "Clockwise Top Left"
+msgstr "Horario arriba a la izquierda"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, kde-format
+msgid "Counterclockwise Bottom Left"
+msgstr "Antihorario abajo a la izquierda"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, kde-format
+msgid "Clockwise Bottom Right"
+msgstr "Horario abajo a la derecha"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, kde-format
+msgid "Counterclockwise Top Right"
+msgstr "Antihorario arriba a la derecha"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, kde-format
+msgid "Counterclockwise Top"
+msgstr "Antihorario arriba"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, kde-format
+msgid "Counterclockwise Right"
+msgstr "Antihorario a la derecha"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, kde-format
+msgid "Counterclockwise Bottom"
+msgstr "Antihorario abajo"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, kde-format
+msgid "Counterclockwise Left"
+msgstr "Antihorario a la izquierda"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, kde-format
+msgid "Counterclockwise Top Left"
+msgstr "Antihorario arriba a la izquierda"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, kde-format
+msgid "Clockwise Bottom Left"
+msgstr "Horario abajo a la izquierda"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, kde-format
+msgid "Counterclockwise Bottom Right"
+msgstr "Antihorario abajo a la derecha"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Clockwise Top Right"
+msgstr "Horario arriba a la derecha"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Windshield"
+msgstr "Parabrisas"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, kde-format
+msgid "Right"
+msgstr "Derecha"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr "Arriba"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Vertical"
+msgstr "Vertical"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, kde-format
+msgid "Horizontal"
+msgstr "Horizontal"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, kde-format
+msgid "Right Reverse"
+msgstr "Derecha al revés"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, kde-format
+msgid "Up Reverse"
+msgstr "Arriba al revés"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Vertical Reverse"
+msgstr "Vertical al revés"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Horizontal Reverse"
+msgstr "Horizontal al revés"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Door"
+msgstr "Puerta de granero"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Diagonal Bottom Left"
+msgstr "Diagonal abajo a la izquierda"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Diagonal Bottom Left Reverse"
+msgstr "Diagonal abajo a la izquierda al revés"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Diagonal Top Left"
+msgstr "Diagonal arriba a la izquierda"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Diagonal Top Left Reverse"
+msgstr "Diagonal arriba a la izquierda al revés"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr "Uve de granero"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, kde-format
+msgid "Barn Zig Zag"
+msgstr "Zigzag de granero"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, kde-format
+msgid "Vertical Reversed"
+msgstr "Vertical al revés"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, kde-format
+msgid "Horizontal Reversed"
+msgstr "Horizontal al revés"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr "Caja"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, kde-format
+msgid "From Top Left"
+msgstr "Desde arriba a la izquierda"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, kde-format
+msgid "From Top Right"
+msgstr "Desde arriba a la derecha"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, kde-format
+msgid "From Bottom Left"
+msgstr "Desde abajo a la izquierda"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, kde-format
+msgid "From Bottom Right"
+msgstr "Desde abajo a la derecha"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Diagonal"
+msgstr "Diagonal"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr "Cuatro cajas"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, kde-format
+msgid "Corners In"
+msgstr "Esquinas hacia dentro"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, kde-format
+msgid "Corners In Reverse"
+msgstr "Esquinas hacia dentro al revés"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, kde-format
+msgid "Corners Out"
+msgstr "Esquinas hacia fuera"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, kde-format
+msgid "Corners Out Reverse"
+msgstr "Esquinas hacia fuera al revés"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Misc Diagonal"
+msgstr "Diagonal variada"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, kde-format
+msgid "Double Barn Door"
+msgstr "Puerta de granero doble"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, kde-format
+msgid "Double Diamond"
+msgstr "Diamante doble"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr "Uve"
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, kde-format
+msgid "Zig Zag"
+msgstr "Zigzag"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, kde-format
+msgid "Fade"
+msgstr "Desvanecer"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr "Desvanecimiento cruzado"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, kde-format
+msgid "Fade over Color"
+msgstr "Desvanecer sobre el color"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, kde-format
+msgid "ArrowHead"
+msgstr "Punta de flecha"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, kde-format
+msgid "Down"
+msgstr "Abajo"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, kde-format
+msgid "Down Reverse"
+msgstr "Abajo al revés"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, kde-format
+msgid "Left"
+msgstr "Izquierda"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, kde-format
+msgid "Left Reverse"
+msgstr "Izquierda al revés"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Ellipse"
+msgstr "Elipse"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Circle"
+msgstr "Círculo"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Circle Reverse"
+msgstr "Círculo al revés"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr "Ojo"
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Hexagon"
+msgstr "Hexágono"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr "Iris"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Rectangular"
+msgstr "Rectangular"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Rectangular Reverse"
+msgstr "Rectangular al revés"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Diamond"
+msgstr "Diamante"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Diamond Reverse"
+msgstr "Diamante al revés"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, kde-format
+msgid "Misc"
+msgstr "Diversos"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Heart"
+msgstr "Corazón"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Heart Reverse"
+msgstr "Corazón al revés"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Keyhole"
+msgstr "Cerradura"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Keyhole Reverse"
+msgstr "Cerradura al revés"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Pentagon"
+msgstr "Pentágono"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, kde-format
+msgid "RoundRect"
+msgstr "Rectángulo redondeado"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Star"
+msgstr "Estrella"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, kde-format
+msgid "Four Point Star"
+msgstr "Estrella de cuatro puntas"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, kde-format
+msgid "Four Point Star Reverse"
+msgstr "Estrella de cuatro puntas al revés"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, kde-format
+msgid "Five Point Star"
+msgstr "Estrella de cinco puntas"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, kde-format
+msgid "Five Point Star Reverse"
+msgstr "Estrella de cinco puntas al revés"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, kde-format
+msgid "Six Point Star"
+msgstr "Estrella de seis puntas"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, kde-format
+msgid "Six Point Star Reverse"
+msgstr "Estrella de seis puntas al revés"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Triangle"
+msgstr "Triángulo"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box Snakes"
+msgstr "Serpientes en caja"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Two Box Top In"
+msgstr "Dos cajas, arriba hacia dentro"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Two Box Bottom In"
+msgstr "Dos cajas, abajo hacia dentro"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Two Box Left In"
+msgstr "Dos cajas, izquierda hacia dentro"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Two Box Right In"
+msgstr "Dos cajas, derecha hacia dentro"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Four Box Vertical In"
+msgstr "Cuatro cajas, vertical hacia dentro"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Four Box Horizontal In"
+msgstr "Cuatro cajas, horizontal hacia dentro"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Two Box Top Out"
+msgstr "Dos cajas, arriba hacia fuera"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Two Box Bottom Out"
+msgstr "Dos cajas, abajo hacia fuera"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Two Box Left Out"
+msgstr "Dos cajas, izquierda hacia fuera"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Two Box Right Out"
+msgstr "Dos cajas, derecha hacia fuera"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Four Box Vertical Out"
+msgstr "Cuatro cajas, vertical hacia fuera"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Four Box Horizontal Out"
+msgstr "Cuatro cajas, horizontal hacia fuera"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Parallel Snakes"
+msgstr "Serpientes paralelas"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Vertical Top Same In"
+msgstr "Misma entrada vertical hacia arriba"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Vertical Top Same Out"
+msgstr "Misma salida vertical hacia arriba"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Vertical Bottom Same In"
+msgstr "Misma entrada vertical hacia abajo"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Vertical Bottom Same Out"
+msgstr "Misma salida vertical hacia abajo"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, kde-format
+msgid "Vertical Top Left Opposite In"
+msgstr "Entrada opuesta vertical hacia arriba a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, kde-format
+msgid "Vertical Top Left Opposite Out"
+msgstr "Salida opuesta vertical hacia arriba a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, kde-format
+msgid "Vertical Bottom Left Opposite In"
+msgstr "Entrada opuesta vertical hacia abajo a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, kde-format
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "Salida opuesta vertical hacia abajo a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, kde-format
+msgid "Horizontal Left Same In"
+msgstr "Misma entrada horizontal a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, kde-format
+msgid "Horizontal Left Same Out"
+msgstr "Misma salida horizontal a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, kde-format
+msgid "Horizontal Right Same In"
+msgstr "Misma entrada horizontal a la derecha"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, kde-format
+msgid "Horizontal Right Same Out"
+msgstr "Misma salida horizontal a la derecha"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, kde-format
+msgid "Horizontal Top Left Opposite In"
+msgstr "Entrada opuesta horizontal arriba a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, kde-format
+msgid "Horizontal Top Left Opposite Out"
+msgstr "Salida opuesta horizontal arriba a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, kde-format
+msgid "Horizontal Top Right Opposite In"
+msgstr "Entrada opuesta horizontal arriba a la derecha"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, kde-format
+msgid "Horizontal Top Right Opposite Out"
+msgstr "Salida opuesta horizontal arriba a la derecha"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, kde-format
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "Entrada opuesta diagonal abajo a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, kde-format
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "Salida opuesta diagnoal abajo a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, kde-format
+msgid "Diagonal Top Left Opposite In"
+msgstr "Entrada opuesta diagonal arriba a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, kde-format
+msgid "Diagonal Top Left Opposite Out"
+msgstr "Salida opuesta diagonal arriba a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Snake"
+msgstr "Serpiente"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Spiral"
+msgstr "Espiral"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Clockwise Top Left In"
+msgstr "Entrada horaria arriba a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Clockwise Top Left Out"
+msgstr "Salida horaria arriba a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Clockwise Top Right In"
+msgstr "Entrada horaria arriba a la derecha"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Clockwise Top Right Out"
+msgstr "Salida horaria arriba a la derecha"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Clockwise Bottom Left In"
+msgstr "Entrada horaria abajo a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Clockwise Bottom Left Out"
+msgstr "Salida horaria abajo a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Clockwise Bottom Right In"
+msgstr "Entrada horaria abajo a la derecha"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Clockwise Bottom Right Out"
+msgstr "Salida horaria abajo a la derecha"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Counterclockwise Top Left In"
+msgstr "Entrada antihoraria arriba a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Counterclockwise Top Left Out"
+msgstr "Salida antihoraria arriba a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, kde-format
+msgid "Counterclockwise Top Right In"
+msgstr "Entrada antihoraria arriba a la derecha"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, kde-format
+msgid "Counterclockwise Top Right Out"
+msgstr "Salida antihoraria arriba a la derecha"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, kde-format
+msgid "Counterclockwise Bottom Left In"
+msgstr "Entrada antihoraria abajo a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, kde-format
+msgid "Counterclockwise Bottom Left Out"
+msgstr "Salida antihoraria abajo a la derecha"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, kde-format
+msgid "Counterclockwise Bottom Right In"
+msgstr "Entrada antihoraria abajo a la derecha"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, kde-format
+msgid "Counterclockwise Bottom Right Out"
+msgstr "Salida antihoraria abajo a la derecha"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Waterfall"
+msgstr "Cascada"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, kde-format
+msgid "Top Left Vertical"
+msgstr "Vertical arriba a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Top Left Horizontal"
+msgstr "Horizontal arriba a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Top Right Vertical"
+msgstr "Vertical arriba a la derecha"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Top Right Horizontal"
+msgstr "Horizontal arriba a la derecha"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Bottom Left Vertical"
+msgstr "Vertical abajo a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Bottom Left Horizontal"
+msgstr "Horizontal abajo a la izquierda"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Bottom Right Vertical"
+msgstr "Vertical abajo a la derecha"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Bottom Right Horizontal"
+msgstr "Horizontal abajo a la derecha"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Slide"
+msgstr "Diapositiva"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, kde-format
+msgid "Space Rotation"
+msgstr "Rotación del espacio"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, kde-format
+msgid "Swap effect"
+msgstr "Efecto de intercambio"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, kde-format
+msgid "Header"
+msgstr "Cabecera"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, kde-format
+msgid "Footer"
+msgstr "Pie"
+
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Sin mantenimiento en el momento de publicar esta versión. La comunidad de "
+#~ "Calligra da la bienvenida a las personas interesadas en encargarse del "
+#~ "mantenimiento."
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Editar"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Ver"
+
+#, fuzzy
+#~| msgid "&Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "&Insertar"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "F&ormato"
+
+#, fuzzy
+#~| msgid "&Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "&Diapositiva"
+
+#, fuzzy
+#~| msgid "Sli&de Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "&Presentación"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Preferencia&s"
+
+#, fuzzy
+#~| msgid "Crop"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Recortar"
+
+#, fuzzy
+#~| msgid "X:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~| msgid "W&idth:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr "&Anchura:"
+
+#, fuzzy
+#~| msgid "Will keep the width of the crop constant"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the width of the crop constant"
+#~ msgstr "Mantendrá constante la anchura del recorte"
+
+#, fuzzy
+#~| msgid "&Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "A&ltura:"
+
+#, fuzzy
+#~| msgid "Will keep the height of the crop constant"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the height of the crop constant"
+#~ msgstr "Mantendrá constante la altura del recorte"
+
+#, fuzzy
+#~| msgid "Y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "R&atio:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "&Proporciones:"
+
+#, fuzzy
+#~| msgid "Will keep the ratio constant"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the ratio constant"
+#~ msgstr "Mantendrá constantes las proporciones"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Capa"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Imagen"
+
+#, fuzzy
+#~| msgid "&Crop"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "Re&cortar"
+
+#, fuzzy
+#~| msgid "Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "Diapositivas"
+
+#, fuzzy
+#~| msgid "Presentation Slides:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "Diapositivas de la presentación:"
+
+#, fuzzy
+#~| msgid "Edit Custom Slide Shows ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "Editar las presentaciones personalizadas..."
+
+#, fuzzy
+#~| msgid "HTML Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "HTML Export"
+#~ msgstr "Exportar HTML"
+
+#, fuzzy
+#~| msgid "Tick the slide should be exported :"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tick the slide should be exported :"
+#~ msgstr "Marque la diapositiva que debe ser exportada:"
+
+#, fuzzy
+#~| msgid "Select all"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select all"
+#~ msgstr "Seleccionar todo"
+
+#, fuzzy
+#~| msgid "Select template (.css) :"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select template (.css) :"
+#~ msgstr "Seleccionar plantilla (.css):"
+
+#, fuzzy
+#~| msgid "Deselect all"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deselect all"
+#~ msgstr "Deseleccionar todo"
+
+#, fuzzy
+#~| msgid "Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Título"
+
+#, fuzzy
+#~| msgid "Output preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output preview"
+#~ msgstr "Vista previa de la salida"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Browse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Browse"
+#~ msgstr "Explorar"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~| msgid "Delete Favorite"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "Borrar favorito"
+
+#, fuzzy
+#~| msgid "Open in browser"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open in browser"
+#~ msgstr "Abrir en un navegador"
+
+#, fuzzy
+#~| msgid "Multiple monitors"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiple monitors"
+#~ msgstr "Varios monitores"
+
+#, fuzzy
+#~| msgid "Presentation monitor:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "Monitor de la presentación:"
+
+#, fuzzy
+#~| msgid "Enable presenter view"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enable presenter view"
+#~ msgstr "Habilitar la vista del presentador"
+
+#, fuzzy
+#~| msgctxt "application name"
+#~| msgid "Calligra Stage"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "Calligra Stage"
+
+#, fuzzy
+#~| msgid "Presentation Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "Herramienta de presentaciones"
+
+#, fuzzy
+#~| msgid ""
+#~| "Unmaintained at the time of release of this version. The Calligra "
+#~| "community welcomes interested persons to take over maintainership."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Sin mantenimiento en el momento de publicar esta versión. La comunidad de "
+#~ "Calligra da la bienvenida a las personas interesadas en encargarse del "
+#~ "mantenimiento."
+
+#, fuzzy
+#~| msgid "Copyright 1998-%1, The Stage Team"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Stage Team"
+#~ msgstr "Copyright 1998-%1, el equipo de Stage"
+
+#, fuzzy
+#~| msgid "Former maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "Anterior encargado"
+
+#, fuzzy
+#~| msgid "Thorsten Zachmann"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thorsten Zachmann"
+#~ msgstr "Thorsten Zachmann"
+
+#, fuzzy
+#~| msgid "Laurent Montel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#, fuzzy
+#~| msgid "Original author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "Autor original"
+
+#, fuzzy
+#~| msgid "Reginald Stadlbauer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reginald Stadlbauer"
+#~ msgstr "Reginald Stadlbauer"
+
+#, fuzzy
+#~| msgid "Werner Trobin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Werner Trobin"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~| msgid "Toshitaka Fujioka"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toshitaka Fujioka"
+#~ msgstr "Toshitaka Fujioka"
+
+#, fuzzy
+#~| msgid "Lukáš Tinkl"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lukáš Tinkl"
+#~ msgstr "Lukáš Tinkl"
+
+#, fuzzy
+#~| msgid "Ariya Hidayat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "Ariya Hidayat"
+
+#, fuzzy
+#~| msgid "Percy Leonhardt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percy Leonhardt"
+#~ msgstr "Percy Leonhardt"
+
+#, fuzzy
+#~| msgid "Thomas Zander"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#, fuzzy
+#~| msgid "Peter Simonsson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#, fuzzy
+#~| msgid "Boudewijn Rempt "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt "
+#~ msgstr "Boudewijn Rempt "
+
+#, fuzzy
+#~| msgid "Carlos Licea "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Carlos Licea "
+#~ msgstr "Carlos Licea "
+
+#, fuzzy
+#~| msgid "C. Boemann "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C. Boemann "
+#~ msgstr "C. Boemann "
+
+#, fuzzy
+#~| msgid "Fredy Yanardi "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fredy Yanardi "
+#~ msgstr "Fredy Yanardi "
+
+#, fuzzy
+#~| msgid "Jan Hambrecht "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht "
+#~ msgstr "Jan Hambrecht "
+
+#, fuzzy
+#~| msgid "Marijn Kruisselbrink "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Marijn Kruisselbrink "
+#~ msgstr "Marijn Kruisselbrink "
+
+#, fuzzy
+#~| msgid "Martin Pfeiffer "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Martin Pfeiffer "
+#~ msgstr "Martin Pfeiffer "
+
+#, fuzzy
+#~| msgid "Sven Langkamp "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sven Langkamp "
+#~ msgstr "Sven Langkamp "
+
+#, fuzzy
+#~| msgid "Timothée Lacroix "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Timothée Lacroix "
+#~ msgstr "Timothée Lacroix "
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr ""
+#~ "Sofía Priego,Raúl González,Juan Manuel García Molina,Enrique Matías "
+#~ "Sánchez (Quique)"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "spriego@darksylvania.net,raulgf83@gmail.com,juanma@superiodico.net,"
+#~ "cronopios@gmail.com"
+
+#, fuzzy
+#~| msgid "Unknown"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown"
+#~ msgstr "Desconocido"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Diapositiva %1"
+
+#, fuzzy
+#~| msgid "End of presentation. Click to exit."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of presentation. Click to exit."
+#~ msgstr "Fin de la presentación. Pulse para salir."
+
+#, fuzzy
+#~| msgid "Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Disposición"
+
+#, fuzzy
+#~| msgid "Can not find needed text component, Calligra Stage will quit now."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Can not find needed text component, Calligra Stage will quit now."
+#~ msgstr ""
+#~ "No se ha podido encontrar el componente de texto necesario, Calligra "
+#~ "Stage se cerrará ahora."
+
+#, fuzzy
+#~| msgid ""
+#~| "Can not find needed picture component, Calligra Stage will quit now."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Can not find needed picture component, Calligra Stage will quit now."
+#~ msgstr ""
+#~ "No se ha podido encontrar el componente de imagen necesario, Calligra "
+#~ "Stage se cerrará ahora."
+
+#, fuzzy
+#~| msgid "Installation Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Installation Error"
+#~ msgstr "Error de instalación"
+
+#, fuzzy
+#~| msgid "Placeholder shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Placeholder shape"
+#~ msgstr "Forma para reservar espacio"
+
+#, fuzzy
+#~| msgid "Double click to add a title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a title"
+#~ msgstr "Doble clic para añadir un título"
+
+#, fuzzy
+#~| msgid "Double click to add an outline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add an outline"
+#~ msgstr "Doble clic para añadir un contorno"
+
+#, fuzzy
+#~| msgid "Double click to add a text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a text"
+#~ msgstr "Doble clic para añadir un texto"
+
+#, fuzzy
+#~| msgid "Double click to add notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add notes"
+#~ msgstr "Doble clic para añadir notas"
+
+#, fuzzy
+#~| msgid "Double click to add a picture"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a picture"
+#~ msgstr "Doble clic para añadir una imagen"
+
+#, fuzzy
+#~| msgid "Double click to add a chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a chart"
+#~ msgstr "Doble clic para añadir una gráfica"
+
+#, fuzzy
+#~| msgid "Double click to add an object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add an object"
+#~ msgstr "Doble clic para añadir un objeto"
+
+#, fuzzy
+#~| msgid "Pen Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "Color del bolígrafo"
+
+#, fuzzy
+#~| msgid "Pen Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Size"
+#~ msgstr "Tamaño del bolígrafo"
+
+#, fuzzy
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "Negro"
+
+#, fuzzy
+#~| msgid "White"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "White"
+#~ msgstr "Blanco"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Verde"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "Rojo"
+
+#, fuzzy
+#~| msgid "Blue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Azul"
+
+#, fuzzy
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "Amarillo"
+
+#, fuzzy
+#~| msgid "Next Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "Diapositiva siguiente"
+
+#, fuzzy
+#~| msgid "Speaker Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Speaker Notes"
+#~ msgstr "Notas del orador"
+
+#, fuzzy
+#~| msgid "Current Slide %1 of %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "Diapositiva actual %1 de %2"
+
+#, fuzzy
+#~| msgid "End of Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "Fin de la presentación"
+
+#, fuzzy
+#~| msgid "start on mouse click"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start on mouse click"
+#~ msgstr "iniciar con un clic del ratón"
+
+#, fuzzy
+#~| msgid "start after previous animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start after previous animation"
+#~ msgstr "iniciar tras la animación anterior"
+
+#, fuzzy
+#~| msgid "start with previous animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start with previous animation"
+#~ msgstr "iniciar con la animación anterior"
+
+#, fuzzy
+#~| msgid "Start after %1 seconds. Duration of %2 seconds."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start after %1 seconds. Duration of %2 seconds."
+#~ msgstr "Iniciar tras %1 segundos. Duración de %2 segundos."
+
+#, fuzzy
+#~| msgid "Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "Animación"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Forma"
+
+#, fuzzy
+#~| msgid "&Move Here"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "&Mover aquí"
+
+#, fuzzy
+#~| msgid "&Copy Here"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "&Copiar aquí"
+
+#, fuzzy
+#~| msgid "C&ancel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&ancel"
+#~ msgstr "C&ancelar"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Normal"
+
+#, fuzzy
+#~| msgid "Show Master Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Master Slides"
+#~ msgstr "Mostrar las diapositivas maestras"
+
+#, fuzzy
+#~| msgid "Import Slideshow..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "Importar una presentación..."
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "Insertar una diapositiva"
+
+#, fuzzy
+#~| msgid "Insert a new slide after the current one"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a new slide after the current one"
+#~ msgstr "Insertar una diapositiva nueva tras la actual"
+
+#, fuzzy
+#~| msgid "Copy Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "Copiar la diapositiva"
+
+#, fuzzy
+#~| msgid "Copy the current slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "Copiar la diapositiva actual"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "Borrar la diapositiva"
+
+#, fuzzy
+#~| msgid "Delete the current slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "Borrar la diapositiva actual"
+
+#, fuzzy
+#~| msgid "Master Slide..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide..."
+#~ msgstr "Diapositiva maestra..."
+
+#, fuzzy
+#~| msgid "Previous Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "Diapositiva anterior"
+
+#, fuzzy
+#~| msgid "Go to previous slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "Ir a la diapositiva anterior"
+
+#, fuzzy
+#~| msgid "Go to next slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "Ir a la diapositiva siguiente"
+
+#, fuzzy
+#~| msgid "First Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "Primera diapositiva"
+
+#, fuzzy
+#~| msgid "Go to first slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "Ir a la la primera diapositiva"
+
+#, fuzzy
+#~| msgid "Last Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "Última diapositiva"
+
+#, fuzzy
+#~| msgid "Go to last slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "Ir a la última diapositiva"
+
+#, fuzzy
+#~| msgid "Configure Stage..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "Configurar Stage..."
+
+#, fuzzy
+#~| msgid "Export as HTML..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as HTML..."
+#~ msgstr "Exportar como HTML..."
+
+#, fuzzy
+#~| msgid "Insert Pictures as Slides..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "Insertar imágenes como diapositivas..."
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Appear Animation"
+#~ msgstr "Crear una animación de aparición"
+
+#, fuzzy
+#~| msgid "Edit Custom Slide Shows..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows..."
+#~ msgstr "Editar las presentaciones personalizadas..."
+
+#, fuzzy
+#~| msgid "Start Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "Iniciar presentación"
+
+#, fuzzy
+#~| msgid "From Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "Desde la diapositiva actual"
+
+#, fuzzy
+#~| msgid "From First Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From First Slide"
+#~ msgstr "Desde la primera diapositiva"
+
+#, fuzzy
+#~| msgid "Stop presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "Detener presentación"
+
+#, fuzzy
+#~| msgid "Show Status Bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Mostrar barra de estado"
+
+#, fuzzy
+#~| msgid "Hide Status Bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Ocultar barra de estado"
+
+#, fuzzy
+#~| msgid "Shows or hides the status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Mostrar u ocultar la barra de estado"
+
+#, fuzzy
+#~| msgid "Configure Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "Configurar la presentación..."
+
+#, fuzzy
+#~| msgid "Configure Presenter View..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "Configurar la vista del presentador..."
+
+#, fuzzy
+#~| msgid "Draw on the presentation..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "Dibujar en la presentación..."
+
+#, fuzzy
+#~| msgid "Highlight the presentation..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Highlight the presentation..."
+#~ msgstr "Realzar la presentación..."
+
+#, fuzzy
+#~| msgid "Blackscreen on the presentation..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blackscreen on the presentation..."
+#~ msgstr "Pantalla negra en la presentación..."
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Notas"
+
+#, fuzzy
+#~| msgid "Slides Sorter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "Clasificador de diapositivas"
+
+#, fuzzy
+#~| msgid "Slide Show: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "Presentación:"
+
+#, fuzzy
+#~| msgid "Add a new custom slide show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new custom slide show"
+#~ msgstr "Añadir una nueva presentación personalizada"
+
+#, fuzzy
+#~| msgid "Delete current custom slide show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "Borrar la presentación personalizada actual"
+
+#, fuzzy
+#~| msgid "Add slides to current custom slide show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add slides to current custom slide show"
+#~ msgstr "Añadir diapositivas a la presentación personalizada actual"
+
+#, fuzzy
+#~| msgid "Remove slides from current custom slide show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove slides from current custom slide show"
+#~ msgstr "Eliminar diapositivas de la presentación personalizada actual"
+
+#, fuzzy
+#~| msgid "Duplicate Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "Duplicar diapositiva"
+
+#, fuzzy
+#~| msgid "Start Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "Iniciar presentación"
+
+#, fuzzy
+#~| msgid "Add a new slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new slide"
+#~ msgstr "Añadir una nueva diapositiva"
+
+#, fuzzy
+#~| msgid "Delete selected slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "Borrar la diapositiva actual"
+
+#, fuzzy
+#~| msgid "Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Renombrar"
+
+#, fuzzy
+#~| msgid "Cut"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "Cortar"
+
+#, fuzzy
+#~| msgid "Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Copiar"
+
+#, fuzzy
+#~| msgid "Paste"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "Pegar"
+
+#, fuzzy
+#~| msgid "Slide Show %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "Presentación %1"
+
+#, fuzzy
+#~| msgid "All slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All slides"
+#~ msgstr "Todas las diapositivas"
+
+#, fuzzy
+#~| msgid "Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Error"
+
+#, fuzzy
+#~| msgid "There cannot be two slideshows with the same name."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "There cannot be two slideshows with the same name."
+#~ msgstr "No puede haber dos presentaciones con el mismo nombre."
+
+#, fuzzy
+#~| msgid "Automatic animation preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic animation preview"
+#~ msgstr "Vista previa automática de la animación"
+
+#, fuzzy
+#~| msgid "Preview animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "Vista previa de la animación"
+
+#, fuzzy
+#~| msgid "Slide Transitions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "Transiciones de diapositivas"
+
+#, fuzzy
+#~| msgid "Shape Click Actions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Click Actions"
+#~ msgstr "Acciones a pulsar en la forma"
+
+#, fuzzy
+#~| msgid "Shape Animations"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "Animaciones de forma"
+
+#, fuzzy
+#~| msgid "Manage animation delay and duration: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage animation delay and duration: "
+#~ msgstr "Administrar el retraso y la duración de la animación: "
+
+#, fuzzy
+#~| msgid "Start: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start: "
+#~ msgstr "Iniciar: "
+
+#, fuzzy
+#~| msgid "on mouse click"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "on mouse click"
+#~ msgstr "con un clic de ratón"
+
+#, fuzzy
+#~| msgid "after previous animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after previous animation"
+#~ msgstr "tras la animación anterior"
+
+#, fuzzy
+#~| msgid "with previous animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "with previous animation"
+#~ msgstr "con la animación anterior"
+
+#, fuzzy
+#~| msgid "Delay: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delay: "
+#~ msgstr "Retraso "
+
+#, fuzzy
+#~| msgid "Duration: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "Duración: "
+
+#, fuzzy
+#~| msgid "Preview Shape Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview Shape Animation"
+#~ msgstr "Vista previa de la animación de la forma"
+
+#, fuzzy
+#~| msgid "No Effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "Sin efecto"
+
+#, fuzzy
+#~| msgid " sec"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr " s"
+
+#, fuzzy
+#~| msgid "Apply To All Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply To All Slides"
+#~ msgstr "Aplicar a todas las diapositivas"
+
+#, fuzzy
+#~| msgid "Entrance"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entrance"
+#~ msgstr "Entrada"
+
+#, fuzzy
+#~| msgid "Exit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exit"
+#~ msgstr "Salida"
+
+#, fuzzy
+#~| msgid "Emphasis"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Emphasis"
+#~ msgstr "Énfasis"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "Personalizado"
+
+#, fuzzy
+#~| msgid "Motion path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Motion path"
+#~ msgstr "Trayectoria del movimiento"
+
+#, fuzzy
+#~| msgid "Ole Action"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ole Action"
+#~ msgstr "Acción ole"
+
+#, fuzzy
+#~| msgid "Media Call"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Media Call"
+#~ msgstr "Llamada multimedia"
+
+#, fuzzy
+#~| msgid "Edit animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "Editar animación"
+
+#, fuzzy
+#~| msgid "Add new animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new animation"
+#~ msgstr "Añadir una nueva animación"
+
+#, fuzzy
+#~| msgid "Remove animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "Eliminar animación"
+
+#, fuzzy
+#~| msgid "Order: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Order: "
+#~ msgstr "Orden: "
+
+#, fuzzy
+#~| msgid "Move animation up"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation up"
+#~ msgstr "Mover animación hacia arriba"
+
+#, fuzzy
+#~| msgid "Move animation down"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation down"
+#~ msgstr "Mover animación hacia abajo"
+
+#, fuzzy
+#~| msgid "Add a new animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "Añadir una nueva animación"
+
+#, fuzzy
+#~| msgid "Delete current animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "Borrar la animación actual"
+
+#, fuzzy
+#~| msgid "seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "seconds"
+#~ msgstr "segundos"
+
+#, fuzzy
+#~| msgid "Monitor %1 (primary)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monitor %1 (primary)"
+#~ msgstr "Monitor %1 (primario)"
+
+#, fuzzy
+#~| msgid "Monitor %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monitor %1"
+#~ msgstr "Monitor %1"
+
+#, fuzzy
+#~| msgid "Configure Presenter View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View"
+#~ msgstr "Configurar la vista del presentador"
+
+#, fuzzy
+#~| msgid "Configure Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "Configurar la presentación"
+
+#, fuzzy
+#~| msgid "Html Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Html Export"
+#~ msgstr "Exportación HTML"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Exportar"
+
+#, fuzzy
+#~| msgid "There is already a favorite file with this name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "There is already a favorite file with this name"
+#~ msgstr "Ya existe un archivo favorito con este nombre"
+
+#, fuzzy
+#~| msgid "Incorrect file, .zip only or corrupted zip"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Incorrect file, .zip only or corrupted zip"
+#~ msgstr "Archivo incorrecto, se trata de un simple .zip o de un zip dañado"
+
+#, fuzzy
+#~| msgid "Zip file need to contain style.css"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zip file need to contain style.css"
+#~ msgstr "El archivo zip debe contener un style.css"
+
+#, fuzzy
+#~| msgid "Delete Template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "Borrar la plantilla"
+
+#, fuzzy
+#~| msgid "You may not remove the templates provided with the application"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "You may not remove the templates provided with the application"
+#~ msgstr "No puede eliminar las plantillas proporcionadas con la aplicación"
+
+#, fuzzy
+#~| msgid "Add Template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Template"
+#~ msgstr "Añadir plantilla"
+
+#, fuzzy
+#~| msgid "Are you sure you want to remove \"%1\"?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Are you sure you want to remove \"%1\"?"
+#~ msgstr "¿Está seguro de querer eliminar «%1»?"
+
+#, fuzzy
+#~| msgid "Confirm remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm remove"
+#~ msgstr "Confirmar la eliminación"
+
+#, fuzzy
+#~| msgid "No sound"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr "Sin sonido"
+
+#, fuzzy
+#~| msgid "Import..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import..."
+#~ msgstr "Importar..."
+
+#, fuzzy
+#~| msgid "Bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bar"
+#~ msgstr "Barra"
+
+#, fuzzy
+#~| msgid "From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Left"
+#~ msgstr "Desde la izquierda"
+
+#, fuzzy
+#~| msgid "From Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top"
+#~ msgstr "Desde arriba"
+
+#, fuzzy
+#~| msgid "From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Right"
+#~ msgstr "Desde la derecha"
+
+#, fuzzy
+#~| msgid "From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "Desde abajo"
+
+#, fuzzy
+#~| msgid "Unknown subtype"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown subtype"
+#~ msgstr "Subtipo desconocido"
+
+#, fuzzy
+#~| msgid "Clock"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "Reloj"
+
+#, fuzzy
+#~| msgid "From Twelve Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Twelve Clockwise"
+#~ msgstr "Horario a partir de las 12"
+
+#, fuzzy
+#~| msgid "From Three Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Three Clockwise"
+#~ msgstr "Horario a partir de las 3"
+
+#, fuzzy
+#~| msgid "From Six Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Six Clockwise"
+#~ msgstr "Horario a partir de las 6"
+
+#, fuzzy
+#~| msgid "From Nine Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Nine Clockwise"
+#~ msgstr "Horario a partir de las 9"
+
+#, fuzzy
+#~| msgid "From Twelve Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Twelve Counterclockwise"
+#~ msgstr "Antihorario a partir de las 12"
+
+#, fuzzy
+#~| msgid "From Three Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Three Counterclockwise"
+#~ msgstr "Antihorario a partir de las 3"
+
+#, fuzzy
+#~| msgid "From Six Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Six Counterclockwise"
+#~ msgstr "Antihorario a partir de las 6"
+
+#, fuzzy
+#~| msgid "From Nine Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Nine Counterclockwise"
+#~ msgstr "Antihorario a partir de las 9"
+
+#, fuzzy
+#~| msgid "Double Fan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "Ventilador doble"
+
+#, fuzzy
+#~| msgid "Fan Out Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Vertical"
+#~ msgstr "Salida ventilador vertical"
+
+#, fuzzy
+#~| msgid "Fan Out Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Horizontal"
+#~ msgstr "Salida ventilador horizontal"
+
+#, fuzzy
+#~| msgid "Fan In Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "Entrada ventilador vertical"
+
+#, fuzzy
+#~| msgid "Fan In Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "Entrada ventilador horizontal"
+
+#, fuzzy
+#~| msgid "Fan In Vertical Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical Reverse"
+#~ msgstr "Entrada ventilador vertical al revés"
+
+#, fuzzy
+#~| msgid "Fan In Horizontal Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal Reverse"
+#~ msgstr "Entrada ventilador horizontal al revés"
+
+#, fuzzy
+#~| msgid "Double Sweep"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "Doble barrido"
+
+#, fuzzy
+#~| msgid "Parallel Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "Vertical paralelo"
+
+#, fuzzy
+#~| msgid "Parallel Diagonal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal"
+#~ msgstr "Diagonal paralelo"
+
+#, fuzzy
+#~| msgid "Opposite Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "Vertical opuesto"
+
+#, fuzzy
+#~| msgid "Opposite Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "Horizontal opuesto"
+
+#, fuzzy
+#~| msgid "Parallel Diagonal Top Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "Diagonal paralelo arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Parallel Diagonal Bottom Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "Diagonal paralelo abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "Parallel Vertical Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical Reverse"
+#~ msgstr "Vertical paralelo al revés"
+
+#, fuzzy
+#~| msgid "Parallel Diagonal Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Reverse"
+#~ msgstr "Diagonal paralelo al revés"
+
+#, fuzzy
+#~| msgid "Opposite Vertical Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "Vertical opuesto al revés"
+
+#, fuzzy
+#~| msgid "Opposite Horizontal Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "Horizontal opuesto al revés"
+
+#, fuzzy
+#~| msgid "Parallel Diagonal Top Left Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "Diagonal paralelo arriba a la izquierda al revés"
+
+#, fuzzy
+#~| msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "Diagonal paralelo abajo a la izquierda al revés"
+
+#, fuzzy
+#~| msgid "Fan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan"
+#~ msgstr "Ventilador"
+
+#, fuzzy
+#~| msgid "Center Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "Centro derecha"
+
+#, fuzzy
+#~| msgid "Center Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Top"
+#~ msgstr "Centro arriba"
+
+#, fuzzy
+#~| msgid "Center Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Left"
+#~ msgstr "Centro izquierda"
+
+#, fuzzy
+#~| msgid "Center Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "Centro abajo"
+
+#, fuzzy
+#~| msgid "Fan Out Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Top"
+#~ msgstr "Salida ventilador arriba"
+
+#, fuzzy
+#~| msgid "Fan Out Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "Salida ventilador derecha"
+
+#, fuzzy
+#~| msgid "Fan Out Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "Salida ventilador abajo"
+
+#, fuzzy
+#~| msgid "Fan Out Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Left"
+#~ msgstr "Salida ventilador izquierda"
+
+#, fuzzy
+#~| msgid "Fan In Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Top"
+#~ msgstr "Entrada ventilador arriba"
+
+#, fuzzy
+#~| msgid "Fan In Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "Entrada ventilador derecha"
+
+#, fuzzy
+#~| msgid "Fan In Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "Entrada ventilador abajo"
+
+#, fuzzy
+#~| msgid "Fan In Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Left"
+#~ msgstr "Entrada ventilador izquierda"
+
+#, fuzzy
+#~| msgid "Pin Wheel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "Molinillo de viento"
+
+#, fuzzy
+#~| msgid "Two Blades Vertical Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Vertical Clockwise"
+#~ msgstr "Dos aspas verticales en sentido horario"
+
+#, fuzzy
+#~| msgid "Two Blades Horizontal Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Clockwise"
+#~ msgstr "Dos aspas horizontales en sentido horario"
+
+#, fuzzy
+#~| msgid "Four Blades Horizontal Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Clockwise"
+#~ msgstr "Cuatro aspas horizontales en sentido horario"
+
+#, fuzzy
+#~| msgid "Two Blades Vertical Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Vertical Counterclockwise"
+#~ msgstr "Dos aspas verticales en sentido antihorario"
+
+#, fuzzy
+#~| msgid "Two Blades Horizontal Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Counterclockwise"
+#~ msgstr "Dos aspas horizontales en sentido antihorario"
+
+#, fuzzy
+#~| msgid "Four Blades Horizontal Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Counterclockwise"
+#~ msgstr "Cuatro aspas horizontales en sentido antihorario"
+
+#, fuzzy
+#~| msgid "Saloon Door"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "Puerta de salón"
+
+#, fuzzy
+#~| msgid "To Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Top"
+#~ msgstr "Hacia arriba"
+
+#, fuzzy
+#~| msgid "To Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "Hacia la izquierda"
+
+#, fuzzy
+#~| msgid "To Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "Hacia abajo"
+
+#, fuzzy
+#~| msgid "To Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "Hacia la derecha"
+
+#, fuzzy
+#~| msgid "Single Sweep"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "Barrido único"
+
+#, fuzzy
+#~| msgid "Clockwise Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top"
+#~ msgstr "Horario arriba"
+
+#, fuzzy
+#~| msgid "Clockwise Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "Horario a la derecha"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "Horario abajo"
+
+#, fuzzy
+#~| msgid "Clockwise Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "Horario a la izquierda"
+
+#, fuzzy
+#~| msgid "Clockwise Top Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "Horario arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "Antihorario abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "Horario abajo a la derecha"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "Antihorario arriba a la derecha"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top"
+#~ msgstr "Antihorario arriba"
+
+#, fuzzy
+#~| msgid "Counterclockwise Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Right"
+#~ msgstr "Antihorario a la derecha"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom"
+#~ msgstr "Antihorario abajo"
+
+#, fuzzy
+#~| msgid "Counterclockwise Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Left"
+#~ msgstr "Antihorario a la izquierda"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left"
+#~ msgstr "Antihorario arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "Horario abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "Antihorario abajo a la derecha"
+
+#, fuzzy
+#~| msgid "Clockwise Top Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "Horario arriba a la derecha"
+
+#, fuzzy
+#~| msgid "Windshield"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "Parabrisas"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "Derecha"
+
+#, fuzzy
+#~| msgid "Up"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up"
+#~ msgstr "Arriba"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "Vertical"
+
+#, fuzzy
+#~| msgid "Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "Horizontal"
+
+#, fuzzy
+#~| msgid "Right Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Reverse"
+#~ msgstr "Derecha al revés"
+
+#, fuzzy
+#~| msgid "Up Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up Reverse"
+#~ msgstr "Arriba al revés"
+
+#, fuzzy
+#~| msgid "Vertical Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reverse"
+#~ msgstr "Vertical al revés"
+
+#, fuzzy
+#~| msgid "Horizontal Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reverse"
+#~ msgstr "Horizontal al revés"
+
+#, fuzzy
+#~| msgid "Barn Door"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "Puerta de granero"
+
+#, fuzzy
+#~| msgid "Diagonal Bottom Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "Diagonal abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "Diagonal Bottom Left Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left Reverse"
+#~ msgstr "Diagonal abajo a la izquierda al revés"
+
+#, fuzzy
+#~| msgid "Diagonal Top Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "Diagonal arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Diagonal Top Left Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Reverse"
+#~ msgstr "Diagonal arriba a la izquierda al revés"
+
+#, fuzzy
+#~| msgid "Barn Vee"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Vee"
+#~ msgstr "Uve de granero"
+
+#, fuzzy
+#~| msgid "Barn Zig Zag"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "Zigzag de granero"
+
+#, fuzzy
+#~| msgid "Vertical Reversed"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "Vertical al revés"
+
+#, fuzzy
+#~| msgid "Horizontal Reversed"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "Horizontal al revés"
+
+#, fuzzy
+#~| msgid "Box"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box"
+#~ msgstr "Caja"
+
+#, fuzzy
+#~| msgid "From Top Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "Desde arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "From Top Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "Desde arriba a la derecha"
+
+#, fuzzy
+#~| msgid "From Bottom Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "Desde abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "From Bottom Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "Desde abajo a la derecha"
+
+#, fuzzy
+#~| msgid "Diagonal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "Diagonal"
+
+#, fuzzy
+#~| msgid "Four Box"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box"
+#~ msgstr "Cuatro cajas"
+
+#, fuzzy
+#~| msgid "Corners In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "Esquinas hacia dentro"
+
+#, fuzzy
+#~| msgid "Corners In Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In Reverse"
+#~ msgstr "Esquinas hacia dentro al revés"
+
+#, fuzzy
+#~| msgid "Corners Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "Esquinas hacia fuera"
+
+#, fuzzy
+#~| msgid "Corners Out Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out Reverse"
+#~ msgstr "Esquinas hacia fuera al revés"
+
+#, fuzzy
+#~| msgid "Misc Diagonal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "Diagonal variada"
+
+#, fuzzy
+#~| msgid "Double Barn Door"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Barn Door"
+#~ msgstr "Puerta de granero doble"
+
+#, fuzzy
+#~| msgid "Double Diamond"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Diamond"
+#~ msgstr "Diamante doble"
+
+#, fuzzy
+#~| msgid "Vee"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vee"
+#~ msgstr "Uve"
+
+#, fuzzy
+#~| msgid "Zig Zag"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zig Zag"
+#~ msgstr "Zigzag"
+
+#, fuzzy
+#~| msgid "Fade"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "Desvanecer"
+
+#, fuzzy
+#~| msgid "Crossfade"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crossfade"
+#~ msgstr "Desvanecimiento cruzado"
+
+#, fuzzy
+#~| msgid "Fade over Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade over Color"
+#~ msgstr "Desvanecer sobre el color"
+
+#, fuzzy
+#~| msgid "ArrowHead"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "Punta de flecha"
+
+#, fuzzy
+#~| msgid "Down"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down"
+#~ msgstr "Abajo"
+
+#, fuzzy
+#~| msgid "Down Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "Abajo al revés"
+
+#, fuzzy
+#~| msgid "Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "Izquierda"
+
+#, fuzzy
+#~| msgid "Left Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "Izquierda al revés"
+
+#, fuzzy
+#~| msgid "Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Elipse"
+
+#, fuzzy
+#~| msgid "Circle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "Círculo"
+
+#, fuzzy
+#~| msgid "Circle Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "Círculo al revés"
+
+#, fuzzy
+#~| msgid "Eye"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eye"
+#~ msgstr "Ojo"
+
+#, fuzzy
+#~| msgid "Hexagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hexagon"
+#~ msgstr "Hexágono"
+
+#, fuzzy
+#~| msgid "Iris"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Iris"
+#~ msgstr "Iris"
+
+#, fuzzy
+#~| msgid "Rectangular"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular"
+#~ msgstr "Rectangular"
+
+#, fuzzy
+#~| msgid "Rectangular Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "Rectangular al revés"
+
+#, fuzzy
+#~| msgid "Diamond"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond"
+#~ msgstr "Diamante"
+
+#, fuzzy
+#~| msgid "Diamond Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "Diamante al revés"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Diversos"
+
+#, fuzzy
+#~| msgid "Heart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart"
+#~ msgstr "Corazón"
+
+#, fuzzy
+#~| msgid "Heart Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "Corazón al revés"
+
+#, fuzzy
+#~| msgid "Keyhole"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole"
+#~ msgstr "Cerradura"
+
+#, fuzzy
+#~| msgid "Keyhole Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "Cerradura al revés"
+
+#, fuzzy
+#~| msgid "Pentagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Pentágono"
+
+#, fuzzy
+#~| msgid "RoundRect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "Rectángulo redondeado"
+
+#, fuzzy
+#~| msgid "Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "Estrella"
+
+#, fuzzy
+#~| msgid "Four Point Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star"
+#~ msgstr "Estrella de cuatro puntas"
+
+#, fuzzy
+#~| msgid "Four Point Star Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "Estrella de cuatro puntas al revés"
+
+#, fuzzy
+#~| msgid "Five Point Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star"
+#~ msgstr "Estrella de cinco puntas"
+
+#, fuzzy
+#~| msgid "Five Point Star Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "Estrella de cinco puntas al revés"
+
+#, fuzzy
+#~| msgid "Six Point Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star"
+#~ msgstr "Estrella de seis puntas"
+
+#, fuzzy
+#~| msgid "Six Point Star Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "Estrella de seis puntas al revés"
+
+#, fuzzy
+#~| msgid "Triangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triangle"
+#~ msgstr "Triángulo"
+
+#, fuzzy
+#~| msgid "Box Snakes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box Snakes"
+#~ msgstr "Serpientes en caja"
+
+#, fuzzy
+#~| msgid "Two Box Top In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top In"
+#~ msgstr "Dos cajas, arriba hacia dentro"
+
+#, fuzzy
+#~| msgid "Two Box Bottom In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "Dos cajas, abajo hacia dentro"
+
+#, fuzzy
+#~| msgid "Two Box Left In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "Dos cajas, izquierda hacia dentro"
+
+#, fuzzy
+#~| msgid "Two Box Right In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "Dos cajas, derecha hacia dentro"
+
+#, fuzzy
+#~| msgid "Four Box Vertical In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical In"
+#~ msgstr "Cuatro cajas, vertical hacia dentro"
+
+#, fuzzy
+#~| msgid "Four Box Horizontal In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "Cuatro cajas, horizontal hacia dentro"
+
+#, fuzzy
+#~| msgid "Two Box Top Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top Out"
+#~ msgstr "Dos cajas, arriba hacia fuera"
+
+#, fuzzy
+#~| msgid "Two Box Bottom Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "Dos cajas, abajo hacia fuera"
+
+#, fuzzy
+#~| msgid "Two Box Left Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "Dos cajas, izquierda hacia fuera"
+
+#, fuzzy
+#~| msgid "Two Box Right Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "Dos cajas, derecha hacia fuera"
+
+#, fuzzy
+#~| msgid "Four Box Vertical Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical Out"
+#~ msgstr "Cuatro cajas, vertical hacia fuera"
+
+#, fuzzy
+#~| msgid "Four Box Horizontal Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "Cuatro cajas, horizontal hacia fuera"
+
+#, fuzzy
+#~| msgid "Parallel Snakes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "Serpientes paralelas"
+
+#, fuzzy
+#~| msgid "Vertical Top Same In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "Misma entrada vertical hacia arriba"
+
+#, fuzzy
+#~| msgid "Vertical Top Same Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "Misma salida vertical hacia arriba"
+
+#, fuzzy
+#~| msgid "Vertical Bottom Same In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same In"
+#~ msgstr "Misma entrada vertical hacia abajo"
+
+#, fuzzy
+#~| msgid "Vertical Bottom Same Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same Out"
+#~ msgstr "Misma salida vertical hacia abajo"
+
+#, fuzzy
+#~| msgid "Vertical Top Left Opposite In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Left Opposite In"
+#~ msgstr "Entrada opuesta vertical hacia arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Vertical Top Left Opposite Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Left Opposite Out"
+#~ msgstr "Salida opuesta vertical hacia arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Vertical Bottom Left Opposite In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Left Opposite In"
+#~ msgstr "Entrada opuesta vertical hacia abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "Vertical Bottom Left Opposite Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Left Opposite Out"
+#~ msgstr "Salida opuesta vertical hacia abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "Horizontal Left Same In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "Misma entrada horizontal a la izquierda"
+
+#, fuzzy
+#~| msgid "Horizontal Left Same Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same Out"
+#~ msgstr "Misma salida horizontal a la izquierda"
+
+#, fuzzy
+#~| msgid "Horizontal Right Same In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same In"
+#~ msgstr "Misma entrada horizontal a la derecha"
+
+#, fuzzy
+#~| msgid "Horizontal Right Same Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same Out"
+#~ msgstr "Misma salida horizontal a la derecha"
+
+#, fuzzy
+#~| msgid "Horizontal Top Left Opposite In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Left Opposite In"
+#~ msgstr "Entrada opuesta horizontal arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Horizontal Top Left Opposite Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Left Opposite Out"
+#~ msgstr "Salida opuesta horizontal arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Horizontal Top Right Opposite In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite In"
+#~ msgstr "Entrada opuesta horizontal arriba a la derecha"
+
+#, fuzzy
+#~| msgid "Horizontal Top Right Opposite Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite Out"
+#~ msgstr "Salida opuesta horizontal arriba a la derecha"
+
+#, fuzzy
+#~| msgid "Diagonal Bottom Left Opposite In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left Opposite In"
+#~ msgstr "Entrada opuesta diagonal abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "Diagonal Bottom Left Opposite Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left Opposite Out"
+#~ msgstr "Salida opuesta diagnoal abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "Diagonal Top Left Opposite In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "Entrada opuesta diagonal arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Diagonal Top Left Opposite Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite Out"
+#~ msgstr "Salida opuesta diagonal arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Snake"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "Serpiente"
+
+#, fuzzy
+#~| msgid "Spiral"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Espiral"
+
+#, fuzzy
+#~| msgid "Clockwise Top Left In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "Entrada horaria arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Clockwise Top Left Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "Salida horaria arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Clockwise Top Right In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "Entrada horaria arriba a la derecha"
+
+#, fuzzy
+#~| msgid "Clockwise Top Right Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "Salida horaria arriba a la derecha"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom Left In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "Entrada horaria abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom Left Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "Salida horaria abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom Right In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "Entrada horaria abajo a la derecha"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom Right Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "Salida horaria abajo a la derecha"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top Left In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "Entrada antihoraria arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top Left Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "Salida antihoraria arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top Right In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "Entrada antihoraria arriba a la derecha"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top Right Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "Salida antihoraria arriba a la derecha"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom Left In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "Entrada antihoraria abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom Left Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "Salida antihoraria abajo a la derecha"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom Right In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "Entrada antihoraria abajo a la derecha"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom Right Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "Salida antihoraria abajo a la derecha"
+
+#, fuzzy
+#~| msgid "Waterfall"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "Cascada"
+
+#, fuzzy
+#~| msgid "Top Left Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Vertical"
+#~ msgstr "Vertical arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Top Left Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Horizontal"
+#~ msgstr "Horizontal arriba a la izquierda"
+
+#, fuzzy
+#~| msgid "Top Right Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "Vertical arriba a la derecha"
+
+#, fuzzy
+#~| msgid "Top Right Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Horizontal"
+#~ msgstr "Horizontal arriba a la derecha"
+
+#, fuzzy
+#~| msgid "Bottom Left Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "Vertical abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "Bottom Left Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Horizontal"
+#~ msgstr "Horizontal abajo a la izquierda"
+
+#, fuzzy
+#~| msgid "Bottom Right Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "Vertical abajo a la derecha"
+
+#, fuzzy
+#~| msgid "Bottom Right Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "Horizontal abajo a la derecha"
+
+#, fuzzy
+#~| msgid "Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "Diapositiva"
+
+#, fuzzy
+#~| msgid "Space Rotation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space Rotation"
+#~ msgstr "Rotación del espacio"
+
+#, fuzzy
+#~| msgid "Swap effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "Efecto de intercambio"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "Cabecera"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "Pie"
+
+#~ msgid "Maintainer"
+#~ msgstr "Encargado"
+
+#~ msgid "Calligra Presentation Tool"
+#~ msgstr "Herramienta de presentaciones de Calligra"
+
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "Stage"
+
+#~ msgid "File to open"
+#~ msgstr "Archivo a abrir"
+
+#~ msgid "Set Layout"
+#~ msgstr "Establecer la disposición"
+
+#~ msgid "Layout Tool"
+#~ msgstr "Herramienta de disposición"
+
+#~ msgid "&File"
+#~ msgstr "&Archivo"
+
+#~ msgid "Line"
+#~ msgstr "Línea"
+
+#~ msgid "Arra&nge Objects"
+#~ msgstr "Orde&nar los objetos"
+
+#~ msgid "&Align Objects"
+#~ msgstr "&Alinear los objetos"
+
+#~ msgid "Te&xt"
+#~ msgstr "Te&xto"
+
+#~ msgid "&Align"
+#~ msgstr "&Alinear"
+
+#~ msgid "T&ype"
+#~ msgstr "T&ipo"
+
+#~ msgid "Spellcheck"
+#~ msgstr "Verificación ortográfica"
+
+#~ msgid "Autocorrection"
+#~ msgstr "Corrección automática"
+
+#~ msgid "File"
+#~ msgstr "Archivo"
+
+#~ msgid "Edit"
+#~ msgstr "Editar"
+
+#~ msgid "Insert"
+#~ msgstr "Insertar"
+
+#~ msgid "Tools"
+#~ msgstr "Herramientas"
+
+#~ msgid "Format"
+#~ msgstr "Formato"
+
+#~ msgid "Text"
+#~ msgstr "Texto"
+
+#~ msgid "Slide Show"
+#~ msgstr "Presentación"
+
+#~ msgid "Navigation"
+#~ msgstr "Navegación"
+
+#~ msgid "Vertical Alignment"
+#~ msgstr "Alineación vertical"
+
+#~ msgid "Flip Objects"
+#~ msgstr "Voltear los objetos"
+
+#~ msgid "&Scale to Show the Picture 1:1 In"
+#~ msgstr "E&scalar para mostrar la imagen 1:1 en"
+
+#~ msgid "Spell Check Result"
+#~ msgstr "Resultado de la verificación ortográfica"
+
+#~ msgid "Slide Layouts"
+#~ msgstr "Diseños de diapositivas"
+
+#~ msgid "Not implemented in 2.0"
+#~ msgstr "No implementado en la versión 2.0"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete page effect"
+#~ msgstr "Borrar efecto de página"
+
+#~ msgid "Configure KPresenter..."
+#~ msgstr "Configurar KPresenter..."
+
+#, fuzzy
+#~| msgid "Slides Sorter"
+#~ msgid "Slide Title"
+#~ msgstr "Clasificador de diapositivas"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "Deseleccionar elemento"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "Seleccionar elemento"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Editar"
+
+#~ msgid "New Slide Show %1"
+#~ msgstr "Nueva presentación %1"
+
+#~ msgid "Are you sure you want to delete the selected slide show?"
+#~ msgstr "¿Seguro que desea borrar la presentación seleccionada?"
+
+#~ msgid "Confirm action"
+#~ msgstr "Confirmar la acción"
+
+#~ msgid "Custom Slideshows editor"
+#~ msgstr "Editor de las presentaciones personalizadas"
+
+#~ msgid "Available Slides"
+#~ msgstr "Diapositivas disponibles"
+
+#~ msgid "Add Slide"
+#~ msgstr "Añadir una diapositiva"
+
+#~ msgid "Undo"
+#~ msgstr "Deshacer"
+
+#~ msgid "Ok"
+#~ msgstr "Aceptar"
+
+#~ msgid "Close"
+#~ msgstr "Cerrar"
+
+#~ msgid "KPresenter"
+#~ msgstr "KPresenter"

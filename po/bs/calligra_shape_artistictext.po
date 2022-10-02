@@ -1,0 +1,281 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2015-02-22 22:31+0100\n"
+"Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-10-21 04:54+0000\n"
+"X-Generator: Launchpad (build 16807)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: AddTextRangeCommand.cpp:15 AddTextRangeCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Add text range"
+msgstr "Dodaj opseg teksta"
+
+#: ArtisticTextShapeFactory.cpp:17
+#, kde-format
+msgid "ArtisticTextShape"
+msgstr "ArtisticTextShape"
+
+#: ArtisticTextShapeFactory.cpp:19
+#, kde-format
+msgid "A shape which shows a single text line"
+msgstr "Oblik koji pokazuje jednu liniju teksta"
+
+#: ArtisticTextShapeFactory.cpp:29
+#, kde-format
+msgid "Artistic Text"
+msgstr "Umjetnički tekst"
+
+#: ArtisticTextTool.cpp:64
+#, kde-format
+msgid "Detach Path"
+msgstr "Ukloni stazu"
+
+#: ArtisticTextTool.cpp:69
+#, kde-format
+msgid "Convert to Path"
+msgstr "Pretvori u stazu"
+
+#: ArtisticTextTool.cpp:74
+#, kde-format
+msgid "Bold text"
+msgstr "Bodebljani tekst"
+
+#: ArtisticTextTool.cpp:79
+#, kde-format
+msgid "Italic text"
+msgstr "Kurzivni tekst"
+
+#: ArtisticTextTool.cpp:84
+#, kde-format
+msgid "Superscript"
+msgstr "Eksponent"
+
+#: ArtisticTextTool.cpp:89
+#, kde-format
+msgid "Subscript"
+msgstr "Indeks"
+
+#: ArtisticTextTool.cpp:94
+#, kde-format
+msgid "Anchor at Start"
+msgstr "Sidro na početku"
+
+#: ArtisticTextTool.cpp:99
+#, kde-format
+msgid "Anchor at Middle"
+msgstr "Sidro u sredini"
+
+#: ArtisticTextTool.cpp:104
+#, kde-format
+msgid "Anchor at End"
+msgstr "Sidro na kraju"
+
+#: ArtisticTextTool.cpp:295
+#, kde-format
+msgid "Click to change cursor position."
+msgstr "Kliknite za promjenu pozicije kursora."
+
+#: ArtisticTextTool.cpp:297
+#, kde-format
+msgid "Click to select text shape."
+msgstr "Kliknite za izbor oblika teksta."
+
+#: ArtisticTextTool.cpp:300
+#, kde-format
+msgid "Double click to put text on path."
+msgstr "Dvostruko kliknite da smjestite tekst na stazu."
+
+#: ArtisticTextTool.cpp:303
+#, kde-format
+msgid "Drag handle to change start offset."
+msgstr "Dvostruko kliknite za promjenu pozicije početka."
+
+#: ArtisticTextTool.cpp:307
+#, kde-format
+msgid "Press escape to finish editing."
+msgstr "Pritisnite Esc za kraj uređivanja."
+
+#: ArtisticTextTool.cpp:489
+#, kde-format
+msgid "Press return to finish editing."
+msgstr "Pritisni enter za kraj uređivanja."
+
+#: ArtisticTextTool.cpp:583
+msgctxt "(qtundo-format)"
+msgid "Convert to Path"
+msgstr "Pretvori u stazu"
+
+#: ArtisticTextTool.cpp:596
+#, kde-format
+msgid "Text Properties"
+msgstr "Osobine teksta"
+
+#: ArtisticTextTool.cpp:606
+#, kde-format
+msgid "Text On Path"
+msgstr "Tekst na stazi"
+
+#: ArtisticTextToolFactory.cpp:17
+#, kde-format
+msgid "Artistic text editing"
+msgstr "Uređivanje umjetničkog teksta"
+
+#: AttachTextToPathCommand.cpp:15
+msgctxt "(qtundo-format)"
+msgid "Attach Path"
+msgstr "Priloži stazu"
+
+#: ChangeTextAnchorCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Change text anchor"
+msgstr "Promijeni sidro teksta"
+
+#: ChangeTextFontCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Change font"
+msgstr "Promijeni font"
+
+#: ChangeTextOffsetCommand.cpp:15
+msgctxt "(qtundo-format)"
+msgid "Change Text Offset"
+msgstr "Promijeni poziciju teksta"
+
+#: DetachTextFromPathCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Detach Path"
+msgstr "Ukloni stazu"
+
+#: RemoveTextRangeCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Remove text range"
+msgstr "Ukloni opseg teksta"
+
+#: ReplaceTextRangeCommand.cpp:14 ReplaceTextRangeCommand.cpp:22
+#: ReplaceTextRangeCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Replace text range"
+msgstr "Opseg zamjenskog teksta"
+
+#, fuzzy
+#~| msgid "ArtisticTextShape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArtisticTextShape"
+#~ msgstr "ArtisticTextShape"
+
+#, fuzzy
+#~| msgid "A shape which shows a single text line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape which shows a single text line"
+#~ msgstr "Oblik koji pokazuje jednu liniju teksta"
+
+#, fuzzy
+#~| msgid "Artistic Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Artistic Text"
+#~ msgstr "Umjetnički tekst"
+
+#, fuzzy
+#~| msgid "Bold text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bold text"
+#~ msgstr "Bodebljani tekst"
+
+#, fuzzy
+#~| msgid "Italic text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Italic text"
+#~ msgstr "Kurzivni tekst"
+
+#, fuzzy
+#~| msgid "Superscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Superscript"
+#~ msgstr "Eksponent"
+
+#, fuzzy
+#~| msgid "Subscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subscript"
+#~ msgstr "Indeks"
+
+#, fuzzy
+#~| msgid "Anchor at Start"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor at Start"
+#~ msgstr "Sidro na početku"
+
+#, fuzzy
+#~| msgid "Anchor at Middle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor at Middle"
+#~ msgstr "Sidro u sredini"
+
+#, fuzzy
+#~| msgid "Anchor at End"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor at End"
+#~ msgstr "Sidro na kraju"
+
+#, fuzzy
+#~| msgid "Click to change cursor position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click to change cursor position."
+#~ msgstr "Kliknite za promjenu pozicije kursora."
+
+#, fuzzy
+#~| msgid "Click to select text shape."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click to select text shape."
+#~ msgstr "Kliknite za izbor oblika teksta."
+
+#, fuzzy
+#~| msgid "Double click to put text on path."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to put text on path."
+#~ msgstr "Dvostruko kliknite da smjestite tekst na stazu."
+
+#, fuzzy
+#~| msgid "Drag handle to change start offset."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag handle to change start offset."
+#~ msgstr "Dvostruko kliknite za promjenu pozicije početka."
+
+#, fuzzy
+#~| msgid "Press escape to finish editing."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press escape to finish editing."
+#~ msgstr "Pritisnite Esc za kraj uređivanja."
+
+#, fuzzy
+#~| msgid "Press return to finish editing."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press return to finish editing."
+#~ msgstr "Pritisni enter za kraj uređivanja."
+
+#, fuzzy
+#~| msgid "Text Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Properties"
+#~ msgstr "Osobine teksta"
+
+#, fuzzy
+#~| msgid "Text On Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text On Path"
+#~ msgstr "Tekst na stazi"
+
+#, fuzzy
+#~| msgid "Artistic text editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Artistic text editing"
+#~ msgstr "Uređivanje umjetničkog teksta"

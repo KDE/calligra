@@ -1,0 +1,60 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2012-10-03 13:33+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2012-12-21 01:43+0000\n"
+"X-Generator: Launchpad (build 16378)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: PluginShape.cpp:36
+#, kde-format
+msgid "Unknown"
+msgstr "Nepoznato"
+
+#: PluginShape.cpp:40
+#, kde-format
+msgid "Plugin of mimetype: %1"
+msgstr "Priključak za mimetype: %1"
+
+#: PluginShapeFactory.cpp:22
+#, kde-format
+msgid "Plugin Placeholder"
+msgstr "Mjesto priključka"
+
+#: PluginShapeFactory.cpp:24
+#, kde-format
+msgid "Plugin Placeholder, embedded or fullscreen"
+msgstr "Mjesto priključka, ugrađeno ili na punom ekranu"
+
+#, fuzzy
+#~| msgid "Unknown"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown"
+#~ msgstr "Nepoznato"
+
+#, fuzzy
+#~| msgid "Plugin of mimetype: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin of mimetype: %1"
+#~ msgstr "Priključak za mimetype: %1"
+
+#, fuzzy
+#~| msgid "Plugin Placeholder"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Placeholder"
+#~ msgstr "Mjesto priključka"
+
+#, fuzzy
+#~| msgid "Plugin Placeholder, embedded or fullscreen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Placeholder, embedded or fullscreen"
+#~ msgstr "Mjesto priključka, ugrađeno ili na punom ekranu"

@@ -1,0 +1,1122 @@
+<chapter id="formatspread">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Raphael</firstname
+> <surname
+>Langerhorst</surname
+> <affiliation
+> <address
+><email
+>raphael.langerhorst@kdemail.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+&traducteurGerardDelafond;&traducteurDanielDurand;&traducteurLudovicGrossard; 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Formatage du Tableur</title>
+
+<sect1 id="formatcells">
+<!--<title
+>Fonts, Text, Borders and Colors</title
+>-->
+<title
+>Format des cellules</title>
+<para
+>Pour changer le format et l'apparence des cellules, lignes ou colonnes sélectionnées, utilisez l'option <guimenuitem
+>Format de cellule...</guimenuitem
+> du menu <guimenu
+>Format</guimenu
+> ou du menu contextuel du bouton <mousebutton
+>droit</mousebutton
+> de la souris.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat0.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Menu contextuel du bouton droit de la souris.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Ceci ouvrira la boîte de dialogue <guilabel
+>Format de cellule</guilabel
+> qui présente plusieurs pages à onglets :</para>
+<sect2 id="formatdata">
+<!-- beginning of annma writing -->
+<title
+>Formats de données et représentation</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Page des <guilabel
+>formats des données</guilabel
+>.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>La page <guilabel
+>Format de données</guilabel
+> de la boîte de dialogue de <guilabel
+>format de cellule</guilabel
+> vous permet de contrôler comment les valeurs des cellules sont affichées.</para>
+<para
+>La partie du haut de cette page vous permet de sélectionner le format à utiliser en affichant les valeurs numériques, les dates ou les heures. Un panneau <guilabel
+>d'aperçu</guilabel
+> vous permet de voir l'effet du nouveau format. </para>
+<para
+>Vous pouvez définir le même format de date pour une ligne ou une colonne en sélectionnant la ligne ou la colonne et en ouvrant la boîte de dialogue <guilabel
+>Format de cellule</guilabel
+> avec le &BDS;.</para>
+<note
+><para
+>Vous pouvez augmenter la précision décimale de n'importe quel nombre pour les formats <guilabel
+>Générique</guilabel
+>, <guilabel
+>Nombre</guilabel
+>, <guilabel
+>Pourcentage</guilabel
+>, <guilabel
+>Monétaire</guilabel
+> or <guilabel
+>Scientifique</guilabel
+> en utilisant l'icône<guiicon
+>Augmenter la précision</guiicon
+> dans la barre d'outils <guilabel
+>Format</guilabel
+> :  <inlinemediaobject
+><imageobject>
+<imagedata fileref="increasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+<para
+>Vous pouvez diminuer la précision décimale de n'importe quel nombre pour les formats <guilabel
+>Générique</guilabel
+>, <guilabel
+>Nombre</guilabel
+>, <guilabel
+>Pourcentage</guilabel
+>, <guilabel
+>Monétaire</guilabel
+> or <guilabel
+>Scientifique</guilabel
+> en utilisant l'icône<guiicon
+>diminuer la précision</guiicon
+> dans la barre d'outils <guilabel
+>Format</guilabel
+> :  <inlinemediaobject
+><imageobject>
+<imagedata fileref="decreasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</note>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Générique</guilabel
+></term>
+<listitem
+><para
+>Ceci est le format par défaut et &sheets; détecte automatiquement le type de données suivant le contenu de la cellule. Par défaut, &sheets; justifie à droite dans une cellule les nombres, les dates et les heures et justifie à gauche le reste.</para>
+<para
+>Si le format <guilabel
+>Générique</guilabel
+> ne vous convient pas, vous pouvez le modifier pour un format particulier parmi les choix ci-dessous.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Nombre</guilabel
+></term>
+<listitem
+><para
+>La notation des nombres utilise la notation que vous avez choisie dans la &configurationDuSysteme; dans <menuchoice
+><guimenu
+>Localisation</guimenu
+><guisubmenu
+>Pays / Région &amp; Langue</guisubmenu
+><guimenuitem
+>Nombres</guimenuitem
+></menuchoice
+>. Les nombres sont justifiés à droite par défaut.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Pourcentage</guilabel
+></term>
+<listitem
+><para
+>Quand il y a un nombre dans la cellule courante et que vous souhaitez modifier le format de cellule de <guilabel
+>Générique</guilabel
+> à <guilabel
+>Pourcentage</guilabel
+>, le nombre dans la cellule est multiplié par 100.</para>
+<para
+>Par exemple, si vous saisissez 2 et fixez le format de cellule à <guilabel
+>Pourcentage</guilabel
+>, le nombre deviendra 200 %. Remodifier le format de cellule à <guilabel
+>Générique</guilabel
+> <guilabel
+>Generic</guilabel
+> le ramènera à 2.</para>
+<para
+>Vous pouvez également utiliser l'icône <guiicon
+>Pourcentage</guiicon
+>dans la barre d'outils <guilabel
+>Format</guilabel
+> :  <inlinemediaobject
+><imageobject>
+<imagedata fileref="percent.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Monétaire</guilabel
+></term>
+<listitem
+><para
+>Le format <guilabel
+>Monétaire</guilabel
+> convertit votre nombre en une notation correspondante à celle que vous avez choisie dans la &configurationDuSysteme; dans <menuchoice
+><guimenu
+>Localisation</guimenu
+><guisubmenu
+>Pays / Région &amp; Langue</guisubmenu
+><guimenuitem
+>Monétaire</guimenuitem
+></menuchoice
+>. Le symbole de la devise est affiché et la précision peut être paramétrée dans la &configurationDuSysteme;.</para>
+<para
+>Vous pouvez aussi utiliser l'icône<guiicon
+>Format monétaire</guiicon
+> dans la barre d'outils <guilabel
+>Format</guilabel
+> pour configurer la cellule conformément à votre devise actuelle :  <inlinemediaobject
+><imageobject>
+<imagedata fileref="hi22-action-money.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Scientifique</guilabel
+></term>
+<listitem
+><para
+>Le format <guilabel
+>Scientifique</guilabel
+> convertit votre nombre en une notation scientifique. Par exemple, 0.0012 sera converti en 1.2E-03. Si vous revenez au format de cellule <guilabel
+>Générique</guilabel
+> 0.0012 sera affiché de nouveau. Le format de cellule <guilabel
+>Générique</guilabel
+> ne conserve pas la notation scientifique, aussi si vous souhaitez conserver cette notation scientifique, vous devez le spécifier en utilisant le menu.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Fraction</guilabel
+></term>
+<listitem
+><para
+>Le format <guilabel
+>Fraction</guilabel
+> convertit votre nombre en une fraction. Par exemple, 0.1 peut être modifié en 1/8, 2/16, 1/10, &etc; Vous définissez le type de fraction en le choisissant dans le champ sur la droite. Si la fraction exacte n'est pas disponible dans le mode choisi, la concordance la plus proche est choisie. Par exemple, quand nous avons 1.5 comme nombre, nous choisissons <guilabel
+>Fraction</guilabel
+> et <guilabel
+>1/16 un seizième</guilabel
+>. Le texte affiché dans la cellule est « 1 8/16 » qui est la fraction exacte. Si vous avez 1/4 comme nombre dans votre cellule et si vous choisissez <guilabel
+>Fraction</guilabel
+> et <guilabel
+>1/16 un seizième</guilabel
+>, la cellule affichera « 1 6/16 » qui est la fraction en seizième la plus proche.</para>
+</listitem
+><!--TODO formatting of numbers?-->
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Date</guilabel
+></term>
+<listitem
+><para
+>Pour insérer une date, vous devez le faire dans un des formats défini dans la &configurationDuSysteme; dans <menuchoice
+><guimenu
+>Localisation</guimenu
+><guisubmenu
+>Pays / Région &amp; Langue</guisubmenu
+><guimenuitem
+>Date et heure</guimenuitem
+></menuchoice
+>. Il y a deux formats définis ici : le format long de date et le format court de date.</para>
+<para
+>Un nombre naturel aléatoire NN sera transformé en date à partir du 30 décembre 1899 (qui est 0) avec le nombre de jours NN ajouté. Par exemple, si vous avez une cellule avec 100 et que vous choisissiez <guilabel
+>Format de date</guilabel
+>, « 1900-04-09 » s'affichera, ce qui correspond à 100 jours après le 30 décembre 1899. Cette date de départ est en avance de deux jours sur le calcul, car il y a eu un bug dans Lotus 123, qui est resté ainsi dans Excel pour des raisons de compatibilité. Peu de gens, de toute manière, ont besoin de calculer depuis le 1er janvier 1900 et ajouter 9 jours au 1er novembre 2000 par exemple, vous indiquera le 10 novembre 2000. En fait, tous les calculs de date sont corrects.</para>
+<note
+><para
+>Quand une cellule est au <guilabel
+>Format de date</guilabel
+>, vous pouvez étendre cette cellule vers le bas comme vous le faites avec les nombres et les cellules proches contiennent également des dates, chaque date étant incrémentée d'un jour.</para
+></note
+><!--TODO explain that
+better-->
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Heure</guilabel
+></term>
+<listitem
+><para
+>Cette option formate le temps de votre contenu de cellule. Pour saisir une heure, vous devez le faire dans le <guilabel
+>format d'heure</guilabel
+> défini dans la &configurationDuSysteme; <menuchoice
+><guimenu
+>Localisation</guimenu
+><guisubmenu
+>Pays / Région &amp; Langue</guisubmenu
+><guimenuitem
+>Date et Heure</guimenuitem
+></menuchoice
+>. Dans la boîte de dialogue <guilabel
+>Format de cellule</guilabel
+> vous pouvez définir la manière d'afficher la date et l'heure en choisissant une des options. Le format par défaut est celui du système choisi dans la &configurationDuSysteme;. Quand le nombre dans la cellule n'a pas de sens en temps que date, &sheets; affiche 00:00 dans le format général existant dans la &configurationDuSysteme;.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Date et heure</guilabel
+></term>
+<listitem
+><para
+>Cette option formate la date et l'heure de votre contenu de cellule. Pour saisir une date et une heure, vous devez ouvrir les paramètres <guilabel
+>Date et heure</guilabel
+> dans la &configurationDuSysteme; dans <menuchoice
+><guimenu
+>Localisation</guimenu
+><guisubmenu
+>Pays / Région &amp; Langue</guisubmenu
+><guimenuitem
+>Date et Heure</guimenuitem
+></menuchoice
+>. Dans la boîte de dialogue <guilabel
+>Format de cellule</guilabel
+> vous pouvez définir la manière d'afficher la date et l'heure en choisissant une des options. Le format par défaut est celui du système choisi dans la &configurationDuSysteme;. Quand le nombre dans la cellule n'a pas de sens en temps que date, &sheets; affiche 00:00 dans le format général existant dans la &configurationDuSysteme;.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Texte</guilabel
+></term>
+<listitem
+><para
+>Cela formate le contenu de votre cellule en texte. Cela peut être utile si vous souhaitez qu'un nombre soit traité comme du texte et non comme un nombre. Par exemple, pour un code ZIP, configurer un nombre au format texte se justifie. Quand les nombres sont convertis au format texte, ils ne peuvent pas être utilisés dans les calculs ou les formules. Cela change également la manière dont la cellule est justifié.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Personnalisé</guilabel
+></term>
+<listitem
+><para
+>Ne fonctionne pas encore. Sera activé dans la prochaine mise à jour.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+>Le bas de la page <guilabel
+>Données</guilabel
+>, vous permet d'ajouter un <guilabel
+>Préfixe</guilabel
+> comme le symbole $ au début de chaque élément ou un <guilabel
+>Suffixe</guilabel
+> comme $HK à la fin. Vous pouvez aussi contrôler combien de chiffres sont affichés après le séparateur décimal pour les valeurs numériques, si les valeurs positives sont affichées précédées d'un signe + et si les valeurs négatives sont affichées en rouge. </para>
+</sect2
+> <!--end of annma writing -->
+
+<sect2 id="formattext">
+<title
+>Réglages des polices et du texte</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Onglet police</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>L'onglet <guilabel
+>Police</guilabel
+> vous permet de sélectionner le style, la taille et la couleur de la police, y compris des options supplémentaires, comme le soulignement ou le texte barré. La partie du bas donne un aperçu du format de texte sélectionné.</para>
+<para
+>La police par défaut est définie pour toutes les cellules dans le menu <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Gestionnaire de style</guimenuitem
+></menuchoice
+> ainsi que le style courant.</para>
+<!--annma-->
+<variablelist>
+<!--varlistentry>
+<term
+><guilabel
+>Family List box</guilabel
+></term>
+<listitem
+><para
+>Allows you to choose a new font family.</para>
+</listitem>
+</varlistentry-->
+<varlistentry>
+<term
+><guilabel
+>Style : </guilabel
+></term>
+<listitem
+><para
+>Choisir le style de police pour les cellules sélectionnées. Quand vous sélectionnez plusieurs cellules de différents styles, le style affiché est défini dans <guilabel
+>Varriations (Sans changement)</guilabel
+> et accepter cette option vous permet de conserver vos paramètres pour chaque cellule. Modifier en <guilabel
+>Roman</guilabel
+> par exemple modifiera tous les styles des cellules sélectionnées en <guilabel
+>Roman</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Taille : </guilabel
+></term>
+<listitem
+><para
+>Choisir la taille de la police de la cellule sélectionnée. Quand vous sélectionnez plusieurs cellules avec différentes tailles de polices, la taille affichée est définie dans <guilabel
+></guilabel
+> (pas de chiffre affiché) et la laisser garde les paramètres actuels pour chaque cellule. Modifier en <guilabel
+>14</guilabel
+> par exemple modifie la taille de la police de toutes les cellules sélectionnées en <guilabel
+>14</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Graisse : </guilabel
+></term>
+<listitem
+><para
+>Choisir l'épaisseur de la police de la cellule sélectionnée. Quand vous sélectionnez plusieurs cellules avec différentes épaisseurs de polices, l'épaisseur affichée est définie dans <guilabel
+>Variable (aucune modification)</guilabel
+> et la laisser garde les paramètres actuels pour chaque cellule. Modifier en <guilabel
+>Gras</guilabel
+> par exemple modifie l'épaisseur des polices de toutes les cellules sélectionnées en <guilabel
+>Gras</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Couleur : </guilabel
+></term>
+<listitem
+><para
+>Choisir la couleur pour le texte des cellules actuellement sélectionnées. Cliquer sur la barre des couleurs ouvrira la boîte de dialogue standard de KDE <guilabel
+>Sélectionner couleur</guilabel
+> dans laquelle vous pourrez choisir la nouvelle couleur. </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Souligné : </guilabel
+></term>
+<listitem
+><para
+>Souligne le texte des cellules sélzctionnées si l'option est cochée. Elle n'est pas cochée par défaut.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Barrer</guilabel
+></term>
+<listitem
+><para
+>Cela barrera le texte des cellules sélectionnées si cette option est cochée. Elle n'est pas cochée par défaut.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<!--end of annma-->
+</sect2>
+
+<sect2 id="formatposition">
+<title
+>Position et rotation du texte</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Position de la page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Sur la page <guilabel
+>Position</guilabel
+>, vous pouvez contrôler la position du texte à l'intérieur d'une cellule en faisant les sélections convenables dans les zones <guilabel
+>Horizontal</guilabel
+> et <guilabel
+>Vertical</guilabel
+> ou en réglant la valeur d'<guilabel
+>Indentation</guilabel
+>. Vous pouvez aussi choisir de faire que le texte apparaisse verticalement plutôt qu'horizontalement ou même avec un angle.</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Horizontal</guilabel
+></term>
+<listitem
+><para
+>Définir horizontalement le contenu de la cellule. <guilabel
+>Standard</guilabel
+> est le choix par défaut et est déterminé par le format de données choisi. <guilabel
+>Gauche</guilabel
+> signifie que le contenu sera affiché à gauche dans la cellule.<guilabel
+>Centre</guilabel
+> signifie que le contenu sera centré dans la cellule. <guilabel
+>Droite</guilabel
+> signifie que le contenu sera affiché à droite dans la cellule.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Vertical</guilabel
+></term>
+<listitem
+><para
+>Définir verticalement le contenu de la cellule. <guilabel
+>Haut</guilabel
+> signifie que le contenu sera affiché en haut de la cellule.<guilabel
+>Milieu</guilabel
+> signifie que le contenu sera affiché au milieude la cellule.<guilabel
+>Bas</guilabel
+> signifie que le contenu sera affiché en haut de la cellule.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Options du texte</guilabel
+></term>
+<listitem
+><para
+>Ceci est valable seulement quand la rotation est de 0°. <guilabel
+>Retour à la ligne</guilabel
+> fait revenir le texte à la ligne afin qu'il tienne dans la taille de la précédente cellule. S'il n'est pas coché, le texte restera sur une seule ligne.</para>
+<para
+><guilabel
+>Texte vertical</guilabel
+> place votre texte verticalement</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Rotation</guilabel
+></term>
+<listitem
+><para
+>Votre texte a	pparaîtra orienté selon l'angle que vous avez défini. Des valeurs positives le déplaceront dans le sens contraire aux aiguilles d'une montre et des valeurs négatives dans le sens des aiguilles d'une montre. </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Fusionner les cellules</guilabel
+></term>
+<listitem
+><para
+>Quand cette option est cochée, elle fournit le même résultat que <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Fusionner les cellules </guimenuitem
+></menuchoice
+>. Vous devez sélectionner au moins deux cellules consécutives. Ces cellules consécutives sont ensuite fusionnées dans une seule plus grande.</para>
+<para
+>Quand une cellule fusionnée est sélectionnée et quand vous décochez cette option, toutes les cellules reviennent à leur taille originale d'avant la fusion. C'est le même effet que <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Dissocier les cellules</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Indenter</guilabel
+></term>
+<listitem
+><para
+>Règle la taille de l'indentation qui sera utilisée dans une cellule lorsque vous choisissez les actions <guilabel
+>Augmenter l'indentation</guilabel
+> et <guilabel
+>Diminuer l'indentation</guilabel
+> depuis la barre d'outils. Ces actions ne sont pas activées par défaut dans la barre d'outils.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Taille de cellule</guilabel
+></term>
+<listitem
+><para
+>Vous définissez ici la taille de la cellule, soit une largeur et une hauteur personnalisées, soit une largeur et u ne hauteur par défaut.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="formatborder">
+<title
+>Bordure de cellule</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Bordure de page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>La page <guilabel
+>Bordure</guilabel
+> vous permet de fixer l'apparence des bords de cellule. Si vous avez sélectionné plus d'une cellule, vous pouvez appliquer différents styles aux bordures entre les cellules et l'environnement de la zone sélectionnée. </para>
+<para
+>Sélectionnez d'abord le motif et la couleur dans la section <guilabel
+>Motif</guilabel
+> de la page <guilabel
+>Bordures</guilabel
+>, puis appliquez-les aux différentes parties de la bordure en cliquant sur le bouton approprié de la section <guilabel
+>Bordures</guilabel
+>, ou sur l'un des boutons <guilabel
+>Présélection</guilabel
+>. Le bouton à gauche dans la section <guilabel
+>Présélection</guilabel
+> efface toute bordure précédemment appliquée. Notez que vous pouvez aussi ajouter une barre diagonale aux cellules.</para>
+</sect2>
+<sect2 id="formatbackground">
+<title
+>Arrière-plan de cellule</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat5.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Arrière-plan de page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Le motif et la couleur du fond peuvent être sélectionnés dans la page <guilabel
+>Fond</guilabel
+>.</para>
+<para
+>Choisissez simplement le<guilabel
+>Motif</guilabel
+> désiré, puis sélectionnez la couleur du motif et la couleur du fond.</para>
+<para
+>En bas de cette page, vous pouvez voir un <guilabel
+>Aperçu</guilabel
+> du fond de la cellule configurée.</para>
+</sect2>
+<sect2 id="formatprotection">
+<title
+>Protection de cellule</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat6.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Onglet de protection de cellule</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Vous pouvez modifier la manière dont le contenu d'une cellule est protégé dans la page <guilabel
+>Protection de cellule</guilabel
+>.</para>
+<para
+>Toutes les cellules sont protégées par défaut (cela signifie que le contenu d'une cellule ne peut être modifié) et pour que la protection d'une cellule soit active, vous devez également protéger la feuille en utilisant le menu <menuchoice
+> <guimenu
+>Outils</guimenu
+><guimenuitem
+>Protection de feuille...</guimenuitem
+></menuchoice
+> et fournir un mot de passe. Vous pouvez également masquer les formules de la cellule dans le but de protéger votre méthode de calcul de la formule. Cela nécessite pour fonctionner d'activer la protection de la feuille. Vous pouvez masquer le contenu de la cellule avec <guilabel
+>Masque tout</guilabel
+> ce qui nécessite aussi de protéger la feuille.guilabel Vous pouvez en savoir plus sur ces paramétrages dans le chapitre <link linkend="protection"
+>&sheets; avancé, Section protection</link
+>.</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Cacher tout</guilabel
+></term>
+<listitem
+><para
+>Cette option masque le contenu de la cellule et fonctionne seulement quand la feuille est protégée ce qui signifie que changer l'attribut <guilabel
+>Masquer tout</guilabel
+> d'une cellule n'a aucun effet tant que la feuille est protégée. Que la cellule elle-même soit protégée ou non n'a pas d'importance.</para>
+<para
+>Quand <guilabel
+>Masquer tout</guilabel
+> est sélectionné, <guilabel
+>Protégé</guilabel
+> et <guilabel
+>Masquer formules</guilabel
+> sont désactivés. Lorsque la feuille est protégée, <guilabel
+>Masquer tout</guilabel
+> masque le contenu de la cellule et les formules et cela masque et proège le contenu de la cellule.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Protégé</guilabel
+></term>
+<listitem
+><para
+>Si l'option est cochée, le contenu de la cellule sera protgé. C'est la situation par défaut. Vous devez protéger la feuille entière en utilisant le menu <menuchoice
+><guimenu
+>Outils </guimenu
+><guimenuitem
+>Protéger la feuille...</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Cacher la formule</guilabel
+></term>
+<listitem
+><para
+>Quand cette option est cochée, la cellule est encore visible. De toute manière, son contenu n'apparaît pas dans la barre <guilabel
+>Formule</guilabel
+>. Masquer les formules fonctionne seulement pour les cellules qui contiennent des formules. Ainsi, l'utilisateur ne peut voir les formules. La feuille doit être protégée ainsi pour être fonctionnelle.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Ne pas impri</guilabel
+></term>
+<listitem
+><para
+>Si vous cochez <guilabel
+>Ne pas imprimer le texte</guilabel
+>, le texte dans la cellule ne sera pas imprimé. Cette option est décochée par défaut ce qui signifie que le texte des cellules est toujours imprimé par défaut..</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+</sect1>
+
+<sect1 id="conditional">
+<title
+>Attributs conditionnels des cellules</title>
+<para
+>Vous pouvez faire changer l'apparence d'une cellule selon la valeur qu'elle contient, peut-être utile si vous utilisez &sheets; pour conserver une trace de vos dépenses personnelles et voulez surligner tout élément plus grand que mille Euros.</para>
+<para
+>Pour faire cela, sélectionnez les cellules, puis choisissez <guimenuitem
+>Styles conditionnels...</guimenuitem
+> dans le menu <guimenu
+>Format</guimenu
+>. Ceci ouvre la boîte de dialogue <guilabel
+>Styles conditionnels</guilabel
+> où vous pouvez faire changer le type de police et la couleur de la cellule quand la valeur rencontre une ou plusieurs conditions. Notez que les deuxième et troisième conditions ne s'appliquent que si les précédentes ne sont pas rencontrées.</para>
+<para
+>Utilisez <menuchoice
+><guisubmenu
+>Effacer</guisubmenu
+><guimenuitem
+>Styles conditionnels</guimenuitem
+></menuchoice
+>du menu <guimenu
+>Édition</guimenu
+> pour supprimer les attributs conditionnels des cellules sélectionnées.</para>
+</sect1>
+
+<sect1 id="cellsize">
+<title
+>Changer la taille des cellules</title>
+<para
+>La page <guilabel
+>Position</guilabel
+> dans le dialogue <guilabel
+>Format de cellule</guilabel
+> vous permet de modifier la taille des cellules sélectionnées. Notez que changer la hauteur d'une seule cellule changera la hauteur de toutes les cellules d'une ligne, de même que changer la largeur d'une cellule affectera toute la colonne.</para>
+<para
+>Vous pouvez aussi sélectionner les lignes ou colonnes à changer, puis sélectionner <guimenuitem
+>Redimensionner la ligne...</guimenuitem
+> ou <guimenuitem
+>Redimensionner la colonne...</guimenuitem
+> du menu contextuel du bouton <mousebutton
+>droit</mousebutton
+> de la souris ou du menu <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+> Ligne</guisubmenu
+></menuchoice
+> ou <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+> Colonne</guisubmenu
+></menuchoice
+>.</para>
+<para
+>Si vous déplacez le pointeur de la souris de telle manière que son extrémité est sur la ligne entre deux des numéros de lignes à gauche de la fenêtre de &sheets;, le pointeur se changera pour afficher deux lignes parallèles, chacune avec une petite flèche qui en part. Quand le pointeur est dans cet état, vous pouvez tenir enfoncé le bouton <mousebutton
+>gauche</mousebutton
+> de la souris et tirer le bord entre les deux lignes, changeant la hauteur de la ligne supérieure. Une technique semblable peut être utilisée pour changer la largeur d'une colonne.</para>
+
+<para
+>Pour établir la hauteur de la ligne ou la largeur de la colonne au minimum nécessaire pour afficher le contenu, sélectionnez la ligne ou la colonne entière et cliquez du bouton droit sur le libellé de la ligne ou de la colonne. Dans le menu qui apparaît, sélectionnez <guimenuitem
+>Ajuster la ligne</guimenuitem
+> ou <guimenuitem
+>Ajuster la colonne</guimenuitem
+>. La ligne ou la colonne se redimensionnera au minimum nécessaire. Vous pouvez aussi sélectionner une simple cellule ou une plage de cellules et cliquer sur <guimenuitem
+>Ajuster les lignes et colonnes</guimenuitem
+>, soit du menu du bouton droit, soit dans le menu <guimenu
+>Format</guimenu
+>.</para>
+
+<para
+>Vous pouvez donner la même taille à plusieurs lignes ou colonnes adjacentes en sélectionnant <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+> Ligne</guisubmenu
+><guimenuitem
+>Égaliser les lignes</guimenuitem
+></menuchoice
+> ou <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Colonne</guisubmenu
+><guimenuitem
+> Égaliser les colonnes</guimenuitem
+></menuchoice
+>.</para>
+
+</sect1>
+
+<sect1 id="merging">
+<title
+>Fusionner les cellules</title>
+<para
+>Il est souvent pratique d'avoir une cellule qui s'étale sur deux ou plusieurs colonnes ou sur plusieurs lignes. Ceci peut se faire en fusionnant deux ou plusieurs cellules en une. Sélectionnez les cellules à fusionner, puis choisissez <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Fusionner les cellules</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Pour inverser ce processus, sélectionnez la cellule fusionnée et choisissez <guimenuitem
+>Dissocier les cellules</guimenuitem
+> dans le menu <guimenu
+>Format</guimenu
+>.</para>
+</sect1>
+
+<sect1 id="hiding">
+<title
+>Cacher lignes et colonnes</title>
+<para
+>Un tableur bien fini peut souvent se faire de manière à avoir l'air plus attirant en cachant les cellules qui contiennent des calculs intermédiaires, de telle manière que seules les données importantes et les résultats sont affichés.</para>
+<para
+>Dans &sheets;, vous pouvez cacher les lignes ou colonnes sélectionnées en utilisant les options <guimenuitem
+>Cacher les lignes</guimenuitem
+> et <guimenuitem
+>Cacher les colonnes</guimenuitem
+> du menu <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Lignes</guisubmenu
+></menuchoice
+>, <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Colonne</guisubmenu
+></menuchoice
+> ou du menu contextuel du bouton <mousebutton
+>droit</mousebutton
+> de la souris. Les lignes cachées ne sont pas affichées sur l'écran ni incluses dans la sortie imprimante.</para>
+<para
+>Cacher des cellules de cette manière les rend aussi moins vulnérables à une modification accidentelle.</para>
+<para
+>Pour afficher à nouveau une ligne ou une colonne, sélectionnez <menuchoice
+><guisubmenu
+>Ligne</guisubmenu
+><guimenuitem
+>Afficher les lignes...</guimenuitem
+></menuchoice
+> ou <menuchoice
+><guisubmenu
+>Colonne</guisubmenu
+><guimenuitem
+>Afficher les colonnes...</guimenuitem
+></menuchoice
+> dans le menu <guimenu
+>Format</guimenu
+>. Dans la boîte de dialogue qui apparaît, vous pouvez sélectionner n'importe quel nombre de lignes à afficher.</para>
+</sect1>
+
+<sect1 id="sheet-properties">
+<title
+>Propriétés de la feuille</title>
+<para
+>Vous pouvez accéder aux propriétés de la feuille courante, soit en cliquant-droit sur l'onglet feuille et en choisissant <guilabel
+>Propriétés de la feuille</guilabel
+> ou en utilisant le menu <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Feuille</guisubmenu
+><guimenuitem
+>Propriétés de la feuille</guimenuitem
+></menuchoice
+>. Veuillez noter que vous pouvez seulement accéder à <guilabel
+>Propriétés de la feuille</guilabel
+>si le document ou la feuille ne sont pas protégés.</para>
+<para
+>Vous pouvez définir différentes propriétés valables pour la feuille courante. Cliquer sur <guibutton
+>Ok</guibutton
+> rendra effectives vos modifications et <guibutton
+>Defaut</guibutton
+> restaurera les paramètres initiaux.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sheetproperties.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Boîte de dialogue des propriétés de la feuille</phrase>
+</textobject>
+</mediaobject>
+</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Mise en page : </guilabel
+></term>
+<listitem
+><para
+>Vous permet de choisir l'orientation de la feuille. Par défaut, la première colonne de la feuille est à gauche. Si vous choisissez <guilabel
+>De droite à gauche</guilabel
+>, alors la première colonne sera à droite et les autres seront ajoutées de la droite vers la gauche.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Cacher zéro</guilabel
+></term>
+<listitem
+><para
+>Si la boîte de dialogue est décochée, toute cellule contenant la valeur zéro apparaîtra blanche.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Recalcul automatique</guilabel
+></term>
+<listitem
+><para
+>Ce paramètre vérifie que les formules sont recalculées automatiquement quand la valeur d'une cellule à laquelle elle se réfère est modifiee.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Afficher les colonnes au format nombre</guilabel
+></term>
+<listitem
+><para
+>Si cette case est cochée, l'en-tête de colonne affichera des nombres plutôt que des lettres. Les lettres sont affichées par défaut</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Utiliser le mode LC</guilabel
+></term>
+<listitem
+><para
+>Si cette case est cochée, la référence de cellule affichée du côté gauche de la Barre de formules sera affichée en mode LC (i.e L2C3) plutôt que sous sa forme normale B3. Cela ne semble pas être d'une grande utilité jusqu'à présent.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Convertir la première lettre en majuscule.</guilabel
+></term>
+<listitem
+><para
+>Cocher cette case et la première lettre de tout texte saisi sera automatiquement convertie en capitale.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Afficher la grille</guilabel
+></term>
+<listitem
+><para
+>Si la case est cochée, la grille (les limites de cellule) sera affichée. C'est le choix par défaut. Si vous la décochez, la grille sera masquée.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Afficher les bordures de pages</guilabel
+></term>
+<listitem
+><para
+>Si vous cochez cette option, les bordures de pages seront tracées sur votre feuille courante. Par défaut, les bordures de pages ne sont pas affichées. Il peut être utile de voir les bordures de pages si vous souhaitez imprimer votre feuille.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Afficher les formules</guilabel
+></term>
+<listitem
+><para
+>Si cette case est cochée, &sheets; affichera les formules actuelles dans les cellules plutôt que les résultats.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Afficher l'indicateur de formule</guilabel
+></term>
+<listitem
+><para
+>Si cette case est cochée, &sheets; affichera un petit triangle bleu dans le coin inférieur gauche des cellules contenant des formules. Cela peut être utile si vous souhaitez protéger les cellules contenant des formules.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Afficher l'indicateur de commentaires</guilabel
+></term>
+<listitem
+><para
+>Si cette case est cochée, les cellules contenant des commentaires seront marquées avec un petit triangle rouge dans le coin supérieur droit. </para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

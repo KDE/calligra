@@ -1,0 +1,286 @@
+# Irish translation of koffice-dockers
+# Copyright (C) 2009 This_file_is_part_of_KDE
+# This file is distributed under the same license as the koffice-dockers package.
+# Kevin Scannell <kscanne@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice/koffice-dockers.po\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2007-07-22 14:30-0500\n"
+"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
+"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
+"3 : 4\n"
+
+#: shapecollection/OdfCollectionLoader.cpp:63
+#, kde-format
+msgid "Found no shapes in the collection! %1"
+msgstr "Níor aimsíodh aon ghiuirléidí sa bhailiúchán! %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:132
+#, fuzzy, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr "Níor aimsíodh aon ghiuirléidí sa chomhad: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:157
+#, kde-format
+msgid "No body tag found in file: %1"
+msgstr ""
+
+#: shapecollection/OdfCollectionLoader.cpp:165
+#, kde-format
+msgid "No office:drawing tag found in file: %1"
+msgstr ""
+
+#: shapecollection/OdfCollectionLoader.cpp:173
+#: shapecollection/OdfCollectionLoader.cpp:181
+#, kde-format
+msgid "No shapes found in file: %1"
+msgstr "Níor aimsíodh aon ghiuirléidí sa chomhad: %1"
+
+#: shapecollection/ShapeCollectionDocker.cpp:111
+#, kde-format
+msgid "Add Shape"
+msgstr "Cuir Giuirléid Leis"
+
+#: shapecollection/ShapeCollectionDocker.cpp:146
+#, kde-format
+msgid "More"
+msgstr "Tuilleadh"
+
+#: shapecollection/ShapeCollectionDocker.cpp:176
+#, kde-format
+msgid "Open Shape Collection"
+msgstr "Oscail Bailiúchán Giuirléidí"
+
+#: shapecollection/ShapeCollectionDocker.cpp:184
+#, kde-format
+msgid "Remove Shape Collection"
+msgstr "Bain Bailiúchán Giuirléidí"
+
+#: shapecollection/ShapeCollectionDocker.cpp:330
+#, kde-format
+msgid "Default"
+msgstr "Réamhshocrú"
+
+#: shapecollection/ShapeCollectionDocker.cpp:334
+#, kde-format
+msgid "Geometrics"
+msgstr ""
+
+#: shapecollection/ShapeCollectionDocker.cpp:345
+#, kde-format
+msgid "Arrows"
+msgstr "Saigheada"
+
+#: shapecollection/ShapeCollectionDocker.cpp:349
+#, kde-format
+msgid "Funny"
+msgstr "Greannmhar"
+
+#: shapecollection/ShapeCollectionDocker.cpp:522
+#, kde-format
+msgid "Collection Error"
+msgstr "Earráid Bhailiúcháin"
+
+#: shapeproperties/ShapePropertiesDocker.cpp:35
+#, kde-format
+msgid "Shape Properties"
+msgstr "Airíonna na Giuirléide"
+
+#: snapguidedocker/SnapGuideDocker.cpp:39
+#, kde-format
+msgid "Snap Settings"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Found no shapes in the collection! %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Níor aimsíodh aon ghiuirléidí sa bhailiúchán! %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Níor aimsíodh aon ghiuirléidí sa chomhad: %1"
+
+#, fuzzy
+#~| msgid "No shapes found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Níor aimsíodh aon ghiuirléidí sa chomhad: %1"
+
+#, fuzzy
+#~| msgid "No shapes found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Níor aimsíodh aon ghiuirléidí sa chomhad: %1"
+
+#, fuzzy
+#~| msgid "No shapes found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Níor aimsíodh aon ghiuirléidí sa chomhad: %1"
+
+#, fuzzy
+#~| msgid "Add Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Shape"
+#~ msgstr "Cuir Giuirléid Leis"
+
+#, fuzzy
+#~| msgid "More"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More"
+#~ msgstr "Tuilleadh"
+
+#, fuzzy
+#~| msgid "Open Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Shape Collection"
+#~ msgstr "Oscail Bailiúchán Giuirléidí"
+
+#, fuzzy
+#~| msgid "Remove Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Bain Bailiúchán Giuirléidí"
+
+#, fuzzy
+#~| msgid "Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Réamhshocrú"
+
+#, fuzzy
+#~| msgid "Arrows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "Saigheada"
+
+#, fuzzy
+#~| msgid "Funny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Funny"
+#~ msgstr "Greannmhar"
+
+#, fuzzy
+#~| msgid "Collection Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Collection Error"
+#~ msgstr "Earráid Bhailiúcháin"
+
+#, fuzzy
+#~| msgid "Shape Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties"
+#~ msgstr "Airíonna na Giuirléide"
+
+#~ msgid "Shadow Properties"
+#~ msgstr "Airíonna Scátha"
+
+#~ msgid "Creation error"
+#~ msgstr "Earráid chruthaithe"
+
+#~ msgid "File not found"
+#~ msgstr "Comhad gan aimsiú"
+
+#~ msgid "Cannot create storage"
+#~ msgstr "Ní féidir stóras a chruthú"
+
+#~ msgid "Bad MIME type"
+#~ msgstr "Droch-chineál MIME"
+
+#~ msgid "Error in embedded document"
+#~ msgstr "Earráid i gcáipéis leabaithe"
+
+#~ msgid "Format not recognized"
+#~ msgstr "Formáid anaithnid"
+
+#~ msgid "Not implemented"
+#~ msgstr "Gan feidhmiú"
+
+#~ msgid "Parsing error"
+#~ msgstr "Earráid pharsála"
+
+#~ msgid "Internal error"
+#~ msgstr "Earráid inmheánach"
+
+#~ msgid "Out of memory"
+#~ msgstr "Cuimhne ídithe"
+
+#~ msgid "Unknown error"
+#~ msgstr "Earráid anaithnid"
+
+#~ msgid ""
+#~ "Could not open\n"
+#~ "%2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Ní féidir %2\n"
+#~ "a oscailt.\n"
+#~ "Fáth: %1"
+
+#~ msgid "Opacity:"
+#~ msgstr "Teimhneacht:"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Neamhní"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Soladach"
+
+#~ msgid "Gradient"
+#~ msgstr "Grádán"
+
+#~ msgid "Pattern"
+#~ msgstr "Patrún"
+
+#~ msgid "Style:"
+#~ msgstr "Stíl:"
+
+#~ msgid "Width:"
+#~ msgstr "Leithead:"
+
+#~ msgid "Join:"
+#~ msgstr "Ceangail:"
+
+#~ msgid "Miter join"
+#~ msgstr "Mítéaralt"
+
+#~ msgid "Bevel join"
+#~ msgstr "Beibheal"
+
+#~ msgid "Styles"
+#~ msgstr "Stíleanna"
+
+#~ msgid "Shapes"
+#~ msgstr "Giuirléidí"
+
+#~ msgid "Open..."
+#~ msgstr "Oscail..."
+
+#~ msgid "Save Book..."
+#~ msgstr "Sábháil Leabhar..."
+
+#~ msgid "New Folder..."
+#~ msgstr "Fillteán Nua..."
+
+#~ msgid "Zoom In"
+#~ msgstr "Súmáil Isteach"
+
+#~ msgid "Zoom Out"
+#~ msgstr "Súmáil Amach"
+
+#~ msgid "Remove Folder"
+#~ msgstr "Bain Fillteán"
+
+#~ msgid "Templates"
+#~ msgstr "Teimpléid"

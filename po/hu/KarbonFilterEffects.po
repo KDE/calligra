@@ -1,0 +1,2427 @@
+#
+# Tamas Szanto <tszanto@mol.hu>, 2002.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2011, 2012.
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: KOffice 1.5\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-10-06 10:41+0200\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, kde-format
+msgid "Blend"
+msgstr "Keverés"
+
+#: BlendEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Blend mode"
+msgstr "Keverés módja"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "normál"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr "Többszörözés"
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr "Képernyő"
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr "Sötétítés"
+
+#: BlendEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Lighten"
+msgstr "Világosítás"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr "Gauss-féle elmosás"
+
+#: BlurEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Radius"
+msgstr "Sugár"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr "Színmátrix"
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr "Színmátrix alkalmazása"
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Saturate colors"
+msgstr "Színek telítése"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Rotate hue"
+msgstr "Színárnyalat keverése"
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr "Fényesség alfába"
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Saturate value"
+msgstr "Fényességi érték"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, kde-format
+msgid "Angle"
+msgstr "Szög"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr "Színmátrix"
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr "Komponens átvitel"
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr "Funkció"
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr "Identitás"
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, kde-format
+msgid "Table"
+msgstr "Táblázat"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr "Diszkrét"
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Linear"
+msgstr "Lineáris"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr "Gamma"
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr "Értékek"
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, kde-format
+msgid "Slope"
+msgstr "Lejtő"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, kde-format
+msgid "Intercept"
+msgstr "Feltartóztatás"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr "Amplitúdó"
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr "Exponens"
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr "Eltolás"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, kde-format
+msgid "Composite"
+msgstr "Összetett"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, kde-format
+msgid "Operation"
+msgstr "Művelet"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr "Csavart mátrix"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, kde-format
+msgid "Duplicate"
+msgstr "Megkettőzés"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr "Tördelés"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, kde-format
+msgid "None"
+msgstr "Nincs"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, kde-format
+msgid "Edge mode:"
+msgstr "Élek módja:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr "Magméret:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Target point:"
+msgstr "Célpont:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr "Osztó:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr "Eltolás:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr "Alfa megőrzése"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, kde-format
+msgid "Edit kernel"
+msgstr "Mag szerkesztése"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, kde-format
+msgid "Flood fill"
+msgstr "Kitöltés"
+
+#: FloodEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Flood color"
+msgstr "Kitöltés színe"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr "kép"
+
+#: ImageEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Select image..."
+msgstr "Kép kiválasztása..."
+
+#: ImageEffectConfigWidget.cpp:54
+#, kde-format
+msgid "Select image"
+msgstr "Kép kiválasztása"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr "Összevonás"
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr "Morfológia"
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr "Marás"
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Dilate"
+msgstr "Nyújtás"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Operator:"
+msgstr "Kezelő:"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Radius x:"
+msgstr "X-sugár:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, kde-format
+msgid "Radius y:"
+msgstr "Y-sugár:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr "dx"
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr "dy"
+
+#, fuzzy
+#~| msgid "Blend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "Keverés"
+
+#, fuzzy
+#~| msgid "Blend mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "Keverés módja"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "normál"
+
+#, fuzzy
+#~| msgid "Multiply"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiply"
+#~ msgstr "Többszörözés"
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Screen"
+#~ msgstr "Képernyő"
+
+#, fuzzy
+#~| msgid "Darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "Sötétítés"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Világosítás"
+
+#, fuzzy
+#~| msgid "Gaussian blur"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gaussian blur"
+#~ msgstr "Gauss-féle elmosás"
+
+#, fuzzy
+#~| msgid "Radius"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "Sugár"
+
+#, fuzzy
+#~| msgid "Color Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color Matrix"
+#~ msgstr "Színmátrix"
+
+#, fuzzy
+#~| msgid "Apply color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply color matrix"
+#~ msgstr "Színmátrix alkalmazása"
+
+#, fuzzy
+#~| msgid "Saturate colors"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "Színek telítése"
+
+#, fuzzy
+#~| msgid "Rotate hue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate hue"
+#~ msgstr "Színárnyalat keverése"
+
+#, fuzzy
+#~| msgid "Luminance to alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Luminance to alpha"
+#~ msgstr "Fényesség alfába"
+
+#, fuzzy
+#~| msgid "Saturate value"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "Fényességi érték"
+
+#, fuzzy
+#~| msgid "Angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "Szög"
+
+#, fuzzy
+#~| msgid "Color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color matrix"
+#~ msgstr "Színmátrix"
+
+#, fuzzy
+#~| msgid "Component transfer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Component transfer"
+#~ msgstr "Komponens átvitel"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function"
+#~ msgstr "Funkció"
+
+#, fuzzy
+#~| msgid "Identity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Identity"
+#~ msgstr "Identitás"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "Táblázat"
+
+#, fuzzy
+#~| msgid "Discrete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Discrete"
+#~ msgstr "Diszkrét"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "Lineáris"
+
+#, fuzzy
+#~| msgid "Gamma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gamma"
+#~ msgstr "Gamma"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Values"
+#~ msgstr "Értékek"
+
+#, fuzzy
+#~| msgid "Slope"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "Lejtő"
+
+#, fuzzy
+#~| msgid "Intercept"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "Feltartóztatás"
+
+#, fuzzy
+#~| msgid "Amplitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Amplitude"
+#~ msgstr "Amplitúdó"
+
+#, fuzzy
+#~| msgid "Exponent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exponent"
+#~ msgstr "Exponens"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Eltolás"
+
+#, fuzzy
+#~| msgid "Composite"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "Összetett"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "Művelet"
+
+#, fuzzy
+#~| msgid "Convolve Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convolve Matrix"
+#~ msgstr "Csavart mátrix"
+
+#, fuzzy
+#~| msgid "Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "Megkettőzés"
+
+#, fuzzy
+#~| msgid "Wrap"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Wrap"
+#~ msgstr "Tördelés"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Nincs"
+
+#, fuzzy
+#~| msgid "Edge mode:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "Élek módja:"
+
+#, fuzzy
+#~| msgid "Kernel size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Kernel size:"
+#~ msgstr "Magméret:"
+
+#, fuzzy
+#~| msgid "Target point:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "Célpont:"
+
+#, fuzzy
+#~| msgid "Divisor:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Divisor:"
+#~ msgstr "Osztó:"
+
+#, fuzzy
+#~| msgid "Bias:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bias:"
+#~ msgstr "Eltolás:"
+
+#, fuzzy
+#~| msgid "Preserve alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preserve alpha"
+#~ msgstr "Alfa megőrzése"
+
+#, fuzzy
+#~| msgid "Edit kernel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "Mag szerkesztése"
+
+#, fuzzy
+#~| msgid "Flood fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "Kitöltés"
+
+#, fuzzy
+#~| msgid "Flood color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "Kitöltés színe"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "kép"
+
+#, fuzzy
+#~| msgid "Select image..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image..."
+#~ msgstr "Kép kiválasztása..."
+
+#, fuzzy
+#~| msgid "Select image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image"
+#~ msgstr "Kép kiválasztása"
+
+#, fuzzy
+#~| msgid "Merge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Merge"
+#~ msgstr "Összevonás"
+
+#, fuzzy
+#~| msgid "Morphology"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Morphology"
+#~ msgstr "Morfológia"
+
+#, fuzzy
+#~| msgid "Erode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Erode"
+#~ msgstr "Marás"
+
+#, fuzzy
+#~| msgid "Dilate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "Nyújtás"
+
+#, fuzzy
+#~| msgid "Operator:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "Kezelő:"
+
+#, fuzzy
+#~| msgid "Radius x:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "X-sugár:"
+
+#, fuzzy
+#~| msgid "Radius y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "Y-sugár:"
+
+#, fuzzy
+#~| msgid "dx"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#, fuzzy
+#~| msgid "dy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kiszel Kristóf,Szántó Tamás,Tóth Csanád,Úr Balázs"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "ulysses@kubuntu.org,tszanto@mol.hu,toth.csanad@kde.hu,urbalazs@gmail.com"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "Logikai művelet"
+
+#~ msgid "&Order"
+#~ msgstr "S&orrend"
+
+#~ msgid "&Align"
+#~ msgstr "I&gazítás"
+
+#~ msgid "&File"
+#~ msgstr "&Fájl"
+
+#~ msgid "&Edit"
+#~ msgstr "&Szerkesztés"
+
+#~ msgid "&View"
+#~ msgstr "Né&zet"
+
+#~ msgid "&Object"
+#~ msgstr "&Objektum"
+
+#~ msgid "&Distribute"
+#~ msgstr "&Elosztás"
+
+#~ msgid "&Path"
+#~ msgstr "&Elérési út"
+
+#~ msgid "Effe&cts"
+#~ msgstr "Effe&ktusok"
+
+#~ msgid "&Settings"
+#~ msgstr "&Beállítások"
+
+#~ msgid "Edit"
+#~ msgstr "Szerkesztés"
+
+#~ msgid "Object"
+#~ msgstr "Objektum"
+
+#~ msgid "Align"
+#~ msgstr "Igazítás"
+
+#~ msgid "Effects"
+#~ msgstr "Effektusok"
+
+#~ msgid "View"
+#~ msgstr "Nézet"
+
+#~ msgid "&Flatten Path..."
+#~ msgstr "A görbületek ki&simítása..."
+
+#~ msgid "Flatten Path"
+#~ msgstr "Útvonal simítása"
+
+#~ msgid "Properties"
+#~ msgstr "Tulajdonságok"
+
+#~ msgid "Flatness:"
+#~ msgstr "Simaság:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten path"
+#~ msgstr "Útvonal simítása"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "Útvonal finomítása"
+
+#~ msgid "&Refine Path..."
+#~ msgstr "Útvonal &finomítása"
+
+#~ msgid "Refine Path"
+#~ msgstr "Útvonal finomítása"
+
+#~ msgid "Subdivisions:"
+#~ msgstr "Felosztások:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "Kerekített sarkok"
+
+#~ msgid "&Round Corners..."
+#~ msgstr "Kerekített s&arkok..."
+
+#~ msgid "Round Corners"
+#~ msgstr "Kerekített sarkok"
+
+#~ msgid "Radius:"
+#~ msgstr "Sugár:"
+
+#, fuzzy
+#~| msgid "End angle:"
+#~ msgid "Expand all"
+#~ msgstr "Zárószög:"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "Nézet"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "Nézet"
+
+#, fuzzy
+#~| msgid "Pencil Tool"
+#~ msgid "Stencil Box"
+#~ msgstr "Ceruza eszköz"
+
+#, fuzzy
+#~ msgid "More shapes"
+#~ msgstr "Objektumok csoportosítása"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl & pinch"
+#~ msgstr "Örvény és csavarás"
+
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "Ör&vény/csavarás..."
+
+#~ msgid "Whirl Pinch"
+#~ msgstr "Örvényes csavarás"
+
+#~ msgid "Info"
+#~ msgstr "Információ"
+
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr ""
+#~ "Az örvény és csavarás effektus eredménye fejleszthető az útvonal előzetes "
+#~ "finomításával."
+
+#~ msgid "Angle:"
+#~ msgstr "Szög:"
+
+#~ msgid "Pinch:"
+#~ msgstr "Csavarás:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "A réteg felemelése"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "A réteg lesüllyesztése"
+
+#~ msgid "Configure"
+#~ msgstr "Beállítás"
+
+#~ msgid "Interface"
+#~ msgstr "Felület"
+
+#~ msgid "Misc"
+#~ msgstr "Egyéb"
+
+#~ msgid "Grid"
+#~ msgstr "Rács"
+
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokumentum"
+
+#~ msgid "Document Settings"
+#~ msgstr "Dokumentumbeállítások"
+
+#~ msgctxt "@title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Szerző"
+
+#~ msgid "Author"
+#~ msgstr "Szerző"
+
+#~ msgid "Layer view"
+#~ msgstr "Rétegnézet"
+
+#~ msgid "Add a new layer"
+#~ msgstr "Új réteg hozzáadása"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "A kijelölt objektumok törlése"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "A kijelölt objektumok előrehozása"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "A kijelölt objektumok hátraküldése"
+
+#~ msgid "Minimal View"
+#~ msgstr "Minimális nézet"
+
+#~ msgid "Detailed View"
+#~ msgstr "Részletes nézet"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "Miniatűr nézet"
+
+#~ msgid "View mode"
+#~ msgstr "Nézetmód"
+
+#~ msgid "New Layer"
+#~ msgstr "Új réteg"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Adja meg az új réteg nevét:"
+
+#~ msgid "New layer"
+#~ msgstr "Új réteg"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Réteg létrehozása"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Réteg törlése"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "Nem törölhető minden réteg. Legalább egy réteg szükséges."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Hiba a rétegek törlése során"
+
+#~ msgid "Layer"
+#~ msgstr "Réteg"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Csoport"
+
+#~ msgid "Shape"
+#~ msgstr "Alakzat"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Látható"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Zárolt"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "zIndex"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Átlátszatlanság"
+
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Vágott"
+
+#~ msgid "no"
+#~ msgstr "nem"
+
+#~ msgid "yes"
+#~ msgstr "igen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Alakzatok áthelyezése"
+
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "Egy vektorgrafikus alkalmazás."
+
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "© A Karbon fejlesztői, 2001-2013."
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "A fejlesztők örömmel fogadnak bármilyen jellegű közreműködést."
+
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Hibajavítások és fejlesztések"
+
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#~ msgid "Bug fixes"
+#~ msgstr "Hibajavítások"
+
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Hasznos javítófoltok és tanácsok"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Érvénytelen OASIS-dokumentum. Nem található office:body tag."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Érvénytelen OASIS-dokumentum. Nem található office:drawing tag."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Érvénytelen OASIS-dokumentum. Nem található draw:page tag."
+
+#~ msgid "Master Page"
+#~ msgstr "Mesteroldal"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "Grafika beszúrása"
+
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Válassza ki a felvenni kívánt grafikát"
+
+#~ msgid "Could not load image."
+#~ msgstr "A kép nem tölthető be."
+
+#~ msgid "Import graphic"
+#~ msgstr "Grafika importálása"
+
+#~ msgid "Could not create image shape."
+#~ msgstr "Nem hozható létre képi alakzat."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally"
+#~ msgstr "Tükrözés vízszintesen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Vertically"
+#~ msgstr "Tükrözés függőlegesen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally and Vertically"
+#~ msgstr "Tükrözés vízszintesen és függőlegesen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "Útvonalak elválasztása"
+
+#~ msgid "Outline &Mode"
+#~ msgstr "Körvonalas &mód"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "A lapszegélyek megjelenítése"
+
+#~ msgid "&Import Graphic..."
+#~ msgstr "Grafika &importálása..."
+
+#~ msgid "D&elete"
+#~ msgstr "&Törlés"
+
+#~ msgid "Edit Guides"
+#~ msgstr "Vezetők szerkesztése"
+
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Megkettőzés"
+
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Elosztás középre (vízszintesen)"
+
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Az üres helyek elosztása (vízszintesen)"
+
+#~ msgid "Distribute Left Borders"
+#~ msgstr "A bal oldali szegélyek elosztása"
+
+#~ msgid "Distribute Right Borders"
+#~ msgstr "A jobb oldali szegélyek elosztása"
+
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Elosztás középre (függőlegesen)"
+
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Az üres helyek elosztása (függőlegesen)"
+
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Az alsó szegélyek elosztása"
+
+#~ msgid "Distribute Top Borders"
+#~ msgstr "A felső szegélyek elosztása"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Vonalzók megjelenítése"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "A vonalzók ki- és bekapcsolása"
+
+#~ msgid "Show Color Palette"
+#~ msgstr "Színpaletta megjelenítése"
+
+#~ msgid "Show or hide color palette"
+#~ msgstr "A színpaletta megjelenítése vagy elrejtése"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Rácspontokhoz igazítás"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "Illesztés a rácspontokhoz"
+
+#~ msgid "&Clip Object"
+#~ msgstr "&Objektumcsoportosítás"
+
+#~ msgid "&Unclip Objects"
+#~ msgstr "Objektum&csoportosítás megszüntetése"
+
+#~ msgid "Mirror Vertically"
+#~ msgstr "Tükrözés függőlegesen"
+
+#~ msgid "Mirror Horizontally"
+#~ msgstr "Tükrözés vízszintesen"
+
+#~ msgid "&Close Path"
+#~ msgstr "&Zárt út"
+
+#~ msgid "Com&bine Path"
+#~ msgstr "Útvonal kom&binálása"
+
+#~ msgid "Se&parate Path"
+#~ msgstr "Útvonal szét&választása"
+
+#~ msgid "Re&verse Path"
+#~ msgstr "Útvonal megcfordítása"
+
+#~ msgid "Intersect Paths"
+#~ msgstr "Útvonalak metszete"
+
+#~ msgid "Subtract Paths"
+#~ msgstr "Útvonalak kivonata"
+
+#~ msgid "Unite Paths"
+#~ msgstr "Útvonalak egyesítése"
+
+#~ msgid "Exclude Paths"
+#~ msgstr "Útvonalak kizárása"
+
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Útvonal rácspontokhoz igazítása"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "A Karbon beállításai..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "Ol&dalelrendezés..."
+
+#~ msgid "Zoom to Selection"
+#~ msgstr "Nagyítás a kijelölésre"
+
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Nagyítás a rajzra"
+
+#~ msgid "Zoom"
+#~ msgstr "Nagyítás"
+
+#~ msgid "Show status bar:"
+#~ msgstr "Az állapotsor megjelenítése:"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "A nemrég használt fájlok listájának max. hossza:"
+
+#~ msgid "Palette font size:"
+#~ msgstr "A paletta betűmérete:"
+
+#~ msgid "Canvas color:"
+#~ msgstr "A rajzterület színe:"
+
+#~ msgid "Select palette"
+#~ msgstr "Paletta kiválasztása"
+
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "Kitöltés alkalmazása a kijelölésre"
+
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "Nincs"
+
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "Ecsetvonás alkalmazása a kijelölésre"
+
+#~ msgctxt "The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "Egyéni"
+
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Nincs"
+
+#~ msgid "Stroke:"
+#~ msgstr "Ecsetvonás:"
+
+#~ msgid "Fill:"
+#~ msgstr "Kitöltés:"
+
+#~ msgid "File to open"
+#~ msgstr "A megnyitandó fájl"
+
+#~ msgid "Target:"
+#~ msgstr "Cél:"
+
+#~ msgid "Line"
+#~ msgstr "Vonal"
+
+#~ msgid "Fill"
+#~ msgstr "Kitöltés"
+
+#~ msgid "Type:"
+#~ msgstr "Típus:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Lineáris"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Sugaras"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Kúpos"
+
+#~ msgid "Repeat:"
+#~ msgstr "Ismétlés:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Nincs"
+
+#~ msgid "Reflect"
+#~ msgstr "Visszaverődés"
+
+#~ msgid "Repeat"
+#~ msgstr "Ismétlés"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Általános átlátszatlanság:"
+
+#~ msgid "Color stop:"
+#~ msgstr "Zárószín:"
+
+#~ msgid "Stop color."
+#~ msgstr "Befejező szín:"
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "Hozzáa&dás az előre definiált színátmenetekhez"
+
+#~ msgid "Original"
+#~ msgstr "Eredeti"
+
+#~ msgid "Tiled"
+#~ msgstr "Mozaikszerű"
+
+#~ msgid "Stretched"
+#~ msgstr "Nyújtott"
+
+#~ msgid "Top Left"
+#~ msgstr "Balra fent"
+
+#~ msgid "Top"
+#~ msgstr "Fent"
+
+#~ msgid "Top Right"
+#~ msgstr "Jobbra fent"
+
+#~ msgid "Left"
+#~ msgstr "Balra"
+
+#~ msgid "Center"
+#~ msgstr "Középre"
+
+#~ msgid "Right"
+#~ msgstr "Jobbra"
+
+#~ msgid "Bottom Left"
+#~ msgstr "Balra lent"
+
+#~ msgid "Bottom"
+#~ msgstr "Alulra"
+
+#~ msgid "Bottom Right"
+#~ msgstr "Jobbra lent"
+
+#~ msgid "Stroke"
+#~ msgstr "Vonalkázás"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "A lapszegélyek elrejtése"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "A vonalzók elrejtése"
+
+#~ msgid "Stop color:"
+#~ msgstr "Befejező szín:"
+
+#~ msgid "Tools"
+#~ msgstr "Eszközök"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Másolási eltolás:"
+
+#, fuzzy
+#~| msgid "Show Grid"
+#~ msgid "Show Guides"
+#~ msgstr "Rács megjelenítése"
+
+#, fuzzy
+#~ msgid "Shows or hides guides"
+#~ msgstr "A rács ki-be kapcsolása."
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "(nincs)"
+
+#, fuzzy
+#~| msgid "Solid"
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Egyszínű"
+
+#~ msgid "Gradient"
+#~ msgstr "Gradiens"
+
+#~ msgid "Pattern"
+#~ msgstr "Minta"
+
+#~ msgid "Units:"
+#~ msgstr "Mértékegység:"
+
+#, fuzzy
+#~| msgid "Inner radius:"
+#~ msgid "Handle radius:"
+#~ msgstr "Belső sugár:"
+
+#, fuzzy
+#~ msgid "Ungroup shapes"
+#~ msgstr "Az objektumcsoport megszüntetése"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Objektumok csoportosítása"
+
+#, fuzzy
+#~| msgid "Show &grid"
+#~ msgid "Show grid:"
+#~ msgstr "Rács meg&jelenítése"
+
+#, fuzzy
+#~ msgid "Snap to grid:"
+#~ msgstr "Illesztés a rácspontokhoz."
+
+#, fuzzy
+#~| msgid "Grid &color:"
+#~ msgid "Grid color:"
+#~ msgstr "Rá&csszín:"
+
+#, fuzzy
+#~| msgid "&Horizontal:"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "Vízsz&intesen:"
+
+#, fuzzy
+#~| msgid "&Vertical:"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Függőlegesen:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Az automatikus mentés időköze (perc):"
+
+#~ msgid "No auto save"
+#~ msgstr "(ne legyen automatikus mentés)"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "Create backup file"
+#~ msgstr "Biztonsági mentés készítése"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Válasszon mintát"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Válassza ki a felvenni kívánt mintát"
+
+#, fuzzy
+#~| msgid "Reference"
+#~ msgid "Reference Point:"
+#~ msgstr "Hivatkozás"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Pattern Size"
+#~ msgstr "Minta"
+
+#~ msgid "W:"
+#~ msgstr "Sz:"
+
+#~ msgid "H:"
+#~ msgstr "M:"
+
+#~ msgid "Edit Gradient"
+#~ msgstr "Színátmenet szerkesztése"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "Előre definiált színátmenetek"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgid "Gradient tool"
+#~ msgstr "Színátmenet"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Színátmenet"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Pattern tool"
+#~ msgstr "Minta"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Minta"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgid "Precision:"
+#~ msgstr "Pozíció:"
+
+#, fuzzy
+#~| msgid "Raw"
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Nyers"
+
+#~ msgid "Curve"
+#~ msgstr "Görbe"
+
+#~ msgid "Straight"
+#~ msgstr "Egyenes"
+
+#~ msgid "Optimize"
+#~ msgstr "Optimalizálás"
+
+#~ msgid "Exactness:"
+#~ msgstr "Pontosság:"
+
+#~ msgid "Combine angle:"
+#~ msgstr "Szögkombinálás:"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "&Follow selected path"
+#~ msgstr "Objektumok törlése"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "Vastagság:"
+
+#, fuzzy
+#~| msgid "Start angle:"
+#~ msgid "Use tablet &angle"
+#~ msgstr "Kezdőszög:"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgid "Fixation:"
+#~ msgstr "Irány:"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgid "Current"
+#~ msgstr "Görbe"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Graphics Pen"
+#~ msgstr "Gradiens"
+
+#, fuzzy
+#~| msgid "Ellipse Tool"
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Ellipszis"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "&Előtérbe hozás"
+
+#~ msgid "&Raise"
+#~ msgstr "&Felemelés"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "Le&süllyesztés"
+
+#~ msgid "Send to &Back"
+#~ msgstr "&Háttérbe helyezés"
+
+#~ msgid "Show Grid"
+#~ msgstr "Rács megjelenítése"
+
+#~ msgid "Hide Grid"
+#~ msgstr "A rács elrejtése"
+
+#, fuzzy
+#~ msgid "Shows or hides grid"
+#~ msgstr "A rács ki-be kapcsolása."
+
+#~ msgid "Align Left"
+#~ msgstr "Igazítás balra"
+
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "Igazítás középre (vízszintesen)"
+
+#~ msgid "Align Right"
+#~ msgstr "Igazítás jobbra"
+
+#~ msgid "Align Top"
+#~ msgstr "Igazítás felülre"
+
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Igazítás középre (függőlegesen)"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Align Bottom"
+#~ msgstr "Igazítás alulra"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Stop opacity:"
+#~ msgstr "Átlátszóság:"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "Az állapotsor megjelenítése"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern"
+#~ msgstr "Válasszon mintát"
+
+#, fuzzy
+#~| msgid "Predefined"
+#~ msgid "Undefined"
+#~ msgstr "Előre definiált"
+
+#~ msgid "Transform"
+#~ msgstr "Átalakítás"
+
+#~ msgid "Set x-position of actual selection"
+#~ msgstr "Beállítja a kijelölés X pozícióját"
+
+#~ msgid "Set y-position of actual selection"
+#~ msgstr "Beállítja a kijelölés Y pozícióját"
+
+#~ msgid "Set width of actual selection"
+#~ msgstr "Beállítja a kijelölés szélességét"
+
+#~ msgid "Set height of actual selection"
+#~ msgstr "Beállítja a kijelölés magasságát"
+
+#~ msgid "R:"
+#~ msgstr "R:"
+
+#~ msgid "Rotate actual selection"
+#~ msgstr "A kijelölés elforgatása"
+
+#~ msgid "SX:"
+#~ msgstr "SX:"
+
+#~ msgid "Shear actual selection in x-direction"
+#~ msgstr "A kijelölés nyírása X irányba"
+
+#~ msgid "SY:"
+#~ msgstr "SY:"
+
+#~ msgid "Shear actual selection in y-direction"
+#~ msgstr "A kijelölés nyírása Y irányba"
+
+#~ msgid "Shear"
+#~ msgstr "Nyírás"
+
+#, fuzzy
+#~ msgid "Attach Path"
+#~ msgstr "A görbületek kisimítása"
+
+#, fuzzy
+#~ msgid "Detach Path"
+#~ msgstr "A görbületek kisimítása"
+
+#, fuzzy
+#~| msgid "Convert to Shapes"
+#~ msgid "Convert to Path"
+#~ msgstr "Átalakítás alakzatokká"
+
+#, fuzzy
+#~| msgid "Text Tool"
+#~ msgid "Simple Text Tool"
+#~ msgstr "Szöveg-eszköz"
+
+#~ msgid "Save as path"
+#~ msgstr "Elmentés útvonalként"
+
+#~ msgid "Uniform Color"
+#~ msgstr "Egyetlen szín"
+
+#~ msgid "Old:"
+#~ msgstr "Régi:"
+
+#~ msgid "New:"
+#~ msgstr "Új:"
+
+#~ msgid "G:"
+#~ msgstr "G:"
+
+#~ msgid "B:"
+#~ msgstr "B:"
+
+#~ msgctxt "Hue:"
+#~ msgid "H:"
+#~ msgstr "Árny.:"
+
+#~ msgctxt "Saturation:"
+#~ msgid "S:"
+#~ msgstr "Tel.:"
+
+#~ msgctxt "Value:"
+#~ msgid "V:"
+#~ msgstr "Érték:"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "Type"
+#~ msgstr "Típus"
+
+#~ msgid "Cap"
+#~ msgstr "Pont"
+
+#~ msgid "Join"
+#~ msgstr "Csatlakozás"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Színválasztó"
+
+#~ msgid "Height:"
+#~ msgstr "Magasság:"
+
+#~ msgid "Layers:"
+#~ msgstr "Rétegek:"
+
+#~ msgid "Format:"
+#~ msgstr "Formátum:"
+
+#~ msgid "Resources"
+#~ msgstr "Erőforrások"
+
+#~ msgid "Patterns"
+#~ msgstr "Minták"
+
+#~ msgid "Clipart"
+#~ msgstr "Clipart"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "&Importálás"
+
+#~ msgid "Stroke: None"
+#~ msgstr "Vonalkázás: nincs"
+
+#~ msgid "Fill: None"
+#~ msgstr "Kitöltés: nincs"
+
+#~ msgid "Fill: RGB"
+#~ msgstr "Kitöltés: RGB"
+
+#~ msgid "Fill: CMYK"
+#~ msgstr "Kitöltés: CMYK"
+
+#~ msgid "Fill: HSB"
+#~ msgstr "Kitöltés: HSB"
+
+#~ msgid "Fill: Grayscale"
+#~ msgstr "Kitöltés: szürkeárnyalatok"
+
+#~ msgid "Fill: Color"
+#~ msgstr "Kitöltés: szín"
+
+#~ msgid "Fill: Gradient"
+#~ msgstr "Kitöltés: színátmenet"
+
+#~ msgid "Fill: Pattern"
+#~ msgstr "Kitöltés: minta"
+
+#~ msgid "Stroke: RGB"
+#~ msgstr "Vonalkázás: RGB"
+
+#~ msgid "Stroke: CMYK"
+#~ msgstr "Vonalkázás: CMYK"
+
+#~ msgid "Stroke: HSB"
+#~ msgstr "Vonalkázás: HSB"
+
+#~ msgid "Stroke: Grayscale"
+#~ msgstr "Vonalkázás: szürkeárnyalatok"
+
+#~ msgid "Stroke: Gradient"
+#~ msgstr "Vonalkázás: színátmenet"
+
+#~ msgid "Stroke: Pattern"
+#~ msgstr "Vonalkázás: minta"
+
+#~ msgid "Polygonize"
+#~ msgstr "Sokszögesítés"
+
+#~ msgid "Round corners:"
+#~ msgstr "Kerekített sarkok:"
+
+#~ msgid "&Shadow Effect..."
+#~ msgstr "Á&rnyékolás..."
+
+#~ msgid "Create Shadow Effect"
+#~ msgstr "Árnyékolás létrehozása"
+
+#~ msgid "Distance:"
+#~ msgstr "Távolság:"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Create Shadow"
+#~ msgstr "Árnyék létrehozása"
+
+#~ msgid "Object Properties"
+#~ msgstr "Az objektum tulajdonságai"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "&Törlés"
+
+#~ msgid "&Import"
+#~ msgstr "&Importálás"
+
+#, fuzzy
+#~| msgid "Image Tool"
+#~ msgid "Unnamed Tool"
+#~ msgstr "Kép"
+
+#, fuzzy
+#~ msgid "&Undo"
+#~ msgstr "&Visszavonás:"
+
+#, fuzzy
+#~ msgid "&Redo"
+#~ msgstr "Új&ra végrehajtás:"
+
+#~ msgid "&Undo: "
+#~ msgstr "&Visszavonás:"
+
+#~ msgid "&Redo: "
+#~ msgstr "Új&ra végrehajtás:"
+
+#~ msgid "Fill Objects"
+#~ msgstr "Objektumok kitöltése"
+
+#~ msgid "Fill Object"
+#~ msgstr "Objektum kitöltése"
+
+#~ msgid "Insert Text"
+#~ msgstr "Szöveg beszúrása"
+
+#~ msgid "Transform Objects"
+#~ msgstr "Objektumok átalakítása"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Az objektum duplikálása"
+
+#~ msgid "Duplicate Objects"
+#~ msgstr "Az objektumok duplikálása"
+
+#~ msgid "Transform Object"
+#~ msgstr "Objektum átalakítása"
+
+#~ msgid "Translate Objects"
+#~ msgstr "Objektumok eltolása"
+
+#~ msgid "Translate Object"
+#~ msgstr "Objektum eltolása"
+
+#~ msgid "Scale Objects"
+#~ msgstr "Objektumok méretezése"
+
+#~ msgid "Scale Object"
+#~ msgstr "Objektum méretezése"
+
+#~ msgid "Shear Objects"
+#~ msgstr "Objektumok nyírása"
+
+#~ msgid "Shear Object"
+#~ msgstr "Objektum nyírása"
+
+#~ msgid "Rotate Objects"
+#~ msgstr "Objektumok forgatása"
+
+#~ msgid "Rotate Object"
+#~ msgstr "Objektum forgatása"
+
+#~ msgid "Translate Bezier"
+#~ msgstr "Bezier-eltolás"
+
+#~ msgid "Translate Points"
+#~ msgstr "Pontok eltolása"
+
+#~ msgid "Translate Point"
+#~ msgstr "Pont eltolása"
+
+#~ msgid "Ellipse"
+#~ msgstr "Ellipszis"
+
+#~ msgid "Polygon"
+#~ msgstr "Sokszög"
+
+#~ msgid "Polyline"
+#~ msgstr "Sokszögvonal"
+
+#~ msgid "Sinus"
+#~ msgstr "Szinusz"
+
+#~ msgid "Spiral"
+#~ msgstr "Spirál"
+
+#~ msgid "Star"
+#~ msgstr "Csillag"
+
+#~ msgid "<qt><b>Shape tool</b><br>"
+#~ msgstr "<qt><b>Alakzat-eszköz</b><br>"
+
+#~ msgid "<i>Click and drag</i> to place your own shape.<br>"
+#~ msgstr ""
+#~ "<i>Kattintással és húzással</i> lehet az alakzatokat elhelyezni.<br>"
+
+#~ msgid "<i>Click</i> to place a shape using the tool properties values.</qt>"
+#~ msgstr ""
+#~ "<i>Kattintással</i> lehet egy alakzatot az eszköztulajdonságoknál "
+#~ "megadott értékekkel elhelyezni.</qt>"
+
+#~ msgid "Periods:"
+#~ msgstr "Periódus:"
+
+#~ msgid "Sinus Tool"
+#~ msgstr "Szinusz"
+
+#~ msgid "Insert Spiral"
+#~ msgstr "Spirál beszúrása"
+
+#~ msgid "Round"
+#~ msgstr "Kerek"
+
+#~ msgid "Rectangular"
+#~ msgstr "Téglalap alakú"
+
+#~ msgid "Segments:"
+#~ msgstr "Szegmensek:"
+
+#~ msgid "Fade:"
+#~ msgstr "Meredekség:"
+
+#~ msgid "Clockwise"
+#~ msgstr "balra"
+
+#~ msgid "Counter Clockwise"
+#~ msgstr "jobbra"
+
+#~ msgid "Spiral Tool"
+#~ msgstr "Spirál"
+
+#~ msgid "Insert Star"
+#~ msgstr "Csillag beszúrása"
+
+#~ msgid "Star Outline"
+#~ msgstr "Csillagkörvonal"
+
+#~ msgid "Wheel"
+#~ msgstr "Kerék"
+
+#~ msgid "Framed Star"
+#~ msgstr "Keretezett csillag"
+
+#~ msgid "Gear"
+#~ msgstr "Fogaskerék"
+
+#~ msgid "Outer radius:"
+#~ msgstr "Külső sugár:"
+
+#~ msgid "Inner angle:"
+#~ msgstr "Belső szög:"
+
+#~ msgid "Roundness:"
+#~ msgstr "Kerekítettség:"
+
+#~ msgid "Star Tool"
+#~ msgstr "Csillag"
+
+#~ msgid "Draw a star"
+#~ msgstr "Csillag rajzolása"
+
+#~ msgid "Shadow"
+#~ msgstr "Árnyék"
+
+#~ msgid "Draw translucent shadow"
+#~ msgstr "Áttetsző árnyék rajzolása"
+
+#~ msgid "Text"
+#~ msgstr "Szöveg"
+
+#~ msgid "Alignment:"
+#~ msgstr "Igazítás:"
+
+#~ msgid "Position"
+#~ msgstr "Pozíció"
+
+#~ msgid "Edit Base Path"
+#~ msgstr "Az alapútvonal szerkesztése"
+
+#~ msgid "New text"
+#~ msgstr "Új szöveg"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "Above"
+#~ msgstr "Felülre"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "On"
+#~ msgstr "Fölé"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "Under"
+#~ msgstr "Alá"
+
+#~ msgid "<qt><b>Text Tool</b><br>"
+#~ msgstr "<qt><b>Szöveg-eszköz</b><br>"
+
+#~ msgid "<i>Click</i> on document to place horizontal text.<br>"
+#~ msgstr ""
+#~ "<i>Kattintással</i> lehet a dokumentumban vízszintes szöveget elhelyezni."
+#~ "<br>"
+
+#~ msgid "<i>Click and drag</i> in document to place directional text.<br>"
+#~ msgstr ""
+#~ "<i>Kattintással és húzással</i> lehet irányított szöveget elhelyezni.<br>"
+
+#~ msgid ""
+#~ "<i>Click</i> on a selected path object to place text along its outline."
+#~ "<br>"
+#~ msgstr ""
+#~ "<i>Kattintson</i> rá egy útvonal-objektumra, ha szöveget szeretne egy "
+#~ "vonal mentén elhelyezni.<br>"
+
+#~ msgid "<i>Click</i> on a selected text object to change it.<br></qt>"
+#~ msgstr ""
+#~ "<i>Kattintson</i> a módosítandó szöveges objektumra, ha meg szeretné "
+#~ "változtatni.<br></qt>"
+
+#~ msgid "Change Text"
+#~ msgstr "A szöveg megváltoztatása"
+
+#~ msgid "Text Conversion"
+#~ msgstr "Szövegkonverzió"
+
+#~ msgid "One object"
+#~ msgid_plural "%1 objects"
+#~ msgstr[0] "%1 objektum"
+#~ msgstr[1] "%1 objektum"
+
+#~ msgid "path"
+#~ msgstr "útvonal"
+
+#~ msgid "One group, containing one object"
+#~ msgid_plural "One group, containing %1 objects"
+#~ msgstr[0] "Egy csoport, %1 objektumot tartalmaz"
+#~ msgstr[1] "Egy csoport, %1 objektumot tartalmaz"
+
+#~ msgid "text"
+#~ msgstr "szöveg"
+
+#~ msgid "image"
+#~ msgstr "kép"
+
+#~ msgid "Paste Object"
+#~ msgstr "Objektum beillesztése"
+
+#~ msgid "Paste Objects"
+#~ msgstr "Objektumok beillesztése"
+
+#~ msgid "Flatten Curves"
+#~ msgstr "A görbületek kisimítása"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "A vonás tulajdonságai"
+
+#~ msgid "Set line width of actual selection"
+#~ msgstr "A kijelölés vonalvastagságának beállítása"
+
+#~ msgid "Butt cap"
+#~ msgstr "Lezáró vég"
+
+#~ msgid "Round cap"
+#~ msgstr "Kerekített vég"
+
+#~ msgid "Square cap"
+#~ msgstr "Szögletes vég"
+
+#~ msgid "Join:"
+#~ msgstr "Csatlakozás:"
+
+#~ msgid "Miter join"
+#~ msgstr "Túlérő csatlakozás"
+
+#~ msgid "Round join"
+#~ msgstr "Kerekített csatlakozás"
+
+#~ msgid "Bevel join"
+#~ msgstr "Ívelt csatlakozás"
+
+#, fuzzy
+#~ msgid "Miter limit:"
+#~ msgstr "Túlérő csatlakozás"
+
+#, fuzzy
+#~ msgid "Set miter limit"
+#~ msgstr "A vonalvastagság beállítása"
+
+#~ msgid "P&urge"
+#~ msgstr "T&isztítás (purge)"
+
+#~ msgid "&History"
+#~ msgstr "N&apló"
+
+#~ msgid "&Insert Knots..."
+#~ msgstr "Csomó&k beszúrása..."
+
+#~ msgid "Insert Knots"
+#~ msgstr "Csomók beszúrása"
+
+#~ msgid "Insert Clipart"
+#~ msgstr "Clipart-kép beszúrása"
+
+#~ msgid "Stroke Objects"
+#~ msgstr "Objektumok vonalkázása"
+
+#~ msgid "Stroke Object"
+#~ msgstr "Objektum vonalkázása"
+
+#~ msgid "Stroke Width"
+#~ msgstr "A vonalkák vastagsága"
+
+#~ msgid "Dash Pattern"
+#~ msgstr "Vonalminta"
+
+#~ msgid "<qt><b>Zoom tool:</b><br>"
+#~ msgstr "<qt><b>Nagyítás:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to zoom into a rectangular area.<br>"
+#~ msgstr ""
+#~ "<i>Kattintással és húzással</i> lehet kinagyítani egy téglalap alakú "
+#~ "területet.<br>"
+
+#~ msgid "<i>Right click</i> to zoom out of canvas.<br>"
+#~ msgstr "<i>Jobb kattintással</i> lehet kicsinyíteni.</qt>"
+
+#~ msgid "<i>Pressing +/- keys</i><br>to zoom into/out of canvas."
+#~ msgstr "<i>A +/- billentyűkkel lehet</i><br>nagyítani ill. kicsinyíteni."
+
+#~ msgid "Zoom Tool"
+#~ msgstr "Nagyítás"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Max. visszavonási mélység:"
+
+#~ msgid "<qt><b>Polyline tool:</b><br>"
+#~ msgstr "<qt><b>Sokszög-eszköz:</b><br>"
+
+#~ msgid ""
+#~ "- <i>Click</i> to add a node and <i>drag</i> to set its bezier vector.<br>"
+#~ msgstr ""
+#~ "- <i>Kattintson</i> egy új csomópont felvételéhez és <i>húzással</i> "
+#~ "jelölje ki a Bezier-vektort.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Ctrl</i> while dragging to edit the previous bezier vector.<br>"
+#~ msgstr ""
+#~ "- Nyomja le a <i>Ctrl</i>-t húzás közben az előző Bezier-vektor "
+#~ "kijelöléséhez.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Shift</i> while dragging to change the curve in a straight "
+#~ "line.<br>"
+#~ msgstr ""
+#~ "- Nyomja le a <i>Shift</i>-et húzás közben a görbület egyenes szakaszon "
+#~ "való kijelöléséhez.<br>"
+
+#~ msgid "- Press <i>Backspace</i> to cancel the last curve.<br>"
+#~ msgstr ""
+#~ "- Nyomja le a <i>Backspace</i>-t a legutolsó görbület megszüntetéséhez."
+#~ "<br>"
+
+#~ msgid "- Press <i>Esc</i> to cancel the whole polyline.<br>"
+#~ msgstr ""
+#~ "- Nyomja le az <i>Esc</i>-t az egész sokszögvonal megszüntetéséhez.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Enter</i> or <i>double click</i> to end the polyline.</qt>"
+#~ msgstr ""
+#~ "- Nyomja le az <i>Enter</i>-t vagy <i>kattintson duplán</i> a "
+#~ "sokszögvonal bezárásához.</qt>"
+
+#~ msgid "Polyline Tool"
+#~ msgstr "Sokszögvonal-eszköz"
+
+#~ msgid "Translate"
+#~ msgstr "Eltolás"
+
+#~ msgid "Relative &position"
+#~ msgstr "Relatív po&zíció"
+
+#~ msgid "This action cannot be undone later. Do you really want to continue?"
+#~ msgstr ""
+#~ "Ezt a műveletet később nem lehet visszavonni. Biztosan végre szeretné "
+#~ "hajtani?"
+
+#~ msgid "Purge History"
+#~ msgstr "Tisztítási (purge) napló"
+
+#~ msgid "Zoom Width"
+#~ msgstr "Teljes szélesség"
+
+#~ msgid "Whole Page"
+#~ msgstr "Az egész oldal"
+
+#~ msgid "Wireframe"
+#~ msgstr "drótvázas"
+
+#~ msgid "25%"
+#~ msgstr "25%"
+
+#~ msgid "50%"
+#~ msgstr "50%"
+
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#~ msgid "200%"
+#~ msgstr "200%"
+
+#~ msgid "300%"
+#~ msgstr "300%"
+
+#~ msgid "400%"
+#~ msgstr "400%"
+
+#~ msgid "800%"
+#~ msgstr "800%"
+
+#~ msgid "Line Style"
+#~ msgstr "Vonalstílus"
+
+#~ msgid "History"
+#~ msgstr "Napló"
+
+#~ msgid "Align Objects"
+#~ msgstr "Objektumok igazítása"
+
+#~ msgid "Clean Up"
+#~ msgstr "Tisztítás"
+
+#~ msgid "Delete Object"
+#~ msgstr "Objektum törlése"
+
+#~ msgid "Delete Node"
+#~ msgstr "A csomópont törlése"
+
+#~ msgid "Distribute Objects"
+#~ msgstr "Az objektumok elosztása"
+
+#~ msgid "Order Selection"
+#~ msgstr "A sorrend kiválasztása"
+
+#~ msgid "Snap to g&rid"
+#~ msgstr "Rács&pontokhoz illesztés"
+
+#~ msgid "Snap Distance"
+#~ msgstr "Illesztési távolság"
+
+#~ msgid "V&ertical:"
+#~ msgstr "&Függőlegesen:"
+
+#~ msgid "HSV"
+#~ msgstr "HSV"
+
+#~ msgid "Alpha (opacity)"
+#~ msgstr "Alfa (áttetszőség)"
+
+#~ msgctxt "document width"
+#~ msgid "Width:"
+#~ msgstr "Szélesség:"
+
+#~ msgid "New"
+#~ msgstr "Új"
+
+#~ msgid "Raise"
+#~ msgstr "Felemelés"
+
+#~ msgid "Lower"
+#~ msgstr "Lesüllyesztés"
+
+#~ msgid "Item"
+#~ msgstr "Elem"
+
+#~ msgid "L"
+#~ msgstr "L"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "Current Object"
+#~ msgstr "Az aktuális objektum"
+
+#~ msgid "Change the name of the object:"
+#~ msgstr "Az objektum nevének megváltoztatása:"
+
+#~ msgid "Change the name of the current layer:"
+#~ msgstr "Az aktuális réteg nevének megváltoztatása:"
+
+#~ msgid "Add Layer"
+#~ msgstr "Réteg hozzáadása"
+
+#~ msgid "Commands"
+#~ msgstr "Parancsok"
+
+#~ msgid "Group commands"
+#~ msgstr "Csoportparancsok"
+
+#~ msgid "Rectangle"
+#~ msgstr "Téglalap"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Ellipszis beszúrása"
+
+#~ msgid "Full"
+#~ msgstr "Teljes"
+
+#~ msgid "Pie"
+#~ msgstr "Körcikk"
+
+#~ msgid "Arc"
+#~ msgstr "Körív"
+
+#~ msgctxt "object width"
+#~ msgid "Width:"
+#~ msgstr "Szélesség:"
+
+#~ msgid "<qt><b>Gradient tool:</b><br>"
+#~ msgstr "<qt><b>Színátmenet eszköz:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to choose the gradient vector.<br>"
+#~ msgstr ""
+#~ "<i>Kattintással és húzással</i> lehet kijelölni a színátmenet irányát.<br>"
+
+#~ msgid ""
+#~ "<i>Click and drag</i> a gradient vector handle to change the gradient "
+#~ "vector.<br>"
+#~ msgstr ""
+#~ "Egy színátmenet-vektor fogantyújára <i>kattintva és azt elhúzva</i> lehet "
+#~ "megváltoztatni a színátmenet vektorát.<br>"
+
+#~ msgid ""
+#~ "<i>Shift click and drag</i> to move the radial gradient focal point.<br>"
+#~ msgstr ""
+#~ "<i>Shifttel együtt történő kattintással és húzással</i> lehet elmozgatni "
+#~ "a radiális színátmenet fókuszpontját.<br>"
+
+#~ msgid ""
+#~ "<i>Press i or Shift+i</i> to decrease or increase the handle size.<br>"
+#~ msgstr ""
+#~ "A fogantyúméret növeléséhez és csökkentéséhez <i>nyomja meg az I vagy "
+#~ "Shift+I</i> kombinációt.<br>"
+
+#~ msgid "<br><b>Gradient editing:</b><br>"
+#~ msgstr "<br><b>Színátmenet-szerkesztés:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to move points.<br>"
+#~ msgstr "<i>Kattintással és húzással</i> lehet pontokat mozgatni.<br>"
+
+#~ msgid "<i>Double click</i> on a color point to edit it.<br>"
+#~ msgstr "<i>Dupla kattintással</i> lehet egy pont színét szerkeszteni.<br>"
+
+#~ msgid "<i>Right click</i> on a color point to remove it.</qt>"
+#~ msgstr "<i>Jobb kattintással</i> lehet egy színes pontot eltávolítani.</qt>"
+
+#~ msgid "<qt><b>Pattern tool:</b><br>"
+#~ msgstr "<qt><b>Minta-eszköz:</b><br>"
+
+#~ msgid "<i>Click</i> on the pattern you want in the chooser.<br>"
+#~ msgstr "<i>Kattintson</i> rá a kívánt mintára a választóablakban.<br>"
+
+#~ msgid "<i>Click and drag</i> to choose the pattern vector.</qt>"
+#~ msgstr ""
+#~ "<i>Kattintással és húzással</i> lehet a minta vektorát kijelölni.</qt>"
+
+#~ msgid "Please select a pattern."
+#~ msgstr "Válasszon ki egy mintát."
+
+#~ msgid "<qt><b>Pencil tool:</b><br>"
+#~ msgstr "<qt><b>Ceruza eszköz:</b><br>"
+
+#~ msgid "- <i>Click</i> to begin drawing, release when you have finished."
+#~ msgstr ""
+#~ "- <i>Kattintson</i> a rajzolás megkezdéséhez, majd engedje el a gombot, "
+#~ "ha elkészült."
+
+#~ msgid "Pencil"
+#~ msgstr "Ceruza"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Sokszög beszúrása"
+
+#~ msgid "Polygon Tool"
+#~ msgstr "Sokszögvonal"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Téglalap beszúrása"
+
+#~ msgid "Rectangle Tool"
+#~ msgstr "Téglalap"
+
+#~ msgid "Rotate Tool"
+#~ msgstr "Forgatás"
+
+#~ msgid "Insert Round Rect"
+#~ msgstr "Kerekített sarkú téglalap beszúrása"
+
+#~ msgid "Height (%1):"
+#~ msgstr "Magasság (%1):"
+
+#~ msgid "Edge radius X:"
+#~ msgstr "A kerekítés sugara (X):"
+
+#~ msgid "Edge radius Y:"
+#~ msgstr "A kerekítés sugara (Y):"
+
+#~ msgid "Round Rectangle Tool"
+#~ msgstr "Kerekített sarkú téglalap"
+
+#~ msgid "Round Rectangle"
+#~ msgstr "Kerekített sarkú téglalap"
+
+#~ msgid "Editing Nodes"
+#~ msgstr "A csomópontok szerkesztése"
+
+#~ msgid "Select Nodes Tool"
+#~ msgstr "Csúcskijelölő eszköz"
+
+#~ msgid "Selection Mode"
+#~ msgstr "Kijelölési mód"
+
+#~ msgid "Select in current layer"
+#~ msgstr "Kijelölés az aktuális rétegben"
+
+#~ msgid "Select in visible layers"
+#~ msgstr "Kijelölés a látható rétegekben"
+
+#~ msgid "Select in selected layers"
+#~ msgstr "Kijelölés a kiválasztott rétegekben"
+
+#~ msgid "Select"
+#~ msgstr "Kijelölés"
+
+#~ msgid "<qt><b>Selection tool:</b><br>"
+#~ msgstr "<qt><b>Kijelölés-eszköz:</b><br>"
+
+#~ msgid ""
+#~ "<i>Select in current layer:</i><br>The selection is made in the layer "
+#~ "selected in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Kijelölés az aktuális rétegben:</i><br>A kijelölés abban a rétegben "
+#~ "történik, mely ki van választva a rétegdokkolóban.<br><br>"
+
+#~ msgid ""
+#~ "<i>Select in visible layers:</i><br>The selection is made in the visible "
+#~ "layers (eye in the layers docker).<br><br>"
+#~ msgstr ""
+#~ "<i>Kijelölés a látható rétegekben:</i><br>A kijelölés a látható "
+#~ "rétegekben történik (lásd a rétegdokkolót).<br><br>"
+
+#~ msgid ""
+#~ "<i>Select in selected layers:</i><br>The selection is made in the checked "
+#~ "layers in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Kijelölés a kiválasztott rétegekben:</i><br>A kijelölés a "
+#~ "rétegdokkolóban kiválasztott rétegekben történik.<br><br>"
+
+#~ msgid ""
+#~ "<i>Position using arrow keys</i><br>The selection can be positioned up, "
+#~ "down, left and right using the corresponding arrow keys."
+#~ msgstr ""
+#~ "<i>Pozícionálás a nyilakkal</i><br>A kijelölt rész jobbra, balra, felfelé "
+#~ "és lefelé pozícionálható a megfelelő nyilakkal."
+
+#~ msgctxt "[(left,bottom), (right,top)] (actual unit)"
+#~ msgid "Selection [(%1, %2), (%3, %4)] (%5)"
+#~ msgstr "Kijelölés [(%1, %2), (%3, %4)] (%5)"
+
+#~ msgid "No selection"
+#~ msgstr "Nincs kijelölés"
+
+#~ msgid "Select Tool"
+#~ msgstr "Kijelölés"
+
+#~ msgid "Shear Tool"
+#~ msgstr "Nyírás"
+
+#~ msgctxt "selection width"
+#~ msgid "Width:"
+#~ msgstr "Szélesség:"
+
+#~ msgid "<qt><b>Image tool:</b><br>"
+#~ msgstr "<qt><b>Kép:</b><br>"
+
+#~ msgid "Choose Image to Add"
+#~ msgstr "Válassza ki a felvenni kívánt képet"
+
+#~ msgid "Knots:"
+#~ msgstr "Csomók:"

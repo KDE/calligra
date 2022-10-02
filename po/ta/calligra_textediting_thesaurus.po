@@ -1,0 +1,418 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: thesaurus_tool\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2004-08-10 23:55-0800\n"
+"Last-Translator: Tamil PC <tamilpc@ambalam.com>\n"
+"Language-Team: KDE <kde-i18n-doc@kde.org>\n"
+"Language: ta\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Thesaurus.cpp:81
+#, kde-format
+msgid "(No match)"
+msgstr "[பொருத்தமற்ற]"
+
+#: Thesaurus.cpp:91
+#, kde-format
+msgid "&Search for:"
+msgstr "தேடல் தேவைகள்"
+
+#: Thesaurus.cpp:94
+#, kde-format
+msgid "S&earch"
+msgstr "தேடு"
+
+#: Thesaurus.cpp:101
+#, kde-format
+msgctxt "@action:button Go back to the previous word in history"
+msgid "Back"
+msgstr ""
+
+#: Thesaurus.cpp:105
+#, fuzzy, kde-format
+#| msgid "Forward"
+msgctxt "@action:button Go forward to the next word in history"
+msgid "Forward"
+msgstr "முன்னோக்கி"
+
+#: Thesaurus.cpp:108
+#, kde-format
+msgid "Change Language..."
+msgstr "மொழி மாற்றங்கள்"
+
+#: Thesaurus.cpp:122
+#, kde-format
+msgid "&Thesaurus"
+msgstr "அகராதி"
+
+#: Thesaurus.cpp:126
+#, kde-format
+msgid "Synonyms"
+msgstr "விளக்கம்"
+
+#: Thesaurus.cpp:133
+#, kde-format
+msgid "More General Words"
+msgstr "மேலும் பொதுவான வார்த்தைகள்"
+
+#: Thesaurus.cpp:140
+#, kde-format
+msgid "More Specific Words"
+msgstr "மேலும் குறிப்பான வார்த்தைகள்"
+
+#: Thesaurus.cpp:170
+#, fuzzy, kde-format
+#| msgid "&WordNet"
+msgid "&Wordnet"
+msgstr "வேடுநெட் "
+
+#: Thesaurus.cpp:192
+#, kde-format
+msgid "&Replace with:"
+msgstr "இதனுடன் மாற்று"
+
+#: Thesaurus.cpp:255
+#, kde-format
+msgid "&Replace"
+msgstr "மாற்று"
+
+#: Thesaurus.cpp:267
+#, fuzzy, kde-format
+#| msgid "&Replace"
+msgid "Replace Word"
+msgstr "மாற்று"
+
+#: Thesaurus.cpp:295
+#, kde-format
+msgid "Related Words - %1"
+msgstr "தொடர்பு எழுத்து -%1"
+
+#: Thesaurus.cpp:409
+#, kde-format
+msgid ""
+"The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+"select a thesaurus file."
+msgstr ""
+"அகராதி கோப்பு '%1'  காணப்படவில்லை தயவு செய்து 'மொழி மாற்றங்கள்' .....  அகராதி "
+"கோப்பினை தேர்வு செய்."
+
+#: Thesaurus.cpp:429
+#, fuzzy, kde-format
+#| msgid "<b>Error:</b> Failed to execute grep. Output:<br>%1"
+msgid "<b>Error:</b> Failed to execute grep."
+msgstr "<b>பிழை</b>   கிரிப் நிறைவேற்றுவது துண்டித்தது wn'. Output:<br>%1"
+
+#: Thesaurus.cpp:581
+#, kde-format
+msgid "Synonyms/Hypernyms - Ordered by Frequency"
+msgstr "Synonyms/Hypernyms "
+
+#: Thesaurus.cpp:582
+#, kde-format
+msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+msgstr "விளக்கம் - ஒற்றுமைக்கு மதிப்பு விலக்கம் ( வினை மட்டும்)"
+
+#: Thesaurus.cpp:583
+#, kde-format
+msgid "Antonyms - Words with Opposite Meanings"
+msgstr "எதிர்சொல் - எழுத்து எதிர் விள்க்கத்தை கொண்டது"
+
+#: Thesaurus.cpp:584
+#, kde-format
+msgid "Hyponyms - ... is a (kind of) %1"
+msgstr "Hyponyms - ... is a (kind of) %1"
+
+#: Thesaurus.cpp:585
+#, kde-format
+msgid "Meronyms - %1 has a ..."
+msgstr "Meronyms - %1 has a ..."
+
+#: Thesaurus.cpp:587
+#, kde-format
+msgid "Holonyms - ... has a %1"
+msgstr "Holonyms - ... has a %1"
+
+#: Thesaurus.cpp:588
+#, kde-format
+msgid "Attributes"
+msgstr "குணங்கள்"
+
+#: Thesaurus.cpp:589
+#, kde-format
+msgid "Cause To (for some verbs only)"
+msgstr "Cause To (for some verbs only)"
+
+#: Thesaurus.cpp:590
+#, kde-format
+msgid "Verb Entailment (for some verbs only)"
+msgstr "வினையை தேவைப்படுத்துதல்(சில வினைகளுக்கு மட்டும்)"
+
+#: Thesaurus.cpp:591
+#, kde-format
+msgid "Familiarity & Polysemy Count"
+msgstr "பழகிய மற்றும் பலவித எண்ணிக்கை"
+
+#: Thesaurus.cpp:593
+#, kde-format
+msgid "Verb Frames (examples of use)"
+msgstr "வினை சட்டம்( எடுத்துகாட்டு )"
+
+#: Thesaurus.cpp:594
+#, kde-format
+msgid "List of Compound Words"
+msgstr "கூட்டு எழுத்து பட்டியல்"
+
+#: Thesaurus.cpp:595
+#, kde-format
+msgid "Overview of Senses"
+msgstr "உணர்வு மேல்நோக்கு"
+
+#: Thesaurus.cpp:623
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#| "installed on your computer if you want to use it, and 'wn' has to be in "
+#| "your PATH. You can get WordNet at <a href=\"http://www.cogsci.princeton."
+#| "edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet "
+#| "only supports the English language."
+msgid ""
+"<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+"installed on your computer if you want to use it, and 'wn' has to be in your "
+"PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+"\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+"English language."
+msgstr ""
+"<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+"installed on your computer if you want to use it, and 'wn' has to be in your "
+"PATH. You can get WordNet at <a href=\"http://www.cogsci.princeton.edu/~wn/"
+"\">http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet only supports "
+"the English language."
+
+#: Thesaurus.cpp:635
+#, kde-format
+msgid "No match for '%1'."
+msgstr "பொருத்தம் இல்லை '%1"
+
+#, fuzzy
+#~| msgid "(No match)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(No match)"
+#~ msgstr "[பொருத்தமற்ற]"
+
+#, fuzzy
+#~| msgid "&Search for:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Search for:"
+#~ msgstr "தேடல் தேவைகள்"
+
+#, fuzzy
+#~| msgid "S&earch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&earch"
+#~ msgstr "தேடு"
+
+#, fuzzy
+#~| msgid "Forward"
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go forward to the next word in history"
+#~ msgid "Forward"
+#~ msgstr "முன்னோக்கி"
+
+#, fuzzy
+#~| msgid "Change Language..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Language..."
+#~ msgstr "மொழி மாற்றங்கள்"
+
+#, fuzzy
+#~| msgid "&Thesaurus"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Thesaurus"
+#~ msgstr "அகராதி"
+
+#, fuzzy
+#~| msgid "Synonyms"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms"
+#~ msgstr "விளக்கம்"
+
+#, fuzzy
+#~| msgid "More General Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More General Words"
+#~ msgstr "மேலும் பொதுவான வார்த்தைகள்"
+
+#, fuzzy
+#~| msgid "More Specific Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More Specific Words"
+#~ msgstr "மேலும் குறிப்பான வார்த்தைகள்"
+
+#, fuzzy
+#~| msgid "&WordNet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Wordnet"
+#~ msgstr "வேடுநெட் "
+
+#, fuzzy
+#~| msgid "&Replace with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace with:"
+#~ msgstr "இதனுடன் மாற்று"
+
+#, fuzzy
+#~| msgid "&Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace"
+#~ msgstr "மாற்று"
+
+#, fuzzy
+#~| msgid "&Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace Word"
+#~ msgstr "மாற்று"
+
+#, fuzzy
+#~| msgid "Related Words - %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Related Words - %1"
+#~ msgstr "தொடர்பு எழுத்து -%1"
+
+#, fuzzy
+#~| msgid ""
+#~| "The thesaurus file '%1' was not found. Please use 'Change Language...' "
+#~| "to select a thesaurus file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+#~ "select a thesaurus file."
+#~ msgstr ""
+#~ "அகராதி கோப்பு '%1'  காணப்படவில்லை தயவு செய்து 'மொழி மாற்றங்கள்' .....  அகராதி "
+#~ "கோப்பினை தேர்வு செய்."
+
+#, fuzzy
+#~| msgid "<b>Error:</b> Failed to execute grep. Output:<br>%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<b>Error:</b> Failed to execute grep."
+#~ msgstr "<b>பிழை</b>   கிரிப் நிறைவேற்றுவது துண்டித்தது wn'. Output:<br>%1"
+
+#, fuzzy
+#~| msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgstr "Synonyms/Hypernyms "
+
+#, fuzzy
+#~| msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgstr "விளக்கம் - ஒற்றுமைக்கு மதிப்பு விலக்கம் ( வினை மட்டும்)"
+
+#, fuzzy
+#~| msgid "Antonyms - Words with Opposite Meanings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Antonyms - Words with Opposite Meanings"
+#~ msgstr "எதிர்சொல் - எழுத்து எதிர் விள்க்கத்தை கொண்டது"
+
+#, fuzzy
+#~| msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgstr "Hyponyms - ... is a (kind of) %1"
+
+#, fuzzy
+#~| msgid "Meronyms - %1 has a ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Meronyms - %1 has a ..."
+#~ msgstr "Meronyms - %1 has a ..."
+
+#, fuzzy
+#~| msgid "Holonyms - ... has a %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Holonyms - ... has a %1"
+#~ msgstr "Holonyms - ... has a %1"
+
+#, fuzzy
+#~| msgid "Attributes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attributes"
+#~ msgstr "குணங்கள்"
+
+#, fuzzy
+#~| msgid "Cause To (for some verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cause To (for some verbs only)"
+#~ msgstr "Cause To (for some verbs only)"
+
+#, fuzzy
+#~| msgid "Verb Entailment (for some verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Entailment (for some verbs only)"
+#~ msgstr "வினையை தேவைப்படுத்துதல்(சில வினைகளுக்கு மட்டும்)"
+
+#, fuzzy
+#~| msgid "Familiarity & Polysemy Count"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Familiarity & Polysemy Count"
+#~ msgstr "பழகிய மற்றும் பலவித எண்ணிக்கை"
+
+#, fuzzy
+#~| msgid "Verb Frames (examples of use)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Frames (examples of use)"
+#~ msgstr "வினை சட்டம்( எடுத்துகாட்டு )"
+
+#, fuzzy
+#~| msgid "List of Compound Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "List of Compound Words"
+#~ msgstr "கூட்டு எழுத்து பட்டியல்"
+
+#, fuzzy
+#~| msgid "Overview of Senses"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overview of Senses"
+#~ msgstr "உணர்வு மேல்நோக்கு"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~| "installed on your computer if you want to use it, and 'wn' has to be in "
+#~| "your PATH. You can get WordNet at <a href=\"http://www.cogsci.princeton."
+#~| "edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet "
+#~| "only supports the English language."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~ "installed on your computer if you want to use it, and 'wn' has to be in "
+#~ "your PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+#~ "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+#~ "English language."
+#~ msgstr ""
+#~ "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~ "installed on your computer if you want to use it, and 'wn' has to be in "
+#~ "your PATH. You can get WordNet at <a href=\"http://www.cogsci.princeton."
+#~ "edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet "
+#~ "only supports the English language."
+
+#, fuzzy
+#~| msgid "No match for '%1'."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No match for '%1'."
+#~ msgstr "பொருத்தம் இல்லை '%1"
+
+#~ msgid "Failed to execute grep."
+#~ msgstr "கிரப் நிறைவேற்றுவது தோல்வியடைந்தது  "
+
+#~ msgid "<b>Error:</b> Failed to execute WordNet program 'wn'. Output:<br>%1"
+#~ msgstr ""
+#~ "<b>பிழை</b>    வேடுநெட் நிரல் நிறைவேற்றுவது துண்டித்ததுwn'. Output:<br>%1"

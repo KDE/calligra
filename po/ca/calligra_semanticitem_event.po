@@ -1,0 +1,117 @@
+# Translation of calligra_semanticitem_event.po to Catalan
+# Copyright (C) 2014-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Josep M. Ferrer <txemaq@gmail.com>, 2014, 2016.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2020-07-09 17:20+0200\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Generator: Lokalize 20.07.70\n"
+
+#: KoEventSemanticItemFactory.cpp:31
+#, kde-format
+msgctxt "displayname of the semantic item type Event"
+msgid "Event"
+msgstr "Esdeveniment"
+
+#: KoRdfCalendarEvent.cpp:158
+#, kde-format
+msgid "Area"
+msgstr "Àrea"
+
+#: KoRdfCalendarEvent.cpp:159
+#, kde-format
+msgid "Region"
+msgstr "Regió"
+
+#: KoRdfCalendarEvent.cpp:381
+#, kde-format
+msgid "Select a calendar for saving:"
+msgstr "Seleccioneu un calendari per a desar:"
+
+#: KoRdfCalendarEvent.cpp:401
+#, kde-format
+msgid ""
+"Could not add entry\n"
+"%1"
+msgstr ""
+"No s'ha pogut afegir l'entrada\n"
+"%1"
+
+#: KoRdfCalendarEvent.cpp:428
+#, kde-format
+msgid ""
+"Could not save iCal file\n"
+"%1"
+msgstr ""
+"No s'ha pogut desar el fitxer iCal\n"
+"%1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfCalendarEventEditWidget.ui:20
+#, kde-format
+msgid "&Summary:"
+msgstr "&Resum:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfCalendarEventEditWidget.ui:30
+#, kde-format
+msgid "&Location:"
+msgstr "&Ubicació:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfCalendarEventEditWidget.ui:43
+#, kde-format
+msgid "&Start:"
+msgstr "&Inici:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: KoRdfCalendarEventEditWidget.ui:56
+#, kde-format
+msgid "&End:"
+msgstr "&Final:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tadtab)
+#: KoRdfCalendarEventEditWidget.ui:80
+#, kde-format
+msgid "Time and Date"
+msgstr "Hora i data"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tztab)
+#: KoRdfCalendarEventEditWidget.ui:93
+#, kde-format
+msgid "Timezone"
+msgstr "Zona horària"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:30
+#, kde-format
+msgid "Calendar Event"
+msgstr "Esdeveniment de calendari"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:37
+#, kde-format
+msgid "Edit..."
+msgstr "Edita..."
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:40
+#, kde-format
+msgid "Import event to Calendar"
+msgstr "Importa l'esdeveniment al calendari"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:43
+#, kde-format
+msgid "Export event to iCal file..."
+msgstr "Exporta l'esdeveniment a un fitxer iCal..."

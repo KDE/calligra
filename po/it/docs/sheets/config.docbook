@@ -1,0 +1,166 @@
+<chapter id="configure">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Andrea</firstname
+><surname
+>Celli</surname
+><affiliation
+><address
+><email
+>andrea.celli@libero.it</email
+></address
+></affiliation
+><contrib
+>Traduzione italiana</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Vincenzo</firstname
+><surname
+>Reale</surname
+><affiliation
+><address
+><email
+>smart2128vr@gmail.com</email
+></address
+></affiliation
+><contrib
+>Traduzione italiana</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Configurazione di &sheets;: scorciatoie e barre degli strumenti</title>
+
+<sect1 id="configshort">
+<title
+>Scorciatoie</title>
+<para
+>Per cambiare le combinazioni di tasti (o scorciatoie da tastiera) utilizzate da &sheets;, seleziona <menuchoice
+><guimenu
+>Impostazioni</guimenu
+><guimenuitem
+>Configura le scorciatoie...</guimenuitem
+></menuchoice
+>. Si aprirà una finestra di dialogo simile a questa: </para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Configurazione scorciatoie, immagine 1</phrase>
+</textobject>
+</mediaobject>
+<para
+>Cerca nell'elenco l'azione a cui vuoi cambiare o associare una scorciatoia da tastiera e selezionala con un clic del tasto <mousebutton
+>sinistro</mousebutton
+> del mouse sul nome. Puoi trovare rapidamente l'azione che cerchi scrivendone il nome nella barra di ricerca che vedi in alto. Ora, potrai cambiare la scorciatoia associata all'azione selezionando il pulsante <guilabel
+>Nessuna</guilabel
+>, <guilabel
+>Predefinita</guilabel
+> o <guilabel
+>Personalizzata</guilabel
+>.</para>
+<para
+>Ora basta premere la combinazione di tasti che vuoi utilizzare come scorciatoia, ad esempio <keycombo action="simul"
+> &Ctrl;&Shift;<keycap
+>S</keycap
+></keycombo
+>.</para>
+</sect1>
+
+<sect1 id="configtoolbars">
+<title
+>Barre degli strumenti</title>
+<para
+>&sheets; ha sei barre degli strumenti: <guilabel
+>File</guilabel
+>, <guilabel
+>Modifica</guilabel
+>, <guilabel
+>Navigazione</guilabel
+>, <guilabel
+>Formato</guilabel
+>, <guilabel
+>Caratteri</guilabel
+> e <guilabel
+>Colori/Bordi</guilabel
+>, ciascuna delle quali può essere visibile o no, a seconda delle scelte fatte nel menu <guimenu
+>Impostazioni</guimenu
+>.</para>
+<para
+>Se le barre sono sbloccate, puoi scegliere se una barra degli strumenti debba apparire <guimenuitem
+>In alto</guimenuitem
+>, <guimenuitem
+>A sinistra</guimenuitem
+>, <guimenuitem
+>A destra</guimenuitem
+> o <guimenuitem
+> In basso</guimenuitem
+> nella finestra di &sheets; con un clic <mousebutton
+>destro</mousebutton
+> sulla barra stessa che aprirà il <guilabel
+>menu della barra degli strumenti</guilabel
+> e ti permetterà di fare una selezione nel sotto-menu <guisubmenu
+>Orientazione</guisubmenu
+>. Il <guilabel
+>Menu della barra degli strumenti</guilabel
+> ha degli altri sotto-menu per scegliere se la barra degli strumenti debba mostrare le icone, il testo o entrambe, nonché la dimensione delle icone.</para>
+
+<para
+>Un altro modo per spostare barra degli strumenti è quello di posizionare il puntatore del mouse su una delle due barrette verticali poste all'estremità sinistra di ogni barra degli strumenti e, tenendo premuto il tasto <mousebutton
+>sinistro</mousebutton
+>, trascinare la barra nella posizione desiderata. Quando trascini in questo modo la barra degli strumenti, puoi rilasciare il tasto del mouse quando è ancora ad una certa distanza dai bordi della finestra di &sheets;, otterrai così una barra fluttuante, che non è fissata a nessun particolare punto della finestra di &sheets;, e che può essere spostata anche fuori dalla finestra. Se vuoi riportare una barra fluttuante in una delle posizioni tradizionali, basta un clic del tasto <mousebutton
+>destro</mousebutton
+> sulla sua barra dei titoli per aprire il <guilabel
+>Menu della barra degli strumenti</guilabel
+> e scegliere una delle opzioni del sottomenu <guisubmenu
+>Orientazione</guisubmenu
+>.</para>
+
+<para
+>Selezionando <guimenuitem
+>Configura le barre degli strumenti...</guimenuitem
+> dal menu <guimenu
+>Impostazioni</guimenu
+>, appare una finestra di dialogo che ti permette di aggiungere o togliere dei pulsanti dalle barre degli strumenti di &sheets;.</para>
+<para
+>Per utilizzare la finestra di dialogo <guilabel
+>Configura le barre degli strumenti</guilabel
+>, seleziona prima una delle barre elencata nella casella a scelta multipla <guilabel
+>Barre degli strumenti:</guilabel
+>. La finestra a destra <guilabel
+>Azioni attuali</guilabel
+> mostra i pulsanti attualmente presenti in quella barra degli strumenti. Puoi rimuovere un pulsante selezionandolo in questa finestra e poi azionando la freccia diretta a sinistra o spostarlo utilizzando le frecce rivolte in su o in giù. Per aggiungere un nuovo pulsante alla barra degli strumenti, selezionalo nella lista <guilabel
+>Azioni disponibili</guilabel
+> e poi utilizza la freccia verso destra.</para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

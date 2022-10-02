@@ -1,0 +1,226 @@
+# Bosnian translations for PACKAGE package
+# engleski prevodi za paket PACKAGE.
+# Copyright (C) 2014 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: $2\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2015-02-04 16:02+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: none\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2015-02-05 07:28+0000\n"
+"X-Generator: Launchpad (build 17331)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: KoEventSemanticItemFactory.cpp:31
+#, kde-format
+msgctxt "displayname of the semantic item type Event"
+msgid "Event"
+msgstr "Događaj"
+
+#: KoRdfCalendarEvent.cpp:158
+#, kde-format
+msgid "Area"
+msgstr "Područje"
+
+#: KoRdfCalendarEvent.cpp:159
+#, kde-format
+msgid "Region"
+msgstr "Region"
+
+#: KoRdfCalendarEvent.cpp:381
+#, kde-format
+msgid "Select a calendar for saving:"
+msgstr "Odaberi kalendar za snimanje:"
+
+#: KoRdfCalendarEvent.cpp:401
+#, kde-format
+msgid ""
+"Could not add entry\n"
+"%1"
+msgstr ""
+"Unos nije mogao biti dodat\n"
+"%1"
+
+#: KoRdfCalendarEvent.cpp:428
+#, kde-format
+msgid ""
+"Could not save iCal file\n"
+"%1"
+msgstr ""
+"Ne može se snimti iCal datoteka\n"
+"%1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfCalendarEventEditWidget.ui:20
+#, kde-format
+msgid "&Summary:"
+msgstr "&Sumarno:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfCalendarEventEditWidget.ui:30
+#, kde-format
+msgid "&Location:"
+msgstr "&Lokacija:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfCalendarEventEditWidget.ui:43
+#, kde-format
+msgid "&Start:"
+msgstr "&Početak:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: KoRdfCalendarEventEditWidget.ui:56
+#, kde-format
+msgid "&End:"
+msgstr "&Kraj:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tadtab)
+#: KoRdfCalendarEventEditWidget.ui:80
+#, kde-format
+msgid "Time and Date"
+msgstr "Vrijeme i Datum"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tztab)
+#: KoRdfCalendarEventEditWidget.ui:93
+#, kde-format
+msgid "Timezone"
+msgstr "Vremenska zona"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:30
+#, kde-format
+msgid "Calendar Event"
+msgstr "Kalendar događaja"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:37
+#, kde-format
+msgid "Edit..."
+msgstr "Izmijeni..."
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:40
+#, kde-format
+msgid "Import event to Calendar"
+msgstr "Uvezi događaj u kalendar"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:43
+#, kde-format
+msgid "Export event to iCal file..."
+msgstr "Izvezi događaj kao iCal datoteku..."
+
+#, fuzzy
+#~| msgid "&Summary:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Summary:"
+#~ msgstr "&Sumarno:"
+
+#, fuzzy
+#~| msgid "&Location:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Location:"
+#~ msgstr "&Lokacija:"
+
+#, fuzzy
+#~| msgid "&Start:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Start:"
+#~ msgstr "&Početak:"
+
+#, fuzzy
+#~| msgid "&End:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&End:"
+#~ msgstr "&Kraj:"
+
+#, fuzzy
+#~| msgid "Time and Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time and Date"
+#~ msgstr "Vrijeme i Datum"
+
+#, fuzzy
+#~| msgid "Timezone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Timezone"
+#~ msgstr "Vremenska zona"
+
+#, fuzzy
+#~| msgctxt "displayname of the semantic item type Event"
+#~| msgid "Event"
+#~ msgctxt "(qtundo-format) displayname of the semantic item type Event"
+#~ msgid "Event"
+#~ msgstr "Događaj"
+
+#, fuzzy
+#~| msgid "Area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area"
+#~ msgstr "Područje"
+
+#, fuzzy
+#~| msgid "Region"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Region"
+#~ msgstr "Region"
+
+#, fuzzy
+#~| msgid "Select a calendar for saving:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select a calendar for saving:"
+#~ msgstr "Odaberi kalendar za snimanje:"
+
+#, fuzzy
+#~| msgid ""
+#~| "Could not add entry\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not add entry\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Unos nije mogao biti dodat\n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid ""
+#~| "Could not save iCal file\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not save iCal file\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Ne može se snimti iCal datoteka\n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid "Calendar Event"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Event"
+#~ msgstr "Kalendar događaja"
+
+#, fuzzy
+#~| msgid "Edit..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit..."
+#~ msgstr "Izmijeni..."
+
+#, fuzzy
+#~| msgid "Import event to Calendar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import event to Calendar"
+#~ msgstr "Uvezi događaj u kalendar"
+
+#, fuzzy
+#~| msgid "Export event to iCal file..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export event to iCal file..."
+#~ msgstr "Izvezi događaj kao iCal datoteku..."

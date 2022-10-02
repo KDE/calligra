@@ -1,0 +1,345 @@
+# translation of calligra_textediting_thesaurus.po to Slovak
+# Stanislav Višňovský <visnovsky@nenya.ms.mff.cuni.cz>, 2002.
+# Stanislav Visnovsky <visnovsky@kde.org>, 2003.
+# Roman Paholik <wizzardsk@gmail.com>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra_textediting_thesaurus\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2016-11-20 19:51+0100\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: Thesaurus.cpp:81
+#, kde-format
+msgid "(No match)"
+msgstr "(Nič nenájdené)"
+
+#: Thesaurus.cpp:91
+#, kde-format
+msgid "&Search for:"
+msgstr "&Hľadať:"
+
+#: Thesaurus.cpp:94
+#, kde-format
+msgid "S&earch"
+msgstr "&Hľadať"
+
+#: Thesaurus.cpp:101
+#, kde-format
+msgctxt "@action:button Go back to the previous word in history"
+msgid "Back"
+msgstr "Späť"
+
+#: Thesaurus.cpp:105
+#, kde-format
+msgctxt "@action:button Go forward to the next word in history"
+msgid "Forward"
+msgstr "Dopredu"
+
+#: Thesaurus.cpp:108
+#, kde-format
+msgid "Change Language..."
+msgstr "Zmeniť jazyk..."
+
+#: Thesaurus.cpp:122
+#, kde-format
+msgid "&Thesaurus"
+msgstr "&Thesaurus"
+
+#: Thesaurus.cpp:126
+#, kde-format
+msgid "Synonyms"
+msgstr "Synonymá"
+
+#: Thesaurus.cpp:133
+#, kde-format
+msgid "More General Words"
+msgstr "Všeobecnejšie slová"
+
+#: Thesaurus.cpp:140
+#, kde-format
+msgid "More Specific Words"
+msgstr "Presnejšie slová"
+
+#: Thesaurus.cpp:170
+#, kde-format
+msgid "&Wordnet"
+msgstr "&WordNet"
+
+#: Thesaurus.cpp:192
+#, kde-format
+msgid "&Replace with:"
+msgstr "&Nahradiť:"
+
+#: Thesaurus.cpp:255
+#, kde-format
+msgid "&Replace"
+msgstr "&Nahradiť"
+
+#: Thesaurus.cpp:267
+#, kde-format
+msgid "Replace Word"
+msgstr "Nahradiť slovo"
+
+#: Thesaurus.cpp:295
+#, kde-format
+msgid "Related Words - %1"
+msgstr "Súvisiace slová - %1"
+
+#: Thesaurus.cpp:409
+#, kde-format
+msgid ""
+"The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+"select a thesaurus file."
+msgstr ""
+"Súbor slovníka synoným '%1' sa nepodarilo nájsť. Prosím, použite 'Zmeniť "
+"jazyk...' a vyberte súbor so slovníkom."
+
+#: Thesaurus.cpp:429
+#, kde-format
+msgid "<b>Error:</b> Failed to execute grep."
+msgstr "<b>Chyba:</b> Zlyhalo spustenie grep."
+
+#: Thesaurus.cpp:581
+#, kde-format
+msgid "Synonyms/Hypernyms - Ordered by Frequency"
+msgstr "Synonymá - Utriedené podľa frekvencie"
+
+#: Thesaurus.cpp:582
+#, kde-format
+msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+msgstr "Synonymá - Utriedené podľa podobnosti významu (iba slovesá)"
+
+#: Thesaurus.cpp:583
+#, kde-format
+msgid "Antonyms - Words with Opposite Meanings"
+msgstr "Antonymá - Slová s opačným významom"
+
+#: Thesaurus.cpp:584
+#, kde-format
+msgid "Hyponyms - ... is a (kind of) %1"
+msgstr "Hyponymá - ... je (niečo ako) %1"
+
+#: Thesaurus.cpp:585
+#, kde-format
+msgid "Meronyms - %1 has a ..."
+msgstr "Meronymá - %1 má ..."
+
+#: Thesaurus.cpp:587
+#, kde-format
+msgid "Holonyms - ... has a %1"
+msgstr "Holonymá - ... má %1"
+
+#: Thesaurus.cpp:588
+#, kde-format
+msgid "Attributes"
+msgstr "Atribúty"
+
+#: Thesaurus.cpp:589
+#, kde-format
+msgid "Cause To (for some verbs only)"
+msgstr "Dôvod k (iba pre niektoré slovesá)"
+
+#: Thesaurus.cpp:590
+#, kde-format
+msgid "Verb Entailment (for some verbs only)"
+msgstr "Dôsledok (iba pre niektoré slovesá)"
+
+#: Thesaurus.cpp:591
+#, kde-format
+msgid "Familiarity & Polysemy Count"
+msgstr "Hodnotenie bežnosti a viacvýznamovosti"
+
+#: Thesaurus.cpp:593
+#, kde-format
+msgid "Verb Frames (examples of use)"
+msgstr "Príklady použitia slovesa"
+
+#: Thesaurus.cpp:594
+#, kde-format
+msgid "List of Compound Words"
+msgstr "Zoznam zložených slov"
+
+#: Thesaurus.cpp:595
+#, kde-format
+msgid "Overview of Senses"
+msgstr "Prehľad významov"
+
+#: Thesaurus.cpp:623
+#, kde-format
+msgid ""
+"<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+"installed on your computer if you want to use it, and 'wn' has to be in your "
+"PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+"\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+"English language."
+msgstr ""
+"<b>Chyba:</b> Nepodarilo sa spustiť program 'wn' pre WordNet. WordNet musíte "
+"mať nainštalovaný, ak ho chcete používať, a 'wn' musí byť vo vašej premennej "
+"PATH. WordNet nájdete na <a href=\"http://wordnet.princeton.edu/\">http://"
+"wordnet.princeton.edu/</a>. Nezabúdajte, že WordNet podporuje iba angličtinu."
+
+#: Thesaurus.cpp:635
+#, kde-format
+msgid "No match for '%1'."
+msgstr "Nič nenájdené pre '%1'."
+
+#~ msgctxt "@action:button Close thesaurus dialog"
+#~ msgid "&Close"
+#~ msgstr "&Zavrieť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(No match)"
+#~ msgstr "(Nič nenájdené)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Search for:"
+#~ msgstr "&Hľadať:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&earch"
+#~ msgstr "&Hľadať"
+
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go back to the previous word in history"
+#~ msgid "Back"
+#~ msgstr "Späť"
+
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go forward to the next word in history"
+#~ msgid "Forward"
+#~ msgstr "Dopredu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Language..."
+#~ msgstr "Zmeniť jazyk..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Thesaurus"
+#~ msgstr "&Thesaurus"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms"
+#~ msgstr "Synonymá"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More General Words"
+#~ msgstr "Všeobecnejšie slová"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More Specific Words"
+#~ msgstr "Presnejšie slová"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Wordnet"
+#~ msgstr "&WordNet"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace with:"
+#~ msgstr "&Nahradiť s:"
+
+#~ msgctxt "(qtundo-format) @action:button Close thesaurus dialog"
+#~ msgid "&Close"
+#~ msgstr "&Zavrieť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace"
+#~ msgstr "&Nahradiť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace Word"
+#~ msgstr "Nahradiť slovo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Related Words - %1"
+#~ msgstr "Súvisiace slová - %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+#~ "select a thesaurus file."
+#~ msgstr ""
+#~ "Súbor slovníka synoným '%1' sa nepodarilo nájsť. Prosím, použite 'Zmeniť "
+#~ "jazyk...' a vyberte súbor so slovníkom."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<b>Error:</b> Failed to execute grep."
+#~ msgstr "<b>Chyba:</b> Zlyhalo spustenie grep."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgstr "Synonymá - Utriedené podľa frekvencie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgstr "Synonymá - Utriedené podľa podobnosti významu (iba slovesá)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Antonyms - Words with Opposite Meanings"
+#~ msgstr "Antonymá - Slová s opačným významom"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgstr "Hyponymá - ... je (niečo ako) %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Meronyms - %1 has a ..."
+#~ msgstr "Meronymá - %1 má ..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Holonyms - ... has a %1"
+#~ msgstr "Holonymá - ... má %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attributes"
+#~ msgstr "Atribúty"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cause To (for some verbs only)"
+#~ msgstr "Dôvod k (iba pre niektoré slovesá)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Entailment (for some verbs only)"
+#~ msgstr "Dôsledok (iba pre niektoré slovesá)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Familiarity & Polysemy Count"
+#~ msgstr "Hodnotenie bežnosti a viacvýznamovosti"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Frames (examples of use)"
+#~ msgstr "Príklady použitia slovesa"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "List of Compound Words"
+#~ msgstr "Zoznam zložených slov"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overview of Senses"
+#~ msgstr "Prehľad významov"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~ "installed on your computer if you want to use it, and 'wn' has to be in "
+#~ "your PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+#~ "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+#~ "English language."
+#~ msgstr ""
+#~ "<b>Chyba:</b> Nepodarilo sa spustiť program 'wn' pre WordNet. WordNet "
+#~ "musíte mať nainštalovaný, ak ho chcete používať, a 'wn' musí byť vo vašej "
+#~ "premennej PATH. WordNet nájdete na <a href=\"http://wordnet.princeton.edu/"
+#~ "\">http://wordnet.princeton.edu/</a>. Nezabúdajte, že WordNet podporuje "
+#~ "iba angličtinu."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No match for '%1'."
+#~ msgstr "Nič nenájdené pre '%1'."

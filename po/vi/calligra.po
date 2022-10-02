@@ -1,0 +1,5849 @@
+# Copyright (C).
+#
+# Hoàng Đức Hiếu <hieu.d.hoang@gmail.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-23 00:46+0000\n"
+"PO-Revision-Date: 2008-01-27 21:10+0700\n"
+"Last-Translator: Hoàng Đức Hiếu <hieu.d.hoang@gmail.com>\n"
+"Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KAider 0.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, fuzzy, kde-format
+#| msgid "Color name:"
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Tên màu:"
+
+#, fuzzy, kde-format
+#| msgid "Color name:"
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "Tên màu:"
+
+#: basicflakes/plugin/KoCreatePathToolFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Draw path"
+msgstr "Ngắt đường con"
+
+#: basicflakes/plugin/KoPencilToolFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Freehand path"
+msgstr "Ngắt đường con"
+
+#: basicflakes/tools/KoCreatePathTool.cpp:448
+#, kde-format
+msgid "Angle snapping delta:"
+msgstr ""
+
+#: basicflakes/tools/KoCreatePathTool.cpp:455
+#, kde-format
+msgid "Activate angle snap:"
+msgstr ""
+
+#: basicflakes/tools/KoCreatePathTool.cpp:463
+#, fuzzy, kde-format
+msgid "Angle Constraints"
+msgstr "Thay đổi Liên hệ"
+
+#: basicflakes/tools/KoCreatePathTool.cpp:467
+#: basicflakes/tools/KoPencilTool.cpp:336 widgets/KoGradientEditWidget.cpp:147
+#, fuzzy, kde-format
+#| msgid "Lines"
+msgid "Line"
+msgstr "Các dòng"
+
+#: basicflakes/tools/KoPencilTool.cpp:273
+#, fuzzy, kde-format
+#| msgid "Position:"
+msgid "Precision:"
+msgstr "Vị trí:"
+
+#: basicflakes/tools/KoPencilTool.cpp:275
+#, kde-format
+msgctxt "The raw line data"
+msgid "Raw"
+msgstr ""
+
+#: basicflakes/tools/KoPencilTool.cpp:276
+#: flake/KoConnectionShapeConfigWidget.cpp:20
+#, kde-format
+msgid "Curve"
+msgstr "Cong"
+
+#: basicflakes/tools/KoPencilTool.cpp:277
+#: flake/KoConnectionShapeConfigWidget.cpp:19
+#, kde-format
+msgid "Straight"
+msgstr "Thẳng"
+
+#: basicflakes/tools/KoPencilTool.cpp:286
+#: basicflakes/tools/KoPencilTool.cpp:292
+#, kde-format
+msgid "Optimize"
+msgstr ""
+
+#: basicflakes/tools/KoPencilTool.cpp:298
+#, kde-format
+msgid "Exactness:"
+msgstr ""
+
+#: basicflakes/tools/KoPencilTool.cpp:331
+#: basicflakes/tools/KoPencilTool.cpp:332
+#, kde-format
+msgid "Pencil"
+msgstr ""
+
+#: flake/commands/KoConnectionShapeTypeCommand.cpp:18
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Connection"
+msgstr "Thay đổi Liên hệ"
+
+#: flake/commands/KoParameterHandleMoveCommand.cpp:21
+#, fuzzy
+#| msgid "Change parameter"
+msgctxt "(qtundo-format)"
+msgid "Change parameter"
+msgstr "Thay đổi tham số"
+
+#: flake/commands/KoParameterToPathCommand.cpp:31
+#: flake/commands/KoParameterToPathCommand.cpp:40
+#, fuzzy
+#| msgid "Convert to Path"
+msgctxt "(qtundo-format)"
+msgid "Convert to Path"
+msgstr "Chuyển đổi sang Đường"
+
+#: flake/commands/KoPathBreakAtPointCommand.cpp:29
+#, fuzzy
+#| msgid "Break subpath at points"
+msgctxt "(qtundo-format)"
+msgid "Break subpath at points"
+msgstr "Ngắt đường con tại các điểm"
+
+#: flake/commands/KoPathCombineCommand.cpp:45
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Combine paths"
+msgstr "Tổng hợp các đường"
+
+#: flake/commands/KoPathControlPointMoveCommand.cpp:28
+#, fuzzy
+#| msgid "Move control point"
+msgctxt "(qtundo-format)"
+msgid "Move control point"
+msgstr "Di chuyển điểm điều khiển"
+
+#: flake/commands/KoPathFillRuleCommand.cpp:31
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set fill rule"
+msgstr "Đặt luật tô màu"
+
+#: flake/commands/KoPathPointInsertCommand.cpp:66
+#, fuzzy
+#| msgid "Insert point"
+msgctxt "(qtundo-format)"
+msgid "Insert points"
+msgstr "Chèn điểm"
+
+#: flake/commands/KoPathPointMergeCommand.cpp:139
+#, fuzzy
+#| msgid "Merge points"
+msgctxt "(qtundo-format)"
+msgid "Merge points"
+msgstr "Nhập các điểm"
+
+#: flake/commands/KoPathPointMoveCommand.cpp:29
+#: flake/commands/KoPathPointMoveCommand.cpp:45
+#, fuzzy
+#| msgid "Move points"
+msgctxt "(qtundo-format)"
+msgid "Move points"
+msgstr "Di chuyển các điểm"
+
+#: flake/commands/KoPathPointRemoveCommand.cpp:91
+#: flake/commands/KoPathPointRemoveCommand.cpp:120
+#, fuzzy
+#| msgid "Remove points"
+msgctxt "(qtundo-format)"
+msgid "Remove points"
+msgstr "Xoá các điểm"
+
+#: flake/commands/KoPathPointTypeCommand.cpp:35
+#, fuzzy
+#| msgid "Set point type"
+msgctxt "(qtundo-format)"
+msgid "Set point type"
+msgstr "Đặt kiểu điểm"
+
+#: flake/commands/KoPathReverseCommand.cpp:38
+#, fuzzy
+#| msgid "Reverse paths"
+msgctxt "(qtundo-format)"
+msgid "Reverse paths"
+msgstr "Đảo ngược các đường"
+
+#: flake/commands/KoPathSegmentBreakCommand.cpp:28
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Break subpath"
+msgstr "Ngắt đường con"
+
+#: flake/commands/KoPathSegmentTypeCommand.cpp:121
+#, fuzzy
+#| msgid "Change segments to curves"
+msgctxt "(qtundo-format)"
+msgid "Change segments to curves"
+msgstr "Thay các đoạn thẳng bằng các đường cong"
+
+#: flake/commands/KoPathSegmentTypeCommand.cpp:123
+#, fuzzy
+#| msgid "Change segments to lines"
+msgctxt "(qtundo-format)"
+msgid "Change segments to lines"
+msgstr "Thay các đoạn thẳng bằng các đường thẳng"
+
+#: flake/commands/KoPathShapeMarkerCommand.cpp:20
+#, fuzzy
+#| msgid "Set border"
+msgctxt "(qtundo-format)"
+msgid "Set marker"
+msgstr "Đặt viền"
+
+#: flake/commands/KoShapeAlignCommand.cpp:74
+#, fuzzy
+#| msgid "Align shapes"
+msgctxt "(qtundo-format)"
+msgid "Align shapes"
+msgstr "Dóng các hình"
+
+#: flake/commands/KoShapeBackgroundCommand.cpp:50
+#: flake/commands/KoShapeBackgroundCommand.cpp:61
+#: flake/commands/KoShapeBackgroundCommand.cpp:76
+#, fuzzy
+#| msgid "Set background"
+msgctxt "(qtundo-format)"
+msgid "Set background"
+msgstr "Đặt nền"
+
+#: flake/commands/KoShapeClipCommand.cpp:57
+#: flake/commands/KoShapeClipCommand.cpp:73
+#, fuzzy
+#| msgid "Ellipse Shape"
+msgctxt "(qtundo-format)"
+msgid "Clip Shape"
+msgstr "Hình êlíp"
+
+#: flake/commands/KoShapeCreateCommand.cpp:39
+#, fuzzy
+#| msgid "Create shape"
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Tạo đường"
+
+#: flake/commands/KoShapeDeleteCommand.cpp:43
+#, fuzzy
+#| msgid "Delete shape"
+msgctxt "(qtundo-format) Delete one shape"
+msgid "Delete shape"
+msgstr "Xoá hình"
+
+#: flake/commands/KoShapeDeleteCommand.cpp:56
+#, fuzzy
+#| msgid "Delete shape"
+msgctxt "(qtundo-format)"
+msgid "Delete shape"
+msgid_plural "Delete shapes"
+msgstr[0] "Xoá hình"
+
+#: flake/commands/KoShapeDistributeCommand.cpp:117
+#, fuzzy
+#| msgid "Distribute shapes"
+msgctxt "(qtundo-format)"
+msgid "Distribute shapes"
+msgstr "Phân phối các hình"
+
+#: flake/commands/KoShapeGroupCommand.cpp:82
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Group shapes"
+msgstr "Nhóm các hình"
+
+#: flake/commands/KoShapeGroupCommand.cpp:84
+msgctxt "(qtundo-format)"
+msgid "Add shapes to group"
+msgstr ""
+
+#: flake/commands/KoShapeKeepAspectRatioCommand.cpp:17
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Keep Aspect Ratio"
+msgstr "Lưu Tỉ lệ ngang/dọc"
+
+#: flake/commands/KoShapeLockCommand.cpp:23
+#, fuzzy
+#| msgid "Lock shapes"
+msgctxt "(qtundo-format)"
+msgid "Lock shapes"
+msgstr "Khoá các hình"
+
+#: flake/commands/KoShapeMoveCommand.cpp:36
+#: flake/commands/KoShapeMoveCommand.cpp:54
+#, fuzzy
+#| msgid "Move shapes"
+msgctxt "(qtundo-format)"
+msgid "Move shapes"
+msgstr "Di chuyển các đường"
+
+#: flake/commands/KoShapeRenameCommand.cpp:28
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename Shape"
+msgstr "Tạo mẫu"
+
+#: flake/commands/KoShapeReorderCommand.cpp:40
+#, fuzzy
+#| msgid "Reorder shapes"
+msgctxt "(qtundo-format)"
+msgid "Reorder shapes"
+msgstr "Sắp xếp lại các đường"
+
+#: flake/commands/KoShapeRunAroundCommand.cpp:59
+#, fuzzy
+#| msgid "Change parameter"
+msgctxt "(qtundo-format)"
+msgid "Change Shape RunAround"
+msgstr "Thay đổi tham số"
+
+#: flake/commands/KoShapeShadowCommand.cpp:54
+#: flake/commands/KoShapeShadowCommand.cpp:71
+#: flake/commands/KoShapeShadowCommand.cpp:82
+#, fuzzy
+#| msgid "Show &Grid"
+msgctxt "(qtundo-format)"
+msgid "Set Shadow"
+msgstr "Hiện &Lưới"
+
+#: flake/commands/KoShapeShearCommand.cpp:38
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Shear shapes"
+msgstr "Làm méo các hình"
+
+#: flake/commands/KoShapeSizeCommand.cpp:30
+#, fuzzy
+#| msgid "Reorder shapes"
+msgctxt "(qtundo-format)"
+msgid "Resize shapes"
+msgstr "Sắp xếp lại các đường"
+
+#: flake/commands/KoShapeStrokeCommand.cpp:59
+#: flake/commands/KoShapeStrokeCommand.cpp:78
+#: flake/commands/KoShapeStrokeCommand.cpp:89
+#, fuzzy
+#| msgid "Set border"
+msgctxt "(qtundo-format)"
+msgid "Set stroke"
+msgstr "Đặt viền"
+
+#: flake/commands/KoShapeTransparencyCommand.cpp:35
+#: flake/commands/KoShapeTransparencyCommand.cpp:46
+#: flake/commands/KoShapeTransparencyCommand.cpp:59
+#, fuzzy
+#| msgid "Opacity"
+msgctxt "(qtundo-format)"
+msgid "Set opacity"
+msgstr "Độ trong suốt"
+
+#: flake/commands/KoShapeUnclipCommand.cpp:107
+#, fuzzy
+#| msgid "Ellipse Shape"
+msgctxt "(qtundo-format)"
+msgid "Unclip Shape"
+msgstr "Hình êlíp"
+
+#: flake/commands/KoShapeUnclipCommand.cpp:116
+#, fuzzy
+#| msgid "Ellipse Shape"
+msgctxt "(qtundo-format)"
+msgid "Unclip Shapes"
+msgstr "Hình êlíp"
+
+#: flake/commands/KoShapeUngroupCommand.cpp:46
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Ungroup shapes"
+msgstr "Bỏ nhóm các hình"
+
+#: flake/commands/KoSubpathJoinCommand.cpp:38
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Close subpath"
+msgstr "Đóng đường con"
+
+#: flake/commands/KoSubpathJoinCommand.cpp:40
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Join subpaths"
+msgstr "Nhập các đường con"
+
+#: flake/commands/KoSubpathRemoveCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Remove subpath"
+msgstr "Xoá đường con"
+
+#: flake/KoConnectionShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Standard"
+msgstr "Tiêu chuẩn"
+
+#: flake/KoConnectionShapeConfigWidget.cpp:18
+#, kde-format
+msgid "Lines"
+msgstr "Các dòng"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#. i18n: ectx: property (text), widget (QLabel, lblTypeDesc)
+#: flake/KoConnectionShapeConfigWidget.ui:17
+#: widgets/koDocumentInfoAboutWidget.ui:141
+#: widgets/KoGradientEditWidget.cpp:152
+#, kde-format
+msgid "Type:"
+msgstr "Loại:"
+
+#: flake/KoConnectionShapeFactory.cpp:22
+#, fuzzy, kde-format
+#| msgid "Time:"
+msgid "Tie"
+msgstr "Thời gian:"
+
+#: flake/KoConnectionShapeFactory.cpp:24
+#, fuzzy, kde-format
+msgid "A connection between two other shapes"
+msgstr "Hình để thể hiện một kết nối giữa hai hình khác"
+
+#: flake/KoGridData.cpp:210
+#, fuzzy, kde-format
+#| msgid "Show &Grid"
+msgid "Show Grid"
+msgstr "Hiện &Lưới"
+
+#: flake/KoGridData.cpp:211
+#, fuzzy, kde-format
+#| msgid "Show &Grid"
+msgid "Shows or hides grid"
+msgstr "Hiện &Lưới"
+
+#: flake/KoPathShapeFactory.cpp:22
+#, fuzzy, kde-format
+msgid "Simple path shape"
+msgstr "Làm méo các hình"
+
+#: flake/KoPathShapeFactory.cpp:24
+#, fuzzy, kde-format
+msgid "A simple path shape"
+msgstr "Làm méo các hình"
+
+#: flake/KoShapeController.cpp:60 rdf/InsertSemanticObjectCreateAction.cpp:46
+#: rdf/InsertSemanticObjectReferenceAction.cpp:51
+#: text/InsertTextReferenceAction.cpp:50 text/InsertVariableAction.cpp:45
+#, fuzzy, kde-format
+#| msgid "Tool Options"
+msgid "%1 Options"
+msgstr "Cấu hình Công cụ"
+
+#: flake/KoShapePaste.cpp:155
+#, fuzzy
+#| msgid "Paste Shapes"
+msgctxt "(qtundo-format)"
+msgid "Paste Shapes"
+msgstr "Dán Các hình"
+
+#: flake/KoToolManager.cpp:451
+#, fuzzy, kde-format
+#| msgid "Copy the current page"
+msgid "Active tool: %1"
+msgstr "Chép trang hiện tại"
+
+#: flake/KoToolProxy.cpp:587
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Paste Image"
+msgstr "Trang Dán"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nodeSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:30
+#, fuzzy, kde-format
+msgid "Nodes"
+msgstr "Không có"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, extensionSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:43
+#, kde-format
+msgid "Extension of lines"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, boundingBoxSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:56
+#, kde-format
+msgid "Bounding box of shape"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, snapDistance)
+#: flake/SnapGuideConfigWidget.ui:72
+#, kde-format
+msgid "Proximity distance where snapping happens"
+msgstr ""
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, snapDistance)
+#: flake/SnapGuideConfigWidget.ui:75
+#, kde-format
+msgid " px"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, orthogonalSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:85
+#, kde-format
+msgid "Orthogonal"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, intersectionSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:98
+#, kde-format
+msgid "Intersection of lines"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lineGuideSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:111
+#, fuzzy, kde-format
+#| msgid "Guide Lines"
+msgid "Guide lines"
+msgstr "Các đường dóng"
+
+#: flake/svg/SvgShapeFactory.cpp:23
+#, kde-format
+msgid "Embedded svg shape"
+msgstr ""
+
+#: flake/tools/KoCreateShapesToolFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Create object"
+msgstr "Mở tài liệu"
+
+#: flake/tools/KoPanToolFactory.cpp:17
+#, kde-format
+msgid "Pan"
+msgstr ""
+
+#: flake/tools/KoPathSegmentChangeStrategy.cpp:133
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Segment"
+msgstr "Thay đổi Liên hệ"
+
+#: flake/tools/KoPathTool.cpp:97
+#, kde-format
+msgid "Corner point"
+msgstr "Điểm góc"
+
+#: flake/tools/KoPathTool.cpp:102
+#, fuzzy, kde-format
+#| msgid "Remove point"
+msgid "Smooth point"
+msgstr "Xoá điểm"
+
+#: flake/tools/KoPathTool.cpp:107
+#, kde-format
+msgid "Symmetric Point"
+msgstr "Điểm Đối xứng"
+
+#: flake/tools/KoPathTool.cpp:112
+#, fuzzy, kde-format
+#| msgid "Merge points"
+msgid "Make curve point"
+msgstr "Nhập các điểm"
+
+#: flake/tools/KoPathTool.cpp:116
+#, fuzzy, kde-format
+#| msgid "Merge points"
+msgid "Make line point"
+msgstr "Nhập các điểm"
+
+#: flake/tools/KoPathTool.cpp:120
+#, fuzzy, kde-format
+msgid "Segment to Line"
+msgstr "Đoạn thẳng tới Đường thẳng"
+
+#: flake/tools/KoPathTool.cpp:125
+#, kde-format
+msgid "Segment to Curve"
+msgstr "Đoạn thẳng tới Đường cong"
+
+#: flake/tools/KoPathTool.cpp:130
+#, kde-format
+msgid "Insert point"
+msgstr "Chèn điểm"
+
+#: flake/tools/KoPathTool.cpp:135
+#, kde-format
+msgid "Remove point"
+msgstr "Xoá điểm"
+
+#: flake/tools/KoPathTool.cpp:140
+#, fuzzy, kde-format
+msgid "Break at point"
+msgstr "Ngắt tại điểm"
+
+#: flake/tools/KoPathTool.cpp:144
+#, fuzzy, kde-format
+msgid "Break at segment"
+msgstr "Ngắt tại đoạn thẳng"
+
+#: flake/tools/KoPathTool.cpp:148
+#, fuzzy, kde-format
+msgid "Join with segment"
+msgstr "Nhập vào đoạn thẳng"
+
+#: flake/tools/KoPathTool.cpp:153
+#, kde-format
+msgid "Merge points"
+msgstr "Nhập các điểm"
+
+#: flake/tools/KoPathTool.cpp:157
+#, kde-format
+msgid "To Path"
+msgstr "Tới đường"
+
+#: flake/tools/KoPathTool.cpp:190
+#, fuzzy, kde-format
+#| msgid "Curve"
+msgid "Line/Curve"
+msgstr "Cong"
+
+#: flake/tools/KoPathTool.cpp:528
+#, fuzzy, kde-format
+#| msgid "Move control point"
+msgid "Drag to move handle."
+msgstr "Di chuyển điểm điều khiển"
+
+#: flake/tools/KoPathTool.cpp:592
+#, fuzzy, kde-format
+#| msgid "Move control point"
+msgid "Drag to move point. Shift click to change point type."
+msgstr "Di chuyển điểm điều khiển"
+
+#: flake/tools/KoPathTool.cpp:594
+#, fuzzy, kde-format
+#| msgid "Move control point"
+msgid "Drag to move control point."
+msgstr "Di chuyển điểm điều khiển"
+
+#: flake/tools/KoPathTool.cpp:619
+#, kde-format
+msgid "Drag to change curve directly. Double click to insert new path point."
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:626
+#, fuzzy, kde-format
+#| msgid "Break subpath at points"
+msgid "Press B to break path at selected point."
+msgstr "Ngắt đường con tại các điểm"
+
+#: flake/tools/KoPathTool.cpp:628
+#, fuzzy, kde-format
+#| msgid "Break subpath at points"
+msgid "Press B to break path at selected segments."
+msgstr "Ngắt đường con tại các điểm"
+
+#: flake/tools/KoPathToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgid "Path editing"
+msgstr "Cảnh báo"
+
+#: flake/tools/KoZoomToolFactory.cpp:17 widgets/KoZoomController_p.h:28
+#: widgets/KoZoomWidget.cpp:52
+#, kde-format
+msgid "Zoom"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
+#: flake/tools/KoZoomToolWidget.ui:20
+#, kde-format
+msgid "Zoom In"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
+#: flake/tools/KoZoomToolWidget.ui:30
+#, kde-format
+msgid "Zoom Out"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, corner)
+#. i18n: ectx: property (text), widget (QToolButton, smooth)
+#. i18n: ectx: property (text), widget (QToolButton, symmetric)
+#. i18n: ectx: property (text), widget (QToolButton, lineSegment)
+#. i18n: ectx: property (text), widget (QToolButton, curveSegment)
+#. i18n: ectx: property (text), widget (QToolButton, linePoint)
+#. i18n: ectx: property (text), widget (QToolButton, curvePoint)
+#. i18n: ectx: property (text), widget (QToolButton, addPoint)
+#. i18n: ectx: property (text), widget (QToolButton, removePoint)
+#. i18n: ectx: property (text), widget (QToolButton, breakPoint)
+#. i18n: ectx: property (text), widget (QToolButton, breakSegment)
+#. i18n: ectx: property (text), widget (QToolButton, joinSegment)
+#. i18n: ectx: property (text), widget (QToolButton, mergePoints)
+#. i18n: ectx: property (text), widget (QToolButton, add)
+#. i18n: ectx: property (text), widget (QToolButton, remove)
+#. i18n: ectx: property (text), widget (QToolButton, open)
+#. i18n: ectx: property (text), widget (QToolButton, save)
+#: flake/tools/PathToolOptionWidgetBase.ui:39
+#: flake/tools/PathToolOptionWidgetBase.ui:46
+#: flake/tools/PathToolOptionWidgetBase.ui:53
+#: flake/tools/PathToolOptionWidgetBase.ui:73
+#: flake/tools/PathToolOptionWidgetBase.ui:80
+#: flake/tools/PathToolOptionWidgetBase.ui:87
+#: flake/tools/PathToolOptionWidgetBase.ui:94
+#: flake/tools/PathToolOptionWidgetBase.ui:101
+#: flake/tools/PathToolOptionWidgetBase.ui:108
+#: flake/tools/PathToolOptionWidgetBase.ui:115
+#: flake/tools/PathToolOptionWidgetBase.ui:122
+#: flake/tools/PathToolOptionWidgetBase.ui:129
+#: flake/tools/PathToolOptionWidgetBase.ui:136 widgets/KoEditColorSet.ui:48
+#: widgets/KoEditColorSet.ui:58 widgets/KoEditColorSet.ui:68
+#: widgets/KoEditColorSet.ui:78
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QPushButton, convertToPath)
+#: flake/tools/PathToolOptionWidgetBase.ui:186
+#, kde-format
+msgid "Convert To Path"
+msgstr "Hoán chuyển thành Đường"
+
+#: kross/KoScriptingDocker.cpp:78 kross/KoScriptingPart.cpp:82
+#, fuzzy, kde-format
+#| msgid "Object"
+msgid "Scripts"
+msgstr "Đối tượng"
+
+#: kross/KoScriptingDocker.cpp:113 kross/KoScriptManager.cpp:146
+#, fuzzy, kde-format
+#| msgid "Import lines:"
+msgid "Script Manager"
+msgstr "Nhập các dòng:"
+
+#: kross/KoScriptingPart.cpp:78
+#, fuzzy, kde-format
+#| msgid "Object"
+msgid "Execute Script File..."
+msgstr "Đối tượng"
+
+#: kross/KoScriptingPart.cpp:86
+#, kde-format
+msgid "Script Manager..."
+msgstr ""
+
+#: kross/KoScriptingPart.cpp:160
+#, fuzzy, kde-format
+#| msgid "Object"
+msgid "Execute Script File"
+msgstr "Đối tượng"
+
+#: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
+#, kde-format
+msgid "Save"
+msgstr "Lưu"
+
+#: kross/KoScriptManagerAdd.cpp:54
+#, kde-format
+msgid ""
+"<qt>This wizard will guide you through the process of adding a new resource "
+"to your scripts.</qt>"
+msgstr ""
+
+#: kross/KoScriptManagerAdd.cpp:59
+#, fuzzy, kde-format
+#| msgid "Import lines:"
+msgid "Add script file"
+msgstr "Nhập các dòng:"
+
+#: kross/KoScriptManagerAdd.cpp:64
+#, fuzzy, kde-format
+msgid "Add collection folder"
+msgstr "Thêm thư mục bộ"
+
+#: kross/KoScriptManagerAdd.cpp:67
+#, kde-format
+msgid "Install script package file"
+msgstr "Cài tệp gói"
+
+#: kross/KoScriptManagerAdd.cpp:71
+#, kde-format
+msgid "Install online script package"
+msgstr "Cài gói từ trên Mạng"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, add)
+#: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
+#: widgets/KoEditColorSet.ui:45
+#, kde-format
+msgid "Add"
+msgstr "Thêm"
+
+#: kross/KoScriptManagerAdd.cpp:281
+#, fuzzy, kde-format
+#| msgid "Import lines:"
+msgid "Script File"
+msgstr "Nhập các dòng:"
+
+#: kross/KoScriptManagerAdd.cpp:284
+#, fuzzy, kde-format
+#| msgid "Object"
+msgid "Script"
+msgstr "Đối tượng"
+
+#: kross/KoScriptManagerAdd.cpp:287
+#, fuzzy, kde-format
+msgid "Collection"
+msgstr "Bộ"
+
+#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#, fuzzy, kde-format
+msgctxt "Default text for undo action"
+msgid "Undo"
+msgstr "&Tháo gỡ View"
+
+#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#: main/KoUndoStackAction.cpp:41
+#, fuzzy, kde-format
+msgid "Undo %1"
+msgstr "&Tháo gỡ View"
+
+#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#, fuzzy, kde-format
+msgctxt "Default text for redo action"
+msgid "Redo"
+msgstr "&Tháo gỡ View"
+
+#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#: main/KoUndoStackAction.cpp:41
+#, fuzzy, kde-format
+msgid "Redo %1"
+msgstr "&Tháo gỡ View"
+
+#: kundo2/kundo2model.cpp:54
+#, kde-format
+msgid "<empty>"
+msgstr ""
+
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1522
+#: main/KoUndoStackAction.cpp:33
+#, fuzzy, kde-format
+msgid "Redo"
+msgstr "&Tháo gỡ View"
+
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1521
+#: main/KoUndoStackAction.cpp:25
+#, fuzzy, kde-format
+msgid "Undo"
+msgstr "&Tháo gỡ View"
+
+#. i18n: ectx: Menu (file)
+#: main/calligra_shell.rc:4
+#, kde-format
+msgid "&File"
+msgstr "&Tệp"
+
+#. i18n: ectx: Menu (settings)
+#: main/calligra_shell.rc:32
+#, kde-format
+msgid "&Settings"
+msgstr "T&hiết lập"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: main/calligra_shell.rc:46
+#, kde-format
+msgid "File"
+msgstr "Tệp"
+
+#: main/config/KoConfigDocumentPage.cpp:46
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, fuzzy, kde-format
+msgid "Document Settings"
+msgstr "Thông tin về tại liệu"
+
+#: main/config/KoConfigDocumentPage.cpp:62
+#, kde-format
+msgid "No autosave"
+msgstr ""
+
+#: main/config/KoConfigDocumentPage.cpp:63
+#, kde-format
+msgctxt "unit symbol for minutes, leading space as separator"
+msgid " min"
+msgstr ""
+
+#: main/config/KoConfigDocumentPage.cpp:65
+#, fuzzy, kde-format
+#| msgid "Autosaving..."
+msgid "Autosave interval:"
+msgstr "Đang tự động lưu..."
+
+#: main/config/KoConfigDocumentPage.cpp:69
+#, fuzzy, kde-format
+#| msgid "Create shape"
+msgid "Create backup file:"
+msgstr "Tạo đường"
+
+#: main/config/KoConfigGridPage.cpp:55
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, fuzzy, kde-format
+#| msgid "Show &Grid"
+msgid "Grid"
+msgstr "Hiện &Lưới"
+
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+#| msgid "Show &Grid"
+msgid "Show grid:"
+msgstr "Hiện &Lưới"
+
+#: main/config/KoConfigGridPage.cpp:64
+#, fuzzy, kde-format
+msgid "Snap to grid:"
+msgstr "Gắn vào Lưới"
+
+#: main/config/KoConfigGridPage.cpp:65
+#, fuzzy, kde-format
+#| msgid "&Background color:"
+msgid "Grid color:"
+msgstr "Màu &nền:"
+
+#: main/config/KoConfigGridPage.cpp:67
+#, fuzzy, kde-format
+msgid "Spacing"
+msgstr "Dấu cách"
+
+#: main/config/KoConfigGridPage.cpp:78
+#, fuzzy, kde-format
+#| msgid "&Horizontal"
+msgctxt "Horizontal grid spacing"
+msgid "&Horizontal:"
+msgstr "&Ngang"
+
+#: main/config/KoConfigGridPage.cpp:79
+#, fuzzy, kde-format
+#| msgid "&Vertical"
+msgctxt "Vertical grid spacing"
+msgid "&Vertical:"
+msgstr "&Dọc"
+
+#: main/config/KoConfigMiscPage.cpp:66
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:30
+#: pigment/KoCompositeOpRegistry.cpp:31
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: main/config/KoConfigMiscPage.cpp:76
+#, fuzzy, kde-format
+#| msgid "Unit:"
+msgid "Units:"
+msgstr "Đơn vị:"
+
+#: main/config/KoConfigMiscPage.cpp:85
+#, kde-format
+msgid "Handle radius:"
+msgstr ""
+
+#: main/config/KoConfigMiscPage.cpp:92
+#, kde-format
+msgid "Grab sensitivity:"
+msgstr ""
+
+#: main/config/KoConfigMiscPage.cpp:99
+#, fuzzy, kde-format
+msgid "Paste offset:"
+msgstr "Trang Dán"
+
+#: main/config/KoConfigMiscPage.cpp:103
+#, kde-format
+msgid "Paste at Cursor:"
+msgstr ""
+
+#: main/KoApplication.cpp:198
+#, kde-format
+msgid "Only print and exit"
+msgstr "Chỉ in và thoát ra"
+
+#: main/KoApplication.cpp:199
+#, fuzzy, kde-format
+#| msgid "Open a new document with a template"
+msgid "Open a new document based on the given template (desktopfile name)"
+msgstr "Mở một tài liệu mới với mẫu"
+
+#: main/KoApplication.cpp:200
+#, fuzzy, kde-format
+#| msgid "Open a new document with a template"
+msgid "Open a new document based on the given template file"
+msgstr "Mở một tài liệu mới với mẫu"
+
+#: main/KoApplication.cpp:201
+#, kde-format
+msgid "Override display DPI"
+msgstr ""
+
+#: main/KoApplication.cpp:202
+#, fuzzy, kde-format
+#| msgid "Only print and exit"
+msgid "Only export to PDF and exit"
+msgstr "Chỉ in và thoát ra"
+
+#: main/KoApplication.cpp:203
+#, kde-format
+msgid "Filename for export-pdf"
+msgstr ""
+
+#: main/KoApplication.cpp:204
+#, kde-format
+msgid "just load the file and then exit"
+msgstr ""
+
+#: main/KoApplication.cpp:205
+#, kde-format
+msgid "load the file, show the window and progressbar and then exit"
+msgstr ""
+
+#: main/KoApplication.cpp:206
+#, kde-format
+msgid "Filename to write profiling information into."
+msgstr ""
+
+#: main/KoApplication.cpp:207
+#, kde-format
+msgid "Load a file and save it as an ODF file. Meant for debugging."
+msgstr ""
+
+#: main/KoApplication.cpp:208
+#, kde-format
+msgid "File(s) or URL(s) to open"
+msgstr ""
+
+#: main/KoApplication.cpp:218
+#, kde-format
+msgid ""
+"You are running a 32 bits build on a 64 bits Windows.\n"
+"This is not recommended.\n"
+"Please download and install the x64 build instead."
+msgstr ""
+
+#: main/KoApplication.cpp:262
+#, fuzzy, kde-format
+#| msgid "Creation error"
+msgid "%1: Critical Error"
+msgstr "Lỗi tạo"
+
+#: main/KoApplication.cpp:262
+#, kde-format
+msgid ""
+"Essential application components could not be found.\n"
+"This might be an installation issue.\n"
+"Try restarting or reinstalling."
+msgstr ""
+
+#: main/KoApplication.cpp:511
+#, fuzzy, kde-format
+#| msgid "No template found for: %1 "
+msgid "No template found for: %1"
+msgstr "Không tìm thấy mẫu cho: %1."
+
+#: main/KoApplication.cpp:514
+#, fuzzy, kde-format
+msgid "Too many templates found for: %1"
+msgstr "Quá nhiều mẫu cho: %1"
+
+#: main/KoApplication.cpp:536 main/KoApplication.cpp:554
+#, kde-format
+msgid "Template %1 failed to load."
+msgstr "Không thể tải mẫu %1."
+
+#: main/KoApplication.cpp:544
+#, fuzzy, kde-format
+#| msgid "No template found for: %1 "
+msgid "No template found at: %1"
+msgstr "Không tìm thấy mẫu cho: %1."
+
+#: main/KoAutoSaveRecoveryDialog.cpp:166
+#, fuzzy, kde-format
+#| msgid "Save palette"
+msgctxt "@title:window"
+msgid "Recover Files"
+msgstr "Lưu bảng màu"
+
+#: main/KoAutoSaveRecoveryDialog.cpp:171
+#, kde-format
+msgid "The following autosave file can be recovered:"
+msgstr ""
+
+#: main/KoAutoSaveRecoveryDialog.cpp:174
+#, kde-format
+msgid "The following autosave files can be recovered:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
+#: main/KoDetailsPaneBase.ui:94
+#, kde-format
+msgid "Always use this template at application start up"
+msgstr "Luôn dùng mẫu này khi khởi chạy"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
+#: main/KoDetailsPaneBase.ui:97
+#, kde-format
+msgid "Always use this template"
+msgstr "Luôn dùng mẫu này"
+
+#: main/KoDocument.cpp:549
+#, kde-format
+msgid "Making backup..."
+msgstr "Đang tạo bản dự phòng..."
+
+#: main/KoDocument.cpp:564
+#, kde-format
+msgid "Saving..."
+msgstr "Đang lưu..."
+
+#: main/KoDocument.cpp:592
+#, kde-format
+msgid ""
+"Could not save\n"
+"%1"
+msgstr ""
+"Không thể lưu\n"
+"%1"
+
+#: main/KoDocument.cpp:594
+#, kde-format
+msgid ""
+"Could not save %1\n"
+"Reason: %2"
+msgstr ""
+"Không thể lưu %1\n"
+"Lí do: %2"
+
+#: main/KoDocument.cpp:623
+#, kde-format
+msgid "Document <i>%1</i> saved"
+msgstr "Đã lưu tài liệu <i>%1</i>"
+
+#: main/KoDocument.cpp:711
+#, kde-format
+msgid ""
+"The password of this encrypted document is not known. Autosave aborted! "
+"Please save your work manually."
+msgstr ""
+"Không biết mật khẩu cho tài liệu được mã hoá này. Tự động lưu thất bại! Xin "
+"hãy tự lưu tài liệu."
+
+#: main/KoDocument.cpp:714
+#, kde-format
+msgid "Autosaving..."
+msgstr "Đang tự động lưu..."
+
+#: main/KoDocument.cpp:726
+#, kde-format
+msgid "Error during autosave! Partition full?"
+msgstr "Lỗi khi đang tự động lưu! Đĩa đầy?"
+
+#: main/KoDocument.cpp:819
+#, kde-format
+msgid "Could not create the file for saving"
+msgstr "Không thể tạo tệp để lưu"
+
+#: main/KoDocument.cpp:863 main/KoDocument.cpp:885 main/KoDocument.cpp:916
+#: main/KoDocument.cpp:950
+#, kde-format
+msgid "Not able to write '%1'. Partition full?"
+msgstr "Không thể ghi '%1'. Đĩa đầy?"
+
+#: main/KoDocument.cpp:870
+#, fuzzy, kde-format
+#| msgid "Not able to write '%1'. Partition full?"
+msgid "Not able to write RDF metadata. Partition full?"
+msgstr "Không thể ghi '%1'. Đĩa đầy?"
+
+#: main/KoDocument.cpp:878 main/KoDocument.cpp:925 main/KoDocument.cpp:1992
+#, kde-format
+msgid "Error while trying to write '%1'. Partition full?"
+msgstr "Lỗi khi đang cố ghi '%1'. Đĩa đầy?"
+
+#: main/KoDocument.cpp:1204
+#, kde-format
+msgid ""
+"Malformed URL\n"
+"%1"
+msgstr ""
+"URL không hợp lệ\n"
+"%1"
+
+#: main/KoDocument.cpp:1220
+#, kde-format
+msgid ""
+"An autosaved file exists for this document.\n"
+"Do you want to open it instead?"
+msgstr ""
+"Một tệp được lưu tự động của tài liệu này đã tồn tại.\n"
+"Bạn có muốn mở nó không?"
+
+#: main/KoDocument.cpp:1337 main/KoDocument.cpp:1685 main/KoMainWindow.cpp:705
+#, kde-format
+msgid "The file %1 does not exist."
+msgstr "Tệp %1 không tồn tại."
+
+#: main/KoDocument.cpp:1463
+#, fuzzy, kde-format
+msgid "Opening Document"
+msgstr "Mở tài liệu"
+
+#: main/KoDocument.cpp:1478
+#, fuzzy, kde-format
+#| msgid "Could not create the file for saving"
+msgid "Could not create the filter plugin"
+msgstr "Không thể tạo tệp để lưu"
+
+#: main/KoDocument.cpp:1481
+#, fuzzy, kde-format
+#| msgid "Could not create the file for saving"
+msgid "Could not create the output document"
+msgstr "Không thể tạo tệp để lưu"
+
+#: main/KoDocument.cpp:1484
+#, kde-format
+msgid "File not found"
+msgstr "Không tìm thấy tệp"
+
+#: main/KoDocument.cpp:1487
+#, kde-format
+msgid "Cannot create storage"
+msgstr "Không thể tạo lưu trữ"
+
+#: main/KoDocument.cpp:1490
+#, kde-format
+msgid "Bad MIME type"
+msgstr "Loại MIME xấu"
+
+#: main/KoDocument.cpp:1493
+#, kde-format
+msgid "Error in embedded document"
+msgstr "Lỗi trong tài liệu nhúng"
+
+#: main/KoDocument.cpp:1496
+#, kde-format
+msgid "Format not recognized"
+msgstr "Không nhận dạng được định dạng"
+
+#: main/KoDocument.cpp:1499
+#, fuzzy, kde-format
+msgid "Not implemented"
+msgstr "Chưa được viết"
+
+#: main/KoDocument.cpp:1502
+#, fuzzy, kde-format
+msgid "Parsing error"
+msgstr "Lỗi đọc"
+
+#: main/KoDocument.cpp:1505
+#, kde-format
+msgid "Document is password protected"
+msgstr "Tài liệu được bảo vệ với mật khẩu"
+
+#: main/KoDocument.cpp:1508
+#, fuzzy, kde-format
+msgid "Invalid file format"
+msgstr "Định dạng trang"
+
+#: main/KoDocument.cpp:1515
+#, fuzzy, kde-format
+msgid "Internal error"
+msgstr "Lỗi bên trong"
+
+#: main/KoDocument.cpp:1518
+#, kde-format
+msgid "Out of memory"
+msgstr "Hết bộ nhớ"
+
+#: main/KoDocument.cpp:1521
+#, kde-format
+msgid "Empty Filter Plugin"
+msgstr ""
+
+#: main/KoDocument.cpp:1524
+#, kde-format
+msgid "Trying to load into the wrong kind of document"
+msgstr ""
+
+#: main/KoDocument.cpp:1527
+#, fuzzy, kde-format
+msgid "Failed to download remote file"
+msgstr "Không thể mở được file %1"
+
+#: main/KoDocument.cpp:1534
+#, fuzzy, kde-format
+msgid "Unknown error"
+msgstr "Lỗi không rõ"
+
+#: main/KoDocument.cpp:1538
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not open\n"
+#| "%2.\n"
+#| "Reason: %1"
+msgid ""
+"Could not open %2.\n"
+"Reason: %1.\n"
+"%3"
+msgstr ""
+"Không thể mở được\n"
+"%2.\n"
+"Lí do: %1"
+
+#: main/KoDocument.cpp:1596
+#, kde-format
+msgid "Document <i>%1</i> loaded"
+msgstr "Đã tải tài liệu <i>%1</i>"
+
+#: main/KoDocument.cpp:1659 odf/KoOdfReadStore.cpp:98
+#, kde-format
+msgid "Could not find %1"
+msgstr "Không tìm thấy %1"
+
+#: main/KoDocument.cpp:1671
+#, kde-format
+msgid ""
+"Parsing error in %1 at line %2, column %3\n"
+"Error message: %4"
+msgstr ""
+"Lỗi đọc trong %1 trên dòng %2, cột %3\n"
+"Thông báo lỗi: %4"
+
+#: main/KoDocument.cpp:1692
+#, kde-format
+msgid "%1 is not a file."
+msgstr "%1 không phải là tệp."
+
+#: main/KoDocument.cpp:1707
+#, kde-format
+msgid "Could not open the file for reading (check read permissions)."
+msgstr "Không thể mở tệp đó để đọc (hãy kiểm tra quyền hạn đọc)."
+
+#: main/KoDocument.cpp:1718
+#, kde-format
+msgid "Could not read the beginning of the file."
+msgstr "Không thể đọc được phần đầu của tệp."
+
+#: main/KoDocument.cpp:1748
+#, kde-format
+msgid ""
+"parsing error in the main document at line %1, column %2\n"
+"Error message: %3"
+msgstr ""
+"Lỗi đọc trong tài liệu chính trên dòng %1, cột %2\n"
+"Thông báo lỗi: %3"
+
+#: main/KoDocument.cpp:1769
+#, fuzzy, kde-format
+#| msgid "Not a valid KOffice file: %1"
+msgid "Not a valid Calligra file: %1"
+msgstr "Không phải tệp KOffice hợp lệ: %1"
+
+#: main/KoDocument.cpp:1854
+#, kde-format
+msgid "Invalid document: no file 'maindoc.xml'."
+msgstr "Tài liệu không hợp lệ: không có tệp 'maindoc.xml'."
+
+#: main/KoDocument.cpp:1878
+#, fuzzy, kde-format
+msgid ""
+"Document <i>%1</i> contains several versions. Go to File->Versions to open "
+"an old version."
+msgstr ""
+"Tài liệu này chứa vài phiên bản. Dùng Tệp -> Các phiên bản để mở một phiên "
+"bản cũ."
+
+#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2554 main/KoMainWindow.cpp:1227
+#: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
+#, kde-format
+msgid "Untitled"
+msgstr "Không đề"
+
+#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1230
+#, kde-format
+msgid ""
+"<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
+"</p>"
+msgstr ""
+"<p>Tài liệu <b>'%1'</b> đã bị thay đổi.</p><p>Bạn có muốn lưu nó không?</p>"
+
+#: main/KoDocument.cpp:2165
+#, fuzzy, kde-format
+msgid "Internal error: saveXML not implemented"
+msgstr "Lỗi bên trong: saveXML chưa được viết"
+
+#: main/KoDocument.cpp:2202
+#, kde-format
+msgid ""
+"Could not open\n"
+"%1"
+msgstr ""
+"Không thể mở\n"
+"%1"
+
+#: main/KoDocument.cpp:2205
+#, kde-format
+msgid ""
+"Could not open %1\n"
+"Reason: %2"
+msgstr ""
+"Không thể mở %1\n"
+"Lí do: %2"
+
+#: main/KoDocument.cpp:2262
+#, fuzzy, kde-format
+msgid "a word processing"
+msgstr "một chương trình văn bản"
+
+#: main/KoDocument.cpp:2263
+#, fuzzy, kde-format
+#| msgid "Page Preview"
+msgid "a spreadsheet"
+msgstr "Xem trước Trang"
+
+#: main/KoDocument.cpp:2264
+#, fuzzy, kde-format
+msgid "a presentation"
+msgstr "một bài trình diễn"
+
+#: main/KoDocument.cpp:2265
+#, kde-format
+msgid "a chart"
+msgstr "một biểu đồ"
+
+#: main/KoDocument.cpp:2266
+#, kde-format
+msgid "a drawing"
+msgstr "một bức vẽ"
+
+#: main/KoDocument.cpp:2558
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
+#| "it?</p>"
+msgid ""
+"The document \"%1\" has been modified.\n"
+"Do you want to save your changes or discard them?"
+msgstr ""
+"<p>Tài liệu <b>'%1'</b> đã bị thay đổi.</p><p>Bạn có muốn lưu nó không?</p>"
+
+#: main/KoDocument.cpp:2560
+#, fuzzy, kde-format
+msgid "Close Document"
+msgstr "Tài liệu Riêng"
+
+#: main/KoDocumentSectionDelegate.cpp:508
+#, fuzzy, kde-format
+#| msgid "%1%"
+msgid "%1 %"
+msgstr "%1%"
+
+#: main/KoDocumentSectionToolTip.cpp:37
+#, kde-format
+msgid "No"
+msgstr "Không"
+
+#: main/KoDocumentSectionToolTip.cpp:37
+#, kde-format
+msgid "Yes"
+msgstr "Có"
+
+#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#, kde-format
+msgid "Could not export file."
+msgstr "Không thể xuất tệp."
+
+#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#, kde-format
+msgid "Missing Export Filter"
+msgstr "Thiếu Bộ lọc Xuất"
+
+#: main/KoFilterManager.cpp:518
+#, kde-format
+msgid ""
+"Could not import file of type\n"
+"%1"
+msgstr ""
+"Không thể nhập tệp kiểu\n"
+"%1"
+
+#: main/KoFilterManager.cpp:520
+#, kde-format
+msgid "Missing Import Filter"
+msgstr "Thiếu Bộ lọc Nhập"
+
+#: main/KoFilterManager_p.cpp:30
+#, kde-format
+msgid "Choose Filter"
+msgstr "Chọn bộ lọc"
+
+#: main/KoFindText.cpp:46
+#, kde-format
+msgid "Case Sensitive"
+msgstr ""
+
+#: main/KoFindText.cpp:46
+#, kde-format
+msgid "Match cases when searching"
+msgstr ""
+
+#: main/KoFindText.cpp:47
+#, kde-format
+msgid "Match only whole words"
+msgstr ""
+
+#: main/KoFindText.cpp:47
+#, kde-format
+msgid "Whole Words Only"
+msgstr ""
+
+#: main/KoFindText.cpp:48
+#, kde-format
+msgid "Find from Cursor"
+msgstr ""
+
+#: main/KoFindText.cpp:48
+#, kde-format
+msgid "Start searching from the current cursor"
+msgstr ""
+
+#: main/KoMainWindow.cpp:163
+#, fuzzy, kde-format
+msgid "%1 unsaved document (%2)"
+msgstr "%1 tài liệu chưa được lưu (%2)"
+
+#: main/KoMainWindow.cpp:272
+#, kde-format
+msgid "Export as PDF..."
+msgstr "Xuất ra PDF..."
+
+#: main/KoMainWindow.cpp:282
+#, kde-format
+msgid "Reload"
+msgstr "Tải lại"
+
+#: main/KoMainWindow.cpp:286
+#, kde-format
+msgid "Versions..."
+msgstr "Các phiên bản..."
+
+#: main/KoMainWindow.cpp:290
+#, fuzzy, kde-format
+msgid "Open ex&isting Document as Untitled Document..."
+msgstr "Mở tài liệu đã tồn tạị"
+
+#: main/KoMainWindow.cpp:294
+#, kde-format
+msgid "E&xport..."
+msgstr "&Xuất..."
+
+#: main/KoMainWindow.cpp:298
+#, fuzzy, kde-format
+msgid "En&crypt Document"
+msgstr "Mở tài liệu"
+
+#: main/KoMainWindow.cpp:303
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "&Uncompress to Directory"
+msgstr "Nhập Tài liệu"
+
+#: main/KoMainWindow.cpp:308
+#, fuzzy, kde-format
+msgid "&New View"
+msgstr "&Cách xem mới"
+
+#: main/KoMainWindow.cpp:314 widgets/KoDocumentInfoDlg.cpp:86
+#, kde-format
+msgid "Document Information"
+msgstr "Thông tin về tài liệu"
+
+#: main/KoMainWindow.cpp:338
+#, kde-format
+msgid "Full Screen Mode"
+msgstr "Chế độ Toàn màn hình"
+
+#: main/KoMainWindow.cpp:343
+#, fuzzy, kde-format
+#| msgid "Show Rulers"
+msgid "Show Dockers"
+msgstr "Hiện Thước kẻ"
+
+#: main/KoMainWindow.cpp:348
+#, fuzzy, kde-format
+#| msgid "Show Rulers"
+msgctxt "@action:inmenu"
+msgid "Show Docker Titlebars"
+msgstr "Hiện Thước kẻ"
+
+#: main/KoMainWindow.cpp:355
+#, fuzzy, kde-format
+#| msgid "Show Rulers"
+msgid "Dockers"
+msgstr "Hiện Thước kẻ"
+
+#: main/KoMainWindow.cpp:660
+#, kde-format
+msgid "(write protected)"
+msgstr "(bảo vệ khỏi ghi)"
+
+#: main/KoMainWindow.cpp:665
+#, kde-format
+msgid "Save as %1"
+msgstr "Lưu vào %1"
+
+#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:388
+#, fuzzy, kde-format
+msgid "%1 (unknown file type)"
+msgstr "%1 (kiểu file không xác định)"
+
+#: main/KoMainWindow.cpp:855
+#, kde-format
+msgid ""
+"<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
+"want to save in this format?</qt>"
+msgstr ""
+"<qt>Lưu vào định dạng %1 có thể làm mất một số thông tin định dạng.<p>Bạn có "
+"muốn lưu vào định dạng này?</qt>"
+
+#: main/KoMainWindow.cpp:858
+#, kde-format
+msgid "Confirm Save"
+msgstr "Xác nhận Lưu"
+
+#: main/KoMainWindow.cpp:867
+#, kde-format
+msgid ""
+"<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
+"want to export to this format?</qt>"
+msgstr ""
+"<qt>Xuất ra định dạng %1 có thể làm mất một số thông tin định dạng.<p>Bạn có "
+"muốn xuất ra định dạng này?</qt>"
+
+#: main/KoMainWindow.cpp:870
+#, kde-format
+msgid "Confirm Export"
+msgstr "Xác nhận Xuất"
+
+#: main/KoMainWindow.cpp:871
+#, kde-format
+msgid "Export"
+msgstr "Xuất"
+
+#: main/KoMainWindow.cpp:964
+#, fuzzy, kde-format
+#| msgid "Untitled"
+msgid "untitled"
+msgstr "Không đề"
+
+#: main/KoMainWindow.cpp:1292
+#, fuzzy, kde-format
+msgid "Open Document"
+msgstr "Mở tài liệu"
+
+#: main/KoMainWindow.cpp:1301 pageapp/KoPAView.cpp:524
+#, kde-format
+msgid "Import Document"
+msgstr "Nhập Tài liệu"
+
+#: main/KoMainWindow.cpp:1465
+#, fuzzy, kde-format
+#| msgid "Export as PDF..."
+msgid "Export as PDF"
+msgstr "Xuất ra PDF..."
+
+#: main/KoMainWindow.cpp:1502
+#, kde-format
+msgid "Cannot export to the specified file"
+msgstr ""
+
+#: main/KoMainWindow.cpp:1701 pageapp/KoPADocumentStructureDocker.cpp:80
+#, kde-format
+msgid "Document"
+msgstr "Tài liệu"
+
+#: main/KoMainWindow.cpp:1709
+#, kde-format
+msgid "Document - %1"
+msgstr "Tài liệu - %1"
+
+#: main/KoMainWindow.cpp:1746
+#, kde-format
+msgid ""
+"You will lose all changes made since your last save\n"
+"Do you want to continue?"
+msgstr ""
+"Bạn sẽ mất tất cả các thay đổi kể từ lần lưu cuối\n"
+"Bạn có muốn tiếp tục không?"
+
+#: main/KoMainWindow.cpp:1748
+#, kde-format
+msgid "Warning"
+msgstr "Cảnh báo"
+
+#: main/KoMainWindow.cpp:2113
+#, kde-format
+msgid "Show %1 Toolbar"
+msgstr "Hiện thanh công cụ %1"
+
+#: main/KoMainWindow.cpp:2115
+#, kde-format
+msgid "Hide %1 Toolbar"
+msgstr "Ẩn thanh công cụ %1"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
+#: main/KoOpenPane.cpp:123 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
+#, fuzzy, kde-format
+msgid "Open Existing Document"
+msgstr "Mở tài liệu đã tồn tạị"
+
+#: main/KoOpenPane.cpp:199
+#, kde-format
+msgid "Recent Documents"
+msgstr "Các tài liệu Gần đây"
+
+#: main/KoOpenPane.cpp:299
+#, fuzzy, kde-format
+msgid "Custom Document"
+msgstr "Tài liệu Riêng"
+
+#: main/KoPrintingDialog.cpp:43
+#, kde-format
+msgid "Stop"
+msgstr "Dừng"
+
+#: main/KoPrintingDialog.cpp:132
+#, fuzzy, kde-format
+#| msgid "Printing done"
+msgid "Printing"
+msgstr "Đã in xong"
+
+#: main/KoPrintingDialog_p.h:136
+#, kde-format
+msgid "Printing done"
+msgstr "Đã in xong"
+
+#: main/KoPrintingDialog_p.h:137
+#, kde-format
+msgid "Close"
+msgstr "Đóng"
+
+#: main/KoPrintingDialog_p.h:157
+#, kde-format
+msgid "Stopped"
+msgstr "Bị dừng"
+
+#: main/KoRecentDocumentsPane.cpp:71
+#, kde-format
+msgid "Open This Document"
+msgstr "Mở tài liệu này"
+
+#: main/KoRecentDocumentsPane.cpp:174
+#, kde-format
+msgctxt "File modification date and time. %1 is date time"
+msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
+msgstr "<tr><td><b>Đã thay đổi:</b></td><td>%1</td></tr>"
+
+#: main/KoRecentDocumentsPane.cpp:177
+#, fuzzy, kde-format
+msgctxt "File access date and time. %1 is date time"
+msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
+msgstr "<tr><td><b>Đã được mở:</b></td><td>%1</td></tr>"
+
+#: main/KoStandardAction.cpp:19
+#, fuzzy, kde-format
+#| msgid "Show &Grid"
+msgid "Show Guides"
+msgstr "Hiện &Lưới"
+
+#: main/KoStandardAction.cpp:20
+#, fuzzy, kde-format
+#| msgid "Show &Grid"
+msgid "Shows or hides guides"
+msgstr "Hiện &Lưới"
+
+#: main/KoTemplateCreateDia.cpp:104
+#, kde-format
+msgid "Create Template"
+msgstr "Tạo Mẫu"
+
+#: main/KoTemplateCreateDia.cpp:113
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgctxt "Template name"
+msgid "Name:"
+msgstr "Tên:"
+
+#: main/KoTemplateCreateDia.cpp:123
+#, kde-format
+msgid "Group:"
+msgstr "Nhóm:"
+
+#: main/KoTemplateCreateDia.cpp:138
+#, kde-format
+msgid "&Add Group..."
+msgstr "&Thêm Nhóm..."
+
+#: main/KoTemplateCreateDia.cpp:141 main/KoVersionDialog.cpp:61
+#, kde-format
+msgid "&Remove"
+msgstr "&Xoá"
+
+#: main/KoTemplateCreateDia.cpp:147
+#, kde-format
+msgid "Picture"
+msgstr "Ảnh"
+
+#: main/KoTemplateCreateDia.cpp:150
+#, fuzzy, kde-format
+#| msgid "Preview"
+msgid "&Preview"
+msgstr "Xem trước"
+
+#: main/KoTemplateCreateDia.cpp:155
+#, fuzzy, kde-format
+msgid "Custom:"
+msgstr "Tự chọn"
+
+#: main/KoTemplateCreateDia.cpp:159
+#, kde-format
+msgid "&Select..."
+msgstr "&Chọn..."
+
+#: main/KoTemplateCreateDia.cpp:168
+#, kde-format
+msgid "Use the new template as default"
+msgstr "Dùng mẫu mới làm mặc định"
+
+#: main/KoTemplateCreateDia.cpp:308
+#, kde-format
+msgid "Do you really want to overwrite the existing '%1' template?"
+msgstr "Bạn có muốn ghi đè mẫu '%1' đã tồn tại?"
+
+#: main/KoTemplateCreateDia.cpp:421 main/KoTemplateCreateDia.cpp:428
+#, kde-format
+msgid "Add Group"
+msgstr "Thêm Nhóm"
+
+#: main/KoTemplateCreateDia.cpp:421
+#, kde-format
+msgid "Enter group name:"
+msgstr "Nhập tên nhóm:"
+
+#: main/KoTemplateCreateDia.cpp:428
+#, kde-format
+msgid "This name is already used."
+msgstr "Tên này đã được dùng."
+
+#: main/KoTemplateCreateDia.cpp:452
+#, kde-format
+msgid "Do you really want to remove that group?"
+msgstr "Bạn có muốn xoá nhóm này?"
+
+#: main/KoTemplateCreateDia.cpp:453
+#, kde-format
+msgid "Remove Group"
+msgstr "Xoá Nhóm"
+
+#: main/KoTemplateCreateDia.cpp:455
+#, kde-format
+msgid "Do you really want to remove that template?"
+msgstr "Bạn có muốn xoá mẫu đó?"
+
+#: main/KoTemplateCreateDia.cpp:456
+#, kde-format
+msgid "Remove Template"
+msgstr "Xoá Mẫu"
+
+#: main/KoTemplateCreateDia.cpp:507
+#, kde-format
+msgid "Could not load picture."
+msgstr "Không thể tải ảnh."
+
+#: main/KoTemplateCreateDia.cpp:510
+#, kde-format
+msgid "No picture available."
+msgstr "Không có ảnh nào."
+
+#: main/KoTemplatesPane.cpp:37
+#, kde-format
+msgid "Use This Template"
+msgstr "Dùng mẫu này"
+
+#: main/KoVersionDialog.cpp:35
+#, kde-format
+msgid "Version"
+msgstr "Phiên bản"
+
+#: main/KoVersionDialog.cpp:49
+#, kde-format
+msgid "Date & Time"
+msgstr "Ngày và Giờ"
+
+#: main/KoVersionDialog.cpp:50
+#, kde-format
+msgid "Saved By"
+msgstr "Lưu bởi"
+
+#: main/KoVersionDialog.cpp:51 main/KoVersionDialog.cpp:215
+#, kde-format
+msgid "Comment"
+msgstr "Chú thích"
+
+#: main/KoVersionDialog.cpp:58
+#, kde-format
+msgid "&Add"
+msgstr "&Thêm"
+
+#: main/KoVersionDialog.cpp:64
+#, kde-format
+msgid "&Modify"
+msgstr "T&hay đổi"
+
+#: main/KoVersionDialog.cpp:67
+#, kde-format
+msgid "&Open"
+msgstr "&Mở"
+
+#: main/KoVersionDialog.cpp:120
+#, kde-format
+msgid "A new version could not be added"
+msgstr "Không thể thêm phiên bản mới"
+
+#: main/KoVersionDialog.cpp:227 main/KoVersionDialog.cpp:229
+#, kde-format
+msgid "Date: %1"
+msgstr "Ngày: %1"
+
+#: main/KoView.cpp:330
+#, fuzzy, kde-format
+#| msgid "Copy the current page"
+msgid "Active Author Profile"
+msgstr "Chép trang hiện tại"
+
+#: main/KoView.cpp:342 main/KoView.cpp:396
+#, kde-format
+msgctxt "choice for author profile"
+msgid "Anonymous"
+msgstr ""
+
+#: main/KoView.cpp:395 widgets/KoConfigAuthorPage.cpp:69
+#, fuzzy, kde-format
+#| msgid "Copy the current page"
+msgid "Default Author Profile"
+msgstr "Chép trang hiện tại"
+
+#: odf/KoDocumentInfo.cpp:40
+#, kde-format
+msgid "Unknown"
+msgstr "Không biết"
+
+#: odf/KoOdfReadStore.cpp:91
+#, fuzzy, kde-format
+msgid "No store backend"
+msgstr "Không có hậu phương lưu"
+
+#: odf/KoOdfReadStore.cpp:126
+#, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2\n"
+"Error message: %3"
+msgstr ""
+"Lỗi đọc tài liệu chính ở dòng %1, cột %2\n"
+"Thông báo lỗi: %3"
+
+#: odf/KoPageFormat.cpp:53
+#, fuzzy, kde-format
+#| msgid "ISO A3"
+msgctxt "Page size"
+msgid "ISO A3"
+msgstr "ISO A3"
+
+#: odf/KoPageFormat.cpp:54
+#, fuzzy, kde-format
+#| msgid "ISO A4"
+msgctxt "Page size"
+msgid "ISO A4"
+msgstr "ISO A4"
+
+#: odf/KoPageFormat.cpp:55
+#, fuzzy, kde-format
+#| msgid "ISO A5"
+msgctxt "Page size"
+msgid "ISO A5"
+msgstr "ISO A5"
+
+#: odf/KoPageFormat.cpp:56
+#, fuzzy, kde-format
+#| msgid "US Letter"
+msgctxt "Page size"
+msgid "US Letter"
+msgstr "Thư kiểu Mĩ"
+
+#: odf/KoPageFormat.cpp:57
+#, fuzzy, kde-format
+#| msgid "US Letter"
+msgctxt "Page size"
+msgid "US Legal"
+msgstr "Thư kiểu Mĩ"
+
+#: odf/KoPageFormat.cpp:58
+#, fuzzy, kde-format
+#| msgid "Screen"
+msgctxt "Page size"
+msgid "Screen"
+msgstr "Màn hình"
+
+#: odf/KoPageFormat.cpp:59
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "Custom"
+msgstr "Tự chọn"
+
+#: odf/KoPageFormat.cpp:60
+#, fuzzy, kde-format
+#| msgid "ISO B5"
+msgctxt "Page size"
+msgid "ISO B5"
+msgstr "ISO B5"
+
+#: odf/KoPageFormat.cpp:61
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "US Executive"
+msgstr "US Executive"
+
+#: odf/KoPageFormat.cpp:62
+#, fuzzy, kde-format
+#| msgid "ISO A0"
+msgctxt "Page size"
+msgid "ISO A0"
+msgstr "ISO A0"
+
+#: odf/KoPageFormat.cpp:63
+#, fuzzy, kde-format
+#| msgid "ISO A1"
+msgctxt "Page size"
+msgid "ISO A1"
+msgstr "ISO A1"
+
+#: odf/KoPageFormat.cpp:64
+#, fuzzy, kde-format
+#| msgid "ISO A2"
+msgctxt "Page size"
+msgid "ISO A2"
+msgstr "ISO A2"
+
+#: odf/KoPageFormat.cpp:65
+#, fuzzy, kde-format
+#| msgid "ISO A6"
+msgctxt "Page size"
+msgid "ISO A6"
+msgstr "ISO A6"
+
+#: odf/KoPageFormat.cpp:66
+#, fuzzy, kde-format
+#| msgid "ISO A7"
+msgctxt "Page size"
+msgid "ISO A7"
+msgstr "ISO A7"
+
+#: odf/KoPageFormat.cpp:67
+#, fuzzy, kde-format
+#| msgid "ISO A8"
+msgctxt "Page size"
+msgid "ISO A8"
+msgstr "ISO A8"
+
+#: odf/KoPageFormat.cpp:68
+#, fuzzy, kde-format
+#| msgid "ISO A9"
+msgctxt "Page size"
+msgid "ISO A9"
+msgstr "ISO A9"
+
+#: odf/KoPageFormat.cpp:69
+#, fuzzy, kde-format
+#| msgid "ISO B0"
+msgctxt "Page size"
+msgid "ISO B0"
+msgstr "ISO B0"
+
+#: odf/KoPageFormat.cpp:70
+#, fuzzy, kde-format
+#| msgid "ISO B1"
+msgctxt "Page size"
+msgid "ISO B1"
+msgstr "ISO B1"
+
+#: odf/KoPageFormat.cpp:71
+#, fuzzy, kde-format
+#| msgid "ISO B10"
+msgctxt "Page size"
+msgid "ISO B10"
+msgstr "ISO B10"
+
+#: odf/KoPageFormat.cpp:72
+#, fuzzy, kde-format
+#| msgid "ISO B2"
+msgctxt "Page size"
+msgid "ISO B2"
+msgstr "ISO B2"
+
+#: odf/KoPageFormat.cpp:73
+#, fuzzy, kde-format
+#| msgid "ISO B3"
+msgctxt "Page size"
+msgid "ISO B3"
+msgstr "ISO B3"
+
+#: odf/KoPageFormat.cpp:74
+#, fuzzy, kde-format
+#| msgid "ISO B4"
+msgctxt "Page size"
+msgid "ISO B4"
+msgstr "ISO B4"
+
+#: odf/KoPageFormat.cpp:75
+#, fuzzy, kde-format
+#| msgid "ISO B6"
+msgctxt "Page size"
+msgid "ISO B6"
+msgstr "ISO B6"
+
+#: odf/KoPageFormat.cpp:76
+#, fuzzy, kde-format
+#| msgid "ISO C5"
+msgctxt "Page size"
+msgid "ISO C5"
+msgstr "ISO C5"
+
+#: odf/KoPageFormat.cpp:77
+#, kde-format
+msgctxt "Page size"
+msgid "US Common 10"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:78
+#, fuzzy, kde-format
+#| msgid "ISO DL"
+msgctxt "Page size"
+msgid "ISO DL"
+msgstr "ISO DL"
+
+#: odf/KoPageFormat.cpp:79
+#, kde-format
+msgctxt "Page size"
+msgid "US Folio"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:80
+#, fuzzy, kde-format
+#| msgid "US Letter"
+msgctxt "Page size"
+msgid "US Ledger"
+msgstr "Thư kiểu Mĩ"
+
+#: odf/KoPageFormat.cpp:81
+#, kde-format
+msgctxt "Page size"
+msgid "US Tabloid"
+msgstr ""
+
+#: odf/KoUnit.cpp:37
+#, kde-format
+msgid "Millimeters (mm)"
+msgstr "Millimét (mm)"
+
+#: odf/KoUnit.cpp:39
+#, kde-format
+msgid "Centimeters (cm)"
+msgstr "Centimét (mm)"
+
+#: odf/KoUnit.cpp:41
+#, kde-format
+msgid "Decimeters (dm)"
+msgstr "Decimét (mm)"
+
+#: odf/KoUnit.cpp:43
+#, kde-format
+msgid "Inches (in)"
+msgstr "Inch (in)"
+
+#: odf/KoUnit.cpp:45
+#, kde-format
+msgid "Pica (pi)"
+msgstr "Pica (pi)"
+
+#: odf/KoUnit.cpp:47
+#, kde-format
+msgid "Cicero (cc)"
+msgstr "Cicero (cc)"
+
+#: odf/KoUnit.cpp:49
+#, kde-format
+msgid "Points (pt)"
+msgstr "Points (pt)"
+
+#: odf/KoUnit.cpp:51
+#, kde-format
+msgid "Pixels (px)"
+msgstr "Điểm ảnh (px)"
+
+#: odf/KoUnit.cpp:53
+#, kde-format
+msgid "Unsupported unit"
+msgstr ""
+
+#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:21
+#, fuzzy
+#| msgid "Change parameter"
+msgctxt "(qtundo-format)"
+msgid "Change master slide"
+msgstr "Thay đổi tham số"
+
+#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:24
+#, fuzzy
+#| msgid "Change parameter"
+msgctxt "(qtundo-format)"
+msgid "Change master page"
+msgstr "Thay đổi tham số"
+
+#: pageapp/commands/KoPAChangePageLayoutCommand.cpp:19
+#, fuzzy
+#| msgid "Page Layout"
+msgctxt "(qtundo-format)"
+msgid "Set Page Layout"
+msgstr "Bố trí Trang"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:18
+#, fuzzy
+#| msgid "Set background"
+msgctxt "(qtundo-format)"
+msgid "Display master background"
+msgstr "Đặt nền"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:22
+#, fuzzy
+#| msgid "Set background"
+msgctxt "(qtundo-format)"
+msgid "Display slide background"
+msgstr "Đặt nền"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:25
+#, fuzzy
+#| msgid "Set background"
+msgctxt "(qtundo-format)"
+msgid "Display page background"
+msgstr "Đặt nền"
+
+#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:18
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Show master shapes"
+msgstr "Làm méo các hình"
+
+#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:21
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Hide master shapes"
+msgstr "Làm méo các hình"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:26
+#, fuzzy
+#| msgid "Delete shape"
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Xoá hình"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:29
+#, fuzzy
+#| msgid "Delete page"
+msgctxt "(qtundo-format) Delete one page"
+msgid "Delete page"
+msgstr "Xoá trang"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:50
+#, fuzzy
+#| msgid "Delete shape"
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Xoá hình"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:53
+#, fuzzy
+#| msgid "Delete page"
+msgctxt "(qtundo-format)"
+msgid "Delete page"
+msgid_plural "Delete pages"
+msgstr[0] "Xoá trang"
+
+#: pageapp/commands/KoPAPageInsertCommand.cpp:24
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert slide"
+msgstr "Chèn Số thứ tự"
+
+#: pageapp/commands/KoPAPageInsertCommand.cpp:27
+#, fuzzy
+#| msgid "Insert page"
+msgctxt "(qtundo-format)"
+msgid "Insert page"
+msgstr "Chèn trang"
+
+#: pageapp/commands/KoPAPageMoveCommand.cpp:45
+#, fuzzy
+#| msgid "Move shapes"
+msgctxt "(qtundo-format)"
+msgid "Move slide"
+msgid_plural "Move slides"
+msgstr[0] "Di chuyển các đường"
+
+#: pageapp/commands/KoPAPageMoveCommand.cpp:48
+#, fuzzy
+#| msgid "Move page"
+msgctxt "(qtundo-format)"
+msgid "Move page"
+msgid_plural "Move pages"
+msgstr[0] "Di chuyển trang"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "Confirm Save"
+msgid "Configure"
+msgstr "Xác nhận Lưu"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
+#, fuzzy, kde-format
+#| msgid "Document"
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Tài liệu"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
+#, fuzzy, kde-format
+#| msgid "Author"
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Tác giả "
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
+#, kde-format
+msgid "Author"
+msgstr "Tác giả "
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:27
+#, kde-format
+msgid "Select a master slide design:"
+msgstr ""
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:28
+#, fuzzy, kde-format
+msgid "Master Slide"
+msgstr "Trang Dán"
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:30
+#, kde-format
+msgid "Select a master page design:"
+msgstr ""
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:97
+#, fuzzy, kde-format
+msgid "Master Page"
+msgstr "Trang Dán"
+
+#: pageapp/KoPADocumentModel.cpp:172 pageapp/KoPAPageThumbnailModel.cpp:54
+#, fuzzy, kde-format
+msgid "Slide %1"
+msgstr "Hiện thanh công cụ %1"
+
+#: pageapp/KoPADocumentModel.cpp:174
+#, fuzzy, kde-format
+msgid "Page  %1"
+msgstr "Tên: "
+
+#: pageapp/KoPADocumentModel.cpp:177
+#: pageapp/KoPADocumentStructureDocker.cpp:102
+#, kde-format
+msgid "Layer"
+msgstr "Lớp"
+
+#: pageapp/KoPADocumentModel.cpp:179
+#, kde-format
+msgid "Group"
+msgstr "Nhóm"
+
+#: pageapp/KoPADocumentModel.cpp:181
+#, kde-format
+msgid "Shape"
+msgstr "Hình"
+
+#: pageapp/KoPADocumentModel.cpp:272
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename Slide"
+msgstr "Trang Dán"
+
+#: pageapp/KoPADocumentModel.cpp:274
+#, fuzzy
+#| msgid "Move page"
+msgctxt "(qtundo-format)"
+msgid "Rename Page"
+msgstr "Di chuyển trang"
+
+#: pageapp/KoPADocumentModel.cpp:278
+#, fuzzy
+#| msgid "Create Layer"
+msgctxt "(qtundo-format)"
+msgid "Rename Layer"
+msgstr "Tạo Lớp"
+
+#: pageapp/KoPADocumentModel.cpp:314
+#: pageapp/KoPADocumentStructureDocker.cpp:100
+#, fuzzy, kde-format
+#| msgid "&Size:"
+msgid "Slide"
+msgstr "&Cỡ:"
+
+#: pageapp/KoPADocumentModel.cpp:317
+#, kde-format
+msgid "Visible"
+msgstr "Nhìn thấy"
+
+#: pageapp/KoPADocumentModel.cpp:318
+#, kde-format
+msgid "Locked"
+msgstr "Bị khoá"
+
+#: pageapp/KoPADocumentModel.cpp:533 pageapp/KoPADocumentModel.cpp:552
+#, fuzzy
+#| msgid "Reorder shapes"
+msgctxt "(qtundo-format)"
+msgid "Reparent shapes"
+msgstr "Sắp xếp lại các đường"
+
+#: pageapp/KoPADocumentModel.cpp:686
+#, fuzzy, kde-format
+#| msgid "Move page"
+msgid "&Move Here"
+msgstr "Di chuyển trang"
+
+#: pageapp/KoPADocumentModel.cpp:690
+#, fuzzy, kde-format
+#| msgid "Green"
+msgid "&Copy Here"
+msgstr "Xanh lá cây"
+
+#: pageapp/KoPADocumentModel.cpp:694
+#, fuzzy, kde-format
+msgid "C&ancel"
+msgstr "Chọn"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:89
+#, fuzzy, kde-format
+#| msgid "Add a new layer"
+msgid "Add a new slide or layer"
+msgstr "Thêm một lớp mới"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:92
+#, fuzzy, kde-format
+#| msgid "Add a new layer"
+msgid "Add a new page or layer"
+msgstr "Thêm một lớp mới"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:100
+#: widgets/KoPageLayoutDialog.cpp:37
+#, kde-format
+msgid "Page"
+msgstr "Trang"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:109
+#: pageapp/KoPADocumentStructureDocker.cpp:616
+#, kde-format
+msgid "Delete selected objects"
+msgstr "Xoá các đối tượng được chọn"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:115
+#, kde-format
+msgid "Raise selected objects"
+msgstr "Nâng các đối tượng được chọn"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:121
+#, kde-format
+msgid "Lower selected objects"
+msgstr "Hạ các đối tượng được chọn"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:130
+#, kde-format
+msgid "Minimal View"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:132
+#, kde-format
+msgid "Detailed View"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:134
+#, kde-format
+msgid "Thumbnail View"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:144
+#, fuzzy, kde-format
+#| msgid "Line Border"
+msgid "View mode"
+msgstr "Viền Đường thẳng"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:301
+#, kde-format
+msgid "Enter the name of the new layer:"
+msgstr "Nhập tên của lớp mới:"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:301
+#, kde-format
+msgid "New Layer"
+msgstr "Lớp Mới"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:302
+#, kde-format
+msgid "New layer"
+msgstr "Lớp mới"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:315
+#, fuzzy
+#| msgid "Create Layer"
+msgctxt "(qtundo-format)"
+msgid "Create Layer"
+msgstr "Tạo Lớp"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:341
+#, fuzzy
+#| msgid "Delete Layer"
+msgctxt "(qtundo-format)"
+msgid "Delete Layer"
+msgstr "Xoá Lớp"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:344
+#, kde-format
+msgid "Could not delete all layers. At least one layer is required."
+msgstr "Không thể xoá tất cả các lớp. Phải có ít nhất một lớp."
+
+#: pageapp/KoPADocumentStructureDocker.cpp:344
+#, kde-format
+msgid "Error deleting layers"
+msgstr "Lỗi khi xoá lớp"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:611
+#, fuzzy, kde-format
+#| msgid "Add a new layer"
+msgid "Add a new slide"
+msgstr "Thêm một lớp mới"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:614
+#, fuzzy, kde-format
+#| msgid "Add a new layer"
+msgid "Add a new page"
+msgstr "Thêm một lớp mới"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:618
+#, fuzzy, kde-format
+msgid "Cut"
+msgstr "Tự chọn"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:619
+#: pigment/compositeops/KoCompositeOpCopy.h:24
+#: pigment/compositeops/KoCompositeOpCopy2.h:32
+#: pigment/KoCompositeOpRegistry.cpp:87
+#, fuzzy, kde-format
+msgid "Copy"
+msgstr "Công ti:"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:620
+#, fuzzy, kde-format
+#| msgid "Date"
+msgid "Paste"
+msgstr "Ngày"
+
+#: pageapp/KoPAPageThumbnailModel.cpp:56
+#, fuzzy, kde-format
+msgid "Page %1"
+msgstr "Tên: "
+
+#: pageapp/KoPAPastePage.cpp:118
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Paste Slide"
+msgid_plural "Paste Slides"
+msgstr[0] "Trang Dán"
+
+#: pageapp/KoPAPastePage.cpp:121
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Paste Page"
+msgid_plural "Paste Pages"
+msgstr[0] "Trang Dán"
+
+#: pageapp/KoPAView.cpp:307 widgets/KoToolBoxDocker.cpp:30
+#, kde-format
+msgid "Tools"
+msgstr ""
+
+#: pageapp/KoPAView.cpp:350
+#, kde-format
+msgid "D&elete"
+msgstr "&Xoá"
+
+#: pageapp/KoPAView.cpp:361
+#, fuzzy, kde-format
+msgid "Snap to Grid"
+msgstr "Gắn vào Lưới"
+
+#: pageapp/KoPAView.cpp:371
+#, fuzzy, kde-format
+msgid "Show Master Pages"
+msgstr "Làm méo các hình"
+
+#: pageapp/KoPAView.cpp:375
+#, kde-format
+msgid "Show Rulers"
+msgstr "Hiện Thước kẻ"
+
+#: pageapp/KoPAView.cpp:377
+#, kde-format
+msgid "Show/hide the view's rulers"
+msgstr "Hiện/ẩn các thước kẻ của khung xem"
+
+#: pageapp/KoPAView.cpp:381
+#, fuzzy, kde-format
+msgid "Show Page Margins"
+msgstr "Làm méo các hình"
+
+#: pageapp/KoPAView.cpp:383
+#, fuzzy, kde-format
+#| msgid "Show/hide the view's rulers"
+msgid "Show/hide the page margins"
+msgstr "Hiện/ẩn các thước kẻ của khung xem"
+
+#: pageapp/KoPAView.cpp:387
+#, kde-format
+msgid "Insert Page"
+msgstr "Chèn Trang"
+
+#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
+#, fuzzy, kde-format
+msgid "Insert a new page after the current one"
+msgstr "Chèn một trang vào sau trang hiện tại"
+
+#: pageapp/KoPAView.cpp:393
+#, kde-format
+msgid "Copy Page"
+msgstr "Chép Trang"
+
+#: pageapp/KoPAView.cpp:395 pageapp/KoPAView.cpp:396
+#, kde-format
+msgid "Copy the current page"
+msgstr "Chép trang hiện tại"
+
+#: pageapp/KoPAView.cpp:399
+#, kde-format
+msgid "Delete Page"
+msgstr "Xoá Trang"
+
+#: pageapp/KoPAView.cpp:402 pageapp/KoPAView.cpp:403
+#, fuzzy, kde-format
+#| msgid "Copy the current page"
+msgid "Delete the current page"
+msgstr "Chép trang hiện tại"
+
+#: pageapp/KoPAView.cpp:406
+#, fuzzy, kde-format
+msgid "Master Page..."
+msgstr "Trang Dán"
+
+#: pageapp/KoPAView.cpp:410
+#, kde-format
+msgid "Page Layout..."
+msgstr "Kiểu trang..."
+
+#. i18n: ectx: property (text), widget (QTableWidget, variables)
+#: pageapp/KoPAView.cpp:420 rdf/KoSemanticStylesheetsEditor.ui:57
+#, kde-format
+msgid "Variable"
+msgstr "Biến số"
+
+#: pageapp/KoPAView.cpp:425
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "Import Document..."
+msgstr "Nhập Tài liệu"
+
+#: pageapp/KoPAView.cpp:429
+#, fuzzy, kde-format
+msgid "Configure..."
+msgstr "Gắn vào Lưới"
+
+#: pageapp/KoPAView.cpp:521
+#, fuzzy, kde-format
+#| msgid "Import lines:"
+msgid "Import Slideshow"
+msgstr "Nhập các dòng:"
+
+#: pageapp/KoPAView.cpp:549 pageapp/KoPAView.cpp:553
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not open\n"
+#| "%1"
+msgid ""
+"Could not import\n"
+"%1"
+msgstr ""
+"Không thể mở\n"
+"%1"
+
+#: pageapp/KoPAView.cpp:666
+#, fuzzy
+#| msgid "Change parameter"
+msgctxt "(qtundo-format)"
+msgid "Change page layout"
+msgstr "Thay đổi tham số"
+
+#. i18n: ectx: property (text), widget (QPushButton, backgroundImage)
+#: pageapp/tools/backgroundTool/BackgroundToolWidget.ui:43
+#, fuzzy, kde-format
+#| msgid "Set background"
+msgid "Set image ..."
+msgstr "Đặt nền"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
+#, fuzzy, kde-format
+#| msgid "Set background"
+msgid "Background"
+msgstr "Đặt nền"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#, fuzzy, kde-format
+#| msgid "Set background"
+msgid "Page Background"
+msgstr "Đặt nền"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Page Preview"
+msgid "Page Design"
+msgstr "Xem trước Trang"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Slide Design"
+msgstr "Hiện thanh công cụ %1"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#, fuzzy, kde-format
+#| msgid "Set background"
+msgid "Use background of master page"
+msgstr "Đặt nền"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#, fuzzy, kde-format
+#| msgid "Set background"
+msgid "Use background of master slide"
+msgstr "Đặt nền"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#, fuzzy, kde-format
+#| msgid "Change parameter"
+msgid "Display shapes of master page"
+msgstr "Thay đổi tham số"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#, fuzzy, kde-format
+#| msgid "Change parameter"
+msgid "Display shapes of master slide"
+msgstr "Thay đổi tham số"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:102
+#, fuzzy
+#| msgid "Set background"
+msgctxt "(qtundo-format)"
+msgid "Change slide background image"
+msgstr "Đặt nền"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:103
+#, fuzzy
+#| msgid "Set background"
+msgctxt "(qtundo-format)"
+msgid "Change page background image"
+msgstr "Đặt nền"
+
+#: pageapp/widgets/KoPageNavigator.cpp:55
+#, fuzzy, kde-format
+msgid "Master Slide %1/%2"
+msgstr "Trang Dán"
+
+#: pageapp/widgets/KoPageNavigator.cpp:56
+#, fuzzy, kde-format
+msgid "Slide %1/%2"
+msgstr "Hiện thanh công cụ %1"
+
+#: pageapp/widgets/KoPageNavigator.cpp:57
+#, fuzzy, kde-format
+msgid "Master Page %1/%2"
+msgstr "Trang Dán"
+
+#: pageapp/widgets/KoPageNavigator.cpp:58
+#, fuzzy, kde-format
+msgid "Page %1/%2"
+msgstr "Tên: "
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:37
+#, kde-format
+msgid "Clear"
+msgstr ""
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:110
+#: pigment/compositeops/KoCompositeOps.h:127
+#: pigment/KoCompositeOpRegistry.cpp:38
+#, kde-format
+msgid "Subtract"
+msgstr "Trừ"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:182
+#: pigment/compositeops/KoCompositeOps.h:129
+#: pigment/KoCompositeOpRegistry.cpp:39
+#, kde-format
+msgid "Multiply"
+msgstr ""
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:248
+#: pigment/colorspaces/KoAlphaColorSpace.h:183
+#: pigment/KoColorModelStandardIds.cpp:12
+#, fuzzy, kde-format
+#| msgid "Alpha"
+msgid "Alpha mask"
+msgstr "Alpha"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:250
+#: pigment/colorspaces/KoLabColorSpace.cpp:34
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:36
+#, kde-format
+msgid "Alpha"
+msgstr "Alpha"
+
+#: pigment/colorspaces/KoAlphaColorSpace.h:128
+#: pigment/colorspaces/KoAlphaColorSpace.h:133
+#: pigment/colorspaces/KoAlphaColorSpace.h:137
+#: pigment/colorspaces/KoAlphaColorSpace.h:141
+#: pigment/colorspaces/KoAlphaColorSpace.h:144
+#: pigment/colorspaces/KoAlphaColorSpace.h:147
+#: pigment/colorspaces/KoAlphaColorSpace.h:150
+#: pigment/colorspaces/KoAlphaColorSpace.h:153
+#: pigment/colorspaces/KoAlphaColorSpace.h:159
+#: pigment/colorspaces/KoAlphaColorSpace.h:162
+#, kde-format
+msgid "Undefined operation in the alpha color space"
+msgstr ""
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:27
+#: pigment/colorspaces/KoLabColorSpace.h:63
+#, fuzzy, kde-format
+#| msgid "L*a*b* (16-bit integer/channel)"
+msgid "L*a*b* (16-bit integer/channel, unmanaged)"
+msgstr "L*a*b* (số nguyên 16-bit/channel)"
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:31
+#: pigment/compositeops/KoCompositeOps.h:196
+#: pigment/KoCompositeOpRegistry.cpp:111
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Lightness"
+msgstr "Làm sáng"
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:32
+#: pigment/KoBasicHistogramProducers.cpp:430
+#, kde-format
+msgid "a*"
+msgstr "a*"
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:33
+#: pigment/KoBasicHistogramProducers.cpp:431
+#, kde-format
+msgid "b*"
+msgstr "b*"
+
+#: pigment/colorspaces/KoRgbU16ColorSpace.cpp:26
+#: pigment/colorspaces/KoRgbU16ColorSpace.h:51
+#, fuzzy, kde-format
+#| msgid "RGB 16-bit integer/channel)"
+msgid "RGB (16-bit integer/channel, unmanaged)"
+msgstr "RGB số nguyên 16-bit/channel)"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:28
+#: pigment/colorspaces/KoRgbU8ColorSpace.h:52
+#, fuzzy, kde-format
+#| msgid "RGB 8-bit integer/channel)"
+msgid "RGB (8-bit integer/channel, unmanaged)"
+msgstr "RGB số nguyên 8-bit/channel)"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:33
+#, kde-format
+msgid "Blue"
+msgstr "Xanh nước biển"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:34
+#, kde-format
+msgid "Green"
+msgstr "Xanh lá cây"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:35
+#, kde-format
+msgid "Red"
+msgstr "Đỏ"
+
+#: pigment/colorspaces/KoSimpleColorSpace.h:60
+#: pigment/colorspaces/KoSimpleColorSpace.h:67
+#, kde-format
+msgid "Undefined operation in the %1 space"
+msgstr ""
+
+#: pigment/colorspaces/KoSimpleColorSpace.h:84
+#: pigment/colorspaces/KoSimpleColorSpace.h:89
+#: pigment/colorspaces/KoSimpleColorSpace.h:94
+#: pigment/colorspaces/KoSimpleColorSpace.h:99
+#: pigment/colorspaces/KoSimpleColorSpace.h:104
+#: pigment/colorspaces/KoSimpleColorSpace.h:108
+#: pigment/colorspaces/KoSimpleColorSpace.h:112
+#: pigment/colorspaces/KoSimpleColorSpace.h:115
+#: pigment/colorspaces/KoSimpleColorSpace.h:118
+#: pigment/colorspaces/KoSimpleColorSpace.h:124
+#: pigment/colorspaces/KoSimpleColorSpace.h:127
+#, kde-format
+msgid "Undefined operation in the %1 color space"
+msgstr ""
+
+#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
+#, kde-format
+msgid "Simple Color Conversion Engine"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOpAlphaDarken.h:28
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:194
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken32.h:235
+#, fuzzy, kde-format
+#| msgid "Alpha"
+msgid "Alpha darken"
+msgstr "Alpha"
+
+#: pigment/compositeops/KoCompositeOpBehind.h:26
+#: pigment/KoCompositeOpRegistry.cpp:69
+#, kde-format
+msgid "Behind"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOpDissolve.h:48
+#: pigment/KoCompositeOpRegistry.cpp:83
+#, kde-format
+msgid "Dissolve"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOpErase.h:27
+#: pigment/KoCompositeOpRegistry.cpp:72
+#, kde-format
+msgid "Erase"
+msgstr "Xoá"
+
+#: pigment/compositeops/KoCompositeOpGreater.h:40
+#: pigment/KoCompositeOpRegistry.cpp:70
+#, fuzzy, kde-format
+#| msgid "Created:"
+msgid "Greater"
+msgstr "Tạo:"
+
+#: pigment/compositeops/KoCompositeOpOver.h:49
+#: pigment/compositeops/KoOptimizedCompositeOpOver128.h:238
+#: pigment/compositeops/KoOptimizedCompositeOpOver32.h:196
+#: pigment/KoCompositeOpRegistry.cpp:68 pigment/KoCompositeOpRegistry.cpp:134
+#, kde-format
+msgid "Normal"
+msgstr "Bình thường"
+
+#: pigment/compositeops/KoCompositeOps.h:101
+#: pigment/KoCompositeOpRegistry.cpp:71
+#, fuzzy, kde-format
+msgid "Overlay"
+msgstr "Thêm mục lục dưới"
+
+#: pigment/compositeops/KoCompositeOps.h:102
+#: pigment/KoCompositeOpRegistry.cpp:75
+#, kde-format
+msgid "Grain Merge"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:103
+#: pigment/KoCompositeOpRegistry.cpp:76
+#, kde-format
+msgid "Grain Extract"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:104
+#: pigment/KoCompositeOpRegistry.cpp:74
+#, fuzzy, kde-format
+msgid "Hard Mix"
+msgstr "Chiều cao:"
+
+#: pigment/compositeops/KoCompositeOps.h:105
+#: pigment/KoCompositeOpRegistry.cpp:79
+#, kde-format
+msgid "Geometric Mean"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:106
+#: pigment/KoCompositeOpRegistry.cpp:77
+#, fuzzy, kde-format
+#| msgid "Variable"
+msgid "Parallel"
+msgstr "Biến số"
+
+#: pigment/compositeops/KoCompositeOps.h:107
+#: pigment/KoCompositeOpRegistry.cpp:78
+#, kde-format
+msgid "Allanon"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:109
+#: pigment/KoCompositeOpRegistry.cpp:53
+#, kde-format
+msgid "Screen"
+msgstr "Màn hình"
+
+#: pigment/compositeops/KoCompositeOps.h:110
+#: pigment/KoCompositeOpRegistry.cpp:49
+#, fuzzy, kde-format
+#| msgid "Color Chooser"
+msgid "Color Dodge"
+msgstr "Chọn Màu"
+
+#: pigment/compositeops/KoCompositeOps.h:111
+#: pigment/KoCompositeOpRegistry.cpp:50
+#, fuzzy, kde-format
+#| msgid "Line Border"
+msgid "Linear Dodge"
+msgstr "Viền Đường thẳng"
+
+#: pigment/compositeops/KoCompositeOps.h:112 pigment/KoCompositeOp.cpp:23
+#: pigment/KoCompositeOpRegistry.cpp:28 pigment/KoCompositeOpRegistry.cpp:51
+#, kde-format
+msgid "Lighten"
+msgstr "Làm sáng"
+
+#: pigment/compositeops/KoCompositeOps.h:113
+#: pigment/KoCompositeOpRegistry.cpp:56
+#, fuzzy, kde-format
+msgid "Hard Light"
+msgstr "Chiều cao:"
+
+#: pigment/compositeops/KoCompositeOps.h:114
+#: pigment/KoCompositeOpRegistry.cpp:58
+#, fuzzy, kde-format
+#| msgid "Straight"
+msgid "Soft Light (SVG)"
+msgstr "Thẳng"
+
+#: pigment/compositeops/KoCompositeOps.h:115
+#: pigment/KoCompositeOpRegistry.cpp:57
+#, fuzzy, kde-format
+#| msgid "Straight"
+msgid "Soft Light (Photoshop)"
+msgstr "Thẳng"
+
+#: pigment/compositeops/KoCompositeOps.h:116
+#: pigment/KoCompositeOpRegistry.cpp:59
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Gamma Light"
+msgstr "Làm sáng"
+
+#: pigment/compositeops/KoCompositeOps.h:117
+#: pigment/KoCompositeOpRegistry.cpp:55
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Vivid Light"
+msgstr "Làm sáng"
+
+#: pigment/compositeops/KoCompositeOps.h:118
+#: pigment/KoCompositeOpRegistry.cpp:54
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Pin Light"
+msgstr "Làm sáng"
+
+#: pigment/compositeops/KoCompositeOps.h:119
+#: pigment/KoCompositeOpRegistry.cpp:52
+#, fuzzy, kde-format
+msgid "Linear Light"
+msgstr "Bề rộng:"
+
+#: pigment/compositeops/KoCompositeOps.h:121
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Color Burn"
+msgstr "Màu"
+
+#: pigment/compositeops/KoCompositeOps.h:122
+#: pigment/KoCompositeOpRegistry.cpp:44
+#, fuzzy, kde-format
+#| msgid "Line Border"
+msgid "Linear Burn"
+msgstr "Viền Đường thẳng"
+
+#: pigment/compositeops/KoCompositeOps.h:123 pigment/KoCompositeOp.cpp:24
+#: pigment/KoCompositeOpRegistry.cpp:27 pigment/KoCompositeOpRegistry.cpp:45
+#, kde-format
+msgid "Darken"
+msgstr "Làm tối"
+
+#: pigment/compositeops/KoCompositeOps.h:124
+#: pigment/KoCompositeOpRegistry.cpp:46
+#, kde-format
+msgid "Gamma Dark"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:126
+#: pigment/KoCompositeOpRegistry.cpp:37
+#, fuzzy, kde-format
+msgid "Addition"
+msgstr "Thêm phân số"
+
+#: pigment/compositeops/KoCompositeOps.h:128
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Inversed-Subtract"
+msgstr "Trừ"
+
+#: pigment/compositeops/KoCompositeOps.h:130
+#: pigment/KoCompositeOpRegistry.cpp:40
+#, kde-format
+msgid "Divide"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:132
+#: pigment/KoCompositeOpRegistry.cpp:66
+#, kde-format
+msgid "Arcus Tangent"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:133
+#: pigment/KoCompositeOpRegistry.cpp:62
+#, kde-format
+msgid "Difference"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:134
+#: pigment/KoCompositeOpRegistry.cpp:65
+#, kde-format
+msgid "Exclusion"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:135
+#: pigment/KoCompositeOpRegistry.cpp:63
+#, kde-format
+msgid "Equivalence"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:136
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Additive-Subtractive"
+msgstr "Trừ"
+
+#: pigment/compositeops/KoCompositeOps.h:165
+#: pigment/KoCompositeOpRegistry.cpp:84
+#, fuzzy, kde-format
+#| msgid "Copy Page"
+msgid "Copy Red"
+msgstr "Chép Trang"
+
+#: pigment/compositeops/KoCompositeOps.h:166
+#: pigment/KoCompositeOpRegistry.cpp:85
+#, fuzzy, kde-format
+#| msgid "Green"
+msgid "Copy Green"
+msgstr "Xanh lá cây"
+
+#: pigment/compositeops/KoCompositeOps.h:167
+#: pigment/KoCompositeOpRegistry.cpp:86
+#, fuzzy, kde-format
+#| msgid "Copy Page"
+msgid "Copy Blue"
+msgstr "Chép Trang"
+
+#: pigment/compositeops/KoCompositeOps.h:168
+#: pigment/KoCompositeOpRegistry.cpp:88
+#, fuzzy, kde-format
+msgid "Tangent Normalmap"
+msgstr "Tổng hợp các đường"
+
+#: pigment/compositeops/KoCompositeOps.h:169
+#, fuzzy, kde-format
+msgid "Combine Normal Maps"
+msgstr "Tổng hợp các đường"
+
+#: pigment/compositeops/KoCompositeOps.h:171 pigment/KoCompositeOp.cpp:18
+#: pigment/KoCompositeOpRegistry.cpp:90
+#, kde-format
+msgid "Color"
+msgstr "Màu"
+
+#: pigment/compositeops/KoCompositeOps.h:172
+#: pigment/KoCompositeOpRegistry.cpp:91
+#, kde-format
+msgid "Hue"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:173
+#: pigment/KoCompositeOpRegistry.cpp:92
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Saturation"
+msgstr "Trừ"
+
+#: pigment/compositeops/KoCompositeOps.h:174
+#: pigment/KoCompositeOpRegistry.cpp:95
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Increase Saturation"
+msgstr "Trừ"
+
+#: pigment/compositeops/KoCompositeOps.h:175
+#: pigment/KoCompositeOpRegistry.cpp:94
+#, fuzzy, kde-format
+msgid "Decrease Saturation"
+msgstr ""
+"\n"
+" Định hướng:"
+
+#: pigment/compositeops/KoCompositeOps.h:176
+#: pigment/KoCompositeOpRegistry.cpp:93
+#, fuzzy, kde-format
+#| msgid "Increase font size"
+msgid "Luminosity"
+msgstr "Tăng cỡ chữ"
+
+#: pigment/compositeops/KoCompositeOps.h:177
+#: pigment/KoCompositeOpRegistry.cpp:97
+#, fuzzy, kde-format
+#| msgid "Increase font size"
+msgid "Increase Luminosity"
+msgstr "Tăng cỡ chữ"
+
+#: pigment/compositeops/KoCompositeOps.h:178
+#: pigment/KoCompositeOpRegistry.cpp:96
+#, fuzzy, kde-format
+#| msgid "Decrease font size"
+msgid "Decrease Luminosity"
+msgstr "Giảm cỡ chữ"
+
+#: pigment/compositeops/KoCompositeOps.h:179
+#: pigment/KoCompositeOpRegistry.cpp:47
+#, fuzzy, kde-format
+#| msgid "Set background"
+msgid "Darker Color"
+msgstr "Đặt nền"
+
+#: pigment/compositeops/KoCompositeOps.h:180
+#: pigment/KoCompositeOpRegistry.cpp:60
+#, fuzzy, kde-format
+#| msgid "More Line Colors..."
+msgid "Lighter Color"
+msgstr "Màu dòng khác ..."
+
+#: pigment/compositeops/KoCompositeOps.h:182
+#: pigment/KoCompositeOpRegistry.cpp:99
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Color HSI"
+msgstr "Màu"
+
+#: pigment/compositeops/KoCompositeOps.h:183
+#: pigment/KoCompositeOpRegistry.cpp:100
+#, kde-format
+msgid "Hue HSI"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:184
+#: pigment/KoCompositeOpRegistry.cpp:101
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Saturation HSI"
+msgstr "Trừ"
+
+#: pigment/compositeops/KoCompositeOps.h:185
+#: pigment/KoCompositeOpRegistry.cpp:104
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Increase Saturation HSI"
+msgstr "Trừ"
+
+#: pigment/compositeops/KoCompositeOps.h:186
+#: pigment/KoCompositeOpRegistry.cpp:103
+#, fuzzy, kde-format
+msgid "Decrease Saturation HSI"
+msgstr ""
+"\n"
+" Định hướng:"
+
+#: pigment/compositeops/KoCompositeOps.h:187
+#: pigment/KoCompositeOpRegistry.cpp:102
+#, fuzzy, kde-format
+msgid "Intensity"
+msgstr "Nhập tên"
+
+#: pigment/compositeops/KoCompositeOps.h:188
+#: pigment/KoCompositeOpRegistry.cpp:106
+#, fuzzy, kde-format
+#| msgid "Increase Indent"
+msgid "Increase Intensity"
+msgstr "Thụt vào"
+
+#: pigment/compositeops/KoCompositeOps.h:189
+#: pigment/KoCompositeOpRegistry.cpp:105
+#, fuzzy, kde-format
+msgid "Decrease Intensity"
+msgstr "Lùi ra"
+
+#: pigment/compositeops/KoCompositeOps.h:191
+#: pigment/KoCompositeOpRegistry.cpp:108
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Color HSL"
+msgstr "Màu"
+
+#: pigment/compositeops/KoCompositeOps.h:192
+#: pigment/KoCompositeOpRegistry.cpp:109
+#, kde-format
+msgid "Hue HSL"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:193
+#: pigment/KoCompositeOpRegistry.cpp:110
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Saturation HSL"
+msgstr "Trừ"
+
+#: pigment/compositeops/KoCompositeOps.h:194
+#: pigment/KoCompositeOpRegistry.cpp:113
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Increase Saturation HSL"
+msgstr "Trừ"
+
+#: pigment/compositeops/KoCompositeOps.h:195
+#: pigment/KoCompositeOpRegistry.cpp:112
+#, fuzzy, kde-format
+msgid "Decrease Saturation HSL"
+msgstr ""
+"\n"
+" Định hướng:"
+
+#: pigment/compositeops/KoCompositeOps.h:197
+#: pigment/KoCompositeOpRegistry.cpp:115
+#, fuzzy, kde-format
+#| msgid "Increase Indent"
+msgid "Increase Lightness"
+msgstr "Thụt vào"
+
+#: pigment/compositeops/KoCompositeOps.h:198
+#: pigment/KoCompositeOpRegistry.cpp:114
+#, fuzzy, kde-format
+msgid "Decrease Lightness"
+msgstr "Lùi ra"
+
+#: pigment/compositeops/KoCompositeOps.h:200
+#: pigment/KoCompositeOpRegistry.cpp:117
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Color HSV"
+msgstr "Màu"
+
+#: pigment/compositeops/KoCompositeOps.h:201
+#: pigment/KoCompositeOpRegistry.cpp:118
+#, kde-format
+msgid "Hue HSV"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:202
+#: pigment/KoCompositeOpRegistry.cpp:119
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Saturation HSV"
+msgstr "Trừ"
+
+#: pigment/compositeops/KoCompositeOps.h:203
+#: pigment/KoCompositeOpRegistry.cpp:122
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Increase Saturation HSV"
+msgstr "Trừ"
+
+#: pigment/compositeops/KoCompositeOps.h:204
+#: pigment/KoCompositeOpRegistry.cpp:121
+#, fuzzy, kde-format
+msgid "Decrease Saturation HSV"
+msgstr ""
+"\n"
+" Định hướng:"
+
+#: pigment/compositeops/KoCompositeOps.h:205
+#: pigment/KoCompositeOpRegistry.cpp:120
+#, kde-format
+msgid "Value"
+msgstr "Giá trị"
+
+#: pigment/compositeops/KoCompositeOps.h:206
+#: pigment/KoCompositeOpRegistry.cpp:124
+#, fuzzy, kde-format
+#| msgid "Increase Indent"
+msgid "Increase Value"
+msgstr "Thụt vào"
+
+#: pigment/compositeops/KoCompositeOps.h:207
+#: pigment/KoCompositeOpRegistry.cpp:123
+#, fuzzy, kde-format
+msgid "Decrease Value"
+msgstr "Lùi ra"
+
+#: pigment/KoBasicHistogramProducers.cpp:352
+#: pigment/KoBasicHistogramProducers.cpp:419
+#, kde-format
+msgid "Generic RGB Histogram"
+msgstr ""
+
+#: pigment/KoBasicHistogramProducers.cpp:356
+#, kde-format
+msgid "R"
+msgstr "R"
+
+#: pigment/KoBasicHistogramProducers.cpp:357
+#, kde-format
+msgid "G"
+msgstr "G"
+
+#: pigment/KoBasicHistogramProducers.cpp:358
+#, kde-format
+msgid "B"
+msgstr "B"
+
+#: pigment/KoBasicHistogramProducers.cpp:425
+#, kde-format
+msgid "L*a*b* Histogram"
+msgstr ""
+
+#: pigment/KoBasicHistogramProducers.cpp:429
+#, kde-format
+msgid "L*"
+msgstr "L*"
+
+#: pigment/KoBasicHistogramProducers.cpp:503
+#, kde-format
+msgid "Generic L*a*b* Histogram"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:13
+#, kde-format
+msgid "RGB"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:14
+#, kde-format
+msgid "XYZ"
+msgstr "XYZ"
+
+#: pigment/KoColorModelStandardIds.cpp:15
+#, kde-format
+msgid "L*a*b*"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:16
+#, kde-format
+msgid "CMYK"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:17
+#, kde-format
+msgid "Grayscale"
+msgstr "Đen Trắng"
+
+#: pigment/KoColorModelStandardIds.cpp:18
+#, kde-format
+msgid "Grayscale (without transparency)"
+msgstr "Đen Trắng (không có độ trong suốt)"
+
+#: pigment/KoColorModelStandardIds.cpp:19
+#, kde-format
+msgid "YCbCr"
+msgstr "YCbCr"
+
+#: pigment/KoColorModelStandardIds.cpp:21
+#, kde-format
+msgid "8 Bits"
+msgstr "8 Bit"
+
+#: pigment/KoColorModelStandardIds.cpp:22
+#, kde-format
+msgid "16 Bits"
+msgstr "16 Bit"
+
+#: pigment/KoColorModelStandardIds.cpp:23
+#, fuzzy, kde-format
+#| msgid "16 Bits Float (HDR)"
+msgid "16 Bits Float"
+msgstr "16 Bit dấu phẩy động (HDR)"
+
+#: pigment/KoColorModelStandardIds.cpp:24
+#, fuzzy, kde-format
+#| msgid "32 Bits Float (HDR)"
+msgid "32 Bits Float"
+msgstr "32 Bit dấu phẩy động (HDR)"
+
+#: pigment/KoColorModelStandardIds.cpp:25
+#, fuzzy, kde-format
+#| msgid "16 Bits Float (HDR)"
+msgid "64 Bits Float"
+msgstr "16 Bit dấu phẩy động (HDR)"
+
+#: pigment/KoCompositeOp.cpp:21 pigment/KoCompositeOpRegistry.cpp:26
+#, kde-format
+msgid "Arithmetic"
+msgstr ""
+
+#: pigment/KoCompositeOp.cpp:22 pigment/KoCompositeOpRegistry.cpp:29
+#, fuzzy, kde-format
+msgid "Negative"
+msgstr "Thay thế bằng"
+
+#: pigment/KoCompositeOp.cpp:25 pigment/KoCompositeOpRegistry.cpp:32
+#, kde-format
+msgid "HSY"
+msgstr ""
+
+#: pigment/KoCompositeOp.cpp:26 pigment/KoCompositeOpRegistry.cpp:33
+#, kde-format
+msgid "HSI"
+msgstr ""
+
+#: pigment/KoCompositeOp.cpp:27 pigment/KoCompositeOpRegistry.cpp:34
+#, kde-format
+msgid "HSL"
+msgstr ""
+
+#: pigment/KoCompositeOp.cpp:28 pigment/KoCompositeOpRegistry.cpp:35
+#, kde-format
+msgid "HSV"
+msgstr ""
+
+#: pigment/KoCompositeOp.cpp:29 pigment/KoCompositeOpRegistry.cpp:30
+#, kde-format
+msgid "Mix"
+msgstr ""
+
+#: pigment/KoCompositeOpRegistry.cpp:41
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Inverse Subtract"
+msgstr "Trừ"
+
+#: pigment/KoCompositeOpRegistry.cpp:43
+#, kde-format
+msgid "Burn"
+msgstr ""
+
+#: pigment/KoCompositeOpRegistry.cpp:64
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Additive Subtractive"
+msgstr "Trừ"
+
+#: pigment/KoCompositeOpRegistry.cpp:73
+#, fuzzy, kde-format
+#| msgid "Alpha"
+msgid "Alpha Darken"
+msgstr "Alpha"
+
+#: pigment/KoCompositeOpRegistry.cpp:81
+#, kde-format
+msgid "Bumpmap"
+msgstr ""
+
+#: pigment/KoCompositeOpRegistry.cpp:82
+#, fuzzy, kde-format
+msgid "Combine Normal Map"
+msgstr "Tổng hợp các đường"
+
+#: pigment/resources/KoStopGradient.cpp:421
+#, kde-format
+msgid "SVG Gradient"
+msgstr ""
+
+#: rdf/InsertSemanticObjectReferenceAction.cpp:43
+#, kde-format
+msgid "Select the object you want to reference"
+msgstr ""
+
+#: rdf/KoDocumentRdf.cpp:618
+#, kde-format
+msgid "Reference"
+msgstr ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:229
+#, kde-format
+msgid "Set For All Existing"
+msgstr ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:297
+#, kde-format
+msgctxt "statement is an Rdf related term"
+msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
+msgid_plural ""
+"<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
+msgstr[0] ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:300
+#, kde-format
+msgctxt "statement is an Rdf related term"
+msgid "Discard invalid statements?"
+msgstr ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:341
+#, fuzzy, kde-format
+#| msgid "Red"
+msgid "Rdf"
+msgstr "Đỏ"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: rdf/KoDocumentRdfEditWidget.ui:21
+#, fuzzy, kde-format
+msgid "Triples"
+msgstr "Đầu đề:"
+
+#. i18n: ectx: property (text), widget (QPushButton, newStylesheet)
+#. i18n: ectx: property (text), widget (QPushButton, newTripleButton)
+#. i18n: ectx: property (text), widget (QPushButton, newNamespaceButton)
+#: rdf/KoDocumentRdfEditWidget.ui:39 rdf/KoDocumentRdfEditWidget.ui:84
+#: rdf/KoSemanticStylesheetsEditor.ui:77
+#, kde-format
+msgid "new"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, copyTripleButton)
+#: rdf/KoDocumentRdfEditWidget.ui:46
+#, fuzzy, kde-format
+msgid "copy"
+msgstr "Công ti:"
+
+#. i18n: ectx: property (text), widget (QPushButton, deleteStylesheet)
+#. i18n: ectx: property (text), widget (QPushButton, deleteTripleButton)
+#. i18n: ectx: property (text), widget (QPushButton, deleteNamespaceButton)
+#: rdf/KoDocumentRdfEditWidget.ui:53 rdf/KoDocumentRdfEditWidget.ui:91
+#: rdf/KoSemanticStylesheetsEditor.ui:84
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "delete"
+msgstr "Xoá"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: rdf/KoDocumentRdfEditWidget.ui:76
+#, fuzzy, kde-format
+#| msgid "Replace"
+msgid "Namespaces"
+msgstr "Thay thế"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, m_namespaceView)
+#: rdf/KoDocumentRdfEditWidget.ui:123
+#, fuzzy, kde-format
+msgid "Prefix"
+msgstr "Xem trước:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, m_namespaceView)
+#: rdf/KoDocumentRdfEditWidget.ui:128
+#, fuzzy, kde-format
+#| msgid "Replace"
+msgid "Namespace"
+msgstr "Thay thế"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: rdf/KoDocumentRdfEditWidget.ui:137
+#, kde-format
+msgid "Semantic"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
+#: rdf/KoDocumentRdfEditWidget.ui:156
+#, kde-format
+msgid "SPARQL"
+msgstr ""
+
+#. i18n: ectx: property (html), widget (QTextEdit, m_sparqlQuery)
+#: rdf/KoDocumentRdfEditWidget.ui:182
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"># Insert your SPARQL query here<br /># "
+"Results are shown below.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix rdf:  &lt;http://www.w3."
+"org/1999/02/22-rdf-syntax-ns#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix foaf: &lt;http://xmlns.com/"
+"foaf/0.1/&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix pkg:  &lt;http://docs.oasis-open."
+"org/ns/office/1.2/meta/pkg#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix geo84: &lt;http://www.w3."
+"org/2003/01/geo/wgs84_pos#&gt;</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">select ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">where { </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"> ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">}</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
+#: rdf/KoDocumentRdfEditWidget.ui:191
+#, fuzzy, kde-format
+msgid "Execute"
+msgstr "US Executive"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_5)
+#: rdf/KoDocumentRdfEditWidget.ui:221
+#, fuzzy, kde-format
+#| msgid "Styles"
+msgid "Stylesheets"
+msgstr "Các kiểu"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: rdf/KoDocumentRdfEditWidget.ui:227
+#, kde-format
+msgid ""
+"Set the default stylesheet for Semantic objects in this document. New RDF "
+"objects will use this stylesheet automatically. The buttons allow you to set "
+"the stylesheet for all existing semantic objects to the new default "
+"stylesheet as well."
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:101
+#, fuzzy, kde-format
+#| msgid "Styles"
+msgid "Apply Stylesheet"
+msgstr "Các kiểu"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
+#: rdf/KoSemanticStylesheetsEditor.cpp:107
+#, kde-format
+msgid "System"
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:112
+#: rdf/KoSemanticStylesheetsEditor.cpp:123
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "User"
+msgstr "Chèn"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:126
+#, kde-format
+msgid "Reapply Current"
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:131
+#, kde-format
+msgid "Disassociate"
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add..."
+msgid "Edit %1"
+msgstr "Thêm..."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: rdf/KoSemanticStylesheetsEditor.ui:17
+#, fuzzy, kde-format
+#| msgid "Styles"
+msgid "Stylesheet Definition"
+msgstr "Các kiểu"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: rdf/KoSemanticStylesheetsEditor.ui:29
+#, kde-format
+msgid "Variables Available"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QTableWidget, variables)
+#: rdf/KoSemanticStylesheetsEditor.ui:62
+#, fuzzy, kde-format
+msgid "Description"
+msgstr ""
+"\n"
+" Định hướng:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, stylesheets)
+#: rdf/KoSemanticStylesheetsEditor.ui:107
+#, fuzzy, kde-format
+#| msgid "Styles"
+msgid "Stylesheet Name"
+msgstr "Các kiểu"
+
+#: rdf/KoSopranoTableModel.cpp:71
+#, kde-format
+msgid "Empty"
+msgstr ""
+
+#: rdf/KoSopranoTableModel.cpp:73 rdf/KoSopranoTableModelDelegate.cpp:30
+#, kde-format
+msgid "URI"
+msgstr ""
+
+#: rdf/KoSopranoTableModel.cpp:75 rdf/KoSopranoTableModelDelegate.cpp:31
+#, kde-format
+msgid "Literal"
+msgstr ""
+
+#: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:32
+#, fuzzy, kde-format
+#| msgid "Black"
+msgid "Blank"
+msgstr "Đen"
+
+#: rdf/KoSopranoTableModel.cpp:119
+#, fuzzy, kde-format
+#| msgid "&Size:"
+msgid "Valid"
+msgstr "&Cỡ:"
+
+#: rdf/KoSopranoTableModel.cpp:121
+#, fuzzy, kde-format
+msgid "Subject"
+msgstr "Đối tượng"
+
+#: rdf/KoSopranoTableModel.cpp:123
+#, fuzzy, kde-format
+#| msgid "Picture"
+msgid "Predicate"
+msgstr "Ảnh"
+
+#: rdf/KoSopranoTableModel.cpp:125
+#, kde-format
+msgid "Object"
+msgstr "Đối tượng"
+
+#: rdf/KoSopranoTableModel.cpp:127
+#, fuzzy, kde-format
+#| msgid "Type"
+msgid "Obj Type"
+msgstr "Loại"
+
+#: rdf/KoSopranoTableModel.cpp:129
+#, fuzzy, kde-format
+#| msgid "Data"
+msgid "DataType"
+msgstr "Dữ liệu "
+
+#: rdf/KoSopranoTableModel.cpp:131
+#, fuzzy, kde-format
+#| msgid "Stopped"
+msgid "Stored In"
+msgstr "Bị dừng"
+
+#: store/KoEncryptedStore.cpp:228
+#, fuzzy, kde-format
+#| msgid ""
+#| "This document contains an unknown encryption method. Some parts may be "
+#| "unreadable."
+msgid ""
+"This document contains an unknown checksum. When you give a password it "
+"might not be verified."
+msgstr ""
+"Tài liệu chứa phương pháp mã hoá không rõ. Một số phần có thể không đọc được."
+
+#: store/KoEncryptedStore.cpp:254 store/KoEncryptedStore.cpp:271
+#, kde-format
+msgid ""
+"This document contains an unknown encryption method. Some parts may be "
+"unreadable."
+msgstr ""
+"Tài liệu chứa phương pháp mã hoá không rõ. Một số phần có thể không đọc được."
+
+#: store/KoEncryptedStore.cpp:286
+#, kde-format
+msgid ""
+"This document contains incomplete encryption data. Some parts may be "
+"unreadable."
+msgstr ""
+"Tài liệu chứa dữ liệu mã hoá không đầy đủ. Một số phần có thể không đọc được."
+
+#: store/KoEncryptedStore.cpp:300
+#, kde-format
+msgid ""
+"QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
+"not be opened."
+msgstr ""
+"QCA hiện không hỗ trợ SHA1 hoặc PBKDF2 dùng SHA1. Không thể mở tài liệu."
+
+#: store/KoEncryptedStore.cpp:330
+#, fuzzy, kde-format
+msgid ""
+"The manifest file seems to be corrupted. It cannot be modified and the "
+"document will remain unreadable. Please try and save the document again to "
+"prevent losing your work."
+msgstr ""
+"Danh sách tệp có vẻ bị lỗi. Nó không thể bị thay đổi và tài liệu sẽ chỉ được "
+"đọc. Xin cố lưu lại tài liệu để tránh mất dữ liệu."
+
+#: store/KoEncryptedStore.cpp:428
+#, fuzzy, kde-format
+msgid ""
+"The manifest file cannot be written. The document will remain unreadable. "
+"Please try and save the document again to prevent losing your work."
+msgstr ""
+"Không thể ghi danh sách tệp. Tài liệu sẽ chỉ được đọc. Xin cố lưu lại tài "
+"liệu để tránh mất dữ liệu."
+
+#: store/KoEncryptedStore.cpp:549
+#, kde-format
+msgid "Please enter the password to open this file."
+msgstr "Nhập mật khẩu để mở tệp này."
+
+#: store/KoEncryptedStore.cpp:724
+#, kde-format
+msgid "Please enter the password to encrypt the document with."
+msgstr "Nhập mật khẩu để mã hoá tài liệu này."
+
+#: store/KoEncryptedStore.cpp:738
+#, kde-format
+msgid "Do you want to save the password?"
+msgstr "Bạn có muốn lưu lại mật khẩu?"
+
+#: store/KoNetAccess.cpp:90
+#, fuzzy, kde-format
+#| msgid "The file %1 does not exist."
+msgid "File '%1' is not readable"
+msgstr "Tệp %1 không tồn tại."
+
+#: store/KoNetAccess.cpp:409
+#, kde-format
+msgid "ERROR: Unknown protocol '%1'"
+msgstr ""
+
+#: store/KoStore.cpp:168
+#, fuzzy, kde-format
+msgid "The directory mode is not supported for remote locations."
+msgstr "Chế độ thư mục không hỗ trợ các địa điểm ở máy khác."
+
+#: store/KoStore.cpp:169
+#, kde-format
+msgid "Calligra Storage"
+msgstr ""
+
+#: text/commands/ChangeListCommand.cpp:28
+#: text/commands/ChangeListCommand.cpp:76
+#: text/commands/ChangeListCommand.cpp:89
+#, fuzzy
+#| msgid "Change"
+msgctxt "(qtundo-format)"
+msgid "Change List"
+msgstr "Thay đổi"
+
+#: text/commands/ChangeStylesMacroCommand.cpp:24
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Styles"
+msgstr "Thêm kí tự vào kí hiệu"
+
+#: text/commands/ChangeTrackedDeleteCommand.cpp:263
+#, kde-format
+msgid "Delete"
+msgstr "Xoá"
+
+#: text/commands/ChangeTrackedDeleteCommand.cpp:318
+#: text/commands/DeleteCommand.cpp:506 text/KoTextEditor_undo.cpp:74
+#: text/KoTextEditor_undo.cpp:153 text/KoTextEditor_undo.cpp:188
+#: text/KoTextEditor_undo.cpp:205 text/KoTextEditor_undo.cpp:247
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Text"
+msgstr "Chữ"
+
+#: text/commands/DeleteCommand.cpp:57
+#, fuzzy
+#| msgid "Delete"
+msgctxt "(qtundo-format)"
+msgid "Delete"
+msgstr "Xoá"
+
+#: text/commands/DeleteTableColumnCommand.cpp:23
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete Column"
+msgstr "Text đã &chọn"
+
+#: text/commands/DeleteTableRowCommand.cpp:23
+#, fuzzy
+#| msgid "Delete"
+msgctxt "(qtundo-format)"
+msgid "Delete Row"
+msgstr "Xoá"
+
+#: text/commands/InsertNoteCommand.cpp:21
+#, fuzzy
+#| msgid "Insert point"
+msgctxt "(qtundo-format)"
+msgid "Insert Footnote"
+msgstr "Chèn điểm"
+
+#: text/commands/InsertNoteCommand.cpp:23
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Endnote"
+msgstr "Chèn Số thứ tự"
+
+#: text/commands/InsertTableColumnCommand.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Column Right"
+msgstr "Chèn biểu tượng"
+
+#: text/commands/InsertTableColumnCommand.cpp:27
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Column Left"
+msgstr "Chèn biểu tượng"
+
+#: text/commands/InsertTableRowCommand.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Row Below"
+msgstr "Chèn biểu tượng"
+
+#: text/commands/InsertTableRowCommand.cpp:27
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Row Above"
+msgstr "Chèn biểu tượng"
+
+#: text/commands/ListItemNumberingCommand.cpp:22
+#, fuzzy
+#| msgid "Change parameter"
+msgctxt "(qtundo-format)"
+msgid "Change List Numbering"
+msgstr "Thay đổi tham số"
+
+#: text/commands/NewSectionCommand.cpp:22
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "New Section"
+msgstr "Nhóm các hình"
+
+#: text/commands/ParagraphFormattingCommand.cpp:82
+#, fuzzy
+#| msgid "Set Paragraph Style"
+msgctxt "(qtundo-format)"
+msgid "Direct Paragraph Formatting"
+msgstr "Đặt Kiểu Đoạn"
+
+#: text/commands/RenameSectionCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename Section"
+msgstr "Tạo mẫu"
+
+#: text/commands/ResizeTableCommand.cpp:30
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Adjust Column Width"
+msgstr "Tuỳ biến"
+
+#: text/commands/ResizeTableCommand.cpp:32
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Adjust Row Height"
+msgstr "Tuỳ biến"
+
+#: text/commands/SplitSectionsCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Split sections startings"
+msgstr ""
+
+#: text/commands/SplitSectionsCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Split sections endings"
+msgstr ""
+
+#: text/commands/TextPasteCommand.cpp:51
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Paste As Text"
+msgstr "Trang Dán"
+
+#: text/commands/TextPasteCommand.cpp:53
+#, fuzzy
+#| msgid "Date"
+msgctxt "(qtundo-format)"
+msgid "Paste"
+msgstr "Ngày"
+
+#: text/InsertTextLocator.cpp:14
+#, kde-format
+msgid "Index Reference"
+msgstr ""
+
+#: text/InsertTextReferenceAction.cpp:22 text/InsertTextReferenceAction.cpp:50
+#, kde-format
+msgid "Text Reference"
+msgstr ""
+
+#: text/InsertTextReferenceAction.cpp:31
+#, kde-format
+msgid "Please create an index to reference first."
+msgstr ""
+
+#: text/InsertTextReferenceAction.cpp:40
+#, kde-format
+msgid "Select the index you want to reference"
+msgstr ""
+
+#: text/KoFindStrategy.cpp:51
+#, kde-format
+msgid "Found 1 match"
+msgid_plural "Found %1 matches"
+msgstr[0] ""
+
+#: text/KoFindStrategy.cpp:51
+#, kde-format
+msgid "Found no match"
+msgstr ""
+
+#: text/KoReplaceStrategy.cpp:43
+#, kde-format
+msgid ""
+"Found no match\n"
+"\n"
+"No text was replaced"
+msgstr ""
+
+#: text/KoReplaceStrategy.cpp:46
+#, kde-format
+msgid "1 replacement made"
+msgid_plural "%1 replacements made"
+msgstr[0] ""
+
+#: text/KoReplaceStrategy.cpp:59
+#, fuzzy, kde-format
+msgid "Replace %1 with %2?"
+msgstr "Thay thế Text"
+
+#: text/KoSectionModel.cpp:87
+#, fuzzy, kde-format
+msgctxt "new numbered section name"
+msgid "New section %1"
+msgstr "Nhóm các hình"
+
+#: text/KoText.cpp:19
+#, fuzzy, kde-format
+msgctxt "Underline Style"
+msgid "None"
+msgstr "Không"
+
+#: text/KoText.cpp:20
+#, fuzzy, kde-format
+msgctxt "Underline Style"
+msgid "Single"
+msgstr "Một"
+
+#: text/KoText.cpp:21
+#, kde-format
+msgctxt "Underline Style"
+msgid "Double"
+msgstr "Đôi"
+
+#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1501
+#: text/KoTextEditor.cpp:1503
+#, fuzzy
+#| msgid "Set Paragraph Style"
+msgctxt "(qtundo-format)"
+msgid "New Paragraph"
+msgstr "Đặt Kiểu Đoạn"
+
+#: text/KoTextEditor.cpp:470
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add Bookmark"
+msgstr "Thêm chỗ ghi nhớ"
+
+#: text/KoTextEditor.cpp:485
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add Annotation"
+msgstr "Thêm phân số"
+
+#: text/KoTextEditor.cpp:509
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Index"
+msgstr "Chèn Số thứ tự"
+
+#: text/KoTextEditor.cpp:535
+#, fuzzy
+#| msgid "Insert page"
+msgctxt "(qtundo-format)"
+msgid "Insert Variable"
+msgstr "Chèn trang"
+
+#: text/KoTextEditor.cpp:602
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Break"
+msgstr "Thêm chỗ ghi nhớ"
+
+#: text/KoTextEditor.cpp:923 text/KoTextEditor.cpp:925
+#: text/KoTextEditor.cpp:940
+#, fuzzy
+#| msgid "Insert page"
+msgctxt "(qtundo-format)"
+msgid "Insert Table"
+msgstr "Chèn trang"
+
+#: text/KoTextEditor.cpp:1080
+#, fuzzy
+#| msgid "Merge points"
+msgctxt "(qtundo-format)"
+msgid "Merge Cells"
+msgstr "Nhập các điểm"
+
+#: text/KoTextEditor.cpp:1097
+#, fuzzy
+#| msgid "Vertical"
+msgctxt "(qtundo-format)"
+msgid "Split Cells"
+msgstr "&Dọc"
+
+#: text/KoTextEditor.cpp:1126
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Adjust Table Width"
+msgstr "Tuỳ biến"
+
+#: text/KoTextEditor.cpp:1143
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Border Formatting"
+msgstr "Định dạng trang"
+
+#: text/KoTextEditor.cpp:1190 text/KoTextEditor.cpp:1192
+#: text/KoTextEditor.cpp:1210
+#, fuzzy
+#| msgid "Insert page"
+msgctxt "(qtundo-format)"
+msgid "Insert Table Of Contents"
+msgstr "Chèn trang"
+
+#: text/KoTextEditor.cpp:1249
+#, fuzzy
+#| msgid "Insert page"
+msgctxt "(qtundo-format)"
+msgid "Modify Table Of Contents"
+msgstr "Chèn trang"
+
+#: text/KoTextEditor.cpp:1266 text/KoTextEditor.cpp:1268
+#: text/KoTextEditor.cpp:1287
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Bibliography"
+msgstr "Chèn Xuống dòng"
+
+#: text/KoTextEditor.cpp:1324 text/KoTextEditor.cpp:1326
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add Citation"
+msgstr "Thêm phân số"
+
+#: text/KoTextEditor.cpp:1353 text/KoTextEditor.cpp:1355
+#: text/KoTextEditor.cpp:1393
+msgctxt "(qtundo-format)"
+msgid "Typing"
+msgstr ""
+
+#: text/KoTextEditor_format.cpp:54
+#, fuzzy
+#| msgid "Bold"
+msgctxt "(qtundo-format)"
+msgid "Bold"
+msgstr "Đậm"
+
+#: text/KoTextEditor_format.cpp:67
+#, fuzzy
+#| msgid "Italic"
+msgctxt "(qtundo-format)"
+msgid "Italic"
+msgstr "Nghiêng"
+
+#: text/KoTextEditor_format.cpp:80
+#, fuzzy
+#| msgid "Underline"
+msgctxt "(qtundo-format)"
+msgid "Underline"
+msgstr "Gạch chân"
+
+#: text/KoTextEditor_format.cpp:99
+#, fuzzy
+#| msgid "Strike Out"
+msgctxt "(qtundo-format)"
+msgid "Strike Out"
+msgstr "Gạch bỏ"
+
+#: text/KoTextEditor_format.cpp:132 text/KoTextEditor_format.cpp:133
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Alignment"
+msgstr "Thay đổi Liên hệ"
+
+#: text/KoTextEditor_format.cpp:150
+#, fuzzy
+#| msgid "Set Vertical Alignment"
+msgctxt "(qtundo-format)"
+msgid "Set Vertical Alignment"
+msgstr "Đặt Dóng Dọc"
+
+#: text/KoTextEditor_format.cpp:184 text/KoTextEditor_format.cpp:185
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Decrease Indent"
+msgstr "Lùi ra"
+
+#: text/KoTextEditor_format.cpp:220 text/KoTextEditor_format.cpp:221
+#, fuzzy
+#| msgid "Increase Indent"
+msgctxt "(qtundo-format)"
+msgid "Increase Indent"
+msgstr "Thụt vào"
+
+#: text/KoTextEditor_format.cpp:256 text/KoTextEditor_format.cpp:258
+#, fuzzy
+#| msgid "Decrease font size"
+msgctxt "(qtundo-format)"
+msgid "Decrease font size"
+msgstr "Giảm cỡ chữ"
+
+#: text/KoTextEditor_format.cpp:269 text/KoTextEditor_format.cpp:271
+#, fuzzy
+#| msgid "Increase font size"
+msgctxt "(qtundo-format)"
+msgid "Increase font size"
+msgstr "Tăng cỡ chữ"
+
+#: text/KoTextEditor_format.cpp:282
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Font"
+msgstr "Text đã &chọn"
+
+#: text/KoTextEditor_format.cpp:295
+#, fuzzy
+#| msgid "Set point type"
+msgctxt "(qtundo-format)"
+msgid "Set Font Size"
+msgstr "Đặt kiểu điểm"
+
+#: text/KoTextEditor_format.cpp:308
+#, fuzzy
+#| msgid "Set background"
+msgctxt "(qtundo-format)"
+msgid "Set Background Color"
+msgstr "Đặt nền"
+
+#: text/KoTextEditor_format.cpp:321
+#, fuzzy
+#| msgid "Text Color..."
+msgctxt "(qtundo-format)"
+msgid "Set Text Color"
+msgstr "Màu Chữ..."
+
+#: text/KoTextEditor_format.cpp:349 text/KoTextEditor_format.cpp:388
+#, fuzzy
+#| msgid "Set Character Style"
+msgctxt "(qtundo-format)"
+msgid "Set Character Style"
+msgstr "Đặt Kiểu Kí tự"
+
+#: text/KoTextEditor_format.cpp:455
+#, fuzzy
+#| msgid "Set Paragraph Style"
+msgctxt "(qtundo-format)"
+msgid "Set Paragraph Style"
+msgstr "Đặt Kiểu Đoạn"
+
+#: text/KoTextEditor_format.cpp:517
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Formatting"
+msgstr "Định dạng"
+
+#: text/KoTextEditor_p.h:145 text/KoTextEditor_p.h:181
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Format"
+msgstr "Định dạng"
+
+#: text/styles/KoStyleManager.cpp:93 text/styles/KoStyleManager.cpp:98
+#, fuzzy, kde-format
+#| msgid "&Default"
+msgid "Default"
+msgstr "&Mặc định"
+
+#: widgets/KoColorPopupAction.cpp:76
+#, kde-format
+msgid "Opacity"
+msgstr "Độ trong suốt"
+
+#: widgets/KoColorSetWidget.cpp:148
+#, kde-format
+msgid "Recent:"
+msgstr "Gần đây:"
+
+#: widgets/KoColorSetWidget.cpp:161
+#, kde-format
+msgid "Add / Remove Colors..."
+msgstr "Thêm/Xoá Màu..."
+
+#: widgets/KoConfigAuthorPage.cpp:51
+#, kde-format
+msgid "Add new author profile (starts out as a copy of current)"
+msgstr ""
+
+#: widgets/KoConfigAuthorPage.cpp:55
+#, fuzzy, kde-format
+#| msgid "Copy the current page"
+msgid "Delete the author profile"
+msgstr "Chép trang hiện tại"
+
+#: widgets/KoConfigAuthorPage.cpp:129
+#, kde-format
+msgid "Name (not duplicate or blank name):"
+msgstr ""
+
+#: widgets/KoConfigAuthorPage.cpp:129
+#, fuzzy, kde-format
+#| msgid "name of the output file"
+msgid "Name of Profile"
+msgstr "tên của tệp đầu ra"
+
+#. i18n: ectx: property (text), widget (QLabel, fullNameLabel)
+#: widgets/KoConfigAuthorPage.ui:20 widgets/koDocumentInfoAuthorWidget.ui:20
+#, kde-format
+msgid "Name:"
+msgstr "Tên:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblInitialsDesc)
+#: widgets/KoConfigAuthorPage.ui:40 widgets/koDocumentInfoAuthorWidget.ui:37
+#, kde-format
+msgid "Initials:"
+msgstr "Tên viết tắt:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
+#: widgets/KoConfigAuthorPage.ui:63 widgets/koDocumentInfoAuthorWidget.ui:60
+#, fuzzy, kde-format
+msgid "Title:"
+msgstr "Tựa đề:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPositionDesc)
+#: widgets/KoConfigAuthorPage.ui:79 widgets/koDocumentInfoAuthorWidget.ui:77
+#, kde-format
+msgid "Position:"
+msgstr "Vị trí:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCompanyDesc)
+#: widgets/KoConfigAuthorPage.ui:95 widgets/koDocumentInfoAuthorWidget.ui:94
+#, kde-format
+msgid "Company:"
+msgstr "Công ty:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEmailDesc)
+#: widgets/KoConfigAuthorPage.ui:111 widgets/koDocumentInfoAuthorWidget.ui:104
+#, kde-format
+msgid "Email:"
+msgstr "Thư điện tử:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPhoneHome)
+#: widgets/KoConfigAuthorPage.ui:127 widgets/koDocumentInfoAuthorWidget.ui:114
+#, kde-format
+msgid "Telephone (home):"
+msgstr "Điện thoại (nhà):"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPhoneWork)
+#: widgets/KoConfigAuthorPage.ui:143 widgets/koDocumentInfoAuthorWidget.ui:124
+#, kde-format
+msgid "Telephone (work):"
+msgstr "Điện thoại (cơ quan):"
+
+#. i18n: ectx: property (text), widget (QLabel, lblFaxDesc)
+#: widgets/KoConfigAuthorPage.ui:159 widgets/koDocumentInfoAuthorWidget.ui:134
+#, kde-format
+msgid "Fax:"
+msgstr "Fax:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblStreetDesc)
+#: widgets/KoConfigAuthorPage.ui:175 widgets/koDocumentInfoAuthorWidget.ui:144
+#, kde-format
+msgid "Street:"
+msgstr "Phố:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPostalDesc)
+#: widgets/KoConfigAuthorPage.ui:191 widgets/koDocumentInfoAuthorWidget.ui:154
+#, kde-format
+msgid "Postal code:"
+msgstr "Mã bưu điện:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCityDesc)
+#: widgets/KoConfigAuthorPage.ui:207 widgets/koDocumentInfoAuthorWidget.ui:164
+#, kde-format
+msgid "City:"
+msgstr "Thành phố:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCountryDesc)
+#: widgets/KoConfigAuthorPage.ui:223 widgets/koDocumentInfoAuthorWidget.ui:174
+#, kde-format
+msgid "Country:"
+msgstr "Nước:"
+
+#: widgets/KoCsvImportDialog.cpp:85
+#, kde-format
+msgid "Import Data"
+msgstr "Nhập Dữ liệu"
+
+#: widgets/KoCsvImportDialog.cpp:88
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Khuyên dùng ( %1 )"
+
+#: widgets/KoCsvImportDialog.cpp:89
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Miền địa phương ( %1)"
+
+#: widgets/KoCsvImportDialog.cpp:92
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Khác ( %1 )"
+
+#: widgets/KoCsvImportDialog.cpp:207 widgets/KoCsvImportDialog.cpp:547
+#: widgets/KoCsvImportDialog.cpp:570
+#, fuzzy, kde-format
+msgid "Generic"
+msgstr "Chung chung"
+
+#: widgets/KoCsvImportDialog.cpp:209 widgets/KoCsvImportDialog.cpp:572
+#: widgets/KoModeBox.cpp:572
+#, fuzzy, kde-format
+msgid "Text"
+msgstr "Chữ"
+
+#: widgets/KoCsvImportDialog.cpp:211 widgets/KoCsvImportDialog.cpp:574
+#, kde-format
+msgid "Date"
+msgstr "Ngày"
+
+#: widgets/KoCsvImportDialog.cpp:213 widgets/KoCsvImportDialog.cpp:576
+#, kde-format
+msgid "Currency"
+msgstr "Tiền tệ"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.cpp:215 widgets/KoCsvImportDialog.cpp:578
+#: widgets/KoCsvImportDialog.cpp:685 widgets/KoCsvImportDialog.ui:265
+#, fuzzy, kde-format
+msgid "None"
+msgstr "Không có"
+
+#: widgets/KoCsvImportDialog.cpp:712
+#, kde-format
+msgid ""
+"Please check the ranges you specified. The start value must be lower than "
+"the end value."
+msgstr ""
+"Xin kiểm tra lại khoảng mà bạn chỉ định. Giá trị bắt đầu phải nhỏ hơn giá "
+"trị kết thúc."
+
+#: widgets/KoCsvImportDialog.cpp:758
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "Không tìm thấy bộ mã: %1"
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_dataTab)
+#: widgets/KoCsvImportDialog.ui:52
+#, kde-format
+msgid "Data"
+msgstr "Dữ liệu "
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
+#: widgets/KoCsvImportDialog.ui:63
+#, kde-format
+msgid "E&ncoding:"
+msgstr "&Bộ mã:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_firstRowHeader)
+#: widgets/KoCsvImportDialog.ui:107
+#, fuzzy, kde-format
+msgid "First row contains headers"
+msgstr "Hàng đầu tiên chứa đầu đề"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_firstColHeader)
+#: widgets/KoCsvImportDialog.ui:120
+#, fuzzy, kde-format
+msgid "First column contains headers"
+msgstr "Cột đầu tiên chứa đầu đề"
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_formatTab)
+#: widgets/KoCsvImportDialog.ui:144
+#, fuzzy, kde-format
+msgid "Format"
+msgstr "Định dạng"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
+#: widgets/KoCsvImportDialog.ui:156
+#, kde-format
+msgid "Delimiter"
+msgstr "Dấu phân cách"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: widgets/KoCsvImportDialog.ui:162
+#, kde-format
+msgid "Comma"
+msgstr "Dấu phẩy"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: widgets/KoCsvImportDialog.ui:172
+#, kde-format
+msgid "Semicolon"
+msgstr "Dấu chấm phẩy"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: widgets/KoCsvImportDialog.ui:179
+#, kde-format
+msgid "Other"
+msgstr "Khác"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: widgets/KoCsvImportDialog.ui:186
+#, kde-format
+msgid "Tabulator"
+msgstr "Tab"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: widgets/KoCsvImportDialog.ui:193
+#, kde-format
+msgid "Space"
+msgstr "Dấu cách"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: widgets/KoCsvImportDialog.ui:238
+#, fuzzy, kde-format
+msgid "Text&quote:"
+msgstr "Dấu &ngoặc:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.ui:255
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.ui:260
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QLabel, label3)
+#: widgets/KoCsvImportDialog.ui:289
+#, kde-format
+msgid "Decimal symbol:"
+msgstr "Dấu thập phân:"
+
+#. i18n: ectx: property (text), widget (QLabel, label4)
+#: widgets/KoCsvImportDialog.ui:318
+#, fuzzy, kde-format
+msgid "Thousands separator:"
+msgstr "Dấu cách hàng nghìn:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_ignoreDuplicates)
+#: widgets/KoCsvImportDialog.ui:363
+#, kde-format
+msgid "Ignore duplicate delimiters"
+msgstr "Bỏ qua dấu ngăn cách bị lặp lại"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: widgets/KoCsvImportDialog.ui:370
+#, kde-format
+msgid "&Format:"
+msgstr "Định &dạng:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_rangesTab)
+#: widgets/KoCsvImportDialog.ui:384
+#, kde-format
+msgid "Ranges"
+msgstr "Khoảng"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_updateButton)
+#: widgets/KoCsvImportDialog.ui:390
+#, kde-format
+msgid "Update"
+msgstr "Cập nhật"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
+#: widgets/KoCsvImportDialog.ui:457
+#, kde-format
+msgid "Import columns:"
+msgstr "Nhập các cột:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel3)
+#: widgets/KoCsvImportDialog.ui:476
+#, kde-format
+msgid "Import lines:"
+msgstr "Nhập các dòng:"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: widgets/KoCsvImportDialog.ui:486 widgets/KoCsvImportDialog.ui:509
+#, fuzzy, kde-format
+msgid "to"
+msgstr "đến"
+
+#: widgets/KoDialog.cpp:247
+#, kde-format
+msgid "&Try"
+msgstr ""
+
+#: widgets/KoDialog.cpp:460
+#, fuzzy, kde-format
+#| msgid "Modified:"
+msgid "modified"
+msgstr "Sửa:"
+
+#: widgets/KoDialog.cpp:471
+#, kde-format
+msgctxt "Document/application separator in titlebar"
+msgid " – "
+msgstr ""
+
+#: widgets/KoDialog.cpp:846
+#, fuzzy, kde-format
+#| msgid "&Default"
+msgid "&Details"
+msgstr "&Mặc định"
+
+#: widgets/KoDialog.cpp:1004
+#, kde-format
+msgid "Get help..."
+msgstr ""
+
+#: widgets/KoDockWidgetTitleBar.cpp:52
+#, fuzzy, kde-format
+#| msgid "Show Rulers"
+msgctxt "@info:tooltip"
+msgid "Float Docker"
+msgstr "Hiện Thước kẻ"
+
+#: widgets/KoDockWidgetTitleBar.cpp:59
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "Close Docker"
+msgstr "Tài liệu Riêng"
+
+#: widgets/KoDockWidgetTitleBar.cpp:67
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "Collapse Docker"
+msgstr "Tài liệu Riêng"
+
+#: widgets/KoDockWidgetTitleBar.cpp:76
+#, fuzzy, kde-format
+#| msgid "Show Rulers"
+msgctxt "@info:tooltip"
+msgid "Lock Docker"
+msgstr "Hiện Thước kẻ"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:235
+#: widgets/KoDocumentInfoDlg.cpp:331
+#, kde-format
+msgid "&Encrypt"
+msgstr "&Mã hoá"
+
+#. i18n: ectx: property (text), widget (QLabel, lblKeywordsDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:64
+#, kde-format
+msgid "Keywords:"
+msgstr "Từ khoá:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblSubjectDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:111
+#, fuzzy, kde-format
+msgid "Subject:"
+msgstr "Tiêu đề:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:124
+#, kde-format
+msgid "Last printed:"
+msgstr "In lần cuối:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEditingDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:158
+#, fuzzy, kde-format
+msgid "Total editing time:"
+msgstr "Tổng thời gian sửa:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEncryptedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:178
+#, kde-format
+msgid "Encryption:"
+msgstr "Mã hoá:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:188
+#, fuzzy, kde-format
+msgctxt "Document title"
+msgid "Title:"
+msgstr "Tựa đề:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblRevisionDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:201
+#, fuzzy, kde-format
+msgid "Revision number:"
+msgstr "Số phiên bản:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblModifiedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:211
+#, kde-format
+msgid "Modified:"
+msgstr "Sửa:"
+
+#. i18n: ectx: property (text), widget (QLabel, lbCommentsDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:231
+#, kde-format
+msgid "Comments:"
+msgstr "Lời bình:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCreatedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:251
+#, kde-format
+msgid "Created:"
+msgstr "Tạo:"
+
+#. i18n: ectx: property (text), widget (QLabel, filePathInfoLabel)
+#: widgets/koDocumentInfoAboutWidget.ui:261
+#, fuzzy, kde-format
+#| msgid "To Path"
+msgid "Path:"
+msgstr "Tới đường"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbReset)
+#: widgets/koDocumentInfoAboutWidget.ui:280
+#, kde-format
+msgid "&Reset"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lbLanguageDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:297
+#, fuzzy, kde-format
+msgid "Language:"
+msgstr "Trang Dán"
+
+#: widgets/KoDocumentInfoDlg.cpp:104 widgets/KoDocumentInfoDlg.cpp:105
+#, kde-format
+msgid "General"
+msgstr "Chung"
+
+#: widgets/KoDocumentInfoDlg.cpp:132
+#, fuzzy, kde-format
+msgid "Last saved by"
+msgstr "Trang Dán"
+
+#: widgets/KoDocumentInfoDlg.cpp:189
+#, fuzzy, kde-format
+#| msgid "Use ';' (Example: Office;KDE;KOffice)"
+msgid "Use ';' (Example: Office;KDE;Calligra)"
+msgstr "Dùng ';' (ví dụ: Office;KDE;KOffice)"
+
+#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:315
+#, kde-format
+msgid "This document will be decrypted"
+msgstr "Tài liệu này sẽ được giải mã"
+
+#: widgets/KoDocumentInfoDlg.cpp:221 widgets/KoDocumentInfoDlg.cpp:317
+#, kde-format
+msgid "Do not decrypt"
+msgstr "Không giải mã"
+
+#: widgets/KoDocumentInfoDlg.cpp:223 widgets/KoDocumentInfoDlg.cpp:319
+#, kde-format
+msgid "This document is encrypted"
+msgstr "Tài liệu này đã được mã hoá"
+
+#: widgets/KoDocumentInfoDlg.cpp:225 widgets/KoDocumentInfoDlg.cpp:321
+#, kde-format
+msgid "D&ecrypt"
+msgstr "&Giải mã"
+
+#: widgets/KoDocumentInfoDlg.cpp:229 widgets/KoDocumentInfoDlg.cpp:325
+#, kde-format
+msgid "This document will be encrypted."
+msgstr "Tài liệu này sẽ được mã hoá."
+
+#: widgets/KoDocumentInfoDlg.cpp:231 widgets/KoDocumentInfoDlg.cpp:327
+#, kde-format
+msgid "Do not encrypt"
+msgstr "Không mã hoá"
+
+#: widgets/KoDocumentInfoDlg.cpp:233 widgets/KoDocumentInfoDlg.cpp:329
+#, kde-format
+msgid "This document is not encrypted"
+msgstr "Tài liệu này không được mã hoá"
+
+#: widgets/KoDocumentInfoDlg.cpp:239
+#, fuzzy, kde-format
+#| msgid "This document is not encrypted"
+msgid "This document does not support encryption"
+msgstr "Tài liệu này không được mã hoá"
+
+#: widgets/KoDocumentInfoDlg.cpp:351
+#, fuzzy, kde-format
+msgid ""
+"<qt>Decrypting the document will remove the password protection from it."
+"<p>Do you still want to decrypt the file?</qt>"
+msgstr ""
+"<qt>Giải mã tài liệu sẽ làm mất mật mã bảo vệ nó.<p>Bạn có muốn giải mã tệp?"
+"</qt>"
+
+#: widgets/KoDocumentInfoDlg.cpp:353
+#, fuzzy, kde-format
+msgid "Confirm Decrypt"
+msgstr "Chấp nhận Giải mã"
+
+#: widgets/KoDocumentInfoDlg.cpp:354
+#, kde-format
+msgid "Decrypt"
+msgstr "Giải mã"
+
+#: widgets/KoDocumentInfoDlg.cpp:365
+#, kde-format
+msgid ""
+"<qt>Your document could not be saved automatically.<p>To complete the "
+"decryption, please save the document.</qt>"
+msgstr ""
+"<qt>Tài liệu của bạn không thể được lưu lại tự động.<p>Để hoàn thành giải "
+"mã, xin hãy lưu tài liệu.</qt>"
+
+#: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
+#: widgets/KoDocumentInfoDlg.cpp:409 widgets/KoDocumentInfoDlg.cpp:417
+#, kde-format
+msgid "Save Document"
+msgstr "Lưu Tài liệu"
+
+#: widgets/KoDocumentInfoDlg.cpp:373
+#, kde-format
+msgid ""
+"<qt>The document has been changed since it was opened. To complete the "
+"decryption the document needs to be saved.<p>Do you want to save the "
+"document now?</qt>"
+msgstr ""
+"<qt>Tài liệu đã bị thay đổi kể từ khi nó được mở ra. Để hoàn thành giải mã, "
+"tài liệu cần được lưu lại.<p>Bạn có muốn lưu tài liệu này bây giờ không?</qt>"
+
+#: widgets/KoDocumentInfoDlg.cpp:391
+#, kde-format
+msgid ""
+"<qt>The document is currently saved as %1. The document needs to be changed "
+"to <b>OASIS OpenDocument</b> to be encrypted.<p>Do you want to change the "
+"file to OASIS OpenDocument?</qt>"
+msgstr ""
+"<qt>Tài liệu hiện đang được lưu ở dạng %1. Nó cần được chuyển sang <b>Tài "
+"liệu Mở OASIS</b> để mã hoá.<p>Bạn có muốn chuyển tệp sang Tài liệu Mở OASIS?"
+"</qt>"
+
+#: widgets/KoDocumentInfoDlg.cpp:393
+#, kde-format
+msgid "Change Filetype"
+msgstr "Thay đổi loại tệp"
+
+#: widgets/KoDocumentInfoDlg.cpp:394
+#, kde-format
+msgid "Change"
+msgstr "Thay đổi"
+
+#: widgets/KoDocumentInfoDlg.cpp:407
+#, kde-format
+msgid ""
+"<qt>Your document could not be saved automatically.<p>To complete the "
+"encryption, please save the document.</qt>"
+msgstr ""
+"<qt>Tài liệu của bạn không thể được lưu tự động.<p>Để hoàn thành mã hoá, xin "
+"hãy lưu tài liệu.</qt>"
+
+#: widgets/KoDocumentInfoDlg.cpp:415
+#, kde-format
+msgid ""
+"<qt>The document has been changed since it was opened. To complete the "
+"encryption the document needs to be saved.<p>Do you want to save the "
+"document now?</qt>"
+msgstr ""
+"<qt>Tài liệu đã bị thay đổi kể từ khi nó được mở ra. Để hoàn thành giải mã, "
+"tài liệu cần được lưu lại.<p>Bạn có muốn lưu tài liệu này bây giờ không?</qt>"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, remove)
+#: widgets/KoEditColorSet.ui:55
+#, kde-format
+msgid "Remove"
+msgstr "Xoá"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, open)
+#: widgets/KoEditColorSet.ui:65
+#, kde-format
+msgid "Open palette"
+msgstr "Mở bảng màu"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, save)
+#: widgets/KoEditColorSet.ui:75
+#, kde-format
+msgid "Save palette"
+msgstr "Lưu bảng màu"
+
+#: widgets/KoEditColorSetDialog.cpp:146
+#, kde-format
+msgid "Add Color To Palette"
+msgstr "Thêm Màu vào Bảng màu"
+
+#: widgets/KoEditColorSetDialog.cpp:146
+#, kde-format
+msgid "Color name:"
+msgstr "Tên màu:"
+
+#: widgets/KoEditColorSetDialog.cpp:174
+#, fuzzy, kde-format
+#| msgid "Add Color To Palette"
+msgid "Gimp Color Palette (*.gpl)"
+msgstr "Thêm Màu vào Bảng màu"
+
+#: widgets/KoEditColorSetDialog.cpp:187
+#, kde-format
+msgid "Cannot write to palette file %1. Maybe it is read-only. "
+msgstr "Không thể ghi vào tệp bảng màu %1. Có thể nó chỉ được đọc."
+
+#: widgets/KoEditColorSetDialog.cpp:187
+#, kde-format
+msgid "Palette"
+msgstr "Bảng màu"
+
+#: widgets/KoEditColorSetDialog.cpp:201
+#, kde-format
+msgid "Add/Remove Colors"
+msgstr "Thêm/Xoá Màu"
+
+#: widgets/KoFillConfigWidget.cpp:211
+#, fuzzy, kde-format
+msgctxt "No stroke or fill"
+msgid "None"
+msgstr "Không có"
+
+#: widgets/KoFillConfigWidget.cpp:219
+#, kde-format
+msgctxt "Solid color stroke or fill"
+msgid "Solid"
+msgstr ""
+
+#: widgets/KoFillConfigWidget.cpp:227
+#, kde-format
+msgid "Gradient"
+msgstr ""
+
+#: widgets/KoFillConfigWidget.cpp:235
+#, kde-format
+msgid "Pattern"
+msgstr ""
+
+#: widgets/KoFillConfigWidget.cpp:249
+#, fuzzy, kde-format
+#| msgid "Change parameter"
+msgid "Change the filling color"
+msgstr "Thay đổi tham số"
+
+#: widgets/KoFillConfigWidget.cpp:260
+#, fuzzy, kde-format
+#| msgid "Change parameter"
+msgid "Change the filling gradient"
+msgstr "Thay đổi tham số"
+
+#: widgets/KoFillConfigWidget.cpp:267
+#, fuzzy, kde-format
+#| msgid "Change parameter"
+msgid "Change the filling pattern"
+msgstr "Thay đổi tham số"
+
+#: widgets/KoGradientEditWidget.cpp:145
+#, kde-format
+msgid "Target:"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:148
+#, fuzzy, kde-format
+msgid "Fill"
+msgstr "Tìm kiếm "
+
+#: widgets/KoGradientEditWidget.cpp:154
+#, fuzzy, kde-format
+#| msgid "Lines"
+msgctxt "Linear gradient type"
+msgid "Linear"
+msgstr "Các dòng"
+
+#: widgets/KoGradientEditWidget.cpp:155
+#, kde-format
+msgctxt "Radial gradient type"
+msgid "Radial"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:156
+#, kde-format
+msgctxt "Conical gradient type"
+msgid "Conical"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:159
+#, kde-format
+msgid "Repeat:"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:161
+#, fuzzy, kde-format
+msgctxt "No gradient spread"
+msgid "None"
+msgstr "Không có"
+
+#: widgets/KoGradientEditWidget.cpp:162
+#, kde-format
+msgid "Reflect"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:163
+#, kde-format
+msgid "Repeat"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:166
+#, fuzzy, kde-format
+#| msgid "Opacity:"
+msgid "Overall opacity:"
+msgstr "Độ trong suốt:"
+
+#: widgets/KoGradientEditWidget.cpp:171
+#, fuzzy, kde-format
+#| msgid "&Color:"
+msgid "Color stop:"
+msgstr "&Màu:"
+
+#: widgets/KoGradientEditWidget.cpp:179
+#, kde-format
+msgid "Stop color."
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:182
+#, kde-format
+msgid "&Add to Predefined Gradients"
+msgstr ""
+
+#: widgets/KoModeBox.cpp:575
+#, fuzzy, kde-format
+msgid "Icon and Text"
+msgstr "Chữ"
+
+#: widgets/KoModeBox.cpp:576
+#, kde-format
+msgid "Icon only"
+msgstr ""
+
+#: widgets/KoModeBox.cpp:579
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Tabs side"
+msgstr "Các lề"
+
+#: widgets/KoModeBox.cpp:583
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Top side"
+msgstr "Các lề"
+
+#: widgets/KoModeBox.cpp:584
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Bottom side"
+msgstr "Các lề"
+
+#: widgets/KoModeBox.cpp:587
+#, fuzzy, kde-format
+#| msgid "Left indent"
+msgid "Left side"
+msgstr "Thụt trái"
+
+#: widgets/KoModeBox.cpp:588
+#, fuzzy, kde-format
+#| msgid "Right indent"
+msgid "Right side"
+msgstr "Thụt phải"
+
+#: widgets/KoPageLayoutDialog.cpp:33
+#, kde-format
+msgid "Page Layout"
+msgstr "Bố trí Trang"
+
+#: widgets/KoPageLayoutDialog.cpp:95
+#, fuzzy, kde-format
+msgid "Apply to document"
+msgstr "Mở tài liệu"
+
+#: widgets/KoPageLayoutWidget.cpp:175
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left Edge:"
+msgstr "Trái:"
+
+#: widgets/KoPageLayoutWidget.cpp:176
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right Edge:"
+msgstr "Phải:"
+
+#: widgets/KoPageLayoutWidget.cpp:179
+#, fuzzy, kde-format
+#| msgid "Printing done"
+msgid "Binding Edge:"
+msgstr "Đã in xong"
+
+#: widgets/KoPageLayoutWidget.cpp:180
+#, fuzzy, kde-format
+#| msgid "Page Size"
+msgid "Page Edge:"
+msgstr "Cỡ Trang"
+
+#: widgets/KoPageLayoutWidget.cpp:276
+#, fuzzy, kde-format
+#| msgid "Fit Page"
+msgid "Facing Pages:"
+msgstr "Vừa Trang"
+
+#. i18n: ectx: property (text), widget (QRadioButton, facingPages)
+#: widgets/KoPageLayoutWidget.cpp:277 widgets/KoPageLayoutWidget.ui:160
+#, fuzzy, kde-format
+#| msgid "Fit Page"
+msgid "Facing pages"
+msgstr "Vừa Trang"
+
+#: widgets/KoPageLayoutWidget.cpp:280
+#, fuzzy, kde-format
+#| msgid "Page Layout"
+msgid "Page Layout:"
+msgstr "Bố trí Trang"
+
+#: widgets/KoPageLayoutWidget.cpp:281
+#, fuzzy, kde-format
+#| msgid "Page Preview"
+msgid "Page spread"
+msgstr "Xem trước Trang"
+
+#. i18n: ectx: property (text), widget (QLabel, unitsLabel)
+#: widgets/KoPageLayoutWidget.ui:25
+#, kde-format
+msgid "Unit:"
+msgstr "Đơn vị:"
+
+#. i18n: ectx: property (text), widget (QLabel, stylesLabel)
+#: widgets/KoPageLayoutWidget.ui:45
+#, fuzzy, kde-format
+msgid "Follow style:"
+msgstr "Nhập trình lọc thất bại"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/KoPageLayoutWidget.ui:61
+#, fuzzy, kde-format
+#| msgid "&Size:"
+msgid "Size:"
+msgstr "&Cỡ:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: widgets/KoPageLayoutWidget.ui:77
+#, fuzzy, kde-format
+msgid "Width:"
+msgstr "Bề rộng:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:104
+#, fuzzy, kde-format
+msgid "Height:"
+msgstr "Chiều cao:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:119
+#, fuzzy, kde-format
+#| msgid "Orientation"
+msgid "Orientation:"
+msgstr "Định &hướng"
+
+#. i18n: ectx: property (text), widget (QRadioButton, portrait)
+#: widgets/KoPageLayoutWidget.ui:129
+#, fuzzy, kde-format
+#| msgid "&Portrait"
+msgid "Portrait"
+msgstr "&Chân dung"
+
+#. i18n: ectx: property (text), widget (QRadioButton, landscape)
+#: widgets/KoPageLayoutWidget.ui:136
+#, fuzzy, kde-format
+#| msgid "La&ndscape"
+msgid "Landscape"
+msgstr "Nằm &ngang"
+
+#. i18n: ectx: property (text), widget (QLabel, facingPageLabel)
+#: widgets/KoPageLayoutWidget.ui:143
+#, fuzzy, kde-format
+#| msgid "Fit Page"
+msgid "Facing pages:"
+msgstr "Vừa Trang"
+
+#. i18n: ectx: property (text), widget (QRadioButton, singleSided)
+#: widgets/KoPageLayoutWidget.ui:153
+#, fuzzy, kde-format
+msgid "Single sided"
+msgstr "Một"
+
+#. i18n: ectx: property (text), widget (QLabel, directionLabel)
+#: widgets/KoPageLayoutWidget.ui:167
+#, fuzzy, kde-format
+msgid "Text direction:"
+msgstr "&Text sẽ tìm"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:184
+#, kde-format
+msgid "Automatic"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:189
+#, fuzzy, kde-format
+#| msgid "Straight"
+msgid "Left to right"
+msgstr "Thẳng"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:194
+#, fuzzy, kde-format
+#| msgid "Right indent"
+msgid "Right to left"
+msgstr "Thụt phải"
+
+#. i18n: ectx: property (title), widget (QGroupBox, margins)
+#: widgets/KoPageLayoutWidget.ui:204
+#, kde-format
+msgid "Margins"
+msgstr "Các lề"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:210
+#, fuzzy, kde-format
+msgid "Top:"
+msgstr "Đỉnh:"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.ui:230
+#, fuzzy, kde-format
+#| msgid "Printing done"
+msgid "Binding edge:"
+msgstr "Đã in xong"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.ui:250
+#, fuzzy, kde-format
+#| msgid "Page Preview"
+msgid "Page edge:"
+msgstr "Xem trước Trang"
+
+#. i18n: ectx: property (text), widget (QLabel, label_12)
+#: widgets/KoPageLayoutWidget.ui:270
+#, fuzzy, kde-format
+#| msgid "Margins"
+msgid "Bottom:"
+msgstr "Các lề"
+
+#: widgets/KoResourceItemChooser.cpp:137
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgctxt "@info:tooltip"
+msgid "Import resource"
+msgstr "Nhập Tài liệu"
+
+#: widgets/KoResourceItemChooser.cpp:144
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgctxt "@info:tooltip"
+msgid "Delete resource"
+msgstr "Xoá"
+
+#: widgets/KoResourceItemChooser.cpp:192
+#, fuzzy, kde-format
+#| msgid "Choose Filter"
+msgctxt "@title:window"
+msgid "Choose File to Add"
+msgstr "Chọn bộ lọc"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:107
+#: widgets/KoTagToolButton.cpp:51
+#, fuzzy, kde-format
+#| msgid "New Layer"
+msgid "New tag"
+msgstr "Lớp Mới"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:140
+#, kde-format
+msgid "Assign to tag"
+msgstr ""
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:149
+#, fuzzy, kde-format
+#| msgid "Remove point"
+msgid "Remove from this tag"
+msgstr "Xoá điểm"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:157
+#, fuzzy, kde-format
+msgid "Remove from other tag"
+msgstr "  Lời bình "
+
+#: widgets/KoResourceModel.cpp:78
+#, kde-format
+msgid "Tags"
+msgstr ""
+
+#: widgets/KoResourceTaggingManager.cpp:143
+#, kde-format
+msgid "Unable to undelete tag"
+msgstr ""
+
+#: widgets/KoResourceTaggingManager.cpp:144
+#, kde-format
+msgid ""
+"<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
+"enter a new, unique name for it.</qt>"
+msgstr ""
+
+#: widgets/KoResourceTaggingManager.cpp:151
+#, kde-format
+msgid "Tag was not undeleted."
+msgstr ""
+
+#: widgets/KoRuler.cpp:1266
+#, fuzzy, kde-format
+msgid "First line indent"
+msgstr "Thụt dòng đầu tiên vào"
+
+#: widgets/KoRuler.cpp:1267
+#, kde-format
+msgid "Left indent"
+msgstr "Thụt trái"
+
+#: widgets/KoRuler.cpp:1268
+#, kde-format
+msgid "Right indent"
+msgstr "Thụt phải"
+
+#: widgets/KoShadowConfigWidget.cpp:55
+#, kde-format
+msgid "Change the color of the shadow"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/KoShadowConfigWidget.ui:67
+#, kde-format
+msgid "Blur:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/KoShadowConfigWidget.ui:84
+#, kde-format
+msgid "Distance:"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:83
+#, kde-format
+msgid "Butt cap"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:90
+#, kde-format
+msgid "Round cap"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:97
+#, fuzzy, kde-format
+msgid "Square cap"
+msgstr "Thêm / Chuyển thành square bracket"
+
+#: widgets/KoStrokeConfigWidget.cpp:108
+#, fuzzy, kde-format
+#| msgid "Merge points"
+msgid "Miter join"
+msgstr "Nhập các điểm"
+
+#: widgets/KoStrokeConfigWidget.cpp:115
+#, kde-format
+msgid "Round join"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:122
+#, fuzzy, kde-format
+#| msgid "Remove point"
+msgid "Bevel join"
+msgstr "Xoá điểm"
+
+#: widgets/KoStrokeConfigWidget.cpp:132
+#, fuzzy, kde-format
+#| msgid "Merge points"
+msgid "Miter limit"
+msgstr "Nhập các điểm"
+
+#: widgets/KoStrokeConfigWidget.cpp:203
+#, kde-format
+msgid "Thickness:"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:213
+#, kde-format
+msgid "Set line width of actual selection"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:229
+#, kde-format
+msgid "Change the color of the line/border"
+msgstr ""
+
+#: widgets/KoTagChooserWidget.cpp:41
+#, kde-format
+msgid "Tag"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:39
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Entering search terms here will add to, or remove resources from the "
+"current tag view.<para>To filter based on the partial, case insensitive name "
+"of a resource:<br><icode>partialname</icode> or <icode>!partialname</icode>."
+"</para><para>In-/exclusion of other tag sets:<br><icode>[Tagname]</icode> or "
+"<icode>![Tagname]</icode>.</para><para>Case sensitive and full name matching "
+"in-/exclusion:<br><icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</"
+"icode>.</para>Filter results cannot be saved for the <interface>All Presets</"
+"interface> view.<br>In this view, pressing <interface>Enter</interface> or "
+"clearing the filter box will restore all items.<br>Create and/or switch to a "
+"different tag if you want to save filtered resources into named sets.</qt>"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:53
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Entering search terms here will add to, or remove resources from the "
+"current tag view.<para>To filter based on the partial, case insensitive name "
+"of a resource:<br><icode>partialname</icode> or <icode>!partialname</icode>."
+"</para><para>In-/exclusion of other tag sets:<br><icode>[Tagname]</icode> or "
+"<icode>![Tagname]</icode>.</para><para>Case sensitive and full name matching "
+"in-/exclusion:<br><icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</"
+"icode>.</para>Pressing <interface>Enter</interface> or clicking the "
+"<interface>Save</interface> button will save the changes.</qt>"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:68
+#, kde-format
+msgid "Enter resource filters here"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:79
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Save the currently filtered set as the new members of the current tag.</"
+"qt>"
+msgstr ""
+
+#: widgets/KoTagToolButton.cpp:44
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<qt>Show the tag box options.</qt>"
+msgstr ""
+
+#: widgets/KoTagToolButton.cpp:60
+#, fuzzy, kde-format
+#| msgid "Move page"
+msgid "Rename tag"
+msgstr "Di chuyển trang"
+
+#: widgets/KoTagToolButton.cpp:71
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Delete this tag"
+msgstr "Xoá Trang"
+
+#: widgets/KoTagToolButton.cpp:89
+#, kde-format
+msgid "Clear undelete list"
+msgstr ""
+
+#: widgets/KoTagToolButton.cpp:119
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Undelete"
+msgstr "Xoá"
+
+#: widgets/KoToolBox.cpp:294
+#, fuzzy, kde-format
+#| msgid "Set point type"
+msgid "Icon Size"
+msgstr "Đặt kiểu điểm"
+
+#: widgets/KoToolBox.cpp:295
+#, fuzzy, kde-format
+#| msgid "&Default"
+msgctxt "@item:inmenu Icon size"
+msgid "Default"
+msgstr "&Mặc định"
+
+#: widgets/KoToolBox.cpp:302
+#, kde-format
+msgid "%1x%2"
+msgstr ""
+
+#: widgets/KoToolBoxButton.cpp:55
+#, fuzzy, kde-format
+#| msgid "%1%"
+msgctxt "@info:tooltip"
+msgid "%1"
+msgstr "%1%"
+
+#: widgets/KoToolBoxButton.cpp:56
+#, kde-format
+msgctxt "@info:tooltip %2 is shortcut"
+msgid "%1 (%2)"
+msgstr ""
+
+#: widgets/KoToolBoxDocker.cpp:20
+#, kde-format
+msgid "Toolbox"
+msgstr ""
+
+#: widgets/KoToolDocker.cpp:184
+#, kde-format
+msgid "Tool Options"
+msgstr "Cấu hình Công cụ"
+
+#: widgets/KoToolDocker.cpp:216
+#, kde-format
+msgid "Toggles organizing the options in tabs or not"
+msgstr ""
+
+#: widgets/KoViewItemContextBar.cpp:183
+#, fuzzy, kde-format
+#| msgid "Select Character"
+msgid "deselect item"
+msgstr "Chọn Kí tự"
+
+#: widgets/KoViewItemContextBar.cpp:183
+#, fuzzy, kde-format
+#| msgid "Select Character"
+msgid "select item"
+msgstr "Chọn Kí tự"
+
+#: widgets/KoZoomAction.cpp:196 widgets/KoZoomAction.cpp:209
+#: widgets/KoZoomMode.cpp:13
+#, kde-format
+msgid "%1%"
+msgstr "%1%"
+
+#: widgets/KoZoomMode.cpp:14
+#, kde-format
+msgid "Fit Page Width"
+msgstr "Vừa Bề rộng"
+
+#: widgets/KoZoomMode.cpp:15
+#, kde-format
+msgid "Fit Page"
+msgstr "Vừa Trang"
+
+#: widgets/KoZoomMode.cpp:17
+#, kde-format
+msgid "Actual Pixels"
+msgstr "Điểm ảnh Thật"
+
+#: widgets/KoZoomMode.cpp:21
+#, fuzzy, kde-format
+#| msgid "Fit Page Width"
+msgid "Fit Text Width"
+msgstr "Vừa Bề rộng"
+
+#: widgets/KoZoomWidget.cpp:69
+#, kde-format
+msgid "Use same aspect as pixels"
+msgstr ""
+
+#: widgets/KoZoomWidget.cpp:78
+#, fuzzy, kde-format
+msgid "Zoom to Selection"
+msgstr "Bộ"
+
+#: widgets/KoZoomWidget.cpp:87
+#, fuzzy, kde-format
+msgid "Zoom to All"
+msgstr "Bộ"
+
+#: widgetutils/KoFileDialog.cpp:463
+#, kde-format
+msgid "All supported formats"
+msgstr ""
+
+#: widgetutils/KoGroupButton.cpp:131
+#, fuzzy, kde-format
+#| msgid "%1%"
+msgctxt "@info:tooltip of custom triple button"
+msgid "%1"
+msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Install script package file"
+#~ msgid "Install Script Package"
+#~ msgstr "Cài tệp gói"
+
+#~ msgid "Could not read the package \"%1\"."
+#~ msgstr "Không thể đọc gói \"%1\"."
+
+#~ msgid "The package \"%1\" does not contain a valid install.rc file."
+#~ msgstr "Gói \"%1\" không chứa tệp install.rc hợp lệ."
+
+#~ msgid "Failed to parse the install.rc file at package \"%1\"."
+#~ msgstr "Không thể đọc tệp install.rc trong \"%1\"."
+
+#~ msgid ""
+#~ "Failed to determinate location where the package \"%1\" should be "
+#~ "installed to."
+#~ msgstr "Không thể xác định địa điểm để cài gói \"%1\"."
+
+#~ msgid ""
+#~ "A script package with the name \"%1\" already exists. Replace this "
+#~ "package?"
+#~ msgstr "Một gói có tên \"%1\" đã tồn tại. Thay thế gói đó?"
+
+#~ msgid "Replace"
+#~ msgstr "Thay thế"
+
+#~ msgid ""
+#~ "Could not uninstall this script package. You may not have sufficient "
+#~ "permissions to delete the folder \"%1\"."
+#~ msgstr ""
+#~ "Không thể gỡ bỏ gói này. Có thể bạn không có quyền xoá thư mục \"%1\"."
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not uninstall the script package \"%1\" since the script is not "
+#~ "installed."
+#~ msgstr "Không thể gỡ bỏ gói \"%1\" vì nó không được cài."
+
+#~ msgid ""
+#~ "Could not uninstall the script package \"%1\". You may not have "
+#~ "sufficient permissions to delete the folder \"%1\"."
+#~ msgstr ""
+#~ "Không thể gỡ bỏ gói \"%1\". Có thể bạn không có quyền xoá thư mục \"%1\"."
+
+#, fuzzy
+#~| msgid "Download"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Download resource"
+#~ msgstr "Tải xuống"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Share Resource"
+#~ msgstr "Xoá"

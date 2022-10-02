@@ -1,0 +1,907 @@
+<chapter id="basics">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+&traductor.Antoni.Bella; 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Conceptes bàsics de &sheets;</title>
+
+<note
+><para
+>Com a la resta del &kde;, &sheets; és altament configurable, el qual pot provocar problemes per als lectors que estiguin intentant comparar el text en un document com aquest amb el que veuen en la versió de &sheets; que s'està executant en el seu escriptori. Per a intentar reduir les possibilitats de confusió, se suggereix que quan comenceu a usar &sheets; per primera vegada, configureu les opcions per omissió en totes les pàgines del diàleg de configuració de &sheets; (configuració que s'obté seleccionant <menuchoice
+><guimenu
+>Arranjament</guimenu
+><guimenuitem
+>Configura Sheets...</guimenuitem
+></menuchoice
+>). </para
+></note>
+
+<sect1 id="starting">
+<title
+>Fulls de càlcul per a novells</title>
+
+<para
+>Aquesta secció intenta explicar per exemple què és un programa de full de càlcul com ara &sheets;, i per què és una eina tan útil davant qualsevol situació on s'ha de tractar amb números. Si ja heu usat un programa de full de càlcul, potser voldreu passar a la següent secció.</para>
+
+<para
+>El primer a fer és iniciar &sheets;. Ho podeu fer fent clic <mousebutton
+>esquerre</mousebutton
+> sobre una icona de &sheets; si n'hi ha una al vostre escriptori o plafó, o podeu seleccionar <menuchoice
+><guimenu
+>Oficina</guimenu
+><guimenuitem
+>&sheets;</guimenuitem
+></menuchoice
+> des del &kmenu;.</para>
+
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="newdocument.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>&sheets; al primer inici</phrase>
+</textobject>
+</mediaobject
+>Una vegada iniciat tindreu l'opció d'obrir un document recent, crear un document nou a partir d'una plantilla (amb categories de plantilles) o obrir un document existent. Seleccioneu la categoria <guilabel
+>General</guilabel
+> a l'esquerra i escolliu la plantilla <guilabel
+>Full de treball buit</guilabel
+>. Després feu clic al botó <guibutton
+>Usa aquesta plantilla</guibutton
+>.</para>
+
+<para
+>Una mirada al &sheets; una vegada iniciat, veureu un full de cel·les rectangulars buides disposades en files amb números i en columnes amb lletres. Aquí és a on podeu introduir dades o fórmules, text o diagrames. <mediaobject>
+<imageobject>
+<imagedata fileref="starting1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Captura de pantalla inici1</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Ara, introduïu el text i els valors mostrats en les primeres 5 columnes de la captura de pantalla anterior dintre de les mateixes cel·les del vostre full de càlcul. Ignoreu el que hi ha en la fila 7 de moment. Per a introduir quelcom dintre d'una cel·la, seleccioneu primer la cel·la fent-hi clic <mousebutton
+>esquerre</mousebutton
+>, després escriviu el que voleu i premeu &Intro; o useu les tecles de cursor per a moure el punt de selecció cap a una altra cel·la. </para>
+<para
+>El que heu introduït pot ser un pressupost senzill pels propers dos mesos, llistant quant pensem gastar en menjar, casa, roba i altres despeses. Ara seleccionem la cel·la B7 (columna B, fila 7), escriviu <userinput
+>=B2+B3+B4+B5</userinput
+> i premeu &Intro;. Com que comença amb un símbol <keycap
+>=</keycap
+>, &sheets; veurà això com a una fórmula, quelcom a calcular, en aquest cas sumant els valors de les 4 cel·les que hi ha entre B2 i B5, i el que es mostrarà en la cel·la B7 serà el resultat d'aquest càlcul.</para>
+<para
+>Podeu introduir una fórmula similar dintre de la cel·la C7, excepte que en aquest cas haurà de ser <userinput
+>=C2+C3+C4+C5</userinput
+>, però hi ha una manera molt més fàcil copiant la cel·la B7 i enganxant-la dintre de C7. &sheets; ajustarà automàticament les referències a la cel·la des de B.. a C.. quan sigui enganxada.</para>
+<para
+>En aquest punt podeu pensar que &sheets; no fa més del que podeu fer amb un llapis, paper i una calculadora, i teniu raó. Però recordeu que aquest és un exemple molt petit d'un full de càlcul que fa càlculs senzills amb tan sols uns pocs números. Per a quantitats de valors o de dades raonablement grans, usar un full de càlcul per a realitzar els càlculs és molt més ràpid i molt més fiable que fer-ho a mà.</para>
+<para
+>També, un full de càlcul us permet jugar al joc de <quote
+>Què passa si?</quote
+>. Atès que cada fórmula es recalcula automàticament quan es canvia qualsevol dels valors als que es refereix, podeu veure ràpidament el que succeeix si altereu qualsevol de les dades. Usant el nostre exemple podeu veure l'efecte de reduir la despesa en menjar al desembre simplement introduint un valor nou a la cel·la C2. Si teniu un full de càlcul que modela l'efecte hivernacle de manera adequada veureu l'efecte de reducció d'un 50 per cent en la quantitat de metà dintre de l'atmosfera.</para>
+</sect1>
+
+<sect1 id="selecting">
+<title
+>Seleccionar cel·les</title>
+<para
+>Podeu seleccionar una única cel·la o una àrea rectangular de cel·les en el full de càlcul. Les cel·les seleccionades es mostren amb una vora negra. </para>
+<itemizedlist>
+<title
+>Podeu seleccionar una única cel·la de qualsevol de les següents maneres:</title>
+<listitem
+><para
+>Fent clic <mousebutton
+>esquerre</mousebutton
+> sobre seu.</para
+></listitem>
+<listitem
+><para
+>Introduint la referència de cel·la (per exemple <userinput
+>B5</userinput
+>) dintre del quadre de referència de cel·les a l'extrem esquerre de les opcions de l'eina <guilabel
+>Editor de cel·les</guilabel
+> i prémer &Intro;.</para
+></listitem>
+<listitem
+><para
+>Usant l'opció de menú <menuchoice
+><guimenu
+>Ves</guimenu
+><guimenuitem
+>Ves a la cel·la...</guimenuitem
+></menuchoice
+></para
+></listitem>
+</itemizedlist>
+
+<para
+>També podeu fer el camí amb les tecles de <keysym
+>cursor</keysym
+>. Prement la tecla &Intro; moureu la selecció actual una posició amunt, avall, esquerra o dreta, depenent de la configuració a la pàgina <guilabel
+>Interfície</guilabel
+> del <link linkend="configinterface"
+>diàleg de configuració</link
+> de &sheets;.</para
+> <para
+>Si manteniu premuda la tecla <keycombo action="simul"
+>&Maj;</keycombo
+> mentre useu les tecles de <keysym
+>cursor</keysym
+> la selecció es mourà al començament o al final del bloc de cel·les plenes.</para>
+<para
+>Per a seleccionar una àrea de cel·les contigües arrossegueu el cursor del ratolí a través de l'àrea que voleu amb el botó <mousebutton
+>esquerre</mousebutton
+> premut, o introduïu les referències de cel·la superior esquerra i inferior dreta separades per dos punts en el quadre de referència de cel·la <guilabel
+>Editor de cel·les</guilabel
+> (per exemple <userinput
+>B7:C14</userinput
+>) i premeu &Intro;, o introduïu aquestes referències de cel·la en un format similar dintre del diàleg que s'obté amb <menuchoice
+><guimenu
+>Visualitza</guimenu
+><guimenuitem
+>Ves a la cel·la...</guimenuitem
+></menuchoice
+>.</para>
+<para
+>També podeu seleccionar una àrea de cel·les seleccionant la cel·la en una cantonada de l'àrea que voleu i després, tot mantenint premuda la tecla <keycombo action="simul"
+>&Maj;</keycombo
+>, seleccionant la cel·la en la cantonada oposada prement el &BER;.</para>
+
+<para
+>Per a seleccionar cel·les no contigües, feu clic sobre la primera cel·la que voleu seleccionar i després manteniu premuda la tecla <keycombo action="simul"
+>&Ctrl;</keycombo
+> mentre seleccioneu les altres cel·les.</para>
+
+<para
+>Per a seleccionar tota una fila o columna de cel·les feu clic <mousebutton
+>esquerre</mousebutton
+> sobre el número de fila a l'esquerra del full de càlcul o sobre les lletres de la columna a la part superior. Per a seleccionar files o columnes adjacents arrossegueu el punter del ratolí sobre els números de fila o lletres de columna amb el &BER; premut.</para>
+<para
+>Per a seleccionar files o columnes de cel·les no contigües, feu clic sobre el primer número de fila o lletra de columna i després manteniu premuda la tecla <keycombo action="simul"
+>&Ctrl;</keycombo
+> mentre seleccioneu les altres files o columnes de cel·les.</para>
+
+</sect1>
+
+<sect1 id="entering">
+<title
+>Introduir dades</title>
+<para
+>Introduir dades dintre d'una cel·la pot ser tan senzill com seleccionar la cel·la, escriure les vostres dades, després prémer &Intro; o moure la selecció a una altra cel·la amb una de les tecles de <keysym
+>cursor</keysym
+>. Depenent de com introduïu les dades, &sheets; les interpretarà com a un número, data, hora o text:</para>
+<itemizedlist>
+<listitem
+><para
+>Els números s'introdueixen en la manera òbvia; <userinput
+>123</userinput
+>, <userinput
+> -123</userinput
+>, <userinput
+>456,7</userinput
+> o en notació científica <userinput
+>-1,2E-5</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>Les dates s'han d'introduir en el format del vostre <quote
+>sistema</quote
+>, tal com estan definides a &systemsettings; sota la pestanya <menuchoice
+><guimenu
+>Configuració regional</guimenu
+> <guisubmenu
+>País/Regió i idioma</guisubmenu
+> <guimenuitem
+>Data i hora</guimenuitem
+> </menuchoice
+>. Si, per exemple, esteu utilitzant la forma DD/MM/AAAA, haureu d'introduir <userinput
+>30/03/2012</userinput
+> per al 30 de març de 2012. Els zeros que sobren es poden ometre dels camps del dia i del mes i tan sols els dos últims dígits de l'any són obligatoris si la data correspon al segle present, per exemple <userinput
+>9/1/9</userinput
+> per al 9 de gener de 2009. </para
+></listitem>
+<listitem
+><para
+>Les hores també s'han d'introduir usant el format del <quote
+>sistema</quote
+>. Per exemple, si esteu usant un rellotge de 12 hores aleshores introduireu les hores en el format HH:MIN am|pm o HH:MIN:SS am|pm com a <userinput
+>9:42 am</userinput
+> o <userinput
+>10:30:52 pm</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>&sheets; defineix qualsevol dada d'entrada com a <quote
+>text</quote
+> si no pot reconèixer les dades com a números, dates o hores. </para
+></listitem>
+</itemizedlist>
+<note
+><para
+>Per omissió dintre d'una cel·la, &sheets; justifica els números, dates i hores a la dreta i a l'esquerra tota la resta. Això pot ser una guia útil per a saber si heu introduït una data o hora en el format correcte. Però recordeu que es pot canviar com mostrar els elements en el <link linkend="formatdata"
+>format de cel·la</link
+>.</para
+></note>
+
+<para
+>El principal quadre d'entrada pel text a les opcions de l'eina <guilabel
+>Editor de cel·les</guilabel
+> proveeix una manera fàcil d'editar els continguts d'una cel·la seleccionada. Quan estigueu satisfet amb el que heu introduït, premeu &Intro; o feu clic <mousebutton
+>esquerre</mousebutton
+> sobre la marca de selecció verda, o feu clic sobre la creueta vermella per a cancel·lar el que esteu editant.</para>
+
+<sect2 id="genericformat">
+<title
+>Format de cel·la genèric</title>
+<para
+>&sheets; usa el format de cel·la <quote
+>Genèric</quote
+> per omissió. Encara que s'usi aquest format, &sheets; detecta automàticament el tipus de dades real segons les dades actuals de la cel·la. Per exemple, si introduïu algun text dintre d'una cel·la i posteriorment introduïu un número dintre de la mateixa cel·la, &sheets; interpretarà automàticament les noves dades com a un número. Si voleu definir el tipus de dades, el podeu establir en el <link linkend="formatdata"
+>format de cel·la</link
+>. En qualsevol moment podeu retornar al format <quote
+>Genèric</quote
+>. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="copypaste">
+<title
+>Copiar, retallar i enganxar</title>
+
+<para
+>En un primer moment, els elements <guimenuitem
+>Retalla</guimenuitem
+>, <guimenuitem
+>Copia</guimenuitem
+> i <guimenuitem
+>Enganxa</guimenuitem
+> semblen similars a aquestes funcions en les altres aplicacions de &kde;. Tenint seleccionada una cel·la o cel·les, podeu escollir <guimenuitem
+>Copia</guimenuitem
+> o <guimenuitem
+>Retalla</guimenuitem
+> des del menú <guimenu
+>Edita</guimenu
+> o des del menú desplegable que obteniu mantenint premut el &BDR; sobre una cel·la seleccionada. També podeu usar les dreceres <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+> </keycombo
+> o <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+> </keycombo
+>, després moveu la selecció cap a la cel·la de destí i escolliu <guimenuitem
+>Enganxa</guimenuitem
+> o premeu <keycombo action="simul"
+> &Ctrl;<keycap
+>V</keycap
+></keycombo
+>. De tota manera, hi ha algunes subtileses associades amb aquestes funcions en &sheets; que es tracten a sota.</para>
+
+<para
+>Si una cel·la conté una fórmula aleshores es copia aquesta en comptes del resultat mostrat, i si la fórmula conté una referència a una altra cel·la, aleshores la referència és canviada per l'operació <guimenuitem
+>Retalla</guimenuitem
+> o <guimenuitem
+>Copia</guimenuitem
+> i <guimenuitem
+>Enganxa</guimenuitem
+> i apunta cap a la cel·la que té la mateixa posició relativa en la cel·la original. Per exemple si la cel·la A2 conté la fórmula <userinput
+>=B3</userinput
+> i es copia a C4, aleshores C4 contindrà <userinput
+>=D5</userinput
+>.</para>
+<para
+>Això pot semblar una manera ben estranya de fer una còpia, però el 99 per cent de les vegades és exactament el que es vol (si no, mireu la secció sobre <link linkend="absolute"
+>referències absolutes a cel·la</link
+>). Per exemple, en la senzilla llista de la compra que es mostra a sota, la cel·la D2 haurà de contenir <userinput
+>=B2 * C2</userinput
+>, D3 haurà de ser <userinput
+>=B3 * C3</userinput
+>, D4 haurà de ser <userinput
+>=B4 * C4</userinput
+> i així successivament. En comptes d'haver d'introduir una fórmula diferent en cada cel·la, simplement podeu introduir la primera fórmula en D2 i després copieu-la dintre de les cel·les inferiors, deixant que &sheets; ajusti adequadament les referències de cel·la.</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="copy1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Captura de pantalla copia1</phrase>
+</textobject>
+</mediaobject>
+
+<sect2 id="copypasteareas">
+<title
+>Copiar i enganxar àrees de cel·la</title>
+<para
+>En l'exemple anterior D2 es pot copiar dintre de totes tres cel·les de D3 a D5 d'una sola vegada copiant D2 i després seleccionant l'àrea de cel·les completa D3:D5 abans d'enganxar.</para>
+<para
+>Es pot retallar o copiar una àrea rectangular de cel·les amb una operació seleccionant l'àrea abans de retallar o copiar. Després seleccioneu la cantonada superior esquerra de la cel·la de l'àrea en què voleu enganxar abans de realitzar l'enganxat.</para>
+<para
+>Si es retalla o copia una àrea rectangular de cel·les, diguem B2:C3, i les enganxeu dintre d'una àrea més gran com A10:D13, el patró original de cel·les es repetirà per a completar l'àrea de destinació.</para>
+<para
+>&sheets; també proveeix un mètode <quote
+>Arrossega i copia</quote
+> per a copiar cel·les immediatament a sota o a la dreta de les cel·les originals. Per a usar aquest mètode, seleccioneu les cel·les a copiar, després situeu el punter del ratolí sobre el petit quadrat negre en la cantonada inferior dreta de les cel·les seleccionades perquè el cursor canviï a una doble fletxa. Aleshores manteniu premut el &BER; mentre arrossegueu les cel·les seleccionades tan lluny com voleu. Tingueu present que les referències a les cel·les en les fórmules s'incrementen d'acord amb els canvis relatius de la posició. Les referències absolutes no són canviades.</para>
+</sect2>
+
+<sect2 id="specialpaste">
+<title
+>Altres maneres d'enganxar</title>
+<para
+>Una cel·la pot contenir text, un valor o una fórmula, i també pot contenir <link linkend="formatspread"
+>informació de format</link
+> especial per al tipus de lletra, vores o fons. &sheets; té versions especials per enganxar que us permeten manejar aquests elements de diferents maneres.</para>
+
+<para
+><menuchoice
+><guimenu
+>Edita</guimenu
+><guimenuitem
+>Enganxat especial...</guimenuitem
+></menuchoice
+> fa aparèixer el diàleg <guilabel
+>Enganxat especial</guilabel
+>. Seleccionant l'element apropiat des de la part esquerra d'aquest diàleg podeu escollir simplement enganxar <guilabel
+>Text</guilabel
+>, el <guilabel
+>Format</guilabel
+> de cel·la, qualsevol <guilabel
+>Comentari</guilabel
+> en les cel·les o <guilabel
+>Tot excepte les vores</guilabel
+>. Els elements a la part dreta d'aquest diàleg us permeten fer <link linkend="sumspecialpaste"
+>aritmètica senzilla sobre l'àrea de les cel·les</link
+>. </para>
+
+<para
+><menuchoice
+><guimenu
+>Edita</guimenu
+><guimenuitem
+>Enganxa amb inserció...</guimenuitem
+></menuchoice
+> insereix les cel·les copiades dintre del full movent les cel·les, que d'altra manera serien substituïdes, un nombre adequat de files o columnes avall o a la dreta. També es pot usar per inserir files o columnes completes copiades dintre del full de treball.</para>
+</sect2>
+
+</sect1>
+<!-- ME insdel -->
+<sect1 id="insdel">
+<title
+>Inserir i suprimir</title>
+<para
+>Utilitzeu la tecla <keycap
+>Supr</keycap
+> o <menuchoice
+><guimenu
+>Edita</guimenu
+><guisubmenu
+>Neteja</guisubmenu
+><guimenuitem
+>Continguts</guimenuitem
+> </menuchoice
+> per eliminar el text, valor o fórmula de les cel·les, files o columnes seleccionades sense afectar a res més.</para>
+
+<para
+>Per a suprimir-ho tot en les cel·les, files o columnes seleccionades, incloent-hi comentaris i formats especials, escolliu l'opció <guimenuitem
+>Tot</guimenuitem
+> des del menú <menuchoice
+><guimenu
+>Edita</guimenu
+><guisubmenu
+>Neteja</guisubmenu
+></menuchoice
+> o des del menú emergent que obteniu en fer clic <mousebutton
+>dret</mousebutton
+> sobre una selecció. </para>
+<para
+>Per eliminar completament les files o columnes seleccionades, useu les opcions <guimenuitem
+>Elimina les files</guimenuitem
+> o <guimenuitem
+>Elimina les columnes</guimenuitem
+> des del menú emergent del &BDR;.</para>
+<para
+>Si seleccioneu una cel·la o cel·les i escolliu <guimenuitem
+>Elimina les cel·les...</guimenuitem
+> des del menú emergent del &BDR;, aleshores podreu escollir si les altres cel·les en el full de treball es mouran amunt o a l'esquerra per omplir l'espai deixat per les cel·les que heu escollit per eliminar.</para>
+<para
+>Si voleu inserir files o columnes buides dintre del full, seleccioneu les files o les columnes en què voleu que les noves cel·les o files se situïn i escolliu l'opció <guimenuitem
+>Insereix files</guimenuitem
+> o <guimenuitem
+>Insereix columnes</guimenuitem
+> des del menú emergent del &BDR;.</para>
+<para
+>Podeu inserir cel·les noves dintre del full de treball seleccionant l'àrea a on voleu que apareguin i aleshores escollint l'opció <guimenuitem
+> Insereix cel·les...</guimenuitem
+> des del menú emergent del &BDR;. Aleshores se us demanarà si les cel·les existents en l'àrea seleccionada s'han de moure avall o a la dreta per a fer lloc a les noves cel·les.</para>
+
+</sect1>
+
+<sect1 id="simplesums">
+<title
+>Suma senzilla</title>
+<para
+>Si el primer caràcter en una cel·la és un signe igual (<keycap
+>=</keycap
+>), &sheets; prendrà els continguts de cel·la com a una fórmula a calcular. El resultat d'aquest càlcul es mostrarà en la cel·la mateixa que conté aquesta fórmula. Per exemple, introduïu <userinput
+>=2+3</userinput
+> dintre d'una cel·la i s'haurà de mostrar <emphasis
+>5</emphasis
+>.</para>
+<para
+>És molt útil que una fórmula pugui contenir referències a altres cel·les, de manera que <userinput
+>=B4+A3</userinput
+> calcularà la suma dels valors en les cel·les B4 i A3, i aquest càlcul serà actualitzat cada vegada que es canviïn les cel·les B4 o A3.</para>
+<para
+>Així com en la suma, una fórmula pot usar el símbol <keycap
+>-</keycap
+> per a restar, <keycap
+>*</keycap
+> per a multiplicar, i <keycap
+>/</keycap
+> per dividir. Els símbols de parèntesis <keycap
+>(</keycap
+> i <keycap
+>)</keycap
+> també es poden usar de la mateixa manera que en àlgebra, perquè pugueu introduir fórmules més complexes com <userinput
+>=((B10 + C3) *5 - F11) / 2 </userinput
+>.</para>
+
+<para
+>Les cel·les que contenen una fórmula seran marcades amb un petit triangle blau en la cantonada inferior esquerra si s'ha marcat la casella de selecció <guilabel
+>Mostra indicador de fórmula</guilabel
+> en el diàleg <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Full</guisubmenu
+><guisubmenu
+>Propietats del full</guisubmenu
+> </menuchoice
+>.</para>
+<para
+>&sheets; també inclou un gran nombre de funcions integrades per aplicacions com càlculs estadístics, trigonomètrics i financers. El seu ús s'examinarà amb major profunditat en una <link linkend="formulas"
+>secció posterior</link
+> d'aquest manual, però si esteu interessat en aquest tema escolliu <guimenuitem
+>Funció...</guimenuitem
+> des del menú <guimenu
+>Insereix</guimenu
+> i doneu un cop d'ull al diàleg <guilabel
+>Funció</guilabel
+> que es mostrarà.</para>
+<para
+>Tanmateix, ara com ara, la funció <userinput
+>SUM</userinput
+> pot ser interessant, atès que calcula la suma de tots els valors en una àrea de cel·les especificades. Per exemple, <userinput
+>=SUM(B4:C10)</userinput
+> calcula la suma de tots els valors en l'àrea de cel·les des de B4 fins a C10.</para>
+<para
+>Si &sheets; mostra <keycap
+>#VALOR!</keycap
+> quan heu introduït la vostra fórmula, això normalment voldrà dir que no pot entendre el que s'ha introduït, però si la fila de símbols finalitza amb una petita fletxa vermella, això simplement voldrà dir que la cel·la no és prou ampla per a mostrar tot el resultat, en aquest cas podeu o bé fer les cel·les més amples o canviar el seu <link linkend="formatdata"
+>format</link
+> perquè el resultat s'ajusti de forma adequada.</para>
+
+<sect2 id="recalc">
+<title
+>Recalcular</title>
+<para
+>Si està marcat <guilabel
+>Recàlcul automàtic</guilabel
+> al diàleg <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Full</guisubmenu
+><guisubmenu
+>Propietats del full</guisubmenu
+> </menuchoice
+>, &sheets; recalcula els valors de les cel·les quan en el full hi ha algun canvi que les afecta.</para>
+<para
+>Quan per al full actual no està marcat <guilabel
+>Recàlcul automàtic</guilabel
+>, li podeu indicar a &sheets; que realitzi un recàlcul automàtic en qualsevol moment usant l'opció <guimenuitem
+>Recàlcul automàtic</guimenuitem
+> o <guimenuitem
+>Recalcula document</guimenuitem
+> en el menú <guimenu
+>Eines</guimenu
+> o la seva drecera <keycombo action="simul"
+>&Maj;<keysym
+>F9</keysym
+></keycombo
+> o <keysym
+>F9</keysym
+>.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sort">
+<title
+>Ordenar les dades</title>
+<para
+>En l'exemple senzill mostrat a sota, les dades consisteixen en els noms i països d'una sèrie de muntanyes junt amb la seva altitud sobre el nivell del mar. &sheets; pot ordenar aquestes dades en maneres diferents.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sort1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Captura de pantalla de les dades ordenades</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Poder voleu tenir les dades ordenades pel nom i en ordre alfabètics. Per fer-ho, seleccioneu l'àrea on estan les dades (en aquest cas, A2:C7) i escollir <guimenuitem
+>Ordena...</guimenuitem
+> des del menú <guimenu
+>Dades</guimenu
+>. Això obre el diàleg <guilabel
+>Ordena</guilabel
+>.</para
+> 
+<para
+>L'ordenació es fa alfanumèricament, i distingeix majúscules i minúscules. Els números van abans de les lletres i les majúscules van abans que les minúscules, de manera que les cel·les que contenen les entrades <userinput
+>Cat</userinput
+>, <userinput
+>bar</userinput
+>, <userinput
+>77</userinput
+> i <userinput
+>Bat</userinput
+> s'ordenaran de la següent manera: <emphasis
+>77 Bat Cat bar</emphasis
+>.</para>
+<!-- Obsolete, AFAICT (Phil)
+<para
+>The <guimenuitem
+>Sort Increasing</guimenuitem
+> and <guimenuitem
+>Sort 
+Decreasing</guimenuitem
+> options from the <guimenu
+>Data</guimenu
+> menu options 
+sort the data according to the contents of the cells in the left column of the 
+selected area. For more complex sorting select <menuchoice
+><guimenu
+>Data
+</guimenu
+><guimenuitem
+>Sort...</guimenuitem
+></menuchoice
+> to bring up the 
+<guilabel
+>Sort</guilabel
+> dialog box.</para>
+-->
+<para
+>A l'àrea <guilabel
+>Direcció</guilabel
+> d'aquest quadre de diàleg, seleccioneu-la per ordenar les files o columnes. Si marqueu la casella <guilabel
+>La primera fila conté les capçaleres de la columna</guilabel
+> o <guilabel
+>La primera columna conté les capçaleres de la fila</guilabel
+> perquè les dades a la primera fila o columna no s'incloguin a l'operació d'ordenació.</para>
+<para
+>Les files o columnes s'ordenen en l'ordre especificat, el qual es pot canviar utilitzant els botons <guibutton
+>Mou amunt</guibutton
+> i <guibutton
+>Mou avall</guibutton
+>. Utilitzant l'exemple de la captura de pantalla anterior, escollint la columna B com la primera clau i la columna C com la segona, s'ordenarien les dades per país, per a cada país i per l'alçada.</para>
+<para
+>Desmarqueu l'opció <guilabel
+>Distingeix majúscules i minúscules</guilabel
+> per obtenir una ordenació que no depengui de les majúscules i canviar l'ordre d'ordenació entre <guilabel
+>Ascendent</guilabel
+> i <guilabel
+>Descendent</guilabel
+> fent clic sobre les cel·les de la columna <guilabel
+>Criteri d'ordenació</guilabel
+>. </para>
+
+<para
+>L'extensió <guilabel
+>Detalls 
+>
+></guilabel
+> del diàleg permet ordenar utilitzant un ordre propi com, per exemple, Gener, Febrer... en lloc de l'alfanumèric. El format de la cel·la es mou amb el contingut d'aquesta, si seleccioneu <guilabel
+>Copia el format de la cel·la (vores, colors, estil de text)</guilabel
+>. </para>
+</sect1>
+
+
+<sect1 id="statusbarsum">
+<title
+>La barra d'estat calculadora de resum</title>
+<para
+>A la part final esquerra de la barra d'estat, per omissió es mostra un resum dels valors en les cel·les seleccionades. D'acord amb la configuració del quadre combinat <guilabel
+>Funció mostrada a la barra d'estat:</guilabel
+> a la pàgina <guilabel
+>Interfície</guilabel
+> del diàleg de configuració de &sheets;, el resum pot ser:</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Cap</guilabel
+></term>
+<listitem
+><para
+>No es realitza cap càlcul de resum. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Mitjana</guilabel
+></term>
+<listitem
+><para
+>El valor que es mostra és la mitjana dels valors en les cel·les seleccionades. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Comptador</guilabel
+></term>
+<listitem
+><para
+>El valor que es mostra és el nombre de cel·les que contenen valors numèrics. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>CompteA</guilabel
+></term>
+<listitem
+><para
+>El valor que es mostra és el nombre de cel·les no buides. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Max</guilabel
+></term>
+<listitem
+><para
+>El valor que es mostra és el màxim dels valors en les cel·les seleccionades. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Min</guilabel
+></term>
+<listitem
+><para
+>El valor que es mostra és el mínim dels valors en les cel·les seleccionades. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Sum</guilabel
+></term>
+<listitem
+><para
+>El valor que es mostra és la suma dels valors en les cel·les seleccionades. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+<para
+>El mètode de càlcul també es pot canviar fent clic <mousebutton
+>dret</mousebutton
+> sobre l'àrea de resum del resultat del càlcul de la barra d'estat i escollint un element des del menú emergent.</para>
+
+</sect1>
+
+<sect1 id="saving">
+<title
+>Desar el vostre treball</title>
+<para
+>&sheets; desa tot el document, el qual pot incloure un o més fulls de treball, com un únic fitxer de document.</para>
+<para
+>Si heu creat un document nou o voleu desar un existent amb un nom diferent, utilitzeu <menuchoice
+><guimenu
+>Fitxer</guimenu
+><guimenuitem
+>Desa com a...</guimenuitem
+></menuchoice
+>. Es mostrarà el diàleg comú del &kde; <guilabel
+>Desa el document com a</guilabel
+>. Escolliu la carpeta on voleu desar el document i introduïu un nom de fitxer adequat dintre del quadre de text <guilabel
+>Nom:</guilabel
+>. Els documents de &sheets; normalment es desen automàticament amb una extensió <filename
+>.ods</filename
+>, no necessitareu afegir-la al nom de fitxer, però assegureu-vos que la selecció de <guilabel
+>Filtre:</guilabel
+> està establerta a <guilabel
+>Full de càlcul OpenDocument</guilabel
+>.</para>
+<para
+>Per a desar el vostre document sense canviar el seu nom, simplement useu <menuchoice
+> <guimenu
+>Fitxer</guimenu
+><guimenuitem
+>Desa</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>També podeu desar un document de &sheets; en un format extern, seleccionant-lo des del quadre combinat <guilabel
+>Filtre:</guilabel
+>.</para>
+<para
+>Quan deseu una versió modificada d'un document existent, &sheets; desarà la versió anterior com a un fitxer de còpia de seguretat, afegint un símbol <literal
+>~</literal
+> al final del nom de fitxer.</para>
+<para
+>&sheets; pot proveir alguna protecció contra la pèrdua del vostre treball per una caiguda del sistema o per haver tancat &sheets; sense desar el document actual. Fa això desant automàticament cada pocs minuts l'última versió del document en la que esteu treballant usant un nom de fitxer modificat. La versió desada automàticament serà eliminada normalment la propera vegada que deseu el document, de manera que tan sols existirà si està més actualitzada que la versió que es va desar manualment. Quan obriu un document, &sheets; comprova per a veure si hi ha una versió desada automàticament, i si en troba una, us ofereix obrir-la en el seu lloc.</para>
+<para
+>Els documents desats automàticament es desen amb un nom de fitxer de la forma <filename
+>.elvostrefitxer.autosave</filename
+> (tingueu present el punt al començament), de manera que <filename
+>fullcalcul1.ksp</filename
+> es desaria automàticament com a <filename
+>.fullcalcul1.ksp.autosave</filename
+>. La característica del desament automàtic és configurada per l'usuari al <link linkend="configopensave"
+>diàleg de configuració</link
+>.</para>
+
+<sect2 id="templates">
+<title
+>Plantilles</title>
+<para
+>Si creareu un munt de documents similars podeu estalviar temps i problemes creant primer una plantilla i usant-la després com a base per als documents individuals.</para>
+<para
+>Per a fer-ho, primer creeu un document que contingui els elements comuns, després deseu-lo com a plantilla escollint <menuchoice
+><guimenu
+>Fitxer</guimenu
+><guimenuitem
+>Crea una plantilla a partir d'un document</guimenuitem
+></menuchoice
+>. Fent això s'obrirà el diàleg <guilabel
+>Crea una plantilla</guilabel
+>. Introduïu un nom per a la vostra nova plantilla en el quadre de text <guilabel
+>Nom:</guilabel
+> i premeu <guibutton
+>D'acord</guibutton
+>. La propera vegada que comenceu un document nou escollint <menuchoice
+><guimenu
+>Fitxer</guimenu
+><guimenuitem
+>Nou</guimenuitem
+></menuchoice
+> o la propera vegada que inicieu &sheets;, el diàleg <guilabel
+>Escull</guilabel
+> us indicarà l'opció de crear el nou document des de la vostra plantilla.</para>
+<para
+>El diàleg <guilabel
+>Crea una plantilla</guilabel
+> també permet escollir una imatge diferent per a mostrar sobre el nom de plantilla a la finestra de diàleg a l'inici, i permet desar les vostres plantilles sota diferents noms de grups, els quals apareixeran com a pàgines diferents en el diàleg d'inici.</para>
+<para
+>Les plantilles es desen com a fitxers <literal role="extension"
+>.kst</literal
+> sota <filename
+>~/.kde/share/apps/sheets/templates/</filename
+>. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="printing">
+<title
+>Imprimir un full de càlcul</title>
+<para
+>Imprimir un full de càlcul bàsicament es fa seleccionant <menuchoice
+> <guimenu
+>Fitxer</guimenu
+><guimenuitem
+>Imprimeix...</guimenuitem
+></menuchoice
+> el qual farà aparèixer el diàleg <guilabel
+>Impressió</guilabel
+> comú del &kde;, on podeu escollir entre altres opcions, la impressora a utilitzar, el nombre de còpies i si s'imprimiran totes o tan sols les pàgines seleccionades.</para>
+<para
+>Per omissió, &sheets; imprimirà tots els elements en el full de treball actual, però ho podeu restringir seleccionant primer l'àrea a imprimir i escollint després <guimenuitem
+>Defineix el rang d'impressió</guimenuitem
+> des del submenú <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Interval de la impressió</guisubmenu
+> </menuchoice
+>.</para>
+<para
+>&sheets; imprimirà tantes pàgines com siguin necessàries per a incloure tots els elements del full de treball actual. Podeu veure ràpidament com es dividiran en pàgines separades per a la impressió marcant la casella <menuchoice
+><guimenu
+>Visualitza</guimenu
+><guimenuitem
+>Vores de la pàgina</guimenuitem
+></menuchoice
+>. Els límits de cada pàgina impresa seran marcats amb línies acolorides en el full de treball.</para>
+
+<para
+>Per a una visualització més detallada del que s'enviarà a la impressora, incloent-hi tot el que s'ha demanat incloure en les capçaleres i els peus de pàgina (vegeu més avall), escolliu <menuchoice
+><guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Vista prèvia d'impressió...</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Per a millorar l'aparença de la sortida impresa, podeu canviar el tipus de lletra, colors, vores i mides de les cel·les en el full de treball, mireu la secció <link linkend="formatspread"
+>Donar format a un full de càlcul</link
+> per a més detalls sobre com fer això.</para>
+
+<para
+>També podeu utilitzar el diàleg <guilabel
+>Disposició de pàgina</guilabel
+>, invocant-lo seleccionant <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Disposició de pàgina...</guimenuitem
+></menuchoice
+>, per a canviar l'orientació de les pàgines impreses, la mida del paper (aquest l'haureu d'ajustar per a la vostra impressora) i la mida de les vores de pàgina.</para>
+<para
+>El <guilabel
+>Full</guilabel
+> proporciona més opcions. La secció <guilabel
+>Arranjament de la impressió</guilabel
+> permet seleccionar si s'ha d'imprimir o no la graella, indicadors de comentari i de fórmula, objectes i diagrames. La secció <guilabel
+>Repeticions a cada pàgina</guilabel
+> permet repetir les files o columnes seleccionades sobre cada pàgina impresa. A la secció <guilabel
+>Escalat</guilabel
+> permet establir un factor d'escala o limitar el nombre de pàgines a imprimir.</para>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

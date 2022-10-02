@@ -1,0 +1,413 @@
+# thesaurus_tool Bahasa Melayu (Malay) (ms)
+# Malay translation
+#
+# MIMOS Open Source <opensource@mimos.my>, 2005.
+# Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: thesaurus_tool\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2008-07-08 22:06+0800\n"
+"Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
+"Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
+"Language: ms\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=1;\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: Thesaurus.cpp:81
+#, kde-format
+msgid "(No match)"
+msgstr "(Tiada padanan)"
+
+#: Thesaurus.cpp:91
+#, kde-format
+msgid "&Search for:"
+msgstr "&Cari:"
+
+#: Thesaurus.cpp:94
+#, kde-format
+msgid "S&earch"
+msgstr "&Cari"
+
+#: Thesaurus.cpp:101
+#, kde-format
+msgctxt "@action:button Go back to the previous word in history"
+msgid "Back"
+msgstr ""
+
+#: Thesaurus.cpp:105
+#, fuzzy, kde-format
+#| msgid "Forward"
+msgctxt "@action:button Go forward to the next word in history"
+msgid "Forward"
+msgstr "Ke depan"
+
+#: Thesaurus.cpp:108
+#, kde-format
+msgid "Change Language..."
+msgstr "Ubah Bahasa..."
+
+#: Thesaurus.cpp:122
+#, kde-format
+msgid "&Thesaurus"
+msgstr "&Tesaurus"
+
+#: Thesaurus.cpp:126
+#, kde-format
+msgid "Synonyms"
+msgstr "Sinonim"
+
+#: Thesaurus.cpp:133
+#, kde-format
+msgid "More General Words"
+msgstr "Kata Lebih Umum"
+
+#: Thesaurus.cpp:140
+#, kde-format
+msgid "More Specific Words"
+msgstr "Kata Lebih Khusus"
+
+#: Thesaurus.cpp:170
+#, fuzzy, kde-format
+#| msgid "&WordNet"
+msgid "&Wordnet"
+msgstr "&WordNet"
+
+#: Thesaurus.cpp:192
+#, kde-format
+msgid "&Replace with:"
+msgstr "&Ganti dengan:"
+
+#: Thesaurus.cpp:255
+#, kde-format
+msgid "&Replace"
+msgstr "&Ganti"
+
+#: Thesaurus.cpp:267
+#, fuzzy, kde-format
+#| msgid "&Replace"
+msgid "Replace Word"
+msgstr "&Ganti"
+
+#: Thesaurus.cpp:295
+#, kde-format
+msgid "Related Words - %1"
+msgstr "Kata Berkaitan - %1"
+
+#: Thesaurus.cpp:409
+#, kde-format
+msgid ""
+"The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+"select a thesaurus file."
+msgstr ""
+"Fail tesaurus '%1' tidak ditemui. Guna 'Ubah Bahasa...' untuk memilih fail "
+"tesaurus."
+
+#: Thesaurus.cpp:429
+#, fuzzy, kde-format
+#| msgid "<b>Error:</b> Failed to execute grep. Output:<br>%1"
+msgid "<b>Error:</b> Failed to execute grep."
+msgstr "<b>Ralat:</b> Gagal melaksanakan grep. Output:<br>%1"
+
+#: Thesaurus.cpp:581
+#, kde-format
+msgid "Synonyms/Hypernyms - Ordered by Frequency"
+msgstr "Sinonim/Hipernim - Tertib mengikut Frekuensi"
+
+#: Thesaurus.cpp:582
+#, kde-format
+msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+msgstr "Sinonim - Tertib mengikut Persamaan Makna (kata kerja sahaja)"
+
+#: Thesaurus.cpp:583
+#, kde-format
+msgid "Antonyms - Words with Opposite Meanings"
+msgstr "Antonim - Kata dengan Makna Berlawanan"
+
+#: Thesaurus.cpp:584
+#, kde-format
+msgid "Hyponyms - ... is a (kind of) %1"
+msgstr "Hiponim - ... adalah (kira-kira)%1"
+
+#: Thesaurus.cpp:585
+#, kde-format
+msgid "Meronyms - %1 has a ..."
+msgstr "Meronim - %1 mempunyai ..."
+
+#: Thesaurus.cpp:587
+#, kde-format
+msgid "Holonyms - ... has a %1"
+msgstr "Holonim - ... mempunyai %1"
+
+#: Thesaurus.cpp:588
+#, kde-format
+msgid "Attributes"
+msgstr "Atribut"
+
+#: Thesaurus.cpp:589
+#, kde-format
+msgid "Cause To (for some verbs only)"
+msgstr "Sebab (bagi beberapa kata kerja sahaja)"
+
+#: Thesaurus.cpp:590
+#, kde-format
+msgid "Verb Entailment (for some verbs only)"
+msgstr "Keperluan Kata Kerja (bagi beberapa kata kerja sahaja)"
+
+#: Thesaurus.cpp:591
+#, kde-format
+msgid "Familiarity & Polysemy Count"
+msgstr "Kiraan Pengetahuan & Polisemi"
+
+#: Thesaurus.cpp:593
+#, kde-format
+msgid "Verb Frames (examples of use)"
+msgstr "Rangka Kata Kerja (contoh penggunaan)"
+
+#: Thesaurus.cpp:594
+#, kde-format
+msgid "List of Compound Words"
+msgstr "Senarai Kata Majmuk"
+
+#: Thesaurus.cpp:595
+#, kde-format
+msgid "Overview of Senses"
+msgstr "Paparan Umum Makna "
+
+#: Thesaurus.cpp:623
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#| "installed on your computer if you want to use it, and 'wn' has to be in "
+#| "your PATH. You can get WordNet at <a href=\"http://www.cogsci.princeton."
+#| "edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet "
+#| "only supports the English language."
+msgid ""
+"<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+"installed on your computer if you want to use it, and 'wn' has to be in your "
+"PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+"\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+"English language."
+msgstr ""
+"<b>Ralat:</b> Gagal melaksanakan program 'wn' WordNet. WordNet perlu "
+"dipasang pada komputer jika anda hendak menggunakannya, dan 'wn' perlu ada "
+"dalam PATH anda. Anda boleh mendapatkan WordNet di <a href=\"http://www."
+"cogsci.princeton.edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. "
+"Perhatikan yang Wordnet hanya menyokong bahasa Inggeris."
+
+#: Thesaurus.cpp:635
+#, kde-format
+msgid "No match for '%1'."
+msgstr "Tiada padanan untuk '%1'."
+
+#, fuzzy
+#~| msgid "(No match)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(No match)"
+#~ msgstr "(Tiada padanan)"
+
+#, fuzzy
+#~| msgid "&Search for:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Search for:"
+#~ msgstr "&Cari:"
+
+#, fuzzy
+#~| msgid "S&earch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&earch"
+#~ msgstr "&Cari"
+
+#, fuzzy
+#~| msgid "Forward"
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go forward to the next word in history"
+#~ msgid "Forward"
+#~ msgstr "Ke depan"
+
+#, fuzzy
+#~| msgid "Change Language..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Language..."
+#~ msgstr "Ubah Bahasa..."
+
+#, fuzzy
+#~| msgid "&Thesaurus"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Thesaurus"
+#~ msgstr "&Tesaurus"
+
+#, fuzzy
+#~| msgid "Synonyms"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms"
+#~ msgstr "Sinonim"
+
+#, fuzzy
+#~| msgid "More General Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More General Words"
+#~ msgstr "Kata Lebih Umum"
+
+#, fuzzy
+#~| msgid "More Specific Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More Specific Words"
+#~ msgstr "Kata Lebih Khusus"
+
+#, fuzzy
+#~| msgid "&WordNet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Wordnet"
+#~ msgstr "&WordNet"
+
+#, fuzzy
+#~| msgid "&Replace with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace with:"
+#~ msgstr "&Ganti dengan:"
+
+#, fuzzy
+#~| msgid "&Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace"
+#~ msgstr "&Ganti"
+
+#, fuzzy
+#~| msgid "&Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace Word"
+#~ msgstr "&Ganti"
+
+#, fuzzy
+#~| msgid "Related Words - %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Related Words - %1"
+#~ msgstr "Kata Berkaitan - %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "The thesaurus file '%1' was not found. Please use 'Change Language...' "
+#~| "to select a thesaurus file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+#~ "select a thesaurus file."
+#~ msgstr ""
+#~ "Fail tesaurus '%1' tidak ditemui. Guna 'Ubah Bahasa...' untuk memilih "
+#~ "fail tesaurus."
+
+#, fuzzy
+#~| msgid "<b>Error:</b> Failed to execute grep. Output:<br>%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<b>Error:</b> Failed to execute grep."
+#~ msgstr "<b>Ralat:</b> Gagal melaksanakan grep. Output:<br>%1"
+
+#, fuzzy
+#~| msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgstr "Sinonim/Hipernim - Tertib mengikut Frekuensi"
+
+#, fuzzy
+#~| msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgstr "Sinonim - Tertib mengikut Persamaan Makna (kata kerja sahaja)"
+
+#, fuzzy
+#~| msgid "Antonyms - Words with Opposite Meanings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Antonyms - Words with Opposite Meanings"
+#~ msgstr "Antonim - Kata dengan Makna Berlawanan"
+
+#, fuzzy
+#~| msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgstr "Hiponim - ... adalah (kira-kira)%1"
+
+#, fuzzy
+#~| msgid "Meronyms - %1 has a ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Meronyms - %1 has a ..."
+#~ msgstr "Meronim - %1 mempunyai ..."
+
+#, fuzzy
+#~| msgid "Holonyms - ... has a %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Holonyms - ... has a %1"
+#~ msgstr "Holonim - ... mempunyai %1"
+
+#, fuzzy
+#~| msgid "Attributes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attributes"
+#~ msgstr "Atribut"
+
+#, fuzzy
+#~| msgid "Cause To (for some verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cause To (for some verbs only)"
+#~ msgstr "Sebab (bagi beberapa kata kerja sahaja)"
+
+#, fuzzy
+#~| msgid "Verb Entailment (for some verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Entailment (for some verbs only)"
+#~ msgstr "Keperluan Kata Kerja (bagi beberapa kata kerja sahaja)"
+
+#, fuzzy
+#~| msgid "Familiarity & Polysemy Count"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Familiarity & Polysemy Count"
+#~ msgstr "Kiraan Pengetahuan & Polisemi"
+
+#, fuzzy
+#~| msgid "Verb Frames (examples of use)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Frames (examples of use)"
+#~ msgstr "Rangka Kata Kerja (contoh penggunaan)"
+
+#, fuzzy
+#~| msgid "List of Compound Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "List of Compound Words"
+#~ msgstr "Senarai Kata Majmuk"
+
+#, fuzzy
+#~| msgid "Overview of Senses"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overview of Senses"
+#~ msgstr "Paparan Umum Makna "
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~| "installed on your computer if you want to use it, and 'wn' has to be in "
+#~| "your PATH. You can get WordNet at <a href=\"http://www.cogsci.princeton."
+#~| "edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet "
+#~| "only supports the English language."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~ "installed on your computer if you want to use it, and 'wn' has to be in "
+#~ "your PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+#~ "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+#~ "English language."
+#~ msgstr ""
+#~ "<b>Ralat:</b> Gagal melaksanakan program 'wn' WordNet. WordNet perlu "
+#~ "dipasang pada komputer jika anda hendak menggunakannya, dan 'wn' perlu "
+#~ "ada dalam PATH anda. Anda boleh mendapatkan WordNet di <a href=\"http://"
+#~ "www.cogsci.princeton.edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. "
+#~ "Perhatikan yang Wordnet hanya menyokong bahasa Inggeris."
+
+#, fuzzy
+#~| msgid "No match for '%1'."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No match for '%1'."
+#~ msgstr "Tiada padanan untuk '%1'."

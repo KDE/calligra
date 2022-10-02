@@ -1,0 +1,353 @@
+# Translation of calligra_textediting_thesaurus.po to Ukrainian
+# Copyright (C) 2003-2010 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Eugene Onischenko <oneugene@ukr.net>, 2003.
+# Ivan Petrouchtchak <fr.ivan@ukrainian-orthodox.org>, 2005, 2007, 2008.
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra_textediting_thesaurus\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2010-04-28 18:21+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <translation@linux.org.ua>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: Thesaurus.cpp:81
+#, kde-format
+msgid "(No match)"
+msgstr "(Не знайдено)"
+
+#: Thesaurus.cpp:91
+#, kde-format
+msgid "&Search for:"
+msgstr "&Шукати:"
+
+#: Thesaurus.cpp:94
+#, kde-format
+msgid "S&earch"
+msgstr "Ш&укати"
+
+#: Thesaurus.cpp:101
+#, kde-format
+msgctxt "@action:button Go back to the previous word in history"
+msgid "Back"
+msgstr "Назад"
+
+#: Thesaurus.cpp:105
+#, kde-format
+msgctxt "@action:button Go forward to the next word in history"
+msgid "Forward"
+msgstr "Вперед"
+
+#: Thesaurus.cpp:108
+#, kde-format
+msgid "Change Language..."
+msgstr "Змінити мову..."
+
+#: Thesaurus.cpp:122
+#, kde-format
+msgid "&Thesaurus"
+msgstr "&Словник синонімів"
+
+#: Thesaurus.cpp:126
+#, kde-format
+msgid "Synonyms"
+msgstr "Синоніми"
+
+#: Thesaurus.cpp:133
+#, kde-format
+msgid "More General Words"
+msgstr "Загальніші слова"
+
+#: Thesaurus.cpp:140
+#, kde-format
+msgid "More Specific Words"
+msgstr "Специфічніші слова"
+
+#: Thesaurus.cpp:170
+#, kde-format
+msgid "&Wordnet"
+msgstr "&Wordnet"
+
+#: Thesaurus.cpp:192
+#, kde-format
+msgid "&Replace with:"
+msgstr "За&мінити на:"
+
+#: Thesaurus.cpp:255
+#, kde-format
+msgid "&Replace"
+msgstr "&Замінити"
+
+#: Thesaurus.cpp:267
+#, kde-format
+msgid "Replace Word"
+msgstr "Замінити слово"
+
+#: Thesaurus.cpp:295
+#, kde-format
+msgid "Related Words - %1"
+msgstr "Пов'язані слова — %1"
+
+#: Thesaurus.cpp:409
+#, kde-format
+msgid ""
+"The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+"select a thesaurus file."
+msgstr ""
+"Не знайдено файл словника синонімів «%1». Будь ласка, скористайтесь «Змінити "
+"мову...», щоб вибрати файл словника синонімів."
+
+#: Thesaurus.cpp:429
+#, kde-format
+msgid "<b>Error:</b> Failed to execute grep."
+msgstr "<b>Помилка:</b> Не вдалося запустити команду grep."
+
+#: Thesaurus.cpp:581
+#, kde-format
+msgid "Synonyms/Hypernyms - Ordered by Frequency"
+msgstr "Синоніми/Гіперболи — впорядковані за частотою вживання"
+
+#: Thesaurus.cpp:582
+#, kde-format
+msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+msgstr "Синоніми — впорядковані за схожістю значення (тільки дієслова)"
+
+#: Thesaurus.cpp:583
+#, kde-format
+msgid "Antonyms - Words with Opposite Meanings"
+msgstr "Антоніми — слова з протилежним значенням"
+
+#: Thesaurus.cpp:584
+#, kde-format
+msgid "Hyponyms - ... is a (kind of) %1"
+msgstr "Гіперболи — ... це (щось на зразок) %1"
+
+#: Thesaurus.cpp:585
+#, kde-format
+msgid "Meronyms - %1 has a ..."
+msgstr "Метафори — %1 має..."
+
+#: Thesaurus.cpp:587
+#, kde-format
+msgid "Holonyms - ... has a %1"
+msgstr "Голоніми — ... має %1"
+
+#: Thesaurus.cpp:588
+#, kde-format
+msgid "Attributes"
+msgstr "Атрибути"
+
+#: Thesaurus.cpp:589
+#, kde-format
+msgid "Cause To (for some verbs only)"
+msgstr "Примусити до (тільки для деяких дієслів)"
+
+#: Thesaurus.cpp:590
+#, kde-format
+msgid "Verb Entailment (for some verbs only)"
+msgstr "Форми дієслів (тільки для деяких дієслів)"
+
+#: Thesaurus.cpp:591
+#, kde-format
+msgid "Familiarity & Polysemy Count"
+msgstr "Кількість схожих та багатозначних"
+
+#: Thesaurus.cpp:593
+#, kde-format
+msgid "Verb Frames (examples of use)"
+msgstr "Групи дієслів (приклади використання)"
+
+#: Thesaurus.cpp:594
+#, kde-format
+msgid "List of Compound Words"
+msgstr "Список сполучених слів"
+
+#: Thesaurus.cpp:595
+#, kde-format
+msgid "Overview of Senses"
+msgstr "Огляд значень"
+
+#: Thesaurus.cpp:623
+#, kde-format
+msgid ""
+"<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+"installed on your computer if you want to use it, and 'wn' has to be in your "
+"PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+"\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+"English language."
+msgstr ""
+"<b>Помилка:</b> Не вдається запустити програму WordNet — «wn». Якщо ви "
+"бажаєте користуватись WorldNet, то вам необхідно встановити цю програму на "
+"вашому комп'ютері, та впевнитися, що шлях до «wn» вказано у змінній оточення "
+"PATH. Ви можете отримати WordNet з <a href=\"http://wordnet.princeton.edu/"
+"\">http://wordnet.princeton.edu/</a>. Зважте, що WordNet підтримує тільки "
+"англійську мову."
+
+#: Thesaurus.cpp:635
+#, kde-format
+msgid "No match for '%1'."
+msgstr "Немає відповідних слів для «%1»."
+
+#~ msgctxt "@action:button Close thesaurus dialog"
+#~ msgid "&Close"
+#~ msgstr "&Закрити"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(No match)"
+#~ msgstr "(Не знайдено)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Search for:"
+#~ msgstr "&Шукати:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&earch"
+#~ msgstr "Ш&укати"
+
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go back to the previous word in history"
+#~ msgid "Back"
+#~ msgstr "Назад"
+
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go forward to the next word in history"
+#~ msgid "Forward"
+#~ msgstr "Вперед"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Language..."
+#~ msgstr "Змінити мову..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Thesaurus"
+#~ msgstr "&Словник синонімів"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms"
+#~ msgstr "Синоніми"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More General Words"
+#~ msgstr "Загальніші слова"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More Specific Words"
+#~ msgstr "Специфічніші слова"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Wordnet"
+#~ msgstr "&Wordnet"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace with:"
+#~ msgstr "За&мінити на:"
+
+#~ msgctxt "(qtundo-format) @action:button Close thesaurus dialog"
+#~ msgid "&Close"
+#~ msgstr "&Закрити"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace"
+#~ msgstr "&Замінити"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace Word"
+#~ msgstr "Замінити слово"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Related Words - %1"
+#~ msgstr "Пов'язані слова — %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+#~ "select a thesaurus file."
+#~ msgstr ""
+#~ "Не знайдено файл словника синонімів «%1». Будь ласка, скористайтесь "
+#~ "«Змінити мову...», щоб вибрати файл словника синонімів."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<b>Error:</b> Failed to execute grep."
+#~ msgstr "<b>Помилка:</b> Не вдалося запустити команду grep."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgstr "Синоніми/Гіперболи — впорядковані за частотою вживання"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgstr "Синоніми — впорядковані за схожістю значення (тільки дієслова)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Antonyms - Words with Opposite Meanings"
+#~ msgstr "Антоніми — слова з протилежним значенням"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgstr "Гіперболи — ... це (щось на зразок) %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Meronyms - %1 has a ..."
+#~ msgstr "Метафори — %1 має..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Holonyms - ... has a %1"
+#~ msgstr "Голоніми — ... має %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attributes"
+#~ msgstr "Атрибути"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cause To (for some verbs only)"
+#~ msgstr "Примусити до (тільки для деяких дієслів)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Entailment (for some verbs only)"
+#~ msgstr "Форми дієслів (тільки для деяких дієслів)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Familiarity & Polysemy Count"
+#~ msgstr "Кількість схожих та багатозначних"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Frames (examples of use)"
+#~ msgstr "Групи дієслів (приклади використання)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "List of Compound Words"
+#~ msgstr "Список сполучених слів"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overview of Senses"
+#~ msgstr "Огляд значень"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~ "installed on your computer if you want to use it, and 'wn' has to be in "
+#~ "your PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+#~ "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+#~ "English language."
+#~ msgstr ""
+#~ "<b>Помилка:</b> Не вдається запустити програму WordNet — «wn». Якщо ви "
+#~ "бажаєте користуватись WorldNet, то вам необхідно встановити цю програму "
+#~ "на вашому комп'ютері, та впевнитися, що шлях до «wn» вказано у змінній "
+#~ "оточення PATH. Ви можете отримати WordNet з <a href=\"http://wordnet."
+#~ "princeton.edu/\">http://wordnet.princeton.edu/</a>. Зважте, що WordNet "
+#~ "підтримує тільки англійську мову."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No match for '%1'."
+#~ msgstr "Немає відповідних слів для «%1»."

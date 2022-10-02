@@ -1,0 +1,1421 @@
+<chapter id="hardsums">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Hans-Frieder</firstname
+><surname
+>Hirsch</surname
+><affiliation
+><address
+><email
+>f.hirsch@t-online.de</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+> <othercredit role="translator"
+><firstname
+>Johannes</firstname
+><surname
+>Schwall</surname
+><affiliation
+><address
+><email
+>johannes.schwall@gmail.com</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>&sheets; für Fortgeschrittene</title>
+<sect1 id="series">
+<title
+>Reihen</title>
+<para
+>Wenn Sie eine Tabelle erstellen, müssen Sie häufig eine Reihe von Werten, wie z.B. 10, 11, 12, ... in einer Zeile oder in einer Spalte eingeben. Es gibt verschiedene Möglichkeiten, wie Sie dies in &sheets; tun können.</para>
+<para
+>Für eine einfache kurze Reihe wie 5, 6, 7, 8, ... ist die <quote
+>Ziehen und Kopieren</quote
+>-Methode die einfachste Möglichkeit. Tragen Sie den Anfangswert in die Startzelle und den folgenden Wert der Reihe in eine angrenzende Zelle ein. Dann wählen Sie beide Zellen aus und verschieben Sie den Mauszeiger so, dass er über dem kleinen Quadrat an der unteren rechten Ecke des markierten Bereiches steht. Der Cursor wird zu einem diagonalen Pfeil mit zwei Spitzen. Halten Sie dann die &LMB; gedrückt, während Sie die Zellen nach unten oder nach rechts ziehen.</para>
+<para
+>Die Schrittgröße wird als die Differenz zwischen den zwei Anfangswerten errechnet, die Sie eingetragen haben. Beispiel: Wenn Sie <userinput
+>4</userinput
+> in Zelle A1 eingeben und <userinput
+>3,5</userinput
+> in A2, dann beide Zellen auswählen und sie nach unten ziehen und kopieren, ist die Schrittgröße der Wert in A2 minus des Wertes in A1, in diesem Fall also -0,5. Damit erhalten Sie die Reihe 4, 3,5, 3, 2,5, 2, ...</para>
+
+<para
+>Die <quote
+>Ziehen und Kopieren</quote
+>-Methode wird sogar mit Reihen fertig, in der der Schrittwert nicht ein konstanter Wert, sondern selbst eine Reihe ist. Wenn Sie also mit 1, 3, 4, 6 beginnen, wird die <emphasis
+>Ziehen und Kopieren</emphasis
+> Methode die Zahlen zur folgenden Reihe ergänzen: 1, 3, 4, 6, 7, 9, 10, 12, ... Der Schrittwert in diesem Beispiel ist die folgende Reihe: 2, 1, 2, 1, ...</para>
+
+ <!--FIXME does not work here -->
+<para
+>&sheets; kennt auch einige besondere <quote
+>Reihen</quote
+>, zum Beispiel die Wochentage. Geben Sie <userinput
+>Freitag</userinput
+> in eine Zelle ein (achten Sie auf den großen Anfangsbuchstaben) und Ziehen und Kopieren Sie dann nach unten. Wählen Sie <menuchoice
+><guimenu
+>Extras</guimenu
+><guimenuitem
+>Benutzerdefinierte Listen ...</guimenuitem
+></menuchoice
+> um zu sehen, welche besonderen Reihen verfügbar sind, und welche Sie vielleicht selbst erstellen wollen.</para>
+
+<para
+>Wenn Sie eine Zelle auswählen und <guimenuitem
+>Reihe ...</guimenuitem
+> aus dem Menü <guimenu
+>Einfügen</guimenu
+> wählen, sehen Sie den Dialog <guilabel
+>Reihe</guilabel
+>. Dieses ist nützlich für das Erzeugen von Reihen, die zu lang sind, um mit der Ziehen-und-Kopieren-Methode erstellt zu werden, oder für das Erzeugen geometrischer Reihen wie 1, 1,5, 2,25, 3,375, ..., wo der Schrittwert, 1,5 in diesem Fall, als Multiplikator verwendet wird.</para>
+<para
+>Wenn die gewünschte Art der Reihe für die vorhergehenden Methoden zu schwierig ist, verwenden Sie eine Formel und ziehen und kopieren Sie diese. Z. B., um eine Reihe mit den Werten 2, 4, 16, 256, ... zu erzeugen, geben Sie <userinput
+>2</userinput
+> in A1 und <userinput
+>= A1*A1</userinput
+> in A2 ein und ziehen und kopieren die Zelle A2 nach unten.</para>
+</sect1>
+
+<sect1 id="formulas">
+<title
+>Formeln</title>
+<sect2 id="builtin">
+<title
+>Vorhandene Funktionen</title>
+<para
+>In &sheets; gibt es eine Vielzahl von mathematischen und anderen <link linkend="functions"
+>Funktionen</link
+>, die Sie als Formel in einer Zelle verwenden können. Eine Formel wird angezeigt oder eingegeben, indem Sie eine Zelle wählen, und dann <guimenuitem
+>Funktion ...</guimenuitem
+> aus dem Menü <guimenu
+>Einfügen</guimenu
+> wählen. Damit öffnen Sie den Dialog <guilabel
+>Funktion</guilabel
+>.</para>
+<para
+>Wählen Sie aus der Liste links im Dialogfeld die Funktion, die Sie verwenden möchten. Auf der Seite <guilabel
+>Hilfe</guilabel
+> werden dann eine Beschreibung, der Rückgabetyp, Syntax, Parameter und Beispiele für diese Funktion angezeigt. Zusätzlich finden Sie häufig auch Verweise auf ähnliche Funktionen.Klicken Sie auf den Knopf Pfeil runter, um eine Funktion in das Textfeld unten im Dialog einzufügen.</para>
+<para
+>Jetzt wird die Seite <guilabel
+>Parameter</guilabel
+> angezeigt. Hier können Sie die Werte für die gewählte Funktion eingeben. Wenn Sie einen normalen Zahlen- oder Textwert für einen Parameter eintragen möchten, geben Sie ihn in das passende Textfeld auf der Seite <guilabel
+>Parameter</guilabel
+>ein. Um einen Verweis auf eine Zelle anstatt eines Wertes einzutragen, klicken Sie mit der <mousebutton
+>linken</mousebutton
+> Maustaste auf das entsprechende Textfeld auf der Seite <guilabel
+>Parameter</guilabel
+> und klicken Sie dann auf die Zielzelle in der Tabelle.</para>
+<para
+>Anstatt die Seite <guilabel
+>Parameter</guilabel
+> zu verwenden, können Sie  Zellenverweise wie <userinput
+>B6</userinput
+> auch direkt in das Textfeld unten im Dialog <guilabel
+>Funktion</guilabel
+> eintragen. Wenn ein Ausdruck mehrere Parameter hat, werden diese Parameter jeweils mit einem Semikolon (<keysym
+>;</keysym
+>) getrennt.</para>
+<para
+>Drücken Sie auf <guibutton
+>OK</guibutton
+>, um die Funktion in die aktuelle Zelle einzufügen und den Dialog <guilabel
+>Funktion</guilabel
+> zu schließen.</para>
+<para
+>Sie können natürlich auch ohne den Dialog <guilabel
+>Funktion</guilabel
+> die ganze Formel direkt in das Hauptbearbeitungsfeld im <guilabel
+>Zelleneditor</guilabel
+> der Werkzeugoptionen eingeben. Groß- oder Kleinschreibung spielt für Funktionsnamen keine Rolle. Denken Sie daran, dass alle Formeln mit dem Symbol <keysym
+>=</keysym
+> beginnen müssen.</para>
+</sect2>
+
+<sect2 id="logical">
+<title
+>Logische Vergleiche</title>
+<para
+>Logische Funktionen wie IF(), AND() und OR() haben Parameter, die die logischen (booleschen) Werte <quote
+>Wahr</quote
+>oder <quote
+>Falsch</quote
+>annehmen können. Diese Art von Werten kann durch andere logische Funktionen wie ISEVEN() oder durch den Vergleich von Werten in Tabellenzellen mit den Vergleichsausdrücken produziert werden, die in der folgenden Tabelle aufgeführt werden.</para>
+
+<informaltable
+><tgroup cols="3">
+<thead>
+<row>
+<entry
+>Ausdruck </entry>
+<entry
+>Beschreibung </entry>
+<entry
+>Beispiel </entry
+></row>
+</thead>
+<tbody>
+
+<row
+><entry
+><keysym
+>=</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>ist gleich</entry>
+<entry
+><userinput
+>A2==B3</userinput
+> ist Wahr, wenn der Wert in A2 gleich dem Wert in B3 ist</entry>
+</row>
+
+<row
+><entry
+><keysym
+>!</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>ist nicht gleich</entry>
+<entry
+><userinput
+>A2!=B3</userinput
+> ist Wahr, wenn der Wert in A2 nicht gleich dem Wert in B3 ist</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>ist nicht gleich</entry>
+<entry
+>Ist das gleiche wie <userinput
+>A2!=B3</userinput
+></entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+></entry>
+<entry
+>ist kleiner als</entry>
+<entry
+><userinput
+>A2&lt;B3</userinput
+> ist Wahr, wenn der Wert in A2 kleiner als der Wert in B3 ist</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>ist kleiner oder gleich</entry>
+<entry
+><userinput
+>A2&lt;=B3</userinput
+> ist Wahr, wenn der Wert in A2 kleiner oder gleich dem Wert in B3 ist</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>ist größer als</entry>
+<entry
+><userinput
+>A2&gt;B3</userinput
+> ist Wahr, wenn der Wert in A2 größer als der Wert in B3 ist</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>ist größer oder gleich</entry>
+<entry
+><userinput
+>A2&gt;=B3</userinput
+> ist Wahr, wenn der Wert in A2 größer oder gleich dem Wert in B3 ist</entry>
+</row>
+
+</tbody
+></tgroup
+></informaltable>
+
+<para
+>Wenn Sie also <userinput
+>=IF(B3&gt;B1;"GRÖSSER";"")</userinput
+> in eine Zelle eingeben, zeigt die Zelle GRÖSSER an, wenn der Wert in B3 größer als der in B1 ist, anderenfalls zeigt sie nichts an.</para>
+</sect2>
+
+<sect2 id="absolute">
+<title
+>Absolute Zellenverweise</title>
+<para
+>Wenn eine Formel einen Zellverweis enthält, wird dieser Verweis normalerweise geändert, wenn die Zelle in eine andere Zelle in der Tabelle kopiert wird. Um dieses Verhalten zu verhindern, setzt man ein <keysym
+>$</keysym
+>-Symbol vor den Buchstaben der Spaltennummer, der Zeilennummer oder vor beide. </para>
+
+<itemizedlist>
+<listitem
+><para
+>Wenn A1 die Formel <userinput
+>=D5</userinput
+> enthält, wird der Inhalt der Zelle beim Kopieren nach B2 in <userinput
+>=E6</userinput
+> geändert (das normale Verhalten). </para
+></listitem>
+<listitem
+><para
+>Wenn A1 die Formel <userinput
+>=$D5</userinput
+> enthält, wird der Inhalt der Zelle beim Kopieren nach B2 in <userinput
+>=D6</userinput
+> geändert (der Spaltenbuchstabe wurde nicht geändert). </para
+></listitem>
+<listitem
+><para
+>Wenn A1 die Formel <userinput
+>=D$5</userinput
+> enthält, wird der Inhalt der Zelle beim Kopieren nach B2 in <userinput
+>=E5</userinput
+> geändert (die Zeilennummer wurde nicht geändert). </para
+></listitem>
+<listitem
+><para
+>Wenn A1 die Formel <userinput
+>=$D$5</userinput
+> enthält, wird der Inhalt der Zelle beim Kopieren nach B2 nicht verändert, der Inhalt ist weiterhin <userinput
+>=D5</userinput
+> (weder der Spaltenbuchstabe noch die Zeilennummer wurden geändert). </para
+></listitem>
+
+</itemizedlist>
+<para
+>Wenn Sie einen Zellenverweis in einer Formel eingeben oder ändern, können Sie mit der Funktionstaste <keysym
+>F4</keysym
+> durch diese vier Möglichkeiten schalten. Durch wiederholtes Drücken von <keysym
+>F4</keysym
+> wird also aus dem Zellenverweis D5 $D$5, $D5, D$5 und dann wieder D5.</para>
+<para
+><link linkend="namedareas"
+>Benannte Zellenbereiche</link
+> können in einer ähnlichen Weise benutzt werden, um feste Zellenverweise in eine Formel einzugeben. </para>
+</sect2>
+</sect1>
+
+<sect1 id="sumspecialpaste">
+<title
+>Berechnungen mit <quote
+>Einfügen Spezial</quote
+></title>
+<para
+>Vielleicht wollen Sie manchmal einen einzelnen Wert zu einer Anzahl von Zellen addieren oder von ihnen subtrahieren, oder Zellen mit einem Wert multiplizieren oder sie alle durch einen einzelnen Wert teilen. Die Funktion <guimenuitem
+>Einfügen spezial ...</guimenuitem
+> lässt Sie das schnell und einfach tun.</para>
+<para
+>Zuerst tragen Sie den Wert, mit dem Sie eine Berechnung auf dem Zellenbereich durchführen wollen, in eine freie Zelle in ihrer Tabelle ein und <guimenuitem
+>kopieren</guimenuitem
+> ihn. Wählen Sie dann den Bereich der Zellen aus, die Sie ändern wollen und wählen Sie <guimenuitem
+>Einfügen spezial ...</guimenuitem
+> aus dem Menü <guimenu
+>Bearbeiten</guimenu
+> oder aus dem Kontextmenü der <mousebutton
+>rechten</mousebutton
+> Maustaste. Wählen Sie dann im Dialogfenster einen der Einträge <guilabel
+>Addition</guilabel
+>, <guilabel
+>Subtraktion</guilabel
+>, <guilabel
+>Multiplikation</guilabel
+> oder <guilabel
+>Division</guilabel
+> aus dem <guilabel
+>Operation</guilabel
+>-Abschnitt aus.</para>
+<para
+>Sie können auch unterschiedliche Modifikationswerte auf unterschiedliche Zeilen oder Spalten des Zielbereichs anwenden, indem Sie einen Bereich, der die gewünschten Modifikationsfaktoren enthält, kopieren, bevor Sie den Zielbereich auswählen und <guimenuitem
+>Einfügen spezial ...</guimenuitem
+> ausführen. Z. B. wenn Sie <userinput
+>5</userinput
+> in Zelle A1 und <userinput
+>10</userinput
+> in B1 eingeben, beide Zellen auswählen und <guimenuitem
+>kopieren</guimenuitem
+>, danach die Zellen A10 bis D15 markieren und im Dialog<guimenuitem
+>Einfügen spezial ...</guimenuitem
+> <guilabel
+>Addition</guilabel
+> wählen, wird 5 zu den Zellen A10:A15 und 10C:C15 sowie 10 zu den Zellen B10:B15 und D10:D15 hinzugefügt.</para>
+<para
+>Beachten Sie, dass ein Modifikationswert eine Formel sowie ein einfacher numerischer Wert sein kann. Wenn es eine Formel ist, dann passt &sheets; die Zellenverweise genau wie beim normalen <guimenuitem
+>Einfügen</guimenuitem
+> an.</para>
+</sect1>
+
+<sect1 id="arrayformulas">
+<title
+>Feldformeln</title>
+<para
+>&sheets; erlaubt die Benutzung von Formeln, deren Ergebnis eine Matrix oder ein Bereich von Werten ist. Normalerweise wird nur der erste Wert in einer Zelle angezeigt. Wenn Sie die gesamte Matrix dargestellt werden soll, benutzen Sie den Kurzbefehl <keycombo
+>&Ctrl;&Alt;&Enter;</keycombo
+> bei der Bearbeitung einer Formel. Dann wird die Formel in eine Feldformel umgewandelt und die benachbarten Zellen werden, soweit erforderlich, belegt.</para>
+<para
+>Zellen, die Teil einer Feldformel sind, sind für die Bearbeitung gesperrt.</para>
+</sect1>
+
+<sect1 id="goalseek">
+<title
+>Zielwertsuche</title>
+<para
+>&sheets; kann verwendet werden, um algebraische Ausdrücke wie <emphasis
+>x + x^2 = 4</emphasis
+> oder die Frage <emphasis
+>Für welchen Wert von x ist die Formel x plus x zum Quadrat gleich 4 ?</emphasis
+> zu lösen.</para>
+<para
+>Für dieses Beispiel könnten Sie <userinput
+>=A2+A2*A2</userinput
+> in A1 eingeben und dann entweder unterschiedliche Werte in A2 eingeben, bis das Resultat in A1 so nahe an <emphasis
+>4</emphasis
+> ist, wie Sie es wünschen, oder Sie nutzen vorzugsweise &sheets;s <guimenuitem
+>Zielwertsuche ...</guimenuitem
+>, die automatisch den Wert in einer Zelle verändert, um zu versuchen, den Wert in einer anderen Zelle so nahe wie möglich an seinen Zielwert anzunähern.</para>
+<para
+>Die Zielwertsuche starten Sie mit <guimenuitem
+>Zielwertsuche ...</guimenuitem
+> im Menü <guimenu
+>Daten</guimenu
+>.Damit öffnen Sie einen Dialog, in dem Sie die Adresse der Zielwertzelle (<userinput
+>A1</userinput
+> in diesem Fall) in das Feld <guilabel
+>Setze Zelle:</guilabel
+> eintragen. Den Zielwert selbst (<userinput
+>4</userinput
+>) tragen Sie dann in das Feld <guilabel
+>Auf Wert:</guilabel
+>ein und die Adresse der zu verändernden Zelle (<userinput
+>A2</userinput
+>) in das Feld <guilabel
+>Durch Änderung von Zelle;</guilabel
+>.Beachten Sie, dass Sie einen Ausgangswert in die Zelle eingetragen haben müssen, die angepasst werden soll, bevor Sie die <guimenuitem
+>Zielwertsuche</guimenuitem
+> starten.</para>
+<para
+>Wenn Sie den Knopf <guibutton
+>OK</guibutton
+> drücken, wird die Berechnung gestartet. Wenn sie beendet ist und einen Zielwert gefunden hat, drücken Sie den Knopf <guibutton
+>OK</guibutton
+>, um das Ergebnis zu übernehmen. Oder drücken Sie auf <guibutton
+>Abbrechen</guibutton
+>, um den ursprünglichen Wert zu behalten. </para>
+</sect1>
+
+ <sect1 id="pivottable">
+   <title
+>Pivot-Tabellen</title>
+   <para
+>Mit &sheets; können <ulink url="http://de	.wikipedia.org/wiki/Pivot-Tabelle"
+>Pivot-Tabellen</ulink
+> aus den Daten der aktuellen Tabelle konstruiert werden. </para>
+   <para
+>Diese Funktion wird mit <guimenuitem
+>Pivot  ...</guimenuitem
+> aus dem Menü <guimenu
+>Daten</guimenu
+> aufgerufen. Es folgt ein Beispiel für die Erstellung einer Pivot-Tabelle. </para>
+   <para
+>Folgende Daten werden in diesem Beispiel verwendet. </para>
+   <para>
+     <mediaobject>
+       <imageobject>
+	 <imagedata fileref="pivot1.png" format="PNG"/>
+       </imageobject>
+       <textobject>
+	 <phrase
+>Ursprüngliche Tabelle</phrase>
+       </textobject>
+     </mediaobject>
+   </para>
+   <para
+>Um eine Pivot-Tabelle mit den gewünschten Anforderungen zu erstellen, wählen Sie <menuchoice
+> <guimenu
+>Daten</guimenu
+> <guimenuitem
+>Pivot ...</guimenuitem
+></menuchoice
+>. </para>
+     <para
+>Im damit aufgerufenen Dialog kann die Quelle der Daten für die Pivot-Tabelle ausgewählt werden. Zur Auswahl stehen das aktuelle Arbeitsblatt oder externe Quellen wie eine Datenbank oder eine <abbrev
+>ODS</abbrev
+>-Datei. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot2.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Auswahl der Datenquelle</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>In diesem Dialog kann der Benutzer die Pivot-Tabelle anpassen. Die Überschriften der der Spalten in den Quelldaten werden als Beschriftungen verwendet, die als Arbeitsfelder dienen. Die Beschriftungen können in eine der drei Bereiche (<guilabel
+>Reihen</guilabel
+>, <guilabel
+>Spalten</guilabel
+> oder <guilabel
+>Werte</guilabel
+>) gezogen und abgelegt werden, um die Pivot-Tabelle zu erstellen. Ihre Auswahl können Sie mit <guibutton
+>Ziehen/Ablegen zurücksetzen</guibutton
+>  wieder löschen. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot3.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Einrichtungsdialog der Pivot-Tabelle</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>In diesem Beispiel wird <replaceable
+>Name</replaceable
+> in <guilabel
+>Zeilen</guilabel
+>, <replaceable
+>Kategorie</replaceable
+> in <guilabel
+>Spalten</guilabel
+> und <replaceable
+>Bewertung</replaceable
+> in das Feld <guilabel
+>Werte</guilabel
+> gezogen. </para>
+     <para
+>Mit dem Knopf <guibutton
+>Filter hinzufügen</guibutton
+> können Sie einen Dialog öffnen, um die gewünschten Daten zu Filtern. In diesem Dialog können Sie mehrere Filter auf der Basis der Spaltenüberschriften und deren Beziehungen zueinander (<guimenuitem
+>Und</guimenuitem
+> or <guimenuitem
+>Oder</guimenuitem
+>) definieren. Damit können Sie die Ausgabe in großem Umfang anpassen. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot4.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Filterdialog der Pivot-Tabelle</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+><guilabel
+>Summe der Zeilen</guilabel
+> und <guilabel
+>Summe der Spalten</guilabel
+>: Aktivieren Sie diese Ankreuzfelder, um automatisch Summen der zugehörigen Zeilen und Spalten in der Pivot-Tabelle anzuzeigen. </para>
+   </sect1>
+
+<sect1 id="worksheets">
+<title
+>Arbeiten mit mehreren Tabellen</title>
+<para
+>Wenn Sie ein neues leeres Dokument mit &sheets; anlegen, enthält es bereits eine Anzahl von leeren Tabellen. Diese Anzahl der Tabellen wird durch die ausgewählte Vorlage festgelegt.</para>
+<para
+><menuchoice
+><guimenu
+>Einfügen</guimenu
+><guimenuitem
+>Tabelle</guimenuitem
+> </menuchoice
+> fügt eine weitere Tabelle zum Dokument hinzu.</para>
+<para
+>Sie können auch zwischen den Tabellen umschalten, indem Sie die Tasten <keycombo action="simul"
+>&Ctrl;<keysym
+>Bild ab</keysym
+></keycombo
+> verwenden, um die folgende Tabelle anzuzeigen, und <keycombo action="simul"
+> &Ctrl; <keysym
+>Bild auf</keysym
+></keycombo
+>, um die vorhergehende Tabelle anzuzeigen.</para>
+<para
+>Tabellen haben standardmäßig die Namen <emphasis
+>Tabelle1</emphasis
+>, <emphasis
+>Tabelle2</emphasis
+>, ... Sie können einem Blatt dadurch einen anderen Namen geben, dass Sie auf den entsprechenden Karteireiter mit der <mousebutton
+>rechten</mousebutton
+> Maustaste klicken, <guimenuitem
+>Tabelle umbenennen ...</guimenuitem
+> wählen und einen neuen Namen für die Tabelle eingeben.</para>
+<para
+>Um eine Tabelle aus dem Dokument zu löschen, verwenden Sie <guimenuitem
+>Tabelle entfernen</guimenuitem
+> im Kontextmenü, das Sie mit einem Klick der <mousebutton
+>rechten</mousebutton
+> Maustaste auf den Karteireiter der Tabelle, die Sie entfernen wollen, öffnen.</para>
+<para
+>Andere Eintragungen im <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Tabelle</guisubmenu
+></menuchoice
+>-Untermenü erlauben Ihnen, ein Blatt auf beinahe gleiche Art und Weise anzuzeigen oder auszublenden, wie Zeilen und Spalten angezeigt und ausgeblendet werden können.</para>
+<para
+>Wenn Sie in einer Formel in einer Tabelle einen Verweis auf eine Zelle in einer anderen Tabelle eingeben wollen, muss der Zellenverweis mit dem Tabellennamen beginnen, gefolgt von einem Ausrufezeichen (<keysym
+>!</keysym
+>).Wenn Sie zum Beispiel <userinput
+>=Tabelle2!A2</userinput
+> in eine Zelle in Blatt 1 eingeben, erhält diese Zelle den Wert von A2 aus Tabelle2. Beachten Sie, das bei Tabellennamen zwischen Groß- und Kleinschreibung unterschieden wird.</para>
+
+
+<sect2 id="consolidate">
+<title
+>Daten zusammenfassen</title>
+<para
+>Angenommen Sie haben ein Dokument aus mehreren Tabellen mit ähnlichen Daten, aber zum Beispiel für verschiedene Monate eines Jahres und wollen in einer zusätzlichen Tabelle die zusammengehörenden Werte aus den anderen Tabellen zusammenfassen (z. B. Summe oder Durchschnitt ermitteln).</para>
+<para
+>Diese Aufgabe durch die Funktion <guimenuitem
+>Zusammenfassen ...</guimenuitem
+> aus dem Menü <guimenu
+>Daten</guimenu
+> erleichtert.</para>
+<para
+>Dadurch wird der Dialog <guilabel
+>Zusammenfassen</guilabel
+> geöffnet.</para>
+<para
+>Für jede der Quelltabellen tragen Sie einen Verweis auf den gewünschten Datenbereich im Feld <guilabel
+>Verweis:</guilabel
+> ein. Dann klicken Sie auf <guibutton
+>Hinzufügen</guibutton
+>, dadurch wird der Verweis in die Liste  <guilabel
+>Eingegebene Verweise</guilabel
+> aufgenommen. Der Verweis sollte den Namen der Tabelle mit den Quelldaten enthalten, wie z. B. <userinput
+>Januar!A1:A10</userinput
+>, und kann automatisch eingegeben werden, indem Sie den gewünschten Bereich in der entsprechenden Tabelle auswählen.</para>
+<para
+>Wenn Sie die Verweise auf alle Quelldaten-Tabellen eingegeben haben, wählen Sie in der Zieltabelle die Zelle aus, an der die linke obere Ecke der zusammengefassten Daten erscheinen soll. Dann wählen Sie aus dem Auswahlfeld <guilabel
+>Funktion:</guilabel
+> die gewünschte Funktion aus und drücken dann den Knopf <guibutton
+>OK</guibutton
+>.</para>
+<para
+>Wenn Sie auf den Knopf <guilabel
+>Details 
+>
+></guilabel
+> im Dialog klicken und <guilabel
+>Daten kopieren</guilabel
+> auswählen, werden die Ergebnisse der Berechnung in die Zielzellen eingesetzt, anstatt der Formeln zur Berechnung der Werte. </para>
+</sect2>
+</sect1>
+<sect1 id="insertchart">
+<title
+>Diagramme einfügen</title>
+<para
+>Sie können Diagramme in eine Tabelle einfügen, um Ihre Daten grafisch darzustellen. </para>
+<para
+>Zuerst öffnen Sie <guilabel
+>Objekt hinzufügen</guilabel
+> im Menü <menuchoice
+><guimenu
+>Einstellungen</guimenu
+><guimenuitem
+>Andockbare Dialoge</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Wählen Sie zuerst den Bereich der Zellen aus, die die darzustellenden Daten enthalten und wählen dann <guilabel
+>Diagramm</guilabel
+> Im andockbaren Dialog <guilabel
+>Objekt hinzufügen</guilabel
+>. Ziehen Sie mit gedrückter <mousebutton
+>linker</mousebutton
+> Maustaste Maustaste über die Tabelle, um den Bereich für die Anzeige des Diagramms festzulegen. Sie müssen dabei nicht so genau sein, da die Größe und Lage des Diagramms jederzeit leicht geändert werden kann. Wenn Sie die Maustaste loslassen, erscheint der Dialog <guilabel
+>Diagramm-Einstellungen</guilabel
+>.</para>
+<para
+>Im Datenbereich ist bereits die ausgewählte Zellenbereich eingetragen. Sie können nun die erste Zeile oder Spalte als Beschriftung angeben und die Datensätze zeilenweise oder spaltenweise benutzen. Wenn Sie den Knopf <guibutton
+>OK</guibutton
+> betätigen, verschwindet der Dialog und Sie sehen das Diagramm einbettet in der Tabelle. </para>
+<para
+>Wählen Sie nun <guibutton
+>Diagrammbearbeitung</guibutton
+> aus <guilabel
+>Werkzeuge</guilabel
+> und bearbeiten die Eigenschaften des Diagramms wie den Typ, Beschriftungen und Achsen in den <guilabel
+>Diagrammbearbeitung</guilabel
+>.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="chart1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Bildschirmfoto des eingebetteten Diagramms</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Um das eingebettete Diagramm zu verschieben, zu vergrößern oder zu verkleinern oder um es zu löschen, wechseln Sie zum <guibutton
+>Werkzeug für Objekte</guibutton
+> und klicken dann irgendwo in das Diagramm. Es wird jetzt mit einem grünen Rand und mit je einem kleinen gelben Quadrat an jeder Ecke und in der Mitte jeder Seite angezeigt. </para>
+<para
+>Wenn Sie den Mauszeiger über eins der Quadrate bewegen, wird als Pfeil mit zwei Spitzen angezeigt. Sie können die Größe des Diagramms nun ändern, indem Sie eins dieser Quadrate mit der gedrückten <mousebutton
+>linken </mousebutton
+>Maustaste ziehen. Um das Diagramm zu löschen, klicken Sie mit der <mousebutton
+>rechten</mousebutton
+> Maustaste auf eins der Quadrate und wählen Sie <guimenuitem
+>Löschen</guimenuitem
+>.</para>
+<para
+>Um das Diagramm zu verschieben, bewegen Sie den Cursor hinein. Der Cursor wird zu einem Kreuz, halten Sie jetzt die <mousebutton
+> linke </mousebutton
+> Maustaste gedrückt und Sie können das Diagramm dorthin bewegen, wo Sie es haben wollen.</para>
+<para
+>Um das Aussehen des Diagramms wieder zu normalisieren, klicken Sie einfach irgendwo außerhalb des Diagramms in die Tabelle.</para>
+<para
+>Um das Format des Diagramms selbst zu ändern, doppelklicken Sie mit der <mousebutton
+>linken</mousebutton
+> Maustaste innerhalb des Diagrammbereichs. Die <guilabel
+>Diagrammbearbeitung</guilabel
+> wird dann angezeigt und sie können dann damit die Eigenschaften des Diagramms ändern.</para>
+</sect1>
+
+<sect1 id="insertdata">
+<title
+>Externe Daten einfügen</title>
+<para
+>Sie können Daten aus einer Textdatei oder aus der Zwischenablage in eine Tabelle einfügen, indem Sie zuerst die Zelle auswählen, in der Sie das obere linke Element der einzufügenden Daten einfügen wollen und dann <guimenuitem
+>Aus Textdatei ...</guimenuitem
+> oder <guimenuitem
+>Aus Zwischenablage ...</guimenuitem
+> aus dem Untermenü <menuchoice
+><guimenu
+>Einfügen</guimenu
+><guisubmenu
+>Externe Daten</guisubmenu
+></menuchoice
+> wählen.</para>
+<para
+>In beiden Fällen wird &sheets; annehmen, dass die Daten im Format <acronym
+>CSV</acronym
+> vorliegen und ein Dialogfeld öffnen, in dem Sie einstellen können, wie die Daten aus der Datei oder der Zwischenablage ausgelesen und in den Tabellenzellen angeordnet werden.</para>
+<para
+>Wenn die Unterstützung dafür in Ihrem System vorhanden ist, kann &sheets; auch Daten aus einer <acronym
+>SQL</acronym
+>-Datenbank in eine Tabelle einfügen. Das machen Sie, indem Sie <menuchoice
+><guimenu
+>Einfügen</guimenu
+> <guisubmenu
+>Externe Daten</guisubmenu
+><guimenuitem
+>Aus Datenbank</guimenuitem
+> </menuchoice
+> auswählen.</para>
+</sect1>
+
+<sect1 id="hyper">
+<title
+>Zellen verknüpfen</title>
+<para
+>Eine Tabellenzelle kann mit einer Aktion verknüpft werden, damit das <mousebutton
+>linke</mousebutton
+> Klicken auf der Zelle z. B. Ihren Webbrowser öffnet. Damit eine Zelle auf diese Weise funktioniert, wählen Sie <menuchoice
+><guimenu
+>Einfügen</guimenu
+><guimenuitem
+>Verknüpfung ...</guimenuitem
+></menuchoice
+>. Das öffnet das <guilabel
+> Verweis einfügen</guilabel
+>-Dialogfeld, in dem Sie zwischen vier Arten von Verknüpfungen wählen können:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Eine mit <guilabel
+>Internet</guilabel
+> verknüpfte Zelle wird versuchen Ihren Standard-Webbrowser mit der &URL; zu öffnen, die Sie in dem <guilabel
+>Internetadresse</guilabel
+>-Textfeld des <guilabel
+>Verweis einfügen</guilabel
+>-Dialoges eingegeben haben. Das könnte zum Beispiel <userinput
+>http://www.calligra.org</userinput
+> sein. </para
+></listitem>
+
+<listitem
+><para
+>Wenn Sie auf eine Zelle klicken, die eine <guilabel
+>Mail</guilabel
+>-Verknüpfung enthält wird Ihr E-Mail-Programm geöffnet, das die Adresse verwendet, die Sie im <guilabel
+>E-Mail</guilabel
+>-Textfeld als <quote
+>An:</quote
+> Adresse eingegeben haben. Zum Beispiel <userinput
+>anon@example.com</userinput
+>. </para
+></listitem>
+
+<listitem
+><para
+>Eine mit <guilabel
+>Datei</guilabel
+> verknüpfte Zelle enthält den Pfad zu einer Datei oder einem Ordner, wie er in dem Textfeld<guilabel
+>Speicherort für Datei</guilabel
+> eingegeben wurde und versucht die Datei oder den Ordner mit einer geeigneten Anwendung zu öffnen, wenn auf sie geklickt wird. </para
+></listitem>
+
+<listitem
+><para
+>Eine verknüpfte Zelle enthält einen Verweis auf eine &sheets;-Zelle, die in das Feld <guilabel
+>Zelle oder benannter Bereich</guilabel
+> eingetragen wird. Wenn Sie mit der<mousebutton
+>linken</mousebutton
+> Maustaste auf eine solche Zelle klicken, wechselt &sheets; zur Zielzelle. </para
+></listitem>
+</itemizedlist>
+
+<para
+>Bei allen vier Arten von Verknüpfungszellen muss ein Text im Feld <guilabel
+>Textanzeige</guilabel
+> des Dialogs <guilabel
+>Verknüpfung einfügen</guilabel
+> eingegeben werden. Das ist der Text, der in der Tabelle in der Verknüpfungszelle erscheint</para>
+</sect1>
+
+<sect1 id="validcheck">
+<title
+>Gültigkeitsprüfung</title>
+<para
+>&sheets; kann automatisch die Gültigkeit der eingegebenen Daten mit einer Anzahl von Kriterien überprüfen und eine Warnmeldung ausgeben, wenn die Daten unzulässig sind.</para>
+<para
+>Um diese Funktion einzuschalten, wählen Sie die Zellen aus, die überwacht werden sollen und wählen Sie <menuchoice
+><guimenu
+>Daten</guimenu
+><guimenuitem
+>Gültigkeit ...</guimenuitem
+></menuchoice
+>. Das öffnet den Dialog <guilabel
+>Gültigkeit</guilabel
+> von &sheets;, der drei Karteikarten enthält.</para>
+<para
+>Auf der Seite <guilabel
+>Kriterien</guilabel
+>wählen Sie im Auswahlfeld <guilabel
+>Zulassen:</guilabel
+> den Datentyp aus, der als gültig betrachtet werden soll. Dann wählen Sie den gültigen Wertebereich im Auswahlfeld <guilabel
+>Daten:</guilabel
+> und geben passende Werte in eine oder beide der Bearbeitungsfelder ein.</para>
+<para
+>Wenn Sie damit fertig sind, wechseln Sie zur Karteikarte <guilabel
+>Fehlerbenachrichtigung</guilabel
+>. Hier können Sie die Art der Fehlerbenachrichtigung (<guimenuitem
+>Anhalten</guimenuitem
+>, <guimenuitem
+>Warnung</guimenuitem
+> oder <guimenuitem
+>Information</guimenuitem
+>) wählen, die erscheint, wenn ein unzulässiger Wert eingegeben wurde, und Sie können hier den Titel des Benachrichtigungsfensters und den Text der Benachrichtigung festlegen.</para>
+<!--FIXME missing Input Help tab-->
+<para
+>Beachten Sie, dass diese Funktion nur Daten überprüft, die Sie in die Zelle eingeben. Eine Möglichkeit zur Überprüfung der Werte von Formelzellen finden Sie im Abschnitt <link linkend="formatdata"
+>bedingte Zellenattribute</link
+> in diesem Handbuch.</para>
+</sect1>
+
+<sect1 id="protection">
+<title
+>Schutz</title>
+
+<sect2 id="doc-protection">
+<title
+>Ein Dokument schützen</title>
+<para
+>Schutz des Dokuments bedeutet, das ein Benutzer keine Tabellen einfügen oder löschen kann. Die Zellen in einem geschützten Dokument sind nicht geschützt.</para>
+<para
+>Wählen Sie <menuchoice
+><guimenu
+>Extras</guimenu
+><guimenuitem
+>Dokument schützen ...</guimenuitem
+></menuchoice
+>. Damit öffnen Sie einen Dialog zur Eingabe des Passwortes. Der <guilabel
+>Passwortstärkeanzeiger</guilabel
+> zeigt Ihnen, ob Ihr Passwort sicher genug ist. Je länger der angezeigte Balken, desto sicherer ist das Passwort.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Der Dialog Dokument schützen</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Diese Passwort brauchen Sie, um den Schutz des Dokuments wieder aufzuheben.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Der Dialog Dokumentschutz aufheben</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Wenn ein Dokument geschützt ist, können Sie nicht:</para>
+<itemizedlist>
+<listitem
+><para
+>Eine Tabelle umbenennen </para
+></listitem>
+<listitem
+><para
+>Eine Tabelle einfügen </para
+></listitem>
+<listitem
+><para
+>Eine Tabelle löschen </para
+></listitem>
+<listitem
+><para
+>Eine Tabelle ausblenden </para
+></listitem>
+<listitem
+><para
+>Eine Tabelle einblenden </para
+></listitem>
+<listitem
+><para
+>Die Eigenschaften der Tabelle anzeigen </para
+></listitem>
+<listitem
+><para
+>Zellen verbinden oder trennen </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="sheet-protection">
+<title
+>Tabellen schützen</title>
+<para
+>Der Schutz einer Tabelle schaltet den Schutz für den Inhalt aller geschützten Zellen und Objekte ein. Einzelne Zellen oder Zellenbereiche in einer geschützten Tabelle können trotzdem ungeschützt sein, siehe das <link linkend="cell-protection"
+>nächste Kapitel</link
+>. </para>
+<para
+>Um eine Tabelle zu schützen, wählen Sie <menuchoice
+><guimenu
+>Extras</guimenu
+><guimenuitem
+> Tabelle schützen ...</guimenuitem
+></menuchoice
+>. Damit öffnen Sie einen Dialog zur Eingabe des Passwortes. Der <guilabel
+>Passwortstärkeanzeiger</guilabel
+> zeigt Ihnen, ob Ihr Passwort sicher genug ist. Je länger der angezeigte Balken, desto sicherer ist das Passwort.</para>
+<para
+>Diese Passwort brauchen Sie, um den Schutz der Tabelle wieder aufzuheben.</para>
+<para
+>Wenn eine Tabelle geschützt ist, können Sie nicht:</para>
+<itemizedlist>
+<listitem
+><para
+>Ein Objekt oder Diagramm einfügen </para
+></listitem>
+<listitem
+><para
+>Eine Zelle formatieren </para
+></listitem>
+<listitem
+><para
+>Eine Zeile oder Spalte einfügen </para
+></listitem>
+<listitem
+><para
+>Den Inhalt einer Zelle bearbeiten und ändern </para
+></listitem>
+<listitem
+><para
+>Den Inhalt einer Tabelle ändern </para
+></listitem>
+</itemizedlist>
+
+<note
+><para
+>Der Schutz einer Tabelle ist besonders sinnvoll, um das unbeabsichtigte Löschen von Formeln zu verhindern.</para
+></note>
+</sect2>
+
+<sect2 id="cell-protection">
+<title
+>Schutz von Zellen und Zellenbereichen</title>
+<warning
+><para
+>Zellenschutz ist in der Voreinstellung für alle Zellen eingeschaltet und wird dann wirksam, wenn Sie die Tabelle schützen. Wenn Sie die Voreinstellung nicht ändern und die Tabelle schützen, sind alle Zellen geschützt.</para
+></warning>
+<para
+>Wollen Sie nur bestimmte Zellen schützen, muss der als Standard eingestellte Schutz für alle anderen Zellen ausgeschaltet werden. Wollen Sie den Benutzern zum Beispiel die Eingabe in die meisten Zellen erlauben, müssen Sie die Eigenschaft <guilabel
+>Geschützt</guilabel
+> für diese Zellen ausschalten und für die übrigen Zellen, die nicht geändert werden sollen, den Zellenschutz einschalten. Das erfordert drei Schritte: Schutz für alle Zellen aufheben, die zu schützenden Zellen auswählen und dafür den Schutz aktivieren und dann die gesamte Tabelle schützen.</para>
+<para
+>Um den Schutz für alle Zellen aufzuheben: </para>
+<itemizedlist>
+<listitem
+><para
+>Wählen Sie die gesamte Tabelle mit dem Mauszeiger. </para
+></listitem>
+<listitem
+><para
+>Wählen Sie in der Menüleiste <menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Zellenformat ...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>Öffnen Sie dann im Dialog die Seite <guilabel
+>Zellenschutz</guilabel
+>. </para
+></listitem>
+<listitem
+><para
+>Wählen Sie <guilabel
+>Alles ausblenden</guilabel
+> und wählen Sie <guilabel
+>Geschützt</guilabel
+> ab, um den Schutz aller Zellen zu entfernen. Alle Zellen sind jetzt nicht mehr geschützt. </para
+></listitem>
+</itemizedlist>
+<para
+>Um einen Zellenbereich oder einen Bereich nicht-zusammenhängender Zellen zu schützen:</para>
+<itemizedlist>
+<listitem
+><para
+>Wählen einen Bereich von Zellen, die geschützt werden sollen, oder benutzen Sie die Taste <keycombo action="simul"
+>&Ctrl;</keycombo
+>, um nicht-zusammenhängende Zellen auszuwählen. </para
+></listitem>
+<listitem
+><para
+>Wenn Sie alle gewünschten Zellen ausgewählt haben, wählen Sie <menuchoice
+> <guimenu
+>Format</guimenu
+> <guimenuitem
+>Zellenformat ...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>Öffnen Sie dann im Dialog die Seite <guilabel
+>Zellenschutz</guilabel
+>. </para
+></listitem>
+<listitem
+><para
+>Klicken Sie auf der Seite <guilabel
+>Zellenschutz</guilabel
+> auf <guilabel
+>Geschützt</guilabel
+> und dann auf <guibutton
+>OK</guibutton
+>. </para
+></listitem>
+</itemizedlist>
+<para
+>Wenn der Schutz für alle gewünschten Zellen ausgewählt ist, muss die gesamte Tabelle geschützt werden, damit die gewählten Zellen tatsächlich geschützt sind:</para>
+<itemizedlist>
+<listitem
+><para
+>Wählen Sie <menuchoice
+><guimenu
+>Extras</guimenu
+> <guimenuitem
+>Tabelle schützen ...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>Im Dialog geben Sie ein sicheres Passwort ein und bestätigen Sie es durch eine zweite Eingabe. Dann Klicken Sie auf <guibutton
+>OK</guibutton
+>. </para
+></listitem>
+<listitem
+><para
+>Geschützte Zellen in einer geschützten Tabellen können nicht ohne Aufhebung des Schutzes für die gesamte Tabelle bearbeitet werden, außerdem sind keine Änderungen in der Tabelle möglich. Sie können zum Beispiel keine Zeilen oder Spalten einfügen, die Breite von Spalten ändern oder eingebettete Diagramme erstellen. </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="hide-formula">
+<title
+>Zellenformeln ausblenden</title>
+<para
+>Sie können Ihre Formeln ausblenden, sodass Sie von anderen nicht gelesen werden können. In der Standardeinstellung ist jede Zelle geschützt, wird aber nicht ausgeblendet. Denken Sie aber daran, das diese Einstellungen wirkungslos sind, solange die Tabelle selbst nicht geschützt ist.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Eine Standardzelle mit einer Formel</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Um Formeln in Zellen auszublenden, wählen Sie die gewünschte Zelle oder nicht-zusammenhängende Zellen mit <keycombo action="simul"
+>&Ctrl;</keycombo
+> und dann im Menü <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+> Zellenformat ...</guimenuitem
+></menuchoice
+>. Gehen Sie im Dialog Zellenformat zur Seite  <guilabel
+>Formel Ausblenden</guilabel
+>. Wenn Sie dann die Tabelle schützen, wird das Ergebnis der Berechnung angezeigt, nicht aber die Formel selbst. </para>
+<para
+>Jetzt müssen Sie noch die Tabelle schützen: Wählen Sie <menuchoice
+> <guimenu
+>Extras</guimenu
+> <guimenuitem
+>Tabelle schützen ...</guimenuitem
+> </menuchoice
+>, um den Dialog <guilabel
+>Tabellenschutz</guilabel
+> anzuzeigen. Geben Sie hier ein sicheres Passwort zweimal ein, um zu verhindern, das andere den Schutz der Tabelle aufheben können. </para>
+<para
+>Wenn Sie <guilabel
+>Formel Ausblenden</guilabel
+> aktiviert haben, <guilabel
+>Geschützt</guilabel
+> aber nicht, wird die Formel nach Schutz der Tabelle ausgeblendet, aber Sie können den Inhalt der Zelle ändern.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula5.png" format="PNG"/>
+</imageobject
+>    
+<textobject>
+<phrase
+><guilabel
+>Formel Ausblenden</guilabel
+> ist aktiviert, aber die Zelle ist nicht geschützt, und die Tabelle ist geschützt</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Wenn Sie <guilabel
+>Formel Ausblenden</guilabel
+> und <guilabel
+>Geschützt</guilabel
+> aktiviert haben, wird die Formel nach Schutz der Tabelle ausgeblendet und Sie können den Inhalt der Zelle nicht ändern.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>Formel Ausblenden</guilabel
+> und <guilabel
+>Geschützt</guilabel
+> sind auf der Seite <guilabel
+>Zellenschutz</guilabel
+> aktiviert und die Tabelle ist geschützt</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Denken Sie daran, das es sehr leicht ist, das Passwort für eine geschützte Tabelle zu knacken, für wirkliche Sicherheit brauchen Sie ein besseres Konzept.</para>
+</sect2>
+
+<sect2 id="hide-all">
+<title
+>Formel und Ergebnis ausblenden</title>
+<para
+>Sie können sowohl die Formel als auch den Inhalt einer Zelle ausblenden, indem Sie <guilabel
+>Alles ausblenden</guilabel
+> auf der Seite Zellenschutz des Dialogs auswählen, den Sie mit <menuchoice
+> <guimenu
+>Format</guimenu
+> <guimenuitem
+>Zellenformat ...</guimenuitem
+></menuchoice
+> öffnen. Im Bildschirmfoto unten ist die Zelle selbst nicht geschützt (<guilabel
+>Geschützt</guilabel
+> ist nicht aktiviert), daher können Sie den Inhalt der Zelle ändern.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Nur <guilabel
+>Alles ausblenden</guilabel
+> ist aktiviert (kein Zellenschutz) und die Tabelle ist geschützt</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Dann ist die Zelle selbst geschützt und kann nicht überschreiben werden.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>Alles ausblenden</guilabel
+> und <guilabel
+>Geschützt</guilabel
+> sind aktiviert und auch die Tabelle ist geschützt</phrase>
+</textobject>
+</mediaobject>
+</para>
+</sect2>
+</sect1>
+
+
+<sect1 id="other">
+<title
+>Andere Funktionen</title>
+<!-- no split view in 2.4
+<sect2 id="splitview">
+<title
+>Splitting the View</title>
+<para
+>If your spreadsheet is so large that you cannot see all of it at once, 
+splitting &sheets;'s window into two or more views can help you work on it. 
+This is done by selecting <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Split View</guimenuitem
+></menuchoice
+> which will split the current view into 
+two parts. <menuchoice
+><guimenu
+>View</guimenu
+><guisubmenu
+>Splitter Orientation
+</guisubmenu
+></menuchoice
+> lets you choose between 
+<guimenuitem
+>Horizontal</guimenuitem
+> and <guimenuitem
+>Vertical</guimenuitem
+> 
+splitting.</para>
+<para
+>This technique is particularly useful when you want to select an area 
+of the spreadsheet that is larger than can be shown in one view, perhaps to
+paste a copied cell into it. 
+Use the scrollbars to position the two views to show the top left and 
+bottom right cells of the wanted area, select the top left cell in one 
+view then hold the &Shift; key pressed while you select the 
+bottom right cell with the <mousebutton
+>left</mousebutton
+> mouse button.</para>
+<para
+>If there is more than one sheet in your document, you can show a 
+different sheet in each of the split views.</para>
+<para
+>The relative sizes of the views can be changed by dragging the thick bar 
+separating the views.</para>
+<para
+>To remove a view select <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Remove View</guimenuitem
+></menuchoice
+></para>
+</sect2>
+-->
+
+<sect2 id="namedareas">
+<title
+>Benannte Zellen und Zellenbereiche</title>
+<para
+>Sie können einer Zelle oder irgendeinem Bereich eines Blattes einen Namen wie <userinput
+>Toller Name</userinput
+> geben, indem Sie die Zelle oder den Bereich auswählen und dann <guimenuitem
+>Bereichsname ...</guimenuitem
+> im Kontextmenü der <mousebutton
+>rechten</mousebutton
+> Maustaste wählen. Das öffnen Sie den Dialog <guilabel
+>Bereichsname</guilabel
+>, in dem Sie einen beliebigen Namen eintragen können.</para>
+<para
+>Sie können eine Zelle oder einen Bereich auch benennen, indem Sie erst einen Bereich auswählen und dann den gewünschten Namen in das Adressfeld links neben dem Formeleingabefeld eingeben und damit die Zellenadresse überschreiben, die normalerweise dort steht.</para>
+<para
+>Wenn Sie hier einen Namen eingeben, der bereits verwendet wird, ändert sich &sheets;s Auswahlmarkierung so, dass die entsprechenden Zellen markiert und angezeigt werden.</para>
+<para
+><menuchoice
+><guimenu
+>Daten</guimenu
+> <guimenuitem
+>Benannte Bereiche</guimenuitem
+></menuchoice
+> zeigt Ihnen eine Liste der vorhandenen Namen. Sie können den Cursor in &sheets; dann zu einem der benannten Bereiche bewegen oder Bereichsnamen bearbeiten und entfernen. </para>
+<para
+>Benannte Zellen sind in Formeln besonders nützlich als eine Alternative zu <link linkend="absolute"
+>absoluten Zellenverweisen</link
+>, da die Namen anstatt der normalen Zellenverweise verwendet werden können und nicht geändert werden, wenn die Zelle, die die Formel enthält, kopiert wird. Wenn ein Name auf diese Art verwendet wird, sollte er in einfachen Anführungszeichen eingeschlossen werden.</para>
+<para
+>Z. B. wenn Sie Zelle A1 den Namen <userinput
+>Fred</userinput
+> gegeben haben, dann können Sie eine Formel wie <userinput
+>= 'Fred' + 2</userinput
+> in eine andere Zelle eingeben, die immer das Resultat des Hinzufügens von 2 zu dem Wert in A1 ergibt, egal wohin die Formelzelle kopiert wird.</para>
+<para
+>Beachten Sie dass Zellen- und Bereichsnamen so behandelt werden als seien sie in Kleinbuchstaben geschrieben.</para>
+</sect2>
+
+<sect2 id="cellcomments">
+<title
+>Zellenkommentare</title>
+<para
+>Eine Zelle kann einen Textkommentar enthalten, der beim Arbeiten mit der Tabelle angesehen werden kann, der aber nicht gedruckt und normalerweise nicht angezeigt wird.</para>
+<para
+>Um einen Kommentar einzugeben, wählen Sie die Zelle aus und wählen Sie <guimenuitem
+>Kommentar ...</guimenuitem
+> aus dem Kontextmenü der <mousebutton
+>rechten</mousebutton
+> Maustaste oder aus dem Menü <guimenu
+>Einfügen</guimenu
+> und geben Sie Ihren Kommentar im Dialog <guilabel
+>Zellenkommentar</guilabel
+> ein.</para>
+<para
+>Um sich den Kommentar anzeigen zu lassen, bewegen Sie den Mauszeiger über die Zelle. Die Kommentar erscheint dann genau wie eine Kurzinfo. </para>
+<para
+>Wenn Sie <guilabel
+>Kommentarmarkierung anzeigen</guilabel
+> im Dialog <guilabel
+>Tabellen-Eigenschaften</guilabel
+> auswählen, werden alle Zellen, die einen Kommentar enthalten, durch ein kleines rotes Dreieck in der rechten oberen Ecke gekennzeichnet.</para>
+<para
+>Um diesen Dialog zu öffnen, klicken Sie mit der <mousebutton
+>rechten</mousebutton
+> Maustaste auf den Karteikartenreiter der Tabelle unten im Hauptfenster und wählen <guimenuitem
+>Tabellen-Eigenschaften</guimenuitem
+> aus dem Kontextmenü. Oder wählen Sie diesen Eintrag aus dem Menü <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Tabelle</guisubmenu
+></menuchoice
+>.</para>
+
+<para
+>Um einen Kommentar aus einer Zelle zu entfernen, wählen Sie <guimenuitem
+>Kommentar entfernen</guimenuitem
+> im Kontextmenü der <mousebutton
+>rechten</mousebutton
+> Maustaste oder wählen Sie <menuchoice
+><guimenu
+>Bearbeiten</guimenu
+><guisubmenu
+>Löschen</guisubmenu
+><guimenuitem
+>Kommentar</guimenuitem
+></menuchoice
+>.</para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

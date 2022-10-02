@@ -1,0 +1,347 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+ <!ENTITY sheets "<application
+>Calligra Sheets</application
+>">
+ <!ENTITY words "<application
+>Calligra Words</application
+>">
+ <!ENTITY stage "<application
+>Calligra Stage</application
+>">
+ <!ENTITY flow "<application
+>Calligra Flow</application
+>">
+ <!ENTITY plan "<application
+>Calligra Plan</application
+>">
+ <!ENTITY karbon "<application
+>Calligra Karbon</application
+>">
+ <!ENTITY calligra "Calligra">
+ <!ENTITY kappname "&calligra;">
+ <!ENTITY package "Calligra">
+ <!ENTITY % addindex "IGNORE">
+ <!ENTITY % Indonesian "INCLUDE"
+> <!-- change language only here -->
+]>
+
+<!-- maintained by raphael.langerhorst@kdemail.net -->
+
+<book id="calligra" lang="&language;">
+<bookinfo>
+<title
+>&calligra;</title>
+<subtitle
+>Pengenalan Umum</subtitle>
+<authorgroup>
+<author
+>&Raphael.Langerhorst; &Raphael.Langerhorst.mail; </author>
+<author
+>&Jost.Schenck; &Jost.Schenck.mail; </author>
+<othercredit role="translator"
+><firstname
+>Wantoyo</firstname
+><surname
+></surname
+><affiliation
+><address
+><email
+>wantoyek@gmail.com</email
+></address
+></affiliation
+><contrib
+>Terjemahan</contrib
+></othercredit
+> 
+</authorgroup>
+
+<date
+>03-01-2012</date>
+<releaseinfo
+>2.4.0</releaseinfo>
+
+<abstract>
+<para
+>&calligra; adalah sebuah alat perkantoran dan seni grafik oleh &kde;. </para>
+</abstract>
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Calligra</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title
+>Pengenalan</title>
+<sect1>
+<title
+>Komponen &calligra;</title>
+
+<important
+> <para
+>Silakan periksa <ulink url="http://docs.kde.org/development/en/calligra/calligra/index.html"
+>http://docs.kde.org</ulink
+> untuk versi terbaru dari dokumen ini.</para
+></important>
+
+<para
+>&calligra; adalah seni grafis dan office suite oleh &kde;. &calligra; terdiri dari komponen-komponen berikut: </para>
+
+<itemizedlist>
+<listitem
+><para
+>&words; (pengolah kata berbasis frame)</para
+></listitem>
+<listitem
+><para
+>&sheets; (sebuah aplikasi lembar sebar)</para
+></listitem
+> 
+<listitem
+><para
+>&stage; (presentasi layar dan slide)</para
+></listitem>
+<listitem
+><para
+>&flow; (sebuah aplikasi perbaganan)</para
+></listitem>
+<listitem
+><para
+>&karbon; (aplikasi menggambar vektor)</para
+></listitem>
+<listitem
+><para
+>&plan; (aplikasi manajemen projek)</para
+></listitem>
+</itemizedlist>
+
+<para
+>Karena komponen ini menggunakan teknologi Flake, komponen &calligra; dirancang untuk bekerja dengan baik satu sama lain. Banyak komponen &calligra; dapat disematkan pada dokumen &calligra; lainnya. Misalnya, Anda dapat memasukkan lembar-kerja yang Anda buat dalam &sheets; langsung menjadi dokumen &words;. Dengan cara ini, rumit, dokumen majemuk dan gabungan dapat diciptakan menggunakan &calligra;. </para>
+
+<para
+>Mekanisme plugin yang membuatnya mudah untuk memperluas fungsi &calligra;. Anda akan menemukan banyak plugin di beberapa komponen dan dapat belajar bagaimana untuk menulis plugin sendiri. </para>
+
+<para
+>Panduan ini hanya mencakup fitur umum &calligra;, mereka yang umum untuk sebagian besar atau semua komponen di suite. Untuk informasi rinci tentang komponen yang berbeda, kita lihat manual masing-masing. </para>
+
+</sect1>
+
+<sect1 id="features">
+<title
+>Ikhtisar fitur &calligra;</title>
+<sect2 id="featureintegration">
+<title
+>Integrasi</title>
+<para
+>&calligra; menyediakan sebuah kerangka kerja yang membangun semua komponen. Melalui kerangka kerja ini integrasi tinggi dicapai. Ini memungkinkan untuk mengembangkan sendiri komponen yang trintegrasikan juga. </para>
+</sect2>
+<sect2 id="featureleightweight">
+<title
+>Ringan</title>
+<para
+>Meskipun menawarkan begitu banyak komponen, &calligra; ringan, cepat dan memiliki jejak memori agak rendah. Hal ini juga dicapai karena &calligra; dibikin pada &kde;, kerangka kerja pengembangan aplikasi yang kuat. </para>
+<para
+>Tujuan &calligra; adalah tidak membebani antarmuka pengguna dengan fitur yang tidak diperlukan. Hasil ini bersandar dan berarti antarmuka pengguna memungkinkan Anda melakukan pekerjaan Anda secara efisien. </para>
+<para
+>Menjadi ringan terkadang juga berarti bahwa fungsi khusus yang Anda butuhkan tidak ada. Dalam hal ini Anda selalu dapat menambahkan fungsionalitas sendiri dengan memperluas &calligra;. Fitur tambahan selalu tersedia melalui plugin atau skrip tambahan, sehingga menjaga &calligra; itu sendiri ringan. </para>
+</sect2>
+<sect2 id="featurecompleteness">
+<title
+>Kelengkapan</title>
+<para
+>&calligra; menawarkan berbagai komponen, yang mencakup sebagian besar kebutuhan kantor dan bisnis. Fitur tambahan selalu dapat diimplementasikan melalui skrip, plugin atau bahkan seluruh komponen berdasarkan kerangka kerja &calligra;. </para>
+</sect2>
+<sect2 id="featurefileformat">
+<title
+>Format OpenDocument OASIS</title>
+<para
+>Merupakan hal penting bagi setiap office suite untuk mematuhi standar yang ditetapkan. Terutama pada tingkat format file untuk memungkinkan pertukaran dokumen mulus dengan office suite lainnya. Ini juga menghindari penguncian vendor, yang sangat penting bagi perusahaan dan juga bagi individu. </para>
+<para
+>Untuk alasan ini &calligra; telah mengadaptasi format OpenDocument OASIS sebagai format file asli. </para>
+</sect2>
+<sect2 id="featurekde">
+<title
+>Fitur-fitur &kde;</title>
+<para
+>Sejak &calligra; dibangun di &kde; semua fitur yang Anda harapkan dari &kde; aplikasi juga tersedia di &calligra;. Ini termasuk &DBus;, KParts, Flake, Desktop Integration, Configurability dan sebagainya. Semua ini membuat tampilan dan nuansa &calligra; sangat akrab dan &calligra; benar-benar terintegrasi ke dalam lingkungan desktop, sehingga memungkinkan alur kerja yang lancar. </para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<chapter id="configuration">
+<title
+>Mengkonfigurasi &calligra; dan Sistem Anda</title>
+
+<para
+>Sementara &calligra; seharusnya bekerja cukup baik luar biasa, mungkin ada beberapa hal untuk mengoptimalkan untuk mendapatkan yang terbaik dari &calligra;. Bab ini menunjukkan apa yang mungkin ingin Anda lakukan untuk mencapai hasil terbaik dengan office suite baru Anda dan membuatnya sesuai dengan kebutuhan Anda. &calligra; sangat dapat dikonfigurasi, bahkan hingga ke bilah alat dan tata letak menu yang terperinci. </para>
+
+<sect1 id="custom-gui">
+<title
+>Menyesuaikan &GUI; &calligra;</title>
+
+<para
+>Sementara &calligra; hadir luar biasa dengan &GUI; (antarmuka pengguna grafis) yang seharusnya sesuai dengan kebutuhan kebanyakan orang, ada alasan bagus mengapa Anda mungkin ingin bagaimana mengubah nuansa program. </para>
+
+<para
+>Ibu saya, misalnya, agak takut dengan tombol dan entri menu yang tidak dia mengerti. Untuk menyesuaikan &calligra; untuk kebutuhannya, saya mengurangi &GUI; untuk minimal fungsi. Karena ia hanya perlu menulis huruf dan menggunakan templat tertentu, tidak perlu lebih banyak fungsi daripada menyimpan, memuat, mencetak, dll. &etc; </para>
+
+<para
+>Berkat konsep <quote
+>action</quote
+> &Qt; dan &kde;, Anda dapat dengan bebas menyesuaikan bilah menu dan bilah alat &calligra;. Sayangnya, saat ini, tidak ada dialog yang mudah digunakan untuk melakukan ini. &calligra; menyimpan konfigurasi &GUI; dalam file &XML; dan Anda harus mengeditnya. Semoga situasi ini akan berubah di masa depan; sekarang, Anda perlu beberapa  pengetahuan dasar tentang bagaimana dokumen &XML; bekerja (atau &HTML;, yang merupakan bagian dari &XML;). </para>
+
+<para
+>Biasanya, masing-masing aplikasi &calligra; memiliki setidaknya dua dari mereka file-file &XML;: satu yang menjelaskan &GUI; dari shell (secara dasarnya, itulah yang Anda lihat jika tidak ada dokumen yang terbuka) dan yang menjelaskan &GUI; pada masing-masing bagian (itulah yang biasanya Anda lihat). Misalnya, untuk &words;, keduanya &XML; file diberi nama <filename
+>calligra_shell.rc</filename
+> dan <filename
+>words.rc</filename
+>. </para>
+
+<para
+>Ini adalah contoh sederhana mengenai rc-file. </para>
+
+<example>
+<title
+>Contoh sederhana rc-file</title>
+<screen
+>&lt;!DOCTYPE QConfig &gt;&lt;qconfig&gt;
+&lt;menubar&gt;
+&lt;menu name="Edit"&gt;&lt;text&gt;Edit&lt;/text&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;separator/&gt;
+&lt;action name="edit_find"/&gt;
+&lt;/menu&gt;
+&lt;menu name="Insert"&gt;&lt;text&gt;Insert&lt;/text&gt;
+&lt;action name="insert_picture"/&gt;
+&lt;action name="insert_clipart"/&gt;
+&lt;menu name="Variable"&gt;&lt;text&gt;Variable&lt;/text&gt;
+&lt;action name="insert_var_datefix"/&gt;
+&lt;action name="insert_var_datevar"/&gt;
+&lt;/menu&gt;
+&lt;/menu&gt;
+&lt;/menubar&gt;
+&lt;toolbars&gt;
+&lt;toolbar name="edit_toolbar" position="right"&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;/toolbar&gt;
+&lt;/toolbars&gt;
+&lt;/qconfig&gt;
+</screen>
+</example>
+
+</sect1>
+
+</chapter>
+
+<chapter id="more-info">
+<title
+>Cara mendapatkan informasi lebih lanjut</title>
+
+<sect1 id="other-manuals">
+<title
+>Manual &calligra; lainnya</title>
+
+<para
+>Untuk informasi terperinci tentang berbagai aplikasi &calligra;, silakan lihat manual masing-masing. </para>
+
+</sect1>
+
+<sect1 id="links">
+<title
+>Tautan</title>
+
+<para
+>Tautan berikut akan berguna jika Anda mencari informasi lebih lanjut tentang &kde; atau &calligra;. </para>
+
+<itemizedlist>
+<listitem>
+<para
+><ulink url="http://calligra.org"
+>Laman &calligra;</ulink
+>. Di sini kamu bisa menemukan informasi mengenai bagaimana untuk mendapatkan dan menginstal &calligra;, berita tentang pengembangan &calligra;, cuplikan &etc; </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://www.kde.org"
+>Laman &kde;</ulink
+>. &kde; adalah lingkungan desktop yang sangat canggih dan benar-benar bebas serta gratis untuk sistem operasi keluarga unix. &calligra; dibuat menggunakan pustaka lib &kde;. </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://qt-project.org/"
+>Halaman &Qt;</ulink
+>. Pencipta C++-toolkit &Qt;. &kde; dan &calligra; dibuat menggunakan &Qt;. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="programmersinfo">
+<title
+>Pemrograman &calligra;</title>
+
+<sect1 id="programmingintro">
+<title
+>Pengenalan</title>
+<para
+>Jika kamu ingin melakukan pengembangan &calligra;, sumberdaya berikut mungkin menarik: </para>
+
+<itemizedlist>
+<listitem
+><para
+>Di <ulink url="http://techbase.kde.org/Development"
+>http://techbase.kde.org/Development</ulink
+> kamu akan menemukan banyak dokumen tentang pemrograman dengan &Qt; dan &kde;. Kamu bisa menemukan versi online dokumentasi pustaka lib &kde; yang lengkap pada <ulink url="http://api.kde.org/"
+>KDE API Reference</ulink
+> </para
+></listitem
+> 
+<listitem
+><para
+>Langkah pertama untuk kode pengkontribusian adalah dengan mengikuti <ulink url="http://community.kde.org/Calligra/Building/Building_Calligra"
+>beberapa intruksi</ulink
+> untuk mendapatkan kode sumber dan membangunnya. </para
+></listitem>
+</itemizedlist>
+</sect1>
+
+</chapter>
+
+<chapter id="legal">
+<title
+>Lisensi dan Hak Cipta</title>
+
+<para
+>&calligra; adalah hasil dari usaha bersama dari banyak pengembang. Setiap sumber file &calligra; adalah hak cipta oleh orang-orang yang menulis file ini dan nama-nama mereka dapat ditemukan di awal setiap file sumber dengan lisensi yang berlaku untuk file sumber itu. </para>
+
+<para
+>Buku Petunjuk ini adalah hak cipta dari &Jost.Schenck;. Ini dapat didistribusikan secara bebas, seperti selama notifikasi hak cipta ini disertakan. Anda dapat mengubahnya selama Anda mengirimi saya perubahan atau serahkan mereka ke &kde; <acronym
+>Git</acronym
+>. Aku tidak akan bertanggung jawab atas apa pun yang dihasilkan dari penggunaan buku petunjuk ini. </para>
+
+<para
+>Buku petunjuk &calligra; yang lain adalah hak cipta dari penulis masing-masing. </para>
+
+<para
+>Wantoyo<email
+>wantoyek@gmail.com</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+&documentation.index; 
+</book>
+

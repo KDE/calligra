@@ -1,0 +1,2015 @@
+# translation of karbon.po to
+# translation of karbon.po to
+# translation of karbon.po to
+# translation of karbon.po to Xhosa
+# translation of karbon.po to
+# translation of karbon.po to
+# translation of karbon.po to
+# translation of karbon.po to
+# translation of karbon.po to
+# Copyright (C) 2002 Free Software Foundation, Inc.
+# Lwandle Mgidlana <lwandle@translate.org.za>, 2002
+# Thelma Lungcuzo <thelma@translate.org.za>, 2002
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2002-11-02 14:53+0200\n"
+"Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
+"Language-Team: Xhosa <xhosa@translate.org.za>\n"
+"Language: xh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.0beta2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "Bold"
+msgid "Blend"
+msgstr "Qaqambisa amagama"
+
+#: BlendEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+#| msgid "Bold"
+msgid "Blend mode"
+msgstr "Qaqambisa amagama"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "Eqhelekileyo"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:28
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgid "Lighten"
+msgstr "Ubude:"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr ""
+
+#: BlurEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius"
+msgstr "Umgca othe ngqo osembindini wesangqa:"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+msgid "Saturate colors"
+msgstr "Chukumisa Umbala"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, fuzzy, kde-format
+#| msgid "Rotate"
+msgid "Rotate hue"
+msgstr "Jikelezisa"
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, fuzzy, kde-format
+msgid "Saturate value"
+msgstr "Chukumisa Umbala"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, fuzzy, kde-format
+#| msgid "Angle:"
+msgid "Angle"
+msgstr "Ikona:"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr ""
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, fuzzy, kde-format
+msgid "Function"
+msgstr "Indlela Yokhetho"
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, fuzzy, kde-format
+msgid "Table"
+msgstr "Gcwalisa"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, fuzzy, kde-format
+#| msgid "Linear"
+msgid "Linear"
+msgstr "Enecala elinye"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, fuzzy, kde-format
+msgid "Slope"
+msgstr "Chukumisa"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Interface"
+msgid "Intercept"
+msgstr "Ujongano"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, fuzzy, kde-format
+#| msgid "Effects"
+msgid "Offset"
+msgstr "Iziqhano"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "Components"
+msgid "Composite"
+msgstr "Iingxenye"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, fuzzy, kde-format
+#| msgid "Boolean Operation"
+msgid "Operation"
+msgstr "Umsebenzi we Boolean"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, fuzzy, kde-format
+#| msgid "&Duplicate"
+msgid "Duplicate"
+msgstr "&Ukhuphelo"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, fuzzy, kde-format
+#| msgid "None"
+msgid "None"
+msgstr "Akho nananye"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, fuzzy, kde-format
+#| msgid "Edges:"
+msgid "Edge mode:"
+msgstr "Iziphelo emacaleni:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, fuzzy, kde-format
+#| msgid "Target:"
+msgid "Target point:"
+msgstr "Okungqaliweyo:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, fuzzy, kde-format
+#| msgid "Cap:"
+msgid "Bias:"
+msgstr "Cap:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, fuzzy, kde-format
+#| msgid "Pattern"
+msgid "Edit kernel"
+msgstr "Umlinganiselo"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "Stroke Color"
+msgid "Flood fill"
+msgstr "Chukumisa Umbala"
+
+#: FloodEffectConfigWidget.cpp:24
+#, fuzzy, kde-format
+#| msgid "Stroke Color"
+msgid "Flood color"
+msgstr "Chukumisa Umbala"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, fuzzy, kde-format
+msgid "Image"
+msgstr "Isixhobo Sombhalo"
+
+#: ImageEffectConfigWidget.cpp:27
+#, fuzzy, kde-format
+msgid "Select image..."
+msgstr "Khetha isixhobo samaqhina"
+
+#: ImageEffectConfigWidget.cpp:54
+#, fuzzy, kde-format
+msgid "Select image"
+msgstr "Khetha isixhobo samaqhina"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr ""
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, fuzzy, kde-format
+msgid "Dilate"
+msgstr "C&ima"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Boolean Operation"
+msgid "Operator:"
+msgstr "Umsebenzi we Boolean"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius x:"
+msgstr "Umgca othe ngqo osembindini wesangqa:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius y:"
+msgstr "Umgca othe ngqo osembindini wesangqa:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr ""
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Bold"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "Qaqambisa amagama"
+
+#, fuzzy
+#~| msgid "Bold"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "Qaqambisa amagama"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Eqhelekileyo"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Ubude:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "Umgca othe ngqo osembindini wesangqa:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "Chukumisa Umbala"
+
+#, fuzzy
+#~| msgid "Rotate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate hue"
+#~ msgstr "Jikelezisa"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "Chukumisa Umbala"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "Ikona:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function"
+#~ msgstr "Indlela Yokhetho"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "Gcwalisa"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "Enecala elinye"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "Chukumisa"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "Ujongano"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Iziqhano"
+
+#, fuzzy
+#~| msgid "Components"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "Iingxenye"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "Umsebenzi we Boolean"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "&Ukhuphelo"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Akho nananye"
+
+#, fuzzy
+#~| msgid "Edges:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "Iziphelo emacaleni:"
+
+#, fuzzy
+#~| msgid "Target:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "Okungqaliweyo:"
+
+#, fuzzy
+#~| msgid "Cap:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bias:"
+#~ msgstr "Cap:"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "Umlinganiselo"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "Chukumisa Umbala"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "Chukumisa Umbala"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Isixhobo Sombhalo"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image..."
+#~ msgstr "Khetha isixhobo samaqhina"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image"
+#~ msgstr "Khetha isixhobo samaqhina"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "C&ima"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "Umsebenzi we Boolean"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "Umgca othe ngqo osembindini wesangqa:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "Umgca othe ngqo osembindini wesangqa:"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Thelma Lungcuzo"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "thelma@translate.org.za"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "Umsebenzi we Boolean"
+
+#~ msgid "&Order"
+#~ msgstr "&Lungisa ngendlela"
+
+#, fuzzy
+#~ msgid "&Align"
+#~ msgstr "Ubeko ngokuhambelana:"
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "Gcwalisa"
+
+#~ msgid "&Object"
+#~ msgstr "&Injongo"
+
+#, fuzzy
+#~ msgid "&Distribute"
+#~ msgstr "Cima Iinjongo"
+
+#, fuzzy
+#~ msgid "&Path"
+#~ msgstr "pt"
+
+#, fuzzy
+#~ msgid "Effe&cts"
+#~ msgstr "Iziqhano"
+
+#, fuzzy
+#~ msgid "&Settings"
+#~ msgstr "Izicwangciso Zoxwebhu"
+
+#, fuzzy
+#~ msgid "Object"
+#~ msgstr "&Injongo"
+
+#, fuzzy
+#~ msgid "Align"
+#~ msgstr "Ubeko ngokuhambelana:"
+
+#~ msgid "Effects"
+#~ msgstr "Iziqhano"
+
+#, fuzzy
+#~ msgid "&Flatten Path..."
+#~ msgstr "&Yenza kubemcaba"
+
+#, fuzzy
+#~ msgid "Flatten Path"
+#~ msgstr "&Yenza kubemcaba"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Chukumisa Izinto zobumnini"
+
+#~ msgid "Flatness:"
+#~ msgstr "Okumcaba:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten path"
+#~ msgstr "&Yenza kubemcaba"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "Khetha umlinganiselo ukongeza"
+
+#, fuzzy
+#~ msgid "&Refine Path..."
+#~ msgstr "&Yenza kubemcaba"
+
+#, fuzzy
+#~ msgid "Refine Path"
+#~ msgstr "Khetha umlinganiselo ukongeza"
+
+#, fuzzy
+#~| msgid "Round Corners"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "Jikelele Ezikoneni"
+
+#, fuzzy
+#~ msgid "&Round Corners..."
+#~ msgstr "&Jikelele kwiikona"
+
+#~ msgid "Round Corners"
+#~ msgstr "Jikelele Ezikoneni"
+
+#~ msgid "Radius:"
+#~ msgstr "Umgca othe ngqo osembindini wesangqa:"
+
+#, fuzzy
+#~ msgid "Expand all"
+#~ msgstr "Fakelela Uxande"
+
+#, fuzzy
+#~ msgid "Stencil Box"
+#~ msgstr "Umlinganiselo"
+
+#, fuzzy
+#~ msgid "More shapes"
+#~ msgstr "Yenza amaqela Eenjongo "
+
+#, fuzzy
+#~| msgid "Whirl Pinch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl & pinch"
+#~ msgstr "Ujikelezo rhoqo Lokutsweba"
+
+#, fuzzy
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Ujikelezo rhoqo/Utswebo"
+
+#~ msgid "Whirl Pinch"
+#~ msgstr "Ujikelezo rhoqo Lokutsweba"
+
+#~ msgid "Angle:"
+#~ msgstr "Ikona:"
+
+#~ msgid "Pinch:"
+#~ msgstr "Tsweba:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "Nyusa ulwaleko"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "Yehlisa ulwaleko"
+
+#, fuzzy
+#~ msgid "Configure"
+#~ msgstr "Qwalasela i Karbon..."
+
+#~ msgid "Interface"
+#~ msgstr "Ujongano"
+
+#~ msgid "Misc"
+#~ msgstr "Misc"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Uxwebhu"
+
+#~ msgid "Document Settings"
+#~ msgstr "Izicwangciso Zoxwebhu"
+
+#, fuzzy
+#~ msgid "Layer view"
+#~ msgstr "Ulwaleko"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgid "Add a new layer"
+#~ msgstr "Ulwaleko olutsha"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Delete selected objects"
+#~ msgstr "Cima Iinjongo"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Raise selected objects"
+#~ msgstr "Cima Iinjongo"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Lower selected objects"
+#~ msgstr "Cima Iinjongo"
+
+#, fuzzy
+#~ msgid "New Layer"
+#~ msgstr "Ulwaleko olutsha"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Ngenisa igama lolwaleko olutsha:"
+
+#~ msgid "New layer"
+#~ msgstr "Ulwaleko olutsha"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Nyusa ulwaleko"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Cima ulwaleko"
+
+#, fuzzy
+#~ msgid "Layer"
+#~ msgstr "Ulwaleko"
+
+#, fuzzy
+#~ msgid "Shape"
+#~ msgstr "Chukumisa"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Ukungabonakali ngaphaya"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgid "yes"
+#~ msgstr "Uhlobo:"
+
+#, fuzzy
+#~ msgid "Master Page"
+#~ msgstr "Fakelela Uxande"
+
+#, fuzzy
+#~| msgid "Insert Sinus"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "Fakela i Sinus"
+
+#, fuzzy
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Khetha umlinganiselo ukongeza"
+
+#, fuzzy
+#~ msgid "Import graphic"
+#~ msgstr "&Rhweba ngaphakathi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "&Yenza kubemcaba"
+
+#, fuzzy
+#~| msgid "View &Mode"
+#~ msgid "Outline &Mode"
+#~ msgstr "Bonisela &Indlela"
+
+#, fuzzy
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Rhweba ngaphakathi"
+
+#~ msgid "D&elete"
+#~ msgstr "C&ima"
+
+#, fuzzy
+#~| msgid "Edit Gradient"
+#~ msgid "Edit Guides"
+#~ msgstr "Hlela Ithambeka"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Ukhuphelo"
+
+#, fuzzy
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Ubeko ngokuhambelana:"
+
+#, fuzzy
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Ubeko ngokuhambelana:"
+
+#, fuzzy
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Cima Iinjongo"
+
+#, fuzzy
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Cima Iinjongo"
+
+#, fuzzy
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Ubeko ngokuhambelana:"
+
+#, fuzzy
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Ubeko ngokuhambelana:"
+
+#, fuzzy
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Cima Iinjongo"
+
+#, fuzzy
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Cima Iinjongo"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgid "&Clip Object"
+#~ msgstr "&Injongo"
+
+#, fuzzy
+#~| msgid "&Ungroup Objects"
+#~ msgid "&Unclip Objects"
+#~ msgstr "&Sukwenza Iinjongo iqela"
+
+#, fuzzy
+#~ msgid "&Close Path"
+#~ msgstr "Khetha umlinganiselo ukongeza"
+
+#, fuzzy
+#~ msgid "Com&bine Path"
+#~ msgstr "Khetha umlinganiselo ukongeza"
+
+#, fuzzy
+#~ msgid "Se&parate Path"
+#~ msgstr "&Yenza kubemcaba"
+
+#, fuzzy
+#~ msgid "Re&verse Path"
+#~ msgstr "Khetha umlinganiselo ukongeza"
+
+#, fuzzy
+#~ msgid "Intersect Paths"
+#~ msgstr "Hlela isiseko somendo"
+
+#, fuzzy
+#~ msgid "Subtract Paths"
+#~ msgstr "&Yenza kubemcaba"
+
+#, fuzzy
+#~ msgid "Unite Paths"
+#~ msgstr "Hlela isiseko somendo"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Qwalasela i Karbon..."
+
+#, fuzzy
+#~ msgid "Page &Layout..."
+#~ msgstr "Qwalasela i Karbon..."
+
+#, fuzzy
+#~ msgid "Zoom to Selection"
+#~ msgstr "Indlela Yokhetho"
+
+#, fuzzy
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Indlela Yokhetho"
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "Gcwalisa Iinjongo"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show status bar:"
+#~ msgstr "Bonisa imo yebar"
+
+#, fuzzy
+#~ msgid "Number of recent files:"
+#~ msgstr "Inani lefayile esandukubakho:"
+
+#, fuzzy
+#~ msgid "Select palette"
+#~ msgstr "Khetha isixhobo samaqhina"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "Akho nananye"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Akho nananye"
+
+#, fuzzy
+#~| msgid "Stroke"
+#~ msgid "Stroke:"
+#~ msgstr "Chukumisa"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgid "Fill:"
+#~ msgstr "Gcwalisa"
+
+#, fuzzy
+#~ msgid "File to open"
+#~ msgstr "Ifayile Ezakuvula"
+
+#~ msgid "Target:"
+#~ msgstr "Okungqaliweyo:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Line"
+#~ msgstr "Enecala elinye"
+
+#~ msgid "Fill"
+#~ msgstr "Gcwalisa"
+
+#~ msgid "Type:"
+#~ msgstr "Udidi:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Enecala elinye"
+
+#, fuzzy
+#~| msgid "Radial"
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Umgca othe ngqo osembindini kwi sangqa"
+
+#, fuzzy
+#~| msgid "Conical"
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Imo yombhona"
+
+#~ msgid "Repeat:"
+#~ msgstr "Phinda:"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Akho nananye"
+
+#~ msgid "Reflect"
+#~ msgstr "Buyisa ukukhanya"
+
+#~ msgid "Repeat"
+#~ msgstr "Phinda"
+
+#, fuzzy
+#~ msgid "Overall opacity:"
+#~ msgstr "Ukungabonakali ngaphaya:"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgid "Stop color."
+#~ msgstr "Chukumisa Umbala"
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Yongeza Amathambeka Achazwe kuqala "
+
+#, fuzzy
+#~ msgid "Tiled"
+#~ msgstr "Gcwalisa"
+
+#, fuzzy
+#~ msgid "Top Right"
+#~ msgstr "Gcwalisa Iinjongo"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgid "Right"
+#~ msgstr "Ubude:"
+
+#, fuzzy
+#~ msgid "Bottom"
+#~ msgstr "Gcwalisa Iinjongo"
+
+#~ msgid "Stroke"
+#~ msgstr "Chukumisa"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgid "Stop color:"
+#~ msgstr "Chukumisa Umbala"
+
+#, fuzzy
+#~| msgid "Toolbox"
+#~ msgid "Tools"
+#~ msgstr "Ibhokisi yesixhobo"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Akho nananye"
+
+#, fuzzy
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Qaqambisa amagama"
+
+#~ msgid "Gradient"
+#~ msgstr "Ithambeka"
+
+#~ msgid "Pattern"
+#~ msgstr "Umlinganiselo"
+
+#~ msgid "Units:"
+#~ msgstr "Iingxenye:"
+
+#, fuzzy
+#~| msgid "Inner radius:"
+#~ msgid "Handle radius:"
+#~ msgstr "Umgca othe ngqo embindini wesangqa Ongaphakathi:"
+
+#, fuzzy
+#~ msgid "Ungroup shapes"
+#~ msgstr "Sukwenza iqela Lenjongo"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Iqela Lenjongo"
+
+#, fuzzy
+#~ msgid "Grid color:"
+#~ msgstr "Phelisa umbala:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Gcina ngokuzenzekelayo (encinacene):"
+
+#~ msgid "No auto save"
+#~ msgstr "Akukho gcino oluzenzekelayo"
+
+#~ msgid "min"
+#~ msgstr "encincane"
+
+#, fuzzy
+#~ msgid "Create backup file"
+#~ msgstr "Yenza Ifayile Yogcino lwasemva"
+
+#, fuzzy
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Khetha umlinganiselo ukongeza"
+
+#, fuzzy
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Khetha umlinganiselo ukongeza"
+
+#, fuzzy
+#~| msgid "Reference"
+#~ msgid "Reference Point:"
+#~ msgstr "Isiqinisekiso"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Pattern Size"
+#~ msgstr "Umlinganiselo"
+
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "Amathambeka Achazwe kuqala"
+
+#, fuzzy
+#~ msgid "Gradient tool"
+#~ msgstr "Ithambeka"
+
+#, fuzzy
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Ithambeka"
+
+#, fuzzy
+#~ msgid "Pattern tool"
+#~ msgstr "Umlinganiselo"
+
+#, fuzzy
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Umlinganiselo"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgid "Precision:"
+#~ msgstr "Indawo:"
+
+#, fuzzy
+#~ msgid "Exactness:"
+#~ msgstr "Okumcaba:"
+
+#, fuzzy
+#~ msgid "Combine angle:"
+#~ msgstr "Fakelela Uxande"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "&Follow selected path"
+#~ msgstr "Cima Iinjongo"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "Chukumisa Ububanzi"
+
+#, fuzzy
+#~ msgid "Use tablet &angle"
+#~ msgstr "Qala umbala:"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgid "Fixation:"
+#~ msgstr "Uhlengahlengiso:"
+
+#, fuzzy
+#~ msgid "Current"
+#~ msgstr "Cima Injongo"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Graphics Pen"
+#~ msgstr "Ithambeka"
+
+#, fuzzy
+#~ msgid "Calligraphy Tool"
+#~ msgstr "&Okumilise okweqanda"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "Zisa &Ngaphambili"
+
+#~ msgid "&Raise"
+#~ msgstr "&Phakamisa"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "&Ezantsi"
+
+#~ msgid "Send to &Back"
+#~ msgstr "Thumela &Emva"
+
+#, fuzzy
+#~ msgid "Align Left"
+#~ msgstr "Ubeko ngokuhambelana:"
+
+#, fuzzy
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "Ubeko ngokuhambelana:"
+
+#, fuzzy
+#~ msgid "Align Right"
+#~ msgstr "Ubeko ngokuhambelana:"
+
+#, fuzzy
+#~ msgid "Align Top"
+#~ msgstr "Gcwalisa Iinjongo"
+
+#, fuzzy
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Ubeko ngokuhambelana:"
+
+#, fuzzy
+#~ msgid "Align Bottom"
+#~ msgstr "Gcwalisa Iinjongo"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Stop opacity:"
+#~ msgstr "Ukungabonakali ngaphaya:"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "Bonisa imo yebar"
+
+#, fuzzy
+#~ msgid "Choose Pattern"
+#~ msgstr "Khetha umlinganiselo ukongeza"
+
+#, fuzzy
+#~| msgid "Predefined"
+#~ msgid "Undefined"
+#~ msgstr "Ichazwe ekuqaleni"
+
+#~ msgid "Transform"
+#~ msgstr "Ququla imo"
+
+#, fuzzy
+#~ msgid "Set x-position of actual selection"
+#~ msgstr "Akukho lukhetho"
+
+#, fuzzy
+#~ msgid "Set y-position of actual selection"
+#~ msgstr "Akukho lukhetho"
+
+#, fuzzy
+#~ msgid "Set width of actual selection"
+#~ msgstr "Akukho lukhetho"
+
+#, fuzzy
+#~ msgid "Set height of actual selection"
+#~ msgstr "Akukho lukhetho"
+
+#~ msgid "R:"
+#~ msgstr "R:"
+
+#, fuzzy
+#~ msgid "Rotate actual selection"
+#~ msgstr "Akukho lukhetho"
+
+#, fuzzy
+#~ msgid "SX:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~ msgid "Shear actual selection in x-direction"
+#~ msgstr "Akukho lukhetho"
+
+#, fuzzy
+#~ msgid "SY:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~ msgid "Shear actual selection in y-direction"
+#~ msgstr "Akukho lukhetho"
+
+#~ msgid "Shear"
+#~ msgstr "Sarha"
+
+#, fuzzy
+#~ msgid "Attach Path"
+#~ msgstr "&Yenza kubemcaba"
+
+#, fuzzy
+#~ msgid "Detach Path"
+#~ msgstr "&Yenza kubemcaba"
+
+#, fuzzy
+#~ msgid "Convert to Path"
+#~ msgstr "Guqulela kwizimo"
+
+#, fuzzy
+#~| msgid "Text Tool"
+#~ msgid "Simple Text Tool"
+#~ msgstr "Isixhobo Sombhalo"
+
+#~ msgid "Uniform Color"
+#~ msgstr "Umbala Weyunifomu"
+
+#~ msgid "Old:"
+#~ msgstr "Endala:"
+
+#~ msgid "New:"
+#~ msgstr "Entsha:"
+
+#~ msgid "G:"
+#~ msgstr "G:"
+
+#~ msgid "B:"
+#~ msgstr "B:"
+
+#~ msgctxt "Hue:"
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgctxt "Saturation:"
+#~ msgid "S:"
+#~ msgstr "S:"
+
+#~ msgctxt "Value:"
+#~ msgid "V:"
+#~ msgstr "V:"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "Type"
+#~ msgstr "Udidi"
+
+#~ msgid "Cap"
+#~ msgstr "Cap"
+
+#~ msgid "Join"
+#~ msgstr "Dibanisa"
+
+#, fuzzy
+#~ msgid "Color Chooser"
+#~ msgstr "Khetha umbala"
+
+#, fuzzy
+#~ msgid "Layers:"
+#~ msgstr "Ulwaleko"
+
+#, fuzzy
+#~ msgid "Format:"
+#~ msgstr "Eqhelekileyo"
+
+#~ msgid "Patterns"
+#~ msgstr "Imilinganiselo"
+
+#, fuzzy
+#~ msgid "Clipart"
+#~ msgstr "Isixhobo se Clipart"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "&Rhweba ngaphakathi"
+
+#, fuzzy
+#~ msgid "Stroke: None"
+#~ msgstr "Chukumisa"
+
+#, fuzzy
+#~ msgid "Fill: None"
+#~ msgstr "Gcwalisa Umbala"
+
+#, fuzzy
+#~ msgid "Fill: RGB"
+#~ msgstr "Gcwalisa"
+
+#, fuzzy
+#~ msgid "Fill: CMYK"
+#~ msgstr "Gcwalisa Umbala"
+
+#, fuzzy
+#~ msgid "Fill: HSB"
+#~ msgstr "Gcwalisa"
+
+#, fuzzy
+#~ msgid "Fill: Color"
+#~ msgstr "Gcwalisa Umbala"
+
+#, fuzzy
+#~ msgid "Fill: Gradient"
+#~ msgstr "Gcwalisa ngethambeka"
+
+#, fuzzy
+#~ msgid "Fill: Pattern"
+#~ msgstr "Gcwalisa ngomlinganiselo"
+
+#, fuzzy
+#~ msgid "Stroke: RGB"
+#~ msgstr "Chukumisa"
+
+#, fuzzy
+#~ msgid "Stroke: CMYK"
+#~ msgstr "Chukumisa"
+
+#, fuzzy
+#~ msgid "Stroke: HSB"
+#~ msgstr "Chukumisa"
+
+#, fuzzy
+#~ msgid "Stroke: Gradient"
+#~ msgstr "Hlela Ithambeka"
+
+#, fuzzy
+#~ msgid "Stroke: Pattern"
+#~ msgstr "Khetha umlinganiselo ukongeza"
+
+#~ msgid "Polygonize"
+#~ msgstr "Yenza umzobo onamacala amaninzi"
+
+#, fuzzy
+#~ msgid "Round corners:"
+#~ msgstr "Jikelele Ezikoneni"
+
+#~ msgid "Distance:"
+#~ msgstr "Umgama:"
+
+#, fuzzy
+#~ msgid "Create Shadow"
+#~ msgstr "Isithunzi"
+
+#~ msgid "Object Properties"
+#~ msgstr "Izinto zobumnini Zenjongo"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "C&ima"
+
+#~ msgid "&Import"
+#~ msgstr "&Rhweba ngaphakathi"
+
+#, fuzzy
+#~ msgid "Unnamed Tool"
+#~ msgstr "Isixhobo Sombhalo"
+
+#, fuzzy
+#~ msgid "&Undo"
+#~ msgstr "S&ukwenza:"
+
+#, fuzzy
+#~ msgid "&Redo"
+#~ msgstr "&Yenza kwakhona:"
+
+#~ msgid "&Undo: "
+#~ msgstr "S&ukwenza:"
+
+#~ msgid "&Redo: "
+#~ msgstr "&Yenza kwakhona:"
+
+#~ msgid "Fill Objects"
+#~ msgstr "Gcwalisa Iinjongo"
+
+#~ msgid "Fill Object"
+#~ msgstr "Gcwalisa Injongo"
+
+#~ msgid "Insert Text"
+#~ msgstr "Faka Umbhalo"
+
+#~ msgid "Transform Objects"
+#~ msgstr "Guqula imo Yeenjongo"
+
+#, fuzzy
+#~ msgid "Duplicate Object"
+#~ msgstr "Cima Injongo"
+
+#, fuzzy
+#~ msgid "Duplicate Objects"
+#~ msgstr "Cima Iinjongo"
+
+#~ msgid "Transform Object"
+#~ msgstr "Guqula imo Yenjongo"
+
+#~ msgid "Translate Objects"
+#~ msgstr "Tolika Iinjongo"
+
+#~ msgid "Translate Object"
+#~ msgstr "Tolika Injongo"
+
+#~ msgid "Scale Objects"
+#~ msgstr "Kalisha Iinjongo"
+
+#~ msgid "Scale Object"
+#~ msgstr "Isikali Senjongo"
+
+#~ msgid "Shear Objects"
+#~ msgstr "Sarha Iinjongo"
+
+#~ msgid "Shear Object"
+#~ msgstr "Sarha Injongo"
+
+#~ msgid "Rotate Objects"
+#~ msgstr "Jikelezisa Iinjongo"
+
+#~ msgid "Rotate Object"
+#~ msgstr "Jikelezisa Injongo"
+
+#, fuzzy
+#~ msgid "Translate Bezier"
+#~ msgstr "Tolika"
+
+#, fuzzy
+#~ msgid "Translate Points"
+#~ msgstr "Tolika Iinjongo"
+
+#, fuzzy
+#~ msgid "Translate Point"
+#~ msgstr "Tolika"
+
+#, fuzzy
+#~ msgid "Ellipse"
+#~ msgstr "&Okumilise okweqanda"
+
+#, fuzzy
+#~ msgid "Polygon"
+#~ msgstr "&Iilayini ezininzi"
+
+#~ msgid "Polyline"
+#~ msgstr "Umzobo onamacala amaninzi"
+
+#, fuzzy
+#~ msgid "Sinus"
+#~ msgstr "S&inus"
+
+#, fuzzy
+#~ msgid "Spiral"
+#~ msgstr "S&piral"
+
+#, fuzzy
+#~ msgid "Star"
+#~ msgstr "I&nkwenkwezi"
+
+#~ msgid "<qt><b>Shape tool</b><br>"
+#~ msgstr "<qt><b>Ubume besixhobo</b><br>"
+
+#~ msgid "<i>Click and drag</i> to place your own shape.<br>"
+#~ msgstr "<i>Nqakraza urhuqe</i> ukubeka ubume bakho.<br>"
+
+#~ msgid "<i>Click</i> to place a shape using the tool properties values.</qt>"
+#~ msgstr ""
+#~ "<i>Nqakraza</i> ukubeka ubume usebenzise amaxabiso ezinto zobumnini.</qt>"
+
+#~ msgid "Periods:"
+#~ msgstr "Amaxesha:"
+
+#, fuzzy
+#~ msgid "Sinus Tool"
+#~ msgstr "S&inus"
+
+#~ msgid "Insert Spiral"
+#~ msgstr "Faka Ujikeleziso"
+
+#, fuzzy
+#~ msgid "Rectangular"
+#~ msgstr "&Uxande"
+
+#~ msgid "Segments:"
+#~ msgstr "Iingxenye:"
+
+#~ msgid "Fade:"
+#~ msgstr "Iya iphela:"
+
+#~ msgid "Clockwise"
+#~ msgstr "Okuhamba njenge wotshi"
+
+#~ msgid "Counter Clockwise"
+#~ msgstr "Umbali Ngokohambo lwe wotshi"
+
+#, fuzzy
+#~ msgid "Spiral Tool"
+#~ msgstr "S&piral"
+
+#~ msgid "Insert Star"
+#~ msgstr "Faka Inkwenkwezi"
+
+#, fuzzy
+#~ msgid "Star Outline"
+#~ msgstr "Amagqabantshintshi"
+
+#, fuzzy
+#~ msgid "Framed Star"
+#~ msgstr "Yenza inkwenkwezi"
+
+#, fuzzy
+#~ msgid "Gear"
+#~ msgstr "Sarha"
+
+#~ msgid "Outer radius:"
+#~ msgstr "Umgca othe ngqo embindini wesangqa ongaphandle:"
+
+#, fuzzy
+#~ msgid "Inner angle:"
+#~ msgstr "Fakelela Uxande"
+
+#, fuzzy
+#~ msgid "Roundness:"
+#~ msgstr "Jikelele Kwiikona:"
+
+#, fuzzy
+#~ msgid "Star Tool"
+#~ msgstr "Isixhobo Sesarha"
+
+#~ msgid "Shadow"
+#~ msgstr "Isithunzi"
+
+#~ msgid "Draw translucent shadow"
+#~ msgstr "Zoba isithunzi sokuphantse ubonengaphaya"
+
+#~ msgid "Text"
+#~ msgstr "Umbalo"
+
+#~ msgid "Alignment:"
+#~ msgstr "Ubeko ngokuhambelana:"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "Indawo:"
+
+#, fuzzy
+#~ msgid "Edit Base Path"
+#~ msgstr "Hlela isiseko somendo"
+
+#, fuzzy
+#~ msgid "New text"
+#~ msgstr "Umbalo"
+
+#, fuzzy
+#~ msgid "<qt><b>Text Tool</b><br>"
+#~ msgstr "<qt><b>Ubume besixhobo</b><br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on document to place horizontal text.<br>"
+#~ msgstr "<i>Nqakraza urhuqe</i> ukubeka ubume bakho.<br>"
+
+#, fuzzy
+#~ msgid "<i>Click and drag</i> in document to place directional text.<br>"
+#~ msgstr "<i>Nqakraza urhuqe<i> ukukhetha ithambeka le vector.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Click</i> on a selected path object to place text along its outline."
+#~ "<br>"
+#~ msgstr "<i>Nqakraza</i> kumlinganiselo owufunayo kumkhethi.<br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on a selected text object to change it.<br></qt>"
+#~ msgstr "<i>Nqakraza ekunene</i> kumbala wenqaku ukuyihambisa.</qt>"
+
+#, fuzzy
+#~ msgid "Change Text"
+#~ msgstr "Tshintsha umbhalo"
+
+#, fuzzy
+#~ msgid "Text Conversion"
+#~ msgstr "Uguqulelo ombhalo"
+
+#, fuzzy
+#~ msgid "path"
+#~ msgstr "pt"
+
+#, fuzzy
+#~ msgid "text"
+#~ msgstr "Umbalo"
+
+#, fuzzy
+#~ msgid "Paste Object"
+#~ msgstr "Jikelezisa Injongo"
+
+#, fuzzy
+#~ msgid "Paste Objects"
+#~ msgstr "Jikelezisa Iinjongo"
+
+#~ msgid "Flatten Curves"
+#~ msgstr "Yenza amagophe Abemcaba"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Chukumisa Izinto zobumnini"
+
+#, fuzzy
+#~ msgid "Round cap"
+#~ msgstr "Jikelele Ezikoneni"
+
+#~ msgid "Join:"
+#~ msgstr "Dibanisa:"
+
+#, fuzzy
+#~ msgid "Round join"
+#~ msgstr "Jikelele Ezikoneni"
+
+#, fuzzy
+#~ msgid "Set miter limit"
+#~ msgstr "Cwangcisa Ububanzi Belayini"
+
+#~ msgid "P&urge"
+#~ msgstr "Y&enza kucoceke"
+
+#~ msgid "&History"
+#~ msgstr "&Imbali"
+
+#, fuzzy
+#~ msgid "&Insert Knots..."
+#~ msgstr "&Faka Amaqhina"
+
+#~ msgid "Insert Knots"
+#~ msgstr "Faka Amaqhina"
+
+#, fuzzy
+#~ msgid "Insert Clipart"
+#~ msgstr "Faka i clipart"
+
+#~ msgid "Stroke Objects"
+#~ msgstr "Chukumisa Iinjongo"
+
+#~ msgid "Stroke Object"
+#~ msgstr "Chukumisa Iinjongo"
+
+#~ msgid "Stroke Width"
+#~ msgstr "Chukumisa Ububanzi"
+
+#, fuzzy
+#~ msgid "Dash Pattern"
+#~ msgstr "Umlinganiselo"
+
+#, fuzzy
+#~ msgid "<qt><b>Zoom tool:</b><br>"
+#~ msgstr "<qt><b>Isixhobo somzobo onamacala amaninzi</b><br>"
+
+#, fuzzy
+#~ msgid "<i>Click and drag</i> to zoom into a rectangular area.<br>"
+#~ msgstr "<i>Nqakraza urhuqe<i> ukukhetha ithambeka le vector.<br>"
+
+#, fuzzy
+#~ msgid "<i>Right click</i> to zoom out of canvas.<br>"
+#~ msgstr "<i>Nqakraza ekunene</i> kumbala wenqaku ukuyihambisa.</qt>"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Sukwenza/yenza kwakhona umda:"
+
+#~ msgid "<qt><b>Polyline tool:</b><br>"
+#~ msgstr "<qt><b>Isixhobo somzobo onamacala amaninzi</b><br>"
+
+#~ msgid ""
+#~ "- <i>Click</i> to add a node and <i>drag</i> to set its bezier vector.<br>"
+#~ msgstr ""
+#~ "- <i>Nqakraza</i> ukongeza iqhina <i>urhuqe</i> ukuze ucwangcise ibezier "
+#~ "vector yayo.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Ctrl</i> while dragging to edit the previous bezier vector.<br>"
+#~ msgstr ""
+#~ "- Cinizela <i>Ctrl</i> ngexesha urhuqela ukuhlela i bezier vector "
+#~ "edlulileyo.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Shift</i> while dragging to change the curve in a straight "
+#~ "line.<br>"
+#~ msgstr ""
+#~ "- Cinizela <i>Shift</i> ngexesha urhuqela ukutshintsha igophe kumgca othe "
+#~ "nkqo.<br>"
+
+#~ msgid "- Press <i>Backspace</i> to cancel the last curve.<br>"
+#~ msgstr "- Cinizela <i>Backspace</i> ukuze urhoxise igophe lokugqibela.<br>"
+
+#~ msgid "- Press <i>Esc</i> to cancel the whole polyline.<br>"
+#~ msgstr ""
+#~ "- Cinizela <i>Esc</i> ukurhoxisa umzobo onamacala amaninzi onke.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Enter</i> or <i>double click</i> to end the polyline.</qt>"
+#~ msgstr ""
+#~ "- Cinizela  <i>Ngenisa</i> okanye <i>nqakraza kabini</i> kwisiphelo "
+#~ "somzobo onamacala amaninzi. </qt>"
+
+#~ msgid "Polyline Tool"
+#~ msgstr "Isixhobo Somzobo onamacala amaninzi"
+
+#~ msgid "Translate"
+#~ msgstr "Tolika"
+
+#~ msgid "Relative &position"
+#~ msgstr "Indawo &ehlobeneyo"
+
+#~ msgid "This action cannot be undone later. Do you really want to continue?"
+#~ msgstr ""
+#~ "Le ntshukumo ayikwazi ukungeziwa ngexesha elizayo. Ingaba ufuna "
+#~ "ukuqhubeka?"
+
+#~ msgid "Purge History"
+#~ msgstr "Coca Imbali"
+
+#, fuzzy
+#~ msgid "Zoom Width"
+#~ msgstr "Ububanzi:"
+
+#~ msgid "Wireframe"
+#~ msgstr "Isakhelo socingo"
+
+#, fuzzy
+#~ msgid "25%"
+#~ msgstr "   25%"
+
+#, fuzzy
+#~ msgid "50%"
+#~ msgstr "   50%"
+
+#, fuzzy
+#~ msgid "100%"
+#~ msgstr "  100%"
+
+#, fuzzy
+#~ msgid "200%"
+#~ msgstr "  200%"
+
+#, fuzzy
+#~ msgid "300%"
+#~ msgstr "  300%"
+
+#, fuzzy
+#~ msgid "400%"
+#~ msgstr "  400%"
+
+#, fuzzy
+#~ msgid "800%"
+#~ msgstr "  800%"
+
+#, fuzzy
+#~ msgid "Line Style"
+#~ msgstr "Cwangcisa Uhlobo Lodibaniso "
+
+#~ msgid "History"
+#~ msgstr "Imbali"
+
+#, fuzzy
+#~ msgid "Align Objects"
+#~ msgstr "Gcwalisa Iinjongo"
+
+#~ msgid "Clean Up"
+#~ msgstr "Coca"
+
+#~ msgid "Delete Object"
+#~ msgstr "Cima Injongo"
+
+#, fuzzy
+#~ msgid "Delete Node"
+#~ msgstr "Cima ulwaleko"
+
+#~ msgid "Order Selection"
+#~ msgstr "Ukhetho Lwendlela yokulungisa"
+
+#, fuzzy
+#~ msgid "Snap Distance"
+#~ msgstr "Umgama:"
+
+#~ msgid "New"
+#~ msgstr "Entsha"
+
+#~ msgid "Raise"
+#~ msgstr "Phakamisa"
+
+#~ msgid "Lower"
+#~ msgstr "Ezantsi"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#, fuzzy
+#~ msgid "Change the name of the object:"
+#~ msgstr "Tshintsha igama lolwaleko lwangoku:"
+
+#~ msgid "Change the name of the current layer:"
+#~ msgstr "Tshintsha igama lolwaleko lwangoku:"
+
+#, fuzzy
+#~ msgid "Add Layer"
+#~ msgstr "Ulwaleko"
+
+#, fuzzy
+#~ msgid "Rectangle"
+#~ msgstr "&Uxande"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Faka Okumbhoxo"
+
+#, fuzzy
+#~ msgid "Full"
+#~ msgstr "Gcwalisa"
+
+#~ msgid "<qt><b>Gradient tool:</b><br>"
+#~ msgstr "<qt><b>Isixhobo se thambeka:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to choose the gradient vector.<br>"
+#~ msgstr "<i>Nqakraza urhuqe<i> ukukhetha ithambeka le vector.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Click and drag</i> a gradient vector handle to change the gradient "
+#~ "vector.<br>"
+#~ msgstr "<i>Nqakraza urhuqe<i> ukukhetha ithambeka le vector.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Shift click and drag</i> to move the radial gradient focal point.<br>"
+#~ msgstr "<i>Nqakraza urhuqe<i> ukukhetha ithambeka le vector.<br>"
+
+#~ msgid "<br><b>Gradient editing:</b><br>"
+#~ msgstr "<br><b>Uhlelo lwe thambeka:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to move points.<br>"
+#~ msgstr "<i>Nqakraza urhuqhe</i> ukuhambisa amanqaku.<br>"
+
+#~ msgid "<i>Double click</i> on a color point to edit it.<br>"
+#~ msgstr "<i>Nqakraza kabini</i> kumbala wenqaku ukuyihlela.<br>"
+
+#~ msgid "<i>Right click</i> on a color point to remove it.</qt>"
+#~ msgstr "<i>Nqakraza ekunene</i> kumbala wenqaku ukuyihambisa.</qt>"
+
+#~ msgid "<qt><b>Pattern tool:</b><br>"
+#~ msgstr "<qt><b>Isixhobo somlinganiselo:</b><br>"
+
+#~ msgid "<i>Click</i> on the pattern you want in the chooser.<br>"
+#~ msgstr "<i>Nqakraza</i> kumlinganiselo owufunayo kumkhethi.<br>"
+
+#~ msgid "<i>Click and drag</i> to choose the pattern vector.</qt>"
+#~ msgstr "<i>Nqakraza urhuqe<i> ukhethe ithambeka le vector.<br>"
+
+#, fuzzy
+#~ msgid "<qt><b>Pencil tool:</b><br>"
+#~ msgstr "<qt><b>Isixhobo somlinganiselo:</b><br>"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Faka Umzobo onamacala amaninzi"
+
+#, fuzzy
+#~ msgid "Polygon Tool"
+#~ msgstr "Isixhobo Somzobo onamacala amaninzi"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Fakelela Uxande"
+
+#, fuzzy
+#~ msgid "Rectangle Tool"
+#~ msgstr "&Uxande"
+
+#, fuzzy
+#~ msgid "Rotate Tool"
+#~ msgstr "Isixhobo Sojikeleziso"
+
+#, fuzzy
+#~ msgid "Insert Round Rect"
+#~ msgstr "Faka Uxande Olungqukuva"
+
+#, fuzzy
+#~ msgid "Height (%1):"
+#~ msgstr "Ubude(%1):"
+
+#, fuzzy
+#~ msgid "Edge radius X:"
+#~ msgstr "Esiphelweni secala lomgca othe ngqo embindini wesangqa:"
+
+#, fuzzy
+#~ msgid "Edge radius Y:"
+#~ msgstr "Esiphelweni secala lomgca othe ngqo embindini wesangqa:"
+
+#, fuzzy
+#~ msgid "Round Rectangle Tool"
+#~ msgstr "&Uxande Olungqukuva"
+
+#, fuzzy
+#~ msgid "Round Rectangle"
+#~ msgstr "&Uxande Olungqukuva"
+
+#, fuzzy
+#~ msgid "Editing Nodes"
+#~ msgstr "Hlela Iqhina"
+
+#, fuzzy
+#~ msgid "Select Nodes Tool"
+#~ msgstr "Khetha isixhobo samaqhina"
+
+#~ msgid "Selection Mode"
+#~ msgstr "Indlela Yokhetho"
+
+#~ msgid "Select in current layer"
+#~ msgstr "Khetha kulwalelo lwangoku"
+
+#~ msgid "Select in visible layers"
+#~ msgstr "Khetha kulwalweko olungabonakaliyo"
+
+#~ msgid "Select in selected layers"
+#~ msgstr "Khetha kulwaleko lukhethiweyo"
+
+#~ msgid "Select"
+#~ msgstr "Khetha"
+
+#~ msgid "<qt><b>Selection tool:</b><br>"
+#~ msgstr "<qt><b>Isixhobo sokukhetha:</b><br>"
+
+#~ msgid ""
+#~ "<i>Select in current layer:</i><br>The selection is made in the layer "
+#~ "selected in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i> Khetha kulwaleko lwangoku:</i><br>Ukhetho lenziwe kulwaleko "
+#~ "olukhethwe kulwaleko lwe docker.<br><br>"
+
+#~ msgid ""
+#~ "<i>Select in visible layers:</i><br>The selection is made in the visible "
+#~ "layers (eye in the layers docker).<br><br>"
+#~ msgstr ""
+#~ "<i> Khetha kulwaleko olubonakalayo:</i><br>Ukhetho lwenziwe kulwaleko "
+#~ "olubonakalayoyo (imehlo kulwaleko lwe docker).<br><br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Select in selected layers:</i><br>The selection is made in the checked "
+#~ "layers in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Select kulwaleko olukhethiweyo:</i><br>Ukhetho lenziwe kulwaleko "
+#~ "olukhangelweyo kulwaleko lwe docker."
+
+#~ msgid "No selection"
+#~ msgstr "Akukho lukhetho"
+
+#, fuzzy
+#~ msgid "Select Tool"
+#~ msgstr "Khetha isixhobo"
+
+#, fuzzy
+#~ msgid "Shear Tool"
+#~ msgstr "Isixhobo Sesarha"
+
+#, fuzzy
+#~ msgid "<qt><b>Image tool:</b><br>"
+#~ msgstr "<qt><b>Ubume besixhobo</b><br>"
+
+#, fuzzy
+#~ msgid "Choose Image to Add"
+#~ msgstr "Khetha umlinganiselo ukongeza"
+
+#~ msgid "Knots:"
+#~ msgstr "Amaqhina:"

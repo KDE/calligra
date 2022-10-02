@@ -1,0 +1,6462 @@
+# WEB-Translator generated file. UTF-8 test:äëïöü
+# Copyright (C) 2001 Free Software Foundation, Inc.
+# Frikkie Thirion <frix@expertron.co.za>, 2001,2002.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kpresenter VERSION\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2002-11-07 11:41+0200\n"
+"Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
+"Language-Team: AFRIKAANS <AF@lia.org.za>\n"
+"Language: af\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "Einde:"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "Pastei"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, fuzzy, kde-format
+msgid "&Insert"
+msgstr "Voeg by Lêer"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "Formaat"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, fuzzy, kde-format
+msgid "&Slide"
+msgstr "Skuif"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, fuzzy, kde-format
+msgid "Sli&de Show"
+msgstr "Skyfievertoning"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "Gids soeklys Instellings"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "Skyfievertoning"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "Skep Html Aanbieding"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "Skep Html Aanbieding"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "Skep Html Aanbieding"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "Gekose skyfies"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Gekose skyfies"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Gekose skyfies"
+msgstr[1] "Gekose skyfies"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "Aanbieding Duur: "
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "Skyfievertoning"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "Verander Kas van Teks"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "Nee Effek"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "Gekose skyfies"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "Skuif Titel"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "Skyfievertoning"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "Skuif Titel"
+
+#: part/KPrAboutData.h:21
+#, fuzzy, kde-format
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "Konfigureer Voltooiïng..."
+
+#: part/KPrAboutData.h:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Tool"
+msgstr "Aanbieding"
+
+#: part/KPrAboutData.h:25
+#, fuzzy, kde-format
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "(c) 1998-2002, Die Kpresenter Span"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, fuzzy, kde-format
+#| msgid "current maintainer"
+msgid "Former maintainer"
+msgstr "huidige onderhouer"
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KPrAboutData.h:35
+#, fuzzy, kde-format
+#| msgid "original author"
+msgid "Original author"
+msgstr "oorspronklike outeur"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr ""
+
+#: part/KPrAboutData.h:36
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Werner Trobin"
+msgstr "Gesentreer"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr ""
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr ""
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr ""
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KPrAboutData.h:43
+#, fuzzy, kde-format
+msgid "Peter Simonsson"
+msgstr "Kpresenter - Rotering"
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr ""
+
+#: part/KPrAboutData.h:45
+#, fuzzy, kde-format
+#| msgid "&Closed Line"
+msgid "Carlos Licea "
+msgstr "Gesluit Lyn"
+
+#: part/KPrAboutData.h:46
+#, kde-format
+msgid "C. Boemann "
+msgstr ""
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr ""
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr ""
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr ""
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr ""
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr ""
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr ""
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "WEB-Vertaler (http://kde.af.org.za)"
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "frix@expertron.co.za"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr ""
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, kde-format
+msgid "Slide %1"
+msgstr "Skuif %1"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, fuzzy, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "Vertoon Skyfies in Aanbieding"
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Layout"
+msgstr "Bladsy Uitleg..."
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KPrPicturesImport.cpp:62
+#, fuzzy
+#| msgid "Insert Picture"
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "Voeg by Prent"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Pen Color"
+msgstr "Kleur"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, fuzzy, kde-format
+msgid "Pen Size"
+msgstr "Vermeerder Skrif tipe Grootte"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, fuzzy, kde-format
+msgid "Black"
+msgstr "Kleur:"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, fuzzy, kde-format
+msgid "White"
+msgstr "Wydte:"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, fuzzy, kde-format
+msgid "Green"
+msgstr "Gradiënt"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, kde-format
+msgid "Red"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, fuzzy, kde-format
+msgid "Blue"
+msgstr "Petroon"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, fuzzy, kde-format
+msgid "Yellow"
+msgstr "Skyfievertoning"
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, fuzzy, kde-format
+#| msgid "&Next Slide"
+msgid "Next Slide"
+msgstr "Volgende Skuif"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, kde-format
+msgid "Speaker Notes"
+msgstr ""
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, fuzzy, kde-format
+#| msgid "Create HTML Slideshow"
+msgid "Current Slide %1 of %2"
+msgstr "Skep Html Skyfievertoning"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, fuzzy, kde-format
+msgid "End of Slide Show"
+msgstr "Skyfievertoning"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "start after previous animation"
+msgstr "Skep Html Aanbieding"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "start with previous animation"
+msgstr "Skep Html Aanbieding"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Animation"
+msgstr "Skep Html Aanbieding"
+
+#: part/KPrShapeAnimations.cpp:201
+#, fuzzy, kde-format
+msgid "Shape"
+msgstr "Vorm"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, fuzzy, kde-format
+msgid "&Move Here"
+msgstr "Skuif"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, fuzzy, kde-format
+msgid "&Copy Here"
+msgstr "Skuif"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, kde-format
+msgid "C&ancel"
+msgstr ""
+
+#: part/KPrView.cpp:73
+#, kde-format
+msgid "Normal"
+msgstr "Normale"
+
+#: part/KPrView.cpp:78
+#, fuzzy, kde-format
+msgid "Show Master Slides"
+msgstr "Herbenaam Bladsy"
+
+#: part/KPrView.cpp:79
+#, fuzzy, kde-format
+msgid "Import Slideshow..."
+msgstr "Gaan na Bladsy..."
+
+#: part/KPrView.cpp:80
+#, fuzzy, kde-format
+msgid "Insert Slide"
+msgstr "Voeg by Lyn"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr ""
+
+#: part/KPrView.cpp:83
+#, fuzzy, kde-format
+msgid "Copy Slide"
+msgstr "Skuif"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, fuzzy, kde-format
+msgid "Copy the current slide"
+msgstr "Voor Huidige Bladsy"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, fuzzy, kde-format
+msgid "Delete Slide"
+msgstr "Gekose skyfies"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, fuzzy, kde-format
+msgid "Delete the current slide"
+msgstr "Voor Huidige Bladsy"
+
+#: part/KPrView.cpp:89
+#, fuzzy, kde-format
+msgid "Master Slide..."
+msgstr "Voeg by Lyn"
+
+#: part/KPrView.cpp:90
+#, fuzzy, kde-format
+#| msgid "&Previous Slide"
+msgid "Previous Slide"
+msgstr "Vorige Skuif"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, fuzzy, kde-format
+msgid "Go to previous slide"
+msgstr "Vorige Skuif"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, fuzzy, kde-format
+msgid "Go to next slide"
+msgstr "Gaan na Bladsy..."
+
+#: part/KPrView.cpp:96
+#, fuzzy, kde-format
+msgid "First Slide"
+msgstr "Herbenaam Bladsy"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, fuzzy, kde-format
+msgid "Go to first slide"
+msgstr "Gaan na Bladsy..."
+
+#: part/KPrView.cpp:99
+#, fuzzy, kde-format
+msgid "Last Slide"
+msgstr "Herbenaam Bladsy"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, fuzzy, kde-format
+msgid "Go to last slide"
+msgstr "Gaan na Bladsy..."
+
+#: part/KPrView.cpp:102
+#, fuzzy, kde-format
+msgid "Configure Stage..."
+msgstr "Konfigureer Voltooiïng..."
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr ""
+
+#: part/KPrView.cpp:251
+#, fuzzy, kde-format
+#| msgid "Insert Picture"
+msgid "Insert Pictures as Slides..."
+msgstr "Voeg by Prent"
+
+#: part/KPrView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Create Appear Animation"
+msgstr "Skep Html Aanbieding"
+
+#: part/KPrView.cpp:264
+#, fuzzy, kde-format
+msgid "Edit Custom Slide Shows..."
+msgstr "Konfigureer Voltooiïng..."
+
+#: part/KPrView.cpp:268
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Start Presentation"
+msgstr "Aanbieding"
+
+#: part/KPrView.cpp:271
+#, fuzzy, kde-format
+msgid "From Current Slide"
+msgstr "Na Huidige Bladsy"
+
+#: part/KPrView.cpp:275
+#, fuzzy, kde-format
+msgid "From First Slide"
+msgstr "Zoem Hele Bladsy"
+
+#: part/KPrView.cpp:280
+#, fuzzy, kde-format
+msgid "Stop presentation"
+msgstr "Aanbieding"
+
+#: part/KPrView.cpp:286
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Show Status Bar"
+msgstr "Vertoon status kolom"
+
+#: part/KPrView.cpp:287
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Hide Status Bar"
+msgstr "Vertoon status kolom"
+
+#: part/KPrView.cpp:288
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Shows or hides the status bar"
+msgstr "Vertoon status kolom"
+
+#: part/KPrView.cpp:297
+#, fuzzy, kde-format
+msgid "Configure Slide Show..."
+msgstr "Konfigureer Voltooiïng..."
+
+#: part/KPrView.cpp:301
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter..."
+msgid "Configure Presenter View..."
+msgstr "Konfigureer Kpresenter..."
+
+#: part/KPrView.cpp:305
+#, fuzzy, kde-format
+msgid "Draw on the presentation..."
+msgstr "Beïendig Aanbieding"
+
+#: part/KPrView.cpp:312
+#, fuzzy, kde-format
+msgid "Highlight the presentation..."
+msgstr "Beïendig Aanbieding"
+
+#: part/KPrView.cpp:319
+#, fuzzy, kde-format
+msgid "Blackscreen on the presentation..."
+msgstr "Beïendig Aanbieding"
+
+#: part/KPrViewModeNotes.cpp:36
+#, fuzzy, kde-format
+#| msgid "Note"
+msgid "Notes"
+msgstr "Nota"
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, fuzzy, kde-format
+msgid "Slides Sorter"
+msgstr "Skuif Titel"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, fuzzy, kde-format
+msgid "Slide Show: "
+msgstr "Skyfievertoning"
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new custom slide show"
+msgstr "Skyfievertoning"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, fuzzy, kde-format
+msgid "Delete current custom slide show"
+msgstr "Voor Huidige Bladsy"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, fuzzy, kde-format
+msgid "Add slides to current custom slide show"
+msgstr "Skyfievertoning"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, fuzzy, kde-format
+msgid "Remove slides from current custom slide show"
+msgstr "Skyfievertoning"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, fuzzy, kde-format
+msgid "Duplicate Slide"
+msgstr "Gekose skyfies"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, fuzzy, kde-format
+#| msgid "Create HTML Slideshow"
+msgid "Start Slideshow"
+msgstr "Skep Html Skyfievertoning"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new slide"
+msgstr "Skyfievertoning"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, fuzzy, kde-format
+msgid "Delete selected slides"
+msgstr "Gekose skyfies"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, fuzzy, kde-format
+msgid "Rename"
+msgstr "Verwyder Skakel"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, fuzzy, kde-format
+#| msgid "&Custom"
+msgid "Cut"
+msgstr "Pasmaak"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, fuzzy, kde-format
+#| msgid "Group"
+msgid "Copy"
+msgstr "Groep"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, fuzzy, kde-format
+#| msgid "Path"
+msgid "Paste"
+msgstr "Gids soeklys"
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, fuzzy, kde-format
+msgid "Slide Show %1"
+msgstr "Skyfievertoning"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, fuzzy, kde-format
+msgid "All slides"
+msgstr "Alle lêers"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, fuzzy, kde-format
+#| msgid "Arrow"
+msgid "Error"
+msgstr "Pyl"
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr ""
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "Bladsy Uitleg..."
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, fuzzy, kde-format
+msgid "Automatic animation preview"
+msgstr "Vertoon voorskou"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Preview animation"
+msgstr "Aanbieding"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, fuzzy, kde-format
+msgid "Slide Transitions"
+msgstr "Skuif Titel"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Shape Click Actions"
+msgstr "Skep Html Aanbieding"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Shape Animations"
+msgstr "Skep Html Aanbieding"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, fuzzy, kde-format
+msgid "Manage animation delay and duration: "
+msgstr "Aanbieding Duur: "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, fuzzy, kde-format
+msgid "Start: "
+msgstr "Gaan na Begin"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "after previous animation"
+msgstr "Skep Html Aanbieding"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "with previous animation"
+msgstr "Skep Html Aanbieding"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, fuzzy, kde-format
+#| msgid "Direction"
+msgid "Duration: "
+msgstr "Rigting"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Preview Shape Animation"
+msgstr "Skep Html Aanbieding"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, kde-format
+msgid "No Effect"
+msgstr "Nee Effek"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid " sec"
+msgstr " sekondes"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, fuzzy, kde-format
+msgid "Slide Transition:"
+msgstr "Skuif Titel"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, fuzzy, kde-format
+#| msgid "Apply Styles"
+msgid "Apply To All Slides"
+msgstr "Wend aan Style"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#, fuzzy
+#| msgid "Apply Style to Frames"
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr "Wend aan Styl na Rame"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, fuzzy, kde-format
+msgid "Custom"
+msgstr "Skyfievertoning"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, fuzzy, kde-format
+msgid "Ole Action"
+msgstr "Voltooiïng"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Edit animation"
+msgstr "Skep Html Aanbieding"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Add new animation"
+msgstr "Skep Html Aanbieding"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, fuzzy, kde-format
+#| msgid "Remove Link"
+msgid "Remove animation"
+msgstr "Verwyder Skakel"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Move animation up"
+msgstr "Skep Html Aanbieding"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Move animation down"
+msgstr "Skep Html Aanbieding"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new animation"
+msgstr "Skyfievertoning"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, fuzzy, kde-format
+msgid "Delete current animation"
+msgstr "Voor Huidige Bladsy"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, fuzzy, kde-format
+#| msgid "Group"
+msgid "Crop"
+msgstr "Groep"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, fuzzy, kde-format
+#| msgid "Width:"
+msgid "W&idth:"
+msgstr "Wydte:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, fuzzy, kde-format
+msgid "Will keep the width of the crop constant"
+msgstr "Skep Prentjies van die Skyfies"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, fuzzy, kde-format
+msgid "&Height:"
+msgstr "Hoogte:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, fuzzy, kde-format
+msgid "Will keep the height of the crop constant"
+msgstr "Skep Prentjies van die Skyfies"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, fuzzy, kde-format
+msgid "R&atio:"
+msgstr "Rotering hoek:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, fuzzy, kde-format
+msgid "Will keep the ratio constant"
+msgstr "Skep Prentjies van die Skyfies"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, fuzzy, kde-format
+#| msgid "&Page"
+msgid "Image"
+msgstr "Bladsy"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, fuzzy, kde-format
+msgid "&Crop"
+msgstr "Bo:"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "Vorm"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, fuzzy, kde-format
+msgid "Presentation monitor:"
+msgstr "Aanbieding"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Enable presenter view"
+msgstr "Konfigureer Kpresenter"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Configure Presenter View"
+msgstr "Konfigureer Kpresenter"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, fuzzy, kde-format
+msgid "Configure Slide Show"
+msgstr "Skyfievertoning"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, fuzzy, kde-format
+msgid "Slides"
+msgstr "Skuif"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Slides:"
+msgstr "Aanbieding"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, fuzzy, kde-format
+msgid "Edit Custom Slide Shows ..."
+msgstr "Konfigureer Voltooiïng..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, fuzzy, kde-format
+msgid "Select all"
+msgstr "Deur te kies..."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, fuzzy, kde-format
+msgid "Select template (.css) :"
+msgstr "Uitvee Bladsy"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, fuzzy, kde-format
+msgid "Deselect all"
+msgstr "Deur te kies..."
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, fuzzy, kde-format
+#| msgid "Title:"
+msgid "Title"
+msgstr "Titel:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, fuzzy, kde-format
+msgid "Output preview"
+msgstr "Vertoon voorskou"
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, fuzzy, kde-format
+#| msgid "New..."
+msgid "..."
+msgstr "Nuwe..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, fuzzy, kde-format
+#| msgid "Author:"
+msgid "Author"
+msgstr "Outeur:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, fuzzy, kde-format
+msgid "Delete Favorite"
+msgstr "Gekose skyfies"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, fuzzy, kde-format
+msgid "Delete Template"
+msgstr "Gekose skyfies"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, fuzzy, kde-format
+msgid "Add Template"
+msgstr "Gekose skyfies"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "Doen jy wil hê na verwyder die huidige bladsy?"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+#| msgid "Save Configuration..."
+msgid "Confirm remove"
+msgstr "Stoor Opstelling..."
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#, fuzzy
+#| msgid "Change Rotation"
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr "Verander Rotering"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid "No sound"
+msgstr " sekondes"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, fuzzy, kde-format
+msgid "Import..."
+msgstr "In voer Styl..."
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr ""
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "From Left"
+msgstr "Kom Van Links"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Come From Top"
+msgid "From Top"
+msgstr "Kom Van Bo"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Right"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Clock"
+msgstr "Kleur:"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Twelve Clockwise"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Three Clockwise"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Six Clockwise"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Nine Clockwise"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Twelve Counterclockwise"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Three Counterclockwise"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Six Counterclockwise"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Nine Counterclockwise"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Fan"
+msgstr "Dubbel Pyl"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan Out Vertical"
+msgstr "Open Vertikaal"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Horizontal"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan In Vertical"
+msgstr "Open Vertikaal"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan In Horizontal"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Fan In Vertical Reverse"
+msgstr "Vertikaal Lyne"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Fan In Horizontal Reverse"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Double Sweep"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Parallel Vertical"
+msgstr "Open Vertikaal"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Opposite Vertical"
+msgstr "Open Vertikaal"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Opposite Horizontal"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Top Left"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Parallel Diagonal Bottom Left"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Parallel Vertical Reverse"
+msgstr "Vertikaal Lyne"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal Reverse"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Opposite Vertical Reverse"
+msgstr "Vertikaal Lyne"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Opposite Horizontal Reverse"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Fan"
+msgstr "6% Opvul Patroon"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Center Right"
+msgstr "Vee na die Regterkant"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Top"
+msgstr "Gesentreer"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Left"
+msgstr "Gesentreer"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Center Bottom"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Top"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Right"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Fan Out Bottom"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan Out Left"
+msgstr "Open Vertikaal"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan In Top"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Fan In Right"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Fan In Bottom"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Fan In Left"
+msgstr "Kom Van Links"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Pin Wheel"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Two Blades Vertical Clockwise"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Two Blades Horizontal Clockwise"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Four Blades Horizontal Clockwise"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Saloon Door"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Top"
+msgid "To Top"
+msgstr "Kom Van Bo"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Cover Left"
+msgid "To Left"
+msgstr "Omhulsel Links"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "To Bottom"
+msgstr "Bodem:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Cover Right"
+msgid "To Right"
+msgstr "Omhulsel Regterkant"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Single Sweep"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top"
+msgstr "Kom Van Links"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Cover Right-Up"
+msgid "Clockwise Right"
+msgstr "Omhulsel Right-Up"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+#| msgid "Align Bottom"
+msgid "Clockwise Bottom"
+msgstr "Oplyn Bodem"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+msgid "Clockwise Left"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left"
+msgstr "Kom Van Links"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Right"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Left"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Windshield"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, fuzzy, kde-format
+msgid "Right"
+msgstr "Regterkant:"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Vertical"
+msgstr "Open Vertikaal"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, fuzzy, kde-format
+msgid "Horizontal"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Right Reverse"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Up Reverse"
+msgstr "Vertikaal Lyne"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reverse"
+msgstr "Vertikaal Lyne"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reverse"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Barn Door"
+msgstr "Dubbel Pyl"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Diagonal Bottom Left"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Diagonal Bottom Left Reverse"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Diagonal Top Left"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Reverse"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Barn Zig Zag"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reversed"
+msgstr "Vertikaal Lyne"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reversed"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "From Top Left"
+msgstr "Kom Van Links"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Top Right"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom Left"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom Right"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Diagonal"
+msgstr "Diagonale Gradiënt 1"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+msgid "Corners In"
+msgstr "Hoeke:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Corners In Reverse"
+msgstr "Hoeke:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Corners Out"
+msgstr "Hoeke:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Corners Out Reverse"
+msgstr "Hoeke:"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Misc Diagonal"
+msgstr "Diagonale Gradiënt 1"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Barn Door"
+msgstr "Dubbel Pyl"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Diamond"
+msgstr "Dubbel Pyl"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Zig Zag"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Fade"
+msgstr "Opskrif"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr ""
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Set Text Color"
+msgid "Fade over Color"
+msgstr "Stel Teks Kleur"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "ArrowHead"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, fuzzy, kde-format
+#| msgid "Done"
+msgid "Down"
+msgstr "Klaar"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Down Reverse"
+msgstr "Vertikaal Lyne"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, fuzzy, kde-format
+msgid "Left"
+msgstr "Lengte:"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Left Reverse"
+msgstr "Vertikaal Lyne"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Ellipse"
+msgstr "Elipse"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Circle"
+msgstr "Sirkel"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Circle Reverse"
+msgstr "Vertikaal Lyne"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Hexagon"
+msgstr "Aanbieding"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular"
+msgstr "Driehoek"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular Reverse"
+msgstr "Driehoek"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Diamond"
+msgstr "Dubbel Pyl"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Diamond Reverse"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, kde-format
+msgid "Misc"
+msgstr "Allerande"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Header"
+msgid "Heart"
+msgstr "Opskrif"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Heart Reverse"
+msgstr "Vertikaal Lyne"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole"
+msgstr "Vertikaal Lyne"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole Reverse"
+msgstr "Vertikaal Lyne"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Pentagon"
+msgstr "Aanbieding"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Sound effect"
+msgid "RoundRect"
+msgstr "Klank effek"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Star"
+msgstr "Gaan na Begin"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star Reverse"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star Reverse"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star Reverse"
+msgstr "Horisontaal Lyne"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Tiled"
+msgid "Triangle"
+msgstr "Geteël"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Box Snakes"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Box In"
+msgid "Two Box Top In"
+msgstr "Boks In"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Two Box Bottom In"
+msgstr "Bodem:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Cover Left"
+msgid "Two Box Left In"
+msgstr "Omhulsel Links"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Cover Right"
+msgid "Two Box Right In"
+msgstr "Omhulsel Regterkant"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Four Box Vertical In"
+msgstr "Open Vertikaal"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Four Box Horizontal In"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Box Out"
+msgid "Two Box Top Out"
+msgstr "Boks Uit"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Two Box Bottom Out"
+msgstr "Bodem:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Two Box Left Out"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Two Box Right Out"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Four Box Vertical Out"
+msgstr "Open Vertikaal"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Four Box Horizontal Out"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Parallel Snakes"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same In"
+msgstr "Vertikaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same Out"
+msgstr "Vertikaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same In"
+msgstr "Vertikaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same Out"
+msgstr "Vertikaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite In"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite Out"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Left Opposite In"
+msgstr "Vertikaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same In"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same Out"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same In"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same Out"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite In"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite Out"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite In"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite Out"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite In"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite Out"
+msgstr "Horisontaal Gradiënt"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Snake"
+msgstr "Vorm"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Spiral"
+msgstr "Vorm"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left In"
+msgstr "Kom Van Links"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left Out"
+msgstr "Kom Van Links"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right In"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right Out"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left In"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left Out"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right In"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right Out"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left In"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left Out"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right In"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right Out"
+msgstr "Kom Van Regterkant"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left In"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left Out"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right In"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right Out"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Waterfall"
+msgstr "Nee Effek"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Top Left Vertical"
+msgstr "Open Vertikaal"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Top Left Horizontal"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Top Right Vertical"
+msgstr "Open Vertikaal"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Top Right Horizontal"
+msgstr "Open Horisontaal"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Close Vertical"
+msgid "Bottom Left Vertical"
+msgstr "Maak toe Vertikaal"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Close Horizontal"
+msgid "Bottom Left Horizontal"
+msgstr "Maak toe Horisontaal"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Bottom Right Vertical"
+msgstr "Kom Van Bodem"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Interlocking Horizontal 1"
+msgid "Bottom Right Horizontal"
+msgstr "Intersluit Horisontaal 1"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Slide"
+msgstr "Skuif"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Space Rotation"
+msgstr "Rotering hoek:"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Swap effect"
+msgstr "Nee Effek"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, fuzzy, kde-format
+#| msgid "Header"
+msgid "Header"
+msgstr "Opskrif"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, kde-format
+msgid "Footer"
+msgstr "Voetskrif"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "Einde:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "Pastei"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "Voeg by Lêer"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "Formaat"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "Skuif"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Gids soeklys Instellings"
+
+#, fuzzy
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Groep"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr "Wydte:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the width of the crop constant"
+#~ msgstr "Skep Prentjies van die Skyfies"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "Hoogte:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "Rotering hoek:"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Bladsy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "Bo:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "Skuif"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "Aanbieding"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "Konfigureer Voltooiïng..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select all"
+#~ msgstr "Deur te kies..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select template (.css) :"
+#~ msgstr "Uitvee Bladsy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deselect all"
+#~ msgstr "Deur te kies..."
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Titel:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output preview"
+#~ msgstr "Vertoon voorskou"
+
+#, fuzzy
+#~| msgid "New..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "Nuwe..."
+
+#, fuzzy
+#~| msgid "Author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Outeur:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "Gekose skyfies"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "Aanbieding"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "Konfigureer Voltooiïng..."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "Aanbieding"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Stage Team"
+#~ msgstr "(c) 1998-2002, Die Kpresenter Span"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "huidige onderhouer"
+
+#, fuzzy
+#~| msgid "original author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "oorspronklike outeur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Kpresenter - Rotering"
+
+#, fuzzy
+#~| msgid "&Closed Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Carlos Licea "
+#~ msgstr "Gesluit Lyn"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "WEB-Vertaler (http://kde.af.org.za)"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "frix@expertron.co.za"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Skuif %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of presentation. Click to exit."
+#~ msgstr "Vertoon Skyfies in Aanbieding"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Bladsy Uitleg..."
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "Kleur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Size"
+#~ msgstr "Vermeerder Skrif tipe Grootte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "Kleur:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "White"
+#~ msgstr "Wydte:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Gradiënt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Petroon"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~| msgid "&Next Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "Volgende Skuif"
+
+#, fuzzy
+#~| msgid "Create HTML Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "Skep Html Skyfievertoning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start after previous animation"
+#~ msgstr "Skep Html Aanbieding"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start with previous animation"
+#~ msgstr "Skep Html Aanbieding"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "Skep Html Aanbieding"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Vorm"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "Skuif"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "Skuif"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Normale"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Master Slides"
+#~ msgstr "Herbenaam Bladsy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "Gaan na Bladsy..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "Voeg by Lyn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "Skuif"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "Voor Huidige Bladsy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "Gekose skyfies"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "Voor Huidige Bladsy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide..."
+#~ msgstr "Voeg by Lyn"
+
+#, fuzzy
+#~| msgid "&Previous Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "Vorige Skuif"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "Vorige Skuif"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "Gaan na Bladsy..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "Herbenaam Bladsy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "Gaan na Bladsy..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "Herbenaam Bladsy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "Gaan na Bladsy..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "Konfigureer Voltooiïng..."
+
+#, fuzzy
+#~| msgid "Insert Picture"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "Voeg by Prent"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Appear Animation"
+#~ msgstr "Skep Html Aanbieding"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows..."
+#~ msgstr "Konfigureer Voltooiïng..."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "Aanbieding"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "Na Huidige Bladsy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From First Slide"
+#~ msgstr "Zoem Hele Bladsy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "Aanbieding"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Vertoon status kolom"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Vertoon status kolom"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Vertoon status kolom"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "Konfigureer Voltooiïng..."
+
+#, fuzzy
+#~| msgid "Configure KPresenter..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "Konfigureer Kpresenter..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "Beïendig Aanbieding"
+
+#, fuzzy
+#~| msgid "Note"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Nota"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "Skuif Titel"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new custom slide show"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "Voor Huidige Bladsy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add slides to current custom slide show"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "Gekose skyfies"
+
+#, fuzzy
+#~| msgid "Create HTML Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "Skep Html Skyfievertoning"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new slide"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "Gekose skyfies"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Verwyder Skakel"
+
+#, fuzzy
+#~| msgid "&Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "Pasmaak"
+
+#, fuzzy
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Groep"
+
+#, fuzzy
+#~| msgid "Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "Gids soeklys"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All slides"
+#~ msgstr "Alle lêers"
+
+#, fuzzy
+#~| msgid "Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Pyl"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic animation preview"
+#~ msgstr "Vertoon voorskou"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "Aanbieding"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "Skuif Titel"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Click Actions"
+#~ msgstr "Skep Html Aanbieding"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "Skep Html Aanbieding"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage animation delay and duration: "
+#~ msgstr "Aanbieding Duur: "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start: "
+#~ msgstr "Gaan na Begin"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after previous animation"
+#~ msgstr "Skep Html Aanbieding"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "with previous animation"
+#~ msgstr "Skep Html Aanbieding"
+
+#, fuzzy
+#~| msgid "Direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "Rigting"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview Shape Animation"
+#~ msgstr "Skep Html Aanbieding"
+
+#, fuzzy
+#~| msgid "No Effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr " sekondes"
+
+#, fuzzy
+#~| msgid "Apply Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply To All Slides"
+#~ msgstr "Wend aan Style"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ole Action"
+#~ msgstr "Voltooiïng"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "Skep Html Aanbieding"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new animation"
+#~ msgstr "Skep Html Aanbieding"
+
+#, fuzzy
+#~| msgid "Remove Link"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "Verwyder Skakel"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation up"
+#~ msgstr "Skep Html Aanbieding"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "Voor Huidige Bladsy"
+
+#, fuzzy
+#~| msgid "Configure KPresenter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View"
+#~ msgstr "Konfigureer Kpresenter"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "Gekose skyfies"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Are you sure you want to remove \"%1\"?"
+#~ msgstr "Doen jy wil hê na verwyder die huidige bladsy?"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm remove"
+#~ msgstr "Stoor Opstelling..."
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr " sekondes"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import..."
+#~ msgstr "In voer Styl..."
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Left"
+#~ msgstr "Kom Van Links"
+
+#, fuzzy
+#~| msgid "Come From Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top"
+#~ msgstr "Kom Van Bo"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Right"
+#~ msgstr "Kom Van Regterkant"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "Kleur:"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "Dubbel Pyl"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Vertical"
+#~ msgstr "Open Vertikaal"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Horizontal"
+#~ msgstr "Open Horisontaal"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "Open Vertikaal"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "Open Horisontaal"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical Reverse"
+#~ msgstr "Vertikaal Lyne"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal Reverse"
+#~ msgstr "Horisontaal Lyne"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "Open Vertikaal"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "Open Vertikaal"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "Open Horisontaal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical Reverse"
+#~ msgstr "Vertikaal Lyne"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Reverse"
+#~ msgstr "Horisontaal Lyne"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "Vertikaal Lyne"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "Horisontaal Lyne"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan"
+#~ msgstr "6% Opvul Patroon"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "Vee na die Regterkant"
+
+#, fuzzy
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Top"
+#~ msgstr "Gesentreer"
+
+#, fuzzy
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Left"
+#~ msgstr "Gesentreer"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Top"
+#~ msgstr "Open Horisontaal"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "Open Horisontaal"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Left"
+#~ msgstr "Open Vertikaal"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "Kom Van Regterkant"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Left"
+#~ msgstr "Kom Van Links"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Cover Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "Omhulsel Links"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "Bodem:"
+
+#, fuzzy
+#~| msgid "Cover Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "Omhulsel Regterkant"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Cover Right-Up"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "Omhulsel Right-Up"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "Oplyn Bodem"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "Kom Van Links"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "Kom Van Regterkant"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "Kom Van Regterkant"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "Regterkant:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "Open Vertikaal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "Open Horisontaal"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Reverse"
+#~ msgstr "Horisontaal Lyne"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up Reverse"
+#~ msgstr "Vertikaal Lyne"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reverse"
+#~ msgstr "Vertikaal Lyne"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reverse"
+#~ msgstr "Horisontaal Lyne"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "Dubbel Pyl"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "Vertikaal Lyne"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "Horisontaal Lyne"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "Kom Van Links"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "Kom Van Regterkant"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "Diagonale Gradiënt 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "Hoeke:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "Hoeke:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "Diagonale Gradiënt 1"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Barn Door"
+#~ msgstr "Dubbel Pyl"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Diamond"
+#~ msgstr "Dubbel Pyl"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "Opskrif"
+
+#, fuzzy
+#~| msgid "Set Text Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade over Color"
+#~ msgstr "Stel Teks Kleur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Done"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down"
+#~ msgstr "Klaar"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "Vertikaal Lyne"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "Lengte:"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "Vertikaal Lyne"
+
+#, fuzzy
+#~| msgid "Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Elipse"
+
+#, fuzzy
+#~| msgid "Circle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "Sirkel"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "Vertikaal Lyne"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular"
+#~ msgstr "Driehoek"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "Driehoek"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond"
+#~ msgstr "Dubbel Pyl"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "Horisontaal Lyne"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Allerande"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart"
+#~ msgstr "Opskrif"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "Vertikaal Lyne"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "Vertikaal Lyne"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Aanbieding"
+
+#, fuzzy
+#~| msgid "Sound effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "Klank effek"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "Gaan na Begin"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "Horisontaal Lyne"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "Horisontaal Lyne"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "Horisontaal Lyne"
+
+#, fuzzy
+#~| msgid "Tiled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triangle"
+#~ msgstr "Geteël"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box Snakes"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Box In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top In"
+#~ msgstr "Boks In"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "Bodem:"
+
+#, fuzzy
+#~| msgid "Cover Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "Omhulsel Links"
+
+#, fuzzy
+#~| msgid "Cover Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "Omhulsel Regterkant"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical In"
+#~ msgstr "Open Vertikaal"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "Open Horisontaal"
+
+#, fuzzy
+#~| msgid "Box Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top Out"
+#~ msgstr "Boks Uit"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "Bodem:"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "Open Horisontaal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "Vertikaal Gradiënt"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "Vertikaal Gradiënt"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same In"
+#~ msgstr "Vertikaal Gradiënt"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "Horisontaal Gradiënt"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same Out"
+#~ msgstr "Horisontaal Gradiënt"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same In"
+#~ msgstr "Horisontaal Gradiënt"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same Out"
+#~ msgstr "Horisontaal Gradiënt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite In"
+#~ msgstr "Horisontaal Gradiënt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "Horisontaal Gradiënt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "Vorm"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Vorm"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "Kom Van Links"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "Kom Van Links"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "Kom Van Regterkant"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "Kom Van Regterkant"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "Kom Van Regterkant"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "Kom Van Regterkant"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Vertical"
+#~ msgstr "Open Vertikaal"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Horizontal"
+#~ msgstr "Open Horisontaal"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "Open Vertikaal"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Horizontal"
+#~ msgstr "Open Horisontaal"
+
+#, fuzzy
+#~| msgid "Close Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "Maak toe Vertikaal"
+
+#, fuzzy
+#~| msgid "Close Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Horizontal"
+#~ msgstr "Maak toe Horisontaal"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "Kom Van Bodem"
+
+#, fuzzy
+#~| msgid "Interlocking Horizontal 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "Intersluit Horisontaal 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "Skuif"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space Rotation"
+#~ msgstr "Rotering hoek:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "Opskrif"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "Voetskrif"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgid "Maintainer"
+#~ msgstr "huidige onderhouer"
+
+#, fuzzy
+#~| msgid "KOffice Presentation Tool"
+#~ msgid "Calligra Presentation Tool"
+#~ msgstr "Koffice Aanbieding Program"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "Bladsy"
+
+#~ msgid "File to open"
+#~ msgstr "Lêer na open"
+
+#, fuzzy
+#~ msgid "Set Layout"
+#~ msgstr "Bladsy Uitleg..."
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "Titel:"
+
+#~ msgid "Line"
+#~ msgstr "Lyn"
+
+#~ msgid "Arra&nge Objects"
+#~ msgstr "Rangskik Objekte"
+
+#~ msgid "&Align Objects"
+#~ msgstr "Oplyn Objekte"
+
+#~ msgid "Te&xt"
+#~ msgstr "Teks"
+
+#~ msgid "&Align"
+#~ msgstr "Oplyn"
+
+#~ msgid "T&ype"
+#~ msgstr "Tipe"
+
+#~ msgid "Spellcheck"
+#~ msgstr "Speltoets"
+
+#, fuzzy
+#~ msgid "Autocorrection"
+#~ msgstr "Aktiveer Outokorreksie"
+
+#, fuzzy
+#~ msgid "File"
+#~ msgstr "Titel:"
+
+#, fuzzy
+#~ msgid "Edit"
+#~ msgstr "Einde:"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Voeg by Lêer"
+
+#~ msgid "Tools"
+#~ msgstr "Nutsprogramme"
+
+#~ msgid "Format"
+#~ msgstr "Formaat"
+
+#~ msgid "Text"
+#~ msgstr "Teks"
+
+#, fuzzy
+#~ msgid "Slide Show"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~ msgid "Navigation"
+#~ msgstr "Voltooiïng"
+
+#~ msgid "Vertical Alignment"
+#~ msgstr "Vertikaal Oplyn"
+
+#~ msgid "Flip Objects"
+#~ msgstr "Draai om Objekte"
+
+#, fuzzy
+#~ msgid "&Scale to Show the Picture 1:1 In"
+#~ msgstr "Skaal na vertoon die Prent 1:1 in"
+
+#, fuzzy
+#~ msgid "Spell Check Result"
+#~ msgstr "Spel Toetsing"
+
+#, fuzzy
+#~ msgid "Slide Layouts"
+#~ msgstr "Bladsy Uitleg..."
+
+#, fuzzy
+#~ msgid "Transitions"
+#~ msgstr "Skuif Titel"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete page effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Configure KPresenter..."
+#~ msgid "Configure KPresenter..."
+#~ msgstr "Konfigureer Kpresenter..."
+
+#~ msgid "Slide Title"
+#~ msgstr "Skuif Titel"
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "Deur te kies..."
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "Deur te kies..."
+
+#, fuzzy
+#~ msgid "New Slide Show %1"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete the selected slide show?"
+#~ msgstr "Doen jy wil hê na verwyder die huidige bladsy?"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgid "Confirm action"
+#~ msgstr "Stoor Opstelling..."
+
+#, fuzzy
+#~ msgid "Custom Slideshows editor"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~ msgid "Customs Slideshows"
+#~ msgstr "Skyfievertoning"
+
+#, fuzzy
+#~ msgid "Available Slides"
+#~ msgstr "Duplikaat Bladsy"
+
+#, fuzzy
+#~| msgid "Slide"
+#~ msgid "Add Slide"
+#~ msgstr "Skuif"
+
+#, fuzzy
+#~ msgid "Close"
+#~ msgstr "Kleur:"
+
+#~ msgid "KPresenter"
+#~ msgstr "Kpresenter"
+
+#, fuzzy
+#~| msgid "Set Page Layout"
+#~ msgid "Page Layouts"
+#~ msgstr "Stel Bladsy Uitleg"
+
+#~ msgid "&Page"
+#~ msgstr "Bladsy"
+
+#, fuzzy
+#~ msgid "Click to preview the page effect."
+#~ msgstr "Verander Kas van Teks"
+
+#, fuzzy
+#~ msgid "Spiral Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Snake Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Pentagon Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "RoundRect Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Misc Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Ellipse Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Iris Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Eye Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Hexagon Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Triangle Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Star Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Fan Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Clock Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Double Fan Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Bar Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Slide Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Four Box Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Misc Diagonal Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Barn Vee Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Zig Zag Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Barn Door Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Diagonal Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Vee Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Box Wipe Effect"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Formaat"
+
+#, fuzzy
+#~ msgid "Navigate to:"
+#~ msgstr "Voltooiïng"
+
+#, fuzzy
+#~| msgid "Cover Down"
+#~ msgid "Cover down effect"
+#~ msgstr "Omhulsel Ondertoe"
+
+#, fuzzy
+#~ msgid "Insert &new slide:"
+#~ msgstr "Voeg by nuwe bladsy"
+
+#~ msgid "Use &default template"
+#~ msgstr "Gebruik verstek werkvoorbeeld"
+
+#, fuzzy
+#~ msgid "Use cu&rrent slide as default"
+#~ msgstr "Gebruik Huidige Skuif as Verstek Werkvoorbeeld"
+
+#~ msgid "Choose di&fferent template"
+#~ msgstr "Kies ander werkvoorbeeld"
+
+#, fuzzy
+#~ msgid "A&ngle:"
+#~ msgstr "Hoek:"
+
+#, fuzzy
+#~ msgid " °"
+#~ msgstr "0°"
+
+#~ msgid "Pie"
+#~ msgstr "Pastei"
+
+#, fuzzy
+#~ msgid "&Type:"
+#~ msgstr "Tipe:"
+
+#, fuzzy
+#~ msgid "&Length:"
+#~ msgstr "Lengte:"
+
+#, fuzzy
+#~ msgid "Set here the start position."
+#~ msgstr "Y posisie (%1):"
+
+#, fuzzy
+#~ msgid "Set the arc length of your pie."
+#~ msgstr "Skep Prentjies van die Skyfies"
+
+#, fuzzy
+#~ msgid "Start position:"
+#~ msgstr "Y posisie (%1):"
+
+#, fuzzy
+#~ msgid "Preview"
+#~ msgstr "Vertoon voorskou"
+
+#, fuzzy
+#~ msgid "Channel Intensity"
+#~ msgstr "Verander Links Inkeep"
+
+#, fuzzy
+#~ msgid "Intensity"
+#~ msgstr "Pen styl:"
+
+#, fuzzy
+#~ msgid "Contrast"
+#~ msgstr "Hoeke:"
+
+#, fuzzy
+#~ msgid "Normalize"
+#~ msgstr "Normale"
+
+#, fuzzy
+#~ msgid "Solarize"
+#~ msgstr "Skuif"
+
+#, fuzzy
+#~ msgid "Noise"
+#~ msgstr "Nota"
+
+#, fuzzy
+#~ msgid "Blur"
+#~ msgstr "Petroon"
+
+#, fuzzy
+#~ msgid "Sharpen"
+#~ msgstr "Vorm"
+
+#, fuzzy
+#~ msgid "Shade"
+#~ msgstr "Vorm"
+
+#, fuzzy
+#~ msgid "Value:"
+#~ msgstr "Petroon"
+
+#~ msgid " %"
+#~ msgstr " %"
+
+#, fuzzy
+#~ msgid "Gray"
+#~ msgstr "Gryskleur"
+
+#~ msgid "Color:"
+#~ msgstr "Kleur:"
+
+#, fuzzy
+#~ msgid "Color 1:"
+#~ msgstr "Kleur:"
+
+#, fuzzy
+#~ msgid "Color 2:"
+#~ msgstr "Kleur:"
+
+#, fuzzy
+#~ msgid "Intensity:"
+#~ msgstr "Pen styl:"
+
+#, fuzzy
+#~ msgid "Factor:"
+#~ msgstr "X-faktor:"
+
+#~ msgid "Type:"
+#~ msgstr "Tipe:"
+
+#, fuzzy
+#~ msgid "LaPlace"
+#~ msgstr "Lokalisering"
+
+#, fuzzy
+#~ msgid "Poisson"
+#~ msgstr "Posisie (%1):"
+
+#, fuzzy
+#~ msgid "Color Shading"
+#~ msgstr "Kleur/Gradiënt"
+
+#, fuzzy
+#~ msgid "Azimuth:"
+#~ msgstr "Outeur:"
+
+#~ msgid "Angle:"
+#~ msgstr "Hoek:"
+
+#, fuzzy
+#~ msgid "Wave length:"
+#~ msgstr "Lengte:"
+
+#, fuzzy
+#~ msgid "Pen"
+#~ msgstr "Pen"
+
+#, fuzzy
+#~ msgid "Arrow Style"
+#~ msgstr "Wend aan Styl"
+
+#, fuzzy
+#~ msgid "&Begin:"
+#~ msgstr "Begin:"
+
+#, fuzzy
+#~ msgid "&End:"
+#~ msgstr "Einde:"
+
+#, fuzzy
+#~ msgid "&Width:"
+#~ msgstr "Wydte:"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "Styl"
+
+#, fuzzy
+#~ msgid "C&olor:"
+#~ msgstr "Kleur:"
+
+#, fuzzy
+#~ msgid " pt"
+#~ msgstr "pt"
+
+#, fuzzy
+#~ msgid "Rect"
+#~ msgstr "Driehoek"
+
+#, fuzzy
+#~ msgid "Vertical declination:"
+#~ msgstr "Vertikaal Gradiënt"
+
+#, fuzzy
+#~ msgid "Horizontal declination:"
+#~ msgstr "Horisontaal Gradiënt"
+
+#, fuzzy
+#~ msgid "Set the horizontal declination."
+#~ msgstr "Horisontaal Gradiënt"
+
+#, fuzzy
+#~ msgid "Set the vertical declination."
+#~ msgstr "Vertikaal Gradiënt"
+
+#~ msgid "Polygon"
+#~ msgstr "Poligoon"
+
+#, fuzzy
+#~ msgid "&Sharpness:"
+#~ msgstr "Skerpheid:"
+
+#~ msgid "Brush"
+#~ msgstr "Kwas"
+
+#, fuzzy
+#~ msgid "&Style:"
+#~ msgstr "Styl"
+
+#, fuzzy
+#~ msgid "&Preview"
+#~ msgstr "Vertoon voorskou"
+
+#, fuzzy
+#~ msgid "&Effect:"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "&Speed:"
+#~ msgstr "Vorm"
+
+#, fuzzy
+#~ msgid "So&und effect"
+#~ msgstr "Klank effek"
+
+#, fuzzy
+#~ msgid "&File:"
+#~ msgstr "Titel:"
+
+#, fuzzy
+#~ msgid "Automatic &transition to the next slide after:"
+#~ msgstr "Hand wissel na volgende step"
+
+#~ msgid "Gradient"
+#~ msgstr "Gradiënt"
+
+#, fuzzy
+#~ msgid "Gradient:"
+#~ msgstr "Gradiënt"
+
+#, fuzzy
+#~ msgid "X-fac&tor:"
+#~ msgstr "X-faktor:"
+
+#, fuzzy
+#~ msgid "Un&balanced:"
+#~ msgstr "Ongebalanseerde"
+
+#, fuzzy
+#~ msgid "&Y-factor:"
+#~ msgstr "Y-faktor:"
+
+#, fuzzy
+#~ msgid "Margin"
+#~ msgstr "Kantlyne in %1"
+
+#, fuzzy
+#~ msgid "Margins"
+#~ msgstr "Kantlyne in %1"
+
+#, fuzzy
+#~ msgid "S&ynchronize changes"
+#~ msgstr "Sinkroniseer"
+
+#~ msgid "General"
+#~ msgstr "Algemeen"
+
+#, fuzzy
+#~ msgid "Na&me:"
+#~ msgstr "Nommer"
+
+#, fuzzy
+#~ msgid "Protect si&ze and position"
+#~ msgstr "Beskerm grootte en posisie"
+
+#, fuzzy
+#~ msgid "Keep &aspect ratio"
+#~ msgstr "Hou verhouding"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "Posisie (%1):"
+
+#, fuzzy
+#~ msgid "Shadow"
+#~ msgstr "Vorm"
+
+#~ msgid "Color && Distance"
+#~ msgstr "Kleur && Afstand"
+
+#~ msgid "Distance:"
+#~ msgstr "Afstand:"
+
+#, fuzzy
+#~ msgid "Orientation"
+#~ msgstr "Aanbieding"
+
+#~ msgid "Picture"
+#~ msgstr "Prent"
+
+#~ msgid "Depth"
+#~ msgstr "Diepte"
+
+#, fuzzy
+#~ msgid "&1 bit color mode"
+#~ msgstr "1  bit  kleur modus"
+
+#, fuzzy
+#~ msgid "&8 bit color mode"
+#~ msgstr "8  bit  kleur modus"
+
+#, fuzzy
+#~ msgid "1&6 bit color mode"
+#~ msgstr "16  bit  kleur modus"
+
+#, fuzzy
+#~ msgid "&32 bit color mode"
+#~ msgstr "32  bit  kleur modus"
+
+#, fuzzy
+#~ msgid "&Default color mode"
+#~ msgstr "Verstek kleur modus"
+
+#, fuzzy
+#~ msgid "%"
+#~ msgstr " %"
+
+#, fuzzy
+#~ msgid "Gra&yscale"
+#~ msgstr "Gryskleur"
+
+#, fuzzy
+#~ msgid "&Brightness:"
+#~ msgstr "Helderheid:"
+
+#, fuzzy
+#~ msgid "&Qt::DockLeft:"
+#~ msgstr "Links:"
+
+#, fuzzy
+#~ msgid "Qt::Orientation"
+#~ msgstr "Aanbieding"
+
+#, fuzzy
+#~ msgid "Use slide master background"
+#~ msgstr "Stel Agtergrond"
+
+#~ msgid "Background type:"
+#~ msgstr "Agtergrond tipe:"
+
+#~ msgid "Color/Gradient"
+#~ msgstr "Kleur/Gradiënt"
+
+#~ msgid "Plain"
+#~ msgstr "Eenvoudig"
+
+#~ msgid "Diagonal Gradient 1"
+#~ msgstr "Diagonale Gradiënt 1"
+
+#~ msgid "Diagonal Gradient 2"
+#~ msgstr "Diagonale Gradiënt 2"
+
+#~ msgid "Circle Gradient"
+#~ msgstr "Sirkel Gradiënt"
+
+#~ msgid "Rectangle Gradient"
+#~ msgstr "Driehoek Gradiënt"
+
+#~ msgid "PipeCross Gradient"
+#~ msgstr "Pyp kruising Gradiënt"
+
+#~ msgid "Pyramid Gradient"
+#~ msgstr "Piramiede Gradiënt"
+
+#~ msgid "Unbalanced"
+#~ msgstr "Ongebalanseerde"
+
+#~ msgid "X-factor:"
+#~ msgstr "X-faktor:"
+
+#~ msgid "Y-factor:"
+#~ msgstr "Y-faktor:"
+
+#~ msgid "View mode:"
+#~ msgstr "Besigtig modus:"
+
+#, fuzzy
+#~ msgid "Scaled"
+#~ msgstr "Lokalisering"
+
+#~ msgid "Apply &Global"
+#~ msgstr "Wend aan Globale"
+
+#~ msgid "&Reset"
+#~ msgstr "Herstel"
+
+#, fuzzy
+#~ msgid "Single Color"
+#~ msgstr "Stel Teks Kleur"
+
+#, fuzzy
+#~ msgid "%1% Fill Pattern"
+#~ msgstr "12% Opvul Patroon"
+
+#~ msgid "Crossing Lines"
+#~ msgstr "Kruisende Lyne"
+
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "Diagonale Lyne ( / )"
+
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "Diagonale Lyne ( \\ )"
+
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "Diagonale Kruisende Lyne"
+
+#, fuzzy
+#~ msgid "Diagonal 2"
+#~ msgstr "Diagonale Gradiënt 2"
+
+#, fuzzy
+#~ msgid "PipeCross"
+#~ msgstr "Pyp kruising Gradiënt"
+
+#, fuzzy
+#~ msgid "Pyramid"
+#~ msgstr "Piramiede Gradiënt"
+
+#~ msgid "Resize Object Up"
+#~ msgstr "Hervergroot Voorwerp Begin"
+
+#~ msgid "Resize Object Down"
+#~ msgstr "Hervergroot Voorwerp Ondertoe"
+
+#~ msgid "Resize Object Left"
+#~ msgstr "Hervergroot Voorwerp Links"
+
+#~ msgid "Resize Object Right"
+#~ msgstr "Hervergroot Voorwerp Regterkant"
+
+#, fuzzy
+#~ msgid "Resize Object Left && Up"
+#~ msgstr "Hervergroot Voorwerp Links en Begin"
+
+#, fuzzy
+#~ msgid "Resize Object Left && Down"
+#~ msgstr "Hervergroot Voorwerp Links en Ondertoe"
+
+#, fuzzy
+#~ msgid "Resize Object Right && Up"
+#~ msgstr "Hervergroot Voorwerp Regterkant en Begin"
+
+#, fuzzy
+#~ msgid "Resize Object Right && Down"
+#~ msgstr "Hervergroot Voorwerp Regterkant en Ondertoe"
+
+#, fuzzy
+#~ msgid ""
+#~ "Read-only content cannot be changed. No modifications will be accepted."
+#~ msgstr ""
+#~ "Lees-alleen inhoud kan nie wees het verander. Nee veranderinge sal wees "
+#~ "aanvaar"
+
+#~ msgid "&Drawing Mode"
+#~ msgstr "Teken Modus"
+
+#, fuzzy
+#~ msgid "&Goto Slide..."
+#~ msgstr "Gaan na Bladsy..."
+
+#, fuzzy
+#~ msgid "&End"
+#~ msgstr "Einde:"
+
+#~ msgid "Change Text Font"
+#~ msgstr "Verander Teks Skrif tipe"
+
+#~ msgid "Set Text Background Color"
+#~ msgstr "Stel Teks Agtergrond Kleur"
+
+#~ msgid "Make Text Bold"
+#~ msgstr "Maak Teks Vetdruk"
+
+#~ msgid "Make Text Italic"
+#~ msgstr "Maak Teks Kursief"
+
+#~ msgid "Underline Text"
+#~ msgstr "Onderstreep Teks"
+
+#~ msgid "Set Text Font"
+#~ msgstr "Stel Teks Skrif tipe"
+
+#~ msgid "Change Text Size"
+#~ msgstr "Verander Teks Grootte"
+
+#~ msgid "Set Text Subscript"
+#~ msgstr "Stel Teks Onderskrif"
+
+#~ msgid "Set Text Superscript"
+#~ msgstr "Stel Teks Boskrif"
+
+#~ msgid "Apply Default Format"
+#~ msgstr "Wend aan Verstek Formaat"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "Vermeerder Skrif tipe Grootte"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "Verklein Skrif tipe Grootte"
+
+#~ msgid "Set Text Align"
+#~ msgstr "Stel Teks Oplyn"
+
+#~ msgid "Change Tabulators"
+#~ msgstr "Verander Tabelleerders"
+
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "Vermeerder Paragraaf Diepte"
+
+#~ msgid "Decrease Paragraph Depth"
+#~ msgstr "Verklein Paragraaf Diepte"
+
+#~ msgid "Change First Line Indent"
+#~ msgstr "Verander Eerste Lyn Inkeep"
+
+#~ msgid "Change Left Indent"
+#~ msgstr "Verander Links Inkeep"
+
+#~ msgid "Change Right Indent"
+#~ msgstr "Verander Regterkant Inkeep"
+
+#~ msgid "Printing..."
+#~ msgstr "Besig om te druk..."
+
+#, fuzzy
+#~ msgid "Scale to Original Size"
+#~ msgstr "Skaal na Oorspronklike Grootte"
+
+#, fuzzy
+#~ msgid "Scale Picture to Be Shown 1:1 in Presentation Mode"
+#~ msgstr "Skaal Prent na wees Vertoon 1:1 in Aanbieding Modus"
+
+#~ msgid "Extend Text Contents to Height"
+#~ msgstr "Uitbrei Teks Inhoud na Hoogte"
+
+#~ msgid "Extend Text to Contents"
+#~ msgstr "Uitbrei Teks na Inhoud"
+
+#~ msgid "Align Objects Left"
+#~ msgstr "Oplyn Objekte Links"
+
+#~ msgid "Align Objects Top"
+#~ msgstr "Oplyn Objekte Bo"
+
+#~ msgid "Align Objects Right"
+#~ msgstr "Oplyn Objekte Regterkant"
+
+#~ msgid "Align Objects Bottom"
+#~ msgstr "Oplyn Objekte Bodem"
+
+#~ msgid "Align Objects Centered (horizontal)"
+#~ msgstr "Oplyn Objekte Gesentreer (horisontaal)"
+
+#~ msgid "Align Objects Center/Vertical"
+#~ msgstr "Oplyn Objekte Sentrum/Vertikaal"
+
+#~ msgid "Close Object"
+#~ msgstr "Maak toe Voorwerp"
+
+#~ msgid "Closed Freehand"
+#~ msgstr "Gesluit Vryhand"
+
+#~ msgid "Closed Polyline"
+#~ msgstr "Gesluit Polilyn"
+
+#, fuzzy
+#~ msgid "Modify Slide Transition For All Pages"
+#~ msgstr "Skuif Titel"
+
+#~ msgid "Interface"
+#~ msgstr "Koppelvlak"
+
+#~ msgid "Spelling"
+#~ msgstr "Spelling"
+
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#~ msgid "Document Settings"
+#~ msgstr "Dokument Instellings"
+
+#~ msgid "Default Tools Settings"
+#~ msgstr "Verstek Nutsprogramme Instellings"
+
+#, fuzzy
+#~ msgid "Paths"
+#~ msgstr "Gids soeklys"
+
+#~ msgid "Path Settings"
+#~ msgstr "Gids soeklys Instellings"
+
+#~ msgid "Change Config"
+#~ msgstr "Verander Opstelling"
+
+#~ msgid "Show rulers"
+#~ msgstr "Vertoon lineale"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "Nommer van onlangse lêers:"
+
+#, fuzzy
+#~ msgid "Background object color:"
+#~ msgstr "Agtergrond kleur:"
+
+#~ msgid "Grid color:"
+#~ msgstr "Rooster kleur:"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Herstel/herstel herroep beperk:"
+
+#~ msgid "Display links"
+#~ msgstr "Vertoon skakel"
+
+#~ msgid "&Underline all links"
+#~ msgstr "Onderstreep alle skakel"
+
+#~ msgid "Display comments"
+#~ msgstr "Vertoon kommentaar"
+
+#~ msgid "Display field code"
+#~ msgstr "Vertoon veld kode"
+
+#~ msgid "Grid"
+#~ msgstr "Rooster"
+
+#, fuzzy
+#~ msgid "Vertical grid size:"
+#~ msgstr "Vertikaal Gradiënt"
+
+#~ msgid "Change Display Link Command"
+#~ msgstr "Verander Vertoon Skakel Opdrag"
+
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "Verander Vertoon Veld Kode Opdrag"
+
+#~ msgid "Document Defaults"
+#~ msgstr "Dokument Verstek"
+
+#~ msgid "Default font:"
+#~ msgstr "Verstek skrif tipe:"
+
+#~ msgid "Choose..."
+#~ msgstr "Kies..."
+
+#, fuzzy
+#~ msgid "Create backup file"
+#~ msgstr "Skep Rugsteun Lêer"
+
+#~ msgid "Autosave (min):"
+#~ msgstr "Outostoor (min):"
+
+#~ msgid "No autosave"
+#~ msgstr "Nee outostoor"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "Starting page number:"
+#~ msgstr "Beginne bladsy nommer:"
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "Oortjie stop (%1):"
+
+#~ msgid "Cursor"
+#~ msgstr "Plekaanduier"
+
+#~ msgid "Cursor in protected area"
+#~ msgstr "Plekaanduier in beskerm area"
+
+#~ msgid "Direct insert cursor"
+#~ msgstr "Direkte voeg by plekaanduier"
+
+#~ msgid "Change Starting Page Number"
+#~ msgstr "Verander Beginne Bladsy Nommer"
+
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "Verander Oortjie Stop Waarde"
+
+#, fuzzy
+#~ msgid "Outl&ine"
+#~ msgstr "Buitelyn"
+
+#~ msgid "&Rectangle"
+#~ msgstr "Driehoek"
+
+#, fuzzy
+#~ msgid "Polygo&n"
+#~ msgstr "Poligoon"
+
+#, fuzzy
+#~ msgid "&Pie"
+#~ msgstr "Pastei"
+
+#~ msgid "Type"
+#~ msgstr "Tipe"
+
+#, fuzzy
+#~ msgid "Picture Path"
+#~ msgstr "Prent gids soeklys"
+
+#, fuzzy
+#~ msgid "Backup Path"
+#~ msgstr "Prent gids soeklys"
+
+#, fuzzy
+#~ msgid "Modify Path..."
+#~ msgstr "Verander gids soeklys..."
+
+#, fuzzy
+#~ msgid "&Add..."
+#~ msgstr "Skuif"
+
+#, fuzzy
+#~ msgid "&Modify..."
+#~ msgstr "Verander gids soeklys..."
+
+#, fuzzy
+#~ msgid "&Remove"
+#~ msgstr "Verwyder Skakel"
+
+#, fuzzy
+#~ msgid "Test"
+#~ msgstr "Teks"
+
+#, fuzzy
+#~ msgid "Name:"
+#~ msgstr "Nommer"
+
+#, fuzzy
+#~ msgid "Existing slides:"
+#~ msgstr "Volgende Skuif"
+
+#, fuzzy
+#~ msgid "Custom Slide Show name is already used."
+#~ msgstr "Konfigureer Voltooiïng..."
+
+#, fuzzy
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr "Ongeldige dokument, Dok etiket kort"
+
+#, fuzzy
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr "Ongeldige dokument, Dok etiket kort"
+
+#, fuzzy
+#~ msgid ""
+#~ "You do not appear to have PERL installed.\n"
+#~ "It is needed to convert this document.\n"
+#~ "Please install PERL and try again."
+#~ msgstr ""
+#~ "Jy moet nie verskyn na het Perl geïnstalleer.\n"
+#~ "Dit is benodig na skakel om hierdie dokument.\n"
+#~ "Asseblief installeer Perl en probeer weer."
+
+#, fuzzy
+#~ msgid "Insert Part Object"
+#~ msgstr "Voeg by Groep Voorwerp"
+
+#, fuzzy
+#~ msgid "Invalid document, DOC tag missing."
+#~ msgstr "Ongeldige dokument, Dok etiket kort"
+
+#~ msgid "Paste Objects"
+#~ msgstr "Plak Objekte"
+
+#, fuzzy
+#~ msgid "Set New Options"
+#~ msgstr "Stel nuwe Opsies"
+
+#~ msgid "Insert File"
+#~ msgstr "Voeg by Lêer"
+
+#, fuzzy
+#~ msgid "Insert New Slide"
+#~ msgstr "Voeg by nuwe bladsy"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Duplikaat Voorwerp"
+
+#~ msgid "Number of copies:"
+#~ msgstr "Nommer van kopieër:"
+
+#~ msgid "Rotation angle:"
+#~ msgstr "Rotering hoek:"
+
+#, fuzzy
+#~ msgid "Increase width:"
+#~ msgstr "Vermeerder X (%1):"
+
+#, fuzzy
+#~ msgid "Increase height:"
+#~ msgstr "Vermeerder X (%1):"
+
+#, fuzzy
+#~ msgid "Move X:"
+#~ msgstr "Beweeg X (%1):"
+
+#, fuzzy
+#~ msgid "Move Y:"
+#~ msgstr "Beweeg Y (%1):"
+
+#~ msgid "Appear"
+#~ msgstr "Verskyn"
+
+#~ msgid "Order of appearance:"
+#~ msgstr "Volgorde van voorkoms:"
+
+#~ msgid "Effect (appearing):"
+#~ msgstr "Effek (verskyning):"
+
+#~ msgid "Come From Right/Top"
+#~ msgstr "Kom Van Regterkant/Bo"
+
+#~ msgid "Come From Right/Bottom"
+#~ msgstr "Kom Van Regterkant/Bodem"
+
+#~ msgid "Come From Left/Top"
+#~ msgstr "Kom Van Links/Bo"
+
+#~ msgid "Come From Left/Bottom"
+#~ msgstr "Kom Van Links/Bodem"
+
+#~ msgid "Wipe From Left"
+#~ msgstr "Vee Van Links"
+
+#~ msgid "Wipe From Right"
+#~ msgstr "Vee Van Regterkant"
+
+#~ msgid "Wipe From Top"
+#~ msgstr "Vee Van Bo"
+
+#~ msgid "Wipe From Bottom"
+#~ msgstr "Vee Van Bodem"
+
+#, fuzzy
+#~ msgid "Fast"
+#~ msgstr "Formaat"
+
+#~ msgid "Effect (object specific):"
+#~ msgstr "Effek (voorwerp spesifieke):"
+
+#~ msgid "Paragraph After Paragraph"
+#~ msgstr "Paragraaf Na Paragraaf"
+
+#~ msgid "Timer of the object:"
+#~ msgstr "Tydhouer van die voorwerp:"
+
+#~ msgid "File name:"
+#~ msgstr "Lêer naam:"
+
+#~ msgid "Play"
+#~ msgstr "Speel"
+
+#~ msgid "Disappear"
+#~ msgstr "Verdwyn"
+
+#~ msgid "Effect (disappearing):"
+#~ msgstr "Effek (verdwyning):"
+
+#, fuzzy
+#~ msgid "Disappear to Right"
+#~ msgstr "Verdwyn na die Regterkant"
+
+#, fuzzy
+#~ msgid "Disappear to Left"
+#~ msgstr "Verdwyn na die Links"
+
+#, fuzzy
+#~ msgid "Disappear to Top"
+#~ msgstr "Verdwyn na die Bo"
+
+#, fuzzy
+#~ msgid "Disappear to Bottom"
+#~ msgstr "Verdwyn na die Bodem"
+
+#, fuzzy
+#~ msgid "Disappear to Right/Top"
+#~ msgstr "Verdwyn na die Regterkant/Bo"
+
+#, fuzzy
+#~ msgid "Disappear to Right/Bottom"
+#~ msgstr "Verdwyn na die Regterkant/Bodem"
+
+#, fuzzy
+#~ msgid "Disappear to Left/Top"
+#~ msgstr "Verdwyn na die Links/Bo"
+
+#, fuzzy
+#~ msgid "Disappear to Left/Bottom"
+#~ msgstr "Verdwyn na die Links/Bodem"
+
+#, fuzzy
+#~ msgid "Wipe to Left"
+#~ msgstr "Vee na die Links"
+
+#, fuzzy
+#~ msgid "Wipe to Top"
+#~ msgstr "Vee na die Bo"
+
+#, fuzzy
+#~ msgid "Wipe to Bottom"
+#~ msgstr "Vee na die Bodem"
+
+#~ msgid "Assign Object Effects"
+#~ msgstr "Toeken Voorwerp Effekte"
+
+#~ msgid "*.%1|%2 Files"
+#~ msgstr "*.%1|%2 Lêers"
+
+#, fuzzy
+#~ msgid "All Supported Files"
+#~ msgstr "Alle ondersteunde lêers"
+
+#, fuzzy
+#~ msgid "Image Effect"
+#~ msgstr "Nee Effek"
+
+#~ msgid "Import Style"
+#~ msgstr "In voer Styl"
+
+#, fuzzy
+#~ msgid "File name is empty."
+#~ msgstr "Lêer naam is leeg"
+
+#~ msgid "File is not a KPresenter file!"
+#~ msgstr "Lêer is nie 'n Kpresenter Lêer!"
+
+#~ msgid "Path:"
+#~ msgstr "Gids soeklys:"
+
+#, fuzzy
+#~ msgid "&Set Colors"
+#~ msgstr "Stel Teks Kleur"
+
+#, fuzzy
+#~ msgid "Preliminary Slides"
+#~ msgstr "Vorige Skuif"
+
+#~ msgid "Text color:"
+#~ msgstr "Teks kleur:"
+
+#~ msgid "Background color:"
+#~ msgstr "Agtergrond kleur:"
+
+#, fuzzy
+#~ msgid "Create Memory Stick Slideshow"
+#~ msgstr "Skep Html Skyfievertoning"
+
+#, fuzzy
+#~ msgid "Create pictures of the slides"
+#~ msgstr "Skep Prentjies van die Skyfies"
+
+#, fuzzy
+#~ msgid "Create index file"
+#~ msgstr "Skep Rugsteun Lêer"
+
+#, fuzzy
+#~ msgid "Change Help Line Position"
+#~ msgstr "Verander Hulp Lyn posisie"
+
+#, fuzzy
+#~ msgid "Position:"
+#~ msgstr "Posisie (%1):"
+
+#~ msgid "Add New Help Line"
+#~ msgstr "Voeg by Nuwe Hulp Lyn"
+
+#~ msgid "Add New Help Point"
+#~ msgstr "Voeg by Nuwe Hulp Punt"
+
+#, fuzzy
+#~ msgid "X position:"
+#~ msgstr "X posisie (%1):"
+
+#, fuzzy
+#~ msgid "Y position:"
+#~ msgstr "Y posisie (%1):"
+
+#, fuzzy
+#~ msgid "Slide Note %1:\n"
+#~ msgstr "Skuif %1"
+
+#, fuzzy
+#~ msgid "Master Page Note:\n"
+#~ msgstr "Plak Bladsy"
+
+#~ msgid "Delete Objects"
+#~ msgstr "Uitvee Objekte"
+
+#~ msgid "Resize"
+#~ msgstr "Hervergroot"
+
+#~ msgid "Group Objects"
+#~ msgstr "Groep Objekte"
+
+#~ msgid "Ungroup Objects"
+#~ msgstr "Ontgroep Objekte"
+
+#~ msgid "Lower Objects"
+#~ msgstr "Sagter Objekte"
+
+#~ msgid "Raise Objects"
+#~ msgstr "Lig Objekte"
+
+#~ msgid "Insert Line"
+#~ msgstr "Voeg by Lyn"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Voeg by Driehoek"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Voeg by Elipse"
+
+#~ msgid "Insert Pie/Arc/Chord"
+#~ msgstr "Voeg by Pastei/Boog/Akkoord"
+
+#~ msgid "Insert Textbox"
+#~ msgstr "Voeg by Teksboks"
+
+#~ msgid "Insert Autoform"
+#~ msgstr "Voeg by Outo-vorm"
+
+#~ msgid "Insert Freehand"
+#~ msgstr "Voeg by Vryhand"
+
+#~ msgid "Insert Polyline"
+#~ msgstr "Voeg by Polilyn"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Voeg by Poligoon"
+
+#~ msgid "Insert Closed Freehand"
+#~ msgstr "Voeg by Gesluit Vryhand"
+
+#~ msgid "Insert Closed Polyline"
+#~ msgstr "Voeg by Gesluit Polilyn"
+
+#~ msgid "Embed Object"
+#~ msgstr "Inbed Voorwerp"
+
+#~ msgid "Change Pixmap"
+#~ msgstr "Verander Bispatroon"
+
+#~ msgid "Move Objects"
+#~ msgstr "Beweeg Objekte"
+
+#~ msgid "Change Shadow"
+#~ msgstr "Verander Skadu"
+
+#~ msgid "Change Vertical Alignment"
+#~ msgstr "Verander Vertikaal Oplyn"
+
+#, fuzzy
+#~ msgid "No Outline"
+#~ msgstr "Buitelyn"
+
+#~ msgid "Square"
+#~ msgstr "Vierkantige"
+
+#~ msgid "Line Arrow"
+#~ msgstr "Lyn Pyl"
+
+#~ msgid "Dimension Line"
+#~ msgstr "Dimensie Lyn"
+
+#~ msgid "Double Line Arrow"
+#~ msgstr "Dubbel Lyn Pyl"
+
+#~ msgid "&General"
+#~ msgstr "Algemeen"
+
+#, fuzzy
+#~ msgid "&Transition Type"
+#~ msgstr "Toeken Effekte"
+
+#, fuzzy
+#~ msgid "&Manual transition to next step or slide"
+#~ msgstr "Hand wissel na volgende step"
+
+#~ msgid "&Infinite loop"
+#~ msgstr "Oneindige lus"
+
+#, fuzzy
+#~ msgid "Measure presentation &duration"
+#~ msgstr "Vertoon aanbieding duur"
+
+#~ msgid "Arc"
+#~ msgstr "Boog"
+
+#~ msgid "Chord"
+#~ msgstr "Akkoord"
+
+#, fuzzy
+#~ msgid "Display Duration"
+#~ msgstr "Vertoon skakel"
+
+#, fuzzy
+#~ msgid "Slides in the pages:"
+#~ msgstr "Uitvee Bladsy"
+
+#, fuzzy
+#~ msgid "Draw border around the slides"
+#~ msgstr "Skep Prentjies van die Skyfies"
+
+#~ msgid "Apply Properties"
+#~ msgstr "Wend aan Eienskappe"
+
+#, fuzzy
+#~ msgid "Name Object"
+#~ msgstr "Inbed Voorwerp"
+
+#~ msgid "Protect Object"
+#~ msgstr "Beskerm Voorwerp"
+
+#~ msgid "Keep Ratio"
+#~ msgstr "Hou Verhouding"
+
+#~ msgid "Change Size"
+#~ msgstr "Verander Grootte"
+
+#, fuzzy
+#~ msgid "Pict&ure"
+#~ msgstr "Prent"
+
+#~ msgid "pt"
+#~ msgstr "pt"
+
+#, fuzzy
+#~ msgid "Rename Slide"
+#~ msgstr "Herbenaam Bladsy"
+
+#~ msgid "Slide title:"
+#~ msgstr "Skuif titel:"
+
+#~ msgid "Close From All Directions"
+#~ msgstr "Maak toe Van Alle Rigtings"
+
+#~ msgid "Open From All Directions"
+#~ msgstr "Open Van Alle Rigtings"
+
+#~ msgid "Interlocking Horizontal 2"
+#~ msgstr "Intersluit Horisontaal 2"
+
+#~ msgid "Interlocking Vertical 1"
+#~ msgstr "Intersluit Vertikaal 1"
+
+#~ msgid "Interlocking Vertical 2"
+#~ msgstr "Intersluit Vertikaal 2"
+
+#~ msgid "Surround 1"
+#~ msgstr "Omsingel 1"
+
+#~ msgid "Fly Away 1"
+#~ msgstr "Vlieg Weg 1"
+
+#~ msgid "Cover Up"
+#~ msgstr "Omhulsel Begin"
+
+#~ msgid "Cover Left-Up"
+#~ msgstr "Omhulsel Left-Up"
+
+#~ msgid "Cover Left-Down"
+#~ msgstr "Omhulsel Left-Down"
+
+#~ msgid "Cover Right-Bottom"
+#~ msgstr "Omhulsel Right-Bottom"
+
+#~ msgid "Dissolve"
+#~ msgstr "Oplos"
+
+#, fuzzy
+#~ msgid "Melting"
+#~ msgstr "Spelling"
+
+#~ msgid "Paste Text"
+#~ msgstr "Plak Teks"
+
+#~ msgid "Insert Variable"
+#~ msgstr "Voeg by Veranderlike"
+
+#~ msgid "Protect content"
+#~ msgstr "Beskerm inhoud"
+
+#, fuzzy
+#~ msgid "Effect:"
+#~ msgstr "Nee Effek"
+
+#, fuzzy
+#~ msgid "Remove Slide"
+#~ msgstr "Herbenaam Bladsy"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "Datum"
+
+#, fuzzy
+#~ msgid "Insert new slide"
+#~ msgstr "Voeg by nuwe bladsy"
+
+#~ msgid "Save Picture"
+#~ msgstr "Stoor Prent"
+
+#, fuzzy
+#~ msgid "Save Failed"
+#~ msgstr "Stoor Prent"
+
+#~ msgid "No chart component registered"
+#~ msgstr "Nee kaart komponent geregistreer"
+
+#~ msgid "No table component registered"
+#~ msgstr "Nee tabel komponent geregistreer"
+
+#~ msgid "No formula component registered"
+#~ msgstr "Nee formule komponent geregistreer"
+
+#~ msgid "Autoform-Choose"
+#~ msgstr "Autoform-Choose"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Eienskap"
+
+#, fuzzy
+#~ msgid "Slide Background"
+#~ msgstr "Stel Agtergrond"
+
+#~ msgid ""
+#~ "Do you want to load a previously saved configuration which will be used "
+#~ "for this HTML Presentation?"
+#~ msgstr ""
+#~ "Doen jy wil hê na las 'n vorige gestoor opstelling wat sal wees gebruik "
+#~ "word vir hierdie Html Aanbieding?"
+
+#~ msgid "*.kpweb|KPresenter HTML Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|Kpresenter Html Aanbieding (*.kpweb)"
+
+#~ msgid "Only local files are currently supported."
+#~ msgstr "Slegs plaaslike lêers word huidiglik ondersteunde."
+
+#, fuzzy
+#~ msgid "Object Effect"
+#~ msgstr "Toeken Voorwerp Effekte"
+
+#, fuzzy
+#~ msgid "No Slide"
+#~ msgstr "Skuif"
+
+#~ msgid "Change List Type"
+#~ msgstr "Verander Lys Tipe"
+
+#, fuzzy
+#~ msgid "Change Outline Color"
+#~ msgstr "Verander Pen Kleur"
+
+#, fuzzy
+#~ msgid "Change Fill Color"
+#~ msgstr "Verander Pen Kleur"
+
+#~ msgid "Change Line Begin"
+#~ msgstr "Verander Lyn Begin"
+
+#~ msgid "Change Line End"
+#~ msgstr "Verander Lyn Einde"
+
+#, fuzzy
+#~ msgid "Change Outline Style"
+#~ msgstr "Verander Pen Styl"
+
+#, fuzzy
+#~ msgid "Change Outline Width"
+#~ msgstr "Verander Pen Wydte"
+
+#~ msgid "Show Sidebar"
+#~ msgstr "Vertoon Kantbalk"
+
+#, fuzzy
+#~ msgid "Hide Sidebar"
+#~ msgstr "Kantbalk"
+
+#, fuzzy
+#~ msgid "Hide Notebar"
+#~ msgstr "Steek weg Voetskrif"
+
+#, fuzzy
+#~ msgid "Slide &Master"
+#~ msgstr "Skuif Titel"
+
+#, fuzzy
+#~ msgid "Guide Lines"
+#~ msgstr "Solied Lyn"
+
+#, fuzzy
+#~ msgid "Show &Grid"
+#~ msgstr "Spring na Rooster"
+
+#, fuzzy
+#~ msgid "Hide &Grid"
+#~ msgstr "Steek weg Opskrif"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Spring na Rooster"
+
+#, fuzzy
+#~ msgid "&Slide..."
+#~ msgstr "Skuif"
+
+#~ msgid "P&icture..."
+#~ msgstr "Prent..."
+
+#~ msgid "&Rotate"
+#~ msgstr "Roteer"
+
+#, fuzzy
+#~ msgid "&Zoom"
+#~ msgstr "Zoem:"
+
+#~ msgid "&Shape"
+#~ msgstr "Vorm"
+
+#~ msgid "&Circle/Ellipse"
+#~ msgstr "Sirkel/Elipse"
+
+#~ msgid "&Pie/Arc/Chord"
+#~ msgstr "Pastei/Boog/Akkoord"
+
+#~ msgid "&Text"
+#~ msgstr "Teks"
+
+#~ msgid "Ta&ble"
+#~ msgstr "Tabel"
+
+#~ msgid "&Object"
+#~ msgstr "Voorwerp"
+
+#~ msgid "&Line"
+#~ msgstr "Lyn"
+
+#~ msgid "&Freehand"
+#~ msgstr "Vryhand"
+
+#~ msgid "Po&lyline"
+#~ msgstr "Polilyn"
+
+#~ msgid "Closed &Freehand"
+#~ msgstr "Gesluit Vryhand"
+
+#~ msgid "Closed Po&lyline"
+#~ msgstr "Gesluit Polilyn"
+
+#~ msgid "&Font..."
+#~ msgstr "Skrif tipe..."
+
+#~ msgid "Font Family"
+#~ msgstr "Skrif tipe Familie"
+
+#~ msgid "&Bold"
+#~ msgstr "Vetdruk"
+
+#~ msgid "&Italic"
+#~ msgstr "Kursief"
+
+#~ msgid "&Underline"
+#~ msgstr "Onderstreep"
+
+#~ msgid "&Strike Out"
+#~ msgstr "Slaan Uit"
+
+#~ msgid "&Color..."
+#~ msgstr "Kleur..."
+
+#~ msgid "Align &Left"
+#~ msgstr "Oplyn Links"
+
+#~ msgid "Align &Center"
+#~ msgstr "Oplyn Sentrum"
+
+#~ msgid "Align &Right"
+#~ msgstr "Oplyn Regterkant"
+
+#~ msgid "Align &Block"
+#~ msgstr "Oplyn Blok"
+
+#~ msgid "Number"
+#~ msgstr "Nommer"
+
+#~ msgid "Bullet"
+#~ msgstr "Petroon"
+
+#~ msgid "&Increase Depth"
+#~ msgstr "Vermeerder Diepte"
+
+#~ msgid "&Decrease Depth"
+#~ msgstr "Verklein Diepte"
+
+#~ msgid "Extend Contents to Object &Height"
+#~ msgstr "Uitbrei Inhoud na Voorwerp Hoogte"
+
+#, fuzzy
+#~ msgid "&Extend Object to Fit Contents"
+#~ msgstr "Uitbrei Voorwerp na pas Inhoud"
+
+#, fuzzy
+#~ msgid "&Insert Slide Number"
+#~ msgstr "Voeg by Bladsy Nommer"
+
+#, fuzzy
+#~ msgid "&Properties"
+#~ msgstr "Eienskap"
+
+#~ msgid "Ra&ise Objects"
+#~ msgstr "Lig Objekte"
+
+#~ msgid "&Lower Objects"
+#~ msgstr "Sagter Objekte"
+
+#~ msgid "Bring to Front"
+#~ msgstr "Bring na Voor"
+
+#~ msgid "Send to Back"
+#~ msgstr "Stuur na Terug"
+
+#~ msgid "R&otate Objects..."
+#~ msgstr "Roteer Objekte..."
+
+#~ msgid "&Shadow Objects..."
+#~ msgstr "Skadu Objekte..."
+
+#~ msgid "Align Center (&horizontally)"
+#~ msgstr "Oplyn Sentrum (horisontaal)"
+
+#~ msgid "Align &Top"
+#~ msgstr "Oplyn Bo"
+
+#~ msgid "Align Center (&vertically)"
+#~ msgstr "Oplyn Sentrum (vertikaal)"
+
+#~ msgid "Align &Bottom"
+#~ msgstr "Oplyn Bodem"
+
+#, fuzzy
+#~ msgid "Slide Bac&kground..."
+#~ msgstr "Bladsy Agtergrond..."
+
+#~ msgid "Create &HTML Slideshow..."
+#~ msgstr "Skep Html Skyfievertoning..."
+
+#, fuzzy
+#~ msgid "Create Memor&y Stick Slideshow..."
+#~ msgstr "Skep Html Skyfievertoning..."
+
+#, fuzzy
+#~ msgid "Template Manager"
+#~ msgstr "Werkvoorbeeld Bestuurder..."
+
+#~ msgid "Use Current Slide as Default Template"
+#~ msgstr "Gebruik Huidige Skuif as Verstek Werkvoorbeeld"
+
+#~ msgid "Align O&bjects"
+#~ msgstr "Oplyn Objekte"
+
+#~ msgid "Line Begin"
+#~ msgstr "Lyn Begin"
+
+#~ msgid "Line End"
+#~ msgstr "Lyn Einde"
+
+#, fuzzy
+#~ msgid "Outline Style"
+#~ msgstr "Buitelyn"
+
+#, fuzzy
+#~ msgid "Outline Width"
+#~ msgstr "Buitelyn"
+
+#~ msgid "&Group Objects"
+#~ msgstr "Groep Objekte"
+
+#~ msgid "&Ungroup Objects"
+#~ msgstr "Ontgroep Objekte"
+
+#, fuzzy
+#~ msgid "Edit &Object Effect..."
+#~ msgstr "Toeken Voorwerp Effekte"
+
+#, fuzzy
+#~ msgid "Edit Slide &Transition..."
+#~ msgstr "Skuif Titel"
+
+#~ msgid "&Go to Start"
+#~ msgstr "Gaan na Begin"
+
+#~ msgid "Go to &End"
+#~ msgstr "Gaan na Einde"
+
+#, fuzzy
+#~ msgid "Goto &Slide..."
+#~ msgstr "Gaan na Bladsy..."
+
+#, fuzzy
+#~ msgid "Fill Color..."
+#~ msgstr "Kleur..."
+
+#, fuzzy
+#~ msgid "Outline Color..."
+#~ msgstr "Pen Kleur..."
+
+#~ msgid "&Extend Contents to Object Height"
+#~ msgstr "Uitbrei Inhoud na Voorwerp Hoogte"
+
+#, fuzzy
+#~ msgid "&Resize Object to Fit Contents"
+#~ msgstr "Hervergroot Voorwerp na pas Inhoud"
+
+#, fuzzy
+#~ msgid "&Rename Slide..."
+#~ msgstr "Herbenaam Bladsy..."
+
+#~ msgid "Sca&le to Original Size"
+#~ msgstr "Skaal na Oorspronklike Grootte"
+
+#~ msgid "640x480"
+#~ msgstr "640x480"
+
+#~ msgid "800x600"
+#~ msgstr "800x600"
+
+#~ msgid "1024x768"
+#~ msgstr "1024x768"
+
+#~ msgid "1280x1024"
+#~ msgstr "1280x1024"
+
+#~ msgid "1600x1200"
+#~ msgstr "1600x1200"
+
+#~ msgid "&Change Picture..."
+#~ msgstr "Verander Prent..."
+
+#, fuzzy
+#~ msgid "Image &Effect..."
+#~ msgstr "Toeken Effek..."
+
+#~ msgid "Superscript"
+#~ msgstr "Boskrif"
+
+#~ msgid "Subscript"
+#~ msgstr "Onderskrif"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "Spesiaal Karakter..."
+
+#~ msgid "Link..."
+#~ msgstr "Skakel..."
+
+#~ msgid "Enter Custom Factor..."
+#~ msgstr "Invoer Pasmaak Faktor..."
+
+#, fuzzy
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Outokorreksie..."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "Paragraaf..."
+
+#~ msgid "Default Format"
+#~ msgstr "Verstek Formaat"
+
+#~ msgid "Open Link"
+#~ msgstr "Open Skakel"
+
+#~ msgid "Change Link..."
+#~ msgstr "Verander Skakel..."
+
+#~ msgid "Copy Link"
+#~ msgstr "Kopie Skakel"
+
+#, fuzzy
+#~ msgid "Add to Bookmark"
+#~ msgstr "Voeg by na boekmerk"
+
+#~ msgid "&Custom Variables..."
+#~ msgstr "Pasmaak Veranderlikes..."
+
+#~ msgid "Edit Variable..."
+#~ msgstr "Redigeer Veranderlike..."
+
+#~ msgid "&Variable"
+#~ msgstr "Veranderlike"
+
+#~ msgid "&Property"
+#~ msgstr "Eienskap"
+
+#~ msgid "&Date"
+#~ msgstr "Datum"
+
+#~ msgid "&Time"
+#~ msgstr "Tyd"
+
+#~ msgid "&Refresh All Variables"
+#~ msgstr "Verfris Alle Veranderlikes"
+
+#~ msgid "Change Case..."
+#~ msgstr "Verander Kas..."
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "Zoem:"
+
+#, fuzzy
+#~ msgid "&Style Manager"
+#~ msgstr "Styl Bestuurder..."
+
+#~ msgid "St&yle"
+#~ msgstr "Styl"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Aktiveer Outokorreksie"
+
+#, fuzzy
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Aktiveer Outokorreksie"
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "Voeg by nuwe bladsy:"
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Voeg by nuwe bladsy:"
+
+#, fuzzy
+#~ msgid "Line Break"
+#~ msgstr "Lyn Begin"
+
+#~ msgid "Completion"
+#~ msgstr "Voltooiïng"
+
+#, fuzzy
+#~ msgid "Increase Numbering Level"
+#~ msgstr "Vermeerder Skrif tipe Grootte"
+
+#, fuzzy
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "Verklein Skrif tipe Grootte"
+
+#~ msgid "Comment..."
+#~ msgstr "Kommentaar..."
+
+#~ msgid "Edit Comment..."
+#~ msgstr "Redigeer Kommentaar..."
+
+#, fuzzy
+#~ msgid "Add Guide Line..."
+#~ msgstr "Voeg by Nuwe Hulp Lyn..."
+
+#~ msgid "Remove Comment"
+#~ msgstr "Verwyder Kommentaar"
+
+#, fuzzy
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Kopie Teks Van Kommentaar..."
+
+#~ msgid "&Configure Completion..."
+#~ msgstr "Konfigureer Voltooiïng..."
+
+#~ msgid "Zoom Out"
+#~ msgstr "Zoem Uit"
+
+#~ msgid "Zoom In"
+#~ msgstr "Zoem In"
+
+#, fuzzy
+#~ msgid "Zoom Slide Width"
+#~ msgstr "Zoem Bladsy Wydte"
+
+#, fuzzy
+#~ msgid "Zoom Selected Objects"
+#~ msgstr "Zoem Gekose Voorwerp"
+
+#, fuzzy
+#~ msgid "Zoom Slide Height"
+#~ msgstr "Zoem Bladsy Hoogte"
+
+#~ msgid "Zoom All Objects"
+#~ msgstr "Zoem Alle Objekte"
+
+#~ msgid "Horizontal Flip"
+#~ msgstr "Horisontaal Draai om"
+
+#~ msgid "Vertical Flip"
+#~ msgstr "Vertikaal Draai om"
+
+#, fuzzy
+#~ msgid "Duplicate Object..."
+#~ msgstr "Duplikaat Voorwerp"
+
+#, fuzzy
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Wend aan Outokorreksie..."
+
+#, fuzzy
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Skep Styl Van Keuse"
+
+#~ msgid "Align Top"
+#~ msgstr "Oplyn Bo"
+
+#~ msgid "Align Middle"
+#~ msgstr "Oplyn Middelste"
+
+#~ msgid "Save Picture..."
+#~ msgstr "Stoor Prent..."
+
+#~ msgid "File..."
+#~ msgstr "Lêer..."
+
+#~ msgid "Save Background Picture..."
+#~ msgstr "Stoor Agtergrond Prent..."
+
+#, fuzzy
+#~ msgid "Hide Background"
+#~ msgstr "Stel Agtergrond"
+
+#, fuzzy
+#~ msgid "Display Background"
+#~ msgstr "Bladsy Agtergrond"
+
+#~ msgid "Set Background"
+#~ msgstr "Stel Agtergrond"
+
+#, fuzzy
+#~ msgid "Select New Picture"
+#~ msgstr "Kies nuwe Prent"
+
+#, fuzzy
+#~ msgid "Next slide"
+#~ msgstr "Volgende Skuif"
+
+#~ msgid "Slide %1/%2"
+#~ msgstr "Skuif %1/%2"
+
+#, fuzzy
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr "Voorwerp: %1 - (wydte: %2; hoogte: %3)(%4)"
+
+#, fuzzy
+#~ msgctxt "1 object selected"
+#~ msgid "%n objects selected"
+#~ msgstr "%2 objekte gekose"
+
+#~ msgid "Change Link"
+#~ msgstr "Verander Skakel"
+
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "Korrek Verkeerd gespelde Woord"
+
+#~ msgid "Paragraph Settings"
+#~ msgstr "Paragraaf Instellings"
+
+#~ msgid "Change Custom Variable"
+#~ msgstr "Verander Pasmaak Veranderlike"
+
+#~ msgid "Change Case of Text"
+#~ msgstr "Verander Kas van Teks"
+
+#, fuzzy
+#~ msgid "Whole Slide"
+#~ msgstr "Skuif"
+
+#~ msgid "Presentation Duration"
+#~ msgstr "Aanbieding Duur"
+
+#, fuzzy
+#~ msgid "Enable Document Footer"
+#~ msgstr "Dokument"
+
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Wend aan Styl na Raam"
+
+#, fuzzy
+#~ msgid "Change Note Text"
+#~ msgstr "Verander Kas van Teks"
+
+#, fuzzy
+#~ msgid "Do you want to apply autoformat in new slide?"
+#~ msgstr "Doen jy wil hê na soektog in nuwe bladsy?"
+
+#, fuzzy
+#~ msgid "First"
+#~ msgstr "Formaat"
+
+#, fuzzy
+#~ msgid "Previous"
+#~ msgstr "Vorige Bladsy"
+
+#, fuzzy
+#~ msgid "Next"
+#~ msgstr "Teks"
+
+#, fuzzy
+#~ msgid "Last"
+#~ msgstr "Formaat"
+
+#, fuzzy
+#~ msgid "Home"
+#~ msgstr "Gezoem"
+
+#~ msgid "Table of Contents"
+#~ msgstr "Tabel van Inhoud"
+
+#~ msgid "Click here to start the Slideshow"
+#~ msgstr "Kliek hier na begin die Skyfievertoning"
+
+#, fuzzy
+#~ msgid "Create HTML Slideshow Wizard"
+#~ msgstr "Skep Html Skyfievertoning"
+
+#, fuzzy
+#~ msgid ""
+#~ "Enter your name, email address and the title of the web presentation. "
+#~ "Also enter the output directory where the web presentation should be "
+#~ "saved. "
+#~ msgstr ""
+#~ "Invoer jou naam, e-pos adres en\n"
+#~ "die titel van die web aanbieding.\n"
+#~ "Asook Invoer die gids soeklys binnein wat die\n"
+#~ "web aanbieding moet wees geskep\n"
+#~ "(Hierdie moet wees 'n gids).\n"
+
+#, fuzzy
+#~ msgid "Email address:"
+#~ msgstr "E-pos adres:"
+
+#, fuzzy
+#~ msgid "Step 1: General Information"
+#~ msgstr "Algemeen Informasie"
+
+#, fuzzy
+#~ msgid "You can also specify the zoom for the slides."
+#~ msgstr ""
+#~ "\n"
+#~ "Laastens jy kan asook spesifiseer die zoem\n"
+#~ "vir die skyfies."
+
+#~ msgid "Zoom:"
+#~ msgstr "Zoem:"
+
+#, fuzzy
+#~ msgid "This selection allows you to specify the size of the slide image."
+#~ msgstr ""
+#~ "\n"
+#~ "Laastens jy kan asook spesifiseer die zoem\n"
+#~ "vir die skyfies."
+
+#, fuzzy
+#~ msgid "Encoding:"
+#~ msgstr "Einde:"
+
+#, fuzzy
+#~ msgid "Document type:"
+#~ msgstr "Dokument"
+
+#~ msgid "Title color:"
+#~ msgstr "Titel kleur:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Here you can specify titles for each slide. Click on a slide in the list "
+#~ "and then enter the title in the textbox below. If you click on a title, "
+#~ "KPresenter mainview will display the slide."
+#~ msgstr ""
+#~ "Hier jy kan spesifiseer titels vir\n"
+#~ "elke skuif. Kliek op 'n skuif in\n"
+#~ "die lys en dan word invoer die titel\n"
+#~ "in die teksboks onder. As jy\n"
+#~ "Kliek op 'n titel, die Kpresenter\n"
+#~ "hoofaansig sal rol na hierdie\n"
+#~ "skuif, sodat dit kan wees gesien."
+
+#, fuzzy
+#~ msgid "This selection allows you to specify the time between slides."
+#~ msgstr ""
+#~ "\n"
+#~ "Laastens jy kan asook spesifiseer die zoem\n"
+#~ "vir die skyfies."
+
+#, fuzzy
+#~ msgid "Disabled"
+#~ msgstr "Oplos"
+
+#, fuzzy
+#~ msgid "Write header to the slides"
+#~ msgstr "Skep Prentjies van die Skyfies"
+
+#, fuzzy
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want to write the navigation "
+#~ "buttons on top of the slide."
+#~ msgstr ""
+#~ "\n"
+#~ "Laastens jy kan asook spesifiseer die zoem\n"
+#~ "vir die skyfies."
+
+#, fuzzy
+#~ msgid "Write footer to the slides"
+#~ msgstr "Skep Prentjies van die Skyfies"
+
+#, fuzzy
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want the presentation to start "
+#~ "again once the latest slide is reached."
+#~ msgstr ""
+#~ "\n"
+#~ "Laastens jy kan asook spesifiseer die zoem\n"
+#~ "vir die skyfies."
+
+#, fuzzy
+#~ msgid "Step 5: Options for Unattended Presentations"
+#~ msgstr "Bladsy Opstelling vir Skerm Voorleggings"
+
+#~ msgid "Initialize (create file structure, etc.)"
+#~ msgstr "Inisialiseer (skep lêer struktuur, etc.)"
+
+#~ msgid "Create Pictures of the Slides"
+#~ msgstr "Skep Prentjies van die Skyfies"
+
+#, fuzzy
+#~ msgid "Create HTML Pages for the Slides"
+#~ msgstr "Skep Html bladsye vir die skyfies"
+
+#~ msgid "Create Main Page (Table of Contents)"
+#~ msgstr "Skep Hoof Bladsy (Tabel van Inhoud)"
+
+#, fuzzy
+#~ msgid "Options for Unattended Presentations"
+#~ msgstr "Bladsy Opstelling vir Skerm Voorleggings"
+
+#~ msgid "*.kpweb|KPresenter Web-Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|Kpresenter Web-Presentation (*.kpweb)"
+
+#, fuzzy
+#~ msgid "Save Web Presentation Configuration"
+#~ msgstr "Aanbieding Duur"
+
+#~ msgid "Freehand"
+#~ msgstr "Vryhand"
+
+#~ msgid "Autoform"
+#~ msgstr "Outo-vorm"
+
+#~ msgid "Polyline"
+#~ msgstr "Polilyn"
+
+#~ msgid "Embedded Object"
+#~ msgstr "Ingebedde Voorwerp"
+
+#, fuzzy
+#~| msgid "View mode:"
+#~ msgid "View Mode"
+#~ msgstr "Besigtig modus:"
+
+#, fuzzy
+#~ msgid "Prot&ect content"
+#~ msgstr "Beskerm inhoud"
+
+#, fuzzy
+#~ msgid "Spellchecker Behavior"
+#~ msgstr "Spel toetser gedrag"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Gids soeklys Instellings"

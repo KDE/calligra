@@ -1,0 +1,1059 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2015-02-24 23:22+0100\n"
+"Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-10-22 05:07+0000\n"
+"X-Generator: Launchpad (build 16807)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: actions/AccidentalAction.cpp:54
+#, kde-format
+msgid "Double flat"
+msgstr "Dvostruka snizilica"
+
+#: actions/AccidentalAction.cpp:55
+#, kde-format
+msgctxt "lowered half a step"
+msgid "Flat"
+msgstr "Snizilica"
+
+#: actions/AccidentalAction.cpp:56
+#, kde-format
+msgid "Natural"
+msgstr "Razrješnica"
+
+#: actions/AccidentalAction.cpp:57
+#, kde-format
+msgctxt "raised half a step"
+msgid "Sharp"
+msgstr "Povisilica"
+
+#: actions/AccidentalAction.cpp:58
+#, kde-format
+msgid "Double sharp"
+msgstr "Dvostruka povisilica"
+
+#: actions/AccidentalAction.cpp:61 actions/KeySignatureAction.cpp:38
+#, kde-format
+msgid "%1 flats"
+msgstr "%1 razrešnica"
+
+#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:39
+#, kde-format
+msgid "%1 sharps"
+msgstr "%1 povisilica"
+
+#: actions/DotsAction.cpp:34
+#, kde-format
+msgid "Dots"
+msgstr "Tačke"
+
+#: actions/EraserAction.cpp:36
+#, kde-format
+msgid "Eraser"
+msgstr "Brisač"
+
+#: actions/KeySignatureAction.cpp:28
+#, kde-format
+msgid "Ab Major"
+msgstr "Ab Dur"
+
+#: actions/KeySignatureAction.cpp:29
+#, kde-format
+msgid "Eb Major"
+msgstr "Eb Dur"
+
+#: actions/KeySignatureAction.cpp:30
+#, kde-format
+msgid "Bb Major"
+msgstr "Bb Dur"
+
+#: actions/KeySignatureAction.cpp:31
+#, kde-format
+msgid "F Major"
+msgstr "F Dur"
+
+#: actions/KeySignatureAction.cpp:32
+#, kde-format
+msgid "C Major"
+msgstr "C Dur"
+
+#: actions/KeySignatureAction.cpp:33
+#, kde-format
+msgid "G Major"
+msgstr "G Dur"
+
+#: actions/KeySignatureAction.cpp:34
+#, kde-format
+msgid "D Major"
+msgstr "D Dur"
+
+#: actions/KeySignatureAction.cpp:35
+#, kde-format
+msgid "A Major"
+msgstr "A Dur"
+
+#: actions/KeySignatureAction.cpp:36
+#, kde-format
+msgid "E Major"
+msgstr "E Dur"
+
+#: actions/KeySignatureAction.cpp:49
+#, kde-format
+msgctxt "Other key signature"
+msgid "Other"
+msgstr "Ostalo"
+
+#: actions/NoteEntryAction.cpp:55
+#, kde-format
+msgid "note"
+msgstr "nota"
+
+#: actions/NoteEntryAction.cpp:55
+#, kde-format
+msgid "rest"
+msgstr "pauza"
+
+#: actions/NoteEntryAction.cpp:57
+#, kde-format
+msgid "Double whole "
+msgstr "Dvostruka cijela "
+
+#: actions/NoteEntryAction.cpp:58
+#, kde-format
+msgid "Whole "
+msgstr "Cijela "
+
+#: actions/NoteEntryAction.cpp:59
+#, kde-format
+msgid "Half "
+msgstr "Polovinka "
+
+#: actions/NoteEntryAction.cpp:60
+#, kde-format
+msgid "Quarter "
+msgstr "Četvrintka "
+
+#: actions/NoteEntryAction.cpp:61
+#, kde-format
+msgid "Eighth "
+msgstr "Osminka "
+
+#: actions/NoteEntryAction.cpp:62
+#, kde-format
+msgid "16th "
+msgstr "Šesnaestinka "
+
+#: actions/NoteEntryAction.cpp:63
+#, kde-format
+msgid "32nd "
+msgstr "tridesetdvojinka "
+
+#: actions/NoteEntryAction.cpp:64
+#, kde-format
+msgid "64th "
+msgstr "šezdesetčetvrtinka "
+
+#: actions/NoteEntryAction.cpp:65
+#, kde-format
+msgid "128th "
+msgstr "stodvadesetosminka "
+
+#: actions/NoteEntryAction.cpp:67
+#, kde-format
+msgid "Unknown note"
+msgstr "Nepoznata nota"
+
+#: actions/NoteEntryAction.cpp:67
+#, kde-format
+msgid "Unknown rest"
+msgstr "Nepoznata pauza"
+
+#: actions/RemoveBarAction.cpp:22
+#, kde-format
+msgid "Remove bar"
+msgstr "Ukloni taktnicu"
+
+#: actions/SelectionAction.cpp:32
+#, kde-format
+msgid "Select"
+msgstr "Odaberi"
+
+#: actions/SetClefAction.cpp:39
+#, kde-format
+msgctxt "Treble clef"
+msgid "Treble"
+msgstr "Sopran"
+
+#: actions/SetClefAction.cpp:40
+#, kde-format
+msgctxt "Bass clef"
+msgid "Bass"
+msgstr "Bas"
+
+#: actions/SetClefAction.cpp:43
+#, kde-format
+msgctxt "Soprano clef"
+msgid "Soprano"
+msgstr "Sopran"
+
+#: actions/SetClefAction.cpp:44
+#, kde-format
+msgctxt "Alto clef"
+msgid "Alto"
+msgstr "Alt"
+
+#: actions/SetClefAction.cpp:45
+#, kde-format
+msgctxt "Tenor clef"
+msgid "Tenor"
+msgstr "Tenor"
+
+#: actions/SetClefAction.cpp:46
+#, kde-format
+msgid "C clef on line %1"
+msgstr "C ključ u liniji %1"
+
+#: actions/SetClefAction.cpp:49
+#, kde-format
+msgid "Unknown clef"
+msgstr "Nepoznati ključ"
+
+#: actions/TiedNoteAction.cpp:33
+#, kde-format
+msgid "Tied notes"
+msgstr "Ligature"
+
+#: commands/AddBarsCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Add measures"
+msgstr "Dodaj mjere"
+
+#: commands/AddDotCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Add dot"
+msgstr "Dodaj tačku"
+
+#: commands/AddNoteCommand.cpp:29
+msgctxt "(qtundo-format)"
+msgid "Set chord duration"
+msgstr "Postavi trajanje akorda"
+
+#: commands/AddNoteCommand.cpp:31
+msgctxt "(qtundo-format)"
+msgid "Add note"
+msgstr "Dodaj notu"
+
+#: commands/AddPartCommand.cpp:25
+msgctxt "(qtundo-format)"
+msgid "Add part"
+msgstr "Dodaj partituru"
+
+#: commands/AddPartCommand.cpp:26
+#, kde-format
+msgid "Part %1"
+msgstr "Dio %1"
+
+#: commands/ChangePartDetailsCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Change part details"
+msgstr "Promjena detalja partiture"
+
+#: commands/CreateChordCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Add chord"
+msgstr "Dodaj akord"
+
+#: commands/CreateChordCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Add rest"
+msgstr "Dodaj pauzu"
+
+#: commands/MakeRestCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Convert chord to rest"
+msgstr "Pretvori akord u pauzu"
+
+#: commands/RemoveBarCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Remove bar"
+msgstr "Ukloni taktnicu"
+
+#: commands/RemoveChordCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove rest"
+msgstr "Ukloni pauzu"
+
+#: commands/RemoveChordCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Remove chord"
+msgstr "Ukloni akord"
+
+#: commands/RemoveNoteCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove note"
+msgstr "Ukloni notu"
+
+#: commands/RemovePartCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Remove part"
+msgstr "Ukloni partituru"
+
+#: commands/RemoveStaffElementCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Remove clef"
+msgstr "Ukloni ključ"
+
+#: commands/RemoveStaffElementCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Remove staff element"
+msgstr "Ukloni dionicu"
+
+#: commands/SetAccidentalsCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Set accidentals"
+msgstr "Postavi povisilicu/snizilicu"
+
+#: commands/SetClefCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change clef"
+msgstr "Promijeni ključ"
+
+#: commands/SetKeySignatureCommand.cpp:25
+#: commands/SetKeySignatureCommand.cpp:72
+msgctxt "(qtundo-format)"
+msgid "Change key signature"
+msgstr "Promijeni tonalitet"
+
+#: commands/SetTimeSignatureCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Change time signature"
+msgstr "Promiijeni oznaku mjere"
+
+#: commands/ToggleTiedNoteCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Toggle Note Tie"
+msgstr "Uključi/isključi ligature"
+
+#: dialogs/KeySignatureDialog.cpp:15
+#, kde-format
+msgid "Set key signature"
+msgstr "Postavi oznaku tonaliteta"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/KeySignatureDialog.ui:63
+#, kde-format
+msgid "Region"
+msgstr "Region"
+
+#. i18n: ectx: property (text), widget (QRadioButton, throughBar)
+#. i18n: ectx: property (text), widget (QRadioButton, throughEndOfPiece)
+#. i18n: ectx: property (text), widget (QRadioButton, toNextChange)
+#: dialogs/KeySignatureDialog.ui:71 dialogs/KeySignatureDialog.ui:122
+#: dialogs/KeySignatureDialog.ui:163
+#, kde-format
+msgid "Measure"
+msgstr "Mjera"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/KeySignatureDialog.ui:88
+#, kde-format
+msgid "through"
+msgstr "do"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/KeySignatureDialog.ui:139
+#, kde-format
+msgid "through end of piece"
+msgstr "do kraja dijela"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/KeySignatureDialog.ui:180
+#, kde-format
+msgid "to next key change"
+msgstr "do sljedeće promjene tonaliteta"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/KeySignatureDialog.ui:205
+#, kde-format
+msgid "Staves"
+msgstr "Dionice"
+
+#. i18n: ectx: property (text), widget (QRadioButton, allStaves)
+#: dialogs/KeySignatureDialog.ui:211
+#, kde-format
+msgid "Update all staves"
+msgstr "Ažuriraj sve dionice"
+
+#. i18n: ectx: property (text), widget (QRadioButton, selectedStaff)
+#: dialogs/KeySignatureDialog.ui:221
+#, kde-format
+msgid "Only update selected staff"
+msgstr "Ažuriraj samo odabrane dionice"
+
+#: dialogs/PartDetailsDialog.cpp:19
+#, kde-format
+msgid "Part details"
+msgstr "Detalji partiture"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/PartDetailsDialog.ui:18
+#, kde-format
+msgid "Name:"
+msgstr "Naziv:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/PartDetailsDialog.ui:34
+#, kde-format
+msgid "Short name:"
+msgstr "Kratko ime:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/PartDetailsDialog.ui:50
+#, kde-format
+msgid "Staves:"
+msgstr "Dionice:"
+
+#. i18n: ectx: property (text), widget (QToolButton, editPart)
+#. i18n: ectx: property (text), widget (QToolButton, addPart)
+#. i18n: ectx: property (text), widget (QToolButton, removePart)
+#: dialogs/PartsWidget.ui:37 dialogs/PartsWidget.ui:44
+#: dialogs/PartsWidget.ui:54
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:187
+#, kde-format
+msgid "Voice 1"
+msgstr "1. glas"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:192
+#, kde-format
+msgid "Voice 2"
+msgstr "2. glas"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:197
+#, kde-format
+msgid "Voice 3"
+msgstr "3. glas"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:202
+#, kde-format
+msgid "Voice 4"
+msgstr "4. glas"
+
+#. i18n: ectx: property (text), widget (QToolButton, addBarsButton)
+#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:86
+#: SimpleEntryTool.cpp:678
+#, kde-format
+msgid "Add measures"
+msgstr "Dodaj mjere"
+
+#. i18n: ectx: property (text), widget (QToolButton, importButton)
+#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:78
+#, kde-format
+msgid "Import"
+msgstr "Uvezi"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportButton)
+#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:82
+#, kde-format
+msgid "Export"
+msgstr "Izvezi"
+
+#: MusicShape.cpp:71
+#, kde-format
+msgid "Part 1"
+msgstr "Dio 1"
+
+#: MusicShapeFactory.cpp:36
+#, kde-format
+msgid "Music Shape"
+msgstr "Muzički oblik"
+
+#: MusicShapeFactory.cpp:38
+#, kde-format
+msgid "A shape which provides a music editor"
+msgstr "Oblik koga daje uređivač muzike"
+
+#: MusicTool.cpp:85
+#, kde-format
+msgid "Parts"
+msgstr "Partiture"
+
+#: MusicToolFactory.cpp:19
+#, kde-format
+msgid "Music editing, parts"
+msgstr "Uređivanje muzike, partiture"
+
+#: SimpleEntryTool.cpp:226
+#, kde-format
+msgid "Clef"
+msgstr "Muzički ključ"
+
+#: SimpleEntryTool.cpp:255
+#, kde-format
+msgid "Time signature"
+msgstr "Takt"
+
+#: SimpleEntryTool.cpp:285
+#, kde-format
+msgid "Key signature"
+msgstr "Tonalitet"
+
+#: SimpleEntryTool.cpp:679
+#, kde-format
+msgid "Add how many measures?"
+msgstr "Koliko mjera dodati?"
+
+#: SimpleEntryTool.cpp:743
+#, kde-format
+msgctxt "@title:window"
+msgid "Import"
+msgstr "Uvezi"
+
+#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:760
+#, fuzzy, kde-format
+#| msgid "*xml|MusicXML files (*.xml)"
+msgid "MusicXML files (*.xml)"
+msgstr "*xml|MusicXML datoteke (*.xml)"
+
+#: SimpleEntryTool.cpp:760
+#, kde-format
+msgctxt "@title:window"
+msgid "Export"
+msgstr "Izvezi"
+
+#: SimpleEntryToolFactory.cpp:18
+#, kde-format
+msgid "Music editing"
+msgstr "Uređenje muzike"
+
+#, fuzzy
+#~| msgid "Region"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Region"
+#~ msgstr "Region"
+
+#, fuzzy
+#~| msgid "Measure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Measure"
+#~ msgstr "Mjera"
+
+#, fuzzy
+#~| msgid "through"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "through"
+#~ msgstr "do"
+
+#, fuzzy
+#~| msgid "through end of piece"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "through end of piece"
+#~ msgstr "do kraja dijela"
+
+#, fuzzy
+#~| msgid "to next key change"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "to next key change"
+#~ msgstr "do sljedeće promjene tonaliteta"
+
+#, fuzzy
+#~| msgid "Staves"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Staves"
+#~ msgstr "Dionice"
+
+#, fuzzy
+#~| msgid "Update all staves"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Update all staves"
+#~ msgstr "Ažuriraj sve dionice"
+
+#, fuzzy
+#~| msgid "Only update selected staff"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Only update selected staff"
+#~ msgstr "Ažuriraj samo odabrane dionice"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Naziv:"
+
+#, fuzzy
+#~| msgid "Short name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short name:"
+#~ msgstr "Kratko ime:"
+
+#, fuzzy
+#~| msgid "Staves:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Staves:"
+#~ msgstr "Dionice:"
+
+#, fuzzy
+#~| msgid "Voice 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 1"
+#~ msgstr "1. glas"
+
+#, fuzzy
+#~| msgid "Voice 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 2"
+#~ msgstr "2. glas"
+
+#, fuzzy
+#~| msgid "Voice 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 3"
+#~ msgstr "3. glas"
+
+#, fuzzy
+#~| msgid "Voice 4"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 4"
+#~ msgstr "4. glas"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Double flat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double flat"
+#~ msgstr "Dvostruka snizilica"
+
+#, fuzzy
+#~| msgctxt "lowered half a step"
+#~| msgid "Flat"
+#~ msgctxt "(qtundo-format) lowered half a step"
+#~ msgid "Flat"
+#~ msgstr "Snizilica"
+
+#, fuzzy
+#~| msgid "Natural"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Natural"
+#~ msgstr "Razrješnica"
+
+#, fuzzy
+#~| msgctxt "raised half a step"
+#~| msgid "Sharp"
+#~ msgctxt "(qtundo-format) raised half a step"
+#~ msgid "Sharp"
+#~ msgstr "Povisilica"
+
+#, fuzzy
+#~| msgid "Double sharp"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double sharp"
+#~ msgstr "Dvostruka povisilica"
+
+#, fuzzy
+#~| msgid "%1 flats"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 flats"
+#~ msgstr "%1 razrešnica"
+
+#, fuzzy
+#~| msgid "%1 sharps"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 sharps"
+#~ msgstr "%1 povisilica"
+
+#, fuzzy
+#~| msgid "Dots"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dots"
+#~ msgstr "Tačke"
+
+#, fuzzy
+#~| msgid "Eraser"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eraser"
+#~ msgstr "Brisač"
+
+#, fuzzy
+#~| msgid "Ab Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ab Major"
+#~ msgstr "Ab Dur"
+
+#, fuzzy
+#~| msgid "Eb Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eb Major"
+#~ msgstr "Eb Dur"
+
+#, fuzzy
+#~| msgid "Bb Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bb Major"
+#~ msgstr "Bb Dur"
+
+#, fuzzy
+#~| msgid "F Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F Major"
+#~ msgstr "F Dur"
+
+#, fuzzy
+#~| msgid "C Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C Major"
+#~ msgstr "C Dur"
+
+#, fuzzy
+#~| msgid "G Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "G Major"
+#~ msgstr "G Dur"
+
+#, fuzzy
+#~| msgid "D Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D Major"
+#~ msgstr "D Dur"
+
+#, fuzzy
+#~| msgid "A Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A Major"
+#~ msgstr "A Dur"
+
+#, fuzzy
+#~| msgid "E Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E Major"
+#~ msgstr "E Dur"
+
+#, fuzzy
+#~| msgctxt "Other key signature"
+#~| msgid "Other"
+#~ msgctxt "(qtundo-format) Other key signature"
+#~ msgid "Other"
+#~ msgstr "Ostalo"
+
+#, fuzzy
+#~| msgid "note"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "note"
+#~ msgstr "nota"
+
+#, fuzzy
+#~| msgid "rest"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "rest"
+#~ msgstr "pauza"
+
+#, fuzzy
+#~| msgid "Double whole "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double whole "
+#~ msgstr "Dvostruka cijela "
+
+#, fuzzy
+#~| msgid "Whole "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whole "
+#~ msgstr "Cijela "
+
+#, fuzzy
+#~| msgid "Half "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Half "
+#~ msgstr "Polovinka "
+
+#, fuzzy
+#~| msgid "Quarter "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quarter "
+#~ msgstr "Četvrintka "
+
+#, fuzzy
+#~| msgid "Eighth "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eighth "
+#~ msgstr "Osminka "
+
+#, fuzzy
+#~| msgid "16th "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "16th "
+#~ msgstr "Šesnaestinka "
+
+#, fuzzy
+#~| msgid "32nd "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "32nd "
+#~ msgstr "tridesetdvojinka "
+
+#, fuzzy
+#~| msgid "64th "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "64th "
+#~ msgstr "šezdesetčetvrtinka "
+
+#, fuzzy
+#~| msgid "128th "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "128th "
+#~ msgstr "stodvadesetosminka "
+
+#, fuzzy
+#~| msgid "Unknown note"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown note"
+#~ msgstr "Nepoznata nota"
+
+#, fuzzy
+#~| msgid "Unknown rest"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown rest"
+#~ msgstr "Nepoznata pauza"
+
+#, fuzzy
+#~| msgid "Select"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select"
+#~ msgstr "Odaberi"
+
+#, fuzzy
+#~| msgctxt "Treble clef"
+#~| msgid "Treble"
+#~ msgctxt "(qtundo-format) Treble clef"
+#~ msgid "Treble"
+#~ msgstr "Sopran"
+
+#, fuzzy
+#~| msgctxt "Bass clef"
+#~| msgid "Bass"
+#~ msgctxt "(qtundo-format) Bass clef"
+#~ msgid "Bass"
+#~ msgstr "Bas"
+
+#, fuzzy
+#~| msgctxt "Soprano clef"
+#~| msgid "Soprano"
+#~ msgctxt "(qtundo-format) Soprano clef"
+#~ msgid "Soprano"
+#~ msgstr "Sopran"
+
+#, fuzzy
+#~| msgctxt "Alto clef"
+#~| msgid "Alto"
+#~ msgctxt "(qtundo-format) Alto clef"
+#~ msgid "Alto"
+#~ msgstr "Alt"
+
+#, fuzzy
+#~| msgctxt "Tenor clef"
+#~| msgid "Tenor"
+#~ msgctxt "(qtundo-format) Tenor clef"
+#~ msgid "Tenor"
+#~ msgstr "Tenor"
+
+#, fuzzy
+#~| msgid "C clef on line %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C clef on line %1"
+#~ msgstr "C ključ u liniji %1"
+
+#, fuzzy
+#~| msgid "Unknown clef"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown clef"
+#~ msgstr "Nepoznati ključ"
+
+#, fuzzy
+#~| msgid "Tied notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tied notes"
+#~ msgstr "Ligature"
+
+#, fuzzy
+#~| msgid "Part %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Part %1"
+#~ msgstr "Dio %1"
+
+#, fuzzy
+#~| msgid "Set key signature"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set key signature"
+#~ msgstr "Postavi oznaku tonaliteta"
+
+#, fuzzy
+#~| msgid "Part details"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Part details"
+#~ msgstr "Detalji partiture"
+
+#, fuzzy
+#~| msgid "Part 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Part 1"
+#~ msgstr "Dio 1"
+
+#, fuzzy
+#~| msgid "Music Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Music Shape"
+#~ msgstr "Muzički oblik"
+
+#, fuzzy
+#~| msgid "A shape which provides a music editor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape which provides a music editor"
+#~ msgstr "Oblik koga daje uređivač muzike"
+
+#, fuzzy
+#~| msgid "Parts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parts"
+#~ msgstr "Partiture"
+
+#, fuzzy
+#~| msgid "Music editing, parts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Music editing, parts"
+#~ msgstr "Uređivanje muzike, partiture"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Uvezi"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Izvezi"
+
+#, fuzzy
+#~| msgid "Clef"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clef"
+#~ msgstr "Muzički ključ"
+
+#, fuzzy
+#~| msgid "Time signature"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time signature"
+#~ msgstr "Takt"
+
+#, fuzzy
+#~| msgid "Key signature"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Key signature"
+#~ msgstr "Tonalitet"
+
+#, fuzzy
+#~| msgid "Add how many measures?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add how many measures?"
+#~ msgstr "Koliko mjera dodati?"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Import"
+#~ msgstr "Uvezi"
+
+#, fuzzy
+#~| msgid "*xml|MusicXML files (*.xml)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "MusicXML files (*.xml)"
+#~ msgstr "*xml|MusicXML datoteke (*.xml)"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Export"
+#~ msgstr "Izvezi"
+
+#, fuzzy
+#~| msgid "Music editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Music editing"
+#~ msgstr "Uređenje muzike"
+
+#~ msgid "Add dot"
+#~ msgstr "Dodaj tačku"
+
+#~ msgid "Set chord duration"
+#~ msgstr "Postavi trajanje akorda"
+
+#~ msgid "Add note"
+#~ msgstr "Dodaj notu"
+
+#~ msgid "Add part"
+#~ msgstr "Dodaj partituru"
+
+#~ msgid "Change part details"
+#~ msgstr "Promjena detalja partiture"
+
+#~ msgid "Add chord"
+#~ msgstr "Dodaj akord"
+
+#~ msgid "Add rest"
+#~ msgstr "Dodaj pauzu"
+
+#~ msgid "Convert chord to rest"
+#~ msgstr "Pretvori akord u pauzu"
+
+#~ msgid "Remove rest"
+#~ msgstr "Ukloni pauzu"
+
+#~ msgid "Remove chord"
+#~ msgstr "Ukloni akort"
+
+#~ msgid "Remove note"
+#~ msgstr "Ukloni notu"
+
+#~ msgid "Remove part"
+#~ msgstr "Ukloni partituru"
+
+#~ msgid "Remove clef"
+#~ msgstr "Ukloni ključ"
+
+#~ msgid "Remove staff element"
+#~ msgstr "Ukloni dionicu"
+
+#~ msgid "Set accidentals"
+#~ msgstr "Postavi povisilicu/snizilicu"
+
+#~ msgid "Change clef"
+#~ msgstr "Promijeni ključ"
+
+#~ msgid "Change key signature"
+#~ msgstr "Promijeni tonalitet"
+
+#~ msgid "Change time signature"
+#~ msgstr "Promiijeni oznaku mjere"
+
+#~ msgid "Toggle Note Tie"
+#~ msgstr "Uključi/isključi ligature"

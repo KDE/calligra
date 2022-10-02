@@ -1,0 +1,76 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Andrew Coles <andrew_coles@yahoo.co.uk>, 2010.
+# Steve Allewell <steve.allewell@gmail.com>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2014-07-01 22:26+0100\n"
+"Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
+"Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: ChangeVectorDataCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change Vector Data"
+msgstr "Change Vector Data"
+
+#: VectorShapeFactory.cpp:27
+#, kde-format
+msgid "Vector image"
+msgstr "Vector image"
+
+#: VectorShapeFactory.cpp:29
+#, kde-format
+msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+msgstr "A shape that shows a vector image (EMF/WMF/SVM)"
+
+#: VectorTool.cpp:64
+#, kde-format
+msgid "Open Vector Image (EMF/WMF/SVM)"
+msgstr "Open Vector Image (EMF/WMF/SVM)"
+
+#: VectorToolFactory.cpp:20
+#, kde-format
+msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+msgstr "Vector Image (EMF/WMF/SVM/SVG) tool"
+
+#, fuzzy
+#~| msgid "Vector image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector image"
+#~ msgstr "Vector image"
+
+#, fuzzy
+#~| msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgstr "A shape that shows a vector image (EMF/WMF/SVM)"
+
+#, fuzzy
+#~| msgid "Open Vector Image (EMF/WMF/SVM)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Vector Image (EMF/WMF/SVM)"
+#~ msgstr "Open Vector Image (EMF/WMF/SVM)"
+
+#, fuzzy
+#~| msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+#~ msgstr "Vector Image (EMF/WMF/SVM/SVG) tool"
+
+#, fuzzy
+#~| msgid "Vector image tool"
+#~ msgid "EMF/WMF Vector Shape tool"
+#~ msgstr "Vector image tool"
+
+#~ msgid "Vector image selection tool"
+#~ msgstr "Vector image selection tool"

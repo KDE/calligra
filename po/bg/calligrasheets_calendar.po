@@ -1,0 +1,122 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Yasen Pramatarov <yasen@lindeas.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: CalendarTool\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2009-06-15 10:00+0300\n"
+"Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
+"Language-Team: Bulgarian <dict@fsa-bg.org>\n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: CalendarTool.cpp:63
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+"Крайната дата е преди началната дата. Моля, задайте валидни начална и крайна "
+"дата."
+
+#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#, kde-format
+msgid "Error"
+msgstr "Грешка"
+
+#: CalendarTool.cpp:68
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+"Периодът от време не може да бъде по-голям от 10 години. Ако имате нужда от "
+"такъв голям период, трябва да го разделите и да го вмъкнете всеки подпериод "
+"отделно."
+
+#: CalendarTool.cpp:73
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+"Началната и крайната дата са един и същи ден. Ще бъдат вмъкнати данните само "
+"за този ден. Сигурни ли сте, че искате да продължите?"
+
+#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#, kde-format
+msgid "Warning"
+msgstr "Предупреждение"
+
+#: CalendarTool.cpp:78
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+"Вмъкването на период по-голям от година може да отнеме много време. Сигурни "
+"ли сте, че искате да продължите?"
+
+#: CalendarTool.cpp:95
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+"Областта, в която искате да вмъкнете данните, не е празна. Сигурни ли сте, "
+"че искате да продължите? Ако изберете \"Не\", ще може да видите областта, "
+"която ще се запълни и съответно данните, които ще се изгубят."
+
+#: CalendarTool.cpp:102
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "Вмъкване на календар"
+
+#: CalendarTool.cpp:108
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "Календар от %1 до %2"
+
+#: CalendarTool.cpp:150
+#, kde-format
+msgid "week"
+msgstr "седмица"
+
+#: CalendarToolFactory.cpp:24
+#, fuzzy, kde-format
+msgid "Calendar"
+msgstr "Календар"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:14
+#, kde-format
+msgid "Calendar Tool"
+msgstr "Календар"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:20
+#, kde-format
+msgid "Insert"
+msgstr "Вмъкване"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:27
+#, kde-format
+msgid "End date:"
+msgstr "Крайна дата:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:47
+#, kde-format
+msgid "Start date:"
+msgstr "Начална дата:"

@@ -1,0 +1,70 @@
+# translation of calligra_shape_comment.po to Slovak
+# Richard Fric <Richard.Fric@kdemail.net>, 2010.
+# Roman Paholik <wizzardsk@gmail.com>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra_shape_comment\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2016-11-20 19:48+0100\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "The plugin needed for displaying comments is not present."
+msgstr "Plugin potrebný na zobrazovanie komentárov nie je dostupný."
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "Plugin Missing"
+msgstr "Chýbajúci plugin"
+
+#: CommentShape.cpp:51
+#, kde-format
+msgid ""
+"The plugin needed for displaying the comment is not compatible with the "
+"current version of the comment shape."
+msgstr ""
+"Plugin potrebný na zobrazovanie komentárov nie je kompatibilný s aktuálnou "
+"verziou tvaru komentára."
+
+#: CommentShape.cpp:52
+#, kde-format
+msgid "Plugin Incompatible"
+msgstr "Nekompatibilný plugin"
+
+#: CommentShapeFactory.cpp:17 CommentToolFactory.cpp:17
+#, kde-format
+msgid "Comment"
+msgstr "Komentár"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Missing"
+#~ msgstr "Chýbajúci plugin"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The plugin needed for displaying comments is not present."
+#~ msgstr "Plugin potrebný na zobrazovanie komentárov nie je dostupný."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The plugin needed for displaying the comment is not compatible with the "
+#~ "current version of the comment shape."
+#~ msgstr ""
+#~ "Plugin potrebný na zobrazovanie komentárov nie je kompatibilný s "
+#~ "aktuálnou verziou tvaru komentára."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Incompatible"
+#~ msgstr "Nekompatibilný plugin"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comment"
+#~ msgstr "Komentár"

@@ -1,0 +1,93 @@
+<!--    
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+       
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+
+<chapter id="hints-and-tips">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+> <firstname
+>Stefan</firstname
+> <surname
+>Asserhäll</surname
+> <affiliation
+><address
+><email
+>stefan.asserhall@bredband.net</email
+></address
+></affiliation
+> <contrib
+>Översättare</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Allmänna tips för bra presentationer</title>
+
+<para
+>Ok, du har bestämt dig för att använda &stage; för din presentation. Innan du börjar göra stordiabilder eller animerade bildspel, leta rätt på ett papper och sätt dig vid ett skrivbord borta från datorn. Det spelar ingen roll om du ska hålla en lektion eller försöka övertyga chefen att din plan eller idé ska utnyttjas, du måste tänka ut vad du försöker säga. Skriv ner alla ämnen som du måste täcka in, försök få dem i en ordning som du tror är begriplig. Lägg inte till några detaljer än, bara bestäm dig för rubriker och strukturen på ditt föredrag.</para>
+
+<para
+>Anteckna vilka fakta du måste täcka in under varje rubrik. Du försöker bygga upp ett övertygande argument. Fundera på att gruppera fakta i sådant som måste vara med, sådant som borde vara med och sådant som skulle vara trevligt att täcka om du har gott om tid.</para>
+
+<para
+>När du väl har skrivit ner alla saker som du behöver säga, tänk igenom tiden som är tillgänglig för att göra det. Tio minuter låter som sekel när du börjar, men det är mycket svårt att få något sagt på så kort tid. Hämta ditt papper och en klocka med sekundvisare. Öva på presentationen flera gånger. Detta har flera fördelar. För det första får du rätt timing. Om man har sagt att du har tio minuter, överskrid aldrig den tilldelade tiden. För det andra, när du verkligen gör presentationen framför en levande publik, är det inte första gången du har gjort den. För det tredje, du får ordning på orden i ditt eget huvud. Du kommer på sätt att säga saker om ämnet. Om du har hört dig själv framföra presentationen flera gånger, vet du vad du ska säga härnäst och hur du ska säga det. </para>
+
+<para
+>&stage; skapar inte talaranteckningar när det här skrivs, men jag tycker det är lika bra att använda vanliga bilder. Skapa några bilder åt dig själv, utskrivna på vanligt papper, och några för användning med stordiaprojektorn. Gör texten på dina bilder lagom stor, du måste kunna läsa den på avstånd. Jag använder 14 eller 16 punkters text. Experimentera för att hitta en storlek som du lätt kan läsa. Jag skriver aldrig ut ett skript.</para>
+
+<para
+>Om du använder en stordiaprojektor, lär dig hur den används innan. Försäkra dig om att lampan fungerar, och att reservlampan är fortfarande hel. Rengör linsen och plattan. Om du inte är van vid att arbeta med projektorer, öva. Försäkra dig om att själva duken är ren. Det är förmodligen bäst, när du tar tid på dig själv, att använda fem sekunder (räkna <quote
+>ett tusen ett, ett tusen två....</quote
+>) för att byta varje bild. På det sättet vet du att du inte behöver skynda dig. Om du vill peka på något, kan du använda en pekpinne och peka på duken, eller leta rätt på en laserpekare eller lägga en penna direkt på stordiabilden. Men se upp, de har en tendens att rulla iväg om du stöter till bordet.</para>
+
+<para
+>Fundera på var du ska stå. Du kan inte stå framför duken, så på ena sidan är förmodligen det bästa alternativet om du vill att publiken ska kunna se. Jag projicerar ofta en bild på en tavla och ritar ovanpå den. Om du använder en PC med digitalprojektor kan du rita på dina bilder med &stage;s pennverktyg. Om du använder en stordiaprojektor, kan du använda en genomskinlig tom stordiabild och en penna ovanpå de datorskapade bilderna.</para>
+
+<para
+>När du framför presentationen, titta då inte av misstag rätt in i ljuset. Det är lätt att göra det. Om du inte ska använda projektorn i några minuter, stäng då av den. Öva på att flytta dig dit du ska stå. Titta efter eluttag i rummet som du ska använda, och lär dig hur man drar för fönstren och var ljusknapparna sitter. Goda förberedelser gör det inte bara mindre troligt att du gör misstag (krånglande saker kan vara en mardröm framför en publik), men ger dig också säkerhet. Ha alltid en <quote
+>reservplan</quote
+> klar om något vägrar fungera. Ta med en papperskopia av dina bilder. Du kan kopiera och dela ut dem till publiken i förväg om utrustningen går sönder.</para>
+
+<para
+>Jag har inte sagt så mycket om innehållet än. För närvarande är allt du har ett papper med det som du vill säga. Innan du skapar något mer, tänk på om publikens förståelse av vad du säger blir bättre om du visar en bild. Dåliga presentationer består av en följd av stordiabilder fulla med text. Presentatören läser sedan upp texten på bilden för publiken (som redan har läst den, eftersom de kan göra det fortare än någon kan läsa upp innehållet). Försök att undvika att skriva något alls på bilden, utom en titel och ett nummer. Rita en bild av vad du vill säga, förklara sedan bilden för publiken. På det sättet är de inte före dig (kom ihåg att de kan läsa snabbare än du kan tala) och det verkar som du kan allt. Du behöver egentligen inte kunna det, utan kan använda bilden som ett antal påminnelser. En bild ska understödja det du säger, inte upprepa det. En bild ska fokusera publikens intresse, inte distrahera dem.</para>
+
+<para
+>Ett exempel. Jag lär järnvägsanställda hur de ska bete sig vid olyckor. Jag ville använda en bild för att diskutera hur man kan flytta farliga laster från urspårade eller skadade järnvägsvagnar till ett vägfordon efter en olycka. Bilden jag gjorde hade en enkel bild av en tankvagn, den sort som används för att frakta gas eller olja. På sidan skrev jag <quote
+>Farliga Kemikalier AB</quote
+> så att jag inte behövde förklara det. Jag ville framföra flera viktiga saker. För det första, att man måste se till att elektriciteten i ledningen ovanför stängs av om de är inom ett visst avstånd, innan något ytterligare görs. Jag ritade en av stödpelarna och en pil med säkerhetsavståndet angivet. Därefter ville jag säga att man inte får flytta vagnens innehåll i mörker eller vid åska. Jag ritade en måne och en blixt ovanför vagnen. Man måste skaffa expertråd, så jag ritade ett pappersark och skrev ordet <quote
+>Planera</quote
+> intill vagnen. Man måste också försäkra sig om att fordonet inte flyttar sig när vikten inuti försvinner. Jag ritade små röda kilar vid hjulen. Allt som jag behövde prata om fanns på bilden. Allt jag behövde göra var att titta på bilden och den avslöjade för mig vad jag behövde täcka in. När jag hade berättat om alla saker på bilden, var jag klar med ämnet. </para>
+
+<para
+>Använd i allmänhet bara en diabild eller annan bild om den visar något som bidrar till vad du säger. Till sist, slappna av och försök att inte skynda igenom alltihop. Tala till publiken, inte mot dem och kom ihåg att en presentation gäller det meddelande som du försöker överföra. &stage; är ett användbart verktyg. Det kan hjälpa dig att framföra meddelandet, men det kan inte göra ditt eget jobb.</para>
+
+</chapter>

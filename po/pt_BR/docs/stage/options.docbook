@@ -1,0 +1,333 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Marcus</firstname
+><surname
+>Gama</surname
+><affiliation
+><address
+><email
+>marcus.gama@gmail.com</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Configurando o &stage;</title>
+
+<sect1 id="configure-dialog">
+<title
+>A janela Configurar - Stage</title>
+
+<sect2 id="configure-misc">
+<title
+>Diverso</title>
+
+<screenshot>
+<screeninfo
+>Diversos</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-misc.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Diversos</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Unidades</guilabel
+></term>
+<listitem
+><para
+>Escolha a unidade padrão que será usada nos seus slides.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Raio da pega</guilabel
+></term>
+<listitem
+><para
+>Se selecionar uma forma com a ferramenta padrão (seta), você verá retângulos vermelhos e amarelos. Estes são chamados de pegas (usados para redimensionar, girar, ...). O raio da pega define o tamanho da mesma. Se você torná-lo maior será mais fácil de acertar.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Sensibilidade da pega</guilabel
+></term>
+<listitem
+><para
+>Esta opção define a exatidão necessária para acertar uma pega para a selecionar.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Deslocamento da colagem</guilabel
+></term>
+<listitem
+><para
+>Isto só fica ativo se a opção <guilabel
+>Colar no cursor</guilabel
+> estiver desativada. Se você copiar uma forma com o atalho <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> e colar com <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+>, fazendo-o em um local onde já exista uma forma com esta posição, irá colar a nova forma abaixo ou à direita.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Colar no cursor</guilabel
+></term>
+<listitem
+><para
+>Desativa a posição da colagem e introduz uma forma colada na posição do ponteiro do mouse.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-grid">
+<title
+>Grade</title>
+
+<screenshot>
+<screeninfo
+>Grade</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-grid.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Grade</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Grade</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Mostrar grade</guilabel
+></term>
+<listitem
+><para
+>Se ativado, o &stage; exibirá uma grade de pontos representando as interseções de linhas horizontais e verticais imaginárias. Você pode usar estes pontos para posicionar precisamente os objetos no slide.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Ajustar à grade</guilabel
+></term>
+<listitem
+><para
+>Se estiver ativado, quando você soltar ou mover objetos no slide o canto superior esquerdo do objeto se <quote
+>ajustará</quote
+> ou moverá para o ponto da grade mais próximo.</para>
+<para
+>Isto reduz sua liberdade de posicionar livremente objetos no slide, no entanto isto também auxilia a alinhar objetos precisamente. Isto é facilmente desativado ou ativado com esta opção, permitindo-lhe o melhor dos dois mundos.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Cor da grade:</guilabel
+></term>
+<listitem
+><para
+>Você poderá mudar aqui a cor da grade, que é preta por padrão.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Espaçamento</guilabel
+></title>
+<para
+>Você poderá optar por manter as mesmas proporções para as duas opções abaixo, clicando no ícone <inlinemediaobject
+><imageobject
+> <imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+> ou por separar as duas opções com o ícone <inlinemediaobject
+><imageobject
+> <imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+>.</para>
+<varlistentry>
+<term
+><guilabel
+>Horizontal:</guilabel
+></term>
+<listitem
+><para
+>Configura o espaço em centímetros entre dois pontos numa linha horizontal da grade. O padrão é de 0,5 centímetros.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Vertical:</guilabel
+></term>
+<listitem
+><para
+>Configura o espaço em centímetros entre dois pontos numa linha vertical da grade. O padrão é de 0,5 centímetros.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-document">
+<title
+>Documento</title>
+
+<screenshot>
+<screeninfo
+>Documento</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-document.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Documento</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Configurações do documento</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Intervalo de salvamento automático:</guilabel
+></term>
+<listitem
+><para
+>Você pode usar isto para ajustar a frequência com que o &stage; salva um arquivo temporário. Se configurar este valor para <guilabel
+>Sem salvamento automático</guilabel
+>, o &stage; não irá salvar automaticamente. Você pode ajustar o salvamento automático de 1 minuto até 60 minutos.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Criar cópia de segurança:</guilabel
+></term>
+<listitem
+><para
+>Se estiver assinalada, irá criar um arquivo <filename
+>.&lt;nome&gt;.odp.autosave.odp</filename
+> na pasta onde se encontra o seu arquivo. Esta cópia de segurança poderá então ser usada no caso de ocorrer um problema. A cópia de segurança é atualizada, sempre que você salvar o seu documento ou sempre que ocorrer um salvamento automático.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-author">
+<title
+>Author</title>
+
+<screenshot>
+<screeninfo
+>Author</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Documento</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Escolha um perfil do autor para o seu documento. </para>
+<para
+>Você pode adicionar um novo perfil ou excluir o atual usando os botões à direita da lista de perfis. </para>
+</sect2>
+
+</sect1>
+
+</chapter>

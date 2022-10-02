@@ -1,0 +1,4047 @@
+# translation of stage.po to Slovak
+# Miroslav Vasko <vasko@ies.sk>, 1998.
+# Branislav Gajdos <brian@linuxee.sk>, 2000.
+# Stanislav Visnovsky <visnovsky@nenya.ms.mff.cuni.cz>, 2001,2002.
+# Stanislav Visnovsky <visnovsky@kde.org>, 2003.
+# Richard Fric <Richard.Fric@kdemail.net>, 2006, 2009.
+# Roman Paholík <wizzardsk@gmail.com>, 2012, 2013, 2014, 2015, 2016, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: stage\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2021-11-15 17:29+0100\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.08.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, kde-format
+msgid "&Edit"
+msgstr "&Upraviť"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, kde-format
+msgid "&View"
+msgstr "P&ohľad"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, kde-format
+msgid "&Insert"
+msgstr "&Vložiť"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "F&ormát"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, kde-format
+msgid "&Slide"
+msgstr "Snímka"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, kde-format
+msgid "Sli&de Show"
+msgstr "&Prezentácia"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, kde-format
+msgid "&Settings"
+msgstr "Nastavenia"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "Pridať vlastnú slideshow"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "Vytvoriť animáciu tvaru"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "Upraviť udalosť spustenia animácie"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "Odstrániť tvar animácie"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "Vymazať vlastnú prezentáciu"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Vymazať snímku"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Vymazať snímku"
+msgstr[1] "Vymazať snímky"
+msgstr[2] "Vymazať snímky"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "Upraviť oneskorenie/trvanie animácie"
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "Upraviť vlastnú slideshow"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "Vytvoriť efekt snímky"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "Zmeniť efekt snímky"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "Vymazať efekt snímky"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "Zmeniť prechod snímok"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "Premenovať vlastnú slideshow"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "Zmena poradia animácií"
+
+#: part/KPrAboutData.h:21
+#, kde-format
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "Calligra Stage"
+
+#: part/KPrAboutData.h:23
+#, kde-format
+msgid "Presentation Tool"
+msgstr "Prezentačný nástroj"
+
+#: part/KPrAboutData.h:25
+#, kde-format
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "(c) 1998-%1, Tím Stage"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, kde-format
+msgid "Former maintainer"
+msgstr "Predošlý správca"
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr "Thorsten Zachmann"
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Original author"
+msgstr "Pôvodný autor"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr "Reginald Stadlbauer"
+
+#: part/KPrAboutData.h:36
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr "Toshitaka Fujioka"
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr "Lukáš Tinkl"
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr "Percy Leonhardt"
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KPrAboutData.h:43
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr "Boudewijn Rempt "
+
+#: part/KPrAboutData.h:45
+#, kde-format
+msgid "Carlos Licea "
+msgstr "Carlos Licea "
+
+#: part/KPrAboutData.h:46
+#, kde-format
+msgid "C. Boemann "
+msgstr "Casper Boemann "
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr "Fredy Yanardi "
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr "Jan Hambrecht "
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr "Marijn Kruisselbrink "
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr "Martin Pfeiffer "
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr "Sven Langkamp "
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr "Timothée Lacroix "
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+"Brian Gajdos Atomique,Dusan Onofer,Peter Strelec,Miroslav Vasko,Marek Zima,"
+"Stanislav Višňovský,Roman Paholík"
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+"brian@linuxee.sk,onofer@phf.euke.sk,beko@profi.sk,vasko@ies.sk,"
+"marek_zima@yahoo.com,visnovsky@kde.org,wizzardsk@gmail.com"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr "Neznáme"
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, kde-format
+msgid "Slide %1"
+msgstr "Stránka %1"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "Koniec prezentácie. Kliknite pre ukončenie."
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, kde-format
+msgid "Layout"
+msgstr "Rozloženie"
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr "Nemôžem nájsť potrebný textový komponent, Calligra Stage sa ukončí."
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr "Nemôžem nájsť potrebný obrazový komponent, Calligra Stage sa ukončí."
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr "Chyba inštalácie"
+
+#: part/KPrPicturesImport.cpp:62
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "Vložiť obrázky"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr "Tvar symbolu"
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr "Dvakrát kliknite na pridanie názvu"
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr "Dvakrát kliknite na pridanie obrysu"
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr "Dvakrát kliknite na pridanie textu"
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr "Dvakrát kliknite na pridanie poznámky"
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr "Dvakrát kliknite na pridanie obrázku"
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr "Dvakrát kliknite na pridanie grafu"
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr "Dvakrát kliknite na pridanie objektu"
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, kde-format
+msgid "Pen Color"
+msgstr "Farba pera"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, kde-format
+msgid "Pen Size"
+msgstr "Veľkosť pera"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, kde-format
+msgid "Black"
+msgstr "Čierna"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, kde-format
+msgid "White"
+msgstr "Biela"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, kde-format
+msgid "Green"
+msgstr "Zelená"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, kde-format
+msgid "Red"
+msgstr "Červená"
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, kde-format
+msgid "Blue"
+msgstr "Modrá"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, kde-format
+msgid "Yellow"
+msgstr "Žltá"
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, kde-format
+msgid "Next Slide"
+msgstr "Ďalšia snímka"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, kde-format
+msgid "Speaker Notes"
+msgstr "Poznámky prednášateľa"
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, kde-format
+msgid "Current Slide %1 of %2"
+msgstr "Aktuálna snímka %1 z %2"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, kde-format
+msgid "End of Slide Show"
+msgstr "Koniec prezentácie"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr "spustiť pri kliknutí myšou"
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, kde-format
+msgid "start after previous animation"
+msgstr "Spustiť po predošlej animácii"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, kde-format
+msgid "start with previous animation"
+msgstr "Spustiť s predošlou animáciou"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr "Spustiť po %1 sekundách. Trvanie %2 sekúnd."
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, kde-format
+msgid "Animation"
+msgstr "Animácia"
+
+#: part/KPrShapeAnimations.cpp:201
+#, kde-format
+msgid "Shape"
+msgstr "Tvar"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, kde-format
+msgid "&Move Here"
+msgstr "&Presunúť sem"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, kde-format
+msgid "&Copy Here"
+msgstr "&Kopírovať sem"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, kde-format
+msgid "C&ancel"
+msgstr "&Zrušiť"
+
+#: part/KPrView.cpp:73
+#, kde-format
+msgid "Normal"
+msgstr "Normálna"
+
+#: part/KPrView.cpp:78
+#, kde-format
+msgid "Show Master Slides"
+msgstr "Ukázať hlavné snímky"
+
+#: part/KPrView.cpp:79
+#, kde-format
+msgid "Import Slideshow..."
+msgstr "Impotovať slideshow..."
+
+#: part/KPrView.cpp:80
+#, kde-format
+msgid "Insert Slide"
+msgstr "Vložiť stránku"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr "Vložiť novú snímku za aktuálnou"
+
+#: part/KPrView.cpp:83
+#, kde-format
+msgid "Copy Slide"
+msgstr "Kopírovať stránku"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, kde-format
+msgid "Copy the current slide"
+msgstr "Kopírovať aktuálnu snímku"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, kde-format
+msgid "Delete Slide"
+msgstr "Vymazať snímku"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, kde-format
+msgid "Delete the current slide"
+msgstr "Vymazať aktuálnu snímku"
+
+#: part/KPrView.cpp:89
+#, kde-format
+msgid "Master Slide..."
+msgstr "Hlavná snímka..."
+
+#: part/KPrView.cpp:90
+#, kde-format
+msgid "Previous Slide"
+msgstr "Predošlá snímka"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, kde-format
+msgid "Go to previous slide"
+msgstr "Prejsť na predošlú snímku"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, kde-format
+msgid "Go to next slide"
+msgstr "Prejsť na ďalšiu snímku"
+
+#: part/KPrView.cpp:96
+#, kde-format
+msgid "First Slide"
+msgstr "Prvá snímka"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, kde-format
+msgid "Go to first slide"
+msgstr "Prejsť na prvú snímku"
+
+#: part/KPrView.cpp:99
+#, kde-format
+msgid "Last Slide"
+msgstr "Posledná snímka"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, kde-format
+msgid "Go to last slide"
+msgstr "Prejsť na poslednú snímku"
+
+#: part/KPrView.cpp:102
+#, kde-format
+msgid "Configure Stage..."
+msgstr "&Nastaviť Stage..."
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr "Exportovať ako HTML..."
+
+#: part/KPrView.cpp:251
+#, kde-format
+msgid "Insert Pictures as Slides..."
+msgstr "Vložiť obrázky ako snímky..."
+
+#: part/KPrView.cpp:260
+#, kde-format
+msgid "Create Appear Animation"
+msgstr "Vytvoriť animáciu objavenia"
+
+#: part/KPrView.cpp:264
+#, kde-format
+msgid "Edit Custom Slide Shows..."
+msgstr "Upraviť vlastné prezentácie..."
+
+#: part/KPrView.cpp:268
+#, kde-format
+msgid "Start Presentation"
+msgstr "Spustiť prezentáciu"
+
+#: part/KPrView.cpp:271
+#, kde-format
+msgid "From Current Slide"
+msgstr "Od aktuálnej snímky"
+
+#: part/KPrView.cpp:275
+#, kde-format
+msgid "From First Slide"
+msgstr "Od prvej snímky"
+
+#: part/KPrView.cpp:280
+#, kde-format
+msgid "Stop presentation"
+msgstr "Zastaviť prezentáciu"
+
+#: part/KPrView.cpp:286
+#, kde-format
+msgid "Show Status Bar"
+msgstr "Zobraziť stavový riadok"
+
+#: part/KPrView.cpp:287
+#, kde-format
+msgid "Hide Status Bar"
+msgstr "Skryť stavový riadok"
+
+#: part/KPrView.cpp:288
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Zobrazí alebo skryje stavový riadok"
+
+#: part/KPrView.cpp:297
+#, kde-format
+msgid "Configure Slide Show..."
+msgstr "Nastavenie prezentácie..."
+
+#: part/KPrView.cpp:301
+#, kde-format
+msgid "Configure Presenter View..."
+msgstr "Povoliť zobrazenie presentera..."
+
+#: part/KPrView.cpp:305
+#, kde-format
+msgid "Draw on the presentation..."
+msgstr "Kresliť na prezentáciu..."
+
+#: part/KPrView.cpp:312
+#, kde-format
+msgid "Highlight the presentation..."
+msgstr "Vysvietiť prezentáciu..."
+
+#: part/KPrView.cpp:319
+#, kde-format
+msgid "Blackscreen on the presentation..."
+msgstr "Prázdna obrazovka na prezentáciu..."
+
+#: part/KPrViewModeNotes.cpp:36
+#, kde-format
+msgid "Notes"
+msgstr "Poznámky"
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, kde-format
+msgid "Slides Sorter"
+msgstr "Radenie snímok"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, kde-format
+msgid "Slide Show: "
+msgstr "Slide Show: "
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, kde-format
+msgid "Add a new custom slide show"
+msgstr "Pridať novú vlastnú slideshow"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, kde-format
+msgid "Delete current custom slide show"
+msgstr "Vymazať aktuálnu vlastnú prezentáciu"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, kde-format
+msgid "Add slides to current custom slide show"
+msgstr "Pridať snímky do aktuálnej vlastnej prezentácie"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, kde-format
+msgid "Remove slides from current custom slide show"
+msgstr "Odstrániť snímky z aktuálnej vlastnej prezentácie"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, kde-format
+msgid "Duplicate Slide"
+msgstr "Duplikovať snímku"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, kde-format
+msgid "Start Slideshow"
+msgstr "Spustiť prezentáciu"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, kde-format
+msgid "Add a new slide"
+msgstr "Pridať novú snímku"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, kde-format
+msgid "Delete selected slides"
+msgstr "Odstrániť vybrané snímky"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, kde-format
+msgid "Rename"
+msgstr "Premenovať"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, kde-format
+msgid "Cut"
+msgstr "Vystrihnúť"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, kde-format
+msgid "Copy"
+msgstr "Kopírovať"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, kde-format
+msgid "Paste"
+msgstr "Vložiť"
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, kde-format
+msgid "Slide Show %1"
+msgstr "Slide Show %1"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, kde-format
+msgid "All slides"
+msgstr "Všetky snímky"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, kde-format
+msgid "Error"
+msgstr "Chyba"
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr "Nemôžu byť dva slideshowy s rovnakým názvom."
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "Nastavenie rozloženie"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, kde-format
+msgid "Automatic animation preview"
+msgstr "Automatický náhľad animácie"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, kde-format
+msgid "Preview animation"
+msgstr "Náhľad animácie"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, kde-format
+msgid "Slide Transitions"
+msgstr "Prechody snímok"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, kde-format
+msgid "Shape Click Actions"
+msgstr "Akcie kliknutí tvarov"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, kde-format
+msgid "Shape Animations"
+msgstr "Tvar animácií"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, kde-format
+msgid "Manage animation delay and duration: "
+msgstr "Spravovať oneskorenie a trvanie animácie:"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, kde-format
+msgid "Start: "
+msgstr "Spustiť:"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr "pri kliknutí myšou"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, kde-format
+msgid "after previous animation"
+msgstr "po predošlej animácii"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, kde-format
+msgid "with previous animation"
+msgstr "s predošlou animáciou"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr "Oneskorenie:"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, kde-format
+msgid "Duration: "
+msgstr "Trvanie: "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, kde-format
+msgid "Preview Shape Animation"
+msgstr "Náhľad tvaru animácie"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, kde-format
+msgid "No Effect"
+msgstr "Žiadny efekt"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, kde-format
+msgid " sec"
+msgstr " sek"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr "Ručne"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr "Automatické"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, kde-format
+msgid "Slide Transition:"
+msgstr "Prechod snímok:"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, kde-format
+msgid "Apply To All Slides"
+msgstr "Použiť pre všetky snímky"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr "Použiť efekt snímky pre všetky snímky"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr "Vchod"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr "Ukončiť"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr "Dôraz"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, kde-format
+msgid "Custom"
+msgstr "Vlastné"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr "Cesta pohybu"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, kde-format
+msgid "Ole Action"
+msgstr "Ole akcia"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr "Volanie média"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, kde-format
+msgid "Edit animation"
+msgstr "Upraviť animáciu"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, kde-format
+msgid "Add new animation"
+msgstr "Pridať novú animáciu"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, kde-format
+msgid "Remove animation"
+msgstr "Odstrániť animáciu"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr "Poradie:"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, kde-format
+msgid "Move animation up"
+msgstr "Presunúť animáciu hore"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, kde-format
+msgid "Move animation down"
+msgstr "Presunúť animáciu dolu"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, kde-format
+msgid "Add a new animation"
+msgstr "Pridať novú animáciu"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, kde-format
+msgid "Delete current animation"
+msgstr "Vymazať aktuálnu animáciu"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr "sekúnd"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, kde-format
+msgid "Crop"
+msgstr "Orezať"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, kde-format
+msgid "W&idth:"
+msgstr "Šírka:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, kde-format
+msgid "Will keep the width of the crop constant"
+msgstr "Ponechá šírku konštanty orezania"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, kde-format
+msgid "&Height:"
+msgstr "Výš&ka:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, kde-format
+msgid "Will keep the height of the crop constant"
+msgstr "Ponechá výšku konštanty orezania"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, kde-format
+msgid "R&atio:"
+msgstr "Pomer:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, kde-format
+msgid "Will keep the ratio constant"
+msgstr "Zachová pomer strán konštantný"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr "Vrstva"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, kde-format
+msgid "Image"
+msgstr "Obrázok"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, kde-format
+msgid "&Crop"
+msgstr "O&rezať"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "Upraviť tvar"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr "Viac monitorov"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, kde-format
+msgid "Presentation monitor:"
+msgstr "Monitor prezentácie:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, kde-format
+msgid "Enable presenter view"
+msgstr "Povoliť zobrazenie presentera"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr "Monitor %1 (primárny)"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr "Monitor %1"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, kde-format
+msgid "Configure Presenter View"
+msgstr "Nastaviť zobrazenie presentera"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, kde-format
+msgid "Configure Slide Show"
+msgstr "Nastavenie prezentácie"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, kde-format
+msgid "Slides"
+msgstr "Snímky"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, kde-format
+msgid "Presentation Slides:"
+msgstr "Snímky prezentácie:"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, kde-format
+msgid "Edit Custom Slide Shows ..."
+msgstr "Upraviť vlastné prezentácie..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr "HTML Export"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr "Zaškrtnite snímku, ktorá má byť exportovaná:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, kde-format
+msgid "Select all"
+msgstr "Vybrať všetko"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, kde-format
+msgid "Select template (.css) :"
+msgstr "Vybrať šablónu (.css) :"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, kde-format
+msgid "Deselect all"
+msgstr "Odznačiť všetko"
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, kde-format
+msgid "Title"
+msgstr "Titulok"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, kde-format
+msgid "Output preview"
+msgstr "Náhľad výstupu"
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr "Prehadávať"
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, kde-format
+msgid "Author"
+msgstr "Autor"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, kde-format
+msgid "Delete Favorite"
+msgstr "Vymazať obľúbené"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr "Otvoriť v prehliadači"
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr "Html Export"
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr "Exportovať"
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr "Už existuje obľúbená položka s týmto názvom"
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr "Nepsrávny súbor, iba .zip alebo poškodený zip"
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr "Zip súbor musí obsahovať style.css"
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, kde-format
+msgid "Delete Template"
+msgstr "Vymazať šablónu"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr "Nemali by ste odstrániť šablóny dodané v aplikácii"
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, kde-format
+msgid "Add Template"
+msgstr "Pridať šablónu"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "Ste si istý, že chcete odtrániť \"%1\"?"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, kde-format
+msgid "Confirm remove"
+msgstr "Potvrdenie vymazania"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr "Zmeniť zvuk akcie"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, kde-format
+msgid "No sound"
+msgstr "Bez zvuku"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, kde-format
+msgid "Import..."
+msgstr "Importovať..."
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr "Stĺpec"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, kde-format
+msgid "From Left"
+msgstr "Zľava"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, kde-format
+msgid "From Top"
+msgstr "Zhora"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, kde-format
+msgid "From Right"
+msgstr "Sprava"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, kde-format
+msgid "From Bottom"
+msgstr "Zdola"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr "Neznámy podtyp"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Clock"
+msgstr "Hodiny"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, kde-format
+msgid "From Twelve Clockwise"
+msgstr "Od 12 v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, kde-format
+msgid "From Three Clockwise"
+msgstr "Od 3 v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, kde-format
+msgid "From Six Clockwise"
+msgstr "Od 6 v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, kde-format
+msgid "From Nine Clockwise"
+msgstr "Od 9 v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, kde-format
+msgid "From Twelve Counterclockwise"
+msgstr "Od 12 proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, kde-format
+msgid "From Three Counterclockwise"
+msgstr "Od 3 proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, kde-format
+msgid "From Six Counterclockwise"
+msgstr "Od 6 proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, kde-format
+msgid "From Nine Counterclockwise"
+msgstr "Od 9 proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Double Fan"
+msgstr "Dvojitý vetrák"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, kde-format
+msgid "Fan Out Vertical"
+msgstr "Vetrák von vertikálne"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, kde-format
+msgid "Fan Out Horizontal"
+msgstr "Vetrák von horizontálne"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, kde-format
+msgid "Fan In Vertical"
+msgstr "Vetrák dnu vertikálne"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, kde-format
+msgid "Fan In Horizontal"
+msgstr "Vetrák dnu horizontálne"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, kde-format
+msgid "Fan In Vertical Reverse"
+msgstr "Vetrák dnu vertikálne obrátene"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Fan In Horizontal Reverse"
+msgstr "Vetrák dnu horizontálne obrátene"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Double Sweep"
+msgstr "Dvojité zametanie"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Parallel Vertical"
+msgstr "Paralelne vertikálne"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Parallel Diagonal"
+msgstr "Paralelne diagonálne"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Opposite Vertical"
+msgstr "Oproti vertikálne"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Opposite Horizontal"
+msgstr "Oproti horizontálne"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Parallel Diagonal Top Left"
+msgstr "Paralelne diagonálne hore vľavo"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Parallel Diagonal Bottom Left"
+msgstr "Paralelne diagonálne dolu vľavo"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Parallel Vertical Reverse"
+msgstr "Paralelne vertikálne obrátene"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Parallel Diagonal Reverse"
+msgstr "Paralelne diagonálne obrátene"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Opposite Vertical Reverse"
+msgstr "Oproti vertikálne obrátene"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Opposite Horizontal Reverse"
+msgstr "Oproti horizontálne obrátene"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "Paralelne diagonálne hore vľavo obrátene"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "Paralelne diagonálne dolu vľavo obrátene"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Fan"
+msgstr "Vetrák"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Center Right"
+msgstr "V strede vpravo"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Center Top"
+msgstr "V strede hore"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Center Left"
+msgstr "V strede vľavo"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Center Bottom"
+msgstr "V strede dole"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Fan Out Top"
+msgstr "Vetrák von hore"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Fan Out Right"
+msgstr "Vetrák von vpravo"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Fan Out Bottom"
+msgstr "Vetrák von dolu"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Fan Out Left"
+msgstr "Vetrák von vľavo"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Fan In Top"
+msgstr "Vetrák dnu hore"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Fan In Right"
+msgstr "Vetrák dnu vpravo"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Fan In Bottom"
+msgstr "Vetrák dnu dolu"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Fan In Left"
+msgstr "Vetrák dnu vľavo"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Pin Wheel"
+msgstr "Veterník"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, kde-format
+msgid "Two Blades Vertical Clockwise"
+msgstr "Dve steblá vertikálne v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, kde-format
+msgid "Two Blades Horizontal Clockwise"
+msgstr "Dve steblá horizontálne v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, kde-format
+msgid "Four Blades Horizontal Clockwise"
+msgstr "Štyri steblá horizontálne v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, kde-format
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "Dve steblá vertikálne proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, kde-format
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "Dve steblá horizontálne proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, kde-format
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "Štyri steblá horizontálne proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Saloon Door"
+msgstr "Dvere salónu"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, kde-format
+msgid "To Top"
+msgstr "Nahor"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, kde-format
+msgid "To Left"
+msgstr "Do ľava"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, kde-format
+msgid "To Bottom"
+msgstr "Dolu"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, kde-format
+msgid "To Right"
+msgstr "Do prava"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Single Sweep"
+msgstr "Jednoduché zametanie"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, kde-format
+msgid "Clockwise Top"
+msgstr "Nahor v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, kde-format
+msgid "Clockwise Right"
+msgstr "Do prava v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, kde-format
+msgid "Clockwise Bottom"
+msgstr "Dolu v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, kde-format
+msgid "Clockwise Left"
+msgstr "Do ľava v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, kde-format
+msgid "Clockwise Top Left"
+msgstr "Hore vľavo v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, kde-format
+msgid "Counterclockwise Bottom Left"
+msgstr "Dolu vľavo proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, kde-format
+msgid "Clockwise Bottom Right"
+msgstr "Dolu vpravo v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, kde-format
+msgid "Counterclockwise Top Right"
+msgstr "Hore vpravo proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, kde-format
+msgid "Counterclockwise Top"
+msgstr "Nahor proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, kde-format
+msgid "Counterclockwise Right"
+msgstr "Do prava proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, kde-format
+msgid "Counterclockwise Bottom"
+msgstr "Dolu proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, kde-format
+msgid "Counterclockwise Left"
+msgstr "Do ľava proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, kde-format
+msgid "Counterclockwise Top Left"
+msgstr "Hore vľavo proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, kde-format
+msgid "Clockwise Bottom Left"
+msgstr "Dolu vľavo v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, kde-format
+msgid "Counterclockwise Bottom Right"
+msgstr "Dolu vpravo proti smeru hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Clockwise Top Right"
+msgstr "Hore vpravo v smere hodinových ručičiek"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Windshield"
+msgstr "Čelné sklo"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, kde-format
+msgid "Right"
+msgstr "Vpravo"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr "Hore"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Vertical"
+msgstr "Vertikálne"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, kde-format
+msgid "Horizontal"
+msgstr "Horizontálne"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, kde-format
+msgid "Right Reverse"
+msgstr "Vpravo obrátene"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, kde-format
+msgid "Up Reverse"
+msgstr "Hore obrátene"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Vertical Reverse"
+msgstr "Vertikálne obrátene"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Horizontal Reverse"
+msgstr "Horizontálne obrátene"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Door"
+msgstr "Dvere stodoly"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Diagonal Bottom Left"
+msgstr "Diagonálne dolu vľavo"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Diagonal Bottom Left Reverse"
+msgstr "Diagonálne dolu vľavo obrátene"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Diagonal Top Left"
+msgstr "Diagonálne hore vľavo"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Diagonal Top Left Reverse"
+msgstr "Diagonálne hore vľavo obrátene"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr "Barn Vee"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, kde-format
+msgid "Barn Zig Zag"
+msgstr "Stodola cik cak"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, kde-format
+msgid "Vertical Reversed"
+msgstr "Zvislo otočené"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, kde-format
+msgid "Horizontal Reversed"
+msgstr "Vodorovne otočené"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr "Stĺpec"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, kde-format
+msgid "From Top Left"
+msgstr "Zhora zľava"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, kde-format
+msgid "From Top Right"
+msgstr "Zhora sprava"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, kde-format
+msgid "From Bottom Left"
+msgstr "Zdola zľava"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, kde-format
+msgid "From Bottom Right"
+msgstr "Zdola sprava"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Diagonal"
+msgstr "Diagonálne"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr "Štvorstĺpec"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, kde-format
+msgid "Corners In"
+msgstr "Rohy dnu"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, kde-format
+msgid "Corners In Reverse"
+msgstr "Rohy dnu obrátene"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, kde-format
+msgid "Corners Out"
+msgstr "Rohy von"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, kde-format
+msgid "Corners Out Reverse"
+msgstr "Rohy von obrátene"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Misc Diagonal"
+msgstr "Rôzne diagonálne"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, kde-format
+msgid "Double Barn Door"
+msgstr "Dvojité dvere stodoly"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, kde-format
+msgid "Double Diamond"
+msgstr "Dvojitý diamant"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr "Vee"
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, kde-format
+msgid "Zig Zag"
+msgstr "Cik Cak"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, kde-format
+msgid "Fade"
+msgstr "Blednutie"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr "Prelínanie"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, kde-format
+msgid "Fade over Color"
+msgstr "Zanikanie farby"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, kde-format
+msgid "ArrowHead"
+msgstr "ArrowHead"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, kde-format
+msgid "Down"
+msgstr "Dolu"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, kde-format
+msgid "Down Reverse"
+msgstr "Dole obrátené"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, kde-format
+msgid "Left"
+msgstr "Vľavo"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, kde-format
+msgid "Left Reverse"
+msgstr "Vľavo obrátené"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Ellipse"
+msgstr "Elipsa"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Circle"
+msgstr "Kruh"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Circle Reverse"
+msgstr "Obrátený kruh"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr "Oko"
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Hexagon"
+msgstr "Šesťuholník"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr "Clona"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Rectangular"
+msgstr "Pravouhlý"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Rectangular Reverse"
+msgstr "Obrátený pravouholník"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Diamond"
+msgstr "Diamant"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Diamond Reverse"
+msgstr "Obrátený diamant"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, kde-format
+msgid "Misc"
+msgstr "Rôzne"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Heart"
+msgstr "Srdce"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Heart Reverse"
+msgstr "Otočené srdce"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Keyhole"
+msgstr "Kľúčová dierka"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Keyhole Reverse"
+msgstr "Obrátená kľúčová dierka"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Pentagon"
+msgstr "Päťuholník"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, kde-format
+msgid "RoundRect"
+msgstr "RoundRect"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Star"
+msgstr "Hviezda"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, kde-format
+msgid "Four Point Star"
+msgstr "Päťcípa hviezda"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, kde-format
+msgid "Four Point Star Reverse"
+msgstr "Otočená štvorcípa hviezda"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, kde-format
+msgid "Five Point Star"
+msgstr "Štvorcípa hviezda"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, kde-format
+msgid "Five Point Star Reverse"
+msgstr "Otočená päťcípa hviezda"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, kde-format
+msgid "Six Point Star"
+msgstr "Šesťcípa hviezda"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, kde-format
+msgid "Six Point Star Reverse"
+msgstr "Otočená šesťcípa hviezda"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Triangle"
+msgstr "Trojuholník"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box Snakes"
+msgstr "Stĺpcové hady"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Two Box Top In"
+msgstr "Dve krabice hore dnu"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Two Box Bottom In"
+msgstr "Dve krabice dole dnu"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Two Box Left In"
+msgstr "Dve krabice vľavo dnu"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Two Box Right In"
+msgstr "Dve krabice vpravo dnu"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Four Box Vertical In"
+msgstr "Štyri krabice vertikálne dnu"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Four Box Horizontal In"
+msgstr "Štyri krabice horizontálne dnu"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Two Box Top Out"
+msgstr "Dve krabice hore vpm"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Two Box Bottom Out"
+msgstr "Dve krabice dole von"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Two Box Left Out"
+msgstr "Dve krabice vľavo von"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Two Box Right Out"
+msgstr "Dve krabice vpravo von"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Four Box Vertical Out"
+msgstr "Štvorstĺpcový zvislý výstup"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Four Box Horizontal Out"
+msgstr "Štyri krabice horizontálne von"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Parallel Snakes"
+msgstr "Paralelné hady"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Vertical Top Same In"
+msgstr "Vertikálne hore rovnako dnu"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Vertical Top Same Out"
+msgstr "Vertikálne hore rovnako von"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Vertical Bottom Same In"
+msgstr "Vertikálne dolu rovnako dnu"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Vertical Bottom Same Out"
+msgstr "Vertikálne dolu rovnako von"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, kde-format
+msgid "Vertical Top Left Opposite In"
+msgstr "Vertikálny vrch, vľavo oproti dovnútra"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, kde-format
+msgid "Vertical Top Left Opposite Out"
+msgstr "Vertikálne hore vľavo oproti von"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, kde-format
+msgid "Vertical Bottom Left Opposite In"
+msgstr "Vertikálne dolu vľavo oproti dnu"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, kde-format
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "Vertikálne dolu vľavo oproti von"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, kde-format
+msgid "Horizontal Left Same In"
+msgstr "Horizontálne vľavo rovnako dnu"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, kde-format
+msgid "Horizontal Left Same Out"
+msgstr "Horizontálne vľavo rovnako von"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, kde-format
+msgid "Horizontal Right Same In"
+msgstr "Horizontálne hore rovnako dnu"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, kde-format
+msgid "Horizontal Right Same Out"
+msgstr "Horizontálne hore rovnako von"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, kde-format
+msgid "Horizontal Top Left Opposite In"
+msgstr "Horizontálne hore vľavo oproti dni"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, kde-format
+msgid "Horizontal Top Left Opposite Out"
+msgstr "Horizontálne hore vľavo oproti von"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, kde-format
+msgid "Horizontal Top Right Opposite In"
+msgstr "Horizontálne hore vpravo oproti dnu"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, kde-format
+msgid "Horizontal Top Right Opposite Out"
+msgstr "Horizontálny vrch, vpravo oproti von"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, kde-format
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "Diagonálne dolu vľavo oproti dnu"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, kde-format
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "Diagonálny spodok, vľavo oproti von"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, kde-format
+msgid "Diagonal Top Left Opposite In"
+msgstr "Diagonálne hore vľavo oproti dnu"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, kde-format
+msgid "Diagonal Top Left Opposite Out"
+msgstr "Diagonálne hore vľavo oproti von"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Snake"
+msgstr "Had"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Spiral"
+msgstr "Špirála"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Clockwise Top Left In"
+msgstr "V smere hodinových ručičiek hore vľavo dnu"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Clockwise Top Left Out"
+msgstr "V smere hodinových ručičiek hore vľavo von"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Clockwise Top Right In"
+msgstr "V smere hodinových ručičiek hore vpravo dnu"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Clockwise Top Right Out"
+msgstr "V smere hodinových ručičiek hore vpravo von"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Clockwise Bottom Left In"
+msgstr "V smere hodinových ručičiek dolu vľavo dnu"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Clockwise Bottom Left Out"
+msgstr "V smere hodinových ručičiek dolu vľavo von"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Clockwise Bottom Right In"
+msgstr "V smere hodinových ručičiek dolu vpravo dnu"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Clockwise Bottom Right Out"
+msgstr "V smere hodinových ručičiek dolu vpravo von"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Counterclockwise Top Left In"
+msgstr "Proti smeru hodinových ručičiek hore vľavo dnu"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Counterclockwise Top Left Out"
+msgstr "Proti smeru hodinových ručičiek hore vľavo von"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, kde-format
+msgid "Counterclockwise Top Right In"
+msgstr "Proti smeru hodinových ručičiek hore vpravo dnu"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, kde-format
+msgid "Counterclockwise Top Right Out"
+msgstr "Proti smeru hodinových ručičiek hore vpravo von"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, kde-format
+msgid "Counterclockwise Bottom Left In"
+msgstr "Proti smeru hodinových ručičiek dolu vľavo dnu"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, kde-format
+msgid "Counterclockwise Bottom Left Out"
+msgstr "Proti smeru hodinových ručičiek dolu vľavo von"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, kde-format
+msgid "Counterclockwise Bottom Right In"
+msgstr "Proti smeru hodinových ručičiek dolu vpravo dnu"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, kde-format
+msgid "Counterclockwise Bottom Right Out"
+msgstr "Proti smeru hodinových ručičiek dolu vpravo von"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Waterfall"
+msgstr "Vodopád"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, kde-format
+msgid "Top Left Vertical"
+msgstr "Hote vľavo vertikálne"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Top Left Horizontal"
+msgstr "Hore vľavo horizontálne"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Top Right Vertical"
+msgstr "Hore vpravo vertikálne"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Top Right Horizontal"
+msgstr "Hore vpravo horizontálne"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Bottom Left Vertical"
+msgstr "Dolu vľavo vertikálne"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Bottom Left Horizontal"
+msgstr "Dolu vľavo horizontálne"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Bottom Right Vertical"
+msgstr "Dolu vpravo vertikálne"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Bottom Right Horizontal"
+msgstr "Dolu vpravo horizontálne"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Slide"
+msgstr "Snímka"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, kde-format
+msgid "Space Rotation"
+msgstr "Otočenie priestoru"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, kde-format
+msgid "Swap effect"
+msgstr "Vymeniť efekt"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, kde-format
+msgid "Header"
+msgstr "Hlavička"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, kde-format
+msgid "Footer"
+msgstr "Pätička"
+
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Neudržiavané v čase vydania tejto verzie. Komunita Calligra víta "
+#~ "zainteresované osoby, ktoré prevezmú udržiavanie."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Upraviť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Zobraziť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "&Vložiť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "F&ormát"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "Snímka"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "&Prezentácia"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Nastavenia"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Orezať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr "Šírka:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the width of the crop constant"
+#~ msgstr "Ponechá šírku konštanty orezania"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "Výš&ka:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the height of the crop constant"
+#~ msgstr "Ponechá výšku konštanty orezania"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "Pomer:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the ratio constant"
+#~ msgstr "Zachová pomer strán konštantný"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Vrstva"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Obrázok"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "O&rezať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "Snímky"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "Snímky prezentácie:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "Upraviť vlastné prezentácie..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "HTML Export"
+#~ msgstr "HTML Export"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tick the slide should be exported :"
+#~ msgstr "Zaškrtnite snímku, ktorá má byť exportovaná:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select all"
+#~ msgstr "Vybrať všetko"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select template (.css) :"
+#~ msgstr "Vybrať šablónu (.css) :"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deselect all"
+#~ msgstr "Odznačiť všetko"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Názov"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output preview"
+#~ msgstr "Náhľad výstupu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Browse"
+#~ msgstr "Prehadávať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "Vymazať obľúbené"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open in browser"
+#~ msgstr "Otvoriť v prehliadači"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiple monitors"
+#~ msgstr "Viac monitorov"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "Monitor prezentácie:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enable presenter view"
+#~ msgstr "Povoliť zobrazenie presentera"
+
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "Calligra Stage"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "Prezentačný nástroj"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Neudržiavané v čase vydania tejto verzie. Komunita Calligra víta "
+#~ "zainteresované osoby, ktoré prevezmú udržiavanie."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Stage Team"
+#~ msgstr "(c) 1998-%1, Tím Stage"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "Predošlý správca"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thorsten Zachmann"
+#~ msgstr "Thorsten Zachmann"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "Pôvodný autor"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reginald Stadlbauer"
+#~ msgstr "Reginald Stadlbauer"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Werner Trobin"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toshitaka Fujioka"
+#~ msgstr "Toshitaka Fujioka"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lukáš Tinkl"
+#~ msgstr "Lukáš Tinkl"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "Ariya Hidayat"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percy Leonhardt"
+#~ msgstr "Percy Leonhardt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt "
+#~ msgstr "Boudewijn Rempt "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Carlos Licea "
+#~ msgstr "Carlos Licea "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C. Boemann "
+#~ msgstr "Casper Boemann "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fredy Yanardi "
+#~ msgstr "Fredy Yanardi "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht "
+#~ msgstr "Jan Hambrecht "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Marijn Kruisselbrink "
+#~ msgstr "Marijn Kruisselbrink "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Martin Pfeiffer "
+#~ msgstr "Martin Pfeiffer "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sven Langkamp "
+#~ msgstr "Sven Langkamp "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Timothée Lacroix "
+#~ msgstr "Timothée Lacroix "
+
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Roman Paholík"
+
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "wizzardsk@gmail.com"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown"
+#~ msgstr "Neznáme"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Stránka %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of presentation. Click to exit."
+#~ msgstr "Koniec prezentácie. Kliknite pre ukončenie."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Rozloženie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Can not find needed text component, Calligra Stage will quit now."
+#~ msgstr "Nemôžem nájsť potrebný textový komponent, Calligra Stage sa ukončí."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Can not find needed picture component, Calligra Stage will quit now."
+#~ msgstr ""
+#~ "Nemôžem nájsť potrebný obrazový komponent, Calligra Stage sa ukončí."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Installation Error"
+#~ msgstr "Chyba inštalácie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Placeholder shape"
+#~ msgstr "Tvar symbolu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a title"
+#~ msgstr "Dvakrát kliknite na pridanie názvu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add an outline"
+#~ msgstr "Dvakrát kliknite na pridanie obrysu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a text"
+#~ msgstr "Dvakrát kliknite na pridanie textu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add notes"
+#~ msgstr "Dvakrát kliknite na pridanie poznámky"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a picture"
+#~ msgstr "Dvakrát kliknite na pridanie obrázku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a chart"
+#~ msgstr "Dvakrát kliknite na pridanie grafu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add an object"
+#~ msgstr "Dvakrát kliknite na pridanie objektu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "Farba pera"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Size"
+#~ msgstr "Veľkosť pera"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "Čierna"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "White"
+#~ msgstr "Biela"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Zelená"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "Červená"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Modrá"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "Žltá"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "Ďalšia snímka"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Speaker Notes"
+#~ msgstr "Poznámky prednášateľa"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "Aktuálna snímka %1 z %2"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "Koniec prezentácie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start on mouse click"
+#~ msgstr "spustiť pri kliknutí myšou"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start after previous animation"
+#~ msgstr "Spustiť po predošlej animácii"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start with previous animation"
+#~ msgstr "Spustiť s predošlou animáciou"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start after %1 seconds. Duration of %2 seconds."
+#~ msgstr "Spustiť po %1 sekundách. Trvanie %2 sekúnd."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "Animácia"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Tvar"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "&Presunúť sem"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "&Kopírovať sem"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&ancel"
+#~ msgstr "&Zrušiť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Normálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Master Slides"
+#~ msgstr "Ukázať hlavné snímky"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "Impotovať slideshow..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "Vložiť stránku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a new slide after the current one"
+#~ msgstr "Vložiť novú snímku za aktuálnou"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "Kopírovať stránku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "Kopírovať aktuálnu snímku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "Vymazať snímku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "Vymazať aktuálnu snímku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide..."
+#~ msgstr "Hlavná snímka..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "Predošlá snímka"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "Prejsť na predošlú snímku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "Prejsť na ďalšiu snímku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "Prvá snímka"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "Prejsť na prvú snímku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "Posledná snímka"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "Prejsť na poslednú snímku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "&Nastaviť Stage..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as HTML..."
+#~ msgstr "Exportovať ako HTML..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "Vložiť obrázky ako snímky..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Appear Animation"
+#~ msgstr "Vytvoriť animáciu objavenia"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows..."
+#~ msgstr "Upraviť vlastné prezentácie..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "Spustiť prezentáciu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "Od aktuálnej snímky"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From First Slide"
+#~ msgstr "Od prvej snímky"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "Zastaviť prezentáciu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Zobraziť stavový riadok"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Skryť stavový riadok"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Zobrazí alebo skryje stavový riadok"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "Nastavenie prezentácie..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "Povoliť zobrazenie presentera..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "Kresliť na prezentáciu..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Highlight the presentation..."
+#~ msgstr "Vysvietiť prezentáciu..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blackscreen on the presentation..."
+#~ msgstr "Prázdna obrazovka na prezentáciu..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Poznámky"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "Radenie snímok"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "Slide Show: "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new custom slide show"
+#~ msgstr "Pridať novú vlastnú slideshow"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "Vymazať aktuálnu vlastnú prezentáciu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add slides to current custom slide show"
+#~ msgstr "Pridať snímky do aktuálnej vlastnej prezentácie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove slides from current custom slide show"
+#~ msgstr "Odstrániť snímky z aktuálnej vlastnej prezentácie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "Duplikovať snímku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "Spustiť prezentáciu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new slide"
+#~ msgstr "Pridať novú snímku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "Odstrániť vybrané snímky"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Premenovať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "Vystrihnúť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Kopírovať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "Vložiť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "Slide Show %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All slides"
+#~ msgstr "Všetky snímky"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Chyba"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "There cannot be two slideshows with the same name."
+#~ msgstr "Nemôžu byť dva slideshowy s rovnakým názvom."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic animation preview"
+#~ msgstr "Automatický náhľad animácie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "Náhľad animácie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "Prechody snímok"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Click Actions"
+#~ msgstr "Akcie kliknutí tvarov"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "Tvar animácií"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage animation delay and duration: "
+#~ msgstr "Spravovať oneskorenie a trvanie animácie:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start: "
+#~ msgstr "Štart"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "on mouse click"
+#~ msgstr "pri kliknutí myšou"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after previous animation"
+#~ msgstr "po predošlej animácii"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "with previous animation"
+#~ msgstr "s predošlou animáciou"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delay: "
+#~ msgstr "Oneskorenie:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "Trvanie: "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview Shape Animation"
+#~ msgstr "Náhľad tvaru animácie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "Žiadny efekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr " sek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply To All Slides"
+#~ msgstr "Použiť pre všetky snímky"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entrance"
+#~ msgstr "Vchod"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exit"
+#~ msgstr "Ukončiť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Emphasis"
+#~ msgstr "Dôraz"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "Vlastné"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Motion path"
+#~ msgstr "Cesta pohybu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ole Action"
+#~ msgstr "Ole akcia"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Media Call"
+#~ msgstr "Volanie média"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "Upraviť animáciu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new animation"
+#~ msgstr "Pridať novú animáciu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "Odstrániť animáciu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Order: "
+#~ msgstr "Poradie:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation up"
+#~ msgstr "Presunúť animáciu hore"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation down"
+#~ msgstr "Presunúť animáciu dolu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "Pridať novú animáciu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "Vymazať aktuálnu animáciu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "seconds"
+#~ msgstr "sekúnd"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monitor %1 (primary)"
+#~ msgstr "Monitor %1 (primárny)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monitor %1"
+#~ msgstr "Monitor %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View"
+#~ msgstr "Nastaviť zobrazenie presentera"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "Nastavenie prezentácie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Html Export"
+#~ msgstr "Html Export"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Exportovať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "There is already a favorite file with this name"
+#~ msgstr "Už existuje obľúbená položka s týmto názvom"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Incorrect file, .zip only or corrupted zip"
+#~ msgstr "Nepsrávny súbor, iba .zip alebo poškodený zip"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zip file need to contain style.css"
+#~ msgstr "Zip súbor musí obsahovať style.css"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "Vymazať šablónu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "You may not remove the templates provided with the application"
+#~ msgstr "Nemali by ste odstrániť šablóny dodané v aplikácii"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Template"
+#~ msgstr "Pridať šablónu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Are you sure you want to remove \"%1\"?"
+#~ msgstr "Ste si istý, že chcete odtrániť \"%1\"?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm remove"
+#~ msgstr "Potvrdenie vymazania"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr "Bez zvuku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import..."
+#~ msgstr "Importovať..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bar"
+#~ msgstr "Stĺpec"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Left"
+#~ msgstr "Zľava"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top"
+#~ msgstr "Zhora"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Right"
+#~ msgstr "Sprava"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "Zdola"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown subtype"
+#~ msgstr "Neznámy podtyp"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "Hodiny"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Twelve Clockwise"
+#~ msgstr "Od 12 v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Three Clockwise"
+#~ msgstr "Od 3 v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Six Clockwise"
+#~ msgstr "Od 6 v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Nine Clockwise"
+#~ msgstr "Od 9 v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Twelve Counterclockwise"
+#~ msgstr "Od 12 proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Three Counterclockwise"
+#~ msgstr "Od 3 proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Six Counterclockwise"
+#~ msgstr "Od 6 proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Nine Counterclockwise"
+#~ msgstr "Od 9 proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "Dvojitý vetrák"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Vertical"
+#~ msgstr "Vetrák von vertikálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Horizontal"
+#~ msgstr "Vetrák von horizontálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "Vetrák dnu vertikálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "Vetrák dnu horizontálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical Reverse"
+#~ msgstr "Vetrák dnu vertikálne obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal Reverse"
+#~ msgstr "Vetrák dnu horizontálne obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "Dvojité zametanie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "Paralelne vertikálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal"
+#~ msgstr "Paralelne diagonálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "Oproti vertikálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "Oproti horizontálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "Paralelne diagonálne hore vľavo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "Paralelne diagonálne dolu vľavo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical Reverse"
+#~ msgstr "Paralelne vertikálne obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Reverse"
+#~ msgstr "Paralelne diagonálne obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "Oproti vertikálne obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "Oproti horizontálne obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "Paralelne diagonálne hore vľavo obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "Paralelne diagonálne dolu vľavo obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan"
+#~ msgstr "Vetrák"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "V strede vpravo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Top"
+#~ msgstr "V strede hore"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Left"
+#~ msgstr "V strede vľavo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "V strede dole"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Top"
+#~ msgstr "Vetrák von hore"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "Vetrák von vpravo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "Vetrák von dolu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Left"
+#~ msgstr "Vetrák von vľavo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Top"
+#~ msgstr "Vetrák dnu hore"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "Vetrák dnu vpravo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "Vetrák dnu dolu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Left"
+#~ msgstr "Vetrák dnu vľavo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "Veterník"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Vertical Clockwise"
+#~ msgstr "Dve steblá vertikálne v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Clockwise"
+#~ msgstr "Dve steblá horizontálne v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Clockwise"
+#~ msgstr "Štyri steblá horizontálne v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Vertical Counterclockwise"
+#~ msgstr "Dve steblá vertikálne proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Counterclockwise"
+#~ msgstr "Dve steblá horizontálne proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Counterclockwise"
+#~ msgstr "Štyri steblá horizontálne proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "Dvere salónu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Top"
+#~ msgstr "Nahor"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "Do ľava"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "Dolu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "Do prava"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "Jednoduché zametanie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top"
+#~ msgstr "Nahor v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "Do prava v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "Dolu v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "Do ľava v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "Hore vľavo v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "Dolu vľavo proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "Dolu vpravo v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "Hore vpravo proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top"
+#~ msgstr "Nahor proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Right"
+#~ msgstr "Do prava proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom"
+#~ msgstr "Dolu proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Left"
+#~ msgstr "Do ľava proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left"
+#~ msgstr "Hore vľavo proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "Dolu vľavo v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "Dolu vpravo proti smeru hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "Hore vpravo v smere hodinových ručičiek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "Čelné sklo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "Vpravo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up"
+#~ msgstr "Hore"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "Vertikálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "Horizontálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Reverse"
+#~ msgstr "Vpravo obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up Reverse"
+#~ msgstr "Hore obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reverse"
+#~ msgstr "Vertikálne obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reverse"
+#~ msgstr "Horizontálne obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "Dvere stodoly"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "Diagonálne dolu vľavo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left Reverse"
+#~ msgstr "Diagonálne dolu vľavo obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "Diagonálne hore vľavo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Reverse"
+#~ msgstr "Diagonálne hore vľavo obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Vee"
+#~ msgstr "Barn Vee"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "Stodola cik cak"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "Zvislo otočené"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "Vodorovne otočené"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box"
+#~ msgstr "Stĺpec"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "Zhora zľava"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "Zhora sprava"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "Zdola zľava"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "Zdola sprava"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "Diagonálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box"
+#~ msgstr "Štvorstĺpec"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "Rohy dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In Reverse"
+#~ msgstr "Rohy dnu obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "Rohy von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out Reverse"
+#~ msgstr "Rohy von obrátene"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "Rôzne diagonálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Barn Door"
+#~ msgstr "Dvojité dvere stodoly"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Diamond"
+#~ msgstr "Dvojitý diamant"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vee"
+#~ msgstr "Vee"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zig Zag"
+#~ msgstr "Cik Cak"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "Blednutie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crossfade"
+#~ msgstr "Prelínanie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade over Color"
+#~ msgstr "Zanikanie farby"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "ArrowHead"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down"
+#~ msgstr "Dolu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "Dole obrátené"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "Vľavo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "Vľavo obrátené"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Elipsa"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "Kruh"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "Obrátený kruh"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eye"
+#~ msgstr "Oko"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hexagon"
+#~ msgstr "Šesťuholník"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Iris"
+#~ msgstr "Clona"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular"
+#~ msgstr "Pravouhlý"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "Obrátený pravouholník"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond"
+#~ msgstr "Diamant"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "Obrátený diamant"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Rôzne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart"
+#~ msgstr "Srdce"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "Otočené srdce"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole"
+#~ msgstr "Kľúčová dierka"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "Obrátená kľúčová dierka"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Päťuholník"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "RoundRect"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "Hviezda"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star"
+#~ msgstr "Päťcípa hviezda"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "Otočená štvorcípa hviezda"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star"
+#~ msgstr "Štvorcípa hviezda"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "Otočená päťcípa hviezda"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star"
+#~ msgstr "Šesťcípa hviezda"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "Otočená šesťcípa hviezda"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triangle"
+#~ msgstr "Trojuholník"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box Snakes"
+#~ msgstr "Stĺpcové hady"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top In"
+#~ msgstr "Dve krabice hore dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "Dve krabice dole dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "Dve krabice vľavo dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "Dve krabice vpravo dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical In"
+#~ msgstr "Štyri krabice vertikálne dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "Štyri krabice horizontálne dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top Out"
+#~ msgstr "Dve krabice hore vpm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "Dve krabice dole von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "Dve krabice vľavo von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "Dve krabice vpravo von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical Out"
+#~ msgstr "Štvorstĺpcový zvislý výstup"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "Štyri krabice horizontálne von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "Paralelné hady"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "Vertikálne hore rovnako dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "Vertikálne hore rovnako von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same In"
+#~ msgstr "Vertikálne dolu rovnako dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same Out"
+#~ msgstr "Vertikálne dolu rovnako von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Left Opposite In"
+#~ msgstr "Vertikálny vrch, vľavo oproti dovnútra"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Left Opposite Out"
+#~ msgstr "Vertikálne hore vľavo oproti von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Left Opposite In"
+#~ msgstr "Vertikálne dolu vľavo oproti dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Left Opposite Out"
+#~ msgstr "Vertikálne dolu vľavo oproti von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "Horizontálne vľavo rovnako dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same Out"
+#~ msgstr "Horizontálne vľavo rovnako von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same In"
+#~ msgstr "Horizontálne hore rovnako dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same Out"
+#~ msgstr "Horizontálne hore rovnako von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Left Opposite In"
+#~ msgstr "Horizontálne hore vľavo oproti dni"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Left Opposite Out"
+#~ msgstr "Horizontálne hore vľavo oproti von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite In"
+#~ msgstr "Horizontálne hore vpravo oproti dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite Out"
+#~ msgstr "Horizontálny vrch, vpravo oproti von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left Opposite In"
+#~ msgstr "Diagonálne dolu vľavo oproti dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left Opposite Out"
+#~ msgstr "Diagonálny spodok, vľavo oproti von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "Diagonálne hore vľavo oproti dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite Out"
+#~ msgstr "Diagonálne hore vľavo oproti von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "Had"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Špirála"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "V smere hodinových ručičiek hore vľavo dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "V smere hodinových ručičiek hore vľavo von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "V smere hodinových ručičiek hore vpravo dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "V smere hodinových ručičiek hore vpravo von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "V smere hodinových ručičiek dolu vľavo dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "V smere hodinových ručičiek dolu vľavo von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "V smere hodinových ručičiek dolu vpravo dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "V smere hodinových ručičiek dolu vpravo von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "Proti smeru hodinových ručičiek hore vľavo dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "Proti smeru hodinových ručičiek hore vľavo von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "Proti smeru hodinových ručičiek hore vpravo dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "Proti smeru hodinových ručičiek hore vpravo von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "Proti smeru hodinových ručičiek dolu vľavo dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "Proti smeru hodinových ručičiek dolu vľavo von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "Proti smeru hodinových ručičiek dolu vpravo dnu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "Proti smeru hodinových ručičiek dolu vpravo von"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "Vodopád"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Vertical"
+#~ msgstr "Hote vľavo vertikálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Horizontal"
+#~ msgstr "Hore vľavo horizontálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "Hore vpravo vertikálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Horizontal"
+#~ msgstr "Hore vpravo horizontálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "Dolu vľavo vertikálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Horizontal"
+#~ msgstr "Dolu vľavo horizontálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "Dolu vpravo vertikálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "Dolu vpravo horizontálne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "Snímka"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space Rotation"
+#~ msgstr "Otočenie priestoru"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "Vymeniť efekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "Hlavička"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "Pätička"
+
+#~ msgid "Maintainer"
+#~ msgstr "Správca"
+
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "Stage"
+
+#~ msgid "File to open"
+#~ msgstr "Otvoriť súbor"

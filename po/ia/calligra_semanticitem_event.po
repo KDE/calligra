@@ -1,0 +1,222 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Giovanni Sora <g.sora@tiscali.it>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-11-06 13:17+0100\n"
+"Last-Translator: Giovanni Sora <g.sora@tiscali.it>\n"
+"Language-Team: Interlingua <kde-i18n-ia@kde.org>\n"
+"Language: ia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: KoEventSemanticItemFactory.cpp:31
+#, kde-format
+msgctxt "displayname of the semantic item type Event"
+msgid "Event"
+msgstr "Evento"
+
+#: KoRdfCalendarEvent.cpp:158
+#, kde-format
+msgid "Area"
+msgstr "Area"
+
+#: KoRdfCalendarEvent.cpp:159
+#, kde-format
+msgid "Region"
+msgstr "Region"
+
+#: KoRdfCalendarEvent.cpp:381
+#, kde-format
+msgid "Select a calendar for saving:"
+msgstr "Selige un calendario de salveguardar:"
+
+#: KoRdfCalendarEvent.cpp:401
+#, kde-format
+msgid ""
+"Could not add entry\n"
+"%1"
+msgstr ""
+"Il non pote adder elemento\n"
+"%1"
+
+#: KoRdfCalendarEvent.cpp:428
+#, kde-format
+msgid ""
+"Could not save iCal file\n"
+"%1"
+msgstr ""
+"Il non pote salveguardar file de iCal\n"
+"%1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfCalendarEventEditWidget.ui:20
+#, kde-format
+msgid "&Summary:"
+msgstr "&Summario:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfCalendarEventEditWidget.ui:30
+#, kde-format
+msgid "&Location:"
+msgstr "&Location:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfCalendarEventEditWidget.ui:43
+#, kde-format
+msgid "&Start:"
+msgstr "&Starta:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: KoRdfCalendarEventEditWidget.ui:56
+#, kde-format
+msgid "&End:"
+msgstr "&Termina:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tadtab)
+#: KoRdfCalendarEventEditWidget.ui:80
+#, kde-format
+msgid "Time and Date"
+msgstr "Tempore e Data"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tztab)
+#: KoRdfCalendarEventEditWidget.ui:93
+#, kde-format
+msgid "Timezone"
+msgstr "Fuso horari"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:30
+#, kde-format
+msgid "Calendar Event"
+msgstr "Evento de Calendario"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:37
+#, kde-format
+msgid "Edit..."
+msgstr "Modifica..."
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:40
+#, kde-format
+msgid "Import event to Calendar"
+msgstr "IMporta evento incalendario"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:43
+#, kde-format
+msgid "Export event to iCal file..."
+msgstr "Exporta evento al file de iCal..."
+
+#, fuzzy
+#~| msgid "&Summary:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Summary:"
+#~ msgstr "&Summario:"
+
+#, fuzzy
+#~| msgid "&Location:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Location:"
+#~ msgstr "&Location:"
+
+#, fuzzy
+#~| msgid "&Start:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Start:"
+#~ msgstr "&Starta:"
+
+#, fuzzy
+#~| msgid "&End:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&End:"
+#~ msgstr "&Termina:"
+
+#, fuzzy
+#~| msgid "Time and Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time and Date"
+#~ msgstr "Tempore e Data"
+
+#, fuzzy
+#~| msgid "Timezone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Timezone"
+#~ msgstr "Fuso horari"
+
+#, fuzzy
+#~| msgctxt "displayname of the semantic item type Event"
+#~| msgid "Event"
+#~ msgctxt "(qtundo-format) displayname of the semantic item type Event"
+#~ msgid "Event"
+#~ msgstr "Evento"
+
+#, fuzzy
+#~| msgid "Area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area"
+#~ msgstr "Area"
+
+#, fuzzy
+#~| msgid "Region"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Region"
+#~ msgstr "Region"
+
+#, fuzzy
+#~| msgid "Select a calendar for saving:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select a calendar for saving:"
+#~ msgstr "Selige un calendario de salveguardar:"
+
+#, fuzzy
+#~| msgid ""
+#~| "Could not add entry\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not add entry\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Il non pote adder elemento\n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid ""
+#~| "Could not save iCal file\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not save iCal file\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Il non pote salveguardar file de iCal\n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid "Calendar Event"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Event"
+#~ msgstr "Evento de Calendario"
+
+#, fuzzy
+#~| msgid "Edit..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit..."
+#~ msgstr "Modifica..."
+
+#, fuzzy
+#~| msgid "Import event to Calendar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import event to Calendar"
+#~ msgstr "IMporta evento incalendario"
+
+#, fuzzy
+#~| msgid "Export event to iCal file..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export event to iCal file..."
+#~ msgstr "Exporta evento al file de iCal..."

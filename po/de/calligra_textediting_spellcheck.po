@@ -1,0 +1,100 @@
+# Burkhard Lück <lueck@hube-lueck.de>, 2007, 2008, 2011.
+# Frederik Schwarzer <schwarzer@kde.org>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2011-10-31 21:59+0100\n"
+"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "&Rechtschreibprüfung einrichten ..."
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Autom. Rechtschreibprüfung"
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr "Rechtschreibprüfung"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Rechtschreibung"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Zum Wörterbuch hinzufügen"
+
+#, fuzzy
+#~| msgid "Configure &Spell Checking..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "&Rechtschreibprüfung einrichten ..."
+
+#, fuzzy
+#~| msgid "Auto Spell Check"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Autom. Rechtschreibprüfung"
+
+#, fuzzy
+#~| msgid "Check Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Rechtschreibprüfung"
+
+#, fuzzy
+#~| msgid "Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Rechtschreibung"
+
+#, fuzzy
+#~| msgid "Add to Dictionary"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Zum Wörterbuch hinzufügen"
+
+#~ msgid "Ignore Word"
+#~ msgstr "Wort ignorieren"
+
+#~ msgid "Spell Check"
+#~ msgstr "Rechtschreibprüfung"
+
+#~ msgid "Spell Check Configuration"
+#~ msgstr "Einrichtung der Rechtschreibprüfung"
+
+#~ msgid "Default Language:"
+#~ msgstr "Standardsprache:"
+
+#~ msgid "Options"
+#~ msgstr "Optionen"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "Rechtschreibprüfung im &Hintergrund aktivieren"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "Durchgehend groß geschriebene Wörter ü&berspringen"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "&Zusammengezogene Wörter überspringen"
+
+#~ msgid "&Add"
+#~ msgstr "Hin&zufügen"
+
+#~ msgid "&Remove"
+#~ msgstr "&Entfernen"

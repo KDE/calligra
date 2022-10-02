@@ -1,0 +1,567 @@
+# Uyghur translation for FormulaShape.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sahran <sahran.ug@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: FormulaShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-09-08 07:04+0900\n"
+"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language: ug\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+
+#: FormulaCommand.cpp:59
+msgctxt "(qtundo-format)"
+msgid "Add text to formula"
+msgstr "فورمۇلىغا تېكىست قوش"
+
+#: FormulaCommand.cpp:215
+msgctxt "(qtundo-format)"
+msgid "Change rows"
+msgstr "قۇرنى ئۆزگەرت"
+
+#: FormulaEditor.cpp:74
+msgctxt "(qtundo-format)"
+msgid "Add text"
+msgstr "تېكىست قوش"
+
+#: FormulaEditor.cpp:107
+msgctxt "(qtundo-format)"
+msgid "Insert row"
+msgstr "قۇر قىستۇر"
+
+#: FormulaEditor.cpp:112
+msgctxt "(qtundo-format)"
+msgid "Remove row"
+msgstr "قۇرنى ئۆچۈر"
+
+#: FormulaEditor.cpp:120
+msgctxt "(qtundo-format)"
+msgid "Insert column"
+msgstr "ئىستون قىستۇر"
+
+#: FormulaEditor.cpp:125
+msgctxt "(qtundo-format)"
+msgid "Remove column"
+msgstr "ئىستوننى ئۆچۈر"
+
+#: FormulaEditor.cpp:151
+msgctxt "(qtundo-format)"
+msgid "Insert formula elements."
+msgstr "فورمۇلا ئېلېمېنتلىرىنى قىستۇرۇش."
+
+#: FormulaEditor.cpp:184
+msgctxt "(qtundo-format)"
+msgid "Remove formula elements"
+msgstr "فورمۇلا ئېلېمېنتلىرىنى ئۆچۈرۈش"
+
+#: FormulaToolWidget.cpp:72
+#, kde-format
+msgid "Arrows"
+msgstr "يا ئوقلار"
+
+#: FormulaToolWidget.cpp:74
+#, kde-format
+msgid "Greek"
+msgstr "گىرېكچە"
+
+#: FormulaToolWidget.cpp:78
+#, kde-format
+msgid "Relations"
+msgstr "مۇناسىۋەتلەر"
+
+#: FormulaToolWidget.cpp:81
+#, kde-format
+msgid "Operators"
+msgstr "ئەمەللەر"
+
+#: FormulaToolWidget.cpp:85
+#, kde-format
+msgid "Miscellaneous"
+msgstr "باشقىلار"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: FormulaToolWidget.ui:24
+#, kde-format
+msgid "Insert"
+msgstr "قىستۇر"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupElements)
+#: FormulaToolWidget.ui:36
+#, kde-format
+msgid "Elements"
+msgstr "ئېلېمېنتلار"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupSymbols)
+#: FormulaToolWidget.ui:132
+#, kde-format
+msgid "Symbols"
+msgstr "بەلگىلەر"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupActions)
+#: FormulaToolWidget.ui:228
+#, kde-format
+msgid "Actions"
+msgstr "مەشغۇلاتلار"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
+#: FormulaToolWidget.ui:279
+#, kde-format
+msgctxt "This button opens a file dialog to load a MathML file"
+msgid "Load..."
+msgstr "ئوقۇش..."
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonSave)
+#: FormulaToolWidget.ui:286
+#, kde-format
+msgid "Save..."
+msgstr "ساقلاش…"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: FormulaToolWidget.ui:294
+#, kde-format
+msgid "Edit"
+msgstr "تەھرىرلەش"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupGeneralOptions)
+#: FormulaToolWidget.ui:300
+#, kde-format
+msgid "General options"
+msgstr "ئادەتتىكى تاللانما"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: FormulaToolWidget.ui:325
+#, kde-format
+msgid "Font:"
+msgstr "خەت نۇسخا:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColors)
+#: FormulaToolWidget.ui:341
+#, kde-format
+msgid "Colors:"
+msgstr "رەڭلەر:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupSpecificOptions)
+#: FormulaToolWidget.ui:349
+#, kde-format
+msgid "Specific options"
+msgstr "ئالاھىدە تاللانما"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: FormulaToolWidget.ui:371
+#, kde-format
+msgid "Rows:"
+msgstr "قۇر:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: FormulaToolWidget.ui:378
+#, kde-format
+msgid "Columns:"
+msgstr "ئىستون:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton)
+#: FormulaToolWidget.ui:406
+#, kde-format
+msgid "View MathML"
+msgstr "MathML نى كۆرۈش"
+
+#: KoFormulaShape.cpp:210
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"بۇ پۈتۈك تەركىبىدە يىراقتىكى پۈتۈكنىڭ ئۇلانمىسى بار \n"
+"%1"
+
+#: KoFormulaShape.cpp:211
+#, kde-format
+msgid "Confirmation Required"
+msgstr "جەزملەش زۆرۈر"
+
+#: KoFormulaShape.cpp:211
+#, kde-format
+msgid "Download"
+msgstr "چۈشۈرۈش"
+
+#: KoFormulaShape.cpp:211
+#, kde-format
+msgid "Skip"
+msgstr "ئۆتكۈزۈۋەت"
+
+#: KoFormulaShapeFactory.cpp:21
+#, kde-format
+msgid "Formula"
+msgstr "فورمۇلا"
+
+#: KoFormulaShapeFactory.cpp:23
+#, kde-format
+msgid "A formula"
+msgstr "بىر فورمۇلا"
+
+#: KoFormulaTool.cpp:407
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert formula elements."
+msgid "Insert fenced element"
+msgstr "فورمۇلا ئېلېمېنتلىرىنى قىستۇرۇش."
+
+#: KoFormulaTool.cpp:408
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert formula elements."
+msgid "Insert enclosed element"
+msgstr "فورمۇلا ئېلېمېنتلىرىنى قىستۇرۇش."
+
+#: KoFormulaTool.cpp:411
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert row"
+msgid "Insert root"
+msgstr "قۇر قىستۇر"
+
+#: KoFormulaTool.cpp:412
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert row"
+msgid "Insert square root"
+msgstr "قۇر قىستۇر"
+
+#: KoFormulaTool.cpp:414
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert row"
+msgid "Insert fraction"
+msgstr "قۇر قىستۇر"
+
+#: KoFormulaTool.cpp:416
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert row"
+msgid "Insert bevelled fraction"
+msgstr "قۇر قىستۇر"
+
+#: KoFormulaTool.cpp:419
+#, kde-format
+msgid "Insert 3x3 table"
+msgstr "3x3 جەدۋەل قىستۇر"
+
+#: KoFormulaTool.cpp:423
+#, kde-format
+msgid "Insert 2 dimensional vector"
+msgstr "2 ئۆلچەملىك ۋېكتور قىستۇر"
+
+#: KoFormulaTool.cpp:426
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert row"
+msgid "Insert subscript"
+msgstr "قۇر قىستۇر"
+
+#: KoFormulaTool.cpp:428
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert row"
+msgid "Insert superscript"
+msgstr "قۇر قىستۇر"
+
+#: KoFormulaTool.cpp:430
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert row"
+msgid "Insert sub- and superscript"
+msgstr "قۇر قىستۇر"
+
+#: KoFormulaTool.cpp:432
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert row"
+msgid "Insert overscript"
+msgstr "قۇر قىستۇر"
+
+#: KoFormulaTool.cpp:434
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert row"
+msgid "Insert underscript"
+msgstr "قۇر قىستۇر"
+
+#: KoFormulaTool.cpp:436
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert row"
+msgid "Insert under- and overscript"
+msgstr "قۇر قىستۇر"
+
+#: KoFormulaTool.cpp:445
+#, kde-format
+msgid "Insert row"
+msgstr "قۇر قىستۇر"
+
+#: KoFormulaTool.cpp:452
+#, kde-format
+msgid "Insert column"
+msgstr "ئىستون قىستۇر"
+
+#: KoFormulaTool.cpp:459
+#, kde-format
+msgid "Remove row"
+msgstr "قۇرنى ئۆچۈر"
+
+#: KoFormulaTool.cpp:466
+#, kde-format
+msgid "Remove column"
+msgstr "ئىستوننى ئۆچۈر"
+
+#: KoFormulaToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Formula editing tool"
+msgid "Formula editing"
+msgstr "فورمۇلا تەھرىرلەش قورالى"
+
+#: KoM2MMLForumulaTool.cpp:97
+#, kde-format
+msgid "Mode: "
+msgstr "ئۇسۇلى: "
+
+#: KoM2MMLForumulaTool.cpp:100
+#, kde-format
+msgid "LaTeX"
+msgstr "LaTeX"
+
+#: KoM2MMLForumulaTool.cpp:102
+#, kde-format
+msgid "Matlab"
+msgstr "Matlab"
+
+#: KoM2MMLForumulaTool.cpp:171
+#, kde-format
+msgid "Parse error."
+msgstr "تەھلىل قىلىشتا خاتالىق كۆرۈلدى."
+
+#: KoM2MMLForumulaTool.cpp:201
+#, kde-format
+msgid "Edit formula with LaTeX/Matlab syntax"
+msgstr ""
+
+#: KoM2MMLForumulaTool.cpp:203
+#, kde-format
+msgid "Edit formula with LaTeX syntax"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "قىستۇر"
+
+#, fuzzy
+#~| msgid "Elements"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Elements"
+#~ msgstr "ئېلېمېنتلار"
+
+#, fuzzy
+#~| msgid "Symbols"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Symbols"
+#~ msgstr "بەلگىلەر"
+
+#, fuzzy
+#~| msgid "Actions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Actions"
+#~ msgstr "مەشغۇلاتلار"
+
+#, fuzzy
+#~| msgctxt "This button opens a file dialog to load a MathML file"
+#~| msgid "Load..."
+#~ msgctxt ""
+#~ "(qtundo-format) This button opens a file dialog to load a MathML file"
+#~ msgid "Load..."
+#~ msgstr "ئوقۇش..."
+
+#, fuzzy
+#~| msgid "Save..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save..."
+#~ msgstr "ساقلاش…"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "تەھرىرلەش"
+
+#, fuzzy
+#~| msgid "General options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General options"
+#~ msgstr "ئادەتتىكى تاللانما"
+
+#, fuzzy
+#~| msgid "Font:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Font:"
+#~ msgstr "خەت نۇسخا:"
+
+#, fuzzy
+#~| msgid "Colors:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Colors:"
+#~ msgstr "رەڭلەر:"
+
+#, fuzzy
+#~| msgid "Specific options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Specific options"
+#~ msgstr "ئالاھىدە تاللانما"
+
+#, fuzzy
+#~| msgid "Rows:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rows:"
+#~ msgstr "قۇر:"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "ئىستون:"
+
+#, fuzzy
+#~| msgid "View MathML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View MathML"
+#~ msgstr "MathML نى كۆرۈش"
+
+#, fuzzy
+#~| msgid "Arrows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "يا ئوقلار"
+
+#, fuzzy
+#~| msgid "Greek"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Greek"
+#~ msgstr "گىرېكچە"
+
+#, fuzzy
+#~| msgid "Relations"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Relations"
+#~ msgstr "مۇناسىۋەتلەر"
+
+#, fuzzy
+#~| msgid "Operators"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operators"
+#~ msgstr "ئەمەللەر"
+
+#, fuzzy
+#~| msgid "Miscellaneous"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Miscellaneous"
+#~ msgstr "باشقىلار"
+
+#, fuzzy
+#~| msgid ""
+#~| "This document contains an external link to a remote document\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document contains an external link to a remote document\n"
+#~ "%1"
+#~ msgstr ""
+#~ "بۇ پۈتۈك تەركىبىدە يىراقتىكى پۈتۈكنىڭ ئۇلانمىسى بار \n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid "Confirmation Required"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirmation Required"
+#~ msgstr "جەزملەش زۆرۈر"
+
+#, fuzzy
+#~| msgid "Download"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Download"
+#~ msgstr "چۈشۈرۈش"
+
+#, fuzzy
+#~| msgid "Skip"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip"
+#~ msgstr "ئۆتكۈزۈۋەت"
+
+#, fuzzy
+#~| msgid "Formula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formula"
+#~ msgstr "فورمۇلا"
+
+#, fuzzy
+#~| msgid "A formula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A formula"
+#~ msgstr "بىر فورمۇلا"
+
+#, fuzzy
+#~| msgid "Insert 3x3 table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert 3x3 table"
+#~ msgstr "3x3 جەدۋەل قىستۇر"
+
+#, fuzzy
+#~| msgid "Insert 2 dimensional vector"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert 2 dimensional vector"
+#~ msgstr "2 ئۆلچەملىك ۋېكتور قىستۇر"
+
+#, fuzzy
+#~| msgid "Formula editing tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formula editing"
+#~ msgstr "فورمۇلا تەھرىرلەش قورالى"
+
+#, fuzzy
+#~| msgid "Mode: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mode: "
+#~ msgstr "ئۇسۇلى: "
+
+#, fuzzy
+#~| msgid "LaTeX"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "LaTeX"
+#~ msgstr "LaTeX"
+
+#, fuzzy
+#~| msgid "Matlab"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Matlab"
+#~ msgstr "Matlab"
+
+#, fuzzy
+#~| msgid "Parse error."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parse error."
+#~ msgstr "تەھلىل قىلىشتا خاتالىق كۆرۈلدى."

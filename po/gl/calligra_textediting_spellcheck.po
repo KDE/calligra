@@ -1,0 +1,76 @@
+# translation of SpellCheckPlugin.po to
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Miguel Branco <mgl.branco@gmail.com>, 2008, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2012-04-21 16:20+0200\n"
+"Last-Translator: Miguel Branco <mgl.branco@gmail.com>\n"
+"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "Configurar a corrección ortográfica…"
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Configurar a corrección ortográfica"
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr "Comprobar a ortografía"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Ortografía"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Engadir ao dicionario"
+
+#, fuzzy
+#~| msgid "Configure &Spell Checking..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "Configurar a corrección ortográfica..."
+
+#, fuzzy
+#~| msgid "Auto Spell Check"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Configurar a corrección ortográfica"
+
+#, fuzzy
+#~| msgid "Check Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Verificar a ortografía"
+
+#, fuzzy
+#~| msgid "Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Ortografía"
+
+#, fuzzy
+#~| msgid "Add to Dictionary"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Engadir ao dicionario"
+
+#~ msgid "Ignore Word"
+#~ msgstr "Ignorar esta palabras"

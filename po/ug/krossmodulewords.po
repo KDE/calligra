@@ -1,0 +1,408 @@
+# Uyghur translation for krossmodulewords.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sahran <sahran.ug@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: krossmodulewords\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 02:41+0200\n"
+"PO-Revision-Date: 2013-09-08 07:04+0900\n"
+"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language: ug\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. i18n: ectx: Menu (tools)
+#: scripting.rc:4
+#, kde-format
+msgid "&Tools"
+msgstr "قوراللار(&T)"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:7
+#, kde-format
+msgid "Import"
+msgstr "ئىمپورت قىل"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:7
+#, kde-format
+msgid "Import content"
+msgstr "مەزمۇن ئىمپورت قىلىش"
+
+#. i18n: tag script attribute text
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:8 scripts/scripts.rc:26
+#, kde-format
+msgid "Text or HTML File"
+msgstr ""
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:8
+#, kde-format
+msgid "Python script to import content from a text or html file"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:12
+#, kde-format
+msgid "Doxygen XML"
+msgstr ""
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:12
+#, kde-format
+msgid "Python script to import content from a combined doxygen XML file"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:16
+#, kde-format
+msgid "OpenOffice.org UNO"
+msgstr ""
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:16
+#, kde-format
+msgid "Python script to import content using OpenOffice.org PyUNO"
+msgstr ""
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:25
+#, kde-format
+msgid "Export"
+msgstr "ئېكسپورت قىل"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:25
+#, kde-format
+msgid "Export content"
+msgstr "مەزمۇننى ئېكسپورت قىل"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:26
+#, kde-format
+msgid "Python script to export content to a text or html file"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:30
+#, kde-format
+msgid "ReportLab.org PDF"
+msgstr ""
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:30
+#, kde-format
+msgid "Python script to export content to a PDF file using ReportLab.org"
+msgstr ""
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:40
+#, kde-format
+msgid "Tools"
+msgstr "قوراللار"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:40
+#, kde-format
+msgid "Miscellaneous scripts"
+msgstr "باشقا قوليازمىلار(script)"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:41
+#, kde-format
+msgid "XML Viewer"
+msgstr "XML كۆرگۈ"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:41
+#, kde-format
+msgid ""
+"Python script to view the OpenDocument XML representation of the current "
+"document"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:45
+#, kde-format
+msgid "Document Tree"
+msgstr "پۈتۈكنىڭ شاخسىمان تىزىمى"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:45
+#, kde-format
+msgid "QtRuby script that displays the document structure within a treeview"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:49
+#, kde-format
+msgid "Online Help"
+msgstr "توردىكى ياردەم"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:49
+#, kde-format
+msgid ""
+"Python script that uses the KHTML Part to display the Words Scripting online "
+"help"
+msgstr ""
+
+#. i18n: tag collection attribute text
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:60 scripts/scripts.rc:118
+#, kde-format
+msgid "Variables"
+msgstr "ئۆزگەرگۈچىلەر"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:60
+#, kde-format
+msgid "Scripting variables for Words"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:62
+#, kde-format
+msgid "Read From File..."
+msgstr ""
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:62
+#, kde-format
+msgid "Python script to read a variable from a file"
+msgstr ""
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:80
+#, kde-format
+msgid "Samples"
+msgstr "مىسال"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:80
+#, kde-format
+msgid "Samples to demonstrate scripting with Words"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:81
+#, kde-format
+msgid "Insert Shape..."
+msgstr ""
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:81
+#, kde-format
+msgid "Python script to insert a shape"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:85
+#, kde-format
+msgid "Control Cursor..."
+msgstr ""
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:85
+#, kde-format
+msgid "Ruby script that demonstrates how to control the cursor"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:89
+#, kde-format
+msgid "Execute Action..."
+msgstr ""
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:89
+#, kde-format
+msgid "Python script that demonstrates usage of actions"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:93
+#, kde-format
+msgid "Tool Actions..."
+msgstr ""
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:93
+#, kde-format
+msgid "Python script that demonstrates usage of tool actions"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:97
+#, kde-format
+msgid "Progressbar"
+msgstr ""
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:97
+#, kde-format
+msgid "Python script that demonstrates how to use the progressbar"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:101
+#, kde-format
+msgid "Text"
+msgstr "تېكىست"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:101
+#, kde-format
+msgid "Python script that demonstrates usage of the text engine"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:105
+#, kde-format
+msgid "Lists with HTML"
+msgstr ""
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:105
+#, kde-format
+msgid "Python script that demonstrates how to create lists with HTML"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:110
+#, kde-format
+msgid "Lists with Cursor"
+msgstr ""
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:110
+#, kde-format
+msgid "Python script that demonstrates how to create lists with a cursor"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:114
+#, kde-format
+msgid "Tables"
+msgstr "جەدۋەللەر"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:114
+#, kde-format
+msgid "Python script that demonstrates how to deal with tables"
+msgstr ""
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:118
+#, kde-format
+msgid "Python script that demonstrates how to handle variables"
+msgstr ""
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:122
+#, kde-format
+msgid "All Shapes"
+msgstr "بارلىق شەكىللەر"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:122
+#, kde-format
+msgid "Python script adds all shapes"
+msgstr ""
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "قوراللار(&T)"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "ئىمپورت قىل"
+
+#, fuzzy
+#~| msgid "Import content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import content"
+#~ msgstr "مەزمۇن ئىمپورت قىلىش"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "ئېكسپورت قىل"
+
+#, fuzzy
+#~| msgid "Export content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export content"
+#~ msgstr "مەزمۇننى ئېكسپورت قىل"
+
+#, fuzzy
+#~| msgid "Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "قوراللار"
+
+#, fuzzy
+#~| msgid "Miscellaneous scripts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Miscellaneous scripts"
+#~ msgstr "باشقا قوليازمىلار(script)"
+
+#, fuzzy
+#~| msgid "XML Viewer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "XML Viewer"
+#~ msgstr "XML كۆرگۈ"
+
+#, fuzzy
+#~| msgid "Document Tree"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Tree"
+#~ msgstr "پۈتۈكنىڭ شاخسىمان تىزىمى"
+
+#, fuzzy
+#~| msgid "Online Help"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Online Help"
+#~ msgstr "توردىكى ياردەم"
+
+#, fuzzy
+#~| msgid "Variables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Variables"
+#~ msgstr "ئۆزگەرگۈچىلەر"
+
+#, fuzzy
+#~| msgid "Samples"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Samples"
+#~ msgstr "مىسال"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text"
+#~ msgstr "تېكىست"
+
+#, fuzzy
+#~| msgid "Tables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tables"
+#~ msgstr "جەدۋەللەر"
+
+#, fuzzy
+#~| msgid "All Shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All Shapes"
+#~ msgstr "بارلىق شەكىللەر"

@@ -1,0 +1,91 @@
+# translation of kspreadsolver.po to Japanese
+# Copyright (C) 2007 This_file_is_part_of_KDE
+# This file is distributed under the same license as the koffice package.
+# Yukiko Bando <ybando@k6.dion.ne.jp>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kspreadsolver\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2007-06-14 21:00+0900\n"
+"Last-Translator: Yukiko Bando <ybando@k6.dion.ne.jp>\n"
+"Language-Team: Japanese <kde-jp@kde.org>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: Solver.cpp:66
+#, kde-format
+msgid "Function Optimizer..."
+msgstr "関数オプティマイザ..."
+
+#: Solver.cpp:103
+#, fuzzy
+#| msgid "Optimization"
+msgctxt "(qtundo-format)"
+msgid "Optimize"
+msgstr "最適化"
+
+#. i18n: ectx: Menu (tools)
+#: solver.rc:4
+#, kde-format
+msgid "&Tools"
+msgstr "ツール(&T)"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: SolverDetailsWidget.ui:67
+#, kde-format
+msgid "Precision:"
+msgstr "精度:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: SolverDetailsWidget.ui:74
+#, kde-format
+msgid "Maximum Iterations:"
+msgstr "最大反復回数:"
+
+#: SolverDialog.cpp:18
+#, kde-format
+msgid "Function Optimizer"
+msgstr "関数オプティマイザ"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: SolverMainWidget.ui:37
+#, kde-format
+msgid "Optimization"
+msgstr "最適化"
+
+#. i18n: ectx: property (text), widget (QRadioButton, maximizeButton)
+#: SolverMainWidget.ui:43
+#, kde-format
+msgid "Maximize"
+msgstr "最大化"
+
+#. i18n: ectx: property (text), widget (QRadioButton, minimizeButton)
+#: SolverMainWidget.ui:50
+#, kde-format
+msgid "Minimize"
+msgstr "最小化"
+
+#. i18n: ectx: property (text), widget (QRadioButton, valueButton)
+#: SolverMainWidget.ui:60
+#, kde-format
+msgid "Value:"
+msgstr "値:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: SolverMainWidget.ui:73
+#, kde-format
+msgid "Parameters:"
+msgstr "パラメータ:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: SolverMainWidget.ui:83
+#, kde-format
+msgid "Function:"
+msgstr "関数:"

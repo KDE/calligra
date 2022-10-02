@@ -1,0 +1,1144 @@
+<chapter id="formatspread">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Raphael</firstname
+> <surname
+>Langerhorst</surname
+> <affiliation
+> <address
+><email
+>raphael.langerhorst@kdemail.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Pedro</firstname
+><surname
+>Morais</surname
+><affiliation
+><address
+><email
+>morais@kde.org</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Formatação da Folha de Cálculo</title>
+
+<sect1 id="formatcells">
+<!--<title
+>Fonts, Text, Borders and Colors</title
+>-->
+<title
+>Formato de Célula</title>
+<para
+>Para mudar o formato e a aparência das células, linhas ou colunas seleccionadas use a opção <guimenuitem
+>Formatação das Células...</guimenuitem
+> do menu <guimenu
+>Formato</guimenu
+> ou com o menu de contexto do botão <mousebutton
+>direito</mousebutton
+> do rato.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat0.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Menu de contexto do botão direito do rato.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Isto irá invocar a janela de <guilabel
+>Formatação da Célula</guilabel
+>, que tem várias páginas separadas:</para>
+<sect2 id="formatdata">
+<!-- beginning of annma writing -->
+<title
+>Formatos e Representações de Dados</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Página de <guilabel
+>Formato dos Dados</guilabel
+>.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>A página do <guilabel
+>Formato dos Dados</guilabel
+> da janela do <guilabel
+>Formato das Células</guilabel
+> permite-lhe controlar como é que os valores das células são mostrados.</para>
+<para
+>A parte de cima desta página permite-lhe seleccionar o formato a ser usado ao mostrar os valores numéricos, das datas ou das horas. Uma área de <guilabel
+>Antevisão</guilabel
+> permite-lhe ver o efeito do novo formato. </para>
+<para
+>Poderá atribuir o mesmo formato de dados para uma linha ou coluna se seleccionar a linha ou coluna e chamar a janela <guilabel
+>Formato da Célula</guilabel
+> com o &RMB;.</para>
+<note
+><para
+>Poderá aumentar as casas decimais para qualquer número nos formatos <guilabel
+>Genérico</guilabel
+>, <guilabel
+>Número</guilabel
+>, <guilabel
+>Percentagem</guilabel
+>, <guilabel
+>Monetário</guilabel
+> ou <guilabel
+>Científico</guilabel
+>, usando o ícone para <guilabel
+>Aumentar a Precisão Decimal</guilabel
+> na barra de <guilabel
+>Formato</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="increasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+<para
+>Poderá diminuir as casas decimais para qualquer número nos formatos <guilabel
+>Genérico</guilabel
+>, <guilabel
+>Número</guilabel
+>, <guilabel
+>Percentagem</guilabel
+>, <guilabel
+>Monetário</guilabel
+> ou <guilabel
+>Científico</guilabel
+>, usando o ícone para <guilabel
+>Diminuir a Precisão Decimal</guilabel
+> na barra de <guilabel
+>Formato</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="decreasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</note>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Genérico</guilabel
+></term>
+<listitem
+><para
+>Este é o formato por omissão e o &sheets; detecta o tipo de dados actual, com base nos dados actuais da célula. O &sheets; justifica à direita os números, datas e horas numa célula e à esquerda tudo o resto.</para>
+<para
+>Se o formato <guilabel
+>Genérico</guilabel
+> não for adequado para si, poderá mudar para um formato específico, através das opções abaixo.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Número</guilabel
+></term>
+<listitem
+><para
+>A notação numérica usa a notação que escolher globalmente no &systemsettings; em <menuchoice
+><guimenu
+>Localização</guimenu
+><guisubmenu
+>País/Região &amp; Língua</guisubmenu
+><guimenuitem
+>Número</guimenuitem
+></menuchoice
+>. Os números são justificados à direita por omissão.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Percentagem</guilabel
+></term>
+<listitem
+><para
+>Quando tiver um número na célula actual e mudar o formato da célula de <guilabel
+>Genérico</guilabel
+> para <guilabel
+>Percentagem</guilabel
+>, o número da célula actual será multiplicado por 100.</para>
+<para
+>Por exemplo, se tiver 2 e definir o formato da célula como <guilabel
+>Percentagem</guilabel
+>, o número ficará igual a 200 %. Se mudar de volta para o formato de célula <guilabel
+>Genérico</guilabel
+>, voltará a colocá-lo como 2.</para>
+<para
+>Poderá também usar o ícone <guilabel
+>Percentagem</guilabel
+> na barra de <guilabel
+>Formato</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="percent.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Monetário</guilabel
+></term>
+<listitem
+><para
+>O formato <guilabel
+>Monetário</guilabel
+> converte o seu número para a notação monetária, usando a configuração definida de forma fixa no &systemsettings; em <menuchoice
+><guimenu
+>Localização</guimenu
+><guisubmenu
+>País/Região &amp; Língua</guisubmenu
+><guimenuitem
+>Dinheiro</guimenuitem
+></menuchoice
+>. O símbolo monetário será apresentado e a precisão será a definida no &systemsettings;.</para>
+<para
+>Poderá usar também o ícone <guilabel
+>Monetário</guilabel
+> na barra de <guilabel
+>Formato</guilabel
+> para definir a formatação da célula, para que fique como a sua moeda actual: <inlinemediaobject
+><imageobject>
+<imagedata fileref="hi22-action-money.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Notação Científica</guilabel
+></term>
+<listitem
+><para
+>O formato <guilabel
+>Científico</guilabel
+> altera o seu número, usando a notação científica. Por exemplo, o 0,0012 será impresso como 1,2E-03. Ao voltar ao formato <guilabel
+>Genérico</guilabel
+>, voltará a mostrar 0,0012. O formato de dados Genérico não mantém a notação científica, como tal, se quiser esta notação, terá de a indicar com este item do menu.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Fracção</guilabel
+></term>
+<listitem
+><para
+>O formato de <guilabel
+>Fracção</guilabel
+> transforma o seu número numa fracção. Por exemplo, o 0,1 poderá mudar para 1/8, 2/16, 1/10, &etc;. Você define o tipo da fracção, escolhendo-a no campo à direita. Se a fracção exacta não for possível no modo de fracção escolhido, será feita a correspondência mais próxima. Por exemplo, quando tiver 1,5 como número, se escolher <guilabel
+>Fracção</guilabel
+> e <guilabel
+>16-avos 1/16</guilabel
+>, irá obter o "1 8/16", que é uma fracção exacta. Se tiver 1,4 como número na sua célula, escolher a <guilabel
+>Fracção</guilabel
+> e os <guilabel
+>16-avos 1/16</guilabel
+>, então a célula irá mostrar "1 6/16", que é a fracção de 16-avos mais próxima.</para>
+</listitem
+><!--TODO formatting of numbers?-->
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Data</guilabel
+></term>
+<listitem
+><para
+>Para introduzir uma data, deverá indicá-la num dos formatos definidos no &systemsettings;, em <menuchoice
+><guimenu
+>Localização</guimenu
+><guisubmenu
+>País/Região &amp; Língua</guisubmenu
+><guimenuitem
+>Datas &amp; Horas</guimenuitem
+></menuchoice
+>. Existem dois formatos aqui definidos: o das datas e o das datas abreviadas.</para>
+<para
+>Um número natural aleatório NN será transformado numa data, a partir de 30 de Dezembro de 1899 (que equivale a 0) com o número NN de dias adicionado. Por exemplo, se tiver uma célula com o valor 100 e escolher o formato <guilabel
+>Data</guilabel
+>, irá aparecer "09-04-1900" na célula, o que corresponde a 100 dias após o 30 de Dezembro de 1899. Esta data inicial corresponde a dois dias antes, o que era um erro no Lotus 123 e que se manteve desta forma no Excel, para manter a compatibilidade. Poucas pessoas terão de calcular datas a partir de 1 de Janeiro de 1900 qualquer forma, pelo que se adicionar 9 dias a 1 de Novembro de 2000, por exemplo, irá obter 10 de Novembro de 2000, como tal, todos os cálculos de datas estarão correctos.</para>
+<note
+><para
+>Quando uma célula está no formato de <guilabel
+>Data</guilabel
+>, poderá arrastar esta célula para baixo, como faz com os números, para que as células seguintes também obtenham datas, sendo cada uma destas incrementada de um dia.</para
+></note
+><!--TODO explain that
+better-->
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Hora</guilabel
+></term>
+<listitem
+><para
+>Isto formata o conteúdo da sua célula como uma hora. Para indicar uma hora, devê-la-á indicar com o <guilabel
+>Formato da hora</guilabel
+> definido no &systemsettings;, em <menuchoice
+><guimenu
+>Localização</guimenu
+><guisubmenu
+>País/Região &amp; Língua</guisubmenu
+><guimenuitem
+>Horas &amp; Datas</guimenuitem
+></menuchoice
+>. Na janela do <guilabel
+>Formato da Célula</guilabel
+>, poderá definir como é que a hora será mostrada, com base numa das opções de horas disponíveis. O formato por omissão é o definido no &systemsettings;. Quando o número da célula não fizer sentido como uma hora, o &sheets; irá mostrar 00:00 no formato global que tem no &systemsettings;.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Data e Hora</guilabel
+></term>
+<listitem
+><para
+>Isto formata o conteúdo da sua célula como uma hora. Para indicar uma hora, devê-la-á indicar com o <guilabel
+>Formato da hora</guilabel
+> definido no &systemsettings;, em <menuchoice
+><guimenu
+>Localização</guimenu
+><guisubmenu
+>País/Região &amp; Língua</guisubmenu
+><guimenuitem
+>Horas &amp; Datas</guimenuitem
+></menuchoice
+>. Na janela do <guilabel
+>Formato da Célula</guilabel
+>, poderá definir como é que a hora será mostrada, com base numa das opções de horas disponíveis. O formato por omissão é o definido no &systemsettings;. Quando o número da célula não fizer sentido como uma hora, o &sheets; irá mostrar 00:00 no formato global que tem no &systemsettings;.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Texto</guilabel
+></term>
+<listitem
+><para
+>Isto formata o conteúdo da sua célula como texto. Poderá ser útil se quiser um número tratado como texto em vez de um número, como por exemplo um código postal. Se configurar um número com o formato de texto, ficará justificado à esquerda. Quando os números forem formatados como texto, não poderão ser usados nos cálculos ou fórmulas. Poderá também alterar a forma como a célula é justificada.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Personalizado</guilabel
+></term>
+<listitem
+><para
+>Ainda não funciona. A ser activado na próxima versão.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+>A parte inferior da página do <guilabel
+>Formato dos Dados</guilabel
+> deixa-o seleccionar um <guilabel
+>Prefixo:</guilabel
+>, como um símbolo '$' no início de cada item ou um <guilabel
+>Sufixo:</guilabel
+> como 'EUR' no fim. Você também poderá controlar o número de dígitos apresentados após o símbolo decimal, se os números positivos são apresentados antecedidos de um '+' e se os números negativos são mostrados a vermelho. </para>
+</sect2
+> <!--end of annma writing -->
+
+<sect2 id="formattext">
+<title
+>Configuração do Tipo de Letra e Texto</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Página do tipo de letra.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>A página <guilabel
+>Tipo de Letra</guilabel
+> permite-lhe seleccionar o <guilabel
+>Estilo:</guilabel
+>, o <guilabel
+>Tamanho:</guilabel
+>, a <guilabel
+>Espessura:</guilabel
+> e a <guilabel
+>Cor:</guilabel
+> do tipo de letra, incluindo algumas opções adicionais como o texto sublinhado ou traçado. A parte inferior da página dá uma <guilabel
+>Antevisão</guilabel
+> do formato do texto seleccionado.</para>
+<para
+>A notação numérica usa a notação que escolher globalmente no &kcontrolcenter; em <menuchoice
+><guimenu
+>Regional &amp; Acessibilidade</guimenu
+><guimenuitem
+>Número</guimenuitem
+></menuchoice
+>. Os números são justificados à direita por omissão.</para>
+<!--annma-->
+<variablelist>
+<!--varlistentry>
+<term
+><guilabel
+>Family List box</guilabel
+></term>
+<listitem
+><para
+>Allows you to choose a new font family.</para>
+</listitem>
+</varlistentry-->
+<varlistentry>
+<term
+><guilabel
+>Estilo:</guilabel
+></term>
+<listitem
+><para
+>Escolha o estilo do texto para as células seleccionadas de momento. Quando seleccionar várias células com espessuras diferentes, o estilo apresentado é igual a <guilabel
+>Variado (Sem Alteração)</guilabel
+> e, se o deixar dessa forma, irá manter todas as configurações actuais para cada célula. Se mudar para <guilabel
+>Roman</guilabel
+>, por exemplo, irá mudar todo o texto das células seleccionadas para <guilabel
+>Roman</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Tamanho:</guilabel
+></term>
+<listitem
+><para
+>Escolha o tamanho da sua letra para as células seleccionadas de momento. Quando seleccionar várias células com tamanhos diferentes, o tamanho apresentado é igual a <guilabel
+> </guilabel
+> (sem números escritos) e, se o deixar dessa forma, irá manter todas as configurações actuais para cada célula. Se mudar para <guilabel
+>14</guilabel
+>, por exemplo, irá mudar o tamanho de todo o texto das células seleccionadas para <guilabel
+>14</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Espessura:</guilabel
+></term>
+<listitem
+><para
+>Escolha a espessura do texto para as células seleccionadas de momento. Quando seleccionar várias células com espessuras diferentes, a espessura apresentada é igual a <guilabel
+>Variado (Sem Alteração)</guilabel
+> e, se o deixar dessa forma, irá manter todas as configurações actuais para cada célula. Se mudar para <guilabel
+>Negrito</guilabel
+>, por exemplo, irá mudar todo o texto das células seleccionadas para <guilabel
+>Negrito</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Cor:</guilabel
+></term>
+<listitem
+><para
+>Escolha a cor do texto das células seleccionadas de momento. Se carregar na barra de cores, irá aparecer a janela normal de <guilabel
+>Selecção de Cores</guilabel
+> do KDE, onde poderá escolher a cor nova. </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Sublinhado</guilabel
+></term>
+<listitem
+><para
+>Sublinha o texto das células seleccionadas de momento. Esta opção não está assinalada, por omissão.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Traçado</guilabel
+></term>
+<listitem
+><para
+>Risca o texto das células seleccionadas de momento. Esta opção não está assinalada, por omissão.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<!--end of annma-->
+</sect2>
+
+<sect2 id="formatposition">
+<title
+>Posição e Rotação do Texto</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Página de Posição.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Na página <guilabel
+>Posição</guilabel
+>, você poderá controlar a posição do texto dentro de uma célula, fazendo as selecções adequadas nas áreas <guilabel
+>Horizontal</guilabel
+> e <guilabel
+>Vertical</guilabel
+> ou definindo o valor da <guilabel
+>Indentação</guilabel
+>. Você também poderá optar por ter o texto a aparecer na vertical em vez de na horizontal, ou mesmo com um determinado ângulo.</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Horizontal</guilabel
+></term>
+<listitem
+><para
+>Configura a posição do conteúdo na célula, a nível horizontal. O <guilabel
+>Normal</guilabel
+> é a opção por omissão e é definido a partir do formato que escolher; o <guilabel
+>Esquerdo</guilabel
+> significa que o conteúdo é mostrado à esquerda da célula. O <guilabel
+>Centro</guilabel
+> significa que o conteúdo será centrado na horizontal na célula. O <guilabel
+>Direita</guilabel
+> significa que o conteúdo da célula será apresentado à direita da célula.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Vertical</guilabel
+></term>
+<listitem
+><para
+>Configura a posição do conteúdo na célula, a nível vertical. O <guilabel
+>Topo</guilabel
+> significa que o conteúdo é mostrado no topo da célula. O <guilabel
+>Meio</guilabel
+> significa que o conteúdo será centrado na vertical na célula. O <guilabel
+>Fundo</guilabel
+> significa que o conteúdo da célula será apresentado na parte inferior da célula.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Opção do Texto</guilabel
+></term>
+<listitem
+><para
+>Isto só está disponível quando a rotação é igual a 0º. O <guilabel
+>Repartir o texto</guilabel
+> divide o texto para que caiba no tamanho da célula anterior. Se não estiver assinalado, o texto irá permanecer apenas numa linha.</para>
+<para
+>O <guilabel
+>Texto vertical</guilabel
+> coloca o seu texto na vertical.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Rotação</guilabel
+></term>
+<listitem
+><para
+>O seu texto irá aparecer orientado com o ângulo que definir aqui. Os valores positivos irão rodá-lo no sentido oposto aos ponteiros do relógio, assim como os negativos irão rodá-lo no sentido horário.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Juntar as Células</guilabel
+></term>
+<listitem
+><para
+>Quando estiver assinalada esta opção, terá o mesmo efeito que a <menuchoice
+><guimenu
+>Formato</guimenu
+><guimenuitem
+>Reunir as Células</guimenuitem
+></menuchoice
+>. Terá de ter pelo menos duas células consecutivas seleccionadas. Essas células consecutivas são então reunidas numa maior.</para>
+<para
+>Quando for seleccionada uma célula reunida e desligar esta opção, então as células voltarão ao seu tamanho original antes da junção. Tem o mesmo efeito que a opção <menuchoice
+><guimenu
+>Formato</guimenu
+><guimenuitem
+>Separar as Células</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Indentação</guilabel
+></term>
+<listitem
+><para
+>Define a quantidade de indentação que será usada na célula quando usar as acções <guilabel
+>Aumentar a Indentação</guilabel
+>/<guilabel
+>Diminuir a Indentação</guilabel
+> da barra de ferramentas. Estas acções não estão activas por omissão na barra de ferramentas.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Tamanho da Célula</guilabel
+></term>
+<listitem
+><para
+>Poderá definir aqui o tamanho da célula, sendo este uma altura e largura personalizadas ou então as dimensões predefinidas.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="formatborder">
+<title
+>Contorno da Célula</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Página de Contorno.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>A página <guilabel
+>Contorno</guilabel
+> permite-lhe mudar a aparência do contorno das células. Se você tiver seleccionado mais do que uma célula, você poderá aplicar vários estilos diferentes aos contornos entre as células e os que rodeiam a área seleccionada. </para>
+<para
+>Primeiro seleccione o padrão e a cor da secção <guilabel
+>Padrão</guilabel
+> da página <guilabel
+>Contorno</guilabel
+> e depois aplique-o às diferentes partes do contorno, carregando no botão apropriado da secção <guilabel
+>Margem</guilabel
+> ou num dos botões em <guilabel
+>Pré-seleccionar</guilabel
+>. O botão do lado esquerdo desta secção irá limpar os contornos previamente aplicados. Lembre-se que também poderá aplicar uma linha traçada na diagonal às células.</para>
+</sect2>
+<sect2 id="formatbackground">
+<title
+>Fundo da Célula</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat5.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Página do Fundo.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>O padrão e a cor de fundo da célula podem ser seleccionados na página <guilabel
+>Fundo</guilabel
+>.</para>
+<para
+>Basta escolher o <guilabel
+>Padrão</guilabel
+> desejado e escolher depois a <guilabel
+>Cor</guilabel
+> do padrão e a <guilabel
+>Cor de fundo</guilabel
+>.</para>
+<para
+>No fundo desta página, poderá ver uma <guilabel
+>Antevisão</guilabel
+> do fundo configurado para a célula.</para>
+</sect2>
+<sect2 id="formatprotection">
+<title
+>Protecção da Célula</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat6.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Página de protecção da célula.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Poderá alterar a forma como o conteúdo de uma célula é protegido na página <guilabel
+>Protecção da Célula</guilabel
+>.</para>
+<para
+>Todas as células estão protegidas por omissão (o que significa que o conteúdo das células não poderá ser alterado) e, para a protecção de células ficar activa, terá também de proteger a folha com a opção do menu <menuchoice
+><guimenu
+>Ferramentas</guimenu
+><guimenuitem
+>Proteger a Folha...</guimenuitem
+></menuchoice
+> e indicar uma senha. Poderá também esconder a fórmula da célula para proteger a forma como calcula a fórmula. Também necessita de activar a protecção da folha para isto funcionar. Poderá esconder o conteúdo da célula com a opção <guilabel
+>Esconder tudo</guilabel
+>, o que mais uma vez necessita da protecção da folha. Poderá aprender mais sobre estas opções no <link linkend="protection"
+>capítulo do &sheets; Avançado, na secção de Protecção</link
+>.</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Esconder tudo</guilabel
+></term>
+<listitem
+><para
+>Isto esconde o conteúdo da célula e funciona só quando a folha estiver protegida, o que significa que a mudança do atributo <guilabel
+>Esconder tudo</guilabel
+> de uma célula não fará efeito até que a folha seja protegida. Se a célula em si está protegida ou não, isso não interessa.</para>
+<para
+>Quando a opção <guilabel
+>Esconder tudo</guilabel
+> estiver seleccionada, as opções <guilabel
+>Protegido</guilabel
+> e <guilabel
+>Esconder a fórmula</guilabel
+> estão desactivadas, dado que, quando a folha está protegida, o <guilabel
+>Esconder tudo</guilabel
+> esconde o conteúdo da célula e a fórmula, mascarando e protegendo deste modo o conteúdo da célula.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Protegido</guilabel
+></term>
+<listitem
+><para
+>Se estiver assinalada a opção, o conteúdo da célula será protegido. Este é o comportamento por omissão. Terá de proteger a folha toda, usando a opção <menuchoice
+><guimenu
+>Ferramentas</guimenu
+><guimenuitem
+>Proteger a Folha...</guimenuitem
+></menuchoice
+> para esta protecção de células individuais funcionar. Quando uma célula ficar protegida, o seu conteúdo não poderá ser alterado.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Esconder a fórmula</guilabel
+></term>
+<listitem
+><para
+>Quando esta opção estiver assinalada, a célula fica à mesma visível. Contudo, o seu conteúdo não aparece na barra de <guilabel
+>Fórmulas</guilabel
+>. O acto de esconder a fórmula só funciona para as células que contenham células, para que o utilizador não possa ver a mesma. Para além disso, a folha terá de estar protegida para isto funcionar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Não imprimir o texto</guilabel
+></term>
+<listitem
+><para
+>Se assinalar a opção <guilabel
+>Não imprimir o texto</guilabel
+>, então o texto na célula não será impresso. Esta opção está desligada por omissão, o que significa que o texto da célula será sempre impresso nesse caso.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+</sect1>
+
+<sect1 id="conditional">
+<title
+>Atributos Condicionais da Célula</title>
+<para
+>Você poderá fazer com que a aparência de uma célula mude de acordo com o valor que contém, o que poderá ser útil se você for usar o &sheets; para registar as suas despesas domésticas e quiser realçar os itens maiores que, por exemplo, mil euros.</para>
+<para
+>Para o fazer, seleccione as células e escolha os <guimenuitem
+>Estilos Condicionais...</guimenuitem
+> do menu <guimenu
+>Formato</guimenu
+>. Isto irá mostrar a janela dos <guilabel
+>Estilos Condicionais</guilabel
+>, onde você poderá fazer com que o tipo de letra e a sua cor mudem quando o valor corresponder a uma ou mais condições. Repare que a segunda e terceira condições só se aplicam se as condições anteriores não se aplicarem.</para>
+<para
+>Use a opção <menuchoice
+><guisubmenu
+>Limpar</guisubmenu
+><guimenuitem
+>Estilos Condicionais</guimenuitem
+></menuchoice
+> do menu <guimenu
+>Editar</guimenu
+> para limpar os estilos condicionais das células seleccionadas.</para>
+</sect1>
+
+<sect1 id="cellsize">
+<title
+>Mudar o Tamanho de Células</title>
+<para
+>A página <guilabel
+>Posição</guilabel
+> da janela <guilabel
+>Formatação da Célula</guilabel
+> permite-lhe alterar o tamanho das células seleccionadas. Lembre-se que se alterar a altura de uma única célula irá afectar todas as células na mesma linha, e se alterar de forma semelhante a largura, irá afectar a coluna inteira.</para>
+<para
+>Você poderá também seleccionar as linhas ou colunas a serem alteradas, seleccionando depois as opções <guimenuitem
+>Redimensionar a Linha...</guimenuitem
+> ou <guimenuitem
+>Redimensionar a Coluna... </guimenuitem
+> do menu de contexto do botão <mousebutton
+>direito</mousebutton
+> ou com a opções dos menus <menuchoice
+><guimenu
+>Formato</guimenu
+><guisubmenu
+>Linha</guisubmenu
+></menuchoice
+> ou <menuchoice
+><guimenu
+>Formato</guimenu
+><guisubmenu
+>Coluna</guisubmenu
+></menuchoice
+>.</para>
+<para
+>Se você mover o cursor do rato de modo a que fique entre a linha que separa os números de linha à esquerda da janela do &sheets;, este irá mudar de forma a ficar com duas linhas paralelas com setas a apontarem em sentidos opostos. Quando o cursor ficar neste estado, você poderá manter o botão <mousebutton
+>esquerdo</mousebutton
+> do rato carregado e arrastar essa linha de separação, mudando a largura da linha superior. Pode-se usar uma técnica semelhante para mudar a largura de uma coluna.</para>
+
+<para
+>Para alterar a altura de uma linha ou a largura de uma coluna para o mínimo necessário para que consiga mostrar o conteúdo, seleccione a linha ou coluna inteira e carregue com o botão <mousebutton
+>direito</mousebutton
+> na legenda da linha ou coluna. No menu que aparece, seleccione a opção <guimenuitem
+>Ajustar Linha</guimenuitem
+> ou <guimenuitem
+>Ajustar Coluna</guimenuitem
+>. A linha ou coluna ajustar-se-á para o tamanho mínimo necessário. Você poderá também seleccionar uma única célula ou um intervalo de células, e carregar na opção <guimenuitem
+>Ajustar Linha &amp; Coluna</guimenuitem
+> do menu do &RMB; ou no menu <guimenu
+>Formato</guimenu
+>.</para>
+
+<para
+>Você poderá colocar um conjunto de linhas ou colunas adjacentes com o mesmo tamanho se as seleccionar e escolher <menuchoice
+><guimenu
+>Formato</guimenu
+><guisubmenu
+>Linha</guisubmenu
+><guimenuitem
+>Igualar Linha</guimenuitem
+></menuchoice
+> ou <menuchoice
+><guimenu
+>Formato</guimenu
+><guisubmenu
+>Coluna</guisubmenu
+> <guimenuitem
+>Igualar Coluna</guimenuitem
+></menuchoice
+>.</para>
+
+</sect1>
+
+<sect1 id="merging">
+<title
+>Juntar Células</title>
+<para
+>É normalmente conveniente ter uma célula que se expande por duas ou mais colunas ou por mais do que uma linha. Isto pode ser feito se juntar duas ou mais células numa só. Seleccione as células que deseja juntar e escolha <menuchoice
+><guimenu
+>Formato</guimenu
+><guimenuitem
+>Reunir as Células</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Para anular este processo, seleccione a célula reunida e escolha <guimenuitem
+>Dissociar as Células</guimenuitem
+> do menu <guimenu
+>Formato</guimenu
+>.</para>
+</sect1>
+
+<sect1 id="hiding">
+<title
+>Esconder Linhas e Colunas</title>
+<para
+>Uma folha de cálculo finalizada poderá ficar mais atractiva se esconder as células que contenham os cálculos intermédios, de modo a ter visíveis apenas os campos de introdução de dados e as áreas de resultado.</para>
+<para
+>No &sheets; você poderá esconder as linhas ou colunas seleccionadas se usar as opções <guimenuitem
+>Esconder as Linhas</guimenuitem
+> e <guimenuitem
+>Esconder as Colunas</guimenuitem
+> do menu <menuchoice
+><guimenu
+>Formato</guimenu
+> <guisubmenu
+>Linha</guisubmenu
+></menuchoice
+>, <menuchoice
+><guimenu
+>Formato</guimenu
+><guisubmenu
+>Coluna</guisubmenu
+></menuchoice
+> ou com o menu do botão <mousebutton
+>direito</mousebutton
+>. As linhas e colunas escondidas não aparecem no ecrã nem nas versões impressas.</para>
+<para
+>Esconder as células deste modo também as tornar um pouco menos susceptíveis de serem acidentalmente alteradas.</para>
+<para
+>Para voltar a mostrar uma linha ou coluna, seleccione a opção <menuchoice
+><guisubmenu
+>Linha</guisubmenu
+><guimenuitem
+>Mostrar as Linhas...</guimenuitem
+></menuchoice
+> ou a <menuchoice
+><guisubmenu
+>Coluna</guisubmenu
+><guimenuitem
+>Mostrar as Colunas... </guimenuitem
+></menuchoice
+> do menu <guimenu
+>Formato</guimenu
+>. Na janela que aparece, você poderá seleccionar qualquer conjunto de colunas para mostrar.</para>
+</sect1>
+
+<sect1 id="sheet-properties">
+<title
+>Propriedades da folha</title>
+<para
+>Poderá aceder às propriedades da folha actual, carregando com o botão direito no separador da folha e escolhendo a opção <guilabel
+>Propriedades da Folha</guilabel
+> ou usando a opção do menu <menuchoice
+><guimenu
+>Formato</guimenu
+> <guisubmenu
+>Folha</guisubmenu
+><guimenuitem
+>Propriedades da Folha</guimenuitem
+></menuchoice
+>. Lembre-se que só poderá aceder às propriedades da folha quando o documento a folha não estiverem protegidos.</para>
+<para
+>Poderá definir diferentes propriedades que serão validadas na folha actual. Se carregar em <guibutton
+>OK</guibutton
+> irá validar as suas alterações e o <guibutton
+>Predefinições</guibutton
+> trará de volta as opções por omissão.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sheetproperties.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>A janela de Propriedades da folha.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Direcção de disposição:</guilabel
+></term>
+<listitem
+><para
+>Permite-lhe escolher a orientação da folha. Por omissão, a primeira coluna da folha fica à esquerda. Se escolher <guilabel
+>Direita para a Esquerda</guilabel
+>, então a primeira coluna ficará à direita e as outras serão adicionadas da direita para a esquerda.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Esconder o zero</guilabel
+></term>
+<listitem
+><para
+>Se esta opção estiver assinalada, todas as células que tiverem o valor zero aparecerão em branco.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Cálculo automático</guilabel
+></term>
+<listitem
+><para
+>Esta opção controla se as fórmulas voltam a ser calculadas automaticamente, quando o valor de alguma das células referenciadas for alterado.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mostrar as colunas como números</guilabel
+></term>
+<listitem
+><para
+>Se esta opção estiver assinalada, os cabeçalhos das colunas irão aparecer como números em vez de letras. Por omissão, aparece como letras.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Usar o modo LC</guilabel
+></term>
+<listitem
+><para
+>Se esta opção estiver assinalada, a referência da célula mostrada à esquerda da Barra de Fórmulas irá aparecer no modo LC (i.e., L3C2), em vez do seu formato normal (i.e., B3). Isto não parece ser muito utilizado de momento.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Converter a primeira letra para maiúsculas</guilabel
+></term>
+<listitem
+><para
+>Assinale esta opção, para que a primeira letra de qualquer texto que você escreva seja convertida automaticamente para maiúsculas.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mostrar a grelha</guilabel
+></term>
+<listitem
+><para
+>Se estiver assinalada a opção, os limites das células da grelha ficarão visíveis. Esta é a opção por omissão. Se a desligar, a grelha ficará escondida.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mostrar os contornos da página</guilabel
+></term>
+<listitem
+><para
+>Se assinalar esta opção, os contornos da página serão desenhados na sua folha actual. Por omissão, os contornos da página não são mostrados. É útil para ver os contornos da página, se quiser imprimir a sua folha.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mostrar a fórmula</guilabel
+></term>
+<listitem
+><para
+>Se esta opção estiver assinalada, o &sheets; irá mostrar as fórmulas actuais nas células, em vez dos resultados.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mostrar o indicador de fórmula</guilabel
+></term>
+<listitem
+><para
+>Se esta opção estiver assinalada, o &sheets; irá mostrar um pequeno triângulo azul no canto inferior esquerdo da células que contêm fórmulas. Isto é útil se quiser proteger as células com fórmulas.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mostrar o indicador de comentários</guilabel
+></term>
+<listitem
+><para
+>Se esta opção estiver seleccionada, as células que contenham comentários são marcadas com um pequeno triângulo vermelho no canto superior direito.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

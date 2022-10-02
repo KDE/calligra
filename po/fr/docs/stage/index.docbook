@@ -1,0 +1,324 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY package "calligra">
+  <!ENTITY calligra "Calligra">
+  <!ENTITY tables "<application
+>Calligra Tables</application
+>">
+  <!ENTITY words "<application
+>Calligra Words</application
+>">
+  <!ENTITY stage "<application
+>Calligra Stage</application
+>">
+  <!ENTITY plan "<application
+>Calligra Plan</application
+>">
+  <!-- the following author entities have been added to user.entities in 4.10 branch and trunk of svn
+       they can be removed from this file once they are present in the kdelibs minimum version required by &kappname; -->
+  <!ENTITY traducteurFrederickAngelique      '<othercredit role="translator"
+><firstname
+>Frederick</firstname
+><surname
+>Angelique</surname
+><affiliation
+><address
+><email
+>ti_orion@hotmail.fr</email
+></address
+></affiliation
+><contrib
+>Traduction française&nbsp;</contrib
+></othercredit
+>'>
+  <!ENTITY relecteurFrederickAngelique        '<othercredit role="reviewer"
+><firstname
+>Frederick</firstname
+><surname
+>Angelique</surname
+><affiliation
+><address
+><email
+>ti_orion@hotmail.fr</email
+></address
+></affiliation
+><contrib
+>Relecture de la documentation française&nbsp;</contrib
+></othercredit
+>'>
+  <!ENTITY FrederickAngelique 'Frederick Angelique <email
+>ti_orion@hotmail.fr</email
+>'>
+
+  <!ENTITY kappname "&stage;">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY tutorial SYSTEM "tutorial.docbook">
+  <!ENTITY guides SYSTEM "guides.docbook">
+  <!ENTITY great SYSTEM "great-presentations.docbook">
+  <!ENTITY menus SYSTEM "menus.docbook">
+  <!ENTITY options SYSTEM "options.docbook">
+  <!ENTITY % French "INCLUDE"
+> <!-- change language only here -->
+]>
+
+<book id="stage" lang="&language;">
+<bookinfo>
+<title
+>Manuel de &stage;</title>
+
+<authorgroup>
+<author
+>&Neil.Lucock; &Neil.Lucock.mail; </author>
+
+<author
+>&Krishna.Tateneni; &Krishna.Tateneni.mail; </author>
+
+<author
+>&Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail; </author>
+
+<author
+><personname
+> <firstname
+>Gary</firstname
+> <surname
+>Cramblitt</surname
+> </personname
+> <email
+>garycramblitt@comcast.net</email
+> </author>
+
+<othercredit role="translator"
+><firstname
+>Xavier</firstname
+><surname
+>Besnard</surname
+><affiliation
+><address
+><email
+>ktranslator31@yahoo.fr</email
+></address
+></affiliation
+><contrib
+>Traduction française&nbsp;</contrib
+> </othercredit
+><othercredit role="translator"
+><firstname
+>Frederick</firstname
+><surname
+>Angelique</surname
+><affiliation
+><address
+><email
+>ti_orion@hotmail.fr</email
+></address
+></affiliation
+> <contrib
+>Traduction française&nbsp;</contrib
+></othercredit
+> <othercredit role="reviewer"
+><firstname
+>Ludovic</firstname
+><surname
+>Grossard</surname
+><affiliation
+><address
+><email
+>grossard@kde.org</email
+></address
+></affiliation
+><contrib
+>Relecture de la documentation française&nbsp;</contrib
+></othercredit
+> 
+</authorgroup>
+
+<date
+>09/12/2012</date>
+<releaseinfo
+>2.6</releaseinfo>
+
+<copyright>
+<year
+>1999</year
+><year
+>2000</year>
+<holder
+>&Krishna.Tateneni;</holder>
+</copyright>
+
+<copyright>
+<year
+>2001</year
+><year
+>2002</year>
+<holder
+>&Neil.Lucock;</holder>
+</copyright>
+
+<copyright>
+<year
+>2005</year>
+<holder
+>&Anne-Marie.Mahfouf;</holder>
+</copyright>
+
+<copyright>
+<year
+>2006</year>
+<holder
+>Gary Cramblitt</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<abstract>
+<para
+>&stage; est le programme de présentation faisant partie de la suite d'applications bureautiques &calligra;. </para>
+</abstract>
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Stage</keyword>
+<keyword
+> Calligra</keyword>
+<keyword
+>Graphiques</keyword>
+<keyword
+>Présentations</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title
+>Introduction</title>
+
+<important
+> <para
+>Veuillez consulter <ulink url="http://docs.kde.org/en/development/en/calligra/stage/index.html"
+>http://docs.kde.org</ulink
+> pour les mises à jour de ce document.</para
+></important>
+
+<para
+>&stage; est le programme de présentation faisant partie de la suite &calligra;. En utilisant &stage;, vous pouvez préparer une série de diapositives pour un diaporama sur écran ou à imprimer. Vos diapositives peuvent contenir du texte et des dessins en de multiples formats et bien sûr, vous pouvez incorporer toutes sortes d'objets en utilisant KParts. </para>
+
+<para
+>La suite &calligra; consiste en plusieurs applications conçues pour fonctionner ensemble. Une documentation générale de &calligra; est disponible, aussi bien que des manuels pour chaque composant. Les composants de &calligra; sont : </para>
+
+<itemizedlist>
+<listitem>
+<para
+>&words; - un traitement de texte utilisant des cadres. </para>
+</listitem>
+
+<listitem
+><para
+>&tables; - un tableur. </para>
+</listitem>
+
+</itemizedlist>
+
+<para
+>&calligra; est un projet libre (ou à code source ouvert), distribué selon les termes de la licence publique générale &GNU;. </para>
+
+</chapter>
+
+&tutorial;
+
+&guides;
+
+&great;
+
+&menus;
+
+&options;
+
+<chapter id="credits">
+<title
+>Remerciements et Licence</title>
+
+<para
+>&stage; </para>
+
+<para
+>Droits d'auteur pour le programme pour 1998-2000 par Reginald Stadlbauer <email
+>reggie@kde.org</email
+> </para>
+
+<para
+>Le mainteneur actuel est Laurent Montel <email
+>montel@kde.org</email
+>. </para>
+
+
+<itemizedlist>
+<title
+>Contributeurs</title>
+
+<listitem>
+<para
+>Werner Trobin <email
+>trobin@kde.org</email
+>. </para>
+</listitem>
+
+<listitem>
+<para
+>&David.Faure; &David.Faure.mail; </para>
+</listitem>
+
+<listitem>
+<para
+>Toshitaka Fujioka <email
+>fujioka@kde.org</email
+> </para>
+</listitem>
+
+<listitem>
+<para
+>Luk&aacute;&scaron; Tinkl <email
+>lukas@kde.org</email
+> </para>
+</listitem>
+
+<listitem>
+<para
+>&Thorsten.Zachmann; &Thorsten.Zachmann.mail; </para>
+</listitem>
+
+<listitem>
+<para
+>Ariya Hidayat <email
+>ariya@kde.org</email
+> </para>
+</listitem>
+
+<listitem>
+<para
+>Percy Leonhardt <email
+>percy@eris23.de</email
+> </para>
+</listitem>
+</itemizedlist>
+
+<para
+>Documentation fondée sur le travail de &Krishna.Tateneni; sous copyright 1999-2000. Certaines parties sont sous copyright 2000-2002 de &Neil.Lucock; &Neil.Lucock.mail; et 2005 de &Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail; </para>
+
+<para
+>Traduction française par Xavier Besnard <email
+>ktranslator31@yahoo.fr</email
+> et Frederick Angelique <email
+>ti_orion@hotmail.fr</email
+>. Relecture par Ludovic Grossard <email
+>grossard@kde.org</email
+>.</para
+> &underFDL; &underGPL; </chapter>
+
+&documentation.index; 
+
+</book>
+

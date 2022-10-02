@@ -1,0 +1,2500 @@
+# Malay translation
+# MIMOS Open Source <opensource@mimos.my>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mimos\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2006-10-05 19:46+0800\n"
+"Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
+"Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
+"Language: ms\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=1;\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, fuzzy, kde-format
+msgid "%1 Export Options"
+msgstr "Ralat Eksport PNG"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, fuzzy, kde-format
+msgid "Page %1"
+msgstr "Halaman"
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, fuzzy, kde-format
+msgid "Page:"
+msgstr "Halaman"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, kde-format
+msgid "Size in Pixels"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgid "Image height:"
+msgstr "Tinggi:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, kde-format
+msgid "Resolution:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, kde-format
+msgid "Color"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr ""
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:299
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not open the requested file %1"
+msgstr "Tidak dapat baca dari fail."
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, fuzzy, kde-format
+#| msgid "Passwords"
+msgid "Enter password"
+msgstr "Kata laluan"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find path for type %1"
+msgstr "Tidak dapat baca dari fail."
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, fuzzy, kde-format
+#| msgid "Footnote %1"
+msgid "Attribute \"%1\" not found"
+msgstr "Nota kaki %1"
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr "Tidak dapat baca dari fail."
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find relationships file \"%1\""
+msgstr "Tidak dapat baca dari fail."
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr "Tidak dapat baca dari fail."
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, fuzzy, kde-format
+#| msgid ""
+#| "Parsing error in MathML file %4 at line %1, column %2\n"
+#| "Error message: %3"
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+"Ralat kaji hurai dalam fail MathML %4 pada baris %1, lajur %2\n"
+"Mesej ralat: %3"
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not write block"
+msgstr "Tidak dapat baca dari fail."
+
+#: sheets/csv/csvexport.cc:266
+#, kde-format
+msgid "<SHEETNAME>"
+msgstr "<SHEETNAME>"
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Disarankan (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Lokal (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Lain-lain (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:281 words/ascii/ImportDialog.cc:94
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "Tidak jumpa pengekodan: %1"
+
+#: sheets/csv/csvimport.cc:74
+#, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr "Penapis CSV tidak boleh buka fail input - sila lapor."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "Pengekodan"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, kde-format
+msgid "E&ncoding:"
+msgstr "&Pengekodan:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, kde-format
+msgid "End of Line"
+msgstr "Hujung Baris"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr "gaya &UNIX (disarankan; suap baris sahaja)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr "Gaya &Windows (kembalian penyorong dan suapan garis)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr "Gaya &MacOS (kembalian penyorong sahaja)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, kde-format
+msgid "Sheets"
+msgstr "Helaian"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, kde-format
+msgid "Select sheets to export:"
+msgstr "Pilih helaian untuk eksport:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, kde-format
+msgid "Delimiter Line"
+msgstr "Garis Penyahhad"
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, kde-format
+msgid "********<SHEETNAME>********"
+msgstr "********<SHEETNAME>********"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr "<SHEETNAME> akan digantikan dengan nama helaian berikutnya."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr "Cetak garis penyahhad pada sebelah atas setiap helaian"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, kde-format
+msgid "Cells"
+msgstr "Sel"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, kde-format
+msgid "Delimiter"
+msgstr "Penyahhad"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, kde-format
+msgid "Comma"
+msgstr "Koma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, kde-format
+msgid "Semicolon"
+msgstr "Koma bertitik"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, kde-format
+msgid "Tabulator"
+msgstr "Penjadual"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, kde-format
+msgid "Space"
+msgstr "Jarak"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, kde-format
+msgid "Other:"
+msgstr "Lain-lain:"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, kde-format
+msgid "Quotes:"
+msgstr "Petikan:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, kde-format
+msgid "Export selection only"
+msgstr "Pemilihan eksport sahaja"
+
+#: sheets/dbase/dbaseimport.cc:44
+#, kde-format
+msgid "File format is not supported."
+msgstr "Format fail tidak disokong."
+
+#: sheets/dbase/dbaseimport.cc:49
+#, kde-format
+msgid "Could not read from file."
+msgstr "Tidak dapat baca dari fail."
+
+#: sheets/html/exportdialog.cc:21
+#, kde-format
+msgid "Export Sheet to HTML"
+msgstr "Eksport Helaian ke HTML"
+
+#: sheets/html/exportdialog.cc:32
+#, kde-format
+msgid "Recommended: UTF-8"
+msgstr "Disarankan: UTF-8"
+
+#: sheets/html/exportdialog.cc:33
+#, kde-format
+msgid "Locale (%1)"
+msgstr "Lokal (%1)"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, kde-format
+msgid "En&coding:"
+msgstr "&Pengekodan:"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr ""
+"Dengan pilihan ini anda boleh tentukan pengekodan fail HTML. Pengekodan yang "
+"disarankan (UTF8) dipilih sebagai piawai."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, kde-format
+msgid "Sheet Selection"
+msgstr "Pemilihan Helaian "
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr "Klik di sini untuk memilih semua helaian dalam senarai."
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, kde-format
+msgid "Select &All"
+msgstr "Pilih &Semua"
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, kde-format
+msgid "Desele&ct All"
+msgstr "&Nyahpilih Semua"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+"Opsyen ini akan menyebabkan penapis eksport HTML menjana halaman baru bagi "
+"setiap helaian. Jika anda nyahaktifkan pilihan ini, semua helaian akan "
+"ditulis pada satu halaman. "
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, kde-format
+msgid "Use &separate files for each table"
+msgstr "Gunakan fail &berasingan untuk setiap jadual"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, kde-format
+msgid "Style"
+msgstr "Gaya"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr ""
+"Pilih pilihan ini untuk menggunakan fon dan warna piawai bagi halaman HTML."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, kde-format
+msgid "Use &default style"
+msgstr "Gunakan gaya &piawai"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr ""
+"Pilih pilihan ini untuk menetapkan helaian gaya berasingan bagi halaman HTML "
+"anda. Anda boleh pilih atau taipkannya dalam medan di bawah."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, kde-format
+msgid "Use &external stylesheet:"
+msgstr "Gunakan helaian gaya &luar:"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+"Dalam medan ini, anda boleh masukkan URL untuk gaya helaian anda. Anda boleh "
+"menuding ke helaian gaya pada cakera, atau ke Internet."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, kde-format
+msgid "Layout"
+msgstr "Bentangan"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr ""
+"Guna pilihan ini untuk mengaktifkan atau menyahaktifkan sempadan di keliling "
+"sel."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, kde-format
+msgid "Use &borders"
+msgstr "Guna &sempadan"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+"Guna pilihan ini untuk menentukan bilangan piksel yang sepatutnya ada di "
+"antara sel. Kesan ini dapat dilihat dengan jelas jika anda semak <b>Guna "
+"sempadan</b>."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, kde-format
+msgid "Pi&xels between cells:"
+msgstr "&Piksel antara sel:"
+
+#: sheets/html/htmlexport.cc:200 sheets/html/htmlexport.cc:375
+#, kde-format
+msgid "Top"
+msgstr ""
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr "Konfigurasi Penapis Eksport Latex"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, kde-format
+msgid "Document"
+msgstr "Dokumen"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, kde-format
+msgid "Document Style"
+msgstr "Gaya Dokumen"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, kde-format
+msgid "Latex style"
+msgstr "gaya Latex"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, fuzzy, kde-format
+#| msgid "KWord style"
+msgid "Words style"
+msgstr "gaya KWord"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, kde-format
+msgid "Document Type"
+msgstr "Jenis Dokumen"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, fuzzy, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr "Dokumen dapat dikompilkan sendiri."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, fuzzy, kde-format
+#| msgid ""
+#| "The document will be generated as a full latex document since all the "
+#| "include will be generated before the \\begin[document} and "
+#| "\\end{document} commands."
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+"Dokumen akan dijanakan sebagai dokumen lateks penuh kerana semua yang "
+"terlibat akan dijanakan sebelum perintah \\mula(dokumen} dan "
+"\\akhiri{dokumen}."
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, kde-format
+msgid "Independent document"
+msgstr "Dokumen bebas"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, fuzzy, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr "Jangan jana pengepala lateks atau persekitaran dokumen. "
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+"Dokumen akan dijanakan sebagai dokumen lateks yang perlu dimasukkan ke dalam "
+"dokumen lateks utama. Ia membenarkan anda menjana beberapa fail kecil bagi "
+"setiap bab dokumen anda. "
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, kde-format
+msgid "Document to include"
+msgstr "Dokumen hendak dimasukkan"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, kde-format
+msgid "Document class:"
+msgstr "Kelas dokumen:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, kde-format
+msgid "Quality:"
+msgstr "Kualiti:"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, kde-format
+msgid "Final"
+msgstr "Akhir"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, kde-format
+msgid "Draft"
+msgstr "Draf"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, kde-format
+msgid "Default font size:"
+msgstr "Saiz fon piawai:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, kde-format
+msgid "Pictures"
+msgstr "Gambar"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, fuzzy, kde-format
+#| msgid "Convert the pictures"
+msgid "Convert the pictures:"
+msgstr "Tukar gambar"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, kde-format
+msgid "Pictures directory:"
+msgstr "Direktori gambar:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, kde-format
+msgid "Language"
+msgstr "Bahasa"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, kde-format
+msgid "Add"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, kde-format
+msgid "Remove"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, fuzzy, kde-format
+msgid "Contents"
+msgstr "Nota"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, fuzzy, kde-format
+#| msgid "Export informations about author"
+msgid "Export information about author:"
+msgstr "Eksport maklumat tentang pengarang"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, fuzzy, kde-format
+#| msgid "Add a table of content"
+msgid "Add a table of content:"
+msgstr "Tambah jadual kandungan"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, kde-format
+msgid "Notes"
+msgstr "Nota"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, kde-format
+msgid "Don't export"
+msgstr "Jangan eksport"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, kde-format
+msgid "Export notes in margin notes"
+msgstr "Eksport nota dalam nota jidar"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, kde-format
+msgid "Export notes in comments"
+msgstr "Eksport nota dalam komen"
+
+#: sheets/opencalc/opencalcexport.cc:890
+#, kde-format
+msgid "Page "
+msgstr "Halaman"
+
+#: sheets/opencalc/opencalcimport.cc:1199
+#, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr "Fail nampaknya rosak. Melangkau jadual. "
+
+#: sheets/opencalc/opencalcimport.cc:1211
+#, kde-format
+msgid "Skipping a table."
+msgstr "Melangkau jadual."
+
+#: sheets/opencalc/opencalcimport.cc:1911
+#, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+"Dokumen ini telah dicipta dengan OpenOffice.org versi '%1'. Penapis ini "
+"telah ditulis untuk versi 1.0. Membaca fail ini boleh mengakibatkan perilaku "
+"yang luar biasa, paparan data yang bercelaru atau tidak betul. Anda mahu "
+"teruskan menukar dokumen?"
+
+#: sheets/opencalc/opencalcimport.cc:1912
+#, kde-format
+msgid "Unsupported document version"
+msgstr "Versi dokumen tak disokong"
+
+#: sheets/qpro/qproimport.cc:114
+#, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr "Penapis QPRO tidak boleh buka fail input - sila lapor."
+
+#: sheets/qpro/qproimport.cc:219
+#, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr ""
+"Tidak dapat buka fail terlindung kata laluan. \n"
+"Algoritma kata laluan belum diterbitkan"
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Unable to find part for type %1"
+msgstr "Tidak dapat baca dari fail."
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:348
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1425
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr ""
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, fuzzy, kde-format
+#| msgid "Endnote %1"
+msgid "Slide layout \"%1\" not found"
+msgstr "Nota hujung %1"
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, fuzzy, kde-format
+#| msgid "Slide Title"
+msgid "Slide %1"
+msgstr "Tajuk Slaid"
+
+#: words/ascii/ImportDialog.cc:32
+#, fuzzy, kde-format
+#| msgid "KWord's Plain Text Import Filter"
+msgid "Words's Plain Text Import Filter"
+msgstr "Penapis Import Teks Mudah KWord"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "Dialog Import Teks Mudah"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, kde-format
+msgid "End of Paragraph"
+msgstr "Hujung Perenggan"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, kde-format
+msgid "&As is: At the end of line"
+msgstr "&Seperti: Pada hujung baris"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr "&Ayat: Jika hujung baris merupakan hujung ayat"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr ""
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, fuzzy, kde-format
+#| msgid "End of Line"
+msgid "End notes"
+msgstr "Hujung Baris"
+
+#: words/msword-odf/conversion.cpp:828
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Pengepala Halaman Genap"
+
+#: words/msword-odf/conversion.cpp:830
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Pengepala Halaman Ganjil"
+
+#: words/msword-odf/conversion.cpp:832
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Pengaki Halaman Genap"
+
+#: words/msword-odf/conversion.cpp:834
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Pengaki Halaman Ganjil"
+
+#: words/msword-odf/conversion.cpp:836
+#, kde-format
+msgid "First Page Header"
+msgstr "Pengepala Halaman Pertama"
+
+#: words/msword-odf/conversion.cpp:838
+#, kde-format
+msgid "First Page Footer"
+msgstr "Pengaki Halaman Pertama"
+
+#: words/msword-odf/texthandler.cpp:632
+#, kde-format
+msgid "Table %1"
+msgstr "Jadual %1"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr "Fail tidak boleh dimuatkan, kerana ia bukan dokumen RTF."
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, fuzzy, kde-format
+#| msgid "KWord's RTF Import Filter"
+msgid "Words's RTF Import Filter"
+msgstr "Penapis Import RTF KWord"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, fuzzy, kde-format
+#| msgid "The file cannot be loaded, as it cannot be opened."
+msgid "The file cannot be loaded."
+msgstr "Fail tidak boleh dimuatkan kerana tidak boleh dibuka."
+
+#~ msgid "Failed to read data."
+#~ msgstr "Gagal membaca data."
+
+#, fuzzy
+#~ msgid "Export Error"
+#~ msgstr "Ralat Eksport SVG"
+
+#~ msgid "Malformed XML data."
+#~ msgstr "Data XML cacat bentuk."
+
+#, fuzzy
+#~ msgid "Export to Image"
+#~ msgstr "Import imej"
+
+#, fuzzy
+#~ msgid "Area to export:"
+#~ msgstr "Pilih helaian untuk eksport:"
+
+#~ msgid "Height:"
+#~ msgstr "Tinggi:"
+
+#~ msgid "Width:"
+#~ msgstr "Lebar:"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image width:"
+#~ msgstr "Tinggi:"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image height:"
+#~ msgstr "Tinggi:"
+
+#, fuzzy
+#~| msgid "En&coding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&coding:"
+#~ msgstr "&Pengekodan:"
+
+#, fuzzy
+#~| msgid ""
+#~| "With this option you can define the encoding of the HTML file. The "
+#~| "recommended encoding (UTF8) is selected as default."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "With this option you can define the encoding of the HTML file. The "
+#~ "recommended encoding (UTF8) is selected as default."
+#~ msgstr ""
+#~ "Dengan pilihan ini anda boleh tentukan pengekodan fail HTML. Pengekodan "
+#~ "yang disarankan (UTF8) dipilih sebagai piawai."
+
+#, fuzzy
+#~| msgid "Sheet Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet Selection"
+#~ msgstr "Pemilihan Helaian "
+
+#, fuzzy
+#~| msgid "Click here to select all sheets in the list."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click here to select all sheets in the list."
+#~ msgstr "Klik di sini untuk memilih semua helaian dalam senarai."
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select &All"
+#~ msgstr "Pilih &Semua"
+
+#, fuzzy
+#~| msgid "Desele&ct All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Desele&ct All"
+#~ msgstr "&Nyahpilih Semua"
+
+#, fuzzy
+#~| msgid ""
+#~| "This option will make the HTML export filter generate a new page for "
+#~| "each sheet. If you disable this option, all sheets are written on one "
+#~| "page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This option will make the HTML export filter generate a new page for each "
+#~ "sheet. If you disable this option, all sheets are written on one page."
+#~ msgstr ""
+#~ "Opsyen ini akan menyebabkan penapis eksport HTML menjana halaman baru "
+#~ "bagi setiap helaian. Jika anda nyahaktifkan pilihan ini, semua helaian "
+#~ "akan ditulis pada satu halaman. "
+
+#, fuzzy
+#~| msgid "Use &separate files for each table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &separate files for each table"
+#~ msgstr "Gunakan fail &berasingan untuk setiap jadual"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Gaya"
+
+#, fuzzy
+#~| msgid ""
+#~| "Select this option to use the default fonts and colors for the HTML page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to use the default fonts and colors for the HTML page."
+#~ msgstr ""
+#~ "Pilih pilihan ini untuk menggunakan fon dan warna piawai bagi halaman "
+#~ "HTML."
+
+#, fuzzy
+#~| msgid "Use &default style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &default style"
+#~ msgstr "Gunakan gaya &piawai"
+
+#, fuzzy
+#~| msgid ""
+#~| "Select this option to specify a separate stylesheet for the HTML page. "
+#~| "You can select or type on in the field below."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to specify a separate stylesheet for the HTML page. "
+#~ "You can select or type on in the field below."
+#~ msgstr ""
+#~ "Pilih pilihan ini untuk menetapkan helaian gaya berasingan bagi halaman "
+#~ "HTML anda. Anda boleh pilih atau taipkannya dalam medan di bawah."
+
+#, fuzzy
+#~| msgid "Use &external stylesheet:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &external stylesheet:"
+#~ msgstr "Gunakan helaian gaya &luar:"
+
+#, fuzzy
+#~| msgid ""
+#~| "In this field you can enter an URL for your stylesheet. It is possible "
+#~| "to point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "In this field you can enter an URL for your stylesheet. It is possible to "
+#~ "point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgstr ""
+#~ "Dalam medan ini, anda boleh masukkan URL untuk gaya helaian anda. Anda "
+#~ "boleh menuding ke helaian gaya pada cakera, atau ke Internet."
+
+#, fuzzy
+#~| msgid "Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Bentangan"
+
+#, fuzzy
+#~| msgid "Use this option to enable or disable borders around the cells."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use this option to enable or disable borders around the cells."
+#~ msgstr ""
+#~ "Guna pilihan ini untuk mengaktifkan atau menyahaktifkan sempadan di "
+#~ "keliling sel."
+
+#, fuzzy
+#~| msgid "Use &borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &borders"
+#~ msgstr "Guna &sempadan"
+
+#, fuzzy
+#~| msgid ""
+#~| "Use this option to define how many pixels there should be between the "
+#~| "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Use this option to define how many pixels there should be between the "
+#~ "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgstr ""
+#~ "Guna pilihan ini untuk menentukan bilangan piksel yang sepatutnya ada di "
+#~ "antara sel. Kesan ini dapat dilihat dengan jelas jika anda semak <b>Guna "
+#~ "sempadan</b>."
+
+#, fuzzy
+#~| msgid "Pi&xels between cells:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pi&xels between cells:"
+#~ msgstr "&Piksel antara sel:"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Dokumen"
+
+#, fuzzy
+#~| msgid "Document Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Style"
+#~ msgstr "Gaya Dokumen"
+
+#, fuzzy
+#~| msgid "Latex style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex style"
+#~ msgstr "gaya Latex"
+
+#, fuzzy
+#~| msgid "KWord style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words style"
+#~ msgstr "gaya KWord"
+
+#, fuzzy
+#~| msgid "Document Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Type"
+#~ msgstr "Jenis Dokumen"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The document will be able to be compiled alone"
+#~ msgstr "Dokumen dapat dikompilkan sendiri."
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a full latex document since all the "
+#~| "include will be generated before the \\begin[document} and "
+#~| "\\end{document} commands."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a full latex document since all the "
+#~ "include will be generated before the \\begin[document} and "
+#~ "\\end{document} commands."
+#~ msgstr ""
+#~ "Dokumen akan dijanakan sebagai dokumen lateks penuh kerana semua yang "
+#~ "terlibat akan dijanakan sebelum perintah \\mula(dokumen} dan "
+#~ "\\akhiri{dokumen}."
+
+#, fuzzy
+#~| msgid "Independent document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Independent document"
+#~ msgstr "Dokumen bebas"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do not generate either the latex header or the document environment"
+#~ msgstr "Jangan jana pengepala lateks atau persekitaran dokumen. "
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a latex document which will have to be "
+#~| "included in a main latex document. It will allow you to generate several "
+#~| "little files for each chapter of your document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a latex document which will have to be "
+#~ "included in a main latex document. It will allow you to generate several "
+#~ "little files for each chapter of your document."
+#~ msgstr ""
+#~ "Dokumen akan dijanakan sebagai dokumen lateks yang perlu dimasukkan ke "
+#~ "dalam dokumen lateks utama. Ia membenarkan anda menjana beberapa fail "
+#~ "kecil bagi setiap bab dokumen anda. "
+
+#, fuzzy
+#~| msgid "Document to include"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document to include"
+#~ msgstr "Dokumen hendak dimasukkan"
+
+#, fuzzy
+#~| msgid "Document class:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document class:"
+#~ msgstr "Kelas dokumen:"
+
+#, fuzzy
+#~| msgid "Quality:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quality:"
+#~ msgstr "Kualiti:"
+
+#, fuzzy
+#~| msgid "Final"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Final"
+#~ msgstr "Akhir"
+
+#, fuzzy
+#~| msgid "Draft"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draft"
+#~ msgstr "Draf"
+
+#, fuzzy
+#~| msgid "Default font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default font size:"
+#~ msgstr "Saiz fon piawai:"
+
+#, fuzzy
+#~| msgid "Pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures"
+#~ msgstr "Gambar"
+
+#, fuzzy
+#~| msgid "Convert the pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convert the pictures:"
+#~ msgstr "Tukar gambar"
+
+#, fuzzy
+#~| msgid "Pictures directory:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures directory:"
+#~ msgstr "Direktori gambar:"
+
+#, fuzzy
+#~| msgid "Language"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Bahasa"
+
+#, fuzzy
+#~| msgid "Encoding"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encoding"
+#~ msgstr "Pengekodan"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "Nota"
+
+#, fuzzy
+#~| msgid "Export informations about author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export information about author:"
+#~ msgstr "Eksport maklumat tentang pengarang"
+
+#, fuzzy
+#~| msgid "Add a table of content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a table of content:"
+#~ msgstr "Tambah jadual kandungan"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Nota"
+
+#, fuzzy
+#~| msgid "Don't export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Don't export"
+#~ msgstr "Jangan eksport"
+
+#, fuzzy
+#~| msgid "Export notes in margin notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in margin notes"
+#~ msgstr "Eksport nota dalam nota jidar"
+
+#, fuzzy
+#~| msgid "Export notes in comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in comments"
+#~ msgstr "Eksport nota dalam komen"
+
+#, fuzzy
+#~| msgid "E&ncoding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "&Pengekodan:"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Line"
+#~ msgstr "Hujung Baris"
+
+#, fuzzy
+#~| msgid "&UNIX style (recommended; line feed only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&UNIX style (recommended; line feed only)"
+#~ msgstr "gaya &UNIX (disarankan; suap baris sahaja)"
+
+#, fuzzy
+#~| msgid "&Windows style (carriage return and line feed)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Windows style (carriage return and line feed)"
+#~ msgstr "Gaya &Windows (kembalian penyorong dan suapan garis)"
+
+#, fuzzy
+#~| msgid "&MacOS style (carriage return only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&MacOS style (carriage return only)"
+#~ msgstr "Gaya &MacOS (kembalian penyorong sahaja)"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Helaian"
+
+#, fuzzy
+#~| msgid "Select sheets to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select sheets to export:"
+#~ msgstr "Pilih helaian untuk eksport:"
+
+#, fuzzy
+#~| msgid "Delimiter Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter Line"
+#~ msgstr "Garis Penyahhad"
+
+#, fuzzy
+#~| msgid "********<SHEETNAME>********"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "********<SHEETNAME>********"
+#~ msgstr "********<SHEETNAME>********"
+
+#, fuzzy
+#~| msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgstr "<SHEETNAME> akan digantikan dengan nama helaian berikutnya."
+
+#, fuzzy
+#~| msgid "Print delimiter line above every sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Print delimiter line above every sheet"
+#~ msgstr "Cetak garis penyahhad pada sebelah atas setiap helaian"
+
+#, fuzzy
+#~| msgid "Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cells"
+#~ msgstr "Sel"
+
+#, fuzzy
+#~| msgid "Delimiter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "Penyahhad"
+
+#, fuzzy
+#~| msgid "Comma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "Koma"
+
+#, fuzzy
+#~| msgid "Semicolon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "Koma bertitik"
+
+#, fuzzy
+#~| msgid "Tabulator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "Penjadual"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "Jarak"
+
+#, fuzzy
+#~| msgid "Other:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other:"
+#~ msgstr "Lain-lain:"
+
+#, fuzzy
+#~| msgid "Quotes:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quotes:"
+#~ msgstr "Petikan:"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Export selection only"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export selection only"
+#~ msgstr "Pemilihan eksport sahaja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page:"
+#~ msgstr "Halaman"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area to export:"
+#~ msgstr "Pilih helaian untuk eksport:"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "Tinggi:"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Lebar:"
+
+#, fuzzy
+#~| msgid "Plain Text Import Dialog"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plain Text Import Dialog"
+#~ msgstr "Dialog Import Teks Mudah"
+
+#, fuzzy
+#~| msgid "End of Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Paragraph"
+#~ msgstr "Hujung Perenggan"
+
+#, fuzzy
+#~| msgid "&As is: At the end of line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As is: At the end of line"
+#~ msgstr "&Seperti: Pada hujung baris"
+
+#, fuzzy
+#~| msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgstr "&Ayat: Jika hujung baris merupakan hujung ayat"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Error"
+#~ msgstr "Ralat Eksport SVG"
+
+#, fuzzy
+#~| msgid "Failed to read data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to read data."
+#~ msgstr "Gagal membaca data."
+
+#, fuzzy
+#~| msgid "Malformed XML data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Malformed XML data."
+#~ msgstr "Data XML cacat bentuk."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to Image"
+#~ msgstr "Import imej"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PNG Export Options"
+#~ msgstr "Ralat Eksport PNG"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace \"%1\" not found"
+#~ msgstr "Nota hujung %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open the requested file %1"
+#~ msgstr "Tidak dapat baca dari fail."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read ZIP directory of the requested file %1"
+#~ msgstr "Tidak dapat baca dari fail."
+
+#, fuzzy
+#~| msgid "Passwords"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter password"
+#~ msgstr "Kata laluan"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find path for type %1"
+#~ msgstr "Tidak dapat baca dari fail."
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Element \"%1\" not found"
+#~ msgstr "Nota hujung %1"
+
+#, fuzzy
+#~| msgid "Footnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attribute \"%1\" not found"
+#~ msgstr "Nota kaki %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgstr "Tidak dapat baca dari fail."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find relationships file \"%1\""
+#~ msgstr "Tidak dapat baca dari fail."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgstr "Tidak dapat baca dari fail."
+
+#, fuzzy
+#~| msgid ""
+#~| "Parsing error in MathML file %4 at line %1, column %2\n"
+#~| "Error message: %3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Parsing error in the main document at line %1, column %2.\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Ralat kaji hurai dalam fail MathML %4 pada baris %1, lajur %2\n"
+#~ "Mesej ralat: %3"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' not found."
+#~ msgstr "Nota hujung %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not write block"
+#~ msgstr "Tidak dapat baca dari fail."
+
+#, fuzzy
+#~| msgid "<SHEETNAME>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME>"
+#~ msgstr "<SHEETNAME>"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Recommended ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Disarankan (%1)"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Locale ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Lokal (%1)"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Other ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Lain-lain (%1)"
+
+#, fuzzy
+#~| msgid "Cannot find encoding: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "Tidak jumpa pengekodan: %1"
+
+#, fuzzy
+#~| msgid "CSV filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV filter cannot open input file - please report."
+#~ msgstr "Penapis CSV tidak boleh buka fail input - sila lapor."
+
+#, fuzzy
+#~| msgid "File format is not supported."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File format is not supported."
+#~ msgstr "Format fail tidak disokong."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read from file."
+#~ msgstr "Tidak dapat baca dari fail."
+
+#, fuzzy
+#~| msgid "Export Sheet to HTML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Sheet to HTML"
+#~ msgstr "Eksport Helaian ke HTML"
+
+#, fuzzy
+#~| msgid "Recommended: UTF-8"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recommended: UTF-8"
+#~ msgstr "Disarankan: UTF-8"
+
+#, fuzzy
+#~| msgid "Locale (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale (%1)"
+#~ msgstr "Lokal (%1)"
+
+#, fuzzy
+#~| msgid "Latex Export Filter Configuration"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex Export Filter Configuration"
+#~ msgstr "Konfigurasi Penapis Eksport Latex"
+
+#, fuzzy
+#~| msgid "Page "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page "
+#~ msgstr "Halaman"
+
+#, fuzzy
+#~| msgid "The file seems to be corrupt. Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file seems to be corrupt. Skipping a table."
+#~ msgstr "Fail nampaknya rosak. Melangkau jadual. "
+
+#, fuzzy
+#~| msgid "Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skipping a table."
+#~ msgstr "Melangkau jadual."
+
+#, fuzzy
+#~| msgid ""
+#~| "This document was created with OpenOffice.org version '%1'. This filter "
+#~| "was written for version 1.0. Reading this file could cause strange "
+#~| "behavior, crashes or incorrect display of the data. Do you want to "
+#~| "continue converting the document?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document was created with OpenOffice.org version '%1'. This filter "
+#~ "was written for version 1.0. Reading this file could cause strange "
+#~ "behavior, crashes or incorrect display of the data. Do you want to "
+#~ "continue converting the document?"
+#~ msgstr ""
+#~ "Dokumen ini telah dicipta dengan OpenOffice.org versi '%1'. Penapis ini "
+#~ "telah ditulis untuk versi 1.0. Membaca fail ini boleh mengakibatkan "
+#~ "perilaku yang luar biasa, paparan data yang bercelaru atau tidak betul. "
+#~ "Anda mahu teruskan menukar dokumen?"
+
+#, fuzzy
+#~| msgid "Unsupported document version"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unsupported document version"
+#~ msgstr "Versi dokumen tak disokong"
+
+#, fuzzy
+#~| msgid "QPRO filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QPRO filter cannot open input file - please report."
+#~ msgstr "Penapis QPRO tidak boleh buka fail input - sila lapor."
+
+#, fuzzy
+#~| msgid ""
+#~| "Unable to open password protected files.\n"
+#~| "The password algorithm has not been published"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unable to open password protected files.\n"
+#~ "The password algorithm has not been published"
+#~ msgstr ""
+#~ "Tidak dapat buka fail terlindung kata laluan. \n"
+#~ "Algoritma kata laluan belum diterbitkan"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unable to find part for type %1"
+#~ msgstr "Tidak dapat baca dari fail."
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide layout \"%1\" not found"
+#~ msgstr "Nota hujung %1"
+
+#, fuzzy
+#~| msgid "Slide Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Tajuk Slaid"
+
+#, fuzzy
+#~| msgid "KWord's Plain Text Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's Plain Text Import Filter"
+#~ msgstr "Penapis Import Teks Mudah KWord"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End notes"
+#~ msgstr "Hujung Baris"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Pengepala Halaman Genap"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Pengepala Halaman Ganjil"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Pengaki Halaman Genap"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Pengaki Halaman Ganjil"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Header"
+#~ msgstr "Pengepala Halaman Pertama"
+
+#, fuzzy
+#~| msgid "First Page Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Footer"
+#~ msgstr "Pengaki Halaman Pertama"
+
+#, fuzzy
+#~| msgid "Table %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table %1"
+#~ msgstr "Jadual %1"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgstr "Fail tidak boleh dimuatkan, kerana ia bukan dokumen RTF."
+
+#, fuzzy
+#~| msgid "KWord's RTF Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's RTF Import Filter"
+#~ msgstr "Penapis Import RTF KWord"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded, as it cannot be opened."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded."
+#~ msgstr "Fail tidak boleh dimuatkan kerana tidak boleh dibuka."
+
+#~ msgid "Failed to write file."
+#~ msgstr "Gagal menulis fail."
+
+#, fuzzy
+#~ msgid "%1 Export Error"
+#~ msgstr "Ralat Eksport SVG"
+
+#, fuzzy
+#~ msgid "Export Filter Parameters"
+#~ msgstr "Parameter Penapis Eksport PNG"
+
+#~ msgid "Keep ratio"
+#~ msgstr "Kekalkan nisbah"
+
+#, fuzzy
+#~ msgid "Width (%):"
+#~ msgstr "Lebar (%1):"
+
+#~ msgid "Height (%):"
+#~ msgstr "Tinggi (%):"
+
+#~ msgid "PNG Export Error"
+#~ msgstr "Ralat Eksport PNG"
+
+#~ msgid "EPS Export"
+#~ msgstr "Eksport EPS"
+
+#~ msgid "PostScript level 1"
+#~ msgstr "PascaSkrip Tahap 1"
+
+#~ msgid "PostScript level 2"
+#~ msgstr "PascaSkrip tahap 2"
+
+#~ msgid "PostScript level 3"
+#~ msgstr "PascaSkrip tahap 3"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "PDF Import"
+
+#~ msgid "Text"
+#~ msgstr "Teks"
+
+#~ msgid "Number"
+#~ msgstr "Nombor"
+
+#~ msgid "Currency"
+#~ msgstr "Mata wang"
+
+#~ msgid "Date"
+#~ msgstr "Tarikh"
+
+#~ msgid "Decimal Comma Number"
+#~ msgstr "Nombor Koma Perpuluhan"
+
+#~ msgid "Decimal Point Number"
+#~ msgstr "Nombor Titik Perpuluhan"
+
+#~ msgid "None"
+#~ msgstr "Tiada"
+
+#~ msgid ""
+#~ "Please check the ranges you specified. The start value must be lower than "
+#~ "the end value."
+#~ msgstr ""
+#~ "Sila semak julat yang anda tetapkan. Nilai mula mesti lebih rendah "
+#~ "daripada nilai akhir. "
+
+#~ msgid "Common"
+#~ msgstr "Biasa"
+
+#~ msgid "Other"
+#~ msgstr "Lain-lain"
+
+#~ msgid "Ignore duplicate delimiters"
+#~ msgstr "Abaikan menduplikasikan penyahhad"
+
+#~ msgid "Text&quote:"
+#~ msgstr "&Petikan teks:"
+
+#~ msgid "&Format:"
+#~ msgstr "&Format:"
+
+#~ msgid "Ranges"
+#~ msgstr "Julat"
+
+#~ msgid "to"
+#~ msgstr "ke "
+
+#~ msgid "Import lines:"
+#~ msgstr "Import baris:"
+
+#~ msgid "Import columns:"
+#~ msgstr "Import lajur:"
+
+#~ msgid "Update"
+#~ msgstr "Kemas kini"
+
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#, fuzzy
+#~ msgid "&Cancel"
+#~ msgstr "&Lanjutan "
+
+#, fuzzy
+#~| msgid ""
+#~| "An error has occurred while parsing the KWord file.\n"
+#~| "At line: %1, column %2\n"
+#~| "Error message: %3"
+#~ msgid ""
+#~ "An error has occurred while parsing the Words file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Ralat berlaku semasa mengkaji hurai fail KWord,\n"
+#~ "Pada baris: %1, lajur %2\n"
+#~ "Mesej ralat: %3"
+
+#, fuzzy
+#~| msgid "KWord Export Filter Library"
+#~ msgid "Words Export Filter Library"
+#~ msgstr "Pustaka Penapis Eksport KWord"
+
+#~ msgid "Export XSLT Configuration"
+#~ msgstr "Eksport Konfigurasi XSLT"
+
+#~ msgid "Open Document"
+#~ msgstr "Buka Dokumen"
+
+#~ msgid "Import XSLT Configuration"
+#~ msgstr "Import Konfigurasi XSLT"
+
+#~ msgid "Common xslt Files"
+#~ msgstr "Fail xslt Biasa"
+
+#~ msgid "Personal xslt Files"
+#~ msgstr "Fail xslt Peribadi"
+
+#~ msgid "Choose..."
+#~ msgstr "Pilih..."
+
+#~ msgid "SVG Export Error"
+#~ msgstr "Ralat Eksport SVG"
+
+#~ msgid "LaTeX Export Error"
+#~ msgstr "Ralat Eksport LateX"
+
+#~ msgid "PNG Export Filter Parameters"
+#~ msgstr "Parameter Penapis Eksport PNG"
+
+#, fuzzy
+#~ msgid "Height"
+#~ msgstr "Tinggi:"
+
+#, fuzzy
+#~ msgid "Width"
+#~ msgstr "Lebar:"
+
+#~ msgid "Height (%)"
+#~ msgstr "Tinggi (%)"
+
+#~ msgid "Width (%)"
+#~ msgstr "Lebar (%)"
+
+#~ msgid "Slide Title"
+#~ msgstr "Tajuk Slaid"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Picture %1"
+#~ msgstr "Gambar %1"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Table %3, row %1, column %2"
+#~ msgstr " Jadual %3, baris %1, lajur %2"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the AbiWord file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Ralat berlaku semasa mengkaji hurai fail AbiWord.\n"
+#~ "Pada baris:%1, lajur %2\n"
+#~ "Mesej ralat:%3"
+
+#~ msgid "AbiWord Import Filter"
+#~ msgstr "Penapis Import AbiWord"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Main Text Frameset"
+#~ msgstr "Set Bingkai Teks Utama"
+
+#~ msgid "An error occurred during the load of the AbiWord file: %1"
+#~ msgstr "Ralat berlaku semasa memuatkan fail AbiWord: %1"
+
+#~ msgid "Unable to save document information."
+#~ msgstr "Tidak dapat menyimpan maklumat dokumen."
+
+#~ msgid "Unable to save main document."
+#~ msgstr "Tidak dapat menyimpan dokumen utama."
+
+#~ msgctxt "Frameset name"
+#~ msgid "Footnote %1"
+#~ msgstr "Nota kaki %1"
+
+#, fuzzy
+#~| msgid "KWord's Plain Text Export Filter"
+#~ msgid "Words's Plain Text Export Filter"
+#~ msgstr "Penapis Eksport Teks Mudah KWord"
+
+#, fuzzy
+#~| msgid "KWord's HTML Export Filter"
+#~ msgid "Words's HTML Export Filter"
+#~ msgstr "Penapis Eksport HTML KWord"
+
+#~ msgid "Untitled Document"
+#~ msgstr "Dokumen Tak Bertajuk"
+
+#~ msgid "Latex Import Filter Parameters"
+#~ msgstr "Parameter Penapis Import Latex"
+
+#~ msgid "Unicode"
+#~ msgstr "Unikod"
+
+#~ msgid "latin1"
+#~ msgstr "latin1"
+
+#~ msgid "New document"
+#~ msgstr "Dokumen baru"
+
+#~ msgid "Embedded document"
+#~ msgstr "Dokumen terbenam"
+
+#, fuzzy
+#~| msgid "KWord's MS Write Import Filter"
+#~ msgid "Words's MS Write Import Filter"
+#~ msgstr "Penapis Import MS Write KWord"
+
+#~ msgid "Header"
+#~ msgstr "Pengepala"
+
+#~ msgid "Footer"
+#~ msgstr "Pengaki"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Set Bingkai Teks Utama"
+
+#~ msgctxt "Object name"
+#~ msgid "Table %1"
+#~ msgstr "Jadual %1"
+
+#~ msgctxt "Object name"
+#~ msgid "Table Frame %1"
+#~ msgstr "Bingkai Jadual %1"
+
+#, fuzzy
+#~| msgctxt "Pseudo-author for annotations"
+#~| msgid "KWord 1.3"
+#~ msgctxt "Pseudo-author for annotations"
+#~ msgid "KWord 1.3"
+#~ msgstr "KWord 1.3"
+
+#~ msgid "Plain Text Export Dialog"
+#~ msgstr "Dialog Eksport Teks Mudah"
+
+#~ msgid "HTML Export Dialog"
+#~ msgstr "Dialog Eksport HTML"
+
+#~ msgid "&HTML 4.01"
+#~ msgstr "&HTML 4.01"
+
+#~ msgid "HTML 4.01 (For older HTML user agents) "
+#~ msgstr "HTML 4.01 (Untuk ejen pengguna HTML yang lebih lama)"
+
+#~ msgid "&XHTML 1.0"
+#~ msgstr "&XHTML 1.0"
+
+#~ msgid "XHTML 1.0"
+#~ msgstr "XHTML 1.0"
+
+#~ msgid "Mode"
+#~ msgstr "Mod"
+
+#~ msgid "L&ight: Convert to strict (X)HTML"
+#~ msgstr "&Rendah: Tukar ke (X)HTML tegas"
+
+#~ msgid ""
+#~ "Convert mainly the document structure (Recommended for exporting to "
+#~ "browsers with limited capabilities)"
+#~ msgstr ""
+#~ "Tukar terutamanya struktur dokumen (Disarankan untuk mengeksport ke "
+#~ "pelayar dengan kemampuan terhad)"
+
+#~ msgid "&Basic: Convert to transitional (X)HTML"
+#~ msgstr "&Asas: Tukar ke (X)HTML peralihan"
+
+#, fuzzy
+#~| msgid ""
+#~| "Convert most of the document (Recommended for re-importing in KWord or "
+#~| "for exporting to older browsers)"
+#~ msgid ""
+#~ "Convert most of the document (Recommended for re-importing in Words or "
+#~ "for exporting to older browsers)"
+#~ msgstr ""
+#~ "Tukar kebanyakan dokumen (Disarankan untuk mengimport semula dalam KWord "
+#~ "atau untuk mengeksport ke pelayar yang lebih lama)"
+
+#~ msgid "&Enhanced: Convert to (X)HTML with CSS"
+#~ msgstr "&Lanjutan: Tukar ke (X)HTML dengan CSS"
+
+#, fuzzy
+#~| msgid ""
+#~| "Convert as much as possible of the KWord document (Recommended for "
+#~| "exporting to other modern word processors or to modern browsers)"
+#~ msgid ""
+#~ "Convert as much as possible of the Words document (Recommended for "
+#~ "exporting to other modern word processors or to modern browsers)"
+#~ msgstr ""
+#~ "Tukar sebanyak mungkin dokumen KWord (Disarankan untuk mengeksport ke "
+#~ "pemproses kata moden yang lain atau ke pelayar moden)"
+
+#~ msgid "Use external CSS sheet:"
+#~ msgstr "Gunakan helaian CSS luar:"
+
+#~ msgid "Enter the location of the CSS file in this field"
+#~ msgstr "Masukkan lokasi fail CSS dalam medan ini"
+
+#, fuzzy
+#~ msgid "This directory will contains the eps pictures of your document"
+#~ msgstr "Direktori ini akan mengandungi gambar eps dokumen anda."
+
+#~ msgid "MS Write Import Dialog"
+#~ msgstr "Dialog Import MS Write"
+
+#~ msgid "&Encoding"
+#~ msgstr "&Pengekodan"
+
+#~ msgid ""
+#~ "Select the encoding of the Write document.<br><br>Try the Default  "
+#~ "Encoding (CP 1252), if unsure."
+#~ msgstr ""
+#~ "Pilih pengekodan bagi dokumen Write.<br><br>Cuba Pengekodan Piawai (CP "
+#~ "1252), jika tak pasti."
+
+#~ msgid "&Other encoding:"
+#~ msgstr "Pengekodan &lain:"
+
+#~ msgid "&Default encoding (CP 1252)"
+#~ msgstr "Pengekodan &piawai (CP 1252)"
+
+#~ msgid ""
+#~ "Most Write documents are stored using this encoding (also known as "
+#~ "windows-1252).<br><br>Select this if unsure."
+#~ msgstr ""
+#~ "Kebanyakan dokumen Write disimpankan dengan menggunakan pengekodan ini "
+#~ "(juga dikenali sebagai windows -1252).<br><br>Pilih ini jika tak pasti."
+
+#~ msgid "&Advanced"
+#~ msgstr "&Lanjutan "
+
+#, fuzzy
+#~| msgid ""
+#~| "These advanced options allow you to fine-tune the importing of "
+#~| "formatting information. They compensate for differences between KWord "
+#~| "and MS Write by adding extra formatting information (not found in the "
+#~| "original document), to try to make the imported document look as close "
+#~| "to the original as possible.<br><br>It is safe to use the defaults, if "
+#~| "unsure."
+#~ msgid ""
+#~ "These advanced options allow you to fine-tune the importing of formatting "
+#~ "information. They compensate for differences between Words and MS Write "
+#~ "by adding extra formatting information (not found in the original "
+#~ "document), to try to make the imported document look as close to the "
+#~ "original as possible.<br><br>It is safe to use the defaults, if unsure."
+#~ msgstr ""
+#~ "Opsyen lanjutan ini membenarkan anda menala halus pengimportan maklumat "
+#~ "pemformatan. Ia mengimbangi perbezaan antara KWord dan MS Write dengan "
+#~ "menambah maklumat pemformatan tambahan (tidak ada dalam dokumen asal), "
+#~ "supaya dokumen import itu kelihatan sehampir yang mungkin dengan yang "
+#~ "asal.<br><br>Adalah selamat menggunakan piawai, jika tak pasti."
+
+#~ msgid "Compensate for &linespacing differences"
+#~ msgstr "Mengimbangi perbezaan &jarak baris"
+
+#~ msgid ""
+#~ "Try to simulate Write's linespacing by adding some spaces before each "
+#~ "paragraph."
+#~ msgstr ""
+#~ "Cuba tiru jarak baris Write dengan menambah beberapa jarak sebelum setiap "
+#~ "perenggan."
+
+#~ msgid "Enable &image positioning"
+#~ msgstr "Aktifkan penentuan posisi &imej"
+
+#~ msgid "Use paragraph indentation to position images."
+#~ msgstr "Gunakan pengengsotan perenggan untuk menentukan posisi imej."
+
+#, fuzzy
+#~| msgid "PDF Import"
+#~ msgid "DCM Import"
+#~ msgstr "PDF Import"
+
+#, fuzzy
+#~ msgid "Import options"
+#~ msgstr "Ralat Eksport PNG"
+
+#~ msgid ""
+#~ "The document cannot be loaded, as it seems not to follow the RTF syntax."
+#~ msgstr ""
+#~ "Dokumen tidak boleh dimuatkan, kerana ia tidak mematuhi sintaks RTF. "
+
+#~ msgid ""
+#~ "The RTF (Rich Text Format) document has an unexpected version number: %1. "
+#~ "Continuing might result in an erroneous conversion. Do you want to "
+#~ "continue?"
+#~ msgstr ""
+#~ "Dokumen RTF (Format Teks Kaya) mempunyai bilangan versi yang tidak "
+#~ "dijangka: %1.Meneruskannya mungkin mengakibatkan penukaran yang salah. "
+#~ "Anda mahu teruskan?"
+
+#~ msgid ""
+#~ "The PWD (PocketWord's Rich Text Format) document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Dokumen PWD (Format Teks Kaya PocketWord) mempunyai bilangan versi yang "
+#~ "tidak dijangka: %1 Meneruskannya mungkin mengakibatkan pertukaran yang "
+#~ "salah. Anda mahu teruskannya?"
+
+#~ msgid ""
+#~ "The URTF (\"Unicode Rich Text Format\") document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Dokumen URTF (\"Format Teks Kaya Unikod\") mempunyai bilangan versi yang "
+#~ "tidak dijangka: %1. Meneruskannya mungkin mengakibatkan pertukaran yang "
+#~ "salah. Anda mahu teruskannya?"
+
+#~ msgid ""
+#~ "The RTF document cannot be loaded, as it has an unexpected first keyword: "
+#~ "\\%1."
+#~ msgstr ""
+#~ "Dokumen RTF tidak dapat dimuatkan, kerana ia mempunyai kata kunci pertama "
+#~ "yang tidak dijangka: \\%1."
+
+#~ msgid "Old &method: If the line is empty or has less than 40 characters"
+#~ msgstr ""
+#~ "&Kaedah lama: Jika baris kosong atau mengandungi kurang daripada 40 aksara"
+
+#, fuzzy
+#~ msgid "KFormula Import Error"
+#~ msgstr "Ralat Import MathML"
+
+#, fuzzy
+#~ msgid "KFormula1.3 Import Filter"
+#~ msgstr "Penapis Import AbiWord"
+
+#~ msgid "Available Sheets"
+#~ msgstr "Helaian yang Boleh Didapatkan"
+
+#, fuzzy
+#~| msgid "Footnote %1"
+#~ msgid "Footnote \"%1\" not found"
+#~ msgstr "Nota kaki %1"
+
+#~ msgid "Picture %1"
+#~ msgstr "Gambar %1"
+
+#, fuzzy
+#~ msgid "JPEG Export Options"
+#~ msgstr "Ralat Eksport PNG"
+
+#, fuzzy
+#~ msgid "All Images"
+#~ msgstr "Semua (%1 halaman)"
+
+#, fuzzy
+#~ msgid "PDFImportWidget"
+#~ msgstr "PDF Import"
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "Halaman"
+
+#, fuzzy
+#~ msgid "&All pages"
+#~ msgstr "Semua (%1 halaman)"
+
+#, fuzzy
+#~ msgid "&First page"
+#~ msgstr "Pengepala Halaman Pertama"
+
+#, fuzzy
+#~| msgid "&Advanced"
+#~ msgid "Advanced quality"
+#~ msgstr "&Lanjutan "
+
+#, fuzzy
+#~| msgid "&Format:"
+#~ msgid "Formats:"
+#~ msgstr "&Format:"
+
+#, fuzzy
+#~ msgid "Predictor:"
+#~ msgstr "Direktori gambar:"
+
+#~ msgid "Initializing..."
+#~ msgstr "Memulakan..."
+
+#~ msgid "First pass: page #%1..."
+#~ msgstr "Kemasukan pertama: halaman #%1..."
+
+#~ msgid "Second pass: page #%1..."
+#~ msgstr "Kemasukan kedua: halaman#%1... "
+
+#~ msgid "Body Frameset #%1"
+#~ msgstr "Set Bingkai Isi #%1"
+
+#~ msgid "Header Frameset #%1"
+#~ msgstr "Set Bingkai Pengepala #%1"
+
+#~ msgid "Footer Frameset #%1"
+#~ msgstr "Set Bingkai Pengaki #%1"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "Set Bingkai Teks %1"
+
+#~ msgid "KWord's PDF Import Filter"
+#~ msgstr "Penapis Import PDF KWord"
+
+#~ msgid "Page Selection"
+#~ msgstr "Pemilihan Halaman "
+
+#~ msgid "All (%1 pages)"
+#~ msgstr "Semua (%1 halaman)"
+
+#~ msgid "Range:"
+#~ msgstr "Julat:"
+
+#~ msgid "Import images"
+#~ msgstr "Import imej"
+
+#~ msgid "\"Smart\" mode"
+#~ msgstr "mod \"Smart\""
+
+#~ msgid ""
+#~ "Removes returns and hyphens at end of line. Also tries to compute the "
+#~ "paragraph alignment. Note that the layout of some pages can get messed up."
+#~ msgstr ""
+#~ "Alih keluar kembali dan tanda sempang pada hujung baris. Cuba kira "
+#~ "penjajaran perenggan. Perhatikan yang bentangan beberapa halaman boleh "
+#~ "menjadi bercelaru."
+
+#~ msgid "Owner:"
+#~ msgstr "Pemilik:"
+
+#~ msgid "User:"
+#~ msgstr "Pengguna:"
+
+#~ msgctxt "Table_Name Cell row,column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 Sel%2%3"
+
+#, fuzzy
+#~ msgid "&Document mode"
+#~ msgstr "Jenis Dokumen"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "do not compress the file at all"
+#~ msgid "None"
+#~ msgstr "Tiada"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "do not use any predictor"
+#~ msgid "None"
+#~ msgstr "Tiada"
+
+#, fuzzy
+#~ msgid "Importing..."
+#~ msgstr "Import imej"
+
+#, fuzzy
+#~| msgid "&Format:"
+#~ msgid "Form"
+#~ msgstr "&Format:"
+
+#, fuzzy
+#~ msgid "Export hidden layers"
+#~ msgstr "Parameter Penapis Eksport PNG"
+
+#, fuzzy
+#~ msgid "BMP Export Error"
+#~ msgstr "Ralat Eksport PNG"
+
+#, fuzzy
+#~ msgid "MNG Export Error"
+#~ msgstr "Ralat Eksport PNG"
+
+#, fuzzy
+#~ msgid "Xbm Export Error"
+#~ msgstr "Ralat Eksport LateX"
+
+#, fuzzy
+#~ msgid "Xpm Export Error"
+#~ msgstr "Ralat Eksport LateX"
+
+#, fuzzy
+#~ msgid "JPEG Export Error"
+#~ msgstr "Ralat Eksport PNG"
+
+#, fuzzy
+#~ msgid "KSpread Kexi Import Filter"
+#~ msgstr "Penapis Import PDF KWord"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Nombor"
+
+#~ msgid "Unable to open output file."
+#~ msgstr "Tidak dapat buka fail output."
+
+#~ msgid "Failed to open input file: %1"
+#~ msgstr "Gagal membuka fail input: %1"
+
+#~ msgid "Failed to write formula."
+#~ msgstr "Gagal menulis formula."
+
+#~ msgid "MathML Export Error"
+#~ msgstr "Ralat Eksport MathML"

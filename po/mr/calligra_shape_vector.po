@@ -1,0 +1,68 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Chetan Khona <chetan@kompkin.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-03-11 15:49+0530\n"
+"Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
+"Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
+"Language: mr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: ChangeVectorDataCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change Vector Data"
+msgstr "व्हेक्टर डेटा बदला"
+
+#: VectorShapeFactory.cpp:27
+#, kde-format
+msgid "Vector image"
+msgstr "व्हेक्टर प्रतिमा"
+
+#: VectorShapeFactory.cpp:29
+#, kde-format
+msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+msgstr "व्हेक्टर प्रतिमा (EMF/WMF/SVM) दर्शविणारा आकार"
+
+#: VectorTool.cpp:64
+#, kde-format
+msgid "Open Vector Image (EMF/WMF/SVM)"
+msgstr "व्हेक्टर प्रतिमा उघडा (EMF/WMF/SVM)"
+
+#: VectorToolFactory.cpp:20
+#, fuzzy, kde-format
+#| msgid "Vector Image (EMF/WMF/SVM) tool"
+msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+msgstr "व्हेक्टर प्रतिमा (EMF/WMF/SVM) साधन"
+
+#, fuzzy
+#~| msgid "Vector image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector image"
+#~ msgstr "व्हेक्टर प्रतिमा"
+
+#, fuzzy
+#~| msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgstr "व्हेक्टर प्रतिमा (EMF/WMF/SVM) दर्शविणारा आकार"
+
+#, fuzzy
+#~| msgid "Open Vector Image (EMF/WMF/SVM)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Vector Image (EMF/WMF/SVM)"
+#~ msgstr "व्हेक्टर प्रतिमा उघडा (EMF/WMF/SVM)"
+
+#, fuzzy
+#~| msgid "Vector Image (EMF/WMF/SVM) tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+#~ msgstr "व्हेक्टर प्रतिमा (EMF/WMF/SVM) साधन"

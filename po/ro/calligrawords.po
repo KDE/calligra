@@ -1,0 +1,6215 @@
+# Copyright (C).
+# Sergiu Bivol <sergiu@cip.md>, 2008, 2009, 2012, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kword\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"PO-Revision-Date: 2021-05-15 16:15+0100\n"
+"Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
+"Language-Team: Romanian\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+"X-Generator: Lokalize 19.12.3\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, kde-format
+msgid "&File"
+msgstr "&Fișier"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, kde-format
+msgid "&Edit"
+msgstr "&Editare"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, kde-format
+msgid "&View"
+msgstr "&Vizualizare"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, kde-format
+msgid "&Display Mode"
+msgstr "&Regim de afișare"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, fuzzy, kde-format
+#| msgid "Semantic Object"
+msgid "Semantics"
+msgstr "Obiect Semantic "
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, kde-format
+msgid "S&tyles"
+msgstr "S&tiluri"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, kde-format
+msgid "&Settings"
+msgstr "&Configurări"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "Verificare ortografică"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, kde-format
+msgid "Edit"
+msgstr "Editare"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, kde-format
+msgid "Spell Check Result"
+msgstr "Rezultatul verificării ortografice"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, kde-format
+msgid "Change Variable To"
+msgstr "Schimbă variabila în"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr "&Unelte"
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "Stabilește stilul paginii"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "Inserează stilul paginii"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "Proprietăți pagină"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Creează formă"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, kde-format
+msgid "Baseline"
+msgstr "Linie de bază"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, kde-format
+msgid "Character"
+msgstr "Caracter"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, kde-format
+msgid "Row"
+msgstr "Rând"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, kde-format
+msgid "Page (entire) area"
+msgstr "Zonă (completă) a paginii"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, kde-format
+msgid "Page text area"
+msgstr "Aria textului din pagină"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, kde-format
+msgid "Paragraph area"
+msgstr "Aria paragrafului"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, kde-format
+msgid "Paragraph text area"
+msgstr "Aria textului din paragraf"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, kde-format
+msgid "Left page border"
+msgstr "Marginea stângă a paginii"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, kde-format
+msgid "Right page border"
+msgstr "Marginea dreaptă a paginii"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, kde-format
+msgid "Right paragraph border"
+msgstr "Limita paragrafului din dreapta"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, kde-format
+msgid "Left paragraph border"
+msgstr "Limita paragrafului din stânga"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, fuzzy, kde-format
+msgid "Shape relation to text is:"
+msgstr "Relația formei la text este:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr "În linie cu textul (se poartă ca un caracter)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr "Plutește, dar ancorat într-o poziție caracter"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr "Plutește, dar ancorat la un paragraf"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr "Plutește liber (nu este ancorat unui text)"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, kde-format
+msgid "Vertical Positioning"
+msgstr "Poziționare verticală"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, kde-format
+msgid "Top align with:"
+msgstr "Aliniere sus cu:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, kde-format
+msgid "Center align with:"
+msgstr "Aliniere pe centru cu:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, kde-format
+msgid "Bottom align with:"
+msgstr "Aliniere jos cu:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr "Decalaj"
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, kde-format
+msgid "from:"
+msgstr "de la:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, kde-format
+msgid "Horizontal Positioning"
+msgstr "Poziționare orizontală"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, kde-format
+msgid "Left align with:"
+msgstr "Alinere la stânga cu:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, kde-format
+msgid "Right align with:"
+msgstr "Aliniere la dreapta cu:"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, kde-format
+msgid "Configure"
+msgstr "Configurează"
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr "Diverse"
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, kde-format
+msgid "Grid"
+msgstr "Grilă"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Document"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, kde-format
+msgid "Document Settings"
+msgstr "Configurări document"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Autor"
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr "Autor"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, kde-format
+msgid "Create New Bookmark"
+msgstr "Creează un semn de carte nou"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+"Semnele de carte vă permit să săriți între părți ale documentului.\n"
+"Scrieți numele semnului dumneavoastră."
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "Denumire:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, kde-format
+msgid "Columns:"
+msgstr "Coloane:"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, kde-format
+msgid "Column spacing:"
+msgstr "Spațiere coloane:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, kde-format
+msgid "frameset"
+msgstr "set de cadre"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, kde-format
+msgid "No framesets in document"
+msgstr "Niciun set de cadre în document"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "Numele setului de cadre:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, kde-format
+msgid "Create a new frameset:"
+msgstr "Creează un set nou de cadre"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr "Alegeți setul de cadre existent la care vă conectați:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "Denumirea setului de cadre"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, kde-format
+msgid "Smart Positioning"
+msgstr "Poziționare inteligentă"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Text Run Around"
+msgstr "Text aranjat integral"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "Conectează cadre de text"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "Schimbă proprietăți pagină"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr "Ancoră la..."
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, kde-format
+msgid "&Page"
+msgstr "&Pagină"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, kde-format
+msgid "Para&graph"
+msgstr "Para&graf"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, kde-format
+msgid "&To Character"
+msgstr "&La caracter"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, kde-format
+msgid "&As Character"
+msgstr "Ca un &caracter"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, kde-format
+msgid "Horizontal Alignment"
+msgstr "Aliniere orizontală"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, kde-format
+msgid "&Left"
+msgstr "&Stânga"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, kde-format
+msgid "&Center"
+msgstr "&Centru"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, kde-format
+msgid "&Right"
+msgstr "&Dreapta"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, kde-format
+msgid "Vertical Alignment"
+msgstr "Aliniere verticală"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr "&Sus"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr "&Mijloc"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, kde-format
+msgid "&Bottom"
+msgstr "&Jos"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, kde-format
+msgid "Text Wrap-around"
+msgstr "Înfășurare text"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, kde-format
+msgid "Run through this shape"
+msgstr "Trece prin această formă"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, kde-format
+msgid "Skip below this shape"
+msgstr "Salt sub această formă"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, kde-format
+msgid "Run on left side of this shape"
+msgstr "Trece pe latura  stângă a acestei forme"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, kde-format
+msgid "Run on right side of this shape"
+msgstr "Trece pe latura dreaptă a acestei forme"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, kde-format
+msgid "Run on longest side of this shape"
+msgstr "Treec pe cea mai lungă latură a acestei forme "
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, kde-format
+msgid "Run on both sides of this shape"
+msgstr "Trece pe ambele părți ale acestei forme"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr "Trece pe părțile mai late de:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, kde-format
+msgid "Distance Between Shape and Text:"
+msgstr "Distanța dintre formă și text:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, kde-format
+msgid "Columns"
+msgstr "Coloane"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, kde-format
+msgid "Style"
+msgstr "Stil"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, kde-format
+msgid "Clone"
+msgstr "Clonează"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, kde-format
+msgid "Delete"
+msgstr "Șterge"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "Schimbă stilul paginii"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr "Aaugă stil de pagină nou cu denumirea:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Clone Page Style"
+msgstr "Clonează stilul paginii"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr "Textul de altundeva va:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr "Forma afectează textul după:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr "Dreptunghiul de delimitare"
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr "Contur"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr "Forma și textul sunt separate:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left by:"
+msgstr "Stânga:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right by:"
+msgstr "Dreapta:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, kde-format
+msgid "&Rename"
+msgstr "&Redenumește"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, kde-format
+msgid "&Delete"
+msgstr "Ș&terge"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Redenumește semnul de carte"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr "Adăugați o nouă denumire pentru semnul de carte"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr "Există deja un semn de carte cu denumirea „%1”."
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, kde-format
+msgid "Select Bookmark"
+msgstr "Alege semn de carte"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "Geometrie"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, kde-format
+msgid "Page Size && Margins"
+msgstr "Dimensiuni pagină și margini"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, kde-format
+msgid "Create"
+msgstr "Creează"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, kde-format
+msgid "Navigation"
+msgstr ""
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+#| msgid "&Page"
+msgid "Page #"
+msgstr "&Pagină"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Section"
+msgstr "Opțiuni cadru"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr "RDF"
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "Statistici"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "Cuvinte:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "Propoziții:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "Silabe:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, fuzzy, kde-format
+#| msgid "Characters (including spaces):"
+msgid "Characters (spaces):"
+msgstr "Caractere (inclusiv spații):"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, fuzzy, kde-format
+#| msgid "Characters (including spaces):"
+msgid "Characters (no spaces):"
+msgstr "Caractere (inclusiv spații):"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr "Linii:"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, fuzzy, kde-format
+#| msgid "Flesch Reading Ease"
+msgid "Flesch reading ease"
+msgstr "Gradul Flesch de ușurință în citire"
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, fuzzy, kde-format
+#| msgid "East Asian characters:"
+msgid "East asian characters:"
+msgstr "Caractere est-asiatice:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, kde-format
+msgid "Words"
+msgstr "Cuvinte"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, kde-format
+msgid "Sentences"
+msgstr "Propoziții"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, kde-format
+msgid "Syllables"
+msgstr "Silabe"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, kde-format
+msgid "Lines"
+msgstr "Linii"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, kde-format
+msgid "Characters With Spaces"
+msgstr "Caractere cu spații"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, kde-format
+msgid "Characters without spaces"
+msgstr "Caractere fără spații"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, kde-format
+msgid "East Asian characters"
+msgstr "Caractere est-asiatice"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, kde-format
+msgid "Flesch Reading Ease"
+msgstr "Gradul Flesch de ușurință în citire"
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "Standard "
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "Antet 1"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "Antet 2"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "Antet 3"
+
+#: part/i18n/stylenames.cpp:12
+#, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "Listă enumerată"
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "Listă alfabetică"
+
+#: part/i18n/stylenames.cpp:14
+#, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "Listă cu buline"
+
+#: part/i18n/stylenames.cpp:15
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "Titlu cuprinsului"
+
+#: part/i18n/stylenames.cpp:16
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "Antet cuprins 1"
+
+#: part/i18n/stylenames.cpp:17
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "Antet cuprins 2"
+
+#: part/i18n/stylenames.cpp:18
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "Antet cuprins 3"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "Titlul documentului"
+
+#: part/i18n/stylenames.cpp:20
+#, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "Antet"
+
+#: part/i18n/stylenames.cpp:21
+#, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "Subsol"
+
+#: part/i18n/stylenames.cpp:24
+#, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "Simplu"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "Margini 1"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "Margini 2"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "Margini 3"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "Rând"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "Coloană"
+
+#: part/i18n/stylenames.cpp:30
+#, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "Gri deschis"
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "Gri închis"
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "Negru"
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "Albastru deschis"
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "Albastru închis"
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "Roșu"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "Galben"
+
+#: part/i18n/stylenames.cpp:37
+#, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "Colorat"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "Albăstrui"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "Simplu 1"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "Simplu 2"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "Simplu 3"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "Antet 1"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "Antet 2"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "Antet 3"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "Antet 4"
+
+#: part/i18n/stylenames.cpp:50
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "Coloane 1"
+
+#: part/i18n/stylenames.cpp:51
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "Coloane 2"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "Grilă 1"
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "Grilă 2"
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "Grilă 3"
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "Antet gri"
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "Antet albastru"
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "Albastru tradițional"
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "Gri tradițional"
+
+#: part/i18n/stylenames.cpp:59
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "Antet și subsol albastru"
+
+#: part/i18n/stylenames.cpp:60
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "Antet și subsol gri"
+
+#: part/KWAboutData.h:20
+#, fuzzy, kde-format
+#| msgid "Calligra Word Processor"
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "Procesor de Cuvinte Calligra"
+
+#: part/KWAboutData.h:22
+#, fuzzy, kde-format
+#| msgid "Calligra Word Processor"
+msgid "Word processor"
+msgstr "Procesor de Cuvinte Calligra"
+
+#: part/KWAboutData.h:24
+#, fuzzy, kde-format
+#| msgid "(c) 1998-2011, The Words Team"
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "(c) 1998-2001, Echipa de Cuvinte"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr "Co-întreținător"
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr "Pierre Ducroquet"
+
+#: part/KWAboutData.h:33
+#, fuzzy, kde-format
+#| msgid "Casper Boemann"
+msgid "C. Boemann"
+msgstr "Casper Boemann"
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr "Tot"
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr "Sebastian Sauer"
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Formatting stuff"
+msgstr "Formatând lucruri"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr "Thorsten Zachmann"
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, kde-format
+msgid "Filter"
+msgstr "Filtru"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr "Matus Uzak"
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr "Afișaj și Imagine"
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr "Pavol Korinek"
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistics docker"
+msgstr "Statistici"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, fuzzy, kde-format
+msgid "Foot and endnotes"
+msgstr "Note de &subsol"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr ""
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, fuzzy, kde-format
+msgid "Style Manager"
+msgstr "Opțiuni tabel"
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr "Lassi Nieminen"
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr "Hanzes Matus"
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr "Lukáš Tvrdý"
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr "Girish Ramakrishnan"
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, kde-format
+msgid "ODF Support"
+msgstr "Suport ODF"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr ""
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr "Sven Lüppken"
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr "Frank Dekervel"
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr "Krister Wicksell Eriksson"
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr "Dag Andersen"
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr "Nash Hoogwater"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "FormulăK"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr "Ulrich Kuettler"
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr "Shaheed Haque"
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr "Clarence Dang"
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr "Robert Jacolin"
+
+#: part/KWAboutData.h:65
+#, kde-format
+msgid "Enno Bartels"
+msgstr "Enno Bartels"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr "Ewald Snel"
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr "Tomasz Grobelny"
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr "Michael Johnson"
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page break icon"
+msgstr "Pauză de Pagină "
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+
+#: part/KWDocument.cpp:495
+#, kde-format
+msgid "Copy"
+msgstr "Copiază"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, kde-format
+msgid "Standard"
+msgstr "Standard"
+
+#: part/KWDocument.cpp:546
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Document Title"
+msgid "Document Title"
+msgstr "Titlul documentului"
+
+#: part/KWDocument.cpp:553
+#, kde-format
+msgid "Head 1"
+msgstr "Antet 1 "
+
+#: part/KWDocument.cpp:559
+#, kde-format
+msgid "Head 2"
+msgstr "Antet 2 "
+
+#: part/KWDocument.cpp:565
+#, kde-format
+msgid "Head 3"
+msgstr "Antet 3 "
+
+#: part/KWDocument.cpp:571
+#, kde-format
+msgid "Bullet List"
+msgstr "Listă cu Simboluri"
+
+#: part/KWGui.cpp:69
+#, kde-format
+msgid "Tools"
+msgstr "Unelte"
+
+#: part/KWOdfLoader.cpp:83
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr "Fisier OASIS OpenDocument invalid. Nici o etichetă office:body găsită."
+
+#: part/KWOdfLoader.cpp:95
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr ""
+"Fișier OASIS OpenDocument invalid. Nici o marcă găsită în interiorul office:"
+"body."
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+"Acesta nu este un document ce procesează cuvinte , dar %1.Vă rugam încercați "
+"să îl deschideți cu aplicația corectă."
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, fuzzy, kde-format
+#| msgid "Standard"
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "Standard"
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+"Nu se poate găsi componenta de text dorită, Cuvintele se vor închide acum"
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr "Eroare de instalare"
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr "Modificat"
+
+#: part/KWStatusBar.cpp:36
+#, kde-format
+msgid "Saved"
+msgstr "Salvat"
+
+#: part/KWStatusBar.cpp:37
+#, fuzzy, kde-format
+msgid "Page %1 of %2"
+msgstr "Pagina %1/%2"
+
+#: part/KWStatusBar.cpp:38
+#, fuzzy, kde-format
+msgid "Page %1-%2 of %3"
+msgstr "Pagina %1/%2"
+
+#: part/KWStatusBar.cpp:39
+#, kde-format
+msgid "Line %1"
+msgstr "Linia  %1"
+
+#: part/KWStatusBar.cpp:124
+#, kde-format
+msgid "Page Number"
+msgstr "Numărul paginii"
+
+#: part/KWStatusBar.cpp:137
+#, kde-format
+msgid "Line Number"
+msgstr "Numărul liniei"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Page Style"
+msgid "Change the page style"
+msgstr "Schimbă stilul paginii"
+
+#: part/KWStatusBar.cpp:155
+#, kde-format
+msgid "Page Style"
+msgstr "Stilul paginii"
+
+#: part/KWStatusBar.cpp:169
+#, kde-format
+msgid "Page Size"
+msgstr "Dimensiunea paginii"
+
+#: part/KWStatusBar.cpp:184
+#, kde-format
+msgid "Saved/Modified"
+msgstr "Salvat/Modificat"
+
+#: part/KWStatusBar.cpp:197
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr "Cursorul mausului X:Y"
+
+#: part/KWStatusBar.cpp:211
+#, fuzzy, kde-format
+msgid "Zoom Controller"
+msgstr "Controlează Zoom-ul"
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:260
+#, kde-format
+msgid "Shape Properties..."
+msgstr "Proprietăți formă..."
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr "Modifică comportamentul formei"
+
+#: part/KWView.cpp:271
+#, kde-format
+msgid "Create Template From Document..."
+msgstr "Creare șablon din document..."
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr "Documentul este salvat și folosit ulterior ca șablon"
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+"Puteți salva acest document ca șablon.<br /><br />Puteți folosi acest nou "
+"șablon ca punct de pornire pentru alt document."
+
+#: part/KWView.cpp:292
+#, kde-format
+msgid "Show Formatting Characters"
+msgstr "Arată caractere de formatare"
+
+#: part/KWView.cpp:298
+#, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr "Comută afișarea caracterelor netipăribile"
+
+#: part/KWView.cpp:299
+#, fuzzy, kde-format
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+"Comutați afișajul caracterelor neprintabile.<br/><br/>Când aceasta este "
+"permisă , Cuvintele îți afișează taburi,spații și alte caractere "
+"neprintabile."
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr ""
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr ""
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+
+#: part/KWView.cpp:310
+#, kde-format
+msgid "Show Text Shape Borders"
+msgstr "Arătați Marginile Formei Textului"
+
+#: part/KWView.cpp:311
+#, kde-format
+msgid "Turns the border display on and off"
+msgstr "Pornește și oprește afișajul de pe margine"
+
+#: part/KWView.cpp:317
+#, kde-format
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+"Turns the border display on and off.<br/><br/>Marginile nu sunt printate "
+"niciodată.Această opțiune este folositoare în a vedea cum documentul va "
+"apărea pe pagina printată."
+
+#: part/KWView.cpp:319
+#, kde-format
+msgid "Show Table Borders"
+msgstr "Afoșează Marginile Tabelului"
+
+#: part/KWView.cpp:325
+#, kde-format
+msgid "Toggle the display of table borders"
+msgstr "Comuntați afișajul marginilor tabelelor"
+
+#: part/KWView.cpp:326
+#, kde-format
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+"Comutați afișajul marginii tabelelor.<br/><br/>În momentul în care vor fi "
+"adăugate, Cuvintele vor arăta orice margini invizibile de tabele cu o linie "
+"groasă gri."
+
+#: part/KWView.cpp:328
+#, fuzzy, kde-format
+msgid "Show Section Bounds"
+msgstr "Autocorecție avansată"
+
+#: part/KWView.cpp:334
+#, fuzzy, kde-format
+#| msgid "Toggle the display of table borders"
+msgid "Toggle the display of section bounds"
+msgstr "Comuntați afișajul marginilor tabelelor"
+
+#: part/KWView.cpp:335
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+#| "shows you any invisible table borders with a thin gray line."
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+"Comutați afișajul marginii tabelelor.<br/><br/>În momentul în care vor fi "
+"adăugate, Cuvintele vor arăta orice margini invizibile de tabele cu o linie "
+"groasă gri."
+
+#: part/KWView.cpp:337
+#, kde-format
+msgid "Show Rulers"
+msgstr "Afișează Rigle"
+
+#: part/KWView.cpp:339
+#, kde-format
+msgid "Shows or hides rulers"
+msgstr "Afișează sau ascunde rigle"
+
+#: part/KWView.cpp:340
+#, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+"Riglele sunt spațiile albe măsurând în vârf și la stânga documentului. "
+"Riglele arată poziția și lățimea paginilor și ferestrelor și pot fi folosite "
+"să poziționeze tabulatori printre altele.<p>Debifați căsuța pentru a nu mai "
+"afișa riglele.</p>"
+
+#: part/KWView.cpp:351
+#, kde-format
+msgid "Snap to Grid"
+msgstr "Treceți la Grilă"
+
+#: part/KWView.cpp:359
+#, kde-format
+msgid "Show Status Bar"
+msgstr "Afișează Bara de Status "
+
+#: part/KWView.cpp:360
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Afișează sau ascunde bara de status "
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr ""
+
+#: part/KWView.cpp:374
+#, kde-format
+msgid "Semantic Stylesheets..."
+msgstr "Fișiere semantice de stil..."
+
+#: part/KWView.cpp:376
+#, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr "Modificați și adăugați Fișe semantice de stil"
+
+#: part/KWView.cpp:377
+#, fuzzy, kde-format
+#| msgid ""
+#| "Stylesheets are used to format contact, event, and location information "
+#| "which is stored in Rdf"
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+"Stylesheet-urile sunt folosite pentru a formata informațiile legate de "
+"contact , eveniment și locație care sunt in Rdf"
+
+#: part/KWView.cpp:392
+#, kde-format
+msgid "Configure..."
+msgstr "Configurare..."
+
+#: part/KWView.cpp:401
+#, kde-format
+msgid "Page Layout..."
+msgstr "Formatul Paginii..."
+
+#: part/KWView.cpp:403
+#, kde-format
+msgid "Change properties of entire page"
+msgstr "Schimbă proprietățile întregii paginii"
+
+#: part/KWView.cpp:404
+#, kde-format
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+"Schimbați proprietățile întregii pagini. <p>În acest moment puteți schimba "
+"dimensiunile și orientarea hârtiei , dimensiunile antetului și a "
+"subsolului , și setările coloanei.</p>"
+
+#: part/KWView.cpp:407
+#, kde-format
+msgid "Create Header"
+msgstr "Creează antet"
+
+#: part/KWView.cpp:413
+#, kde-format
+msgid "Create Footer"
+msgstr "Creează subsol"
+
+#: part/KWView.cpp:420
+#, fuzzy, kde-format
+msgid "Show Comments"
+msgstr "Șterge coloană"
+
+#: part/KWView.cpp:421
+#, fuzzy, kde-format
+#| msgid "No framesets in document"
+msgid "Shows comments in the document"
+msgstr "Niciun set de cadre în document"
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr ""
+
+#: part/KWView.cpp:428
+#, fuzzy, kde-format
+#| msgid "Shows or hides the status bar"
+msgid "Shows or hides word counting in status bar"
+msgstr "Afișează sau ascunde bara de status "
+
+#: part/pagetool/KWPageTool.cpp:85
+#, fuzzy, kde-format
+#| msgid "Page Size"
+msgid "Page Setup"
+msgstr "Dimensiunea Paginii"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, fuzzy, kde-format
+#| msgid "Even Pages Footer"
+msgid "Header & Footer"
+msgstr "Subsolul Paginilor Par"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Page layout"
+msgstr "Modifică format"
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+msgctxt "Next search result"
+msgid "Next"
+msgstr "Inserare tabel"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, fuzzy, kde-format
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "Previzualizare"
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, fuzzy, kde-format
+#| msgid "Options"
+msgctxt "Search options"
+msgid "Options"
+msgstr "Opțiuni "
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, kde-format
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, kde-format
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, kde-format
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, kde-format
+msgid "Replace"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Antetul paginilor impare"
+
+#: part/Words.cpp:47
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Antetul paginilor pare"
+
+#: part/Words.cpp:49
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Subsolul paginilor impare"
+
+#: part/Words.cpp:51
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Subsolul paginilor pare"
+
+#: part/Words.cpp:53
+#, kde-format
+msgid "Main text"
+msgstr "Text principal"
+
+#: part/Words.cpp:55
+#, kde-format
+msgid "Other text"
+msgstr "Alt text"
+
+#, fuzzy
+#~| msgid "Anchor to..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor to..."
+#~ msgstr "Ancoră la..."
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "&Pagină"
+
+#, fuzzy
+#~| msgid "Para&graph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "Para&graf"
+
+#, fuzzy
+#~| msgid "&To Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "&La caracter"
+
+#, fuzzy
+#~| msgid "&As Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "Ca un &caracter"
+
+#, fuzzy
+#~| msgid "Horizontal Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Aliniere orizontală"
+
+#, fuzzy
+#~| msgid "&Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "&Stânga"
+
+#, fuzzy
+#~| msgid "&Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Center"
+#~ msgstr "&Centru"
+
+#, fuzzy
+#~| msgid "&Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "&Dreapta"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Alignment"
+#~ msgstr "Aliniere verticală"
+
+#, fuzzy
+#~| msgid "&Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Top"
+#~ msgstr "&Sus"
+
+#, fuzzy
+#~| msgid "&Middle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Middle"
+#~ msgstr "&Mijloc"
+
+#, fuzzy
+#~| msgid "&Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "&Jos"
+
+#, fuzzy
+#~| msgid "Text Wrap-around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Wrap-around"
+#~ msgstr "Înfășurare text"
+
+#, fuzzy
+#~| msgid "Run through this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "Trece prin această formă"
+
+#, fuzzy
+#~| msgid "Skip below this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "Salt sub această formă"
+
+#, fuzzy
+#~| msgid "Run on left side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "Trece pe latura  stângă a acestei forme"
+
+#, fuzzy
+#~| msgid "Run on right side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "Trece pe latura dreaptă a acestei forme"
+
+#, fuzzy
+#~| msgid "Run on longest side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "Treec pe cea mai lungă latură a acestei forme "
+
+#, fuzzy
+#~| msgid "Run on both sides of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "Trece pe ambele părți ale acestei forme"
+
+#, fuzzy
+#~| msgid "Run on sides that are wider than:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on sides that are wider than:"
+#~ msgstr "Trece pe părțile mai late de:"
+
+#, fuzzy
+#~| msgid "Distance Between Shape and Text:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance Between Shape and Text:"
+#~ msgstr "Distanța dintre formă și text:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape relation to text is:"
+#~ msgstr "Relația formei la text este:"
+
+#, fuzzy
+#~| msgid "Inline with text (behaves as a character)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inline with text (behaves as a character)"
+#~ msgstr "În linie cu textul (se poartă ca un caracter)"
+
+#, fuzzy
+#~| msgid "Floating, but anchored to a character position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Floating, but anchored to a character position"
+#~ msgstr "Plutește, dar ancorat într-o poziție caracter"
+
+#, fuzzy
+#~| msgid "Floating, but anchored to a paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Floating, but anchored to a paragraph"
+#~ msgstr "Plutește, dar ancorat la un paragraf"
+
+#, fuzzy
+#~| msgid "Floating free (not anchored to text)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Floating free (not anchored to text)"
+#~ msgstr "Plutește liber (nu este ancorat unui text)"
+
+#, fuzzy
+#~| msgid "Vertical Positioning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "Poziționare verticală"
+
+#, fuzzy
+#~| msgid "Top align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top align with:"
+#~ msgstr "Aliniere sus cu:"
+
+#, fuzzy
+#~| msgid "Center align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center align with:"
+#~ msgstr "Aliniere pe centru cu:"
+
+#, fuzzy
+#~| msgid "Bottom align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom align with:"
+#~ msgstr "Aliniere jos cu:"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Decalaj"
+
+#, fuzzy
+#~| msgid "from:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "de la:"
+
+#, fuzzy
+#~| msgid "Horizontal Positioning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "Poziționare orizontală"
+
+#, fuzzy
+#~| msgid "Left align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left align with:"
+#~ msgstr "Alinere la stânga cu:"
+
+#, fuzzy
+#~| msgid "Right align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right align with:"
+#~ msgstr "Aliniere la dreapta cu:"
+
+#, fuzzy
+#~| msgid "Name of frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "Numele setului de cadre:"
+
+#, fuzzy
+#~| msgid "Create a new frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "Creează un set nou de cadre"
+
+#, fuzzy
+#~| msgid "Select existing frameset to connect to:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select existing frameset to connect to:"
+#~ msgstr "Alegeți setul de cadre existent la care vă conectați:"
+
+#, fuzzy
+#~| msgid "Frameset Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "Denumirea setului de cadre"
+
+#, fuzzy
+#~| msgid "&Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "&Redenumește"
+
+#, fuzzy
+#~| msgid "&Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "Ș&terge"
+
+#, fuzzy
+#~| msgid ""
+#~| "Bookmarks allow you to jump between parts of your document.\n"
+#~| "Please provide the name of your bookmark."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Bookmarks allow you to jump between parts of your document.\n"
+#~ "Please provide the name of your bookmark."
+#~ msgstr ""
+#~ "Semnele de carte vă permit să săriți între părți ale documentului.\n"
+#~ "Scrieți numele semnului dumneavoastră."
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Denumire:"
+
+#, fuzzy
+#~| msgid "Page Size && Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "Dimensiuni pagină și margini"
+
+#, fuzzy
+#~| msgid "Text elsewhere will:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text elsewhere will:"
+#~ msgstr "Textul de altundeva va:"
+
+#, fuzzy
+#~| msgid "The shape affects the text by its:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The shape affects the text by its:"
+#~ msgstr "Forma afectează textul după:"
+
+#, fuzzy
+#~| msgid "Bounding box"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bounding box"
+#~ msgstr "Dreptunghiul de delimitare"
+
+#, fuzzy
+#~| msgid "Contour"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contour"
+#~ msgstr "Contur"
+
+#, fuzzy
+#~| msgid "Shape and text is separated:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape and text is separated:"
+#~ msgstr "Forma și textul sunt separate:"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "Stânga:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "Dreapta:"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Coloane:"
+
+#, fuzzy
+#~| msgid "Column spacing:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "Spațiere coloane:"
+
+#, fuzzy
+#~| msgid "Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "Cuvinte"
+
+#, fuzzy
+#~| msgid "Sentences"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "Propoziții"
+
+#, fuzzy
+#~| msgid "Syllables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "Silabe"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Linii"
+
+#, fuzzy
+#~| msgid "Characters With Spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "Caractere cu spații"
+
+#, fuzzy
+#~| msgid "Characters without spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "Caractere fără spații"
+
+#, fuzzy
+#~| msgid "East Asian characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "Caractere est-asiatice"
+
+#, fuzzy
+#~| msgid "Flesch Reading Ease"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch Reading Ease"
+#~ msgstr "Gradul Flesch de ușurință în citire"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Fișier"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Editare"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Vizualizare"
+
+#, fuzzy
+#~| msgid "&Display Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "&Regim de afișare"
+
+#, fuzzy
+#~| msgid "Semantic Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "Obiect Semantic "
+
+#, fuzzy
+#~| msgid "S&tyles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&tyles"
+#~ msgstr "S&tiluri"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Configurări"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "Verificare ortografică"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Editare"
+
+#, fuzzy
+#~| msgid "Spell Check Result"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "Rezultatul verificării ortografice"
+
+#, fuzzy
+#~| msgid "Change Variable To"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "Schimbă variabila în"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "&Unelte"
+
+#, fuzzy
+#~| msgid "Baseline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "Linie de bază"
+
+#, fuzzy
+#~| msgid "Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "Caracter"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Rând"
+
+#, fuzzy
+#~| msgid "Page (entire) area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page (entire) area"
+#~ msgstr "Zonă (completă) a paginii"
+
+#, fuzzy
+#~| msgid "Page text area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "Aria textului din pagină"
+
+#, fuzzy
+#~| msgid "Paragraph area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "Aria paragrafului"
+
+#, fuzzy
+#~| msgid "Paragraph text area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "Aria textului din paragraf"
+
+#, fuzzy
+#~| msgid "Left page border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "Marginea stângă a paginii"
+
+#, fuzzy
+#~| msgid "Right page border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "Marginea dreaptă a paginii"
+
+#, fuzzy
+#~| msgid "Right paragraph border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right paragraph border"
+#~ msgstr "Limita paragrafului din dreapta"
+
+#, fuzzy
+#~| msgid "Left paragraph border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left paragraph border"
+#~ msgstr "Limita paragrafului din stânga"
+
+#, fuzzy
+#~| msgid "Configure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Configurează"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Diverse"
+
+#, fuzzy
+#~| msgid "Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Grilă"
+
+#, fuzzy
+#~| msgctxt "@title:tab Document settings page"
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Document"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Configurări document"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~| msgid "Create New Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "Creează un semn de carte nou"
+
+#, fuzzy
+#~| msgid "frameset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "set de cadre"
+
+#, fuzzy
+#~| msgid "No framesets in document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No framesets in document"
+#~ msgstr "Niciun set de cadre în document"
+
+#, fuzzy
+#~| msgid "Smart Positioning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "Poziționare inteligentă"
+
+#, fuzzy
+#~| msgid "Connect Text Frames"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "Conectează cadre de text"
+
+#, fuzzy
+#~| msgid "Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "Coloane"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Stil"
+
+#, fuzzy
+#~| msgid "Clone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "Clonează"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Șterge"
+
+#, fuzzy
+#~| msgid "Add a new page style with the name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new page style with the name:"
+#~ msgstr "Aaugă stil de pagină nou cu denumirea:"
+
+#, fuzzy
+#~| msgid "Clone Page Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "Clonează stilul paginii"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Redenumește semnul de carte"
+
+#, fuzzy
+#~| msgid "Please provide a new name for the bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please provide a new name for the bookmark"
+#~ msgstr "Adăugați o nouă denumire pentru semnul de carte"
+
+#, fuzzy
+#~| msgid "A bookmark with the name \"%1\" already exists."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr "Există deja un semn de carte cu denumirea „%1”."
+
+#, fuzzy
+#~| msgid "Select Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "Alege semn de carte"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Geometrie"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "&Pagină"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "Opțiuni cadru"
+
+#, fuzzy
+#~| msgid "RDF"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RDF"
+#~ msgstr "RDF"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "Statistici"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "Cuvinte:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "Propoziții:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "Silabe:"
+
+#, fuzzy
+#~| msgid "Characters (including spaces):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "Caractere (inclusiv spații):"
+
+#, fuzzy
+#~| msgid "Characters (including spaces):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "Caractere (inclusiv spații):"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "Linii:"
+
+#, fuzzy
+#~| msgid "Flesch Reading Ease"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch reading ease"
+#~ msgstr "Gradul Flesch de ușurință în citire"
+
+#, fuzzy
+#~| msgid "East Asian characters:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "Caractere est-asiatice:"
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Standard"
+#~ msgstr "Standard"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "Antet 1 "
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "Antet 2 "
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "Antet 3 "
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Enumerated List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "Listă enumerată"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Alphabetical List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "Listă alfabetică"
+
+#, fuzzy
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "Listă cu Simboluri"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "Titlu cuprins"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "Antet cuprins 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "Antet cuprins 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "Antet cuprins 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "Titlul documentului"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "&Antet"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "&Subsol"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Plain"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "Simplu"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "Margini 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "Margini 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "Margini 3"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "Rând"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "Coloană:"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "Gri deschis"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "Gri închis"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "Negru"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "Albastru deschis"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "Albastru închis"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "Roșu"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "Galben"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Colorful"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "Colorat"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bluish"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "Albăstrui"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "Simplu 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "Simplu 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "Simplu 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "Antet 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "Antet 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "Antet 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 4"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "Antet 4"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "Coloane 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "Coloane 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "Grilă 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "Grilă 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "Grilă 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "Antet gri"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "Antet albastru"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "Albastru tradițional"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "Gri tradițional"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "Antet și subsol albastru"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "Antet și subsol gri"
+
+#, fuzzy
+#~| msgid "Calligra Word Processor"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "Procesor de Cuvinte Calligra"
+
+#, fuzzy
+#~| msgid "Calligra Word Processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "Procesor de Cuvinte Calligra"
+
+#, fuzzy
+#~| msgid "(c) 1998-2011, The Words Team"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "(c) 1998-2001, Echipa de Cuvinte"
+
+#, fuzzy
+#~| msgid "Co maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Co maintainer"
+#~ msgstr "Co-întreținător"
+
+#, fuzzy
+#~| msgid "Pierre Ducroquet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Ducroquet"
+#~ msgstr "Pierre Ducroquet"
+
+#, fuzzy
+#~| msgid "Casper Boemann"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C. Boemann"
+#~ msgstr "Casper Boemann"
+
+#, fuzzy
+#~| msgid "Everything"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Everything"
+#~ msgstr "Tot"
+
+#, fuzzy
+#~| msgid "Sebastian Sauer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sebastian Sauer"
+#~ msgstr "Sebastian Sauer"
+
+#, fuzzy
+#~| msgid "Boudewijn Rempt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#, fuzzy
+#~| msgid "Pierre Stirnweiss"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#, fuzzy
+#~| msgid "Formatting stuff"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "Formatând lucruri"
+
+#, fuzzy
+#~| msgid "Inge Wallin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#, fuzzy
+#~| msgid "Thorsten Zachmann"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thorsten Zachmann"
+#~ msgstr "Thorsten Zachmann"
+
+#, fuzzy
+#~| msgid "Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "Filtru"
+
+#, fuzzy
+#~| msgid "Matus Uzak"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Matus Uzak"
+#~ msgstr "Matus Uzak"
+
+#, fuzzy
+#~| msgid "Layout and Painting"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout and Painting"
+#~ msgstr "Afișaj și Imagine"
+
+#, fuzzy
+#~| msgid "Pavol Korinek"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pavol Korinek"
+#~ msgstr "Pavol Korinek"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "Statistici"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "Note de &subsol"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "Opțiuni tabel"
+
+#, fuzzy
+#~| msgid "Lassi Nieminen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lassi Nieminen"
+#~ msgstr "Lassi Nieminen"
+
+#, fuzzy
+#~| msgid "Hanzes Matus"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hanzes Matus"
+#~ msgstr "Hanzes Matus"
+
+#, fuzzy
+#~| msgid "Lukáš Tvrdý"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lukáš Tvrdý"
+#~ msgstr "Lukáš Tvrdý"
+
+#, fuzzy
+#~| msgid "Thomas Zander"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#, fuzzy
+#~| msgid "Girish Ramakrishnan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Girish Ramakrishnan"
+#~ msgstr "Girish Ramakrishnan"
+
+#, fuzzy
+#~| msgid "ODF Support"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ODF Support"
+#~ msgstr "Suport ODF"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~| msgid "Laurent Montel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#, fuzzy
+#~| msgid "Sven Lüppken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sven Lüppken"
+#~ msgstr "Sven Lüppken"
+
+#, fuzzy
+#~| msgid "Frank Dekervel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frank Dekervel"
+#~ msgstr "Frank Dekervel"
+
+#, fuzzy
+#~| msgid "Krister Wicksell Eriksson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Krister Wicksell Eriksson"
+#~ msgstr "Krister Wicksell Eriksson"
+
+#, fuzzy
+#~| msgid "Dag Andersen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dag Andersen"
+#~ msgstr "Dag Andersen"
+
+#, fuzzy
+#~| msgid "Nash Hoogwater"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nash Hoogwater"
+#~ msgstr "Nash Hoogwater"
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "FormulăK"
+
+#, fuzzy
+#~| msgid "Ulrich Kuettler"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ulrich Kuettler"
+#~ msgstr "Ulrich Kuettler"
+
+#, fuzzy
+#~| msgid "Shaheed Haque"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shaheed Haque"
+#~ msgstr "Shaheed Haque"
+
+#, fuzzy
+#~| msgid "Werner Trobin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Werner Trobin"
+
+#, fuzzy
+#~| msgid "Nicolas Goutte"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "Nicolas Goutte"
+
+#, fuzzy
+#~| msgid "Ariya Hidayat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "Ariya Hidayat"
+
+#, fuzzy
+#~| msgid "Clarence Dang"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clarence Dang"
+#~ msgstr "Clarence Dang"
+
+#, fuzzy
+#~| msgid "Robert Jacolin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Robert Jacolin"
+#~ msgstr "Robert Jacolin"
+
+#, fuzzy
+#~| msgid "Enno Bartels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "Enno Bartels"
+
+#, fuzzy
+#~| msgid "Ewald Snel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ewald Snel"
+#~ msgstr "Ewald Snel"
+
+#, fuzzy
+#~| msgid "Tomasz Grobelny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomasz Grobelny"
+#~ msgstr "Tomasz Grobelny"
+
+#, fuzzy
+#~| msgid "Michael Johnson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Michael Johnson"
+#~ msgstr "Michael Johnson"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "Pauză de Pagină "
+
+#, fuzzy
+#~| msgid "Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Copiază"
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Standard"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "Titlul documentului"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "Antet 1 "
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "Antet 2 "
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "Antet 3 "
+
+#, fuzzy
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "Listă cu Simboluri"
+
+#, fuzzy
+#~| msgid "Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "Unelte"
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr ""
+#~ "Fisier OASIS OpenDocument invalid. Nici o etichetă office:body găsită."
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr ""
+#~ "Fișier OASIS OpenDocument invalid. Nici o marcă găsită în interiorul "
+#~ "office:body."
+
+#, fuzzy
+#~| msgid ""
+#~| "This is not a word processing document, but %1. Please try opening it "
+#~| "with the appropriate application."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This is not a word processing document, but %1. Please try opening it "
+#~ "with the appropriate application."
+#~ msgstr ""
+#~ "Acesta nu este un document ce procesează cuvinte , dar %1.Vă rugam "
+#~ "încercați să îl deschideți cu aplicația corectă."
+
+#, fuzzy
+#~| msgid "Can not find needed text component, Words will quit now"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Can not find needed text component, Words will quit now"
+#~ msgstr ""
+#~ "Nu se poate găsi componenta de text dorită, Cuvintele se vor închide acum"
+
+#, fuzzy
+#~| msgid "Installation Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Installation Error"
+#~ msgstr "Eroare de instalare "
+
+#, fuzzy
+#~| msgid "Modified"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modified"
+#~ msgstr "Modificat"
+
+#, fuzzy
+#~| msgid "Saved"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "Salvat"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "Pagina %1/%2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "Pagina %1/%2"
+
+#, fuzzy
+#~| msgid "Line %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "Linia  %1"
+
+#, fuzzy
+#~| msgid "Page Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Numărul Paginii"
+
+#, fuzzy
+#~| msgid "Line Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "Numărul Liniei"
+
+#, fuzzy
+#~| msgid "Page Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "Stilul Paginii"
+
+#, fuzzy
+#~| msgid "Page Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "Dimensiunea Paginii"
+
+#, fuzzy
+#~| msgid "Saved/Modified"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved/Modified"
+#~ msgstr "Salvat/Modificat"
+
+#, fuzzy
+#~| msgid "Mouse Cursor X:Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mouse Cursor X:Y"
+#~ msgstr "Cursorul Mouse-ului X:Y"
+
+#, fuzzy
+#~| msgid "Zoom Controller"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom Controller"
+#~ msgstr "Controlează Zoom-ul"
+
+#, fuzzy
+#~| msgid "Shape Properties..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "Proprietăți formă..."
+
+#, fuzzy
+#~| msgid "Change how the shape behave"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change how the shape behave"
+#~ msgstr "Modifică comportamentul formei"
+
+#, fuzzy
+#~| msgid "Create Template From Document..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template From Document..."
+#~ msgstr "Creare șablon din document..."
+
+#, fuzzy
+#~| msgid "Save this document and use it later as a template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save this document and use it later as a template"
+#~ msgstr "Documentul este salvat și folosit ulterior ca șablon"
+
+#, fuzzy
+#~| msgid ""
+#~| "You can save this document as a template.<br><br>You can use this new "
+#~| "template as a starting point for another document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "You can save this document as a template.<br><br>You can use this new "
+#~ "template as a starting point for another document."
+#~ msgstr ""
+#~ "Puteți salva acest document ca șablon.<br /><br />Puteți folosi acest nou "
+#~ "șablon ca punct de pornire pentru alt document."
+
+#, fuzzy
+#~| msgid "Show Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "Arată caractere de formatare"
+
+#, fuzzy
+#~| msgid "Toggle the display of non-printing characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "Comută afișarea caracterelor netipăribile"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~ "enabled, Words shows you tabs, spaces, carriage returns and other non-"
+#~ "printing characters."
+#~ msgstr ""
+#~ "Comutați afișajul caracterelor neprintabile.<br/><br/>Când aceasta este "
+#~ "permisă , Cuvintele îți afișează taburi,spații și alte caractere "
+#~ "neprintabile."
+
+#, fuzzy
+#~| msgid "Show Text Shape Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Text Shape Borders"
+#~ msgstr "Arătați Marginile Formei Textului"
+
+#, fuzzy
+#~| msgid "Turns the border display on and off"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Turns the border display on and off"
+#~ msgstr "Pornește și oprește afișajul de pe margine"
+
+#, fuzzy
+#~| msgid ""
+#~| "Turns the border display on and off.<br/><br/>The borders are never "
+#~| "printed. This option is useful to see how the document will appear on "
+#~| "the printed page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Turns the border display on and off.<br/><br/>The borders are never "
+#~ "printed. This option is useful to see how the document will appear on the "
+#~ "printed page."
+#~ msgstr ""
+#~ "Turns the border display on and off.<br/><br/>Marginile nu sunt printate "
+#~ "niciodată.Această opțiune este folositoare în a vedea cum documentul va "
+#~ "apărea pe pagina printată."
+
+#, fuzzy
+#~| msgid "Show Table Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "Afoșează Marginile Tabelului"
+
+#, fuzzy
+#~| msgid "Toggle the display of table borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of table borders"
+#~ msgstr "Comuntați afișajul marginilor tabelelor"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of table borders.<br/><br/>When this is enabled, "
+#~| "Words shows you any invisible table borders with a thin gray line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+#~ "shows you any invisible table borders with a thin gray line."
+#~ msgstr ""
+#~ "Comutați afișajul marginii tabelelor.<br/><br/>În momentul în care vor fi "
+#~ "adăugate, Cuvintele vor arăta orice margini invizibile de tabele cu o "
+#~ "linie groasă gri."
+
+#, fuzzy
+#~| msgid "Toggle the display of table borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of section bounds"
+#~ msgstr "Comuntați afișajul marginilor tabelelor"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of table borders.<br/><br/>When this is enabled, "
+#~| "Words shows you any invisible table borders with a thin gray line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+#~ "section bounds will be indicated with a thin gray horizontal brackets."
+#~ msgstr ""
+#~ "Comutați afișajul marginii tabelelor.<br/><br/>În momentul în care vor fi "
+#~ "adăugate, Cuvintele vor arăta orice margini invizibile de tabele cu o "
+#~ "linie groasă gri."
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Afișează Rigle"
+
+#, fuzzy
+#~| msgid "Shows or hides rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Afișează sau ascunde rigle"
+
+#, fuzzy
+#~| msgid ""
+#~| "The rulers are the white measuring spaces top and left of the document. "
+#~| "The rulers show the position and width of pages and of frames and can be "
+#~| "used to position tabulators among others.<p>Uncheck this to disable the "
+#~| "rulers from being displayed.</p>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The rulers are the white measuring spaces top and left of the document. "
+#~ "The rulers show the position and width of pages and of frames and can be "
+#~ "used to position tabulators among others.<p>Uncheck this to disable the "
+#~ "rulers from being displayed.</p>"
+#~ msgstr ""
+#~ "Riglele sunt spațiile albe măsurând în vârf și la stânga documentului. "
+#~ "Riglele arată poziția și lățimea paginilor și ferestrelor și pot fi "
+#~ "folosite să poziționeze tabulatori printre altele.<p>Debifați căsuța "
+#~ "pentru a nu mai afișa riglele.</p>"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Treceți la Grilă"
+
+#, fuzzy
+#~| msgid "Show Status Bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Afișează Bara de Status "
+
+#, fuzzy
+#~| msgid "Shows or hides the status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Afișează sau ascunde bara de status "
+
+#, fuzzy
+#~| msgid "Semantic Stylesheets..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantic Stylesheets..."
+#~ msgstr "Fișiere semantice de stil..."
+
+#, fuzzy
+#~| msgid "Modify and add semantic stylesheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modify and add semantic stylesheets"
+#~ msgstr "Modificați și adăugați Fișe semantice de stil"
+
+#, fuzzy
+#~| msgid ""
+#~| "Stylesheets are used to format contact, event, and location information "
+#~| "which is stored in Rdf"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Stylesheets are used to format the display of information which is stored "
+#~ "in RDF."
+#~ msgstr ""
+#~ "Stylesheet-urile sunt folosite pentru a formata informațiile legate de "
+#~ "contact , eveniment și locație care sunt in Rdf"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Creează"
+
+#, fuzzy
+#~| msgid "Configure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "Configurare..."
+
+#, fuzzy
+#~| msgid "Page Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "Formatul Paginii..."
+
+#, fuzzy
+#~| msgid "Change properties of entire page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "Schimbă proprietățile întregii paginii"
+
+#, fuzzy
+#~| msgid ""
+#~| "Change properties of the entire page.<p>Currently you can change paper "
+#~| "size, paper orientation, header and footer sizes, and column settings.</"
+#~| "p>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Change properties of the entire page.<p>Currently you can change paper "
+#~ "size, paper orientation, header and footer sizes, and column settings.</p>"
+#~ msgstr ""
+#~ "Schimbați proprietățile întregii pagini. <p>În acest moment puteți "
+#~ "schimba dimensiunile și orientarea hârtiei , dimensiunile antetului și a "
+#~ "subsolului , și setările coloanei.</p>"
+
+#, fuzzy
+#~| msgid "Create Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "Creează antet"
+
+#, fuzzy
+#~| msgid "Create Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "Creează subsol"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Comments"
+#~ msgstr "Șterge coloană"
+
+#, fuzzy
+#~| msgid "No framesets in document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows comments in the document"
+#~ msgstr "Niciun set de cadre în document"
+
+#, fuzzy
+#~| msgid "Shows or hides the status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "Afișează sau ascunde bara de status "
+
+#, fuzzy
+#~| msgid "Page Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "Dimensiunea Paginii"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "Subsolul Paginilor Par"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "Modifică format"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "Inserare tabel"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Previzualizare"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgctxt "(qtundo-format) Search options"
+#~ msgid "Options"
+#~ msgstr "Opțiuni "
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Antetul paginilor impare"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Antetul paginilor pare"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Subsolul paginilor impare"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Subsolul paginilor pare"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "Text principal"
+
+#, fuzzy
+#~| msgid "Other text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "Alt text"
+
+#, fuzzy
+#~| msgid "Bookmark"
+#~ msgid "Book"
+#~ msgstr "Semn de carte"
+
+#, fuzzy
+#~| msgid "Calligra Word Processor"
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "Procesor de Cuvinte Calligra"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgid "Author tool"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~| msgid "(c) 1998-2011, The Words Team"
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "(c) 1998-2001, Echipa de Cuvinte"
+
+#, fuzzy
+#~| msgid "Co maintainer"
+#~ msgid "Co-maintainer"
+#~ msgstr "Co-întreținător"
+
+#, fuzzy
+#~| msgid "Can not find needed text component, Words will quit now"
+#~ msgid "Can not find needed text component, Author will quit now"
+#~ msgstr ""
+#~ "Nu se poate găsi componenta de text dorită, Cuvintele se vor închide acum"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Select Cover Image..."
+#~ msgstr "Inserare Pagină"
+
+#, fuzzy
+#~ msgid "Open..."
+#~ msgstr "Modifică spațierea liniilor"
+
+#, fuzzy
+#~ msgid "Open Cover"
+#~ msgstr "Modifică spațierea liniilor"
+
+#, fuzzy
+#~ msgid "Import problem"
+#~ msgstr "Stil margine"
+
+#, fuzzy
+#~ msgid "Cover selection"
+#~ msgstr "Inserează coloană"
+
+#, fuzzy
+#~| msgid "Border Outline"
+#~ msgid "Outliner"
+#~ msgstr "Contur margine"
+
+#, fuzzy
+#~ msgid "Edit section"
+#~ msgstr "&Tăiat"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgid "Main"
+#~ msgstr "Text principal"
+
+#, fuzzy
+#~| msgid "ODF Support"
+#~ msgid "Supporting"
+#~ msgstr "Suport ODF"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgid "Author's actor"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~ msgid "Enter actor's name here"
+#~ msgstr "Nume intrare"
+
+#, fuzzy
+#~ msgid "Actor description:"
+#~ msgstr "&Autocorecție..."
+
+#, fuzzy
+#~| msgid "&Bold"
+#~ msgid "Bold"
+#~ msgstr "&Bold"
+
+#, fuzzy
+#~| msgid "&Italic"
+#~ msgid "Italic"
+#~ msgstr "&Italic"
+
+#, fuzzy
+#~| msgid "&Underline"
+#~ msgid "Underline"
+#~ msgstr "&Subliniat"
+
+#, fuzzy
+#~| msgid "Left align with:"
+#~ msgid "LeftAlign"
+#~ msgstr "Alinere la stânga cu:"
+
+#, fuzzy
+#~| msgid "Center align with:"
+#~ msgid "CenterAlign"
+#~ msgstr "Aliniere pe centru cu:"
+
+#, fuzzy
+#~| msgid "Right align with:"
+#~ msgid "RightAlign"
+#~ msgstr "Aliniere la dreapta cu:"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "displayname of the semantic item type AuthorActor"
+#~ msgid "AuthorActor"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "1st Edit"
+#~ msgstr "Editare"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "2nd Edit"
+#~ msgstr "Editare"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "3rd Edit"
+#~ msgstr "Editare"
+
+#, fuzzy
+#~ msgid "Author's section"
+#~ msgstr "&Autocorecție..."
+
+#, fuzzy
+#~ msgid "Badge:"
+#~ msgstr "Număr &pagină"
+
+#, fuzzy
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "Opțiuni cadru"
+
+#~ msgid "File to open"
+#~ msgstr "Fișier de deschis"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "Creează cadru"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "Elimină cadrul"
+
+#~ msgid "General"
+#~ msgstr "Generale"
+
+#~ msgid "Protect size and position"
+#~ msgstr "Păstrează dimensiunea și poziția "
+
+#~ msgid "Position"
+#~ msgstr "Poziție"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgid "Width:"
+#~ msgstr "Lățime:"
+
+#~ msgid "Height:"
+#~ msgstr "Înălțime:"
+
+#~ msgid "Margins"
+#~ msgstr "Margini"
+
+#~ msgid "Synchronize changes"
+#~ msgstr "Sincronizează modificările"
+
+#~ msgid "Bottom:"
+#~ msgstr "Jos:"
+
+#~ msgid "Top:"
+#~ msgstr "Sus:"
+
+#~ msgid "Right:"
+#~ msgstr "Dreapta:"
+
+#~ msgid "Left:"
+#~ msgstr "Stânga:"
+
+#~ msgid "If Frame Overflows"
+#~ msgstr "Dacă cadrul se revarsă"
+
+#~ msgid "Create a new page"
+#~ msgstr "Creează o pagină nouă"
+
+#~ msgid "Resize last frame"
+#~ msgstr "Redimensionează ultimul cadru"
+
+#~ msgid "Do not show the extra text"
+#~ msgstr "Nu arăta textul suplimentar"
+
+#~ msgid "When Creating a Page"
+#~ msgstr "La crearea unei pagini"
+
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "Reconectează cadrul la cursul curent"
+
+#~ msgid "Do not create a followup frame"
+#~ msgstr "Nu crea un cadru în continuare"
+
+#~ msgid "Copy this Frame"
+#~ msgstr "Copiază acest cadru"
+
+#~ msgid "Only on even/odd pages"
+#~ msgstr "Numai pe pagini pare/impare"
+
+#~ msgid "Protect content"
+#~ msgstr "Protejează conținut"
+
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "Cadrul este o copie a cadrului precedent"
+
+#~ msgid "Changes will be applied to all frames in frameset"
+#~ msgstr "Schimbările vor fi aplicate tuturor ferestrelor din setul de cadre"
+
+#~ msgid "Retain original aspect ratio"
+#~ msgstr "Păstrează raportul de aspect original"
+
+#~ msgid "Select All Shapes"
+#~ msgstr "Alege toate formele"
+
+#~ msgid "Create Linked Copy"
+#~ msgstr "Creează o Copie Link"
+
+#~ msgid "Create a copy of the current frame, always showing the same contents"
+#~ msgstr ""
+#~ "Creați o copie a ferestrei curente întotdeauna arătând aceleași conținut  "
+
+#~ msgid ""
+#~ "Create a copy of the current frame, that remains linked to it. This means "
+#~ "they always show the same contents: modifying the contents in such a "
+#~ "frame will update all its linked copies."
+#~ msgstr ""
+#~ "Creați o copie a ferestrei actuale, care va rămâne legată de aceasta. "
+#~ "Asta înseamna că vor arata tot timpul același conținut: modificând "
+#~ "conținutul într-o fereastră precum aceasta va actualiza toate copiile "
+#~ "legate."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "Creează copie legată"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "Inserează pagină"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "Elimină pagina"
+
+#~ msgid "Bookmark..."
+#~ msgstr "Semn de carte..."
+
+#~ msgid "Select Bookmark..."
+#~ msgstr "Alege semn de carte..."
+
+#~ msgid "Bookmark"
+#~ msgstr "Semn de carte"
+
+#~ msgid "Page %1/%2"
+#~ msgstr "Pagina %1%2"
+
+#~ msgid "Characters (excluding spaces):"
+#~ msgstr "Caractere (exclusiv spații):"
+
+#~ msgid "Flesch Reading Ease:"
+#~ msgstr "Gradul Flesch de ușurință în citire:"
+
+#~ msgid "Preferences"
+#~ msgstr "Preferințe"
+
+#~ msgid "Automatically update"
+#~ msgstr "Actualizează automat"
+
+#~ msgid "update"
+#~ msgstr "actualizare"
+
+#~ msgid "by:"
+#~ msgstr "după:"
+
+#~ msgid "F&ormat"
+#~ msgstr "F&ormat"
+
+#~ msgid "Invalid document. No mimetype specified."
+#~ msgstr "Document invalid.Nici un tip mime specificat."
+
+#~ msgid ""
+#~ "Invalid document. Expected mimetype application/x-words or application/"
+#~ "vnd.kde.words, got %1"
+#~ msgstr ""
+#~ "Document invalid. Se aștepta o aplicație/x-words de tip mime sau "
+#~ "aplicație/vnd.kde.words , s-a primit %1"
+
+#~ msgid "Invalid document. Paper size: %1x%2"
+#~ msgstr "Document invalid. Lungimea hârtiei:  %1x%2"
+
+#~ msgid "Unable to locate footnote text"
+#~ msgstr "Incapabil să localizeze nota de subsol"
+
+#~ msgid "Unable to locate note-text"
+#~ msgstr "Incapabil să localizeze nota din text."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "Cadru Clip"
+
+#~ msgid "Create Frame-clip"
+#~ msgstr "Creează Fereastră-clip"
+
+#~ msgid "Remove Frame-clip"
+#~ msgstr "Șterge Fereastră-clip"
+
+#~ msgid "Force the remainder of the text into the next page"
+#~ msgstr "Forțați restul din text să intre pe cealaltă pagină"
+
+#~ msgid "All text after this point will be moved into the next page."
+#~ msgstr "Totul textul din acest punct va fi mutat pe pagina următoare."
+
+#~ msgid "Before current page"
+#~ msgstr "Înainte de pagina curentă"
+
+#~ msgid "After current page"
+#~ msgstr "După pagina curentă"
+
+#~ msgid "After last page"
+#~ msgstr "După ultima pagină"
+
+#~ msgid "Page style:"
+#~ msgstr "Stilul paginii:"
+
+#~ msgid "Number of pages:"
+#~ msgstr "Număr de pagini:"
+
+#~ msgid "Number of frames:"
+#~ msgstr "Număr de paginii:"
+
+#~ msgid "Number of pictures:"
+#~ msgstr "Număr de imagini:"
+
+#~ msgid "Number of tables:"
+#~ msgstr "Număr de tabele:"
+
+#~ msgid "Text"
+#~ msgstr "Text"
+
+#~ msgid "Include text from foot- and endnotes"
+#~ msgstr "Includeți text din "
+
+#~ msgid "Characters without spaces:"
+#~ msgstr "Caractere fără spaţii:"
+
+#~ msgid "Characters incl. spaces"
+#~ msgstr "Caractere incluzând spații"
+
+#~ msgid "Only count main text"
+#~ msgstr "Se ia în considerare numai textul principal"
+
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "&Inserare"
+
+#~ msgid "Change Tracking"
+#~ msgstr "Modifică Urmărirea"
+
+#~ msgid "approximately %1"
+#~ msgstr "aproximativ %1"
+
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "Cuvinte"
+
+#~ msgid "Notes and fixes"
+#~ msgstr "Însemne și fixe."
+
+#~ msgid "<optimizations"
+#~ msgstr "<optimizări"
+
+#~ msgid "Enable Document Headers"
+#~ msgstr "Activați Antetele Documentului"
+
+#~ msgid "Shows and hides header display"
+#~ msgstr "Arată și ascunde antetul "
+
+#~ msgid ""
+#~ "Selecting this option toggles the display of headers in Words.<br/><br/"
+#~ ">Headers are special frames at the top of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Selectând această opțiune comutați afișajul antetelor în Cuvinte.<br/><br/"
+#~ ">Antetele sunt ferestre speciale la începutul fiecărei pagini care conțin "
+#~ "numărul paginii sau alte informații."
+
+#~ msgid "Enable Document Footers"
+#~ msgstr "Activați Subsolurile Documentului "
+
+#~ msgid "Shows and hides footer display"
+#~ msgstr "Afișează și ascunde afișajul subsolului"
+
+#~ msgid ""
+#~ "Selecting this option toggles the display of footers in Words. <br/><br/"
+#~ ">Footers are special shapes at the bottom of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Selectând această opțiune comutați afișajul subsolurilor  în Cuvinte.<br/"
+#~ "><br/>Subsolurile sunt ferestre speciale la sfârșitul fiecărei pagini "
+#~ "care conțin numărul paginii sau alte informații."
+
+#~ msgid "Raise Shape"
+#~ msgstr "Mărește Forma "
+
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shape"
+#~ msgstr ""
+#~ "Măriți forma selectată acum astfel încât să apară deasupra tuturor "
+#~ "celorlate figuri"
+
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shapes. This is only useful if shapes overlap each other. If multiple "
+#~ "shapes are selected they are all raised in turn."
+#~ msgstr ""
+#~ "Măriți forma selectată astfel încât să apară deasupra tuturor celorlalte "
+#~ "forme. Această comandă este folositoare numai daca formele se suprapun. "
+#~ "Dacă sunt selectate mai multe forme , se vor mări toate."
+
+#~ msgid "Lower Shape"
+#~ msgstr "Micșorează Forma "
+
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it"
+#~ msgstr ""
+#~ "Micșorați forma selectată curent astfel încât să dispară sub orice altă "
+#~ "formă cu care se suprapune"
+
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it. If multiple shape are selected they are all lowered in "
+#~ "turn."
+#~ msgstr ""
+#~ "Micșorați forma selectată curent astfel încât să dispară sub orice altă "
+#~ "formă peste care se suprapune. Daca mai multe forme sunt selectate , vor "
+#~ "fi toate micșorate."
+
+#~ msgid "Bring to Front"
+#~ msgstr "Adu în prim-plan"
+
+#~ msgid "Send to Back"
+#~ msgstr "Trimite în Spate"
+
+#~| msgid "&Variable"
+#~ msgid "Variable"
+#~ msgstr "variabilă"
+
+#~ msgid "Anchor"
+#~ msgstr "Ancoră"
+
+#~ msgid "As Character"
+#~ msgstr "Ca și Caracter"
+
+#~ msgid "Anchor the current shape as a character in the text"
+#~ msgstr "Ancorați forma curentă ca și caracter în text "
+
+#~ msgid "To Character"
+#~ msgstr "La Caracter"
+
+#~ msgid "Anchor the current shape to the character at the current position"
+#~ msgstr "Ancorați forma curentă la caracter în poziția curentă"
+
+#~| msgid "Paragraph"
+#~ msgid "To Paragraph"
+#~ msgstr "La Paragraf"
+
+#~ msgid "Anchor the current shape to current paragraph"
+#~ msgstr "Ancorează forma curentă la paragraful curent "
+
+#~| msgid "Remove Page"
+#~ msgid "To Page"
+#~ msgstr "La Pagină"
+
+#~ msgid "Anchor the current shape to current page"
+#~ msgstr "Ancorați figura curentă la pagina curentă"
+
+#~ msgid "Sentence, word and letter counts for this document"
+#~ msgstr "Propoziția , cuvântul și litera se adaugă la acest document"
+
+#~ msgid ""
+#~ "Information on the number of letters, words, syllables and sentences for "
+#~ "this document.<p>Evaluates readability using the Flesch reading score.</p>"
+#~ msgstr ""
+#~ "Informații despre numărul de litere, cuvinte, silabe și propoziții pentru "
+#~ "acest document.<p>Evaluează lizibilitatea folosind coeficientul Flesch de "
+#~ "citit.</p>"
+
+#~ msgid "Page..."
+#~ msgstr "Pagină..."
+
+#~ msgid "Delete Page"
+#~ msgstr "Ștergere pagină"
+
+#~ msgid "Insert Image Options"
+#~ msgstr "Inserează Opțiunile Imaginii"
+
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Disable Document Headers"
+#~ msgstr "Statistici document"
+
+#, fuzzy
+#~ msgid "Disable Document Footers"
+#~ msgstr "Statistici document"
+
+#~| msgid "Frame &Borders"
+#~ msgid "Page Borders"
+#~ msgstr "&Margini cadre"
+
+#, fuzzy
+#~ msgid "Hide Status Bar"
+#~ msgstr "Structură document"
+
+#, fuzzy
+#~ msgid "Numbering"
+#~ msgstr "Numerotare"
+
+#~ msgid "Automatic"
+#~ msgstr "Automat"
+
+#, fuzzy
+#~ msgid "Footnote"
+#~ msgstr "Notă de &subsol"
+
+#, fuzzy
+#~ msgid "Endnote"
+#~ msgstr "Notă &terminală"
+
+#, fuzzy
+#~ msgid "Insert Footnote/Endnote"
+#~ msgstr "Inserează notă subsol/notă terminală"
+
+#, fuzzy
+#~ msgid "Footnote/Endnote..."
+#~ msgstr "Notă de &subsol"
+
+#, fuzzy
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "&Cadru/Set de cadre..."
+
+#, fuzzy
+#~ msgid "Alter frameset properties"
+#~ msgstr "Proprietăți cadru..."
+
+#, fuzzy
+#~ msgid "Picture..."
+#~ msgstr "Imagini"
+
+#, fuzzy
+#~ msgid "Insert a picture into document"
+#~ msgstr "Inserează imagine"
+
+#, fuzzy
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "Creează cadru formulă"
+
+#, fuzzy
+#~ msgid "Set Floating"
+#~ msgstr "Opțiuni tabel"
+
+#, fuzzy
+#~ msgid "Filter stuff"
+#~ msgstr "Fișier de deschis"
+
+#~ msgid "Fra&mes"
+#~ msgstr "&Cadre"
+
+#~ msgid "Tables"
+#~ msgstr "Tabele"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Layout of Text in Other Frames"
+#~ msgstr "Textul alte cadre :"
+
+#, fuzzy
+#~ msgid "Text will run around this frame"
+#~ msgstr "&nu se va aranja în acest cadru"
+
+#, fuzzy
+#~ msgid "Text will not run around this frame"
+#~ msgstr "&nu se va aranja în acest cadru"
+
+#, fuzzy
+#~ msgid "Left"
+#~ msgstr "Stânga:"
+
+#, fuzzy
+#~ msgid "Right"
+#~ msgstr "Dreapta:"
+
+#, fuzzy
+#~ msgid "Longest side"
+#~ msgstr "Text aranjat integral"
+
+#, fuzzy
+#~ msgid "Create custom outline"
+#~ msgstr "Creează imagine"
+
+#, fuzzy
+#~ msgid "Create Custom Outline"
+#~ msgstr "Creează imagine"
+
+#, fuzzy
+#~ msgid "Create outlines"
+#~ msgstr "Creează imagine"
+
+#~ msgid "Borders"
+#~ msgstr "Margini"
+
+#, fuzzy
+#~ msgid "MailMerge"
+#~ msgstr "Familie"
+
+#~ msgid "Table"
+#~ msgstr "Tabel"
+
+#, fuzzy
+#~ msgid "Font"
+#~ msgstr "Notă de &subsol"
+
+#~| msgid "F&ormat"
+#~ msgid "Format"
+#~ msgstr "Fo&rmat"
+
+#~ msgid "Formula"
+#~ msgstr "Formulă"
+
+#~ msgid "KWord"
+#~ msgstr "KWord"
+
+#~| msgid "Insert Picture"
+#~ msgid "Insert Picture..."
+#~ msgstr "Inserează imagine"
+
+#, fuzzy
+#~ msgid "Page Background"
+#~ msgstr "Culoare de fundal"
+
+#~ msgid "If Text is Too Long for Frame"
+#~ msgstr "Dacă textul este prea lung pentru cadru"
+
+#~ msgid "On New Page Creation"
+#~ msgstr "La crearea unei pagini noi"
+
+#~ msgid "Place a copy of this frame"
+#~ msgstr "Plasează o copie a acestui cadru"
+
+#, fuzzy
+#~ msgid "Show Grid"
+#~ msgstr "&Subsol"
+
+#, fuzzy
+#~ msgid "Even Pages Header %1"
+#~ msgstr "Antet cuprins 1"
+
+#, fuzzy
+#~ msgid "Main Text Frameset"
+#~ msgstr "Set de cadre text %1"
+
+#~ msgid "Matrix"
+#~ msgstr "Matrice"
+
+#, fuzzy
+#~ msgid "Configure Frame Border"
+#~ msgstr "&Margini cadre"
+
+#~ msgid "Ta&ble"
+#~ msgstr "&Tabel"
+
+#, fuzzy
+#~ msgid "Configure Frame Borders"
+#~ msgstr "&Margini cadre"
+
+#~| msgid "Create a new page"
+#~ msgid "Add a new page"
+#~ msgstr "Creează o pagină nouă"
+
+#, fuzzy
+#~ msgid "Delete selected pages"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Delete Layer"
+#~ msgstr "Ștergere tabel"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Statistici document"
+
+#, fuzzy
+#~ msgid "&Table:"
+#~ msgstr "Tabel"
+
+#, fuzzy
+#~ msgid "&Keep Settings..."
+#~ msgstr "Opțiuni cadru"
+
+#, fuzzy
+#~ msgid "&Username:"
+#~ msgstr "Set de cadre parțial %1"
+
+#, fuzzy
+#~ msgid "&Port:"
+#~ msgstr "Fo&rmat"
+
+#, fuzzy
+#~ msgid "default"
+#~ msgstr "Ștergere cadru"
+
+#, fuzzy
+#~ msgid "<< &Remove"
+#~ msgstr "Șterge linie"
+
+#~ msgid "Name"
+#~ msgstr "Nume"
+
+#, fuzzy
+#~ msgid "Distribution Lists"
+#~ msgstr "Opțiuni cadru"
+
+#, fuzzy
+#~ msgid "Address B&ook"
+#~ msgstr "Inserează coloană"
+
+#, fuzzy
+#~ msgid "&Selected Addresses"
+#~ msgstr "Ștergere cadru"
+
+#, fuzzy
+#~ msgid "Hello!"
+#~ msgstr "Antet 1"
+
+#, fuzzy
+#~ msgid "Professional"
+#~ msgstr "Inserează coloană"
+
+#, fuzzy
+#~ msgid "To:"
+#~ msgstr "Sus:"
+
+#, fuzzy
+#~ msgid "Subject:"
+#~ msgstr "SubScript"
+
+#, fuzzy
+#~ msgid "Thank you,"
+#~ msgstr "Modifică format"
+
+#, fuzzy
+#~ msgid "Thanks,"
+#~ msgstr "Modifică format"
+
+#, fuzzy
+#~ msgid "Subject"
+#~ msgstr "SubScript"
+
+#, fuzzy
+#~ msgid "Attention"
+#~ msgstr "&Autocorecție..."
+
+#, fuzzy
+#~ msgid "Attention:"
+#~ msgstr "&Autocorecție..."
+
+#, fuzzy
+#~ msgid "Instructions"
+#~ msgstr "Opțiuni cadru"
+
+#~ msgid "PERSONAL"
+#~ msgstr "PERSONAL"
+
+#~ msgid "FACSIMILE"
+#~ msgstr "FAX"
+
+#, fuzzy
+#~ msgid "Mail Merge - Editor"
+#~ msgstr "Editor de scrisori înseriate"
+
+#, fuzzy
+#~ msgid "Mail Merge - Setup Database Connection"
+#~ msgstr "Editor de scrisori înseriate"
+
+#, fuzzy
+#~ msgid "<not saved>"
+#~ msgstr "Nu salvează automat"
+
+#, fuzzy
+#~ msgid "Store Settings"
+#~ msgstr "Opțiuni cadru"
+
+#, fuzzy
+#~ msgid "Condition"
+#~ msgstr "Tipăresc..."
+
+#~ msgid "Value"
+#~ msgstr "Valoare"
+
+#, fuzzy
+#~ msgid "Unkown mail merge variable: %1"
+#~ msgstr "Scrisoare înseriată - Nume variabilă"
+
+#, fuzzy
+#~ msgid "New Distribution List"
+#~ msgstr "Opțiuni cadru"
+
+#, fuzzy
+#~ msgid "Please enter name:"
+#~ msgstr "Nume intrare"
+
+#~ msgid "No Value"
+#~ msgstr "Fără valoare"
+
+#, fuzzy
+#~ msgid "Add record"
+#~ msgstr "Adaugă înregistrare"
+
+#, fuzzy
+#~ msgid "Add entry"
+#~ msgstr "Adaugă intrare"
+
+#, fuzzy
+#~ msgid "Remove entry"
+#~ msgstr "Șterge intrare"
+
+#, fuzzy
+#~ msgid "Add Entry"
+#~ msgstr "Adaugă intrare"
+
+#, fuzzy
+#~ msgid "Port:"
+#~ msgstr "Fo&rmat"
+
+#~| msgid "Table of Contents"
+#~ msgid "Table of Content"
+#~ msgstr "Cuprins"
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "Număr &pagină"
+
+#, fuzzy
+#~ msgid "Slots"
+#~ msgstr "&Tăiat"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Proprietăți cadru..."
+
+#~| msgid "&Variable"
+#~ msgid "Variables"
+#~ msgstr "&Variabilă"
+
+#, fuzzy
+#~ msgid "HTML Document"
+#~ msgstr "Structură document"
+
+#, fuzzy
+#~ msgid "Encoded Text"
+#~ msgstr "&Tăiat"
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)."
+#~ msgstr "Șterge coloana din tabel."
+
+#~| msgid "Size (%1):"
+#~ msgid "Size:"
+#~ msgstr "Mărime (%1):"
+
+#, fuzzy
+#~ msgid "Single sided"
+#~ msgstr "Text aranjat integral"
+
+#, fuzzy
+#~ msgid "Whole document:"
+#~ msgstr "Structură document"
+
+#, fuzzy
+#~ msgid "Right to left"
+#~ msgstr "Standard"
+
+#~| msgid "Left:"
+#~ msgid "Left Edge:"
+#~ msgstr "Stânga:"
+
+#~| msgid "Right:"
+#~ msgid "Right Edge:"
+#~ msgstr "Dreapta:"
+
+#, fuzzy
+#~ msgid "Page Edge:"
+#~ msgstr "Număr &pagină"
+
+#, fuzzy
+#~ msgid "Page spread"
+#~ msgstr "Modifică marginea de sus a cadrului"
+
+#~ msgid "Printing..."
+#~ msgstr "Tipăresc..."
+
+#, fuzzy
+#~ msgid "Insert Inline Table"
+#~ msgstr "Inserare tabel"
+
+#, fuzzy
+#~ msgid "Bookmark target: "
+#~ msgstr "Șterge coloana"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "Set de cadre text %1"
+
+#, fuzzy
+#~ msgid "Create Formula Frame"
+#~ msgstr "Creează cadru formulă"
+
+#, fuzzy
+#~ msgid ""
+#~ "KWord is unable to insert the table because there is not enough space "
+#~ "available."
+#~ msgstr ""
+#~ "Nu pot insera tabelul deoarece nu mai există\n"
+#~ "spațiu disponibil."
+
+#, fuzzy
+#~ msgid "Create Table"
+#~ msgstr "Creează imagine"
+
+#, fuzzy
+#~ msgid "Change Frame Background Color"
+#~ msgstr "Modifică culoarea de fundal a cadrului"
+
+#, fuzzy
+#~ msgid "Delete Page %1"
+#~ msgstr "Ștergere cadru"
+
+#, fuzzy
+#~ msgid "Resize Column"
+#~ msgstr "Șterge coloana"
+
+#, fuzzy
+#~ msgid "Resize Row"
+#~ msgstr "Șterge linie"
+
+#~ msgid "Configure KWord"
+#~ msgstr "Configurare KWord"
+
+#~ msgid "Interface"
+#~ msgstr "Interfață"
+
+#, fuzzy
+#~ msgid "Interface Settings"
+#~ msgstr "Opțiuni cadru"
+
+#~ msgid "Spelling"
+#~ msgstr "Ortografie"
+
+#, fuzzy
+#~ msgid "Spell Checker Behavior"
+#~ msgstr "Comportament verificator ortografic"
+
+#, fuzzy
+#~ msgid "Formula Defaults"
+#~ msgstr "Statistici document"
+
+#, fuzzy
+#~ msgid "Misc Settings"
+#~ msgstr "Opțiuni tabel"
+
+#, fuzzy
+#~ msgid "Path Settings"
+#~ msgstr "Opțiuni paragraf"
+
+#, fuzzy
+#~ msgid "Change Config"
+#~ msgstr "Modifică indentarea"
+
+#, fuzzy
+#~ msgid "Show s&crollbar"
+#~ msgstr "Afișează rigle"
+
+#, fuzzy
+#~ msgid "Number of recent &files:"
+#~ msgstr "Număr de fișiere recente:"
+
+#, fuzzy
+#~ msgid "&Vertical grid size:"
+#~ msgstr "Aliniere verticală"
+
+#, fuzzy
+#~ msgid "&Underline all links"
+#~ msgstr "&Subliniat"
+
+#, fuzzy
+#~ msgid "View formatting end paragraph"
+#~ msgstr "Caractere de &formatare"
+
+#, fuzzy
+#~ msgid "View formatting space"
+#~ msgstr "Caractere de &formatare"
+
+#, fuzzy
+#~ msgid "Document Defaults"
+#~ msgstr "Statistici document"
+
+#, fuzzy
+#~ msgid "Default font:"
+#~ msgstr "Ștergere cadru"
+
+#, fuzzy
+#~ msgid "Choose..."
+#~ msgstr "&Culoare..."
+
+#, fuzzy
+#~ msgid "Autosave every (min):"
+#~ msgstr "Salvare automată (min):"
+
+#, fuzzy
+#~ msgid "No autosave"
+#~ msgstr "Nu salvează automat"
+
+#, fuzzy
+#~ msgid " min"
+#~ msgstr "min"
+
+#, fuzzy
+#~ msgid "Create backup file"
+#~ msgstr "Creează imagine"
+
+#, fuzzy
+#~ msgid "Tab stop (%1):"
+#~ msgstr "Mărime interval (%1):"
+
+#, fuzzy
+#~ msgid "Cursor"
+#~ msgstr "&Personalizat"
+
+#, fuzzy
+#~ msgid "Change Starting Page Number"
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "Mărime interval (%1):"
+
+#, fuzzy
+#~ msgid "Personal Expression"
+#~ msgstr "Inserează coloană"
+
+#, fuzzy
+#~ msgid "Backup Path"
+#~ msgstr "Imagine (%1) %2"
+
+#, fuzzy
+#~ msgid "Configure Endnote/Footnote"
+#~ msgstr "Configurează nota de subsol"
+
+#, fuzzy
+#~ msgid "&Width:"
+#~ msgstr "Lungime:"
+
+#, fuzzy
+#~ msgid "Solid"
+#~ msgstr "&Bold"
+
+#, fuzzy
+#~ msgid "Change End-/Footnote Variable Settings"
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "Change Footnote Line Separator Settings"
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "Delete Bookmark"
+#~ msgstr "Șterge coloana"
+
+#~ msgid "Delete Row"
+#~ msgstr "Șterge linia"
+
+#~ msgid "Delete Column"
+#~ msgstr "Șterge coloana"
+
+#~ msgid "Delete the row from the table."
+#~ msgstr "Șterge linia din tabel."
+
+#~ msgid "Delete the column from the table."
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Delete the whole table?"
+#~ msgstr "Șterge linia din tabel."
+
+#, fuzzy
+#~ msgid "Delete all selected rows?"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Delete row number %1?"
+#~ msgstr "Ștergere cadru"
+
+#, fuzzy
+#~ msgid "Delete column number %1?"
+#~ msgstr "Șterge coloana:"
+
+#, fuzzy
+#~ msgid "Delete rows: %1 ?"
+#~ msgstr "Șterge linia:"
+
+#, fuzzy
+#~ msgid "Delete columns: %1 ?"
+#~ msgstr "Șterge coloana:"
+
+#~ msgid "Column %1"
+#~ msgstr "Coloana %1"
+
+#~ msgid "Text Frame %1"
+#~ msgstr "Cadru text %1"
+
+#~ msgid "Empty"
+#~ msgstr "Gol"
+
+#, fuzzy
+#~ msgid "Formula Frame %1"
+#~ msgstr "Cadru formulă %1"
+
+#~ msgid "Picture (%1) %2"
+#~ msgstr "Imagine (%1) %2"
+
+#~ msgid "Embedded Objects"
+#~ msgstr "Obiecte încapsulate"
+
+#~ msgid "Formula Frames"
+#~ msgstr "Cadre formulă"
+
+#~ msgid "Pictures"
+#~ msgstr "Imagini"
+
+#~ msgid "Text Frames/Frame Sets"
+#~ msgstr "Cadre text/Seturi de cadre"
+
+#~ msgid "Document Structure"
+#~ msgstr "Structură document"
+
+#, fuzzy
+#~ msgid "Create Part Frame"
+#~ msgstr "Creează cadru componentă"
+
+#~ msgid "Delete Table"
+#~ msgstr "Ștergere tabel"
+
+#, fuzzy
+#~ msgid "Delete Text Frame"
+#~ msgstr "Șterge cadru text"
+
+#, fuzzy
+#~ msgid "Delete Formula Frame"
+#~ msgstr "Șterge cadru formulă"
+
+#, fuzzy
+#~ msgid "Delete Picture Frame"
+#~ msgstr "Șterge cadru imagine"
+
+#, fuzzy
+#~ msgid "Delete Object Frame"
+#~ msgstr "Șterge cadru obiect"
+
+#, fuzzy
+#~ msgid "Edit Personal Expression"
+#~ msgstr "Inserează coloană"
+
+#, fuzzy
+#~ msgid "empty"
+#~ msgstr "Gol"
+
+#, fuzzy
+#~ msgid "new group"
+#~ msgstr "Șterge linia"
+
+#, fuzzy
+#~ msgid "&Automatic"
+#~ msgstr "Automat"
+
+#, fuzzy
+#~ msgid "&Manual"
+#~ msgstr "Manual"
+
+#, fuzzy
+#~ msgid "&Footnote"
+#~ msgstr "Notă de &subsol"
+
+#, fuzzy
+#~ msgid "&Endnote"
+#~ msgstr "Notă &terminală"
+
+#, fuzzy
+#~ msgid "Formula %1"
+#~ msgstr "Formulă"
+
+#, fuzzy
+#~ msgid "Frame Properties for %1"
+#~ msgstr "Proprietăți cadru..."
+
+#, fuzzy
+#~ msgid "Frame Properties for New Frame"
+#~ msgstr "Proprietăți cadru..."
+
+#, fuzzy
+#~ msgid "Frames Properties"
+#~ msgstr "Proprietăți cadru..."
+
+#, fuzzy
+#~ msgid "Frame Settings for %1"
+#~ msgstr "Opțiuni cadru"
+
+#, fuzzy
+#~ msgid "SideHead Definition"
+#~ msgstr "Definiție antet față"
+
+#~ msgid "Gap size (%1):"
+#~ msgstr "Mărime interval (%1):"
+
+#, fuzzy
+#~ msgid "Closest to Binding"
+#~ msgstr "Cel mai apropiat de alăturare"
+
+#, fuzzy
+#~ msgid "Closest to Page Edge"
+#~ msgstr "Cel mai apropiat de marginea paginii"
+
+#~ msgid "Table is inline"
+#~ msgstr "Tabelul este în-linie"
+
+#, fuzzy
+#~ msgid "Set new color on all selected frames"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Background color:"
+#~ msgstr "Culoare de fundal"
+
+#, fuzzy
+#~ msgid "Background style:"
+#~ msgstr "Culoare de fundal"
+
+#, fuzzy
+#~ msgid "No Background Fill"
+#~ msgstr "Culoare de fundal"
+
+#, fuzzy
+#~ msgid "&Borders"
+#~ msgstr "Margini"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "&Stil"
+
+#, fuzzy
+#~ msgid "Co&lor:"
+#~ msgstr "Fo&rmat"
+
+#, fuzzy
+#~ msgid "Rename Frameset"
+#~ msgstr "Numele setului de cadre:"
+
+#, fuzzy
+#~ msgid ""
+#~ "A new frameset with the name '%1' can not be made because a frameset with "
+#~ "that name already exists. Please enter another name or select an existing "
+#~ "frameset from the list."
+#~ msgstr ""
+#~ "Nu pot să fac un set de cadre nou '%1 deoarece\n"
+#~ "există deja unul cu acest nume. Introduceți un\n"
+#~ "alt nume sau alegeți un set de cadre existent\n"
+#~ "din listă."
+
+#, fuzzy
+#~ msgid "Make Frameset Inline"
+#~ msgstr "Cadrul este flotant"
+
+#, fuzzy
+#~ msgid "Make Frameset Non-Inline"
+#~ msgstr "Cadrul este flotant"
+
+#~ msgid "Resize Frame"
+#~ msgstr "Redimensionează cadru"
+
+#, fuzzy
+#~ msgid "Change Margin Frame"
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "Change Border"
+#~ msgstr "Modifică marginea de sus a cadrului"
+
+#, fuzzy
+#~ msgid "Change Left Border Frame"
+#~ msgstr "Modifică marginea stângă a cadrului"
+
+#, fuzzy
+#~ msgid "Change Right Border Frame"
+#~ msgstr "Modifică marginea dreapta a cadrului"
+
+#, fuzzy
+#~ msgid "Change Top Border Frame"
+#~ msgstr "Modifică marginea de sus a cadrului"
+
+#, fuzzy
+#~ msgid "Change Bottom Border Frame"
+#~ msgstr "Modifică marginea de jos a cadrului"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to reconnect the last frame of the frameset '%1'. The "
+#~ "contents of this frameset will be deleted.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Sunteți pe cale să ștergeți ultimul cadru\n"
+#~ "din setul de cadre '%1'.\n"
+#~ "Conținutul acestuia va dispărea pentru\n"
+#~ "totdeauna!\n"
+#~ "\n"
+#~ "Doriți într-adevăr acest lucru?"
+
+#~ msgid "Reconnect Frame"
+#~ msgstr "Reconectare cadru"
+
+#~ msgid "&Reconnect"
+#~ msgstr "&Reconectează"
+
+#, fuzzy
+#~ msgid "Frame Style Manager"
+#~ msgstr "Opțiuni cadru"
+
+#, fuzzy
+#~ msgid "Frame background color:"
+#~ msgstr "Modifică culoarea de fundal a cadrului"
+
+#, fuzzy
+#~ msgid "Go to Footnote"
+#~ msgstr "Configurează nota de subsol"
+
+#, fuzzy
+#~ msgid "Go to Endnote"
+#~ msgstr "Configurează nota de subsol"
+
+#~ msgid "Insert Row"
+#~ msgstr "Inserează linie"
+
+#~ msgid "Insert Column"
+#~ msgstr "Inserează coloană"
+
+#~ msgid "Insert New Row"
+#~ msgstr "Inserează linie nouă"
+
+#~ msgid "Insert New Column"
+#~ msgstr "Inserează coloană nouă"
+
+#~ msgid "Before"
+#~ msgstr "Înainte"
+
+#~ msgid "After"
+#~ msgstr "După"
+
+#~ msgid "Row:"
+#~ msgstr "Linie:"
+
+#~ msgid "Column:"
+#~ msgstr "Coloană:"
+
+#, fuzzy
+#~ msgid "Choose &Picture..."
+#~ msgstr "&Culoare..."
+
+#, fuzzy
+#~ msgid "Choose Picture"
+#~ msgstr "Modifică stilul listei"
+
+#, fuzzy
+#~ msgid "Do you really want to replace the current datasource?"
+#~ msgstr "Doriți să șterg acest cadru?"
+
+#, fuzzy
+#~ msgid "Mail Merge Setup"
+#~ msgstr "Familie"
+
+#, fuzzy
+#~ msgid "Edit Current..."
+#~ msgstr "Editează intrare"
+
+#, fuzzy
+#~ msgid "Create New..."
+#~ msgstr "Creează o pagină nouă"
+
+#, fuzzy
+#~ msgid "Print Preview..."
+#~ msgstr "Previzualizare"
+
+#, fuzzy
+#~ msgid "Create New Document"
+#~ msgstr "Creează o pagină nouă"
+
+#, fuzzy
+#~ msgid "Mail Merge - Variable Name"
+#~ msgstr "Scrisoare înseriată - Nume variabilă"
+
+#, fuzzy
+#~ msgid "Unnamed Table"
+#~ msgstr "Creează imagine"
+
+#, fuzzy
+#~ msgid "Object %1"
+#~ msgstr "Obiect încapsulat %1"
+
+#, fuzzy
+#~ msgid "Move/Resize Frame"
+#~ msgstr "Redimensionează cadru"
+
+#, fuzzy
+#~ msgid "Make Document External"
+#~ msgstr "Statistici document"
+
+#, fuzzy
+#~ msgid "Make Document Internal"
+#~ msgstr "Cadrul este flotant"
+
+#, fuzzy
+#~ msgid "Picture %1"
+#~ msgstr "Imagine (%1) %2"
+
+#, fuzzy
+#~ msgid "Sort Text"
+#~ msgstr "&Tăiat"
+
+#, fuzzy
+#~ msgid "Increase"
+#~ msgstr "Crește indentarea"
+
+#, fuzzy
+#~ msgid "Decrease"
+#~ msgstr "Descrește indentarea"
+
+#, fuzzy
+#~ msgid "Split Cell"
+#~ msgstr "Divizare celule"
+
+#, fuzzy
+#~ msgid "Number of rows:"
+#~ msgstr "Număr de linii:"
+
+#, fuzzy
+#~ msgid "Number of columns:"
+#~ msgstr "Număr de coloane:"
+
+#, fuzzy
+#~ msgid "Selected Text"
+#~ msgstr "Selectare font"
+
+#, fuzzy
+#~ msgid "Counting..."
+#~ msgstr "Tipăresc..."
+
+#, fuzzy
+#~ msgid "Number of embedded objects:"
+#~ msgstr "Obiecte încapsulate"
+
+#, fuzzy
+#~ msgid "Number of formula frameset:"
+#~ msgstr "Creează cadru formulă"
+
+#, fuzzy
+#~ msgid "Table Settings"
+#~ msgstr "Opțiuni tabel"
+
+#, fuzzy
+#~ msgid "Cell heights:"
+#~ msgstr "Înălțime celulă:"
+
+#~ msgid "Manual"
+#~ msgstr "Manual"
+
+#, fuzzy
+#~ msgid "Cell widths:"
+#~ msgstr "Lungime celulă:"
+
+#, fuzzy
+#~ msgid "The table is &inline"
+#~ msgstr "Tabelul este flotant"
+
+#, fuzzy
+#~ msgid "Reapply template to table"
+#~ msgstr "Aplică stilul %1"
+
+#, fuzzy
+#~ msgid "Add New Rows to Table"
+#~ msgstr "Inserare tabel"
+
+#, fuzzy
+#~ msgid "Remove Rows From Table"
+#~ msgstr "Șterge linia din tabel."
+
+#, fuzzy
+#~ msgid "Remove Row"
+#~ msgstr "Șterge linie"
+
+#, fuzzy
+#~ msgid "Add New Columns to Table"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Remove Columns From Table"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Remove Column"
+#~ msgstr "Șterge coloană"
+
+#, fuzzy
+#~ msgid "Apply Template to Table"
+#~ msgstr "Aplică stilul %1"
+
+#, fuzzy
+#~ msgid "Table Style Manager"
+#~ msgstr "Opțiuni tabel"
+
+#, fuzzy
+#~ msgid "&Customize"
+#~ msgstr "&Personalizat"
+
+#, fuzzy
+#~ msgid "Apply To"
+#~ msgstr "Ștergere cadru"
+
+#, fuzzy
+#~ msgid "First row"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Last row"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Body"
+#~ msgstr "&Bold"
+
+#, fuzzy
+#~ msgid "First column"
+#~ msgstr "Inserează coloană"
+
+#, fuzzy
+#~ msgid "Last column"
+#~ msgstr "Inserează coloană"
+
+#, fuzzy
+#~ msgid "--- Frame Break ---"
+#~ msgstr "&Rupere de cadru"
+
+#, fuzzy
+#~ msgid "Change Paragraph Attribute"
+#~ msgstr "Modifică atribut paragraf"
+
+#, fuzzy
+#~ msgid "Paste"
+#~ msgstr "Număr &pagină"
+
+#, fuzzy
+#~ msgid "Insert Table of Contents"
+#~ msgstr "Cuprins"
+
+#, fuzzy
+#~ msgid "Endnote %1"
+#~ msgstr "Notă &terminală"
+
+#, fuzzy
+#~ msgid "Footnote %1"
+#~ msgstr "Notă de &subsol"
+
+#, fuzzy
+#~ msgid "Insert Expression"
+#~ msgstr "Inserează coloană"
+
+#, fuzzy
+#~ msgid "Insert Variable"
+#~ msgstr "Inserare tabel"
+
+#, fuzzy
+#~ msgid "Select Frame"
+#~ msgstr "Ștergere cadru"
+
+#, fuzzy
+#~ msgid "Configure Mai&l Merge..."
+#~ msgstr "Configurează nota terminală"
+
+#, fuzzy
+#~ msgid "Drag Mail Merge Variable"
+#~ msgstr "Scrisoare înseriată - Nume variabilă"
+
+#~ msgid "&Delete Frame"
+#~ msgstr "Ș&terge cadru"
+
+#, fuzzy
+#~ msgid "Ra&ise Frame"
+#~ msgstr "Redimensionează cadru"
+
+#, fuzzy
+#~ msgid "&Lower Frame"
+#~ msgstr "Conectează cadru"
+
+#, fuzzy
+#~ msgid "Text Mode"
+#~ msgstr "Cadru te&xt"
+
+#, fuzzy
+#~ msgid "Only show the text of the document"
+#~ msgstr "Nu afișează textul suplimentar"
+
+#, fuzzy
+#~ msgid "Pre&view Mode"
+#~ msgstr "Previzualizare"
+
+#, fuzzy
+#~ msgid "Enable Document &Headers"
+#~ msgstr "Statistici document"
+
+#, fuzzy
+#~ msgid "Enable Document Foo&ters"
+#~ msgstr "Statistici document"
+
+#, fuzzy
+#~ msgid "Disable Document Foo&ters"
+#~ msgstr "Statistici document"
+
+#, fuzzy
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "Caracter &special..."
+
+#~ msgid "&Hard Frame Break"
+#~ msgstr "&Rupere de cadru"
+
+#, fuzzy
+#~ msgid "Comment..."
+#~ msgstr "Coloană:"
+
+#, fuzzy
+#~ msgid "Edit Comment..."
+#~ msgstr "Coloană:"
+
+#, fuzzy
+#~ msgid "Change the content of a comment"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Coloană:"
+
+#~ msgid "Table of &Contents"
+#~ msgstr "&Cuprins"
+
+#, fuzzy
+#~ msgid "Document &Information"
+#~ msgstr "Statistici document"
+
+#, fuzzy
+#~ msgid "&Statistic"
+#~ msgstr "Statistici"
+
+#~ msgid "&Custom"
+#~ msgstr "&Personalizat"
+
+#~ msgid "Te&xt Frame"
+#~ msgstr "Cadru te&xt"
+
+#, fuzzy
+#~ msgid "Create a new text frame"
+#~ msgstr "Creează cadru text"
+
+#, fuzzy
+#~ msgid "Create a new text frame."
+#~ msgstr "Creează cadru text"
+
+#, fuzzy
+#~ msgid "For&mula"
+#~ msgstr "Formulă"
+
+#, fuzzy
+#~ msgid "Insert a formula into a new frame"
+#~ msgstr "Creează cadru formulă"
+
+#, fuzzy
+#~ msgid "Insert a formula into a new frame."
+#~ msgstr "Creează cadru formulă"
+
+#, fuzzy
+#~ msgid "&Table..."
+#~ msgstr "&Tabel"
+
+#, fuzzy
+#~ msgid "Create a new frame for a picture"
+#~ msgstr "Creează o pagină nouă"
+
+#, fuzzy
+#~ msgid "Create a new frame for a picture or diagram."
+#~ msgstr "Creează o pagină nouă"
+
+#~ msgid "&Object Frame"
+#~ msgstr "Cadru &obiect"
+
+#, fuzzy
+#~ msgid "Insert an object into a new frame"
+#~ msgstr "Inserare tabel"
+
+#, fuzzy
+#~ msgid "Insert an object into a new frame."
+#~ msgstr "Inserare tabel"
+
+#, fuzzy
+#~ msgid "Fi&le..."
+#~ msgstr "&Tabel"
+
+#~ msgid "&Font..."
+#~ msgstr "&Font..."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&Paragraf..."
+
+#, fuzzy
+#~ msgid "&Frame Style Manager"
+#~ msgstr "Opțiuni cadru"
+
+#, fuzzy
+#~ msgid "Change attributes of framestyles"
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "Change attributes of styles"
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "Font Size"
+#~ msgstr "Unire celule"
+
+#, fuzzy
+#~ msgid "Increase Font Size"
+#~ msgstr "Crește indentarea"
+
+#, fuzzy
+#~ msgid "Decrease Font Size"
+#~ msgstr "Descrește indentarea"
+
+#~ msgid "St&yle"
+#~ msgstr "&Stil"
+
+#, fuzzy
+#~ msgid "Default Format"
+#~ msgstr "Ștergere cadru"
+
+#, fuzzy
+#~ msgid "&Strike Out"
+#~ msgstr "&Tăiat"
+
+#~ msgid "Align &Left"
+#~ msgstr "Aliniază &stânga"
+
+#~ msgid "Align &Right"
+#~ msgstr "Aliniază &dreapta"
+
+#~ msgid "Align &Block"
+#~ msgstr "Aliniază &bloc"
+
+#~ msgid "Superscript"
+#~ msgstr "Superscript"
+
+#~ msgid "Subscript"
+#~ msgstr "Subscript"
+
+#~ msgid "Increase Indent"
+#~ msgstr "Crește indentarea"
+
+#~ msgid "Decrease Indent"
+#~ msgstr "Descrește indentarea"
+
+#, fuzzy
+#~ msgid "Text Color..."
+#~ msgstr "&Culoare..."
+
+#, fuzzy
+#~ msgid "Bullet"
+#~ msgstr "Bullet &disc"
+
+#, fuzzy
+#~ msgid "Framest&yle"
+#~ msgstr "Nume set de cadre"
+
+#~ msgid "Border Left"
+#~ msgstr "Margine stânga"
+
+#~ msgid "Border Right"
+#~ msgstr "Margine dreapta"
+
+#~ msgid "Border Top"
+#~ msgstr "Margine sus"
+
+#~ msgid "Border Bottom"
+#~ msgstr "Margine jos"
+
+#~ msgid "Border Style"
+#~ msgstr "Stil margine"
+
+#~ msgid "Border Width"
+#~ msgstr "Grosime margine"
+
+#~ msgid "Border Color"
+#~ msgstr "Culoare margine"
+
+#, fuzzy
+#~ msgid "Text Background Color..."
+#~ msgstr "Culoare de fundal"
+
+#, fuzzy
+#~ msgid "Change background color for currently selected text"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "&Properties"
+#~ msgstr "Proprietăți cadru..."
+
+#, fuzzy
+#~ msgid "Adjust properties of the current table"
+#~ msgstr "Șterge linia din tabel."
+
+#, fuzzy
+#~ msgid "Adjust properties of the current table."
+#~ msgstr "Șterge linia din tabel."
+
+#~ msgid "&Insert Row..."
+#~ msgstr "&Inserează linie..."
+
+#, fuzzy
+#~ msgid "Insert one or more rows at cursor location"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "I&nsert Column..."
+#~ msgstr "&Inserează coloană..."
+
+#, fuzzy
+#~ msgid "Insert one or more columns into the current table"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Insert one or more columns into the current table."
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Delete selected rows from the current table"
+#~ msgstr "Șterge linia din tabel."
+
+#, fuzzy
+#~ msgid "Delete selected rows from the current table."
+#~ msgstr "Șterge linia din tabel."
+
+#, fuzzy
+#~ msgid "Delete selected columns from the current table"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Delete selected columns from the current table."
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Resize Column..."
+#~ msgstr "&Inserează coloană..."
+
+#, fuzzy
+#~ msgid "Change the width of the currently selected column"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Change the width of the currently selected column."
+#~ msgstr "Șterge coloana din tabel."
+
+#~ msgid "&Join Cells"
+#~ msgstr "&Unește celule"
+
+#, fuzzy
+#~ msgid "Join two or more cells into one large cell"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "&Split Cell..."
+#~ msgstr "Divizare celule"
+
+#, fuzzy
+#~ msgid "Split one cell into two or more cells"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Protect Cells"
+#~ msgstr "Unire celule"
+
+#, fuzzy
+#~ msgid "Prevent changes to content of selected cells"
+#~ msgstr "Șterge coloana din tabel."
+
+#~ msgid "&Ungroup Table"
+#~ msgstr "&Degrupează tabel"
+
+#, fuzzy
+#~ msgid "Delete &Table"
+#~ msgstr "Ștergere tabel"
+
+#, fuzzy
+#~ msgid "Delete the entire table"
+#~ msgstr "Șterge linia din tabel."
+
+#, fuzzy
+#~ msgid "T&able Style Manager"
+#~ msgstr "Opțiuni tabel"
+
+#, fuzzy
+#~ msgid "Change attributes of tablestyles"
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "Table&style"
+#~ msgstr "Tabele"
+
+#, fuzzy
+#~ msgid "Convert Table to Text"
+#~ msgstr "Cuprins"
+
+#, fuzzy
+#~ msgid "Sort Text..."
+#~ msgstr "&Tăiat"
+
+#, fuzzy
+#~ msgid "Add Expression"
+#~ msgstr "Inserează coloană"
+
+#, fuzzy
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Autocorecție simplă"
+
+#, fuzzy
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Autocorecție simplă"
+
+#, fuzzy
+#~ msgid "Toggle autocorrection on and off"
+#~ msgstr "Autocorecție avansată"
+
+#, fuzzy
+#~ msgid "Toggle autocorrection on and off."
+#~ msgstr "Autocorecție avansată"
+
+#, fuzzy
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "&Autocorecție..."
+
+#, fuzzy
+#~ msgid "Custom &Variables..."
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "Edit &Personal Expressions..."
+#~ msgstr "Inserează coloană"
+
+#, fuzzy
+#~ msgid "Add or change one or more personal expressions"
+#~ msgstr "Inserează coloană"
+
+#, fuzzy
+#~ msgid "Change Case..."
+#~ msgstr "&Culoare..."
+
+#, fuzzy
+#~ msgid "Change Picture..."
+#~ msgstr "&Culoare..."
+
+#, fuzzy
+#~ msgid "Change the picture in the currently selected frame"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Configure Header/Footer..."
+#~ msgstr "Configurează nota terminală"
+
+#, fuzzy
+#~ msgid "Configure the currently selected header or footer"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Configure the currently selected header or footer."
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Change Link..."
+#~ msgstr "Modifică spațierea liniilor"
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected link"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Change the details of the currently selected link."
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "Modifică spațierea liniilor"
+
+#, fuzzy
+#~ msgid "Add to Bookmark"
+#~ msgstr "Șterge coloana"
+
+#, fuzzy
+#~ msgid "Remove Link"
+#~ msgstr "Șterge intrare"
+
+#, fuzzy
+#~ msgid "Show Doc Structure"
+#~ msgstr "Structură document"
+
+#, fuzzy
+#~ msgid "Hide Doc Structure"
+#~ msgstr "Structură document"
+
+#, fuzzy
+#~ msgid "Open document structure sidebar"
+#~ msgstr "Structură document"
+
+#, fuzzy
+#~ msgid "Hide Rulers"
+#~ msgstr "&Subsol"
+
+#, fuzzy
+#~ msgid "Hide Grid"
+#~ msgstr "&Subsol"
+
+#, fuzzy
+#~ msgid "Configure C&ompletion..."
+#~ msgstr "Configurează nota de subsol"
+
+#, fuzzy
+#~ msgid "Change the words and options for autocompletion"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Inserează notă terminală"
+
+#, fuzzy
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Inserează notă terminală"
+
+#, fuzzy
+#~ msgid "Increase Numbering Level"
+#~ msgstr "Crește indentarea"
+
+#, fuzzy
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "Descrește indentarea"
+
+#, fuzzy
+#~ msgid "Edit Variable..."
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Autocorecție simplă"
+
+#, fuzzy
+#~ msgid "Create Style From Selection..."
+#~ msgstr "&Creează model din document..."
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected text"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected text."
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "&Footnote..."
+#~ msgstr "Notă de &subsol"
+
+#, fuzzy
+#~ msgid "Edit Footnote"
+#~ msgstr "Configurează nota de subsol"
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected footnote"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected footnote."
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Change Footnote/Endnote Parameter"
+#~ msgstr "Inserează notă subsol/notă terminală"
+
+#, fuzzy
+#~ msgid "Save Picture As..."
+#~ msgstr "&Culoare..."
+
+#, fuzzy
+#~ msgid "Save the picture in a separate file"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "&Create Framestyle From Frame..."
+#~ msgstr "Creează cadru formulă"
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected frame"
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Create a new framestyle based on the currently selected frame."
+#~ msgstr "Șterge coloana din tabel."
+
+#, fuzzy
+#~ msgid "Convert to Text Box"
+#~ msgstr "Cuprins"
+
+#, fuzzy
+#~ msgid "Go to Document Structure"
+#~ msgstr "Structură document"
+
+#, fuzzy
+#~ msgid "Insert variable \"%1\" into the text"
+#~ msgstr "Cuprins"
+
+#, fuzzy
+#~ msgid "Frame Background Color..."
+#~ msgstr "Modifică culoarea de fundal a cadrului"
+
+#, fuzzy
+#~ msgid "Apply a paragraph style"
+#~ msgstr "Aplică pentru antet"
+
+#, fuzzy
+#~ msgid "Apply a frame style"
+#~ msgstr "Aplică pentru antet"
+
+#, fuzzy
+#~ msgid "Apply a table style"
+#~ msgstr "Aplică pentru antet"
+
+#, fuzzy
+#~ msgid "Image"
+#~ msgstr "Număr &pagină"
+
+#, fuzzy
+#~ msgid "Select paste format:"
+#~ msgstr "Ștergere cadru"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to delete a table.\n"
+#~ "Doing so will delete all the text in the table.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "SĂŽnteĹŁi pe cale sÄ ĹtergeĹŁi un tabel.\n"
+#~ "FÄcĂŽnd acest lucru se va Ĺterge\n"
+#~ "tot textul conĹŁinut ĂŽn tabel!\n"
+#~ "DoriĹŁi ĂŽntr-adevÄr acest lucru?"
+
+#~ msgid "Do you want to delete this frame?"
+#~ msgstr "Doriți să șterg acest cadru?"
+
+#, fuzzy
+#~ msgid "Change Custom Variable"
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "Insert Picture Inline"
+#~ msgstr "Inserează imagine"
+
+#, fuzzy
+#~ msgid "Insert Inline Frame"
+#~ msgstr "Inserare tabel"
+
+#, fuzzy
+#~ msgid "You can only insert footnotes or endnotes into the first frameset."
+#~ msgstr ""
+#~ "La ora actuală puteți inserea note de subsol sau\n"
+#~ "note terminale în primul set de cadre."
+
+#~ msgid "Insert Footnote"
+#~ msgstr "Inserează notă subsol"
+
+#~ msgid "Update Table of &Contents"
+#~ msgstr "Actualizează &cuprins"
+
+#, fuzzy
+#~ msgid "Change Font"
+#~ msgstr "Modifică indentarea"
+
+#~ msgid "Change Layout"
+#~ msgstr "Modifică format"
+
+#, fuzzy
+#~ msgid "You must select a frame first."
+#~ msgstr "Trebuie să selectați mai întâi un cadru."
+
+#~ msgid "Format Frameset"
+#~ msgstr "Format set de cadre"
+
+#~ msgid "Insert Table"
+#~ msgstr "Inserare tabel"
+
+#, fuzzy
+#~ msgid "Insert Formula"
+#~ msgstr "Formulă"
+
+#, fuzzy
+#~ msgid "Remove Rows"
+#~ msgstr "Șterge linie"
+
+#, fuzzy
+#~ msgid "Remove Columns"
+#~ msgstr "Șterge coloană"
+
+#, fuzzy
+#~ msgid "Adjust Table"
+#~ msgstr "Inserare tabel"
+
+#, fuzzy
+#~ msgid "Join Cells Failed"
+#~ msgstr "Unire celule"
+
+#, fuzzy
+#~ msgid ""
+#~ "You have to select some cells which are next to each other and are not "
+#~ "already joined."
+#~ msgstr ""
+#~ "Trebuie să selectați celule care sunt alăturate\n"
+#~ "și care nu sunt deja lipitte."
+
+#~ msgid "Join Cells"
+#~ msgstr "Unire celule"
+
+#, fuzzy
+#~ msgid "You have to put the cursor into a table before splitting cells."
+#~ msgstr ""
+#~ "Trebuie să puneți cursorul într-un tabel\n"
+#~ "înainte de a diviza celule."
+
+#, fuzzy
+#~ msgid "Split Cells"
+#~ msgstr "Divizare celule"
+
+#~ msgid ""
+#~ "There is not enough space to split the cell into that many parts, make it "
+#~ "bigger first"
+#~ msgstr ""
+#~ "Nu există suficient spațiu la dreapta tabelului\n"
+#~ "pentru a insera o nouă coloană."
+
+#~ msgid "Ungroup Table"
+#~ msgstr "Degrupare tabel"
+
+#, fuzzy
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Aplică stilul %1"
+
+#, fuzzy
+#~ msgid "Apply Style to Frames"
+#~ msgstr "Aplică stilul %1"
+
+#, fuzzy
+#~ msgid "Apply Framestyle to Frame"
+#~ msgstr "Aplică stilul %1"
+
+#, fuzzy
+#~ msgid "Apply Framestyle to Frames"
+#~ msgstr "Aplică stilul %1"
+
+#, fuzzy
+#~ msgid "Apply Framestyle"
+#~ msgstr "Aplică pentru antet"
+
+#, fuzzy
+#~ msgid "Apply Tablestyle to Frame"
+#~ msgstr "Aplică stilul %1"
+
+#, fuzzy
+#~ msgid "Apply Tablestyle to Frames"
+#~ msgstr "Aplică stilul %1"
+
+#, fuzzy
+#~ msgid "Change Text Size"
+#~ msgstr "Modifică stilul listei"
+
+#, fuzzy
+#~ msgid "Change Text Font"
+#~ msgstr "Modifică indentarea"
+
+#, fuzzy
+#~ msgid "Make Text Bold"
+#~ msgstr "Cadru te&xt"
+
+#, fuzzy
+#~ msgid "Make Text Italic"
+#~ msgstr "Cadrul este flotant"
+
+#, fuzzy
+#~ msgid "Underline Text"
+#~ msgstr "Subliniat"
+
+#, fuzzy
+#~ msgid "Strike Out Text"
+#~ msgstr "&Tăiat"
+
+#, fuzzy
+#~ msgid "Set Text Color"
+#~ msgstr "&Culoare..."
+
+#, fuzzy
+#~ msgid "Center Text"
+#~ msgstr "Inserează text"
+
+#, fuzzy
+#~ msgid "Justify Text"
+#~ msgstr "Bloc"
+
+#, fuzzy
+#~ msgid "Change List Type"
+#~ msgstr "Modifică stilul listei"
+
+#, fuzzy
+#~ msgid "Make Text Superscript"
+#~ msgstr "SuperScript"
+
+#, fuzzy
+#~ msgid "Make Text Subscript"
+#~ msgstr "SubScript"
+
+#, fuzzy
+#~ msgid "Change Case of Text"
+#~ msgstr "Modifică stilul listei"
+
+#, fuzzy
+#~ msgid "Change Top Frame Border"
+#~ msgstr "Modifică marginea de sus a cadrului"
+
+#, fuzzy
+#~ msgid "Change Bottom Frame Border"
+#~ msgstr "Modifică marginea de jos a cadrului"
+
+#, fuzzy
+#~ msgid "Change Tabulator"
+#~ msgstr "Modifică format"
+
+#, fuzzy
+#~ msgid "Change First Line Indent"
+#~ msgstr "Modifică stilul listei"
+
+#, fuzzy
+#~ msgid "Change Indent"
+#~ msgstr "Modifică indentarea"
+
+#, fuzzy
+#~ msgid "Edit Endnote"
+#~ msgstr "Configurează nota de subsol"
+
+#, fuzzy
+#~ msgid "Change Footnote Parameter"
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "Change Endnote Parameter"
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "D&elete Current Column..."
+#~ msgstr "Ș&terge coloană..."
+
+#, fuzzy
+#~ msgid "D&elete Selected Columns..."
+#~ msgstr "Ș&terge coloană..."
+
+#, fuzzy
+#~ msgid "&Delete Current Row..."
+#~ msgstr "Ș&terge linie..."
+
+#, fuzzy
+#~ msgid "&Delete Selected Rows..."
+#~ msgstr "Ș&terge linie..."
+
+#, fuzzy
+#~ msgid "Change Picture"
+#~ msgstr "Modifică stilul listei"
+
+#, fuzzy
+#~ msgid "Save Picture"
+#~ msgstr "Modifică stilul listei"
+
+#~ msgid "Move Frame"
+#~ msgstr "Mută cadru"
+
+#, fuzzy
+#~ msgid "Change Note Text"
+#~ msgstr "Modifică stilul listei"
+
+#, fuzzy
+#~ msgid "Apply Autoformat"
+#~ msgstr "Ștergere cadru"
+
+#, fuzzy
+#~ msgid "Change Footnote Parameters"
+#~ msgstr "Variabile &personale..."
+
+#, fuzzy
+#~ msgid "Insert File"
+#~ msgstr "Inserare tabel"
+
+#, fuzzy
+#~ msgid "Normal"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Delete Frames"
+#~ msgstr "Ștergere cadru"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Opțiuni cadru"
+
+#~ msgid "Table %1"
+#~ msgstr "Tabel %1"
+
+#~ msgid "Font Family"
+#~ msgstr "Familie font"
+
+#, fuzzy
+#~ msgid "Speak Text"
+#~ msgstr "&Tăiat"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to delete the last Frame of the Frameset '%1'. The contents "
+#~ "of this Frameset will not appear anymore!\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Sunteți pe cale să ștergeți ultimul cadru\n"
+#~ "din setul de cadre '%1'.\n"
+#~ "Conținutul acestuia va dispărea pentru\n"
+#~ "totdeauna!\n"
+#~ "\n"
+#~ "Doriți într-adevăr acest lucru?"

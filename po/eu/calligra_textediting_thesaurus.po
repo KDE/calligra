@@ -1,0 +1,436 @@
+# Translation of thesaurus_tool.po to Euskara/Basque (eu).
+#
+#
+# Ion Gaztañaga <igaztanaga@gmail.com>, 2005.
+# Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2013.
+# Iñigo Salvador Azurmendi <xalba@euskalnet.net>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: thesaurus_tool\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-11-12 00:00+0100\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@euskalnet.net>\n"
+"Language-Team: Basque <kde-i18n-doc@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: Thesaurus.cpp:81
+#, kde-format
+msgid "(No match)"
+msgstr "(Bat-etortzerik ez)"
+
+#: Thesaurus.cpp:91
+#, kde-format
+msgid "&Search for:"
+msgstr "&Bilatu hau:"
+
+#: Thesaurus.cpp:94
+#, kde-format
+msgid "S&earch"
+msgstr "B&ilatu"
+
+#: Thesaurus.cpp:101
+#, kde-format
+msgctxt "@action:button Go back to the previous word in history"
+msgid "Back"
+msgstr "Atzera"
+
+#: Thesaurus.cpp:105
+#, kde-format
+msgctxt "@action:button Go forward to the next word in history"
+msgid "Forward"
+msgstr "Aurrera"
+
+#: Thesaurus.cpp:108
+#, kde-format
+msgid "Change Language..."
+msgstr "Aldatu hizkuntza..."
+
+#: Thesaurus.cpp:122
+#, kde-format
+msgid "&Thesaurus"
+msgstr "&Thesaurus"
+
+#: Thesaurus.cpp:126
+#, kde-format
+msgid "Synonyms"
+msgstr "Sinonimoak"
+
+#: Thesaurus.cpp:133
+#, kde-format
+msgid "More General Words"
+msgstr "Hitz orokor gehiago"
+
+#: Thesaurus.cpp:140
+#, kde-format
+msgid "More Specific Words"
+msgstr "Hitz espezifiko gehiago"
+
+#: Thesaurus.cpp:170
+#, kde-format
+msgid "&Wordnet"
+msgstr "&WordNet"
+
+#: Thesaurus.cpp:192
+#, kde-format
+msgid "&Replace with:"
+msgstr "&Ordeztu honekin:"
+
+#: Thesaurus.cpp:255
+#, kde-format
+msgid "&Replace"
+msgstr "&Ordeztu"
+
+#: Thesaurus.cpp:267
+#, kde-format
+msgid "Replace Word"
+msgstr "Ordeztu hitza"
+
+#: Thesaurus.cpp:295
+#, kde-format
+msgid "Related Words - %1"
+msgstr "Erlazionatutako hitzak, %1"
+
+#: Thesaurus.cpp:409
+#, kde-format
+msgid ""
+"The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+"select a thesaurus file."
+msgstr ""
+"Ez da aurkitu sinonimoen '%1'  fitxategia. Erabili 'Aldatu hizkuntza...' "
+"sinonimoen fitxategi bat hautatzeko."
+
+#: Thesaurus.cpp:429
+#, kde-format
+msgid "<b>Error:</b> Failed to execute grep."
+msgstr "<b>Errorea:</b> Huts egin du grep exekutatzean."
+
+#: Thesaurus.cpp:581
+#, kde-format
+msgid "Synonyms/Hypernyms - Ordered by Frequency"
+msgstr "Sinonimoak/Hiperonimoak, maiztasunaren arabera ordenatuta"
+
+#: Thesaurus.cpp:582
+#, kde-format
+msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+msgstr ""
+"Sinonimoak. Esanahiaren antzekotasunaren arabera ordenatuta (aditzak "
+"bakarrik)"
+
+#: Thesaurus.cpp:583
+#, kde-format
+msgid "Antonyms - Words with Opposite Meanings"
+msgstr "Sinonimoak. Aurkako esanahia duten hitzak"
+
+#: Thesaurus.cpp:584
+#, kde-format
+msgid "Hyponyms - ... is a (kind of) %1"
+msgstr "Hiponimoak. ... %1(r)en antzekoa da"
+
+#: Thesaurus.cpp:585
+#, kde-format
+msgid "Meronyms - %1 has a ..."
+msgstr "Meronimoak. %1(e)k badu... bat"
+
+#: Thesaurus.cpp:587
+#, kde-format
+msgid "Holonyms - ... has a %1"
+msgstr "Holonimoak. ...(e)k badu %1 bat"
+
+#: Thesaurus.cpp:588
+#, kde-format
+msgid "Attributes"
+msgstr "Atributuak"
+
+#: Thesaurus.cpp:589
+#, kde-format
+msgid "Cause To (for some verbs only)"
+msgstr "Zergatia (aditz batzuentzat bakarrik)"
+
+#: Thesaurus.cpp:590
+#, kde-format
+msgid "Verb Entailment (for some verbs only)"
+msgstr "Aditzen ondorioak (aditz batzuentzat bakarrik)"
+
+#: Thesaurus.cpp:591
+#, kde-format
+msgid "Familiarity & Polysemy Count"
+msgstr "Kidetasun- eta polisemia-kontaketa"
+
+#: Thesaurus.cpp:593
+#, kde-format
+msgid "Verb Frames (examples of use)"
+msgstr "Aditz-markoak (erabilera-adibideak)"
+
+#: Thesaurus.cpp:594
+#, kde-format
+msgid "List of Compound Words"
+msgstr "Hitz elkartuen zerrenda"
+
+#: Thesaurus.cpp:595
+#, kde-format
+msgid "Overview of Senses"
+msgstr "Esanahien ikuspegi orokorra"
+
+#: Thesaurus.cpp:623
+#, kde-format
+msgid ""
+"<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+"installed on your computer if you want to use it, and 'wn' has to be in your "
+"PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+"\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+"English language."
+msgstr ""
+"<b>Errorea:</b> Huts egin du WordNet 'wn' programa exekutatzean. WordNet "
+"erabili nahi baduzu, ordenagailuan instalatuta egon behar du eta 'wn'k bide-"
+"izenean agertu behar du. Hemen eskuratu dezakezu WordNet: <a href=\"http://"
+"wordnet.princeton.edu/\">http://wordnet.princeton.edu/</a>. Kontuan izan "
+"WordNet-ek ingelesa baino ez duela onartzen."
+
+#: Thesaurus.cpp:635
+#, kde-format
+msgid "No match for '%1'."
+msgstr "Ez dago '%1'(r)en bat-etortzerik."
+
+#~ msgctxt "@action:button Close thesaurus dialog"
+#~ msgid "&Close"
+#~ msgstr "&Itxi"
+
+#, fuzzy
+#~| msgid "(No match)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(No match)"
+#~ msgstr "(Bat-etortzerik ez)"
+
+#, fuzzy
+#~| msgid "&Search for:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Search for:"
+#~ msgstr "&Bilatu hau:"
+
+#, fuzzy
+#~| msgid "S&earch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&earch"
+#~ msgstr "B&ilatu"
+
+#, fuzzy
+#~| msgctxt "@action:button Go back to the previous word in history"
+#~| msgid "Back"
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go back to the previous word in history"
+#~ msgid "Back"
+#~ msgstr "Atzera"
+
+#, fuzzy
+#~| msgctxt "@action:button Go forward to the next word in history"
+#~| msgid "Forward"
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go forward to the next word in history"
+#~ msgid "Forward"
+#~ msgstr "Aurrera"
+
+#, fuzzy
+#~| msgid "Change Language..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Language..."
+#~ msgstr "Aldatu hizkuntza..."
+
+#, fuzzy
+#~| msgid "&Thesaurus"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Thesaurus"
+#~ msgstr "&Thesaurus"
+
+#, fuzzy
+#~| msgid "Synonyms"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms"
+#~ msgstr "Sinonimoak"
+
+#, fuzzy
+#~| msgid "More General Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More General Words"
+#~ msgstr "Hitz orokor gehiago"
+
+#, fuzzy
+#~| msgid "More Specific Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More Specific Words"
+#~ msgstr "Hitz espezifiko gehiago"
+
+#, fuzzy
+#~| msgid "&Wordnet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Wordnet"
+#~ msgstr "&WordNet"
+
+#, fuzzy
+#~| msgid "&Replace with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace with:"
+#~ msgstr "&Ordeztu honekin:"
+
+#, fuzzy
+#~| msgctxt "@action:button Close thesaurus dialog"
+#~| msgid "&Close"
+#~ msgctxt "(qtundo-format) @action:button Close thesaurus dialog"
+#~ msgid "&Close"
+#~ msgstr "&Itxi"
+
+#, fuzzy
+#~| msgid "&Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace"
+#~ msgstr "&Ordeztu"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace Word"
+#~ msgstr "Ordeztu hitza"
+
+#, fuzzy
+#~| msgid "Related Words - %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Related Words - %1"
+#~ msgstr "Erlazionatutako hitzak, %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "The thesaurus file '%1' was not found. Please use 'Change Language...' "
+#~| "to select a thesaurus file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+#~ "select a thesaurus file."
+#~ msgstr ""
+#~ "Ez da aurkitu sinonimoen '%1'  fitxategia. Erabili 'Aldatu hizkuntza...' "
+#~ "sinonimoen fitxategi bat hautatzeko."
+
+#, fuzzy
+#~| msgid "<b>Error:</b> Failed to execute grep."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<b>Error:</b> Failed to execute grep."
+#~ msgstr "<b>Errorea:</b> Huts egin du grep exekutatzean."
+
+#, fuzzy
+#~| msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgstr "Sinonimoak/Hiperonimoak, maiztasunaren arabera ordenatuta"
+
+#, fuzzy
+#~| msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgstr ""
+#~ "Sinonimoak. Esanahiaren antzekotasunaren arabera ordenatuta (aditzak "
+#~ "bakarrik)"
+
+#, fuzzy
+#~| msgid "Antonyms - Words with Opposite Meanings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Antonyms - Words with Opposite Meanings"
+#~ msgstr "Sinonimoak. Aurkako esanahia duten hitzak"
+
+#, fuzzy
+#~| msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgstr "Hiponimoak. ... %1(r)en antzekoa da"
+
+#, fuzzy
+#~| msgid "Meronyms - %1 has a ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Meronyms - %1 has a ..."
+#~ msgstr "Meronimoak. %1(e)k badu... bat"
+
+#, fuzzy
+#~| msgid "Holonyms - ... has a %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Holonyms - ... has a %1"
+#~ msgstr "Holonimoak. ...(e)k badu %1 bat"
+
+#, fuzzy
+#~| msgid "Attributes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attributes"
+#~ msgstr "Atributuak"
+
+#, fuzzy
+#~| msgid "Cause To (for some verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cause To (for some verbs only)"
+#~ msgstr "Zergatia (aditz batzuentzat bakarrik)"
+
+#, fuzzy
+#~| msgid "Verb Entailment (for some verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Entailment (for some verbs only)"
+#~ msgstr "Aditzen ondorioak (aditz batzuentzat bakarrik)"
+
+#, fuzzy
+#~| msgid "Familiarity & Polysemy Count"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Familiarity & Polysemy Count"
+#~ msgstr "Kidetasun- eta polisemia-kontaketa"
+
+#, fuzzy
+#~| msgid "Verb Frames (examples of use)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Frames (examples of use)"
+#~ msgstr "Aditz-markoak (erabilera-adibideak)"
+
+#, fuzzy
+#~| msgid "List of Compound Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "List of Compound Words"
+#~ msgstr "Hitz elkartuen zerrenda"
+
+#, fuzzy
+#~| msgid "Overview of Senses"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overview of Senses"
+#~ msgstr "Esanahien ikuspegi orokorra"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~| "installed on your computer if you want to use it, and 'wn' has to be in "
+#~| "your PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+#~| "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports "
+#~| "the English language."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~ "installed on your computer if you want to use it, and 'wn' has to be in "
+#~ "your PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+#~ "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+#~ "English language."
+#~ msgstr ""
+#~ "<b>Errorea:</b> Huts egin du WordNet 'wn' programa exekutatzean. WordNet "
+#~ "erabili nahi baduzu, ordenagailuan instalatuta egon behar du eta 'wn'k "
+#~ "bide-izenean agertu behar du. Hemen eskuratu dezakezu WordNet: <a href="
+#~ "\"http://wordnet.princeton.edu/\">http://wordnet.princeton.edu/</a>. "
+#~ "Kontuan izan WordNet-ek ingelesa baino ez duela onartzen."
+
+#, fuzzy
+#~| msgid "No match for '%1'."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No match for '%1'."
+#~ msgstr "Ez dago '%1'(r)en bat-etortzerik."
+
+#~ msgid "Failed to execute grep."
+#~ msgstr "Errorea grep exekutatzean."
+
+#~ msgid "<b>Error:</b> Failed to execute WordNet program 'wn'. Output:<br>%1"
+#~ msgstr ""
+#~ "<b>Errorea:</b> Erroea WordNet-en \"wn\" programa exekutatzean. Irteera:"
+#~ "<br>%1"

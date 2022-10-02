@@ -1,0 +1,101 @@
+# translation of ChangecasePlugin.po to Kazakh
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: ChangecasePlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2008-11-14 06:52-0500\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"\n"
+"\n"
+
+#: Changecase.cpp:51 Changecase.cpp:79
+#, kde-format
+msgid "Change case"
+msgstr "Үлкен-кішілігін ауыстыру"
+
+#: Changecase.cpp:56
+#, kde-format
+msgid "Sentence case"
+msgstr "Сөйлемдегідей"
+
+#: Changecase.cpp:57
+#, kde-format
+msgid "lowercase"
+msgstr "кіші әріптер"
+
+#: Changecase.cpp:58
+#, kde-format
+msgid "UPPER CASE"
+msgstr "ҮЛКЕН ӘРІПТЕР"
+
+#: Changecase.cpp:59
+#, kde-format
+msgid "Initial Caps"
+msgstr "Үлкеннен бастап"
+
+#: Changecase.cpp:60
+#, kde-format
+msgid "tOGGLE cASE"
+msgstr "әІПТЕРДІ тЕРІСТЕУ"
+
+#: ChangecaseFactory.cpp:16
+#, kde-format
+msgid "Change Case..."
+msgstr "Үлкен-кішілігін ауыстыру..."
+
+#, fuzzy
+#~| msgid "Change case"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change case"
+#~ msgstr "Үлкен-кішілігін ауыстыру"
+
+#, fuzzy
+#~| msgid "Sentence case"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentence case"
+#~ msgstr "Сөйлемдегідей"
+
+#, fuzzy
+#~| msgid "lowercase"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "lowercase"
+#~ msgstr "кіші әріптер"
+
+#, fuzzy
+#~| msgid "UPPER CASE"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "UPPER CASE"
+#~ msgstr "ҮЛКЕН ӘРІПТЕР"
+
+#, fuzzy
+#~| msgid "Initial Caps"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Initial Caps"
+#~ msgstr "Үлкеннен бастап"
+
+#, fuzzy
+#~| msgid "tOGGLE cASE"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "tOGGLE cASE"
+#~ msgstr "әІПТЕРДІ тЕРІСТЕУ"
+
+#, fuzzy
+#~| msgid "Change Case..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Case..."
+#~ msgstr "Үлкен-кішілігін ауыстыру..."
+
+#~ msgid "Changecase"
+#~ msgstr "Үлкен-кішілігін ауыстыру"

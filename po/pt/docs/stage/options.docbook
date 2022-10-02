@@ -1,0 +1,335 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>José</firstname
+><surname
+>Pires</surname
+><affiliation
+><address
+><email
+>zepires@gmail.com</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Configurar o &stage;</title>
+
+<sect1 id="configure-dialog">
+<title
+>A Janela para <guilabel
+>Configurar o Stage</guilabel
+></title>
+
+<sect2 id="configure-misc">
+<title
+>Diversos</title>
+
+<screenshot>
+<screeninfo
+>Diversos</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-misc.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Diversos</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Unidades</guilabel
+></term>
+<listitem
+><para
+>Escolha a unidade a usar por omissão nos seus 'slides'.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Raio da pega</guilabel
+></term>
+<listitem
+><para
+>Se seleccionar uma forma com a ferramenta predefinida (seta), irá ver rectângulos vermelhos e amarelos. Estes são chamados de pegas (usados para dimensionar, rodar, ...). O raio da pega define o tamanho da mesma. Se o tornar maior, é mais fácil de acertar nela.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Sensibilidade na captura</guilabel
+></term>
+<listitem
+><para
+>Esta opção com que exactidão deverá acertar numa pega para a seleccionar.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Posição da colagem</guilabel
+></term>
+<listitem
+><para
+>Isto só fica activo se a opção <guilabel
+>Colar no Cursor</guilabel
+> estiver desactivada. Se copiar uma forma com a combinação <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> e a colar com <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+>, fazendo-o num local onde já exista uma forma com esta posição, irá colar a nova forma em baixo ou à direita.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Colar no Cursor</guilabel
+></term>
+<listitem
+><para
+>Desactiva a posição da colagem e introduz uma forma colada na posição do cursor do rato.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-grid">
+<title
+>Grelha</title>
+
+<screenshot>
+<screeninfo
+>Grelha</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-grid.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Grelha</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Grelha</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Mostrar a grelha</guilabel
+></term>
+<listitem
+><para
+>Se estiver activa, o &stage; irá mostrar uma grelha com pontos que representam as intersecções de linhas horizontais e verticais. Poderá usar estes pontos para posicionar objectos com precisão no 'slide'.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Ajustar à grelha</guilabel
+></term>
+<listitem
+><para
+>Se isto estiver activo, ao largar ou mover os objectos do 'slide', o canto superior esquerdo do objecto irá <quote
+>alinhar</quote
+> ou mover-se para o ponto da grelha mais próximo.</para>
+<para
+>Isto reduz de facto a sua liberdade para colocar objectos no 'slide', mas também o ajuda a alinhá-los com precisão. É facilmente desactivada ou activada com esta opção, permitindo-lhe o melhor dos dois mundos.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Cor da grelha:</guilabel
+></term>
+<listitem
+><para
+>Poderá mudar aqui a cor da grelha, que é preta por omissão.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Espaço</guilabel
+></title>
+<para
+>Poderá optar por manter as mesmas proporções para as duas opções abaixo, se carregar no ícone <inlinemediaobject
+><imageobject
+> <imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+> ou por separar as duas opções com o ícone <inlinemediaobject
+><imageobject
+> <imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+>.</para>
+<varlistentry>
+<term
+><guilabel
+>Horizontal:</guilabel
+></term>
+<listitem
+><para
+>Indique o espaço em centímetros entre dois pontos numa linha horizontal da grelha. O valor por omissão é de 0,5 centímetros.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Vertical:</guilabel
+></term>
+<listitem
+><para
+>Indique o espaço em centímetros entre dois pontos numa linha vertical da grelha. O valor por omissão é de 0,5 centímetros.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-document">
+<title
+>Documento</title>
+
+<screenshot>
+<screeninfo
+>Documento</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-document.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Documento</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Configuração do Documento</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Gravar automaticamente a cada:</guilabel
+></term>
+<listitem
+><para
+>Poderá usar isto para ajustar com que frequência o &stage; grava um ficheiro temporário. Se configurar este valor para <guilabel
+>Sem gravação automática</guilabel
+>, o &stage; não fará qualquer gravação automática. Poderá ajustar a gravação automática de 1 minuto até 60 minutos.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Criar um ficheiro de salvaguarda:</guilabel
+></term>
+<listitem
+><para
+>Se estiver assinalada, irá criar um ficheiro <filename
+>.&lt;nome&gt;.odp.autosave.odp</filename
+> na pasta onde se encontra o seu ficheiro. Esta cópia de segurança poderá então ser usada no caso de ocorrer um problema. A cópia de segurança é actualizada, sempre que você gravar o seu documento ou sempre que ocorrer uma gravação automática.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-author">
+<title
+>Autoria</title>
+
+<screenshot>
+<screeninfo
+>Autoria</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Documento</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Escolha um perfil de autoria para o seu documento. </para>
+<para
+>Poderá adicionar um perfil novo ou apagar o actual, usando os botões à direita da lista de perfis. </para>
+</sect2>
+
+</sect1>
+
+</chapter>

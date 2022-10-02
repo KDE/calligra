@@ -1,0 +1,282 @@
+# Irish translation of TableShape
+# Copyright (C) 2009 This_file_is_part_of_KDE
+# This file is distributed under the same license as the TableShape package.
+# Kevin Scannell <kscanne@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: TableShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2009-12-24 06:59-0500\n"
+"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
+"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
+"3 : 4\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+
+#: SheetsEditor.cpp:57 SheetsEditor.cpp:121
+#, kde-format
+msgid "Rename"
+msgstr "Athainmnigh"
+
+#: SheetsEditor.cpp:61
+#, kde-format
+msgid "Add"
+msgstr "Cuir Leis"
+
+#: SheetsEditor.cpp:65
+#, kde-format
+msgid "Remove"
+msgstr "Bain"
+
+#: SheetsEditor.cpp:121
+#, kde-format
+msgid "Enter Name:"
+msgstr "Iontráil Ainm:"
+
+#: TableShape.cpp:288
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Confirmation Required"
+msgstr ""
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Download"
+msgstr ""
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Skip"
+msgstr ""
+
+#: TableShapeFactory.cpp:37
+#, kde-format
+msgid "Spreadsheet"
+msgstr "Scarbhileog"
+
+#: TableShapeFactory.cpp:39
+#, kde-format
+msgid "Spreadsheet Shape"
+msgstr "Giuirléid Scarbhileoige"
+
+#: TableTool.cpp:218
+#, kde-format
+msgid "Import OpenDocument Spreadsheet File"
+msgstr "Iompórtáil Scarbhileog OpenDocument"
+
+#: TableTool.cpp:219
+#, kde-format
+msgid "Import"
+msgstr "Iompórtáil"
+
+#: TableTool.cpp:223
+#, kde-format
+msgid "Export OpenDocument Spreadsheet File"
+msgstr "Easpórtáil Scarbhileog OpenDocument"
+
+#: TableTool.cpp:224
+#, kde-format
+msgid "Export"
+msgstr "Easpórtáil"
+
+#: TableTool.cpp:704
+#, kde-format
+msgid "Sheets"
+msgstr "Bileoga"
+
+#: TableTool.cpp:746
+#, kde-format
+msgid "Sheet:"
+msgstr "Bileog:"
+
+#: TableTool.cpp:748
+#, kde-format
+msgid "Selected Sheet"
+msgstr "Bileog Roghnaithe"
+
+#: TableTool.cpp:763
+#, fuzzy, kde-format
+#| msgid "Table Options"
+msgid "View Options"
+msgstr "Roghanna Tábla"
+
+#: TableToolFactory.cpp:21
+#, fuzzy, kde-format
+#| msgid "Table editing tool"
+msgid "Table editing"
+msgstr "Uirlis eagarthóireachta tábla"
+
+#: ToolHeaders.cpp:286 ToolHeaders.cpp:884
+#, kde-format
+msgid "Area is too large."
+msgstr ""
+
+#: ToolHeaders.cpp:429
+#, kde-format
+msgid "Hide Row"
+msgstr ""
+
+#: ToolHeaders.cpp:431
+#, kde-format
+msgid "Height: %1 %2"
+msgstr ""
+
+#: ToolHeaders.cpp:1059
+#, fuzzy, kde-format
+#| msgid "Columns:"
+msgid "Hide Column"
+msgstr "Colúin:"
+
+#: ToolHeaders.cpp:1061
+#, kde-format
+msgid "Width: %1 %2"
+msgstr ""
+
+#~ msgid "Number of columns"
+#~ msgstr "Líon na gcolún"
+
+#~ msgid "Rows:"
+#~ msgstr "Rónna:"
+
+#~ msgid "Number of rows"
+#~ msgstr "Líon na rónna"
+
+#, fuzzy
+#~| msgid "Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Athainmnigh"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Cuir Leis"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Bain"
+
+#, fuzzy
+#~| msgid "Enter Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter Name:"
+#~ msgstr "Iontráil Ainm:"
+
+#, fuzzy
+#~| msgid "Spreadsheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spreadsheet"
+#~ msgstr "Scarbhileog"
+
+#, fuzzy
+#~| msgid "Spreadsheet Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spreadsheet Shape"
+#~ msgstr "Giuirléid Scarbhileoige"
+
+#, fuzzy
+#~| msgid "Import OpenDocument Spreadsheet File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import OpenDocument Spreadsheet File"
+#~ msgstr "Iompórtáil Scarbhileog OpenDocument"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Iompórtáil"
+
+#, fuzzy
+#~| msgid "Export OpenDocument Spreadsheet File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export OpenDocument Spreadsheet File"
+#~ msgstr "Easpórtáil Scarbhileog OpenDocument"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Easpórtáil"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Bileoga"
+
+#, fuzzy
+#~| msgid "Sheet:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet:"
+#~ msgstr "Bileog:"
+
+#, fuzzy
+#~| msgid "Selected Sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Selected Sheet"
+#~ msgstr "Bileog Roghnaithe"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Colúin:"
+
+#, fuzzy
+#~| msgid "Number of columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of columns"
+#~ msgstr "Líon na gcolún"
+
+#, fuzzy
+#~| msgid "Rows:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rows:"
+#~ msgstr "Rónna:"
+
+#, fuzzy
+#~| msgid "Number of rows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of rows"
+#~ msgstr "Líon na rónna"
+
+#, fuzzy
+#~| msgid "Table Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table Options"
+#~ msgstr "Roghanna Tábla"
+
+#, fuzzy
+#~| msgid "Table editing tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table editing"
+#~ msgstr "Uirlis eagarthóireachta tábla"
+
+#~ msgid "Table"
+#~ msgstr "Tábla"
+
+#~ msgid "Table Shape"
+#~ msgstr "Giuirléid Tábla"

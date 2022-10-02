@@ -1,0 +1,164 @@
+# Translation of calligra_shape_spreadsheet.po to Catalan
+# Copyright (C) 2009-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2 or later.
+#
+# Josep M. Ferrer <txemaq@gmail.com>, 2009, 2011, 2014, 2016, 2020.
+# Rafael Carreras <rcarreras@caliu.cat>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2020-10-28 10:13+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Josep M. Ferrer"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "txemaq@gmail.com"
+
+#: SheetsEditor.cpp:57 SheetsEditor.cpp:121
+#, kde-format
+msgid "Rename"
+msgstr "Reanomena"
+
+#: SheetsEditor.cpp:61
+#, kde-format
+msgid "Add"
+msgstr "Afegeix"
+
+#: SheetsEditor.cpp:65
+#, kde-format
+msgid "Remove"
+msgstr "Elimina"
+
+#: SheetsEditor.cpp:121
+#, kde-format
+msgid "Enter Name:"
+msgstr "Introduïu un nom:"
+
+#: TableShape.cpp:288
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"Aquest document conté un enllaç extern a un document remot\n"
+"%1"
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Confirmation Required"
+msgstr "Cal confirmació"
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Download"
+msgstr "Baixa"
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Skip"
+msgstr "Omet"
+
+#: TableShapeFactory.cpp:37
+#, kde-format
+msgid "Spreadsheet"
+msgstr "Full de càlcul"
+
+#: TableShapeFactory.cpp:39
+#, kde-format
+msgid "Spreadsheet Shape"
+msgstr "Forma de full de càlcul"
+
+#: TableTool.cpp:218
+#, kde-format
+msgid "Import OpenDocument Spreadsheet File"
+msgstr "Importa un fitxer de full de càlcul OpenDocument"
+
+#: TableTool.cpp:219
+#, kde-format
+msgid "Import"
+msgstr "Importa"
+
+#: TableTool.cpp:223
+#, kde-format
+msgid "Export OpenDocument Spreadsheet File"
+msgstr "Exporta un fitxer de full de càlcul OpenDocument"
+
+#: TableTool.cpp:224
+#, kde-format
+msgid "Export"
+msgstr "Exporta"
+
+#: TableTool.cpp:704
+#, kde-format
+msgid "Sheets"
+msgstr "Fulls"
+
+#: TableTool.cpp:746
+#, kde-format
+msgid "Sheet:"
+msgstr "Full:"
+
+#: TableTool.cpp:748
+#, kde-format
+msgid "Selected Sheet"
+msgstr "Full seleccionat"
+
+#: TableTool.cpp:763
+#, kde-format
+msgid "View Options"
+msgstr "Opcions de visualització"
+
+#: TableToolFactory.cpp:21
+#, kde-format
+msgid "Table editing"
+msgstr "Edició de taules"
+
+#: ToolHeaders.cpp:286 ToolHeaders.cpp:884
+#, kde-format
+msgid "Area is too large."
+msgstr "L'àrea és massa gran."
+
+#: ToolHeaders.cpp:429
+#, kde-format
+msgid "Hide Row"
+msgstr "Oculta la fila"
+
+#: ToolHeaders.cpp:431
+#, kde-format
+msgid "Height: %1 %2"
+msgstr "Alçada: %1 %2"
+
+#: ToolHeaders.cpp:1059
+#, kde-format
+msgid "Hide Column"
+msgstr "Oculta la columna"
+
+#: ToolHeaders.cpp:1061
+#, kde-format
+msgid "Width: %1 %2"
+msgstr "Amplada: %1 %2"
+
+#~ msgid "Number of columns"
+#~ msgstr "Nombre de columnes"
+
+#~ msgid "Rows:"
+#~ msgstr "Files:"
+
+#~ msgid "Number of rows"
+#~ msgstr "Nombre de files"

@@ -1,0 +1,5046 @@
+# translation of words.po to Greek
+# Copyright (C) 2000, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
+#
+# Aggelos Oikonomopoulos <lydwigvernon@yahoo.co.uk>, 2000.
+# Stergios Dramis <sdramis@egnatia.ee.auth.gr>, 2002-2004.
+# Spiros Georgaras <sng@hellug.gr>, 2005, 2006, 2007.
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2006, 2007, 2008, 2009.
+# Spiros Georgaras <sngeorgaras@otenet.gr>, 2008.
+# Petros <pvidalis@gmail.com>, 2009.
+# Stelios <sstavra@gmail.com>, 2011, 2012, 2020, 2021.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: words\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"PO-Revision-Date: 2021-09-02 09:20+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 20.04.2\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, kde-format
+msgid "&File"
+msgstr "&Αρχείο"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, kde-format
+msgid "&Edit"
+msgstr "&Επεξεργασία"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, kde-format
+msgid "&View"
+msgstr "&Προβολή"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, kde-format
+msgid "&Display Mode"
+msgstr "Λειτουργία &εμφάνισης"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, kde-format
+msgid "Semantics"
+msgstr "Σημασιολογία"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, kde-format
+msgid "S&tyles"
+msgstr "Σ&τιλ"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, kde-format
+msgid "&Settings"
+msgstr "&Ρυθμίσεις"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "Ορθογραφικός έλεγχος"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, kde-format
+msgid "Edit"
+msgstr "Επεξεργασία"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, kde-format
+msgid "Spell Check Result"
+msgstr "Αποτέλεσμα ορθογραφικού ελέγχου"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, kde-format
+msgid "Change Variable To"
+msgstr "Τροποποίηση μεταβλητής σε"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr "&Εργαλεία"
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "Ορισμός στιλ σελίδων"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "Εισαγωγή στιλ σελίδας"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "Ιδιότητες σελίδας"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Δημιουργία σχήματος"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, kde-format
+msgid "Baseline"
+msgstr "Αφετηρία"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, kde-format
+msgid "Character"
+msgstr "Χαρακτήρας"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, kde-format
+msgid "Row"
+msgstr "Γραμμή"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, kde-format
+msgid "Page (entire) area"
+msgstr "Περιοχή (πλήρους) σελίδας"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, kde-format
+msgid "Page text area"
+msgstr "Περιοχή κειμένου σελίδας"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, kde-format
+msgid "Paragraph area"
+msgstr "Περιοχή παραγράφου"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, kde-format
+msgid "Paragraph text area"
+msgstr "Περιοχή κειμένου παραγράφου"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, kde-format
+msgid "Left page border"
+msgstr "Περίγραμμα αριστερής σελίδας"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, kde-format
+msgid "Right page border"
+msgstr "Περίγραμμα δεξιάς σελίδας"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, kde-format
+msgid "Right paragraph border"
+msgstr "Περίγραμμα δεξιάς παραγράφου"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, kde-format
+msgid "Left paragraph border"
+msgstr "Περίγραμμα αριστερής παραγράφου"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr "Η σχέση του σχήματος με το κείμενο είναι:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr "Εμβόλιμο με το κείμενο (συμπεριφέρεται ως χαρακτήρας)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr "Κινούμενο, αλλά αγκυρωμένο σε θέση χαρακτήρα"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr "Κινούμενο, αλλά αγκυρωμένο σε παράγραφο"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr "Κινούμενο ελεύθερα (όχι αγκυρωμένο σε κείμενο)"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, kde-format
+msgid "Vertical Positioning"
+msgstr "Κατακόρυφη τοποθέτηση"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, kde-format
+msgid "Top align with:"
+msgstr "Στοίχιση στην κορυφή με:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, kde-format
+msgid "Center align with:"
+msgstr "Στοίχιση στο κέντρο με:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, kde-format
+msgid "Bottom align with:"
+msgstr "Στοίχιση στη βάση με:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr "Μετατόπιση"
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, kde-format
+msgid "from:"
+msgstr "από:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, kde-format
+msgid "Horizontal Positioning"
+msgstr "Οριζόντια τοποθέτηση"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, kde-format
+msgid "Left align with:"
+msgstr "Στοίχιση αριστερά με:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, kde-format
+msgid "Right align with:"
+msgstr "Στοίχιση δεξιά με:"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, kde-format
+msgid "Configure"
+msgstr "Διαμόρφωση"
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr "Διάφορα"
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, kde-format
+msgid "Grid"
+msgstr "Κάνναβος"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Έγγραφο"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, kde-format
+msgid "Document Settings"
+msgstr "Ρυθμίσεις εγγράφων"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Συγγραφέας"
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr "Συγγραφέας"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, kde-format
+msgid "Create New Bookmark"
+msgstr "Δημιουργία νέου σελιδοδείκτη"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+"Οι σελιδοδείκτες σάς επιτρέπουν τη μετάβαση σε διάφορα σημεία του εγγράφου "
+"σας.\n"
+"Παρακαλώ εισάγετε το όνομα του σελιδοδείκτη σας."
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "Όνομα:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, kde-format
+msgid "Columns:"
+msgstr "Στήλες:"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, kde-format
+msgid "Column spacing:"
+msgstr "Απόσταση στηλών:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, kde-format
+msgid "frameset"
+msgstr "σύνολο πλαισίων"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, kde-format
+msgid "No framesets in document"
+msgstr "Δεν υπάρχουν σύνολα πλαισίων στο έγγραφο"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "Όνομα συνόλου πλαισίων:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, kde-format
+msgid "Create a new frameset:"
+msgstr "Δημιουργία νέου συνόλου πλαισίων:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr "Επιλέξτε υπάρχον σύνολο πλαισίων για σύνδεση:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "Όνομα συνόλου πλαισίων"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, kde-format
+msgid "Smart Positioning"
+msgstr "Έξυπνη τοποθέτηση"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, kde-format
+msgid "Text Run Around"
+msgstr "Ροή κειμένου γύρω"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "Σύνδεση πλαισίων κειμένου"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "Αλλαγή ιδιοτήτων σχήματος"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr "Αγκύρωση στο..."
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, kde-format
+msgid "&Page"
+msgstr "&Σελίδα"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, kde-format
+msgid "Para&graph"
+msgstr "Παρά&γραφος"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, kde-format
+msgid "&To Character"
+msgstr "Σ&τον χαρακτήρα"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, kde-format
+msgid "&As Character"
+msgstr "&Ως χαρακτήρας"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, kde-format
+msgid "Horizontal Alignment"
+msgstr "Οριζόντια στοίχιση"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, kde-format
+msgid "&Left"
+msgstr "&Αριστερά"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, kde-format
+msgid "&Center"
+msgstr "&Κέντρο"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, kde-format
+msgid "&Right"
+msgstr "&Δεξιά"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, kde-format
+msgid "Vertical Alignment"
+msgstr "Κατακόρυφη στοίχιση"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr "&Κορυφή"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr "&Μέση"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, kde-format
+msgid "&Bottom"
+msgstr "&Βάση"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, kde-format
+msgid "Text Wrap-around"
+msgstr "Περιρρέον κείμενο"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, kde-format
+msgid "Run through this shape"
+msgstr "Ρέει μέσα από αυτό το σχήμα"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, kde-format
+msgid "Skip below this shape"
+msgstr "Παραλειφθεί κάτω από αυτό το σχήμα"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, kde-format
+msgid "Run on left side of this shape"
+msgstr "Ρέει στην αριστερή πλευρά αυτού του σχήματος"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, kde-format
+msgid "Run on right side of this shape"
+msgstr "Ρέει στη δεξιά πλευρά αυτού του σχήματος"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, kde-format
+msgid "Run on longest side of this shape"
+msgstr "Ρέει στη μακρύτερη πλευρά αυτού του σχήματος"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, kde-format
+msgid "Run on both sides of this shape"
+msgstr "Ρέει και στις δύο πλευρές αυτού του σχήματος"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr "Ρέει στις πλευρές με πλάτος μεγαλύτερο από:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, kde-format
+msgid "Distance Between Shape and Text:"
+msgstr "Απόσταση μεταξύ σχήματος και κειμένου:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, kde-format
+msgid "Columns"
+msgstr "Στήλες"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, kde-format
+msgid "Style"
+msgstr "Στιλ"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, kde-format
+msgid "Clone"
+msgstr "Κλώνος"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, kde-format
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "Αλλαγή στιλ σελίδας"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr "Προσθήκη νέου στιλ σελίδας με όνομα:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Clone Page Style"
+msgstr "Κλωνοποίηση στιλ σελίδας"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr "Το κείμενο αλλού θα:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr "Το σχήμα επηρεάζει το κείμενο με το:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr "Περιοριστικό πλαίσιο"
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr "Περίγραμμα"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr "Το σχήμα και το κείμενο είναι διαχωρισμένα:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, kde-format
+msgid "Left by:"
+msgstr "Αριστερά με:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr "Επάνω με:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr "Κάτω με:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, kde-format
+msgid "Right by:"
+msgstr "Δεξιά με:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, kde-format
+msgid "&Rename"
+msgstr "Μετο&νομασία"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, kde-format
+msgid "&Delete"
+msgstr "&Διαγραφή"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Μετονομασία σελιδοδείκτη"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr "Παρακαλώ εισάγετε ένα νέο όνομα σελιδοδείκτη"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr "Σελιδοδείκτης με το όνομα \"%1\" υπάρχει ήδη."
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, kde-format
+msgid "Select Bookmark"
+msgstr "Επιλογή σελιδοδείκτη"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "Γεωμετρία"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, kde-format
+msgid "Page Size && Margins"
+msgstr "Μέγεθος σελίδας && περιθώρια"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, kde-format
+msgid "Create"
+msgstr "Δημιουργία"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr "Αποσφαλμάτωση"
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, kde-format
+msgid "Navigation"
+msgstr "Πλοήγηση"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, kde-format
+msgid "Page #"
+msgstr "Σελίδα #"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, kde-format
+msgid "Section"
+msgstr "Ενότητα"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr "RDF"
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "Στατιστική"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "Λέξεις:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "Προτάσεις:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "Συλλαβές:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, kde-format
+msgid "Characters (spaces):"
+msgstr "Χαρακτήρες (κενά):"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, kde-format
+msgid "Characters (no spaces):"
+msgstr "Χαρακτήρες (χωρίς κενά):"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr "Γραμμές:"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr "Αναγνωσιμότητα:"
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, kde-format
+msgid "Flesch reading ease"
+msgstr "Ευκολία στην ανάγνωση του Flesch"
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, kde-format
+msgid "East asian characters:"
+msgstr "Χαρακτήρες ανατολικής Ασίας:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, kde-format
+msgid "Words"
+msgstr "Λέξεις"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, kde-format
+msgid "Sentences"
+msgstr "Προτάσεις"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, kde-format
+msgid "Syllables"
+msgstr "Συλλαβές"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, kde-format
+msgid "Lines"
+msgstr "Γραμμές"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, kde-format
+msgid "Characters With Spaces"
+msgstr "Χαρακτήρες με τα κενά"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, kde-format
+msgid "Characters without spaces"
+msgstr "Χαρακτήρες χωρίς τα κενά"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, kde-format
+msgid "East Asian characters"
+msgstr "Χαρακτήρες ανατολικής Ασίας"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, kde-format
+msgid "Flesch Reading Ease"
+msgstr "Ευκολία ανάγνωσης Flesch"
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "Τυπικό"
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "Κεφαλή 1"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "Κεφαλή 2"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "Κεφαλή 3"
+
+#: part/i18n/stylenames.cpp:12
+#, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "Αριθμημένη λίστα"
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "Αλφαβητική λίστα"
+
+#: part/i18n/stylenames.cpp:14
+#, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "Λίστα κουκίδων"
+
+#: part/i18n/stylenames.cpp:15
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "Τίτλος περιεχομένων"
+
+#: part/i18n/stylenames.cpp:16
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "Κεφαλή περιεχομένων 1"
+
+#: part/i18n/stylenames.cpp:17
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "Κεφαλή περιεχομένων 2"
+
+#: part/i18n/stylenames.cpp:18
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "Κεφαλή περιεχομένων 3"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "Τίτλος εγγράφου"
+
+#: part/i18n/stylenames.cpp:20
+#, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "Κεφαλίδα"
+
+#: part/i18n/stylenames.cpp:21
+#, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "Υποσέλιδο"
+
+#: part/i18n/stylenames.cpp:24
+#, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "Απλό"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "Περιγράμματα 1"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "Περιγράμματα 2"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "Περιγράμματα 3"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "Γραμμή"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "Στήλη"
+
+#: part/i18n/stylenames.cpp:30
+#, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "Ανοιχτό γκρι"
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "Σκούρο γκρι"
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "Μαύρο"
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "Ανοιχτό μπλε"
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "Σκούρο μπλε"
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "Κόκκινο"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "Κίτρινο"
+
+#: part/i18n/stylenames.cpp:37
+#, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "Πολύχρωμο"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "Κυανό"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "Απλό 1"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "Απλό 2"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "Απλό 3"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "Κεφαλίδα 1"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "Κεφαλίδα 2"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "Κεφαλίδα 3"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "Κεφαλίδα 4"
+
+#: part/i18n/stylenames.cpp:50
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "Στήλες 1"
+
+#: part/i18n/stylenames.cpp:51
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "Στήλες 2"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "Κάνναβος 1"
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "Κάνναβος 2"
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "Κάνναβος 3"
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "Γκρι κεφαλή"
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "Μπλε κεφαλή"
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "Μπλε παραδοσιακό"
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "Γκρι παραδοσιακό"
+
+#: part/i18n/stylenames.cpp:59
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "Μπλε άνω και κάτω"
+
+#: part/i18n/stylenames.cpp:60
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "Γκρι άνω και κάτω"
+
+#: part/KWAboutData.h:20
+#, kde-format
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "Calligra Words"
+
+#: part/KWAboutData.h:22
+#, kde-format
+msgid "Word processor"
+msgstr "Επεξεργαστής κειμένου"
+
+#: part/KWAboutData.h:24
+#, kde-format
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "Copyright 1998-%1, η ομάδα του Words"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr "Εκ των συντηρητών"
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr "Pierre Ducroquet"
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr "C. Boemann"
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr "Όλα"
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr "Sebastian Sauer"
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Formatting stuff"
+msgstr "Εργασίες σχηματοποίησης"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr "Thorsten Zachmann"
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, kde-format
+msgid "Filter"
+msgstr "Φίλτρο"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr "Matus Uzak"
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr "Διάταξη και ζωγραφική"
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr "Pavol Korinek"
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr "Shreya Pandit"
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Statistics docker"
+msgstr "Προσάρτηση στατιστικής"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr "Brijesh Patel"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Foot and endnotes"
+msgstr "Υποσημειώσεις και σημειώσεις τέλους"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr "Βιβλιογραφία"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr "Smit Patel"
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr "Mojtaba Shahi"
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Style Manager"
+msgstr "Διαχείριση στιλ"
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr "Lassi Nieminen"
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr "Hanzes Matus"
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr "Lukáš Tvrdý"
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr "Girish Ramakrishnan"
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, kde-format
+msgid "ODF Support"
+msgstr "Υποστήριξη ODF"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr "Robert Mathias Marmorstein"
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr "Sven Lüppken"
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr "Frank Dekervel"
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr "Krister Wicksell Eriksson"
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr "Dag Andersen"
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr "Nash Hoogwater"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "KFormula"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr "Ulrich Kuettler"
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr "Shaheed Haque"
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr "Clarence Dang"
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr "Robert Jacolin"
+
+#: part/KWAboutData.h:65
+#, kde-format
+msgid "Enno Bartels"
+msgstr "Enno Bartels"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr "Ewald Snel"
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr "Tomasz Grobelny"
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr "Michael Johnson"
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr "Fatcow Web Hosting"
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Page break icon"
+msgstr "Εικονίδιο αλλαγής σελίδας"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Σπύρος Γεωργαράς, Τούσης Μανώλης"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "sng@hellug.gr, manolis@koppermind.homelinux.org"
+
+#: part/KWDocument.cpp:495
+#, kde-format
+msgid "Copy"
+msgstr "Αντιγραφή"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, kde-format
+msgid "Standard"
+msgstr "Τυπικό"
+
+#: part/KWDocument.cpp:546
+#, kde-format
+msgid "Document Title"
+msgstr "Τίτλος εγγράφου"
+
+#: part/KWDocument.cpp:553
+#, kde-format
+msgid "Head 1"
+msgstr "Κεφαλή 1"
+
+#: part/KWDocument.cpp:559
+#, kde-format
+msgid "Head 2"
+msgstr "Κεφαλή 2"
+
+#: part/KWDocument.cpp:565
+#, kde-format
+msgid "Head 3"
+msgstr "Κεφαλή 3"
+
+#: part/KWDocument.cpp:571
+#, kde-format
+msgid "Bullet List"
+msgstr "Λίστα κουκκίδων"
+
+#: part/KWGui.cpp:69
+#, kde-format
+msgid "Tools"
+msgstr "Εργαλεία"
+
+#: part/KWOdfLoader.cpp:83
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr ""
+"Μη έγκυρο αρχείο OASIS OpenDocument. Δεν βρέθηκε η ετικέτα office:body."
+
+#: part/KWOdfLoader.cpp:95
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr ""
+"Μη έγκυρο αρχείο OASIS OpenDocument. Δεν βρέθηκε ετικέτα μέσα στο office:"
+"body."
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+"Αυτό δεν είναι ένα έγγραφο επεξεργασίας κειμένου, αλλά %1. Παρακαλώ "
+"δοκιμάστε να το ανοίξετε με την κατάλληλη εφαρμογή."
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, kde-format
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "Τυπικό"
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+"Αδυναμία εύρεσης του απαιτούμενου συστατικού κειμένου. Το Words θα "
+"τερματίσει αμέσως"
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr "Σφάλμα εγκατάστασης"
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr "Τροποποιήθηκε"
+
+#: part/KWStatusBar.cpp:36
+#, kde-format
+msgid "Saved"
+msgstr "Αποθηκεύτηκε"
+
+#: part/KWStatusBar.cpp:37
+#, kde-format
+msgid "Page %1 of %2"
+msgstr "Σελίδα %1 από %2"
+
+#: part/KWStatusBar.cpp:38
+#, kde-format
+msgid "Page %1-%2 of %3"
+msgstr "Σελίδα %1-%2 από %3"
+
+#: part/KWStatusBar.cpp:39
+#, kde-format
+msgid "Line %1"
+msgstr "Γραμμή %1"
+
+#: part/KWStatusBar.cpp:124
+#, kde-format
+msgid "Page Number"
+msgstr "Αριθμός σελίδας"
+
+#: part/KWStatusBar.cpp:137
+#, kde-format
+msgid "Line Number"
+msgstr "Αριθμός γραμμής"
+
+#: part/KWStatusBar.cpp:149
+#, kde-format
+msgid "Change the page style"
+msgstr "Αλλαγή του στιλ της σελίδας"
+
+#: part/KWStatusBar.cpp:155
+#, kde-format
+msgid "Page Style"
+msgstr "Στιλ σελίδας"
+
+#: part/KWStatusBar.cpp:169
+#, kde-format
+msgid "Page Size"
+msgstr "Μέγεθος σελίδας"
+
+#: part/KWStatusBar.cpp:184
+#, kde-format
+msgid "Saved/Modified"
+msgstr "Αποθηκεύτηκε/Τροποποιήθηκε"
+
+#: part/KWStatusBar.cpp:197
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr "Θέση ποντικιού X:Y"
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr "Έλεγχος εστίασης"
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr "Έξοδος από τη λειτουργία πλήρους οθόνης"
+
+#: part/KWView.cpp:260
+#, kde-format
+msgid "Shape Properties..."
+msgstr "Ιδιότητες σχήματος..."
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr "Τροποποίηση συμπεριφοράς σχήματος"
+
+#: part/KWView.cpp:271
+#, kde-format
+msgid "Create Template From Document..."
+msgstr "Δημιουργία προτύπου από έγγραφο..."
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr ""
+"Να αποθηκευθεί αυτό το έγγραφο και να χρησιμοποιηθεί αργότερα ως πρότυπο"
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+"Μπορείτε να αποθηκεύσετε αυτό το έγγραφο ως πρότυπο. <br><br>Μπορείτε να "
+"χρησιμοποιήσετε αυτό το νέο πρότυπο ως σημείο εκκίνησης για άλλο έγγραφο."
+
+#: part/KWView.cpp:292
+#, kde-format
+msgid "Show Formatting Characters"
+msgstr "Εμφάνιση χαρακτήρων σχηματοποίησης"
+
+#: part/KWView.cpp:298
+#, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr "Εναλλαγή της εμφάνισης μη εκτυπώσιμων χαρακτήρων"
+
+#: part/KWView.cpp:299
+#, kde-format
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+"Εναλλαγή της εμφάνισης μη εκτυπώσιμων χαρακτήρων.<br/><br/>Αν είναι ενεργό, "
+"το Words εμφανίζει τους στηλοθέτες, κενά, αλλαγές γραμμών και άλλους μη-"
+"εκτυπώσιμους χαρακτήρες."
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr "Εμφάνιση σκιάσεων πεδίων"
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr "Εναλλαγή στο σκιασμένο φόντο των πεδίων"
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+"Εναλλαγή της οπτικοποίησης των πεδίων (μεταβλητές κτλ.) σχεδιάζοντας το "
+"φόντο τους με χρωματική αντίθεση."
+
+#: part/KWView.cpp:310
+#, kde-format
+msgid "Show Text Shape Borders"
+msgstr "Εμφάνιση περιγραμμάτων σχήματος κειμένου"
+
+#: part/KWView.cpp:311
+#, kde-format
+msgid "Turns the border display on and off"
+msgstr "Εναλλαγή εμφάνισης των περιγραμμάτων"
+
+#: part/KWView.cpp:317
+#, kde-format
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+"Εναλλαγή εμφάνισης των περιγραμμάτων.<br/><br/>Τα περιγράμματα δεν "
+"εκτυπώνονται ποτέ. Αυτή η επιλογή είναι χρήσιμη όταν επιθυμείτε να "
+"εμφανιστεί το έγγραφο με τη μορφή που θα εκτυπωθεί."
+
+#: part/KWView.cpp:319
+#, kde-format
+msgid "Show Table Borders"
+msgstr "Εμφάνιση περιγραμμάτων πίνακα"
+
+#: part/KWView.cpp:325
+#, kde-format
+msgid "Toggle the display of table borders"
+msgstr "Εναλλαγή της εμφάνισης περιγραμμάτων πίνακα"
+
+#: part/KWView.cpp:326
+#, kde-format
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+"Εναλλαγή της εμφάνισης περιγραμμάτων πίνακα.<br/><br/>Αν είναι ενεργό, το "
+"Words εμφανίζει κάθε αόρατο περίγραμμα πίνακα με μια λεπτή γκρίζα γραμμή."
+
+#: part/KWView.cpp:328
+#, kde-format
+msgid "Show Section Bounds"
+msgstr "Εμφάνιση περιγραμμάτων ενοτήτων"
+
+#: part/KWView.cpp:334
+#, kde-format
+msgid "Toggle the display of section bounds"
+msgstr "Εναλλαγή της εμφάνισης περιγραμμάτων ενοτήτων"
+
+#: part/KWView.cpp:335
+#, kde-format
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+"Εναλλαγή της εμφάνισης περιγραμμάτων ενοτήτων.<br/><br/>Αν είναι ενεργό, τα "
+"περιγράμματα ενοτήτων θα δηλώνονται με με λεπτές γκρίζες οριζόντιες αγκύλες."
+
+#: part/KWView.cpp:337
+#, kde-format
+msgid "Show Rulers"
+msgstr "Εμφάνιση κανόνων"
+
+#: part/KWView.cpp:339
+#, kde-format
+msgid "Shows or hides rulers"
+msgstr "Εμφάνιση ή απόκρυψη κανόνων"
+
+#: part/KWView.cpp:340
+#, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+"Οι κανόνες είναι τα λευκά διαστήματα μέτρησης πάνω και αριστερά του "
+"εγγράφου. Οι κανόνες εμφανίζουν τη θέση και το πλάτος σελίδων και πλαισίων "
+"και μπορούν να χρησιμοποιηθούν για την τοποθέτηση των στηλοθετών."
+"<p>Απενεργοποιήστε αυτήν την επιλογή για την απόκρυψη των κανόνων.</p>"
+
+#: part/KWView.cpp:351
+#, kde-format
+msgid "Snap to Grid"
+msgstr "Προσαρμογή στον κάνναβο"
+
+#: part/KWView.cpp:359
+#, kde-format
+msgid "Show Status Bar"
+msgstr "Εμφάνιση γραμμής κατάστασης"
+
+#: part/KWView.cpp:360
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Εμφάνιση ή απόκρυψη της γραμμής κατάστασης"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr "Λειτουργία πλήρους οθόνης"
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr "Ορισμός προβολής σε λειτουργία πλήρους οθόνης"
+
+#: part/KWView.cpp:374
+#, kde-format
+msgid "Semantic Stylesheets..."
+msgstr "Σημασιολογικά φύλλα αισθητικής επικάλυψης..."
+
+#: part/KWView.cpp:376
+#, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr "Τροποποίηση και προσθήκη φύλλων αισθητικής επικάλυψης"
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+"Τα φύλλα αισθητικής επικάλυψης χρησιμοποιούνται για τη μορφοποίηση της "
+"εμφάνισης της πληροφορίας που αποθηκεύεται σε RDF."
+
+#: part/KWView.cpp:392
+#, kde-format
+msgid "Configure..."
+msgstr "Διαμόρφωση..."
+
+#: part/KWView.cpp:401
+#, kde-format
+msgid "Page Layout..."
+msgstr "Σελιδοποίηση..."
+
+#: part/KWView.cpp:403
+#, kde-format
+msgid "Change properties of entire page"
+msgstr "Τροποποίηση ιδιοτήτων ολόκληρης της σελίδας"
+
+#: part/KWView.cpp:404
+#, kde-format
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+"Τροποποίηση ιδιοτήτων ολόκληρης της σελίδας.<p>Για την ώρα μπορείτε να "
+"τροποποιήσετε το μέγεθος χαρτιού, τον προσανατολισμό, τα μεγέθη κεφαλίδας "
+"και υποσέλιδου και τις ρυθμίσεις των στηλών.</p>"
+
+#: part/KWView.cpp:407
+#, kde-format
+msgid "Create Header"
+msgstr "Δημιουργία κεφαλίδας"
+
+#: part/KWView.cpp:413
+#, kde-format
+msgid "Create Footer"
+msgstr "Δημιουργία υποσέλιδου"
+
+#: part/KWView.cpp:420
+#, kde-format
+msgid "Show Comments"
+msgstr "Εμφάνιση σχολίων"
+
+#: part/KWView.cpp:421
+#, kde-format
+msgid "Shows comments in the document"
+msgstr "Εμφάνιση σχολίων στο έγγραφο"
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr "Καταμέτρηση λέξεων"
+
+#: part/KWView.cpp:428
+#, kde-format
+msgid "Shows or hides word counting in status bar"
+msgstr "Εμφάνιση ή απόκρυψη της καταμέτρησης λέξεων στη γραμμή κατάστασης"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, kde-format
+msgid "Page Setup"
+msgstr "Ρύθμιση σελίδας"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, kde-format
+msgid "Header & Footer"
+msgstr "Κεφαλίδα & Υποσέλιδο"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, kde-format
+msgid "Page layout"
+msgstr "Σελιδοποίηση"
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr "Εύρεση:"
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, kde-format
+msgctxt "Next search result"
+msgid "Next"
+msgstr "Επόμενο"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, kde-format
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "Προηγούμενο"
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, kde-format
+msgctxt "Search options"
+msgid "Options"
+msgstr "Επιλογές"
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, kde-format
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr "Αντικατάσταση:"
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, kde-format
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr "Αντικατάσταση"
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, kde-format
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr "Αντικατάσταση όλων"
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, kde-format
+msgid "Replace"
+msgstr "Αντικατάσταση"
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] "1 ταίριασμα βρέθηκε"
+msgstr[1] "%1 ταιριάσματα βρέθηκαν"
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr "Δεν βρέθηκαν ταιριάσματα"
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr "Η αναζήτηση έφτασε στο τέλος, συνέχεια από την αρχή."
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr "Η αναζήτηση έφτασε στην αρχή, συνέχεια από το τέλος."
+
+#: part/Words.cpp:45
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Κεφαλίδα μονών σελίδων"
+
+#: part/Words.cpp:47
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Κεφαλίδα ζυγών σελίδων"
+
+#: part/Words.cpp:49
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Υποσέλιδο μονών σελίδων"
+
+#: part/Words.cpp:51
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Υποσέλιδο ζυγών σελίδων"
+
+#: part/Words.cpp:53
+#, kde-format
+msgid "Main text"
+msgstr "Κύριο κείμενο"
+
+#: part/Words.cpp:55
+#, kde-format
+msgid "Other text"
+msgstr "Άλλο κείμενο"
+
+#~ msgid "Distraction Free Mode"
+#~ msgstr "Λειτουργία χωρίς απόσπαση προσοχής"
+
+#, fuzzy
+#~| msgid "Anchor to..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor to..."
+#~ msgstr "Αγκύρωση στο..."
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "&Σελίδα"
+
+#, fuzzy
+#~| msgid "Para&graph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "Παρά&γραφος"
+
+#, fuzzy
+#~| msgid "&To Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "Σ&τον χαρακτήρα"
+
+#, fuzzy
+#~| msgid "&As Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "&Ως χαρακτήρας"
+
+#, fuzzy
+#~| msgid "Horizontal Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Οριζόντια στοίχιση"
+
+#, fuzzy
+#~| msgid "&Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "&Αριστερά"
+
+#, fuzzy
+#~| msgid "&Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Center"
+#~ msgstr "&Κέντρο"
+
+#, fuzzy
+#~| msgid "&Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "&Δεξιά"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Alignment"
+#~ msgstr "Κατακόρυφη στοίχιση"
+
+#, fuzzy
+#~| msgid "&Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Top"
+#~ msgstr "&Κορυφή"
+
+#, fuzzy
+#~| msgid "&Middle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Middle"
+#~ msgstr "&Μέση"
+
+#, fuzzy
+#~| msgid "&Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "&Βάση"
+
+#, fuzzy
+#~| msgid "Text Wrap-around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Wrap-around"
+#~ msgstr "Περιρρέον κείμενο"
+
+#, fuzzy
+#~| msgid "Run through this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "Ρέει μέσα από αυτό το σχήμα"
+
+#, fuzzy
+#~| msgid "Skip below this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "Παραλειφθεί κάτω από αυτό το σχήμα"
+
+#, fuzzy
+#~| msgid "Run on left side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "Ρέει στην αριστερή πλευρά αυτού του σχήματος"
+
+#, fuzzy
+#~| msgid "Run on right side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "Ρέει στη δεξιά πλευρά αυτού του σχήματος"
+
+#, fuzzy
+#~| msgid "Run on longest side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "Ρέει στη μακρύτερη πλευρά αυτού του σχήματος"
+
+#, fuzzy
+#~| msgid "Run on both sides of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "Ρέει και στις δύο πλευρές αυτού του σχήματος"
+
+#, fuzzy
+#~| msgid "Run on sides that are wider than:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on sides that are wider than:"
+#~ msgstr "Ρέει στις πλευρές με πλάτος μεγαλύτερο από:"
+
+#, fuzzy
+#~| msgid "Distance Between Shape and Text:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance Between Shape and Text:"
+#~ msgstr "Απόσταση μεταξύ σχήματος και κειμένου:"
+
+#, fuzzy
+#~| msgid "Shape relation to text is:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape relation to text is:"
+#~ msgstr "Η σχέση του σχήματος με το κείμενο είναι:"
+
+#, fuzzy
+#~| msgid "Inline with text (behaves as a character)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inline with text (behaves as a character)"
+#~ msgstr "Εμβόλιμο με το κείμενο (συμπεριφέρεται ως χαρακτήρας)"
+
+#, fuzzy
+#~| msgid "Floating, but anchored to a character position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Floating, but anchored to a character position"
+#~ msgstr "Κινούμενο, αλλά αγκυρωμένο σε θέση χαρακτήρα"
+
+#, fuzzy
+#~| msgid "Floating, but anchored to a paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Floating, but anchored to a paragraph"
+#~ msgstr "Κινούμενο, αλλά αγκυρωμένο σε παράγραφο"
+
+#, fuzzy
+#~| msgid "Floating free (not anchored to text)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Floating free (not anchored to text)"
+#~ msgstr "Κινούμενο ελεύθερα (όχι αγκυρωμένο σε κείμενο)"
+
+#, fuzzy
+#~| msgid "Vertical Positioning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "Κατακόρυφη τοποθέτηση"
+
+#, fuzzy
+#~| msgid "Top align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top align with:"
+#~ msgstr "Στοίχιση στην κορυφή με:"
+
+#, fuzzy
+#~| msgid "Center align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center align with:"
+#~ msgstr "Στοίχιση στο κέντρο με:"
+
+#, fuzzy
+#~| msgid "Bottom align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom align with:"
+#~ msgstr "Στοίχιση στη βάση με:"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Μετατόπιση"
+
+#, fuzzy
+#~| msgid "from:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "από:"
+
+#, fuzzy
+#~| msgid "Horizontal Positioning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "Οριζόντια τοποθέτηση"
+
+#, fuzzy
+#~| msgid "Left align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left align with:"
+#~ msgstr "Στοίχιση αριστερά με:"
+
+#, fuzzy
+#~| msgid "Right align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right align with:"
+#~ msgstr "Στοίχιση δεξιά με:"
+
+#, fuzzy
+#~| msgid "Name of frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "Όνομα συνόλου πλαισίων:"
+
+#, fuzzy
+#~| msgid "Create a new frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "Δημιουργία νέου συνόλου πλαισίων:"
+
+#, fuzzy
+#~| msgid "Select existing frameset to connect to:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select existing frameset to connect to:"
+#~ msgstr "Επιλέξτε υπάρχον σύνολο πλαισίων για σύνδεση:"
+
+#, fuzzy
+#~| msgid "Frameset Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "Όνομα συνόλου πλαισίων"
+
+#, fuzzy
+#~| msgid "&Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "Μετο&νομασία"
+
+#, fuzzy
+#~| msgid "&Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "&Διαγραφή"
+
+#, fuzzy
+#~| msgid ""
+#~| "Bookmarks allow you to jump between parts of your document.\n"
+#~| "Please provide the name of your bookmark."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Bookmarks allow you to jump between parts of your document.\n"
+#~ "Please provide the name of your bookmark."
+#~ msgstr ""
+#~ "Οι σελιδοδείκτες σάς επιτρέπουν τη μετάβαση σε διάφορα σημεία του "
+#~ "εγγράφου σας.\n"
+#~ "Παρακαλώ εισάγετε το όνομα του σελιδοδείκτη σας."
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Όνομα:"
+
+#, fuzzy
+#~| msgid "Page Size && Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "Μέγεθος σελίδας && περιθώρια"
+
+#, fuzzy
+#~| msgid "Text elsewhere will:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text elsewhere will:"
+#~ msgstr "Το κείμενο αλλού θα:"
+
+#, fuzzy
+#~| msgid "The shape affects the text by its:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The shape affects the text by its:"
+#~ msgstr "Το σχήμα επηρεάζει το κείμενο με το:"
+
+#, fuzzy
+#~| msgid "Bounding box"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bounding box"
+#~ msgstr "Περιοριστικό πλαίσιο"
+
+#, fuzzy
+#~| msgid "Contour"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contour"
+#~ msgstr "Περίγραμμα"
+
+#, fuzzy
+#~| msgid "Shape and text is separated:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape and text is separated:"
+#~ msgstr "Το σχήμα και το κείμενο είναι διαχωρισμένα:"
+
+#, fuzzy
+#~| msgid "Left by:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "Αριστερά με:"
+
+#, fuzzy
+#~| msgid "Above by:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Above by:"
+#~ msgstr "Επάνω με:"
+
+#, fuzzy
+#~| msgid "Below by:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Below by:"
+#~ msgstr "Κάτω με:"
+
+#, fuzzy
+#~| msgid "Right by:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "Δεξιά με:"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Στήλες:"
+
+#, fuzzy
+#~| msgid "Column spacing:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "Απόσταση στηλών:"
+
+#, fuzzy
+#~| msgid "Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "Λέξεις"
+
+#, fuzzy
+#~| msgid "Sentences"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "Προτάσεις"
+
+#, fuzzy
+#~| msgid "Syllables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "Συλλαβές"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Γραμμές"
+
+#, fuzzy
+#~| msgid "Characters With Spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "Χαρακτήρες με τα κενά"
+
+#, fuzzy
+#~| msgid "Characters without spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "Χαρακτήρες χωρίς τα κενά"
+
+#, fuzzy
+#~| msgid "East Asian characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "Χαρακτήρες ανατολικής Ασίας"
+
+#, fuzzy
+#~| msgid "Flesch Reading Ease"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch Reading Ease"
+#~ msgstr "Ευκολία ανάγνωσης Flesch"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Αρχείο"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Επεξεργασία"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Προβολή"
+
+#, fuzzy
+#~| msgid "&Display Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "Λειτουργία &εμφάνισης"
+
+#, fuzzy
+#~| msgid "Semantics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "Σημασιολογία"
+
+#, fuzzy
+#~| msgid "S&tyles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&tyles"
+#~ msgstr "Σ&τιλ"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Ρυθμίσεις"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "Ορθογραφικός έλεγχος"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Επεξεργασία"
+
+#, fuzzy
+#~| msgid "Spell Check Result"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "Αποτέλεσμα ορθογραφικού ελέγχου"
+
+#, fuzzy
+#~| msgid "Change Variable To"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "Τροποποίηση μεταβλητής σε"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "&Εργαλεία"
+
+#, fuzzy
+#~| msgid "Baseline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "Αφετηρία"
+
+#, fuzzy
+#~| msgid "Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "Χαρακτήρας"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Γραμμή"
+
+#, fuzzy
+#~| msgid "Page (entire) area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page (entire) area"
+#~ msgstr "Περιοχή (πλήρους) σελίδας"
+
+#, fuzzy
+#~| msgid "Page text area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "Περιοχή κειμένου σελίδας"
+
+#, fuzzy
+#~| msgid "Paragraph area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "Περιοχή παραγράφου"
+
+#, fuzzy
+#~| msgid "Paragraph text area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "Περιοχή κειμένου παραγράφου"
+
+#, fuzzy
+#~| msgid "Left page border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "Περίγραμμα αριστερής σελίδας"
+
+#, fuzzy
+#~| msgid "Right page border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "Περίγραμμα δεξιάς σελίδας"
+
+#, fuzzy
+#~| msgid "Right paragraph border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right paragraph border"
+#~ msgstr "Περίγραμμα δεξιάς παραγράφου"
+
+#, fuzzy
+#~| msgid "Left paragraph border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left paragraph border"
+#~ msgstr "Περίγραμμα αριστερής παραγράφου"
+
+#, fuzzy
+#~| msgid "Configure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Διαμόρφωση"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Διάφορα"
+
+#, fuzzy
+#~| msgid "Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Κάνναβος"
+
+#, fuzzy
+#~| msgctxt "@title:tab Document settings page"
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Έγγραφο"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Ρυθμίσεις εγγράφων"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Συγγραφέας"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Συγγραφέας"
+
+#, fuzzy
+#~| msgid "Create New Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "Δημιουργία νέου σελιδοδείκτη"
+
+#, fuzzy
+#~| msgid "frameset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "σύνολο πλαισίων"
+
+#, fuzzy
+#~| msgid "No framesets in document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No framesets in document"
+#~ msgstr "Δεν υπάρχουν σύνολα πλαισίων στο έγγραφο"
+
+#, fuzzy
+#~| msgid "Smart Positioning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "Έξυπνη τοποθέτηση"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Run Around"
+#~ msgstr "Ροή κειμένου γύρω"
+
+#, fuzzy
+#~| msgid "Connect Text Frames"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "Σύνδεση πλαισίων κειμένου"
+
+#, fuzzy
+#~| msgid "Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "Στήλες"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Στιλ"
+
+#, fuzzy
+#~| msgid "Clone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "Κλώνος"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Διαγραφή"
+
+#, fuzzy
+#~| msgid "Add a new page style with the name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new page style with the name:"
+#~ msgstr "Προσθήκη νέου στιλ σελίδας με όνομα:"
+
+#, fuzzy
+#~| msgid "Clone Page Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "Κλωνοποίηση στιλ σελίδας"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Μετονομασία σελιδοδείκτη"
+
+#, fuzzy
+#~| msgid "Please provide a new name for the bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please provide a new name for the bookmark"
+#~ msgstr "Παρακαλώ εισάγετε ένα νέο όνομα σελιδοδείκτη"
+
+#, fuzzy
+#~| msgid "A bookmark with the name \"%1\" already exists."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr "Σελιδοδείκτης με το όνομα \"%1\" υπάρχει ήδη."
+
+#, fuzzy
+#~| msgid "Select Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "Επιλογή σελιδοδείκτη"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Γεωμετρία"
+
+#, fuzzy
+#~| msgid "Salutation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "Χαιρετισμός"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "&Σελίδα"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "Συναρτήσεις"
+
+#, fuzzy
+#~| msgid "RDF"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RDF"
+#~ msgstr "RDF"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "Στατιστική"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "Λέξεις:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "Προτάσεις:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "Συλλαβές:"
+
+#, fuzzy
+#~| msgid "Characters (spaces):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "Χαρακτήρες (κενά):"
+
+#, fuzzy
+#~| msgid "Characters (no spaces):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "Χαρακτήρες (χωρίς κενά):"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "Γραμμές:"
+
+#, fuzzy
+#~| msgid "Readability:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Readability:"
+#~ msgstr "Αναγνωσιμότητα:"
+
+#, fuzzy
+#~| msgid "Flesch reading ease"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch reading ease"
+#~ msgstr "Ευκολία στην ανάγνωση του Flesch"
+
+#, fuzzy
+#~| msgid "East asian characters:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "Χαρακτήρες ανατολικής Ασίας:"
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Standard"
+#~ msgstr "Τυπικό"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "Κεφαλή 1"
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "Κεφαλή 2"
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "Κεφαλή 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Enumerated List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "Αριθμημένη λίστα"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Alphabetical List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "Αλφαβητική λίστα"
+
+#, fuzzy
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "Λίστα κουκκίδων"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "Τίτλος περιεχομένων"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "Κεφαλή περιεχομένων 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "Κεφαλή περιεχομένων 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "Κεφαλή περιεχομένων 3"
+
+#, fuzzy
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "Τίτλος εγγράφου"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "Κεφαλίδα"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "Υποσέλιδο"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Plain"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "Απλό"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "Περιγράμματα 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "Περιγράμματα 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "Περιγράμματα 3"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "Γραμμή"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "Στήλη"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "Ανοιχτό γκρι"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "Σκούρο γκρι"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "Μαύρο"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "Ανοιχτό μπλε"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "Σκούρο μπλε"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "Κόκκινο"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "Κίτρινο"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Colorful"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "Πολύχρωμο"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bluish"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "Κυανό"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "Απλό 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "Απλό 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "Απλό 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "Κεφαλίδα 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "Κεφαλίδα 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "Κεφαλίδα 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 4"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "Κεφαλίδα 4"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "Στήλες 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "Στήλες 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "Κάνναβος 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "Κάνναβος 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "Κάνναβος 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "Γκρι κεφαλή"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "Μπλε κεφαλή"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "Μπλε παραδοσιακό"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "Γκρι παραδοσιακό"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "Μπλε άνω και κάτω"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "Γκρι άνω και κάτω"
+
+#, fuzzy
+#~| msgctxt "application name"
+#~| msgid "Calligra Words"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "Calligra Words"
+
+#, fuzzy
+#~| msgid "Word processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "Επεξεργαστής κειμένου"
+
+#, fuzzy
+#~| msgid "© 1998-2013, The Words Team"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "© 1998-2013, η ομάδα του Words"
+
+#, fuzzy
+#~| msgid "Co maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Co maintainer"
+#~ msgstr "Εκ των συντηρητών"
+
+#, fuzzy
+#~| msgid "Pierre Ducroquet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Ducroquet"
+#~ msgstr "Pierre Ducroquet"
+
+#, fuzzy
+#~| msgid "C. Boemann"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C. Boemann"
+#~ msgstr "C. Boemann"
+
+#, fuzzy
+#~| msgid "Everything"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Everything"
+#~ msgstr "Όλα"
+
+#, fuzzy
+#~| msgid "Sebastian Sauer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sebastian Sauer"
+#~ msgstr "Sebastian Sauer"
+
+#, fuzzy
+#~| msgid "Boudewijn Rempt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#, fuzzy
+#~| msgid "Pierre Stirnweiss"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#, fuzzy
+#~| msgid "Formatting stuff"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "Εργασίες σχηματοποίησης"
+
+#, fuzzy
+#~| msgid "Inge Wallin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#, fuzzy
+#~| msgid "Thorsten Zachmann"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thorsten Zachmann"
+#~ msgstr "Thorsten Zachmann"
+
+#, fuzzy
+#~| msgid "Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "Φίλτρο"
+
+#, fuzzy
+#~| msgid "Matus Uzak"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Matus Uzak"
+#~ msgstr "Matus Uzak"
+
+#, fuzzy
+#~| msgid "Layout and Painting"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout and Painting"
+#~ msgstr "Διάταξη και ζωγραφική"
+
+#, fuzzy
+#~| msgid "Pavol Korinek"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pavol Korinek"
+#~ msgstr "Pavol Korinek"
+
+#, fuzzy
+#~| msgid "Shreya Pandit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shreya Pandit"
+#~ msgstr "Shreya Pandit"
+
+#, fuzzy
+#~| msgid "Statistics docker"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "Προσάρτηση στατιστικής"
+
+#, fuzzy
+#~| msgid "Brijesh Patel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Brijesh Patel"
+#~ msgstr "Brijesh Patel"
+
+#, fuzzy
+#~| msgid "Foot and endnotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "Υποσημειώσεις και σημειώσεις τέλους"
+
+#, fuzzy
+#~| msgid "Bibliography"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bibliography"
+#~ msgstr "Βιβλιογραφία"
+
+#, fuzzy
+#~| msgid "Smit Patel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smit Patel"
+#~ msgstr "Smit Patel"
+
+#, fuzzy
+#~| msgid "Mojtaba Shahi"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mojtaba Shahi"
+#~ msgstr "Mojtaba Shahi"
+
+#, fuzzy
+#~| msgid "Style Manager"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "Διαχείριση στιλ"
+
+#, fuzzy
+#~| msgid "Lassi Nieminen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lassi Nieminen"
+#~ msgstr "Lassi Nieminen"
+
+#, fuzzy
+#~| msgid "Hanzes Matus"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hanzes Matus"
+#~ msgstr "Hanzes Matus"
+
+#, fuzzy
+#~| msgid "Lukáš Tvrdý"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lukáš Tvrdý"
+#~ msgstr "Lukáš Tvrdý"
+
+#, fuzzy
+#~| msgid "Thomas Zander"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#, fuzzy
+#~| msgid "Girish Ramakrishnan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Girish Ramakrishnan"
+#~ msgstr "Girish Ramakrishnan"
+
+#, fuzzy
+#~| msgid "ODF Support"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ODF Support"
+#~ msgstr "Υποστήριξη ODF"
+
+#, fuzzy
+#~| msgid "Robert Mathias Marmorstein"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Robert Mathias Marmorstein"
+#~ msgstr "Robert Mathias Marmorstein"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~| msgid "Laurent Montel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#, fuzzy
+#~| msgid "Sven Lüppken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sven Lüppken"
+#~ msgstr "Sven Lüppken"
+
+#, fuzzy
+#~| msgid "Frank Dekervel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frank Dekervel"
+#~ msgstr "Frank Dekervel"
+
+#, fuzzy
+#~| msgid "Krister Wicksell Eriksson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Krister Wicksell Eriksson"
+#~ msgstr "Krister Wicksell Eriksson"
+
+#, fuzzy
+#~| msgid "Dag Andersen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dag Andersen"
+#~ msgstr "Dag Andersen"
+
+#, fuzzy
+#~| msgid "Nash Hoogwater"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nash Hoogwater"
+#~ msgstr "Nash Hoogwater"
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "KFormula"
+
+#, fuzzy
+#~| msgid "Ulrich Kuettler"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ulrich Kuettler"
+#~ msgstr "Ulrich Kuettler"
+
+#, fuzzy
+#~| msgid "Shaheed Haque"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shaheed Haque"
+#~ msgstr "Shaheed Haque"
+
+#, fuzzy
+#~| msgid "Werner Trobin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Werner Trobin"
+
+#, fuzzy
+#~| msgid "Nicolas Goutte"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "Nicolas Goutte"
+
+#, fuzzy
+#~| msgid "Ariya Hidayat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "Ariya Hidayat"
+
+#, fuzzy
+#~| msgid "Clarence Dang"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clarence Dang"
+#~ msgstr "Clarence Dang"
+
+#, fuzzy
+#~| msgid "Robert Jacolin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Robert Jacolin"
+#~ msgstr "Robert Jacolin"
+
+#, fuzzy
+#~| msgid "Enno Bartels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "Enno Bartels"
+
+#, fuzzy
+#~| msgid "Ewald Snel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ewald Snel"
+#~ msgstr "Ewald Snel"
+
+#, fuzzy
+#~| msgid "Tomasz Grobelny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomasz Grobelny"
+#~ msgstr "Tomasz Grobelny"
+
+#, fuzzy
+#~| msgid "Michael Johnson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Michael Johnson"
+#~ msgstr "Michael Johnson"
+
+#, fuzzy
+#~| msgid "Fatcow Web Hosting"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fatcow Web Hosting"
+#~ msgstr "Fatcow Web Hosting"
+
+#, fuzzy
+#~| msgid "Page break icon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "Εικονίδιο αλλαγής σελίδας"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Σπύρος Γεωργαράς, Τούσης Μανώλης"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sng@hellug.gr, manolis@koppermind.homelinux.org"
+
+#, fuzzy
+#~| msgid "Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Αντιγραφή"
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Τυπικό"
+
+#, fuzzy
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "Τίτλος εγγράφου"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "Κεφαλή 1"
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "Κεφαλή 2"
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "Κεφαλή 3"
+
+#, fuzzy
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "Λίστα κουκκίδων"
+
+#, fuzzy
+#~| msgid "Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "Εργαλεία"
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr ""
+#~ "Μη έγκυρο αρχείο OASIS OpenDocument. Δεν βρέθηκε η ετικέτα office:body."
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr ""
+#~ "Μη έγκυρο αρχείο OASIS OpenDocument. Δεν βρέθηκε ετικέτα μέσα στο office:"
+#~ "body."
+
+#, fuzzy
+#~| msgid ""
+#~| "This is not a word processing document, but %1. Please try opening it "
+#~| "with the appropriate application."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This is not a word processing document, but %1. Please try opening it "
+#~ "with the appropriate application."
+#~ msgstr ""
+#~ "Αυτό δεν είναι ένα έγγραφο επεξεργασίας κειμένου, αλλά %1. Παρακαλώ "
+#~ "δοκιμάστε να το ανοίξετε με την κατάλληλη εφαρμογή."
+
+#, fuzzy
+#~| msgid "Can not find needed text component, Words will quit now"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Can not find needed text component, Words will quit now"
+#~ msgstr ""
+#~ "Αδυναμία εύρεσης του απαιτούμενου συστατικού κειμένου. Το Words θα "
+#~ "τερματίσει αμέσως"
+
+#, fuzzy
+#~| msgid "Installation Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Installation Error"
+#~ msgstr "Σφάλμα εγκατάστασης"
+
+#, fuzzy
+#~| msgid "Modified"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modified"
+#~ msgstr "Τροποποιήθηκε"
+
+#, fuzzy
+#~| msgid "Saved"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "Αποθηκεύτηκε"
+
+#, fuzzy
+#~| msgid "Page %1 of %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "Σελίδα %1 από %2"
+
+#, fuzzy
+#~| msgid "Page %1-%2 of %3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "Σελίδα %1-%2 από %3"
+
+#, fuzzy
+#~| msgid "Line %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "Γραμμή %1"
+
+#, fuzzy
+#~| msgid "Page Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Αριθμός σελίδας"
+
+#, fuzzy
+#~| msgid "Line Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "Αριθμός γραμμής"
+
+#, fuzzy
+#~| msgid "Page Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "Στιλ σελίδας"
+
+#, fuzzy
+#~| msgid "Page Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "Μέγεθος σελίδας"
+
+#, fuzzy
+#~| msgid "Saved/Modified"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved/Modified"
+#~ msgstr "Αποθηκεύτηκε/Τροποποιήθηκε"
+
+#, fuzzy
+#~| msgid "Mouse Cursor X:Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mouse Cursor X:Y"
+#~ msgstr "Θέση ποντικιού X:Y"
+
+#, fuzzy
+#~| msgid "Zoom Controller"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom Controller"
+#~ msgstr "Έλεγχος εστίασης"
+
+#, fuzzy
+#~| msgid "Exit Distraction-Free Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exit Distraction-Free Mode"
+#~ msgstr "Έξοδος από τη λειτουργία χωρίς απόσπαση προσοχής"
+
+#, fuzzy
+#~| msgid "Shape Properties..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "Ιδιότητες σχήματος..."
+
+#, fuzzy
+#~| msgid "Change how the shape behave"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change how the shape behave"
+#~ msgstr "Τροποποίηση συμπεριφοράς σχήματος"
+
+#, fuzzy
+#~| msgid "Create Template From Document..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template From Document..."
+#~ msgstr "Δημιουργία προτύπου από έγγραφο..."
+
+#, fuzzy
+#~| msgid "Save this document and use it later as a template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save this document and use it later as a template"
+#~ msgstr ""
+#~ "Να αποθηκευθεί αυτό το έγγραφο και να χρησιμοποιηθεί αργότερα ως πρότυπο"
+
+#, fuzzy
+#~| msgid ""
+#~| "You can save this document as a template.<br><br>You can use this new "
+#~| "template as a starting point for another document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "You can save this document as a template.<br><br>You can use this new "
+#~ "template as a starting point for another document."
+#~ msgstr ""
+#~ "Μπορείτε να αποθηκεύσετε αυτό το έγγραφο ως πρότυπο. <br><br>Μπορείτε να "
+#~ "χρησιμοποιήσετε αυτό το νέο πρότυπο ως σημείο εκκίνησης για άλλο έγγραφο."
+
+#, fuzzy
+#~| msgid "Show Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "Εμφάνιση χαρακτήρων σχηματοποίησης"
+
+#, fuzzy
+#~| msgid "Toggle the display of non-printing characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "Εναλλαγή της εμφάνισης μη εκτυπώσιμων χαρακτήρων"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~| "enabled, Words shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~ "enabled, Words shows you tabs, spaces, carriage returns and other non-"
+#~ "printing characters."
+#~ msgstr ""
+#~ "Εναλλαγή της εμφάνισης μη εκτυπώσιμων χαρακτήρων.<br/><br/>Αν είναι "
+#~ "ενεργό, το Words εμφανίζει τους στηλοθέτες, κενά, αλλαγές γραμμών και "
+#~ "άλλους μη-εκτυπώσιμους χαρακτήρες."
+
+#, fuzzy
+#~| msgid "Show Field Shadings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Field Shadings"
+#~ msgstr "Εμφάνιση σκιάσεων πεδίων"
+
+#, fuzzy
+#~| msgid "Toggle the shaded background of fields"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the shaded background of fields"
+#~ msgstr "Εναλλαγή στο σκιασμένο φόντο των πεδίων"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the visualization of fields (variables etc.) by drawing their "
+#~| "background in a contrasting color."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the visualization of fields (variables etc.) by drawing their "
+#~ "background in a contrasting color."
+#~ msgstr ""
+#~ "Εναλλαγή της οπτικοποίησης των πεδίων (μεταβλητές κτλ.) σχεδιάζοντας το "
+#~ "φόντο τους με χρωματική αντίθεση."
+
+#, fuzzy
+#~| msgid "Show Text Shape Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Text Shape Borders"
+#~ msgstr "Εμφάνιση περιγραμμάτων σχήματος κειμένου"
+
+#, fuzzy
+#~| msgid "Turns the border display on and off"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Turns the border display on and off"
+#~ msgstr "Εναλλαγή εμφάνισης των περιγραμμάτων"
+
+#, fuzzy
+#~| msgid ""
+#~| "Turns the border display on and off.<br/><br/>The borders are never "
+#~| "printed. This option is useful to see how the document will appear on "
+#~| "the printed page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Turns the border display on and off.<br/><br/>The borders are never "
+#~ "printed. This option is useful to see how the document will appear on the "
+#~ "printed page."
+#~ msgstr ""
+#~ "Εναλλαγή εμφάνισης των περιγραμμάτων.<br/><br/>Τα περιγράμματα δεν "
+#~ "εκτυπώνονται ποτέ. Αυτή η επιλογή είναι χρήσιμη όταν επιθυμείτε να "
+#~ "εμφανιστεί το έγγραφο με τη μορφή που θα εκτυπωθεί."
+
+#, fuzzy
+#~| msgid "Show Table Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "Εμφάνιση περιγραμμάτων πίνακα"
+
+#, fuzzy
+#~| msgid "Toggle the display of table borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of table borders"
+#~ msgstr "Εναλλαγή της εμφάνισης περιγραμμάτων πίνακα"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of table borders.<br/><br/>When this is enabled, "
+#~| "Words shows you any invisible table borders with a thin gray line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+#~ "shows you any invisible table borders with a thin gray line."
+#~ msgstr ""
+#~ "Εναλλαγή της εμφάνισης περιγραμμάτων πίνακα.<br/><br/>Αν είναι ενεργό, το "
+#~ "Words εμφανίζει κάθε αόρατο περίγραμμα πίνακα με μια λεπτή γκρίζα γραμμή."
+
+#, fuzzy
+#~| msgid "Toggle the display of table borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of section bounds"
+#~ msgstr "Εναλλαγή της εμφάνισης περιγραμμάτων πίνακα"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of table borders.<br/><br/>When this is enabled, "
+#~| "Words shows you any invisible table borders with a thin gray line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+#~ "section bounds will be indicated with a thin gray horizontal brackets."
+#~ msgstr ""
+#~ "Εναλλαγή της εμφάνισης περιγραμμάτων πίνακα.<br/><br/>Αν είναι ενεργό, το "
+#~ "Words εμφανίζει κάθε αόρατο περίγραμμα πίνακα με μια λεπτή γκρίζα γραμμή."
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Εμφάνιση κανόνων"
+
+#, fuzzy
+#~| msgid "Shows or hides rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Εμφάνιση ή απόκρυψη κανόνων"
+
+#, fuzzy
+#~| msgid ""
+#~| "The rulers are the white measuring spaces top and left of the document. "
+#~| "The rulers show the position and width of pages and of frames and can be "
+#~| "used to position tabulators among others.<p>Uncheck this to disable the "
+#~| "rulers from being displayed.</p>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The rulers are the white measuring spaces top and left of the document. "
+#~ "The rulers show the position and width of pages and of frames and can be "
+#~ "used to position tabulators among others.<p>Uncheck this to disable the "
+#~ "rulers from being displayed.</p>"
+#~ msgstr ""
+#~ "Οι κανόνες είναι τα λευκά διαστήματα μέτρησης πάνω και αριστερά του "
+#~ "εγγράφου. Οι κανόνες εμφανίζουν τη θέση και το πλάτος σελίδων και "
+#~ "πλαισίων και μπορούν να χρησιμοποιηθούν για την τοποθέτηση των στηλοθετών."
+#~ "<p>Απενεργοποιήστε αυτήν την επιλογή για την απόκρυψη των κανόνων.</p>"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Προσαρμογή στον κάνναβο"
+
+#, fuzzy
+#~| msgid "Show Status Bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Εμφάνιση γραμμής κατάστασης"
+
+#, fuzzy
+#~| msgid "Shows or hides the status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Εμφάνιση ή απόκρυψη της γραμμής κατάστασης"
+
+#, fuzzy
+#~| msgid "Distraction Free Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distraction Free Mode"
+#~ msgstr "Λειτουργία χωρίς απόσπαση προσοχής"
+
+#, fuzzy
+#~| msgid "Set view in distraction free mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set view in distraction free mode"
+#~ msgstr "Ορισμός προβολής σε λειτουργία χωρίς απόσπαση προσοχής"
+
+#, fuzzy
+#~| msgid "Semantic Stylesheets..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantic Stylesheets..."
+#~ msgstr "Σημασιολογικά φύλλα αισθητικής επικάλυψης..."
+
+#, fuzzy
+#~| msgid "Modify and add semantic stylesheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modify and add semantic stylesheets"
+#~ msgstr "Τροποποίηση και προσθήκη φύλλων αισθητικής επικάλυψης"
+
+#, fuzzy
+#~| msgid ""
+#~| "Stylesheets are used to format the display of information which is "
+#~| "stored in RDF."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Stylesheets are used to format the display of information which is stored "
+#~ "in RDF."
+#~ msgstr ""
+#~ "Τα φύλλα αισθητικής επικάλυψης χρησιμοποιούνται για τη μορφοποίηση της "
+#~ "εμφάνισης της πληροφορίας που αποθηκεύεται σε RDF."
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Δημιουργία"
+
+#, fuzzy
+#~| msgid "Configure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "Διαμόρφωση..."
+
+#, fuzzy
+#~| msgid "Page Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "Σελιδοποίηση..."
+
+#, fuzzy
+#~| msgid "Change properties of entire page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "Τροποποίηση ιδιοτήτων ολόκληρης της σελίδας"
+
+#, fuzzy
+#~| msgid ""
+#~| "Change properties of the entire page.<p>Currently you can change paper "
+#~| "size, paper orientation, header and footer sizes, and column settings.</"
+#~| "p>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Change properties of the entire page.<p>Currently you can change paper "
+#~ "size, paper orientation, header and footer sizes, and column settings.</p>"
+#~ msgstr ""
+#~ "Τροποποίηση ιδιοτήτων ολόκληρης της σελίδας.<p>Για την ώρα μπορείτε να "
+#~ "τροποποιήσετε το μέγεθος χαρτιού, τον προσανατολισμό, τα μεγέθη κεφαλίδας "
+#~ "και υποσέλιδου και τις ρυθμίσεις των στηλών.</p>"
+
+#, fuzzy
+#~| msgid "Create Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "Δημιουργία κεφαλίδας"
+
+#, fuzzy
+#~| msgid "Create Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "Δημιουργία υποσέλιδου"
+
+#, fuzzy
+#~| msgid "Show Comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Comments"
+#~ msgstr "Εμφάνιση σχολίων"
+
+#, fuzzy
+#~| msgid "Shows comments in the document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows comments in the document"
+#~ msgstr "Εμφάνιση σχολίων στο έγγραφο"
+
+#, fuzzy
+#~| msgid "Word Count"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word Count"
+#~ msgstr "Καταμέτρηση λέξεων"
+
+#, fuzzy
+#~| msgid "Shows or hides word counting in status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "Εμφάνιση ή απόκρυψη της καταμέτρησης λέξεων στη γραμμή κατάστασης"
+
+#, fuzzy
+#~| msgid "Page Setup"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "Ρύθμιση σελίδας"
+
+#, fuzzy
+#~| msgid "Header & Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "Κεφαλίδα & Υποσέλιδο"
+
+#, fuzzy
+#~| msgid "Page layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "Σελιδοποίηση"
+
+#, fuzzy
+#~| msgid "Next Page"
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "Επόμενη σελίδα"
+
+#, fuzzy
+#~| msgid "Previous Page"
+#~ msgctxt "(qtundo-format) Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Προηγούμενη σελίδα"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgctxt "(qtundo-format) Search options"
+#~ msgid "Options"
+#~ msgstr "Επιλογές"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Κεφαλίδα μονών σελίδων"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Κεφαλίδα ζυγών σελίδων"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Υποσέλιδο μονών σελίδων"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Υποσέλιδο ζυγών σελίδων"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "Κύριο κείμενο"
+
+#, fuzzy
+#~| msgid "Other text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "Άλλο κείμενο"
+
+#~ msgid "Book"
+#~ msgstr "Βιβλίο"
+
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "Calligra Author"
+
+#~ msgid "Author tool"
+#~ msgstr "Εργαλείο συγγραφέα"
+
+#, fuzzy
+#~| msgid "© 2012-2013, The Author Team"
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "© 2012-2013, Η Ομάδα του Author"
+
+#~ msgid "Co-maintainer"
+#~ msgstr "Εκ των συντηρητών"
+
+#~ msgid "Gopalakrishna Bhat"
+#~ msgstr "Gopalakrishna Bhat"
+
+#~ msgid "EPUB export"
+#~ msgstr "Εξαγωγή EPUB"
+
+#~ msgid "Mojtaba Shahi Senobari"
+#~ msgstr "Mojtaba Shahi Senobari"
+
+#~ msgid "Can not find needed text component, Author will quit now"
+#~ msgstr ""
+#~ "Αδυναμία εύρεσης του απαιτούμενου συστατικού κειμένου. Το Author θα "
+#~ "τερματίσει τώρα"
+
+#~ msgid "Select Cover Image..."
+#~ msgstr "Επιλογή εικόνας εξωφύλλου..."
+
+#~ msgid "Set cover for your ebook"
+#~ msgstr "Καθορίστε εξώφυλλο για το ebook σας"
+
+#~ msgid "Open..."
+#~ msgstr "Άνοιγμα..."
+
+#, fuzzy
+#~| msgid "Open File"
+#~ msgid "Open Cover"
+#~ msgstr "Άνοιγμα αρχείου"
+
+#~ msgid "Import problem"
+#~ msgstr "Πρόβλημα εισαγωγής"
+
+#~ msgid "Cover selection"
+#~ msgstr "Επιλογή εξωφύλλου"
+
+#~ msgid "No cover selected yet"
+#~ msgstr "Δεν επιλέχθηκε ακόμη εξώφυλλο"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgid "Edit section"
+#~ msgstr "Συναρτήσεις"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgid "Main"
+#~ msgstr "Κύριο κείμενο"
+
+#, fuzzy
+#~| msgid "ODF Support"
+#~ msgid "Supporting"
+#~ msgstr "Υποστήριξη ODF"
+
+#, fuzzy
+#~| msgid "Author tool"
+#~ msgid "Author's actor"
+#~ msgstr "Εργαλείο συγγραφέα"
+
+#, fuzzy
+#~| msgid "Enter entry name:"
+#~ msgid "Enter actor's name here"
+#~ msgstr "Εισαγωγή ονόματος καταχώρησης:"
+
+#, fuzzy
+#~| msgid "Type"
+#~ msgid "Type:"
+#~ msgstr "Τύπος"
+
+#, fuzzy
+#~| msgid "Member Description"
+#~ msgid "Short description:"
+#~ msgstr "Περιγραφή μέλους"
+
+#, fuzzy
+#~| msgid "Member Description"
+#~ msgid "Actor description:"
+#~ msgstr "Περιγραφή μέλους"
+
+#, fuzzy
+#~| msgid "Left align with:"
+#~ msgid "LeftAlign"
+#~ msgstr "Στοίχιση αριστερά με:"
+
+#, fuzzy
+#~| msgid "Center align with:"
+#~ msgid "CenterAlign"
+#~ msgstr "Στοίχιση στο κέντρο με:"
+
+#, fuzzy
+#~| msgid "Right align with:"
+#~ msgid "RightAlign"
+#~ msgstr "Στοίχιση δεξιά με:"
+
+#, fuzzy
+#~| msgid "Author tool"
+#~ msgctxt "displayname of the semantic item type AuthorActor"
+#~ msgid "AuthorActor"
+#~ msgstr "Εργαλείο συγγραφέα"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "1st Edit"
+#~ msgstr "Επεξεργασία"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "2nd Edit"
+#~ msgstr "Επεξεργασία"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "3rd Edit"
+#~ msgstr "Επεξεργασία"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Author's section"
+#~ msgstr "Αυτόματη διόρθωση"
+
+#, fuzzy
+#~| msgid "Page Description"
+#~ msgid "Section description:"
+#~ msgstr "Περιγραφή σελίδας"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "Συναρτήσεις"
+
+#~ msgid "File to open"
+#~ msgstr "Αρχείο για άνοιγμα"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "Δημιουργία πλαισίου"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "Διαγραφή πλαισίου"
+
+#~ msgid "General"
+#~ msgstr "Γενικά"
+
+#~ msgid "Protect size and position"
+#~ msgstr "Προστασία μεγέθους και θέσης"
+
+#~ msgid "Position"
+#~ msgstr "Θέση"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgid "Width:"
+#~ msgstr "Πλάτος:"
+
+#~ msgid "Height:"
+#~ msgstr "Ύψος:"
+
+#~ msgid "Margins"
+#~ msgstr "Περιθώρια"
+
+#~ msgid "Synchronize changes"
+#~ msgstr "Συγχρονισμός τροποποιήσεων"
+
+#~ msgid "Bottom:"
+#~ msgstr "Κάτω:"
+
+#~ msgid "Top:"
+#~ msgstr "Άνω:"
+
+#~ msgid "Right:"
+#~ msgstr "Δεξιά:"
+
+#~ msgid "Left:"
+#~ msgstr "Αριστερά:"
+
+#~ msgid "If Frame Overflows"
+#~ msgstr "Αν το πλαίσιο υπερχειλίσει"
+
+#~ msgid "Create a new page"
+#~ msgstr "Δημιουργία νέας σελίδας"
+
+#~ msgid "Resize last frame"
+#~ msgstr "Αλλαγή μεγέθους τελευταίου πλαισίου"
+
+#~ msgid "Do not show the extra text"
+#~ msgstr "Να μην εμφανιστεί το επιπλέον κείμενο"
+
+#~ msgid "When Creating a Page"
+#~ msgstr "Όταν δημιουργείται μια σελίδα"
+
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "Επανασύνδεση πλαισίου στην τρέχουσα ροή"
+
+#~ msgid "Do not create a followup frame"
+#~ msgstr "Χωρίς δημιουργία πλαισίου συνέχειας"
+
+#~ msgid "Copy this Frame"
+#~ msgstr "Αντιγραφή αυτού του πλαισίου"
+
+#~ msgid "Only on even/odd pages"
+#~ msgstr "Μόνο σε μονές/ζυγές σελίδες"
+
+#~ msgid "Protect content"
+#~ msgstr "Προστασία περιεχομένου"
+
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "Το πλαίσιο είναι αντίγραφο του προηγούμενου πλαισίου"
+
+#~ msgid "Changes will be applied to all frames in frameset"
+#~ msgstr "Εφαρμογή τροποποιήσεων σε όλα τα πλαίσια του συνόλου"
+
+#~ msgid "Retain original aspect ratio"
+#~ msgstr "Διατήρηση αρχικής αναλογίας διαστάσεων"
+
+#~ msgid "Select All Shapes"
+#~ msgstr "Επιλογή όλων των σχημάτων"
+
+#~ msgid "Create Linked Copy"
+#~ msgstr "Δημιουργία συνδεδεμένου αντιγράφου"
+
+#~ msgid "Create a copy of the current frame, always showing the same contents"
+#~ msgstr ""
+#~ "Δημιουργία ενός αντιγράφου του τρέχοντος πλαισίου, εμφανίζοντας πάντα το "
+#~ "ίδιο περιεχόμενο"
+
+#~ msgid ""
+#~ "Create a copy of the current frame, that remains linked to it. This means "
+#~ "they always show the same contents: modifying the contents in such a "
+#~ "frame will update all its linked copies."
+#~ msgstr ""
+#~ "Δημιουργία ενός αντιγράφου του τρέχοντος πλαισίου, το οποίο παραμένει "
+#~ "συνδεδεμένο σε αυτό. Αυτό σημαίνει ότι τα δύο πλαίσια εμφανίζουν το ίδιο "
+#~ "περιεχόμενο: η τροποποίηση των περιεχομένων ενός τέτοιου πλαισίου θα "
+#~ "ενημερώσει το περιεχόμενο όλων των συνδεδεμένων αντιγράφων."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "Δημιουργία συνδεδεμένου αντιγράφου"
+
+#~ msgid "Images (*.png *.xpm *.jpg *.jpeg)"
+#~ msgstr "Εικόνες (*.png *.xpm *.jpg *.jpeg)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "Εισαγωγή σελίδας"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "Αφαίρεση σελίδας"
+
+#~ msgid "Bookmark..."
+#~ msgstr "Σελιδοδείκτης..."
+
+#~ msgid "Select Bookmark..."
+#~ msgstr "Επιλογή σελιδοδείκτη..."
+
+#~ msgid "Bookmark"
+#~ msgstr "Σελιδοδείκτης"
+
+#~ msgid "Characters (excluding spaces):"
+#~ msgstr "Χαρακτήρες (χωρίς τα κενά):"
+
+#~ msgid "Flesch Reading Ease:"
+#~ msgstr "Ευκολία ανάγνωσης Flesch:"
+
+#~ msgid "Preferences"
+#~ msgstr "Προτιμήσεις"
+
+#~ msgid "Automatically update"
+#~ msgstr "Αυτόματη ενημέρωση"
+
+#~ msgid "update"
+#~ msgstr "ενημέρωση"
+
+#~ msgid "by:"
+#~ msgstr "με:"
+
+#~ msgid "F&ormat"
+#~ msgstr "Μορ&φή"
+
+#~ msgid "Invalid document. No mimetype specified."
+#~ msgstr "Μη έγκυρο έγγραφο. Δεν καθορίστηκε τύπος mime."
+
+#~ msgid ""
+#~ "Invalid document. Expected mimetype application/x-words or application/"
+#~ "vnd.kde.words, got %1"
+#~ msgstr ""
+#~ "Μη έγκυρο έγγραφο. Αναμενόταν τύπος mime ο application/x-words ή ο "
+#~ "application/vnd.kde.words, ενώ βρέθηκε ο %1"
+
+#~ msgid "Invalid document. Paper size: %1x%2"
+#~ msgstr "Μη έγκυρο έγγραφο. Μέγεθος χαρτιού: %1x%2"
+
+#~ msgid "Unable to locate footnote text"
+#~ msgstr "Αδυναμία εντοπισμού κειμένου υποσημείωσης"
+
+#~ msgid "Unable to locate note-text"
+#~ msgstr "Αδυναμία εντοπισμού κειμένου σημείωσης"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "Δέσμευση πλαισίου"
+
+#~ msgid "Create Frame-clip"
+#~ msgstr "Δημιουργία Frame-clip"
+
+#~ msgid "Remove Frame-clip"
+#~ msgstr "Αφαίρεση Frame-clip"
+
+#~ msgid "Force the remainder of the text into the next page"
+#~ msgstr "Εξαναγκασμός του υπολοίπου κειμένου στην επόμενη σελίδα"
+
+#~ msgid "All text after this point will be moved into the next page."
+#~ msgstr "Το κείμενο μετά το σημείο αυτό θα μετακινηθεί στην επόμενη σελίδα."
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Μορφή"
+
+#~ msgid "Enable Document Headers"
+#~ msgstr "Ενεργοποίση κεφαλίδων εγγράφου"
+
+#~ msgid "Enable Document Footers"
+#~ msgstr "Ενεργοποίηση υποσέλιδων εγγράφου"
+
+#~ msgid "Change Tracking"
+#~ msgstr "Παρακολούθηση αλλαγών"
+
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "Words"
+
+#~ msgid "Notes and fixes"
+#~ msgstr "Σημειώσεις και διορθώσεις"
+
+#~ msgid "Number of pages:"
+#~ msgstr "Αριθμός σελίδων:"
+
+#~ msgid "Number of frames:"
+#~ msgstr "Αριθμός πλαισίων:"
+
+#~ msgid "Number of pictures:"
+#~ msgstr "Αριθμός εικόνων:"
+
+#~ msgid "Number of tables:"
+#~ msgstr "Αριθμός πινάκων:"
+
+#~ msgid "Text"
+#~ msgstr "Κείμενο"
+
+#~ msgid "Include text from foot- and endnotes"
+#~ msgstr "Συμπερίληψη κειμένου από υποσέλιδα και σημειώσεις τέλους"
+
+#~ msgid "Characters without spaces:"
+#~ msgstr "Χαρακτήρες χωρίς τα κενά:"
+
+#~ msgid "Characters incl. spaces"
+#~ msgstr "Χαρακτήρες μαζί με τα κενά"
+
+#~ msgid "Only count main text"
+#~ msgstr "Προσμέτρηση μόνο του κύριου κειμένου"
+
+#~ msgid "approximately %1"
+#~ msgstr "προσεγγιστικά %1"
+
+#~ msgid "Sentence, word and letter counts for this document"
+#~ msgstr "Αριθμός προτάσεων, λέξεων και γραμμάτων για το έγγραφο"
+
+#~ msgid ""
+#~ "Information on the number of letters, words, syllables and sentences for "
+#~ "this document.<p>Evaluates readability using the Flesch reading score.</p>"
+#~ msgstr ""
+#~ "Πληροφορίες σχετικά με τον αριθμό γραμμάτων, λέξεων, συλλαβών και "
+#~ "προτάσεων για το έγγραφο. <p>Υπολογισμός της αναγνωσιμότητας "
+#~ "χρησιμοποιώντας τη βαθμολόγηση ανάγνωσης κατά Flesch.</p>"
+
+#~ msgid "Shows and hides header display"
+#~ msgstr "Εμφάνιση και απόκρυψη κεφαλίδων"
+
+#~ msgid ""
+#~ "Selecting this option toggles the display of headers in Words.<br/><br/"
+#~ ">Headers are special frames at the top of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Η επιλογή αυτή εναλλάσσει την εμφάνιση των κεφαλίδων στο Words.<br/><br/"
+#~ ">Οι κεφαλίδες είναι ειδικά πλαίσια στο πάνω μέρος κάθε σελίδας οι οποίες "
+#~ "περιέχουν αριθμούς σελίδων ή άλλες πληροφορίες."
+
+#~ msgid "Shows and hides footer display"
+#~ msgstr "Εμφάνιση και απόκρυψη υποσέλιδων"
+
+#, fuzzy
+#~| msgid ""
+#~| "Selecting this option toggles the display of footers in Words. <br/><br/"
+#~| ">Footers are special frames at the bottom of each page which can contain "
+#~| "page numbers or other information."
+#~ msgid ""
+#~ "Selecting this option toggles the display of footers in Words. <br/><br/"
+#~ ">Footers are special shapes at the bottom of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Η επιλογή αυτή εναλλάσσει την εμφάνιση των υποσέλιδων στο Words. <br/><br/"
+#~ ">Τα υποσέλιδα είναι ειδικά πλαίσια στο κάτω μέρος κάθε σελίδας τα οποία "
+#~ "περιέχουν αριθμούς σελίδων ή άλλες πληροφορίες."
+
+#, fuzzy
+#~| msgid "Raise Frame"
+#~ msgid "Raise Shape"
+#~ msgstr "Ανύψωση πλαισίου"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames"
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shape"
+#~ msgstr ""
+#~ "Ανύψωση του τρέχοντος επιλεγμένου πλαισίου έτσι ώστε να εμφανίζεται πάνω "
+#~ "από όλα τα υπόλοιπα πλαίσια"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames. This is only useful if frames overlap each other. If "
+#~| "multiple frames are selected they are all raised in turn."
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shapes. This is only useful if shapes overlap each other. If multiple "
+#~ "shapes are selected they are all raised in turn."
+#~ msgstr ""
+#~ "Ανύψωση του τρέχοντος επιλεγμένου πλαισίου έτσι ώστε να εμφανίζεται πάνω "
+#~ "από όλα τα υπόλοιπα πλαίσια. Αυτό είναι χρήσιμο όταν το ένα πλαίσιο "
+#~ "βρίσκεται πάνω στο άλλο. Αν επιλεγούν πολλαπλά πλαίσια θα ανυψωθούν όλα "
+#~ "στη σειρά."
+
+#, fuzzy
+#~| msgid "Lower Frame"
+#~ msgid "Lower Shape"
+#~ msgstr "Βύθιση πλαισίου"
+
+#, fuzzy
+#~| msgid ""
+#~| "Lower the currently selected frame so that it disappears under any frame "
+#~| "that overlaps it"
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it"
+#~ msgstr ""
+#~ "Βύθιση του τρέχοντος επιλεγμένου πλαισίου έτσι ώστε να εμφανίζεται κάτω "
+#~ "από όλα τα υπόλοιπα πλαίσια"
+
+#, fuzzy
+#~| msgid ""
+#~| "Lower the currently selected frame so that it disappears under any frame "
+#~| "that overlaps it. If multiple frames are selected they are all lowered "
+#~| "in turn."
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it. If multiple shape are selected they are all lowered in "
+#~ "turn."
+#~ msgstr ""
+#~ "Βύθιση του τρέχοντος επιλεγμένου πλαισίου έτσι ώστε να εμφανίζεται κάτω "
+#~ "από όλα τα υπόλοιπα πλαίσια. Αν επιλεγούν πολλαπλά πλαίσια θα βυθιστούν "
+#~ "όλα στη σειρά."
+
+#~ msgid "Bring to Front"
+#~ msgstr "Μεταφορά εμπρός"
+
+#~ msgid "Send to Back"
+#~ msgstr "Αποστολή πίσω"
+
+#~ msgid "Before current page"
+#~ msgstr "Πριν από την τρέχουσα σελίδα"
+
+#~ msgid "After current page"
+#~ msgstr "Μετά από την τρέχουσα σελίδα"
+
+#~ msgid "After last page"
+#~ msgstr "Μετά από την τελευταία σελίδα"
+
+#~ msgid "Page style:"
+#~ msgstr "Στιλ σελίδων:"
+
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "&Εισαγωγή"
+
+#~ msgid "Variable"
+#~ msgstr "Μεταβλητή"
+
+#~ msgid "As Character"
+#~ msgstr "Ως χαρακτήρας"
+
+#, fuzzy
+#~| msgid "Insert the current shape as a character in the text"
+#~ msgid "Anchor the current shape as a character in the text"
+#~ msgstr "Εισαγωγή του τρέχοντος σχήματος ως χαρακτήρα στο κείμενο"
+
+#~ msgid "To Character"
+#~ msgstr "Στον χαρακτήρα"
+
+#~ msgid "Anchor the current shape to the character at the current position"
+#~ msgstr "Αγκυρώστε το τρέχον σχήμα στον χαρακτήρα στην τρέχουσα θέση"
+
+#~ msgid "To Paragraph"
+#~ msgstr "Στην παράγραφο"
+
+#~ msgid "Anchor the current shape to current paragraph"
+#~ msgstr "Αγκυρώστε το τρέχον σχήμα στην τρέχουσα παράγραφο"
+
+#~ msgid "To Page"
+#~ msgstr "Στη σελίδα"
+
+#~ msgid "Anchor the current shape to current page"
+#~ msgstr "Αγκυρώστε το τρέχον σχήμα στην τρέχουσα σελίδα"
+
+#~ msgid "Page..."
+#~ msgstr "Σελίδα..."
+
+#~ msgid "Delete Page"
+#~ msgstr "Διαγραφή σελίδας"
+
+#, fuzzy
+#~| msgid "Insert Page Style"
+#~ msgid "Insert Image Options"
+#~ msgstr "Εισαγωγή στιλ σελίδας"
+
+#~ msgid "<optimizations"
+#~ msgstr "<βελτιστοποιήσεις"
+
+#~ msgid "Disable Document Headers"
+#~ msgstr "Απενεργοποίηση κεφαλίδων εγγράφου"
+
+#~ msgid "Disable Document Footers"
+#~ msgstr "Απενεργοποίηση υποσέλιδων εγγράφου"
+
+#~ msgid "Page Borders"
+#~ msgstr "Περιγράμματα σελίδων"
+
+#~ msgid "Hide Status Bar"
+#~ msgstr "Απόκρυψη γραμμής κατάστασης"
+
+#~ msgid "Numbering"
+#~ msgstr "Αρίθμηση"
+
+#~ msgid "Automatic"
+#~ msgstr "Αυτόματα"
+
+#~ msgid "Footnote"
+#~ msgstr "Υποσημείωση"
+
+#~ msgid "Endnote"
+#~ msgstr "Σημείωση τέλους"
+
+#~ msgid "Insert Footnote/Endnote"
+#~ msgstr "Εισαγωγή υποσημείωσης/σημείωσης τέλους"
+
+#~ msgid "Insert a footnote referencing the selected text"
+#~ msgstr "Εισαγωγή υποσημείωσης με παραπομπή στο επιλεγμένο κείμενο"
+
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "Ιδιότητες πλαισίου/συνόλου πλαισίων"
+
+#~ msgid "Alter frameset properties"
+#~ msgstr "Τροποποίηση ιδιοτήτων συνόλου πλαισίων"
+
+#~ msgid "Insert a picture into document"
+#~ msgstr "Εισαγωγή φωτογραφίας σε έγγραφο"
+
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "Μετατροπή τρέχοντος πλαισίου σε ένα εμβόλιμο πλαίσιο"
+
+#~ msgid ""
+#~ "Convert the current frame to an inline frame.<br><br>Place the inline "
+#~ "frame within the text at the point nearest to the frames current position."
+#~ msgstr ""
+#~ "Μετατροπή τρέχοντος πλαισίου σε ένα εμβόλιμο πλαίσιο.<br><br>Τοποθέτηση "
+#~ "του εμβόλιμου πλαισίου στο κείμενο στο εγγύτερο της τρέχουσας θέσης "
+#~ "σημείο."
+
+#~ msgid "Set Floating"
+#~ msgstr "Καθορίστε σε κίνηση"
+
+#~ msgid "Set the current shape floating"
+#~ msgstr "Καθορίστε το τρέχον σχήμα σε κίνηση"
+
+#~ msgid "Please select at least one non-locked shape and try again"
+#~ msgstr "Επιλέξτε τουλάχιστον ένα ξεκλείδωτο σχήμα και προσπαθήστε πάλι"
+
+#~ msgid ""
+#~ "<p><b>Check this option to have a text area created automatically for "
+#~ "each page.</b><br>\n"
+#~ "For letters and notes with one main text, possibly on several pages, you "
+#~ "should keep this checked. You should only uncheck it if you want to "
+#~ "define completely where each text frame should be positioned.</p>"
+#~ msgstr ""
+#~ "<p><b>Ενεργοποιήστε αυτήν την επιλογή για την αυτόματη δημιουργία μιας "
+#~ "περιοχής κειμένου σε κάθε σελίδα.</b><br>\n"
+#~ "Για γράμματα και σημειώσεις με ένα κύριο κείμενο, σε πολλές σελίδες ίσως "
+#~ "είναι καλό να το αφήσετε ενεργοποιημένο. Απενεργοποιήστε το μόνο αν "
+#~ "επιθυμείτε να καθορίσετε ολοκληρωτικά τη θέση κάθε πλαισίου κειμένου.</p>"
+
+#~ msgid "Filter stuff"
+#~ msgstr "Εργασίες φίλτρου"
+
+#~ msgid "Page: current/total"
+#~ msgstr "Σελίδα: τρέχουσα/σύνολο"
+
+#~ msgid "Fra&mes"
+#~ msgstr "&Πλαίσια"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgid "Tables"
+#~ msgstr "Πίνακας"
+
+#~ msgid "Insert"
+#~ msgstr "Εισαγωγή"
+
+#~ msgid "Layout of Text in Other Frames"
+#~ msgstr "Διάταξη κειμένου στα άλλα πλαίσια"
+
+#~ msgid "Text will run around this frame"
+#~ msgstr "Ροή κειμένου γύρω από αυτό το πλαίσιο"
+
+#~ msgid "Text will not run around this frame"
+#~ msgstr "Χωρίς ροή κειμένου γύρω από αυτό το πλαίσιο"
+
+#~ msgid "Run Around Side"
+#~ msgstr "Ροή γύρω από το πλάι"
+
+#~ msgid "Longest side"
+#~ msgstr "Μακρύτερη πλευρά"
+
+#~ msgid "Create custom outline"
+#~ msgstr "Δημιουργία προσαρμοσμένου περιγράμματος"
+
+#, fuzzy
+#~| msgid "Create custom outline"
+#~ msgid "Create Custom Outline"
+#~ msgstr "Δημιουργία προσαρμοσμένου περιγράμματος"
+
+#~ msgid "Create a custom vector outline that text will run around"
+#~ msgstr ""
+#~ "Δημιουργία προσαρμοσμένου περιγράμματος όπου το κείμενο θα ρέει γύρω από "
+#~ "αυτό"
+
+#~ msgid ""
+#~ "Text normally runs around the content of a shape, when you want a custom "
+#~ "outline that is independent of the content you can create one and alter "
+#~ "it with the vector tools"
+#~ msgstr ""
+#~ "Το κείμενο κανονικά ρέει γύρω από το περιεχόμενο ενός σχήματος. Αν "
+#~ "επιθυμείτε ένα προσαρμοσμένο περίγραμμα το οποίο να είναι ανεξάρτητο από "
+#~ "το περιεχόμενο μπορείτε να δημιουργήσετε ένα και να το τροποποιήσετε με "
+#~ "τα εργαλεία διανύσματος"
+
+#~ msgid "Create outlines"
+#~ msgstr "Δημιουργία περιγραμμάτων"
+
+#~ msgid "Borders"
+#~ msgstr "Περιγράμματα"
+
+#~ msgid "MailMerge"
+#~ msgstr "Συγχώνευση αλληλογραφίας"
+
+#~ msgid "Font"
+#~ msgstr "Γραμματοσειρά"
+
+#~ msgid "Format"
+#~ msgstr "Μορφή"
+
+#~ msgid "Formula"
+#~ msgstr "Μαθηματική σχέση"
+
+#~ msgid "KWord"
+#~ msgstr "KWord"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgid "Page Background"
+#~ msgstr "Διακοπή σελίδας"
+
+#~ msgid "If Text is Too Long for Frame"
+#~ msgstr "Αν το κείμενο είναι πολύ μακρύ για το πλαίσιο"
+
+#~ msgid "On New Page Creation"
+#~ msgstr "Σε δημιουργία νέας σελίδας"
+
+#~ msgid ""
+#~ "Alter frameset properties.<p>Currently you can change the frame "
+#~ "background."
+#~ msgstr ""
+#~ "Τροποποίηση ιδιοτήτων συνόλου πλαισίων.<p>Για την ώρα μπορείτε να "
+#~ "τροποποιήσετε το φόντο του πλαισίου."
+
+#~ msgid "0"
+#~ msgstr "0"
+
+#~ msgid "Show Grid"
+#~ msgstr "Εμφάνιση καννάβου"
+
+#~ msgid "Odd Pages Header %1"
+#~ msgstr "Κεφαλίδα μονών σελίδων %1"
+
+#~ msgid "Even Pages Header %1"
+#~ msgstr "Κεφαλίδα ζυγών σελίδων %1"
+
+#~ msgid "Odd Pages Footer %1"
+#~ msgstr "Υποσέλιδο μονών σελίδων %1"
+
+#~ msgid "Even Pages Footer %1"
+#~ msgstr "Υποσέλιδο ζυγών σελίδων %1"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Σύνολο πλαισίων κύριου κειμένου"
+
+#~ msgid "Matrix"
+#~ msgstr "Πίνακας"
+
+#~ msgid "Configure Frame Border"
+#~ msgstr "Ρύθμιση περιγράμματος πλαισίου"
+
+#~ msgid "Ta&ble"
+#~ msgstr "Πίνα&κας"
+
+#~ msgid "Cell"
+#~ msgstr "Κελί"
+
+#~ msgid "Configure Frame Borders"
+#~ msgstr "Ρύθμιση περιγραμμάτων πλαισίου"
+
+#~ msgid "Reginald Stadlbauer"
+#~ msgstr "Reginald Stadlbauer"
+
+#~ msgid "Add a new page"
+#~ msgstr "Προσθήκη μιας νέας σελίδας"
+
+#~ msgid "Delete selected pages"
+#~ msgstr "Διαγραφή επιλεγμένων σελίδων"
+
+#~ msgid "New Layer"
+#~ msgstr "Νέο στρώμα"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Εισάγετε το όνομα του νέου στρώματος:"
+
+#~ msgid "New layer"
+#~ msgstr "Νέο στρώμα"
+
+#~ msgid "Delete Layer"
+#~ msgstr "Διαγραφή στρώματος"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr ""
+#~ "Αδυναμία διαγραφής όλων των στρωμάτων. Απαιτείται τουλάχιστον ένα στρώμα."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Σφάλμα διαγραφής στρωμάτων"
+
+#~ msgid "Information"
+#~ msgstr "Πληροφορίες"
+
+#~ msgid "&Available tables:"
+#~ msgstr "&Διαθέσιμοι πίνακες:"
+
+#~ msgid "&Fields of the selected table:"
+#~ msgstr "&Πεδία του επιλεγμένου πίνακα:"
+
+#~ msgid "Query Result"
+#~ msgstr "Αποτέλεσμα ερωτήματος"
+
+#~ msgid "&Query:"
+#~ msgstr "&Ερώτημα:"
+
+#~ msgid "&Execute"
+#~ msgstr "&Εκτέλεση"
+
+#~ msgid "&Setup"
+#~ msgstr "&Ρύθμιση"
+
+#~ msgid "&Table:"
+#~ msgstr "Πίνα&κας:"
+
+#~ msgid "View or Edit Filter &Rules"
+#~ msgstr "Προβολή ή επεξεργασία &κανόνων φίλτρου"
+
+#~ msgid "&Used database records:"
+#~ msgstr "&Εγγραφές βάσης δεδομένων σε χρήση:"
+
+#~ msgid "&Keep Settings..."
+#~ msgstr "&Διατήρηση ρυθμίσεων..."
+
+#~ msgid "&Hostname:"
+#~ msgstr "Ό&νομα υπολογιστή:"
+
+#~ msgid "&Driver:"
+#~ msgstr "&Οδηγός:"
+
+#~ msgid "Database &name:"
+#~ msgstr "Ό&νομα βάσης δεδομένων:"
+
+#~ msgid "&Username:"
+#~ msgstr "Ό&νομα χρήστη:"
+
+#~ msgid "&Port:"
+#~ msgstr "&Θύρα:"
+
+#~ msgid "default"
+#~ msgstr "προκαθορισμένο"
+
+#~ msgid "Address Selection"
+#~ msgstr "Επιλογή διεύθυνσης"
+
+#~ msgid "&Add >>"
+#~ msgstr "&Προσθήκη >>"
+
+#~ msgid "<< &Remove"
+#~ msgstr "<< &Αφαίρεση"
+
+#~ msgid "Save as &Distribution List..."
+#~ msgstr "Αποθήκευση ως &λίστα διανομής..."
+
+#~ msgid "Save selected single entries to a new distribution list"
+#~ msgstr "Αποθήκευση των επιλεγμένων μονών εγγραφών σε μία νέα λίστα διανομής"
+
+#~ msgid "&Filter on:"
+#~ msgstr "&Φίλτρο σε:"
+
+#~ msgid "Name"
+#~ msgstr "Όνομα"
+
+#~ msgid "Distribution Lists"
+#~ msgstr "Λίστες διανομής"
+
+#~ msgid "Single Entries"
+#~ msgstr "Μονές εγγραφές"
+
+#~ msgid "Address B&ook"
+#~ msgstr "Βιβλίο &διευθύνσεων"
+
+#~ msgid "Launch KAddressbook"
+#~ msgstr "Εκτέλεση του KAddressbook"
+
+#~ msgid "&Address Book"
+#~ msgstr "&Βιβλίο διευθύνσεων"
+
+#~ msgid "&Selected Addresses"
+#~ msgstr "&Επιλεγμένες διευθύνσεις"
+
+#~ msgid "Personal"
+#~ msgstr "Προσωπικές"
+
+#~ msgid "Hi!"
+#~ msgstr "Γεια!"
+
+#~ msgid "Hello!"
+#~ msgstr "Γεια σου!"
+
+#~ msgid "Bye!"
+#~ msgstr "Τα λέμε!"
+
+#~ msgid "Good bye"
+#~ msgstr "Χαιρετισμούς"
+
+#~ msgid "Professional"
+#~ msgstr "Επαγγελματικές"
+
+#~ msgid "Good Morning"
+#~ msgstr "Καλημέρα"
+
+#~ msgid "Good Afternoon"
+#~ msgstr "Καλησπέρα"
+
+#~ msgid "Good Evening"
+#~ msgstr "Καληνύχτα"
+
+#~ msgid "Email"
+#~ msgstr "Email"
+
+#~ msgid "To:"
+#~ msgstr "Προς:"
+
+#~ msgid "Subject:"
+#~ msgstr "Θέμα:"
+
+#~ msgid "CC:"
+#~ msgstr "Κοινοποίηση:"
+
+#~ msgid "BCC:"
+#~ msgstr "Κρυφή κοινοποίηση:"
+
+#~ msgid "Fwd:"
+#~ msgstr "Προώθηση:"
+
+#~ msgid "Best regards,"
+#~ msgstr "Ειλικρινείς χαιρετισμούς,"
+
+#~ msgid "Best wishes"
+#~ msgstr "Ευχές"
+
+#~ msgid "Cordially,"
+#~ msgstr "Εγκάρδια,"
+
+#~ msgid "Love,"
+#~ msgstr "Με αγάπη,"
+
+#~ msgid "Regards,"
+#~ msgstr "Χαιρετισμούς,"
+
+#~ msgid "Thank you,"
+#~ msgstr "Ευχαριστώ,"
+
+#~ msgid "Thanks,"
+#~ msgstr "Ευχαριστίες,"
+
+#~ msgid "Subject"
+#~ msgstr "Θέμα"
+
+#~ msgid "Dear Sir or Madam:"
+#~ msgstr "Αγαπητέ Κύριε/Κυρία:"
+
+#~ msgid "Ladies and Gentlemen:"
+#~ msgstr "Κυρίες και Κύριοι:"
+
+#~ msgid "Attention"
+#~ msgstr "Προσοχή"
+
+#~ msgid "Attention:"
+#~ msgstr "Προσοχή:"
+
+#~ msgid "ATTN:"
+#~ msgstr "ΠΡΟΣΟΧΗ:"
+
+#~ msgid "Instructions"
+#~ msgstr "Οδηγίες"
+
+#~ msgid "CERTIFIED"
+#~ msgstr "ΠΙΣΤΟΠΟΙΗΜΕΝΟ"
+
+#~ msgid "CONFIDENTIAL"
+#~ msgstr "ΕΜΠΙΣΤΕΥΤΙΚΟ"
+
+#~ msgid "PERSONAL"
+#~ msgstr "ΠΡΟΣΩΠΙΚΟ"
+
+#~ msgid "FACSIMILE"
+#~ msgstr "ΑΝΤΙΓΡΑΦΟ"
+
+#~ msgid ">>>Illegal position within datasource<<<"
+#~ msgstr ">>>Μη έγκυρη θέση στη πηγή δεδομένων<<<"
+
+#~ msgid ">>>Field %1 is unknown in the current database query<<<"
+#~ msgstr ">>>Το πεδίο %1 είναι άγνωστο στο τρέχον ερώτημα βάσης δεδομένων<<<"
+
+#~ msgid "Mail Merge - Editor"
+#~ msgstr "Συγχώνευση αλληλογραφίας - Επεξεργαστής"
+
+#~ msgid "Error"
+#~ msgstr "Σφάλμα"
+
+#~ msgid "Please enter the password for the database connection"
+#~ msgstr ""
+#~ "Παρακαλώ εισάγετε τον κωδικό πρόσβασης για τη σύνδεση με τη βάση δεδομένων"
+
+#~ msgid "Mail Merge - Setup Database Connection"
+#~ msgstr "Συγχώνευση αλληλογραφίας - Ρύθμιση σύνδεσης βάσης δεδομένων"
+
+#~ msgid "<not saved>"
+#~ msgstr "<δεν αποθηκεύτηκε>"
+
+#~ msgid "ascending"
+#~ msgstr "αύξουσα"
+
+#~ msgid "descending"
+#~ msgstr "φθίνουσα"
+
+#~ msgid "contains"
+#~ msgstr "περιέχει"
+
+#~ msgid "Field"
+#~ msgstr "Πεδίο"
+
+#~ msgid "Sorting Order"
+#~ msgstr "Σειρά ταξινόμησης"
+
+#~ msgid "Include"
+#~ msgstr "Ενσωμάτωση"
+
+#~ msgid "Operator"
+#~ msgstr "Τελεστής"
+
+#~ msgid "Condition"
+#~ msgstr "Συνθήκη"
+
+#~ msgid "Value"
+#~ msgstr "Τιμή"
+
+#~ msgid "Yes"
+#~ msgstr "Ναι"
+
+#~ msgid "NOT"
+#~ msgstr "ΟΧΙ"
+
+#~ msgid "KAddressbook entry '%1' not available."
+#~ msgstr "Η εγγραφή \"%1\" του KAddressbook δεν είναι διαθέσιμη."
+
+#~ msgid "%1 South"
+#~ msgstr "%1 Νότια"
+
+#~ msgid "%1 North"
+#~ msgstr "%1 Βόρεια"
+
+#~ msgid "%1 West"
+#~ msgstr "%1 Δυτικά"
+
+#~ msgid "%1 East"
+#~ msgstr "%1 Ανατολικά"
+
+#~ msgctxt "Geographic coordinates"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#~ msgid "Unkown mail merge variable: %1"
+#~ msgstr "Άγνωστη μεταβλητή συγχώνευσης αλληλογραφίας: %1"
+
+#~ msgid "no category"
+#~ msgstr "χωρίς κατηγορία"
+
+#~ msgid "New Distribution List"
+#~ msgstr "Νέα λίστα διανομής"
+
+#~ msgid "Please enter name:"
+#~ msgstr "Παρακαλώ εισάγετε όνομα:"
+
+#~ msgid ""
+#~ "<qt>Distribution list with the given name <b>%1</b> already exists. "
+#~ "Please select a different name.</qt>"
+#~ msgstr ""
+#~ "<qt>Υπάρχει ήδη μία λίστα διανομής με το δοσμένο όνομα <b>%1</b>. "
+#~ "Παρακαλώ επιλέξτε ένα διαφορετικό όνομα.</qt>"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "No Value"
+#~ msgstr "Χωρίς τιμή"
+
+#~ msgid "Add record"
+#~ msgstr "Πρόσθεση εγγραφής"
+
+#~ msgid "Add entry"
+#~ msgstr "Προσθήκη καταχώρησης"
+
+#~ msgid "Remove entry"
+#~ msgstr "Αφαίρεση καταχώρησης"
+
+#~ msgid "Add Entry"
+#~ msgstr "Προσθήκη καταχώρησης"
+
+#~ msgid "The host-address the OpenOffice.org Server runs on."
+#~ msgstr "Η διεύθυνση υπολογιστή του εξυπηρετητή OpenOffice.org."
+
+#~ msgid "Host:"
+#~ msgstr "Υπολογιστής:"
+
+#~ msgid "localhost"
+#~ msgstr "localhost"
+
+#~ msgid "The port the OpenOffice.org Server runs on."
+#~ msgstr "Η θύρα του εξυπηρετητή OpenOffice.org."
+
+#~ msgid "Port:"
+#~ msgstr "Θύρα:"
+
+#~ msgid ""
+#~ "Number of seconds we try to connect before aborting. If set to 0 we try "
+#~ "to connect only once and if failed abort. If the timeout is disabled, we "
+#~ "try to connect forever."
+#~ msgstr ""
+#~ "Αριθμός δευτερολέπτων προσπάθειας σύνδεσης πριν την εγκατάλειψη. Αν "
+#~ "οριστεί σε 0 θα γίνει μία μόνο προσπάθεια πριν την εγκατάλειψη. Αν το "
+#~ "χρονικό όριο είναι ανενεργό γίνεται συνεχώς προσπάθεια σύνδεσης."
+
+#~ msgid "Timeout:"
+#~ msgstr "Χρονικό όριο:"
+
+#~ msgid ""
+#~ "If the first try to connect with OpenOffice.org failed, we are able to "
+#~ "start OpenOffice.org for you, connect with that instance and once the "
+#~ "work is done, shutdown it again."
+#~ msgstr ""
+#~ "Αν η πρώτη προσπάθεια σύνδεση με το OpenOffice.org αποτύχει, υπάρχει η "
+#~ "δυνατότητα έναρξης του OpenOffice.org για σας, σύνδεσης με το εκτελέσιμο "
+#~ "και κατά την ολοκλήρωση της εργασίας, ξανά τερματισμός του."
+
+#~ msgid "Startup and shutdown OpenOffice.org instance if not running already."
+#~ msgstr "Έναρξη και τερματισμός του OpenOffice.org αν δεν εκτελείται ήδη."
+
+#~ msgid "Hide the temporary OpenOffice.org window."
+#~ msgstr "Απόκρυψη του προσωρινού παραθύρου OpenOffice.org."
+
+#~ msgid "Automatic close documents not needed any longer."
+#~ msgstr "Αυτόματο κλείσιμο εγγράφων όταν δε χρειάζονται πλέον."
+
+#~ msgid "Table of Content"
+#~ msgstr "Πίνακας περιεχομένων"
+
+#~ msgid "Classes"
+#~ msgstr "Κλάσεις"
+
+#~ msgid "Class Description"
+#~ msgstr "Περιγραφή κλάσης"
+
+#~ msgid "Slots"
+#~ msgstr "Υποδοχές"
+
+#~ msgid "Signals"
+#~ msgstr "Σήματα"
+
+#~ msgid "Properties"
+#~ msgstr "Ιδιότητες"
+
+#~ msgid "Variables"
+#~ msgstr "Μεταβλητές"
+
+#~ msgid ""
+#~ "The intermedia format the OpenOffice.org Server saves the loaded document "
+#~ "to. KWord then imports the content from those file and once the job is "
+#~ "done, those temporary file got removed again."
+#~ msgstr ""
+#~ "Η ενδιάμεση μορφή μέσου στην οποία αποθηκεύει ο εξυπηρετητής OpenOffice."
+#~ "org το φορτωμένο έγγραφο. Το KWord έπειτα, εισάγει το περιεχόμενο από "
+#~ "αυτό το αρχείο και κατά την ολοκλήρωση της εργασίας, το προσωρινό αρχείο "
+#~ "αφαιρείται."
+
+#~ msgid "ISO OASIS OpenDocument Text"
+#~ msgstr "Κείμενο ISO OASIS OpenDocument"
+
+#~ msgid "HTML Document"
+#~ msgstr "Έγγραφο HTML"
+
+#~ msgid "Encoded Text"
+#~ msgstr "Κωδικοποιημένο κείμενο"
+
+#~ msgid "Delete the currently selected frame(s)"
+#~ msgstr "Διαγραφή του επιλεγμένου πλαισίου(ων)"
+
+#~ msgid "Delete the currently selected frame(s)."
+#~ msgstr "Διαγραφή του επιλεγμένου πλαισίου(ων)."
+
+#~ msgid "First Page Header"
+#~ msgstr "Κεφαλίδα πρώτης σελίδας"
+
+#~ msgid "First Page Footer"
+#~ msgstr "Υποσέλιδο πρώτης σελίδας"
+
+#~ msgid ""
+#~ "Invalid document. 'fo' has the wrong namespace. The application which "
+#~ "produced this document is not OASIS-compliant."
+#~ msgstr ""
+#~ "Μη έγκυρο έγγραφο. Το 'fo' έχει εσφαλμένο χώρο ονομάτων. Η εφαρμογή που "
+#~ "δημιούργησε το έγγραφο αυτό δεν είναι σε πλήρη συμμόρφωση με το πρότυπο "
+#~ "OASIS."

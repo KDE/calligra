@@ -1,0 +1,214 @@
+# translation of PictureShape.po to Italian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the KOffice package.
+# Luciano Montanaro <mikelima@cirulla.net>, 2007, 2008, 2012.
+# Vincenzo Reale <smart2128vr@gmail.com>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PictureShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2016-11-24 20:33+0100\n"
+"Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: ChangeImageCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change image"
+msgstr "Cambia immagine"
+
+#: ChangeImageCommand.cpp:43
+msgctxt "(qtundo-format)"
+msgid "Crop image"
+msgstr "Rifila immagine"
+
+#: ChangeImageCommand.cpp:57
+msgctxt "(qtundo-format)"
+msgid "Change image color mode"
+msgstr "Modifica modalità colore dell'immagine"
+
+#: ClipCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Contour image (by image analysis)"
+msgstr "Aggiungi un contorno all'immagine (analizzando l'immagine)"
+
+#: ClipCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Remove image contour"
+msgstr "Elimina il contorno dell'immagine"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnImageFile)
+#: forms/wdgPictureTool.ui:20
+#, kde-format
+msgid "Replace image..."
+msgstr "Sostituisci immagine..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbAspect)
+#: forms/wdgPictureTool.ui:32
+#, kde-format
+msgid "Keep proportions"
+msgstr "Mantieni le proporzioni"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: forms/wdgPictureTool.ui:58
+#, kde-format
+msgid "Left:"
+msgstr "Sinistra:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: forms/wdgPictureTool.ui:68
+#, kde-format
+msgid "Right:"
+msgstr "Destra:"
+
+#. i18n: ectx: property (text), widget (QLabel, bottomLabel)
+#: forms/wdgPictureTool.ui:91
+#, kde-format
+msgid "Bottom:"
+msgstr "Basso:"
+
+#. i18n: ectx: property (text), widget (QLabel, topLabel)
+#: forms/wdgPictureTool.ui:111
+#, kde-format
+msgid "Top:"
+msgstr "Alto:"
+
+#. i18n: ectx: property (text), widget (QToolButton, bnFill)
+#: forms/wdgPictureTool.ui:131
+#, kde-format
+msgid "Reset"
+msgstr "Ripristina"
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbContour)
+#: forms/wdgPictureTool.ui:148
+#, kde-format
+msgid "Contour (by image analysis)"
+msgstr "Contorno (analizzando l'immagine)"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: forms/wdgPictureTool.ui:178
+#, kde-format
+msgid "Color mode:"
+msgstr "Modalità di colore:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: forms/wdgPictureTool.ui:193
+#, kde-format
+msgid "Crop"
+msgstr "Ritaglia"
+
+#: PictureShapeFactory.cpp:31
+#, kde-format
+msgid "Image"
+msgstr "Immagine"
+
+#: PictureShapeFactory.cpp:33
+#, kde-format
+msgid "Image shape that can display jpg, png etc."
+msgstr "Figura contenente un'immagine che può contenere jpeg, PNG ecc."
+
+#: PictureTool.cpp:95
+#, kde-format
+msgid "Standard"
+msgstr "Standard"
+
+#: PictureTool.cpp:96
+#, kde-format
+msgid "Greyscale"
+msgstr "Scala di grigi"
+
+#: PictureTool.cpp:97
+#, kde-format
+msgid "Monochrome"
+msgstr "monocroma"
+
+#: PictureTool.cpp:98
+#, kde-format
+msgid "Watermark"
+msgstr "Filigrana"
+
+#: PictureToolFactory.cpp:19
+#, kde-format
+msgid "Picture editing"
+msgstr "Modifica delle immagini"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace image..."
+#~ msgstr "Sostituisci immagine..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keep proportions"
+#~ msgstr "Mantieni le proporzioni"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left:"
+#~ msgstr "Sinistra:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right:"
+#~ msgstr "Destra:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom:"
+#~ msgstr "Basso:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top:"
+#~ msgstr "Alto:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset"
+#~ msgstr "Ripristina"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contour (by image analysis)"
+#~ msgstr "Contorno (analizzando l'immagine)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color mode:"
+#~ msgstr "Modalità di colore:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Ritaglia"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Immagine"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image shape that can display jpg, png etc."
+#~ msgstr "Figura contenente un'immagine che può contenere jpeg, PNG ecc."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Standard"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Greyscale"
+#~ msgstr "Scala di grigi"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monochrome"
+#~ msgstr "monocroma"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Watermark"
+#~ msgstr "Filigrana"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Picture editing"
+#~ msgstr "Modifica delle immagini"
+
+#~ msgid "Open"
+#~ msgstr "Apri"
+
+#~ msgid "Picture Tool"
+#~ msgstr "Strumento per le immagini"

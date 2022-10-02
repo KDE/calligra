@@ -1,0 +1,629 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrew Coles <andrew_coles@yahoo.co.uk>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 02:41+0200\n"
+"PO-Revision-Date: 2009-03-15 17:57+0000\n"
+"Last-Translator: Andrew Coles <andrew_coles@yahoo.co.uk>\n"
+"Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: ectx: Menu (tools)
+#: scripting.rc:4
+#, kde-format
+msgid "&Tools"
+msgstr "&Tools"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:7
+#, kde-format
+msgid "Import"
+msgstr "Import"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:7
+#, kde-format
+msgid "Import content"
+msgstr "Import content"
+
+#. i18n: tag script attribute text
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:8 scripts/scripts.rc:26
+#, kde-format
+msgid "Text or HTML File"
+msgstr "Text or HTML File"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:8
+#, kde-format
+msgid "Python script to import content from a text or html file"
+msgstr "Python script to import content from a text or html file"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:12
+#, kde-format
+msgid "Doxygen XML"
+msgstr "Doxygen XML"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:12
+#, kde-format
+msgid "Python script to import content from a combined doxygen XML file"
+msgstr "Python script to import content from a combined doxygen XML file"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:16
+#, kde-format
+msgid "OpenOffice.org UNO"
+msgstr "OpenOffice.org UNO"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:16
+#, kde-format
+msgid "Python script to import content using OpenOffice.org PyUNO"
+msgstr "Python script to import content using OpenOffice.org PyUNO"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:25
+#, kde-format
+msgid "Export"
+msgstr "Export"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:25
+#, kde-format
+msgid "Export content"
+msgstr "Export content"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:26
+#, kde-format
+msgid "Python script to export content to a text or html file"
+msgstr "Python script to export content to a text or html file"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:30
+#, kde-format
+msgid "ReportLab.org PDF"
+msgstr "ReportLab.org PDF"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:30
+#, kde-format
+msgid "Python script to export content to a PDF file using ReportLab.org"
+msgstr "Python script to export content to a PDF file using ReportLab.org"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:40
+#, kde-format
+msgid "Tools"
+msgstr "Tools"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:40
+#, kde-format
+msgid "Miscellaneous scripts"
+msgstr "Miscellaneous scripts"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:41
+#, kde-format
+msgid "XML Viewer"
+msgstr "XML Viewer"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:41
+#, kde-format
+msgid ""
+"Python script to view the OpenDocument XML representation of the current "
+"document"
+msgstr ""
+"Python script to view the OpenDocument XML representation of the current "
+"document"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:45
+#, kde-format
+msgid "Document Tree"
+msgstr "Document Tree"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:45
+#, kde-format
+msgid "QtRuby script that displays the document structure within a treeview"
+msgstr "QtRuby script that displays the document structure within a treeview"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:49
+#, kde-format
+msgid "Online Help"
+msgstr "Online Help"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:49
+#, kde-format
+msgid ""
+"Python script that uses the KHTML Part to display the Words Scripting online "
+"help"
+msgstr ""
+"Python script that uses the KHTML Part to display the Words Scripting online "
+"help"
+
+#. i18n: tag collection attribute text
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:60 scripts/scripts.rc:118
+#, kde-format
+msgid "Variables"
+msgstr "Variables"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:60
+#, kde-format
+msgid "Scripting variables for Words"
+msgstr "Scripting variables for Words"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:62
+#, kde-format
+msgid "Read From File..."
+msgstr "Read From File..."
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:62
+#, kde-format
+msgid "Python script to read a variable from a file"
+msgstr "Python script to read a variable from a file"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:80
+#, kde-format
+msgid "Samples"
+msgstr "Samples"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:80
+#, kde-format
+msgid "Samples to demonstrate scripting with Words"
+msgstr "Samples to demonstrate scripting with Words"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:81
+#, kde-format
+msgid "Insert Shape..."
+msgstr "Insert Shape..."
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:81
+#, kde-format
+msgid "Python script to insert a shape"
+msgstr "Python script to insert a shape"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:85
+#, kde-format
+msgid "Control Cursor..."
+msgstr "Control Cursor..."
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:85
+#, kde-format
+msgid "Ruby script that demonstrates how to control the cursor"
+msgstr "Ruby script that demonstrates how to control the cursor"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:89
+#, kde-format
+msgid "Execute Action..."
+msgstr "Execute Action..."
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:89
+#, kde-format
+msgid "Python script that demonstrates usage of actions"
+msgstr "Python script that demonstrates usage of actions"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:93
+#, kde-format
+msgid "Tool Actions..."
+msgstr "Tool Actions..."
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:93
+#, kde-format
+msgid "Python script that demonstrates usage of tool actions"
+msgstr "Python script that demonstrates usage of tool actions"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:97
+#, kde-format
+msgid "Progressbar"
+msgstr "Progress Bar"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:97
+#, kde-format
+msgid "Python script that demonstrates how to use the progressbar"
+msgstr "Python script that demonstrates how to use the progress bar"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:101
+#, kde-format
+msgid "Text"
+msgstr "Text"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:101
+#, kde-format
+msgid "Python script that demonstrates usage of the text engine"
+msgstr "Python script that demonstrates usage of the text engine"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:105
+#, kde-format
+msgid "Lists with HTML"
+msgstr "Lists with HTML"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:105
+#, kde-format
+msgid "Python script that demonstrates how to create lists with HTML"
+msgstr "Python script that demonstrates how to create lists with HTML"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:110
+#, kde-format
+msgid "Lists with Cursor"
+msgstr "Lists with Cursor"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:110
+#, kde-format
+msgid "Python script that demonstrates how to create lists with a cursor"
+msgstr "Python script that demonstrates how to create lists with a cursor"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:114
+#, kde-format
+msgid "Tables"
+msgstr "Tables"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:114
+#, kde-format
+msgid "Python script that demonstrates how to deal with tables"
+msgstr "Python script that demonstrates how to deal with tables"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:118
+#, kde-format
+msgid "Python script that demonstrates how to handle variables"
+msgstr "Python script that demonstrates how to handle variables"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:122
+#, kde-format
+msgid "All Shapes"
+msgstr "All Shapes"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:122
+#, kde-format
+msgid "Python script adds all shapes"
+msgstr "Python script adds all shapes"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "&Tools"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Import"
+
+#, fuzzy
+#~| msgid "Import content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import content"
+#~ msgstr "Import content"
+
+#, fuzzy
+#~| msgid "Text or HTML File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text or HTML File"
+#~ msgstr "Text or HTML File"
+
+#, fuzzy
+#~| msgid "Python script to import content from a text or html file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to import content from a text or html file"
+#~ msgstr "Python script to import content from a text or html file"
+
+#, fuzzy
+#~| msgid "Doxygen XML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Doxygen XML"
+#~ msgstr "Doxygen XML"
+
+#, fuzzy
+#~| msgid "Python script to import content from a combined doxygen XML file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to import content from a combined doxygen XML file"
+#~ msgstr "Python script to import content from a combined doxygen XML file"
+
+#, fuzzy
+#~| msgid "OpenOffice.org UNO"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "OpenOffice.org UNO"
+#~ msgstr "OpenOffice.org UNO"
+
+#, fuzzy
+#~| msgid "Python script to import content using OpenOffice.org PyUNO"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to import content using OpenOffice.org PyUNO"
+#~ msgstr "Python script to import content using OpenOffice.org PyUNO"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Export"
+
+#, fuzzy
+#~| msgid "Export content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export content"
+#~ msgstr "Export content"
+
+#, fuzzy
+#~| msgid "Python script to export content to a text or html file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to export content to a text or html file"
+#~ msgstr "Python script to export content to a text or html file"
+
+#, fuzzy
+#~| msgid "ReportLab.org PDF"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ReportLab.org PDF"
+#~ msgstr "ReportLab.org PDF"
+
+#, fuzzy
+#~| msgid "Python script to export content to a PDF file using ReportLab.org"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to export content to a PDF file using ReportLab.org"
+#~ msgstr "Python script to export content to a PDF file using ReportLab.org"
+
+#, fuzzy
+#~| msgid "Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "Tools"
+
+#, fuzzy
+#~| msgid "Miscellaneous scripts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Miscellaneous scripts"
+#~ msgstr "Miscellaneous scripts"
+
+#, fuzzy
+#~| msgid "XML Viewer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "XML Viewer"
+#~ msgstr "XML Viewer"
+
+#, fuzzy
+#~| msgid ""
+#~| "Python script to view the OpenDocument XML representation of the current "
+#~| "document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Python script to view the OpenDocument XML representation of the current "
+#~ "document"
+#~ msgstr ""
+#~ "Python script to view the OpenDocument XML representation of the current "
+#~ "document"
+
+#, fuzzy
+#~| msgid "Document Tree"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Tree"
+#~ msgstr "Document Tree"
+
+#, fuzzy
+#~| msgid ""
+#~| "QtRuby script that displays the document structure within a treeview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QtRuby script that displays the document structure within a treeview"
+#~ msgstr ""
+#~ "QtRuby script that displays the document structure within a treeview"
+
+#, fuzzy
+#~| msgid "Online Help"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Online Help"
+#~ msgstr "Online Help"
+
+#, fuzzy
+#~| msgid ""
+#~| "Python script that uses the KHTML Part to display the Words Scripting "
+#~| "online help"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Python script that uses the KHTML Part to display the Words Scripting "
+#~ "online help"
+#~ msgstr ""
+#~ "Python script that uses the KHTML Part to display the Words Scripting "
+#~ "online help"
+
+#, fuzzy
+#~| msgid "Variables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Variables"
+#~ msgstr "Variables"
+
+#, fuzzy
+#~| msgid "Scripting variables for Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scripting variables for Words"
+#~ msgstr "Scripting variables for Words"
+
+#, fuzzy
+#~| msgid "Read From File..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Read From File..."
+#~ msgstr "Read From File..."
+
+#, fuzzy
+#~| msgid "Python script to read a variable from a file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to read a variable from a file"
+#~ msgstr "Python script to read a variable from a file"
+
+#, fuzzy
+#~| msgid "Samples"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Samples"
+#~ msgstr "Samples"
+
+#, fuzzy
+#~| msgid "Samples to demonstrate scripting with Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Samples to demonstrate scripting with Words"
+#~ msgstr "Samples to demonstrate scripting with Words"
+
+#, fuzzy
+#~| msgid "Insert Shape..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Shape..."
+#~ msgstr "Insert Shape..."
+
+#, fuzzy
+#~| msgid "Python script to insert a shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script to insert a shape"
+#~ msgstr "Python script to insert a shape"
+
+#, fuzzy
+#~| msgid "Control Cursor..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Control Cursor..."
+#~ msgstr "Control Cursor..."
+
+#, fuzzy
+#~| msgid "Ruby script that demonstrates how to control the cursor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ruby script that demonstrates how to control the cursor"
+#~ msgstr "Ruby script that demonstrates how to control the cursor"
+
+#, fuzzy
+#~| msgid "Execute Action..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Execute Action..."
+#~ msgstr "Execute Action..."
+
+#, fuzzy
+#~| msgid "Python script that demonstrates usage of actions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates usage of actions"
+#~ msgstr "Python script that demonstrates usage of actions"
+
+#, fuzzy
+#~| msgid "Tool Actions..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tool Actions..."
+#~ msgstr "Tool Actions..."
+
+#, fuzzy
+#~| msgid "Python script that demonstrates usage of tool actions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates usage of tool actions"
+#~ msgstr "Python script that demonstrates usage of tool actions"
+
+#, fuzzy
+#~| msgid "Progressbar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Progressbar"
+#~ msgstr "Progress Bar"
+
+#, fuzzy
+#~| msgid "Python script that demonstrates how to use the progressbar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates how to use the progressbar"
+#~ msgstr "Python script that demonstrates how to use the progress bar"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text"
+#~ msgstr "Text"
+
+#, fuzzy
+#~| msgid "Python script that demonstrates usage of the text engine"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates usage of the text engine"
+#~ msgstr "Python script that demonstrates usage of the text engine"
+
+#, fuzzy
+#~| msgid "Lists with HTML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lists with HTML"
+#~ msgstr "Lists with HTML"
+
+#, fuzzy
+#~| msgid "Python script that demonstrates how to create lists with HTML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates how to create lists with HTML"
+#~ msgstr "Python script that demonstrates how to create lists with HTML"
+
+#, fuzzy
+#~| msgid "Lists with Cursor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lists with Cursor"
+#~ msgstr "Lists with Cursor"
+
+#, fuzzy
+#~| msgid "Python script that demonstrates how to create lists with a cursor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates how to create lists with a cursor"
+#~ msgstr "Python script that demonstrates how to create lists with a cursor"
+
+#, fuzzy
+#~| msgid "Tables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tables"
+#~ msgstr "Tables"
+
+#, fuzzy
+#~| msgid "Python script that demonstrates how to deal with tables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates how to deal with tables"
+#~ msgstr "Python script that demonstrates how to deal with tables"
+
+#, fuzzy
+#~| msgid "Python script that demonstrates how to handle variables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script that demonstrates how to handle variables"
+#~ msgstr "Python script that demonstrates how to handle variables"
+
+#, fuzzy
+#~| msgid "All Shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All Shapes"
+#~ msgstr "All Shapes"
+
+#, fuzzy
+#~| msgid "Python script adds all shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python script adds all shapes"
+#~ msgstr "Python script adds all shapes"

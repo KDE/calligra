@@ -1,0 +1,951 @@
+<chapter id="basics">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+> <firstname
+>Stefan</firstname
+> <surname
+>Asserhäll</surname
+> <affiliation
+><address
+><email
+>stefan.asserhall@bredband.net</email
+></address
+></affiliation
+> <contrib
+>Översättare</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>&sheets; grunder</title>
+
+<note
+><para
+>Liksom övriga &kde;, har &sheets; många inställningsmöjligheter, som kan orsaka problem för läsare som försöker jämföra texten i ett dokument som det här, med vad de ser i den version av &sheets; som kör på deras skrivbord. För att skära bort några av möjligheterna till förvirring, föreslår vi att du väljer de förvalda alternativen på alla sidor i &sheets; inställningsdialogruta när du först börjar använda &sheets; (de erhålls genom att välja <menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Anpassa Tables...</guimenuitem
+></menuchoice
+>). </para
+></note>
+
+<sect1 id="starting">
+<title
+>Kalkylblad för nybörjare</title>
+
+<para
+>Det här avsnittet försöker förklara, med hjälp av exempel, vad ett kalkylprogram som &sheets; i själva verket gör, och varför det är ett så användbart verktyg när man måste hantera tal. Om du redan har använt ett kalkylprogram, så kanske du vill gå direkt till nästa avsnitt.</para>
+
+<para
+>Det första du ska göra, är att starta &sheets;. Du kan göra det genom att <mousebutton
+>vänster</mousebutton
+>klicka på &sheets; ikon, om det finns en på skrivbordet eller i panelen, eller du kan välja <menuchoice
+><guimenu
+>Kontor</guimenu
+><guimenuitem
+>&sheets;</guimenuitem
+></menuchoice
+> i K-menyn.</para>
+
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="newdocument.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>&sheets; efter första start</phrase>
+</textobject>
+</mediaobject
+>När det har startat får du valet att öppna senaste dokument, skapa ett nytt dokument från en mall (med mallkategorier) eller öppna ett befintligt dokument. Välj kategorin <guilabel
+>Allmänt</guilabel
+> till vänster och välj mallen <guilabel
+>Tomt arbetsblad</guilabel
+>. Klicka därefter på knappen <guibutton
+>Använd den här mallen</guibutton
+>.</para>
+
+<para
+>Om du tittar på &sheets; när det väl har startat, ser du en tabell med tomma rektangulära celler, arrangerade i rader med nummer och kolumner med bokstäver. Det är här som data, formler, text eller diagram matas in. <mediaobject>
+<imageobject>
+<imagedata fileref="starting1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Skärmbild första starten</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Skriv nu in den text och de värden som visas i de fem första raderna på skärmbilden ovan, i samma celler på kalkylbladet. Ignorera vad som finns på rad 7 för ögonblicket. För att skriva in något i en cell, markera först cellen genom att <mousebutton
+>vänster</mousebutton
+>klicka inne i den, skriv därefter vad du vill, och tryck sedan på <keycap
+>Enter</keycap
+> eller använd piltangenterna för att flytta markeringen till en annan cell. </para>
+<para
+>Vad vi har skrivit in hittills skulle kunna vara en enkel budget för följande två månader, som listar hur mycket vi tänker spendera på Mat, Bostad, Kläder och Övriga kostnader. Välj nu cell B7 (kolumn B, rad 7), skriv in <userinput
+>=B2+B3+B4+B5</userinput
+> och tryck på <keycap
+>Enter</keycap
+>. Eftersom detta börjar med tecknet <keycap
+>=</keycap
+>, anser &sheets; att det är en formel, något som måste beräknas, i det här fallet genom att summera värden i de fyra cellerna B2 till B5, och vad som visas i cell B7 är resultatet av beräkningen.</para>
+<para
+>Du skulle kunna skriva in en liknande formel i cell C7, utom att i det här fallet skulle det behöva vara <userinput
+>=C2+C3+C4+C5</userinput
+>, men det finns ett enklare sätt, nämligen att kopiera innehållet i cell B7 och klistra in det i C7. &sheets; justerar automatiskt cellreferenserna från B.. till C.. när värdet klistras in.</para>
+<para
+>Just nu kanske du tycker att &sheets; inte gör mer än du skulle kunna hantera med penna, papper och en miniräknare, och det kan vara riktigt, men kom ihåg att det här är ett mycket litet exempel på ett kalkylblad, som gör enkla beräkningar med ett fåtal värden. För alla rimligt stora tabeller med värden eller data, är det mycket snabbare och noggrannare att använda ett kalkylblad för att göra beräkningarna, än att göra dem för hand.</para>
+<para
+>Dessutom låter ett kalkylblad dig leka <quote
+>Vad händer om?</quote
+> Eftersom varje formel automatiskt räknas om så fort något av de värden som den beror på ändras, så kan man snabbt se vad som händer om något av dem ändras. Med vårt exempel, så kan man se effekten av att reducera kostnaden för mat i december, genom att helt enkelt skriva in ett nytt värde i cell C2. Eller om ett kalkylblad noggrant modellerade växthuseffekten, skulle man till exempel kunna se effekten av en 50 procentig minskning av metankoncentrationen.</para>
+</sect1>
+
+<sect1 id="selecting">
+<title
+>Markera celler</title>
+<para
+>Du kan välja en enda cell, eller ett rektangulärt område, i kalkyltabellen. De markerade cellerna visas med en tjock svart kant. </para>
+<itemizedlist>
+<title
+>Du kan välja en ensam cell på ett av följande sätt</title>
+<listitem
+><para
+><mousebutton
+>vänster</mousebutton
+>klicka på den</para
+></listitem>
+<listitem
+><para
+>skriv in cellreferensen (till exempel <userinput
+>B5</userinput
+>) i cellreferensrutan i vänsterkanten av <guilabel
+>Celleditorn</guilabel
+> under verktygsalternativ och tryck på <keycap
+>Enter</keycap
+></para
+></listitem>
+<listitem
+><para
+>använd menyalternativet <menuchoice
+><guimenu
+>Gå</guimenu
+><guimenuitem
+>Gå till cell...</guimenuitem
+></menuchoice
+></para
+></listitem>
+</itemizedlist>
+
+<para
+>Du kan också flytta runt med <keysym
+>pil</keysym
+>tangenterna. Genom att trycka på tangenten <keysym
+>Enter</keysym
+> flyttas den nuvarande markeringen ett steg uppåt, neråt, åt vänster eller åt höger, beroende på inställningen på sidan <guilabel
+>Diverse</guilabel
+> i &sheets; <link linkend="configinterface"
+>inställningsdialogruta</link
+>.</para
+> <para
+>Om du håller nere <keycombo action="simul"
+>&Shift;</keycombo
+>-tangenten medan <keysym
+>pil</keysym
+>tangenterna används, så flyttas markeringen till början eller slutet av blocket med använda celler.</para>
+<para
+>För att välja ett område med celler, dra musmarkören över det önskade området med <mousebutton
+>vänster</mousebutton
+> musknapp nertryckt, eller skriv in referenserna för övre vänstra och nedre högra cellen skilda av ett kolon i cellreferensrutan <guilabel
+>Celleditor</guilabel
+> (till exempel <userinput
+>B7:C14 </userinput
+>) och tryck på <keycap
+>Enter</keycap
+>, eller skriv in cellreferenserna med ett liknande format i dialogrutan som visas med <menuchoice
+><guimenu
+>Gå</guimenu
+> <guimenuitem
+>Gå till cell...</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Du kan också välja ett område med celler genom att markera cellen i ett hörn av det önskade området, och sedan hålla nere <keycombo action="simul"
+>&Shift;</keycombo
+>-tangenten medan <mousebutton
+>vänster</mousebutton
+> musknapp används för att markera cellen i motsatt hörn.</para>
+
+<para
+>För att välja celler som inte är intilliggande, klicka på den första cellen du vill markera och håll därefter ner <keycombo action="simul"
+>&Ctrl;</keycombo
+>-tangenten medan övriga celler markeras.</para>
+
+<para
+>För att välja en hel rad eller kolumn med celler, <mousebutton
+>vänster</mousebutton
+>klicka på radnumret till vänster om tabellen eller kolumnens bokstav över tabellen. För att välja intilliggande rader och kolumner, dra muspekaren över motsvarande radnummer eller kolumnbokstäver med <mousebutton
+>vänster</mousebutton
+> musknapp nertryckt.</para>
+<para
+>För att välja rader eller kolumner av celler som inte är intilliggande, klicka på det första radnumret eller den första kolumnbokstaven och håll därefter ner <keycombo action="simul"
+>&Ctrl;</keycombo
+>-tangenten medan övriga rader eller kolumner markeras.</para>
+
+</sect1>
+
+<sect1 id="entering">
+<title
+>Skriva in data</title>
+<para
+>Att skriva in data in en cell kan vara så enkelt som att markera cellen, skriva data, och därefter trycka på <keycap
+>Enter</keycap
+> eller flytta markeringen till en annan cell med någon av <keysym
+>pil</keysym
+>tangenterna. Beroende på hur du skriver in data, tolkas det av &sheets; som ett tal, datum, tid eller text:</para>
+<itemizedlist>
+<listitem
+><para
+>Nummer skrivs in på det självklara sättet, <userinput
+>123</userinput
+>, <userinput
+>-123</userinput
+>, <userinput
+>456,7</userinput
+> eller med vetenskaplig notation <userinput
+>1,2E-5</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>Datum ska skrivas in med <quote
+>systemformatet</quote
+>, som det definieras i systeminställningarnas dialogruta <menuchoice
+><guimenu
+>Region</guimenu
+><guisubmenu
+>Land/region och språk</guisubmenu
+><guimenuitem
+>Datum och tid</guimenuitem
+></menuchoice
+>. Om du till exempel använder formatet ÅÅÅÅ-MM-DD, ska du skriva in <userinput
+>2012-03-30</userinput
+> för 30:e mars, 2012. Inledande nollor kan utelämnas i dagen och månaden och bara den sista eller de två sista siffrorna av året måste skrivas in om datumet gäller nuvarande århundrade, till exempel <userinput
+>9-1-9</userinput
+> för 9:e januari, 2009. </para
+></listitem>
+<listitem
+><para
+>Tider ska också skrivas in med <quote
+>systemformatet</quote
+>. Om du till exempel använder en 24-timmarsklocka, skriv då in tider som TT:MM eller TT:MM:SS, som <userinput
+>9:42</userinput
+> eller <userinput
+>22:30:52</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>&sheets; definierar all inmatad data som <quote
+>text</quote
+> om det inte kan tolkas som ett nummer, datum eller tid. </para
+></listitem>
+</itemizedlist>
+<note
+><para
+>Normalt högerjusterar &sheets; nummer, datum och tider inne i en cell, och vänsterjusterar allt annat. Detta kan vara en användbar indikation på om du skrev in ett datum eller en tid med rätt format. Men kom ihåg att sättet som objekt visas kan ändras, genom att ändra <link linkend="formatdata"
+>cellformatet</link
+>.</para
+></note>
+
+<para
+>Huvudrutan för textinmatning under verktygsalternativen i <guilabel
+>Celleditor</guilabel
+> tillhandahåller ett enkelt sätt att redigera innehållet av en markerad cell. Tryck på <keycap
+>Enter</keycap
+> eller <mousebutton
+>vänster</mousebutton
+>klicka på den gröna bocken när du är nöjd med det du skrivit in, eller klicka på det röda korset för att avbryta redigeringen.</para>
+
+<sect2 id="genericformat">
+<title
+>Generellt cellformat</title>
+<para
+>&sheets; använder cellformatet <quote
+>Generellt</quote
+> som förval. Så länge det formatet används, detekterar &sheets; automatiskt den verkliga datatypen beroende på aktuell celldata. Om du till exempel skriver in text i en cell och senare skriver in ett tal i samma cell, tolkar &sheets; automatiskt det nya värdet som ett tal. Om du vill definiera datatypen själv, kan du explicit ange den under <link linkend="formatdata"
+>cellformat</link
+>. Du kan ändra formatet tillbaka till <quote
+>Generellt</quote
+> när som helst. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="copypaste">
+<title
+>Kopiera, klippa ut och klistra in</title>
+
+<para
+>Vid första påseendet, verkar &sheets; <guimenuitem
+>Klipp ut</guimenuitem
+>, <guimenuitem
+>Kopiera</guimenuitem
+> och <guimenuitem
+>Klistra in</guimenuitem
+> likna samma funktioner i andra &kde;-program. När en cell eller flera celler har markerats, kan du välja <guimenuitem
+>Kopiera</guimenuitem
+> eller <guimenuitem
+>Klipp ut</guimenuitem
+> i menyn <guimenu
+>Redigera</guimenu
+> eller i menyn som visas genom att hålla nere <mousebutton
+>höger</mousebutton
+> musknapp på en markerad cell, eller genom att använda snabbtangenterna <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> eller <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+>. Därefter kan du flytta markeringen till cellen där du vill klistra in, och välja <guimenuitem
+>Klistra in</guimenuitem
+> eller trycka på <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+>. Det finns dock vissa hårfina skillnader som hör ihop med de här funktionerna i &sheets;, som beskrivs nedan.</para>
+
+<para
+>Om en cell innehåller en formel, så kopieras själva formeln istället för resultatet som visas. Om formeln innehåller en referens till en annan cell, så ändras referensen av operationerna <guimenuitem
+>Klipp ut</guimenuitem
+> eller <guimenuitem
+>Kopiera</guimenuitem
+> och <guimenuitem
+>Klistra in</guimenuitem
+> så att den pekar på cellen som har samma relativa position som originalcellen. Om till exempel cell A2 innehåller formeln <userinput
+>=B3</userinput
+> och den kopieras till C4, så kommer cell C4 att innehålla <userinput
+>=D5</userinput
+>.</para>
+<para
+>Det här kan verka vara ett ganska konstigt sätt att göra en kopia, men i 99 procent av fallen är detta exakt vad man vill ha (om det inte är det, se avsnittet om <link linkend="absolute"
+>absoluta cellreferenser</link
+>). I den enkla shoppinglistan som visas nedan, så ska cell D2 innehålla <userinput
+>=B2 * C2</userinput
+>, D3 ska vara <userinput
+>=B3 * C3</userinput
+>, D4 ska vara <userinput
+>=B4 * C4</userinput
+> och så vidare. Istället för att behöva skriva in en annorlunda formel i varje cell, så kan man bara skriva in den första formeln i D2 och sedan kopiera den till cellerna nedanför, och låta &sheets; justera cellreferenserna så att de passar.</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="copy1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Skärmbild första kopieringen</phrase>
+</textobject>
+</mediaobject>
+
+<sect2 id="copypasteareas">
+<title
+>Kopiera och klistra in cellområden</title>
+<para
+>I exemplet ovan kan D2 kopieras till alla tre cellerna D3 till D5 på en gång, genom att bara kopiera D2 och därefter välja hela cellområdet innan man klistrar in.</para>
+<para
+>Ett rektangulärt område med celler kan klippas ut eller kopieras på en gång genom att välja området innan man klipper ut eller kopierar. Man väljer därefter övre vänstra hörnet på området där resultatet ska klistras in, innan man klistrar in.</para>
+<para
+>Om man klipper ut eller kopierar ett rektangulärt område med celler, till exempel B2:C3, och klistrar in det i ett större område som A10:D13 så upprepas mönstret i det ursprungliga området för att fylla det större området.</para>
+<para
+>&sheets; tillhandahåller också en metod för att <quote
+>dra och kopiera</quote
+> celler till andra celler omedelbart nedanför eller till höger om de ursprungliga cellerna. För att använda den här metoden, välj cellerna som ska kopieras och placera därefter muspekaren över den lilla svarta fyrkanten i nedre högra hörnet av de markerade cellerna, så att markören ändras till en pil med två huvuden. Håll därefter nere <mousebutton
+>vänster</mousebutton
+> musknapp medan de markerade cellerna dras så långt som önskas. Observera att cellreferenserna i formler inkrementeras enligt den relativa positionsändringen. Absoluta referenser ändras inte.</para>
+</sect2>
+
+<sect2 id="specialpaste">
+<title
+>Andra inklistringslägen</title>
+<para
+>En cell kan innehålla text, ett värde eller en formel, och kan också innehålla särskild teckensnitts-, kant- eller bakgrunds-<link linkend="formatspread"
+>formateringsinformation</link
+>. &sheets; har speciella versioner av Klistra in, som låter dig hantera den här informationen på olika sätt.</para>
+
+<para
+><menuchoice
+><guimenu
+>Redigera</guimenu
+><guimenuitem
+>Klistra in special...</guimenuitem
+></menuchoice
+> visar dialogrutan <guilabel
+>Klistra in special</guilabel
+>. Genom att välja lämpligt alternativ i den vänstra delen av dialogrutan, kan du välja att klistra in <guilabel
+>Allting</guilabel
+>, bara <guilabel
+>Text</guilabel
+>, cellens <guilabel
+>Format</guilabel
+>, en eventuell <guilabel
+>Kommentar</guilabel
+> i cellen eller <guilabel
+>Allting utan kant</guilabel
+>. Alternativen i nedre delen av dialogrutan låter dig utföra enkel <link linkend="sumspecialpaste"
+>aritmetik med ett cellområde</link
+>. </para>
+
+<para
+><guimenuitem
+>Klistra in och infoga...</guimenuitem
+> infogar de kopierade cellerna i tabellen genom att flytta celler som annars skulle skrivas över ett lämpligt antal rader eller kolumner neråt och till höger. Det kan också användas för att infoga hela kopierade rader eller kolumner i tabellen.</para>
+</sect2>
+
+</sect1>
+<!-- ME insdel -->
+<sect1 id="insdel">
+<title
+>Infoga och ta bort</title>
+<para
+>Använd tangenten <keysym
+>Delete</keysym
+> eller <menuchoice
+><guimenu
+>Redigera</guimenu
+><guisubmenu
+>Rensa</guisubmenu
+><guimenuitem
+>Innehåll</guimenuitem
+></menuchoice
+> för att ta bort texten, värdet eller formeln från markerade celler, rader eller kolumner utan att påverka någonting annat.</para>
+
+<para
+>För att ta bort allt i markerade celler, rader eller kolumner, även kommentarer och särskild formatering, använd alternativet <guimenuitem
+>Alla</guimenuitem
+> i menyn <menuchoice
+><guimenu
+>Redigera</guimenu
+><guisubmenu
+>Rensa</guisubmenu
+></menuchoice
+>, eller i menyn som visas när du <mousebutton
+>höger</mousebutton
+>klickar på en markering. </para>
+<para
+>För att helt och hållet ta bort markerade rader eller kolumner från tabellen, använd alternativen <guimenuitem
+>Ta bort rader</guimenuitem
+>, eller <guimenuitem
+>Ta bort kolumner</guimenuitem
+> från menyn som visas med <mousebutton
+>höger</mousebutton
+> musknapp.</para>
+<para
+>Om du markerar en eller flera celler och väljer <guimenuitem
+>Ta bort celler...</guimenuitem
+> i menyn som visas med <mousebutton
+>höger</mousebutton
+> musknapp, kan du välja om andra celler på arbetsbladet ska flyttas upp eller åt vänster för att fylla i utrymmet som lämnas av cellen eller cellerna som du har valt att ta bort.</para>
+<para
+>Om du vill infoga nya tomma rader eller kolumner på bladet, markera raderna eller kolumnerna där du vill att de nya raderna eller kolumnerna ska placeras, och välj alternativen <guimenuitem
+>Infoga rader</guimenuitem
+> eller <guimenuitem
+>Infoga kolumner</guimenuitem
+> i menyn som visas med <mousebutton
+>höger</mousebutton
+> musknapp.</para>
+<para
+>Du kan infoga nya celler på arbetsbladet genom att markera området där du vill att de ska visas, och sedan välja alternativet <guimenuitem
+>Infoga celler...</guimenuitem
+> i menyn som visas med <mousebutton
+>höger</mousebutton
+> musknapp. Du blir då tillfrågad om de befintliga cellerna i det markerade området ska flyttas ner eller till höger för att ge utrymme för de nya.</para>
+
+</sect1>
+
+<sect1 id="simplesums">
+<title
+>Enkla summor</title>
+<para
+>Om det första tecknet i en cell är ett likhetstecken (<keycap
+>=</keycap
+>) antar &sheets; att cellens innehåll är en formel som ska beräknas. Resultatet av beräkningen visas i cellen, istället för själva formeln. Skriv till exempel in <userinput
+>=2+3</userinput
+> i en cell, så ska resultatet <emphasis
+>5</emphasis
+> visas.</para>
+<para
+>Mer användbart är att en formel kan innehålla referenser till andra celler, så att <userinput
+>=B4+A3</userinput
+> beräknar summan av värden i cellerna B4 och A3, och den här beräkningen uppdateras så fort cellerna B4 eller A3 ändras.</para>
+<para
+>Förutom addition, kan en formel använda symbolen <keycap
+>-</keycap
+> för subtraktion, <keycap
+>*</keycap
+> för multiplikation och <keycap
+>/</keycap
+> för att utföra division. Runda parenteser <keycap
+>(</keycap
+> och <keycap
+>)</keycap
+> kan också användas som i vanlig algebra, så att du kan skriva in sammansatta formler såsom <userinput
+>=((B10 + C3) *5 - F11) / 2 </userinput
+>.</para>
+
+<para
+>Celler som innehåller en formel, markeras med en liten blå triangel i nedre vänstra hörnet om kryssrutan <guilabel
+>Visa formelindikering</guilabel
+> i dialogrutan <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Arbetsblad</guisubmenu
+> <guisubmenu
+>Egenskaper för arbetsblad</guisubmenu
+></menuchoice
+> är markerad.</para>
+<para
+>&sheets; innehåller också ett stort antal inbyggda formler för beräkningstillämpningar inom statistik, trigonometri och finans. Hur de används betraktas mer ingående i ett <link linkend="formulas"
+>senare avsnitt</link
+> i handboken, men om du redan är intresserad nu, välj <guimenuitem
+>Funktion...</guimenuitem
+> i menyn <guimenu
+>Infoga</guimenu
+> och titta igenom dialogrutan <guilabel
+>Funktion</guilabel
+> som visas.</para>
+<para
+>För tillfället kan formeln <userinput
+>SUM</userinput
+> vara intressant, eftersom den beräknar summan av alla värden i ett angivet område med celler. Till exempel så beräknar <userinput
+>=SUM(B4:C10)</userinput
+> summan av alla värden i cellområdet B4 till C10.</para>
+<para
+>Om &sheets; visar en rad med symbolen <keycap
+>#</keycap
+> när du har skrivit in formeln, så betyder det här oftast att det inte går att tolka vad du har skrivit in, men om raden med <keycap
+>#</keycap
+> slutar med en liten röd pil, betyder det bara att cellen inte är bred nog att visa hela resultatet. I detta fall bör du antingen göra cellen bredare eller ändra <link linkend="formatdata"
+>formatet</link
+> så att resultatet får plats.</para>
+
+<sect2 id="recalc">
+<title
+>Räkna om</title>
+<para
+>Om rutan <guilabel
+>Automatisk omräkning</guilabel
+> i dialogrutan <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Arbetsblad</guisubmenu
+> <guisubmenu
+>Egenskaper för arbetsblad</guisubmenu
+></menuchoice
+> är markerad, så räknar &sheets; om värden i celler så fort något som påverkar dem ändras.</para>
+<para
+>När <guilabel
+>Automatisk omräkning</guilabel
+> inte är markerad för nuvarande arbetsblad, kan du begära att &sheets; utför en omräkning när som helst, genom att använda alternativen <guimenuitem
+>Räkna om arbetsblad</guimenuitem
+> eller <guimenuitem
+>Räkna om dokument</guimenuitem
+> i menyn <guimenu
+>Verktyg</guimenu
+> eller snabbtangenterna <keycombo action="simul"
+>&Shift;<keysym
+>F9</keysym
+></keycombo
+> eller <keysym
+>F9</keysym
+>.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sort">
+<title
+>Sortera data</title>
+<para
+>I det enkla exemplet nedan, består data av namn och länder för ett antal berg, tillsammans med deras höjd över havet. &sheets; låter oss sortera sådan data på olika sätt.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sort1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Skärmbild av sorterad data</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Vi kanske vill sortera data så att namnen är i alfabetisk ordning. Markera området som innehåller data (A2:C7 i detta fall) och välj <guimenuitem
+>Sortera...</guimenuitem
+> i menyn <guimenu
+>Data</guimenu
+> för att göra det. Det visar dialogrutan <guilabel
+>Sortera</guilabel
+>.</para
+> 
+<para
+>Sortering görs alfanumeriskt, och är normalt skiftlägeskänslig. Nummer kommer före stora bokstäver, som kommer före små bokstäver, så att celler som innehåller <userinput
+>Cykel</userinput
+>, <userinput
+>bar</userinput
+>, <userinput
+>77</userinput
+> och <userinput
+>Båge</userinput
+> skulle sorteras i följande ordning: <emphasis
+>77 Båge Cykel bar</emphasis
+>.</para>
+<!-- Obsolete, AFAICT (Phil)
+<para
+>The <guimenuitem
+>Sort Increasing</guimenuitem
+> and <guimenuitem
+>Sort 
+Decreasing</guimenuitem
+> options from the <guimenu
+>Data</guimenu
+> menu options 
+sort the data according to the contents of the cells in the left column of the 
+selected area. For more complex sorting select <menuchoice
+><guimenu
+>Data
+</guimenu
+><guimenuitem
+>Sort...</guimenuitem
+></menuchoice
+> to bring up the 
+<guilabel
+>Sort</guilabel
+> dialog box.</para>
+-->
+<para
+>Välj att sortera enligt rader eller kolumner i rutan <guilabel
+>Riktning</guilabel
+> i dialogrutan. Om du markerar rutan <guilabel
+>Första raden innehåller kolumnrubriker</guilabel
+> eller <guilabel
+>Första kolumnen innehåller radrubriker</guilabel
+> ingår inte data i första raden eller kolumnen i sorteringen.</para>
+<para
+>Raderna eller kolumnerna sorteras i angiven ordning, vilket kan ändras med knapparna <guibutton
+>Flytta upp</guibutton
+> och <guibutton
+>Flytta ner</guibutton
+>. Med användning av exemplet på skärmbilden ovan, att välja kolumn B som första nyckel och kolumn C som andra, skulle sortera data enligt land, och för varje land, enligt höjd.</para>
+<para
+>Avmarkera alternativet <guilabel
+>Skiftlägeskänslig</guilabel
+> för att få en sortering som inte beror på bokstävernas storlek, och byt sorteringsordning mellan <guilabel
+>Stigande</guilabel
+> och <guilabel
+>Fallande</guilabel
+> genom att klicka på cellerna i kolumnen <guilabel
+>Sorteringsordning</guilabel
+>. </para>
+
+<para
+>Sidan <guilabel
+>Detaljer 
+>
+></guilabel
+> i dialogrutan låter dig sortera genom att använda ordningen hos objekt som januari, februari, ... istället för alfanumeriskt. Cellformatet flyttas med cellinnehållet om du väljer <guilabel
+>Kopiera cellformatering (kanter, färger, textstil)</guilabel
+>. </para>
+</sect1>
+
+
+<sect1 id="statusbarsum">
+<title
+>Statusradens summeringsräknare</title>
+<para
+>Vänstra delen av statusraden visar en summering av värden i markerade celler. Beroende på inställningen i kombinationsrutan <guilabel
+>Funktion som visas i statusraden</guilabel
+> på sidan <guilabel
+>Gränssnitt</guilabel
+> i &sheets; inställningsdialogruta, kan summeringen vara:</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Inget</guilabel
+></term>
+<listitem
+><para
+>Ingen summeringsberäkning utförs. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Normal</guilabel
+></term>
+<listitem
+><para
+>Värdet som visas är medelvärdet av alla värden i de markerade cellerna. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Antal</guilabel
+></term>
+<listitem
+><para
+>Värdet som visas är antalet celler som innehåller numeriska värden. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>AntalA</guilabel
+></term>
+<listitem
+><para
+>Värdet som visas är antalet celler som inte är tomma. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Max</guilabel
+></term>
+<listitem
+><para
+>Värdet som visas är maximum av alla värden i de markerade cellerna. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Min</guilabel
+></term>
+<listitem
+><para
+>Värdet som visas är minimum av alla värden i de markerade cellerna. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Summa</guilabel
+></term>
+<listitem
+><para
+>Värdet som visas är summan av alla värden i de markerade cellerna. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+<para
+>Beräkningsmetoden kan också ändras genom att <mousebutton
+>höger</mousebutton
+>klicka på resultatområdet för summeringsberäkningen i statusraden, och välja ett alternativ i menyn som visas.</para>
+
+</sect1>
+
+<sect1 id="saving">
+<title
+>Spara ditt arbete</title>
+<para
+>&sheets; sparar hela dokumentet, som kan innehålla mer än ett arbetsblad, som en enda dokumentfil.</para>
+<para
+>Om du har skapat ett nytt dokument, eller vill spara en befintlig med ett annat namn, använd <menuchoice
+><guimenu
+>Arkiv</guimenu
+> <guimenuitem
+> Spara som...</guimenuitem
+></menuchoice
+>. Det visar &kde;:s vanliga dialogruta <guilabel
+>Spara dokument som</guilabel
+>. Välj katalog där du vill spara dokumentet, och skriv in ett lämpligt filnamn i textrutan <guilabel
+>Namn</guilabel
+>. &sheets;-dokument sparas normalt automatiskt med filändelsen <filename
+>.ods</filename
+>, så du behöver inte lägga till det här till filnamnet, men försäkra dig om att alternativet <guilabel
+>Filter:</guilabel
+> är inställt på <guilabel
+>OASIS OpenDocument kalkylark</guilabel
+>.</para>
+<para
+>För att spara dokumentet utan att ändra namn, använd bara <menuchoice
+><guimenu
+>Arkiv</guimenu
+><guimenuitem
+>Spara</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Du kan också spara ett &sheets;-dokument med ett främmande format, genom att välja formatat i kombinationsrutan <guilabel
+>Filter:</guilabel
+>.</para>
+<para
+>När du sparar en ändrad version av ett befintligt dokument, så behåller &sheets; den föregående versionen som en säkerhetskopia, och lägger till symbolen <literal
+>~</literal
+> i slutet på filnamnet.</para>
+<para
+>&sheets; erbjuder ett visst skydd mot att förlora arbete på grund av en datorkrasch eller på grund av att du stängt &sheets; utan att spara det nuvarande dokumentet. Detta görs genom att automatiskt spara den senaste versionen av dokumentet som du arbetar med med några minuters mellanrum med ett ändrat filnamn. Versionen som sparas automatiskt tas normalt bort när du sparar dokumentet nästa gång, så att den bara finns om den är aktuellare än versionen som du sparar för hand. När du öppnar ett dokument, kontrollerar &sheets; om en version som sparats automatiskt finns, och om en sådan hittas, får du erbjudande om att öppna den i stället.</para>
+<para
+>Automatiskt sparade dokument sparas med ett filnamn på formen <filename
+>.ditt_filnamn.autosave</filename
+> (observera den inledande punkten), så att <filename
+>blad1.ods</filename
+> skulle sparas automatiskt som <filename
+>.blad1.ods.autosave</filename
+>. Funktionen för att spara automatiskt kan <link linkend="configopensave"
+>anpassas i inställningsdialogrutan</link
+>.</para>
+
+<sect2 id="templates">
+<title
+>Mallar</title>
+<para
+>Om du kommer att skapa många liknande dokument, kan du spara tid och besvär genom att först skapa en mall och sedan använda den som grund till de enskilda dokumenten.</para>
+<para
+>För att göra det, skapa först ett dokument som innehåller de gemensamma delarna, och spara den sedan som en mall genom att välja <menuchoice
+><guimenu
+>Arkiv</guimenu
+><guimenuitem
+>Skapa mall från dokument</guimenuitem
+></menuchoice
+>. När detta görs öppnas dialogrutan <guilabel
+>Skapa en mall</guilabel
+>. Skriv in namnet på den nya mallen i textrutan <guilabel
+>Namn:</guilabel
+> och klicka på <guibutton
+>Ok</guibutton
+>. Nästa gång du skapar ett nytt dokument genom att välja <menuchoice
+><guimenu
+>Arkiv</guimenu
+><guimenuitem
+>Ny</guimenuitem
+></menuchoice
+> eller nästa gång du startar &sheets;, så ger dialogrutan <guilabel
+>Välj</guilabel
+> dig möjlighet att skapa det nya dokumentet från din mall.</para>
+<para
+>Dialogrutan <guilabel
+>Skapa en mall</guilabel
+> låter dig också välja en annan bild som visas ovanför mallnamnet i startdialogfönstret, och låter dig spara mallarna med olika gruppnamn, som visas som olika flikar i dialogfönstret.</para>
+<para
+>Mallar lagras som <literal role="extension"
+>.kst</literal
+>-filer under <filename
+>~/.kde/share/apps/tables/templates/</filename
+>. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="printing">
+<title
+>Skriva ut ett kalkylblad</title>
+<para
+>Att skriva ut ett kalkylblad görs helt enkelt genom att välja <menuchoice
+><guimenu
+>Arkiv</guimenu
+><guimenuitem
+>Skriv ut...</guimenuitem
+></menuchoice
+>, som visar &kde;:s vanliga dialogruta <guilabel
+>Skriv ut</guilabel
+> där du kan välja, bland andra alternativ, skrivaren som ska användas, antal kopior och om alla eller bara valda sidor ska skrivas ut.</para>
+<para
+>Normalt skriver &sheets; ut alla objekt på det nuvarande arbetsbladet, men du kan begränsa detta genom att först markera området du vill skriva ut, och sedan välja <guimenuitem
+>Ange utskriftsintervall</guimenuitem
+> i undermenyn <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Utskriftsintervall</guisubmenu
+></menuchoice
+>.</para>
+<para
+>&sheets; skriver ut så många sidor som behövs för att få med alla objekt på det nuvarande arbetsbladet. Du kan snabbt se hur ett arbetsblad delas i skilda sidor för utskrift genom att markera rutan <menuchoice
+><guimenu
+>Visa</guimenu
+><guimenuitem
+>Visa sidkanter</guimenuitem
+></menuchoice
+>. Kanterna för varje sida som skrivs ut markeras då med röda linjer på arbetsbladet.</para>
+
+<para
+>Välj <menuchoice
+><guimenu
+>Arkiv</guimenu
+><guimenuitem
+>Förhandsgranska utskrift...</guimenuitem
+></menuchoice
+>, för en mer detaljerad vy av vad som kommer att skickas till skrivaren, inklusive allt som du har begärt ska finnas med i sidhuvud och sidfot (se nedan).</para>
+
+<para
+>För att förbättra utseendet på utskriften, kan du ändra teckensnitt, färger, kanter och storlekar för cellerna på arbetsbladet, se avsnittet <link linkend="formatspread"
+>Formatera kalkylblad</link
+> för mer information om hur man gör detta.</para>
+
+<para
+>Du kan också använda dialogrutan <guilabel
+>Sidlayout</guilabel
+>, som visas genom att välja <menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Sidlayout...</guimenuitem
+></menuchoice
+>, för att ändra orientering på de utskrivna sidorna, pappersstorlek (den bör vara lämplig för skrivaren) och storleken på marginalerna.</para>
+<para
+><guilabel
+>Arbetsblad</guilabel
+> ger fler alternativ. Rutan <guilabel
+>Utskriftsinställningar</guilabel
+> låter dig välja om rutnät, kommentarindikering och formelindikering, objekt och diagram ska skrivas ut eller inte. Rutan <guilabel
+>Upprepningar på varje sida</guilabel
+> tillhandahåller ett alternativt sätt att begränsa utskriften till en del av arbetsbladet och låter dig upprepa valda kolumner eller rader på varje utskriven sida. I rutan <guilabel
+>Skalning</guilabel
+> kan du ställa in en skalfaktor eller begränsa antal sidor för utskrift.</para>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

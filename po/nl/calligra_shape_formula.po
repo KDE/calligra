@@ -1,0 +1,567 @@
+# translation of FormulaShape.po to Dutch
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristof Bal <kristof.bal@gmail.com>, 2008.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2009, 2010, 2011, 2013, 2014, 2015, 2016, 2017.
+msgid ""
+msgstr ""
+"Project-Id-Version: FormulaShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2017-06-03 11:14+0100\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Freek de Kruijf"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "freekdekruijf@kde.nl"
+
+#: FormulaCommand.cpp:59
+msgctxt "(qtundo-format)"
+msgid "Add text to formula"
+msgstr "Tekst toevoegen aan een formule"
+
+#: FormulaCommand.cpp:215
+msgctxt "(qtundo-format)"
+msgid "Change rows"
+msgstr "Rijen wijzigen"
+
+#: FormulaEditor.cpp:74
+msgctxt "(qtundo-format)"
+msgid "Add text"
+msgstr "Tekst toevoegen"
+
+#: FormulaEditor.cpp:107
+msgctxt "(qtundo-format)"
+msgid "Insert row"
+msgstr "Rij invoegen"
+
+#: FormulaEditor.cpp:112
+msgctxt "(qtundo-format)"
+msgid "Remove row"
+msgstr "Rij verwijderen"
+
+#: FormulaEditor.cpp:120
+msgctxt "(qtundo-format)"
+msgid "Insert column"
+msgstr "Kolom invoegen"
+
+#: FormulaEditor.cpp:125
+msgctxt "(qtundo-format)"
+msgid "Remove column"
+msgstr "Kolom verwijderen"
+
+#: FormulaEditor.cpp:151
+msgctxt "(qtundo-format)"
+msgid "Insert formula elements."
+msgstr "Formule-elementen invoegen."
+
+#: FormulaEditor.cpp:184
+msgctxt "(qtundo-format)"
+msgid "Remove formula elements"
+msgstr "Formule-elementen verwijderen"
+
+#: FormulaToolWidget.cpp:72
+#, kde-format
+msgid "Arrows"
+msgstr "Pijlen"
+
+#: FormulaToolWidget.cpp:74
+#, kde-format
+msgid "Greek"
+msgstr "Grieks"
+
+#: FormulaToolWidget.cpp:78
+#, kde-format
+msgid "Relations"
+msgstr "Relaties"
+
+#: FormulaToolWidget.cpp:81
+#, kde-format
+msgid "Operators"
+msgstr "Operators"
+
+#: FormulaToolWidget.cpp:85
+#, kde-format
+msgid "Miscellaneous"
+msgstr "Diversen"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: FormulaToolWidget.ui:24
+#, kde-format
+msgid "Insert"
+msgstr "Invoegen"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupElements)
+#: FormulaToolWidget.ui:36
+#, kde-format
+msgid "Elements"
+msgstr "Elementen"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupSymbols)
+#: FormulaToolWidget.ui:132
+#, kde-format
+msgid "Symbols"
+msgstr "Symbolen"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupActions)
+#: FormulaToolWidget.ui:228
+#, kde-format
+msgid "Actions"
+msgstr "Acties"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
+#: FormulaToolWidget.ui:279
+#, kde-format
+msgctxt "This button opens a file dialog to load a MathML file"
+msgid "Load..."
+msgstr "Laden..."
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonSave)
+#: FormulaToolWidget.ui:286
+#, kde-format
+msgid "Save..."
+msgstr "Opslaan..."
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: FormulaToolWidget.ui:294
+#, kde-format
+msgid "Edit"
+msgstr "Bewerken"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupGeneralOptions)
+#: FormulaToolWidget.ui:300
+#, kde-format
+msgid "General options"
+msgstr "Algemene opties"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: FormulaToolWidget.ui:325
+#, kde-format
+msgid "Font:"
+msgstr "Lettertype:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColors)
+#: FormulaToolWidget.ui:341
+#, kde-format
+msgid "Colors:"
+msgstr "Kleuren:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupSpecificOptions)
+#: FormulaToolWidget.ui:349
+#, kde-format
+msgid "Specific options"
+msgstr "Specifieke opties"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: FormulaToolWidget.ui:371
+#, kde-format
+msgid "Rows:"
+msgstr "Rijen:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: FormulaToolWidget.ui:378
+#, kde-format
+msgid "Columns:"
+msgstr "Kolommen:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton)
+#: FormulaToolWidget.ui:406
+#, kde-format
+msgid "View MathML"
+msgstr "MathML tonen"
+
+#: KoFormulaShape.cpp:210
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"Dit document bevat een externe koppeling naar een document elders\n"
+"%1"
+
+#: KoFormulaShape.cpp:211
+#, kde-format
+msgid "Confirmation Required"
+msgstr "Bevestiging vereist"
+
+#: KoFormulaShape.cpp:211
+#, kde-format
+msgid "Download"
+msgstr "Downloaden"
+
+#: KoFormulaShape.cpp:211
+#, kde-format
+msgid "Skip"
+msgstr "Overslaan"
+
+#: KoFormulaShapeFactory.cpp:21
+#, kde-format
+msgid "Formula"
+msgstr "Formule"
+
+#: KoFormulaShapeFactory.cpp:23
+#, kde-format
+msgid "A formula"
+msgstr "Een formule"
+
+#: KoFormulaTool.cpp:407
+#, kde-format
+msgid "Insert fenced element"
+msgstr "Omheind element invoegen"
+
+#: KoFormulaTool.cpp:408
+#, kde-format
+msgid "Insert enclosed element"
+msgstr "Ingesloten element invoegen"
+
+#: KoFormulaTool.cpp:411
+#, kde-format
+msgid "Insert root"
+msgstr "Wortel invoegen"
+
+#: KoFormulaTool.cpp:412
+#, kde-format
+msgid "Insert square root"
+msgstr "Vierkantswortel"
+
+#: KoFormulaTool.cpp:414
+#, kde-format
+msgid "Insert fraction"
+msgstr "Breuk invoegen"
+
+#: KoFormulaTool.cpp:416
+#, kde-format
+msgid "Insert bevelled fraction"
+msgstr "Breuk verschoven invoegen"
+
+#: KoFormulaTool.cpp:419
+#, kde-format
+msgid "Insert 3x3 table"
+msgstr "3x3 tabel invoegen"
+
+#: KoFormulaTool.cpp:423
+#, kde-format
+msgid "Insert 2 dimensional vector"
+msgstr "2 dimensionale vector invoegen"
+
+#: KoFormulaTool.cpp:426
+#, kde-format
+msgid "Insert subscript"
+msgstr "Subscript invoegen"
+
+#: KoFormulaTool.cpp:428
+#, kde-format
+msgid "Insert superscript"
+msgstr "Superscript invoegen"
+
+#: KoFormulaTool.cpp:430
+#, kde-format
+msgid "Insert sub- and superscript"
+msgstr "Sub- en superscript invoegen"
+
+#: KoFormulaTool.cpp:432
+#, kde-format
+msgid "Insert overscript"
+msgstr "Overscript invoegen"
+
+#: KoFormulaTool.cpp:434
+#, kde-format
+msgid "Insert underscript"
+msgstr "Underscript invoegen"
+
+#: KoFormulaTool.cpp:436
+#, kde-format
+msgid "Insert under- and overscript"
+msgstr "Under- en overscript invoegen"
+
+#: KoFormulaTool.cpp:445
+#, kde-format
+msgid "Insert row"
+msgstr "Rij invoegen"
+
+#: KoFormulaTool.cpp:452
+#, kde-format
+msgid "Insert column"
+msgstr "Kolom invoegen"
+
+#: KoFormulaTool.cpp:459
+#, kde-format
+msgid "Remove row"
+msgstr "Rij verwijderen"
+
+#: KoFormulaTool.cpp:466
+#, kde-format
+msgid "Remove column"
+msgstr "Kolom verwijderen"
+
+#: KoFormulaToolFactory.cpp:17
+#, kde-format
+msgid "Formula editing"
+msgstr "Bewerken van formules"
+
+#: KoM2MMLForumulaTool.cpp:97
+#, kde-format
+msgid "Mode: "
+msgstr "Modus: "
+
+#: KoM2MMLForumulaTool.cpp:100
+#, kde-format
+msgid "LaTeX"
+msgstr "LaTeX"
+
+#: KoM2MMLForumulaTool.cpp:102
+#, kde-format
+msgid "Matlab"
+msgstr "Matlab"
+
+#: KoM2MMLForumulaTool.cpp:171
+#, kde-format
+msgid "Parse error."
+msgstr "Ontleedfout."
+
+#: KoM2MMLForumulaTool.cpp:201
+#, kde-format
+msgid "Edit formula with LaTeX/Matlab syntax"
+msgstr "Formule bewerken met LaTeX/Matlab syntaxis"
+
+#: KoM2MMLForumulaTool.cpp:203
+#, kde-format
+msgid "Edit formula with LaTeX syntax"
+msgstr "Formule bewerken met LaTeX syntaxis"
+
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Freek de Kruijf"
+
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "freekdekruijf@kde.nl"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Elements"
+#~ msgstr "Elementen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Symbols"
+#~ msgstr "Symbolen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Actions"
+#~ msgstr "Acties"
+
+#~ msgctxt ""
+#~ "(qtundo-format) This button opens a file dialog to load a MathML file"
+#~ msgid "Load..."
+#~ msgstr "Laden..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save..."
+#~ msgstr "Opslaan..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Bewerken"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General options"
+#~ msgstr "Algemene opties"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Font:"
+#~ msgstr "Lettertype:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Colors:"
+#~ msgstr "Kleuren:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Specific options"
+#~ msgstr "Specifieke opties"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rows:"
+#~ msgstr "Rijen:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Kolommen:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View MathML"
+#~ msgstr "MathML tonen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "Pijlen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Greek"
+#~ msgstr "Grieks"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Relations"
+#~ msgstr "Relaties"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operators"
+#~ msgstr "Operators"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Miscellaneous"
+#~ msgstr "Diversen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document contains an external link to a remote document\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Dit document bevat een externe koppeling naar een document elders\n"
+#~ "%1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirmation Required"
+#~ msgstr "Bevestiging vereist"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Download"
+#~ msgstr "Downloaden"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip"
+#~ msgstr "Overslaan"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formula"
+#~ msgstr "Formule"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A formula"
+#~ msgstr "Een formule"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert fenced element"
+#~ msgstr "Omheind element invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert enclosed element"
+#~ msgstr "Ingesloten element invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert root"
+#~ msgstr "Wortel invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert square root"
+#~ msgstr "Vierkantswortel"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert fraction"
+#~ msgstr "Breuk invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert bevelled fraction"
+#~ msgstr "Breuk verschoven invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert 3x3 table"
+#~ msgstr "3x3 tabel invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert 2 dimensional vector"
+#~ msgstr "2 dimensionale vector invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert subscript"
+#~ msgstr "Subscript invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert superscript"
+#~ msgstr "Superscript invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert sub- and superscript"
+#~ msgstr "Sub- en superscript invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert overscript"
+#~ msgstr "Overscript invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert underscript"
+#~ msgstr "Underscript invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert under- and overscript"
+#~ msgstr "Under- en overscript invoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formula editing"
+#~ msgstr "Bewerken van formules"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mode: "
+#~ msgstr "Modus:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "LaTeX"
+#~ msgstr "LaTeX"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Matlab"
+#~ msgstr "Matlab"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parse error."
+#~ msgstr "Ontleedfout."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit formula with LaTeX/Matlab syntax"
+#~ msgstr "Formule bewerken met LaTeX/Matlab syntaxis"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit formula with LaTeX syntax"
+#~ msgstr "Formule bewerken met LaTeX syntaxis"
+
+#~ msgid "Formula tool"
+#~ msgstr "Formulegereedschap"
+
+#, fuzzy
+#~| msgid "Remove Elements"
+#~ msgid "Remove stuff"
+#~ msgstr "Elementen verwijderen"
+
+#~ msgid "Insert fence"
+#~ msgstr "Begrenzing invoegen"
+
+#~ msgid "Insert 2x2 table"
+#~ msgstr "2x2 tabel invoegen"
+
+#~ msgid "Insert 3 dimensional vector"
+#~ msgstr "3 dimensionale vector invoegen"
+
+#~ msgid "Insert table row"
+#~ msgstr "Tabelrij invoegen"
+
+#~ msgid "Replace Element"
+#~ msgstr "Element vervangen"
+
+#~ msgid "Attribute Changed"
+#~ msgstr "Attribuut gewijzigd"

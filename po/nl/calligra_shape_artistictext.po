@@ -1,0 +1,272 @@
+# translation of ArtisticTextShape.po to Dutch
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristof Bal <kristof.bal@gmail.com>, 2008, 2009.
+# Freek de Kruijf <f.de.kruijf@hetnet.nl>, 2008, 2009.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2009, 2011, 2014, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: ArtisticTextShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2016-12-08 17:09+0100\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: AddTextRangeCommand.cpp:15 AddTextRangeCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Add text range"
+msgstr "Tekstreeks toevoegen"
+
+#: ArtisticTextShapeFactory.cpp:17
+#, kde-format
+msgid "ArtisticTextShape"
+msgstr "ArtistiekeTekstVorm"
+
+#: ArtisticTextShapeFactory.cpp:19
+#, kde-format
+msgid "A shape which shows a single text line"
+msgstr "Een vorm die een enkele regel tekst weergeeft"
+
+#: ArtisticTextShapeFactory.cpp:29
+#, kde-format
+msgid "Artistic Text"
+msgstr "Artistieke tekst"
+
+#: ArtisticTextTool.cpp:64
+#, kde-format
+msgid "Detach Path"
+msgstr "Maak een pad los"
+
+#: ArtisticTextTool.cpp:69
+#, kde-format
+msgid "Convert to Path"
+msgstr "Converteren naar pad"
+
+#: ArtisticTextTool.cpp:74
+#, kde-format
+msgid "Bold text"
+msgstr "Vette tekst"
+
+#: ArtisticTextTool.cpp:79
+#, kde-format
+msgid "Italic text"
+msgstr "Cursieve tekst"
+
+#: ArtisticTextTool.cpp:84
+#, kde-format
+msgid "Superscript"
+msgstr "Superscript"
+
+#: ArtisticTextTool.cpp:89
+#, kde-format
+msgid "Subscript"
+msgstr "Subscript"
+
+#: ArtisticTextTool.cpp:94
+#, kde-format
+msgid "Anchor at Start"
+msgstr "Anker aan het begin"
+
+#: ArtisticTextTool.cpp:99
+#, kde-format
+msgid "Anchor at Middle"
+msgstr "Anker in het midden"
+
+#: ArtisticTextTool.cpp:104
+#, kde-format
+msgid "Anchor at End"
+msgstr "Anker aan het eind"
+
+#: ArtisticTextTool.cpp:295
+#, kde-format
+msgid "Click to change cursor position."
+msgstr "Klik om de cursorpositie te wijzigen."
+
+#: ArtisticTextTool.cpp:297
+#, kde-format
+msgid "Click to select text shape."
+msgstr "Klik om de tekstvorm te kiezen."
+
+#: ArtisticTextTool.cpp:300
+#, kde-format
+msgid "Double click to put text on path."
+msgstr "Dubbelklikken om tekst op het pad te zetten."
+
+#: ArtisticTextTool.cpp:303
+#, kde-format
+msgid "Drag handle to change start offset."
+msgstr "Handvat verslepen om beginoffset te wijzigen."
+
+#: ArtisticTextTool.cpp:307
+#, kde-format
+msgid "Press escape to finish editing."
+msgstr "Druk op escape om het bewerken te beëindigen."
+
+#: ArtisticTextTool.cpp:489
+#, kde-format
+msgid "Press return to finish editing."
+msgstr "Druk op return om het bewerken te beëindigen."
+
+#: ArtisticTextTool.cpp:583
+msgctxt "(qtundo-format)"
+msgid "Convert to Path"
+msgstr "Converteren naar pad"
+
+#: ArtisticTextTool.cpp:596
+#, kde-format
+msgid "Text Properties"
+msgstr "Teksteigenschappen"
+
+#: ArtisticTextTool.cpp:606
+#, kde-format
+msgid "Text On Path"
+msgstr "Tekst op een pad"
+
+#: ArtisticTextToolFactory.cpp:17
+#, kde-format
+msgid "Artistic text editing"
+msgstr "Artistiek tekstbewerken"
+
+#: AttachTextToPathCommand.cpp:15
+msgctxt "(qtundo-format)"
+msgid "Attach Path"
+msgstr "Plak er een pad aan"
+
+#: ChangeTextAnchorCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Change text anchor"
+msgstr "Wijzig het tekstanker"
+
+#: ChangeTextFontCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Change font"
+msgstr "Wijzig het lettertype"
+
+#: ChangeTextOffsetCommand.cpp:15
+msgctxt "(qtundo-format)"
+msgid "Change Text Offset"
+msgstr "Wijzig de tekstpositie"
+
+#: DetachTextFromPathCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Detach Path"
+msgstr "Maak een pad los"
+
+#: RemoveTextRangeCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Remove text range"
+msgstr "Tekstreeks verwijderen"
+
+#: ReplaceTextRangeCommand.cpp:14 ReplaceTextRangeCommand.cpp:22
+#: ReplaceTextRangeCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Replace text range"
+msgstr "Tekstreeks vervangen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArtisticTextShape"
+#~ msgstr "ArtistiekeTekstVorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape which shows a single text line"
+#~ msgstr "Een vorm die een enkele regel tekst weergeeft"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Artistic Text"
+#~ msgstr "Artistieke tekst"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bold text"
+#~ msgstr "Vette tekst"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Italic text"
+#~ msgstr "Cursieve tekst"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Superscript"
+#~ msgstr "Superscript"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subscript"
+#~ msgstr "Subscript"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor at Start"
+#~ msgstr "Anker aan het begin"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor at Middle"
+#~ msgstr "Anker in het midden"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor at End"
+#~ msgstr "Anker aan het eind"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click to change cursor position."
+#~ msgstr "Klik om de cursorpositie te wijzigen."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click to select text shape."
+#~ msgstr "Klik om de tekstvorm te kiezen."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to put text on path."
+#~ msgstr "Dubbelklikken om tekst op het pad te zetten."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag handle to change start offset."
+#~ msgstr "Handvat verslepen om beginoffset te wijzigen."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press escape to finish editing."
+#~ msgstr "Druk op escape om het bewerken te beëindigen."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press return to finish editing."
+#~ msgstr "Druk op return om het bewerken te beëindigen."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Properties"
+#~ msgstr "Teksteigenschappen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text On Path"
+#~ msgstr "Tekst op een pad"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Artistic text editing"
+#~ msgstr "Artistiek tekstbewerken"
+
+#~ msgid "Family:"
+#~ msgstr "Familie:"
+
+#~ msgid "Size:"
+#~ msgstr "Grootte:"
+
+#~ msgid "Offset:"
+#~ msgstr "Offset:"
+
+#~ msgid "Artistic Text Tool"
+#~ msgstr "Hulpmiddel voor artistieke tekst"
+
+#~ msgid "Change text"
+#~ msgstr "Wijzig de tekst"
+
+#~ msgid "Style:"
+#~ msgstr "Stijl:"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Text:"
+#~ msgstr "Tekst:"

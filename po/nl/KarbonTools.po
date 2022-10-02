@@ -1,0 +1,1348 @@
+# translation of KarbonTools.po to Dutch
+# translation of karbon.po to
+# translation of karbon.po to
+# Copyright (C) 2003, 2004, 2005, 2006, 2008, 2009, 2010 Free Software Foundation, Inc.
+#
+# Rinse de Vries <rinse@kde.nl>, 2003, 2004.
+# Rinse de Vries <rinsedevries@kde.nl>, 2004, 2005.
+# Maarten Rütten <mrutten@dds.nl>, 2005.
+# Sander Koning <sanderkoning@kde.nl>, 2006.
+# Bram Schoenmakers <bramschoenmakers@kde.nl>, 2006.
+# Freek de Kruijf <f.de.kruijf@hetnet.nl>, 2008, 2009.
+# Kristof Bal <kristof.bal@gmail.com>, 2008, 2009.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: KarbonTools\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2022-08-03 14:17+0200\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 22.04.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:16
+#, kde-format
+msgid "A calligraphic shape"
+msgstr "Een kalligrafische vorm"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:18
+#, kde-format
+msgid "Calligraphic Shape"
+msgstr "Kalligrafische vorm"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:56
+#, kde-format
+msgid "Save profile as..."
+msgstr "Sla profiel op als..."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
+#, kde-format
+msgid "Remove profile"
+msgstr "Profiel verwijderen"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:69
+#, kde-format
+msgid "&Follow selected path"
+msgstr "&Volg geselecteerd pad"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:72
+#, kde-format
+msgid "Use tablet &pressure"
+msgstr "Gebruik tablet&druk"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:75
+#, kde-format
+msgid "Width:"
+msgstr "Lijndikte:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:83
+#, kde-format
+msgid "Thinning:"
+msgstr "Verdunnen:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:92
+#, kde-format
+msgid "Use tablet &angle"
+msgstr "Gebruik tablet&hoek"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:95
+#, kde-format
+msgid "Angle:"
+msgstr "Hoek:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:104
+#, kde-format
+msgid "Fixation:"
+msgstr "Fixatie:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:113
+#, kde-format
+msgid "Caps:"
+msgstr "Boven-/onderzijde:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:122
+#, kde-format
+msgid "Mass:"
+msgstr "Massa:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:131
+#, kde-format
+msgid "Drag:"
+msgstr "Verslepen:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:188
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:213
+#, kde-format
+msgid "Current"
+msgstr "Huidige"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:207
+#, kde-format
+msgid "Profile name"
+msgstr "Profielnaam"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:208
+#, kde-format
+msgid "Please insert the name by which you want to save this profile:"
+msgstr "Gaarne de naam ingeven van het profiel dat u wilt opslaan:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:215
+#, kde-format
+msgid "Sorry, the name you entered is invalid."
+msgstr "Helaas, de ingegeven naam is ongeldig."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
+#, kde-format
+msgctxt "invalid profile name"
+msgid "Invalid name."
+msgstr "Ongeldige naam."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:224
+#, kde-format
+msgid ""
+"A profile with that name already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"Een profiel met die naam bestaat al!\n"
+"Wilt u het overschrijven?"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:360
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:385
+#, kde-format
+msgid "Mouse"
+msgstr "Muis"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:373
+#, kde-format
+msgid "Graphics Pen"
+msgstr "Grafische pen"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:338
+#, kde-format
+msgid "Fill"
+msgstr "Opvullen"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:377
+#, kde-format
+msgid "Calligraphy: increase width"
+msgstr "Kalligrafie: verhoog de lijndikte"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
+#, kde-format
+msgid "Calligraphy: decrease width"
+msgstr "Kalligrafie: verminder lijndikte"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:387
+#, kde-format
+msgid "Calligraphy: increase angle"
+msgstr "Kalligrafie: verhoog de hoek"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:392
+#, kde-format
+msgid "Calligraphy: decrease angle"
+msgstr "Kalligrafie: verminder de hoek"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:399
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:400
+#: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
+#, kde-format
+msgid "Calligraphy"
+msgstr "Kalligrafie"
+
+#: filterEffectTool/FilterAddCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Add filter effect"
+msgstr "Filtereffect toevoegen"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:58
+#, kde-format
+msgid "Add effect to current filter stack"
+msgstr "Effect aan de huidige filterstapel toevoegen"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:68
+#, kde-format
+msgid "Add to filter presets"
+msgstr "Aan vooringestelde filters toevoegen"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:72
+#, kde-format
+msgid "Remove filter preset"
+msgstr "Vooringesteld filter verwijderen"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:335
+#, kde-format
+msgid "Effect name"
+msgstr "Effectnaam"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:336
+#, kde-format
+msgid "Please enter a name for the filter effect"
+msgstr "Gaarne een naam voor het filtereffect invoeren"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
+#: filterEffectTool/FilterEffectEditWidget.ui:32
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:314
+#, kde-format
+msgid "Filter Effect Editor"
+msgstr "Bewerker voor filtereffecten"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: filterEffectTool/FilterEffectEditWidget.ui:40
+#, kde-format
+msgid "Effects and Connections"
+msgstr "Effecten en verbindingen"
+
+#. i18n: ectx: property (text), widget (QToolButton, removeEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addEffect)
+#. i18n: ectx: property (text), widget (QToolButton, raiseEffect)
+#. i18n: ectx: property (text), widget (QToolButton, lowerEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addPreset)
+#. i18n: ectx: property (text), widget (QToolButton, removePreset)
+#: filterEffectTool/FilterEffectEditWidget.ui:57
+#: filterEffectTool/FilterEffectEditWidget.ui:67
+#: filterEffectTool/FilterEffectEditWidget.ui:74
+#: filterEffectTool/FilterEffectEditWidget.ui:81
+#: filterEffectTool/FilterEffectEditWidget.ui:102
+#: filterEffectTool/FilterEffectEditWidget.ui:109
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: filterEffectTool/FilterEffectEditWidget.ui:92
+#, kde-format
+msgid "Filter Presets"
+msgstr "Filtervoorinstellingen"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: filterEffectTool/FilterEffectEditWidget.ui:116
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:470
+#, kde-format
+msgid "Effect Properties"
+msgstr "Effecteigenschappen"
+
+#: filterEffectTool/FilterRemoveCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove filter effect"
+msgstr "Filtereffect verwijderen"
+
+#: filterEffectTool/FilterStackSetCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Set filter stack"
+msgstr "Filterstapel instellen"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:433
+#, kde-format
+msgid "Effects"
+msgstr "Effecten"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:443
+#, kde-format
+msgid "View and edit filter"
+msgstr "Een filter bekijken en bewerken"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:449
+#, kde-format
+msgid "Remove filter from object"
+msgstr "Filter van object verwijderen"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:453
+#, kde-format
+msgid "Add Filter"
+msgstr "Filter toevoegen"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:482
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:488
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:494
+#, kde-format
+msgid "W:"
+msgstr "B:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:500
+#, kde-format
+msgid "H:"
+msgstr "H:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:505
+#, kde-format
+msgid "Effect Region"
+msgstr "Effectgebied"
+
+#: filterEffectTool/KarbonFilterEffectsToolFactory.cpp:16
+#, kde-format
+msgid "Filter effects editing"
+msgstr "Bewerking van filtereffecten"
+
+#: KarbonGradientTool.cpp:198
+#, kde-format
+msgid "Drag to move gradient position."
+msgstr "Slepen om de positie van het kleurverloop verplaatsen."
+
+#: KarbonGradientTool.cpp:207
+#, kde-format
+msgid "Drag to move color stop. Double click to remove color stop."
+msgstr ""
+"Trekken om de eindkleur te verplaatsen. Dubbel klikken om de eindkleur te "
+"verwijderen."
+
+#: KarbonGradientTool.cpp:209
+#, kde-format
+msgid "Drag to move color stop."
+msgstr "Trekken om de eindkleur te verplaatsen."
+
+#: KarbonGradientTool.cpp:216
+#, kde-format
+msgid "Drag to move gradient position. Double click to insert color stop."
+msgstr ""
+"Trekken om de positie van het kleurverloop te verplaatsen. Dubbel klikken om "
+"de eindkleur in te voegen."
+
+#: KarbonGradientTool.cpp:494
+#, kde-format
+msgid "Edit Gradient"
+msgstr "Bewerk kleurverloop"
+
+#: KarbonGradientTool.cpp:496
+#, kde-format
+msgid "Predefined Gradients"
+msgstr "Voorgedefinieerde kleurverlopen"
+
+#: KarbonGradientToolFactory.cpp:17
+#, kde-format
+msgid "Gradient editing"
+msgstr "Kleurverloopbewerking"
+
+#: KarbonPatternOptionsWidget.cpp:21
+#, kde-format
+msgid "Original"
+msgstr "Origineel"
+
+#: KarbonPatternOptionsWidget.cpp:22
+#, kde-format
+msgid "Tiled"
+msgstr "Getegeld"
+
+#: KarbonPatternOptionsWidget.cpp:23
+#, kde-format
+msgid "Stretched"
+msgstr "Uitgerekt"
+
+#: KarbonPatternOptionsWidget.cpp:25
+#, kde-format
+msgid "Top Left"
+msgstr "Linksboven"
+
+#: KarbonPatternOptionsWidget.cpp:26
+#, kde-format
+msgid "Top"
+msgstr "Bovenaan"
+
+#: KarbonPatternOptionsWidget.cpp:27
+#, kde-format
+msgid "Top Right"
+msgstr "Rechtsboven"
+
+#: KarbonPatternOptionsWidget.cpp:28
+#, kde-format
+msgid "Left"
+msgstr "Links"
+
+#: KarbonPatternOptionsWidget.cpp:29
+#, kde-format
+msgid "Center"
+msgstr "Midden"
+
+#: KarbonPatternOptionsWidget.cpp:30
+#, kde-format
+msgid "Right"
+msgstr "Rechts"
+
+#: KarbonPatternOptionsWidget.cpp:31
+#, kde-format
+msgid "Bottom Left"
+msgstr "Linksonder"
+
+#: KarbonPatternOptionsWidget.cpp:32
+#, kde-format
+msgid "Bottom"
+msgstr "Onder"
+
+#: KarbonPatternOptionsWidget.cpp:33
+#, kde-format
+msgid "Bottom Right"
+msgstr "Rechtsonder"
+
+#: KarbonPatternTool.cpp:273
+#, kde-format
+msgid "Pattern Options"
+msgstr "Patroonopties"
+
+#: KarbonPatternTool.cpp:275
+#, kde-format
+msgid "Patterns"
+msgstr "Patronen"
+
+#: KarbonPatternToolFactory.cpp:17
+#, kde-format
+msgid "Pattern editing"
+msgstr "Patroonbewerking"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects and Connections"
+#~ msgstr "Effecten en verbindingen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter Presets"
+#~ msgstr "Filtervoorinstellingen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A calligraphic shape"
+#~ msgstr "Een kalligrafische vorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphic Shape"
+#~ msgstr "Kalligrafische vorm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save profile as..."
+#~ msgstr "Sla profiel op als..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove profile"
+#~ msgstr "Profiel verwijderen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Follow selected path"
+#~ msgstr "&Volg geselecteerd pad"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use tablet &pressure"
+#~ msgstr "Gebruik tablet&druk"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Breedte:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thinning:"
+#~ msgstr "Verdunnen:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use tablet &angle"
+#~ msgstr "Gebruik tablet&hoek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Hoek:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fixation:"
+#~ msgstr "Fixatie:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Caps:"
+#~ msgstr "Boven-/onderzijde:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mass:"
+#~ msgstr "Massa:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag:"
+#~ msgstr "Verslepen:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current"
+#~ msgstr "Huidige"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Profile name"
+#~ msgstr "Profielnaam"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please insert the name by which you want to save this profile:"
+#~ msgstr "Gaarne de naam ingeven van het profiel dat u wilt opslaan:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sorry, the name you entered is invalid."
+#~ msgstr "Helaas, de ingegeven naam is ongeldig."
+
+#~ msgctxt "(qtundo-format) invalid profile name"
+#~ msgid "Invalid name."
+#~ msgstr "Ongeldige naam."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "A profile with that name already exists.\n"
+#~ "Do you want to overwrite it?"
+#~ msgstr ""
+#~ "Een profiel met die naam bestaat al!\n"
+#~ "Wilt u het overschrijven?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mouse"
+#~ msgstr "Muis"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Graphics Pen"
+#~ msgstr "Grafische pen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill"
+#~ msgstr "Opvullen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: increase width"
+#~ msgstr "Kalligrafie: verhoog de lijndikte"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: decrease width"
+#~ msgstr "Kalligrafie: verminder lijndikte"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: increase angle"
+#~ msgstr "Kalligrafie: verhoog de hoek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: decrease angle"
+#~ msgstr "Kalligrafie: verminder de hoek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy"
+#~ msgstr "Kalligrafie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add effect to current filter stack"
+#~ msgstr "Effect aan de huidige filterstapel toevoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to filter presets"
+#~ msgstr "Aan vooringestelde filters toevoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove filter preset"
+#~ msgstr "Vooringesteld filter verwijderen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect name"
+#~ msgstr "Effectnaam"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please enter a name for the filter effect"
+#~ msgstr "Gaarne een naam voor het filtereffect invoeren"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter Effect Editor"
+#~ msgstr "Bewerker voor filtereffecten"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Effecten"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View and edit filter"
+#~ msgstr "Een filter bekijken en bewerken"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove filter from object"
+#~ msgstr "Filter van object verwijderen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Filter"
+#~ msgstr "Filter toevoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect Properties"
+#~ msgstr "Effecteigenschappen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W:"
+#~ msgstr "W:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect Region"
+#~ msgstr "Effectgebied"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter effects editing"
+#~ msgstr "Bewerking van filtereffecten"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move gradient position."
+#~ msgstr "Slepen om de positie van het kleurverloop verplaatsen."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move color stop. Double click to remove color stop."
+#~ msgstr ""
+#~ "Trekken om de eindkleur te verplaatsen. Dubbel klikken om de eindkleur te "
+#~ "verwijderen."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move color stop."
+#~ msgstr "Trekken om de eindkleur te verplaatsen."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move gradient position. Double click to insert color stop."
+#~ msgstr ""
+#~ "Trekken om de positie van het kleurverloop te verplaatsen. Dubbel klikken "
+#~ "om de eindkleur in te voegen."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Gradient"
+#~ msgstr "Bewerk kleurverloop"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Predefined Gradients"
+#~ msgstr "Voorgedefinieerde kleurverlopen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gradient editing"
+#~ msgstr "Bewerking van kleurverloop"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original"
+#~ msgstr "Origineel"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tiled"
+#~ msgstr "Getegeld"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stretched"
+#~ msgstr "Uitgerekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left"
+#~ msgstr "Linksboven"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top"
+#~ msgstr "Boven"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right"
+#~ msgstr "Rechtsboven"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "Links"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center"
+#~ msgstr "Midden"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "Rechts"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left"
+#~ msgstr "Linksonder"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom"
+#~ msgstr "Onder"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right"
+#~ msgstr "Rechtsonder"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pattern Options"
+#~ msgstr "Patroonopties"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Patterns"
+#~ msgstr "Patronen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pattern editing"
+#~ msgstr "Patroonbewerking"
+
+#~ msgid "Target:"
+#~ msgstr "Doel:"
+
+#~ msgid "Line"
+#~ msgstr "Lijn"
+
+#~ msgid "Type:"
+#~ msgstr "Type:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Lineair"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Straalsgewijs"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Kegelvormig"
+
+#~ msgid "Repeat:"
+#~ msgstr "Herhalen:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#~ msgid "Reflect"
+#~ msgstr "Spiegelen"
+
+#~ msgid "Repeat"
+#~ msgstr "Herhalen"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Totale dekking:"
+
+#~ msgid "Color stop:"
+#~ msgstr "Kleurstop:"
+
+#~ msgid "Stop color."
+#~ msgstr "Eindkleur."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Aan voorgedefinieerde kleurverlopen toevoegen"
+
+#~ msgid "Reference Point:"
+#~ msgstr "Referentiepunt:"
+
+#~ msgid "Reference Point Offset"
+#~ msgstr "Referentiepuntverplaatsing"
+
+#~ msgid "Tile Offset"
+#~ msgstr "Tegelverplaatsing"
+
+#~ msgid "Pattern Size"
+#~ msgstr "Patroongrootte"
+
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Kalligrafisch gereedschap"
+
+#~ msgid "Stroke"
+#~ msgstr "Reep"
+
+#~ msgid "Precision:"
+#~ msgstr "Precisie:"
+
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Ruw"
+
+#~ msgid "Curve"
+#~ msgstr "Hoek"
+
+#~ msgid "Straight"
+#~ msgstr "Recht"
+
+#~ msgid "Optimize"
+#~ msgstr "Optimaliseren"
+
+#~ msgid "Exactness:"
+#~ msgstr "Nauwkeurigheid:"
+
+#~ msgid "Combine angle:"
+#~ msgstr "Hoek combineren:"
+
+#~ msgid "Freehand Path Drawing Tool"
+#~ msgstr "Gereedschap voor het tekenen van een vrij pad"
+
+#~ msgid "Stop color:"
+#~ msgstr "Eindkleur:"
+
+#~ msgid "Gradient tool"
+#~ msgstr "Kleurverloopgereedschap"
+
+#~ msgid "Pattern tool"
+#~ msgstr "Patroongereedschap"
+
+#~ msgid "Pencil tool"
+#~ msgstr "Tekengereedschap"
+
+#~ msgid "Calligraphy tool"
+#~ msgstr "Kalligrafisch gereedschap"
+
+#~ msgid "Filter effects tool"
+#~ msgstr "Hulpmiddel voor filtereffecten"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Vlak"
+
+#~ msgid "Gradient"
+#~ msgstr "Kleurverloop"
+
+#~ msgid "Pattern"
+#~ msgstr "Patroon"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Even/oneven vullen"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Winding vullen"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr ""
+#~ "Rinse de Vries,Maarten Rütten,Sander Koning,Antoon Tolboom,Freek de Kruijf"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "rinsedevries@kde.nl,mrutten@dds.nl,sanderkoning@kde.nl,"
+#~ "atolboo_op_casema_punt_nl,f.de.kruijf@hetnet.nl"
+
+#~ msgid "&Order"
+#~ msgstr "V&olgorde"
+
+#~ msgid "&Align"
+#~ msgstr "U&itlijnen"
+
+#~ msgid "&File"
+#~ msgstr "&Bestand"
+
+#~ msgid "&Edit"
+#~ msgstr "B&ewerken"
+
+#~ msgid "&View"
+#~ msgstr "&Beeld"
+
+#~ msgid "&Object"
+#~ msgstr "&Object"
+
+#~ msgid "&Distribute"
+#~ msgstr "Ve&rspreiden"
+
+#~ msgid "&Path"
+#~ msgstr "&Pad"
+
+#~ msgid "&Settings"
+#~ msgstr "&Instellingen"
+
+#~ msgid "Edit"
+#~ msgstr "Bewerken"
+
+#~ msgid "Object"
+#~ msgstr "Object"
+
+#~ msgid "Align"
+#~ msgstr "Uitlijnen"
+
+#~ msgid "View"
+#~ msgstr "Beeld"
+
+#~ msgid "File to open"
+#~ msgstr "Bestand om te openen"
+
+#~ msgid "Boolean Operation"
+#~ msgstr "Boleaanse operatie"
+
+#~ msgid "Raise Layer"
+#~ msgstr "Laag naar voorgrond"
+
+#~ msgid "Lower Layer"
+#~ msgstr "Laag naar achtergrond"
+
+#~ msgid "Configure"
+#~ msgstr "Instellen"
+
+#~ msgid "Interface"
+#~ msgstr "Interface"
+
+#~ msgid "Misc"
+#~ msgstr "Diversen"
+
+#~ msgid "Grid"
+#~ msgstr "Raster"
+
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Document"
+
+#~ msgid "Document Settings"
+#~ msgstr "Documentinstellingen"
+
+#~ msgid "Show status bar"
+#~ msgstr "Statusbalk tonen"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "Aantal recente bestanden:"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Offset kopiëren:"
+
+#~ msgid "Palette font size:"
+#~ msgstr "Lettertypegrootte palet:"
+
+#~ msgid "Units:"
+#~ msgstr "Eenheden:"
+
+#~ msgid "Show grid:"
+#~ msgstr "Raster tonen:"
+
+#~ msgid "Snap to grid:"
+#~ msgstr "Vastzetten op raster:"
+
+#~ msgid "Grid color:"
+#~ msgstr "Rasterkleur:"
+
+#~ msgid "Spacing"
+#~ msgstr "Afstand"
+
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Horizontaal:"
+
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Verticaal:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Auto-opslag (min):"
+
+#~ msgid "No auto save"
+#~ msgstr "Geen automatische opslag"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "Create backup file"
+#~ msgstr "Reservekopie aanmaken"
+
+#~ msgid "Layer view"
+#~ msgstr "Lagenweergave"
+
+#~ msgid "Add a new layer"
+#~ msgstr "Nieuwe laag toevoegen"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "Geselecteerde objecten verwijderen"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "Geselecteerd object naar voorgrond"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "Geselecteerd object naar achtergrond"
+
+#~ msgid "New Layer"
+#~ msgstr "Nieuwe laag"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Voer de naam in van de nieuwe laag:"
+
+#~ msgid "New layer"
+#~ msgstr "Nieuwe laag"
+
+#~ msgid "Create Layer"
+#~ msgstr "Laag aanmaken"
+
+#~ msgid "Delete Layer"
+#~ msgstr "Laag verwijderen"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "Kan niet alle lagen verwijderen. Minstens een laag is vereist."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Fout bij verwijderen van lagen"
+
+#~ msgid "Layer"
+#~ msgstr "Lagen"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Groep"
+
+#~ msgid "Shape"
+#~ msgstr "Vorm"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Zichtbaar"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Vergrendeld"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "z-Index"
+
+#~ msgid "Reparent shapes"
+#~ msgstr "Vormen opnieuw ordenen"
+
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Kleurverloop kiezen om toe te voegen"
+
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Patroon kiezen om toe te voegen"
+
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "Druk om de selectie te vullen"
+
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "Druk om in de selectie strepen te zetten"
+
+#~ msgid "Custom"
+#~ msgstr "Aangepast"
+
+#~ msgid "Stroke:"
+#~ msgstr "Reep:"
+
+#~ msgid "Fill:"
+#~ msgstr "Opvullen:"
+
+#~ msgid "Styles"
+#~ msgstr "Stijlen"
+
+#~ msgid "&Flatten Path..."
+#~ msgstr "Pad &vlak maken..."
+
+#~ msgid "Flatten Path"
+#~ msgstr "Pad vlak maken"
+
+#~ msgid "Flatness:"
+#~ msgstr "Vlakte:"
+
+#~ msgid "Flatten path"
+#~ msgstr "Pad vlak maken"
+
+#~ msgid "Refine path"
+#~ msgstr "Pad verfijnen"
+
+#~ msgid "&Refine Path..."
+#~ msgstr "Pad &verfijnen..."
+
+#~ msgid "Refine Path"
+#~ msgstr "Pad verfijnen"
+
+#~ msgid "Subdivisions:"
+#~ msgstr "Subsecties:"
+
+#~ msgid "Round Corners"
+#~ msgstr "Hoeken afronden"
+
+#~ msgid "&Round Corners..."
+#~ msgstr "&Hoeken afronden..."
+
+#~ msgid "Radius:"
+#~ msgstr "Straal:"
+
+#~ msgid "Whirl & pinch"
+#~ msgstr "Draaien & indrukken"
+
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Draaien/indrukken..."
+
+#~ msgid "Whirl Pinch"
+#~ msgstr "Draaien/indrukken"
+
+#~ msgid "Info"
+#~ msgstr "Info"
+
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr ""
+#~ "Het resultaat van het draaien/indrukkeneffect kan worden verbeterd door "
+#~ "het vooraf verfijnen van de vorm van het pad."
+
+#~ msgid "Pinch:"
+#~ msgstr "Indrukken:"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Ongeldig OASIS document. Geen office:body tag gevonden."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Ongeldig OASIS document. Geen office:drawing tag gevonden."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Ongeldig OASIS document. Geen draw:page tag gevonden."
+
+#~ msgid "Tools"
+#~ msgstr "Gereedschappen"
+
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Kies de toe te voegen illustratie"
+
+#~ msgid "Group shapes"
+#~ msgstr "Vormen groeperen"
+
+#~ msgid "Ungroup shapes"
+#~ msgstr "Vormengroepering opheffen"
+
+#~ msgid "Outline &Mode"
+#~ msgstr "Omlijning &modus"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Paginamarges tonen"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Paginamarges verbergen"
+
+#~ msgid "&Import Graphic..."
+#~ msgstr "Grafiek &importeren..."
+
+#~ msgid "D&elete"
+#~ msgstr "Ver&wijderen"
+
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Dupliceren"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "Naar &voorgrond brengen"
+
+#~ msgid "&Raise"
+#~ msgstr "Naar vo&ren brengen"
+
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "Naar &achteren brengen"
+
+#~ msgid "Send to &Back"
+#~ msgstr "Naar achtergrond &brengen"
+
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Verdeel centrering (horizontaal)"
+
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Verdeel gaten (horizontaal)"
+
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Verdeel linker grenzen"
+
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Verdeel rechter grenzen"
+
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Verdeel centrering (vertikaal)"
+
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Verdeel gaten (vertikaal)"
+
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Verdeel ondergrenzen"
+
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Verdeel bovengrenzen"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Linialen tonen"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Linialen verbergen"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Toont of verbergt de linialen"
+
+#~ msgid "Show Grid"
+#~ msgstr "Raster tonen"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Raster verbergen"
+
+#~ msgid "Shows or hides grid"
+#~ msgstr "Toont of verbergt het raster"
+
+#~ msgid "Show Guides"
+#~ msgstr "Raster tonen"
+
+#~ msgid "Hide Guides"
+#~ msgstr "Raster verbergen"
+
+#~ msgid "Shows or hides guides"
+#~ msgstr "Toont of verbergt raster"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Vastzetten op raster"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "Vastzetten op raster"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Groepeer objecten"
+
+#~ msgid "&Ungroup Objects"
+#~ msgstr "Groepering objecten &opheffen"
+
+#~ msgid "&Close Path"
+#~ msgstr "Pad &sluiten"
+
+#~ msgid "Com&bine Path"
+#~ msgstr "Paden com&bineren"
+
+#~ msgid "Se&parate Path"
+#~ msgstr "&Pad scheiden"
+
+#~ msgid "Re&verse Path"
+#~ msgstr "Pad onge&daan maken"
+
+#~ msgid "Intersect Paths"
+#~ msgstr "Paden laten snijden"
+
+#~ msgid "Subtract Paths"
+#~ msgstr "Paden aftrekken"
+
+#~ msgid "Unite Paths"
+#~ msgstr "Paden verenigen"
+
+#~ msgid "Exclude Paths"
+#~ msgstr "Paden uitsluiten"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Karbon instellen..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "Pagina&opmaak..."
+
+#~ msgid "Zoom to Selection"
+#~ msgstr "Selectie inzoomen"
+
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Tekening inzoomen"
+
+#~ msgid "Zoom"
+#~ msgstr "Zoomen"
+
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "Een grafisch vectortekenprogramma."
+
+#~ msgid "Karbon14"
+#~ msgstr "Karbon14"
+
+#~ msgid "(c) 2001-2009, The Karbon Developers"
+#~ msgstr "(c) 2001-2009, De ontwikkelaars van Karbon"
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "U bent uitgenodigd om op eender welke manier mee te helpen"
+
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Bugreparaties en verbeteringen"
+
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#~ msgid "Bug fixes"
+#~ msgstr "Bug-fixes"
+
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Nuttige verbeteringen en advies"
+
+#~ msgid "Align Left"
+#~ msgstr "Links uitlijnen"
+
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "Centreren (horizontaal)"
+
+#~ msgid "Align Right"
+#~ msgstr "Rechts uitlijnen"
+
+#~ msgid "Align Top"
+#~ msgstr "Boven uitlijnen"
+
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Centreren (vertikaal)"
+
+#~ msgid "Align Bottom"
+#~ msgstr "Onder uitlijnen"
+
+#~ msgid "Stop opacity:"
+#~ msgstr "Einddekking:"
+
+#~ msgid "Profile:"
+#~ msgstr "Profiel:"
+
+#~ msgid "Show details >>"
+#~ msgstr "Toon details >>"
+
+#~ msgid "Hide details <<"
+#~ msgstr "Verberg details <<"
+
+#~ msgid "Opacity"
+#~ msgstr "Dekking"

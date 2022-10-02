@@ -1,0 +1,272 @@
+# translation of koffice-dockers to Romanian
+# Copyright (C) 2008 This_file_is_part_of_KDE
+# This file is distributed under the same license as the koffice-dockers package.
+# Laurenţiu Buzdugan <lbuz@rolix.org>, 2008".
+# Sergiu Bivol <sergiu@cip.md>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice-dockers\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2009-04-26 13:56+0300\n"
+"Last-Translator: Sergiu Bivol <sergiu@ase.md>\n"
+"Language-Team: Romanian <kde-i18n-ro@lists.kde.org>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+
+#: shapecollection/OdfCollectionLoader.cpp:63
+#, kde-format
+msgid "Found no shapes in the collection! %1"
+msgstr "Nu au fost găsite forme în colecție! %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:132
+#, fuzzy, kde-format
+#| msgid "Not a valid KOffice file: %1"
+msgid "Not a valid Calligra file: %1"
+msgstr "Nu este un fișier KOffice valid: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:157
+#, kde-format
+msgid "No body tag found in file: %1"
+msgstr ""
+
+#: shapecollection/OdfCollectionLoader.cpp:165
+#, kde-format
+msgid "No office:drawing tag found in file: %1"
+msgstr ""
+
+#: shapecollection/OdfCollectionLoader.cpp:173
+#: shapecollection/OdfCollectionLoader.cpp:181
+#, kde-format
+msgid "No shapes found in file: %1"
+msgstr ""
+
+#: shapecollection/ShapeCollectionDocker.cpp:111
+#, kde-format
+msgid "Add Shape"
+msgstr "Adaugă formă"
+
+#: shapecollection/ShapeCollectionDocker.cpp:146
+#, kde-format
+msgid "More"
+msgstr "Mai multe"
+
+#: shapecollection/ShapeCollectionDocker.cpp:176
+#, kde-format
+msgid "Open Shape Collection"
+msgstr "Deschide colecția de forme"
+
+#: shapecollection/ShapeCollectionDocker.cpp:184
+#, kde-format
+msgid "Remove Shape Collection"
+msgstr "Elimină colecția de forme"
+
+#: shapecollection/ShapeCollectionDocker.cpp:330
+#, kde-format
+msgid "Default"
+msgstr "Implicit"
+
+#: shapecollection/ShapeCollectionDocker.cpp:334
+#, kde-format
+msgid "Geometrics"
+msgstr "Geometrice"
+
+#: shapecollection/ShapeCollectionDocker.cpp:345
+#, kde-format
+msgid "Arrows"
+msgstr "Săgeți"
+
+#: shapecollection/ShapeCollectionDocker.cpp:349
+#, kde-format
+msgid "Funny"
+msgstr "Nostime"
+
+#: shapecollection/ShapeCollectionDocker.cpp:522
+#, kde-format
+msgid "Collection Error"
+msgstr "Eroare colecție"
+
+#: shapeproperties/ShapePropertiesDocker.cpp:35
+#, kde-format
+msgid "Shape Properties"
+msgstr "Proprietăți formă"
+
+#: snapguidedocker/SnapGuideDocker.cpp:39
+#, kde-format
+msgid "Snap Settings"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Found no shapes in the collection! %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Nu au fost găsite forme în colecție! %1"
+
+#, fuzzy
+#~| msgid "Not a valid KOffice file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Nu este un fișier KOffice valid: %1"
+
+#, fuzzy
+#~| msgid "Not a valid KOffice file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Nu este un fișier KOffice valid: %1"
+
+#, fuzzy
+#~| msgid "Add Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Shape"
+#~ msgstr "Adaugă formă"
+
+#, fuzzy
+#~| msgid "More"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More"
+#~ msgstr "Mai multe"
+
+#, fuzzy
+#~| msgid "Open Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Shape Collection"
+#~ msgstr "Deschide colecția de forme"
+
+#, fuzzy
+#~| msgid "Remove Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Elimină colecția de forme"
+
+#, fuzzy
+#~| msgid "Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Implicit"
+
+#, fuzzy
+#~| msgid "Geometrics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometrics"
+#~ msgstr "Geometrice"
+
+#, fuzzy
+#~| msgid "Arrows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "Săgeți"
+
+#, fuzzy
+#~| msgid "Funny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Funny"
+#~ msgstr "Nostime"
+
+#, fuzzy
+#~| msgid "Collection Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Collection Error"
+#~ msgstr "Eroare colecție"
+
+#, fuzzy
+#~| msgid "Shape Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties"
+#~ msgstr "Proprietăți formă"
+
+#~ msgid "Shadow Properties"
+#~ msgstr "Proprietăți umbră"
+
+#~ msgid "Creation error"
+#~ msgstr "Eroare la creare"
+
+#~ msgid "File not found"
+#~ msgstr "Fișierul nu a fost găsit"
+
+#~ msgid "Cannot create storage"
+#~ msgstr "Imposibil de creat stocarea"
+
+#~ msgid "Bad MIME type"
+#~ msgstr "Tip MIME greșit"
+
+#~ msgid "Error in embedded document"
+#~ msgstr "Eroare în documentul încorporat"
+
+#~ msgid "Format not recognized"
+#~ msgstr "Format nerecunoscut"
+
+#~ msgid "Not implemented"
+#~ msgstr "Neimplementat"
+
+#~ msgid "Parsing error"
+#~ msgstr "Eroare de parcurgere"
+
+#~ msgid "Document is password protected"
+#~ msgstr "Documentul este protejat prin parolă"
+
+#~ msgid "Internal error"
+#~ msgstr "Eroare internă"
+
+#~ msgid "Out of memory"
+#~ msgstr "Memorie insuficientă"
+
+#~ msgid "Unknown error"
+#~ msgstr "Eroare necunoscută"
+
+#~ msgid ""
+#~ "Could not open\n"
+#~ "%2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Imposibil de deschis\n"
+#~ "%2.\n"
+#~ "Motivul: %1"
+
+#~ msgid "Failed to import the file: %1"
+#~ msgstr "Imposibil  de importat fișierul: %1"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Proprietăți tăiere"
+
+#~ msgid "Style:"
+#~ msgstr "Stil:"
+
+#~ msgid "Width:"
+#~ msgstr "Lățime:"
+
+#~ msgid "Set line width of actual selection"
+#~ msgstr "Stabilește lățimea de linie a selecției propriu-zise"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgid "Styles"
+#~ msgstr "Stil:"
+
+#~ msgid "Shapes"
+#~ msgstr "Forme"
+
+#~ msgid "Open..."
+#~ msgstr "Deschide..."
+
+#~ msgid "Save Book..."
+#~ msgstr "Salvare carte..."
+
+#~ msgid "New Folder..."
+#~ msgstr "Dosar nou..."
+
+#~ msgid "Zoom In"
+#~ msgstr "Apropie"
+
+#~ msgid "Zoom Out"
+#~ msgstr "Depărtează"
+
+#~ msgid "Remove Folder"
+#~ msgstr "Elimină dosarul"
+
+#~ msgid "Templates"
+#~ msgstr "Șabloane"

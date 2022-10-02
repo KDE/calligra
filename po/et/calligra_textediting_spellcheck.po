@@ -1,0 +1,104 @@
+# translation of SpellCheckPlugin.po to Estonian
+# Copyright (C) 2008 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2008, 2010, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2011-12-25 21:15+0200\n"
+"Last-Translator: Marek Laane <bald@smail.ee>\n"
+"Language-Team: Estonian <kde-et@linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "Õigekirja kontrolli &seadistamine..."
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Õigekirja automaatne kontroll"
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr "Õigekirja kontroll"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Õigekiri"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Lisa sõnaraamatusse"
+
+#, fuzzy
+#~| msgid "Configure &Spell Checking..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "Õigekirja kontrolli &seadistamine..."
+
+#, fuzzy
+#~| msgid "Auto Spell Check"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Õigekirja automaatne kontroll"
+
+#, fuzzy
+#~| msgid "Check Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Õigekirja kontroll"
+
+#, fuzzy
+#~| msgid "Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Õigekiri"
+
+#, fuzzy
+#~| msgid "Add to Dictionary"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Lisa sõnaraamatusse"
+
+#~ msgid "Ignore Word"
+#~ msgstr "Eira sõna"
+
+#~ msgid "Spell Check"
+#~ msgstr "Õigekirja kontroll"
+
+#~ msgid "Spell Check Configuration"
+#~ msgstr "Õigekirja kontrolli seadistamine"
+
+#~ msgid "Default Language:"
+#~ msgstr "Vaikimisi keel:"
+
+#~ msgid "Options"
+#~ msgstr "Valikud"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "Õigekirja kontrollimise lu&bamine taustal"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "Kõik s&uurtähelised sõnad jäetakse vahele"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "&Kokkujooksnud sõnad jäetakse vahele"
+
+#~ msgid "&Add"
+#~ msgstr "&Lisa"
+
+#~ msgid "&Remove"
+#~ msgstr "&Eemalda"

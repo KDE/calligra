@@ -1,0 +1,224 @@
+# Translation of koconverter.po to Ukrainian
+# Copyright (C) 2005-2015 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Ivan Petrouchtchak <fr.ivan@ukrainian-orthodox.org>, 2005, 2006, 2008.
+# Yuri Chornoivan <yurchor@ukr.net>, 2009, 2010, 2011, 2012, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: koconverter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2015-10-26 18:58+0200\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Eugene Onischenko"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "oneugene@ukr.net"
+
+#: calligraconverter.cpp:144
+#, kde-format
+msgid "CalligraConverter"
+msgstr "Перетворювач Calligra"
+
+#: calligraconverter.cpp:146
+#, kde-format
+msgid "Calligra Document Converter"
+msgstr "Перетворювач документів для Calligra"
+
+#: calligraconverter.cpp:148
+#, kde-format
+msgid "Copyright 2001-%1 Calligra developers"
+msgstr "© Розробники Calligra, 2001–%1"
+
+#: calligraconverter.cpp:149
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: calligraconverter.cpp:150
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: calligraconverter.cpp:151
+#, kde-format
+msgid "Dan Leinir Turthra Jensen"
+msgstr "Dan Leinir Turthra Jensen"
+
+#: calligraconverter.cpp:158
+#, kde-format
+msgid "Input file"
+msgstr "Вхідний файл"
+
+#: calligraconverter.cpp:159
+#, kde-format
+msgid "Output file"
+msgstr "Вихідний файл"
+
+#: calligraconverter.cpp:160
+#, kde-format
+msgid "Make a backup of the destination file"
+msgstr "зробити резервну копію файла призначення"
+
+#: calligraconverter.cpp:161
+#, kde-format
+msgid "Batch mode: do not show dialogs"
+msgstr "Пакетний режим: не показувати діалогові вікна"
+
+#: calligraconverter.cpp:162
+#, kde-format
+msgid "Interactive mode: show dialogs (default)"
+msgstr "Інтерактивний режим: показувати діалогові вікна (типовий)"
+
+#: calligraconverter.cpp:163
+#, kde-format
+msgid "Mimetype of the output file"
+msgstr "Тип mime вихідного файла"
+
+#: calligraconverter.cpp:166
+#, kde-format
+msgid "The print orientation. This could be either Portrait or Landscape."
+msgstr "Орієнтація відбитка. Можна визначити книжкову або альбомну орієнтацію."
+
+#: calligraconverter.cpp:167
+#, kde-format
+msgid "The paper size. A4, Legal, Letter, ..."
+msgstr "Розмір аркуша. A4, Legal, Letter тощо."
+
+#: calligraconverter.cpp:168
+#, kde-format
+msgid "The size of the paper margin. By default this is 0.2."
+msgstr "Розмір поля аркуша. Типовим є значення 0,2."
+
+#: calligraconverter.cpp:175
+#, kde-format
+msgid "Two arguments required"
+msgstr "Потрібні два аргументи"
+
+#: calligraconverter.cpp:203
+#, kde-format
+msgid "Mimetype for input file %1 not found!"
+msgstr "Не знайдено тип mime для вхідного файла %1!"
+
+#: calligraconverter.cpp:212
+#, kde-format
+msgid "Mimetype not found %1"
+msgstr "Не знайдено тип mime %1"
+
+#: calligraconverter.cpp:218
+#, kde-format
+msgid "Mimetype not found, try using the -mimetype option"
+msgstr "Не знайдено тип mime, спробуйте параметр -mimetype"
+
+#: calligraconverter.cpp:242
+#, kde-format
+msgid "*** The conversion failed! ***"
+msgstr "*** Перетворення було невдалим! ***"
+
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Eugene Onischenko"
+
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "oneugene@ukr.net"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CalligraConverter"
+#~ msgstr "Перетворювач Calligra"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Converter"
+#~ msgstr "Перетворювач документів для Calligra"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2001-%1 Calligra developers"
+#~ msgstr "© Розробники Calligra, 2001–%1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "Nicolas Goutte"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dan Leinir Turthra Jensen"
+#~ msgstr "Dan Leinir Turthra Jensen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Input file"
+#~ msgstr "Вхідний файл"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output file"
+#~ msgstr "Вихідний файл"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Make a backup of the destination file"
+#~ msgstr "зробити резервну копію файла призначення"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Batch mode: do not show dialogs"
+#~ msgstr "Пакетний режим: не показувати діалогові вікна"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interactive mode: show dialogs (default)"
+#~ msgstr "Інтерактивний режим: показувати діалогові вікна (типовий)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype of the output file"
+#~ msgstr "Тип mime вихідного файла"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The print orientation. This could be either Portrait or Landscape."
+#~ msgstr ""
+#~ "Орієнтація відбитка. Можна визначити книжкову або альбомну орієнтацію."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The paper size. A4, Legal, Letter, ..."
+#~ msgstr "Розмір аркуша. A4, Legal, Letter тощо."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The size of the paper margin. By default this is 0.2."
+#~ msgstr "Розмір поля аркуша. Типовим є значення 0,2."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two arguments required"
+#~ msgstr "Потрібні два аргументи"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype for input file %1 not found!"
+#~ msgstr "Не знайдено тип mime для вхідного файла %1!"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found %1"
+#~ msgstr "Не знайдено тип mime %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found, try using the -mimetype option"
+#~ msgstr "Не знайдено тип mime, спробуйте параметр -mimetype"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "*** The conversion failed! ***"
+#~ msgstr "*** Перетворення було невдалим! ***"
+
+#~ msgid "KOConverter"
+#~ msgstr "KOConverter"

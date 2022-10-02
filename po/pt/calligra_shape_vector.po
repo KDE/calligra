@@ -1,0 +1,55 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: VectorShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2016-11-20 12:54+0000\n"
+"Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
+"Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-POFile-SpellExtra: EMF WMF SVM\n"
+
+#: ChangeVectorDataCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change Vector Data"
+msgstr "Mudar os Dados do Vector"
+
+#: VectorShapeFactory.cpp:27
+#, kde-format
+msgid "Vector image"
+msgstr "Imagem vectorial"
+
+#: VectorShapeFactory.cpp:29
+#, kde-format
+msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+msgstr "Uma forma que mostra uma imagem vectorial (EMF/WMF/SVM)"
+
+#: VectorTool.cpp:64
+#, kde-format
+msgid "Open Vector Image (EMF/WMF/SVM)"
+msgstr "Imagem Vectorial Aberta (EMF/WMF/SVM)"
+
+#: VectorToolFactory.cpp:20
+#, kde-format
+msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+msgstr "Imagem vectorial (EMF/WMF/SVM/SVG)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector image"
+#~ msgstr "Imagem vectorial"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgstr "Uma forma que mostra uma imagem vectorial (EMF/WMF/SVM)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Vector Image (EMF/WMF/SVM)"
+#~ msgstr "Imagem Vectorial Aberta (EMF/WMF/SVM)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+#~ msgstr "Imagem vectorial (EMF/WMF/SVM/SVG)"

@@ -1,0 +1,64 @@
+# translation of SpellCheckPlugin.po to Maithili
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sangeeta Kumari <sangeeta09@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2009-04-22 00:20+0530\n"
+"Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
+"Language-Team: Maithili <maithili.sf.net>\n"
+"Language: mai\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"\n"
+"\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr ""
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr ""
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr ""
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr ""
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr ""
+
+#~ msgid "Options"
+#~ msgstr "विकल्प"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "पृष्ठभूमि मे वर्तनी जाँच सक्षम करू (&b)"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "सभटा अपरकेस शब्दसभ केँ छोड़ू (&u)"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "एकसँग लिखल शब्दसभ केँ छोड़ू (&k)"
+
+#~ msgid "&Add"
+#~ msgstr "जोड़ू (&A)"
+
+#~ msgid "&Remove"
+#~ msgstr "हटाबू (&R)"

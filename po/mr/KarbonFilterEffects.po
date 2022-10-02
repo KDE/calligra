@@ -1,0 +1,1252 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Chetan Khona <chetan@kompkin.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-03-28 14:37+0530\n"
+"Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
+"Language: mr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, kde-format
+msgid "Blend"
+msgstr "मिश्रण"
+
+#: BlendEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Blend mode"
+msgstr "मिश्रण पद्धती"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "सामान्य"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr "बहुजिनसी"
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr "स्क्रीन"
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr "गडद करणे"
+
+#: BlendEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Lighten"
+msgstr "फिकट करणे"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr "गुसियान ब्लर"
+
+#: BlurEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Radius"
+msgstr "त्रिज्या"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr "रंग मात्रीक्स"
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr "रंग मात्रीक्स लागू करा"
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Saturate colors"
+msgstr "रंगानी पूर्ण व्यापणे"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Rotate hue"
+msgstr "रंगाच्या छटा फिरविणे"
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr "अल्फाची प्रकाशमानता"
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Saturate value"
+msgstr "व्यापण्याचे मूल्य"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, kde-format
+msgid "Angle"
+msgstr "कोन"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr "रंग मात्रीक्स"
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr "घटकाचे स्थानांतरण"
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr "कार्य"
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr "ओळख"
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, kde-format
+msgid "Table"
+msgstr "कोष्टक"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr "वेगळा"
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Linear"
+msgstr "एकरेषीय"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr "गॅमा"
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr "मूल्य"
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, kde-format
+msgid "Slope"
+msgstr "उतार"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, kde-format
+msgid "Intercept"
+msgstr "अंतर्रोध"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr "विस्तार"
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr "द्योतक"
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr "ऑफसेट"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, kde-format
+msgid "Composite"
+msgstr "संमिश्र"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, kde-format
+msgid "Operation"
+msgstr "क्रिया"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr "कॉन्क्लोव मात्रीक्स"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, kde-format
+msgid "Duplicate"
+msgstr "प्रतिकृती"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr "वेष्टण"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, kde-format
+msgid "None"
+msgstr "काही नाही"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, kde-format
+msgid "Edge mode:"
+msgstr "किनार पद्धत :"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr "मुख्य भागाचा आकार :"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Target point:"
+msgstr "लक्ष्य बिंदू :"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr "वाटणी करणारा :"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr "तिरपा छेद/कल :"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr "अल्फाचे जतन"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, kde-format
+msgid "Edit kernel"
+msgstr "मुख्य भाग संपादित करा"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, kde-format
+msgid "Flood fill"
+msgstr "पोकळी भरणे"
+
+#: FloodEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Flood color"
+msgstr "रंग भरणे"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr "प्रतिमा"
+
+#: ImageEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Select image..."
+msgstr "प्रतिमा निवडा..."
+
+#: ImageEffectConfigWidget.cpp:54
+#, kde-format
+msgid "Select image"
+msgstr "प्रतिमा निवडा"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr "विलीन करा"
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr "वनस्पती व प्राणी यांच्या स्वरूपाचे शास्त्र"
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr "झिजवा"
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Dilate"
+msgstr "विस्तारा"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Operator:"
+msgstr "वापरणारा :"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Radius x:"
+msgstr "त्रिज्या एक्स :"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, kde-format
+msgid "Radius y:"
+msgstr "त्रिज्या वाय :"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr "dx"
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr "dy"
+
+#, fuzzy
+#~| msgid "Blend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "मिश्रण"
+
+#, fuzzy
+#~| msgid "Blend mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "मिश्रण पद्धती"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "सामान्य"
+
+#, fuzzy
+#~| msgid "Multiply"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiply"
+#~ msgstr "बहुजिनसी"
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Screen"
+#~ msgstr "स्क्रीन"
+
+#, fuzzy
+#~| msgid "Darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "गडद करणे"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "फिकट करणे"
+
+#, fuzzy
+#~| msgid "Gaussian blur"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gaussian blur"
+#~ msgstr "गुसियान ब्लर"
+
+#, fuzzy
+#~| msgid "Radius"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "त्रिज्या"
+
+#, fuzzy
+#~| msgid "Color Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color Matrix"
+#~ msgstr "रंग मात्रीक्स"
+
+#, fuzzy
+#~| msgid "Apply color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply color matrix"
+#~ msgstr "रंग मात्रीक्स लागू करा"
+
+#, fuzzy
+#~| msgid "Saturate colors"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "रंगानी पूर्ण व्यापणे"
+
+#, fuzzy
+#~| msgid "Rotate hue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate hue"
+#~ msgstr "रंगाच्या छटा फिरविणे"
+
+#, fuzzy
+#~| msgid "Luminance to alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Luminance to alpha"
+#~ msgstr "अल्फाची प्रकाशमानता"
+
+#, fuzzy
+#~| msgid "Saturate value"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "व्यापण्याचे मूल्य"
+
+#, fuzzy
+#~| msgid "Angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "कोन"
+
+#, fuzzy
+#~| msgid "Color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color matrix"
+#~ msgstr "रंग मात्रीक्स"
+
+#, fuzzy
+#~| msgid "Component transfer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Component transfer"
+#~ msgstr "घटकाचे स्थानांतरण"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function"
+#~ msgstr "कार्य"
+
+#, fuzzy
+#~| msgid "Identity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Identity"
+#~ msgstr "ओळख"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "कोष्टक"
+
+#, fuzzy
+#~| msgid "Discrete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Discrete"
+#~ msgstr "वेगळा"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "एकरेषीय"
+
+#, fuzzy
+#~| msgid "Gamma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gamma"
+#~ msgstr "गॅमा"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Values"
+#~ msgstr "मूल्य"
+
+#, fuzzy
+#~| msgid "Slope"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "उतार"
+
+#, fuzzy
+#~| msgid "Intercept"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "अंतर्रोध"
+
+#, fuzzy
+#~| msgid "Amplitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Amplitude"
+#~ msgstr "विस्तार"
+
+#, fuzzy
+#~| msgid "Exponent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exponent"
+#~ msgstr "द्योतक"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "ऑफसेट"
+
+#, fuzzy
+#~| msgid "Composite"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "संमिश्र"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "क्रिया"
+
+#, fuzzy
+#~| msgid "Convolve Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convolve Matrix"
+#~ msgstr "कॉन्क्लोव मात्रीक्स"
+
+#, fuzzy
+#~| msgid "Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "प्रतिकृती"
+
+#, fuzzy
+#~| msgid "Wrap"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Wrap"
+#~ msgstr "वेष्टण"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "काही नाही"
+
+#, fuzzy
+#~| msgid "Edge mode:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "किनार पद्धत :"
+
+#, fuzzy
+#~| msgid "Kernel size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Kernel size:"
+#~ msgstr "मुख्य भागाचा आकार :"
+
+#, fuzzy
+#~| msgid "Target point:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "लक्ष्य बिंदू :"
+
+#, fuzzy
+#~| msgid "Divisor:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Divisor:"
+#~ msgstr "वाटणी करणारा :"
+
+#, fuzzy
+#~| msgid "Bias:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bias:"
+#~ msgstr "तिरपा छेद/कल :"
+
+#, fuzzy
+#~| msgid "Preserve alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preserve alpha"
+#~ msgstr "अल्फाचे जतन"
+
+#, fuzzy
+#~| msgid "Edit kernel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "मुख्य भाग संपादित करा"
+
+#, fuzzy
+#~| msgid "Flood fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "पोकळी भरणे"
+
+#, fuzzy
+#~| msgid "Flood color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "रंग भरणे"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "प्रतिमा"
+
+#, fuzzy
+#~| msgid "Select image..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image..."
+#~ msgstr "प्रतिमा निवडा..."
+
+#, fuzzy
+#~| msgid "Select image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image"
+#~ msgstr "प्रतिमा निवडा"
+
+#, fuzzy
+#~| msgid "Merge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Merge"
+#~ msgstr "विलीन करा"
+
+#, fuzzy
+#~| msgid "Morphology"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Morphology"
+#~ msgstr "वनस्पती व प्राणी यांच्या स्वरूपाचे शास्त्र"
+
+#, fuzzy
+#~| msgid "Erode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Erode"
+#~ msgstr "झिजवा"
+
+#, fuzzy
+#~| msgid "Dilate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "विस्तारा"
+
+#, fuzzy
+#~| msgid "Operator:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "वापरणारा :"
+
+#, fuzzy
+#~| msgid "Radius x:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "त्रिज्या एक्स :"
+
+#, fuzzy
+#~| msgid "Radius y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "त्रिज्या वाय :"
+
+#, fuzzy
+#~| msgid "dx"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#, fuzzy
+#~| msgid "dy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "चेतन खोना"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "chetan@kompkin.com"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "बुलीयन ऑपरेशन"
+
+#~ msgid "&Order"
+#~ msgstr "क्रम (&O)"
+
+#~ msgid "&Align"
+#~ msgstr "जुळवा (&A)"
+
+#~ msgid "&File"
+#~ msgstr "फाईल (&F)"
+
+#~ msgid "&Edit"
+#~ msgstr "संपादित करा (&E)"
+
+#~ msgid "&View"
+#~ msgstr "दृश्य (&V)"
+
+#~ msgid "&Object"
+#~ msgstr "घटक (&O)"
+
+#~ msgid "&Distribute"
+#~ msgstr "विभागणी (&D)"
+
+#~ msgid "&Path"
+#~ msgstr "मार्ग (&P)"
+
+#~ msgid "Effe&cts"
+#~ msgstr "परिणाम (&C)"
+
+#~ msgid "&Settings"
+#~ msgstr "संयोजना (&S)"
+
+#~ msgid "Edit"
+#~ msgstr "संपादित करा"
+
+#~ msgid "Object"
+#~ msgstr "घटक"
+
+#~ msgid "Align"
+#~ msgstr "जुळवा"
+
+#~ msgid "Effects"
+#~ msgstr "परिणाम"
+
+#~ msgid "View"
+#~ msgstr "दृश्य"
+
+#~ msgid "&Flatten Path..."
+#~ msgstr "मार्ग समतल करा (&F)..."
+
+#~ msgid "Flatten Path"
+#~ msgstr "मार्ग समतल करा"
+
+#~ msgid "Properties"
+#~ msgstr "गुणधर्म"
+
+#~ msgid "Flatness:"
+#~ msgstr "समतलता :"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten path"
+#~ msgstr "मार्ग समतल करा"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "मार्ग सुस्थितीत आणा"
+
+#~ msgid "&Refine Path..."
+#~ msgstr "मार्ग सुस्थितीत आणा (&R)..."
+
+#~ msgid "Refine Path"
+#~ msgstr "मार्ग सुस्थितीत आणा"
+
+#~ msgid "Subdivisions:"
+#~ msgstr "उपविभाग :"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "गोलाकार कोपरे"
+
+#~ msgid "&Round Corners..."
+#~ msgstr "गोलाकार कोपरे (&R)..."
+
+#~ msgid "Round Corners"
+#~ msgstr "गोलाकार कोपरे"
+
+#~ msgid "Radius:"
+#~ msgstr "त्रिज्या :"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "दृश्य"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "दृश्य"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Reparent shapes"
+#~ msgid "More shapes"
+#~ msgstr "पुनर्रचित आकार"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl & pinch"
+#~ msgstr "फिरविणे व आकुंचन"
+
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "फिरविणे/आकुंचन (&W)..."
+
+#~ msgid "Whirl Pinch"
+#~ msgstr "फिरविणे आकुंचन"
+
+#~ msgid "Info"
+#~ msgstr "माहिती"
+
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr "फिरविणे व आकुंचन कृतीचा परिणाम अंकपट समतल करून वाढू शकतो आधीच आकार द्या"
+
+#~ msgid "Angle:"
+#~ msgstr "कोन :"
+
+#~ msgid "Pinch:"
+#~ msgstr "आकुंचित करा :"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "स्तर वर आणा"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "स्तर खाली आणा"
+
+#~ msgid "Configure"
+#~ msgstr "संयोजीत करा"
+
+#~ msgid "Interface"
+#~ msgstr "दुवा"
+
+#~ msgid "Misc"
+#~ msgstr "किरकोळ"
+
+#~ msgid "Grid"
+#~ msgstr "जाळे"
+
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "दस्तऐवज"
+
+#~ msgid "Document Settings"
+#~ msgstr "दस्तऐवजाची संयोजना"
+
+#~ msgctxt "@title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "लेखक"
+
+#~ msgid "Author"
+#~ msgstr "लेखक"
+
+#~ msgid "Layer view"
+#~ msgstr "स्तराचे दृश्य"
+
+#~ msgid "Add a new layer"
+#~ msgstr "नवीन स्तर वाढवा"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "निवडलेले घटक काढून टाका"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "निवडलेले घटक वर आणा"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "निवडलेले घटक खाली आणा"
+
+#~ msgid "Minimal View"
+#~ msgstr "किमान दृश्य"
+
+#~ msgid "Detailed View"
+#~ msgstr "तपशीलवार दृश्य"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "लघुप्रतिमा दृश्य"
+
+#~ msgid "View mode"
+#~ msgstr "दृश्य पद्धती"
+
+#~ msgid "New Layer"
+#~ msgstr "नवीन स्तर"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "नवीन स्तराचे नाव लिहा :"
+
+#~ msgid "New layer"
+#~ msgstr "नवीन स्तर"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "स्तर निर्माण करा"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "स्तर काढून टाका"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "सर्व स्तर काढू शकलो नाही. किमान एका स्तराची आवश्यकता आहे."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "स्तर काढताना त्रुटी"
+
+#~ msgid "Layer"
+#~ msgstr "स्तर"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "समूह"
+
+#~ msgid "Shape"
+#~ msgstr "आकार"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "दृश्यमान"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "कुलूपबंद"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "झेडसूची"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "अपारदर्शकता"
+
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "खंडीत"
+
+#~ msgid "no"
+#~ msgstr "नाही"
+
+#~ msgid "yes"
+#~ msgstr "हो"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "पुनर्रचित आकार"
+
+#~ msgid "Karbon"
+#~ msgstr "कार्बन"
+
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "व्हेक्टर ग्राफिक्स आरेखन अनुप्रयोग"
+
+#, fuzzy
+#~| msgid "(c) 2001-2011, The Karbon Developers"
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "(c) 2001-2011, The कार्बन विकासकर्ते"
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "कोणत्याही स्वरूपात सहभागी होण्यासाठी तुम्हाला आमंत्रित करण्यात येत आहे"
+
+#~ msgid "Rob Buis"
+#~ msgstr "रॉब ब्युईस"
+
+#~ msgid "Tomislav Lukman"
+#~ msgstr "टोमिस्लाव लुकमन"
+
+#~ msgid "Benoît Vautrin"
+#~ msgstr "बेनोईट व्हुत्रीन"
+
+#~ msgid "Jan Hambrecht"
+#~ msgstr "जान हंब्रेच"
+
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "बगचे निर्धारण व सुधारणा"
+
+#~ msgid "Peter Simonsson"
+#~ msgstr "पीटर सिमोन्सन"
+
+#~ msgid "Tim Beaulen"
+#~ msgstr "टीम ब्युलेन"
+
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "बौद्वीज रेम्प"
+
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "पीअरे स्टर्नवेस"
+
+#~ msgid "Inge Wallin"
+#~ msgstr "इंगे वालीन"
+
+#~ msgid "Bug fixes"
+#~ msgstr "बगचे निर्धारण"
+
+#~ msgid "Alan Horkan"
+#~ msgstr "अलन होर्कन"
+
+#~ msgid "Helpful patches and advice"
+#~ msgstr "साह्यभूत जोड व सल्ला"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "अवैध ओअसीस दस्तऐवज.ऑफिस:अंगभूत चिन्ह आढळले नाही."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "अवैध ओअसीस दस्तऐवज.ऑफिस:आरेखन चिन्ह आढळले नाही"
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "अवैध ओअसीस दस्तऐवज. काढल्याचे:पृष्ठाची चिन्ह आढळले नाही "
+
+#~ msgid "Master Page"
+#~ msgstr "मुख्य पान"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "आरेखने समाविष्ट करा"
+
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "समाविष्ट करण्यासाठी आरेखनाची निवड करा"
+
+#~ msgid "Could not load image."
+#~ msgstr "प्रतिमा लोड करू शकत नाही."
+
+#~ msgid "Import graphic"
+#~ msgstr "आरेखन आयात करा"
+
+#~ msgid "Could not create image shape."
+#~ msgstr "प्रतिमेचा आकार साकार करू शकत नाही"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally"
+#~ msgstr "आडवेरित्या प्रतिबिंबित करा"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Vertically"
+#~ msgstr "उभेरित्या प्रतिबिंबित करा"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally and Vertically"
+#~ msgstr "आडवेरित्या व उभेरित्या प्रतिबिंबित करा"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "वेगळे मार्ग"
+
+#~ msgid "Outline &Mode"
+#~ msgstr "रूपरेषा पद्धत (&M)"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "पानाचे समास दर्शवा"
+
+#~ msgid "&Import Graphic..."
+#~ msgstr "आरेखन आयात करा (&I)..."
+
+#~ msgid "D&elete"
+#~ msgstr "काढून टाका (&E)"
+
+#~ msgid "Edit Guides"
+#~ msgstr "मार्गदर्शक तत्व संपादित करा"
+
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "प्रतिकृती (&D)"
+
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "मध्यभागाचे वितरण करा (आडव्या स्थितीत)"
+
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "मोकळ्या जागांचे वितरण करा (आडव्या स्थितीत)"
+
+#~ msgid "Distribute Left Borders"
+#~ msgstr "डाव्या बाजूच्या सीमांचे वितरण करा"
+
+#~ msgid "Distribute Right Borders"
+#~ msgstr "उजव्या बाजूंच्या सीमांचे वितरण करा"
+
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "मध्यभागाचे वितरण करा (उभ्या स्थितीत)"
+
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "मोकळ्या जागांचे वितरण करा (उभ्या स्थितीत)"
+
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "खालील बाजूच्या सीमांचे वितरण करा"
+
+#~ msgid "Distribute Top Borders"
+#~ msgstr "वरील बाजूच्या सीमांचे वितरण करा"
+
+#~ msgid "Show Rulers"
+#~ msgstr "मोजपट्ट्या दर्शवा"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "मोजपट्ट्या दर्शवितो किंवा लपवितो"
+
+#~ msgid "Show Color Palette"
+#~ msgstr "रंगपाटी दर्शवा"
+
+#~ msgid "Show or hide color palette"
+#~ msgstr "रंगपाटी दर्शवा किंवा लपवा"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "जाळ्याकडे खेचा"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "जाळ्याकडे खेचतो"
+
+#~ msgid "&Clip Object"
+#~ msgstr "घटक खंडीत करा (&C)"
+
+#~ msgid "&Unclip Objects"
+#~ msgstr "घटक मोकळे करा (&U)"
+
+#~ msgid "Mirror Vertically"
+#~ msgstr "उभेरित्या प्रतिबिंबित करा"
+
+#~ msgid "Mirror Horizontally"
+#~ msgstr "आडवेरित्या प्रतिबिंबित करा"
+
+#~ msgid "&Close Path"
+#~ msgstr "मार्ग बंद करा (&C)"
+
+#~ msgid "Com&bine Path"
+#~ msgstr "मार्ग एकत्र करा (&B)"
+
+#~ msgid "Se&parate Path"
+#~ msgstr "मार्ग वेगळे करा (&P)"
+
+#~ msgid "Re&verse Path"
+#~ msgstr "मार्ग उलट करा (&V)"
+
+#~ msgid "Intersect Paths"
+#~ msgstr "मार्ग एकमेकांना छेदतील अशी रचना करा"
+
+#~ msgid "Subtract Paths"
+#~ msgstr "मार्ग कमी करा"
+
+#~ msgid "Unite Paths"
+#~ msgstr "मार्ग एकत्रित करा"
+
+#~ msgid "Exclude Paths"
+#~ msgstr "मार्ग वगळा"
+
+#~ msgid "Snap Path to Grid"
+#~ msgstr "मार्ग जाळ्याकडे खेचा"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "कार्बन संयोजीत करा..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "पृष्ठ रचना (&L)..."
+
+#~ msgid "Zoom to Selection"
+#~ msgstr "निवडीकडे झूम करा"
+
+#~ msgid "Zoom to Drawing"
+#~ msgstr "आरेखनाकडे झूम करा"
+
+#~ msgid "Zoom"
+#~ msgstr "झूम"
+
+#~ msgid "Show status bar:"
+#~ msgstr "स्थिती पट्टी दर्शवा :"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "अलीकडील फाईल्सची संख्या :"
+
+#~ msgid "Palette font size:"
+#~ msgstr "फॉन्ट पटाचा आकार :"
+
+#~ msgid "Canvas color:"
+#~ msgstr "कॅनवास रंग :"
+
+#~ msgid "Select palette"
+#~ msgstr "पट निवडा"
+
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "निवडलेल्याची भरण करण्यासाठी कळ दाबा"
+
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "काही नाही"
+
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "निवडलेल्यावर आघात करण्यासाठी कळ दाबा"
+
+#~ msgctxt "The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "ऐच्छिक"
+
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "काही नाही"
+
+#~ msgid "Stroke:"
+#~ msgstr "आघात :"
+
+#~ msgid "Fill:"
+#~ msgstr "भरण :"
+
+#~ msgid "File to open"
+#~ msgstr "उघडावयाची फाईल"
+
+#~ msgid "Target:"
+#~ msgstr "लक्ष्य :"
+
+#~ msgid "Line"
+#~ msgstr "रेषा"
+
+#~ msgid "Fill"
+#~ msgstr "भरण"
+
+#~ msgid "Type:"
+#~ msgstr "प्रकार :"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "एकरेषीय"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "मध्यबिंदूतून जाणारे"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "शंक्वाकृती"
+
+#~ msgid "Repeat:"
+#~ msgstr "पुनरावृत्ती :"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "काही नाही"
+
+#~ msgid "Reflect"
+#~ msgstr "परवार्तीत करा"
+
+#~ msgid "Repeat"
+#~ msgstr "पुनरावृत्ती"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "एकंदर अपारदर्शकता :"
+
+#~ msgid "Color stop:"
+#~ msgstr "रंगाना प्रतिबंध :"
+
+#~ msgid "Stop color."
+#~ msgstr "रंग थांबवा."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "पूर्वनिश्चीत उतरणी वाढवा (&A)"
+
+#~ msgid "Original"
+#~ msgstr "मूळ"
+
+#~ msgid "Tiled"
+#~ msgstr "फरसबंदी केलेले"
+
+#~ msgid "Stretched"
+#~ msgstr "ताणलेले"
+
+#~ msgid "Top Left"
+#~ msgstr "वरील डावे"
+
+#~ msgid "Top"
+#~ msgstr "वर"
+
+#~ msgid "Top Right"
+#~ msgstr "वरील उजवे"
+
+#~ msgid "Left"
+#~ msgstr "डावे"
+
+#~ msgid "Center"
+#~ msgstr "मध्य"
+
+#~ msgid "Right"
+#~ msgstr "उजवे"
+
+#~ msgid "Bottom Left"
+#~ msgstr "खाली डावे"
+
+#~ msgid "Bottom"
+#~ msgstr "खाली"
+
+#~ msgid "Bottom Right"
+#~ msgstr "खाली उजवे"
+
+#~ msgid "Stroke"
+#~ msgstr "आघात"

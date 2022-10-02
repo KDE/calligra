@@ -1,0 +1,93 @@
+<!--    
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+       
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+
+<chapter id="hints-and-tips">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>José</firstname
+><surname
+>Pires</surname
+><affiliation
+><address
+><email
+>zepires@gmail.com</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Sugestões Gerais para Óptimas Apresentações</title>
+
+<para
+>Ok, você decidiu usar o  &stage; para a sua apresentação. Antes de começar a fazer transparência ou apresentações animadas, vá e descubra um papel e sente-se numa secretária longe do computador. Não interessa se você vai dar uma aula ou se vai tentar convencer o patrão de que o seu plano, política ou ideia deverá ser adoptado; você precisa de descobrir o que vai tentar dizer. Escreva todos os assuntos que necessita de cobrir, tente obtê-los pela ordem que pensa fazerem sentido. Não coloque ainda nenhuns detalhes, decida apenas os destaques a estrutura da sua conversa.</para>
+
+<para
+>Sobre cada cabeçalho, tome algumas notas dos factos que precisa de cobrir. Você está a tentar criar um argumento convincente. Considere em agrupar os seus factos em coisas que necessitem de ser incluídas, coisas que possam ser incluídas e coisas que seria bom cobrir se tivesse bastante tempo.</para>
+
+<para
+>Logo que tenha escrito todas as coisas que precisa de dizer, tenha em consideração o tempo disponível para o fazer. Dez minutos parecem uma eternidade quando você começa, mas torna-se de facto bastante complicado explicar muito em tão pouco tempo. Pegue no seu papel e num relógio com um ponteiro de segundos. Pratique a sua apresentação outra e outra vez. Isto tem vários benefícios. Primeiro, terá a temporização correcta. Se alguém lhe disser que você tem dez minutos, nunca passe para além do tempo permitido. Em segundo lugar, quando de facto o fizer à frente de uma audiência ao vivo, não será a primeira vez que você tenha feito essa apresentação. Em terceiro, você terá as suas palavras na sua própria cabeça. Irá descobrir formas de dizer coisas sobre o assunto. Se já se ouviu a fazer esta apresentação várias vezes, irá saber o que dizer a seguir e como o fará. </para>
+
+<para
+>O &stage; não produz Notas do Orador na altura em que isto foi escrito, mas sinto-me satisfeito em usar apenas 'slides' normais. Produza alguns 'slides' para si, impressos em papel normal, e outros para serem usados no Projector. Torne o texto dos seus 'slides' giro e grande, você necessita de ser capaz de o ler a alguma distância. Eu uso o tamanho de letra 14 ou 16; experimente para descobrir um tamanho que possa ler com facilidade. Nunca criei nenhum programa.</para>
+
+<para
+>Se estiver a usar um projector, aprenda como usá-lo antes de mais. Certifique-se que a lâmpada funciona e que a lâmpada sobressalente também está boa. Limpe a lente. Se não estiver habituado a trabalhar com projectores, pratique. Garanta que o ecrã de projecção em si está limpo. Será provavelmente melhor, ao temporizar-se a si próprio, dar cerca de cinco segundos (conte <quote
+>mil e um, mil e dois, ....</quote
+>) para mudar cada 'slide'. Desta forma, você saberá que não tem de se despachar. Se precisa, de facto, de apontar algo num 'slide' poderá usar um ponteiro e apontar no ecrã de projecção; descubra um ponteiro laser ou ponha um lápis na transparência em si. Tenha em atenção, isto tende a mudar de lugar quando agitar a mesa.</para>
+
+<para
+>Tenha em consideração onde vai ficar. Não poderá ficar à frente da sua projecção, por isso, se ficar num dos lados da projecção, será provavelmente a melhor opção se quiser que a sua audiência seja capaz de ver. Eu, com frequência, costumo projectar uma imagem num quadro branco e desenho por cima dele. Se você estiver a usar um PC com um projector digital, você poderá desenhar por cima dos seus 'slides' com a ferramenta da caneta do &stage;. Lembre-se que o desenho à mão com um rato é uma aptidão que necessita de prática. Se estiver a usar um projector, poderá usar transparências sobrepostas e uma caneta por cima das imagens geradas pelo seu computador.</para>
+
+<para
+>Quando estiver a fazer a apresentação, não olhe acidentalmente para a luz; isto é fácil de acontecer. Se não for usar a máquina durante alguns minutos, desligue-a. Pratique para saber onde é que se irá colocar. Verifique o local onde estão as tomadas eléctricas e saiba como é que os invisuais lidam e onde é que se encontram os interruptores de luz. Uma boa preparação não só o torna menos susceptível a erros (coisas inanimadas poderão ser um pesadelo à frente de uma audiência), mas também lhe dá mais confiança. Tenha sempre um <quote
+>Plano B</quote
+> pronto se algo se recusar a funcionar. Tenha um cópia em papel dos seus 'slides' consigo. Pode fotocopiar e distribuir pela sua audiência se o equipamento falhar.</para>
+
+<para
+>Ainda não foi dita muita coisa sobre o conteúdo. De momento, tudo o que tem é uma folha de papel com tudo o que tem a dizer nela. Antes de fazer seja o que for, pergunte a si próprio se a compreensão por parte das pessoas ao que vai dizer poderá ser melhorada se lhes mostrar uma imagem. As apresentações más são aquelas que consistem numa série de 'slides' cheios de texto. O apresentador poderá ler o 'slide' para a audiência (que já o leu mais depressa que você, dado que consegue ler mais depressa do que ouvir uma pessoa a falar). Tente evitar escrever tudo no 'slide', excepto um título e um número. Desenhe uma imagem do que precisa de dizer e então explique a imagem para eles. Desta forma eles não lhe passarão à frente (eles conseguem ler mais depressa do que você consegue falar, lembra-se?) e assim irá dar a noção que percebe do assunto. Você não percebe, simplesmente usa a imagem como uma série de chamadas de atenção. Um 'slide' deverá suportar o que você diz, não duplicar. Um 'slide' deverá ser o foco da atenção da audiência, não uma distracção.</para>
+
+<para
+>Por exemplo, eu ensino aos funcionários dos Caminhos de Ferro como responder a acidentes. Eu queria usar um 'slide' para discutir como transportar cargas perigosas de uma carruagem descarrilada ou danificada para um veículo automóvel depois de um acidente. O 'slide' que eu criei tinha um desenho simples de uma carruagem-tanque, daquelas para transportar gases ou líquidos. Do outro lado, escrevi  <quote
+>Empresa de Químicos Letais</quote
+> parra que não tivesse de o explicar. Seria bom realçar vários pontos importantes. Primeiro, terá que desactivar os cabos eléctricos, antes de fazer seja o que for, se eles estiverem a uma curta distância. Eu desenhei uma das estruturas de suporte e desenhei uma seta com a distância de segurança nela. Depois, quis dizer que não deveria transportar o conteúdo da carruagem às escuras ou debaixo de uma trovoada. Desenhei uma Lua e um relâmpago por cima do veículo. Você precisa de ter conselhos de especialistas, como tal desenhei uma folha de papel com a palavra <quote
+>Plano</quote
+> perto do veículo. Terá também de garantir que o veículo não se move quando o peso for retirado  de dentro dele. Por isso, desenhei algumas pequenas cunhas vermelhas debaixo das rodas. Tudo o que tinha a dizer estava neste desenho. Tudo o que tenho a fazer é olhar para o desenho e ele diz-me o que tenho de cobrir. Quando tiver coberto todas as coisas no desenho, terminei este assunto. </para>
+
+<para
+>De um modo geral, use apenas um 'slide' ou imagem se lhe mostrar alguma coisa que acrescente algo de novo ao que você está a dizer. Finalmente, descanse e tente não apressar tudo. Fale com eles, não para eles, e lembre-se que uma apresentação passa pela mensagem que você está a querer passar. O &stage; é uma ferramenta útil. Podê-lo-á ajudar a que essa mensagem passe, mas não faz todo o trabalho por si.</para>
+
+</chapter>

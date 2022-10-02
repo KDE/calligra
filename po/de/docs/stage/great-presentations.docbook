@@ -1,0 +1,91 @@
+<!--    
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+       
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+
+<chapter id="hints-and-tips">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Burkhard</firstname
+><surname
+>Lück</surname
+><affiliation
+><address
+><email
+>lueck@hube-lueck.de</email
+></address
+></affiliation
+><contrib
+>Übersetzung</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Allgemeine Hinweise und Tipps für großartige Präsentationen</title>
+
+<para
+>Bevor man eine Präsentation mit &stage; erstellen kann, gibt es eine Reihe von Vorbereitungen, die man am besten ohne Computer trifft. Man sollte sich ein Blatt Papier nehmen und den Inhalt der Präsentation planen. Dabei ist es egal, ob man für eine Unterrichtsstunde irgend welcher Art plant oder seinen Chef von seinen Plänen und Ideen überzeugen will. Man muss entscheiden, was man eigentlich mit der Präsentation sagen will. Das beinhaltet die Themen, die Struktur, die Überschriften. Den Inhalt muss man an dieser Stelle noch nicht festlegen.</para>
+
+<para
+>Zu jeder Überschrift notiert man die Fakten, die genannt werden sollen. Man muss versuchen, überzeugende Argumente zu finden. Die Fakten sollten in wichtige, weniger wichtige und zusätzliche, die man bei zu viel Zeit einbringen möchte, eingeteilt werden.</para>
+
+<para
+>Nachdem man damit fertig ist, ist als Nächstes die verfügbare Zeit zu beachten. Zehn Minuten erscheinen zu Beginn unendlich lang zu sein, sind allerdings für eine informative Rede nur eine sehr kurze Zeitspanne. Daher ist es nötig, die Präsentation oft unter Beachtung der zur Verfügung stehenden Zeit zu üben. Das hat viele Vorteile: Erstens entwickelt man ein Gefühl für die richtige Geschwindigkeit. Man sollte sich zur Regel machen, eine vorgegebene Zeit nicht zu überschreiten. Zweitens hat man die Präsentation schon einige Male durchgeführt, wenn man sie schließlich vor Publikum vorträgt. Drittens hat man sich die richtigen Worte bereits im Kopf zurechtgelegt. Man gewinnt eine gewisse Freiheit, über die Inhalte der jeweiligen Folie zu sprechen, ohne sie wortwörtlich vor zu lesen. </para>
+
+<para
+>Mit &stage; kann man momentan noch keine Notizen für den Sprecher erstellen, aber normale Folien reichen aus. Man sollte einige Folie für sich selbst auf Papier ausdrucken und einige für den Overheadprojektor. Die Textgröße sollte so gewählt sein, dass man den Text auch aus größerer Entfernung lesen kann. Eine Größe von 14 bis 16 Punkt ist ein guter Richtwert. Ein Skript ist nicht zu empfehlen.</para>
+
+<para
+>Man sollte sich mit einem Overheadprojektor vor der Präsentation vertraut machen. Es ist sinnvoll, die Lampe und Ersatzlampe auf einwandfreie Funktion zu überprüfen und eventuell die Linsen und die Oberflächen zu reinigen. Üben Sie, wenn Sie selten mit Projektoren arbeiten. Auch die Projektionsfläche muss sauber sein. Beim Üben sollte man etwa fünf Sekunden (zählen Sie <quote
+>Eintausendundeins, Eintausendundzwei ....</quote
+>) Zeit zum Wechsel einer Folie einplanen. Man kann entweder einen Laserpointer an der Projektionsfläche oder einen Bleistift o. Ä. auf dem Overheadprojektor selbst verwenden, um auf etwas zu zeigen. Bleistifte neigen zum Wegrollen, falls man gegen den Projektor stößt.</para>
+
+<para
+>Man muss die eigene Standposition einplanen. Vor der Projektionsfläche ist kein guter Platz, etwas seitlich ist eine geeignete Position, damit das Publikum Sie sehen kann. Wenn man die Folie auf eine weiße Tafel projiziert, kann man auf der Projektion zeichnen. Wenn Sie einen PC mit einem digitalen Projektor arbeiten, können Sie auch auf den Folien mit dem Präsentationsstift von &stage; zeichnen. Freihändiges Zeichnen mit einer Maus erfordert allerdings einige Übung. Bei einem Overheadprojektor kann man auch transparente Folien auf die Präsentationsfolie legen und einen Folienstift verwenden.</para>
+
+<para
+>Man sollte wegen Blendeffekten unbedingt vermeiden, direkt in das Licht zu sehen. Falls man den OHP einige Minuten nicht benötigt, sollte man ihn ausschalten. Man sollte sich auch mit dem Präsentationsraum vertraut machen. Die Positionen von Steckdosen sollte man kennen und die Bedienung von Lichtschaltern und Vorhängen sollte ausprobiert werden. Das vermeidet Fehler und gibt Sicherheit. Man sollte sich auch ein paar Gedanken über Pannen machen und Alternativen einplanen. Papierausdrucke der Folien, die im Notfall fotokopiert und an die Zuhörer verteilt werden können, sind sehr sinnvoll.</para>
+
+<para
+>Bisher wurde noch nichts über den Inhalt der Präsentation gesagt. Bisher hat man nur ein Blatt Papier mit den Inhalten vor sich. Bei der Erstellung der Präsentation sollte man sich bei jeder Folie fragen, ob das Verständnis durch die Folie verbessert wird. Man kann fürchterliche Präsentationen durchführen, wenn man nur Folien gefüllt mit Texten produziert und diese dann den Zuhörern vorliest (das ist unmöglich, da jeder Zuhörer still schneller liest als der Vortragende laut).Man sollte zunächst nichts anderes als einen Titel und eine Nummer auf jede Folie schreiben. Dann versucht man, eine Zeichnung des Inhalts anzufertigen. Diese Zeichnung kann man den Zuhörern dann erklären. Auf diese Weise sind die Zuhörer nicht schneller und der Vortragende macht einen kompetenten Eindruck. Die Zeichnungen dienen gewissermaßen als Stichwortgeber. Eine Folie sollte eine Ergänzung zum Vortrag sein und kein Duplikat des Vortrags. Damit wird die Konzentration des Publikums gefesselt und nicht zerstreut.</para>
+
+<para
+>Ein Beispiel zur Illustration: Eine Unterrichtsstunde für Bahnangestellte zum Verhalten bei Unfällen. Inhalt der Folie soll sein, wie man Gefahrgüter sicher von einem entgleisten Wagen auf einen Lastwagen umlädt. Das Folienbild zeigt einen Tankwagen für Gase oder Flüssigkeiten. Auf der Seite steht <quote
+>Tödliche Chemiefabrik</quote
+> geschrieben. Folgende wichtige Dinge sollen dazu gesagt werden: Erstens, der Strom in benachbarten Oberleitungen muss abgeschaltet werden, bevor man irgend etwas anderes unternimmt. Daher wird ein Pfeil zu einem Strommasten gezeichnet und der erforderliche Sicherheitsabstand an diesen Pfeil geschrieben. Zweitens dürfen die Wagoninhalte nicht bei Dunkelheit oder Gewitter umgeladen werden. Daher wird ein Mond und ein Blitz oberhalb des Wagons eingezeichnet. Drittens sollte man sich Rat von Fachleuten holen. Daher wird ein Papier neben den Lastwagen gezeichnet und <quote
+>Plan</quote
+> darauf geschrieben. Viertens muss sicher gestellt werden, dass der Wagon sich beim umladen nicht bewegt. Daher werden kleine rote Keile bei den Rädern eingezeichnet. Damit befinden sich alle wichtigen Inhalte gewissermaßen auf der Folie. </para>
+
+<para
+>Im Allgemeinen sollte man ein Bild nur dann verwenden, wenn es zu dem Vorgetragenen etwas hinzufügt. Schließlich ist noch wichtig, nicht zu schnell vorzutragen. Man muss mit dem Publikum reden und darf nicht auf das Publikum einreden und sollte immer daran denken, dass man mit der Präsentation etwas vermitteln will. &stage; ist ein Werkzeug. Es kann nützlich sein, aber dessen Verwendung macht die Präsentation nicht automatisch gut.</para>
+
+</chapter>

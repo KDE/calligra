@@ -1,0 +1,8775 @@
+# translation of calligra.po to Icelandic
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sveinn í Felli <sveinki@nett.is>, 2011, 2013, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-23 00:46+0000\n"
+"PO-Revision-Date: 2015-01-29 09:07+0000\n"
+"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
+"Language-Team: Icelandic <kde-isl@molar.is>\n"
+"Language: is\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=n != 1;\n"
+"\n"
+"X-Generator: Lokalize 1.5\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Sveinn í Felli"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "sv1@fellsnet.is"
+
+#: basicflakes/plugin/KoCreatePathToolFactory.cpp:17
+#, kde-format
+msgid "Draw path"
+msgstr ""
+
+#: basicflakes/plugin/KoPencilToolFactory.cpp:16
+#, kde-format
+msgid "Freehand path"
+msgstr ""
+
+#: basicflakes/tools/KoCreatePathTool.cpp:448
+#, kde-format
+msgid "Angle snapping delta:"
+msgstr ""
+
+#: basicflakes/tools/KoCreatePathTool.cpp:455
+#, kde-format
+msgid "Activate angle snap:"
+msgstr ""
+
+#: basicflakes/tools/KoCreatePathTool.cpp:463
+#, kde-format
+msgid "Angle Constraints"
+msgstr ""
+
+#: basicflakes/tools/KoCreatePathTool.cpp:467
+#: basicflakes/tools/KoPencilTool.cpp:336 widgets/KoGradientEditWidget.cpp:147
+#, kde-format
+msgid "Line"
+msgstr "Lína"
+
+#: basicflakes/tools/KoPencilTool.cpp:273
+#, kde-format
+msgid "Precision:"
+msgstr "Nákvæmni:"
+
+#: basicflakes/tools/KoPencilTool.cpp:275
+#, kde-format
+msgctxt "The raw line data"
+msgid "Raw"
+msgstr ""
+
+#: basicflakes/tools/KoPencilTool.cpp:276
+#: flake/KoConnectionShapeConfigWidget.cpp:20
+#, kde-format
+msgid "Curve"
+msgstr "Boglína"
+
+#: basicflakes/tools/KoPencilTool.cpp:277
+#: flake/KoConnectionShapeConfigWidget.cpp:19
+#, kde-format
+msgid "Straight"
+msgstr "Beint"
+
+#: basicflakes/tools/KoPencilTool.cpp:286
+#: basicflakes/tools/KoPencilTool.cpp:292
+#, kde-format
+msgid "Optimize"
+msgstr ""
+
+#: basicflakes/tools/KoPencilTool.cpp:298
+#, kde-format
+msgid "Exactness:"
+msgstr ""
+
+#: basicflakes/tools/KoPencilTool.cpp:331
+#: basicflakes/tools/KoPencilTool.cpp:332
+#, kde-format
+msgid "Pencil"
+msgstr ""
+
+#: flake/commands/KoConnectionShapeTypeCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Change Connection"
+msgstr "Breyta tengingu"
+
+#: flake/commands/KoParameterHandleMoveCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Change parameter"
+msgstr "Skipta um breytu"
+
+#: flake/commands/KoParameterToPathCommand.cpp:31
+#: flake/commands/KoParameterToPathCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Convert to Path"
+msgstr "Umbreyta í línuteikningu"
+
+#: flake/commands/KoPathBreakAtPointCommand.cpp:29
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgctxt "(qtundo-format)"
+msgid "Break subpath at points"
+msgstr "Sameina punkta"
+
+#: flake/commands/KoPathCombineCommand.cpp:45
+msgctxt "(qtundo-format)"
+msgid "Combine paths"
+msgstr ""
+
+#: flake/commands/KoPathControlPointMoveCommand.cpp:28
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgctxt "(qtundo-format)"
+msgid "Move control point"
+msgstr "Sameina punkta"
+
+#: flake/commands/KoPathFillRuleCommand.cpp:31
+msgctxt "(qtundo-format)"
+msgid "Set fill rule"
+msgstr ""
+
+#: flake/commands/KoPathPointInsertCommand.cpp:66
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgctxt "(qtundo-format)"
+msgid "Insert points"
+msgstr "Sameina punkta"
+
+#: flake/commands/KoPathPointMergeCommand.cpp:139
+msgctxt "(qtundo-format)"
+msgid "Merge points"
+msgstr "Sameina punkta"
+
+#: flake/commands/KoPathPointMoveCommand.cpp:29
+#: flake/commands/KoPathPointMoveCommand.cpp:45
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgctxt "(qtundo-format)"
+msgid "Move points"
+msgstr "Sameina punkta"
+
+#: flake/commands/KoPathPointRemoveCommand.cpp:91
+#: flake/commands/KoPathPointRemoveCommand.cpp:120
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgctxt "(qtundo-format)"
+msgid "Remove points"
+msgstr "Sameina punkta"
+
+#: flake/commands/KoPathPointTypeCommand.cpp:35
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set point type"
+msgstr "Letur"
+
+#: flake/commands/KoPathReverseCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Reverse paths"
+msgstr ""
+
+#: flake/commands/KoPathSegmentBreakCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Break subpath"
+msgstr ""
+
+#: flake/commands/KoPathSegmentTypeCommand.cpp:121
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change segments to curves"
+msgstr "Breyta leturstíl?"
+
+#: flake/commands/KoPathSegmentTypeCommand.cpp:123
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change segments to lines"
+msgstr "Breyta leturstíl?"
+
+#: flake/commands/KoPathShapeMarkerCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Set marker"
+msgstr ""
+
+#: flake/commands/KoShapeAlignCommand.cpp:74
+msgctxt "(qtundo-format)"
+msgid "Align shapes"
+msgstr ""
+
+#: flake/commands/KoShapeBackgroundCommand.cpp:50
+#: flake/commands/KoShapeBackgroundCommand.cpp:61
+#: flake/commands/KoShapeBackgroundCommand.cpp:76
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set background"
+msgstr "Bakgrunnslitur"
+
+#: flake/commands/KoShapeClipCommand.cpp:57
+#: flake/commands/KoShapeClipCommand.cpp:73
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Clip Shape"
+msgstr "Form"
+
+#: flake/commands/KoShapeCreateCommand.cpp:39
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Búa til sniðmát"
+
+#: flake/commands/KoShapeDeleteCommand.cpp:43
+#, fuzzy
+msgctxt "(qtundo-format) Delete one shape"
+msgid "Delete shape"
+msgstr "Eyða síðu"
+
+#: flake/commands/KoShapeDeleteCommand.cpp:56
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete shape"
+msgid_plural "Delete shapes"
+msgstr[0] "Eyða síðu"
+msgstr[1] "Eyða síðu"
+
+#: flake/commands/KoShapeDistributeCommand.cpp:117
+msgctxt "(qtundo-format)"
+msgid "Distribute shapes"
+msgstr ""
+
+#: flake/commands/KoShapeGroupCommand.cpp:82
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Group shapes"
+msgstr "Staðsetningar"
+
+#: flake/commands/KoShapeGroupCommand.cpp:84
+msgctxt "(qtundo-format)"
+msgid "Add shapes to group"
+msgstr ""
+
+#: flake/commands/KoShapeKeepAspectRatioCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Keep Aspect Ratio"
+msgstr "Halda stærðarhlutföllum"
+
+#: flake/commands/KoShapeLockCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Lock shapes"
+msgstr ""
+
+#: flake/commands/KoShapeMoveCommand.cpp:36
+#: flake/commands/KoShapeMoveCommand.cpp:54
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Move shapes"
+msgstr "Flytja skyggnu"
+
+#: flake/commands/KoShapeRenameCommand.cpp:28
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename Shape"
+msgstr "Heimasíða"
+
+#: flake/commands/KoShapeReorderCommand.cpp:40
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Reorder shapes"
+msgstr "Heimasíða"
+
+#: flake/commands/KoShapeRunAroundCommand.cpp:59
+msgctxt "(qtundo-format)"
+msgid "Change Shape RunAround"
+msgstr ""
+
+#: flake/commands/KoShapeShadowCommand.cpp:54
+#: flake/commands/KoShapeShadowCommand.cpp:71
+#: flake/commands/KoShapeShadowCommand.cpp:82
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Shadow"
+msgstr "Sýna möskva"
+
+#: flake/commands/KoShapeShearCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Shear shapes"
+msgstr ""
+
+#: flake/commands/KoShapeSizeCommand.cpp:30
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Resize shapes"
+msgstr "Heimasíða"
+
+#: flake/commands/KoShapeStrokeCommand.cpp:59
+#: flake/commands/KoShapeStrokeCommand.cpp:78
+#: flake/commands/KoShapeStrokeCommand.cpp:89
+msgctxt "(qtundo-format)"
+msgid "Set stroke"
+msgstr ""
+
+#: flake/commands/KoShapeTransparencyCommand.cpp:35
+#: flake/commands/KoShapeTransparencyCommand.cpp:46
+#: flake/commands/KoShapeTransparencyCommand.cpp:59
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set opacity"
+msgstr "Ógagnsæi:"
+
+#: flake/commands/KoShapeUnclipCommand.cpp:107
+msgctxt "(qtundo-format)"
+msgid "Unclip Shape"
+msgstr ""
+
+#: flake/commands/KoShapeUnclipCommand.cpp:116
+msgctxt "(qtundo-format)"
+msgid "Unclip Shapes"
+msgstr ""
+
+#: flake/commands/KoShapeUngroupCommand.cpp:46
+msgctxt "(qtundo-format)"
+msgid "Ungroup shapes"
+msgstr ""
+
+#: flake/commands/KoSubpathJoinCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Close subpath"
+msgstr ""
+
+#: flake/commands/KoSubpathJoinCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Join subpaths"
+msgstr ""
+
+#: flake/commands/KoSubpathRemoveCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Remove subpath"
+msgstr "Fjarlægja hóp"
+
+#: flake/KoConnectionShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Standard"
+msgstr "Staðlað"
+
+#: flake/KoConnectionShapeConfigWidget.cpp:18
+#, kde-format
+msgid "Lines"
+msgstr "Línur"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#. i18n: ectx: property (text), widget (QLabel, lblTypeDesc)
+#: flake/KoConnectionShapeConfigWidget.ui:17
+#: widgets/koDocumentInfoAboutWidget.ui:141
+#: widgets/KoGradientEditWidget.cpp:152
+#, fuzzy, kde-format
+msgid "Type:"
+msgstr "Tegund:"
+
+#: flake/KoConnectionShapeFactory.cpp:22
+#, fuzzy, kde-format
+msgid "Tie"
+msgstr "Bindi"
+
+#: flake/KoConnectionShapeFactory.cpp:24
+#, kde-format
+msgid "A connection between two other shapes"
+msgstr ""
+
+#: flake/KoGridData.cpp:210
+#, fuzzy, kde-format
+msgid "Show Grid"
+msgstr "Sýna möskva"
+
+#: flake/KoGridData.cpp:211
+#, fuzzy, kde-format
+msgid "Shows or hides grid"
+msgstr "Sýna möskva"
+
+#: flake/KoPathShapeFactory.cpp:22
+#, fuzzy, kde-format
+msgid "Simple path shape"
+msgstr "Heimasíða"
+
+#: flake/KoPathShapeFactory.cpp:24
+#, kde-format
+msgid "A simple path shape"
+msgstr ""
+
+#: flake/KoShapeController.cpp:60 rdf/InsertSemanticObjectCreateAction.cpp:46
+#: rdf/InsertSemanticObjectReferenceAction.cpp:51
+#: text/InsertTextReferenceAction.cpp:50 text/InsertVariableAction.cpp:45
+#, kde-format
+msgid "%1 Options"
+msgstr "Valmöguleikar %1"
+
+#: flake/KoShapePaste.cpp:155
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Paste Shapes"
+msgstr "Líma skyggnu"
+
+#: flake/KoToolManager.cpp:451
+#, kde-format
+msgid "Active tool: %1"
+msgstr ""
+
+#: flake/KoToolProxy.cpp:587
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Paste Image"
+msgstr "Líma skyggnu"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nodeSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:30
+#, kde-format
+msgid "Nodes"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, extensionSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:43
+#, kde-format
+msgid "Extension of lines"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, boundingBoxSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:56
+#, kde-format
+msgid "Bounding box of shape"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, snapDistance)
+#: flake/SnapGuideConfigWidget.ui:72
+#, kde-format
+msgid "Proximity distance where snapping happens"
+msgstr ""
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, snapDistance)
+#: flake/SnapGuideConfigWidget.ui:75
+#, fuzzy, kde-format
+msgid " px"
+msgstr " px"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, orthogonalSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:85
+#, kde-format
+msgid "Orthogonal"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, intersectionSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:98
+#, kde-format
+msgid "Intersection of lines"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lineGuideSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:111
+#, fuzzy, kde-format
+msgid "Guide lines"
+msgstr "Undirstrikað"
+
+#: flake/svg/SvgShapeFactory.cpp:23
+#, kde-format
+msgid "Embedded svg shape"
+msgstr ""
+
+#: flake/tools/KoCreateShapesToolFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Create object"
+msgstr "Búa til sniðmát"
+
+#: flake/tools/KoPanToolFactory.cpp:17
+#, kde-format
+msgid "Pan"
+msgstr "Hliðra"
+
+#: flake/tools/KoPathSegmentChangeStrategy.cpp:133
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Segment"
+msgstr "Breyta"
+
+#: flake/tools/KoPathTool.cpp:97
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Corner point"
+msgstr "Sameina punkta"
+
+#: flake/tools/KoPathTool.cpp:102
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Smooth point"
+msgstr "Sameina punkta"
+
+#: flake/tools/KoPathTool.cpp:107
+#, kde-format
+msgid "Symmetric Point"
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:112
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Make curve point"
+msgstr "Sameina punkta"
+
+#: flake/tools/KoPathTool.cpp:116
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Make line point"
+msgstr "Sameina punkta"
+
+#: flake/tools/KoPathTool.cpp:120
+#, fuzzy, kde-format
+msgid "Segment to Line"
+msgstr "Breyta leturstíl?"
+
+#: flake/tools/KoPathTool.cpp:125
+#, fuzzy, kde-format
+msgid "Segment to Curve"
+msgstr "Breyta leturstíl?"
+
+#: flake/tools/KoPathTool.cpp:130
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Insert point"
+msgstr "Sameina punkta"
+
+#: flake/tools/KoPathTool.cpp:135
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Remove point"
+msgstr "Sameina punkta"
+
+#: flake/tools/KoPathTool.cpp:140
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Break at point"
+msgstr "Sameina punkta"
+
+#: flake/tools/KoPathTool.cpp:144
+#, kde-format
+msgid "Break at segment"
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:148
+#, kde-format
+msgid "Join with segment"
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:153
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Merge points"
+msgstr "Sameina punkta"
+
+#: flake/tools/KoPathTool.cpp:157
+#, fuzzy, kde-format
+msgid "To Path"
+msgstr "Slóð:"
+
+#: flake/tools/KoPathTool.cpp:190
+#, fuzzy, kde-format
+#| msgid "Curve"
+msgid "Line/Curve"
+msgstr "Boglína"
+
+#: flake/tools/KoPathTool.cpp:528
+#, kde-format
+msgid "Drag to move handle."
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:592
+#, kde-format
+msgid "Drag to move point. Shift click to change point type."
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:594
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Drag to move control point."
+msgstr "Sameina punkta"
+
+#: flake/tools/KoPathTool.cpp:619
+#, kde-format
+msgid "Drag to change curve directly. Double click to insert new path point."
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:626
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Press B to break path at selected point."
+msgstr "Sameina punkta"
+
+#: flake/tools/KoPathTool.cpp:628
+#, kde-format
+msgid "Press B to break path at selected segments."
+msgstr ""
+
+#: flake/tools/KoPathToolFactory.cpp:17
+#, kde-format
+msgid "Path editing"
+msgstr ""
+
+#: flake/tools/KoZoomToolFactory.cpp:17 widgets/KoZoomController_p.h:28
+#: widgets/KoZoomWidget.cpp:52
+#, kde-format
+msgid "Zoom"
+msgstr "Aðdráttur"
+
+#. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
+#: flake/tools/KoZoomToolWidget.ui:20
+#, fuzzy, kde-format
+msgid "Zoom In"
+msgstr "Renna að"
+
+#. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
+#: flake/tools/KoZoomToolWidget.ui:30
+#, fuzzy, kde-format
+msgid "Zoom Out"
+msgstr "Renna frá"
+
+#. i18n: ectx: property (text), widget (QToolButton, corner)
+#. i18n: ectx: property (text), widget (QToolButton, smooth)
+#. i18n: ectx: property (text), widget (QToolButton, symmetric)
+#. i18n: ectx: property (text), widget (QToolButton, lineSegment)
+#. i18n: ectx: property (text), widget (QToolButton, curveSegment)
+#. i18n: ectx: property (text), widget (QToolButton, linePoint)
+#. i18n: ectx: property (text), widget (QToolButton, curvePoint)
+#. i18n: ectx: property (text), widget (QToolButton, addPoint)
+#. i18n: ectx: property (text), widget (QToolButton, removePoint)
+#. i18n: ectx: property (text), widget (QToolButton, breakPoint)
+#. i18n: ectx: property (text), widget (QToolButton, breakSegment)
+#. i18n: ectx: property (text), widget (QToolButton, joinSegment)
+#. i18n: ectx: property (text), widget (QToolButton, mergePoints)
+#. i18n: ectx: property (text), widget (QToolButton, add)
+#. i18n: ectx: property (text), widget (QToolButton, remove)
+#. i18n: ectx: property (text), widget (QToolButton, open)
+#. i18n: ectx: property (text), widget (QToolButton, save)
+#: flake/tools/PathToolOptionWidgetBase.ui:39
+#: flake/tools/PathToolOptionWidgetBase.ui:46
+#: flake/tools/PathToolOptionWidgetBase.ui:53
+#: flake/tools/PathToolOptionWidgetBase.ui:73
+#: flake/tools/PathToolOptionWidgetBase.ui:80
+#: flake/tools/PathToolOptionWidgetBase.ui:87
+#: flake/tools/PathToolOptionWidgetBase.ui:94
+#: flake/tools/PathToolOptionWidgetBase.ui:101
+#: flake/tools/PathToolOptionWidgetBase.ui:108
+#: flake/tools/PathToolOptionWidgetBase.ui:115
+#: flake/tools/PathToolOptionWidgetBase.ui:122
+#: flake/tools/PathToolOptionWidgetBase.ui:129
+#: flake/tools/PathToolOptionWidgetBase.ui:136 widgets/KoEditColorSet.ui:48
+#: widgets/KoEditColorSet.ui:58 widgets/KoEditColorSet.ui:68
+#: widgets/KoEditColorSet.ui:78
+#, fuzzy, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QPushButton, convertToPath)
+#: flake/tools/PathToolOptionWidgetBase.ui:186
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert to Path"
+msgid "Convert To Path"
+msgstr "Umbreyta í línuteikningu"
+
+#: kross/KoScriptingDocker.cpp:78 kross/KoScriptingPart.cpp:82
+#, kde-format
+msgid "Scripts"
+msgstr "Skriftur"
+
+#: kross/KoScriptingDocker.cpp:113 kross/KoScriptManager.cpp:146
+#, kde-format
+msgid "Script Manager"
+msgstr "Skriftustjóri"
+
+#: kross/KoScriptingPart.cpp:78
+#, kde-format
+msgid "Execute Script File..."
+msgstr "Keyra skriftuskrá..."
+
+#: kross/KoScriptingPart.cpp:86
+#, kde-format
+msgid "Script Manager..."
+msgstr "Skriftustjóri..."
+
+#: kross/KoScriptingPart.cpp:160
+#, kde-format
+msgid "Execute Script File"
+msgstr "Keyra skriftuskrá"
+
+#: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
+#, kde-format
+msgid "Save"
+msgstr "Vista"
+
+#: kross/KoScriptManagerAdd.cpp:54
+#, kde-format
+msgid ""
+"<qt>This wizard will guide you through the process of adding a new resource "
+"to your scripts.</qt>"
+msgstr ""
+
+#: kross/KoScriptManagerAdd.cpp:59
+#, fuzzy, kde-format
+#| msgid "Script File"
+msgid "Add script file"
+msgstr "Skriftuskrá"
+
+#: kross/KoScriptManagerAdd.cpp:64
+#, kde-format
+msgid "Add collection folder"
+msgstr ""
+
+#: kross/KoScriptManagerAdd.cpp:67
+#, fuzzy, kde-format
+msgid "Install script package file"
+msgstr "Setja inn skriftupakka"
+
+#: kross/KoScriptManagerAdd.cpp:71
+#, fuzzy, kde-format
+msgid "Install online script package"
+msgstr "Setja inn skriftupakka"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, add)
+#: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
+#: widgets/KoEditColorSet.ui:45
+#, kde-format
+msgid "Add"
+msgstr "Bæta við"
+
+#: kross/KoScriptManagerAdd.cpp:281
+#, kde-format
+msgid "Script File"
+msgstr "Skriftuskrá"
+
+#: kross/KoScriptManagerAdd.cpp:284
+#, kde-format
+msgid "Script"
+msgstr "Skrifta"
+
+#: kross/KoScriptManagerAdd.cpp:287
+#, kde-format
+msgid "Collection"
+msgstr "Safn"
+
+#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#, fuzzy, kde-format
+msgctxt "Default text for undo action"
+msgid "Undo"
+msgstr "Afturkalla"
+
+#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#: main/KoUndoStackAction.cpp:41
+#, fuzzy, kde-format
+msgid "Undo %1"
+msgstr "Afturkalla %1"
+
+#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#, fuzzy, kde-format
+msgctxt "Default text for redo action"
+msgid "Redo"
+msgstr "Endurtaka"
+
+#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#: main/KoUndoStackAction.cpp:41
+#, fuzzy, kde-format
+msgid "Redo %1"
+msgstr "Endurtaka %1"
+
+#: kundo2/kundo2model.cpp:54
+#, fuzzy, kde-format
+msgid "<empty>"
+msgstr "Tómt"
+
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1522
+#: main/KoUndoStackAction.cpp:33
+#, fuzzy, kde-format
+msgid "Redo"
+msgstr "Endurtaka"
+
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1521
+#: main/KoUndoStackAction.cpp:25
+#, fuzzy, kde-format
+msgid "Undo"
+msgstr "Afturkalla"
+
+#. i18n: ectx: Menu (file)
+#: main/calligra_shell.rc:4
+#, fuzzy, kde-format
+msgid "&File"
+msgstr "&Skrá"
+
+#. i18n: ectx: Menu (settings)
+#: main/calligra_shell.rc:32
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "&Stillingar"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: main/calligra_shell.rc:46
+#, fuzzy, kde-format
+msgid "File"
+msgstr "Skrá"
+
+#: main/config/KoConfigDocumentPage.cpp:46
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, fuzzy, kde-format
+msgid "Document Settings"
+msgstr "Stillingar skjals"
+
+#: main/config/KoConfigDocumentPage.cpp:62
+#, kde-format
+msgid "No autosave"
+msgstr ""
+
+#: main/config/KoConfigDocumentPage.cpp:63
+#, kde-format
+msgctxt "unit symbol for minutes, leading space as separator"
+msgid " min"
+msgstr ""
+
+#: main/config/KoConfigDocumentPage.cpp:65
+#, kde-format
+msgid "Autosave interval:"
+msgstr ""
+
+#: main/config/KoConfigDocumentPage.cpp:69
+#, fuzzy, kde-format
+msgid "Create backup file:"
+msgstr "Búa til afrit"
+
+#: main/config/KoConfigGridPage.cpp:55
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, fuzzy, kde-format
+msgid "Grid"
+msgstr "Hnitanet"
+
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+msgid "Show grid:"
+msgstr "Sýna hnitanet:"
+
+#: main/config/KoConfigGridPage.cpp:64
+#, fuzzy, kde-format
+msgid "Snap to grid:"
+msgstr "Jafna við hnitanet"
+
+#: main/config/KoConfigGridPage.cpp:65
+#, fuzzy, kde-format
+msgid "Grid color:"
+msgstr "Stilla lit möskva:"
+
+#: main/config/KoConfigGridPage.cpp:67
+#, fuzzy, kde-format
+msgid "Spacing"
+msgstr "Millibil"
+
+#: main/config/KoConfigGridPage.cpp:78
+#, fuzzy, kde-format
+msgctxt "Horizontal grid spacing"
+msgid "&Horizontal:"
+msgstr "&Lárétt:"
+
+#: main/config/KoConfigGridPage.cpp:79
+#, fuzzy, kde-format
+msgctxt "Vertical grid spacing"
+msgid "&Vertical:"
+msgstr "Lóð&rétt:"
+
+#: main/config/KoConfigMiscPage.cpp:66
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:30
+#: pigment/KoCompositeOpRegistry.cpp:31
+#, fuzzy, kde-format
+msgid "Misc"
+msgstr "Ýmislegt"
+
+#: main/config/KoConfigMiscPage.cpp:76
+#, fuzzy, kde-format
+msgid "Units:"
+msgstr "Mælieiningar:"
+
+#: main/config/KoConfigMiscPage.cpp:85
+#, kde-format
+msgid "Handle radius:"
+msgstr ""
+
+#: main/config/KoConfigMiscPage.cpp:92
+#, kde-format
+msgid "Grab sensitivity:"
+msgstr ""
+
+#: main/config/KoConfigMiscPage.cpp:99
+#, fuzzy, kde-format
+msgid "Paste offset:"
+msgstr "Líma skyggnu"
+
+#: main/config/KoConfigMiscPage.cpp:103
+#, kde-format
+msgid "Paste at Cursor:"
+msgstr ""
+
+#: main/KoApplication.cpp:198
+#, fuzzy, kde-format
+msgid "Only print and exit"
+msgstr "Bara prenta og hætta"
+
+#: main/KoApplication.cpp:199
+#, fuzzy, kde-format
+msgid "Open a new document based on the given template (desktopfile name)"
+msgstr "Búa til nýtt skjal út frá sniðskrá"
+
+#: main/KoApplication.cpp:200
+#, fuzzy, kde-format
+msgid "Open a new document based on the given template file"
+msgstr "Búa til nýtt skjal út frá sniðskrá"
+
+#: main/KoApplication.cpp:201
+#, fuzzy, kde-format
+msgid "Override display DPI"
+msgstr "Hunsa upplausn skjás"
+
+#: main/KoApplication.cpp:202
+#, fuzzy, kde-format
+msgid "Only export to PDF and exit"
+msgstr "Bara prenta og hætta"
+
+#: main/KoApplication.cpp:203
+#, kde-format
+msgid "Filename for export-pdf"
+msgstr ""
+
+#: main/KoApplication.cpp:204
+#, kde-format
+msgid "just load the file and then exit"
+msgstr ""
+
+#: main/KoApplication.cpp:205
+#, kde-format
+msgid "load the file, show the window and progressbar and then exit"
+msgstr ""
+
+#: main/KoApplication.cpp:206
+#, kde-format
+msgid "Filename to write profiling information into."
+msgstr ""
+
+#: main/KoApplication.cpp:207
+#, kde-format
+msgid "Load a file and save it as an ODF file. Meant for debugging."
+msgstr ""
+
+#: main/KoApplication.cpp:208
+#, kde-format
+msgid "File(s) or URL(s) to open"
+msgstr ""
+
+#: main/KoApplication.cpp:218
+#, kde-format
+msgid ""
+"You are running a 32 bits build on a 64 bits Windows.\n"
+"This is not recommended.\n"
+"Please download and install the x64 build instead."
+msgstr ""
+
+#: main/KoApplication.cpp:262
+#, fuzzy, kde-format
+msgid "%1: Critical Error"
+msgstr "Undirbúningsvilla"
+
+#: main/KoApplication.cpp:262
+#, kde-format
+msgid ""
+"Essential application components could not be found.\n"
+"This might be an installation issue.\n"
+"Try restarting or reinstalling."
+msgstr ""
+
+#: main/KoApplication.cpp:511
+#, fuzzy, kde-format
+msgid "No template found for: %1"
+msgstr "Of mörg snið fundust fyrir: %1"
+
+#: main/KoApplication.cpp:514
+#, fuzzy, kde-format
+msgid "Too many templates found for: %1"
+msgstr "Of mörg snið fundust fyrir: %1"
+
+#: main/KoApplication.cpp:536 main/KoApplication.cpp:554
+#, fuzzy, kde-format
+msgid "Template %1 failed to load."
+msgstr "Mistókst að hlaða inn sniðinu %1."
+
+#: main/KoApplication.cpp:544
+#, fuzzy, kde-format
+msgid "No template found at: %1"
+msgstr "Of mörg snið fundust fyrir: %1"
+
+#: main/KoAutoSaveRecoveryDialog.cpp:166
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Recover Files"
+msgstr "Litaspjald"
+
+#: main/KoAutoSaveRecoveryDialog.cpp:171
+#, kde-format
+msgid "The following autosave file can be recovered:"
+msgstr ""
+
+#: main/KoAutoSaveRecoveryDialog.cpp:174
+#, kde-format
+msgid "The following autosave files can be recovered:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
+#: main/KoDetailsPaneBase.ui:94
+#, fuzzy, kde-format
+msgid "Always use this template at application start up"
+msgstr "Alltaf nota þetta snið þegar forrit ræsir sig"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
+#: main/KoDetailsPaneBase.ui:97
+#, fuzzy, kde-format
+msgid "Always use this template"
+msgstr "Alltaf nota þetta snið"
+
+#: main/KoDocument.cpp:549
+#, fuzzy, kde-format
+msgid "Making backup..."
+msgstr "Bý til afrit..."
+
+#: main/KoDocument.cpp:564
+#, fuzzy, kde-format
+msgid "Saving..."
+msgstr "Vista..."
+
+#: main/KoDocument.cpp:592
+#, fuzzy, kde-format
+msgid ""
+"Could not save\n"
+"%1"
+msgstr ""
+"Gat ekki vistað\n"
+"%1"
+
+#: main/KoDocument.cpp:594
+#, fuzzy, kde-format
+msgid ""
+"Could not save %1\n"
+"Reason: %2"
+msgstr ""
+"Gat ekki vistað %1\n"
+"Ástæða: %2"
+
+#: main/KoDocument.cpp:623
+#, kde-format
+msgid "Document <i>%1</i> saved"
+msgstr ""
+
+#: main/KoDocument.cpp:711
+#, kde-format
+msgid ""
+"The password of this encrypted document is not known. Autosave aborted! "
+"Please save your work manually."
+msgstr ""
+
+#: main/KoDocument.cpp:714
+#, fuzzy, kde-format
+msgid "Autosaving..."
+msgstr "Sjálfvirk vistun..."
+
+#: main/KoDocument.cpp:726
+#, fuzzy, kde-format
+msgid "Error during autosave! Partition full?"
+msgstr "Villa við sjálfvirka vistun! Disksneið full?"
+
+#: main/KoDocument.cpp:819
+#, fuzzy, kde-format
+msgid "Could not create the file for saving"
+msgstr "Gat ekki búið til skrá til vistunar"
+
+#: main/KoDocument.cpp:863 main/KoDocument.cpp:885 main/KoDocument.cpp:916
+#: main/KoDocument.cpp:950
+#, fuzzy, kde-format
+msgid "Not able to write '%1'. Partition full?"
+msgstr "Get ekki skrifað '%1'. Disksneið full?"
+
+#: main/KoDocument.cpp:870
+#, fuzzy, kde-format
+msgid "Not able to write RDF metadata. Partition full?"
+msgstr "Get ekki skrifað '%1'. Disksneið full?"
+
+#: main/KoDocument.cpp:878 main/KoDocument.cpp:925 main/KoDocument.cpp:1992
+#, fuzzy, kde-format
+msgid "Error while trying to write '%1'. Partition full?"
+msgstr "Villa við skrifun af '%1'. Disksneið full?"
+
+#: main/KoDocument.cpp:1204
+#, fuzzy, kde-format
+msgid ""
+"Malformed URL\n"
+"%1"
+msgstr ""
+"Gölluð slóð\n"
+"%1"
+
+#: main/KoDocument.cpp:1220
+#, fuzzy, kde-format
+msgid ""
+"An autosaved file exists for this document.\n"
+"Do you want to open it instead?"
+msgstr ""
+"Öryggisafrit er til fyrir þetta skjal.\n"
+"Viltu opna það í staðinn?"
+
+#: main/KoDocument.cpp:1337 main/KoDocument.cpp:1685 main/KoMainWindow.cpp:705
+#, fuzzy, kde-format
+msgid "The file %1 does not exist."
+msgstr "Skráin %1 er ekki til."
+
+#: main/KoDocument.cpp:1463
+#, fuzzy, kde-format
+msgid "Opening Document"
+msgstr "Opna skjal"
+
+#: main/KoDocument.cpp:1478
+#, fuzzy, kde-format
+msgid "Could not create the filter plugin"
+msgstr "Gat ekki búið til skrá til vistunar"
+
+#: main/KoDocument.cpp:1481
+#, fuzzy, kde-format
+msgid "Could not create the output document"
+msgstr "Gat ekki búið til skrá til vistunar"
+
+#: main/KoDocument.cpp:1484
+#, fuzzy, kde-format
+msgid "File not found"
+msgstr "Skrá fannst ekki"
+
+#: main/KoDocument.cpp:1487
+#, fuzzy, kde-format
+msgid "Cannot create storage"
+msgstr "Get ekki búið til geymslu"
+
+#: main/KoDocument.cpp:1490
+#, fuzzy, kde-format
+msgid "Bad MIME type"
+msgstr "Ógild MIME tegund"
+
+#: main/KoDocument.cpp:1493
+#, fuzzy, kde-format
+msgid "Error in embedded document"
+msgstr "Villa í innbyggðu skjali"
+
+#: main/KoDocument.cpp:1496
+#, fuzzy, kde-format
+msgid "Format not recognized"
+msgstr "Óþekkt snið"
+
+#: main/KoDocument.cpp:1499
+#, fuzzy, kde-format
+msgid "Not implemented"
+msgstr "Ekki útfært enn"
+
+#: main/KoDocument.cpp:1502
+#, fuzzy, kde-format
+msgid "Parsing error"
+msgstr "Þáttunarvilla"
+
+#: main/KoDocument.cpp:1505
+#, fuzzy, kde-format
+msgid "Document is password protected"
+msgstr "Skjalið er lykilorðsvarið"
+
+#: main/KoDocument.cpp:1508
+#, kde-format
+msgid "Invalid file format"
+msgstr ""
+
+#: main/KoDocument.cpp:1515
+#, fuzzy, kde-format
+msgid "Internal error"
+msgstr "Innri villa"
+
+#: main/KoDocument.cpp:1518
+#, fuzzy, kde-format
+msgid "Out of memory"
+msgstr "Minnið er búið"
+
+#: main/KoDocument.cpp:1521
+#, kde-format
+msgid "Empty Filter Plugin"
+msgstr ""
+
+#: main/KoDocument.cpp:1524
+#, kde-format
+msgid "Trying to load into the wrong kind of document"
+msgstr ""
+
+#: main/KoDocument.cpp:1527
+#, kde-format
+msgid "Failed to download remote file"
+msgstr ""
+
+#: main/KoDocument.cpp:1534
+#, fuzzy, kde-format
+msgid "Unknown error"
+msgstr "Óþekkt villa"
+
+#: main/KoDocument.cpp:1538
+#, fuzzy, kde-format
+msgid ""
+"Could not open %2.\n"
+"Reason: %1.\n"
+"%3"
+msgstr ""
+"Gat ekki opnað %1\n"
+"Ástæða: %2"
+
+#: main/KoDocument.cpp:1596
+#, kde-format
+msgid "Document <i>%1</i> loaded"
+msgstr ""
+
+#: main/KoDocument.cpp:1659 odf/KoOdfReadStore.cpp:98
+#, fuzzy, kde-format
+msgid "Could not find %1"
+msgstr "Gat ekki fundið %1"
+
+#: main/KoDocument.cpp:1671
+#, fuzzy, kde-format
+msgid ""
+"Parsing error in %1 at line %2, column %3\n"
+"Error message: %4"
+msgstr ""
+"Þáttunarvilla í %1 á línu %2, dálki %3\n"
+"Villuboð: %4"
+
+#: main/KoDocument.cpp:1692
+#, fuzzy, kde-format
+msgid "%1 is not a file."
+msgstr "%1 er ekki skrá."
+
+#: main/KoDocument.cpp:1707
+#, fuzzy, kde-format
+msgid "Could not open the file for reading (check read permissions)."
+msgstr "Gat ekki opnað skrána til lesturs (athugaðu lesréttindi)."
+
+#: main/KoDocument.cpp:1718
+#, fuzzy, kde-format
+msgid "Could not read the beginning of the file."
+msgstr "Gat ekki lesið upphaf skráarinnar."
+
+#: main/KoDocument.cpp:1748
+#, fuzzy, kde-format
+msgid ""
+"parsing error in the main document at line %1, column %2\n"
+"Error message: %3"
+msgstr ""
+"Þáttunarvilla í aðalskjali á línu %1, dálki %2\n"
+"Villuboð: %3"
+
+#: main/KoDocument.cpp:1769
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr ""
+
+#: main/KoDocument.cpp:1854
+#, fuzzy, kde-format
+msgid "Invalid document: no file 'maindoc.xml'."
+msgstr "Ógilt skjal: 'maindoc.xml' er ekki til."
+
+#: main/KoDocument.cpp:1878
+#, kde-format
+msgid ""
+"Document <i>%1</i> contains several versions. Go to File->Versions to open "
+"an old version."
+msgstr ""
+
+#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2554 main/KoMainWindow.cpp:1227
+#: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
+#, fuzzy, kde-format
+msgid "Untitled"
+msgstr "Ónefnt"
+
+#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1230
+#, fuzzy, kde-format
+msgid ""
+"<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
+"</p>"
+msgstr "<p>Skjalinu <b>'%1'</b> hefur verið breytt.</p><p>Viltu vista það?</p>"
+
+#: main/KoDocument.cpp:2165
+#, fuzzy, kde-format
+msgid "Internal error: saveXML not implemented"
+msgstr "Innri villa: vistun á XML hefur ekki verið útfærð"
+
+#: main/KoDocument.cpp:2202
+#, fuzzy, kde-format
+msgid ""
+"Could not open\n"
+"%1"
+msgstr ""
+"Gat ekki opnað\n"
+"%1"
+
+#: main/KoDocument.cpp:2205
+#, fuzzy, kde-format
+msgid ""
+"Could not open %1\n"
+"Reason: %2"
+msgstr ""
+"Gat ekki opnað %1\n"
+"Ástæða: %2"
+
+#: main/KoDocument.cpp:2262
+#, fuzzy, kde-format
+msgid "a word processing"
+msgstr "ritvinnsla"
+
+#: main/KoDocument.cpp:2263
+#, fuzzy, kde-format
+msgid "a spreadsheet"
+msgstr "töflureiknir"
+
+#: main/KoDocument.cpp:2264
+#, fuzzy, kde-format
+msgid "a presentation"
+msgstr "kynning"
+
+#: main/KoDocument.cpp:2265
+#, fuzzy, kde-format
+msgid "a chart"
+msgstr "graf"
+
+#: main/KoDocument.cpp:2266
+#, fuzzy, kde-format
+msgid "a drawing"
+msgstr "teikning"
+
+#: main/KoDocument.cpp:2558
+#, fuzzy, kde-format
+msgid ""
+"The document \"%1\" has been modified.\n"
+"Do you want to save your changes or discard them?"
+msgstr "<p>Skjalinu <b>'%1'</b> hefur verið breytt.</p><p>Viltu vista það?</p>"
+
+#: main/KoDocument.cpp:2560
+#, fuzzy, kde-format
+msgid "Close Document"
+msgstr "Sérsniðið skjal"
+
+#: main/KoDocumentSectionDelegate.cpp:508
+#, fuzzy, kde-format
+msgid "%1 %"
+msgstr "%1 %"
+
+#: main/KoDocumentSectionToolTip.cpp:37
+#, fuzzy, kde-format
+msgid "No"
+msgstr "Nei"
+
+#: main/KoDocumentSectionToolTip.cpp:37
+#, fuzzy, kde-format
+msgid "Yes"
+msgstr "Já"
+
+#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#, fuzzy, kde-format
+msgid "Could not export file."
+msgstr "Gat ekki flutt út skrá."
+
+#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#, fuzzy, kde-format
+msgid "Missing Export Filter"
+msgstr "Vantar útflutningssíu"
+
+#: main/KoFilterManager.cpp:518
+#, fuzzy, kde-format
+msgid ""
+"Could not import file of type\n"
+"%1"
+msgstr ""
+"Gat ekki flutt inn skrá af tegund\n"
+"%1"
+
+#: main/KoFilterManager.cpp:520
+#, fuzzy, kde-format
+msgid "Missing Import Filter"
+msgstr "Vantar innflutningssíu"
+
+#: main/KoFilterManager_p.cpp:30
+#, fuzzy, kde-format
+msgid "Choose Filter"
+msgstr "Velja síu"
+
+#: main/KoFindText.cpp:46
+#, fuzzy, kde-format
+msgid "Case Sensitive"
+msgstr "Háð há/lágstöfum"
+
+#: main/KoFindText.cpp:46
+#, kde-format
+msgid "Match cases when searching"
+msgstr ""
+
+#: main/KoFindText.cpp:47
+#, kde-format
+msgid "Match only whole words"
+msgstr ""
+
+#: main/KoFindText.cpp:47
+#, kde-format
+msgid "Whole Words Only"
+msgstr ""
+
+#: main/KoFindText.cpp:48
+#, kde-format
+msgid "Find from Cursor"
+msgstr ""
+
+#: main/KoFindText.cpp:48
+#, kde-format
+msgid "Start searching from the current cursor"
+msgstr ""
+
+#: main/KoMainWindow.cpp:163
+#, fuzzy, kde-format
+msgid "%1 unsaved document (%2)"
+msgstr "Vista skjal sem"
+
+#: main/KoMainWindow.cpp:272
+#, fuzzy, kde-format
+msgid "Export as PDF..."
+msgstr "Flytja út sem PDF..."
+
+#: main/KoMainWindow.cpp:282
+#, fuzzy, kde-format
+msgid "Reload"
+msgstr "Endurlesa"
+
+#: main/KoMainWindow.cpp:286
+#, fuzzy, kde-format
+msgid "Versions..."
+msgstr "Útgáfur..."
+
+#: main/KoMainWindow.cpp:290
+#, fuzzy, kde-format
+msgid "Open ex&isting Document as Untitled Document..."
+msgstr "Opna þetta skjal"
+
+#: main/KoMainWindow.cpp:294
+#, fuzzy, kde-format
+msgid "E&xport..."
+msgstr "&Flytja út..."
+
+#: main/KoMainWindow.cpp:298
+#, fuzzy, kde-format
+msgid "En&crypt Document"
+msgstr "Flytja inn skjal"
+
+#: main/KoMainWindow.cpp:303
+#, fuzzy, kde-format
+msgid "&Uncompress to Directory"
+msgstr "Flytja inn skjal"
+
+#: main/KoMainWindow.cpp:308
+#, fuzzy, kde-format
+msgid "&New View"
+msgstr "&Ný sýn"
+
+#: main/KoMainWindow.cpp:314 widgets/KoDocumentInfoDlg.cpp:86
+#, fuzzy, kde-format
+msgid "Document Information"
+msgstr "Upplýsingar um skjal"
+
+#: main/KoMainWindow.cpp:338
+#, fuzzy, kde-format
+msgid "Full Screen Mode"
+msgstr "Fylla skjá"
+
+#: main/KoMainWindow.cpp:343
+#, fuzzy, kde-format
+msgid "Show Dockers"
+msgstr "Sýna %1 tækjaslá"
+
+#: main/KoMainWindow.cpp:348
+#, fuzzy, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Docker Titlebars"
+msgstr "Sýna %1 tækjaslá"
+
+#: main/KoMainWindow.cpp:355
+#, fuzzy, kde-format
+msgid "Dockers"
+msgstr "Sérsniðið skjal"
+
+#: main/KoMainWindow.cpp:660
+#, kde-format
+msgid "(write protected)"
+msgstr ""
+
+#: main/KoMainWindow.cpp:665
+#, fuzzy, kde-format
+msgid "Save as %1"
+msgstr "Vista sem %1"
+
+#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:388
+#, fuzzy, kde-format
+msgid "%1 (unknown file type)"
+msgstr "%1 (óþekkt skráartegund)"
+
+#: main/KoMainWindow.cpp:855
+#, fuzzy, kde-format
+msgid ""
+"<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
+"want to save in this format?</qt>"
+msgstr ""
+"<qt>Vistun sem %1 gæti valdið tapi af uppsetningu. <p>Viltu eftir sem áður "
+"vista í þessu sniði?</qt>"
+
+#: main/KoMainWindow.cpp:858
+#, fuzzy, kde-format
+msgid "Confirm Save"
+msgstr "Staðfesta vistun"
+
+#: main/KoMainWindow.cpp:867
+#, fuzzy, kde-format
+msgid ""
+"<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
+"want to export to this format?</qt>"
+msgstr ""
+"<qt>Að flytja út sem %1 gæti valdið tapi af uppsetningu. <p>Viltu eftir sem "
+"áður flytja út í þessu sniði?</qt>"
+
+#: main/KoMainWindow.cpp:870
+#, fuzzy, kde-format
+msgid "Confirm Export"
+msgstr "Staðfesta útflutning"
+
+#: main/KoMainWindow.cpp:871
+#, fuzzy, kde-format
+msgid "Export"
+msgstr "Flytja út"
+
+#: main/KoMainWindow.cpp:964
+#, fuzzy, kde-format
+msgid "untitled"
+msgstr "Ónefnt"
+
+#: main/KoMainWindow.cpp:1292
+#, fuzzy, kde-format
+msgid "Open Document"
+msgstr "Opna skjal"
+
+#: main/KoMainWindow.cpp:1301 pageapp/KoPAView.cpp:524
+#, fuzzy, kde-format
+msgid "Import Document"
+msgstr "Flytja inn skjal"
+
+#: main/KoMainWindow.cpp:1465
+#, fuzzy, kde-format
+msgid "Export as PDF"
+msgstr "Flytja út sem PDF..."
+
+#: main/KoMainWindow.cpp:1502
+#, kde-format
+msgid "Cannot export to the specified file"
+msgstr ""
+
+#: main/KoMainWindow.cpp:1701 pageapp/KoPADocumentStructureDocker.cpp:80
+#, fuzzy, kde-format
+msgid "Document"
+msgstr "Skjal"
+
+#: main/KoMainWindow.cpp:1709
+#, fuzzy, kde-format
+msgid "Document - %1"
+msgstr "Skjal - %1"
+
+#: main/KoMainWindow.cpp:1746
+#, kde-format
+msgid ""
+"You will lose all changes made since your last save\n"
+"Do you want to continue?"
+msgstr ""
+
+#: main/KoMainWindow.cpp:1748
+#, fuzzy, kde-format
+msgid "Warning"
+msgstr "Aðvörun"
+
+#: main/KoMainWindow.cpp:2113
+#, fuzzy, kde-format
+msgid "Show %1 Toolbar"
+msgstr "Sýna %1 tækjaslá"
+
+#: main/KoMainWindow.cpp:2115
+#, fuzzy, kde-format
+msgid "Hide %1 Toolbar"
+msgstr "Fela %1 tækjaslá"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
+#: main/KoOpenPane.cpp:123 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
+#, fuzzy, kde-format
+msgid "Open Existing Document"
+msgstr "Opna þetta skjal"
+
+#: main/KoOpenPane.cpp:199
+#, fuzzy, kde-format
+msgid "Recent Documents"
+msgstr "Nýleg skjöl"
+
+#: main/KoOpenPane.cpp:299
+#, fuzzy, kde-format
+msgid "Custom Document"
+msgstr "Sérsniðið skjal"
+
+#: main/KoPrintingDialog.cpp:43
+#, fuzzy, kde-format
+msgid "Stop"
+msgstr "Stöðva"
+
+#: main/KoPrintingDialog.cpp:132
+#, kde-format
+msgid "Printing"
+msgstr ""
+
+#: main/KoPrintingDialog_p.h:136
+#, fuzzy, kde-format
+msgid "Printing done"
+msgstr "Haus á síðu"
+
+#: main/KoPrintingDialog_p.h:137
+#, fuzzy, kde-format
+msgid "Close"
+msgstr "Loka"
+
+#: main/KoPrintingDialog_p.h:157
+#, fuzzy, kde-format
+msgid "Stopped"
+msgstr "Stöðvað"
+
+#: main/KoRecentDocumentsPane.cpp:71
+#, fuzzy, kde-format
+msgid "Open This Document"
+msgstr "Opna þetta skjal"
+
+#: main/KoRecentDocumentsPane.cpp:174
+#, fuzzy, kde-format
+msgctxt "File modification date and time. %1 is date time"
+msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
+msgstr "<tr><td><b>Breytt:</b></td><td>%1</td></tr>"
+
+#: main/KoRecentDocumentsPane.cpp:177
+#, fuzzy, kde-format
+msgctxt "File access date and time. %1 is date time"
+msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
+msgstr "<tr><td><b>Opnað:</b></td><td>%1</td></tr>"
+
+#: main/KoStandardAction.cpp:19
+#, fuzzy, kde-format
+msgid "Show Guides"
+msgstr "Sýna möskva"
+
+#: main/KoStandardAction.cpp:20
+#, fuzzy, kde-format
+msgid "Shows or hides guides"
+msgstr "Sýna möskva"
+
+#: main/KoTemplateCreateDia.cpp:104
+#, fuzzy, kde-format
+msgid "Create Template"
+msgstr "Búa til sniðmát"
+
+#: main/KoTemplateCreateDia.cpp:113
+#, fuzzy, kde-format
+msgctxt "Template name"
+msgid "Name:"
+msgstr "Nafn:"
+
+#: main/KoTemplateCreateDia.cpp:123
+#, fuzzy, kde-format
+msgid "Group:"
+msgstr "Hópur:"
+
+#: main/KoTemplateCreateDia.cpp:138
+#, fuzzy, kde-format
+msgid "&Add Group..."
+msgstr "Bæt&a við hóp..."
+
+#: main/KoTemplateCreateDia.cpp:141 main/KoVersionDialog.cpp:61
+#, fuzzy, kde-format
+msgid "&Remove"
+msgstr "&Fjarlægja"
+
+#: main/KoTemplateCreateDia.cpp:147
+#, fuzzy, kde-format
+msgid "Picture"
+msgstr "Mynd"
+
+#: main/KoTemplateCreateDia.cpp:150
+#, fuzzy, kde-format
+msgid "&Preview"
+msgstr "Forskoðun:"
+
+#: main/KoTemplateCreateDia.cpp:155
+#, fuzzy, kde-format
+msgid "Custom:"
+msgstr "Sérsniðið"
+
+#: main/KoTemplateCreateDia.cpp:159
+#, fuzzy, kde-format
+msgid "&Select..."
+msgstr "&Velja..."
+
+#: main/KoTemplateCreateDia.cpp:168
+#, fuzzy, kde-format
+msgid "Use the new template as default"
+msgstr "Nota nýja sniðið sem sjálfgefið"
+
+#: main/KoTemplateCreateDia.cpp:308
+#, fuzzy, kde-format
+msgid "Do you really want to overwrite the existing '%1' template?"
+msgstr "Viltu virkilega skrifa yfir sniðið '%1' sem þegar er til?"
+
+#: main/KoTemplateCreateDia.cpp:421 main/KoTemplateCreateDia.cpp:428
+#, fuzzy, kde-format
+msgid "Add Group"
+msgstr "Bæta við hópi"
+
+#: main/KoTemplateCreateDia.cpp:421
+#, fuzzy, kde-format
+msgid "Enter group name:"
+msgstr "Skrifaðu nafn á hóp:"
+
+#: main/KoTemplateCreateDia.cpp:428
+#, fuzzy, kde-format
+msgid "This name is already used."
+msgstr "Þetta nafn er í notkun."
+
+#: main/KoTemplateCreateDia.cpp:452
+#, fuzzy, kde-format
+msgid "Do you really want to remove that group?"
+msgstr "Viltu virkilega fjarlægja þennan hóp?"
+
+#: main/KoTemplateCreateDia.cpp:453
+#, fuzzy, kde-format
+msgid "Remove Group"
+msgstr "Fjarlægja hóp"
+
+#: main/KoTemplateCreateDia.cpp:455
+#, fuzzy, kde-format
+msgid "Do you really want to remove that template?"
+msgstr "Viltu virkilega fjarlægja þetta snið?"
+
+#: main/KoTemplateCreateDia.cpp:456
+#, fuzzy, kde-format
+msgid "Remove Template"
+msgstr "Fjarlægja sniðskrá"
+
+#: main/KoTemplateCreateDia.cpp:507
+#, fuzzy, kde-format
+msgid "Could not load picture."
+msgstr "Gat ekki hlaðið inn mynd."
+
+#: main/KoTemplateCreateDia.cpp:510
+#, fuzzy, kde-format
+msgid "No picture available."
+msgstr "Engin mynd til."
+
+#: main/KoTemplatesPane.cpp:37
+#, fuzzy, kde-format
+msgid "Use This Template"
+msgstr "Nota þetta snið"
+
+#: main/KoVersionDialog.cpp:35
+#, fuzzy, kde-format
+msgid "Version"
+msgstr "Útgáfa"
+
+#: main/KoVersionDialog.cpp:49
+#, fuzzy, kde-format
+msgid "Date & Time"
+msgstr "Dagur og tími"
+
+#: main/KoVersionDialog.cpp:50
+#, fuzzy, kde-format
+msgid "Saved By"
+msgstr "Vistað af"
+
+#: main/KoVersionDialog.cpp:51 main/KoVersionDialog.cpp:215
+#, fuzzy, kde-format
+msgid "Comment"
+msgstr "Athugasemd"
+
+#: main/KoVersionDialog.cpp:58
+#, fuzzy, kde-format
+msgid "&Add"
+msgstr "Bæt&a við"
+
+#: main/KoVersionDialog.cpp:64
+#, fuzzy, kde-format
+msgid "&Modify"
+msgstr "&Breyta"
+
+#: main/KoVersionDialog.cpp:67
+#, fuzzy, kde-format
+msgid "&Open"
+msgstr "&Opna"
+
+#: main/KoVersionDialog.cpp:120
+#, kde-format
+msgid "A new version could not be added"
+msgstr ""
+
+#: main/KoVersionDialog.cpp:227 main/KoVersionDialog.cpp:229
+#, fuzzy, kde-format
+msgid "Date: %1"
+msgstr "Dags.: %1"
+
+#: main/KoView.cpp:330
+#, kde-format
+msgid "Active Author Profile"
+msgstr ""
+
+#: main/KoView.cpp:342 main/KoView.cpp:396
+#, kde-format
+msgctxt "choice for author profile"
+msgid "Anonymous"
+msgstr ""
+
+#: main/KoView.cpp:395 widgets/KoConfigAuthorPage.cpp:69
+#, kde-format
+msgid "Default Author Profile"
+msgstr ""
+
+#: odf/KoDocumentInfo.cpp:40
+#, fuzzy, kde-format
+msgid "Unknown"
+msgstr "Óþekkt"
+
+#: odf/KoOdfReadStore.cpp:91
+#, kde-format
+msgid "No store backend"
+msgstr ""
+
+#: odf/KoOdfReadStore.cpp:126
+#, fuzzy, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2\n"
+"Error message: %3"
+msgstr ""
+"Þáttunarvilla í aðalskjali á línu %1, dálki %2\n"
+"Villuboð: %3"
+
+#: odf/KoPageFormat.cpp:53
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO A3"
+msgstr "ISO A3"
+
+#: odf/KoPageFormat.cpp:54
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO A4"
+msgstr "ISO A4"
+
+#: odf/KoPageFormat.cpp:55
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO A5"
+msgstr "ISO A5"
+
+#: odf/KoPageFormat.cpp:56
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "US Letter"
+msgstr "US Letter"
+
+#: odf/KoPageFormat.cpp:57
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "US Legal"
+msgstr "US Legal"
+
+#: odf/KoPageFormat.cpp:58
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "Screen"
+msgstr "Skjár"
+
+#: odf/KoPageFormat.cpp:59
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "Custom"
+msgstr "Sérsniðið"
+
+#: odf/KoPageFormat.cpp:60
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO B5"
+msgstr "ISO B5"
+
+#: odf/KoPageFormat.cpp:61
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "US Executive"
+msgstr "US Executive"
+
+#: odf/KoPageFormat.cpp:62
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO A0"
+msgstr "ISO A0"
+
+#: odf/KoPageFormat.cpp:63
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO A1"
+msgstr "ISO A1"
+
+#: odf/KoPageFormat.cpp:64
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO A2"
+msgstr "ISO A2"
+
+#: odf/KoPageFormat.cpp:65
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO A6"
+msgstr "ISO A6"
+
+#: odf/KoPageFormat.cpp:66
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO A7"
+msgstr "ISO A7"
+
+#: odf/KoPageFormat.cpp:67
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO A8"
+msgstr "ISO A8"
+
+#: odf/KoPageFormat.cpp:68
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO A9"
+msgstr "ISO A9"
+
+#: odf/KoPageFormat.cpp:69
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO B0"
+msgstr "ISO B0"
+
+#: odf/KoPageFormat.cpp:70
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO B1"
+msgstr "ISO B1"
+
+#: odf/KoPageFormat.cpp:71
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO B10"
+msgstr "ISO B10"
+
+#: odf/KoPageFormat.cpp:72
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO B2"
+msgstr "ISO B2"
+
+#: odf/KoPageFormat.cpp:73
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO B3"
+msgstr "ISO B3"
+
+#: odf/KoPageFormat.cpp:74
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO B4"
+msgstr "ISO B4"
+
+#: odf/KoPageFormat.cpp:75
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO B6"
+msgstr "ISO B6"
+
+#: odf/KoPageFormat.cpp:76
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO C5"
+msgstr "ISO C5"
+
+#: odf/KoPageFormat.cpp:77
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "US Common 10"
+msgstr "US Common 10"
+
+#: odf/KoPageFormat.cpp:78
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "ISO DL"
+msgstr "ISO DL"
+
+#: odf/KoPageFormat.cpp:79
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "US Folio"
+msgstr "US Folio"
+
+#: odf/KoPageFormat.cpp:80
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "US Ledger"
+msgstr "US Ledger"
+
+#: odf/KoPageFormat.cpp:81
+#, fuzzy, kde-format
+msgctxt "Page size"
+msgid "US Tabloid"
+msgstr "US Tabloid"
+
+#: odf/KoUnit.cpp:37
+#, fuzzy, kde-format
+msgid "Millimeters (mm)"
+msgstr "Millímetrar (mm)"
+
+#: odf/KoUnit.cpp:39
+#, fuzzy, kde-format
+msgid "Centimeters (cm)"
+msgstr "Sentímetrar (cm)"
+
+#: odf/KoUnit.cpp:41
+#, fuzzy, kde-format
+msgid "Decimeters (dm)"
+msgstr "Desímetrar (dm)"
+
+#: odf/KoUnit.cpp:43
+#, fuzzy, kde-format
+msgid "Inches (in)"
+msgstr "Tommur (in)"
+
+#: odf/KoUnit.cpp:45
+#, fuzzy, kde-format
+msgid "Pica (pi)"
+msgstr "Pica (pi)"
+
+#: odf/KoUnit.cpp:47
+#, fuzzy, kde-format
+msgid "Cicero (cc)"
+msgstr "Cicero (cc)"
+
+#: odf/KoUnit.cpp:49
+#, fuzzy, kde-format
+msgid "Points (pt)"
+msgstr "Punktar (pt)"
+
+#: odf/KoUnit.cpp:51
+#, fuzzy, kde-format
+msgid "Pixels (px)"
+msgstr "Punktar (pt)"
+
+#: odf/KoUnit.cpp:53
+#, kde-format
+msgid "Unsupported unit"
+msgstr ""
+
+#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:21
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change master slide"
+msgstr "Sekúnda"
+
+#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:24
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change parameter"
+msgctxt "(qtundo-format)"
+msgid "Change master page"
+msgstr "Skipta um breytu"
+
+#: pageapp/commands/KoPAChangePageLayoutCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Page Layout"
+msgstr "Stilla uppsetningu á síðu"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:18
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Display master background"
+msgstr "Sekúnda"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:22
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Display slide background"
+msgstr "Sekúnda"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Display page background"
+msgstr "Sekúnda"
+
+#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:18
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Show master shapes"
+msgstr "Síðasta síða"
+
+#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Hide master shapes"
+msgstr ""
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:26
+#, fuzzy
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Eyða síðu"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:29
+#, fuzzy
+msgctxt "(qtundo-format) Delete one page"
+msgid "Delete page"
+msgstr "Eyða síðu"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:50
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Eyða síðu"
+msgstr[1] "Eyða síðu"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:53
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete page"
+msgid_plural "Delete pages"
+msgstr[0] "Eyða síðu"
+msgstr[1] "Eyða síðu"
+
+#: pageapp/commands/KoPAPageInsertCommand.cpp:24
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert slide"
+msgstr "Setja inn atriðaskrá"
+
+#: pageapp/commands/KoPAPageInsertCommand.cpp:27
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert page"
+msgstr "Setja inn síðu"
+
+#: pageapp/commands/KoPAPageMoveCommand.cpp:45
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Move slide"
+msgid_plural "Move slides"
+msgstr[0] "Flytja skyggnu"
+msgstr[1] "Flytja skyggnu"
+
+#: pageapp/commands/KoPAPageMoveCommand.cpp:48
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Move page"
+msgid_plural "Move pages"
+msgstr[0] "Færa &upp"
+msgstr[1] "Færa &upp"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
+#, fuzzy, kde-format
+msgid "Configure"
+msgstr "Stilla"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
+#, fuzzy, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Skjal"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
+#, fuzzy, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Höfundur"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
+#, fuzzy, kde-format
+msgid "Author"
+msgstr "Höfundur"
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:27
+#, kde-format
+msgid "Select a master slide design:"
+msgstr ""
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:28
+#, fuzzy, kde-format
+msgid "Master Slide"
+msgstr "Líma skyggnu"
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:30
+#, kde-format
+msgid "Select a master page design:"
+msgstr ""
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:97
+#, fuzzy, kde-format
+msgid "Master Page"
+msgstr "Síðasta síða"
+
+#: pageapp/KoPADocumentModel.cpp:172 pageapp/KoPAPageThumbnailModel.cpp:54
+#, kde-format
+msgid "Slide %1"
+msgstr "Skyggna %1"
+
+#: pageapp/KoPADocumentModel.cpp:174
+#, fuzzy, kde-format
+#| msgid "Page %1"
+msgid "Page  %1"
+msgstr "Síða %1"
+
+#: pageapp/KoPADocumentModel.cpp:177
+#: pageapp/KoPADocumentStructureDocker.cpp:102
+#, fuzzy, kde-format
+msgid "Layer"
+msgstr "Lag"
+
+#: pageapp/KoPADocumentModel.cpp:179
+#, fuzzy, kde-format
+msgid "Group"
+msgstr "Hópur"
+
+#: pageapp/KoPADocumentModel.cpp:181
+#, fuzzy, kde-format
+msgid "Shape"
+msgstr "Form"
+
+#: pageapp/KoPADocumentModel.cpp:272
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename Slide"
+msgstr "Líma skyggnu"
+
+#: pageapp/KoPADocumentModel.cpp:274
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename Page"
+msgstr "Heimasíða"
+
+#: pageapp/KoPADocumentModel.cpp:278
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename Layer"
+msgstr "Nýtt lag"
+
+#: pageapp/KoPADocumentModel.cpp:314
+#: pageapp/KoPADocumentStructureDocker.cpp:100
+#, fuzzy, kde-format
+msgid "Slide"
+msgstr "Skyggna"
+
+#: pageapp/KoPADocumentModel.cpp:317
+#, fuzzy, kde-format
+msgid "Visible"
+msgstr "Sýnilegt"
+
+#: pageapp/KoPADocumentModel.cpp:318
+#, fuzzy, kde-format
+msgid "Locked"
+msgstr "Læst"
+
+#: pageapp/KoPADocumentModel.cpp:533 pageapp/KoPADocumentModel.cpp:552
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Reparent shapes"
+msgstr "Heimasíða"
+
+#: pageapp/KoPADocumentModel.cpp:686
+#, fuzzy, kde-format
+msgid "&Move Here"
+msgstr "Flytja skyggnu"
+
+#: pageapp/KoPADocumentModel.cpp:690
+#, fuzzy, kde-format
+msgid "&Copy Here"
+msgstr "Flytja skyggnu"
+
+#: pageapp/KoPADocumentModel.cpp:694
+#, fuzzy, kde-format
+msgid "C&ancel"
+msgstr "&Hætta við"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:89
+#, kde-format
+msgid "Add a new slide or layer"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:92
+#, kde-format
+msgid "Add a new page or layer"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:100
+#: widgets/KoPageLayoutDialog.cpp:37
+#, fuzzy, kde-format
+msgid "Page"
+msgstr "Síða"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:109
+#: pageapp/KoPADocumentStructureDocker.cpp:616
+#, fuzzy, kde-format
+msgid "Delete selected objects"
+msgstr "Eyða síðu"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:115
+#, kde-format
+msgid "Raise selected objects"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:121
+#, fuzzy, kde-format
+msgid "Lower selected objects"
+msgstr "Búa til sniðmát"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:130
+#, fuzzy, kde-format
+msgid "Minimal View"
+msgstr "Smámyndasýn"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:132
+#, fuzzy, kde-format
+msgid "Detailed View"
+msgstr "Nákvæmur listi"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:134
+#, fuzzy, kde-format
+msgid "Thumbnail View"
+msgstr "Smámyndasýn"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:144
+#, kde-format
+msgid "View mode"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:301
+#, kde-format
+msgid "Enter the name of the new layer:"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:301
+#, fuzzy, kde-format
+msgid "New Layer"
+msgstr "Nýtt lag"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:302
+#, fuzzy, kde-format
+msgid "New layer"
+msgstr "Nýtt lag"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:315
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Create Layer"
+msgstr "Eyða lagi"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:341
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete Layer"
+msgstr "Eyða lagi"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:344
+#, kde-format
+msgid "Could not delete all layers. At least one layer is required."
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:344
+#, fuzzy, kde-format
+msgid "Error deleting layers"
+msgstr "Búa til afrit"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:611
+#, kde-format
+msgid "Add a new slide"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:614
+#, kde-format
+msgid "Add a new page"
+msgstr ""
+
+#: pageapp/KoPADocumentStructureDocker.cpp:618
+#, fuzzy, kde-format
+msgid "Cut"
+msgstr "Klippa"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:619
+#: pigment/compositeops/KoCompositeOpCopy.h:24
+#: pigment/compositeops/KoCompositeOpCopy2.h:32
+#: pigment/KoCompositeOpRegistry.cpp:87
+#, fuzzy, kde-format
+msgid "Copy"
+msgstr "Afrita"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:620
+#, fuzzy, kde-format
+msgid "Paste"
+msgstr "Líma"
+
+#: pageapp/KoPAPageThumbnailModel.cpp:56
+#, kde-format
+msgid "Page %1"
+msgstr "Síða %1"
+
+#: pageapp/KoPAPastePage.cpp:118
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Paste Slide"
+msgid_plural "Paste Slides"
+msgstr[0] "Líma skyggnu"
+msgstr[1] "Líma skyggnu"
+
+#: pageapp/KoPAPastePage.cpp:121
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Paste Page"
+msgid_plural "Paste Pages"
+msgstr[0] "Líma skyggnu"
+msgstr[1] "Líma skyggnu"
+
+#: pageapp/KoPAView.cpp:307 widgets/KoToolBoxDocker.cpp:30
+#, fuzzy, kde-format
+msgid "Tools"
+msgstr "Áhöld"
+
+#: pageapp/KoPAView.cpp:350
+#, fuzzy, kde-format
+msgid "D&elete"
+msgstr "&Eyða"
+
+#: pageapp/KoPAView.cpp:361
+#, fuzzy, kde-format
+msgid "Snap to Grid"
+msgstr "Jafna við hnitanet"
+
+#: pageapp/KoPAView.cpp:371
+#, fuzzy, kde-format
+msgid "Show Master Pages"
+msgstr "Síðasta síða"
+
+#: pageapp/KoPAView.cpp:375
+#, fuzzy, kde-format
+msgid "Show Rulers"
+msgstr "Sýna stikur"
+
+#: pageapp/KoPAView.cpp:377
+#, kde-format
+msgid "Show/hide the view's rulers"
+msgstr ""
+
+#: pageapp/KoPAView.cpp:381
+#, fuzzy, kde-format
+msgid "Show Page Margins"
+msgstr "Síðasta síða"
+
+#: pageapp/KoPAView.cpp:383
+#, kde-format
+msgid "Show/hide the page margins"
+msgstr ""
+
+#: pageapp/KoPAView.cpp:387
+#, fuzzy, kde-format
+msgid "Insert Page"
+msgstr "Setja inn síðu"
+
+#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
+#, kde-format
+msgid "Insert a new page after the current one"
+msgstr ""
+
+#: pageapp/KoPAView.cpp:393
+#, fuzzy, kde-format
+msgid "Copy Page"
+msgstr "Síða"
+
+#: pageapp/KoPAView.cpp:395 pageapp/KoPAView.cpp:396
+#, fuzzy, kde-format
+msgid "Copy the current page"
+msgstr "Eyða síðu"
+
+#: pageapp/KoPAView.cpp:399
+#, fuzzy, kde-format
+msgid "Delete Page"
+msgstr "Eyða síðu"
+
+#: pageapp/KoPAView.cpp:402 pageapp/KoPAView.cpp:403
+#, fuzzy, kde-format
+msgid "Delete the current page"
+msgstr "Eyða síðu"
+
+#: pageapp/KoPAView.cpp:406
+#, fuzzy, kde-format
+msgid "Master Page..."
+msgstr "Síðasta síða"
+
+#: pageapp/KoPAView.cpp:410
+#, fuzzy, kde-format
+msgid "Page Layout..."
+msgstr "Uppsetning á síðu..."
+
+#. i18n: ectx: property (text), widget (QTableWidget, variables)
+#: pageapp/KoPAView.cpp:420 rdf/KoSemanticStylesheetsEditor.ui:57
+#, fuzzy, kde-format
+msgid "Variable"
+msgstr "Breyta"
+
+#: pageapp/KoPAView.cpp:425
+#, fuzzy, kde-format
+msgid "Import Document..."
+msgstr "Flytja inn skjal"
+
+#: pageapp/KoPAView.cpp:429
+#, fuzzy, kde-format
+msgid "Configure..."
+msgstr "Stilla..."
+
+#: pageapp/KoPAView.cpp:521
+#, fuzzy, kde-format
+msgid "Import Slideshow"
+msgstr "Vantar innflutningssíu"
+
+#: pageapp/KoPAView.cpp:549 pageapp/KoPAView.cpp:553
+#, fuzzy, kde-format
+msgid ""
+"Could not import\n"
+"%1"
+msgstr ""
+"Gat ekki opnað\n"
+"%1"
+
+#: pageapp/KoPAView.cpp:666
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change page layout"
+msgstr "Stilla uppsetningu á síðu"
+
+#. i18n: ectx: property (text), widget (QPushButton, backgroundImage)
+#: pageapp/tools/backgroundTool/BackgroundToolWidget.ui:43
+#, kde-format
+msgid "Set image ..."
+msgstr ""
+
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
+#, fuzzy, kde-format
+msgid "Background"
+msgstr "Bakgrunnslitur"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#, fuzzy, kde-format
+msgid "Page Background"
+msgstr "Bakgrunnslitur"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Page Design"
+msgstr "Haus á síðu"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Slide %1"
+msgid "Slide Design"
+msgstr "Skyggna %1"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#, fuzzy, kde-format
+msgid "Use background of master page"
+msgstr "Sekúnda"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#, fuzzy, kde-format
+msgid "Use background of master slide"
+msgstr "Sekúnda"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#, fuzzy, kde-format
+msgid "Display shapes of master page"
+msgstr "Sekúnda"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#, fuzzy, kde-format
+msgid "Display shapes of master slide"
+msgstr "Sekúnda"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:102
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change slide background image"
+msgstr "Bakgrunnslitur"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:103
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change page background image"
+msgstr "Bakgrunnslitur"
+
+#: pageapp/widgets/KoPageNavigator.cpp:55
+#, fuzzy, kde-format
+msgid "Master Slide %1/%2"
+msgstr "Líma skyggnu"
+
+#: pageapp/widgets/KoPageNavigator.cpp:56
+#, fuzzy, kde-format
+#| msgid "Slide %1"
+msgid "Slide %1/%2"
+msgstr "Skyggna %1"
+
+#: pageapp/widgets/KoPageNavigator.cpp:57
+#, fuzzy, kde-format
+msgid "Master Page %1/%2"
+msgstr "Síðasta síða"
+
+#: pageapp/widgets/KoPageNavigator.cpp:58
+#, fuzzy, kde-format
+#| msgid "Page %1"
+msgid "Page %1/%2"
+msgstr "Síða %1"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:37
+#, fuzzy, kde-format
+msgid "Clear"
+msgstr "Hreinsa"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:110
+#: pigment/compositeops/KoCompositeOps.h:127
+#: pigment/KoCompositeOpRegistry.cpp:38
+#, fuzzy, kde-format
+msgid "Subtract"
+msgstr "Draga frá"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:182
+#: pigment/compositeops/KoCompositeOps.h:129
+#: pigment/KoCompositeOpRegistry.cpp:39
+#, fuzzy, kde-format
+msgid "Multiply"
+msgstr "Margfalda"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:248
+#: pigment/colorspaces/KoAlphaColorSpace.h:183
+#: pigment/KoColorModelStandardIds.cpp:12
+#, fuzzy, kde-format
+msgid "Alpha mask"
+msgstr "Alfa"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:250
+#: pigment/colorspaces/KoLabColorSpace.cpp:34
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:36
+#, fuzzy, kde-format
+msgid "Alpha"
+msgstr "Alfa"
+
+#: pigment/colorspaces/KoAlphaColorSpace.h:128
+#: pigment/colorspaces/KoAlphaColorSpace.h:133
+#: pigment/colorspaces/KoAlphaColorSpace.h:137
+#: pigment/colorspaces/KoAlphaColorSpace.h:141
+#: pigment/colorspaces/KoAlphaColorSpace.h:144
+#: pigment/colorspaces/KoAlphaColorSpace.h:147
+#: pigment/colorspaces/KoAlphaColorSpace.h:150
+#: pigment/colorspaces/KoAlphaColorSpace.h:153
+#: pigment/colorspaces/KoAlphaColorSpace.h:159
+#: pigment/colorspaces/KoAlphaColorSpace.h:162
+#, kde-format
+msgid "Undefined operation in the alpha color space"
+msgstr ""
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:27
+#: pigment/colorspaces/KoLabColorSpace.h:63
+#, kde-format
+msgid "L*a*b* (16-bit integer/channel, unmanaged)"
+msgstr ""
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:31
+#: pigment/compositeops/KoCompositeOps.h:196
+#: pigment/KoCompositeOpRegistry.cpp:111
+#, fuzzy, kde-format
+msgid "Lightness"
+msgstr "Ljósleiki"
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:32
+#: pigment/KoBasicHistogramProducers.cpp:430
+#, kde-format
+msgid "a*"
+msgstr ""
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:33
+#: pigment/KoBasicHistogramProducers.cpp:431
+#, kde-format
+msgid "b*"
+msgstr ""
+
+#: pigment/colorspaces/KoRgbU16ColorSpace.cpp:26
+#: pigment/colorspaces/KoRgbU16ColorSpace.h:51
+#, kde-format
+msgid "RGB (16-bit integer/channel, unmanaged)"
+msgstr ""
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:28
+#: pigment/colorspaces/KoRgbU8ColorSpace.h:52
+#, kde-format
+msgid "RGB (8-bit integer/channel, unmanaged)"
+msgstr ""
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:33
+#, fuzzy, kde-format
+msgid "Blue"
+msgstr "Blár"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:34
+#, fuzzy, kde-format
+msgid "Green"
+msgstr "Grænn"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:35
+#, fuzzy, kde-format
+msgid "Red"
+msgstr "Rauður"
+
+#: pigment/colorspaces/KoSimpleColorSpace.h:60
+#: pigment/colorspaces/KoSimpleColorSpace.h:67
+#, kde-format
+msgid "Undefined operation in the %1 space"
+msgstr ""
+
+#: pigment/colorspaces/KoSimpleColorSpace.h:84
+#: pigment/colorspaces/KoSimpleColorSpace.h:89
+#: pigment/colorspaces/KoSimpleColorSpace.h:94
+#: pigment/colorspaces/KoSimpleColorSpace.h:99
+#: pigment/colorspaces/KoSimpleColorSpace.h:104
+#: pigment/colorspaces/KoSimpleColorSpace.h:108
+#: pigment/colorspaces/KoSimpleColorSpace.h:112
+#: pigment/colorspaces/KoSimpleColorSpace.h:115
+#: pigment/colorspaces/KoSimpleColorSpace.h:118
+#: pigment/colorspaces/KoSimpleColorSpace.h:124
+#: pigment/colorspaces/KoSimpleColorSpace.h:127
+#, kde-format
+msgid "Undefined operation in the %1 color space"
+msgstr ""
+
+#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
+#, kde-format
+msgid "Simple Color Conversion Engine"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOpAlphaDarken.h:28
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:194
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken32.h:235
+#, fuzzy, kde-format
+msgid "Alpha darken"
+msgstr "Dekkja"
+
+#: pigment/compositeops/KoCompositeOpBehind.h:26
+#: pigment/KoCompositeOpRegistry.cpp:69
+#, kde-format
+msgid "Behind"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOpDissolve.h:48
+#: pigment/KoCompositeOpRegistry.cpp:83
+#, fuzzy, kde-format
+msgid "Dissolve"
+msgstr "Leysa upp"
+
+#: pigment/compositeops/KoCompositeOpErase.h:27
+#: pigment/KoCompositeOpRegistry.cpp:72
+#, fuzzy, kde-format
+msgid "Erase"
+msgstr "Eyða"
+
+#: pigment/compositeops/KoCompositeOpGreater.h:40
+#: pigment/KoCompositeOpRegistry.cpp:70
+#, fuzzy, kde-format
+msgid "Greater"
+msgstr "Búið til:"
+
+#: pigment/compositeops/KoCompositeOpOver.h:49
+#: pigment/compositeops/KoOptimizedCompositeOpOver128.h:238
+#: pigment/compositeops/KoOptimizedCompositeOpOver32.h:196
+#: pigment/KoCompositeOpRegistry.cpp:68 pigment/KoCompositeOpRegistry.cpp:134
+#, fuzzy, kde-format
+msgid "Normal"
+msgstr "Venjulegt"
+
+#: pigment/compositeops/KoCompositeOps.h:101
+#: pigment/KoCompositeOpRegistry.cpp:71
+#, fuzzy, kde-format
+msgid "Overlay"
+msgstr "Leggja yfir"
+
+#: pigment/compositeops/KoCompositeOps.h:102
+#: pigment/KoCompositeOpRegistry.cpp:75
+#, fuzzy, kde-format
+msgid "Grain Merge"
+msgstr "Kornablöndun"
+
+#: pigment/compositeops/KoCompositeOps.h:103
+#: pigment/KoCompositeOpRegistry.cpp:76
+#, fuzzy, kde-format
+msgid "Grain Extract"
+msgstr "Kornaeimun"
+
+#: pigment/compositeops/KoCompositeOps.h:104
+#: pigment/KoCompositeOpRegistry.cpp:74
+#, fuzzy, kde-format
+msgid "Hard Mix"
+msgstr "Hart ljós"
+
+#: pigment/compositeops/KoCompositeOps.h:105
+#: pigment/KoCompositeOpRegistry.cpp:79
+#, kde-format
+msgid "Geometric Mean"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:106
+#: pigment/KoCompositeOpRegistry.cpp:77
+#, fuzzy, kde-format
+msgid "Parallel"
+msgstr "Samsíða"
+
+#: pigment/compositeops/KoCompositeOps.h:107
+#: pigment/KoCompositeOpRegistry.cpp:78
+#, kde-format
+msgid "Allanon"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:109
+#: pigment/KoCompositeOpRegistry.cpp:53
+#, fuzzy, kde-format
+msgid "Screen"
+msgstr "Skjár"
+
+#: pigment/compositeops/KoCompositeOps.h:110
+#: pigment/KoCompositeOpRegistry.cpp:49
+#, fuzzy, kde-format
+msgid "Color Dodge"
+msgstr "Litur"
+
+#: pigment/compositeops/KoCompositeOps.h:111
+#: pigment/KoCompositeOpRegistry.cpp:50
+#, fuzzy, kde-format
+#| msgid "Line"
+msgid "Linear Dodge"
+msgstr "Lína"
+
+#: pigment/compositeops/KoCompositeOps.h:112 pigment/KoCompositeOp.cpp:23
+#: pigment/KoCompositeOpRegistry.cpp:28 pigment/KoCompositeOpRegistry.cpp:51
+#, fuzzy, kde-format
+msgid "Lighten"
+msgstr "Lýsa"
+
+#: pigment/compositeops/KoCompositeOps.h:113
+#: pigment/KoCompositeOpRegistry.cpp:56
+#, fuzzy, kde-format
+msgid "Hard Light"
+msgstr "Hart ljós"
+
+#: pigment/compositeops/KoCompositeOps.h:114
+#: pigment/KoCompositeOpRegistry.cpp:58
+#, fuzzy, kde-format
+msgid "Soft Light (SVG)"
+msgstr "Mjúkt ljós"
+
+#: pigment/compositeops/KoCompositeOps.h:115
+#: pigment/KoCompositeOpRegistry.cpp:57
+#, fuzzy, kde-format
+msgid "Soft Light (Photoshop)"
+msgstr "Mjúkt ljós"
+
+#: pigment/compositeops/KoCompositeOps.h:116
+#: pigment/KoCompositeOpRegistry.cpp:59
+#, fuzzy, kde-format
+msgid "Gamma Light"
+msgstr "Hart ljós"
+
+#: pigment/compositeops/KoCompositeOps.h:117
+#: pigment/KoCompositeOpRegistry.cpp:55
+#, fuzzy, kde-format
+msgid "Vivid Light"
+msgstr "Hart ljós"
+
+#: pigment/compositeops/KoCompositeOps.h:118
+#: pigment/KoCompositeOpRegistry.cpp:54
+#, fuzzy, kde-format
+msgid "Pin Light"
+msgstr "Hart ljós"
+
+#: pigment/compositeops/KoCompositeOps.h:119
+#: pigment/KoCompositeOpRegistry.cpp:52
+#, fuzzy, kde-format
+msgid "Linear Light"
+msgstr "Hart ljós"
+
+#: pigment/compositeops/KoCompositeOps.h:121
+#, fuzzy, kde-format
+msgid "Color Burn"
+msgstr "Litur"
+
+#: pigment/compositeops/KoCompositeOps.h:122
+#: pigment/KoCompositeOpRegistry.cpp:44
+#, fuzzy, kde-format
+#| msgid "Line"
+msgid "Linear Burn"
+msgstr "Lína"
+
+#: pigment/compositeops/KoCompositeOps.h:123 pigment/KoCompositeOp.cpp:24
+#: pigment/KoCompositeOpRegistry.cpp:27 pigment/KoCompositeOpRegistry.cpp:45
+#, fuzzy, kde-format
+msgid "Darken"
+msgstr "Dekkja"
+
+#: pigment/compositeops/KoCompositeOps.h:124
+#: pigment/KoCompositeOpRegistry.cpp:46
+#, kde-format
+msgid "Gamma Dark"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:126
+#: pigment/KoCompositeOpRegistry.cpp:37
+#, fuzzy, kde-format
+msgid "Addition"
+msgstr "Bæta við"
+
+#: pigment/compositeops/KoCompositeOps.h:128
+#, fuzzy, kde-format
+msgid "Inversed-Subtract"
+msgstr "Draga frá"
+
+#: pigment/compositeops/KoCompositeOps.h:130
+#: pigment/KoCompositeOpRegistry.cpp:40
+#, fuzzy, kde-format
+msgid "Divide"
+msgstr "Deila"
+
+#: pigment/compositeops/KoCompositeOps.h:132
+#: pigment/KoCompositeOpRegistry.cpp:66
+#, kde-format
+msgid "Arcus Tangent"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:133
+#: pigment/KoCompositeOpRegistry.cpp:62
+#, fuzzy, kde-format
+msgid "Difference"
+msgstr "Mismunur"
+
+#: pigment/compositeops/KoCompositeOps.h:134
+#: pigment/KoCompositeOpRegistry.cpp:65
+#, kde-format
+msgid "Exclusion"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:135
+#: pigment/KoCompositeOpRegistry.cpp:63
+#, kde-format
+msgid "Equivalence"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:136
+#, kde-format
+msgid "Additive-Subtractive"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:165
+#: pigment/KoCompositeOpRegistry.cpp:84
+#, fuzzy, kde-format
+msgid "Copy Red"
+msgstr "Afrita"
+
+#: pigment/compositeops/KoCompositeOps.h:166
+#: pigment/KoCompositeOpRegistry.cpp:85
+#, fuzzy, kde-format
+msgid "Copy Green"
+msgstr "Grænn"
+
+#: pigment/compositeops/KoCompositeOps.h:167
+#: pigment/KoCompositeOpRegistry.cpp:86
+#, fuzzy, kde-format
+msgid "Copy Blue"
+msgstr "Afrita"
+
+#: pigment/compositeops/KoCompositeOps.h:168
+#: pigment/KoCompositeOpRegistry.cpp:88
+#, kde-format
+msgid "Tangent Normalmap"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:169
+#, kde-format
+msgid "Combine Normal Maps"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:171 pigment/KoCompositeOp.cpp:18
+#: pigment/KoCompositeOpRegistry.cpp:90
+#, fuzzy, kde-format
+msgid "Color"
+msgstr "Litur"
+
+#: pigment/compositeops/KoCompositeOps.h:172
+#: pigment/KoCompositeOpRegistry.cpp:91
+#, fuzzy, kde-format
+msgid "Hue"
+msgstr "Litblær"
+
+#: pigment/compositeops/KoCompositeOps.h:173
+#: pigment/KoCompositeOpRegistry.cpp:92
+#, fuzzy, kde-format
+msgid "Saturation"
+msgstr "Litmettun"
+
+#: pigment/compositeops/KoCompositeOps.h:174
+#: pigment/KoCompositeOpRegistry.cpp:95
+#, fuzzy, kde-format
+msgid "Increase Saturation"
+msgstr "Litmettun"
+
+#: pigment/compositeops/KoCompositeOps.h:175
+#: pigment/KoCompositeOpRegistry.cpp:94
+#, fuzzy, kde-format
+msgid "Decrease Saturation"
+msgstr "Litmettun"
+
+#: pigment/compositeops/KoCompositeOps.h:176
+#: pigment/KoCompositeOpRegistry.cpp:93
+#, fuzzy, kde-format
+msgid "Luminosity"
+msgstr "Birtustig"
+
+#: pigment/compositeops/KoCompositeOps.h:177
+#: pigment/KoCompositeOpRegistry.cpp:97
+#, fuzzy, kde-format
+msgid "Increase Luminosity"
+msgstr "Birtustig"
+
+#: pigment/compositeops/KoCompositeOps.h:178
+#: pigment/KoCompositeOpRegistry.cpp:96
+#, fuzzy, kde-format
+msgid "Decrease Luminosity"
+msgstr "Birtustig"
+
+#: pigment/compositeops/KoCompositeOps.h:179
+#: pigment/KoCompositeOpRegistry.cpp:47
+#, fuzzy, kde-format
+msgid "Darker Color"
+msgstr "Bakgrunnslitur"
+
+#: pigment/compositeops/KoCompositeOps.h:180
+#: pigment/KoCompositeOpRegistry.cpp:60
+#, fuzzy, kde-format
+msgid "Lighter Color"
+msgstr "Litur línu"
+
+#: pigment/compositeops/KoCompositeOps.h:182
+#: pigment/KoCompositeOpRegistry.cpp:99
+#, fuzzy, kde-format
+msgid "Color HSI"
+msgstr "Litur"
+
+#: pigment/compositeops/KoCompositeOps.h:183
+#: pigment/KoCompositeOpRegistry.cpp:100
+#, kde-format
+msgid "Hue HSI"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:184
+#: pigment/KoCompositeOpRegistry.cpp:101
+#, fuzzy, kde-format
+msgid "Saturation HSI"
+msgstr "Litmettun"
+
+#: pigment/compositeops/KoCompositeOps.h:185
+#: pigment/KoCompositeOpRegistry.cpp:104
+#, fuzzy, kde-format
+msgid "Increase Saturation HSI"
+msgstr "Litmettun"
+
+#: pigment/compositeops/KoCompositeOps.h:186
+#: pigment/KoCompositeOpRegistry.cpp:103
+#, fuzzy, kde-format
+msgid "Decrease Saturation HSI"
+msgstr "Litmettun"
+
+#: pigment/compositeops/KoCompositeOps.h:187
+#: pigment/KoCompositeOpRegistry.cpp:102
+#, fuzzy, kde-format
+msgid "Intensity"
+msgstr "Styrkur"
+
+#: pigment/compositeops/KoCompositeOps.h:188
+#: pigment/KoCompositeOpRegistry.cpp:106
+#, fuzzy, kde-format
+msgid "Increase Intensity"
+msgstr "Auka inndrátt"
+
+#: pigment/compositeops/KoCompositeOps.h:189
+#: pigment/KoCompositeOpRegistry.cpp:105
+#, fuzzy, kde-format
+msgid "Decrease Intensity"
+msgstr "Minnka inndrátt"
+
+#: pigment/compositeops/KoCompositeOps.h:191
+#: pigment/KoCompositeOpRegistry.cpp:108
+#, fuzzy, kde-format
+msgid "Color HSL"
+msgstr "Litur"
+
+#: pigment/compositeops/KoCompositeOps.h:192
+#: pigment/KoCompositeOpRegistry.cpp:109
+#, kde-format
+msgid "Hue HSL"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:193
+#: pigment/KoCompositeOpRegistry.cpp:110
+#, fuzzy, kde-format
+msgid "Saturation HSL"
+msgstr "Litmettun"
+
+#: pigment/compositeops/KoCompositeOps.h:194
+#: pigment/KoCompositeOpRegistry.cpp:113
+#, fuzzy, kde-format
+msgid "Increase Saturation HSL"
+msgstr "Litmettun"
+
+#: pigment/compositeops/KoCompositeOps.h:195
+#: pigment/KoCompositeOpRegistry.cpp:112
+#, fuzzy, kde-format
+msgid "Decrease Saturation HSL"
+msgstr "Litmettun"
+
+#: pigment/compositeops/KoCompositeOps.h:197
+#: pigment/KoCompositeOpRegistry.cpp:115
+#, fuzzy, kde-format
+msgid "Increase Lightness"
+msgstr "Ljósleiki"
+
+#: pigment/compositeops/KoCompositeOps.h:198
+#: pigment/KoCompositeOpRegistry.cpp:114
+#, fuzzy, kde-format
+msgid "Decrease Lightness"
+msgstr "Ljósleiki"
+
+#: pigment/compositeops/KoCompositeOps.h:200
+#: pigment/KoCompositeOpRegistry.cpp:117
+#, fuzzy, kde-format
+msgid "Color HSV"
+msgstr "Litur"
+
+#: pigment/compositeops/KoCompositeOps.h:201
+#: pigment/KoCompositeOpRegistry.cpp:118
+#, kde-format
+msgid "Hue HSV"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:202
+#: pigment/KoCompositeOpRegistry.cpp:119
+#, fuzzy, kde-format
+msgid "Saturation HSV"
+msgstr "Litmettun"
+
+#: pigment/compositeops/KoCompositeOps.h:203
+#: pigment/KoCompositeOpRegistry.cpp:122
+#, fuzzy, kde-format
+msgid "Increase Saturation HSV"
+msgstr "Litmettun"
+
+#: pigment/compositeops/KoCompositeOps.h:204
+#: pigment/KoCompositeOpRegistry.cpp:121
+#, fuzzy, kde-format
+msgid "Decrease Saturation HSV"
+msgstr "Litmettun"
+
+#: pigment/compositeops/KoCompositeOps.h:205
+#: pigment/KoCompositeOpRegistry.cpp:120
+#, fuzzy, kde-format
+msgid "Value"
+msgstr "Gildi"
+
+#: pigment/compositeops/KoCompositeOps.h:206
+#: pigment/KoCompositeOpRegistry.cpp:124
+#, fuzzy, kde-format
+msgid "Increase Value"
+msgstr "Auka inndrátt"
+
+#: pigment/compositeops/KoCompositeOps.h:207
+#: pigment/KoCompositeOpRegistry.cpp:123
+#, fuzzy, kde-format
+msgid "Decrease Value"
+msgstr "Minnka inndrátt"
+
+#: pigment/KoBasicHistogramProducers.cpp:352
+#: pigment/KoBasicHistogramProducers.cpp:419
+#, kde-format
+msgid "Generic RGB Histogram"
+msgstr ""
+
+#: pigment/KoBasicHistogramProducers.cpp:356
+#, fuzzy, kde-format
+msgid "R"
+msgstr "R"
+
+#: pigment/KoBasicHistogramProducers.cpp:357
+#, fuzzy, kde-format
+msgid "G"
+msgstr "G"
+
+#: pigment/KoBasicHistogramProducers.cpp:358
+#, fuzzy, kde-format
+msgid "B"
+msgstr "B"
+
+#: pigment/KoBasicHistogramProducers.cpp:425
+#, kde-format
+msgid "L*a*b* Histogram"
+msgstr ""
+
+#: pigment/KoBasicHistogramProducers.cpp:429
+#, kde-format
+msgid "L*"
+msgstr ""
+
+#: pigment/KoBasicHistogramProducers.cpp:503
+#, kde-format
+msgid "Generic L*a*b* Histogram"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:13
+#, kde-format
+msgid "RGB"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:14
+#, kde-format
+msgid "XYZ"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:15
+#, kde-format
+msgid "L*a*b*"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:16
+#, kde-format
+msgid "CMYK"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:17
+#, fuzzy, kde-format
+msgid "Grayscale"
+msgstr "Grátóna"
+
+#: pigment/KoColorModelStandardIds.cpp:18
+#, kde-format
+msgid "Grayscale (without transparency)"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:19
+#, fuzzy, kde-format
+msgid "YCbCr"
+msgstr "YCbCr"
+
+#: pigment/KoColorModelStandardIds.cpp:21
+#, kde-format
+msgid "8 Bits"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:22
+#, kde-format
+msgid "16 Bits"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:23
+#, kde-format
+msgid "16 Bits Float"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:24
+#, kde-format
+msgid "32 Bits Float"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:25
+#, kde-format
+msgid "64 Bits Float"
+msgstr ""
+
+#: pigment/KoCompositeOp.cpp:21 pigment/KoCompositeOpRegistry.cpp:26
+#, kde-format
+msgid "Arithmetic"
+msgstr ""
+
+#: pigment/KoCompositeOp.cpp:22 pigment/KoCompositeOpRegistry.cpp:29
+#, fuzzy, kde-format
+msgid "Negative"
+msgstr "Neikvætt"
+
+#: pigment/KoCompositeOp.cpp:25 pigment/KoCompositeOpRegistry.cpp:32
+#, fuzzy, kde-format
+msgid "HSY"
+msgstr "HSL"
+
+#: pigment/KoCompositeOp.cpp:26 pigment/KoCompositeOpRegistry.cpp:33
+#, fuzzy, kde-format
+msgid "HSI"
+msgstr "HSL"
+
+#: pigment/KoCompositeOp.cpp:27 pigment/KoCompositeOpRegistry.cpp:34
+#, fuzzy, kde-format
+msgid "HSL"
+msgstr "HSL"
+
+#: pigment/KoCompositeOp.cpp:28 pigment/KoCompositeOpRegistry.cpp:35
+#, fuzzy, kde-format
+msgid "HSV"
+msgstr "HSV"
+
+#: pigment/KoCompositeOp.cpp:29 pigment/KoCompositeOpRegistry.cpp:30
+#, fuzzy, kde-format
+msgid "Mix"
+msgstr "Blöndun"
+
+#: pigment/KoCompositeOpRegistry.cpp:41
+#, fuzzy, kde-format
+msgid "Inverse Subtract"
+msgstr "Draga frá"
+
+#: pigment/KoCompositeOpRegistry.cpp:43
+#, fuzzy, kde-format
+msgid "Burn"
+msgstr "Brenna"
+
+#: pigment/KoCompositeOpRegistry.cpp:64
+#, fuzzy, kde-format
+msgid "Additive Subtractive"
+msgstr "Draga frá"
+
+#: pigment/KoCompositeOpRegistry.cpp:73
+#, fuzzy, kde-format
+msgid "Alpha Darken"
+msgstr "Dekkja"
+
+#: pigment/KoCompositeOpRegistry.cpp:81
+#, kde-format
+msgid "Bumpmap"
+msgstr ""
+
+#: pigment/KoCompositeOpRegistry.cpp:82
+#, kde-format
+msgid "Combine Normal Map"
+msgstr ""
+
+#: pigment/resources/KoStopGradient.cpp:421
+#, kde-format
+msgid "SVG Gradient"
+msgstr ""
+
+#: rdf/InsertSemanticObjectReferenceAction.cpp:43
+#, kde-format
+msgid "Select the object you want to reference"
+msgstr ""
+
+#: rdf/KoDocumentRdf.cpp:618
+#, fuzzy, kde-format
+msgid "Reference"
+msgstr "Tilvísun"
+
+#: rdf/KoDocumentRdfEditWidget.cpp:229
+#, kde-format
+msgid "Set For All Existing"
+msgstr ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:297
+#, kde-format
+msgctxt "statement is an Rdf related term"
+msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
+msgid_plural ""
+"<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:300
+#, kde-format
+msgctxt "statement is an Rdf related term"
+msgid "Discard invalid statements?"
+msgstr ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:341
+#, fuzzy, kde-format
+msgid "Rdf"
+msgstr "Rauður"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: rdf/KoDocumentRdfEditWidget.ui:21
+#, kde-format
+msgid "Triples"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, newStylesheet)
+#. i18n: ectx: property (text), widget (QPushButton, newTripleButton)
+#. i18n: ectx: property (text), widget (QPushButton, newNamespaceButton)
+#: rdf/KoDocumentRdfEditWidget.ui:39 rdf/KoDocumentRdfEditWidget.ui:84
+#: rdf/KoSemanticStylesheetsEditor.ui:77
+#, fuzzy, kde-format
+msgid "new"
+msgstr "nýtt"
+
+#. i18n: ectx: property (text), widget (QPushButton, copyTripleButton)
+#: rdf/KoDocumentRdfEditWidget.ui:46
+#, fuzzy, kde-format
+msgid "copy"
+msgstr "afrita"
+
+#. i18n: ectx: property (text), widget (QPushButton, deleteStylesheet)
+#. i18n: ectx: property (text), widget (QPushButton, deleteTripleButton)
+#. i18n: ectx: property (text), widget (QPushButton, deleteNamespaceButton)
+#: rdf/KoDocumentRdfEditWidget.ui:53 rdf/KoDocumentRdfEditWidget.ui:91
+#: rdf/KoSemanticStylesheetsEditor.ui:84
+#, fuzzy, kde-format
+msgid "delete"
+msgstr "eyða"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: rdf/KoDocumentRdfEditWidget.ui:76
+#, fuzzy, kde-format
+msgid "Namespaces"
+msgstr "Nafnasvið"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, m_namespaceView)
+#: rdf/KoDocumentRdfEditWidget.ui:123
+#, fuzzy, kde-format
+msgid "Prefix"
+msgstr "Forskeyti"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, m_namespaceView)
+#: rdf/KoDocumentRdfEditWidget.ui:128
+#, fuzzy, kde-format
+msgid "Namespace"
+msgstr "Nafnasvið"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: rdf/KoDocumentRdfEditWidget.ui:137
+#, kde-format
+msgid "Semantic"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
+#: rdf/KoDocumentRdfEditWidget.ui:156
+#, kde-format
+msgid "SPARQL"
+msgstr ""
+
+#. i18n: ectx: property (html), widget (QTextEdit, m_sparqlQuery)
+#: rdf/KoDocumentRdfEditWidget.ui:182
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"># Insert your SPARQL query here<br /># "
+"Results are shown below.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix rdf:  &lt;http://www.w3."
+"org/1999/02/22-rdf-syntax-ns#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix foaf: &lt;http://xmlns.com/"
+"foaf/0.1/&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix pkg:  &lt;http://docs.oasis-open."
+"org/ns/office/1.2/meta/pkg#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix geo84: &lt;http://www.w3."
+"org/2003/01/geo/wgs84_pos#&gt;</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">select ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">where { </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"> ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">}</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
+#: rdf/KoDocumentRdfEditWidget.ui:191
+#, fuzzy, kde-format
+msgid "Execute"
+msgstr "Keyra"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_5)
+#: rdf/KoDocumentRdfEditWidget.ui:221
+#, fuzzy, kde-format
+msgid "Stylesheets"
+msgstr "Stílblöð"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: rdf/KoDocumentRdfEditWidget.ui:227
+#, kde-format
+msgid ""
+"Set the default stylesheet for Semantic objects in this document. New RDF "
+"objects will use this stylesheet automatically. The buttons allow you to set "
+"the stylesheet for all existing semantic objects to the new default "
+"stylesheet as well."
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:101
+#, fuzzy, kde-format
+msgid "Apply Stylesheet"
+msgstr "Stílblöð"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
+#: rdf/KoSemanticStylesheetsEditor.cpp:107
+#, fuzzy, kde-format
+msgid "System"
+msgstr "Kerfi"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:112
+#: rdf/KoSemanticStylesheetsEditor.cpp:123
+#, fuzzy, kde-format
+msgid "User"
+msgstr "Notandi"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:126
+#, kde-format
+msgid "Reapply Current"
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:131
+#, kde-format
+msgid "Disassociate"
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:151
+#, fuzzy, kde-format
+msgid "Edit %1"
+msgstr "Breyta %1"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: rdf/KoSemanticStylesheetsEditor.ui:17
+#, fuzzy, kde-format
+msgid "Stylesheet Definition"
+msgstr "Stílblöð"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: rdf/KoSemanticStylesheetsEditor.ui:29
+#, kde-format
+msgid "Variables Available"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QTableWidget, variables)
+#: rdf/KoSemanticStylesheetsEditor.ui:62
+#, fuzzy, kde-format
+msgid "Description"
+msgstr "Lýsing"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, stylesheets)
+#: rdf/KoSemanticStylesheetsEditor.ui:107
+#, fuzzy, kde-format
+msgid "Stylesheet Name"
+msgstr "Stílblöð"
+
+#: rdf/KoSopranoTableModel.cpp:71
+#, fuzzy, kde-format
+msgid "Empty"
+msgstr "Tómt"
+
+#: rdf/KoSopranoTableModel.cpp:73 rdf/KoSopranoTableModelDelegate.cpp:30
+#, fuzzy, kde-format
+msgid "URI"
+msgstr "Slóð"
+
+#: rdf/KoSopranoTableModel.cpp:75 rdf/KoSopranoTableModelDelegate.cpp:31
+#, kde-format
+msgid "Literal"
+msgstr ""
+
+#: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:32
+#, fuzzy, kde-format
+msgid "Blank"
+msgstr "Tómt"
+
+#: rdf/KoSopranoTableModel.cpp:119
+#, fuzzy, kde-format
+msgid "Valid"
+msgstr "Gilt"
+
+#: rdf/KoSopranoTableModel.cpp:121
+#, fuzzy, kde-format
+msgid "Subject"
+msgstr "Efni"
+
+#: rdf/KoSopranoTableModel.cpp:123
+#, kde-format
+msgid "Predicate"
+msgstr ""
+
+#: rdf/KoSopranoTableModel.cpp:125
+#, fuzzy, kde-format
+msgid "Object"
+msgstr "Hlutur"
+
+#: rdf/KoSopranoTableModel.cpp:127
+#, fuzzy, kde-format
+msgid "Obj Type"
+msgstr "Tegund:"
+
+#: rdf/KoSopranoTableModel.cpp:129
+#, fuzzy, kde-format
+msgid "DataType"
+msgstr "Gögn"
+
+#: rdf/KoSopranoTableModel.cpp:131
+#, kde-format
+msgid "Stored In"
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:228
+#, kde-format
+msgid ""
+"This document contains an unknown checksum. When you give a password it "
+"might not be verified."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:254 store/KoEncryptedStore.cpp:271
+#, kde-format
+msgid ""
+"This document contains an unknown encryption method. Some parts may be "
+"unreadable."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:286
+#, kde-format
+msgid ""
+"This document contains incomplete encryption data. Some parts may be "
+"unreadable."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:300
+#, kde-format
+msgid ""
+"QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
+"not be opened."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:330
+#, kde-format
+msgid ""
+"The manifest file seems to be corrupted. It cannot be modified and the "
+"document will remain unreadable. Please try and save the document again to "
+"prevent losing your work."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:428
+#, kde-format
+msgid ""
+"The manifest file cannot be written. The document will remain unreadable. "
+"Please try and save the document again to prevent losing your work."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:549
+#, kde-format
+msgid "Please enter the password to open this file."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:724
+#, kde-format
+msgid "Please enter the password to encrypt the document with."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:738
+#, fuzzy, kde-format
+msgid "Do you want to save the password?"
+msgstr "Viltu virkilega fjarlægja þetta snið?"
+
+#: store/KoNetAccess.cpp:90
+#, fuzzy, kde-format
+msgid "File '%1' is not readable"
+msgstr "Skráin %1 er ekki til."
+
+#: store/KoNetAccess.cpp:409
+#, kde-format
+msgid "ERROR: Unknown protocol '%1'"
+msgstr ""
+
+#: store/KoStore.cpp:168
+#, fuzzy, kde-format
+msgid "The directory mode is not supported for remote locations."
+msgstr "Möppuhamurinn er ekki studdur fyrir fjarlægar staðsetningar."
+
+#: store/KoStore.cpp:169
+#, kde-format
+msgid "Calligra Storage"
+msgstr ""
+
+#: text/commands/ChangeListCommand.cpp:28
+#: text/commands/ChangeListCommand.cpp:76
+#: text/commands/ChangeListCommand.cpp:89
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change List"
+msgstr "Breyta"
+
+#: text/commands/ChangeStylesMacroCommand.cpp:24
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Styles"
+msgstr "Línustíll"
+
+#: text/commands/ChangeTrackedDeleteCommand.cpp:263
+#, fuzzy, kde-format
+msgid "Delete"
+msgstr "Eyða"
+
+#: text/commands/ChangeTrackedDeleteCommand.cpp:318
+#: text/commands/DeleteCommand.cpp:506 text/KoTextEditor_undo.cpp:74
+#: text/KoTextEditor_undo.cpp:153 text/KoTextEditor_undo.cpp:188
+#: text/KoTextEditor_undo.cpp:205 text/KoTextEditor_undo.cpp:247
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Text"
+msgstr "Texti"
+
+#: text/commands/DeleteCommand.cpp:57
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete"
+msgstr "Eyða"
+
+#: text/commands/DeleteTableColumnCommand.cpp:23
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete Column"
+msgstr "Eyða Hópur"
+
+#: text/commands/DeleteTableRowCommand.cpp:23
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete Row"
+msgstr "Eyða röð"
+
+#: text/commands/InsertNoteCommand.cpp:21
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Footnote"
+msgstr "Setja inn atriðaskrá"
+
+#: text/commands/InsertNoteCommand.cpp:23
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Endnote"
+msgstr "Setja inn atriðaskrá"
+
+#: text/commands/InsertTableColumnCommand.cpp:25
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgctxt "(qtundo-format)"
+msgid "Insert Column Right"
+msgstr "Sameina punkta"
+
+#: text/commands/InsertTableColumnCommand.cpp:27
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgctxt "(qtundo-format)"
+msgid "Insert Column Left"
+msgstr "Sameina punkta"
+
+#: text/commands/InsertTableRowCommand.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Row Below"
+msgstr "Setja inn röð fyrir ofan"
+
+#: text/commands/InsertTableRowCommand.cpp:27
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Row Above"
+msgstr "Setja inn röð fyrir ofan"
+
+#: text/commands/ListItemNumberingCommand.cpp:22
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change List Numbering"
+msgstr "Breyta"
+
+#: text/commands/NewSectionCommand.cpp:22
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "New Section"
+msgstr "Staðsetningar"
+
+#: text/commands/ParagraphFormattingCommand.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Direct Paragraph Formatting"
+msgstr ""
+
+#: text/commands/RenameSectionCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename Section"
+msgstr "Heimasíða"
+
+#: text/commands/ResizeTableCommand.cpp:30
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Adjust Column Width"
+msgstr "Laga að breidd glugga"
+
+#: text/commands/ResizeTableCommand.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Adjust Row Height"
+msgstr ""
+
+#: text/commands/SplitSectionsCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Split sections startings"
+msgstr ""
+
+#: text/commands/SplitSectionsCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Split sections endings"
+msgstr ""
+
+#: text/commands/TextPasteCommand.cpp:51
+msgctxt "(qtundo-format)"
+msgid "Paste As Text"
+msgstr ""
+
+#: text/commands/TextPasteCommand.cpp:53
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Paste"
+msgstr "Líma"
+
+#: text/InsertTextLocator.cpp:14
+#, fuzzy, kde-format
+msgid "Index Reference"
+msgstr "Tilvísun"
+
+#: text/InsertTextReferenceAction.cpp:22 text/InsertTextReferenceAction.cpp:50
+#, fuzzy, kde-format
+msgid "Text Reference"
+msgstr "Tilvísun"
+
+#: text/InsertTextReferenceAction.cpp:31
+#, kde-format
+msgid "Please create an index to reference first."
+msgstr ""
+
+#: text/InsertTextReferenceAction.cpp:40
+#, kde-format
+msgid "Select the index you want to reference"
+msgstr ""
+
+#: text/KoFindStrategy.cpp:51
+#, kde-format
+msgid "Found 1 match"
+msgid_plural "Found %1 matches"
+msgstr[0] ""
+msgstr[1] ""
+
+#: text/KoFindStrategy.cpp:51
+#, kde-format
+msgid "Found no match"
+msgstr ""
+
+#: text/KoReplaceStrategy.cpp:43
+#, kde-format
+msgid ""
+"Found no match\n"
+"\n"
+"No text was replaced"
+msgstr ""
+
+#: text/KoReplaceStrategy.cpp:46
+#, kde-format
+msgid "1 replacement made"
+msgid_plural "%1 replacements made"
+msgstr[0] ""
+msgstr[1] ""
+
+#: text/KoReplaceStrategy.cpp:59
+#, kde-format
+msgid "Replace %1 with %2?"
+msgstr ""
+
+#: text/KoSectionModel.cpp:87
+#, fuzzy, kde-format
+msgctxt "new numbered section name"
+msgid "New section %1"
+msgstr "Staðsetningar"
+
+#: text/KoText.cpp:19
+#, fuzzy, kde-format
+msgctxt "Underline Style"
+msgid "None"
+msgstr "Ekkert"
+
+#: text/KoText.cpp:20
+#, fuzzy, kde-format
+msgctxt "Underline Style"
+msgid "Single"
+msgstr "Einföld"
+
+#: text/KoText.cpp:21
+#, fuzzy, kde-format
+msgctxt "Underline Style"
+msgid "Double"
+msgstr "Tvöföld"
+
+#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1501
+#: text/KoTextEditor.cpp:1503
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "New Paragraph"
+msgstr "Nýtt lag"
+
+#: text/KoTextEditor.cpp:470
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add Bookmark"
+msgstr "Setja inn bókamerki"
+
+#: text/KoTextEditor.cpp:485
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add Annotation"
+msgstr "Bæta við"
+
+#: text/KoTextEditor.cpp:509
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Index"
+msgstr "Setja inn atriðaskrá"
+
+#: text/KoTextEditor.cpp:535
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Variable"
+msgstr "Setja inn breytu"
+
+#: text/KoTextEditor.cpp:602
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Break"
+msgstr "Setja inn skil"
+
+#: text/KoTextEditor.cpp:923 text/KoTextEditor.cpp:925
+#: text/KoTextEditor.cpp:940
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Table"
+msgstr "Setja inn töflu"
+
+#: text/KoTextEditor.cpp:1080
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Merge Cells"
+msgstr "Sameina reiti"
+
+#: text/KoTextEditor.cpp:1097
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Split Cells"
+msgstr "Kljúfa hólf"
+
+#: text/KoTextEditor.cpp:1126
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Adjust Table Width"
+msgstr "Laga að breidd glugga"
+
+#: text/KoTextEditor.cpp:1143
+msgctxt "(qtundo-format)"
+msgid "Change Border Formatting"
+msgstr ""
+
+#: text/KoTextEditor.cpp:1190 text/KoTextEditor.cpp:1192
+#: text/KoTextEditor.cpp:1210
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Table Of Contents"
+msgstr "Setja inn töflu"
+
+#: text/KoTextEditor.cpp:1249
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Modify Table Of Contents"
+msgstr "Setja inn töflu"
+
+#: text/KoTextEditor.cpp:1266 text/KoTextEditor.cpp:1268
+#: text/KoTextEditor.cpp:1287
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Bibliography"
+msgstr "Setja inn skil"
+
+#: text/KoTextEditor.cpp:1324 text/KoTextEditor.cpp:1326
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add Citation"
+msgstr "Bæta við"
+
+#: text/KoTextEditor.cpp:1353 text/KoTextEditor.cpp:1355
+#: text/KoTextEditor.cpp:1393
+msgctxt "(qtundo-format)"
+msgid "Typing"
+msgstr ""
+
+#: text/KoTextEditor_format.cpp:54
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Bold"
+msgstr "Feitletrað"
+
+#: text/KoTextEditor_format.cpp:67
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Italic"
+msgstr "Skáletrað"
+
+#: text/KoTextEditor_format.cpp:80
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Underline"
+msgstr "Undirstrikað"
+
+#: text/KoTextEditor_format.cpp:99
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Strike Out"
+msgstr "Yfirstrikað"
+
+#: text/KoTextEditor_format.cpp:132 text/KoTextEditor_format.cpp:133
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Alignment"
+msgstr "Breyta"
+
+#: text/KoTextEditor_format.cpp:150
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Vertical Alignment"
+msgstr "Lóðrétt staðsetning"
+
+#: text/KoTextEditor_format.cpp:184 text/KoTextEditor_format.cpp:185
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Decrease Indent"
+msgstr "Minnka inndrátt"
+
+#: text/KoTextEditor_format.cpp:220 text/KoTextEditor_format.cpp:221
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Increase Indent"
+msgstr "Auka inndrátt"
+
+#: text/KoTextEditor_format.cpp:256 text/KoTextEditor_format.cpp:258
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Decrease font size"
+msgstr "Minnka inndrátt"
+
+#: text/KoTextEditor_format.cpp:269 text/KoTextEditor_format.cpp:271
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Increase font size"
+msgstr "Auka inndrátt"
+
+#: text/KoTextEditor_format.cpp:282
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Font"
+msgstr "Letur"
+
+#: text/KoTextEditor_format.cpp:295
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Font Size"
+msgstr "Letur"
+
+#: text/KoTextEditor_format.cpp:308
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Background Color"
+msgstr "Bakgrunnslitur"
+
+#: text/KoTextEditor_format.cpp:321
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Text Color"
+msgstr "Velja textalit"
+
+#: text/KoTextEditor_format.cpp:349 text/KoTextEditor_format.cpp:388
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Character Style"
+msgstr "Línustíll"
+
+#: text/KoTextEditor_format.cpp:455
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Paragraph Style"
+msgstr "Línustíll"
+
+#: text/KoTextEditor_format.cpp:517
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Formatting"
+msgstr "Snið"
+
+#: text/KoTextEditor_p.h:145 text/KoTextEditor_p.h:181
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Format"
+msgstr "Snið"
+
+#: text/styles/KoStyleManager.cpp:93 text/styles/KoStyleManager.cpp:98
+#, fuzzy, kde-format
+msgid "Default"
+msgstr "Sjálfgefið"
+
+#: widgets/KoColorPopupAction.cpp:76
+#, fuzzy, kde-format
+msgid "Opacity"
+msgstr "Ógagnsæi"
+
+#: widgets/KoColorSetWidget.cpp:148
+#, kde-format
+msgid "Recent:"
+msgstr ""
+
+#: widgets/KoColorSetWidget.cpp:161
+#, kde-format
+msgid "Add / Remove Colors..."
+msgstr ""
+
+#: widgets/KoConfigAuthorPage.cpp:51
+#, kde-format
+msgid "Add new author profile (starts out as a copy of current)"
+msgstr ""
+
+#: widgets/KoConfigAuthorPage.cpp:55
+#, fuzzy, kde-format
+msgid "Delete the author profile"
+msgstr "Eyða síðu"
+
+#: widgets/KoConfigAuthorPage.cpp:129
+#, kde-format
+msgid "Name (not duplicate or blank name):"
+msgstr ""
+
+#: widgets/KoConfigAuthorPage.cpp:129
+#, kde-format
+msgid "Name of Profile"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, fullNameLabel)
+#: widgets/KoConfigAuthorPage.ui:20 widgets/koDocumentInfoAuthorWidget.ui:20
+#, fuzzy, kde-format
+msgid "Name:"
+msgstr "Nafn:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblInitialsDesc)
+#: widgets/KoConfigAuthorPage.ui:40 widgets/koDocumentInfoAuthorWidget.ui:37
+#, fuzzy, kde-format
+msgid "Initials:"
+msgstr "Upphafsstafir:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
+#: widgets/KoConfigAuthorPage.ui:63 widgets/koDocumentInfoAuthorWidget.ui:60
+#, fuzzy, kde-format
+msgid "Title:"
+msgstr "Titill:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPositionDesc)
+#: widgets/KoConfigAuthorPage.ui:79 widgets/koDocumentInfoAuthorWidget.ui:77
+#, fuzzy, kde-format
+msgid "Position:"
+msgstr "Staða:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCompanyDesc)
+#: widgets/KoConfigAuthorPage.ui:95 widgets/koDocumentInfoAuthorWidget.ui:94
+#, fuzzy, kde-format
+msgid "Company:"
+msgstr "Fyrirtæki:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEmailDesc)
+#: widgets/KoConfigAuthorPage.ui:111 widgets/koDocumentInfoAuthorWidget.ui:104
+#, fuzzy, kde-format
+msgid "Email:"
+msgstr "Netfang:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPhoneHome)
+#: widgets/KoConfigAuthorPage.ui:127 widgets/koDocumentInfoAuthorWidget.ui:114
+#, fuzzy, kde-format
+msgid "Telephone (home):"
+msgstr "Heimasími:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPhoneWork)
+#: widgets/KoConfigAuthorPage.ui:143 widgets/koDocumentInfoAuthorWidget.ui:124
+#, fuzzy, kde-format
+msgid "Telephone (work):"
+msgstr "Vinnusími:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblFaxDesc)
+#: widgets/KoConfigAuthorPage.ui:159 widgets/koDocumentInfoAuthorWidget.ui:134
+#, fuzzy, kde-format
+msgid "Fax:"
+msgstr "Fax:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblStreetDesc)
+#: widgets/KoConfigAuthorPage.ui:175 widgets/koDocumentInfoAuthorWidget.ui:144
+#, fuzzy, kde-format
+msgid "Street:"
+msgstr "Gata:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPostalDesc)
+#: widgets/KoConfigAuthorPage.ui:191 widgets/koDocumentInfoAuthorWidget.ui:154
+#, fuzzy, kde-format
+msgid "Postal code:"
+msgstr "Póstnúmer:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCityDesc)
+#: widgets/KoConfigAuthorPage.ui:207 widgets/koDocumentInfoAuthorWidget.ui:164
+#, fuzzy, kde-format
+msgid "City:"
+msgstr "Borg:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCountryDesc)
+#: widgets/KoConfigAuthorPage.ui:223 widgets/koDocumentInfoAuthorWidget.ui:174
+#, fuzzy, kde-format
+msgid "Country:"
+msgstr "Land:"
+
+#: widgets/KoCsvImportDialog.cpp:85
+#, fuzzy, kde-format
+msgid "Import Data"
+msgstr "Flytja inn gögn"
+
+#: widgets/KoCsvImportDialog.cpp:88
+#, fuzzy, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Ráðlögð ( %1 )"
+
+#: widgets/KoCsvImportDialog.cpp:89
+#, fuzzy, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Staðbundin ( %1 )"
+
+#: widgets/KoCsvImportDialog.cpp:92
+#, fuzzy, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Önnur ( %1 )"
+
+#: widgets/KoCsvImportDialog.cpp:207 widgets/KoCsvImportDialog.cpp:547
+#: widgets/KoCsvImportDialog.cpp:570
+#, fuzzy, kde-format
+msgid "Generic"
+msgstr "Almennt"
+
+#: widgets/KoCsvImportDialog.cpp:209 widgets/KoCsvImportDialog.cpp:572
+#: widgets/KoModeBox.cpp:572
+#, fuzzy, kde-format
+msgid "Text"
+msgstr "Texti"
+
+#: widgets/KoCsvImportDialog.cpp:211 widgets/KoCsvImportDialog.cpp:574
+#, fuzzy, kde-format
+msgid "Date"
+msgstr "Dagsetning"
+
+#: widgets/KoCsvImportDialog.cpp:213 widgets/KoCsvImportDialog.cpp:576
+#, fuzzy, kde-format
+msgid "Currency"
+msgstr "Gjaldmiðill"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.cpp:215 widgets/KoCsvImportDialog.cpp:578
+#: widgets/KoCsvImportDialog.cpp:685 widgets/KoCsvImportDialog.ui:265
+#, fuzzy, kde-format
+msgid "None"
+msgstr "Ekkert"
+
+#: widgets/KoCsvImportDialog.cpp:712
+#, fuzzy, kde-format
+msgid ""
+"Please check the ranges you specified. The start value must be lower than "
+"the end value."
+msgstr ""
+"Vinsamlega athugaðu sviðið sem þú tilgreindir. Upphafsgildið verður að vera "
+"lægra en endagildið."
+
+#: widgets/KoCsvImportDialog.cpp:758
+#, fuzzy, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "Finn ekki stafatöflu: %1"
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_dataTab)
+#: widgets/KoCsvImportDialog.ui:52
+#, fuzzy, kde-format
+msgid "Data"
+msgstr "Gögn"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
+#: widgets/KoCsvImportDialog.ui:63
+#, fuzzy, kde-format
+msgid "E&ncoding:"
+msgstr "Kóðu&n:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_firstRowHeader)
+#: widgets/KoCsvImportDialog.ui:107
+#, kde-format
+msgid "First row contains headers"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_firstColHeader)
+#: widgets/KoCsvImportDialog.ui:120
+#, kde-format
+msgid "First column contains headers"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_formatTab)
+#: widgets/KoCsvImportDialog.ui:144
+#, fuzzy, kde-format
+msgid "Format"
+msgstr "Snið"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
+#: widgets/KoCsvImportDialog.ui:156
+#, fuzzy, kde-format
+msgid "Delimiter"
+msgstr "Afmarkari"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: widgets/KoCsvImportDialog.ui:162
+#, fuzzy, kde-format
+msgid "Comma"
+msgstr "Komma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: widgets/KoCsvImportDialog.ui:172
+#, fuzzy, kde-format
+msgid "Semicolon"
+msgstr "Semíkomma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: widgets/KoCsvImportDialog.ui:179
+#, fuzzy, kde-format
+msgid "Other"
+msgstr "Annað"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: widgets/KoCsvImportDialog.ui:186
+#, fuzzy, kde-format
+msgid "Tabulator"
+msgstr "Dálkstillir"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: widgets/KoCsvImportDialog.ui:193
+#, fuzzy, kde-format
+msgid "Space"
+msgstr "Bil"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: widgets/KoCsvImportDialog.ui:238
+#, kde-format
+msgid "Text&quote:"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.ui:255
+#, fuzzy, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.ui:260
+#, fuzzy, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QLabel, label3)
+#: widgets/KoCsvImportDialog.ui:289
+#, fuzzy, kde-format
+msgid "Decimal symbol:"
+msgstr "Tugabrotatákn:"
+
+#. i18n: ectx: property (text), widget (QLabel, label4)
+#: widgets/KoCsvImportDialog.ui:318
+#, fuzzy, kde-format
+msgid "Thousands separator:"
+msgstr "Þúsundatákn:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_ignoreDuplicates)
+#: widgets/KoCsvImportDialog.ui:363
+#, fuzzy, kde-format
+msgid "Ignore duplicate delimiters"
+msgstr "Hunsa tvöfalda aðgreina"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: widgets/KoCsvImportDialog.ui:370
+#, fuzzy, kde-format
+msgid "&Format:"
+msgstr "&Snið:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_rangesTab)
+#: widgets/KoCsvImportDialog.ui:384
+#, fuzzy, kde-format
+msgid "Ranges"
+msgstr "Svið"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_updateButton)
+#: widgets/KoCsvImportDialog.ui:390
+#, fuzzy, kde-format
+msgid "Update"
+msgstr "Uppfæra"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
+#: widgets/KoCsvImportDialog.ui:457
+#, fuzzy, kde-format
+msgid "Import columns:"
+msgstr "Flytja inn skjal"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel3)
+#: widgets/KoCsvImportDialog.ui:476
+#, fuzzy, kde-format
+msgid "Import lines:"
+msgstr "Vantar innflutningssíu"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: widgets/KoCsvImportDialog.ui:486 widgets/KoCsvImportDialog.ui:509
+#, fuzzy, kde-format
+msgid "to"
+msgstr "til"
+
+#: widgets/KoDialog.cpp:247
+#, kde-format
+msgid "&Try"
+msgstr ""
+
+#: widgets/KoDialog.cpp:460
+#, fuzzy, kde-format
+msgid "modified"
+msgstr "Breytt:"
+
+#: widgets/KoDialog.cpp:471
+#, kde-format
+msgctxt "Document/application separator in titlebar"
+msgid " – "
+msgstr ""
+
+#: widgets/KoDialog.cpp:846
+#, fuzzy, kde-format
+msgid "&Details"
+msgstr "Nánar"
+
+#: widgets/KoDialog.cpp:1004
+#, kde-format
+msgid "Get help..."
+msgstr ""
+
+#: widgets/KoDockWidgetTitleBar.cpp:52
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "Float Docker"
+msgstr "Sérsniðið skjal"
+
+#: widgets/KoDockWidgetTitleBar.cpp:59
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "Close Docker"
+msgstr "Sérsniðið skjal"
+
+#: widgets/KoDockWidgetTitleBar.cpp:67
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "Collapse Docker"
+msgstr "Sérsniðið skjal"
+
+#: widgets/KoDockWidgetTitleBar.cpp:76
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "Lock Docker"
+msgstr "Sérsniðið skjal"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:235
+#: widgets/KoDocumentInfoDlg.cpp:331
+#, fuzzy, kde-format
+msgid "&Encrypt"
+msgstr "&Dulrita"
+
+#. i18n: ectx: property (text), widget (QLabel, lblKeywordsDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:64
+#, fuzzy, kde-format
+msgid "Keywords:"
+msgstr "Stikkorð:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblSubjectDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:111
+#, fuzzy, kde-format
+msgid "Subject:"
+msgstr "Viðfangsefni:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:124
+#, fuzzy, kde-format
+msgid "Last printed:"
+msgstr "Síðast prentað:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEditingDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:158
+#, fuzzy, kde-format
+msgid "Total editing time:"
+msgstr "Heildartími ritunar:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEncryptedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:178
+#, fuzzy, kde-format
+msgid "Encryption:"
+msgstr "Dulritun:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:188
+#, fuzzy, kde-format
+msgctxt "Document title"
+msgid "Title:"
+msgstr "Titill:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblRevisionDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:201
+#, fuzzy, kde-format
+msgid "Revision number:"
+msgstr "Útgáfunúmer:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblModifiedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:211
+#, fuzzy, kde-format
+msgid "Modified:"
+msgstr "Breytt:"
+
+#. i18n: ectx: property (text), widget (QLabel, lbCommentsDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:231
+#, fuzzy, kde-format
+msgid "Comments:"
+msgstr "Athugasemdir:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCreatedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:251
+#, fuzzy, kde-format
+msgid "Created:"
+msgstr "Búið til:"
+
+#. i18n: ectx: property (text), widget (QLabel, filePathInfoLabel)
+#: widgets/koDocumentInfoAboutWidget.ui:261
+#, fuzzy, kde-format
+msgid "Path:"
+msgstr "Slóð:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbReset)
+#: widgets/koDocumentInfoAboutWidget.ui:280
+#, fuzzy, kde-format
+msgid "&Reset"
+msgstr "F&rumstilla"
+
+#. i18n: ectx: property (text), widget (QLabel, lbLanguageDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:297
+#, fuzzy, kde-format
+msgid "Language:"
+msgstr "Síðasta síða"
+
+#: widgets/KoDocumentInfoDlg.cpp:104 widgets/KoDocumentInfoDlg.cpp:105
+#, fuzzy, kde-format
+msgid "General"
+msgstr "Almennt"
+
+#: widgets/KoDocumentInfoDlg.cpp:132
+#, fuzzy, kde-format
+msgid "Last saved by"
+msgstr "Síðasta síða"
+
+#: widgets/KoDocumentInfoDlg.cpp:189
+#, kde-format
+msgid "Use ';' (Example: Office;KDE;Calligra)"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:315
+#, fuzzy, kde-format
+msgid "This document will be decrypted"
+msgstr "Skjalið er lykilorðsvarið"
+
+#: widgets/KoDocumentInfoDlg.cpp:221 widgets/KoDocumentInfoDlg.cpp:317
+#, fuzzy, kde-format
+msgid "Do not decrypt"
+msgstr "&Dulrita"
+
+#: widgets/KoDocumentInfoDlg.cpp:223 widgets/KoDocumentInfoDlg.cpp:319
+#, fuzzy, kde-format
+msgid "This document is encrypted"
+msgstr "Skjalið er lykilorðsvarið"
+
+#: widgets/KoDocumentInfoDlg.cpp:225 widgets/KoDocumentInfoDlg.cpp:321
+#, fuzzy, kde-format
+msgid "D&ecrypt"
+msgstr "&Dulrita"
+
+#: widgets/KoDocumentInfoDlg.cpp:229 widgets/KoDocumentInfoDlg.cpp:325
+#, fuzzy, kde-format
+msgid "This document will be encrypted."
+msgstr "Skjalið er lykilorðsvarið"
+
+#: widgets/KoDocumentInfoDlg.cpp:231 widgets/KoDocumentInfoDlg.cpp:327
+#, fuzzy, kde-format
+msgid "Do not encrypt"
+msgstr "&Dulrita"
+
+#: widgets/KoDocumentInfoDlg.cpp:233 widgets/KoDocumentInfoDlg.cpp:329
+#, fuzzy, kde-format
+msgid "This document is not encrypted"
+msgstr "Skjalið er lykilorðsvarið"
+
+#: widgets/KoDocumentInfoDlg.cpp:239
+#, fuzzy, kde-format
+msgid "This document does not support encryption"
+msgstr "Skjalið er lykilorðsvarið"
+
+#: widgets/KoDocumentInfoDlg.cpp:351
+#, kde-format
+msgid ""
+"<qt>Decrypting the document will remove the password protection from it."
+"<p>Do you still want to decrypt the file?</qt>"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:353
+#, fuzzy, kde-format
+msgid "Confirm Decrypt"
+msgstr "Staðfesta útflutning"
+
+#: widgets/KoDocumentInfoDlg.cpp:354
+#, fuzzy, kde-format
+msgid "Decrypt"
+msgstr "&Dulrita"
+
+#: widgets/KoDocumentInfoDlg.cpp:365
+#, kde-format
+msgid ""
+"<qt>Your document could not be saved automatically.<p>To complete the "
+"decryption, please save the document.</qt>"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
+#: widgets/KoDocumentInfoDlg.cpp:409 widgets/KoDocumentInfoDlg.cpp:417
+#, fuzzy, kde-format
+msgid "Save Document"
+msgstr "Vista skjal"
+
+#: widgets/KoDocumentInfoDlg.cpp:373
+#, kde-format
+msgid ""
+"<qt>The document has been changed since it was opened. To complete the "
+"decryption the document needs to be saved.<p>Do you want to save the "
+"document now?</qt>"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:391
+#, kde-format
+msgid ""
+"<qt>The document is currently saved as %1. The document needs to be changed "
+"to <b>OASIS OpenDocument</b> to be encrypted.<p>Do you want to change the "
+"file to OASIS OpenDocument?</qt>"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:393
+#, fuzzy, kde-format
+msgid "Change Filetype"
+msgstr "Línustíll"
+
+#: widgets/KoDocumentInfoDlg.cpp:394
+#, fuzzy, kde-format
+msgid "Change"
+msgstr "Breyta"
+
+#: widgets/KoDocumentInfoDlg.cpp:407
+#, kde-format
+msgid ""
+"<qt>Your document could not be saved automatically.<p>To complete the "
+"encryption, please save the document.</qt>"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:415
+#, kde-format
+msgid ""
+"<qt>The document has been changed since it was opened. To complete the "
+"encryption the document needs to be saved.<p>Do you want to save the "
+"document now?</qt>"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, remove)
+#: widgets/KoEditColorSet.ui:55
+#, fuzzy, kde-format
+msgid "Remove"
+msgstr "Fjarlægja"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, open)
+#: widgets/KoEditColorSet.ui:65
+#, fuzzy, kde-format
+msgid "Open palette"
+msgstr "Litaspjald"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, save)
+#: widgets/KoEditColorSet.ui:75
+#, fuzzy, kde-format
+msgid "Save palette"
+msgstr "Litaspjald"
+
+#: widgets/KoEditColorSetDialog.cpp:146
+#, kde-format
+msgid "Add Color To Palette"
+msgstr ""
+
+#: widgets/KoEditColorSetDialog.cpp:146
+#, fuzzy, kde-format
+#| msgctxt "NAME OF TRANSLATORS"
+#| msgid "Your names"
+msgid "Color name:"
+msgstr "Sveinn í Felli"
+
+#: widgets/KoEditColorSetDialog.cpp:174
+#, kde-format
+msgid "Gimp Color Palette (*.gpl)"
+msgstr ""
+
+#: widgets/KoEditColorSetDialog.cpp:187
+#, kde-format
+msgid "Cannot write to palette file %1. Maybe it is read-only. "
+msgstr ""
+
+#: widgets/KoEditColorSetDialog.cpp:187
+#, fuzzy, kde-format
+msgid "Palette"
+msgstr "Litaspjald"
+
+#: widgets/KoEditColorSetDialog.cpp:201
+#, kde-format
+msgid "Add/Remove Colors"
+msgstr ""
+
+#: widgets/KoFillConfigWidget.cpp:211
+#, fuzzy, kde-format
+msgctxt "No stroke or fill"
+msgid "None"
+msgstr "Ekkert"
+
+#: widgets/KoFillConfigWidget.cpp:219
+#, kde-format
+msgctxt "Solid color stroke or fill"
+msgid "Solid"
+msgstr ""
+
+#: widgets/KoFillConfigWidget.cpp:227
+#, kde-format
+msgid "Gradient"
+msgstr ""
+
+#: widgets/KoFillConfigWidget.cpp:235
+#, kde-format
+msgid "Pattern"
+msgstr ""
+
+#: widgets/KoFillConfigWidget.cpp:249
+#, fuzzy, kde-format
+msgid "Change the filling color"
+msgstr "Breyta"
+
+#: widgets/KoFillConfigWidget.cpp:260
+#, fuzzy, kde-format
+msgid "Change the filling gradient"
+msgstr "Breyta"
+
+#: widgets/KoFillConfigWidget.cpp:267
+#, fuzzy, kde-format
+msgid "Change the filling pattern"
+msgstr "Breyta"
+
+#: widgets/KoGradientEditWidget.cpp:145
+#, kde-format
+msgid "Target:"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:148
+#, kde-format
+msgid "Fill"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:154
+#, fuzzy, kde-format
+#| msgid "Line"
+msgctxt "Linear gradient type"
+msgid "Linear"
+msgstr "Lína"
+
+#: widgets/KoGradientEditWidget.cpp:155
+#, kde-format
+msgctxt "Radial gradient type"
+msgid "Radial"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:156
+#, kde-format
+msgctxt "Conical gradient type"
+msgid "Conical"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:159
+#, kde-format
+msgid "Repeat:"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:161
+#, fuzzy, kde-format
+msgctxt "No gradient spread"
+msgid "None"
+msgstr "Ekkert"
+
+#: widgets/KoGradientEditWidget.cpp:162
+#, kde-format
+msgid "Reflect"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:163
+#, kde-format
+msgid "Repeat"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:166
+#, fuzzy, kde-format
+msgid "Overall opacity:"
+msgstr "Ógagnsæi:"
+
+#: widgets/KoGradientEditWidget.cpp:171
+#, fuzzy, kde-format
+msgid "Color stop:"
+msgstr "Litur"
+
+#: widgets/KoGradientEditWidget.cpp:179
+#, kde-format
+msgid "Stop color."
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:182
+#, kde-format
+msgid "&Add to Predefined Gradients"
+msgstr ""
+
+#: widgets/KoModeBox.cpp:575
+#, fuzzy, kde-format
+msgid "Icon and Text"
+msgstr "Texti"
+
+#: widgets/KoModeBox.cpp:576
+#, kde-format
+msgid "Icon only"
+msgstr ""
+
+#: widgets/KoModeBox.cpp:579
+#, fuzzy, kde-format
+msgid "Tabs side"
+msgstr "Neðst"
+
+#: widgets/KoModeBox.cpp:583
+#, fuzzy, kde-format
+msgid "Top side"
+msgstr "Neðst"
+
+#: widgets/KoModeBox.cpp:584
+#, fuzzy, kde-format
+msgid "Bottom side"
+msgstr "Neðst"
+
+#: widgets/KoModeBox.cpp:587
+#, fuzzy, kde-format
+msgid "Left side"
+msgstr "Vinstri inndráttur"
+
+#: widgets/KoModeBox.cpp:588
+#, fuzzy, kde-format
+msgid "Right side"
+msgstr "Hægri inndráttur"
+
+#: widgets/KoPageLayoutDialog.cpp:33
+#, fuzzy, kde-format
+msgid "Page Layout"
+msgstr "Síðuupsetning"
+
+#: widgets/KoPageLayoutDialog.cpp:95
+#, fuzzy, kde-format
+msgid "Apply to document"
+msgstr "Sérsniðið skjal"
+
+#: widgets/KoPageLayoutWidget.cpp:175
+#, fuzzy, kde-format
+msgid "Left Edge:"
+msgstr "Vinstri inndráttur"
+
+#: widgets/KoPageLayoutWidget.cpp:176
+#, fuzzy, kde-format
+msgid "Right Edge:"
+msgstr "Hægri inndráttur"
+
+#: widgets/KoPageLayoutWidget.cpp:179
+#, fuzzy, kde-format
+msgid "Binding Edge:"
+msgstr "Haus á síðu"
+
+#: widgets/KoPageLayoutWidget.cpp:180
+#, fuzzy, kde-format
+msgid "Page Edge:"
+msgstr "Haus á síðu"
+
+#: widgets/KoPageLayoutWidget.cpp:276
+#, fuzzy, kde-format
+msgid "Facing Pages:"
+msgstr "Passa á síðu"
+
+#. i18n: ectx: property (text), widget (QRadioButton, facingPages)
+#: widgets/KoPageLayoutWidget.cpp:277 widgets/KoPageLayoutWidget.ui:160
+#, fuzzy, kde-format
+msgid "Facing pages"
+msgstr "Even Page(s)"
+
+#: widgets/KoPageLayoutWidget.cpp:280
+#, fuzzy, kde-format
+msgid "Page Layout:"
+msgstr "Síðuupsetning"
+
+#: widgets/KoPageLayoutWidget.cpp:281
+#, fuzzy, kde-format
+msgid "Page spread"
+msgstr "Haus á síðu"
+
+#. i18n: ectx: property (text), widget (QLabel, unitsLabel)
+#: widgets/KoPageLayoutWidget.ui:25
+#, fuzzy, kde-format
+msgid "Unit:"
+msgstr "Eining:"
+
+#. i18n: ectx: property (text), widget (QLabel, stylesLabel)
+#: widgets/KoPageLayoutWidget.ui:45
+#, kde-format
+msgid "Follow style:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/KoPageLayoutWidget.ui:61
+#, fuzzy, kde-format
+msgid "Size:"
+msgstr "Stærð:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: widgets/KoPageLayoutWidget.ui:77
+#, fuzzy, kde-format
+msgid "Width:"
+msgstr "Breidd:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:104
+#, fuzzy, kde-format
+msgid "Height:"
+msgstr "Hæð:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:119
+#, fuzzy, kde-format
+msgid "Orientation:"
+msgstr "Stefna:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, portrait)
+#: widgets/KoPageLayoutWidget.ui:129
+#, fuzzy, kde-format
+msgid "Portrait"
+msgstr "Lóðrétt"
+
+#. i18n: ectx: property (text), widget (QRadioButton, landscape)
+#: widgets/KoPageLayoutWidget.ui:136
+#, fuzzy, kde-format
+msgid "Landscape"
+msgstr "Lárétt"
+
+#. i18n: ectx: property (text), widget (QLabel, facingPageLabel)
+#: widgets/KoPageLayoutWidget.ui:143
+#, fuzzy, kde-format
+msgid "Facing pages:"
+msgstr "Even Page(s)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, singleSided)
+#: widgets/KoPageLayoutWidget.ui:153
+#, fuzzy, kde-format
+msgid "Single sided"
+msgstr "Einföld"
+
+#. i18n: ectx: property (text), widget (QLabel, directionLabel)
+#: widgets/KoPageLayoutWidget.ui:167
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Connection"
+msgid "Text direction:"
+msgstr "Breyta tengingu"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:184
+#, fuzzy, kde-format
+msgid "Automatic"
+msgstr "Sjálfvirkt"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:189
+#, fuzzy, kde-format
+msgid "Left to right"
+msgstr "Frá vinstri til hægri"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:194
+#, fuzzy, kde-format
+msgid "Right to left"
+msgstr "Frá hægri til vinstri"
+
+#. i18n: ectx: property (title), widget (QGroupBox, margins)
+#: widgets/KoPageLayoutWidget.ui:204
+#, fuzzy, kde-format
+msgid "Margins"
+msgstr "Spássíur"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:210
+#, fuzzy, kde-format
+msgid "Top:"
+msgstr "Efst:"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.ui:230
+#, fuzzy, kde-format
+msgid "Binding edge:"
+msgstr "Haus á síðu"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.ui:250
+#, fuzzy, kde-format
+msgid "Page edge:"
+msgstr "Haus á síðu"
+
+#. i18n: ectx: property (text), widget (QLabel, label_12)
+#: widgets/KoPageLayoutWidget.ui:270
+#, fuzzy, kde-format
+msgid "Bottom:"
+msgstr "Neðst:"
+
+#: widgets/KoResourceItemChooser.cpp:137
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "Import resource"
+msgstr "Flytja inn skjal"
+
+#: widgets/KoResourceItemChooser.cpp:144
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete resource"
+msgstr "Eyða auðlind"
+
+#: widgets/KoResourceItemChooser.cpp:192
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Choose File to Add"
+msgstr "Velja síu"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:107
+#: widgets/KoTagToolButton.cpp:51
+#, fuzzy, kde-format
+msgid "New tag"
+msgstr "Nýtt lag"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:140
+#, kde-format
+msgid "Assign to tag"
+msgstr ""
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:149
+#, fuzzy, kde-format
+msgid "Remove from this tag"
+msgstr "Eyða síðu"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:157
+#, fuzzy, kde-format
+msgid "Remove from other tag"
+msgstr "Eyða síðu"
+
+#: widgets/KoResourceModel.cpp:78
+#, kde-format
+msgid "Tags"
+msgstr ""
+
+#: widgets/KoResourceTaggingManager.cpp:143
+#, kde-format
+msgid "Unable to undelete tag"
+msgstr ""
+
+#: widgets/KoResourceTaggingManager.cpp:144
+#, kde-format
+msgid ""
+"<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
+"enter a new, unique name for it.</qt>"
+msgstr ""
+
+#: widgets/KoResourceTaggingManager.cpp:151
+#, kde-format
+msgid "Tag was not undeleted."
+msgstr ""
+
+#: widgets/KoRuler.cpp:1266
+#, fuzzy, kde-format
+msgid "First line indent"
+msgstr "Inndráttur á fyrstu línu"
+
+#: widgets/KoRuler.cpp:1267
+#, fuzzy, kde-format
+msgid "Left indent"
+msgstr "Vinstri inndráttur"
+
+#: widgets/KoRuler.cpp:1268
+#, fuzzy, kde-format
+msgid "Right indent"
+msgstr "Hægri inndráttur"
+
+#: widgets/KoShadowConfigWidget.cpp:55
+#, kde-format
+msgid "Change the color of the shadow"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/KoShadowConfigWidget.ui:67
+#, kde-format
+msgid "Blur:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/KoShadowConfigWidget.ui:84
+#, kde-format
+msgid "Distance:"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:83
+#, kde-format
+msgid "Butt cap"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:90
+#, kde-format
+msgid "Round cap"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:97
+#, fuzzy, kde-format
+msgid "Square cap"
+msgstr "Ferköntuð bóla"
+
+#: widgets/KoStrokeConfigWidget.cpp:108
+#, fuzzy, kde-format
+msgid "Miter join"
+msgstr "Afmarkari"
+
+#: widgets/KoStrokeConfigWidget.cpp:115
+#, kde-format
+msgid "Round join"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:122
+#, kde-format
+msgid "Bevel join"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:132
+#, fuzzy, kde-format
+msgid "Miter limit"
+msgstr "Afmarkari"
+
+#: widgets/KoStrokeConfigWidget.cpp:203
+#, kde-format
+msgid "Thickness:"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:213
+#, kde-format
+msgid "Set line width of actual selection"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:229
+#, kde-format
+msgid "Change the color of the line/border"
+msgstr ""
+
+#: widgets/KoTagChooserWidget.cpp:41
+#, kde-format
+msgid "Tag"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:39
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Entering search terms here will add to, or remove resources from the "
+"current tag view.<para>To filter based on the partial, case insensitive name "
+"of a resource:<br><icode>partialname</icode> or <icode>!partialname</icode>."
+"</para><para>In-/exclusion of other tag sets:<br><icode>[Tagname]</icode> or "
+"<icode>![Tagname]</icode>.</para><para>Case sensitive and full name matching "
+"in-/exclusion:<br><icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</"
+"icode>.</para>Filter results cannot be saved for the <interface>All Presets</"
+"interface> view.<br>In this view, pressing <interface>Enter</interface> or "
+"clearing the filter box will restore all items.<br>Create and/or switch to a "
+"different tag if you want to save filtered resources into named sets.</qt>"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:53
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Entering search terms here will add to, or remove resources from the "
+"current tag view.<para>To filter based on the partial, case insensitive name "
+"of a resource:<br><icode>partialname</icode> or <icode>!partialname</icode>."
+"</para><para>In-/exclusion of other tag sets:<br><icode>[Tagname]</icode> or "
+"<icode>![Tagname]</icode>.</para><para>Case sensitive and full name matching "
+"in-/exclusion:<br><icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</"
+"icode>.</para>Pressing <interface>Enter</interface> or clicking the "
+"<interface>Save</interface> button will save the changes.</qt>"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:68
+#, kde-format
+msgid "Enter resource filters here"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:79
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Save the currently filtered set as the new members of the current tag.</"
+"qt>"
+msgstr ""
+
+#: widgets/KoTagToolButton.cpp:44
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<qt>Show the tag box options.</qt>"
+msgstr ""
+
+#: widgets/KoTagToolButton.cpp:60
+#, fuzzy, kde-format
+msgid "Rename tag"
+msgstr "Heimasíða"
+
+#: widgets/KoTagToolButton.cpp:71
+#, fuzzy, kde-format
+msgid "Delete this tag"
+msgstr "Eyða síðu"
+
+#: widgets/KoTagToolButton.cpp:89
+#, kde-format
+msgid "Clear undelete list"
+msgstr ""
+
+#: widgets/KoTagToolButton.cpp:119
+#, fuzzy, kde-format
+msgid "Undelete"
+msgstr "eyða"
+
+#: widgets/KoToolBox.cpp:294
+#, fuzzy, kde-format
+msgid "Icon Size"
+msgstr "Stærð"
+
+#: widgets/KoToolBox.cpp:295
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Icon size"
+msgid "Default"
+msgstr "Sjálfgefið"
+
+#: widgets/KoToolBox.cpp:302
+#, kde-format
+msgid "%1x%2"
+msgstr ""
+
+#: widgets/KoToolBoxButton.cpp:55
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "%1"
+msgstr "%1%"
+
+#: widgets/KoToolBoxButton.cpp:56
+#, kde-format
+msgctxt "@info:tooltip %2 is shortcut"
+msgid "%1 (%2)"
+msgstr ""
+
+#: widgets/KoToolBoxDocker.cpp:20
+#, fuzzy, kde-format
+msgid "Toolbox"
+msgstr "Áhöld"
+
+#: widgets/KoToolDocker.cpp:184
+#, kde-format
+msgid "Tool Options"
+msgstr "Valkostir áhalda"
+
+#: widgets/KoToolDocker.cpp:216
+#, kde-format
+msgid "Toggles organizing the options in tabs or not"
+msgstr ""
+
+#: widgets/KoViewItemContextBar.cpp:183
+#, kde-format
+msgid "deselect item"
+msgstr ""
+
+#: widgets/KoViewItemContextBar.cpp:183
+#, kde-format
+msgid "select item"
+msgstr ""
+
+#: widgets/KoZoomAction.cpp:196 widgets/KoZoomAction.cpp:209
+#: widgets/KoZoomMode.cpp:13
+#, fuzzy, kde-format
+msgid "%1%"
+msgstr "%1%"
+
+#: widgets/KoZoomMode.cpp:14
+#, fuzzy, kde-format
+msgid "Fit Page Width"
+msgstr "Laga að breidd glugga"
+
+#: widgets/KoZoomMode.cpp:15
+#, fuzzy, kde-format
+msgid "Fit Page"
+msgstr "Passa á síðu"
+
+#: widgets/KoZoomMode.cpp:17
+#, kde-format
+msgid "Actual Pixels"
+msgstr ""
+
+#: widgets/KoZoomMode.cpp:21
+#, fuzzy, kde-format
+msgid "Fit Text Width"
+msgstr "Laga að breidd glugga"
+
+#: widgets/KoZoomWidget.cpp:69
+#, kde-format
+msgid "Use same aspect as pixels"
+msgstr ""
+
+#: widgets/KoZoomWidget.cpp:78
+#, fuzzy, kde-format
+msgid "Zoom to Selection"
+msgstr "Aðdráttur að völdu"
+
+#: widgets/KoZoomWidget.cpp:87
+#, fuzzy, kde-format
+msgid "Zoom to All"
+msgstr "Aðdráttur að völdu"
+
+#: widgetutils/KoFileDialog.cpp:463
+#, kde-format
+msgid "All supported formats"
+msgstr ""
+
+#: widgetutils/KoGroupButton.cpp:131
+#, fuzzy, kde-format
+msgctxt "@info:tooltip of custom triple button"
+msgid "%1"
+msgstr "%1%"
+
+#, fuzzy
+#~ msgid "Install Script Package"
+#~ msgstr "Setja inn skriftupakka"
+
+#, fuzzy
+#~ msgid "Could not read the package \"%1\"."
+#~ msgstr "Gat ekki lesið pakkan \"%1\"."
+
+#, fuzzy
+#~ msgid ""
+#~ "A script package with the name \"%1\" already exists. Replace this "
+#~ "package?"
+#~ msgstr "Skriftupakki með nafninu \"%1\" er þegar til. Skipta honum út?"
+
+#, fuzzy
+#~ msgid "Replace"
+#~ msgstr "Skipta út"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not uninstall this script package. You may not have sufficient "
+#~ "permissions to delete the folder \"%1\"."
+#~ msgstr ""
+#~ "Gat ekki fjarlægt skriftupakkan. Það getur verið að þú hafir ekki nægar "
+#~ "heimildir til að eyða möppunni \"%1\"."
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not uninstall the script package \"%1\" since the script is not "
+#~ "installed."
+#~ msgstr ""
+#~ "Gat ekki fjarlægt skriftupakkan. Það getur verið að þú hafir ekki nægar "
+#~ "heimildir til að eyða möppunni \"%1\"."
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not uninstall the script package \"%1\". You may not have "
+#~ "sufficient permissions to delete the folder \"%1\"."
+#~ msgstr ""
+#~ "Gat ekki fjarlægt skriftupakkan. Það getur verið að þú hafir ekki nægar "
+#~ "heimildir til að eyða möppunni \"%1\"."
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Download resource"
+#~ msgstr "Eyða auðlind"
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Share Resource"
+#~ msgstr "Eyða auðlind"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "&Eyða"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Sveinn í Felli"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sv1@fellsnet.is"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Skrá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Stillingar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File"
+#~ msgstr "Skrá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Always use this template at application start up"
+#~ msgstr "Alltaf nota þetta snið þegar forrit ræsir sig"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Always use this template"
+#~ msgstr "Alltaf nota þetta snið"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid " px"
+#~ msgstr " px"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom In"
+#~ msgstr "Renna að"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom Out"
+#~ msgstr "Renna frá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Convert to Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convert To Path"
+#~ msgstr "Umbreyta í línuteikningu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Nafn:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Initials:"
+#~ msgstr "Upphafsstafir:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title:"
+#~ msgstr "Titill:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Position:"
+#~ msgstr "Staða:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Company:"
+#~ msgstr "Fyrirtæki:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Email:"
+#~ msgstr "Netfang:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Telephone (home):"
+#~ msgstr "Heimasími:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Telephone (work):"
+#~ msgstr "Vinnusími:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fax:"
+#~ msgstr "Fax:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Street:"
+#~ msgstr "Gata:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Postal code:"
+#~ msgstr "Póstnúmer:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "City:"
+#~ msgstr "Borg:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Country:"
+#~ msgstr "Land:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data"
+#~ msgstr "Gögn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "Kóðu&n:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "Afmarkari"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "Komma"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "Semíkomma"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other"
+#~ msgstr "Annað"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "Dálkstillir"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "Bil"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decimal symbol:"
+#~ msgstr "Tugabrotatákn:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thousands separator:"
+#~ msgstr "Þúsundatákn:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ignore duplicate delimiters"
+#~ msgstr "Hunsa tvöfalda aðgreina"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Format:"
+#~ msgstr "&Snið:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ranges"
+#~ msgstr "Svið"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Update"
+#~ msgstr "Uppfæra"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import columns:"
+#~ msgstr "Flytja inn skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "to"
+#~ msgstr "til"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unit:"
+#~ msgstr "Eining:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size:"
+#~ msgstr "Stærð:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Breidd:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "Hæð:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Orientation:"
+#~ msgstr "Stefna:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Portrait"
+#~ msgstr "Lóðrétt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Landscape"
+#~ msgstr "Lárétt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single sided"
+#~ msgstr "Einföld"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Change Connection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text direction:"
+#~ msgstr "Breyta tengingu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic"
+#~ msgstr "Sjálfvirkt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left to right"
+#~ msgstr "Frá vinstri til hægri"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right to left"
+#~ msgstr "Frá hægri til vinstri"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Margins"
+#~ msgstr "Spássíur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top:"
+#~ msgstr "Efst:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page edge:"
+#~ msgstr "Haus á síðu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom:"
+#~ msgstr "Neðst:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Fjarlægja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open palette"
+#~ msgstr "Litaspjald"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save palette"
+#~ msgstr "Litaspjald"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keywords:"
+#~ msgstr "Stikkorð:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subject:"
+#~ msgstr "Viðfangsefni:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last printed:"
+#~ msgstr "Síðast prentað:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Total editing time:"
+#~ msgstr "Heildartími ritunar:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encryption:"
+#~ msgstr "Dulritun:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Document title"
+#~ msgid "Title:"
+#~ msgstr "Titill:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Revision number:"
+#~ msgstr "Útgáfunúmer:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modified:"
+#~ msgstr "Breytt:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comments:"
+#~ msgstr "Athugasemdir:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Created:"
+#~ msgstr "Búið til:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Path:"
+#~ msgstr "Slóð:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Reset"
+#~ msgstr "F&rumstilla"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language:"
+#~ msgstr "Síðasta síða"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stylesheet Definition"
+#~ msgstr "Stílblöð"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Description"
+#~ msgstr "Lýsing"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "new"
+#~ msgstr "nýtt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "delete"
+#~ msgstr "eyða"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stylesheet Name"
+#~ msgstr "Stílblöð"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "copy"
+#~ msgstr "afrita"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespaces"
+#~ msgstr "Nafnasvið"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Prefix"
+#~ msgstr "Forskeyti"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace"
+#~ msgstr "Nafnasvið"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Execute"
+#~ msgstr "Keyra"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stylesheets"
+#~ msgstr "Stílblöð"
+
+#, fuzzy
+#~| msgid "Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line"
+#~ msgstr "Lína"
+
+#, fuzzy
+#~| msgid "Precision:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Precision:"
+#~ msgstr "Nákvæmni:"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Curve"
+#~ msgstr "Boglína"
+
+#, fuzzy
+#~| msgid "Straight"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Straight"
+#~ msgstr "Beint"
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Staðlað"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Línur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tie"
+#~ msgstr "Bindi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Grid"
+#~ msgstr "Sýna möskva"
+
+#, fuzzy
+#~| msgid "%1 Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 Options"
+#~ msgstr "Valmöguleikar %1"
+
+#, fuzzy
+#~| msgid "Pan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pan"
+#~ msgstr "Hliðra"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Segment to Line"
+#~ msgstr "Breyta leturstíl?"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "Aðdráttur"
+
+#, fuzzy
+#~| msgid "Scripts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scripts"
+#~ msgstr "Skriftur"
+
+#, fuzzy
+#~| msgid "Script Manager"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Script Manager"
+#~ msgstr "Skriftustjóri"
+
+#, fuzzy
+#~| msgid "Execute Script File..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Execute Script File..."
+#~ msgstr "Keyra skriftuskrá..."
+
+#, fuzzy
+#~| msgid "Script Manager..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Script Manager..."
+#~ msgstr "Skriftustjóri..."
+
+#, fuzzy
+#~| msgid "Execute Script File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Execute Script File"
+#~ msgstr "Keyra skriftuskrá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Install Script Package"
+#~ msgstr "Setja inn skriftupakka"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read the package \"%1\"."
+#~ msgstr "Gat ekki lesið pakkan \"%1\"."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "A script package with the name \"%1\" already exists. Replace this "
+#~ "package?"
+#~ msgstr "Skriftupakki með nafninu \"%1\" er þegar til. Skipta honum út?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Skipta út"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not uninstall this script package. You may not have sufficient "
+#~ "permissions to delete the folder \"%1\"."
+#~ msgstr ""
+#~ "Gat ekki fjarlægt skriftupakkan. Það getur verið að þú hafir ekki nægar "
+#~ "heimildir til að eyða möppunni \"%1\"."
+
+#, fuzzy
+#~| msgid "Save"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save"
+#~ msgstr "Vista"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Bæta við"
+
+#, fuzzy
+#~| msgid "Script File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Script File"
+#~ msgstr "Skriftuskrá"
+
+#, fuzzy
+#~| msgid "Script"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Script"
+#~ msgstr "Skrifta"
+
+#, fuzzy
+#~| msgid "Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Collection"
+#~ msgstr "Safn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Default text for undo action"
+#~ msgid "Undo"
+#~ msgstr "Afturkalla"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Undo %1"
+#~ msgstr "Afturkalla %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Default text for redo action"
+#~ msgid "Redo"
+#~ msgstr "Endurtaka"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Redo %1"
+#~ msgstr "Endurtaka %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<empty>"
+#~ msgstr "Tómt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Redo"
+#~ msgstr "Endurtaka"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Undo"
+#~ msgstr "Afturkalla"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Stillingar skjals"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create backup file:"
+#~ msgstr "Búa til afrit"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Hnitanet"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show grid:"
+#~ msgstr "Sýna hnitanet:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid color:"
+#~ msgstr "Stilla lit möskva:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spacing"
+#~ msgstr "Millibil"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Lárétt:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "Lóð&rétt:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Ýmislegt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Units:"
+#~ msgstr "Mælieiningar:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Only print and exit"
+#~ msgstr "Bara prenta og hætta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open a new document based on the given template (desktopfile name)"
+#~ msgstr "Búa til nýtt skjal út frá sniðskrá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open a new document based on the given template file"
+#~ msgstr "Búa til nýtt skjal út frá sniðskrá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Override display DPI"
+#~ msgstr "Hunsa upplausn skjás"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1: Critical Error"
+#~ msgstr "Undirbúningsvilla"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Too many templates found for: %1"
+#~ msgstr "Of mörg snið fundust fyrir: %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Template %1 failed to load."
+#~ msgstr "Mistókst að hlaða inn sniðinu %1."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No template found at: %1"
+#~ msgstr "Of mörg snið fundust fyrir: %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Making backup..."
+#~ msgstr "Bý til afrit..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saving..."
+#~ msgstr "Vista..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not save\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Gat ekki vistað\n"
+#~ "%1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not save %1\n"
+#~ "Reason: %2"
+#~ msgstr ""
+#~ "Gat ekki vistað %1\n"
+#~ "Ástæða: %2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Autosaving..."
+#~ msgstr "Sjálfvirk vistun..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error during autosave! Partition full?"
+#~ msgstr "Villa við sjálfvirka vistun! Disksneið full?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not create the file for saving"
+#~ msgstr "Gat ekki búið til skrá til vistunar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not able to write '%1'. Partition full?"
+#~ msgstr "Get ekki skrifað '%1'. Disksneið full?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error while trying to write '%1'. Partition full?"
+#~ msgstr "Villa við skrifun af '%1'. Disksneið full?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Malformed URL\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Gölluð slóð\n"
+#~ "%1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "An autosaved file exists for this document.\n"
+#~ "Do you want to open it instead?"
+#~ msgstr ""
+#~ "Öryggisafrit er til fyrir þetta skjal.\n"
+#~ "Viltu opna það í staðinn?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file %1 does not exist."
+#~ msgstr "Skráin %1 er ekki til."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opening Document"
+#~ msgstr "Opna skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not create the filter plugin"
+#~ msgstr "Gat ekki búið til skrá til vistunar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not create the output document"
+#~ msgstr "Gat ekki búið til skrá til vistunar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File not found"
+#~ msgstr "Skrá fannst ekki"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot create storage"
+#~ msgstr "Get ekki búið til geymslu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bad MIME type"
+#~ msgstr "Ógild MIME tegund"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error in embedded document"
+#~ msgstr "Villa í innbyggðu skjali"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format not recognized"
+#~ msgstr "Óþekkt snið"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not implemented"
+#~ msgstr "Ekki útfært enn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parsing error"
+#~ msgstr "Þáttunarvilla"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document is password protected"
+#~ msgstr "Skjalið er lykilorðsvarið"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Internal error"
+#~ msgstr "Innri villa"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Out of memory"
+#~ msgstr "Minnið er búið"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown error"
+#~ msgstr "Óþekkt villa"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1.\n"
+#~ "%3"
+#~ msgstr ""
+#~ "Gat ekki opnað %1\n"
+#~ "Ástæða: %2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find %1"
+#~ msgstr "Gat ekki fundið %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Parsing error in %1 at line %2, column %3\n"
+#~ "Error message: %4"
+#~ msgstr ""
+#~ "Þáttunarvilla í %1 á línu %2, dálki %3\n"
+#~ "Villuboð: %4"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 is not a file."
+#~ msgstr "%1 er ekki skrá."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open the file for reading (check read permissions)."
+#~ msgstr "Gat ekki opnað skrána til lesturs (athugaðu lesréttindi)."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read the beginning of the file."
+#~ msgstr "Gat ekki lesið upphaf skráarinnar."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "parsing error in the main document at line %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Þáttunarvilla í aðalskjali á línu %1, dálki %2\n"
+#~ "Villuboð: %3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid document: no file 'maindoc.xml'."
+#~ msgstr "Ógilt skjal: 'maindoc.xml' er ekki til."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Untitled"
+#~ msgstr "Ónefnt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
+#~ "it?</p>"
+#~ msgstr ""
+#~ "<p>Skjalinu <b>'%1'</b> hefur verið breytt.</p><p>Viltu vista það?</p>"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Internal error: saveXML not implemented"
+#~ msgstr "Innri villa: vistun á XML hefur ekki verið útfærð"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not open\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Gat ekki opnað\n"
+#~ "%1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not open %1\n"
+#~ "Reason: %2"
+#~ msgstr ""
+#~ "Gat ekki opnað %1\n"
+#~ "Ástæða: %2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "a word processing"
+#~ msgstr "ritvinnsla"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "a spreadsheet"
+#~ msgstr "töflureiknir"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "a presentation"
+#~ msgstr "kynning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "a chart"
+#~ msgstr "graf"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "a drawing"
+#~ msgstr "teikning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document \"%1\" has been modified.\n"
+#~ "Do you want to save your changes or discard them?"
+#~ msgstr ""
+#~ "<p>Skjalinu <b>'%1'</b> hefur verið breytt.</p><p>Viltu vista það?</p>"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Close Document"
+#~ msgstr "Sérsniðið skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 %"
+#~ msgstr "%1 %"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No"
+#~ msgstr "Nei"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yes"
+#~ msgstr "Já"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not export file."
+#~ msgstr "Gat ekki flutt út skrá."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Missing Export Filter"
+#~ msgstr "Vantar útflutningssíu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not import file of type\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Gat ekki flutt inn skrá af tegund\n"
+#~ "%1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Missing Import Filter"
+#~ msgstr "Vantar innflutningssíu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Choose Filter"
+#~ msgstr "Velja síu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Case Sensitive"
+#~ msgstr "Háð há/lágstöfum"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as PDF..."
+#~ msgstr "Flytja út sem PDF..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reload"
+#~ msgstr "Endurlesa"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Versions..."
+#~ msgstr "Útgáfur..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&xport..."
+#~ msgstr "&Flytja út..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&crypt Document"
+#~ msgstr "Flytja inn skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&New View"
+#~ msgstr "&Ný sýn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Information"
+#~ msgstr "Upplýsingar um skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Full Screen Mode"
+#~ msgstr "Fylla skjá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @action:inmenu"
+#~ msgid "Show Docker Titlebars"
+#~ msgstr "Sýna %1 tækjaslá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save as %1"
+#~ msgstr "Vista sem %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (unknown file type)"
+#~ msgstr "%1 (óþekkt skráartegund)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
+#~ "want to save in this format?</qt>"
+#~ msgstr ""
+#~ "<qt>Vistun sem %1 gæti valdið tapi af uppsetningu. <p>Viltu eftir sem "
+#~ "áður vista í þessu sniði?</qt>"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm Save"
+#~ msgstr "Staðfesta vistun"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you "
+#~ "still want to export to this format?</qt>"
+#~ msgstr ""
+#~ "<qt>Að flytja út sem %1 gæti valdið tapi af uppsetningu. <p>Viltu eftir "
+#~ "sem áður flytja út í þessu sniði?</qt>"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm Export"
+#~ msgstr "Staðfesta útflutning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Flytja út"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "untitled"
+#~ msgstr "Ónefnt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Document"
+#~ msgstr "Opna skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Document"
+#~ msgstr "Flytja inn skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as PDF"
+#~ msgstr "Flytja út sem PDF..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document - %1"
+#~ msgstr "Skjal - %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "Aðvörun"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show %1 Toolbar"
+#~ msgstr "Sýna %1 tækjaslá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide %1 Toolbar"
+#~ msgstr "Fela %1 tækjaslá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Existing Document"
+#~ msgstr "Opna þetta skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recent Documents"
+#~ msgstr "Nýleg skjöl"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom Document"
+#~ msgstr "Sérsniðið skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop"
+#~ msgstr "Stöðva"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Close"
+#~ msgstr "Loka"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stopped"
+#~ msgstr "Stöðvað"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open This Document"
+#~ msgstr "Opna þetta skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) File modification date and time. %1 is date time"
+#~ msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
+#~ msgstr "<tr><td><b>Breytt:</b></td><td>%1</td></tr>"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) File access date and time. %1 is date time"
+#~ msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
+#~ msgstr "<tr><td><b>Opnað:</b></td><td>%1</td></tr>"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template"
+#~ msgstr "Búa til sniðmát"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Template name"
+#~ msgid "Name:"
+#~ msgstr "Nafn:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Group:"
+#~ msgstr "Hópur:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Add Group..."
+#~ msgstr "Bæt&a við hóp..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Remove"
+#~ msgstr "&Fjarlægja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Picture"
+#~ msgstr "Mynd"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Preview"
+#~ msgstr "Forskoðun:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom:"
+#~ msgstr "Sérsniðið"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Select..."
+#~ msgstr "&Velja..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use the new template as default"
+#~ msgstr "Nota nýja sniðið sem sjálfgefið"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do you really want to overwrite the existing '%1' template?"
+#~ msgstr "Viltu virkilega skrifa yfir sniðið '%1' sem þegar er til?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Group"
+#~ msgstr "Bæta við hópi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter group name:"
+#~ msgstr "Skrifaðu nafn á hóp:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "This name is already used."
+#~ msgstr "Þetta nafn er í notkun."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do you really want to remove that group?"
+#~ msgstr "Viltu virkilega fjarlægja þennan hóp?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Group"
+#~ msgstr "Fjarlægja hóp"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do you really want to remove that template?"
+#~ msgstr "Viltu virkilega fjarlægja þetta snið?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Template"
+#~ msgstr "Fjarlægja sniðskrá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "&Eyða"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not load picture."
+#~ msgstr "Gat ekki hlaðið inn mynd."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No picture available."
+#~ msgstr "Engin mynd til."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use This Template"
+#~ msgstr "Nota þetta snið"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Version"
+#~ msgstr "Útgáfa"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date & Time"
+#~ msgstr "Dagur og tími"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved By"
+#~ msgstr "Vistað af"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comment"
+#~ msgstr "Athugasemd"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Add"
+#~ msgstr "Bæt&a við"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Modify"
+#~ msgstr "&Breyta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Open"
+#~ msgstr "&Opna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date: %1"
+#~ msgstr "Dags.: %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown"
+#~ msgstr "Óþekkt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Parsing error in the main document at line %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Þáttunarvilla í aðalskjali á línu %1, dálki %2\n"
+#~ "Villuboð: %3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A3"
+#~ msgstr "ISO A3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A4"
+#~ msgstr "ISO A4"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A5"
+#~ msgstr "ISO A5"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "US Letter"
+#~ msgstr "US Letter"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "US Legal"
+#~ msgstr "US Legal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "Screen"
+#~ msgstr "Skjár"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "Custom"
+#~ msgstr "Sérsniðið"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B5"
+#~ msgstr "ISO B5"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "US Executive"
+#~ msgstr "US Executive"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A0"
+#~ msgstr "ISO A0"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A1"
+#~ msgstr "ISO A1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A2"
+#~ msgstr "ISO A2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A6"
+#~ msgstr "ISO A6"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A7"
+#~ msgstr "ISO A7"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A8"
+#~ msgstr "ISO A8"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A9"
+#~ msgstr "ISO A9"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B0"
+#~ msgstr "ISO B0"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B1"
+#~ msgstr "ISO B1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B10"
+#~ msgstr "ISO B10"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B2"
+#~ msgstr "ISO B2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B3"
+#~ msgstr "ISO B3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B4"
+#~ msgstr "ISO B4"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B6"
+#~ msgstr "ISO B6"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO C5"
+#~ msgstr "ISO C5"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "US Common 10"
+#~ msgstr "US Common 10"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO DL"
+#~ msgstr "ISO DL"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "US Folio"
+#~ msgstr "US Folio"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "US Ledger"
+#~ msgstr "US Ledger"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "US Tabloid"
+#~ msgstr "US Tabloid"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Millimeters (mm)"
+#~ msgstr "Millímetrar (mm)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Centimeters (cm)"
+#~ msgstr "Sentímetrar (cm)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decimeters (dm)"
+#~ msgstr "Desímetrar (dm)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inches (in)"
+#~ msgstr "Tommur (in)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pica (pi)"
+#~ msgstr "Pica (pi)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cicero (cc)"
+#~ msgstr "Cicero (cc)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Points (pt)"
+#~ msgstr "Punktar (pt)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Stilla"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Höfundur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Höfundur"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Skyggna %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Lag"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Group"
+#~ msgstr "Hópur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Form"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "Skyggna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Visible"
+#~ msgstr "Sýnilegt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locked"
+#~ msgstr "Læst"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&ancel"
+#~ msgstr "&Hætta við"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page"
+#~ msgstr "Síða"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Detailed View"
+#~ msgstr "Nákvæmur listi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thumbnail View"
+#~ msgstr "Smámyndasýn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "Nýtt lag"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New layer"
+#~ msgstr "Nýtt lag"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "Klippa"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Afrita"
+
+#, fuzzy
+#~| msgid "Page %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1"
+#~ msgstr "Síða %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "Áhöld"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "&Eyða"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Jafna við hnitanet"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Sýna stikur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "Setja inn síðu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Page"
+#~ msgstr "Eyða síðu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "Uppsetning á síðu..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Variable"
+#~ msgstr "Breyta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "Stilla..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background"
+#~ msgstr "Bakgrunnslitur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Background"
+#~ msgstr "Bakgrunnslitur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Design"
+#~ msgstr "Haus á síðu"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Design"
+#~ msgstr "Skyggna %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Display shapes of master page"
+#~ msgstr "Sekúnda"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide %1/%2"
+#~ msgstr "Líma skyggnu"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1/%2"
+#~ msgstr "Skyggna %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page %1/%2"
+#~ msgstr "Síðasta síða"
+
+#, fuzzy
+#~| msgid "Page %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1/%2"
+#~ msgstr "Síða %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clear"
+#~ msgstr "Hreinsa"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract"
+#~ msgstr "Draga frá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiply"
+#~ msgstr "Margfalda"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alpha"
+#~ msgstr "Alfa"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lightness"
+#~ msgstr "Ljósleiki"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Blár"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Grænn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "Rauður"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dissolve"
+#~ msgstr "Leysa upp"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Erase"
+#~ msgstr "Eyða"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Greater"
+#~ msgstr "Búið til:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Venjulegt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overlay"
+#~ msgstr "Leggja yfir"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grain Merge"
+#~ msgstr "Kornablöndun"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grain Extract"
+#~ msgstr "Kornaeimun"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel"
+#~ msgstr "Samsíða"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Screen"
+#~ msgstr "Skjár"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Lýsa"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hard Light"
+#~ msgstr "Hart ljós"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Soft Light (SVG)"
+#~ msgstr "Mjúkt ljós"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Soft Light (Photoshop)"
+#~ msgstr "Mjúkt ljós"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "Dekkja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Addition"
+#~ msgstr "Bæta við"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Divide"
+#~ msgstr "Deila"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Difference"
+#~ msgstr "Mismunur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "Litur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hue"
+#~ msgstr "Litblær"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturation"
+#~ msgstr "Litmettun"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Luminosity"
+#~ msgstr "Birtustig"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darker Color"
+#~ msgstr "Bakgrunnslitur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighter Color"
+#~ msgstr "Litur línu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intensity"
+#~ msgstr "Styrkur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Value"
+#~ msgstr "Gildi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R"
+#~ msgstr "R"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "G"
+#~ msgstr "G"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "B"
+#~ msgstr "B"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grayscale"
+#~ msgstr "Grátóna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "YCbCr"
+#~ msgstr "YCbCr"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Negative"
+#~ msgstr "Neikvætt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "HSL"
+#~ msgstr "HSL"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "HSV"
+#~ msgstr "HSV"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mix"
+#~ msgstr "Blöndun"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Burn"
+#~ msgstr "Brenna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reference"
+#~ msgstr "Tilvísun"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "System"
+#~ msgstr "Kerfi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "User"
+#~ msgstr "Notandi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit %1"
+#~ msgstr "Breyta %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Empty"
+#~ msgstr "Tómt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "URI"
+#~ msgstr "Slóð"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blank"
+#~ msgstr "Tómt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Valid"
+#~ msgstr "Gilt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subject"
+#~ msgstr "Efni"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "Hlutur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File '%1' is not readable"
+#~ msgstr "Skráin %1 er ekki til."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The directory mode is not supported for remote locations."
+#~ msgstr "Möppuhamurinn er ekki studdur fyrir fjarlægar staðsetningar."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) new numbered section name"
+#~ msgid "New section %1"
+#~ msgstr "Staðsetningar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Underline Style"
+#~ msgid "None"
+#~ msgstr "Ekkert"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Underline Style"
+#~ msgid "Single"
+#~ msgstr "Einföld"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Underline Style"
+#~ msgid "Double"
+#~ msgstr "Tvöföld"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Sjálfgefið"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opacity"
+#~ msgstr "Ógagnsæi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Data"
+#~ msgstr "Flytja inn gögn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Ráðlögð ( %1 )"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Staðbundin ( %1 )"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Önnur ( %1 )"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Generic"
+#~ msgstr "Almennt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date"
+#~ msgstr "Dagsetning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency"
+#~ msgstr "Gjaldmiðill"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Ekkert"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Please check the ranges you specified. The start value must be lower than "
+#~ "the end value."
+#~ msgstr ""
+#~ "Vinsamlega athugaðu sviðið sem þú tilgreindir. Upphafsgildið verður að "
+#~ "vera lægra en endagildið."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "Finn ekki stafatöflu: %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "modified"
+#~ msgstr "Breytt:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Details"
+#~ msgstr "Nánar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Close Docker"
+#~ msgstr "Sérsniðið skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Collapse Docker"
+#~ msgstr "Sérsniðið skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General"
+#~ msgstr "Almennt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last saved by"
+#~ msgstr "Síðasta síða"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Encrypt"
+#~ msgstr "&Dulrita"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save Document"
+#~ msgstr "Vista skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change"
+#~ msgstr "Breyta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Palette"
+#~ msgstr "Litaspjald"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Ekkert"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change the filling gradient"
+#~ msgstr "Breyta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Type:"
+#~ msgstr "Tegund:"
+
+#, fuzzy
+#~| msgid "Line"
+#~ msgctxt "(qtundo-format) Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Lína"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) No gradient spread"
+#~ msgid "None"
+#~ msgstr "Ekkert"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overall opacity:"
+#~ msgstr "Ógagnsæi:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color stop:"
+#~ msgstr "Litur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Icon and Text"
+#~ msgstr "Texti"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom side"
+#~ msgstr "Neðst"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left side"
+#~ msgstr "Vinstri inndráttur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right side"
+#~ msgstr "Hægri inndráttur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout"
+#~ msgstr "Síðuupsetning"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Import resource"
+#~ msgstr "Flytja inn skjal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Delete resource"
+#~ msgstr "Eyða auðlind"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Download resource"
+#~ msgstr "Eyða auðlind"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Share Resource"
+#~ msgstr "Eyða auðlind"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Choose File to Add"
+#~ msgstr "Velja síu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New tag"
+#~ msgstr "Nýtt lag"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First line indent"
+#~ msgstr "Inndráttur á fyrstu línu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left indent"
+#~ msgstr "Vinstri inndráttur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right indent"
+#~ msgstr "Hægri inndráttur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Miter limit"
+#~ msgstr "Afmarkari"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename tag"
+#~ msgstr "Heimasíða"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete this tag"
+#~ msgstr "Eyða síðu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Undelete"
+#~ msgstr "eyða"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Icon Size"
+#~ msgstr "Stærð"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @item:inmenu Icon size"
+#~ msgid "Default"
+#~ msgstr "Sjálfgefið"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "%1"
+#~ msgstr "%1%"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toolbox"
+#~ msgstr "Áhöld"
+
+#, fuzzy
+#~| msgid "Tool Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tool Options"
+#~ msgstr "Valkostir áhalda"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fit Page Width"
+#~ msgstr "Laga að breidd glugga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fit Page"
+#~ msgstr "Passa á síðu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fit Text Width"
+#~ msgstr "Laga að breidd glugga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Aðdráttur að völdu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @info:tooltip of custom triple button"
+#~ msgid "%1"
+#~ msgstr "%1%"
+
+#, fuzzy
+#~ msgctxt "Label for the Find text input box"
+#~ msgid "Find:"
+#~ msgstr "Finna:"
+
+#, fuzzy
+#~ msgctxt "Next search result"
+#~ msgid "Next"
+#~ msgstr "Næsta"
+
+#, fuzzy
+#~ msgctxt "Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Fyrri"
+
+#, fuzzy
+#~ msgctxt "Search options"
+#~ msgid "Options"
+#~ msgstr "Valkostir"
+
+#, fuzzy
+#~ msgctxt "Label for the Replace text input box"
+#~ msgid "Replace:"
+#~ msgstr "Skipta út"
+
+#, fuzzy
+#~ msgctxt "Replace the current match"
+#~ msgid "Replace"
+#~ msgstr "Skipta út"
+
+#, fuzzy
+#~ msgctxt "Replace all found matches"
+#~ msgid "Replace All"
+#~ msgstr "Skipta út"
+
+#, fuzzy
+#~ msgctxt "Text list-style"
+#~ msgid "None"
+#~ msgstr "Ekkert"
+
+#, fuzzy
+#~ msgid "Circle Bullet"
+#~ msgstr "Hringlaga bóla"
+
+#, fuzzy
+#~ msgid "Arabic"
+#~ msgstr "Arabíska"
+
+#, fuzzy
+#~ msgid "Lower Alphabetical"
+#~ msgstr "Lágstafir"
+
+#, fuzzy
+#~ msgid "Upper Alphabetical"
+#~ msgstr "Hástafir"
+
+#, fuzzy
+#~ msgid "Bengali"
+#~ msgstr "Bengalska"
+
+#, fuzzy
+#~ msgid "Gujarati"
+#~ msgstr "Gujarati"
+
+#, fuzzy
+#~ msgid "Kannada"
+#~ msgstr "Kannada"
+
+#, fuzzy
+#~ msgid "Malayalam"
+#~ msgstr "Malaíalam"
+
+#, fuzzy
+#~ msgid "Oriya"
+#~ msgstr "Oryanska"
+
+#, fuzzy
+#~ msgid "Tamil"
+#~ msgstr "Tamílska"
+
+#, fuzzy
+#~ msgid "Telugu"
+#~ msgstr "Telugu"
+
+#, fuzzy
+#~ msgid "Tibetan"
+#~ msgstr "Tíbetska"
+
+#, fuzzy
+#~ msgid "Thai"
+#~ msgstr "Tælenska"
+
+#, fuzzy
+#~ msgid "Image"
+#~ msgstr "Mynd"
+
+#, fuzzy
+#~ msgid "Open File"
+#~ msgstr "Litaspjald"
+
+#, fuzzy
+#~ msgid "Open Files"
+#~ msgstr "Litaspjald"
+
+#, fuzzy
+#~ msgid "Filter:"
+#~ msgstr "Velja síu"
+
+#, fuzzy
+#~ msgid "TextLabel"
+#~ msgstr "Merki"
+
+#, fuzzy
+#~ msgid "Named"
+#~ msgstr "Nafn"
+
+#, fuzzy
+#~ msgid "Save File"
+#~ msgstr "Litaspjald"
+
+#, fuzzy
+#~ msgid "Import File"
+#~ msgstr "Vantar innflutningssíu"
+
+#, fuzzy
+#~ msgid "Use the new template every time %1 starts"
+#~ msgstr "Nota nýja sniðið í hvert sinn %1 er hlaðið inn"
+
+#, fuzzy
+#~ msgid "Testing: OpenFile"
+#~ msgstr "Litaspjald"
+
+#, fuzzy
+#~ msgid "Testing: ImportFile"
+#~ msgstr "Vantar innflutningssíu"
+
+#, fuzzy
+#~ msgid "Testing: ImportFiles"
+#~ msgstr "Vantar innflutningssíu"
+
+#, fuzzy
+#~ msgid "Testing: Import Directory"
+#~ msgstr "Flytja inn skjal"
+
+#, fuzzy
+#~ msgid "Testing: SaveFile"
+#~ msgstr "Litaspjald"
+
+#, fuzzy
+#~ msgid "Could not open \"%1\" project file."
+#~ msgstr "Gat ekki flutt út skrá."
+
+#, fuzzy
+#~ msgid "The database \"%1\" does not exist."
+#~ msgstr "Skráin %1 er ekki til."
+
+#, fuzzy
+#~ msgid "The database file \"%1\" does not exist."
+#~ msgstr "Skráin %1 er ekki til."
+
+#, fuzzy
+#~ msgid "Creating table failed."
+#~ msgstr "Búa til afrit"
+
+#, fuzzy
+#~ msgid "Cannot create table without fields."
+#~ msgstr "Get ekki búið til geymslu"
+
+#, fuzzy
+#~ msgid "Could not create the same table \"%1\" twice."
+#~ msgstr "Gat ekki lesið pakkan \"%1\"."
+
+#, fuzzy
+#~ msgid "Table \"%1\" does not exist."
+#~ msgstr "Skráin %1 er ekki til."
+
+#, fuzzy
+#~ msgid "Could not alter table \"%1\" using the same table as destination."
+#~ msgstr "Gat ekki lesið upphaf skráarinnar."
+
+#, fuzzy
+#~ msgid "Could not rename table \"%1\" using the same name."
+#~ msgstr "Gat ekki lesið upphaf skráarinnar."
+
+#, fuzzy
+#~ msgid "Query \"%1\" does not exist."
+#~ msgstr "Skráin %1 er ekki til."
+
+#, fuzzy
+#~ msgid "Begin transaction failed."
+#~ msgstr "Búa til afrit"
+
+#, fuzzy
+#~ msgid "Transaction already started."
+#~ msgstr "Þetta nafn er í notkun."
+
+#, fuzzy
+#~ msgid "Column <resource>%1</resource> does not exist in the query."
+#~ msgstr "Skráin %1 er ekki til."
+
+#, fuzzy
+#~ msgid ""
+#~ "Error in XML data: \"%1\" in line %2, column %3.\n"
+#~ "XML data: %4"
+#~ msgstr ""
+#~ "Þáttunarvilla í %1 á línu %2, dálki %3\n"
+#~ "Villuboð: %4"
+
+#, fuzzy
+#~ msgid "Could not insert record because there is no master table specified."
+#~ msgstr "Gat ekki lesið pakkan \"%1\"."
+
+#, fuzzy
+#~ msgid "Could not delete record because there is no master table specified."
+#~ msgstr "Gat ekki lesið pakkan \"%1\"."
+
+#, fuzzy
+#~ msgid "Unknown error."
+#~ msgstr "Óþekkt villa"
+
+#, fuzzy
+#~ msgctxt "@info"
+#~ msgid "file: %1"
+#~ msgstr "Dags.: %1"
+
+#, fuzzy
+#~ msgid "Could not set value of database property \"%1\"."
+#~ msgstr "Gat ekki lesið pakkan \"%1\"."
+
+#, fuzzy
+#~ msgid "Could not read database property \"%1\"."
+#~ msgstr "Gat ekki lesið pakkan \"%1\"."
+
+#, fuzzy
+#~ msgid "Could not read database properties."
+#~ msgstr "Gat ekki lesið upphaf skráarinnar."
+
+#, fuzzy
+#~ msgid "Could not find database driver \"%1\"."
+#~ msgstr "Gat ekki lesið pakkan \"%1\"."
+
+#, fuzzy
+#~ msgid "Could not load database driver \"%1\"."
+#~ msgstr "Gat ekki lesið pakkan \"%1\"."
+
+#, fuzzy
+#~ msgid "Could not find service <resource>%1</resource>."
+#~ msgstr "Gat ekki lesið pakkan \"%1\"."
+
+#, fuzzy
+#~ msgid "Field not found"
+#~ msgstr "Skrá fannst ekki"
+
+#, fuzzy
+#~ msgid "Could not access the table directly using its name"
+#~ msgstr "Gat ekki búið til skrá til vistunar"
+
+#, fuzzy
+#~ msgid "Table not found"
+#~ msgstr "Skrá fannst ekki"
+
+#, fuzzy
+#~ msgid "Table \"%1\" has no \"%2\" field."
+#~ msgstr "Skráin %1 er ekki til."
+
+#, fuzzy
+#~ msgid "Short Integer Number"
+#~ msgstr "Símanúmer"
+
+#, fuzzy
+#~ msgid "Integer Number"
+#~ msgstr "Símanúmer"
+
+#, fuzzy
+#~ msgid "Date and Time"
+#~ msgstr "Dagur og tími"
+
+#, fuzzy
+#~ msgid "Time"
+#~ msgstr "Tímabelti"
+
+#, fuzzy
+#~ msgid "Single Precision Number"
+#~ msgstr "Útgáfunúmer:"
+
+#, fuzzy
+#~ msgid "Double Precision Number"
+#~ msgstr "Útgáfunúmer:"
+
+#, fuzzy
+#~ msgid "Long Text"
+#~ msgstr "Texti"
+
+#, fuzzy
+#~ msgid "Invalid Group"
+#~ msgstr "Bæta við hópi"
+
+#, fuzzy
+#~ msgid "Date/Time"
+#~ msgstr "Dagur og tími"
+
+#, fuzzy
+#~ msgid "Syntax Error"
+#~ msgstr "Innri villa"
+
+#, fuzzy
+#~ msgid "Syntax error."
+#~ msgstr "Innri villa"
+
+#, fuzzy
+#~ msgid "Error"
+#~ msgstr "Villa!"
+
+#, fuzzy
+#~ msgid "Error near \"%1\"."
+#~ msgstr "Innri villa"
+
+#, fuzzy
+#~ msgid "Server's port number"
+#~ msgstr "Útgáfunúmer:"
+
+#, fuzzy
+#~ msgid "Record inserting failed."
+#~ msgstr "Búa til afrit"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Change Connection"
+#~ msgid "Test Connection"
+#~ msgstr "Breyta tengingu"
+
+#, fuzzy
+#~ msgid "Number"
+#~ msgstr "Símanúmer"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Nafn"
+
+#, fuzzy
+#~ msgid "Object Name"
+#~ msgstr "Heiti hlutar"
+
+#, fuzzy
+#~ msgid "Line Color"
+#~ msgstr "Litur línu"
+
+#, fuzzy
+#~ msgid "Line Style"
+#~ msgstr "Línustíll"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "Staðsetning"
+
+#, fuzzy
+#~ msgid "Height"
+#~ msgstr "Hæð"
+
+#, fuzzy
+#~ msgid "Background Color"
+#~ msgstr "Bakgrunnslitur"
+
+#, fuzzy
+#~ msgid "Size"
+#~ msgstr "Stærð"
+
+#, fuzzy
+#~ msgid "Check Box"
+#~ msgstr "Prófa"
+
+#, fuzzy
+#~ msgid "Cross"
+#~ msgstr "Kross"
+
+#, fuzzy
+#~ msgid "Dot"
+#~ msgstr "Punktur"
+
+#, fuzzy
+#~ msgid "Style"
+#~ msgstr "Stíll"
+
+#, fuzzy
+#~ msgid "Data Source"
+#~ msgstr "Gagnagjafi"
+
+#, fuzzy
+#~ msgid "Foreground Color"
+#~ msgstr "Forgrunnslitur"
+
+#, fuzzy
+#~ msgid "Field"
+#~ msgstr "Svæði"
+
+#, fuzzy
+#~ msgid "Center"
+#~ msgstr "Miðjað"
+
+#, fuzzy
+#~ msgid "Left"
+#~ msgstr "Vinstri"
+
+#, fuzzy
+#~ msgid "Right"
+#~ msgstr "Hægri"
+
+#, fuzzy
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Lárétt staðsetning"
+
+#, fuzzy
+#~ msgid "Bottom"
+#~ msgstr "Neðst"
+
+#, fuzzy
+#~ msgid "Top"
+#~ msgstr "Efst"
+
+#, fuzzy
+#~ msgid "Vertical Alignment"
+#~ msgstr "Lóðrétt staðsetning"
+
+#, fuzzy
+#~ msgid "Font"
+#~ msgstr "Letur"
+
+#, fuzzy
+#~ msgid "Background Opacity"
+#~ msgstr "Bakgrunnslitur"
+
+#, fuzzy
+#~ msgid "Word Wrap"
+#~ msgstr "Skipta línum"
+
+#, fuzzy
+#~ msgid "Can Grow"
+#~ msgstr "Getur vaxið"
+
+#, fuzzy
+#~ msgid "Clip"
+#~ msgstr "Myndskeið"
+
+#, fuzzy
+#~ msgid "Stretch"
+#~ msgstr "Teygja"
+
+#, fuzzy
+#~ msgid "Caption"
+#~ msgstr "Skýringatexti"
+
+#, fuzzy
+#~ msgid "Label"
+#~ msgstr "Merki"
+
+#, fuzzy
+#~ msgid "Column:"
+#~ msgstr "Dálki:"
+
+#, fuzzy
+#~ msgid "Sort:"
+#~ msgstr "Raða"
+
+#, fuzzy
+#~ msgid "Show group header:"
+#~ msgstr "Sýna möskva"
+
+#, fuzzy
+#~ msgid "Show group footer:"
+#~ msgstr "Fótur á skýrslu"
+
+#, fuzzy
+#~ msgid "Report Header"
+#~ msgstr "Haus á skýrslu"
+
+#, fuzzy
+#~ msgid "Report Footer"
+#~ msgstr "Fótur á skýrslu"
+
+#, fuzzy
+#~ msgid "Title"
+#~ msgstr "Titill"
+
+#, fuzzy
+#~ msgid "Page Size"
+#~ msgstr "Blaðsíðustærð"
+
+#, fuzzy
+#~ msgid "Left Margin"
+#~ msgstr "Vinstri spássía"
+
+#, fuzzy
+#~ msgid "Right Margin"
+#~ msgstr "Hægri spássía"
+
+#, fuzzy
+#~ msgid "Top Margin"
+#~ msgstr "Efri spássía"
+
+#, fuzzy
+#~ msgid "Bottom Margin"
+#~ msgstr "Neðri spássía"
+
+#, fuzzy
+#~ msgctxt "<data-source>: <object>"
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#, fuzzy
+#~ msgid "Edit..."
+#~ msgstr "Breyta..."
+
+#, fuzzy
+#~ msgid "Move Down"
+#~ msgstr "Færa &niður"
+
+#, fuzzy
+#~ msgid "Ascending"
+#~ msgstr "Hækkandi"
+
+#, fuzzy
+#~ msgid "Descending"
+#~ msgstr "Lækkandi"
+
+#, fuzzy
+#~ msgid "Show report footer"
+#~ msgstr "Fótur á skýrslu"
+
+#, fuzzy
+#~ msgid "First page:"
+#~ msgstr "Fyrsta síða"
+
+#, fuzzy
+#~ msgid "Even pages:"
+#~ msgstr "Even Page(s)"
+
+#, fuzzy
+#~ msgid "Last page:"
+#~ msgstr "Síðasta síða"
+
+#, fuzzy
+#~ msgid "Odd pages:"
+#~ msgstr "Odd Page(s)"
+
+#, fuzzy
+#~ msgid "Page Footer"
+#~ msgstr "Síðufótur"
+
+#, fuzzy
+#~| msgid "Collection"
+#~ msgid "Section"
+#~ msgstr "Safn"
+
+#, fuzzy
+#~ msgctxt "Static Image"
+#~ msgid "Static"
+#~ msgstr "Sjálfvirkt"
+
+#, fuzzy
+#~ msgid "Value (brightness)"
+#~ msgstr "Gildi (birta)"
+
+#, fuzzy
+#~ msgid "Cyan"
+#~ msgstr "Blágrænn"
+
+#, fuzzy
+#~ msgid "Magenta"
+#~ msgstr "Fjólublár"
+
+#, fuzzy
+#~ msgid "Yellow"
+#~ msgstr "Gulur"
+
+#, fuzzy
+#~ msgid "Black"
+#~ msgstr "Svart"
+
+#, fuzzy
+#~ msgctxt "default theme name"
+#~ msgid "Default"
+#~ msgstr "Sjálfgefið"
+
+#, fuzzy
+#~ msgid "Configuration..."
+#~ msgstr "Stilla..."
+
+#, fuzzy
+#~ msgid "&Tools"
+#~ msgstr "Áhöld"
+
+#, fuzzy
+#~ msgid "Database file \"%1\" does not exist."
+#~ msgstr "Skráin %1 er ekki til."
+
+#, fuzzy
+#~ msgid "Table \"%1\" does not exist in the database."
+#~ msgstr "Skráin %1 er ekki til."
+
+#, fuzzy
+#~ msgid "Could not compact database \"%1\"."
+#~ msgstr "Gat ekki lesið pakkan \"%1\"."
+
+#, fuzzy
+#~ msgid "Could not gain exclusive access for writing the file."
+#~ msgstr "Gat ekki lesið upphaf skráarinnar."
+
+#, fuzzy
+#~ msgid "Could not close busy database."
+#~ msgstr "Gat ekki hlaðið inn mynd."
+
+#, fuzzy
+#~ msgid "Could not remove file \"%1\"."
+#~ msgstr "Gat ekki flutt út skrá."
+
+#, fuzzy
+#~ msgid "Table \"%1\" does not exist"
+#~ msgstr "Skráin %1 er ekki til."
+
+#, fuzzy
+#~ msgid "Formatting"
+#~ msgstr "Snið"
+
+#, fuzzy
+#~ msgid "Testing: OpenDirectories"
+#~ msgstr "Flytja inn skjal"
+
+#, fuzzy
+#~ msgid "Testing: ImportDirectories"
+#~ msgstr "Flytja inn skjal"
+
+#, fuzzy
+#~ msgid "Testing: SaveFiles"
+#~ msgstr "Litaspjald"
+
+#, fuzzy
+#~ msgid "Import Directories"
+#~ msgstr "Flytja inn skjal"
+
+#, fuzzy
+#~ msgid "Error!"
+#~ msgstr "Villa!"
+
+#, fuzzy
+#~ msgid "Contacts"
+#~ msgstr "Tengiliðir"
+
+#, fuzzy
+#~ msgid "Events"
+#~ msgstr "Atburðir"
+
+#, fuzzy
+#~ msgid "Locations"
+#~ msgstr "Staðsetningar"
+
+#, fuzzy
+#~ msgid "Area"
+#~ msgstr "Svæði"
+
+#, fuzzy
+#~ msgid "Region"
+#~ msgstr "Svæði"
+
+#, fuzzy
+#~ msgid "&Summary:"
+#~ msgstr "Yfirlit"
+
+#, fuzzy
+#~ msgid "&Location:"
+#~ msgstr "Staðsetning"
+
+#, fuzzy
+#~ msgid "&Start:"
+#~ msgstr "Byrja"
+
+#, fuzzy
+#~ msgid "Time and Date"
+#~ msgstr "Tími og dagsetning"
+
+#, fuzzy
+#~ msgid "Timezone"
+#~ msgstr "Tímabelti"
+
+#, fuzzy
+#~ msgid "&Name:"
+#~ msgstr "Nafn:"
+
+#, fuzzy
+#~ msgid "&Nick:"
+#~ msgstr "Gælunafn"
+
+#, fuzzy
+#~ msgid "&Phone Number:"
+#~ msgstr "Símanúmer"
+
+#, fuzzy
+#~ msgid "&Home Page:"
+#~ msgstr "Heimasíða"
+
+#, fuzzy
+#~ msgid "Contact Information"
+#~ msgstr "Upplýsingar um tengilið"
+
+#, fuzzy
+#~ msgid "&Name"
+#~ msgstr "Nafn"
+
+#, fuzzy
+#~ msgid "Latitude"
+#~ msgstr "Breiddargráða"
+
+#, fuzzy
+#~ msgid "Longitude"
+#~ msgstr "Lengdargráða"
+
+#, fuzzy
+#~ msgid "People"
+#~ msgstr "Fólk"
+
+#, fuzzy
+#~ msgid ""
+#~ "A document with this name already exists.\n"
+#~ "Do you want to overwrite it?"
+#~ msgstr ""
+#~ "Það er þegar til skjal með þessu nafni.\n"
+#~ "Viltu skrifa yfir það?"
+
+#, fuzzy
+#~ msgid "%1 (Uncompressed XML Files)"
+#~ msgstr "%1 (óþjappaðar XML skrár)"
+
+#, fuzzy
+#~ msgid "%1 (Flat XML File)"
+#~ msgstr "%1 (flöt XML skrá)"
+
+#, fuzzy
+#~ msgid "%1 (Encrypted)"
+#~ msgstr "&Dulrita"
+
+#, fuzzy
+#~ msgid "%1 (%2 Compatible)"
+#~ msgstr "%1 (%2 samhæf)"
+
+#, fuzzy
+#~ msgid "Export Document As"
+#~ msgstr "Flytja skjal út sem"
+
+#, fuzzy
+#~ msgid "Export to PDF"
+#~ msgstr "Flytja út sem PDF..."
+
+#, fuzzy
+#~ msgid "Document background"
+#~ msgstr "Sekúnda"
+
+#, fuzzy
+#~ msgid "&OK"
+#~ msgstr "Í &lagi"
+
+#, fuzzy
+#~ msgid "&Cancel"
+#~ msgstr "&Hætta við"
+
+#, fuzzy
+#~ msgid "Even Pages(s)"
+#~ msgstr "Even Page(s)"
+
+#, fuzzy
+#~ msgid "Any Pages(s)"
+#~ msgstr "Even Page(s)"
+
+#, fuzzy
+#~ msgid "&Edit"
+#~ msgstr "Br&eyta"
+
+#, fuzzy
+#~ msgid "&Close"
+#~ msgstr "&Loka"
+
+#, fuzzy
+#~ msgid "Dodge"
+#~ msgstr "Upplita"
+
+#, fuzzy
+#~ msgid "Hard light"
+#~ msgstr "Skarpt ljós"
+
+#, fuzzy
+#~ msgid "Soft light"
+#~ msgstr "Mjúkt lýsing"
+
+#, fuzzy
+#~ msgid "Angle:"
+#~ msgstr "Einföld"
+
+#, fuzzy
+#~ msgid "Style:"
+#~ msgstr "Stíll:"
+
+#, fuzzy
+#~ msgid "Insert Table"
+#~ msgstr "Setja inn töflu"
+
+#, fuzzy
+#~ msgid "Insert Row Above"
+#~ msgstr "Setja inn röð fyrir ofan"
+
+#, fuzzy
+#~ msgid "Delete Column"
+#~ msgstr "Eyða Hópur"
+
+#, fuzzy
+#~ msgid "Delete Row"
+#~ msgstr "Eyða röð"
+
+#, fuzzy
+#~ msgid "Insert Bibliography"
+#~ msgstr "Setja inn skil"
+
+#, fuzzy
+#~ msgid "min"
+#~ msgstr "mín"
+
+#, fuzzy
+#~ msgid "DetailsPaneBase"
+#~ msgstr "DetailsPaneBase"
+
+#, fuzzy
+#~ msgid "Embedding Object"
+#~ msgstr "Felli inn hlut"
+
+#, fuzzy
+#~ msgid "I&mport..."
+#~ msgstr "Flytja &inn..."
+
+#, fuzzy
+#~ msgid "&Default"
+#~ msgstr "S&jálfgefið"
+
+#, fuzzy
+#~ msgid ""
+#~ "An autosaved file for an unnamed document exists in %1.\n"
+#~ "This file is dated %2\n"
+#~ "Do you want to open it?"
+#~ msgstr ""
+#~ "Sjálfvirk vistun fyrir ónefnt skjal finnst í %1.\n"
+#~ "Skjalið er dagsett %2\n"
+#~ "Viltu opna það?"
+
+#, fuzzy
+#~ msgid ""
+#~ "No personal contact data set, please use the "
+#~ "option                                     \"Set as Personal Contact Data"
+#~ "\" from the \"Edit\"     menu in KAddressbook to set one."
+#~ msgstr ""
+#~ "Ekkert persónulegt auðkenni sett upp. Notaðu "
+#~ "valkostinn                            \"Setja sem persónulegt auðkenni\" "
+#~ "frá \"Breyta\" valmyndinni í KAddressbook til að útbúa eitt slíkt."
+
+#, fuzzy
+#~ msgid "&Load From Address Book"
+#~ msgstr "&Ná í frá vistfangaskrá"
+
+#, fuzzy
+#~ msgid "Line Break"
+#~ msgstr "Línuskil"
+
+#, fuzzy
+#~ msgid "Hide Grid"
+#~ msgstr "Fela möskva"
+
+#, fuzzy
+#~ msgid "&Close All Views"
+#~ msgstr "&Loka öllum sýnum"
+
+#, fuzzy
+#~ msgid "&Split View"
+#~ msgstr "&Kljúfa sýn"
+
+#, fuzzy
+#~ msgid "&Remove View"
+#~ msgstr "&Fjarlægja sýn"
+
+#, fuzzy
+#~ msgid "Splitter &Orientation"
+#~ msgstr "&Klofnigsátt"
+
+#, fuzzy
+#~ msgid "&Horizontal"
+#~ msgstr "Lá&rétt"
+
+#, fuzzy
+#~ msgid "&Vertical"
+#~ msgstr "&Lóðrétt"
+
+#, fuzzy
+#~ msgid "End"
+#~ msgstr "Endir"

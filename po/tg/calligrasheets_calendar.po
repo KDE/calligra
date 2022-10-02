@@ -1,0 +1,260 @@
+# translation of kspreadinsertcalendar.po to Tajik Language
+#
+# Victor Ibragimov <youth_opportunities@tajikngo.org>, 2006, 2011.
+# Victor Ibragimov <victor.ibragimov@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kspreadinsertcalendar\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2011-09-11 18:57+0500\n"
+"Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
+"Language-Team: American English <http://www.kde.tj>\n"
+"Language: tg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: CalendarTool.cpp:63
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+"Санаи охирин пеш аз санаи аввалин меистад. Мутмаин шавед, ки санаи охирин "
+"баъд аз санаи аввалин меистад."
+
+#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#, kde-format
+msgid "Error"
+msgstr "Хато"
+
+#: CalendarTool.cpp:68
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+"Тақвимҳо набояд, ки аз 10 сол зиёд бошанд. Агар чунин давраҳои зиёд ба шумо "
+"лозим ҳастанд, шумо бояд онҳоро тақсим кунед."
+
+#: CalendarTool.cpp:73
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+"Санаи охирин ва санаи аввалин баробар ҳастанд! Танҳо як рӯз ворид карда "
+"мешавад. Давом медиҳед?"
+
+#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#, kde-format
+msgid "Warning"
+msgstr "Огоҳӣ"
+
+#: CalendarTool.cpp:78
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+"Эҷодкунии тақвим барои давраи зиёд аз даҳ сол метавонад ҷои бисёр бигирад, "
+"давом медиҳед?"
+
+#: CalendarTool.cpp:95
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+"Он ҷое, ки тақвим ворид карда шудааст холӣ НЕСТ. Оё шумо мутмаин ҳастед, ки "
+"мехоҳед давом диҳед ва маълумоти мавҷудбударо дубора нависед? Агар шумо Не-"
+"ро интихоб мекунед, ҷои лозимӣ барои тақвими дилхоҳ интихоб карда мешавад ва "
+"ин тавр шумо метавонед бубинед, ки кадом маълумот дубора навишта мешавад."
+
+#: CalendarTool.cpp:102
+#, fuzzy
+#| msgid "Insert Calendar"
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "Тақвимро ворид кунед"
+
+#: CalendarTool.cpp:108
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "Тақвим аз %1 то %2"
+
+#: CalendarTool.cpp:150
+#, kde-format
+msgid "week"
+msgstr "ҳафта"
+
+#: CalendarToolFactory.cpp:24
+#, fuzzy, kde-format
+#| msgid "Calendar Tool"
+msgid "Calendar"
+msgstr "Асбоби тақвим"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:14
+#, kde-format
+msgid "Calendar Tool"
+msgstr "Асбоби тақвим"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:20
+#, kde-format
+msgid "Insert"
+msgstr "Ворид кардан"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:27
+#, kde-format
+msgid "End date:"
+msgstr "Санаи охирин:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:47
+#, kde-format
+msgid "Start date:"
+msgstr "Санаи аввалин:"
+
+#, fuzzy
+#~| msgid "Calendar Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Tool"
+#~ msgstr "Асбоби тақвим"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Ворид кардан"
+
+#, fuzzy
+#~| msgid "Start date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start date:"
+#~ msgstr "Санаи аввалин:"
+
+#, fuzzy
+#~| msgid "End date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End date:"
+#~ msgstr "Санаи охирин:"
+
+#, fuzzy
+#~| msgid ""
+#~| "End date is before start date! Please make sure that end date comes "
+#~| "after start date."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "End date is before start date! Please make sure that end date comes after "
+#~ "start date."
+#~ msgstr ""
+#~ "Санаи охирин пеш аз санаи аввалин меистад. Мутмаин шавед, ки санаи охирин "
+#~ "баъд аз санаи аввалин меистад."
+
+#, fuzzy
+#~| msgid "Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Хато"
+
+#, fuzzy
+#~| msgid ""
+#~| "Calendars should not be longer than 10 years. If you really need such "
+#~| "long periods you need to split them up."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Calendars should not be longer than 10 years. If you really need such "
+#~ "long periods you need to split them up."
+#~ msgstr ""
+#~ "Тақвимҳо набояд, ки аз 10 сол зиёд бошанд. Агар чунин давраҳои зиёд ба "
+#~ "шумо лозим ҳастанд, шумо бояд онҳоро тақсим кунед."
+
+#, fuzzy
+#~| msgid ""
+#~| "Start and end dates are equal! Only one day will be inserted, do you "
+#~| "want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Start and end dates are equal! Only one day will be inserted, do you want "
+#~ "to continue?"
+#~ msgstr ""
+#~ "Санаи охирин ва санаи аввалин баробар ҳастанд! Танҳо як рӯз ворид карда "
+#~ "мешавад. Давом медиҳед?"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "Огоҳӣ"
+
+#, fuzzy
+#~| msgid ""
+#~| "Creating a calendar for a longer period than a year can take up a lot of "
+#~| "space, do you want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Creating a calendar for a longer period than a year can take up a lot of "
+#~ "space, do you want to continue?"
+#~ msgstr ""
+#~ "Эҷодкунии тақвим барои давраи зиёд аз даҳ сол метавонад ҷои бисёр "
+#~ "бигирад, давом медиҳед?"
+
+#, fuzzy
+#~| msgid ""
+#~| "The area where the calendar is inserted is NOT empty, are you sure you "
+#~| "want to continue, overwriting existing data? If you choose No the area "
+#~| "that would be required for the desired calendar will be selected so you "
+#~| "can see what data would be overwritten."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The area where the calendar is inserted is NOT empty, are you sure you "
+#~ "want to continue, overwriting existing data? If you choose No the area "
+#~ "that would be required for the desired calendar will be selected so you "
+#~ "can see what data would be overwritten."
+#~ msgstr ""
+#~ "Он ҷое, ки тақвим ворид карда шудааст холӣ НЕСТ. Оё шумо мутмаин ҳастед, "
+#~ "ки мехоҳед давом диҳед ва маълумоти мавҷудбударо дубора нависед? Агар "
+#~ "шумо Не-ро интихоб мекунед, ҷои лозимӣ барои тақвими дилхоҳ интихоб карда "
+#~ "мешавад ва ин тавр шумо метавонед бубинед, ки кадом маълумот дубора "
+#~ "навишта мешавад."
+
+#, fuzzy
+#~| msgid "Calendar from %1 to %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar from %1 to %2"
+#~ msgstr "Тақвим аз %1 то %2"
+
+#, fuzzy
+#~| msgid "week"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "week"
+#~ msgstr "ҳафта"
+
+#, fuzzy
+#~| msgid "Calendar Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar"
+#~ msgstr "Асбоби тақвим"
+
+#, fuzzy
+#~ msgid "Do not insert a calendar"
+#~ msgstr "Вориди календар"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Виктор Ибрагимов"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "youth_opportunities@tajikngo.org"
+
+#~ msgid "Insert Calendar..."
+#~ msgstr "Вориди календар..."

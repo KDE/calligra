@@ -1,0 +1,584 @@
+# translation of AutocorrectPlugin to Lithuanian
+# This file is distributed under the same license as the AutocorrectPlugin package.
+# Donatas Glodenis <dgvirtual@akl.lt>, 2007.
+# Remigijus Jarmalavičius <remigijus@jarmalavicius.lt>, 2011, 2012.
+# Liudas Ališauskas <liudas@akmc.lt>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: AutocorrectPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-04-12 18:29+0300\n"
+"Last-Translator: Liudas Ališauskas <liudas@akmc.lt>\n"
+"Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
+"%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: Autocorrect.cpp:25
+#, kde-format
+msgid "Configure &Autocorrection..."
+msgstr "Konfigūruoti auto taisymą..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, AutocorrectConfig)
+#: Autocorrect.cpp:29 Autocorrect.cpp:78 AutocorrectConfig.ui:14
+#: AutocorrectConfigDialog.cpp:364
+#, kde-format
+msgid "Autocorrection"
+msgstr "Auto taisymas"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_1)
+#: AutocorrectConfig.ui:24
+#, kde-format
+msgid "Si&mple Autocorrection"
+msgstr "Paprastas auto taisymas"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperCase)
+#: AutocorrectConfig.ui:30
+#, kde-format
+msgid ""
+"Detect when a new sentence is started and always ensure that the first "
+"character is an uppercase character"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, upperCase)
+#: AutocorrectConfig.ui:34
+#, kde-format
+msgid ""
+"Convert &first letter of a sentence automatically to uppercase\n"
+"(e.g. \"my house. in this town\" to \"my house. In this town\")"
+msgstr ""
+"Keisti &pirmą raidę sakinyje automatiškai į didžiąją\n"
+"(pvz. „mano namai. yra čia“ į „Mano namai. Yra čia“)"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperUpper)
+#: AutocorrectConfig.ui:44
+#, kde-format
+msgid ""
+"All words are checked for the common mistake of holding the shift key down a "
+"bit too long. If some words must have two uppercase characters, then those "
+"exceptions should be added in the 'Exceptions' tab."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, upperUpper)
+#: AutocorrectConfig.ui:48
+#, kde-format
+msgid ""
+"Convert &two uppercase characters to one uppercase and one lowercase "
+"character\n"
+" (e.g. PErfect to Perfect)"
+msgstr ""
+"Keisti &dvi didžiąsias raides į vieną didžiąją ir vieną mažąją raides\n"
+" (pvz. NUostabu į Nuostabu)"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoFormatUrl)
+#: AutocorrectConfig.ui:55
+#, kde-format
+msgid ""
+"Detect when a URL (Uniform Resource Locator) is typed and provide formatting "
+"that matches the way an Internet browser would show a URL."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoFormatUrl)
+#: AutocorrectConfig.ui:58
+#, kde-format
+msgid "Autoformat &URLs"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, ignoreDoubleSpace)
+#: AutocorrectConfig.ui:65
+#, kde-format
+msgid ""
+"Make sure that more than one space cannot be typed, as this is a common "
+"mistake which is quite hard to find in formatted text."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, ignoreDoubleSpace)
+#: AutocorrectConfig.ui:68
+#, kde-format
+msgid "&Suppress double spaces"
+msgstr "Šalinti dvigubus tarpus"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, trimParagraphs)
+#: AutocorrectConfig.ui:75
+#, kde-format
+msgid ""
+"Keep correct formatting and indenting of sentences by automatically removing "
+"spaces typed at the beginning and end of a paragraph."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, trimParagraphs)
+#: AutocorrectConfig.ui:78
+#, kde-format
+msgid "R&emove spaces at the beginning and end of paragraphs"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoChangeFormat)
+#: AutocorrectConfig.ui:85
+#, kde-format
+msgid ""
+"When you use _underline_ or *bold*, the text between the underscores or "
+"asterisks will be converted to underlined or bold text."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoChangeFormat)
+#: AutocorrectConfig.ui:88
+#, kde-format
+msgid "Automatically do &bold and underline formatting"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoReplaceNumber)
+#: AutocorrectConfig.ui:95
+#, kde-format
+msgid "Most standard fraction notations will be converted when available"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoReplaceNumber)
+#: AutocorrectConfig.ui:98
+#, kde-format
+msgid "Re&place 1/2... with ½..."
+msgstr "Pa&keisti 1/2... su ½..."
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, useNumberStyle)
+#: AutocorrectConfig.ui:108
+#, kde-format
+msgid ""
+"When typing '1)' or similar in front of a paragraph, automatically convert "
+"the paragraph to use that numbering style. This has the advantage that "
+"further paragraphs will also be numbered and the spacing is done correctly."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, useNumberStyle)
+#: AutocorrectConfig.ui:111
+#, kde-format
+msgid "Use &autonumbering for numbered paragraphs"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoSuperScript)
+#: AutocorrectConfig.ui:121
+#, kde-format
+msgid "Rep&lace 1st... with 1^st..."
+msgstr "Keisti 1st... su 1^st..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, capitalizeDaysName)
+#: AutocorrectConfig.ui:128
+#, kde-format
+msgid "Capitalize name of days"
+msgstr "Dienų vardus rašyti didž. raidėmis"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, useBulletStyle)
+#: AutocorrectConfig.ui:138
+#, kde-format
+msgid ""
+"When typing '*' or '-' in front of a paragraph, automatically convert the "
+"paragraph to use that list-style. Using a list-style formatting means that a "
+"correct bullet is used to draw the list."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, useBulletStyle)
+#: AutocorrectConfig.ui:141
+#, kde-format
+msgid "Use l&ist-formatting for bulleted paragraphs"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, defaultBulletStyle)
+#. i18n: ectx: property (text), widget (QPushButton, doubleDefault)
+#. i18n: ectx: property (text), widget (QPushButton, singleDefault)
+#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
+#: AutocorrectConfig.ui:178 AutocorrectConfig.ui:253 AutocorrectConfig.ui:308
+#: AutocorrectConfig.ui:360
+#, kde-format
+msgid "Default"
+msgstr "Numatytas"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: AutocorrectConfig.ui:214
+#, kde-format
+msgid "Custom &Quotes"
+msgstr "Savitos &kabutės"
+
+#. i18n: ectx: property (text), widget (QCheckBox, typographicDoubleQuotes)
+#: AutocorrectConfig.ui:220
+#, kde-format
+msgid "Replace &double quotes with typographical quotes"
+msgstr "Keisti &dvigubas kabutes tipografinėmis kabutėmis"
+
+#. i18n: ectx: property (text), widget (QCheckBox, typographicSingleQuotes)
+#: AutocorrectConfig.ui:275
+#, kde-format
+msgid "Replace &single quotes with typographical quotes"
+msgstr "Keisti &pavienes kabutes tipografinėmis kabutėmis"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: AutocorrectConfig.ui:344
+#, kde-format
+msgid "Ad&vanced Autocorrection"
+msgstr "Išplėstinis auto taisymas"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: AutocorrectConfig.ui:352
+#, kde-format
+msgid "Replacements and exceptions for language:"
+msgstr "Keitiniai ir išimtys. Kalba"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
+#: AutocorrectConfig.ui:365
+#, kde-format
+msgid "All Languages"
+msgstr "Visos kalbos"
+
+#. i18n: ectx: property (text), widget (QCheckBox, advancedAutocorrection)
+#: AutocorrectConfig.ui:375
+#, kde-format
+msgid "&Enable word replacement"
+msgstr "Įjungti žodžio pakeitimą"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoCorrectionWithFormat)
+#: AutocorrectConfig.ui:385
+#, fuzzy, kde-format
+#| msgid "Rep&lace 1st... with 1^st..."
+msgid "Replace &text with format"
+msgstr "Keisti 1st... su 1^st..."
+
+#. i18n: ectx: property (text), widget (QLabel, findLabel)
+#: AutocorrectConfig.ui:394
+#, kde-format
+msgid "&Find"
+msgstr "&Ieškoti"
+
+#. i18n: ectx: property (text), widget (QToolButton, specialChar1)
+#. i18n: ectx: property (text), widget (QToolButton, specialChar2)
+#: AutocorrectConfig.ui:407 AutocorrectConfig.ui:427
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QLabel, replaceLabel)
+#: AutocorrectConfig.ui:414
+#, kde-format
+msgid "Re&place"
+msgstr "Pakeisti"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#. i18n: ectx: property (text), widget (QPushButton, add1)
+#: AutocorrectConfig.ui:438 AutocorrectConfig.ui:562
+#: AutocorrectConfigDialog.cpp:281
+#, kde-format
+msgid "&Add"
+msgstr "&Pridėti"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeButton)
+#. i18n: ectx: property (text), widget (QPushButton, remove2)
+#: AutocorrectConfig.ui:445 AutocorrectConfig.ui:637
+#, kde-format
+msgid "Remove"
+msgstr "Pašalinti"
+
+#. i18n: ectx: property (text), widget (QPushButton, changeFormat)
+#: AutocorrectConfig.ui:455
+#, kde-format
+msgid "C&hange Format..."
+msgstr "Pakeisti formatavimą..."
+
+#. i18n: ectx: property (text), widget (QPushButton, clearFormat)
+#: AutocorrectConfig.ui:465
+#, kde-format
+msgid "C&lear Format"
+msgstr "Išvalyti formatavimą"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
+#: AutocorrectConfig.ui:503
+#, kde-format
+msgid "Find"
+msgstr "Ieškoti"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
+#: AutocorrectConfig.ui:508
+#, kde-format
+msgid "Replace"
+msgstr "Pakeisti"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
+#: AutocorrectConfig.ui:517
+#, kde-format
+msgid "E&xceptions"
+msgstr "Išimtys"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: AutocorrectConfig.ui:525
+#, kde-format
+msgid "Do not treat as the end of a sentence:"
+msgstr "Nelaikyti sakinio pabaiga:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoinclude1)
+#. i18n: ectx: property (text), widget (QCheckBox, autoinclude2)
+#: AutocorrectConfig.ui:551 AutocorrectConfig.ui:619
+#, fuzzy, kde-format
+msgid "Autoinclude"
+msgstr "Automatinis įtraukimas"
+
+#. i18n: ectx: property (text), widget (QPushButton, remove1)
+#: AutocorrectConfig.ui:569
+#, kde-format
+msgid "R&emove"
+msgstr "&Pašalinti"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: AutocorrectConfig.ui:593
+#, kde-format
+msgid "Accept two uppercase letters in:"
+msgstr "Leisti dvi didžiąsias raidės:"
+
+#. i18n: ectx: property (text), widget (QPushButton, add2)
+#: AutocorrectConfig.ui:630
+#, kde-format
+msgid "A&dd"
+msgstr "Pri&dėti"
+
+#: AutocorrectConfigDialog.cpp:277
+#, kde-format
+msgid "&Modify"
+msgstr "&Modifikuoti"
+
+#: AutocorrectConfigDialog.cpp:378
+#, kde-format
+msgid "Select Character"
+msgstr "Parinkti rašmenį"
+
+#: AutocorrectFactory.cpp:16
+#, kde-format
+msgid "Autocorrect"
+msgstr "Auto taisymas"
+
+#, fuzzy
+#~| msgid "Si&mple Autocorrection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Si&mple Autocorrection"
+#~ msgstr "Paprastas auto taisymas"
+
+#, fuzzy
+#~| msgid ""
+#~| "Convert &first letter of a sentence automatically to uppercase\n"
+#~| "(e.g. \"my house. in this town\" to \"my house. In this town\")"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Convert &first letter of a sentence automatically to uppercase\n"
+#~ "(e.g. \"my house. in this town\" to \"my house. In this town\")"
+#~ msgstr ""
+#~ "Keisti &pirmą raidę sakinyje automatiškai į didžiąją\n"
+#~ "(pvz. „mano namai. yra čia“ į „Mano namai. Yra čia“)"
+
+#, fuzzy
+#~| msgid ""
+#~| "Convert &two uppercase characters to one uppercase and one lowercase "
+#~| "character\n"
+#~| " (e.g. PErfect to Perfect)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Convert &two uppercase characters to one uppercase and one lowercase "
+#~ "character\n"
+#~ " (e.g. PErfect to Perfect)"
+#~ msgstr ""
+#~ "Keisti &dvi didžiąsias raides į vieną didžiąją ir vieną mažąją raides\n"
+#~ " (pvz. NUostabu į Nuostabu)"
+
+#, fuzzy
+#~| msgid "&Suppress double spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Suppress double spaces"
+#~ msgstr "Šalinti dvigubus tarpus"
+
+#, fuzzy
+#~| msgid "Re&place 1/2... with ½..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&place 1/2... with ½..."
+#~ msgstr "Pa&keisti 1/2... su ½..."
+
+#, fuzzy
+#~| msgid "Rep&lace 1st... with 1^st..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rep&lace 1st... with 1^st..."
+#~ msgstr "Keisti 1st... su 1^st..."
+
+#, fuzzy
+#~| msgid "Capitalize name of days"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Capitalize name of days"
+#~ msgstr "Dienų vardus rašyti didž. raidėmis"
+
+#, fuzzy
+#~| msgid "Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Numatytas"
+
+#, fuzzy
+#~| msgid "Custom &Quotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom &Quotes"
+#~ msgstr "Savitos &kabutės"
+
+#, fuzzy
+#~| msgid "Replace &double quotes with typographical quotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace &double quotes with typographical quotes"
+#~ msgstr "Keisti &dvigubas kabutes tipografinėmis kabutėmis"
+
+#, fuzzy
+#~| msgid "Replace &single quotes with typographical quotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace &single quotes with typographical quotes"
+#~ msgstr "Keisti &pavienes kabutes tipografinėmis kabutėmis"
+
+#, fuzzy
+#~| msgid "Ad&vanced Autocorrection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ad&vanced Autocorrection"
+#~ msgstr "Išplėstinis auto taisymas"
+
+#, fuzzy
+#~| msgid "Replacements and exceptions for language:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replacements and exceptions for language:"
+#~ msgstr "Keitiniai ir išimtys. Kalba"
+
+#, fuzzy
+#~| msgid "All Languages"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All Languages"
+#~ msgstr "Visos kalbos"
+
+#, fuzzy
+#~| msgid "&Enable word replacement"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Enable word replacement"
+#~ msgstr "Įjungti žodžio pakeitimą"
+
+#, fuzzy
+#~| msgid "Rep&lace 1st... with 1^st..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace &text with format"
+#~ msgstr "Keisti 1st... su 1^st..."
+
+#, fuzzy
+#~| msgid "&Find"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Find"
+#~ msgstr "&Ieškoti"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Re&place"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&place"
+#~ msgstr "Pakeisti"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Pašalinti"
+
+#, fuzzy
+#~| msgid "C&hange Format..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&hange Format..."
+#~ msgstr "Pakeisti formatavimą..."
+
+#, fuzzy
+#~| msgid "C&lear Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&lear Format"
+#~ msgstr "Išvalyti formatavimą"
+
+#, fuzzy
+#~| msgid "Find"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Find"
+#~ msgstr "Ieškoti"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Pakeisti"
+
+#, fuzzy
+#~| msgid "E&xceptions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&xceptions"
+#~ msgstr "Išimtys"
+
+#, fuzzy
+#~| msgid "Do not treat as the end of a sentence:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do not treat as the end of a sentence:"
+#~ msgstr "Nelaikyti sakinio pabaiga:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Autoinclude"
+#~ msgstr "Automatinis įtraukimas"
+
+#, fuzzy
+#~| msgid "R&emove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&emove"
+#~ msgstr "&Pašalinti"
+
+#, fuzzy
+#~| msgid "Accept two uppercase letters in:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Accept two uppercase letters in:"
+#~ msgstr "Leisti dvi didžiąsias raidės:"
+
+#, fuzzy
+#~| msgid "A&dd"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A&dd"
+#~ msgstr "Pri&dėti"
+
+#, fuzzy
+#~| msgid "Configure &Autocorrection..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Konfigūruoti auto taisymą..."
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Autocorrection"
+#~ msgstr "Auto taisymas"
+
+#, fuzzy
+#~| msgid "&Modify"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Modify"
+#~ msgstr "&Modifikuoti"
+
+#, fuzzy
+#~| msgid "&Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Add"
+#~ msgstr "&Pridėti"
+
+#, fuzzy
+#~| msgid "Select Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Character"
+#~ msgstr "Parinkti rašmenį"
+
+#, fuzzy
+#~| msgid "Autocorrect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Autocorrect"
+#~ msgstr "Auto taisymas"

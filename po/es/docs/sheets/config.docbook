@@ -1,0 +1,152 @@
+<chapter id="configure">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Juan Manuel</firstname
+><surname
+>García Molina</surname
+><affiliation
+><address
+><email
+>juanma@superiodico.net</email
+></address
+></affiliation
+><contrib
+>Traductor</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Configuración de los accesos rápidos y las barras de herramientas de &sheets;</title>
+
+<sect1 id="configshort">
+<title
+>Accesos rápidos</title>
+<para
+>Para modificar las combinaciones de accesos rápidos que utiliza &sheets;, seleccione <menuchoice
+><guimenu
+>Preferencias</guimenu
+><guimenuitem
+>Configurar los accesos rápidos...</guimenuitem
+></menuchoice
+>. Esto lanzará un cuadro de diálogo como el que se muestra a continuación. </para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Captura de pantalla de configuración de atajo 1</phrase>
+</textobject>
+</mediaobject>
+<para
+>Busque a través de la lista de selección múltiple hasta encontrar la acción que quiera añadir o para la que quiera cambiar el acceso rápido de teclado y selecciónela haciendo clic <mousebutton
+>izquierdo</mousebutton
+> sobre el nombre. Si introduce el nombre de la acción en la barra de búsqueda de arriba, puede encontrar rápidamente la acción deseada. Entonces podrá cambiar el acceso rápido seleccionando el botón de radio <guilabel
+>Ninguno</guilabel
+>, <guilabel
+>Predeterminado</guilabel
+> o <guilabel
+>Personalizado</guilabel
+>.</para>
+<para
+>Ahora puede simplemente presionar la combinación de teclas que quiera como acceso rápido, por ejemplo <keycombo action="simul"
+> &Ctrl;&Shift;<keycap
+>S</keycap
+></keycombo
+>.</para>
+</sect1>
+
+<sect1 id="configtoolbars">
+<title
+>Barras de herramientas</title>
+<para
+>&sheets; tiene seis barras de herramientas: <guilabel
+>Archivo</guilabel
+>, <guilabel
+>Editar</guilabel
+>, <guilabel
+>Navegación</guilabel
+>, <guilabel
+>Formato</guilabel
+>, <guilabel
+>Tipo de letra</guilabel
+> y <guilabel
+>Color/borde</guilabel
+>, cada una de las cuales puede ser mostrada o no dependiendo de la configuración realizada en el menú <guimenu
+>Preferencias</guimenu
+>.</para>
+<para
+>Si las barras de herramientas están desbloqueadas, puede decidir si una barra de herramientas debe aparecer <guimenuitem
+>Arriba</guimenuitem
+>, a la <guimenuitem
+>Izquierda</guimenuitem
+>, a la <guimenuitem
+>Derecha</guimenuitem
+> o <guimenuitem
+>Abajo</guimenuitem
+> en la ventana de &sheets; haciendo clic con el botón <mousebutton
+>derecho</mousebutton
+> del ratón sobre esa barra de herramientas, lo que hará que aparezca el <guilabel
+>Menú de la barra de herramientas</guilabel
+>, y haciendo una selección en el submenú <guisubmenu
+>Orientación</guisubmenu
+>. Este <guilabel
+>Menú de la barra de herramientas</guilabel
+> también tiene submenús para seleccionar si la barra de herramientas debe mostrar iconos, texto o ambos, y el tamaño de los iconos.</para>
+
+<para
+>Otra forma de mover una barra de herramientas es posicionando el puntero del ratón sobre las dos barras verticales situadas en el borde izquierdo de cada barra de herramientas y mantener pulsado el botón <mousebutton
+>izquierdo</mousebutton
+> del ratón mientras arrastra la barra de herramientas a la posición deseada. Cuando arrastre la barra de herramientas de esta manera puede soltar el botón del ratón cuando esté a cierta distancia de cualquiera de los laterales de la ventana de &sheets;, y entonces tendrá una barra de herramientas flotante, que no está fijada a ninguna parte concreta de la ventana de &sheets; y que por tanto se puede mover fuera de la ventana. Para volver a poner en una de las posiciones tradicionales una barra de herramientas flotante, haga clic <mousebutton
+>derecho</mousebutton
+> sobre su barra de título para hacer surgir el <guilabel
+>Menú de la barra de herramientas</guilabel
+> y luego seleccione una de las opciones del submenú <guisubmenu
+>Orientación</guisubmenu
+>.</para>
+
+<para
+>Seleccionar <guimenuitem
+>Configurar barras de herramientas...</guimenuitem
+> del menú <guimenu
+>Preferencias</guimenu
+> le mostrará un cuadro de diálogo que le permitirá añadir botones o eliminarlos de las barras de herramientas de &sheets;.</para>
+<para
+>Para usar este cuadro de diálogo <guilabel
+>Configurar barras de herramientas</guilabel
+>, seleccione primero una barra de herramientas de la lista desplegable <guilabel
+>Barra de herramientas:</guilabel
+>. A la derecha de la ventana <guilabel
+>Acciones actuales:</guilabel
+> se le mostrarán los botones presentes actualmente sobre la barra de herramientas. Puede borrar un botón seleccionándolo en esta ventana y pulsando luego el botón de la flecha izquierda, o muévalo arriba o abajo presoonando los botones de flecha arriba y abajo. Para añadir un botón nuevo a la barra de herramientas, selecciónelo en la lista <guilabel
+>Acciones disponibles:</guilabel
+> y presione luego el botón de flecha a la derecha.</para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

@@ -1,0 +1,3009 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2008.
+# Petros <pvidalis@gmail.com>, 2010.
+# Stelios <sstavra@gmail.com>, 2011, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: ChartShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2020-10-11 13:48+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 20.04.2\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Stelios"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "sstavra@gmail.com"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
+#: AxesConfigWidget.cpp:80 AxesConfigWidget.cpp:86 LegendConfigWidget.ui:33
+#, kde-format
+msgid "Start"
+msgstr "Αρχή"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
+#: AxesConfigWidget.cpp:81 AxesConfigWidget.cpp:85 LegendConfigWidget.ui:43
+#, kde-format
+msgid "End"
+msgstr "Τέλος"
+
+#: AxesConfigWidget.cpp:83
+#, kde-format
+msgid "Near-axis"
+msgstr "Κοντά-στον-άξονα"
+
+#: AxesConfigWidget.cpp:84
+#, kde-format
+msgid "Other-side"
+msgstr "Άλλη-πλευρά"
+
+#: AxesConfigWidget.cpp:253 AxesConfigWidget.cpp:261 ChartTool.cpp:994
+#: DataSetConfigWidget.cpp:353
+#, kde-format
+msgid "Axistitle"
+msgstr "Τίτλος άξονα"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShow)
+#: AxesConfigWidget.ui:45
+#, kde-format
+msgid "Show Axis"
+msgstr "Εμφάνιση άξονα"
+
+#. i18n: ectx: property (text), widget (QToolButton, axisScalingButton)
+#: AxesConfigWidget.ui:58
+#, kde-format
+msgid "Scale"
+msgstr "Κλίμακα"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowLabels)
+#: AxesConfigWidget.ui:65
+#, kde-format
+msgid "Show Labels"
+msgstr "Εμφάνιση ετικετών"
+
+#. i18n: ectx: property (text), widget (QToolButton, axisEditFontButton)
+#: AxesConfigWidget.ui:72
+#, kde-format
+msgid "Font"
+msgstr "Γραμματοσειρά"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
+#: AxesConfigWidget.ui:81
+#, kde-format
+msgid "Show Major Grid"
+msgstr "Εμφάνιση κύριου πλέγματος"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowMinorGridLines)
+#: AxesConfigWidget.ui:88
+#, kde-format
+msgid "Show Minor Grid"
+msgstr "Εμφάνιση μικρού πλέγματος"
+
+#. i18n: ectx: property (text), widget (QLabel, barPropertiesLabel)
+#: AxesConfigWidget.ui:119
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"size:8pt; font-weight:600;\">Bar Properties</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"size:8pt; font-weight:600;\">Ιδιότητες ράβδου</span></p></body></html>"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, explodeFactor)
+#. i18n: ectx: property (suffix), widget (QSpinBox, gapBetweenBars)
+#. i18n: ectx: property (suffix), widget (QSpinBox, gapBetweenSets)
+#: AxesConfigWidget.ui:132 AxesConfigWidget.ui:174 PieConfigWidget.ui:39
+#: widgets/RingConfigWidget.ui:147
+#, no-c-format, kde-format
+msgid "%"
+msgstr "%"
+
+#. i18n: ectx: property (text), widget (QLabel, gapBetweenSetsLabel)
+#: AxesConfigWidget.ui:154
+#, kde-format
+msgid "Gap Between Sets"
+msgstr "Κενό μεταξύ συνόλων"
+
+#. i18n: ectx: property (text), widget (QLabel, gapBetweenBarsLabel)
+#: AxesConfigWidget.ui:167
+#, kde-format
+msgid "Gap Between Bars"
+msgstr "Κενό μεταξύ ράβδων"
+
+#. i18n: ectx: property (text), widget (QCheckBox, axisShowTitle)
+#: AxesConfigWidget.ui:193
+#, kde-format
+msgid "Show Title"
+msgstr "Εμφάνιση τίτλου"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:201
+#, kde-format
+msgid "Primary X Axis"
+msgstr "Κύριος X άξονας"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:206 DataSetConfigWidget.ui:95
+#, kde-format
+msgid "Primary Y Axis"
+msgstr "Κύριος Y άξονας"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:211
+#, kde-format
+msgid "Secondary X Axis"
+msgstr "Δευτερεύων X άξονας"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
+#. i18n: ectx: property (text), item, widget (QComboBox, axes)
+#: AxesConfigWidget.ui:216 DataSetConfigWidget.ui:100
+#, kde-format
+msgid "Secondary Y Axis"
+msgstr "Δευτερεύων Y άξονας"
+
+#: ChartShape.cpp:311
+#, kde-format
+msgid ""
+"The plugin needed for displaying text labels in a chart is not available."
+msgstr ""
+"Το πρόσθετο που απαιτείται για την εμφάνιση ετικετών κειμένου σε ένα "
+"διάγραμμα δεν είναι διαθέσιμο."
+
+#: ChartShape.cpp:312
+#, kde-format
+msgid "Plugin Missing"
+msgstr "Λείπει πρόσθετο"
+
+#: ChartShape.cpp:316
+#, kde-format
+msgid ""
+"The plugin needed for displaying text labels is not compatible with the "
+"current version of the chart Flake shape."
+msgstr ""
+"Το πρόσθετο που απαιτείται για την εμφάνιση ετικετών κειμένου δεν είναι "
+"συμβατό με την τρέχουσα έκδοση του σχήματος διαγράμματος Flake."
+
+#: ChartShape.cpp:317
+#, kde-format
+msgid "Plugin Incompatible"
+msgstr "Μη συμβατό πρόσθετο"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showTitle)
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: ChartShape.cpp:335 LegendConfigWidget.ui:123 TitlesConfigWidget.ui:44
+#, kde-format
+msgid "Title"
+msgstr "Τίτλος"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showSubTitle)
+#: ChartShape.cpp:365 TitlesConfigWidget.ui:85
+#, kde-format
+msgid "Subtitle"
+msgstr "Υπότιτλος"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showFooter)
+#: ChartShape.cpp:395 TitlesConfigWidget.ui:126
+#, kde-format
+msgid "Footer"
+msgstr "Υποσέλιδο"
+
+#: ChartShape.cpp:787
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"Αυτό το έγγραφο περιέχει έναν εξωτερικό σύνδεσμο σε ένα απομακρυσμένο "
+"έγγραφο\n"
+"%1"
+
+#: ChartShape.cpp:788
+#, kde-format
+msgid "Confirmation Required"
+msgstr "Απαιτείται επιβεβαίωση"
+
+#: ChartShape.cpp:788
+#, kde-format
+msgid "Download"
+msgstr "Λήψη"
+
+#: ChartShape.cpp:788
+#, kde-format
+msgid "Skip"
+msgstr "Παράλειψη"
+
+#: ChartShapeFactory.cpp:57
+#, kde-format
+msgid "Chart"
+msgstr "Διάγραμμα"
+
+#: ChartShapeFactory.cpp:60
+#, kde-format
+msgid "Business charts"
+msgstr "Επαγγελματικά διαγράμματα"
+
+#: ChartShapeFactory.cpp:79 DataSetConfigWidget.cpp:202
+#: PlotAreaConfigWidget.cpp:236
+#, kde-format
+msgid "Bar Chart"
+msgstr "Ραβδόγραμμα"
+
+#: ChartShapeFactory.cpp:80
+#, kde-format
+msgid "Normal bar chart"
+msgstr "Κανονικό ραβδόγραμμα"
+
+#: ChartShapeFactory.cpp:90
+#, kde-format
+msgid "Stacked Bar Chart"
+msgstr "Ραβδόγραμμα με στοίβα"
+
+#: ChartShapeFactory.cpp:91
+#, kde-format
+msgid "Stacked bar chart"
+msgstr "Ραβδόγραμμα με στοίβα"
+
+#: ChartShapeFactory.cpp:101
+#, kde-format
+msgid "Percent Bar Chart"
+msgstr "Ποσοστιαίο ραβδόγραμμα"
+
+#: ChartShapeFactory.cpp:102
+#, kde-format
+msgid "Percent bar chart"
+msgstr "Ποσοστιαίο ραβδόγραμμα"
+
+#: ChartShapeFactory.cpp:112 DataSetConfigWidget.cpp:207
+#: PlotAreaConfigWidget.cpp:242
+#, kde-format
+msgid "Line Chart"
+msgstr "Γραμμικό διάγραμμα"
+
+#: ChartShapeFactory.cpp:113
+#, kde-format
+msgid "Normal line chart"
+msgstr "Κανονικό γραμμικό διάγραμμα"
+
+#: ChartShapeFactory.cpp:123
+#, kde-format
+msgid "Stacked Line Chart"
+msgstr "Γραμμικό διάγραμμα με στοίβα"
+
+#: ChartShapeFactory.cpp:124
+#, kde-format
+msgid "Stacked line chart"
+msgstr "Γραμμικό διάγραμμα με στοίβα"
+
+#: ChartShapeFactory.cpp:134
+#, kde-format
+msgid "Percent Line Chart"
+msgstr "Ποσοστιαίο διάγραμμα"
+
+#: ChartShapeFactory.cpp:135
+#, kde-format
+msgid "Percent line chart"
+msgstr "Ποσοστιαίο διάγραμμα"
+
+#: ChartShapeFactory.cpp:145 DataSetConfigWidget.cpp:212
+#: PlotAreaConfigWidget.cpp:248
+#, kde-format
+msgid "Area Chart"
+msgstr "Διάγραμμα επιφάνειας"
+
+#: ChartShapeFactory.cpp:146
+#, kde-format
+msgid "Normal area chart"
+msgstr "Κανονικό διάγραμμα επιφάνειας"
+
+#: ChartShapeFactory.cpp:156
+#, kde-format
+msgid "Stacked Area Chart"
+msgstr "Διάγραμμα επιφάνειας με στοίβα"
+
+#: ChartShapeFactory.cpp:157
+#, kde-format
+msgid "Stacked area chart"
+msgstr "Διάγραμμα επιφάνειας με στοίβα"
+
+#: ChartShapeFactory.cpp:167
+#, kde-format
+msgid "Percent Area Chart"
+msgstr "Ποσοστιαίο διάγραμμα επιφάνειας"
+
+#: ChartShapeFactory.cpp:168
+#, kde-format
+msgid "Percent area chart"
+msgstr "Ποσοστιαίο διάγραμμα επιφάνειας"
+
+#: ChartShapeFactory.cpp:178 DataSetConfigWidget.cpp:217
+#: PlotAreaConfigWidget.cpp:256
+#, kde-format
+msgid "Pie Chart"
+msgstr "Διάγραμμα πίτας"
+
+#: ChartShapeFactory.cpp:179
+#, kde-format
+msgid "Pie chart"
+msgstr "Διάγραμμα πίτας"
+
+#: ChartShapeFactory.cpp:189 DataSetConfigWidget.cpp:218
+#: PlotAreaConfigWidget.cpp:257
+#, kde-format
+msgid "Ring Chart"
+msgstr "Διάγραμμα δακτυλίου"
+
+#: ChartShapeFactory.cpp:190
+#, kde-format
+msgid "Ring chart"
+msgstr "Διάγραμμα δακτυλίου"
+
+#: ChartShapeFactory.cpp:200 DataSetConfigWidget.cpp:229
+#: PlotAreaConfigWidget.cpp:270
+#, kde-format
+msgid "Bubble Chart"
+msgstr "Διάγραμμα φυσαλίδων"
+
+#: ChartShapeFactory.cpp:201
+#, kde-format
+msgid "Bubble chart"
+msgstr "Διάγραμμα φυσαλίδων"
+
+#: ChartShapeFactory.cpp:211 DataSetConfigWidget.cpp:231
+#: PlotAreaConfigWidget.cpp:269
+#, kde-format
+msgid "Scatter Chart"
+msgstr "Διάγραμμα διασποράς"
+
+#: ChartShapeFactory.cpp:212
+#, kde-format
+msgid "Scatter chart"
+msgstr "Διάγραμμα διασποράς"
+
+#: ChartShapeFactory.cpp:222
+#, kde-format
+msgid "Radar Chart"
+msgstr "Διάγραμμα ραντάρ"
+
+#: ChartShapeFactory.cpp:223
+#, kde-format
+msgid "Radar chart"
+msgstr "Διάγραμμα ραντάρ"
+
+#: ChartShapeFactory.cpp:233
+#, kde-format
+msgid "Filled Radar Chart"
+msgstr "Διάγραμμα ραντάρ με γέμιση χρώματος"
+
+#: ChartShapeFactory.cpp:234
+#, kde-format
+msgid "Filled radar chart"
+msgstr "Διάγραμμα ραντάρ με γέμιση χρώματος"
+
+#: ChartShapeFactory.cpp:244
+#, kde-format
+msgid "Candle Stick Stock Chart"
+msgstr "Διάγραμμα μετοχών κηροπήγιο"
+
+#: ChartShapeFactory.cpp:245
+#, kde-format
+msgid "Japanese candle stick stock chart"
+msgstr "Διάγραμμα μετοχών Ιαπωνικό κηροπήγιο"
+
+#: ChartShapeFactory.cpp:255
+#, kde-format
+msgid "OHLC Stock Chart"
+msgstr "Διάγραμμα μετοχών OHLC"
+
+#: ChartShapeFactory.cpp:256
+#, kde-format
+msgid "Open High Low Close stock chart"
+msgstr "Άνοιγμα υψηλό χαμηλό κλείσιμο διάγραμμα μετοχών"
+
+#: ChartShapeFactory.cpp:266
+#, kde-format
+msgid "HLC Stock Chart"
+msgstr "Διάγραμμα μετοχών HLC"
+
+#: ChartShapeFactory.cpp:267
+#, kde-format
+msgid "High Low Close stock chart"
+msgstr "Υψηλό χαμηλό κλείσιμο διάγραμμα μετοχών"
+
+#: ChartShapeFactory.cpp:364 ChartShapeFactory.cpp:550
+#: ChartShapeFactory.cpp:633
+#, kde-format
+msgid "January"
+msgstr "Ιανουάριος"
+
+#: ChartShapeFactory.cpp:365 ChartShapeFactory.cpp:551
+#: ChartShapeFactory.cpp:634
+#, kde-format
+msgid "July"
+msgstr "Ιούλιος"
+
+#: ChartShapeFactory.cpp:366 ChartShapeFactory.cpp:552
+#: ChartShapeFactory.cpp:635
+#, kde-format
+msgid "December"
+msgstr "Δεκέμβριος"
+
+#: ChartShapeFactory.cpp:369 ChartShapeFactory.cpp:370
+#: ChartShapeFactory.cpp:371 ChartShapeFactory.cpp:372
+#: ChartShapeFactory.cpp:555 ChartShapeFactory.cpp:556
+#: ChartShapeFactory.cpp:557 ChartShapeFactory.cpp:558
+#: ChartShapeFactory.cpp:638 ChartShapeFactory.cpp:639
+#: dialogs/BubbleDataEditor.cpp:67 dialogs/ScatterDataEditor.cpp:71
+#, kde-format
+msgid "Column %1"
+msgstr "Στήλη %1"
+
+#: ChartShapeFactory.cpp:396
+#, kde-format
+msgid "Month"
+msgstr "Μήνας"
+
+#: ChartShapeFactory.cpp:398
+#, kde-format
+msgid "Growth in %"
+msgstr "Ανάπτυξη σε %"
+
+#: ChartShapeFactory.cpp:460
+#, kde-format
+msgid "Share A"
+msgstr "Μετοχή Α"
+
+#: ChartShapeFactory.cpp:461
+#, kde-format
+msgid "Share B"
+msgstr "Μετοχή Β"
+
+#: ChartShapeFactory.cpp:462
+#, kde-format
+msgid "Share C"
+msgstr "Μετοχή Γ"
+
+#: ChartShapeFactory.cpp:465
+#, kde-format
+msgid "Open"
+msgstr "Άνοιγμα"
+
+#: ChartShapeFactory.cpp:466
+#, kde-format
+msgid "High"
+msgstr "Υψηλό"
+
+#: ChartShapeFactory.cpp:467
+#, kde-format
+msgid "Low"
+msgstr "Χαμηλό"
+
+#: ChartShapeFactory.cpp:468
+#, kde-format
+msgid "Close"
+msgstr "Κλείσιμο"
+
+#: ChartShapeFactory.cpp:583
+#, kde-format
+msgid "Growth"
+msgstr "Ανάπτυξη"
+
+#: ChartTool.cpp:103
+#, kde-format
+msgid "Do something"
+msgstr "Κάποια ενέργεια"
+
+#: ChartTool.cpp:108
+#, kde-format
+msgid "Do something else"
+msgstr "Κάποια άλλη ενέργεια"
+
+#: ChartTool.cpp:277
+#, kde-format
+msgid "Titles"
+msgstr "Τίτλοι"
+
+#: ChartTool.cpp:292
+#, kde-format
+msgid "Legend"
+msgstr "Υπόμνημα"
+
+#: ChartTool.cpp:312
+#, kde-format
+msgid "Plot Area"
+msgstr "Περιοχή σχεδίασης"
+
+#: ChartTool.cpp:1142
+msgctxt "(qtundo-format)"
+msgid "Show Legend"
+msgstr "Εμφάνιση υπομνήματος"
+
+#: ChartTool.cpp:1144
+msgctxt "(qtundo-format)"
+msgid "Hide Legend"
+msgstr "Απόκρυψη υπομνήματος"
+
+#: ChartToolFactory.cpp:29
+#, kde-format
+msgid "Chart editing"
+msgstr "Επεξεργασία διαγράμματος"
+
+#: commands/AddRemoveAxisCommand.cpp:37
+msgctxt "(qtundo-format)"
+msgid "Add Axis"
+msgstr "Προσθήκη άξονα"
+
+#: commands/AddRemoveAxisCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Remove Axis"
+msgstr "Αφαίρεση άξονα"
+
+#: commands/AxisCommand.cpp:120
+msgctxt "(qtundo-format)"
+msgid "Show Axis Title"
+msgstr "Εμφάνιση τίτλου άξονα"
+
+#: commands/AxisCommand.cpp:122
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Title"
+msgstr "Απόκρυψη τίτλου άξονα"
+
+#: commands/AxisCommand.cpp:147
+msgctxt "(qtundo-format)"
+msgid "Show Axis"
+msgstr "Εμφάνιση άξονα"
+
+#: commands/AxisCommand.cpp:149
+msgctxt "(qtundo-format)"
+msgid "Hide Axis"
+msgstr "Απόκρυψη άξονα"
+
+#: commands/AxisCommand.cpp:158
+msgctxt "(qtundo-format)"
+msgid "Show Axis Labels"
+msgstr "Εμφάνιση ετικετών άξονα"
+
+#: commands/AxisCommand.cpp:160
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Labels"
+msgstr "Απόκρυψη ετικετών άξονα"
+
+#: commands/AxisCommand.cpp:169
+msgctxt "(qtundo-format)"
+msgid "Show Axis Major Gridlines"
+msgstr "Εμφάνιση κύριων γραμμών πλέγματος άξονα"
+
+#: commands/AxisCommand.cpp:171
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Major Gridlines"
+msgstr "Απόκρυψη κύριων γραμμών πλέγματος άξονα"
+
+#: commands/AxisCommand.cpp:180
+msgctxt "(qtundo-format)"
+msgid "Show Axis Minor Gridlines"
+msgstr "Εμφάνιση δευτερευουσών γραμμών πλέγματος άξονα"
+
+#: commands/AxisCommand.cpp:182
+msgctxt "(qtundo-format)"
+msgid "Hide Axis Minor Gridlines"
+msgstr "Απόκρυψη δευτερευουσών γραμμών πλέγματος άξονα"
+
+#: commands/AxisCommand.cpp:191
+msgctxt "(qtundo-format)"
+msgid "Logarithmic Scaling"
+msgstr "Λογαριθμική κλίμακα"
+
+#: commands/AxisCommand.cpp:193
+msgctxt "(qtundo-format)"
+msgid "Linear Scaling"
+msgstr "Γραμμική κλίμακα"
+
+#: commands/AxisCommand.cpp:201
+msgctxt "(qtundo-format)"
+msgid "Set Axis Step Width"
+msgstr "Ρύθμιση πλάτους βήματος άξονα"
+
+#: commands/AxisCommand.cpp:208
+msgctxt "(qtundo-format)"
+msgid "Set Axis Substep Width"
+msgstr "Ρύθμιση πλάτους υποβήματος άξονα"
+
+#: commands/AxisCommand.cpp:216
+msgctxt "(qtundo-format)"
+msgid "Set Automatic Step Width"
+msgstr "Ρύθμιση πλάτους αυτόματου βήματος"
+
+#: commands/AxisCommand.cpp:218
+msgctxt "(qtundo-format)"
+msgid "Set Manual Step Width"
+msgstr "Ρύθμιση πλάτους χειροκίνητου βήματος"
+
+#: commands/AxisCommand.cpp:227
+msgctxt "(qtundo-format)"
+msgid "Automatic Substep Width"
+msgstr "Πλάτος αυτόματου υποβήματος"
+
+#: commands/AxisCommand.cpp:229
+msgctxt "(qtundo-format)"
+msgid "Manual Substep Width"
+msgstr "Πλάτος χειροκίνητου υποβήματος"
+
+#: commands/AxisCommand.cpp:237
+msgctxt "(qtundo-format)"
+msgid "Set Axis Label Font"
+msgstr "Ρύθμιση γραμματοσειράς ετικέτας άξονα"
+
+#: commands/AxisCommand.cpp:243
+msgctxt "(qtundo-format)"
+msgid "Set Axis Position"
+msgstr "Ρύθμιση θέσης άξονα"
+
+#: commands/AxisCommand.cpp:264
+msgctxt "(qtundo-format)"
+msgid "Set Axis Labels Position"
+msgstr "Ρύθμιση θέσης ετικετών άξονα"
+
+#: commands/ChartTextShapeCommand.cpp:36
+msgctxt "(qtundo-format)"
+msgid "Show Text Shape"
+msgstr "Εμφάνιση σχήματος κειμένου"
+
+#: commands/ChartTextShapeCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Hide Text Shape"
+msgstr "Απόκρυψη σχήματος κειμένου"
+
+#: commands/ChartTypeCommand.cpp:80
+msgctxt "(qtundo-format)"
+msgid "Normal Bar Chart"
+msgstr "Κανονικό ραβδόγραμμα"
+
+#: commands/ChartTypeCommand.cpp:83
+msgctxt "(qtundo-format)"
+msgid "Stacked Bar Chart"
+msgstr "Ραβδόγραμμα με στοίβα"
+
+#: commands/ChartTypeCommand.cpp:86
+msgctxt "(qtundo-format)"
+msgid "Percent Bar Chart"
+msgstr "Ποσοστιαίο ραβδόγραμμα"
+
+#: commands/ChartTypeCommand.cpp:95
+msgctxt "(qtundo-format)"
+msgid "Normal Line Chart"
+msgstr "Κανονικό διάγραμμα"
+
+#: commands/ChartTypeCommand.cpp:98
+msgctxt "(qtundo-format)"
+msgid "Stacked Line Chart"
+msgstr "Γραμμικό διάγραμμα με στοίβα"
+
+#: commands/ChartTypeCommand.cpp:101
+msgctxt "(qtundo-format)"
+msgid "Percent Line Chart"
+msgstr "Ποσοστιαίο γραμμικό διάγραμμα"
+
+#: commands/ChartTypeCommand.cpp:110
+msgctxt "(qtundo-format)"
+msgid "Normal Area Chart"
+msgstr "Κανονικό διάγραμμα επιφάνειας"
+
+#: commands/ChartTypeCommand.cpp:113
+msgctxt "(qtundo-format)"
+msgid "Stacked Area Chart"
+msgstr "Διάγραμμα επιφάνειας με στοίβα"
+
+#: commands/ChartTypeCommand.cpp:116
+msgctxt "(qtundo-format)"
+msgid "Percent Area Chart"
+msgstr "Ποσοστιαίο διάγραμμα επιφάνειας"
+
+#: commands/ChartTypeCommand.cpp:123
+msgctxt "(qtundo-format)"
+msgid "Circle Chart"
+msgstr "Κυκλικό διάγραμμα"
+
+#: commands/ChartTypeCommand.cpp:126
+msgctxt "(qtundo-format)"
+msgid "Ring Chart"
+msgstr "Διάγραμμα δακτυλίου"
+
+#: commands/ChartTypeCommand.cpp:129
+msgctxt "(qtundo-format)"
+msgid "Scatter Chart"
+msgstr "Διάγραμμα διασποράς"
+
+#: commands/ChartTypeCommand.cpp:132
+msgctxt "(qtundo-format)"
+msgid "Radar Chart"
+msgstr "Διάγραμμα ραντάρ"
+
+#: commands/ChartTypeCommand.cpp:135
+msgctxt "(qtundo-format)"
+msgid "Filled Radar Chart"
+msgstr "Διάγραμμα ραντάρ με γέμιση χρώματος"
+
+#: commands/ChartTypeCommand.cpp:138
+msgctxt "(qtundo-format)"
+msgid "Stock Chart"
+msgstr "Διάγραμμα μετοχών"
+
+#: commands/ChartTypeCommand.cpp:141
+msgctxt "(qtundo-format)"
+msgid "Bubble Chart"
+msgstr "Διάγραμμα φυσαλίδων"
+
+#: commands/ChartTypeCommand.cpp:144
+msgctxt "(qtundo-format)"
+msgid "Surface Chart"
+msgstr "Διάγραμμα επιφάνειας"
+
+#: commands/ChartTypeCommand.cpp:147
+msgctxt "(qtundo-format)"
+msgid "Gantt Chart"
+msgstr "Διάγραμμα Gantt"
+
+#: commands/DatasetCommand.cpp:144
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Chart Type"
+msgstr "Ρύθμιση του τύπου του συνόλου δεδομένων του διαγράμματος"
+
+#: commands/DatasetCommand.cpp:152
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Category"
+msgstr "Εμφάνιση κατηγορίας συνόλου δεδομένων"
+
+#: commands/DatasetCommand.cpp:154
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Category"
+msgstr "Απόκρυψη κατηγορίας συνόλου δεδομένων"
+
+#: commands/DatasetCommand.cpp:163
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Number"
+msgstr "Εμφάνιση πλήθους συνόλου δεδομένων"
+
+#: commands/DatasetCommand.cpp:165
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Number"
+msgstr "Απόκρυψη πλήθους συνόλου δεδομένων"
+
+#: commands/DatasetCommand.cpp:174
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Percent"
+msgstr "Εμφάνιση ποσοστού συνόλου δεδομένων"
+
+#: commands/DatasetCommand.cpp:176
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Percent"
+msgstr "Απόκρυψη ποσοστού συνόλου δεδομένων"
+
+#: commands/DatasetCommand.cpp:185
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Symbol"
+msgstr "Εμφάνιση συμβόλου συνόλου δεδομένων"
+
+#: commands/DatasetCommand.cpp:187
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Symbol"
+msgstr "Απόκρυψη συμβόλου συνόλου δεδομένων"
+
+#: commands/DatasetCommand.cpp:195
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Brush Color"
+msgstr "Ρύθμιση χρώματος πινέλου συνόλου δεδομένων"
+
+#: commands/DatasetCommand.cpp:202
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Pen Color"
+msgstr "Ρύθμιση χρώματος γραφίδας συνόλου δεδομένων"
+
+#: commands/DatasetCommand.cpp:211
+msgctxt "(qtundo-format)"
+msgid "Hide Dataset Marker"
+msgstr "Απόκρυψη δείκτη συνόλου δεδομένων"
+
+#: commands/DatasetCommand.cpp:213
+msgctxt "(qtundo-format)"
+msgid "Show Dataset Marker Symbol"
+msgstr "Εμφάνιση του συμβόλου του δείκτη του συνόλου δεδομένων"
+
+#: commands/DatasetCommand.cpp:221
+msgctxt "(qtundo-format)"
+msgid "Set Dataset Axis"
+msgstr "Ρύθμιση άξονα συνόλου δεδομένων"
+
+#: commands/GapCommand.cpp:61
+msgctxt "(qtundo-format)"
+msgid "Set Gap Between Bars"
+msgstr "Ρύθμιση κενού μεταξύ ράβδων"
+
+#: commands/GapCommand.cpp:68
+msgctxt "(qtundo-format)"
+msgid "Set Gap Between Sets"
+msgstr "Ρύθμιση κενού μεταξύ συνόλων"
+
+#: commands/LegendCommand.cpp:78
+msgctxt "(qtundo-format)"
+msgid "Set Legend Title"
+msgstr "Ρύθμιση τίτλου υπομνήματος"
+
+#: commands/LegendCommand.cpp:86
+msgctxt "(qtundo-format)"
+msgid "Set Legend Font"
+msgstr "Ρύθμιση γραμματοσειράς υπομνήματος"
+
+#: commands/LegendCommand.cpp:93
+msgctxt "(qtundo-format)"
+msgid "Set Legend Font size"
+msgstr "Ρύθμιση μεγέθους γραμματοσειράς υπομνήματος"
+
+#: commands/LegendCommand.cpp:100
+msgctxt "(qtundo-format)"
+msgid "Set Legend Orientation"
+msgstr "Ρύθμιση προσανατολισμού υπομνήματος"
+
+#: commands/PlotAreaCommand.cpp:59
+msgctxt "(qtundo-format)"
+msgid "Set Horizontal Bars"
+msgstr "Ρύθμιση οριζόντιων ράβδων"
+
+#: commands/PlotAreaCommand.cpp:61
+msgctxt "(qtundo-format)"
+msgid "Set Vertical Bars"
+msgstr "Ρύθμιση κατακόρυφων ράβδων"
+
+#: DataSet.cpp:262
+#, kde-format
+msgid "Series %1"
+msgstr "Σειρά %1"
+
+#: DataSetConfigWidget.cpp:196 PlotAreaConfigWidget.cpp:232
+#, kde-format
+msgid "Chart Type"
+msgstr "Τύπος διαγράμματος"
+
+#: DataSetConfigWidget.cpp:203 DataSetConfigWidget.cpp:208
+#: DataSetConfigWidget.cpp:213 DataSetConfigWidget.cpp:221
+#: PlotAreaConfigWidget.cpp:237 PlotAreaConfigWidget.cpp:243
+#: PlotAreaConfigWidget.cpp:249 PlotAreaConfigWidget.cpp:263
+#, kde-format
+msgid "Normal"
+msgstr "Κανονικό"
+
+#: DataSetConfigWidget.cpp:204 DataSetConfigWidget.cpp:209
+#: DataSetConfigWidget.cpp:214 PlotAreaConfigWidget.cpp:238
+#: PlotAreaConfigWidget.cpp:244 PlotAreaConfigWidget.cpp:250
+#, kde-format
+msgid "Stacked"
+msgstr "Με στοίβα"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataPointShowPercent)
+#. i18n: ectx: property (text), widget (QCheckBox, datasetShowPercent)
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetShowPercent)
+#: DataSetConfigWidget.cpp:205 DataSetConfigWidget.cpp:210
+#: DataSetConfigWidget.cpp:215 DataSetConfigWidget.ui:245
+#: PieConfigWidget.ui:189 PlotAreaConfigWidget.cpp:239
+#: PlotAreaConfigWidget.cpp:245 PlotAreaConfigWidget.cpp:251
+#: widgets/RadarDataSetConfigWidget.ui:166 widgets/RingConfigWidget.ui:120
+#, kde-format
+msgid "Percent"
+msgstr "Ποσοστό"
+
+#: DataSetConfigWidget.cpp:220 PlotAreaConfigWidget.cpp:262
+#, kde-format
+msgid "Polar Chart"
+msgstr "Πολικό διάγραμμα"
+
+#: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:264
+#, kde-format
+msgid "Filled"
+msgstr "Γεμισμένο"
+
+#: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:275
+#, kde-format
+msgid "Stock Chart"
+msgstr "Διάγραμμα μετοχών"
+
+#: DataSetConfigWidget.cpp:225 PlotAreaConfigWidget.cpp:276
+#, kde-format
+msgid "Candlestick"
+msgstr "Κηροπήγιο"
+
+#: DataSetConfigWidget.cpp:226 PlotAreaConfigWidget.cpp:277
+#, kde-format
+msgid "OpenHighLowClose"
+msgstr "OpenHighLowClose"
+
+#: DataSetConfigWidget.cpp:227 PlotAreaConfigWidget.cpp:278
+#, kde-format
+msgid "HighLowClose"
+msgstr "HighLowClose"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: DataSetConfigWidget.cpp:245 DataSetConfigWidget.cpp:387
+#: dialogs/FormatErrorBarDialog.ui:89 widgets/RadarDataSetConfigWidget.cpp:84
+#: widgets/RadarDataSetConfigWidget.cpp:188
+#, kde-format
+msgid "None"
+msgstr "Κανένα"
+
+#. i18n: ectx: property (text), widget (QCheckBox, automaticStepWidth)
+#. i18n: ectx: property (text), widget (QCheckBox, automaticSubStepWidth)
+#: DataSetConfigWidget.cpp:246 dialogs/AxisScalingDialog.ui:49
+#: dialogs/AxisScalingDialog.ui:85 widgets/RadarDataSetConfigWidget.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr "Αυτόματο"
+
+#: DataSetConfigWidget.cpp:248 widgets/RadarDataSetConfigWidget.cpp:87
+#, kde-format
+msgid "Select"
+msgstr "Επιλογή"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerPositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerResize)
+#: DataSetConfigWidget.cpp:396 TitlesConfigWidget.ui:52
+#: TitlesConfigWidget.ui:66 TitlesConfigWidget.ui:93 TitlesConfigWidget.ui:107
+#: TitlesConfigWidget.ui:134 TitlesConfigWidget.ui:148
+#: widgets/RadarDataSetConfigWidget.cpp:197
+#, kde-format
+msgid "Auto"
+msgstr "Αυτόματο"
+
+#: DataSetConfigWidget.cpp:658 PlotAreaConfigWidget.cpp:638
+#: PlotAreaConfigWidget.cpp:689 PlotAreaConfigWidget.cpp:871
+#: widgets/RadarDataSetConfigWidget.cpp:303
+#, kde-format
+msgid "Data Set %1"
+msgstr "Σύνολο δεδομένων %1"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, dataSets)
+#: DataSetConfigWidget.ui:23 widgets/RadarDataSetConfigWidget.ui:21
+#, kde-format
+msgid "Select a data set"
+msgstr "Επιλέξτε ένα σύνολο δεδομένων"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetHasChartType)
+#: DataSetConfigWidget.ui:33
+#, kde-format
+msgid "Use Plot Type"
+msgstr "Χρήση τύπου γραφήματος"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: DataSetConfigWidget.ui:78
+#, kde-format
+msgid "Attach To Axis"
+msgstr "Προσάρτηση στον άξονα"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
+#: DataSetConfigWidget.ui:112 PieConfigWidget.ui:56
+#: widgets/RadarDataSetConfigWidget.ui:33 widgets/RingConfigWidget.ui:28
+#, kde-format
+msgid "Stroke"
+msgstr "Ιχνογράφηση"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
+#: DataSetConfigWidget.ui:153 PieConfigWidget.ui:97
+#: widgets/RadarDataSetConfigWidget.ui:74 widgets/RingConfigWidget.ui:69
+#, kde-format
+msgid "Fill"
+msgstr "Γέμισμα"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetMarkerLabel)
+#: DataSetConfigWidget.ui:201 PieConfigWidget.ui:145
+#: widgets/RadarDataSetConfigWidget.ui:122
+#, kde-format
+msgid "Marker"
+msgstr "Δείκτης"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataPointShowCategory)
+#. i18n: ectx: property (text), widget (QCheckBox, datasetShowCategory)
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetShowCategory)
+#: DataSetConfigWidget.ui:231 dialogs/PieDataEditor.cpp:32
+#: PieConfigWidget.ui:175 widgets/RadarDataSetConfigWidget.ui:152
+#: widgets/RingConfigWidget.ui:106
+#, kde-format
+msgid "Category"
+msgstr "Κατηγορία"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dataPointShowNumber)
+#. i18n: ectx: property (text), widget (QCheckBox, dataSetShowNumber)
+#: DataSetConfigWidget.ui:238 PieConfigWidget.ui:182
+#: widgets/RadarDataSetConfigWidget.ui:159 widgets/RingConfigWidget.ui:113
+#, kde-format
+msgid "Number"
+msgstr "Αριθμός"
+
+#. i18n: ectx: property (text), widget (QCheckBox, datasetShowErrorBar)
+#: DataSetConfigWidget.ui:287
+#, kde-format
+msgid "Error Bars"
+msgstr "Γραμμές σφαλμάτων"
+
+#. i18n: ectx: property (text), widget (QPushButton, insertRow)
+#. i18n: ectx: property (text), widget (QToolButton, formatErrorBar)
+#: DataSetConfigWidget.ui:312 dialogs/PieDataEditor.cpp:61
+#: dialogs/PieDataEditor.ui:33
+#, kde-format
+msgid "Insert"
+msgstr "Εισαγωγή"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, CellRegionDialog)
+#. i18n: ectx: property (windowTitle), widget (QDialog, AxisScalingDialog)
+#: dialogs/AxisScalingDialog.ui:13 dialogs/CellRegionDialog.ui:14
+#, kde-format
+msgid "Dialog"
+msgstr "Διάλογος"
+
+#. i18n: ectx: property (text), widget (QCheckBox, logarithmicScaling)
+#: dialogs/AxisScalingDialog.ui:19
+#, kde-format
+msgid "Logarithmic Scaling"
+msgstr "Λογαριθμική κλίμακα"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/AxisScalingDialog.ui:32
+#, kde-format
+msgid "Step Width:"
+msgstr "Πλάτος βήματος:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/AxisScalingDialog.ui:65
+#, kde-format
+msgid "Substep Width:"
+msgstr "Πλάτος υποβήματος:"
+
+#: dialogs/BubbleDataEditor.cpp:105
+#, kde-format
+msgid "Bubble Data Editor"
+msgstr "Επεξεργαστής δεδομένων φυσαλίδων"
+
+#: dialogs/BubbleDataEditor.cpp:111 dialogs/ScatterDataEditor.cpp:117
+#, kde-format
+msgid "Insert Column Before"
+msgstr "Εισαγωγή στήλης πριν"
+
+#: dialogs/BubbleDataEditor.cpp:112 dialogs/ScatterDataEditor.cpp:118
+#, kde-format
+msgid "Insert Column After"
+msgstr "Εισαγωγή στήλης μετά"
+
+#: dialogs/BubbleDataEditor.cpp:113 dialogs/ScatterDataEditor.cpp:119
+#: dialogs/StockDataEditor.cpp:96
+#, kde-format
+msgid "Insert Row Above"
+msgstr "Εισαγωγή γραμμής πάνω"
+
+#: dialogs/BubbleDataEditor.cpp:114 dialogs/ScatterDataEditor.cpp:120
+#: dialogs/StockDataEditor.cpp:97
+#, kde-format
+msgid "Insert Row Below"
+msgstr "Εισαγωγή γραμμής κάτω"
+
+#. i18n: ectx: property (text), widget (QPushButton, deleteSelection)
+#: dialogs/BubbleDataEditor.cpp:115 dialogs/PieDataEditor.cpp:62
+#: dialogs/PieDataEditor.ui:46 dialogs/ScatterDataEditor.cpp:121
+#, kde-format
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ScatterDataEditor)
+#. i18n: ectx: property (windowTitle), widget (QWidget, BubbleDataEditor)
+#: dialogs/BubbleDataEditor.ui:26 dialogs/ScatterDataEditor.ui:26
+#, kde-format
+msgid "Bubbles Editor"
+msgstr "Επεξεργαστής φυσαλίδων"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnBefore)
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnLeft)
+#: dialogs/BubbleDataEditor.ui:39 dialogs/ChartTableEditor.ui:78
+#: dialogs/ScatterDataEditor.ui:39
+#, kde-format
+msgid "Insert data column before selected column"
+msgstr "Εισαγωγή στήλης δεδομένων πριν την επιλεγμένη στήλη"
+
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnBefore)
+#. i18n: ectx: property (text), widget (QToolButton, insertRowBelow)
+#. i18n: ectx: property (text), widget (QToolButton, insertRowAbove)
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnAfter)
+#. i18n: ectx: property (text), widget (QToolButton, deleteSelection)
+#. i18n: ectx: property (text), widget (QToolButton, addDataSetAfter)
+#. i18n: ectx: property (text), widget (QToolButton, addDataSetBefore)
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnLeft)
+#. i18n: ectx: property (text), widget (QToolButton, insertColumnRight)
+#: dialogs/BubbleDataEditor.ui:42 dialogs/BubbleDataEditor.ui:62
+#: dialogs/BubbleDataEditor.ui:82 dialogs/BubbleDataEditor.ui:102
+#: dialogs/BubbleDataEditor.ui:122 dialogs/BubbleDataEditor.ui:215
+#: dialogs/BubbleDataEditor.ui:235 dialogs/ChartTableEditor.ui:55
+#: dialogs/ChartTableEditor.ui:68 dialogs/ChartTableEditor.ui:81
+#: dialogs/ChartTableEditor.ui:94 dialogs/ChartTableEditor.ui:107
+#: dialogs/ScatterDataEditor.ui:42 dialogs/ScatterDataEditor.ui:62
+#: dialogs/ScatterDataEditor.ui:82 dialogs/ScatterDataEditor.ui:102
+#: dialogs/ScatterDataEditor.ui:122 dialogs/ScatterDataEditor.ui:215
+#: dialogs/ScatterDataEditor.ui:235 dialogs/StockDataEditor.ui:42
+#: dialogs/StockDataEditor.ui:61 dialogs/StockDataEditor.ui:80
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertRowBelow)
+#: dialogs/BubbleDataEditor.ui:59 dialogs/ChartTableEditor.ui:52
+#: dialogs/ScatterDataEditor.ui:59 dialogs/StockDataEditor.ui:39
+#, kde-format
+msgid "Insert data row below selected row"
+msgstr "Εισαγωγή γραμμής δεδομένων κάτω από την επιλεγμένη γραμμή"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertRowAbove)
+#: dialogs/BubbleDataEditor.ui:79 dialogs/ChartTableEditor.ui:65
+#: dialogs/ScatterDataEditor.ui:79 dialogs/StockDataEditor.ui:58
+#, kde-format
+msgid "Insert data row above selected row"
+msgstr "Εισαγωγή γραμμής δεδομένων πάνω από την επιλεγμένη γραμμή"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnAfter)
+#. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnRight)
+#: dialogs/BubbleDataEditor.ui:99 dialogs/ChartTableEditor.ui:91
+#: dialogs/ScatterDataEditor.ui:99
+#, kde-format
+msgid "Insert data column after selected column"
+msgstr "Εισαγωγή στήλης δεδομένων μετά την επιλεγμένη στήλη"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
+#: dialogs/BubbleDataEditor.ui:119 dialogs/ChartTableEditor.ui:104
+#: dialogs/ScatterDataEditor.ui:119
+#, kde-format
+msgid "Delete selection"
+msgstr "Διαγραφή επιλογής"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, manualControl)
+#: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
+#, kde-format
+msgid "Manual control of data sets"
+msgstr "Χειροκίνητος έλεγχος των συνόλων δεδομένων"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitlePositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, subtitleResize)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerPositioning)
+#. i18n: ectx: property (text), item, widget (QComboBox, footerResize)
+#. i18n: ectx: property (text), widget (QCheckBox, manualControl)
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: dialogs/BubbleDataEditor.ui:182 dialogs/ScatterDataEditor.ui:182
+#: LegendConfigWidget.ui:92 TitlesConfigWidget.ui:57 TitlesConfigWidget.ui:71
+#: TitlesConfigWidget.ui:98 TitlesConfigWidget.ui:112 TitlesConfigWidget.ui:139
+#: TitlesConfigWidget.ui:153
+#, kde-format
+msgid "Manual"
+msgstr "Χειροκίνητος"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, removeDataSet)
+#: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
+#, kde-format
+msgid "Remove data set"
+msgstr "Αφαίρεση συνόλου δεδομένων"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetAfter)
+#. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetBefore)
+#: dialogs/BubbleDataEditor.ui:212 dialogs/BubbleDataEditor.ui:232
+#: dialogs/ScatterDataEditor.ui:212 dialogs/ScatterDataEditor.ui:232
+#, kde-format
+msgid "Add data set after selected data set"
+msgstr "Προσθήκη συνόλου δεδομένων μετά το επιλεγμένο σύνολο δεδομένων"
+
+#: dialogs/BubbleDataSetTableModel.cpp:103
+#: dialogs/ScatterDataSetTableModel.cpp:103
+#, kde-format
+msgid "Dataset Name"
+msgstr "Όνομα συνόλου δεδομένων"
+
+#: dialogs/BubbleDataSetTableModel.cpp:104
+#: dialogs/ScatterDataSetTableModel.cpp:104
+#, kde-format
+msgid "X-Values"
+msgstr "X-τιμές"
+
+#: dialogs/BubbleDataSetTableModel.cpp:105
+#: dialogs/ScatterDataSetTableModel.cpp:105
+#, kde-format
+msgid "Y-Values"
+msgstr "Y-τιμές"
+
+#: dialogs/BubbleDataSetTableModel.cpp:106
+#, kde-format
+msgid "Bubble Size"
+msgstr "Μέγεθος φυσαλίδων"
+
+#: dialogs/BubbleDataSetTableModel.cpp:146
+#: dialogs/ScatterDataSetTableModel.cpp:142
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Label: %1"
+msgstr "Ετικέτα: %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:148
+#: dialogs/ScatterDataSetTableModel.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Default label: %1"
+msgstr "Προκαθορισμένη ετικέτα: %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:153
+#: dialogs/ScatterDataSetTableModel.cpp:149
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "X-Values cell region: %1"
+msgstr "Περιοχή κελιών X-τιμών: %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:155
+#: dialogs/BubbleDataSetTableModel.cpp:162
+#: dialogs/BubbleDataSetTableModel.cpp:169
+#: dialogs/ScatterDataSetTableModel.cpp:151
+#: dialogs/ScatterDataSetTableModel.cpp:158
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Default values used"
+msgstr "Προκαθορισμένες τιμές σε χρήση"
+
+#: dialogs/BubbleDataSetTableModel.cpp:160
+#: dialogs/ScatterDataSetTableModel.cpp:156
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Y-Values cell region: %1"
+msgstr "Περιοχή κελιών Y-τιμών: %1"
+
+#: dialogs/BubbleDataSetTableModel.cpp:167
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Bubble size cell region: %1"
+msgstr "Περιοχή κελιών μεγέθους φυσαλίδων: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/CellRegionDialog.ui:49
+#, kde-format
+msgid "Y Values:"
+msgstr "Y τιμές:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/CellRegionDialog.ui:59
+#, kde-format
+msgid "X Values:"
+msgstr "X τιμές:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/CellRegionDialog.ui:72
+#, kde-format
+msgid "<b>Choose a Data Set</b>"
+msgstr "<b>Επιλέξτε ένα σύνολο δεδομένων</b>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: dialogs/CellRegionDialog.ui:82
+#, kde-format
+msgid "Categories:"
+msgstr "Κατηγορίες:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: dialogs/CellRegionDialog.ui:96
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-weight:600;\">Name:</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-weight:600;\">Όνομα:</span></p></body></html>"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ChartTableEditor)
+#: dialogs/ChartTableEditor.ui:14
+#, kde-format
+msgid "Data Editor"
+msgstr "Επεξεργαστής δεδομένων"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dataSetsInRows)
+#: dialogs/ChartTableEditor.ui:29
+#, kde-format
+msgid "&Data sets in rows"
+msgstr "Σύνολα &δεδομένων σε γραμμές"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dataSetsInColumns)
+#: dialogs/ChartTableEditor.ui:36
+#, kde-format
+msgid "Data sets in &columns"
+msgstr "Σύνολα δεδομένων σε &στήλες"
+
+#: dialogs/FontEditorDialog.cpp:20
+#, kde-format
+msgid "Select Font"
+msgstr "Επιλογή γραμματοσειράς"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, FormatErrorBarDialog)
+#: dialogs/FormatErrorBarDialog.ui:29
+#, kde-format
+msgid "Format Error Bars"
+msgstr "Γραμμές σφαλμάτων διαμόρφωσης"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/FormatErrorBarDialog.ui:69
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Error Category</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"weight:600;\"></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Κατηγορία σφάλματος</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"weight:600;\"></p></body></html>"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:94
+#, kde-format
+msgid "Constant"
+msgstr "Σταθερά"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:99
+#, kde-format
+msgid "Percentage"
+msgstr "Ποσοστό"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:104
+#, kde-format
+msgid "Error Margin"
+msgstr "Περιθώριο σφάλματος"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:109
+#, kde-format
+msgid "Standard Deviation"
+msgstr "Τυπική απόκλιση"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:114
+#, kde-format
+msgid "Variance"
+msgstr "Διακύμανση"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, errorType)
+#: dialogs/FormatErrorBarDialog.ui:119
+#, kde-format
+msgid "From Data table"
+msgstr "Από πίνακα δεδομένων"
+
+#. i18n: ectx: property (text), widget (QLabel, valueLabel)
+#: dialogs/FormatErrorBarDialog.ui:144
+#, kde-format
+msgid "Positive "
+msgstr "Θετικό "
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QRadioButton, negIndicator)
+#: dialogs/FormatErrorBarDialog.ui:173 dialogs/FormatErrorBarDialog.ui:338
+#, kde-format
+msgid "Negative"
+msgstr "Αρνητικό"
+
+#. i18n: ectx: property (text), widget (QCheckBox, sameValueForBoth)
+#: dialogs/FormatErrorBarDialog.ui:207
+#, kde-format
+msgid "Same for both"
+msgstr "Ίδιο και για τα δύο"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/FormatErrorBarDialog.ui:226 dialogs/PieDataEditor.cpp:33
+#, kde-format
+msgid "Value"
+msgstr "Τιμή"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, percentageValue)
+#: dialogs/FormatErrorBarDialog.ui:233
+#, no-c-format, kde-format
+msgid " %"
+msgstr " %"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/FormatErrorBarDialog.ui:303
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Error Indicator</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">Δείκτης σφάλματος</span></p></body></html>"
+
+#. i18n: ectx: property (text), widget (QRadioButton, posIndicator)
+#: dialogs/FormatErrorBarDialog.ui:325
+#, kde-format
+msgid "Positive"
+msgstr "Θετικό"
+
+#. i18n: ectx: property (text), widget (QRadioButton, posAndNegIndicator)
+#: dialogs/FormatErrorBarDialog.ui:351
+#, kde-format
+msgid "Both"
+msgstr "Και τα δύο"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, NewAxisDialog)
+#: dialogs/NewAxisDialog.ui:20
+#, kde-format
+msgid "New Axis"
+msgstr "Νέος άξονας"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dimensionIsX)
+#: dialogs/NewAxisDialog.ui:46
+#, kde-format
+msgctxt "Axis dimension"
+msgid "&X"
+msgstr "&X"
+
+#. i18n: ectx: property (text), widget (QRadioButton, dimensionIsY)
+#: dialogs/NewAxisDialog.ui:56
+#, kde-format
+msgctxt "Axis dimension"
+msgid "&Y"
+msgstr "&Y"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/NewAxisDialog.ui:72
+#, kde-format
+msgid "Title:"
+msgstr "Τίτλος:"
+
+#: dialogs/PieDataEditor.cpp:55
+#, kde-format
+msgid "Pie Data Editor"
+msgstr "Επεξεργαστής δεδομένων πίτας"
+
+#. i18n: ectx: property (shortcut), widget (QPushButton, deleteSelection)
+#: dialogs/PieDataEditor.ui:52
+#, kde-format
+msgid "Del"
+msgstr "Del"
+
+#: dialogs/ScatterDataEditor.cpp:94 widgets/RingConfigWidget.cpp:101
+#, kde-format
+msgid "Row %1"
+msgstr "Γραμμή %1"
+
+#: dialogs/ScatterDataEditor.cpp:111
+#, kde-format
+msgid "Scatter Data Editor"
+msgstr "Επεξεργαστής δεδομένων διασποράς"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
+#: dialogs/StockDataEditor.cpp:88 dialogs/StockDataEditor.ui:26
+#, kde-format
+msgid "Stock Data Editor"
+msgstr "Επεξεργαστής δεδομένων μετοχών"
+
+#: dialogs/StockDataEditor.cpp:98
+#, kde-format
+msgid "Delete Row"
+msgstr "Διαγραφή γραμμής"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
+#: dialogs/StockDataEditor.ui:77
+#, kde-format
+msgid "Delete row"
+msgstr "Διαγραφή γραμμής"
+
+#: dialogs/TableEditorDialog.cpp:58
+#, kde-format
+msgid "Insert Above"
+msgstr "Εισαγωγή πάνω"
+
+#: dialogs/TableEditorDialog.cpp:59
+#, kde-format
+msgid "Insert Below"
+msgstr "Εισαγωγή κάτω"
+
+#: dialogs/TableEditorDialog.cpp:60
+#, kde-format
+msgid "Insert Before"
+msgstr "Εισαγωγή πριν"
+
+#: dialogs/TableEditorDialog.cpp:61
+#, kde-format
+msgid "Insert After"
+msgstr "Εισαγωγή μετά"
+
+#: dialogs/TableEditorDialog.cpp:62
+#, kde-format
+msgid "Delete Selection"
+msgstr "Διαγραφή επιλογής"
+
+#: dialogs/TableEditorDialog.cpp:169 dialogs/TableEditorDialog.cpp:193
+#, kde-format
+msgid "New Row"
+msgstr "Νέα γραμμή"
+
+#: dialogs/TableEditorDialog.cpp:217 dialogs/TableEditorDialog.cpp:241
+#, kde-format
+msgid "New Column"
+msgstr "Νέα στήλη"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
+#: LegendConfigWidget.ui:19
+#, kde-format
+msgid "Vertical"
+msgstr "Κατακόρυφο"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
+#: LegendConfigWidget.ui:24
+#, kde-format
+msgid "Horizontal"
+msgstr "Οριζόντιο"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
+#: LegendConfigWidget.ui:38
+#, kde-format
+msgid "Center"
+msgstr "Κέντρο"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:52
+#, kde-format
+msgid "Right"
+msgstr "Δεξιά"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:57
+#, kde-format
+msgid "Top"
+msgstr "Πάνω"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:62
+#, kde-format
+msgid "Bottom"
+msgstr "Κάτω"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:67
+#, kde-format
+msgid "Left"
+msgstr "Αριστερά"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:72
+#, kde-format
+msgid "Top-left"
+msgstr "Πάνω-αριστερά"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:77
+#, kde-format
+msgid "Top-right"
+msgstr "Πάνω-δεξιά"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:82
+#, kde-format
+msgid "Bottom-left"
+msgstr "Κάτω-αριστερά"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
+#: LegendConfigWidget.ui:87
+#, kde-format
+msgid "Bottom-right"
+msgstr "Κάτω-δεξιά"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: LegendConfigWidget.ui:100
+#, kde-format
+msgid "Position"
+msgstr "Θέση"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showLegend)
+#: LegendConfigWidget.ui:107
+#, kde-format
+msgid "Show Legend"
+msgstr "Εμφάνιση υπομνήματος"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: LegendConfigWidget.ui:130
+#, kde-format
+msgid "Orientation"
+msgstr "Προσανατολισμός"
+
+#. i18n: ectx: property (text), widget (QPushButton, legendEditFontButton)
+#: LegendConfigWidget.ui:147
+#, kde-format
+msgid "Fonts..."
+msgstr "Γραμματοσειρές..."
+
+#: PieConfigWidget.cpp:101
+#, kde-format
+msgid "Data Point %1"
+msgstr "Σημείο δεδομένων %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
+#, kde-format
+msgid "E&xplode Factor"
+msgstr "&Συντελεστής ανάπτυξης"
+
+#: PlotAreaConfigWidget.cpp:281
+#, kde-format
+msgid "Surface Chart"
+msgstr "Διάγραμμα επιφάνειας"
+
+#: PlotAreaConfigWidget.cpp:283
+#, kde-format
+msgid "Gantt Chart"
+msgstr "Διάγραμμα Gantt"
+
+#. i18n: ectx: property (text), widget (QCheckBox, threeDLook)
+#: PlotAreaConfigWidget.ui:61
+#, kde-format
+msgid "3D"
+msgstr "3Δ"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
+#: PlotAreaConfigWidget.ui:69
+#, kde-format
+msgid "Vertical Bars"
+msgstr "Κατακόρυφες ράβδοι"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
+#: PlotAreaConfigWidget.ui:74
+#, kde-format
+msgid "Horizontal Bars"
+msgstr "Οριζόντιες ράβδοι"
+
+#. i18n: ectx: property (text), widget (QPushButton, editData)
+#: PlotAreaConfigWidget.ui:82
+#, kde-format
+msgid "Edit Data..."
+msgstr "Επεξεργασία δεδομένων..."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: PlotAreaConfigWidget.ui:98 PlotAreaConfigWidget.ui:181
+#, kde-format
+msgid "Axes"
+msgstr "Άξονες"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: PlotAreaConfigWidget.ui:111 PlotAreaConfigWidget.ui:218
+#: widgets/RingConfigWidget.ui:171
+#, kde-format
+msgid "Data Sets"
+msgstr "Σύνολα δεδομένων"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: PlotAreaConfigWidget.ui:131
+#, kde-format
+msgid "Data Points"
+msgstr "Σημεία δεδομένων"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
+#: StockConfigWidget.ui:18
+#, kde-format
+msgid "Range line"
+msgstr "Γραμμή εύρους"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
+#: StockConfigWidget.ui:47
+#, kde-format
+msgid "Gain marker"
+msgstr "Δείκτης ενίσχυσης"
+
+#. i18n: ectx: property (text), widget (QLabel, datasetColorLabel_2)
+#: StockConfigWidget.ui:73
+#, kde-format
+msgid "Loss marker"
+msgstr "Δείκτης απώλειας"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: TitlesConfigWidget.ui:18
+#, kde-format
+msgid "Positioning"
+msgstr "Τοποθέτηση"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: TitlesConfigWidget.ui:28
+#, kde-format
+msgid "Resize"
+msgstr "Αλλαγή μεγέθους"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/RingConfigWidget.ui:18
+#, kde-format
+msgid "Categories"
+msgstr "Κατηγορίες"
+
+#: widgets/StrokeConfigWidget.cpp:91
+#, kde-format
+msgid "Butt cap"
+msgstr "Σταυροειδής απόληξη"
+
+#: widgets/StrokeConfigWidget.cpp:98
+#, kde-format
+msgid "Round cap"
+msgstr "Στρογγυλή απόληξη"
+
+#: widgets/StrokeConfigWidget.cpp:105
+#, kde-format
+msgid "Square cap"
+msgstr "Τετράγωνη απόληξη"
+
+#: widgets/StrokeConfigWidget.cpp:116
+#, kde-format
+msgid "Miter join"
+msgstr "Μητρική ένωση"
+
+#: widgets/StrokeConfigWidget.cpp:123
+#, kde-format
+msgid "Round join"
+msgstr "Στρογγυλή ένωση"
+
+#: widgets/StrokeConfigWidget.cpp:130
+#, kde-format
+msgid "Bevel join"
+msgstr "Λοξότμητη ένωση"
+
+#: widgets/StrokeConfigWidget.cpp:140
+#, kde-format
+msgid "Miter limit"
+msgstr "Μητρικό όριο"
+
+#: widgets/StrokeConfigWidget.cpp:197
+#, kde-format
+msgid "Set line width of actual selection"
+msgstr "Ρύθμιση πλάτους γραμμής της πραγματικής επιλογής"
+
+#: widgets/StrokeConfigWidget.cpp:211
+#, kde-format
+msgid "Change the color of the line"
+msgstr "Αλλαγή του χρώματος της γραμμής"
+
+#, fuzzy
+#~| msgid "Attached Axis"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set Dataset Marker Style"
+#~ msgstr "Προσαρτημένοι άξονες"
+
+#~ msgid "Symbol"
+#~ msgstr "Σύμβολο"
+
+#~ msgid "Data Format"
+#~ msgstr "Μορφή δεδομένων"
+
+#~ msgid "Actions"
+#~ msgstr "Ενέργειες"
+
+#~ msgid "Insert Rows"
+#~ msgstr "Εισαγωγή γραμμών"
+
+#~ msgid "Delete Columns"
+#~ msgstr "Διαγραφή στηλών"
+
+#, fuzzy
+#~| msgid "Bar Chart"
+#~ msgid "Bar chart"
+#~ msgstr "Ραβδόγραμμα"
+
+#, fuzzy
+#~| msgid "Line Chart"
+#~ msgid "Line chart"
+#~ msgstr "Γραμμικό διάγραμμα"
+
+#, fuzzy
+#~| msgid "Area Chart"
+#~ msgid "Area chart"
+#~ msgstr "Διάγραμμα επιφάνειας"
+
+#, fuzzy
+#~| msgid "Plot Area"
+#~ msgid "Area"
+#~ msgstr "Περιοχή σχεδίασης"
+
+#, fuzzy
+#~| msgid "Bar Chart"
+#~ msgid "Radar"
+#~ msgstr "Ραβδόγραμμα"
+
+#, fuzzy
+#~| msgid "Scatter Chart"
+#~ msgid "Scatter"
+#~ msgstr "Διάγραμμα διασποράς"
+
+#, fuzzy
+#~| msgid "Bubble Chart"
+#~ msgid "Bubbles"
+#~ msgstr "Διάγραμμα φυσαλίδων"
+
+#, fuzzy
+#~| msgid "Stock Chart"
+#~ msgid "Stock HLC"
+#~ msgstr "Διάγραμμα μετοχών"
+
+#~ msgid "Data Ranges..."
+#~ msgstr "Εύρος δεδομένων..."
+
+#~ msgid "Axis %1"
+#~ msgstr "Άξονας %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~| "weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Pie Properties</"
+#~| "span></p></body></html>"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Chart Titles</"
+#~ "span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Ιδιότητες πίτας</"
+#~ "span></p></body></html>"
+
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Άξονες</span></p></body></html>"
+
+#~ msgid "Scaling..."
+#~ msgstr "Κλίμακα..."
+
+#, fuzzy
+#~| msgid "Edit Fonts..."
+#~ msgid "Edit Label Fonts..."
+#~ msgstr "Επεξεργασία γραμματοσειρών..."
+
+#~ msgid "Custom Type"
+#~ msgstr "Προσαρμοσμένος τύπος"
+
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Pie Properties</"
+#~ "span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Ιδιότητες πίτας</"
+#~ "span></p></body></html>"
+
+#~ msgid "v"
+#~ msgstr "κ"
+
+#~ msgid "h"
+#~ msgstr "ο"
+
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
+#~ "style=\" font-weight:600;\">Labels</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
+#~ "style=\" font-weight:600;\">Ετικέτες</span></p></body></html>"
+
+#~ msgid "Show Frame"
+#~ msgstr "Εμφάνιση πλαισίου"
+
+#, fuzzy
+#~| msgid "Show Legend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Legend Frame"
+#~ msgstr "Εμφάνιση υπομνήματος"
+
+#, fuzzy
+#~| msgid "Show Legend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Legend Frame"
+#~ msgstr "Εμφάνιση υπομνήματος"
+
+#~ msgid ""
+#~ "Are you sure you want to remove this axis? All settings specific to this "
+#~ "axis will be lost."
+#~ msgstr ""
+#~ "Είστε σίγουροι ότι επιθυμείτε την αφαίρεση αυτού του άξονα; Όλες οι "
+#~ "ρυθμίσεις του θα χαθούν."
+
+#~ msgid "Axis Removal Confirmation"
+#~ msgstr "Επιβεβαίωση αφαίρεσης άξονα"
+
+#, fuzzy
+#~| msgid "Dialog"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dialog"
+#~ msgstr "Διάλογος"
+
+#, fuzzy
+#~| msgid "Step Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Step Width:"
+#~ msgstr "Πλάτος βήματος:"
+
+#, fuzzy
+#~| msgid "Substep Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Substep Width:"
+#~ msgstr "Πλάτος υποβήματος:"
+
+#, fuzzy
+#~| msgid "Format Error Bars"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format Error Bars"
+#~ msgstr "Γραμμές σφαλμάτων διαμόρφωσης"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~| "weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "weight:600;\">Error Category</span></p>\n"
+#~| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+#~| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+#~| "font-weight:600;\"></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "weight:600;\">Error Category</span></p>\n"
+#~ "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+#~ "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+#~ "font-weight:600;\"></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "weight:600;\">Κατηγορία σφάλματος</span></p>\n"
+#~ "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+#~ "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+#~ "font-weight:600;\"></p></body></html>"
+
+#, fuzzy
+#~| msgid "Constant"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Constant"
+#~ msgstr "Σταθερά"
+
+#, fuzzy
+#~| msgid "Percentage"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage"
+#~ msgstr "Ποσοστό"
+
+#, fuzzy
+#~| msgid "Error Margin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error Margin"
+#~ msgstr "Περιθώριο σφάλματος"
+
+#, fuzzy
+#~| msgid "Standard Deviation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard Deviation"
+#~ msgstr "Τυπική απόκλιση"
+
+#, fuzzy
+#~| msgid "Variance"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Variance"
+#~ msgstr "Διακύμανση"
+
+#, fuzzy
+#~| msgid "From Data table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Data table"
+#~ msgstr "Από πίνακα δεδομένων"
+
+#, fuzzy
+#~| msgid "Positive "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Positive "
+#~ msgstr "Θετικό "
+
+#, fuzzy
+#~| msgid "Negative"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Negative"
+#~ msgstr "Αρνητικό"
+
+#, fuzzy
+#~| msgid "Same for both"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Same for both"
+#~ msgstr "Ίδιο και για τα δύο"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Value"
+#~ msgstr "Τιμή"
+
+#, fuzzy
+#~| msgid " %"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " %"
+#~ msgstr " %"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~| "weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "weight:600;\">Error Indicator</span></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "weight:600;\">Error Indicator</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "weight:600;\">Δείκτης σφάλματος</span></p></body></html>"
+
+#, fuzzy
+#~| msgid "Positive"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Positive"
+#~ msgstr "Θετικό"
+
+#, fuzzy
+#~| msgid "Both"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Both"
+#~ msgstr "Και τα δύο"
+
+#, fuzzy
+#~| msgid "New Axis"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Axis"
+#~ msgstr "Νέος άξονας"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title:"
+#~ msgstr "Τίτλος:"
+
+#, fuzzy
+#~| msgid "Y Values:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y Values:"
+#~ msgstr "Τιμές Υ:"
+
+#, fuzzy
+#~| msgid "X Values:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X Values:"
+#~ msgstr "Τιμές Χ:"
+
+#, fuzzy
+#~| msgid "<b>Choose a Data Set</b>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<b>Choose a Data Set</b>"
+#~ msgstr "<b>Επιλέξτε ένα σύνολο δεδομένων</b>"
+
+#, fuzzy
+#~| msgid "Categories:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Categories:"
+#~ msgstr "Κατηγορίες:"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~| "font-weight:400; font-style:normal;\">\n"
+#~| "<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+#~| "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+#~| "style=\" font-weight:600;\">Name:</span></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+#~ "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+#~ "style=\" font-weight:600;\">Name:</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+#~ "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+#~ "style=\" font-weight:600;\">Όνομα:</span></p></body></html>"
+
+#, fuzzy
+#~| msgid "Data Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data Format"
+#~ msgstr "Μορφή δεδομένων"
+
+#, fuzzy
+#~| msgid "Data sets in rows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data sets in rows"
+#~ msgstr "Σύνολα δεδομένων σε γραμμές"
+
+#, fuzzy
+#~| msgid "Data sets in columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data sets in columns"
+#~ msgstr "Σύνολα δεδομένων σε στήλες"
+
+#, fuzzy
+#~| msgid "Actions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Actions"
+#~ msgstr "Ενέργειες"
+
+#, fuzzy
+#~| msgid "3D"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "3D"
+#~ msgstr "3Δ"
+
+#, fuzzy
+#~| msgid "Edit Data..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Data..."
+#~ msgstr "Επεξεργασία δεδομένων..."
+
+#, fuzzy
+#~| msgid "Plot Area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plot Area"
+#~ msgstr "Περιοχή σχεδίασης"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~| "font-weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
+#~| "style=\" font-weight:600;\">Labels</span></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
+#~ "style=\" font-weight:600;\">Labels</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
+#~ "style=\" font-weight:600;\">Ετικέτες</span></p></body></html>"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~| "font-weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Άξονες</span></p></body></html>"
+
+#, fuzzy
+#~| msgid "Label"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Label"
+#~ msgstr "Ετικέτα"
+
+#, fuzzy
+#~| msgid "Show Grid Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Grid Lines"
+#~ msgstr "Εμφάνιση γραμμών πλέγματος"
+
+#, fuzzy
+#~| msgid "Scaling..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scaling..."
+#~ msgstr "Κλίμακα..."
+
+#, fuzzy
+#~| msgid "Edit Fonts..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Fonts..."
+#~ msgstr "Επεξεργασία γραμματοσειρών..."
+
+#, fuzzy
+#~| msgid "Data Sets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data Sets"
+#~ msgstr "Σύνολα δεδομένων"
+
+#, fuzzy
+#~| msgid "Select a data set"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select a data set"
+#~ msgstr "Επιλέξτε ένα σύνολο δεδομένων"
+
+#, fuzzy
+#~| msgid "Custom Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom Type"
+#~ msgstr "Προσαρμοσμένος τύπος"
+
+#, fuzzy
+#~| msgid "Gap Between Bars"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gap Between Bars"
+#~ msgstr "Κενό μεταξύ ράβδων"
+
+#, fuzzy
+#~| msgid "%"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%"
+#~ msgstr "%"
+
+#, fuzzy
+#~| msgid "Gap Between Sets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gap Between Sets"
+#~ msgstr "Κενό μεταξύ συνόλων"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~| "font-weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "size:8pt; font-weight:600;\">Bar Properties</span></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Bar Properties</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:8pt; font-weight:600;\">Ιδιότητες ράβδου</span></p></body></html>"
+
+#, fuzzy
+#~| msgid "Explode Factor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Explode Factor"
+#~ msgstr "Συντελεστής ανάπτυξης"
+
+#, fuzzy
+#~| msgid ""
+#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
+#~| "TR/REC-html40/strict.dtd\">\n"
+#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~| "css\">\n"
+#~| "p, li { white-space: pre-wrap; }\n"
+#~| "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~| "weight:400; font-style:normal;\">\n"
+#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~| "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Pie Properties</"
+#~| "span></p></body></html>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Pie Properties</"
+#~ "span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+#~ "weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Ιδιότητες πίτας</"
+#~ "span></p></body></html>"
+
+#, fuzzy
+#~| msgid "Attached Axis"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attached Axis"
+#~ msgstr "Προσαρτημένοι άξονες"
+
+#, fuzzy
+#~| msgid "Marker"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Marker"
+#~ msgstr "Δείκτης"
+
+#, fuzzy
+#~| msgid "Stroke"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stroke"
+#~ msgstr "Ιχνογράφηση"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill"
+#~ msgstr "Γέμισμα"
+
+#, fuzzy
+#~| msgid "Error Bars"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error Bars"
+#~ msgstr "Γραμμές σφαλμάτων"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Εισαγωγή"
+
+#, fuzzy
+#~| msgid "Category"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Category"
+#~ msgstr "Κατηγορία"
+
+#, fuzzy
+#~| msgid "Symbol"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Symbol"
+#~ msgstr "Σύμβολο"
+
+#, fuzzy
+#~| msgid "Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number"
+#~ msgstr "Αριθμός"
+
+#, fuzzy
+#~| msgid "Legend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Legend"
+#~ msgstr "Υπόμνημα"
+
+#, fuzzy
+#~| msgid "Show Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Frame"
+#~ msgstr "Εμφάνιση πλαισίου"
+
+#, fuzzy
+#~| msgid "Orientation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Orientation"
+#~ msgstr "Προσανατολισμός"
+
+#, fuzzy
+#~| msgid "v"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "v"
+#~ msgstr "κ"
+
+#, fuzzy
+#~| msgid "h"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "h"
+#~ msgstr "ο"
+
+#, fuzzy
+#~| msgid "Bar Chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bar Chart"
+#~ msgstr "Ραβδόγραμμα"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Κανονικά"
+
+#, fuzzy
+#~| msgid "Stacked"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stacked"
+#~ msgstr "Σε στοίβα"
+
+#, fuzzy
+#~| msgid "Percent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percent"
+#~ msgstr "Ποσοστό"
+
+#, fuzzy
+#~| msgid "Line Chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Chart"
+#~ msgstr "Γραμμικό διάγραμμα"
+
+#, fuzzy
+#~| msgid "Area Chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area Chart"
+#~ msgstr "Διάγραμμα επιφάνειας"
+
+#, fuzzy
+#~| msgid "Pie Chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pie Chart"
+#~ msgstr "Διάγραμμα πίτας"
+
+#, fuzzy
+#~| msgid "Polar Chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Polar Chart"
+#~ msgstr "Πολικό διάγραμμα"
+
+#, fuzzy
+#~| msgid "Filled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filled"
+#~ msgstr "Γεμισμένο"
+
+#, fuzzy
+#~| msgid "HighLowClose"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "HighLowClose"
+#~ msgstr "HighLowClose"
+
+#, fuzzy
+#~| msgid "OpenHighLowClose"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "OpenHighLowClose"
+#~ msgstr "OpenHighLowClose"
+
+#, fuzzy
+#~| msgid "Candlestick"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Candlestick"
+#~ msgstr "Κηροπήγιο"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Κανένα"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic"
+#~ msgstr "Αυτόματο"
+
+#, fuzzy
+#~| msgid "Select"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select"
+#~ msgstr "Επιλογή"
+
+#, fuzzy
+#~| msgid "Data Ranges..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data Ranges..."
+#~ msgstr "Εύρος δεδομένων..."
+
+#, fuzzy
+#~| msgid "Axis %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Axis %1"
+#~ msgstr "Άξονας %1"
+
+#, fuzzy
+#~| msgid "Data Set %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data Set %1"
+#~ msgstr "Σύνολο δεδομένων %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "Are you sure you want to remove this axis? All settings specific to this "
+#~| "axis will be lost."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Are you sure you want to remove this axis? All settings specific to this "
+#~ "axis will be lost."
+#~ msgstr ""
+#~ "Είστε σίγουροι ότι επιθυμείτε την αφαίρεση αυτού του άξονα; Όλες οι "
+#~ "ρυθμίσεις του θα χαθούν."
+
+#, fuzzy
+#~| msgid "Axis Removal Confirmation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Axis Removal Confirmation"
+#~ msgstr "Επιβεβαίωση αφαίρεσης άξονα"
+
+#, fuzzy
+#~| msgid ""
+#~| "The plugin needed for displaying text labels in a chart is not available."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The plugin needed for displaying text labels in a chart is not available."
+#~ msgstr ""
+#~ "Το πρόσθετο που απαιτείται για την εμφάνιση ετικετών κειμένου σε ένα "
+#~ "διάγραμμα δεν είναι διαθέσιμο."
+
+#, fuzzy
+#~| msgid "Plugin Missing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Missing"
+#~ msgstr "Λείπει πρόσθετο"
+
+#, fuzzy
+#~| msgid ""
+#~| "The plugin needed for displaying text labels is not compatible with the "
+#~| "current version of the chart Flake shape."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The plugin needed for displaying text labels is not compatible with the "
+#~ "current version of the chart Flake shape."
+#~ msgstr ""
+#~ "Το πρόσθετο που απαιτείται για την εμφάνιση ετικετών κειμένου δεν είναι "
+#~ "συμβατό με την τρέχουσα έκδοση του σχήματος διαγράμματος Flake."
+
+#, fuzzy
+#~| msgid "Plugin Incompatible"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Incompatible"
+#~ msgstr "Μη συμβατό πρόσθετο"
+
+#, fuzzy
+#~| msgid "Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Τίτλος"
+
+#, fuzzy
+#~| msgid "Subtitle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtitle"
+#~ msgstr "Υπότιτλος"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "Υποσέλιδο"
+
+#, fuzzy
+#~| msgid ""
+#~| "This document contains an external link to a remote document\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document contains an external link to a remote document\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Αυτό το έγγραφο περιέχει έναν εξωτερικό σύνδεσμο σε ένα απομακρυσμένο "
+#~ "έγγραφο\n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid "Confirmation Required"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirmation Required"
+#~ msgstr "Απαιτείται επιβεβαίωση"
+
+#, fuzzy
+#~| msgid "Download"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Download"
+#~ msgstr "Λήψη"
+
+#, fuzzy
+#~| msgid "Skip"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip"
+#~ msgstr "Παράλειψη"
+
+#, fuzzy
+#~| msgid "Chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chart"
+#~ msgstr "Διάγραμμα"
+
+#, fuzzy
+#~| msgid "Business charts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Business charts"
+#~ msgstr "Επαγγελματικά διαγράμματα"
+
+#, fuzzy
+#~| msgid "January"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "January"
+#~ msgstr "Ιανουάριος"
+
+#, fuzzy
+#~| msgid "July"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "July"
+#~ msgstr "Ιούλιος"
+
+#, fuzzy
+#~| msgid "December"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "December"
+#~ msgstr "Δεκέμβριος"
+
+#, fuzzy
+#~| msgid "Column %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column %1"
+#~ msgstr "Στήλη %1"
+
+#, fuzzy
+#~| msgid "Month"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Month"
+#~ msgstr "Μήνας"
+
+#, fuzzy
+#~| msgid "Growth in %"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Growth in %"
+#~ msgstr "Ανάπτυξη σε %"
+
+#, fuzzy
+#~| msgid "Do something"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do something"
+#~ msgstr "Κάποια ενέργεια"
+
+#, fuzzy
+#~| msgid "Do something else"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do something else"
+#~ msgstr "Κάποια άλλη ενέργεια"
+
+#, fuzzy
+#~| msgid "Chart Editing Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chart editing"
+#~ msgstr "Εργαλείο επεξεργασίας διαγράμματος"
+
+#, fuzzy
+#~| msgid "Series %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Series %1"
+#~ msgstr "Σειρά %1"
+
+#, fuzzy
+#~| msgid "Select Font"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Font"
+#~ msgstr "Επιλογή γραμματοσειράς"
+
+#, fuzzy
+#~| msgid "Insert Rows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Rows"
+#~ msgstr "Εισαγωγή γραμμών"
+
+#, fuzzy
+#~| msgid "Delete Rows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Rows"
+#~ msgstr "Διαγραφή γραμμών"
+
+#, fuzzy
+#~| msgid "Insert Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Columns"
+#~ msgstr "Εισαγωγή στηλών"
+
+#, fuzzy
+#~| msgid "Delete Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Columns"
+#~ msgstr "Διαγραφή στηλών"
+
+#~ msgid "Color"
+#~ msgstr "Χρώμα"
+
+#~ msgid "sdf"
+#~ msgstr "sdf"
+
+#~ msgid "Data Area"
+#~ msgstr "Περιοχή δεδομένων"
+
+#~ msgid "Use first row for labels"
+#~ msgstr "Χρήση πρώτης γραμμής για ετικέτες"
+
+#~ msgid "Use first column for labels"
+#~ msgstr "Χρήση πρώτης στήλης για ετικέτες"
+
+#~ msgid "Cut Rows"
+#~ msgstr "Αποκοπή γραμμών"
+
+#~ msgid "Cut Columns"
+#~ msgstr "Αποκοπή στηλών"
+
+#~ msgid "Cut Cells"
+#~ msgstr "Αποκοπή κελιών"
+
+#~ msgid "Copy Rows"
+#~ msgstr "Αντιγραφή γραμμών"
+
+#~ msgid "Copy Columns"
+#~ msgstr "Αντιγραφή στηλών"
+
+#~ msgid "Copy Cells"
+#~ msgstr "Αντιγραφή κελιών"
+
+#~ msgid "Insert Cells"
+#~ msgstr "Εισαγωγή κελιών"
+
+#~ msgid "Position and Alignment..."
+#~ msgstr "Θέση και στοίχιση..."

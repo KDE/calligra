@@ -1,0 +1,333 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Natalie</firstname
+> <surname
+>Koning</surname
+><affiliation
+><address
+> <email
+>nat@switch.demon.nl</email
+></address
+></affiliation
+> <contrib
+>Vertaler</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>&stage; instellen</title>
+
+<sect1 id="configure-dialog">
+<title
+>Het dialoogvenster Stage instellen</title>
+
+<sect2 id="configure-misc">
+<title
+>Div.</title>
+
+<screenshot>
+<screeninfo
+>Div</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-misc.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Div</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Eenheden</guilabel
+></term>
+<listitem
+><para
+>Kies de standaard eenheid die in uw dia's wordt gebruikt.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Hendelstraal</guilabel
+></term>
+<listitem
+><para
+>Als u een vorm met het standaard hulpmiddel (pijl) selecteert, dan ziet u de gele en rode rechthoeken. Dit worden handels genoemd (gebruikt voor grootte wijzigen, draaien, ...). De handelstraal wijzigt de grootte van de handels. Als u deze groter maakt dan is het gemakkelijker om ze te raken.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Gevoeligheid voor vangen</guilabel
+></term>
+<listitem
+><para
+>Deze optie definieert hoe exact het nodig om een handel te selecteren.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Offset voor plakken</guilabel
+></term>
+<listitem
+><para
+>Dit is alleen actief als <guilabel
+>Plakken op de cursor</guilabel
+> is uitgeschakeld. Als u een vorm met de sneltoets <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> kopieert en plakt met <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> en dat doet op een plaats waar al een vorm is, dan wordt deze offset gebruikt om de nieuwe vorm naar beneden/rechts te plakken.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Bij cursor plakken</guilabel
+></term>
+<listitem
+><para
+>Schakelt de offset voor plakken uit en voegt een geplakte vorm in op de positie van de muiscursor.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-grid">
+<title
+>Raster</title>
+
+<screenshot>
+<screeninfo
+>Raster</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-grid.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Raster</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Raster</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Raster tonen</guilabel
+></term>
+<listitem
+><para
+>Als dit item ingeschakeld is, zal &stage; een raster van stippen, die de denkbeeldige snijpunten van horizontale en verticale lijnen voorstellen, op de dia weergeven. U kunt deze punten gebruiken bij het plaatsen van objecten op de dia.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Raster magnetisch</guilabel
+></term>
+<listitem
+><para
+>Als deze optie ingeschakeld is, zullen objecten die getekend of verplaatst worden met de linkerbovenhoek door het dichtstbijzijnde rasterpunt <quote
+>aangetrokken</quote
+> worden.</para>
+<para
+>Dit beperkt u in de mogelijkheid op objecten overal te plaatsen, het helpt echter bij het precies uitlijnen van de objecten. Door de optie in- en uit te schakelen kunt u van beide mogelijkheden gebruik maken. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Rasterkleur:</guilabel
+></term>
+<listitem
+><para
+>Hier kunt u de rasterkleur wijzigen; de standaard is zwart.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Spatiëring</guilabel
+></title>
+<para
+>Klik op de knop <inlinemediaobject
+><imageobject
+> <imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+> om de beide instellingen dezelfde verhouding te geven. Klik op de knop <inlinemediaobject
+><imageobject
+> <imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+> om de beide instellingen een eigen verhouding te geven.</para>
+<varlistentry>
+<term
+><guilabel
+>Horizontaal:</guilabel
+></term>
+<listitem
+><para
+>Hier kunt u de horizontale afstand in centimeters tussen twee punten op het raster instellen. De standaard is 0.5 centimeter.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Verticaal:</guilabel
+></term>
+<listitem
+><para
+>Hier kunt u de verticale afstand in centimeters tussen twee punten op het raster instellen. De standaard is 0.5 centimeter.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-document">
+<title
+>Document</title>
+
+<screenshot>
+<screeninfo
+>Document</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-document.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Document</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Documentinstellingen</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Automatisch opslaan iedere:</guilabel
+></term>
+<listitem
+><para
+>Hier kunt u instellen hoe vaak &stage; een reservekopie opslaat. Als u <guilabel
+>Geen automatische opslag</guilabel
+> kiest, zal &stage; het bestand niet automatisch opslaan. U kunt de tijd instellen van 1 tot 60 minuten.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Reservekopiebestand aanmaken:</guilabel
+></term>
+<listitem
+><para
+>Als deze optie ingeschakeld is, wordt een reservekopie met de naam <filename
+>&lt;naam&gt;.odp.autosave.kpr</filename
+> in dezelfde map als het huidige bestand opgeslagen. Deze reservekopie kan gebruikt worden als er zich problemen voordoen. De reservekopie wordt bijgewerkt telkens wanneer u het bestand opslaat of wanneer het bestand automatisch opgeslagen wordt.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-author">
+<title
+>Auteur</title>
+
+<screenshot>
+<screeninfo
+>Auteur</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Document</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Kies een auteursprofiel voor uw documentatie. </para>
+<para
+>U kunt een nieuw profiel toevoegen of het huidige profiel verwijderen met de knoppen rechts van de afrollijst met profielen. </para>
+</sect2>
+
+</sect1>
+
+</chapter>

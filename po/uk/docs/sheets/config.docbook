@@ -1,0 +1,152 @@
+<chapter id="configure">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Юрій</firstname
+><surname
+>Чорноіван</surname
+><affiliation
+><address
+><email
+>yurchor@ukr.net</email
+></address
+></affiliation
+><contrib
+>Переклад українською</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Налаштування клавіатурних скорочень і панелей інструментів &sheets;</title>
+
+<sect1 id="configshort">
+<title
+>Клавіатурні скорочення</title>
+<para
+>Щоб змінити налаштування клавіатурних скорочень, які використовуються у &sheets; скористайтеся пунктом меню <menuchoice
+><guimenu
+>Параметри</guimenu
+> <guimenuitem
+>Налаштування скорочень... </guimenuitem
+></menuchoice
+>. Програма відкриє діалогове вікно, зразок якого показано нижче. </para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Знімок вікна налаштування скорочень 1</phrase>
+</textobject>
+</mediaobject>
+<para
+>Знайдіть у списку дію, для якої ви бажаєте додати або змінити клавіатурне скорочення, а потім позначте її наведенням вказівника миші з наступним клацанням <mousebutton
+>лівою</mousebutton
+> кнопкою миші. Ви можете пришвидшити пошук потрібної дії, якщо почнете вводити назву дії у рядок пошуку, розташований у верхній частині вікна. Після цього ви зможете змінити клавіатурне скорочення позначенням одного з варіантів <guilabel
+>Немає</guilabel
+>, <guilabel
+>Типове</guilabel
+> або <guilabel
+>Нетипове</guilabel
+>.</para>
+<para
+>Далі, просто слід натиснути комбінацію клавіш, яка має бути клавіатурним скороченням, наприклад <keycombo action="simul"
+> &Ctrl;&Shift;<keycap
+>S</keycap
+></keycombo
+>.</para>
+</sect1>
+
+<sect1 id="configtoolbars">
+<title
+>Пенали</title>
+<para
+>У &sheets; є шість панелей інструментів: <guilabel
+>Файл</guilabel
+>, <guilabel
+>Зміни</guilabel
+>, <guilabel
+>Навігація</guilabel
+>, <guilabel
+>Формат</guilabel
+>, <guilabel
+>Шрифт</guilabel
+> і <guilabel
+>Колір/Границя</guilabel
+>. Кожну з цих панелей може бути показано або не показано, залежно від вибору пунктів меню <guimenu
+>Параметри</guimenu
+>.</para>
+<para
+>Якщо панелі розблоковано, ви можете визначити розташування панелі інструментів: <guimenuitem
+>Вгорі</guimenuitem
+>, <guimenuitem
+>Ліворуч</guimenuitem
+>, <guimenuitem
+>Праворуч</guimenuitem
+> або <guimenuitem
+>Внизу</guimenuitem
+> вікна &sheets;. Для цього достатнього навести вказівник миші на панель інструментів, клацнути <mousebutton
+>правою</mousebutton
+> кнопкою миші, — програма відкриє <guilabel
+>Меню панелі інструментів</guilabel
+>. Оберіть у меню підменю <guisubmenu
+>Орієнтація</guisubmenu
+>. Крім того, у <guilabel
+>Меню панелі інструментів</guilabel
+> ви знайдете підменю, за допомогою яких можна визначити, чи буде показано на панелі піктограми, текст або і те, і інше, а також розмір піктограм.</para>
+
+<para
+>Існує і інший спосіб пересування панелі інструментів. Наведіть вказівник миші на дві вертикальні смужки у лівій частині панелі, натисніть і утримуйте <mousebutton
+>ліву</mousebutton
+> кнопку миші, а потім перетягніть панель у бажане місце. Під час перетягування панелі у такий спосіб ви можете відпустити кнопку миші, коли панель перебуватиме на певній відстані від однієї зі сторін вікна &sheets;, — панель стане рухомою, її не буде закріплено до жодної частини вікна &sheets;. Фактично, таку панель можна буде пересунути за межі вікна. Щоб повернути рухому панель у одну з її звичайних позицій, наведіть вказівник миші на смужку заголовка такої панелі, клацніть <mousebutton
+>правою</mousebutton
+> кнопкою миші, щоб викликати <guilabel
+>Меню панелі інструментів</guilabel
+>, а потім оберіть відповідний пункт з підменю <guisubmenu
+>Орієнтація</guisubmenu
+>.</para>
+
+<para
+>Після вибору пункту <guimenuitem
+>Налаштувати пенали...</guimenuitem
+> з меню <guimenu
+>Параметри</guimenu
+> програма відкриє діалогове вікно, за допомогою якого ви зможете додати або вилучити кнопки з панелі інструментів &sheets;.</para>
+<para
+>Що скористатися цим діалоговим вікно <guilabel
+>Налаштувати пенали</guilabel
+>, спочатку оберіть панель інструментів за допомогою спадного списку <guilabel
+>Пенал:</guilabel
+>. Після цього у правому списку <guilabel
+>Поточні дії:</guilabel
+> буде показано кнопки, які вже є на панелі інструментів. Для того, щоб вилучити кнопку, оберіть її у цьому списку, а потім натисніть кнопку зі стрілкою ліворуч. Ви також можете змінити порядок кнопок за допомогою натискання кнопок зі стрілками вгору і вниз. Щоб додати нову кнопку до панелі інструментів, оберіть відповідний пункт у списку <guilabel
+>Наявні дії:</guilabel
+>, а потім натисніть кнопку зі стрілкою праворуч.</para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

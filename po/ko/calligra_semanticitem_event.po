@@ -1,0 +1,223 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Shinjo Park <kde@peremen.name>, 2014, 2021.
+# Jung Hee Lee <daemul72@gmail.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2021-07-31 02:37+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 20.12.3\n"
+
+#: KoEventSemanticItemFactory.cpp:31
+#, kde-format
+msgctxt "displayname of the semantic item type Event"
+msgid "Event"
+msgstr "이벤트"
+
+#: KoRdfCalendarEvent.cpp:158
+#, kde-format
+msgid "Area"
+msgstr "영역"
+
+#: KoRdfCalendarEvent.cpp:159
+#, kde-format
+msgid "Region"
+msgstr "지역"
+
+#: KoRdfCalendarEvent.cpp:381
+#, kde-format
+msgid "Select a calendar for saving:"
+msgstr "저장할 달력 선택:"
+
+#: KoRdfCalendarEvent.cpp:401
+#, kde-format
+msgid ""
+"Could not add entry\n"
+"%1"
+msgstr ""
+"다음 항목을 추가할 수 없음\n"
+"%1"
+
+#: KoRdfCalendarEvent.cpp:428
+#, kde-format
+msgid ""
+"Could not save iCal file\n"
+"%1"
+msgstr ""
+"iCal 파일을 저장할 수 없음\n"
+"%1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfCalendarEventEditWidget.ui:20
+#, kde-format
+msgid "&Summary:"
+msgstr "개요(&S):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfCalendarEventEditWidget.ui:30
+#, kde-format
+msgid "&Location:"
+msgstr "위치(&L):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfCalendarEventEditWidget.ui:43
+#, kde-format
+msgid "&Start:"
+msgstr "시작(&S):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: KoRdfCalendarEventEditWidget.ui:56
+#, kde-format
+msgid "&End:"
+msgstr "끝(&E):"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tadtab)
+#: KoRdfCalendarEventEditWidget.ui:80
+#, kde-format
+msgid "Time and Date"
+msgstr "날짜와 시간"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tztab)
+#: KoRdfCalendarEventEditWidget.ui:93
+#, kde-format
+msgid "Timezone"
+msgstr "시간대"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:30
+#, kde-format
+msgid "Calendar Event"
+msgstr "일정 이벤트"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:37
+#, kde-format
+msgid "Edit..."
+msgstr "편집..."
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:40
+#, kde-format
+msgid "Import event to Calendar"
+msgstr "달력으로 이벤트 가져오기"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:43
+#, kde-format
+msgid "Export event to iCal file..."
+msgstr "iCal 파일로 이벤트 내보내기..."
+
+#, fuzzy
+#~| msgid "&Summary:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Summary:"
+#~ msgstr "요약(&S):"
+
+#, fuzzy
+#~| msgid "&Location:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Location:"
+#~ msgstr "위치(&L):"
+
+#, fuzzy
+#~| msgid "&Start:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Start:"
+#~ msgstr "시작(&S):"
+
+#, fuzzy
+#~| msgid "&End:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&End:"
+#~ msgstr "끝(&E):"
+
+#, fuzzy
+#~| msgid "Time and Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time and Date"
+#~ msgstr "시간과 날짜"
+
+#, fuzzy
+#~| msgid "Timezone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Timezone"
+#~ msgstr "시간대"
+
+#, fuzzy
+#~| msgctxt "displayname of the semantic item type Event"
+#~| msgid "Event"
+#~ msgctxt "(qtundo-format) displayname of the semantic item type Event"
+#~ msgid "Event"
+#~ msgstr "행사"
+
+#, fuzzy
+#~| msgid "Area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area"
+#~ msgstr "영역"
+
+#, fuzzy
+#~| msgid "Region"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Region"
+#~ msgstr "지역"
+
+#, fuzzy
+#~| msgid "Select a calendar for saving:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select a calendar for saving:"
+#~ msgstr "저장할 달력 선택:"
+
+#, fuzzy
+#~| msgid ""
+#~| "Could not add entry\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not add entry\n"
+#~ "%1"
+#~ msgstr ""
+#~ "다음 항목을 추가할 수 없음\n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid ""
+#~| "Could not save iCal file\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not save iCal file\n"
+#~ "%1"
+#~ msgstr ""
+#~ "iCal 파일을 저장할 수 없음\n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid "Calendar Event"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Event"
+#~ msgstr "달력 행사"
+
+#, fuzzy
+#~| msgid "Edit..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit..."
+#~ msgstr "편집..."
+
+#, fuzzy
+#~| msgid "Import event to Calendar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import event to Calendar"
+#~ msgstr "달력으로 행사 가져오기"
+
+#, fuzzy
+#~| msgid "Export event to iCal file..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export event to iCal file..."
+#~ msgstr "iCal 파일로 행사 내보내기..."

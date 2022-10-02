@@ -1,0 +1,71 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2015-02-22 22:32+0100\n"
+"Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-10-19 05:22+0000\n"
+"X-Generator: Launchpad (build 16807)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: ChangeVectorDataCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change Vector Data"
+msgstr "Promijeni vektorske podakte"
+
+#: VectorShapeFactory.cpp:27
+#, kde-format
+msgid "Vector image"
+msgstr "Vektorska slika"
+
+#: VectorShapeFactory.cpp:29
+#, kde-format
+msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+msgstr "Lik koji prikazuje vektorsku sliku (EMF/WMF/SVM)"
+
+#: VectorTool.cpp:64
+#, kde-format
+msgid "Open Vector Image (EMF/WMF/SVM)"
+msgstr "Open Vector Image (EMF/WMF/SVM)"
+
+#: VectorToolFactory.cpp:20
+#, kde-format
+msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+msgstr "Alat za vektorske slike (EMF/WMF/SVM/SVG)"
+
+#, fuzzy
+#~| msgid "Vector image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector image"
+#~ msgstr "Vektorska slika"
+
+#, fuzzy
+#~| msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgstr "Lik koji prikazuje vektorsku sliku (EMF/WMF/SVM)"
+
+#, fuzzy
+#~| msgid "Open Vector Image (EMF/WMF/SVM)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Vector Image (EMF/WMF/SVM)"
+#~ msgstr "Open Vector Image (EMF/WMF/SVM)"
+
+#, fuzzy
+#~| msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+#~ msgstr "Alat za vektorske slike (EMF/WMF/SVM/SVG)"
+
+#~ msgid "Open EMF/WMF Shape"
+#~ msgstr "Open EMF/WMF Shape"
+
+#~ msgid "EMF/WMF Vector Shape tool"
+#~ msgstr "EMF/WMF vektorki alat"

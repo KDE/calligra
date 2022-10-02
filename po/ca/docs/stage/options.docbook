@@ -1,0 +1,319 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+&traductor.Rafael.Carreras; 
+</authorgroup>
+</chapterinfo>
+<title
+>Configurant el &stage;</title>
+
+<sect1 id="configure-dialog">
+<title
+>El diàleg Configura el &stage;</title>
+
+<sect2 id="configure-misc">
+<title
+>Misc</title>
+
+<screenshot>
+<screeninfo
+>Misc</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-misc.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Misc</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Unitats</guilabel
+></term>
+<listitem
+><para
+>Escolliu la unitat per defecte que s'usarà a les vostres diapositives.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Radi de nansa</guilabel
+></term>
+<listitem
+><para
+>Si seleccioneu una forma amb l'eina per omissió (fletxa) veureu rectangles grocs i vermells. Aquests s'anomenen nanses (utilitzades per a canviar la mida, girar...) El radi de la nansa canvia la seva mida. Si les feu més grans serà més fàcil el seu ús.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Proximitat per seleccionar</guilabel
+></term>
+<listitem
+><para
+>Aquesta opció defineix la precisió que necessiteu per a seleccionar una nansa.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Enganxa el desplaçament</guilabel
+></term>
+<listitem
+><para
+>Aquesta només està activa si <guilabel
+>Enganxa en el cursor</guilabel
+> està inhabilitada. Si copieu una forma amb la drecera <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> i l'enganxeu amb <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+>, i la ubiqueu en un lloc on ja hi ha una forma, aquest desplaçament s'utilitzarà per enganxar la nova forma a la part inferior/dreta.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Enganxa en el cursor</guilabel
+></term>
+<listitem
+><para
+>Inhabilita el desplaçament d'enganxar i inserir una forma enganxada a la posició del cursor del ratolí.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-grid">
+<title
+>Graella</title>
+
+<screenshot>
+<screeninfo
+>Graella</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-grid.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Graella</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Graella</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Mostra la graella</guilabel
+></term>
+<listitem
+><para
+>Si està habilitat, el &stage; mostrarà una graella de punts representant les interseccions de línies imaginàries horitzontals i verticals. Podeu usar aquests punts per a posicionar amb precisió els objectes de la diapositiva.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Ajusta a la graella</guilabel
+></term>
+<listitem
+><para
+>Si està habilitat, quan inseriu o moveu objectes a la diapositiva, la cantonada superior esquerra de l'objecte s'<quote
+>ajustarà</quote
+> o es mourà, al punt de la graella més proper.</para>
+<para
+>Això redueix la vostra llibertat de posicionar lliurement els objectes de la diapositiva, però també ajuda a alinear els objectes de manera precisa. S'inhabilita fàcilment amb aquesta opció, permetent-vos el millor d'ambdós mons.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Color de la graella:</guilabel
+></term>
+<listitem
+><para
+>Podeu canviar aquí el color de la graella que és negre per omissió.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Espaiat</guilabel
+></title>
+<para
+>Podeu escollir de deixar la mateixa proporció per als dos arranjaments de sota amb la icona <inlinemediaobject
+><imageobject
+> <imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+> o de separar-los usant la icona <inlinemediaobject
+><imageobject
+> <imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+>.</para>
+<varlistentry>
+<term
+><guilabel
+>Horitzontal:</guilabel
+></term>
+<listitem
+><para
+>Arranja l'espai en mil·límetres entre dos punts d'una línia horitzontal de la graella. El valor per omissió és de 5 mil·límetres.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Vertical:</guilabel
+></term>
+<listitem
+><para
+>Arranja l'espai en mil·límetres entre dos punts d'una línia vertical de la graella. El valor per omissió és de 5 mil·límetres.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-document">
+<title
+>Document</title>
+
+<screenshot>
+<screeninfo
+>Document</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-document.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Document</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Arranjaments del document</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Desa automàticament cada:</guilabel
+></term>
+<listitem
+><para
+>Podeu usar això per a ajustar com de sovint ha de desar el &stage; un fitxer temporal. Si ho arrangeu a <guilabel
+>No desis automàticament</guilabel
+>, el &stage; no desarà automàticament. Podeu ajustar el desament automàtic des d'1 minut a 60 minuts.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Crea un fitxer de còpia de seguretat:</guilabel
+></term>
+<listitem
+><para
+>Si està marcat, això crearà un <filename
+>.&lt;nom&gt;.odp.autosave.odp</filename
+> a la carpeta on hi ha el vostre fitxer. Aquest fitxer de seguretat es pot usar en cas que hi hagués algun problema. El fitxer de seguretat s'actualitzarà cada cop que deseu el vostre document o cada cop que es realitzi un desament automàtic.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-author">
+<title
+>Autor</title>
+
+<screenshot>
+<screeninfo
+>Autor</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Document</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Trieu un perfil d'autor per al vostre document. </para>
+<para
+>Podeu afegir un nou perfil o eliminar el perfil actual utilitzant els botons a la dreta de la llista desplegable perfils. </para>
+</sect2>
+
+</sect1>
+
+</chapter>

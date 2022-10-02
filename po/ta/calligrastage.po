@@ -1,0 +1,6982 @@
+# translation of kpresenter.po to 
+# translation of kpresenter.po to
+# translation of kpresenter.po to
+# translation of kpresenter.po to
+# translation of kpresenter.po to Tamil
+# Copyright (C) 2004 Free Software Foundation, Inc.
+# , 2004
+# , 2004
+# , 2004
+# Ambalam <tamilpc@ambalam.com>, 2004.
+# root <root@localhost.localdomain>, 2004.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kpresenter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2004-11-29 01:52-0800\n"
+"Last-Translator: Tamil PC <tamilpc@ambalam.com>\n"
+"Language-Team:  <ta@li.org>\n"
+"Language: ta\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "&முடிவு"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "துண்டம்"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, fuzzy, kde-format
+msgid "&Insert"
+msgstr "கோப்பினை சொருகு"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "&வடிவம்"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "&Slide"
+msgstr "&பட வில்லை"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, kde-format
+msgid "Sli&de Show"
+msgstr "படக்காட்சி"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "பாதை அமைவுகள்"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "தனிப்பயன் படவில்லை காட்சி"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "படவில்லை நீக்கு"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "படவில்லை நீக்கு"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "படவில்லை நீக்கு"
+msgstr[1] "படவில்லை நீக்கு"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#, fuzzy
+#| msgid "Presentation duration: "
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "முன்வைப்பு கால அளவு."
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "தனிப்பயன் படவில்லை காட்சி"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+#, fuzzy
+#| msgid "Change Image Effect"
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "பட விளைவுகளை மாற்றவும்."
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+#, fuzzy
+#| msgid "Image &effect:"
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "பட விளைவு"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "படவில்லை நீக்கு"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+#, fuzzy
+#| msgid "Modify Slide Transition"
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "படவில்லை பரிமாற்றத்தை மாற்றவும்"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#, fuzzy
+#| msgid "Define Custom Slide Show"
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "தனிப்பயன் படவில்லை காட்சியை வரையறு"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+#, fuzzy
+#| msgid "Modify Slide Transition"
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "படவில்லை பரிமாற்றத்தை மாற்றவும்"
+
+#: part/KPrAboutData.h:21
+#, fuzzy, kde-format
+#| msgid "&Configure Slide Show..."
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "படவில்லையை உள்ளமை."
+
+#: part/KPrAboutData.h:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Tool"
+msgstr "முன்வைப்பு"
+
+#: part/KPrAboutData.h:25
+#, fuzzy, kde-format
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "(c) 1998-2004, இந்த Kபிரசன்ட்டர் குழு"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, fuzzy, kde-format
+#| msgid "current maintainer"
+msgid "Former maintainer"
+msgstr "தற்போதைய பராமரிப்பாளர்."
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KPrAboutData.h:35
+#, fuzzy, kde-format
+#| msgid "original author"
+msgid "Original author"
+msgstr "மூல ஆசிரியர்."
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr ""
+
+#: part/KPrAboutData.h:36
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Werner Trobin"
+msgstr "மையமாக்கிய"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr ""
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr ""
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr ""
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KPrAboutData.h:43
+#, fuzzy, kde-format
+msgid "Peter Simonsson"
+msgstr "முன்வைப்பு"
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr ""
+
+#: part/KPrAboutData.h:45
+#, fuzzy, kde-format
+#| msgid "&Closed Line"
+msgid "Carlos Licea "
+msgstr "மூடப்பட்ட கோடுகள்"
+
+#: part/KPrAboutData.h:46
+#, kde-format
+msgid "C. Boemann "
+msgstr ""
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr ""
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr ""
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr ""
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr ""
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr ""
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr ""
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "சிவகுமார் சண்முகசுந்தரம்,கோமதி சிவகுமார் "
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "sshanmu@yahoo.com,gomathiss@hotmail.com "
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr ""
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, kde-format
+msgid "Slide %1"
+msgstr "படவில்லை %1"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "முன்வைப்பின் முடிவு,வெளியேற சொடுக்கவும்."
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Layout"
+msgstr "பக்க அமைப்பு"
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KPrPicturesImport.cpp:62
+#, fuzzy
+#| msgid "Insert Picture"
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "படத்தை செருகு"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Pen Color"
+msgstr "நிறம்"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, fuzzy, kde-format
+msgid "Pen Size"
+msgstr "எழுத்துரு அளவை அதிகரிக்கவும்"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, fuzzy, kde-format
+msgid "Black"
+msgstr "வண்ணம்:"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, fuzzy, kde-format
+msgid "White"
+msgstr " அகலம்:"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, kde-format
+msgid "Green"
+msgstr "பச்சை"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, kde-format
+msgid "Red"
+msgstr "சிவப்பு"
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, kde-format
+msgid "Blue"
+msgstr "நீலம்"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, fuzzy, kde-format
+#| msgid "Slow"
+msgid "Yellow"
+msgstr "மெதுவாக."
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, fuzzy, kde-format
+#| msgid "&Next Slide"
+msgid "Next Slide"
+msgstr "அடுத்த படவில்லை"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, kde-format
+msgid "Speaker Notes"
+msgstr ""
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, fuzzy, kde-format
+#| msgid "Create HTML Slideshow"
+msgid "Current Slide %1 of %2"
+msgstr "HTML படக்காட்சியை உருவாக்கு"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "End of Slide Show"
+msgstr "படவில்லைக் காட்சி"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "start after previous animation"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "start with previous animation"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Animation"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/KPrShapeAnimations.cpp:201
+#, kde-format
+msgid "Shape"
+msgstr "வடிவம்"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, fuzzy, kde-format
+#| msgid "Move Slide"
+msgid "&Move Here"
+msgstr "படவில்லை நகர்த்து"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, fuzzy, kde-format
+#| msgid "Copy Slide"
+msgid "&Copy Here"
+msgstr "படவில்லையை நகலெடு   "
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, kde-format
+msgid "C&ancel"
+msgstr ""
+
+#: part/KPrView.cpp:73
+#, kde-format
+msgid "Normal"
+msgstr "இயல்பான"
+
+#: part/KPrView.cpp:78
+#, fuzzy, kde-format
+#| msgid "Paste Slide"
+msgid "Show Master Slides"
+msgstr "படவில்லையை ஒட்டு "
+
+#: part/KPrView.cpp:79
+#, fuzzy, kde-format
+#| msgid "Goto Slide..."
+msgid "Import Slideshow..."
+msgstr "படவில்லைக்கு செல் ... "
+
+#: part/KPrView.cpp:80
+#, kde-format
+msgid "Insert Slide"
+msgstr "படவில்லையை நுழை"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr ""
+
+#: part/KPrView.cpp:83
+#, kde-format
+msgid "Copy Slide"
+msgstr "படவில்லையை நகலெடு   "
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Copy the current slide"
+msgstr "தற்போதைய படவில்லைக்கு முன்"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Slide"
+msgstr "படவில்லை நீக்கு"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete the current slide"
+msgstr "தற்போதைய படவில்லைக்கு முன்"
+
+#: part/KPrView.cpp:89
+#, fuzzy, kde-format
+#| msgid "Insert &Slide..."
+msgid "Master Slide..."
+msgstr "படவில்லையைச் செருகு..."
+
+#: part/KPrView.cpp:90
+#, fuzzy, kde-format
+#| msgid "&Previous Slide"
+msgid "Previous Slide"
+msgstr "முந்தைய படவில்லை"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, fuzzy, kde-format
+#| msgid "Previous slide"
+msgid "Go to previous slide"
+msgstr "முந்தைய படவில்லை"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, fuzzy, kde-format
+#| msgid "Go to slide:"
+msgid "Go to next slide"
+msgstr "படவில்லைக்கு செல் :"
+
+#: part/KPrView.cpp:96
+#, fuzzy, kde-format
+#| msgid "Paste Slide"
+msgid "First Slide"
+msgstr "படவில்லையை ஒட்டு "
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, fuzzy, kde-format
+#| msgid "Go to slide:"
+msgid "Go to first slide"
+msgstr "படவில்லைக்கு செல் :"
+
+#: part/KPrView.cpp:99
+#, fuzzy, kde-format
+#| msgid "Paste Slide"
+msgid "Last Slide"
+msgstr "படவில்லையை ஒட்டு "
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, fuzzy, kde-format
+#| msgid "Go to slide:"
+msgid "Go to last slide"
+msgstr "படவில்லைக்கு செல் :"
+
+#: part/KPrView.cpp:102
+#, fuzzy, kde-format
+#| msgid "&Configure Slide Show..."
+msgid "Configure Stage..."
+msgstr "படவில்லையை உள்ளமை."
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr ""
+
+#: part/KPrView.cpp:251
+#, fuzzy, kde-format
+#| msgid "Insert Picture"
+msgid "Insert Pictures as Slides..."
+msgstr "படத்தை செருகு"
+
+#: part/KPrView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Create Appear Animation"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/KPrView.cpp:264
+#, fuzzy, kde-format
+#| msgid "Custom Slide Show..."
+msgid "Edit Custom Slide Shows..."
+msgstr "தனிப்பயன் படவில்லைக் காட்சி..."
+
+#: part/KPrView.cpp:268
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Start Presentation"
+msgstr "முன்வைப்பு"
+
+#: part/KPrView.cpp:271
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "From Current Slide"
+msgstr "தற்போதைய படவில்லைக்கு பின்"
+
+#: part/KPrView.cpp:275
+#, fuzzy, kde-format
+#| msgid "Start From &First Slide"
+msgid "From First Slide"
+msgstr "முதல் படவில்லையை ஆரம்பி "
+
+#: part/KPrView.cpp:280
+#, fuzzy, kde-format
+msgid "Stop presentation"
+msgstr "முன்வைப்பு"
+
+#: part/KPrView.cpp:286
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Show Status Bar"
+msgstr "நிலைப்பட்டையை காட்டவும்"
+
+#: part/KPrView.cpp:287
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Hide Status Bar"
+msgstr "நிலைப்பட்டையை காட்டவும்"
+
+#: part/KPrView.cpp:288
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Shows or hides the status bar"
+msgstr "நிலைப்பட்டையை காட்டவும்"
+
+#: part/KPrView.cpp:297
+#, fuzzy, kde-format
+#| msgid "&Configure Slide Show..."
+msgid "Configure Slide Show..."
+msgstr "படவில்லையை உள்ளமை."
+
+#: part/KPrView.cpp:301
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter..."
+msgid "Configure Presenter View..."
+msgstr "KPresenter கட்டமை "
+
+#: part/KPrView.cpp:305
+#, fuzzy, kde-format
+msgid "Draw on the presentation..."
+msgstr "முன்வைப்பை மேல் எழுது"
+
+#: part/KPrView.cpp:312
+#, fuzzy, kde-format
+msgid "Highlight the presentation..."
+msgstr "முன்வைப்பை மேல் எழுது"
+
+#: part/KPrView.cpp:319
+#, fuzzy, kde-format
+msgid "Blackscreen on the presentation..."
+msgstr "முன்வைப்பை மேல் எழுது"
+
+#: part/KPrViewModeNotes.cpp:36
+#, fuzzy, kde-format
+#| msgid "Note"
+msgid "Notes"
+msgstr "குறிப்பு."
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, fuzzy, kde-format
+msgid "Slides Sorter"
+msgstr "பிரதான &பட வில்லை"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show: "
+msgstr "படவில்லைக் காட்சி"
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new custom slide show"
+msgstr "படக்காட்சி"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete current custom slide show"
+msgstr "தற்போதைய படவில்லைக்கு முன்"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, fuzzy, kde-format
+msgid "Add slides to current custom slide show"
+msgstr "தனிப்பயன் படவில்லை காட்சி"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, fuzzy, kde-format
+msgid "Remove slides from current custom slide show"
+msgstr "தனிப்பயன் படவில்லை காட்சி"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Duplicate Slide"
+msgstr "படவில்லை நீக்கு"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, fuzzy, kde-format
+#| msgid "Create HTML Slideshow"
+msgid "Start Slideshow"
+msgstr "HTML படக்காட்சியை உருவாக்கு"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new slide"
+msgstr "படக்காட்சி"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, fuzzy, kde-format
+#| msgid "Selected slides:"
+msgid "Delete selected slides"
+msgstr "தேர்ந்தெடுக்கப்பட்ட படவில்லைகள்:"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, fuzzy, kde-format
+msgid "Rename"
+msgstr "தொடுப்பை நீக்கு"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, fuzzy, kde-format
+#| msgid "&Custom"
+msgid "Cut"
+msgstr "& தனிப்பயன்"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, fuzzy, kde-format
+#| msgid "Co&py"
+msgid "Copy"
+msgstr "நகல் எடு"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, fuzzy, kde-format
+#| msgid "Path"
+msgid "Paste"
+msgstr "பாதை"
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show %1"
+msgstr "படவில்லைக் காட்சி"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, fuzzy, kde-format
+#| msgid "All Files"
+msgid "All slides"
+msgstr "அனைத்து கோப்புகள்"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, fuzzy, kde-format
+#| msgid "Arrow"
+msgid "Error"
+msgstr "அம்பு குறி."
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr ""
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+#, fuzzy
+#| msgid "Page &Layout..."
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "பக்க அமைப்பு"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, fuzzy, kde-format
+#| msgid "Automatic hyphenation"
+msgid "Automatic animation preview"
+msgstr "தானே இடைகோடிடுதல்"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Preview animation"
+msgstr "முன்வைப்பு"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, fuzzy, kde-format
+#| msgid "Modify Slide Transition"
+msgid "Slide Transitions"
+msgstr "படவில்லை பரிமாற்றத்தை மாற்றவும்"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Shape Click Actions"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Shape Animations"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, fuzzy, kde-format
+#| msgid "Presentation duration: "
+msgid "Manage animation delay and duration: "
+msgstr "முன்வைப்பு கால அளவு."
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, fuzzy, kde-format
+msgid "Start: "
+msgstr "வரைப்படம் "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "after previous animation"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "with previous animation"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, fuzzy, kde-format
+#| msgid "Direction"
+msgid "Duration: "
+msgstr "திசை"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Preview Shape Animation"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, kde-format
+msgid "No Effect"
+msgstr "விளைவு இல்லை"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid " sec"
+msgstr "நொடிகள்"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, fuzzy, kde-format
+#| msgid "Modify Slide Transition"
+msgid "Slide Transition:"
+msgstr "படவில்லை பரிமாற்றத்தை மாற்றவும்"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, fuzzy, kde-format
+#| msgid "Apply Styles"
+msgid "Apply To All Slides"
+msgstr "பாணிகளை பயன்படுத்து."
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#, fuzzy
+#| msgid "Apply Style to Frames"
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr "பாணிகளை சட்டங்களில் பயன்படுத்து"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, fuzzy, kde-format
+msgid "Custom"
+msgstr "தனிப்பயன் படவில்லை"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, fuzzy, kde-format
+#| msgid "Elevation:"
+msgid "Ole Action"
+msgstr "முன்புறத்தோற்றம்"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Edit animation"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Add new animation"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, fuzzy, kde-format
+#| msgid "Remove Link"
+msgid "Remove animation"
+msgstr "தொடுப்பை நீக்கு"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Move animation up"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Move animation down"
+msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new animation"
+msgstr "படக்காட்சி"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete current animation"
+msgstr "தற்போதைய படவில்லைக்கு முன்"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, fuzzy, kde-format
+#| msgid "Co&py"
+msgid "Crop"
+msgstr "நகல் எடு"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, fuzzy, kde-format
+#| msgid "Width:"
+msgid "W&idth:"
+msgstr " அகலம்:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, fuzzy, kde-format
+msgid "Will keep the width of the crop constant"
+msgstr "சட்டங்களுக்கான படங்களை உருவாக்கு"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, fuzzy, kde-format
+msgid "&Height:"
+msgstr "உயரம்:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, fuzzy, kde-format
+msgid "Will keep the height of the crop constant"
+msgstr "சட்டங்களுக்கான படங்களை உருவாக்கு"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, fuzzy, kde-format
+msgid "R&atio:"
+msgstr "சுழற்சி"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, fuzzy, kde-format
+msgid "Will keep the ratio constant"
+msgstr "சட்டங்களுக்கான படங்களை உருவாக்கு"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, fuzzy, kde-format
+#| msgid "&Page"
+msgid "Image"
+msgstr "& பக்கம்"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, fuzzy, kde-format
+msgid "&Crop"
+msgstr "மேல்:"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+#, fuzzy
+#| msgid "Shape"
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "வடிவம்"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, fuzzy, kde-format
+#| msgid "Presentation Pen"
+msgid "Presentation monitor:"
+msgstr "காட்சியமைப்பு பேனா."
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Enable presenter view"
+msgstr "உள்ளமை Kமுன்வைப்பவர்"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Configure Presenter View"
+msgstr "உள்ளமை Kமுன்வைப்பவர்"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, kde-format
+msgid "Configure Slide Show"
+msgstr "படவில்லைக் காட்சியை வடிவமைக்கவும்"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "Slides"
+msgstr "&பட வில்லை"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Slides:"
+msgstr "முன்வைப்பு"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, fuzzy, kde-format
+#| msgid "Custom Slide Show..."
+msgid "Edit Custom Slide Shows ..."
+msgstr "தனிப்பயன் படவில்லைக் காட்சி..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, fuzzy, kde-format
+#| msgid "Select &All"
+msgid "Select all"
+msgstr "&முழுவதையும் தேர்வு செய்."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, fuzzy, kde-format
+msgid "Select template (.css) :"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பக்கங்கள்"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, fuzzy, kde-format
+#| msgid "&Deselect All"
+msgid "Deselect all"
+msgstr "&எல்லா தேர்வுகளையும் நீக்கு"
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, fuzzy, kde-format
+#| msgid "Title:"
+msgid "Title"
+msgstr "தலைப்பு:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, fuzzy, kde-format
+#| msgid "Automatic preview"
+msgid "Output preview"
+msgstr "தன்னியக்க முன்னோட்டம்"
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, fuzzy, kde-format
+#| msgid "New..."
+msgid "..."
+msgstr "புதிய..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, fuzzy, kde-format
+#| msgid "Author:"
+msgid "Author"
+msgstr "ஆசிரியர்:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Favorite"
+msgstr "படவில்லை நீக்கு"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Template"
+msgstr "படவில்லை நீக்கு"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Add Template"
+msgstr "படவில்லை நீக்கு"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+#| msgid "Do you want to remove the current slide?"
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "நிகழ்விலுள்ள படவில்லையை நீக்க விருப்பமா?"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+#| msgid "Save Configuration..."
+msgid "Confirm remove"
+msgstr "உள்ளமைவை சேமி..."
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#, fuzzy
+#| msgid "Change Rotation"
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr "சுழற்சி மாற்றவும்"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid "No sound"
+msgstr "நொடிகள்"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, fuzzy, kde-format
+#| msgid "Import Styles..."
+msgid "Import..."
+msgstr "பாணிகளை இறக்கு..."
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr ""
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "From Left"
+msgstr "இடது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Come From Top"
+msgid "From Top"
+msgstr "மேல் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Right"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Clock"
+msgstr "வண்ணம்:"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Twelve Clockwise"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Three Clockwise"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Six Clockwise"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Nine Clockwise"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Twelve Counterclockwise"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Three Counterclockwise"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Six Counterclockwise"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Nine Counterclockwise"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Fan"
+msgstr "இரட்டை அம்பு"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan Out Vertical"
+msgstr "செங்குத்தாக திற"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Horizontal"
+msgstr "கிடைமட்டமாய் திற"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan In Vertical"
+msgstr "செங்குத்தாக திற"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan In Horizontal"
+msgstr "கிடைமட்டமாய் திற"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Fan In Vertical Reverse"
+msgstr "செங்குத்து கோடுகள்"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Fan In Horizontal Reverse"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Double Sweep"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Parallel Vertical"
+msgstr "செங்குத்தாக திற"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Opposite Vertical"
+msgstr "செங்குத்தாக திற"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Opposite Horizontal"
+msgstr "கிடைமட்டமாய் திற"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Diagonal Top Left"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Parallel Diagonal Bottom Left"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Parallel Vertical Reverse"
+msgstr "செங்குத்து கோடுகள்"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal Reverse"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Opposite Vertical Reverse"
+msgstr "செங்குத்து கோடுகள்"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Opposite Horizontal Reverse"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Flatten"
+msgid "Fan"
+msgstr "ஒருமையாக்கல்"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Uncover Right"
+msgid "Center Right"
+msgstr "வலமாக திற"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Top"
+msgstr "மையமாக்கிய"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Left"
+msgstr "மையமாக்கிய"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Center Bottom"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Top"
+msgstr "கிடைமட்டமாய் திற"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Right"
+msgstr "கிடைமட்டமாய் திற"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Fan Out Bottom"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan Out Left"
+msgstr "செங்குத்தாக திற"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan In Top"
+msgstr "கிடைமட்டமாய் திற"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Fan In Right"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Fan In Bottom"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Fan In Left"
+msgstr "இடது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Pin Wheel"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Vertical Clockwise"
+msgstr "Blinds Horizontal"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Horizontal Clockwise"
+msgstr "Blinds Horizontal"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Blades Horizontal Clockwise"
+msgstr "Blinds Horizontal"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "Blinds Horizontal"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "Blinds Horizontal"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "Blinds Horizontal"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Saloon Door"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Top"
+msgid "To Top"
+msgstr "மேல் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Cover Left"
+msgid "To Left"
+msgstr "இடமிருந்து மூடு"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "To Bottom"
+msgstr "கீழே:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Cover Right"
+msgid "To Right"
+msgstr "வலமிருது மூடு"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Single Sweep"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top"
+msgstr "இடது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Cover Right-Up"
+msgid "Clockwise Right"
+msgstr "வலமிருந்து மேலாக மூடு"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+#| msgid "Align Bottom"
+msgid "Clockwise Bottom"
+msgstr "கீழ்புறமாக ஒருநிலைப்படுத்தவும் "
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Clockwise Left"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left"
+msgstr "இடது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Right"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Left"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Windshield"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, fuzzy, kde-format
+msgid "Right"
+msgstr "வலது:"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Vertical"
+msgstr "செங்குத்தாக திற"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, fuzzy, kde-format
+msgid "Horizontal"
+msgstr "கிடைமட்டமாய் திற"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Right Reverse"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Up Reverse"
+msgstr "செங்குத்து கோடுகள்"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reverse"
+msgstr "செங்குத்து கோடுகள்"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reverse"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Barn Door"
+msgstr "இரட்டை அம்பு"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Diagonal Bottom Left"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Diagonal Bottom Left Reverse"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Top Left"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Top Left Reverse"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Barn Zig Zag"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reversed"
+msgstr "செங்குத்து கோடுகள்"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reversed"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "From Top Left"
+msgstr "இடது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Top Right"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom Left"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom Right"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Diagonal"
+msgstr "குறுக்கு சரிவு 1"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+msgid "Corners In"
+msgstr "மூலைகள் :"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Corners In Reverse"
+msgstr "மூலைகள் :"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Corners Out"
+msgstr "மூலைகள் :"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Corners Out Reverse"
+msgstr "மூலைகள் :"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Misc Diagonal"
+msgstr "குறுக்கு சரிவு 1"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Barn Door"
+msgstr "இரட்டை அம்பு"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Diamond"
+msgstr "இரட்டை அம்பு"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Zig Zag"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, kde-format
+msgid "Fade"
+msgstr "திரை விரி"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr ""
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Set Text Color"
+msgid "Fade over Color"
+msgstr "உரை நிறத்தை அமை"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "ArrowHead"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, fuzzy, kde-format
+#| msgid "Done"
+msgid "Down"
+msgstr "முடிந்தது"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Down Reverse"
+msgstr "செங்குத்து கோடுகள்"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, fuzzy, kde-format
+msgid "Left"
+msgstr "நீளம் : "
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Left Reverse"
+msgstr "செங்குத்து கோடுகள்"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Ellipse"
+msgstr "நீள்வட்டம்"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Circle"
+msgstr "வட்டம்"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Circle Reverse"
+msgstr "செங்குத்து கோடுகள்"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Hexagon"
+msgstr "முன்வைப்பு"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular"
+msgstr "நீள் சதுரம்"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular Reverse"
+msgstr "நீள் சதுரம்"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Diamond"
+msgstr "இரட்டை அம்பு"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Diamond Reverse"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, kde-format
+msgid "Misc"
+msgstr "உபரி குறிகள்"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Header"
+msgid "Heart"
+msgstr "தலைப்பு."
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Heart Reverse"
+msgstr "செங்குத்து கோடுகள்"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole"
+msgstr "செங்குத்து கோடுகள்"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole Reverse"
+msgstr "செங்குத்து கோடுகள்"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Pentagon"
+msgstr "முன்வைப்பு"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Sound effect"
+msgid "RoundRect"
+msgstr "ஒலி விளைவு "
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Star"
+msgstr "வரைப்படம் "
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star Reverse"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star Reverse"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star Reverse"
+msgstr "கிடைமட்ட கோடுகள்"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Tiled"
+msgid "Triangle"
+msgstr "வில்லையாக"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Box Snakes"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Box In"
+msgid "Two Box Top In"
+msgstr "பெட்டி உள்"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Two Box Bottom In"
+msgstr "கீழே:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Cover Left"
+msgid "Two Box Left In"
+msgstr "இடமிருந்து மூடு"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Cover Right"
+msgid "Two Box Right In"
+msgstr "வலமிருது மூடு"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Four Box Vertical In"
+msgstr "செங்குத்தாக திற"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Box Horizontal In"
+msgstr "Blinds Horizontal"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Box Out"
+msgid "Two Box Top Out"
+msgstr "பெட்டி வெளி"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Two Box Bottom Out"
+msgstr "கீழே:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Two Box Left Out"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Two Box Right Out"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Four Box Vertical Out"
+msgstr "செங்குத்தாக திற"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Box Horizontal Out"
+msgstr "Blinds Horizontal"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Snakes"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same In"
+msgstr "செங்குத்து சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same Out"
+msgstr "செங்குத்து சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same In"
+msgstr "செங்குத்து சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same Out"
+msgstr "செங்குத்து சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite In"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite Out"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Left Opposite In"
+msgstr "செங்குத்து சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same In"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same Out"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same In"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same Out"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite In"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite Out"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite In"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite Out"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite In"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite Out"
+msgstr "கிடைமட்ட சரிவு"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgid "Snake"
+msgstr "வடிவம்"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Swirl"
+msgid "Spiral"
+msgstr "சுழற்சி"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left In"
+msgstr "இடது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left Out"
+msgstr "இடது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right In"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right Out"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left In"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left Out"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right In"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right Out"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left In"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left Out"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right In"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right Out"
+msgstr "வலது பக்கத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left In"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left Out"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right In"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right Out"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Waterfall"
+msgstr "பட விளைவு"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Top Left Vertical"
+msgstr "செங்குத்தாக திற"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Top Left Horizontal"
+msgstr "கிடைமட்டமாய் திற"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Top Right Vertical"
+msgstr "செங்குத்தாக திற"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Top Right Horizontal"
+msgstr "கிடைமட்டமாய் திற"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Close Vertical"
+msgid "Bottom Left Vertical"
+msgstr "செங்குத்தாக மூடு"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Close Horizontal"
+msgid "Bottom Left Horizontal"
+msgstr "கிடைமட்டமாய் மூடு"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Bottom Right Vertical"
+msgstr "கீழ் புறத்திலிருந்து வா"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Interlocking Horizontal 1"
+msgid "Bottom Right Horizontal"
+msgstr "கிடைமட்ட உள்ளமைந்த பூட்டு 1"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "Slide"
+msgstr "&பட வில்லை"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Rotation"
+msgid "Space Rotation"
+msgstr "சுழற்சி"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Swap effect"
+msgstr "பட விளைவு"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, fuzzy, kde-format
+#| msgid "Header"
+msgid "Header"
+msgstr "தலைப்பு."
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, kde-format
+msgid "Footer"
+msgstr "அடிப்பகுதி."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&முடிவு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "துண்டம்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "கோப்பினை சொருகு"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "&வடிவம்"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "&பட வில்லை"
+
+#, fuzzy
+#~| msgid "Sli&de Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "படக்காட்சி"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "பாதை அமைவுகள்"
+
+#, fuzzy
+#~| msgid "Co&py"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "நகல் எடு"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr " அகலம்:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the width of the crop constant"
+#~ msgstr "சட்டங்களுக்கான படங்களை உருவாக்கு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "உயரம்:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "சுழற்சி"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "& பக்கம்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "மேல்:"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "&பட வில்லை"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "முன்வைப்பு"
+
+#, fuzzy
+#~| msgid "Custom Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "தனிப்பயன் படவில்லைக் காட்சி..."
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select all"
+#~ msgstr "&முழுவதையும் தேர்வு செய்."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select template (.css) :"
+#~ msgstr "தேர்ந்தெடுக்கப்பட்ட பக்கங்கள்"
+
+#, fuzzy
+#~| msgid "&Deselect All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deselect all"
+#~ msgstr "&எல்லா தேர்வுகளையும் நீக்கு"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "தலைப்பு:"
+
+#, fuzzy
+#~| msgid "Automatic preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output preview"
+#~ msgstr "தன்னியக்க முன்னோட்டம்"
+
+#, fuzzy
+#~| msgid "New..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "புதிய..."
+
+#, fuzzy
+#~| msgid "Author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "ஆசிரியர்:"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "படவில்லை நீக்கு"
+
+#, fuzzy
+#~| msgid "Presentation Pen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "காட்சியமைப்பு பேனா."
+
+#, fuzzy
+#~| msgid "&Configure Slide Show..."
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "படவில்லையை உள்ளமை."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "முன்வைப்பு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Stage Team"
+#~ msgstr "(c) 1998-2004, இந்த Kபிரசன்ட்டர் குழு"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "தற்போதைய பராமரிப்பாளர்."
+
+#, fuzzy
+#~| msgid "original author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "மூல ஆசிரியர்."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "முன்வைப்பு"
+
+#, fuzzy
+#~| msgid "&Closed Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Carlos Licea "
+#~ msgstr "மூடப்பட்ட கோடுகள்"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "சிவகுமார் சண்முகசுந்தரம்,கோமதி சிவகுமார் "
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sshanmu@yahoo.com,gomathiss@hotmail.com "
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "படவில்லை %1"
+
+#, fuzzy
+#~| msgid "End of presentation. Click to exit."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of presentation. Click to exit."
+#~ msgstr "முன்வைப்பின் முடிவு,வெளியேற சொடுக்கவும்."
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "பக்க அமைப்பு"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "நிறம்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Size"
+#~ msgstr "எழுத்துரு அளவை அதிகரிக்கவும்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "வண்ணம்:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "White"
+#~ msgstr " அகலம்:"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "பச்சை"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "சிவப்பு"
+
+#, fuzzy
+#~| msgid "Blue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "நீலம்"
+
+#, fuzzy
+#~| msgid "Slow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "மெதுவாக."
+
+#, fuzzy
+#~| msgid "&Next Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "அடுத்த படவில்லை"
+
+#, fuzzy
+#~| msgid "Create HTML Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "HTML படக்காட்சியை உருவாக்கு"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "படவில்லைக் காட்சி"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start after previous animation"
+#~ msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start with previous animation"
+#~ msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "வடிவம்"
+
+#, fuzzy
+#~| msgid "Move Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "படவில்லை நகர்த்து"
+
+#, fuzzy
+#~| msgid "Copy Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "படவில்லையை நகலெடு   "
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "இயல்பான"
+
+#, fuzzy
+#~| msgid "Paste Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Master Slides"
+#~ msgstr "படவில்லையை ஒட்டு "
+
+#, fuzzy
+#~| msgid "Goto Slide..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "படவில்லைக்கு செல் ... "
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "படவில்லையை நுழை"
+
+#, fuzzy
+#~| msgid "Copy Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "படவில்லையை நகலெடு   "
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "தற்போதைய படவில்லைக்கு முன்"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "படவில்லை நீக்கு"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "தற்போதைய படவில்லைக்கு முன்"
+
+#, fuzzy
+#~| msgid "Insert &Slide..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide..."
+#~ msgstr "படவில்லையைச் செருகு..."
+
+#, fuzzy
+#~| msgid "&Previous Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "முந்தைய படவில்லை"
+
+#, fuzzy
+#~| msgid "Previous slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "முந்தைய படவில்லை"
+
+#, fuzzy
+#~| msgid "Go to slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "படவில்லைக்கு செல் :"
+
+#, fuzzy
+#~| msgid "Paste Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "படவில்லையை ஒட்டு "
+
+#, fuzzy
+#~| msgid "Go to slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "படவில்லைக்கு செல் :"
+
+#, fuzzy
+#~| msgid "Paste Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "படவில்லையை ஒட்டு "
+
+#, fuzzy
+#~| msgid "Go to slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "படவில்லைக்கு செல் :"
+
+#, fuzzy
+#~| msgid "&Configure Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "படவில்லையை உள்ளமை."
+
+#, fuzzy
+#~| msgid "Insert Picture"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "படத்தை செருகு"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Appear Animation"
+#~ msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#, fuzzy
+#~| msgid "Custom Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows..."
+#~ msgstr "தனிப்பயன் படவில்லைக் காட்சி..."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "முன்வைப்பு"
+
+#, fuzzy
+#~| msgid "After Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "தற்போதைய படவில்லைக்கு பின்"
+
+#, fuzzy
+#~| msgid "Start From &First Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From First Slide"
+#~ msgstr "முதல் படவில்லையை ஆரம்பி "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "முன்வைப்பு"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "நிலைப்பட்டையை காட்டவும்"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Status Bar"
+#~ msgstr "நிலைப்பட்டையை காட்டவும்"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "நிலைப்பட்டையை காட்டவும்"
+
+#, fuzzy
+#~| msgid "&Configure Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "படவில்லையை உள்ளமை."
+
+#, fuzzy
+#~| msgid "Configure KPresenter..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "KPresenter கட்டமை "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "முன்வைப்பை மேல் எழுது"
+
+#, fuzzy
+#~| msgid "Note"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "குறிப்பு."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "பிரதான &பட வில்லை"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "படவில்லைக் காட்சி"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new custom slide show"
+#~ msgstr "படக்காட்சி"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "தற்போதைய படவில்லைக்கு முன்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add slides to current custom slide show"
+#~ msgstr "தனிப்பயன் படவில்லை காட்சி"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "படவில்லை நீக்கு"
+
+#, fuzzy
+#~| msgid "Create HTML Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "HTML படக்காட்சியை உருவாக்கு"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new slide"
+#~ msgstr "படக்காட்சி"
+
+#, fuzzy
+#~| msgid "Selected slides:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "தேர்ந்தெடுக்கப்பட்ட படவில்லைகள்:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "தொடுப்பை நீக்கு"
+
+#, fuzzy
+#~| msgid "&Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "& தனிப்பயன்"
+
+#, fuzzy
+#~| msgid "Co&py"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "நகல் எடு"
+
+#, fuzzy
+#~| msgid "Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "பாதை"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "படவில்லைக் காட்சி"
+
+#, fuzzy
+#~| msgid "All Files"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All slides"
+#~ msgstr "அனைத்து கோப்புகள்"
+
+#, fuzzy
+#~| msgid "Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "அம்பு குறி."
+
+#, fuzzy
+#~| msgid "Automatic hyphenation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic animation preview"
+#~ msgstr "தானே இடைகோடிடுதல்"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "முன்வைப்பு"
+
+#, fuzzy
+#~| msgid "Modify Slide Transition"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "படவில்லை பரிமாற்றத்தை மாற்றவும்"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Click Actions"
+#~ msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#, fuzzy
+#~| msgid "Presentation duration: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage animation delay and duration: "
+#~ msgstr "முன்வைப்பு கால அளவு."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start: "
+#~ msgstr "வரைப்படம் "
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after previous animation"
+#~ msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "with previous animation"
+#~ msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#, fuzzy
+#~| msgid "Direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "திசை"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview Shape Animation"
+#~ msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#, fuzzy
+#~| msgid "No Effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "விளைவு இல்லை"
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr "நொடிகள்"
+
+#, fuzzy
+#~| msgid "Apply Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply To All Slides"
+#~ msgstr "பாணிகளை பயன்படுத்து."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "தனிப்பயன் படவில்லை"
+
+#, fuzzy
+#~| msgid "Elevation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ole Action"
+#~ msgstr "முன்புறத்தோற்றம்"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new animation"
+#~ msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#, fuzzy
+#~| msgid "Remove Link"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "தொடுப்பை நீக்கு"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation up"
+#~ msgstr "HTML-காட்சியமைப்பை படைக்கவும்"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "படக்காட்சி"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "தற்போதைய படவில்லைக்கு முன்"
+
+#, fuzzy
+#~| msgid "Configure KPresenter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View"
+#~ msgstr "உள்ளமை Kமுன்வைப்பவர்"
+
+#, fuzzy
+#~| msgid "Configure Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "படவில்லைக் காட்சியை வடிவமைக்கவும்"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "படவில்லை நீக்கு"
+
+#, fuzzy
+#~| msgid "Do you want to remove the current slide?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Are you sure you want to remove \"%1\"?"
+#~ msgstr "நிகழ்விலுள்ள படவில்லையை நீக்க விருப்பமா?"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm remove"
+#~ msgstr "உள்ளமைவை சேமி..."
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr "நொடிகள்"
+
+#, fuzzy
+#~| msgid "Import Styles..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import..."
+#~ msgstr "பாணிகளை இறக்கு..."
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Left"
+#~ msgstr "இடது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top"
+#~ msgstr "மேல் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Right"
+#~ msgstr "வலது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "வண்ணம்:"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "இரட்டை அம்பு"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Vertical"
+#~ msgstr "செங்குத்தாக திற"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Horizontal"
+#~ msgstr "கிடைமட்டமாய் திற"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "செங்குத்தாக திற"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "கிடைமட்டமாய் திற"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical Reverse"
+#~ msgstr "செங்குத்து கோடுகள்"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal Reverse"
+#~ msgstr "கிடைமட்ட கோடுகள்"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "செங்குத்தாக திற"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "செங்குத்தாக திற"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "கிடைமட்டமாய் திற"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical Reverse"
+#~ msgstr "செங்குத்து கோடுகள்"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Reverse"
+#~ msgstr "கிடைமட்ட கோடுகள்"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "செங்குத்து கோடுகள்"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "கிடைமட்ட கோடுகள்"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Flatten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan"
+#~ msgstr "ஒருமையாக்கல்"
+
+#, fuzzy
+#~| msgid "Uncover Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "வலமாக திற"
+
+#, fuzzy
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Top"
+#~ msgstr "மையமாக்கிய"
+
+#, fuzzy
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Left"
+#~ msgstr "மையமாக்கிய"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Top"
+#~ msgstr "கிடைமட்டமாய் திற"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "கிடைமட்டமாய் திற"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Left"
+#~ msgstr "செங்குத்தாக திற"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "வலது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Left"
+#~ msgstr "இடது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Clockwise"
+#~ msgstr "Blinds Horizontal"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Clockwise"
+#~ msgstr "Blinds Horizontal"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Cover Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "இடமிருந்து மூடு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "கீழே:"
+
+#, fuzzy
+#~| msgid "Cover Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "வலமிருது மூடு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Cover Right-Up"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "வலமிருந்து மேலாக மூடு"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "கீழ்புறமாக ஒருநிலைப்படுத்தவும் "
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "இடது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "வலது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "வலது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "வலது:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "செங்குத்தாக திற"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "கிடைமட்டமாய் திற"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Reverse"
+#~ msgstr "கிடைமட்ட கோடுகள்"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up Reverse"
+#~ msgstr "செங்குத்து கோடுகள்"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reverse"
+#~ msgstr "செங்குத்து கோடுகள்"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reverse"
+#~ msgstr "கிடைமட்ட கோடுகள்"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "இரட்டை அம்பு"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "செங்குத்து கோடுகள்"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "கிடைமட்ட கோடுகள்"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "இடது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "வலது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "குறுக்கு சரிவு 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "மூலைகள் :"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "மூலைகள் :"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "குறுக்கு சரிவு 1"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Barn Door"
+#~ msgstr "இரட்டை அம்பு"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Diamond"
+#~ msgstr "இரட்டை அம்பு"
+
+#, fuzzy
+#~| msgid "Fade"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "திரை விரி"
+
+#, fuzzy
+#~| msgid "Set Text Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade over Color"
+#~ msgstr "உரை நிறத்தை அமை"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Done"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down"
+#~ msgstr "முடிந்தது"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "செங்குத்து கோடுகள்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "நீளம் : "
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "செங்குத்து கோடுகள்"
+
+#, fuzzy
+#~| msgid "Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "நீள்வட்டம்"
+
+#, fuzzy
+#~| msgid "Circle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "வட்டம்"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "செங்குத்து கோடுகள்"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular"
+#~ msgstr "நீள் சதுரம்"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "நீள் சதுரம்"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond"
+#~ msgstr "இரட்டை அம்பு"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "கிடைமட்ட கோடுகள்"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "உபரி குறிகள்"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart"
+#~ msgstr "தலைப்பு."
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "செங்குத்து கோடுகள்"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "செங்குத்து கோடுகள்"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "முன்வைப்பு"
+
+#, fuzzy
+#~| msgid "Sound effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "ஒலி விளைவு "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "வரைப்படம் "
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "கிடைமட்ட கோடுகள்"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "கிடைமட்ட கோடுகள்"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "கிடைமட்ட கோடுகள்"
+
+#, fuzzy
+#~| msgid "Tiled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triangle"
+#~ msgstr "வில்லையாக"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box Snakes"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Box In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top In"
+#~ msgstr "பெட்டி உள்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "கீழே:"
+
+#, fuzzy
+#~| msgid "Cover Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "இடமிருந்து மூடு"
+
+#, fuzzy
+#~| msgid "Cover Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "வலமிருது மூடு"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical In"
+#~ msgstr "செங்குத்தாக திற"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "Blinds Horizontal"
+
+#, fuzzy
+#~| msgid "Box Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top Out"
+#~ msgstr "பெட்டி வெளி"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "கீழே:"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "Blinds Horizontal"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "செங்குத்து சரிவு"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "செங்குத்து சரிவு"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same In"
+#~ msgstr "செங்குத்து சரிவு"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "கிடைமட்ட சரிவு"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same Out"
+#~ msgstr "கிடைமட்ட சரிவு"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same In"
+#~ msgstr "கிடைமட்ட சரிவு"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same Out"
+#~ msgstr "கிடைமட்ட சரிவு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite In"
+#~ msgstr "கிடைமட்ட சரிவு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "கிடைமட்ட சரிவு"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "வடிவம்"
+
+#, fuzzy
+#~| msgid "Swirl"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "சுழற்சி"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "இடது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "இடது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "வலது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "வலது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "வலது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "வலது பக்கத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Vertical"
+#~ msgstr "செங்குத்தாக திற"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Horizontal"
+#~ msgstr "கிடைமட்டமாய் திற"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "செங்குத்தாக திற"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Horizontal"
+#~ msgstr "கிடைமட்டமாய் திற"
+
+#, fuzzy
+#~| msgid "Close Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "செங்குத்தாக மூடு"
+
+#, fuzzy
+#~| msgid "Close Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Horizontal"
+#~ msgstr "கிடைமட்டமாய் மூடு"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "கீழ் புறத்திலிருந்து வா"
+
+#, fuzzy
+#~| msgid "Interlocking Horizontal 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "கிடைமட்ட உள்ளமைந்த பூட்டு 1"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "&பட வில்லை"
+
+#, fuzzy
+#~| msgid "Rotation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space Rotation"
+#~ msgstr "சுழற்சி"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "தலைப்பு."
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "அடிப்பகுதி."
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgid "Maintainer"
+#~ msgstr "தற்போதைய பராமரிப்பாளர்."
+
+#, fuzzy
+#~| msgid "KOffice Presentation Tool"
+#~ msgid "Calligra Presentation Tool"
+#~ msgstr "Kஅலுவலகம் காட்சியமைப்பு கருவி "
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "& பக்கம்"
+
+#~ msgid "File to open"
+#~ msgstr "திறக்க வேண்டிய கோப்பு."
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgid "Set Layout"
+#~ msgstr "பக்க அமைப்பு"
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "&கோப்பு:"
+
+#~ msgid "Line"
+#~ msgstr "கோடு"
+
+#~ msgid "Arra&nge Objects"
+#~ msgstr "&பொருள்களை ஒழுங்கமை"
+
+#~ msgid "&Align Objects"
+#~ msgstr "&பொருள்களை சீரமை"
+
+#~ msgid "Te&xt"
+#~ msgstr "&உரை"
+
+#~ msgid "&Align"
+#~ msgstr "&சீரமை"
+
+#~ msgid "T&ype"
+#~ msgstr "&வகை"
+
+#~ msgid "Spellcheck"
+#~ msgstr "சொல் திருத்தி"
+
+#, fuzzy
+#~ msgid "Autocorrection"
+#~ msgstr "தானியங்கு திருத்தத்தை செயல்படுத்து"
+
+#, fuzzy
+#~ msgid "File"
+#~ msgstr "&கோப்பு:"
+
+#, fuzzy
+#~ msgid "Edit"
+#~ msgstr "&முடிவு"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "கோப்பினை சொருகு"
+
+#~ msgid "Tools"
+#~ msgstr "கருவிகள்"
+
+#~ msgid "Format"
+#~ msgstr "வடிவம்"
+
+#~ msgid "Text"
+#~ msgstr "உரை"
+
+#~ msgid "Slide Show"
+#~ msgstr "படவில்லைக் காட்சி"
+
+#~ msgid "Navigation"
+#~ msgstr "வழிசெலுத்தல்"
+
+#~ msgid "Vertical Alignment"
+#~ msgstr "செங்குத்து ஒழுங்கமை"
+
+#~ msgid "Flip Objects"
+#~ msgstr "எழு பொருள்கள்"
+
+#~ msgid "&Scale to Show the Picture 1:1 In"
+#~ msgstr "படம் 1:1 ல் காட்டுவதற்கான அளவு"
+
+#~ msgid "Spell Check Result"
+#~ msgstr "சொல் திருத்தி முடிவு"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgid "Slide Layouts"
+#~ msgstr "பக்க அமைப்பு"
+
+#, fuzzy
+#~| msgid "Slide Transition"
+#~ msgid "Transitions"
+#~ msgstr "படவில்லை மாற்றம்"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete page effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Configure KPresenter..."
+#~ msgid "Configure KPresenter..."
+#~ msgstr "KPresenter கட்டமை "
+
+#~ msgid "Slide Title"
+#~ msgstr "பட வில்லை தலைப்பு."
+
+#, fuzzy
+#~| msgid "&Deselect All"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "&எல்லா தேர்வுகளையும் நீக்கு"
+
+#, fuzzy
+#~| msgid "Select"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "தேர்வு "
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgid "New Slide Show %1"
+#~ msgstr "படவில்லைக் காட்சி"
+
+#, fuzzy
+#~| msgid "Do you want to remove the current slide?"
+#~ msgid "Are you sure you want to delete the selected slide show?"
+#~ msgstr "நிகழ்விலுள்ள படவில்லையை நீக்க விருப்பமா?"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgid "Confirm action"
+#~ msgstr "உள்ளமைவை சேமி..."
+
+#, fuzzy
+#~| msgid "Custom Slide Show"
+#~ msgid "Custom Slideshows editor"
+#~ msgstr "தனிப்பயன் படவில்லை காட்சி"
+
+#, fuzzy
+#~| msgid "Custom Slide Show"
+#~ msgid "Customs Slideshows"
+#~ msgstr "தனிப்பயன் படவில்லை காட்சி"
+
+#, fuzzy
+#~| msgid "Duplicate Slide"
+#~ msgid "Available Slides"
+#~ msgstr "மாற்று படவில்லை"
+
+#, fuzzy
+#~| msgid "Slide"
+#~ msgid "Add Slide"
+#~ msgstr "பட வில்லை."
+
+#, fuzzy
+#~ msgid "Close"
+#~ msgstr "வண்ணம்:"
+
+#~ msgid "KPresenter"
+#~ msgstr "Kகாட்சியாளர்"
+
+#, fuzzy
+#~| msgid "Set Page Layout"
+#~ msgid "Page Layouts"
+#~ msgstr "பக்கம் இடஅமைவை அமை"
+
+#~ msgid "&Page"
+#~ msgstr "& பக்கம்"
+
+#, fuzzy
+#~| msgid "Change Image Effect"
+#~ msgid "Click to preview the page effect."
+#~ msgstr "பட விளைவுகளை மாற்றவும்."
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Spiral Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Snake Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Pentagon Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "RoundRect Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Misc Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Ellipse Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Iris Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Eye Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Hexagon Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Triangle Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Star Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Fan Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Clock Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Double Fan Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Bar Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Slide Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Four Box Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Misc Diagonal Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Barn Vee Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Zig Zag Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Barn Door Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Diagonal Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Vee Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Box Wipe Effect"
+#~ msgstr "பட விளைவு"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "வடிவம்"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgid "Navigate to:"
+#~ msgstr "வழிசெலுத்தல்"
+
+#, fuzzy
+#~| msgid "Cover Down"
+#~ msgid "Cover down effect"
+#~ msgstr "கீழாக மூடு"
+
+#~ msgid "Insert &new slide:"
+#~ msgstr "புதிய படவில்லையைச் சொருகு:"
+
+#~ msgid "Use &default template"
+#~ msgstr "முன்னிருப்பு வார்ப்புருவை பயன்படுத்து"
+
+#~ msgid "Use cu&rrent slide as default"
+#~ msgstr "தற்போதைய படவில்லையை முன்னிருப்பாக பயன்படுத்தவும்"
+
+#~ msgid "Choose di&fferent template"
+#~ msgstr "வேறு வார்ப்புருவை தேர்ந்தெடு"
+
+#, fuzzy
+#~ msgid "A&ngle:"
+#~ msgstr "கோணம்"
+
+#, fuzzy
+#~ msgid " °"
+#~ msgstr "0°"
+
+#~ msgid "Pie"
+#~ msgstr "துண்டம்"
+
+#, fuzzy
+#~ msgid "&Type:"
+#~ msgstr "வகை:"
+
+#, fuzzy
+#~ msgid "&Length:"
+#~ msgstr "நீளம் : "
+
+#, fuzzy
+#~ msgid "Set here the start position."
+#~ msgstr "Y நிலை (%1):"
+
+#, fuzzy
+#~ msgid "Set the arc length of your pie."
+#~ msgstr "சட்டங்களுக்கான படங்களை உருவாக்கு"
+
+#, fuzzy
+#~ msgid "Start position:"
+#~ msgstr "Y நிலை (%1):"
+
+#~ msgid "Preview"
+#~ msgstr "முன்தோற்றம்"
+
+#~ msgid "Channel Intensity"
+#~ msgstr "தட செறிவு"
+
+#~ msgid "Intensity"
+#~ msgstr "செறிவு "
+
+#~ msgid "Desaturate"
+#~ msgstr "முழுநிலை இல்லை"
+
+#~ msgid "Contrast"
+#~ msgstr "வேறுபாடு"
+
+#~ msgid "Normalize"
+#~ msgstr "இயல்பாக்கு"
+
+#~ msgid "Equalize"
+#~ msgstr "சமப்படுத்து"
+
+#~ msgid "Threshold"
+#~ msgstr "விளிம்பு"
+
+#~ msgid "Solarize"
+#~ msgstr "சூரிய ஒளிதாக்கம்"
+
+#~ msgid "Emboss"
+#~ msgstr "வேறுபாடு"
+
+#~ msgid "Despeckle"
+#~ msgstr "டிஸ்பகில்"
+
+#~ msgid "Charcoal"
+#~ msgstr "Charcoal"
+
+#~ msgid "Noise"
+#~ msgstr "சத்தம்"
+
+#~ msgid "Blur"
+#~ msgstr "மங்கல்"
+
+#~ msgid "Edge"
+#~ msgstr "விளிம்பு"
+
+#~ msgid "Implode"
+#~ msgstr "உள்ளிழுத்தல்"
+
+#~ msgid "Oil Paint"
+#~ msgstr "எண்ணை பெயிண்ட்"
+
+#~ msgid "Sharpen"
+#~ msgstr "தீட்டு"
+
+#~ msgid "Spread"
+#~ msgstr "பரப்புதல்"
+
+#~ msgid "Shade"
+#~ msgstr "நிழலாக்கு"
+
+#~ msgid "Wave"
+#~ msgstr "அலை"
+
+#~ msgid "Value:"
+#~ msgstr "மதிப்பு:"
+
+#~ msgid " %"
+#~ msgstr " %"
+
+#~ msgid "Color component:"
+#~ msgstr "வண்ண பொருள்கூறுகள்"
+
+#~ msgid "Gray"
+#~ msgstr "கிரே"
+
+#~ msgid "All"
+#~ msgstr "அனைத்தும்"
+
+#~ msgid "Color:"
+#~ msgstr "வண்ணம்:"
+
+#~ msgid "Color 1:"
+#~ msgstr "வண்ணம் 1:"
+
+#~ msgid "Color 2:"
+#~ msgstr "வண்ணம் 2:"
+
+#~ msgid "Intensity:"
+#~ msgstr "வீரியம்:"
+
+#~ msgid "This effect has no options."
+#~ msgstr "இந்த விளைவுக்கு விருப்பத் தேர்வு இல்லை"
+
+#~ msgid "Factor:"
+#~ msgstr "காரணி:"
+
+#~ msgid "Type:"
+#~ msgstr "வகை:"
+
+#~ msgid "Uniform"
+#~ msgstr "ஒரேமாதிரியான"
+
+#~ msgid "Gaussian"
+#~ msgstr "காசியன்"
+
+#~ msgid "Multiplicative Gaussian"
+#~ msgstr "மடங்கு காசியன்"
+
+#~ msgid "Impulse"
+#~ msgstr "உந்துகை "
+
+#~ msgid "LaPlace"
+#~ msgstr "லாபிலேஸ்"
+
+#~ msgid "Poisson"
+#~ msgstr "உந்துகை "
+
+#~ msgid "Radius:"
+#~ msgstr "ஆரம்:"
+
+#~ msgid "Color Shading"
+#~ msgstr "நிழலாக்க வண்ணம்"
+
+#~ msgid "Azimuth:"
+#~ msgstr "அசிமத்:"
+
+#, fuzzy
+#~ msgid "Determines the light source and direction"
+#~ msgstr "ஒலி மூலம் மற்றும் திசையையும் கண்டுபிடிக்கும்."
+
+#~ msgid "Angle:"
+#~ msgstr "கோணம்"
+
+#~ msgid "Amplitude:"
+#~ msgstr "வீச்சு"
+
+#~ msgid "Wave length:"
+#~ msgstr "அலை நீளம்"
+
+#, fuzzy
+#~ msgid "Pen"
+#~ msgstr "பேனா"
+
+#~ msgid "Arrow Style"
+#~ msgstr "அம்புக்குறி பாணி."
+
+#, fuzzy
+#~ msgid "&Begin:"
+#~ msgstr "தொடக்கம்:"
+
+#, fuzzy
+#~ msgid "&End:"
+#~ msgstr "முடிவு:"
+
+#, fuzzy
+#~ msgid "&Width:"
+#~ msgstr " அகலம்:"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "& பாணி"
+
+#, fuzzy
+#~ msgid "C&olor:"
+#~ msgstr "வண்ணம்:"
+
+#~ msgid " pt"
+#~ msgstr "புள்ளி"
+
+#, fuzzy
+#~ msgid "Rect"
+#~ msgstr "நீள் சதுரம்"
+
+#, fuzzy
+#~ msgid "Vertical declination:"
+#~ msgstr "நீளவாட்டமான சீரானசரிவு :"
+
+#, fuzzy
+#~ msgid "Horizontal declination:"
+#~ msgstr "அகலவாட்டமான சீரானசரிவு :"
+
+#, fuzzy
+#~ msgid "Set the horizontal declination."
+#~ msgstr "அகலவாட்டமான சீரானசரிவு :"
+
+#, fuzzy
+#~ msgid "Set the vertical declination."
+#~ msgstr "நீளவாட்டமான சீரானசரிவு :"
+
+#~ msgid "Polygon"
+#~ msgstr "பலகோணம்"
+
+#, fuzzy
+#~ msgid "&Sharpness:"
+#~ msgstr "கூர்மை :"
+
+#, fuzzy
+#~ msgid "Brush"
+#~ msgstr "தூரிகை"
+
+#, fuzzy
+#~ msgid "&Style:"
+#~ msgstr "பாணி:"
+
+#~ msgid "&Preview"
+#~ msgstr "&முன்காட்சி"
+
+#~ msgid "&Effect:"
+#~ msgstr "விளைவு:"
+
+#~ msgid "&Speed:"
+#~ msgstr "&வேகம்:"
+
+#, fuzzy
+#~ msgid "So&und effect"
+#~ msgstr "ஒலி விளைவு "
+
+#, fuzzy
+#~ msgid "&File:"
+#~ msgstr "&கோப்பு:"
+
+#~ msgid "Automatic &transition to the next slide after:"
+#~ msgstr "தானாகவே அடுத்த படவில்லைக்கு முன்னேறு:"
+
+#~ msgid "Gradient"
+#~ msgstr "சரிவு"
+
+#, fuzzy
+#~ msgid "Gradient:"
+#~ msgstr "சரிவு"
+
+#, fuzzy
+#~ msgid "X-fac&tor:"
+#~ msgstr "X-காரணி:"
+
+#, fuzzy
+#~ msgid "Un&balanced:"
+#~ msgstr "நிலையற்ற"
+
+#, fuzzy
+#~ msgid "&Y-factor:"
+#~ msgstr "Y-காரணி:"
+
+#, fuzzy
+#~ msgid "Margin"
+#~ msgstr "ஓரம் (%1)"
+
+#, fuzzy
+#~ msgid "Margins"
+#~ msgstr "ஓரம் (%1)"
+
+#, fuzzy
+#~ msgid "S&ynchronize changes"
+#~ msgstr "ஒத்தியக்க மாற்றங்கள்"
+
+#, fuzzy
+#~ msgid "General"
+#~ msgstr "&பொதுவான."
+
+#, fuzzy
+#~ msgid "Na&me:"
+#~ msgstr "&பெயர்:"
+
+#, fuzzy
+#~ msgid "Protect si&ze and position"
+#~ msgstr "அளவையும் இடத்தையும் பாதுகார்"
+
+#, fuzzy
+#~ msgid "Keep &aspect ratio"
+#~ msgstr "விகிதத்தை வைத்துக்கொள்"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "உந்துகை "
+
+#~ msgid "Shadow"
+#~ msgstr "நிழல்"
+
+#~ msgid "Color && Distance"
+#~ msgstr "வண்ணம் மற்றும் தூரம்"
+
+#~ msgid "Distance:"
+#~ msgstr "தூரம்"
+
+#, fuzzy
+#~ msgid "Orientation"
+#~ msgstr "முன்வைப்பு"
+
+#~ msgid "Picture"
+#~ msgstr "படம்"
+
+#~ msgid "Depth"
+#~ msgstr "ஆழம்"
+
+#, fuzzy
+#~ msgid "&1 bit color mode"
+#~ msgstr "1 பிட் வண்ண வகை"
+
+#, fuzzy
+#~ msgid "&8 bit color mode"
+#~ msgstr "8 பிட் வண்ண வகை"
+
+#, fuzzy
+#~ msgid "1&6 bit color mode"
+#~ msgstr "16 பிட் வண்ண வகை"
+
+#, fuzzy
+#~ msgid "&32 bit color mode"
+#~ msgstr "32 பிட் வண்ண வகை"
+
+#, fuzzy
+#~ msgid "&Default color mode"
+#~ msgstr "முன்னிருப்பு வண்ண வகை"
+
+#, fuzzy
+#~ msgid "%"
+#~ msgstr " %"
+
+#, fuzzy
+#~ msgid "Conv&ert from RGB image to BRG image"
+#~ msgstr "RGB பிம்பத்திலிருந்து BGR பிம்பத்திலிருந்து மாற்றவும்"
+
+#, fuzzy
+#~ msgid "Gra&yscale"
+#~ msgstr "சாம்பல் நிறம்"
+
+#, fuzzy
+#~ msgid "&Brightness:"
+#~ msgstr "பிரகாசம் :"
+
+#, fuzzy
+#~ msgid "&Qt::DockLeft:"
+#~ msgstr "இடது:"
+
+#, fuzzy
+#~ msgid "Qt::Orientation"
+#~ msgstr "முன்வைப்பு"
+
+#, fuzzy
+#~ msgid "Use slide master background"
+#~ msgstr "படவில்லை பின்னணியை பயன்படுத்து"
+
+#~ msgid "Background type:"
+#~ msgstr "பின்னணி வகை:"
+
+#~ msgid "Color/Gradient"
+#~ msgstr "வண்ணம்/கிராடியன்ட்"
+
+#~ msgid "Plain"
+#~ msgstr "சாதாரண"
+
+#~ msgid "Diagonal Gradient 1"
+#~ msgstr "குறுக்கு சரிவு 1"
+
+#~ msgid "Diagonal Gradient 2"
+#~ msgstr "குறுக்கு சரிவுட் 2"
+
+#~ msgid "Circle Gradient"
+#~ msgstr "வட்டமான சரிவு "
+
+#~ msgid "Rectangle Gradient"
+#~ msgstr "நீள்சதுரம் சரிவு"
+
+#~ msgid "PipeCross Gradient"
+#~ msgstr "பைப்கிராஸ் சரிவு"
+
+#~ msgid "Pyramid Gradient"
+#~ msgstr "பிரமிடு சரிவு"
+
+#~ msgid "Unbalanced"
+#~ msgstr "நிலையற்ற"
+
+#~ msgid "X-factor:"
+#~ msgstr "X-காரணி:"
+
+#~ msgid "Y-factor:"
+#~ msgstr "Y-காரணி:"
+
+#~ msgid "View mode:"
+#~ msgstr "காட்சி வகை:"
+
+#~ msgid "Apply &Global"
+#~ msgstr "பொதுவானதை பயன்படுத்து"
+
+#~ msgid "&Reset"
+#~ msgstr "&மீட்டமை "
+
+#, fuzzy
+#~ msgid "Single Color"
+#~ msgstr "& நிறத்தை அமைக்கவும்"
+
+#, fuzzy
+#~ msgid "%1% Fill Pattern"
+#~ msgstr "12% நிரப்பல் தோரணி "
+
+#~ msgid "Crossing Lines"
+#~ msgstr "குறுக்கிட்ட கோடுகள்"
+
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "குறுக்கு கோடுகள் ( / )"
+
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "குறுக்கு கோடுகள் (\\)"
+
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "குறுக்கு கோடுகள்"
+
+#, fuzzy
+#~ msgid "Diagonal 2"
+#~ msgstr "குறுக்கு சரிவுட் 2"
+
+#, fuzzy
+#~ msgid "PipeCross"
+#~ msgstr "பைப்கிராஸ் சரிவு"
+
+#, fuzzy
+#~ msgid "Pyramid"
+#~ msgstr "பிரமிடு சரிவு"
+
+#~ msgid "Resize Object Up"
+#~ msgstr "பொருளை மேல்புறமாக மறுஅளவாக்கவும்"
+
+#~ msgid "Resize Object Down"
+#~ msgstr "பொருளை கீழ்புறமாக மறுஅளவாக்கவும்"
+
+#~ msgid "Resize Object Left"
+#~ msgstr "பொருளை இடதுபக்கமாக மறுஅளவாக்கவும்"
+
+#~ msgid "Resize Object Right"
+#~ msgstr "பொருளை வலதுபக்கமாக மறுஅளவாக்கவும்"
+
+#~ msgid "Resize Object Left && Up"
+#~ msgstr "&& பொருளை இடது மேல்புறமாக மறுஅளவாக்கவும்"
+
+#~ msgid "Resize Object Left && Down"
+#~ msgstr "&& பொருளை இடது கீழ்புறமாக மறுஅளவாக்கவும்"
+
+#~ msgid "Resize Object Right && Up"
+#~ msgstr "&& பொருளை வலது மேல்புறமாக மறுஅளவாக்கவும்"
+
+#~ msgid "Resize Object Right && Down"
+#~ msgstr "&& பொருளை வலது கீழ்புறமாக மறுஅளவாக்கவும்"
+
+#~ msgid ""
+#~ "Read-only content cannot be changed. No modifications will be accepted."
+#~ msgstr ""
+#~ "படிக்க மட்டும் கூடிய உள்ளடக்கத்தை மாற்ற முடியாது.  மாற்றங்கள் ஏற்றுக் கொள்ளப்படாது."
+
+#~ msgid "&Continue"
+#~ msgstr "&தொடர்"
+
+#~ msgid "&Drawing Mode"
+#~ msgstr "&வரைதல் முறைமைகள்"
+
+#~ msgid "&Goto Slide..."
+#~ msgstr "&படவில்லைக்கு செல் ... "
+
+#~ msgid "&End"
+#~ msgstr "&முடிவு"
+
+#~ msgid "Change Text Font"
+#~ msgstr "உருவின் எழுத்துருவை மாற்றவும்"
+
+#~ msgid "Set Text Background Color"
+#~ msgstr "பின்னணி நிறத்தை அமை : "
+
+#~ msgid "Make Text Bold"
+#~ msgstr "உரையை தடித்தாக்கு"
+
+#~ msgid "Make Text Italic"
+#~ msgstr "உரையை சாய்வாக்கு"
+
+#~ msgid "Underline Text"
+#~ msgstr "உரையின் கீழ் கோடிடு"
+
+#~ msgid "Set Text Font"
+#~ msgstr "உரை எழுத்துருவை அமை"
+
+#~ msgid "Change Text Size"
+#~ msgstr "உரையின் அளவை மாற்றவும்"
+
+#~ msgid "Set Text Subscript"
+#~ msgstr "உரை அடிக்குறிப்பை அமை"
+
+#~ msgid "Set Text Superscript"
+#~ msgstr "உரை மேல் எழுத்தை அமை"
+
+#~ msgid "Apply Default Format"
+#~ msgstr "முன்னிருப்பு வடிவத்தை புதிய பயன்படுத்து"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "எழுத்துரு அளவை அதிகரிக்கவும்"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "எழுத்துரு அளவை குறைக்கவும்"
+
+#~ msgid "Set Text Align"
+#~ msgstr "உரைப் பொருத்தத்தை அமை"
+
+#~ msgid "Change Tabulators"
+#~ msgstr "பட்டியலிடுவான்களை மாற்று"
+
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "பத்தியின் ஆழத்தை அதிகரிக்கவும்"
+
+#~ msgid "Decrease Paragraph Depth"
+#~ msgstr "பத்தியின் ஆழத்தை குறைக்கவும்"
+
+#~ msgid "Change First Line Indent"
+#~ msgstr "முதல் வரி உள்ளடக்கை மாற்று"
+
+#~ msgid "Change Left Indent"
+#~ msgstr "இடது உள்ளடக்கை மாற்று"
+
+#~ msgid "Change Right Indent"
+#~ msgstr "வலது உள்ளடக்கை மாற்று"
+
+#~ msgid "Printing..."
+#~ msgstr "அச்சிடுகிறது..."
+
+#, fuzzy
+#~ msgid "Scale to Original Size"
+#~ msgstr "உண்மை அளவை அளவெடு"
+
+#, fuzzy
+#~ msgid "Scale Picture to Be Shown 1:1 in Presentation Mode"
+#~ msgstr "காட்சியமைப்பு முறைமையில் 1:1ல் காட்டிய படத்தை அளவாக்கவும்"
+
+#~ msgid "Extend Text Contents to Height"
+#~ msgstr "பொருளடக்கங்ளை உயரத்திற்கு நீட்டிக்கவும்"
+
+#~ msgid "Extend Text to Contents"
+#~ msgstr "பொருளடக்கங்களை நீட்டிக்கவும்"
+
+#~ msgid "Align Objects Left"
+#~ msgstr "பொருள்களை இடதுபக்கமாக ஒருநிலைப்படுத்தவும்"
+
+#~ msgid "Align Objects Top"
+#~ msgstr "பொருள்களை மேல்புறமாக ஒருநிலைப்படுத்தவும்"
+
+#~ msgid "Align Objects Right"
+#~ msgstr "பொருள்களை வலதுபக்கமாக ஒருநிலைப்படுத்தவும்"
+
+#~ msgid "Align Objects Bottom"
+#~ msgstr "பொருள்களை கீழ்புறமாக ஒருநிலைப்படுத்தவும்"
+
+#~ msgid "Align Objects Centered (horizontal)"
+#~ msgstr "பொருள்களை மையமாக ( அகலவாட்டமாக ) ஒருநிலைப்படுத்தவும்"
+
+#~ msgid "Align Objects Center/Vertical"
+#~ msgstr "பொருள்களை மையமாக / அகலவாட்டமாக ஒருநிலைப்படுத்தவும்"
+
+#~ msgid "Close Object"
+#~ msgstr "பொருளை மூடு"
+
+#~ msgid "Closed Freehand"
+#~ msgstr "நீள்சதுரத்தை மூடவும்."
+
+#~ msgid "Closed Polyline"
+#~ msgstr "பலவரி மூடப்பட்டுள்ளது."
+
+#~ msgid "Closed Cubic Bezier Curve"
+#~ msgstr "பட்டகம் வளைவினை மூடவும்."
+
+#~ msgid "Closed Quadric Bezier Curve"
+#~ msgstr "குவடரிக் பிஸையர் வளைவினை மூடவும்."
+
+#~ msgid "Modify Slide Transition For All Pages"
+#~ msgstr "எல்லா பக்கங்களுக்கான படவில்லை பரிமாற்றத்தை மாற்றவும்"
+
+#~ msgid "Interface"
+#~ msgstr "இடை விளிம்பு"
+
+#~ msgid "Spelling"
+#~ msgstr "எழுத்தாக்கம்"
+
+#~ msgid "Document"
+#~ msgstr "ஆவணம்"
+
+#~ msgid "Document Settings"
+#~ msgstr "ஆவண அமைவுகள்"
+
+#~ msgid "Default Tools Settings"
+#~ msgstr "முன்னிருப்பு கருவிகள் அமைப்புகள்"
+
+#~ msgid "Paths"
+#~ msgstr "பாதைகள்"
+
+#~ msgid "Path Settings"
+#~ msgstr "பாதை அமைவுகள்"
+
+#~ msgid "Change Config"
+#~ msgstr "உள்ளமை மாற்று"
+
+#~ msgid "Show rulers"
+#~ msgstr "அளவீடுகளை காட்டு"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "அண்மை கோப்புகளின் எண்ணிக்கை"
+
+#~ msgid "Background object color:"
+#~ msgstr "பின்னணிப் பொருள் நிறம்:"
+
+#~ msgid "Grid color:"
+#~ msgstr "கட்ட வண்ணம்:"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "ரத்து செய்யும்/மறுபடி செய்யும் அளவு:"
+
+#~ msgid "Display links"
+#~ msgstr "காட்சி தொடுப்பு "
+
+#~ msgid "&Underline all links"
+#~ msgstr "&எல்லா இணைப்புகளையும் அடிக்கோடு இடு"
+
+#~ msgid "Display comments"
+#~ msgstr "கருத்துகளை காட்டு"
+
+#~ msgid "Display field code"
+#~ msgstr "புலக்குறியீட்டினைக் காட்டு"
+
+#~ msgid "Print slide notes"
+#~ msgstr "படவில்லைக் குறிப்புகளை அச்சிடுக"
+
+#~ msgid "Grid"
+#~ msgstr "கட்டம்"
+
+#, fuzzy
+#~ msgid "Vertical grid size:"
+#~ msgstr "செங்குத்து சரிவு"
+
+#~ msgid "Change Display Link Command"
+#~ msgstr "இணைப்பு காட்சிக் கட்டளையை மாற்று "
+
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "புலக்குறியீட்டி காட்சிக் கட்டளையை மாற்று"
+
+#~ msgid "Document Defaults"
+#~ msgstr "ஆவணம் முன்னிருப்புகளை"
+
+#~ msgid "Default font:"
+#~ msgstr "இயல்பான எழுத்துரு: "
+
+#~ msgid "Choose..."
+#~ msgstr "தேர்வுச் செய்"
+
+#~ msgid "Global language:"
+#~ msgstr "பொது மொழி "
+
+#~ msgid "Create backup file"
+#~ msgstr "காப்புப் கோப்பினை உருவாக்கு "
+
+#~ msgid "Autosave (min):"
+#~ msgstr "தானே சேமிப்பது(குறைவான):"
+
+#~ msgid "No autosave"
+#~ msgstr "தானே சேமிக்க முடியாது"
+
+#~ msgid "min"
+#~ msgstr "குறைவான"
+
+#~ msgid "Starting page number:"
+#~ msgstr "தொடங்கும் பக்கம் எண்: "
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "தத்தல் நிறுத்து(%1)"
+
+#~ msgid "Cursor"
+#~ msgstr "நிலைக்காட்டி"
+
+#~ msgid "Cursor in protected area"
+#~ msgstr "பாதுகாக்கப்பட்ட இடத்தில் சுட்டிக்காட்டி"
+
+#~ msgid "Direct insert cursor"
+#~ msgstr "நேராக இடம் காட்டியை நுழை"
+
+#~ msgid "Change Starting Page Number"
+#~ msgstr "தொடங்கும் பக்கம் எண்னை மாற்று"
+
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "தத்தல் நிறுத்தும் மதிப்பினை மாற்று"
+
+#, fuzzy
+#~ msgid "Outl&ine"
+#~ msgstr "சுற்றுக்கோடு."
+
+#~ msgid "&Fill"
+#~ msgstr "நிரப்பு"
+
+#~ msgid "&Rectangle"
+#~ msgstr "நீள்சதுரம்"
+
+#, fuzzy
+#~ msgid "Polygo&n"
+#~ msgstr "பலகோணம்"
+
+#, fuzzy
+#~ msgid "&Pie"
+#~ msgstr "துண்டம்"
+
+#~ msgid "Type"
+#~ msgstr "வகை"
+
+#~ msgid "Picture Path"
+#~ msgstr "படத்தின் பாதை"
+
+#~ msgid "Backup Path"
+#~ msgstr "பின்னணிப் பாதை"
+
+#~ msgid "Modify Path..."
+#~ msgstr "பாதையை மாற்று"
+
+#, fuzzy
+#~ msgid "&Add..."
+#~ msgstr "&சேர்"
+
+#, fuzzy
+#~ msgid "&Modify..."
+#~ msgstr "பாதையை மாற்று"
+
+#, fuzzy
+#~ msgid "&Remove"
+#~ msgstr "தொடுப்பை நீக்கு"
+
+#~ msgid "Test"
+#~ msgstr "சோதனை"
+
+#~ msgid "(Copy %1)"
+#~ msgstr "(நகல் எடு %1)"
+
+#, fuzzy
+#~ msgid "Name:"
+#~ msgstr "&பெயர்:"
+
+#~ msgid "Existing slides:"
+#~ msgstr "ஏற்கெனவே இருக்கும் படவில்லைகள்:"
+
+#, fuzzy
+#~ msgid "Custom Slide Show name is already used."
+#~ msgstr "தனிப்பயன் படவில்லைக் காட்சி..."
+
+#~ msgid "You did not select any slides. Please select some slides."
+#~ msgstr ""
+#~ "நீங்கள் எந்தவொரு படவில்லையையும் தேர்ந்தெடுக்கவில்லை. தயவுசெய்து சில படவில்லைகளைத் "
+#~ "தேர்ந்தெடுக்கவும்."
+
+#, fuzzy
+#~ msgid ""
+#~ "You do not appear to have PERL installed.\n"
+#~ "It is needed to convert this document.\n"
+#~ "Please install PERL and try again."
+#~ msgstr ""
+#~ "PERL நிறுவபடவில்லை.\n"
+#~ "இந்த ஆவணத்தை மாற்ற அது தேவை.\n"
+#~ "தயவுசெய்து PERL நிறுவிய பிறகு முயற்சிக்கவும்."
+
+#~ msgid ""
+#~ "parsing error in the main document (converted from an old KPresenter "
+#~ "format) at line %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "பிரதான ஆவணத்தில் %1 வரியில், %2  நெடுவரிசையில் பாகுபடுத்தல் தவறு நேர்ந்துள்ளது\n"
+#~ "தவறு தகவல்: %3"
+
+#~ msgid "Insert Part Object"
+#~ msgstr "பகுதி பொருளை சொருகு"
+
+#~ msgid "Invalid document, DOC tag missing."
+#~ msgstr "முறையில்லாத ஆவணம், DOC அட்டை இல்லை."
+
+#~ msgid ""
+#~ "Invalid document, expected mimetype application/x-kpresenter or "
+#~ "application/vnd.kde.kpresenter, got %1"
+#~ msgstr ""
+#~ "செல்லாத ஆவணம். மின்னஞ்சல் பலவகைப் பயன்பாடு/x-kவிரிவு அல்லது பயன்பாடு/vnd.kde."
+#~ "kவிரிவு தேவைப்படுகிறது, கிடைத்தது %1"
+
+#~ msgid "Paste Objects"
+#~ msgstr "பொருள்களை ஒட்டவும் "
+
+#~ msgid "Set New Options"
+#~ msgstr "புதிய விருப்பங்களை அமை"
+
+#~ msgid "Insert File"
+#~ msgstr "கோப்பினை சொருகு"
+
+#~ msgid "Insert New Slide"
+#~ msgstr "புதிய படவில்லையை சொருகு:"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "படி எடுக்கப்பட்ட பொருள்"
+
+#~ msgid "Number of copies:"
+#~ msgstr "படிகளின் எண்ணிக்கை :"
+
+#~ msgid "Rotation angle:"
+#~ msgstr "சுழற்சி கோணம் :"
+
+#, fuzzy
+#~ msgid "Increase width:"
+#~ msgstr "அகலத்தை அதிகரிக்கவும்(%1) :"
+
+#, fuzzy
+#~ msgid "Increase height:"
+#~ msgstr "உயரத்தை அதிகரிக்கவும்(%1) :"
+
+#, fuzzy
+#~ msgid "Move X:"
+#~ msgstr "நகர்த்துX(%1) :"
+
+#, fuzzy
+#~ msgid "Move Y:"
+#~ msgstr "நகர்த்துY(%1) :"
+
+#~ msgid "Appear"
+#~ msgstr "தோன்று"
+
+#~ msgid "Order of appearance:"
+#~ msgstr "தோன்றும் வரிசை :"
+
+#~ msgid "Effect (appearing):"
+#~ msgstr "விளைவு (தோன்றுகிறது) : "
+
+#~ msgid "Come From Right/Top"
+#~ msgstr "வலது/மேல் புறத்திலிருந்து வா"
+
+#~ msgid "Come From Right/Bottom"
+#~ msgstr "வலது/கீழ் புறத்திலிருந்து வா"
+
+#~ msgid "Come From Left/Top"
+#~ msgstr "இடது/மேல் புறத்திலிருந்து வா"
+
+#~ msgid "Come From Left/Bottom"
+#~ msgstr "வலது/கீழ் புறத்திலிருந்து வா"
+
+#~ msgid "Wipe From Left"
+#~ msgstr "இடது பக்கத்திலிருந்து துடை"
+
+#~ msgid "Wipe From Right"
+#~ msgstr "வலது பக்கத்திலிருந்து துடை"
+
+#~ msgid "Wipe From Top"
+#~ msgstr "மேல் புறத்திலிருந்து துடை"
+
+#~ msgid "Wipe From Bottom"
+#~ msgstr "கீழ் புறத்திலிருந்து துடை"
+
+#~ msgid "Speed:"
+#~ msgstr "வேகம்:"
+
+#~ msgid "Medium"
+#~ msgstr "ஊடகம்"
+
+#~ msgid "Fast"
+#~ msgstr "வேகமாக."
+
+#~ msgid "Effect (object specific):"
+#~ msgstr "விளைவு (பொருள் குறிப்பிட்ட) : "
+
+#~ msgid "Paragraph After Paragraph"
+#~ msgstr "பத்திப் பத்திகளாக"
+
+#~ msgid "Timer of the object:"
+#~ msgstr "பொருளின் நேரம் கணிப்பான் :"
+
+#~ msgid "File name:"
+#~ msgstr "கோப்புப் பெயர் :"
+
+#~ msgid "Play"
+#~ msgstr "இயங்கு "
+
+#~ msgid "Disappear"
+#~ msgstr "மறை"
+
+#~ msgid "Order of disappearance:"
+#~ msgstr "தோற்ற மறைவின் வரிசை"
+
+#~ msgid "Effect (disappearing):"
+#~ msgstr "விளைவு (மறைகின்றது) : "
+
+#~ msgid "Disappear to Right"
+#~ msgstr "வலது பக்கத்திற்கு மறையவும்"
+
+#~ msgid "Disappear to Left"
+#~ msgstr "இடது பக்கத்திற்கு மறையவும்"
+
+#~ msgid "Disappear to Top"
+#~ msgstr "மேலே மறை"
+
+#~ msgid "Disappear to Bottom"
+#~ msgstr "கீழே மறை"
+
+#~ msgid "Disappear to Right/Top"
+#~ msgstr "வலது/மேலே மறை"
+
+#~ msgid "Disappear to Right/Bottom"
+#~ msgstr "வலது/கீழே மறை"
+
+#~ msgid "Disappear to Left/Top"
+#~ msgstr "இடது/மேலே மறை"
+
+#~ msgid "Disappear to Left/Bottom"
+#~ msgstr "இடது/கீழே மறை"
+
+#~ msgid "Wipe to Left"
+#~ msgstr "இடது பக்கதில் துடை"
+
+#~ msgid "Wipe to Right"
+#~ msgstr "வலது பக்கதில் துடை"
+
+#~ msgid "Wipe to Top"
+#~ msgstr "மேல் புறமாக துடை"
+
+#~ msgid "Wipe to Bottom"
+#~ msgstr "கீழ் புறமாக துடை"
+
+#~ msgid "Assign Object Effects"
+#~ msgstr "பொருள் விளைவுகளை மதிப்பளி"
+
+#~ msgid "*.%1|%2 Files"
+#~ msgstr "*.%1|%2 கோப்புகள்"
+
+#~ msgid "All Supported Files"
+#~ msgstr "விரும்பிய ஆதரவு"
+
+#~ msgid "Image Effect"
+#~ msgstr "உருவ விளைவு "
+
+#~ msgid "Import Style"
+#~ msgstr "இறக்குமதி பாணி."
+
+#~ msgid "File name is empty."
+#~ msgstr "கோப்பின் பெயர் காலியாக உள்ளது."
+
+#~ msgid "File is not a KPresenter file!"
+#~ msgstr "இக்கோப்பு Kபிரசன்டர் கோப்பு அல்ல."
+
+#~ msgid ""
+#~ "Please enter the directory where the memory stick presentation should be "
+#~ "saved. Please also enter a title for the slideshow presentation. "
+#~ msgstr ""
+#~ "அடைவை நுழைத்திட முன்வைப்பை சார்ந்த நினைவகத்தில் சேமிக்கவும். ஸ்லைடுசொவை முன்வைக்க "
+#~ "தலைப்பை பதித்திடுக."
+
+#~ msgid "Path:"
+#~ msgstr "பாதை:"
+
+#~ msgid "&Set Colors"
+#~ msgstr "& நிறத்தை அமைக்கவும்"
+
+#~ msgid "Preliminary Slides"
+#~ msgstr "தொடக்கநிலை ஆய்வு"
+
+#~ msgid ""
+#~ "This section allows you to set the colors for the preliminary slides; it "
+#~ "does not affect the presentation in any way, and it is normal to leave "
+#~ "these set to the default."
+#~ msgstr ""
+#~ "இந்த பகுதி உங்களை தொடக்கநிலை ஆய்வு வண்ணத்தை நுழைத்திட உதவும். இது எந்தவிதத்திலும் "
+#~ "முன்வைப்பை பாதிக்காது, மேலும் இது இயல்பாக வெளியேறும் அல்லது தவறை அமைத்திடும். "
+
+#~ msgid "Text color:"
+#~ msgstr "உரை வண்ணம்: "
+
+#~ msgid "Background color:"
+#~ msgstr "பின்னணி வண்ணம்:"
+
+#~ msgid ""
+#~ "Selecting this button will take you to the KPresenter documentation that "
+#~ "provides more information on how to use the Memory Stick export function. "
+#~ msgstr ""
+#~ "இந்த பொத்தானை தேர்ந்தெடுப்பதால் இது உங்களை Kபிரசண்டர் ஆவணத்திற்கு கொண்டு செல்லும் அஃது "
+#~ "உங்களுக்கு தகவல்களையும் நினைவை சார்ந்த செயலையும் பயன்படுத்துவது பற்றி சொல்கிறது."
+
+#~ msgid ""
+#~ "Selecting this button will proceed to generating the presentation in the "
+#~ "special Sony format."
+#~ msgstr "இந்த பொத்தானை தேர்ந்தெடுப்பது மூலம் நீங்கள் சோனி வடிவத்தை உருவாக்க முடியும்."
+
+#~ msgid ""
+#~ "Selecting this button will cancel out of the generation of the "
+#~ "presentation, and return to the normal KPresenter view. No files will be "
+#~ "affected."
+#~ msgstr ""
+#~ "இந்த பொத்தானை தேர்ந்தெடுப்பதால் முன்வைப்பை நீக்கி விடும், மற்றும் இயல்பான kபிரஸ்சண்டர் "
+#~ "காட்சிக்கு திருப்பி விடும். இதனால் எந்த கோப்பும் பாதிப்பு அடையாது."
+
+#~ msgid "Create Memory Stick Slideshow"
+#~ msgstr "ஸ்லைடுசொ நினைவகத்தை உருவாக்கு"
+
+#~ msgid ""
+#~ "<qt>The directory <b>%1</b> does not exist.<br>Do you want create it?</qt>"
+#~ msgstr "<qt>ஆவணம்<b>%1</b> இல்லை.<br>நீங்கள் உருவாக்க விரும்புகிறீரா?</qt>"
+
+#~ msgid "Directory Not Found"
+#~ msgstr "ஆவணத்தை காண முடியவில்லை"
+
+#, fuzzy
+#~ msgid "Cannot create directory."
+#~ msgstr "ஆவணத்தை உருவாக்க முடியவில்லை"
+
+#~ msgid ""
+#~ "You are about to overwrite an existing index file : %1.\n"
+#~ " Do you want to proceed?"
+#~ msgstr ""
+#~ "வெளியேறும் அடைவு கோப்பின் மேல் எழுதுவதற்கு தயார் ஆகுங்கள்:%1.\n"
+#~ "உங்களுக்கு முன்னேற வேண்டுமா?"
+
+#~ msgid "Create directory structure"
+#~ msgstr "அடைவுக்கான வடிவத்தை உருவாக்கு"
+
+#~ msgid "Create pictures of the slides"
+#~ msgstr "ஸ்லைடுக்கான படங்களை உருவாக்கு"
+
+#~ msgid "Create index file"
+#~ msgstr "அட்டவணை கோப்பினை உருவாக்கு"
+
+#~ msgid "Change Help Line Position"
+#~ msgstr "உதவி வரி நிலையை மாற்று."
+
+#, fuzzy
+#~ msgid "Position:"
+#~ msgstr "உந்துகை "
+
+#~ msgid "Add New Help Line"
+#~ msgstr "புதிய உதவி வரியை சேர்"
+
+#~ msgid "Add New Help Point"
+#~ msgstr "புதிய உதவி புள்ளியை சேர்"
+
+#, fuzzy
+#~ msgid "X position:"
+#~ msgstr "X நிலை (%1):"
+
+#, fuzzy
+#~ msgid "Y position:"
+#~ msgstr "Y நிலை (%1):"
+
+#~ msgid "Slide Note %1:\n"
+#~ msgstr "பட வில்லை குறிப்பு: %1 \n"
+
+#~ msgid "Delete Objects"
+#~ msgstr "பொருட்களை நீக்கு"
+
+#~ msgid "Resize"
+#~ msgstr "மாற்று அளவு"
+
+#~ msgid "Group Objects"
+#~ msgstr "குழு பொருள்கள்."
+
+#~ msgid "Ungroup Objects"
+#~ msgstr "ஒருங்கிணைத்த பொருள்களை பிரித்திடு"
+
+#~ msgid "Lower Objects"
+#~ msgstr "சிறிய பொருள்."
+
+#~ msgid "Raise Objects"
+#~ msgstr "உயர்த்தி பொருள்கள்."
+
+#~ msgid "Insert Line"
+#~ msgstr "வரியை செருகு"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "நீள்சதுரத்தை செருகு"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "நீள்வட்டத்தை செருகு"
+
+#~ msgid "Insert Pie/Arc/Chord"
+#~ msgstr "Pie/Arc/Chord செருகு"
+
+#~ msgid "Insert Textbox"
+#~ msgstr "உரைபெட்டியை செருகு"
+
+#~ msgid "Insert Autoform"
+#~ msgstr "தன்னியக்கபடிவத்தை செருகு"
+
+#~ msgid "Insert Freehand"
+#~ msgstr "வெறுங்கையை செருகு"
+
+#~ msgid "Insert Polyline"
+#~ msgstr "பல நேர்கோடு செருகு."
+
+#~ msgid "Insert Quadric Bezier Curve"
+#~ msgstr "மூடிய குவடரிக் வளைவினை செருகவும்."
+
+#~ msgid "Insert Cubic Bezier Curve"
+#~ msgstr "மூடிய பட்டகம் வளைவினை செருகவும்."
+
+#~ msgid "Insert Polygon"
+#~ msgstr "பலகோணத்தை செருகுகவும்"
+
+#~ msgid "Insert Closed Freehand"
+#~ msgstr "மூடிய நீள்சதுரத்தை செருகவும்."
+
+#~ msgid "Insert Closed Polyline"
+#~ msgstr "பலவரி மூடப்பட்டுள்ளதை செருகு."
+
+#~ msgid "Insert Closed Quadric Bezier Curve"
+#~ msgstr "மூடிய குவடரிக் வளைவினை செருகவும்."
+
+#~ msgid "Insert Closed Cubic Bezier Curve"
+#~ msgstr "மூடிய பட்டகம் வளைவினை செருகவும்."
+
+#~ msgid "Embed Object"
+#~ msgstr "உட்பொதி பொருட்கள்."
+
+#~ msgid "Change Pixmap"
+#~ msgstr "படப்புள்ளி வரைபடத்தினை மாற்று."
+
+#~ msgid "Move Objects"
+#~ msgstr "பொருள்களை நகர்த்து"
+
+#~ msgid "Change Shadow"
+#~ msgstr "நிழலினை மாற்றவும்."
+
+#~ msgid "Change Vertical Alignment"
+#~ msgstr "உயரப்பொருத்தத்தை மாற்று"
+
+#~ msgid "No Outline"
+#~ msgstr "சுற்றுக்கோடு இல்லை"
+
+#~ msgid "Square"
+#~ msgstr "சதுரம்."
+
+#~ msgid "Line Arrow"
+#~ msgstr "கோடு அம்பு"
+
+#~ msgid "Dimension Line"
+#~ msgstr "அளவு வரி"
+
+#~ msgid "Double Line Arrow"
+#~ msgstr "இரட்டை கோடு அம்பு"
+
+#~ msgid "&General"
+#~ msgstr "&பொதுவான."
+
+#~ msgid ""
+#~ "<p>This dialog allows you to configure how the slideshow will be "
+#~ "displayed, including whether the slides are automatically sequenced or "
+#~ "manually controlled, and also allows you to configure a <em>drawing pen</"
+#~ "em> that can be used during the display of the presentation to add "
+#~ "additional information or to emphasise particular points.</p>"
+#~ msgstr ""
+#~ "<p>This dialog allows you to configure how the slideshow will be "
+#~ "displayed, including whether the slides are automatically sequenced or "
+#~ "manually controlled, and also allows you to configure a <em>drawing pen</"
+#~ "em> that can be used during the display of the presentation to add "
+#~ "additional information or to emphasise particular points.</p> "
+
+#~ msgid "&Transition Type"
+#~ msgstr "மாற்றும் வகை"
+
+#~ msgid ""
+#~ "<li><p>If you select <b>Manual transition to next step or slide</b> then "
+#~ "each transition and effect on a slide, or transition from one slide to "
+#~ "the next, will require an action. Typically this action will be a mouse "
+#~ "click, or the space bar.</p></li><li><p>If you select <b>Automatic "
+#~ "transition to next step or slide</b> then the presentation will "
+#~ "automatically sequence each transition and effect on a slide, and will "
+#~ "automatically transition to the next slide when the current slide is "
+#~ "fully displayed. The speed of sequencing is controlled using the slider "
+#~ "below. This also enables the option to automatically loop back to the "
+#~ "first slide after the last slide has been shown.</p></li>"
+#~ msgstr ""
+#~ "<li><p>நீங்கள் தேர்ந்தெடுத்தால்<>ஸ்லைடு அல்லது அடுத்த நிலையின் கைமுறை மாற்றங்கள்</"
+#~ "b>ஒவ்வொரு ஸ்லைடையும் அல்லது செயல்களையும் செய்வதற்கு உதவுகிறது டிபிகலி இந்த சுட்டியை "
+#~ "சொடுக்குவதற்கு அல்லது இடைவெளி விசை</p></li><li><p>நீங்கள் தேர்ந்தெடுத்தால்<>தானாக "
+#~ "அடுத்த ஸ்லைடு அல்லது வழிக்கு செல்லும்</b>அடுத்து தானாக முன்வைப்பை எல்லா ஸ்லைடுகலாகும் "
+#~ "தானாக நடப்பு ஸ்லைடு முழுதாக ஏற்றப்பட்ட போது அடுத்த ஸ்லைடுக்கு மாறிவிடும் இதன் வேகம் "
+#~ "ஸ்லைடு பட்டையை பயன்படுத்தி கட்டுப்படுத்துகிறது. இந்த தேர்வு முதல் ஸ்லைடிலிருந்து "
+#~ "கடைசி ஸ்லைடிற்கு காண்பிக்கிறது</p></li>< "
+
+#~ msgid "&Manual transition to next step or slide"
+#~ msgstr "கைமுறையாக அடுத்த ஸ்லைடு அல்லது நிலைக்கு மாற்றுக"
+
+#~ msgid "&Automatic transition to next step or slide"
+#~ msgstr "&தானாகவே அடுத்த ஸ்லைடு அல்லது நிலைக்கு மாற்றுக"
+
+#~ msgid "&Infinite loop"
+#~ msgstr "&முடிவில்லா மடக்கி. "
+
+#~ msgid ""
+#~ "<p>If this checkbox is selected, then the slideshow will restart at the "
+#~ "first slide after the last slide has been displayed. It is only available "
+#~ "if the <b>Automatic transition to next step or slide</b> button is "
+#~ "selected above.</p> <p>This option may be useful if you are running a "
+#~ "promotional display.</p>"
+#~ msgstr ""
+#~ "<p>இந்த சோதனைப்பெட்டி தேர்ந்தெடுக்கப்பட்டால்,கடைசி காட்சி முடிந்த பின் அது தானாகவே "
+#~ "முதல் காட்சியை ஆரம்பித்துவிடும் இது கிடைக்கும் போது மட்டும் <b>தானாக அடுத்த "
+#~ "ஸ்லைடுக்கு மாற்றிவிடும்</b>பொத்தான் மேலே தேர்ந்தெடுக்கப்பட்டுள்ளது.</p><p>இந்த தேர்வு "
+#~ "உயர்ந்து ஒடும் காட்சிக்கு உத்வியாக உள்ளது.</p>"
+
+#, fuzzy
+#~ msgid "&Show 'End of presentation' slide"
+#~ msgstr "முன்வைப்பின் முடிவு,வெளியேற சொடுக்கவும்."
+
+#~ msgid "Measure presentation &duration"
+#~ msgstr "முன்வைப்பின் & கால அளவு."
+
+#, fuzzy
+#~ msgid ""
+#~ "<p>If this checkbox is selected, the time that each slide was displayed "
+#~ "for, and the total time for the presentation will be measured.</p> <p>The "
+#~ "times will be displayed at the end of the presentation.</p> <p>This can "
+#~ "be used during rehearsal to check coverage for each issue in the "
+#~ "presentation, and to verify that the presentation duration is correct.</p>"
+#~ msgstr ""
+#~ "<p>இந்த பரிசோதனைப்பெட்டி தேர்ந்தெடுக்கப்பட்டால், ஒவ்வொரு ஸ்லைடின் காட்சியையும் காண்பிக்க "
+#~ "மற்றும் மொத்த மணியின் முன்வைப்பை அளக்க உதவுகிறது</><>முன்வைப்பின் இறுதியில் மணியை "
+#~ "காண்பிக்க உதவுகிறது</p><p>இஃது சோதித்து முடிப்பதற்கு முன்வைப்பின் மணியை சோதிக்க "
+#~ "சரியாக உள்ளதா என பார்க்கவும்</p>   "
+
+#~ msgid ""
+#~ "<p>This part of the dialog allows you to configure the <em>drawing mode</"
+#~ "em>, which allows you to add additional information, emphasise particular "
+#~ "content, or to correct errors during the presentation by drawing on the "
+#~ "slides using the mouse.</p><p>You can configure the color of the drawing "
+#~ "pen and the width of the pen.</p>"
+#~ msgstr ""
+#~ "<p>இந்த பகுதியின் உரையாடல் உங்களை உள்ளமைக்க உதவுகிறது<>அஃது கூடுதல் தகவல், "
+#~ "குறிப்பிட்ட உள்ளடக்கங்கள் அல்லது தவறை முன்வைக்க ஸ்லைடு வரைதலின் சுட்டியை பயன்படுத்துக.</"
+#~ "p><p>நீங்கள் வரையும் பேனா மற்றும் அகலத்தின் வண்ணத்தை உள்ளமைக்கிறது</p>"
+
+#~ msgid ""
+#~ "<p>This dialog allows you to configure which slides are used in the "
+#~ "presentation. Slides that are not selected will not be displayed during "
+#~ "the slide show.</p>"
+#~ msgstr ""
+#~ "<p>இந்த உரையாடல் நீங்கள் எந்த ஸ்லைடின் முன்வைப்பில் உள்ளீர்கள் என்பதை உள்ளமைக்கிறது. "
+#~ "தேர்ந்தெடுக்கப்படாத ஸ்லைடு காட்சியில் காண்பிக்காது.</ p>"
+
+#~ msgid "Arc"
+#~ msgstr "வட்டப்பகுதி"
+
+#~ msgid "Chord"
+#~ msgstr "கயிறு"
+
+#~ msgid "Convex/Concave"
+#~ msgstr "குவி/குழி"
+
+#~ msgid "No."
+#~ msgstr "இல்லை"
+
+#~ msgid "Display Duration"
+#~ msgstr "காட்சி நேர அளவு "
+
+#, fuzzy
+#~ msgid "Slides in the pages:"
+#~ msgstr "தேர்ந்தெடுக்கப்பட்ட பக்கங்கள்"
+
+#, fuzzy
+#~ msgid "Draw border around the slides"
+#~ msgstr "ஸ்லைடுக்கான படங்களை உருவாக்கு"
+
+#~ msgid "Apply Properties"
+#~ msgstr "பண்புகளை பயன்படுத்து."
+
+#~ msgid "Name Object"
+#~ msgstr "பொருள் பெயர்."
+
+#~ msgid "Protect Object"
+#~ msgstr "பொருள்களை பாதுகாக்கவும்"
+
+#~ msgid "Keep Ratio"
+#~ msgstr "விகிதத்தை நினைவுக் கொள்"
+
+#~ msgid "Change Size"
+#~ msgstr "அளவினை மாற்று."
+
+#, fuzzy
+#~ msgid "Pict&ure"
+#~ msgstr "படம்"
+
+#~ msgid "pt"
+#~ msgstr "புள்ளி"
+
+#~ msgid "(%1)"
+#~ msgstr "(%1)"
+
+#~ msgid "Rename Slide"
+#~ msgstr "மாற்று பெயர் பட வில்லை."
+
+#~ msgid "Slide title:"
+#~ msgstr "படக்காட்சி தலைப்பு:"
+
+#~ msgid "Close From All Directions"
+#~ msgstr "அனைத்து திசையிலிருந்தும் மூடு"
+
+#~ msgid "Open From All Directions"
+#~ msgstr "அனைத்து திசையிலிருந்தும் திற"
+
+#~ msgid "Interlocking Horizontal 2"
+#~ msgstr "கிடைமட்ட உள்ளமைந்த பூட்டு 2"
+
+#~ msgid "Interlocking Vertical 1"
+#~ msgstr "செங்குத்து உள்ளமைந்த பூட்டு 1"
+
+#~ msgid "Interlocking Vertical 2"
+#~ msgstr "செங்குத்து உள்ளமைந்த பூட்டு 2"
+
+#~ msgid "Surround 1"
+#~ msgstr "சரவுண்ட் 1"
+
+#~ msgid "Fly Away 1"
+#~ msgstr "பறந்து செல் 1"
+
+#~ msgid "Blinds Vertical"
+#~ msgstr "Blinds Vertical"
+
+#~ msgid "Checkerboard Across"
+#~ msgstr "கட்டபலகையாக "
+
+#~ msgid "Checkerboard Down"
+#~ msgstr "கட்டப்பலகை கீழே"
+
+#~ msgid "Uncover Down"
+#~ msgstr "கீழாக திற"
+
+#~ msgid "Cover Up"
+#~ msgstr "மேலாக மூடு"
+
+#~ msgid "Uncover Up"
+#~ msgstr "மேலாக திற"
+
+#~ msgid "Uncover Left"
+#~ msgstr "இடமாக திற"
+
+#~ msgid "Cover Left-Up"
+#~ msgstr "இட மேலாக மூடு"
+
+#~ msgid "Uncover Left-Up"
+#~ msgstr "இட மேலாக திற"
+
+#~ msgid "Cover Left-Down"
+#~ msgstr "இட கீழாக மூடு"
+
+#~ msgid "Uncover Left-Down"
+#~ msgstr "இடமிருந்து கீழாக திற"
+
+#~ msgid "Uncover Right-Up"
+#~ msgstr "வலமிருந்து மேலாக திற"
+
+#~ msgid "Cover Right-Bottom"
+#~ msgstr "வலமிருந்து கீழாக மூடு"
+
+#~ msgid "Uncover Right-Bottom"
+#~ msgstr "வலமிருந்து கீழே திற"
+
+#~ msgid "Dissolve"
+#~ msgstr "கரை"
+
+#~ msgid "Strips Left-Up"
+#~ msgstr "இட மேலாக வரியிடு"
+
+#~ msgid "Strips Left-Down"
+#~ msgstr "இட கீழாக வரியிடு"
+
+#~ msgid "Strips Right-Up"
+#~ msgstr "வலமிருந்து மேல் நகர்த்து"
+
+#~ msgid "Strips Right-Down"
+#~ msgstr "வலமிருந்து கீழாக வரியிடு"
+
+#~ msgid "Melting"
+#~ msgstr "உருக்குதல்"
+
+#~ msgid "Random Transition"
+#~ msgstr "குறிப்பில்லா மாற்றம்"
+
+#~ msgid "Paste Text"
+#~ msgstr "உரையை ஒட்டு."
+
+#~ msgid "Insert Variable"
+#~ msgstr "மாறியை செருகு."
+
+#~ msgid "Protect content"
+#~ msgstr "பொருள் உள்ளடக்கம்"
+
+#~ msgid "Effect:"
+#~ msgstr "விளைவு:"
+
+#~ msgid "Automatically advance to the next slide after:"
+#~ msgstr "தானாகவே அடுத்த படக்காட்சிக்கு முன்னேறு:"
+
+#, fuzzy
+#~ msgid "Remove Slide"
+#~ msgstr "மாற்று பெயர் பட வில்லை."
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "தேதி"
+
+#~ msgid "Insert new slide"
+#~ msgstr "புதிய படவில்லைச் சொருகு"
+
+#~ msgid "Save Picture"
+#~ msgstr "படத்தை சேமி"
+
+#, fuzzy
+#~ msgid "Save Failed"
+#~ msgstr "படத்தை சேமி"
+
+#~ msgid "No chart component registered"
+#~ msgstr "வரைபட அங்கம் எதுவும் பதிவுசெய்யபடவில்லை"
+
+#~ msgid "No table component registered"
+#~ msgstr "அட்டவணை அங்கம் எதுவும் பதிவுசெய்யபடவில்லை"
+
+#~ msgid "No formula component registered"
+#~ msgstr "விதி அங்கம் எதுவும் பதிவுசெய்யபடவில்லை"
+
+#~ msgid "Autoform-Choose"
+#~ msgstr "தன்னியக்கபடிவம்-தேர்ந்தெடு"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "பண்புகள்"
+
+#~ msgid "Slide Background"
+#~ msgstr "படவில்லை பின்னணி"
+
+#~ msgid ""
+#~ "Do you want to load a previously saved configuration which will be used "
+#~ "for this HTML Presentation?"
+#~ msgstr ""
+#~ "இந்த HTML-காட்சியமைப்பைப் பயன்படுத்த ஏற்கனவே சேமித்த வடிவமைப்பை உள்ளே ஏற்ற வேண்டுமா?"
+
+#~ msgid "*.kpweb|KPresenter HTML Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|Kகாட்சியாளர் HTML-காட்சியமைப்பு (*.kpweb)"
+
+#~ msgid "Only local files are currently supported."
+#~ msgstr "தற்போது உள்ளிருப்பு கோப்புகள் தான் ஆதரிக்கப்படுகின்றன."
+
+#~ msgid "Object Effect"
+#~ msgstr "பொருட்களின் விளைவு "
+
+#, fuzzy
+#~ msgid "You did not select any slide."
+#~ msgstr "நீங்கள் எந்தவொரு படவில்லையையும் தேர்ந்தெடுக்கவில்லை."
+
+#~ msgid "No Slide"
+#~ msgstr "படவில்லை இல்லை"
+
+#~ msgid "Change List Type"
+#~ msgstr "பட்டியலின் வகையை மாற்று "
+
+#~ msgid "Change Outline Color"
+#~ msgstr "வெளிக்கோடு நிறத்தை மாற்று "
+
+#~ msgid "Change Fill Color"
+#~ msgstr "நிரப்பும் நிறத்தை மாற்று "
+
+#~ msgid "Change Line Begin"
+#~ msgstr "வரி தொடக்கத்தை மாற்று"
+
+#~ msgid "Change Line End"
+#~ msgstr "வரி முடிவை மாற்று"
+
+#~ msgid "Change Outline Style"
+#~ msgstr "வெளிக்கோட்டு பாணியை மாத்து"
+
+#~ msgid "Change Outline Width"
+#~ msgstr "வெளிக்கோட்டின் அகலத்தை மாற்று"
+
+#~ msgid "Show Sidebar"
+#~ msgstr "பக்கப்பட்டையை காட்டு"
+
+#~ msgid "Hide Sidebar"
+#~ msgstr "சாய்வுப்பட்டையை மறை"
+
+#~ msgid "Show Notebar"
+#~ msgstr "குறிப்புப்பட்டையை காட்டு"
+
+#~ msgid "Hide Notebar"
+#~ msgstr "குறிப்புப் பட்டையை மறை"
+
+#~ msgid "&Formatting Characters"
+#~ msgstr "எழுத்தை நிறுவுதல்"
+
+#, fuzzy
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "அச்சில் வராத எழுத்துகளின் தோற்றத்தை மாற்று"
+
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br><br>When this is "
+#~ "enabled, KPresenter shows you tabs, spaces, carriage returns and other "
+#~ "non-printing characters."
+#~ msgstr ""
+#~ "அச்சில் வராத எழுத்துகளின் தோற்றத்தை மாற்று. <br><br>இதை செயல்படுத்தப்படும் போது, "
+#~ "KPresenter  தத்தல்கள், இடைவெளிகள்,  நகர்த்தி திரும்பல் மற்றும் மற்ற அச்சில் வராத "
+#~ "எழுத்துகளைக் காட்டும்."
+
+#~ msgid "Slide &Master"
+#~ msgstr "பிரதான &பட வில்லை"
+
+#, fuzzy
+#~ msgid "Guide Lines"
+#~ msgstr "திண்ம வரி."
+
+#, fuzzy
+#~ msgid "Show &Grid"
+#~ msgstr "கட்டத்துக்கு இழுத்துச் செல்"
+
+#, fuzzy
+#~ msgid "Hide &Grid"
+#~ msgstr "மறை &தலைப்பு"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "கட்டத்துக்கு இழுத்துச் செல்"
+
+#~ msgid "&Slide..."
+#~ msgstr "&படவில்லை..."
+
+#~ msgid "P&icture..."
+#~ msgstr "படம்..."
+
+#~ msgid "&Rotate"
+#~ msgstr "& சுழற்று"
+
+#, fuzzy
+#~ msgid "&Zoom"
+#~ msgstr "பெரிதாக்கு: "
+
+#~ msgid "&Shape"
+#~ msgstr "& வடிவம்"
+
+#~ msgid "&Circle/Ellipse"
+#~ msgstr "வட்டம்/நீள்வட்டம்"
+
+#~ msgid "&Pie/Arc/Chord"
+#~ msgstr "Pie/Arc/Chord"
+
+#~ msgid "&Text"
+#~ msgstr "உரை"
+
+#~ msgid "&Chart"
+#~ msgstr "வரைப்படம் "
+
+#~ msgid "Ta&ble"
+#~ msgstr "அட்டவணை"
+
+#~ msgid "&Object"
+#~ msgstr "& பொருள்..."
+
+#~ msgid "&Line"
+#~ msgstr "வரி"
+
+#~ msgid "&Freehand"
+#~ msgstr "& கை வரைதல்"
+
+#~ msgid "Po&lyline"
+#~ msgstr "பலகோடுகள்"
+
+#~ msgid "&Quadric Bezier Curve"
+#~ msgstr "&குஆடிரிக் பெய்சர் வளைவு"
+
+#~ msgid "C&ubic Bezier Curve"
+#~ msgstr "க்யுபிக் பெய்சர் வளைவு"
+
+#~ msgid "Co&nvex/Concave Polygon"
+#~ msgstr "கான்வெக்ஸ்/கான்கேவ் பல கோணம்"
+
+#~ msgid "Closed &Freehand"
+#~ msgstr "மூடப்பட்ட கைவரைதல்"
+
+#~ msgid "Closed Po&lyline"
+#~ msgstr "மூடப்பட்ட பலகோணம்"
+
+#~ msgid "Closed &Quadric Bezier Curve"
+#~ msgstr "மூடப்பட்ட குஆடரிக் பெசியர் வளைவு "
+
+#~ msgid "Closed C&ubic Bezier Curve"
+#~ msgstr "மூடப்பட்ட க்யுபிக் பெசியர் வளைவு"
+
+#~ msgid "&Font..."
+#~ msgstr "எழுத்துரு..."
+
+#~ msgid "Font Family"
+#~ msgstr "எழுத்துரு குடும்பம்"
+
+#~ msgid "&Bold"
+#~ msgstr "தடிப்பான"
+
+#~ msgid "&Italic"
+#~ msgstr "சாய்வு"
+
+#~ msgid "&Underline"
+#~ msgstr "கோடிடு"
+
+#~ msgid "&Strike Out"
+#~ msgstr "அடித்து விடு"
+
+#~ msgid "&Color..."
+#~ msgstr "வண்ணம்"
+
+#~ msgid "Align &Left"
+#~ msgstr "இடதுபக்கமாக ஒருநிலைப்படுத்து"
+
+#~ msgid "Align &Center"
+#~ msgstr "மையமாக ஒருநிலைப்படுத்து"
+
+#~ msgid "Align &Right"
+#~ msgstr "வலதுபக்கமாக ஒருநிலைப்படுத்து"
+
+#~ msgid "Align &Block"
+#~ msgstr "தொகுதி சீரமைப்பு"
+
+#~ msgid "Number"
+#~ msgstr "எண்"
+
+#~ msgid "Bullet"
+#~ msgstr "பொட்டு"
+
+#~ msgid "&Increase Depth"
+#~ msgstr "ஆழத்தை அதிகரிக்கவும்"
+
+#~ msgid "&Decrease Depth"
+#~ msgstr "ஆழத்தை குறைக்கவும்"
+
+#~ msgid "Extend Contents to Object &Height"
+#~ msgstr "பொருளடக்கங்களை பொருள் உயரத்திற்கு நீட்டிக்கவும்"
+
+#~ msgid "&Extend Object to Fit Contents"
+#~ msgstr "&Extend Object to Fit Contents"
+
+#, fuzzy
+#~ msgid "&Insert Slide Number"
+#~ msgstr "பக்கம் எண்ணை செருகு"
+
+#~ msgid "&Properties"
+#~ msgstr "பண்புகள்"
+
+#~ msgid "Ra&ise Objects"
+#~ msgstr "பொருட்களை உயர்த்தவும்"
+
+#~ msgid "&Lower Objects"
+#~ msgstr "பொருட்களை தாழ்த்தவும்"
+
+#~ msgid "Bring to Front"
+#~ msgstr "முன் கொண்டுவா "
+
+#~ msgid "Send to Back"
+#~ msgstr "பின் அனுப்பு"
+
+#~ msgid "R&otate Objects..."
+#~ msgstr "பொருட்களை சுழற்று..."
+
+#~ msgid "&Shadow Objects..."
+#~ msgstr "நிழல் பொருட்கள்"
+
+#~ msgid "Align Center (&horizontally)"
+#~ msgstr "மையமாக (அகலவாட்டமாக) ஒருநிலைப்படுத்தவும்"
+
+#~ msgid "Align &Top"
+#~ msgstr "மேல்புறமாக ஒருநிலைப்படுத்தவும்"
+
+#~ msgid "Align Center (&vertically)"
+#~ msgstr "மையமாக (நீளவாட்டமாக) ஒருநிலைப்படுத்தவும்"
+
+#~ msgid "Align &Bottom"
+#~ msgstr "கீழ்புறமாக ஒருநிலைப்படுத்தவும்"
+
+#~ msgid "Slide Bac&kground..."
+#~ msgstr "படவில்லை பின்னணி..."
+
+#~ msgid "Create &HTML Slideshow..."
+#~ msgstr "HTML படக்காட்சியை உருவாக்கவும்..."
+
+#~ msgid "Create Memor&y Stick Slideshow..."
+#~ msgstr "படக்காட்சி நினைவகத்தை உருவாக்கு"
+
+#~ msgid "Template Manager"
+#~ msgstr "வார்ப்புரு மேலாளர்"
+
+#~ msgid "Use Current Slide as Default Template"
+#~ msgstr "முன்னிருப்பு வார்ப்புருவை தற்போதய படக்காட்சியாக பயன்படுத்துக"
+
+#~ msgid "Align O&bjects"
+#~ msgstr "பொருள்களை ஒருநிலைப்படுத்தவும்"
+
+#~ msgid "Line Begin"
+#~ msgstr "வரி தொடக்கம்"
+
+#~ msgid "Line End"
+#~ msgstr "வரி முடிவு"
+
+#~ msgid "Outline Style"
+#~ msgstr "சுற்றுக்கோடு பாணி"
+
+#~ msgid "Outline Width"
+#~ msgstr "வெளிக்கோடு அகலம்"
+
+#~ msgid "&Group Objects"
+#~ msgstr "பொருள்களை ஒருங்கிணைப்படுத்து"
+
+#~ msgid "&Ungroup Objects"
+#~ msgstr "ஒருங்கிணைப்படுத்திய பொருள்களை பிரித்திடு"
+
+#, fuzzy
+#~ msgid "Edit &Object Effect..."
+#~ msgstr "படவில்லை விளைவுகளை திருத்துக"
+
+#, fuzzy
+#~ msgid "Edit Slide &Transition..."
+#~ msgstr "படவில்லை பரிமாற்றத்தை திருத்துக"
+
+#~ msgid "&Go to Start"
+#~ msgstr "தொடக்கத்திற்கு செல்"
+
+#~ msgid "Go to &End"
+#~ msgstr "முடிவுக்கு செல்"
+
+#~ msgid "Goto &Slide..."
+#~ msgstr "படவில்லைக்கு செல்"
+
+#~ msgid "Fill Color..."
+#~ msgstr "வண்ணத்தை நிரப்பு..."
+
+#~ msgid "Outline Color..."
+#~ msgstr "வெளிக்கோட்டின் வண்ணம்..."
+
+#~ msgid "&Extend Contents to Object Height"
+#~ msgstr "பொருளடக்கங்ளை பொருள் உயரத்திற்கு நீட்டிக்கவும்"
+
+#~ msgid "&Resize Object to Fit Contents"
+#~ msgstr "பொருத்தல் பொருளடக்கத்துல் அமையும்படி பொருட்களை மறுவடிவம் செய்க"
+
+#~ msgid "&Rename Slide..."
+#~ msgstr "படிவத்திற்கு வேறு பெயரிடுக"
+
+#~ msgid "Sca&le to Original Size"
+#~ msgstr "உண்மை அளவை அளவெடு"
+
+#~ msgid "640x480"
+#~ msgstr "640x480"
+
+#~ msgid "800x600"
+#~ msgstr "800x600"
+
+#~ msgid "1024x768"
+#~ msgstr "1024x768"
+
+#~ msgid "1280x1024"
+#~ msgstr "1280x1024"
+
+#~ msgid "1600x1200"
+#~ msgstr "1600x1200"
+
+#~ msgid "&Change Picture..."
+#~ msgstr "படத்தை மாற்று..."
+
+#~ msgid "Image &Effect..."
+#~ msgstr "படிமம் விளைவுகள்"
+
+#~ msgid "Superscript"
+#~ msgstr "மேலொட்டு "
+
+#~ msgid "Subscript"
+#~ msgstr "கீழ் ஓட்டு"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "சிறப்பு எழுத்து"
+
+#~ msgid "Link..."
+#~ msgstr "... தொடுப்பு"
+
+#~ msgid "Enter Custom Factor..."
+#~ msgstr "தனிப்பயன் காரணியை நுழைக்கவும்..."
+
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "தானியங்கி உள்ளமைப்பு திருத்தம்"
+
+#~ msgid "&Paragraph..."
+#~ msgstr "பத்தி "
+
+#~ msgid "Default Format"
+#~ msgstr "முன்னிருப்பு வடிவம் "
+
+#~ msgid "Open Link"
+#~ msgstr "தொடுப்பை திற"
+
+#~ msgid "Change Link..."
+#~ msgstr "தொடுப்பை மாற்று"
+
+#~ msgid "Copy Link"
+#~ msgstr "தொடுப்பை நகலெடு"
+
+#~ msgid "Add to Bookmark"
+#~ msgstr "பக்கக் குறிப்புன் சேர் "
+
+#~ msgid "&Custom Variables..."
+#~ msgstr "வழக்கம் மாறிகள் "
+
+#~ msgid "Edit Variable..."
+#~ msgstr "மாறியை திருத்துக"
+
+#~ msgid "&Variable"
+#~ msgstr "மாறி"
+
+#~ msgid "&Property"
+#~ msgstr "பண்பு"
+
+#~ msgid "&Date"
+#~ msgstr "தேதி"
+
+#~ msgid "&Time"
+#~ msgstr "நேரம்"
+
+#~ msgid "&Statistic"
+#~ msgstr "&புள்ளிவிவர"
+
+#~ msgid "&Refresh All Variables"
+#~ msgstr "எல்லா மாறிகளையும் புதுப்பி "
+
+#~ msgid "Change Case..."
+#~ msgstr "நிலை மாற்றம்"
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "பெரிதாக்கு: "
+
+#~ msgid "&Style Manager"
+#~ msgstr "பாணி மேலாளர்"
+
+#~ msgid "St&yle"
+#~ msgstr "& பாணி"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "தானியங்கு திருத்தத்தை செயல்படுத்து"
+
+#~ msgid "Disable Autocorrection"
+#~ msgstr "தானியங்கு திருத்தத்தை செயல்படுத்தாதே"
+
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "உடையாத வாக்க்கியங்களை செருகு "
+
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "இடைவெளி இல்லாத சிறுகோட்டினை சொருகு"
+
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "மென் இடைக்கோட்டைச் செருகு "
+
+#~ msgid "Line Break"
+#~ msgstr "வரி நீளத்தை சரி செய்"
+
+#~ msgid "Completion"
+#~ msgstr "முழுமையான"
+
+#~ msgid "Increase Numbering Level"
+#~ msgstr "எண்ணிக்கையிடும் அளவை அதிகரிக்கவும்"
+
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "எண்ணிக்கையிடும் அளவை குறைக்கவும்"
+
+#~ msgid "Comment..."
+#~ msgstr "குறிப்புரை"
+
+#~ msgid "Edit Comment..."
+#~ msgstr "தொகுப்பு குறிப்புரை "
+
+#, fuzzy
+#~ msgid "Add Guide Line..."
+#~ msgstr "புது உதவி வரியை சேர்க"
+
+#~ msgid "Remove Comment"
+#~ msgstr "குறிப்புரை நீக்குக "
+
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "குறிப்புரைக்கு உரையை நகலெடு "
+
+#~ msgid "&Configure Completion..."
+#~ msgstr "முழுமையான உள்ளமைப்பு"
+
+#~ msgid "Zoom Out"
+#~ msgstr "சிறிதாக்கு "
+
+#~ msgid "Zoom In"
+#~ msgstr "பெரிதாக்கு"
+
+#~ msgid "Zoom Entire Slide"
+#~ msgstr "முழுப் படவில்லையை பெரிதாக்கு "
+
+#~ msgid "Zoom Slide Width"
+#~ msgstr "படவில்லையின் அகலத்தை பெரிதாக்கு"
+
+#, fuzzy
+#~ msgid "Zoom Selected Objects"
+#~ msgstr "தேர்வுசெய்த பொருளை பெரிதாக்குக"
+
+#~ msgid "Zoom Slide Height"
+#~ msgstr "படவில்லையின் உயரத்தை பெரிதாக்கு"
+
+#~ msgid "Zoom All Objects"
+#~ msgstr "எல்லா பொருட்களையும் பெரிதாக்கு."
+
+#~ msgid "Horizontal Flip"
+#~ msgstr "கிடைமட்ட வரிகள்"
+
+#~ msgid "Vertical Flip"
+#~ msgstr "செங்குத்தான வரிகள்"
+
+#~ msgid "Duplicate Object..."
+#~ msgstr "பொருள் படியெடு"
+
+#, fuzzy
+#~ msgid "Apply Autocorrection"
+#~ msgstr "தானியங்கி திருத்தத்தினை பயன்படுத்தவும்."
+
+#, fuzzy
+#~ msgid "Create Style From Selection..."
+#~ msgstr "தேர்வுகளில் இருந்து பாணியை உருவாக்கு."
+
+#~ msgid "Align Top"
+#~ msgstr "மேல்புறமாக ஒருநிலைப்படுத்தவும் "
+
+#~ msgid "Align Middle"
+#~ msgstr "நடுவிலிருந்து ஒருநிலைப்படுத்து"
+
+#~ msgid "Save Picture..."
+#~ msgstr "படத்தை சேமி"
+
+#~ msgid "Autospellcheck"
+#~ msgstr "தானியங்கி சொல்திருத்தி"
+
+#~ msgid "File..."
+#~ msgstr "கோப்புகள்"
+
+#~ msgid "Save Background Picture..."
+#~ msgstr "பின்னணி உருவை சேமி..."
+
+#~ msgid "Type Anywhere Cursor"
+#~ msgstr "எங்கும் தட்டச்சு செய்யக்கூடிய காட்டி"
+
+#~ msgid "Ignore All"
+#~ msgstr "முழுவதையும் புறக்கணி "
+
+#~ msgid "Add Word to Dictionary"
+#~ msgstr "அகராதியில் சொல்லினை சேர்"
+
+#, fuzzy
+#~ msgid "Hide Background"
+#~ msgstr "படவில்லை பின்னணி"
+
+#, fuzzy
+#~ msgid "Display Background"
+#~ msgstr "படவில்லை பின்னணி"
+
+#~ msgid "Set Background"
+#~ msgstr "பின்னணி அமை."
+
+#~ msgid "Select New Picture"
+#~ msgstr "புதிய படத்தினை தேர்ந்தெடுக்கவும்"
+
+#~ msgid "Next slide"
+#~ msgstr "அடுத்த படவில்லை"
+
+#~ msgid "Slide %1/%2"
+#~ msgstr "வில்லை %1%2"
+
+#, fuzzy
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr "பொருள்: %1 - (: அகலம் %2; உயரம் : %3)(%4)"
+
+#, fuzzy
+#~ msgctxt "1 object selected"
+#~ msgid "%n objects selected"
+#~ msgstr "1 பொருள் தேர்வு செய்யப்பட்டுள்ளது"
+
+#~ msgid "Change Link"
+#~ msgstr "வரியை மாற்று."
+
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "தவறான வார்த்தையை திருத்து."
+
+#~ msgid "Paragraph Settings"
+#~ msgstr "பத்தி-அமைப்புகள்"
+
+#~ msgid "Change Custom Variable"
+#~ msgstr "தனிப்பயன் மதிப்புகளை மாற்றவும்"
+
+#~ msgid "Change Case of Text"
+#~ msgstr "உரையின் நிலை/எழுத்தை மாற்றவும்."
+
+#~ msgid "Whole Slide"
+#~ msgstr "முழு படவில்லை"
+
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#~ msgid "Presentation Duration"
+#~ msgstr "முன்வைப்பு கால அளவு"
+
+#, fuzzy
+#~ msgid "Enable Document Footer"
+#~ msgstr "ஆவண வகை:"
+
+#~ msgid "Apply Style to Frame"
+#~ msgstr "பாணிகளை சட்டத்திற்கு பயன்படுத்து"
+
+#~ msgid "Change Note Text"
+#~ msgstr "குறிப்பு உரையை மாற்று"
+
+#~ msgid "Apply Autoformat"
+#~ msgstr "தானியங்கி வடிவத்தினை பயன்படுத்து."
+
+#~ msgid "Do you want to apply autoformat in new slide?"
+#~ msgstr "புதிய பட வில்லையில் தானியங்கி வடிவத்தினை பயன்படுத்த உங்களுக்கு விருப்பமா."
+
+#~ msgid "Replace Word"
+#~ msgstr "எழுத்தை மாற்றியிடு."
+
+#~ msgid "First"
+#~ msgstr "முதல்"
+
+#~ msgid "Previous"
+#~ msgstr "முன்னால்"
+
+#~ msgid "Next"
+#~ msgstr "அடுத்த"
+
+#~ msgid "Last"
+#~ msgstr "கடைசி"
+
+#~ msgid "Home"
+#~ msgstr "வீடு"
+
+#~ msgid ""
+#~ "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/"
+#~ "kpresenter\">KPresenter</a>"
+#~ msgstr ""
+#~ "%1 அன்று<i>%2 ஆல்</i> with <a href=\"http://www.koffice.org/kpresenter"
+#~ "\">KPresenter</a> உடன் உருவாக்கப்பட்டது"
+
+#~ msgid "Table of Contents"
+#~ msgstr "உள்ளடக்கங்களின் அட்டவணை"
+
+#~ msgid "Click here to start the Slideshow"
+#~ msgstr "படக்காட்சியை ஆரம்பிக்க இங்கே சொடுக்கவும்"
+
+#~ msgid "Create HTML Slideshow Wizard"
+#~ msgstr "HTML படக்காட்சி வழிகாட்டியை உருவாக்கு"
+
+#~ msgid ""
+#~ "This page allows you to specify some of the key values for how your "
+#~ "presentation will be shown in HTML. Select individual items for more help "
+#~ "on what they do."
+#~ msgstr ""
+#~ "இந்த பக்கம் உங்களை சில விசை மதிப்பை HTML யை முன்வைக்க உதவுகிறது. மேலும் "
+#~ "உதவிகளுக்கு நீங்கள் செய்ததை தேர்ந்தெடுக்க உதவுகிறது. "
+
+#~ msgid ""
+#~ "Enter your name, email address and the title of the web presentation. "
+#~ "Also enter the output directory where the web presentation should be "
+#~ "saved. "
+#~ msgstr ""
+#~ "உங்கள் பெயர், மின்அஞ்சல் முகவரி மற்றும் முன்வைப்பின் தலைப்பை உள்ளிடு. சேமிக்க "
+#~ "வெளியீடுக்கான ஆவணத்தை உள்ளிடு.  "
+
+#~ msgid ""
+#~ "This is where you enter the name of the person or organization that "
+#~ "should be named as the author of the presentation."
+#~ msgstr ""
+#~ "ஒருவரின் அல்லது நிலையத்தின் பெயரை நுழைத்திடுக அஃது உருவாக்கியின் பெயரால் "
+#~ "முன்வைத்ததாகும். "
+
+#~ msgid "This is where you enter the title of the overall presentation."
+#~ msgstr "இது நீங்கள் நுழைத்த தலைப்பின் ஒட்டு மொத்த முன்வைப்பாகும். "
+
+#~ msgid "Email address:"
+#~ msgstr "மின்அஞ்சல் முகவரிகள்: "
+
+#~ msgid ""
+#~ "This is where you enter the email address of the person or organization "
+#~ "that is responsible for the presentation."
+#~ msgstr ""
+#~ "ஒருவரின் பெயர் அல்லது நிலையத்தின் மின் அஞ்சல் விலாசத்தை நுழைத்திடவும். அது "
+#~ "முன்வைப்புக்கு துணை நின்றதாகும். "
+
+#~ msgid ""
+#~ "The value entered for the path is the directory where the presentation "
+#~ "will be saved. If it does not exist, you'll be asked if you want to "
+#~ "create the directory or abort the creation."
+#~ msgstr ""
+#~ "பாதைக்காக நுழைத்திட்ட மதிப்பு அடைவை முன்வைப்பில் சேமிக்கவும். இது வெளியேறவில்லை "
+#~ "என்றால் நீங்கள் அடைவை அல்லது உருவாக்க வேண்டுமா என்பதை கேட்கும்."
+
+#~ msgid "Step 1: General Information"
+#~ msgstr "படி 1: பொதுவான தகவல்"
+
+#~ msgid ""
+#~ "This page allows you to specify how the HTML for your presentation will "
+#~ "be displayed. Select individual items for more help on what they do."
+#~ msgstr ""
+#~ "இந்த பக்கம் உங்களை HTML  முன்வைப்பில் காண்பிக்கும். அவர்கள் செய்ததில் இருந்து நிறைய "
+#~ "உதவிகளையும் தனி வகைகளையும் தேர்ந்தெடுக்கவும்."
+
+#~ msgid "Here you can configure the style of the web pages."
+#~ msgstr "இங்கு வலைப்பக்கத்தின் பாணியை உள்ளமைக்க முடிய்ம்."
+
+#~ msgid "You can also specify the zoom for the slides."
+#~ msgstr "நீங்கள் படம் பெரியதாக்க குறிப்பிடலாம்."
+
+#~ msgid "Zoom:"
+#~ msgstr "பெரிதாக்கு: "
+
+#~ msgid "This selection allows you to specify the size of the slide image."
+#~ msgstr "இந்த தேர்ந்தெடுப்பு உங்களின் ஸ்லைடு படத்தின் அளவை பெரிதாகும். "
+
+#~ msgid "Encoding:"
+#~ msgstr "குறியிடுதல்:"
+
+#~ msgid "Document type:"
+#~ msgstr "ஆவண வகை:"
+
+#~ msgid "Step 2: Configure HTML"
+#~ msgstr "படி 2:  HTML யை உள்ளமை"
+
+#~ msgid ""
+#~ "This page allows you to specify the colors for your presentation display. "
+#~ "Select individual items for more help on what they do."
+#~ msgstr ""
+#~ "இந்த பக்கம் உங்களை வண்ணத்தின் முன்வைப்போடு காண்பிக்கும். அவர்கள் செய்ததில் உதவி "
+#~ "வேண்டுமானால் தனிவகையை தேர்ந்தெடு."
+
+#~ msgid "Now you can customize the colors of the web pages."
+#~ msgstr "இங்கு வலைப்பக்கத்தின் வண்ணத்தை தனிப்பயனாக்க முடியும்."
+
+#~ msgid "Title color:"
+#~ msgstr "தலைப்பு வண்ணம்: "
+
+#~ msgid "Step 3: Customize Colors"
+#~ msgstr "படி 3: வண்ணத்தை தனிபயனாக்கு"
+
+#~ msgid ""
+#~ "This page allows you to modify the titles of each slide, if required. You "
+#~ "normally do not need to do this, but it is available if required."
+#~ msgstr ""
+#~ "இந்த பக்கம் ஸ்லைடின் எல்லா பக்கத்தையும் சரி செய்தாகும், தேவைப்பட்டால். நீங்கள் இதை செய்ய "
+#~ "தேவைப்படாது ஆனால் தேவைப்பட்டால் இருக்கும்."
+
+#~ msgid ""
+#~ "Here you can specify titles for each slide. Click on a slide in the list "
+#~ "and then enter the title in the textbox below. If you click on a title, "
+#~ "KPresenter mainview will display the slide."
+#~ msgstr ""
+#~ "ஒவ்வொறு வில்லையின் தலைப்பை எங்கே\n"
+#~ "நீங்கள் குறிப்பிடலாம். ஒரு வில்லையின்\n"
+#~ "மேலுள்ள பட்டியலை க்ளிக் செய்யவும் மற்றும்\n"
+#~ "தலைப்பின் கீழுள்ள தொகுப்பு பெட்டியில் நுழைக்கவும்.\n"
+#~ "நீங்கள் தலைப்பை க்ளிக் செய்தால், Kகாட்சியாளர்\n"
+#~ "மூலகாட்சி இந்த வில்லையில் உருளும்,\n"
+#~ "இதனால் நீங்கள் வில்லை பார்க்கலாம்."
+
+#~ msgid "Step 4: Customize Slide Titles"
+#~ msgstr "படி 4: படப் பெயரை தனிப்பயனாக்கு"
+
+#, fuzzy
+#~ msgid "This selection allows you to specify the time between slides."
+#~ msgstr "இந்த தேர்ந்தெடுப்பு உங்களின் ஸ்லைடு படத்தின் அளவை பெரிதாகும். "
+
+#, fuzzy
+#~ msgid "Disabled"
+#~ msgstr "கரை"
+
+#, fuzzy
+#~ msgid "Write header to the slides"
+#~ msgstr "ஸ்லைடுக்கான படங்களை உருவாக்கு"
+
+#, fuzzy
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want to write the navigation "
+#~ "buttons on top of the slide."
+#~ msgstr "இந்த தேர்ந்தெடுப்பு உங்களின் ஸ்லைடு படத்தின் அளவை பெரிதாகும். "
+
+#, fuzzy
+#~ msgid "Write footer to the slides"
+#~ msgstr "ஸ்லைடுக்கான படங்களை உருவாக்கு"
+
+#, fuzzy
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want the presentation to start "
+#~ "again once the latest slide is reached."
+#~ msgstr "இந்த தேர்ந்தெடுப்பு உங்களின் ஸ்லைடு படத்தின் அளவை பெரிதாகும். "
+
+#~ msgid "Initialize (create file structure, etc.)"
+#~ msgstr "தொடங்கு ( வடிவத்தை உருவாக்குதல், மற்றம் இதர)"
+
+#~ msgid "Create Pictures of the Slides"
+#~ msgstr "சட்டங்களுக்கான படங்களை உருவாக்கு"
+
+#~ msgid "Create HTML Pages for the Slides"
+#~ msgstr "வில்லைகளுக்கு HTML பக்கங்களை உருவாக்கவும்"
+
+#~ msgid "Create Main Page (Table of Contents)"
+#~ msgstr "மூல பக்கத்தை உருவாக்கவும் ( உள்ளடக்கத்தின் அட்டவணை)"
+
+#~ msgid "*.kpweb|KPresenter Web-Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|Kகாட்சியாளர் வலை-காட்சியமைப்பு  (*.kpweb) "
+
+#~ msgid "Save Web Presentation Configuration"
+#~ msgstr "வலை முன்வைப்பு உள்ளமையை சேமிக்கவும்"
+
+#~ msgid "Freehand"
+#~ msgstr "கை வரைதல்"
+
+#~ msgid "Autoform"
+#~ msgstr "தானியக்க படிவம்"
+
+#~ msgid "Group"
+#~ msgstr "தொகுப்பு/கூட்டு"
+
+#~ msgid "Polyline"
+#~ msgstr "சாதாரண கோடு"
+
+#~ msgid "Embedded Object"
+#~ msgstr "பொருட்களை உட்பதிக்கவும்"
+
+#~ msgid "Cubic Bezier Curve"
+#~ msgstr "பட்டக பெய்சியர் வளைவு"
+
+#~ msgid "Quadric Bezier Curve"
+#~ msgstr "இருபடி பெய்சியர் வளைவரை"
+
+#, fuzzy
+#~| msgid "View mode:"
+#~ msgid "View Mode"
+#~ msgstr "காட்சி வகை:"
+
+#, fuzzy
+#~ msgid "Prot&ect content"
+#~ msgstr "பொருள் உள்ளடக்கம்"
+
+#, fuzzy
+#~ msgid "Spellchecker Behavior"
+#~ msgstr "வரி/நொடுவரி தன்மை"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "பாதை அமைவுகள்"

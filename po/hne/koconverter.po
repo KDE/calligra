@@ -1,0 +1,246 @@
+# translation of koconverter.po to Hindi
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Ravishankar Shrivastava <raviratlami@yahoo.com>, 2008.
+# Ravishankar Shrivastava <raviratlami@aol.in>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: koconverter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2009-03-03 08:41+0530\n"
+"Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
+"Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
+"Language: hne\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "रविसंकर सिरीवास्तव, जी. करूनाकर"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "raviratlami@aol.in,"
+
+#: calligraconverter.cpp:144
+#, fuzzy, kde-format
+#| msgid "KOffice Document Converter"
+msgid "CalligraConverter"
+msgstr "केआफिस कागद बदलइया"
+
+#: calligraconverter.cpp:146
+#, fuzzy, kde-format
+#| msgid "KOffice Document Converter"
+msgid "Calligra Document Converter"
+msgstr "केआफिस कागद बदलइया"
+
+#: calligraconverter.cpp:148
+#, fuzzy, kde-format
+#| msgid "(c) 2001-2004 KOffice developers"
+msgid "Copyright 2001-%1 Calligra developers"
+msgstr "(c) 2001-2004, केआफिस बनइया मन"
+
+#: calligraconverter.cpp:149
+#, kde-format
+msgid "David Faure"
+msgstr "डेविड फाउरे"
+
+#: calligraconverter.cpp:150
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "निकोलस गाउते"
+
+#: calligraconverter.cpp:151
+#, kde-format
+msgid "Dan Leinir Turthra Jensen"
+msgstr ""
+
+#: calligraconverter.cpp:158
+#, kde-format
+msgid "Input file"
+msgstr "इनपुट फाइल"
+
+#: calligraconverter.cpp:159
+#, kde-format
+msgid "Output file"
+msgstr "आउटपुट फाइल"
+
+#: calligraconverter.cpp:160
+#, kde-format
+msgid "Make a backup of the destination file"
+msgstr "गंतव्य फाइल के बैक अप बनाव"
+
+#: calligraconverter.cpp:161
+#, kde-format
+msgid "Batch mode: do not show dialogs"
+msgstr "बैच मोडः ए संदेस नइ देखाव"
+
+#: calligraconverter.cpp:162
+#, kde-format
+msgid "Interactive mode: show dialogs (default)"
+msgstr "इंटरेक्टिव मोड: गोठ देखाव (डिफाल्ट)"
+
+#: calligraconverter.cpp:163
+#, kde-format
+msgid "Mimetype of the output file"
+msgstr "आउटपुट फाइल बर माइमकिसिम"
+
+#: calligraconverter.cpp:166
+#, kde-format
+msgid "The print orientation. This could be either Portrait or Landscape."
+msgstr ""
+
+#: calligraconverter.cpp:167
+#, kde-format
+msgid "The paper size. A4, Legal, Letter, ..."
+msgstr ""
+
+#: calligraconverter.cpp:168
+#, kde-format
+msgid "The size of the paper margin. By default this is 0.2."
+msgstr ""
+
+#: calligraconverter.cpp:175
+#, kde-format
+msgid "Two arguments required"
+msgstr "दु आर्गुमेंट जरूरी हे"
+
+#: calligraconverter.cpp:203
+#, kde-format
+msgid "Mimetype for input file %1 not found!"
+msgstr "इनपुट फाइल %1 बर माइम किसिम नइ मिलिस!"
+
+#: calligraconverter.cpp:212
+#, kde-format
+msgid "Mimetype not found %1"
+msgstr "माइम किसिम %1 नइ मिलिस"
+
+#: calligraconverter.cpp:218
+#, kde-format
+msgid "Mimetype not found, try using the -mimetype option"
+msgstr "माइम किसिम नइ मिलिस, -mimetype विकल्प आजमा कर देखव"
+
+#: calligraconverter.cpp:242
+#, kde-format
+msgid "*** The conversion failed! ***"
+msgstr "*** रूपांतरन फेल! ***"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "रविसंकर सिरीवास्तव, जी. करूनाकर"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "raviratlami@aol.in,"
+
+#, fuzzy
+#~| msgid "KOffice Document Converter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CalligraConverter"
+#~ msgstr "केआफिस कागद बदलइया"
+
+#, fuzzy
+#~| msgid "KOffice Document Converter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Converter"
+#~ msgstr "केआफिस कागद बदलइया"
+
+#, fuzzy
+#~| msgid "(c) 2001-2004 KOffice developers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2001-%1 Calligra developers"
+#~ msgstr "(c) 2001-2004, केआफिस बनइया मन"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "डेविड फाउरे"
+
+#, fuzzy
+#~| msgid "Nicolas Goutte"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "निकोलस गाउते"
+
+#, fuzzy
+#~| msgid "Input file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Input file"
+#~ msgstr "इनपुट फाइल"
+
+#, fuzzy
+#~| msgid "Output file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output file"
+#~ msgstr "आउटपुट फाइल"
+
+#, fuzzy
+#~| msgid "Make a backup of the destination file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Make a backup of the destination file"
+#~ msgstr "गंतव्य फाइल के बैक अप बनाव"
+
+#, fuzzy
+#~| msgid "Batch mode: do not show dialogs"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Batch mode: do not show dialogs"
+#~ msgstr "बैच मोडः ए संदेस नइ देखाव"
+
+#, fuzzy
+#~| msgid "Interactive mode: show dialogs (default)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interactive mode: show dialogs (default)"
+#~ msgstr "इंटरेक्टिव मोड: गोठ देखाव (डिफाल्ट)"
+
+#, fuzzy
+#~| msgid "Mimetype of the output file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype of the output file"
+#~ msgstr "आउटपुट फाइल बर माइमकिसिम"
+
+#, fuzzy
+#~| msgid "Two arguments required"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two arguments required"
+#~ msgstr "दु आर्गुमेंट जरूरी हे"
+
+#, fuzzy
+#~| msgid "Mimetype for input file %1 not found!"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype for input file %1 not found!"
+#~ msgstr "इनपुट फाइल %1 बर माइम किसिम नइ मिलिस!"
+
+#, fuzzy
+#~| msgid "Mimetype not found %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found %1"
+#~ msgstr "माइम किसिम %1 नइ मिलिस"
+
+#, fuzzy
+#~| msgid "Mimetype not found, try using the -mimetype option"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found, try using the -mimetype option"
+#~ msgstr "माइम किसिम नइ मिलिस, -mimetype विकल्प आजमा कर देखव"
+
+#, fuzzy
+#~| msgid "*** The conversion failed! ***"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "*** The conversion failed! ***"
+#~ msgstr "*** रूपांतरन फेल! ***"
+
+#~ msgid "KOConverter"
+#~ msgstr "कोकनवर्टर"

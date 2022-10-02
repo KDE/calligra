@@ -1,0 +1,2942 @@
+# translation of kofficefilters.po to greek
+# translation of kofficefilters.po to
+#
+# Yannis Kollias <jonnie_kgr@inMail24.com>, 2005.
+# Spiros Georgaras <sng@hellug.gr>, 2005, 2006, 2007.
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2006, 2007, 2008, 2009.
+# Spiros Georgaras <sngeorgaras@otenet.gr>, 2008.
+# Stelios <sstavra@gmail.com>, 2011, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kofficefilters\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2020-10-12 08:09+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 20.04.2\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, kde-format
+msgid "%1 Export Options"
+msgstr "%1 Επιλογές εξαγωγής"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, kde-format
+msgid "Page %1"
+msgstr "Σελίδα %1"
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, kde-format
+msgid "Page:"
+msgstr "Σελίδα:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, kde-format
+msgid "Size in Pixels"
+msgstr "Μέγεθος σε εικονοστοιχεία"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr "Πλάτος εικόνας:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, kde-format
+msgid "Image height:"
+msgstr "Ύψος εικόνας:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr "Μέγεθος σε μονάδες"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, kde-format
+msgid "Resolution:"
+msgstr "Ανάλυση:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr "Μονάδα:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr "Χρώμα φόντου"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, kde-format
+msgid "Color"
+msgstr "Χρώμα"
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr "Αδιαφάνεια"
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:299
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr "Το πεδίο ορισμού \"%1\" δεν βρέθηκε"
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, kde-format
+msgid "Could not open the requested file %1"
+msgstr "Αδυναμία ανοίγματος του αρχείου %1 που ζητήθηκε"
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr "Αδυναμία ανάγνωσης του ZIP καταλόγου του αρχείου %1 που ζητήθηκε"
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, kde-format
+msgid "Enter password"
+msgstr "Εισαγωγή κωδικού"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr ""
+"Αυτό το έγγραφο είναι κρυπτογραφημένο, παρακαλώ δώστε τον κωδικό για να το "
+"αποκρυπτογραφήσετε:"
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr ""
+"Λανθασμένος κωδικός, παρακαλώ δώστε τον κωδικό για να αποκρυπτογραφήσετε "
+"αυτό το έγγραφο:"
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, kde-format
+msgid "Could not find path for type %1"
+msgstr "Αδυναμία εύρεσης διαδρομής για τον τύπο %1"
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr "%1 (γραμμή %2, στήλη %3)"
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr "%1 (%2, γραμμή %3, στήλη %4)"
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr "Το στοιχείο \"%1\" δεν βρέθηκε"
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, kde-format
+msgid "Attribute \"%1\" not found"
+msgstr "Η ιδιότητα \"%1\" δεν βρέθηκε"
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr "Μη αναμενόμενη τιμή \"%1\" ιδιότητας \"%2\""
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr "Μη αναμενόμενη δεύτερη εμφάνιση του \"%1\" στοιχείου"
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr "Αναμενόμενο κλείσιμο του στοιχείου \"%1\""
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr "Κανένα από τα αναμενόμενα στοιχεία δεν βρέθηκε: %1"
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, kde-format
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr ""
+"Αδυναμία εύρεσης προορισμού για το αναγνωριστικό \"%1\" στο αρχείο \"%2\""
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, kde-format
+msgid "Could not find relationships file \"%1\""
+msgstr "Αδυναμία εύρεσης συσχετίσεων για το αρχείο \"%1\""
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, kde-format
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr "Αδυναμία εύρεσης προορισμού για συσχέτιση \"%1\" στο αρχείο \"%2\""
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+"Συντακτικό σφάλμα στο κύριο έγγραφο στη γραμμή %1, στήλη %2.\n"
+"Μήνυμα σφάλματος: %3"
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr "Η δοθείσα τιμή '%1' δεν βρέθηκε."
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr "Η δοθείσα τιμή '%1' δεν είναι αρχείο."
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr "Αδυναμία ανοίγματος της δοθείσας τιμής \"%1\" για εγγραφή."
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, kde-format
+msgid "Could not write block"
+msgstr "Αδυναμία εγγραφής στο τμήμα"
+
+#: sheets/csv/csvexport.cc:266
+#, kde-format
+msgid "<SHEETNAME>"
+msgstr "<ΟΝΟΜΑΦΥΛΛΟΥ>"
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Συνιστώμενο ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Εντοπιότητα ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Άλλο ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:281 words/ascii/ImportDialog.cc:94
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "Δε βρέθηκε η κωδικοποίηση: %1"
+
+#: sheets/csv/csvimport.cc:74
+#, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr ""
+"Το φίλτρο CSV δεν μπορεί να ανοίξει το αρχείο εισόδου - παρακαλώ κάνετε μια "
+"αναφορά."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "Κωδικοποίηση"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, kde-format
+msgid "E&ncoding:"
+msgstr "&Κωδικοποίηση:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, kde-format
+msgid "End of Line"
+msgstr "Τέλος γραμμής"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr "Στιλ &UNIX (συνιστώμενο· μόνο line feed)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr "Στιλ &Windows (carriage return και line feed)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr "Στιλ &MacOS (μόνο carriage return)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, kde-format
+msgid "Sheets"
+msgstr "Φύλλα"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, kde-format
+msgid "Select sheets to export:"
+msgstr "Επιλογή φύλλων για εξαγωγή:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, kde-format
+msgid "Delimiter Line"
+msgstr "Γραμμή οριοθέτη"
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, kde-format
+msgid "********<SHEETNAME>********"
+msgstr "********<ΟΝΟΜΑΦΥΛΛΟΥ>********"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr "Το <ΟΝΟΜΑΦΥΛΛΟΥ> αντικαθίσταται από το όνομα του επόμενου φύλλου."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr "Εκτύπωση γραμμής οριοθέτη πάνω από κάθε φύλλο"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, kde-format
+msgid "Cells"
+msgstr "Κελιά"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, kde-format
+msgid "Delimiter"
+msgstr "Οριοθέτης"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, kde-format
+msgid "Comma"
+msgstr "Κόμμα"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, kde-format
+msgid "Semicolon"
+msgstr "Άνω τελεία"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, kde-format
+msgid "Tabulator"
+msgstr "Στηλοθέτης"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, kde-format
+msgid "Space"
+msgstr "Κενό"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, kde-format
+msgid "Other:"
+msgstr "Άλλο:"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, kde-format
+msgid "Quotes:"
+msgstr "Εισαγωγικά:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, kde-format
+msgid "Export selection only"
+msgstr "Εξαγωγή επιλογής μόνο"
+
+#: sheets/dbase/dbaseimport.cc:44
+#, kde-format
+msgid "File format is not supported."
+msgstr "Ο τύπος αρχειοθέτησης δεν υποστηρίζεται."
+
+#: sheets/dbase/dbaseimport.cc:49
+#, kde-format
+msgid "Could not read from file."
+msgstr "Αδυναμία ανάγνωσης από το αρχείο."
+
+#: sheets/html/exportdialog.cc:21
+#, kde-format
+msgid "Export Sheet to HTML"
+msgstr "Εξαγωγή φύλλου σε HTML"
+
+#: sheets/html/exportdialog.cc:32
+#, kde-format
+msgid "Recommended: UTF-8"
+msgstr "Συνιστάται: UTF-8"
+
+#: sheets/html/exportdialog.cc:33
+#, kde-format
+msgid "Locale (%1)"
+msgstr "Εντοπιότητα (%1)"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, kde-format
+msgid "En&coding:"
+msgstr "Κ&ωδικοποίηση:"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr ""
+"Με αυτή την επιλογή μπορείτε να ορίσετε την κωδικοποίηση του HTML αρχείου. Η "
+"συνιστώμενη κωδικοποίηση (UTF8) είναι εξ ορισμού επιλεγμένη."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, kde-format
+msgid "Sheet Selection"
+msgstr "Επιλογή φύλλου"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr "Κάντε κλικ εδώ για να επιλέξετε όλα τα φύλλα της λίστας."
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, kde-format
+msgid "Select &All"
+msgstr "Επι&λογή όλων"
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, kde-format
+msgid "Desele&ct All"
+msgstr "Αποεπιλο&γή όλων"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+"Αυτή η επιλογή θα κάνει το φίλτρο εξαγωγής HTML να δημιουργήσει μία νέα "
+"σελίδα για κάθε φύλλο. Αν την απενεργοποιήσετε, όλα τα φύλλα θα γραφτούν σε "
+"μία σελίδα."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, kde-format
+msgid "Use &separate files for each table"
+msgstr "Χρήση &ξεχωριστών αρχείων για κάθε πίνακα"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, kde-format
+msgid "Style"
+msgstr "Στιλ"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr ""
+"Ενεργοποιήστε αυτή την επιλογή για να χρησιμοποιήσετε τις προκαθορισμένες "
+"γραμματοσειρές και χρώματα για τη σελίδα HTML."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, kde-format
+msgid "Use &default style"
+msgstr "Χρήση &προκαθορισμένου στιλ"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr ""
+"Ενεργοποιήστε αυτή την επιλογή για να καθορίσετε ένα ξεχωριστό φύλλο "
+"αισθητικής επικάλυψης για τη σελίδα HTML. Μπορείτε να το επιλέξετε ή να "
+"πληκτρολογήσετε το όνομά του στο παρακάτω πεδίο."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, kde-format
+msgid "Use &external stylesheet:"
+msgstr "Χρήση &εξωτερικού φύλλου αισθητικής επικάλυψης:"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+"Σε αυτό το πεδίο μπορείτε να εισάγετε ένα URL για το φύλλο αισθητικής. Είναι "
+"δυνατό να επιλέξετε ένα φύλλο αισθητικής στο δίσκο, ή κάπου στο διαδίκτυο."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, kde-format
+msgid "Layout"
+msgstr "Διάταξη"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr ""
+"Χρησιμοποιήστε αυτή την επιλογή για να ενεργοποιήσετε ή να απενεργοποιήσετε "
+"τα περιγράμματα γύρω από τα κελιά."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, kde-format
+msgid "Use &borders"
+msgstr "Χρήση &περιγραμμάτων"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+"Χρησιμοποιήστε αυτή την επιλογή για να ορίσετε πόσα εικονοστοιχεία πρέπει να "
+"υπάρχουν μεταξύ των κελιών. Αυτό το εφέ είναι καλύτερα ορατό αν "
+"ενεργοποιήσετε και το <b>Χρήση περιγραμμάτων</b>."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, kde-format
+msgid "Pi&xels between cells:"
+msgstr "Ει&κονοστοιχεία μεταξύ των κελιών:"
+
+#: sheets/html/htmlexport.cc:200 sheets/html/htmlexport.cc:375
+#, kde-format
+msgid "Top"
+msgstr "Πάνω"
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr "Διαμόρφωση φίλτρου εξαγωγής Latex"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, kde-format
+msgid "Document"
+msgstr "Έγγραφο"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, kde-format
+msgid "Document Style"
+msgstr "Στιλ εγγράφου"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, kde-format
+msgid "Latex style"
+msgstr "Στιλ Latex"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, kde-format
+msgid "Words style"
+msgstr "Στιλ Words"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, kde-format
+msgid "Document Type"
+msgstr "Τύπος εγγράφου"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr "Το έγγραφο είναι δυνατό να μεταγλωττιστεί μόνο του"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, kde-format
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+"Το έγγραφο θα παραχθεί ως πλήρες έγγραφο latex αφού όλες οι εντολές include "
+"θα παραχθούν πριν από τις εντολές \\begin[document} και \\end{document}."
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, kde-format
+msgid "Independent document"
+msgstr "Ανεξάρτητο έγγραφο"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr ""
+"Να μη δημιουργηθεί ούτε η επικεφαλίδα latex ούτε το περιβάλλον του εγγράφου"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+"Το έγγραφο θα παραχθεί ως έγγραφο latex το οποίο θα πρέπει να περιληφθεί σε "
+"ένα κύριο έγγραφο latex. Θα σας επιτρέψει να δημιουργείτε πολλά μικρά αρχεία "
+"για κάθε κεφάλαιο του εγγράφου σας."
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, kde-format
+msgid "Document to include"
+msgstr "Έγγραφο που θα περιληφθεί"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, kde-format
+msgid "Document class:"
+msgstr "Κλάση εγγράφου:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, kde-format
+msgid "Quality:"
+msgstr "Ποιότητα:"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, kde-format
+msgid "Final"
+msgstr "Τελικό"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, kde-format
+msgid "Draft"
+msgstr "Πρόχειρο"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, kde-format
+msgid "Default font size:"
+msgstr "Προκαθορισμένο μέγεθος γραμματοσειράς:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, kde-format
+msgid "Pictures"
+msgstr "Εικόνες"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, kde-format
+msgid "Convert the pictures:"
+msgstr "Μετατροπή των εικόνων:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, kde-format
+msgid "Pictures directory:"
+msgstr "Κατάλογος εικόνων:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, kde-format
+msgid "Language"
+msgstr "Γλώσσα"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, kde-format
+msgid "Add"
+msgstr "Προσθήκη"
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, kde-format
+msgid "Remove"
+msgstr "Αφαίρεση"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, kde-format
+msgid "Contents"
+msgstr "Περιεχόμενα"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, kde-format
+msgid "Export information about author:"
+msgstr "Εξαγωγή πληροφοριών για το συγγραφέα:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, kde-format
+msgid "Add a table of content:"
+msgstr "Προσθήκη ενός πίνακα περιεχομένων:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, kde-format
+msgid "Notes"
+msgstr "Σημειώσεις"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, kde-format
+msgid "Don't export"
+msgstr "Να μη γίνει εξαγωγή"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, kde-format
+msgid "Export notes in margin notes"
+msgstr "Εξαγωγή σημειώσεων σε σχόλια στο περιθώριο"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, kde-format
+msgid "Export notes in comments"
+msgstr "Εξαγωγή σημειώσεων σε σχόλια"
+
+#: sheets/opencalc/opencalcexport.cc:890
+#, kde-format
+msgid "Page "
+msgstr "Σελίδα "
+
+#: sheets/opencalc/opencalcimport.cc:1199
+#, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr "Το αρχείο φαίνεται να είναι κατεστραμμένο. Παράλειψη ενός πίνακα."
+
+#: sheets/opencalc/opencalcimport.cc:1211
+#, kde-format
+msgid "Skipping a table."
+msgstr "Παράλειψη ενός πίνακα."
+
+#: sheets/opencalc/opencalcimport.cc:1911
+#, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+"Αυτό το έγγραφο δημιουργήθηκε με το OpenOffice.org έκδοση '%1'. Αυτό το "
+"φίλτρο γράφτηκε για την έκδοση 1.0. Η ανάγνωση αυτού του αρχείου μπορεί να "
+"προκαλέσει παράξενη συμπεριφορά, καταρρεύσεις ή λανθασμένη εμφάνιση των "
+"δεδομένων. Θέλετε να συνεχίσετε τη μετατροπή αυτού του εγγράφου;"
+
+#: sheets/opencalc/opencalcimport.cc:1912
+#, kde-format
+msgid "Unsupported document version"
+msgstr "Μη υποστηριζόμενη έκδοση εγγράφου"
+
+#: sheets/qpro/qproimport.cc:114
+#, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr ""
+"Το φίλτρο QPRO δεν κατάφερε να ανοίξει το αρχείο εισόδου - παρακαλώ κάνετε "
+"μια αναφορά."
+
+#: sheets/qpro/qproimport.cc:219
+#, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr ""
+"Αδυναμία ανοίγματος αρχείων προστατευμένων με κωδικό πρόσβασης.\n"
+"Ο αλγόριθμος του κωδικού πρόσβασης δεν έχει δημοσιευτεί"
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, kde-format
+msgid "Unable to find part for type %1"
+msgstr "Αδυναμία εύρεσης τμήματος για τον τύπο %1"
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr "Δηλώθηκε πολύ μικρός αριθμός κοινόχρηστων συμβολοσειρών (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr "Δηλώθηκε πολύ μικρός αριθμός για τα στιλ των γραμματοσειρών (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr "Δηλώθηκε πολύ μικρός αριθμός για τον τύπο των κελιών (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr "Δηλώθηκε πολύ μικρός αριθμός για τα στιλ γεμίσματος (%1)"
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:348
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+"Δεν έγινε πλήρης φόρτωση δεδομένων εξαιτίας υπέρβασης στο μέγιστο μέγεθος "
+"φύλλου"
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1425
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr "Αναμένεται αριθμός ακέραιος ή κινητής υποδιαστολής"
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, kde-format
+msgid "Slide layout \"%1\" not found"
+msgstr "το περίγραμμα της διαφάνειας \"%1\" δεν βρέθηκε"
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, kde-format
+msgid "Slide %1"
+msgstr "Διαφάνεια %1"
+
+#: words/ascii/ImportDialog.cc:32
+#, kde-format
+msgid "Words's Plain Text Import Filter"
+msgstr "Φίλτρο εισαγωγής απλού κειμένου του Words"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "Διάλογος εισαγωγής απλού κειμένου"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, kde-format
+msgid "End of Paragraph"
+msgstr "Τέλος παραγράφου"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, kde-format
+msgid "&As is: At the end of line"
+msgstr "Ό&πως είναι: Στο τέλος της γραμμής"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr "Π&ρόταση: Αν το τέλος γραμμής είναι το τέλος μιας πρότασης"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr "&Κενή γραμμή: Αν η γραμμή είναι κενή"
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, kde-format
+msgid "End notes"
+msgstr "Τέλος σημειώσεων"
+
+#: words/msword-odf/conversion.cpp:828
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Κεφαλίδα ζυγών σελίδων"
+
+#: words/msword-odf/conversion.cpp:830
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Κεφαλίδα μονών σελίδων"
+
+#: words/msword-odf/conversion.cpp:832
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Υποσέλιδο ζυγών σελίδων"
+
+#: words/msword-odf/conversion.cpp:834
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Υποσέλιδο μονών σελίδων"
+
+#: words/msword-odf/conversion.cpp:836
+#, kde-format
+msgid "First Page Header"
+msgstr "Κεφαλίδα πρώτης σελίδας"
+
+#: words/msword-odf/conversion.cpp:838
+#, kde-format
+msgid "First Page Footer"
+msgstr "Υποσέλιδο πρώτης σελίδας"
+
+#: words/msword-odf/texthandler.cpp:632
+#, kde-format
+msgid "Table %1"
+msgstr "Πίνακας %1"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr ""
+"Το αρχείο δεν μπορεί να φορτωθεί, καθώς φαίνεται ότι δεν είναι έγγραφο RTF."
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, kde-format
+msgid "Words's RTF Import Filter"
+msgstr "Φίλτρο εισαγωγής RTF του Words"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, kde-format
+msgid "The file cannot be loaded."
+msgstr "Αδυναμία φόρτωσης αρχείου."
+
+#~ msgid "Failed to read data."
+#~ msgstr "Αποτυχία ανάγνωσης των δεδομένων."
+
+#~ msgid "Export Error"
+#~ msgstr "Σφάλμα εξαγωγής"
+
+#~ msgid "Malformed XML data."
+#~ msgstr "Λανθασμένα δεδομένα XML."
+
+#~ msgid "Export to Image"
+#~ msgstr "Εξαγωγή σε εικόνα"
+
+#~ msgid "Complete Page"
+#~ msgstr "Ολόκληρη σελίδα"
+
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Περιοχή αντικειμένων στη σελίδα"
+
+#~ msgid "Area to export:"
+#~ msgstr "Περιοχή για εξαγωγή:"
+
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "Προσαρμοσμένο μέγεθος (εικονοστοιχεία):"
+
+#~ msgid "Height:"
+#~ msgstr "Ύψος:"
+
+#~ msgid "Width:"
+#~ msgstr "Πλάτος:"
+
+#~ msgid "Margin:"
+#~ msgstr "Περιθώριο:"
+
+#~ msgid "QXml"
+#~ msgstr "QXml"
+
+#, fuzzy
+#~| msgid "Size in Pixels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Pixels"
+#~ msgstr "Μέγεθος σε εικονοστοιχεία"
+
+#, fuzzy
+#~| msgid "Image width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image width:"
+#~ msgstr "Πλάτος εικόνας:"
+
+#, fuzzy
+#~| msgid "Image height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image height:"
+#~ msgstr "Ύψος εικόνας:"
+
+#, fuzzy
+#~| msgid "Size in Units"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Units"
+#~ msgstr "Μέγεθος σε μονάδες"
+
+#, fuzzy
+#~| msgid "Resolution:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Resolution:"
+#~ msgstr "Ανάλυση:"
+
+#, fuzzy
+#~| msgid "Unit:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unit:"
+#~ msgstr "Μονάδα:"
+
+#, fuzzy
+#~| msgid "Background Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background Color"
+#~ msgstr "Χρώμα φόντου"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "Χρώμα"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opacity"
+#~ msgstr "Αδιαφάνεια"
+
+#, fuzzy
+#~| msgid "En&coding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&coding:"
+#~ msgstr "Κ&ωδικοποίηση:"
+
+#, fuzzy
+#~| msgid ""
+#~| "With this option you can define the encoding of the HTML file. The "
+#~| "recommended encoding (UTF8) is selected as default."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "With this option you can define the encoding of the HTML file. The "
+#~ "recommended encoding (UTF8) is selected as default."
+#~ msgstr ""
+#~ "Με αυτή την επιλογή μπορείτε να ορίσετε την κωδικοποίηση του HTML "
+#~ "αρχείου. Η συνιστώμενη κωδικοποίηση (UTF8) είναι εξ ορισμού επιλεγμένη."
+
+#, fuzzy
+#~| msgid "Sheet Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet Selection"
+#~ msgstr "Επιλογή φύλλου"
+
+#, fuzzy
+#~| msgid "Click here to select all sheets in the list."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click here to select all sheets in the list."
+#~ msgstr "Κάντε κλικ εδώ για να επιλέξετε όλα τα φύλλα της λίστας."
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select &All"
+#~ msgstr "Επι&λογή όλων"
+
+#, fuzzy
+#~| msgid "Desele&ct All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Desele&ct All"
+#~ msgstr "Αποεπιλο&γή όλων"
+
+#, fuzzy
+#~| msgid ""
+#~| "This option will make the HTML export filter generate a new page for "
+#~| "each sheet. If you disable this option, all sheets are written on one "
+#~| "page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This option will make the HTML export filter generate a new page for each "
+#~ "sheet. If you disable this option, all sheets are written on one page."
+#~ msgstr ""
+#~ "Αυτή η επιλογή θα κάνει το φίλτρο εξαγωγής HTML να δημιουργήσει μία νέα "
+#~ "σελίδα για κάθε φύλλο. Αν την απενεργοποιήσετε, όλα τα φύλλα θα γραφτούν "
+#~ "σε μία σελίδα."
+
+#, fuzzy
+#~| msgid "Use &separate files for each table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &separate files for each table"
+#~ msgstr "Χρήση &ξεχωριστών αρχείων για κάθε πίνακα"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Στιλ"
+
+#, fuzzy
+#~| msgid ""
+#~| "Select this option to use the default fonts and colors for the HTML page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to use the default fonts and colors for the HTML page."
+#~ msgstr ""
+#~ "Ενεργοποιήστε αυτή την επιλογή για να χρησιμοποιήσετε τις προκαθορισμένες "
+#~ "γραμματοσειρές και χρώματα για τη σελίδα HTML."
+
+#, fuzzy
+#~| msgid "Use &default style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &default style"
+#~ msgstr "Χρήση &προκαθορισμένου στιλ"
+
+#, fuzzy
+#~| msgid ""
+#~| "Select this option to specify a separate stylesheet for the HTML page. "
+#~| "You can select or type on in the field below."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to specify a separate stylesheet for the HTML page. "
+#~ "You can select or type on in the field below."
+#~ msgstr ""
+#~ "Ενεργοποιήστε αυτή την επιλογή για να καθορίσετε ένα ξεχωριστό φύλλο "
+#~ "αισθητικής επικάλυψης για τη σελίδα HTML. Μπορείτε να το επιλέξετε ή να "
+#~ "πληκτρολογήσετε το όνομά του στο παρακάτω πεδίο."
+
+#, fuzzy
+#~| msgid "Use &external stylesheet:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &external stylesheet:"
+#~ msgstr "Χρήση &εξωτερικού φύλλου αισθητικής επικάλυψης:"
+
+#, fuzzy
+#~| msgid ""
+#~| "In this field you can enter an URL for your stylesheet. It is possible "
+#~| "to point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "In this field you can enter an URL for your stylesheet. It is possible to "
+#~ "point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgstr ""
+#~ "Σε αυτό το πεδίο μπορείτε να εισάγετε ένα URL για το φύλλο αισθητικής. "
+#~ "Είναι δυνατό να επιλέξετε ένα φύλλο αισθητικής στο δίσκο, ή κάπου στο "
+#~ "διαδίκτυο."
+
+#, fuzzy
+#~| msgid "Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Διάταξη"
+
+#, fuzzy
+#~| msgid "Use this option to enable or disable borders around the cells."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use this option to enable or disable borders around the cells."
+#~ msgstr ""
+#~ "Χρησιμοποιήστε αυτή την επιλογή για να ενεργοποιήσετε ή να "
+#~ "απενεργοποιήσετε τα περιγράμματα γύρω από τα κελιά."
+
+#, fuzzy
+#~| msgid "Use &borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &borders"
+#~ msgstr "Χρήση &περιγραμμάτων"
+
+#, fuzzy
+#~| msgid ""
+#~| "Use this option to define how many pixels there should be between the "
+#~| "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Use this option to define how many pixels there should be between the "
+#~ "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgstr ""
+#~ "Χρησιμοποιήστε αυτή την επιλογή για να ορίσετε πόσα εικονοστοιχεία πρέπει "
+#~ "να υπάρχουν μεταξύ των κελιών. Αυτό το εφέ είναι καλύτερα ορατό αν "
+#~ "ενεργοποιήσετε και το <b>Χρήση περιγραμμάτων</b>."
+
+#, fuzzy
+#~| msgid "Pi&xels between cells:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pi&xels between cells:"
+#~ msgstr "Ει&κονοστοιχεία μεταξύ των κελιών:"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Έγγραφο"
+
+#, fuzzy
+#~| msgid "Document Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Style"
+#~ msgstr "Στιλ εγγράφου"
+
+#, fuzzy
+#~| msgid "Latex style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex style"
+#~ msgstr "Στιλ Latex"
+
+#, fuzzy
+#~| msgid "Words style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words style"
+#~ msgstr "Στιλ Words"
+
+#, fuzzy
+#~| msgid "Document Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Type"
+#~ msgstr "Τύπος εγγράφου"
+
+#, fuzzy
+#~| msgid "The document will be able to be compiled alone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The document will be able to be compiled alone"
+#~ msgstr "Το έγγραφο είναι δυνατό να μεταγλωττιστεί μόνο του"
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a full latex document since all the "
+#~| "include will be generated before the \\begin[document} and "
+#~| "\\end{document} commands."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a full latex document since all the "
+#~ "include will be generated before the \\begin[document} and "
+#~ "\\end{document} commands."
+#~ msgstr ""
+#~ "Το έγγραφο θα παραχθεί ως πλήρες έγγραφο latex αφού όλες οι εντολές "
+#~ "include θα τοποθετηθούν πριν από τις εντολές \\begin[document} και "
+#~ "\\end{document}"
+
+#, fuzzy
+#~| msgid "Independent document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Independent document"
+#~ msgstr "Ανεξάρτητο έγγραφο"
+
+#, fuzzy
+#~| msgid "Do not generate either the latex header or the document environment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do not generate either the latex header or the document environment"
+#~ msgstr ""
+#~ "Να μη δημιουργηθεί ούτε η επικεφαλίδα latex ούτε το περιβάλλον του "
+#~ "εγγράφου"
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a latex document which will have to be "
+#~| "included in a main latex document. It will allow you to generate several "
+#~| "little files for each chapter of your document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a latex document which will have to be "
+#~ "included in a main latex document. It will allow you to generate several "
+#~ "little files for each chapter of your document."
+#~ msgstr ""
+#~ "Το έγγραφο θα παραχθεί ως έγγραφο latex το οποίο θα πρέπει να περιληφθεί "
+#~ "σε ένα κύριο έγγραφο latex. Θα σας επιτρέψει να δημιουργείτε πολλά μικρά "
+#~ "αρχεία για κάθε κεφάλαιο του εγγράφου σας."
+
+#, fuzzy
+#~| msgid "Document to include"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document to include"
+#~ msgstr "Έγγραφο που θα περιληφθεί"
+
+#, fuzzy
+#~| msgid "Document class:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document class:"
+#~ msgstr "Κλάση εγγράφου:"
+
+#, fuzzy
+#~| msgid "Quality:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quality:"
+#~ msgstr "Ποιότητα:"
+
+#, fuzzy
+#~| msgid "Final"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Final"
+#~ msgstr "Τελικό"
+
+#, fuzzy
+#~| msgid "Draft"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draft"
+#~ msgstr "Πρόχειρο"
+
+#, fuzzy
+#~| msgid "Default font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default font size:"
+#~ msgstr "Προκαθορισμένο μέγεθος γραμματοσειράς:"
+
+#, fuzzy
+#~| msgid "Pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures"
+#~ msgstr "Εικόνες"
+
+#, fuzzy
+#~| msgid "Convert the pictures:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convert the pictures:"
+#~ msgstr "Μετατροπή των εικόνων:"
+
+#, fuzzy
+#~| msgid "Pictures directory:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures directory:"
+#~ msgstr "Κατάλογος εικόνων:"
+
+#, fuzzy
+#~| msgid "Language"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Γλώσσα"
+
+#, fuzzy
+#~| msgid "Encoding"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encoding"
+#~ msgstr "Κωδικοποίηση"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Προσθήκη"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Αφαίρεση"
+
+#, fuzzy
+#~| msgid "Contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "Περιεχόμενα"
+
+#, fuzzy
+#~| msgid "Export information about author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export information about author:"
+#~ msgstr "Εξαγωγή πληροφοριών για το συγγραφέα:"
+
+#, fuzzy
+#~| msgid "Add a table of content:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a table of content:"
+#~ msgstr "Προσθήκη ενός πίνακα περιεχομένων:"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Σημειώσεις"
+
+#, fuzzy
+#~| msgid "Don't export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Don't export"
+#~ msgstr "Να μη γίνει εξαγωγή"
+
+#, fuzzy
+#~| msgid "Export notes in margin notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in margin notes"
+#~ msgstr "Εξαγωγή σημειώσεων σε σχόλια στο περιθώριο"
+
+#, fuzzy
+#~| msgid "Export notes in comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in comments"
+#~ msgstr "Εξαγωγή σημειώσεων σε σχόλια"
+
+#, fuzzy
+#~| msgid "E&ncoding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "&Κωδικοποίηση:"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Line"
+#~ msgstr "Τέλος γραμμής"
+
+#, fuzzy
+#~| msgid "&UNIX style (recommended; line feed only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&UNIX style (recommended; line feed only)"
+#~ msgstr "Στιλ &UNIX (συνιστώμενο· μόνο line feed)"
+
+#, fuzzy
+#~| msgid "&Windows style (carriage return and line feed)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Windows style (carriage return and line feed)"
+#~ msgstr "Στιλ &Windows (carriage return και line feed)"
+
+#, fuzzy
+#~| msgid "&MacOS style (carriage return only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&MacOS style (carriage return only)"
+#~ msgstr "Στιλ &MacOS (μόνο carriage return)"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Φύλλα"
+
+#, fuzzy
+#~| msgid "Select sheets to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select sheets to export:"
+#~ msgstr "Επιλογή φύλλων για εξαγωγή:"
+
+#, fuzzy
+#~| msgid "Delimiter Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter Line"
+#~ msgstr "Γραμμή οριοθέτη"
+
+#, fuzzy
+#~| msgid "********<SHEETNAME>********"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "********<SHEETNAME>********"
+#~ msgstr "********<ΟΝΟΜΑΦΥΛΛΟΥ>********"
+
+#, fuzzy
+#~| msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgstr "Το <ΟΝΟΜΑΦΥΛΛΟΥ> αντικαθίσταται από το όνομα του επόμενου φύλλου."
+
+#, fuzzy
+#~| msgid "Print delimiter line above every sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Print delimiter line above every sheet"
+#~ msgstr "Εκτύπωση γραμμής οριοθέτη πάνω από κάθε φύλλο"
+
+#, fuzzy
+#~| msgid "Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cells"
+#~ msgstr "Κελιά"
+
+#, fuzzy
+#~| msgid "Delimiter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "Οριοθέτης"
+
+#, fuzzy
+#~| msgid "Comma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "Κόμμα"
+
+#, fuzzy
+#~| msgid "Semicolon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "Άνω τελεία"
+
+#, fuzzy
+#~| msgid "Tabulator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "Στηλοθέτης"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "Κενό"
+
+#, fuzzy
+#~| msgid "Other:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other:"
+#~ msgstr "Άλλο:"
+
+#, fuzzy
+#~| msgid "Quotes:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quotes:"
+#~ msgstr "Εισαγωγικά:"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Export selection only"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export selection only"
+#~ msgstr "Εξαγωγή επιλογής μόνο"
+
+#, fuzzy
+#~| msgid "Page:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page:"
+#~ msgstr "Σελίδα:"
+
+#, fuzzy
+#~| msgid "Complete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Complete Page"
+#~ msgstr "Ολόκληρη σελίδα"
+
+#, fuzzy
+#~| msgid "Area of Objects on Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Περιοχή αντικειμένων στη σελίδα"
+
+#, fuzzy
+#~| msgid "Area to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area to export:"
+#~ msgstr "Περιοχή για εξαγωγή:"
+
+#, fuzzy
+#~| msgid "Custom size (in pixels):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "Προσαρμοσμένο μέγεθος (εικονοστοιχεία):"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "Ύψος:"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Πλάτος:"
+
+#, fuzzy
+#~| msgid "Margin:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Margin:"
+#~ msgstr "Περιθώριο:"
+
+#, fuzzy
+#~| msgid "Plain Text Import Dialog"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plain Text Import Dialog"
+#~ msgstr "Διάλογος εισαγωγής απλού κειμένου"
+
+#, fuzzy
+#~| msgid "End of Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Paragraph"
+#~ msgstr "Τέλος παραγράφου"
+
+#, fuzzy
+#~| msgid "&As is: At the end of line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As is: At the end of line"
+#~ msgstr "Ό&πως είναι: Στο τέλος της γραμμής"
+
+#, fuzzy
+#~| msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgstr "Π&ρόταση: Αν το τέλος γραμμής είναι το τέλος μιας πρότασης"
+
+#, fuzzy
+#~| msgid "&Empty Line: If the line is empty"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Empty Line: If the line is empty"
+#~ msgstr "&Κενή γραμμή: Αν η γραμμή είναι κενή"
+
+#, fuzzy
+#~| msgid "Export Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Error"
+#~ msgstr "Σφάλμα εξαγωγής"
+
+#, fuzzy
+#~| msgid "Failed to read data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to read data."
+#~ msgstr "Αποτυχία ανάγνωσης των δεδομένων."
+
+#, fuzzy
+#~| msgid "Malformed XML data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Malformed XML data."
+#~ msgstr "Λανθασμένα δεδομένα XML."
+
+#, fuzzy
+#~| msgid "Export to Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to Image"
+#~ msgstr "Εξαγωγή σε εικόνα"
+
+#, fuzzy
+#~| msgid "PNG Export Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PNG Export Options"
+#~ msgstr "Επιλογές εξαγωγής PNG"
+
+#, fuzzy
+#~| msgid "Namespace \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace \"%1\" not found"
+#~ msgstr "Το πεδίο ορισμού \"%1\" δεν βρέθηκε"
+
+#, fuzzy
+#~| msgid "Could not open the requested file %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open the requested file %1"
+#~ msgstr "Αδυναμία ανοίγματος του αρχείου %1 που ζητήθηκε"
+
+#, fuzzy
+#~| msgid "Could not read ZIP directory of the requested file %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read ZIP directory of the requested file %1"
+#~ msgstr "Αδυναμία ανάγνωσης του ZIP καταλόγου του αρχείου %1 που ζητήθηκε"
+
+#, fuzzy
+#~| msgid "Enter password"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter password"
+#~ msgstr "Εισαγωγή κωδικού"
+
+#, fuzzy
+#~| msgid ""
+#~| "This document is encrypted, please enter the password to decrypt it:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "This document is encrypted, please enter the password to decrypt it:"
+#~ msgstr ""
+#~ "Αυτό το έγγραφο είναι κρυπτογραφημένο, παρακαλώ δώστε τον κωδικό για να "
+#~ "το αποκρυπτογραφήσετε:"
+
+#, fuzzy
+#~| msgid ""
+#~| "Incorrect password, please enter the password to decrypt this document:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Incorrect password, please enter the password to decrypt this document:"
+#~ msgstr ""
+#~ "Λανθασμένος κωδικός, παρακαλώ δώστε τον κωδικό για να αποκρυπτογραφήσετε "
+#~ "αυτό το έγγραφο:"
+
+#, fuzzy
+#~| msgid "Could not find path for type %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find path for type %1"
+#~ msgstr "Αδυναμία εύρεσης διαδρομής για τον τύπο %1"
+
+#, fuzzy
+#~| msgid "%1 (line %2, column %3)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (line %2, column %3)"
+#~ msgstr "%1 (γραμμή %2, στήλη %3)"
+
+#, fuzzy
+#~| msgid "%1 (%2, line %3, column %4)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (%2, line %3, column %4)"
+#~ msgstr "%1 (%2, γραμμή %3, στήλη %4)"
+
+#, fuzzy
+#~| msgid "Element \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Element \"%1\" not found"
+#~ msgstr "Το στοιχείο \"%1\" δεν βρέθηκε"
+
+#, fuzzy
+#~| msgid "Attribute \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attribute \"%1\" not found"
+#~ msgstr "Η ιδιότητα \"%1\" δεν βρέθηκε"
+
+#, fuzzy
+#~| msgid "Unexpected value \"%1\" of attribute \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unexpected value \"%1\" of attribute \"%2\""
+#~ msgstr "Μη αναμενόμενη τιμή \"%1\" ιδιότητας \"%2\""
+
+#, fuzzy
+#~| msgid "Unexpected second occurrence of \"%1\" element"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unexpected second occurrence of \"%1\" element"
+#~ msgstr "Μη αναμενόμενη δεύτερη εμφάνιση του \"%1\" στοιχείου"
+
+#, fuzzy
+#~| msgid "Expected closing of element \"%1\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Expected closing of element \"%1\""
+#~ msgstr "Αναμενόμενο κλείσιμο του στοιχείου \"%1\""
+
+#, fuzzy
+#~| msgid "None of expected elements found: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None of expected elements found: %1"
+#~ msgstr "Κανένα από τα αναμενόμενα στοιχεία δεν βρέθηκε: %1"
+
+#, fuzzy
+#~| msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgstr ""
+#~ "Αδυναμία εύρεσης προορισμού για το αναγνωριστικό \"%1\" στο αρχείο \"%2\""
+
+#, fuzzy
+#~| msgid "Could not find relationships file \"%1\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find relationships file \"%1\""
+#~ msgstr "Αδυναμία εύρεσης συσχετίσεων για το αρχείο \"%1\""
+
+#, fuzzy
+#~| msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgstr "Αδυναμία εύρεσης προορισμού για συσχέτιση \"%1\" στο αρχείο \"%2\""
+
+#, fuzzy
+#~| msgid ""
+#~| "Parsing error in the main document at line %1, column %2.\n"
+#~| "Error message: %3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Parsing error in the main document at line %1, column %2.\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Συντακτικό σφάλμα στο κύριο έγγραφο στη γραμμή %1, στήλη %2.\n"
+#~ "Μήνυμα σφάλματος: %3"
+
+#, fuzzy
+#~| msgid "QXml"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QXml"
+#~ msgstr "QXml"
+
+#, fuzzy
+#~| msgid "Entry '%1' not found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' not found."
+#~ msgstr "Η δοθείσα τιμή '%1' δεν βρέθηκε."
+
+#, fuzzy
+#~| msgid "Entry '%1' is not a file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' is not a file."
+#~ msgstr "Η δοθείσα τιμή '%1' δεν είναι αρχείο."
+
+#, fuzzy
+#~| msgid "Could not open entry \"%1\" for writing."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open entry \"%1\" for writing."
+#~ msgstr "Αδυναμία ανοίγματος της δοθείσας τιμής \"%1\" για εγγραφή."
+
+#, fuzzy
+#~| msgid "Could not write block"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not write block"
+#~ msgstr "Αδυναμία εγγραφής στο τμήμα"
+
+#, fuzzy
+#~| msgid "<SHEETNAME>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME>"
+#~ msgstr "<ΟΝΟΜΑΦΥΛΛΟΥ>"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Recommended ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Συνιστώμενο ( %1 )"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Locale ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Εντοπιότητα ( %1 )"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Other ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Άλλο ( %1 )"
+
+#, fuzzy
+#~| msgid "Cannot find encoding: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "Δε βρέθηκε η κωδικοποίηση: %1"
+
+#, fuzzy
+#~| msgid "CSV filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV filter cannot open input file - please report."
+#~ msgstr ""
+#~ "Το φίλτρο CSV δεν μπορεί να ανοίξει το αρχείο εισόδου - παρακαλώ κάνετε "
+#~ "μια αναφορά."
+
+#, fuzzy
+#~| msgid "File format is not supported."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File format is not supported."
+#~ msgstr "Ο τύπος αρχειοθέτησης δεν υποστηρίζεται."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read from file."
+#~ msgstr "Αδυναμία ανάγνωσης από το αρχείο."
+
+#, fuzzy
+#~| msgid "Export Sheet to HTML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Sheet to HTML"
+#~ msgstr "Εξαγωγή φύλλου σε HTML"
+
+#, fuzzy
+#~| msgid "Recommended: UTF-8"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recommended: UTF-8"
+#~ msgstr "Συνιστάται: UTF-8"
+
+#, fuzzy
+#~| msgid "Locale (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale (%1)"
+#~ msgstr "Εντοπιότητα (%1)"
+
+#, fuzzy
+#~| msgid "Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top"
+#~ msgstr "Πάνω"
+
+#, fuzzy
+#~| msgid "Latex Export Filter Configuration"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex Export Filter Configuration"
+#~ msgstr "Διαμόρφωση φίλτρου εξαγωγής Latex"
+
+#, fuzzy
+#~| msgid "Page "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page "
+#~ msgstr "Σελίδα "
+
+#, fuzzy
+#~| msgid "The file seems to be corrupt. Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file seems to be corrupt. Skipping a table."
+#~ msgstr "Το αρχείο φαίνεται να είναι κατεστραμμένο. Παράλειψη ενός πίνακα."
+
+#, fuzzy
+#~| msgid "Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skipping a table."
+#~ msgstr "Παράλειψη ενός πίνακα."
+
+#, fuzzy
+#~| msgid ""
+#~| "This document was created with OpenOffice.org version '%1'. This filter "
+#~| "was written for version 1.0. Reading this file could cause strange "
+#~| "behavior, crashes or incorrect display of the data. Do you want to "
+#~| "continue converting the document?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document was created with OpenOffice.org version '%1'. This filter "
+#~ "was written for version 1.0. Reading this file could cause strange "
+#~ "behavior, crashes or incorrect display of the data. Do you want to "
+#~ "continue converting the document?"
+#~ msgstr ""
+#~ "Αυτό το έγγραφο δημιουργήθηκε με το OpenOffice.org έκδοση '%1'. Αυτό το "
+#~ "φίλτρο γράφτηκε για την έκδοση 1.0. Η ανάγνωση αυτού του αρχείου μπορεί "
+#~ "να προκαλέσει παράξενη συμπεριφορά, καταρρεύσεις ή λανθασμένη εμφάνιση "
+#~ "των δεδομένων. Θέλετε να συνεχίσετε τη μετατροπή αυτού του εγγράφου;"
+
+#, fuzzy
+#~| msgid "Unsupported document version"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unsupported document version"
+#~ msgstr "Μη υποστηριζόμενη έκδοση εγγράφου"
+
+#, fuzzy
+#~| msgid "QPRO filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QPRO filter cannot open input file - please report."
+#~ msgstr ""
+#~ "Το φίλτρο QPRO δεν κατάφερε να ανοίξει το αρχείο εισόδου - παρακαλώ "
+#~ "κάνετε μια αναφορά."
+
+#, fuzzy
+#~| msgid ""
+#~| "Unable to open password protected files.\n"
+#~| "The password algorithm has not been published"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unable to open password protected files.\n"
+#~ "The password algorithm has not been published"
+#~ msgstr ""
+#~ "Αδυναμία ανοίγματος αρχείων προστατευμένων με κωδικό πρόσβασης.\n"
+#~ "Ο αλγόριθμος του κωδικού πρόσβασης δεν έχει δημοσιευτεί"
+
+#, fuzzy
+#~| msgid "Unable to find part for type %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unable to find part for type %1"
+#~ msgstr "Αδυναμία εύρεσης τμήματος για τον τύπο %1"
+
+#, fuzzy
+#~| msgid "Declared number of shared strings too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of shared strings too small (%1)"
+#~ msgstr "Δηλώθηκε πολύ μικρός αριθμός κοινόχρηστων συμβολοσειρών (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of font styles too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of font styles too small (%1)"
+#~ msgstr "Δηλώθηκε πολύ μικρός αριθμός για τα στιλ των γραμματοσειρών (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of cell formats too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of cell formats too small (%1)"
+#~ msgstr "Δηλώθηκε πολύ μικρός αριθμός για τον τύπο των κελιών (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of fill styles too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of fill styles too small (%1)"
+#~ msgstr "Δηλώθηκε πολύ μικρός αριθμός για τα στιλ γεμίσματος (%1)"
+
+#, fuzzy
+#~| msgid ""
+#~| "The data could not be loaded completely because the maximum size of "
+#~| "sheet was exceeded."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The data could not be loaded completely because the maximum size of sheet "
+#~ "was exceeded."
+#~ msgstr ""
+#~ "Δεν έγινε πλήρης φόρτωση δεδομένων εξαιτίας υπέρβασης στο μέγιστο μέγεθος "
+#~ "φύλλου"
+
+#, fuzzy
+#~| msgid "Expected integer or floating point number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Expected integer or floating point number"
+#~ msgstr "Αναμένεται αριθμός ακέραιος ή κινητής υποδιαστολής"
+
+#, fuzzy
+#~| msgid "Slide layout \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide layout \"%1\" not found"
+#~ msgstr "το περίγραμμα της διαφάνειας \"%1\" δεν βρέθηκε"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Διαφάνεια %1"
+
+#, fuzzy
+#~| msgid "Words's Plain Text Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's Plain Text Import Filter"
+#~ msgstr "Φίλτρο εισαγωγής απλού κειμένου του Words"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End notes"
+#~ msgstr "Τέλος γραμμής"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Κεφαλίδα ζυγών σελίδων"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Κεφαλίδα μονών σελίδων"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Υποσέλιδο ζυγών σελίδων"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Υποσέλιδο μονών σελίδων"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Header"
+#~ msgstr "Κεφαλίδα πρώτης σελίδας"
+
+#, fuzzy
+#~| msgid "First Page Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Footer"
+#~ msgstr "Υποσέλιδο πρώτης σελίδας"
+
+#, fuzzy
+#~| msgid "Table %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table %1"
+#~ msgstr "Πίνακας %1"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgstr ""
+#~ "Το αρχείο δεν μπορεί να φορτωθεί, καθώς φαίνεται ότι δεν είναι έγγραφο "
+#~ "RTF."
+
+#, fuzzy
+#~| msgid "Words's RTF Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's RTF Import Filter"
+#~ msgstr "Φίλτρο εισαγωγής RTF του Words"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded."
+#~ msgstr "Αδυναμία φόρτωσης αρχείου."
+
+#~ msgid "Failed to write file."
+#~ msgstr "Αποτυχία εγγραφής του αρχείου."
+
+#~ msgid "%1 Export Error"
+#~ msgstr "Σφάλμα εξαγωγής %1"
+
+#~ msgid "Export Filter Parameters"
+#~ msgstr "Εξαγωγή παραμέτρων φίλτρου"
+
+#~ msgid "Keep ratio"
+#~ msgstr "Διατήρηση αναλογιών"
+
+#~ msgid "Width (%):"
+#~ msgstr "Πλάτος (%):"
+
+#~ msgid "Height (%):"
+#~ msgstr "Ύψος (%):"
+
+#~ msgid "PNG Export Error"
+#~ msgstr "Σφάλμα εξαγωγής PNG"
+
+#~ msgid "EPS Export"
+#~ msgstr "Εξαγωγή EPS"
+
+#~ msgid "Options"
+#~ msgstr "Επιλογές"
+
+#~ msgid "PostScript level 1"
+#~ msgstr "PostScript level 1"
+
+#~ msgid "PostScript level 2"
+#~ msgstr "PostScript level 2"
+
+#~ msgid "PostScript level 3"
+#~ msgstr "PostScript level 3"
+
+#~ msgid "Import"
+#~ msgstr "Εισαγωγή"
+
+#~ msgid "Text"
+#~ msgstr "Κείμενο"
+
+#~ msgid "Number"
+#~ msgstr "Αριθμός"
+
+#~ msgid "Currency"
+#~ msgstr "Νόμισμα"
+
+#~ msgid "Date"
+#~ msgstr "Ημερομηνία"
+
+#~ msgid "Decimal Comma Number"
+#~ msgstr "Δεκαδικός με υποδιαστολή για διαχωριστικό"
+
+#~ msgid "Decimal Point Number"
+#~ msgstr "Δεκαδικός με τελεία για διαχωριστικό"
+
+#~ msgid "None"
+#~ msgstr "Κανένα"
+
+#~ msgid ""
+#~ "Please check the ranges you specified. The start value must be lower than "
+#~ "the end value."
+#~ msgstr ""
+#~ "Παρακαλώ ελέγξτε τα όρια που θέσατε. Η αρχική τιμή πρέπει να είναι "
+#~ "μικρότερη από την τελική."
+
+#~ msgid "Common"
+#~ msgstr "Κοινό"
+
+#~ msgid "Other"
+#~ msgstr "Άλλο"
+
+#~ msgid "Ignore duplicate delimiters"
+#~ msgstr "Παράβλεψη διπλών οριοθετών"
+
+#~ msgid "Text&quote:"
+#~ msgstr "Κείμενο&παράθεση:"
+
+#~ msgid "&Format:"
+#~ msgstr "&Μορφή:"
+
+#~ msgid "Ranges"
+#~ msgstr "Όρια"
+
+#~ msgid "to"
+#~ msgstr "σε"
+
+#~ msgid "Import lines:"
+#~ msgstr "Εισαγωγή γραμμών:"
+
+#~ msgid "Import columns:"
+#~ msgstr "Εισαγωγή στηλών:"
+
+#~ msgid "Update"
+#~ msgstr "Ενημέρωση"
+
+#~ msgid "&Help"
+#~ msgstr "&Βοήθεια"
+
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#~ msgid "&OK"
+#~ msgstr "&Εντάξει"
+
+#~ msgid "&Cancel"
+#~ msgstr "&Ακύρωση"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the Words file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Ένα σφάλμα συνέβη κατά την ανάλυση του αρχείου Words.\n"
+#~ "Στη γραμμή: %1, στήλη %2\n"
+#~ "Μήνυμα σφάλματος: %3"
+
+#~ msgid "Words Export Filter Library"
+#~ msgstr "Βιβλιοθήκη φίλτρων εξαγωγής του Words"
+
+#~ msgid "Export XSLT Configuration"
+#~ msgstr "Διαμόρφωση εξαγωγής XSLT"
+
+#~ msgid "Open Document"
+#~ msgstr "Άνοιγμα εγγράφου"
+
+#~ msgid "Import XSLT Configuration"
+#~ msgstr "Διαμόρφωση εισαγωγής XSLT"
+
+#~ msgid "Common xslt Files"
+#~ msgstr "Κοινά αρχεία xslt"
+
+#~ msgid "Personal xslt Files"
+#~ msgstr "Προσωπικά αρχεία xslt"
+
+#~ msgid "Choose..."
+#~ msgstr "Επιλογή..."
+
+#~ msgid "SVG Export Error"
+#~ msgstr "Σφάλμα εξαγωγής SVG"
+
+#~ msgid "LaTeX Export Error"
+#~ msgstr "Σφάλμα εξαγωγής LaTeX"
+
+#~ msgid "PNG Export Filter Parameters"
+#~ msgstr "Παράμετροι φίλτρου εξαγωγής PNG"
+
+#~ msgid "Height"
+#~ msgstr "Ύψος"
+
+#~ msgid "Width"
+#~ msgstr "Πλάτος"
+
+#~ msgid "Height (%)"
+#~ msgstr "Ύψος (%)"
+
+#~ msgid "Width (%)"
+#~ msgstr "Πλάτος (%)"
+
+#~ msgid "Slide Title"
+#~ msgstr "Τίτλος διαφάνειας"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Picture %1"
+#~ msgstr "Εικόνα %1"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Table %3, row %1, column %2"
+#~ msgstr "Πίνακας %3, γραμμή %1, στήλη %2"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the AbiWord file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Ένα σφάλμα συνέβη κατά την ανάλυση του αρχείου AbiWord.\n"
+#~ "Στη γραμμή: %1, στήλη %2\n"
+#~ "Μήνυμα σφάλματος: %3"
+
+#~ msgid "AbiWord Import Filter"
+#~ msgstr "Φίλτρο εισαγωγής AbiWord"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Main Text Frameset"
+#~ msgstr "Σύνολο πλαισίων κυρίως κειμένου"
+
+#~ msgid "An error occurred during the load of the AbiWord file: %1"
+#~ msgstr "Ένα σφάλμα συνέβη κατά τη φόρτωση του αρχείου AbiWord: %1"
+
+#~ msgid "Unable to save document information."
+#~ msgstr "Αδυναμία αποθήκευσης των πληροφοριών εγγράφου."
+
+#~ msgid "Unable to save main document."
+#~ msgstr "Αδυναμία αποθήκευσης του κύριου εγγράφου."
+
+#~ msgctxt "Frameset name"
+#~ msgid "Footnote %1"
+#~ msgstr "Υποσημείωση %1"
+
+#~ msgid "Words's Plain Text Export Filter"
+#~ msgstr "Φίλτρο εξαγωγής απλού κειμένου του Words"
+
+#~ msgid "Words's HTML Export Filter"
+#~ msgstr "Φίλτρο εξαγωγής HTML του Words"
+
+#~ msgid "Untitled Document"
+#~ msgstr "Χωρίς τίτλο έγγραφο"
+
+#~ msgid "Latex Import Filter Parameters"
+#~ msgstr "Παράμετροι φίλτρου εισαγωγής Latex"
+
+#~ msgid "Unicode"
+#~ msgstr "Unicode"
+
+#~ msgid "latin1"
+#~ msgstr "latin1"
+
+#~ msgid "New document"
+#~ msgstr "Νέο έγγραφο"
+
+#~ msgid "Embedded document"
+#~ msgstr "Ενσωματωμένο έγγραφο"
+
+#~ msgid "Words's MS Write Import Filter"
+#~ msgstr "Φίλτρο εισαγωγής MS Write του Words"
+
+#~ msgid "Header"
+#~ msgstr "Κεφαλίδα"
+
+#~ msgid "Footer"
+#~ msgstr "Υποσέλιδο"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Σύνολο πλαισίων κυρίως κειμένου"
+
+#~ msgctxt "Object name"
+#~ msgid "Table %1"
+#~ msgstr "Πίνακας %1"
+
+#~ msgctxt "Object name"
+#~ msgid "Table Frame %1"
+#~ msgstr "Πλαίσιο πίνακα %1"
+
+#~ msgctxt "Pseudo-author for annotations"
+#~ msgid "KWord 1.3"
+#~ msgstr "KWord 1.3"
+
+#~ msgid "Plain Text Export Dialog"
+#~ msgstr "Διάλογος εξαγωγής απλού κειμένου"
+
+#~ msgid "HTML Export Dialog"
+#~ msgstr "Διάλογος εξαγωγής HTML"
+
+#~ msgid "&HTML 4.01"
+#~ msgstr "&HTML 4.01"
+
+#~ msgid "HTML 4.01 (For older HTML user agents) "
+#~ msgstr "HTML 4.01 (Για παλαιότερους πράκτορες χρήστη HTML) "
+
+#~ msgid "&XHTML 1.0"
+#~ msgstr "&XHTML 1.0"
+
+#~ msgid "XHTML 1.0"
+#~ msgstr "XHTML 1.0"
+
+#~ msgid "Mode"
+#~ msgstr "Λειτουργία"
+
+#~ msgid "L&ight: Convert to strict (X)HTML"
+#~ msgstr "Απ&λός: Μετατροπή σε αυστηρό (X)HTML"
+
+#~ msgid ""
+#~ "Convert mainly the document structure (Recommended for exporting to "
+#~ "browsers with limited capabilities)"
+#~ msgstr ""
+#~ "Μετατροπή κυρίως της δομής του εγγράφου (Συνιστάται για εξαγωγή σε "
+#~ "περιηγητές με περιορισμένες δυνατότητες)"
+
+#~ msgid "&Basic: Convert to transitional (X)HTML"
+#~ msgstr "&Βασικός: Μετατροπή σε μεταβατικό (X)HTML"
+
+#~ msgid ""
+#~ "Convert most of the document (Recommended for re-importing in Words or "
+#~ "for exporting to older browsers)"
+#~ msgstr ""
+#~ "Μετατροπή του μεγαλύτερου μέρους του εγγράφου (Συνιστάται για "
+#~ "επανεισαγωγή στο Words ή για εξαγωγή σε παλαιότερους περιηγητές)"
+
+#~ msgid "&Enhanced: Convert to (X)HTML with CSS"
+#~ msgstr "Ε&μπλουτισμένος: Μετατροπή σε (X)HTML με CSS"
+
+#~ msgid ""
+#~ "Convert as much as possible of the Words document (Recommended for "
+#~ "exporting to other modern word processors or to modern browsers)"
+#~ msgstr ""
+#~ "Μετατροπή για το κατά το δυνατόν μεγαλύτερο μέρος του εγγράφου του Words "
+#~ "(Συνιστάται για εξαγωγή σε άλλους σύγχρονους επεξεργαστές κειμένου ή σε "
+#~ "σύγχρονους περιηγητές)"
+
+#~ msgid "Use external CSS sheet:"
+#~ msgstr "Χρήση εξωτερικού φύλλου CSS:"
+
+#~ msgid "Enter the location of the CSS file in this field"
+#~ msgstr "Δώστε την τοποθεσία του αρχείου CSS σε αυτό το πεδίο"
+
+#~ msgid "This directory will contains the eps pictures of your document"
+#~ msgstr "Αυτός ο κατάλογος θα περιέχει τις εικόνες eps του εγγράφου σας"
+
+#~ msgid "MS Write Import Dialog"
+#~ msgstr "Διάλογος εισαγωγής MS Write"
+
+#~ msgid "&Encoding"
+#~ msgstr "&Κωδικοποίηση"
+
+#~ msgid ""
+#~ "Select the encoding of the Write document.<br><br>Try the Default  "
+#~ "Encoding (CP 1252), if unsure."
+#~ msgstr ""
+#~ "Επιλέξτε την κωδικοποίηση του εγγράφου Write.<br><br>Δοκιμάστε την "
+#~ "προκαθορισμένη κωδικοποίηση (CP 1252), αν δεν είσαστε σίγουροι."
+
+#~ msgid "&Other encoding:"
+#~ msgstr "Ά&λλη κωδικοποίηση:"
+
+#~ msgid "&Default encoding (CP 1252)"
+#~ msgstr "&Προκαθορισμένη κωδικοποίηση (CP 1252)"
+
+#~ msgid ""
+#~ "Most Write documents are stored using this encoding (also known as "
+#~ "windows-1252).<br><br>Select this if unsure."
+#~ msgstr ""
+#~ "Τα περισσότερα έγγραφα Write αποθηκεύονται χρησιμοποιώντας αυτή την "
+#~ "κωδικοποίηση (γνωστή και σαν windows-1252).<br><br> Επιλέξτε αυτή αν δεν "
+#~ "είσαστε σίγουροι."
+
+#~ msgid "&Advanced"
+#~ msgstr "Για &προχωρημένους"
+
+#~ msgid ""
+#~ "These advanced options allow you to fine-tune the importing of formatting "
+#~ "information. They compensate for differences between Words and MS Write "
+#~ "by adding extra formatting information (not found in the original "
+#~ "document), to try to make the imported document look as close to the "
+#~ "original as possible.<br><br>It is safe to use the defaults, if unsure."
+#~ msgstr ""
+#~ "Αυτές οι προχωρημένες επιλογές σάς επιτρέπουν να βελτιώσετε την εισαγωγή "
+#~ "των πληροφοριών διαμόρφωσης. Αντισταθμίζουν τις διαφορές μεταξύ του Words "
+#~ "και του MS Write με την προσθήκη επιπλέον πληροφοριών διαμόρφωσης (που "
+#~ "δεν βρίσκονται στο αρχικό έγγραφο), ώστε να κάνουν το εισαγόμενο έγγραφο "
+#~ "να μοιάζει όσο πιο πολύ γίνεται με το αρχικό.<br><br>Είναι ασφαλές να "
+#~ "χρησιμοποιήσετε τα προκαθορισμένα, αν δεν είσαστε σίγουροι."
+
+#~ msgid "Compensate for &linespacing differences"
+#~ msgstr "Αντιστάθμιση για τις διαφορές απόστασης μεταξύ &γραμμών"
+
+#~ msgid ""
+#~ "Try to simulate Write's linespacing by adding some spaces before each "
+#~ "paragraph."
+#~ msgstr ""
+#~ "Προσπάθεια προσομοίωσης της απόστασης μεταξύ των γραμμών του Write με την "
+#~ "προσθήκη μερικών κενών πριν από κάθε παράγραφο."
+
+#~ msgid "Enable &image positioning"
+#~ msgstr "Ενεργοποίηση καθορισμού θέσης &εικόνων"
+
+#~ msgid "Use paragraph indentation to position images."
+#~ msgstr "Χρήση των εσοχών παραγράφου για την τοποθέτηση εικόνων."
+
+#~ msgid "DCM Import"
+#~ msgstr "Εισαγωγή DCM"
+
+#~ msgid "Import options"
+#~ msgstr "Επιλογές εισαγωγής"
+
+#~ msgid "Read digital signatures from the dataset"
+#~ msgstr "Ανάγνωση ψηφιακών υπογραφών από τα δεδομένα"
+
+#~ msgid "Ignore relationship constraints"
+#~ msgstr "Αγνόηση περιορισμών συσχέτισης"
+
+#~ msgid ""
+#~ "Do not abort on content item errors\n"
+#~ "(e.g. missing value type specific attributes)"
+#~ msgstr ""
+#~ "Να μη γίνει εγκατάλειψη για σφάλματα σε αντικείμενα του περιεχομένου\n"
+#~ "(π.χ. έλλειψη καταχώρησης τύπων σε ορισμένες ιδιότητες)"
+
+#~ msgid "Skip invalid content item subtree"
+#~ msgstr "Παράλειψη μη έγκυρου υποσυνόλου δενδρικής δομής"
+
+#~ msgid "Note \"%1\" already exists"
+#~ msgstr "Η σημείωση \"%1\" υπάρχει ήδη"
+
+#~ msgid ""
+#~ "The document cannot be loaded, as it seems not to follow the RTF syntax."
+#~ msgstr ""
+#~ "Το αρχείο δεν μπορεί να φορτωθεί, καθώς φαίνεται ότι δεν ακολουθεί τη "
+#~ "σύνταξη RTF."
+
+#~ msgid ""
+#~ "The RTF (Rich Text Format) document has an unexpected version number: %1. "
+#~ "Continuing might result in an erroneous conversion. Do you want to "
+#~ "continue?"
+#~ msgstr ""
+#~ "Το RTF (Rich Text Format) έγγραφο έχει ένα μη αναμενόμενο αριθμό έκδοσης: "
+#~ "%1. Αν συνεχίσετε ίσως καταλήξετε σε εσφαλμένη μετατροπή. Θέλετε να "
+#~ "συνεχίσετε;"
+
+#~ msgid ""
+#~ "The PWD (PocketWord's Rich Text Format) document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Το PWD (PocketWord's Rich Text Format) έγγραφο έχει ένα μη αναμενόμενο "
+#~ "αριθμό έκδοσης: %1. Αν συνεχίσετε ίσως καταλήξετε σε εσφαλμένη μετατροπή. "
+#~ "Θέλετε να συνεχίσετε;"
+
+#~ msgid ""
+#~ "The URTF (\"Unicode Rich Text Format\") document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Το URTF (\"Unicode Rich Text Format\") έγγραφο έχει ένα μη αναμενόμενο "
+#~ "αριθμό έκδοσης: %1. Αν συνεχίσετε ίσως καταλήξετε σε εσφαλμένη μετατροπή. "
+#~ "Θέλετε να συνεχίσετε;"
+
+#~ msgid ""
+#~ "The RTF document cannot be loaded, as it has an unexpected first keyword: "
+#~ "\\%1."
+#~ msgstr ""
+#~ "Το RTF έγγραφο δεν μπορεί να φορτωθεί, καθώς έχει μία μη αναμενόμενη λέξη "
+#~ "κλειδί: \\%1."
+
+#~ msgid "Old &method: If the line is empty or has less than 40 characters"
+#~ msgstr ""
+#~ "Παλιά &μέθοδος: Αν η γραμμή είναι άδεια ή έχει λιγότερους από 40 "
+#~ "χαρακτήρες"
+
+#~ msgid "KFormula Import Error"
+#~ msgstr "Σφάλμα εισαγωγής KFormula"
+
+#~ msgid "KFormula1.3 Import Filter"
+#~ msgstr "Φίλτρο εισαγωγής KFormula1.3"
+
+#~ msgid "Available Sheets"
+#~ msgstr "Διαθέσιμα φύλλα"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgid "Endnote \"%1\" not found"
+#~ msgstr "Σημείωση τέλους %1"
+
+#, fuzzy
+#~| msgid "Footnote %1"
+#~ msgid "Footnote \"%1\" not found"
+#~ msgstr "Υποσημείωση %1"
+
+#~ msgid "Picture %1"
+#~ msgstr "Εικόνα %1"
+
+#~ msgid "A password is required to read that pdf"
+#~ msgstr "Απαιτείται κωδικός πρόσβασης για την ανάγνωση του pdf"
+
+#~ msgid "Cannot export images in %1.\n"
+#~ msgstr "Αδυναμία εξαγωγής εικόνων στο %1.\n"
+
+#~ msgid "JPEG Export Options"
+#~ msgstr "Επιλογές εξαγωγής JPEG"
+
+#~ msgid "TIFF Export Options"
+#~ msgstr "Επιλογές εξαγωγής TIFF"
+
+#~ msgid "All Images"
+#~ msgstr "Όλες οι εικόνες"
+
+#~ msgid ""
+#~ "The image is using an unsupported color space. Please convert to 16-bit "
+#~ "floating point RGB/Alpha before saving in the OpenEXR format."
+#~ msgstr ""
+#~ "Η εικόνα χρησιμοποιεί ένα μη υποστηριζόμενο χώρο χρωμάτων. Παρακαλώ "
+#~ "μετατρέψτε την σε 16-bit κινητής υποδιαστολής RGB/Alpha πριν την "
+#~ "αποθηκεύσετε με μορφή OpenEXR."
+
+#~ msgid "PDFImportWidget"
+#~ msgstr "Συστατικό εισαγωγής PDF"
+
+#~ msgid "Pages"
+#~ msgstr "Σελίδες"
+
+#~ msgid "&All pages"
+#~ msgstr "Ό&λες οι σελίδες"
+
+#~ msgid "&First page"
+#~ msgstr "&Πρώτη σελίδα"
+
+#~ msgid "&Selection of page"
+#~ msgstr "&Επιλογή σελίδας"
+
+#~ msgid "Dimensions"
+#~ msgstr "Διαστάσεις"
+
+#~ msgctxt "vertical resolution"
+#~ msgid "Vertical:"
+#~ msgstr "Κατακόρυφα:"
+
+#~ msgctxt "horizontal resolution"
+#~ msgid "Horizontal:"
+#~ msgstr "Οριζόντια:"
+
+#~ msgid "Size:"
+#~ msgstr "Μέγεθος:"
+
+#~ msgid "Options of Your PNG"
+#~ msgstr "Επιλογές για το PNG σας"
+
+#~ msgid ""
+#~ "Note: the compression level does not change the quality of the result"
+#~ msgstr ""
+#~ "Σημείωση: το επίπεδο συμπίεσης δεν επηρεάζει την ποιότητα του "
+#~ "αποτελέσματος"
+
+#~ msgid ""
+#~ "<p>Adjust the compression time. Better compression takes longer.\n"
+#~ "<br>Note: the compression level does not change the quality of the result."
+#~ "</p>"
+#~ msgstr ""
+#~ "<p>Προσαρμογή του χρόνου συμπίεσης. Καλύτερη συμπίεση απαιτεί περισσότερο "
+#~ "χρόνο.\n"
+#~ "<br>Σημείωση: το επίπεδο συμπίεσης δεν επηρεάζει την ποιότητα του "
+#~ "αποτελέσματος.</p>"
+
+#~ msgid "Compress:"
+#~ msgstr "Συμπίεση:"
+
+#~ msgctxt ""
+#~ "The compression will take a long time; saving the file will be slow."
+#~ msgid "Slow"
+#~ msgstr "Αργό"
+
+#~ msgctxt "The file will save fast but will not be compressed a lot"
+#~ msgid "Fast"
+#~ msgstr "Γρήγορο"
+
+#~ msgctxt "the file will be small"
+#~ msgid "Small"
+#~ msgstr "Μικρό"
+
+#~ msgctxt "the file will be big"
+#~ msgid "Big"
+#~ msgstr "Μεγάλο"
+
+#~ msgid "Use interlacing when publishing on the Internet"
+#~ msgstr "Χρήση πλέξης εικόνας για τη δημοσίευση στο διαδίκτυο"
+
+#~ msgid ""
+#~ "<p>Interlacing is useful if you intend to publish your image on the "
+#~ "Internet.<br>\n"
+#~ "Enabling interlacing will cause the image to be displayed by the browser "
+#~ "even while downloading.</p>"
+#~ msgstr ""
+#~ "<p>Η πλέξη είναι χρήσιμη αν σκοπεύετε να δημοσιεύσετε την εικόνα σας στο "
+#~ "διαδίκτυο.<br>\n"
+#~ "Η ενεργοποίηση της πλέξης θα έχει σαν αποτέλεσμα την εμφάνιση της εικόνας "
+#~ "ακόμα και όταν αυτή λαμβάνεται από τον περιηγητή.</p>"
+
+#~ msgid "Interlacing"
+#~ msgstr "Πλέξη"
+
+#~ msgid "Disable to get smaller files if your image has no transparency"
+#~ msgstr ""
+#~ "Απενεργοποιήστε αυτή την επιλογή για τη λήψη μικρότερων αρχείων αν η "
+#~ "εικόνα σας δεν περιέχει διαφάνεια"
+
+#~ msgid ""
+#~ "<p>The Portable Network Graphics (PNG) file format allows transparency in "
+#~ "your image to be stored by saving an alpha channel.\n"
+#~ "You can uncheck the box if you are not using transparency and you want to "
+#~ "make the resulting file smaller .<br>Always saving the alpha channel is "
+#~ "recommended.</p>"
+#~ msgstr ""
+#~ "<p>Η μορφή αρχείου Portable Network Graphics (PNG) επιτρέπει τη χρήση "
+#~ "διαφάνειας στην εικόνα σας με την αποθήκευση ενός καναλιού άλφα.\n"
+#~ "Μπορείτε να απενεργοποιήσετε την επιλογή αν δε χρησιμοποιείτε διαφάνεια "
+#~ "και θέλετε το αρχείο αποτέλεσμα να είναι μικρότερο. <br>Συστήνεται πάντα "
+#~ "η αποθήκευση του καναλιού άλφα.</p>"
+
+#~ msgid "Store alpha channel (transparency)"
+#~ msgstr "Αποθήκευση άλφα καναλιού (διαφάνεια)"
+
+#~ msgid "No image loaded"
+#~ msgstr "Δε φορτώθηκε εικόνα"
+
+#~ msgctxt ""
+#~ "Show a preview of the image after saving to assess the quality difference"
+#~ msgid "Preview image"
+#~ msgstr "Προεπισκόπηση εικόνας"
+
+#~ msgid "Size: 100KB"
+#~ msgstr "Μέγεθος: 100KB"
+
+#~ msgid "Basic"
+#~ msgstr "Βασικό"
+
+#~ msgid "File size:"
+#~ msgstr "Μέγεθος αρχείου:"
+
+#~ msgctxt ""
+#~ "the file will be much compressed, thus small, but quality will be bad"
+#~ msgid "Small"
+#~ msgstr "Μικρό"
+
+#~ msgctxt "the file will be good quality, but big"
+#~ msgid "Big"
+#~ msgstr "Μεγάλο"
+
+#~ msgid ""
+#~ "These settings determine how much information is lost during compression"
+#~ msgstr ""
+#~ "Αυτές οι ρυθμίσεις καθορίζουν το επίπεδο της χαμένης πληροφορίες κατά τη "
+#~ "διάρκεια της συμπίεσης"
+
+#~ msgctxt "the file will be much compressed, so the quality will be bad"
+#~ msgid "Bad"
+#~ msgstr "Κακή"
+
+#~ msgctxt "the quality will be good but the file will not be much compressed"
+#~ msgid "Good"
+#~ msgstr "Καλή"
+
+#~ msgctxt "A progressive jpeg file can be displayed while loading."
+#~ msgid "Progressive"
+#~ msgstr "Προοδευτική"
+
+#~ msgid "Advanced quality"
+#~ msgstr "Προχωρημένη ποιότητα"
+
+#~ msgid "Optimize"
+#~ msgstr "Βελτιστοποίηση"
+
+#~ msgctxt "the result will be artificially smoothed to hide jpeg artefacts"
+#~ msgid "Smooth:"
+#~ msgstr "Εξομάλυνση:"
+
+#~ msgid "Force baseline JPEG"
+#~ msgstr "Εξαναγκασμός βασικής γραμμής JPEG"
+
+#~ msgid "Subsampling:"
+#~ msgstr "Υποδειγματοληψία:"
+
+#~ msgid "2x2, 1x1, 1x1 (smallest file)"
+#~ msgstr "2x2, 1x1, 1x1 (μικρότερο αρχείο)"
+
+#~ msgid "2x1, 1x1, 1x1"
+#~ msgstr "2x1, 1x1, 1x1"
+
+#~ msgid "1x2, 1x1, 1x1"
+#~ msgstr "1x2, 1x1, 1x1"
+
+#~ msgid "1x1, 1x1, 1x1 (best quality)"
+#~ msgstr "1x1, 1x1, 1x1 (βέλτιστη ποιότητα)"
+
+#~ msgid "Metadata"
+#~ msgstr "Μεταδεδομένα"
+
+#~ msgid "Formats:"
+#~ msgstr "Μορφές:"
+
+#~ msgid "Exif"
+#~ msgstr "Exif"
+
+#~ msgid "IPTC"
+#~ msgstr "IPTC"
+
+#~ msgid "XMP"
+#~ msgstr "XMP"
+
+#~ msgid "Filters:"
+#~ msgstr "Φίλτρα:"
+
+#~ msgid "Options of Your TIFF"
+#~ msgstr "Επιλογές για το TIFF σας"
+
+#~ msgid "TIFF Options"
+#~ msgstr "Επιλογές TIFF"
+
+#~ msgid "Compression type:"
+#~ msgstr "Τύπος συμπίεσης:"
+
+#~ msgid "JPEG DCT Compression"
+#~ msgstr "Συμπίεση JPEG DCT"
+
+#~ msgid "Deflate (ZIP)"
+#~ msgstr "Deflate (ZIP)"
+
+#~ msgid "Lempel-Ziv & Welch (LZW)"
+#~ msgstr "Lempel-Ziv & Welch (LZW)"
+
+#~ msgid "Leadtools JPEG2000"
+#~ msgstr "Leadtools JPEG2000"
+
+#~ msgid "CCITT Modified Huffman RLE"
+#~ msgstr "CCITT Modified Huffman RLE"
+
+#~ msgid "CCITT Group 3 Fax Encoding"
+#~ msgstr "Κωδικοποίηση CCITT Group 3 Fax"
+
+#~ msgid "CCITT Group 4 Fax Encoding"
+#~ msgstr "Κωδικοποίηση CCITT Group 4 Fax"
+
+#~ msgid "Pixar Log"
+#~ msgstr "Pixar Log"
+
+#~ msgid "Predictor:"
+#~ msgstr "Πρόβλεψη:"
+
+#~ msgid ""
+#~ "Using a predictor can improve the compression (mostly for LZW and deflate)"
+#~ msgstr ""
+#~ "Η χρήση μιας πρόβλεψης μπορεί να βελτιώσει τη συμπίεση (κυρίως για τα LZW "
+#~ "και deflate)"
+
+#~ msgid "Horizontal Differencing"
+#~ msgstr "Οριζόντια διαφορά"
+
+#~ msgid "Floating Point Horizontal Differencing"
+#~ msgstr "Οριζόντια κινητής υποδιαστολής διαφορά"
+
+#~ msgid "Store alpha &channel (transparency)"
+#~ msgstr "Αποθήκευση άλφα &καναλιού (διαφάνεια)"
+
+#~ msgid ""
+#~ "This option will merge all layers. It is advisable to check this option, "
+#~ "otherwise other applications might not be able to read your file correctly"
+#~ msgstr ""
+#~ "Αυτή η επιλογή θα συγχωνεύσει όλα τα στρώματα. Προτείνεται η χρήση αυτής "
+#~ "της επιλογής, γιατί υπάρχει περίπτωση άλλες εφαρμογές να μην μπορούν να "
+#~ "διαβάσουν σωστά το αρχείο"
+
+#~ msgid "Flatten the &image"
+#~ msgstr "Ισοπέδωση της &εικόνας"
+
+#~ msgid "JPEG Compression Options"
+#~ msgstr "Επιλογές συμπίεσης JPEG"
+
+#~ msgid "Smallest"
+#~ msgstr "Μικρότερη"
+
+#~ msgid "Best"
+#~ msgstr "Βέλτιστη"
+
+#~ msgid "Deflate Compression Options"
+#~ msgstr "Επιλογές συμπίεσης Deflate"
+
+#~ msgctxt "save the file quickly, but do not compress very well"
+#~ msgid "Fast"
+#~ msgstr "Γρήγορο"
+
+#~ msgctxt "make the file small, at the price of a longer saving time"
+#~ msgid "Small"
+#~ msgstr "Μικρό"
+
+#~ msgid "CCITT Group 3 fax encoding Options"
+#~ msgstr "Επιλογές κωδικοποίησης CCITT Group 3 fax"
+
+#~ msgid "Fax mode:"
+#~ msgstr "Λειτουργία φαξ:"
+
+#~ msgid "Classic"
+#~ msgstr "Κλασσική"
+
+#~ msgid "No RTC"
+#~ msgstr "Χωρίς RTC"
+
+#~ msgid "No EOL"
+#~ msgstr "Χωρίς EOL"
+
+#~ msgid "Pixar Log Compression Options"
+#~ msgstr "Επιλογές συμπίεσης Pixar Log"
+
+#~ msgctxt "save quickly, but do not compress a lot"
+#~ msgid "Fast"
+#~ msgstr "Γρήγορο"
+
+#~ msgctxt "make a very small file, but take a long time saving"
+#~ msgid "Small"
+#~ msgstr "Μικρό"
+
+#~ msgid "Initializing..."
+#~ msgstr "Αρχικοποίηση..."
+
+#~ msgid "First pass: page #%1..."
+#~ msgstr "Πρώτο πέρασμα: σελίδα #%1..."
+
+#~ msgid "Second pass: page #%1..."
+#~ msgstr "Δεύτερο πέρασμα: σελίδα #%1..."
+
+#~ msgid "Body Frameset #%1"
+#~ msgstr "Σύνολο πλαισίων σώματος #%1"
+
+#~ msgid "Header Frameset #%1"
+#~ msgstr "Σύνολο πλαισίων κεφαλίδας #%1"
+
+#~ msgid "Footer Frameset #%1"
+#~ msgstr "Σύνολο πλαισίων υποσέλιδου #%1"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "Σύνολο πλαισίων κειμένου %1"
+
+#~ msgid "KWord's PDF Import Filter"
+#~ msgstr "Φίλτρο εισαγωγής PDF του KWord"
+
+#~ msgid "Page Selection"
+#~ msgstr "Επιλογή σελίδων"
+
+#~ msgid "All (%1 pages)"
+#~ msgstr "Όλες (%1 σελίδες)"
+
+#~ msgid "Range:"
+#~ msgstr "Εύρος:"
+
+#~ msgid "Import images"
+#~ msgstr "Εισαγωγή εικόνων"
+
+#~ msgid "\"Smart\" mode"
+#~ msgstr "\"Έξυπνη\" λειτουργία"
+
+#~ msgid ""
+#~ "Removes returns and hyphens at end of line. Also tries to compute the "
+#~ "paragraph alignment. Note that the layout of some pages can get messed up."
+#~ msgstr ""
+#~ "Αφαιρεί αλλαγές γραμμής και θέσεις διαχωρισμού από το τέλος της γραμμής. "
+#~ "Επίσης προσπαθεί να υπολογίσει τη στοίχιση της παραγράφου. Σημειώστε ότι "
+#~ "διάταξη μερικών σελίδων μπορεί να χαλάσει."
+
+#~ msgid "Owner:"
+#~ msgstr "Ιδιοκτήτης:"
+
+#~ msgid "User:"
+#~ msgstr "Χρήστης:"
+
+#~ msgctxt "Table_Name Cell row,column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 κελί %2,%3"

@@ -1,0 +1,344 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Martin Schlander <mschlander@opensuse.org>, 2008, 2009, 2010, 2011, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice-dockers\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-06-26 19:00+0200\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: shapecollection/OdfCollectionLoader.cpp:63
+#, kde-format
+msgid "Found no shapes in the collection! %1"
+msgstr "Ingen former fundet i samlingen! %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:132
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr "Ikke en gyldig Calligra-fil: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:157
+#, kde-format
+msgid "No body tag found in file: %1"
+msgstr "Intet body-mærke fundet i filen: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:165
+#, kde-format
+msgid "No office:drawing tag found in file: %1"
+msgstr "Intet office:drawing-mærke fundet i filen: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:173
+#: shapecollection/OdfCollectionLoader.cpp:181
+#, kde-format
+msgid "No shapes found in file: %1"
+msgstr "Ingen former fundet i filen: %1"
+
+#: shapecollection/ShapeCollectionDocker.cpp:111
+#, kde-format
+msgid "Add Shape"
+msgstr "Tilføj form"
+
+#: shapecollection/ShapeCollectionDocker.cpp:146
+#, kde-format
+msgid "More"
+msgstr "Mere"
+
+#: shapecollection/ShapeCollectionDocker.cpp:176
+#, kde-format
+msgid "Open Shape Collection"
+msgstr "Åbn form-samling"
+
+#: shapecollection/ShapeCollectionDocker.cpp:184
+#, kde-format
+msgid "Remove Shape Collection"
+msgstr "Fjern form-samling"
+
+#: shapecollection/ShapeCollectionDocker.cpp:330
+#, kde-format
+msgid "Default"
+msgstr "Standard"
+
+#: shapecollection/ShapeCollectionDocker.cpp:334
+#, kde-format
+msgid "Geometrics"
+msgstr "Geometriske former"
+
+#: shapecollection/ShapeCollectionDocker.cpp:345
+#, kde-format
+msgid "Arrows"
+msgstr "Pile"
+
+#: shapecollection/ShapeCollectionDocker.cpp:349
+#, kde-format
+msgid "Funny"
+msgstr "Sjov"
+
+#: shapecollection/ShapeCollectionDocker.cpp:522
+#, kde-format
+msgid "Collection Error"
+msgstr "Samlingsfejl"
+
+#: shapeproperties/ShapePropertiesDocker.cpp:35
+#, kde-format
+msgid "Shape Properties"
+msgstr "Form-egenskaber"
+
+#: snapguidedocker/SnapGuideDocker.cpp:39
+#, kde-format
+msgid "Snap Settings"
+msgstr "Hægteindstillinger"
+
+#, fuzzy
+#~| msgid "Found no shapes in the collection! %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Ingen former fundet i samlingen! %1"
+
+#, fuzzy
+#~| msgid "Not a valid Calligra file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Ikke en gyldig Calligra-fil: %1"
+
+#, fuzzy
+#~| msgid "No body tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Intet body-mærke fundet i filen: %1"
+
+#, fuzzy
+#~| msgid "No office:drawing tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Intet office:drawing-mærke fundet i filen: %1"
+
+#, fuzzy
+#~| msgid "No shapes found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Ingen former fundet i filen: %1"
+
+#, fuzzy
+#~| msgid "Add Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Shape"
+#~ msgstr "Tilføj form"
+
+#, fuzzy
+#~| msgid "More"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More"
+#~ msgstr "Mere"
+
+#, fuzzy
+#~| msgid "Open Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Shape Collection"
+#~ msgstr "Åbn form-samling"
+
+#, fuzzy
+#~| msgid "Remove Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Fjern form-samling"
+
+#, fuzzy
+#~| msgid "Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Standard"
+
+#, fuzzy
+#~| msgid "Geometrics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometrics"
+#~ msgstr "Geometriske former"
+
+#, fuzzy
+#~| msgid "Arrows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "Pile"
+
+#, fuzzy
+#~| msgid "Funny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Funny"
+#~ msgstr "Sjov"
+
+#, fuzzy
+#~| msgid "Collection Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Collection Error"
+#~ msgstr "Samlingsfejl"
+
+#, fuzzy
+#~| msgid "Shape Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties"
+#~ msgstr "Form-egenskaber"
+
+#, fuzzy
+#~| msgid "Snap Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Settings"
+#~ msgstr "Hægteindstillinger"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Farvevælger"
+
+#~ msgid "Shadow Properties"
+#~ msgstr "Skyggeegenskaber"
+
+#~ msgid "Creation error"
+#~ msgstr "Oprettelsesfejl"
+
+#~ msgid "File not found"
+#~ msgstr "Fil ikke fundet"
+
+#~ msgid "Cannot create storage"
+#~ msgstr "Kan ikke oprette opbevaring"
+
+#~ msgid "Bad MIME type"
+#~ msgstr "Fejlagtig MIME-type"
+
+#~ msgid "Error in embedded document"
+#~ msgstr "Fejl i indlejret dokument"
+
+#~ msgid "Format not recognized"
+#~ msgstr "Format ikke genkendt"
+
+#~ msgid "Not implemented"
+#~ msgstr "Ikke implementeret"
+
+#~ msgid "Parsing error"
+#~ msgstr "Fortolkningsfejl"
+
+#~ msgid "Document is password protected"
+#~ msgstr "Dokumentet er kodeordsbeskyttet"
+
+#~ msgid "Internal error"
+#~ msgstr "Intern fejl"
+
+#~ msgid "Out of memory"
+#~ msgstr "Løb tør for hukommelse"
+
+#~ msgid "Unknown error"
+#~ msgstr "Ukendt fejl"
+
+#~ msgid ""
+#~ "Could not open\n"
+#~ "%2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Kunne ikke åbne\n"
+#~ "%2.\n"
+#~ "Årsag: %1"
+
+#~ msgid "Failed to import the file: %1"
+#~ msgstr "Import af filen mislykkedes: %1"
+
+#~ msgid "Opacity:"
+#~ msgstr "Ugennemsigtighed:"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Ingen"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Massiv"
+
+#~ msgid "Gradient"
+#~ msgstr "Farveovergang"
+
+#~ msgid "Pattern"
+#~ msgstr "Mønster"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "lige/ulige-udfyldning"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Svingende udfyldning"
+
+#~ msgid "Stroke and Fill"
+#~ msgstr "Strøg og udfyldning"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Strøgegenskaber"
+
+#~ msgid "Style:"
+#~ msgstr "Stil:"
+
+#~ msgid "Width:"
+#~ msgstr "Bredde:"
+
+#~ msgid "Set line width of actual selection"
+#~ msgstr "Sæt linjebredde for den faktiske markering"
+
+#~ msgid "Cap:"
+#~ msgstr "Hætte:"
+
+#~ msgid "Butt cap"
+#~ msgstr "Endehætte"
+
+#~ msgid "Round cap"
+#~ msgstr "Rund hætte"
+
+#~ msgid "Square cap"
+#~ msgstr "Firkantet hætte"
+
+#~ msgid "Join:"
+#~ msgstr "Sammenføj:"
+
+#~ msgid "Miter join"
+#~ msgstr "Geringsammenføjning"
+
+#~ msgid "Round join"
+#~ msgstr "Rund sammenføjning"
+
+#~ msgid "Bevel join"
+#~ msgstr "Smigsammenføjning"
+
+#~ msgid "Miter limit:"
+#~ msgstr "Geringgrænse:"
+
+#~ msgid "Set miter limit"
+#~ msgstr "Sæt geringgrænse"
+
+#~ msgid "Styles"
+#~ msgstr "Stile"
+
+#~ msgid "Shapes"
+#~ msgstr "Former"
+
+#~ msgid "Open..."
+#~ msgstr "Åbn..."
+
+#~ msgid "Save Book..."
+#~ msgstr "Gem bog..."
+
+#~ msgid "New Folder..."
+#~ msgstr "Ny mappe..."
+
+#~ msgid "Zoom In"
+#~ msgstr "Zoom ind"
+
+#~ msgid "Zoom Out"
+#~ msgstr "Zoom ud"
+
+#~ msgid "Remove Folder"
+#~ msgstr "Fjern mappe"
+
+#~ msgid "Templates"
+#~ msgstr "Skabeloner"

@@ -1,0 +1,70 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrej Vernekar <andrej.vernekar@gmail.com>, 2012.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2020-01-23 15:47+0100\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Translator: Andrej Vernekar <andrej.vernekar@gmail.com>\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Poedit 2.2.4\n"
+
+#: ChangeVectorDataCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change Vector Data"
+msgstr "Spremeni vektorske podatke"
+
+#: VectorShapeFactory.cpp:27
+#, kde-format
+msgid "Vector image"
+msgstr "Vektorska slika"
+
+#: VectorShapeFactory.cpp:29
+#, kde-format
+msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+msgstr "Oblika, ki prikazuje vektorsko sliko (EMF/WMF/SVM)"
+
+#: VectorTool.cpp:64
+#, kde-format
+msgid "Open Vector Image (EMF/WMF/SVM)"
+msgstr "Odpri vektorsko sliko (EMF/WMF/SVM)"
+
+#: VectorToolFactory.cpp:20
+#, kde-format
+msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+msgstr "Orodje za vektorsko sliko (EMF/WMF/SVM)"
+
+#, fuzzy
+#~| msgid "Vector image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector image"
+#~ msgstr "Vektorska slika"
+
+#, fuzzy
+#~| msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgstr "Oblika ki prikazuje vektorsko sliko (EMF/WMF/SVM)"
+
+#, fuzzy
+#~| msgid "Open Vector Image (EMF/WMF/SVM)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Vector Image (EMF/WMF/SVM)"
+#~ msgstr "Odpri vektorsko sliko (EMF/WMF/SVM)"
+
+#, fuzzy
+#~| msgid "Vector Image (EMF/WMF/SVM) tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+#~ msgstr "Orodje za vektorsko sliko (EMF/WMF/SVM)"

@@ -1,0 +1,298 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Martin Schlander <mschlander@opensuse.org>, 2009, 2010, 2011, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: ArtisticTextShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2014-12-22 20:34+0100\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: AddTextRangeCommand.cpp:15 AddTextRangeCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Add text range"
+msgstr "Tilføj tekstområde"
+
+#: ArtisticTextShapeFactory.cpp:17
+#, kde-format
+msgid "ArtisticTextShape"
+msgstr "Form til kunstnerisk tekst"
+
+#: ArtisticTextShapeFactory.cpp:19
+#, kde-format
+msgid "A shape which shows a single text line"
+msgstr "En form som viser en enkelt tekstlinje"
+
+#: ArtisticTextShapeFactory.cpp:29
+#, kde-format
+msgid "Artistic Text"
+msgstr "Kunstnerisk tekst"
+
+#: ArtisticTextTool.cpp:64
+#, kde-format
+msgid "Detach Path"
+msgstr "Afkobl sti"
+
+#: ArtisticTextTool.cpp:69
+#, kde-format
+msgid "Convert to Path"
+msgstr "Konvertér til sti"
+
+#: ArtisticTextTool.cpp:74
+#, kde-format
+msgid "Bold text"
+msgstr "Fed tekst"
+
+#: ArtisticTextTool.cpp:79
+#, kde-format
+msgid "Italic text"
+msgstr "Kursiv tekst"
+
+#: ArtisticTextTool.cpp:84
+#, kde-format
+msgid "Superscript"
+msgstr "Hævet skrift"
+
+#: ArtisticTextTool.cpp:89
+#, kde-format
+msgid "Subscript"
+msgstr "Sænket skrift"
+
+#: ArtisticTextTool.cpp:94
+#, kde-format
+msgid "Anchor at Start"
+msgstr "Forankr ved start"
+
+#: ArtisticTextTool.cpp:99
+#, kde-format
+msgid "Anchor at Middle"
+msgstr "Forankr i midten"
+
+#: ArtisticTextTool.cpp:104
+#, kde-format
+msgid "Anchor at End"
+msgstr "Forankr ved afslutning"
+
+#: ArtisticTextTool.cpp:295
+#, kde-format
+msgid "Click to change cursor position."
+msgstr "Klik for at ændre markørposition."
+
+#: ArtisticTextTool.cpp:297
+#, kde-format
+msgid "Click to select text shape."
+msgstr "Klik for at markere tekstform."
+
+#: ArtisticTextTool.cpp:300
+#, kde-format
+msgid "Double click to put text on path."
+msgstr "Dobbeltklik for at sætte tekst på sti."
+
+#: ArtisticTextTool.cpp:303
+#, kde-format
+msgid "Drag handle to change start offset."
+msgstr "Træk håndtag for at ændre startforskydning."
+
+#: ArtisticTextTool.cpp:307
+#, kde-format
+msgid "Press escape to finish editing."
+msgstr "Tryk Esc for at afslutte redigering."
+
+#: ArtisticTextTool.cpp:489
+#, kde-format
+msgid "Press return to finish editing."
+msgstr "Tryk Retur for at afslutte redigering."
+
+#: ArtisticTextTool.cpp:583
+msgctxt "(qtundo-format)"
+msgid "Convert to Path"
+msgstr "Konvertér til sti"
+
+#: ArtisticTextTool.cpp:596
+#, kde-format
+msgid "Text Properties"
+msgstr "Tekstegenskaber"
+
+#: ArtisticTextTool.cpp:606
+#, kde-format
+msgid "Text On Path"
+msgstr "Tekst på sti"
+
+#: ArtisticTextToolFactory.cpp:17
+#, kde-format
+msgid "Artistic text editing"
+msgstr "Redigering af kunstnerisk tekst"
+
+#: AttachTextToPathCommand.cpp:15
+msgctxt "(qtundo-format)"
+msgid "Attach Path"
+msgstr "Tilknyt sti"
+
+#: ChangeTextAnchorCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Change text anchor"
+msgstr "Ændr tekstforankring"
+
+#: ChangeTextFontCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Change font"
+msgstr "Ændr skrifttype"
+
+#: ChangeTextOffsetCommand.cpp:15
+msgctxt "(qtundo-format)"
+msgid "Change Text Offset"
+msgstr "Ændr tekstforskydning"
+
+#: DetachTextFromPathCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Detach Path"
+msgstr "Afkobl sti"
+
+#: RemoveTextRangeCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Remove text range"
+msgstr "Fjern tekstområde"
+
+#: ReplaceTextRangeCommand.cpp:14 ReplaceTextRangeCommand.cpp:22
+#: ReplaceTextRangeCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Replace text range"
+msgstr "Erstat tekstområde"
+
+#, fuzzy
+#~| msgid "ArtisticTextShape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArtisticTextShape"
+#~ msgstr "Form til kunstnerisk tekst"
+
+#, fuzzy
+#~| msgid "A shape which shows a single text line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape which shows a single text line"
+#~ msgstr "En form som viser en enkelt tekstlinje"
+
+#, fuzzy
+#~| msgid "Artistic Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Artistic Text"
+#~ msgstr "Kunstnerisk tekst"
+
+#, fuzzy
+#~| msgid "Bold text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bold text"
+#~ msgstr "Fed tekst"
+
+#, fuzzy
+#~| msgid "Italic text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Italic text"
+#~ msgstr "Kursiv tekst"
+
+#, fuzzy
+#~| msgid "Superscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Superscript"
+#~ msgstr "Hævet skrift"
+
+#, fuzzy
+#~| msgid "Subscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subscript"
+#~ msgstr "Sænket skrift"
+
+#, fuzzy
+#~| msgid "Anchor at Start"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor at Start"
+#~ msgstr "Forankr ved start"
+
+#, fuzzy
+#~| msgid "Anchor at Middle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor at Middle"
+#~ msgstr "Forankr i midten"
+
+#, fuzzy
+#~| msgid "Anchor at End"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor at End"
+#~ msgstr "Forankr ved afslutning"
+
+#, fuzzy
+#~| msgid "Click to change cursor position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click to change cursor position."
+#~ msgstr "Klik for at ændre markørposition."
+
+#, fuzzy
+#~| msgid "Click to select text shape."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click to select text shape."
+#~ msgstr "Klik for at markere tekstform."
+
+#, fuzzy
+#~| msgid "Double click to put text on path."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to put text on path."
+#~ msgstr "Dobbeltklik for at sætte tekst på sti."
+
+#, fuzzy
+#~| msgid "Drag handle to change start offset."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag handle to change start offset."
+#~ msgstr "Træk håndtag for at ændre startforskydning."
+
+#, fuzzy
+#~| msgid "Press escape to finish editing."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press escape to finish editing."
+#~ msgstr "Tryk Esc for at afslutte redigering."
+
+#, fuzzy
+#~| msgid "Press return to finish editing."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press return to finish editing."
+#~ msgstr "Tryk Retur for at afslutte redigering."
+
+#, fuzzy
+#~| msgid "Text Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Properties"
+#~ msgstr "Tekstegenskaber"
+
+#, fuzzy
+#~| msgid "Text On Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text On Path"
+#~ msgstr "Tekst på sti"
+
+#, fuzzy
+#~| msgid "Artistic text editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Artistic text editing"
+#~ msgstr "Redigering af kunstnerisk tekst"
+
+#~ msgid "Family:"
+#~ msgstr "Familie:"
+
+#~ msgid "Size:"
+#~ msgstr "Størrelse:"
+
+#~ msgid "Offset:"
+#~ msgstr "Forskydning:"
+
+#~ msgid "Artistic Text Tool"
+#~ msgstr "Værktøj til kunstnerisk tekst"
+
+#~ msgid "Change text"
+#~ msgstr "Ændr tekst"

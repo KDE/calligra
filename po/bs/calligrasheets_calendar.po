@@ -1,0 +1,239 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2015-02-24 23:23+0100\n"
+"Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-10-22 05:07+0000\n"
+"X-Generator: Launchpad (build 16807)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: CalendarTool.cpp:63
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+"Krajnji datum je prije početnog. Osigurajte da krajnji datum dolazi posle "
+"početnog."
+
+#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#, kde-format
+msgid "Error"
+msgstr "Greška"
+
+#: CalendarTool.cpp:68
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+"Kalendari ne mogu biti duži od 10 godina. Ako vam zaista trebaju takvi "
+"periodi, morate ih razdvojiti."
+
+#: CalendarTool.cpp:73
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+"Početni i krajnji datum su jednaki. Biće ubačen samo jedan dan, želite li da "
+"nastavite?"
+
+#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#, kde-format
+msgid "Warning"
+msgstr "Upozorenje"
+
+#: CalendarTool.cpp:78
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+"Pravljenje kalendara za duže od jedne godine može zauzeti puno mjesta, "
+"želite li da nastavite?"
+
+#: CalendarTool.cpp:95
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+"Oblast gdje se kalendar ubacuje nije prazna, želite li zaista da nastavite, "
+"prebrisavši postojeće podatke? Ako odustanite, oblast potrebna za željeni "
+"kalendar biće izabrana, tako da možete vidjeti koji podaci bi bili "
+"prebrisani."
+
+#: CalendarTool.cpp:102
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "Ubaci kalendar"
+
+#: CalendarTool.cpp:108
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "Kalendar od %1 do %2"
+
+#: CalendarTool.cpp:150
+#, kde-format
+msgid "week"
+msgstr "sedmica"
+
+#: CalendarToolFactory.cpp:24
+#, kde-format
+msgid "Calendar"
+msgstr "kalendar"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:14
+#, kde-format
+msgid "Calendar Tool"
+msgstr "Kalendarski alat"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:20
+#, kde-format
+msgid "Insert"
+msgstr "Ubaci"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:27
+#, kde-format
+msgid "End date:"
+msgstr "Datum kraja:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:47
+#, kde-format
+msgid "Start date:"
+msgstr "Datum početka:"
+
+#, fuzzy
+#~| msgid "Calendar Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Tool"
+#~ msgstr "Kalendarski alat"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Ubaci"
+
+#, fuzzy
+#~| msgid "Start date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start date:"
+#~ msgstr "Datum početka:"
+
+#, fuzzy
+#~| msgid "End date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End date:"
+#~ msgstr "Datum kraja:"
+
+#, fuzzy
+#~| msgid ""
+#~| "End date is before start date! Please make sure that end date comes "
+#~| "after start date."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "End date is before start date! Please make sure that end date comes after "
+#~ "start date."
+#~ msgstr ""
+#~ "Krajnji datum je prije početnog. Osigurajte da krajnji datum dolazi posle "
+#~ "početnog."
+
+#, fuzzy
+#~| msgid "Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Greška"
+
+#, fuzzy
+#~| msgid ""
+#~| "Calendars should not be longer than 10 years. If you really need such "
+#~| "long periods you need to split them up."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Calendars should not be longer than 10 years. If you really need such "
+#~ "long periods you need to split them up."
+#~ msgstr ""
+#~ "Kalendari ne mogu biti duži od 10 godina. Ako vam zaista trebaju takvi "
+#~ "periodi, morate ih razdvojiti."
+
+#, fuzzy
+#~| msgid ""
+#~| "Start and end dates are equal! Only one day will be inserted, do you "
+#~| "want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Start and end dates are equal! Only one day will be inserted, do you want "
+#~ "to continue?"
+#~ msgstr ""
+#~ "Početni i krajnji datum su jednaki. Biće ubačen samo jedan dan, želite li "
+#~ "da nastavite?"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "Upozorenje"
+
+#, fuzzy
+#~| msgid ""
+#~| "Creating a calendar for a longer period than a year can take up a lot of "
+#~| "space, do you want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Creating a calendar for a longer period than a year can take up a lot of "
+#~ "space, do you want to continue?"
+#~ msgstr ""
+#~ "Pravljenje kalendara za duže od jedne godine može zauzeti puno mjesta, "
+#~ "želite li da nastavite?"
+
+#, fuzzy
+#~| msgid ""
+#~| "The area where the calendar is inserted is NOT empty, are you sure you "
+#~| "want to continue, overwriting existing data? If you choose No the area "
+#~| "that would be required for the desired calendar will be selected so you "
+#~| "can see what data would be overwritten."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The area where the calendar is inserted is NOT empty, are you sure you "
+#~ "want to continue, overwriting existing data? If you choose No the area "
+#~ "that would be required for the desired calendar will be selected so you "
+#~ "can see what data would be overwritten."
+#~ msgstr ""
+#~ "Oblast gdje se kalendar ubacuje nije prazna, želite li zaista da "
+#~ "nastavite, prebrisavši postojeće podatke? Ako odustanite, oblast potrebna "
+#~ "za željeni kalendar biće izabrana, tako da možete vidjeti koji podaci bi "
+#~ "bili prebrisani."
+
+#, fuzzy
+#~| msgid "Calendar from %1 to %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar from %1 to %2"
+#~ msgstr "Kalendar od %1 do %2"
+
+#, fuzzy
+#~| msgid "week"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "week"
+#~ msgstr "sedmica"
+
+#, fuzzy
+#~| msgid "Calendar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar"
+#~ msgstr "kalendar"

@@ -1,0 +1,98 @@
+# Irish translation of ChangecasePlugin
+# Copyright (C) 2009 This_file_is_part_of_KDE
+# This file is distributed under the same license as the ChangecasePlugin package.
+# Kevin Scannell <kscanne@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice/ChangecasePlugin.po\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2007-07-22 14:30-0500\n"
+"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
+"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
+"3 : 4\n"
+
+#: Changecase.cpp:51 Changecase.cpp:79
+#, kde-format
+msgid "Change case"
+msgstr "Athraigh an cás"
+
+#: Changecase.cpp:56
+#, kde-format
+msgid "Sentence case"
+msgstr "Cás an abairt"
+
+#: Changecase.cpp:57
+#, kde-format
+msgid "lowercase"
+msgstr "cás íochtair"
+
+#: Changecase.cpp:58
+#, kde-format
+msgid "UPPER CASE"
+msgstr "CÁS UACHTAIR"
+
+#: Changecase.cpp:59
+#, kde-format
+msgid "Initial Caps"
+msgstr "Ceannlitreacha Thosaigh"
+
+#: Changecase.cpp:60
+#, kde-format
+msgid "tOGGLE cASE"
+msgstr "cÁS sCORÁN"
+
+#: ChangecaseFactory.cpp:16
+#, kde-format
+msgid "Change Case..."
+msgstr "Athraigh an Cás..."
+
+#, fuzzy
+#~| msgid "Change case"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change case"
+#~ msgstr "Athraigh an cás"
+
+#, fuzzy
+#~| msgid "Sentence case"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentence case"
+#~ msgstr "Cás an abairt"
+
+#, fuzzy
+#~| msgid "lowercase"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "lowercase"
+#~ msgstr "cás íochtair"
+
+#, fuzzy
+#~| msgid "UPPER CASE"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "UPPER CASE"
+#~ msgstr "CÁS UACHTAIR"
+
+#, fuzzy
+#~| msgid "Initial Caps"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Initial Caps"
+#~ msgstr "Ceannlitreacha Thosaigh"
+
+#, fuzzy
+#~| msgid "tOGGLE cASE"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "tOGGLE cASE"
+#~ msgstr "cÁS sCORÁN"
+
+#, fuzzy
+#~| msgid "Change Case..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Case..."
+#~ msgstr "Athraigh an Cás..."
+
+#~ msgid "Changecase"
+#~ msgstr "Changecase"

@@ -1,0 +1,2247 @@
+# translation of kofficefilters.po to Tajik
+# Copyright (C) 2004 Free Software Foundation, Inc.
+# 2004, infoDev, a World Bank organization
+# 2004, Khujand Computer Technologies, Inc.
+# 2004, Youth Opportunities NGO
+# Roger Kovacs <rkovacs@khujand.org>, 2004.
+# Victor Ibragimov <youth_opportunities@tajik.net>, 2004.
+# Виктор Ибрагимов <youth_opportunities@tajik.net>, 2004.
+msgid ""
+msgstr ""
+"Project-Id-Version: kofficefilters\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2004-07-06 13:25-0400\n"
+"Last-Translator: Victor Ibragimov <youth_opportunities@tajik.net>\n"
+"Language-Team: Tajik\n"
+"Language: tg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"<youth_opportunities@tajik.net>\n"
+"X-Generator: KBabel 1.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, fuzzy, kde-format
+msgid "%1 Export Options"
+msgstr "Хатои Содироти PNG"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, fuzzy, kde-format
+msgid "Page %1"
+msgstr "Саҳифа"
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, fuzzy, kde-format
+msgid "Page:"
+msgstr "Саҳифа"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, kde-format
+msgid "Size in Pixels"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, fuzzy, kde-format
+msgid "Image height:"
+msgstr "Баландӣ (%)"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, kde-format
+msgid "Resolution:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, kde-format
+msgid "Color"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr ""
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:299
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not open the requested file %1"
+msgstr "Аз файл хонда натавонист."
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, fuzzy, kde-format
+#| msgid "Passwords"
+msgid "Enter password"
+msgstr "Гузарвожаҳо"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find path for type %1"
+msgstr "Аз файл хонда натавонист."
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, fuzzy, kde-format
+#| msgid "Footnote %1"
+msgid "Attribute \"%1\" not found"
+msgstr "Эзоҳи поварақ%1"
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr "Аз файл хонда натавонист."
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find relationships file \"%1\""
+msgstr "Аз файл хонда натавонист."
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr "Аз файл хонда натавонист."
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, fuzzy, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+"Хато дар ҳоли санҷиши файли KWord.\n"
+"Дар сатри %1, сутун %2.\n"
+"Мактуби хатогӣ: %3"
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not write block"
+msgstr "Аз файл хонда натавонист."
+
+#: sheets/csv/csvexport.cc:266
+#, fuzzy, kde-format
+msgid "<SHEETNAME>"
+msgstr "<TABLENAME>"
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, fuzzy, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Дигар ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, fuzzy, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Дигар ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Дигар ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:281 words/ascii/ImportDialog.cc:94
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr ""
+
+#: sheets/csv/csvimport.cc:74
+#, fuzzy, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr ""
+"Фильтри CSV ин файл кушода натавонист - илтимос дар бораи ин сабаб ахборотро "
+"бифиристед."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "Рамзгузорӣ"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, fuzzy, kde-format
+msgid "E&ncoding:"
+msgstr "Рамзгузорӣ"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, kde-format
+msgid "End of Line"
+msgstr "Дар охири сатр"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr "Услуби &UNIX"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr "Услуби &Windows"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr "Услуби &MacOS"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, kde-format
+msgid "Sheets"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, kde-format
+msgid "Select sheets to export:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, kde-format
+msgid "Delimiter Line"
+msgstr "Ҷудокунандаи хат"
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, fuzzy, kde-format
+msgid "********<SHEETNAME>********"
+msgstr "********<TABLENAME>********"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, fuzzy, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr "<TABLENAME> ба номи ҷадвали дигар иваз мекунад."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, fuzzy, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr "Ҷудокунандаи хат дар болои ҷадвалҳо чоп кунед"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, kde-format
+msgid "Cells"
+msgstr "Сӯрохҳо"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, kde-format
+msgid "Delimiter"
+msgstr "Ҷудокунанда"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, kde-format
+msgid "Comma"
+msgstr "Нуқта"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, kde-format
+msgid "Semicolon"
+msgstr "Нуқтавергул"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, kde-format
+msgid "Tabulator"
+msgstr "Табулятор"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, kde-format
+msgid "Space"
+msgstr "Фосила"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, kde-format
+msgid "Other:"
+msgstr "Дигар:"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, kde-format
+msgid "Quotes:"
+msgstr "Ишораҳо:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, kde-format
+msgid "Export selection only"
+msgstr "Танҳо интихобот содирот кунед:"
+
+#: sheets/dbase/dbaseimport.cc:44
+#, kde-format
+msgid "File format is not supported."
+msgstr "Андозаи файл ёримандӣ надорад."
+
+#: sheets/dbase/dbaseimport.cc:49
+#, kde-format
+msgid "Could not read from file."
+msgstr "Аз файл хонда натавонист."
+
+#: sheets/html/exportdialog.cc:21
+#, fuzzy, kde-format
+msgid "Export Sheet to HTML"
+msgstr "Содироти Ҷадвал(ҳо):"
+
+#: sheets/html/exportdialog.cc:32
+#, kde-format
+msgid "Recommended: UTF-8"
+msgstr ""
+
+#: sheets/html/exportdialog.cc:33
+#, fuzzy, kde-format
+msgid "Locale (%1)"
+msgstr "Ҷадвал %1"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, fuzzy, kde-format
+msgid "En&coding:"
+msgstr "Рамзгузорӣ"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, fuzzy, kde-format
+msgid "Sheet Selection"
+msgstr "Интихоботи Саҳифа"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, kde-format
+msgid "Select &All"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, kde-format
+msgid "Desele&ct All"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, kde-format
+msgid "Use &separate files for each table"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, kde-format
+msgid "Style"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, kde-format
+msgid "Use &default style"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, kde-format
+msgid "Use &external stylesheet:"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, kde-format
+msgid "Layout"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, kde-format
+msgid "Use &borders"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, kde-format
+msgid "Pi&xels between cells:"
+msgstr ""
+
+#: sheets/html/htmlexport.cc:200 sheets/html/htmlexport.cc:375
+#, kde-format
+msgid "Top"
+msgstr ""
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr "Танзимоти Филтри Содироти Latex "
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, kde-format
+msgid "Document"
+msgstr "Ҳуҷҷат"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, kde-format
+msgid "Document Style"
+msgstr "Услуби ҳуҷҷат"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, kde-format
+msgid "Latex style"
+msgstr "Услуби LaTex "
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, fuzzy, kde-format
+#| msgid "KWord style"
+msgid "Words style"
+msgstr "Услуби KWord "
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, kde-format
+msgid "Document Type"
+msgstr "Шакли ҳуҷҷат"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, fuzzy, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr "Ин ҳуҷҷат метавонад ба танҳои ҷамъ шудан."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, fuzzy, kde-format
+#| msgid ""
+#| "The document will be generated as a full latex document since all the "
+#| "include will be generated before the \\begin[document} and "
+#| "\\end{document} commands."
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+"Ин ҳуҷҷат бо унвони як ҳуҷҷати комил таҳия хоҳад шуд зеро,ки тамоми самимаҳо "
+"пеш аз дастуроти \\аввали [ҳуҷҷат} ва \\охири {ҳуҷҷат} таҳия мешаванд."
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, kde-format
+msgid "Independent document"
+msgstr "Ҳуҷҷати мустақил"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, fuzzy, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr "Сарлавҳаи latex ё гирдуатрофи ҳуҷҷатро нагиронед."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+"Ҳуҷҷати мазкур ба ҳуҷҷати latex, ки қисми асосии ҳуҷҷати latex дар бар "
+"мегирад, дохил карда мешавад. Ин ба шумо имконият медиҳад, ки якчанд файлҳои "
+"хурдро барои параграфҳои ҳуҷҷати худ истифода баред."
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, kde-format
+msgid "Document to include"
+msgstr "Дохил кардани ҳуҷҷат"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, kde-format
+msgid "Document class:"
+msgstr "Синфи ҳуҷҷат:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, kde-format
+msgid "Quality:"
+msgstr "Сифат:"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, fuzzy, kde-format
+msgid "Final"
+msgstr "охир"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, fuzzy, kde-format
+msgid "Draft"
+msgstr "нақша"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, kde-format
+msgid "Default font size:"
+msgstr "Андозаи Ҳарфи Пешфарз:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, kde-format
+msgid "Pictures"
+msgstr "Суратҳо"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, fuzzy, kde-format
+#| msgid "Convert the pictures"
+msgid "Convert the pictures:"
+msgstr "Табдил додани тасвир"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, kde-format
+msgid "Pictures directory:"
+msgstr "Феҳристи суратҳо:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, kde-format
+msgid "Language"
+msgstr "Забон"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, kde-format
+msgid "Add"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, kde-format
+msgid "Remove"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, fuzzy, kde-format
+msgid "Contents"
+msgstr "Аломатҳо"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, fuzzy, kde-format
+#| msgid "Export informations about author"
+msgid "Export information about author:"
+msgstr "Ахбороти содирот дар бораи муаллиф"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, fuzzy, kde-format
+#| msgid "Add a table of content"
+msgid "Add a table of content:"
+msgstr "Иловаи ҷадвали мундариҷа"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, kde-format
+msgid "Notes"
+msgstr "Аломатҳо"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, kde-format
+msgid "Don't export"
+msgstr "Содирот накунед"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, kde-format
+msgid "Export notes in margin notes"
+msgstr "Содироти аломатҳо дар канораи аломатҳо"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, kde-format
+msgid "Export notes in comments"
+msgstr "Содироти аломатҳо дар қайдҳо"
+
+#: sheets/opencalc/opencalcexport.cc:890
+#, kde-format
+msgid "Page "
+msgstr "Саҳифа"
+
+#: sheets/opencalc/opencalcimport.cc:1199
+#, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr "Ин файл вайрон аст.Ҷадвал надида монда мешавад."
+
+#: sheets/opencalc/opencalcimport.cc:1211
+#, kde-format
+msgid "Skipping a table."
+msgstr "Надида мондани ҷадвал."
+
+#: sheets/opencalc/opencalcimport.cc:1911
+#, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+"Этот документ был создан '%1' версией документа OpenOffice.org. Этот филтр "
+"был написан версией 1.0. Читая этот файл могли возникнут небольшие "
+"изменения, испорченность или непонятное изображение информации. Хотите ли вы "
+"продолжить восстановление документа?"
+
+#: sheets/opencalc/opencalcimport.cc:1912
+#, kde-format
+msgid "Unsupported document version"
+msgstr "Ривояти ҳуҷҷат бетарафдори кардан мебошад"
+
+#: sheets/qpro/qproimport.cc:114
+#, fuzzy, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr ""
+"Филтри QPRO ин файл кушода натавонист - илтимос дар бораи ин сабаб ахборотро "
+"бифиристед."
+
+#: sheets/qpro/qproimport.cc:219
+#, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr ""
+"Файл, ки гузарвожа дорад кушода натавонист.\n"
+"Алгоритми гузарвожа эълон карда набуд"
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Unable to find part for type %1"
+msgstr "Аз файл хонда натавонист."
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:348
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1425
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr ""
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, fuzzy, kde-format
+#| msgid "Endnote %1"
+msgid "Slide layout \"%1\" not found"
+msgstr "Теҳнушт %1"
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, fuzzy, kde-format
+#| msgid "Slide Title"
+msgid "Slide %1"
+msgstr "Сарлавҳаи намоиш"
+
+#: words/ascii/ImportDialog.cc:32
+#, fuzzy, kde-format
+#| msgid "KWord's Plain Text Import Filter"
+msgid "Words's Plain Text Import Filter"
+msgstr "Филтри Воридот аз файли матнӣ"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "Диалоги воридот дар файли матнӣ"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, kde-format
+msgid "End of Paragraph"
+msgstr "Дар охири параграф"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, kde-format
+msgid "&As is: At the end of line"
+msgstr "&Чи хел аст: Дар тамоми хат"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr "&Ҷумла: Агар, тамоми хат - тамоми ҷумла мебошад"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr ""
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, fuzzy, kde-format
+#| msgid "End of Line"
+msgid "End notes"
+msgstr "Дар охири сатр"
+
+#: words/msword-odf/conversion.cpp:828
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Сарлавҳаи саҳифаҳоро ҳамвор кунед"
+
+#: words/msword-odf/conversion.cpp:830
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Сарлавҳаи саҳифаҳои ноҷуфт"
+
+#: words/msword-odf/conversion.cpp:832
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Сарлавҳаи поёни саҳифаҳоро ҳамвор кунед"
+
+#: words/msword-odf/conversion.cpp:834
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Сарлавҳаи поёни саҳифаҳои ноҷуфт"
+
+#: words/msword-odf/conversion.cpp:836
+#, kde-format
+msgid "First Page Header"
+msgstr "Сарлавҳаи Саҳифаи Аввалин"
+
+#: words/msword-odf/conversion.cpp:838
+#, kde-format
+msgid "First Page Footer"
+msgstr "Сарлавҳаи поёни Саҳифаи Аввалин"
+
+#: words/msword-odf/texthandler.cpp:632
+#, kde-format
+msgid "Table %1"
+msgstr "Ҷадвал %1"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr ""
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, fuzzy, kde-format
+msgid "Words's RTF Import Filter"
+msgstr "Воридоти филтри ҳуҷҷати PDF"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, kde-format
+msgid "The file cannot be loaded."
+msgstr ""
+
+#~ msgid "Failed to read data."
+#~ msgstr "Сана хонда натавонист."
+
+#, fuzzy
+#~ msgid "Export Error"
+#~ msgstr "Хатои Содироти PNG"
+
+#~ msgid "Malformed XML data."
+#~ msgstr "Санаи XML нокифоя ташкилёфтани."
+
+#, fuzzy
+#~ msgid "Export to Image"
+#~ msgstr "Воридоти суратҳо"
+
+#, fuzzy
+#~ msgid "Height:"
+#~ msgstr "Баландӣ (%)"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "Васеъгӣ (%)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image width:"
+#~ msgstr "Баландӣ (%)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image height:"
+#~ msgstr "Баландӣ (%)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&coding:"
+#~ msgstr "Рамзгузорӣ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet Selection"
+#~ msgstr "Интихоботи Саҳифа"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Ҳуҷҷат"
+
+#, fuzzy
+#~| msgid "Document Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Style"
+#~ msgstr "Услуби ҳуҷҷат"
+
+#, fuzzy
+#~| msgid "Latex style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex style"
+#~ msgstr "Услуби LaTex "
+
+#, fuzzy
+#~| msgid "KWord style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words style"
+#~ msgstr "Услуби KWord "
+
+#, fuzzy
+#~| msgid "Document Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Type"
+#~ msgstr "Шакли ҳуҷҷат"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The document will be able to be compiled alone"
+#~ msgstr "Ин ҳуҷҷат метавонад ба танҳои ҷамъ шудан."
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a full latex document since all the "
+#~| "include will be generated before the \\begin[document} and "
+#~| "\\end{document} commands."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a full latex document since all the "
+#~ "include will be generated before the \\begin[document} and "
+#~ "\\end{document} commands."
+#~ msgstr ""
+#~ "Ин ҳуҷҷат бо унвони як ҳуҷҷати комил таҳия хоҳад шуд зеро,ки тамоми "
+#~ "самимаҳо пеш аз дастуроти \\аввали [ҳуҷҷат} ва \\охири {ҳуҷҷат} таҳия "
+#~ "мешаванд."
+
+#, fuzzy
+#~| msgid "Independent document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Independent document"
+#~ msgstr "Ҳуҷҷати мустақил"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do not generate either the latex header or the document environment"
+#~ msgstr "Сарлавҳаи latex ё гирдуатрофи ҳуҷҷатро нагиронед."
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a latex document which will have to be "
+#~| "included in a main latex document. It will allow you to generate several "
+#~| "little files for each chapter of your document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a latex document which will have to be "
+#~ "included in a main latex document. It will allow you to generate several "
+#~ "little files for each chapter of your document."
+#~ msgstr ""
+#~ "Ҳуҷҷати мазкур ба ҳуҷҷати latex, ки қисми асосии ҳуҷҷати latex дар бар "
+#~ "мегирад, дохил карда мешавад. Ин ба шумо имконият медиҳад, ки якчанд "
+#~ "файлҳои хурдро барои параграфҳои ҳуҷҷати худ истифода баред."
+
+#, fuzzy
+#~| msgid "Document to include"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document to include"
+#~ msgstr "Дохил кардани ҳуҷҷат"
+
+#, fuzzy
+#~| msgid "Document class:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document class:"
+#~ msgstr "Синфи ҳуҷҷат:"
+
+#, fuzzy
+#~| msgid "Quality:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quality:"
+#~ msgstr "Сифат:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Final"
+#~ msgstr "охир"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draft"
+#~ msgstr "нақша"
+
+#, fuzzy
+#~| msgid "Default font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default font size:"
+#~ msgstr "Андозаи Ҳарфи Пешфарз:"
+
+#, fuzzy
+#~| msgid "Pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures"
+#~ msgstr "Суратҳо"
+
+#, fuzzy
+#~| msgid "Convert the pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convert the pictures:"
+#~ msgstr "Табдил додани тасвир"
+
+#, fuzzy
+#~| msgid "Pictures directory:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures directory:"
+#~ msgstr "Феҳристи суратҳо:"
+
+#, fuzzy
+#~| msgid "Language"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Забон"
+
+#, fuzzy
+#~| msgid "Encoding"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encoding"
+#~ msgstr "Рамзгузорӣ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "Аломатҳо"
+
+#, fuzzy
+#~| msgid "Export informations about author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export information about author:"
+#~ msgstr "Ахбороти содирот дар бораи муаллиф"
+
+#, fuzzy
+#~| msgid "Add a table of content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a table of content:"
+#~ msgstr "Иловаи ҷадвали мундариҷа"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Аломатҳо"
+
+#, fuzzy
+#~| msgid "Don't export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Don't export"
+#~ msgstr "Содирот накунед"
+
+#, fuzzy
+#~| msgid "Export notes in margin notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in margin notes"
+#~ msgstr "Содироти аломатҳо дар канораи аломатҳо"
+
+#, fuzzy
+#~| msgid "Export notes in comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in comments"
+#~ msgstr "Содироти аломатҳо дар қайдҳо"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "Рамзгузорӣ"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Line"
+#~ msgstr "Дар охири сатр"
+
+#, fuzzy
+#~| msgid "&UNIX style (recommended; line feed only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&UNIX style (recommended; line feed only)"
+#~ msgstr "Услуби &UNIX"
+
+#, fuzzy
+#~| msgid "&Windows style (carriage return and line feed)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Windows style (carriage return and line feed)"
+#~ msgstr "Услуби &Windows"
+
+#, fuzzy
+#~| msgid "&MacOS style (carriage return only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&MacOS style (carriage return only)"
+#~ msgstr "Услуби &MacOS"
+
+#, fuzzy
+#~| msgid "Delimiter Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter Line"
+#~ msgstr "Ҷудокунандаи хат"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "********<SHEETNAME>********"
+#~ msgstr "********<TABLENAME>********"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgstr "<TABLENAME> ба номи ҷадвали дигар иваз мекунад."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Print delimiter line above every sheet"
+#~ msgstr "Ҷудокунандаи хат дар болои ҷадвалҳо чоп кунед"
+
+#, fuzzy
+#~| msgid "Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cells"
+#~ msgstr "Сӯрохҳо"
+
+#, fuzzy
+#~| msgid "Delimiter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "Ҷудокунанда"
+
+#, fuzzy
+#~| msgid "Comma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "Нуқта"
+
+#, fuzzy
+#~| msgid "Semicolon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "Нуқтавергул"
+
+#, fuzzy
+#~| msgid "Tabulator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "Табулятор"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "Фосила"
+
+#, fuzzy
+#~| msgid "Other:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other:"
+#~ msgstr "Дигар:"
+
+#, fuzzy
+#~| msgid "Quotes:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quotes:"
+#~ msgstr "Ишораҳо:"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Export selection only"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export selection only"
+#~ msgstr "Танҳо интихобот содирот кунед:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page:"
+#~ msgstr "Саҳифа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "Баландӣ (%)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Васеъгӣ (%)"
+
+#, fuzzy
+#~| msgid "Plain Text Import Dialog"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plain Text Import Dialog"
+#~ msgstr "Диалоги воридот дар файли матнӣ"
+
+#, fuzzy
+#~| msgid "End of Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Paragraph"
+#~ msgstr "Дар охири параграф"
+
+#, fuzzy
+#~| msgid "&As is: At the end of line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As is: At the end of line"
+#~ msgstr "&Чи хел аст: Дар тамоми хат"
+
+#, fuzzy
+#~| msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgstr "&Ҷумла: Агар, тамоми хат - тамоми ҷумла мебошад"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Error"
+#~ msgstr "Хатои Содироти PNG"
+
+#, fuzzy
+#~| msgid "Failed to read data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to read data."
+#~ msgstr "Сана хонда натавонист."
+
+#, fuzzy
+#~| msgid "Malformed XML data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Malformed XML data."
+#~ msgstr "Санаи XML нокифоя ташкилёфтани."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to Image"
+#~ msgstr "Воридоти суратҳо"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PNG Export Options"
+#~ msgstr "Хатои Содироти PNG"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace \"%1\" not found"
+#~ msgstr "Теҳнушт %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open the requested file %1"
+#~ msgstr "Аз файл хонда натавонист."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read ZIP directory of the requested file %1"
+#~ msgstr "Аз файл хонда натавонист."
+
+#, fuzzy
+#~| msgid "Passwords"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter password"
+#~ msgstr "Гузарвожаҳо"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find path for type %1"
+#~ msgstr "Аз файл хонда натавонист."
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Element \"%1\" not found"
+#~ msgstr "Теҳнушт %1"
+
+#, fuzzy
+#~| msgid "Footnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attribute \"%1\" not found"
+#~ msgstr "Эзоҳи поварақ%1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgstr "Аз файл хонда натавонист."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find relationships file \"%1\""
+#~ msgstr "Аз файл хонда натавонист."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgstr "Аз файл хонда натавонист."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Parsing error in the main document at line %1, column %2.\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Хато дар ҳоли санҷиши файли KWord.\n"
+#~ "Дар сатри %1, сутун %2.\n"
+#~ "Мактуби хатогӣ: %3"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' not found."
+#~ msgstr "Теҳнушт %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not write block"
+#~ msgstr "Аз файл хонда натавонист."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME>"
+#~ msgstr "<TABLENAME>"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Дигар ( %1 )"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Дигар ( %1 )"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Other ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Дигар ( %1 )"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV filter cannot open input file - please report."
+#~ msgstr ""
+#~ "Фильтри CSV ин файл кушода натавонист - илтимос дар бораи ин сабаб "
+#~ "ахборотро бифиристед."
+
+#, fuzzy
+#~| msgid "File format is not supported."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File format is not supported."
+#~ msgstr "Андозаи файл ёримандӣ надорад."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read from file."
+#~ msgstr "Аз файл хонда натавонист."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Sheet to HTML"
+#~ msgstr "Содироти Ҷадвал(ҳо):"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recommended: UTF-8"
+#~ msgstr "Дигар ( %1 )"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale (%1)"
+#~ msgstr "Ҷадвал %1"
+
+#, fuzzy
+#~| msgid "Latex Export Filter Configuration"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex Export Filter Configuration"
+#~ msgstr "Танзимоти Филтри Содироти Latex "
+
+#, fuzzy
+#~| msgid "Page "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page "
+#~ msgstr "Саҳифа"
+
+#, fuzzy
+#~| msgid "The file seems to be corrupt. Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file seems to be corrupt. Skipping a table."
+#~ msgstr "Ин файл вайрон аст.Ҷадвал надида монда мешавад."
+
+#, fuzzy
+#~| msgid "Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skipping a table."
+#~ msgstr "Надида мондани ҷадвал."
+
+#, fuzzy
+#~| msgid ""
+#~| "This document was created with OpenOffice.org version '%1'. This filter "
+#~| "was written for version 1.0. Reading this file could cause strange "
+#~| "behavior, crashes or incorrect display of the data. Do you want to "
+#~| "continue converting the document?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document was created with OpenOffice.org version '%1'. This filter "
+#~ "was written for version 1.0. Reading this file could cause strange "
+#~ "behavior, crashes or incorrect display of the data. Do you want to "
+#~ "continue converting the document?"
+#~ msgstr ""
+#~ "Этот документ был создан '%1' версией документа OpenOffice.org. Этот "
+#~ "филтр был написан версией 1.0. Читая этот файл могли возникнут небольшие "
+#~ "изменения, испорченность или непонятное изображение информации. Хотите ли "
+#~ "вы продолжить восстановление документа?"
+
+#, fuzzy
+#~| msgid "Unsupported document version"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unsupported document version"
+#~ msgstr "Ривояти ҳуҷҷат бетарафдори кардан мебошад"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QPRO filter cannot open input file - please report."
+#~ msgstr ""
+#~ "Филтри QPRO ин файл кушода натавонист - илтимос дар бораи ин сабаб "
+#~ "ахборотро бифиристед."
+
+#, fuzzy
+#~| msgid ""
+#~| "Unable to open password protected files.\n"
+#~| "The password algorithm has not been published"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unable to open password protected files.\n"
+#~ "The password algorithm has not been published"
+#~ msgstr ""
+#~ "Файл, ки гузарвожа дорад кушода натавонист.\n"
+#~ "Алгоритми гузарвожа эълон карда набуд"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unable to find part for type %1"
+#~ msgstr "Аз файл хонда натавонист."
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide layout \"%1\" not found"
+#~ msgstr "Теҳнушт %1"
+
+#, fuzzy
+#~| msgid "Slide Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Сарлавҳаи намоиш"
+
+#, fuzzy
+#~| msgid "KWord's Plain Text Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's Plain Text Import Filter"
+#~ msgstr "Филтри Воридот аз файли матнӣ"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End notes"
+#~ msgstr "Дар охири сатр"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Сарлавҳаи саҳифаҳоро ҳамвор кунед"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Сарлавҳаи саҳифаҳои ноҷуфт"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Сарлавҳаи поёни саҳифаҳоро ҳамвор кунед"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Сарлавҳаи поёни саҳифаҳои ноҷуфт"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Header"
+#~ msgstr "Сарлавҳаи Саҳифаи Аввалин"
+
+#, fuzzy
+#~| msgid "First Page Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Footer"
+#~ msgstr "Сарлавҳаи поёни Саҳифаи Аввалин"
+
+#, fuzzy
+#~| msgid "Table %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table %1"
+#~ msgstr "Ҷадвал %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's RTF Import Filter"
+#~ msgstr "Воридоти филтри ҳуҷҷати PDF"
+
+#~ msgid "Failed to write file."
+#~ msgstr "Файл навишта натавонист."
+
+#, fuzzy
+#~ msgid "%1 Export Error"
+#~ msgstr "Хатои Содироти PNG"
+
+#, fuzzy
+#~ msgid "Export Filter Parameters"
+#~ msgstr "Параметрҳои Филтри Содироти PNG"
+
+#~ msgid "Keep ratio"
+#~ msgstr "Муносибат нигоҳ доред"
+
+#, fuzzy
+#~ msgid "Width (%):"
+#~ msgstr "Васеъгӣ (%)"
+
+#, fuzzy
+#~ msgid "Height (%):"
+#~ msgstr "Баландӣ (%)"
+
+#~ msgid "PNG Export Error"
+#~ msgstr "Хатои Содироти PNG"
+
+#~ msgid "EPS Export"
+#~ msgstr "Содироти EPS"
+
+#~ msgid "PostScript level 1"
+#~ msgstr "PostScript-и дараҷаи 1"
+
+#~ msgid "PostScript level 2"
+#~ msgstr "PostScript-и дараҷаи 2"
+
+#~ msgid "PostScript level 3"
+#~ msgstr "PostScript-и дараҷаи 3"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "Воридоти PDF "
+
+#~ msgid "Text"
+#~ msgstr "Матн"
+
+#~ msgid "Number"
+#~ msgstr "Рақам"
+
+#~ msgid "Currency"
+#~ msgstr "Валюта"
+
+#~ msgid "Date"
+#~ msgstr "Таърих"
+
+#~ msgid "None"
+#~ msgstr "Ҳеҷ"
+
+#~ msgid ""
+#~ "Please check the ranges you specified. The start value must be lower than "
+#~ "the end value."
+#~ msgstr ""
+#~ "Диапазони интихобшудоаро тафтиш кунед. Маънои авалин аз маънои охрини "
+#~ "бояд хурдтар шавад."
+
+#~ msgid "Common"
+#~ msgstr "Умумӣ"
+
+#~ msgid "Other"
+#~ msgstr "Дигар"
+
+#~ msgid "Ignore duplicate delimiters"
+#~ msgstr "Тақсимкунандаи дубора ҳисоб накун"
+
+#, fuzzy
+#~ msgid "Text&quote:"
+#~ msgstr "Ишораи матн:"
+
+#, fuzzy
+#~ msgid "&Format:"
+#~ msgstr "Андоза"
+
+#~ msgid "Ranges"
+#~ msgstr "Диапазонҳо"
+
+#~ msgid "to"
+#~ msgstr "дар"
+
+#~ msgid "Import lines:"
+#~ msgstr "Воридоти хатҳо:"
+
+#~ msgid "Import columns:"
+#~ msgstr "Воридоти сутунҳо:"
+
+#~ msgid "Update"
+#~ msgstr "Дуруст кардан"
+
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#, fuzzy
+#~ msgid "&Cancel"
+#~ msgstr "&Тараққӣ"
+
+#, fuzzy
+#~| msgid ""
+#~| "An error has occurred while parsing the KWord file.\n"
+#~| "At line: %1, column %2\n"
+#~| "Error message: %3"
+#~ msgid ""
+#~ "An error has occurred while parsing the Words file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Хато дар ҳоли санҷиши файли KWord.\n"
+#~ "Дар сатри %1, сутун %2.\n"
+#~ "Мактуби хатогӣ: %3"
+
+#, fuzzy
+#~| msgid "KWord Export Filter Library"
+#~ msgid "Words Export Filter Library"
+#~ msgstr "Филтри содироти KWord дар китобхона"
+
+#~ msgid "Export XSLT Configuration"
+#~ msgstr "Танзими Содироти XSLT"
+
+#~ msgid "Open Document"
+#~ msgstr "Кушодани ҳуҷҷат"
+
+#~ msgid "Import XSLT Configuration"
+#~ msgstr "Танзими Воридоти XSLT"
+
+#~ msgid "Common xslt Files"
+#~ msgstr "Файлҳои xslt-и умумӣ"
+
+#~ msgid "Personal xslt Files"
+#~ msgstr "Файлҳои xslt-и шаҳси"
+
+#~ msgid "Choose..."
+#~ msgstr "Дигар кардан..."
+
+#, fuzzy
+#~ msgid "SVG Export Error"
+#~ msgstr "Хатои Содироти PNG"
+
+#~ msgid "LaTeX Export Error"
+#~ msgstr "Хатои Содироти LaTeX"
+
+#~ msgid "PNG Export Filter Parameters"
+#~ msgstr "Параметрҳои Филтри Содироти PNG"
+
+#, fuzzy
+#~ msgid "Height"
+#~ msgstr "Баландӣ (%)"
+
+#, fuzzy
+#~ msgid "Width"
+#~ msgstr "Васеъгӣ (%)"
+
+#~ msgid "Height (%)"
+#~ msgstr "Баландӣ (%)"
+
+#~ msgid "Width (%)"
+#~ msgstr "Васеъгӣ (%)"
+
+#~ msgid "Slide Title"
+#~ msgstr "Сарлавҳаи намоиш"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Picture %1"
+#~ msgstr "Сурат %1"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Table %3, row %1, column %2"
+#~ msgstr "Ҷадвал %3, қатор %1, сутун %2"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the AbiWord file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Хато дар ҳоли санҷиши ҳуҷҷати AbiWord\n"
+#~ "Дар сатри %1, сутун %2.\n"
+#~ "Мактуби хатогӣ: %3"
+
+#~ msgid "AbiWord Import Filter"
+#~ msgstr "Филтри Водирот дар AbiWord"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Main Text Frameset"
+#~ msgstr "Танзими Матни Асосӣ "
+
+#~ msgid "An error occurred during the load of the AbiWord file: %1"
+#~ msgstr "Дар ҳоли пурдоркардани файли AbiWord хато омад: %1"
+
+#~ msgid "Unable to save document information."
+#~ msgstr "Ахбороти ҳуҷҷат нигоҳ карда натавонист."
+
+#~ msgid "Unable to save main document."
+#~ msgstr "Ҳуҷҷати асосӣ нигоҳ карда натавонист."
+
+#~ msgctxt "Frameset name"
+#~ msgid "Footnote %1"
+#~ msgstr "Унвони саҳифаи ипоёна %1"
+
+#, fuzzy
+#~| msgid "KWord's Plain Text Export Filter"
+#~ msgid "Words's Plain Text Export Filter"
+#~ msgstr "Филтри Содирот дар файли матнӣ"
+
+#, fuzzy
+#~| msgid "KWord's HTML Export Filter"
+#~ msgid "Words's HTML Export Filter"
+#~ msgstr "Филтри Содирот дар ҳуҷҷати HTML "
+
+#~ msgid "Untitled Document"
+#~ msgstr "Ҳуҷҷати беном"
+
+#~ msgid "Latex Import Filter Parameters"
+#~ msgstr "Созкунии филтри воридот дар LaTex "
+
+#~ msgid "Unicode"
+#~ msgstr "Харфҳои рамзӣ"
+
+#~ msgid "latin1"
+#~ msgstr "latin1"
+
+#~ msgid "New document"
+#~ msgstr "Ҳуҷҷати нав"
+
+#~ msgid "Embedded document"
+#~ msgstr "Ҳуҷҷат дар дарун сохтанд"
+
+#, fuzzy
+#~| msgid "KWord's MS Write Import Filter"
+#~ msgid "Words's MS Write Import Filter"
+#~ msgstr "Филтри Воридоти Навиштани KWord's MS"
+
+#~ msgid "Header"
+#~ msgstr "Сарлавҳа"
+
+#~ msgid "Footer"
+#~ msgstr "Сарлавҳаи поён"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Танзими Манти Умумӣ"
+
+#~ msgctxt "Object name"
+#~ msgid "Table %1"
+#~ msgstr "Ҷадвал %1"
+
+#~ msgctxt "Object name"
+#~ msgid "Table Frame %1"
+#~ msgstr "Чорчӯбаи ҷадвал %1"
+
+#, fuzzy
+#~| msgctxt "Pseudo-author for annotations"
+#~| msgid "KWord 1.3"
+#~ msgctxt "Pseudo-author for annotations"
+#~ msgid "KWord 1.3"
+#~ msgstr "KWord 1.3"
+
+#~ msgid "Plain Text Export Dialog"
+#~ msgstr "Диалоги содирот дар файли матнӣ"
+
+#~ msgid "HTML Export Dialog"
+#~ msgstr "Диалоги Содирот дар HTML"
+
+#~ msgid "&HTML 4.01"
+#~ msgstr "&HTML 4.01"
+
+#~ msgid "HTML 4.01 (For older HTML user agents) "
+#~ msgstr "HTML 4.01 (барои браузери кӯҳна) "
+
+#~ msgid "&XHTML 1.0"
+#~ msgstr "&XHTML 1.0"
+
+#~ msgid "XHTML 1.0"
+#~ msgstr "XHTML 1.0"
+
+#~ msgid "Mode"
+#~ msgstr "Ҳолат"
+
+#~ msgid "L&ight: Convert to strict (X)HTML"
+#~ msgstr "&Оддӣ: Нигоҳ доштан ба (X)HTML"
+
+#~ msgid ""
+#~ "Convert mainly the document structure (Recommended for exporting to "
+#~ "browsers with limited capabilities)"
+#~ msgstr ""
+#~ "Асосан сохтори ҳуҷҷатро дигаргун месозад (Барои содирот дар броузер бо "
+#~ "имкониятҳои маҳдуд тавсия карда мешавад)"
+
+#~ msgid "&Basic: Convert to transitional (X)HTML"
+#~ msgstr "&Асосӣ: Нигоҳ доштан ба (X)HTML -и васеъгӣ"
+
+#, fuzzy
+#~| msgid ""
+#~| "Convert most of the document (Recommended for re-importing in KWord or "
+#~| "for exporting to older browsers)"
+#~ msgid ""
+#~ "Convert most of the document (Recommended for re-importing in Words or "
+#~ "for exporting to older browsers)"
+#~ msgstr ""
+#~ "Ин қисми асосани ҳуҷҷат дигаргун мекунад( Барои таёр кардани содирот дар "
+#~ "ҳуҷҷати KWord ё ки браузер тавсия карда мешавад)"
+
+#~ msgid "&Enhanced: Convert to (X)HTML with CSS"
+#~ msgstr "&Васеъгӣ: Нигоҳ доштан ба (X)HTML ҳамроҳи CSS"
+
+#, fuzzy
+#~| msgid ""
+#~| "Convert as much as possible of the KWord document (Recommended for "
+#~| "exporting to other modern word processors or to modern browsers)"
+#~ msgid ""
+#~ "Convert as much as possible of the Words document (Recommended for "
+#~ "exporting to other modern word processors or to modern browsers)"
+#~ msgstr ""
+#~ "Бисёртари мавҷудоти ҳуҷҷати KWord тағъир медиҳад ( барои содирот дар "
+#~ "версияҳои навтарини протсессорҳои матнӣ ё ки браузерҳои версияҳои нав "
+#~ "тавсия карда мешавад)"
+
+#, fuzzy
+#~ msgid "This directory will contains the eps pictures of your document"
+#~ msgstr "Ин феҳрист тасвирҳои eps дар документи шумо нигоҳ хоҳад дошт."
+
+#~ msgid "MS Write Import Dialog"
+#~ msgstr "Диалоги Воридот дар MS Write "
+
+#~ msgid "&Encoding"
+#~ msgstr "&Рамзгузорӣ"
+
+#~ msgid ""
+#~ "Select the encoding of the Write document.<br><br>Try the Default  "
+#~ "Encoding (CP 1252), if unsure."
+#~ msgstr ""
+#~ "Рамзгузорӣ барои навиштани ҳуҷҷат интихоб кунед.<br><br> Рамзгузории "
+#~ "пешфарзи (CP 1252)-ро санҷед, агар шумо эҳтимод надоред."
+
+#~ msgid "&Other encoding:"
+#~ msgstr "&Рамзгузории дигар:"
+
+#~ msgid "&Default encoding (CP 1252)"
+#~ msgstr "&Рамзгузории пешфарз (CP 1252)"
+
+#~ msgid ""
+#~ "Most Write documents are stored using this encoding (also known as "
+#~ "windows-1252).<br><br>Select this if unsure."
+#~ msgstr ""
+#~ "Бисёре ҳуҷҷатҳои Write дар ин рамз нигоҳ дошта мешаванд (ҳамчунин мисли "
+#~ "windows-1252 маълум аст).<br><br>Агар шумо боваринок нашудед онро интихоб "
+#~ "кунед."
+
+#~ msgid "&Advanced"
+#~ msgstr "&Тараққӣ"
+
+#, fuzzy
+#~| msgid ""
+#~| "These advanced options allow you to fine-tune the importing of "
+#~| "formatting information. They compensate for differences between KWord "
+#~| "and MS Write by adding extra formatting information (not found in the "
+#~| "original document), to try to make the imported document look as close "
+#~| "to the original as possible.<br><br>It is safe to use the defaults, if "
+#~| "unsure."
+#~ msgid ""
+#~ "These advanced options allow you to fine-tune the importing of formatting "
+#~ "information. They compensate for differences between Words and MS Write "
+#~ "by adding extra formatting information (not found in the original "
+#~ "document), to try to make the imported document look as close to the "
+#~ "original as possible.<br><br>It is safe to use the defaults, if unsure."
+#~ msgstr ""
+#~ "Дурусткунии иловаги ба шумо имкон медиҳад ки ворид кардани ахбори андозаи "
+#~ "матнро дуруст кунед. Онҳо кушиш мекунанд, ки фарқият мобайни KWord ва MS "
+#~ "Write бо роҳи иловаи ахбори мукаммал дар бораи андозабанди ғаромат кунад "
+#~ "(ҳозир набудани документи аслӣ ) барои  оне ки ҳуҷҷат дар андозаи MS "
+#~ "Write чи қадаре ки комилтар ба ҳуҷҷати аслии KWord наздик бошад."
+
+#~ msgid "Compensate for &linespacing differences"
+#~ msgstr "&Ғаромат кардании фарқият байни фосилаи сатр"
+
+#~ msgid ""
+#~ "Try to simulate Write's linespacing by adding some spaces before each "
+#~ "paragraph."
+#~ msgstr ""
+#~ "Эмулятсия байни фосилаи сатри васеъ бо роҳи иловакунии сафедӣ пеш аз ҳар "
+#~ "як параграф."
+
+#~ msgid "Enable &image positioning"
+#~ msgstr "&Мавқекунии аниқи тасвир"
+
+#~ msgid "Use paragraph indentation to position images."
+#~ msgstr "Истифода кардани фосилаҳои абзатсҳо барои мавқеи аниқи тасвир."
+
+#, fuzzy
+#~| msgid "PDF Import"
+#~ msgid "DCM Import"
+#~ msgstr "Воридоти PDF "
+
+#, fuzzy
+#~ msgid "Import options"
+#~ msgstr "Хатои Содироти PNG"
+
+#~ msgid "Old &method: If the line is empty or has less than 40 characters"
+#~ msgstr ""
+#~ "&Усули кӯҳна: Агар хат холи аст, ёки дар ин хат аз 40 аломатҳо кам "
+#~ "мебошанд"
+
+#, fuzzy
+#~ msgid "KFormula Import Error"
+#~ msgstr "Хатои Воридоти MathML"
+
+#, fuzzy
+#~ msgid "KFormula1.3 Import Filter"
+#~ msgstr "Филтри Водирот дар AbiWord"
+
+#, fuzzy
+#~ msgid "Available Sheets"
+#~ msgstr "Ҷадвалҳои дастрасӣ"
+
+#, fuzzy
+#~| msgid "Footnote %1"
+#~ msgid "Footnote \"%1\" not found"
+#~ msgstr "Эзоҳи поварақ%1"
+
+#~ msgid "Picture %1"
+#~ msgstr "Сурат %1"
+
+#, fuzzy
+#~ msgid "JPEG Export Options"
+#~ msgstr "Хатои Содироти PNG"
+
+#, fuzzy
+#~ msgid "All Images"
+#~ msgstr "Ҳама (%1 саҳифаҳо)"
+
+#, fuzzy
+#~ msgid "PDFImportWidget"
+#~ msgstr "Воридоти PDF "
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "Саҳифа"
+
+#, fuzzy
+#~ msgid "&All pages"
+#~ msgstr "Ҳама (%1 саҳифаҳо)"
+
+#, fuzzy
+#~ msgid "&First page"
+#~ msgstr "Сарлавҳаи Саҳифаи Аввалин"
+
+#, fuzzy
+#~| msgid "&Advanced"
+#~ msgid "Advanced quality"
+#~ msgstr "&Тараққӣ"
+
+#, fuzzy
+#~ msgid "Formats:"
+#~ msgstr "Андоза"
+
+#, fuzzy
+#~ msgid "Predictor:"
+#~ msgstr "Феҳристи суратҳо:"
+
+#~ msgid "Initializing..."
+#~ msgstr "Коргузорӣ..."
+
+#~ msgid "First pass: page #%1..."
+#~ msgstr "Гузаштани якум: саҳифа #%1..."
+
+#~ msgid "Second pass: page #%1..."
+#~ msgstr "Гузаштани дуюм: саҳифа #%1..."
+
+#~ msgid "Body Frameset #%1"
+#~ msgstr "Саҳифа #%1"
+
+#~ msgid "Header Frameset #%1"
+#~ msgstr "Унвони саҳифаи боло #%1"
+
+#~ msgid "Footer Frameset #%1"
+#~ msgstr "Унвони саҳифаи поён #%1"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "Доираи матн %1"
+
+#~ msgid "KWord's PDF Import Filter"
+#~ msgstr "Воридоти филтри ҳуҷҷати PDF"
+
+#~ msgid "Page Selection"
+#~ msgstr "Интихоботи Саҳифа"
+
+#~ msgid "All (%1 pages)"
+#~ msgstr "Ҳама (%1 саҳифаҳо)"
+
+#~ msgid "Range:"
+#~ msgstr "Диапазон:"
+
+#~ msgid "Import images"
+#~ msgstr "Воридоти суратҳо"
+
+#~ msgid "\"Smart\" mode"
+#~ msgstr "Тартиботи \"маънавӣ\""
+
+#~ msgid ""
+#~ "Removes returns and hyphens at end of line. Also tries to compute the "
+#~ "paragraph alignment. Note that the layout of some pages can get messed up."
+#~ msgstr ""
+#~ "returns ва hyphens дар тамоми хат нест карда мекунад. Ҳамчунин кӯшиш "
+#~ "мекунад барои тахмин кардани параграф дар ҳуҷҷат. Қайд кунед, ки ин нақша "
+#~ "чанде саҳифаҳо нест карда метавонад."
+
+#~ msgid "Owner:"
+#~ msgstr "Соҳиб:"
+
+#~ msgid "User:"
+#~ msgstr "Истифодакунанда:"
+
+#~ msgctxt "Table_Name Cell row,column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 Ячейка%2,%3"
+
+#, fuzzy
+#~ msgid "&Document mode"
+#~ msgstr "Шакли ҳуҷҷат"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "do not compress the file at all"
+#~ msgid "None"
+#~ msgstr "Ҳеҷ"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "do not use any predictor"
+#~ msgid "None"
+#~ msgstr "Ҳеҷ"
+
+#, fuzzy
+#~ msgid "Importing..."
+#~ msgstr "Воридоти суратҳо"
+
+#, fuzzy
+#~ msgid "Form"
+#~ msgstr "Андоза"
+
+#, fuzzy
+#~ msgid "Export hidden layers"
+#~ msgstr "Параметрҳои Филтри Содироти PNG"
+
+#, fuzzy
+#~ msgid "BMP Export Error"
+#~ msgstr "Хатои Содироти PNG"
+
+#, fuzzy
+#~ msgid "MNG Export Error"
+#~ msgstr "Хатои Содироти PNG"
+
+#, fuzzy
+#~ msgid "Xbm Export Error"
+#~ msgstr "Хатои Содироти LaTeX"
+
+#, fuzzy
+#~ msgid "Xpm Export Error"
+#~ msgstr "Хатои Содироти LaTeX"
+
+#, fuzzy
+#~ msgid "JPEG Export Error"
+#~ msgstr "Хатои Содироти PNG"
+
+#, fuzzy
+#~ msgid "KSpread Kexi Import Filter"
+#~ msgstr "Филтри воридот барои KWord 1.3"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Рақам"
+
+#~ msgid "Unable to open output file."
+#~ msgstr "Файли барориш кушода натавонист."
+
+#, fuzzy
+#~ msgid "Failed to open input file: %1"
+#~ msgstr "Файл кушода натавонист"
+
+#~ msgid "Failed to write formula."
+#~ msgstr "Формула навишта натавонист"
+
+#~ msgid "MathML Export Error"
+#~ msgstr "Хатои Содироти MathML"

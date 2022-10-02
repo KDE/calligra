@@ -1,0 +1,1126 @@
+<chapter id="formatspread">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Raphael</firstname
+> <surname
+>Langerhorst</surname
+> <affiliation
+> <address
+><email
+>raphael.langerhorst@kdemail.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+&traductor.Antoni.Bella; 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Donar format a un full de càlcul</title>
+
+<sect1 id="formatcells">
+<!--<title
+>Fonts, Text, Borders and Colors</title
+>-->
+<title
+>Format de cel·la</title>
+<para
+>Per a canviar el format i aparença de les cel·les, files o columnes seleccionades, utilitzeu l'opció <guimenuitem
+>Format de la cel·la...</guimenuitem
+> des del menú <guimenu
+>Format</guimenu
+>, o bé des del menú emergent del &BDR;.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat0.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Menú contextual per al &BDR;</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Fa aparèixer el diàleg <guilabel
+>Format de cel·la</guilabel
+> que té diverses pàgines amb pestanyes:</para>
+<sect2 id="formatdata">
+<!-- beginning of annma writing -->
+<title
+>Formats de dades i presentació</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Pàgina <guilabel
+>Format de dades</guilabel
+>.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>La pàgina <guilabel
+>Format de dades</guilabel
+> del diàleg <guilabel
+>Format de cel·la</guilabel
+> us permet controlar com es mostren els valors de les cel·les.</para>
+<para
+>La part superior d'aquesta pàgina us permet seleccionar el format a utilitzar per a mostrar valors numèrics, dates o hores. Una subfinestra de <guilabel
+>Vista prèvia</guilabel
+> us permetrà veure l'efecte del nou format. </para>
+<para
+>Podeu establir el mateix format de dades per a una fila o columna seleccionant-la i cridant el diàleg <guilabel
+>Format de cel·la</guilabel
+> amb el &BER;.</para>
+<note
+><para
+>Podeu augmentar la precisió decimal per a qualsevol número en format <guilabel
+>Genèric</guilabel
+>, <guilabel
+>Número</guilabel
+>, <guilabel
+>Percentatge</guilabel
+>, <guilabel
+>Diners</guilabel
+> o <guilabel
+>Científic</guilabel
+> utilitzant la icona <guiicon
+>Incrementa la precisió</guiicon
+> a la barra d'eines <guilabel
+>Format</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="increasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+<para
+>Podeu disminuir la precisió decimal per a qualsevol número en els formats <guilabel
+>Genèric</guilabel
+>, <guilabel
+>Número</guilabel
+>, <guilabel
+>Percentatge</guilabel
+>, <guilabel
+>Diners</guilabel
+> o <guilabel
+>Científic</guilabel
+> utilitzant la icona <guiicon
+>Disminueix la precisió</guiicon
+> a la barra d'eines <guilabel
+>Format</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="decreasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</note>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Genèric</guilabel
+></term>
+<listitem
+><para
+>Aquest és el format per defecte i el &sheets; detecta automàticament el tipus de dades real depenent de les dades de la cel·la actual. Per defecte, el &sheets; posa els números a la dreta, les dates i les hores centrades i a l'esquerra tota la resta.</para>
+<para
+>Si el format <guilabel
+>Genèric</guilabel
+> no s'ajusta a les vostres necessitats, podeu escollir un format específic entre la selecció de sota.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Número</guilabel
+></term>
+<listitem
+><para
+>La notació numèrica utilitza la notació que heu escollit globalment a l'&systemsettings;, en <menuchoice
+><guimenu
+>Configuració regional</guimenu
+><guisubmenu
+>País/Regió i idioma</guisubmenu
+><guimenuitem
+>Nombres</guimenuitem
+></menuchoice
+>. Per omissió, els números es justifiquen a la dreta.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Percentatge</guilabel
+></term>
+<listitem
+><para
+>Quan teniu un número en la cel·la actual i canvieu el format <guilabel
+>Genèric</guilabel
+> a <guilabel
+>Percentatge</guilabel
+>, el número de cel·la actual és multiplicat per 100.</para>
+<para
+>Per exemple, si introduïu 2 i establiu el format de cel·la a <guilabel
+>Percentatge</guilabel
+>, el número serà 200%. Si preneu el format de cel·la <guilabel
+>Genèric</guilabel
+> aquest canviarà a 2 altra vegada.</para>
+<para
+>També podeu utilitzar la icona de <guiicon
+>Percentatge</guiicon
+> a la barra d'eines <guilabel
+>Format</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="percent.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Moneda</guilabel
+></term>
+<listitem
+><para
+>El format <guilabel
+>Diners</guilabel
+> converteix els números en una notació monetària utilitzant les opcions establertes globalment a l'&systemsettings; en <menuchoice
+><guimenu
+>Configuració regional</guimenu
+><guisubmenu
+>País/Regió i idioma</guisubmenu
+><guimenuitem
+>Diners</guimenuitem
+></menuchoice
+>. Es mostrarà el símbol de la moneda i la precisió serà l'establerta a l'&systemsettings;.</para>
+<para
+>També podeu utilitzar la icona <guiicon
+>Format de la moneda</guiicon
+> a la barra d'eines <guilabel
+>Format</guilabel
+> per establir el format de cel·la perquè mostri la moneda actual: <inlinemediaobject
+><imageobject>
+<imagedata fileref="hi22-action-money.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Científic</guilabel
+></term>
+<listitem
+><para
+>El format <guilabel
+>Científic</guilabel
+> canvia el número utilitzant la notació científica. Per exemple, 0,0012 serà canviat a 1,2E-03. Si torneu a utilitzar el format de cel·la <guilabel
+>Genèric</guilabel
+> es mostrarà 0,0012 altra vegada. El format de dades <guilabel
+>Genèric</guilabel
+> de la cel·la no manté la notació científica de manera que si voleu aquesta notació, l'haureu d'especificar explícitament utilitzant aquest element de menú.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Fracció</guilabel
+></term>
+<listitem
+><para
+>El format <guilabel
+>Fracció</guilabel
+> canvia el número a una fracció. Per exemple, 0,1 pot canviar a 1/8, 2/16, 1/10, &etc; Podeu definir el tipus de fracció escollint-lo en el camp de la dreta. Si la fracció exacta no és possible en el mode que heu escollit, el que es representarà serà la fracció més pròxima. Per exemple, si tenim 1,5 com a número, escollim <guilabel
+>Fracció</guilabel
+> i <guilabel
+>Setzens 1/16</guilabel
+>, el text que es mostra dintre de la cel·la serà «1 8/16» que és una fracció exacta. Si el número és 1,4 i escolliu <guilabel
+>Fracció</guilabel
+> i <guilabel
+>Setzens 1/16</guilabel
+>, la cel·la mostra «1 6/16» que és la fracció més propera amb Setzens com a denominador.</para>
+</listitem
+><!--TODO formatting of numbers?-->
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Data</guilabel
+></term>
+<listitem
+><para
+>Per a introduir una data, haureu d'introduir un dels formats establerts a l'&systemsettings;, en <menuchoice
+><guimenu
+>Configuració regional</guimenu
+><guisubmenu
+>País/Regió i idioma</guisubmenu
+><guimenuitem
+>Data i hora</guimenuitem
+></menuchoice
+>. Aquí s'estableixen dos formats: El format de la data i el format curt de la data.</para>
+<para
+>Un nombre natural aleatori NN es transforma en la data a partir del 30 de desembre de 1899 (que és 0) afegint NN dies. Per exemple, si teniu una cel·la amb 100 i escolliu el format de la <guilabel
+>Data</guilabel
+>, a la cel·la es mostrarà la data «1900-04-09», que és 100 dies posterior al 30 de desembre de 1899. Aquesta data d'inici és dos dies anterior atès que hi havia un error en Lotus 123 i per a assegurar la compatibilitat es va mantenir en l'Excel. Poca gent necessitarà calcular les dates des de l'1 de gener de 1900 i, de tota manera, afegint 9 dies a l'1 de novembre de 2000, per exemple, s'obté el 10 de novembre de 2000 atès que els càlculs normals entre dates sí que es realitzen correctament.</para>
+<note
+><para
+>Quan una cel·la tingui el format de la <guilabel
+>Data</guilabel
+>, la podeu arrossegar cap avall de la mateixa manera que ho feu amb els números i les cel·les següents també seran dates, cadascuna amb un dia més que l'anterior.</para
+></note
+><!--TODO explain that
+better-->
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Hora</guilabel
+></term>
+<listitem
+><para
+>Dona format al contingut de la cel·la com a una hora. Per a introduir una hora, l'haureu d'introduir en el <guilabel
+>Format d'hora</guilabel
+> establert a &systemsettings; en <menuchoice
+><guimenu
+>Configuració regional</guimenu
+><guisubmenu
+>País/Regió i idioma</guisubmenu
+><guimenuitem
+>Data i hora</guimenuitem
+></menuchoice
+>. En el diàleg <guilabel
+>Format de cel·la</guilabel
+> podeu establir com s'haurà de mostrar el temps escollint una de les opcions de format d'hora disponibles. El format per omissió és el format del sistema establert a &systemsettings;. Quan el número en la cel·la no té sentit com a una hora, &sheets; mostrarà 00:00 en el format global que tingueu a &systemsettings;.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Data i hora</guilabel
+></term>
+<listitem
+><para
+>Dona format al contingut de la cel·la com a una data i hora. Per introduir una data i una hora, l'haureu d'introduir en el <guilabel
+>Format de l'hora</guilabel
+> establert a l'&systemsettings; en <menuchoice
+><guimenu
+>Configuració regional</guimenu
+><guisubmenu
+>País/Regió i idioma</guisubmenu
+><guimenuitem
+>Data i hora</guimenuitem
+></menuchoice
+>. En el diàleg <guilabel
+>Format de cel·la</guilabel
+> podeu establir com s'haurà de mostrar el temps escollint una de les opcions de format d'hora disponibles. El format per omissió és el format del sistema establert a l'&systemsettings;. Quan el número en la cel·la no té sentit com a una hora, &sheets; mostrarà 00:00 en el format global que tingueu a l'&systemsettings;.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Text</guilabel
+></term>
+<listitem
+><para
+>Dona format al contingut de la cel·la com a un text. Pot ser útil si voleu que es tracti un número com a text, per exemple per a codi postal (ZIP). Si s'arranja com a text, es posarà a l'esquerra. Quan els números es formatin com a text, no es poden fer servir per a càlculs ni fórmules. També canviarà el justificat a les cel·les.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>A mida</guilabel
+></term>
+<listitem
+><para
+>Encara no funciona. Estarà habilitat en la versió següent.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+>La part inferior de la pàgina <guilabel
+>Format de dades</guilabel
+> us permet afegir un <guilabel
+>Prefix:</guilabel
+> com un símbol $ al començament de cada element o un <guilabel
+>Postfix:</guilabel
+> com a $HK al final. També podreu controlar quants dígits mostrar després del punt decimal per a valors numèrics, si els valors positius es mostren amb un signe + al davant i si els valors negatius es mostren en vermell. </para>
+</sect2
+> <!--end of annma writing -->
+
+<sect2 id="formattext">
+<title
+>Opcions de tipus de lletra i de text</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Tipus de lletra de la pàgina.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>La pàgina <guilabel
+>Tipus de lletra</guilabel
+> us permet seleccionar la família del tipus de lletra, <guilabel
+>Estil:</guilabel
+>, <guilabel
+>Mida:</guilabel
+>, <guilabel
+> Tipus:</guilabel
+> i <guilabel
+>Color:</guilabel
+> per a la cel·la actual, a més d'algunes opcions addicionals com el subratllat i el taxat del text. La part inferior de la pàgina ofereix una <guilabel
+>Vista prèvia</guilabel
+> del format de text seleccionat.</para>
+<para
+>El tipus de lletra per omissió per a totes les cel·les és establert en el menú <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Gestor d'estils</guimenuitem
+></menuchoice
+> amb l'estil utilitzat actualment.</para>
+<!--annma-->
+<variablelist>
+<!--varlistentry>
+<term
+><guilabel
+>Family List box</guilabel
+></term>
+<listitem
+><para
+>Allows you to choose a new font family.</para>
+</listitem>
+</varlistentry-->
+<varlistentry>
+<term
+><guilabel
+>Estil:</guilabel
+></term>
+<listitem
+><para
+>Escull l'estil de la lletra per a les cel·les actualment seleccionades. Quan seleccioneu diverses cel·les amb estils diferents, l'estil mostrat serà establert a <guilabel
+>Variant (sense canvis)</guilabel
+> i deixant-lo així es mantindran les opcions de l'estil actual per a cada cel·la. Per exemple, canviant-lo a <guilabel
+>Roman</guilabel
+> l'estil de text per a totes les cel·les seleccionades serà establert a <guilabel
+>Roman</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mida:</guilabel
+></term>
+<listitem
+><para
+>Escull la mida de la lletra per a les cel·les actualment seleccionades. Quan seleccioneu diverses cel·les amb mides diferents, la mida mostrada serà establerta a <guilabel
+> </guilabel
+> (sense número escrit) i en deixar-ho així es mantindran totes les opcions de mida actual per a cada cel·la. Per exemple, canviant-lo a <guilabel
+>14</guilabel
+> la mida de lletra per a totes les cel·les serà establert a <guilabel
+>14</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Tipus:</guilabel
+></term>
+<listitem
+><para
+>Escull l'estil de la lletra per a les cel·les actualment seleccionades. Quan seleccioneu diverses cel·les amb estils diferents, l'estil mostrat serà establert a <guilabel
+>Variant (sense canvis)</guilabel
+> i deixant-lo així es mantindran les opcions de l'estil actual per a cada cel·la. Per exemple, canviant-lo a <guilabel
+>Roman</guilabel
+> l'estil de text per a totes les cel·les seleccionades serà establert a <guilabel
+>Roman</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Color:</guilabel
+></term>
+<listitem
+><para
+>Escull el color de text per a les cel·les actualment seleccionades. Fent clic sobre la barra de color se us mostrarà el diàleg estàndard de &kde; <guilabel
+>Selecciona color</guilabel
+> des d'on podreu escollir el color nou. </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Subratllat</guilabel
+></term>
+<listitem
+><para
+>Si està marcada, se subratllarà el text en les cel·les actualment seleccionades. Per omissió no està marcada.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Barrat</guilabel
+></term>
+<listitem
+><para
+>Si està marcada, es barrarà el text en les cel·les actualment seleccionades. Per omissió no està marcada.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<!--end of annma-->
+</sect2>
+
+<sect2 id="formatposition">
+<title
+>Posició i rotació del text</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Pàgina Posició.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Des de la pàgina <guilabel
+>Posició</guilabel
+> podreu controlar la posició del text dintre d'una cel·la fent possible seleccions en les àrees <guilabel
+>Horitzontal</guilabel
+> i <guilabel
+>Vertical</guilabel
+> o establint el valor de <guilabel
+>Sagnat</guilabel
+>. També podreu escollir que el text aparegui verticalment en comptes d'horitzontalment, o fins i tot amb un angle d'inclinació.</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Horitzontal</guilabel
+></term>
+<listitem
+><para
+>Estableix la posició horitzontal del contingut en la cel·la. Per omissió, és <guilabel
+>Estàndard</guilabel
+> i s'estableix a partir del format de dades que escolliu. <guilabel
+>Esquerra</guilabel
+> vol dir que el contingut es mostrarà a l'esquerra de la cel·la. <guilabel
+>Centre</guilabel
+> vol dir que el contingut estarà en el centre horitzontal en la cel·la. <guilabel
+>Dreta</guilabel
+> vol dir que el contingut serà mostrat a la dreta de la cel·la.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Vertical</guilabel
+></term>
+<listitem
+><para
+>Estableix la posició vertical del contingut en la cel·la. <guilabel
+>Dalt</guilabel
+> vol dir que el contingut es mostrarà a la part superior de la cel·la. <guilabel
+>Centre</guilabel
+> vol dir que el contingut estarà verticalment al mig en la cel·la. <guilabel
+>Baix</guilabel
+> vol dir que el contingut serà mostrat a la part inferior de la cel·la.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Opció de text</guilabel
+></term>
+<listitem
+><para
+>Tan sols està disponible quan la rotació és de 0°. <guilabel
+>Ajusta el text</guilabel
+> fa que el text s'ajusti a la mida anterior de la cel·la. Si no està marcada, el text romandrà en una sola línia.</para>
+<para
+><guilabel
+>Text vertical</guilabel
+> disposa el text verticalment.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Rotació</guilabel
+></term>
+<listitem
+><para
+>El vostre text apareixerà orientat en l'angle aquí establert. Els valors positius el mouran en el sentit contrari a les agulles del rellotge i el negatiu en el sentit de les agulles del rellotge.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Fusiona les cel·les</guilabel
+></term>
+<listitem
+><para
+>Quan està marcada, té el mateix efecte que <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Fusiona les cel·les</guimenuitem
+></menuchoice
+>. Almenys haureu de tenir seleccionades dues cel·les consecutives. Aquestes cel·les consecutives seran les que es fusionaran per a formar una cel·la més gran.</para>
+<para
+>Quan està seleccionada una cel·la fusionada i manlleveu aquesta marca, totes les cel·les retornaran a la seva mida original prèvia a la fusió. Té el mateix efecte que <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Dissocia les cel·les</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Sagnat</guilabel
+></term>
+<listitem
+><para
+>Estableix la quantitat de sagnat que hi haurà a la cel·la quan escolliu les accions <guilabel
+>Augmenta el sagnat</guilabel
+> o <guilabel
+>Disminueix el sagnat</guilabel
+> des de la barra d'eines. Per omissió aquestes accions no estan habilitades a la barra d'eines.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mida de la cel·la</guilabel
+></term>
+<listitem
+><para
+>Establiu aquí la mida de la cel·la, amb una amplada i una alçada personalitzada o escolliu els valors per omissió.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="formatborder">
+<title
+>Vora de la cel·la</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Pàgina Vores.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>La pàgina <guilabel
+>Vores</guilabel
+> us permet establir l'aparença de les vores de la cel·la. Si heu seleccionat més d'una cel·la podreu aplicar estils diferents de les vores entre les cel·les i aquests envoltaran l'àrea seleccionada. </para>
+<para
+>Primer seleccioneu el patró i el color des de la secció a <guilabel
+>Patró</guilabel
+> de la pàgina <guilabel
+>Vores</guilabel
+> i després apliqueu això a les diferents parts de la vora fent clic sobre el botó apropiat en la secció <guilabel
+>Vora</guilabel
+> o sobre un dels botons a <guilabel
+>Preselecciona</guilabel
+>. El botó a mà esquerra en la secció <guilabel
+>Preselecciona</guilabel
+> netejarà qualsevol vora aplicada anteriorment. Tingueu present que també podreu afegir una línia diagonal a les cel·les.</para>
+</sect2>
+<sect2 id="formatbackground">
+<title
+>Fons de la cel·la</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat5.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Pàgina Fons.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>El patró i el color del fons es pot seleccionar des de la pàgina <guilabel
+>Fons</guilabel
+>.</para>
+<para
+>Simplement escolliu un <guilabel
+>Patró</guilabel
+> desitjat, després escolliu el <guilabel
+>Color</guilabel
+> del patró i el <guilabel
+>Color de fons</guilabel
+>.</para>
+<para
+>A la part inferior d'aquesta pàgina podeu veure una <guilabel
+>Vista prèvia</guilabel
+> del fons configurat per a la cel·la.</para>
+</sect2>
+<sect2 id="formatprotection">
+<title
+>Protecció de la cel·la</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat6.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Pàgina Protecció de la cel·la.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Podeu canviar la manera de protegir el contingut d'una cel·la en la pàgina <guilabel
+>Protecció de la cel·la</guilabel
+>.</para>
+<para
+>Per omissió, totes les cel·les es protegeixen (això vol dir que el contingut no es pot canviar) i per activar la protecció de la cel·la també haureu de protegir el full utilitzant el menú <menuchoice
+><guimenu
+>Eines</guimenu
+><guimenuitem
+>Protegeix el full</guimenuitem
+></menuchoice
+> i proveir una contrasenya. També podeu ocultar la fórmula de la cel·la per a protegir la manera en què la calculeu. Perquè funcioni, també haureu d'habilitar la protecció de cel·les. Podeu ocultar el contingut de la cel·la amb <guilabel
+>Oculta-ho tot</guilabel
+> i, altra vegada serà necessària la protecció de la cel·la. Teniu més informació sobre totes aquestes opcions en el <link linkend="protection"
+>capítol &sheets; avançat, secció Protecció</link
+>.</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Ocultar-ho tot</guilabel
+></term>
+<listitem
+><para
+>Oculta el contingut de la cel·la i tan sols funciona quan el full està protegit, el que vol dir que canviar l'atribut <guilabel
+>Oculta-ho tot</guilabel
+> d'una cel·la no té efecte a menys que el full estigui protegit. No importa si la cel·la està o no protegida.</para>
+<para
+>Quan està seleccionat <guilabel
+>Oculta-ho tot</guilabel
+>, restaran inhabilitades <guilabel
+>Protegit</guilabel
+> i <guilabel
+>Oculta la fórmula</guilabel
+>, i quan el full estigui protegit, <guilabel
+>Oculta-ho tot</guilabel
+> ocultarà el contingut de la cel·la i de la fórmula de manera que posarà una màscara i protegirà el contingut de la cel·la.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Protegit</guilabel
+></term>
+<listitem
+><para
+>Si està marcada, el contingut de la cel·la es protegirà. És el comportament per omissió. Haureu de protegir tot el full utilitzant el menú <menuchoice
+><guimenu
+>Eines</guimenu
+><guimenuitem
+>Protegeix el full...</guimenuitem
+></menuchoice
+> perquè aquesta protecció de cel·la individual funcioni. Quan una cel·la és protegida el seu contingut no serà canviat.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Oculta la fórmula</guilabel
+></term>
+<listitem
+><para
+>Quan està marcada, la cel·la encara serà visible. De tota manera, el seu contingut no apareixerà en la barra de <guilabel
+>Fórmula</guilabel
+>. Ocultar la fórmula tan sols funciona per a les cel·les que continguin fórmules, de manera que l'usuari no podrà veure la fórmula. I el full haurà d'estar protegit perquè funcioni.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>No imprimeixis el text</guilabel
+></term>
+<listitem
+><para
+>Si es marca <guilabel
+>No imprimeixis el text</guilabel
+>, aleshores el text en la cel·la no serà imprès. Per omissió, no està marcada, el qual vol dir que el text de la cel·la serà imprès sempre.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+</sect1>
+
+<sect1 id="conditional">
+<title
+>Atributs condicionals de cel·la</title>
+<para
+>Podeu fer que l'aparença d'una cel·la canviï d'acord amb el valor que conté, pot ser d'utilitat si esteu utilitzant &sheets; per a seguir la pista de les vostres despeses d'allotjament i voleu ressaltar qualsevol element major que, diguem, mil euros.</para>
+<para
+>Per a fer-ho seleccioneu les cel·les i després escolliu <guimenuitem
+>Estils condicionals...</guimenuitem
+> des del menú <guimenu
+>Format</guimenu
+>. Es mostrarà el diàleg <guilabel
+>Estils condicionals</guilabel
+>, on podreu fer que el tipus de lletra i el color d'una cel·la canviï quan el valor compleixi una o més condicions. Tingueu present que les condicions segona i tercera tan sols seran aplicades si les condicions prèvies no es compleixen.</para>
+<para
+>Utilitzeu <menuchoice
+><guisubmenu
+>Neteja</guisubmenu
+><guimenuitem
+>Estils condicionals</guimenuitem
+></menuchoice
+> des del menú <guimenu
+>Edita</guimenu
+> per a netejar qualsevol atribut condicional de les cel·les seleccionades.</para>
+</sect1>
+
+<sect1 id="cellsize">
+<title
+>Canviar la mida de les cel·les</title>
+<para
+>La pàgina <guilabel
+>Posició</guilabel
+> en el diàleg <guilabel
+>Format de cel·la</guilabel
+> us permet modificar la mida de les cel·les seleccionades. Tingueu present que en canviar l'alçada de tan sols una cel·la es canviarà l'alçada de totes les cel·les en aquesta fila, i igualment un canvi en l'amplada afectarà tota la columna.</para>
+<para
+>També podeu seleccionar les files o columnes a canviar i després seleccionar <guimenuitem
+>Canvia la mida de la fila...</guimenuitem
+> o <guimenuitem
+>Canvia la mida de la columna...</guimenuitem
+> des del menú emergent del &BDR; o des del menú <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Fila</guisubmenu
+></menuchoice
+> o <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Columna</guisubmenu
+></menuchoice
+>.</para>
+<para
+>Si moveu el cursor del ratolí de manera que el seu consell resti fora de la línia entre dos dels números de fila a l'esquerra de la finestra de &sheets; el cursor canviarà per a mostrar dues línies paral·leles amb una petita fletxa que surt d'aquestes. Quan el cursor està en aquest estat podeu mantenir premut el &BER; i arrossegar la vora entre les dues files, canviant l'alçada de la fila superior. Es pot utilitzar una tècnica similar per a canviar l'amplada d'una columna.</para>
+
+<para
+>Per establir l'alçada de la fila o l'amplada de la columna al mínim necessari per a mostrar el contingut, escolliu la fila o la columna i feu clic dret sobre l'etiqueta de fila o de columna. En el menú que aparegui, seleccioneu <guimenuitem
+>Ajusta fila</guimenuitem
+> o <guimenuitem
+>Ajusta columna</guimenuitem
+>. La fila o la columna prendrà la mida mínima necessària. També podeu seleccionar una cel·la única o un interval de cel·les, i fer clic sobre <guimenuitem
+>Ajusta fila i columna</guimenuitem
+> bé des del menú del clic dret o bé des del menú <guimenu
+>Format</guimenu
+>.</para>
+
+<para
+>Podeu fer de la mateixa mida un cert nombre de files o columnes adjacents seleccionant-les i escollint després <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Fila</guisubmenu
+><guimenuitem
+>Equalitza fila</guimenuitem
+></menuchoice
+> o <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Columna</guisubmenu
+><guimenuitem
+>Equalitza columna</guimenuitem
+></menuchoice
+>.</para>
+
+</sect1>
+
+<sect1 id="merging">
+<title
+>Fusionar cel·les</title>
+<para
+>Sovint, és pràctic tenir una cel·la a on abans hi havia una o més columnes, o mirant cap avall on hi havia més d'una fila. Es pot fer combinant dues o més cel·les dintre d'una. Seleccioneu les cel·les a fusionar i després escolliu <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Fusiona les cel·les</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Per a revertir aquest procés, seleccioneu la cel·la fusionada i després escolliu <guimenuitem
+>Dissocia les cel·les</guimenuitem
+> des del menú <guimenu
+>Format</guimenu
+>.</para>
+</sect1>
+
+<sect1 id="hiding">
+<title
+>Ocultar files i columnes</title>
+<para
+>Un full de càlcul finalitzat sovint es pot fer més atractiu ocultant les cel·les que contenen càlculs intermedis perquè tan sols es mostrin les dades inicials més importants i les àrees de resultat.</para>
+<para
+>En &sheets;, podeu ocultar les files o columnes seleccionades utilitzant les opcions <guimenuitem
+>Oculta files</guimenuitem
+> i <guimenuitem
+>Oculta columnes</guimenuitem
+> des del menú <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Fila</guisubmenu
+></menuchoice
+>, <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Columna</guisubmenu
+></menuchoice
+> o des del &BDR;. Les files i columnes ocultes no són mostrades en la pantalla ni són incloses en una impressió.</para>
+<para
+>Ocultant les cel·les d'aquesta manera també es fan menys susceptibles d'un canvi accidental.</para>
+<para
+>Per a deixar d'ocultar una fila o columna, seleccioneu <menuchoice
+><guisubmenu
+>Fila </guisubmenu
+><guimenuitem
+>Mostra les files...</guimenuitem
+></menuchoice
+> o <menuchoice
+><guisubmenu
+>Columna</guisubmenu
+><guimenuitem
+>Mostra les columnes...</guimenuitem
+></menuchoice
+> en el menú <guimenu
+>Format</guimenu
+>. En el diàleg que apareixerà, podeu seleccionar qualsevol nombre de files a mostrar.</para>
+</sect1>
+
+<sect1 id="sheet-properties">
+<title
+>Propietats del full</title>
+<para
+>Podeu accedir a les propietats del full actual fent clic dret sobre la pestanya del full i escollint <guilabel
+>Propietats del full</guilabel
+> o utilitzant el menú <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Full</guisubmenu
+><guimenuitem
+>Propietats del full</guimenuitem
+></menuchoice
+>. Tingueu present que tan sols podeu accedir a les <guilabel
+>Propietats del full</guilabel
+> quan el document o el full no resti protegit.</para>
+<para
+>Podeu establir propietats diferents que es considerin vàlides per al full actual. Fent clic sobre <guibutton
+>D'acord</guibutton
+> validant els vostres canvis i <guibutton
+>Omissió</guibutton
+> per a tornar a les opcions per omissió.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sheetproperties.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Diàleg Propietats del full.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Direcció de format:</guilabel
+></term>
+<listitem
+><para
+>Us permet escollir l'orientació del full. Per omissió, la primera columna del full és la de l'esquerra. Si escolliu <guilabel
+>De dreta a esquerra</guilabel
+>, la primera columna estarà a la dreta i les altres seran afegides de dreta a esquerra.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Oculta els zeros</guilabel
+></term>
+<listitem
+><para
+>Si aquesta casella està marcada qualsevol cel·la que contingui el valor zero apareixerà en blanc.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Recàlcul automàtic</guilabel
+></term>
+<listitem
+><para
+>Aquesta opció controla si les fórmules es recalculen automàticament quan es canvia el valor d'alguna de les cel·les implicades.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mostra la columna com a números</guilabel
+></term>
+<listitem
+><para
+>Si aquesta casella està marcada, les capçaleres de les columnes es mostraran com a números. Per omissió, són lletres.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Usa el mode LC</guilabel
+></term>
+<listitem
+><para
+>Si aquesta casella està marcada la cel·la de referència mostrada al final esquerre de la barra de fórmula es mostrarà en el mode LC (&pex; L2C3) en comptes de la seva forma normal B3. Això no sembla que serveixi de gaire, de moment.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Converteix la primera lletra a majúscula</guilabel
+></term>
+<listitem
+><para
+>Marqueu aquesta casella i la primera lletra de qualsevol text que escriviu serà convertida a majúscula.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mostra la graella</guilabel
+></term>
+<listitem
+><para
+>Si està marcada es mostra la graella (els límits de cel·la). Aquesta està per omissió. Si manlleveu la marca, la graella restarà oculta.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mostra les vores de pàgina</guilabel
+></term>
+<listitem
+><para
+>Si marqueu aquesta opció, es dibuixaran les vores del full actual. Per omissió, les vores de pàgina no són mostrades. És útil per a veure les vores de la pàgina si voleu imprimir el vostre full.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mostra la fórmula</guilabel
+></term>
+<listitem
+><para
+>Si aquesta casella està marcada, &sheets; mostrarà les fórmules reals en les cel·les en comptes dels resultats.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mostra l'indicador de fórmula</guilabel
+></term>
+<listitem
+><para
+>Si aquesta casella està marcada, &sheets; mostrarà un petit triangle blau en la cantonada inferior esquerra de les cel·les que contenen fórmules. És útil si voleu protegir cel·les amb fórmules.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Mostra l'indicador de comentari</guilabel
+></term>
+<listitem
+><para
+>Si aquesta casella està marcada, les cel·les que tenen comentaris seran marcades amb un petit triangle vermell a la cantonada superior dreta.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

@@ -1,0 +1,349 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+ <!ENTITY sheets "<application
+>Calligra Sheets</application
+>">
+ <!ENTITY words "<application
+>Calligra Words</application
+>">
+ <!ENTITY stage "<application
+>Calligra Stage</application
+>">
+ <!ENTITY flow "<application
+>Calligra Flow</application
+>">
+ <!ENTITY plan "<application
+>Calligra Plan</application
+>">
+ <!ENTITY karbon "<application
+>Calligra Karbon</application
+>">
+ <!ENTITY calligra "Calligra">
+ <!ENTITY kappname "&calligra;">
+ <!ENTITY package "Calligra">
+ <!ENTITY % addindex "IGNORE">
+ <!ENTITY % Russian "INCLUDE"
+> <!-- change language only here -->
+]>
+
+<!-- maintained by raphael.langerhorst@kdemail.net -->
+
+<book id="calligra" lang="&language;">
+<bookinfo>
+<title
+>&calligra;</title>
+<subtitle
+>Общее введение</subtitle>
+<authorgroup>
+<author
+>&Raphael.Langerhorst; &Raphael.Langerhorst.mail; </author>
+<author
+>&Jost.Schenck; &Jost.Schenck.mail; </author>
+<othercredit role="translator"
+><firstname
+>Ivan</firstname
+><surname
+>Petrov</surname
+><affiliation
+><address
+><email
+>pis00593@udmglzs.udmene.ru</email
+></address
+></affiliation
+><contrib
+>Перевод на русский</contrib
+></othercredit
+> 
+</authorgroup>
+
+<date
+>3 января 2012 г.</date>
+<releaseinfo
+>2.4.0</releaseinfo>
+
+<abstract>
+<para
+>&calligra; — это графический и офисный пакет &kde;. </para>
+</abstract>
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Calligra</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title
+>Введение</title>
+<sect1>
+<title
+>Компоненты &calligra;</title>
+
+<important
+> <para
+>Для получения обновлённой версии этой документации обратитесь к <ulink url="http://docs.kde.org/development/en/calligra/calligra/index.html"
+>http://docs.kde.org</ulink
+>.</para
+></important>
+
+<para
+>&calligra; — это графический и офисный пакет для &kde;. &calligra; состоит из следующих компонентов: </para>
+
+<itemizedlist>
+<listitem
+><para
+>&words; (текстовый процессор, основанный на врезках)</para
+></listitem>
+<listitem
+><para
+>&sheets; (приложение для работы с электронной таблицей)</para
+></listitem
+> 
+<listitem
+><para
+>&stage; (приложение для подготовки презентаций)</para
+></listitem>
+<listitem
+><para
+>&flow; (приложение для работы со схемами и диаграммами)</para
+></listitem>
+<listitem
+><para
+>&karbon; (редактор векторной графики)</para
+></listitem>
+<listitem
+><para
+>&plan; (приложение для управления проектами)</para
+></listitem>
+</itemizedlist>
+
+<para
+>Так как эти компоненты используют технологию Flake, они хорошо взаимодействуют друг с другом. Множество компонентов &calligra; возможно встроить в другой документ &calligra;. Например, таблицу, созданную в &sheets;, возможно вставить прямо в документ &words;. Таким образом, весь комплекс программ &calligra; позволяет создавать сложные составные документы. </para>
+
+<para
+>Механизм модулей позволяет расширять возможности &calligra;. В некоторых компонентах есть множество модулей, также возможно научиться самостоятельно создавать их. </para>
+
+<para
+>Это руководство охватывает только общие возможности &calligra;, те, которые являются общими для большинства или всех компонентов пакета. Для получения подробной информации о различных компонентах ознакомьтесь с соответствующим руководством. </para>
+
+</sect1>
+
+<sect1 id="features">
+<title
+>Обзор возможностей &calligra;</title>
+<sect2 id="featureintegration">
+<title
+>Интеграция</title>
+<para
+>&calligra; предоставляет структуру, на которой основаны все компоненты. Благодаря этой структуре достигается высокая интеграция. Возможно разработать собственный компонент, который также интегрируется. </para>
+</sect2>
+<sect2 id="featureleightweight">
+<title
+>Легковесность</title>
+<para
+>Несмотря на то, что  &calligra; предлагает так много компонентов, приложение остаётся лёгким, быстрым и занимает довольно мало места в памяти. Этого удалось достичь благодаря тому, что приложение &calligra; основано на &kde;, мощной платформе разработки приложений. </para>
+<para
+>Цель &calligra; также состоит в том, чтобы не перегружать интерфейс функциями, которые редко используются. Благодаря этому появился простой и удобный пользовательский интерфейс, который позволяет пользователю эффективно выполнять свою работу. </para>
+<para
+>Легковесность иногда также может означать, что нужной особой специальной функциональности в интерфейсе нет. В этом случае всегда возможно добавить функциональность самостоятельно, расширив &calligra;. Дополнительные функции всегда доступны с помощью дополнительных  модулей или сценариев, оставляя &calligra; легковесным приложением. </para>
+</sect2>
+<sect2 id="featurecompleteness">
+<title
+>Завершённость</title>
+<para
+>&calligra; предлагает широкий ассортимент компонентов, охватывающих большинство потребностей дома и офиса. Дополнительные функции всегда возможно реализовать с помощью сценариев, модулей или даже целых компонентов на основе системы &calligra;. </para>
+</sect2>
+<sect2 id="featurefileformat">
+<title
+>Формат OASIS OpenDocument</title>
+<para
+>Одной из главнейших целей для разработчиков является поддержка всех арспространённых стандартнов, особенно на уровне форматов файлов. </para>
+<para
+>По этой причине стандартным форматом файлов для &calligra; является формат OASIS OpenDocument. </para>
+</sect2>
+<sect2 id="featurekde">
+<title
+>Возможности, предоставляемые &kde;</title>
+<para
+>Поскольку &calligra; основана на &kde;, все функции, ожидаемые от приложения &kde;, также доступны в &calligra;. Они включают в себя &DBus;, KParts, Flake, интеграцию в рабочее окружение, настройку интерфейса. и так далее. Всё это делает внешний вид &calligra; узнаваемым и действительно позволяет интегрировать &calligra; в рабочую среду, обеспечивая бесперебойные рабочие процессы. </para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<chapter id="configuration">
+<title
+>Настройка &calligra; и системы</title>
+
+<para
+>Хотя &calligra; работает хорошо сразу после установки, для получения максимума пользы возможно оптимизировать некоторые параметры. Эта глава показывает, что возможно сделать, чтобы добиться наилучших результатов от новой офисной среды. &calligra; легко настраивается вплоть до подробной панели инструментов и расположения меню. </para>
+
+<sect1 id="custom-gui">
+<title
+>Настройка графического интерфейса &calligra;</title>
+
+<para
+>Несмотря на то, что &calligra; поставляется с графическим интерфейсом, который удовлетворяет потребности большинства пользователей, может возникнуть желание изменить внешний вид приложений. </para>
+
+<para
+>Некоторые пользователи, например, могут бояться кнопок и пунктов меню, которые они не понимают. Чтобы приспособить &calligra; к их потребностям, возможно сократить функционал графического интерфейса до минимума. Например, если требуется только писать письма и использовать несколько шаблонов, нет необходимости держать больше кнопок, чем сохранение, загрузка, печать и им подобные функции. </para>
+
+<para
+>Благодаря концепции <quote
+>действий</quote
+> &Qt; и &kde; возможно свободно настраивать строки меню и панели инструментов &calligra;. К сожалению, в настоящее время для этого ещё нет простых в использовании диалогов. &calligra; хранит свою конфигурацию графического интерфейса в файлах в формате &XML;, и их придётся редактировать. К счастью, эта ситуация должна в будущем измениться; в настоящее время потребуются базовые знания о том, как работают &XML;-документы (или &HTML;, который является подмножеством &XML;). </para>
+
+<para
+>Обычно каждое приложение &calligra; содержит по крайней мере два &XML;-файла: один описывает графический интерфейс оболочки (в основном то, что пользователь видит, если документ не открыт), а второй описывает графический интерфейс соответствующей части (то, что обычно видит пользователь при работе в приложении). Например, для &words; эти два &XML;-файла называются <filename
+>calligra_shell.rc</filename
+> и <filename
+>words.rc</filename
+>.  </para>
+
+<para
+>Далее приведен простой пример такого rc файла. </para>
+
+<example>
+<title
+>Пример простого rc файла</title>
+<screen
+>&lt;!DOCTYPE QConfig &gt;&lt;qconfig&gt;
+&lt;menubar&gt;
+&lt;menu name="Edit"&gt;&lt;text&gt;Edit&lt;/text&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;separator/&gt;
+&lt;action name="edit_find"/&gt;
+&lt;/menu&gt;
+&lt;menu name="Insert"&gt;&lt;text&gt;Insert&lt;/text&gt;
+&lt;action name="insert_picture"/&gt;
+&lt;action name="insert_clipart"/&gt;
+&lt;menu name="Variable"&gt;&lt;text&gt;Variable&lt;/text&gt;
+&lt;action name="insert_var_datefix"/&gt;
+&lt;action name="insert_var_datevar"/&gt;
+&lt;/menu&gt;
+&lt;/menu&gt;
+&lt;/menubar&gt;
+&lt;toolbars&gt;
+&lt;toolbar name="edit_toolbar" position="right"&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;/toolbar&gt;
+&lt;/toolbars&gt;
+&lt;/qconfig&gt;
+</screen>
+</example>
+
+</sect1>
+
+</chapter>
+
+<chapter id="more-info">
+<title
+>Как получить дополнительную информацию</title>
+
+<sect1 id="other-manuals">
+<title
+>Другие руководства &calligra;</title>
+
+<para
+>Для получения более подробной информации о разных приложениях &calligra; обратитесь к соответствующим руководствам. </para>
+
+</sect1>
+
+<sect1 id="links">
+<title
+>Ссылки</title>
+
+<para
+>Больше информации о &kde; и &calligra; доступно по ссылкам ниже. </para>
+
+<itemizedlist>
+<listitem>
+<para
+><ulink url="http://calligra.org"
+>Домашняя страница &calligra;</ulink
+>. Здесь представлена информация о том, как получить и установить &calligra;, новости о разработке &calligra;, снимки экрана и так далее. </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://www.kde.org"
+>Домашняя страница &kde;</ulink
+>. &kde; — это наиболее продвинутая и абсолютно свободная интерактивная среда для UNIX-подобных операционных систем. &calligra; использует библиотеки &kde;. </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://qt-project.org/"
+>Страница &Qt;</ulink
+>. Создатели инструментария &Qt; на языке  C++. &kde; и &calligra; используют &Qt;. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="programmersinfo">
+<title
+>Программирование &calligra;</title>
+
+<sect1 id="programmingintro">
+<title
+>Введение</title>
+<para
+>Если вы хотите участвовать в разработке &calligra;, вам могут быть интересны следующие ресурсы: </para>
+
+<itemizedlist>
+<listitem
+><para
+>На сайте <ulink url="http://techbase.kde.org/Development"
+>http://techbase.kde.org/Development</ulink
+> представлено много документации о программировании с &Qt; и &kde;. <ulink url="http://api.kde.org/"
+>Здесь</ulink
+> находится полная онлайн-версия документации библиотеки &kde;. </para
+></listitem
+> 
+<listitem
+><para
+>Первый шаг для внесения вклада в написание кода — это следовать <ulink url="http://community.kde.org/Calligra/Building/Building_Calligra"
+>этой инструкции</ulink
+>, чтобы получить исходный код и собрать его. </para
+></listitem>
+</itemizedlist>
+</sect1>
+
+</chapter>
+
+<chapter id="legal">
+<title
+>Авторские права и лицензия</title>
+
+<para
+>&calligra; — это результат совместных усилий множества разработчиков. Каждый исходный файл &calligra; защищён авторским правом людей, написавших этот конкретный файл, и их имена возможно найти в начале каждого исходного файла с лицензией, которая применяется к этому исходному файлу. </para>
+
+<para
+>Авторские права на это руководство принадлежат &Jost.Schenck;. Его возможно распространять свободно при условии неизменности информации об авторских правах. Руководство возможно изменять при условии, что изменения будут отправлены автору или размещены на &kde; <acronym
+>Git</acronym
+>. Автор не несёт ответственности за всё, что происходит в результате использования этого руководства. </para>
+
+<para
+>Авторские права на другие руководства &calligra; принадлежат их авторам. </para>
+
+<para
+>Перевод на русский язык — Иван Петров<email
+>pis00593@udmglzs.udmene.ru,</email
+> Мария Шикунова<email
+>translation-team@basealt.ru</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+&documentation.index; 
+</book>
+

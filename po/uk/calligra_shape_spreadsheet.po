@@ -1,0 +1,246 @@
+# Translation of calligra_shape_spreadsheet.po to Ukrainian
+# Copyright (C) 2009-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2009, 2010, 2011, 2014, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra_shape_spreadsheet\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2020-10-28 08:56+0200\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.11.70\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Юрій Чорноіван"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "yurchor@ukr.net"
+
+#: SheetsEditor.cpp:57 SheetsEditor.cpp:121
+#, kde-format
+msgid "Rename"
+msgstr "Перейменувати"
+
+#: SheetsEditor.cpp:61
+#, kde-format
+msgid "Add"
+msgstr "Додати"
+
+#: SheetsEditor.cpp:65
+#, kde-format
+msgid "Remove"
+msgstr "Вилучити"
+
+#: SheetsEditor.cpp:121
+#, kde-format
+msgid "Enter Name:"
+msgstr "Введіть назву:"
+
+#: TableShape.cpp:288
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"У цьому документі містить посилання на зовнішній документ\n"
+"%1"
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Confirmation Required"
+msgstr "Потрібне підтвердження"
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Download"
+msgstr "Отримати"
+
+#: TableShape.cpp:289
+#, kde-format
+msgid "Skip"
+msgstr "Пропустити"
+
+#: TableShapeFactory.cpp:37
+#, kde-format
+msgid "Spreadsheet"
+msgstr "Електронна таблиця"
+
+#: TableShapeFactory.cpp:39
+#, kde-format
+msgid "Spreadsheet Shape"
+msgstr "Форма електронної таблиці"
+
+#: TableTool.cpp:218
+#, kde-format
+msgid "Import OpenDocument Spreadsheet File"
+msgstr "Імпортувати файл електронної таблиці OpenDocument"
+
+#: TableTool.cpp:219
+#, kde-format
+msgid "Import"
+msgstr "Імпортувати"
+
+#: TableTool.cpp:223
+#, kde-format
+msgid "Export OpenDocument Spreadsheet File"
+msgstr "Експортувати файл електронної таблиці OpenDocument"
+
+#: TableTool.cpp:224
+#, kde-format
+msgid "Export"
+msgstr "Експортувати"
+
+#: TableTool.cpp:704
+#, kde-format
+msgid "Sheets"
+msgstr "Аркуші"
+
+#: TableTool.cpp:746
+#, kde-format
+msgid "Sheet:"
+msgstr "Аркуш:"
+
+#: TableTool.cpp:748
+#, kde-format
+msgid "Selected Sheet"
+msgstr "Обраний аркуш"
+
+#: TableTool.cpp:763
+#, kde-format
+msgid "View Options"
+msgstr "Параметри перегляду"
+
+#: TableToolFactory.cpp:21
+#, kde-format
+msgid "Table editing"
+msgstr "Редагування таблиць"
+
+#: ToolHeaders.cpp:286 ToolHeaders.cpp:884
+#, kde-format
+msgid "Area is too large."
+msgstr "Ділянка занадто велика."
+
+#: ToolHeaders.cpp:429
+#, kde-format
+msgid "Hide Row"
+msgstr "Сховати рядок"
+
+#: ToolHeaders.cpp:431
+#, kde-format
+msgid "Height: %1 %2"
+msgstr "Висота: %1 %2"
+
+#: ToolHeaders.cpp:1059
+#, kde-format
+msgid "Hide Column"
+msgstr "Сховати стовпчик"
+
+#: ToolHeaders.cpp:1061
+#, kde-format
+msgid "Width: %1 %2"
+msgstr "Ширина: %1 %2"
+
+#~ msgid "Number of columns"
+#~ msgstr "Кількість стовпчиків"
+
+#~ msgid "Rows:"
+#~ msgstr "Рядки:"
+
+#~ msgid "Number of rows"
+#~ msgstr "Кількість рядків"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Перейменувати"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Додати"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Вилучити"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter Name:"
+#~ msgstr "Введіть назву:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spreadsheet"
+#~ msgstr "Електронна таблиця"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spreadsheet Shape"
+#~ msgstr "Форма електронної таблиці"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import OpenDocument Spreadsheet File"
+#~ msgstr "Імпортувати файл електронної таблиці OpenDocument"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Імпортувати"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export OpenDocument Spreadsheet File"
+#~ msgstr "Експортувати файл електронної таблиці OpenDocument"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Експортувати"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Аркуші"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet:"
+#~ msgstr "Аркуш:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Selected Sheet"
+#~ msgstr "Обраний аркуш"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Стовпчики:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of columns"
+#~ msgstr "Кількість стовпчиків"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rows:"
+#~ msgstr "Рядки:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of rows"
+#~ msgstr "Кількість рядків"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table Options"
+#~ msgstr "Параметри таблиці"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table editing"
+#~ msgstr "Редагування таблиць"
+
+#~ msgid "Table"
+#~ msgstr "Таблиця"
+
+#~ msgid "Table Shape"
+#~ msgstr "Форма таблиці"

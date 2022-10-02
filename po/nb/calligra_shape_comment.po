@@ -1,0 +1,50 @@
+# Translation of calligra_shape_comment to Norwegian Bokmål
+#
+# Bjørn Steensrud <bjornst@skogkatt.homelinux.org>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2010-09-01 09:30+0200\n"
+"Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
+"Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
+"Language: nb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "The plugin needed for displaying comments is not present."
+msgstr ""
+"Programtillegget som trengs for å vise kommentarer er ikke tilgjengelig."
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "Plugin Missing"
+msgstr "Mangler programtillegg"
+
+#: CommentShape.cpp:51
+#, kde-format
+msgid ""
+"The plugin needed for displaying the comment is not compatible with the "
+"current version of the comment shape."
+msgstr ""
+"Programtillegget som trengs for å vise kommentarer passer ikke med gjeldende "
+"versjon av kommentarfasongen."
+
+#: CommentShape.cpp:52
+#, kde-format
+msgid "Plugin Incompatible"
+msgstr "Programtillegg ikke kompatibelt"
+
+#: CommentShapeFactory.cpp:17 CommentToolFactory.cpp:17
+#, kde-format
+msgid "Comment"
+msgstr "Kommentar"

@@ -1,0 +1,181 @@
+<chapter id="importexport">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Marce</firstname
+><surname
+>Villarino</surname
+><affiliation
+><address
+><email
+>mvillarino@users.sourceforge.net</email
+></address
+></affiliation
+><contrib
+>Tradutor do proxecto Trasno</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Importación e Exportación a Outros Formatos</title>
+<para
+>&kspread; ten faculdades limitadas para importar (ler) e exportar (escreber) ficheiros de folla de cálculo alleos. As capacidades de &kspread; na hora de elaborar esta documentación resúmense na táboa en baixo, para información mais detallada visite <ulink url="http://www.koffice.org/filters/status.phtml"
+>http://www.koffice.org/filters/status.phtml</ulink
+>.</para>
+
+<informaltable
+><tgroup cols="3">
+<thead>
+<row>
+<entry
+>Formato </entry>
+<entry
+>Importar </entry>
+<entry
+>Exportar </entry
+></row>
+</thead>
+<tbody>
+
+<row
+><entry
+>Folla de Cálculo de Applix</entry>
+<entry
+>Beta</entry>
+<entry
+>Nengún</entry>
+</row>
+
+<row
+><entry
+>Valores Separados por Vírgulas (<link linkend="csvdata"
+><acronym
+>CSV</acronym
+></link
+>)</entry>
+<entry
+>Bon</entry>
+<entry
+>Bon</entry>
+</row>
+
+<row
+><entry
+>dBase</entry>
+<entry
+>Beta</entry>
+<entry
+>Nengún</entry>
+</row>
+
+<row
+><entry
+>Excel 97/2000</entry>
+<entry
+>Bon</entry>
+<entry
+>Nengún</entry>
+</row>
+
+<row
+><entry
+>Gnumeric</entry>
+<entry
+>Beta</entry>
+<entry
+>Beta</entry>
+</row>
+
+<row
+><entry
+>HTML</entry>
+<entry
+>Nengún</entry>
+<entry
+>Beta</entry>
+</row>
+
+<row
+><entry
+>Quattro Pro</entry>
+<entry
+>Beta</entry>
+<entry
+>Nengún</entry>
+</row>
+
+</tbody
+></tgroup
+></informaltable>
+
+<para
+>Para importar un ficheiro alleo simplesmente cargue-o como se for un ficheiro nativo de &kspread; mediante <menuchoice
+><guimenu
+>Ficheiro</guimenu
+> <guimenuitem
+>Abrir...</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Para exportar un ficheiro de &kspread; nun formato diferente escolla <menuchoice
+> <guimenu
+>Ficheiro</guimenu
+><guimenuitem
+>Guardar Como...</guimenuitem
+></menuchoice
+> e escolla o formato na lista <guilabel
+>Filtro:</guilabel
+>. Apesar de que &kspread; engade automaticamente a extensión <literal role="extension"
+>.ksp</literal
+> aos nomes dos ficheiros guardados no seu formato nativo, pode engadir a extensión correcta para os formatos alleos.</para>
+
+<sect1 id="csvdata">
+<title
+>Datos <acronym
+>CSV</acronym
+></title>
+<para
+>Nos ficheiros de texto as táboas de datos son a miúdo escritas cos valores da mesma liña separados por vírgulas, espazos, tabuladores ou outro carácter, por exemplo <emphasis
+>123, 456, 789, abcd, efgh</emphasis
+>. Tais ficheiros son denominados <quote
+><acronym
+>CSV</acronym
+></quote
+> (Valores Separados por Vírgulas), aínda que o caracter delimitante non sexa unha vírgula.</para>
+<para
+>Se lle pede a &kspread; que abra un ficheiro de texto asumirá que está no formato <acronym
+>CSV</acronym
+> e lanzará un diálogo que lle permitirá escoller o delimitador (caracter de separación) usado no ficherio, e mostrará como quedarán os datos nas celas da folla de cálculo.</para>
+<para
+>Outras opcións deste diálogo permiten definir o <guilabel
+>Formato</guilabel
+> das celas da folla de cálculo, se debe eliminar as aspas dos textos, e se as primeiras liñas deben ou non ser ignoradas.</para>
+</sect1>
+</chapter>
+
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

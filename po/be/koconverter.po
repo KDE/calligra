@@ -1,0 +1,217 @@
+# translation of koconverter.po to Belarusian
+#
+# Siarhei Liantsevich <serzh.by@gmail.com>, 2006, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: koconverter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2007-01-26 06:17+0100\n"
+"Last-Translator: Siarhei Liantsevich <serzh.by@gmail.com>\n"
+"Language-Team: Belarusian\n"
+"Language: be\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || n%10>=5 && n%10<=9 || n"
+"%100>=11 && n%100<=14 ? 2 : 3);\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Сяржук Лянцэвіч"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "serzh.by@gmail.com"
+
+#: calligraconverter.cpp:144
+#, fuzzy, kde-format
+msgid "CalligraConverter"
+msgstr "Ператваральнік дакументаў KOffice"
+
+#: calligraconverter.cpp:146
+#, fuzzy, kde-format
+msgid "Calligra Document Converter"
+msgstr "Ператваральнік дакументаў KOffice"
+
+#: calligraconverter.cpp:148
+#, fuzzy, kde-format
+msgid "Copyright 2001-%1 Calligra developers"
+msgstr "(c) 2001-2004, распрацоўнікі KOffice"
+
+#: calligraconverter.cpp:149
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: calligraconverter.cpp:150
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr ""
+
+#: calligraconverter.cpp:151
+#, kde-format
+msgid "Dan Leinir Turthra Jensen"
+msgstr ""
+
+#: calligraconverter.cpp:158
+#, fuzzy, kde-format
+msgid "Input file"
+msgstr "Уваходны файл"
+
+#: calligraconverter.cpp:159
+#, fuzzy, kde-format
+msgid "Output file"
+msgstr "Выходны файл"
+
+#: calligraconverter.cpp:160
+#, fuzzy, kde-format
+msgid "Make a backup of the destination file"
+msgstr "Ствараць рэзервовую копію файла"
+
+#: calligraconverter.cpp:161
+#, fuzzy, kde-format
+msgid "Batch mode: do not show dialogs"
+msgstr "Не паказваць дыялогі ў пакетным рэжыме"
+
+#: calligraconverter.cpp:162
+#, fuzzy, kde-format
+msgid "Interactive mode: show dialogs (default)"
+msgstr "Паказваць дыялогі ў інтэрактыўным рэжыме (па змаўчанні)"
+
+#: calligraconverter.cpp:163
+#, fuzzy, kde-format
+msgid "Mimetype of the output file"
+msgstr "Тып выходнага файла."
+
+#: calligraconverter.cpp:166
+#, kde-format
+msgid "The print orientation. This could be either Portrait or Landscape."
+msgstr ""
+
+#: calligraconverter.cpp:167
+#, kde-format
+msgid "The paper size. A4, Legal, Letter, ..."
+msgstr ""
+
+#: calligraconverter.cpp:168
+#, kde-format
+msgid "The size of the paper margin. By default this is 0.2."
+msgstr ""
+
+#: calligraconverter.cpp:175
+#, fuzzy, kde-format
+msgid "Two arguments required"
+msgstr "Неабходныя два аргументу"
+
+#: calligraconverter.cpp:203
+#, fuzzy, kde-format
+msgid "Mimetype for input file %1 not found!"
+msgstr "Тып уваходнага файла %1 не знойдзены!"
+
+#: calligraconverter.cpp:212
+#, fuzzy, kde-format
+msgid "Mimetype not found %1"
+msgstr "Тып не знойдзены %1"
+
+#: calligraconverter.cpp:218
+#, fuzzy, kde-format
+msgid "Mimetype not found, try using the -mimetype option"
+msgstr "Тып не вызначаны, выкарыстайце ключ -mimetype"
+
+#: calligraconverter.cpp:242
+#, fuzzy, kde-format
+msgid "*** The conversion failed! ***"
+msgstr "*** Памылка ператварэння! ***"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Сяржук Лянцэвіч"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "serzh.by@gmail.com"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CalligraConverter"
+#~ msgstr "Ператваральнік дакументаў KOffice"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Converter"
+#~ msgstr "Ператваральнік дакументаў KOffice"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2001-%1 Calligra developers"
+#~ msgstr "(c) 2001-2004, распрацоўнікі KOffice"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Input file"
+#~ msgstr "Уваходны файл"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output file"
+#~ msgstr "Выходны файл"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Make a backup of the destination file"
+#~ msgstr "Ствараць рэзервовую копію файла"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Batch mode: do not show dialogs"
+#~ msgstr "Не паказваць дыялогі ў пакетным рэжыме"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interactive mode: show dialogs (default)"
+#~ msgstr "Паказваць дыялогі ў інтэрактыўным рэжыме (па змаўчанні)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype of the output file"
+#~ msgstr "Тып выходнага файла."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two arguments required"
+#~ msgstr "Неабходныя два аргументу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype for input file %1 not found!"
+#~ msgstr "Тып уваходнага файла %1 не знойдзены!"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found %1"
+#~ msgstr "Тып не знойдзены %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found, try using the -mimetype option"
+#~ msgstr "Тып не вызначаны, выкарыстайце ключ -mimetype"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "*** The conversion failed! ***"
+#~ msgstr "*** Памылка ператварэння! ***"
+
+#, fuzzy
+#~ msgid "KOConverter"
+#~ msgstr "KOConverter"

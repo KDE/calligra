@@ -1,0 +1,185 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2013, 2016, 2017.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2017-06-03 11:15+0100\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: KoEventSemanticItemFactory.cpp:31
+#, kde-format
+msgctxt "displayname of the semantic item type Event"
+msgid "Event"
+msgstr "Gebeurtenis"
+
+#: KoRdfCalendarEvent.cpp:158
+#, kde-format
+msgid "Area"
+msgstr "Gebied"
+
+#: KoRdfCalendarEvent.cpp:159
+#, kde-format
+msgid "Region"
+msgstr "Regio"
+
+#: KoRdfCalendarEvent.cpp:381
+#, kde-format
+msgid "Select a calendar for saving:"
+msgstr "Een agenda selecteren om in op te slaan:"
+
+#: KoRdfCalendarEvent.cpp:401
+#, kde-format
+msgid ""
+"Could not add entry\n"
+"%1"
+msgstr ""
+"Fout bij het invoeren van\n"
+"%1"
+
+#: KoRdfCalendarEvent.cpp:428
+#, kde-format
+msgid ""
+"Could not save iCal file\n"
+"%1"
+msgstr ""
+"Fout bij het opslaan van iCal-bestand\n"
+"%1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfCalendarEventEditWidget.ui:20
+#, kde-format
+msgid "&Summary:"
+msgstr "&Samenvatting:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfCalendarEventEditWidget.ui:30
+#, kde-format
+msgid "&Location:"
+msgstr "&Locatie:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfCalendarEventEditWidget.ui:43
+#, kde-format
+msgid "&Start:"
+msgstr "&Begin:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: KoRdfCalendarEventEditWidget.ui:56
+#, kde-format
+msgid "&End:"
+msgstr "&Einde:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tadtab)
+#: KoRdfCalendarEventEditWidget.ui:80
+#, kde-format
+msgid "Time and Date"
+msgstr "Tijd en datum"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tztab)
+#: KoRdfCalendarEventEditWidget.ui:93
+#, kde-format
+msgid "Timezone"
+msgstr "Tijdzone"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:30
+#, kde-format
+msgid "Calendar Event"
+msgstr "Agendanotitie"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:37
+#, kde-format
+msgid "Edit..."
+msgstr "Bewerken..."
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:40
+#, kde-format
+msgid "Import event to Calendar"
+msgstr "Notitie in agenda importeren"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:43
+#, kde-format
+msgid "Export event to iCal file..."
+msgstr "Notitie naar iCal-bestand exporteren..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Summary:"
+#~ msgstr "&Samenvatting:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Location:"
+#~ msgstr "&Locatie:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Start:"
+#~ msgstr "&Begin:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&End:"
+#~ msgstr "&Einde:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time and Date"
+#~ msgstr "Tijd en datum"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Timezone"
+#~ msgstr "Tijdzone"
+
+#~ msgctxt "(qtundo-format) displayname of the semantic item type Event"
+#~ msgid "Event"
+#~ msgstr "Gebeurtenis"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area"
+#~ msgstr "Gebied"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Region"
+#~ msgstr "Regio"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select a calendar for saving:"
+#~ msgstr "Een agenda selecteren om in op te slaan:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not add entry\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Fout bij het invoeren van\n"
+#~ "%1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not save iCal file\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Fout bij het opslaan van iCal-bestand\n"
+#~ "%1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Event"
+#~ msgstr "Agendanotitie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit..."
+#~ msgstr "Bewerken..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import event to Calendar"
+#~ msgstr "Notitie in agenda importeren"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export event to iCal file..."
+#~ msgstr "Notitie naar iCal-bestand exporteren..."

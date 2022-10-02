@@ -1,0 +1,199 @@
+# translation of PictureShape.po to Karakh
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2008, 2011, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: PictureShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2012-07-22 10:59+0600\n"
+"Last-Translator: Sairan Kikkarin\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"\n"
+"\n"
+
+#: ChangeImageCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change image"
+msgstr "Кескінді өзгерту"
+
+#: ChangeImageCommand.cpp:43
+msgctxt "(qtundo-format)"
+msgid "Crop image"
+msgstr "Кескінді ойып алу"
+
+#: ChangeImageCommand.cpp:57
+msgctxt "(qtundo-format)"
+msgid "Change image color mode"
+msgstr "Кескіннің түстер режімін өзгерту"
+
+#: ClipCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Contour image (by image analysis)"
+msgstr "Кескіннің контурын (талдап) сызу"
+
+#: ClipCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Remove image contour"
+msgstr "Кескіннің контурын өшіру"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnImageFile)
+#: forms/wdgPictureTool.ui:20
+#, kde-format
+msgid "Replace image..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbAspect)
+#: forms/wdgPictureTool.ui:32
+#, kde-format
+msgid "Keep proportions"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: forms/wdgPictureTool.ui:58
+#, kde-format
+msgid "Left:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: forms/wdgPictureTool.ui:68
+#, kde-format
+msgid "Right:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, bottomLabel)
+#: forms/wdgPictureTool.ui:91
+#, kde-format
+msgid "Bottom:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, topLabel)
+#: forms/wdgPictureTool.ui:111
+#, kde-format
+msgid "Top:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, bnFill)
+#: forms/wdgPictureTool.ui:131
+#, kde-format
+msgid "Reset"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbContour)
+#: forms/wdgPictureTool.ui:148
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Contour image (by image analysis)"
+msgid "Contour (by image analysis)"
+msgstr "Кескіннің контурын (талдап) сызу"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: forms/wdgPictureTool.ui:178
+#, kde-format
+msgid "Color mode:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: forms/wdgPictureTool.ui:193
+#, kde-format
+msgid "Crop"
+msgstr ""
+
+#: PictureShapeFactory.cpp:31
+#, kde-format
+msgid "Image"
+msgstr "Кескін"
+
+#: PictureShapeFactory.cpp:33
+#, kde-format
+msgid "Image shape that can display jpg, png etc."
+msgstr "Көрсетуге болатын кескін қалыпы, jpg, png т.б."
+
+#: PictureTool.cpp:95
+#, kde-format
+msgid "Standard"
+msgstr "Стандартты"
+
+#: PictureTool.cpp:96
+#, kde-format
+msgid "Greyscale"
+msgstr "Сұр реңкті"
+
+#: PictureTool.cpp:97
+#, kde-format
+msgid "Monochrome"
+msgstr "Бір түсті"
+
+#: PictureTool.cpp:98
+#, kde-format
+msgid "Watermark"
+msgstr "Сулы белгі"
+
+#: PictureToolFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Picture editing tool"
+msgid "Picture editing"
+msgstr "Суретті өңдеу құралы"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Contour image (by image analysis)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contour (by image analysis)"
+#~ msgstr "Кескіннің контурын (талдап) сызу"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Кескін"
+
+#, fuzzy
+#~| msgid "Image shape that can display jpg, png etc."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image shape that can display jpg, png etc."
+#~ msgstr "Көрсетуге болатын кескін қалыпы, jpg, png т.б."
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Стандартты"
+
+#, fuzzy
+#~| msgid "Greyscale"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Greyscale"
+#~ msgstr "Сұр реңкті"
+
+#, fuzzy
+#~| msgid "Monochrome"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monochrome"
+#~ msgstr "Бір түсті"
+
+#, fuzzy
+#~| msgid "Watermark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Watermark"
+#~ msgstr "Сулы белгі"
+
+#, fuzzy
+#~| msgid "Picture editing tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Picture editing"
+#~ msgstr "Суретті өңдеу құралы"
+
+#~ msgid "Open"
+#~ msgstr "Ашу"
+
+#~ msgid "Picture Tool"
+#~ msgstr "Сурет құралы"

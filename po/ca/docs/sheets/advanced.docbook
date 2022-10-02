@@ -1,0 +1,1373 @@
+<chapter id="hardsums">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+&traductor.Antoni.Bella; 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>&sheets; avançat</title>
+<sect1 id="series">
+<title
+>Sèries</title>
+<para
+>Mentre construïu un full de càlcul sovint necessitareu incloure una sèrie de valors, com 10, 11, 12... en una fila o columna. Hi ha diverses maneres en què ho podeu fer al &sheets;.</para>
+<para
+>Per a una sèrie curta i simple com 5, 6, 7, 8... el mètode <quote
+>Arrossega i copia</quote
+> és el més simple. Introduïu el valor d'inici dintre de la cel·la d'inici i el següent valor de la sèrie dintre d'una cel·la adjacent. Després seleccioneu ambdues cel·les i moveu el punter del cursor perquè resti sobre el petit quadrat a la cantonada inferior dreta; el cursor canviarà a una doble fletxa diagonal. Després manteniu premut el &BER; mentre arrossegueu les cel·les cap avall o cap al costat tant com calgui.</para>
+<para
+>La mida del pas es calcula com la diferència entre els dos valors d'inici que heu introduït. Per exemple, si introduïu <userinput
+>4</userinput
+> dintre de la cel·la A1 i <userinput
+>3,5</userinput
+> dintre d'A2 després seleccioneu ambdues cel·les, arrossegueu-les i copieu-les a sota. La mida del pas es calcularà com el valor en A2 menys el valor en A1, -0,5 en aquest cas obtindreu la sèrie 4, 3,5, 3, 2,5, 2...</para>
+
+<para
+>El mètode <quote
+>Arrossega i copia</quote
+> fins i tot pot tractar amb sèries a on el valor del pas no sigui un valor constant, sinó una sèrie per si mateixa. De manera que si comença amb 1, 3, 4, 6... arrossegant i copiant s'estendrà a 1, 3, 4, 6, 7, 9, 10, 12..., el valor del pas en aquest exemple és la sèrie 2, 1, 2, 1...</para>
+
+ <!--FIXME does not work here -->
+<para
+>&sheets; també reconeix algunes <quote
+>sèries</quote
+> especials com els dies de la setmana. Intenteu introduir <userinput
+>divendres</userinput
+> dintre d'una cel·la i <userinput
+>dissabte</userinput
+> dintre de la cel·la d'avall, després useu arrossega i copia sobre seu. Per a veure les sèries especials disponibles, i potser crear-ne de pròpies, seleccioneu <menuchoice
+><guimenu
+>Eines</guimenu
+><guimenuitem
+>Llistes personalitzades...</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Si seleccioneu una cel·la i escolliu <guimenuitem
+>Sèries...</guimenuitem
+> des del menú <guimenu
+>Insereix</guimenu
+>, veureu el diàleg <guilabel
+>Sèries</guilabel
+>. Això és útil per a crear sèries que són massa llargues per a ser convenientment construïdes usant el mètode arrossega i copia, o per a crear sèries geomètriques com 1, 1,5, 2,25, 3,375... a on el valor del pas, 1,5 en aquest cas, s'usa com a un multiplicador.</para>
+<para
+>Si el tipus de sèrie que voleu és massa complicat per a qualsevol dels anteriors mètodes, considereu usar una fórmula i arrossegueu i copieu això. Per exemple, per a crear una sèrie amb els valors 2, 4, 16, 256... introduïu <userinput
+>2</userinput
+> dintre d'A1, <userinput
+>=A1*A1</userinput
+> dintre d'A2 i arrossegueu i copieu cap avall les cel·les a partir d'A2.</para>
+</sect1>
+
+<sect1 id="formulas">
+<title
+>Fórmules</title>
+<sect2 id="builtin">
+<title
+>Funcions incloses</title>
+<para
+>&sheets; té un enorme abast de <link linkend="functions"
+>funcions</link
+> matemàtiques internes i altres que es poden usar en una cel·la de fórmula. Es poden veure i accedir seleccionant una cel·la i després escollint <guimenuitem
+>Funció...</guimenuitem
+> des del menú <guimenu
+>Insereix</guimenu
+>. Això us mostrarà el diàleg <guilabel
+>Funció</guilabel
+>.</para>
+<para
+>Seleccioneu la funció que voleu usar des del quadre de llista a l'esquerra del diàleg. La pestanya <guilabel
+>Ajuda</guilabel
+> de la pàgina mostra una descripció del tipus de retorn, la sintaxi, els paràmetres i exemples per a aquesta funció. A més, aquesta pàgina proveeix enllaços a les funcions relacionades. Després, premeu el botó amb el símbol de la fletxa cap avall per a enganxar-la dintre del quadre d'edició de text que hi ha a la zona inferior del diàleg.</para>
+<para
+>La pestanya <guilabel
+>Paràmetres</guilabel
+> de la pàgina mostra després perquè us permeti introduir els paràmetres per a la funció que heu escollit. Si voleu introduir un valor real per a un paràmetre, escriviu-lo dintre del quadre de text adequat en la pàgina <guilabel
+>Paràmetres</guilabel
+>. Per a introduir una referència de cel·la en comptes d'un valor, feu clic <mousebutton
+>esquerre</mousebutton
+> sobre el quadre de text apropiat en la pàgina <guilabel
+>Paràmetres</guilabel
+> i després feu clic <mousebutton
+>esquerre</mousebutton
+> sobre la cel·la de destinació en el full de càlcul.</para>
+<para
+>En comptes d'usar la pàgina <guilabel
+>Paràmetres</guilabel
+>, les referències a cel·les com <userinput
+>B6</userinput
+> es poden introduir escrivint-les directament dintre del quadre d'edició a baix del diàleg <guilabel
+>Funció</guilabel
+>. Si una funció conté més d'un paràmetre s'haurà de separar amb punt i coma (<keysym
+>;</keysym
+>).</para>
+<para
+>En prémer el botó <guibutton
+>D'acord</guibutton
+> s'inserirà la funció dintre de la cel·la actual i es tancarà el diàleg <guilabel
+>Funció</guilabel
+>.</para>
+<para
+>Per descomptat, ho podeu fer sense el diàleg <guilabel
+>Funció</guilabel
+> i simplement escriure l'expressió completa dintre del quadre d'entrada principal en la barra d'eines de fórmula. Els noms de les funcions no fan distinció entre majúscules i minúscules, però no oblideu que totes les expressions han de començar amb un símbol <keysym
+>=</keysym
+>.</para>
+</sect2>
+
+<sect2 id="logical">
+<title
+>Comparacions lògiques</title>
+<para
+>Les funcions lògiques com IF(), AND(), OR() prenen paràmetres que tenen els valors lògics (booleans) Cert o Fals. Aquest tipus de valor es pot produir amb funcions lògiques com ISEVEN() o per comparació dels valors en les cel·les del full de càlcul que estiguin usant les expressions de comparació que es donen en la següent taula.</para>
+
+<informaltable
+><tgroup cols="3">
+<thead>
+<row>
+<entry
+>Expressió </entry>
+<entry
+>Descripció </entry>
+<entry
+>Exemple </entry
+></row>
+</thead>
+<tbody>
+
+<row
+><entry
+><keysym
+>=</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>És igual que</entry>
+<entry
+><userinput
+>A2==B3</userinput
+> és Cert si el valor en A2 és igual que el valor en B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>!</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>No és igual que</entry>
+<entry
+><userinput
+>A2!=B3</userinput
+> és Cert si el valor en A2 no és igual que el valor en B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>No és igual que</entry>
+<entry
+>El mateix que <userinput
+>A2!=B3</userinput
+></entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+></entry>
+<entry
+>És més petit que</entry>
+<entry
+><userinput
+>A2&lt;B3</userinput
+> és Cert si el valor en A2 és més petit que el valor en B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>És més petit o igual que</entry>
+<entry
+><userinput
+>A2&lt;=B3</userinput
+> és Cert si el valor en A2 és més petit o igual que el valor en B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>És més gran que</entry>
+<entry
+><userinput
+>A2&gt;B3</userinput
+> és Cert si el valor a A2 és més gran que el valor a B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>És més gran o igual que</entry>
+<entry
+><userinput
+>A2&gt;=B3</userinput
+> és Cert si el valor en A2 és més gran o igual que el valor en B3</entry>
+</row>
+
+</tbody
+></tgroup
+></informaltable>
+
+<para
+>Aleshores si introduïu <userinput
+>=IF(B3&gt;B1;"MÉS GRAN";"")</userinput
+> dintre d'una cel·la es mostrarà MÉS GRAN si el valor en B3 és més gran que el de B1, d'altra manera la cel·la no mostrarà res.</para>
+</sect2>
+
+<sect2 id="absolute">
+<title
+>Referències de cel·la absolutes</title>
+<para
+>Si una fórmula conté una referència a cel·la en què la referència se sol canviar quan es copia la cel·la a una altra banda del full de treball. Per evitar aquest comportament situeu un símbol <keysym
+>$</keysym
+> abans de la lletra de la columna, número de fila o ambdós. </para>
+
+<itemizedlist>
+<listitem
+><para
+>Si A1 conté la fórmula <userinput
+>=D5</userinput
+> aleshores copiant la cel·la a B2 aquesta es convertirà en <userinput
+>=E6</userinput
+> (el comportament normal). </para
+></listitem>
+<listitem
+><para
+>Si A1 conté la fórmula <userinput
+>=$D5</userinput
+> aleshores copiant la cel·la a B2 aquesta es convertirà en <userinput
+>=D6</userinput
+> (la lletra de la columna no canvia). </para
+></listitem>
+<listitem
+><para
+>Si A1 conté la fórmula <userinput
+>=D$5</userinput
+> aleshores copiant la cel·la a B2 aquesta es convertirà en <userinput
+>=E5</userinput
+> (el número de la fila no canvia). </para
+></listitem>
+<listitem
+><para
+>Si A1 conté la fórmula <userinput
+>=$D$5</userinput
+> aleshores copiant la cel·la a B2 aquesta romandrà com a <userinput
+>=D5</userinput
+> (no canvia ni la lletra de columna ni el número de fila). </para
+></listitem>
+
+</itemizedlist>
+<para
+>Quan introduïu o editeu una referència de cel·la en una fórmula aleshores podreu usar la drecera de teclat <keysym
+>F4</keysym
+> per a aquestes quatre possibilitats.</para>
+<para
+>De manera similar es poden usar <link linkend="namedareas"
+>noms de cel·la</link
+> per a incloure una referència estàtica de cel·la en una fórmula. </para>
+</sect2>
+</sect1>
+
+<sect1 id="sumspecialpaste">
+<title
+>Aritmètica usant enganxat especial</title>
+<para
+>Algunes vegades potser voldreu afegir o sostraure un únic valor a un nombre de cel·les, multiplicar-les o dividir-les totes per un únic valor. L'opció <guimenuitem
+>Enganxat especial...</guimenuitem
+> us permet fer això de manera ràpida i fàcil.</para>
+<para
+>Primer, introduïu el valor del modificador dintre d'alguna cel·la sobrant sobre el vostre full de càlcul i escolliu <guimenuitem
+>Copia</guimenuitem
+>. Després seleccioneu l'àrea de cel·les que voleu canviar, escolliu <guimenuitem
+>Enganxat especial...</guimenuitem
+> des del menú <guimenu
+>Edita</guimenu
+> o al menú contextual i seleccioneu <guilabel
+>Suma</guilabel
+>, <guilabel
+>Resta</guilabel
+>, <guilabel
+>Multiplicació</guilabel
+> o <guilabel
+>Divisió</guilabel
+> des de la secció <guilabel
+>Operació</guilabel
+> del diàleg.</para>
+<para
+>També podeu aplicar diferents valors de modificador a files o columnes diferents de l'àrea de destinació copiant una àrea que contingui els modificadors que voleu abans de seleccionar l'àrea de destinació i fent un <guimenuitem
+>Enganxat especial...</guimenuitem
+>. Per exemple, si introduïu <userinput
+>5</userinput
+> dintre de la cel·la A1, <userinput
+>10</userinput
+> dintre de B1, seleccioneu ambdues cel·les i feu un <guimenuitem
+>Copia</guimenuitem
+> i després <guimenuitem
+>Enganxat especial...</guimenuitem
+> <guilabel
+>aplicat</guilabel
+> dintre de les cel·les de la A10 a la D15, s'afegirà 5 a A10:A15, C10:C15, i 10 a B10:B15, D10:D15.</para>
+<para
+>Tingueu present que un valor de modificador pot ser tant una fórmula com un valor numèric simple. Si és una fórmula, &sheets; ajustarà les referències de cel·la com per a una operació normal de <guimenuitem
+>Enganxa</guimenuitem
+>.</para>
+</sect1>
+
+<sect1 id="arrayformulas">
+<title
+>Fórmules de matriu</title>
+<para
+>&sheets; permet l'ús de les fórmules on el resultat és una matriu o un interval de valors. Normalment, només es mostra el primer valor a una cel·la. Si voleu que es mostri tota la matriu, simplement utilitzeu <keycombo
+>&Ctrl;&Alt;&Intro;</keycombo
+> quan editeu una fórmula, i es convertirà en una fórmula de matriu, ocupant les cel·les veïnes, segons sigui necessari.</para>
+<para
+>Les cel·les que formen part d'una fórmula de matriu estan bloquejades per a l'edició.</para>
+</sect1>
+
+<sect1 id="goalseek">
+<title
+>Aconseguir objectius</title>
+<para
+>&sheets; es pot usar per a resoldre expressions algebraiques com <emphasis
+>x + x^2 = 4</emphasis
+> o <emphasis
+>Per a quin valor x dona que x + x al quadrat és igual que 4?</emphasis
+></para>
+<para
+>Per aquest exemple podríeu introduir <userinput
+>=A2+A2*A2</userinput
+> dintre d'A1 i després provar diferents valors en A2 fins que el resultat d'A1 sigui tan proper com es pugui a <emphasis
+>4</emphasis
+> o, preferiblement, usar la característica <guimenuitem
+>Cerca objectiu...</guimenuitem
+> de &sheets;, la qual ajusta automàticament el valor en una cel·la per a intentar fer el valor en una altra cel·la tan proper com sigui possible a un valor objectiu.</para>
+<para
+>S'invoca seleccionant <guimenuitem
+>Cerca objectiu...</guimenuitem
+> des del menú <guimenu
+>Dades</guimenu
+>. Això us mostrarà un diàleg en el qual podreu introduir la referència de la cel·la del valor objectiu (<userinput
+>A1</userinput
+> en aquest cas) dintre de la caixa <guilabel
+>Arranja la cel·la</guilabel
+>, el mateix valor objectiu (<userinput
+>4</userinput
+>) dintre de la caixa <guilabel
+>Al valor:</guilabel
+> i la referència de la cel·la que es canviarà (<userinput
+>A2</userinput
+>) dintre de la caixa <guilabel
+>Canviant la cel·la:</guilabel
+>. Tingueu present que necessiteu haver introduït algun valor inicial dintre de la cel·la que es canviarà abans de començar amb <guimenuitem
+>Cerca objectiu</guimenuitem
+>.</para>
+<para
+>Prement el botó <guibutton
+>D'acord</guibutton
+> s'iniciaran els càlculs. Quan finalitzi i si s'ha trobat una solució premeu el botó <guibutton
+>D'acord</guibutton
+> per acceptar el resultat o <guibutton
+>Cancel·la</guibutton
+> per a mantenir el valor original. </para>
+</sect1>
+
+ <sect1 id="pivottable">
+   <title
+>Taules pivot</title>
+   <para
+>&sheets; es pot utilitzar per a construir <ulink url="http://en.wikipedia.org/wiki/Pivot_table"
+>taules pivot</ulink
+> utilitzant les dades de la taula actual. </para>
+   <para
+>Aquesta característica es pot invocar seleccionant <guimenuitem
+>Pivot...</guimenuitem
+> des del menú <guimenu
+>Dades</guimenu
+>. A continuació es mostra un exemple de generació de taula pivot. </para>
+   <para
+>Suposem que tenim les següents dades. </para>
+   <para>
+     <mediaobject>
+       <imageobject>
+	 <imagedata fileref="pivot1.png" format="PNG"/>
+       </imageobject>
+       <textobject>
+	 <phrase
+>Taula inicial</phrase>
+       </textobject>
+     </mediaobject>
+   </para>
+   <para
+>Volem crear una taula pivot a partir de la nostra elecció i requisits. De manera que escollim <menuchoice
+> <guimenu
+>Dades</guimenu
+> <guimenuitem
+>Pivot...</guimenuitem
+> </menuchoice
+>. </para>
+     <para
+>El diàleg que apareixerà permet a l'usuari seleccionar la font de les dades. Les dades es poden prendre del full de treball actual o des d'una font externa, com una base de dades o un fitxer <abbrev
+>ODS</abbrev
+>. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot2.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Triar la font de les dades</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>Aquí hi ha el diàleg que permet a l'usuari personalitzar la taula pivot. Les etiquetes de les columnes a les dades d'origen es converteixen en etiquetes que serveixen com a camps de treball. Les etiquetes es poden arrossegar i deixar anar en una entre tres àrees (<guilabel
+>Files</guilabel
+>, <guilabel
+>Columnes</guilabel
+> o <guilabel
+>Valors</guilabel
+>) per a generar la taula pivot. Podeu restablir les vostres opcions utilitzant el botó <guibutton
+>Reinicia l'arrossegat i deixar anar</guibutton
+>. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot3.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Diàleg de configuració de la taula pivot</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>En el nostre exemple, <replaceable
+>Nom</replaceable
+> és arrossegat a <guilabel
+>Files</guilabel
+>, <replaceable
+>Categoria</replaceable
+> a <guilabel
+>Columnes</guilabel
+>, <replaceable
+>Puntuació</replaceable
+> a <guilabel
+>Valors</guilabel
+>. Les funcions definides per l'usuari, com a suma, mitjana, màxim, mínim, comptador, &etc; es poden seleccionar des de la llista <guilabel
+>Seleccioneu una opció</guilabel
+>. </para>
+     <para
+>El botó <guibutton
+>Afegeix un filtre</guibutton
+> es pot utilitzar per obrir el diàleg de filtratge per filtrar les dades desitjades. Utilitzant aquest quadre podreu definir múltiples filtres basats en l'etiqueta de la columna i la relació entre elles (<guimenuitem
+>I</guimenuitem
+> o <guimenuitem
+>O</guimenuitem
+>). Això hauria de permetre una llibertat extrema per a personalitzar la sortida. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot4.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Diàleg de filtratge de la taula pivot</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+><guilabel
+>Total de files</guilabel
+> i <guilabel
+>Total de columnes</guilabel
+>: en marcar aquestes opcions es permetrà calcular de forma automàtica el total de files i columnes corresponents a la taula pivot. </para>
+   </sect1>
+
+<sect1 id="worksheets">
+<title
+>Usar més d'un full de treball</title>
+<para
+>Quan comenceu un nou document, buit, amb &sheets; es crearan un cert nombre de fulls de treball buits. El nombre de fulls es crea determinat per la plantilla seleccionada.</para>
+<para
+><menuchoice
+><guimenu
+>Insereix</guimenu
+><guimenuitem
+>Full</guimenuitem
+> </menuchoice
+> afegeix un altre full al document.</para>
+<para
+>També podeu canviar entre fulls de treball usant les dreceres de teclat <keycombo action="simul"
+>&Ctrl;<keycap
+>Av Pàg</keycap
+></keycombo
+> per anar al següent full, <keycombo action="simul"
+>&Ctrl;<keycap
+>Re Pàg</keycap
+></keycombo
+> per anar cap a l'anterior.</para>
+<para
+>Els fulls de treball es donen amb els noms per omissió <emphasis
+>Full1</emphasis
+>, <emphasis
+>Full2</emphasis
+>... Podeu donar un nom diferent per un full fent clic <mousebutton
+>dret</mousebutton
+> sobre la pestanya i seleccionant <guimenuitem
+>Reanomena el full...</guimenuitem
+>.</para>
+<para
+>Per eliminar un full del document useu l'opció <guimenuitem
+>Elimina el full</guimenuitem
+> en el menú contextual que apareix en fer clic <mousebutton
+>dret</mousebutton
+> sobre la pestanya del full que voleu eliminar.</para>
+<para
+>Altres entrades en el submenú <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Full</guisubmenu
+></menuchoice
+> us permeten mostrar o ocultar un full en la mateixa manera que es poden ocultar les files o columnes.</para>
+<para
+>Si voleu que una fórmula en un full es refereixi a una cel·la en un altre full, la referència de cel·la haurà de començar amb el nom del full seguit d'un signe d'admiració (<keysym
+>!</keysym
+>). Per exemple, si introduïu <userinput
+>=Full2!A2</userinput
+> dintre d'una cel·la en Full1, aquesta cel·la prendrà el valor des d'A2 en el Full2. Tingueu present que els noms dels fulls distingeixen majúscules i minúscules.</para>
+
+
+<sect2 id="consolidate">
+<title
+>Consolidar les dades</title>
+<para
+>Podeu haver construït un document amb diversos fulls de treball que continguin diverses dades similars per a, diguem, els mesos diferents de l'any, i voleu tenir fulls de resum que continguin les dades consolidades (&pex;, sumes o mitjanes) dels elements de dades corresponents en els altres fulls.</para>
+<para
+>Aquesta tasca es pot fer força fàcilment usant l'element del menú <guimenuitem
+>Consolida...</guimenuitem
+> des del menú <guimenu
+>Dades</guimenu
+>.</para>
+<para
+>Seleccionant aquesta opció, se us mostra el diàleg <guilabel
+>Consolida</guilabel
+>.</para>
+<para
+>Per a cadascun dels fulls d'origen, introduïu una referència a l'àrea de dades desitjada en el quadre <guilabel
+>Referència:</guilabel
+>. Premeu <guibutton
+>Afegeix</guibutton
+> per a transferir-la al quadre <guilabel
+>Referències introduïdes:</guilabel
+>. La referència haurà d'incloure el nom del full que conté les dades d'origen, com <userinput
+>Gener!A1:A10</userinput
+>, i es pot introduir automàticament seleccionant l'àrea en el full apropiat.</para>
+<para
+>Després d'introduir les referències per a tots els fulls de dades d'origen, seleccioneu la cel·la en el full de destinació a on voleu que aparegui la cantonada superior esquerra dels resultats consolidats. Després, escolliu la funció apropiada des del quadre combinat <guilabel
+>Funció:</guilabel
+> i premeu el botó <guibutton
+>D'acord</guibutton
+>.</para>
+<para
+>Si feu clic sobre el botó <guilabel
+>Detalls 
+>
+></guilabel
+> en el diàleg i marqueu la casella <guilabel
+>Copia les dades</guilabel
+>, els valors resultants de la consolidació es posaran dintre de les cel·les de destinació en comptes d'usar les fórmules per a calcular-les. </para>
+</sect2>
+</sect1>
+<sect1 id="insertchart">
+<title
+>Inserir un diagrama</title>
+<para
+>Podeu inserir un diagrama en un full per a donar una vista de diagrama de les vostres dades.</para>
+<para
+>Primer habiliteu l'acoblador <guilabel
+>Afegeix una forma</guilabel
+> utilitzant l'element de menú <menuchoice
+> <guimenu
+>Arranjament</guimenu
+><guimenuitem
+>Acobladors</guimenuitem
+> </menuchoice
+>.</para>
+<para
+>Després seleccioneu l'àrea de cel·les que continguin les dades i escolliu <guilabel
+>Diagrama</guilabel
+> a <guilabel
+>Afegeix una forma</guilabel
+>. El cursor canviarà a una petita forma en creu que haureu d'arrossegar pel full mentre manteniu premut el &BER; per a definir l'àrea en què voleu que aparegui el diagrama. No cal ser massa precís en aquesta etapa atès que la mida del diagrama es pot canviar amb facilitat en qualsevol moment. Quan deixeu anar el botó del ratolí apareixerà un diàleg <guilabel
+>Opcions de diagrama</guilabel
+>.</para>
+<para
+>L'àrea de dades ja s'ha omplert amb l'interval de cel·les seleccionat. Seleccioneu la primera fila i la columna com a etiquetes, marqueu <guilabel
+>Les dades s'arrangen en files</guilabel
+> i feu clic al botó <guibutton
+>D'acord</guibutton
+>. El diàleg desapareixerà i veureu el diagrama incrustat dins del full de treball.</para>
+<para
+>Ara seleccioneu l'<guibutton
+>Eina d'edició de diagrames</guibutton
+> des de l'acoblador <guilabel
+>Eines</guilabel
+> i editeu les propietats del diagrama, com un tipus de diagrama, les etiquetes i l'eix a <guilabel
+>Edició de diagrames</guilabel
+>.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="chart1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Captura de pantalla del diagrama incrustat</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Per a moure, canviar la mida o fins i tot suprimir el diagrama incrustat canvieu a l'eina <guibutton
+>Manipulació bàsica de la forma</guibutton
+> i feu clic dintre de qualsevol lloc de l'àrea del diagrama. Ara hauria d'aparèixer una vora ombrejada en diagonal i amb un petit quadrat groc a cada cantonada i al mig de cada vora. </para>
+<para
+>Si moveu el cursor sobre qualsevol dels quadrats, aquests haurien de canviar a una fletxa doble. Podeu canviar la mida del diagrama arrossegant un d'aquests quadrats amb el &BER; premut. Per suprimir el diagrama, feu clic <mousebutton
+>dret</mousebutton
+> sobre un dels quadrats i seleccioneu <guimenuitem
+>Suprimeix</guimenuitem
+>.</para>
+<para
+>Per a moure el diagrama moveu el cursor que està dins seu. El cursor s'hauria de convertir en una creu, premeu el &BER; i podreu arrossegar el diagrama a on voleu que resti.</para>
+<para
+>Per a restaurar el diagrama a la seva aparença normal simplement feu clic en algun lloc fora de l'àrea del diagrama.</para>
+<para
+>Per a canviar el format mateix del diagrama feu doble clic <mousebutton
+>esquerre</mousebutton
+> dintre de l'àrea del diagrama. El diagrama <guilabel
+>Edició de diagrames</guilabel
+> hauria d'aparèixer a l'acoblador. Podeu usar aquestes eines per a canviar el diagrama.</para>
+</sect1>
+
+<sect1 id="insertdata">
+<title
+>Inserir dades externes</title>
+<para
+>Podeu inserir dades des d'un fitxer de text o des del porta-retalls dintre d'un full de treball seleccionant primer la cel·la en què voleu que aparegui l'element superior esquerre de les dades inserides, i després seleccionant <guimenuitem
+>Des d'un fitxer de text...</guimenuitem
+> o <guimenuitem
+>Des del porta-retalls...</guimenuitem
+> des del submenú <menuchoice
+><guimenu
+>Insereix</guimenu
+><guisubmenu
+>Dades externes</guisubmenu
+> </menuchoice
+>.</para>
+<para
+>En ambdós casos, &sheets; assumirà que les dades estan en format <acronym
+>CSV</acronym
+> i obrirà un diàleg que us permetrà controlar com s'extrauen les dades des del fitxer o des del porta-retalls i com se situen dintre de les cel·les del full de treball.</para>
+<para
+>Si s'ha inclòs la funcionalitat en el vostre sistema, &sheets; també pot inserir dades des d'una base de dades <acronym
+>SQL</acronym
+> dintre d'un full de treball. Això es fa usant l'opció <menuchoice
+><guimenu
+>Insereix</guimenu
+><guisubmenu
+>Dades externes</guisubmenu
+><guimenuitem
+>Des d'una base de dades...</guimenuitem
+> </menuchoice
+>.</para>
+</sect1>
+
+<sect1 id="hyper">
+<title
+>Enllaçar cel·les</title>
+<para
+>Es pot enllaçar una cel·la a una acció de manera que fent clic <mousebutton
+>esquerre</mousebutton
+> sobre la cel·la, per exemple, s'obrirà el vostre navegador. Per a fer que una cel·la actuï d'aquesta manera, seleccioneu-la i escolliu <menuchoice
+><guimenu
+>Insereix</guimenu
+><guimenuitem
+>Enllaç...</guimenuitem
+> </menuchoice
+>. Això us mostrarà el diàleg <guilabel
+>Insereix enllaç</guilabel
+>, la qual us permet seleccionar entre quatre tipus d'enllaç:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Una cel·la d'enllaç a <guilabel
+>Internet</guilabel
+> intentarà obrir el vostre navegador predeterminat amb l'&URL; introduït en el quadre de text <guilabel
+>Adreça d'Internet:</guilabel
+> del diàleg <guilabel
+>Insereix enllaç</guilabel
+> quan s'hi fa clic. Això pot ser, per exemple, <userinput
+>http://www.calligra.org</userinput
+>. </para
+></listitem>
+
+<listitem
+><para
+>Fent clic sobre una cel·la que contingui un enllaç de <guilabel
+>Correu</guilabel
+>, s'obrirà el vostre programa per editar correu fent ús de l'adreça introduïda en el quadre de text <guilabel
+>Correu electrònic:</guilabel
+> com al camp A:. Per exemple, <userinput
+>anon@exemple.com</userinput
+>. </para
+></listitem>
+
+<listitem
+><para
+>Una cel·la d'enllaç a <guilabel
+>Fitxer</guilabel
+> mantindrà el camí a un fitxer o carpeta, tal com s'ha introduït dintre del quadre de text <guilabel
+>Ubicació del fitxer:</guilabel
+>, i intentarà obrir aquest fitxer o carpeta amb una aplicació adequada quan feu clic sobre seu. </para
+></listitem>
+
+<listitem
+><para
+>El tipus d'enllaç de <guilabel
+>Cel·la</guilabel
+> mantindrà la referència a una cel·la de &sheets;, introduïda en el quadre de text <guilabel
+>Cel·la o àrea anomenada:</guilabel
+>. Fent clic <mousebutton
+>esquerre</mousebutton
+> sobre aquest tipus d'enllaç de cel·la causarà que &sheets; mogui el focus cap a la cel·la de destinació. </para
+></listitem>
+</itemizedlist>
+
+<para
+>Els quatre tipus d'enllaços de cel·la necessiten algun text adequat introduït dintre del camp <guilabel
+>Text a mostrar:</guilabel
+> del diàleg <guilabel
+>Insereix un enllaç</guilabel
+>. Aquest és el text que apareixerà a la cel·la.</para>
+</sect1>
+
+<sect1 id="validcheck">
+<title
+>Comprovar la validesa</title>
+<para
+>&sheets; pot comprovar automàticament la validesa d'una dada introduïda contra un cert nombre de criteris, i mostrar un quadre de missatge si les dades no són vàlides.</para>
+<para
+>Per habilitar aquesta característica, seleccioneu la/es cel·la/es a controlar i escolliu <menuchoice
+><guimenu
+>Dades</guimenu
+><guimenuitem
+>Validesa...</guimenuitem
+> </menuchoice
+> Això us mostrarà el diàleg <guilabel
+>Validesa</guilabel
+> de &sheets;, el qual disposa de tres pestanyes.</para>
+<para
+>A la pàgina <guilabel
+>Criteri</guilabel
+> seleccioneu quin tipus de dades s'hauran de considerar vàlides des del quadre combinat <guilabel
+>Permet:</guilabel
+> i després definiu l'interval de valors vàlids escollint una de les opcions al quadre combinat <guilabel
+>Dades:</guilabel
+> i introduint uns valors adequats en un o ambdós quadres d'edició.</para>
+<para
+>Una vegada fet això canvieu a la pestanya <guilabel
+>Alerta d'error</guilabel
+>. Aquí podreu escollir el tipus de quadre de missatge (<guimenuitem
+>Atura</guimenuitem
+>, <guimenuitem
+>Avís</guimenuitem
+> o <guimenuitem
+>Informació</guimenuitem
+>) que apareixerà quan s'introdueixi un valor no vàlid, i es defineixi el títol i el text del quadre de missatge.</para>
+<!--FIXME missing Input Help tab-->
+<para
+>Tingueu present que aquesta característica tan sols comprova les dades que introduïu dintre de la cel·la, per a una manera de comprovar els resultats des de les cel·les de fórmula, mireu la secció <link linkend="formatdata"
+>Atributs condicionals de cel·la</link
+> d'aquest manual.</para>
+</sect1>
+
+<sect1 id="protection">
+<title
+>Protecció</title>
+
+<sect2 id="doc-protection">
+<title
+>Protegir el document</title>
+<para
+>Protegir el document vol dir que sense la contrasenya un usuari no podrà afegir ni eliminar fulls. La protecció del document no protegeix cel·les.</para>
+<para
+>Seleccioneu <menuchoice
+><guimenu
+>Eines</guimenu
+><guimenuitem
+>Protegeix el document...</guimenuitem
+></menuchoice
+>. Apareixerà un diàleg per a demanar-vos la contrasenya. L'entrada <guilabel
+>Contrasenya:</guilabel
+> indica si la vostra contrasenya és prou segura. Com més llarg sigui l'indicador, més segura serà la vostra contrasenya.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>El diàleg Protegeix el document</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Aquesta contrasenya serà necessària per a desprotegir el document.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>El diàleg Desprotegeix el document</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Quan un document està protegit, no es podrà:</para>
+<itemizedlist>
+<listitem
+><para
+>Canviar el nom a un full </para
+></listitem>
+<listitem
+><para
+>Inserir un full </para
+></listitem>
+<listitem
+><para
+>Eliminar un full </para
+></listitem>
+<listitem
+><para
+>Ocultar un full </para
+></listitem>
+<listitem
+><para
+>Mostrar un full </para
+></listitem>
+<listitem
+><para
+>Veure les propietats del full </para
+></listitem>
+<listitem
+><para
+>Fusionar o dissociar cel·les </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="sheet-protection">
+<title
+>Protegir el full</title>
+<para
+>Protegir un full vol dir protegir el contingut de totes les cel·les i objectes en un full. Dintre d'un full protegit les cel·les individuals o la selecció de cel·les es poden desprotegir, mireu en la <link linkend="cell-protection"
+>següent secció</link
+>.</para>
+<para
+>Per a protegir un full, seleccioneu <menuchoice
+><guimenu
+>Eines</guimenu
+><guimenuitem
+>Protegeix el full...</guimenuitem
+></menuchoice
+> Apareixerà un diàleg per a demanar-vos la contrasenya. L'entrada <guilabel
+>Contrasenya:</guilabel
+> indica si la vostra contrasenya és prou segura. Com més llarg sigui l'indicador, més segura serà la contrasenya.</para>
+<para
+>Aquesta contrasenya serà necessària per a desprotegir el full.</para>
+<para
+>Quan un full està protegit, no es podrà:</para>
+<itemizedlist>
+<listitem
+><para
+>Inserir qualsevol objecte o diagrama </para
+></listitem>
+<listitem
+><para
+>Donar format a qualsevol cel·la </para
+></listitem>
+<listitem
+><para
+>Inserir una fila o una columna </para
+></listitem>
+<listitem
+><para
+>Editar i canviar el contingut de la cel·la </para
+></listitem>
+<listitem
+><para
+>Canviar qualsevol contingut en la cel·la </para
+></listitem>
+</itemizedlist>
+
+<note
+><para
+>Protegir un full és especialment útil per a prevenir l'esborrat accidental de fórmules.</para
+></note>
+</sect2>
+
+<sect2 id="cell-protection">
+<title
+>Protegir la cel·la o cel·les seleccionades</title>
+<warning
+><para
+>Per omissió, la protecció de la cel·la està activa per a totes les cel·les i tan sols és efectiva quan habiliteu la protecció del full. Si manteniu l'opció per omissió i protegiu el full, es protegiran totes les cel·les.</para
+></warning>
+<para
+>Si voleu que tan sols estiguin protegides algunes cel·les, aquesta protecció per omissió es pot activar o desactivar per a totes les altres cel·les. Per exemple, podríeu voler que la majoria de les cel·les acceptin l'entrada de l'usuari de manera que haurà d'estar sense marcar <guilabel
+>Protegida</guilabel
+> per aquesta i escollir mantenir protegides les cel·les que hagin de romandre sense canvis (com ara els títols). Us caldran 3 passos per a tan sols protegir algunes cel·les: Desprotegir totes les cel·les, seleccionar les cel·les que s'han de protegir i després protegir tot el full.</para>
+<para
+>Per a desprotegir totes les cel·les:</para>
+<itemizedlist>
+<listitem
+><para
+>Seleccionar tot el full de càlcul amb el ratolí. </para
+></listitem>
+<listitem
+><para
+>En la barra de menús, seleccioneu <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Format de cel·la...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>En el diàleg que apareixerà, aneu a la pestanya <guilabel
+>Protecció de cel·la</guilabel
+>. </para
+></listitem>
+<listitem
+><para
+>Marqueu <guilabel
+>Oculta-ho tot</guilabel
+> i desmarqueu <guilabel
+>Protegida</guilabel
+> per eliminar la protecció sobre totes les cel·les. Ara totes les cel·les estaran desprotegides. </para
+></listitem>
+</itemizedlist>
+<para
+>Per a protegir un interval de cel·les seleccionades o una selecció de cel·les no contigües:</para>
+<itemizedlist>
+<listitem
+><para
+>Ressalteu l'interval de cel·les a protegir o useu la tecla <keycombo action="simul"
+>&Ctrl;</keycombo
+> per a seleccionar cel·les no contigües. </para
+></listitem>
+<listitem
+><para
+>Una vegada seleccionades totes les cel·les desitjades, anar cap al menú <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Format de cel·la...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>En el diàleg que apareixerà, aneu a la pestanya <guilabel
+>Protecció de cel·la</guilabel
+>. </para
+></listitem>
+<listitem
+><para
+>Feu clic sobre la casella que hi ha al costat de <guilabel
+>Protegida</guilabel
+> i després feu clic sobre <guibutton
+>D'acord</guibutton
+>. </para
+></listitem>
+</itemizedlist>
+<para
+>Una vegada marcades les cel·les a protegir, l'opció de protecció hauria d'estar habilitada a l'àmbit del full, el qual voldrà dir que heu desprotegit tot el full perquè la cel·la quedi efectivament protegida:</para>
+<itemizedlist>
+<listitem
+><para
+>Seleccioneu <menuchoice
+><guimenu
+>Eines</guimenu
+><guimenuitem
+>Protegeix full...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>En el diàleg que apareixerà, s'ha de proveir una contrasenya segura i després confirmar-la escrivint-la altra vegada. Feu clic sobre <guibutton
+>D'acord</guibutton
+>. </para
+></listitem>
+<listitem
+><para
+>Les cel·les protegides en un full protegit no es poden editar sense desprotegir tot el full, i qualsevol canvi al full restarà inhabilitat. Per exemple, ningú podrà inserir files o columnes, canviar l'amplada de la columna o crear diagrames incrustats. </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="hide-formula">
+<title
+>Ocultar una fórmula de cel·la</title>
+<para
+>Podríeu voler ocultar les fórmules perquè altra gent no les pugui veure. Per omissió, cada cel·la està protegida i sense ocultar. Però és important recordar que aquests atributs no tenen efecte a menys que el full estigui protegit.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Una cel·la per omissió amb una fórmula</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Per ocultar les fórmules de les cel·les, seleccioneu la cel·la o l'interval de cel·les o les cel·les no contigües amb <keycombo action="simul"
+>&Ctrl;</keycombo
+> i després escolliu el menú <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Format de cel·la...</guimenuitem
+></menuchoice
+> En el diàleg Format de cel·la, feu clic en la pestanya <guilabel
+>Protecció de cel·la</guilabel
+> i seleccioneu <guilabel
+>Oculta la fórmula</guilabel
+>. Després de protegir el full, els resultats de les fórmules seran visibles, però no les fórmules. </para>
+<para
+>Ara heu de protegir el full: Escolliu <menuchoice
+><guimenu
+>Eines</guimenu
+><guimenuitem
+>Protegeix el full...</guimenuitem
+></menuchoice
+> per a mostrar el diàleg <guilabel
+>Protegeix el full</guilabel
+>. Introduïu una contrasenya segura dues vegades per evitar que altra gent pugui manllevar la protecció del full. </para>
+<para
+>Quan està habilitada <guilabel
+>Oculta la fórmula</guilabel
+> i inhabilitada <guilabel
+>Protegida</guilabel
+>, la fórmula restarà oculta després de protegir el full, però el contingut de la cel·la es podrà canviar.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula5.png" format="PNG"/>
+</imageobject
+>    
+<textobject>
+<phrase
+><guilabel
+>Oculta fórmula</guilabel
+> està habilitat però la cel·la no està protegida i el full està protegit</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Quan estan habilitades <guilabel
+>Oculta fórmula</guilabel
+> i <guilabel
+>Protegida</guilabel
+>, la fórmula s'oculta després de protegir el full, però el contingut de la cel·la no es pot canviar.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>Oculta fórmula</guilabel
+> i <guilabel
+>Protegida</guilabel
+> estan habilitades en <guilabel
+>Protecció de cel·la</guilabel
+> i el full està protegit.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Tingueu present que és molt fàcil eludir la contrasenya per a un full protegit, de manera que si voleu seguretat real, aquesta no és la millor solució.</para>
+</sect2>
+
+<sect2 id="hide-all">
+<title
+>Ocultar tot en la cel·la</title>
+<para
+>Podeu ocultar tant la fórmula com el contingut de la cel·la escollint <guilabel
+>Oculta-ho tot</guilabel
+> en la pestanya Protecció de cel·la en el menú <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Format de cel·la...</guimenuitem
+></menuchoice
+> En la captura de pantalla següent, la cel·la mateixa no està protegida (<guilabel
+>Protegida</guilabel
+> està sense marcar) de manera que el contingut de la cel·la no es pot canviar.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>Oculta-ho tot</guilabel
+> tan sols està habilitat (sense protecció de cel·la) i la cel·la està protegida.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Aquí la cel·la està protegida de manera que no es pot sobreescriure.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>Oculta-ho tot</guilabel
+> i <guilabel
+>Protegida</guilabel
+> estan habilitades en Protecció de cel·la i el full està protegit.</phrase>
+</textobject>
+</mediaobject>
+</para>
+</sect2>
+</sect1>
+
+
+<sect1 id="other">
+<title
+>Altres característiques</title>
+<!-- no split view in 2.4
+<sect2 id="splitview">
+<title
+>Splitting the View</title>
+<para
+>If your spreadsheet is so large that you cannot see all of it at once, 
+splitting &sheets;'s window into two or more views can help you work on it. 
+This is done by selecting <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Split View</guimenuitem
+></menuchoice
+> which will split the current view into 
+two parts. <menuchoice
+><guimenu
+>View</guimenu
+><guisubmenu
+>Splitter Orientation
+</guisubmenu
+></menuchoice
+> lets you choose between 
+<guimenuitem
+>Horizontal</guimenuitem
+> and <guimenuitem
+>Vertical</guimenuitem
+> 
+splitting.</para>
+<para
+>This technique is particularly useful when you want to select an area 
+of the spreadsheet that is larger than can be shown in one view, perhaps to
+paste a copied cell into it. 
+Use the scrollbars to position the two views to show the top left and 
+bottom right cells of the wanted area, select the top left cell in one 
+view then hold the &Shift; key pressed while you select the 
+bottom right cell with the <mousebutton
+>left</mousebutton
+> mouse button.</para>
+<para
+>If there is more than one sheet in your document, you can show a 
+different sheet in each of the split views.</para>
+<para
+>The relative sizes of the views can be changed by dragging the thick bar 
+separating the views.</para>
+<para
+>To remove a view select <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Remove View</guimenuitem
+></menuchoice
+></para>
+</sect2>
+-->
+
+<sect2 id="namedareas">
+<title
+>Noms de cel·les i àrees</title>
+<para
+>Podeu posar un nom com <userinput
+>foo</userinput
+> a una cel·la o àrea d'un full seleccionant la cel·la o àrea i després seleccionant <guimenuitem
+>Nom d'àrea...</guimenuitem
+> des del menú del &BDR;. Això us mostra el diàleg <guilabel
+>Nom d'àrea</guilabel
+> des d'on podreu introduir el nom que voleu.</para>
+<para
+>També podeu posar nom a una cel·la o àrea seleccionant-la i escrivint el nom en el petit quadre de text a l'esquerra de la barra d'eines de fórmules, sobreescrivint la referència de cel·la que apareix aquí normalment.</para>
+<para
+>Si introduïu en aquest quadre de text un nom que ja s'està usant, la selecció de &sheets; passarà a mostrar les cel·les amb aquest nom.</para>
+<para
+>L'opció <menuchoice
+><guimenu
+>Dades</guimenu
+><guimenuitem
+>Àrees amb nom...</guimenuitem
+> </menuchoice
+> us dona una llista de noms existents i us permet canviar el focus de &sheets; a qualsevol d'aquests o eliminar un nom. </para>
+<para
+>Les cel·les amb nom són particularment útils en fórmules com a una alternativa a les <link linkend="absolute"
+>referències absolutes a cel·la</link
+> com els noms que s'usen en comptes de referències normals a cel·la i no canvien quan la cel·la que conté la fórmula és copiada. Quan s'usa un nom d'aquesta manera aquest haurà d'estar tancat entre cometes simples.</para>
+<para
+>Per exemple, si la cel·la A1 us ha indicat el nom <userinput
+>fred</userinput
+> aleshores podreu introduir una fórmula com <userinput
+>='fred' + 2</userinput
+> dintre d'una altra cel·la que sempre donaria com a resultat d'afegir 2 al valor en A1, sense importar a on es copiï la cel·la de fórmula.</para>
+<para
+>Tingueu present que els noms d'àrea es tracten com si estiguessin en minúscula.</para>
+</sect2>
+
+<sect2 id="cellcomments">
+<title
+>Comentaris de cel·la</title>
+<para
+>Una cel·la pot contenir un comentari de text que es pot veure quan s'està treballant sobre el full de càlcul però que no s'imprimiran ni es veuran normalment.</para>
+<para
+>Per afegir un comentari seleccioneu la cel·la i escolliu <guimenuitem
+>Comentari...</guimenuitem
+> des del menú del &BDR; o des del menú <guimenu
+>Insereix</guimenu
+> i escriviu el comentari dintre del diàleg resultant <guilabel
+>Comentari de la cel·la</guilabel
+>.</para>
+<para
+>Per a veure el comentari passeu el punter del ratolí sobre la cel·la. El comentari apareixerà com si fos un consell. </para>
+<para
+>Si marqueu la casella <guilabel
+>Mostra l'indicador de comentari</guilabel
+> del diàleg <guilabel
+>Propietats del full</guilabel
+>, les cel·les que continguin comentaris seran ressaltades amb un petit triangle vermell en la cantonada superior dreta.</para>
+<para
+>Per obrir aquest diàleg, feu clic amb el &BDR; sobre la pestanya del full a la part inferior de la finestra principal i seleccioneu <guimenuitem
+>Propietats del full</guimenuitem
+> des del menú emergent. O seleccioneu-lo des del menú <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Full</guisubmenu
+></menuchoice
+>.</para>
+
+<para
+>Per esborrar un comentari d'una cel·la, seleccioneu <guimenuitem
+>Elimina el comentari</guimenuitem
+> des del menú al &BDR; o escolliu <menuchoice
+><guimenu
+>Edita</guimenu
+><guisubmenu
+>Neteja</guisubmenu
+><guimenuitem
+>Comentari</guimenuitem
+></menuchoice
+>.</para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

@@ -1,0 +1,222 @@
+# Slovenian translation of calligra component
+#
+# Matija Šuklje <matija@suklje.name>, 2014.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2020-11-01 08:18+0100\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Translator: Matija Šuklje <matija@suklje.name>\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Poedit 2.4.1\n"
+
+#: KoEventSemanticItemFactory.cpp:31
+#, kde-format
+msgctxt "displayname of the semantic item type Event"
+msgid "Event"
+msgstr "Dogodek"
+
+#: KoRdfCalendarEvent.cpp:158
+#, kde-format
+msgid "Area"
+msgstr "Krajevnost"
+
+#: KoRdfCalendarEvent.cpp:159
+#, kde-format
+msgid "Region"
+msgstr "Področje"
+
+#: KoRdfCalendarEvent.cpp:381
+#, kde-format
+msgid "Select a calendar for saving:"
+msgstr "Izberi koledar za shranjevanje:"
+
+#: KoRdfCalendarEvent.cpp:401
+#, kde-format
+msgid ""
+"Could not add entry\n"
+"%1"
+msgstr ""
+"Ni bilo mogoče dodati vnosa\n"
+"%1"
+
+#: KoRdfCalendarEvent.cpp:428
+#, kde-format
+msgid ""
+"Could not save iCal file\n"
+"%1"
+msgstr ""
+"Ni bilo mogoče shraniti iCal datoteke\n"
+"%1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfCalendarEventEditWidget.ui:20
+#, kde-format
+msgid "&Summary:"
+msgstr "Povzetek:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfCalendarEventEditWidget.ui:30
+#, kde-format
+msgid "&Location:"
+msgstr "&Lokacija:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfCalendarEventEditWidget.ui:43
+#, kde-format
+msgid "&Start:"
+msgstr "Začetek:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: KoRdfCalendarEventEditWidget.ui:56
+#, kde-format
+msgid "&End:"
+msgstr "Konec:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tadtab)
+#: KoRdfCalendarEventEditWidget.ui:80
+#, kde-format
+msgid "Time and Date"
+msgstr "Čas in datum"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tztab)
+#: KoRdfCalendarEventEditWidget.ui:93
+#, kde-format
+msgid "Timezone"
+msgstr "Časovni pas"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:30
+#, kde-format
+msgid "Calendar Event"
+msgstr "Dogodek koledarja"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:37
+#, kde-format
+msgid "Edit..."
+msgstr "Uredi…"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:40
+#, kde-format
+msgid "Import event to Calendar"
+msgstr "Uvozi dogodek v Koledar"
+
+#: KoRdfCalendarEventTreeWidgetItem.cpp:43
+#, kde-format
+msgid "Export event to iCal file..."
+msgstr "Izvozi dogodek v iCal datoteko…"
+
+#, fuzzy
+#~| msgid "&Summary:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Summary:"
+#~ msgstr "&Povzetek:"
+
+#, fuzzy
+#~| msgid "&Location:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Location:"
+#~ msgstr "&Lokacija:"
+
+#, fuzzy
+#~| msgid "&Start:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Start:"
+#~ msgstr "&Začetek:"
+
+#, fuzzy
+#~| msgid "&End:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&End:"
+#~ msgstr "&Konec:"
+
+#, fuzzy
+#~| msgid "Time and Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time and Date"
+#~ msgstr "Čas in datum"
+
+#, fuzzy
+#~| msgid "Timezone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Timezone"
+#~ msgstr "Časovni pas"
+
+#, fuzzy
+#~| msgctxt "displayname of the semantic item type Event"
+#~| msgid "Event"
+#~ msgctxt "(qtundo-format) displayname of the semantic item type Event"
+#~ msgid "Event"
+#~ msgstr "Dogodek"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area"
+#~ msgstr "Kjarevnost"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Region"
+#~ msgstr "Področje"
+
+#, fuzzy
+#~| msgid "Select a calendar for saving:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select a calendar for saving:"
+#~ msgstr "Izberi koledar za shranjevanje:"
+
+#, fuzzy
+#~| msgid ""
+#~| "Could not add entry\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not add entry\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Ni bilo mogoče dodati vnosa\n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid ""
+#~| "Could not save iCal file\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not save iCal file\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Ni bilo mogoče shraniti iCal datoteke\n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid "Calendar Event"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Event"
+#~ msgstr "Dogodek koledarja"
+
+#, fuzzy
+#~| msgid "Edit..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit..."
+#~ msgstr "Uredi …"
+
+#, fuzzy
+#~| msgid "Import event to Calendar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import event to Calendar"
+#~ msgstr "Uvozi dogodek v Koledar"
+
+#, fuzzy
+#~| msgid "Export event to iCal file..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export event to iCal file..."
+#~ msgstr "Izvozi dogodek v iCal datoteko …"

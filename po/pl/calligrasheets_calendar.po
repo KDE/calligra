@@ -1,0 +1,242 @@
+# translation of kspread_plugin_tool_calendar.po to
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Maciej Wikło <maciej.wiklo@wp.pl>, 2009.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kspread_plugin_tool_calendar\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2014-06-29 14:12+0200\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: CalendarTool.cpp:63
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+"Data zakończenia jest przed datą rozpoczęcia! Proszę się upewnić, że data "
+"zakończenia następuje po dacie rozpoczęcia."
+
+#: CalendarTool.cpp:63 CalendarTool.cpp:68
+#, kde-format
+msgid "Error"
+msgstr "Błąd"
+
+#: CalendarTool.cpp:68
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+"Kalendarze nie powinny być dłuższe niż 10 lat. Jeśli rzeczywiście "
+"potrzebujesz takich długich okresów, podziel je."
+
+#: CalendarTool.cpp:73
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+"Data rozpoczęcia pokrywa się z datą zakończenia! Zostanie wstawiony tylko "
+"jeden dzień, czy chcesz kontynuować?"
+
+#: CalendarTool.cpp:73 CalendarTool.cpp:78 CalendarTool.cpp:95
+#, kde-format
+msgid "Warning"
+msgstr "Ostrzeżenie"
+
+#: CalendarTool.cpp:78
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+"Utworzenie kalendarza na okres dłuższy niż rok może zająć dużo miejsca, czy "
+"chcesz kontynuować?"
+
+#: CalendarTool.cpp:95
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+"Obszar wstawiania kalendarza NIE jest pusty, czy chcesz kontynuować, "
+"nadpisując istniejące dane? Jeśli wybierzesz Nie, zostanie wybrany obszar "
+"przeznaczony na kalendarz, więc zobaczysz, które dane zostaną nadpisane."
+
+#: CalendarTool.cpp:102
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "Wstaw kalendarz"
+
+#: CalendarTool.cpp:108
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "Kalendarz od %1 do %2"
+
+#: CalendarTool.cpp:150
+#, kde-format
+msgid "week"
+msgstr "tydzień"
+
+#: CalendarToolFactory.cpp:24
+#, kde-format
+msgid "Calendar"
+msgstr "Kalendarz"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:14
+#, kde-format
+msgid "Calendar Tool"
+msgstr "Narzędzie kalendarza"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:20
+#, kde-format
+msgid "Insert"
+msgstr "Wstaw"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:27
+#, kde-format
+msgid "End date:"
+msgstr "Data zakończenia:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:47
+#, kde-format
+msgid "Start date:"
+msgstr "Data rozpoczęcia:"
+
+#, fuzzy
+#~| msgid "Calendar Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Tool"
+#~ msgstr "Narzędzie kalendarza"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Wstaw"
+
+#, fuzzy
+#~| msgid "Start date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start date:"
+#~ msgstr "Data rozpoczęcia:"
+
+#, fuzzy
+#~| msgid "End date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End date:"
+#~ msgstr "Data zakończenia:"
+
+#, fuzzy
+#~| msgid ""
+#~| "End date is before start date! Please make sure that end date comes "
+#~| "after start date."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "End date is before start date! Please make sure that end date comes after "
+#~ "start date."
+#~ msgstr ""
+#~ "Data zakończenia jest przed datą rozpoczęcia! Proszę się upewnić, że data "
+#~ "zakończenia następuje po dacie rozpoczęcia."
+
+#, fuzzy
+#~| msgid "Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Błąd"
+
+#, fuzzy
+#~| msgid ""
+#~| "Calendars should not be longer than 10 years. If you really need such "
+#~| "long periods you need to split them up."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Calendars should not be longer than 10 years. If you really need such "
+#~ "long periods you need to split them up."
+#~ msgstr ""
+#~ "Kalendarze nie powinny być dłuższe niż 10 lat. Jeśli rzeczywiście "
+#~ "potrzebujesz takich długich okresów, podziel je."
+
+#, fuzzy
+#~| msgid ""
+#~| "Start and end dates are equal! Only one day will be inserted, do you "
+#~| "want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Start and end dates are equal! Only one day will be inserted, do you want "
+#~ "to continue?"
+#~ msgstr ""
+#~ "Data rozpoczęcia pokrywa się z datą zakończenia! Zostanie wstawiony tylko "
+#~ "jeden dzień, czy chcesz kontynuować?"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "Ostrzeżenie"
+
+#, fuzzy
+#~| msgid ""
+#~| "Creating a calendar for a longer period than a year can take up a lot of "
+#~| "space, do you want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Creating a calendar for a longer period than a year can take up a lot of "
+#~ "space, do you want to continue?"
+#~ msgstr ""
+#~ "Utworzenie kalendarza na okres dłuższy niż rok może zająć dużo miejsca, "
+#~ "czy chcesz kontynuować?"
+
+#, fuzzy
+#~| msgid ""
+#~| "The area where the calendar is inserted is NOT empty, are you sure you "
+#~| "want to continue, overwriting existing data? If you choose No the area "
+#~| "that would be required for the desired calendar will be selected so you "
+#~| "can see what data would be overwritten."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The area where the calendar is inserted is NOT empty, are you sure you "
+#~ "want to continue, overwriting existing data? If you choose No the area "
+#~ "that would be required for the desired calendar will be selected so you "
+#~ "can see what data would be overwritten."
+#~ msgstr ""
+#~ "Obszar wstawiania kalendarza NIE jest pusty, czy chcesz kontynuować, "
+#~ "nadpisując istniejące dane? Jeśli wybierzesz Nie, zostanie wybrany obszar "
+#~ "przeznaczony na kalendarz, więc zobaczysz, które dane zostaną nadpisane."
+
+#, fuzzy
+#~| msgid "Calendar from %1 to %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar from %1 to %2"
+#~ msgstr "Kalendarz od %1 do %2"
+
+#, fuzzy
+#~| msgid "week"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "week"
+#~ msgstr "tydzień"
+
+#, fuzzy
+#~| msgid "Calendar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar"
+#~ msgstr "Kalendarz"

@@ -1,0 +1,143 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2015, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-12 00:45+0000\n"
+"PO-Revision-Date: 2016-11-21 18:27+0100\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Freek de Kruijf"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "freekdekruijf@kde.nl"
+
+#: main.cpp:61
+#, kde-format
+msgctxt "@info"
+msgid "Mimetype for <filename>%1</filename> not found!"
+msgstr "Mime-bestandstype voor <filename>%1</filename> is niet gevonden!"
+
+#: main.cpp:119
+#, kde-format
+msgctxt "@action:button"
+msgid "Open with <application>%1</application>"
+msgstr "Met <application>%1</application> openen"
+
+#: main.cpp:124
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not find Calligra application suitable for opening <filename>%1</"
+"filename>.<nl/>Do you want to open the file using default application "
+"<application>%2</application>?"
+msgstr ""
+"Kon de geschikte Calligra toepassing niet vinden voor het openen van "
+"<filename>%1</filename>.<nl/>Wilt u het bestand openen met de standaard "
+"toepassing <application>%2</application>?"
+
+#: main.cpp:127
+#, kde-format
+msgctxt "@title:window"
+msgid "Calligra Application Not Found"
+msgstr "Calligra toepassing niet gevonden"
+
+#: main.cpp:157
+#, kde-format
+msgid "Calligra Opener"
+msgstr "Calligra toepassing voor openen"
+
+#: main.cpp:159
+#, kde-format
+msgid "Calligra Document Opener"
+msgstr "Toepassing voor het openen van een Calligra-document"
+
+#: main.cpp:161
+#, kde-format
+msgid "Copyright 2010-%1 Calligra developers"
+msgstr "Copyright 2010-%1 Ontwikkelaars van Calligra"
+
+#: main.cpp:162
+#, kde-format
+msgid "Jarosław Staniek"
+msgstr "Jarosław Staniek"
+
+#: main.cpp:169
+#, kde-format
+msgid "Lists names of all available Calligra applications"
+msgstr "Geeft een lijst met namen van alle beschikbare Calligra-toepassingen"
+
+#: main.cpp:170
+#, kde-format
+msgid "Files to open"
+msgstr "Te openen bestanden"
+
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Freek de Kruijf"
+
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "freekdekruijf@kde.nl"
+
+#~ msgctxt "(qtundo-format) @info"
+#~ msgid "Mimetype for <filename>%1</filename> not found!"
+#~ msgstr "Mime-bestandstype voor <filename>%1</filename> is niet gevonden!"
+
+#~ msgctxt "(qtundo-format) @action:button"
+#~ msgid "Open with <application>%1</application>"
+#~ msgstr "Met <application>%1</application> openen"
+
+#~ msgctxt "(qtundo-format) @info"
+#~ msgid ""
+#~ "Could not find Calligra application suitable for opening <filename>%1</"
+#~ "filename>.<nl/>Do you want to open the file using default application "
+#~ "<application>%2</application>?"
+#~ msgstr ""
+#~ "Kon de geschikte Calligra toepassing niet vinden voor het openen van "
+#~ "<filename>%1</filename>.<nl/>Wilt u het bestand openen met de standaard "
+#~ "toepassing <application>%2</application>?"
+
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Calligra Application Not Found"
+#~ msgstr "Calligra toepassing niet gevonden"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Opener"
+#~ msgstr "Calligra toepassing voor openen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Opener"
+#~ msgstr "Toepassing voor het openen van een Calligra-document"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2010-%1 Calligra developers"
+#~ msgstr "Copyright 2010-%1 Ontwikkelaars van Calligra"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jarosław Staniek"
+#~ msgstr "Jarosław Staniek"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lists names of all available Calligra applications"
+#~ msgstr ""
+#~ "Geeft een lijst met namen van alle beschikbare Calligra-toepassingen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Files to open"
+#~ msgstr "Te openen bestanden"

@@ -1,0 +1,321 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+&traducteurXavierBesnard;&traducteurFrederickAngelique; 
+</authorgroup>
+</chapterinfo>
+<title
+>Configurer &stage;</title>
+
+<sect1 id="configure-dialog">
+<title
+>La boîte de dialogue <guilabel
+>Configurer</guilabel
+> de Stage</title>
+
+<sect2 id="configure-misc">
+<title
+>Divers</title>
+
+<screenshot>
+<screeninfo
+>Divers</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-misc.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Divers</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Unités</guilabel
+></term>
+<listitem
+><para
+>Choisissez l'unité par défaut qui sera utilisée dans vos diapositives.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Rayon de la poignée</guilabel
+></term>
+<listitem
+><para
+>Si vous sélectionnez une forme avec l'outil par défaut (flèche), vous voyez les rectangles jaunes et rouges. Ils sont appelés poignées (utilisées pour redimensionner, les rotations, etc.). Le rayon de la poignée modifie la taille des poignées. Si vous les définissez plus grandes, il sera plus facile de les sélectionner.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Sensibilité de tirage</guilabel
+></term>
+<listitem
+><para
+>Cette option définit la précision avec laquelle vous devez atteindre la poignée pour qu'elle soit considérée comme sélectionnée.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Coller en décalant</guilabel
+></term>
+<listitem
+><para
+>Cette option est active seulement si <guilabel
+>Coller au curseur</guilabel
+> est désactivé. Si vous copiez une forme avec le raccourci clavier <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> et la collez avec le raccourci <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+>, à un endroit où il existe déjà une forme, ce décalage est utilisé pour coller une nouvelle forme en bas / à droite.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Coller au curseur</guilabel
+></term>
+<listitem
+><para
+>Désactive le collage en décalant et insère une forme collée à la position du curseur de la souris.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-grid">
+<title
+>Grille</title>
+
+<screenshot>
+<screeninfo
+>Grille</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-grid.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Grille</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Grille</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Afficher la grille</guilabel
+></term>
+<listitem
+><para
+>Si l'option est activée, &stage; affichera une grille de points représentant les intersections de lignes horizontales et verticales imaginaires. Vous pouvez utiliser ces points pour positionner précisément des objets sur la diapositive.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Aimanter la grille</guilabel
+></term>
+<listitem
+><para
+>Si cette option est activée, quand vous déposez ou déplacez des objets sur la diapositive, le coin en haut à gauche de l'objet <quote
+>se collera</quote
+> ou se déplacera jusqu'au point de la grille le plus proche.</para>
+<para
+>Cela réduit votre liberté de positionner à votre guise les objets sur la diapositive, cependant cette option aide à aligner les objets précisément. Ce comportement est facilement désactivé ou activé avec cette option vous donnant accès au meilleur des deux mondes.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Couleur de la grille : </guilabel
+></term>
+<listitem
+><para
+>Vous pouvez changer ici la couleur de la grille dont la couleur par défaut est noire.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Espacement</guilabel
+></title>
+<para
+>Vous pouvez choisir de conserver le même ratio pour les deux paramètres ci-dessous en ayant l'icône <inlinemediaobject
+><imageobject
+> <imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+> ou de séparer les deux paramètres en utilisant l'icône <inlinemediaobject
+><imageobject
+> <imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+>.</para>
+<varlistentry>
+<term
+><guilabel
+>Horizontal :</guilabel
+></term>
+<listitem
+><para
+>Définir l'espace en centimètre entre deux points sur une ligne horizontale de la grille. L'espace par défaut est 0,5 centimètre.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Vertical :</guilabel
+></term>
+<listitem
+><para
+>Définir l'espace en centimètre entre deux points sur une ligne verticale de la grille. L'espace par défaut est de 0,5 centimètre.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-document">
+<title
+>Document</title>
+
+<screenshot>
+<screeninfo
+>Document</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-document.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Document</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Paramètres du document</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Intervalle d'enregistrement automatique :</guilabel
+></term>
+<listitem
+><para
+>Vous pouvez utiliser cela pour spécifier la fréquence de génération d'un fichier temporaire par &stage;. Si vous définissez cette valeur à <guilabel
+>Pas d'enregistrement automatique</guilabel
+>, &stage; ne fera aucun enregistrement automatique. Vous pouvez régler la fréquence d'enregistrement automatique de 1 minute à 60 minutes.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Créer un fichier de sauvegarde :</guilabel
+></term>
+<listitem
+><para
+>Si cette option est sélectionnée, cela créera un fichier <filename
+>.&lt;nom&gt;.odp.autosave.odp</filename
+> dans le dossier où se trouve votre fichier. Ce fichier de sauvegarde peut être alors utilisé en cas de problème. Le fichier de sauvegarde est mis à jour chaque fois que vous enregistrez votre document ou chaque fois qu'il y a une sauvegarde automatique.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-author">
+<title
+>Auteur</title>
+
+<screenshot>
+<screeninfo
+>Auteur</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Document</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Choisissez un profil d'auteur pour votre document. </para>
+<para
+>Vous pouvez ajoutez un nouveau profil ou supprimer le profil actuel grâce aux boutons à droite de la liste déroulante des profils. </para>
+</sect2>
+
+</sect1>
+
+</chapter>

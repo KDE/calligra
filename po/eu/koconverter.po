@@ -1,0 +1,270 @@
+# Translation for koconverter.po to Euskara/Basque (eu).
+# Copyright (C) 2005-2021, This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>.
+#
+# Translators:
+# Ion Gaztañaga <igaztanaga@gmail.com>, 2005.
+# Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2013.
+# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2013, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2021-01-18 21:28+0100\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Ion Gaztañaga,Hizkuntza Politikarako Sailburuordetza"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "igaztanaga@gmail.com,hizpol@ej-gv.es"
+
+#: calligraconverter.cpp:144
+#, kde-format
+msgid "CalligraConverter"
+msgstr "Calligra bihurgailua"
+
+#: calligraconverter.cpp:146
+#, kde-format
+msgid "Calligra Document Converter"
+msgstr "Calligra dokumentu-bihurgailua"
+
+#: calligraconverter.cpp:148
+#, kde-format
+msgid "Copyright 2001-%1 Calligra developers"
+msgstr "Copyright 2001-%1 Calligra garatzaileak"
+
+#: calligraconverter.cpp:149
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: calligraconverter.cpp:150
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: calligraconverter.cpp:151
+#, kde-format
+msgid "Dan Leinir Turthra Jensen"
+msgstr "Dan Leinir Turthra Jensen"
+
+#: calligraconverter.cpp:158
+#, kde-format
+msgid "Input file"
+msgstr "Sarrera-fitxategia"
+
+#: calligraconverter.cpp:159
+#, kde-format
+msgid "Output file"
+msgstr "Irteera-fitxategia"
+
+#: calligraconverter.cpp:160
+#, kde-format
+msgid "Make a backup of the destination file"
+msgstr "Egin helburu-fitxategiaren babeskopia"
+
+#: calligraconverter.cpp:161
+#, kde-format
+msgid "Batch mode: do not show dialogs"
+msgstr "Batch modua: ez erakutsi elkarrizketak"
+
+#: calligraconverter.cpp:162
+#, kde-format
+msgid "Interactive mode: show dialogs (default)"
+msgstr "Modu interaktiboa: erakutsi elkarrizketak (lehenetsia)"
+
+#: calligraconverter.cpp:163
+#, kde-format
+msgid "Mimetype of the output file"
+msgstr "Irteera-fitxategiaren MIME mota"
+
+#: calligraconverter.cpp:166
+#, kde-format
+msgid "The print orientation. This could be either Portrait or Landscape."
+msgstr "Inprimaketa-orientazioa. Bertikala edo horizontala izan daiteke."
+
+#: calligraconverter.cpp:167
+#, kde-format
+msgid "The paper size. A4, Legal, Letter, ..."
+msgstr "Paper-tamaina: A4, legala, gutuna..."
+
+#: calligraconverter.cpp:168
+#, kde-format
+msgid "The size of the paper margin. By default this is 0.2."
+msgstr "Paper-marjinaren tamaina. Lehenespenez, 0.2 da."
+
+#: calligraconverter.cpp:175
+#, kde-format
+msgid "Two arguments required"
+msgstr "Bi argumentu behar dira"
+
+#: calligraconverter.cpp:203
+#, kde-format
+msgid "Mimetype for input file %1 not found!"
+msgstr "%1 sarrera-fitxategirako MIME mota ez da aurkitu!"
+
+#: calligraconverter.cpp:212
+#, kde-format
+msgid "Mimetype not found %1"
+msgstr "%1 MIME mota ez da aurkitu"
+
+#: calligraconverter.cpp:218
+#, kde-format
+msgid "Mimetype not found, try using the -mimetype option"
+msgstr "MIME mota ez da aurkitu. Saiatu berriz -mimetype aukera erabiliz"
+
+#: calligraconverter.cpp:242
+#, kde-format
+msgid "*** The conversion failed! ***"
+msgstr "*** Bihurketak huts egin du! ***"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Ion Gaztañaga,Hizkuntza Politikarako Sailburuordetza"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "igaztanaga@gmail.com,hizpol@ej-gv.es"
+
+#, fuzzy
+#~| msgid "CalligraConverter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CalligraConverter"
+#~ msgstr "Calligra bihurgailua"
+
+#, fuzzy
+#~| msgid "Calligra Document Converter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Converter"
+#~ msgstr "Calligra dokumentu-bihurgailua"
+
+#, fuzzy
+#~| msgid "(c) 2001-2011 Calligra developers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2001-%1 Calligra developers"
+#~ msgstr "(c) 2001-2011 Calligra-ren garatzaileak"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~| msgid "Nicolas Goutte"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "Nicolas Goutte"
+
+#, fuzzy
+#~| msgid "Dan Leinir Turthra Jensen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dan Leinir Turthra Jensen"
+#~ msgstr "Dan Leinir Turthra Jensen"
+
+#, fuzzy
+#~| msgid "Input file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Input file"
+#~ msgstr "Sarrera-fitxategia"
+
+#, fuzzy
+#~| msgid "Output file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output file"
+#~ msgstr "Irteera-fitxategia"
+
+#, fuzzy
+#~| msgid "Make a backup of the destination file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Make a backup of the destination file"
+#~ msgstr "Egin helburu-fitxategiaren babeskopia"
+
+#, fuzzy
+#~| msgid "Batch mode: do not show dialogs"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Batch mode: do not show dialogs"
+#~ msgstr "Batch modua: ez erakutsi elkarrizketak"
+
+#, fuzzy
+#~| msgid "Interactive mode: show dialogs (default)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interactive mode: show dialogs (default)"
+#~ msgstr "Modu interaktiboa: erakutsi elkarrizketak (lehenetsia)"
+
+#, fuzzy
+#~| msgid "Mimetype of the output file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype of the output file"
+#~ msgstr "Irteera-fitxategiaren MIME mota"
+
+#, fuzzy
+#~| msgid "The print orientation. This could be either Portrait or Landscape."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The print orientation. This could be either Portrait or Landscape."
+#~ msgstr "Inprimaketa-orientazioa. Bertikala edo horizontala izan daiteke."
+
+#, fuzzy
+#~| msgid "The paper size. A4, Legal, Letter, ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The paper size. A4, Legal, Letter, ..."
+#~ msgstr "Paper-tamaina: A4, legala, gutuna..."
+
+#, fuzzy
+#~| msgid "The size of the paper margin. By default this is 0.2."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The size of the paper margin. By default this is 0.2."
+#~ msgstr "Paper-marjinaren tamaina. Lehenespenez, 0.2 da."
+
+#, fuzzy
+#~| msgid "Two arguments required"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two arguments required"
+#~ msgstr "Bi argumentu behar dira"
+
+#, fuzzy
+#~| msgid "Mimetype for input file %1 not found!"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype for input file %1 not found!"
+#~ msgstr "%1 sarrera-fitxategirako MIME mota ez da aurkitu!"
+
+#, fuzzy
+#~| msgid "Mimetype not found %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found %1"
+#~ msgstr "%1 MIME mota ez da aurkitu"
+
+#, fuzzy
+#~| msgid "Mimetype not found, try using the -mimetype option"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found, try using the -mimetype option"
+#~ msgstr "MIME mota ez da aurkitu. Saiatu berriz -mimetype aukera erabiliz"
+
+#, fuzzy
+#~| msgid "*** The conversion failed! ***"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "*** The conversion failed! ***"
+#~ msgstr "*** Bihurketak huts egin du! ***"
+
+#~ msgid "KOConverter"
+#~ msgstr "KOConverter"

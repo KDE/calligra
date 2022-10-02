@@ -1,0 +1,254 @@
+<chapter id="guides">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Brad</firstname
+> <surname
+>Hards</surname
+> <affiliation
+> <address
+><email
+>bradh@frogmouth.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Danny</firstname
+> <surname
+>Allen</surname
+> <affiliation
+> <address
+><email
+>danny@dannyallen.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+
+<othercredit role="translator"
+><firstname
+>Marcus</firstname
+><surname
+>Gama</surname
+><affiliation
+><address
+><email
+>marcus.gama@gmail.com</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Guias Detalhados</title>
+
+<para
+>Este capítulo descreve como realizar as tarefas mais comuns no &stage;.</para>
+
+<sect1 id="html-wizard">
+<title
+>Criando uma apresentação em &HTML;</title>
+
+<para
+>Transforme uma apresentação existente em páginas &HTML; padrão com botões de navegação inseridos.</para>
+
+<para
+>Primeiro, crie uma nova apresentação ou abra uma existente. Depois, clique na opção <menuchoice
+><guimenu
+>Arquivo</guimenu
+><guimenuitem
+>Exportar como HTML...</guimenuitem
+></menuchoice
+></para>
+<para
+>Você irá então obter uma janela que lhe pedirá alguns detalhes:</para>
+
+<screenshot>
+<screeninfo
+>Preenchendo os detalhes para a sua apresentação em &HTML;</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow3.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Preenchendo os detalhes para a sua apresentação em &HTML;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Preencha os campos <guilabel
+>Título</guilabel
+> e <guilabel
+>Autor</guilabel
+>. Selecione os slides que deverão ser exportados. Se você quiser alterar um nome usado na página &HTML; para cada slide, clique duas vezes sobre o nome e edite-o no local.</para>
+
+<para
+>Na área de <guilabel
+>Visualização do resultado</guilabel
+> são apresentados os slides reduzidos, onde você poderá indicar a ordem correta dos slides e navegar pela apresentação com os botões <guiicon
+>&lt;</guiicon
+> e <guiicon
+>&gt;</guiicon
+>. </para>
+
+<para
+>Agora pode selecionar uma folha de estilo com a configuração das opções de &HTML;.</para>
+
+<para
+>Para realmente produzir a sua apresentação em &HTML;, clique no botão <guibutton
+>Exportar</guibutton
+> e selecione uma pasta.</para>
+
+<para
+>O que nós temos agora são as novas pastas <filename
+>html/</filename
+> e <filename
+>pics/</filename
+>, criadas no local definido anteriormente:</para>
+
+<screenshot>
+<screeninfo
+>As pastas recém criadas da apresentação em &HTML;</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow9.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>As pastas recém criadas da apresentação em &HTML;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Existe também um arquivo <filename
+>index.html</filename
+> para iniciar sua apresentação Web.</para>
+
+<para
+>Você poderá ver como ela funciona, usando o seu gerenciador de arquivos ou navegador Web para abrir o arquivo <filename
+>index.html</filename
+>. Clique onde é indicado, para que seja mostrada a primeira página da sua apresentação. A partir daí, funciona da mesma forma que uma apresentação do &stage;.</para>
+
+<para
+>Um clique nos ícones de seta movem a apresentação para o próximo slide ou o anterior. Para voltar para o inicio da apresentação, clique no ícone de slide.</para>
+
+<tip
+><para
+>Para compartilhar a sua apresentação com o mundo, transfira os arquivos recém produzidos para um local acessível na rede (&ie;, para a Web), lembrando-se de manter a estrutura de pastas intacta.</para
+></tip>
+</sect1>
+
+<sect1 id="creating-templates">
+<title
+>Criando modelos para o &stage;</title>
+
+<para
+>É muito fácil de criar um novo modelo para o &stage;.</para>
+
+<para
+>Se você tiver uma apresentação num estilo que você gostaria de usar novamente, você poderá salvá-la como um modelo.</para>
+
+<para
+>Este tutorial mostrará como nós podemos criar um novo modelo e salvá-lo.</para>
+
+<para
+>Abra o &stage; e crie um novo documento.</para>
+
+<para
+>Para adicionar alguma destaque ao slide em branco, nós podemos alterar o fundo do slide - faça isso selecionando a <guilabel
+>Plano de fundo do documento</guilabel
+> na área acoplável Ferramentas.</para>
+
+<para
+>Nós queremos que o fundo seja atrativo. Dessa forma, você pode escolher usar uma imagem como plano de fundo clicando o botão <guibutton
+>Definir imagem</guibutton
+>: sinta-se à vontade para experimentar, mas mantenha o visual bonito!</para>
+
+<screenshot>
+<screeninfo
+>Escolhendo um fundo de slide</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="template03.png"/>
+</imageobject>
+<textobject
+><phrase
+>Escolhendo um fundo de slide</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>A página deverá agora ter as cores que escolheu. Crie uma caixa de texto e escreva um cabeçalho para o slide:</para>
+
+<screenshot>
+<screeninfo
+>Adicionando um Cabeçalho para o novo modelo</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template04.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Adicionando um Cabeçalho para o novo modelo</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Quando estiver satisfeito com o seu modelo, vá para <menuchoice
+><guimenu
+>Arquivo</guimenu
+> <guimenuitem
+>Salvar como</guimenuitem
+></menuchoice
+> e selecione <guilabel
+>Modelo de Apresentação OpenDocument</guilabel
+> o tipo de arquivo da janela.</para>
+
+</sect1>
+
+</chapter>

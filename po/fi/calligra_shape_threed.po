@@ -1,0 +1,39 @@
+# KDE Finnish translation sprint participants:
+# Jiri Grönroos <jiri.gronroos+l10n@iki.fi>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: ThreedShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-11-22 22:08+0200\n"
+"Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
+"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-POT-Import-Date: 2013-01-13 22:09:30+0000\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ThreedShapeFactory.cpp:35
+#, kde-format
+msgid "3D Scene"
+msgstr "3D-maisema"
+
+#: ThreedShapeFactory.cpp:37
+#, kde-format
+msgid "Shape that displays a simple 3D scene."
+msgstr "Yksinkertaisia 3D-maisemia esittävä muoto."
+
+#, fuzzy
+#~| msgid "3D Scene"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "3D Scene"
+#~ msgstr "3D-maisema"
+
+#, fuzzy
+#~| msgid "Shape that displays a simple 3D scene."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape that displays a simple 3D scene."
+#~ msgstr "Yksinkertaisia 3D-maisemia esittävä muoto."

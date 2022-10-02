@@ -1,0 +1,1962 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Алексей</firstname
+><surname
+>Опарин</surname
+><affiliation
+><address
+><email
+>opaleksej@yandex.ru</email
+></address
+></affiliation
+><contrib
+>Перевод на русский</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Настройка &kpresenter;</title>
+
+<sect1  id="configure-autocorrection">
+<title
+>Диалог <guilabel
+>Настроить автоисправление...</guilabel
+></title>
+<para
+>Автоисправление - это система коррекции наиболее часто встречающихся ошибок ввода, автозамены сокращений полным написанием, выставления заглавных букв. Как следует из названия, всё это делается автоматически во время редактирования документа.</para>
+
+<sect2 id="enabling-autocorrection">
+<title
+>Включение/отключение автоисправления</title>
+
+<para
+>Для того чтобы включить автоисправление, выберите в меню  <menuchoice
+><guimenu
+>Текст</guimenu
+><guimenuitem
+> Автоисправление</guimenuitem
+><guimenuitem
+>Включить автоисправление</guimenuitem
+></menuchoice
+>. При включённом автоисправлении изменения вносятся <emphasis
+>при вводе</emphasis
+>. Какие именно изменения производятся - определяют настройки, описанные ниже. </para>
+
+<para
+>Чтобы отключить автоисправление, выберите в меню  <menuchoice
+><guimenu
+>Текст</guimenu
+><guimenuitem
+> Автоисправление</guimenuitem
+><guimenuitem
+>Выключить автоисправление</guimenuitem
+></menuchoice
+>. В этом случае исправления не производятся. Вы можете, однако, <link linkend="manually"
+>включить автоисправление вручную</link
+>, используя пункт меню <menuchoice
+><guimenu
+>Текст</guimenu
+><guimenuitem
+> Автоисправление</guimenuitem
+><guimenuitem
+>Применить автоисправление</guimenuitem
+></menuchoice
+>. </para>
+
+<para
+>Для настройки параметров автоисправления, выберите в меню <menuchoice
+><guimenu
+>Настройка</guimenu
+><guimenuitem
+>Настроить автоисправление...</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Вы увидите диалог настройки параметров с четырьмя вкладками: <link linkend="simple-autocorrection"
+>Простое автоисправление</link
+>, <link linkend="custom-quotes"
+>Настройка кавычек</link
+>, <link linkend="advanced-autocorrestion"
+>Расширенное автоисправление</link
+> и <link linkend="exceptions"
+>Исключения</link
+>.</para>
+</sect2>
+
+<sect2 id="simple-autocorrection">
+<title
+><guilabel
+>Простое автоисправление</guilabel
+></title>
+
+<screenshot>
+<screeninfo
+>Простое автоисправление</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="autocorrection1.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Простое автоисправление</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Автоматическая замена начальной буквы предложения на прописную</guilabel
+></term>
+<listitem
+><para
+>При включении этого параметра &kpresenter; автоматически превращает первую букву предложения в прописную после ввода точки. Можно предписать &kpresenter; в некоторых случаях не делать этого (например, “Sr.” или “Jr.”). Подробности смотрите в разделе <link linkend="exceptions"
+>Исключения автоисправления</link
+>.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Замена двух идущих подряд прописных букв прописной и строчной</guilabel
+></term>
+<listitem
+><para
+>При включении этого параметра &kpresenter; автоматически заменяет двойную прописную букву (распространённая ошибка при наборе) одной. Можно предписать &kpresenter; в некоторых случаях не делать этого. Подробности смотрите в разделе <link linkend="exceptions"
+>Исключения автоисправления</link
+>.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Автоформатирование Интернет-адресов</guilabel
+></term>
+<listitem
+><para
+>При включении этого параметра &kpresenter; находит участки текста, которые можно рассматривать как URL, и автоматически создаёт из них ссылки.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Убрать двойные пробелы</guilabel
+></term>
+<listitem
+><para
+>При включении этого параметра &kpresenter; заменяет любое количество идущих подряд пробелов одним</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Удалить пробелы в начале и конце абзацев</guilabel
+></term>
+<listitem
+><para
+>При включении этого параметра &kpresenter; автоматически удаляет пробелы в начале и/или в конце строк.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Автоматически вводить полужирный шрифт и подчёркивание</guilabel
+></term>
+<listitem
+><para
+>При включении этого параметра &kpresenter; замечает слова, находящиеся между звёздочками ( * ), затем удаляет звёздочки и выделяет слова между ними полужирным шрифтом.</para>
+<para
+>Подобным образом происходит поиск слов, введённых между знаками подчёркивания ( _ ). Затем эти знаки удаляются, и весь текст между ними подчёркивается.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Замена 1/2... на ½...</guilabel
+></term>
+<listitem
+><para
+>При включении этого параметра &kpresenter; автоматически заменит 1/2, 1/3 и 3/4 их аналогами, состоящими из одного символа.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Применять автонумерацию к нумерованным абзацам</guilabel
+></term>
+<listitem
+><para
+>Если вы начнёте набор абзаца с цифры и символа (например, <emphasis
+>1)</emphasis
+>), &kpresenter; сочтёт такой абзац нумерованным. Все абзацы, следующие за ним, также будут последовательно пронумерованы.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Заменить 1st на 1^st</guilabel
+></term>
+<listitem
+><para
+>При включении этого параметра &kpresenter; автоматически заменит 1st на 1<superscript
+>st</superscript
+>.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Начинать названия дней недели с большой буквы</guilabel
+></term>
+<listitem
+><para
+>Автоматически начинает названия дней недели с большой буквы (Sunday, Monday, Tuesday и т.д....).</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Преобразовывать в маркированные списки</guilabel
+></term>
+<listitem
+><para
+>При включении этого параметра &kpresenter; замечает абзацы, начинающиеся с <emphasis
+> - </emphasis
+>, и автоматически преобразует их в маркированные списки. Маркёр можно выбрать с помощью кнопки левее и ниже этого параметра.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+<sect2 id="custom-quotes">
+<title
+><guilabel
+>Настройка кавычек</guilabel
+></title>
+
+<para
+>Выберите вкладку <guilabel
+>Настройка кавычек</guilabel
+></para>
+
+<screenshot>
+<screeninfo
+>Настройка кавычек</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="autocorrection2.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Настройка кавычек</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Замена двойных кавычек типографскими кавычками</guilabel
+></term>
+<listitem>
+<para
+>При выборе этого параметра стандартные двойные клавиатурные кавычки будут преобразованы в типографские кавычки. Для замены одиночного символа кавычек, щёлкните одну из кнопок. Щелчок на кнопке <guibutton
+>По умолчанию</guibutton
+> возвратит все кавычки абзаца в стандартный вид.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Замена одиночных кавычек типографскими кавычками</guilabel
+></term>
+<listitem>
+<para
+>При выборе этого параметра одиночные кавычки будут преобразованы в типографские кавычки. Для замены одиночного символа кавычек, щёлкните одну из кнопок. Щелчок на кнопке <guibutton
+>По умолчанию</guibutton
+> возвратит все кавычки абзаца в стандартный вид.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+<sect2 id="advanced-autocorrestion">
+<title
+><guilabel
+>Расширенное автоисправление</guilabel
+></title>
+
+<para
+>Чтобы включить расширенное автоисправление, перейдите на вкладку <guilabel
+>Расширенное автоисправление</guilabel
+>.</para>
+
+<screenshot>
+<screeninfo
+>Расширенное автоисправление</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="autocorrection3.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Расширенное автоисправление</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Это заставит &kpresenter; заменять одну строку текста другой, что может быть удобно при вводе специальных символов, часто используемых сокращений, или исправлении распространённых ошибок ввода.</para>
+
+<para
+>&kpresenter; использует разные строки автоисправления в зависимости от языка. Выберите соответствующий язык в выпадающем списке <guilabel
+>Замены и исключения для языка</guilabel
+>.</para>
+
+<para
+>Флажок <guilabel
+>Включить автоисправление</guilabel
+> используется для включения/выключения функций автозамены в &kpresenter;. Если этот флажок сброшен, &kpresenter; не будет производить автозамены из списка в этом диалоге.</para>
+
+<para
+>Если флажок <guilabel
+>Замена текста с форматированием</guilabel
+> установлен, &kpresenter; не только заменит текст найденным соответствием, но и приспособит его форматирование к формату текущего документа. Если этот флажок сброшен,  &kpresenter; использует формат того текста, в котором соответствие было найдено. Подробности смотрите в разделе <link linkend="autocorrection-format-options"
+>Изменение формата строки автоисправления</link
+>.</para>
+
+<sect3>
+<title
+>Добавление строки автоисправления</title>
+
+<para
+>Для добавления строки, которую &kpresenter; должен заменить, просто введите её в текстовом поле <guilabel
+>Найти</guilabel
+>, затем введите текст, на который нужно её заменить, в поле <guilabel
+>Заменить на</guilabel
+>.</para>
+
+
+<note
+><para
+>Для вставки специального символа, который невозможно ввести с клавиатуры, нажмите кнопку с тремя точками на ней и выберите символ из представленной таблицы.</para
+></note>
+
+<para
+>После ввода нажмите кнопку <guibutton
+>Добавить</guibutton
+>. Ваши текстовые строки добавлена в таблицу.</para>
+</sect3>
+
+<sect3>
+<title
+>Редактирование и автоисправление строк</title>
+<para
+><emphasis
+>Изменение текста, который нужно найти.</emphasis
+></para>
+<para
+>&kpresenter; не позволяет изменять текст для поиска. Это делается для предупреждения катастрофических ошибок.</para>
+<para
+>Вместо этого придётся полностью удалить текущую пару поиск/замена и ввести новую.</para>
+
+<para
+><emphasis
+>Изменение текста, вводимого на замену.</emphasis
+></para>
+<para
+>Начните со щелчка на редактируемой текстовой строке. Она станет выделенной, и строки для поиска/замены отобразятся в текстовом поле выше неё. Измените заменяющий текст. Сделав это, просто нажмите кнопку <guibutton
+>Изменить</guibutton
+>.</para>
+
+</sect3>
+
+<sect3>
+<title
+>Удаление строки автоисправления</title>
+
+<para
+>Просто щёлкните ненужную строку мышью и нажмите кнопку <guibutton
+>Удалить</guibutton
+>. Строка будет удалена.</para>
+
+<warning>
+<para
+>Учтите, &kpresenter; не возвращает назад ошибочно удалённую строку, поэтому хорошо подумайте <emphasis
+>перед</emphasis
+> нажатием кнопки <guibutton
+>Удалить</guibutton
+>.</para>
+</warning>
+</sect3>
+
+<sect3 id="autocorrection-format-options">
+<title
+>Изменение формата строки автоисправления</title>
+<note
+><para
+>Прежде чем форматировать строку автоисправления, её нужно создать.</para
+></note>
+<para
+>После создания строки щёлкните на ней левой кнопкой мыши</para>
+<para
+>Теперь нажмите кнопку <guibutton
+>Изменить формат...</guibutton
+>. Появится небольшой диалог:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="changeformat.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para
+>Этот диалог позволяет выбрать формат замещающего текста.</para>
+<para
+>В левом столбце видны 13 флажков. Если один из флажков установлен, &kpresenter; изменит формат замещаемого текста согласно указанным параметрам. Если все флажки сброшены, &kpresenter; не будет соблюдать форматирование при замещении текста.</para>
+
+<variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Шрифт:</guilabel
+></term>
+<listitem>
+<para
+>В этом поле с выпадающим списком выберите шрифт для замещающего текста.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Размер:</guilabel
+></term>
+<listitem>
+<para
+>В этом поле со счётчиком выберите размер шрифта для замещающего текста.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Цвет:</guilabel
+> и <guilabel
+>Цвет фона</guilabel
+></term>
+<listitem>
+<para
+>Щелчок на одной из этих кнопок позволит изменить цвета шрифта и/или фона для документов &kpresenter;. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Полужирный:</guilabel
+> и <guilabel
+>Курсив:</guilabel
+></term>
+<listitem>
+<para
+>Пользуйтесь радиокнопками <guilabel
+>Да</guilabel
+>/<guilabel
+>Нет</guilabel
+> для преобразования шрифтов в полужирное или курсивное начертание.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Зачёркнутый:</guilabel
+></term>
+<listitem>
+<para
+>Можно выбрать <guilabel
+>Одинарное</guilabel
+>, <guilabel
+>Двойное</guilabel
+>, <guilabel
+>Жирное</guilabel
+> или <guilabel
+>Без зачёркивания</guilabel
+> варианты зачёркивания замещающего текста.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Подчёркнутый:</guilabel
+></term>
+<listitem>
+<para
+>Можно выбрать <guilabel
+>Одинарное</guilabel
+>, <guilabel
+>Двойное</guilabel
+>, <guilabel
+>Жирное</guilabel
+> или <guilabel
+>Без зачёркивания</guilabel
+> варианты зачёркивания замещающего текста.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Выравнивание по вертикали:</guilabel
+></term>
+<listitem>
+<para
+>Можно выбрать следующие варианты выравнивания замещающего текста: <guilabel
+>Нормальное</guilabel
+>, <guilabel
+>Надстрочное</guilabel
+> или <guilabel
+>Подстрочное</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Тень:</guilabel
+> и <guilabel
+>Слово за словом:</guilabel
+></term>
+<listitem>
+<para
+>Пользуйтесь радиокнопками <guilabel
+>Да</guilabel
+>/<guilabel
+>Нет</guilabel
+> для определения, нужно ли использоватьтень для замещающего текста и/или слово за словом подчёркивать или зачёркивать его.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Регистр:</guilabel
+></term>
+<listitem>
+<para
+>Можно выбрать <guilabel
+>Обычный текст</guilabel
+>, <guilabel
+>ВЕРХНИЙ РЕГИСТР</guilabel
+>, <guilabel
+>нижний регистр</guilabel
+> или <guilabel
+>маленькие заглавные буквы</guilabel
+> для определения, как будут выглядеть заглавные буквы в замещающем тексте.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Язык:</guilabel
+></term>
+<listitem>
+<para
+>Можно выбрать язык замещающего текста.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+>Настроив все параметры, нажмите кнопку <guibutton
+>OK</guibutton
+> для их принятия.</para>
+<para
+>Нажатие кнопки <guibutton
+>Отмена</guibutton
+> отменит все изменения.</para>
+<para
+>Нажав кнопку <guibutton
+>Сброс</guibutton
+>, вы возвратите диалог к первоначальному виду.</para>
+<para
+>Нажав <guibutton
+>Очистить</guibutton
+>, вы сбросите все установленные флажки.</para>
+</sect3>
+
+</sect2>
+<sect2 id="exceptions">
+<title
+><guilabel
+>Исключения</guilabel
+></title>
+
+<para
+>В некоторых случаях автоисправления, принятые в &kpresenter;,бывают нежелательны. В четвёртой вкладке этого диалога как раз и настраиваются <emphasis
+>исключения</emphasis
+> из правил, которые мы с вами обсудили выше.</para>
+<para
+>Так выглядит диалог исключений:</para>
+
+<screenshot>
+<screeninfo
+>Исключения</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="autocorrection4.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Исключения</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Чтобы &kpresenter; не принимал какой-либо текст (например, сокращение) за конец предложения, просто введите этот текстовый фрагмент в текстовое поле с надписью <guilabel
+>Не принимать за конец предложения:</guilabel
+>. Затем нажмите кнопку <guibutton
+>Добавить</guibutton
+>.</para>
+<para
+>Пример: добавление <quote
+>Jr.</quote
+> к этому диалогу предотвратит замену</para>
+<para
+><quote
+>Robert Jones Jr. is a friend of the family.</quote
+></para>
+<para
+>на:</para>
+<para
+><quote
+>Robert Jones Jr. Is a friend of the family.</quote
+></para>
+<para
+>Для удаления ошибочного пункта щёлкните на нём и нажмите кнопку <guibutton
+>Удалить</guibutton
+>.</para>
+<para
+>Вторая группа полей выполняет сходные действия в отношении двух идущих подряд прописных букв.</para>
+<para
+>Просто введите нужное слово в поле под надписью <guilabel
+>Пропускать написание двойных букв в верхнем регистре:</guilabel
+>. Затем нажмите кнопку <guibutton
+>Добавить</guibutton
+>.</para>
+<para
+>Например: добавление к этому диалогу <quote
+>CD</quote
+> предотвратит замену</para>
+<para
+><quote
+>CD</quote
+></para>
+<para
+>на:</para>
+<para
+><quote
+>Cd</quote
+></para>
+<para
+>Для удаления ошибочного пункта щёлкните на нём и нажмите кнопку <guibutton
+>Удалить</guibutton
+>.</para>
+
+</sect2>
+<sect2 id="manually">
+<title
+>Включение автоисправления вручную</title>
+
+<para
+>Если автоисправление для данного документа было отключено, его можно включить вручную.</para>
+<para
+>Для ручного включения автоисправления, сначала нужно установить требуемые параметры с помощью <link linkend="configure-autocorrection"
+>диалога автоисправления</link
+>.</para>
+<para
+>Затем нужно выбрать в меню <menuchoice
+> <guimenu
+>Сервис</guimenu
+><guimenuitem
+> Автоисправление</guimenuitem
+><guimenuitem
+>Применить автоисправление</guimenuitem
+></menuchoice
+>.</para>
+<para
+>&kpresenter; просканирует документ с начала до конца и применит к нему все установленные параметры.</para>
+<para
+>После окончания процедуры вы можете вернуться к редактированию документа.</para>
+<para
+>Подробности о включении и выключении автоисправления смотрите здесь: <link linkend="enabling-autocorrection"
+>Включение/выключение автоисправления</link
+>.</para>
+
+</sect2>
+</sect1>
+
+<sect1  id="configure-completion">
+<title
+>Диалог <guilabel
+>Настроить завершение...</guilabel
+></title>
+
+<para
+>Автозавершение позволяет вводить только несколько первых букв часто используемых вами слов (специальных или технических). &kpresenter; закончит их ввод самостоятельно. Это бывает очень удобно при вводе длинных технических терминов.</para>
+
+<sect2 id="autocomplete-using">
+<title
+>Использование автозавершения</title>
+<para
+>Пользоваться автозавершением очень просто. Просто введите первые буквы слова, затем нажмите <keycombo
+>&Ctrl;<keycap
+>E</keycap
+></keycombo
+>. &kpresenter; выберет из списка автозавершения слово, начинающееся на эти буквы, и самостоятельно его закончит.</para>
+<sect3 id="autocomplete-using-add">
+<title
+>Добавление слов для автозавершения</title>
+<para
+>&kpresenter; может вести отдельные списки автозавершения для каждого пользователя.</para>
+<para
+>Добавлять слова в них можно двумя способами:</para>
+<itemizedlist>
+<listitem
+><para
+>&kpresenter; может автоматически добавлять слова к списку автозавершения для дальнейшего использования. Настроить это можно в <link linkend="autocomplete-dialog"
+>диалоге</link
+>.</para
+></listitem>
+<listitem
+><para
+>Отдельные слова можно добавить в список с помощью <link linkend="autocomplete-dialog"
+>диалога</link
+>.</para
+></listitem>
+</itemizedlist>
+</sect3>
+</sect2>
+
+<sect2 id="autocomplete-dialog">
+<title
+>Настройка автозавершения</title>
+<para
+>Для настройки автозавершения выберите пункт меню <menuchoice
+> <guimenu
+>Настройка</guimenu
+><guimenuitem
+>Настроить завершение...</guimenuitem
+></menuchoice
+>. Откроется следующий диалог.</para>
+
+<screenshot>
+<screeninfo
+>Диалог Настроить завершение...</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="completion.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Диалог Настроить завершение...</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Включить завершение слов</guilabel
+></term>
+<listitem
+><para
+>Служит для включения/отключения автозавершения.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Добавить</guilabel
+></term>
+<listitem>
+<para
+>Нажатием этой кнопки можно вручную добавлять отдельные слова в список автозавершения.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Удалить</guilabel
+></term>
+<listitem>
+<para
+>Для удаления ненужного слова из списка, выделите его и нажмите эту кнопку.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Автоматически добавлять новые слова в список предлагаемых к завершению</guilabel
+></term>
+<listitem>
+<para
+>Этот параметр позволяет добавлять любое слово, количество букв в котором равное или больше, чем <guilabel
+>Минимальное количество букв</guilabel
+>, в список предлагаемых к завершению слов.</para>
+<para
+>Большое текстовое поле в середине диалога содержит все слова, предлагаемые к автозавершению.</para>
+<note
+><para
+>Не все слова в этом списке могут быть немедленно предложены к автозавершению после введения в диалоге.</para
+></note>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показывать слова в виде подсказок</guilabel
+></term>
+<listitem>
+<para
+>Если этот параметр включён, то после набора начальных букв слова из списка автозавершения появится текстовое поле со словами, предлагаемыми к автозавершению. Для завершения слова нажмите клавишу, которую вы назначили для этого в выпадающем списке <guilabel
+>Клавиша согласия на завершение</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term
+><guilabel
+>Минимальное количество букв:</guilabel
+></term>
+<listitem>
+<para
+>С помощью этой комбинации счётчика и ползунка установите минимальное количество букв в слове для автозавершения, чтобы &kpresenter; автоматически не вносил в список автозавершения короткие слова. Можно выбрать любое значение от 5 до 100, и в список будут попадать только слова, состоящие из заданного (или большего) количества букв.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Максимум предлагаемых слов:</guilabel
+></term>
+<listitem>
+<para
+>Эта комбинацию счётчика и ползунка предназначена для ограничения количества слов в списке автозавершения. Если включён параметр<guilabel
+>Автоматически добавлять новые слова в список предлагаемых к завершению</guilabel
+>, этот список может стать слишком громоздким. Чтобы избежать этого, установите максимальное количество слов в пределах от 1 до 500.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Завершать пробелом</guilabel
+></term>
+<listitem>
+<para
+>Если этот параметр включён, то после автоматически введённого слова будет добавлен пробел, и вводить его вручную не понадобится.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Клавиша согласия на завершение:</guilabel
+></term>
+<listitem>
+<para
+>Настраивает клавишу, с помощью которой вы соглашаетесь на ввод одного из предложенных слов. Вы можете выбрать <keycap
+>Enter</keycap
+>, <keycap
+>Tab</keycap
+>, <keycap
+>Пробел</keycap
+>, <keycap
+>End</keycap
+> или <keycap
+>Правая стрелка</keycap
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Сделать списком по умолчанию</guilabel
+></term>
+<listitem>
+<para
+>Введённое слово не становится частью списка автозавершения до тех пор, пока он не <emphasis
+>сохранён</emphasis
+> на диске. С момента его сохранения &kpresenter; применяет данный список для всех автозавершений до тех пор, пока он не будет замещён другим сохранённым списком.</para>
+<para
+>Некоторые из этих слов в списке автозавершения могут всё-таки не сохраниться на диске.</para
+><para
+>Чтобы сохранить текущий список на диск и дать возможность &kpresenter; пользоваться им для автозавершения, нажмите эту кнопку.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+>Для сохранения настроек нажмите кнопку <guibutton
+>OK</guibutton
+>. Для отмены всех изменений нажмите кнопку <guibutton
+>Отмена</guibutton
+>. Для отмены настроек, установленных нажатием кнопки <guibutton
+>Сделать списком по умолчанию</guibutton
+> нажмите кнопку <guibutton
+>Сброс</guibutton
+>.</para>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="configure-dialog">
+<title
+>Диалог <guilabel
+>Настроить &kpresenter;</guilabel
+></title>
+
+<sect2 id="configure-interface">
+<title
+><guilabel
+>Вид</guilabel
+></title>
+
+<screenshot>
+<screeninfo
+>Настроить вид</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure1.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Настроить вид</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Линейки</guilabel
+></term>
+<listitem
+><para
+>Этот параметр включён по умолчанию, и на каждом слайде &kpresenter; видны вертикальная и горизонтальная линейки. Если параметр отключён, линейки на слайдах больше не появятся.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Строка состояния</guilabel
+></term>
+<listitem
+><para
+>Отображает/скрывает строку состояния, по умолчанию отображается.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Количество недавних файлов:</guilabel
+></term>
+<listitem
+><para
+>Устанавливает количество файлов, которые можно открыть из меню  <menuchoice
+><guimenu
+>Файл</guimenu
+><guimenuitem
+>Открыть недавние</guimenuitem
+></menuchoice
+>. Значение по умолчанию 10, а вы можете установить от 1 до 20.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Величина отступа текста:</guilabel
+></term>
+<listitem
+><para
+>Эта настройка устанавливается в меню <guimenu
+>Текст</guimenu
+>, пунктами <guimenuitem
+>Увеличить отступ</guimenuitem
+> и <guimenuitem
+>Уменьшить отступ</guimenuitem
+> для изменения величины отступа. По умолчанию установлен 1 см.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-color">
+<title
+><guilabel
+>Цвет</guilabel
+></title>
+
+<screenshot>
+<screeninfo
+>Цвет</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure2.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Цвет</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Цвет фона объекта:</guilabel
+></term>
+<listitem
+><para
+>Изменяет фоновый цвет текстового поля. По умолчанию цвет всех текстовых полей белый. Если у слайда тёмный фон, а вы хотите поместить на него белый текст, можно установить фоновый цвет таким, чтобы вводимый текст был хорошо различим для вас при вводе. Когда ввод будет закончен, пространство вокруг текста примет цвет общего фона. Нажатие кнопки  <guibutton
+>По умолчанию</guibutton
+> вернёт все настройки в исходное состояние.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Цвет сетки:</guilabel
+></term>
+<listitem
+><para
+>Здесь можно настроить цвет сетки, по умолчанию он чёрный.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-spelling">
+<title
+><guilabel
+>Проверка правописания</guilabel
+></title>
+
+<para
+>На этой вкладке настраивается поведение программы проверки правописания.</para>
+
+<screenshot>
+<screeninfo
+>Проверка правописания</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure3.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Проверка правописания</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Язык по умолчанию:</guilabel
+></term>
+<listitem
+><para
+>Здесь происходит выбор языка для проверки правописания. Представленный список языков основан на установленных пакетах aspell-ISO, поэтому для проверки правописания нужно установить соответствующий пакет.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Включить фоновую проверку правописания</guilabel
+> </term>
+<listitem
+><para
+>Если этот параметр включён (а он включён по умолчанию),то слова, не соответствующие словарям, упомянутым выше, будут выделены красным цветом. Эффект здесь тот же, что при выборе параметра <menuchoice
+><guimenu
+>Текст</guimenu
+><guimenuitem
+>Проверка правописания</guimenuitem
+><guimenuitem
+>Автоматическая проверка правописания</guimenuitem
+></menuchoice
+>, и оба параметра включаются/отключаются совместно.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Пропускать слова из прописных букв</guilabel
+></term>
+<listitem
+><para
+>Если этот параметр включён, то слова, набранные прописными буквами, не будут считаться ошибочными. Этот параметр также будет действовать при выборе пункта меню <menuchoice
+><guimenu
+>Текст</guimenu
+><guimenuitem
+>Проверка правописания</guimenuitem
+><guimenuitem
+> Написание...</guimenuitem
+></menuchoice
+>.</para>
+<tip
+><para
+>Это бывает удобно, если обрабатываемый документ содержит большое количество сокращений. Если этот флажок сброшен, большинство сокращений будут незаслуженно выделены, а если его установить, то &kpresenter; не будет считать их ошибками.</para
+></tip>
+</listitem
+></varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Пропускать слитно написанные слова</guilabel
+></term>
+<listitem
+><para
+>Если включить этот параметр, то слитно написанные слова не будут считаться ошибочными. Для некоторых языков это удобно. Этот параметр будет также действовать при выборе пункта меню <menuchoice
+><guimenu
+>Текст</guimenu
+><guimenuitem
+>Проверка правописания</guimenuitem
+><guimenuitem
+>Написание...</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Примеры таких слов: <emphasis
+>shutout</emphasis
+>, <emphasis
+>cannot</emphasis
+> и <emphasis
+>blackout</emphasis
+>.</para>
+<tip>
+<para
+>Установив этот флажок, можно предотвратить выделение названий веб-сайтов и адресов электронной почты как ошибок, ведь такого рода тексты часто состоят из нескольких слитных слов.</para>
+</tip>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Пропускать эти слова</guilabel
+></term>
+<listitem
+><para
+>Это список слов, которые проверка правописания должна пропускать всегда. Введите слово в текстовое поле и нажмите кнопку <guilabel
+>Добавить</guilabel
+>. Все слова из этого списка при проверке правописания будут пропущены.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Добавить</guilabel
+></term>
+<listitem
+><para
+>Введите слово в текстовое поле, затем нажмите эту кнопку для добавления слова в список. Если слово добавлено, то даже если вы нажмёте кнопку <guibutton
+>Отмена</guibutton
+> в диалоге настройки, слово в списке все равно останется.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Удалить</guilabel
+></term>
+<listitem
+><para
+>Выделите слово в списке, затем нажмите эту кнопку для его удаления.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2 id="configure-misc">
+<title
+><guilabel
+>Дополнительно</guilabel
+></title>
+
+<screenshot>
+<screeninfo
+>Дополнительно</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure4.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Дополнительно</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Дополнительно</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Количество откатов/повторений:</guilabel
+></term>
+<listitem
+><para
+>Установите количество действий, к которым можно вернуться (сохраняемых в буфере откатов &kpresenter;). По умолчанию это 30, минимум 0, максимум 60. Если порядковый номер действия превышает установленный лимит, оно будет забыто.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Выделять ссылки</guilabel
+></term>
+<listitem
+><para
+>Если вы хотите включить в свои слайды ссылки, можно использовать пункт меню <menuchoice
+><guimenu
+>Вставка</guimenu
+><guimenuitem
+>Ссылка...</guimenuitem
+></menuchoice
+>, позволяющий вставить в документ интернет-адрес, адрес электронной почты или ссылку на файл. Если параметр <guilabel
+>Выделять ссылки</guilabel
+> включён, все ссылки по умолчанию будут выделены цветом, и станут хорошо заметны. Если параметр отключён, ссылки выделяться не будут. Ссылки будут выделены (или нет) как в редактируемых слайдах, так и во время презентации. Выделенная ссылка: <inlinemediaobject
+><imageobject
+> <imagedata fileref="configure4a.png" format="PNG"/></imageobject
+></inlinemediaobject
+> Невыделенная ссылка: <inlinemediaobject
+><imageobject>
+<imagedata fileref="configure4a1.png" format="PNG"/></imageobject
+></inlinemediaobject
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Подчёркивать все ссылки</guilabel
+></term>
+<listitem
+><para
+>Если параметр включён, то все ссылки по умолчанию будут подчёркнуты. Если параметр отключить, ссылки подчёркиваться не будут. Выделенная и подчёркнутая ссылка: <inlinemediaobject
+><imageobject>
+<imagedata fileref="configure4b.png" format="PNG"/></imageobject
+></inlinemediaobject
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показывать комментарии</guilabel
+></term>
+<listitem
+><para
+>Комментарии вставляются в текст в позицию курсора через меню <menuchoice
+><guimenu
+>Вставка</guimenu
+><guimenuitem
+>Комментарий...</guimenuitem
+></menuchoice
+>. Комментарии будут видны только в режиме редактирования, но не во время презентации. Если этот параметр включён (по умолчанию), то комментарий будет отображён в маленьком жёлтом прямоугольнике. Затем его можно редактировать, удалять или копировать его текст при помощи щелчка правой кнопкой мыши. Выделенный комментарий: <inlinemediaobject
+><imageobject>
+<imagedata fileref="configure4c.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para
+></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term
+><guilabel
+>Показывать код поля</guilabel
+></term>
+<listitem
+><para
+>В режиме редактирования (не во время презентации) этот параметр позволит отображать коды переменных. Это очень удобно для того, чтобы разобраться, какая из переменных выделена. Переменные вставляются через меню <menuchoice
+><guimenu
+>Вставка</guimenu
+><guimenuitem
+>Переменная</guimenuitem
+></menuchoice
+>.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Печатать примечания к слайдам</guilabel
+></term>
+<listitem
+><para
+>Если этот параметр включён, все примечания будут распечатаны на принтере. Примечания будут напечатаны на отдельном последнем листе, с первого до последнего слайда, и будут закончены Главной страницей примечаний. Можно просмотреть примечания к каждому слайду через меню <menuchoice
+><guimenu
+>Вид</guimenu
+><guimenuitem
+>Показать панель примечаний</guimenuitem
+></menuchoice
+>.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Сетка</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Наклон по горизонтали:</guilabel
+></term>
+<listitem
+><para
+>Установка расстояния в миллиметрах между двумя соседними точками сетки по горизонтали. По умолчанию 5 мм.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Выравнивание по вертикали:</guilabel
+></term>
+<listitem
+><para
+>Установка расстояния между двумя соседними точками сетки по вертикали. По умолчанию 5 мм.</para
+></listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="configure-document">
+<title
+><guilabel
+>Документ</guilabel
+></title>
+
+<screenshot>
+<screeninfo
+>Документ</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure5.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Документ</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Настройки документа по умолчанию</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Шрифт по умолчанию:</guilabel
+></term>
+<listitem
+><para
+>Нажмите кнопку <guibutton
+>Выбрать...</guibutton
+>, и появится новый диалог, в котором можно задать шрифт по умолчанию. Этот шрифт будет применяться в &kpresenter; до очередного форматирования. Любой текст может быть приведён к настройкам по умолчанию выбором пункта меню <menuchoice
+><guimenu
+>Текст</guimenu
+><guimenuitem
+>Формат по умолчанию</guimenuitem
+></menuchoice
+>.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Основной язык:</guilabel
+></term>
+<listitem
+><para
+>В этом выпадающем списке можно выбрать основной язык документа, настройка которого будет использована при проверке правописания и расстановке переносов.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Автоматический перенос слов</guilabel
+></term>
+<listitem
+><para
+>Включите этот параметр, если необходимо автоматически переносить длинные слова, не помещающиеся в текстовое поле. По умолчанию этот параметр отключён.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Настройка документа</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Создавать резервную копию</guilabel
+></term>
+<listitem
+><para
+>Если этот параметр включён, то в директории, где хранится редактируемый файл, будет создан файл <filename
+>.&lt;name&gt;.kpr.autosave.kpr</filename
+>. Это делается на случай возникновения проблем. Файл обновляется всякий раз, когда вы сохраняете документ, а также при каждом автосохранении.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Автосохранение (мин.):</guilabel
+></term>
+<listitem
+><para
+>Здесь можно установить, как часто &kpresenter; будет сохранять временный файл. Если установить параметр <guilabel
+>Без автосохранения</guilabel
+>, &kpresenter; не будет делать этого совсем. Период между автосохранениями можно установить от 1 до 60 минут.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Номер первого слайда:</guilabel
+></term>
+<listitem
+><para
+>Здесь можно изменить номер слайда, с которого начинается презентация. По умолчанию это номер 1. </para>
+<tip
+><para
+>Это поможет вам в том случае, если нужно разделить единый документ на несколько файлов.</para
+></tip
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Интервал табуляции (мм):</guilabel
+></term>
+<listitem
+><para
+>Для каждого документа &kpresenter; предустановлен определённый интервал табуляции. Если вы установите свой интервал для этого документа, его значение заменит предустановленное. В этом текстовом поле можно установить нужный интервал табуляции. Например, если установить значение 1,5 при единицах измерения сантиметр, то первая позиция табуляции будет располагаться в 1,5 см. от левого поля, вторая - в 3 см., и т.д.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Курсор</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Курсор в нерабочей области</guilabel
+></term>
+<listitem
+><para
+>Если этот флажок установлен, и вы щёлкнете мышью в нерабочей области вашего документа, курсор появится там. Если флажок сброшен, то при щелчке в нерабочей области курсор не появится.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Курсор свободного ввода</guilabel
+></term>
+<!-- FIXME: Is this the same as the type anywhere cursor? if so, why
+two names? -->
+<listitem
+><para
+>Если этот флажок установлен, то вы можете выбирать место ввода в документе по своему усмотрению. Переместите указатель мыши к нужному месту в документе, нажмите среднюю кнопку, и копия выделенного текста будет вставлена в нужное место документа.</para>
+<para
+>Если этот флажок сброшен, то для копирования текста из одной части в другую, вам понадобится выделить текст, вручную скопировать его в буфер обмена, затем вручную вставить его в нужное место. </para
+></listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="configure-tools">
+<title
+><guilabel
+>Инструменты</guilabel
+></title>
+
+<para
+>Этот диалог устанавливает настройки инструментов по умолчанию. В нем 6 вкладок.</para>
+
+<sect3 id="outline">
+<title
+>Контур</title>
+
+<screenshot>
+<screeninfo
+>Вкладка Контур</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Вкладка Контур</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Это используется в меню <menuchoice
+><guimenu
+>Вставка</guimenu
+><guimenuitem
+> Линия</guimenuitem
+></menuchoice
+>.</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Цвет:</guilabel
+></term>
+<listitem
+><para
+>Настройка цвета линии. Щелчок в этой области вызовет стандартный диалог выбора цвета KDE.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Стиль:</guilabel
+></term>
+<listitem
+><para
+>Выбор стиля линии от Без Контура (линии не будет совсем) до линии, состоящей из точек или обычной линии.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Ширина:</guilabel
+></term>
+<listitem
+><para
+>Задание ширины линии.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Стиль стрелки</guilabel
+></term>
+<listitem
+><para
+>Настройка стиля начала и окончания строк. Например, можно вставить стрелку в конце строки, а начало её оформить квадратным маркёром.</para
+></listitem>
+</varlistentry>
+</variablelist>
+<para
+>Последнее поле представит вам суммарный вид ваших настроек.</para>
+</sect3>
+
+<sect3 id="fill">
+<title
+>Заливка</title>
+
+<screenshot>
+<screeninfo
+>Вкладка Заливка</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6b.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Вкладка Заливка</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Тип:</guilabel
+></term>
+<listitem
+><para
+>Можно выбрать между типами заливки: <guilabel
+>Одноцветная</guilabel
+>, <guilabel
+>Градиентная</guilabel
+> и <guilabel
+>Прозрачная</guilabel
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Стиль:</guilabel
+></term>
+<listitem
+><para
+>Выбор стиля или шаблона.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Цвет:</guilabel
+></term>
+<listitem
+><para
+>Выбор цвета. По умолчанию он белый. Щелчок в области выбора цвета вызовет стандартный диалог выбора цвета KDE.</para
+></listitem>
+</varlistentry>
+</variablelist>
+<para
+>В итоговом окне, представляющем сделанные настройки, цвет не белый!</para>
+</sect3>
+
+<sect3 id="rectangle">
+<title
+>Прямоугольник</title>
+
+<para
+>Это используется в меню <menuchoice
+><guimenu
+>Вставка</guimenu
+><guimenuitem
+> Фигура</guimenuitem
+><guimenuitem
+>Прямоугольник </guimenuitem
+></menuchoice
+>.</para>
+
+<screenshot>
+<screeninfo
+>Вкладка Прямоугольник</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6c.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Вкладка Прямоугольник</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Вы можете связать две настройки, описанные ниже, с помощью значка <inlinemediaobject
+><imageobject
+><imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+> или разделить обе настройки при помощи значка <inlinemediaobject
+><imageobject
+><imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+>.</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Наклон по вертикали:</guilabel
+></term>
+<listitem
+><para
+>Задаёт наклон по вертикали.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Наклон по горизонтали:</guilabel
+></term>
+<listitem
+><para
+>Задаёт наклон по горизонтали.</para
+></listitem>
+</varlistentry>
+</variablelist>
+<para
+>Последнее поле представит вам суммарный вид ваших настроек.</para>
+</sect3>
+
+<sect3 id="polygon">
+<title
+>Многоугольник</title>
+
+<para
+>Это используется в меню <menuchoice
+><guimenu
+>Вставка</guimenu
+><guimenuitem
+> Фигура</guimenuitem
+><guimenuitem
+>Выпуклый/вогнутый многоугольник</guimenuitem
+></menuchoice
+>.</para>
+
+<screenshot>
+<screeninfo
+>Вкладка Многоугольник</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6d.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Вкладка Многоугольник</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Тип:</guilabel
+></term>
+<listitem
+><para
+>Можно выбрать <guilabel
+>Многоугольник</guilabel
+> или <guilabel
+>Выпуклый/вогнутый</guilabel
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Углы:</guilabel
+></term>
+<listitem
+><para
+>Задание количества вершин многоугольника.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Острота углов:</guilabel
+></term>
+<listitem
+><para
+>Увеличение или уменьшение остроты углов многоугольника.</para
+></listitem>
+</varlistentry>
+</variablelist>
+<para
+>Последнее поле представит вам суммарный вид ваших настроек.</para>
+</sect3>
+
+<sect3 id="pie">
+<title
+>Производные круга</title>
+
+<para
+>Это используется в меню <menuchoice
+><guimenu
+>Вставка</guimenu
+><guimenuitem
+>Фигура </guimenuitem
+><guimenuitem
+>Сектор/дуга/сегмент </guimenuitem
+></menuchoice
+>.</para>
+
+<screenshot>
+<screeninfo
+>Вкладка Производные круга</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6e.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Вкладка Производные круга</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Тип:</guilabel
+></term>
+<listitem
+><para
+>Здесь можно выбрать один из трёх вариантов: Сектор, Дуга и Сегмент.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Начальная позиция:</guilabel
+></term>
+<listitem
+><para
+>Задаёт начальную позицию.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Длина:</guilabel
+></term>
+<listitem
+><para
+>Задаёт длину фигуры.</para
+></listitem>
+</varlistentry>
+</variablelist>
+<para
+>Последнее поле представит вам суммарный вид ваших настроек.</para>
+</sect3>
+
+</sect2>
+
+<sect2 id="configure-paths">
+<title
+><guilabel
+>Пути</guilabel
+></title>
+
+<screenshot>
+<screeninfo
+>Пути</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure7.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Пути</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+<para
+>Здесь устанавливаются два пути - путь к резервному файлу и путь к каталогу со слайдами. Если какой-либо из них нужно изменить - выделите его и нажмите кнопку <guilabel
+>Изменить путь</guilabel
+>. Появится маленький диалог, и если сбросить флажок <guilabel
+>Путь по умолчанию</guilabel
+>, вы сможете задать нужный путь самостоятельно или с помощью стандартного диалога выбора файла KDE.</para>
+
+</sect2>
+
+</sect1>
+
+</chapter>

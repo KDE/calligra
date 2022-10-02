@@ -1,0 +1,276 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY package "calligra">
+  <!ENTITY calligra "Calligra">
+  <!ENTITY tables "<application
+>Calligra Tables</application
+>">
+  <!ENTITY words "<application
+>Calligra Words</application
+>">
+  <!ENTITY stage "<application
+>Calligra Stage</application
+>">
+  <!ENTITY plan "<application
+>Calligra Plan</application
+>">
+  <!-- the following author entities have been added to user.entities in 4.10 branch and trunk of svn
+       they can be removed from this file once they are present in the kdelibs minimum version required by &kappname; -->
+  <!ENTITY traducteurFrederickAngelique      '<othercredit role="translator"
+><firstname
+>Frederick</firstname
+><surname
+>Angelique</surname
+><affiliation
+><address
+><email
+>ti_orion@hotmail.fr</email
+></address
+></affiliation
+><contrib
+>Traduction française&nbsp;</contrib
+></othercredit
+>'>
+  <!ENTITY relecteurFrederickAngelique        '<othercredit role="reviewer"
+><firstname
+>Frederick</firstname
+><surname
+>Angelique</surname
+><affiliation
+><address
+><email
+>ti_orion@hotmail.fr</email
+></address
+></affiliation
+><contrib
+>Relecture de la documentation française&nbsp;</contrib
+></othercredit
+>'>
+  <!ENTITY FrederickAngelique 'Frederick Angelique <email
+>ti_orion@hotmail.fr</email
+>'>
+
+  <!ENTITY kappname "&stage;">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY tutorial SYSTEM "tutorial.docbook">
+  <!ENTITY guides SYSTEM "guides.docbook">
+  <!ENTITY great SYSTEM "great-presentations.docbook">
+  <!ENTITY menus SYSTEM "menus.docbook">
+  <!ENTITY options SYSTEM "options.docbook">
+  <!ENTITY % Catalan  "INCLUDE"
+> <!-- change language only here -->
+]>
+
+<book id="stage" lang="&language;">
+<bookinfo>
+<title
+>El manual de &stage;</title>
+
+<authorgroup>
+<author
+>&Neil.Lucock; &Neil.Lucock.mail; </author>
+
+<author
+>&Krishna.Tateneni; &Krishna.Tateneni.mail; </author>
+
+<author
+>&Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail; </author>
+
+<author
+><personname
+> <firstname
+>Gary</firstname
+> <surname
+>Cramblitt</surname
+> </personname
+> <email
+>garycramblitt@comcast.net</email
+> </author>
+
+&traductor.Rafael.Carreras; &traductor.Antoni.Bella; 
+</authorgroup>
+
+<date
+>9 de desembre de 2012</date>
+<releaseinfo
+>2.6</releaseinfo>
+
+<copyright>
+<year
+>1999</year
+><year
+>2000</year>
+<holder
+>&Krishna.Tateneni;</holder>
+</copyright>
+
+<copyright>
+<year
+>2001</year
+><year
+>2002</year>
+<holder
+>&Neil.Lucock;</holder>
+</copyright>
+
+<copyright>
+<year
+>2005</year>
+<holder
+>&Anne-Marie.Mahfouf;</holder>
+</copyright>
+
+<copyright>
+<year
+>2006</year>
+<holder
+>Gary Cramblitt</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<abstract>
+<para
+>&stage; és el programa de presentacions de la suite d'aplicacions de productivitat &calligra;. </para>
+</abstract>
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Stage</keyword>
+<keyword
+>Calligra</keyword>
+<keyword
+>Gràfics</keyword>
+<keyword
+>Presentacions</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title
+>Introducció</title>
+
+<important
+> <para
+>Si us plau, mireu <ulink url="http://docs.kde.org/development/ca/calligra/stage/index.html"
+>http://docs.kde.org</ulink
+> per a versions actualitzades d'aquest document.</para
+></important>
+
+<para
+>El &stage; és el programa de presentacions de la suite de productivitat &calligra;. Usant el &stage;, podeu preparar un conjunt de diapositives per a usar-les en un passi a la pantalla o per a imprimir. Les vostres diapositives poden incloure text i gràfics en una varietat de formats i, naturalment, podeu incrustar-hi tota mena d'objectes usant el KParts. </para>
+
+<para
+>La suite de productivitat &calligra; està composta per una sèrie d'aplicacions dissenyades per a treballar juntes. Hi ha disponible documentació general del &calligra;, així com manuals per a cada component de la suite. Altres components del &calligra; són: </para>
+
+<itemizedlist>
+<listitem>
+<para
+>&words; -un processador de text basat en marcs-. </para>
+</listitem>
+
+<listitem
+><para
+>&tables; -una aplicació de full de dades-. </para>
+</listitem>
+
+</itemizedlist>
+
+<para
+>El &calligra; és un projecte de programari lliure (o de codi font obert) sota els termes de la Llicència Pública General de &GNU;. </para>
+
+</chapter>
+
+&tutorial;
+
+&guides;
+
+&great;
+
+&menus;
+
+&options;
+
+<chapter id="credits">
+<title
+>Crèdits i Llicència</title>
+
+<para
+>&stage; </para>
+
+<para
+>Drets d'autor del programa 1998-2000 per en Reginald Stadlbauer <email
+>reggie@kde.org</email
+> </para>
+
+<para
+>El mantenidor actual és Laurent Montel <email
+>montel@kde.org</email
+>. </para>
+
+
+<itemizedlist>
+<title
+>Col·laboradors</title>
+
+<listitem>
+<para
+>Werner Trobin <email
+>trobin@kde.org</email
+>. </para>
+</listitem>
+
+<listitem>
+<para
+>&David.Faure; &David.Faure.mail; </para>
+</listitem>
+
+<listitem>
+<para
+>Toshitaka Fujioka <email
+>fujioka@kde.org</email
+> </para>
+</listitem>
+
+<listitem>
+<para
+>Luk&aacute;&scaron; Tinkl <email
+>lukas@kde.org</email
+> </para>
+</listitem>
+
+<listitem>
+<para
+>&Thorsten.Zachmann; &Thorsten.Zachmann.mail; </para>
+</listitem>
+
+<listitem>
+<para
+>Ariya Hidayat <email
+>ariya@kde.org</email
+> </para>
+</listitem>
+
+<listitem>
+<para
+>Percy Leonhardt <email
+>percy@eris23.de</email
+> </para>
+</listitem>
+</itemizedlist>
+
+<para
+>Documentació basada en la feina amb drets d'autor 1999-2000 per &Krishna.Tateneni;. Algunes parts són copyright 2000-2002 &Neil.Lucock; &Neil.Lucock.mail; i 2005 &Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail; </para>
+
+<para
+>Traductor de la documentació: &credits.Rafael.Carreras;</para
+> &underFDL; &underGPL; </chapter>
+
+&documentation.index; 
+
+</book>
+

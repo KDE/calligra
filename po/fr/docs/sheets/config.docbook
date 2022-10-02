@@ -1,0 +1,140 @@
+<chapter id="configure">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+&traducteurGerardDelafond; &traducteurDanielDurand; &traducteurLudovicGrossard; 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Configurer les raccourcis et barres d'outils de &sheets;</title>
+
+<sect1 id="configshort">
+<title
+>Raccourcis</title>
+<para
+>Pour changer les combinaisons de raccourcis clavier utilisés par &sheets;, sélectionnez <menuchoice
+><guimenu
+>Configuration</guimenu
+><guimenuitem
+>Configurer les raccourcis clavier...</guimenuitem
+></menuchoice
+>. Ceci ouvrira une boîte de dialogue comme ci-dessous. </para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Capture d'écran 1 de configuration</phrase>
+</textobject>
+</mediaobject>
+<para
+>Cherchez dans la liste déroulante pour trouver l'action dont vous voulez ajouter ou modifier le raccourci- lavier et sélectionnez-la par un clic <mousebutton
+>gauche</mousebutton
+> sur son nom. En donnant le nom de l'action dans la barre de recherche en haut, vous pourrez alors changer le raccourci en sélectionnant le bouton radio <guilabel
+>Aucun</guilabel
+>, <guilabel
+>Par défaut</guilabel
+> ou <guilabel
+>Personnalisé</guilabel
+>.</para>
+<para
+>Maintenant vous pouvez simplement actionner la combinaison de touches que vous voulez pour agir comme raccourci, par exemple <keycombo action="simul"
+>&Ctrl;&Maj;<keycap
+>S</keycap
+></keycombo
+>.</para>
+</sect1>
+
+<sect1 id="configtoolbars">
+<title
+>Barres d'outils</title>
+<para
+>&sheets; a six barres d'outils : <guilabel
+>Fichier</guilabel
+>, <guilabel
+>Édition</guilabel
+>, <guilabel
+>Maths</guilabel
+>, <guilabel
+>Navigation</guilabel
+>, <guilabel
+>Format</guilabel
+>, <guilabel
+>Police</guilabel
+> et <guilabel
+>Couleur / Bordures</guilabel
+>, chacune d'entre elles peut être affichée ou non en fonction des choix faits dans le menu <guimenu
+>Configuration</guimenu
+>.</para>
+<para
+>Si les barres d'outils sont déverrouillées, vous pouvez choisir si une barre d'outils apparaît en <guimenuitem
+>haut</guimenuitem
+>, à <guimenuitem
+>gauche</guimenuitem
+>, à <guimenuitem
+>droite</guimenuitem
+> ou en <guimenuitem
+>bas</guimenuitem
+> de la fenêtre de &sheets; en cliquant du bouton <mousebutton
+>droit</mousebutton
+> sur la barre d'outils, ce qui ouvre le <guilabel
+>menu de barre d'outils</guilabel
+> et en faisant une sélection dans le sous-menu <guisubmenu
+>Orientation</guisubmenu
+>. Ce <guilabel
+>Menu de barre d'outils</guilabel
+> a aussi des sous-menus pour choisir si la barre d'outils affiche des icônes, de texte ou les deux, et la taille des icônes.</para>
+
+<para
+>Une autre manière de déplacer une barre d'outils est de placer le pointeur de la souris sur les deux barres verticales à l'extrémité gauche de chaque barre d'outils et de maintenir le bouton <mousebutton
+>gauche</mousebutton
+> de la souris enfoncé pendant que vous tirez la barre vers la position désirée. Quand vous tirez la barre d'outils de cette manière, vous pouvez relâcher le bouton de la souris quand il est à une certaine distance de n'importe quel bord de la fenêtre de &sheets;, et vous obtiendrez alors une barre flottante, qui n'est pas liée à une partie particulière de la fenêtre de &sheets;, et peut être déplacée hors de la fenêtre. Pour remettre une barre d'outils flottante dans une des positions traditionnelles, cliquez du bouton <mousebutton
+>droit</mousebutton
+> sur sa petite barre de titre pour amener le <guilabel
+>Menu de barre d'outils</guilabel
+> et choisissez une des options dans le sous-menu<guisubmenu
+>Orientation</guisubmenu
+>.</para>
+
+<para
+>La sélection de <guimenuitem
+>Configurer les barres d'outils...</guimenuitem
+> du menu <guimenu
+>Configuration</guimenu
+> ouvre une boîte de dialogue qui vous permet d'ajouter des boutons ou d'en enlever des barres d'outils de &sheets;.</para>
+<para
+>Pour utiliser cette boîte de dialogue <guilabel
+>Configurer les barres d'outils</guilabel
+>, sélectionnez d'abord une barre d'outils dans la liste combinée <guilabel
+>Barre d'outils :</guilabel
+>. La fenêtre à droite <guilabel
+>Actions actuelles :</guilabel
+> affichera alors les boutons actuellement présents dans la barre d'outils. Vous pouvez enlever un bouton en le sélectionnant dans cette fenêtre puis en actionnant le bouton gauche de la souris, ou le déplacer en actionnant les flèches haut et bas. Pour ajouter un nouveau bouton à la barre d'outils, sélectionnez-le dans la liste <guilabel
+>Actions disponibles :</guilabel
+> et actionnez le bouton en flèche vers la droite.</para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

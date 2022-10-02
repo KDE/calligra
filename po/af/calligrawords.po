@@ -1,0 +1,6275 @@
+# WEB-Translator generated file. UTF-8 test:äëïöü
+# Copyright (C) 2001 Free Software Foundation, Inc.
+# Frikkie Thirion <frix@expertron.co.za>, 2001,2002.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kword VERSION\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"PO-Revision-Date: 2002-09-27 16:45+0200\n"
+"Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
+"Language-Team: AFRIKAANS <AF@lia.org.za>\n"
+"Language: af\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, fuzzy, kde-format
+msgid "&File"
+msgstr "Filter uitset"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "Stopnota"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "Nuwe"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, fuzzy, kde-format
+msgid "&Display Mode"
+msgstr "Vertoon veld kode"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Semantics"
+msgstr "Statistieke"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, fuzzy, kde-format
+#| msgid "Style:"
+msgid "S&tyles"
+msgstr "Styl:"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "Allerande Instellings"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "Speltoets"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "Slaan uit Teks"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, fuzzy, kde-format
+msgid "Spell Check Result"
+msgstr "Spel Toetsing"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, kde-format
+msgid "Change Variable To"
+msgstr "Verander Veranderlike Na"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr ""
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+#, fuzzy
+#| msgid "&Page Mode"
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "Bladsy Modus"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "Voeg by Tabel"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#, fuzzy
+#| msgid "Frame Properties"
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "Raam Eienskappe"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+#, fuzzy
+#| msgid "Create Text Frame"
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Skep Teks Raam"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, fuzzy, kde-format
+#| msgid "Frame is inline"
+msgid "Baseline"
+msgstr "Raam is inlyn"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, fuzzy, kde-format
+msgid "Character"
+msgstr "Skep Tabel"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, kde-format
+msgid "Row"
+msgstr "Ry"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, fuzzy, kde-format
+msgid "Page (entire) area"
+msgstr "Plekaanduier in beskerm area"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, fuzzy, kde-format
+msgid "Page text area"
+msgstr "Plekaanduier in beskerm area"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Paragraph area"
+msgstr "Paragraaf"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings"
+msgid "Paragraph text area"
+msgstr "Paragraaf Instellings"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, fuzzy, kde-format
+msgid "Left page border"
+msgstr "Verander Links Grens Raam"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, fuzzy, kde-format
+msgid "Right page border"
+msgstr "Verander Regterkant Grens Raam"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, fuzzy, kde-format
+msgid "Right paragraph border"
+msgstr "Verander Regterkant Grens Raam"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, fuzzy, kde-format
+msgid "Left paragraph border"
+msgstr "Verander Links Grens Raam"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Positioning"
+msgstr "Vertikaal Lyne"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, fuzzy, kde-format
+msgid "Top align with:"
+msgstr "Left-align Teks"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, fuzzy, kde-format
+msgid "Center align with:"
+msgstr "Left-align Teks"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, fuzzy, kde-format
+msgid "Bottom align with:"
+msgstr "Left-align Teks"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, fuzzy, kde-format
+#| msgid "From:"
+msgid "from:"
+msgstr "Van:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Positioning"
+msgstr "Horisontaal Lyne"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, fuzzy, kde-format
+msgid "Left align with:"
+msgstr "Left-align Teks"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, fuzzy, kde-format
+msgid "Right align with:"
+msgstr "Right-align Teks"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "C&onfigure..."
+msgid "Configure"
+msgstr "Konfigureer..."
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr "Allerande"
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Grid 1"
+msgid "Grid"
+msgstr "Rooster 1"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, fuzzy, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Dokument"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, kde-format
+msgid "Document Settings"
+msgstr "Dokument Instellings"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, kde-format
+msgid "Create New Bookmark"
+msgstr "Skep Nuwe Boekmerk"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "Naam:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, fuzzy, kde-format
+msgid "Columns:"
+msgstr "Kolom"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, fuzzy, kde-format
+#| msgid "Default column spacing:"
+msgid "Column spacing:"
+msgstr "Verstek kolom spasiëring:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, fuzzy, kde-format
+#| msgid "Fra&mes"
+msgid "frameset"
+msgstr "Rame"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, fuzzy, kde-format
+msgid "No framesets in document"
+msgstr "Slegs vertoon die teks van die dokument."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "Naam van raamstel:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, fuzzy, kde-format
+#| msgid "Create a new frameset"
+msgid "Create a new frameset:"
+msgstr "Skep 'n nuwe raamstel"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, fuzzy, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr "Kies bestaande raamstel na konnekteer raam na"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "Raamstel Naam"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Smart Positioning"
+msgstr "Posisie"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, kde-format
+msgid "Text Run Around"
+msgstr "Teks Hardloop Omtrent"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "Konnekteer Teks Rame"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+#, fuzzy
+#| msgid "Frame Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "Raam Eienskappe"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, kde-format
+msgid "&Page"
+msgstr "Bladsy"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Para&graph"
+msgstr "Paragraaf"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, fuzzy, kde-format
+msgid "&To Character"
+msgstr "Skep Tabel"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, fuzzy, kde-format
+msgid "&As Character"
+msgstr "Skep Tabel"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Alignment"
+msgstr "Horisontaal Lyne"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, fuzzy, kde-format
+msgid "&Left"
+msgstr "Teks Hardloop Omtrent"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, fuzzy, kde-format
+#| msgctxt "Position"
+#| msgid "Centered"
+msgid "&Center"
+msgstr "Gesentreer"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, fuzzy, kde-format
+msgid "&Right"
+msgstr "Hardloop Omtrent Kant"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Alignment"
+msgstr "Vertikaal Lyne"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "&Bottom"
+msgstr "Bodem:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, fuzzy, kde-format
+#| msgid "Text Run Around"
+msgid "Text Wrap-around"
+msgstr "Teks Hardloop Omtrent"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run through this shape"
+msgstr "Teks sal hardloop deur hierdie raam"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Skip below this shape"
+msgstr "Teks sal hardloop deur hierdie raam"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on left side of this shape"
+msgstr "Teks sal hardloop deur hierdie raam"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on right side of this shape"
+msgstr "Teks sal hardloop deur hierdie raam"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on longest side of this shape"
+msgstr "Teks sal hardloop deur hierdie raam"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on both sides of this shape"
+msgstr "Teks sal hardloop deur hierdie raam"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, fuzzy, kde-format
+msgid "Distance Between Shape and Text:"
+msgstr "Afstand tussen raam en teks (%1):"
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, fuzzy, kde-format
+msgid "Columns"
+msgstr "Kolom"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, fuzzy, kde-format
+#| msgid "Style:"
+msgid "Style"
+msgstr "Styl:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, fuzzy, kde-format
+msgid "Clone"
+msgstr "Maak toe:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, fuzzy, kde-format
+msgid "Delete"
+msgstr "Uitvee Ry"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+#, fuzzy
+#| msgid "&Page Mode"
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "Bladsy Modus"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, fuzzy, kde-format
+#| msgid "&Page Mode"
+msgid "Clone Page Style"
+msgstr "Bladsy Modus"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left by:"
+msgstr "Links:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right by:"
+msgstr "Regterkant:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, fuzzy, kde-format
+msgid "&Rename"
+msgstr "Gebruikernaam:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, fuzzy, kde-format
+msgid "&Delete"
+msgstr "Uitvee Ry"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Herbenaam Boekmerk"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, fuzzy, kde-format
+#| msgid ""
+#| "A frameset with the name '%1' already exists. Please enter another name."
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr ""
+"'n raamstel met die naam '%1' alreeds bestaan. Asseblief invoer nog 'n naam."
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, kde-format
+msgid "Select Bookmark"
+msgstr "Kies Boekmerk"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "Geometrie"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, fuzzy, kde-format
+#| msgid "Protect Size"
+msgid "Page Size && Margins"
+msgstr "Beskerm Grootte"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, fuzzy, kde-format
+msgid "Create"
+msgstr "Skep Tabel"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, fuzzy, kde-format
+msgid "Navigation"
+msgstr "Saluut:"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+#| msgid "&Page"
+msgid "Page #"
+msgstr "Bladsy"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Section"
+msgstr "Instruksies:"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr ""
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "Statistieke"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "Woorde:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "Sinne:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "Woorddele:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (spaces):"
+msgstr "Karakters insluitend spasies:"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (no spaces):"
+msgstr "Karakters insluitend spasies:"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, fuzzy, kde-format
+#| msgid "Dot Line"
+msgid "Lines:"
+msgstr "Punt Lyn"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, fuzzy, kde-format
+#| msgid "Flesch reading ease:"
+msgid "Flesch reading ease"
+msgstr "Flesch lees maklikheid:"
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East asian characters:"
+msgstr "Formatering Karakters"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, fuzzy, kde-format
+#| msgid "Words:"
+msgid "Words"
+msgstr "Woorde:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, fuzzy, kde-format
+#| msgid "Sentences:"
+msgid "Sentences"
+msgstr "Sinne:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, fuzzy, kde-format
+#| msgid "Syllables:"
+msgid "Syllables"
+msgstr "Woorddele:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, fuzzy, kde-format
+#| msgid "Dot Line"
+msgid "Lines"
+msgstr "Punt Lyn"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, fuzzy, kde-format
+#| msgid "Characters without spaces:"
+msgid "Characters With Spaces"
+msgstr "Karakters sonder om te spasies:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, fuzzy, kde-format
+#| msgid "Characters without spaces:"
+msgid "Characters without spaces"
+msgstr "Karakters sonder om te spasies:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East Asian characters"
+msgstr "Formatering Karakters"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, fuzzy, kde-format
+#| msgid "Flesch reading ease:"
+msgid "Flesch Reading Ease"
+msgstr "Flesch lees maklikheid:"
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "Standaard"
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "Kop 1"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "Kop 2"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "Kop 3"
+
+#: part/i18n/stylenames.cpp:12
+#, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "Geënumireerde Lys"
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "Alfabeties Lys"
+
+#: part/i18n/stylenames.cpp:14
+#, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "Petroon Lys"
+
+#: part/i18n/stylenames.cpp:15
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "Inhoud Titel"
+
+#: part/i18n/stylenames.cpp:16
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "Inhoud Kop 1"
+
+#: part/i18n/stylenames.cpp:17
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "Inhoud Kop 2"
+
+#: part/i18n/stylenames.cpp:18
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "Inhoud Kop 3"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "Dokument Titel"
+
+#: part/i18n/stylenames.cpp:20
+#, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "Opskrif"
+
+#: part/i18n/stylenames.cpp:21
+#, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "Voetskrif"
+
+#: part/i18n/stylenames.cpp:24
+#, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "Eenvoudig"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "Grense 1"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "Grense 2"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "Grense 3"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "Ry"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "Kolom"
+
+#: part/i18n/stylenames.cpp:30
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "Ligte grys"
+
+#: part/i18n/stylenames.cpp:31
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "Donker grys"
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "Swart"
+
+#: part/i18n/stylenames.cpp:33
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "Ligte blou"
+
+#: part/i18n/stylenames.cpp:34
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "Donker blou"
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "Rooi"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "Geel"
+
+#: part/i18n/stylenames.cpp:37
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "Poort:"
+
+#: part/i18n/stylenames.cpp:38
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "Swart"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "Eenvoudige 1"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "Eenvoudige 2"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "Eenvoudige 3"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "Opskrif 1"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "Opskrif 2"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "Opskrif 3"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "Opskrif 4"
+
+#: part/i18n/stylenames.cpp:50
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "Kolom"
+
+#: part/i18n/stylenames.cpp:51
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "Kolom"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "Rooster 1"
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "Rooster 2"
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "Rooster 3"
+
+#: part/i18n/stylenames.cpp:55
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "Grys opskrif"
+
+#: part/i18n/stylenames.cpp:56
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "Blou opskrif"
+
+#: part/i18n/stylenames.cpp:57
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "Blou tradisionele"
+
+#: part/i18n/stylenames.cpp:58
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "Grys tradisionele"
+
+#: part/i18n/stylenames.cpp:59
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "Blou bo en bodem"
+
+#: part/i18n/stylenames.cpp:60
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "Grys bo en bodem"
+
+#: part/KWAboutData.h:20
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "Koffice Woord Verwerker"
+
+#: part/KWAboutData.h:22
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgid "Word processor"
+msgstr "Koffice Woord Verwerker"
+
+#: part/KWAboutData.h:24
+#, fuzzy, kde-format
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "(c) 1998-2002, Die Kword Span"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr ""
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr ""
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr ""
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr ""
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr ""
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: part/KWAboutData.h:37
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Formatting stuff"
+msgstr "Formatering Karakters"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, fuzzy, kde-format
+msgid "Filter"
+msgstr "Filter uitset"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistics docker"
+msgstr "Statistieke"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, fuzzy, kde-format
+#| msgid "Footnotes"
+msgid "Foot and endnotes"
+msgstr "Voetnotas"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr ""
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, fuzzy, kde-format
+msgid "Style Manager"
+msgstr "Styl Bestuurder..."
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr ""
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr ""
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr ""
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr ""
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, fuzzy, kde-format
+#| msgid "Sorting Order"
+msgid "ODF Support"
+msgstr "Besig om te sorteer Volgorde"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr ""
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr ""
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr ""
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr ""
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr ""
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr ""
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "Kformula"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr ""
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr ""
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr ""
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr ""
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr ""
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr ""
+
+#: part/KWAboutData.h:65
+#, fuzzy, kde-format
+#| msgid "Endnotes"
+msgid "Enno Bartels"
+msgstr "Stopnotas"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr ""
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr ""
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, fuzzy, kde-format
+msgid "Page break icon"
+msgstr "Lyn Breek"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "WEB-Vertaler (http://kde.af.org.za)"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "frix@expertron.co.za"
+
+#: part/KWDocument.cpp:495
+#, fuzzy, kde-format
+#| msgid "Copy%1-%2"
+msgid "Copy"
+msgstr "Copy%1-%2"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgid "Standard"
+msgstr "Standaard"
+
+#: part/KWDocument.cpp:546
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Document Title"
+msgid "Document Title"
+msgstr "Dokument Titel"
+
+#: part/KWDocument.cpp:553
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 1"
+msgid "Head 1"
+msgstr "Kop 1"
+
+#: part/KWDocument.cpp:559
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 2"
+msgid "Head 2"
+msgstr "Kop 2"
+
+#: part/KWDocument.cpp:565
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 3"
+msgid "Head 3"
+msgstr "Kop 3"
+
+#: part/KWDocument.cpp:571
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Bullet List"
+msgid "Bullet List"
+msgstr "Petroon Lys"
+
+#: part/KWGui.cpp:69
+#, kde-format
+msgid "Tools"
+msgstr ""
+
+#: part/KWOdfLoader.cpp:83
+#, fuzzy, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr "Ongeldige dokument. Nee mime-tipe gespesifiseer."
+
+#: part/KWOdfLoader.cpp:95
+#, fuzzy, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr "Ongeldige dokument. Nee mime-tipe gespesifiseer."
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "Standaard"
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:36
+#, fuzzy, kde-format
+msgid "Saved"
+msgstr "Stoor Prent"
+
+#: part/KWStatusBar.cpp:37
+#, fuzzy, kde-format
+msgid "Page %1 of %2"
+msgstr "Bladsy %1/%2"
+
+#: part/KWStatusBar.cpp:38
+#, fuzzy, kde-format
+msgid "Page %1-%2 of %3"
+msgstr "Bladsy %1/%2"
+
+#: part/KWStatusBar.cpp:39
+#, fuzzy, kde-format
+#| msgid "Dot Line"
+msgid "Line %1"
+msgstr "Punt Lyn"
+
+#: part/KWStatusBar.cpp:124
+#, fuzzy, kde-format
+msgid "Page Number"
+msgstr "Beginne bladsy nommer:"
+
+#: part/KWStatusBar.cpp:137
+#, fuzzy, kde-format
+#| msgid "Number"
+msgid "Line Number"
+msgstr "Nommer"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+#| msgid "&Page Mode"
+msgid "Change the page style"
+msgstr "Bladsy Modus"
+
+#: part/KWStatusBar.cpp:155
+#, fuzzy, kde-format
+#| msgid "&Page Mode"
+msgid "Page Style"
+msgstr "Bladsy Modus"
+
+#: part/KWStatusBar.cpp:169
+#, fuzzy, kde-format
+#| msgid "Protect Size"
+msgid "Page Size"
+msgstr "Beskerm Grootte"
+
+#: part/KWStatusBar.cpp:184
+#, kde-format
+msgid "Saved/Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:197
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr ""
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr ""
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Frame Properties"
+msgid "Shape Properties..."
+msgstr "Raam Eienskappe"
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr ""
+
+#: part/KWView.cpp:271
+#, fuzzy, kde-format
+#| msgid "&Create Template From Document..."
+msgid "Create Template From Document..."
+msgstr "Skep Werkvoorbeeld Van Dokument..."
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr "Stoor hierdie dokument en gebruik dit later as 'n werkvoorbeeld"
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+"Jy kan stoor hierdie dokument as 'n werkvoorbeeld.<br><br>Jy kan gebruik "
+"hierdie nuwe werkvoorbeeld as 'n beginne punt vir nog 'n dokument."
+
+#: part/KWView.cpp:292
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Show Formatting Characters"
+msgstr "Formatering Karakters"
+
+#: part/KWView.cpp:298
+#, fuzzy, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr "Wissel die vertoon van non-printing karakters."
+
+#: part/KWView.cpp:299
+#, kde-format
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr ""
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr ""
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+
+#: part/KWView.cpp:310
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Text Shape Borders"
+msgstr "Konfigureer Tabel Grense"
+
+#: part/KWView.cpp:311
+#, fuzzy, kde-format
+msgid "Turns the border display on and off"
+msgstr "Draai die grens vertoon op en af."
+
+#: part/KWView.cpp:317
+#, fuzzy, kde-format
+#| msgid ""
+#| "Turns the border display on and off.<br><br>The borders are never "
+#| "printed. This option is useful to see how the document will appear on the "
+#| "printed page."
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+"Draai die grens vertoon op en af.<br><br>die grense word moet nooit printed. "
+"Hierdie opsie is bruikbare na sien hoe die dokument sal verskyn op die "
+"printed bladsy."
+
+#: part/KWView.cpp:319
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Table Borders"
+msgstr "Konfigureer Tabel Grense"
+
+#: part/KWView.cpp:325
+#, fuzzy, kde-format
+msgid "Toggle the display of table borders"
+msgstr "Wissel die vertoon van non-printing karakters."
+
+#: part/KWView.cpp:326
+#, kde-format
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+
+#: part/KWView.cpp:328
+#, fuzzy, kde-format
+msgid "Show Section Bounds"
+msgstr "Verander outokorreksie opsies."
+
+#: part/KWView.cpp:334
+#, fuzzy, kde-format
+msgid "Toggle the display of section bounds"
+msgstr "Wissel die vertoon van non-printing karakters."
+
+#: part/KWView.cpp:335
+#, kde-format
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+
+#: part/KWView.cpp:337
+#, kde-format
+msgid "Show Rulers"
+msgstr "Vertoon Lineale"
+
+#: part/KWView.cpp:339
+#, fuzzy, kde-format
+msgid "Shows or hides rulers"
+msgstr "Vertoon of steek weg lineale."
+
+#: part/KWView.cpp:340
+#, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+
+#: part/KWView.cpp:351
+#, fuzzy, kde-format
+msgid "Snap to Grid"
+msgstr "Vertoon Voetskrif"
+
+#: part/KWView.cpp:359
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Show Status Bar"
+msgstr "Vertoon status kolom"
+
+#: part/KWView.cpp:360
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Shows or hides the status bar"
+msgstr "Vertoon status kolom"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr ""
+
+#: part/KWView.cpp:374
+#, fuzzy, kde-format
+msgid "Semantic Stylesheets..."
+msgstr "In voer Styl..."
+
+#: part/KWView.cpp:376
+#, fuzzy, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr "In voer Styl..."
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+
+#: part/KWView.cpp:392
+#, fuzzy, kde-format
+#| msgid "C&onfigure..."
+msgid "Configure..."
+msgstr "Konfigureer..."
+
+#: part/KWView.cpp:401
+#, fuzzy, kde-format
+msgid "Page Layout..."
+msgstr "Verander Uitleg"
+
+#: part/KWView.cpp:403
+#, fuzzy, kde-format
+msgid "Change properties of entire page"
+msgstr "Verander eienskappe van hele bladsy."
+
+#: part/KWView.cpp:404
+#, fuzzy, kde-format
+#| msgid ""
+#| "Change properties of the entire page.<p>Currently you can change paper "
+#| "size, paper orientation, header and footer sizes, and column settings."
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+"Verander eienskappe van die hele bladsy.<p>Huidiglik jy kan Verander papier "
+"grootte, papier oriëntasie, opskrif en voetskrif grotes, en kolom "
+"instellings."
+
+#: part/KWView.cpp:407
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Create Header"
+msgstr "Skep Teks Raam"
+
+#: part/KWView.cpp:413
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Create Footer"
+msgstr "Skep Teks Raam"
+
+#: part/KWView.cpp:420
+#, fuzzy, kde-format
+#| msgid "Remove Comment"
+msgid "Show Comments"
+msgstr "Verwyder Kommentaar"
+
+#: part/KWView.cpp:421
+#, fuzzy, kde-format
+msgid "Shows comments in the document"
+msgstr "Slegs vertoon die teks van die dokument."
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr ""
+
+#: part/KWView.cpp:428
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Shows or hides word counting in status bar"
+msgstr "Vertoon status kolom"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, fuzzy, kde-format
+#| msgid "Protect Size"
+msgid "Page Setup"
+msgstr "Beskerm Grootte"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, fuzzy, kde-format
+#| msgid "Even Pages Footer"
+msgid "Header & Footer"
+msgstr "Al Bladsye Voetskrif"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Page layout"
+msgstr "Verander Uitleg"
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, fuzzy, kde-format
+#| msgid "New..."
+msgid "..."
+msgstr "Nuwe..."
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+msgctxt "Next search result"
+msgid "Next"
+msgstr "Voeg by Tabel"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, fuzzy, kde-format
+#| msgid "Preview"
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "Voorskou"
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, kde-format
+msgctxt "Search options"
+msgid "Options"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, kde-format
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, kde-format
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, kde-format
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, kde-format
+msgid "Replace"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Onewe Bladsye Opskrif"
+
+#: part/Words.cpp:47
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Al Bladsye Opskrif"
+
+#: part/Words.cpp:49
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Onewe Bladsye Voetskrif"
+
+#: part/Words.cpp:51
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Al Bladsye Voetskrif"
+
+#: part/Words.cpp:53
+#, fuzzy, kde-format
+msgid "Main text"
+msgstr "Plak Teks"
+
+#: part/Words.cpp:55
+#, fuzzy, kde-format
+msgid "Other text"
+msgstr "Voeg by Tabel"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "Bladsy"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "Paragraaf"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "Skep Tabel"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "Skep Tabel"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Horisontaal Lyne"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "Teks Hardloop Omtrent"
+
+#, fuzzy
+#~| msgctxt "Position"
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Center"
+#~ msgstr "Gesentreer"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "Hardloop Omtrent Kant"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Alignment"
+#~ msgstr "Vertikaal Lyne"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "Bodem:"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Wrap-around"
+#~ msgstr "Teks Hardloop Omtrent"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "Teks sal hardloop deur hierdie raam"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "Teks sal hardloop deur hierdie raam"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "Teks sal hardloop deur hierdie raam"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "Teks sal hardloop deur hierdie raam"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "Teks sal hardloop deur hierdie raam"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "Teks sal hardloop deur hierdie raam"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance Between Shape and Text:"
+#~ msgstr "Afstand tussen raam en teks (%1):"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "Vertikaal Lyne"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top align with:"
+#~ msgstr "Left-align Teks"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center align with:"
+#~ msgstr "Left-align Teks"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom align with:"
+#~ msgstr "Left-align Teks"
+
+#, fuzzy
+#~| msgid "From:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "Van:"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "Horisontaal Lyne"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left align with:"
+#~ msgstr "Left-align Teks"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right align with:"
+#~ msgstr "Right-align Teks"
+
+#, fuzzy
+#~| msgid "Name of frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "Naam van raamstel:"
+
+#, fuzzy
+#~| msgid "Create a new frameset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "Skep 'n nuwe raamstel"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select existing frameset to connect to:"
+#~ msgstr "Kies bestaande raamstel na konnekteer raam na"
+
+#, fuzzy
+#~| msgid "Frameset Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "Raamstel Naam"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "Gebruikernaam:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "Uitvee Ry"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Naam:"
+
+#, fuzzy
+#~| msgid "Protect Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "Beskerm Grootte"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "Links:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "Regterkant:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Kolom"
+
+#, fuzzy
+#~| msgid "Default column spacing:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "Verstek kolom spasiëring:"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "Woorde:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "Sinne:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "Woorddele:"
+
+#, fuzzy
+#~| msgid "Dot Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Punt Lyn"
+
+#, fuzzy
+#~| msgid "Characters without spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "Karakters sonder om te spasies:"
+
+#, fuzzy
+#~| msgid "Characters without spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "Karakters sonder om te spasies:"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "Formatering Karakters"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch Reading Ease"
+#~ msgstr "Flesch lees maklikheid:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "Filter uitset"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "Stopnota"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "Nuwe"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "Vertoon veld kode"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "Statistieke"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&tyles"
+#~ msgstr "Styl:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Allerande Instellings"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "Speltoets"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Slaan uit Teks"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "Spel Toetsing"
+
+#, fuzzy
+#~| msgid "Change Variable To"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "Verander Veranderlike Na"
+
+#, fuzzy
+#~| msgid "New..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "Nuwe..."
+
+#, fuzzy
+#~| msgid "Frame is inline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "Raam is inlyn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "Skep Tabel"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Ry"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "Plekaanduier in beskerm area"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "Paragraaf"
+
+#, fuzzy
+#~| msgid "Paragraph Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "Paragraaf Instellings"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "Verander Links Grens Raam"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "Verander Regterkant Grens Raam"
+
+#, fuzzy
+#~| msgid "C&onfigure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Konfigureer..."
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Allerande"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Rooster 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Dokument Instellings"
+
+#, fuzzy
+#~| msgid "Create New Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "Skep Nuwe Boekmerk"
+
+#, fuzzy
+#~| msgid "Fra&mes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "Rame"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "Posisie"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Run Around"
+#~ msgstr "Teks Hardloop Omtrent"
+
+#, fuzzy
+#~| msgid "Connect Text Frames"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "Konnekteer Teks Rame"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "Kolom"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Styl:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "Maak toe:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Uitvee Ry"
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "Bladsy Modus"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Herbenaam Boekmerk"
+
+#, fuzzy
+#~| msgid ""
+#~| "A frameset with the name '%1' already exists. Please enter another name."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr ""
+#~ "'n raamstel met die naam '%1' alreeds bestaan. Asseblief invoer nog 'n "
+#~ "naam."
+
+#, fuzzy
+#~| msgid "Select Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "Kies Boekmerk"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Geometrie"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "Saluut:"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "Bladsy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "Instruksies:"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "Statistieke"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "Woorde:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "Sinne:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "Woorddele:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "Karakters insluitend spasies:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "Karakters insluitend spasies:"
+
+#, fuzzy
+#~| msgid "Dot Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "Punt Lyn"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch reading ease"
+#~ msgstr "Flesch lees maklikheid:"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "Formatering Karakters"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Standard"
+#~ msgstr "Standaard"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "Kop 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "Kop 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "Kop 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Enumerated List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "Geënumireerde Lys"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Alphabetical List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "Alfabeties Lys"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "Petroon Lys"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "Inhoud Titel"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "Inhoud Kop 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "Inhoud Kop 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "Inhoud Kop 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "Dokument Titel"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "Vertoon Opskrif"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "Voetnota"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Plain"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "Eenvoudig"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "Grense 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "Grense 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "Grense 3"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "Ry"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "Kolom"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "Ligte grys"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "Donker grys"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "Swart"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "Ligte blou"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "Donker blou"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "Rooi"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "Geel"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "Poort:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "Swart"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "Eenvoudige 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "Eenvoudige 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "Eenvoudige 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "Opskrif 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "Opskrif 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "Opskrif 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 4"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "Opskrif 4"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "Kolom"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "Kolom"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "Rooster 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "Rooster 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "Rooster 3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "Grys opskrif"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "Blou opskrif"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "Blou tradisionele"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "Grys tradisionele"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "Blou bo en bodem"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "Grys bo en bodem"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "Koffice Woord Verwerker"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "Koffice Woord Verwerker"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "(c) 1998-2002, Die Kword Span"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "Formatering Karakters"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "Filter uitset"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "Statistieke"
+
+#, fuzzy
+#~| msgid "Footnotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "Voetnotas"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "Styl Bestuurder..."
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "Kformula"
+
+#, fuzzy
+#~| msgid "Endnotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "Stopnotas"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "Lyn Breek"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "WEB-Vertaler (http://kde.af.org.za)"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "frix@expertron.co.za"
+
+#, fuzzy
+#~| msgid "Copy%1-%2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Copy%1-%2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Standaard"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "Dokument Titel"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "Kop 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "Kop 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "Kop 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "Petroon Lys"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr "Ongeldige dokument. Nee mime-tipe gespesifiseer."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr "Ongeldige dokument. Nee mime-tipe gespesifiseer."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "Stoor Prent"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "Bladsy %1/%2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "Bladsy %1/%2"
+
+#, fuzzy
+#~| msgid "Dot Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "Punt Lyn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Beginne bladsy nommer:"
+
+#, fuzzy
+#~| msgid "Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "Nommer"
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "Bladsy Modus"
+
+#, fuzzy
+#~| msgid "Protect Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "Beskerm Grootte"
+
+#, fuzzy
+#~| msgid "Frame Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "Raam Eienskappe"
+
+#, fuzzy
+#~| msgid "&Create Template From Document..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template From Document..."
+#~ msgstr "Skep Werkvoorbeeld Van Dokument..."
+
+#, fuzzy
+#~| msgid "Save this document and use it later as a template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save this document and use it later as a template"
+#~ msgstr "Stoor hierdie dokument en gebruik dit later as 'n werkvoorbeeld"
+
+#, fuzzy
+#~| msgid ""
+#~| "You can save this document as a template.<br><br>You can use this new "
+#~| "template as a starting point for another document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "You can save this document as a template.<br><br>You can use this new "
+#~ "template as a starting point for another document."
+#~ msgstr ""
+#~ "Jy kan stoor hierdie dokument as 'n werkvoorbeeld.<br><br>Jy kan gebruik "
+#~ "hierdie nuwe werkvoorbeeld as 'n beginne punt vir nog 'n dokument."
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "Formatering Karakters"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "Wissel die vertoon van non-printing karakters."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Turns the border display on and off"
+#~ msgstr "Draai die grens vertoon op en af."
+
+#, fuzzy
+#~| msgid ""
+#~| "Turns the border display on and off.<br><br>The borders are never "
+#~| "printed. This option is useful to see how the document will appear on "
+#~| "the printed page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Turns the border display on and off.<br/><br/>The borders are never "
+#~ "printed. This option is useful to see how the document will appear on the "
+#~ "printed page."
+#~ msgstr ""
+#~ "Draai die grens vertoon op en af.<br><br>die grense word moet nooit "
+#~ "printed. Hierdie opsie is bruikbare na sien hoe die dokument sal verskyn "
+#~ "op die printed bladsy."
+
+#, fuzzy
+#~| msgid "Configure Table Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "Konfigureer Tabel Grense"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of table borders"
+#~ msgstr "Wissel die vertoon van non-printing karakters."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of section bounds"
+#~ msgstr "Wissel die vertoon van non-printing karakters."
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Vertoon Lineale"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Vertoon of steek weg lineale."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Vertoon Voetskrif"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Vertoon status kolom"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Vertoon status kolom"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantic Stylesheets..."
+#~ msgstr "In voer Styl..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Skep Tabel"
+
+#, fuzzy
+#~| msgid "C&onfigure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "Konfigureer..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "Verander Uitleg"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "Verander eienskappe van hele bladsy."
+
+#, fuzzy
+#~| msgid ""
+#~| "Change properties of the entire page.<p>Currently you can change paper "
+#~| "size, paper orientation, header and footer sizes, and column settings."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Change properties of the entire page.<p>Currently you can change paper "
+#~ "size, paper orientation, header and footer sizes, and column settings.</p>"
+#~ msgstr ""
+#~ "Verander eienskappe van die hele bladsy.<p>Huidiglik jy kan Verander "
+#~ "papier grootte, papier oriëntasie, opskrif en voetskrif grotes, en kolom "
+#~ "instellings."
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "Skep Teks Raam"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "Skep Teks Raam"
+
+#, fuzzy
+#~| msgid "Remove Comment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Comments"
+#~ msgstr "Verwyder Kommentaar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows comments in the document"
+#~ msgstr "Slegs vertoon die teks van die dokument."
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "Vertoon status kolom"
+
+#, fuzzy
+#~| msgid "Protect Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "Beskerm Grootte"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "Al Bladsye Voetskrif"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "Verander Uitleg"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "Voeg by Tabel"
+
+#, fuzzy
+#~| msgid "Preview"
+#~ msgctxt "(qtundo-format) Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Voorskou"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Onewe Bladsye Opskrif"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Al Bladsye Opskrif"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Onewe Bladsye Voetskrif"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Al Bladsye Voetskrif"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "Plak Teks"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "Voeg by Tabel"
+
+#, fuzzy
+#~ msgid "Book"
+#~ msgstr "Voeg by Boekmerk..."
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "Koffice Woord Verwerker"
+
+#, fuzzy
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "(c) 1998-2002, Die Kword Span"
+
+#, fuzzy
+#~ msgid "Select Cover Image..."
+#~ msgstr "Voeg by Tabel"
+
+#, fuzzy
+#~| msgid "Open Existing..."
+#~ msgid "Open..."
+#~ msgstr "Open Bestaande..."
+
+#, fuzzy
+#~| msgid "Open Link"
+#~ msgid "Open Cover"
+#~ msgstr "Open Skakel"
+
+#, fuzzy
+#~| msgid "Import Style"
+#~ msgid "Import problem"
+#~ msgstr "In voer Styl"
+
+#, fuzzy
+#~| msgid "Completion"
+#~ msgid "Cover selection"
+#~ msgstr "Voltooiïng"
+
+#, fuzzy
+#~| msgid "Border Outline"
+#~ msgid "Outliner"
+#~ msgstr "Grens Buitelyn"
+
+#, fuzzy
+#~ msgid "Edit section"
+#~ msgstr "Slaan uit Teks"
+
+#, fuzzy
+#~ msgid "Main"
+#~ msgstr "Plak Teks"
+
+#, fuzzy
+#~| msgid "Enter entry name:"
+#~ msgid "Enter actor's name here"
+#~ msgstr "Invoer inskrywing naam:"
+
+#, fuzzy
+#~| msgid "Type"
+#~ msgid "Type:"
+#~ msgstr "Tipe"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Actor description:"
+#~ msgstr "Outokorreksie"
+
+#, fuzzy
+#~| msgid "&Bold"
+#~ msgid "Bold"
+#~ msgstr "Vetdruk"
+
+#, fuzzy
+#~| msgid "&Italic"
+#~ msgid "Italic"
+#~ msgstr "Kursief"
+
+#, fuzzy
+#~| msgid "&Underline"
+#~ msgid "Underline"
+#~ msgstr "Onderstreep"
+
+#, fuzzy
+#~ msgid "LeftAlign"
+#~ msgstr "Left-align Teks"
+
+#, fuzzy
+#~ msgid "CenterAlign"
+#~ msgstr "Left-align Teks"
+
+#, fuzzy
+#~ msgid "RightAlign"
+#~ msgstr "Right-align Teks"
+
+#, fuzzy
+#~ msgid "1st Edit"
+#~ msgstr "Slaan uit Teks"
+
+#, fuzzy
+#~ msgid "2nd Edit"
+#~ msgstr "Slaan uit Teks"
+
+#, fuzzy
+#~ msgid "3rd Edit"
+#~ msgstr "Slaan uit Teks"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Author's section"
+#~ msgstr "Outokorreksie"
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgid "Badge:"
+#~ msgstr "Bladsy Modus"
+
+#, fuzzy
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "Instruksies:"
+
+#~ msgid "File to open"
+#~ msgstr "Lêer na open"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "Skep Teks Raam"
+
+#, fuzzy
+#~| msgid "Delete Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "Uitvee Raam"
+
+#~ msgid "General"
+#~ msgstr "Algemeen"
+
+#~ msgid "Protect size and position"
+#~ msgstr "Beskerm grootte en posisie"
+
+#~ msgid "Position"
+#~ msgstr "Posisie"
+
+#~ msgid "Width:"
+#~ msgstr "Wydte:"
+
+#~ msgid "Height:"
+#~ msgstr "Hoogte:"
+
+#, fuzzy
+#~ msgid "Margins"
+#~ msgstr "Kantlyne in %1"
+
+#~ msgid "Synchronize changes"
+#~ msgstr "Sinkroniseer verander"
+
+#~ msgid "Bottom:"
+#~ msgstr "Bodem:"
+
+#~ msgid "Top:"
+#~ msgstr "Bo:"
+
+#~ msgid "Right:"
+#~ msgstr "Regterkant:"
+
+#~ msgid "Left:"
+#~ msgstr "Links:"
+
+#~ msgid "Create a new page"
+#~ msgstr "Skep 'n nuwe bladsy"
+
+#~ msgid "Resize last frame"
+#~ msgstr "Hervergroot laaste raam"
+
+#, fuzzy
+#~ msgid "Do not show the extra text"
+#~ msgstr "Moet nie vertoon die addisionele teks"
+
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "Herkoppel raam na huidige vloei"
+
+#, fuzzy
+#~ msgid "Do not create a followup frame"
+#~ msgstr "Moet nie skep 'n opvolg raam"
+
+#, fuzzy
+#~| msgid "Connect Frame"
+#~ msgid "Copy this Frame"
+#~ msgstr "Konnekteer Raam"
+
+#~ msgid "Protect content"
+#~ msgstr "Beskerm inhoud"
+
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "Raam is 'n kopie van die vorige Raam"
+
+#~ msgid "Changes will be applied to all frames in frameset"
+#~ msgstr "Verander sal wees aangewend na alle rame in raamstel"
+
+#~ msgid "Retain original aspect ratio"
+#~ msgstr "Behou oorspronklike aspek verhouding"
+
+#, fuzzy
+#~ msgid "Select All Shapes"
+#~ msgstr "Kies Raamstel"
+
+#, fuzzy
+#~ msgid "Create Linked Copy"
+#~ msgstr "Skep 'n nuwe bladsy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "Skep 'n nuwe bladsy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "Voeg by Tabel"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "Verwyder Inskrywing"
+
+#, fuzzy
+#~ msgid "Bookmark..."
+#~ msgstr "Voeg by Boekmerk..."
+
+#, fuzzy
+#~ msgid "Select Bookmark..."
+#~ msgstr "Kies Boekmerk..."
+
+#, fuzzy
+#~ msgid "Bookmark"
+#~ msgstr "Voeg by Boekmerk..."
+
+#, fuzzy
+#~| msgid "Page %1"
+#~ msgid "Page %1/%2"
+#~ msgstr "Bladsy %1"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgid "Characters (excluding spaces):"
+#~ msgstr "Karakters insluitend spasies:"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgid "Flesch Reading Ease:"
+#~ msgstr "Flesch lees maklikheid:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgid "Preferences"
+#~ msgstr "Sinne:"
+
+#, fuzzy
+#~ msgid "Automatically update"
+#~ msgstr "Aandag:"
+
+#~ msgid "F&ormat"
+#~ msgstr "Formaat"
+
+#~ msgid "Invalid document. No mimetype specified."
+#~ msgstr "Ongeldige dokument. Nee mime-tipe gespesifiseer."
+
+#, fuzzy
+#~ msgid "Invalid document. Paper size: %1x%2"
+#~ msgstr "Ongeldige dokument. Nee mime-tipe gespesifiseer."
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate footnote text"
+#~ msgstr "Nie moontlik na skep databasis voorwerp"
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate note-text"
+#~ msgstr "Nie moontlik na skep databasis voorwerp"
+
+#, fuzzy
+#~| msgid "Inline Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "Inlyn Raam"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgid "Create Frame-clip"
+#~ msgstr "Skep Teks Raam"
+
+#, fuzzy
+#~ msgid "Remove Frame-clip"
+#~ msgstr "Verwyder Opneem"
+
+#, fuzzy
+#~ msgid "Force the remainder of the text into the next page"
+#~ msgstr "Forseer die res van die teks binnein die volgende raam."
+
+#, fuzzy
+#~ msgid "All text after this point will be moved into the next page."
+#~ msgstr ""
+#~ "Hierdie voeg in 'n non-printing karakter na die huidige plekaanduier "
+#~ "posisie. Alle teks na Hierdie punt sal wees verskuif binnein die volgende "
+#~ "raam in die raamstel."
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Formaat"
+
+#, fuzzy
+#~ msgid "Enable Document Headers"
+#~ msgstr "Dokument Verstek"
+
+#, fuzzy
+#~ msgid "Enable Document Footers"
+#~ msgstr "Maak Teks Kursief"
+
+#, fuzzy
+#~| msgid "Change Link"
+#~ msgid "Change Tracking"
+#~ msgstr "Verander Skakel"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "Woorde:"
+
+#, fuzzy
+#~ msgid "Number of pages:"
+#~ msgstr "Nommer van rye:"
+
+#, fuzzy
+#~ msgid "Number of frames:"
+#~ msgstr "Nommer van rye:"
+
+#, fuzzy
+#~ msgid "Number of pictures:"
+#~ msgstr "Nommer van kolomme:"
+
+#, fuzzy
+#~ msgid "Number of tables:"
+#~ msgstr "Nommer van kolomme:"
+
+#, fuzzy
+#~ msgid "Text"
+#~ msgstr "Teks Modus"
+
+#~ msgid "Characters without spaces:"
+#~ msgstr "Karakters sonder om te spasies:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgid "Characters incl. spaces"
+#~ msgstr "Karakters insluitend spasies:"
+
+#~ msgid "approximately %1"
+#~ msgstr "ongeveer %1"
+
+#~ msgid "Sentence, word and letter counts for this document"
+#~ msgstr "Sin, woord en brief tel vir hierdie dokument"
+
+#, fuzzy
+#~ msgid "Shows and hides header display"
+#~ msgstr "Vertoon en steek weg opskrif vertoon."
+
+#, fuzzy
+#~| msgid ""
+#~| "Selecting this option toggles the display of headers in KWord."
+#~| "<br><br>Headers are special frames at the top of each page which can "
+#~| "contain page numbers or other information."
+#~ msgid ""
+#~ "Selecting this option toggles the display of headers in Words.<br/><br/"
+#~ ">Headers are special frames at the top of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Deur te kies hierdie opsie skakel tussen die vertoon van opskrifte in "
+#~ "Kword.<br><br>opskrifte word spesiaal rame na die bo van elke bladsy wat "
+#~ "kan bevat bladsy nommers of ander informasie."
+
+#, fuzzy
+#~ msgid "Shows and hides footer display"
+#~ msgstr "Vertoon en steek weg voetskrif vertoon."
+
+#, fuzzy
+#~| msgid ""
+#~| "Selecting this option toggles the display of headers in KWord."
+#~| "<br><br>Headers are special frames at the top of each page which can "
+#~| "contain page numbers or other information."
+#~ msgid ""
+#~ "Selecting this option toggles the display of footers in Words. <br/><br/"
+#~ ">Footers are special shapes at the bottom of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Deur te kies hierdie opsie skakel tussen die vertoon van opskrifte in "
+#~ "Kword.<br><br>opskrifte word spesiaal rame na die bo van elke bladsy wat "
+#~ "kan bevat bladsy nommers of ander informasie."
+
+#, fuzzy
+#~ msgid "Raise Shape"
+#~ msgstr "Lig Raam"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames"
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shape"
+#~ msgstr ""
+#~ "Lig die huidiglik gekose raam sodat wat dit verskyn boonste alle die "
+#~ "ander rame"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames. This is only useful if frames overlap each other. If "
+#~| "multiple frames are selected they are all raised in turn."
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shapes. This is only useful if shapes overlap each other. If multiple "
+#~ "shapes are selected they are all raised in turn."
+#~ msgstr ""
+#~ "Lig die huidiglik gekose raam sodat wat dit verskyn boonste alle die "
+#~ "ander rame. Hierdie is slegs bruikbare as rame oorvleuel elke ander. as "
+#~ "veelvuldige rame word gekose hulle word alle ontpak in skakel."
+
+#, fuzzy
+#~ msgid "Lower Shape"
+#~ msgstr "Sagter Raam"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames"
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it"
+#~ msgstr ""
+#~ "Lig die huidiglik gekose raam sodat wat dit verskyn boonste alle die "
+#~ "ander rame"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames. This is only useful if frames overlap each other. If "
+#~| "multiple frames are selected they are all raised in turn."
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it. If multiple shape are selected they are all lowered in "
+#~ "turn."
+#~ msgstr ""
+#~ "Lig die huidiglik gekose raam sodat wat dit verskyn boonste alle die "
+#~ "ander rame. Hierdie is slegs bruikbare as rame oorvleuel elke ander. as "
+#~ "veelvuldige rame word gekose hulle word alle ontpak in skakel."
+
+#~ msgid "Bring to Front"
+#~ msgstr "Bring na Voor"
+
+#~ msgid "Send to Back"
+#~ msgstr "Stuur na Terug"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgid "After last page"
+#~ msgstr "Eerste Bladsy Opskrif"
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgid "Page style:"
+#~ msgstr "Bladsy Modus"
+
+#, fuzzy
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "Voeg by Ry"
+
+#, fuzzy
+#~| msgid "&Variable"
+#~ msgid "Variable"
+#~ msgstr "Veranderlike"
+
+#, fuzzy
+#~ msgid "As Character"
+#~ msgstr "Skep Tabel"
+
+#, fuzzy
+#~ msgid "Anchor the current shape as a character in the text"
+#~ msgstr "Voeg by tabel van inhoud na die huidige plekaanduier posisie."
+
+#, fuzzy
+#~ msgid "To Character"
+#~ msgstr "Skep Tabel"
+
+#, fuzzy
+#~ msgid "Anchor the current shape to the character at the current position"
+#~ msgstr "Voeg by tabel van inhoud na die huidige plekaanduier posisie."
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgid "To Paragraph"
+#~ msgstr "Paragraaf"
+
+#, fuzzy
+#~ msgid "To Page"
+#~ msgstr "Verwyder Inskrywing"
+
+#, fuzzy
+#~ msgid "Page..."
+#~ msgstr "Bladsy..."
+
+#, fuzzy
+#~ msgid "Delete Page"
+#~ msgstr "Uitvee Tabel"
+
+#, fuzzy
+#~ msgid "Insert Image Options"
+#~ msgstr "Voeg by Tabel"
+
+#, fuzzy
+#~ msgid "Disable Document Headers"
+#~ msgstr "Dokument Verstek"
+
+#, fuzzy
+#~ msgid "Disable Document Footers"
+#~ msgstr "Dokument Verstek"
+
+#, fuzzy
+#~| msgid "Frame &Borders"
+#~ msgid "Page Borders"
+#~ msgstr "Raam Grense"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Vertoon status kolom"
+
+#~ msgid "Numbering"
+#~ msgstr "Nommering"
+
+#~ msgid "Automatic"
+#~ msgstr "Automaties"
+
+#~ msgid "Footnote"
+#~ msgstr "Voetnota"
+
+#~ msgid "Endnote"
+#~ msgstr "Stopnota"
+
+#~ msgid "Insert Footnote/Endnote"
+#~ msgstr "Voeg by Voetnota/Stopnota"
+
+#, fuzzy
+#~ msgid "Footnote/Endnote..."
+#~ msgstr "Voetnota..."
+
+#, fuzzy
+#~ msgid "Insert a footnote referencing the selected text"
+#~ msgstr "Voeg by 'n kommentaar aangaande die gekose teks."
+
+#, fuzzy
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "Raam/Raamstel..."
+
+#, fuzzy
+#~ msgid "Alter frameset properties"
+#~ msgstr "Verander raamstel eienskappe."
+
+#, fuzzy
+#~| msgid "P&icture..."
+#~ msgid "Picture..."
+#~ msgstr "Prent..."
+
+#, fuzzy
+#~| msgid "Insert picture inline"
+#~ msgid "Insert a picture into document"
+#~ msgstr "Voeg by prent inlyn"
+
+#, fuzzy
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "Skakel om huidige raam na 'n inlyn raam."
+
+#~ msgid ""
+#~ "Convert the current frame to an inline frame.<br><br>Place the inline "
+#~ "frame within the text at the point nearest to the frames current position."
+#~ msgstr ""
+#~ "Skakel om die huidige raam na 'n inlyn raam.<br><br>Plek die inlyn raam "
+#~ "binne in die teks na die punt naaste na die rame huidige posisie."
+
+#, fuzzy
+#~ msgid "Set Floating"
+#~ msgstr "Allerande Instellings"
+
+#, fuzzy
+#~| msgid "&Filter output"
+#~ msgid "Filter stuff"
+#~ msgstr "Filter uitset"
+
+#, fuzzy
+#~| msgid "Fra&mes"
+#~ msgid "Fra&mes"
+#~ msgstr "Rame"
+
+#~ msgid "Tables"
+#~ msgstr "Tabelle"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Voeg by Ry"
+
+#~ msgid "Layout of Text in Other Frames"
+#~ msgstr "Uitleg van Teks in Ander Rame"
+
+#, fuzzy
+#~| msgid "Text will run &around the frame"
+#~ msgid "Text will run around this frame"
+#~ msgstr "Teks sal hardloop omtrent die raam"
+
+#, fuzzy
+#~| msgid "Text will &not run around this frame"
+#~ msgid "Text will not run around this frame"
+#~ msgstr "Teks sal nie hardloop omtrent hierdie raam"
+
+#~ msgid "Run Around Side"
+#~ msgstr "Hardloop Omtrent Kant"
+
+#, fuzzy
+#~ msgid "Left"
+#~ msgstr "Links"
+
+#, fuzzy
+#~ msgid "Right"
+#~ msgstr "Regterkant"
+
+#, fuzzy
+#~ msgid "Longest side"
+#~ msgstr "Hardloop Omtrent Kant"
+
+#, fuzzy
+#~ msgid "Create custom outline"
+#~ msgstr "Skep 'n tabel."
+
+#, fuzzy
+#~ msgid "Create Custom Outline"
+#~ msgstr "Skep 'n tabel."
+
+#, fuzzy
+#~ msgid "Create outlines"
+#~ msgstr "Skep 'n tabel."
+
+#~ msgid "Borders"
+#~ msgstr "Grense"
+
+#, fuzzy
+#~ msgid "MailMerge"
+#~ msgstr "Pos Saamvlans - Redigeerder"
+
+#~ msgid "Table"
+#~ msgstr "Tabel"
+
+#, fuzzy
+#~ msgid "Font"
+#~ msgstr "Voetnota"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgid "Format"
+#~ msgstr "Formaat"
+
+#~ msgid "Formula"
+#~ msgstr "Formule"
+
+#~ msgid "KWord"
+#~ msgstr "Kword"
+
+#, fuzzy
+#~| msgid "Insert Picture"
+#~ msgid "Insert Picture..."
+#~ msgstr "Voeg by Prent"
+
+#, fuzzy
+#~| msgid "Background"
+#~ msgid "Page Background"
+#~ msgstr "Agtergrond"
+
+#, fuzzy
+#~ msgid "If Text is Too Long for Frame"
+#~ msgstr "As Teks is te lang vir Raam"
+
+#, fuzzy
+#~ msgid "On New Page Creation"
+#~ msgstr "Op nuwe Bladsy Skep"
+
+#~ msgid "Place a copy of this frame"
+#~ msgstr "Plek 'n kopie van hierdie raam"
+
+#~ msgid ""
+#~ "Alter frameset properties.<p>Currently you can change the frame "
+#~ "background."
+#~ msgstr ""
+#~ "Verander raamstel eienskappe.<p>Huidiglik jy kan verander die raam "
+#~ "agtergrond."
+
+#, fuzzy
+#~ msgid "Show Grid"
+#~ msgstr "Vertoon Voetskrif"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgid "Odd Pages Header %1"
+#~ msgstr "Onewe Bladsye Opskrif"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgid "Even Pages Header %1"
+#~ msgstr "Al Bladsye Opskrif"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgid "Odd Pages Footer %1"
+#~ msgstr "Onewe Bladsye Voetskrif"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgid "Even Pages Footer %1"
+#~ msgstr "Al Bladsye Voetskrif"
+
+#, fuzzy
+#~ msgid "Main Text Frameset"
+#~ msgstr "Redigeer Teks Raamstel"
+
+#~ msgid "Matrix"
+#~ msgstr "Matrix"
+
+#, fuzzy
+#~ msgid "Configure Frame Border"
+#~ msgstr "Konfigureer Raam Grense"
+
+#~ msgid "Ta&ble"
+#~ msgstr "Tabel"
+
+#~ msgid "Cell"
+#~ msgstr "Sel"
+
+#~ msgid "Configure Frame Borders"
+#~ msgstr "Konfigureer Raam Grense"
+
+#, fuzzy
+#~| msgid "Create a new page"
+#~ msgid "Add a new page"
+#~ msgstr "Skep 'n nuwe bladsy"
+
+#, fuzzy
+#~ msgid "Delete selected pages"
+#~ msgstr "Uitvee alle gekose selle"
+
+#, fuzzy
+#~ msgid "Delete Layer"
+#~ msgstr "Uitvee Tabel"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Dokument Informasie"
+
+#~ msgid "&Available tables:"
+#~ msgstr "Beskikbaar tabelle:"
+
+#~ msgid "&Fields of the selected table:"
+#~ msgstr "Velde van die gekose tabel:"
+
+#~ msgid "Query Result"
+#~ msgstr "Navraag Resultaat"
+
+#~ msgid "&Query:"
+#~ msgstr "Navraag:"
+
+#~ msgid "&Execute"
+#~ msgstr "Uitvoer"
+
+#~ msgid "&Setup"
+#~ msgstr "Opstelling"
+
+#~ msgid "&Table:"
+#~ msgstr "Tabel:"
+
+#~ msgid "View or Edit Filter &Rules"
+#~ msgstr "Besigtig of Redigeer Filter Reëls"
+
+#~ msgid "&Used database records:"
+#~ msgstr "Gebruik word databasis neem op:"
+
+#, fuzzy
+#~ msgid "&Keep Settings..."
+#~ msgstr "Hou Instellings"
+
+#~ msgid "&Hostname:"
+#~ msgstr "Masjien naam:"
+
+#~ msgid "&Driver:"
+#~ msgstr "Drywer:"
+
+#~ msgid "Database &name:"
+#~ msgstr "Databasis naam:"
+
+#~ msgid "&Username:"
+#~ msgstr "Gebruikernaam:"
+
+#~ msgid "&Port:"
+#~ msgstr "Poort:"
+
+#~ msgid "default"
+#~ msgstr "verstek"
+
+#, fuzzy
+#~ msgid "Address Selection"
+#~ msgstr "Uitdrukking"
+
+#, fuzzy
+#~ msgid "<< &Remove"
+#~ msgstr "Verwyder ry"
+
+#, fuzzy
+#~ msgid "&Filter on:"
+#~ msgstr "Filter uitset"
+
+#~ msgid "Name"
+#~ msgstr "Naam"
+
+#, fuzzy
+#~ msgid "Distribution Lists"
+#~ msgstr "Instruksies:"
+
+#, fuzzy
+#~ msgid "Address B&ook"
+#~ msgstr "Uitdrukking"
+
+#, fuzzy
+#~ msgid "&Selected Addresses"
+#~ msgstr "Kies Raamstel"
+
+#~ msgid "Personal"
+#~ msgstr "Persoonlike"
+
+#~ msgid "Hi!"
+#~ msgstr "Hoog!"
+
+#~ msgid "Hello!"
+#~ msgstr "Hallo!"
+
+#~ msgid "Bye!"
+#~ msgstr "Totsiens!"
+
+#~ msgid "Good bye"
+#~ msgstr "Goeie totsiens"
+
+#~ msgid "Professional"
+#~ msgstr "Profesionele"
+
+#~ msgid "Good Morning"
+#~ msgstr "Goeie Môre"
+
+#~ msgid "Good Afternoon"
+#~ msgstr "Goeie Namiddag"
+
+#~ msgid "Good Evening"
+#~ msgstr "Goeie Aand"
+
+#, fuzzy
+#~ msgid "Email"
+#~ msgstr "E-pos:"
+
+#~ msgid "To:"
+#~ msgstr "Na:"
+
+#~ msgid "Subject:"
+#~ msgstr "Onderwerp:"
+
+#~ msgid "CC:"
+#~ msgstr "Cc:"
+
+#~ msgid "BCC:"
+#~ msgstr "Bcc:"
+
+#~ msgid "Fwd:"
+#~ msgstr "Stuur aan:"
+
+#~ msgid "Best regards,"
+#~ msgstr "Beste groete,"
+
+#~ msgid "Best wishes"
+#~ msgstr "Beste wense"
+
+#~ msgid "Cordially,"
+#~ msgstr "Cordially,"
+
+#~ msgid "Love,"
+#~ msgstr "Liefde,"
+
+#~ msgid "Regards,"
+#~ msgstr "Groete,"
+
+#~ msgid "Thank you,"
+#~ msgstr "Dank jy,"
+
+#~ msgid "Thanks,"
+#~ msgstr "Bedankinge,"
+
+#~ msgid "Subject"
+#~ msgstr "Onderwerp"
+
+#~ msgid "Dear Sir or Madam:"
+#~ msgstr "Liewe Meneer of Mevrou:"
+
+#~ msgid "Ladies and Gentlemen:"
+#~ msgstr "Dames en Here:"
+
+#, fuzzy
+#~ msgid "Attention"
+#~ msgstr "Aandag:"
+
+#~ msgid "Attention:"
+#~ msgstr "Aandag:"
+
+#~ msgid "ATTN:"
+#~ msgstr "Aandag:"
+
+#, fuzzy
+#~ msgid "Instructions"
+#~ msgstr "Instruksies:"
+
+#~ msgid "CERTIFIED"
+#~ msgstr "Gesertifiseer"
+
+#~ msgid "CONFIDENTIAL"
+#~ msgstr "Konfidentiële"
+
+#~ msgid "PERSONAL"
+#~ msgstr "Persoonlike"
+
+#~ msgid "FACSIMILE"
+#~ msgstr "Faksimilee"
+
+#~ msgid ">>>Field %1 is unknown in the current database query<<<"
+#~ msgstr ">>>Veld %1 is onbekende in die huidige databasis navraag<<<"
+
+#~ msgid "Mail Merge - Editor"
+#~ msgstr "Pos Saamvlans - Redigeerder"
+
+#~ msgid "Please enter the password for the database connection"
+#~ msgstr "Asseblief invoer die wagwoord vir die databasis verbinding"
+
+#, fuzzy
+#~ msgid "Mail Merge - Setup Database Connection"
+#~ msgstr "Pos Saamvlans - Opstelling databasis verbinding"
+
+#~ msgid "<not saved>"
+#~ msgstr "<not saved>"
+
+#, fuzzy
+#~ msgid "Store Settings"
+#~ msgstr "Stoor instellings"
+
+#~ msgid "ascending"
+#~ msgstr "opgaande"
+
+#~ msgid "descending"
+#~ msgstr "afgaande"
+
+#~ msgid "contains"
+#~ msgstr "bevat"
+
+#~ msgid "Field"
+#~ msgstr "Veld"
+
+#, fuzzy
+#~ msgid "Include"
+#~ msgstr "sluit in"
+
+#~ msgid "Operator"
+#~ msgstr "Operateur"
+
+#~ msgid "Condition"
+#~ msgstr "Kondisie"
+
+#~ msgid "Value"
+#~ msgstr "Waarde"
+
+#~ msgid "NOT"
+#~ msgstr "Nie"
+
+#, fuzzy
+#~ msgid "Unkown mail merge variable: %1"
+#~ msgstr "Trek Pos Saamvlans Veranderlike"
+
+#, fuzzy
+#~ msgid "New Distribution List"
+#~ msgstr "Instruksies:"
+
+#, fuzzy
+#~ msgid "Please enter name:"
+#~ msgstr "Invoer inskrywing naam:"
+
+#, fuzzy
+#~ msgid ""
+#~ "<qt>Distribution list with the given name <b>%1</b> already exists. "
+#~ "Please select a different name.</qt>"
+#~ msgstr ""
+#~ "'n raamstel met die naam '%1' alreeds bestaan. Asseblief invoer nog 'n "
+#~ "naam."
+
+#~ msgid "No Value"
+#~ msgstr "Nee Waarde"
+
+#, fuzzy
+#~ msgid "Add record"
+#~ msgstr "Voeg by Opneem"
+
+#, fuzzy
+#~ msgid "Add entry"
+#~ msgstr "Voeg by Inskrywing"
+
+#, fuzzy
+#~ msgid "Remove entry"
+#~ msgstr "Verwyder Inskrywing"
+
+#, fuzzy
+#~ msgid "Add Entry"
+#~ msgstr "Voeg by Inskrywing"
+
+#, fuzzy
+#~| msgid "&Hostname:"
+#~ msgid "Host:"
+#~ msgstr "Masjien naam:"
+
+#, fuzzy
+#~| msgid "&Port:"
+#~ msgid "Port:"
+#~ msgstr "Poort:"
+
+#, fuzzy
+#~| msgid "&Time"
+#~ msgid "Timeout:"
+#~ msgstr "Tyd"
+
+#, fuzzy
+#~| msgid "Table of Contents"
+#~ msgid "Table of Content"
+#~ msgstr "Tabel van Inhoud"
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "Bladsy"
+
+#, fuzzy
+#~ msgid "Slots"
+#~ msgstr "Slaan uit Teks"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Raam Eienskappe"
+
+#, fuzzy
+#~| msgid "&Variable"
+#~ msgid "Variables"
+#~ msgstr "Veranderlike"
+
+#, fuzzy
+#~ msgid "HTML Document"
+#~ msgstr "Dokument"
+
+#, fuzzy
+#~ msgid "Encoded Text"
+#~ msgstr "Slaan uit Teks"
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)"
+#~ msgstr "Uitvee die huidiglik gekose raam."
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)."
+#~ msgstr "Uitvee die huidiglik gekose raam."
+
+#~ msgid "First Page Header"
+#~ msgstr "Eerste Bladsy Opskrif"
+
+#~ msgid "First Page Footer"
+#~ msgstr "Eerste Bladsy Voetskrif"
+
+#, fuzzy
+#~ msgid "Unit:"
+#~ msgstr "Eenhede:"
+
+#, fuzzy
+#~| msgid "Size (%1):"
+#~ msgid "Size:"
+#~ msgstr "Grootte (%1):"
+
+#, fuzzy
+#~| msgid "Attention:"
+#~ msgid "Orientation:"
+#~ msgstr "Aandag:"
+
+#, fuzzy
+#~ msgid "Single sided"
+#~ msgstr "Hardloop Omtrent Kant"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgid "Whole document:"
+#~ msgstr "Dokument"
+
+#, fuzzy
+#~ msgid "Right to left"
+#~ msgstr "Ligte blou"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgid "Left Edge:"
+#~ msgstr "Links:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgid "Right Edge:"
+#~ msgstr "Regterkant:"
+
+#, fuzzy
+#~ msgid "Page spread"
+#~ msgstr "Lyn Breek"
+
+#~ msgid "Printing..."
+#~ msgstr "Besig om te druk..."
+
+#, fuzzy
+#~ msgid "Cancel"
+#~ msgstr "Sel"
+
+#~ msgid ""
+#~ "Read-only content cannot be changed. No modifications will be accepted."
+#~ msgstr ""
+#~ "Lees-alleen inhoud kan nie wees het verander. Nee veranderinge sal wees "
+#~ "aanvaar."
+
+#~ msgid "Insert Inline Table"
+#~ msgstr "Voeg by Inlyn Tabel"
+
+#, fuzzy
+#~ msgid "Bookmark target: "
+#~ msgstr "Voeg by Boekmerk..."
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "Teks Raamstel %1"
+
+#, fuzzy
+#~ msgid "Create Formula Frame"
+#~ msgstr "Skep 'n Formule Raam"
+
+#~ msgid ""
+#~ "KWord is unable to insert the table because there is not enough space "
+#~ "available."
+#~ msgstr ""
+#~ "Kword is nie moontlik na voeg by die tabel omdat daar is nie genoeg "
+#~ "spasie beskikbaar."
+
+#~ msgid "Create Table"
+#~ msgstr "Skep Tabel"
+
+#~ msgid "Change Frame Background Color"
+#~ msgstr "Verander Raam Agtergrond Kleur"
+
+#, fuzzy
+#~ msgid "Delete Page %1"
+#~ msgstr "Uitvee Raam"
+
+#~ msgid "Resize Column"
+#~ msgstr "Hervergroot Kolom"
+
+#, fuzzy
+#~ msgid "Resize Row"
+#~ msgstr "Verwyder ry"
+
+#~ msgid "Configure KWord"
+#~ msgstr "Konfigureer Kword"
+
+#~ msgid "Interface"
+#~ msgstr "Koppelvlak"
+
+#~ msgid "Interface Settings"
+#~ msgstr "Koppelvlak Instellings"
+
+#~ msgid "Spelling"
+#~ msgstr "Spelling"
+
+#~ msgid "Spell Checker Behavior"
+#~ msgstr "Spel Toetser Gedrag"
+
+#~ msgid "Formula Defaults"
+#~ msgstr "Formule Verstek"
+
+#~ msgid "Misc Settings"
+#~ msgstr "Allerande Instellings"
+
+#~ msgid "Path"
+#~ msgstr "Gids soeklys"
+
+#~ msgid "Path Settings"
+#~ msgstr "Gids soeklys Instellings"
+
+#, fuzzy
+#~ msgid "Change Config"
+#~ msgstr "Verander opstelling"
+
+#~ msgid "Show s&crollbar"
+#~ msgstr "Vertoon rolstaaf"
+
+#, fuzzy
+#~ msgid ""
+#~ "The number of files remembered in the file open dialog and in the recent "
+#~ "files menu item."
+#~ msgstr ""
+#~ "Die hoeveelheid van lêers onthou in Die lêer open dialoog en in Die "
+#~ "onlangse lêers kieslys item"
+
+#~ msgid "Number of recent &files:"
+#~ msgstr "Nommer van onlangse lêers:"
+
+#~ msgid "&Horizontal grid size:"
+#~ msgstr "Horisontaal rooster grootte:"
+
+#~ msgid "&Vertical grid size:"
+#~ msgstr "Vertikaal rooster grootte:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Configure the indent width used when using the 'Increase' or 'Decrease' "
+#~ "indentation buttons on a paragraph.<p>The lower the value, the more often "
+#~ "the buttons will have to be pressed to gain the same indentation."
+#~ msgstr ""
+#~ "Konfigureer die inkeep wydte gebruik word wanneer te gebruik die "
+#~ "Vermeerder of Verklein inkeping knoppies op 'n paragraaf.<p>die sagter "
+#~ "die waarde die meer gereeld die knoppies sal het na wees gedruk na "
+#~ "versterking die selfde inkeping"
+
+#~ msgid "&Paragraph indent by toolbar buttons:"
+#~ msgstr "Paragraaf inkeep deur nutsbalk knoppies:"
+
+#, fuzzy
+#~ msgid ""
+#~ "After selecting Preview Mode (from the \"View\" menu,) this is the number "
+#~ "of pages KWord will position on one horizontal row."
+#~ msgstr ""
+#~ "Na deur te kies voorskou modus (deur middel van die \"Besigtig\" kieslys, "
+#~ "opsie \"voorskou modus\") hierdie is die hoeveelheid van bladsye Kword "
+#~ "sal posisie op een horisontaal ry"
+
+#, fuzzy
+#~ msgid "Number of pa&ges per row in preview mode:"
+#~ msgstr "Voorskou modus - Nommer van bladsye per ry:"
+
+#, fuzzy
+#~ msgid "Undo/&redo limit:"
+#~ msgstr "Herstel/herstel herroep beperk:"
+
+#~ msgid "Display &links"
+#~ msgstr "Vertoon skakel"
+
+#~ msgid "&Underline all links"
+#~ msgstr "Onderstreep alle skakel"
+
+#~ msgid "Display c&omments"
+#~ msgstr "Vertoon kommentaar"
+
+#~ msgid "Display field code"
+#~ msgstr "Vertoon veld kode"
+
+#~ msgid "View Formatting"
+#~ msgstr "Besigtig Formatering"
+
+#~ msgid "View formatting end paragraph"
+#~ msgstr "Besigtig formatering einde paragraaf"
+
+#~ msgid "View formatting space"
+#~ msgstr "Besigtig formatering spasie"
+
+#~ msgid "View formatting tabs"
+#~ msgstr "Besigtig formatering oortjies"
+
+#~ msgid "View formatting break"
+#~ msgstr "Besigtig formatering breek"
+
+#~ msgid "Change Display Link Command"
+#~ msgstr "Verander Vertoon Skakel Opdrag"
+
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "Verander Vertoon Veld Kode Opdrag"
+
+#~ msgid "Document Defaults"
+#~ msgstr "Dokument Verstek"
+
+#, fuzzy
+#~ msgid ""
+#~ "When setting a document to use more than one column this distance will be "
+#~ "used to separate the columns. This value is merely a default setting as "
+#~ "the column spacing can be changed per document"
+#~ msgstr ""
+#~ "Wanneer opset 'n dokument na gebruik meer dan word een kolom Hierdie "
+#~ "afstand sal wees gebruik word na aparte die kolomme. Hierdie waarde is "
+#~ "net 'n verstek opset as die kolom spasiëring kan wees het verander per "
+#~ "dokument"
+
+#~ msgid "Default font:"
+#~ msgstr "Verstek skrif tipe:"
+
+#~ msgid "Choose..."
+#~ msgstr "Kies..."
+
+#~ msgid "Autosave every (min):"
+#~ msgstr "Outostoor elke (min):"
+
+#~ msgid ""
+#~ "A backup copy of the current document is created when a change has been "
+#~ "made. The interval used to create backup documents is set here."
+#~ msgstr ""
+#~ "'n rugsteun kopie van die huidige dokument is geskep wanneer 'n verander "
+#~ "het al gemaak. die interval gebruik word na skep rugsteun dokumente is "
+#~ "stel hier."
+
+#~ msgid "No autosave"
+#~ msgstr "Nee outostoor"
+
+#~ msgid " min"
+#~ msgstr " min"
+
+#, fuzzy
+#~ msgid "Create backup file"
+#~ msgstr "Skep Rugsteun Lêer"
+
+#~ msgid "Starting page number:"
+#~ msgstr "Beginne bladsy nommer:"
+
+#~ msgid "Tab stop (%1):"
+#~ msgstr "Oortjie stop (%1):"
+
+#~ msgid "Cursor"
+#~ msgstr "Plekaanduier"
+
+#~ msgid "Cursor in protected area"
+#~ msgstr "Plekaanduier in beskerm area"
+
+#~ msgid "Change Starting Page Number"
+#~ msgstr "Verander Beginne Bladsy Nommer"
+
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "Verander Oortjie Stop Waarde"
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "Oortjie stop (%1):"
+
+#~ msgid "Personal Expression"
+#~ msgstr "Persoonlike Uitdrukking"
+
+#, fuzzy
+#~ msgid "Backup Path"
+#~ msgstr "Prent gids soeklys"
+
+#, fuzzy
+#~ msgid "Modify Path..."
+#~ msgstr "Verander gids soeklys..."
+
+#~ msgid "Configure Endnote/Footnote"
+#~ msgstr "Konfigureer Stopnota/Voetnota"
+
+#~ msgid "Separator Line"
+#~ msgstr "Skeier Lyn"
+
+#, fuzzy
+#~ msgid ""
+#~ "Configure the separator line. The separator line is drawn directly above "
+#~ "the frame for the footnotes."
+#~ msgstr ""
+#~ "Konfigureer die skeier lyn. die skeier lyn is geteken direk boonste die "
+#~ "raam vir die voetnotas"
+
+#~ msgctxt "Position"
+#~ msgid "Left"
+#~ msgstr "Links"
+
+#~ msgctxt "Position"
+#~ msgid "Right"
+#~ msgstr "Regterkant"
+
+#~ msgid " %"
+#~ msgstr " %"
+
+#, fuzzy
+#~ msgid "&Width:"
+#~ msgstr "Wydte:"
+
+#, fuzzy
+#~ msgid ""
+#~ "The width is the thickness of the separator line, set to 0 for no "
+#~ "separator line."
+#~ msgstr ""
+#~ "Die wydte is Die dikheid van Die skeier lyn, stel na 0 vir nee skeier lyn"
+
+#~ msgid "&Size on page:"
+#~ msgstr "Grootte op bladsy:"
+
+#, fuzzy
+#~ msgid ""
+#~ "The size of the separator line can be defined as a percentage of the "
+#~ "width of the page."
+#~ msgstr ""
+#~ "Die grootte van Die skeier lyn kan wees gedefinieër in 'n persentasie van "
+#~ "Die wydte van Die bladsy"
+
+#~ msgid "Solid"
+#~ msgstr "Solied"
+
+#~ msgid "Dash Line"
+#~ msgstr "Streep Lyn"
+
+#~ msgid "Dash Dot Line"
+#~ msgstr "Streep Punt Lyn"
+
+#~ msgid "Dash Dot Dot Line"
+#~ msgstr "Streep Punt Punt Lyn"
+
+#, fuzzy
+#~ msgid ""
+#~ "The separator line can be drawn as a solid line or as a line which has a "
+#~ "pattern; the pattern can be set in the style-type."
+#~ msgstr ""
+#~ "Die skeier lyn kan wees geteken as 'n solied lyn of as 'n lyn wat het 'n "
+#~ "patroon; Die patroon kan wees stel in Die style-type"
+
+#~ msgid "Change End-/Footnote Variable Settings"
+#~ msgstr "Verander End-/Voetnota Veranderlike Instellings"
+
+#~ msgid "Change Footnote Line Separator Settings"
+#~ msgstr "Verander Voetnota Lyn Skeier Instellings"
+
+#, fuzzy
+#~ msgid "Rename Bookmark..."
+#~ msgstr "Herbenaam Boekmerk"
+
+#, fuzzy
+#~ msgid "That name already exists, please choose another name."
+#~ msgstr "Naam alreeds bestaan! Kies nog 'n Naam."
+
+#~ msgid "Delete Bookmark"
+#~ msgstr "Uitvee Boekmerk"
+
+#~ msgid "Delete Row"
+#~ msgstr "Uitvee Ry"
+
+#~ msgid "Delete Column"
+#~ msgstr "Uitvee Kolom"
+
+#~ msgid "Delete the row from the table."
+#~ msgstr "Uitvee die ry van die tabel."
+
+#~ msgid "Delete the column from the table."
+#~ msgstr "Uitvee die kolom van die tabel."
+
+#, fuzzy
+#~ msgid "Delete the whole table?"
+#~ msgstr "Uitvee die volledige tabel"
+
+#, fuzzy
+#~ msgid "Delete all selected rows?"
+#~ msgstr "Uitvee alle gekose rye"
+
+#, fuzzy
+#~ msgid "Delete row number %1?"
+#~ msgstr "Uitvee Raam"
+
+#, fuzzy
+#~ msgid "Delete column number %1?"
+#~ msgstr "Uitvee Kolomme:"
+
+#, fuzzy
+#~ msgid "Delete rows: %1 ?"
+#~ msgstr "Uitvee Rye:"
+
+#, fuzzy
+#~ msgid "Delete columns: %1 ?"
+#~ msgstr "Uitvee Kolomme:"
+
+#~ msgid "Column %1"
+#~ msgstr "Kolom %1"
+
+#~ msgid "Text Frame %1"
+#~ msgstr "Teks Raam %1"
+
+#~ msgid "Empty"
+#~ msgstr "Leeg"
+
+#, fuzzy
+#~ msgid "Formula Frame %1"
+#~ msgstr "Formule raam %1"
+
+#~ msgid "Picture (%1) %2"
+#~ msgstr "Prent (%1) %2"
+
+#~ msgid "Embedded Objects"
+#~ msgstr "Ingebedde Objekte"
+
+#~ msgid "Formula Frames"
+#~ msgstr "Formule Rame"
+
+#~ msgid "Pictures"
+#~ msgstr "Prentjies"
+
+#~ msgid "Text Frames/Frame Sets"
+#~ msgstr "Teks Rame/Raam Verstel"
+
+#~ msgid "Document Structure"
+#~ msgstr "Dokument Struktuur"
+
+#~ msgid ""
+#~ "This document was created with a newer version of KWord (syntax version: "
+#~ "%1)\n"
+#~ "Opening it in this version of KWord will lose some information."
+#~ msgstr ""
+#~ "Hierdie dokument was geskep met 'n nuwer weergawe van Kword (sintaks "
+#~ "weergawe: %1)\n"
+#~ "Oopgemaak dit in Hierdie weergawe van Kword sal verloor sommige "
+#~ "informasie."
+
+#, fuzzy
+#~ msgid "File Format Mismatch"
+#~ msgstr "Lêer formaat nie-ooreenstemming"
+
+#~ msgid "Create Part Frame"
+#~ msgstr "Skep Deel Raam"
+
+#~ msgid "Delete Table"
+#~ msgstr "Uitvee Tabel"
+
+#~ msgid "Delete Text Frame"
+#~ msgstr "Uitvee Teks Raam"
+
+#~ msgid "Delete Formula Frame"
+#~ msgstr "Uitvee Formule Raam"
+
+#~ msgid "Delete Picture Frame"
+#~ msgstr "Uitvee Prent Raam"
+
+#~ msgid "Delete Object Frame"
+#~ msgstr "Uitvee Voorwerp Raam"
+
+#~ msgid "Edit Personal Expression"
+#~ msgstr "Redigeer Persoonlike Uitdrukking"
+
+#, fuzzy
+#~ msgid "Group name:"
+#~ msgstr "Groepnaam"
+
+#~ msgid "Expressions"
+#~ msgstr "Uitdrukkings"
+
+#~ msgid "&New"
+#~ msgstr "Nuwe"
+
+#~ msgid "New"
+#~ msgstr "Nuwe"
+
+#~ msgid "empty"
+#~ msgstr "leeg"
+
+#~ msgid "new group"
+#~ msgstr "nuwe groep"
+
+#~ msgid "&Automatic"
+#~ msgstr "Automaties"
+
+#~ msgid "&Manual"
+#~ msgstr "Hand"
+
+#~ msgid "&Footnote"
+#~ msgstr "Voetnota"
+
+#~ msgid "&Endnote"
+#~ msgstr "Stopnota"
+
+#~ msgid "Formula %1"
+#~ msgstr "Formule %1"
+
+#, fuzzy
+#~ msgid "Frame Properties for %1"
+#~ msgstr "Raam Eienskappe"
+
+#, fuzzy
+#~ msgid "Frame Properties for New Frame"
+#~ msgstr "Raam Eienskappe"
+
+#~ msgid "Frames Properties"
+#~ msgstr "Rame Eienskappe"
+
+#, fuzzy
+#~ msgid "Frame Settings for %1"
+#~ msgstr "Raam Instellings"
+
+#~ msgid "SideHead Definition"
+#~ msgstr "Sy-hoof Definisie"
+
+#~ msgid "Gap size (%1):"
+#~ msgstr "Gaping grootte (%1):"
+
+#~ msgid "Closest to Binding"
+#~ msgstr "Naaste na Binding"
+
+#~ msgid "Closest to Page Edge"
+#~ msgstr "Naaste na Bladsy Rand"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Protect content:</b><br/>Disallow changes to be made to the contents "
+#~ "of the frame(s)."
+#~ msgstr ""
+#~ "Moenie toelaat verander na wees gemaak na die inhoud van die raam(s)"
+
+#~ msgid "No."
+#~ msgstr "Nee."
+
+#~ msgid "Table is inline"
+#~ msgstr "Tabel is inlyn"
+
+#~ msgid "Set new color on all selected frames"
+#~ msgstr "Stel nuwe kleur op alle gekose rame"
+
+#~ msgid "Background color:"
+#~ msgstr "Agtergrond kleur:"
+
+#~ msgid "Background style:"
+#~ msgstr "Agtergrond styl:"
+
+#~ msgid "No Background Fill"
+#~ msgstr "Nee Agtergrond Opvul"
+
+#~ msgid "100% Fill Pattern"
+#~ msgstr "100% Opvul Patroon"
+
+#~ msgid "94% Fill Pattern"
+#~ msgstr "94% Opvul Patroon"
+
+#~ msgid "88% Fill Pattern"
+#~ msgstr "88% Opvul Patroon"
+
+#~ msgid "63% Fill Pattern"
+#~ msgstr "63% Opvul Patroon"
+
+#~ msgid "50% Fill Pattern"
+#~ msgstr "50% Opvul Patroon"
+
+#~ msgid "37% Fill Pattern"
+#~ msgstr "37% Opvul Patroon"
+
+#~ msgid "12% Fill Pattern"
+#~ msgstr "12% Opvul Patroon"
+
+#~ msgid "6% Fill Pattern"
+#~ msgstr "6% Opvul Patroon"
+
+#~ msgid "Crossing Lines"
+#~ msgstr "Kruisende Lyne"
+
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "Diagonale Lyne ( / )"
+
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "Diagonale Lyne ( \\ )"
+
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "Diagonale Kruisende Lyne"
+
+#, fuzzy
+#~ msgid "&Borders"
+#~ msgstr "Grense"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "Styl:"
+
+#~ msgid "Rename Frameset"
+#~ msgstr "Herbenaam Raamstel"
+
+#~ msgid ""
+#~ "A new frameset with the name '%1' can not be made because a frameset with "
+#~ "that name already exists. Please enter another name or select an existing "
+#~ "frameset from the list."
+#~ msgstr ""
+#~ "'n nuwe raamstel met die naam '%1' kan nie wees gemaak omdat 'n raamstel "
+#~ "met wat naam alreeds bestaan. Asseblief invoer nog 'n naam of kies 'n "
+#~ "bestaande raamstel van die lys."
+
+#~ msgid "Protect Content"
+#~ msgstr "Beskerm Inhoud"
+
+#~ msgid ""
+#~ "The frame will not be resized because the new size would be greater than "
+#~ "the size of the page."
+#~ msgstr ""
+#~ "Die raam sal nie wees hervergroot omdat Die nuwe grootte sal wees "
+#~ "grootter as Die grootte van Die bladsy."
+
+#~ msgid "Make Frameset Inline"
+#~ msgstr "Maak Raamstel Inlyn"
+
+#~ msgid "Make Frameset Non-Inline"
+#~ msgstr "Maak Raamstel Non-Inline"
+
+#~ msgid "Resize Frame"
+#~ msgstr "Hervergroot Raam"
+
+#~ msgid "Change Margin Frame"
+#~ msgstr "Verander Kantlyn Raam"
+
+#~ msgid "Change Border"
+#~ msgstr "Verander Grens"
+
+#~ msgid "Change Left Border Frame"
+#~ msgstr "Verander Links Grens Raam"
+
+#~ msgid "Change Right Border Frame"
+#~ msgstr "Verander Regterkant Grens Raam"
+
+#~ msgid "Change Top Border Frame"
+#~ msgstr "Verander Bo Grens Raam"
+
+#~ msgid "Change Bottom Border Frame"
+#~ msgstr "Verander Bodem Grens Raam"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to reconnect the last frame of the frameset '%1'. The "
+#~ "contents of this frameset will be deleted.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Jy word aangaande na herkoppel die laaste Raam van die Raamstel '%1'. die "
+#~ "inhoud van hierdie Raamstel sal wees uitgevee.\n"
+#~ "word Jy seker Jy wil hê na doen wat?"
+
+#~ msgid "Reconnect Frame"
+#~ msgstr "Herkoppel Raam"
+
+#~ msgid "&Reconnect"
+#~ msgstr "Herkoppel"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Synchronize changes:</b><br/>When this is checked any change in "
+#~ "margins will be used for all directions."
+#~ msgstr ""
+#~ "Wanneer hierdie is nagegaan enige verander in kantlyne sal wees gebruik "
+#~ "word vir alle rigtings"
+
+#~ msgid "Frame Style Manager"
+#~ msgstr "Raam Styl Bestuurder"
+
+#~ msgid "Import From File..."
+#~ msgstr "In voer Van Lêer..."
+
+#, fuzzy
+#~ msgid "Frame background color:"
+#~ msgstr "Raam Agtergrond Kleur"
+
+#, fuzzy
+#~ msgid "Go to Footnote"
+#~ msgstr "Gaan na Voet Einde Nota"
+
+#, fuzzy
+#~ msgid "Go to Endnote"
+#~ msgstr "Gaan na Voet Einde Nota"
+
+#, fuzzy
+#~ msgid "File name is empty."
+#~ msgstr "Lêer naam is leeg"
+
+#~ msgid "File does not contain any styles. It may be the wrong version."
+#~ msgstr ""
+#~ "Lêer doen nie bevat enige style. Dit dalk mag wees die verkeerde weergawe."
+
+#~ msgid "This file is not a KWord file!"
+#~ msgstr "Hierdie lêer is nie 'n Kword lêer!"
+
+#~ msgid "Select style to import:"
+#~ msgstr "Kies styl na in voer:"
+
+#~ msgid "Insert Row"
+#~ msgstr "Voeg by Ry"
+
+#~ msgid "Insert Column"
+#~ msgstr "Voeg by Kolom"
+
+#~ msgid "Insert New Row"
+#~ msgstr "Voeg by Nuwe Ry"
+
+#~ msgid "Insert New Column"
+#~ msgstr "Voeg by Nuwe Kolom"
+
+#~ msgid "Before"
+#~ msgstr "Voor"
+
+#~ msgid "After"
+#~ msgstr "Na"
+
+#~ msgid "Row:"
+#~ msgstr "Ry:"
+
+#~ msgid "Column:"
+#~ msgstr "Kolom:"
+
+#~ msgid "Choose &Picture..."
+#~ msgstr "Kies Prent..."
+
+#~ msgid "Choose Picture"
+#~ msgstr "Kies Prent"
+
+#, fuzzy
+#~ msgid "Contents Head %1"
+#~ msgstr "Inhoud Kop 1"
+
+#, fuzzy
+#~ msgid "No plugins supporting the requested action were found."
+#~ msgstr "Nee inprop modules ondersteun die versoekte aksie was gevind"
+
+#~ msgid "&Available sources:"
+#~ msgstr "Beskikbaar bronkodes:"
+
+#~ msgid "Edit Current..."
+#~ msgstr "Redigeer Huidige..."
+
+#~ msgid "Create New..."
+#~ msgstr "Skep Nuwe..."
+
+#~ msgid "Merging:"
+#~ msgstr "Saamvoeg:"
+
+#~ msgid "Print Preview..."
+#~ msgstr "Druk Voorskou..."
+
+#~ msgid "Create New Document"
+#~ msgstr "Skep Nuwe Dokument"
+
+#~ msgid "Mail Merge - Variable Name"
+#~ msgstr "Pos Saamvlans - Veranderlike Naam"
+
+#, fuzzy
+#~ msgid "Unnamed Table"
+#~ msgstr "Skep Tabel"
+
+#~ msgid "Object %1"
+#~ msgstr "Voorwerp %1"
+
+#, fuzzy
+#~ msgid "Move/Resize Frame"
+#~ msgstr "Hervergroot Raam"
+
+#, fuzzy
+#~ msgid "Make Document External"
+#~ msgstr "Dokument Verstek"
+
+#, fuzzy
+#~ msgid "Make Document Internal"
+#~ msgstr "Maak Teks Kursief"
+
+#~ msgid "Picture %1"
+#~ msgstr "Prent %1"
+
+#, fuzzy
+#~ msgid "Sort Text"
+#~ msgstr "Slaan uit Teks"
+
+#, fuzzy
+#~ msgid "Increase"
+#~ msgstr "Vermeerder Inkeep"
+
+#, fuzzy
+#~ msgid "Decrease"
+#~ msgstr "Verklein Inkeep"
+
+#~ msgid "Split Cell"
+#~ msgstr "Skei Sel"
+
+#~ msgid "Number of rows:"
+#~ msgstr "Nommer van rye:"
+
+#~ msgid "Number of columns:"
+#~ msgstr "Nommer van kolomme:"
+
+#, fuzzy
+#~ msgid "Selected Text"
+#~ msgstr "Gekose"
+
+#~ msgid "Counting..."
+#~ msgstr "Tel..."
+
+#, fuzzy
+#~ msgid "Number of embedded objects:"
+#~ msgstr "Ingebedde Objekte"
+
+#, fuzzy
+#~ msgid "Number of formula frameset:"
+#~ msgstr "Nommer van rye:"
+
+#~ msgid "Table Settings"
+#~ msgstr "Tabel Instellings"
+
+#~ msgid "Cell heights:"
+#~ msgstr "Sel hoogtes:"
+
+#~ msgid "Manual"
+#~ msgstr "Hand"
+
+#~ msgid "Cell widths:"
+#~ msgstr "Sel wydtes:"
+
+#~ msgid "The table is &inline"
+#~ msgstr "Die tabel is inlyn"
+
+#~ msgid "Templates"
+#~ msgstr "Voorbeelde"
+
+#, fuzzy
+#~ msgid "Add New Rows to Table"
+#~ msgstr "Voeg by nuwe rye na tabel"
+
+#, fuzzy
+#~ msgid "Remove Rows From Table"
+#~ msgstr "Verwyder rye van tabel"
+
+#, fuzzy
+#~ msgid "Remove Row"
+#~ msgstr "Verwyder ry"
+
+#, fuzzy
+#~ msgid "Add New Columns to Table"
+#~ msgstr "Voeg by nuwe kolomme na tabel"
+
+#, fuzzy
+#~ msgid "Remove Columns From Table"
+#~ msgstr "Verwyder kolomme van tabel"
+
+#, fuzzy
+#~ msgid "Remove Column"
+#~ msgstr "Verwyder kolom"
+
+#, fuzzy
+#~ msgid "Apply Template to Table"
+#~ msgstr "Wend aan werkvoorbeeld na tabel"
+
+#~ msgid "Table Style Manager"
+#~ msgstr "Tabel Styl Bestuurder"
+
+#~ msgid "Adjust"
+#~ msgstr "Verstel"
+
+#~ msgid "Change..."
+#~ msgstr "Verander..."
+
+#~ msgid "&Customize"
+#~ msgstr "Pasmaak"
+
+#~ msgid "Apply To"
+#~ msgstr "Wend aan Na"
+
+#~ msgid "First row"
+#~ msgstr "Eerste ry"
+
+#~ msgid "Last row"
+#~ msgstr "Laaste ry"
+
+#~ msgid "Body"
+#~ msgstr "Liggaam"
+
+#~ msgid "First column"
+#~ msgstr "Eerste kolom"
+
+#~ msgid "Last column"
+#~ msgstr "Laaste kolom"
+
+#~ msgid "--- Frame Break ---"
+#~ msgstr "--- Raam Breek ---"
+
+#~ msgid "Change Paragraph Attribute"
+#~ msgstr "Verander Paragraaf Kenmerk"
+
+#, fuzzy
+#~ msgid "Paste"
+#~ msgstr "Gids soeklys"
+
+#~ msgid "Insert Table of Contents"
+#~ msgstr "Voeg by Tabel van Inhoud"
+
+#~ msgid "Insert Break After Paragraph"
+#~ msgstr "Voeg by Breek Na Paragraaf"
+
+#, fuzzy
+#~ msgid "Endnote %1"
+#~ msgstr "Stopnota"
+
+#~ msgid "Footnote %1"
+#~ msgstr "Voetnota %1"
+
+#~ msgid "Insert Expression"
+#~ msgstr "Voeg by Uitdrukking"
+
+#~ msgid "Insert Variable"
+#~ msgstr "Voeg by Veranderlike"
+
+#, fuzzy
+#~ msgid "Select Frame"
+#~ msgstr "Kies Raamstel"
+
+#~ msgid "Configure Mai&l Merge..."
+#~ msgstr "Konfigureer Pos Saamvlans..."
+
+#~ msgid "Drag Mail Merge Variable"
+#~ msgstr "Trek Pos Saamvlans Veranderlike"
+
+#~ msgid "&Delete Frame"
+#~ msgstr "Uitvee Raam"
+
+#~ msgid "Ra&ise Frame"
+#~ msgstr "Lig Raam"
+
+#~ msgid "&Lower Frame"
+#~ msgstr "Sagter Raam"
+
+#~ msgid "Text Mode"
+#~ msgstr "Teks Modus"
+
+#~ msgid ""
+#~ "Do not show any pictures, formatting or layout. KWord will display only "
+#~ "the text for editing."
+#~ msgstr ""
+#~ "Doen nie vertoon enige prentjies, formatering of uitleg. Kword sal "
+#~ "vertoon slegs die teks vir redigering."
+
+#, fuzzy
+#~ msgid ""
+#~ "Switch to page mode.<br><br> Page mode is designed to make editing your "
+#~ "text easy.<br><br>This function is most frequently used to return to text "
+#~ "editing after switching to preview mode."
+#~ msgstr ""
+#~ "Wissel na bladsy modus.<br><br> bladsy modus is ontwerp na maak "
+#~ "redigering jou teks maklike.<br><br>Hierdie funksie is mees dikwels "
+#~ "gebruik word na terug na teks redigering na omskakeling na Voorskou modus."
+
+#, fuzzy
+#~ msgid "Switch to page editing mode"
+#~ msgstr "Wissel na bladsy redigering modus."
+
+#~ msgid "Pre&view Mode"
+#~ msgstr "Voorskou Modus"
+
+#~ msgid ""
+#~ "Zoom out from your document to get a look at several pages of your "
+#~ "document.<br><br>The number of pages per line can be customized."
+#~ msgstr ""
+#~ "Zoem uit van jou dokument na kry 'n kyk na klomp bladsye van jou dokument."
+#~ "<br><br>Die nommer van bladsye per lyn kan wees doelgemaakte."
+
+#, fuzzy
+#~ msgid "Zoom out to a multiple page view"
+#~ msgstr "Zoem uit na 'n veelvuldige bladsy besigtig."
+
+#, fuzzy
+#~ msgid "Enable Document &Headers"
+#~ msgstr "Dokument Verstek"
+
+#, fuzzy
+#~ msgid "Enable Document Foo&ters"
+#~ msgstr "Dokument Verstek"
+
+#, fuzzy
+#~ msgid "Disable Document Foo&ters"
+#~ msgstr "Dokument Verstek"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "Spesiaal Karakter..."
+
+#, fuzzy
+#~ msgid "Insert one or more symbols or letters not found on the keyboard"
+#~ msgstr ""
+#~ "Voeg by een of meer simbole of letters nie gevind op die sleutelbord."
+
+#~ msgid "Insert one or more symbols or letters not found on the keyboard."
+#~ msgstr ""
+#~ "Voeg by een of meer simbole of letters nie gevind op die sleutelbord."
+
+#~ msgid "&Hard Frame Break"
+#~ msgstr "Hard Raam Breek"
+
+#, fuzzy
+#~ msgid "Force the remainder of the text into the next frame"
+#~ msgstr "Forseer die res van die teks binnein die volgende raam."
+
+#~ msgid ""
+#~ "This inserts a non-printing character at the current cursor position. All "
+#~ "text after this point will be moved into the next frame in the frameset."
+#~ msgstr ""
+#~ "Hierdie voeg in 'n non-printing karakter na die huidige plekaanduier "
+#~ "posisie. Alle teks na Hierdie punt sal wees verskuif binnein die volgende "
+#~ "raam in die raamstel."
+
+#~ msgid "Link..."
+#~ msgstr "Skakel..."
+
+#, fuzzy
+#~ msgid "Insert a Web address, email address or hyperlink to a file"
+#~ msgstr "Voeg by 'n web adres, e-pos adres of hiperskakel na 'n lêer."
+
+#, fuzzy
+#~ msgid "Insert a Web address, email address or hyperlink to a file."
+#~ msgstr "Voeg by 'n web adres, e-pos adres of hiperskakel na 'n lêer."
+
+#~ msgid "Comment..."
+#~ msgstr "Kommentaar..."
+
+#, fuzzy
+#~ msgid "Insert a comment about the selected text"
+#~ msgstr "Voeg by 'n kommentaar aangaande die gekose teks."
+
+#~ msgid ""
+#~ "Insert a comment about the selected text. These comments are not designed "
+#~ "to appear on the final page."
+#~ msgstr ""
+#~ "Voeg by 'n kommentaar aangaande die gekose teks. Hierdie kommentaar word "
+#~ "nie ontwerp na verskyn op die finale bladsy."
+
+#~ msgid "Edit Comment..."
+#~ msgstr "Redigeer Kommentaar..."
+
+#, fuzzy
+#~ msgid "Change the content of a comment"
+#~ msgstr "Verander die inhoud van 'n kommentaar."
+
+#~ msgid "Change the content of a comment."
+#~ msgstr "Verander die inhoud van 'n kommentaar."
+
+#, fuzzy
+#~ msgid "Remove the selected document comment"
+#~ msgstr "Verwyder die gekose dokument kommentaar."
+
+#~ msgid "Remove the selected document comment."
+#~ msgstr "Verwyder die gekose dokument kommentaar."
+
+#, fuzzy
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Redigeer Kommentaar..."
+
+#~ msgid "Table of &Contents"
+#~ msgstr "Tabel van Inhoud"
+
+#~ msgid "Insert table of contents at the current cursor position."
+#~ msgstr "Voeg by tabel van inhoud na die huidige plekaanduier posisie."
+
+#, fuzzy
+#~ msgid "Document &Information"
+#~ msgstr "Dokument Informasie"
+
+#~ msgid "&Date"
+#~ msgstr "Datum"
+
+#, fuzzy
+#~ msgid "&Statistic"
+#~ msgstr "Statistieke"
+
+#~ msgid "&Custom"
+#~ msgstr "Pasmaak"
+
+#~ msgid "&Refresh All Variables"
+#~ msgstr "Verfris Alle Veranderlikes"
+
+#, fuzzy
+#~ msgid "Update all variables to current values"
+#~ msgstr "Dateer op alle veranderlikes na huidige waardes."
+
+#~ msgid ""
+#~ "Update all variables in the document to current values.<br><br>This will "
+#~ "update page numbers, dates or any other variables that need updating."
+#~ msgstr ""
+#~ "Dateer op alle veranderlikes in die dokument na huidige waardes."
+#~ "<br><br>Hierdie sal Dateer op bladsy nommers, datums of enige ander "
+#~ "veranderlikes wat benodig besig met opdatering van."
+
+#~ msgid "&Expression"
+#~ msgstr "Uitdrukking"
+
+#~ msgid "Te&xt Frame"
+#~ msgstr "Teks Raam"
+
+#, fuzzy
+#~ msgid "Create a new text frame"
+#~ msgstr "Skep 'n nuwe teks raam."
+
+#~ msgid "Create a new text frame."
+#~ msgstr "Skep 'n nuwe teks raam."
+
+#~ msgid "For&mula"
+#~ msgstr "Formule"
+
+#, fuzzy
+#~ msgid "Insert a formula into a new frame"
+#~ msgstr "Voeg by 'n formule binnein 'n nuwe raam."
+
+#~ msgid "Insert a formula into a new frame."
+#~ msgstr "Voeg by 'n formule binnein 'n nuwe raam."
+
+#~ msgid "&Table..."
+#~ msgstr "Tabel..."
+
+#~ msgid ""
+#~ "Create a table.<br><br>The table can either exist in a frame of its own "
+#~ "or inline."
+#~ msgstr ""
+#~ "Skep 'n tabel.<br><br>Die tabel kan òf bestaan in 'n raam van sy eie of "
+#~ "inlyn."
+
+#, fuzzy
+#~ msgid "Create a new frame for a picture"
+#~ msgstr "Skep 'n nuwe raam vir 'n prent."
+
+#~ msgid "Create a new frame for a picture or diagram."
+#~ msgstr "Skep 'n nuwe raam vir 'n prent of diagram."
+
+#~ msgid "&Object Frame"
+#~ msgstr "Voorwerp Raam"
+
+#, fuzzy
+#~ msgid "Insert an object into a new frame"
+#~ msgstr "Voeg by 'n voorwerp binnein 'n nuwe raam."
+
+#~ msgid "Insert an object into a new frame."
+#~ msgstr "Voeg by 'n voorwerp binnein 'n nuwe raam."
+
+#~ msgid "Fi&le..."
+#~ msgstr "Lêer..."
+
+#~ msgid "&Font..."
+#~ msgstr "Skrif tipe..."
+
+#~ msgid "Change the attributes of the currently selected characters."
+#~ msgstr "Verander die eienskappe van die huidiglik gekose karakters."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "Paragraaf..."
+
+#, fuzzy
+#~ msgid ""
+#~ "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~ msgstr ""
+#~ "Verander paragraaf kantlyne, teks vloei, grense, paragraafkoeëls, "
+#~ "nommering, etc."
+
+#, fuzzy
+#~ msgid ""
+#~ "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~ "<p>Select text in multiple paragraphs to change the formatting of all "
+#~ "selected paragraphs.<p>If no text is selected, the paragraph where the "
+#~ "cursor is located will be changed."
+#~ msgstr ""
+#~ "Verander paragraaf kantlyne, teks vloei, grense, paragraafkoeëls, "
+#~ "nommering, etc.<p>Kies teks in veelvuldige paragrawe na Verander die "
+#~ "formatering van alle gekose paragrawe.<p>As nee teks is gekose, die "
+#~ "paragraaf waar die plekaanduier is geleë sal wees het verander."
+
+#, fuzzy
+#~ msgid "&Frame Style Manager"
+#~ msgstr "Raam Styl Bestuurder"
+
+#, fuzzy
+#~ msgid "Change attributes of framestyles"
+#~ msgstr "Verander eienskappe van style."
+
+#, fuzzy
+#~ msgid "Change attributes of styles"
+#~ msgstr "Verander eienskappe van style."
+
+#~ msgid ""
+#~ "Change font and paragraph attributes of styles.<p>Multiple styles can be "
+#~ "changed using the dialog box."
+#~ msgstr ""
+#~ "Verander skrif tipe en paragraaf eienskappe van style.<p>Veelvuldige "
+#~ "style kan wees het verander te gebruik die dialoog boks."
+
+#, fuzzy
+#~ msgid "Font Size"
+#~ msgstr "Beskerm Grootte"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "Vermeerder Skrif tipe Grootte"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "Verklein Skrif tipe Grootte"
+
+#~ msgid "St&yle"
+#~ msgstr "Styl"
+
+#~ msgid "Default Format"
+#~ msgstr "Verstek Formaat"
+
+#, fuzzy
+#~ msgid "Change font and paragraph attributes to their default values"
+#~ msgstr ""
+#~ "Verander skrif tipe en paragraaf eienskappe na hulle verstek waardes."
+
+#~ msgid "Change font and paragraph attributes to their default values."
+#~ msgstr ""
+#~ "Verander skrif tipe en paragraaf eienskappe na hulle verstek waardes."
+
+#~ msgid "&Strike Out"
+#~ msgstr "Slaan Uit"
+
+#~ msgid "Align &Left"
+#~ msgstr "Oplyn Links"
+
+#~ msgid "Align &Center"
+#~ msgstr "Oplyn Sentrum"
+
+#~ msgid "Align &Right"
+#~ msgstr "Oplyn Regterkant"
+
+#~ msgid "Align &Block"
+#~ msgstr "Oplyn Blok"
+
+#~ msgid "Superscript"
+#~ msgstr "Boskrif"
+
+#~ msgid "Subscript"
+#~ msgstr "Onderskrif"
+
+#~ msgid "Increase Indent"
+#~ msgstr "Vermeerder Inkeep"
+
+#~ msgid "Decrease Indent"
+#~ msgstr "Verklein Inkeep"
+
+#~ msgid "Text Color..."
+#~ msgstr "Teks Kleur..."
+
+#~ msgid "Bullet"
+#~ msgstr "Petroon"
+
+#~ msgid "Border Left"
+#~ msgstr "Grens Links"
+
+#~ msgid "Border Right"
+#~ msgstr "Grens Regterkant"
+
+#~ msgid "Border Top"
+#~ msgstr "Grens Bo"
+
+#~ msgid "Border Bottom"
+#~ msgstr "Grens Bodem"
+
+#~ msgid "Border Style"
+#~ msgstr "Grens Styl"
+
+#~ msgid "Border Width"
+#~ msgstr "Grens Wydte"
+
+#~ msgid "Border Color"
+#~ msgstr "Grens Kleur"
+
+#~ msgid "Text Background Color..."
+#~ msgstr "Teks Agtergrond Kleur..."
+
+#, fuzzy
+#~ msgid "Change background color for currently selected text"
+#~ msgstr "Verander agtergrond kleur vir huidiglik gekose teks."
+
+#~ msgid "Change background color for currently selected text."
+#~ msgstr "Verander agtergrond kleur vir huidiglik gekose teks."
+
+#, fuzzy
+#~ msgid "&Properties"
+#~ msgstr "Raam Eienskappe"
+
+#, fuzzy
+#~ msgid "Adjust properties of the current table"
+#~ msgstr "Verstel eienskappe van die huidige tabel."
+
+#~ msgid "Adjust properties of the current table."
+#~ msgstr "Verstel eienskappe van die huidige tabel."
+
+#~ msgid "&Insert Row..."
+#~ msgstr "Voeg by Ry..."
+
+#, fuzzy
+#~ msgid "Insert one or more rows at cursor location"
+#~ msgstr "Voeg by een of meer rye na plekaanduier ligging."
+
+#~ msgid "Insert one or more rows at current cursor location."
+#~ msgstr "Voeg by een of meer rye na huidige plekaanduier ligging."
+
+#~ msgid "I&nsert Column..."
+#~ msgstr "Voeg by Kolom..."
+
+#, fuzzy
+#~ msgid "Insert one or more columns into the current table"
+#~ msgstr "Voeg by een of meer kolomme binnein die huidige tabel."
+
+#~ msgid "Insert one or more columns into the current table."
+#~ msgstr "Voeg by een of meer kolomme binnein die huidige tabel."
+
+#, fuzzy
+#~ msgid "Delete selected rows from the current table"
+#~ msgstr "Uitvee gekose rye van die huidige tabel."
+
+#~ msgid "Delete selected rows from the current table."
+#~ msgstr "Uitvee gekose rye van die huidige tabel."
+
+#, fuzzy
+#~ msgid "Delete selected columns from the current table"
+#~ msgstr "Uitvee gekose kolomme van die huidige tabel."
+
+#~ msgid "Delete selected columns from the current table."
+#~ msgstr "Uitvee gekose kolomme van die huidige tabel."
+
+#~ msgid "Resize Column..."
+#~ msgstr "Hervergroot Kolom..."
+
+#, fuzzy
+#~ msgid "Change the width of the currently selected column"
+#~ msgstr "Verander die wydte van die huidiglik gekose kolom."
+
+#~ msgid "Change the width of the currently selected column."
+#~ msgstr "Verander die wydte van die huidiglik gekose kolom."
+
+#~ msgid "&Join Cells"
+#~ msgstr "Aansluit by Selle"
+
+#, fuzzy
+#~ msgid "Join two or more cells into one large cell"
+#~ msgstr "Aansluit by twee of meer selle binnein een groot sel."
+
+#~ msgid ""
+#~ "Join two or more cells into one large cell.<p>This is a good way to "
+#~ "create titles and labels within a table."
+#~ msgstr ""
+#~ "Aansluit by twee of meer selle binnein een groot sel.<p>Hierdie is 'n "
+#~ "goeie weg na skep titels en etikette binne in 'n tabel."
+
+#, fuzzy
+#~ msgid "&Split Cell..."
+#~ msgstr "Skei Selle..."
+
+#, fuzzy
+#~ msgid "Split one cell into two or more cells"
+#~ msgstr "Skei een sel binnein twee of meer selle."
+
+#~ msgid ""
+#~ "Split one cell into two or more cells.<p>Cells can be split horizontally, "
+#~ "vertically or both directions at once."
+#~ msgstr ""
+#~ "Skei een sel binnein twee of meer selle.<p>selle kan wees Skei "
+#~ "horisontaal, vertikaal of beide rigtings na as eers."
+
+#~ msgid "Protect Cells"
+#~ msgstr "Beskerm Selle"
+
+#, fuzzy
+#~ msgid "Prevent changes to content of selected cells"
+#~ msgstr "Verhoed verander na inhoud van gekose selle."
+
+#~ msgid ""
+#~ "Toggles cell protection on and off.<br><br>When cell protection is on, "
+#~ "the user can not alter the content or formatting of the text within the "
+#~ "cell."
+#~ msgstr ""
+#~ "Skakel tussen sel beskerming op en af.<br><br>Wanneer sel beskerming is "
+#~ "op, die gebruiker kan nie verander die inhoud van formatering van die "
+#~ "teks binne in die sel."
+
+#~ msgid "&Ungroup Table"
+#~ msgstr "Ontgroep Tabel"
+
+#, fuzzy
+#~ msgid "Break a table into individual frames"
+#~ msgstr "Breek 'n tabel binnein individuele rame."
+
+#~ msgid "Delete &Table"
+#~ msgstr "Uitvee Tabel"
+
+#, fuzzy
+#~ msgid "Delete the entire table"
+#~ msgstr "Uitvee die hele tabel."
+
+#~ msgid ""
+#~ "Deletes all cells and the content within the cells of the currently "
+#~ "selected table."
+#~ msgstr ""
+#~ "Deletes alle selle en die inhoud binne in die selle van die huidiglik "
+#~ "gekose tabel."
+
+#, fuzzy
+#~ msgid "T&able Style Manager"
+#~ msgstr "Tabel Styl Bestuurder"
+
+#, fuzzy
+#~ msgid "Change attributes of tablestyles"
+#~ msgstr "Verander eienskappe van style."
+
+#, fuzzy
+#~ msgid "Convert Table to Text"
+#~ msgstr "Voeg by Tabel van Inhoud"
+
+#, fuzzy
+#~ msgid "Sort Text..."
+#~ msgstr "Slaan uit Teks"
+
+#, fuzzy
+#~ msgid "Add Expression"
+#~ msgstr "Uitdrukking"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Aktiveer Outokorreksie"
+
+#, fuzzy
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Aktiveer Outokorreksie"
+
+#, fuzzy
+#~ msgid "Toggle autocorrection on and off"
+#~ msgstr "Wissel outokorreksie op en af."
+
+#~ msgid "Toggle autocorrection on and off."
+#~ msgstr "Wissel outokorreksie op en af."
+
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Konfigureer Outokorreksie..."
+
+#~ msgid ""
+#~ "Change autocorrection options including:<p> <UL><LI><P>exceptions to "
+#~ "autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> "
+#~ "<LI><P>and basic autocorrection options</P>."
+#~ msgstr ""
+#~ "Verander outokorreksie opsies insluitend:<p> <UL><LI><P>uitsonderings na "
+#~ "outokorreksie</P> <LI><P>voeg by/verwyder outokorreksie plaasvervanger "
+#~ "teks</P> <LI><P>en basiese outokorreksie opsies</P>."
+
+#~ msgid "Custom &Variables..."
+#~ msgstr "Pasmaak Veranderlikes..."
+
+#, fuzzy
+#~ msgid "Edit &Personal Expressions..."
+#~ msgstr "Redigeer Persoonlike Uitdrukking"
+
+#, fuzzy
+#~ msgid "Add or change one or more personal expressions"
+#~ msgstr "Voeg by of verander een of meer persoonlike uitdrukkings."
+
+#~ msgid ""
+#~ "Add or change one or more personal expressions.<p>Personal expressions "
+#~ "are a way to quickly insert commonly used phrases or text into your "
+#~ "document."
+#~ msgstr ""
+#~ "Voeg by of verander een of meer persoonlike uitdrukkings.<p>persoonlike "
+#~ "uitdrukkings word 'n weg na vinnig voeg by algemeen gebruik word frases "
+#~ "of teks binnein jou dokument."
+
+#~ msgid "Change Case..."
+#~ msgstr "Verander Kas..."
+
+#, fuzzy
+#~ msgid "Alter the capitalization of selected text"
+#~ msgstr "Verander die kapitaliseer van gekose teks."
+
+#, fuzzy
+#~ msgid ""
+#~ "Alter the capitalization of selected text to one of five pre-defined "
+#~ "patterns.<p>You can also switch all letters from upper case to lower case "
+#~ "and from lower case to upper case in one move."
+#~ msgstr ""
+#~ "Verander die kapitaliseer van gekose teks na een van vyf pre-defined "
+#~ "patrone.<p>Jy kan asook wissel alle letters van hoofletters na sagter kas "
+#~ "en van sagter kas na boonste kas in een beweeg."
+
+#~ msgid "Change Picture..."
+#~ msgstr "Verander Prent..."
+
+#, fuzzy
+#~ msgid "Change the picture in the currently selected frame"
+#~ msgstr "Verander die prent in die huidiglik gekose raam."
+
+#~ msgid ""
+#~ "You can specify a different picture in the current frame.<br><br>KWord "
+#~ "automatically resizes the new picture to fit within the old frame."
+#~ msgstr ""
+#~ "Jy kan spesifiseer 'n ander prent in die huidige raam.<br><br>Kword "
+#~ "automaties hervergroot die nuwe prent na pas binne in die ou raam."
+
+#~ msgid "Configure Header/Footer..."
+#~ msgstr "Konfigureer Opskrif/Voetskrif..."
+
+#, fuzzy
+#~ msgid "Configure the currently selected header or footer"
+#~ msgstr "Konfigureer die huidiglik gekose opskrif of voetskrif."
+
+#~ msgid "Configure the currently selected header or footer."
+#~ msgstr "Konfigureer die huidiglik gekose opskrif of voetskrif."
+
+#, fuzzy
+#~ msgid "Open the link with the appropriate application"
+#~ msgstr "Open die skakel met die geskikte aansoek."
+
+#~ msgid ""
+#~ "Open the link with the appropriate application.<br><br>Web addresses are "
+#~ "opened in a browser.<br>Email addresses begin a new message addressed to "
+#~ "the link.<br>File links are opened by the appropriate viewer or editor."
+#~ msgstr ""
+#~ "Open die skakel met die geskikte aansoek.<br><br>Web adresse word "
+#~ "geöpende in 'n blaaier.<br>E-pos adresse begin 'n nuwe boodskap "
+#~ "aangespreek na die skakel.<br>Lêer skakel word geöpende deur die geskikte "
+#~ "aansig of redigeerder."
+
+#~ msgid "Change Link..."
+#~ msgstr "Verander Skakel..."
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected link"
+#~ msgstr "Verander die inhoud van die huidiglik gekose skakel."
+
+#~ msgid "Change the details of the currently selected link."
+#~ msgstr "Verander die details van die huidiglik gekose skakel."
+
+#~ msgid "Copy Link"
+#~ msgstr "Kopie Skakel"
+
+#, fuzzy
+#~ msgid "Add to Bookmark"
+#~ msgstr "Voeg by na boekmerk"
+
+#~ msgid "Remove Link"
+#~ msgstr "Verwyder Skakel"
+
+#~ msgid "Show Doc Structure"
+#~ msgstr "Vertoon Dok Struktuur"
+
+#, fuzzy
+#~ msgid "Hide Doc Structure"
+#~ msgstr "Vertoon Dok Struktuur"
+
+#, fuzzy
+#~ msgid "Open document structure sidebar"
+#~ msgstr "Open dokument struktuur kantbalk."
+
+#, fuzzy
+#~ msgid ""
+#~ "Open document structure sidebar.<p>This sidebar helps you organize your "
+#~ "document and quickly find pictures, tables etc."
+#~ msgstr ""
+#~ "Open dokument struktuur kantbalk.<p>Hierdie kantbalk help jy organiseer "
+#~ "jou dokument en vinnig soek prentjies, tabelle, etc."
+
+#, fuzzy
+#~ msgid "Hide Rulers"
+#~ msgstr "Steek weg Voetskrif"
+
+#, fuzzy
+#~ msgid "Hide Grid"
+#~ msgstr "Steek weg Voetskrif"
+
+#, fuzzy
+#~ msgid "Configure C&ompletion..."
+#~ msgstr "Konfigureer Voltooiïng..."
+
+#, fuzzy
+#~ msgid "Change the words and options for autocompletion"
+#~ msgstr "Verander die woorde en opsies vir outo voltooiïng."
+
+#~ msgid "Add words or change the options for autocompletion."
+#~ msgstr "Voeg by woorde of verander die opsies vir outo voltooiïng."
+
+#~ msgid "Line Break"
+#~ msgstr "Lyn Breek"
+
+#, fuzzy
+#~ msgid "Increase Numbering Level"
+#~ msgstr "Vermeerder Skrif tipe Grootte"
+
+#, fuzzy
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "Verklein Skrif tipe Grootte"
+
+#~ msgid "Edit Variable..."
+#~ msgstr "Redigeer Veranderlike..."
+
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Wend aan Outokorreksie"
+
+#, fuzzy
+#~ msgid ""
+#~ "Manually force KWord to scan the entire document and apply autocorrection"
+#~ msgstr ""
+#~ "Eiehandig forseer Kword na skandeer die hele dokument en wend aan "
+#~ "outokorreksie."
+
+#~ msgid ""
+#~ "Manually force KWord to scan the entire document and apply autocorrection."
+#~ msgstr ""
+#~ "Eiehandig forseer Kword na skandeer die hele dokument en wend aan "
+#~ "outokorreksie."
+
+#, fuzzy
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Skep Styl Van Keuse"
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected text"
+#~ msgstr "Skep 'n nuwe styl gebaseerde op die huidiglik gekose teks."
+
+#~ msgid "Create a new style based on the currently selected text."
+#~ msgstr "Skep 'n nuwe styl gebaseerde op die huidiglik gekose teks."
+
+#~ msgid "&Footnote..."
+#~ msgstr "Voetnota..."
+
+#, fuzzy
+#~ msgid "Change the look of footnotes"
+#~ msgstr "Verander die kyk van voetnotas."
+
+#~ msgid "Change the look of footnotes."
+#~ msgstr "Verander die kyk van voetnotas."
+
+#~ msgid "Edit Footnote"
+#~ msgstr "Redigeer Voetnota"
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected footnote"
+#~ msgstr "Verander die inhoud van die huidiglik gekose voetnota."
+
+#~ msgid "Change the content of the currently selected footnote."
+#~ msgstr "Verander die inhoud van die huidiglik gekose voetnota."
+
+#~ msgid "Change Footnote/Endnote Parameter"
+#~ msgstr "Verander Voetnota/Stopnota Parameter"
+
+#, fuzzy
+#~ msgid "Save Picture As..."
+#~ msgstr "Stoor Prent..."
+
+#, fuzzy
+#~ msgid "Save the picture in a separate file"
+#~ msgstr "Stoor die prent in 'n aparte lêer."
+
+#~ msgid ""
+#~ "Save the picture in the currently selected frame in a separate file, "
+#~ "outside the KWord document."
+#~ msgstr ""
+#~ "Stoor die prent in die huidiglik gekose raam in 'n aparte lêer, buitekant "
+#~ "die Kword dokument."
+
+#, fuzzy
+#~ msgid "&Create Framestyle From Frame..."
+#~ msgstr "Skep Werkvoorbeeld Van Dokument..."
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected frame"
+#~ msgstr "Skep 'n nuwe styl gebaseerde op die huidiglik gekose raam."
+
+#, fuzzy
+#~ msgid "Convert to Text Box"
+#~ msgstr "Voeg by Tabel van Inhoud"
+
+#, fuzzy
+#~ msgid "Go to Document Structure"
+#~ msgstr "Dokument Struktuur"
+
+#, fuzzy
+#~ msgid "Insert variable \"%1\" into the text"
+#~ msgstr "Voeg by Tabel van Inhoud"
+
+#, fuzzy
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr "%1. Raam: %2, %3  -  %4, %5 (wydte: %6, hoogte: %7) (%8)"
+
+#~ msgid "%1 frames selected"
+#~ msgstr "%1 rame gekose"
+
+#, fuzzy
+#~ msgid "Frame Background Color..."
+#~ msgstr "Raam Agtergrond Kleur"
+
+#, fuzzy
+#~ msgid "Apply a frame style"
+#~ msgstr "Wend aan Styl na Rame"
+
+#, fuzzy
+#~ msgid "Apply a table style"
+#~ msgstr "Wend aan werkvoorbeeld na tabel"
+
+#, fuzzy
+#~ msgid "Image"
+#~ msgstr "Bladsy"
+
+#, fuzzy
+#~ msgid "Select paste format:"
+#~ msgstr "Kies styl na in voer:"
+
+#~ msgid ""
+#~ "You are about to delete a table.\n"
+#~ "Doing so will delete all the text in the table.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Jy word aangaande na uitvee 'n tabel.\n"
+#~ "Doen sodat sal uitvee alle die teks in die tabel.\n"
+#~ "word Jy seker Jy wil hê na doen wat?"
+
+#~ msgid "Do you want to delete this frame?"
+#~ msgstr "Doen jy wil hê na uitvee hierdie raam?"
+
+#~ msgid "Change Custom Variable"
+#~ msgstr "Verander Pasmaak Veranderlike"
+
+#~ msgid "Insert Picture Inline"
+#~ msgstr "Voeg by Prent Inlyn"
+
+#~ msgid "Set cursor where you want to insert inline frame."
+#~ msgstr "Stel plekaanduier waar jy wil hê na voeg by inlyn raam."
+
+#~ msgid "Insert Inline Frame"
+#~ msgstr "Voeg by Inlyn Raam"
+
+#~ msgid "You can only insert footnotes or endnotes into the first frameset."
+#~ msgstr ""
+#~ "Jy kan slegs voeg by voetnotas of stopnotas binnein die eerste raamstel."
+
+#~ msgid "Insert Footnote"
+#~ msgstr "Voeg by Voetnota"
+
+#~ msgid "Update Table of &Contents"
+#~ msgstr "Dateer op Tabel van Inhoud"
+
+#~ msgid "Change Font"
+#~ msgstr "Verander Skrif tipe"
+
+#~ msgid "Change Layout"
+#~ msgstr "Verander Uitleg"
+
+#~ msgid "You must select a frame first."
+#~ msgstr "Jy moet kies 'n raam eerste."
+
+#~ msgid "Format Frameset"
+#~ msgstr "Formaat Raamstel"
+
+#~ msgid "Insert Table"
+#~ msgstr "Voeg by Tabel"
+
+#~ msgid "Insert Formula"
+#~ msgstr "Voeg by Formule"
+
+#, fuzzy
+#~ msgid "Remove Rows"
+#~ msgstr "Verwyder rye"
+
+#, fuzzy
+#~ msgid "Remove Columns"
+#~ msgstr "Verwyder kolomme"
+
+#~ msgid "Adjust Table"
+#~ msgstr "Verstel Tabel"
+
+#, fuzzy
+#~ msgid "Join Cells Failed"
+#~ msgstr "Aansluit by Selle"
+
+#~ msgid ""
+#~ "You have to select some cells which are next to each other and are not "
+#~ "already joined."
+#~ msgstr ""
+#~ "Jy het na kies sommige selle wat word volgende na elke ander en word nie "
+#~ "alreeds bygekom."
+
+#~ msgid "Join Cells"
+#~ msgstr "Aansluit by Selle"
+
+#~ msgid "You have to put the cursor into a table before splitting cells."
+#~ msgstr ""
+#~ "Jy het na plaas die plekaanduier binnein 'n tabel voor om te skei selle."
+
+#~ msgid "Split Cells"
+#~ msgstr "Skei Selle"
+
+#~ msgid ""
+#~ "There is not enough space to split the cell into that many parts, make it "
+#~ "bigger first"
+#~ msgstr ""
+#~ "Daar is nie genoeg spasie na skei die sel binnein wat veel dele, maak dit "
+#~ "groter eerste"
+
+#~ msgid "Ungroup Table"
+#~ msgstr "Ontgroep Tabel"
+
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Wend aan Styl na Raam"
+
+#~ msgid "Apply Style to Frames"
+#~ msgstr "Wend aan Styl na Rame"
+
+#~ msgid "Change Text Size"
+#~ msgstr "Verander Teks Grootte"
+
+#~ msgid "Change Text Font"
+#~ msgstr "Verander Teks Skrif tipe"
+
+#~ msgid "Make Text Bold"
+#~ msgstr "Maak Teks Vetdruk"
+
+#~ msgid "Make Text Italic"
+#~ msgstr "Maak Teks Kursief"
+
+#~ msgid "Underline Text"
+#~ msgstr "Onderstreep Teks"
+
+#, fuzzy
+#~ msgid "Strike Out Text"
+#~ msgstr "Slaan uit Teks"
+
+#~ msgid "Set Text Color"
+#~ msgstr "Stel Teks Kleur"
+
+#~ msgid "Center Text"
+#~ msgstr "Sentrum Teks"
+
+#~ msgid "Justify Text"
+#~ msgstr "Regverdig Teks"
+
+#~ msgid "Change List Type"
+#~ msgstr "Verander Lys Tipe"
+
+#~ msgid "Make Text Superscript"
+#~ msgstr "Maak Teks Boskrif"
+
+#~ msgid "Make Text Subscript"
+#~ msgstr "Maak Teks Onderskrif"
+
+#~ msgid "Change Case of Text"
+#~ msgstr "Verander Kas van Teks"
+
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "Vermeerder Paragraaf Diepte"
+
+#~ msgid "Decrease Paragraph Depth"
+#~ msgstr "Verklein Paragraaf Diepte"
+
+#, fuzzy
+#~ msgid "Change Top Frame Border"
+#~ msgstr "Verander Bo Grens Raam"
+
+#, fuzzy
+#~ msgid "Change Bottom Frame Border"
+#~ msgstr "Verander Bodem Grens Raam"
+
+#~ msgid "Change Tabulator"
+#~ msgstr "Verander Tabel-vormer"
+
+#~ msgid "Change First Line Indent"
+#~ msgstr "Verander Eerste Lyn Inkeep"
+
+#~ msgid "Change Indent"
+#~ msgstr "Verander Inkeep"
+
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "Korrek Verkeerd gespelde Woord"
+
+#~ msgid "Edit Endnote"
+#~ msgstr "Redigeer Stopnota"
+
+#~ msgid "Change Footnote Parameter"
+#~ msgstr "Verander Voetnota Parameter"
+
+#~ msgid "Change Endnote Parameter"
+#~ msgstr "Verander Stopnota Parameter"
+
+#, fuzzy
+#~ msgid "D&elete Current Column..."
+#~ msgstr "Uitvee Gekose Kolomme..."
+
+#~ msgid "D&elete Selected Columns..."
+#~ msgstr "Uitvee Gekose Kolomme..."
+
+#, fuzzy
+#~ msgid "&Delete Current Row..."
+#~ msgstr "Uitvee Gekose Rye..."
+
+#~ msgid "&Delete Selected Rows..."
+#~ msgstr "Uitvee Gekose Rye..."
+
+#~ msgid "Change Picture"
+#~ msgstr "Verander Prent"
+
+#~ msgid "Save Picture"
+#~ msgstr "Stoor Prent"
+
+#~ msgid "Move Frame"
+#~ msgstr "Beweeg Raam"
+
+#~ msgid "Change Note Text"
+#~ msgstr "Verander Nota Teks"
+
+#~ msgid "Change Footnote Parameters"
+#~ msgstr "Verander Voetnota Parameters"
+
+#~ msgid "Insert File"
+#~ msgstr "Voeg by Lêer"
+
+#, fuzzy
+#~ msgid "File name is not a KWord file!"
+#~ msgstr "Lêer naam is nie 'n Kword Lêer!."
+
+#, fuzzy
+#~ msgid "Normal"
+#~ msgstr "Formaat"
+
+#~ msgid "Delete Frames"
+#~ msgstr "Uitvee Rame"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Stoor instellings"
+
+#~ msgid "Table %1"
+#~ msgstr "Tabel %1"
+
+#~ msgctxt ""
+#~ "Hello dear translator :), 1 is the table name, 2 and 3 are row and column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 Sel %2,%3"
+
+#~ msgid "Font Family"
+#~ msgstr "Skrif tipe Familie"
+
+#, fuzzy
+#~ msgid "Speak Text"
+#~ msgstr "Slaan uit Teks"
+
+#~ msgid ""
+#~ "You are about to delete the last Frame of the Frameset '%1'. The contents "
+#~ "of this Frameset will not appear anymore!\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Jy word aangaande na uitvee die laaste Raam van die Raamstel '%1'. die "
+#~ "inhoud van hierdie Raamstel sal nie verskyn meer!\n"
+#~ "word Jy seker Jy wil hê na doen wat?"

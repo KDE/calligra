@@ -1,0 +1,519 @@
+<chapter id="configdialog">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Ivan</firstname
+><surname
+>Petrov</surname
+><affiliation
+><address
+><email
+>pis00593@udmglzs.udmene.ru</email
+></address
+></affiliation
+><contrib
+>Перевод на русский</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Окно настройки &kspread;</title>
+
+<para
+>После того, как вы выберете <menuchoice
+><guimenu
+>Настройка</guimenu
+><guimenuitem
+>Настройка Kspread</guimenuitem
+></menuchoice
+>, откроется окно с несколькими страницами, перейти на которые можно выбирая пиктограммы, расположенные в левой части окна. На этих страницах находятся параметры, отвечающие за множество аспектов работы &kspread;.</para>
+
+<sect1 id="configpref">
+<title
+><guilabel
+>Общие</guilabel
+></title>
+<para
+>На этой странице находится несколько переключателей, с помощью которых можно настроить, как отображаются, вводятся и вычисляются данные: <variablelist>
+<varlistentry>
+<term
+><guilabel
+>Показывать формулы</guilabel
+></term>
+<listitem
+><para
+>Если установлен этот флажок, то &kspread; будет отображать сами формулы, а не результаты вычислений. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показывать индикатор формул</guilabel
+></term>
+<listitem
+><para
+>Если установлен этот флажок, то &kspread; будет отображать маленький синий треугольник в нижнем углу ячеек содержащих формулы. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показывать сетку</guilabel
+></term>
+<listitem
+><para
+>Определяет, показывать или нет линии сетки электронной таблицы. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показывать номер столбца</guilabel
+></term>
+<listitem
+><para
+>Если установлен этот флажок, то заголовки столбцов будут показаны числами, а не буквами. </para
+></listitem>
+</varlistentry>
+<varlistentry>
+
+<term
+><guilabel
+>Адресация строка/столбец</guilabel
+></term>
+<listitem
+><para
+>Если установлен этот флажок, то адреса ячеек, которые показываются слева от панели Формул, отображаются в LC режиме (<abbrev
+>например</abbrev
+>, L2C3), а не в в обычной форме B3. Судя по всему эта возможность не часто используется в настоящее время. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Автоматический пересчёт</guilabel
+></term>
+<listitem
+><para
+>Определяет, надо ли автоматически пересчитывать формулы, если изменяется значение хотя бы одной используемой в ней ячейки. </para
+></listitem>
+</varlistentry>
+<varlistentry>
+
+<term
+><guilabel
+>Не показывать нулевые значения</guilabel
+></term>
+<listitem
+><para
+>Если установлен этот флажок, то любая ячейка, содержащая нулевое значение, будет выглядеть пустой. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Преобразовать первую букву в верхний регистр</guilabel
+></term>
+<listitem
+><para
+>Установите этот флажок и первая буква при наборе текста будет автоматически преобразовываться в верхний регистр. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+</sect1>
+
+<sect1 id="configlocale">
+<title
+><guilabel
+>Страна и язык</guilabel
+></title>
+<para
+>На этой странице окна настройки &kspread; показано, как будут отображаться такие элементы, как числа, даты, время и валюта.</para>
+<para
+>Если вы загрузили электронную таблицу, которая была создана с использованием другой локали, то нажав на кнопку <guibutton
+>Применить формат текущей локали</guibutton
+> на этой странице вы преобразуете её к вашим настройкам локали.</para>
+</sect1>
+
+<sect1 id="configinterface">
+<title
+><guilabel
+>Интерфейс</guilabel
+></title>
+<para
+>Эта страница диалога настройки &kspread; (её можно вызвать выбрав <guimenuitem
+>Настройка Kspread...</guimenuitem
+> из меню <guimenu
+>Настройка</guimenu
+>) контролирует следующие параметры &kspread;:</para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><guilabel
+>Число листов в книге по умолчанию:</guilabel
+></term>
+<listitem
+><para
+>Определяет количество рабочих листов, создаваемых в новом документе, если при запуске &kspread; был установлен параметр <guilabel
+>Начинать с пустого документа</guilabel
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Количество недавно открытых файлов:</guilabel
+></term>
+<listitem
+><para
+>Определяет максимальное количество файлов, показываемых при выборе <menuchoice
+><guimenu
+>Файл</guimenu
+><guimenuitem
+>Открыть недавние</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Автосохранение (мин):</guilabel
+></term>
+<listitem
+><para
+>Здесь вы можете выбрать время между автосохранениями, или отключить эту возможность, выбрав <guilabel
+>Без автосохранения</guilabel
+> (перетащив ползунок в крайнее левое положение). </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показывать вертикальную полосу прокрутки</guilabel
+></term>
+<listitem
+><para
+>Установите или снимите этот флажок чтобы показать или скрыть вертикальную полосу прокрутки. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показывать горизонтальную полосу прокрутки</guilabel
+></term>
+<listitem
+><para
+>Установите или снимите этот флажок чтобы показать или скрыть горизонтальную полосу прокрутки. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показывать заголовки столбцов</guilabel
+></term>
+<listitem
+><para
+>Установите этот флажок чтобы вверху рабочей таблицы отображались буквы столбцов. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показывать заголовки строк</guilabel
+></term>
+<listitem
+><para
+>Установите этот флажок чтобы слева отображались номера строк. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показать ярлыки листов</guilabel
+></term>
+<listitem
+><para
+>Этот флажок определяет, показывать или нет вкладки листов в низу рабочего листа. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показывать панель формул</guilabel
+></term>
+<listitem
+><para
+>Здесь можно выбрать, показавать ли панель формул. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показать строку состояния</guilabel
+></term>
+<listitem
+><para
+>Снимите этот флажок чтобы скрыть строку состояния. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+</sect1>
+
+<sect1 id="configmisc">
+<title
+><guilabel
+>Разное</guilabel
+></title>
+<para
+>Страница <guilabel
+>Разное</guilabel
+> диалога настройки &kspread; содержит следующие элементы;</para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><guilabel
+>Режим автодополнения:</guilabel
+></term>
+<listitem
+><para
+>Позволяет выбрать режим автодополнения текста в выпадающем списке с возможными вариантами. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Отступ:</guilabel
+></term>
+<listitem
+><para
+>Позволяет определить величину отступа используемого параметром <guimenuitem
+>Увеличить отступ</guimenuitem
+> из меню <guimenu
+>Формат</guimenu
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Нажатие ENTER переносит выделение на:</guilabel
+></term>
+<listitem
+><para
+>После того как вы выделили ячейку и нажали <keysym
+>Enter</keysym
+> выделение переместится на одну ячейку влево, вправо, вверх или вниз в зависимости от установки в этом выпадающем списке. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показывать описания ошибок</guilabel
+></term>
+<listitem
+><para
+>Если вы установите этот флажок, то всякий раз, когда вы введёте в ячейку что-то, чего не может понять &kspread;, будет появляться окно с сообщением об ошибке. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Метод вычисления:</guilabel
+></term>
+<listitem
+><para
+>Этот выпадающий список используется для выбора режима вычислений, которые производит функция <link linkend="statusbarsum"
+>Итог в строке состояния</link
+>.. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Показывать индикатор комментария</guilabel
+></term>
+<listitem
+><para
+>Если установлен этот флажок, то ячейки, содержащие комментарии, помечаются маленьким красным треугольником в верхнем правом углу. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+</sect1>
+
+<sect1 id="configcolor">
+<title
+><guilabel
+>Цвет</guilabel
+></title>
+<para
+>Эта страница диалога настройки &kspread; позволяет выбрать цвет сетки таблицы. Если вы не хотите чтобы сетка отображалась, снимите флажок <guilabel
+>Показывать сетку</guilabel
+> на странице настройки <link linkend="configpref"
+><guilabel
+>Общие</guilabel
+></link
+>.</para>
+<para
+>Эта страница также позволяет выбрать цвет линий используемых для обозначения границ печатных страниц когда в меню <guimenu
+>Вид</guimenu
+> установлен параметр <guimenuitem
+>Показать</guimenuitem
+> границы страниц.</para>
+</sect1>
+
+<sect1 id="configpagelayout">
+<title
+><guilabel
+>Формат страницы</guilabel
+></title>
+<para
+>Эта страница диалога настройки &kspread; позволяет установить размер бумаги по умолчанию, ориентацию и единицы измерения, используемые принтером и в диалоговом окне <guilabel
+>Формат страницы</guilabel
+> (вызвать которое можно выбрав <guimenuitem
+>Настройка страницы</guimenuitem
+> из меню <guimenu
+>Формат</guimenu
+>.</para>
+</sect1>
+
+<sect1 id="configspelling">
+<title
+><guilabel
+>Проверка правописания</guilabel
+></title>
+<para
+>Эта страница позволяет настроить поведение программы проверки орфографии &kspread;.</para>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Создавать сочетания корней/аффиксов не в словаре</guilabel>
+</term>
+<listitem
+><para
+>Если установлен этот флажок, и &kspread; находит в документе слово, которое он не может распознать, но которое состоит из распознанного корня и не распознанного окончания или приставки, он принимает его, а в случае, если этот флажок не установлен, отвергает его. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Считать ошибкой написанные вместе слова</guilabel>
+</term>
+<listitem
+><para
+>Если установлен этот флажок, то обычные слова, написанные слитно, будут считаться ошибкой, например <emphasis
+>cannot</emphasis
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Словарь:</guilabel
+></term>
+<listitem
+><para
+>Этот выпадающий список используется для выбора альтернативного словаря. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Кодировка:</guilabel
+></term>
+<listitem
+><para
+>Для выбора используемой кодировки. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Клиент:</guilabel
+></term>
+<listitem
+><para
+>Этот выпадающий список позволяет выбирать разные программы проверки правописания из тех, которые установлены на вашем компьютере. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Игнорировать слова из прописных букв</guilabel
+></term>
+<listitem
+><para
+>Установить этот флажок если хотите чтобы при проверке орфографии слова из прописных букв, которые обычно являются аббревиатурами, например, как &kde;, пропускались. </para
+></listitem>
+</varlistentry>
+
+
+</variablelist
+></para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

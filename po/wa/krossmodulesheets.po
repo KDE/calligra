@@ -1,0 +1,2120 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Jean Cayron <jean.cayron@gmail.com>, 2009, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: krossmodulekspread\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"PO-Revision-Date: 2010-12-24 14:39+0100\n"
+"Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
+"Language-Team: Walloon <linux@walon.org>\n"
+"Language: wa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: ectx: Menu (tools)
+#: scripting.rc:4
+#, kde-format
+msgid "&Tools"
+msgstr "Us&teyes"
+
+#: ScriptingFunction.cpp:36
+#, kde-format
+msgid "No such script."
+msgstr "Nou scripe insi."
+
+#: ScriptingFunction.cpp:82
+#, kde-format
+msgid "No such script function."
+msgstr "Nole fonccion scripe insi."
+
+#: ScriptingFunction.cpp:96
+#, kde-format
+msgid "No return value."
+msgstr "Nole valixhance ritournêye."
+
+#: ScriptingFunction.cpp:134 ScriptingFunction.cpp:135
+#: ScriptingFunction.cpp:142
+#, kde-format
+msgid "Scripts"
+msgstr "Sicripes"
+
+#: ScriptingPart.cpp:51
+#, kde-format
+msgid "Scriptfile \"%1\" does not exist."
+msgstr "Li fitchî scripe « %1 » n' egzistêye nén."
+
+#: ScriptingPart.cpp:55
+#, kde-format
+msgid ""
+"Scriptfile \"%1\" is not executable. Please set the executable-attribute on "
+"that file."
+msgstr ""
+"Li fitchî scripe « %1 » n' est nén enondåve. Defnixhoz l' atribut fitchî "
+"enondåve so c' fitchî la s' i vs plait."
+
+#: ScriptingPart.cpp:72
+#, kde-format
+msgid "Scriptfile \"%1\" is in a temporary directory. Execution denied."
+msgstr "Li fitchî scripe « %1 » est on ridant timporaire. Enondaedje rifuzé."
+
+#: ScriptingPart.cpp:77
+#, kde-format
+msgid "Failed to execute scriptfile \"%1\""
+msgstr "Dji n' a savou enonder l' fitchî scripe « %1 »"
+
+#: ScriptingPart.cpp:80
+#, kde-format
+msgid "Errors on execution of scripts."
+msgstr "Arokes a l' enondaedje des scripes."
+
+#: ScriptingWidgets.cpp:67
+#, kde-format
+msgid "Sheet"
+msgstr "Foye"
+
+#: ScriptingWidgets.cpp:70
+#, kde-format
+msgid "Cell"
+msgstr "Boesse"
+
+#: ScriptingWidgets.cpp:71
+#, kde-format
+msgid "Range"
+msgstr "Fortchete"
+
+#: ScriptingWriter.h:226
+#, fuzzy
+#| msgid "Set Values"
+msgctxt "(qtundo-format)"
+msgid "Set Values"
+msgstr "Defini valixhances"
+
+#: scripts/consoledocker.py:63
+#, fuzzy
+#| msgid "CSV File"
+msgctxt "Menu"
+msgid "File"
+msgstr "Fitchî CSV"
+
+#: scripts/consoledocker.py:65
+msgid "New"
+msgstr ""
+
+#: scripts/consoledocker.py:66
+#, fuzzy
+#| msgid "OdfPy File"
+msgid "Open..."
+msgstr "Fitchî OdfPy"
+
+#: scripts/consoledocker.py:67
+#, fuzzy
+#| msgid "CSV File"
+msgid "Save"
+msgstr "Fitchî CSV"
+
+#: scripts/consoledocker.py:68
+msgid "Save As..."
+msgstr ""
+
+#: scripts/consoledocker.py:70
+msgctxt "Menu"
+msgid "Edit"
+msgstr ""
+
+#: scripts/consoledocker.py:72
+msgctxt "Menu"
+msgid "Build"
+msgstr ""
+
+#: scripts/consoledocker.py:74
+msgid "Compile"
+msgstr ""
+
+#: scripts/consoledocker.py:75
+msgid "Execute"
+msgstr ""
+
+#: scripts/consoledocker.py:90
+#, fuzzy
+#| msgid "OdfPy File"
+msgid "Open File"
+msgstr "Fitchî OdfPy"
+
+#: scripts/consoledocker.py:98
+#, fuzzy
+#| msgid "Failed to execute scriptfile \"%1\""
+msgid "<qt>Failed to open file \"%1\"<br><br>%2</qt>"
+msgstr "Dji n' a savou enonder l' fitchî scripe « %1 »"
+
+#: scripts/consoledocker.py:98 scripts/consoledocker.py:108
+#: scripts/csvexport.py:46 scripts/csvimport.py:45 scripts/htmlexport.py:444
+#: scripts/xmlviewer.py:175 scripts/xmlviewer.py:283
+msgid "Error"
+msgstr ""
+
+#: scripts/consoledocker.py:108
+#, fuzzy
+#| msgid "Failed to execute scriptfile \"%1\""
+msgid "<qt>Failed to save file \"%1\"<br><br>%2</qt>"
+msgstr "Dji n' a savou enonder l' fitchî scripe « %1 »"
+
+#: scripts/consoledocker.py:114
+#, fuzzy
+#| msgid "CSV File"
+msgid "Save File"
+msgstr "Fitchî CSV"
+
+#: scripts/consoledocker.py:123
+msgid "Compiled! %1"
+msgstr ""
+
+#: scripts/consoledocker.py:131
+msgid "Executed! %1"
+msgstr ""
+
+#: scripts/consoledocker.py:229
+#, fuzzy
+#| msgid "Cell"
+msgid "Name"
+msgstr "Boesse"
+
+#: scripts/consoledocker.py:231
+msgid "Type"
+msgstr ""
+
+#: scripts/consoledocker.py:249
+#, fuzzy
+#| msgid "Python Console"
+msgid "Console"
+msgstr "Conzôle Python"
+
+#: scripts/consoledocker.py:262
+msgid "Editor"
+msgstr ""
+
+#: scripts/consoledocker.py:269
+msgid "Inspect"
+msgstr ""
+
+#: scripts/csvexport.py:25
+#, fuzzy
+#| msgid "Export"
+msgid "CSV Export"
+msgstr "Ebaguer"
+
+#: scripts/csvexport.py:29
+#, fuzzy
+#| msgid "Export to a HTML File"
+msgid "Export to CSV File"
+msgstr "Ebaguer dins on fitchî HTML"
+
+#: scripts/csvexport.py:29 scripts/htmlexport.py:377 scripts/logger.py:22
+#: scripts/odfpyexport.py:241
+#, fuzzy
+#| msgid "CSV File"
+msgctxt "Options page name"
+msgid "Save"
+msgstr "Fitchî CSV"
+
+#: scripts/csvexport.py:32 scripts/csvimport.py:32 scripts/htmlexport.py:374
+#: scripts/htmlexport.py:380 scripts/logger.py:25 scripts/odfpyexport.py:250
+#: scripts/vcardimport.py:45 scripts/xmlviewer.py:32
+#, fuzzy
+#| msgid "CSV File"
+msgid "All Files"
+msgstr "Fitchî CSV"
+
+#: scripts/csvexport.py:32 scripts/csvimport.py:32
+#, fuzzy
+#| msgid "Export to a Comma-Separated-Value File"
+msgid "Comma-Separated-Value Files"
+msgstr "Ebaguer dins on fitchî di valixhances dispårteyes pa des comas"
+
+#: scripts/csvexport.py:34
+#, fuzzy
+#| msgid "Export"
+msgctxt "Options page name"
+msgid "Export"
+msgstr "Ebaguer"
+
+#: scripts/csvexport.py:34
+#, fuzzy
+#| msgid "Export content"
+msgid "Export Sheets and ranges"
+msgstr "Ebaguer ådvins"
+
+#: scripts/csvexport.py:39 scripts/csvimport.py:38
+#, fuzzy
+#| msgid "Export to a Comma-Separated-Value File"
+msgid "Comma Separated Value Options"
+msgstr "Ebaguer dins on fitchî di valixhances dispårteyes pa des comas"
+
+#: scripts/csvexport.py:39 scripts/csvimport.py:38
+#, fuzzy
+#| msgid "Functions"
+msgid "Options"
+msgstr "Fonccions"
+
+#: scripts/csvexport.py:79
+msgid "No CSV file chosen"
+msgstr ""
+
+#: scripts/csvimport.py:25
+#, fuzzy
+#| msgid "Import"
+msgid "CSV Import"
+msgstr "Abaguer"
+
+#: scripts/csvimport.py:29
+#, fuzzy
+#| msgid "Import from a vCard File"
+msgid "Import from CSV File"
+msgstr "Abaguer a pårti d' on fitchî vCard"
+
+#: scripts/csvimport.py:29 scripts/htmlexport.py:371 scripts/vcardimport.py:40
+#: scripts/xmlviewer.py:30
+#, fuzzy
+#| msgid "OdfPy File"
+msgid "Open"
+msgstr "Fitchî OdfPy"
+
+#: scripts/csvimport.py:34 scripts/vcardimport.py:47
+msgid "Import to sheet beginning at cell"
+msgstr ""
+
+#: scripts/csvimport.py:72 scripts/vcardimport.py:60
+msgid "No current sheet."
+msgstr ""
+
+#: scripts/csvimport.py:76 scripts/vcardimport.py:70
+msgid "Invalid sheet \"%1\" defined."
+msgstr ""
+
+#: scripts/csvimport.py:80
+msgid "Invalid cell \"%1\" defined."
+msgstr ""
+
+#: scripts/csvimport.py:84 scripts/vcardimport.py:56
+msgid "File '%1' not found."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: scripts/csvoptions.ui:21
+#, kde-format
+msgid "Delimiter:"
+msgstr "Pårtixhant:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: scripts/csvoptions.ui:58
+#, kde-format
+msgid "Line terminator"
+msgstr "Finixheu d' roye"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: scripts/csvoptions.ui:100
+#, kde-format
+msgid "Escape char:"
+msgstr "Caractere di cwitaedje:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, DoubleQuoteCheckBox)
+#: scripts/csvoptions.ui:127
+#, kde-format
+msgid "Double quote"
+msgstr "Dobe wiyemet"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: scripts/csvoptions.ui:137
+#, kde-format
+msgid "Quote char:"
+msgstr "Caractere di wiyemet:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, QuotingCheckBox)
+#: scripts/csvoptions.ui:170
+#, kde-format
+msgid "Quoting"
+msgstr "Direye"
+
+#. i18n: ectx: property (text), widget (QCheckBox, SkipInitialSpaceCheckBox)
+#: scripts/csvoptions.ui:177
+#, kde-format
+msgid "Skip initial space"
+msgstr "Passer l' prumî espåce"
+
+#. i18n: ectx: property (text), widget (QCheckBox, StrictCheckBox)
+#: scripts/csvoptions.ui:184
+#, kde-format
+msgid "Strict"
+msgstr "Sir"
+
+#: scripts/htmlexport.py:221
+msgid "No such file \"%1\" to read from."
+msgstr ""
+
+#: scripts/htmlexport.py:230
+#, fuzzy
+#| msgid "Failed to execute scriptfile \"%1\""
+msgid "Failed to open the file \"%1\"."
+msgstr "Dji n' a savou enonder l' fitchî scripe « %1 »"
+
+#: scripts/htmlexport.py:236
+msgid "No sheets which could be exported to HTML."
+msgstr ""
+
+#: scripts/htmlexport.py:309
+#, fuzzy
+#| msgid "Failed to execute scriptfile \"%1\""
+msgid ""
+"Failed to create HTML file \"%1\":\n"
+"%2"
+msgstr "Dji n' a savou enonder l' fitchî scripe « %1 »"
+
+#: scripts/htmlexport.py:366
+#, fuzzy
+#| msgid "Export"
+msgid "HTML Export"
+msgstr "Ebaguer"
+
+#: scripts/htmlexport.py:371
+#, fuzzy
+#| msgid "Export to an OpenDocument File"
+msgid "Read from OpenDocument Spreadsheet File"
+msgstr "Ebaguer dins on fitchî OpenDocument"
+
+#: scripts/htmlexport.py:374
+#, fuzzy
+#| msgid "Export to an OpenDocument File"
+msgid "OpenDocument Spreadsheet Files"
+msgstr "Ebaguer dins on fitchî OpenDocument"
+
+#: scripts/htmlexport.py:377
+#, fuzzy
+#| msgid "HTML File"
+msgid "Save to HTML File"
+msgstr "Fitchî HTML"
+
+#: scripts/htmlexport.py:380
+msgid "HTML Documents"
+msgstr ""
+
+#: scripts/htmlexport.py:382
+msgid "HTML Document Information"
+msgstr ""
+
+#: scripts/htmlexport.py:382
+msgid "Info"
+msgstr ""
+
+#: scripts/htmlexport.py:388
+msgid "Style of the HTML Document"
+msgstr ""
+
+#: scripts/htmlexport.py:388
+msgid "Styles"
+msgstr ""
+
+#: scripts/htmlexport.py:426 scripts/logger.py:30
+msgid "Overwrite file?"
+msgstr ""
+
+#: scripts/htmlexport.py:426 scripts/logger.py:30
+msgid "The file \"%1\" does already exist. Overwrite the file?"
+msgstr ""
+
+#: scripts/htmlexport.py:428
+#, fuzzy
+#| msgid "Export content"
+msgid "Export aborted."
+msgstr "Ebaguer ådvins"
+
+#: scripts/htmlexport.py:447
+#, fuzzy
+#| msgid "Export"
+msgid "Exporting..."
+msgstr "Ebaguer"
+
+#: scripts/htmlexport.py:447
+msgid "Initialize..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: scripts/htmlexportinfos.ui:26
+#, kde-format
+msgid "Title:"
+msgstr "Tite:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: scripts/htmlexportinfos.ui:52
+#, kde-format
+msgid "Subject:"
+msgstr "Sudjet:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: scripts/htmlexportinfos.ui:78
+#, kde-format
+msgid "Author:"
+msgstr "Oteur:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: scripts/htmlexportinfos.ui:104
+#, kde-format
+msgid "E-Mail:"
+msgstr "Emile:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: scripts/htmlexportinfos.ui:130
+#, kde-format
+msgid "Keywords:"
+msgstr "Mots clés:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: scripts/htmlexportinfos.ui:156
+#, kde-format
+msgid "Filename:"
+msgstr "No do fitchî:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: scripts/htmlexportinfos.ui:182
+#, kde-format
+msgid "Date:"
+msgstr "Date:"
+
+#: scripts/logger.py:22
+#, fuzzy
+#| msgid "HTML File"
+msgid "Save to Log File"
+msgstr "Fitchî HTML"
+
+#: scripts/logger.py:25
+#, fuzzy
+#| msgid "HTML File"
+msgid "Log File"
+msgstr "Fitchî HTML"
+
+#: scripts/logger.py:31 scripts/xmlviewer.py:34
+#, fuzzy
+#| msgid "Export content"
+msgid "Aborted."
+msgstr "Ebaguer ådvins"
+
+#: scripts/logger.py:38
+#, fuzzy
+#| msgid "Failed to execute scriptfile \"%1\""
+msgid ""
+"Failed to write Log File \"%1\":\n"
+"%2"
+msgstr "Dji n' a savou enonder l' fitchî scripe « %1 »"
+
+#: scripts/logger.py:50
+msgid "Failed to create listener for sheetname '%1' and range '%2'"
+msgstr ""
+
+#: scripts/myorca.py:86
+#, fuzzy
+#| msgid "Failed to execute scriptfile \"%1\""
+msgid "Failed to create listener"
+msgstr "Dji n' a savou enonder l' fitchî scripe « %1 »"
+
+#: scripts/myorca.py:96
+#, fuzzy
+#| msgid "Sheet"
+msgid "Sheet name changed"
+msgstr "Foye"
+
+#: scripts/myorca.py:100
+msgid "Show sheet %1"
+msgstr ""
+
+#: scripts/myorca.py:104
+msgid "Hide sheet %1"
+msgstr ""
+
+#: scripts/myorca.py:136
+#, fuzzy
+#| msgid "Functions"
+msgid "Action"
+msgstr "Fonccions"
+
+#: scripts/myorca.py:139
+#, fuzzy
+#| msgid "Cell"
+msgid "Cell Name"
+msgstr "Boesse"
+
+#: scripts/myorca.py:144
+#, fuzzy
+#| msgid "Set Values"
+msgid "Cell Value"
+msgstr "Defini valixhances"
+
+#: scripts/myorca.py:148
+#, fuzzy
+#| msgid "Sheet"
+msgid "Sheet Name"
+msgstr "Foye"
+
+#: scripts/myorca.py:154
+msgid "Cell Name if selection changed"
+msgstr ""
+
+#: scripts/myorca.py:159
+msgid "Cell Value if selection changed"
+msgstr ""
+
+#: scripts/myorca.py:164
+#, fuzzy
+#| msgid "Sheet"
+msgid "Sheet Name if sheet changed"
+msgstr "Foye"
+
+#: scripts/myorca.py:188
+msgid "Calligra Spreadsheet"
+msgstr ""
+
+#: scripts/myorca.py:198
+msgid "Failed to connect with the Orca HTTP-Server."
+msgstr ""
+
+#: scripts/myorca.py:201
+msgid "Url:"
+msgstr ""
+
+#: scripts/odfpyexport.py:43
+msgid ""
+"<qt>Failed to import the ODFPY python module.<br><br>To use this odfpyexport."
+"py python script to export to OpenDocument you need to install the <a href="
+"\"http://opendocumentfellowship.org/projects/odfpy\">ODFPY</a> python module."
+"</qt>"
+msgstr ""
+
+#: scripts/odfpyexport.py:74
+msgid ""
+"Invalid range for sheet \"%1\" cause left column value \"%2\" is bigger than "
+"right column value \"%3\"."
+msgstr ""
+
+#: scripts/odfpyexport.py:76
+msgid ""
+"Invalid range for sheet \"%1\" cause top row value \"%2\" is bigger than "
+"bottom row value \"%3\"."
+msgstr ""
+
+#: scripts/odfpyexport.py:83
+#, fuzzy
+#| msgid "Export to an OpenDocument File"
+msgid "OpenDocument Text"
+msgstr "Ebaguer dins on fitchî OpenDocument"
+
+#: scripts/odfpyexport.py:140
+#, fuzzy
+#| msgid "Export to an OpenDocument File"
+msgid "OpenDocument Spreadsheet"
+msgstr "Ebaguer dins on fitchî OpenDocument"
+
+#: scripts/odfpyexport.py:222
+#, fuzzy
+#| msgid "Export to an OpenDocument File"
+msgid "No OpenDocument Spreadsheet file to read from defined."
+msgstr "Ebaguer dins on fitchî OpenDocument"
+
+#: scripts/odfpyexport.py:236
+#, fuzzy
+#| msgid "Export"
+msgid "OdfPy Export"
+msgstr "Ebaguer"
+
+#: scripts/odfpyexport.py:241
+#, fuzzy
+#| msgid "Export to an OpenDocument File"
+msgid "Save to OpenDocument File"
+msgstr "Ebaguer dins on fitchî OpenDocument"
+
+#: scripts/odfpyexport.py:249
+#, fuzzy
+#| msgid "CSV File"
+msgid "All Supported Files"
+msgstr "Fitchî CSV"
+
+#: scripts/odfpyexport.py:254
+#, fuzzy
+#| msgid "Export content"
+msgid "Export Sheets"
+msgstr "Ebaguer ådvins"
+
+#: scripts/odfpyexport.py:254
+#, fuzzy
+#| msgid "Sheet"
+msgid "Sheets"
+msgstr "Foye"
+
+#: scripts/odfpyexport.py:280
+msgid "No OpenDocument file to write defined."
+msgstr ""
+
+#: scripts/pyregexp.py:10
+msgid ""
+"The PYREGEXP() function replaces substring in the input string with a given "
+"string using regular expression."
+msgstr ""
+
+#: scripts/pyregexp.py:11
+msgid "PYREGEXP(string)"
+msgstr ""
+
+#: scripts/pyregexp.py:12
+msgid "The input string."
+msgstr ""
+
+#: scripts/pyregexp.py:13
+msgid "The regular expression."
+msgstr ""
+
+#: scripts/pyregexp.py:14
+msgid "Replace with."
+msgstr ""
+
+#: scripts/pyregexp.py:15
+msgid "PYREGEXP(\"Some String\",\"(S|m)\",\"A\")"
+msgstr ""
+
+#: scripts/pyregexp.py:25
+msgid "Invalid regexp"
+msgstr ""
+
+#: scripts/pytime.py:10
+msgid "The PYTIME() function displays the current datetime."
+msgstr ""
+
+#: scripts/pytime.py:11
+msgid "PYTIME(string)"
+msgstr ""
+
+#: scripts/pytime.py:12
+msgid "The datetime format string."
+msgstr ""
+
+#: scripts/pytime.py:13
+msgid "PYTIME()"
+msgstr ""
+
+#: scripts/pytime.py:14
+msgid "PYTIME(\"%H:%M.%S\")"
+msgstr ""
+
+#: scripts/pytime.py:15
+msgid "PYTIME(\"%Y-%M-%d\")"
+msgstr ""
+
+#: scripts/pytime.py:21
+msgid "Invalid format"
+msgstr ""
+
+#: scripts/rpyfunctions.py:116
+msgid ""
+"This function returns the probability density function of the normal "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:124
+#: scripts/rpyfunctions.py:131 scripts/rpyfunctions.py:138
+#: scripts/rpyfunctions.py:145 scripts/rpyfunctions.py:152
+#: scripts/rpyfunctions.py:159 scripts/rpyfunctions.py:166
+#: scripts/rpyfunctions.py:173 scripts/rpyfunctions.py:180
+#: scripts/rpyfunctions.py:187 scripts/rpyfunctions.py:194
+#: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:208
+#: scripts/rpyfunctions.py:215
+msgid ""
+"If true, log of the result will be returned instead. This is useful if the "
+"result would otherwise underflow to 0. Defaults to false."
+msgstr ""
+
+#: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
+#: scripts/rpyfunctions.py:121
+msgid "mean of the distribution"
+msgstr ""
+
+#: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
+#: scripts/rpyfunctions.py:124 scripts/rpyfunctions.py:126
+#: scripts/rpyfunctions.py:128 scripts/rpyfunctions.py:131
+#: scripts/rpyfunctions.py:133 scripts/rpyfunctions.py:138
+#: scripts/rpyfunctions.py:140 scripts/rpyfunctions.py:145
+#: scripts/rpyfunctions.py:147 scripts/rpyfunctions.py:152
+#: scripts/rpyfunctions.py:154 scripts/rpyfunctions.py:156
+#: scripts/rpyfunctions.py:159 scripts/rpyfunctions.py:161
+#: scripts/rpyfunctions.py:166 scripts/rpyfunctions.py:168
+#: scripts/rpyfunctions.py:173 scripts/rpyfunctions.py:175
+#: scripts/rpyfunctions.py:180 scripts/rpyfunctions.py:182
+#: scripts/rpyfunctions.py:187 scripts/rpyfunctions.py:189
+#: scripts/rpyfunctions.py:191 scripts/rpyfunctions.py:194
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:201
+#: scripts/rpyfunctions.py:203 scripts/rpyfunctions.py:208
+#: scripts/rpyfunctions.py:210 scripts/rpyfunctions.py:215
+#: scripts/rpyfunctions.py:217
+msgid "observation"
+msgstr ""
+
+#: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
+#: scripts/rpyfunctions.py:121
+msgid "standard deviation of the distribution"
+msgstr ""
+
+#: scripts/rpyfunctions.py:118
+msgid ""
+"This function returns the cumulative distribution function of the normal "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:119 scripts/rpyfunctions.py:121
+#: scripts/rpyfunctions.py:126 scripts/rpyfunctions.py:128
+#: scripts/rpyfunctions.py:133 scripts/rpyfunctions.py:135
+#: scripts/rpyfunctions.py:140 scripts/rpyfunctions.py:142
+#: scripts/rpyfunctions.py:147 scripts/rpyfunctions.py:149
+#: scripts/rpyfunctions.py:154 scripts/rpyfunctions.py:156
+#: scripts/rpyfunctions.py:161 scripts/rpyfunctions.py:163
+#: scripts/rpyfunctions.py:168 scripts/rpyfunctions.py:170
+#: scripts/rpyfunctions.py:175 scripts/rpyfunctions.py:177
+#: scripts/rpyfunctions.py:182 scripts/rpyfunctions.py:184
+#: scripts/rpyfunctions.py:189 scripts/rpyfunctions.py:191
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:198
+#: scripts/rpyfunctions.py:203 scripts/rpyfunctions.py:205
+#: scripts/rpyfunctions.py:210 scripts/rpyfunctions.py:212
+#: scripts/rpyfunctions.py:217 scripts/rpyfunctions.py:219
+msgid ""
+"If true (the default), the lower tail of the distribution is considered."
+msgstr ""
+
+#: scripts/rpyfunctions.py:119 scripts/rpyfunctions.py:121
+#: scripts/rpyfunctions.py:126 scripts/rpyfunctions.py:128
+#: scripts/rpyfunctions.py:133 scripts/rpyfunctions.py:135
+#: scripts/rpyfunctions.py:140 scripts/rpyfunctions.py:142
+#: scripts/rpyfunctions.py:147 scripts/rpyfunctions.py:149
+#: scripts/rpyfunctions.py:154 scripts/rpyfunctions.py:156
+#: scripts/rpyfunctions.py:161 scripts/rpyfunctions.py:163
+#: scripts/rpyfunctions.py:168 scripts/rpyfunctions.py:170
+#: scripts/rpyfunctions.py:175 scripts/rpyfunctions.py:177
+#: scripts/rpyfunctions.py:182 scripts/rpyfunctions.py:184
+#: scripts/rpyfunctions.py:189 scripts/rpyfunctions.py:191
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:198
+#: scripts/rpyfunctions.py:203 scripts/rpyfunctions.py:205
+#: scripts/rpyfunctions.py:210 scripts/rpyfunctions.py:212
+#: scripts/rpyfunctions.py:217 scripts/rpyfunctions.py:219
+msgid ""
+"If true, log of the probability is used. This is useful if the probability "
+"would otherwise underflow to 0. Defaults to false."
+msgstr ""
+
+#: scripts/rpyfunctions.py:120
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the normal distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:121 scripts/rpyfunctions.py:135
+#: scripts/rpyfunctions.py:142 scripts/rpyfunctions.py:149
+#: scripts/rpyfunctions.py:163 scripts/rpyfunctions.py:170
+#: scripts/rpyfunctions.py:177 scripts/rpyfunctions.py:184
+#: scripts/rpyfunctions.py:198 scripts/rpyfunctions.py:205
+#: scripts/rpyfunctions.py:212 scripts/rpyfunctions.py:219
+msgid "probability"
+msgstr ""
+
+#: scripts/rpyfunctions.py:123
+msgid ""
+"This function returns the probability density function of the log-normal "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:124 scripts/rpyfunctions.py:126
+#: scripts/rpyfunctions.py:128
+msgid "mean of the underlying normal distribution"
+msgstr ""
+
+#: scripts/rpyfunctions.py:124 scripts/rpyfunctions.py:126
+#: scripts/rpyfunctions.py:128
+msgid "standard deviation of the underlying normal distribution"
+msgstr ""
+
+#: scripts/rpyfunctions.py:125
+msgid ""
+"This function returns the cumulative distribution function of the log-normal "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:127
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the log-normal distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:130
+msgid ""
+"This function returns the probability density function of the gamma "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:131 scripts/rpyfunctions.py:133
+#: scripts/rpyfunctions.py:135 scripts/rpyfunctions.py:166
+#: scripts/rpyfunctions.py:168 scripts/rpyfunctions.py:170
+#: scripts/rpyfunctions.py:180 scripts/rpyfunctions.py:182
+#: scripts/rpyfunctions.py:184 scripts/rpyfunctions.py:215
+#: scripts/rpyfunctions.py:217 scripts/rpyfunctions.py:219
+msgid "the scale parameter of the distribution"
+msgstr ""
+
+#: scripts/rpyfunctions.py:131 scripts/rpyfunctions.py:133
+#: scripts/rpyfunctions.py:135 scripts/rpyfunctions.py:166
+#: scripts/rpyfunctions.py:168 scripts/rpyfunctions.py:170
+msgid "the shape parameter of the distribution"
+msgstr ""
+
+#: scripts/rpyfunctions.py:132
+msgid ""
+"This function returns the cumulative distribution function of the gamma "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:134
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the gamma distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:137
+msgid ""
+"This function returns the probability density function of the beta "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:138 scripts/rpyfunctions.py:140
+#: scripts/rpyfunctions.py:142
+msgid "the first shape parameter of the distribution"
+msgstr ""
+
+#: scripts/rpyfunctions.py:138 scripts/rpyfunctions.py:140
+#: scripts/rpyfunctions.py:142
+msgid "the second scale parameter of the distribution"
+msgstr ""
+
+#: scripts/rpyfunctions.py:139
+msgid ""
+"This function returns the cumulative distribution function of the beta "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:141
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the beta distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:144
+msgid ""
+"This function returns the probability density function of the Student t "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:145 scripts/rpyfunctions.py:147
+#: scripts/rpyfunctions.py:149 scripts/rpyfunctions.py:159
+#: scripts/rpyfunctions.py:161 scripts/rpyfunctions.py:163
+msgid "the number of degrees of freedom of the distribution"
+msgstr ""
+
+#: scripts/rpyfunctions.py:146
+msgid ""
+"This function returns the cumulative distribution function of the Student t "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:148
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the Student t distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:151
+msgid ""
+"This function returns the probability density function of the F distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:152 scripts/rpyfunctions.py:154
+#: scripts/rpyfunctions.py:156
+msgid "the first number of degrees of freedom of the distribution"
+msgstr ""
+
+#: scripts/rpyfunctions.py:152 scripts/rpyfunctions.py:154
+#: scripts/rpyfunctions.py:156
+msgid "the second number of degrees of freedom of the distribution"
+msgstr ""
+
+#: scripts/rpyfunctions.py:153
+msgid ""
+"This function returns the cumulative distribution function of the F "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:155
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the F distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:158
+msgid ""
+"This function returns the probability density function of the chi-square "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:160
+msgid ""
+"This function returns the cumulative distribution function of the chi-square "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:162
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the chi-square distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:165
+msgid ""
+"This function returns the probability density function of the Weibull "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:167
+msgid ""
+"This function returns the cumulative distribution function of the Weibull "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:169
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the Weibull distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:172
+msgid ""
+"This function returns the probability density function of the Poisson "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:173 scripts/rpyfunctions.py:175
+#: scripts/rpyfunctions.py:177
+msgid "the mean of the distribution"
+msgstr ""
+
+#: scripts/rpyfunctions.py:174
+msgid ""
+"This function returns the cumulative distribution function of the Poisson "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:176
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the Poisson distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:179
+msgid ""
+"This function returns the probability density function of the exponential "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:181
+msgid ""
+"This function returns the cumulative distribution function of the "
+"exponential distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:183
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the exponential distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:186
+msgid ""
+"This function returns the probability density function of the binomial "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:187 scripts/rpyfunctions.py:189
+#: scripts/rpyfunctions.py:191 scripts/rpyfunctions.py:194
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:198
+msgid "the number of trials"
+msgstr ""
+
+#: scripts/rpyfunctions.py:187 scripts/rpyfunctions.py:189
+#: scripts/rpyfunctions.py:191 scripts/rpyfunctions.py:194
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:198
+#: scripts/rpyfunctions.py:208 scripts/rpyfunctions.py:210
+#: scripts/rpyfunctions.py:212
+msgid "the probability of success in each trial"
+msgstr ""
+
+#: scripts/rpyfunctions.py:188
+msgid ""
+"This function returns the cumulative distribution function of the binomial "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:190
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the binomial distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:193
+msgid ""
+"This function returns the probability density function of the negative "
+"binomial distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:195
+msgid ""
+"This function returns the cumulative distribution function of the negative "
+"binomial distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:197
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the negative binomial "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:200
+msgid ""
+"This function returns the probability density function of the hypergeometric "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:203
+#: scripts/rpyfunctions.py:205
+msgid "the number of balls drawn"
+msgstr ""
+
+#: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:203
+#: scripts/rpyfunctions.py:205
+msgid "the number of black balls"
+msgstr ""
+
+#: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:203
+#: scripts/rpyfunctions.py:205
+msgid "the number of red balls"
+msgstr ""
+
+#: scripts/rpyfunctions.py:202
+msgid ""
+"This function returns the cumulative distribution function of the "
+"hypergeometric distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:204
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the hypergeometric distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:207
+msgid ""
+"This function returns the probability density function of the geometric "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:209
+msgid ""
+"This function returns the cumulative distribution function of the geometric "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:211
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the geometric distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:214
+msgid ""
+"This function returns the probability density function of the Cauchy "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:215 scripts/rpyfunctions.py:217
+#: scripts/rpyfunctions.py:219
+msgid "the center of the distribution"
+msgstr ""
+
+#: scripts/rpyfunctions.py:216
+msgid ""
+"This function returns the cumulative distribution function of the Cauchy "
+"distribution."
+msgstr ""
+
+#: scripts/rpyfunctions.py:218
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the Cauchy distribution."
+msgstr ""
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:4
+#, kde-format
+msgid "Import"
+msgstr "Abaguer"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:4
+#, kde-format
+msgid "Import content"
+msgstr "Abaguer ådvins"
+
+#. i18n: tag script attribute text
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:5 scripts/scripts.rc:16
+#, kde-format
+msgid "CSV File"
+msgstr "Fitchî CSV"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:5
+#, kde-format
+msgid "Import from a Comma-Separated-Value File"
+msgstr "Abaguer a pårti d' on fitchî di valixhances dispårteyes pa des comas"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:9
+#, kde-format
+msgid "vCard File"
+msgstr "Fitchî vCard"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:9
+#, kde-format
+msgid "Import from a vCard File"
+msgstr "Abaguer a pårti d' on fitchî vCard"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:15
+#, kde-format
+msgid "Export"
+msgstr "Ebaguer"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:15
+#, kde-format
+msgid "Export content"
+msgstr "Ebaguer ådvins"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:16
+#, kde-format
+msgid "Export to a Comma-Separated-Value File"
+msgstr "Ebaguer dins on fitchî di valixhances dispårteyes pa des comas"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:20
+#, kde-format
+msgid "HTML File"
+msgstr "Fitchî HTML"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:20
+#, kde-format
+msgid "Export to a HTML File"
+msgstr "Ebaguer dins on fitchî HTML"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:24
+#, kde-format
+msgid "OdfPy File"
+msgstr "Fitchî OdfPy"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:24
+#, kde-format
+msgid "Export to an OpenDocument File"
+msgstr "Ebaguer dins on fitchî OpenDocument"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:30
+#, kde-format
+msgid "Functions"
+msgstr "Fonccions"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:30
+#, kde-format
+msgid "Scripting formula functions"
+msgstr "Fonccions di formules discriptaedje"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:31
+#, kde-format
+msgid "R-Project"
+msgstr "Pordjet R"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:31
+#, kde-format
+msgid ""
+"Functions for the R programming environment for data analysis and graphics"
+msgstr ""
+"Fonccions po l' evironmint d' programaedje po l' analije di dnêyes et d' "
+"imådjes"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:35
+#, kde-format
+msgid "YFinance"
+msgstr "YFinance"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:35
+#, kde-format
+msgid "Yahoo! Finance formula function"
+msgstr "Fonccion di formule po les cwårs Yahoo!"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:39
+#, kde-format
+msgid "YWeather"
+msgstr "YWeather"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:39
+#, kde-format
+msgid "Yahoo! Weather formula function"
+msgstr "Fonccion di formule pol meteyo Yahoo!"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:43
+#, kde-format
+msgid "PyTime"
+msgstr "PyTime"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:43
+#, kde-format
+msgid "Time formula function"
+msgstr "Fonccion di formule di tins"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:48
+#, kde-format
+msgid "PyRegExp"
+msgstr "PyRegExp"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:48
+#, kde-format
+msgid "Regular Expression formula function"
+msgstr "Fonccion di formule d' erîlêye ratourneure"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:55
+#, kde-format
+msgid "Tools"
+msgstr "Usteyes"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:55
+#, kde-format
+msgid "Miscellaneous scripts"
+msgstr "Totes sôres di scripes"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:56
+#, kde-format
+msgid "XML Viewer"
+msgstr "Håyneu XML"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:56
+#, kde-format
+msgid ""
+"Python script to view the OpenDocument XML representation of the current "
+"document"
+msgstr ""
+"Sicripe Python po vey li rprezintaedje di l' XML OpenDocument do documint do "
+"moumint"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:60
+#, kde-format
+msgid "Orca Speech"
+msgstr "Cåzaedje Orca"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:60
+#, kde-format
+msgid "Orca Screen Reader"
+msgstr "Lijheu d' waitroûle Orca"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:64
+#, kde-format
+msgid "Logger"
+msgstr "Edjistreu e djournå"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:64
+#, kde-format
+msgid "Log changes in cells to a file"
+msgstr "Rdjistrî e djournå les candjmints ezès boesses dins on fitchî"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:70
+#, kde-format
+msgid "Docker"
+msgstr "Panea d' usteye"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:70
+#, kde-format
+msgid "Scripting Docker Widgets"
+msgstr "Ahesses di panea d' usteye do scriptaedje"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:71
+#, kde-format
+msgid "Python Console"
+msgstr "Conzôle Python"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:71
+#, kde-format
+msgid "Interactive Python Console Docker"
+msgstr "Panea d' usteye interactif del conzôle Python"
+
+#. i18n: tag script attribute text
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:76
+#, kde-format
+msgid "Ruby Snippets"
+msgstr "Bokets Ruby"
+
+#: scripts/vcardimport.py:34
+#, fuzzy
+#| msgid "Import from a vCard File"
+msgid "Import vCard"
+msgstr "Abaguer a pårti d' on fitchî vCard"
+
+#: scripts/vcardimport.py:45
+#, fuzzy
+#| msgid "vCard File"
+msgid "vCard Files"
+msgstr "Fitchî vCard"
+
+#: scripts/xmlviewer.py:30
+#, fuzzy
+#| msgid "Export to an OpenDocument File"
+msgid "Open OpenDocument File"
+msgstr "Ebaguer dins on fitchî OpenDocument"
+
+#: scripts/xmlviewer.py:32
+#, fuzzy
+#| msgid "Export to an OpenDocument File"
+msgid "OpenDocument Files"
+msgstr "Ebaguer dins on fitchî OpenDocument"
+
+#: scripts/xmlviewer.py:57
+#, fuzzy
+#| msgid "Failed to execute scriptfile \"%1\""
+msgid "Failed to read the manifest"
+msgstr "Dji n' a savou enonder l' fitchî scripe « %1 »"
+
+#: scripts/xmlviewer.py:168 scripts/xmlviewer.py:265
+#, fuzzy
+#| msgid "Failed to execute scriptfile \"%1\""
+msgid "Failed to extract \"%1\" to \"%2\""
+msgstr "Dji n' a savou enonder l' fitchî scripe « %1 »"
+
+#: scripts/xmlviewer.py:175
+#, fuzzy
+#| msgid "Failed to execute scriptfile \"%1\""
+msgid "<qt>Failed to execute program:<br><br>%1 \"%2\"</qt>"
+msgstr "Dji n' a savou enonder l' fitchî scripe « %1 »"
+
+#: scripts/xmlviewer.py:187
+msgid "Open with..."
+msgstr ""
+
+#: scripts/xmlviewer.py:192
+msgid "Filter"
+msgstr ""
+
+#: scripts/xmlviewer.py:199
+msgid "No program defined."
+msgstr ""
+
+#: scripts/xmlviewer.py:214
+msgid "Compare..."
+msgstr ""
+
+#: scripts/xmlviewer.py:225
+#, fuzzy
+#| msgid "Export to an OpenDocument File"
+msgid "Compare with OpenDocument file:"
+msgstr "Ebaguer dins on fitchî OpenDocument"
+
+#: scripts/xmlviewer.py:238
+msgid "No OpenDocument file to compare with selected."
+msgstr ""
+
+#: scripts/xmlviewer.py:242
+msgid "No command selected."
+msgstr ""
+
+#: scripts/xmlviewer.py:253
+msgid "The OpenDocument file does not contain any file named \"%1\""
+msgstr ""
+
+#: scripts/xmlviewer.py:283
+msgid "<qt>%1</qt>"
+msgstr ""
+
+#: scripts/yfinance.py:39
+msgid ""
+"The YFINANCE() function uses the Yahoo! Finance Web Service to display stock "
+"values of a defined ticker symbol."
+msgstr ""
+
+#: scripts/yfinance.py:41
+msgid "YFINANCE(string,string,string)"
+msgstr ""
+
+#: scripts/yfinance.py:42
+msgid "The ticker symbol."
+msgstr ""
+
+#: scripts/yfinance.py:43
+msgid "The date."
+msgstr ""
+
+#: scripts/yfinance.py:44
+msgid "The type: Date, Open, High, Low, Close, Volume or AdjClose."
+msgstr ""
+
+#: scripts/yfinance.py:45
+msgid "YFINANCE(\"YHOO\";\"20060119\";\"Open\")"
+msgstr ""
+
+#: scripts/yfinance.py:46
+msgid "YFINANCE(\"=C14\";\"=C15\";\"=C16\")"
+msgstr ""
+
+#: scripts/yfinance.py:65
+msgid "Invalid symbol"
+msgstr ""
+
+#: scripts/yfinance.py:69
+msgid "Invalid date"
+msgstr ""
+
+#: scripts/yfinance.py:81
+msgid "Invalid type"
+msgstr ""
+
+#: scripts/yfinance.py:99 scripts/yweather.py:68
+msgid "Web services request failed"
+msgstr ""
+
+#: scripts/yfinance.py:110
+msgid "No stock"
+msgstr ""
+
+#: scripts/yfinance.py:113
+msgid "Invalid stock"
+msgstr ""
+
+#: scripts/yweather.py:39
+msgid ""
+"The YWEATHER() function uses the Yahoo! Weather Web Service to display the "
+"weather of a location."
+msgstr ""
+
+#: scripts/yweather.py:41
+msgid "YWEATHER(string;string)"
+msgstr ""
+
+#: scripts/yweather.py:42
+msgid "The US zip code, Location ID or cell that contains them."
+msgstr ""
+
+#: scripts/yweather.py:43
+msgid "Units for temperature. f=Fahrenheit and c=Celsius"
+msgstr ""
+
+#: scripts/yweather.py:44
+msgid "YWEATHER(\"=A1\")"
+msgstr ""
+
+#: scripts/yweather.py:45
+msgid "YWEATHER(\"GMXX0151\";\"c\")"
+msgstr ""
+
+#: scripts/yweather.py:55
+msgid "Invalid location"
+msgstr ""
+
+#: scripts/yweather.py:83
+msgid "Invalid condition"
+msgstr ""
+
+#~ msgid ","
+#~ msgstr ","
+
+#~ msgid ";"
+#~ msgstr ";"
+
+#~ msgid "\\n"
+#~ msgstr "\\n"
+
+#~ msgid "\\t"
+#~ msgstr "\\t"
+
+#~ msgid "\\r"
+#~ msgstr "\\r"
+
+#~ msgid "\\n\\r"
+#~ msgstr "\\n\\r"
+
+#~ msgid "\\r\\n"
+#~ msgstr "\\r\\n"
+
+#~ msgid "\\"
+#~ msgstr "\\"
+
+#~ msgid "\""
+#~ msgstr "\""
+
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Delimiter:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter:"
+#~ msgstr "Pårtixhant:"
+
+#, fuzzy
+#~| msgid ","
+#~ msgctxt "(qtundo-format)"
+#~ msgid ","
+#~ msgstr ","
+
+#, fuzzy
+#~| msgid ";"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ";"
+#~ msgstr ";"
+
+#, fuzzy
+#~| msgid "\\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\\n"
+#~ msgstr "\\n"
+
+#, fuzzy
+#~| msgid "\\t"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\\t"
+#~ msgstr "\\t"
+
+#, fuzzy
+#~| msgid "Line terminator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line terminator"
+#~ msgstr "Finixheu d' roye"
+
+#, fuzzy
+#~| msgid "\\r"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\\r"
+#~ msgstr "\\r"
+
+#, fuzzy
+#~| msgid "\\n\\r"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\\n\\r"
+#~ msgstr "\\n\\r"
+
+#, fuzzy
+#~| msgid "\\r\\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\\r\\n"
+#~ msgstr "\\r\\n"
+
+#, fuzzy
+#~| msgid "Escape char:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape char:"
+#~ msgstr "Caractere di cwitaedje:"
+
+#, fuzzy
+#~| msgid "\\"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\\"
+#~ msgstr "\\"
+
+#, fuzzy
+#~| msgid "Double quote"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double quote"
+#~ msgstr "Dobe wiyemet"
+
+#, fuzzy
+#~| msgid "Quote char:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quote char:"
+#~ msgstr "Caractere di wiyemet:"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Quoting"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quoting"
+#~ msgstr "Direye"
+
+#, fuzzy
+#~| msgid "Skip initial space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip initial space"
+#~ msgstr "Passer l' prumî espåce"
+
+#, fuzzy
+#~| msgid "Strict"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Strict"
+#~ msgstr "Sir"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title:"
+#~ msgstr "Tite:"
+
+#, fuzzy
+#~| msgid "Subject:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subject:"
+#~ msgstr "Sudjet:"
+
+#, fuzzy
+#~| msgid "Author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author:"
+#~ msgstr "Oteur:"
+
+#, fuzzy
+#~| msgid "E-Mail:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E-Mail:"
+#~ msgstr "Emile:"
+
+#, fuzzy
+#~| msgid "Keywords:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keywords:"
+#~ msgstr "Mots clés:"
+
+#, fuzzy
+#~| msgid "Filename:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filename:"
+#~ msgstr "No do fitchî:"
+
+#, fuzzy
+#~| msgid "Date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date:"
+#~ msgstr "Date:"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "Us&teyes"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Abaguer"
+
+#, fuzzy
+#~| msgid "Import content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import content"
+#~ msgstr "Abaguer ådvins"
+
+#, fuzzy
+#~| msgid "CSV File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV File"
+#~ msgstr "Fitchî CSV"
+
+#, fuzzy
+#~| msgid "Import from a Comma-Separated-Value File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import from a Comma-Separated-Value File"
+#~ msgstr ""
+#~ "Abaguer a pårti d' on fitchî di valixhances dispårteyes pa des comas"
+
+#, fuzzy
+#~| msgid "vCard File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "vCard File"
+#~ msgstr "Fitchî vCard"
+
+#, fuzzy
+#~| msgid "Import from a vCard File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import from a vCard File"
+#~ msgstr "Abaguer a pårti d' on fitchî vCard"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Ebaguer"
+
+#, fuzzy
+#~| msgid "Export content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export content"
+#~ msgstr "Ebaguer ådvins"
+
+#, fuzzy
+#~| msgid "Export to a Comma-Separated-Value File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to a Comma-Separated-Value File"
+#~ msgstr "Ebaguer dins on fitchî di valixhances dispårteyes pa des comas"
+
+#, fuzzy
+#~| msgid "HTML File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "HTML File"
+#~ msgstr "Fitchî HTML"
+
+#, fuzzy
+#~| msgid "Export to a HTML File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to a HTML File"
+#~ msgstr "Ebaguer dins on fitchî HTML"
+
+#, fuzzy
+#~| msgid "OdfPy File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "OdfPy File"
+#~ msgstr "Fitchî OdfPy"
+
+#, fuzzy
+#~| msgid "Export to an OpenDocument File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to an OpenDocument File"
+#~ msgstr "Ebaguer dins on fitchî OpenDocument"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Functions"
+#~ msgstr "Fonccions"
+
+#, fuzzy
+#~| msgid "Scripting formula functions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scripting formula functions"
+#~ msgstr "Fonccions di formules discriptaedje"
+
+#, fuzzy
+#~| msgid "R-Project"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R-Project"
+#~ msgstr "Pordjet R"
+
+#, fuzzy
+#~| msgid ""
+#~| "Functions for the R programming environment for data analysis and "
+#~| "graphics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Functions for the R programming environment for data analysis and graphics"
+#~ msgstr ""
+#~ "Fonccions po l' evironmint d' programaedje po l' analije di dnêyes et d' "
+#~ "imådjes"
+
+#, fuzzy
+#~| msgid "YFinance"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "YFinance"
+#~ msgstr "YFinance"
+
+#, fuzzy
+#~| msgid "Yahoo! Finance formula function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yahoo! Finance formula function"
+#~ msgstr "Fonccion di formule po les cwårs Yahoo!"
+
+#, fuzzy
+#~| msgid "YWeather"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "YWeather"
+#~ msgstr "YWeather"
+
+#, fuzzy
+#~| msgid "Yahoo! Weather formula function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yahoo! Weather formula function"
+#~ msgstr "Fonccion di formule pol meteyo Yahoo!"
+
+#, fuzzy
+#~| msgid "PyTime"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PyTime"
+#~ msgstr "PyTime"
+
+#, fuzzy
+#~| msgid "Time formula function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time formula function"
+#~ msgstr "Fonccion di formule di tins"
+
+#, fuzzy
+#~| msgid "PyRegExp"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PyRegExp"
+#~ msgstr "PyRegExp"
+
+#, fuzzy
+#~| msgid "Regular Expression formula function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Regular Expression formula function"
+#~ msgstr "Fonccion di formule d' erîlêye ratourneure"
+
+#, fuzzy
+#~| msgid "Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "Usteyes"
+
+#, fuzzy
+#~| msgid "Miscellaneous scripts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Miscellaneous scripts"
+#~ msgstr "Totes sôres di scripes"
+
+#, fuzzy
+#~| msgid "XML Viewer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "XML Viewer"
+#~ msgstr "Håyneu XML"
+
+#, fuzzy
+#~| msgid ""
+#~| "Python script to view the OpenDocument XML representation of the current "
+#~| "document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Python script to view the OpenDocument XML representation of the current "
+#~ "document"
+#~ msgstr ""
+#~ "Sicripe Python po vey li rprezintaedje di l' XML OpenDocument do documint "
+#~ "do moumint"
+
+#, fuzzy
+#~| msgid "Orca Speech"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Orca Speech"
+#~ msgstr "Cåzaedje Orca"
+
+#, fuzzy
+#~| msgid "Orca Screen Reader"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Orca Screen Reader"
+#~ msgstr "Lijheu d' waitroûle Orca"
+
+#, fuzzy
+#~| msgid "Logger"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Logger"
+#~ msgstr "Edjistreu e djournå"
+
+#, fuzzy
+#~| msgid "Log changes in cells to a file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Log changes in cells to a file"
+#~ msgstr "Rdjistrî e djournå les candjmints ezès boesses dins on fitchî"
+
+#, fuzzy
+#~| msgid "Docker"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Docker"
+#~ msgstr "Panea d' usteye"
+
+#, fuzzy
+#~| msgid "Scripting Docker Widgets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scripting Docker Widgets"
+#~ msgstr "Ahesses di panea d' usteye do scriptaedje"
+
+#, fuzzy
+#~| msgid "Python Console"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python Console"
+#~ msgstr "Conzôle Python"
+
+#, fuzzy
+#~| msgid "Interactive Python Console Docker"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interactive Python Console Docker"
+#~ msgstr "Panea d' usteye interactif del conzôle Python"
+
+#, fuzzy
+#~| msgid "Ruby Snippets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ruby Snippets"
+#~ msgstr "Bokets Ruby"
+
+#, fuzzy
+#~| msgid "No such script."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No such script."
+#~ msgstr "Nou scripe insi."
+
+#, fuzzy
+#~| msgid "No such script function."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No such script function."
+#~ msgstr "Nole fonccion scripe insi."
+
+#, fuzzy
+#~| msgid "No return value."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No return value."
+#~ msgstr "Nole valixhance ritournêye."
+
+#, fuzzy
+#~| msgid "Scripts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scripts"
+#~ msgstr "Sicripes"
+
+#, fuzzy
+#~| msgid "Scriptfile \"%1\" does not exist."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scriptfile \"%1\" does not exist."
+#~ msgstr "Li fitchî scripe « %1 » n' egzistêye nén."
+
+#, fuzzy
+#~| msgid ""
+#~| "Scriptfile \"%1\" is not executable. Please set the executable-attribute "
+#~| "on that file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Scriptfile \"%1\" is not executable. Please set the executable-attribute "
+#~ "on that file."
+#~ msgstr ""
+#~ "Li fitchî scripe « %1 » n' est nén enondåve. Defnixhoz l' atribut fitchî "
+#~ "enondåve so c' fitchî la s' i vs plait."
+
+#, fuzzy
+#~| msgid "Scriptfile \"%1\" is in a temporary directory. Execution denied."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scriptfile \"%1\" is in a temporary directory. Execution denied."
+#~ msgstr ""
+#~ "Li fitchî scripe « %1 » est on ridant timporaire. Enondaedje rifuzé."
+
+#, fuzzy
+#~| msgid "Failed to execute scriptfile \"%1\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to execute scriptfile \"%1\""
+#~ msgstr "Dji n' a savou enonder l' fitchî scripe « %1 »"
+
+#, fuzzy
+#~| msgid "Errors on execution of scripts."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Errors on execution of scripts."
+#~ msgstr "Arokes a l' enondaedje des scripes."
+
+#, fuzzy
+#~| msgid "Sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet"
+#~ msgstr "Foye"
+
+#, fuzzy
+#~| msgid "Cell"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cell"
+#~ msgstr "Boesse"
+
+#, fuzzy
+#~| msgid "Range"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Range"
+#~ msgstr "Fortchete"
+
+#, fuzzy
+#~| msgid "Import from a Kexi Project File"
+#~ msgid "Invalid Kexi Project File: %1"
+#~ msgstr "Abaguer a pårti d' on fitchî di pordjet Kexi"
+
+#, fuzzy
+#~| msgid "Failed to execute scriptfile \"%1\""
+#~ msgid "Failed to connect: %1"
+#~ msgstr "Dji n' a savou enonder l' fitchî scripe « %1 »"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgid "Kexi Export"
+#~ msgstr "Ebaguer"
+
+#, fuzzy
+#~| msgid "Export to a Kexi Project File"
+#~ msgid "Export to Kexi Project File"
+#~ msgstr "Ebaguer dins on fitchî Prodjet Kexi"
+
+#, fuzzy
+#~| msgid "Export to a Kexi Project File"
+#~ msgid "Kexi Project Files"
+#~ msgstr "Ebaguer dins on fitchî Prodjet Kexi"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgid "Kexi Import"
+#~ msgstr "Abaguer"
+
+#, fuzzy
+#~| msgid "Import from a Kexi Project File"
+#~ msgid "Import from Kexi Project File"
+#~ msgstr "Abaguer a pårti d' on fitchî di pordjet Kexi"
+
+#~ msgid "Kexi Database"
+#~ msgstr "Båze di dnêyes Kexi"
+
+#~ msgid "Import from a Kexi Project File"
+#~ msgstr "Abaguer a pårti d' on fitchî di pordjet Kexi"
+
+#~ msgid "Export to a Kexi Project File"
+#~ msgstr "Ebaguer dins on fitchî Prodjet Kexi"

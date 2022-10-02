@@ -1,0 +1,40 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2012-12-27 02:46+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ThreedShapeFactory.cpp:35
+#, kde-format
+msgid "3D Scene"
+msgstr "3D сахна"
+
+#: ThreedShapeFactory.cpp:37
+#, kde-format
+msgid "Shape that displays a simple 3D scene."
+msgstr "3D сахнаны көрсететін қалып."
+
+#, fuzzy
+#~| msgid "3D Scene"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "3D Scene"
+#~ msgstr "3D сахна"
+
+#, fuzzy
+#~| msgid "Shape that displays a simple 3D scene."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape that displays a simple 3D scene."
+#~ msgstr "3D сахнаны көрсететін қалып."

@@ -1,0 +1,213 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: koconverter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2016-11-20 12:44+0000\n"
+"Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
+"Language-Team: pt <kde-i18n-pt@kde.org>\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-POFile-SpellExtra: mimetype KOConverter  Faure Goutte Calligra Turthra\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-POFile-SpellExtra: Jensen Leinir\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "José Nuno Pires,Pedro Morais"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "zepires@gmail.com,morais@kde.org"
+
+#: calligraconverter.cpp:144
+#, kde-format
+msgid "CalligraConverter"
+msgstr "Conversor do Calligra"
+
+#: calligraconverter.cpp:146
+#, kde-format
+msgid "Calligra Document Converter"
+msgstr "Conversor de Documentos do Calligra"
+
+#: calligraconverter.cpp:148
+#, kde-format
+msgid "Copyright 2001-%1 Calligra developers"
+msgstr "'Copyright' 2001-%1 dos programadores do Calligra"
+
+#: calligraconverter.cpp:149
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: calligraconverter.cpp:150
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: calligraconverter.cpp:151
+#, kde-format
+msgid "Dan Leinir Turthra Jensen"
+msgstr "Dan Leinir Turthra Jensen"
+
+#: calligraconverter.cpp:158
+#, kde-format
+msgid "Input file"
+msgstr "Ficheiro de entrada"
+
+#: calligraconverter.cpp:159
+#, kde-format
+msgid "Output file"
+msgstr "Ficheiro de resultado"
+
+#: calligraconverter.cpp:160
+#, kde-format
+msgid "Make a backup of the destination file"
+msgstr "Fazer uma salvaguarda do ficheiro de destino"
+
+#: calligraconverter.cpp:161
+#, kde-format
+msgid "Batch mode: do not show dialogs"
+msgstr "Modo em lote: não mostrar janelas"
+
+#: calligraconverter.cpp:162
+#, kde-format
+msgid "Interactive mode: show dialogs (default)"
+msgstr "Modo interactivo: mostra janelas (por omissão)"
+
+#: calligraconverter.cpp:163
+#, kde-format
+msgid "Mimetype of the output file"
+msgstr "Tipo MIME do ficheiro de saída"
+
+#: calligraconverter.cpp:166
+#, kde-format
+msgid "The print orientation. This could be either Portrait or Landscape."
+msgstr "A orientação da impressão. Poderá ser Retrato ou Paisagem."
+
+#: calligraconverter.cpp:167
+#, kde-format
+msgid "The paper size. A4, Legal, Letter, ..."
+msgstr "O tamanho do papel. A4, Legal, Carta, ..."
+
+#: calligraconverter.cpp:168
+#, kde-format
+msgid "The size of the paper margin. By default this is 0.2."
+msgstr "O tamanho da margem do papel. Por omissão, é igual a 0,2."
+
+#: calligraconverter.cpp:175
+#, kde-format
+msgid "Two arguments required"
+msgstr "São necessários dois argumentos"
+
+#: calligraconverter.cpp:203
+#, kde-format
+msgid "Mimetype for input file %1 not found!"
+msgstr "O tipo MIME para o ficheiro de entrada %1 não foi encontrado!"
+
+#: calligraconverter.cpp:212
+#, kde-format
+msgid "Mimetype not found %1"
+msgstr "O tipo MIME %1 não foi encontrado"
+
+#: calligraconverter.cpp:218
+#, kde-format
+msgid "Mimetype not found, try using the -mimetype option"
+msgstr "O tipo MIME não foi encontrado. Tente usar a opção -mimetype"
+
+#: calligraconverter.cpp:242
+#, kde-format
+msgid "*** The conversion failed! ***"
+msgstr "*** A conversão falhou! ***"
+
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "José Nuno Pires,Pedro Morais"
+
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "zepires@gmail.com,morais@kde.org"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CalligraConverter"
+#~ msgstr "Conversor do Calligra"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Converter"
+#~ msgstr "Conversor de Documentos do Calligra"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2001-%1 Calligra developers"
+#~ msgstr "'Copyright' 2001-%1 dos programadores do Calligra"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "Nicolas Goutte"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dan Leinir Turthra Jensen"
+#~ msgstr "Dan Leinir Turthra Jensen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Input file"
+#~ msgstr "Ficheiro de entrada"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output file"
+#~ msgstr "Ficheiro de resultado"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Make a backup of the destination file"
+#~ msgstr "Fazer uma salvaguarda do ficheiro de destino"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Batch mode: do not show dialogs"
+#~ msgstr "Modo em lote: não mostrar janelas"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interactive mode: show dialogs (default)"
+#~ msgstr "Modo interactivo: mostra janelas (por omissão)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype of the output file"
+#~ msgstr "Tipo MIME do ficheiro de saída"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The print orientation. This could be either Portrait or Landscape."
+#~ msgstr "A orientação da impressão. Poderá ser Retrato ou Paisagem."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The paper size. A4, Legal, Letter, ..."
+#~ msgstr "O tamanho do papel. A4, Legal, Carta, ..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The size of the paper margin. By default this is 0.2."
+#~ msgstr "O tamanho da margem do papel. Por omissão, é igual a 0,2."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two arguments required"
+#~ msgstr "São necessários dois argumentos"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype for input file %1 not found!"
+#~ msgstr "O tipo MIME para o ficheiro de entrada %1 não foi encontrado!"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found %1"
+#~ msgstr "O tipo MIME %1 não foi encontrado"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found, try using the -mimetype option"
+#~ msgstr "O tipo MIME não foi encontrado. Tente usar a opção -mimetype"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "*** The conversion failed! ***"
+#~ msgstr "*** A conversão falhou! ***"

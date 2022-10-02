@@ -1,0 +1,3369 @@
+# translation of kword.po to Thai
+# Copyright (C) 2005 Free Software Foundation, Inc.
+#
+# Narachai Sakorn <narachai@opentle.org>, 2005.
+# Sahachart Anukulkitch <drrider@gmail.com>, 2005.
+#  <donga.nb@gmail.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: kword\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"PO-Revision-Date: 2008-04-29 13:35+0700\n"
+"Last-Translator:  <donga.nb@gmail.com>\n"
+"Language-Team: Thai <thai-l10n@googlegroups.com>\n"
+"Language: th\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: LoKalize 0.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, fuzzy, kde-format
+msgid "&File"
+msgstr "ตัว&กรองผลส่งออก"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, kde-format
+msgid "&Edit"
+msgstr ""
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, kde-format
+msgid "&View"
+msgstr ""
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, kde-format
+msgid "&Display Mode"
+msgstr "โหมดในการแส&ดง"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, kde-format
+msgid "Semantics"
+msgstr ""
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, fuzzy, kde-format
+msgid "S&tyles"
+msgstr "กรอบ"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "เก็บค่าที่ตั้งไว้"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "ตรวจคำสะกด"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, kde-format
+msgid "Edit"
+msgstr ""
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, kde-format
+msgid "Spell Check Result"
+msgstr "ผลการตรวจคำสะกด"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, kde-format
+msgid "Change Variable To"
+msgstr "เปลี่ยนตัวแปรเป็น"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr ""
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "กรอบ"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "เปลี่ยนตัวแปรเป็น"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "ปรับแต่งเส้นกรอบ"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "กรอบ"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, kde-format
+msgid "Baseline"
+msgstr ""
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "Character"
+msgstr "สร้าง"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, fuzzy, kde-format
+#| msgid "Row"
+msgid "Row"
+msgstr "แถว"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, fuzzy, kde-format
+msgid "Page (entire) area"
+msgstr "&หน้า"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, fuzzy, kde-format
+msgid "Page text area"
+msgstr "&หน้า"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Paragraph area"
+msgstr "รูปแบบย่อหน้า"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, fuzzy, kde-format
+msgid "Paragraph text area"
+msgstr "รูปแบบย่อหน้า"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, fuzzy, kde-format
+msgid "Left page border"
+msgstr "ปรับแต่งเส้นกรอบ"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, fuzzy, kde-format
+msgid "Right page border"
+msgstr "ปรับแต่งเส้นกรอบ"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, fuzzy, kde-format
+msgid "Right paragraph border"
+msgstr "ปรับแต่งเส้นกรอบ"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, fuzzy, kde-format
+msgid "Left paragraph border"
+msgstr "ปรับแต่งเส้นกรอบ"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, fuzzy, kde-format
+msgid "Vertical Positioning"
+msgstr "เงื่อนไข"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, kde-format
+msgid "Top align with:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, kde-format
+msgid "Center align with:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, kde-format
+msgid "Bottom align with:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, fuzzy, kde-format
+#| msgid "From:"
+msgid "from:"
+msgstr "จาก:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, fuzzy, kde-format
+msgid "Horizontal Positioning"
+msgstr "เงื่อนไข"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, kde-format
+msgid "Left align with:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, kde-format
+msgid "Right align with:"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, fuzzy, kde-format
+msgid "Configure"
+msgstr "ปรับแต่งเส้นกรอบ"
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, kde-format
+msgid "Grid"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, fuzzy, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "เก็บค่าที่ตั้งไว้"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, fuzzy, kde-format
+msgid "Document Settings"
+msgstr "เก็บค่าที่ตั้งไว้"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, kde-format
+msgid "Create New Bookmark"
+msgstr "สร้างที่คั่นหนังสือใหม่"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+"ที่คั่นหน้าจะอนุญาตให้คุณกระโดดไปมาระหว่างส่วนต่างๆ ของเอกสารได้\n"
+"โปรดใส่ชื่อที่คั่นหน้าของคุณ"
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "ชื่อ:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, fuzzy, kde-format
+msgid "Columns:"
+msgstr "คอลัมน์"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, fuzzy, kde-format
+msgid "Column spacing:"
+msgstr "คอลัมน์"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, fuzzy, kde-format
+#| msgid "Fra&mes"
+msgid "frameset"
+msgstr "กรอบ"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, kde-format
+msgid "No framesets in document"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, fuzzy, kde-format
+#| msgid "Number of frames:"
+msgid "Name of frameset:"
+msgstr "จำนวนของเฟรม:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, fuzzy, kde-format
+msgid "Create a new frameset:"
+msgstr "สร้างที่คั่นหนังสือใหม่"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, fuzzy, kde-format
+msgid "Frameset Name"
+msgstr "กรอบ"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, fuzzy, kde-format
+msgid "Smart Positioning"
+msgstr "เงื่อนไข"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, kde-format
+msgid "Text Run Around"
+msgstr ""
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, fuzzy, kde-format
+msgid "Connect Text Frames"
+msgstr "กรอบ"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "ปรับแต่งเส้นกรอบ"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, fuzzy, kde-format
+msgid "&Page"
+msgstr "&หน้า"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Para&graph"
+msgstr "รูปแบบย่อหน้า"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "&To Character"
+msgstr "สร้าง"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "&As Character"
+msgstr "สร้าง"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, fuzzy, kde-format
+msgid "Horizontal Alignment"
+msgstr "เงื่อนไข"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, kde-format
+msgid "&Left"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, kde-format
+msgid "&Center"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, kde-format
+msgid "&Right"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, fuzzy, kde-format
+msgid "Vertical Alignment"
+msgstr "เงื่อนไข"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, fuzzy, kde-format
+msgid "&Bottom"
+msgstr "เส้นขอบ"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, kde-format
+msgid "Text Wrap-around"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, kde-format
+msgid "Run through this shape"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, kde-format
+msgid "Skip below this shape"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, kde-format
+msgid "Run on left side of this shape"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, kde-format
+msgid "Run on right side of this shape"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, kde-format
+msgid "Run on longest side of this shape"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, kde-format
+msgid "Run on both sides of this shape"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, kde-format
+msgid "Distance Between Shape and Text:"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, kde-format
+msgid "Columns"
+msgstr "คอลัมน์"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, fuzzy, kde-format
+msgid "Style"
+msgstr "กรอบ"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, fuzzy, kde-format
+msgid "Clone"
+msgstr "คำลงท้าย:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, fuzzy, kde-format
+#| msgid "&Delete"
+msgid "Delete"
+msgstr "ลบ"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "กรอบ"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, fuzzy, kde-format
+msgid "Clone Page Style"
+msgstr "กรอบ"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, kde-format
+msgid "Left by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, kde-format
+msgid "Right by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, kde-format
+msgid "&Rename"
+msgstr "เปลี่ย&นชื่อ"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, kde-format
+msgid "&Delete"
+msgstr "ลบ"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, fuzzy, kde-format
+msgid "Rename Bookmark"
+msgstr "เลือกที่คั่นหนังสือ"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, fuzzy, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr "มีชุดกรอบที่ชื่อ '%1' อยู่แล้ว โปรดเติมชื่อใหม่"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, kde-format
+msgid "Select Bookmark"
+msgstr "เลือกที่คั่นหน้า"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Geometry"
+msgstr "ลบรายการ"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, fuzzy, kde-format
+msgid "Page Size && Margins"
+msgstr "&หน้า"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, kde-format
+msgid "Create"
+msgstr "สร้าง"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, fuzzy, kde-format
+msgid "Navigation"
+msgstr "กล่าวด้วยความเคารพ:"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Page #"
+msgstr "&หน้า"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Section"
+msgstr "หัวเอกสาร:"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr ""
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "จำนวนคำ:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "จำนวนประโยค:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "จำนวนพยางค์:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (spaces):"
+msgstr "จำนวนตัวอักษร รวมช่องว่าง:"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (no spaces):"
+msgstr "จำนวนตัวอักษร รวมช่องว่าง:"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr "จำนวนบรรทัด:"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, kde-format
+msgid "Flesch reading ease"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, fuzzy, kde-format
+msgid "East asian characters:"
+msgstr "รูปแบบชุดกรอบ"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, fuzzy, kde-format
+msgid "Words"
+msgstr "เอกสารข้อความ K"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, fuzzy, kde-format
+#| msgid "Sentences:"
+msgid "Sentences"
+msgstr "จำนวนประโยค:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, fuzzy, kde-format
+msgid "Syllables"
+msgstr "ตาราง"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, fuzzy, kde-format
+#| msgid "Lines:"
+msgid "Lines"
+msgstr "จำนวนบรรทัด:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, fuzzy, kde-format
+#| msgid "Characters without spaces:"
+msgid "Characters With Spaces"
+msgstr "จำนวนตัวอักษร ไม่รวมช่องว่าง:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, fuzzy, kde-format
+#| msgid "Characters without spaces:"
+msgid "Characters without spaces"
+msgstr "จำนวนตัวอักษร ไม่รวมช่องว่าง:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, fuzzy, kde-format
+msgid "East Asian characters"
+msgstr "รูปแบบชุดกรอบ"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, kde-format
+msgid "Flesch Reading Ease"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:9
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "กรอบ"
+
+#: part/i18n/stylenames.cpp:10
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "กรอบ"
+
+#: part/i18n/stylenames.cpp:11
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "กรอบ"
+
+#: part/i18n/stylenames.cpp:12
+#, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:14
+#, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:15
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "เก็บค่าที่ตั้งไว้"
+
+#: part/i18n/stylenames.cpp:16
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "เก็บค่าที่ตั้งไว้"
+
+#: part/i18n/stylenames.cpp:17
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "เก็บค่าที่ตั้งไว้"
+
+#: part/i18n/stylenames.cpp:18
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "เก็บค่าที่ตั้งไว้"
+
+#: part/i18n/stylenames.cpp:19
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "เก็บค่าที่ตั้งไว้"
+
+#: part/i18n/stylenames.cpp:20
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "กรอบ"
+
+#: part/i18n/stylenames.cpp:21
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "ท้ายกระดาษ"
+
+#: part/i18n/stylenames.cpp:24
+#, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:25
+#, fuzzy, kde-format
+#| msgid "Borders"
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "เส้นขอบ"
+
+#: part/i18n/stylenames.cpp:26
+#, fuzzy, kde-format
+#| msgid "Borders"
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "เส้นขอบ"
+
+#: part/i18n/stylenames.cpp:27
+#, fuzzy, kde-format
+#| msgid "Borders"
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "เส้นขอบ"
+
+#: part/i18n/stylenames.cpp:28
+#, fuzzy, kde-format
+#| msgid "Row"
+msgctxt "Style name"
+msgid "Row"
+msgstr "แถว"
+
+#: part/i18n/stylenames.cpp:29
+#, fuzzy, kde-format
+#| msgid "Column"
+msgctxt "Style name"
+msgid "Column"
+msgstr "คอลัมน์"
+
+#: part/i18n/stylenames.cpp:30
+#, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:36
+#, fuzzy, kde-format
+#| msgid "Hello!"
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "สวัสดี !"
+
+#: part/i18n/stylenames.cpp:37
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "&พอร์ต:"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:44
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "กรอบ"
+
+#: part/i18n/stylenames.cpp:45
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "กรอบ"
+
+#: part/i18n/stylenames.cpp:46
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "กรอบ"
+
+#: part/i18n/stylenames.cpp:47
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "กรอบ"
+
+#: part/i18n/stylenames.cpp:50
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "คอลัมน์"
+
+#: part/i18n/stylenames.cpp:51
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "คอลัมน์"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:59
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "เส้นขอบ"
+
+#: part/i18n/stylenames.cpp:60
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "เส้นขอบ"
+
+#: part/KWAboutData.h:20
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "โปรแกรมประมวลผลคำของโปรแกรมชุดสำนักงาน K"
+
+#: part/KWAboutData.h:22
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgid "Word processor"
+msgstr "โปรแกรมประมวลผลคำของโปรแกรมชุดสำนักงาน K"
+
+#: part/KWAboutData.h:24
+#, fuzzy, kde-format
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "(c) 1998-2001, กลุ่มผู้พัฒนา เอกสารข้อความ K"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr ""
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr ""
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr ""
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr ""
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr ""
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: part/KWAboutData.h:37
+#, fuzzy, kde-format
+msgid "Formatting stuff"
+msgstr "รูปแบบชุดกรอบ"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, fuzzy, kde-format
+msgid "Filter"
+msgstr "ตัว&กรองผลส่งออก"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Statistics docker"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, fuzzy, kde-format
+msgid "Foot and endnotes"
+msgstr "ท้ายกระดาษ"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr ""
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Style Manager"
+msgstr ""
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr ""
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr ""
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr ""
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr ""
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, fuzzy, kde-format
+#| msgid "Sorting Order"
+msgid "ODF Support"
+msgstr "การเรียงลำดับ"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr ""
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr ""
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr ""
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr ""
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr ""
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr ""
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "สูตรคณิตศาสตร์ K"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr ""
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr ""
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr ""
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr ""
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr ""
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr ""
+
+#: part/KWAboutData.h:65
+#, kde-format
+msgid "Enno Bartels"
+msgstr ""
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr ""
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr ""
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, fuzzy, kde-format
+msgid "Page break icon"
+msgstr "&หน้า"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "ถนอมทรัพย์ นพบูรณ์"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "donga.nb@gmail.com"
+
+#: part/KWDocument.cpp:495
+#, kde-format
+msgid "Copy"
+msgstr ""
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, kde-format
+msgid "Standard"
+msgstr ""
+
+#: part/KWDocument.cpp:546
+#, fuzzy, kde-format
+msgid "Document Title"
+msgstr "เก็บค่าที่ตั้งไว้"
+
+#: part/KWDocument.cpp:553
+#, fuzzy, kde-format
+msgid "Head 1"
+msgstr "กรอบ"
+
+#: part/KWDocument.cpp:559
+#, fuzzy, kde-format
+msgid "Head 2"
+msgstr "กรอบ"
+
+#: part/KWDocument.cpp:565
+#, fuzzy, kde-format
+msgid "Head 3"
+msgstr "กรอบ"
+
+#: part/KWDocument.cpp:571
+#, kde-format
+msgid "Bullet List"
+msgstr ""
+
+#: part/KWGui.cpp:69
+#, kde-format
+msgid "Tools"
+msgstr ""
+
+#: part/KWOdfLoader.cpp:83
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr ""
+
+#: part/KWOdfLoader.cpp:95
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr ""
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, kde-format
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr ""
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:36
+#, kde-format
+msgid "Saved"
+msgstr ""
+
+#: part/KWStatusBar.cpp:37
+#, fuzzy, kde-format
+msgid "Page %1 of %2"
+msgstr "&หน้า"
+
+#: part/KWStatusBar.cpp:38
+#, fuzzy, kde-format
+msgid "Page %1-%2 of %3"
+msgstr "&หน้า"
+
+#: part/KWStatusBar.cpp:39
+#, fuzzy, kde-format
+#| msgid "Lines:"
+msgid "Line %1"
+msgstr "จำนวนบรรทัด:"
+
+#: part/KWStatusBar.cpp:124
+#, fuzzy, kde-format
+msgid "Page Number"
+msgstr "เริ่มหมายเลขหน้าที่เลข:"
+
+#: part/KWStatusBar.cpp:137
+#, fuzzy, kde-format
+msgid "Line Number"
+msgstr "เริ่มหมายเลขหน้าที่เลข:"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+msgid "Change the page style"
+msgstr "กรอบ"
+
+#: part/KWStatusBar.cpp:155
+#, fuzzy, kde-format
+msgid "Page Style"
+msgstr "กรอบ"
+
+#: part/KWStatusBar.cpp:169
+#, fuzzy, kde-format
+msgid "Page Size"
+msgstr "&หน้า"
+
+#: part/KWStatusBar.cpp:184
+#, kde-format
+msgid "Saved/Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:197
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr ""
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr ""
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:260
+#, fuzzy, kde-format
+msgid "Shape Properties..."
+msgstr "ปรับแต่งเส้นกรอบ"
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr ""
+
+#: part/KWView.cpp:271
+#, fuzzy, kde-format
+msgid "Create Template From Document..."
+msgstr "สร้างที่คั่นหนังสือใหม่"
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr ""
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+
+#: part/KWView.cpp:292
+#, fuzzy, kde-format
+msgid "Show Formatting Characters"
+msgstr "รูปแบบชุดกรอบ"
+
+#: part/KWView.cpp:298
+#, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr ""
+
+#: part/KWView.cpp:299
+#, kde-format
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr ""
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr ""
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+
+#: part/KWView.cpp:310
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Text Shape Borders"
+msgstr "ปรับแต่งขอบตาราง"
+
+#: part/KWView.cpp:311
+#, kde-format
+msgid "Turns the border display on and off"
+msgstr ""
+
+#: part/KWView.cpp:317
+#, kde-format
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+
+#: part/KWView.cpp:319
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Table Borders"
+msgstr "ปรับแต่งขอบตาราง"
+
+#: part/KWView.cpp:325
+#, kde-format
+msgid "Toggle the display of table borders"
+msgstr ""
+
+#: part/KWView.cpp:326
+#, kde-format
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+
+#: part/KWView.cpp:328
+#, kde-format
+msgid "Show Section Bounds"
+msgstr ""
+
+#: part/KWView.cpp:334
+#, kde-format
+msgid "Toggle the display of section bounds"
+msgstr ""
+
+#: part/KWView.cpp:335
+#, kde-format
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+
+#: part/KWView.cpp:337
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Rulers"
+msgstr "ปรับแต่งขอบตาราง"
+
+#: part/KWView.cpp:339
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Shows or hides rulers"
+msgstr "ปรับแต่งขอบตาราง"
+
+#: part/KWView.cpp:340
+#, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+
+#: part/KWView.cpp:351
+#, kde-format
+msgid "Snap to Grid"
+msgstr ""
+
+#: part/KWView.cpp:359
+#, kde-format
+msgid "Show Status Bar"
+msgstr ""
+
+#: part/KWView.cpp:360
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr ""
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr ""
+
+#: part/KWView.cpp:374
+#, kde-format
+msgid "Semantic Stylesheets..."
+msgstr ""
+
+#: part/KWView.cpp:376
+#, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr ""
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+
+#: part/KWView.cpp:392
+#, fuzzy, kde-format
+msgid "Configure..."
+msgstr "ปรับแต่งขอบตาราง"
+
+#: part/KWView.cpp:401
+#, fuzzy, kde-format
+msgid "Page Layout..."
+msgstr "ด้วยความขอบคุณอย่างสูง"
+
+#: part/KWView.cpp:403
+#, fuzzy, kde-format
+msgid "Change properties of entire page"
+msgstr "ปรับแต่งเส้นกรอบ"
+
+#: part/KWView.cpp:404
+#, kde-format
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+
+#: part/KWView.cpp:407
+#, fuzzy, kde-format
+msgid "Create Header"
+msgstr "กรอบ"
+
+#: part/KWView.cpp:413
+#, fuzzy, kde-format
+msgid "Create Footer"
+msgstr "กรอบ"
+
+#: part/KWView.cpp:420
+#, fuzzy, kde-format
+msgid "Show Comments"
+msgstr "ลบรายการ"
+
+#: part/KWView.cpp:421
+#, kde-format
+msgid "Shows comments in the document"
+msgstr ""
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr ""
+
+#: part/KWView.cpp:428
+#, kde-format
+msgid "Shows or hides word counting in status bar"
+msgstr ""
+
+#: part/pagetool/KWPageTool.cpp:85
+#, fuzzy, kde-format
+msgid "Page Setup"
+msgstr "&หน้า"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, fuzzy, kde-format
+msgid "Header & Footer"
+msgstr "กรอบ"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Page layout"
+msgstr "ด้วยความขอบคุณอย่างสูง"
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, fuzzy, kde-format
+msgid "..."
+msgstr "&หน้า"
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+msgctxt "Next search result"
+msgid "Next"
+msgstr "เปลี่ยนตัวแปรเป็น"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, kde-format
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, kde-format
+msgctxt "Search options"
+msgid "Options"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, kde-format
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, kde-format
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, kde-format
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, kde-format
+msgid "Replace"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, fuzzy, kde-format
+msgid "Odd Pages Header"
+msgstr "กรอบ"
+
+#: part/Words.cpp:47
+#, fuzzy, kde-format
+msgid "Even Pages Header"
+msgstr "กรอบ"
+
+#: part/Words.cpp:49
+#, fuzzy, kde-format
+msgid "Odd Pages Footer"
+msgstr "กรอบ"
+
+#: part/Words.cpp:51
+#, fuzzy, kde-format
+msgid "Even Pages Footer"
+msgstr "กรอบ"
+
+#: part/Words.cpp:53
+#, kde-format
+msgid "Main text"
+msgstr ""
+
+#: part/Words.cpp:55
+#, kde-format
+msgid "Other text"
+msgstr ""
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "&หน้า"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "รูปแบบย่อหน้า"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "สร้าง"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "สร้าง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "เส้นขอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "เงื่อนไข"
+
+#, fuzzy
+#~| msgid "From:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "จาก:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "เงื่อนไข"
+
+#, fuzzy
+#~| msgid "Number of frames:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "จำนวนของเฟรม:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "สร้างที่คั่นหนังสือใหม่"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "กรอบ"
+
+#, fuzzy
+#~| msgid "&Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "เปลี่ย&นชื่อ"
+
+#, fuzzy
+#~| msgid "&Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "ลบ"
+
+#, fuzzy
+#~| msgid ""
+#~| "Bookmarks allow you to jump between parts of your document.\n"
+#~| "Please provide the name of your bookmark."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Bookmarks allow you to jump between parts of your document.\n"
+#~ "Please provide the name of your bookmark."
+#~ msgstr ""
+#~ "ที่คั่นหน้าจะอนุญาตให้คุณกระโดดไปมาระหว่างส่วนต่างๆ ของเอกสารได้\n"
+#~ "โปรดใส่ชื่อที่คั่นหน้าของคุณ"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "ชื่อ:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "&หน้า"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "คอลัมน์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "คอลัมน์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "เอกสารข้อความ K"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "จำนวนประโยค:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "ตาราง"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "จำนวนบรรทัด:"
+
+#, fuzzy
+#~| msgid "Characters without spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "จำนวนตัวอักษร ไม่รวมช่องว่าง:"
+
+#, fuzzy
+#~| msgid "Characters without spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "จำนวนตัวอักษร ไม่รวมช่องว่าง:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "รูปแบบชุดกรอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "ตัว&กรองผลส่งออก"
+
+#, fuzzy
+#~| msgid "&Display Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "โหมดในการแส&ดง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "เก็บค่าที่ตั้งไว้"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "ตรวจคำสะกด"
+
+#, fuzzy
+#~| msgid "Spell Check Result"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "ผลการตรวจคำสะกด"
+
+#, fuzzy
+#~| msgid "Change Variable To"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "เปลี่ยนตัวแปรเป็น"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "&หน้า"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "สร้าง"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "แถว"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "&หน้า"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "รูปแบบย่อหน้า"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "รูปแบบย่อหน้า"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "ปรับแต่งเส้นกรอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "ปรับแต่งเส้นกรอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "ปรับแต่งเส้นกรอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "เก็บค่าที่ตั้งไว้"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "เก็บค่าที่ตั้งไว้"
+
+#, fuzzy
+#~| msgid "Create New Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "สร้างที่คั่นหนังสือใหม่"
+
+#, fuzzy
+#~| msgid "Fra&mes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "กรอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "เงื่อนไข"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "กรอบ"
+
+#, fuzzy
+#~| msgid "Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "คอลัมน์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "คำลงท้าย:"
+
+#, fuzzy
+#~| msgid "&Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "ลบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "กรอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "เลือกที่คั่นหนังสือ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr "มีชุดกรอบที่ชื่อ '%1' อยู่แล้ว โปรดเติมชื่อใหม่"
+
+#, fuzzy
+#~| msgid "Select Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "เลือกที่คั่นหน้า"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "ลบรายการ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "กล่าวด้วยความเคารพ:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "&หน้า"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "หัวเอกสาร:"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "จำนวนคำ:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "จำนวนประโยค:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "จำนวนพยางค์:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "จำนวนตัวอักษร รวมช่องว่าง:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "จำนวนตัวอักษร รวมช่องว่าง:"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "จำนวนบรรทัด:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "รูปแบบชุดกรอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "เก็บค่าที่ตั้งไว้"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "ท้ายกระดาษ"
+
+#, fuzzy
+#~| msgid "Borders"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "เส้นขอบ"
+
+#, fuzzy
+#~| msgid "Borders"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "เส้นขอบ"
+
+#, fuzzy
+#~| msgid "Borders"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "เส้นขอบ"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "แถว"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "คอลัมน์"
+
+#, fuzzy
+#~| msgid "Hello!"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "สวัสดี !"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "&พอร์ต:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "คอลัมน์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "คอลัมน์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "เส้นขอบ"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "โปรแกรมประมวลผลคำของโปรแกรมชุดสำนักงาน K"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "โปรแกรมประมวลผลคำของโปรแกรมชุดสำนักงาน K"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "(c) 1998-2001, กลุ่มผู้พัฒนา เอกสารข้อความ K"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "รูปแบบชุดกรอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "ตัว&กรองผลส่งออก"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "ท้ายกระดาษ"
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "สูตรคณิตศาสตร์ K"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "&หน้า"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ถนอมทรัพย์ นพบูรณ์"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "donga.nb@gmail.com"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "เก็บค่าที่ตั้งไว้"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "&หน้า"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "&หน้า"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "จำนวนบรรทัด:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "เริ่มหมายเลขหน้าที่เลข:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "เริ่มหมายเลขหน้าที่เลข:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "กรอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "&หน้า"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "ปรับแต่งเส้นกรอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template From Document..."
+#~ msgstr "สร้างที่คั่นหนังสือใหม่"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "รูปแบบชุดกรอบ"
+
+#, fuzzy
+#~| msgid "Configure Table Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "ปรับแต่งขอบตาราง"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "สร้าง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "ปรับแต่งขอบตาราง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "ด้วยความขอบคุณอย่างสูง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "กรอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "กรอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Comments"
+#~ msgstr "ลบรายการ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "&หน้า"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "ด้วยความขอบคุณอย่างสูง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "เปลี่ยนตัวแปรเป็น"
+
+#, fuzzy
+#~| msgid "Bookmarks"
+#~ msgid "Book"
+#~ msgstr "ที่คั่นหน้า"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "โปรแกรมประมวลผลคำของโปรแกรมชุดสำนักงาน K"
+
+#, fuzzy
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "(c) 1998-2001, กลุ่มผู้พัฒนา เอกสารข้อความ K"
+
+#, fuzzy
+#~ msgid "Select Cover Image..."
+#~ msgstr "เปลี่ยนตัวแปรเป็น"
+
+#, fuzzy
+#~ msgid "Cover selection"
+#~ msgstr "เงื่อนไข"
+
+#, fuzzy
+#~ msgid "Edit section"
+#~ msgstr "หัวเอกสาร:"
+
+#, fuzzy
+#~| msgid "Enter entry name:"
+#~ msgid "Enter actor's name here"
+#~ msgstr "เติมชื่อรายการ:"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Actor description:"
+#~ msgstr "การแก้ไขคำอัตโนมัติ"
+
+#, fuzzy
+#~ msgid "Underline"
+#~ msgstr "ชื่อ&ผู้ใช้:"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Author's section"
+#~ msgstr "การแก้ไขคำอัตโนมัติ"
+
+#, fuzzy
+#~ msgid "Badge:"
+#~ msgstr "โหมดในการแส&ดง"
+
+#, fuzzy
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "หัวเอกสาร:"
+
+#, fuzzy
+#~ msgid "File to open"
+#~ msgstr "ตัว&กรองผลส่งออก"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "กรอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "กรอบ"
+
+#~ msgid "General"
+#~ msgstr "ค่าทั่วไป"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "เงื่อนไข"
+
+#, fuzzy
+#~ msgid "Margins"
+#~ msgstr "เมทริกซ์"
+
+#, fuzzy
+#~ msgid "Bottom:"
+#~ msgstr "เส้นขอบ"
+
+#, fuzzy
+#~ msgid "Top:"
+#~ msgstr "ถึง:"
+
+#, fuzzy
+#~ msgid "Create a new page"
+#~ msgstr "สร้างที่คั่นหนังสือใหม่"
+
+#, fuzzy
+#~ msgid "Resize last frame"
+#~ msgstr "คอลัมน์"
+
+#, fuzzy
+#~ msgid "Copy this Frame"
+#~ msgstr "ชื่อ&ผู้ใช้:"
+
+#, fuzzy
+#~ msgid "Select All Shapes"
+#~ msgstr "เลือกชุดกรอบ"
+
+#, fuzzy
+#~ msgid "Create Linked Copy"
+#~ msgstr "สร้างที่คั่นหนังสือใหม่"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "สร้างที่คั่นหนังสือใหม่"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "เปลี่ยนตัวแปรเป็น"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "ลบรายการ"
+
+#, fuzzy
+#~ msgid "Bookmark..."
+#~ msgstr "เลือกที่คั่นหนังสือ"
+
+#, fuzzy
+#~ msgid "Select Bookmark..."
+#~ msgstr "เลือกที่คั่นหนังสือ"
+
+#, fuzzy
+#~| msgid "Bookmarks"
+#~ msgid "Bookmark"
+#~ msgstr "ที่คั่นหน้า"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgid "Characters (excluding spaces):"
+#~ msgstr "จำนวนตัวอักษร รวมช่องว่าง:"
+
+#, fuzzy
+#~ msgid "Automatically update"
+#~ msgstr "สิ่งที่ส่งมาด้วย:"
+
+#~ msgid "F&ormat"
+#~ msgstr "รูปแ&บบ"
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate footnote text"
+#~ msgstr "ไม่สามารถสร้างวัตถุฐานข้อมูลได้"
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate note-text"
+#~ msgstr "ไม่สามารถสร้างวัตถุฐานข้อมูลได้"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "ชื่อ&ผู้ใช้:"
+
+#, fuzzy
+#~ msgid "Create Frame-clip"
+#~ msgstr "กรอบ"
+
+#, fuzzy
+#~ msgid "Remove Frame-clip"
+#~ msgstr "ลบเร็คคอร์ด"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "รูปแบบ"
+
+#, fuzzy
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "เอกสารข้อความ K"
+
+#~ msgid "Number of pages:"
+#~ msgstr "จำนวนหน้า:"
+
+#~ msgid "Number of pictures:"
+#~ msgstr "จำนวนของรูปภาพ:"
+
+#~ msgid "Number of tables:"
+#~ msgstr "จำนวนของตาราง:"
+
+#~ msgid "Text"
+#~ msgstr "ข้อความ"
+
+#, fuzzy
+#~ msgid "Raise Shape"
+#~ msgstr "ชื่อ&ผู้ใช้:"
+
+#, fuzzy
+#~ msgid "Lower Shape"
+#~ msgstr "ย้ายกรอบ"
+
+#, fuzzy
+#~ msgid "Page style:"
+#~ msgstr "กรอบ"
+
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "แ&ทรก"
+
+#, fuzzy
+#~ msgid "Variable"
+#~ msgstr "&ตาราง:"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgid "As Character"
+#~ msgstr "สร้าง"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgid "To Character"
+#~ msgstr "สร้าง"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgid "To Paragraph"
+#~ msgstr "รูปแบบย่อหน้า"
+
+#, fuzzy
+#~ msgid "To Page"
+#~ msgstr "ลบรายการ"
+
+#, fuzzy
+#~ msgid "Page..."
+#~ msgstr "ด้วยความขอบคุณอย่างสูง"
+
+#, fuzzy
+#~ msgid "Delete Page"
+#~ msgstr "&ตาราง:"
+
+#, fuzzy
+#~ msgid "Insert Image Options"
+#~ msgstr "เปลี่ยนตัวแปรเป็น"
+
+#, fuzzy
+#~ msgid "Page Borders"
+#~ msgstr "ปรับแต่งเส้นกรอบ"
+
+#, fuzzy
+#~ msgid "Numbering"
+#~ msgstr "ชื่อ"
+
+#, fuzzy
+#~ msgid "Automatic"
+#~ msgstr "สิ่งที่ส่งมาด้วย:"
+
+#, fuzzy
+#~ msgid "Picture..."
+#~ msgstr "เปลี่ยนตัวแปรเป็น"
+
+#, fuzzy
+#~ msgid "Set Floating"
+#~ msgstr "เก็บค่าที่ตั้งไว้"
+
+#, fuzzy
+#~| msgid "&Filter output"
+#~ msgid "Filter stuff"
+#~ msgstr "ตัว&กรองผลส่งออก"
+
+#, fuzzy
+#~ msgid "Fra&mes"
+#~ msgstr "กรอบ"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgid "Tables"
+#~ msgstr "ตาราง"
+
+#, fuzzy
+#~| msgctxt "Insert menu"
+#~| msgid "&Insert"
+#~ msgid "Insert"
+#~ msgstr "แ&ทรก"
+
+#, fuzzy
+#~ msgid "Create Custom Outline"
+#~ msgstr "เปลี่ยนตัวแปรเป็น"
+
+#, fuzzy
+#~ msgid "Borders"
+#~ msgstr "เส้นขอบ"
+
+#~ msgid "MailMerge"
+#~ msgstr "รวมเข้ากับจดหมาย"
+
+#, fuzzy
+#~ msgid "Font"
+#~ msgstr "ท้ายกระดาษ"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgid "Format"
+#~ msgstr "รูปแ&บบ"
+
+#~ msgid "Formula"
+#~ msgstr "สูตร"
+
+#~ msgid "KWord"
+#~ msgstr "เอกสารข้อความ K"
+
+#, fuzzy
+#~ msgid "Page Background"
+#~ msgstr "&หน้า"
+
+#, fuzzy
+#~ msgid "Main Text Frameset"
+#~ msgstr "รูปแบบชุดกรอบ"
+
+#~ msgid "Matrix"
+#~ msgstr "เมทริกซ์"
+
+#~ msgid "Configure Frame Border"
+#~ msgstr "ปรับแต่งเส้นกรอบ"
+
+#~ msgid "Ta&ble"
+#~ msgstr "ตาราง"
+
+#~ msgid "Cell"
+#~ msgstr "เซลล์"
+
+#~ msgid "Configure Frame Borders"
+#~ msgstr "ปรับแต่งเส้นกรอบ"
+
+#, fuzzy
+#~ msgid "Add a new page"
+#~ msgstr "สร้างที่คั่นหนังสือใหม่"
+
+#, fuzzy
+#~| msgid "&Fields of the selected table:"
+#~ msgid "Delete selected pages"
+#~ msgstr "&ช่องข้อมูลของตารางที่เลือกไว้:"
+
+#, fuzzy
+#~ msgid "Delete Layer"
+#~ msgstr "&ตาราง:"
+
+#~ msgid "Information"
+#~ msgstr "ข้อมูลรายละเอียด"
+
+#~ msgid "&Available tables:"
+#~ msgstr "&ตารางที่มีอยู่:"
+
+#~ msgid "&Fields of the selected table:"
+#~ msgstr "&ช่องข้อมูลของตารางที่เลือกไว้:"
+
+#~ msgid "Query Result"
+#~ msgstr "ผลลัพธ์การร้องขอ"
+
+#~ msgid "&Query:"
+#~ msgstr "&ร้องขอข้อมูล:"
+
+#~ msgid "&Execute"
+#~ msgstr "&ประมวลผล"
+
+#~ msgid "&Setup"
+#~ msgstr "&ตั้งค่า"
+
+#~ msgid "&Table:"
+#~ msgstr "&ตาราง:"
+
+#~ msgid "View or Edit Filter &Rules"
+#~ msgstr "แสดงหรือแก้ไขกฎ&ตัวกรอง"
+
+#~ msgid "&Used database records:"
+#~ msgstr "ระเบี&ยนของฐานข้อมูลที่ใช้:"
+
+#~ msgid "&Keep Settings..."
+#~ msgstr "เ&ก็บค่าที่ตั้งไว้..."
+
+#~ msgid "&Hostname:"
+#~ msgstr "ชื่อโฮ&สต์:"
+
+#~ msgid "&Driver:"
+#~ msgstr "ไ&ดรเวอร์:"
+
+#~ msgid "Database &name:"
+#~ msgstr "ชื่อฐาน&ข้อมูล:"
+
+#~ msgid "&Username:"
+#~ msgstr "ชื่อ&ผู้ใช้:"
+
+#~ msgid "&Port:"
+#~ msgstr "&พอร์ต:"
+
+#~ msgid "default"
+#~ msgstr "ค่าปริยาย"
+
+#~ msgid "Address Selection"
+#~ msgstr "เลือกที่อยู่"
+
+#~ msgid "&Add >>"
+#~ msgstr "เพิ่&ม >>"
+
+#~ msgid "<< &Remove"
+#~ msgstr "<< เ&อาออก"
+
+#~ msgid "Name"
+#~ msgstr "ชื่อ"
+
+#~ msgid "Address B&ook"
+#~ msgstr "สมุดที่อยู่"
+
+#~ msgid "Launch KAddressbook"
+#~ msgstr "เรียก สมุดที่อยู่ K"
+
+#~ msgid "&Address Book"
+#~ msgstr "สมุดที่อยู่"
+
+#~ msgid "&Selected Addresses"
+#~ msgstr "ที่อยู่ที่เลือกไว้"
+
+#~ msgid "Personal"
+#~ msgstr "ส่วนบุคคล"
+
+#~ msgid "Hi!"
+#~ msgstr "สวัสดี !"
+
+#~ msgid "Hello!"
+#~ msgstr "สวัสดี !"
+
+#~ msgid "Bye!"
+#~ msgstr "ลาก่อน !"
+
+#~ msgid "Good bye"
+#~ msgstr "ลาก่อน"
+
+#~ msgid "Professional"
+#~ msgstr "มืออาชีพ"
+
+#~ msgid "Good Morning"
+#~ msgstr "สวัสดีตอนเช้า"
+
+#~ msgid "Good Afternoon"
+#~ msgstr "สวัสดีตอนบ่าย"
+
+#~ msgid "Good Evening"
+#~ msgstr "สวัสดีตอนเย็น"
+
+#~ msgid "Email"
+#~ msgstr "อีเมล์"
+
+#~ msgid "To:"
+#~ msgstr "ถึง:"
+
+#~ msgid "Subject:"
+#~ msgstr "เรื่อง:"
+
+#~ msgid "CC:"
+#~ msgstr "ทำสำเนา:"
+
+#~ msgid "BCC:"
+#~ msgstr "ซ่อนทำสำเนา:"
+
+#~ msgid "Fwd:"
+#~ msgstr "ส่งต่อ:"
+
+#~ msgid "Best regards,"
+#~ msgstr "ด้วยความเคารพอย่างสูง"
+
+#~ msgid "Best wishes"
+#~ msgstr "ด้วยความปราถนาดี"
+
+#~ msgid "Cordially,"
+#~ msgstr "ด้วยไมตรีจิตอันลึกซึ้ง"
+
+#~ msgid "Love,"
+#~ msgstr "ด้วยรักและคิดถึง"
+
+#~ msgid "Regards,"
+#~ msgstr "ขอแสดงความนับถือ"
+
+#~ msgid "Thank you,"
+#~ msgstr "ด้วยความขอบคุณอย่างสูง"
+
+#~ msgid "Thanks,"
+#~ msgstr "ขอแสดงความขอบคุณ"
+
+#~ msgid "Subject"
+#~ msgstr "เรื่อง"
+
+#~ msgid "Dear Sir or Madam:"
+#~ msgstr "เรียน/กราบเรียน:"
+
+#~ msgid "Ladies and Gentlemen:"
+#~ msgstr "ท่านสุภาพบุรุษและสุภาพสตรี:"
+
+#, fuzzy
+#~ msgid "Attention"
+#~ msgstr "สิ่งที่ส่งมาด้วย:"
+
+#~ msgid "Attention:"
+#~ msgstr "สิ่งที่ส่งมาด้วย:"
+
+#~ msgid "ATTN:"
+#~ msgstr "สิ่งที่ส่งมา:"
+
+#, fuzzy
+#~ msgid "Instructions"
+#~ msgstr "หัวเอกสาร:"
+
+#~ msgid "CERTIFIED"
+#~ msgstr "ต้นฉบับ"
+
+#~ msgid "CONFIDENTIAL"
+#~ msgstr "ลับ"
+
+#~ msgid "PERSONAL"
+#~ msgstr "ส่วนบุคคล"
+
+#~ msgid "FACSIMILE"
+#~ msgstr "สำเนาคู่ฉบับ"
+
+#~ msgid ">>>Illegal position within datasource<<<"
+#~ msgstr ">>>ตำแหน่งภายในแหล่งข้อมูลไม่ถูกต้อง<<<"
+
+#~ msgid ">>>Field %1 is unknown in the current database query<<<"
+#~ msgstr ">>>ไม่รู้จักช่องข้อมูล %1 ในการร้องขอฐานข้อมูลปัจจุบัน<<<"
+
+#~ msgid "Mail Merge - Editor"
+#~ msgstr "รวมเข้ากัยจดหมาย - ตัวแก้ไข"
+
+#~ msgid "Please enter the password for the database connection"
+#~ msgstr "โปรดเติมรหัสผ่านสำหรับการเชื่อมต่อฐานข้อมูล"
+
+#, fuzzy
+#~ msgid "Mail Merge - Setup Database Connection"
+#~ msgstr "รวมเข้ากับจดหมาย - ตั้งค่าการเชื่อมต่อฐานข้อมูล"
+
+#~ msgid "<not saved>"
+#~ msgstr "<ยังไม่มีการบันทึก>"
+
+#~ msgid "ascending"
+#~ msgstr "จากน้อยไปหามาก"
+
+#~ msgid "descending"
+#~ msgstr "จากมากไปหาน้อย"
+
+#~ msgid "contains"
+#~ msgstr "มีส่วน"
+
+#~ msgid "Field"
+#~ msgstr "ช่องข้อมูล"
+
+#, fuzzy
+#~ msgid "Include"
+#~ msgstr "รวม"
+
+#~ msgid "Operator"
+#~ msgstr "ตัวดำเนินการ"
+
+#~ msgid "Condition"
+#~ msgstr "เงื่อนไข"
+
+#~ msgid "Value"
+#~ msgstr "ค่า"
+
+#, fuzzy
+#~ msgid "Unkown mail merge variable: %1"
+#~ msgstr "ลากตัวแปรการรวมเข้ากับจดหมาย"
+
+#, fuzzy
+#~ msgid "New Distribution List"
+#~ msgstr "หัวเอกสาร:"
+
+#, fuzzy
+#~ msgid "Please enter name:"
+#~ msgstr "เติมชื่อรายการ:"
+
+#, fuzzy
+#~ msgid ""
+#~ "<qt>Distribution list with the given name <b>%1</b> already exists. "
+#~ "Please select a different name.</qt>"
+#~ msgstr "มีชุดกรอบที่ชื่อ '%1' อยู่แล้ว โปรดเติมชื่อใหม่"
+
+#~ msgid "No Value"
+#~ msgstr "ไม่มีค่า"
+
+#, fuzzy
+#~ msgid "Add record"
+#~ msgstr "เพิ่มเร็คคอร์ด"
+
+#, fuzzy
+#~ msgid "Add entry"
+#~ msgstr "เพิ่มรายการ"
+
+#, fuzzy
+#~ msgid "Remove entry"
+#~ msgstr "ลบรายการ"
+
+#, fuzzy
+#~ msgid "Add Entry"
+#~ msgstr "เพิ่มรายการ"
+
+#, fuzzy
+#~| msgid "&Hostname:"
+#~ msgid "Host:"
+#~ msgstr "ชื่อโฮ&สต์:"
+
+#, fuzzy
+#~| msgid "&Port:"
+#~ msgid "Port:"
+#~ msgstr "&พอร์ต:"
+
+#, fuzzy
+#~ msgid "Timeout:"
+#~ msgstr "เว&ลา"
+
+#, fuzzy
+#~ msgid "Slots"
+#~ msgstr "&พอร์ต:"
+
+#, fuzzy
+#~ msgid "Variables"
+#~ msgstr "&ตาราง:"
+
+#, fuzzy
+#~ msgid "Encoded Text"
+#~ msgstr "เลือกชุดกรอบ"
+
+#, fuzzy
+#~| msgid "Attention:"
+#~ msgid "Orientation:"
+#~ msgstr "สิ่งที่ส่งมาด้วย:"
+
+#, fuzzy
+#~ msgid "Page Edge:"
+#~ msgstr "โหมดในการแส&ดง"
+
+#, fuzzy
+#~ msgid "Page spread"
+#~ msgstr "&หน้า"
+
+#, fuzzy
+#~ msgid "Interface Settings"
+#~ msgstr "เก็บค่าที่ตั้งไว้"
+
+#, fuzzy
+#~ msgid "Spell Checker Behavior"
+#~ msgstr "ผลการตรวจคำสะกด"
+
+#, fuzzy
+#~ msgid "Formula Defaults"
+#~ msgstr "สูตร"
+
+#, fuzzy
+#~ msgid "Path Settings"
+#~ msgstr "เก็บค่าที่ตั้งไว้"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "เก็บค่าที่ตั้งไว้"
+
+#, fuzzy
+#~ msgid "Display c&omments"
+#~ msgstr "โหมดในการแส&ดง"
+
+#, fuzzy
+#~ msgid "Display field code"
+#~ msgstr "โหมดในการแส&ดง"
+
+#, fuzzy
+#~ msgid "Default font:"
+#~ msgstr "ค่าปริยาย"
+
+#, fuzzy
+#~ msgid "No autosave"
+#~ msgstr "ไม่มีค่า"
+
+#, fuzzy
+#~ msgid "Starting page number:"
+#~ msgstr "เริ่มหมายเลขหน้าที่เลข:"
+
+#, fuzzy
+#~ msgid "Delete Bookmark"
+#~ msgstr "เลือกที่คั่นหนังสือ"
+
+#, fuzzy
+#~ msgid "Delete Column"
+#~ msgstr "คอลัมน์"
+
+#, fuzzy
+#~ msgid "Formula Frame %1"
+#~ msgstr "สูตร"
+
+#, fuzzy
+#~ msgid "Formula Frames"
+#~ msgstr "สูตร"
+
+#, fuzzy
+#~ msgid "Expressions"
+#~ msgstr "มืออาชีพ"
+
+#, fuzzy
+#~ msgid "Formula %1"
+#~ msgstr "สูตร"
+
+#, fuzzy
+#~ msgid "Frame Settings for %1"
+#~ msgstr "เก็บค่าที่ตั้งไว้"
+
+#, fuzzy
+#~ msgid "Change Margin Frame"
+#~ msgstr "เปลี่ยนตัวแปรเป็น"
+
+#, fuzzy
+#~ msgid "Change Border"
+#~ msgstr "ปรับแต่งเส้นกรอบ"
+
+#, fuzzy
+#~ msgid "Insert Column"
+#~ msgstr "คอลัมน์"
+
+#, fuzzy
+#~ msgid "Before"
+#~ msgstr "เส้นขอบ"
+
+#, fuzzy
+#~ msgid "Row:"
+#~ msgstr "แถว"
+
+#, fuzzy
+#~ msgid "Column:"
+#~ msgstr "คอลัมน์"
+
+#, fuzzy
+#~ msgid "Mail Merge Setup"
+#~ msgstr "รวมเข้ากับจดหมาย"
+
+#, fuzzy
+#~ msgid "&Available sources:"
+#~ msgstr "&ตารางที่มีอยู่:"
+
+#, fuzzy
+#~ msgid "Mail Merge - Variable Name"
+#~ msgstr "รวมเข้ากัยจดหมาย - ตัวแก้ไข"
+
+#, fuzzy
+#~ msgid "Object %1"
+#~ msgstr "เรื่อง"
+
+#, fuzzy
+#~ msgid "Counting..."
+#~ msgstr "เงื่อนไข"
+
+#, fuzzy
+#~ msgid "Table Settings"
+#~ msgstr "เก็บค่าที่ตั้งไว้"
+
+#, fuzzy
+#~ msgid "Remove Row"
+#~ msgstr "ลบเร็คคอร์ด"
+
+#, fuzzy
+#~ msgid "Remove Column"
+#~ msgstr "ลบรายการ"
+
+#, fuzzy
+#~ msgid "Table %1"
+#~ msgstr "ตาราง"
+
+#, fuzzy
+#~ msgid "Drag Mail Merge Variable"
+#~ msgstr "ลากตัวแปรการรวมเข้ากับจดหมาย"
+
+#, fuzzy
+#~ msgid "&Expression"
+#~ msgstr "มืออาชีพ"
+
+#, fuzzy
+#~ msgid "For&mula"
+#~ msgstr "สูตร"
+
+#, fuzzy
+#~ msgid "&Table..."
+#~ msgstr "&ตาราง:"
+
+#, fuzzy
+#~ msgid "&Paragraph..."
+#~ msgstr "รูปแบบย่อหน้า"
+
+#, fuzzy
+#~ msgid "Change attributes of styles."
+#~ msgstr "เปลี่ยนตัวแปรเป็น"
+
+#, fuzzy
+#~ msgid "Default Format"
+#~ msgstr "รูปแบบ"
+
+#, fuzzy
+#~ msgid "Subscript"
+#~ msgstr "เรื่อง"
+
+#, fuzzy
+#~ msgid "Framest&yle"
+#~ msgstr "กรอบ"
+
+#, fuzzy
+#~ msgid "Border Left"
+#~ msgstr "เส้นขอบ"
+
+#, fuzzy
+#~ msgid "Border Right"
+#~ msgstr "เส้นขอบ"
+
+#, fuzzy
+#~ msgid "Border Top"
+#~ msgstr "เส้นขอบ"
+
+#, fuzzy
+#~ msgid "Border Style"
+#~ msgstr "เส้นขอบ"
+
+#, fuzzy
+#~ msgid "Border Width"
+#~ msgstr "เส้นขอบ"
+
+#, fuzzy
+#~ msgid "Border Color"
+#~ msgstr "เส้นขอบ"
+
+#, fuzzy
+#~ msgid "Table&style"
+#~ msgstr "ตาราง"
+
+#, fuzzy
+#~ msgid "Add Expression"
+#~ msgstr "เลือกที่อยู่"
+
+#, fuzzy
+#~ msgid "Enable Autocorrection"
+#~ msgstr "การแก้ไขคำอัตโนมัติ"
+
+#, fuzzy
+#~ msgid "Disable Autocorrection"
+#~ msgstr "การแก้ไขคำอัตโนมัติ"
+
+#, fuzzy
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "การแก้ไขคำอัตโนมัติ"
+
+#, fuzzy
+#~ msgid "Configure Header/Footer..."
+#~ msgstr "ปรับแต่งเส้นกรอบ"
+
+#, fuzzy
+#~ msgid "Add to Bookmark"
+#~ msgstr "เลือกที่คั่นหนังสือ"
+
+#, fuzzy
+#~ msgid "Remove Link"
+#~ msgstr "ลบรายการ"
+
+#, fuzzy
+#~ msgid "Apply Autocorrection"
+#~ msgstr "การแก้ไขคำอัตโนมัติ"
+
+#, fuzzy
+#~ msgid "Autospellcheck"
+#~ msgstr "ตรวจคำสะกด"
+
+#, fuzzy
+#~ msgid "Image"
+#~ msgstr "&หน้า"
+
+#, fuzzy
+#~ msgid "Insert Formula"
+#~ msgstr "สูตร"
+
+#, fuzzy
+#~ msgid "Remove Rows"
+#~ msgstr "ลบเร็คคอร์ด"
+
+#, fuzzy
+#~ msgid "Remove Columns"
+#~ msgstr "คอลัมน์"
+
+#, fuzzy
+#~ msgid "Change Top Frame Border"
+#~ msgstr "ปรับแต่งเส้นกรอบ"
+
+#, fuzzy
+#~ msgid "Change Bottom Frame Border"
+#~ msgstr "ปรับแต่งเส้นกรอบ"
+
+#, fuzzy
+#~ msgid "Change Tabulator"
+#~ msgstr "เปลี่ยนตัวแปรเป็น"
+
+#, fuzzy
+#~ msgid "Normal"
+#~ msgstr "รูปแบบ"

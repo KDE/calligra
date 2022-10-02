@@ -1,0 +1,150 @@
+<chapter id="configure">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+> <firstname
+>Stefan</firstname
+> <surname
+>Asserhäll</surname
+> <affiliation
+><address
+><email
+>stefan.asserhall@bredband.net</email
+></address
+></affiliation
+> <contrib
+>Översättare</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Att anpassa &sheets; snabbtangenter och verktygsrader</title>
+
+<sect1 id="configshort">
+<title
+>Genvägar</title>
+<para
+>För att ändra snabbtangenter som används av &sheets;, välj <menuchoice
+><guimenu
+>Inställningar</guimenu
+><guimenuitem
+>Anpassa genvägar...</guimenuitem
+></menuchoice
+>. Då startas en dialogruta som visas nedan. </para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Anpassa genvägar, skärmbild 1</phrase>
+</textobject>
+</mediaobject>
+<para
+>Sök igenom listrutan för att hitta åtgärden som du vill lägga till eller ändra snabbtangent för, och välj den genom att <mousebutton
+>vänster</mousebutton
+>klicka på namnet. Genom att skriva in åtgärdens namn i sökraden längst upp hittar du snabbt önskad åtgärd. Därefter kan du ändra snabbtangent genom att välja alternativknappen <guilabel
+>Ingen</guilabel
+>, <guilabel
+>Standard</guilabel
+> eller <guilabel
+>Egen</guilabel
+>.</para>
+<para
+>Nu kan du helt enkelt trycka på tangentkombinationen som du vill ska fungera som snabbtangent, till exempel <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>S</keycap
+></keycombo
+>.</para>
+</sect1>
+
+<sect1 id="configtoolbars">
+<title
+>Verktygsrader</title>
+<para
+>&sheets; har sex verktygsrader. <guilabel
+>Arkiv</guilabel
+>, <guilabel
+>Redigera</guilabel
+>, <guilabel
+>Navigering</guilabel
+>, <guilabel
+>Teckensnitt</guilabel
+> och <guilabel
+>Färg/kant</guilabel
+>. Var och en kan visas eller inte beroende på valen som görs i menyn <guimenu
+>Inställningar</guimenu
+>.</para>
+<para
+>Du kan välja om en verktygsrad visas <guimenuitem
+>Längs upp</guimenuitem
+>, <guimenuitem
+>Till vänster</guimenuitem
+>, <guimenuitem
+>Till höger</guimenuitem
+> eller <guimenuitem
+>Längst ner</guimenuitem
+> i &sheets; fönster, genom att <mousebutton
+>höger</mousebutton
+>klicka på verktygsraden, för att visa <guilabel
+>Verktygsradsmenyn</guilabel
+>, och välja i undermenyn <guisubmenu
+>Orientering</guisubmenu
+>. <guilabel
+>Verktygsradsmenyn</guilabel
+> har också undermenyer för att välja om verktygsraden visar ikoner, text eller båda, och ikonstorleken.</para>
+
+<para
+>Ett annat sätt att flytta en verktygsrad är att placera muspekaren över de två vertikala raderna i vänsterkanten av varje verktygsrad, och hålla nere <mousebutton
+>vänster</mousebutton
+> musknapp medan verktygsraden dras till önskad plats. När verktygsraden dras på det här sättet kan musknappen släppas när den är en bit från &sheets; fönsterkanter, och du får du en flytande verktygsrad, som inte är låst till en viss del av &sheets; fönster, och kan i själva verket flyttas utanför fönstret. För att ta tillbaka en flytande verktygsrad till någon av de traditionella platserna, <mousebutton
+>höger</mousebutton
+>klicka på namnlisten för att visa <guilabel
+>Verktygsradsmenyn</guilabel
+> och välj därefter ett av alternativen i undermenyn <guisubmenu
+>Placering</guisubmenu
+>.</para>
+
+<para
+>Genom att välja <guimenuitem
+>Anpassa verktygsrader...</guimenuitem
+> i menyn <guimenu
+>Inställningar</guimenu
+>, visar en dialogruta som låter dig lägga till knappar eller ta bort dem från &sheets; verktygsrader.</para>
+<para
+>För att använda dialogrutan <guilabel
+>Anpassa verktygsrader</guilabel
+>, välj först en verktygsrad i kombinationsrutan <guilabel
+>Verktygsrad:</guilabel
+>. Fönstret till höger, <guilabel
+>Nuvarande åtgärder:</guilabel
+>, visar då knapparna som för närvarande finns i verktygsraden. Du kan ta bort en knapp genom att välja den i det här fönstret och sedan trycka på knappen med vänsterpilen, eller flytta omkring den genom att trycka på uppåt- och neråtpilarna. För att lägga till en ny knapp i verktygsraden, välj den i listan <guilabel
+>Tillgängliga åtgärder:</guilabel
+>, och tryck sedan på högerpilen.</para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

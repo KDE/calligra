@@ -1,0 +1,226 @@
+# translation of koconverter.po to Dutch
+# translation of koconverter.po to
+# Nederlandse vertaling van koconverter
+# Copyright (c) 2002 KDE e.V.
+# KDE-vertaalgroep Nederlands
+#
+# Rinse de Vries <rinse@kde.nl>, 2002, 2004.
+# Rinse de Vries <rinsedevries@kde.nl>, 2004, 2008.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2011, 2012, 2015, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: koconverter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2016-11-21 22:39+0100\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Rinse de Vries,Freek de Kruijf"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "Rinse@kde.nl,freekdekruijf@kde.nl"
+
+#: calligraconverter.cpp:144
+#, kde-format
+msgid "CalligraConverter"
+msgstr "CalligraConverter"
+
+#: calligraconverter.cpp:146
+#, kde-format
+msgid "Calligra Document Converter"
+msgstr "Calligra documentenconversie"
+
+#: calligraconverter.cpp:148
+#, kde-format
+msgid "Copyright 2001-%1 Calligra developers"
+msgstr "Copyright 2001-%1 Ontwikkelaars van Calligra"
+
+#: calligraconverter.cpp:149
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: calligraconverter.cpp:150
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: calligraconverter.cpp:151
+#, kde-format
+msgid "Dan Leinir Turthra Jensen"
+msgstr "Dan Leinir Turthra Jensen"
+
+#: calligraconverter.cpp:158
+#, kde-format
+msgid "Input file"
+msgstr "Invoerbestand"
+
+#: calligraconverter.cpp:159
+#, kde-format
+msgid "Output file"
+msgstr "Uitvoerbestand"
+
+#: calligraconverter.cpp:160
+#, kde-format
+msgid "Make a backup of the destination file"
+msgstr "Maak een reservekopie van het bestemmingsbestand"
+
+#: calligraconverter.cpp:161
+#, kde-format
+msgid "Batch mode: do not show dialogs"
+msgstr "Batch-modus: geen dialogen tonen"
+
+#: calligraconverter.cpp:162
+#, kde-format
+msgid "Interactive mode: show dialogs (default)"
+msgstr "Interactieve modus: dialogen tonen (standaard)"
+
+#: calligraconverter.cpp:163
+#, kde-format
+msgid "Mimetype of the output file"
+msgstr "Mime-bestandstype van het uitvoerbestand"
+
+#: calligraconverter.cpp:166
+#, kde-format
+msgid "The print orientation. This could be either Portrait or Landscape."
+msgstr "De oriëntatie van het afdrukken. Dit kan Portret of Landschap zijn."
+
+#: calligraconverter.cpp:167
+#, kde-format
+msgid "The paper size. A4, Legal, Letter, ..."
+msgstr "De papierafmetingen, A4, Legal, Letter, ..."
+
+#: calligraconverter.cpp:168
+#, kde-format
+msgid "The size of the paper margin. By default this is 0.2."
+msgstr "De grootte van het marges op het papier. Standaard is dat 0,2."
+
+#: calligraconverter.cpp:175
+#, kde-format
+msgid "Two arguments required"
+msgstr "Twee argumenten zijn vereist"
+
+#: calligraconverter.cpp:203
+#, kde-format
+msgid "Mimetype for input file %1 not found!"
+msgstr "Het mime-bestandstype voor invoerbestand %1 is niet gevonden!"
+
+#: calligraconverter.cpp:212
+#, kde-format
+msgid "Mimetype not found %1"
+msgstr "Mime-bestandstype niet gevonden: %1"
+
+#: calligraconverter.cpp:218
+#, kde-format
+msgid "Mimetype not found, try using the -mimetype option"
+msgstr ""
+"Mime-bestandstype niet gevonden. Probeer de optie -mimetype te gebruiken."
+
+#: calligraconverter.cpp:242
+#, kde-format
+msgid "*** The conversion failed! ***"
+msgstr "*** De conversie is mislukt ***"
+
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Rinse de Vries,Freek de Kruijf"
+
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "Rinse@kde.nl,freekdekruijf@kde.nl"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CalligraConverter"
+#~ msgstr "CalligraConverter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Converter"
+#~ msgstr "Calligra documentenconversie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2001-%1 Calligra developers"
+#~ msgstr "Copyright 2001-%1 Ontwikkelaars van Calligra"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "Nicolas Goutte"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dan Leinir Turthra Jensen"
+#~ msgstr "Dan Leinir Turthra Jensen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Input file"
+#~ msgstr "Invoerbestand"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output file"
+#~ msgstr "Uitvoerbestand"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Make a backup of the destination file"
+#~ msgstr "Maak een reservekopie van het bestemmingsbestand"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Batch mode: do not show dialogs"
+#~ msgstr "Batch-modus: geen dialogen tonen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interactive mode: show dialogs (default)"
+#~ msgstr "Interactieve modus: dialogen tonen (standaard)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype of the output file"
+#~ msgstr "Mime-bestandstype van het uitvoerbestand"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The print orientation. This could be either Portrait or Landscape."
+#~ msgstr "De oriëntatie van het afdrukken. Dit kan Portret of Landschap zijn."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The paper size. A4, Legal, Letter, ..."
+#~ msgstr "De papierafmetingen, A4, Legal, Letter, ..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The size of the paper margin. By default this is 0.2."
+#~ msgstr "De grootte van het marges op het papier. Standaard is dat 0,2."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two arguments required"
+#~ msgstr "Twee argumenten zijn vereist"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype for input file %1 not found!"
+#~ msgstr "Het mime-bestandstype voor invoerbestand %1 is niet gevonden!"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found %1"
+#~ msgstr "Mime-bestandstype niet gevonden: %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found, try using the -mimetype option"
+#~ msgstr ""
+#~ "Mime-bestandstype niet gevonden. Probeer de optie -mimetype te gebruiken."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "*** The conversion failed! ***"
+#~ msgstr "*** De conversie is mislukt ***"
+
+#~ msgid "KOConverter"
+#~ msgstr "KOConverter"

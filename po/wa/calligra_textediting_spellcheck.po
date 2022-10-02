@@ -1,0 +1,104 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Jean Cayron <jean.cayron@gmail.com>, 2009, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2010-11-18 21:43+0100\n"
+"Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
+"Language-Team: Walloon <linux@walon.org>\n"
+"Language: wa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "Apontyî l' tchôke-divins &Coridjrece d' ortografeye..."
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Verifyî l' ortografeye come dji tape"
+
+#: SpellCheckFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Spelling"
+msgid "Check Spelling"
+msgstr "Coridjaedje d' ortografeye"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Coridjaedje d' ortografeye"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Radjouter å motî"
+
+#, fuzzy
+#~| msgid "Configure &Spell Checking..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "Apontyî l' tchôke-divins &Coridjrece d' ortografeye..."
+
+#, fuzzy
+#~| msgid "Auto Spell Check"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Verifyî l' ortografeye come dji tape"
+
+#, fuzzy
+#~| msgid "Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Coridjaedje d' ortografeye"
+
+#, fuzzy
+#~| msgid "Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Coridjaedje d' ortografeye"
+
+#, fuzzy
+#~| msgid "Add to Dictionary"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Radjouter å motî"
+
+#~ msgid "Ignore Word"
+#~ msgstr "Passer houte di c' mot ci"
+
+#~ msgid "Spell Check"
+#~ msgstr "Verifyî l' ortografeye"
+
+#~ msgid "Spell Check Configuration"
+#~ msgstr "Apontiaedje del Coridjrece d' ortografeye"
+
+#~ msgid "Default Language:"
+#~ msgstr "Prémetou lingaedje:"
+
+#~ msgid "Options"
+#~ msgstr "Tchuzes"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "Mete en alaedje li coridjaedje d' ortografeye dins l' &fond"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "Passer houte tos les mots e &grandès letes"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "Passer &houte les mots aclapés eshonnes"
+
+#~ msgid "&Add"
+#~ msgstr "&Radjouter"
+
+#~ msgid "&Remove"
+#~ msgstr "&Oister"

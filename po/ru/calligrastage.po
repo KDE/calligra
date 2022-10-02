@@ -1,0 +1,7137 @@
+# KDE3 - koffice/kpresenter.po Russian translation.
+# Copyright (C) 2005 KDE Russian translation team.
+#
+# Andrey Cherepanov <sibskull@mail.ru>, 2001-2006.
+# Nick Shaforostoff <shafff@ukr.net>, 2004-2005.
+# Alexander Potashev <aspotashev@gmail.com>, 2010.
+# Yuri Efremov <yur.arh@gmail.com>, 2010, 2011.
+# Мария Шикунова <translation-team@basealt.ru>, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kpresenter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2022-03-14 15:24+0300\n"
+"Last-Translator: Мария Шикунова <translation-team@basealt.ru>\n"
+"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.1\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, kde-format
+msgid "&Edit"
+msgstr "&Правка"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, kde-format
+msgid "&View"
+msgstr "&Вид"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, kde-format
+msgid "&Insert"
+msgstr "Вст&авка"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "&Формат"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, kde-format
+msgid "&Slide"
+msgstr "&Слайды"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, kde-format
+msgid "Sli&de Show"
+msgstr "&Демонстрация"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, kde-format
+msgid "&Settings"
+msgstr "&Настройка"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr ""
+"Добавить настраиваемое слайд-шоу\n"
+"добавление настраиваемого слайд-шоу"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr ""
+"Создать анимацию формы\n"
+"создание анимации формы"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr ""
+"Изменить событие для срабатывания анимации\n"
+"изменение события для срабатывания анимации"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr ""
+"Удалить анимацию формы\n"
+"удаление анимации формы"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr ""
+"Удалить настраиваемое слайд-шоу\n"
+"удаление настраиваемого слайд-шоу"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr ""
+"Удаление слайда\n"
+"удаление слайда"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] ""
+"Удалить слайд\n"
+"удаление слайдов"
+msgstr[1] ""
+"Удалить слайды\n"
+"удаление слайдов"
+msgstr[2] ""
+"Удалить слайды\n"
+"удаление слайдов"
+msgstr[3] ""
+"Удалить слайд\n"
+"удаление слайда"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr ""
+"Изменить продолжительность анимации\n"
+"изменение продолжительности анимации"
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr ""
+"Изменить настраиваемое слайд-шоу\n"
+"изменение настраиваемого слайд-шоу"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr ""
+"Создать эффект слайда\n"
+"создание эффекта слайда"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr ""
+"Изменить эффект слайда\n"
+"изменение эффекта слайда"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr ""
+"Удалить эффект слайда\n"
+"удаление эффекта слайда"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr ""
+"Изменить переход между слайдами\n"
+"изменение перехода между слайдами"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr ""
+"Переименовать настраиваемое слайд-шоу\n"
+"переименование настраиваемого слайд-шоу"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr ""
+"Изменить порядок анимации\n"
+"изменение порядка анимации"
+
+#: part/KPrAboutData.h:21
+#, kde-format
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "Calligra Stage"
+
+#: part/KPrAboutData.h:23
+#, kde-format
+msgid "Presentation Tool"
+msgstr "Инструмент презентации"
+
+#: part/KPrAboutData.h:25
+#, kde-format
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "© Команда разработчиков Stage, 1998-%1"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, kde-format
+msgid "Former maintainer"
+msgstr "Предшествующий сопровождающий"
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr "Thorsten Zachmann"
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Original author"
+msgstr "Первоначальный автор"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr "Reginald Stadlbauer"
+
+#: part/KPrAboutData.h:36
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr "Toshitaka Fujioka"
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr "Lukáš Tinkl"
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr "Percy Leonhardt"
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KPrAboutData.h:43
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr "Boudewijn Rempt"
+
+#: part/KPrAboutData.h:45
+#, kde-format
+msgid "Carlos Licea "
+msgstr "Carlos Licea"
+
+#: part/KPrAboutData.h:46
+#, kde-format
+msgid "C. Boemann "
+msgstr "C. Boemann "
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr "Fredy Yanardi"
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr "Jan Hambrecht"
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr "Marijn Kruisselbrink"
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr "Martin Pfeiffer"
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr "Sven Langkamp"
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr "Timothée Lacroix"
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Андрей Черепанов,Мария Шикунова"
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "sibskull@mail.ru,translation-team@basealt.ru"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr "Неизвестно"
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, kde-format
+msgid "Slide %1"
+msgstr "Слайд %1"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "Конец презентации. Щёлкните для выхода."
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, kde-format
+msgid "Layout"
+msgstr "Внешний вид"
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+"Не удалось найти требуемый компонент текста, Calligra Stage завершает работу."
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+"Не удалось найти требуемый компонент изображения, Calligra Stage завершает "
+"работу."
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr "Ошибка установки"
+
+#: part/KPrPicturesImport.cpp:62
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr ""
+"Вставка рисунка\n"
+"вставку рисунка"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr "Форма шаблона подстановки"
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr "Чтобы добавить заголовок, щёлкните дважды"
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr "Чтобы добавить рамку, щёлкните дважды"
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr "Чтобы добавить текст, щёлкните дважды"
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr "Чтобы добавить примечание, щёлкните дважды"
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr "Чтобы добавить изображение, щёлкните дважды"
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr "Чтобы добавить диаграмму, щёлкните дважды"
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr "Чтобы добавить объект, щёлкните дважды"
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, kde-format
+msgid "Pen Color"
+msgstr "Цвет пера"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, kde-format
+msgid "Pen Size"
+msgstr "Размер пера"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, kde-format
+msgid "Black"
+msgstr "Чёрный"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, kde-format
+msgid "White"
+msgstr "Белый"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, kde-format
+msgid "Green"
+msgstr "Зелёный"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, kde-format
+msgid "Red"
+msgstr "Красный"
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, kde-format
+msgid "Blue"
+msgstr "Синий"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, kde-format
+msgid "Yellow"
+msgstr "Жёлтый"
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, kde-format
+msgid "Next Slide"
+msgstr "Следующий слайд"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, kde-format
+msgid "Speaker Notes"
+msgstr "Заметки докладчика"
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, kde-format
+msgid "Current Slide %1 of %2"
+msgstr "Текущий слайд %1 из %2"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, kde-format
+msgid "End of Slide Show"
+msgstr "Конец демонстрации"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr "запуск по щелчку мыши"
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, kde-format
+msgid "start after previous animation"
+msgstr "запуск после предыдущей анимации"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, kde-format
+msgid "start with previous animation"
+msgstr "запуск вместе с предыдущей анимацией"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr "Запуск после %1 сек. Длительность: %2 сек."
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, kde-format
+msgid "Animation"
+msgstr "Анимация"
+
+#: part/KPrShapeAnimations.cpp:201
+#, kde-format
+msgid "Shape"
+msgstr "Фигура"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, kde-format
+msgid "&Move Here"
+msgstr "&Переместить сюда"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, kde-format
+msgid "&Copy Here"
+msgstr "&Копировать сюда"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, kde-format
+msgid "C&ancel"
+msgstr "О&тмена"
+
+#: part/KPrView.cpp:73
+#, kde-format
+msgid "Normal"
+msgstr "Обычный"
+
+#: part/KPrView.cpp:78
+#, kde-format
+msgid "Show Master Slides"
+msgstr "Показать слайды-шаблоны"
+
+#: part/KPrView.cpp:79
+#, kde-format
+msgid "Import Slideshow..."
+msgstr "Импорт презентации..."
+
+#: part/KPrView.cpp:80
+#, kde-format
+msgid "Insert Slide"
+msgstr "Добавить слайд"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr "Добавить новый слайд после текущего"
+
+#: part/KPrView.cpp:83
+#, kde-format
+msgid "Copy Slide"
+msgstr "Копировать слайд"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, kde-format
+msgid "Copy the current slide"
+msgstr "Копировать текущий слайд"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, kde-format
+msgid "Delete Slide"
+msgstr "Удалить слайд"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, kde-format
+msgid "Delete the current slide"
+msgstr "Удалить текущий слайд"
+
+#: part/KPrView.cpp:89
+#, kde-format
+msgid "Master Slide..."
+msgstr "Слайд-шаблон..."
+
+#: part/KPrView.cpp:90
+#, kde-format
+msgid "Previous Slide"
+msgstr "Предыдущий слайд"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, kde-format
+msgid "Go to previous slide"
+msgstr "Перейти к предыдущему слайду"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, kde-format
+msgid "Go to next slide"
+msgstr "Перейти к следующему слайду"
+
+#: part/KPrView.cpp:96
+#, kde-format
+msgid "First Slide"
+msgstr "Первый слайд"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, kde-format
+msgid "Go to first slide"
+msgstr "Перейти к первому слайду"
+
+#: part/KPrView.cpp:99
+#, kde-format
+msgid "Last Slide"
+msgstr "Последний слайд"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, kde-format
+msgid "Go to last slide"
+msgstr "Перейти к последнему слайду"
+
+#: part/KPrView.cpp:102
+#, kde-format
+msgid "Configure Stage..."
+msgstr "Настроить Stage..."
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr "Экспорт в HTML..."
+
+#: part/KPrView.cpp:251
+#, kde-format
+msgid "Insert Pictures as Slides..."
+msgstr "Вставить рисунок как слайд..."
+
+#: part/KPrView.cpp:260
+#, kde-format
+msgid "Create Appear Animation"
+msgstr "Создать анимацию появления"
+
+#: part/KPrView.cpp:264
+#, kde-format
+msgid "Edit Custom Slide Shows..."
+msgstr "Изменить настраиваемые слайд-шоу..."
+
+#: part/KPrView.cpp:268
+#, kde-format
+msgid "Start Presentation"
+msgstr "Начать презентацию"
+
+#: part/KPrView.cpp:271
+#, kde-format
+msgid "From Current Slide"
+msgstr "С текущего слайда"
+
+#: part/KPrView.cpp:275
+#, kde-format
+msgid "From First Slide"
+msgstr "С первого слайда"
+
+#: part/KPrView.cpp:280
+#, kde-format
+msgid "Stop presentation"
+msgstr "Остановить презентацию"
+
+#: part/KPrView.cpp:286
+#, kde-format
+msgid "Show Status Bar"
+msgstr "Показать строку состояния"
+
+#: part/KPrView.cpp:287
+#, kde-format
+msgid "Hide Status Bar"
+msgstr "Скрыть строку состояния"
+
+#: part/KPrView.cpp:288
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Показать или скрыть строку состояния"
+
+#: part/KPrView.cpp:297
+#, kde-format
+msgid "Configure Slide Show..."
+msgstr "Настроить демонстрацию..."
+
+#: part/KPrView.cpp:301
+#, kde-format
+msgid "Configure Presenter View..."
+msgstr "Настроить просмотр презентации..."
+
+#: part/KPrView.cpp:305
+#, kde-format
+msgid "Draw on the presentation..."
+msgstr "Рисовать на презентации..."
+
+#: part/KPrView.cpp:312
+#, kde-format
+msgid "Highlight the presentation..."
+msgstr "Выделить презентацию..."
+
+#: part/KPrView.cpp:319
+#, kde-format
+msgid "Blackscreen on the presentation..."
+msgstr "Чёрный экран на презентации..."
+
+#: part/KPrViewModeNotes.cpp:36
+#, kde-format
+msgid "Notes"
+msgstr "Примечания"
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, kde-format
+msgid "Slides Sorter"
+msgstr "Сортировщик слайдов"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, kde-format
+msgid "Slide Show: "
+msgstr "Слайд-шоу:"
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, kde-format
+msgid "Add a new custom slide show"
+msgstr "Добавить новое настраиваемое слайд-шоу"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, kde-format
+msgid "Delete current custom slide show"
+msgstr "Удалить текущее настраиваемое слайд-шоу"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, kde-format
+msgid "Add slides to current custom slide show"
+msgstr "Добавить слайды к текущему настраиваемому слайд-шоу"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, kde-format
+msgid "Remove slides from current custom slide show"
+msgstr "Удалить слайды с текущего настраиваемого слайд-шоу"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, kde-format
+msgid "Duplicate Slide"
+msgstr "Дублировать слайд"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, kde-format
+msgid "Start Slideshow"
+msgstr "Запустить слайд-шоу"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, kde-format
+msgid "Add a new slide"
+msgstr "Добавить новый слайд"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, kde-format
+msgid "Delete selected slides"
+msgstr "Удалить выбранные слайды"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, kde-format
+msgid "Rename"
+msgstr "Переименовать"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, kde-format
+msgid "Cut"
+msgstr "Вырезать"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, kde-format
+msgid "Copy"
+msgstr "Копировать"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, kde-format
+msgid "Paste"
+msgstr "Вставить"
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, kde-format
+msgid "Slide Show %1"
+msgstr "Слайд-шоу %1"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, kde-format
+msgid "All slides"
+msgstr "Все слайды"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, kde-format
+msgid "Error"
+msgstr "Ошибка"
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr "Существование демонстраций с одинаковым названием невозможно."
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr ""
+"Установка формата\n"
+"установку формата"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, kde-format
+msgid "Automatic animation preview"
+msgstr "Автоматический предварительный просмотр анимации"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, kde-format
+msgid "Preview animation"
+msgstr "Предварительный просмотр анимации"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, kde-format
+msgid "Slide Transitions"
+msgstr "Переходы между слайдами"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, kde-format
+msgid "Shape Click Actions"
+msgstr "Действия при нажатии на фигуру"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, kde-format
+msgid "Shape Animations"
+msgstr "Анимации фигур"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, kde-format
+msgid "Manage animation delay and duration: "
+msgstr "Установить продолжительность и длительность анимации:"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, kde-format
+msgid "Start: "
+msgstr "Запустить:"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr "по щелчку мыши"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, kde-format
+msgid "after previous animation"
+msgstr "после предыдущей анимации"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, kde-format
+msgid "with previous animation"
+msgstr "с предыдущей анимацией"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr "Задержка:"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, kde-format
+msgid "Duration: "
+msgstr "Продолжительность:"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, kde-format
+msgid "Preview Shape Animation"
+msgstr "Предварительный просмотр анимации фигуры"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, kde-format
+msgid "No Effect"
+msgstr "Без эффекта"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, kde-format
+msgid " sec"
+msgstr " сек"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr "Вручную"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr "Автоматически"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, kde-format
+msgid "Slide Transition:"
+msgstr "Переход между слайдами:"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, kde-format
+msgid "Apply To All Slides"
+msgstr "Применить ко всем слайдам"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr ""
+"Применить эффект слайда ко всем слайдам\n"
+"применение эффекта слайда ко всем слайдам"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr "Вход"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr "Выход"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr "Акцент"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, kde-format
+msgid "Custom"
+msgstr "Другой"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr "Путь движения"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, kde-format
+msgid "Ole Action"
+msgstr "Действие Ole"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr "Media Call"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, kde-format
+msgid "Edit animation"
+msgstr "Изменить анимацию"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, kde-format
+msgid "Add new animation"
+msgstr "Добавить новую анимацию"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, kde-format
+msgid "Remove animation"
+msgstr "Удалить анимацию"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr "Порядок:"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, kde-format
+msgid "Move animation up"
+msgstr "Переместить анимацию вверх"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, kde-format
+msgid "Move animation down"
+msgstr "Переместить анимацию вниз"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, kde-format
+msgid "Add a new animation"
+msgstr "Добавить новую анимацию"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, kde-format
+msgid "Delete current animation"
+msgstr "Удалить текущую анимацию"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr "секунды"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, kde-format
+msgid "Crop"
+msgstr "Кадрировать"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, kde-format
+msgid "W&idth:"
+msgstr "&Ширина:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, kde-format
+msgid "Will keep the width of the crop constant"
+msgstr "Сохранит ширину кадрирования постоянной"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, kde-format
+msgid "&Height:"
+msgstr "&Высота:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, kde-format
+msgid "Will keep the height of the crop constant"
+msgstr "Сохранит высоту кадрирования постоянной"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, kde-format
+msgid "R&atio:"
+msgstr "&Соотношение:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, kde-format
+msgid "Will keep the ratio constant"
+msgstr "Сохранит значение соотношения постоянным"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr "Слой"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, kde-format
+msgid "Image"
+msgstr "Изображение"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, kde-format
+msgid "&Crop"
+msgstr "&Обрезать"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr ""
+"Изменить форму\n"
+"изменение формы"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr "Несколько мониторов"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, kde-format
+msgid "Presentation monitor:"
+msgstr "Монитор презентации:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, kde-format
+msgid "Enable presenter view"
+msgstr "Включить режим докладчика"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr "Монитор %1 (основной)"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr "Монитор %1"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, kde-format
+msgid "Configure Presenter View"
+msgstr "Настройка просмотра презентации"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, kde-format
+msgid "Configure Slide Show"
+msgstr "Настроить демонстрацию"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, kde-format
+msgid "Slides"
+msgstr "Слайды"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, kde-format
+msgid "Presentation Slides:"
+msgstr "Слайды презентации:"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, kde-format
+msgid "Edit Custom Slide Shows ..."
+msgstr "Изменить настраиваемые слайд-шоу ..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr "Экспорт в HTML"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr "Отметьте слайд для экспорта :"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, kde-format
+msgid "Select all"
+msgstr "Выбрать все"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, kde-format
+msgid "Select template (.css) :"
+msgstr "Выбрать шаблон (.css) :"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, kde-format
+msgid "Deselect all"
+msgstr "Отменить выбор"
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, kde-format
+msgid "Title"
+msgstr "Заголовок"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, kde-format
+msgid "Output preview"
+msgstr "Предварительный просмотр вывода"
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr "Просмотр"
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, kde-format
+msgid "Author"
+msgstr "Автор:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, kde-format
+msgid "Delete Favorite"
+msgstr "Удалить из избранного"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr "Открыть в браузере"
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr "Экспорт в HTML"
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr "Экспорт"
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr "Файл избранного с таким именем уже существует"
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr "Неверный файл, только .zip или повреждённый zip"
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr "Zip-файл должен содержать style.css"
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, kde-format
+msgid "Delete Template"
+msgstr "Удаление шаблона"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr "Нельзя удалить шаблоны, встроенные в приложение"
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, kde-format
+msgid "Add Template"
+msgstr "Добавление шаблона"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "Удалить «%1»?"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, kde-format
+msgid "Confirm remove"
+msgstr "Подтверждение удаления"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr ""
+"Изменить звук действия\n"
+"изменение звука действия"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, kde-format
+msgid "No sound"
+msgstr "Без звука"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, kde-format
+msgid "Import..."
+msgstr "Импорт..."
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr "Штора"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, kde-format
+msgid "From Left"
+msgstr "Открытие слева"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, kde-format
+msgid "From Top"
+msgstr "Открытие сверху"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, kde-format
+msgid "From Right"
+msgstr "Открытие справа"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, kde-format
+msgid "From Bottom"
+msgstr "Открытие снизу"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr "Неизвестный подтип"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Clock"
+msgstr "Часы"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, kde-format
+msgid "From Twelve Clockwise"
+msgstr "С двенадцати часов по часовой стрелке"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, kde-format
+msgid "From Three Clockwise"
+msgstr "С трёх часов по часовой стрелке"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, kde-format
+msgid "From Six Clockwise"
+msgstr "С шести часов по часовой стрелке"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, kde-format
+msgid "From Nine Clockwise"
+msgstr "С девяти часов по часовой стрелке"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, kde-format
+msgid "From Twelve Counterclockwise"
+msgstr "С двенадцати часов против часовой стрелке"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, kde-format
+msgid "From Three Counterclockwise"
+msgstr "С трёх часов по против часовой стрелке"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, kde-format
+msgid "From Six Counterclockwise"
+msgstr "С шести часов по против часовой стрелке"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, kde-format
+msgid "From Nine Counterclockwise"
+msgstr "С девяти часов против часовой стрелке"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Double Fan"
+msgstr "Двойной веер"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, kde-format
+msgid "Fan Out Vertical"
+msgstr "Развернуть по вертикали"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, kde-format
+msgid "Fan Out Horizontal"
+msgstr "Развернуть по горизонтали"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, kde-format
+msgid "Fan In Vertical"
+msgstr "Свернуть по вертикали"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, kde-format
+msgid "Fan In Horizontal"
+msgstr "Свернуть по горизонтали"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, kde-format
+msgid "Fan In Vertical Reverse"
+msgstr "Свернуть по вертикали (обратный порядок)"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Fan In Horizontal Reverse"
+msgstr "Свернуть по горизонтали (обратный порядок)"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Double Sweep"
+msgstr "Двойная развёртка"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Parallel Vertical"
+msgstr "Развернуть вертикально"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Parallel Diagonal"
+msgstr "Развернуть по диагонали"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Opposite Vertical"
+msgstr "По вертикали противоположно"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Opposite Horizontal"
+msgstr "По горизонтали противоположно"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Parallel Diagonal Top Left"
+msgstr "Развернуть по диагонали вверху слева"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Parallel Diagonal Bottom Left"
+msgstr "Развернуть по диагонали внизу слева"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Parallel Vertical Reverse"
+msgstr "Развернуть по вертикали вертикали (в обратном порядке)"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Parallel Diagonal Reverse"
+msgstr "Развернуть по горизонтали (в обратном порядке)"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Opposite Vertical Reverse"
+msgstr "Противоположная вертикаль (в обратном порядке)"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Opposite Horizontal Reverse"
+msgstr "Противоположная горизонталь (в обратном порядке)"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "Развернуть по диагонали вверху слева (в обратном порядке)"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "Развернуть по диагонали внизу слева (в обратном порядке)"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Fan"
+msgstr "Веер"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Center Right"
+msgstr "По центру справа"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Center Top"
+msgstr "По центру сверху"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Center Left"
+msgstr "По центру слева"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Center Bottom"
+msgstr "По центру снизу"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Fan Out Top"
+msgstr "Развернуть сверху"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Fan Out Right"
+msgstr "Развернуть справа"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Fan Out Bottom"
+msgstr "Развернуть снизу"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Fan Out Left"
+msgstr "Развернуть слева"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Fan In Top"
+msgstr "Свернуть сверху"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Fan In Right"
+msgstr "Свернуть справа"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Fan In Bottom"
+msgstr "Свернуть снизу"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Fan In Left"
+msgstr "Свернуть слева"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Pin Wheel"
+msgstr "Лопасти ветряка"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, kde-format
+msgid "Two Blades Vertical Clockwise"
+msgstr "Две лопасти вертикально (по часовой стрелке)"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, kde-format
+msgid "Two Blades Horizontal Clockwise"
+msgstr "Две лопасти горизонтально (по часовой стрелке)"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, kde-format
+msgid "Four Blades Horizontal Clockwise"
+msgstr "Четыре лопасти горизонтально (по часовой стрелке)"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, kde-format
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "Две лопасти вертикально (против часовой стрелке)"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, kde-format
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "Две лопасти горизонтально (против часовой стрелке)"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, kde-format
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "Четыре лопасти горизонтально (против часовой стрелке)"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Saloon Door"
+msgstr "Распашные двери"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, kde-format
+msgid "To Top"
+msgstr "Закрытие сверху"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, kde-format
+msgid "To Left"
+msgstr "Закрытие слева"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, kde-format
+msgid "To Bottom"
+msgstr "Закрытие снизу"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, kde-format
+msgid "To Right"
+msgstr "Закрытие справа"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Single Sweep"
+msgstr "Одинарная развёртка"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, kde-format
+msgid "Clockwise Top"
+msgstr "По часовой стрелке сверху"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, kde-format
+msgid "Clockwise Right"
+msgstr "По часовой стрелке справа"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, kde-format
+msgid "Clockwise Bottom"
+msgstr "По часовой стрелке снизу"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, kde-format
+msgid "Clockwise Left"
+msgstr "По часовой стрелке слева"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, kde-format
+msgid "Clockwise Top Left"
+msgstr "По часовой стрелке слева"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, kde-format
+msgid "Counterclockwise Bottom Left"
+msgstr "Против часовой стрелки снизу слева"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, kde-format
+msgid "Clockwise Bottom Right"
+msgstr "По часовой стрелке внизу справа"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, kde-format
+msgid "Counterclockwise Top Right"
+msgstr "Против часовой стрелки сверху справа"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, kde-format
+msgid "Counterclockwise Top"
+msgstr "Против часовой стрелки сверху"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, kde-format
+msgid "Counterclockwise Right"
+msgstr "Против часовой стрелки справа"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, kde-format
+msgid "Counterclockwise Bottom"
+msgstr "Против часовой стрелки снизу"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, kde-format
+msgid "Counterclockwise Left"
+msgstr "Против часовой стрелки слева"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, kde-format
+msgid "Counterclockwise Top Left"
+msgstr "Против часовой стрелки сверху слева"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, kde-format
+msgid "Clockwise Bottom Left"
+msgstr "По часовой стрелке слева"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, kde-format
+msgid "Counterclockwise Bottom Right"
+msgstr "Против часовой стрелки снизу справа"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Clockwise Top Right"
+msgstr "По часовой стрелке вверху справа"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Windshield"
+msgstr "Стеклоочиститель"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, kde-format
+msgid "Right"
+msgstr "Справа"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr "Сверху"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Vertical"
+msgstr "По вертикали"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, kde-format
+msgid "Horizontal"
+msgstr "По горизонтали"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, kde-format
+msgid "Right Reverse"
+msgstr "Справа (обратный порядок)"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, kde-format
+msgid "Up Reverse"
+msgstr "Сверху (обратный порядок)"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Vertical Reverse"
+msgstr "По вертикали (обратный порядок)"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Horizontal Reverse"
+msgstr "По горизонтали (обратный порядок)"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Door"
+msgstr "Закрашенная"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Diagonal Bottom Left"
+msgstr "По диагонали внизу слева"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Diagonal Bottom Left Reverse"
+msgstr "По диагонали внизу слева (в обратном порядке)"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Diagonal Top Left"
+msgstr "По диагонали вверху слева"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Diagonal Top Left Reverse"
+msgstr "По диагонали вверху слева (в обратном порядке)"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr "V-образная закрашенная"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, kde-format
+msgid "Barn Zig Zag"
+msgstr "Зигзагообразная закрашенная"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, kde-format
+msgid "Vertical Reversed"
+msgstr "Вертикально (в обратном порядке)"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, kde-format
+msgid "Horizontal Reversed"
+msgstr "Горизонтально (в обратном порядке)"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr "Блок"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, kde-format
+msgid "From Top Left"
+msgstr "Вверху слева"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, kde-format
+msgid "From Top Right"
+msgstr "Вверху справа"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, kde-format
+msgid "From Bottom Left"
+msgstr "Внизу слева"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, kde-format
+msgid "From Bottom Right"
+msgstr "Внизу справа"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Diagonal"
+msgstr "По диагонали"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr "Четыре ящика"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, kde-format
+msgid "Corners In"
+msgstr "Углы внутрь"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, kde-format
+msgid "Corners In Reverse"
+msgstr "Углы в обратном направлении"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, kde-format
+msgid "Corners Out"
+msgstr "Углы наружу"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, kde-format
+msgid "Corners Out Reverse"
+msgstr "Углы наружу в обратном направлении"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Misc Diagonal"
+msgstr "Разные диагонали"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, kde-format
+msgid "Double Barn Door"
+msgstr "Двойная закрашенная"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, kde-format
+msgid "Double Diamond"
+msgstr "Двойная закрашенная ромбом"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr "V-образный эффект"
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, kde-format
+msgid "Zig Zag"
+msgstr "Зигзагообразный эффект"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, kde-format
+msgid "Fade"
+msgstr "Постепенное исчезание"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr "Перекрёстное исчезание"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, kde-format
+msgid "Fade over Color"
+msgstr "Исчезание над цветом"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, kde-format
+msgid "ArrowHead"
+msgstr "Остриё стрелы"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, kde-format
+msgid "Down"
+msgstr "Вниз"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, kde-format
+msgid "Down Reverse"
+msgstr "Вниз в обратном порядке"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, kde-format
+msgid "Left"
+msgstr "Слева"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, kde-format
+msgid "Left Reverse"
+msgstr "Влево в обратном порядке"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Ellipse"
+msgstr "Эллипс"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Circle"
+msgstr "Окружность"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Circle Reverse"
+msgstr "Окружность (обратный порядок)"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr "Глаз"
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Hexagon"
+msgstr "Шестиугольник"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr "Радуга"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Rectangular"
+msgstr "Прямоугольное"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Rectangular Reverse"
+msgstr "Прямоугольное (в обратном порядке)"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Diamond"
+msgstr "Ромб"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Diamond Reverse"
+msgstr "Ромб (в обратном порядке)"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, kde-format
+msgid "Misc"
+msgstr "Другое"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Heart"
+msgstr "Сердце"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Heart Reverse"
+msgstr "Сердце (обратный порядок)"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Keyhole"
+msgstr "Замочная скважина"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Keyhole Reverse"
+msgstr "Замочная скважина (обратный порядок)"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Pentagon"
+msgstr "Пятиугольник"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, kde-format
+msgid "RoundRect"
+msgstr "Закруглённый прямоугольник"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Star"
+msgstr "Звезда"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, kde-format
+msgid "Four Point Star"
+msgstr "Звезда с четырьмя лучами"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, kde-format
+msgid "Four Point Star Reverse"
+msgstr "Звезда с четырьмя лучами (обратный порядок)"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, kde-format
+msgid "Five Point Star"
+msgstr "Звезда с пятью лучами"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, kde-format
+msgid "Five Point Star Reverse"
+msgstr "Звезда с пятью лучами (обратный порядок)"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, kde-format
+msgid "Six Point Star"
+msgstr "Звезда с шестью лучами"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, kde-format
+msgid "Six Point Star Reverse"
+msgstr "Звезда с шестью лучами (обратный порядок)"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Triangle"
+msgstr "Треугольник"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box Snakes"
+msgstr "Блочные змейки"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Two Box Top In"
+msgstr "Два блока сверху внутрь"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Two Box Bottom In"
+msgstr "Два блока снизу внутрь"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Two Box Left In"
+msgstr "Два блока слева внутрь"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Two Box Right In"
+msgstr "Два блока справа внутрь"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Four Box Vertical In"
+msgstr "Четыре блока вертикально внутрь"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Four Box Horizontal In"
+msgstr "Четыре блока горизонтально внутрь"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Two Box Top Out"
+msgstr "Два блока сверху наружу"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Two Box Bottom Out"
+msgstr "Два блока внизу наружу"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Two Box Left Out"
+msgstr "Два блока слева наружу"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Two Box Right Out"
+msgstr "Два блока справа наружу"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Four Box Vertical Out"
+msgstr "Четыре блока вертикально наружу"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Four Box Horizontal Out"
+msgstr "Четыре блока горизонтально наружу"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Parallel Snakes"
+msgstr "Параллельные змейки"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Vertical Top Same In"
+msgstr "Вертикально сверху одинаково внутрь"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Vertical Top Same Out"
+msgstr "Вертикально сверху одинаково наружу"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Vertical Bottom Same In"
+msgstr "Вертикально снизу одинаково внутрь"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Vertical Bottom Same Out"
+msgstr "Вертикально снизу одинаково наружу"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, kde-format
+msgid "Vertical Top Left Opposite In"
+msgstr "Вертикально сверху слева напротив внутрь"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, kde-format
+msgid "Vertical Top Left Opposite Out"
+msgstr "Вертикально сверху слева напротив наружу"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, kde-format
+msgid "Vertical Bottom Left Opposite In"
+msgstr "Вертикально снизу слева напротив внутрь"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, kde-format
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "Вертикально снизу слева напротив наружу"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, kde-format
+msgid "Horizontal Left Same In"
+msgstr "Горизонтально слева одинаково внутрь"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, kde-format
+msgid "Horizontal Left Same Out"
+msgstr "Горизонтально слева одинаково наружу"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, kde-format
+msgid "Horizontal Right Same In"
+msgstr "Горизонтально справа одинаково внутрь"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, kde-format
+msgid "Horizontal Right Same Out"
+msgstr "Горизонтально справа одинаково наружу"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, kde-format
+msgid "Horizontal Top Left Opposite In"
+msgstr "Горизонтально сверху слева напротив внутрь"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, kde-format
+msgid "Horizontal Top Left Opposite Out"
+msgstr "Горизонтально сверху слева напротив наружу"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, kde-format
+msgid "Horizontal Top Right Opposite In"
+msgstr "Горизонтально сверху справа напротив внутрь"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, kde-format
+msgid "Horizontal Top Right Opposite Out"
+msgstr "Горизонтально сверху справа напротив наружу"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, kde-format
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "По диагонали снизу слева напротив внутрь"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, kde-format
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "По диагонали снизу слева напротив наружу"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, kde-format
+msgid "Diagonal Top Left Opposite In"
+msgstr "По диагонали сверху слева напротив внутрь"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, kde-format
+msgid "Diagonal Top Left Opposite Out"
+msgstr "По диагонали сверху слева напротив наружу"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Snake"
+msgstr "Змейка"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Spiral"
+msgstr "Спираль"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Clockwise Top Left In"
+msgstr "По часовой стрелке сверху слева внутрь"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Clockwise Top Left Out"
+msgstr "По часовой стрелки сверху слева наружу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Clockwise Top Right In"
+msgstr "По часовой стрелке сверху справа внутрь"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Clockwise Top Right Out"
+msgstr "По часовой стрелке сверху справа наружу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Clockwise Bottom Left In"
+msgstr "По часовой стрелке снизу слева внутрь"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Clockwise Bottom Left Out"
+msgstr "По часовой стрелке снизу слева наружу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Clockwise Bottom Right In"
+msgstr "По часовой стрелке снизу справа внутрь"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Clockwise Bottom Right Out"
+msgstr "По часовой стрелке снизу справа наружу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Counterclockwise Top Left In"
+msgstr "Против часовой стрелки сверху слева внутрь"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Counterclockwise Top Left Out"
+msgstr "Против часовой стрелки слева сверху наружу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, kde-format
+msgid "Counterclockwise Top Right In"
+msgstr "Против часовой стрелки сверху справа внутрь"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, kde-format
+msgid "Counterclockwise Top Right Out"
+msgstr "Против часовой стрелки сверху справа наружу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, kde-format
+msgid "Counterclockwise Bottom Left In"
+msgstr "Против часовой стрелки снизу справа внутрь"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, kde-format
+msgid "Counterclockwise Bottom Left Out"
+msgstr "Против часовой стрелки снизу слева наружу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, kde-format
+msgid "Counterclockwise Bottom Right In"
+msgstr "Против часовой стрелки снизу справа внутрь"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, kde-format
+msgid "Counterclockwise Bottom Right Out"
+msgstr "Против часовой стрелки снизу справа наружу"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Waterfall"
+msgstr "Водопад"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, kde-format
+msgid "Top Left Vertical"
+msgstr "Вверху слева вертикально"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Top Left Horizontal"
+msgstr "Вверху слева горизонтально"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Top Right Vertical"
+msgstr "Вверху справа вертикально"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Top Right Horizontal"
+msgstr "Вверху справа горизонтально"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Bottom Left Vertical"
+msgstr "Внизу слева вертикально"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Bottom Left Horizontal"
+msgstr "Внизу слева горизонтально"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Bottom Right Vertical"
+msgstr "Внизу справа вертикально"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Bottom Right Horizontal"
+msgstr "Вверху справа горизонтально"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Slide"
+msgstr "Слайд"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, kde-format
+msgid "Space Rotation"
+msgstr "Вращение пространства"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, kde-format
+msgid "Swap effect"
+msgstr "Эффект замены"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, kde-format
+msgid "Header"
+msgstr "Верхний колонтитул"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, kde-format
+msgid "Footer"
+msgstr "Нижний колонтитул"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Правка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Вид"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "Вст&авка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "&Формат"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "&Слайды"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "&Демонстрация"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Настройка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Ко&пировать"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr "Толщина:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the width of the crop constant"
+#~ msgstr "Толщина линии."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "&Высота:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "&Размещение:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "&Слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "&Сверху:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "Слайды"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "Слайды презентации:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "Нестандартная демонстрация..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select all"
+#~ msgstr "Выбрать &все"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select template (.css) :"
+#~ msgstr "Выбранные слайды:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deselect all"
+#~ msgstr "&Отменить выбор"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Заголовок:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output preview"
+#~ msgstr "Предварительный просмотр"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Автор:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "Удалить слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open in browser"
+#~ msgstr "Открыть в браузере"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiple monitors"
+#~ msgstr "Несколько мониторов"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "Монитор презентации:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "Настроить демонстрацию..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "Презентация"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Stage Team"
+#~ msgstr "© Команда разработчиков Stage, 1998-2011"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "Предшествующий сопровождающий"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thorsten Zachmann"
+#~ msgstr "Thorsten Zachmann"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "Первоначальный автор"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reginald Stadlbauer"
+#~ msgstr "Reginald Stadlbauer"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Werner Trobin"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toshitaka Fujioka"
+#~ msgstr "Toshitaka Fujioka"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lukáš Tinkl"
+#~ msgstr "Lukáš Tinkl"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "Ariya Hidayat"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percy Leonhardt"
+#~ msgstr "Percy Leonhardt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt "
+#~ msgstr "Boudewijn Rempt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Carlos Licea "
+#~ msgstr "Carlos Licea"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C. Boemann "
+#~ msgstr "Casper Boemann"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fredy Yanardi "
+#~ msgstr "Fredy Yanardi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht "
+#~ msgstr "Jan Hambrecht"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Marijn Kruisselbrink "
+#~ msgstr "Marijn Kruisselbrink"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Martin Pfeiffer "
+#~ msgstr "Martin Pfeiffer"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sven Langkamp "
+#~ msgstr "Sven Langkamp"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Timothée Lacroix "
+#~ msgstr "Timothée Lacroix"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Андрей Черепанов"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sibskull@mail.ru"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown"
+#~ msgstr "Неизвестный подтип"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Слайд %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of presentation. Click to exit."
+#~ msgstr "Конец презентации. Щёлкните для выхода."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Ф&ормат слайда..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Installation Error"
+#~ msgstr "Ошибка установки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a title"
+#~ msgstr "Чтобы добавить заголовок, щёлкните дважды"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add an outline"
+#~ msgstr "Чтобы добавить рамку, щёлкните дважды"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a text"
+#~ msgstr "Чтобы добавить текст, щёлкните дважды"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add notes"
+#~ msgstr "Чтобы добавить примечание, щёлкните дважды"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a picture"
+#~ msgstr "Чтобы добавить изображение, щёлкните дважды"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a chart"
+#~ msgstr "Чтобы добавить диаграмму, щёлкните дважды"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add an object"
+#~ msgstr "Чтобы добавить объект, щёлкните дважды"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "Цвета"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Size"
+#~ msgstr "Увеличить размер шрифта"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "Чёрный"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "White"
+#~ msgstr "Белый"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Зелёный"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "Красный"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Синий"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "Жёлтый"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "Следующий слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Speaker Notes"
+#~ msgstr "Зачитать &всплывающие подсказки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "Текущий слайд %1 из %2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "Конец демонстрации"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start after previous animation"
+#~ msgstr "Создать презентацию HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start with previous animation"
+#~ msgstr "Создать презентацию HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "Инструмент для анимации"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Фигура"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "&Переместить сюда"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "&Копировать сюда"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&ancel"
+#~ msgstr "О&тмена"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "нет"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Master Slides"
+#~ msgstr "Вставить слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "Импорт презентации..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "Добавить слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a new slide after the current one"
+#~ msgstr "Добавить новый слайд после текущего"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "Копировать слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "Копировать текущий слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "Удалить слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "Удалить текущий слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide..."
+#~ msgstr "Вставить &слайд..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "Предыдущий слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "Предыдущий"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "Перейти на слайд:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "Первый слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "Перейти на слайд:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "Последний слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "Перейти на слайд:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "Настроить демонстрацию..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as HTML..."
+#~ msgstr "Экспорт в HTML..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "Вставка рисунка..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Appear Animation"
+#~ msgstr "Создать презентацию HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows..."
+#~ msgstr "Нестандартная демонстрация..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "Начать презентацию"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "С текущего слайда"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From First Slide"
+#~ msgstr "С первого слайда"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "В цикле"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Показать строку состояния"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Скрыть строку состояния"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Показать или скрыть строку состояния"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "Настроить демонстрацию..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "Настроить просмотр презентации..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "Заменить файл"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Примечания"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "Сортировщик слайдов"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "Демонстрация"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new custom slide show"
+#~ msgstr "Добавить демонстрацию"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "Удалить текущий слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add slides to current custom slide show"
+#~ msgstr "Нестандартная демонстрация"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "Удалить слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "Текущая демонстрация:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new slide"
+#~ msgstr "Добавить демонстрацию"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "Выбранные слайды:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Удалить ссылку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "&Другой формат"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Ко&пировать"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "Папка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "Демонстрация"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All slides"
+#~ msgstr "Все слайды"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Ошибка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "There cannot be two slideshows with the same name."
+#~ msgstr "Существование демонстраций с одинаковым названием невозможно."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic animation preview"
+#~ msgstr "Автоматический перенос слов"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "Презентация"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "Изменить смену слайдов"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Click Actions"
+#~ msgstr "Создать презентацию HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "Инструмент для анимации"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage animation delay and duration: "
+#~ msgstr "Продолжительность презентации: "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start: "
+#~ msgstr "Звезда"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after previous animation"
+#~ msgstr "Создать презентацию HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "with previous animation"
+#~ msgstr "Создать презентацию HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "Направление"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview Shape Animation"
+#~ msgstr "Создать презентацию HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "Без эффекта"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr " сек"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply To All Slides"
+#~ msgstr "Применить стили"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "Нестандартный слайд:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ole Action"
+#~ msgstr "Высота:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "Инструмент для анимации"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new animation"
+#~ msgstr "Инструмент для анимации"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "Удалить ссылку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation up"
+#~ msgstr "Инструмент для анимации"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "Добавить демонстрацию"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "Удалить текущий слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monitor %1 (primary)"
+#~ msgstr "Монитор %1 (основной)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monitor %1"
+#~ msgstr "Монитор %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View"
+#~ msgstr "Настройка просмотра презентации"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "Настроить демонстрацию"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Экспорт"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "Удаление шаблона"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Are you sure you want to remove \"%1\"?"
+#~ msgstr "Вы действительно хотите удалить «%1»?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm remove"
+#~ msgstr "Подтверждение удаления"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr "Без звука"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import..."
+#~ msgstr "Импорт..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bar"
+#~ msgstr "Штора"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Left"
+#~ msgstr "Открытие слева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top"
+#~ msgstr "Открытие сверху"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Right"
+#~ msgstr "Открытие справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "Открытие снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown subtype"
+#~ msgstr "Неизвестный подтип"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "Часы"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Twelve Clockwise"
+#~ msgstr "С двенадцати часов по часовой стрелке"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Three Clockwise"
+#~ msgstr "С трёх часов по часовой стрелке"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Six Clockwise"
+#~ msgstr "С шести часов по часовой стрелке"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Nine Clockwise"
+#~ msgstr "С девяти часов по часовой стрелке"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Twelve Counterclockwise"
+#~ msgstr "С двенадцати часов против часовой стрелке"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Three Counterclockwise"
+#~ msgstr "С трёх часов по против часовой стрелке"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Six Counterclockwise"
+#~ msgstr "С шести часов по против часовой стрелке"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Nine Counterclockwise"
+#~ msgstr "С девяти часов против часовой стрелке"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "Двойной веер"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Vertical"
+#~ msgstr "Развернуть по вертикали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Horizontal"
+#~ msgstr "Развернуть по горизонтали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "Свернуть по вертикали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "Свернуть по горизонтали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical Reverse"
+#~ msgstr "Свернуть по вертикали (обратный порядок)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal Reverse"
+#~ msgstr "Свернуть по горизонтали (обратный порядок)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "Двойное вытирание"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "Развернуть по вертикали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "Развернуть по вертикали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "Развернуть по горизонтали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical Reverse"
+#~ msgstr "Вертикальные линии"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Reverse"
+#~ msgstr "Горизонтальные линии"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "Вертикальные линии"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "Горизонтальные линии"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan"
+#~ msgstr "Веер"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "По центру справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Top"
+#~ msgstr "По центру сверху"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Left"
+#~ msgstr "По центру слева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "По центру снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Top"
+#~ msgstr "Развернуть сверху"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "Развернуть справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "Развернуть снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Left"
+#~ msgstr "Развернуть слева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Top"
+#~ msgstr "Свернуть сверху"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "Свернуть справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "Свернуть снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Left"
+#~ msgstr "Свернуть слева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "Лопасти ветряка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Vertical Clockwise"
+#~ msgstr "Две лопасти вертикально (по часовой стрелке)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Clockwise"
+#~ msgstr "Две лопасти горизонтально (по часовой стрелке)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Clockwise"
+#~ msgstr "Четыре лопасти горизонтально (по часовой стрелке)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Vertical Counterclockwise"
+#~ msgstr "Две лопасти вертикально (против часовой стрелке)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Counterclockwise"
+#~ msgstr "Две лопасти горизонтально (против часовой стрелке)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Counterclockwise"
+#~ msgstr "Четыре лопасти горизонтально (против часовой стрелке)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "Распашные двери"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Top"
+#~ msgstr "Закрытие сверху"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "Закрытие слева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "Закрытие снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "Закрытие справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "Одинарное вытирание"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "Выплывать справа-сверху"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "По нижнему краю"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "Выплывать слева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "Выплывать справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "Выплывать справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "Стеклоочиститель"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "Справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up"
+#~ msgstr "Сверху"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "По вертикали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "По горизонтали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Reverse"
+#~ msgstr "Справа (обратный порядок)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up Reverse"
+#~ msgstr "Сверху (обратный порядок)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reverse"
+#~ msgstr "По вертикали (обратный порядок)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reverse"
+#~ msgstr "По горизонтали (обратный порядок)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "двойная закрашенная"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "Вертикальные линии"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "Горизонтальные линии"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box"
+#~ msgstr "Ящик"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "Выплывать слева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "Выплывать справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "Диагональный градиент 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box"
+#~ msgstr "Четыре ящика"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "Угло&в:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "Угло&в:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "Диагональный градиент 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Barn Door"
+#~ msgstr "двойная закрашенная"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Diamond"
+#~ msgstr "двойная закрашенная"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vee"
+#~ msgstr "V-образный эффект"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zig Zag"
+#~ msgstr "Зигзагообразный эффект"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "Постепенное исчезание"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade over Color"
+#~ msgstr "Цвет текста"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "Остриё стрелы"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down"
+#~ msgstr "Готово"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "Вертикальные линии"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "&Угол:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "Вертикальные линии"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Эллипс"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "Окружность"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "Окружность (обратный порядок)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eye"
+#~ msgstr "Глаз"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hexagon"
+#~ msgstr "Шестиугольник"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Iris"
+#~ msgstr "Радуга"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular"
+#~ msgstr "Прямоугольный градиент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "Прямоугольный градиент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond"
+#~ msgstr "двойная закрашенная"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "Горизонтальные линии"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Другое"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart"
+#~ msgstr "Сердце"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "Сердце (обратный порядок)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole"
+#~ msgstr "Замочная скважина"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "Замочная скважина (обратный порядок)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Пятиугольник"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "Закруглённый прямоугольник"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "Звезда"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star"
+#~ msgstr "Звезда с четырьмя лучами"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "Звезда с четырьмя лучами (обратный порядок)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star"
+#~ msgstr "Звезда с пятью лучами"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "Звезда с пятью лучами (обратный порядок)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star"
+#~ msgstr "Звезда с шестью лучами"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "Звезда с шестью лучами (обратный порядок)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triangle"
+#~ msgstr "Треугольник"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box Snakes"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top In"
+#~ msgstr "Прямоугольник внутрь"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "Сниз&у:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "Выплывать слева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "Выплывать справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical In"
+#~ msgstr "Развернуть по вертикали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "Горизонтальные жалюзи"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top Out"
+#~ msgstr "Прямоугольник наружу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "Сниз&у:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "Горизонтальные жалюзи"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "Параллельные змейки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "Вертикальный градиент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "Вертикальный градиент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same In"
+#~ msgstr "Вертикальный градиент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "Горизонтальный градиент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same Out"
+#~ msgstr "Горизонтальный градиент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same In"
+#~ msgstr "Горизонтальный градиент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same Out"
+#~ msgstr "Горизонтальный градиент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite In"
+#~ msgstr "Горизонтальный шаг сетки:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "Горизонтальный шаг сетки:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "Змейка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Спираль"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "Выплывать слева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "Выплывать слева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "Выплывать справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "Выплывать справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "Выплывать справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "Выплывать справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "Водопад"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Vertical"
+#~ msgstr "Развернуть по вертикали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Horizontal"
+#~ msgstr "Развернуть по горизонтали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "Развернуть по вертикали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Horizontal"
+#~ msgstr "Развернуть по горизонтали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "Сворачивать по вертикали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Horizontal"
+#~ msgstr "Сворачивать по горизонтали"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "Выплывать снизу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "Горизонтальные жалюзи 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "Слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space Rotation"
+#~ msgstr "Вращение"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "Эффект перелистывания"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "Верхний колонтитул"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "Нижний колонтитул"
+
+#~ msgid "Maintainer"
+#~ msgstr "Сопровождающий"
+
+#~ msgid "Calligra Presentation Tool"
+#~ msgstr "Подготовка презентаций Calligra"
+
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "Stage"
+
+#~ msgid "File to open"
+#~ msgstr "Открыть файл"
+
+#, fuzzy
+#~ msgid "Set Layout"
+#~ msgstr "Ф&ормат слайда..."
+
+#~ msgid "&File"
+#~ msgstr "&Файл"
+
+#~ msgid "Line"
+#~ msgstr "Линия"
+
+#~ msgid "Arra&nge Objects"
+#~ msgstr "&Порядок объектов"
+
+#~ msgid "&Align Objects"
+#~ msgstr "В&ыровнять объекты"
+
+#~ msgid "Te&xt"
+#~ msgstr "&Текст"
+
+#~ msgid "&Align"
+#~ msgstr "&Выравнивание"
+
+#~ msgid "T&ype"
+#~ msgstr "&Тип"
+
+#~ msgid "Spellcheck"
+#~ msgstr "Проверка правописания"
+
+#~ msgid "Autocorrection"
+#~ msgstr "Автоисправление"
+
+#~ msgid "File"
+#~ msgstr "Файл"
+
+#, fuzzy
+#~ msgid "Edit"
+#~ msgstr "&Правка"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Вставить файл"
+
+#~ msgid "Tools"
+#~ msgstr "Элементы"
+
+#~ msgid "Format"
+#~ msgstr "Формат"
+
+#~ msgid "Text"
+#~ msgstr "Текст"
+
+#~ msgid "Slide Show"
+#~ msgstr "Демонстрация"
+
+#~ msgid "Navigation"
+#~ msgstr "Навигация"
+
+#~ msgid "Vertical Alignment"
+#~ msgstr "Вертикальное выравнивание"
+
+#~ msgid "Flip Objects"
+#~ msgstr "Выровнять объекты"
+
+#~ msgid "&Scale to Show the Picture 1:1 In"
+#~ msgstr "&Оригинальный масштаб рисунка (1:1) в"
+
+#~ msgid "Spell Check Result"
+#~ msgstr "Результаты проверки орфографии"
+
+#~ msgid "Slide Layouts"
+#~ msgstr "Разметка слайда"
+
+#~ msgid "Transitions"
+#~ msgstr "Смена слайдов"
+
+#~ msgid "Not implemented in 2.0"
+#~ msgstr "Не реализовано в 2.0"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete page effect"
+#~ msgstr ""
+#~ "Удаление эффекта страницы\n"
+#~ "удаление эффекта страницы"
+
+#~ msgid "Configure KPresenter..."
+#~ msgstr "Настроить Stage..."
+
+#~ msgid "Slide Title"
+#~ msgstr "Заголовок слайда"
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "&Отменить выбор"
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "Выбор"
+
+#~ msgid "New Slide Show %1"
+#~ msgstr "Новая демонстрация %1"
+
+#~ msgid "Are you sure you want to delete the selected slide show?"
+#~ msgstr "Вы действительно хотите удалить выбранную демонстрацию?"
+
+#, fuzzy
+#~ msgid "Confirm action"
+#~ msgstr "Сохранить настройки..."
+
+#, fuzzy
+#~ msgid "Custom Slideshows editor"
+#~ msgstr "Нестандартная демонстрация"
+
+#, fuzzy
+#~ msgid "Customs Slideshows"
+#~ msgstr "Нестандартная демонстрация"
+
+#~ msgid "Available Slides"
+#~ msgstr "Доступные слайды"
+
+#~ msgid "Add Slide"
+#~ msgstr "Добавить слайд"
+
+#~ msgid "Undo"
+#~ msgstr "Отменить"
+
+#, fuzzy
+#~ msgid "Close"
+#~ msgstr "Ц&вета:"
+
+#~ msgid "KPresenter"
+#~ msgstr "KPresenter"
+
+#~ msgid ""
+#~ "Choose a predefined shape by clicking on it then clicking the OK button "
+#~ "(or just double-click on the shape). You can then insert the shape onto "
+#~ "your slide by drawing the area with the mouse pointer."
+#~ msgstr ""
+#~ "Вставьте фигуру, выбрав её в списке и нажав OK или просто дважды щёлкнув "
+#~ "по ней. Кроме того, вы можете вставить фигуру, выбрав её в меню, а затем "
+#~ "щёлкнуть и растянуть область фигуры мышью."
+
+#, fuzzy
+#~ msgid "Page Layouts"
+#~ msgstr "Формат слайда"
+
+#~ msgid "&Page"
+#~ msgstr "&Слайд"
+
+#, fuzzy
+#~ msgid "Click to preview the page effect."
+#~ msgstr "Изменить эффект изображения"
+
+#, fuzzy
+#~ msgid "Spiral Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Snake Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Pentagon Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "RoundRect Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Misc Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Ellipse Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Iris Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Eye Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Hexagon Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Triangle Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Star Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Fan Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Clock Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Double Fan Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Bar Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Slide Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Four Box Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Misc Diagonal Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Barn Vee Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Zig Zag Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Barn Door Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Diagonal Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Vee Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Box Wipe Effect"
+#~ msgstr "&Эффект вывода изображения:"
+
+#, fuzzy
+#~ msgid "Form"
+#~ msgstr "Формат"
+
+#, fuzzy
+#~ msgid "Navigate to:"
+#~ msgstr "Навигация"
+
+#, fuzzy
+#~ msgid "Cover down effect"
+#~ msgstr "Выплывать снизу"
+
+#~ msgid "Insert &new slide:"
+#~ msgstr "Вставить &новый слайд:"
+
+#~ msgid "Use &default template"
+#~ msgstr "Использовать шаблон по &умолчанию"
+
+#~ msgid "Use cu&rrent slide as default"
+#~ msgstr "&Использовать текущий слайд как шаблон по умолчанию"
+
+#~ msgid "Choose di&fferent template"
+#~ msgstr "Выбрать &другой шаблон"
+
+#~ msgid "A&ngle:"
+#~ msgstr "&Угол:"
+
+#~ msgid " °"
+#~ msgstr " °"
+
+#~ msgid "Pie"
+#~ msgstr "Сектор"
+
+#~ msgid "These settings are used in the Insert->Shape->Pie/Arc/Chord menu."
+#~ msgstr "Эти параметры используются для сектора, дуги или хорды."
+
+#~ msgid ""
+#~ "You can choose among three options in the dropdown box: Pie, Arc or Chord."
+#~ msgstr "Выбор типа фигуры: сектор, дуга или хорда."
+
+#~ msgid "&Type:"
+#~ msgstr "&Тип:"
+
+#~ msgid "&Length:"
+#~ msgstr "&Угол:"
+
+#~ msgid "This displays a preview of your choices."
+#~ msgstr "Показ примера оформления."
+
+#~ msgid "Set here the start position."
+#~ msgstr "Начальный угол."
+
+#~ msgid "Set the arc length of your pie."
+#~ msgstr "Угол сегмента окружности."
+
+#~ msgid "Start position:"
+#~ msgstr "Начальный угол:"
+
+#~ msgid "Preview"
+#~ msgstr "Просмотр"
+
+#~ msgid "Channel Intensity"
+#~ msgstr "Интенсивность канала"
+
+#~ msgid "Intensity"
+#~ msgstr "Интенсивность"
+
+#~ msgid "Desaturate"
+#~ msgstr "Обесцветить"
+
+#~ msgid "Contrast"
+#~ msgstr "Контрастность"
+
+#~ msgid "Normalize"
+#~ msgstr "Нормализация"
+
+#~ msgid "Equalize"
+#~ msgstr "Выровнять"
+
+#~ msgid "Threshold"
+#~ msgstr "Порог"
+
+#~ msgid "Solarize"
+#~ msgstr "Выцветание"
+
+#~ msgid "Emboss"
+#~ msgstr "Барельеф"
+
+#~ msgid "Despeckle"
+#~ msgstr "Убрать пятна"
+
+#~ msgid "Charcoal"
+#~ msgstr "Карандаш"
+
+#~ msgid "Noise"
+#~ msgstr "Шум"
+
+#~ msgid "Blur"
+#~ msgstr "Размытие"
+
+#~ msgid "Edge"
+#~ msgstr "Край"
+
+#~ msgid "Implode"
+#~ msgstr "Взрыв"
+
+#~ msgid "Oil Paint"
+#~ msgstr "Масляный рисунок"
+
+#~ msgid "Sharpen"
+#~ msgstr "Повышение резкости"
+
+#~ msgid "Spread"
+#~ msgstr "Рассеивание"
+
+#~ msgid "Shade"
+#~ msgstr "Тень"
+
+#~ msgid "Wave"
+#~ msgstr "Волна"
+
+#~ msgid "Value:"
+#~ msgstr "Яркость:"
+
+#~ msgid " %"
+#~ msgstr " %"
+
+#~ msgid "Color component:"
+#~ msgstr "Компонент цвета:"
+
+#~ msgid "Gray"
+#~ msgstr "Серый"
+
+#~ msgid "All"
+#~ msgstr "Все"
+
+#~ msgid "Color:"
+#~ msgstr "Цвет:"
+
+#~ msgid "Color 1:"
+#~ msgstr "Цвет 1:"
+
+#~ msgid "Color 2:"
+#~ msgstr "Цвет 2:"
+
+#~ msgid "Intensity:"
+#~ msgstr "Интенсивность:"
+
+#~ msgid "This effect has no options."
+#~ msgstr "У этого эффекта нет настроек."
+
+#~ msgid "Factor:"
+#~ msgstr "Фактор:"
+
+#~ msgid "Type:"
+#~ msgstr "Тип:"
+
+#~ msgid "Uniform"
+#~ msgstr "Равномерный"
+
+#~ msgid "Gaussian"
+#~ msgstr "Гауссово"
+
+#~ msgid "Multiplicative Gaussian"
+#~ msgstr "Выборочное Гауссово"
+
+#~ msgid "Impulse"
+#~ msgstr "Импульс"
+
+#~ msgid "LaPlace"
+#~ msgstr "Лаплас"
+
+#~ msgid "Poisson"
+#~ msgstr "Пуассон"
+
+#~ msgid "Radius:"
+#~ msgstr "Радиус:"
+
+#~ msgid "Color Shading"
+#~ msgstr "Затенение цвета"
+
+#~ msgid "Azimuth:"
+#~ msgstr "Азимут:"
+
+#, fuzzy
+#~ msgid "Determines the light source and direction"
+#~ msgstr "Определение источника и направления света"
+
+#~ msgid "Angle:"
+#~ msgstr "Угол:"
+
+#~ msgid "Amplitude:"
+#~ msgstr "Амплитуда:"
+
+#~ msgid "Wave length:"
+#~ msgstr "Длина волны:"
+
+#~ msgid "Pen"
+#~ msgstr "Перо"
+
+#~ msgid "The settings in this tab are used in the Insert->Line menu."
+#~ msgstr ""
+#~ "Параметры на этой вкладке используются для линий, вставляемых из меню "
+#~ "Вставка->Линия."
+
+#~ msgid "Arrow Style"
+#~ msgstr "Стрелки"
+
+#~ msgid ""
+#~ "Set the styles of the beginning and end of your line. For example, you "
+#~ "can choose a square dot at the beginning and an arrow at the end."
+#~ msgstr ""
+#~ "Настройка оформления начала и завершения линии. Например, вы можете "
+#~ "показать квадрат на начале линии и стрелку на конце линии."
+
+#~ msgid "&Begin:"
+#~ msgstr "&Начало линии:"
+
+#~ msgid "&End:"
+#~ msgstr "&Конец линии:"
+
+#~ msgid ""
+#~ "Choose the line style. This can range from No Outline, which will not "
+#~ "draw any lines, to dotted and plain lines."
+#~ msgstr ""
+#~ "Стиль линии. Вы можете не показывать линию, указать простую или штриховую "
+#~ "линию."
+
+#~ msgid "&Width:"
+#~ msgstr "&Толщина:"
+
+#~ msgid "St&yle:"
+#~ msgstr "&Стиль линии:"
+
+#~ msgid ""
+#~ "Set the color of the line. Clicking on the color will bring the standard "
+#~ "KDE Select Color dialog."
+#~ msgstr "Выбор цвета линии."
+
+#~ msgid "C&olor:"
+#~ msgstr "&Цвет:"
+
+#~ msgid " pt"
+#~ msgstr " пт"
+
+#~ msgid "Rect"
+#~ msgstr "Прямоугольник"
+
+#~ msgid "All these settings are used in the Insert->Shape->Rectangle menu."
+#~ msgstr "Эти параметры используются для прямоугольника."
+
+#, fuzzy
+#~ msgid "Vertical declination:"
+#~ msgstr "Скругление по вертикали:"
+
+#, fuzzy
+#~ msgid "Horizontal declination:"
+#~ msgstr "Скругление по горизонтали:"
+
+#~ msgid "Set the horizontal declination."
+#~ msgstr "Скругление вершин по горизонтали."
+
+#~ msgid "Set the vertical declination."
+#~ msgstr "Скругление вершин по вертикали."
+
+#~ msgid ""
+#~ "You can choose whether or not to keep the same declination for both "
+#~ "vertical and horizontal using this button."
+#~ msgstr ""
+#~ "Здесь вы можете настроить скругление вершин прямоугольника отдельно по "
+#~ "вертикали и горизонтали."
+
+#~ msgid "Polygon"
+#~ msgstr "Обычный"
+
+#~ msgid ""
+#~ "These settings are used in the Insert->Shape->Convex/Concave Polygon menu."
+#~ msgstr "Эти параметры используются для многоугольника."
+
+#~ msgid "You can choose Polygon or Convex/Concave as a type."
+#~ msgstr "Выбор типа многоугольника."
+
+#~ msgid "Set here the number of corners of the polygon."
+#~ msgstr "Количество вершин многоугольника."
+
+#~ msgid "&Sharpness:"
+#~ msgstr "&Заострённость вершин:"
+
+#~ msgid "Increase or decrease the sharpness of the polygon."
+#~ msgstr "Заострённость вершин."
+
+#~ msgid "Brush"
+#~ msgstr "Фон"
+
+#~ msgid "&Style:"
+#~ msgstr "&Стиль:"
+
+#~ msgid "Choose the style or the pattern."
+#~ msgstr "Стиль заливки."
+
+#~ msgid ""
+#~ "Choose the color (white is the default). Clicking on the color will "
+#~ "display the standard KDE color chooser dialog."
+#~ msgstr "Выбор цвета (по умолчанию используется белый цвет)."
+
+#~ msgid "&Preview"
+#~ msgstr "&Просмотр"
+
+#~ msgid "&Effect:"
+#~ msgstr "&Эффект:"
+
+#~ msgid "&Speed:"
+#~ msgstr "&Скорость смены слайдов:"
+
+#~ msgid "So&und effect"
+#~ msgstr "&Проигрывать звук"
+
+#, fuzzy
+#~ msgid "&File:"
+#~ msgstr "&Файл:"
+
+#~ msgid "Automatic &transition to the next slide after:"
+#~ msgstr "Переходить &на следующий слайд после:"
+
+#~ msgid "Gradient"
+#~ msgstr "Градиент"
+
+#~ msgid "Gradient:"
+#~ msgstr "Градиент:"
+
+#~ msgid "X-fac&tor:"
+#~ msgstr "Горизонтальное &смещение:"
+
+#~ msgid "Un&balanced:"
+#~ msgstr "&Настроить градиент:"
+
+#~ msgid "&Y-factor:"
+#~ msgstr "&Вертикальное смещение:"
+
+#~ msgid "Margin"
+#~ msgstr "Граница"
+
+#~ msgid "Margins"
+#~ msgstr "Границы"
+
+#~ msgid "S&ynchronize changes"
+#~ msgstr "&Синхронизировать изменения"
+
+#~ msgid "General"
+#~ msgstr "Общие"
+
+#~ msgid "Na&me:"
+#~ msgstr "&Имя:"
+
+#~ msgid "Protect si&ze and position"
+#~ msgstr "&Заблокировать изменение размеров и перемещение"
+
+#~ msgid "Keep &aspect ratio"
+#~ msgstr "&Сохранять пропорции"
+
+#~ msgid "Position"
+#~ msgstr "Положение"
+
+#~ msgid "Shadow"
+#~ msgstr "Тень"
+
+#~ msgid "Color && Distance"
+#~ msgstr "Цвет и смещение"
+
+#~ msgid "Distance:"
+#~ msgstr "Смещение:"
+
+#, fuzzy
+#~ msgid "Orientation"
+#~ msgstr "Презентация"
+
+#~ msgid "Picture"
+#~ msgstr "Рисунок"
+
+#~ msgid "Depth"
+#~ msgstr "Глубина"
+
+#~ msgid "&1 bit color mode"
+#~ msgstr "Чёрно-белый (&1 бит)"
+
+#~ msgid "&8 bit color mode"
+#~ msgstr "256 цветов (&8 бит)"
+
+#~ msgid "1&6 bit color mode"
+#~ msgstr "65 тысяч цветов (1&6 бит)"
+
+#~ msgid "&32 bit color mode"
+#~ msgstr "4 млн. цветов (&32 бита)"
+
+#~ msgid "&Default color mode"
+#~ msgstr "&Режим цвета по умолчанию"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Conv&ert from RGB image to BRG image"
+#~ msgstr "П&реобразовать изображение RGB в BRG"
+
+#~ msgid "Gra&yscale"
+#~ msgstr "Оттенки &серого"
+
+#~ msgid "&Brightness:"
+#~ msgstr "&Яркость:"
+
+#, fuzzy
+#~ msgid "&Qt::DockLeft:"
+#~ msgstr "&Слева:"
+
+#, fuzzy
+#~ msgid "Qt::Orientation"
+#~ msgstr "Презентация"
+
+#~ msgid "Use slide master background"
+#~ msgstr "Фон из шаблона слайда"
+
+#~ msgid "Background type:"
+#~ msgstr "Тип фона:"
+
+#~ msgid "Color/Gradient"
+#~ msgstr "Цвет/Градиент"
+
+#~ msgid "Plain"
+#~ msgstr "Сплошная заливка"
+
+#~ msgid "Diagonal Gradient 1"
+#~ msgstr "Диагональный градиент 1"
+
+#~ msgid "Diagonal Gradient 2"
+#~ msgstr "Диагональный градиент 2"
+
+#~ msgid "Circle Gradient"
+#~ msgstr "Эллиптический градиент"
+
+#~ msgid "Rectangle Gradient"
+#~ msgstr "Прямоугольный градиент"
+
+#~ msgid "PipeCross Gradient"
+#~ msgstr "Крестообразный градиент"
+
+#~ msgid "Pyramid Gradient"
+#~ msgstr "Пирамидальный градиент"
+
+#~ msgid "Unbalanced"
+#~ msgstr "Настроить градиент"
+
+#~ msgid "X-factor:"
+#~ msgstr "Горизонтальное смещение:"
+
+#~ msgid "Y-factor:"
+#~ msgstr "Вертикальное смещение:"
+
+#~ msgid "View mode:"
+#~ msgstr "Режим просмотра:"
+
+#~ msgid "Scaled"
+#~ msgstr "Масштабировано"
+
+#~ msgid "Apply &Global"
+#~ msgstr "Применить ко &всем"
+
+#~ msgid "&Reset"
+#~ msgstr "&Сбросить"
+
+#~ msgid "Single Color"
+#~ msgstr "Сплошной цвет"
+
+#~ msgid "Transparent"
+#~ msgstr "Прозрачный"
+
+#~ msgid ""
+#~ "You can choose between Single Color, Gradient or Transparent as the type."
+#~ msgstr ""
+#~ "Здесь вы можете выбрать тип фона: прозрачный, сплошной цвет или градиент."
+
+#~ msgid "%1% Fill Pattern"
+#~ msgstr "%1% заливки"
+
+#~ msgid "Crossing Lines"
+#~ msgstr "Решётка"
+
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "Диагональные линии ( / )"
+
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "Диагональные линии ( \\ )"
+
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "Диагональная решётка"
+
+#~ msgid "Diagonal 2"
+#~ msgstr "Диагональный градиент 2"
+
+#~ msgid "PipeCross"
+#~ msgstr "Крестообразный градиент"
+
+#~ msgid "Pyramid"
+#~ msgstr "Пирамидальный градиент"
+
+#~ msgid ""
+#~ "The object you are trying to select belongs to the master slide. Editing "
+#~ "the object can only be done on the master slide.\n"
+#~ "Go there now?"
+#~ msgstr ""
+#~ "Выбранный объект находится в шаблоне слайда и может быть изменён только в "
+#~ "режиме редактирования шаблона.\n"
+#~ "Изменить шаблон?"
+
+#~ msgid "Resize Object Up"
+#~ msgstr "Растянуть вверх"
+
+#~ msgid "Resize Object Down"
+#~ msgstr "Растянуть вниз"
+
+#~ msgid "Resize Object Left"
+#~ msgstr "Растянуть влево"
+
+#~ msgid "Resize Object Right"
+#~ msgstr "Растянуть вправо"
+
+#~ msgid "Resize Object Left && Up"
+#~ msgstr "Растянуть влево и вверх"
+
+#~ msgid "Resize Object Left && Down"
+#~ msgstr "Растянуть влево и вниз"
+
+#~ msgid "Resize Object Right && Up"
+#~ msgstr "Растянуть вправо и вверх"
+
+#~ msgid "Resize Object Right && Down"
+#~ msgstr "Растянуть вправо и вниз"
+
+#~ msgid ""
+#~ "Read-only content cannot be changed. No modifications will be accepted."
+#~ msgstr "Защищённое от изменения содержимое не может редактироваться."
+
+#~ msgid "&Continue"
+#~ msgstr "&Продолжить"
+
+#~ msgid "&Drawing Mode"
+#~ msgstr "Режим &рисования"
+
+#~ msgid "&Goto Slide..."
+#~ msgstr "&Перейти на слайд..."
+
+#~ msgid "&End"
+#~ msgstr "&Конец"
+
+#~ msgid "Change Text Font"
+#~ msgstr "Шрифт текста"
+
+#~ msgid "Set Text Background Color"
+#~ msgstr " Цвет фона"
+
+#~ msgid "Make Text Bold"
+#~ msgstr "Выделить полужирным"
+
+#~ msgid "Make Text Italic"
+#~ msgstr "Выделить курсивом"
+
+#~ msgid "Underline Text"
+#~ msgstr "Выделить подчёркиванием"
+
+#~ msgid "Set Text Font"
+#~ msgstr "Выбрать шрифт"
+
+#~ msgid "Change Text Size"
+#~ msgstr "Изменить размер текста"
+
+#~ msgid "Set Text Subscript"
+#~ msgstr "Подстрочный"
+
+#~ msgid "Set Text Superscript"
+#~ msgstr "Надстрочный"
+
+#~ msgid "Apply Default Format"
+#~ msgstr "Применить формат по умолчанию"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "Увеличить размер шрифта"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "Уменьшить размер шрифта"
+
+#~ msgid "Set Text Align"
+#~ msgstr "Выравнивание"
+
+#~ msgid "Change Tabulators"
+#~ msgstr "Изменить позиции табуляции"
+
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "Увеличить отступ абзаца"
+
+#~ msgid "Decrease Paragraph Depth"
+#~ msgstr "Уменьшить отступ абзаца"
+
+#~ msgid "Change First Line Indent"
+#~ msgstr "Изменить красную строку"
+
+#~ msgid "Change Left Indent"
+#~ msgstr "По левому краю"
+
+#~ msgid "Change Right Indent"
+#~ msgstr "По правому краю"
+
+#~ msgid "Printing..."
+#~ msgstr "Печать..."
+
+#~ msgid "Scale to Original Size"
+#~ msgstr "Вернуть оригинальный размер"
+
+#~ msgid "Scale Picture to Be Shown 1:1 in Presentation Mode"
+#~ msgstr ""
+#~ "Показывать рисунок в оригинальном масштабе (1:1) в режиме презентации"
+
+#~ msgid "Extend Text Contents to Height"
+#~ msgstr "Выровнять содержимое по высоте объекта"
+
+#~ msgid "Extend Text to Contents"
+#~ msgstr "Выровнять границы объекта по содержимому"
+
+#~ msgid "Align Objects Left"
+#~ msgstr "По левому краю"
+
+#~ msgid "Align Objects Top"
+#~ msgstr "По верхнему краю"
+
+#~ msgid "Align Objects Right"
+#~ msgstr "По правому краю"
+
+#~ msgid "Align Objects Bottom"
+#~ msgstr "По нижнему краю"
+
+#~ msgid "Align Objects Centered (horizontal)"
+#~ msgstr "По центру (горизонтально)"
+
+#~ msgid "Align Objects Center/Vertical"
+#~ msgstr "По центру (вертикально)"
+
+#~ msgid "Close Object"
+#~ msgstr "Закрыть объект"
+
+#~ msgid "Closed Freehand"
+#~ msgstr "Закрытая кривая"
+
+#~ msgid "Closed Polyline"
+#~ msgstr "Закрытая ломаная"
+
+#~ msgid "Closed Cubic Bezier Curve"
+#~ msgstr "Закрытая кубическая кривая Безье"
+
+#~ msgid "Closed Quadric Bezier Curve"
+#~ msgstr "Закрытая квадратичная кривая Безье"
+
+#~ msgid "Modify Slide Transition For All Pages"
+#~ msgstr "Изменить смену слайдов для всех страниц"
+
+#~ msgid "Interface"
+#~ msgstr "Внешний вид"
+
+#~ msgid "Spelling"
+#~ msgstr "Орфография"
+
+#~ msgid "Document"
+#~ msgstr "Документ"
+
+#~ msgid "Document Settings"
+#~ msgstr "Настройки документа"
+
+#~ msgid "Default Tools Settings"
+#~ msgstr "Формат по умолчанию"
+
+#~ msgid "Paths"
+#~ msgstr "Папки"
+
+#~ msgid "Path Settings"
+#~ msgstr "Папки"
+
+#~ msgid "Change Config"
+#~ msgstr "Изменить параметры"
+
+#~ msgid "Show rulers"
+#~ msgstr "Показать линейки"
+
+#~ msgid ""
+#~ "When checked, both vertical and horizontal rulers are shown on the "
+#~ "KPresenter slide (this is the default). When unchecked, the rulers are "
+#~ "not shown on any slide."
+#~ msgstr ""
+#~ "По умолчанию сверху и слева от слайда показываются линейки. Вы можете "
+#~ "отключить их показ этим флажком."
+
+#~ msgid "Toggle the statusbar, which is shown by default."
+#~ msgstr "Включить или отключить показ строки состояния."
+
+#~ msgid "Number of recent files:"
+#~ msgstr "Количество недавних документов:"
+
+#~ msgid ""
+#~ "Set the number of recent files which will be opened using the File->Open "
+#~ "Recent menu. Default is to remember 10 filenames. The maximum you can set "
+#~ "is 20 and the minimum is 1."
+#~ msgstr ""
+#~ "Установить количество недавних документов, показываемых в меню Файл-"
+#~ ">Недавние документы. По умолчанию будут показаны 10 последних документов. "
+#~ "Вы можете настроить показ от 1 до 20 недавних документов."
+
+#~ msgid "Text indentation depth:"
+#~ msgstr "Отступ:"
+
+#~ msgid ""
+#~ "This setting is used by Increase Depth and Decrease Depth menu items (in "
+#~ "the Text menu) to change the indentation depth. The Default is 1 "
+#~ "centimeter."
+#~ msgstr ""
+#~ "Этот параметр задаёт отступ текста, который вы можете изменить через меню "
+#~ "Текст. Значение по умолчанию - 1 см."
+
+#~ msgid "Background object color:"
+#~ msgstr "Цвет фона объекта:"
+
+#~ msgid ""
+#~ "Change the background color of the text box. The background is white by "
+#~ "default. If you have a dark background color and you want to put some "
+#~ "white text on it, you can change the color of the text box so that you "
+#~ "can see what you are typing. When you have finished, the area around the "
+#~ "text will revert to the background color. The Defaults button restores "
+#~ "the original settings."
+#~ msgstr ""
+#~ "Выбор цвета фона объектов. По умолчанию цвет фона - белый. Рекомендуем "
+#~ "назначить цвету текста и фона контрастные цвета для того, чтобы текст был "
+#~ "хорошо виден на фоне. Например, на тёмном фоне будет лучше виден светлый "
+#~ "цвет текста и наоборот."
+
+#~ msgid "Grid color:"
+#~ msgstr "Цвет сетки:"
+
+#~ msgid "Here you can change the grid color, which is black by default."
+#~ msgstr "Выбор цвета сетки. По умолчанию используется чёрный цвет."
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Глубина отмен и повторений:"
+
+#~ msgid ""
+#~ "Set the number of actions you can undo and redo (how many actions "
+#~ "KPresenter keeps in its Undo buffer). This ranges from a minimum of 10 to "
+#~ "a maximum of 60 (the default is 30). Once the number of actions reaches "
+#~ "the number set here, earlier actions will be forgotten."
+#~ msgstr ""
+#~ "Здесь вы можете задать количество шагов отмены или повторений, которые "
+#~ "поддерживает приложение. Вы можете указать от 10 до 60 шагов (значение по "
+#~ "умолчанию - 30). Если вы совершили больше изменений, чем указано в этом "
+#~ "поле, самые ранние изменения будет невозможно отменить."
+
+#~ msgid "Display links"
+#~ msgstr "Показывать ссылки"
+
+#~ msgid ""
+#~ "When you want to include a link in your slide, you can use the Insert-"
+#~ ">Link... menu, which allows you to insert URL, mail or file links. If the "
+#~ "option Display links is checked, all links will be active and displayed "
+#~ "in a different color (this is the default behavior). If the option is "
+#~ "unchecked, the links will be inactive and the same color as the text. "
+#~ "This affects both the edited slides and the slide show."
+#~ msgstr ""
+#~ "Для того, чтобы вставить ссылку на слайд, используйте пункт меню Вставка-"
+#~ ">Ссылка. Ссылка может указывать на ресурс Интернета, адрес электронной "
+#~ "почты или на путь до локального файла. Если этот параметр включен "
+#~ "(поведение по умолчанию), все ссылки на слайдах будут активны и показаны "
+#~ "другим цветом. Если параметр отключен, ссылки не будут никак выделены и "
+#~ "вы не сможете перейти по ним. Этот параметр используется как в режиме "
+#~ "правки, так и в режиме презентации."
+
+#~ msgid "&Underline all links"
+#~ msgstr "&Подчёркивать ссылки"
+
+#~ msgid ""
+#~ "If this is checked, all links will be underlined (this is the default). "
+#~ "If it is not checked, the links will not be underlined."
+#~ msgstr ""
+#~ "При включении этого параметра все ссылки на слайдах будут подчёркнуты."
+
+#~ msgid "Display comments"
+#~ msgstr "Показывать комментарии"
+
+#~ msgid ""
+#~ "Comments are inserted in the text at the cursor using the Insert-"
+#~ ">Comment... menu. Comments can only be viewed in edit mode and not in the "
+#~ "slide show. If this option is checked (default) then each comment will be "
+#~ "shown as a small yellow rectangle. You can then right-click on them to "
+#~ "edit them, remove them or copy the text."
+#~ msgstr ""
+#~ "Вы можете вставить комментарии на слайд через пункт меню Вставка-"
+#~ ">Комментарий. При включении этого параметра (поведение по умолчанию) они "
+#~ "будут показаны только в режиме правки в виде небольшого жёлтого "
+#~ "прямоугольника. Щёлкнув правой кнопкой мыши по этому значку, вы можете "
+#~ "просмотреть и изменить текст комментария, а также удалить его."
+
+#~ msgid "Display field code"
+#~ msgstr "Показывать код полей"
+
+#~ msgid ""
+#~ "In editor mode (not in slide show) this option will display all the "
+#~ "variable codes as well as Link at links location. This is very useful to "
+#~ "see what variable is displayed. Variables are inserted using the Insert -"
+#~ "> Variable menu."
+#~ msgstr ""
+#~ "В режиме правки (не в демонстрации) этот параметр задаёт показ кодов "
+#~ "полей (например, адресов ссылок). Переменные можно вставить в меню "
+#~ "Вставка->Переменная."
+
+#~ msgid "Print slide notes"
+#~ msgstr "Печатать примечания к слайдам"
+
+#~ msgid ""
+#~ "If checked, all notes will be printed on paper. The notes will all be "
+#~ "printed separately on the last page, from the first slide to the last and "
+#~ "finally the Master Page Note. You can see the notes for each slide using "
+#~ "the View->Show notebar menu."
+#~ msgstr ""
+#~ "При включении этого параметра будут распечатаны все примечания к слайдам "
+#~ "в порядке следования слайдов и в самом конце - примечания к шаблону. Вы "
+#~ "можете задать примечания на панели Вид->Показать панель примечаний."
+
+#~ msgid "Grid"
+#~ msgstr "Сетка"
+
+#~ msgid ""
+#~ "Set the space in millimeters between two horizontal points on the grid. "
+#~ "Default is 5 millimeters."
+#~ msgstr ""
+#~ "Размер горизонтального шага сетки в миллиметрах. По умолчанию - 5 мм."
+
+#~ msgid "Vertical grid size:"
+#~ msgstr "Вертикальный шаг сетки:"
+
+#~ msgid ""
+#~ "Set the space in millimeters between two vertical points on the grid. "
+#~ "Default is 5 millimeters."
+#~ msgstr "Размер вертикального шага сетки в миллиметрах. По умолчанию - 5 мм."
+
+#~ msgid "Change Display Link Command"
+#~ msgstr "Изменить показ ссылок"
+
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "Изменить показ кода полей"
+
+#~ msgid "Document Defaults"
+#~ msgstr "Настройки документа по умолчанию"
+
+#~ msgid "Default font:"
+#~ msgstr "Шрифт по умолчанию:"
+
+#~ msgid "Choose..."
+#~ msgstr "Выбор..."
+
+#~ msgid ""
+#~ "Click here if you want to set a new font. The KDE default Select Font "
+#~ "dialog will then be displayed."
+#~ msgstr "Нажмите на эту кнопку чтобы выбрать другой шрифт."
+
+#~ msgid "Global language:"
+#~ msgstr "Язык по умолчанию:"
+
+#~ msgid ""
+#~ "Use this drop down box to determine the default language for the "
+#~ "document. This setting is used by the hyphenation and spelling tools."
+#~ msgstr ""
+#~ "Выберите язык из выпадающего списка. Он будет использован для проверки "
+#~ "орфографии и расстановки переносов в презентациях."
+
+#~ msgid ""
+#~ "Check this box if you want KPresenter to automatically hyphenate long "
+#~ "words when it determines the word wrap in text frames. This is not set by "
+#~ "default."
+#~ msgstr ""
+#~ "При включении этого параметра слишком длинные слова не вмещающиеся в "
+#~ "текстовые врезки будут перенесены по словам. По умолчанию этот параметр "
+#~ "отключен."
+
+#~ msgid "Create backup file"
+#~ msgstr "Создавать резервную копию"
+
+#~ msgid ""
+#~ "If checked, this will create a .<name>.kpr.autosave.kpr in the folder "
+#~ "where your file is. This backup file can then be used in case of a "
+#~ "problem.\n"
+#~ "The backup file is updated every time you save your document or every "
+#~ "time there is an autosave."
+#~ msgstr ""
+#~ "Если этот параметр включен, при открытии документа в папке документа "
+#~ "будет создана резервная копия .<name>.kpr.autosave.kpr. Резервная копия "
+#~ "будет обновляться при каждом сохранении вручную или при автосохранении."
+
+#~ msgid "Autosave (min):"
+#~ msgstr "Автосохранение (мин.):"
+
+#~ msgid "No autosave"
+#~ msgstr "Без автосохранения"
+
+#~ msgid "min"
+#~ msgstr "мин"
+
+#~ msgid ""
+#~ "You can use this to adjust how often KPresenter saves a temporary file. "
+#~ "If you set this value to No autosave, KPresenter will not autosave. You "
+#~ "can adjust the autosave from 1 to 60 minutes."
+#~ msgstr ""
+#~ "Здесь вы можете задать насколько часто будет сохраняться презентация. Вы "
+#~ "можете уменьшить интервал до 0 - при этом автосохранение будет отключено. "
+#~ "Доступный период автосохранения - от 1 до 60 минут."
+
+#~ msgid "Starting page number:"
+#~ msgstr "Номер первого слайда:"
+
+#~ msgid ""
+#~ "Here you can change the number for the first page. It is set to 1 by "
+#~ "default.\n"
+#~ "Tip: this is helpful if you have split a single document into multiple "
+#~ "files."
+#~ msgstr ""
+#~ "Здесь вы можете указать номер первого слайда. По умолчанию нумерация "
+#~ "слайдов начинается с 1.\n"
+#~ "Примечание: этот параметр удобно применять. когда ваша презентация "
+#~ "разбита на несколько файлов."
+
+#~ msgid "Tab stop:"
+#~ msgstr "Интервал табуляции:"
+
+#~ msgid ""
+#~ "Each KPresenter document has a default set of tab stops. If you add tab "
+#~ "stops to your document, the newly added tab stops override the default "
+#~ "ones. You can use this text box to define the spacing between default tab "
+#~ "stops. As an example, if you enter 1.5 in this text box, and the unit of "
+#~ "measurement is in centimeters, the first default tab stop will be located "
+#~ "1.5 cm to the right of the frame's left-hand margin. The second default "
+#~ "tab stop will be located at 3 cm from the left-hand margin, and so on."
+#~ msgstr ""
+#~ "Каждый документ KPresenter содержит список позиций табуляции. Если вы "
+#~ "поменяете значение этого параметра, все заданные вручную позиции "
+#~ "табуляции будут сброшены до значений указанного интервала. Интервал "
+#~ "задаётся в сантиметрах. Так, указав интервал табуляции в 1,5 нажатие "
+#~ "клавиши Tab переносит курсор на 1,5 см. от левого края, следующее нажатие "
+#~ "- на 3 см. и так далее."
+
+#~ msgid "Cursor"
+#~ msgstr "Курсор"
+
+#~ msgid "Cursor in protected area"
+#~ msgstr "В защищённой врезке"
+
+#~ msgid ""
+#~ "When this box is checked and you click in a protected frame within your "
+#~ "document, a cursor will appear. When this box is unchecked, and you click "
+#~ "in a protected frame, no cursor will be visible."
+#~ msgstr ""
+#~ "При включении этого параметра курсор для ввода текста может быть помещён "
+#~ "в защищённой врезке. Если параметр выключен, и вы нажали мышью на "
+#~ "защищённой врезке, курсор не будет показан."
+
+#~ msgid "Direct insert cursor"
+#~ msgstr "В пустом месте"
+
+#~ msgid ""
+#~ "When this box is checked, you can select a section of text using your "
+#~ "mouse. Move the mouse to a new area in your document and click once with "
+#~ "the middle mouse button and a copy of the selected text will be copied "
+#~ "and pasted to the new location in the document.\n"
+#~ "When this box is unchecked, in order to copy text from one section to "
+#~ "another, you must select the text, manually copy the text to the "
+#~ "clipboard, then manually paste the text in the new location."
+#~ msgstr ""
+#~ "Если этот параметр включен, вы можете поместить курсор в любом месте "
+#~ "слайда (даже вне врезок)."
+
+#~ msgid "Change Starting Page Number"
+#~ msgstr "Устанавливает номер первого слайда"
+
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "Интервал табуляции"
+
+#~ msgid "Outl&ine"
+#~ msgstr "&Линия"
+
+#~ msgid "&Fill"
+#~ msgstr "&Заливка"
+
+#~ msgid "&Rectangle"
+#~ msgstr "&Прямоугольник"
+
+#~ msgid "Polygo&n"
+#~ msgstr "Многоугол&ьник"
+
+#~ msgid "&Pie"
+#~ msgstr "&Сектор"
+
+#~ msgid "Type"
+#~ msgstr "Описание"
+
+#~ msgid "Picture Path"
+#~ msgstr "Рисунки"
+
+#~ msgid "Backup Path"
+#~ msgstr "Резервные копии"
+
+#~ msgid ""
+#~ "There are two paths that are set here: the Backup Path and the Picture "
+#~ "Path. The Backup path is the folder where your backup files are saved and "
+#~ "the Picture Path is the folder where your pictures are saved."
+#~ msgstr ""
+#~ "Вы должны указать два пути: расположение резервных копий и расположение "
+#~ "рисунков. В этих папках будут сохраняться соответственно резервные копии "
+#~ "презентаций и рисунки."
+
+#~ msgid "Modify Path..."
+#~ msgstr "Выбрать..."
+
+#~ msgid ""
+#~ "When you click this button, a small dialog will appear and, if Default "
+#~ "path is unchecked, you can either enter a path yourself or choose one "
+#~ "using the standard KDE file dialog."
+#~ msgstr ""
+#~ "При нажатии на эту кнопку появится диалог, в котором вы можете указать "
+#~ "путь к соответствующей папке."
+
+#~ msgid "&Add..."
+#~ msgstr "&Добавить..."
+
+#~ msgid "&Modify..."
+#~ msgstr "&Изменить..."
+
+#, fuzzy
+#~ msgid "&Remove"
+#~ msgstr "Удалить ссылку"
+
+#~ msgid "Test"
+#~ msgstr "Проверка"
+
+#~ msgid "(Copy %1)"
+#~ msgstr "(Копировать %1)"
+
+#~ msgid "Name:"
+#~ msgstr "Имя:"
+
+#~ msgid "Existing slides:"
+#~ msgstr "Доступные слайды:"
+
+#~ msgid "Custom Slide Show name is already used."
+#~ msgstr "Нестандартная демонстрация уже запущена."
+
+#~ msgid "You did not select any slides. Please select some slides."
+#~ msgstr "Не выбран ни один слайд. Укажите несколько слайдов."
+
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr ""
+#~ "Ошибка чтения документа OASIS OpenDocument. Не найден тег office:body."
+
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr ""
+#~ "Ошибка чтения документа OASIS OpenDocument. Нет тегов внутри тега office:"
+#~ "body."
+
+#~ msgid ""
+#~ "This document is not a presentation, but a %1. Please try opening it with "
+#~ "the appropriate application."
+#~ msgstr ""
+#~ "Документ '%1' не содержит презентацию. Откройте его в соответствующем ему "
+#~ "приложении."
+
+#~ msgid ""
+#~ "Invalid OASIS OpenDocument file. No master-style found inside office:"
+#~ "master-styles."
+#~ msgstr ""
+#~ "Ошибка чтения документа OASIS OpenDocument. Нет информации в теге office:"
+#~ "master-styles."
+
+#, fuzzy
+#~ msgid ""
+#~ "You do not appear to have PERL installed.\n"
+#~ "It is needed to convert this document.\n"
+#~ "Please install PERL and try again."
+#~ msgstr ""
+#~ "Похоже, PERL не установлен.\n"
+#~ "Он необходим для конвертации этого документа.\n"
+#~ "Установите PERL и попробуйте снова."
+
+#~ msgid ""
+#~ "parsing error in the main document (converted from an old KPresenter "
+#~ "format) at line %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "ошибка обработки основного документа (преобразованного из старого формата "
+#~ "KPresenter) в строке %1, столбце %2\n"
+#~ "Сообщение об ошибке: %3"
+
+#~ msgid "Insert Part Object"
+#~ msgstr "Вставить объект"
+
+#~ msgid "Invalid document, DOC tag missing."
+#~ msgstr "Неверный формат документа: отсутствует тег DOC."
+
+#~ msgid ""
+#~ "Invalid document, expected mimetype application/x-kpresenter or "
+#~ "application/vnd.kde.kpresenter, got %1"
+#~ msgstr ""
+#~ "Неверный формат документа. Ожидался тип MIME application/x-kpresenter или "
+#~ "application/vnd.kde.kpresenter, был получен %1"
+
+#~ msgid "Paste Objects"
+#~ msgstr "Вставить объекты"
+
+#~ msgid "Set New Options"
+#~ msgstr "Применить новые настройки"
+
+#~ msgid "Insert File"
+#~ msgstr "Вставить файл"
+
+#~ msgid "Insert New Slide"
+#~ msgstr "Вставить новый слайд"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Дублировать слайд"
+
+#~ msgid "Number of copies:"
+#~ msgstr "Количество копий:"
+
+#~ msgid "Rotation angle:"
+#~ msgstr "Угол вращения:"
+
+#~ msgid "Increase width:"
+#~ msgstr "Увеличить ширину:"
+
+#~ msgid "Increase height:"
+#~ msgstr "Увеличить высоту:"
+
+#~ msgid "Move X:"
+#~ msgstr "Переместить по горизонтали:"
+
+#~ msgid "Move Y:"
+#~ msgstr "Переместить по вертикали:"
+
+#~ msgid "Appear"
+#~ msgstr "Появление"
+
+#~ msgid "Order of appearance:"
+#~ msgstr "Порядок появления: "
+
+#~ msgid "Effect (appearing):"
+#~ msgstr "Эффект появления: "
+
+#~ msgid "Come From Right/Top"
+#~ msgstr "Выплывать с верхнего левого угла"
+
+#~ msgid "Come From Right/Bottom"
+#~ msgstr "Выплывать с нижнего правого угла"
+
+#~ msgid "Come From Left/Top"
+#~ msgstr "Выплывать с верхнего левого угла"
+
+#~ msgid "Come From Left/Bottom"
+#~ msgstr "Выплывать с нижнего левого угла"
+
+#~ msgid "Wipe From Left"
+#~ msgstr "Раскрываться слева"
+
+#~ msgid "Wipe From Right"
+#~ msgstr "Раскрываться справа"
+
+#~ msgid "Wipe From Top"
+#~ msgstr "Раскрываться сверху"
+
+#~ msgid "Wipe From Bottom"
+#~ msgstr "Раскрываться снизу"
+
+#~ msgid "Speed:"
+#~ msgstr "Скорость:"
+
+#~ msgid "Medium"
+#~ msgstr "Средне"
+
+#~ msgid "Fast"
+#~ msgstr "Быстро"
+
+#~ msgid "Effect (object specific):"
+#~ msgstr "Эффекты показа объекта: "
+
+#~ msgid "Paragraph After Paragraph"
+#~ msgstr "Абзац за абзацем"
+
+#~ msgid "Timer of the object:"
+#~ msgstr "Время показа объекта:"
+
+#~ msgid "File name:"
+#~ msgstr "Файл: "
+
+#~ msgid "Play"
+#~ msgstr "Проиграть звук"
+
+#~ msgid "Disappear"
+#~ msgstr "Исчезновение"
+
+#~ msgid "Order of disappearance:"
+#~ msgstr "Порядок исчезновения: "
+
+#~ msgid "Effect (disappearing):"
+#~ msgstr "Эффект исчезновения: "
+
+#~ msgid "Disappear to Right"
+#~ msgstr "Исчезать вправо"
+
+#~ msgid "Disappear to Left"
+#~ msgstr "Исчезать влево"
+
+#~ msgid "Disappear to Top"
+#~ msgstr "Исчезать вверх"
+
+#~ msgid "Disappear to Bottom"
+#~ msgstr "Исчезать вниз"
+
+#~ msgid "Disappear to Right/Top"
+#~ msgstr "Исчезать в верхний правый угол"
+
+#~ msgid "Disappear to Right/Bottom"
+#~ msgstr "Исчезать в нижний правый угол"
+
+#~ msgid "Disappear to Left/Top"
+#~ msgstr "Исчезать в верхний левый угол"
+
+#~ msgid "Disappear to Left/Bottom"
+#~ msgstr "Исчезать в нижний левый угол"
+
+#~ msgid "Wipe to Left"
+#~ msgstr "Сворачиваться влево"
+
+#~ msgid "Wipe to Right"
+#~ msgstr "Сворачиваться вправо"
+
+#~ msgid "Wipe to Top"
+#~ msgstr "Сворачиваться вверх"
+
+#~ msgid "Wipe to Bottom"
+#~ msgstr "Сворачиваться вниз"
+
+#~ msgid "Assign Object Effects"
+#~ msgstr "Применить эффекты к объекту"
+
+#~ msgid "*.%1|%2 Files"
+#~ msgstr "*.%1|Файлы %2"
+
+#~ msgid "All Supported Files"
+#~ msgstr "Все поддерживаемые типы"
+
+#~ msgid "Image Effect"
+#~ msgstr "Эффекта изображения"
+
+#~ msgid "Import Style"
+#~ msgstr "Импорт стиля"
+
+#~ msgid "File name is empty."
+#~ msgstr "Имя файл не указано."
+
+#~ msgid "File is not a KPresenter file!"
+#~ msgstr "Файл не является документом KPresenter!"
+
+#~ msgid ""
+#~ "Please enter the directory where the memory stick presentation should be "
+#~ "saved. Please also enter a title for the slideshow presentation. "
+#~ msgstr ""
+#~ "Укажите папку для сохранения презентации Memory Stick и название "
+#~ "презентации. "
+
+#~ msgid "Path:"
+#~ msgstr "Папка:"
+
+#~ msgid "&Set Colors"
+#~ msgstr "&Цвета"
+
+#~ msgid "Preliminary Slides"
+#~ msgstr "Предварительные слайды"
+
+#~ msgid ""
+#~ "This section allows you to set the colors for the preliminary slides; it "
+#~ "does not affect the presentation in any way, and it is normal to leave "
+#~ "these set to the default."
+#~ msgstr ""
+#~ "Здесь вы можете указать цвета для слайдов. В большинстве случаев лучше "
+#~ "оставить цвета по умолчанию."
+
+#~ msgid "Text color:"
+#~ msgstr "Цвет текста:"
+
+#~ msgid "Background color:"
+#~ msgstr "Цвет фона:"
+
+#~ msgid ""
+#~ "Selecting this button will take you to the KPresenter documentation that "
+#~ "provides more information on how to use the Memory Stick export function. "
+#~ msgstr "Вызов справки об экспорте презентации в формат Memory Stick. "
+
+#~ msgid ""
+#~ "Selecting this button will proceed to generating the presentation in the "
+#~ "special Sony format."
+#~ msgstr "Начать экспорт презентации в специальный формат от компании Sony."
+
+#~ msgid ""
+#~ "Selecting this button will cancel out of the generation of the "
+#~ "presentation, and return to the normal KPresenter view. No files will be "
+#~ "affected."
+#~ msgstr ""
+#~ "Остановить экспорт презентации и вернуться в обычный режим редактирования "
+#~ "презентации. Не будет создан ни один файл."
+
+#~ msgid "Create Memory Stick Slideshow"
+#~ msgstr "Создать презентацию Memory Stick"
+
+#~ msgid ""
+#~ "<qt>The directory <b>%1</b> does not exist.<br>Do you want create it?</qt>"
+#~ msgstr "<qt>Папка <b>%1</b> не существует.<br>Вы хотите создать её?</qt>"
+
+#~ msgid "Directory Not Found"
+#~ msgstr "Папка не найдена"
+
+#~ msgid "Cannot create directory."
+#~ msgstr "Невозможно создать папку."
+
+#~ msgid ""
+#~ "You are about to overwrite an existing index file : %1.\n"
+#~ " Do you want to proceed?"
+#~ msgstr "Заменить файл оглавления %1 ?"
+
+#~ msgid "Create directory structure"
+#~ msgstr "Создать структуру папок"
+
+#~ msgid "Create pictures of the slides"
+#~ msgstr "Создать рисунки слайдов"
+
+#~ msgid "Create index file"
+#~ msgstr "Создавать файл оглавления"
+
+#~ msgid "Change Help Line Position"
+#~ msgstr "Изменить позицию направляющей"
+
+#~ msgid "Position:"
+#~ msgstr "Положение:"
+
+#~ msgid "Add New Help Line"
+#~ msgstr "Добавить направляющую"
+
+#~ msgid "Add New Help Point"
+#~ msgstr "Добавить опорную точку"
+
+#~ msgid "X position:"
+#~ msgstr "Позиция по горизонтали:"
+
+#~ msgid "Y position:"
+#~ msgstr "Позиция по вертикали:"
+
+#~ msgid "Slide Note %1:\n"
+#~ msgstr "Примечание слайда %1:\n"
+
+#~ msgid "Master Page Note:\n"
+#~ msgstr "Примечание к шаблону слайдов:\n"
+
+#~ msgid "Delete Objects"
+#~ msgstr "Удалить"
+
+#~ msgid "Resize"
+#~ msgstr "Изменить размер"
+
+#~ msgid "Group Objects"
+#~ msgstr "Группировать объекты"
+
+#~ msgid "Ungroup Objects"
+#~ msgstr "Разгруппировать объекты"
+
+#~ msgid "Lower Objects"
+#~ msgstr "Переместить ниже"
+
+#~ msgid "Raise Objects"
+#~ msgstr "Переместить выше"
+
+#~ msgid "Insert Line"
+#~ msgstr "Вставить строку"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Вставить прямоугольник"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Вставить эллипс"
+
+#~ msgid "Insert Pie/Arc/Chord"
+#~ msgstr "Вставить сектор (дугу,хорду)"
+
+#~ msgid "Insert Textbox"
+#~ msgstr "Вставить область текста"
+
+#~ msgid "Insert Autoform"
+#~ msgstr "Вставить автофигуру"
+
+#~ msgid "Insert Freehand"
+#~ msgstr "Вставить кривую"
+
+#~ msgid "Insert Polyline"
+#~ msgstr "Вставить ломаную"
+
+#~ msgid "Insert Quadric Bezier Curve"
+#~ msgstr "Вставить квардратичную кривую Безье"
+
+#~ msgid "Insert Cubic Bezier Curve"
+#~ msgstr "Вставить кубическую кривую Безье"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Вставить многоугольник"
+
+#~ msgid "Insert Closed Freehand"
+#~ msgstr "Вставить закрытую кривую"
+
+#~ msgid "Insert Closed Polyline"
+#~ msgstr "Вставить закрытую ломаную"
+
+#~ msgid "Insert Closed Quadric Bezier Curve"
+#~ msgstr "Вставить закрытую квардратичную кривую Безье"
+
+#~ msgid "Insert Closed Cubic Bezier Curve"
+#~ msgstr "Вставить закрытую кубическую кривую Безье"
+
+#~ msgid "Embed Object"
+#~ msgstr "Внедрить объект"
+
+#~ msgid "Change Pixmap"
+#~ msgstr "Изменить изображение"
+
+#~ msgid "Move Objects"
+#~ msgstr "Переместить"
+
+#~ msgid "Change Shadow"
+#~ msgstr "Тень"
+
+#~ msgid "Change Vertical Alignment"
+#~ msgstr "Вертикальное выравнивание"
+
+#~ msgid "No Outline"
+#~ msgstr "нет"
+
+#~ msgid "Square"
+#~ msgstr "квадрат"
+
+#~ msgid "Line Arrow"
+#~ msgstr "обычная"
+
+#~ msgid "Dimension Line"
+#~ msgstr "размерная линия"
+
+#~ msgid "Double Line Arrow"
+#~ msgstr "двойная"
+
+#~ msgid "&General"
+#~ msgstr "&Общие"
+
+#~ msgid ""
+#~ "<p>This dialog allows you to configure how the slideshow will be "
+#~ "displayed, including whether the slides are automatically sequenced or "
+#~ "manually controlled, and also allows you to configure a <em>drawing pen</"
+#~ "em> that can be used during the display of the presentation to add "
+#~ "additional information or to emphasise particular points.</p>"
+#~ msgstr ""
+#~ "<p>Здесь вы можете настроить показ слайдов, их порядок, а также добавить "
+#~ "пометки <em>пером</em>.</p>"
+
+#~ msgid "&Transition Type"
+#~ msgstr "&Смена слайдов"
+
+#~ msgid ""
+#~ "<li><p>If you select <b>Manual transition to next step or slide</b> then "
+#~ "each transition and effect on a slide, or transition from one slide to "
+#~ "the next, will require an action. Typically this action will be a mouse "
+#~ "click, or the space bar.</p></li><li><p>If you select <b>Automatic "
+#~ "transition to next step or slide</b> then the presentation will "
+#~ "automatically sequence each transition and effect on a slide, and will "
+#~ "automatically transition to the next slide when the current slide is "
+#~ "fully displayed. The speed of sequencing is controlled using the slider "
+#~ "below. This also enables the option to automatically loop back to the "
+#~ "first slide after the last slide has been shown.</p></li>"
+#~ msgstr ""
+#~ "<li><p>При выборе параметра <b>Ручной переход на следующий шаг или слайд</"
+#~ "b> для перехода потребуется нажать клавишу 'пробел' или левую кнопку мыши."
+#~ "</p></li><li><p>Если вы включили <b>Автоматический переход на следующий "
+#~ "шаг или слайд</b>, слайды будут сменять друг друга через определённый "
+#~ "интервал. Кроме того, в этом режиме вы можете настроить повтор "
+#~ "презентации после показа последнего слайда.</p></li>"
+
+#~ msgid "&Manual transition to next step or slide"
+#~ msgstr "&Ручной переход на следующий шаг или слайд"
+
+#~ msgid "&Automatic transition to next step or slide"
+#~ msgstr "&Автоматический переход на следующий шаг или слайд"
+
+#~ msgid "&Infinite loop"
+#~ msgstr "&Повторять"
+
+#~ msgid ""
+#~ "<p>If this checkbox is selected, then the slideshow will restart at the "
+#~ "first slide after the last slide has been displayed. It is only available "
+#~ "if the <b>Automatic transition to next step or slide</b> button is "
+#~ "selected above.</p> <p>This option may be useful if you are running a "
+#~ "promotional display.</p>"
+#~ msgstr ""
+#~ "<p>При включении этого параметра при включенном параметре "
+#~ "<b>Автоматический переход на следующий шаг или слайд</b> после показа "
+#~ "последнего слайда презентация будет показана с начала.</p> <p>Это бывает "
+#~ "удобно при показе рекламных презентаций</p>"
+
+#~ msgid "&Show 'End of presentation' slide"
+#~ msgstr "Показывать &экран 'Конец презентации'"
+
+#~ msgid ""
+#~ "<p>If this checkbox is selected, when the slideshow has finished a black "
+#~ "slideshow containing the message 'End of presentation. Click to exit' "
+#~ "will be shown."
+#~ msgstr ""
+#~ "<p>Если этот параметр включен, в конце презентации будет показан чёрный "
+#~ "экран с надписью 'Конец презентации. Щёлкните для выхода.'."
+
+#~ msgid "Measure presentation &duration"
+#~ msgstr "&Рассчитать продолжительность презентации"
+
+#~ msgid ""
+#~ "<p>If this checkbox is selected, the time that each slide was displayed "
+#~ "for, and the total time for the presentation will be measured.</p> <p>The "
+#~ "times will be displayed at the end of the presentation.</p> <p>This can "
+#~ "be used during rehearsal to check coverage for each issue in the "
+#~ "presentation, and to verify that the presentation duration is correct.</p>"
+#~ msgstr ""
+#~ "<p>При включении этого параметра после репетиции показа презентации будет "
+#~ "показано время показа каждого слайда и общая длительность презентации.</p>"
+
+#~ msgid ""
+#~ "<p>This part of the dialog allows you to configure the <em>drawing mode</"
+#~ "em>, which allows you to add additional information, emphasise particular "
+#~ "content, or to correct errors during the presentation by drawing on the "
+#~ "slides using the mouse.</p><p>You can configure the color of the drawing "
+#~ "pen and the width of the pen.</p>"
+#~ msgstr ""
+#~ "<p>Эта часть диалога позволяет настроить перо для рисования мышью на "
+#~ "слайдах во время показа презентации. Эта возможность очень удобна для "
+#~ "добавления дополнительной информации, выделения пунктов и исправления "
+#~ "ошибок на слайдах.</p><p>Вы можете указать цвет пера и толщину линий.</p>"
+
+#~ msgid ""
+#~ "<p>This dialog allows you to configure which slides are used in the "
+#~ "presentation. Slides that are not selected will not be displayed during "
+#~ "the slide show.</p>"
+#~ msgstr ""
+#~ "<p>Этот диалог поможет вам выбрать слайды, используемые в презентации. Не "
+#~ "выбранные слайды не будут показываться во время демонстрации презентации."
+#~ "</p>"
+
+#~ msgid "Arc"
+#~ msgstr "Дуга"
+
+#~ msgid "Chord"
+#~ msgstr "Хорда"
+
+#~ msgid "Convex/Concave"
+#~ msgstr "Многоугольник"
+
+#~ msgid "No."
+#~ msgstr "№"
+
+#~ msgid "Display Duration"
+#~ msgstr "Показывать продолжительность"
+
+#~ msgid "Slides in the pages:"
+#~ msgstr "Слайдов на странице:"
+
+#~ msgid ""
+#~ "Choose how many rows and columns with slides you want to have on all pages"
+#~ msgstr "Количество строк и столбцов слайдов на странице"
+
+#~ msgid "Rows: "
+#~ msgstr "Строк: "
+
+#~ msgid "Columns: "
+#~ msgstr "Столбцов: "
+
+#~ msgid "Draw border around the slides"
+#~ msgstr "Показывать рамку вокруг слайда"
+
+#~ msgid "Apply Properties"
+#~ msgstr "Применить"
+
+#~ msgid "Name Object"
+#~ msgstr "Имя объекта"
+
+#~ msgid "Protect Object"
+#~ msgstr "Защитить объект"
+
+#~ msgid "Keep Ratio"
+#~ msgstr "Сохранить размеры"
+
+#~ msgid "Change Size"
+#~ msgstr "Изменить размер"
+
+#~ msgid "Pict&ure"
+#~ msgstr "Рис&унок"
+
+#~ msgid "pt"
+#~ msgstr "пт"
+
+#~ msgctxt "Structure of the presentation"
+#~ msgid "Outline"
+#~ msgstr "Структура"
+
+#~ msgid "(%1)"
+#~ msgstr "(%1)"
+
+#~ msgid "Rename Slide"
+#~ msgstr "Переименовать"
+
+#~ msgid "Slide title:"
+#~ msgstr "Заголовок:"
+
+#~ msgid "Close From All Directions"
+#~ msgstr "Сворачивать в центр"
+
+#~ msgid "Open From All Directions"
+#~ msgstr "Развернуть из центра"
+
+#~ msgid "Interlocking Horizontal 2"
+#~ msgstr "Горизонтальные жалюзи 2"
+
+#~ msgid "Interlocking Vertical 1"
+#~ msgstr "Вертикальные жалюзи 1"
+
+#~ msgid "Interlocking Vertical 2"
+#~ msgstr "Вертикальные жалюзи 2"
+
+#~ msgid "Surround 1"
+#~ msgstr "Спираль 1"
+
+#~ msgid "Fly Away 1"
+#~ msgstr "Минимизация и вылет 1"
+
+#~ msgid "Blinds Vertical"
+#~ msgstr "Вертикальные жалюзи"
+
+#~ msgid "Checkerboard Across"
+#~ msgstr "Шашки горизонтальные"
+
+#~ msgid "Checkerboard Down"
+#~ msgstr "Шашки вертикальные"
+
+#~ msgid "Uncover Down"
+#~ msgstr "Открытие сверху"
+
+#~ msgid "Cover Up"
+#~ msgstr "Выплывать сверху"
+
+#~ msgid "Uncover Up"
+#~ msgstr "Открытие снизу"
+
+#~ msgid "Uncover Left"
+#~ msgstr "Открытие справа"
+
+#~ msgid "Cover Left-Up"
+#~ msgstr "Выплывать слева-сверху"
+
+#~ msgid "Uncover Left-Up"
+#~ msgstr "Открытие справа-снизу"
+
+#~ msgid "Cover Left-Down"
+#~ msgstr "Выплывать слева-снизу"
+
+#~ msgid "Uncover Left-Down"
+#~ msgstr "Открытие справа-сверху"
+
+#~ msgid "Uncover Right-Up"
+#~ msgstr "Открытие слева-снизу"
+
+#~ msgid "Cover Right-Bottom"
+#~ msgstr "Выплывать справа-снизу"
+
+#~ msgid "Uncover Right-Bottom"
+#~ msgstr "Открытие слева-сверху"
+
+#~ msgid "Dissolve"
+#~ msgstr "Растворение"
+
+#~ msgid "Strips Left-Up"
+#~ msgstr "Сворачивание в левый верхний угол"
+
+#~ msgid "Strips Left-Down"
+#~ msgstr "Сворачивание в левый нижний угол"
+
+#~ msgid "Strips Right-Up"
+#~ msgstr "Сворачивание в правый верхний угол"
+
+#~ msgid "Strips Right-Down"
+#~ msgstr "Сворачивание в правый нижний угол"
+
+#~ msgid "Melting"
+#~ msgstr "Растворение"
+
+#~ msgid "Random Transition"
+#~ msgstr "Случайно"
+
+#~ msgid "Paste Text"
+#~ msgstr "Вставить текст"
+
+#~ msgid "Insert Variable"
+#~ msgstr "Вставить переменную"
+
+#~ msgid "Protect content"
+#~ msgstr "Защитить содержимое"
+
+#~ msgid "Effect:"
+#~ msgstr "Эффект:"
+
+#~ msgid "Automatically advance to the next slide after:"
+#~ msgstr "Переходить на следующий слайд после:"
+
+#~ msgid "Remove Slide"
+#~ msgstr "Удалить слайд"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "&Дата"
+
+#~ msgid "Insert new slide"
+#~ msgstr "Вставить новый слайд"
+
+#~ msgid "Save Picture"
+#~ msgstr "Сохранить рисунок"
+
+#~ msgid "Error during saving: could not open '%1' for writing."
+#~ msgstr "Ошибка сохранения: невозможно открыть файл '%1' для записи."
+
+#~ msgid "Unable to save the file to '%1'. %2."
+#~ msgstr "Невозможно сохранить файл в '%1'. %2."
+
+#~ msgid "Save Failed"
+#~ msgstr "Ошибка сохранения"
+
+#, fuzzy
+#~ msgid "Error during saving: could not create temporary file."
+#~ msgstr "Ошибка сохранения: невозможно создать временный файл: %1."
+
+#~ msgid "No chart component registered"
+#~ msgstr "Компонент диаграмм недоступен"
+
+#~ msgid "No table component registered"
+#~ msgstr "Компонент электронной таблицы недоступен"
+
+#~ msgid "No formula component registered"
+#~ msgstr "Компонент формулы недоступен"
+
+#~ msgid "Autoform-Choose"
+#~ msgstr "Выбор автофигуры"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "&Свойства"
+
+#~ msgid "Slide Background"
+#~ msgstr "Фон слайда"
+
+#~ msgid ""
+#~ "Do you want to load a previously saved configuration which will be used "
+#~ "for this HTML Presentation?"
+#~ msgstr ""
+#~ "Загрузить конфигурацию презентации HTML, сохранённую ранее для этой "
+#~ "презентации?"
+
+#~ msgid "*.kpweb|KPresenter HTML Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|Веб-презентации KPresenter (*.kpweb)"
+
+#~ msgid "Only local files are currently supported."
+#~ msgstr "В этой версии поддерживаются только локальные файлы."
+
+#~ msgid "Object Effect"
+#~ msgstr "Эффекты появления объекта"
+
+#, fuzzy
+#~ msgid "You did not select any slide."
+#~ msgstr "Не выбран ни один слайд."
+
+#~ msgid "No Slide"
+#~ msgstr "Нет слайдов"
+
+#~ msgid "Change List Type"
+#~ msgstr "Изменить тип списка"
+
+#~ msgid "Change Outline Color"
+#~ msgstr "Изменить цвет рамки"
+
+#~ msgid "Change Fill Color"
+#~ msgstr "Изменить цвет заливки"
+
+#~ msgid "Change Line Begin"
+#~ msgstr "Изменить начало линии"
+
+#~ msgid "Change Line End"
+#~ msgstr "Изменить конец линии"
+
+#~ msgid "Change Outline Style"
+#~ msgstr "Изменить тип линии"
+
+#~ msgid "Change Outline Width"
+#~ msgstr "Изменить толщину линии"
+
+#~ msgid "Show Sidebar"
+#~ msgstr "Показать боковую панель"
+
+#~ msgid "Hide Sidebar"
+#~ msgstr "Скрыть боковую панель"
+
+#~ msgid "Show Notebar"
+#~ msgstr "Показать панель примечаний"
+
+#~ msgid "Hide Notebar"
+#~ msgstr "Скрыть панель примечаний"
+
+#~ msgid "&Formatting Characters"
+#~ msgstr "&Непечатаемые символы"
+
+#, fuzzy
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "Переключение показа непечатаемых символов"
+
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br><br>When this is "
+#~ "enabled, KPresenter shows you tabs, spaces, carriage returns and other "
+#~ "non-printing characters."
+#~ msgstr ""
+#~ "Переключает показ непечатаемых символов. <br> <br>При включении показа "
+#~ "непечатаемых символов в документе будут показаны символы табуляции, "
+#~ "пробела, перевода строки и другие непечатаемые символы."
+
+#~ msgid "Slide &Master"
+#~ msgstr "&Шаблон слайда"
+
+#~ msgid "Guide Lines"
+#~ msgstr "Направляющие"
+
+#~ msgid "Show &Grid"
+#~ msgstr "Показать &сетку"
+
+#~ msgid "Hide &Grid"
+#~ msgstr "Скрыть &сетку"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Привязать к сетке"
+
+#~ msgid "&Slide..."
+#~ msgstr "&Слайд..."
+
+#~ msgid "P&icture..."
+#~ msgstr "&Рисунок..."
+
+#~ msgid "&Rotate"
+#~ msgstr "&Вращение"
+
+#, fuzzy
+#~ msgid "&Zoom"
+#~ msgstr "Масштаб:"
+
+#~ msgid "&Shape"
+#~ msgstr "&Фигура"
+
+#~ msgid "&Circle/Ellipse"
+#~ msgstr "&Эллипс"
+
+#~ msgid "&Pie/Arc/Chord"
+#~ msgstr "&Сектор"
+
+#~ msgid "&Text"
+#~ msgstr "&Текст"
+
+#~ msgid "&Arrows && Connections"
+#~ msgstr "&Стрелки и соединения"
+
+#~ msgid "&Chart"
+#~ msgstr "&Диаграмма"
+
+#~ msgid "Ta&ble"
+#~ msgstr "&Таблица"
+
+#~ msgid "&Object"
+#~ msgstr "&Объект"
+
+#~ msgid "&Line"
+#~ msgstr "&Линия"
+
+#~ msgid "&Freehand"
+#~ msgstr "&Кривая"
+
+#~ msgid "Po&lyline"
+#~ msgstr "&Ломаная"
+
+#~ msgid "&Quadric Bezier Curve"
+#~ msgstr "К&вадратичная кривая Безье"
+
+#~ msgid "C&ubic Bezier Curve"
+#~ msgstr "К&убическая кривая Безье"
+
+#~ msgid "Co&nvex/Concave Polygon"
+#~ msgstr "&Многоугольник"
+
+#~ msgid "Closed &Freehand"
+#~ msgstr "Замкнутая &кривая"
+
+#~ msgid "Closed Po&lyline"
+#~ msgstr "Замк&нутая ломаная"
+
+#~ msgid "Closed &Quadric Bezier Curve"
+#~ msgstr "Замкн&утая квадратичная кривая Безье"
+
+#~ msgid "Closed C&ubic Bezier Curve"
+#~ msgstr "Замкнута&я кубическая кривая Безье"
+
+#~ msgid "&Font..."
+#~ msgstr "&Шрифт..."
+
+#~ msgid "Font Family"
+#~ msgstr "Шрифт"
+
+#~ msgid "&Bold"
+#~ msgstr "&Полужирный"
+
+#~ msgid "&Italic"
+#~ msgstr "&Курсив"
+
+#~ msgid "&Underline"
+#~ msgstr "&Подчёркнутый"
+
+#~ msgid "&Strike Out"
+#~ msgstr "&Зачёркнутый"
+
+#~ msgid "&Color..."
+#~ msgstr "&Цвет..."
+
+#~ msgid "Align &Left"
+#~ msgstr "По &левому краю"
+
+#~ msgid "Align &Center"
+#~ msgstr "По &центру"
+
+#~ msgid "Align &Right"
+#~ msgstr "По &правому краю"
+
+#~ msgid "Align &Block"
+#~ msgstr "По &ширине"
+
+#~ msgid "Number"
+#~ msgstr "Нумерованный список"
+
+#~ msgid "Bullet"
+#~ msgstr "Маркированный список"
+
+#~ msgid "&Increase Depth"
+#~ msgstr "&Увеличить отступ"
+
+#~ msgid "&Decrease Depth"
+#~ msgstr "Ум&еньшить отступ"
+
+#~ msgid "Extend Contents to Object &Height"
+#~ msgstr "Выровнять содержимое по &высоте объекта"
+
+#~ msgid "&Extend Object to Fit Contents"
+#~ msgstr "&Выровнять границы объекта по содержимому"
+
+#~ msgid "&Insert Slide Number"
+#~ msgstr "Вставить &номер слайда"
+
+#~ msgid "&Properties"
+#~ msgstr "&Свойства"
+
+#~ msgid "Ra&ise Objects"
+#~ msgstr "Переместить вы&ше"
+
+#~ msgid "&Lower Objects"
+#~ msgstr "Переместить в&ыше"
+
+#~ msgid "Bring to Front"
+#~ msgstr "Переместить наверх"
+
+#~ msgid "Send to Back"
+#~ msgstr "Переместить вниз"
+
+#~ msgid "R&otate Objects..."
+#~ msgstr "&Вращать..."
+
+#~ msgid "&Shadow Objects..."
+#~ msgstr "&Тень..."
+
+#~ msgid "Align Center (&horizontally)"
+#~ msgstr "По центру (&горизонтально)"
+
+#~ msgid "Align &Top"
+#~ msgstr "По в&ерхнему краю"
+
+#~ msgid "Align Center (&vertically)"
+#~ msgstr "По центру (&вертикально)"
+
+#~ msgid "Align &Bottom"
+#~ msgstr "По &нижнему краю"
+
+#~ msgid "Slide Bac&kground..."
+#~ msgstr "&Фон слайда..."
+
+#~ msgid "Enable Document &Header"
+#~ msgstr "Показать &верхний колонтитул"
+
+#~ msgid "Disable Document &Header"
+#~ msgstr "Скрыть &верхний колонтитул"
+
+#, fuzzy
+#~ msgid "Shows and hides header display for the current slide"
+#~ msgstr "Показать или скрыть верхний колонтитул слайда"
+
+#~ msgid "Enable Document Foo&ter"
+#~ msgstr "Показать &нижний колонтитул"
+
+#~ msgid "Disable Document Foo&ter"
+#~ msgstr "Скрыть &нижний колонтитул"
+
+#, fuzzy
+#~ msgid "Shows and hides footer display for the current slide"
+#~ msgstr "Показать или скрыть нижний колонтитул слайда"
+
+#~ msgid "Create &HTML Slideshow..."
+#~ msgstr "Создать в&еб-презентацию..."
+
+#~ msgid "Create Memor&y Stick Slideshow..."
+#~ msgstr "Создать презентацию &Memory Stick..."
+
+#~ msgid "Template Manager"
+#~ msgstr "Менеджер шаблонов"
+
+#~ msgid "Use Current Slide as Default Template"
+#~ msgstr "Сделать слайд шаблоном по умолчанию"
+
+#~ msgid "Align O&bjects"
+#~ msgstr "&Выровнять объекты"
+
+#~ msgid "Line Begin"
+#~ msgstr "Начало линии"
+
+#~ msgid "Line End"
+#~ msgstr "Конец линии"
+
+#~ msgid "Outline Style"
+#~ msgstr "Тип линии"
+
+#~ msgid "Outline Width"
+#~ msgstr "Толщина линии"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Группировать объекты"
+
+#~ msgid "&Ungroup Objects"
+#~ msgstr "&Разгруппировать объекты"
+
+#~ msgid "Edit &Object Effect..."
+#~ msgstr "&Эффект появления объекта..."
+
+#~ msgid "Edit Slide &Transition..."
+#~ msgstr "С&мена слайдов..."
+
+#~ msgid "&Go to Start"
+#~ msgstr "Н&ачало"
+
+#~ msgid "Go to &End"
+#~ msgstr "Перейти в &конец"
+
+#~ msgid "Goto &Slide..."
+#~ msgstr "Перейти &на слайд..."
+
+#~ msgid "Fill Color..."
+#~ msgstr "Цвет заливки..."
+
+#~ msgid "Outline Color..."
+#~ msgstr "Цвет линии..."
+
+#~ msgid "&Extend Contents to Object Height"
+#~ msgstr "Выровнять содержимое по &высоте объекта"
+
+#~ msgid "&Resize Object to Fit Contents"
+#~ msgstr "&Изменить размеры объекта по содержимому"
+
+#~ msgid "&Rename Slide..."
+#~ msgstr "Пере&именовать слайд..."
+
+#~ msgid "Sca&le to Original Size"
+#~ msgstr "Вернуть &оригинальный размер"
+
+#~ msgid "640x480"
+#~ msgstr "640x480"
+
+#~ msgid "800x600"
+#~ msgstr "800x600"
+
+#~ msgid "1024x768"
+#~ msgstr "1024x768"
+
+#~ msgid "1280x1024"
+#~ msgstr "1280x1024"
+
+#~ msgid "1600x1200"
+#~ msgstr "1600x1200"
+
+#~ msgid "&Change Picture..."
+#~ msgstr "&Изменить рисунок..."
+
+#~ msgid "Image &Effect..."
+#~ msgstr "&Эффект изображения..."
+
+#~ msgid "Superscript"
+#~ msgstr "Надстрочный"
+
+#~ msgid "Subscript"
+#~ msgstr "Подстрочный"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "&Специальный символ..."
+
+#~ msgid "Link..."
+#~ msgstr "Ссылка..."
+
+#~ msgid "Enter Custom Factor..."
+#~ msgstr "Другое разрешение..."
+
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "&Автоисправление..."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&Абзац..."
+
+#~ msgid "Default Format"
+#~ msgstr "Формат по умолчанию"
+
+#~ msgid "Open Link"
+#~ msgstr "Открыть ссылку"
+
+#~ msgid "Change Link..."
+#~ msgstr "Изменить ссылку..."
+
+#~ msgid "Copy Link"
+#~ msgstr "Копировать ссылку"
+
+#~ msgid "Add to Bookmark"
+#~ msgstr "Добавить в закладки"
+
+#~ msgid "&Custom Variables..."
+#~ msgstr "&Пользовательские переменные..."
+
+#~ msgid "Edit Variable..."
+#~ msgstr "Изменить значение переменной..."
+
+#~ msgid "&Variable"
+#~ msgstr "&Переменная"
+
+#~ msgid "&Property"
+#~ msgstr "&Свойства"
+
+#~ msgid "&Date"
+#~ msgstr "&Дата"
+
+#~ msgid "&Time"
+#~ msgstr "&Время"
+
+#~ msgid "&Statistic"
+#~ msgstr "&Статистика"
+
+#~ msgid "&Refresh All Variables"
+#~ msgstr "&Обновить все переменные"
+
+#~ msgid "Change Case..."
+#~ msgstr "Изменить регистр..."
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "Масштаб:"
+
+#~ msgid "&Style Manager"
+#~ msgstr "&Менеджер стилей"
+
+#~ msgid "St&yle"
+#~ msgstr "&Стиль"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Включить автоисправление"
+
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Выключить автоисправление"
+
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "Вставить неразрывный пробел"
+
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Вставить неразрывный дефис"
+
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Вставить мягкий перенос"
+
+#~ msgid "Line Break"
+#~ msgstr "Перенос строки"
+
+#~ msgid "Completion"
+#~ msgstr "Автозавершение"
+
+#~ msgid "Increase Numbering Level"
+#~ msgstr "Увеличить уровень нумерации"
+
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "Уменьшить уровень нумерации"
+
+#~ msgid "Comment..."
+#~ msgstr "Комментарий..."
+
+#~ msgid "Edit Comment..."
+#~ msgstr "Изменить комментарий..."
+
+#~ msgid "Add Guide Line..."
+#~ msgstr "Добавить направляющую..."
+
+#~ msgid "Remove Comment"
+#~ msgstr "Удалить комментарий"
+
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Копировать текст комментария..."
+
+#~ msgid "&Configure Completion..."
+#~ msgstr "Настройка &автозавершения..."
+
+#~ msgid "Zoom Out"
+#~ msgstr "Уменьшить"
+
+#~ msgid "Zoom In"
+#~ msgstr "Увеличить"
+
+#~ msgid "Zoom Entire Slide"
+#~ msgstr "Слайд целиком"
+
+#~ msgid "Zoom Slide Width"
+#~ msgstr "По ширине слайда"
+
+#~ msgid "Zoom Selected Objects"
+#~ msgstr "По выделенным объектам"
+
+#~ msgid "Zoom Slide Height"
+#~ msgstr "По высоте слайда"
+
+#~ msgid "Zoom All Objects"
+#~ msgstr "По всем объектам"
+
+#~ msgid "Horizontal Flip"
+#~ msgstr "Выравнивание по горизонтали"
+
+#~ msgid "Vertical Flip"
+#~ msgstr "Выравнивание по вертикали"
+
+#~ msgid "Duplicate Object..."
+#~ msgstr "Дублировать объект..."
+
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Применить автоисправление"
+
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Создать стиль из выделения..."
+
+#~ msgid "Align Top"
+#~ msgstr "По верхнему краю"
+
+#~ msgid "Align Middle"
+#~ msgstr "Посередине"
+
+#~ msgid "Save Picture..."
+#~ msgstr "Сохранить рисунок..."
+
+#~ msgid "Autospellcheck"
+#~ msgstr "Автоматическая проверка орфографии"
+
+#~ msgid "File..."
+#~ msgstr "Файл..."
+
+#~ msgid "Save Background Picture..."
+#~ msgstr "Сохранить фоновый рисунок..."
+
+#~ msgid "Type Anywhere Cursor"
+#~ msgstr "Свободный курсор"
+
+#~ msgid "Ignore All"
+#~ msgstr "Игнорировать все"
+
+#~ msgid "Add Word to Dictionary"
+#~ msgstr "Добавить слово в словарь"
+
+#~ msgid "Hide Object From Slide Master"
+#~ msgstr "Не показывать объект с шаблона слайда"
+
+#~ msgid "Display Object From Slide Master"
+#~ msgstr "Показывать объект с шаблона слайда"
+
+#~ msgid "Hide Background"
+#~ msgstr "Скрыть фон слайда"
+
+#~ msgid "Display Background"
+#~ msgstr "Показать фон слайда"
+
+#~ msgid "Set Background"
+#~ msgstr "Фон"
+
+#~ msgid "Select New Picture"
+#~ msgstr "Новый рисунок"
+
+#~ msgid "Next slide"
+#~ msgstr "Следующий"
+
+#~ msgid "Slide %1/%2"
+#~ msgstr "Слайд %1 из %2"
+
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr "%1: %2, %3 - %4, %5 (%6 x %7)"
+
+#, fuzzy
+#~ msgctxt "1 object selected"
+#~ msgid "%n objects selected"
+#~ msgstr "Выбран %1 объект"
+
+#~ msgid "Change Link"
+#~ msgstr "Изменить ссылку"
+
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "Исправить слова с ошибками"
+
+#~ msgid "Paragraph Settings"
+#~ msgstr "Настройки абзаца"
+
+#~ msgid "Change Custom Variable"
+#~ msgstr "Изменить пользовательскую переменную"
+
+#~ msgid "Change Case of Text"
+#~ msgstr "Изменить регистр текста"
+
+#~ msgid "Whole Slide"
+#~ msgstr "Слайд целиком"
+
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#~ msgid "Presentation Duration"
+#~ msgstr "Продолжительность презентации"
+
+#~ msgid "Enable Document Header"
+#~ msgstr "Показать верхние колонтитулы"
+
+#~ msgid "Disable Document Header"
+#~ msgstr "Скрыть верхние колонтитулы"
+
+#~ msgid "Enable Document Footer"
+#~ msgstr "Показать нижние колонтитулы"
+
+#~ msgid "Disable Document Footer"
+#~ msgstr "Скрыть нижние колонтитулы"
+
+#~ msgid "Apply a paragraph style"
+#~ msgstr "Применить стиль абзаца"
+
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Применить стиль к врезке"
+
+#~ msgid "Change Note Text"
+#~ msgstr "Изменить примечание"
+
+#~ msgid "Apply Autoformat"
+#~ msgstr "Применить автоисправление"
+
+#~ msgid "Do you want to apply autoformat in new slide?"
+#~ msgstr "Применить автоформат к новому слайду?"
+
+#~ msgid "Replace Word"
+#~ msgstr "Заменить слово"
+
+#~ msgid "First"
+#~ msgstr "Первый"
+
+#~ msgid "Previous"
+#~ msgstr "Предыдущий"
+
+#~ msgid "Next"
+#~ msgstr "Следующий"
+
+#~ msgid "Last"
+#~ msgstr "Последний"
+
+#~ msgid "Home"
+#~ msgstr "Начало"
+
+#~ msgid ""
+#~ "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/"
+#~ "kpresenter\">KPresenter</a>"
+#~ msgstr ""
+#~ "Создана на %1 <i>%2</i> в <a href=\"http://www.koffice.org/kpresenter"
+#~ "\">KPresenter</a>"
+
+#~ msgid "Table of Contents"
+#~ msgstr "Оглавление"
+
+#~ msgid "Click here to start the Slideshow"
+#~ msgstr "Запуск демонстрации"
+
+#~ msgid "Create HTML Slideshow Wizard"
+#~ msgstr "Мастер создания веб-презентации"
+
+#~ msgid ""
+#~ "This page allows you to specify some of the key values for how your "
+#~ "presentation will be shown in HTML. Select individual items for more help "
+#~ "on what they do."
+#~ msgstr "Эта вкладка поможет вам указать основные параметры веб-презентации."
+
+#~ msgid ""
+#~ "Enter your name, email address and the title of the web presentation. "
+#~ "Also enter the output directory where the web presentation should be "
+#~ "saved. "
+#~ msgstr ""
+#~ "Введите ваше имя, адрес электронной почты и заголовок веб-презентации. "
+#~ "Также необходимо указать папку, в котором будут созданы файлы презентации."
+
+#~ msgid ""
+#~ "This is where you enter the name of the person or organization that "
+#~ "should be named as the author of the presentation."
+#~ msgstr ""
+#~ "Укажите имя человека или название организации, которая является автором "
+#~ "презентации."
+
+#~ msgid "This is where you enter the title of the overall presentation."
+#~ msgstr "Здесь вы можете указать название презентации."
+
+#~ msgid "Email address:"
+#~ msgstr "Адрес электронной почты:"
+
+#~ msgid ""
+#~ "This is where you enter the email address of the person or organization "
+#~ "that is responsible for the presentation."
+#~ msgstr ""
+#~ "Укажите адрес электронной почты автора или организации, ответственной за "
+#~ "подготовку презентации."
+
+#~ msgid ""
+#~ "The value entered for the path is the directory where the presentation "
+#~ "will be saved. If it does not exist, you'll be asked if you want to "
+#~ "create the directory or abort the creation."
+#~ msgstr ""
+#~ "Укажите папку, в которую будет сохранена веб-презентация. Если папки не "
+#~ "существует, появится запрос на создание папки или прекращение сохранения."
+
+#~ msgid "Step 1: General Information"
+#~ msgstr "Шаг 1: Общая информация"
+
+#~ msgid ""
+#~ "This page allows you to specify how the HTML for your presentation will "
+#~ "be displayed. Select individual items for more help on what they do."
+#~ msgstr "На этой вкладке вы можете настроить внешний вид веб-презентации."
+
+#~ msgid "Here you can configure the style of the web pages."
+#~ msgstr "Здесь вы можете определить стиль веб-страниц."
+
+#~ msgid "You can also specify the zoom for the slides."
+#~ msgstr "Также вы можете указать масштаб слайдов."
+
+#~ msgid "Zoom:"
+#~ msgstr "Масштаб:"
+
+#~ msgid "This selection allows you to specify the size of the slide image."
+#~ msgstr "Здесь вы можете указать масштаб слайдов."
+
+#~ msgid "Encoding:"
+#~ msgstr "Кодировка:"
+
+#~ msgid "Document type:"
+#~ msgstr "Тип документа:"
+
+#~ msgid "Step 2: Configure HTML"
+#~ msgstr "Шаг 2: Настройка HTML"
+
+#~ msgid ""
+#~ "This page allows you to specify the colors for your presentation display. "
+#~ "Select individual items for more help on what they do."
+#~ msgstr ""
+#~ "На этой вкладке вы можете указать цвета, используемые в веб-презентации."
+
+#~ msgid "Now you can customize the colors of the web pages."
+#~ msgstr "Здесь вы можете выбрать цвета веб-страниц."
+
+#~ msgid "Title color:"
+#~ msgstr "Цвет заголовка:"
+
+#~ msgid "Step 3: Customize Colors"
+#~ msgstr "Шаг 3: Настройка цветов"
+
+#~ msgid ""
+#~ "This page allows you to modify the titles of each slide, if required. You "
+#~ "normally do not need to do this, but it is available if required."
+#~ msgstr ""
+#~ "На этой вкладке вы можете вручную изменить названия слайдов если "
+#~ "необходимо."
+
+#~ msgid ""
+#~ "Here you can specify titles for each slide. Click on a slide in the list "
+#~ "and then enter the title in the textbox below. If you click on a title, "
+#~ "KPresenter mainview will display the slide."
+#~ msgstr ""
+#~ "Здесь вы можете указать заголовки для каждого слайда. Щёлкните на слайде "
+#~ "и введите текст заголовка. Если вы щёлкните на заголовке, KPresenter в "
+#~ "основном окне перейдёт на этот слайд."
+
+#~ msgid "Step 4: Customize Slide Titles"
+#~ msgstr "Шаг 4: Заголовки слайдов"
+
+#~ msgid ""
+#~ "This page allows you to specify some options for presentations which run "
+#~ "unattended, such as time elapsed before advancing to the next slide, "
+#~ "looping and the presence of headers. If you do not want an unattended "
+#~ "presentation, just leave defaults unchanged."
+#~ msgstr ""
+#~ "Эта вкладка позволяет настроить автоматический показ презентации: время "
+#~ "смены слайдов, автоповтор презентации и показ кнопок навигации."
+
+#~ msgid ""
+#~ "Here you can configure some options for unattended presentations, such as "
+#~ "time elapsed before automatically advance to the next slide, looping and "
+#~ "the presence of headers."
+#~ msgstr ""
+#~ "Здесь вы можете настроить параметры, специфичные для презентаций, не "
+#~ "сопровождаемых дополнительными пояснениями, например интервал, с которым "
+#~ "следует сменять слайды в автоматическом режиме, цикличность, а также "
+#~ "присутствие кнопок навигации."
+
+#~ msgid "Advance after:"
+#~ msgstr "Интервал между слайдами:"
+
+#~ msgid "This selection allows you to specify the time between slides."
+#~ msgstr "Здесь вы можете указать интервал между слайдами."
+
+#~ msgid "Disabled"
+#~ msgstr "Выключено"
+
+#~ msgid "Write header to the slides"
+#~ msgstr "Показывать кнопки навигации"
+
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want to write the navigation "
+#~ "buttons on top of the slide."
+#~ msgstr ""
+#~ "Этот параметр позволяет показывать кнопки навигации на страницах веб-"
+#~ "презентации."
+
+#~ msgid "Write footer to the slides"
+#~ msgstr "Показывать информацию об авторе"
+
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want to write an imprint "
+#~ "consisting on the author and the software used to create these slides."
+#~ msgstr ""
+#~ "Этот параметр позволяет выводить на слайдах информацию об авторе и "
+#~ "используемом программном обеспечении."
+
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want the presentation to start "
+#~ "again once the latest slide is reached."
+#~ msgstr "Начинать ли слайд-шоу заново по завершении оного."
+
+#~ msgid "Step 5: Options for Unattended Presentations"
+#~ msgstr "Шаг 5: Параметры для не сопровождаемых презентаций"
+
+#~ msgid "Initialize (create file structure, etc.)"
+#~ msgstr "Инициализация ( создание структуры файла и т.д. )"
+
+#~ msgid "Create Pictures of the Slides"
+#~ msgstr "Создать рисунки слайдов"
+
+#~ msgid "Create HTML Pages for the Slides"
+#~ msgstr "Создать HTML страницы для слайдов"
+
+#~ msgid "Create Main Page (Table of Contents)"
+#~ msgstr "Создать основную страницу (Оглавление)"
+
+#~ msgid "Options for Unattended Presentations"
+#~ msgstr "Параметры для не сопровождаемых презентаций"
+
+#~ msgid "*.kpweb|KPresenter Web-Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|Веб-презентации KPresenter (*.kpweb)"
+
+#~ msgid "Save Web Presentation Configuration"
+#~ msgstr "Сохранить параметры веб-презентации"
+
+#~ msgid "Freehand"
+#~ msgstr "Кривая"
+
+#~ msgid "Autoform"
+#~ msgstr "Автофигура"
+
+#~ msgid "Group"
+#~ msgstr "Группировать"
+
+#~ msgid "Polyline"
+#~ msgstr "Ломаная"
+
+#~ msgid "Embedded Object"
+#~ msgstr "Внедрённый объект"
+
+#~ msgid "Cubic Bezier Curve"
+#~ msgstr "Кубическая кривая Безье"
+
+#~ msgid "Quadric Bezier Curve"
+#~ msgstr "Квадратичная кривая Безье"
+
+#, fuzzy
+#~ msgid "View Mode"
+#~ msgstr "Режим просмотра:"
+
+#~ msgid "Prot&ect content"
+#~ msgstr "&Защитить содержимое"
+
+#~ msgid "Spellchecker Behavior"
+#~ msgstr "Настройка проверки орфографии"
+
+#~ msgctxt "Abbreviation for Text-to-Speech"
+#~ msgid "TTS"
+#~ msgstr "Синтез речи"
+
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Настройка синтеза речи"
+
+#~ msgid "Speak widget under &mouse pointer"
+#~ msgstr "Зачитать виджет под курсором &мыши"
+
+#~ msgid "Speak widget with &focus"
+#~ msgstr "Зачитать &текущий виджет"
+
+#~ msgid "Speak &What's This?"
+#~ msgstr "Зачитать &подсказки"
+
+#~ msgctxt "Verbal indication if widget is disabled (grayed)"
+#~ msgid "&Say whether disabled"
+#~ msgstr "&Акцентировать на неактивных виджетах"
+
+#~ msgid "Spea&k accelerators"
+#~ msgstr "Зачитать &комбинации клавиш"
+
+#~ msgctxt "A word spoken before another word"
+#~ msgid "Pr&efaced by the word:"
+#~ msgstr "Предварительно зачитать &слово:"
+
+#~ msgctxt "Keyboard accelerator, such as Alt+F"
+#~ msgid "Accelerator"
+#~ msgstr "Комбинация клавиш"
+
+#~ msgid "&Polling interval:"
+#~ msgstr "&Интервал опроса:"
+
+#~ msgid "Error during saving: could not open '%1' temporary file for writing."
+#~ msgstr ""
+#~ "Ошибка сохранения: невозможно открыть временный файл '%1' для записи."

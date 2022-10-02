@@ -1,0 +1,275 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Giovanni Sora <g.sora@tiscali.it>, 2012, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"PO-Revision-Date: 2013-07-04 11:36+0200\n"
+"Last-Translator: G.Sora <g.sora@tiscali.it>\n"
+"Language-Team: Interlingua <kde-l10n-ia@kde.org>\n"
+"Language: ia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: shapecollection/OdfCollectionLoader.cpp:63
+#, kde-format
+msgid "Found no shapes in the collection! %1"
+msgstr "Il non trova alcun formas in le collection %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:132
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr "Non es un valide file de Calligra: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:157
+#, kde-format
+msgid "No body tag found in file: %1"
+msgstr "Il non trovava etiquetta de corpore in file: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:165
+#, kde-format
+msgid "No office:drawing tag found in file: %1"
+msgstr "Il non trovava etiquetta de designo de officio in file: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:173
+#: shapecollection/OdfCollectionLoader.cpp:181
+#, kde-format
+msgid "No shapes found in file: %1"
+msgstr "Il non trovava alcun formas in file: %1"
+
+#: shapecollection/ShapeCollectionDocker.cpp:111
+#, kde-format
+msgid "Add Shape"
+msgstr "Adde forma"
+
+#: shapecollection/ShapeCollectionDocker.cpp:146
+#, kde-format
+msgid "More"
+msgstr "Altere"
+
+#: shapecollection/ShapeCollectionDocker.cpp:176
+#, kde-format
+msgid "Open Shape Collection"
+msgstr "aperi colelction de forma"
+
+#: shapecollection/ShapeCollectionDocker.cpp:184
+#, kde-format
+msgid "Remove Shape Collection"
+msgstr "Remove collection de forma"
+
+#: shapecollection/ShapeCollectionDocker.cpp:330
+#, kde-format
+msgid "Default"
+msgstr "Predefinite"
+
+#: shapecollection/ShapeCollectionDocker.cpp:334
+#, kde-format
+msgid "Geometrics"
+msgstr "Geometria"
+
+#: shapecollection/ShapeCollectionDocker.cpp:345
+#, kde-format
+msgid "Arrows"
+msgstr "Flechas"
+
+#: shapecollection/ShapeCollectionDocker.cpp:349
+#, kde-format
+msgid "Funny"
+msgstr "Divertente"
+
+#: shapecollection/ShapeCollectionDocker.cpp:522
+#, kde-format
+msgid "Collection Error"
+msgstr "Error de collection"
+
+#: shapeproperties/ShapePropertiesDocker.cpp:35
+#, kde-format
+msgid "Shape Properties"
+msgstr "Proprietates de forma"
+
+#: snapguidedocker/SnapGuideDocker.cpp:39
+#, kde-format
+msgid "Snap Settings"
+msgstr "Preferentia de instantaneo"
+
+#, fuzzy
+#~| msgid "Found no shapes in the collection! %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Il non trova alcun formas in le collection %1"
+
+#, fuzzy
+#~| msgid "Not a valid Calligra file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Non es un valide file de Calligra: %1"
+
+#, fuzzy
+#~| msgid "No body tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Il non trovava etiquetta de corpore in file: %1"
+
+#, fuzzy
+#~| msgid "No office:drawing tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Il non trovava etiquetta de designo de officio in file: %1"
+
+#, fuzzy
+#~| msgid "No shapes found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Il non trovava alcun formas in file: %1"
+
+#, fuzzy
+#~| msgid "Add Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Shape"
+#~ msgstr "Adde forma"
+
+#, fuzzy
+#~| msgid "More"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More"
+#~ msgstr "Altere"
+
+#, fuzzy
+#~| msgid "Open Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Shape Collection"
+#~ msgstr "aperi colelction de forma"
+
+#, fuzzy
+#~| msgid "Remove Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Remove collection de forma"
+
+#, fuzzy
+#~| msgid "Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Predefinite"
+
+#, fuzzy
+#~| msgid "Geometrics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometrics"
+#~ msgstr "Geometria"
+
+#, fuzzy
+#~| msgid "Arrows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "Flechas"
+
+#, fuzzy
+#~| msgid "Funny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Funny"
+#~ msgstr "Divertente"
+
+#, fuzzy
+#~| msgid "Collection Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Collection Error"
+#~ msgstr "Error de collection"
+
+#, fuzzy
+#~| msgid "Shape Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties"
+#~ msgstr "Proprietates de forma"
+
+#, fuzzy
+#~| msgid "Snap Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Settings"
+#~ msgstr "Preferentia de instantaneo"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Selector de color"
+
+#~ msgid "Shadow Properties"
+#~ msgstr "Proprietates de umbra"
+
+#~ msgid "Creation error"
+#~ msgstr "Error de creation"
+
+#~ msgid "File not found"
+#~ msgstr "File non trovate"
+
+#~ msgid "Cannot create storage"
+#~ msgstr "Il non pote crear immagazinage"
+
+#~ msgid "Bad MIME type"
+#~ msgstr "Mal typo MIME"
+
+#~ msgid "Error in embedded document"
+#~ msgstr "Error in le documento incorporate"
+
+#~ msgid "Format not recognized"
+#~ msgstr "Formato non recognoscite"
+
+#~ msgid "Not implemented"
+#~ msgstr "Non actuate"
+
+#~ msgid "Parsing error"
+#~ msgstr "Error de analysator syntactic"
+
+#~ msgid "Document is password protected"
+#~ msgstr "Le documento es protegite per contrasigno"
+
+#~ msgid "Internal error"
+#~ msgstr "Error Interne"
+
+#~ msgid "Out of memory"
+#~ msgstr "Foras de Memoria"
+
+#~ msgid "Unknown error"
+#~ msgstr "Error Incognite"
+
+#~ msgid ""
+#~ "Could not open\n"
+#~ "%2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Non pote aperir\n"
+#~ "%2.\n"
+#~ "Motivo: %1"
+
+#~ msgid "Failed to import the file: %1"
+#~ msgstr "Il falleva importar le file %1"
+
+#~ msgid "Opacity:"
+#~ msgstr "Opacitate:"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Necun"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Solido"
+
+#~ msgid "Gradient"
+#~ msgstr "Gradiente"
+
+#~ msgid "Pattern"
+#~ msgstr "Patrono"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Reimple par-dispar"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Reimple a serpentar"
+
+#~ msgid "Stroke and Fill"
+#~ msgstr "Usa tracto e reimple"

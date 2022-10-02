@@ -1,0 +1,5154 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2000 Free Software Foundation, Inc.
+# Damjan Janevski <miopa@usa.net>, 2000.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kword\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"PO-Revision-Date: 2000-10-02 22:00+0100\n"
+"Last-Translator: Damjan Janevski <miopa@usa.net>\n"
+"Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
+"Language: mk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: Plural-Forms: nplurals=3; plural=n%10==1 ? 0 : n%10==2 ? 1 : "
+"2;\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, fuzzy, kde-format
+msgid "&File"
+msgstr "Проверка на правопис"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "&Крајна-нота"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "Надолу"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, fuzzy, kde-format
+msgid "&Display Mode"
+msgstr "&Број на страна"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, fuzzy, kde-format
+msgid "Semantics"
+msgstr "&Стилист..."
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, fuzzy, kde-format
+msgid "S&tyles"
+msgstr "Форма"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "Поставки на рамка"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, fuzzy, kde-format
+msgid "Spellcheck"
+msgstr "Проверка на правопис"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "Уреди &текст"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, fuzzy, kde-format
+msgid "Spell Check Result"
+msgstr "Проверка на правопис"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, fuzzy, kde-format
+msgid "Change Variable To"
+msgstr "&Променливи по избор..."
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr ""
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "Име на група рамки"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "KWord - Вметни табела"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#, fuzzy
+#| msgid "Frame Properties"
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "Параметри на рамка"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "&Создади рамка за текст"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, fuzzy, kde-format
+msgid "Baseline"
+msgstr "Поставки на рамка"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, fuzzy, kde-format
+msgid "Character"
+msgstr "&Создади табела"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, fuzzy, kde-format
+msgid "Row"
+msgstr "Ред:"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, fuzzy, kde-format
+msgid "Page (entire) area"
+msgstr "&Рабови на рамка"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, fuzzy, kde-format
+msgid "Page text area"
+msgstr "&Рабови на рамка"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, fuzzy, kde-format
+msgid "Paragraph area"
+msgstr "&Параграф..."
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, fuzzy, kde-format
+msgid "Paragraph text area"
+msgstr "KWord - Поставки на параграф"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, fuzzy, kde-format
+msgid "Left page border"
+msgstr "&Рабови на рамка"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, fuzzy, kde-format
+msgid "Right page border"
+msgstr "&Рабови на рамка"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, fuzzy, kde-format
+msgid "Right paragraph border"
+msgstr "&Рабови на рамка"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, fuzzy, kde-format
+msgid "Left paragraph border"
+msgstr "&Рабови на рамка"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, fuzzy, kde-format
+msgid "Vertical Positioning"
+msgstr "Вертикално подредување"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, fuzzy, kde-format
+msgid "Top align with:"
+msgstr "Подвлечен"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, fuzzy, kde-format
+msgid "Center align with:"
+msgstr "Подвлечен"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, fuzzy, kde-format
+msgid "Bottom align with:"
+msgstr "Подвлечен"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, fuzzy, kde-format
+msgid "from:"
+msgstr "Зум"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, fuzzy, kde-format
+msgid "Horizontal Positioning"
+msgstr "Вертикално подредување"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, fuzzy, kde-format
+msgid "Left align with:"
+msgstr "Подвлечен"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, fuzzy, kde-format
+msgid "Right align with:"
+msgstr "Подвлечен"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, fuzzy, kde-format
+msgid "Configure"
+msgstr "Конфигурирај крајна-нота"
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, fuzzy, kde-format
+msgid "Grid"
+msgstr "Нумериран список"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, fuzzy, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Структура на документ"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, fuzzy, kde-format
+msgid "Document Settings"
+msgstr "Поставки на рамка"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, fuzzy, kde-format
+msgid "Create New Bookmark"
+msgstr "Создади нова страница"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "Име:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, fuzzy, kde-format
+msgid "Columns:"
+msgstr "Колона:"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, fuzzy, kde-format
+msgid "Column spacing:"
+msgstr "Избриши колона:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, fuzzy, kde-format
+msgid "frameset"
+msgstr "Рамка"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, kde-format
+msgid "No framesets in document"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, fuzzy, kde-format
+msgid "Name of frameset:"
+msgstr "Име на новата група рамки"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, fuzzy, kde-format
+msgid "Create a new frameset:"
+msgstr "Создади нова страница"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, fuzzy, kde-format
+msgid "Frameset Name"
+msgstr "Име на група рамки"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, fuzzy, kde-format
+msgid "Smart Positioning"
+msgstr "&Слика..."
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Text Run Around"
+msgstr "Текст заобиколува"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, fuzzy, kde-format
+msgid "Connect Text Frames"
+msgstr "Поврзи рамки за текст"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+#, fuzzy
+#| msgid "Frame Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "Параметри на рамка"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, fuzzy, kde-format
+msgid "&Page"
+msgstr "&Број на страна"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, fuzzy, kde-format
+msgid "Para&graph"
+msgstr "&Параграф..."
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, fuzzy, kde-format
+msgid "&To Character"
+msgstr "&Создади табела"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, fuzzy, kde-format
+msgid "&As Character"
+msgstr "&Создади табела"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, fuzzy, kde-format
+msgid "Horizontal Alignment"
+msgstr "Вертикално подредување"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, fuzzy, kde-format
+msgid "&Left"
+msgstr "Текст заобиколува"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, fuzzy, kde-format
+#| msgid "Align &Center"
+msgid "&Center"
+msgstr "Подреди на &средина"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, fuzzy, kde-format
+msgid "&Right"
+msgstr "Текст заобиколува"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, fuzzy, kde-format
+msgid "Vertical Alignment"
+msgstr "Вертикално подредување"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "&Bottom"
+msgstr "Долу:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, fuzzy, kde-format
+msgid "Text Wrap-around"
+msgstr "Текст заобиколува"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, fuzzy, kde-format
+msgid "Run through this shape"
+msgstr "Низ другите рамки"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, fuzzy, kde-format
+msgid "Skip below this shape"
+msgstr "Низ другите рамки"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, fuzzy, kde-format
+msgid "Run on left side of this shape"
+msgstr "Низ другите рамки"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, fuzzy, kde-format
+msgid "Run on right side of this shape"
+msgstr "Низ другите рамки"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, fuzzy, kde-format
+msgid "Run on longest side of this shape"
+msgstr "Низ другите рамки"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, fuzzy, kde-format
+msgid "Run on both sides of this shape"
+msgstr "Низ другите рамки"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, kde-format
+msgid "Distance Between Shape and Text:"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, fuzzy, kde-format
+msgid "Columns"
+msgstr "Колона:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, fuzzy, kde-format
+msgid "Style"
+msgstr "Форма"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, kde-format
+msgid "Clone"
+msgstr ""
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, fuzzy, kde-format
+msgid "Delete"
+msgstr "Избриши ред"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "Име на група рамки"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, fuzzy, kde-format
+msgid "Clone Page Style"
+msgstr "Име на група рамки"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left by:"
+msgstr "Лево:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right by:"
+msgstr "Десно:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, fuzzy, kde-format
+msgid "&Rename"
+msgstr "Група рамки %1"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, fuzzy, kde-format
+msgid "&Delete"
+msgstr "Избриши ред"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, fuzzy, kde-format
+msgid "Rename Bookmark"
+msgstr "Избриши колона"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, fuzzy, kde-format
+msgid "Select Bookmark"
+msgstr "Избриши колона"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "Геометрија"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, fuzzy, kde-format
+msgid "Page Size && Margins"
+msgstr "Спои ќелии"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, fuzzy, kde-format
+msgid "Create"
+msgstr "&Создади табела"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, fuzzy, kde-format
+msgid "Navigation"
+msgstr "Почни од:"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Page #"
+msgstr "&Број на страна"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Section"
+msgstr "Вметни колона"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr ""
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, fuzzy, kde-format
+msgid "Statistics"
+msgstr "&Стилист..."
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, fuzzy, kde-format
+msgid "Words:"
+msgstr "KWord"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, fuzzy, kde-format
+msgid "Syllables:"
+msgstr "Табели"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, fuzzy, kde-format
+msgid "Characters (spaces):"
+msgstr "&Создади табела"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, fuzzy, kde-format
+msgid "Characters (no spaces):"
+msgstr "&Создади табела"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, kde-format
+msgid "Flesch reading ease"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East asian characters:"
+msgstr "Знаци за &форматирање"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, fuzzy, kde-format
+msgid "Words"
+msgstr "KWord"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, kde-format
+msgid "Sentences"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, fuzzy, kde-format
+msgid "Syllables"
+msgstr "Табели"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, kde-format
+msgid "Lines"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, fuzzy, kde-format
+msgid "Characters With Spaces"
+msgstr "&Создади табела"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, fuzzy, kde-format
+msgid "Characters without spaces"
+msgstr "&Создади табела"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East Asian characters"
+msgstr "Знаци за &форматирање"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, kde-format
+msgid "Flesch Reading Ease"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:9
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:10
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:11
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:12
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:13
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "Вертикално подредување"
+
+#: part/i18n/stylenames.cpp:14
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "Список со точки"
+
+#: part/i18n/stylenames.cpp:15
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:16
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:17
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:18
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:19
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:20
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:21
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:24
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:25
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:26
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:27
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:28
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:29
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:30
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:31
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:32
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:33
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:34
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:35
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:36
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:37
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:38
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "Список со точки"
+
+#: part/i18n/stylenames.cpp:41
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "Список со точки"
+
+#: part/i18n/stylenames.cpp:42
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "Список со точки"
+
+#: part/i18n/stylenames.cpp:43
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "Список со точки"
+
+#: part/i18n/stylenames.cpp:44
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:45
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:46
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:47
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:50
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:51
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:52
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:53
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:54
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:55
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:56
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "Список со точки"
+
+#: part/i18n/stylenames.cpp:57
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "Список со точки"
+
+#: part/i18n/stylenames.cpp:58
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "Нумериран список"
+
+#: part/i18n/stylenames.cpp:59
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "Список со точки"
+
+#: part/i18n/stylenames.cpp:60
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "Нумериран список"
+
+#: part/KWAboutData.h:20
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "KOffice Збор-процесор"
+
+#: part/KWAboutData.h:22
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgid "Word processor"
+msgstr "KOffice Збор-процесор"
+
+#: part/KWAboutData.h:24
+#, kde-format
+msgid "Copyright 1998-%1, The Words Team"
+msgstr ""
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr ""
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr ""
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr ""
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr ""
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr ""
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: part/KWAboutData.h:37
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Formatting stuff"
+msgstr "Знаци за &форматирање"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, fuzzy, kde-format
+msgid "Filter"
+msgstr "Проверка на правопис"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, fuzzy, kde-format
+msgid "Statistics docker"
+msgstr "&Стилист..."
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, fuzzy, kde-format
+msgid "Foot and endnotes"
+msgstr "&Фусноти"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr ""
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, fuzzy, kde-format
+msgid "Style Manager"
+msgstr "Менаџер на стил"
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr ""
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr ""
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr ""
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr ""
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, kde-format
+msgid "ODF Support"
+msgstr ""
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr ""
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr ""
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr ""
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr ""
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr ""
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr ""
+
+#: part/KWAboutData.h:58
+#, fuzzy, kde-format
+msgid "KFormula"
+msgstr "Формула"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr ""
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr ""
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr ""
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr ""
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr ""
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr ""
+
+#: part/KWAboutData.h:65
+#, fuzzy, kde-format
+msgid "Enno Bartels"
+msgstr "&Крајна-нота"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr ""
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr ""
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, fuzzy, kde-format
+msgid "Page break icon"
+msgstr "&Рабови на рамка"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+
+#: part/KWDocument.cpp:495
+#, fuzzy, kde-format
+msgid "Copy"
+msgstr "&Копирај..."
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, kde-format
+msgid "Standard"
+msgstr ""
+
+#: part/KWDocument.cpp:546
+#, fuzzy, kde-format
+msgid "Document Title"
+msgstr "Нумериран список"
+
+#: part/KWDocument.cpp:553
+#, fuzzy, kde-format
+msgid "Head 1"
+msgstr "Нумериран список"
+
+#: part/KWDocument.cpp:559
+#, fuzzy, kde-format
+msgid "Head 2"
+msgstr "Нумериран список"
+
+#: part/KWDocument.cpp:565
+#, fuzzy, kde-format
+msgid "Head 3"
+msgstr "Нумериран список"
+
+#: part/KWDocument.cpp:571
+#, fuzzy, kde-format
+msgid "Bullet List"
+msgstr "Список со точки"
+
+#: part/KWGui.cpp:69
+#, kde-format
+msgid "Tools"
+msgstr ""
+
+#: part/KWOdfLoader.cpp:83
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr ""
+
+#: part/KWOdfLoader.cpp:95
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr ""
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, kde-format
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr ""
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:36
+#, fuzzy, kde-format
+msgid "Saved"
+msgstr "Вовлекување"
+
+#: part/KWStatusBar.cpp:37
+#, fuzzy, kde-format
+msgid "Page %1 of %2"
+msgstr "Страна %1"
+
+#: part/KWStatusBar.cpp:38
+#, fuzzy, kde-format
+msgid "Page %1-%2 of %3"
+msgstr "Страна %1"
+
+#: part/KWStatusBar.cpp:39
+#, kde-format
+msgid "Line %1"
+msgstr ""
+
+#: part/KWStatusBar.cpp:124
+#, fuzzy, kde-format
+msgid "Page Number"
+msgstr "&Број на страна"
+
+#: part/KWStatusBar.cpp:137
+#, fuzzy, kde-format
+msgid "Line Number"
+msgstr "Нумерирање"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+msgid "Change the page style"
+msgstr "Име на група рамки"
+
+#: part/KWStatusBar.cpp:155
+#, fuzzy, kde-format
+msgid "Page Style"
+msgstr "Име на група рамки"
+
+#: part/KWStatusBar.cpp:169
+#, fuzzy, kde-format
+msgid "Page Size"
+msgstr "Спои ќелии"
+
+#: part/KWStatusBar.cpp:184
+#, kde-format
+msgid "Saved/Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:197
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr ""
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr ""
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Frame Properties"
+msgid "Shape Properties..."
+msgstr "Параметри на рамка"
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr ""
+
+#: part/KWView.cpp:271
+#, fuzzy, kde-format
+msgid "Create Template From Document..."
+msgstr "&Создади шаблон од документ..."
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr ""
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+
+#: part/KWView.cpp:292
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Show Formatting Characters"
+msgstr "Знаци за &форматирање"
+
+#: part/KWView.cpp:298
+#, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr ""
+
+#: part/KWView.cpp:299
+#, kde-format
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr ""
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr ""
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+
+#: part/KWView.cpp:310
+#, fuzzy, kde-format
+msgid "Show Text Shape Borders"
+msgstr "Конфигурирај крајна-нота"
+
+#: part/KWView.cpp:311
+#, kde-format
+msgid "Turns the border display on and off"
+msgstr ""
+
+#: part/KWView.cpp:317
+#, kde-format
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+
+#: part/KWView.cpp:319
+#, fuzzy, kde-format
+msgid "Show Table Borders"
+msgstr "Конфигурирај крајна-нота"
+
+#: part/KWView.cpp:325
+#, kde-format
+msgid "Toggle the display of table borders"
+msgstr ""
+
+#: part/KWView.cpp:326
+#, kde-format
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+
+#: part/KWView.cpp:328
+#, fuzzy, kde-format
+msgid "Show Section Bounds"
+msgstr "Напредно самопоправање"
+
+#: part/KWView.cpp:334
+#, kde-format
+msgid "Toggle the display of section bounds"
+msgstr ""
+
+#: part/KWView.cpp:335
+#, kde-format
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+
+#: part/KWView.cpp:337
+#, fuzzy, kde-format
+msgid "Show Rulers"
+msgstr "Подножје"
+
+#: part/KWView.cpp:339
+#, fuzzy, kde-format
+msgid "Shows or hides rulers"
+msgstr "Подножје"
+
+#: part/KWView.cpp:340
+#, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+
+#: part/KWView.cpp:351
+#, fuzzy, kde-format
+msgid "Snap to Grid"
+msgstr "Подножје"
+
+#: part/KWView.cpp:359
+#, fuzzy, kde-format
+msgid "Show Status Bar"
+msgstr "Структура на документ"
+
+#: part/KWView.cpp:360
+#, fuzzy, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Структура на документ"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr ""
+
+#: part/KWView.cpp:374
+#, fuzzy, kde-format
+msgid "Semantic Stylesheets..."
+msgstr "Форма на раб на рамка"
+
+#: part/KWView.cpp:376
+#, fuzzy, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr "Форма на раб на рамка"
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+
+#: part/KWView.cpp:392
+#, fuzzy, kde-format
+msgid "Configure..."
+msgstr "Конфигурирај крајна-нота"
+
+#: part/KWView.cpp:401
+#, fuzzy, kde-format
+msgid "Page Layout..."
+msgstr "Освежувај табулатори"
+
+#: part/KWView.cpp:403
+#, fuzzy, kde-format
+msgid "Change properties of entire page"
+msgstr "Параметри на рамка"
+
+#: part/KWView.cpp:404
+#, kde-format
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+
+#: part/KWView.cpp:407
+#, fuzzy, kde-format
+msgid "Create Header"
+msgstr "&Создади рамка за текст"
+
+#: part/KWView.cpp:413
+#, fuzzy, kde-format
+msgid "Create Footer"
+msgstr "&Создади рамка за текст"
+
+#: part/KWView.cpp:420
+#, fuzzy, kde-format
+msgid "Show Comments"
+msgstr "Отстрани запис"
+
+#: part/KWView.cpp:421
+#, kde-format
+msgid "Shows comments in the document"
+msgstr ""
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr ""
+
+#: part/KWView.cpp:428
+#, fuzzy, kde-format
+msgid "Shows or hides word counting in status bar"
+msgstr "Структура на документ"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, fuzzy, kde-format
+msgid "Page Setup"
+msgstr "Спои ќелии"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, fuzzy, kde-format
+msgid "Header & Footer"
+msgstr "Нумериран список"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Page layout"
+msgstr "Освежувај табулатори"
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, fuzzy, kde-format
+msgid "..."
+msgstr "Стра&на..."
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+msgctxt "Next search result"
+msgid "Next"
+msgstr "KWord - Вметни табела"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, fuzzy, kde-format
+#| msgid "Preview"
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "Преглед"
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, kde-format
+msgctxt "Search options"
+msgid "Options"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, fuzzy, kde-format
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr "Замени"
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, fuzzy, kde-format
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr "Замени"
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, fuzzy, kde-format
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr "Замени"
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, fuzzy, kde-format
+msgid "Replace"
+msgstr "Замени"
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, fuzzy, kde-format
+msgid "Odd Pages Header"
+msgstr "&Создади рамка за текст"
+
+#: part/Words.cpp:47
+#, fuzzy, kde-format
+msgid "Even Pages Header"
+msgstr "&Создади рамка за текст"
+
+#: part/Words.cpp:49
+#, fuzzy, kde-format
+msgid "Odd Pages Footer"
+msgstr "&Создади рамка за текст"
+
+#: part/Words.cpp:51
+#, fuzzy, kde-format
+msgid "Even Pages Footer"
+msgstr "&Создади рамка за текст"
+
+#: part/Words.cpp:53
+#, fuzzy, kde-format
+msgid "Main text"
+msgstr "Уреди &текст"
+
+#: part/Words.cpp:55
+#, fuzzy, kde-format
+msgid "Other text"
+msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "&Број на страна"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "&Параграф..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Вертикално подредување"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "Текст заобиколува"
+
+#, fuzzy
+#~| msgid "Align &Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Center"
+#~ msgstr "Подреди на &средина"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "Текст заобиколува"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Alignment"
+#~ msgstr "Вертикално подредување"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "Долу:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Wrap-around"
+#~ msgstr "Текст заобиколува"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "Низ другите рамки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "Низ другите рамки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "Низ другите рамки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "Низ другите рамки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "Низ другите рамки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "Низ другите рамки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "Вертикално подредување"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top align with:"
+#~ msgstr "Подвлечен"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center align with:"
+#~ msgstr "Подвлечен"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom align with:"
+#~ msgstr "Подвлечен"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "Зум"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "Вертикално подредување"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left align with:"
+#~ msgstr "Подвлечен"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right align with:"
+#~ msgstr "Подвлечен"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "Име на новата група рамки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "Создади нова страница"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "Име на група рамки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "Група рамки %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "Избриши ред"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Име:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "Спои ќелии"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "Лево:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "Десно:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Колона:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "Избриши колона:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "KWord"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "Табели"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "Знаци за &форматирање"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "Проверка на правопис"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Крајна-нота"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "Надолу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "&Број на страна"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "&Стилист..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&tyles"
+#~ msgstr "Форма"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "Проверка на правопис"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Уреди &текст"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "Проверка на правопис"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "Стра&на..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Ред:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "&Параграф..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "KWord - Поставки на параграф"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Конфигурирај крајна-нота"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "Создади нова страница"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "Рамка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "&Слика..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Run Around"
+#~ msgstr "Текст заобиколува"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "Поврзи рамки за текст"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "Колона:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Форма"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Избриши ред"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "Име на група рамки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Избриши колона"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "Избриши колона"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Геометрија"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "Почни од:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "&Број на страна"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "Вметни колона"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "&Стилист..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "KWord"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "Табели"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "Знаци за &форматирање"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "Вертикално подредување"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "Список со точки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "Заглавје"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "Подножје"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "Ред:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "Колона:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "Список со точки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "Список со точки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "Список со точки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "Список со точки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "Список со точки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "Список со точки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "Список со точки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "KOffice Збор-процесор"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "KOffice Збор-процесор"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "Знаци за &форматирање"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "Проверка на правопис"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "&Стилист..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "&Фусноти"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "Менаџер на стил"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "Формула"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "&Крајна-нота"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "&Копирај..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "Список со точки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "Страна %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "Страна %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "&Број на страна"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "Нумерирање"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "Име на група рамки"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "Спои ќелии"
+
+#, fuzzy
+#~| msgid "Frame Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "Параметри на рамка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template From Document..."
+#~ msgstr "&Создади шаблон од документ..."
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "Знаци за &форматирање"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "Конфигурирај крајна-нота"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Подножје"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Подножје"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Подножје"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantic Stylesheets..."
+#~ msgstr "Форма на раб на рамка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "Конфигурирај крајна-нота"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "Освежувај табулатори"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "Параметри на рамка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "&Создади рамка за текст"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "&Создади рамка за текст"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Comments"
+#~ msgstr "Отстрани запис"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "Спои ќелии"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "Освежувај табулатори"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~| msgid "Preview"
+#~ msgctxt "(qtundo-format) Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Преглед"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Label for the Replace text input box"
+#~ msgid "Replace:"
+#~ msgstr "Замени"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Replace the current match"
+#~ msgid "Replace"
+#~ msgstr "Замени"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Replace all found matches"
+#~ msgid "Replace All"
+#~ msgstr "Замени"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Замени"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "Уреди &текст"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgid "Book"
+#~ msgstr "Избриши колона"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "KOffice Збор-процесор"
+
+#, fuzzy
+#~ msgid "Select Cover Image..."
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgid "Open..."
+#~ msgstr "Вметни ред"
+
+#, fuzzy
+#~ msgid "Open Cover"
+#~ msgstr "Вметни ред"
+
+#, fuzzy
+#~ msgid "Import problem"
+#~ msgstr "Форма на раб на рамка"
+
+#, fuzzy
+#~ msgid "Cover selection"
+#~ msgstr "Регуларен израз"
+
+#, fuzzy
+#~ msgid "Outliner"
+#~ msgstr "Форма на раб на рамка"
+
+#, fuzzy
+#~ msgid "Edit section"
+#~ msgstr "Уреди &текст"
+
+#, fuzzy
+#~ msgid "Main"
+#~ msgstr "Уреди &текст"
+
+#, fuzzy
+#~ msgid "Enter actor's name here"
+#~ msgstr "Име на внес"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Actor description:"
+#~ msgstr "Самопоправање"
+
+#, fuzzy
+#~| msgid "&Bold"
+#~ msgid "Bold"
+#~ msgstr "&Задебелен"
+
+#, fuzzy
+#~| msgid "&Italic"
+#~ msgid "Italic"
+#~ msgstr "&Италик"
+
+#, fuzzy
+#~| msgid "&Underline"
+#~ msgid "Underline"
+#~ msgstr "&Подвлечен"
+
+#, fuzzy
+#~ msgid "LeftAlign"
+#~ msgstr "Подвлечен"
+
+#, fuzzy
+#~ msgid "CenterAlign"
+#~ msgstr "Подвлечен"
+
+#, fuzzy
+#~ msgid "RightAlign"
+#~ msgstr "Подвлечен"
+
+#, fuzzy
+#~ msgid "1st Edit"
+#~ msgstr "Уреди &текст"
+
+#, fuzzy
+#~ msgid "2nd Edit"
+#~ msgstr "Уреди &текст"
+
+#, fuzzy
+#~ msgid "3rd Edit"
+#~ msgstr "Уреди &текст"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Author's section"
+#~ msgstr "Самопоправање"
+
+#, fuzzy
+#~ msgid "Badge:"
+#~ msgstr "&Број на страна"
+
+#, fuzzy
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "Вметни колона"
+
+#, fuzzy
+#~ msgid "File to open"
+#~ msgstr "Датотека за отварање"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "&Создади рамка за текст"
+
+#, fuzzy
+#~| msgid "Delete Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "General"
+#~ msgstr "Интеграл"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "&Слика..."
+
+#~ msgid "Width:"
+#~ msgstr "Ширина:"
+
+#~ msgid "Height:"
+#~ msgstr "Висина:"
+
+#, fuzzy
+#~ msgid "Margins"
+#~ msgstr "Матрица"
+
+#~ msgid "Bottom:"
+#~ msgstr "Долу:"
+
+#~ msgid "Top:"
+#~ msgstr "Горе:"
+
+#~ msgid "Right:"
+#~ msgstr "Десно:"
+
+#~ msgid "Left:"
+#~ msgstr "Лево:"
+
+#~ msgid "Create a new page"
+#~ msgstr "Создади нова страница"
+
+#~ msgid "Resize last frame"
+#~ msgstr "Промени ја големината на последната рамка"
+
+#, fuzzy
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "Преповрзи рамка"
+
+#, fuzzy
+#~ msgid "Do not create a followup frame"
+#~ msgstr "Создади рамка за табела"
+
+#, fuzzy
+#~ msgid "Copy this Frame"
+#~ msgstr "Поврзи рамка"
+
+#, fuzzy
+#~ msgid "Protect content"
+#~ msgstr "Спои ќелии"
+
+#, fuzzy
+#~ msgid "Select All Shapes"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Create Linked Copy"
+#~ msgstr "Создади нова страница"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "Создади нова страница"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "Отстрани внес"
+
+#, fuzzy
+#~ msgid "Bookmark..."
+#~ msgstr "Избриши колона"
+
+#, fuzzy
+#~ msgid "Select Bookmark..."
+#~ msgstr "Избриши колона"
+
+#, fuzzy
+#~ msgid "Bookmark"
+#~ msgstr "Избриши колона"
+
+#, fuzzy
+#~| msgid "Page %1"
+#~ msgid "Page %1/%2"
+#~ msgstr "Страна %1"
+
+#, fuzzy
+#~ msgid "Automatically update"
+#~ msgstr "Самопоправање"
+
+#~ msgid "F&ormat"
+#~ msgstr "Формат"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "Преповрзи рамка"
+
+#, fuzzy
+#~ msgid "Create Frame-clip"
+#~ msgstr "&Создади рамка за текст"
+
+#, fuzzy
+#~ msgid "Remove Frame-clip"
+#~ msgstr "Отстрани запис"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Формат"
+
+#, fuzzy
+#~ msgid "Enable Document Headers"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Enable Document Footers"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgid "Change Tracking"
+#~ msgstr "Проред"
+
+#, fuzzy
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "KWord"
+
+#, fuzzy
+#~ msgid "Number of pages:"
+#~ msgstr "Број на редови:"
+
+#, fuzzy
+#~ msgid "Number of frames:"
+#~ msgstr "Број на редови:"
+
+#, fuzzy
+#~ msgid "Number of pictures:"
+#~ msgstr "Број на редови:"
+
+#, fuzzy
+#~ msgid "Number of tables:"
+#~ msgstr "Број на редови:"
+
+#, fuzzy
+#~ msgid "Text"
+#~ msgstr "Рамка за текст %1"
+
+#, fuzzy
+#~ msgid "Shows and hides header display"
+#~ msgstr "Подножје"
+
+#, fuzzy
+#~ msgid "Shows and hides footer display"
+#~ msgstr "Подножје"
+
+#, fuzzy
+#~ msgid "Raise Shape"
+#~ msgstr "Промени ја големината на последната рамка"
+
+#, fuzzy
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shape"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Lower Shape"
+#~ msgstr "Поврзи рамка"
+
+#, fuzzy
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Bring to Front"
+#~ msgstr "Форматирај група рамки"
+
+#, fuzzy
+#~ msgid "Send to Back"
+#~ msgstr "Најди наназад"
+
+#, fuzzy
+#~ msgid "After last page"
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgid "Page style:"
+#~ msgstr "Име на група рамки"
+
+#, fuzzy
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "Вметни ред"
+
+#, fuzzy
+#~| msgid "&Variable"
+#~ msgid "Variable"
+#~ msgstr "Променлива"
+
+#, fuzzy
+#~ msgid "As Character"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~ msgid "Anchor the current shape as a character in the text"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "To Character"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~ msgid "Anchor the current shape to the character at the current position"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "To Paragraph"
+#~ msgstr "&Параграф..."
+
+#, fuzzy
+#~ msgid "To Page"
+#~ msgstr "Отстрани внес"
+
+#, fuzzy
+#~ msgid "Page..."
+#~ msgstr "&Боја..."
+
+#, fuzzy
+#~ msgid "Delete Page"
+#~ msgstr "Избриши табела"
+
+#, fuzzy
+#~ msgid "Insert Image Options"
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgid "Disable Document Headers"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Disable Document Footers"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~| msgid "Frame &Borders"
+#~ msgid "Page Borders"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~ msgid "Hide Status Bar"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Numbering"
+#~ msgstr "&Нумерирање..."
+
+#~ msgid "Automatic"
+#~ msgstr "Автоматско"
+
+#, fuzzy
+#~ msgid "Footnote"
+#~ msgstr "&Фуснота"
+
+#, fuzzy
+#~ msgid "Endnote"
+#~ msgstr "&Крајна-нота"
+
+#, fuzzy
+#~ msgid "Insert Footnote/Endnote"
+#~ msgstr "Вметни фуснота/крајна-нота"
+
+#, fuzzy
+#~ msgid "Footnote/Endnote..."
+#~ msgstr "&Фуснота или крајна-нота..."
+
+#, fuzzy
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "&Рамка/Група рамки..."
+
+#, fuzzy
+#~ msgid "Alter frameset properties"
+#~ msgstr "Параметри на рамка"
+
+#, fuzzy
+#~ msgid "Picture..."
+#~ msgstr "Слики"
+
+#, fuzzy
+#~ msgid "Insert a picture into document"
+#~ msgstr "Вметни слика"
+
+#, fuzzy
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "&Создади рамка за формула"
+
+#, fuzzy
+#~ msgid "Set Floating"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgid "Filter stuff"
+#~ msgstr "Проверка на правопис"
+
+#, fuzzy
+#~ msgid "Fra&mes"
+#~ msgstr "Рамка"
+
+#~ msgid "Tables"
+#~ msgstr "Табели"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Вметни ред"
+
+#, fuzzy
+#~ msgid "Text will run around this frame"
+#~ msgstr "Не заобиколува други рамки"
+
+#, fuzzy
+#~ msgid "Text will not run around this frame"
+#~ msgstr "Не заобиколува други рамки"
+
+#, fuzzy
+#~ msgid "Run Around Side"
+#~ msgstr "Текст заобиколува"
+
+#, fuzzy
+#~ msgid "Left"
+#~ msgstr "Лево:"
+
+#, fuzzy
+#~ msgid "Right"
+#~ msgstr "Десно:"
+
+#, fuzzy
+#~ msgid "Longest side"
+#~ msgstr "Текст заобиколува"
+
+#, fuzzy
+#~ msgid "Create custom outline"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~ msgid "Create Custom Outline"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~ msgid "Create outlines"
+#~ msgstr "&Создади табела"
+
+#~ msgid "Borders"
+#~ msgstr "Рабови:"
+
+#, fuzzy
+#~ msgid "MailMerge"
+#~ msgstr "Семејство"
+
+#~ msgid "Table"
+#~ msgstr "Табела"
+
+#, fuzzy
+#~ msgid "Font"
+#~ msgstr "&Фуснота"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgid "Format"
+#~ msgstr "Формат"
+
+#~ msgid "Formula"
+#~ msgstr "Формула"
+
+#~ msgid "KWord"
+#~ msgstr "KWord"
+
+#, fuzzy
+#~| msgid "Insert Picture"
+#~ msgid "Insert Picture..."
+#~ msgstr "Вметни слика"
+
+#, fuzzy
+#~ msgid "Page Background"
+#~ msgstr "Боја на позадина на рамка"
+
+#, fuzzy
+#~ msgid "Show Grid"
+#~ msgstr "Подножје"
+
+#, fuzzy
+#~ msgid "Main Text Frameset"
+#~ msgstr "Група рамки %1"
+
+#~ msgid "Matrix"
+#~ msgstr "Матрица"
+
+#, fuzzy
+#~ msgid "Configure Frame Border"
+#~ msgstr "&Рабови на рамка"
+
+#~ msgid "Ta&ble"
+#~ msgstr "Табела"
+
+#, fuzzy
+#~ msgid "Configure Frame Borders"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~| msgid "Create a new page"
+#~ msgid "Add a new page"
+#~ msgstr "Создади нова страница"
+
+#, fuzzy
+#~ msgid "Delete selected pages"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Delete Layer"
+#~ msgstr "Избриши табела"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "&Table:"
+#~ msgstr "Табела"
+
+#, fuzzy
+#~ msgid "&Keep Settings..."
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgid "&Username:"
+#~ msgstr "Група рамки %1"
+
+#, fuzzy
+#~ msgid "&Port:"
+#~ msgstr "Параметри..."
+
+#, fuzzy
+#~ msgid "default"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "&Add >>"
+#~ msgstr "&Додади..."
+
+#, fuzzy
+#~ msgid "<< &Remove"
+#~ msgstr "Отстрани запис"
+
+#~ msgid "Name"
+#~ msgstr "Име"
+
+#, fuzzy
+#~ msgid "Distribution Lists"
+#~ msgstr "Вметни колона"
+
+#, fuzzy
+#~ msgid "Address B&ook"
+#~ msgstr "Регуларен израз"
+
+#, fuzzy
+#~ msgid "&Selected Addresses"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Hello!"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~ msgid "Professional"
+#~ msgstr "Регуларен израз"
+
+#, fuzzy
+#~ msgid "To:"
+#~ msgstr "Горе:"
+
+#, fuzzy
+#~ msgid "Subject:"
+#~ msgstr "Подписмо"
+
+#, fuzzy
+#~ msgid "Fwd:"
+#~ msgstr "Тек:"
+
+#, fuzzy
+#~ msgid "Thank you,"
+#~ msgstr "Освежувај табулатори"
+
+#, fuzzy
+#~ msgid "Thanks,"
+#~ msgstr "Освежувај табулатори"
+
+#, fuzzy
+#~ msgid "Subject"
+#~ msgstr "Подписмо"
+
+#, fuzzy
+#~ msgid "Attention"
+#~ msgstr "Самопоправање"
+
+#, fuzzy
+#~ msgid "Attention:"
+#~ msgstr "Самопоправање"
+
+#, fuzzy
+#~ msgid "Instructions"
+#~ msgstr "Вметни колона"
+
+#, fuzzy
+#~ msgid "Mail Merge - Editor"
+#~ msgstr "Serial Letter - Уредувач"
+
+#, fuzzy
+#~ msgid "Mail Merge - Setup Database Connection"
+#~ msgstr "Serial Letter - Уредувач"
+
+#, fuzzy
+#~ msgid "<not saved>"
+#~ msgstr "Нема вредност"
+
+#, fuzzy
+#~ msgid "Store Settings"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgid "Field"
+#~ msgstr "Најди"
+
+#, fuzzy
+#~ msgid "Include"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Condition"
+#~ msgstr "&Слика..."
+
+#~ msgid "Value"
+#~ msgstr "Вредност"
+
+#, fuzzy
+#~ msgid "Unkown mail merge variable: %1"
+#~ msgstr "Serrial Letter - име на променлива"
+
+#, fuzzy
+#~ msgid "New Distribution List"
+#~ msgstr "Вметни колона"
+
+#, fuzzy
+#~ msgid "Please enter name:"
+#~ msgstr "Име на внес"
+
+#~ msgid "No Value"
+#~ msgstr "Нема вредност"
+
+#, fuzzy
+#~ msgid "Add record"
+#~ msgstr "Додади запис"
+
+#, fuzzy
+#~ msgid "Add entry"
+#~ msgstr "Додади внес"
+
+#, fuzzy
+#~ msgid "Remove entry"
+#~ msgstr "Отстрани внес"
+
+#, fuzzy
+#~ msgid "Add Entry"
+#~ msgstr "Додади внес"
+
+#, fuzzy
+#~ msgid "Port:"
+#~ msgstr "Параметри..."
+
+#, fuzzy
+#~ msgid "Table of Content"
+#~ msgstr "Содр&жина..."
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "&Број на страна"
+
+#, fuzzy
+#~ msgid "Slots"
+#~ msgstr "Формат"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Параметри..."
+
+#, fuzzy
+#~| msgid "&Variable"
+#~ msgid "Variables"
+#~ msgstr "Променлива"
+
+#, fuzzy
+#~ msgid "HTML Document"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Encoded Text"
+#~ msgstr "Формат"
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)."
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Size:"
+#~ msgstr "Растојание ( pt )"
+
+#, fuzzy
+#~ msgid "Single sided"
+#~ msgstr "Текст заобиколува"
+
+#, fuzzy
+#~ msgid "Whole document:"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Right to left"
+#~ msgstr "Нумериран список"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgid "Left Edge:"
+#~ msgstr "Лево:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgid "Right Edge:"
+#~ msgstr "Десно:"
+
+#, fuzzy
+#~ msgid "Page Edge:"
+#~ msgstr "&Број на страна"
+
+#, fuzzy
+#~ msgid "Page spread"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~ msgid "Insert Inline Table"
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgid "Bookmark target: "
+#~ msgstr "Избриши колона"
+
+#, fuzzy
+#~ msgid "Text Frameset %1"
+#~ msgstr "Група рамки %1"
+
+#, fuzzy
+#~ msgid "Create Formula Frame"
+#~ msgstr "&Создади рамка за формула"
+
+#, fuzzy
+#~ msgid ""
+#~ "KWord is unable to insert the table because there is not enough space "
+#~ "available."
+#~ msgstr ""
+#~ "KWord не може да ја вметне табелата бидејќи нема\n"
+#~ "доволно слободен простор."
+
+#, fuzzy
+#~ msgid "Create Table"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~ msgid "Change Frame Background Color"
+#~ msgstr "Боја на позадина на рамка"
+
+#, fuzzy
+#~ msgid "Delete Page %1"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Resize Column"
+#~ msgstr "Избриши колона"
+
+#, fuzzy
+#~ msgid "Resize Row"
+#~ msgstr "Отстрани запис"
+
+#, fuzzy
+#~ msgid "Configure KWord"
+#~ msgstr "Конфигурирај крајна-нота"
+
+#, fuzzy
+#~ msgid "Interface"
+#~ msgstr "Интеграл"
+
+#, fuzzy
+#~ msgid "Interface Settings"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgid "Spelling"
+#~ msgstr "Проверка на правопис"
+
+#, fuzzy
+#~ msgid "Spell Checker Behavior"
+#~ msgstr "Проверка на правопис"
+
+#, fuzzy
+#~ msgid "Formula Defaults"
+#~ msgstr "Продукт"
+
+#, fuzzy
+#~ msgid "Misc Settings"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgid "Path Settings"
+#~ msgstr "KWord - Поставки на параграф"
+
+#, fuzzy
+#~ msgid "Change Config"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Show s&crollbar"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Number of recent &files:"
+#~ msgstr "Број на колони:"
+
+#, fuzzy
+#~ msgid "&Vertical grid size:"
+#~ msgstr "Вертикално подредување"
+
+#, fuzzy
+#~ msgid "&Underline all links"
+#~ msgstr "&Подвлечен"
+
+#, fuzzy
+#~ msgid "View formatting end paragraph"
+#~ msgstr "Знаци за &форматирање"
+
+#, fuzzy
+#~ msgid "View formatting space"
+#~ msgstr "Знаци за &форматирање"
+
+#, fuzzy
+#~ msgid "Document Defaults"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Default font:"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Choose..."
+#~ msgstr "&Боја..."
+
+#, fuzzy
+#~ msgid "No autosave"
+#~ msgstr "Нема вредност"
+
+#, fuzzy
+#~ msgid "Create backup file"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~ msgid "Tab stop (%1):"
+#~ msgstr "Десно ( %1 ):"
+
+#, fuzzy
+#~ msgid "Cursor"
+#~ msgstr "По &избор"
+
+#, fuzzy
+#~ msgid "Change Starting Page Number"
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "Десно ( %1 ):"
+
+#, fuzzy
+#~ msgid "Personal Expression"
+#~ msgstr "Регуларен израз"
+
+#, fuzzy
+#~ msgid "Backup Path"
+#~ msgstr "Слика (%1) %2"
+
+#, fuzzy
+#~ msgid "Modify Path..."
+#~ msgstr "Промени"
+
+#, fuzzy
+#~ msgid "Configure Endnote/Footnote"
+#~ msgstr "Конфигурирај фуснота"
+
+#, fuzzy
+#~ msgid "&Width:"
+#~ msgstr "Ширина:"
+
+#, fuzzy
+#~ msgid "Solid"
+#~ msgstr "Задебелен"
+
+#, fuzzy
+#~ msgid "Dash Dot Dot Line"
+#~ msgstr "црта точка точка црта ( -**- )"
+
+#, fuzzy
+#~ msgid "Change End-/Footnote Variable Settings"
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "Change Footnote Line Separator Settings"
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "Delete Bookmark"
+#~ msgstr "Избриши колона"
+
+#~ msgid "Delete Row"
+#~ msgstr "Избриши ред"
+
+#~ msgid "Delete Column"
+#~ msgstr "Избриши колона"
+
+#~ msgid "Delete the row from the table."
+#~ msgstr "Избриши го редот од табелата."
+
+#~ msgid "Delete the column from the table."
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Delete the whole table?"
+#~ msgstr "Избриши го редот од табелата."
+
+#, fuzzy
+#~ msgid "Delete all selected rows?"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Delete row number %1?"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Delete column number %1?"
+#~ msgstr "Избриши колона:"
+
+#, fuzzy
+#~ msgid "Delete rows: %1 ?"
+#~ msgstr "Избриши ред:"
+
+#, fuzzy
+#~ msgid "Delete columns: %1 ?"
+#~ msgstr "Избриши колона:"
+
+#~ msgid "Column %1"
+#~ msgstr "Колона %1"
+
+#~ msgid "Text Frame %1"
+#~ msgstr "Рамка за текст %1"
+
+#~ msgid "Empty"
+#~ msgstr "Празно"
+
+#, fuzzy
+#~ msgid "Formula Frame %1"
+#~ msgstr "Сума"
+
+#~ msgid "Picture (%1) %2"
+#~ msgstr "Слика (%1) %2"
+
+#~ msgid "Embedded Objects"
+#~ msgstr "Вградени објекти"
+
+#, fuzzy
+#~ msgid "Formula Frames"
+#~ msgstr "Форматирај група рамки"
+
+#~ msgid "Pictures"
+#~ msgstr "Слики"
+
+#~ msgid "Text Frames/Frame Sets"
+#~ msgstr "Рамки за текст/Група рамки"
+
+#~ msgid "Document Structure"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Create Part Frame"
+#~ msgstr "Создади делумна рамка"
+
+#~ msgid "Delete Table"
+#~ msgstr "Избриши табела"
+
+#, fuzzy
+#~ msgid "Delete Text Frame"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Delete Formula Frame"
+#~ msgstr "&Создади рамка за формула"
+
+#, fuzzy
+#~ msgid "Delete Picture Frame"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Delete Object Frame"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Edit Personal Expression"
+#~ msgstr "Регуларен израз"
+
+#, fuzzy
+#~ msgid "&New"
+#~ msgstr "Надолу"
+
+#, fuzzy
+#~ msgid "empty"
+#~ msgstr "Празно"
+
+#, fuzzy
+#~ msgid "new group"
+#~ msgstr "&Одгрупирај"
+
+#, fuzzy
+#~ msgid "&Automatic"
+#~ msgstr "Автоматско"
+
+#, fuzzy
+#~ msgid "&Manual"
+#~ msgstr "Рачно"
+
+#, fuzzy
+#~ msgid "&Footnote"
+#~ msgstr "&Фуснота"
+
+#, fuzzy
+#~ msgid "&Endnote"
+#~ msgstr "&Крајна-нота"
+
+#, fuzzy
+#~ msgid "Formula %1"
+#~ msgstr "Формула"
+
+#, fuzzy
+#~ msgid "Frame Properties for %1"
+#~ msgstr "Параметри на рамка"
+
+#, fuzzy
+#~ msgid "Frame Properties for New Frame"
+#~ msgstr "Параметри на рамка"
+
+#, fuzzy
+#~ msgid "Frames Properties"
+#~ msgstr "Параметри на рамка"
+
+#, fuzzy
+#~ msgid "Frame Settings for %1"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgid "Table is inline"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgid "Set new color on all selected frames"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Background color:"
+#~ msgstr "Боја на позадина на рамка"
+
+#, fuzzy
+#~ msgid "Background style:"
+#~ msgstr "Боја на позадина на рамка"
+
+#, fuzzy
+#~ msgid "No Background Fill"
+#~ msgstr "Боја на позадина на рамка"
+
+#, fuzzy
+#~ msgid "&Borders"
+#~ msgstr "Рабови:"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "Форма"
+
+#, fuzzy
+#~ msgid "Co&lor:"
+#~ msgstr "Боја:"
+
+#, fuzzy
+#~ msgid "Rename Frameset"
+#~ msgstr "Име на новата група рамки"
+
+#, fuzzy
+#~ msgid ""
+#~ "A new frameset with the name '%1' can not be made because a frameset with "
+#~ "that name already exists. Please enter another name or select an existing "
+#~ "frameset from the list."
+#~ msgstr ""
+#~ "Нова група рамки со името '%1'\n"
+#~ "не може а се направи бидејќи група со тоа име\n"
+#~ "веќе постои. Внесете друго име или одберете\n"
+#~ "постоечка група рамки од списокот."
+
+#, fuzzy
+#~ msgid "Make Frameset Inline"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgid "Make Frameset Non-Inline"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgid "Resize Frame"
+#~ msgstr "Промени ја големината на последната рамка"
+
+#, fuzzy
+#~ msgid "Change Margin Frame"
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "Change Border"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~ msgid "Change Left Border Frame"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~ msgid "Change Right Border Frame"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~ msgid "Change Top Border Frame"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~ msgid "Change Bottom Border Frame"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to reconnect the last frame of the frameset '%1'. The "
+#~ "contents of this frameset will be deleted.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Ќе ја избришете последната рамка од\n"
+#~ "групата рамки '%1'.\n"
+#~ "Со тоа исто така ќе ја избришете оваа група рамки\n"
+#~ "и целиот текст содржан во неа!\n"
+#~ "\n"
+#~ "Сигурно ли сакате да го направите тоа?"
+
+#~ msgid "Reconnect Frame"
+#~ msgstr "Преповрзи рамка"
+
+#, fuzzy
+#~ msgid "&Reconnect"
+#~ msgstr "Преповрзи рамка"
+
+#, fuzzy
+#~ msgid "Frame Style Manager"
+#~ msgstr "Менаџер на стил"
+
+#, fuzzy
+#~ msgid "New Framestyle Template (%1)"
+#~ msgstr "Нов шаблон за форма"
+
+#, fuzzy
+#~ msgid "Frame background color:"
+#~ msgstr "Боја на позадина на рамка"
+
+#, fuzzy
+#~ msgid "Go to Footnote"
+#~ msgstr "Конфигурирај фуснота"
+
+#, fuzzy
+#~ msgid "Go to Endnote"
+#~ msgstr "Конфигурирај фуснота"
+
+#~ msgid "Insert Row"
+#~ msgstr "Вметни ред"
+
+#~ msgid "Insert Column"
+#~ msgstr "Вметни колона"
+
+#, fuzzy
+#~ msgid "Insert New Row"
+#~ msgstr "Вметни нов ред"
+
+#~ msgid "Insert New Column"
+#~ msgstr "Вметни нова колона"
+
+#~ msgid "Before"
+#~ msgstr "Пред"
+
+#~ msgid "After"
+#~ msgstr "После"
+
+#~ msgid "Row:"
+#~ msgstr "Ред:"
+
+#~ msgid "Column:"
+#~ msgstr "Колона:"
+
+#, fuzzy
+#~ msgid "Choose &Picture..."
+#~ msgstr "&Боја..."
+
+#, fuzzy
+#~ msgid "Choose Picture"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Do you really want to replace the current datasource?"
+#~ msgstr "Не заобиколува други рамки"
+
+#, fuzzy
+#~ msgid "Mail Merge Setup"
+#~ msgstr "Семејство"
+
+#, fuzzy
+#~ msgid "Edit Current..."
+#~ msgstr "Додади внес"
+
+#, fuzzy
+#~ msgid "Create New..."
+#~ msgstr "Создади нова страница"
+
+#, fuzzy
+#~ msgid "Print Preview..."
+#~ msgstr "Преглед"
+
+#, fuzzy
+#~ msgid "Create New Document"
+#~ msgstr "Создади нова страница"
+
+#, fuzzy
+#~ msgid "Mail Merge - Variable Name"
+#~ msgstr "Serrial Letter - име на променлива"
+
+#, fuzzy
+#~ msgid "Unnamed Table"
+#~ msgstr "&Создади табела"
+
+#, fuzzy
+#~ msgid "Object %1"
+#~ msgstr "Вграден објект %1"
+
+#, fuzzy
+#~ msgid "Move/Resize Frame"
+#~ msgstr "Промени ја големината на последната рамка"
+
+#, fuzzy
+#~ msgid "Make Document External"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Make Document Internal"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgid "Picture %1"
+#~ msgstr "Слика (%1) %2"
+
+#, fuzzy
+#~ msgid "Sort Text"
+#~ msgstr "Формат"
+
+#, fuzzy
+#~ msgid "Increase"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Decrease"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Split Cell"
+#~ msgstr "Раздвои ќелии"
+
+#, fuzzy
+#~ msgid "Number of rows:"
+#~ msgstr "Број на редови:"
+
+#, fuzzy
+#~ msgid "Number of columns:"
+#~ msgstr "Број на колони:"
+
+#, fuzzy
+#~ msgid "Selected Text"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Counting..."
+#~ msgstr "&Слика..."
+
+#, fuzzy
+#~ msgid "Number of embedded objects:"
+#~ msgstr "Вградени објекти"
+
+#, fuzzy
+#~ msgid "Number of formula frameset:"
+#~ msgstr "Број на редови:"
+
+#, fuzzy
+#~ msgid "Table Settings"
+#~ msgstr "Поставки на табела"
+
+#, fuzzy
+#~ msgid "Cell heights:"
+#~ msgstr "Висини на ќелија:"
+
+#~ msgid "Manual"
+#~ msgstr "Рачно"
+
+#, fuzzy
+#~ msgid "Cell widths:"
+#~ msgstr "Ширини на ќелија"
+
+#, fuzzy
+#~ msgid "The table is &inline"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgid "Reapply template to table"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Add New Rows to Table"
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgid "Remove Rows From Table"
+#~ msgstr "Избриши го редот од табелата."
+
+#, fuzzy
+#~ msgid "Remove Row"
+#~ msgstr "Отстрани запис"
+
+#, fuzzy
+#~ msgid "Add New Columns to Table"
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgid "Remove Columns From Table"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Remove Column"
+#~ msgstr "Отстрани запис"
+
+#, fuzzy
+#~ msgid "Apply Template to Table"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Table Style Manager"
+#~ msgstr "Менаџер на стил"
+
+#, fuzzy
+#~ msgid "Textstyle:"
+#~ msgstr "Форма:"
+
+#, fuzzy
+#~ msgid "New Tablestyle Template (%1)"
+#~ msgstr "Нов шаблон за форма"
+
+#, fuzzy
+#~ msgid "&Customize"
+#~ msgstr "По &избор"
+
+#, fuzzy
+#~ msgid "Apply To"
+#~ msgstr "Примени за тело"
+
+#, fuzzy
+#~ msgid "First row"
+#~ msgstr "Вметни ред"
+
+#, fuzzy
+#~ msgid "Last row"
+#~ msgstr "Вметни ред"
+
+#, fuzzy
+#~ msgid "Body"
+#~ msgstr "Задебелен"
+
+#, fuzzy
+#~ msgid "First column"
+#~ msgstr "Вметни колона"
+
+#, fuzzy
+#~ msgid "Last column"
+#~ msgstr "Вметни колона"
+
+#, fuzzy
+#~ msgid "--- Frame Break ---"
+#~ msgstr "&Прекин на рамка"
+
+#, fuzzy
+#~ msgid "Change Paragraph Attribute"
+#~ msgstr "Растојание на параграф"
+
+#, fuzzy
+#~ msgid "Paste"
+#~ msgstr "&Број на страна"
+
+#, fuzzy
+#~ msgid "Insert Table of Contents"
+#~ msgstr "Содр&жина..."
+
+#, fuzzy
+#~ msgid "Endnote %1"
+#~ msgstr "&Крајна-нота"
+
+#, fuzzy
+#~ msgid "Footnote %1"
+#~ msgstr "&Фуснота"
+
+#, fuzzy
+#~ msgid "Insert Expression"
+#~ msgstr "Регуларен израз"
+
+#, fuzzy
+#~ msgid "Insert Variable"
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgid "Select Frame"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Configure Mai&l Merge..."
+#~ msgstr "Конфигурирај крајна-нота"
+
+#, fuzzy
+#~ msgid "Drag Mail Merge Variable"
+#~ msgstr "Serrial Letter - име на променлива"
+
+#~ msgid "&Delete Frame"
+#~ msgstr "&Избриши рамка"
+
+#, fuzzy
+#~ msgid "Ra&ise Frame"
+#~ msgstr "Промени ја големината на последната рамка"
+
+#, fuzzy
+#~ msgid "&Lower Frame"
+#~ msgstr "Поврзи рамка"
+
+#, fuzzy
+#~ msgid "Text Mode"
+#~ msgstr "Рамка за текст %1"
+
+#, fuzzy
+#~ msgid "Pre&view Mode"
+#~ msgstr "Преглед"
+
+#, fuzzy
+#~ msgid "Enable Document &Headers"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Enable Document Foo&ters"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Disable Document Foo&ters"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "Специјален &Знак..."
+
+#~ msgid "&Hard Frame Break"
+#~ msgstr "&Прекин на рамка"
+
+#, fuzzy
+#~ msgid "Comment..."
+#~ msgstr "Колона:"
+
+#, fuzzy
+#~ msgid "Edit Comment..."
+#~ msgstr "Колона:"
+
+#, fuzzy
+#~ msgid "Change the content of a comment"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Колона:"
+
+#, fuzzy
+#~ msgid "Table of &Contents"
+#~ msgstr "Содр&жина..."
+
+#, fuzzy
+#~ msgid "Document &Information"
+#~ msgstr "Структура на документ"
+
+#~ msgid "&Custom"
+#~ msgstr "По &избор"
+
+#, fuzzy
+#~ msgid "&Expression"
+#~ msgstr "Регуларен израз"
+
+#, fuzzy
+#~ msgid "Te&xt Frame"
+#~ msgstr "Рамка за текст %1"
+
+#, fuzzy
+#~ msgid "Create a new text frame"
+#~ msgstr "&Создади рамка за текст"
+
+#, fuzzy
+#~ msgid "Create a new text frame."
+#~ msgstr "&Создади рамка за текст"
+
+#, fuzzy
+#~ msgid "For&mula"
+#~ msgstr "Формула"
+
+#, fuzzy
+#~ msgid "Insert a formula into a new frame"
+#~ msgstr "&Создади рамка за формула"
+
+#, fuzzy
+#~ msgid "Insert a formula into a new frame."
+#~ msgstr "&Создади рамка за формула"
+
+#, fuzzy
+#~ msgid "&Table..."
+#~ msgstr "Табела"
+
+#, fuzzy
+#~ msgid "Create a new frame for a picture"
+#~ msgstr "Создади нова страница"
+
+#, fuzzy
+#~ msgid "Create a new frame for a picture or diagram."
+#~ msgstr "Создади нова страница"
+
+#, fuzzy
+#~ msgid "&Object Frame"
+#~ msgstr "&Создади рамка за текст"
+
+#, fuzzy
+#~ msgid "Insert an object into a new frame"
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgid "Insert an object into a new frame."
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgid "Fi&le..."
+#~ msgstr "Табела"
+
+#~ msgid "&Font..."
+#~ msgstr "&Фонт..."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&Параграф..."
+
+#, fuzzy
+#~ msgid "&Frame Style Manager"
+#~ msgstr "Менаџер на стил"
+
+#, fuzzy
+#~ msgid "Change attributes of framestyles"
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "Change attributes of styles"
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "Font Size"
+#~ msgstr "Спои ќелии"
+
+#, fuzzy
+#~ msgid "Increase Font Size"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Decrease Font Size"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "St&yle"
+#~ msgstr "Форма"
+
+#, fuzzy
+#~ msgid "Default Format"
+#~ msgstr "Избриши рамка"
+
+#~ msgid "Align &Left"
+#~ msgstr "Подреди &лево"
+
+#~ msgid "Align &Right"
+#~ msgstr "Подреди &десно"
+
+#~ msgid "Align &Block"
+#~ msgstr "Подреди &блок"
+
+#, fuzzy
+#~ msgid "Line Spacing &1"
+#~ msgstr "Проред"
+
+#, fuzzy
+#~ msgid "Line Spacing 1.&5"
+#~ msgstr "Проред"
+
+#, fuzzy
+#~ msgid "Line Spacing &2"
+#~ msgstr "Проред"
+
+#~ msgid "Superscript"
+#~ msgstr "Надписмо"
+
+#~ msgid "Subscript"
+#~ msgstr "Подписмо"
+
+#, fuzzy
+#~ msgid "Increase Indent"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Decrease Indent"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Text Color..."
+#~ msgstr "&Боја..."
+
+#, fuzzy
+#~ msgid "Bullet"
+#~ msgstr "Точки"
+
+#, fuzzy
+#~ msgid "Framest&yle"
+#~ msgstr "Име на група рамки"
+
+#, fuzzy
+#~ msgid "Border Left"
+#~ msgstr "Лев раб на рамка"
+
+#, fuzzy
+#~ msgid "Border Right"
+#~ msgstr "Десен раб на рамка"
+
+#, fuzzy
+#~ msgid "Border Top"
+#~ msgstr "Горен раб на рамка"
+
+#, fuzzy
+#~ msgid "Border Bottom"
+#~ msgstr "Долен раб на рамка"
+
+#, fuzzy
+#~ msgid "Border Style"
+#~ msgstr "Форма на раб на рамка"
+
+#, fuzzy
+#~ msgid "Border Width"
+#~ msgstr "Ширина на раб на рамка"
+
+#, fuzzy
+#~ msgid "Border Color"
+#~ msgstr "Боја на раб на рамка"
+
+#, fuzzy
+#~ msgid "Text Background Color..."
+#~ msgstr "Боја на позадина на рамка"
+
+#, fuzzy
+#~ msgid "Change background color for currently selected text"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "&Properties"
+#~ msgstr "Параметри..."
+
+#, fuzzy
+#~ msgid "Adjust properties of the current table"
+#~ msgstr "Избриши го редот од табелата."
+
+#, fuzzy
+#~ msgid "Adjust properties of the current table."
+#~ msgstr "Избриши го редот од табелата."
+
+#~ msgid "&Insert Row..."
+#~ msgstr "&Вметни ред..."
+
+#, fuzzy
+#~ msgid "Insert one or more rows at cursor location"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "I&nsert Column..."
+#~ msgstr "&Вметни колона..."
+
+#, fuzzy
+#~ msgid "Insert one or more columns into the current table"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Insert one or more columns into the current table."
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Delete selected rows from the current table"
+#~ msgstr "Избриши го редот од табелата."
+
+#, fuzzy
+#~ msgid "Delete selected rows from the current table."
+#~ msgstr "Избриши го редот од табелата."
+
+#, fuzzy
+#~ msgid "Delete selected columns from the current table"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Delete selected columns from the current table."
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Resize Column..."
+#~ msgstr "&Вметни колона..."
+
+#, fuzzy
+#~ msgid "Change the width of the currently selected column"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Change the width of the currently selected column."
+#~ msgstr "Избриши ја колоната од табелата."
+
+#~ msgid "&Join Cells"
+#~ msgstr "&Спои ќелии"
+
+#, fuzzy
+#~ msgid "Join two or more cells into one large cell"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "&Split Cell..."
+#~ msgstr "Раздвои ќелии"
+
+#, fuzzy
+#~ msgid "Split one cell into two or more cells"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Protect Cells"
+#~ msgstr "Спои ќелии"
+
+#, fuzzy
+#~ msgid "Prevent changes to content of selected cells"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#~ msgid "&Ungroup Table"
+#~ msgstr "&Одгрупирај табела"
+
+#, fuzzy
+#~ msgid "Delete &Table"
+#~ msgstr "Избриши табела"
+
+#, fuzzy
+#~ msgid "Delete the entire table"
+#~ msgstr "Избриши го редот од табелата."
+
+#, fuzzy
+#~ msgid "T&able Style Manager"
+#~ msgstr "Менаџер на стил"
+
+#, fuzzy
+#~ msgid "Change attributes of tablestyles"
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "Table&style"
+#~ msgstr "Табели"
+
+#, fuzzy
+#~ msgid "Convert Table to Text"
+#~ msgstr "Содр&жина..."
+
+#, fuzzy
+#~ msgid "Sort Text..."
+#~ msgstr "Формат"
+
+#, fuzzy
+#~ msgid "Add Expression"
+#~ msgstr "Регуларен израз"
+
+#, fuzzy
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Едноставно самопоправање"
+
+#, fuzzy
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Едноставно самопоправање"
+
+#, fuzzy
+#~ msgid "Toggle autocorrection on and off"
+#~ msgstr "Напредно самопоправање"
+
+#, fuzzy
+#~ msgid "Toggle autocorrection on and off."
+#~ msgstr "Напредно самопоправање"
+
+#, fuzzy
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "&Самопоправање..."
+
+#, fuzzy
+#~ msgid "Custom &Variables..."
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "Edit &Personal Expressions..."
+#~ msgstr "Регуларен израз"
+
+#, fuzzy
+#~ msgid "Add or change one or more personal expressions"
+#~ msgstr "Регуларен израз"
+
+#, fuzzy
+#~ msgid "Change Case..."
+#~ msgstr "&Боја..."
+
+#, fuzzy
+#~ msgid "Change Picture..."
+#~ msgstr "&Боја..."
+
+#, fuzzy
+#~ msgid "Change the picture in the currently selected frame"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Configure Header/Footer..."
+#~ msgstr "Конфигурирај крајна-нота"
+
+#, fuzzy
+#~ msgid "Configure the currently selected header or footer"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Configure the currently selected header or footer."
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Change Link..."
+#~ msgstr "Проред"
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected link"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Change the details of the currently selected link."
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "Вметни ред"
+
+#, fuzzy
+#~ msgid "Add to Bookmark"
+#~ msgstr "Избриши колона"
+
+#, fuzzy
+#~ msgid "Remove Link"
+#~ msgstr "Отстрани внес"
+
+#, fuzzy
+#~ msgid "Show Doc Structure"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Hide Doc Structure"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Open document structure sidebar"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Hide Rulers"
+#~ msgstr "Подножје"
+
+#, fuzzy
+#~ msgid "Hide Grid"
+#~ msgstr "&Мрежа во табела"
+
+#, fuzzy
+#~ msgid "Configure C&ompletion..."
+#~ msgstr "Конфигурирај фуснота"
+
+#, fuzzy
+#~ msgid "Change the words and options for autocompletion"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Вметни крајна-нота"
+
+#, fuzzy
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Вметни крајна-нота"
+
+#, fuzzy
+#~ msgid "Increase Numbering Level"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Edit Variable..."
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Самопоправање"
+
+#, fuzzy
+#~ msgid "Create Style From Selection..."
+#~ msgstr "&Создади рамка за формула"
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected text"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected text."
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "&Footnote..."
+#~ msgstr "&Фуснота"
+
+#, fuzzy
+#~ msgid "Edit Footnote"
+#~ msgstr "Конфигурирај фуснота"
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected footnote"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected footnote."
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Change Footnote/Endnote Parameter"
+#~ msgstr "Вметни фуснота/крајна-нота"
+
+#, fuzzy
+#~ msgid "Save Picture As..."
+#~ msgstr "&Боја..."
+
+#, fuzzy
+#~ msgid "Save the picture in a separate file"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "&Create Framestyle From Frame..."
+#~ msgstr "&Создади рамка за формула"
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected frame"
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Create a new framestyle based on the currently selected frame."
+#~ msgstr "Избриши ја колоната од табелата."
+
+#, fuzzy
+#~ msgid "Convert to Text Box"
+#~ msgstr "Содр&жина..."
+
+#, fuzzy
+#~ msgid "Go to Document Structure"
+#~ msgstr "Структура на документ"
+
+#, fuzzy
+#~ msgid "Insert variable \"%1\" into the text"
+#~ msgstr "Содр&жина..."
+
+#, fuzzy
+#~ msgid "Frame Background Color..."
+#~ msgstr "Боја на позадина на рамка"
+
+#, fuzzy
+#~ msgid "Apply a paragraph style"
+#~ msgstr "Примени за заглавје"
+
+#, fuzzy
+#~ msgid "Apply a frame style"
+#~ msgstr "Примени за заглавје"
+
+#, fuzzy
+#~ msgid "Apply a table style"
+#~ msgstr "Примени за заглавје"
+
+#, fuzzy
+#~ msgid "Image"
+#~ msgstr "&Број на страна"
+
+#, fuzzy
+#~ msgid "Select paste format:"
+#~ msgstr "Бирање &Знак..."
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to delete a table.\n"
+#~ "Doing so will delete all the text in the table.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Ќе ја избришете последната рамка од\n"
+#~ "групата рамки '%1'.\n"
+#~ "Со тоа исто така ќе ја избришете оваа група рамки\n"
+#~ "и целиот текст содржан во неа!\n"
+#~ "\n"
+#~ "Сигурно ли сакате да го направите тоа?"
+
+#, fuzzy
+#~ msgid "Do you want to delete this frame?"
+#~ msgstr "Не заобиколува други рамки"
+
+#, fuzzy
+#~ msgid "Change Custom Variable"
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "Insert Picture Inline"
+#~ msgstr "Вметни слика"
+
+#, fuzzy
+#~ msgid "Insert Inline Frame"
+#~ msgstr "KWord - Вметни табела"
+
+#~ msgid "Insert Footnote"
+#~ msgstr "Вметни фуснота"
+
+#, fuzzy
+#~ msgid "Update Table of &Contents"
+#~ msgstr "Содр&жина..."
+
+#, fuzzy
+#~ msgid "Change Font"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Change Layout"
+#~ msgstr "Освежувај табулатори"
+
+#, fuzzy
+#~ msgid "You must select a frame first."
+#~ msgstr "Треба прво да одберете рамка."
+
+#~ msgid "Format Frameset"
+#~ msgstr "Форматирај група рамки"
+
+#, fuzzy
+#~ msgid "Insert Table"
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgid "Insert Formula"
+#~ msgstr "Формула"
+
+#, fuzzy
+#~ msgid "Remove Rows"
+#~ msgstr "Отстрани запис"
+
+#, fuzzy
+#~ msgid "Remove Columns"
+#~ msgstr "Отстрани запис"
+
+#, fuzzy
+#~ msgid "Adjust Table"
+#~ msgstr "KWord - Вметни табела"
+
+#, fuzzy
+#~ msgid "Join Cells Failed"
+#~ msgstr "Спои ќелии"
+
+#, fuzzy
+#~ msgid ""
+#~ "You have to select some cells which are next to each other and are not "
+#~ "already joined."
+#~ msgstr ""
+#~ "треба да одберете ќелии кои се една до друга\n"
+#~ "и не се веќе споени"
+
+#~ msgid "Join Cells"
+#~ msgstr "Спои ќелии"
+
+#, fuzzy
+#~ msgid "You have to put the cursor into a table before splitting cells."
+#~ msgstr ""
+#~ "Морате да го ставите курсорот во табела\n"
+#~ "пред да раздвоите ќелии."
+
+#~ msgid "Split Cells"
+#~ msgstr "Раздвои ќелии"
+
+#, fuzzy
+#~ msgid ""
+#~ "There is not enough space to split the cell into that many parts, make it "
+#~ "bigger first"
+#~ msgstr ""
+#~ "Нема доволно простор десно од табелата\n"
+#~ "за да се вметне нова колона."
+
+#~ msgid "Ungroup Table"
+#~ msgstr "Одгрупирај табела"
+
+#, fuzzy
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Apply Framestyle to Frame"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Apply Framestyle to Frames"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Apply Framestyle"
+#~ msgstr "Примени за заглавје"
+
+#, fuzzy
+#~ msgid "Apply Tablestyle to Frame"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Apply Tablestyle to Frames"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Change Text Size"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Change Text Font"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Make Text Bold"
+#~ msgstr "Рамка за текст %1"
+
+#, fuzzy
+#~ msgid "Make Text Italic"
+#~ msgstr "Поставки на рамка"
+
+#, fuzzy
+#~ msgid "Underline Text"
+#~ msgstr "Подвлечен"
+
+#, fuzzy
+#~ msgid "Strike Out Text"
+#~ msgstr "Формат"
+
+#, fuzzy
+#~ msgid "Set Text Color"
+#~ msgstr "&Боја..."
+
+#, fuzzy
+#~ msgid "Center Text"
+#~ msgstr "Вметни крајна-нота"
+
+#, fuzzy
+#~ msgid "Justify Text"
+#~ msgstr "Уреди &текст"
+
+#, fuzzy
+#~ msgid "Set Single Line Spacing"
+#~ msgstr "Проред"
+
+#, fuzzy
+#~ msgid "Set Double Line Spacing"
+#~ msgstr "Проред"
+
+#, fuzzy
+#~ msgid "Change List Type"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Make Text Superscript"
+#~ msgstr "Лево надписмо"
+
+#, fuzzy
+#~ msgid "Make Text Subscript"
+#~ msgstr "Лево подписмо"
+
+#, fuzzy
+#~ msgid "Change Case of Text"
+#~ msgstr "&Боја..."
+
+#, fuzzy
+#~ msgid "Change Top Frame Border"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~ msgid "Change Bottom Frame Border"
+#~ msgstr "&Рабови на рамка"
+
+#, fuzzy
+#~ msgid "Change Tabulator"
+#~ msgstr "Освежувај табулатори"
+
+#, fuzzy
+#~ msgid "Change First Line Indent"
+#~ msgstr "&Боја..."
+
+#, fuzzy
+#~ msgid "Change Indent"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Edit Endnote"
+#~ msgstr "Конфигурирај фуснота"
+
+#, fuzzy
+#~ msgid "Change Footnote Parameter"
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "Change Endnote Parameter"
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "D&elete Current Column..."
+#~ msgstr "&Избриши колона..."
+
+#, fuzzy
+#~ msgid "D&elete Selected Columns..."
+#~ msgstr "&Избриши колона..."
+
+#, fuzzy
+#~ msgid "&Delete Current Row..."
+#~ msgstr "&Избрши ред..."
+
+#, fuzzy
+#~ msgid "&Delete Selected Rows..."
+#~ msgstr "&Избрши ред..."
+
+#, fuzzy
+#~ msgid "Change Picture"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Save Picture"
+#~ msgstr "Вовлекување"
+
+#, fuzzy
+#~ msgid "Move Frame"
+#~ msgstr "Рамка на текст"
+
+#, fuzzy
+#~ msgid "Change Note Text"
+#~ msgstr "&Боја..."
+
+#, fuzzy
+#~ msgid "Apply Autoformat"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Change Footnote Parameters"
+#~ msgstr "&Променливи по избор..."
+
+#, fuzzy
+#~ msgid "Insert File"
+#~ msgstr "KWord - Вметни табела"
+
+#~ msgid "Normal"
+#~ msgstr "Нормално"
+
+#, fuzzy
+#~ msgid "Delete Frames"
+#~ msgstr "Избриши рамка"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Поставки на рамка"
+
+#~ msgid "Table %1"
+#~ msgstr "Табела %1"
+
+#~ msgid "Font Family"
+#~ msgstr "Семејство фонтови"
+
+#, fuzzy
+#~ msgid "Speak Text"
+#~ msgstr "Формат"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to delete the last Frame of the Frameset '%1'. The contents "
+#~ "of this Frameset will not appear anymore!\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Ќе ја избришете последната рамка од\n"
+#~ "групата рамки '%1'.\n"
+#~ "Со тоа исто така ќе ја избришете оваа група рамки\n"
+#~ "и целиот текст содржан во неа!\n"
+#~ "\n"
+#~ "Сигурно ли сакате да го направите тоа?"
