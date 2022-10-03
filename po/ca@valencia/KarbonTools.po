@@ -36,7 +36,7 @@ msgstr "Forma cal·ligràfica"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:56
 #, kde-format
 msgid "Save profile as..."
-msgstr "Guarda el perfil com a..."
+msgstr "Anomena i guarda el perfil..."
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
 #, kde-format
