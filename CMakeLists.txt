@@ -1097,3 +1097,9 @@ endif()
 if (BUILD_TESTING)
     add_subdirectory(tests)
 endif(BUILD_TESTING)
+
+ki18n_install(po)
+if(KF5DocTools_FOUND)
+    kdoctools_install(po)
+endif()
+
