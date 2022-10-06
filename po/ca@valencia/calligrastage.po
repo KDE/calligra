@@ -33,7 +33,7 @@ msgstr "&Edita"
 #: part/calligrastage.rc:29
 #, kde-format
 msgid "&View"
-msgstr "&Visualitza"
+msgstr "Vi&sualitza"
 
 #. i18n: ectx: Menu (insert)
 #: part/calligrastage.rc:49
@@ -64,7 +64,7 @@ msgstr "P&resentació"
 #: part/calligrastage.rc:81
 #, kde-format
 msgid "&Settings"
-msgstr "&Configuració"
+msgstr "Con&figuració"
 
 #: part/commands/KPrAddCustomSlideShowCommand.cpp:19
 msgctxt "(qtundo-format)"

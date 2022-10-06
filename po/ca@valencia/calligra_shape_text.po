@@ -730,7 +730,7 @@ msgstr "Tesi de màster"
 #: dialogs/InsertBibliographyDialog.ui:116
 #, kde-format
 msgid "Misc"
-msgstr "Miscelànea"
+msgstr "Miscel·lània"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -1441,7 +1441,7 @@ msgstr "Carrega una imatge..."
 #: dialogs/ManageBookmark.ui:20
 #, kde-format
 msgid "&Rename"
-msgstr "&Canvia el nom"
+msgstr "Ca&nvia el nom"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
 #: dialogs/ManageBookmark.ui:27

@@ -99,7 +99,7 @@ msgstr "Operadors"
 #: FormulaToolWidget.cpp:85
 #, kde-format
 msgid "Miscellaneous"
-msgstr "Miscelànea"
+msgstr "Miscel·lània"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: FormulaToolWidget.ui:24

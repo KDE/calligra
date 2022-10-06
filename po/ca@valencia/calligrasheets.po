@@ -15917,7 +15917,7 @@ msgstr "aacid@kde.org,sastia@retemail.es,rcarreras@caliu.cat"
 #: part/calligrasheets.rc:5
 #, kde-format
 msgid "&File"
-msgstr "&Fitxer"
+msgstr "Fi&txer"
 
 #. i18n: ectx: Menu (Edit)
 #. i18n: ectx: Menu (edit)
@@ -15949,7 +15949,7 @@ msgstr "Elimina"
 #: part/calligrasheets.rc:54 part/calligrasheets_readonly.rc:9
 #, kde-format
 msgid "&View"
-msgstr "&Visualitza"
+msgstr "Vi&sualitza"
 
 #. i18n: ectx: Menu (go)
 #: part/calligrasheets.rc:65
@@ -16035,7 +16035,7 @@ msgstr "&Eines"
 #: part/calligrasheets.rc:178
 #, kde-format
 msgid "&Settings"
-msgstr "&Configuracions"
+msgstr "Con&figuracions"
 
 #. i18n: ectx: ToolBar (editToolBar)
 #: part/calligrasheets.rc:209
@@ -16781,7 +16781,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:143
 #, kde-format
 msgid "&Convert first letter to uppercase"
-msgstr "&Convertix la primera lletra a majúscula"
+msgstr "Con&vertix la primera lletra a majúscula"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, hideZeroCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:150
@@ -19593,7 +19593,7 @@ msgstr "Any nul:"
 #: ui/dialogs/DocumentSettingsDialog.cpp:169
 #, kde-format
 msgid "&Use System's Locale Settings"
-msgstr "&Utilitza la configuració regional del sistema"
+msgstr "Utilit&za la configuració regional del sistema"
 
 #: ui/dialogs/DocumentSettingsDialog.cpp:196
 #, kde-format
@@ -21214,7 +21214,7 @@ msgstr "VarP"
 #: ui/dialogs/SubtotalsDetailsWidget.ui:35
 #, kde-format
 msgid "&Replace current Subtotals"
-msgstr "&Substituïx subtotals actuals"
+msgstr "Su&bstituïx subtotals actuals"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_pageBreak)
 #: ui/dialogs/SubtotalsDetailsWidget.ui:48

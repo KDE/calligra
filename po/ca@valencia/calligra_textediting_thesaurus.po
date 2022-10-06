@@ -83,12 +83,12 @@ msgstr "&WordNet"
 #: Thesaurus.cpp:192
 #, kde-format
 msgid "&Replace with:"
-msgstr "&Substituïx per:"
+msgstr "Su&bstituïx per:"
 
 #: Thesaurus.cpp:255
 #, kde-format
 msgid "&Replace"
-msgstr "&Substituïx"
+msgstr "Su&bstituïx"
 
 #: Thesaurus.cpp:267
 #, kde-format

@@ -43,7 +43,7 @@ msgstr "&Alinea"
 #: data/karbon.rc:34
 #, kde-format
 msgid "&File"
-msgstr "&Fitxer"
+msgstr "Fi&txer"
 
 #. i18n: ectx: Menu (edit)
 #: data/karbon.rc:38 data/karbon_readonly.rc:11
@@ -55,7 +55,7 @@ msgstr "&Edita"
 #: data/karbon.rc:52 data/karbon_readonly.rc:17
 #, kde-format
 msgid "&View"
-msgstr "&Visualitza"
+msgstr "Vi&sualitza"
 
 #. i18n: ectx: Menu (object)
 #: data/karbon.rc:74
@@ -67,7 +67,7 @@ msgstr "&Objecte"
 #: data/karbon.rc:94
 #, kde-format
 msgid "&Distribute"
-msgstr "&Distribuïx"
+msgstr "Distrib&uïx"
 
 #. i18n: ectx: Menu (path)
 #: data/karbon.rc:113
@@ -85,7 +85,7 @@ msgstr "Efe&ctes"
 #: data/karbon.rc:129
 #, kde-format
 msgid "&Settings"
-msgstr "&Configuracions"
+msgstr "Con&figuracions"
 
 #. i18n: ectx: Menu (page)
 #: data/karbon.rc:137

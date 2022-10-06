@@ -189,7 +189,7 @@ msgstr "Variables de scripts per a Words"
 #: scripts/scripts.rc:62
 #, kde-format
 msgid "Read From File..."
-msgstr "Llig des de &fitxer..."
+msgstr "Llig des de fi&txer..."
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:62

@@ -774,7 +774,7 @@ msgstr "Desfés"
 #: main/calligra_shell.rc:4
 #, kde-format
 msgid "&File"
-msgstr "&Fitxer"
+msgstr "Fi&txer"
 
 #. i18n: ectx: Menu (settings)
 #: main/calligra_shell.rc:32
@@ -860,7 +860,7 @@ msgstr "&Vertical:"
 #: pigment/KoCompositeOpRegistry.cpp:31
 #, kde-format
 msgid "Misc"
-msgstr "Miscelànea"
+msgstr "Miscel·lània"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -1699,7 +1699,7 @@ msgstr "Grup:"
 #: main/KoTemplateCreateDia.cpp:138
 #, kde-format
 msgid "&Add Group..."
-msgstr "&Afig grup..."
+msgstr "Afi&g grup..."
 
 #: main/KoTemplateCreateDia.cpp:141 main/KoVersionDialog.cpp:61
 #, kde-format
@@ -1809,7 +1809,7 @@ msgstr "Comentari"
 #: main/KoVersionDialog.cpp:58
 #, kde-format
 msgid "&Add"
-msgstr "&Afig"
+msgstr "Afi&g"
 
 #: main/KoVersionDialog.cpp:64
 #, kde-format
@@ -1819,7 +1819,7 @@ msgstr "&Modifica"
 #: main/KoVersionDialog.cpp:67
 #, kde-format
 msgid "&Open"
-msgstr "&Obri"
+msgstr "O&bri"
 
 #: main/KoVersionDialog.cpp:120
 #, kde-format
@@ -4911,7 +4911,7 @@ msgstr "Para el color."
 #: widgets/KoGradientEditWidget.cpp:182
 #, kde-format
 msgid "&Add to Predefined Gradients"
-msgstr "&Afig als degradats predefinits"
+msgstr "Afi&g als degradats predefinits"
 
 #: widgets/KoModeBox.cpp:575
 #, kde-format

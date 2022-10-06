@@ -287,7 +287,7 @@ msgstr "..."
 #: AutocorrectConfig.ui:414
 #, kde-format
 msgid "Re&place"
-msgstr "&Substituïx"
+msgstr "Su&bstituïx"
 
 #. i18n: ectx: property (text), widget (QPushButton, addButton)
 #. i18n: ectx: property (text), widget (QPushButton, add1)
@@ -295,7 +295,7 @@ msgstr "&Substituïx"
 #: AutocorrectConfigDialog.cpp:281
 #, kde-format
 msgid "&Add"
-msgstr "&Afig"
+msgstr "Afi&g"
 
 #. i18n: ectx: property (text), widget (QPushButton, removeButton)
 #. i18n: ectx: property (text), widget (QPushButton, remove2)

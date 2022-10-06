@@ -30,7 +30,7 @@ msgstr ""
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
 #, kde-format
 msgid "&File"
-msgstr "&Fitxer"
+msgstr "Fi&txer"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
@@ -42,7 +42,7 @@ msgstr "&Edita"
 #: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
 #, kde-format
 msgid "&View"
-msgstr "&Visualitza"
+msgstr "Vi&sualitza"
 
 #. i18n: ectx: Menu (view_displaymodes)
 #. i18n: ectx: Menu (view)
@@ -277,7 +277,7 @@ msgstr "Configura"
 #: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
 #, kde-format
 msgid "Misc"
-msgstr "Miscelànea"
+msgstr "Miscel·lània"
 
 #: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
 #, kde-format
@@ -622,7 +622,7 @@ msgstr "A la dreta per:"
 #: part/dialogs/KWSelectBookmark.ui:20
 #, kde-format
 msgid "&Rename"
-msgstr "&Canvia el nom"
+msgstr "Ca&nvia el nom"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
 #: part/dialogs/KWSelectBookmark.ui:27
