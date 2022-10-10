@@ -14,7 +14,7 @@
 # Durand Daniel <durand.d@9online.fr>, 2010.
 # xavier <ktranslator31@yahoo.fr>, 2012, 2013.
 # Vincent PINON <vpinon@kde.org>, 2013, 2014.
-# Thomas Vergnaud <thomas.vergnaud@gmx.fr>, 2014, 2015, 2016.
+# Thomas Vergnaud <thomas.vergnaud@gmx.fr>, 2014, 2015, 2016, 2022.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2020.
 # Xavier Besnard <xavier.besnard@neuf.fr>, 2020, 2022.
 #
@@ -23,15 +23,15 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-09-12 00:45+0000\n"
-"PO-Revision-Date: 2022-09-08 20:58+0200\n"
-"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
+"PO-Revision-Date: 2022-10-09 17:43+0200\n"
+"Last-Translator: Thomas Vergnaud <thomas.vergnaud@mailo.eu>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 21.12.3\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -16129,7 +16129,7 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
 "xavier.besnard@neuf.fr, durand.d@9online.fr, vpinon@kde.org, thomas."
-"vergnaud@gmx.fr"
+"vergnaud@mailo.eu"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrasheets.rc:5
