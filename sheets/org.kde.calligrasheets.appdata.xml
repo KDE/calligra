@@ -50,6 +50,7 @@
   <summary xml:lang="id">Lembar-sebar</summary>
   <summary xml:lang="it">Foglio elettronico</summary>
   <summary xml:lang="ja">スプレッドシート</summary>
+  <summary xml:lang="ka">ელექტრონული ცხრილი</summary>
   <summary xml:lang="ko">스프레드시트</summary>
   <summary xml:lang="nl">Rekenblad</summary>
   <summary xml:lang="pl">Arkusz kalkulacyjny</summary>
@@ -114,6 +115,7 @@
     <p xml:lang="id">Fitur:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>
+    <p xml:lang="ka">თვისებები:</p>
     <p xml:lang="ko">기능:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Cechy:</p>
@@ -174,6 +176,7 @@
       <li xml:lang="id">Berbagai macam templat yang telah ditentukan sebelumnya</li>
       <li xml:lang="it">Ampia gamma di modelli predefiniti</li>
       <li xml:lang="ja">幅広い種類のテンプレート</li>
+      <li xml:lang="ka">წინასწარ განსაზღვრული შაბლონების გრძელი სია</li>
       <li xml:lang="ko">광범위한 사전 정의된 템플릿</li>
       <li xml:lang="nl">Grote reeks van voorgedefinieerde sjablonen</li>
       <li xml:lang="pl">Szeroki wybór uprzednio stworzonych szablonów</li>
@@ -203,6 +206,7 @@
       <li xml:lang="id">Daftar rumus komprehensif dan kuat</li>
       <li xml:lang="it">Elenco completo e potente di formule</li>
       <li xml:lang="ja">強力かつ包括的な数式</li>
+      <li xml:lang="ka">ფორმულების მძლავრი და სრული სია</li>
       <li xml:lang="ko">강력하고 포괄적인 수식 목록</li>
       <li xml:lang="nl">Krachtige en uitgebreide lijst met formules</li>
       <li xml:lang="pl">Przydatny i wyczerpujący spis równań</li>
@@ -232,6 +236,7 @@
       <li xml:lang="id">Bekerja dalam lingkungan yang familiar</li>
       <li xml:lang="it">Opera in un ambiente familiare</li>
       <li xml:lang="ja">使い慣れた環境での操作</li>
+      <li xml:lang="ka">იმუშავეთ ნაცნობ გარემოში</li>
       <li xml:lang="ko">익숙한 환경에서 작업</li>
       <li xml:lang="nl">Werk in een bekende omgeving</li>
       <li xml:lang="pl">Praca w znajomym środowisku</li>

@@ -22,6 +22,7 @@
   <name xml:lang="id">Karbon</name>
   <name xml:lang="it">Karbon</name>
   <name xml:lang="ja">Karbon</name>
+  <name xml:lang="ka">Karbon</name>
   <name xml:lang="ko">Karbon</name>
   <name xml:lang="nl">Karbon</name>
   <name xml:lang="pl">Karbon</name>
@@ -53,6 +54,7 @@
   <summary xml:lang="id">Grafik Dapat Diskala</summary>
   <summary xml:lang="it">Grafica scalabile</summary>
   <summary xml:lang="ja">画像の寸法</summary>
+  <summary xml:lang="ka">ვექტორული გრაფიკა</summary>
   <summary xml:lang="ko">확장 가능한 그래픽</summary>
   <summary xml:lang="nl">Vectorafbeeldingen</summary>
   <summary xml:lang="pl">Skalowalna grafika</summary>
@@ -117,6 +119,7 @@
     <p xml:lang="id">Fitur:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>
+    <p xml:lang="ka">თვისებები:</p>
     <p xml:lang="ko">기능:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Możliwości:</p>
@@ -150,6 +153,7 @@
       <li xml:lang="id">Dukungan pemuatan untuk ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="it">Supporto per il caricamento di ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="ja">読み込み可能な形式: ODG, SVG, WPG, WMF, EPS/PS</li>
+      <li xml:lang="ka">ODG, SVG, WPG, WMF, EPS/PS-ის ჩატვირთვის მხარდაჭერა</li>
       <li xml:lang="ko">ODG, SVG, WPG, WMF, EPS/PS 파일 읽기 지원</li>
       <li xml:lang="nl">Ondersteuning voor laden van ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="pl">Obsługa wczytywania dla ODG, SVG, WPG, WMF, EPS/PS</li>
@@ -182,6 +186,7 @@
       <li xml:lang="id">Dukungan penilisan untuk ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="it">Supporto per la scrittura di ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="ja">書き込み可能な形式: ODG, SVG, PNG, PDF, WMF</li>
+      <li xml:lang="ka">ODG, SVG, PNG, PDF, WMF-ის ჩაწერის მხარდაჭერა</li>
       <li xml:lang="ko">ODG, SVG, PNG, PDF, WMF 파일 쓰기 지원</li>
       <li xml:lang="nl">Ondersteuning voor schrijven van ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="pl">Obsługa zapisywania dla ODG, SVG, PNG, PDF, WMF</li>
