@@ -89,4 +89,4 @@ msgstr "Llista els noms de totes les aplicacions disponibles de Calligra"
 #: main.cpp:170
 #, kde-format
 msgid "Files to open"
-msgstr "Fitxers que s'obrirà"
+msgstr "Fitxers que s'han d'obrir"

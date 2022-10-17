@@ -321,7 +321,7 @@ msgstr "Fulls"
 #: sheets/csv/exportdialogui.ui:145
 #, kde-format
 msgid "Select sheets to export:"
-msgstr "Seleccioneu els fulls a exportar:"
+msgstr "Seleccioneu els fulls que s'han d'exportar:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
 #: sheets/csv/exportdialogui.ui:161
@@ -667,7 +667,7 @@ msgstr ""
 #: sheets/latex/export/latexexportwidget.ui:86
 #, kde-format
 msgid "Document to include"
-msgstr "Document que s'haja d'incloure"
+msgstr "Document que s'ha d'incloure"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
 #: sheets/latex/export/latexexportwidget.ui:98

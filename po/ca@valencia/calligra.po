@@ -944,7 +944,7 @@ msgstr ""
 #: main/KoApplication.cpp:208
 #, kde-format
 msgid "File(s) or URL(s) to open"
-msgstr "Fitxer(s) o URL(s) que s'obrirà"
+msgstr "Fitxers o URL que s'han d'obrir"
 
 #: main/KoApplication.cpp:218
 #, kde-format
@@ -5129,7 +5129,7 @@ msgstr "Suprimix el recurs"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Add"
-msgstr "Trieu el fitxer a afegir"
+msgstr "Trieu el fitxer que s'ha d'afegir"
 
 #: widgets/KoResourceItemChooserContextMenu.cpp:107
 #: widgets/KoTagToolButton.cpp:51

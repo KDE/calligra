@@ -3575,7 +3575,7 @@ msgstr "Conversió"
 #: functions/conversion.xml:11 functions/conversion.xml:44
 #, kde-format
 msgid "Bool value to convert"
-msgstr "Valor booleà a convertir"
+msgstr "Valor booleà que s'ha de convertir"
 
 #: functions/conversion.xml:15
 #, kde-format
@@ -3610,7 +3610,7 @@ msgstr "upper(BOOL2STRING(find(\"nan\";\"banana\"))) retorna CERT"
 #: functions/conversion.xml:27
 #, kde-format
 msgid "Integer value to convert"
-msgstr "Valor enter a convertir"
+msgstr "Valor enter que s'ha de convertir"
 
 #: functions/conversion.xml:31
 #, kde-format
@@ -3674,7 +3674,7 @@ msgstr "BOOL2INT(Fals) retorna 0"
 #: functions/conversion.xml:60 functions/conversion.xml:77
 #, kde-format
 msgid "Number to convert into string"
-msgstr "Número a convertir en cadena"
+msgstr "Número que s'ha de convertir en cadena"
 
 #: functions/conversion.xml:64
 #, kde-format
@@ -3719,7 +3719,7 @@ msgstr ""
 #: functions/conversion.xml:90
 #, kde-format
 msgid "A one character string to convert"
-msgstr "Una cadena d'un caràcter a convertir"
+msgstr "Una cadena d'un caràcter que s'ha de convertir"
 
 #: functions/conversion.xml:94
 #, kde-format
@@ -3745,7 +3745,7 @@ msgstr "CHARTOASCII(r) és un error. El caràcter ha de ser entre cometes."
 #: functions/conversion.xml:105
 #, kde-format
 msgid "The ASCII values to convert"
-msgstr "Els valors ASCII a convertir"
+msgstr "Els valors ASCII que s'han de convertir"
 
 #: functions/conversion.xml:109
 #, kde-format
@@ -5322,8 +5322,8 @@ msgid ""
 "Holidays must be one of the following: number = days to add, a single date "
 "or an array of dates."
 msgstr ""
-"Les vacances han de ser una de les següents: nombre = dies a afegir-hi, una "
-"data única o una matriu de dates."
+"Les vacances han de ser una de les següents: nombre = dies que cal afegir-"
+"hi, una data única o una matriu de dates."
 
 #: functions/datetime.xml:683
 #, kde-format
@@ -5729,7 +5729,7 @@ msgstr "ERFC(0,4) fa 0,57160764"
 #: functions/engineering.xml:369 functions/engineering.xml:384
 #, kde-format
 msgid "The value to convert"
-msgstr "El valor a convertir"
+msgstr "El valor que s'ha de convertir"
 
 #: functions/engineering.xml:195 functions/engineering.xml:214
 #: functions/engineering.xml:233 functions/engineering.xml:252
@@ -7162,8 +7162,8 @@ msgid ""
 "is the denominator of the fraction"
 msgstr ""
 "La funció DOLLARDE() retorna els dòlars expressats en forma de nombre "
-"decimal. El dòlar fraccional és el nombre a convertir i la fracció és el "
-"denominador de la fracció"
+"decimal. El dòlar fraccional és el nombre que es convertirà i la fracció és "
+"el denominador de la fracció"
 
 #: functions/financial.xml:389
 #, kde-format
@@ -11983,8 +11983,8 @@ msgstr ""
 "CHIDIST compara el valor quadrat Chi que s'ha de donar a una mostra "
 "aleatòria que es calcula de la suma de (valor dels valors esperats "
 "observats)^2/valors esperats per tots els valors amb la distribució quadrada "
-"Chi teòrica i determina d'ací la probabilitat d'error d'una hipòtesi a "
-"provar."
+"Chi teòrica i determina d'ací la probabilitat d'error d'una hipòtesi que "
+"s'ha de provar."
 
 #: functions/statistical.xml:170
 #, kde-format
@@ -13658,7 +13658,7 @@ msgid ""
 "type The type of t-test to perform. Set this to 1 for a paired t-test, 2 or "
 "3 for an unpaired t-test."
 msgstr ""
-"tipus El tipus de prova t a executar. Establiu-ho a 1 per a una prova t "
+"tipus El tipus de prova t que s'executarà. Establiu-ho a 1 per a una prova t "
 "aparellada, 2 o 3 per a una prova t desaparellada."
 
 #: functions/statistical.xml:1484
@@ -14152,7 +14152,7 @@ msgstr "Text del qual voleu fer la substitució"
 #: functions/text.xml:58
 #, kde-format
 msgid "Part of text you want to replace"
-msgstr "Part del text a substituir"
+msgstr "Part del text que s'ha de substituir"
 
 #: functions/text.xml:62
 #, kde-format
@@ -14162,7 +14162,7 @@ msgstr "Text nou que se substituirà"
 #: functions/text.xml:66
 #, kde-format
 msgid "Which occurrence to replace"
-msgstr "Quina ocurrència a substituir"
+msgstr "Quina ocurrència s'ha de substituir"
 
 #: functions/text.xml:70
 #, kde-format
@@ -14446,12 +14446,12 @@ msgstr "Text del qual vols substituir alguns caràcters"
 #: functions/text.xml:233
 #, kde-format
 msgid "Position of the characters to replace"
-msgstr "Posició dels caràcters a substituir"
+msgstr "Posició dels caràcters que s'han de substituir"
 
 #: functions/text.xml:237
 #, kde-format
 msgid "Number of characters to replace"
-msgstr "Nombre de caràcters a substituir"
+msgstr "Nombre de caràcters que s'han de substituir"
 
 #: functions/text.xml:241 functions/text.xml:272
 #, kde-format
@@ -14491,12 +14491,12 @@ msgstr ""
 #: functions/text.xml:264
 #, kde-format
 msgid "Byte position of the characters to replace"
-msgstr "Posició de byte dels caràcters a substituir"
+msgstr "Posició de byte dels caràcters que s'han de substituir"
 
 #: functions/text.xml:268
 #, kde-format
 msgid "The byte length of characters to replace"
-msgstr "Llargada del byte de caràcters a substituir"
+msgstr "Llargada de byte dels caràcters que s'han de substituir"
 
 #: functions/text.xml:276
 #, kde-format
@@ -16092,7 +16092,7 @@ msgstr "Definix l'interval de la impressió"
 #: part/CellTool.cpp:67
 #, kde-format
 msgid "Define the print range in the current sheet"
-msgstr "Definix l'àrea a imprimir del full actual"
+msgstr "Definix l'àrea que s'imprimirà del full actual"
 
 #: part/CellToolFactory.cpp:20
 #, kde-format
@@ -16168,7 +16168,8 @@ msgstr "Opcions de fitxer"
 #: part/dialogs/FileOptionsWidget.ui:19
 #, kde-format
 msgid "Number of entries in Recent Files list:"
-msgstr "Nombre d'entrades a mostrar en la llista de fitxers recents:"
+msgstr ""
+"Nombre d'entrades que s'han de mostrar en la llista de fitxers recents:"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_recentFilesEntries)
 #: part/dialogs/FileOptionsWidget.ui:26
@@ -17053,7 +17054,7 @@ msgstr "No s'ha pogut trobar el full %1 per a imprimir-lo"
 #: part/PrintJob.cpp:300
 #, kde-format
 msgid "Nothing to print for sheet(s) %1."
-msgstr "No hi ha res a imprimir pels fulls %1."
+msgstr "No hi ha res per a imprimir pels fulls %1."
 
 #: part/View.cpp:229
 #, kde-format
@@ -17144,7 +17145,7 @@ msgstr "Reinicia l'interval de la impressió"
 #: part/View.cpp:274
 #, kde-format
 msgid "Reset the print range in the current sheet"
-msgstr "Reinicia l'interval a imprimir del full actual"
+msgstr "Reinicia l'interval que s'imprimirà del full actual"
 
 # msgid "Border Outline"
 #: part/View.cpp:276
