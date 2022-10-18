@@ -1,0 +1,37 @@
+<!DOCTYPE autocorrection>
+<Word>
+<items>
+ <item find="(C)" replace="©" />
+ <item find="(R)" replace="®" />
+ <item find="(c)" replace="©" />
+ <item find="(r)" replace="®" />
+ <item find="bedre" replace="betre" />
+ <item find="epost" replace="e-post" />
+ <item find="eposten" replace="e-posten" />
+ <item find="epostar" replace="e-postar" />
+ <item find="epostane" replace="e-postane" />
+ <item find="fortsatt" replace="framleis" />
+ <item find="følge" replace="følgje" />
+ <item find="følga" replace="følgja" />
+ <item find="noreg" replace="Noreg" />
+ <item find="velge" replace="velje" />
+ <item find="velga" replace="velja" />
+ <item find="vært" replace="vore" />
+ <item find="klær" replace="klede" />
+</items>
+ <TwoUpperLetterExceptions>
+  <word exception="KOffice" />
+  <word exception="KWord" />
+  <word exception="KSpread" />
+  <word exception="KPresenter" />
+  <word exception="KMail" />
+  <word exception="KTuberling" />
+  <word exception="KNode" />
+  <word exception="KStars" />
+  <word exception="KDevelop" />
+  <word exception="KBabel" />
+  <word exception="KPat" />
+  <word exception="MHz" />
+  <word exception="GHz" />
+ </TwoUpperLetterExceptions>
+</Word>

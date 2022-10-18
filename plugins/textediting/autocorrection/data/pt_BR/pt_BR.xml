@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+ <items>
+  <item replace="assertiva" find="acertiva"/>
+  <item replace="assessorar" find="acessorar"/>
+  <item replace="assessoria" find="acessoria"/>
+  <item replace="acréscimo" find="acréssimo"/>
+  <item replace="acréscimos" find="acréssimos"/>
+  <item replace="advogado" find="adevogado"/>
+  <item replace="adição" find="adiçao"/>
+  <item replace="advogado" find="adivogado"/>
+  <item replace="algoritmo" find="algoritimo"/>
+  <item replace="algoritmo" find="algorítimo"/>
+  <item replace="algoritmo" find="algorítmo"/>
+  <item replace="alguns" find="algums"/>
+  <item replace="analisam" find="analizam"/>
+  <item replace="atenciosamente" find="antenciosamente"/>
+  <item replace="aprendizado" find="aprendisado"/>
+  <item replace="artística" find="artistica"/>
+  <item replace="acessibilidade" find="assessibilidade"/>
+  <item replace="atrasei" find="atrazei"/>
+  <item replace="atraso" find="atrazo"/>
+  <item replace="atrasos" find="atrazos"/>
+  <item replace="autoconhecimento" find="auto-conhecimento"/>
+  <item replace="automóvel" find="autovel"/>
+  <item replace="berinjela" find="beringela"/>
+  <item replace="bicho" find="bixo"/>
+  <item replace="Blumenau" find="Blumenal"/>
+  <item replace="boliche" find="bolixe"/>
+  <item replace="bulimia" find="bulemia"/>
+  <item replace="cabeleireira" find="cabelereira"/>
+  <item replace="cabeleireiras" find="cabelereiras"/>
+  <item replace="cabeleireiro" find="cabelereiro"/>
+  <item replace="cabeleireiros" find="cabelereiros"/>
+  <item replace="capitães" find="capitões"/>
+  <item replace="caracterizar" find="caracterisar"/>
+  <item replace="caracterize" find="caracterise"/>
+  <item replace="céus" find="céis"/>
+  <item replace="cérebro" find="célebro"/>
+  <item replace="cérebros" find="célebros"/>
+  <item replace="chapéus" find="chapéis"/>
+  <item replace="xícara" find="chícara"/>
+  <item replace="xícaras" find="chícaras"/>
+  <item replace="circunferência" find="cicuferencia"/>
+  <item replace="cidadãos" find="cidadães"/>
+  <item replace="circunferência" find="circuferencia"/>
+  <item replace="circunferência" find="circunfêrencia"/>
+  <item replace="digladiar" find="degladiar"/>
+  <item replace="discussão" find="discução"/>
+  <item replace="dizer" find="diser"/>
+  <item replace="disponível" find="disponivel"/>
+  <item replace="eletricidade" find="eletrecidade"/>
+  <item replace="embora" find="enbora"/>
+  <item replace="enfisema" find="efisema"/>
+  <item replace="então" find="entao"/>
+  <item replace="intitular" find="entitular"/>
+  <item replace="entre as" find="entreas"/>
+  <item replace="enchente" find="enxente"/>
+  <item replace="que" find="equ"/>
+  <item replace="equação" find="equacao"/>
+  <item replace="equação" find="equacão"/>
+  <item replace="equação" find="equaçao"/>
+  <item replace="exclusivamente" find="esclusivamente"/>
+  <item replace="exclusividade" find="esclusividade"/>
+  <item replace="exclusivo" find="esclusivo"/>
+  <item replace="escrito" find="escriot"/>
+  <item replace="explica" find="esplica"/>
+  <item replace="estão" find="estáo"/>
+  <item replace="extensão" find="estensão"/>
+  <item replace="extensivo" find="estensivo"/>
+  <item replace="exceção" find="excessão"/>
+  <item replace="espontâneo" find="expontâneo"/>
+  <item replace="estender" find="extender"/>
+  <item replace="extensão" find="extensao"/>
+  <item replace="era" find="éra"/>
+  <item replace="fase" find="faze"/>
+  <item replace="fiscalização" find="fiscalisação"/>
+  <item replace="fiscalizar" find="fiscalisar"/>
+  <item replace="fortuito" find="fortuíto"/>
+  <item replace="fórum" find="forum"/>
+  <item replace="função" find="funcão"/>
+  <item replace="gratuito" find="gratuíto"/>
+  <item replace="hífen" find="hifem"/>
+  <item replace="hífen" find="hífem"/>
+  <item replace="inadmissível" find="inadimissível"/>
+  <item replace="inconveniente" find="incoveniente"/>
+  <item replace="insensível" find="insencível"/>
+  <item replace="insensíveis" find="insencíveis"/>
+  <item replace="indivíduo" find="individuo"/>
+  <item replace="infraestrutura" find="infra-estrutura"/>
+  <item replace="intenção" find="intensão"/>
+  <item replace="intenções" find="intensões"/>
+  <item replace="item" find="ítem"/>
+  <item replace="itens" find="ítens"/>
+  <item replace="lagarto" find="largato"/>
+  <item replace="machucada" find="maxucada"/>
+  <item replace="machucadas" find="maxucadas"/>
+  <item replace="machucado" find="maxucado"/>
+  <item replace="machucados" find="maxucados"/>
+  <item replace="machucar" find="maxucar"/>
+  <item replace="mexendo" find="mechendo"/>
+  <item replace="mexer" find="mecher"/>
+  <item replace="menos" find="menas"/>
+  <item replace="mendigo" find="mendingo"/>
+  <item replace="mencionar" find="mensionar"/>
+  <item replace="micro-ondas" find="microondas"/>
+  <item replace="mortadela" find="mortandela"/>
+  <item replace="não" find="nao"/>
+  <item replace="não" find="noã"/>
+  <item replace="obsessão" find="obceção"/>
+  <item replace="obstáculo" find="obstaculo"/>
+  <item replace="opção" find="opçao"/>
+  <item replace="opinião" find="opnião"/>
+  <item replace="opiniões" find="opniões"/>
+  <item replace="países" find="paises"/>
+  <item replace="parabéns" find="parabens"/>
+  <item replace="parênteses" find="parenteses"/>
+  <item replace="personalizar" find="personalisar"/>
+  <item replace="pesquisa" find="pesquiza"/>
+  <item replace="pesquisar" find="pesquizar"/>
+  <item replace="péssima" find="pessima"/>
+  <item replace="péssimas" find="pessimas"/>
+  <item replace="péssimo" find="pessimo"/>
+  <item replace="péssimos" find="pessimos"/>
+  <item replace="piscina" find="picina"/>
+  <item replace="piscinas" find="picinas"/>
+  <item replace="problema" find="ploblema"/>
+  <item replace="pobreza" find="pobresa"/>
+  <item replace="português" find="portugues"/>
+  <item replace="possui" find="possue"/>
+  <item replace="possuíam" find="possuiam"/>
+  <item replace="prazerosa" find="prazeirosa"/>
+  <item replace="prazerosas" find="prazeirosas"/>
+  <item replace="prazeroso" find="prazeiroso"/>
+  <item replace="prazerosos" find="prazeirosos"/>
+  <item replace="próxima" find="proxima"/>
+  <item replace="próximas" find="proximas"/>
+  <item replace="próximo" find="proximo"/>
+  <item replace="próximos" find="proximos"/>
+  <item replace="quis" find="quiz"/>
+  <item replace="rigidez" find="rigides"/>
+  <item replace="rodoviário" find="rodoviario"/>
+  <item replace="rubrica" find="rúbrica"/>
+  <item replace="salsicha" find="salchicha"/>
+  <item replace="são" find="sao"/>
+  <item replace="serão" find="serao"/>
+  <item replace="subsídio" find="subcídio"/>
+  <item replace="subsídios" find="subcídios"/>
+  <item replace="subsídio" find="subzídio"/>
+  <item replace="subsídios" find="subzídios"/>
+  <item replace="sujeito" find="sugeito"/>
+  <item replace="sujeitar" find="sugeitar"/>
+  <item replace="táxi" find="taxi"/>
+  <item replace="troféus" find="troféis"/>
+  <item replace="humildade" find="umildade"/>
+  <item replace="que" find="uqe"/>
+  <item replace="usada" find="uzada"/>
+  <item replace="usadas" find="uzadas"/>
+  <item replace="usado" find="uzado"/>
+  <item replace="usados" find="uzados"/>
+  <item replace="vários" find="varios"/>
+  <item replace="você" find="vc"/>
+  <item replace="vídeo" find="video"/>
+  <item replace="vídeos" find="videos"/>
+  <item replace="chapéu" find="xapéu"/>
+  <item replace="chuveiro" find="xuveiro"/>
+ </items>
+ <UpperCaseExceptions>
+  <word exception="aprox."/>
+  <word exception="ex."/>
+  </UpperCaseExceptions>
+ <TwoUpperLetterExceptions>
+  <word exception="CDs"/>
+  <word exception="GHz"/>
+  <word exception="KMail"/>
+  <word exception="MHz"/>
+  <word exception="TVs"/>
+ </TwoUpperLetterExceptions>
+ <DoubleQuote>
+  <doublequote begin="“" end="”"/>
+ </DoubleQuote>
+ <SimpleQuote>
+  <simplequote begin="‘" end="’"/>
+ </SimpleQuote>
+ <SuperScript>
+  <superscript find="1o" super="o" />
+  <superscript find="1a" super="a" />
+  <superscript find="othernb" super="o" />
+ </SuperScript>
+</Word>

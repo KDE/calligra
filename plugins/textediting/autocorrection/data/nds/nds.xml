@@ -1,0 +1,118 @@
+<!DOCTYPE autocorrection>
+<Word>
+ <items>
+  <item find="(C)" replace="©" />
+  <item find="(R)" replace="®" />
+  <item find="(c)" replace="©" />
+  <item find="(r)" replace="®" />
+ </items>
+ <UpperCaseExceptions>
+  <word exception="fkt." />
+  <word exception="ges." />
+  <word exception="nr." />
+  <word exception="str." />
+  <word exception="a.B." />
+  <word exception="Afk." />
+  <word exception="Afs." />
+  <word exception="Afsn." />
+  <word exception="Afd." />
+  <word exception="Adr." />
+  <word exception="allg." />
+  <word exception="amerik." />
+  <word exception="Anh." />
+  <word exception="Anm." />
+  <word exception="Apr." />
+  <word exception="Art." />
+  <word exception="Aug." />
+  <word exception="Bd." />
+  <word exception="Bed." />
+  <word exception="bes." />
+  <word exception="best." />
+  <word exception="Bet." />
+  <word exception="ca." />
+  <word exception="Dez." />
+  <word exception="Di." />
+  <word exception="Dipl." />
+  <word exception="Dörsn." />
+  <word exception="Dr." />
+  <word exception="dt." />
+  <word exception="dtsch." />
+  <word exception="Du." />
+  <word exception="etc." />
+  <word exception="evtl." />
+  <word exception="Feb." />
+  <word exception="ff." />
+  <word exception="Fr." />
+  <word exception="i.G." />
+  <word exception="i.V." />
+  <word exception="Ing." />
+  <word exception="insl." />
+  <word exception="Jan." />
+  <word exception="Jg." />
+  <word exception="Jh." />
+  <word exception="Ma." />
+  <word exception="max." />
+  <word exception="med." />
+  <word exception="Mi." />
+  <word exception="min." />
+  <word exception="Mio." />
+  <word exception="MwSt." />
+  <word exception="nat." />
+  <word exception="neg." />
+  <word exception="Nov." />
+  <word exception="Nr." />
+  <word exception="Okt." />
+  <word exception="Org." />
+  <word exception="orig." />
+  <word exception="orth." />
+  <word exception="Pos." />
+  <word exception="priv." />
+  <word exception="Prof." />
+  <word exception="Sa." />
+  <word exception="Sep." />
+  <word exception="Sept." />
+  <word exception="St." />
+  <word exception="Stck." />
+  <word exception="Std." />
+  <word exception="Str." />
+  <word exception="Sü." />
+  <word exception="tel." />
+  <word exception="u.a." />
+  <word exception="Univ." />
+  <word exception="usw." />
+  <word exception="Vert." />
+  <word exception="vgl." />
+  <word exception="Wdh." />
+  <word exception="wg." />
+  <word exception="Whg." />
+  <word exception="wohrsch." />
+  <word exception="opst." />
+  <word exception="tos." />
+ </UpperCaseExceptions>
+ <TwoUpperLetterExceptions>
+  <word exception="AGs" />
+  <word exception="BAföG" />
+  <word exception="CDs" />
+  <word exception="ESt" />
+  <word exception="EStG" />
+  <word exception="ICs" />
+  <word exception="IGs" />
+  <word exception="KGaA" />
+  <word exception="KSt" />
+  <word exception="KStG" />
+  <word exception="LPs" />
+  <word exception="MCs" />
+  <word exception="PCs" />
+  <word exception="TVs" />
+  <word exception="USt" />
+  <word exception="UStG" />
+  <word exception="VSt" />
+  <word exception="WGs" />
+ </TwoUpperLetterExceptions>
+ <DoubleQuote>
+  <doublequote begin="„" end="”"/>
+ </DoubleQuote>
+ <SimpleQuote>
+  <simplequote begin="‚" end="’"/>
+ </SimpleQuote>
+</Word>

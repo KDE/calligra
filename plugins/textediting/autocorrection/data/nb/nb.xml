@@ -1,0 +1,27 @@
+<!DOCTYPE autocorrection>
+<Word>
+<items>
+ <item find="(C)" replace="©" />
+ <item find="(R)" replace="®" />
+ <item find="(c)" replace="©" />
+ <item find="(r)" replace="®" />
+ <item find="norge" replace="Norge" />
+ <item find="epost" replace "e-post" />
+ <item find="sinnsyk" replace "sinnssyk" />
+</items>
+ <TwoUpperLetterExceptions>
+  <word exception="KOffice" />
+  <word exception="KWord" />
+  <word exception="KSpread" />
+  <word exception="KPresenter" />
+  <word exception="KMail" />
+  <word exception="KTuberling" />
+  <word exception="KNode" />
+  <word exception="KStars" />
+  <word exception="KDevelop" />
+  <word exception="KBabel" />
+  <word exception="KPat" />
+  <word exception="MHz" />
+  <word exception="GHz" />
+ </TwoUpperLetterExceptions>
+</Word>

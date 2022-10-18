@@ -1,0 +1,263 @@
+<!DOCTYPE autocorrection>
+<Word>
+ <items>
+  <item find="(C)" replace="©" />
+  <item find="(R)" replace="®" />
+  <item find="(c)" replace="©" />
+  <item find="(r)" replace="®" />
+  <item find="¿a donde" replace="¿a dónde" />
+  <item find="¿cual" replace="¿cuál" />
+  <item find="¿cuales" replace="¿cuáles" />
+  <item find="¿cuanta" replace="¿cuánta" />
+  <item find="¿cuantas" replace="¿cuántas" />
+  <item find="¿cuanto" replace="¿cuánto" />
+  <item find="¿cuantos" replace="¿cuántos" />
+  <item find="¿donde" replace="¿dónde" />
+  <item find="¿para quien" replace="¿para quién" />
+  <item find="¿por que" replace="¿por qué" />
+  <item find="¿porque" replace="¿por qué" />
+  <item find="¿quien" replace="¿quién" />
+  <item find="¿quienes" replace="¿quiénes" />
+  <item find="a drede" replace="adrede" />
+  <item find="abordo" replace="a bordo" />
+  <item find="aborvido" replace="absorbido" />
+  <item find="acesorio" replace="accesorio" />
+  <item find="acesorios" replace="accesorios" />
+  <item find="acordarse que" replace="acordarse de que" />
+  <item find="acuestas" replace="a cuestas" />
+  <item find="aducí" replace="aduje" />
+  <item find="aduciste" replace="adujiste" />
+  <item find="aereolito" replace="aerolito" />
+  <item find="aereoplano" replace="aeroplano" />
+  <item find="aereoestática" replace="aerostática" />
+  <item find="aereodromo" replace="aeródromo" />
+  <item find="agua fiestas" replace="aguafiestas" />
+  <item find="ahi" replace="ahí" />
+  <item find="al rededor" replace="alrededor" />
+  <item find="alegrarse que" replace="alegrarse de que" />
+  <item find="ambiguedad" replace="ambigüedad" />
+  <item find="andé" replace="anduve" />
+  <item find="andaste" replace="anduviste" />
+  <item find="andó" replace="anduvo" />
+  <item find="andamos" replace="anduvimos" />
+  <item find="andaron" replace="anduvieron" />
+  <item find="anecdota" replace="anécdota" />
+  <item find="ante anoche" replace="anteanoche" />
+  <item find="ante ayer" replace="anteayer" />
+  <item find="antes de ayer" replace="anteayer" />
+  <item find="antidiluviano" replace="antediluviano" />
+  <item find="antiguedad" replace="antigüedad" />
+  <item find="antirobo" replace="antirrobo" />
+  <item find="aohra" replace="ahora" />
+  <item find="apesar" replace="a pesar" />
+  <item find="apriori" replace="a priori" />
+  <item find="arguir" replace="argüir" />
+  <item find="atras" replace="atrás" />
+  <item find="averigué" replace="averigüé" />
+  <item find="axfisia" replace="asfixia" />
+  <item find="barajear" replace="barajar" />
+  <item find="bilingue" replace="bilingüe" />
+  <item find="casos límites" replace="casos límite" />
+  <item find="claramnete" replace="claramente" />
+  <item find="cojer" replace="coger" />
+  <item find="crocodilo" replace="cocodrilo" />
+  <item find="de imprevisto" replace="de improviso" />
+  <item find="delante mio" replace="delante de mí" />
+  <item find="delante tuyo" replace="delante de ti" />
+  <item find="dentrifico" replace="dentífrico" />
+  <item find="dentrífico" replace="dentífrico" />
+  <item find="desarollo" replace="desarrollo" />
+  <item find="desed" replace="desde" />
+  <item find="desinfestar" replace="desinfectar" />
+  <item find="detení" replace="detuve" />
+  <item find="deteniste" replace="detuviste" />
+  <item find="detenio" replace="detuvo" />
+  <item find="detras" replace="detrás" />
+  <item find="detrás mio" replace="detrás de mí" />
+  <item find="detrás tuyo" replace="detrás de ti" />
+  <item find="diferiencia" replace="diferencia" />
+  <item find="difernete" replace="diferente" />
+  <item find="diverger" replace="divergir" />
+  <item find="dsde" replace="desde" />
+  <item find="dsede" replace="desde" />
+  <item find="ed" replace="de" />
+  <item find="elejir" replace="elegir" />
+  <item find="en favor" replace="a favor" />
+  <item find="enmedio" replace="en medio" />
+  <item find="eqiupo" replace="equipo" />
+  <item find="escojer" replace="escoger" />
+  <item find="esquies" replace="esquís" />
+  <item find="estandard" replace="estándar" />
+  <item find="estándard" replace="estándar" />
+  <item find="estres" replace="estrés" />
+  <item find="excepcion" replace="excepción" />
+  <item find="exito" replace="éxito" />
+  <item find="exprofeso" replace="ex profeso" />
+  <item find="exprofeso" replace="ex profeso" />
+  <item find="feura" replace="fuera" />
+  <item find="finalemnte" replace="finalmente" />
+  <item find="fué" replace="fue" />
+  <item find="fuí" replace="fui" />
+  <item find="garn" replace="gran" />
+  <item find="gobeirno" replace="gobierno" />
+  <item find="ha echo" replace="ha hecho" />
+  <item find="hablastes" replace="hablaste" />
+  <item find="hacia afuera" replace="hacia fuera" />
+  <item find="hacia adelante" replace="hacia delante" />
+  <item find="hacia abajo" replace="hacia bajo" />
+  <item find="has echo" replace="has hecho" />
+  <item find="haya echo" replace="haya hecho" />
+  <item find="han habido" replace="ha habido" />
+  <item find="he echo" replace="he hecho" />
+  <item find="hemos echo" replace="hemos hecho" />
+  <item find="heroina" replace="heroína" />
+  <item find="hicistes" replace="hiciste" />
+  <item find="hipocondria" replace="hipocondría" />
+  <item find="hsitoria" replace="historia" />
+  <item find="imágen" replace="imagen" />
+  <item find="imagenes" replace="imágenes" />
+  <item find="immediato" replace="inmediato" />
+  <item find="imprimido" replace="impreso" />
+  <item find="inovación" replace="innovación" />
+  <item find="instrución" replace="instrucción" />
+  <item find="la dije" replace="le dije" />
+  <item find="la dijiste" replace="le dijiste" />
+  <item find="la dijo" replace="le dijo" />
+  <item find="la dijimos" replace="le dijimos" />
+  <item find="la dijísteis" replace="le dijísteis" />
+  <item find="la dijeron" replace="le dijeron" />
+  <item find="limpair" replace="limpiar" />
+  <item find="me se" replace="se me" />
+  <item find="te se" replace="se te" />
+  <item find="metereología" replace="meteorología" />
+  <item find="naide" replace="nadie" />
+  <item find="ójala" replace="ojalá" />
+  <item find="picia" replace="pifia" />
+  <item find="pingue" replace="pingüe" />
+  <item find="por contra" replace="por el contrario" />
+  <item find="porqeu" replace="porque" />
+  <item find="proque" replace="porque" />
+  <item find="preveyó" replace="previó" />
+  <item find="preveer" replace="prever" />
+  <item find="protejer" replace="proteger" />
+  <item find="oculatación" replace="ocultación" />
+  <item find="próxiam" replace="próxima" />
+  <item find="próxiom" replace="próximo" />
+  <item find="recojer" replace="recoger" />
+  <item find="rujir" replace="rugir" />
+  <item find="seleccion" replace="selección" />
+  <item find="siemper" replace="siempre" />
+  <item find="standard" replace="estándar" />
+  <item find="dieciseis" replace="dieciséis" />
+  <item find="diez y seis" replace="dieciséis" />
+  <item find="diez y siete" replace="diecisiete" />
+  <item find="diez y ocho" replace="dieciocho" />
+  <item find="diez y nueve" replace="diecinueve" />
+  <item find="treintayuno" replace="treinta y uno" />
+  <item find="treintaydos" replace="treinta y dos" />
+  <item find="treintaytres" replace="treinta y tres" />
+  <item find="treintaycuatro" replace="treinta y cuatro" />
+  <item find="treintaycinco" replace="treinta y cinco" />
+  <item find="treintayseis" replace="treinta y seis" />
+  <item find="treintaysiete" replace="treinta y siete" />
+  <item find="treintayocho" replace="treinta y ocho" />
+  <item find="treintaynueve" replace="treinta y nueve" />
+  <item find="cuarentayuno" replace="cuarenta y uno" />
+  <item find="cuarentaydos" replace="cuarenta y dos" />
+  <item find="cuarentaytres" replace="cuarenta y tres" />
+  <item find="cuarentaycuatro" replace="cuarenta y cuatro" />
+  <item find="cuarentaycinco" replace="cuarenta y cinco" />
+  <item find="cuarentayseis" replace="cuarenta y seis" />
+  <item find="cuarentaysiete" replace="cuarenta y siete" />
+  <item find="cuarentayocho" replace="cuarenta y ocho" />
+  <item find="cuarentaynueve" replace="cuarenta y nueve" />
+  <item find="cincuentayuno" replace="cincuenta y uno" />
+  <item find="cincuentaydos" replace="cincuenta y dos" />
+  <item find="cincuentaytres" replace="cincuenta y tres" />
+  <item find="cincuentaycuatro" replace="cincuenta y cuatro" />
+  <item find="cincuentaycinco" replace="cincuenta y cinco" />
+  <item find="cincuentayseis" replace="cincuenta y seis" />
+  <item find="cincuentaysiete" replace="cincuenta y siete" />
+  <item find="cincuentayocho" replace="cincuenta y ocho" />
+  <item find="cincuentaynueve" replace="cincuenta y nueve" />
+  <item find="diezmil" replace="diez mil" />
+  <item find="veintemil" replace="veinte mil" />
+  <item find="treintamil" replace="treinta mil" />
+  <item find="cuarentamil" replace="cuarenta mil" />
+  <item find="cincuentamil" replace="cincuenta mil" />
+  <item find="sesentamil" replace="sesenta mil" />
+  <item find="setentamil" replace="setenta mil" />
+  <item find="ochentamil" replace="ochenta mil" />
+  <item find="noventamil" replace="noventa mil" />
+  <item find="decimoprimero" replace="undécimo" />
+  <item find="decimosegundo" replace="duodécimo" />
+  <item find="Http://" replace="http://" />
+  <item find="htp://" replace="http://" />
+  <item find="htpp://" replace="http://" />
+  <item find="http:/" replace="http://" />
+  <item find="http:\\" replace="http://" />
+  <item find="Thorvalds" replace="Torvalds" />
+  <item find="Torvald" replace="Torvalds" />
+  <item find="X Windows" replace="X Window" />
+ </items>
+ <UpperCaseExceptions>
+  <word exception="admón." />
+  <word exception="ap." />
+  <word exception="art." />
+  <word exception="cf." />
+  <word exception="cfr." />
+  <word exception="cta." />
+  <word exception="cte." />
+  <word exception="cts." />
+  <word exception="dcha." />
+  <word exception="depto." />
+  <word exception="doc." />
+  <word exception="dto." />
+  <word exception="ej." />
+  <word exception="fasc." />
+  <word exception="grs." />
+  <word exception="gral." />
+  <word exception="pag." />
+  <word exception="pág." />
+  <word exception="págs." />
+  <word exception="tel." />
+  <word exception="teléf." />
+  <word exception="vol." />
+ </UpperCaseExceptions>
+ <TwoUpperLetterExceptions>
+  <word exception="KOffice" />
+  <word exception="KWord" />
+  <word exception="KSpread" />
+  <word exception="KPresenter" />
+  <word exception="KMail" />
+  <word exception="KTuberling" />
+  <word exception="KNode" />
+  <word exception="KStars" />
+  <word exception="KDevelop" />
+  <word exception="KBabel" />
+  <word exception="KPat" />
+  <word exception="MHz" />
+  <word exception="MWh" />
+  <word exception="GHz" />
+  <word exception="MW" />
+  <word exception="GW" />
+  <word exception="GWh" />
+  <word exception="MJ" />
+  <word exception="MT" />
+  <word exception="KByte" />
+  <word exception="MByte" />
+  <word exception="GByte" />
+  <word exception="TByte" />
+ </TwoUpperLetterExceptions>
+ <SuperScript>
+  <superscript find="1o" super="o" />
+  <superscript find="1a" super="a" />
+  <superscript find="othernb" super="o" />
+ </SuperScript>
+ <DoubleQuote>
+  <doublequote begin="«" end="»" />
+ </DoubleQuote>
+ <SimpleQuote>
+  <simplequote begin="'" end="'" />
+ </SimpleQuote>
+</Word>

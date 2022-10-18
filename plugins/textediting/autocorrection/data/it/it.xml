@@ -1,0 +1,58 @@
+<!DOCTYPE autocorrection>
+<Word>
+ <items>
+  <item find="(C)" replace="©" />
+  <item find="(R)" replace="®" />
+  <item find="(c)" replace="©" />
+  <item find="(r)" replace="®" />
+  <item find="é" replace="è" />
+  <item find="e'" replace="è" />
+  <item find="e`" replace="è" />
+  <item find="pò" replace="po'" />
+  <item find="perchè" replace="perché" />
+  <item find="poichè" replace="poiché" />
+  <item find="affinchè" replace="affinché" />
+ </items>
+ <UpperCaseExceptions>
+  <word exception="es." />
+  <word exception="op." />
+  <word exception="cit." />
+  <word exception="pag." />
+ </UpperCaseExceptions>
+ <TwoUpperLetterExceptions>
+  <word exception="KOffice" />
+  <word exception="KWord" />
+  <word exception="KSpread" />
+  <word exception="KPresenter" />
+  <word exception="KMail" />
+  <word exception="KTuberling" />
+  <word exception="KNode" />
+  <word exception="KStars" />
+  <word exception="KDevelop" />
+  <word exception="KBabel" />
+  <word exception="KPat" />
+  <word exception="MHz" />
+  <word exception="MWh" />
+  <word exception="GHz" />
+  <word exception="MW" />
+  <word exception="GW" />
+  <word exception="GWh" />
+  <word exception="MJ" />
+  <word exception="MT" />
+  <word exception="KByte" />
+  <word exception="MByte" />
+  <word exception="GByte" />
+  <word exception="TByte" />
+ </TwoUpperLetterExceptions>
+ <SuperScript>
+  <superscript find="1o" super="o" />
+  <superscript find="1a" super="a" />
+  <superscript find="othernb" super="o" />
+ </SuperScript>
+ <DoubleQuote>
+  <doublequote begin="&#x201C;" end="&#x201D;" />
+ </DoubleQuote>
+ <SimpleQuote>
+  <simplequote begin="&#x2018;" end="&#x2019;" />
+ </SimpleQuote>
+</Word>

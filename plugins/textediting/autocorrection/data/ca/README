@@ -1,0 +1,129 @@
+Dijous 10 de juliol de 2003
+
+KDE Catalan translation team <kde-i18n-ca@mail.kde.org>
+
+Llicència:
+  El contingut d'aquest directori a tots els aspectes està llicenciat sota la mateixa
+llicència que tot el KDE. S'hi ha afegit un llistat de barbarismes recollits per Softcatala.org,
+tot seguit una menció a la llicència i orígen d'aquest gran pedaç de codi:
+
+URL: <http://www.abisource.com/lxr/source/abispell/barbarisms/ca-ES-barbarism.xml>
+
+                Fitxer de barbarismes per l'Abiword
+                (c) 2002-3 Softcatalà Jordi Mas i Hernàndez <jmas@softcatala.org>
+
+                1. Introducció
+
+                Aquest arxiu és una recopilació en format XML de barbarismes en llengua
+                catalana i les seves corresponents correcions. En principi, ha estat
+                dissenyat per millorar les capacitats del corrector l'Abiword
+                (www.abiword.com) però aquesta llista pot ser utilizada per millorar
+                qualsevol altre corrector ortogràfic.
+
+                2. Llicència
+
+                Aquest document és (c)1998-2003 Softcatalà. Es permet l'ús,
+                distribució, i/o modificació d'aquest document d'acord amb Llicència
+                GNU per a documentació lliure versió 1.1 o superior publicada per la
+                Free Software Foundation
+
+Instal·lació:
+    - Accediu al sistema com a usuari root.
+    - Copieu el fitxer ca.xml (el qual està codificat en UTF-8) a la seva ubicació per omissió
+    al sistema amb el següent comandament:
+
+        cp ca.xml /usr/share/apps/koffice/autocorrect/ca.xml
+
+    NOTA: La ubicació dependrà de a on tingueu instal·lat el koffice.
+    - Torneu a engegar l'aplicació koffice i ja us reconeixerà el llistat.
+
+Ús de l'autocorrecció:
+    - Podreu habilitar/configurar l'autocorrecció al KWord des dels ítems de menú:
+
+        * Per anar corregin texts en el moment d'escriure:
+        Eines->Correcció automàtica->Habilita correcció automàtica
+
+        * Per a corregir texts que ja han estat escrits:
+        Eines->Correcció automàtica->Aplica correcció automàtica
+
+        * Per a la configuració:
+        Arranjament->Correcció Automàtica
+
+Col·laboració:
+  Per a col·laborar amb el desenvolupament d'aquest fitxer instal·leu el ca.xml i editeu
+un fitxer local amb els vostres suggeriments, després ens els envieu a la llista de
+correu fent menció que són per afegir-los a l'autocorrecció:
+
+    - Comentari quant als fitxers:
+
+        * README
+          - És el fitxer que esteu llegint i l'usem com a guia per als usuaris i nous col·laboradors.
+        * ca.xml
+          - És el fitxer a instal·lar junt amb el programa.
+            ·· codificat amb el joc de caràcters UTF-8
+        * extract.pl
+          - És un script en perl per a estreure i formatar el contingut del llistat de barbarismes
+          de l'Abiword (sols està aquí per a la seva disponibilitat en línia).
+
+    - Format:
+        * S'usen etiquetes per a identificar més ràpidament el tros de codi que volem modificar:
+        <!DOCTYPE autocorrection>
+          ·· <!-- v0.3 --> - Ens indica la versió del fitxer
+        <Word>
+          <items>
+            <!-- # compostes--> - Mots que haurien d'anar junts o separats
+            <!-- # dièresis--> - Es corregeixen les dièresis.
+            <!-- # accents--> - Es corregeixen accents.
+            <!-- # apòstrofs--> - Es corregeixen els apòstrofs.
+            <!-- # middot --> - Es corregeix la geminació.
+            <!-- # numerals --> - Un llistat de numerals.
+            <!-- # miscelània --> - El llistat arrel.
+                                  - És mol gran i està llistat per lletres   <!-- # a -->,   <!-- # b --> ...
+            <!-- # miscelània "barbarismes SoftCatala" -->
+                                  - És mol gran i està llistat per lletres   <!-- a -->,   <!-- b --> ...
+            <!-- # llenguatge de codi --> - Errades en llenguatge de codi (p.ex. HTML).
+            <!-- # llenguatge informàtic --> - Es procuren corregir els anglisismes pels mots acceptats.
+            <!-- # programari lliure en general --> - Es corregeixen els errors típics referents al Programari Lliure.
+          </items>
+          <UpperCaseExceptions>
+            <!-- # abreviacions --> - El seu objectiu és que no siguin considerades com a final de frase.
+          </UpperCaseExceptions>
+          <TwoUpperLetterExceptions>
+            - El seu objectiu és que al tindre dues majúscules no siguin considerades com a error ortogràfic.
+          </TwoUpperLetterExceptions>
+          <SuperScript>
+            - A partir d'aquí: De moment desconec gaire el que fan aquestes opcions.
+          </SuperScript>
+          <DoubleQuote>
+            - Caràcters de cometa doble («»).
+          </DoubleQuote>
+          <SimpleQuote>
+            - Caràcters de cometa simple (apòstrof).
+          </SimpleQuote>
+        </Word>
+
+    - Procureu no intentar autocorregir mots que també disposin d'un significat vàlid als
+    idiomes català/valencià/balear.
+
+    - Contacteu o envieu les vostres modificacions a l'Equip de traducció al català de KDE a
+    través de la seva llista de correu <kde-i18n-ca@mail.kde.org> (és moderada) o
+    contacteu directament amb en Jordi Mas i Hernàndez <jmas@softcatala.org>.
+
+TODO
+    - Estem a l'espera de si l'OpenOffice usa el mateix format de fitxer per a l'autocorrecció.
+    (de moment sembla que no té suport).
+    - Afegit de noves entrades (o correció si pertoca).
+    - Actualització d'aquest README.
+
+    KDE
+<fet>    - Preguntar a l'equip de desenvolupament vejam com es distribuirà aquest llistat:
+<fet>        * Des del paquet del programa.
+<fet>        * Des del paquet que conté els catàlegs de traducció.
+<fet>    - Oferir la idea sobre l'ús de comodins, variables i cadenes en el format del llistat.
+    - Informar-se quant al tema de les cometes simples i dobles.
+
+AVENÇOS
+    - Shan ordenat les entrades alfabèticament.
+    - S'han eliminat les entrades que ja corregeix el corrector sense dubtes.
+    - L'equip de KOficce ha acceptat la idea d'emprar comodins per a les entrades (encara no està suportat).
+    - El fitxer serà distribuït des del paquet que conté els catàlegs de traducció «koffice-i18n-ca» (s'espera el suport).
