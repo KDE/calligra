@@ -146,7 +146,7 @@ KWDocument::~KWDocument()
     m_config.setUnit(unit());
     saveConfig();
     // Deleting frameSet objects may end-up calling this->frameSets();
-    QList<KWFrameSet*> &frameSets = m_frameSets;
+    const auto frameSets = m_frameSets;
     m_frameSets.clear();
     qDeleteAll(frameSets);
 }
