@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-09-12 00:45+0000\n"
-"PO-Revision-Date: 2022-06-22 16:21-0300\n"
+"PO-Revision-Date: 2022-10-19 15:40-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -18237,7 +18237,7 @@ msgstr "Alternar a fixação de referência no cursor de texto"
 #: ui/CellToolBase.cpp:1409
 #, kde-format
 msgid "Unable to locate action %1"
-msgstr ""
+msgstr "Não foi possível localizar a ação: %1"
 
 #: ui/CellToolBase.cpp:1464
 #, kde-format
