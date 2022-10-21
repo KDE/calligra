@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-23 00:46+0000\n"
-"PO-Revision-Date: 2022-10-12 14:34+0300\n"
+"PO-Revision-Date: 2022-10-20 12:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -660,7 +660,7 @@ msgstr "Betik Yöneticisi"
 #: kross/KoScriptingPart.cpp:78
 #, kde-format
 msgid "Execute Script File..."
-msgstr "Betik Dosyası Çalıştır..."
+msgstr "Betik Dosyası Yürüt..."
 
 #: kross/KoScriptingPart.cpp:86
 #, kde-format
@@ -670,7 +670,7 @@ msgstr "Betik Yöneticisi..."
 #: kross/KoScriptingPart.cpp:160
 #, kde-format
 msgid "Execute Script File"
-msgstr "Betik Dosyası Çalıştır"
+msgstr "Betik Dosyası Yürüt"
 
 #: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
 #, kde-format
@@ -3559,7 +3559,7 @@ msgstr ""
 #: rdf/KoDocumentRdfEditWidget.ui:191
 #, kde-format
 msgid "Execute"
-msgstr "Çalıştır"
+msgstr "Yürüt"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: rdf/KoDocumentRdfEditWidget.ui:221

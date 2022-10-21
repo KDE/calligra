@@ -3476,7 +3476,7 @@ msgstr ""
 #: functions/bitops.xml:35
 #, kde-format
 msgid "Amount to left shift by"
-msgstr "Quantitat a desplaçar a l'esquerra"
+msgstr "Quantitat que s'ha de desplaçar cap a l'esquerra"
 
 #: functions/bitops.xml:39
 #, kde-format
@@ -3487,9 +3487,10 @@ msgid ""
 "right shift. "
 msgstr ""
 "La funció BITLSHIFT() realitza una operació de desplaçament a l'esquerra bit "
-"a bit del primer paràmetre. El nombre de bits a desplaçar s'especifica amb "
-"el segon paràmetre. Cal tindre present que un nombre negatiu de bits a "
-"desplaçar a l'esquerra es convertix en un desplaçament a la dreta. "
+"a bit del primer paràmetre. El nombre de bits que es desplaçaran "
+"s'especifica amb el segon paràmetre. Cal tindre present que un nombre "
+"negatiu de bits que s'han de desplaçar cap a l'esquerra es convertix en un "
+"desplaçament a la dreta. "
 
 #: functions/bitops.xml:40
 #, kde-format
@@ -3499,7 +3500,7 @@ msgstr "BITLSHIFT(valor; mida de desplaçament)"
 #: functions/bitops.xml:53
 #, kde-format
 msgid "Amount to right shift by"
-msgstr "Quantitat a desplaçar a la dreta"
+msgstr "Quantitat que s'ha de desplaçar cap a la dreta"
 
 #: functions/bitops.xml:57
 #, kde-format
@@ -3510,9 +3511,10 @@ msgid ""
 "left shift. "
 msgstr ""
 "La funció BITRSHIFT() realitza una operació de desplaçament a la dreta bit a "
-"bit del primer paràmetre. El nombre de bits a desplaçar s'especifica amb el "
-"segon paràmetre. Cal tindre present que un nombre negatiu de bits a "
-"desplaçar a la dreta es convertix en un desplaçament a l'esquerra. "
+"bit del primer paràmetre. El nombre de bits que es desplaçaran s'especifica "
+"amb el segon paràmetre. Cal tindre present que un nombre negatiu de bits que "
+"s'han de desplaçar cap a la dreta es convertix en un desplaçament a "
+"l'esquerra. "
 
 #: functions/bitops.xml:58
 #, kde-format
@@ -11700,12 +11702,12 @@ msgstr "Referència o interval"
 #: functions/reference.xml:364
 #, kde-format
 msgid "Number of rows to offset"
-msgstr "Nombre de files a desplaçar"
+msgstr "Nombre de files que s'han de desplaçar"
 
 #: functions/reference.xml:368
 #, kde-format
 msgid "Number of columns to offset"
-msgstr "Nombre de columnes a desplaçar"
+msgstr "Nombre de columnes que s'han de desplaçar"
 
 #: functions/reference.xml:372
 #, kde-format
@@ -12977,7 +12979,7 @@ msgstr "PEARSON(A1:A3; B1:B3)"
 #: functions/statistical.xml:936
 #, kde-format
 msgid "Number of elements to permutate"
-msgstr "Nombre d'elements a permutar"
+msgstr "Nombre d'elements que s'han de permutar"
 
 #: functions/statistical.xml:940
 #, kde-format
@@ -13015,7 +13017,7 @@ msgid ""
 msgstr ""
 "La funció PERMUTATIONA() retorna el nombre de permutacions quan es permet la "
 "repetició. El primer paràmetre és el nombre d'elements i el segon és el "
-"nombre d'elements a escollir. Ambdós paràmetres han de ser positius."
+"nombre d'elements que s'escolliran. Ambdós paràmetres han de ser positius."
 
 #: functions/statistical.xml:960
 #, kde-format
@@ -13668,7 +13670,7 @@ msgid ""
 "of data to compare."
 msgstr ""
 "La funció TTEST() calcula la probabilitat d'una prova t indicant dos "
-"intervals de dades a comparar."
+"intervals de dades que es compararan."
 
 #: functions/statistical.xml:1485
 #, kde-format
@@ -18956,7 +18958,7 @@ msgstr "Estil del full"
 #: ui/dialogs/AutoFormatDialog.cpp:70
 #, kde-format
 msgid "Select the sheet style to apply:"
-msgstr "Seleccioneu l'estil de full a aplicar:"
+msgstr "Seleccioneu l'estil de full que s'ha d'aplicar:"
 
 #: ui/dialogs/AutoFormatDialog.cpp:114
 #, kde-format
