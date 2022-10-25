@@ -1082,7 +1082,7 @@ msgstr "No s'ha pogut crear el fitxer per a guardar-lo"
 #: main/KoDocument.cpp:950
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr "No s'ha pogut escriure «%1». La partició és plena?"
+msgstr "No s'ha pogut escriure «%1». La partició està plena?"
 
 #: main/KoDocument.cpp:870
 #, kde-format

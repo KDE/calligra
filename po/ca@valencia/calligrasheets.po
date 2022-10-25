@@ -3486,11 +3486,11 @@ msgid ""
 "parameter. Note that a negative number of bits to left shift by becomes a "
 "right shift. "
 msgstr ""
-"La funció BITLSHIFT() realitza una operació de desplaçament a l'esquerra bit "
-"a bit del primer paràmetre. El nombre de bits que es desplaçaran "
+"La funció BITLSHIFT() realitza una operació de desplaçament cap a l'esquerra "
+"bit a bit del primer paràmetre. El nombre de bits que es desplaçaran "
 "s'especifica amb el segon paràmetre. Cal tindre present que un nombre "
 "negatiu de bits que s'han de desplaçar cap a l'esquerra es convertix en un "
-"desplaçament a la dreta. "
+"desplaçament cap a la dreta. "
 
 #: functions/bitops.xml:40
 #, kde-format
@@ -3510,11 +3510,11 @@ msgid ""
 "parameter. Note that a negative number of bits to right shift by becomes a "
 "left shift. "
 msgstr ""
-"La funció BITRSHIFT() realitza una operació de desplaçament a la dreta bit a "
-"bit del primer paràmetre. El nombre de bits que es desplaçaran s'especifica "
-"amb el segon paràmetre. Cal tindre present que un nombre negatiu de bits que "
-"s'han de desplaçar cap a la dreta es convertix en un desplaçament a "
-"l'esquerra. "
+"La funció BITRSHIFT() realitza una operació de desplaçament cap a la dreta "
+"bit a bit del primer paràmetre. El nombre de bits que es desplaçaran "
+"s'especifica amb el segon paràmetre. Cal tindre present que un nombre "
+"negatiu de bits que s'han de desplaçar cap a la dreta es convertix en un "
+"desplaçament cap a l'esquerra. "
 
 #: functions/bitops.xml:58
 #, kde-format
