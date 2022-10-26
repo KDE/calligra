@@ -17102,12 +17102,12 @@ msgstr "Elimina el full seleccionat"
 #: part/View.cpp:251
 #, kde-format
 msgid "Rename Sheet..."
-msgstr "Canvia el nom el full..."
+msgstr "Canvia el nom del full..."
 
 #: part/View.cpp:254
 #, kde-format
 msgid "Rename the active sheet"
-msgstr "Canvia el nom el full actiu"
+msgstr "Canvia el nom del full actiu"
 
 #: part/View.cpp:256
 #, kde-format
@@ -17471,7 +17471,7 @@ msgstr "Introduïx el nom:"
 #: part/View.cpp:1872
 #, kde-format
 msgid "Rename Sheet"
-msgstr "Canvia el nom full"
+msgstr "Canvia el nom del full"
 
 #: part/View.cpp:1877 part/View.cpp:1883
 #, kde-format
@@ -18834,7 +18834,7 @@ msgstr "Elimina files"
 #: ui/commands/SheetCommands.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Rename Sheet"
-msgstr "Canvia el nom el full"
+msgstr "Canvia el nom del full"
 
 # msgid "Hide Sheet"
 #: ui/commands/SheetCommands.cpp:45

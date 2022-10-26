@@ -262,7 +262,7 @@ msgstr "Mou les formes"
 #: flake/commands/KoShapeRenameCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Rename Shape"
-msgstr "Canvia el nom la forma"
+msgstr "Canvia el nom de la forma"
 
 #: flake/commands/KoShapeReorderCommand.cpp:40
 msgctxt "(qtundo-format)"
@@ -2246,17 +2246,17 @@ msgstr "Forma"
 #: pageapp/KoPADocumentModel.cpp:272
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
-msgstr "Canvia el nom la diapositiva"
+msgstr "Canvia el nom de la diapositiva"
 
 #: pageapp/KoPADocumentModel.cpp:274
 msgctxt "(qtundo-format)"
 msgid "Rename Page"
-msgstr "Canvia el nom la pàgina"
+msgstr "Canvia el nom de la pàgina"
 
 #: pageapp/KoPADocumentModel.cpp:278
 msgctxt "(qtundo-format)"
 msgid "Rename Layer"
-msgstr "Canvia el nom la capa"
+msgstr "Canvia el nom de la capa"
 
 #: pageapp/KoPADocumentModel.cpp:314
 #: pageapp/KoPADocumentStructureDocker.cpp:100
@@ -3873,7 +3873,7 @@ msgstr "Format directe del paràgraf"
 #: text/commands/RenameSectionCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Rename Section"
-msgstr "Canvia el nom la secció"
+msgstr "Canvia el nom de la secció"
 
 #: text/commands/ResizeTableCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -5341,7 +5341,7 @@ msgstr "<qt>Mostra les opcions del quadro d'etiquetes.</qt>"
 #: widgets/KoTagToolButton.cpp:60
 #, kde-format
 msgid "Rename tag"
-msgstr "Canvia el nom l'etiqueta"
+msgstr "Canvia el nom de l'etiqueta"
 
 #: widgets/KoTagToolButton.cpp:71
 #, kde-format

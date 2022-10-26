@@ -633,7 +633,7 @@ msgstr "&Elimina"
 #: part/dialogs/KWSelectBookmarkDialog.cpp:68
 #, kde-format
 msgid "Rename Bookmark"
-msgstr "Canvia el nom l'adreça d'interés"
+msgstr "Canvia el nom de l'adreça d'interés"
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:69
 #, kde-format

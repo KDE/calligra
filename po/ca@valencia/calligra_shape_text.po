@@ -1452,7 +1452,7 @@ msgstr "Sup&rimix"
 #: dialogs/ManageBookmarkDialog.cpp:69
 #, kde-format
 msgid "Rename Bookmark"
-msgstr "Canvia el nom l'adreça d'interés"
+msgstr "Canvia el nom de l'adreça d'interés"
 
 #: dialogs/ManageBookmarkDialog.cpp:70
 #, kde-format
