@@ -2,22 +2,22 @@
 # Copyright (C) 2007 This_file_is_part_of_KDE
 # This file is distributed under the same license as the TextShape package.
 # Luciano Montanaro <mikelima@cirulla.net>, 2007, 2008, 2011, 2012, 2013.
-# Vincenzo Reale <smart2128vr@gmail.com>, 2012, 2014, 2015, 2016, 2018, 2020.
+# Vincenzo Reale <smart2128vr@gmail.com>, 2012, 2014, 2015, 2016, 2018, 2020, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-08-08 00:16+0000\n"
-"PO-Revision-Date: 2020-10-15 09:09+0200\n"
-"Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
+"PO-Revision-Date: 2022-10-16 10:28+0200\n"
+"Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.08.2\n"
+"X-Generator: Lokalize 22.08.2\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -580,7 +580,7 @@ msgstr "Sottolineatura:"
 #: dialogs/CharacterHighlighting.ui:141
 #, kde-format
 msgid "Strikethrough:"
-msgstr "Sbarrato:"
+msgstr "Barrato:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:172
@@ -2665,7 +2665,7 @@ msgstr "Sottolineato"
 #: TextTool.cpp:236
 #, kde-format
 msgid "Strikethrough"
-msgstr "Sbarrato"
+msgstr "Barrato"
 
 #: TextTool.cpp:242
 #, kde-format

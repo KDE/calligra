@@ -1279,7 +1279,7 @@ msgstr " Text:"
 #: dialogs/LinkInsertionDialog.ui:113
 #, kde-format
 msgid "Link To Bookmark"
-msgstr "Enllaç a adreça d'interés"
+msgstr "Enllaç cap a adreça d'interés"
 
 #. i18n: ectx: attribute (toolTip), widget (QWidget, bookmarkLinkInsertionTab)
 #: dialogs/LinkInsertionDialog.ui:117
