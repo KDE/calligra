@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-09-12 00:45+0000\n"
-"PO-Revision-Date: 2022-10-20 12:05+0300\n"
+"PO-Revision-Date: 2022-10-28 13:25+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 22.08.2\n"
 
 #: core/Currency.cpp:35 core/Currency.cpp:81
 #, kde-format
@@ -20760,7 +20760,7 @@ msgstr ""
 "Tümünü Gizle diyerek hücre içeriğini de gizleyebilirsiniz ve bu işlem de "
 "çizelge korumalı olduğunda çalışır.\n"
 "Bütün bu ayarlar hakkında daha fazla bilgiyi Kullanıcı Kılavuzunun Gelişmiş "
-"Calligra Çizelgeleri bölümünde bulabilirsiniz."
+"Calligra Çizelgeleri faslında bulabilirsiniz."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: ui/dialogs/ProtectionWidget.ui:40
@@ -20821,8 +20821,8 @@ msgstr ""
 "İşaretlendiğinde hücre içeriği korumalı olur. Bu öntanımlı davranıştır. "
 "Tekil hücre içeriklerini korumak için Araçlar -> Çizelgeyi Koru menü "
 "seçeneğinden tüm çizelgeyi korumalı yapmanız gerekir. Daha fazla ayrıntıyı "
-"kullanıcı kılavuzunun Gelişmiş Calligra Çizelgeleri bölümünde "
-"bulabilirsiniz. Bir hücre korumalı olduğunda içeriği değiştirilemez."
+"kullanıcı kılavuzunun Gelişmiş Calligra Çizelgeleri faslında bulabilirsiniz. "
+"Bir hücre korumalı olduğunda içeriği değiştirilemez."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_bIsProtected)
 #: ui/dialogs/ProtectionWidget.ui:99
