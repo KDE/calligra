@@ -589,7 +589,7 @@ msgstr "Dalt"
 #: sheets/latex/export/latexexportdialog.cc:139
 #, kde-format
 msgid "Latex Export Filter Configuration"
-msgstr "Configuració del filtre d'exportació a LaTeX"
+msgstr "Configureu el filtre d'exportació a LaTeX"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget2)
 #: sheets/latex/export/latexexportwidget.ui:24
