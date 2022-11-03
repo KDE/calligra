@@ -12286,8 +12286,8 @@ msgid ""
 "array, use Ctrl+Alt+Enter (instead of just Enter) to display the array "
 "elements in separate cells. "
 msgstr ""
-"Verinin sütunlarda olması gerektiğini ve sonuç sütun-dizisi olduğu için, "
-"dizi öğelerini ayrı hücrelerde görüntülemek için Ctrl+Alt+Enter (yalnızca "
+"Verinin sütunlarda olması gerektiğini ve sonuç sütun dizilimi olduğu için, "
+"dizi öeelerini ayrı hücrelerde görüntülemek için Ctrl+Alt+Enter (yalnızca "
 "Enter yerine) düğmelerini kullanın. "
 
 #: functions/statistical.xml:422
@@ -12472,13 +12472,13 @@ msgstr "HYPGEOMDIST(2; 5; 6; 20), 0.3522 döndürür"
 #: functions/statistical.xml:1313
 #, kde-format
 msgid "y values (array)"
-msgstr "y değerleri (dizi)"
+msgstr "y değerleri (dizilim)"
 
 #: functions/statistical.xml:591 functions/statistical.xml:1131
 #: functions/statistical.xml:1317
 #, kde-format
 msgid "x values (array)"
-msgstr "x değerleri (dizi)"
+msgstr "x değerleri (dizilim)"
 
 #: functions/statistical.xml:595
 #, kde-format
@@ -13622,8 +13622,8 @@ msgid ""
 msgstr ""
 "Eşleştirilmiş sınamalar (type = 1, aşağıdaki sözdizim bölümüne bakınız) "
 "yalnızca her iki veri değeri seti aynı kaynaktan alındığında uygundur (yani, "
-"her bir veri kaynağı birinci veri aralığında bir öğe ve ikinci veri "
-"aralığında bir öğe sağlamıştır). Koşma hızı örneğinde, bu mümkün değildir; "
+"her bir veri kaynağı birinci veri aralığında bir öge ve ikinci veri "
+"aralığında bir öge sağlamıştır). Koşma hızı örneğinde, bu olanaklı değildir; "
 "çünkü bir kişi hem kısa hem de uzun olamaz: her kişi yalnızca bir grup ya da "
 "diğer grup için veri sağlayabilir. Bu gibi durumlarda, her veri kümesindeki "
 "değerlerin farklı kaynaklardan alındığı durumlarda eşleştirilmemiş bir t-"
@@ -19968,7 +19968,7 @@ msgid ""
 msgstr ""
 "Kesir biçimi sayılarınızı bir kesire dönüştürür. Örneğin 0,1 yerine 1/8, "
 "2/16 veya 1/10 getirilebilir. Kesir türünü sağdaki alandan seçerek siz "
-"belirlersiniz. Seçtiğiniz kesir kipinde tam kesir mümkün değilse en yakın "
+"belirlersiniz. Seçtiğiniz kesir kipinde tam kesir olanaklı değilse en yakın "
 "eşleşme seçilir.\n"
 " Örneğin: Sayı olarak 1,5 varsa ve Kesir ve Onaltılık 1/16 seçilmişse "
 "hücrede gösterilecek metin tam kesir olan \"1 8/16\" olacaktır. Sayının 1,4 "
@@ -21113,114 +21113,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Bağlantıyı Aç?"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add Comment"
-#~ msgstr "Açıklama Ekle"
-
-#~ msgid "Increase Indent"
-#~ msgstr "Girintilemeyi Artır"
-
-#~ msgid "Increase the indentation"
-#~ msgstr "Girintilemeyi artır"
-
-#~ msgid "Decrease Indent"
-#~ msgstr "Girintilemeyi Azalt"
-
-#~ msgid "Decrease the indentation"
-#~ msgstr "Girintilemeyi azalt"
-
-#~ msgid "Upper Case"
-#~ msgstr "Büyük Harf"
-
-#~ msgid "Upper"
-#~ msgstr "Büyük"
-
-#~ msgid "Convert all letters to upper case"
-#~ msgstr "Tüm harfleri büyük harfe çevir"
-
-#~ msgid "Lower Case"
-#~ msgstr "Küçük Harf"
-
-#~ msgid "Lower"
-#~ msgstr "Küçük"
-
-#~ msgid "Convert all letters to lower case"
-#~ msgstr "Tüm harfleri küçük harfe çevir"
-
-#~ msgid "Convert First Letter to Upper Case"
-#~ msgstr "İlk Harfleri Büyük Harfe Çevir"
-
-#~ msgid "First Letter Upper"
-#~ msgstr "İlk Harfi Büyük Harf Yap"
-
-#~ msgid "Capitalize the first letter"
-#~ msgstr "İlk harfi büyük harf yap"
-
-#~ msgid "Comment..."
-#~ msgstr "Açıklama..."
-
-#~ msgid "Edit a comment for this cell"
-#~ msgstr "Bu hücre için ekbilgiyi düzenle"
-
-#~ msgid "Remove Comment"
-#~ msgstr "Açıklama Kaldır"
-
-#~ msgid "Remove this cell's comment"
-#~ msgstr "Bu hücrenin açıklamasını kaldır"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Switch to uppercase"
-#~ msgstr "Büyük harfe geç"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Switch to lowercase"
-#~ msgstr "Küçük harfe geç"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "First letter uppercase"
-#~ msgstr "İlk harf büyük"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove Comment"
-#~ msgstr "Açıklama Kaldır"
-
-#~ msgid "Clear Comment"
-#~ msgstr "Yorumu Temizle"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Case"
-#~ msgstr "Büyük/Küçük Harf Durumunu Değiştir"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Increase Indentation"
-#~ msgstr "Girintilemeyi Artır"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Decrease Indentation"
-#~ msgstr "Girintilemeyi Azalt"
-
-#~ msgid "Cell Comment"
-#~ msgstr "Hücre Açıklaması"
-
-#~ msgid "&Left"
-#~ msgstr "&Sol"
-
-#~ msgid "&Right"
-#~ msgstr "S&ağ"
-
-#~ msgid "&Up"
-#~ msgstr "&Yukarı"
-
-#~ msgid "&Down"
-#~ msgstr "&Aşağı"
-
-#~ msgid "Autosum"
-#~ msgstr "Otomatik toplam"
-
-#~ msgid "Insert the 'sum' function"
-#~ msgstr "'Toplam' işlevi ekle"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fill Selection"
-#~ msgstr "Seçimi Doldur"
