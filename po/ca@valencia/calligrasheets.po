@@ -8189,7 +8189,7 @@ msgstr ""
 "La funció SYD() calcularà la depreciació de la suma d'anys per a un actiu "
 "basat en el seu cost, valor residual, vida prevista, i un període "
 "particular. Este mètode accelera la taxa de depreciació, de manera que la "
-"despesa de depreciació màxima es dona més als primers períodes que als "
+"despesa de depreciació màxima es dona més en els primers períodes que en els "
 "últims. El cost de depreciació és el cost real menys el valor residual. La "
 "vida útil és el nombre de períodes (normalment anys) sobre els quals es "
 "deprecia l'actiu."
@@ -11177,7 +11177,7 @@ msgid ""
 msgstr ""
 "L'estil A1 especifica l'estil de les adreces de retorn. Si s'establix A1 a "
 "CERT (de manera predeterminada) es retorna l'adreça en l'estil A1 si "
-"s'establix a FALS en l'estil R1C1."
+"s'establix a FALS a l'estil R1C1."
 
 #: functions/reference.xml:34
 #, kde-format
