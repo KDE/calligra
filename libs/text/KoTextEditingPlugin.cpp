@@ -31,6 +31,11 @@ KoTextEditingPlugin::~KoTextEditingPlugin()
 void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) const
 {
     cursor.setPosition(cursorPosition);
+    // Protect against trying to select with an invalid cursorPosition
+    if (cursor.position() == 0) {
+        errorText<<"Invalid cursor position"<<cursorPosition;
+        return;
+    }
     QTextBlock block = cursor.block();
     cursor.setPosition(block.position());
     cursorPosition -= block.position();

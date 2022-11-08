@@ -75,6 +75,16 @@ public:
      */
     virtual void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
+    /**
+     * This method will be called when the user makes at least one change to the document.
+     * You are free to alter the text via the textDocument.  Be aware that operations should be done
+     * via a QTextCursor and should retain any formatting already present on the text.
+     * @param document the text document that was altered.
+     * @param cursorPosition the last altered position in the document.
+     * @return New cursor postion
+     */
+    virtual int characterInserted(QTextDocument *document, int cursorPosition) { Q_UNUSED(document) return cursorPosition; }
+
     /// can be called when this plugin needs the current position of the textcursor
     virtual void setCurrentCursorPosition(QTextDocument *document, int cursorPosition);
 
