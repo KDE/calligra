@@ -1,0 +1,1303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find="baptème" replace="baptême"/>
+    <item find="garde fou" replace="garde-fou"/>
+    <item find="acosté" replace="accosté"/>
+    <item find="ausi" replace="aussi"/>
+    <item find="sotire" replace="sortie"/>
+    <item find="connection" replace="connexion"/>
+    <item find="grand père" replace="grand-père"/>
+    <item find="groseiller" replace="groseillier"/>
+    <item find="Magreb" replace="Maghreb"/>
+    <item find="ça dépends" replace="ça dépend"/>
+    <item find="le publique" replace="le public"/>
+    <item find="plein-pied" replace="plain-pied"/>
+    <item find="rafraichir" replace="rafraîchir"/>
+    <item find="financiaire" replace="financière"/>
+    <item find="Et oui" replace="Eh oui"/>
+    <item find="changemetn" replace="changement"/>
+    <item find="ayant suivit" replace="ayant suivi"/>
+    <item find="optionels" replace="optionnels"/>
+    <item find="rhyume" replace="rhume"/>
+    <item find="instatn" replace="instant"/>
+    <item find="libre échange" replace="libre-échange"/>
+    <item find="super-ordinateurs" replace="superordinateurs"/>
+    <item find="un travaille" replace="un travail"/>
+    <item find="baffouillé" replace="bafouillé"/>
+    <item find="guadeloupe" replace="Guadeloupe"/>
+    <item find="la planisphère" replace="le planisphère"/>
+    <item find="baches" replace="bâches"/>
+    <item find="mal habile" replace="malhabile"/>
+    <item find="totu" replace="tout"/>
+    <item find="il suis" replace="il suit"/>
+    <item find="quote part" replace="quote-part"/>
+    <item find="quelque soit" replace="quel que soit"/>
+    <item find="vasy" replace="vas-y"/>
+    <item find="hotel" replace="hôtel"/>
+    <item find="otées" replace="ôtées"/>
+    <item find="mali" replace="Mali"/>
+    <item find="consonnance" replace="consonance"/>
+    <item find="au moment ou" replace="au moment où"/>
+    <item find="apperçue" replace="aperçue"/>
+    <item find="ellaborée" replace="élaborée"/>
+    <item find="autrment" replace="autrement"/>
+    <item find="Pyrennées" replace="Pyrénées"/>
+    <item find="leru" replace="leur"/>
+    <item find="cable" replace="câble"/>
+    <item find="minitel" replace="Minitel"/>
+    <item find="lse" replace="les"/>
+    <item find="canada" replace="Canada"/>
+    <item find="je suit" replace="je suis"/>
+    <item find="encâblure" replace="encablure"/>
+    <item find="nu propriétaire" replace="nu-propriétaire"/>
+    <item find="programeur" replace="programmeur"/>
+    <item find="bèches" replace="bêches"/>
+    <item find="programes" replace="programmes"/>
+    <item find="elle même" replace="elle-même"/>
+    <item find="chein" replace="chien"/>
+    <item find="ban de poissons" replace="banc de poissons"/>
+    <item find="valloir" replace="valoir"/>
+    <item find="demie-heure" replace="demi-heure"/>
+    <item find="n'ia" replace="n'ai"/>
+    <item find="gouté" replace="goûté"/>
+    <item find="petit-suisses" replace="petits-suisses"/>
+    <item find="ceal" replace="cela"/>
+    <item find="exepté" replace="excepté"/>
+    <item find="un expédiant" replace="un expédient"/>
+    <item find="pare-brises" replace="pare-brise"/>
+    <item find="tempète" replace="tempête"/>
+    <item find="conslutation" replace="consultation"/>
+    <item find="flêche" replace="flèche"/>
+    <item find="le notre" replace="le nôtre"/>
+    <item find="dannemark" replace="Danemark"/>
+    <item find="le votre" replace="le vôtre"/>
+    <item find="gabon" replace="Gabon"/>
+    <item find="batard" replace="bâtard"/>
+    <item find="à peu pré" replace="à peu près"/>
+    <item find="rectifié le tire" replace="rectifié le tir"/>
+    <item find="pèse lettres" replace="pèse-lettres"/>
+    <item find="sotn" replace="sont"/>
+    <item find="la suis" replace="la suie"/>
+    <item find="sépcifiques" replace="spécifiques"/>
+    <item find="incomodé" replace="incommodé"/>
+    <item find="terre plein" replace="terre-plein"/>
+    <item find="mayotte" replace="Mayotte"/>
+    <item find="exessivement" replace="excessivement"/>
+    <item find="japon" replace="Japon"/>
+    <item find="en fabricant" replace="en fabriquant"/>
+    <item find="navigateru" replace="navigateur"/>
+    <item find="friut" replace="fruit"/>
+    <item find="pation" replace="passion"/>
+    <item find="italie" replace="Italie"/>
+    <item find="il aperçu" replace="il aperçut"/>
+    <item find="ambigüité" replace="ambiguïté"/>
+    <item find="guyane" replace="Guyane"/>
+    <item find="maroc" replace="Maroc"/>
+    <item find="rèver" replace="rêver"/>
+    <item find="stastitiques" replace="statistiques"/>
+    <item find="bècher" replace="bêcher"/>
+    <item find="controlé" replace="contrôlé"/>
+    <item find="COMpuTer" replace="computer"/>
+    <item find="est faut" replace="est faux"/>
+    <item find="bas-flanc" replace="bat-flanc"/>
+    <item find="polynésie" replace="Polynésie"/>
+    <item find="en adhérent" replace="en adhérant"/>
+    <item find="utilsateurs" replace="utilisateurs"/>
+    <item find="réveille matin" replace="réveille-matin"/>
+    <item find="Il mais" replace="Il met"/>
+    <item find="multi-tâche" replace="multitâche"/>
+    <item find="sus dit" replace="susdit"/>
+    <item find="c'est a vous" replace="c'est à vous"/>
+    <item find="partouts" replace="partout"/>
+    <item find="le permit de conduire" replace="le permis de conduire"/>
+    <item find="petit-beurres" replace="petits-beurres"/>
+    <item find="donnes-moi" replace="donne-moi"/>
+    <item find="ban d'essais" replace="banc d'essais"/>
+    <item find="tunisie" replace="Tunisie"/>
+    <item find="pous" replace="plus"/>
+    <item find="au grès des" replace="au gré des"/>
+    <item find="haut commissaire" replace="haut-commissaire"/>
+    <item find="guinée" replace="Guinée"/>
+    <item find="procesus" replace="processus"/>
+    <item find="enquèter" replace="enquêter"/>
+    <item find="ce pendant" replace="cependant"/>
+    <item find="croitre" replace="croître"/>
+    <item find="elle conseil" replace="elle conseille"/>
+    <item find="pret" replace="prêt"/>
+    <item find="traine" replace="traîne"/>
+    <item find="imge" replace="image"/>
+    <item find="arete" replace="arête"/>
+    <item find="mêches" replace="mèches"/>
+    <item find="précosses" replace="précoces"/>
+    <item find="appats" replace="appâts"/>
+    <item find="nos cotés" replace="nos côtés"/>
+    <item find="a peu près" replace="à peu près"/>
+    <item find="je veut" replace="je veux"/>
+    <item find="serat-il" replace="sera-t-il"/>
+    <item find="paitre" replace="paître"/>
+    <item find="platre" replace="plâtre"/>
+    <item find="courrant" replace="courant"/>
+    <item find="rèves" replace="rêves"/>
+    <item find="poeles" replace="poêles"/>
+    <item find="parebrise" replace="pare-brise"/>
+    <item find="main d'oeuvre" replace="main-d'oeuvre"/>
+    <item find="intéret" replace="intérêt"/>
+    <item find="joaliers" replace="joailliers"/>
+    <item find="vosu" replace="vous"/>
+    <item find="une alvéole" replace="un alvéole"/>
+    <item find="ficheir" replace="fichier"/>
+    <item find="abisses" replace="abysses"/>
+    <item find="Nouvelle Calédonie" replace="Nouvelle-Calédonie"/>
+    <item find="antrée" replace="entrée"/>
+    <item find="martinique" replace="Martinique"/>
+    <item find="a la fois" replace="à la fois"/>
+    <item find="des fabriquants" replace="des fabricants"/>
+    <item find="hollande" replace="Hollande"/>
+    <item find="olécrânes" replace="olécranes"/>
+    <item find="soit même" replace="soi-même"/>
+    <item find="crûe" replace="crue"/>
+    <item find="pluton" replace="Pluton"/>
+    <item find="Sera-t'il" replace="Sera-t-il"/>
+    <item find="une plait" replace="une plaie"/>
+    <item find="fesant" replace="faisant"/>
+    <item find="multi-tâches" replace="multitâche"/>
+    <item find="aficher" replace="afficher"/>
+    <item find="optionel" replace="optionnel"/>
+    <item find="nouvelle-calédonie" replace="Nouvelle-Calédonie"/>
+    <item find="ciclysme" replace="cyclisme"/>
+    <item find="chèr" replace="cher"/>
+    <item find="parechoc" replace="pare-chocs"/>
+    <item find="identé" replace="indenté"/>
+    <item find="microporcesseur" replace="microprocesseur"/>
+    <item find="controle" replace="contrôle"/>
+    <item find="norvège" replace="Norvège"/>
+    <item find="apotres" replace="apôtres"/>
+    <item find="adanboner" replace="abandonner"/>
+    <item find="ban des accusés" replace="banc des accusés"/>
+    <item find="souffre douleur" replace="souffre-douleur"/>
+    <item find="melée" replace="mêlée"/>
+    <item find="ainés" replace="aînés"/>
+    <item find="Noel" replace="Noël"/>
+    <item find="a-t'il" replace="a-t-il"/>
+    <item find="les adhérants" replace="les adhérents"/>
+    <item find="reve" replace="rêve"/>
+    <item find="sage femme" replace="sage-femme"/>
+    <item find="appui tête" replace="appui-tête"/>
+    <item find="grèle" replace="grêle"/>
+    <item find="pince monseigneur" replace="pince-monseigneur"/>
+    <item find="pillule" replace="pilule"/>
+    <item find="Magrébin" replace="Maghrébin"/>
+    <item find="nouriture" replace="nourriture"/>
+    <item find="parlotte" replace="parlote"/>
+    <item find="cales-pieds" replace="cale-pieds"/>
+    <item find="normallement" replace="normalement"/>
+    <item find="couluer" replace="couleur"/>
+    <item find="oter" replace="ôter"/>
+    <item find="ont aperçut" replace="ont aperçu"/>
+    <item find="je mais" replace="je mets"/>
+    <item find="celles là" replace="celles-là"/>
+    <item find="apotre" replace="apôtre"/>
+    <item find="ceux là" replace="ceux-là"/>
+    <item find="honnètes" replace="honnêtes"/>
+    <item find="annnée" replace="année"/>
+    <item find="sensé être" replace="censé être"/>
+    <item find="Il mets" replace="Il met"/>
+    <item find="chefs-d'oeuvres" replace="chefs-d'oeuvre"/>
+    <item find="bruler" replace="brûler"/>
+    <item find="changments" replace="changements"/>
+    <item find="pinguin" replace="pingouin"/>
+    <item find="controleur" replace="contrôleur"/>
+    <item find="luxembourg" replace="Luxembourg"/>
+    <item find="jacintes" replace="jacinthes"/>
+    <item find="contre-ordre" replace="contrordre"/>
+    <item find="sorite" replace="sortie"/>
+    <item find="cheins" replace="chiens"/>
+    <item find="giffler" replace="gifler"/>
+    <item find="bolc" replace="bloc"/>
+    <item find="quitances" replace="quittances"/>
+    <item find="ognon" replace="oignon"/>
+    <item find="un équivoque" replace="une équivoque"/>
+    <item find="bacler" replace="bâcler"/>
+    <item find="tempètes" replace="tempêtes"/>
+    <item find="infromatique" replace="informatique"/>
+    <item find="mâçon" replace="maçon"/>
+    <item find="moi même" replace="moi-même"/>
+    <item find="sénégal" replace="Sénégal"/>
+    <item find="ficier" replace="fichier"/>
+    <item find="tempette" replace="tempête"/>
+    <item find="remplire" replace="remplir"/>
+    <item find="Quelque soit" replace="Quel que soit"/>
+    <item find="contrejour" replace="contre-jour"/>
+    <item find="décus" replace="déçus"/>
+    <item find="jetéé" replace="jetée"/>
+    <item find="baptèmes" replace="baptêmes"/>
+    <item find="francais" replace="français"/>
+    <item find="va et vient" replace="va-et-vient"/>
+    <item find="exhorbitants" replace="exorbitants"/>
+    <item find="les notres" replace="les nôtres"/>
+    <item find="pallier à" replace="pallier"/>
+    <item find="prudhommes" replace="prud'hommes"/>
+    <item find="marseille" replace="Marseille"/>
+    <item find="courier" replace="courrier"/>
+    <item find="coulerus" replace="couleurs"/>
+    <item find="sans-gène" replace="sans-gêne"/>
+    <item find="parlementères" replace="parlementaires"/>
+    <item find="ils sons" replace="ils sont"/>
+    <item find="pois lourd" replace="poids lourd"/>
+    <item find="machoire" replace="mâchoire"/>
+    <item find="On a pas" replace="On n'a pas"/>
+    <item find="COMPUTer" replace="computer"/>
+    <item find="erronnés" replace="erronés"/>
+    <item find="pilône" replace="pylône"/>
+    <item find="poele" replace="poêle"/>
+    <item find="environnment" replace="environnement"/>
+    <item find="héroine" replace="héroïne"/>
+    <item find="on a pas" replace="on n'a pas"/>
+    <item find="hopital" replace="hôpital"/>
+    <item find="un champs" replace="un champ"/>
+    <item find="chaine" replace="chaîne"/>
+    <item find="acre" replace="âcre"/>
+    <item find="vous faîtes" replace="vous faites"/>
+    <item find="une denticule" replace="un denticule"/>
+    <item find="antécédants" replace="antécédents"/>
+    <item find="crûs" replace="crus"/>
+    <item find="hètre" replace="hêtre"/>
+    <item find="déviser" replace="dévisser"/>
+    <item find="fuire" replace="fuir"/>
+    <item find="baggages" replace="bagages"/>
+    <item find="mêche" replace="mèche"/>
+    <item find="fourmie" replace="fourmi"/>
+    <item find="brulures" replace="brûlures"/>
+    <item find="la sourie" replace="la souris"/>
+    <item find="les anales" replace="les annales"/>
+    <item find="astérique" replace="astérisque"/>
+    <item find="cuissse" replace="cuisse"/>
+    <item find="a t'on" replace="a-t-on"/>
+    <item find="inquiette" replace="inquiète"/>
+    <item find="au dessous" replace="au-dessous"/>
+    <item find="multi-utilisateur" replace="multiutilisateur"/>
+    <item find="veulliez" replace="veuillez"/>
+    <item find="aprés" replace="après"/>
+    <item find="colones" replace="colonnes"/>
+    <item find="au delà" replace="au-delà"/>
+    <item find="bec de lièvre" replace="bec-de-lièvre"/>
+    <item find="terre neuve" replace="terre-neuve"/>
+    <item find="ayant conçut" replace="ayant conçu"/>
+    <item find="enquète" replace="enquête"/>
+    <item find="astérix" replace="astérisque"/>
+    <item find="rape" replace="râpe"/>
+    <item find="chnagements" replace="changements"/>
+    <item find="fios" replace="fois"/>
+    <item find="une aphte" replace="un aphte"/>
+    <item find="dépot" replace="dépôt"/>
+    <item find="language" replace="langage"/>
+    <item find="résidances" replace="résidences"/>
+    <item find="indépendemment" replace="indépendamment"/>
+    <item find="notres" replace="nôtres"/>
+    <item find="Ce pendant" replace="Cependant"/>
+    <item find="paralèlles" replace="parallèles"/>
+    <item find="ellaborer" replace="élaborer"/>
+    <item find="pique nique" replace="pique-nique"/>
+    <item find="sorte à ce que" replace="sorte que"/>
+    <item find="coline" replace="colline"/>
+    <item find="main morte" replace="mainmorte"/>
+    <item find="inquièter" replace="inquiéter"/>
+    <item find="Le publique" replace="Le public"/>
+    <item find="bienvenu" replace="bienvenue"/>
+    <item find="chausse-trappe" replace="chausse-trape"/>
+    <item find="gout" replace="goût"/>
+    <item find="naviguer au prêt" replace="naviguer au près"/>
+    <item find="buttin" replace="butin"/>
+    <item find="tout puissant" replace="tout-puissant"/>
+    <item find="un anagramme" replace="une anagramme"/>
+    <item find="paroide" replace="parodie"/>
+    <item find="parallèlle" replace="parallèle"/>
+    <item find="apelé" replace="appelé"/>
+    <item find="déja" replace="déjà"/>
+    <item find="liserés" replace="lisérés"/>
+    <item find="condanmé" replace="condamné"/>
+    <item find="burkina faso" replace="Burkina Faso"/>
+    <item find="haut le coeur" replace="haut-le-coeur"/>
+    <item find="pallié à" replace="pallié"/>
+    <item find="tu peut" replace="tu peux"/>
+    <item find="danemark" replace="Danemark"/>
+    <item find="un apostrophe" replace="une apostrophe"/>
+    <item find="c'est-à dire" replace="c'est-à-dire"/>
+    <item find="faience" replace="faïence"/>
+    <item find="Charente Maritime" replace="Charente-Maritime"/>
+    <item find="une abaque" replace="un abaque"/>
+    <item find="par acquis" replace="par acquit"/>
+    <item find="vis a vis" replace="vis-à-vis"/>
+    <item find="répèter" replace="répéter"/>
+    <item find="mon du" replace="mon dû"/>
+    <item find="accroitre" replace="accroître"/>
+    <item find="mammelles" replace="mamelles"/>
+    <item find="elle choisi" replace="elle choisit"/>
+    <item find="là bas" replace="là-bas"/>
+    <item find="apperçues" replace="aperçues"/>
+    <item find="la boite" replace="la boîte"/>
+    <item find="par dessous" replace="par-dessous"/>
+    <item find="lieu dit" replace="lieu-dit"/>
+    <item find="Méditerrannée" replace="Méditerranée"/>
+    <item find="bas flanc" replace="bat-flanc"/>
+    <item find="soi même" replace="soi-même"/>
+    <item find="Des lors" replace="Dès lors"/>
+    <item find="a conclut" replace="a conclu"/>
+    <item find="Qui peux" replace="Qui peut"/>
+    <item find="mithe" replace="mythe"/>
+    <item find="mort né" replace="mort-né"/>
+    <item find="publier les bancs" replace="publier les bans"/>
+    <item find="perce neige" replace="perce-neige"/>
+    <item find="quelle que soie" replace="quelle que soit"/>
+    <item find="mourrir" replace="mourir"/>
+    <item find="babord" replace="bâbord"/>
+    <item find="est définit" replace="est défini"/>
+    <item find="Par acquis" replace="Par acquit"/>
+    <item find="jusqu'a" replace="jusqu'à"/>
+    <item find="décidemment" replace="décidément"/>
+    <item find="exédents" replace="excédents"/>
+    <item find="elle survie" replace="elle survit"/>
+    <item find="tête bêche" replace="tête-bêche"/>
+    <item find="repaire" replace="repère"/>
+    <item find="éceuil" replace="écueil"/>
+    <item find="uqi" replace="qui"/>
+    <item find="l'équivalant" replace="l'équivalent"/>
+    <item find="giraffe" replace="girafe"/>
+    <item find="coq à l'âne" replace="coq-à-l'âne"/>
+    <item find="de son plein grès" replace="de son plein gré"/>
+    <item find="piqure" replace="piqûre"/>
+    <item find="baggage" replace="bagage"/>
+    <item find="tatons" replace="tâtons"/>
+    <item find="extrème" replace="extrême"/>
+    <item find="quète" replace="quête"/>
+    <item find="d'en train" replace="d'entrain"/>
+    <item find="personalisé" replace="personnalisé"/>
+    <item find="etre" replace="être"/>
+    <item find="acumuler" replace="accumuler"/>
+    <item find="suffir" replace="suffire"/>
+    <item find="pèse acide" replace="pèse-acides"/>
+    <item find="la mêle chose" replace="la même chose"/>
+    <item find="sous estimées" replace="sous-estimées"/>
+    <item find="une foie" replace="une fois"/>
+    <item find="réveil matin" replace="réveille-matin"/>
+    <item find="liseré" replace="liséré"/>
+    <item find="points-virgule" replace="points-virgules"/>
+    <item find="la plait" replace="la plaie"/>
+    <item find="une après-midi" replace="un après-midi"/>
+    <item find="courronne" replace="couronne"/>
+    <item find="gite" replace="gîte"/>
+    <item find="C'st" replace="C'est"/>
+    <item find="paralèlle" replace="parallèle"/>
+    <item find="ici-même" replace="ici même"/>
+    <item find="atr" replace="art"/>
+    <item find="haut parleur" replace="haut-parleur"/>
+    <item find="prudamment" replace="prudemment"/>
+    <item find="mammelle" replace="mamelle"/>
+    <item find="Ayant suivit" replace="Ayant suivi"/>
+    <item find="écrna" replace="écran"/>
+    <item find="rafraichis" replace="rafraîchis"/>
+    <item find="peid" replace="pied"/>
+    <item find="règlé" replace="réglé"/>
+    <item find="il mets" replace="il met"/>
+    <item find="avior" replace="avoir"/>
+    <item find="batêmes" replace="baptêmes"/>
+    <item find="ci devant" replace="ci-devant"/>
+    <item find="ivoir" replace="ivoire"/>
+    <item find="arret" replace="arrêt"/>
+    <item find="pologne" replace="Pologne"/>
+    <item find="main forte" replace="main-forte"/>
+    <item find="porte fenêtre" replace="porte-fenêtre"/>
+    <item find="soi disant" replace="soi-disant"/>
+    <item find="extention" replace="extension"/>
+    <item find="meme" replace="même"/>
+    <item find="modme" replace="modem"/>
+    <item find="lancer de pois" replace="lancer de poids"/>
+    <item find="différend du" replace="différent du"/>
+    <item find="vert de gris" replace="vert-de-gris"/>
+    <item find="identer" replace="indenter"/>
+    <item find="un emise" replace="une mise"/>
+    <item find="Haiti" replace="Haïti"/>
+    <item find="petit beurre" replace="petit-beurre"/>
+    <item find="poçible" replace="possible"/>
+    <item find="grand mère" replace="grand-mère"/>
+    <item find="sous estimés" replace="sous-estimés"/>
+    <item find="à priori" replace="a priori"/>
+    <item find="par derrière" replace="par-derrière"/>
+    <item find="inclue" replace="incluse"/>
+    <item find="ainées" replace="aînées"/>
+    <item find="trainés" replace="traînés"/>
+    <item find="station service" replace="station-service"/>
+    <item find="mouffles" replace="moufles"/>
+    <item find="aujourdh'ui" replace="aujourd'hui"/>
+    <item find="arreter" replace="arrêter"/>
+    <item find="gouter" replace="goûter"/>
+    <item find="elles sons" replace="elles sont"/>
+    <item find="prudhomme" replace="prud'homme"/>
+    <item find="sera t'il" replace="sera-t-il"/>
+    <item find="siphilys" replace="syphilis"/>
+    <item find="paramètré" replace="paramétré"/>
+    <item find="théillère" replace="théière"/>
+    <item find="il mais" replace="il met"/>
+    <item find="optionelles" replace="optionnelles"/>
+    <item find="algérie" replace="Algérie"/>
+    <item find="mes cotés" replace="mes côtés"/>
+    <item find="exès" replace="excès"/>
+    <item find="sous marin" replace="sous-marin"/>
+    <item find="un on dit" replace="un on-dit"/>
+    <item find="renouveller" replace="renouveler"/>
+    <item find="dure mère" replace="dure-mère"/>
+    <item find="faché" replace="fâché"/>
+    <item find="cnet" replace="cent"/>
+    <item find="des conseilles" replace="des conseils"/>
+    <item find="pas tord" replace="pas tort"/>
+    <item find="anerie" replace="ânerie"/>
+    <item find="navigue au pré" replace="navigue au près"/>
+    <item find="persiffler" replace="persifler"/>
+    <item find="appéritif" replace="apéritif"/>
+    <item find="brulantes" replace="brûlantes"/>
+    <item find="carreaus" replace="carreaux"/>
+    <item find="controler" replace="contrôler"/>
+    <item find="fenètre" replace="fenêtre"/>
+    <item find="fius" replace="fois"/>
+    <item find="il boîte" replace="il boite"/>
+    <item find="dexu" replace="deux"/>
+    <item find="asssis" replace="assis"/>
+    <item find="ordinateru" replace="ordinateur"/>
+    <item find="gagnatn" replace="gagnant"/>
+    <item find="des lors" replace="dès lors"/>
+    <item find="noyeau" replace="noyau"/>
+    <item find="porbablement" replace="probablement"/>
+    <item find="navigue au prêt" replace="navigue au près"/>
+    <item find="une sourie" replace="une souris"/>
+    <item find="chnagement" replace="changement"/>
+    <item find="de plein grès" replace="de plein gré"/>
+    <item find="crète" replace="crête"/>
+    <item find="icone" replace="icône"/>
+    <item find="courrone" replace="couronne"/>
+    <item find="annullé" replace="annulé"/>
+    <item find="monoindustrie" replace="mono-industrie"/>
+    <item find="attaindre" replace="atteindre"/>
+    <item find="sanglotter" replace="sangloter"/>
+    <item find="annullés" replace="annulés"/>
+    <item find="Bienvenu" replace="Bienvenue"/>
+    <item find="pécunier" replace="pécuniaire"/>
+    <item find="noyeaux" replace="noyaux"/>
+    <item find="recomande" replace="recommande"/>
+    <item find="nouritures" replace="nourritures"/>
+    <item find="impot" replace="impôt"/>
+    <item find="ane" replace="âne"/>
+    <item find="bétises" replace="bêtises"/>
+    <item find="les une" replace="les unes"/>
+    <item find="asssise" replace="assise"/>
+    <item find="license" replace="licence"/>
+    <item find="dûs" replace="dus"/>
+    <item find="une antidote" replace="un antidote"/>
+    <item find="nue propriété" replace="nue-propriété"/>
+    <item find="passports" replace="passeports"/>
+    <item find="super-oxyde" replace="superoxyde"/>
+    <item find="http:/" replace="http://"/>
+    <item find="cad" replace="c.-à-d."/>
+    <item find="Pour acquis" replace="Pour acquit"/>
+    <item find="est fournit" replace="est fourni"/>
+    <item find="jacynthe" replace="jacinthe"/>
+    <item find="au grès de" replace="au gré de"/>
+    <item find="toujour" replace="toujours"/>
+    <item find="peaus" replace="peaux"/>
+    <item find="cloture" replace="clôture"/>
+    <item find="allemagne" replace="Allemagne"/>
+    <item find="maurice" replace="Maurice"/>
+    <item find="ambigue" replace="ambiguë"/>
+    <item find="ainé" replace="aîné"/>
+    <item find="ame" replace="âme"/>
+    <item find="votres" replace="vôtres"/>
+    <item find="courament" replace="couramment"/>
+    <item find="sous marine" replace="sous-marine"/>
+    <item find="pourir" replace="pourrir"/>
+    <item find="brulant" replace="brûlant"/>
+    <item find="une armistice" replace="un armistice"/>
+    <item find="pils" replace="plis"/>
+    <item find="sait il" replace="sait-il"/>
+    <item find="va de paire" replace="va de pair"/>
+    <item find="haïti" replace="Haïti"/>
+    <item find="son permit de conduire" replace="son permis de conduire"/>
+    <item find="X Windows" replace="X Window"/>
+    <item find="haut contre" replace="haut-contre"/>
+    <item find="courrir" replace="courir"/>
+    <item find="fenetre" replace="fenêtre"/>
+    <item find="est-ce-que" replace="est-ce que"/>
+    <item find="soutien gorge" replace="soutien-gorge"/>
+    <item find="mirroir" replace="miroir"/>
+    <item find="pâques" replace="Pâques"/>
+    <item find="dnas" replace="dans"/>
+    <item find="une fébricule" replace="un fébricule"/>
+    <item find="friod" replace="froid"/>
+    <item find="un espèce" replace="une espèce"/>
+    <item find="une crois" replace="une croix"/>
+    <item find="infromaticien" replace="informaticien"/>
+    <item find="Dés lors" replace="Dès lors"/>
+    <item find="astériques" replace="astérisques"/>
+    <item find="contre-partie" replace="contrepartie"/>
+    <item find="a suivit" replace="a suivi"/>
+    <item find="on calcul" replace="on calcule"/>
+    <item find="Marseilles" replace="Marseille"/>
+    <item find="poids cassés" replace="pois cassés"/>
+    <item find="tole" replace="tôle"/>
+    <item find="verre de terre" replace="ver de terre"/>
+    <item find="bache" replace="bâche"/>
+    <item find="giffle" replace="gifle"/>
+    <item find="haut de forme" replace="haut-de-forme"/>
+    <item find="dnot" replace="dont"/>
+    <item find="fihcier" replace="fichier"/>
+    <item find="une dote" replace="une dot"/>
+    <item find="la foie" replace="la fois"/>
+    <item find="plutot" replace="plutôt"/>
+    <item find="résoud il" replace="résout-il"/>
+    <item find="pylone" replace="pylône"/>
+    <item find="ficheirs" replace="fichiers"/>
+    <item find="partisant" replace="partisan"/>
+    <item find="concourrir" replace="concourir"/>
+    <item find="court-circuits" replace="courts-circuits"/>
+    <item find="Prés de" replace="Près de"/>
+    <item find="dse" replace="des"/>
+    <item find="suède" replace="Suède"/>
+    <item find="porgramme" replace="programme"/>
+    <item find="passes-partout" replace="passe-partout"/>
+    <item find="la votre" replace="la vôtre"/>
+    <item find="ouie" replace="ouïe"/>
+    <item find="celle-la" replace="celle-là"/>
+    <item find="liu" replace="lui"/>
+    <item find="accolyte" replace="acolyte"/>
+    <item find="aillant" replace="ayant"/>
+    <item find="tatonner" replace="tâtonner"/>
+    <item find="À pirori" replace="A priori"/>
+    <item find="une plais" replace="une plaie"/>
+    <item find="sauf conduits" replace="sauf-conduits"/>
+    <item find="plateforme" replace="plate-forme"/>
+    <item find="pare-choc" replace="pare-chocs"/>
+    <item find="bonour" replace="bonjour"/>
+    <item find="renouvellées" replace="renouvelées"/>
+    <item find="un jouer" replace="un jour"/>
+    <item find="chène" replace="chêne"/>
+    <item find="il vous permets" replace="il vous permet"/>
+    <item find="aucunes" replace="aucune"/>
+    <item find="sthétoscope" replace="stéthoscope"/>
+    <item find="aigües" replace="aiguës"/>
+    <item find="a permit" replace="a permis"/>
+    <item find="annuller" replace="annuler"/>
+    <item find="etc..." replace="etc."/>
+    <item find="mions" replace="moins"/>
+    <item find="orielle" replace="oreille"/>
+    <item find="maos" replace="mais"/>
+    <item find="seychelles" replace="Seychelles"/>
+    <item find="l'en train" replace="l'entrain"/>
+    <item find="logicile" replace="logiciel"/>
+    <item find="torvalds" replace="Torvalds"/>
+    <item find="à posteriori" replace="a posteriori"/>
+    <item find="cambodge" replace="Cambodge"/>
+    <item find="brulé" replace="brûlé"/>
+    <item find="icones" replace="icônes"/>
+    <item find="inconditionelle" replace="inconditionnelle"/>
+    <item find="appéritifs" replace="apéritifs"/>
+    <item find="un transfère" replace="un transfert"/>
+    <item find="elle investi" replace="elle investit"/>
+    <item find="leur équivalant" replace="leur équivalent"/>
+    <item find="exeption" replace="exception"/>
+    <item find="arpès" replace="après"/>
+    <item find="participassion" replace="participation"/>
+    <item find="au grès du" replace="au gré du"/>
+    <item find="chènes" replace="chênes"/>
+    <item find="haut fond" replace="haut-fond"/>
+    <item find="la notre" replace="la nôtre"/>
+    <item find="Antrée" replace="Entrée"/>
+    <item find="exellents" replace="excellents"/>
+    <item find="tater" replace="tâter"/>
+    <item find="l'adhérant" replace="l'adhérent"/>
+    <item find="reast" replace="vide de test"/>
+    <item find="est conçut" replace="est conçu"/>
+    <item find="baclé" replace="bâclé"/>
+    <item find="Quelques soient" replace="Quels que soient"/>
+    <item find="cauchemard" replace="cauchemar"/>
+    <item find="trop plein" replace="trop-plein"/>
+    <item find="condanmer" replace="condamner"/>
+    <item find="fenètres" replace="fenêtres"/>
+    <item find="un adhérant" replace="un adhérent"/>
+    <item find="super-marché" replace="supermarché"/>
+    <item find="vanuatu" replace="Vanuatu"/>
+    <item find="pillules" replace="pilules"/>
+    <item find="demie heure" replace="demi-heure"/>
+    <item find="patietn" replace="patient"/>
+    <item find="il calcul" replace="il calcule"/>
+    <item find="quatres" replace="quatre"/>
+    <item find="tobogan" replace="toboggan"/>
+    <item find="de bon grès" replace="de bon gré"/>
+    <item find="laors" replace="alors"/>
+    <item find="diplome" replace="diplôme"/>
+    <item find="défence" replace="défense"/>
+    <item find="poitn" replace="point"/>
+    <item find="par dessus" replace="par-dessus"/>
+    <item find="ellaborées" replace="élaborées"/>
+    <item find="vers d'eau" replace="verre d'eau"/>
+    <item find="renouvellée" replace="renouvelé"/>
+    <item find="antécédant" replace="antécédent"/>
+    <item find="ajourd'hui" replace="aujourd'hui"/>
+    <item find="otée" replace="ôtée"/>
+    <item find="sourd muet" replace="sourd-muet"/>
+    <item find="comores" replace="Comores"/>
+    <item find="bétise" replace="bêtise"/>
+    <item find="exessif" replace="excessif"/>
+    <item find="un calcule" replace="un calcul"/>
+    <item find="ellaborés" replace="élaborés"/>
+    <item find="porgrammes" replace="programmes"/>
+    <item find="fachée" replace="fâchée"/>
+    <item find="haut relief" replace="haut-relief"/>
+    <item find="sous estimée" replace="sous-estimée"/>
+    <item find="eau de chaud" replace="eau de chaux"/>
+    <item find="un fabriquant" replace="un fabricant"/>
+    <item find="wallis" replace="Wallis"/>
+    <item find="Allo" replace="Allô"/>
+    <item find="jacinte" replace="jacinthe"/>
+    <item find="quand à" replace="quant à"/>
+    <item find="imobile" replace="immobile"/>
+    <item find="logitiel" replace="logiciel"/>
+    <item find="facher" replace="fâcher"/>
+    <item find="boitiers" replace="boîtiers"/>
+    <item find="acoster" replace="accoster"/>
+    <item find="aex" replace="axe"/>
+    <item find="fachées" replace="fâchées"/>
+    <item find="vos cotés" replace="vos côtés"/>
+    <item find="chaines" replace="chaînes"/>
+    <item find="trainé" replace="traîné"/>
+    <item find="meler" replace="mêler"/>
+    <item find="pipe line" replace="pipe-line"/>
+    <item find="toi même" replace="toi-même"/>
+    <item find="dixaine" replace="dizaine"/>
+    <item find="grand peine" replace="grand-peine"/>
+    <item find="microproceseur" replace="microprocesseur"/>
+    <item find="super-utilisateur" replace="superutilisateur"/>
+    <item find="Je mais" replace="Je mets"/>
+    <item find="c'est à-dire" replace="c'est-à-dire"/>
+    <item find="c.à.d." replace="c.-à-d."/>
+    <item find="sinonimes" replace="synonymes"/>
+    <item find="rotir" replace="rôtir"/>
+    <item find="muffle" replace="mufle"/>
+    <item find="chacuns" replace="chacun"/>
+    <item find="aujurd'hui" replace="aujourd'hui"/>
+    <item find="allo" replace="allô"/>
+    <item find="autatn" replace="autant"/>
+    <item find="virsu" replace="virus"/>
+    <item find="çette" replace="cette"/>
+    <item find="mittes" replace="mites"/>
+    <item find="parceque" replace="parce que"/>
+    <item find="fchiers" replace="fichiers"/>
+    <item find="rez de chaussée" replace="rez-de-chaussée"/>
+    <item find="sous estimer" replace="sous-estimer"/>
+    <item find="resoud il" replace="résout-il"/>
+    <item find="esse-que" replace="est-ce que"/>
+    <item find="parlementare" replace="parlementaire"/>
+    <item find="mal en point" replace="mal-en-point"/>
+    <item find="Hors," replace="Or,"/>
+    <item find="avsi" replace="avis"/>
+    <item find="exellent" replace="excellent"/>
+    <item find="couremment" replace="couramment"/>
+    <item find="Dés que" replace="Dès que"/>
+    <item find="melé" replace="mêlé"/>
+    <item find="brulante" replace="brûlante"/>
+    <item find="trapèse" replace="trapèze"/>
+    <item find="un insère" replace="un insert"/>
+    <item find="changemetns" replace="changements"/>
+    <item find="cerf-volants" replace="cerfs-volants"/>
+    <item find="parrin" replace="parrain"/>
+    <item find="régél" replace="réglé"/>
+    <item find="oté" replace="ôté"/>
+    <item find="Blumenal" replace="Blumenau"/>
+    <item find="siphylis" replace="syphilis"/>
+    <item find="recomander" replace="recommander"/>
+    <item find="soit disant" replace="soi-disant"/>
+    <item find="glof" replace="golf"/>
+    <item find="aller de paire" replace="aller de pair"/>
+    <item find="le foi" replace="le foie"/>
+    <item find="Met avis" replace="M'est avis"/>
+    <item find="environment" replace="environnement"/>
+    <item find="abimés" replace="abîmés"/>
+    <item find="point-virgules" replace="points-virgules"/>
+    <item find="peids" replace="pieds"/>
+    <item find="vis à vis" replace="vis-à-vis"/>
+    <item find="libre échangiste" replace="libre-échangiste"/>
+    <item find="bosi" replace="bois"/>
+    <item find="piques-niques" replace="pique-niques"/>
+    <item find="celle là" replace="celle-là"/>
+    <item find="htp://" replace="http://"/>
+    <item find="elle transfert" replace="elle transfère"/>
+    <item find="optionelle" replace="optionnelle"/>
+    <item find="fraicheur" replace="fraîcheur"/>
+    <item find="Irladne" replace="Irlande"/>
+    <item find="trainer" replace="traîner"/>
+    <item find="bolcs" replace="blocs"/>
+    <item find="burundi" replace="Burundi"/>
+    <item find="une animalcule" replace="un animalcule"/>
+    <item find="tes cotés" replace="tes côtés"/>
+    <item find="agraffe" replace="agrafe"/>
+    <item find="continuement" replace="continûment"/>
+    <item find="maréchal ferrant" replace="maréchal-ferrant"/>
+    <item find="pare brise" replace="pare-brise"/>
+    <item find="le souffre" replace="le soufre"/>
+    <item find="super-marchés" replace="supermarchés"/>
+    <item find="appui-têtes" replace="appuis-tête"/>
+    <item find="différend de" replace="différent de"/>
+    <item find="un précédant" replace="un précédent"/>
+    <item find="Etant" replace="Étant"/>
+    <item find="les résidants" replace="les résidents"/>
+    <item find="trone" replace="trône"/>
+    <item find="baffouiller" replace="bafouiller"/>
+    <item find="http:\\" replace="http://"/>
+    <item find="il sans va" replace="il s'en va"/>
+    <item find="au dépens" replace="aux dépens"/>
+    <item find="boitier" replace="boîtier"/>
+    <item find="accolytes" replace="acolytes"/>
+    <item find="lesson" replace="leçon"/>
+    <item find="axu" replace="aux"/>
+    <item find="tepms" replace="temps"/>
+    <item find="le sucés" replace="le succès"/>
+    <item find="flêches" replace="flèches"/>
+    <item find="guet apens" replace="guet-apens"/>
+    <item find="celui-la" replace="celui-là"/>
+    <item find="de tel sorte" replace="de telle sorte"/>
+    <item find="ont investit" replace="ont investi"/>
+    <item find="prud homme" replace="prud'homme"/>
+    <item find="une haltère" replace="un haltère"/>
+    <item find="cauchemards" replace="cauchemars"/>
+    <item find="soleil" replace="Soleil"/>
+    <item find="garde barrière" replace="garde-barrière"/>
+    <item find="rafraichissement" replace="rafraîchissement"/>
+    <item find="tantot" replace="tantôt"/>
+    <item find="pantouffle" replace="pantoufle"/>
+    <item find="plein pied" replace="plain-pied"/>
+    <item find="dûe" replace="due"/>
+    <item find="prud hommes" replace="prud'hommes"/>
+    <item find="il transfert" replace="il transfère"/>
+    <item find="Ile de France" replace="Île-de-France"/>
+    <item find="décroitre" replace="décroître"/>
+    <item find="est choisit" replace="est choisi"/>
+    <item find="congo" replace="Congo"/>
+    <item find="dixaines" replace="dizaines"/>
+    <item find="anévrysmes" replace="anévrismes"/>
+    <item find="imobiles" replace="immobiles"/>
+    <item find="il survie" replace="il survit"/>
+    <item find="côte d'ivoire" replace="Côte d'Ivoire"/>
+    <item find="un détaille" replace="un détail"/>
+    <item find="avrli" replace="avril"/>
+    <item find="exigues" replace="exiguës"/>
+    <item find="naviguer au pré" replace="naviguer au près"/>
+    <item find="appuis-têtes" replace="appuis-tête"/>
+    <item find="francaises" replace="françaises"/>
+    <item find="htpp://" replace="http://"/>
+    <item find="appellé" replace="appelé"/>
+    <item find="demi heure" replace="demi-heure"/>
+    <item find="fraiche" replace="fraîche"/>
+    <item find="il fourni" replace="il fournit"/>
+    <item find="soutiens-gorges" replace="soutiens-gorge"/>
+    <item find="quand-même" replace="quand même"/>
+    <item find="identation" replace="indentation"/>
+    <item find="recomandées" replace="recommandées"/>
+    <item find="canoé" replace="canoë"/>
+    <item find="précosse" replace="précoce"/>
+    <item find="couluers" replace="couleurs"/>
+    <item find="Basses Pyrénées" replace="Basses-Pyrénées"/>
+    <item find="chef d'oeuvre" replace="chef-d'oeuvre"/>
+    <item find="Torvald" replace="Torvalds"/>
+    <item find="acumulé" replace="accumulé"/>
+    <item find="asssises" replace="assises"/>
+    <item find="sinonymes" replace="synonymes"/>
+    <item find="acceuil" replace="accueil"/>
+    <item find="erronnée" replace="erronée"/>
+    <item find="Au moment ou" replace="Au moment où"/>
+    <item find="elle fourni" replace="elle fournit"/>
+    <item find="fachés" replace="fâchés"/>
+    <item find="laisser-passer" replace="laissez-passer"/>
+    <item find="cetrain" replace="certain"/>
+    <item find="le fois" replace="le foie"/>
+    <item find="le résidant" replace="le résident"/>
+    <item find="un ecchymose" replace="une ecchymose"/>
+    <item find="Tu mais" replace="Tu mets"/>
+    <item find="honnète" replace="honnête"/>
+    <item find="amortissment" replace="amortissement"/>
+    <item find="il choisi" replace="il choisit"/>
+    <item find="annullée" replace="annulée"/>
+    <item find="encâblures" replace="encablures"/>
+    <item find="demandes-lui" replace="demande-lui"/>
+    <item find="les un" replace="les uns"/>
+    <item find="pantomine" replace="pantomime"/>
+    <item find="hopitaux" replace="hôpitaux"/>
+    <item find="acr" replace="arc"/>
+    <item find="aieul" replace="aïeul"/>
+    <item find="un équivalant" replace="un équivalent"/>
+    <item find="indû" replace="indu"/>
+    <item find="Mr" replace="M."/>
+    <item find="super utilisateur" replace="superutilisateur"/>
+    <item find="courronnes" replace="couronnes"/>
+    <item find="chaques" replace="chaque"/>
+    <item find="autoinduction" replace="auto-induction"/>
+    <item find="celui-çi" replace="celui-ci"/>
+    <item find="Esquimeau" replace="Esquimau"/>
+    <item find="un pronostique" replace="un pronostic"/>
+    <item find="super-ordinateur" replace="superordinateur"/>
+    <item find="afiche" replace="affiche"/>
+    <item find="hair" replace="haïr"/>
+    <item find="brulants" replace="brûlants"/>
+    <item find="aller entrain" replace="aller en train"/>
+    <item find="ralongés" replace="rallongés"/>
+    <item find="un épistaxis" replace="une épistaxis"/>
+    <item find="copu" replace="coup"/>
+    <item find="cette après-midi" replace="cet après-midi"/>
+    <item find="règlée" replace="réglée"/>
+    <item find="c'est-a-dire" replace="c'est-à-dire"/>
+    <item find="sori" replace="soir"/>
+    <item find="Http://" replace="http://"/>
+    <item find="c'est à dire" replace="c'est-à-dire"/>
+    <item find="une planisphère" replace="un planisphère"/>
+    <item find="voute" replace="voûte"/>
+    <item find="une astérisque" replace="un astérisque"/>
+    <item find="elle boîte" replace="elle boite"/>
+    <item find="suffisemment" replace="suffisamment"/>
+    <item find="tannières" replace="tanières"/>
+    <item find="angleterre" replace="Angleterre"/>
+    <item find="remue ménage" replace="remue-ménage"/>
+    <item find="recomandée" replace="recommandée"/>
+    <item find="près salés" replace="prés salés"/>
+    <item find="règler" replace="régler"/>
+    <item find="empiètement" replace="empiétement"/>
+    <item find="Cepedant" replace="Cependant"/>
+    <item find="ontario" replace="Ontario"/>
+    <item find="rwanda" replace="Rwanda"/>
+    <item find="faisnat" replace="faisant"/>
+    <item find="parlementares" replace="parlementaires"/>
+    <item find="accés" replace="accès"/>
+    <item find="masi" replace="mais"/>
+    <item find="il conseil" replace="il conseille"/>
+    <item find="pie mère" replace="pie-mère"/>
+    <item find="une anathème" replace="un anathème"/>
+    <item find="infractus" replace="infarctus"/>
+    <item find="règlage" replace="réglage"/>
+    <item find="taindre" replace="teindre"/>
+    <item find="bonne après-midi" replace="bon après-midi"/>
+    <item find="joaillers" replace="joailliers"/>
+    <item find="sursoir" replace="surseoir"/>
+    <item find="Thorvalds" replace="Torvalds"/>
+    <item find="ognons" replace="oignons"/>
+    <item find="poitns" replace="points"/>
+    <item find="adanboné" replace="abandonné"/>
+    <item find="tout a fait" replace="tout à fait"/>
+    <item find="tannière" replace="tanière"/>
+    <item find="colone" replace="colonne"/>
+    <item find="Cependatn" replace="Cependant"/>
+    <item find="brucelle" replace="brucelles"/>
+    <item find="boute en train" replace="boute-en-train"/>
+    <item find="utilsateur" replace="utilisateur"/>
+    <item find="nourir" replace="nourrir"/>
+    <item find="trait de faction" replace="trait de fraction"/>
+    <item find="que un" replace="qu'un"/>
+    <item find="aréodromes" replace="aérodromes"/>
+    <item find="mea culpa" replace="mea-culpa"/>
+    <item find="sépcifique" replace="spécifique"/>
+    <item find="male" replace="mâle"/>
+    <item find="kioske" replace="kiosque"/>
+    <item find="pèriode" replace="période"/>
+    <item find="ban de sable" replace="banc de sable"/>
+    <item find="boite" replace="boîte"/>
+    <item find="sous marins" replace="sous-marins"/>
+    <item find="des on dit" replace="des on-dit"/>
+    <item find="batards" replace="bâtards"/>
+    <item find="impots" replace="impôts"/>
+    <item find="irlande" replace="Irlande"/>
+    <item find="aux dépend" replace="aux dépens"/>
+    <item find="gnôme" replace="gnome"/>
+    <item find="ralongé" replace="rallongé"/>
+    <item find="lotto" replace="loto"/>
+    <item find="aigüe" replace="aiguë"/>
+    <item find="ua" replace="au"/>
+    <item find="diplomes" replace="diplômes"/>
+    <item find="ambigüe" replace="ambiguë"/>
+    <item find="garde boue" replace="garde-boue"/>
+    <item find="exhorbitant" replace="exorbitant"/>
+    <item find="tempettes" replace="tempêtes"/>
+    <item find="exigant" replace="exigeant"/>
+    <item find="parlementère" replace="parlementaire"/>
+    <item find="on y survie" replace="on y survit"/>
+    <item find="celulle" replace="cellule"/>
+    <item find="bèche" replace="bêche"/>
+    <item find="languages" replace="langages"/>
+    <item find="occurences" replace="occurrences"/>
+    <item find="mouffle" replace="moufle"/>
+    <item find="est suffisent" replace="est suffisant"/>
+    <item find="nosu" replace="nous"/>
+    <item find="pèse bébé" replace="pèse-bébés"/>
+    <item find="bien disant" replace="bien-disant"/>
+    <item find="charète" replace="charrette"/>
+    <item find="saturne" replace="Saturne"/>
+    <item find="bas fond" replace="bas-fond"/>
+    <item find="arc en ciel" replace="arc-en-ciel"/>
+    <item find="va nu pieds" replace="va-nu-pieds"/>
+    <item find="afiché" replace="affiché"/>
+    <item find="celle-çi" replace="celle-ci"/>
+    <item find="pê" replace="peut-être"/>
+    <item find="jamias" replace="jamais"/>
+    <item find="dilemne" replace="dilemme"/>
+    <item find="annullées" replace="annulées"/>
+    <item find="tu mais" replace="tu mets"/>
+    <item find="pares-brise" replace="pare-brise"/>
+    <item find="appercevoir" replace="apercevoir"/>
+    <item find="mio" replace="moi"/>
+    <item find="suprème" replace="suprême"/>
+    <item find="espagne" replace="Espagne"/>
+    <item find="une sourit" replace="une souris"/>
+    <item find="on en a pas" replace="on n'en a pas"/>
+    <item find="je peut" replace="je peux"/>
+    <item find="apperçus" replace="aperçus"/>
+    <item find="crètes" replace="crêtes"/>
+    <item find="celui là" replace="celui-là"/>
+    <item find="accajou" replace="acajou"/>
+    <item find="epnse" replace="pense"/>
+    <item find="a définit" replace="a défini"/>
+    <item find="vous plaie" replace="vous plaît"/>
+    <item find="que que soie" replace="quel que soit"/>
+    <item find="quitance" replace="quittance"/>
+    <item find="france" replace="France"/>
+    <item find="Sera t'il" replace="Sera-t-il"/>
+    <item find="dégats" replace="dégâts"/>
+    <item find="jupiter" replace="Jupiter"/>
+    <item find="allieurs" replace="ailleurs"/>
+    <item find="règlages" replace="réglages"/>
+    <item find="incomoder" replace="incommoder"/>
+    <item find="renouvellé" replace="renouvelé"/>
+    <item find="belgique" replace="Belgique"/>
+    <item find="trouble fête" replace="trouble-fête"/>
+    <item find="exédent" replace="excédent"/>
+    <item find="à peu prêt" replace="à peu près"/>
+    <item find="elle calcul" replace="elle calcule"/>
+    <item find="petit suisse" replace="petit-suisse"/>
+    <item find="Par contre" replace="En revanche"/>
+    <item find="soul" replace="saoul"/>
+    <item find="apperçu" replace="aperçu"/>
+    <item find="décu" replace="déçu"/>
+    <item find="futuna" replace="Futuna"/>
+    <item find="intérets" replace="intérêts"/>
+    <item find="multi-utilisateurs" replace="multiutilisateur"/>
+    <item find="suisse" replace="Suisse"/>
+    <item find="parmis" replace="parmi"/>
+    <item find="ralonger" replace="rallonge"/>
+    <item find="ouies" replace="ouïes"/>
+    <item find="fxa" replace="fax"/>
+    <item find="je ne sais quoi" replace="je-ne-sais-quoi"/>
+    <item find="Paques" replace="Pâques"/>
+    <item find="batarde" replace="bâtarde"/>
+    <item find="pince nez" replace="pince-nez"/>
+    <item find="aretes" replace="arêtes"/>
+    <item find="francaise" replace="française"/>
+    <item find="contre jour" replace="contre-jour"/>
+    <item find="neptune" replace="Neptune"/>
+    <item find="qu'en dira-t'on" replace="qu'en-dira-t-on"/>
+    <item find="je suie" replace="je suis"/>
+    <item find="au dessus" replace="au-dessus"/>
+    <item find="ambigüité " replace="ambiguïté "/>
+    <item find="une boite" replace="une boîte"/>
+    <item find="point virgule" replace="point-virgule"/>
+    <item find="haut le corps" replace="haut-le-corps"/>
+    <item find="les votres" replace="les vôtres"/>
+    <item find="à peu prés" replace="à peu près"/>
+    <item find="inconditionel" replace="inconditionnel"/>
+    <item find="a conçut" replace="a conçu"/>
+    <item find="A-t'il" replace="A-t-il"/>
+    <item find="anée" replace="année"/>
+    <item find="Bonne après-midi" replace="Bon après-midi"/>
+    <item find="pantouffles" replace="pantoufles"/>
+    <item find="enquètes" replace="enquêtes"/>
+    <item find="collinne" replace="colline"/>
+    <item find="une acrostiche" replace="un acrostiche"/>
+    <item find="courrones" replace="couronnes"/>
+    <item find="résidance" replace="résidence"/>
+    <item find="a reçut" replace="a reçu"/>
+    <item find="par devant" replace="par-devant"/>
+    <item find="colines" replace="collines"/>
+    <item find="chausse trape" replace="chausse-trape"/>
+    <item find="auto induction" replace="autoinduction"/>
+    <item find="cameroun" replace="Cameroun"/>
+    <item find="hate" replace="hâte"/>
+    <item find="financiaires" replace="financières"/>
+    <item find="batême" replace="baptêmes"/>
+    <item find="niger" replace="Niger"/>
+    <item find="sous estimé" replace="sous-estimé"/>
+    <item find="joalier" replace="joaillier"/>
+    <item find="polygône" replace="polygone"/>
+    <item find="pique assiette" replace="pique-assiette"/>
+    <item find="du souffre" replace="du soufre"/>
+    <item find="aconte" replace="acompte"/>
+    <item find="isl" replace="ils"/>
+    <item find="jutse" replace="juste"/>
+    <item find="erronnées" replace="erronées"/>
+    <item find="maitre" replace="maître"/>
+    <item find="a investit" replace="a investi"/>
+    <item find="tio" replace="toi"/>
+    <item find="Allemange" replace="Allemagne"/>
+    <item find="une arcane" replace="un arcane"/>
+    <item find="lune" replace="Lune"/>
+    <item find="hors la loi" replace="hors-la-loi"/>
+    <item find="continument" replace="continûment"/>
+    <item find="portugal" replace="Portugal"/>
+    <item find="artisna" replace="artisan"/>
+    <item find="oui-dire" replace="ouï-dire"/>
+    <item find="parteau" replace="marteau"/>
+    <item find="cerf volant" replace="cerf-volant"/>
+    <item find="oui dire" replace="ouï-dire"/>
+    <item find="un diagnostique" replace="un diagnostic"/>
+    <item find="ralongées" replace="rallongées"/>
+    <item find="abscent" replace="absent"/>
+    <item find="voutes" replace="voûtes"/>
+    <item find="fihciers" replace="fichiers"/>
+    <item find="changment" replace="changement"/>
+    <item find="À posteriori" replace="A posteriori"/>
+    <item find="fils a papa" replace="fils à papa"/>
+    <item find="jacynthes" replace="jacinthes"/>
+    <item find="dégat" replace="dégât"/>
+    <item find="ainée" replace="aînée"/>
+    <item find="mardi gras" replace="Mardi gras"/>
+    <item find="exigue" replace="exiguë"/>
+    <item find="brulure" replace="brûlure"/>
+    <item find="exeptions" replace="exceptions"/>
+    <item find="elle aperçu" replace="elle aperçut"/>
+    <item find="appat" replace="appât"/>
+    <item find="comportment" replace="comportement"/>
+    <item find="lui même" replace="lui-même"/>
+    <item find="il investi" replace="il investit"/>
+    <item find="noël" replace="Noël"/>
+    <item find="Et bien," replace="Eh bien,"/>
+    <item find="occurence" replace="occurrence"/>
+    <item find="aréodrome" replace="aérodrome"/>
+    <item find="héroisme" replace="héroïsme"/>
+    <item find="aieux" replace="aïeux"/>
+    <item find="elles mêmes" replace="elles-mêmes"/>
+    <item find="impresions" replace="impressions"/>
+    <item find="Ceci sont" replace="Ceux-ci sont"/>
+    <item find="se vente" replace="se vante"/>
+    <item find="a subit" replace="a subi"/>
+    <item find="poids de senteur" replace="pois de senteur"/>
+    <item find="pole" replace="pôle"/>
+    <item find="guèpe" replace="guêpe"/>
+    <item find="sinonyme" replace="synonyme"/>
+    <item find="tout à fais" replace="tout à fait"/>
+    <item find="compotte" replace="compote"/>
+    <item find="anévrysme" replace="anévrisme"/>
+    <item find="crèpes" replace="crêpes"/>
+    <item find="mian" replace="main"/>
+    <item find="Bien sur" replace="Bien sûr"/>
+    <item find="batardes" replace="bâtardes"/>
+    <item find="baclés" replace="bâclés"/>
+    <item find="quel que soie" replace="quel que soit"/>
+    <item find="débur" replace="début"/>
+    <item find="autremnt" replace="autrement"/>
+    <item find="alosr" replace="alors"/>
+    <item find="artisant" replace="artisan"/>
+    <item find="trainée" replace="traînée"/>
+    <item find="laissé pour compte" replace="laissé-pour-compte"/>
+    <item find="Irelande" replace="Irlande"/>
+    <item find="raper" replace="râper"/>
+    <item find="grand chose" replace="grand-chose"/>
+    <item find="bas relief" replace="bas-relief"/>
+    <item find="fchier" replace="fichier"/>
+    <item find="lerus" replace="leurs"/>
+    <item find="bon grès mal grès" replace="bon gré mal gré"/>
+    <item find="vénus" replace="Vénus"/>
+    <item find="une effluve" replace="un effluve"/>
+    <item find="lyon" replace="Lyon"/>
+    <item find="ils son" replace="ils sont"/>
+    <item find="distention" replace="distension"/>
+    <item find="acomte" replace="acompte"/>
+    <item find="que une" replace="qu'une"/>
+    <item find="auto-correction" replace="autocorrection"/>
+    <item find="ABC1" replace="test test test"/>
+    <item find="rond-points" replace="ronds-points"/>
+    <item find="par delà" replace="par-delà"/>
+    <item find="un travestit" replace="un travesti"/>
+    <item find="étainte" replace="éteinte"/>
+    <item find="otés" replace="ôtés"/>
+    <item find="rapes" replace="râpes"/>
+    <item find="finlande" replace="Finlande"/>
+    <item find="rève" replace="rêve"/>
+    <item find="sinonime" replace="synonyme"/>
+    <item find="façon à ce que" replace="façon que"/>
+    <item find="mauritanie" replace="Mauritanie"/>
+    <item find="diner" replace="dîner"/>
+    <item find="crèpe" replace="crêpe"/>
+    <item find="sosu" replace="sous"/>
+    <item find="aolrs" replace="alors"/>
+    <item find="super-forme" replace="superforme"/>
+    <item find="erronné" replace="erroné"/>
+    <item find="bec de cane" replace="bec-de-cane"/>
+    <item find="avatn" replace="avant"/>
+    <item find="exeptés" replace="exceptés"/>
+    <item find="dépots" replace="dépôts"/>
+    <item find="accompte" replace="acompte"/>
+    <item find="pétrol" replace="pétrole"/>
+    <item find="un escarre" replace="une escarre"/>
+    <item find="qu'en dira-t-on" replace="qu'en-dira-t-on"/>
+    <item find="On est pas" replace="On n'est pas"/>
+    <item find="informatitien" replace="informaticien"/>
+    <item find="exhorbitante" replace="exorbitante"/>
+    <item find="il travail" replace="il travaille"/>
+    <item find="ellaboré" replace="élaboré"/>
+    <item find="haut commissariat" replace="haut-commissariat"/>
+    <item find="de mon plein grès" replace="de mon plein gré"/>
+    <item find="leurs cotés" replace="leurs côtés"/>
+    <item find="nues propriétés" replace="nues-propriétés"/>
+    <item find="la plais" replace="la plaie"/>
+    <item find="saurait il" replace="saurait-il"/>
+    <item find="probleme" replace="problème"/>
+    <item find="cables" replace="câbles"/>
+    <item find="amortisement" replace="amortissement"/>
+    <item find="le champs" replace="le champ"/>
+    <item find="rectifier le tire" replace="rectifier le tir"/>
+    <item find="prè salé" replace="pré-salé"/>
+    <item find="un mets" replace="un met"/>
+    <item find="a propos" replace="à propos"/>
+    <item find="impresion" replace="impression"/>
+    <item find="pitare" replace="pirate"/>
+    <item find="fraiches" replace="fraîches"/>
+    <item find="exhorbitantes" replace="exorbitantes"/>
+    <item find="passport" replace="passeport"/>
+    <item find="chef lieu" replace="chef-lieu"/>
+    <item find="maraton" replace="marathon"/>
+    <item find="eux mêmes" replace="eux-mêmes"/>
+    <item find="groseillers" replace="groseilliers"/>
+    <item find="je travail" replace="je travaille"/>
+    <item find="moi qui suit" replace="moi qui suis"/>
+    <item find="utilser" replace="utiliser"/>
+    <item find="amre" replace="arme"/>
+    <item find="hètres" replace="hêtres"/>
+    <item find="ficiers" replace="fichiers"/>
+    <item find="là-même" replace="là même"/>
+    <item find="russie" replace="Russie"/>
+    <item find="programe" replace="programme"/>
+    <item find="au-dela" replace="au-delà"/>
+    <item find="cou de pied" replace="cou-de-pied"/>
+    <item find="il peux" replace="il peut"/>
+    <item find="mitte" replace="mite"/>
+    <item find="reine claude" replace="reine-claude"/>
+    <item find="arreté" replace="arrêté"/>
+    <item find="hatu" replace="haut"/>
+    <item find="àla" replace="à la"/>
+    <item find="Cependent" replace="Cependant"/>
+    <item find="une apogée" replace="un apogée"/>
+    <item find="porbable" replace="probable"/>
+    <item find="on est pas" replace="on n'est pas"/>
+    <item find="sous main" replace="sous-main"/>
+    <item find="recomandé" replace="recommandé"/>
+    <item find="ralonge" replace="rallonge"/>
+    <item find="défault" replace="défaut"/>
+    <item find="atôme" replace="atome"/>
+    <item find="utliser" replace="utiliser"/>
+    <item find="sauf conduit" replace="sauf-conduit"/>
+    <item find="obélix" replace="obélisque"/>
+    <item find="une hémisphère" replace="un hémisphère"/>
+    <item find="monoiodé" replace="mono-iodé"/>
+    <item find="celà" replace="cela"/>
+    <item find="monaco" replace="Monaco"/>
+    <item find="trainées" replace="traînées"/>
+    <item find="Quand à" replace="Quant à"/>
+    <item find="joailler" replace="joaillier"/>
+    <item find="controleurs" replace="contrôleurs"/>
+    <item find="ici bas" replace="ici-bas"/>
+    <item find="québec" replace="Québec"/>
+    <item find="c'st" replace="c'est"/>
+    <item find="au devant" replace="au-devant"/>
+    <item find="un conseille" replace="un conseil"/>
+    <item find="deça" replace="deçà"/>
+    <item find="couleru" replace="couleur"/>
+    <item find="la-bas" replace="là-bas"/>
+    <item find="hors d'oeuvre" replace="hors-d'oeuvre"/>
+    <item find="ralongée" replace="rallongée"/>
+    <item find="plateformes" replace="plates-formes"/>
+    <item find="guinée-conakry" replace="Guinée-Conakry"/>
+    <item find="s'insert" replace="s'insère"/>
+    <item find="abscice" replace="abscisse"/>
+    <item find="singature" replace="signature"/>
+    <item find="agraffes" replace="agrafes"/>
+    <item find="presqu'ile" replace="presqu'île"/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="env."/>
+    <word exception="op."/>
+    <word exception="F."/>
+    <word exception="e."/>
+    <word exception="r."/>
+    <word exception="min."/>
+    <word exception="ex."/>
+    <word exception="inf."/>
+    <word exception="g."/>
+    <word exception="id."/>
+    <word exception="n."/>
+    <word exception="ndlr."/>
+    <word exception="apr."/>
+    <word exception="max."/>
+    <word exception="cf."/>
+    <word exception="O."/>
+    <word exception="N."/>
+    <word exception="T."/>
+    <word exception="ch."/>
+    <word exception="d."/>
+    <word exception="av."/>
+    <word exception="V."/>
+    <word exception="P."/>
+    <word exception="p."/>
+    <word exception="à."/>
+    <word exception="-l."/>
+    <word exception="cit."/>
+    <word exception="M."/>
+    <word exception="B."/>
+    <word exception="t."/>
+    <word exception="chap."/>
+    <word exception="loc."/>
+    <word exception="c."/>
+    <word exception="ndt."/>
+    <word exception="tél."/>
+    <word exception="-O."/>
+    <word exception="MM."/>
+    <word exception="i."/>
+    <word exception="s."/>
+    <word exception="U."/>
+    <word exception="hab."/>
+    <word exception="J."/>
+    <word exception="C."/>
+    <word exception="I."/>
+    <word exception="-C."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="GWh"/>
+    <word exception="KPrinter"/>
+    <word exception="OOo"/>
+    <word exception="GW"/>
+    <word exception="MT"/>
+    <word exception="MJ"/>
+    <word exception="KDevelop"/>
+    <word exception="KMail"/>
+    <word exception="MHz"/>
+    <word exception="GHz"/>
+    <word exception="KSpread"/>
+    <word exception="KPat"/>
+    <word exception="MWh"/>
+    <word exception="KStars"/>
+    <word exception="KPresenter"/>
+    <word exception="KBabel"/>
+    <word exception="KWord"/>
+    <word exception="KTuberling"/>
+    <word exception="KOffice"/>
+    <word exception="MW"/>
+    <word exception="KNode"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="“" end="”"/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="‘" end="’"/>
+  </SimpleQuote>
+</Word>

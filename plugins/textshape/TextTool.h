@@ -319,6 +319,7 @@ private:
     void finishedWord();
     void finishedParagraph();
     void startingSimpleEdit();
+    void characterInserted();
     void runUrl(KoPointerEvent *event, QString &url);
     void useTableBorderCursor();
 

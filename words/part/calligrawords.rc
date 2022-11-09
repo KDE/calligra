@@ -80,8 +80,10 @@
       <Action name="tool_auto_spellcheck"/>
       <Action name="tool_configure_spellcheck"/>
   </Menu>
-  <Action name="enable_autocorrection"/>
-  <Action name="configure_autocorrection"/>
+  <Menu name="AutoCorrection"><text>AutoCorrection</text>
+    <Action name="enable_autocorrection"/>
+    <Action name="configure_autocorrection"/>
+  </Menu>
   <Action name="showStatusBar" group="settings_show"/>
   <Action name="configure_completion" group="settings_show"/>
   <Action name="settings_active_author" group="settings_configure"/>

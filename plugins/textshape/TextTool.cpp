@@ -2826,6 +2826,7 @@ void TextTool::editingPluginEvents()
         finishedParagraph();
         m_prevCursorPosition = -1;
     } else {
+        characterInserted();
         int from = m_prevCursorPosition;
         int to = m_textEditor.data()->position();
         if (from > to)
@@ -2865,6 +2866,23 @@ void TextTool::startingSimpleEdit()
         }
     }
 
+}
+
+void TextTool::characterInserted()
+{
+    qInfo()<<Q_FUNC_INFO<<m_textShapeData;
+    if (m_textShapeData && textEditingPluginContainer()) {
+        const QList<KoTextEditingPlugin*> plugins = textEditingPluginContainer()->values();
+        qInfo()<<Q_FUNC_INFO<<"plugins"<<plugins;
+        if (plugins.isEmpty()) {
+            qInfo()<<Q_FUNC_INFO<<"No plugins";
+        }
+        for (KoTextEditingPlugin* plugin : plugins) {
+            m_prevCursorPosition = plugin->characterInserted(m_textShapeData->document(), m_prevCursorPosition);
+        }
+    } else {
+        qInfo()<<Q_FUNC_INFO<<"No shape data or plugin container";
+    }
 }
 
 void TextTool::setTextColor(const KoColor &color)
