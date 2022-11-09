@@ -28,7 +28,6 @@
     <item find=":^K:" replace="ᴷ"/>
     <item find=":intersection:" replace="∩"/>
     <item find="abotu" replace="about"/>
-    <item find="couldnt" replace="couldn’t"/>
     <item find="docuemnt" replace="document"/>
     <item find=":pretzel:" replace="泌"/>
     <item find=":bandage:" replace="洛"/>
@@ -155,7 +154,6 @@
     <item find="sitll" replace="still"/>
     <item find=":first quarter:" replace=""/>
     <item find=":SE:" replace="↘"/>
-    <item find="harwdare" replace="hardware"/>
     <item find=":subset:" replace="⊂"/>
     <item find=":^G:" replace="ᴳ"/>
     <item find=":sweet potato:" replace=""/>
@@ -190,7 +188,6 @@
     <item find=":kissing cat:" replace=""/>
     <item find="exhcanges" replace="exchanges"/>
     <item find=":bubble4:" replace=""/>
-    <item find="qurantine" replace="quarantine"/>
     <item find="percentto" replace="percent to"/>
     <item find=":^k:" replace="ᵏ"/>
     <item find="feilds" replace="fields"/>
@@ -291,7 +288,6 @@
     <item find=":divorce:" replace="⚮"/>
     <item find="ofthe" replace="of the"/>
     <item find=":3 h:" replace=""/>
-    <item find="birhtdays" replace="birthdays"/>
     <item find=":soccer2:" replace="聾"/>
     <item find="documnet" replace="document"/>
     <item find=":peace:" replace="☮"/>
@@ -331,7 +327,6 @@
     <item find="affraid" replace="afraid"/>
     <item find="agreemnet" replace="agreement"/>
     <item find=":pentagram:" replace="⛤"/>
-    <item find=":o:" replace="⭕"/>
     <item find=":empty note page:" replace=""/>
     <item find=":child:" replace="戮"/>
     <item find=":times2:" replace="✖"/>
@@ -348,7 +343,6 @@
     <item find="cooparate" replace="cooperate"/>
     <item find="gemeral" replace="general"/>
     <item find=":^E:" replace="ᴱ"/>
-    <item find="executeables" replace="executables"/>
     <item find=":syringe:" replace=""/>
     <item find=":ping pong:" replace=""/>
     <item find=":scroll:" replace=""/>
@@ -379,7 +373,6 @@
     <item find=":cuteness:" replace=""/>
     <item find=":Sun2:" replace="☼"/>
     <item find=":satellite:" replace=""/>
-    <item find="occorrences" replace="occurrences"/>
     <item find=":cap:" replace="梨"/>
     <item find=":Lambda:" replace="Λ"/>
     <item find="yersa" replace="years"/>
@@ -461,7 +454,6 @@
     <item find="responce" replace="response"/>
     <item find=":scorpius:" replace="♏"/>
     <item find=":monorail:" replace=""/>
-    <item find="ceritifcate" replace="certificate"/>
     <item find="beleiev" replace="believe"/>
     <item find="fianlly" replace="finally"/>
     <item find=":notes2:" replace="♬"/>
@@ -491,19 +483,16 @@
     <item find=":cry:" replace=""/>
     <item find=":^w:" replace="ʷ"/>
     <item find="questiosn" replace="questions"/>
-    <item find="elce" replace="else"/>
     <item find=":cloud3:" replace="⛈"/>
     <item find="actualyl" replace="actually"/>
     <item find=":disappointed:" replace=""/>
     <item find=":circus:" replace=""/>
     <item find=":mailbox3:" replace=""/>
-    <item find="ceritifcates" replace="certificates"/>
     <item find="responsiblity" replace="responsibility"/>
     <item find=":hush:" replace="狼"/>
     <item find="familar" replace="familiar"/>
     <item find=":page4:" replace=""/>
     <item find=":grass:" replace=""/>
-    <item find="braeks" replace="breaks"/>
     <item find=":christmas:" replace=""/>
     <item find=":ambulance:" replace=""/>
     <item find=":folder:" replace=""/>
@@ -513,7 +502,6 @@
     <item find=":lightning:" replace=""/>
     <item find="htink" replace="think"/>
     <item find="might of been" replace="might have been"/>
-    <item find="dident" replace="didn’t"/>
     <item find=":feast:" replace=""/>
     <item find=":white knight:" replace="♘"/>
     <item find="questioms" replace="questions"/>
@@ -526,7 +514,6 @@
     <item find=".*(R)" replace="®"/>
     <item find="exprience" replace="experience"/>
     <item find=":dog:" replace=""/>
-    <item find="directy" replace="directly"/>
     <item find="alraedy" replace="already"/>
     <item find=":11 h:" replace=""/>
     <item find=":sigma:" replace="σ"/>
@@ -565,7 +552,6 @@
     <item find="peices" replace="pieces"/>
     <item find=":flag2:" replace=""/>
     <item find="acommodate" replace="accommodate"/>
-    <item find="breackage" replace="breakage"/>
     <item find=":newspaper2:" replace=""/>
     <item find="hwich" replace="which"/>
     <item find="responsibile" replace="responsible"/>
@@ -574,7 +560,6 @@
     <item find=":rainbow:" replace=""/>
     <item find=":baby:" replace=""/>
     <item find="alwats" replace="always"/>
-    <item find="sugestions" replace="suggestions"/>
     <item find="may of had" replace="may have had"/>
     <item find="stoyr" replace="story"/>
     <item find="becausea" replace="because a"/>
@@ -599,10 +584,8 @@
     <item find=":eyebrow:" replace="廊"/>
     <item find=":cricket2:" replace="聯"/>
     <item find=":printer2:" replace=""/>
-    <item find="proggress" replace="progress"/>
     <item find=":hockey:" replace=""/>
     <item find=":hourglass2:" replace="⏳"/>
-    <item find="inteligence" replace="intelligence"/>
     <item find=":hammer and wrench:" replace=""/>
     <item find=":whale:" replace=""/>
     <item find=":zeta:" replace="ζ"/>
@@ -684,7 +667,6 @@
     <item find="saidthat" replace="said that"/>
     <item find=":iota:" replace="ι"/>
     <item find=":note3:" replace=""/>
-    <item find="doesnt" replace="doesn’t"/>
     <item find="thnigs" replace="things"/>
     <item find=":sigma2:" replace="ς"/>
     <item find=":selfie:" replace="盧"/>
@@ -726,7 +708,6 @@
     <item find="mispelling" replace="misspelling"/>
     <item find=".*..." replace="…"/>
     <item find=":elf:" replace="利"/>
-    <item find="togahter" replace="together"/>
     <item find=":^s:" replace="ˢ"/>
     <item find=":smaller square:" replace="◽"/>
     <item find="develloper" replace="developer"/>
@@ -735,11 +716,11 @@
     <item find=":weight lifter:" replace=""/>
     <item find="danceing" replace="dancing"/>
     <item find="dispaly" replace="display"/>
-    <item find="mainteined" replace="maintained"/>
     <item find="thisyear" replace="this year"/>
     <item find="liev" replace="live"/>
     <item find=":droplet2:" replace=""/>
     <item find="ahppen" replace="happen"/>
+    <item find="sidewalk" replace="pavement"/>
     <item find=":Zeta:" replace="Ζ"/>
     <item find=":cookie:" replace=""/>
     <item find=":orthodox cross:" replace="☦"/>
@@ -777,7 +758,6 @@
     <item find=":hand3:" replace=""/>
     <item find=":marks chapter:" replace=""/>
     <item find=":_2:" replace="₂"/>
-    <item find="apparnetly" replace="apparently"/>
     <item find=":fist3:" replace="亂"/>
     <item find=":Omega:" replace="Ω"/>
     <item find=":end of proof:" replace="∎"/>
@@ -797,7 +777,6 @@
     <item find="separeate" replace="separate"/>
     <item find="wnats" replace="wants"/>
     <item find=":chart:" replace=""/>
-    <item find="occorrence" replace="occurrence"/>
     <item find="merchent" replace="merchant"/>
     <item find=":floppy4:" replace=""/>
     <item find="perhasp" replace="perhaps"/>
@@ -862,7 +841,6 @@
     <item find="wouldbe" replace="would be"/>
     <item find="knwo" replace="know"/>
     <item find="geting" replace="getting"/>
-    <item find="aproach" replace="approach"/>
     <item find="truely" replace="truly"/>
     <item find=":fountain:" replace="⛲"/>
     <item find="makeing" replace="making"/>
@@ -876,7 +854,6 @@
     <item find=":worried:" replace=""/>
     <item find="challanges" replace="challenges"/>
     <item find="ballance" replace="balance"/>
-    <item find="mechine" replace="machine"/>
     <item find="quater" replace="quarter"/>
     <item find=":smiling:" replace="☺"/>
     <item find="reluctent" replace="reluctant"/>
@@ -907,7 +884,6 @@
     <item find="consonent" replace="consonant"/>
     <item find=":integral4:" replace="∮"/>
     <item find=":horns:" replace="落"/>
-    <item find="inteligences" replace="intelligences"/>
     <item find=":sqrt:" replace="√"/>
     <item find="withe" replace="with"/>
     <item find=":barber:" replace=""/>
@@ -917,7 +893,6 @@
     <item find=":storm2:" replace="☈"/>
     <item find=":dice6:" replace="⚅"/>
     <item find=":bird:" replace=""/>
-    <item find="attachements" replace="attachments"/>
     <item find="charachters" replace="characters"/>
     <item find=":smile cat:" replace=""/>
     <item find=":tea:" replace=""/>
@@ -947,7 +922,6 @@
     <item find=":N:" replace="↑"/>
     <item find=":trolleybus:" replace=""/>
     <item find=":hotel:" replace=""/>
-    <item find="didnt" replace="didn’t"/>
     <item find="benifit" replace="benefit"/>
     <item find=":non-potable water:" replace=""/>
     <item find=":hat2:" replace=""/>
@@ -957,7 +931,6 @@
     <item find="int he" replace="in the"/>
     <item find="foriegn" replace="foreign"/>
     <item find=":chopsticks:" replace="異"/>
-    <item find="eacch" replace="each"/>
     <item find=":basis point:" replace="‱"/>
     <item find=":passport:" replace=""/>
     <item find="efel" replace="feel"/>
@@ -1000,7 +973,7 @@
     <item find=":camel2:" replace=""/>
     <item find="idae" replace="idea"/>
     <item find="eyt" replace="yet"/>
-    <item find="reconize" replace="recognize"/>
+    <item find="reconize" replace="recognise"/>
     <item find=":pineapple:" replace=""/>
     <item find=":small square2:" replace="▪"/>
     <item find="experienc" replace="experience"/>
@@ -1022,7 +995,6 @@
     <item find=":NE:" replace="↗"/>
     <item find=":md:" replace=""/>
     <item find=":radio button:" replace=""/>
-    <item find="somtin" replace="something"/>
     <item find=":fuelpump:" replace="⛽"/>
     <item find="comtains" replace="contains"/>
     <item find=":relieved:" replace=""/>
@@ -1049,11 +1021,11 @@
     <item find="donig" replace="doing"/>
     <item find="occurrance" replace="occurrence"/>
     <item find=":fish2:" replace=""/>
-    <item find="yeserday" replace="yesterday"/>
     <item find=".*(tm)" replace="™"/>
     <item find=":pc:" replace=""/>
     <item find=":graduation:" replace=""/>
     <item find=":pentagon:" replace="⬠"/>
+    <item find="zip code" replace="postcode"/>
     <item find=":snowman2:" replace="⛄"/>
     <item find=":whale2:" replace=""/>
     <item find="permanant" replace="permanent"/>
@@ -1081,7 +1053,6 @@
     <item find="insurence" replace="insurance"/>
     <item find="comittee" replace="committee"/>
     <item find=":pear:" replace=""/>
-    <item find="disapoint" replace="disappoint"/>
     <item find=":chart2:" replace=""/>
     <item find="wokr" replace="work"/>
     <item find=":NW:" replace="↖"/>
@@ -1162,7 +1133,7 @@
     <item find="aboutit" replace="about it"/>
     <item find="psoition" replace="position"/>
     <item find=":boom:" replace=""/>
-    <item find="orginization" replace="organization"/>
+    <item find="orginization" replace="organisation"/>
     <item find="porvide" replace="provide"/>
     <item find=":mushroom:" replace=""/>
     <item find="atthe" replace="at the"/>
@@ -1175,7 +1146,6 @@
     <item find=":cloudy:" replace=""/>
     <item find="commitee" replace="committee"/>
     <item find="almots" replace="almost"/>
-    <item find="needen’t" replace="needn’t"/>
     <item find="saidt he" replace="said the"/>
     <item find=":skier:" replace="⛷"/>
     <item find=":sparkler:" replace=""/>
@@ -1204,7 +1174,6 @@
     <item find="parliment" replace="parliament"/>
     <item find=":shoe:" replace=""/>
     <item find="beacuse" replace="because"/>
-    <item find="diden’t" replace="didn’t"/>
     <item find=":_l:" replace="ₗ"/>
     <item find="becasue" replace="because"/>
     <item find=":cat2:" replace=""/>
@@ -1229,7 +1198,6 @@
     <item find=":writing2:" replace=""/>
     <item find=":person pouting:" replace=""/>
     <item find=":5/8:" replace="⅝"/>
-    <item find="youreself" replace="yourself"/>
     <item find=":clover:" replace=""/>
     <item find=":medal2:" replace=""/>
     <item find="postition" replace="position"/>
@@ -1238,7 +1206,6 @@
     <item find=":mrs. claus:" replace="虜"/>
     <item find=":mu:" replace="μ"/>
     <item find=":document:" replace=""/>
-    <item find="somtheing" replace="something"/>
     <item find=":leaf2:" replace=""/>
     <item find=":divides:" replace="∣"/>
     <item find=":^j:" replace="ʲ"/>
@@ -1282,7 +1249,6 @@
     <item find="inital" replace="initial"/>
     <item find=":bomb:" replace=""/>
     <item find="wuould" replace="would"/>
-    <item find="ansewer" replace="answer"/>
     <item find="alwyas" replace="always"/>
     <item find="virtualyl" replace="virtually"/>
     <item find=":double sharp:" replace="턪"/>
@@ -1301,7 +1267,6 @@
     <item find=":globe3:" replace=""/>
     <item find="becomming" replace="becoming"/>
     <item find="charachter" replace="character"/>
-    <item find="remainig" replace="remaining"/>
     <item find="lookign" replace="looking"/>
     <item find="recieving" replace="receiving"/>
     <item find="compleatness" replace="completeness"/>
@@ -1313,7 +1278,6 @@
     <item find=":locomotive:" replace=""/>
     <item find=":+-:" replace="±"/>
     <item find=":fist2:" replace=""/>
-    <item find="hystory" replace="history"/>
     <item find="personalyl" replace="personally"/>
     <item find=":judo:" replace="屢"/>
     <item find=":adult:" replace="六"/>
@@ -1362,14 +1326,12 @@
     <item find="sucess" replace="success"/>
     <item find="wroking" replace="working"/>
     <item find=":phone:" replace="☎"/>
-    <item find="lizzard" replace="lizard"/>
     <item find="religous" replace="religious"/>
     <item find="responsability" replace="responsibility"/>
     <item find="andteh" replace="and the"/>
     <item find=":ticket2:" replace=""/>
     <item find="whent he" replace="when the"/>
     <item find=":gemini:" replace="♊"/>
-    <item find=":schwa:" replace="ə"/>
     <item find=":dice3:" replace="⚂"/>
     <item find=":no pedestrians:" replace=""/>
     <item find=":button2:" replace=""/>
@@ -1422,7 +1384,6 @@
     <item find=":smile:" replace=""/>
     <item find=":zebra:" replace="煉"/>
     <item find="necassarily" replace="necessarily"/>
-    <item find="mainfraimes" replace="mainframes"/>
     <item find="nothign" replace="nothing"/>
     <item find=":hospital:" replace=""/>
     <item find="confirmmation" replace="confirmation"/>
@@ -1451,7 +1412,6 @@
     <item find=":eggplant:" replace=""/>
     <item find=":blush:" replace=""/>
     <item find="cutsomer" replace="customer"/>
-    <item find="problims" replace="problems"/>
     <item find=":rice scene:" replace=""/>
     <item find=":cinema:" replace=""/>
     <item find=":2 h:" replace=""/>
@@ -1462,7 +1422,6 @@
     <item find="thatthe" replace="that the"/>
     <item find="allwasy" replace="always"/>
     <item find="wehn" replace="when"/>
-    <item find="braek" replace="break"/>
     <item find="alway" replace="always"/>
     <item find=":E:" replace="→"/>
     <item find=":cow:" replace=""/>
@@ -1507,7 +1466,6 @@
     <item find="necesary" replace="necessary"/>
     <item find=":empty document:" replace=""/>
     <item find=":icecream:" replace=""/>
-    <item find="knoew" replace="know"/>
     <item find=":^B:" replace="ᴮ"/>
     <item find="ocur" replace="occur"/>
     <item find=":horse3:" replace=""/>
@@ -1584,7 +1542,6 @@
     <item find=":happiness:" replace=""/>
     <item find=":pennant2:" replace=""/>
     <item find=":folder4:" replace=""/>
-    <item find="shouldnt" replace="shouldn’t"/>
     <item find=":empty note:" replace=""/>
     <item find="themselfs" replace="themselves"/>
     <item find=":dizzy face:" replace=""/>
@@ -1595,7 +1552,6 @@
     <item find=":dog2:" replace=""/>
     <item find=":box:" replace=""/>
     <item find="thegovernment" replace="the government"/>
-    <item find="trainning" replace="training"/>
     <item find="acheive" replace="achieve"/>
     <item find=":aries:" replace="♈"/>
     <item find=":^-:" replace="⁻"/>
@@ -1622,7 +1578,6 @@
     <item find=":muscle:" replace=""/>
     <item find=":clown:" replace="嵐"/>
     <item find="talkign" replace="talking"/>
-    <item find="someoen" replace="someone"/>
     <item find=":airplane5:" replace=""/>
     <item find=":socks:" replace="罹"/>
     <item find=":shaved ice:" replace=""/>
@@ -1696,7 +1651,6 @@
     <item find=":dragon2:" replace=""/>
     <item find=":pouch:" replace=""/>
     <item find=":^N:" replace="ᴺ"/>
-    <item find="deleteing" replace="deleting"/>
     <item find=":button:" replace=""/>
     <item find="thigsn" replace="things"/>
     <item find=":small in:" replace="∊"/>
@@ -1706,7 +1660,6 @@
     <item find=":boar:" replace=""/>
     <item find=":paperclip2:" replace=""/>
     <item find=":princess:" replace=""/>
-    <item find="sugestion" replace="suggestion"/>
     <item find=":couch:" replace=""/>
     <item find=":house3:" replace=""/>
     <item find=":balloon:" replace=""/>
@@ -1761,7 +1714,6 @@
     <item find=":fox:" replace="力"/>
     <item find=":cloudy2:" replace=""/>
     <item find="withthe" replace="with the"/>
-    <item find="opnion" replace="opinion"/>
     <item find=":tray:" replace=""/>
     <item find="itnerest" replace="interest"/>
     <item find=":checkbox:" replace="☐"/>
@@ -1769,7 +1721,6 @@
     <item find=":hryvnia:" replace="₴"/>
     <item find=":flower2:" replace="鹿"/>
     <item find="familair" replace="familiar"/>
-    <item find="problim" replace="problem"/>
     <item find="doign" replace="doing"/>
     <item find="agreemeent" replace="agreement"/>
     <item find=":scissors4:" replace="✃"/>
@@ -1793,20 +1744,16 @@
     <item find=":hand4:" replace="駱"/>
     <item find="tonihgt" replace="tonight"/>
     <item find=".*-&gt;.*" replace="→"/>
-    <item find="breackages" replace="breakages"/>
     <item find=":not subset:" replace="⊄"/>
     <item find=":clock:" replace=""/>
-    <item find="anythnig" replace="anything"/>
     <item find="knwos" replace="knows"/>
     <item find=":potato:" replace="凜"/>
     <item find=":_1:" replace="₁"/>
-    <item find="werent" replace="weren’t"/>
     <item find=":taurus:" replace="♉"/>
     <item find="rwite" replace="write"/>
     <item find=":cancer:" replace="♋"/>
     <item find=":tray2:" replace=""/>
     <item find=":chipmunk:" replace=""/>
-    <item find="crysys" replace="crisis"/>
     <item find=":umbrella3:" replace="⛱"/>
     <item find="wohle" replace="whole"/>
     <item find="ytou" replace="you"/>
@@ -1815,7 +1762,7 @@
     <item find="hsa" replace="has"/>
     <item find=":not in:" replace="∉"/>
     <item find=":microphone:" replace=""/>
-    <item find="lisense" replace="license"/>
+    <item find="lisense" replace="licence"/>
     <item find=":SW:" replace="↙"/>
     <item find="unpleasently" replace="unpleasantly"/>
     <item find=":pause:" replace="⏸"/>
@@ -1832,7 +1779,6 @@
     <item find=":warning:" replace="⚠"/>
     <item find="must of been" replace="must have been"/>
     <item find="hesaid" replace="he said"/>
-    <item find="disperation" replace="desperation"/>
     <item find=":moon2:" replace=""/>
     <item find=":smoking:" replace=""/>
     <item find="otu" replace="out"/>
@@ -1924,28 +1870,22 @@
     <item find=":monkey:" replace=""/>
     <item find=":mage:" replace="慄"/>
     <item find=":libra:" replace="♎"/>
-    <item find="releaesd" replace="released"/>
-    <item find="mechines" replace="machines"/>
     <item find="thta" replace="that"/>
     <item find=":camera:" replace=""/>
     <item find="pleasent" replace="pleasant"/>
     <item find=":bridge:" replace=""/>
     <item find=":new moon2:" replace=""/>
     <item find="sceduled" replace="scheduled"/>
-    <item find="imprved" replace="improved"/>
-    <item find="opnions" replace="opinions"/>
     <item find="yera" replace="year"/>
     <item find=":handball:" replace="菉"/>
     <item find=":down4:" replace=""/>
     <item find="thier" replace="their"/>
     <item find=":no entry:" replace="⛔"/>
-    <item find="needent" replace="needn’t"/>
     <item find=":volleyball:" replace=""/>
     <item find=":hard disk:" replace=""/>
     <item find="seance" replace="séance"/>
     <item find=":computer:" replace=""/>
     <item find=":pray:" replace=""/>
-    <item find="theyr" replace="their"/>
     <item find=":4.30:" replace=""/>
     <item find=":skin2:" replace=""/>
     <item find=":Nu:" replace="Ν"/>
@@ -1960,7 +1900,6 @@
     <item find=":book:" replace=""/>
     <item find=":small star:" replace="⭒"/>
     <item find=":car2:" replace=""/>
-    <item find="avaiable" replace="available"/>
     <item find="sucessfull" replace="successful"/>
     <item find="uknown" replace="unknown"/>
     <item find=":sleeping:" replace=""/>
@@ -1970,7 +1909,6 @@
     <item find=":sake:" replace=""/>
     <item find=":empty page:" replace=""/>
     <item find=":joker:" replace=""/>
-    <item find="executeable" replace="executable"/>
     <item find=":check mark:" replace="✓"/>
     <item find=":^J:" replace="ᴶ"/>
     <item find=":cat:" replace=""/>
@@ -1985,7 +1923,6 @@
     <item find=":heavy dollar sign:" replace=""/>
     <item find="shineing" replace="shining"/>
     <item find=":baby bottle:" replace=""/>
-    <item find="mainfraime" replace="mainframe"/>
     <item find=":zipper:" replace="蘿"/>
     <item find=":hushed:" replace=""/>
     <item find="driveing" replace="driving"/>
@@ -2049,14 +1986,12 @@
     <item find=":pencil4:" replace=""/>
     <item find=":tack:" replace=""/>
     <item find=":bullet:" replace="•"/>
-    <item find="birhtday" replace="birthday"/>
     <item find=":no:" replace=""/>
     <item find=":lemon:" replace=""/>
     <item find=":information3:" replace=""/>
     <item find=":no piracy:" replace=""/>
     <item find=":squid:" replace="撚"/>
     <item find="hge" replace="he"/>
-    <item find="uszed" replace="used"/>
     <item find=":partial:" replace="∂"/>
     <item find="catagory" replace="category"/>
     <item find=":basketball:" replace=""/>
@@ -2069,9 +2004,9 @@
     <item find="developement" replace="development"/>
     <item find="willbe" replace="will be"/>
     <item find=":drum:" replace=""/>
+    <item find="paymetns" replace="payments"/>
     <item find=":candle:" replace=""/>
     <item find="tehy" replace="they"/>
-    <item find="paymetns" replace="payments"/>
     <item find=":water polo:" replace="綠"/>
     <item find=":busstop:" replace=""/>
     <item find=":_5:" replace="₅"/>
@@ -2081,8 +2016,8 @@
     <item find=":sunset:" replace=""/>
     <item find=":^6:" replace="⁶"/>
     <item find="informatoin" replace="information"/>
-    <item find=":pencil:" replace="✎"/>
     <item find="excitment" replace="excitement"/>
+    <item find=":pencil:" replace="✎"/>
     <item find="hapens" replace="happens"/>
     <item find=":snail:" replace=""/>
     <item find="rythm" replace="rhythm"/>
@@ -2093,20 +2028,19 @@
     <item find=":^n:" replace="ⁿ"/>
     <item find=":no bicycles:" replace=""/>
     <item find="tecnical" replace="technical"/>
-    <item find="dont" replace="don’t"/>
     <item find=":_3:" replace="₃"/>
     <item find=":!2:" replace="❗"/>
     <item find=":deer:" replace="歷"/>
+    <item find=":speedboat:" replace=""/>
     <item find=":notebook:" replace=""/>
     <item find="marraige" replace="marriage"/>
-    <item find=":speedboat:" replace=""/>
     <item find="directers" replace="directors"/>
     <item find=":S:" replace="↓"/>
     <item find="wriet" replace="write"/>
     <item find=":Eta:" replace="Η"/>
     <item find=":1.30:" replace=""/>
-    <item find=":!:" replace="❕"/>
     <item find=":white queen:" replace="♕"/>
+    <item find=":!:" replace="❕"/>
     <item find="applyed" replace="applied"/>
     <item find=":feet:" replace=""/>
     <item find=":can:" replace="參"/>
@@ -2155,7 +2089,6 @@
     <item find="chanegs" replace="changes"/>
     <item find=":tractor:" replace=""/>
     <item find=":flat:" replace="♭"/>
-    <item find="writen" replace="written"/>
     <item find=":calendar2:" replace=""/>
     <item find=":neptune:" replace="♆"/>
     <item find=":honey:" replace=""/>
@@ -2181,7 +2114,6 @@
     <item find=":lock3:" replace=""/>
     <item find="reveiwing" replace="reviewing"/>
     <item find=":restaurant:" replace=""/>
-    <item find="upcomming" replace="upcoming"/>
     <item find=":post office:" replace=""/>
     <item find=":dizzy:" replace=""/>
     <item find=":copyright:" replace="©"/>
@@ -2209,7 +2141,6 @@
     <item find="usualyl" replace="usually"/>
     <item find=":lantern:" replace=""/>
     <item find=":empty pages:" replace=""/>
-    <item find="cummulative" replace="cumulative"/>
     <item find=":arrows:" replace=""/>
     <item find=":busts:" replace=""/>
     <item find=":mask:" replace=""/>
@@ -2218,7 +2149,6 @@
     <item find="againstt he" replace="against the"/>
     <item find="questoin" replace="question"/>
     <item find=":half rest:" replace="턼"/>
-    <item find="speeking" replace="speaking"/>
     <item find="advanage" replace="advantage"/>
     <item find="especialyl" replace="especially"/>
     <item find=":lozenge:" replace="◊"/>
@@ -2228,7 +2158,6 @@
     <item find=":helmet:" replace="⛑"/>
     <item find="teh" replace="the"/>
     <item find=":down5:" replace=""/>
-    <item find="testiing" replace="testing"/>
     <item find=":shower:" replace=""/>
     <item find=":tm:" replace="™"/>
     <item find=":monocle:" replace="類"/>
@@ -2239,7 +2168,7 @@
     <item find=":handshake:" replace="欄"/>
     <item find="andone" replace="and one"/>
     <item find=":amphora:" replace=""/>
-    <item find="orginized" replace="organized"/>
+    <item find="orginized" replace="organised"/>
     <item find="distribusion" replace="distribution"/>
     <item find=":bubble5:" replace=""/>
     <item find="untilll" replace="until"/>
@@ -2252,7 +2181,6 @@
     <item find=":speaker:" replace=""/>
     <item find="thnig" replace="thing"/>
     <item find="ehr" replace="her"/>
-    <item find="editting" replace="editing"/>
     <item find=":star:" replace="★"/>
     <item find="I.e." replace="i.e."/>
     <item find=":modem:" replace=""/>
@@ -2274,7 +2202,6 @@
     <item find=":mobile phone off:" replace=""/>
     <item find="talekd" replace="talked"/>
     <item find=":right5:" replace=""/>
-    <item find="peaple" replace="people"/>
     <item find=":scissors2:" replace="✄"/>
     <item find=":pennant:" replace=""/>
     <item find=":bubble7:" replace=""/>
@@ -2350,7 +2277,6 @@
     <item find=":bowling:" replace=""/>
     <item find=":brightness2:" replace=""/>
     <item find="compair" replace="compare"/>
-    <item find="unmainteined" replace="unmaintained"/>
     <item find="cusotmer" replace="customer"/>
     <item find="begining" replace="beginning"/>
     <item find=":mute:" replace=""/>
@@ -2461,7 +2387,6 @@
     <item find=":rosette2:" replace=""/>
     <item find=":plug:" replace=""/>
     <item find=":key:" replace=""/>
-    <item find="attachement" replace="attachment"/>
     <item find=":cloud2:" replace="⛅"/>
     <item find=":left2:" replace=""/>
     <item find=":^r:" replace="ʳ"/>
@@ -2606,16 +2531,29 @@
     <word exception="org."/>
   </UpperCaseExceptions>
   <TwoUpperLetterExceptions>
-    <word exception="MCs"/>
-    <word exception="MHz"/>
-    <word exception="PCs"/>
+    <word exception="MSc"/>
     <word exception="THz"/>
-    <word exception="GHz"/>
-    <word exception="TVs"/>
-    <word exception="ICs"/>
     <word exception="LPs"/>
-    <word exception="OOo"/>
+    <word exception="OOo's"/>
+    <word exception="MPhil"/>
+    <word exception="ICs"/>
+    <word exception="MCs"/>
+    <word exception="ODs"/>
+    <word exception="XEmacs"/>
+    <word exception="BSkyB"/>
+    <word exception="TVs"/>
+    <word exception="OKing"/>
+    <word exception="DJs"/>
+    <word exception="BSkyB's"/>
     <word exception="CDs"/>
+    <word exception="OKed"/>
+    <word exception="PCs"/>
+    <word exception="MPs"/>
+    <word exception="MHz"/>
+    <word exception="OOo"/>
+    <word exception="OKs"/>
+    <word exception="XFree86"/>
+    <word exception="GHz"/>
   </TwoUpperLetterExceptions>
   <DoubleQuote>
     <doublequote begin="" end=""/>

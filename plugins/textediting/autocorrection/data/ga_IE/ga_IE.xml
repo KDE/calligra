@@ -1,0 +1,1604 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find="plodaithe" replace="plódaithe"/>
+    <item find="ginearaltacht" replace="ginearáltacht"/>
+    <item find="ceadunú" replace="ceadúnú"/>
+    <item find="ma" replace="má"/>
+    <item find="airithiú" replace="áirithiú"/>
+    <item find="noileán" replace="n-oileán"/>
+    <item find="ainmeacha" replace="ainmneacha"/>
+    <item find="núair" replace="nuair"/>
+    <item find="diol" replace="díol"/>
+    <item find="mait" replace="maith"/>
+    <item find="rómhnic" replace="rómhinic"/>
+    <item find="liomataiste" replace="líomatáiste"/>
+    <item find="morán" replace="mórán"/>
+    <item find="firicí" replace="fíricí"/>
+    <item find="diobháil" replace="díobháil"/>
+    <item find="gobhfuil" replace="go bhfuil"/>
+    <item find="síochain" replace="síocháin"/>
+    <item find="naisiúnaithe" replace="náisiúnaithe"/>
+    <item find="nar" replace="nár"/>
+    <item find="leissin" replace="leis sin"/>
+    <item find="deileáil" replace="déileáil"/>
+    <item find="drama" replace="dráma"/>
+    <item find="trachtail" replace="tráchtáil"/>
+    <item find="doibh" replace="dóibh"/>
+    <item find="forsaí" replace="fórsaí"/>
+    <item find="cailitheach" replace="cáilitheach"/>
+    <item find="hiomlan" replace="hiomlán"/>
+    <item find="suil" replace="súil"/>
+    <item find="gniomh" replace="gníomh"/>
+    <item find="lar" replace="lár"/>
+    <item find="nais" replace="n-ais"/>
+    <item find="suipear" replace="suipéar"/>
+    <item find="aonduine" replace="aon duine"/>
+    <item find="bhful" replace="bhfuil"/>
+    <item find=":!?:" replace="⁉"/>
+    <item find="ars'an" replace="arsa an"/>
+    <item find="feasóige" replace="féasóige"/>
+    <item find="sceal" replace="scéal"/>
+    <item find="culturlann" replace="cultúrlann"/>
+    <item find="criche" replace="críche"/>
+    <item find="diaspora" replace="diaspóra"/>
+    <item find="oidreachta" replace="oidhreachta"/>
+    <item find="areir" replace="aréir"/>
+    <item find="deanam" replace="déanamh"/>
+    <item find="tairring" replace="tarraing"/>
+    <item find="triur" replace="triúr"/>
+    <item find="liuntas" replace="liúntas"/>
+    <item find="pratai" replace="prátaí"/>
+    <item find="teárma" replace="téarma"/>
+    <item find="colas" replace="eolas"/>
+    <item find="abalta" replace="ábalta"/>
+    <item find=":/:" replace="∕"/>
+    <item find="miliún" replace="milliún"/>
+    <item find="nádurtha" replace="nádúrtha"/>
+    <item find="úsaíd" replace="úsáid"/>
+    <item find="nábhar" replace="n-ábhar"/>
+    <item find="proiseas" replace="próiseas"/>
+    <item find="glorthaí" replace="glórtha"/>
+    <item find="dothain" replace="dóthain"/>
+    <item find="Connamara" replace="Conamara"/>
+    <item find="raiteas" replace="ráiteas"/>
+    <item find="iocfaidh" replace="íocfaidh"/>
+    <item find="aimisigh" replace="aimsigh"/>
+    <item find="neamhspleach" replace="neamhspleách"/>
+    <item find="scruduithe" replace="scrúduithe"/>
+    <item find="focloir" replace="foclóir"/>
+    <item find="faisneis" replace="faisnéis"/>
+    <item find="choích" replace="choíche"/>
+    <item find="aimneacha" replace="ainmneacha"/>
+    <item find="eadan" replace="éadan"/>
+    <item find="cach" replace="cách"/>
+    <item find="reáchtá" replace="reáchtáil"/>
+    <item find="siul" replace="siúl"/>
+    <item find="einne" replace="aon duine"/>
+    <item find="cailiní" replace="cailíní"/>
+    <item find="grammadach" replace="gramadach"/>
+    <item find="poilineacht" replace="póilíneacht"/>
+    <item find="taire" replace="tAire"/>
+    <item find="teilfís" replace="teilifís"/>
+    <item find="danta" replace="dánta"/>
+    <item find="clar" replace="clár"/>
+    <item find="foralacha" replace="forálacha"/>
+    <item find="tire" replace="tíre"/>
+    <item find="dilis" replace="dílis"/>
+    <item find="bainistiochta" replace="bainistíochta"/>
+    <item find="fúd" replace="fud"/>
+    <item find="laidre" replace="láidre"/>
+    <item find="arann" replace="árann"/>
+    <item find="nac" replace="nach"/>
+    <item find="scath" replace="scáth"/>
+    <item find="idirnaisiúnta" replace="idirnáisiúnta"/>
+    <item find="anamh" replace="annamh"/>
+    <item find="se" replace="sé"/>
+    <item find=".*(R)" replace="®"/>
+    <item find="afách" replace="áfach"/>
+    <item find="dfhéadfadh" replace="d'fhéadfadh"/>
+    <item find="spoirt" replace="spóirt"/>
+    <item find="coimisiun" replace="coimisiún"/>
+    <item find="thainig" replace="tháinig"/>
+    <item find="faoí" replace="faoi"/>
+    <item find="reamhamharc" replace="réamhamharc"/>
+    <item find="líomátaiste" replace="líomatáiste"/>
+    <item find="guid" replace="gcuid"/>
+    <item find="learscáil" replace="léarscáil"/>
+    <item find="gneithe" replace="gnéithe"/>
+    <item find="pairtí" replace="páirtí"/>
+    <item find="bhuil" replace="bhfuil"/>
+    <item find="ealain" replace="ealaín"/>
+    <item find="profisiúnta" replace="proifisiúnta"/>
+    <item find="cirghe" replace="éirí"/>
+    <item find="fobairt" replace="forbairt"/>
+    <item find="airi" replace="airí"/>
+    <item find="aoí" replace="aoi"/>
+    <item find="beagan" replace="beagán"/>
+    <item find="cuis" replace="cúis"/>
+    <item find="eilimh" replace="éilimh"/>
+    <item find="aris" replace="arís"/>
+    <item find="iarnrod" replace="iarnród"/>
+    <item find="beagainin" replace="beagáinín"/>
+    <item find="lenan-áirítear" replace="lena n-áirítear"/>
+    <item find="léithéid" replace="leithéid"/>
+    <item find="talt" replace="t-alt"/>
+    <item find="neamhghlaolmhara" replace="neamhghaolmhara"/>
+    <item find="riomh" replace="ríomh"/>
+    <item find="bhfhearr" replace="b'fhearr"/>
+    <item find="straiteis" replace="straitéis"/>
+    <item find="comparaid" replace="comparáid"/>
+    <item find="togail" replace="tógáil"/>
+    <item find="oifigúil" replace="oifigiúil"/>
+    <item find="triú" replace="tríú"/>
+    <item find="aisiúil" replace="áisiúil"/>
+    <item find="ple" replace="plé"/>
+    <item find="polatíocht" replace="polaitíocht"/>
+    <item find="ionadai" replace="ionadaí"/>
+    <item find="siochána" replace="síochána"/>
+    <item find="athghabhail" replace="athghabháil"/>
+    <item find="léirmhéas" replace="léirmheas"/>
+    <item find="ídir" replace="idir"/>
+    <item find="eisteachta" replace="éisteachta"/>
+    <item find="aiteanna" replace="áiteanna"/>
+    <item find="leargas" replace="léargas"/>
+    <item find="toghchan" replace="toghchán"/>
+    <item find="ciontai" replace="ciontaí"/>
+    <item find="cursa" replace="cúrsa"/>
+    <item find="neamhspléach" replace="neamhspleách"/>
+    <item find="stat" replace="stát"/>
+    <item find="agsu" replace="agus"/>
+    <item find="votaí" replace="vótaí"/>
+    <item find="iniúcadh" replace="iniúchadh"/>
+    <item find="braonín" replace="braonán"/>
+    <item find="iocaíochta" replace="íocaíochta"/>
+    <item find="afháil" replace="a fháil"/>
+    <item find="feidir" replace="féidir"/>
+    <item find="cúspóir" replace="cuspóir"/>
+    <item find="aimn" replace="ainm"/>
+    <item find="tabhacht" replace="tábhacht"/>
+    <item find="sóiléir" replace="soiléir"/>
+    <item find="NuaGhaeilge" replace="Nua-Ghaeilge"/>
+    <item find="liofa" replace="líofa"/>
+    <item find="Trionóide" replace="Tríonóide"/>
+    <item find="stáiriúil" replace="stairiúil"/>
+    <item find="iocfar" replace="íocfar"/>
+    <item find="ísteach" replace="isteach"/>
+    <item find="raíbh" replace="raibh"/>
+    <item find="geilleadh" replace="géilleadh"/>
+    <item find="dtína" replace="dtí na"/>
+    <item find="stiuradh" replace="stiúradh"/>
+    <item find="sarú" replace="sárú"/>
+    <item find="Eireannacha" replace="Éireannacha"/>
+    <item find="cile" replace="eile"/>
+    <item find="usaidtear" replace="úsáidtear"/>
+    <item find="arist" replace="arís"/>
+    <item find="leibheil" replace="leibhéil"/>
+    <item find="túrscéal" replace="t-úrscéal"/>
+    <item find="siochana" replace="síochána"/>
+    <item find="oige" replace="óige"/>
+    <item find="neagraíochtaí" replace="n-eagraíochtaí"/>
+    <item find="cónai" replace="cónaí"/>
+    <item find="diúltiú" replace="diúltú"/>
+    <item find="sainiúl" replace="sainiúil"/>
+    <item find="eacnamíochta" replace="eacnamaíochta"/>
+    <item find="me" replace="mé"/>
+    <item find="amhran" replace="amhrán"/>
+    <item find="ocáideach" replace="ócáideach"/>
+    <item find="nosanna" replace="nósanna"/>
+    <item find="rol" replace="ról"/>
+    <item find="gnath" replace="gnáth"/>
+    <item find="eilea" replace="eile a"/>
+    <item find="treor" replace="treoir"/>
+    <item find="fado" replace="fadó"/>
+    <item find="madir" replace="maidir"/>
+    <item find="luth" replace="lúth"/>
+    <item find="rachairt" replace="ráchairt"/>
+    <item find="Michéal" replace="Mícheál"/>
+    <item find="pairtithe" replace="páirtithe"/>
+    <item find="amáin" replace="amháin"/>
+    <item find="seoagus" replace="seo agus"/>
+    <item find="céiliúradh" replace="ceiliúradh"/>
+    <item find="agoid" replace="agóid"/>
+    <item find="cursai" replace="cúrsaí"/>
+    <item find="iul" replace="iúl"/>
+    <item find="saoranach" replace="saoránach"/>
+    <item find="eifeachtach" replace="éifeachtach"/>
+    <item find="heictéar" replace="heicteár"/>
+    <item find="polaitiochta" replace="polaitíochta"/>
+    <item find="dirithe" replace="dírithe"/>
+    <item find="dochtuireachta" replace="dochtúireachta"/>
+    <item find="déanam" replace="déanamh"/>
+    <item find="1/2" replace="½"/>
+    <item find="scátheagra" replace="scátheagraíocht"/>
+    <item find="eisiuint" replace="eisiúint"/>
+    <item find="coiteanta" replace="coitianta"/>
+    <item find="slandail" replace="slándáil"/>
+    <item find="muinteoirí" replace="múinteoirí"/>
+    <item find="deirneach" replace="deireanach"/>
+    <item find="riomhphost" replace="ríomhphost"/>
+    <item find="inscine" replace="inscne"/>
+    <item find="conasc" replace="cónasc"/>
+    <item find="diuite" replace="diúité"/>
+    <item find="coiméad" replace="coimeád"/>
+    <item find="caiteamh" replace="caitheamh"/>
+    <item find="asa" replace="as a"/>
+    <item find="tearma" replace="téarma"/>
+    <item find="naisiún" replace="náisiún"/>
+    <item find="ambeidh" replace="a mbeidh"/>
+    <item find="colun" replace="colún"/>
+    <item find=":':" replace="’"/>
+    <item find="meánscolaí" replace="meánscolaíocht"/>
+    <item find="claraithe" replace="cláraithe"/>
+    <item find="comhlionadh" replace="comhlíonadh"/>
+    <item find="fon" replace="fón"/>
+    <item find="solathraí" replace="soláthraí"/>
+    <item find="conasctha" replace="cónasctha"/>
+    <item find="oiriunú" replace="oiriúnú"/>
+    <item find="niorbh" replace="níorbh"/>
+    <item find="dramaíocht" replace="drámaíocht"/>
+    <item find="Caoimhin" replace="Caoimhín"/>
+    <item find="filiochta" replace="filíochta"/>
+    <item find="frid" replace="tríd"/>
+    <item find="seipeal" replace="séipéal"/>
+    <item find="Gaelgeoirí" replace="Gaeilgeoirí"/>
+    <item find="comairle" replace="comhairle"/>
+    <item find="inmheanach" replace="inmheánach"/>
+    <item find="tairscint" replace="tairiscint"/>
+    <item find="achmhainn" replace="acmhainn"/>
+    <item find="óiche" replace="oíche"/>
+    <item find="síochán" replace="síocháin"/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find="núicleach" replace="núicléach"/>
+    <item find="athas" replace="áthas"/>
+    <item find="fag" replace="fág"/>
+    <item find="line" replace="líne"/>
+    <item find="larionad" replace="lárionad"/>
+    <item find="ariam" replace="riamh"/>
+    <item find="dushlán" replace="dúshlán"/>
+    <item find="eadaí" replace="éadaí"/>
+    <item find="Dun" replace="Dún"/>
+    <item find="léagáid" replace="leagáid"/>
+    <item find="baire" replace="báire"/>
+    <item find=":_):" replace="₎"/>
+    <item find="staidear" replace="staidéar"/>
+    <item find="comphobail" replace="comhphobail"/>
+    <item find="ocáid" replace="ócáid"/>
+    <item find="1/4" replace="¼"/>
+    <item find="diuscairt" replace="diúscairt"/>
+    <item find="reasunta" replace="réasúnta"/>
+    <item find="usaid" replace="úsáid"/>
+    <item find="Padraig" replace="Pádraig"/>
+    <item find="difiriúla" replace="difriúla"/>
+    <item find="tógail" replace="tógáil"/>
+    <item find="bealtaine" replace="Bealtaine"/>
+    <item find="héinní" replace="haon ní"/>
+    <item find="stáiriúla" replace="stairiúla"/>
+    <item find="tiocfadh" replace="thiocfadh"/>
+    <item find="institiúd" replace="institiúid"/>
+    <item find="achmhainní" replace="acmhainní"/>
+    <item find="aus" replace="agus"/>
+    <item find="scathán" replace="scáthán"/>
+    <item find="seoa" replace="seo a"/>
+    <item find="statistic" replace="staitistic"/>
+    <item find="o" replace="ó"/>
+    <item find="anmhór" replace="an-mhór"/>
+    <item find="athru" replace="athrú"/>
+    <item find="meain" replace="meáin"/>
+    <item find="reasún" replace="réasún"/>
+    <item find="gombeadh" replace="go mbeadh"/>
+    <item find="náisiunta" replace="náisiúnta"/>
+    <item find="uis" replace="úis"/>
+    <item find="pictuir" replace="pictiúr"/>
+    <item find="ospideal" replace="ospidéal"/>
+    <item find="úsaidtear" replace="úsáidtear"/>
+    <item find="cabidil" replace="caibidil"/>
+    <item find="criochnaithe" replace="críochnaithe"/>
+    <item find="cursíos" replace="cur síos"/>
+    <item find="diomhaointeas" replace="díomhaointeas"/>
+    <item find="oglach" replace="óglach"/>
+    <item find="gearan" replace="gearán"/>
+    <item find="nabliana" replace="na bliana"/>
+    <item find="teaghmáil" replace="teagmháil"/>
+    <item find="agna" replace="ag na"/>
+    <item find="bais" replace="báis"/>
+    <item find="blathanna" replace="bláthanna"/>
+    <item find="léideanna" replace="leideanna"/>
+    <item find="docha" replace="dócha"/>
+    <item find="feistisí" replace="feisteas"/>
+    <item find="rannphairtíocht" replace="rannpháirtíocht"/>
+    <item find="dochais" replace="dóchais"/>
+    <item find="dochasach" replace="dóchasach"/>
+    <item find="cios" replace="cíos"/>
+    <item find="neascleanúint" replace="nascleanúint"/>
+    <item find="gne" replace="gné"/>
+    <item find="gabhaltais" replace="gabháltais"/>
+    <item find="aran" replace="ar an"/>
+    <item find="usaide" replace="úsáide"/>
+    <item find="aistharraing" replace="aistarraing"/>
+    <item find="éile" replace="eile"/>
+    <item find="riomheolaíocht" replace="ríomheolaíocht"/>
+    <item find="bearla" replace="béarla"/>
+    <item find="gra" replace="grá"/>
+    <item find="stadas" replace="stádas"/>
+    <item find="Iarchonnachta" replace="Iar-Chonnachta"/>
+    <item find="reigiúnach" replace="réigiúnach"/>
+    <item find="doman" replace="domhan"/>
+    <item find="reasúnta" replace="réasúnta"/>
+    <item find="solathair" replace="soláthair"/>
+    <item find="ginearalta" replace="ginearálta"/>
+    <item find="cumarsaide" replace="cumarsáide"/>
+    <item find="ud" replace="úd"/>
+    <item find="nos" replace="nós"/>
+    <item find="tog" replace="tóg"/>
+    <item find="miniú" replace="míniú"/>
+    <item find="nuir" replace="nuair"/>
+    <item find=":!!:" replace="‼"/>
+    <item find="nóa" replace="nó a"/>
+    <item find="eicint" replace="éigin"/>
+    <item find="augs" replace="agus"/>
+    <item find="Arainn" replace="Árainn"/>
+    <item find="tatmaisféar" replace="t-atmaisféar"/>
+    <item find="fadbhanna" replace="fadhbanna"/>
+    <item find="taiscealaí" replace="taiscéalaí"/>
+    <item find="runaí" replace="rúnaí"/>
+    <item find="aineoin" replace="ainneoin"/>
+    <item find="fresin" replace="freisin"/>
+    <item find="néireodh" replace="n-éireodh"/>
+    <item find="tsort" replace="sórt"/>
+    <item find="aitreabhacha" replace="áitreabhacha"/>
+    <item find="ceánna" replace="céanna"/>
+    <item find="fogair" replace="fógair"/>
+    <item find="direach" replace="díreach"/>
+    <item find="naisiúnta" replace="náisiúnta"/>
+    <item find="socraid" replace="sochraid"/>
+    <item find="Féirste" replace="Feirste"/>
+    <item find="ThuaidhTheas" replace="Thuaidh-Theas"/>
+    <item find="Míchéal" replace="Mícheál"/>
+    <item find="deanfaidh" replace="déanfaidh"/>
+    <item find="boithre" replace="bóithre"/>
+    <item find="taispáint" replace="taispeáint"/>
+    <item find="priosúnacht" replace="príosúnacht"/>
+    <item find="duinn" replace="dúinn"/>
+    <item find="déagoirí" replace="déagóirí"/>
+    <item find="éagsula" replace="éagsúla"/>
+    <item find="údáráis" replace="údaráis"/>
+    <item find="agas" replace="agus"/>
+    <item find="paipeir" replace="páipéir"/>
+    <item find="fas" replace="fás"/>
+    <item find="hEirinn" replace="hÉirinn"/>
+    <item find="tiarratasóir" replace="t-iarratasóir"/>
+    <item find="tiortha" replace="tíortha"/>
+    <item find="Ceadaoine" replace="Céadaoin"/>
+    <item find="moiminte" replace="móiminte"/>
+    <item find="arfad" replace="ar fad"/>
+    <item find="eagran" replace="eagrán"/>
+    <item find="sábhailte" replace="sábháilte"/>
+    <item find="a'bhfuil" replace="an bhfuil"/>
+    <item find="solathar" replace="soláthar"/>
+    <item find="paipear" replace="páipéar"/>
+    <item find="corais" replace="córais"/>
+    <item find="talann" replace="tallann"/>
+    <item find="sli" replace="slí"/>
+    <item find="udar" replace="údar"/>
+    <item find="Gaeilgoirí" replace="Gaeilgeoirí"/>
+    <item find="cuirte" replace="cúirte"/>
+    <item find="trathnóna" replace="tráthnóna"/>
+    <item find="damaiste" replace="damáiste"/>
+    <item find="faisneise" replace="faisnéise"/>
+    <item find="on" replace="ón"/>
+    <item find="togadh" replace="tógadh"/>
+    <item find="uaír" replace="uair"/>
+    <item find="doicimeid" replace="doiciméid"/>
+    <item find="udaras" replace="údarás"/>
+    <item find="aigesan" replace="aigesean"/>
+    <item find="buachail" replace="buachaill"/>
+    <item find="íarraidh" replace="iarraidh"/>
+    <item find="oileain" replace="oileáin"/>
+    <item find="bionn" replace="bíonn"/>
+    <item find="fodhlithe" replace="fodhlíthe"/>
+    <item find="teaglach" replace="teaghlach"/>
+    <item find="spéisialta" replace="speisialta"/>
+    <item find="iarratasoir" replace="iarratasóir"/>
+    <item find="cen" replace="cén"/>
+    <item find="comisiún" replace="coimisiún"/>
+    <item find="déanmh" replace="déanamh"/>
+    <item find="achtachan" replace="achtachán"/>
+    <item find="maidirle" replace="maidir le"/>
+    <item find="leinn" replace="léinn"/>
+    <item find="bhi" replace="bhí"/>
+    <item find="núicleacha" replace="núicléacha"/>
+    <item find="naisiunta" replace="náisiúnta"/>
+    <item find="tairgí" replace="táirgí"/>
+    <item find="mathar" replace="máthar"/>
+    <item find="dáirire" replace="dáiríre"/>
+    <item find="meid" replace="méid"/>
+    <item find="fomhar" replace="fómhar"/>
+    <item find="áiséirí" replace="aiséirí"/>
+    <item find="cuplá" replace="cúpla"/>
+    <item find="leibheál" replace="leibhéal"/>
+    <item find="bothair" replace="bóthair"/>
+    <item find="abhaineann" replace="a bhaineann"/>
+    <item find="líosta" replace="liosta"/>
+    <item find="sasta" replace="sásta"/>
+    <item find="naisiun" replace="náisiún"/>
+    <item find="difiriúil" replace="difriúil"/>
+    <item find="taimid" replace="táimid"/>
+    <item find="naire" replace="náire"/>
+    <item find="saoriseoir" replace="saoririseoir"/>
+    <item find="achh" replace="ach"/>
+    <item find="lehaghaidh" replace="le haghaidh"/>
+    <item find="agur" replace="agus"/>
+    <item find="bfuil" replace="bhfuil"/>
+    <item find="Caomhín" replace="Caoimhín"/>
+    <item find="trocaire" replace="trócaire"/>
+    <item find="breithiunais" replace="breithiúnais"/>
+    <item find="peist" replace="péist"/>
+    <item find="toideachas" replace="t-oideachas"/>
+    <item find="Brid" replace="Bríd"/>
+    <item find="nachbhfuil" replace="nach bhfuil"/>
+    <item find="habhair" replace="hábhair"/>
+    <item find="nior" replace="níor"/>
+    <item find=":^-:" replace="⁻"/>
+    <item find="deiríochta" replace="déiríochta"/>
+    <item find="feachaint" replace="féachaint"/>
+    <item find="cailin" replace="cailín"/>
+    <item find="compháirtíocht" replace="comhpháirtíocht"/>
+    <item find="ostan" replace="óstlann"/>
+    <item find="tordú" replace="t-ordú"/>
+    <item find="níosmó" replace="níos mó"/>
+    <item find="greine" replace="gréine"/>
+    <item find="leiriú" replace="léiriú"/>
+    <item find="gnóthai" replace="gnóthaí"/>
+    <item find="eigean" replace="éigean"/>
+    <item find="eigeandála" replace="éigeandála"/>
+    <item find="agom" replace="agam"/>
+    <item find="naistriú" replace="n-aistriú"/>
+    <item find="teaglaigh" replace="teaghlaigh"/>
+    <item find="cuig" replace="cúig"/>
+    <item find="chualthas" replace="chualathas"/>
+    <item find="narbh" replace="nárbh"/>
+    <item find="grinneal" replace="grinneall"/>
+    <item find="eolaíchta" replace="eolaíochta"/>
+    <item find="raib" replace="raibh"/>
+    <item find="oiléain" replace="oileáin"/>
+    <item find="ocaideacha" replace="ócáideacha"/>
+    <item find="forum" replace="fóram"/>
+    <item find="runaithe" replace="rúnaithe"/>
+    <item find="cadiad" replace="cad iad"/>
+    <item find="oirúnach" replace="oiriúnach"/>
+    <item find="uachtarain" replace="uachtaráin"/>
+    <item find="tradisiún" replace="traidisiún"/>
+    <item find="slainte" replace="sláinte"/>
+    <item find="c'ainm" replace="cén t-ainm"/>
+    <item find="agu" replace="agus"/>
+    <item find="iomlan" replace="iomlán"/>
+    <item find="beagainín" replace="beagáinín"/>
+    <item find="inmhéanach" replace="inmheánach"/>
+    <item find="muineadh" replace="múineadh"/>
+    <item find="stait" replace="stáit"/>
+    <item find="coimead" replace="coimeád"/>
+    <item find="comhaltai" replace="comhaltaí"/>
+    <item find="fior" replace="fíor"/>
+    <item find="meadú" replace="méadú"/>
+    <item find="milliun" replace="milliún"/>
+    <item find="Aeinéas" replace="Aenéas"/>
+    <item find="Ceannain" replace="Ceanainn"/>
+    <item find="Mairtín" replace="Máirtín"/>
+    <item find="cibe" replace="cibé"/>
+    <item find="túdar" replace="t-údar"/>
+    <item find="reasúin" replace="réasúin"/>
+    <item find="saróidh" replace="sáróidh"/>
+    <item find="codhladh" replace="codladh"/>
+    <item find="reiteach" replace="réiteach"/>
+    <item find="diobh" replace="díobh"/>
+    <item find="oscalit" replace="oscailt"/>
+    <item find="thainic" replace="tháinig"/>
+    <item find="conaithe" replace="cónaithe"/>
+    <item find="tionscamh" replace="tionscnamh"/>
+    <item find="luthchleas" replace="lúthchleas"/>
+    <item find="Cuiv" replace="Cuív"/>
+    <item find="ionchuiseamh" replace="ionchúiseamh"/>
+    <item find="féachána" replace="féachana"/>
+    <item find="moid" replace="móid"/>
+    <item find="abhar" replace="ábhar"/>
+    <item find="léí" replace="léi"/>
+    <item find="siud" replace="siúd"/>
+    <item find="breagach" replace="bréagach"/>
+    <item find="síochanta" replace="síochánta"/>
+    <item find="leisna" replace="leis na"/>
+    <item find="isea" replace="is ea"/>
+    <item find="alcol" replace="alcól"/>
+    <item find="noidhreacht" replace="n-oidhreacht"/>
+    <item find="náisúnta" replace="náisiúnta"/>
+    <item find="féarr" replace="fearr"/>
+    <item find="úsaide" replace="úsáide"/>
+    <item find="oifigi" replace="oifigí"/>
+    <item find="séirbhís" replace="seirbhís"/>
+    <item find="sanáireamh" replace="san áireamh"/>
+    <item find="torthai" replace="torthaí"/>
+    <item find="pairteach" replace="páirteach"/>
+    <item find="criochnú" replace="críochnú"/>
+    <item find="bhaineannle" replace="bhaineann le"/>
+    <item find="toileán" replace="t-oileán"/>
+    <item find="haithle" replace="aithle"/>
+    <item find="gabhaltas" replace="gabháltas"/>
+    <item find="siniu" replace="síniú"/>
+    <item find="fáisnéise" replace="faisnéise"/>
+    <item find="adhmháil" replace="admháil"/>
+    <item find="taispeantas" replace="taispeántas"/>
+    <item find="taiscealaíochta" replace="taiscéalaíochta"/>
+    <item find="soisialta" replace="sóisialta"/>
+    <item find="sraid" replace="sráid"/>
+    <item find="prainn" replace="práinn"/>
+    <item find="comortas" replace="comórtas"/>
+    <item find="Feiriste" replace="Feirste"/>
+    <item find="oidreacht" replace="oidhreacht"/>
+    <item find="measíní" replace="meaisíní"/>
+    <item find="comhairli" replace="comhairlí"/>
+    <item find="cultuir" replace="cultúir"/>
+    <item find="fen" replace="faoin"/>
+    <item find="leí" replace="léi"/>
+    <item find="afhorbairt" replace="a fhorbairt"/>
+    <item find="soisialaigh" replace="sóisialaigh"/>
+    <item find="gombeidh" replace="go mbeidh"/>
+    <item find="slan" replace="slán"/>
+    <item find="tostal" replace="tóstal"/>
+    <item find="afheabhsú" replace="a fheabhsú"/>
+    <item find="notai" replace="nótaí"/>
+    <item find="achinntiú" replace="a chinntiú"/>
+    <item find="tathar" replace="táthar"/>
+    <item find="éadán" replace="éadan"/>
+    <item find=".*(C)" replace="©"/>
+    <item find="scribhneoir" replace="scríbhneoir"/>
+    <item find="eanlaithe" replace="éanlaithe"/>
+    <item find="aleanas" replace="a leanas"/>
+    <item find="tughta" replace="tugtha"/>
+    <item find="isiad" replace="is iad"/>
+    <item find="inaghaidh" replace="in aghaidh"/>
+    <item find="síntús" replace="síntiús"/>
+    <item find=":?:" replace="❓"/>
+    <item find="RTE" replace="RTÉ"/>
+    <item find="prainne" replace="práinne"/>
+    <item find="sruchtúr" replace="struchtúr"/>
+    <item find="duchais" replace="dúchais"/>
+    <item find="aguis" replace="agus"/>
+    <item find="clo" replace="cló"/>
+    <item find="treimhse" replace="tréimhse"/>
+    <item find="praicticiúil" replace="praiticiúil"/>
+    <item find="amháín" replace="amháin"/>
+    <item find="formhor" replace="formhór"/>
+    <item find="mora" replace="móra"/>
+    <item find="claraigh" replace="cláraigh"/>
+    <item find="duiche" replace="dúiche"/>
+    <item find="focloirí" replace="foclóirí"/>
+    <item find="sach" replace="sách"/>
+    <item find="speisiúil" replace="spéisiúil"/>
+    <item find="dreim" replace="dréim"/>
+    <item find="teács" replace="téacs"/>
+    <item find="stráinséar" replace="strainséir"/>
+    <item find="céana" replace="céanna"/>
+    <item find="churar" replace="chur ar"/>
+    <item find="muinin" replace="muinín"/>
+    <item find="eadaigh" replace="éadaigh"/>
+    <item find="reabhlóid" replace="réabhlóid"/>
+    <item find="slaintiochta" replace="sláintíochta"/>
+    <item find="arlíne" replace="ar líne"/>
+    <item find="imeachtai" replace="imeachtaí"/>
+    <item find="fogra" replace="fógra"/>
+    <item find="achmhainne" replace="acmhainne"/>
+    <item find="súntas" replace="suntas"/>
+    <item find="gniomhach" replace="gníomhach"/>
+    <item find="measín" replace="meaisín"/>
+    <item find="seirbhis" replace="seirbhís"/>
+    <item find="samradh" replace="samhradh"/>
+    <item find="limisteir" replace="limistéir"/>
+    <item find="dfhonn" replace="d'fhonn"/>
+    <item find="feile" replace="féile"/>
+    <item find="pictiur" replace="pictiúr"/>
+    <item find="leitheid" replace="leithéid"/>
+    <item find="criocha" replace="críocha"/>
+    <item find="udaraithe" replace="údaraithe"/>
+    <item find="gán" replace="gan"/>
+    <item find="taisceáladh" replace="taiscéaladh"/>
+    <item find="Eireannach" replace="Éireannach"/>
+    <item find="piog" replace="pióg"/>
+    <item find="maistir" replace="máistir"/>
+    <item find="oig" replace="óig"/>
+    <item find="clair" replace="cláir"/>
+    <item find="bothar" replace="bóthar"/>
+    <item find="udarás" replace="údarás"/>
+    <item find="coimisiuin" replace="coimisiúin"/>
+    <item find="nota" replace="nóta"/>
+    <item find="teacs" replace="téacs"/>
+    <item find="cailithe" replace="cáilithe"/>
+    <item find="meachan" replace="meáchan"/>
+    <item find="greasan" replace="gréasán"/>
+    <item find="foluntas" replace="folúntas"/>
+    <item find="scannan" replace="scannán"/>
+    <item find="lathair" replace="láthair"/>
+    <item find="eineacht" replace="éineacht"/>
+    <item find="fa" replace="faoi"/>
+    <item find="statisticí" replace="staitisticí"/>
+    <item find="diuitethe" replace="diúitéithe"/>
+    <item find="lúchair" replace="lúcháir"/>
+    <item find="anios" replace="aníos"/>
+    <item find="aitribh" replace="áitribh"/>
+    <item find="íomha" replace="íomhá"/>
+    <item find="b'fheidir" replace="b'fhéidir"/>
+    <item find="ócaideacha" replace="ócáideacha"/>
+    <item find="abhfuil" replace="a bhfuil"/>
+    <item find="dli" replace="dlí"/>
+    <item find="mir" replace="mír"/>
+    <item find="nn" replace="ann"/>
+    <item find="tádh" replace="t-ádh"/>
+    <item find="greanmhar" replace="greannmhar"/>
+    <item find="gatáir" replace="gátair"/>
+    <item find="comhlachtai" replace="comhlachtaí"/>
+    <item find="iniuchadh" replace="iniúchadh"/>
+    <item find="chuigan" replace="chuig an"/>
+    <item find="stadás" replace="stádas"/>
+    <item find="nadaoine" replace="na daoine"/>
+    <item find="aisci" replace="aiscí"/>
+    <item find=":---:" replace="—"/>
+    <item find="abhí" replace="a bhí"/>
+    <item find="mal" replace="mál"/>
+    <item find="eard" replace="éard"/>
+    <item find="rudai" replace="rudaí"/>
+    <item find="morgaiste" replace="morgáiste"/>
+    <item find="futhú" replace="fúthu"/>
+    <item find="doicimead" replace="doiciméad"/>
+    <item find="iseal" replace="íseal"/>
+    <item find="limistear" replace="limistéar"/>
+    <item find="mathair" replace="máthair"/>
+    <item find="cail" replace="cáil"/>
+    <item find="caighdeain" replace="caighdeáin"/>
+    <item find="sclabhaithe" replace="sclábhaithe"/>
+    <item find="oráid" replace="óráid"/>
+    <item find="fogairt" replace="fógairt"/>
+    <item find="taispeaint" replace="taispeáint"/>
+    <item find="saoraid" replace="saoráid"/>
+    <item find="hathru" replace="hathrú"/>
+    <item find="earrai" replace="earraí"/>
+    <item find="isle" replace="ísle"/>
+    <item find="fondúireac" replace="fondúireacht"/>
+    <item find="reasúnach" replace="réasúnach"/>
+    <item find="ollmhor" replace="ollmhór"/>
+    <item find="Aine" replace="Áine"/>
+    <item find="fréisin" replace="freisin"/>
+    <item find="bradan" replace="bradán"/>
+    <item find="isfearr" replace="is fearr"/>
+    <item find="deantar" replace="déantar"/>
+    <item find="leisean" replace="leis-sean"/>
+    <item find="taiscealaithe" replace="taiscéalaithe"/>
+    <item find="aistharraingt" replace="aistarraingt"/>
+    <item find="moir" replace="móir"/>
+    <item find="trath" replace="tráth"/>
+    <item find="earnail" replace="earnáil"/>
+    <item find="Fomhair" replace="Fómhair"/>
+    <item find="sarófar" replace="sárófar"/>
+    <item find="oga" replace="óga"/>
+    <item find="ocaideach" replace="ócáideach"/>
+    <item find="oilean" replace="oileán"/>
+    <item find="úafásach" replace="uafásach"/>
+    <item find="seiminéar" replace="seimineár"/>
+    <item find="siceolaíocht" replace="síceolaíocht"/>
+    <item find="si" replace="sí"/>
+    <item find="muinteoir" replace="múinteoir"/>
+    <item find="cuirteanna" replace="cúirteanna"/>
+    <item find="deiríocht" replace="déiríocht"/>
+    <item find="dochtuireacht" replace="dochtúireacht"/>
+    <item find="tairge" replace="táirge"/>
+    <item find="greasain" replace="gréasáin"/>
+    <item find="foram" replace="fóram"/>
+    <item find="ealú" replace="éalú"/>
+    <item find="gárda" replace="garda"/>
+    <item find="reasun" replace="réasún"/>
+    <item find="aithine" replace="aithne"/>
+    <item find="Martín" replace="Máirtín"/>
+    <item find="reasunacha" replace="réasúnacha"/>
+    <item find="ce" replace="cé"/>
+    <item find="críchcanna" replace="críocha"/>
+    <item find="úsaideach" replace="úsáideach"/>
+    <item find="compháirtíochta" replace="comhpháirtíochta"/>
+    <item find="Habháís" replace="Haváis"/>
+    <item find=":--:" replace="–"/>
+    <item find="fuarathas" replace="fuarthas"/>
+    <item find="coinníolacha" replace="coinníollacha"/>
+    <item find="struchtuir" replace="struchtúir"/>
+    <item find="gairthí" replace="ghairtí"/>
+    <item find="oiléan" replace="oileán"/>
+    <item find="togtha" replace="tógtha"/>
+    <item find="arasán" replace="árasán"/>
+    <item find="agaidh" replace="aghaidh"/>
+    <item find="arfáil" replace="ar fáil"/>
+    <item find="síad" replace="siad"/>
+    <item find="liuntais" replace="liúntais"/>
+    <item find="tailli" replace="táillí"/>
+    <item find="linte" replace="línte"/>
+    <item find="laithrean" replace="láithreán"/>
+    <item find="bad" replace="bád"/>
+    <item find="ciosa" replace="cíosa"/>
+    <item find="cadé" replace="cad é"/>
+    <item find="cathar" replace="cathair"/>
+    <item find="máithair" replace="máthair"/>
+    <item find="husaid" replace="húsáid"/>
+    <item find="eagsuil" replace="éagsúil"/>
+    <item find="feidhmniú" replace="feidhmiú"/>
+    <item find="leathanch" replace="leathanach"/>
+    <item find="bréa" replace="breá"/>
+    <item find="comhaontu" replace="comhaontú"/>
+    <item find="churchun" replace="chur chun"/>
+    <item find="réasuin" replace="réasúin"/>
+    <item find="rialail" replace="rialáil"/>
+    <item find="coimisineirí" replace="coimisinéirí"/>
+    <item find="proiséas" replace="próiseas"/>
+    <item find="teaghmháil" replace="teagmháil"/>
+    <item find="laethaenta" replace="laethanta"/>
+    <item find="maguaird" replace="máguaird"/>
+    <item find="chail" replace="cháil"/>
+    <item find="lei" replace="léi"/>
+    <item find="afach" replace="áfach"/>
+    <item find="Conghial" replace="Conghail"/>
+    <item find="ta" replace="tá"/>
+    <item find="staisiúin" replace="stáisiúin"/>
+    <item find="fáisnéis" replace="faisnéis"/>
+    <item find="iarrtas" replace="iarratas"/>
+    <item find="trathnona" replace="tráthnóna"/>
+    <item find="Meiricea" replace="Meiriceá"/>
+    <item find="feidm" replace="feidhm"/>
+    <item find="soléir" replace="soiléir"/>
+    <item find="sceál" replace="scéal"/>
+    <item find="tuisce" replace="túisce"/>
+    <item find="solathrach" replace="soláthrach"/>
+    <item find="buiochas" replace="buíochas"/>
+    <item find="beathnaiséisí" replace="beathaisnéisí"/>
+    <item find="laimh" replace="láimh"/>
+    <item find="mod" replace="mód"/>
+    <item find="taitheantas" replace="t-aitheantas"/>
+    <item find=":_-:" replace="₋"/>
+    <item find="Rómhanach" replace="Rómhánach"/>
+    <item find=":^):" replace="⁾"/>
+    <item find="leabharín" replace="leabhairín"/>
+    <item find="fluich" replace="fliuch"/>
+    <item find="futhu" replace="fúthu"/>
+    <item find="nóimeád" replace="nóiméad"/>
+    <item find="litriocht" replace="litríocht"/>
+    <item find="Gaililí" replace="Gailílí"/>
+    <item find="nóimead" replace="nóiméad"/>
+    <item find="ocáideacha" replace="ócáideacha"/>
+    <item find="laidir" replace="láidir"/>
+    <item find="Meirceánach" replace="Meiriceánach"/>
+    <item find="Chábháin" replace="Chabháin"/>
+    <item find="dun" replace="dún"/>
+    <item find="deontaisi" replace="deontais"/>
+    <item find="ona" replace="óna"/>
+    <item find="dheanfadh" replace="dhéanfadh"/>
+    <item find="agusín" replace="aguisín"/>
+    <item find="oiliuna" replace="oiliúna"/>
+    <item find="comphobal" replace="comhphobal"/>
+    <item find="comisiúin" replace="coimisiúin"/>
+    <item find="eag" replace="éag"/>
+    <item find="contac" replace="contae"/>
+    <item find="ballstat" replace="ballstát"/>
+    <item find="coras" replace="córas"/>
+    <item find="Arann" replace="Árann"/>
+    <item find="eisteacht" replace="éisteacht"/>
+    <item find="aimnigh" replace="ainmnigh"/>
+    <item find="Gallimh" replace="Gaillimh"/>
+    <item find="paipéir" replace="páipéir"/>
+    <item find="lan" replace="lán"/>
+    <item find="téan" replace="t-éan"/>
+    <item find="cuitimh" replace="cúitimh"/>
+    <item find="gatár" replace="gátar"/>
+    <item find="udaráis" replace="údaráis"/>
+    <item find="achtachain" replace="achtacháin"/>
+    <item find="anchuid" replace="an-chuid"/>
+    <item find="poibli" replace="poiblí"/>
+    <item find="ballstait" replace="ballstáit"/>
+    <item find="fogrófar" replace="fógrófar"/>
+    <item find="scealaíocht" replace="scéalaíocht"/>
+    <item find="tiomlán" replace="t-iomlán"/>
+    <item find="áitiúl" replace="áitiúil"/>
+    <item find="struchtur" replace="struchtúr"/>
+    <item find="mean" replace="meán"/>
+    <item find="údaras" replace="údarás"/>
+    <item find="admhail" replace="admháil"/>
+    <item find="meachani" replace="meáchain"/>
+    <item find="cludach" replace="clúdach"/>
+    <item find="canbhasáil" replace="canbhásáil"/>
+    <item find="aghlacadh" replace="a ghlacadh"/>
+    <item find="colaiste" replace="coláiste"/>
+    <item find="tabairt" replace="tabhairt"/>
+    <item find="talun" replace="talún"/>
+    <item find="coirpideachas" replace="corpoideachas"/>
+    <item find="fáíl" replace="fáil"/>
+    <item find="cothabhail" replace="cothabháil"/>
+    <item find="nahÉireann" replace="na hÉireann"/>
+    <item find="carráid" replace="earráid"/>
+    <item find="ti" replace="tí"/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find="healaine" replace="healaíne"/>
+    <item find="dan" replace="dán"/>
+    <item find="larionaid" replace="lárionaid"/>
+    <item find="tearra" replace="t-earra"/>
+    <item find="fostoir" replace="fostóir"/>
+    <item find="ocaid" replace="ócáid"/>
+    <item find="teilefís" replace="teilifís"/>
+    <item find="ostán" replace="óstlann"/>
+    <item find="specialta" replace="speisialta"/>
+    <item find="stiurthoir" replace="stiúrthóir"/>
+    <item find="tus" replace="tús"/>
+    <item find="leís" replace="leis"/>
+    <item find="noibríonn" replace="n-oibríonn"/>
+    <item find="ni" replace="ní"/>
+    <item find="lelinn" replace="le linn"/>
+    <item find="abhair" replace="ábhair"/>
+    <item find="aigeán" replace="aigéan"/>
+    <item find="og" replace="óg"/>
+    <item find="hudarás" replace="húdarás"/>
+    <item find="iomha" replace="íomhá"/>
+    <item find="eifeachta" replace="éifeachta"/>
+    <item find="abhár" replace="ábhar"/>
+    <item find=":…:" replace="…"/>
+    <item find="coimeadán" replace="coimeádán"/>
+    <item find="eagsula" replace="éagsúla"/>
+    <item find="usáidtear" replace="úsáidtear"/>
+    <item find="fagtha" replace="fágtha"/>
+    <item find="leitheoirí" replace="léitheoirí"/>
+    <item find="tithiocht" replace="tithíocht"/>
+    <item find="pictuirí" replace="pictiúir"/>
+    <item find="ansiud" replace="ansiúd"/>
+    <item find="Iósa" replace="Íosa"/>
+    <item find="reidh" replace="réidh"/>
+    <item find="féín" replace="féin"/>
+    <item find="núdarás" replace="n-údarás"/>
+    <item find="mionshonraí" replace="mionsonraí"/>
+    <item find="iocaíochtaí" replace="íocaíochtaí"/>
+    <item find="léagáide" replace="leagáide"/>
+    <item find="doigh" replace="dóigh"/>
+    <item find="gniomhaíocht" replace="gníomhaíocht"/>
+    <item find="togáil" replace="tógáil"/>
+    <item find="buntaiste" replace="buntáiste"/>
+    <item find="ra" replace="rá"/>
+    <item find="institiuid" replace="institiúid"/>
+    <item find="aras" replace="áras"/>
+    <item find="diobhail" replace="díobháil"/>
+    <item find="saraíonn" replace="sáraíonn"/>
+    <item find="eagsúla" replace="éagsúla"/>
+    <item find="amhrain" replace="amhráin"/>
+    <item find="dith" replace="díth"/>
+    <item find="oiche" replace="oíche"/>
+    <item find="beal" replace="béal"/>
+    <item find="staideár" replace="staidéar"/>
+    <item find="suíochan" replace="suíochán"/>
+    <item find="cumacht" replace="cumhacht"/>
+    <item find="bhaintamach" replace="bhaint amach"/>
+    <item find="Mícheal" replace="Mícheál"/>
+    <item find="reásunta" replace="réasúnta"/>
+    <item find="dicheall" replace="dícheall"/>
+    <item find="assin" replace="as sin"/>
+    <item find="aineoinn" replace="ainneoin"/>
+    <item find="alainn" replace="álainn"/>
+    <item find="Gaelge" replace="Gaeilge"/>
+    <item find="agan" replace="ag an"/>
+    <item find="socmhainn" replace="sócmhainn"/>
+    <item find="caislean" replace="caisleán"/>
+    <item find="leaspáin" replace="léaspáin"/>
+    <item find="deag" replace="déag"/>
+    <item find="bunus" replace="bunús"/>
+    <item find="sort" replace="sórt"/>
+    <item find="béimíd" replace="beimid"/>
+    <item find="trid" replace="tríd"/>
+    <item find="culturtha" replace="cultúrtha"/>
+    <item find="focas" replace="fócas"/>
+    <item find="scannain" replace="scannáin"/>
+    <item find="deanamh" replace="déanamh"/>
+    <item find="cisti" replace="cistí"/>
+    <item find="náisiun" replace="náisiún"/>
+    <item find="teilfíse" replace="teilifíse"/>
+    <item find="cailiúil" replace="cáiliúil"/>
+    <item find="tri" replace="trí"/>
+    <item find="uachtaran" replace="uachtarán"/>
+    <item find="uasdhátú" replace="uasdátú"/>
+    <item find="eagsúil" replace="éagsúil"/>
+    <item find="ao'chor" replace="aon chor"/>
+    <item find="seirbhise" replace="seirbhíse"/>
+    <item find="easportála" replace="easpórtála"/>
+    <item find="teilifise" replace="teilifíse"/>
+    <item find="ladh" replace="1ú"/>
+    <item find="siopai" replace="siopaí"/>
+    <item find=":!:" replace="❕"/>
+    <item find="lasaí" replace="lásaí"/>
+    <item find="iomportáil" replace="iompórtáil"/>
+    <item find="sólais" replace="sóláis"/>
+    <item find="foghlam" replace="foghlaim"/>
+    <item find="data" replace="dáta"/>
+    <item find="ín" replace="in"/>
+    <item find="bhíuil" replace="bhfuil"/>
+    <item find="trachtála" replace="tráchtála"/>
+    <item find="Eanair" replace="Eanáir"/>
+    <item find="adhéanamh" replace="a dhéanamh"/>
+    <item find="rannog" replace="rannóg"/>
+    <item find="pleanala" replace="pleanála"/>
+    <item find="íochta" replace="íoctha"/>
+    <item find="diobhála" replace="díobhála"/>
+    <item find="Bhlarna" replace="Bhlárna"/>
+    <item find="ol" replace="ól"/>
+    <item find="habhar" replace="hábhar"/>
+    <item find="tre" replace="trí"/>
+    <item find="taim" replace="táim"/>
+    <item find="beithioch" replace="beithíoch"/>
+    <item find="pictúir" replace="pictiúr"/>
+    <item find="nios" replace="níos"/>
+    <item find="aistriúchá" replace="aistriúchán"/>
+    <item find="Lúcas" replace="Lúcás"/>
+    <item find="polataíocht" replace="polaitíocht"/>
+    <item find="riomhaire" replace="ríomhaire"/>
+    <item find="comhaith" replace="cómhaith"/>
+    <item find=":_(:" replace="₍"/>
+    <item find="iarriadh" replace="iarraidh"/>
+    <item find="Micheal" replace="Mícheál"/>
+    <item find="gcursa" replace="gcúrsa"/>
+    <item find="arachas" replace="árachas"/>
+    <item find="uineir" replace="úinéir"/>
+    <item find="chursa" replace="chúrsa"/>
+    <item find="inúchadh" replace="iniúchadh"/>
+    <item find="curaim" replace="cúraim"/>
+    <item find="caisléan" replace="caisleán"/>
+    <item find="illdaite" replace="ildathach"/>
+    <item find="caipéisí" replace="cáipéisí"/>
+    <item find=":-:" replace="−"/>
+    <item find="dechuid" replace="de chuid"/>
+    <item find="raflaí" replace="ráflaí"/>
+    <item find="comradaithe" replace="comrádaithe"/>
+    <item find="cineal" replace="cineál"/>
+    <item find="éagsuil" replace="éagsúil"/>
+    <item find="forala" replace="forála"/>
+    <item find="tabla" replace="tábla"/>
+    <item find="páipear" replace="páipéar"/>
+    <item find="ngairthí" replace="ngairtí"/>
+    <item find="riomphoist" replace="ríomhphoist"/>
+    <item find="tracht" replace="trácht"/>
+    <item find="trím" replace="trí mo"/>
+    <item find="duirt" replace="dúirt"/>
+    <item find="prata" replace="práta"/>
+    <item find="gac" replace="gach"/>
+    <item find="3/4" replace="¾"/>
+    <item find="maidirleis" replace="maidir leis"/>
+    <item find="Ceadaoin" replace="Céadaoin"/>
+    <item find="cuspoir" replace="cuspóir"/>
+    <item find="feách" replace="féach"/>
+    <item find="mionshonra" replace="mionsonra"/>
+    <item find="gear" replace="géar"/>
+    <item find="rialachain" replace="rialacháin"/>
+    <item find="thángas" replace="thángthas"/>
+    <item find="arsa'n" replace="arsa an"/>
+    <item find="ceadunas" replace="ceadúnas"/>
+    <item find="sport" replace="spórt"/>
+    <item find="athchoiriu" replace="athchóiriú"/>
+    <item find="stadáis" replace="stádais"/>
+    <item find="tháing" replace="tháinig"/>
+    <item find="pagh" replace="pá"/>
+    <item find="coipeanna" replace="cóipeanna"/>
+    <item find="atha" replace="átha"/>
+    <item find="tam" replace="t-am"/>
+    <item find="diomhaointis" replace="díomhaointis"/>
+    <item find="fadbh" replace="fadhb"/>
+    <item find="cuirt" replace="cúirt"/>
+    <item find="Eireannaigh" replace="Éireannaigh"/>
+    <item find="tithiochta" replace="tithíochta"/>
+    <item find="oired" replace="oiread"/>
+    <item find="adhmhála" replace="admhála"/>
+    <item find="réasunta" replace="réasúnta"/>
+    <item find="athabhairt" replace="a thabhairt"/>
+    <item find="conaí" replace="cónaí"/>
+    <item find="tradála" replace="trádála"/>
+    <item find="diospóireachtaí" replace="díospóireachtaí"/>
+    <item find="sina" replace="sin a"/>
+    <item find="ostáin" replace="óstlainne"/>
+    <item find="Claith" replace="Cliath"/>
+    <item find="moran" replace="mórán"/>
+    <item find="tiogair" replace="tíogair"/>
+    <item find="turlabhraí" replace="t-urlabhraí"/>
+    <item find="reimse" replace="réimse"/>
+    <item find="amhain" replace="amháin"/>
+    <item find="lasa" replace="lása"/>
+    <item find="nuachtan" replace="nuachtán"/>
+    <item find="Dóbhair" replace="Dobhair"/>
+    <item find="liomataisti" replace="líomatáistí"/>
+    <item find="tradail" replace="trádáil"/>
+    <item find="tháining" replace="tháinig"/>
+    <item find="eigeandáil" replace="éigeandáil"/>
+    <item find="laimhe" replace="láimhe"/>
+    <item find="pa" replace="pá"/>
+    <item find="duli" replace="dul i"/>
+    <item find="cinlae" replace="cín lae"/>
+    <item find="gréim" replace="greim"/>
+    <item find="muinéal" replace="muineál"/>
+    <item find="dhareag" replace="dháréag"/>
+    <item find="daltai" replace="daltaí"/>
+    <item find="deanai" replace="déanaí"/>
+    <item find="dochtuir" replace="dochtúir"/>
+    <item find="leanuint" replace="leanúint"/>
+    <item find="priosunacht" replace="príosúnacht"/>
+    <item find="speárbhean" replace="spéirbhean"/>
+    <item find="sparáil" replace="spáráil"/>
+    <item find="toghchain" replace="toghcháin"/>
+    <item find="pictiuir" replace="pictiúir"/>
+    <item find="iochtarach" replace="íochtarach"/>
+    <item find="cadí" replace="cad í"/>
+    <item find="bunusach" replace="bunúsach"/>
+    <item find="thios" replace="thíos"/>
+    <item find="speise" replace="spéise"/>
+    <item find="iarrthoir" replace="iarrthóir"/>
+    <item find="ionnannas" replace="ionannas"/>
+    <item find="diriú" replace="díriú"/>
+    <item find="araghaidh" replace="ar aghaidh"/>
+    <item find="súiomh" replace="suíomh"/>
+    <item find="aitiúla" replace="áitiúla"/>
+    <item find="reigiunach" replace="réigiúnach"/>
+    <item find="saoraidi" replace="saoráidí"/>
+    <item find="abhartha" replace="ábhartha"/>
+    <item find="finiméin" replace="feiniméin"/>
+    <item find="no" replace="nó"/>
+    <item find="titithe" replace="tite"/>
+    <item find="dóthin" replace="dóthain"/>
+    <item find="bfhuil" replace="bhfuil"/>
+    <item find="arsan" replace="arsa an"/>
+    <item find="Cíochóité" replace="Cíochótae"/>
+    <item find="conaisc" replace="cónaisc"/>
+    <item find="filiocht" replace="filíocht"/>
+    <item find="gaeilge" replace="Gaeilge"/>
+    <item find="Bhuirne" replace="Bhúirne"/>
+    <item find="caipéis" replace="cáipéis"/>
+    <item find="tearmaíocht" replace="téarmaíocht"/>
+    <item find="trathanna" replace="tráthanna"/>
+    <item find="d'aineoinn" replace="d'ainneoin"/>
+    <item find="Gaeilgoir" replace="Gaeilgeoir"/>
+    <item find="omós" replace="ómós"/>
+    <item find="téileamh" replace="t-éileamh"/>
+    <item find="cartaí" replace="cártaí"/>
+    <item find="taon" replace="t-aon"/>
+    <item find="Éirean" replace="Éireann"/>
+    <item find=":^(:" replace="⁽"/>
+    <item find="déirigh" replace="d'éirigh"/>
+    <item find="amlaidh" replace="amhlaidh"/>
+    <item find="ioc" replace="íoc"/>
+    <item find="eíle" replace="eile"/>
+    <item find="eilíonn" replace="éilíonn"/>
+    <item find="deanaí" replace="déanaí"/>
+    <item find="deanann" replace="déanann"/>
+    <item find="taistriúchán" replace="t-aistriúchán"/>
+    <item find="déagoir" replace="déagóir"/>
+    <item find="pairceáil" replace="páirceáil"/>
+    <item find="Spáinis" replace="Spáinnis"/>
+    <item find="oiliúnt" replace="oiliúint"/>
+    <item find="diolaim" replace="díolaim"/>
+    <item find="gael" replace="Gael"/>
+    <item find="breag" replace="bréag"/>
+    <item find="miosa" replace="míosa"/>
+    <item find="reasunach" replace="réasúnach"/>
+    <item find="ospideil" replace="ospidéil"/>
+    <item find="comhdhail" replace="comhdháil"/>
+    <item find="Normanach" replace="Normannach"/>
+    <item find="Lunasa" replace="Lúnasa"/>
+    <item find="tóstóir" replace="t-óstóir"/>
+    <item find="buideál" replace="buidéal"/>
+    <item find="brea" replace="breá"/>
+    <item find="greásán" replace="gréasán"/>
+    <item find="scánnán" replace="scannán"/>
+    <item find="riarachain" replace="riaracháin"/>
+    <item find="socmhainní" replace="sócmhainní"/>
+    <item find="teolas" replace="t-eolas"/>
+    <item find="slándail" replace="slándáil"/>
+    <item find="teagmhail" replace="teagmháil"/>
+    <item find="inadhiaidh" replace="ina dhiaidh"/>
+    <item find="pairt" replace="páirt"/>
+    <item find="pairti" replace="páirtí"/>
+    <item find="antábhachtach" replace="an-tábhachtach"/>
+    <item find="cunamh" replace="cúnamh"/>
+    <item find="éirinn" replace="Éirinn"/>
+    <item find="Gaothdobhair" replace="Gaoth Dobhair"/>
+    <item find="iocaíocht" replace="íocaíocht"/>
+    <item find="Atha" replace="Átha"/>
+    <item find="raite" replace="ráite"/>
+    <item find="barantas" replace="barántas"/>
+    <item find="sceime" replace="scéime"/>
+    <item find="dhaidh" replace="dhiaidh"/>
+    <item find="tráthclár" replace="tráthchlár"/>
+    <item find="bliaintúil" replace="bliantúil"/>
+    <item find="easportail" replace="easpórtáil"/>
+    <item find="daonaireamh" replace="daonáireamh"/>
+    <item find="bhfui" replace="bhfuil"/>
+    <item find="idtaobh" replace="i dtaobh"/>
+    <item find="fuithi" replace="fúithi"/>
+    <item find="brúscair" replace="bruscair"/>
+    <item find="reir" replace="réir"/>
+    <item find="Sionnaine" replace="Sionainne"/>
+    <item find="sóchmhainn" replace="sócmhainn"/>
+    <item find="togála" replace="tógála"/>
+    <item find="fein" replace="féin"/>
+    <item find="crioch" replace="críoch"/>
+    <item find="tiochfaidh" replace="tiocfaidh"/>
+    <item find="run" replace="rún"/>
+    <item find="plasain" replace="plásáin"/>
+    <item find="grupaí" replace="grúpaí"/>
+    <item find="coimisineir" replace="coimisinéir"/>
+    <item find="díogras" replace="díograis"/>
+    <item find="casanna" replace="cásanna"/>
+    <item find="soisear" replace="sóisear"/>
+    <item find="naisceanna" replace="naisc"/>
+    <item find="taisceál" replace="taiscéal"/>
+    <item find="aitiúil" replace="áitiúil"/>
+    <item find="forsai" replace="fórsaí"/>
+    <item find="aitreabh" replace="áitreabh"/>
+    <item find="bainisti" replace="bainistí"/>
+    <item find="dochas" replace="dóchas"/>
+    <item find="leanunach" replace="leanúnach"/>
+    <item find="ócaid" replace="ócáid"/>
+    <item find="taillí" replace="táillí"/>
+    <item find="nuachtain" replace="nuachtáin"/>
+    <item find="tábhar" replace="t-ábhar"/>
+    <item find="slandáil" replace="slándáil"/>
+    <item find="noimead" replace="nóiméad"/>
+    <item find="lehaon" replace="le haon"/>
+    <item find="prainneach" replace="práinneach"/>
+    <item find="amhranaíocht" replace="amhránaíocht"/>
+    <item find="dti" replace="dtí"/>
+    <item find="anaus" replace="anuas"/>
+    <item find="leitheidí" replace="leithéidí"/>
+    <item find="asholáthar" replace="a sholáthar"/>
+    <item find="damhscoil" replace="dámhscoil"/>
+    <item find="bliantiúil" replace="bliantúil"/>
+    <item find="alán" replace="a lán"/>
+    <item find="dearthair" replace="deartháir"/>
+    <item find="tra" replace="trá"/>
+    <item find="meastú" replace="meas tú"/>
+    <item find="coimpléasach" replace="coimpléascach"/>
+    <item find="leibheal" replace="leibhéal"/>
+    <item find="ainilís" replace="anailís"/>
+    <item find="cearnog" replace="cearnóg"/>
+    <item find="foirsteanach" replace="fóirsteanach"/>
+    <item find="stáidéar" replace="staidéar"/>
+    <item find="tir" replace="tír"/>
+    <item find="scaileán" replace="scáileán"/>
+    <item find="cummanach" replace="cumannach"/>
+    <item find="dfhógair" replace="d'fhógair"/>
+    <item find="priosún" replace="príosún"/>
+    <item find="feach" replace="féach"/>
+    <item find="Gailege" replace="Gaeilge"/>
+    <item find="scriofa" replace="scríofa"/>
+    <item find="scealta" replace="scéalta"/>
+    <item find="tainm" replace="t-ainm"/>
+    <item find="tuairiscthe" replace="tuairiscithe"/>
+    <item find="taiscealaíocht" replace="taiscéalaíocht"/>
+    <item find="mease" replace="measc"/>
+    <item find="moire" replace="móire"/>
+    <item find="rafla" replace="ráfla"/>
+    <item find="doicméid" replace="doiciméid"/>
+    <item find="traidisiunta" replace="traidisiúnta"/>
+    <item find="easportáil" replace="easpórtáil"/>
+    <item find="arachais" replace="árachais"/>
+    <item find="sainmhiniú" replace="sainmhíniú"/>
+    <item find="cul" replace="cúl"/>
+    <item find="hudaráis" replace="húdaráis"/>
+    <item find="gailge" replace="Gaeilge"/>
+    <item find="isí" replace="is í"/>
+    <item find="agusna" replace="agus na"/>
+    <item find="scriobh" replace="scríobh"/>
+    <item find="solathrófar" replace="soláthrófar"/>
+    <item find="dearfainn" replace="déarfainn"/>
+    <item find="aguisin" replace="aguisín"/>
+    <item find="suailceach" replace="suáilceach"/>
+    <item find="Deardaoin" replace="Déardaoin"/>
+    <item find="fúáil" replace="fuáil"/>
+    <item find="daois" replace="d'aois"/>
+    <item find="Spainn" replace="Spáinn"/>
+    <item find="cinnitú" replace="cinntiú"/>
+    <item find="coinniollacha" replace="coinníollacha"/>
+    <item find="inioctha" replace="iníoctha"/>
+    <item find="agusan" replace="agus an"/>
+    <item find="ainneoinn" replace="ainneoin"/>
+    <item find="dala" replace="dála"/>
+    <item find="feasóg" replace="féasóg"/>
+    <item find="agusa" replace="agus a"/>
+    <item find="clarú" replace="clárú"/>
+    <item find="dramaí" replace="drámaí"/>
+    <item find="ginerálta" replace="ginearálta"/>
+    <item find="plainéad" replace="pláinéad"/>
+    <item find="sabháil" replace="sábháil"/>
+    <item find="sabhliain" replace="sa bhliain"/>
+    <item find="ríomhpost" replace="ríomhphost"/>
+    <item find="iomportála" replace="iompórtála"/>
+    <item find="sceil" replace="scéil"/>
+    <item find="vota" replace="vóta"/>
+    <item find="másé" replace="más é"/>
+    <item find="dha" replace="dhá"/>
+    <item find="tabhairne" replace="tábhairne"/>
+    <item find="reim" replace="réim"/>
+    <item find="fírínne" replace="fírinne"/>
+    <item find="ceistenna" replace="ceisteanna"/>
+    <item find="igcomhar" replace="i gcomhar"/>
+    <item find="nealaíon" replace="n-ealaíon"/>
+    <item find="nadúrtha" replace="nádúrtha"/>
+    <item find="mor" replace="mór"/>
+    <item find="amhaín" replace="amháin"/>
+    <item find="Éanáir" replace="Eanáir"/>
+    <item find="céadatán" replace="céatadán"/>
+    <item find="nil" replace="níl"/>
+    <item find="spriocdáta" replace="spriocdháta"/>
+    <item find="minigh" replace="mínigh"/>
+    <item find="achmainn" replace="acmhainn"/>
+    <item find="aibheil" replace="áibhéil"/>
+    <item find="fogran" replace="fógrán"/>
+    <item find="uirlís" replace="uirlis"/>
+    <item find="Habháí" replace="Haváí"/>
+    <item find="feithicli" replace="feithiclí"/>
+    <item find="gno" replace="gnó"/>
+    <item find="tháinigh" replace="tháinig"/>
+    <item find="paipéar" replace="páipéar"/>
+    <item find="tabhachtaí" replace="tábhachtaí"/>
+    <item find="deiriochta" replace="déiríochta"/>
+    <item find="cheád" replace="chéad"/>
+    <item find="oráidí" replace="óráidí"/>
+    <item find="sceimeanna" replace="scéimeanna"/>
+    <item find="comisinéir" replace="coimisinéir"/>
+    <item find="solathróidh" replace="soláthróidh"/>
+    <item find="spesialta" replace="speisialta"/>
+    <item find="infrastruchtur" replace="infreastruchtúr"/>
+    <item find="ciuin" replace="ciúin"/>
+    <item find="scatháin" replace="scátháin"/>
+    <item find="roime" replace="roimhe"/>
+    <item find="da" replace="dá"/>
+    <item find="cinealacha" replace="cineálacha"/>
+    <item find="bri" replace="brí"/>
+    <item find="denamh" replace="déanamh"/>
+    <item find="ilghneitheacha" replace="ilghnéitheacha"/>
+    <item find="reamhraiteach" replace="réamhráiteach"/>
+    <item find="Lairge" replace="Láirge"/>
+    <item find="ndeanfadh" replace="ndéanfadh"/>
+    <item find="bagun" replace="bagún"/>
+    <item find="trina" replace="trína"/>
+    <item find="ofigiúil" replace="oifigiúil"/>
+    <item find="notaí" replace="nótaí"/>
+    <item find="milte" replace="mílte"/>
+    <item find="roint" replace="roinnt"/>
+    <item find="adhéanann" replace="a dhéanann"/>
+    <item find="stratéis" replace="straitéis"/>
+    <item find="dlithe" replace="dlíthe"/>
+    <item find="taille" replace="táille"/>
+    <item find="lion" replace="líon"/>
+    <item find="ócaideach" replace="ócáideach"/>
+    <item find="spas" replace="spás"/>
+    <item find="croi" replace="croí"/>
+    <item find="cursaí" replace="cúrsaí"/>
+    <item find="seirbhisí" replace="seirbhísí"/>
+    <item find="ecstais" replace="eacstais"/>
+    <item find="Gaelige" replace="Gaeilge"/>
+    <item find="teilifis" replace="teilifís"/>
+    <item find="reigiún" replace="réigiún"/>
+    <item find="Eirinn" replace="Éirinn"/>
+    <item find="sólas" replace="sólás"/>
+    <item find="rathaíocht" replace="ráthaíocht"/>
+    <item find="luthchleasa" replace="lúthchleasa"/>
+    <item find="túrscéalaí" replace="t-úrscéalaí"/>
+    <item find="ngíomh" replace="ngníomh"/>
+    <item find="cuirdach" replace="cuardach"/>
+    <item find="Rómhanaigh" replace="Rómhánaigh"/>
+    <item find="lamha" replace="lámha"/>
+    <item find="Iosa" replace="Íosa"/>
+    <item find="ilgnéitheach" replace="ilghnéitheach"/>
+    <item find="speisealta" replace="speisialta"/>
+    <item find="bron" replace="brón"/>
+    <item find="ionnanais" replace="ionannais"/>
+    <item find="polatúil" replace="polaitiúil"/>
+    <item find="dairire" replace="dáiríre"/>
+    <item find="rialachan" replace="rialachán"/>
+    <item find="riomphost" replace="ríomhphost"/>
+    <item find="iarnroid" replace="iarnróid"/>
+    <item find="abheith" replace="a bheith"/>
+    <item find="usáid" replace="úsáid"/>
+    <item find="mas" replace="más"/>
+    <item find="pairc" replace="páirc"/>
+    <item find="fiain" replace="fiáin"/>
+    <item find="leine" replace="léine"/>
+    <item find="gearrsceálta" replace="gearrscéalta"/>
+    <item find="chonachtas" replace="chonacthas"/>
+    <item find="bliaina" replace="bliana"/>
+    <item find="fath" replace="fáth"/>
+    <item find="uisci" replace="uiscí"/>
+    <item find="cailliuint" replace="cailliúint"/>
+    <item find="fomhair" replace="fómhair"/>
+    <item find="úsaid" replace="úsáid"/>
+    <item find="comhtheacs" replace="comhthéacs"/>
+    <item find="suiomh" replace="suíomh"/>
+    <item find="Oirr" replace="Oírr"/>
+    <item find="lamh" replace="lámh"/>
+    <item find="tionad" replace="t-ionad"/>
+    <item find="eacnamíocht" replace="eacnamaíocht"/>
+    <item find="carta" replace="cárta"/>
+    <item find="slaintíocht" replace="sláintíocht"/>
+    <item find="cultur" replace="cultúr"/>
+    <item find="ionadu" replace="ionadú"/>
+    <item find="eilithe" replace="éilithe"/>
+    <item find="eís" replace="éis"/>
+    <item find="ionnanas" replace="ionannas"/>
+    <item find="oscalite" replace="oscailte"/>
+    <item find="forim" replace="foirm"/>
+    <item find="taispeán" replace="taispeáin"/>
+    <item find="siniú" replace="síniú"/>
+    <item find="tuarascail" replace="tuarascáil"/>
+    <item find="caighdéan" replace="caighdeán"/>
+    <item find="deanta" replace="déanta"/>
+    <item find="deanaim" replace="déanaim"/>
+    <item find="raidio" replace="raidió"/>
+    <item find="cain" replace="cáin"/>
+    <item find="idirnaisiunta" replace="idirnáisiúnta"/>
+    <item find="fadthéarmach" replace="fadtéarmach"/>
+    <item find="speis" replace="spéis"/>
+    <item find="deagoir" replace="déagóir"/>
+    <item find="laithreach" replace="láithreach"/>
+    <item find="taispéaint" replace="taispeáint"/>
+    <item find="baguin" replace="bagúin"/>
+    <item find="bliadain" replace="bliain"/>
+    <item find="agá" replace="ag a"/>
+    <item find="udarú" replace="údarú"/>
+    <item find="athbreithniú" replace="athbhreithniú"/>
+    <item find="tabhachtach" replace="tábhachtach"/>
+    <item find="éireann" replace="Éireann"/>
+    <item find="scrudú" replace="scrúdú"/>
+    <item find="cuiteamh" replace="cúiteamh"/>
+    <item find="sceala" replace="scéala"/>
+    <item find="dail" replace="dáil"/>
+    <item find="curam" replace="cúram"/>
+    <item find="cairdúil" replace="cairdiúil"/>
+    <item find="cóireál" replace="cóireáil"/>
+    <item find="gnothaí" replace="gnóthaí"/>
+    <item find="seirbhiseach" replace="seirbhíseach"/>
+    <item find="raitis" replace="ráitis"/>
+    <item find="udarais" replace="údaráis"/>
+    <item find="ionnannais" replace="ionannais"/>
+    <item find="eigin" replace="éigin"/>
+    <item find="cuiseanna" replace="cúiseanna"/>
+    <item find="sceim" replace="scéim"/>
+    <item find="ratai" replace="rátaí"/>
+    <item find="noiméad" replace="nóiméad"/>
+    <item find="doicméad" replace="doiciméad"/>
+    <item find="slaintiocht" replace="sláintíocht"/>
+    <item find="igcrích" replace="i gcrích"/>
+    <item find="abhaint" replace="a bhaint"/>
+    <item find="feachana" replace="féachana"/>
+    <item find="coinceap" replace="coincheap"/>
+    <item find="Geailge" replace="Gaeilge"/>
+    <item find="chunna" replace="chun na"/>
+    <item find="áta" replace="atá"/>
+    <item find="braid" replace="bráid"/>
+    <item find="tairgead" replace="t-airgead"/>
+    <item find="timpeallac" replace="timpeallacht"/>
+    <item find="seirbhisi" replace="seirbhísí"/>
+    <item find="tradisiúnta" replace="traidisiúnta"/>
+    <item find="bfhéidir" replace="b'fhéidir"/>
+    <item find="eifeacht" replace="éifeacht"/>
+    <item find="staisiún" replace="stáisiún"/>
+    <item find="glaochanna" replace="glaonna"/>
+    <item find="firínne" replace="fírinne"/>
+    <item find="roba" replace="róba"/>
+    <item find="mead" replace="méad"/>
+    <item find="runaíocht" replace="rúnaíocht"/>
+    <item find="coip" replace="cóip"/>
+    <item find="Gaelgeoir" replace="Gaeilgeoir"/>
+    <item find="cursaíocht" replace="cúrsaíocht"/>
+    <item find="hoglach" replace="hóglach"/>
+    <item find="achur" replace="a chur"/>
+    <item find="crich" replace="crích"/>
+    <item find="oiliuint" replace="oiliúint"/>
+    <item find="infrastruchtúr" replace="infreastruchtúr"/>
+    <item find="oiriúnt" replace="oiriúint"/>
+    <item find="dean" replace="déan"/>
+    <item find="traidisiun" replace="traidisiún"/>
+    <item find="chomhmaith" replace="chomh maith"/>
+    <item find="nadurtha" replace="nádúrtha"/>
+    <item find="taispéantas" replace="taispeántas"/>
+    <item find="reamhra" replace="réamhrá"/>
+    <item find="sochai" replace="sochaí"/>
+    <item find="nadúr" replace="nádúr"/>
+    <item find="déanai" replace="déanaí"/>
+    <item find="suile" replace="súile"/>
+    <item find="diom" replace="díom"/>
+    <item find="leathnach" replace="leathanach"/>
+    <item find="láithréan" replace="láithreán"/>
+    <item find="firinne" replace="fírinne"/>
+    <item find="crannn" replace="crann"/>
+    <item find="Eireann" replace="Éireann"/>
+    <item find="foglaim" replace="foghlaim"/>
+    <item find="seachtainiúl" replace="seachtainiúil"/>
+    <item find="larnach" replace="lárnach"/>
+    <item find="culghairm" replace="cúlghairm"/>
+    <item find="oiriunach" replace="oiriúnach"/>
+    <item find="scribhinn" replace="scríbhinn"/>
+    <item find="haite" replace="háite"/>
+    <item find="duradh" replace="dúradh"/>
+    <item find="greásáin" replace="gréasáin"/>
+    <item find="la" replace="lá"/>
+    <item find="ceadunais" replace="ceadúnais"/>
+    <item find="forsa" replace="fórsa"/>
+    <item find="tearmaí" replace="téarmaí"/>
+    <item find="héireann" replace="hÉireann"/>
+    <item find="comhthaite" replace="comhtháite"/>
+    <item find="said" replace="siad"/>
+    <item find="plasan" replace="plásán"/>
+    <item find="móran" replace="mórán"/>
+    <item find="aitreabhach" replace="áitreabhach"/>
+    <item find="chuna" replace="chun a"/>
+    <item find="lanúin" replace="lánúin"/>
+    <item find="coimisineiri" replace="coimisinéirí"/>
+    <item find="réasun" replace="réasún"/>
+    <item find="saorail" replace="saoráil"/>
+    <item find="gniomhú" replace="gníomhú"/>
+    <item find="piosa" replace="píosa"/>
+    <item find="tréimse" replace="tréimhse"/>
+    <item find="síochana" replace="síochána"/>
+    <item find="scáiléan" replace="scáileán"/>
+    <item find="uafasach" replace="uafásach"/>
+    <item find="vearsa" replace="véarsa"/>
+    <item find="cuirtéis" replace="cúirtéis"/>
+    <item find="túdarás" replace="t-údarás"/>
+    <item find="mile" replace="míle"/>
+    <item find="Éanair" replace="Eanáir"/>
+    <item find="scribhinni" replace="scríbhinní"/>
+    <item find="Gaedhael" replace="Gael"/>
+    <item find="reamhrádh" replace="réamhrá"/>
+    <item find="comisinéara" replace="coimisinéara"/>
+    <item find="foill" replace="fóill"/>
+    <item find="comhreir" replace="comhréir"/>
+    <item find="cnamh" replace="cnámh"/>
+    <item find="píóg" replace="pióg"/>
+    <item find="slandála" replace="slándála"/>
+    <item find="tángadar" replace="thángadar"/>
+    <item find="lionadh" replace="líonadh"/>
+    <item find="diploma" replace="dioplóma"/>
+    <item find="pleanail" replace="pleanáil"/>
+    <item find="mna" replace="mná"/>
+    <item find="amarach" replace="amárach"/>
+    <item find=":\\:" replace="∖"/>
+    <item find="macnamh" replace="machnamh"/>
+    <item find="curamach" replace="cúramach"/>
+    <item find="staideir" replace="staidéir"/>
+    <item find="díoma" replace="díomá"/>
+    <item find="stáidéir" replace="staidéir"/>
+    <item find="ealaine" replace="ealaíne"/>
+    <item find="agua" replace="agus"/>
+    <item find="alcoil" replace="alcóil"/>
+    <item find="leisan" replace="leis an"/>
+    <item find="foraim" replace="fóraim"/>
+    <item find="teastail" replace="teastáil"/>
+    <item find="ceile" replace="céile"/>
+    <item find="minithe" replace="mínithe"/>
+    <item find="clarlann" replace="clárlann"/>
+    <item find="ocáidí" replace="ócáidí"/>
+    <item find="folair" replace="foláir"/>
+    <item find="grupa" replace="grúpa"/>
+    <item find="lach" replace="lách"/>
+    <item find="deanfar" replace="déanfar"/>
+    <item find="meideanna" replace="méideanna"/>
+    <item find="breithiunas" replace="breithiúnas"/>
+    <item find="beim" replace="béim"/>
+    <item find="isé" replace="is é"/>
+    <item find="fe" replace="faoi"/>
+    <item find="hEireann" replace="hÉireann"/>
+    <item find="abálta" replace="ábalta"/>
+    <item find="geaitsíocht" replace="geáitsíocht"/>
+    <item find="inion" replace="iníon"/>
+    <item find="iomportail" replace="iompórtáil"/>
+    <item find="gniomhartha" replace="gníomhartha"/>
+    <item find="párliament" replace="parlaimint"/>
+    <item find="poilineachta" replace="póilíneachta"/>
+    <item find="failte" replace="fáilte"/>
+    <item find="comoradh" replace="comóradh"/>
+    <item find="fasta" replace="fásta"/>
+    <item find="caighdean" replace="caighdeán"/>
+    <item find="sasamh" replace="sásamh"/>
+    <item find="usáide" replace="úsáide"/>
+    <item find="baid" replace="báid"/>
+    <item find="radh" replace="rá"/>
+    <item find="prataí" replace="prátaí"/>
+    <item find="sóchmhainní" replace="sócmhainní"/>
+    <item find="eileamh" replace="éileamh"/>
+    <item find="dlithiúil" replace="dlíthiúil"/>
+    <item find="siolta" replace="síolta"/>
+    <item find="ceim" replace="céim"/>
+    <item find="fritheadh" replace="fuarthas"/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="tUas."/>
+    <word exception="sp."/>
+    <word exception="Ean."/>
+    <word exception="srl."/>
+    <word exception="Aib."/>
+    <word exception="Uas."/>
+    <word exception="cc."/>
+    <word exception="lch."/>
+    <word exception="Dr."/>
+    <word exception="Br."/>
+    <word exception="Teo."/>
+    <word exception="Mrs."/>
+    <word exception="Samh."/>
+    <word exception="iml."/>
+    <word exception="Sr."/>
+    <word exception="Noll."/>
+    <word exception="teil."/>
+    <word exception="Fr."/>
+    <word exception="Lún."/>
+    <word exception="pp."/>
+    <word exception="ibid."/>
+    <word exception="Cho."/>
+    <word exception="lgh."/>
+    <word exception="Ch."/>
+    <word exception="Cd."/>
+    <word exception="uimh."/>
+    <word exception="op."/>
+    <word exception="St."/>
+    <word exception="sbh."/>
+    <word exception="Meith."/>
+    <word exception="Ms."/>
+    <word exception="Fómh."/>
+    <word exception="sh."/>
+    <word exception="Ltd."/>
+    <word exception="Bn."/>
+    <word exception="Co."/>
+    <word exception="Mr."/>
+    <word exception="Eag."/>
+    <word exception="tSr."/>
+    <word exception="hor."/>
+    <word exception="Fig."/>
+    <word exception="Már."/>
+    <word exception="no."/>
+    <word exception="tAth."/>
+    <word exception="cit."/>
+    <word exception="sq."/>
+    <word exception="bl."/>
+    <word exception="rl."/>
+    <word exception="cf."/>
+    <word exception="gCo."/>
+    <word exception="Inc."/>
+    <word exception="tr."/>
+    <word exception="tOll."/>
+    <word exception="taesp."/>
+    <word exception="Beal."/>
+    <word exception="Sc."/>
+    <word exception="Íocht."/>
+    <word exception="Feabh."/>
+    <word exception="Ath."/>
+    <word exception="Jr."/>
+    <word exception="etc."/>
+    <word exception="caib."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="MPanna"/>
+    <word exception="SMSanna"/>
+    <word exception="PRSAanna"/>
+    <word exception="CDanna"/>
+    <word exception="MLAanna"/>
+    <word exception="EGTeo"/>
+    <word exception="TDanna"/>
+    <word exception="SUVanna"/>
+    <word exception="HEANet"/>
+    <word exception="LEDanna"/>
+    <word exception="DVDanna"/>
+    <word exception="MHz"/>
+    <word exception="OOo"/>
+    <word exception="PDFanna"/>
+    <word exception="URLanna"/>
+    <word exception="CVanna"/>
+    <word exception="SPCanna"/>
+    <word exception="GHz"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

@@ -1,0 +1,3093 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find=":macska8:" replace=""/>
+    <item find=":hangosbeszélő:" replace=""/>
+    <item find="Dvorák.*" replace="Dvořák"/>
+    <item find=":gyík:" replace="年"/>
+    <item find="dienstag" replace="Dienstag"/>
+    <item find=":x4:" replace=""/>
+    <item find=":ász:" replace=""/>
+    <item find=":füzet:" replace=""/>
+    <item find=":zokni:" replace="罹"/>
+    <item find=":birkózás:" replace="祿"/>
+    <item find=":telefon5:" replace=""/>
+    <item find=":üres halmaz:" replace="∅"/>
+    <item find=":ököl2:" replace=""/>
+    <item find=":oroszlán:" replace="女"/>
+    <item find="hogz" replace="hogy"/>
+    <item find=":zászló4:" replace="⚐"/>
+    <item find="siserehad.*" replace="siserahad"/>
+    <item find=":7/8:" replace="⅞"/>
+    <item find=":megafon3:" replace=""/>
+    <item find="együttélő.*" replace="együtt élő"/>
+    <item find=":virág7:" replace=""/>
+    <item find=":motorcsónak2:" replace=""/>
+    <item find=":cipő3:" replace=""/>
+    <item find=":^K:" replace="ᴷ"/>
+    <item find=":íj:" replace=""/>
+    <item find=":szandál:" replace=""/>
+    <item find=":rizsgombóc:" replace=""/>
+    <item find="Billel" replace="Bill-lel"/>
+    <item find="szaltó mortale.*" replace="salto mortale"/>
+    <item find=":toll:" replace=""/>
+    <item find="kézenfogva" replace="kézen fogva"/>
+    <item find=".*^6.*" replace="⁶"/>
+    <item find=":^delta:" replace="ᵟ"/>
+    <item find=":csillag3:" replace=""/>
+    <item find=":golf:" replace=""/>
+    <item find=":hajnal:" replace=""/>
+    <item find="légiforgalmi.*" replace="légi forgalmi"/>
+    <item find=":^fi:" replace="ᵠ"/>
+    <item find=":kesztyű:" replace="理"/>
+    <item find=":körte:" replace=""/>
+    <item find="E vitamin.*" replace="E-vitamin"/>
+    <item find=":zombi:" replace="履"/>
+    <item find="kézpénz" replace="készpénz"/>
+    <item find=":^4:" replace="⁴"/>
+    <item find=":részhalmaza:" replace="⊂"/>
+    <item find=":félhang:" replace="텞"/>
+    <item find=":hullám:" replace=""/>
+    <item find=":bé:" replace="♭"/>
+    <item find="szóvégi.*" replace="szó végi"/>
+    <item find=":disznó2:" replace=""/>
+    <item find=":Tau:" replace="Τ"/>
+    <item find=":vagon:" replace=""/>
+    <item find="soronkívűl.*" replace="soron kívül"/>
+    <item find="nagyméretű.*" replace="nagy méretű"/>
+    <item find=":hrivnya:" replace="₴"/>
+    <item find=":cigaretta:" replace=""/>
+    <item find=":szendvics:" replace="索"/>
+    <item find=":lyuk:" replace=""/>
+    <item find=":mobil6:" replace=""/>
+    <item find=":csillagszóró:" replace=""/>
+    <item find=":^T:" replace="ᵀ"/>
+    <item find=":mecset:" replace=""/>
+    <item find=":mókus:" replace=""/>
+    <item find=":billentyűzet:" replace="⌨"/>
+    <item find=":burgonya:" replace="凜"/>
+    <item find=":háromszögű zászló:" replace=""/>
+    <item find=":7h:" replace=""/>
+    <item find=":tűz:" replace=""/>
+    <item find=":desszert:" replace=""/>
+    <item find=":torony:" replace=""/>
+    <item find=":rosszkedvű:" replace=""/>
+    <item find="orvadász.*" replace="orvvadász"/>
+    <item find=":újrahasznosítás:" replace="♲"/>
+    <item find="teakfá.*" replace="tíkfá"/>
+    <item find="öthónapos.*" replace="öt hónapos"/>
+    <item find=":Ióta:" replace="Ι"/>
+    <item find=":taps:" replace=""/>
+    <item find=":rádiógomb:" replace=""/>
+    <item find=":csepp2:" replace=""/>
+    <item find=":_8:" replace="₈"/>
+    <item find=":ujj:" replace=""/>
+    <item find=":keksz:" replace=""/>
+    <item find=":szigma:" replace="σ"/>
+    <item find=":bika2:" replace="♉"/>
+    <item find=":macska4:" replace=""/>
+    <item find=":nem egyenlő:" replace="≠"/>
+    <item find="A vitamin" replace="A-vitamin"/>
+    <item find="B. Ú. É. K." replace="BÚÉK"/>
+    <item find=":sziget:" replace=""/>
+    <item find=":cipő:" replace=""/>
+    <item find=":tűzoltóautó:" replace=""/>
+    <item find=":tartós papír:" replace="♾"/>
+    <item find="rublika.*" replace="rubrika"/>
+    <item find=":treff:" replace="♣"/>
+    <item find=":jelölőnégyzet4:" replace=""/>
+    <item find=":sál:" replace="泥"/>
+    <item find=":szív2:" replace=""/>
+    <item find="másfélmillió.*" replace="másfél millió"/>
+    <item find=":?2:" replace="❔"/>
+    <item find=":macska6:" replace=""/>
+    <item find=":ábécé:" replace=""/>
+    <item find=":csók:" replace=""/>
+    <item find="legelől" replace="legelöl"/>
+    <item find="Ivettől" replace="Ivett-től"/>
+    <item find="sete-sut.*" replace="setesut"/>
+    <item find=":khi:" replace="χ"/>
+    <item find="cigányasszony.*" replace="cigány asszony"/>
+    <item find=":tojás:" replace="讀"/>
+    <item find="mennyegző.*" replace="menyegző"/>
+    <item find="nagyértékű.*" replace="nagy értékű"/>
+    <item find=":kulcs:" replace=""/>
+    <item find="partició.*" replace="partíció"/>
+    <item find=":múzeum:" replace=""/>
+    <item find="Sydneyv.*" replace="Sydney-v"/>
+    <item find=":naptár:" replace=""/>
+    <item find=":postaláda:" replace=""/>
+    <item find="copfstílus.*" replace="copf stílus"/>
+    <item find=":szerencse:" replace="爛"/>
+    <item find="papíralapú.*" replace="papír alapú"/>
+    <item find=":teherautó2:" replace=""/>
+    <item find="centirozás.*" replace="centrírozás"/>
+    <item find=":bank:" replace=""/>
+    <item find="héthónapos.*" replace="hét hónapos"/>
+    <item find=":béta:" replace="β"/>
+    <item find=":^U:" replace="ᵁ"/>
+    <item find=":újság:" replace=""/>
+    <item find="teljes körűen" replace="teljeskörűen"/>
+    <item find=":zebra2:" replace=""/>
+    <item find=":katica:" replace=""/>
+    <item find="eszenci.*" replace="esszenci"/>
+    <item find=":fekete kör:" replace="⚫"/>
+    <item find=":bőr5:" replace=""/>
+    <item find=":hang:" replace=""/>
+    <item find=":káró2:" replace="♢"/>
+    <item find="adatbáziskezelő.*" replace="adatbázis-kezelő"/>
+    <item find=":béka:" replace=""/>
+    <item find="színusz" replace="szinusz"/>
+    <item find=":macska7:" replace=""/>
+    <item find=":orvosi:" replace="⚕"/>
+    <item find=":leborulás:" replace=""/>
+    <item find=":paprika:" replace=""/>
+    <item find=":macska9:" replace=""/>
+    <item find="naív.*" replace="naiv"/>
+    <item find=":düh:" replace=""/>
+    <item find=":játékgép:" replace=""/>
+    <item find="hétközbeni.*" replace="hét közbeni"/>
+    <item find="betü" replace="betű"/>
+    <item find=".*^8.*" replace="⁸"/>
+    <item find="többszázezer.*" replace="több száz ezer"/>
+    <item find=":telihold2:" replace=""/>
+    <item find=":szív4:" replace=""/>
+    <item find=":ivóvíz2:" replace=""/>
+    <item find=":káró:" replace="♦"/>
+    <item find="magasrendű.*" replace="magas rendű"/>
+    <item find=":ünnep:" replace="壟"/>
+    <item find=":^G:" replace="ᴳ"/>
+    <item find="follyon" replace="folyjon"/>
+    <item find="nagyon figyelemre méltó.*" replace="nagyon figyelemreméltó"/>
+    <item find="túrós a háta" replace="túros a háta"/>
+    <item find=".*^+.*" replace="⁺"/>
+    <item find="cim" replace="cím"/>
+    <item find="szervesanyagok.*" replace="szerves anyagok"/>
+    <item find=":csigaház:" replace=""/>
+    <item find=":dzsinn:" replace="吏"/>
+    <item find=":^y:" replace="ʸ"/>
+    <item find=":kábelvasút:" replace=""/>
+    <item find=":jobb5:" replace=""/>
+    <item find=":család:" replace=""/>
+    <item find=":diagram2:" replace=""/>
+    <item find=":nagy kör2:" replace="⬤"/>
+    <item find=":dühös2:" replace="郎"/>
+    <item find="hidegvize.*" replace="hideg vize"/>
+    <item find=":mérleg:" replace="⚖"/>
+    <item find="had legyek" replace="hadd legyek"/>
+    <item find=".*(cc)" replace=""/>
+    <item find=":haha:" replace=""/>
+    <item find=":hangjegyek:" replace="♫"/>
+    <item find=":^k:" replace="ᵏ"/>
+    <item find="taj-szám.*" replace="tajszám"/>
+    <item find=":sün:" replace="璉"/>
+    <item find=":dokumentum2:" replace=""/>
+    <item find=":üpszilon:" replace="υ"/>
+    <item find=":bőr1:" replace=""/>
+    <item find="szimbólikus.*" replace="szimbolikus"/>
+    <item find=":szöveg2:" replace=""/>
+    <item find=":csúszka:" replace=""/>
+    <item find=":parciális:" replace="∂"/>
+    <item find=":kereszt2:" replace="♯"/>
+    <item find=":igen2:" replace=""/>
+    <item find="előre gyártott.*" replace="előregyártott"/>
+    <item find="sokezer.*" replace="sok ezer"/>
+    <item find=":stopper:" replace="⏱"/>
+    <item find=":férfi:" replace=""/>
+    <item find="föllé" replace="fölé"/>
+    <item find=":egér:" replace=""/>
+    <item find=":bitcoin:" replace="₿"/>
+    <item find="nemnagyon" replace="nem nagyon"/>
+    <item find=":japán:" replace=""/>
+    <item find=":heverő:" replace=""/>
+    <item find=":lap3:" replace=""/>
+    <item find=":ital:" replace="磻"/>
+    <item find=":jelölőnégyzet2:" replace="☑"/>
+    <item find=":bivaly:" replace=""/>
+    <item find="öszes" replace="összes"/>
+    <item find=":^f:" replace="ᶠ"/>
+    <item find=":tollhegy2:" replace="✒"/>
+    <item find=":masszázs:" replace=""/>
+    <item find="freitag" replace="Freitag"/>
+    <item find="pekkes" replace="peches"/>
+    <item find="jótanács.*" replace="jó tanács"/>
+    <item find=":manó:" replace="利"/>
+    <item find=":sín:" replace=""/>
+    <item find=":boríték5:" replace=""/>
+    <item find="penicilin.*" replace="penicillin"/>
+    <item find=":varázsló:" replace="慄"/>
+    <item find=":mandarin:" replace=""/>
+    <item find=":ceruza2:" replace="✏"/>
+    <item find=":gamma:" replace="γ"/>
+    <item find=":vaku:" replace=""/>
+    <item find=":^ióta:" replace="ᶥ"/>
+    <item find=":híd:" replace=""/>
+    <item find=":*:" replace="·"/>
+    <item find="Szabadság-híd.*" replace="Szabadság híd"/>
+    <item find="ventillátor.*" replace="ventilátor"/>
+    <item find="teljes-körű" replace="teljes körű"/>
+    <item find=":Béta:" replace="Β"/>
+    <item find=":indulás:" replace=""/>
+    <item find=":oké2:" replace=""/>
+    <item find=":^):" replace="⁾"/>
+    <item find=":Gamma:" replace="Γ"/>
+    <item find=":atom:" replace="⚛"/>
+    <item find=":útépítés:" replace=""/>
+    <item find="ftp" replace="FTP"/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find=":gyalog2:" replace="♟"/>
+    <item find="első fokú.*" replace="elsőfokú"/>
+    <item find="semmennyi.*" replace="semennyi"/>
+    <item find="örökkön-örökké" replace="örökkön örökké"/>
+    <item find=":_i:" replace="ᵢ"/>
+    <item find=":fl:" replace="ﬂ"/>
+    <item find=":pizza:" replace=""/>
+    <item find="csodaszép.*" replace="csoda szép"/>
+    <item find="semmekkora.*" replace="semekkora"/>
+    <item find="hosszantartó.*" replace="hosszan tartó"/>
+    <item find="new yorki.*" replace="New York-i"/>
+    <item find=":rajzszög2:" replace=""/>
+    <item find=":treff2:" replace="♧"/>
+    <item find=":\\:" replace="∖"/>
+    <item find=":olló:" replace="✂"/>
+    <item find=":eleme:" replace="∈"/>
+    <item find=":^H:" replace="ᴴ"/>
+    <item find="vérszerinti.*" replace="vér szerinti"/>
+    <item find=":szabadság:" replace=""/>
+    <item find=":barack:" replace=""/>
+    <item find="&lt;--&gt;" replace="↔"/>
+    <item find=":hegymászás:" replace="輪"/>
+    <item find="többszázmillió.*" replace="több száz millió"/>
+    <item find="Citroen.*" replace="Citroën"/>
+    <item find=":csillag2:" replace="☆"/>
+    <item find=":hotel2:" replace=""/>
+    <item find="zloty.*" replace="złoty"/>
+    <item find=":puszi2:" replace=""/>
+    <item find=":arany:" replace="磊"/>
+    <item find="figyelembevéve" replace="figyelembe véve"/>
+    <item find=":leopárd:" replace=""/>
+    <item find=":brr:" replace=""/>
+    <item find="eFt-.*" replace="E Ft-"/>
+    <item find=":utolsó negyed:" replace=""/>
+    <item find=":busz2:" replace=""/>
+    <item find=":csokor:" replace=""/>
+    <item find="T-alakú.*" replace="T alakú"/>
+    <item find="izület.*" replace="ízület"/>
+    <item find="ezidőtájt" replace="ez idő tájt"/>
+    <item find=":rombusz:" replace="◊"/>
+    <item find=":nők:" replace=""/>
+    <item find=":baba4:" replace=""/>
+    <item find="melegvize.*" replace="meleg vize"/>
+    <item find="Lódz.*" replace="Łódź"/>
+    <item find=":görög kereszt2:" replace="✙"/>
+    <item find=":könyvjelző:" replace=""/>
+    <item find=":^c:" replace="ᶜ"/>
+    <item find="szeszesitalok.*" replace="szeszes italok"/>
+    <item find="kíváló.*" replace="kiváló"/>
+    <item find="Párizs–Dakar-rali.*" replace="Párizs–Dakar rali"/>
+    <item find=":ünnep3:" replace=""/>
+    <item find="rövidtávú.*" replace="rövid távú"/>
+    <item find=":golf2:" replace="⛳"/>
+    <item find="pro és kontra" replace="pró és kontra"/>
+    <item find=":boríték8:" replace=""/>
+    <item find="figyelembevevő.*" replace="figyelembe vevő"/>
+    <item find=":hoki2:" replace=""/>
+    <item find=":':" replace="’"/>
+    <item find=":kép:" replace=""/>
+    <item find=":trombita:" replace=""/>
+    <item find=":izgatott:" replace="朗"/>
+    <item find=":nyomtató:" replace=""/>
+    <item find=":kelta kereszt:" replace=""/>
+    <item find="nagyteljesítményű.*" replace="nagy teljesítményű"/>
+    <item find="pozicíó.*" replace="pozíció"/>
+    <item find=":hal2:" replace=""/>
+    <item find=":táska3:" replace=""/>
+    <item find=":autó3:" replace=""/>
+    <item find=":o:" replace="⭕"/>
+    <item find="semmerre" replace="semerre"/>
+    <item find=":omikron:" replace="ο"/>
+    <item find=":ököl3:" replace="亂"/>
+    <item find=":halsüti:" replace=""/>
+    <item find="Vietnam.*" replace="Vietnám"/>
+    <item find="előszőr" replace="először"/>
+    <item find="passzív ház" replace="passzívház"/>
+    <item find=":ÉNY2:" replace="⇖"/>
+    <item find=":kutya3:" replace=""/>
+    <item find=":^E:" replace="ᴱ"/>
+    <item find="márcsak" replace="már csak"/>
+    <item find=":pipa2:" replace="✔"/>
+    <item find=":robogó:" replace=""/>
+    <item find=":csengő4:" replace=""/>
+    <item find=":egér4:" replace=""/>
+    <item find=":télanyó:" replace="虜"/>
+    <item find="--&gt;" replace="→"/>
+    <item find="on-line.*" replace="online"/>
+    <item find=":kaja:" replace="率"/>
+    <item find=":mozi:" replace=""/>
+    <item find=":feljegyzés:" replace=""/>
+    <item find=":robot:" replace="烙"/>
+    <item find="munkaközben" replace="munka közben"/>
+    <item find="faárú.*" replace="faáru"/>
+    <item find=":nyilak:" replace=""/>
+    <item find=":vitorlás:" replace="⛵"/>
+    <item find=":este:" replace=""/>
+    <item find="nyílat" replace="nyilat"/>
+    <item find="véghezvisz" replace="véghez visz"/>
+    <item find="fejbelövés.*" replace="fejbe lövés"/>
+    <item find="nagytömegű.*" replace="nagy tömegű"/>
+    <item find="érdekképviseleti.*" replace="érdek-képviseleti"/>
+    <item find=":szaturnusz:" replace="♄"/>
+    <item find=":keret:" replace=""/>
+    <item find=":rom:" replace=""/>
+    <item find="napéjegyenlőség.*" replace="nap-éj egyenlőség"/>
+    <item find=":szerelmeslevél:" replace=""/>
+    <item find="http:\\" replace="http://"/>
+    <item find=":Lambda:" replace="Λ"/>
+    <item find=":negyedik gyök:" replace="∜"/>
+    <item find=":táska2:" replace=""/>
+    <item find="késöbb" replace="később"/>
+    <item find=":D:" replace="↓"/>
+    <item find=":dobókocka:" replace=""/>
+    <item find="nyakonvágás.*" replace="nyakon vágás"/>
+    <item find=":szörny:" replace=""/>
+    <item find=":^9:" replace="⁹"/>
+    <item find=":oké:" replace=""/>
+    <item find=":vetítőgép:" replace=""/>
+    <item find="neylon.*" replace="nejlon"/>
+    <item find="másfélszáz.*" replace="másfél száz"/>
+    <item find=":bohóc:" replace="嵐"/>
+    <item find="follyék" replace="folyjék"/>
+    <item find=":étel:" replace="菱"/>
+    <item find="satanizmus.*" replace="sátánizmus"/>
+    <item find=":ház:" replace=""/>
+    <item find="észre térítés.*" replace="észretérítés"/>
+    <item find=":rák2:" replace="戀"/>
+    <item find=":Fi:" replace="Φ"/>
+    <item find="nem utolsó sorban" replace="nem utolsósorban"/>
+    <item find=":teve2:" replace=""/>
+    <item find="semifélé.*" replace="semmifélé"/>
+    <item find=":3h:" replace=""/>
+    <item find=":katalógus:" replace=""/>
+    <item find="cserbenhagy.*" replace="cserben hagy"/>
+    <item find=":stop:" replace=""/>
+    <item find=":lombik:" replace="⚗"/>
+    <item find="ehelyütt" replace="e helyütt"/>
+    <item find=":állomás:" replace=""/>
+    <item find="ésszerű.*" replace="észszerű"/>
+    <item find=":^théta:" replace="ᶿ"/>
+    <item find="jelentősség.*" replace="jelentőség"/>
+    <item find="Babettől" replace="Babett-től"/>
+    <item find=":pók:" replace=""/>
+    <item find=":szivárvány:" replace=""/>
+    <item find=":csengő2:" replace=""/>
+    <item find=":köbgyök:" replace="∛"/>
+    <item find=":könyv:" replace=""/>
+    <item find=":postaláda4:" replace=""/>
+    <item find=":hangjegy2:" replace="♪"/>
+    <item find=":100:" replace=""/>
+    <item find=":dobókocka2:" replace="⚁"/>
+    <item find=":majom:" replace=""/>
+    <item find=":elem:" replace=""/>
+    <item find=".*^5.*" replace="⁵"/>
+    <item find=":^V:" replace="ⱽ"/>
+    <item find=":tej:" replace="拏"/>
+    <item find=":grimasz:" replace=""/>
+    <item find=":boksz:" replace="壘"/>
+    <item find=":dobókocka1:" replace="⚀"/>
+    <item find=":villamos:" replace=""/>
+    <item find=":tollhegy:" replace="✑"/>
+    <item find=":zászlók2:" replace=""/>
+    <item find=":lanovka:" replace=""/>
+    <item find=":futó:" replace="♗"/>
+    <item find=":leves2:" replace=""/>
+    <item find=":Théta:" replace="Θ"/>
+    <item find=":tizedhatod hang:" replace="텡"/>
+    <item find=":koala:" replace=""/>
+    <item find="rubeól.*" replace="rubeol"/>
+    <item find="Sydneyi.*" replace="Sydney-i"/>
+    <item find=":személy2:" replace=""/>
+    <item find="kilógram.*" replace="kilogramm"/>
+    <item find=":bőr3:" replace=""/>
+    <item find="lodzi.*" replace="łódźi"/>
+    <item find=":koktél:" replace=""/>
+    <item find=":cd:" replace=""/>
+    <item find=":gyógyszer:" replace=""/>
+    <item find="Duna-Tisza" replace="Duna–Tisza"/>
+    <item find=":kristálygömb:" replace=""/>
+    <item find="honfoglaláskori.*" replace="honfoglalás kori"/>
+    <item find=":építkezés:" replace=""/>
+    <item find=":neptunusz:" replace="♆"/>
+    <item find="asszimmetrikus.*" replace="aszimmetrikus"/>
+    <item find=":hot dog:" replace=""/>
+    <item find=":hóember:" replace="☃"/>
+    <item find=":függővasút:" replace=""/>
+    <item find=":pingpong:" replace=""/>
+    <item find=":szív7:" replace=""/>
+    <item find=":^I:" replace="ᴵ"/>
+    <item find=":violinkulcs:" replace="턞"/>
+    <item find=":számítógép2:" replace=""/>
+    <item find=":injekció:" replace=""/>
+    <item find=":félszünet:" replace="턼"/>
+    <item find=":rúzsfolt:" replace=""/>
+    <item find="egésznapos.*" replace="egész napos"/>
+    <item find=":le3:" replace=""/>
+    <item find=":úszás:" replace=""/>
+    <item find=":távcső:" replace=""/>
+    <item find=":laza:" replace=""/>
+    <item find=":sapka2:" replace=""/>
+    <item find=":^h:" replace="ʰ"/>
+    <item find="nagyfelbontású.*" replace="nagy felbontású"/>
+    <item find="amikoris" replace="amikor is"/>
+    <item find=":átfedés:" replace=""/>
+    <item find=":motor:" replace=""/>
+    <item find=":földimogyoró:" replace="樂"/>
+    <item find=":integrál:" replace="∫"/>
+    <item find=":tündér:" replace="栗"/>
+    <item find=":bamba:" replace=""/>
+    <item find=":Kappa:" replace="Κ"/>
+    <item find="megfed" replace="megfedd"/>
+    <item find=":^g:" replace="ᵍ"/>
+    <item find=":Japán:" replace=""/>
+    <item find=":^w:" replace="ʷ"/>
+    <item find="egyhelyben" replace="egy helyben"/>
+    <item find=":mappa5:" replace=""/>
+    <item find=":mobil5:" replace=""/>
+    <item find="zsüri.*" replace="zsűri"/>
+    <item find="többszázan" replace="több százan"/>
+    <item find="welnesszel" replace="wellnesszel"/>
+    <item find=":nagy négyzet3:" replace="⬛"/>
+    <item find=":kulcs2:" replace=""/>
+    <item find=":boríték6:" replace=""/>
+    <item find=":felhő:" replace="☁"/>
+    <item find="dezsavu.*" replace="déjà vu"/>
+    <item find=":ejnye:" replace=""/>
+    <item find="nyomonkövet" replace="nyomon követ"/>
+    <item find="eggyütt" replace="együtt"/>
+    <item find="tizet" replace="tízet"/>
+    <item find="végsősoron" replace="végső soron"/>
+    <item find=":khi-ró:" replace="☧"/>
+    <item find=":DK2:" replace="⇘"/>
+    <item find=":csók2:" replace=""/>
+    <item find=":krokodil:" replace=""/>
+    <item find=":király2:" replace="♚"/>
+    <item find=":jen2:" replace=""/>
+    <item find=":pénzváltó:" replace=""/>
+    <item find="nagyfokú.*" replace="nagy fokú"/>
+    <item find="tüzijáték.*" replace="tűzijáték"/>
+    <item find=":csapó:" replace=""/>
+    <item find=":bálna2:" replace=""/>
+    <item find=":naptár2:" replace=""/>
+    <item find=":szánkó:" replace=""/>
+    <item find=":tintahal:" replace="撚"/>
+    <item find="Zsanettel" replace="Zsanett-tel"/>
+    <item find=":kappa:" replace="κ"/>
+    <item find="hóközbeni.*" replace="hó közbeni"/>
+    <item find=":száj2:" replace=""/>
+    <item find=":KNY:" replace="↔"/>
+    <item find=":kör:" replace="○"/>
+    <item find=":esernyő:" replace="☂"/>
+    <item find=":vulkán2:" replace=""/>
+    <item find=":Delta:" replace="Δ"/>
+    <item find=":iszlám:" replace="☪"/>
+    <item find=":hazudós:" replace="拉"/>
+    <item find="lessz" replace="lesz"/>
+    <item find=":nyomtató2:" replace=""/>
+    <item find=":8.30:" replace=""/>
+    <item find=":dango:" replace=""/>
+    <item find=":diagram4:" replace=""/>
+    <item find=":videokamera:" replace=""/>
+    <item find=":csokor2:" replace=""/>
+    <item find=":szaké:" replace=""/>
+    <item find=":zászló2:" replace=""/>
+    <item find=":hegedű:" replace=""/>
+    <item find=":^e:" replace="ᵉ"/>
+    <item find=":flopi:" replace=""/>
+    <item find="rákövetkező.*" replace="rá következő"/>
+    <item find=":napos:" replace="☀"/>
+    <item find=":babák:" replace=""/>
+    <item find=":kalóz2:" replace=""/>
+    <item find="megintcsak" replace="megint csak"/>
+    <item find=":állat:" replace=""/>
+    <item find="Zsanettől" replace="Zsanett-től"/>
+    <item find=":szörf:" replace=""/>
+    <item find=":konfetti:" replace=""/>
+    <item find=":csavarkulcs:" replace=""/>
+    <item find=":lap2:" replace=""/>
+    <item find="kezelésbevétel.*" replace="kezelésbe vétel"/>
+    <item find=":rosszkedv:" replace=""/>
+    <item find=":tehén:" replace=""/>
+    <item find=":bal4:" replace=""/>
+    <item find="Sydneyr.*" replace="Sydney-r"/>
+    <item find=":^Fi:" replace="ᶲ"/>
+    <item find="Árpád-híd.*" replace="Árpád híd"/>
+    <item find="nemzetiszínű.*" replace="nemzeti színű"/>
+    <item find="Skoda" replace="Škoda"/>
+    <item find=":strand:" replace=""/>
+    <item find=":diagram:" replace=""/>
+    <item find="nagyra törő.*" replace="nagyratörő"/>
+    <item find=":betű:" replace=""/>
+    <item find="i.e." replace="i. e."/>
+    <item find="többszáz" replace="több száz"/>
+    <item find=":ruha2:" replace=""/>
+    <item find=":kör2:" replace="●"/>
+    <item find="gúzsbakötés.*" replace="gúzsba kötés"/>
+    <item find=":telefon:" replace="☎"/>
+    <item find=":rendőrautó2:" replace=""/>
+    <item find=":hmm:" replace="樂"/>
+    <item find=":elefánt:" replace=""/>
+    <item find="hosszútávú.*" replace="hosszú távú"/>
+    <item find=":delta:" replace="δ"/>
+    <item find=":_t:" replace="ₜ"/>
+    <item find="muszály" replace="muszáj"/>
+    <item find="kompakt lemez.*" replace="kompaktlemez"/>
+    <item find="Moliére.*" replace="Molière"/>
+    <item find=":kamera:" replace=""/>
+    <item find="biennále.*" replace="biennálé"/>
+    <item find="sokszáz" replace="sok száz"/>
+    <item find="kislétszámú.*" replace="kis létszámú"/>
+    <item find=":^5:" replace="⁵"/>
+    <item find="másfélezer.*" replace="másfél ezer"/>
+    <item find=":kaki:" replace=""/>
+    <item find=":ivóvíz:" replace=""/>
+    <item find=":3/4:" replace="¾"/>
+    <item find="U-alakú.*" replace="U alakú"/>
+    <item find="harmónikus.*" replace="harmonikus"/>
+    <item find=":róka:" replace="力"/>
+    <item find=":telefon3:" replace="✆"/>
+    <item find=":5h:" replace=""/>
+    <item find="nejlon harisny.*" replace="nejlonharisny"/>
+    <item find="Skodá.*" replace="Škodá"/>
+    <item find="higyjük" replace="higgyük"/>
+    <item find=":monokli:" replace="類"/>
+    <item find=":macska2:" replace=""/>
+    <item find=":férfiak:" replace=""/>
+    <item find=":homokóra:" replace="⌛"/>
+    <item find=":polip:" replace=""/>
+    <item find="végetért" replace="véget ért"/>
+    <item find=":eső2:" replace="⛆"/>
+    <item find=":csoki:" replace=""/>
+    <item find="(e)" replace="€"/>
+    <item find=":bástya2:" replace="♜"/>
+    <item find=":fehér kör:" replace="⚪"/>
+    <item find="ezévi.*" replace="ez évi"/>
+    <item find="játsza" replace="játssza"/>
+    <item find="nagyrésze" replace="nagy része"/>
+    <item find=":szégyenkező:" replace=""/>
+    <item find="Mariannak" replace="Mariann-nak"/>
+    <item find=":tojás2:" replace=""/>
+    <item find=":kezdő:" replace=""/>
+    <item find=":kés:" replace=""/>
+    <item find=":flopi3:" replace=""/>
+    <item find=":cápa:" replace="麗"/>
+    <item find="odf" replace="ODF"/>
+    <item find=".*^-.*" replace="⁻"/>
+    <item find=":bázispont:" replace="‱"/>
+    <item find="mindenegyes" replace="minden egyes"/>
+    <item find=":háromszög3:" replace=""/>
+    <item find="hétközben" replace="hét közben"/>
+    <item find="file-.*" replace="fájl"/>
+    <item find=":sivatag:" replace=""/>
+    <item find="ugy" replace="úgy"/>
+    <item find="struktúrális.*" replace="strukturális"/>
+    <item find=":hordó:" replace=""/>
+    <item find=":bomba:" replace=""/>
+    <item find=":_6:" replace="₆"/>
+    <item find="Ph.D" replace="PhD"/>
+    <item find="egzes" replace="egyes"/>
+    <item find="kivül" replace="kívül"/>
+    <item find=":le:" replace="☟"/>
+    <item find="élethalálharc.*" replace="élet-halál harc"/>
+    <item find=":útlevél:" replace=""/>
+    <item find=":tulipán:" replace=""/>
+    <item find=":kőr:" replace="♥"/>
+    <item find=":nyalóka:" replace=""/>
+    <item find=":este2:" replace=""/>
+    <item find=":könyv3:" replace=""/>
+    <item find="sóskifli.*" replace="sós kifli"/>
+    <item find=":tenyér3:" replace=""/>
+    <item find=":repülőgép6:" replace=""/>
+    <item find="egz" replace="egy"/>
+    <item find=":kis négyzet:" replace="▫"/>
+    <item find=":vonalzó:" replace=""/>
+    <item find=":ióta:" replace="ι"/>
+    <item find=":fiúk:" replace=""/>
+    <item find=":növő hold:" replace=""/>
+    <item find=":helikopter:" replace=""/>
+    <item find=":felnőtt:" replace="六"/>
+    <item find="sehogysem" replace="sehogy sem"/>
+    <item find=":király:" replace="♔"/>
+    <item find=":hurok:" replace="➰"/>
+    <item find="pehhes" replace="peches"/>
+    <item find="1/2" replace="½"/>
+    <item find="ovodá.*" replace="óvodá"/>
+    <item find=":banán:" replace=""/>
+    <item find=":kaktusz:" replace=""/>
+    <item find=":sárkány:" replace=""/>
+    <item find="foglakozni" replace="foglalkozni"/>
+    <item find=":gomb2:" replace=""/>
+    <item find=":nyelv:" replace=""/>
+    <item find=":jupiter:" replace="♃"/>
+    <item find=":válás:" replace="⚮"/>
+    <item find="email-ben" replace="ímélben"/>
+    <item find=":Nap:" replace="☉"/>
+    <item find="tenyérbe mászóbb.*" replace="tenyérbemászóbb"/>
+    <item find=":olló4:" replace="✃"/>
+    <item find="végülis" replace="végül is"/>
+    <item find="Sydneyhez" replace="Sydney-hez"/>
+    <item find="samstag" replace="Samstag"/>
+    <item find=":taxi2:" replace=""/>
+    <item find=":_4:" replace="₄"/>
+    <item find="selfie" replace="szelfi"/>
+    <item find=":negyedszünet:" replace="턽"/>
+    <item find=":ffi:" replace="ﬃ"/>
+    <item find=":vécé3:" replace=""/>
+    <item find="pennicilin.*" replace="penicillin"/>
+    <item find=":mikulás:" replace=""/>
+    <item find=":hüvelyk:" replace="″"/>
+    <item find=":^1:" replace="¹"/>
+    <item find=":boríték7:" replace=""/>
+    <item find="okarín.*" replace="okarin"/>
+    <item find="Szentivánéji.*" replace="Szent Iván-éji"/>
+    <item find=":!!:" replace="‼"/>
+    <item find=":zene2:" replace=""/>
+    <item find=".*..." replace="…"/>
+    <item find="rádióaktív.*" replace="radioaktív"/>
+    <item find=":skorpió:" replace="廬"/>
+    <item find=":^s:" replace="ˢ"/>
+    <item find=":lufi:" replace=""/>
+    <item find=":információ2:" replace=""/>
+    <item find=":integrál5:" replace="∰"/>
+    <item find="studió.*" replace="stúdió"/>
+    <item find=":pont2:" replace="‣"/>
+    <item find="nagymennyiségű.*" replace="nagy mennyiségű"/>
+    <item find="elipszis.*" replace="ellipszis"/>
+    <item find=":NY:" replace="←"/>
+    <item find="quizkérdés.*" replace="kvízkérdés"/>
+    <item find="igazságügyminiszter.*" replace="igazságügy-miniszter"/>
+    <item find=":alma2:" replace=""/>
+    <item find="bisztos" replace="biztos"/>
+    <item find=":napraforgó:" replace=""/>
+    <item find=":villám2:" replace="☇"/>
+    <item find="kisméretű.*" replace="kis méretű"/>
+    <item find="börönd.*" replace="bőrönd"/>
+    <item find=":szög:" replace="∠"/>
+    <item find="nagyszemű.*" replace="nagy szemű"/>
+    <item find="semmejik.*" replace="semelyik"/>
+    <item find=":hangjegy:" replace="♩"/>
+    <item find=":fülhallgató:" replace=""/>
+    <item find=":^M:" replace="ᴹ"/>
+    <item find=":jobb4:" replace=""/>
+    <item find=":hajó:" replace=""/>
+    <item find=":japán2:" replace=""/>
+    <item find=":perec:" replace="泌"/>
+    <item find=":elgyötört:" replace=""/>
+    <item find=":zseblámpa:" replace=""/>
+    <item find="ezideig" replace="ez ideig"/>
+    <item find=":jogvédett:" replace="®"/>
+    <item find="hathónapos.*" replace="hat hónapos"/>
+    <item find=":_2:" replace="₂"/>
+    <item find="kívűl" replace="kívül"/>
+    <item find=":hoppá:" replace="來"/>
+    <item find="szinonímá.*" replace="szinonimá"/>
+    <item find=":_p:" replace="ₚ"/>
+    <item find=":növény2:" replace=""/>
+    <item find="inteligens.*" replace="intelligens"/>
+    <item find=":_o:" replace="ₒ"/>
+    <item find=":boríték3:" replace=""/>
+    <item find=":öltöny:" replace=""/>
+    <item find=":paralelogramma2:" replace="▰"/>
+    <item find="mittwoch" replace="Mittwoch"/>
+    <item find="kompatíbilis.*" replace="kompatibilis"/>
+    <item find=":bolt2:" replace=""/>
+    <item find=":nem párhuzamos:" replace="∦"/>
+    <item find="megszünt" replace="megszűnt"/>
+    <item find="házinyúl.*" replace="házi nyúl"/>
+    <item find="dezsavü.*" replace="déjà vu"/>
+    <item find="billiárd asztal.*" replace="biliárdasztal"/>
+    <item find="mindezidáig" replace="mindez idáig"/>
+    <item find=":szigony:" replace=""/>
+    <item find="körut" replace="körút"/>
+    <item find=":kukucs:" replace=""/>
+    <item find=":fiú:" replace=""/>
+    <item find=":munkás:" replace=""/>
+    <item find=":rémült:" replace=""/>
+    <item find=":csónak:" replace=""/>
+    <item find=":dokumentum4:" replace=""/>
+    <item find="igy" replace="így"/>
+    <item find="quiz kérdés.*" replace="kvízkérdés"/>
+    <item find=":étel2:" replace=""/>
+    <item find=":Khi:" replace="Χ"/>
+    <item find="fejbentartás.*" replace="fejben tartás"/>
+    <item find=":turbán:" replace=""/>
+    <item find=":Ró:" replace="Ρ"/>
+    <item find=":_-:" replace="₋"/>
+    <item find=":virág3:" replace=""/>
+    <item find="megfedi" replace="megfeddi"/>
+    <item find=":fej:" replace=""/>
+    <item find="közvéleménykutatás.*" replace="közvélemény-kutatás"/>
+    <item find=":kulcs és kalapács:" replace=""/>
+    <item find=":betű2:" replace=""/>
+    <item find="pósta" replace="posta"/>
+    <item find=":méreg:" replace="☠"/>
+    <item find="ft" replace="Ft"/>
+    <item find=":tészta:" replace=""/>
+    <item find=":^P:" replace="ᴾ"/>
+    <item find="hid" replace="híd"/>
+    <item find="mFt-.*" replace="M Ft-"/>
+    <item find=":brokkoli:" replace="復"/>
+    <item find=":hamburger:" replace=""/>
+    <item find="paraolimpi.*" replace="paralimpi"/>
+    <item find=":avokádó:" replace="陋"/>
+    <item find=":röplabda:" replace=""/>
+    <item find=":szív9:" replace=""/>
+    <item find="természetadta" replace="természet adta"/>
+    <item find=":egér2:" replace=""/>
+    <item find="nagzon" replace="nagyon"/>
+    <item find=":újság2:" replace=""/>
+    <item find=":nű:" replace="ν"/>
+    <item find="nyitva tartás.*" replace="nyitvatartás"/>
+    <item find=":ajjaj:" replace=""/>
+    <item find=":konzerv:" replace="參"/>
+    <item find="ld." replace="l."/>
+    <item find="brutto" replace="bruttó"/>
+    <item find=":pikk:" replace="♠"/>
+    <item find=":görög kereszt:" replace="✚"/>
+    <item find=":borbély:" replace=""/>
+    <item find=":kabát:" replace="痢"/>
+    <item find=":kőr2:" replace="♡"/>
+    <item find=":fa:" replace=""/>
+    <item find=":művészet:" replace=""/>
+    <item find=":^i:" replace="ⁱ"/>
+    <item find="párszáz" replace="pár száz"/>
+    <item find=":megafon2:" replace=""/>
+    <item find=":király3:" replace=""/>
+    <item find="ezügyben" replace="ez ügyben"/>
+    <item find=":pár3:" replace=""/>
+    <item find="sokmillió" replace="sok millió"/>
+    <item find="e-mail-t" replace="ímélt"/>
+    <item find=":kártya:" replace=""/>
+    <item find="jószándék.*" replace="jó szándék"/>
+    <item find=":nadrág:" replace=""/>
+    <item find=":paragrafus:" replace="§"/>
+    <item find=":gesztenye:" replace=""/>
+    <item find="elsőszámú.*" replace="első számú"/>
+    <item find="ping-pong.*" replace="pingpong"/>
+    <item find="allá" replace="alá"/>
+    <item find=":euró2:" replace=""/>
+    <item find=":sugár:" replace=""/>
+    <item find=":hangjegyek4:" replace=""/>
+    <item find=":mobil:" replace=""/>
+    <item find=":vallás:" replace=""/>
+    <item find="-," replace="–,"/>
+    <item find=":atm:" replace=""/>
+    <item find="emeltszintű.*" replace="emelt szintű"/>
+    <item find=":térerő:" replace=""/>
+    <item find=":téglalap:" replace="▭"/>
+    <item find="házhoz-szállítás.*" replace="házhoz szállítás"/>
+    <item find=":fertőző:" replace="☣"/>
+    <item find=":házasság:" replace="⚭"/>
+    <item find=":gitár:" replace=""/>
+    <item find="frizsider.*" replace="fridzsider"/>
+    <item find=":borús:" replace=""/>
+    <item find="egyhónapos" replace="egy hónapos"/>
+    <item find=":kés2:" replace=""/>
+    <item find=":^epszilon:" replace="ᵋ"/>
+    <item find=":keresztény:" replace="✝"/>
+    <item find=":vívás:" replace="鷺"/>
+    <item find=":körhinta:" replace=""/>
+    <item find="magyarnyelvű.*" replace="magyar nyelvű"/>
+    <item find=":Hold:" replace="☽"/>
+    <item find="valószínüleg" replace="valószínűleg"/>
+    <item find=":szikh:" replace="☬"/>
+    <item find=":jegyzetek:" replace=""/>
+    <item find=":dominó:" replace=""/>
+    <item find=":bak:" replace="♑"/>
+    <item find="melzik" replace="melyik"/>
+    <item find=":lakat2:" replace=""/>
+    <item find="selfie-.*" replace="szelfi"/>
+    <item find=":nem létezik:" replace="∄"/>
+    <item find=":ananász:" replace=""/>
+    <item find="foglakoznak" replace="foglalkoznak"/>
+    <item find=":földgömb3:" replace=""/>
+    <item find=":önelégült:" replace=""/>
+    <item find=":korcsolya:" replace="⛸"/>
+    <item find=":sas:" replace="礪"/>
+    <item find=":virág2:" replace=""/>
+    <item find="Anettá" replace="Anett-tá"/>
+    <item find=":pont3:" replace="◦"/>
+    <item find=":öröm:" replace=""/>
+    <item find=":buborék6:" replace=""/>
+    <item find=":csipogó:" replace=""/>
+    <item find=":minimalizálás:" replace=""/>
+    <item find=":éhes:" replace="襤"/>
+    <item find="autogrammj.*" replace="autogramj"/>
+    <item find=":kacsa:" replace="閭"/>
+    <item find=":szűz:" replace="♍"/>
+    <item find=":ünnep2:" replace=""/>
+    <item find="szinoníma.*" replace="szinonima"/>
+    <item find=":kitartó:" replace=""/>
+    <item find="kőrut" replace="körút"/>
+    <item find=":tea:" replace=""/>
+    <item find="vajjon" replace="vajon"/>
+    <item find=":bika:" replace=""/>
+    <item find=":halloween:" replace=""/>
+    <item find=":derékszögű háromszög:" replace="⊿"/>
+    <item find=":horgony:" replace="⚓"/>
+    <item find=":közepes négyzet:" replace="◻"/>
+    <item find=":villogó:" replace=""/>
+    <item find=":_9:" replace="₉"/>
+    <item find=":csibe:" replace=""/>
+    <item find="házasságkötőterem.*" replace="házasságkötő terem"/>
+    <item find=":sál2:" replace="崙"/>
+    <item find="résztvett.*" replace="részt vett"/>
+    <item find="sokszázan" replace="sok százan"/>
+    <item find=":szív6:" replace=""/>
+    <item find=":éta:" replace="η"/>
+    <item find=":taxi:" replace=""/>
+    <item find=":vaddisznó:" replace=""/>
+    <item find=":rosszalló:" replace=""/>
+    <item find=":rendőr:" replace=""/>
+    <item find=":zivatar:" replace=""/>
+    <item find="tüzoltó.*" replace="tűzoltó"/>
+    <item find=":korona:" replace=""/>
+    <item find=":ankh:" replace="☥"/>
+    <item find="nemlétező.*" replace="nem létező"/>
+    <item find=":királyfi:" replace="老"/>
+    <item find=":krikett:" replace=""/>
+    <item find=":írás2:" replace=""/>
+    <item find=":hotel:" replace=""/>
+    <item find=":urna:" replace="⚱"/>
+    <item find="sokminden.*" replace="sok minden"/>
+    <item find=":zsidó:" replace="✡"/>
+    <item find="sorbaállás.*" replace="sorba állás"/>
+    <item find=":hangszóró:" replace=""/>
+    <item find="infrastruktúrális.*" replace="infrastrukturális"/>
+    <item find="Margit-híd.*" replace="Margit híd"/>
+    <item find=".*/m2" replace="/m²"/>
+    <item find=":hullámvasút:" replace=""/>
+    <item find="husvét" replace="húsvét"/>
+    <item find=":tánc:" replace=""/>
+    <item find=":_béta:" replace="ᵦ"/>
+    <item find=":ház2:" replace=""/>
+    <item find=":kalap:" replace=""/>
+    <item find=":fül:" replace=""/>
+    <item find=":le5:" replace=""/>
+    <item find=":mappa3:" replace=""/>
+    <item find=":traktor:" replace=""/>
+    <item find=":szem:" replace=""/>
+    <item find="hidegvíz" replace="hideg víz"/>
+    <item find=":boldog:" replace=""/>
+    <item find="miliméter.*" replace="milliméter"/>
+    <item find=":üres jegyzet:" replace=""/>
+    <item find="színtű" replace="szintű"/>
+    <item find=":ajtó:" replace=""/>
+    <item find=":zongora:" replace=""/>
+    <item find=":dühös:" replace=""/>
+    <item find=":tejút:" replace=""/>
+    <item find=":ühüm:" replace=""/>
+    <item find="nagysikerű.*" replace="nagy sikerű"/>
+    <item find="fejjebb" replace="feljebb"/>
+    <item find="sunday" replace="Sunday"/>
+    <item find=":vak:" replace=""/>
+    <item find=":rajzszög:" replace=""/>
+    <item find=":kenu:" replace=""/>
+    <item find=":hoki:" replace=""/>
+    <item find=":dobókocka3:" replace="⚂"/>
+    <item find=":5.30:" replace=""/>
+    <item find="szobahőmérsékletű.*" replace="szoba-hőmérsékletű"/>
+    <item find=":ezüst:" replace="賂"/>
+    <item find="eyt" replace="ezt"/>
+    <item find="ayt" replace="azt"/>
+    <item find=":ÉD:" replace="↕"/>
+    <item find=":hajó2:" replace=""/>
+    <item find="négyzetalakú.*" replace="négyzet alakú"/>
+    <item find=":háromszög:" replace="△"/>
+    <item find=":teherautó:" replace="⛟"/>
+    <item find="eccer csak" replace="egyszer csak"/>
+    <item find="gyepp" replace="gyep"/>
+    <item find=":ró:" replace="ρ"/>
+    <item find="sokszázmillió.*" replace="sok száz millió"/>
+    <item find=":szégyenlős:" replace=""/>
+    <item find=":merevlemez:" replace=""/>
+    <item find=":béke2:" replace="☮"/>
+    <item find=":bácsi:" replace=""/>
+    <item find="kúpalakú.*" replace="kúp alakú"/>
+    <item find=":negyedhang:" replace="텟"/>
+    <item find="soronkivűl.*" replace="soron kívül"/>
+    <item find="gyengénlátók.*" replace="gyengén látók"/>
+    <item find="ay" replace="az"/>
+    <item find=":bal5:" replace=""/>
+    <item find="parallel.*" replace="paralel"/>
+    <item find=":szög2:" replace="∡"/>
+    <item find="nagyléptékű.*" replace="nagy léptékű"/>
+    <item find=":kosárlabda:" replace=""/>
+    <item find=":tálca2:" replace=""/>
+    <item find="kilenchónapos.*" replace="kilenc hónapos"/>
+    <item find=":szeretlek:" replace="蘭"/>
+    <item find=":&lt;=:" replace="≤"/>
+    <item find=":--:" replace="–"/>
+    <item find=":boríték:" replace="✉"/>
+    <item find=":Pi:" replace="Π"/>
+    <item find=":csillogás:" replace="✨"/>
+    <item find=":kézilabda:" replace="菉"/>
+    <item find=":kör3:" replace=""/>
+    <item find=":_(:" replace="₍"/>
+    <item find=":ködös:" replace=""/>
+    <item find=".*(tm)" replace="™"/>
+    <item find=":pc:" replace=""/>
+    <item find=":horgászat:" replace=""/>
+    <item find="USÁ-.*" replace="USA-"/>
+    <item find=":fax2:" replace=""/>
+    <item find=":Alfa:" replace="Α"/>
+    <item find=":pénztárca:" replace=""/>
+    <item find="cimke" replace="címke"/>
+    <item find=":huss:" replace=""/>
+    <item find=":komp:" replace="⛴"/>
+    <item find=":tehén2:" replace=""/>
+    <item find="széndioxid.*" replace="szén-dioxid"/>
+    <item find=":meglepett:" replace=""/>
+    <item find=":palacsinta:" replace="丹"/>
+    <item find=":^A:" replace="ᴬ"/>
+    <item find=":kanál:" replace="籠"/>
+    <item find=":_r:" replace="ᵣ"/>
+    <item find=":repülőgép5:" replace=""/>
+    <item find="Nikolettel" replace="Nikolett-tel"/>
+    <item find="eFt" replace="E Ft"/>
+    <item find="lényegretörő.*" replace="lényegre törő"/>
+    <item find="menű" replace="menü"/>
+    <item find="MrdFt-.*" replace="Mrd Ft-"/>
+    <item find=":_7:" replace="₇"/>
+    <item find=":telefon2:" replace="☏"/>
+    <item find=".*^4.*" replace="⁴"/>
+    <item find=":jókedvű:" replace=""/>
+    <item find=":liliom:" replace="⚜"/>
+    <item find=":macska11:" replace=""/>
+    <item find=":sugár4:" replace=""/>
+    <item find=":bumm:" replace="勞"/>
+    <item find=":maszk:" replace=""/>
+    <item find="logo" replace="logó"/>
+    <item find=":tigris2:" replace=""/>
+    <item find=":integrál3:" replace="∭"/>
+    <item find="szivesen" replace="szívesen"/>
+    <item find=":répa:" replace="凌"/>
+    <item find=".*^7.*" replace="⁷"/>
+    <item find=":lány:" replace=""/>
+    <item find=":ajándék:" replace=""/>
+    <item find=":falu:" replace=""/>
+    <item find=":buborék4:" replace=""/>
+    <item find=":versenyautó:" replace=""/>
+    <item find="Marcellel" replace="Marcell-lel"/>
+    <item find=":_a:" replace="ₐ"/>
+    <item find="csakazértis" replace="csak azért is"/>
+    <item find=":képernyő:" replace=""/>
+    <item find=":_gamma:" replace="ᵧ"/>
+    <item find=":szalag2:" replace=""/>
+    <item find="sokezren" replace="sok ezren"/>
+    <item find=":_m:" replace="ₘ"/>
+    <item find=":sugár2:" replace=""/>
+    <item find=":zászló3:" replace="⚑"/>
+    <item find="újkeletű.*" replace="új keletű"/>
+    <item find=":kazetta:" replace=""/>
+    <item find=":mobil4:" replace=""/>
+    <item find=":nem osztója:" replace="∤"/>
+    <item find=":^=:" replace="⁼"/>
+    <item find=":újhold:" replace=""/>
+    <item find=":6.30:" replace=""/>
+    <item find=":győzelem2:" replace=""/>
+    <item find=":mikroszkóp:" replace=""/>
+    <item find="hóvégi.*" replace="hó végi"/>
+    <item find=":kéz2:" replace=""/>
+    <item find="jónevű.*" replace="jó nevű"/>
+    <item find="sip" replace="síp"/>
+    <item find=":fel2:" replace=""/>
+    <item find=":12.30:" replace=""/>
+    <item find=":narancssárga szív:" replace="李"/>
+    <item find=":süti3:" replace="怒"/>
+    <item find=":zzz:" replace=""/>
+    <item find=":tenyér:" replace=""/>
+    <item find=":^x:" replace="ˣ"/>
+    <item find=":mentőautó:" replace=""/>
+    <item find=":müzli:" replace="北"/>
+    <item find="irreverzíbilis.*" replace="irreverzibilis"/>
+    <item find=":1/2:" replace="½"/>
+    <item find=":1/4:" replace="¼"/>
+    <item find=":krumpli:" replace=""/>
+    <item find=":sonka:" replace="肋"/>
+    <item find=":sárkány2:" replace=""/>
+    <item find=":font2:" replace=""/>
+    <item find="portfolió.*" replace="portfólió"/>
+    <item find=":fel3:" replace=""/>
+    <item find="robosztus.*" replace="robusztus"/>
+    <item find="képviselőtestület.*" replace="képviselő-testület"/>
+    <item find=":szörny2:" replace=""/>
+    <item find=":üres oldal:" replace=""/>
+    <item find="számit" replace="számít"/>
+    <item find=":édesburgonya:" replace=""/>
+    <item find=":zászlók:" replace=""/>
+    <item find=":nyúl:" replace=""/>
+    <item find=":pipa4:" replace=""/>
+    <item find=":9h:" replace=""/>
+    <item find="Handel" replace="Händel"/>
+    <item find=":szobor:" replace=""/>
+    <item find=":üres jegyzetlap:" replace=""/>
+    <item find="Mariannal" replace="Mariann-nal"/>
+    <item find=":alfa:" replace="α"/>
+    <item find=":ököl:" replace="✊"/>
+    <item find="tízhónapos.*" replace="tíz hónapos"/>
+    <item find=":motorcsónak:" replace=""/>
+    <item find=":sapka:" replace="梨"/>
+    <item find="Szabadsághíd.*" replace="Szabadság híd"/>
+    <item find="szaltó mortále.*" replace="salto mortale"/>
+    <item find=":sajt:" replace="燎"/>
+    <item find=":Epszilon:" replace="Ε"/>
+    <item find=":szédülés:" replace=""/>
+    <item find=":feloldójel:" replace="♮"/>
+    <item find=":írás:" replace="✍"/>
+    <item find=":esernyő3:" replace="⛱"/>
+    <item find=":étterem:" replace=""/>
+    <item find="nagyhatalmú.*" replace="nagy hatalmú"/>
+    <item find=":felhő2:" replace="⛅"/>
+    <item find=":szmájli2:" replace="☹"/>
+    <item find=":csomag:" replace=""/>
+    <item find=":unott:" replace=""/>
+    <item find=":trapéz:" replace="⏢"/>
+    <item find=":bambusz:" replace=""/>
+    <item find="nüáns.*" replace="nüans"/>
+    <item find=":lánc:" replace="⛓"/>
+    <item find=":sör:" replace=""/>
+    <item find=":kemping:" replace=""/>
+    <item find="oda-visszaút.*" replace="oda-vissza út"/>
+    <item find="centírozás.*" replace="centrírozás"/>
+    <item find=":üres dokumentum:" replace=""/>
+    <item find=":csibe2:" replace=""/>
+    <item find=":pfuj:" replace=""/>
+    <item find=":tilos:" replace=""/>
+    <item find=":bebé:" replace="턫"/>
+    <item find="semijen.*" replace="semmilyen"/>
+    <item find="nagyrészé.*" replace="nagy részé"/>
+    <item find="tüzif.*" replace="tűzif"/>
+    <item find=":hangszóró3:" replace=""/>
+    <item find="papirzsebkendő" replace="papír zsebkendő"/>
+    <item find="vizen" replace="vízen"/>
+    <item find=":lakat3:" replace=""/>
+    <item find=":_l:" replace="ₗ"/>
+    <item find=":szív8:" replace=""/>
+    <item find=":hajaj:" replace=""/>
+    <item find=":buborék5:" replace=""/>
+    <item find=":^L:" replace="ᴸ"/>
+    <item find="patkóalakú.*" replace="patkó alakú"/>
+    <item find="partícionál.*" replace="particionál"/>
+    <item find="amig" replace="amíg"/>
+    <item find=":zászló:" replace=""/>
+    <item find="sokmillióan" replace="sok millióan"/>
+    <item find=":Mű:" replace="Μ"/>
+    <item find=":tortilla:" replace=""/>
+    <item find=":szem2:" replace=""/>
+    <item find="egyszercsak" replace="egyszer csak"/>
+    <item find=":5/8:" replace="⅝"/>
+    <item find=":vidám:" replace=""/>
+    <item find=":pajzs:" replace=""/>
+    <item find="dehát" replace="de hát"/>
+    <item find=":szusi:" replace=""/>
+    <item find=":K2:" replace="⇒"/>
+    <item find="Kamillá" replace="Kamill-lá"/>
+    <item find="huszat" replace="húszat"/>
+    <item find=":szarvas:" replace="歷"/>
+    <item find=":D2:" replace="⇓"/>
+    <item find=":kis csillag2:" replace="⭑"/>
+    <item find=":kard:" replace="⚔"/>
+    <item find="hejes" replace="helyes"/>
+    <item find="V-alakú.*" replace="V alakú"/>
+    <item find=":alszik:" replace=""/>
+    <item find="huszas" replace="húszas"/>
+    <item find=":macska3:" replace=""/>
+    <item find=":^j:" replace="ʲ"/>
+    <item find=":eleme2:" replace="∋"/>
+    <item find="Moliere.*" replace="Molière"/>
+    <item find="kerékbetörés.*" replace="kerékbe törés"/>
+    <item find="elött" replace="előtt"/>
+    <item find=":kéz3:" replace=""/>
+    <item find="eggy" replace="egy"/>
+    <item find=":névjegy:" replace=""/>
+    <item find=":szégyen:" replace="臘"/>
+    <item find="Ivettel" replace="Ivett-tel"/>
+    <item find=":ötszög2:" replace="⬟"/>
+    <item find=":ÉK2:" replace="⇗"/>
+    <item find="Anettal" replace="Anett-tal"/>
+    <item find="billentyü.*" replace="billentyű"/>
+    <item find=":gyertya:" replace=""/>
+    <item find="reváns.*" replace="revans"/>
+    <item find=":dáma:" replace=""/>
+    <item find=":produktum:" replace="∏"/>
+    <item find=":villám:" replace=""/>
+    <item find=":macska10:" replace=""/>
+    <item find="jópár.*" replace="jó pár"/>
+    <item find=":szaxofon:" replace=""/>
+    <item find=":phű:" replace=""/>
+    <item find="évközbeni.*" replace="év közbeni"/>
+    <item find=":egészszünet:" replace="턻"/>
+    <item find="Babettal" replace="Babett-tal"/>
+    <item find=":^u:" replace="ᵘ"/>
+    <item find=":sisak:" replace="⛑"/>
+    <item find=":kis négyzet2:" replace="▪"/>
+    <item find=":hajvágás:" replace=""/>
+    <item find=":menóra:" replace=""/>
+    <item find=":diagram5:" replace=""/>
+    <item find="inteligenc.*" replace="intelligenc"/>
+    <item find=":nyakkendő:" replace=""/>
+    <item find=":zsírkréta:" replace=""/>
+    <item find=":kifli:" replace="縷"/>
+    <item find=":csatlakozó:" replace=""/>
+    <item find="írtás.*" replace="irtás"/>
+    <item find="többmillió" replace="több millió"/>
+    <item find="amúgyis" replace="amúgy is"/>
+    <item find=":ló:" replace=""/>
+    <item find=":buborék8:" replace=""/>
+    <item find=":^chi:" replace="ᵡ"/>
+    <item find="allatt" replace="alatt"/>
+    <item find="higyjen" replace="higgyen"/>
+    <item find="kisérleti.*" replace="kísérleti"/>
+    <item find=":nap:" replace=""/>
+    <item find=":idegen2:" replace=""/>
+    <item find="fitness.*" replace="fitnesz"/>
+    <item find=":pulyka:" replace="旅"/>
+    <item find=":hold:" replace=""/>
+    <item find=":hatszög:" replace="⬡"/>
+    <item find=":_+:" replace="₊"/>
+    <item find=":hőmérő:" replace=""/>
+    <item find=":nem részhalmaza:" replace="⊄"/>
+    <item find="box" replace="boksz"/>
+    <item find="nyir" replace="nyír"/>
+    <item find="milió.*" replace="millió"/>
+    <item find=":néni:" replace=""/>
+    <item find="L-alakú.*" replace="L alakú"/>
+    <item find=":gombok:" replace=""/>
+    <item find=":felírótábla:" replace=""/>
+    <item find="Sydneytől" replace="Sydney-től"/>
+    <item find=":műhold:" replace=""/>
+    <item find=":vihar:" replace=""/>
+    <item find=":bal6:" replace=""/>
+    <item find=":fényerő2:" replace=""/>
+    <item find=".*^9.*" replace="⁹"/>
+    <item find=":+-:" replace="±"/>
+    <item find=":gyűrű:" replace=""/>
+    <item find=":szótlan:" replace=""/>
+    <item find="négz" replace="négy"/>
+    <item find="vendéglátó-ipari.*" replace="vendéglátóipari"/>
+    <item find="monday" replace="Monday"/>
+    <item find=":ceruza3:" replace="✐"/>
+    <item find=":kutya:" replace=""/>
+    <item find="donnerstag" replace="Donnerstag"/>
+    <item find=":olló2:" replace="✄"/>
+    <item find=":szumma:" replace="∑"/>
+    <item find="Lodz.*" replace="Łódź"/>
+    <item find=":hímnemű:" replace="♂"/>
+    <item find=":vonat2:" replace=""/>
+    <item find="jó akaratú" replace="jóakaratú"/>
+    <item find=":11h:" replace=""/>
+    <item find="paciens.*" replace="páciens"/>
+    <item find=":pszt:" replace="狼"/>
+    <item find=":sarló és kalapács:" replace="☭"/>
+    <item find="0-ás" replace="0-s"/>
+    <item find="semmenyi.*" replace="semennyi"/>
+    <item find=":török líra:" replace="₺"/>
+    <item find=":láncszem:" replace=""/>
+    <item find="semmeddig" replace="semeddig"/>
+    <item find=":esküvő:" replace=""/>
+    <item find=":lóhere:" replace=""/>
+    <item find=":repülőgép3:" replace=""/>
+    <item find=":hírnökbot:" replace="⚚"/>
+    <item find="csevely.*" replace="csevej"/>
+    <item find="évvégi.*" replace="év végi"/>
+    <item find="1/4" replace="¼"/>
+    <item find="lódzi.*" replace="łódźi"/>
+    <item find=":korhatáros:" replace=""/>
+    <item find=":zsiráf:" replace="漣"/>
+    <item find="magno" replace="magnó"/>
+    <item find=":^0:" replace="⁰"/>
+    <item find=":minden:" replace="∀"/>
+    <item find=":iroda:" replace=""/>
+    <item find=":ablak:" replace=""/>
+    <item find=":információ3:" replace=""/>
+    <item find=":^a:" replace="ᵃ"/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find=":levél:" replace=""/>
+    <item find="partraszállás.*" replace="partra szállás"/>
+    <item find="egyszemélyben" replace="egy személyben"/>
+    <item find=":11.30:" replace=""/>
+    <item find="mindenestre" replace="mindenesetre"/>
+    <item find=":rák3:" replace="♋"/>
+    <item find=":le6:" replace=""/>
+    <item find="semmelyik.*" replace="semelyik"/>
+    <item find=":hányinger:" replace="濫"/>
+    <item find=":autó:" replace=""/>
+    <item find="tervbevétel.*" replace="tervbe vétel"/>
+    <item find="Őrs" replace="Örs"/>
+    <item find="hazsnált.*" replace="használt"/>
+    <item find="útmenti.*" replace="út menti"/>
+    <item find=":jelölőnégyzet:" replace="☐"/>
+    <item find="alsó fokú.*" replace="alsófokú"/>
+    <item find=":mozdony2:" replace=""/>
+    <item find=":imádkozás:" replace=""/>
+    <item find="kiváncsi.*" replace="kíváncsi"/>
+    <item find="életbevágó.*" replace="életbe vágó"/>
+    <item find="kissebb.*" replace="kisebb"/>
+    <item find=":dollár2:" replace=""/>
+    <item find="minőségellenőrzés.*" replace="minőség-ellenőrzés"/>
+    <item find="köralakú.*" replace="kör alakú"/>
+    <item find=":rossz:" replace=""/>
+    <item find="wellnesz.*" replace="wellness"/>
+    <item find=":mosoly:" replace=""/>
+    <item find=":tánc2:" replace=""/>
+    <item find=":háromszög2:" replace="▲"/>
+    <item find=":macska:" replace=""/>
+    <item find=":schwa:" replace="ə"/>
+    <item find="mégcsak" replace="még csak"/>
+    <item find=":cowboy:" replace="鸞"/>
+    <item find=":sárgadinnye:" replace=""/>
+    <item find=":ecset:" replace=""/>
+    <item find=":vidám2:" replace="☺"/>
+    <item find="őszhajú.*" replace="ősz hajú"/>
+    <item find=":^R:" replace="ᴿ"/>
+    <item find=":^l:" replace="ˡ"/>
+    <item find=":verseny:" replace=""/>
+    <item find=":süket:" replace=""/>
+    <item find=":telefon7:" replace=""/>
+    <item find=":mérges:" replace=""/>
+    <item find="euro" replace="euró"/>
+    <item find="féle" replace="-féle"/>
+    <item find=":szív5:" replace=""/>
+    <item find=":tűzoltóautó2:" replace=""/>
+    <item find=":jegy:" replace=""/>
+    <item find=":sí:" replace="⛷"/>
+    <item find=":közömbös:" replace=""/>
+    <item find=":baseball:" replace="⚾"/>
+    <item find=":nagyító2:" replace=""/>
+    <item find="lelkiismeret furdalás.*" replace="lelkiismeret-furdalás"/>
+    <item find=":ördög2:" replace=""/>
+    <item find=":ülés:" replace=""/>
+    <item find=":szakáll:" replace="倫"/>
+    <item find="villamosenergiá.*" replace="villamos energiá"/>
+    <item find="későbarokk.*" replace="késő barokk"/>
+    <item find=":kókuszdió:" replace="便"/>
+    <item find=":manikűr:" replace=""/>
+    <item find=":kerekesszék:" replace="♿"/>
+    <item find=":kereszt4:" replace=""/>
+    <item find=":információ:" replace="ℹ"/>
+    <item find=":postaláda5:" replace=""/>
+    <item find="holocaust.*" replace="holokauszt"/>
+    <item find=":_n:" replace="ₙ"/>
+    <item find=":vízöntő:" replace="♒"/>
+    <item find="annakidején" replace="annak idején"/>
+    <item find=":könyv2:" replace=""/>
+    <item find=":nap2:" replace="☼"/>
+    <item find=":x3:" replace="❎"/>
+    <item find=":kis csillag:" replace="⭒"/>
+    <item find=":hűha:" replace=""/>
+    <item find=":-+:" replace="∓"/>
+    <item find=":busz:" replace=""/>
+    <item find="PIN kód.*" replace="PIN-kód"/>
+    <item find="divatárú.*" replace="divatáru"/>
+    <item find="méginkább" replace="még inkább"/>
+    <item find=":^O:" replace="ᴼ"/>
+    <item find=":hús2:" replace=""/>
+    <item find=":gemkapocs:" replace=""/>
+    <item find=":olasz líra:" replace="₤"/>
+    <item find="reverzíbilis.*" replace="reverzibilis"/>
+    <item find=":uránusz:" replace="♅"/>
+    <item find="kigyó" replace="kígyó"/>
+    <item find=":rendőrautó:" replace=""/>
+    <item find="hejesírásellenőrző.*" replace="helyesírás-ellenőrző"/>
+    <item find=":hóember2:" replace="⛄"/>
+    <item find=":kupa:" replace=""/>
+    <item find=":lábnyom:" replace=""/>
+    <item find=":kisebb négyzet:" replace="◽"/>
+    <item find=":paradicsom:" replace=""/>
+    <item find="montag" replace="Montag"/>
+    <item find=":zebra:" replace="煉"/>
+    <item find="sztyep" replace="sztyepp"/>
+    <item find=":vonat:" replace=""/>
+    <item find="közös lónak túrós" replace="közös lónak túros"/>
+    <item find=":baba:" replace=""/>
+    <item find="Kamillal" replace="Kamill-lal"/>
+    <item find=":fogaskerék:" replace="⚙"/>
+    <item find=":vállrándítás:" replace="路"/>
+    <item find="éppenhogy" replace="éppen hogy"/>
+    <item find=":föld:" replace="♁"/>
+    <item find=":baba3:" replace="櫓"/>
+    <item find=":jelölőnégyzet3:" replace="☒"/>
+    <item find=":metszet:" replace="∩"/>
+    <item find=":süti2:" replace="不"/>
+    <item find=":perc:" replace="′"/>
+    <item find="üzembehelyezés.*" replace="üzembe helyezés"/>
+    <item find=":vezér2:" replace="♛"/>
+    <item find=":játék:" replace=""/>
+    <item find=":üstökös:" replace="☄"/>
+    <item find="fantaziál.*" replace="fantáziál"/>
+    <item find=":buborék7:" replace=""/>
+    <item find="sokhelyütt" replace="sok helyütt"/>
+    <item find="C-on" replace="°C-on"/>
+    <item find="dezsavű.*" replace="déjà vu"/>
+    <item find=":-:" replace="−"/>
+    <item find=":x:" replace="×"/>
+    <item find=":2/3:" replace="⅔"/>
+    <item find="bajbajutott.*" replace="bajba jutott"/>
+    <item find="Petőfi-híd.*" replace="Petőfi híd"/>
+    <item find=":táska:" replace=""/>
+    <item find="túrista.*" replace="turista"/>
+    <item find=":öreg:" replace="陸"/>
+    <item find="modernkori.*" replace="modern kori"/>
+    <item find=":ómega:" replace="ω"/>
+    <item find=":saláta:" replace="綾"/>
+    <item find="szívalakú.*" replace="szív alakú"/>
+    <item find=":hurok2:" replace="➿"/>
+    <item find=":óra:" replace="⌚"/>
+    <item find=":csillag4:" replace=""/>
+    <item find="médiák" replace="média"/>
+    <item find="újraelosztó.*" replace="újra elosztó"/>
+    <item find=":10h:" replace=""/>
+    <item find=":bronz:" replace="雷"/>
+    <item find="oda-visszautazás.*" replace="oda-vissza utazás"/>
+    <item find=":finom:" replace=""/>
+    <item find=":levél2:" replace=""/>
+    <item find=":buborék:" replace=""/>
+    <item find=":futó2:" replace="♝"/>
+    <item find="tennisz" replace="tenisz"/>
+    <item find="Angström.*" replace="Ångström"/>
+    <item find=":sí2:" replace=""/>
+    <item find=":lovaglás:" replace=""/>
+    <item find=":pipa5:" replace=""/>
+    <item find=":érkezés:" replace=""/>
+    <item find=":MD:" replace=""/>
+    <item find=":pénz2:" replace=""/>
+    <item find=":nyolcadszünet:" replace="턾"/>
+    <item find=":roller:" replace=""/>
+    <item find=":gorilla:" replace="轢"/>
+    <item find=":némítás:" replace=""/>
+    <item find="tradícionális.*" replace="tradicionális"/>
+    <item find="netto" replace="nettó"/>
+    <item find=":kettőskereszt2:" replace="☨"/>
+    <item find="skodás.*" replace="škodás"/>
+    <item find="S-alakú.*" replace="S alakú"/>
+    <item find=":osztója:" replace="∣"/>
+    <item find="vízbefúlás.*" replace="vízbe fúlás"/>
+    <item find=":^v:" replace="ᵛ"/>
+    <item find=":vámpír:" replace="率"/>
+    <item find=":ital2:" replace=""/>
+    <item find=":posta3:" replace=""/>
+    <item find=":cipő2:" replace=""/>
+    <item find=":szív3:" replace=""/>
+    <item find="menetközbeni.*" replace="menet közbeni"/>
+    <item find=":nem eleme2:" replace="∌"/>
+    <item find=".*^).*" replace="⁾"/>
+    <item find=":pár:" replace=""/>
+    <item find="Poznan.*" replace="Poznań"/>
+    <item find="utóljára" replace="utoljára"/>
+    <item find=":őrült:" replace="浪"/>
+    <item find="médiákban" replace="médiában"/>
+    <item find=":rák:" replace="呂"/>
+    <item find="kiséri" replace="kíséri"/>
+    <item find=":pisztoly:" replace=""/>
+    <item find=":dinnye:" replace=""/>
+    <item find=":vécé2:" replace=""/>
+    <item find=":lámpa:" replace=""/>
+    <item find=":lap4:" replace=""/>
+    <item find=":jobb2:" replace=""/>
+    <item find="kölni vize.*" replace="kölnivize"/>
+    <item find=":^B:" replace="ᴮ"/>
+    <item find=":címke:" replace=""/>
+    <item find=":telefon6:" replace=""/>
+    <item find="Nikolettől" replace="Nikolett-től"/>
+    <item find=":tyúk:" replace=""/>
+    <item find=":kotta:" replace=""/>
+    <item find="menetrendszerinti.*" replace="menetrend szerinti"/>
+    <item find=":lap:" replace=""/>
+    <item find=":^d:" replace="ᵈ"/>
+    <item find=":pókháló:" replace=""/>
+    <item find=":billentyűzet2:" replace=""/>
+    <item find="határmenti.*" replace="határ menti"/>
+    <item find=":sírás:" replace=""/>
+    <item find=":éjjel:" replace=""/>
+    <item find=":jaj:" replace=""/>
+    <item find=":hanyattegér:" replace=""/>
+    <item find=":ötszög:" replace="⬠"/>
+    <item find=":hálózat:" replace=""/>
+    <item find=":.:" replace="…"/>
+    <item find=":gyémánt:" replace=""/>
+    <item find=":figyelmeztetés:" replace="⚠"/>
+    <item find=":kis eleme2:" replace="∍"/>
+    <item find=":DNY2:" replace="⇙"/>
+    <item find="nagyrabecsült.*" replace="nagyra becsült"/>
+    <item find=":hó:" replace=""/>
+    <item find=":béke:" replace=""/>
+    <item find=":dobókocka5:" replace="⚄"/>
+    <item find=":KNY2:" replace="⇔"/>
+    <item find=":érem:" replace=""/>
+    <item find="románkori.*" replace="román kori"/>
+    <item find=":3/8:" replace="⅜"/>
+    <item find=":zászló5:" replace=""/>
+    <item find=":négyzet:" replace="■"/>
+    <item find="&lt;-&gt;" replace="↔"/>
+    <item find=":bizonyítás vége:" replace="∎"/>
+    <item find=":rizs:" replace=""/>
+    <item find=":diagram3:" replace=""/>
+    <item find=":fényerő:" replace=""/>
+    <item find=":labda:" replace="⚽"/>
+    <item find=":pár2:" replace=""/>
+    <item find=":virág:" replace="⚘"/>
+    <item find=":hópehely:" replace="❄"/>
+    <item find="kilógramm.*" replace="kilogramm"/>
+    <item find=":füzet3:" replace=""/>
+    <item find=":eső:" replace="☔"/>
+    <item find=":nap3:" replace=""/>
+    <item find=":metró:" replace=""/>
+    <item find=":Ómega:" replace="Ω"/>
+    <item find=":napszemüveg:" replace=""/>
+    <item find=":^3:" replace="³"/>
+    <item find="plussz" replace="plusz"/>
+    <item find="németajkú.*" replace="német ajkú"/>
+    <item find=":ÉK:" replace="↗"/>
+    <item find="szervíz.*" replace="szerviz"/>
+    <item find=":kéz:" replace="✋"/>
+    <item find=":alvás:" replace=""/>
+    <item find="Nagymedv.*" replace="Nagy Medv"/>
+    <item find=":telefon4:" replace=""/>
+    <item find=":rakéta:" replace=""/>
+    <item find=":dobókocka6:" replace="⚅"/>
+    <item find=":?:" replace="❓"/>
+    <item find="sonntag" replace="Sonntag"/>
+    <item find=":kígyótartó:" replace="⛎"/>
+    <item find="pehes" replace="peches"/>
+    <item find=":bumm2:" replace=""/>
+    <item find=":felvétel:" replace="⏺"/>
+    <item find="mégegyszer" replace="még egyszer"/>
+    <item find=":gyermek:" replace="戮"/>
+    <item find=":jegyzet:" replace=""/>
+    <item find=":8h:" replace=""/>
+    <item find=":sör2:" replace=""/>
+    <item find=":K:" replace="→"/>
+    <item find=":vulkán:" replace=""/>
+    <item find="jónéhány.*" replace="jó néhány"/>
+    <item find="ezirányú.*" replace="ez irányú"/>
+    <item find="többezer.*" replace="több ezer"/>
+    <item find="Bernadettől" replace="Bernadett-től"/>
+    <item find=":közepes csillag:" replace="⭐"/>
+    <item find=":lányok:" replace=""/>
+    <item find=":huszár2:" replace="♞"/>
+    <item find=":kalapács:" replace=""/>
+    <item find=":nyilas:" replace="♐"/>
+    <item find=":padlizsán:" replace=""/>
+    <item find=":kimerült:" replace=""/>
+    <item find=".*(p)" replace="℗"/>
+    <item find="lámpabura" replace="lámpabúra"/>
+    <item find=":madzsong:" replace=""/>
+    <item find="hóvégén" replace="hó végén"/>
+    <item find="mFt" replace="M Ft"/>
+    <item find=":egészhang:" replace="텝"/>
+    <item find=":újrahasznosítás2:" replace="♻"/>
+    <item find=":újhold2:" replace=""/>
+    <item find=":dínó2:" replace="練"/>
+    <item find=":jegyzettömb:" replace=""/>
+    <item find=":vihar2:" replace="☈"/>
+    <item find=":^-:" replace="⁻"/>
+    <item find=":malacorr:" replace=""/>
+    <item find="kéthónapos.*" replace="két hónapos"/>
+    <item find=":x2:" replace="❌"/>
+    <item find=":hahaha:" replace="藍"/>
+    <item find=":őr:" replace=""/>
+    <item find=":dokumentum:" replace=""/>
+    <item find=":von:" replace="₩"/>
+    <item find=":epszilon:" replace="ε"/>
+    <item find=":izzadtság:" replace=""/>
+    <item find=":troli:" replace=""/>
+    <item find=":csengő3:" replace=""/>
+    <item find=":^o:" replace="ᵒ"/>
+    <item find="Http" replace="http"/>
+    <item find=":pont:" replace="•"/>
+    <item find=":szőke:" replace=""/>
+    <item find=":^p:" replace="ᵖ"/>
+    <item find=":orrszarvú:" replace="憐"/>
+    <item find=":pita:" replace="陵"/>
+    <item find="B vitamin.*" replace="B-vitamin"/>
+    <item find=":cigaretta2:" replace=""/>
+    <item find=":puszi:" replace=""/>
+    <item find=":levél3:" replace=""/>
+    <item find=":mű:" replace="μ"/>
+    <item find=":jelölőnégyzet5:" replace=""/>
+    <item find=":posta2:" replace=""/>
+    <item find="nyomonkövetése" replace="nyomon követése"/>
+    <item find=":dínó:" replace="秊"/>
+    <item find=":bőr2:" replace=""/>
+    <item find=":vécé:" replace=""/>
+    <item find=":zászló6:" replace=""/>
+    <item find=":szekrény:" replace=""/>
+    <item find=":hegy:" replace="⛰"/>
+    <item find="nagymúltú.*" replace="nagy múltú"/>
+    <item find=":baleset:" replace="洛"/>
+    <item find=":sellő:" replace="隆"/>
+    <item find=":aktatáska:" replace=""/>
+    <item find=":popcorn:" replace=""/>
+    <item find=":vhs:" replace=""/>
+    <item find="nyujt" replace="nyújt"/>
+    <item find="Babes-Bolyai.*" replace="Babeș–Bolyai"/>
+    <item find=":^2:" replace="²"/>
+    <item find=":pipa:" replace="✓"/>
+    <item find=":medve:" replace=""/>
+    <item find=":egyszarvú:" replace="濾"/>
+    <item find=":boríték2:" replace=""/>
+    <item find=":fordított:" replace=""/>
+    <item find=":É:" replace="↑"/>
+    <item find=":póló:" replace=""/>
+    <item find=".*^3.*" replace="³"/>
+    <item find=":magnó:" replace=""/>
+    <item find="nyakoncsípés.*" replace="nyakon csípés"/>
+    <item find=":áruház:" replace=""/>
+    <item find=":cirkusz:" replace=""/>
+    <item find="eufórikus.*" replace="euforikus"/>
+    <item find="magasfokú.*" replace="magas fokú"/>
+    <item find=":riadt:" replace=""/>
+    <item find=":bal3:" replace="☚"/>
+    <item find=":telefon8:" replace=""/>
+    <item find=":poggyász:" replace=""/>
+    <item find=":nem2:" replace=""/>
+    <item find="többszázezr.*" replace="több száz ezr"/>
+    <item find=":lámpa2:" replace=""/>
+    <item find="papírzsebkendő" replace="papír zsebkendő"/>
+    <item find="nagytestű.*" replace="nagy testű"/>
+    <item find=":csizma:" replace=""/>
+    <item find=":ruha3:" replace=""/>
+    <item find=":jegyzetlap:" replace=""/>
+    <item find="déjá" replace="déjà"/>
+    <item find=":kalóz:" replace=""/>
+    <item find=":szünet:" replace="⏸"/>
+    <item find=":leves:" replace=""/>
+    <item find=":iskola:" replace=""/>
+    <item find="tízegynéhány" replace="tíz-egynéhány"/>
+    <item find="hüje" replace="hülye"/>
+    <item find="abszolut.*" replace="abszolút"/>
+    <item find=":személy:" replace=""/>
+    <item find=":váza:" replace=""/>
+    <item find="sydneyi" replace="sydney-i"/>
+    <item find=":^béta:" replace="ᵝ"/>
+    <item find="keztyű" replace="kesztyű"/>
+    <item find=":kettőskereszt:" replace="‡"/>
+    <item find=":zéta:" replace="ζ"/>
+    <item find="megtalálha" replace="megtalálja"/>
+    <item find=":könyvjelző2:" replace=""/>
+    <item find="mégha" replace="még ha"/>
+    <item find=":győzelem:" replace="✌"/>
+    <item find=":film:" replace=""/>
+    <item find="Henriettől" replace="Henriett-től"/>
+    <item find=":hörcsög:" replace=""/>
+    <item find=":le4:" replace=""/>
+    <item find="szóbanforgó.*" replace="szóban forgó"/>
+    <item find="licensz.*" replace="licenc"/>
+    <item find=":borús2:" replace=""/>
+    <item find="brilliáns.*" replace="briliáns"/>
+    <item find=":repülőgép:" replace="✈"/>
+    <item find="friday" replace="Friday"/>
+    <item find="C vitamin.*" replace="C-vitamin"/>
+    <item find=":hegyi vasút:" replace=""/>
+    <item find="nagzszemű" replace="nagy szemű"/>
+    <item find=":amerikai foci:" replace=""/>
+    <item find=":flopi2:" replace=""/>
+    <item find=":gyár:" replace=""/>
+    <item find=":^b:" replace="ᵇ"/>
+    <item find="bíztatás.*" replace="biztatás"/>
+    <item find="diszcont" replace="diszkont"/>
+    <item find=":denevér:" replace="驪"/>
+    <item find="olymódon" replace="oly módon"/>
+    <item find=":vagy:" replace="∨"/>
+    <item find=":kukorica:" replace=""/>
+    <item find=":pi:" replace="π"/>
+    <item find="°C-szal" replace="°C-kal"/>
+    <item find=":tao:" replace="☯"/>
+    <item find=":rádió:" replace=""/>
+    <item find="együttjáró.*" replace="együtt járó"/>
+    <item find="éti csig.*" replace="éticsig"/>
+    <item find=":^N:" replace="ᴺ"/>
+    <item find="túristá.*" replace="turistá"/>
+    <item find=":hús:" replace="數"/>
+    <item find=":magasfeszültség:" replace="⚡"/>
+    <item find="síkraszáll.*" replace="síkra száll"/>
+    <item find=":súlyemelés:" replace=""/>
+    <item find="itélet.*" replace="ítélet"/>
+    <item find="pozícíó.*" replace="pozíció"/>
+    <item find="idegennyelvű.*" replace="idegen nyelvű"/>
+    <item find=":karate:" replace="屢"/>
+    <item find="semmere" replace="semerre"/>
+    <item find=":foci:" replace="聾"/>
+    <item find="ey" replace="ez"/>
+    <item find=":gomba:" replace=""/>
+    <item find="fejbeütés.*" replace="fejbe ütés"/>
+    <item find=":egér3:" replace=""/>
+    <item find="Babettel" replace="Babett-tel"/>
+    <item find=":szív:" replace="❤"/>
+    <item find="minusz.*" replace="mínusz"/>
+    <item find=":elutasítás:" replace=""/>
+    <item find=":gomb:" replace=""/>
+    <item find=":óra2:" replace=""/>
+    <item find=":tollaslabda:" replace=""/>
+    <item find=":ffl:" replace="ﬄ"/>
+    <item find=":buborék9:" replace=""/>
+    <item find="szivem" replace="szívem"/>
+    <item find=":csákány:" replace="⛏"/>
+    <item find=":ördögvilla:" replace="落"/>
+    <item find="mennyasszon.*" replace="menyasszon"/>
+    <item find=":Éta:" replace="Η"/>
+    <item find="nyomonkövetésé.*" replace="nyomon követésé"/>
+    <item find=":töprengő:" replace=""/>
+    <item find=":álmos:" replace=""/>
+    <item find=":hívj:" replace="酪"/>
+    <item find=":szédül:" replace=""/>
+    <item find="Rákóczi-híd.*" replace="Rákóczi híd"/>
+    <item find=":lakat:" replace=""/>
+    <item find=":város:" replace=""/>
+    <item find="sarlatanizmus.*" replace="sarlatánizmus"/>
+    <item find=":hús3:" replace=""/>
+    <item find=":cukiság:" replace=""/>
+    <item find=":botkormány:" replace=""/>
+    <item find="táj jellegű.*" replace="tájjellegű"/>
+    <item find=".*(c)" replace="©"/>
+    <item find=":nyugodt:" replace=""/>
+    <item find="menetközben" replace="menet közben"/>
+    <item find=":font:" replace="£"/>
+    <item find=":ököl4:" replace="卵"/>
+    <item find=":baht:" replace="฿"/>
+    <item find="egyátalán" replace="egyáltalán"/>
+    <item find="előrelátható" replace="előre látható"/>
+    <item find=":sport:" replace=""/>
+    <item find="melegvizű.*" replace="meleg vizű"/>
+    <item find=":olló3:" replace="✁"/>
+    <item find=":Pszi:" replace="Ψ"/>
+    <item find=":kettőskereszt3:" replace="턪"/>
+    <item find=":ló2:" replace=""/>
+    <item find=":erdő:" replace=""/>
+    <item find="igénybevevő.*" replace="igénybe vevő"/>
+    <item find="Árpádházi.*" replace="Árpád-házi"/>
+    <item find=":könyvek:" replace=""/>
+    <item find=":ék és kalapács:" replace="⚒"/>
+    <item find=":tűzijáték:" replace=""/>
+    <item find=":csiga:" replace=""/>
+    <item find="teljes-körűen" replace="teljeskörűen"/>
+    <item find=":szerelmes:" replace=""/>
+    <item find=":csúszós út:" replace="⛐"/>
+    <item find=":nyelv2:" replace=""/>
+    <item find=":ÉD2:" replace="⇕"/>
+    <item find="vizi" replace="vízi"/>
+    <item find="hírdetés.*" replace="hirdetés"/>
+    <item find=":torna:" replace="露"/>
+    <item find=":gyalogos:" replace=""/>
+    <item find=":bankkártya:" replace=""/>
+    <item find="sehogyse" replace="sehogy se"/>
+    <item find=":mobil2:" replace=""/>
+    <item find="útbaigazít.*" replace="útba igazít"/>
+    <item find=":billentyűzet3:" replace=""/>
+    <item find="előlről" replace="elölről"/>
+    <item find=":párhuzamos:" replace="∥"/>
+    <item find=":postaláda3:" replace=""/>
+    <item find=".*-&gt;.*" replace="→"/>
+    <item find="szárazbab-főzelék.*" replace="szárazbabfőzelék"/>
+    <item find="nyakoncsapás.*" replace="nyakon csapás"/>
+    <item find=":rögbi:" replace=""/>
+    <item find=":_1:" replace="₁"/>
+    <item find="igénybevett" replace="igénybe vett"/>
+    <item find="tizes" replace="tízes"/>
+    <item find=":választás:" replace=""/>
+    <item find="Marianná" replace="Mariann-ná"/>
+    <item find="Lodzdzsal" replace="Łódźdzsal"/>
+    <item find=":rajzszög3:" replace=""/>
+    <item find="szószerint" replace="szó szerint"/>
+    <item find=":hangszóró2:" replace=""/>
+    <item find=":koporsó:" replace="⚰"/>
+    <item find=":pentagramma:" replace="⛤"/>
+    <item find="valszeg" replace="valószínűleg"/>
+    <item find=":integrál2:" replace="∬"/>
+    <item find=":fok:" replace="°"/>
+    <item find=":idegen:" replace=""/>
+    <item find="nagyritkán" replace="nagy ritkán"/>
+    <item find="nagyforgalmú.*" replace="nagy forgalmú"/>
+    <item find=":megafon:" replace=""/>
+    <item find=":hatszög2:" replace="⬢"/>
+    <item find="semiféle" replace="semmiféle"/>
+    <item find=":fekete szív:" replace=""/>
+    <item find="ambíciózus.*" replace="ambiciózus"/>
+    <item find="déja vu.*" replace="déjà vu"/>
+    <item find="i.sz." replace="i. sz."/>
+    <item find=":plútó:" replace="♇"/>
+    <item find=":1h:" replace=""/>
+    <item find=":homokóra2:" replace="⏳"/>
+    <item find=":macska5:" replace=""/>
+    <item find=":jelölőnégyzet6:" replace=""/>
+    <item find=":kakas:" replace=""/>
+    <item find=":félhold:" replace=""/>
+    <item find=":kismama:" replace="擄"/>
+    <item find=".*(r)" replace="®"/>
+    <item find="háromhónapos.*" replace="három hónapos"/>
+    <item find=":hegy2:" replace=""/>
+    <item find="kultúrális.*" replace="kulturális"/>
+    <item find=":taco:" replace=""/>
+    <item find=":vezér:" replace="♕"/>
+    <item find=":rózsa:" replace=""/>
+    <item find="utólsó.*" replace="utolsó"/>
+    <item find=":hangjegyek3:" replace=""/>
+    <item find=":gyalog:" replace="♙"/>
+    <item find=":cipzár:" replace="蘿"/>
+    <item find=":_khi:" replace="ᵪ"/>
+    <item find=":doboz:" replace=""/>
+    <item find="3/4" replace="¾"/>
+    <item find=":zene:" replace=""/>
+    <item find=":csomag2:" replace=""/>
+    <item find="igénybevehető.*" replace="igénybe vehető"/>
+    <item find=":virág6:" replace="鹿"/>
+    <item find=":flopi4:" replace=""/>
+    <item find=":pagoda:" replace=""/>
+    <item find=":kalap2:" replace=""/>
+    <item find=":_s:" replace="ₛ"/>
+    <item find="nagyhatású.*" replace="nagy hatású"/>
+    <item find=":bástya:" replace="♖"/>
+    <item find="Sydneyb.*" replace="Sydney-b"/>
+    <item find=":euró:" replace="€"/>
+    <item find="kilóméter.*" replace="kilométer"/>
+    <item find=":satu:" replace=""/>
+    <item find="négyhónapos.*" replace="négy hónapos"/>
+    <item find="nagyhírű.*" replace="nagy hírű"/>
+    <item find=":bőr4:" replace=""/>
+    <item find=":öröm2:" replace=""/>
+    <item find=":teknős:" replace=""/>
+    <item find="Erzsébet-híd.*" replace="Erzsébet híd"/>
+    <item find=":gyök:" replace="√"/>
+    <item find=":fi2:" replace="ﬁ"/>
+    <item find=":fürdőkád:" replace=""/>
+    <item find=":futás:" replace=""/>
+    <item find=":kenyér2:" replace="稜"/>
+    <item find="nagyjelentőségű.*" replace="nagy jelentőségű"/>
+    <item find="gombamódra" replace="gomba módra"/>
+    <item find=":spock:" replace=""/>
+    <item find=":mappa2:" replace=""/>
+    <item find="nagz" replace="nagy"/>
+    <item find="C-os" replace="°C-os"/>
+    <item find=":kivi:" replace="諾"/>
+    <item find="legalább is" replace="legalábbis"/>
+    <item find="késség.*" replace="készség"/>
+    <item find=":részhalmaza2:" replace="⊃"/>
+    <item find="többmillióan" replace="több millióan"/>
+    <item find="házhozszállítás.*" replace="házhoz szállítás"/>
+    <item find=":curling:" replace="樓"/>
+    <item find=":telefon9:" replace=""/>
+    <item find="felsővezetői.*" replace="felső vezetői"/>
+    <item find=":mikrobusz:" replace=""/>
+    <item find=":tiltott:" replace=""/>
+    <item find="semis" replace="semmis"/>
+    <item find=":kígyó:" replace=""/>
+    <item find="&lt;--" replace="←"/>
+    <item find="többezren" replace="több ezren"/>
+    <item find=":csibe3:" replace=""/>
+    <item find=":alma:" replace=""/>
+    <item find=":rizskeksz:" replace=""/>
+    <item find="növényvédőszerek.*" replace="növényvédő szerek"/>
+    <item find="ird" replace="írd"/>
+    <item find="pozició.*" replace="pozíció"/>
+    <item find=":posta:" replace=""/>
+    <item find=":néma:" replace=""/>
+    <item find=":templom:" replace="⛪"/>
+    <item find=":tau:" replace="τ"/>
+    <item find=":andráskereszt:" replace="☓"/>
+    <item find="mirelitáru.*" replace="mirelit áru"/>
+    <item find=":agy:" replace="易"/>
+    <item find=":mozdony:" replace=""/>
+    <item find="keresztes pók.*" replace="keresztespók"/>
+    <item find="gömbalakú.*" replace="gömb alakú"/>
+    <item find=":karácsony:" replace=""/>
+    <item find=":merkúr:" replace="☿"/>
+    <item find="nemmindennapi.*" replace="nem mindennapi"/>
+    <item find="nagytekintélyű.*" replace="nagy tekintélyű"/>
+    <item find="javarésze" replace="java része"/>
+    <item find="ígz" replace="így"/>
+    <item find="utján" replace="útján"/>
+    <item find=":zsinagóga:" replace=""/>
+    <item find=":farkas:" replace=""/>
+    <item find=":jeruzsálemi kereszt:" replace="☩"/>
+    <item find="lelyebb" replace="lejjebb"/>
+    <item find=":dokumentum3:" replace=""/>
+    <item find=":ceruza:" replace="✎"/>
+    <item find="egyösszegben" replace="egy összegben"/>
+    <item find="charme-.*" replace="sárm"/>
+    <item find=":cseresznye:" replace=""/>
+    <item find=":^+:" replace="⁺"/>
+    <item find="üzemközbeni.*" replace="üzem közbeni"/>
+    <item find=":ciklon:" replace=""/>
+    <item find=":hányás:" replace="冷"/>
+    <item find=":köd:" replace=""/>
+    <item find=":ördög:" replace=""/>
+    <item find="szabaddemokrat.*" replace="szabad demokrat"/>
+    <item find=":zuhanyzó:" replace=""/>
+    <item find=":nyom:" replace=""/>
+    <item find=":gyalogos2:" replace=""/>
+    <item find=":pszi:" replace="ψ"/>
+    <item find=":paralelogramma:" replace="▱"/>
+    <item find="utánna" replace="utána"/>
+    <item find=":jobb3:" replace="☛"/>
+    <item find=":szorzás2:" replace="✖"/>
+    <item find="szentéletű.*" replace="szent életű"/>
+    <item find=":4.30:" replace=""/>
+    <item find=":show:" replace=""/>
+    <item find=":kos:" replace=""/>
+    <item find=":perzsa:" replace="☫"/>
+    <item find=":pohár3:" replace="弄"/>
+    <item find=":szintetizátor:" replace=""/>
+    <item find="megszűntetés.*" replace="megszüntetés"/>
+    <item find=":fogyó hold:" replace=""/>
+    <item find="emailben" replace="ímélben"/>
+    <item find=":^J:" replace="ᴶ"/>
+    <item find=":oroszlán2:" replace="♌"/>
+    <item find=":Kába:" replace=""/>
+    <item find=":szőlő:" replace=""/>
+    <item find=":autó2:" replace=""/>
+    <item find=":első negyed:" replace=""/>
+    <item find="file" replace="fájl"/>
+    <item find=":kerékpározás:" replace=""/>
+    <item find=".*^0.*" replace="⁰"/>
+    <item find=":zápor:" replace=""/>
+    <item find="kivánt" replace="kívánt"/>
+    <item find=":szigma2:" replace="ς"/>
+    <item find="hivő" replace="hívő"/>
+    <item find="íly" replace="ily"/>
+    <item find="elektroencefalogram.*" replace="elektroenkefalogram"/>
+    <item find=":~:" replace="≈"/>
+    <item find=":jó:" replace=""/>
+    <item find="szennyezőanyagok.*" replace="szennyező anyagok"/>
+    <item find=":torta:" replace=""/>
+    <item find=":antenna:" replace=""/>
+    <item find=":kerékpár:" replace=""/>
+    <item find=":_h:" replace="ₕ"/>
+    <item find=".*^=.*" replace="⁼"/>
+    <item find="poznani.*" replace="poznańi"/>
+    <item find=":9.30:" replace=""/>
+    <item find=":7.30:" replace=""/>
+    <item find=":vízilabda:" replace="綠"/>
+    <item find=":^t:" replace="ᵗ"/>
+    <item find=":királylány:" replace=""/>
+    <item find=":kártya2:" replace=""/>
+    <item find=":kém:" replace=""/>
+    <item find="alíg" replace="alig"/>
+    <item find="welnesz.*" replace="wellness"/>
+    <item find="project.*" replace="projekt"/>
+    <item find=":nyolcadhang:" replace="텠"/>
+    <item find=":újrapapír:" replace="♼"/>
+    <item find="melegvíz" replace="meleg víz"/>
+    <item find=":uborka:" replace="勒"/>
+    <item find=":orr:" replace=""/>
+    <item find="e-mail-en" replace="ímélen"/>
+    <item find=":buborék10:" replace=""/>
+    <item find=":Zéta:" replace="Ζ"/>
+    <item find="kivánság" replace="kívánság"/>
+    <item find="husvéti" replace="húsvéti"/>
+    <item find=":jegy2:" replace=""/>
+    <item find="télvégi.*" replace="tél végi"/>
+    <item find=":villamos2:" replace=""/>
+    <item find=":szemét:" replace=""/>
+    <item find=":szív10:" replace=""/>
+    <item find=":^gamma:" replace="ᵞ"/>
+    <item find=":nem eleme:" replace="∉"/>
+    <item find="szokják" replace="szokták"/>
+    <item find=":kecske:" replace=""/>
+    <item find=":dollár:" replace=""/>
+    <item find=":szalag:" replace=""/>
+    <item find="mégsincs" replace="még sincs"/>
+    <item find=":óriáskerék:" replace=""/>
+    <item find="főműve" replace="fő műve"/>
+    <item find=":&gt;=:" replace="≥"/>
+    <item find=":nem:" replace="¬"/>
+    <item find="semilyen.*" replace="semmilyen"/>
+    <item find=":!?:" replace="⁉"/>
+    <item find="affelett" replace="afelett"/>
+    <item find=":mégsem:" replace=""/>
+    <item find="sajátkezű.*" replace="saját kezű"/>
+    <item find=".*^1.*" replace="¹"/>
+    <item find=":toll2:" replace=""/>
+    <item find="Adriennel" replace="Adrienn-nel"/>
+    <item find="lámpaburá.*" replace="lámpabúrá"/>
+    <item find=":majom2:" replace=""/>
+    <item find="sósperec.*" replace="sós perec"/>
+    <item find=":rúpia:" replace="₹"/>
+    <item find=":füzet2:" replace=""/>
+    <item find="Sydneyn.*" replace="Sydney-n"/>
+    <item find="végsőfokon" replace="végső fokon"/>
+    <item find="legmagasabbrendű.*" replace="legmagasabb rendű"/>
+    <item find=":közepes négyzet2:" replace="◼"/>
+    <item find=":vonalzó2:" replace=""/>
+    <item find=":szamóca:" replace=""/>
+    <item find="angström.*" replace="ångström"/>
+    <item find="nyolchónapos.*" replace="nyolc hónapos"/>
+    <item find="B. ú. é. k." replace="BÚÉK"/>
+    <item find=":tányér:" replace=""/>
+    <item find="M0-ás.*" replace="M0-s"/>
+    <item find="kisalakú.*" replace="kis"/>
+    <item find="semikor" replace="semmikor"/>
+    <item find=":Szigma:" replace="Σ"/>
+    <item find=":csengő:" replace=""/>
+    <item find="résztvesz.*" replace="részt vesz"/>
+    <item find=":fű:" replace=""/>
+    <item find=".*^2.*" replace="²"/>
+    <item find=":_5:" replace="₅"/>
+    <item find=":_v:" replace="ᵥ"/>
+    <item find=":kszi:" replace="ξ"/>
+    <item find="hivők" replace="hívők"/>
+    <item find=":számológép:" replace=""/>
+    <item find=":ímél:" replace=""/>
+    <item find="imígyen" replace="imigyen"/>
+    <item find=":^6:" replace="⁶"/>
+    <item find="dícsér.*" replace="dicsér"/>
+    <item find=":szélcsengő:" replace=""/>
+    <item find=".*%-al" replace="%-kal"/>
+    <item find=":pohár:" replace=""/>
+    <item find=":ágy:" replace=""/>
+    <item find=".*/m3" replace="/m³"/>
+    <item find=":növény:" replace=""/>
+    <item find="A0-ás" replace="A0-s"/>
+    <item find=":telihold:" replace=""/>
+    <item find=":időzítő:" replace="⏲"/>
+    <item find="minnél" replace="minél"/>
+    <item find=":théta:" replace="θ"/>
+    <item find=":^n:" replace="ⁿ"/>
+    <item find="nagyformátumú.*" replace="nagy formátumú"/>
+    <item find=":hal:" replace=""/>
+    <item find=":menyasszony:" replace=""/>
+    <item find=":tészta2:" replace="寧"/>
+    <item find=":kuka:" replace=""/>
+    <item find=":_3:" replace="₃"/>
+    <item find=":radioaktív:" replace="☢"/>
+    <item find=":!2:" replace="❗"/>
+    <item find=":földgömb:" replace=""/>
+    <item find="egydarabig" replace="egy darabig"/>
+    <item find=":térkép:" replace=""/>
+    <item find="szembenálló.*" replace="szemben álló"/>
+    <item find="árboc.*" replace="árbóc"/>
+    <item find=":virág4:" replace=""/>
+    <item find=":növő holdsarló:" replace=""/>
+    <item find="nagyszámban" replace="nagy számban"/>
+    <item find=":1.30:" replace=""/>
+    <item find=":jóga:" replace="律"/>
+    <item find="ilymódon" replace="ily módon"/>
+    <item find="autogramm" replace="autogram"/>
+    <item find=":!:" replace="❕"/>
+    <item find=":dob:" replace="論"/>
+    <item find=":videojáték:" replace=""/>
+    <item find=":diploma:" replace=""/>
+    <item find=":forrás:" replace="⛲"/>
+    <item find=":üres jegyzetek:" replace=""/>
+    <item find=":vásárlás:" replace=""/>
+    <item find=":beteg:" replace="裸"/>
+    <item find=":szerelem:" replace=""/>
+    <item find="mélyvízbe" replace="mély vízbe"/>
+    <item find="egyidőben" replace="egy időben"/>
+    <item find=":/:" replace="∕"/>
+    <item find="magasabbrendű.*" replace="magasabb rendű"/>
+    <item find="metropolis.*" replace="metropolisz"/>
+    <item find="felelőség.*" replace="felelősség"/>
+    <item find=":dvd:" replace=""/>
+    <item find=":_e:" replace="ₑ"/>
+    <item find=":koponya:" replace=""/>
+    <item find=":kézfogás:" replace="欄"/>
+    <item find=":kereszt:" replace="†"/>
+    <item find="asszimetrikus.*" replace="aszimmetrikus"/>
+    <item find=":méz:" replace=""/>
+    <item find=":egér5:" replace=""/>
+    <item find=":csavar:" replace=""/>
+    <item find=":skorpió2:" replace="♏"/>
+    <item find="kőrút.*" replace="körút"/>
+    <item find=":unió:" replace="∪"/>
+    <item find="légyszíves" replace="légy szíves"/>
+    <item find=":kórház:" replace=""/>
+    <item find=":ellipszis:" replace="⬭"/>
+    <item find="felöli" replace="felőli"/>
+    <item find=":kerékpározás2:" replace=""/>
+    <item find=":^W:" replace="ᵂ"/>
+    <item find=":kisebb négyzet2:" replace="◾"/>
+    <item find=":pénz3:" replace="螺"/>
+    <item find=":virág5:" replace=""/>
+    <item find=":hangos:" replace=""/>
+    <item find=":pár4:" replace=""/>
+    <item find=":bal:" replace="☜"/>
+    <item find="samanizmus.*" replace="sámánizmus"/>
+    <item find=".*^(.*" replace="⁽"/>
+    <item find="ELTÉ-.*" replace="ELTE-"/>
+    <item find=":_fi:" replace="ᵩ"/>
+    <item find=":cent:" replace="¢"/>
+    <item find=":patkány:" replace=""/>
+    <item find="mindíg" replace="mindig"/>
+    <item find=":tenisz:" replace=""/>
+    <item find="hóvége" replace="hó vége"/>
+    <item find=":ÉNY:" replace="↖"/>
+    <item find="kölni víz" replace="kölnivíz"/>
+    <item find=":buli:" replace=""/>
+    <item find=":vigyor:" replace=""/>
+    <item find="mig" replace="míg"/>
+    <item find=":kos2:" replace="♈"/>
+    <item find=":szikra:" replace="❇"/>
+    <item find=":hal3:" replace=""/>
+    <item find=":nagy négyzet:" replace="⬜"/>
+    <item find="hidegvizű.*" replace="hideg vizű"/>
+    <item find=":Omikron:" replace="Ο"/>
+    <item find="kevésbbé" replace="kevésbé"/>
+    <item find=":fogyó holdsarló:" replace=""/>
+    <item find="kinálat.*" replace="kínálat"/>
+    <item find=":pá:" replace=""/>
+    <item find=":igen3:" replace=""/>
+    <item find=":lepke:" replace="曆"/>
+    <item find=":csüggedt:" replace=""/>
+    <item find=":pénz:" replace=""/>
+    <item find="szószerinti.*" replace="szó szerinti"/>
+    <item find="üzemközben" replace="üzem közben"/>
+    <item find=":mobil3:" replace=""/>
+    <item find=":bagoly:" replace="黎"/>
+    <item find="örökérvényű.*" replace="örök érvényű"/>
+    <item find="harcbavetés.*" replace="harcba vetés"/>
+    <item find="charme" replace="sárm"/>
+    <item find=":baba2:" replace=""/>
+    <item find=":ezrelék:" replace="‰"/>
+    <item find=":kacsintás:" replace=""/>
+    <item find=":kifejezéstelen:" replace=""/>
+    <item find=":fáradt:" replace=""/>
+    <item find=":copyright:" replace="©"/>
+    <item find="jóbarát.*" replace="jó barát"/>
+    <item find=":birka:" replace=""/>
+    <item find=":lapok:" replace=""/>
+    <item find="tuesday" replace="Tuesday"/>
+    <item find=":1/8:" replace="⅛"/>
+    <item find=":lakat4:" replace=""/>
+    <item find=":nyúl2:" replace=""/>
+    <item find="nagykiterjedésű.*" replace="nagy kiterjedésű"/>
+    <item find=":hangya:" replace=""/>
+    <item find=":citrom:" replace=""/>
+    <item find=":szemüveg:" replace=""/>
+    <item find="Kaszás-csillag.*" replace="Kaszáscsillag"/>
+    <item find="Annabellel" replace="Annabell-lel"/>
+    <item find=":kamion:" replace=""/>
+    <item find=":12h:" replace=""/>
+    <item find="koléga.*" replace="kolléga"/>
+    <item find=":maximalizálás:" replace=""/>
+    <item find="számottartó.*" replace="számot tartó"/>
+    <item find=":méh:" replace=""/>
+    <item find=":név:" replace=""/>
+    <item find="raggaszt.*" replace="ragaszt"/>
+    <item find=":szauna:" replace="淪"/>
+    <item find=":oklevél:" replace=""/>
+    <item find="együttérző" replace="együtt érző"/>
+    <item find=":nő:" replace=""/>
+    <item find=":sékel:" replace="₪"/>
+    <item find=":buborék3:" replace=""/>
+    <item find="hóközben" replace="hó közben"/>
+    <item find=":nem részhalmaza2:" replace="⊅"/>
+    <item find="eggy helyben" replace="egy helyben"/>
+    <item find="zártsorú.*" replace="zárt sorú"/>
+    <item find="munkaközbeni.*" replace="munka közbeni"/>
+    <item find="Anettel" replace="Anett-tel"/>
+    <item find=":tanácstalan:" replace=""/>
+    <item find=":_ró:" replace="ᵨ"/>
+    <item find=":pingvin:" replace=""/>
+    <item find="végefelé" replace="vége felé"/>
+    <item find="felöl" replace="felől"/>
+    <item find="előli" replace="elöli"/>
+    <item find=":szomorú:" replace=""/>
+    <item find=":É2:" replace="⇑"/>
+    <item find=":mikrofon:" replace=""/>
+    <item find=":hold2:" replace=""/>
+    <item find=":csepp:" replace=""/>
+    <item find=":ufó:" replace=""/>
+    <item find="nyil" replace="nyíl"/>
+    <item find="teakfa" replace="tíkfa"/>
+    <item find=":száj:" replace=""/>
+    <item find="hejesírás.*" replace="helyesírás"/>
+    <item find="hírdetmény.*" replace="hirdetmény"/>
+    <item find=":peso:" replace="₱"/>
+    <item find=":fi:" replace="φ"/>
+    <item find="közgazdaságtudomány.*" replace="közgazdaság-tudomány"/>
+    <item find=":^8:" replace="⁸"/>
+    <item find=":6h:" replace=""/>
+    <item find="tipus.*" replace="típus"/>
+    <item find=":ölelés:" replace="珞"/>
+    <item find=":fényképezőgép:" replace=""/>
+    <item find=":naptár3:" replace=""/>
+    <item find=":tm:" replace="™"/>
+    <item find=":kerékpár2:" replace=""/>
+    <item find="örökéletű.*" replace="örök életű"/>
+    <item find="boyler" replace="bojler"/>
+    <item find=":zsonglőr:" replace="魯"/>
+    <item find="savanyútojás-leves.*" replace="savanyú tojásleves"/>
+    <item find=":bikini:" replace=""/>
+    <item find=":nagyító:" replace=""/>
+    <item find="nagyvonalakban" replace="nagy vonalakban"/>
+    <item find=":Kszi:" replace="Ξ"/>
+    <item find=":boríték4:" replace=""/>
+    <item find=":panda:" replace=""/>
+    <item find=":pálma:" replace=""/>
+    <item find="tisztántartás.*" replace="tisztán tartás"/>
+    <item find=":integrál4:" replace="∮"/>
+    <item find="mostmár" replace="most már"/>
+    <item find=":izzó:" replace=""/>
+    <item find=":Üpszilon:" replace="Υ"/>
+    <item find="D vitamin.*" replace="D-vitamin"/>
+    <item find=":dobókocka4:" replace="⚃"/>
+    <item find=":le2:" replace=""/>
+    <item find="immúnis.*" replace="immunis"/>
+    <item find=":madár:" replace=""/>
+    <item find="résztvenni" replace="részt venni"/>
+    <item find=":és:" replace="∧"/>
+    <item find=":tálca:" replace=""/>
+    <item find="like-ol.*" replace="lájkol"/>
+    <item find=":pezsgő:" replace=""/>
+    <item find=":számítógép:" replace=""/>
+    <item find="évvége" replace="év vége"/>
+    <item find=":modem:" replace=""/>
+    <item find="szines" replace="színes"/>
+    <item find=":_=:" replace="₌"/>
+    <item find="thursday" replace="Thursday"/>
+    <item find=":rózsafüzér:" replace=""/>
+    <item find="évközben" replace="év közben"/>
+    <item find=":kenyér:" replace=""/>
+    <item find=":caduceus:" replace="☤"/>
+    <item find=":mappa4:" replace=""/>
+    <item find=":---:" replace="—"/>
+    <item find="teltház" replace="telt ház"/>
+    <item find=":benzinkút:" replace="⛽"/>
+    <item find="kézség.*" replace="készség"/>
+    <item find=":hódeszka:" replace=""/>
+    <item find="kultúrált.*" replace="kulturált"/>
+    <item find="Poznannyal" replace="Poznańnyal"/>
+    <item find="Adriennél" replace="Adrienn-nél"/>
+    <item find=":fagyi2:" replace=""/>
+    <item find=":repülőgép2:" replace=""/>
+    <item find=":mappa:" replace=""/>
+    <item find=":mérleg2:" replace="♎"/>
+    <item find=":ortodox kereszt:" replace="☦"/>
+    <item find=":vár:" replace=""/>
+    <item find="gyanu" replace="gyanú"/>
+    <item find=":szelfi:" replace="盧"/>
+    <item find=":Nű:" replace="Ν"/>
+    <item find="saturday" replace="Saturday"/>
+    <item find=":autópálya:" replace=""/>
+    <item find="szén-dioxid kibocsátás.*" replace="szén-dioxid-kibocsátás"/>
+    <item find=":ember:" replace="⛹"/>
+    <item find=":máltai kereszt:" replace="✠"/>
+    <item find=":ártatlan:" replace=""/>
+    <item find="meghírdetett" replace="meghirdetett"/>
+    <item find=":felhő3:" replace="⛈"/>
+    <item find=":lampion:" replace=""/>
+    <item find=":fel5:" replace=""/>
+    <item find=":vám:" replace=""/>
+    <item find=":DK:" replace="↘"/>
+    <item find=":kör4:" replace=""/>
+    <item find="félévközben.*" replace="félév közben"/>
+    <item find=":ébresztőóra:" replace="⏰"/>
+    <item find=":mikrofon2:" replace=""/>
+    <item find="határontúli.*" replace="határon túli"/>
+    <item find=":stop2:" replace="⏹"/>
+    <item find=":bal2:" replace=""/>
+    <item find="emailen" replace="ímélen"/>
+    <item find=":izom:" replace=""/>
+    <item find=":fel4:" replace=""/>
+    <item find=":hapci:" replace="蠟"/>
+    <item find=".*&lt;-.*" replace="←"/>
+    <item find="eggy csapásra" replace="egy csapásra"/>
+    <item find=":ff:" replace="ﬀ"/>
+    <item find=":^alfa:" replace="ᵅ"/>
+    <item find=":földgömb2:" replace=""/>
+    <item find=":kéz4:" replace="駱"/>
+    <item find="semifelé" replace="semmifelé"/>
+    <item find="kultura.*" replace="kultúra"/>
+    <item find=":^7:" replace="⁷"/>
+    <item find=":Hold2:" replace="☾"/>
+    <item find=":szél:" replace=""/>
+    <item find=":mez:" replace=""/>
+    <item find="hrsz-ú.*" replace="hrsz.-ú"/>
+    <item find=":végtelen:" replace="∞"/>
+    <item find="zártkörű.*" replace="zárt körű"/>
+    <item find=":négyzet2:" replace="□"/>
+    <item find="lehellet.*" replace="lehelet"/>
+    <item find=":oden:" replace=""/>
+    <item find=":hangszóró4:" replace=""/>
+    <item find=":biliárd:" replace=""/>
+    <item find="Htp" replace="http"/>
+    <item find="melz" replace="mely"/>
+    <item find=":tenyér2:" replace="爐"/>
+    <item find=":halak:" replace="♓"/>
+    <item find=":bowling:" replace=""/>
+    <item find=":pipa3:" replace="✅"/>
+    <item find=":behajtani tilos:" replace="⛔"/>
+    <item find=":buszmegálló:" replace=""/>
+    <item find="játszák" replace="játsszák"/>
+    <item find="Dvorak.*" replace="Dvořák"/>
+    <item find=":szemét2:" replace=""/>
+    <item find=":bubi:" replace=""/>
+    <item find="szeint" replace="szerint"/>
+    <item find=":1/3:" replace="⅓"/>
+    <item find=":fel:" replace="☝"/>
+    <item find=":földgömb4:" replace=""/>
+    <item find=":^(:" replace="⁽"/>
+    <item find=":jobb6:" replace=""/>
+    <item find="célratörés.*" replace="célra törés"/>
+    <item find=":om:" replace=""/>
+    <item find="Babes–Bolyai.*" replace="Babeș–Bolyai"/>
+    <item find="MrdFt" replace="Mrd Ft"/>
+    <item find=":^D:" replace="ᴰ"/>
+    <item find=":kocka:" replace="邏"/>
+    <item find=":termálvíz:" replace="♨"/>
+    <item find="idegennyelvi" replace="idegen nyelvi"/>
+    <item find=":sugár3:" replace=""/>
+    <item find="e-mail-ben" replace="ímélben"/>
+    <item find=":_x:" replace="ₓ"/>
+    <item find=":cukor:" replace=""/>
+    <item find="higyje" replace="higgye"/>
+    <item find=":nőnemű:" replace="♀"/>
+    <item find=":huszár:" replace="♘"/>
+    <item find="Bernadettel" replace="Bernadett-tel"/>
+    <item find="villamosenergia" replace="villamos energia"/>
+    <item find=":3.30:" replace=""/>
+    <item find=":szellem:" replace=""/>
+    <item find=":fagyi:" replace=""/>
+    <item find=":fax:" replace=""/>
+    <item find=":érem2:" replace=""/>
+    <item find=":nagy kör:" replace="◯"/>
+    <item find=":tévé:" replace=""/>
+    <item find="Angstrom.*" replace="Ångström"/>
+    <item find="abbéli" replace="abbeli"/>
+    <item find="angstrom.*" replace="ångström"/>
+    <item find=":^z:" replace="ᶻ"/>
+    <item find=":pikk2:" replace="♤"/>
+    <item find=":optikai lemez:" replace=""/>
+    <item find=":pajzs2:" replace="⛨"/>
+    <item find="Babettá" replace="Babett-tá"/>
+    <item find="papir" replace="papír"/>
+    <item find=":ceruza4:" replace=""/>
+    <item find=":hév:" replace=""/>
+    <item find=":puding:" replace=""/>
+    <item find="jórészé.*" replace="jó részé"/>
+    <item find=":egysínű:" replace=""/>
+    <item find="nyárvégi.*" replace="nyár végi"/>
+    <item find=":lambda:" replace="λ"/>
+    <item find=":jen:" replace="¥"/>
+    <item find="síma" replace="sima"/>
+    <item find="megszűntetni" replace="megszüntetni"/>
+    <item find=":kanyar:" replace="☡"/>
+    <item find=":vonat3:" replace=""/>
+    <item find=":postaláda2:" replace=""/>
+    <item find="nagysebességű.*" replace="nagy sebességű"/>
+    <item find="igéret.*" replace="ígéret"/>
+    <item find=":_k:" replace="ₖ"/>
+    <item find=":esernyő2:" replace=""/>
+    <item find=":csillag:" replace="★"/>
+    <item find="továbbtart" replace="tovább tart"/>
+    <item find=":süti:" replace=""/>
+    <item find=":keret2:" replace=""/>
+    <item find=":üres lapok:" replace=""/>
+    <item find=":hurrá:" replace=""/>
+    <item find=":_u:" replace="ᵤ"/>
+    <item find=":teve:" replace=""/>
+    <item find=":2.30:" replace=""/>
+    <item find=":kis eleme:" replace="∊"/>
+    <item find="Henriettel" replace="Henriett-tel"/>
+    <item find="pennicillin.*" replace="penicillin"/>
+    <item find=":ebéd:" replace=""/>
+    <item find=":rák4:" replace=""/>
+    <item find=":2h:" replace=""/>
+    <item find=":tücsök:" replace="聯"/>
+    <item find=":disznó:" replace=""/>
+    <item find="tenyérbe mászóan" replace="tenyérbemászóan"/>
+    <item find=":létezik:" replace="∃"/>
+    <item find=":NY2:" replace="⇐"/>
+    <item find=":ruha:" replace=""/>
+    <item find="buza" replace="búza"/>
+    <item find="Lódzdzsal" replace="Łódźdzsal"/>
+    <item find="nyílt szívű.*" replace="nyíltszívű"/>
+    <item find="talián.*" replace="talján"/>
+    <item find="audencia.*" replace="audiencia"/>
+    <item find=":vőlegény:" replace="蘆"/>
+    <item find=":hohó:" replace="廊"/>
+    <item find="hektóliter.*" replace="hektoliter"/>
+    <item find=":_j:" replace="ⱼ"/>
+    <item find=":evőpálcika:" replace="異"/>
+    <item find=":ikrek:" replace="♊"/>
+    <item find="legújabbkori.*" replace="legújabb kori"/>
+    <item find="Mariannál" replace="Mariann-nál"/>
+    <item find=":angyal:" replace=""/>
+    <item find=":^m:" replace="ᵐ"/>
+    <item find="bedekker.*" replace="bédekker"/>
+    <item find=":bolt:" replace=""/>
+    <item find=":reggel:" replace=""/>
+    <item find=":kereszt3:" replace=""/>
+    <item find=":jobb:" replace="☞"/>
+    <item find=":fürdő:" replace=""/>
+    <item find=":sátor:" replace="⛺"/>
+    <item find=":téglalap2:" replace="▬"/>
+    <item find=":_0:" replace="₀"/>
+    <item find=":buborék2:" replace=""/>
+    <item find="struktura.*" replace="struktúra"/>
+    <item find=":10.30:" replace=""/>
+    <item find="Babettól" replace="Babett-tól"/>
+    <item find="soronkívül.*" replace="soron kívül"/>
+    <item find=":delfin:" replace=""/>
+    <item find=":fenyő:" replace=""/>
+    <item find=":kutya2:" replace=""/>
+    <item find=":színház:" replace=""/>
+    <item find="lelkiismeretfurdalás.*" replace="lelkiismeret-furdalás"/>
+    <item find=":gemkapocs2:" replace=""/>
+    <item find="licenssz.*" replace="licencc"/>
+    <item find=":szerelem2:" replace=""/>
+    <item find=":repülőgép4:" replace=""/>
+    <item find=":hangjegyek2:" replace="♬"/>
+    <item find=":fánk:" replace=""/>
+    <item find=":^r:" replace="ʳ"/>
+    <item find=":4h:" replace=""/>
+    <item find=":rúzs:" replace=""/>
+    <item find=":bálna:" replace=""/>
+    <item find=":DNY:" replace="↙"/>
+    <item find=":kávé:" replace="☕"/>
+    <item find=":szöveg:" replace=""/>
+    <item find=":tigris:" replace=""/>
+    <item find=":tornádó:" replace=""/>
+    <item find=":csalódott:" replace=""/>
+    <item find=":hibiszkusz:" replace=""/>
+    <item find="nyul" replace="nyúl"/>
+    <item find=":_):" replace="₎"/>
+    <item find="tanu" replace="tanú"/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="röv."/>
+    <word exception="xlv."/>
+    <word exception="Kbt."/>
+    <word exception="jún."/>
+    <word exception="uo."/>
+    <word exception="zrt."/>
+    <word exception="Ptk."/>
+    <word exception="lxxi."/>
+    <word exception="Pf."/>
+    <word exception="clxxiv."/>
+    <word exception="xxxix."/>
+    <word exception="clxxxix."/>
+    <word exception="lxxv."/>
+    <word exception="ált."/>
+    <word exception="dny."/>
+    <word exception="ifj."/>
+    <word exception="honv."/>
+    <word exception="Mt."/>
+    <word exception="cliv."/>
+    <word exception="kp."/>
+    <word exception="nyá."/>
+    <word exception="clxiv."/>
+    <word exception="Etv."/>
+    <word exception="cxxxi."/>
+    <word exception="cxxxviii."/>
+    <word exception="gr."/>
+    <word exception="Csjt."/>
+    <word exception="bek."/>
+    <word exception="á."/>
+    <word exception="cxxv."/>
+    <word exception="cix."/>
+    <word exception="júl."/>
+    <word exception="lix."/>
+    <word exception="xci."/>
+    <word exception="w."/>
+    <word exception="xlviii."/>
+    <word exception="lvi."/>
+    <word exception="p."/>
+    <word exception="lxix."/>
+    <word exception="lvii."/>
+    <word exception="xvii."/>
+    <word exception="hrsz."/>
+    <word exception="xcv."/>
+    <word exception="Tbj."/>
+    <word exception="rkp."/>
+    <word exception="clxxxii."/>
+    <word exception="xc."/>
+    <word exception="Hpt."/>
+    <word exception="xciii."/>
+    <word exception="ty."/>
+    <word exception="Btk."/>
+    <word exception="lxxxiii."/>
+    <word exception="AkH."/>
+    <word exception="clxxix."/>
+    <word exception="xxix."/>
+    <word exception="vi."/>
+    <word exception="clvi."/>
+    <word exception="cxxvii."/>
+    <word exception="clxxvi."/>
+    <word exception="Kr."/>
+    <word exception="ék."/>
+    <word exception="egy."/>
+    <word exception="kk."/>
+    <word exception="tszf."/>
+    <word exception="cvi."/>
+    <word exception="clxxviii."/>
+    <word exception="lxiii."/>
+    <word exception="xciv."/>
+    <word exception="cxxii."/>
+    <word exception="okl."/>
+    <word exception="cxxxv."/>
+    <word exception="prot."/>
+    <word exception="Bp."/>
+    <word exception="Avtv."/>
+    <word exception="Áe."/>
+    <word exception="MHSz."/>
+    <word exception="cxcvi."/>
+    <word exception="cxvi."/>
+    <word exception="h."/>
+    <word exception="xv."/>
+    <word exception="id."/>
+    <word exception="clxxv."/>
+    <word exception="clxxxiv."/>
+    <word exception="cxcviii."/>
+    <word exception="iv."/>
+    <word exception="min."/>
+    <word exception="Hszt."/>
+    <word exception="ov."/>
+    <word exception="em."/>
+    <word exception="xl."/>
+    <word exception="cli."/>
+    <word exception="xxxii."/>
+    <word exception="ly."/>
+    <word exception="xlvii."/>
+    <word exception="prof."/>
+    <word exception="xxii."/>
+    <word exception="l."/>
+    <word exception="hiv."/>
+    <word exception="clxviii."/>
+    <word exception="f."/>
+    <word exception="kft."/>
+    <word exception="clii."/>
+    <word exception="Gyvt."/>
+    <word exception="okt."/>
+    <word exception="megj."/>
+    <word exception="ker."/>
+    <word exception="kkt."/>
+    <word exception="clxiii."/>
+    <word exception="ld."/>
+    <word exception="cxxvi."/>
+    <word exception="ig."/>
+    <word exception="Vtv."/>
+    <word exception="érk."/>
+    <word exception="xxxiii."/>
+    <word exception="clv."/>
+    <word exception="koll."/>
+    <word exception="cxxxiii."/>
+    <word exception="clxvi."/>
+    <word exception="z."/>
+    <word exception="cxv."/>
+    <word exception="Gt."/>
+    <word exception="lxxix."/>
+    <word exception="cx."/>
+    <word exception="xxviii."/>
+    <word exception="clxxxi."/>
+    <word exception="d."/>
+    <word exception="cxliv."/>
+    <word exception="ny."/>
+    <word exception="Ötv."/>
+    <word exception="clx."/>
+    <word exception="xlvi."/>
+    <word exception="htb."/>
+    <word exception="Mo."/>
+    <word exception="cxxxiv."/>
+    <word exception="febr."/>
+    <word exception="főisk."/>
+    <word exception="rk."/>
+    <word exception="xxvii."/>
+    <word exception="clxxxviii."/>
+    <word exception="Ve."/>
+    <word exception="gör."/>
+    <word exception="jegyz."/>
+    <word exception="cs."/>
+    <word exception="cv."/>
+    <word exception="é."/>
+    <word exception="ort."/>
+    <word exception="xxv."/>
+    <word exception="cxvii."/>
+    <word exception="lxvi."/>
+    <word exception="szept."/>
+    <word exception="tel."/>
+    <word exception="tvr."/>
+    <word exception="xiv."/>
+    <word exception="máj."/>
+    <word exception="cxcvii."/>
+    <word exception="xxiii."/>
+    <word exception="sgt."/>
+    <word exception="aug."/>
+    <word exception="cxxxvii."/>
+    <word exception="xii."/>
+    <word exception="pld."/>
+    <word exception="dzs."/>
+    <word exception="xxiv."/>
+    <word exception="cxiv."/>
+    <word exception="márc."/>
+    <word exception="igh."/>
+    <word exception="c."/>
+    <word exception="cii."/>
+    <word exception="cxci."/>
+    <word exception="lxxxi."/>
+    <word exception="y."/>
+    <word exception="cxxiv."/>
+    <word exception="xliii."/>
+    <word exception="ind."/>
+    <word exception="cxliii."/>
+    <word exception="ford."/>
+    <word exception="habil."/>
+    <word exception="csüt."/>
+    <word exception="v."/>
+    <word exception="cxxi."/>
+    <word exception="cxiii."/>
+    <word exception="clxv."/>
+    <word exception="xlix."/>
+    <word exception="Kt."/>
+    <word exception="krt."/>
+    <word exception="liv."/>
+    <word exception="cxcv."/>
+    <word exception="felv."/>
+    <word exception="cl."/>
+    <word exception="fszla."/>
+    <word exception="clxxxvi."/>
+    <word exception="hg."/>
+    <word exception="fszt."/>
+    <word exception="Ftv."/>
+    <word exception="sz."/>
+    <word exception="mk."/>
+    <word exception="xlii."/>
+    <word exception="n."/>
+    <word exception="ő."/>
+    <word exception="lxxx."/>
+    <word exception="xxvi."/>
+    <word exception="lxiv."/>
+    <word exception="lxxxviii."/>
+    <word exception="korm."/>
+    <word exception="b."/>
+    <word exception="cxviii."/>
+    <word exception="Nyilv."/>
+    <word exception="cxli."/>
+    <word exception="Flt."/>
+    <word exception="r."/>
+    <word exception="xcii."/>
+    <word exception="clxxxv."/>
+    <word exception="ény."/>
+    <word exception="xvi."/>
+    <word exception="vö."/>
+    <word exception="zs."/>
+    <word exception="cxxx."/>
+    <word exception="rt."/>
+    <word exception="ÉKsz."/>
+    <word exception="mb."/>
+    <word exception="Kjt."/>
+    <word exception="e."/>
+    <word exception="szoc."/>
+    <word exception="lviii."/>
+    <word exception="xxxviii."/>
+    <word exception="br."/>
+    <word exception="lxxxii."/>
+    <word exception="xxxiv."/>
+    <word exception="max."/>
+    <word exception="cviii."/>
+    <word exception="ev."/>
+    <word exception="xx."/>
+    <word exception="cxxiii."/>
+    <word exception="clxix."/>
+    <word exception="kht."/>
+    <word exception="Szt."/>
+    <word exception="isk."/>
+    <word exception="xcvi."/>
+    <word exception="xxxvi."/>
+    <word exception="lxviii."/>
+    <word exception="ovh."/>
+    <word exception="lxxiii."/>
+    <word exception="fsz."/>
+    <word exception="a."/>
+    <word exception="cxxxix."/>
+    <word exception="Vhr."/>
+    <word exception="cca."/>
+    <word exception="kb."/>
+    <word exception="Ltv."/>
+    <word exception="lxxii."/>
+    <word exception="lxxxv."/>
+    <word exception="lxvii."/>
+    <word exception="clxxxiii."/>
+    <word exception="civ."/>
+    <word exception="kat."/>
+    <word exception="g."/>
+    <word exception="cxciii."/>
+    <word exception="dk."/>
+    <word exception="lv."/>
+    <word exception="cxii."/>
+    <word exception="lxv."/>
+    <word exception="xli."/>
+    <word exception="cxlix."/>
+    <word exception="ua."/>
+    <word exception="cxxix."/>
+    <word exception="du."/>
+    <word exception="lxxxvi."/>
+    <word exception="szerk."/>
+    <word exception="NB."/>
+    <word exception="Épt."/>
+    <word exception="kiv."/>
+    <word exception="xliv."/>
+    <word exception="jan."/>
+    <word exception="Áht."/>
+    <word exception="ü."/>
+    <word exception="xxxi."/>
+    <word exception="évf."/>
+    <word exception="i."/>
+    <word exception="ö."/>
+    <word exception="clviii."/>
+    <word exception="Cstv."/>
+    <word exception="etc."/>
+    <word exception="clxxii."/>
+    <word exception="xviii."/>
+    <word exception="clxi."/>
+    <word exception="j."/>
+    <word exception="li."/>
+    <word exception="lxxxiv."/>
+    <word exception="clxx."/>
+    <word exception="ill."/>
+    <word exception="xxi."/>
+    <word exception="clix."/>
+    <word exception="dz."/>
+    <word exception="Hjt."/>
+    <word exception="cxxxvi."/>
+    <word exception="xcix."/>
+    <word exception="clxxxvii."/>
+    <word exception="Ltd."/>
+    <word exception="xxxvii."/>
+    <word exception="clxxx."/>
+    <word exception="mat."/>
+    <word exception="í."/>
+    <word exception="xcvii."/>
+    <word exception="ui."/>
+    <word exception="cxx."/>
+    <word exception="gy."/>
+    <word exception="clxxvii."/>
+    <word exception="cxlvi."/>
+    <word exception="xix."/>
+    <word exception="tkp."/>
+    <word exception="cvii."/>
+    <word exception="al."/>
+    <word exception="s."/>
+    <word exception="cxciv."/>
+    <word exception="Co."/>
+    <word exception="lii."/>
+    <word exception="cxlvii."/>
+    <word exception="lx."/>
+    <word exception="lxi."/>
+    <word exception="kir."/>
+    <word exception="clxii."/>
+    <word exception="xxx."/>
+    <word exception="lxxxvii."/>
+    <word exception="cxlii."/>
+    <word exception="Ktv."/>
+    <word exception="xcviii."/>
+    <word exception="Szjt."/>
+    <word exception="pl."/>
+    <word exception="cxcii."/>
+    <word exception="clxxiii."/>
+    <word exception="vsz."/>
+    <word exception="dec."/>
+    <word exception="gimn."/>
+    <word exception="clxxi."/>
+    <word exception="izr."/>
+    <word exception="vii."/>
+    <word exception="ápr."/>
+    <word exception="orsz."/>
+    <word exception="cxlv."/>
+    <word exception="cxxxii."/>
+    <word exception="cxix."/>
+    <word exception="clxvii."/>
+    <word exception="ún."/>
+    <word exception="stb."/>
+    <word exception="lxx."/>
+    <word exception="össz."/>
+    <word exception="cxcix."/>
+    <word exception="ó."/>
+    <word exception="ű."/>
+    <word exception="m."/>
+    <word exception="ii."/>
+    <word exception="cliii."/>
+    <word exception="t."/>
+    <word exception="róm."/>
+    <word exception="nov."/>
+    <word exception="Sztv."/>
+    <word exception="ltp."/>
+    <word exception="x."/>
+    <word exception="liii."/>
+    <word exception="lxii."/>
+    <word exception="tc."/>
+    <word exception="op."/>
+    <word exception="xiii."/>
+    <word exception="lxxvi."/>
+    <word exception="eü."/>
+    <word exception="bt."/>
+    <word exception="dr."/>
+    <word exception="luth."/>
+    <word exception="lxxxix."/>
+    <word exception="lxxvii."/>
+    <word exception="lxxiv."/>
+    <word exception="lxxviii."/>
+    <word exception="cxi."/>
+    <word exception="cxxviii."/>
+    <word exception="o."/>
+    <word exception="nyrt."/>
+    <word exception="xxxv."/>
+    <word exception="iii."/>
+    <word exception="q."/>
+    <word exception="ref."/>
+    <word exception="spec."/>
+    <word exception="ú."/>
+    <word exception="k."/>
+    <word exception="ix."/>
+    <word exception="cxl."/>
+    <word exception="viii."/>
+    <word exception="megh."/>
+    <word exception="u."/>
+    <word exception="köv."/>
+    <word exception="xi."/>
+    <word exception="pu."/>
+    <word exception="olv."/>
+    <word exception="özv."/>
+    <word exception="ciii."/>
+    <word exception="ci."/>
+    <word exception="kgy."/>
+    <word exception="Vt."/>
+    <word exception="cxc."/>
+    <word exception="úm."/>
+    <word exception="hsz."/>
+    <word exception="clvii."/>
+    <word exception="Inc."/>
+    <word exception="szül."/>
+    <word exception="cxlviii."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="OOo-képp"/>
+    <word exception="MHz-ként"/>
+    <word exception="ÉNy-tal"/>
+    <word exception="OOo-onként"/>
+    <word exception="MPa-nak"/>
+    <word exception="MHz-eseket"/>
+    <word exception="DNy"/>
+    <word exception="ÉNy-iul"/>
+    <word exception="MPa-tól"/>
+    <word exception="ÉNy-ként"/>
+    <word exception="DNy-iakon"/>
+    <word exception="ÉNy-ból"/>
+    <word exception="MHz-cé"/>
+    <word exception="ÉNy-nál"/>
+    <word exception="MPa-ostul"/>
+    <word exception="GHz-be"/>
+    <word exception="MHz-esekkel"/>
+    <word exception="OOo-ba"/>
+    <word exception="ÉNy-ira"/>
+    <word exception="ÉNy-iakig"/>
+    <word exception="GHz-esekért"/>
+    <word exception="ÉNy-iakról"/>
+    <word exception="ÉNy-istul"/>
+    <word exception="GHz-eshez"/>
+    <word exception="DNy-iul"/>
+    <word exception="MSc"/>
+    <word exception="MPa-ig"/>
+    <word exception="GHz-ül"/>
+    <word exception="GHz-cé"/>
+    <word exception="GPa-ig"/>
+    <word exception="GHz-esben"/>
+    <word exception="ÉNy-hoz"/>
+    <word exception="DNy-onként"/>
+    <word exception="GHz-ben"/>
+    <word exception="GPa-hoz"/>
+    <word exception="GHz-esről"/>
+    <word exception="OOo-t"/>
+    <word exception="ÉNy-iakat"/>
+    <word exception="MPa-lal"/>
+    <word exception="MPa-ra"/>
+    <word exception="ÉNy-ostul"/>
+    <word exception="GHz-esbe"/>
+    <word exception="GHz-esekké"/>
+    <word exception="MHz-est"/>
+    <word exception="OOo-on"/>
+    <word exception="ÉNy-iakká"/>
+    <word exception="DNy-iig"/>
+    <word exception="ÉNy-ról"/>
+    <word exception="ÉNy-iért"/>
+    <word exception="GHz-képp"/>
+    <word exception="OOo-ig"/>
+    <word exception="GPa-ostul"/>
+    <word exception="MPa-képp"/>
+    <word exception="MHz-esben"/>
+    <word exception="MSv"/>
+    <word exception="MHz-esről"/>
+    <word exception="DNy-ira"/>
+    <word exception="MHz-képpen"/>
+    <word exception="GHz-es"/>
+    <word exception="OOo-nál"/>
+    <word exception="MHz-esenként"/>
+    <word exception="OOo-nak"/>
+    <word exception="ÉNy-iakból"/>
+    <word exception="TBq"/>
+    <word exception="GHz-estől"/>
+    <word exception="MHz-en"/>
+    <word exception="MHz-esekben"/>
+    <word exception="GHz-esre"/>
+    <word exception="OOo-ra"/>
+    <word exception="GHz-nél"/>
+    <word exception="ÉNy-iból"/>
+    <word exception="GPa-ra"/>
+    <word exception="MHz-esül"/>
+    <word exception="ÉNy-inak"/>
+    <word exception="MHz-esekbe"/>
+    <word exception="GHz-esek"/>
+    <word exception="TPa"/>
+    <word exception="GHz-nek"/>
+    <word exception="ÉNy-iakban"/>
+    <word exception="GHz-esnél"/>
+    <word exception="OOo-ostul"/>
+    <word exception="ÉNy-itól"/>
+    <word exception="GPa-képp"/>
+    <word exception="ÉKsz"/>
+    <word exception="GHz-től"/>
+    <word exception="DNy-ivá"/>
+    <word exception="GHz-essé"/>
+    <word exception="GPa-ról"/>
+    <word exception="MPa-on"/>
+    <word exception="DNy-ról"/>
+    <word exception="MHz-esekhez"/>
+    <word exception="OOo-gal"/>
+    <word exception="MHz-estül"/>
+    <word exception="GHz-et"/>
+    <word exception="DNy-iba"/>
+    <word exception="DNy-ival"/>
+    <word exception="ÉNy-i"/>
+    <word exception="GHz-en"/>
+    <word exception="ÉNy-ra"/>
+    <word exception="MHz-essé"/>
+    <word exception="DNy-képp"/>
+    <word exception="GHz-esekhez"/>
+    <word exception="DNy-tá"/>
+    <word exception="MHz-esekre"/>
+    <word exception="ÉNy-iként"/>
+    <word exception="GHz-esenként"/>
+    <word exception="GHz-esekről"/>
+    <word exception="ÉNy-iaknak"/>
+    <word exception="MPa-ban"/>
+    <word exception="GHz-esig"/>
+    <word exception="DNy-iakat"/>
+    <word exception="OOo-ként"/>
+    <word exception="ÉNy-ot"/>
+    <word exception="MHz-esekig"/>
+    <word exception="GPa-t"/>
+    <word exception="DNy-ban"/>
+    <word exception="ÉNy-ba"/>
+    <word exception="GHz-képpen"/>
+    <word exception="MHz-esre"/>
+    <word exception="ÉNy-tól"/>
+    <word exception="GPa-tól"/>
+    <word exception="DNy-ba"/>
+    <word exception="MHz-eseknek"/>
+    <word exception="OOo"/>
+    <word exception="DNy-ion"/>
+    <word exception="GGy"/>
+    <word exception="MHz-ben"/>
+    <word exception="DNy-hoz"/>
+    <word exception="GWb"/>
+    <word exception="ÉNy-ul"/>
+    <word exception="GHz-esül"/>
+    <word exception="MHz-ig"/>
+    <word exception="ÉNy-iakon"/>
+    <word exception="GHz-esből"/>
+    <word exception="OOo-képpen"/>
+    <word exception="GPa-on"/>
+    <word exception="MHz-esekért"/>
+    <word exception="MHz-esből"/>
+    <word exception="DNy-iaktól"/>
+    <word exception="GBq"/>
+    <word exception="GHz-esekül"/>
+    <word exception="GSv"/>
+    <word exception="ÉNy-iaknál"/>
+    <word exception="MGy"/>
+    <word exception="MPa-ból"/>
+    <word exception="ÉNy-on"/>
+    <word exception="ÉNy-ihoz"/>
+    <word exception="GHz-ről"/>
+    <word exception="GPa"/>
+    <word exception="GHz-esekbe"/>
+    <word exception="MHz-es"/>
+    <word exception="MHz-ért"/>
+    <word exception="GHz-esnek"/>
+    <word exception="DNy-iakra"/>
+    <word exception="ÉNy-ért"/>
+    <word exception="MHz-esekből"/>
+    <word exception="DNy-on"/>
+    <word exception="GHz-esekből"/>
+    <word exception="MHz-hez"/>
+    <word exception="GHz-esekben"/>
+    <word exception="MPa-onként"/>
+    <word exception="ÉNy"/>
+    <word exception="OOo-nként"/>
+    <word exception="MHz-essel"/>
+    <word exception="ÉNy-tá"/>
+    <word exception="ÉNy-onként"/>
+    <word exception="MHz-cel"/>
+    <word exception="DNy-iak"/>
+    <word exception="MHz-esnek"/>
+    <word exception="ÉNy-ig"/>
+    <word exception="DNy-iként"/>
+    <word exception="GHz-esekre"/>
+    <word exception="MHz-ül"/>
+    <word exception="DNy-tól"/>
+    <word exception="DNy-ot"/>
+    <word exception="GHz-eset"/>
+    <word exception="GHz-estül"/>
+    <word exception="GPa-onként"/>
+    <word exception="DNy-tal"/>
+    <word exception="GHz-ért"/>
+    <word exception="OOo-ot"/>
+    <word exception="DNy-iakba"/>
+    <word exception="GHz-esen"/>
+    <word exception="OOo-ról"/>
+    <word exception="ÉNy-ion"/>
+    <word exception="MHz-esektől"/>
+    <word exception="MHz-esekként"/>
+    <word exception="MPa-t"/>
+    <word exception="MHz-esek"/>
+    <word exception="GHz-esekként"/>
+    <word exception="MHz-esért"/>
+    <word exception="MHz-esbe"/>
+    <word exception="ÉNy-iig"/>
+    <word exception="ÉNy-nak"/>
+    <word exception="GHz-ből"/>
+    <word exception="GPa-képpen"/>
+    <word exception="OOo-ból"/>
+    <word exception="ÉNy-iban"/>
+    <word exception="ÉNy-inél"/>
+    <word exception="MPa"/>
+    <word exception="DNy-iról"/>
+    <word exception="DNy-i"/>
+    <word exception="GHz-re"/>
+    <word exception="DNy-ra"/>
+    <word exception="DNy-iakként"/>
+    <word exception="TWb"/>
+    <word exception="MHz-képp"/>
+    <word exception="GHz-est"/>
+    <word exception="DNy-iért"/>
+    <word exception="DNy-iakká"/>
+    <word exception="MHz-ről"/>
+    <word exception="ÉNy-ivá"/>
+    <word exception="DNy-ul"/>
+    <word exception="DNy-ihoz"/>
+    <word exception="DNy-iakig"/>
+    <word exception="GHz-eseken"/>
+    <word exception="TGy"/>
+    <word exception="DNy-inak"/>
+    <word exception="GHz-eseket"/>
+    <word exception="GHz-eseknél"/>
+    <word exception="DNy-ostul"/>
+    <word exception="MHz-estől"/>
+    <word exception="DNy-istul"/>
+    <word exception="ÉNy-ival"/>
+    <word exception="DNy-ként"/>
+    <word exception="ÉNy-ban"/>
+    <word exception="GPa-nál"/>
+    <word exception="DNy-képpen"/>
+    <word exception="OOo-gá"/>
+    <word exception="DNy-nál"/>
+    <word exception="GPa-lal"/>
+    <word exception="GPa-ként"/>
+    <word exception="MHz-esekké"/>
+    <word exception="MHz-esen"/>
+    <word exception="GHz-hez"/>
+    <word exception="GHz-esért"/>
+    <word exception="DNy-iakban"/>
+    <word exception="OOo-stul"/>
+    <word exception="GHz-ig"/>
+    <word exception="MPa-lá"/>
+    <word exception="DNy-iaknál"/>
+    <word exception="MWb"/>
+    <word exception="ÉNy-képp"/>
+    <word exception="GHz"/>
+    <word exception="ÉNy-iakra"/>
+    <word exception="GHz-eseknek"/>
+    <word exception="GHz-cel"/>
+    <word exception="MHz-esnél"/>
+    <word exception="MHz-nek"/>
+    <word exception="MHz-esig"/>
+    <word exception="MBq"/>
+    <word exception="DNy-iban"/>
+    <word exception="MHz-nél"/>
+    <word exception="MPa-képpen"/>
+    <word exception="MHz-esekről"/>
+    <word exception="DNy-iakért"/>
+    <word exception="MPa-nál"/>
+    <word exception="GHz-essel"/>
+    <word exception="DNy-iakból"/>
+    <word exception="BSc"/>
+    <word exception="DNy-iakról"/>
+    <word exception="DNy-iakhoz"/>
+    <word exception="OOo-hoz"/>
+    <word exception="DNy-iból"/>
+    <word exception="MPa-ról"/>
+    <word exception="OOo-tól"/>
+    <word exception="MHz"/>
+    <word exception="MHz-eshez"/>
+    <word exception="GHz-ként"/>
+    <word exception="MHz-be"/>
+    <word exception="GPa-ért"/>
+    <word exception="GPa-lá"/>
+    <word exception="ÉNy-iba"/>
+    <word exception="ÉNy-it"/>
+    <word exception="ÉNy-iakként"/>
+    <word exception="MHz-re"/>
+    <word exception="GHz-esekkel"/>
+    <word exception="MHz-től"/>
+    <word exception="GPa-ban"/>
+    <word exception="OOo-ért"/>
+    <word exception="DNy-ig"/>
+    <word exception="TSv"/>
+    <word exception="ÉNy-képpen"/>
+    <word exception="OOo-vá"/>
+    <word exception="GPa-ból"/>
+    <word exception="ÉNy-iak"/>
+    <word exception="MPa-ért"/>
+    <word exception="MHz-eseknél"/>
+    <word exception="DNy-it"/>
+    <word exception="THz"/>
+    <word exception="DNy-ból"/>
+    <word exception="OOo-ban"/>
+    <word exception="DNy-ért"/>
+    <word exception="DNy-inél"/>
+    <word exception="MPa-ul"/>
+    <word exception="DNy-itól"/>
+    <word exception="ÉNy-iról"/>
+    <word exception="GPa-nak"/>
+    <word exception="MPa-ként"/>
+    <word exception="ÉNy-iakkal"/>
+    <word exception="MHz-enként"/>
+    <word exception="OOo-ul"/>
+    <word exception="GHz-esekig"/>
+    <word exception="DNy-nak"/>
+    <word exception="GPa-ul"/>
+    <word exception="OOo-val"/>
+    <word exception="MHz-et"/>
+    <word exception="GPa-ba"/>
+    <word exception="ÉNy-iakért"/>
+    <word exception="MHz-ből"/>
+    <word exception="MPa-hoz"/>
+    <word exception="DNy-iaknak"/>
+    <word exception="DNy-iakkal"/>
+    <word exception="MHz-eset"/>
+    <word exception="ÉNy-iaktól"/>
+    <word exception="ÉNy-iakhoz"/>
+    <word exception="ÉNy-iakba"/>
+    <word exception="GHz-esektől"/>
+    <word exception="GHz-enként"/>
+    <word exception="MHz-eseken"/>
+    <word exception="MPa-ba"/>
+    <word exception="OOo-n"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

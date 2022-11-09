@@ -1,0 +1,2157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find="kdyz" replace="když"/>
+    <item find="kdyby jsi se" replace="kdyby ses"/>
+    <item find="na příč" replace="napříč"/>
+    <item find=":x4:" replace=""/>
+    <item find=":kino:" replace=""/>
+    <item find=":první čtvrť:" replace=""/>
+    <item find=":telefon5:" replace="✆"/>
+    <item find=":menora:" replace=""/>
+    <item find=":Mléčná dráha:" replace=""/>
+    <item find=":zaškrtnuto:" replace="✓"/>
+    <item find=":7/8:" replace="⅞"/>
+    <item find=":megafon3:" replace=""/>
+    <item find="pravě" replace="právě"/>
+    <item find="dobre" replace="dobře"/>
+    <item find=":usměvavý3:" replace=""/>
+    <item find=":hmyz:" replace=""/>
+    <item find=":opice2:" replace=""/>
+    <item find="českýhc" replace="českých"/>
+    <item find=":^K:" replace="ᴷ"/>
+    <item find=":zaškrtávací pole2:" replace="☑"/>
+    <item find="casto" replace="často"/>
+    <item find=":polibek2:" replace=""/>
+    <item find="sveta" replace="světa"/>
+    <item find=":pager:" replace=""/>
+    <item find="nezávislena" replace="nezávisle na"/>
+    <item find="chtěli jsem" replace="chtěli jsme"/>
+    <item find=":cylindr:" replace=""/>
+    <item find=":^delta:" replace="ᵟ"/>
+    <item find="zaúčelem" replace="za účelem"/>
+    <item find=":golf:" replace=""/>
+    <item find=":šestiúhelník2:" replace="⬢"/>
+    <item find=":a zároveň:" replace="∧"/>
+    <item find="vpodobě" replace="v podobě"/>
+    <item find=":dolů3:" replace=""/>
+    <item find=":trolejbus:" replace=""/>
+    <item find=":zlatá:" replace="磊"/>
+    <item find="stupen" replace="stupeň"/>
+    <item find=":optický disk:" replace=""/>
+    <item find=":^4:" replace="⁴"/>
+    <item find=":schránka5:" replace=""/>
+    <item find=":Tau:" replace="Τ"/>
+    <item find=":jas2:" replace=""/>
+    <item find=":prskavka:" replace=""/>
+    <item find=":registrované:" replace="®"/>
+    <item find=":Ještěrka:" replace="年"/>
+    <item find=":součet:" replace="∑"/>
+    <item find=":slon:" replace=""/>
+    <item find=":kostka3:" replace="⚂"/>
+    <item find=":won:" replace="₩"/>
+    <item find=":^T:" replace="ᵀ"/>
+    <item find=":cvrček:" replace="聯"/>
+    <item find="spolecnost" replace="společnost"/>
+    <item find=":abc:" replace=""/>
+    <item find=":ibišek:" replace=""/>
+    <item find="oboc" replace="obec"/>
+    <item find="ze mně" replace="ze mě"/>
+    <item find=":modlitba:" replace=""/>
+    <item find=":Ióta:" replace="Ι"/>
+    <item find=":trefy:" replace="♣"/>
+    <item find=":prázdné stránky:" replace=""/>
+    <item find=":_8:" replace="₈"/>
+    <item find=":epsilon:" replace="ε"/>
+    <item find=":bublina:" replace=""/>
+    <item find="neco" replace="něco"/>
+    <item find=":kára2:" replace="♢"/>
+    <item find="jsam" replace="jsem"/>
+    <item find="jiti" replace="jíti"/>
+    <item find=":ospalý:" replace=""/>
+    <item find=":jehličnatý:" replace=""/>
+    <item find=":žába:" replace=""/>
+    <item find="vesměru" replace="ve směru"/>
+    <item find=":vítr:" replace=""/>
+    <item find=":špendlík:" replace=""/>
+    <item find="pryha" replace="Praha"/>
+    <item find=":krokodýl:" replace=""/>
+    <item find="Http:" replace="http:"/>
+    <item find=":?2:" replace="❔"/>
+    <item find=":Býk:" replace="♉"/>
+    <item find=":celá nota:" replace="텝"/>
+    <item find=":domy:" replace=""/>
+    <item find="a pod." replace="apod."/>
+    <item find=":bronzová:" replace="雷"/>
+    <item find="roschod" replace="rozchod"/>
+    <item find=":ženy:" replace=""/>
+    <item find=":špagety:" replace=""/>
+    <item find=":holičství:" replace=""/>
+    <item find="těchot" replace="těchto"/>
+    <item find="kdyby jsem" replace="kdybych"/>
+    <item find=":hlemýžď:" replace=""/>
+    <item find=":lebka:" replace=""/>
+    <item find=":elektřina:" replace="⚡"/>
+    <item find=":SZ:" replace="↖"/>
+    <item find=":letadlo2:" replace=""/>
+    <item find=":^U:" replace="ᵁ"/>
+    <item find="mohly jsem" replace="mohly jsme"/>
+    <item find=":ruka4:" replace="駱"/>
+    <item find=":kůže2:" replace=""/>
+    <item find="pri" replace="při"/>
+    <item find=":kůň2:" replace=""/>
+    <item find="dens" replace="dnes"/>
+    <item find="ramení" replace="ramenní"/>
+    <item find=":sedadlo:" replace=""/>
+    <item find=":dolů:" replace="☟"/>
+    <item find=":paprika:" replace=""/>
+    <item find=":bazický bod:" replace="‱"/>
+    <item find=":vlajka3:" replace="⚑"/>
+    <item find=":dům3:" replace=""/>
+    <item find=":přílet:" replace=""/>
+    <item find=":konzerva:" replace="參"/>
+    <item find=":platební karta:" replace=""/>
+    <item find=":trpící:" replace=""/>
+    <item find=":cirkus:" replace=""/>
+    <item find=":jiskřící srdce:" replace=""/>
+    <item find=":hodně štěstí:" replace="爛"/>
+    <item find=":bílá květina:" replace=""/>
+    <item find="zcely" replace="zcela"/>
+    <item find=":^G:" replace="ᴳ"/>
+    <item find=":rypák:" replace=""/>
+    <item find="druhe" replace="druhé"/>
+    <item find=":V:" replace="→"/>
+    <item find=":reproduktor4:" replace=""/>
+    <item find=":vlevo2:" replace=""/>
+    <item find=":^y:" replace="ʸ"/>
+    <item find=":vousy:" replace="倫"/>
+    <item find=":dvojkřížek:" replace="턪"/>
+    <item find="zřetelemna" replace="zřetelem na"/>
+    <item find=":síla signálu:" replace=""/>
+    <item find=":otevřená ústa:" replace=""/>
+    <item find="sezřetelem" replace="se zřetelem"/>
+    <item find=":kůže4:" replace=""/>
+    <item find=":sluchátko4:" replace=""/>
+    <item find="rpoti" replace="proti"/>
+    <item find="mezi mně" replace="mezi mě"/>
+    <item find=":Saturn:" replace="♄"/>
+    <item find=":čtverec:" replace="□"/>
+    <item find=":obálka5:" replace=""/>
+    <item find="nasi" replace="naší"/>
+    <item find=":zákaz:" replace=""/>
+    <item find=":rejstřík:" replace=""/>
+    <item find=":starší žena:" replace=""/>
+    <item find=":žárovka:" replace=""/>
+    <item find="totom" replace="tomto"/>
+    <item find=":není v:" replace="∉"/>
+    <item find=":^k:" replace="ᵏ"/>
+    <item find="čtyri" replace="čtyři"/>
+    <item find=":SZ2:" replace="⇖"/>
+    <item find=":Japonsko:" replace=""/>
+    <item find=":meloun:" replace=""/>
+    <item find=":oranžové srdce:" replace="李"/>
+    <item find="navic" replace="navíc"/>
+    <item find=":východ slunce2:" replace=""/>
+    <item find=":arašídy:" replace="樂"/>
+    <item find=":maltézský kříž:" replace="✠"/>
+    <item find="jende" replace="jeden"/>
+    <item find=":drak2:" replace=""/>
+    <item find=":šroub a matka:" replace=""/>
+    <item find=":zajíc2:" replace=""/>
+    <item find="cíkrev" replace="církev"/>
+    <item find=":bitcoin:" replace="₿"/>
+    <item find=":volaný mobil:" replace=""/>
+    <item find="jsem chtěly" replace="jsme chtěly"/>
+    <item find=":klobouk:" replace=""/>
+    <item find="puoze" replace="pouze"/>
+    <item find=":usměvavá kočka:" replace=""/>
+    <item find=":bylina:" replace=""/>
+    <item find=":euro2:" replace=""/>
+    <item find=":roztomilost:" replace=""/>
+    <item find=":kohout:" replace=""/>
+    <item find=":^f:" replace="ᶠ"/>
+    <item find="srovn." replace="srov."/>
+    <item find=":minibus:" replace=""/>
+    <item find=":J:" replace="↓"/>
+    <item find="mimo tě" replace="mimo tebe"/>
+    <item find=":Merkur:" replace="☿"/>
+    <item find=":těhotná:" replace="擄"/>
+    <item find=":upozornění:" replace="⚠"/>
+    <item find="sjou" replace="jsou"/>
+    <item find=":kůže1:" replace=""/>
+    <item find=":glóbus2:" replace=""/>
+    <item find="úměrněk" replace="úměrně k"/>
+    <item find="mínuta" replace="minuta"/>
+    <item find="ktaré" replace="které"/>
+    <item find=":^ióta:" replace="ᶥ"/>
+    <item find="valstní" replace="vlastní"/>
+    <item find=":maximalizovat:" replace=""/>
+    <item find=":latinský kříž3:" replace=""/>
+    <item find=":euro:" replace="€"/>
+    <item find=":^):" replace="⁾"/>
+    <item find=":atom:" replace="⚛"/>
+    <item find=":pravoúhlý trojúhelník:" replace="⊿"/>
+    <item find=":kůň3:" replace=""/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find=":Měsíc2:" replace="☾"/>
+    <item find=":ano:" replace=""/>
+    <item find=":zápas:" replace="祿"/>
+    <item find=":_i:" replace="ᵢ"/>
+    <item find=":fl:" replace="ﬂ"/>
+    <item find=":kytice2:" replace=""/>
+    <item find=":^fí:" replace="ᵠ"/>
+    <item find=":pizza:" replace=""/>
+    <item find=":jelen:" replace="歷"/>
+    <item find="tísíc" replace="tisíc"/>
+    <item find=":\\:" replace="∖"/>
+    <item find="sest" replace="šest"/>
+    <item find=":koloběžka:" replace=""/>
+    <item find=":mračící:" replace=""/>
+    <item find=":obdélník:" replace="▭"/>
+    <item find="zdůvodu" replace="z důvodu"/>
+    <item find=":^H:" replace="ᴴ"/>
+    <item find=":hurikán:" replace=""/>
+    <item find=":průnik:" replace="∩"/>
+    <item find=":7 h:" replace=""/>
+    <item find="pro mně" replace="pro mě"/>
+    <item find=":odrážka2:" replace="‣"/>
+    <item find="&lt;--&gt;" replace="↔"/>
+    <item find=":nápoj2:" replace=""/>
+    <item find=":vlak:" replace=""/>
+    <item find=":dolů5:" replace=""/>
+    <item find="vec" replace="věc"/>
+    <item find=":hotel2:" replace=""/>
+    <item find=":kolo:" replace=""/>
+    <item find=":oblek:" replace=""/>
+    <item find=":sauna:" replace="淪"/>
+    <item find=":záložka2:" replace=""/>
+    <item find=":deštivo:" replace=""/>
+    <item find=":kytice:" replace=""/>
+    <item find=":odrážka:" replace="•"/>
+    <item find="aby jsi se" replace="aby ses"/>
+    <item find=":3 h:" replace=""/>
+    <item find=":nůžky2:" replace="✄"/>
+    <item find="uprostřed mně" replace="uprostřed mě"/>
+    <item find=":vlevo:" replace="☜"/>
+    <item find=":oko:" replace=""/>
+    <item find=":sněhulák2:" replace="⛄"/>
+    <item find=":kráva:" replace=""/>
+    <item find=":řetězy:" replace="⛓"/>
+    <item find="nepaltné" replace="neplatné"/>
+    <item find=":pudink:" replace=""/>
+    <item find=":sklenice:" replace=""/>
+    <item find=":brýle:" replace=""/>
+    <item find=":^c:" replace="ᶜ"/>
+    <item find="jine" replace="jiné"/>
+    <item find=":nůžky:" replace="✂"/>
+    <item find=":odpadky:" replace=""/>
+    <item find=":rovnoběžník:" replace="▱"/>
+    <item find="ževota" replace="života"/>
+    <item find=":golf2:" replace="⛳"/>
+    <item find="propřípad" replace="pro případ"/>
+    <item find=":bankomat:" replace=""/>
+    <item find="totiz" replace="totiž"/>
+    <item find=":křišťálová koule:" replace=""/>
+    <item find=":Střelec:" replace="♐"/>
+    <item find=":noviny2:" replace=""/>
+    <item find=":krysa:" replace=""/>
+    <item find=":dělník:" replace=""/>
+    <item find=":koupel:" replace=""/>
+    <item find=":Epsilon:" replace="Ε"/>
+    <item find="lídé" replace="lidé"/>
+    <item find=":kytara:" replace=""/>
+    <item find=":stříbrná:" replace="賂"/>
+    <item find=":S2:" replace="⇑"/>
+    <item find=":spící:" replace=""/>
+    <item find="připadě" replace="případě"/>
+    <item find=":':" replace="’"/>
+    <item find=":pozastavit:" replace="⏸"/>
+    <item find=":škola:" replace=""/>
+    <item find=":negace:" replace="¬"/>
+    <item find=":štítek:" replace=""/>
+    <item find="mzdovy" replace="mzdový"/>
+    <item find=":auto:" replace=""/>
+    <item find=":střední hvězda:" replace="⭐"/>
+    <item find=":omikron:" replace="ο"/>
+    <item find=":poštovní schránka:" replace=""/>
+    <item find=":sušenka:" replace=""/>
+    <item find=":pero:" replace=""/>
+    <item find=":bublina4:" replace=""/>
+    <item find=":oslava:" replace=""/>
+    <item find=":nov2:" replace=""/>
+    <item find=":^E:" replace="ᴱ"/>
+    <item find=":přepínač:" replace=""/>
+    <item find="hce" replace="chce"/>
+    <item find="předpos" replace="předpis"/>
+    <item find=":Slunce2:" replace="☼"/>
+    <item find="osobni" replace="osobní"/>
+    <item find="--&gt;" replace="→"/>
+    <item find=":ananas:" replace=""/>
+    <item find=":dvojbéčko:" replace="턫"/>
+    <item find="vrelaci" replace="v relaci"/>
+    <item find=":Fudži:" replace=""/>
+    <item find=":nosorožec:" replace="憐"/>
+    <item find=":přívoz:" replace="⛴"/>
+    <item find=":kruh2:" replace="●"/>
+    <item find="vsouvislosti" replace="v souvislosti"/>
+    <item find=":glóbus3:" replace=""/>
+    <item find="od tě" replace="od tebe"/>
+    <item find=":robot:" replace="烙"/>
+    <item find=":vyčerpaný:" replace=""/>
+    <item find=":vpravo5:" replace=""/>
+    <item find=":svíčka:" replace=""/>
+    <item find="nihc" replace="nich"/>
+    <item find=":preclík:" replace="泌"/>
+    <item find="meli" replace="měli"/>
+    <item find="kodonce" replace="dokonce"/>
+    <item find=":rýže:" replace=""/>
+    <item find="system" replace="systém"/>
+    <item find=":odrážka3:" replace="◦"/>
+    <item find=":ponožky:" replace="罹"/>
+    <item find=":závrať2:" replace=""/>
+    <item find="u tě" replace="u tebe"/>
+    <item find=":Země:" replace="♁"/>
+    <item find=":peníze2:" replace=""/>
+    <item find=":černý jezdec:" replace="♞"/>
+    <item find=":sněhulák:" replace="☃"/>
+    <item find=":zpocený úsměv:" replace=""/>
+    <item find=":unavený:" replace=""/>
+    <item find="nazpůsob" replace="na způsob"/>
+    <item find="http:\\" replace="http://"/>
+    <item find="obdoubí" replace="období"/>
+    <item find=":Lambda:" replace="Λ"/>
+    <item find="posměru" replace="po směru"/>
+    <item find=":večírek3:" replace="壟"/>
+    <item find=":oddechnutí:" replace=""/>
+    <item find=":otevřené dlaně:" replace=""/>
+    <item find=":^9:" replace="⁹"/>
+    <item find=":zvonek3:" replace=""/>
+    <item find=":černé srdce:" replace=""/>
+    <item find=":jazyk:" replace=""/>
+    <item find=":Sigma:" replace="Σ"/>
+    <item find=":elipsa:" replace="⬭"/>
+    <item find=":pevný disk:" replace=""/>
+    <item find=":obíhající srdce:" replace=""/>
+    <item find=":bílá dáma:" replace="♕"/>
+    <item find=":stop:" replace=""/>
+    <item find=":restaurace:" replace=""/>
+    <item find="tuot" replace="tuto"/>
+    <item find=":^théta:" replace="ᶿ"/>
+    <item find=":bento:" replace=""/>
+    <item find=":potlesk:" replace=""/>
+    <item find=":mahjong:" replace=""/>
+    <item find=":latinský kříž:" replace="✝"/>
+    <item find=":pěst4:" replace="卵"/>
+    <item find=":graf:" replace=""/>
+    <item find=":kometa:" replace="☄"/>
+    <item find=":lízátko:" replace=""/>
+    <item find=":kojenecká láhev:" replace=""/>
+    <item find=":mrknutí:" replace=""/>
+    <item find=":pirát:" replace=""/>
+    <item find=":nůž:" replace=""/>
+    <item find=":sova:" replace="黎"/>
+    <item find=":100:" replace=""/>
+    <item find="jsme chtěl" replace="jsem chtěl"/>
+    <item find=":nadávající:" replace="郎"/>
+    <item find=":^V:" replace="ⱽ"/>
+    <item find=":dalekohled:" replace=""/>
+    <item find=":úschovna:" replace=""/>
+    <item find=":polibek:" replace=""/>
+    <item find="proti mě" replace="proti mně"/>
+    <item find=":kimono:" replace=""/>
+    <item find=":nevidím zlo:" replace=""/>
+    <item find=":zarytý:" replace=""/>
+    <item find="veci" replace="věci"/>
+    <item find=":promile:" replace="‰"/>
+    <item find=":lol:" replace="藍"/>
+    <item find=":vana:" replace=""/>
+    <item find=":lanovka:" replace=""/>
+    <item find=":přemýšlící:" replace="樂"/>
+    <item find=":stan:" replace="⛺"/>
+    <item find=":Théta:" replace="Θ"/>
+    <item find=":počítač:" replace=""/>
+    <item find=":svatyně:" replace=""/>
+    <item find=":rýžová koule:" replace=""/>
+    <item find=":reproduktor:" replace=""/>
+    <item find="jojich" replace="jejich"/>
+    <item find=":stolní tenis:" replace=""/>
+    <item find=":koala:" replace=""/>
+    <item find="protoze" replace="protože"/>
+    <item find="povzoru" replace="po vzoru"/>
+    <item find="ceske" replace="české"/>
+    <item find=":vzpěrač:" replace=""/>
+    <item find=":cd:" replace=""/>
+    <item find="musi" replace="musí"/>
+    <item find=":rovnoběžník2:" replace="▰"/>
+    <item find=":motýl:" replace="曆"/>
+    <item find="sobor" replace="soubor"/>
+    <item find=":policie:" replace=""/>
+    <item find=":ryba2:" replace=""/>
+    <item find=":tlačítko:" replace=""/>
+    <item find=":kriket:" replace=""/>
+    <item find="sveho" replace="svého"/>
+    <item find=":basketbal:" replace=""/>
+    <item find=":ok3:" replace=""/>
+    <item find=":^I:" replace="ᴵ"/>
+    <item find=":buben:" replace="論"/>
+    <item find=":vepř:" replace=""/>
+    <item find=":král:" replace=""/>
+    <item find=":bublina9:" replace=""/>
+    <item find="maji" replace="mají"/>
+    <item find="puda" replace="půda"/>
+    <item find=":zklamaný:" replace=""/>
+    <item find="mesta" replace="města"/>
+    <item find=":stránka poznámek:" replace=""/>
+    <item find=":Santa:" replace=""/>
+    <item find=":ohňostroj:" replace=""/>
+    <item find=":klíč:" replace=""/>
+    <item find=":^h:" replace="ʰ"/>
+    <item find=":čepice:" replace="梨"/>
+    <item find=":čtvrťová pomlka:" replace="턽"/>
+    <item find="oublast" replace="oblast"/>
+    <item find=":bublina7:" replace=""/>
+    <item find=":integrál:" replace="∫"/>
+    <item find=":Kappa:" replace="Κ"/>
+    <item find=":^g:" replace="ᵍ"/>
+    <item find="jménem tě" replace="tvým jménem"/>
+    <item find=":nov:" replace=""/>
+    <item find=":^w:" replace="ʷ"/>
+    <item find=":ypsilon:" replace="υ"/>
+    <item find=":trubka:" replace=""/>
+    <item find=":čtverec2:" replace="■"/>
+    <item find=":vůl:" replace=""/>
+    <item find=":Dzéta:" replace="Ζ"/>
+    <item find=":krab:" replace="呂"/>
+    <item find=":zvonek:" replace=""/>
+    <item find=":klapka:" replace=""/>
+    <item find=":nerovnoběžné:" replace="∦"/>
+    <item find="ůzemí" replace="území"/>
+    <item find=":pudl:" replace=""/>
+    <item find="zboži" replace="zboží"/>
+    <item find=":kouření:" replace=""/>
+    <item find=":myš5:" replace=""/>
+    <item find=":hůl:" replace="⚚"/>
+    <item find=":zamračená osoba:" replace=""/>
+    <item find=":list3:" replace=""/>
+    <item find=":Slunce3:" replace=""/>
+    <item find=":sluchátko:" replace=""/>
+    <item find=":fotbal2:" replace="聾"/>
+    <item find=":jen2:" replace=""/>
+    <item find="ve mě" replace="ve mně"/>
+    <item find="poblíž mně" replace="poblíž mě"/>
+    <item find="vzávěru" replace="v závěru"/>
+    <item find=":tygr:" replace=""/>
+    <item find=":11 h:" replace=""/>
+    <item find=":sigma:" replace="σ"/>
+    <item find=":srdce:" replace="❤"/>
+    <item find=":JV:" replace="↘"/>
+    <item find=":mír:" replace="☮"/>
+    <item find="u vnitř" replace="uvnitř"/>
+    <item find="kařdý" replace="každý"/>
+    <item find=":půlová nota:" replace="텞"/>
+    <item find=":vlak3:" replace=""/>
+    <item find=":kappa:" replace="κ"/>
+    <item find=":bublina2:" replace=""/>
+    <item find=":hudba:" replace=""/>
+    <item find=":Delta:" replace="Δ"/>
+    <item find=":ovládací prvek:" replace=""/>
+    <item find="sezoní" replace="sezónní"/>
+    <item find=":spánek:" replace=""/>
+    <item find="mohli jsem" replace="mohli jsme"/>
+    <item find="skola" replace="škola"/>
+    <item find=":kari:" replace=""/>
+    <item find=":8.30:" replace=""/>
+    <item find=":dango:" replace=""/>
+    <item find=":psaní2:" replace=""/>
+    <item find=":lupa2:" replace=""/>
+    <item find=":videokamera:" replace=""/>
+    <item find=":metro:" replace=""/>
+    <item find="svýjimkou" replace="s výjimkou"/>
+    <item find=":štír:" replace="廬"/>
+    <item find=":VZ2:" replace="⇔"/>
+    <item find=":ušklíbající se kočka2:" replace=""/>
+    <item find=":vlak2:" replace=""/>
+    <item find=":^e:" replace="ᵉ"/>
+    <item find="tedhy" replace="tehdy"/>
+    <item find=":úsměv:" replace=""/>
+    <item find=":chléb2:" replace="稜"/>
+    <item find=":sněhová vločka:" replace="❄"/>
+    <item find=":stránka2:" replace=""/>
+    <item find=":žirafa:" replace="漣"/>
+    <item find=":gymnasta:" replace="露"/>
+    <item find="zákoný" replace="zákonný"/>
+    <item find="naproti mne" replace="naproti mně"/>
+    <item find="jenak" replace="jinak"/>
+    <item find=":pes:" replace=""/>
+    <item find=":blesk3:" replace="☇"/>
+    <item find=":hlava:" replace=""/>
+    <item find="při mě" replace="při mně"/>
+    <item find=":obálka3:" replace=""/>
+    <item find=":drak:" replace=""/>
+    <item find=":sluneční brýle:" replace=""/>
+    <item find="jsme byla" replace="jsem byla"/>
+    <item find="vzhledemk" replace="vzhledem k"/>
+    <item find=":steak:" replace="數"/>
+    <item find=":socha:" replace=""/>
+    <item find=":bouřka:" replace=""/>
+    <item find=":zvuk:" replace=""/>
+    <item find=":potomek:" replace="戮"/>
+    <item find=":citrón:" replace=""/>
+    <item find=":informace:" replace="ℹ"/>
+    <item find=":králičí uši:" replace=""/>
+    <item find=":telefon:" replace="☎"/>
+    <item find=":záře:" replace="❇"/>
+    <item find=":černý král:" replace="♚"/>
+    <item find=":delta:" replace="δ"/>
+    <item find=":továrna:" replace=""/>
+    <item find=":archivační papír:" replace="♾"/>
+    <item find=":_t:" replace="ₜ"/>
+    <item find="ketří" replace="kteří"/>
+    <item find=":jin jang:" replace="☯"/>
+    <item find=":injekce:" replace=""/>
+    <item find=":kamera:" replace=""/>
+    <item find=":duch:" replace=""/>
+    <item find=":bota3:" replace=""/>
+    <item find=":víla:" replace="栗"/>
+    <item find="doubré" replace="dobré"/>
+    <item find=":triumf:" replace=""/>
+    <item find=":vlevo3:" replace="☚"/>
+    <item find=":^5:" replace="⁵"/>
+    <item find="dkyž" replace="když"/>
+    <item find=":3/4:" replace="¾"/>
+    <item find=":krčení rameny:" replace="路"/>
+    <item find=":střední čtverec2:" replace="◼"/>
+    <item find=":telefon3:" replace=""/>
+    <item find="blíže tě" replace="blíže tebe"/>
+    <item find="síce" replace="sice"/>
+    <item find=":americký fotbal:" replace=""/>
+    <item find=":domino:" replace=""/>
+    <item find=":donut:" replace=""/>
+    <item find=":bouřka2:" replace="☈"/>
+    <item find=":joystick:" replace=""/>
+    <item find=":Vodnář:" replace="♒"/>
+    <item find=":^Fí:" replace="ᶲ"/>
+    <item find=":ženich:" replace="蘆"/>
+    <item find="jsme chtěla" replace="jsem chtěla"/>
+    <item find=":semafor:" replace=""/>
+    <item find=":prázdná stránka:" replace=""/>
+    <item find=":závod:" replace=""/>
+    <item find=":dolů6:" replace=""/>
+    <item find="odf" replace="ODF"/>
+    <item find=":Pí:" replace="Π"/>
+    <item find="nemůze" replace="nemůže"/>
+    <item find="čvrtletí" replace="čtvrtletí"/>
+    <item find=":poslední čtvrť:" replace=""/>
+    <item find="jyko" replace="jako"/>
+    <item find=":Fí:" replace="Φ"/>
+    <item find="okolo mně" replace="okolo mě"/>
+    <item find=":volejbal:" replace=""/>
+    <item find=":vstupenka:" replace=""/>
+    <item find=":bomba:" replace=""/>
+    <item find=":_6:" replace="₆"/>
+    <item find=":tečka uprostřed:" replace="·"/>
+    <item find=":sýr:" replace="燎"/>
+    <item find=":bílý kruh:" replace="⚪"/>
+    <item find="skrze mně" replace="skrze mě"/>
+    <item find=":rarach:" replace=""/>
+    <item find=":pavučina:" replace=""/>
+    <item find=":slepice:" replace=""/>
+    <item find=":tulipán:" replace=""/>
+    <item find=":smyčka:" replace="➰"/>
+    <item find=":vpravo6:" replace=""/>
+    <item find="prti" replace="proti"/>
+    <item find=":dolar tučně:" replace=""/>
+    <item find=":schránka:" replace=""/>
+    <item find="zmena" replace="změna"/>
+    <item find=":nůžky3:" replace="✁"/>
+    <item find=":montážní klíč:" replace=""/>
+    <item find="spoločností" replace="společnosti"/>
+    <item find=":dokument4:" replace=""/>
+    <item find="dnos" replace="dnes"/>
+    <item find=":sušenka2:" replace="怒"/>
+    <item find=":ióta:" replace="ι"/>
+    <item find="aby jsi" replace="abys"/>
+    <item find=":smažená kreveta:" replace=""/>
+    <item find=":4 h:" replace=""/>
+    <item find="na vzdory" replace="navzdory"/>
+    <item find=":sigma2:" replace="ς"/>
+    <item find="odíl" replace="oddíl"/>
+    <item find=":disketa4:" replace=""/>
+    <item find=":bublina10:" replace=""/>
+    <item find=":pero2:" replace=""/>
+    <item find=":selfie:" replace="盧"/>
+    <item find=":lupa:" replace=""/>
+    <item find="aby jsem" replace="abych"/>
+    <item find="vzávislosti" replace="v závislosti"/>
+    <item find=":bílá věž:" replace="♖"/>
+    <item find=":bez pirátství:" replace=""/>
+    <item find="1/2" replace="½"/>
+    <item find=":kaktus:" replace=""/>
+    <item find=":smích:" replace=""/>
+    <item find=":banán:" replace=""/>
+    <item find=":zákaz chodců:" replace=""/>
+    <item find=":poznámka:" replace=""/>
+    <item find="přihlížejek" replace="přihlížeje k"/>
+    <item find="televizni" replace="televizní"/>
+    <item find=":oči:" replace=""/>
+    <item find=":čaj:" replace=""/>
+    <item find=":šermíř:" replace="鷺"/>
+    <item find="duhré" replace="druhé"/>
+    <item find=":zdvižené obočí:" replace="廊"/>
+    <item find=":ufo:" replace=""/>
+    <item find=":rekonstrukce:" replace=""/>
+    <item find=":kabelka:" replace=""/>
+    <item find=":chobotnice:" replace=""/>
+    <item find="pocet" replace="počet"/>
+    <item find=":taxi2:" replace=""/>
+    <item find=":_4:" replace="₄"/>
+    <item find=":ffi:" replace="ﬃ"/>
+    <item find=":šklebící:" replace=""/>
+    <item find="treba" replace="třeba"/>
+    <item find=":hruška:" replace=""/>
+    <item find=":^1:" replace="¹"/>
+    <item find=":ný:" replace="ν"/>
+    <item find="veformě" replace="ve formě"/>
+    <item find=":!!:" replace="‼"/>
+    <item find=".*..." replace="…"/>
+    <item find=":elf:" replace="利"/>
+    <item find=":poznámkový blok:" replace=""/>
+    <item find="nejbo" replace="nebo"/>
+    <item find=":^s:" replace="ˢ"/>
+    <item find=":schránka3:" replace=""/>
+    <item find=":koktejl:" replace=""/>
+    <item find=":krát2:" replace="✖"/>
+    <item find="uživání" replace="užívání"/>
+    <item find=":integrál5:" replace="∰"/>
+    <item find=":ztlumeno:" replace=""/>
+    <item find=":rádio:" replace=""/>
+    <item find="stryny" replace="strany"/>
+    <item find=":bublina řeči:" replace=""/>
+    <item find="jejech" replace="jejich"/>
+    <item find=":levhart:" replace=""/>
+    <item find="ronvež" replace="rovněž"/>
+    <item find="rpoto" replace="proto"/>
+    <item find=":hrad:" replace=""/>
+    <item find=":zástrčka:" replace=""/>
+    <item find=":lékařský:" replace="⚕"/>
+    <item find=":turecká lira:" replace="₺"/>
+    <item find=":pouť2:" replace=""/>
+    <item find=":trojúhelník:" replace="△"/>
+    <item find=":pláž:" replace=""/>
+    <item find=":zajíc:" replace=""/>
+    <item find=":rybaření:" replace=""/>
+    <item find=":stránka3:" replace=""/>
+    <item find="miti" replace="míti"/>
+    <item find=":^M:" replace="ᴹ"/>
+    <item find="bzlo" replace="bylo"/>
+    <item find=":piano:" replace=""/>
+    <item find="ktery" replace="který"/>
+    <item find=":smyčka2:" replace="➿"/>
+    <item find=":líbající4:" replace=""/>
+    <item find="vlady" replace="vlády"/>
+    <item find=":prst:" replace=""/>
+    <item find=":obálka8:" replace=""/>
+    <item find=":sníh:" replace=""/>
+    <item find=":mešita:" replace=""/>
+    <item find=":autobus2:" replace=""/>
+    <item find=":_2:" replace="₂"/>
+    <item find=":peníze3:" replace="螺"/>
+    <item find="vprotikladu" replace="v protikladu"/>
+    <item find=":raketa:" replace=""/>
+    <item find=":město:" replace=""/>
+    <item find=":Omega:" replace="Ω"/>
+    <item find=":zvětšující se srdce:" replace=""/>
+    <item find="jejichš" replace="jejichž"/>
+    <item find=":nevolnost:" replace="濫"/>
+    <item find=":_p:" replace="ₚ"/>
+    <item find=":prázdná poznámka:" replace=""/>
+    <item find="byla jsme" replace="byla jsem"/>
+    <item find="podkníkový" replace="podnikový"/>
+    <item find=":kostka6:" replace="⚅"/>
+    <item find="bezohledu" replace="bez ohledu"/>
+    <item find=":_o:" replace="ₒ"/>
+    <item find=":baklažán:" replace=""/>
+    <item find=":čtvrtá odmocnina:" replace="∜"/>
+    <item find="jaště" replace="ještě"/>
+    <item find=":noty4:" replace=""/>
+    <item find=":štětec:" replace=""/>
+    <item find=":graf5:" replace=""/>
+    <item find="a t.d." replace="atd."/>
+    <item find=":ustrašený:" replace=""/>
+    <item find=":croissant:" replace="縷"/>
+    <item find="zavod" replace="závod"/>
+    <item find="budle" replace="bude"/>
+    <item find=":_gama:" replace="ᵧ"/>
+    <item find=":policista:" replace=""/>
+    <item find=":kostka5:" replace="⚄"/>
+    <item find=":nákup:" replace=""/>
+    <item find="jojí" replace="její"/>
+    <item find=":radost:" replace=""/>
+    <item find="odaný" replace="oddaný"/>
+    <item find="ke mě" replace="ke mně"/>
+    <item find=":zaškrtávací pole4:" replace=""/>
+    <item find=":auto4:" replace=""/>
+    <item find=":Ró:" replace="Ρ"/>
+    <item find=":_-:" replace="₋"/>
+    <item find=":zaškrtnuto5:" replace=""/>
+    <item find=":přesýpací hodiny:" replace="⌛"/>
+    <item find=":JZ2:" replace="⇙"/>
+    <item find="cennina" replace="cenina"/>
+    <item find="jsuo" replace="jsou"/>
+    <item find=":autobus:" replace=""/>
+    <item find="pzemí" replace="území"/>
+    <item find="meti" replace="mezi"/>
+    <item find="vpoměru" replace="v poměru"/>
+    <item find=":připínáček:" replace=""/>
+    <item find=":burunduk:" replace=""/>
+    <item find=":graf poklesu:" replace=""/>
+    <item find="naúkor" replace="na úkor"/>
+    <item find=":sendvič:" replace="索"/>
+    <item find="poblíž tě" replace="poblíž tebe"/>
+    <item find=":sluchátka:" replace=""/>
+    <item find="replubiky" replace="republiky"/>
+    <item find=":^P:" replace="ᴾ"/>
+    <item find="podvlivem" replace="pod vlivem"/>
+    <item find="v četně" replace="včetně"/>
+    <item find=":hamburger:" replace=""/>
+    <item find="vsouladu" replace="v souladu"/>
+    <item find=":sjednocení:" replace="∪"/>
+    <item find=":JV2:" replace="⇘"/>
+    <item find=":letadlo3:" replace=""/>
+    <item find="naboť" replace="neboť"/>
+    <item find=":Z:" replace="←"/>
+    <item find=":surfař:" replace=""/>
+    <item find="zřetelek" replace="zřetele k"/>
+    <item find=":tráva:" replace=""/>
+    <item find=":růžička2:" replace=""/>
+    <item find=":vlajky:" replace=""/>
+    <item find=":monokl:" replace="類"/>
+    <item find="u mně" replace="u mě"/>
+    <item find=":není rovno:" replace="≠"/>
+    <item find=":minutka:" replace="⏲"/>
+    <item find="proti mne" replace="proti mně"/>
+    <item find=":zámek:" replace=""/>
+    <item find=":disketa2:" replace=""/>
+    <item find=":kabát:" replace="痢"/>
+    <item find=":zamračený:" replace="☹"/>
+    <item find="ze tě" replace="z tebe"/>
+    <item find=":úprk:" replace=""/>
+    <item find=":Štír:" replace="♏"/>
+    <item find=":^i:" replace="ⁱ"/>
+    <item find=":Panna:" replace="♍"/>
+    <item find=":ovce:" replace=""/>
+    <item find="votázce" replace="v otázce"/>
+    <item find="opodál mně" replace="opodál mě"/>
+    <item find=":megafon2:" replace=""/>
+    <item find=":růžička:" replace=""/>
+    <item find=":balík:" replace=""/>
+    <item find=":pár3:" replace=""/>
+    <item find=":Vánoce:" replace=""/>
+    <item find=":glóbus:" replace=""/>
+    <item find="zhlediska" replace="z hlediska"/>
+    <item find=":tužka4:" replace=""/>
+    <item find=":couvající srpek:" replace=""/>
+    <item find=":promoce:" replace=""/>
+    <item find=":maso:" replace=""/>
+    <item find=":mobil:" replace=""/>
+    <item find="sluný" replace="slunný"/>
+    <item find=":tramvaj:" replace=""/>
+    <item find=":meče:" replace="⚔"/>
+    <item find=":vysoké boty:" replace=""/>
+    <item find=":jednorožec:" replace="濾"/>
+    <item find=":psí:" replace="ψ"/>
+    <item find=":Rak:" replace="♋"/>
+    <item find=":kaduceus:" replace="☤"/>
+    <item find=":mávání:" replace=""/>
+    <item find="cený" replace="cenný"/>
+    <item find="posledni" replace="poslední"/>
+    <item find=":kruh3:" replace=""/>
+    <item find="dalsi" replace="další"/>
+    <item find=":mravenec:" replace=""/>
+    <item find=":oslava2:" replace=""/>
+    <item find="vinník" replace="viník"/>
+    <item find=":rozechvělý:" replace=""/>
+    <item find=":videokazeta:" replace=""/>
+    <item find=":paprsky3:" replace=""/>
+    <item find=":motocykl:" replace=""/>
+    <item find=":hranolky:" replace=""/>
+    <item find="nedaleko mně" replace="nedaleko mě"/>
+    <item find=":krabice:" replace=""/>
+    <item find=":pták:" replace=""/>
+    <item find=":zlomené srdce:" replace=""/>
+    <item find="doprostřed tě" replace="doprostřed tebe"/>
+    <item find=":manželství:" replace="⚭"/>
+    <item find=":radostná kočka:" replace=""/>
+    <item find=":prsten:" replace=""/>
+    <item find="pka" replace="pak"/>
+    <item find=":podání ruky:" replace="欄"/>
+    <item find=":zčervenalý2:" replace=""/>
+    <item find=":kůň:" replace=""/>
+    <item find=":není nadmnožinou:" replace="⊅"/>
+    <item find=":deštník:" replace="☂"/>
+    <item find=":paragraf:" replace="§"/>
+    <item find=":dítě:" replace=""/>
+    <item find=":praporek3:" replace=""/>
+    <item find="setuace" replace="situace"/>
+    <item find=":červenající:" replace=""/>
+    <item find=":malé obsahuje:" replace="∍"/>
+    <item find="seznym" replace="seznam"/>
+    <item find="odací" replace="oddací"/>
+    <item find=":nůž2:" replace=""/>
+    <item find=":banka:" replace=""/>
+    <item find=":hvězda3:" replace=""/>
+    <item find=":vítězství:" replace="✌"/>
+    <item find=":klávesnice2:" replace=""/>
+    <item find=":tužka:" replace="✎"/>
+    <item find="na přikl." replace="např."/>
+    <item find="ketrá" replace="která"/>
+    <item find="vdůsledku" replace="v důsledku"/>
+    <item find=":obálka6:" replace=""/>
+    <item find=":hlasování:" replace=""/>
+    <item find=":přihrádka:" replace=""/>
+    <item find=":kiwi:" replace="諾"/>
+    <item find="vobdobí" replace="v období"/>
+    <item find=":srpek měsíce:" replace=""/>
+    <item find=":lanovka2:" replace=""/>
+    <item find=":_9:" replace="₉"/>
+    <item find=":praporek:" replace=""/>
+    <item find=":brusle:" replace="⛸"/>
+    <item find=":Z2:" replace="⇐"/>
+    <item find="měsic" replace="měsíc"/>
+    <item find=":záchod:" replace=""/>
+    <item find="skrze tě" replace="skrze tebe"/>
+    <item find=":čtvereček:" replace="▫"/>
+    <item find=":ne2:" replace=""/>
+    <item find=":hvězda a půlměsíc:" replace="☪"/>
+    <item find=":éta:" replace="η"/>
+    <item find=":taxi:" replace=""/>
+    <item find=":přihrádka2:" replace=""/>
+    <item find="mimo j." replace="mj."/>
+    <item find=":list2:" replace=""/>
+    <item find="dovnitř mně" replace="dovnitř mě"/>
+    <item find=":velryba2:" replace=""/>
+    <item find=":stránky:" replace=""/>
+    <item find="bzla" replace="byla"/>
+    <item find=":rozzlobený:" replace=""/>
+    <item find=":libra2:" replace=""/>
+    <item find=":hrot pera:" replace="✑"/>
+    <item find=":kráva2:" replace=""/>
+    <item find=":nota2:" replace="♪"/>
+    <item find=":fotoaparát:" replace=""/>
+    <item find=":vaření:" replace=""/>
+    <item find=":stuha:" replace=""/>
+    <item find=":radioaktivní:" replace="☢"/>
+    <item find=":řecký kříž:" replace="✚"/>
+    <item find=":hotel:" replace=""/>
+    <item find=":urna:" replace="⚱"/>
+    <item find=":tenis:" replace=""/>
+    <item find=":vyčerpání:" replace=""/>
+    <item find=":sáňky:" replace=""/>
+    <item find=":rovnoběžné:" replace="∥"/>
+    <item find=":piky2:" replace="♤"/>
+    <item find="napřikl." replace="např."/>
+    <item find=":vejce:" replace="讀"/>
+    <item find="ku přikl." replace="kupř."/>
+    <item find=":hrací automat:" replace=""/>
+    <item find=":neslyším zlo:" replace=""/>
+    <item find="žívot" replace="život"/>
+    <item find=":žonglování:" replace="魯"/>
+    <item find=":kříž2:" replace="‡"/>
+    <item find=":^chí:" replace="ᵡ"/>
+    <item find=":traktor:" replace=""/>
+    <item find=":stopy:" replace=""/>
+    <item find=":horská železnice:" replace=""/>
+    <item find=":Slunce:" replace="☉"/>
+    <item find="senzam" replace="seznam"/>
+    <item find=":svěrka:" replace=""/>
+    <item find="třeva" replace="třeba"/>
+    <item find=":Neptun:" replace="♆"/>
+    <item find=":SJ:" replace="↕"/>
+    <item find=":dinosaurus:" replace="秊"/>
+    <item find="sjme" replace="jsme"/>
+    <item find=":recyklace2:" replace="♻"/>
+    <item find=":ryba:" replace=""/>
+    <item find=":mňam:" replace=""/>
+    <item find=":parciální:" replace="∂"/>
+    <item find="do prostřed" replace="doprostřed"/>
+    <item find=":nahoru2:" replace=""/>
+    <item find=":zásah:" replace=""/>
+    <item find=":5.30:" replace=""/>
+    <item find=":karty:" replace=""/>
+    <item find="podtlakem" replace="pod tlakem"/>
+    <item find=":promítačka:" replace=""/>
+    <item find=":poznámkový blok2:" replace=""/>
+    <item find="mozno" replace="možno"/>
+    <item find=":ustaraný:" replace=""/>
+    <item find=":slunéčko:" replace=""/>
+    <item find=":ró:" replace="ρ"/>
+    <item find=":ne:" replace=""/>
+    <item find=":nápoj:" replace="磻"/>
+    <item find="nekterých" replace="některých"/>
+    <item find=":mrkev:" replace="凌"/>
+    <item find=":tiskárna2:" replace=""/>
+    <item find=":busty:" replace=""/>
+    <item find="vsak" replace="však"/>
+    <item find="otevřte" replace="otevřete"/>
+    <item find=":klávesnice:" replace="⌨"/>
+    <item find="podminka" replace="podmínka"/>
+    <item find="přos" replace="přes"/>
+    <item find=":1 h:" replace=""/>
+    <item find=":noty:" replace="♫"/>
+    <item find="republeka" replace="republika"/>
+    <item find="poddojmem" replace="pod dojmem"/>
+    <item find=":jazyk4:" replace=""/>
+    <item find="tetono" replace="tento"/>
+    <item find=":&lt;=:" replace="≤"/>
+    <item find=":bublina8:" replace=""/>
+    <item find="melo" replace="mělo"/>
+    <item find=":--:" replace="–"/>
+    <item find=":nevěsta:" replace=""/>
+    <item find=":ušklíbající se osoba:" replace=""/>
+    <item find="politicke" replace="politické"/>
+    <item find="okolo tě" replace="okolo tebe"/>
+    <item find=":nadšený:" replace="朗"/>
+    <item find=":buvol:" replace=""/>
+    <item find="provdedení" replace="provedení"/>
+    <item find=":_(:" replace="₍"/>
+    <item find="nedaleko tě" replace="nedaleko tebe"/>
+    <item find="cloveka" replace="člověka"/>
+    <item find=":telefonát:" replace="酪"/>
+    <item find=".*(tm)" replace="™"/>
+    <item find="svuo" replace="svou"/>
+    <item find="tedz" replace="tedy"/>
+    <item find=":5 h:" replace=""/>
+    <item find=":oceán:" replace=""/>
+    <item find=":fax2:" replace=""/>
+    <item find="hodína" replace="hodina"/>
+    <item find=":Alfa:" replace="Α"/>
+    <item find="stale" replace="stále"/>
+    <item find=":květina:" replace="⚘"/>
+    <item find=":tužka2:" replace="✏"/>
+    <item find="dset" replace="deset"/>
+    <item find=":bublina6:" replace=""/>
+    <item find="predmet" replace="předmět"/>
+    <item find=":žralok:" replace="麗"/>
+    <item find=":^A:" replace="ᴬ"/>
+    <item find=":myš3:" replace=""/>
+    <item find=":rouška:" replace=""/>
+    <item find=":_r:" replace="ᵣ"/>
+    <item find=":recyklovaný papír:" replace="♼"/>
+    <item find=":praporek2:" replace=""/>
+    <item find="ostatni" replace="ostatní"/>
+    <item find=":kalendář:" replace=""/>
+    <item find=":_7:" replace="₇"/>
+    <item find=":vozík:" replace=""/>
+    <item find=":eso:" replace=""/>
+    <item find="jednotlivy" replace="jednotlivý"/>
+    <item find=":telefon2:" replace="☏"/>
+    <item find="lotech" replace="letech"/>
+    <item find="napriklad" replace="například"/>
+    <item find=":údiv:" replace=""/>
+    <item find=":vizitkář:" replace=""/>
+    <item find=":integrál3:" replace="∭"/>
+    <item find=":Jupiter:" replace="♃"/>
+    <item find=":tornádo:" replace=""/>
+    <item find=":třešně:" replace=""/>
+    <item find=":_a:" replace="ₐ"/>
+    <item find=":zaškrtávací pole5:" replace=""/>
+    <item find="použe" replace="pouze"/>
+    <item find=":amfora:" replace=""/>
+    <item find=":nahoru4:" replace=""/>
+    <item find="tetno" replace="tento"/>
+    <item find=":zip:" replace="蘿"/>
+    <item find=":_m:" replace="ₘ"/>
+    <item find="jsem mohli" replace="jsme mohli"/>
+    <item find="svych" replace="svých"/>
+    <item find=":počítač3:" replace=""/>
+    <item find="sr." replace="srov."/>
+    <item find=":^=:" replace="⁼"/>
+    <item find="obasti" replace="oblasti"/>
+    <item find=":cyklista:" replace=""/>
+    <item find=":6.30:" replace=""/>
+    <item find=":VZ:" replace="↔"/>
+    <item find="svym" replace="svým"/>
+    <item find="yby" replace="aby"/>
+    <item find=":hasiči2:" replace=""/>
+    <item find=":kartotéka:" replace=""/>
+    <item find=":12.30:" replace=""/>
+    <item find=":SJ2:" replace="⇕"/>
+    <item find=":láska2:" replace="蘭"/>
+    <item find="to znam." replace="tzn."/>
+    <item find=":jídlo s sebou:" replace="率"/>
+    <item find=":džin:" replace="吏"/>
+    <item find=":^x:" replace="ˣ"/>
+    <item find=":beta:" replace="β"/>
+    <item find=":1/2:" replace="½"/>
+    <item find=":tučňák:" replace=""/>
+    <item find=":1/4:" replace="¼"/>
+    <item find=":menší čtverec:" replace="◽"/>
+    <item find=":ulita:" replace=""/>
+    <item find=":klaun:" replace="嵐"/>
+    <item find=":zmatený:" replace=""/>
+    <item find=":kříž:" replace="†"/>
+    <item find=":policie2:" replace=""/>
+    <item find=":sluchátko2:" replace=""/>
+    <item find=":lyže:" replace=""/>
+    <item find=":zpocený:" replace=""/>
+    <item find=":obchod2:" replace=""/>
+    <item find="u prostřed" replace="uprostřed"/>
+    <item find=":řehtající:" replace=""/>
+    <item find=":lžíce:" replace="籠"/>
+    <item find=":zaškrtnuto4:" replace=""/>
+    <item find=":Kozoroh:" replace="♑"/>
+    <item find="prvni" replace="první"/>
+    <item find=":usměvavá kočka2:" replace=""/>
+    <item find="veprospěch" replace="ve prospěch"/>
+    <item find=":paprsky:" replace=""/>
+    <item find="příhlaška" replace="přihlášky"/>
+    <item find="společnots" replace="společnost"/>
+    <item find="daleko tě" replace="daleko tebe"/>
+    <item find=":koláč:" replace="不"/>
+    <item find=":letadlo6:" replace=""/>
+    <item find="temer" replace="téměř"/>
+    <item find=":vpravo4:" replace=""/>
+    <item find=":opice:" replace=""/>
+    <item find=":kuře:" replace=""/>
+    <item find="chtěla jsme" replace="chtěla jsem"/>
+    <item find="vzdy" replace="vždy"/>
+    <item find=":plačící kočka:" replace=""/>
+    <item find=":alfa:" replace="α"/>
+    <item find=":pravoslavný kříž:" replace="☦"/>
+    <item find=":vzhůru nohama:" replace=""/>
+    <item find=":plavec:" replace=""/>
+    <item find=":sluchátko3:" replace=""/>
+    <item find=":pravítko2:" replace=""/>
+    <item find=":pláč:" replace=""/>
+    <item find=":srdce se stuhou:" replace=""/>
+    <item find=":rybí koláč:" replace=""/>
+    <item find=":latinský kříž2:" replace=""/>
+    <item find=":talíř:" replace=""/>
+    <item find=":zákaz vstupu:" replace=""/>
+    <item find="byl jsme" replace="byl jsem"/>
+    <item find=":loď2:" replace=""/>
+    <item find=":chí ró:" replace="☧"/>
+    <item find="mimo mně" replace="mimo mě"/>
+    <item find=":noviny:" replace=""/>
+    <item find=":nákladní auto:" replace="⛟"/>
+    <item find=":složka3:" replace=""/>
+    <item find=":protočené panenky:" replace=""/>
+    <item find="z venčí" replace="zvenčí"/>
+    <item find="nakladatelstvi" replace="nakladatelství"/>
+    <item find=":odmocnina:" replace="√"/>
+    <item find="a t.pod." replace="atp."/>
+    <item find="pikud" replace="pokud"/>
+    <item find=":řecký kříž2:" replace="✙"/>
+    <item find=":loďka:" replace=""/>
+    <item find=":párek v rohlíku:" replace=""/>
+    <item find=":^beta:" replace="ᵝ"/>
+    <item find=":housle:" replace=""/>
+    <item find=":minimalizovat:" replace=""/>
+    <item find="kvůli ti" replace="kvůli tobě"/>
+    <item find=":_l:" replace="ₗ"/>
+    <item find=":podmnožina:" replace="⊂"/>
+    <item find="vevztahu" replace="ve vztahu"/>
+    <item find=":vlajka4:" replace="⚐"/>
+    <item find=":slunečno:" replace="☀"/>
+    <item find=":^L:" replace="ᴸ"/>
+    <item find=":badminton:" replace=""/>
+    <item find=":nevinný:" replace=""/>
+    <item find="napříč mne" replace="napříč mně"/>
+    <item find=":bonbón:" replace=""/>
+    <item find=":šestnáctinová nota:" replace="텡"/>
+    <item find=":starší muž:" replace=""/>
+    <item find=":světlé vlasy:" replace=""/>
+    <item find=":prázdný dokument:" replace=""/>
+    <item find=":Měsíc:" replace="☽"/>
+    <item find=":velbloud:" replace=""/>
+    <item find=":5/8:" replace="⅝"/>
+    <item find=":ano2:" replace=""/>
+    <item find="protí" replace="proti"/>
+    <item find=":hvězdička:" replace="⭒"/>
+    <item find=":mí:" replace="μ"/>
+    <item find="čtyří" replace="čtyři"/>
+    <item find=":úsměv2:" replace=""/>
+    <item find=":nekonečno:" replace="∞"/>
+    <item find=":Psí:" replace="Ψ"/>
+    <item find=":vepř2:" replace=""/>
+    <item find=":nudle:" replace=""/>
+    <item find=":^j:" replace="ʲ"/>
+    <item find=":káva:" replace="☕"/>
+    <item find=":dres2:" replace=""/>
+    <item find=":měsíc:" replace=""/>
+    <item find="na úseku" replace="na úseku"/>
+    <item find=":květ2:" replace=""/>
+    <item find=":vodní meloun:" replace=""/>
+    <item find=":sponka2:" replace=""/>
+    <item find=":prázdná množina:" replace="∅"/>
+    <item find=":mapa:" replace=""/>
+    <item find="víco" replace="více"/>
+    <item find="místo tě" replace="místo tebe"/>
+    <item find=":slavení:" replace=""/>
+    <item find=":hrot pera2:" replace="✒"/>
+    <item find="akco" replace="akce"/>
+    <item find="jemom" replace="jenom"/>
+    <item find=":^u:" replace="ᵘ"/>
+    <item find=":6 h:" replace=""/>
+    <item find=":kovboj:" replace="鸞"/>
+    <item find=":paleta:" replace=""/>
+    <item find=":9 h:" replace=""/>
+    <item find=":zuřivý:" replace=""/>
+    <item find=":jed:" replace="☠"/>
+    <item find="vporovnání" replace="v porovnání"/>
+    <item find="o proti" replace="oproti"/>
+    <item find="stojně" replace="stejně"/>
+    <item find=":oblačno2:" replace=""/>
+    <item find=":gorila:" replace="轢"/>
+    <item find=":psaní:" replace="✍"/>
+    <item find=":ruka3:" replace=""/>
+    <item find=":obálka2:" replace=""/>
+    <item find=":celnice:" replace=""/>
+    <item find=":svitek:" replace=""/>
+    <item find=":složka5:" replace=""/>
+    <item find=":lira:" replace="₤"/>
+    <item find=":srdce2:" replace=""/>
+    <item find=":reproduktor2:" replace=""/>
+    <item find="človek" replace="člověk"/>
+    <item find=":dolů4:" replace=""/>
+    <item find=":déšť2:" replace="⛆"/>
+    <item find=":_+:" replace="₊"/>
+    <item find=":paprsky2:" replace=""/>
+    <item find=":usměvavý2:" replace="☻"/>
+    <item find="kamený" replace="kamenný"/>
+    <item find=":křičící kočka:" replace=""/>
+    <item find=":kostka:" replace=""/>
+    <item find="dsud" replace="dosud"/>
+    <item find=":+-:" replace="±"/>
+    <item find=":krakatice:" replace="撚"/>
+    <item find="po popříp." replace="popř."/>
+    <item find="kja" replace="jak"/>
+    <item find="a td." replace="atd."/>
+    <item find=":judo:" replace="屢"/>
+    <item find=":med:" replace=""/>
+    <item find="nyni" replace="nyní"/>
+    <item find="a tomu pod" replace="atp."/>
+    <item find="totíž" replace="totiž"/>
+    <item find="durhé" replace="druhé"/>
+    <item find=":schránka2:" replace=""/>
+    <item find=":bikiny:" replace=""/>
+    <item find=":čtyřlístek:" replace=""/>
+    <item find=":žena:" replace=""/>
+    <item find=":pozor:" replace="☡"/>
+    <item find=":nedělitelné:" replace="∤"/>
+    <item find="cirkvi" replace="církvi"/>
+    <item find=":líbající2:" replace=""/>
+    <item find="1/4" replace="¼"/>
+    <item find="jménem mně" replace="mým jménem"/>
+    <item find=":sandál:" replace=""/>
+    <item find=":^0:" replace="⁰"/>
+    <item find=":obsahuje:" replace="∋"/>
+    <item find=":rukavice:" replace="理"/>
+    <item find="velíký" replace="veliký"/>
+    <item find=":dům:" replace=""/>
+    <item find=":^a:" replace="ᵃ"/>
+    <item find=":žolík:" replace=""/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find=":11.30:" replace=""/>
+    <item find=":stereo:" replace=""/>
+    <item find=":prázdná stránka poznámek:" replace=""/>
+    <item find=":lokomotiva2:" replace=""/>
+    <item find=":kostka4:" replace="⚃"/>
+    <item find="neuveld" replace="neuvedl"/>
+    <item find=":hlava v dlani:" replace="臘"/>
+    <item find=":neexistuje:" replace="∄"/>
+    <item find=":kůže5:" replace=""/>
+    <item find=":obdélník2:" replace="▬"/>
+    <item find="ode mně" replace="ode mě"/>
+    <item find=":vlevo5:" replace=""/>
+    <item find="úhemí" replace="území"/>
+    <item find=":obr:" replace=""/>
+    <item find=":vypnutý mobil:" replace=""/>
+    <item find=":květina2:" replace="鹿"/>
+    <item find="tzto" replace="tyto"/>
+    <item find=":konec důkazu:" replace="∎"/>
+    <item find=":luk:" replace=""/>
+    <item find=":hornický:" replace="⚒"/>
+    <item find=":mračící2:" replace=""/>
+    <item find=":ztišený mobil:" replace=""/>
+    <item find=":okurka:" replace="勒"/>
+    <item find="do tě" replace="do tebe"/>
+    <item find=":ježek:" replace="璉"/>
+    <item find=":drahokam:" replace=""/>
+    <item find=":bambus:" replace=""/>
+    <item find=":tygr2:" replace=""/>
+    <item find=":^R:" replace="ᴿ"/>
+    <item find=":^l:" replace="ˡ"/>
+    <item find=":kára:" replace="♦"/>
+    <item find=":hora2:" replace=""/>
+    <item find="forámt" replace="formát"/>
+    <item find="rozdílod" replace="rozdíl od"/>
+    <item find=":velryba:" replace=""/>
+    <item find="zivot" replace="život"/>
+    <item find=":směna:" replace=""/>
+    <item find=":úhel2:" replace="∡"/>
+    <item find=":pěticípá hvězda:" replace="⛤"/>
+    <item find=":hvězdička2:" replace="⭑"/>
+    <item find="mohla jsme" replace="mohla jsem"/>
+    <item find=":baseball:" replace="⚾"/>
+    <item find="to zn." replace="tzn."/>
+    <item find=":kočka:" replace=""/>
+    <item find=":pošta2:" replace=""/>
+    <item find="praconví" replace="pracovní"/>
+    <item find="na proti" replace="naproti"/>
+    <item find=":pošta:" replace=""/>
+    <item find="josu" replace="jsou"/>
+    <item find=":reproduktor3:" replace=""/>
+    <item find=":lilie:" replace="⚜"/>
+    <item find="kdybysme" replace="kdybychom"/>
+    <item find=":obrazovka:" replace=""/>
+    <item find="jendoduchý" replace="jednoduchý"/>
+    <item find=":kalkulačka:" replace=""/>
+    <item find=":divočák:" replace=""/>
+    <item find="pred" replace="před"/>
+    <item find=":hrozny:" replace=""/>
+    <item find=":nezletilý:" replace=""/>
+    <item find=":graf4:" replace=""/>
+    <item find=":zastávka autobusu:" replace=""/>
+    <item find="účinný" replace="účinný"/>
+    <item find=":_n:" replace="ₙ"/>
+    <item find="ukol" replace="úkol"/>
+    <item find="spiše" replace="spíše"/>
+    <item find=":x3:" replace="❎"/>
+    <item find=":miska:" replace="北"/>
+    <item find=":kalendář2:" replace=""/>
+    <item find=":jednokolejka:" replace=""/>
+    <item find=":oblak3:" replace="⛈"/>
+    <item find=":-+:" replace="∓"/>
+    <item find="svem" replace="svém"/>
+    <item find=":hlasitý zvuk:" replace=""/>
+    <item find=":^O:" replace="ᴼ"/>
+    <item find=":nota:" replace="♩"/>
+    <item find=":minuta:" replace="′"/>
+    <item find="neob" replace="nebo"/>
+    <item find=":ozubené kolo:" replace="⚙"/>
+    <item find=":bílý král:" replace="♔"/>
+    <item find=":zebra:" replace="煉"/>
+    <item find=":letadlo5:" replace=""/>
+    <item find=":šekel:" replace="₪"/>
+    <item find=":dolů2:" replace=""/>
+    <item find=":jahoda:" replace=""/>
+    <item find=":delfín:" replace=""/>
+    <item find=":pivo:" replace=""/>
+    <item find="při tě" replace="při tobě"/>
+    <item find=":zaškrtávací pole6:" replace=""/>
+    <item find="ktera" replace="která"/>
+    <item find="nejem" replace="nejen"/>
+    <item find=":velký kruh:" replace="◯"/>
+    <item find=":kebab:" replace="陵"/>
+    <item find=":chlapci:" replace=""/>
+    <item find="vlemli" replace="velmi"/>
+    <item find=":nadmnožina:" replace="⊃"/>
+    <item find=":-:" replace="−"/>
+    <item find=":dolar2:" replace=""/>
+    <item find=":x:" replace="×"/>
+    <item find=":2/3:" replace="⅔"/>
+    <item find=":starý:" replace="陸"/>
+    <item find="vprocesu" replace="v procesu"/>
+    <item find="napříč mě" replace="napříč mně"/>
+    <item find="kotun" replace="korun"/>
+    <item find=":alembik:" replace="⚗"/>
+    <item find=":pitná voda:" replace=""/>
+    <item find=":dorůstající srpek:" replace=""/>
+    <item find=":2 h:" replace=""/>
+    <item find=":kravata:" replace=""/>
+    <item find=":synagoga:" replace=""/>
+    <item find=":nahoru:" replace="☝"/>
+    <item find=":kůže3:" replace=""/>
+    <item find=":pavouk:" replace=""/>
+    <item find=":Gama:" replace="Γ"/>
+    <item find=":líbající:" replace=""/>
+    <item find=":ucho:" replace=""/>
+    <item find="jsem mohly" replace="jsme mohly"/>
+    <item find=":křeček:" replace=""/>
+    <item find=":školní taška:" replace=""/>
+    <item find=":existuje:" replace="∃"/>
+    <item find=":SV2:" replace="⇗"/>
+    <item find="čeksý" replace="český"/>
+    <item find=":kemp:" replace=""/>
+    <item find=":menší čtverec2:" replace="◾"/>
+    <item find=":noty2:" replace="♬"/>
+    <item find=":brambora:" replace="凜"/>
+    <item find=":pí:" replace="π"/>
+    <item find="mesto" replace="město"/>
+    <item find=":Halloween:" replace=""/>
+    <item find=":vrtulník:" replace=""/>
+    <item find=":upír:" replace="率"/>
+    <item find=":vlajka2:" replace=""/>
+    <item find=":hvězda:" replace="★"/>
+    <item find=":salát:" replace="綾"/>
+    <item find=":biohazard:" replace="☣"/>
+    <item find=":klobouk2:" replace=""/>
+    <item find=":záchod2:" replace=""/>
+    <item find="ovsem" replace="ovšem"/>
+    <item find=":třpyt:" replace="✨"/>
+    <item find=":most:" replace=""/>
+    <item find=":kruh:" replace="○"/>
+    <item find="byhc" replace="bych"/>
+    <item find="navrub" replace="na vrub"/>
+    <item find=":usměvavý4:" replace="來"/>
+    <item find=":dráha:" replace=""/>
+    <item find=":^v:" replace="ᵛ"/>
+    <item find=":klávesnice3:" replace=""/>
+    <item find=":úhel:" replace="∠"/>
+    <item find="pvní" replace="první"/>
+    <item find=":pár:" replace=""/>
+    <item find=":stupeň:" replace="°"/>
+    <item find=":kostel:" replace="⛪"/>
+    <item find=":piky:" replace="♠"/>
+    <item find=":lidské stopy:" replace=""/>
+    <item find=":dělitelné:" replace="∣"/>
+    <item find=":paní Clausová:" replace="虜"/>
+    <item find="jejoch" replace="jejich"/>
+    <item find="svuj" replace="svůj"/>
+    <item find="najsme" replace="nejsme"/>
+    <item find=":^B:" replace="ᴮ"/>
+    <item find="všechny" replace="všechny"/>
+    <item find="čast" replace="část"/>
+    <item find=":jazyk2:" replace=""/>
+    <item find=":kulečník:" replace=""/>
+    <item find="zakon" replace="zákon"/>
+    <item find=":klíč2:" replace=""/>
+    <item find=":hodinky:" replace="⌚"/>
+    <item find=":duha:" replace=""/>
+    <item find=":zrušit:" replace=""/>
+    <item find=":ok2:" replace=""/>
+    <item find=":glóbus4:" replace=""/>
+    <item find=":^d:" replace="ᵈ"/>
+    <item find=":čtvereček2:" replace="▪"/>
+    <item find=":zamlženo:" replace=""/>
+    <item find=":pistole:" replace=""/>
+    <item find=":házená:" replace="菉"/>
+    <item find=":křížek:" replace="♯"/>
+    <item find=":čerpací stanice:" replace="⛽"/>
+    <item find=":.:" replace="…"/>
+    <item find="narozdíl" replace="na rozdíl"/>
+    <item find=":visutá dráha:" replace=""/>
+    <item find=":ragby:" replace=""/>
+    <item find=":slunečnice:" replace=""/>
+    <item find=":zvonkohra:" replace=""/>
+    <item find="voblasti" replace="v oblasti"/>
+    <item find=":pěst3:" replace="亂"/>
+    <item find=":pouť:" replace=""/>
+    <item find=":3/8:" replace="⅜"/>
+    <item find=":ostrov:" replace=""/>
+    <item find="&lt;-&gt;" replace="↔"/>
+    <item find="vejménu" replace="ve jménu"/>
+    <item find=":osminová nota:" replace="텠"/>
+    <item find=":pár2:" replace=""/>
+    <item find="daleko mně" replace="daleko mě"/>
+    <item find=":velký čtverec2:" replace="⬛"/>
+    <item find="beze mně" replace="beze mě"/>
+    <item find="zapomoci" replace="za pomoci"/>
+    <item find="zpravy" replace="zprávy"/>
+    <item find=":tričko:" replace=""/>
+    <item find=":^3:" replace="³"/>
+    <item find="t.zv." replace="tzv."/>
+    <item find=":rozhlas:" replace=""/>
+    <item find=":dokument:" replace=""/>
+    <item find=":list:" replace=""/>
+    <item find=":bublina3:" replace=""/>
+    <item find=":fotbal:" replace="⚽"/>
+    <item find=":rohy:" replace="落"/>
+    <item find=":studený pot:" replace=""/>
+    <item find=":řehot:" replace=""/>
+    <item find=":kalendář3:" replace=""/>
+    <item find=":obraz:" replace=""/>
+    <item find="tisic" replace="tisíc"/>
+    <item find=":dveře:" replace=""/>
+    <item find=":telefon4:" replace=""/>
+    <item find=":?:" replace="❓"/>
+    <item find=":mozek:" replace="易"/>
+    <item find=":stadion:" replace=""/>
+    <item find=":tanečník2:" replace=""/>
+    <item find="colý" replace="celý"/>
+    <item find=":zákaz vjezdu:" replace="⛔"/>
+    <item find=":zápisník:" replace=""/>
+    <item find=":jachta:" replace="⛵"/>
+    <item find=":mléko:" replace="拏"/>
+    <item find=":hřivna:" replace="₴"/>
+    <item find=":dálnice:" replace=""/>
+    <item find=":princezna:" replace=""/>
+    <item find=":hokej2:" replace=""/>
+    <item find=":nákladní auto3:" replace=""/>
+    <item find=":jeruzalémský kříž:" replace="☩"/>
+    <item find=":půlová pomlka:" replace="턼"/>
+    <item find=":kniha3:" replace=""/>
+    <item find=":tlačítko2:" replace=""/>
+    <item find="vyjímka" replace="výjimka"/>
+    <item find=":černá věž:" replace="♜"/>
+    <item find=":družice:" replace=""/>
+    <item find=":box:" replace="壘"/>
+    <item find=":není podmnožinou:" replace="⊄"/>
+    <item find=":tramvaj2:" replace=""/>
+    <item find="vespojení" replace="ve spojení"/>
+    <item find=":hněv:" replace=""/>
+    <item find="bze" replace="bez"/>
+    <item find=":květ:" replace=""/>
+    <item find=":^-:" replace="⁻"/>
+    <item find=":Mí:" replace="Μ"/>
+    <item find=":x2:" replace="❌"/>
+    <item find=":nos:" replace=""/>
+    <item find=":šaty:" replace=""/>
+    <item find=":rty:" replace=""/>
+    <item find=":záložka:" replace=""/>
+    <item find=":šprt:" replace="邏"/>
+    <item find=":^o:" replace="ᵒ"/>
+    <item find=":rajče:" replace=""/>
+    <item find="TM" replace="(tm)"/>
+    <item find="Http" replace="http"/>
+    <item find=":park:" replace=""/>
+    <item find=":^p:" replace="ᵖ"/>
+    <item find=":kočka s očima ze srdcí:" replace=""/>
+    <item find=":dokument3:" replace=""/>
+    <item find="včery" replace="včera"/>
+    <item find="vzájmu" replace="v zájmu"/>
+    <item find=":bez zvonku:" replace=""/>
+    <item find=":motorový člun:" replace=""/>
+    <item find=":stráž:" replace=""/>
+    <item find=":sklenice3:" replace="弄"/>
+    <item find=":noc:" replace=""/>
+    <item find=":sponka:" replace=""/>
+    <item find=":zklamané oddechnutí:" replace=""/>
+    <item find=":popcorn:" replace=""/>
+    <item find=":nebo:" replace="∨"/>
+    <item find=":narozeniny:" replace=""/>
+    <item find=":čertík:" replace=""/>
+    <item find=":^2:" replace="²"/>
+    <item find="jsem chtěli" replace="jsme chtěli"/>
+    <item find=":teploměr2:" replace="裸"/>
+    <item find=":Beta:" replace="Β"/>
+    <item find=":SV:" replace="↗"/>
+    <item find=":obchod:" replace=""/>
+    <item find=":usměvavý:" replace="☺"/>
+    <item find=":kašel:" replace="蠟"/>
+    <item find=":lichoběžník:" replace="⏢"/>
+    <item find=":^gama:" replace="ᵞ"/>
+    <item find=":snowboardista:" replace=""/>
+    <item find="pracovnik" replace="pracovník"/>
+    <item find=":ztišení:" replace="狼"/>
+    <item find=":večírek:" replace=""/>
+    <item find=":J2:" replace="⇓"/>
+    <item find="přípravuje" replace="připravuje"/>
+    <item find="ajko" replace="jako"/>
+    <item find="zpoza tě" replace="zpoza tebe"/>
+    <item find=":vlevo6:" replace=""/>
+    <item find=":mimozemšťan:" replace=""/>
+    <item find=":skútr:" replace=""/>
+    <item find=":samec:" replace="♂"/>
+    <item find="vůbec" replace="vůbec"/>
+    <item find=":film:" replace=""/>
+    <item find=":bublina5:" replace=""/>
+    <item find="devet" replace="devět"/>
+    <item find="poukud" replace="pokud"/>
+    <item find="doprostřed mně" replace="doprostřed mě"/>
+    <item find=":JZ:" replace="↙"/>
+    <item find="čeksá" replace="česká"/>
+    <item find=":překrývat:" replace=""/>
+    <item find="tesíc" replace="tisíc"/>
+    <item find=":kapka2:" replace=""/>
+    <item find=":horská dráha:" replace=""/>
+    <item find="rpacovní" replace="pracovní"/>
+    <item find=":neutrální:" replace=""/>
+    <item find=":^b:" replace="ᵇ"/>
+    <item find="predevsim" replace="především"/>
+    <item find=":míč:" replace="⛹"/>
+    <item find="eventual." replace="event."/>
+    <item find=":černý kruh:" replace="⚫"/>
+    <item find="vytovřeno" replace="vytvořeno"/>
+    <item find=":^N:" replace="ᴺ"/>
+    <item find="rpaha" replace="Praha"/>
+    <item find=":Davidova hvězda:" replace="✡"/>
+    <item find=":^epsilon:" replace="ᵋ"/>
+    <item find=":myš2:" replace=""/>
+    <item find="kdyby jsme" replace="kdybychom"/>
+    <item find=":nákladní auto2:" replace=""/>
+    <item find="ktotou" replace="kterou"/>
+    <item find=":vpravo2:" replace=""/>
+    <item find="clen" replace="člen"/>
+    <item find=":dívky:" replace=""/>
+    <item find="zlavní" replace="hlavní"/>
+    <item find=":nůžky4:" replace="✃"/>
+    <item find="státni" replace="státní"/>
+    <item find="čy" replace="či"/>
+    <item find=":svoboda:" replace=""/>
+    <item find=":není v pořádku:" replace=""/>
+    <item find=":Beran:" replace="♈"/>
+    <item find=":ffl:" replace="ﬄ"/>
+    <item find=":počítač2:" replace=""/>
+    <item find=":mořská bytost:" replace="隆"/>
+    <item find=":vagón:" replace=""/>
+    <item find=":horolezec:" replace="輪"/>
+    <item find=":lhář:" replace="拉"/>
+    <item find=":obálka4:" replace=""/>
+    <item find=":mandarinka:" replace=""/>
+    <item find="kolem mně" replace="kolem mě"/>
+    <item find=":rýžová sušenka:" replace=""/>
+    <item find=":cyklista2:" replace=""/>
+    <item find=":ryba3:" replace=""/>
+    <item find="rpto" replace="proto"/>
+    <item find=":součin:" replace="∏"/>
+    <item find=":anténa:" replace=""/>
+    <item find="nylezeno" replace="nalezeno"/>
+    <item find=":Éta:" replace="Η"/>
+    <item find=":obálka7:" replace=""/>
+    <item find=":džíny:" replace=""/>
+    <item find="vestředu" replace="ve středu"/>
+    <item find=":růže:" replace=""/>
+    <item find="můsí" replace="musí"/>
+    <item find="ktrý" replace="který"/>
+    <item find="znedostatku" replace="z nedostatku"/>
+    <item find=":dítě3:" replace="櫓"/>
+    <item find=":koza:" replace=""/>
+    <item find=".*(c)" replace="©"/>
+    <item find=":had:" replace=""/>
+    <item find=":stopky:" replace="⏱"/>
+    <item find=":videohra:" replace=""/>
+    <item find=":jídlo:" replace="菱"/>
+    <item find=":semafor2:" replace=""/>
+    <item find=":odkaz:" replace=""/>
+    <item find=":vlak4:" replace=""/>
+    <item find="datumem" replace="datem"/>
+    <item find=":broskev:" replace=""/>
+    <item find=":sanitka:" replace=""/>
+    <item find="nezle" replace="nelze"/>
+    <item find=":baht:" replace="฿"/>
+    <item find=":karetní srdce:" replace="♥"/>
+    <item find=":spodek:" replace=""/>
+    <item find=":večírek4:" replace=""/>
+    <item find=":pravítko:" replace=""/>
+    <item find=":zaškrtávací pole3:" replace="☒"/>
+    <item find="tak zv." replace="tzv."/>
+    <item find=":trojúhelník3:" replace=""/>
+    <item find=":jmenovka:" replace=""/>
+    <item find=":sladký brambor:" replace=""/>
+    <item find=":koruna:" replace=""/>
+    <item find="solva" replace="slova"/>
+    <item find="nehleděk" replace="nehledě k"/>
+    <item find=":čokoláda:" replace=""/>
+    <item find="třeby" replace="třeba"/>
+    <item find=":černý střelec:" replace="♝"/>
+    <item find="řiká" replace="říká"/>
+    <item find="eal" replace="ale"/>
+    <item find=":informace2:" replace=""/>
+    <item find="do mně" replace="do mě"/>
+    <item find="ktere" replace="které"/>
+    <item find="penize" replace="peníze"/>
+    <item find=":trackball:" replace=""/>
+    <item find="přiloha" replace="příloha"/>
+    <item find=":sval:" replace=""/>
+    <item find=":milostný dopis:" replace=""/>
+    <item find=":muzeum:" replace=""/>
+    <item find=":poštovní trubka:" replace=""/>
+    <item find=":zákaz kouření:" replace=""/>
+    <item find=":mobil2:" replace=""/>
+    <item find=":recyklace:" replace="♲"/>
+    <item find=":chlapec:" replace=""/>
+    <item find=":televize:" replace=""/>
+    <item find="rpáce" replace="práce"/>
+    <item find="ohledemna" replace="ohledem na"/>
+    <item find=":lev:" replace="女"/>
+    <item find=".*-&gt;.*" replace="→"/>
+    <item find=":úplněk2:" replace=""/>
+    <item find=":_1:" replace="₁"/>
+    <item find="porava" replace="oprava"/>
+    <item find="lídí" replace="lidí"/>
+    <item find="uvnitř tě" replace="uvnitř tebe"/>
+    <item find="nelza" replace="nelze"/>
+    <item find="podél mně" replace="podél mě"/>
+    <item find=":slunce:" replace=""/>
+    <item find=":ruka:" replace="✋"/>
+    <item find="oublasti" replace="oblasti"/>
+    <item find=":integrál2:" replace="∬"/>
+    <item find=":megafon:" replace=""/>
+    <item find="vpřípadě" replace="v případě"/>
+    <item find="totmo" replace="tomto"/>
+    <item find="jehoz" replace="jehož"/>
+    <item find=":velký kruh2:" replace="⬤"/>
+    <item find=":královna:" replace=""/>
+    <item find=":východ slunce3:" replace=""/>
+    <item find=":baterka:" replace=""/>
+    <item find="ve tě" replace="v tobě"/>
+    <item find="veshodě" replace="ve shodě"/>
+    <item find=".*(r)" replace="®"/>
+    <item find="naúrovni" replace="na úrovni"/>
+    <item find=":oblak:" replace="☁"/>
+    <item find=":přilba:" replace="⛑"/>
+    <item find="vrozporu" replace="v rozporu"/>
+    <item find=":pětiúhelník:" replace="⬠"/>
+    <item find="jsem byli" replace="jsme byli"/>
+    <item find=":stránka:" replace=""/>
+    <item find=":trefy2:" replace="♧"/>
+    <item find=":taco:" replace=""/>
+    <item find="dovnitř tě" replace="dovnitř tebe"/>
+    <item find=":nepitná voda:" replace=""/>
+    <item find="uveld" replace="uvedl"/>
+    <item find="k ti" replace="k tobě"/>
+    <item find=":vítězství2:" replace=""/>
+    <item find=":noty3:" replace=""/>
+    <item find=":šipky:" replace=""/>
+    <item find="3/4" replace="¾"/>
+    <item find=":stuha2:" replace=""/>
+    <item find="bezzřetele" replace="bez zřetele"/>
+    <item find="dalši" replace="další"/>
+    <item find=":rámec2:" replace=""/>
+    <item find=":knihy:" replace=""/>
+    <item find=":chléb:" replace=""/>
+    <item find=":_s:" replace="ₛ"/>
+    <item find="podél tě" replace="podél tebe"/>
+    <item find=":informace3:" replace=""/>
+    <item find="řelk" replace="řekl"/>
+    <item find="vcera" replace="včera"/>
+    <item find="ketrý" replace="který"/>
+    <item find="blíže mně" replace="blíže mě"/>
+    <item find="mlě" replace="měl"/>
+    <item find=":disketa:" replace=""/>
+    <item find="zazraničí" replace="zahraničí"/>
+    <item find=":lívance:" replace="丹"/>
+    <item find="čeksé" replace="české"/>
+    <item find=":termální prameny:" replace="♨"/>
+    <item find=":gama:" replace="γ"/>
+    <item find="zejmena" replace="zejména"/>
+    <item find="nazávěr" replace="na závěr"/>
+    <item find=":10 h:" replace=""/>
+    <item find=":tužka3:" replace="✐"/>
+    <item find=":zamyšlený:" replace=""/>
+    <item find=":lejno:" replace=""/>
+    <item find="jeste" replace="ještě"/>
+    <item find=":curling:" replace="樓"/>
+    <item find="vůči" replace="vůči"/>
+    <item find=":hudba2:" replace=""/>
+    <item find=":neobsahuje:" replace="∌"/>
+    <item find=":šestiúhelník:" replace="⬡"/>
+    <item find="&lt;--" replace="←"/>
+    <item find=":schránka4:" replace=""/>
+    <item find=":vstupenka2:" replace=""/>
+    <item find="napříč tě" replace="napříč tebe"/>
+    <item find=":kachna:" replace="閭"/>
+    <item find="konoc" replace="konec"/>
+    <item find=":dzéta:" replace="ζ"/>
+    <item find=":slanina:" replace="肋"/>
+    <item find="poudklad" replace="podklad"/>
+    <item find="psolečnost" replace="společnost"/>
+    <item find=":Spock:" replace=""/>
+    <item find=":8 h:" replace=""/>
+    <item find=":ondřejský kříž:" replace="☓"/>
+    <item find=":líbající3:" replace=""/>
+    <item find=":tau:" replace="τ"/>
+    <item find=":suši:" replace=""/>
+    <item find=":láska:" replace=""/>
+    <item find=":korále:" replace=""/>
+    <item find="ztitulu" replace="z titulu"/>
+    <item find=":vzlyk:" replace=""/>
+    <item find=":kufr:" replace=""/>
+    <item find=":zmrzlina:" replace=""/>
+    <item find=":mikroskop:" replace=""/>
+    <item find="po př." replace="popř."/>
+    <item find="obsahuej" replace="obsahuje"/>
+    <item find="opodál tě" replace="opodál tebe"/>
+    <item find="molh" replace="mohl"/>
+    <item find=":hora:" replace="⛰"/>
+    <item find=":hvězda4:" replace=""/>
+    <item find="všochen" replace="všechen"/>
+    <item find=":dort:" replace=""/>
+    <item find="ap." replace="apod."/>
+    <item find=":rodina:" replace=""/>
+    <item find=":tanabata:" replace=""/>
+    <item find=":nemocnice:" replace=""/>
+    <item find=":^+:" replace="⁺"/>
+    <item find="a t.p." replace="atp."/>
+    <item find=":hasiči:" replace=""/>
+    <item find=":stránka4:" replace=""/>
+    <item find=":libra:" replace="£"/>
+    <item find="vedle tě" replace="vedle tebe"/>
+    <item find=":ústa:" replace=""/>
+    <item find="nekdo" replace="někdo"/>
+    <item find=":bílý jezdec:" replace="♘"/>
+    <item find="jsme mohla" replace="jsem mohla"/>
+    <item find=":účetní kniha:" replace=""/>
+    <item find="pro tě" replace="pro tebe"/>
+    <item find=":sazenice:" replace=""/>
+    <item find="mítso" replace="místo"/>
+    <item find=":couvající měsíc:" replace=""/>
+    <item find="nezákoný" replace="nezákonný"/>
+    <item find="veloký" replace="veliký"/>
+    <item find=":listnatý:" replace=""/>
+    <item find=":tiskárna:" replace=""/>
+    <item find=":cukimi:" replace=""/>
+    <item find=":účes:" replace=""/>
+    <item find=":partitura:" replace=""/>
+    <item find=":avokádo:" replace="陋"/>
+    <item find="cirkve" replace="církve"/>
+    <item find=":lotrinský kříž:" replace="☨"/>
+    <item find=":krumpáč:" replace="⛏"/>
+    <item find=":Ný:" replace="Ν"/>
+    <item find=":jeřáb:" replace=""/>
+    <item find=":kotva:" replace="⚓"/>
+    <item find=":4.30:" replace=""/>
+    <item find=":vlevo4:" replace=""/>
+    <item find=":zmrzlina2:" replace=""/>
+    <item find=":měsíc2:" replace=""/>
+    <item find="nypříklad" replace="například"/>
+    <item find=":přechod pro chodce:" replace=""/>
+    <item find=":postel:" replace=""/>
+    <item find=":čtvrťová nota:" replace="텟"/>
+    <item find=":12 h:" replace=""/>
+    <item find=":medvěd:" replace=""/>
+    <item find=":dorůstající měsíc:" replace=""/>
+    <item find="zítra" replace="zítra"/>
+    <item find=":krocan:" replace="旅"/>
+    <item find=":Ypsilon:" replace="Υ"/>
+    <item find=":^J:" replace="ᴶ"/>
+    <item find="podník" replace="podnik"/>
+    <item find=":auto2:" replace=""/>
+    <item find=":Kába:" replace=""/>
+    <item find=":bílý pěšec:" replace="♙"/>
+    <item find=":fontána:" replace="⛲"/>
+    <item find=":sprcha:" replace=""/>
+    <item find=":princ:" replace="老"/>
+    <item find=":Chí:" replace="Χ"/>
+    <item find=":pilulka:" replace=""/>
+    <item find=":posuvník:" replace=""/>
+    <item find=":stehno:" replace=""/>
+    <item find="vevěci" replace="ve věci"/>
+    <item find=":baterie:" replace=""/>
+    <item find=":~:" replace="≈"/>
+    <item find=":připínáček2:" replace=""/>
+    <item find=":disketa3:" replace=""/>
+    <item find=":e-mail:" replace=""/>
+    <item find="dcou" replace="dvou"/>
+    <item find=":_h:" replace="ₕ"/>
+    <item find="informaco" replace="informace"/>
+    <item find="v prostřed" replace="vprostřed"/>
+    <item find=":kreveta:" replace="戀"/>
+    <item find="vedle mně" replace="vedle mě"/>
+    <item find="nema" replace="nemá"/>
+    <item find=":9.30:" replace=""/>
+    <item find=":7.30:" replace=""/>
+    <item find=":auto3:" replace=""/>
+    <item find=":síť:" replace=""/>
+    <item find=":^t:" replace="ᵗ"/>
+    <item find=":kočka2:" replace=""/>
+    <item find="dum" replace="dům"/>
+    <item find=":lampa:" replace=""/>
+    <item find=":rámec:" replace=""/>
+    <item find=":palma:" replace=""/>
+    <item find=":poznámka3:" replace=""/>
+    <item find=":úšklebek:" replace=""/>
+    <item find=":medaile2:" replace=""/>
+    <item find=":béčko:" replace="♭"/>
+    <item find=":saké:" replace=""/>
+    <item find="přílis" replace="příliš"/>
+    <item find=":orel:" replace="礪"/>
+    <item find=":zastavit2:" replace="⏹"/>
+    <item find=":muži:" replace=""/>
+    <item find=":kladivo a klíč:" replace=""/>
+    <item find=":pot:" replace=""/>
+    <item find=":karetní srdce2:" replace="♡"/>
+    <item find=":člun:" replace=""/>
+    <item find=":obálka:" replace="✉"/>
+    <item find="sohledem" replace="s ohledem"/>
+    <item find=":vlajka:" replace=""/>
+    <item find="kazdy" replace="každý"/>
+    <item find=":večírek2:" replace=""/>
+    <item find="bdou" replace="budou"/>
+    <item find="vsech" replace="všech"/>
+    <item find=":rozvod:" replace="⚮"/>
+    <item find=":&gt;=:" replace="≥"/>
+    <item find="zprávce" replace="správce"/>
+    <item find="nebot" replace="neboť"/>
+    <item find="setuaci" replace="situaci"/>
+    <item find=":kruh4:" replace=""/>
+    <item find=":pastelka:" replace=""/>
+    <item find=":piroh:" replace="寧"/>
+    <item find=":oblak2:" replace="⛅"/>
+    <item find=":!?:" replace="⁉"/>
+    <item find=":nebezpečí smyku:" replace="⛐"/>
+    <item find="proti ti" replace="proti tobě"/>
+    <item find="komel" replace="kolem"/>
+    <item find="rekl" replace="řekl"/>
+    <item find=":loď:" replace=""/>
+    <item find="blízko tě" replace="blízko tebe"/>
+    <item find=":chodec:" replace=""/>
+    <item find="místo mně" replace="místo mě"/>
+    <item find="kteri" replace="kteří"/>
+    <item find="kčs" replace="Kč"/>
+    <item find=":pro všechna:" replace="∀"/>
+    <item find=":kostka1:" replace="⚀"/>
+    <item find=":Ryby:" replace="♓"/>
+    <item find=":_5:" replace="₅"/>
+    <item find=":_v:" replace="ᵥ"/>
+    <item find="dylší" replace="další"/>
+    <item find=":anch:" replace="☥"/>
+    <item find=":zaškrtnuto2:" replace="✔"/>
+    <item find=":ornament srdce:" replace=""/>
+    <item find=":letadlo4:" replace=""/>
+    <item find=":černá dáma:" replace="♛"/>
+    <item find="naproti mě" replace="naproti mně"/>
+    <item find=":^6:" replace="⁶"/>
+    <item find=":obvaz:" replace="洛"/>
+    <item find=":pohár:" replace=""/>
+    <item find=":zámek2:" replace=""/>
+    <item find=":východ slunce:" replace=""/>
+    <item find="zatim" replace="zatím"/>
+    <item find=":peněženka:" replace=""/>
+    <item find=":odpadkový koš:" replace=""/>
+    <item find="pocasi" replace="počasí"/>
+    <item find=":disketa5:" replace=""/>
+    <item find=":théta:" replace="θ"/>
+    <item find=":^n:" replace="ⁿ"/>
+    <item find=":včela:" replace=""/>
+    <item find=":nemluvím zlo:" replace=""/>
+    <item find="nezli" replace="nežli"/>
+    <item find=":peníze:" replace=""/>
+    <item find=":_3:" replace="₃"/>
+    <item find=":ksí:" replace="ξ"/>
+    <item find=":óm:" replace=""/>
+    <item find=":!2:" replace="❗"/>
+    <item find=":divadlo:" replace=""/>
+    <item find="ako" replace="jako"/>
+    <item find=":nahoru5:" replace=""/>
+    <item find=":S:" replace="↑"/>
+    <item find="prace" replace="práce"/>
+    <item find="na př." replace="např."/>
+    <item find=":odlet:" replace=""/>
+    <item find=":1.30:" replace=""/>
+    <item find=":jóga:" replace="律"/>
+    <item find="smer" replace="směr"/>
+    <item find="aby jsme" replace="abychom"/>
+    <item find="ked" replace="kde"/>
+    <item find=":!:" replace="❕"/>
+    <item find="čislo" replace="číslo"/>
+    <item find="jendání" replace="jednání"/>
+    <item find=":hůlky:" replace="異"/>
+    <item find=":jas:" replace=""/>
+    <item find=":dinosaurus2:" replace="練"/>
+    <item find=":dvě srdce:" replace=""/>
+    <item find="valky" replace="války"/>
+    <item find=":náplň:" replace=""/>
+    <item find=":pas:" replace=""/>
+    <item find=":/:" replace="∕"/>
+    <item find=":saxofon:" replace=""/>
+    <item find=":Blíženci:" replace="♊"/>
+    <item find=":kostka2:" replace="⚁"/>
+    <item find=":dvd:" replace=""/>
+    <item find=":_e:" replace="ₑ"/>
+    <item find=":oheň:" replace=""/>
+    <item find="podle mně" replace="podle mě"/>
+    <item find=":zámek3:" replace=""/>
+    <item find=":letadlo:" replace="✈"/>
+    <item find=":palec:" replace="″"/>
+    <item find="blízko mně" replace="blízko mě"/>
+    <item find=":hodiny:" replace=""/>
+    <item find="dobe" replace="době"/>
+    <item find=":třetí odmocnina:" replace="∛"/>
+    <item find="jko" replace="jako"/>
+    <item find="podle tě" replace="podle tebe"/>
+    <item find=":šátek:" replace="崙"/>
+    <item find=":^W:" replace="ᵂ"/>
+    <item find=":pár4:" replace=""/>
+    <item find=":busta:" replace=""/>
+    <item find=":kaštan:" replace=""/>
+    <item find="všyk" replace="však"/>
+    <item find=":cent:" replace="¢"/>
+    <item find=":hrad2:" replace=""/>
+    <item find="jsme mohl" replace="jsem mohl"/>
+    <item find=":úplněk:" replace=""/>
+    <item find=":dárek:" replace=""/>
+    <item find="tohto" replace="tohoto"/>
+    <item find="jden" replace="jeden"/>
+    <item find=":bez úst:" replace=""/>
+    <item find=":zelené jablko:" replace=""/>
+    <item find=":kuře2:" replace=""/>
+    <item find=":srp a kladivo:" replace="☭"/>
+    <item find=":rupie:" replace="₹"/>
+    <item find="byly jsem" replace="byly jsme"/>
+    <item find=":blesk:" replace=""/>
+    <item find=":Lev:" replace="♌"/>
+    <item find=":zvracení:" replace="冷"/>
+    <item find=":kukuřice:" replace=""/>
+    <item find=":Omikron:" replace="Ο"/>
+    <item find=":malé je v:" replace="∊"/>
+    <item find="mouhou" replace="mohou"/>
+    <item find="denni" replace="denní"/>
+    <item find=":zavazadlo:" replace=""/>
+    <item find=":kapka:" replace=""/>
+    <item find="předeším" replace="především"/>
+    <item find=":netopýr:" replace="驪"/>
+    <item find=":střední čtverec:" replace="◻"/>
+    <item find=":beran:" replace=""/>
+    <item find=":pivo2:" replace=""/>
+    <item find=":paprsky4:" replace=""/>
+    <item find="kvůli mě" replace="kvůli mně"/>
+    <item find="naproti ti" replace="naproti tobě"/>
+    <item find=":kanceláře:" replace=""/>
+    <item find=":trojúhelník2:" replace="▲"/>
+    <item find="mohl jsme" replace="mohl jsem"/>
+    <item find=":vlk:" replace=""/>
+    <item find=":copyright:" replace="©"/>
+    <item find="misty" replace="místy"/>
+    <item find=":puls:" replace=""/>
+    <item find=":blesk2:" replace=""/>
+    <item find="poudle" replace="podle"/>
+    <item find=":západ slunce:" replace=""/>
+    <item find=":1/8:" replace="⅛"/>
+    <item find="zasada" replace="zásada"/>
+    <item find=":pes2:" replace=""/>
+    <item find="nihcž" replace="nichž"/>
+    <item find=":odemknuto:" replace=""/>
+    <item find=":burrito:" replace=""/>
+    <item find=":dospělý:" replace="六"/>
+    <item find=":omega:" replace="ω"/>
+    <item find=":mimozemšťan2:" replace=""/>
+    <item find=":bláznivý:" replace="浪"/>
+    <item find="tosíc" replace="tisíc"/>
+    <item find=":hokej:" replace=""/>
+    <item find=":poušť:" replace=""/>
+    <item find=":slintající:" replace="襤"/>
+    <item find=":_chí:" replace="ᵪ"/>
+    <item find=":zákaz odpadků:" replace=""/>
+    <item find=":_ró:" replace="ᵨ"/>
+    <item find=":tanečník:" replace=""/>
+    <item find=":věž:" replace=""/>
+    <item find=":kniha2:" replace=""/>
+    <item find=":kladivo:" replace=""/>
+    <item find=":mikrofon:" replace=""/>
+    <item find="jenojm" replace="jenom"/>
+    <item find="vsouhlase" replace="v souhlase"/>
+    <item find=":budík:" replace="⏰"/>
+    <item find=":lozenge:" replace="◊"/>
+    <item find=":zaškrtnuto3:" replace="✅"/>
+    <item find=":kniha:" replace=""/>
+    <item find=":peso:" replace="₱"/>
+    <item find=":fi:" replace="ﬁ"/>
+    <item find=":balónek:" replace=""/>
+    <item find=":dlaň2:" replace="爐"/>
+    <item find=":^8:" replace="⁸"/>
+    <item find="ohledemk" replace="ohledem k"/>
+    <item find=":tm:" replace="™"/>
+    <item find=":invalidní vozík:" replace="♿"/>
+    <item find=":dívka:" replace=""/>
+    <item find=":sloupcový graf:" replace=""/>
+    <item find=":černý pěšec:" replace="♟"/>
+    <item find="pdle" replace="podle"/>
+    <item find="pdopis" replace="podpis"/>
+    <item find=":záchody:" replace=""/>
+    <item find=":holubice:" replace=""/>
+    <item find="dsik" replace="disk"/>
+    <item find=":panenky:" replace=""/>
+    <item find=":panda:" replace=""/>
+    <item find=":integrál4:" replace="∮"/>
+    <item find=":složka4:" replace=""/>
+    <item find=":muž:" replace=""/>
+    <item find="talčítko" replace="tlačítko"/>
+    <item find=":jazyk3:" replace=""/>
+    <item find=":modem:" replace=""/>
+    <item find="čýst" replace="část"/>
+    <item find=":bez mobilu:" replace=""/>
+    <item find=":okno:" replace=""/>
+    <item find=":štít2:" replace="⛨"/>
+    <item find=":_fí:" replace="ᵩ"/>
+    <item find=":díra:" replace=""/>
+    <item find=":_=:" replace="₌"/>
+    <item find="chtěl jsme" replace="chtěl jsem"/>
+    <item find=":nahoru3:" replace=""/>
+    <item find="nazákladě" replace="na základě"/>
+    <item find=":lak na nehty:" replace=""/>
+    <item find="ku př." replace="kupř."/>
+    <item find=":sluneční brýle2:" replace=""/>
+    <item find=":kánoe:" replace=""/>
+    <item find="vemli" replace="velmi"/>
+    <item find=":pěst:" replace="✊"/>
+    <item find=":---:" replace="—"/>
+    <item find="všoch" replace="všech"/>
+    <item find="mezi tě" replace="mezi tebe"/>
+    <item find=":mrzutý:" replace=""/>
+    <item find=":Hadonoš:" replace="⛎"/>
+    <item find=":V2:" replace="⇒"/>
+    <item find=":skřítek:" replace=""/>
+    <item find="podil" replace="podíl"/>
+    <item find=":Pluto:" replace="♇"/>
+    <item find="do vnitř" replace="dovnitř"/>
+    <item find="seríál" replace="seriál"/>
+    <item find="jsme byl" replace="jsem byl"/>
+    <item find=":fí:" replace="φ"/>
+    <item find="dokumetny" replace="dokumenty"/>
+    <item find=":kuře3:" replace=""/>
+    <item find="podzáminkou" replace="pod záminkou"/>
+    <item find="neni" replace="není"/>
+    <item find="postránce" replace="po stránce"/>
+    <item find=":osminová pomlka:" replace="턾"/>
+    <item find=":velký čtverec:" replace="⬜"/>
+    <item find="uvnitř mně" replace="uvnitř mě"/>
+    <item find="nichz" replace="nichž"/>
+    <item find="kžesťanství" replace="křesťanství"/>
+    <item find=":bota:" replace=""/>
+    <item find=":fotoblesk:" replace=""/>
+    <item find=":zápisník2:" replace=""/>
+    <item find="odělení" replace="oddělení"/>
+    <item find=":Váhy:" replace="♎"/>
+    <item find="nekolik" replace="několik"/>
+    <item find=":mikrofon2:" replace=""/>
+    <item find=":oblačno:" replace=""/>
+    <item find=":oči ze srdcí:" replace=""/>
+    <item find="serial" replace="seriál"/>
+    <item find="zpoza mně" replace="zpoza mě"/>
+    <item find="behem" replace="během"/>
+    <item find="take" replace="také"/>
+    <item find=":dům2:" replace=""/>
+    <item find=":vpravo3:" replace="☛"/>
+    <item find=":adi šakti:" replace="☬"/>
+    <item find=":vodní pólo:" replace="綠"/>
+    <item find=":šokovaný:" replace="勞"/>
+    <item find=".*&lt;-.*" replace="←"/>
+    <item find=":ff:" replace="ﬀ"/>
+    <item find=":^alfa:" replace="ᵅ"/>
+    <item find=":celá pomlka:" replace="턻"/>
+    <item find=":^7:" replace="⁷"/>
+    <item find=":váhy:" replace="⚖"/>
+    <item find=":dítě2:" replace=""/>
+    <item find=":označení kapitol:" replace=""/>
+    <item find="nabo" replace="nebo"/>
+    <item find="jsem byly" replace="jsme byly"/>
+    <item find="abysme" replace="abychom"/>
+    <item find=":oden:" replace=""/>
+    <item find="Htp" replace="http"/>
+    <item find=":houslový klíč:" replace="턞"/>
+    <item find=":anděl:" replace=""/>
+    <item find="besplatný" replace="bezplatný"/>
+    <item find=":liška:" replace="力"/>
+    <item find=":deštník3:" replace="⛱"/>
+    <item find=":prázdný poznámkový blok:" replace=""/>
+    <item find="neplytné" replace="neplatné"/>
+    <item find=":keltský kříž:" replace=""/>
+    <item find=":stanice:" replace=""/>
+    <item find=":vpravo:" replace="☞"/>
+    <item find=":myš4:" replace=""/>
+    <item find=":ztišený:" replace=""/>
+    <item find="ohleduna" replace="ohledu na"/>
+    <item find="kolem tě" replace="kolem tebe"/>
+    <item find=":1/3:" replace="⅓"/>
+    <item find=":sopka:" replace=""/>
+    <item find=":^(:" replace="⁽"/>
+    <item find="objkt" replace="objekt"/>
+    <item find=":^D:" replace="ᴰ"/>
+    <item find=":_x:" replace="ₓ"/>
+    <item find=":písmo:" replace=""/>
+    <item find="zeme" replace="země"/>
+    <item find=":dámské šaty:" replace=""/>
+    <item find=":3.30:" replace=""/>
+    <item find=":běžec:" replace=""/>
+    <item find=":fax:" replace=""/>
+    <item find=":dušené:" replace=""/>
+    <item find=":odrážka noty:" replace="♮"/>
+    <item find=":^z:" replace="ᶻ"/>
+    <item find=":samice:" replace="♀"/>
+    <item find=":ok:" replace=""/>
+    <item find=":Uran:" replace="♅"/>
+    <item find=":líbající kočka:" replace=""/>
+    <item find=":bota2:" replace=""/>
+    <item find=":nocleh:" replace=""/>
+    <item find=":výbuch:" replace=""/>
+    <item find=":teploměr:" replace=""/>
+    <item find=":zákaz kol:" replace=""/>
+    <item find=":závrať:" replace=""/>
+    <item find=":kuželky:" replace=""/>
+    <item find="obsyhuje" replace="obsahuje"/>
+    <item find=":lambda:" replace="λ"/>
+    <item find=":křik:" replace=""/>
+    <item find="chtěly jsem" replace="chtěly jsme"/>
+    <item find=":jen:" replace="¥"/>
+    <item find=":bílý střelec:" replace="♗"/>
+    <item find=":lyžař:" replace="⛷"/>
+    <item find=":_k:" replace="ₖ"/>
+    <item find=":želva:" replace=""/>
+    <item find="kteté" replace="které"/>
+    <item find=":pěst2:" replace=""/>
+    <item find=":bublina myšlenky:" replace=""/>
+    <item find=":houba:" replace=""/>
+    <item find=":mlha:" replace=""/>
+    <item find=":je v:" replace="∈"/>
+    <item find=":rakev:" replace="⚰"/>
+    <item find=":_u:" replace="ᵤ"/>
+    <item find=":2.30:" replace=""/>
+    <item find=":gauč:" replace=""/>
+    <item find="cestujicí" replace="cestující"/>
+    <item find=":myš:" replace=""/>
+    <item find=":ušklíbající se kočka:" replace=""/>
+    <item find=":šála:" replace="泥"/>
+    <item find=":svatba:" replace=""/>
+    <item find=":ruka2:" replace=""/>
+    <item find="misto" replace="místo"/>
+    <item find=":velbloud2:" replace=""/>
+    <item find=":zombie:" replace="履"/>
+    <item find=":složka:" replace=""/>
+    <item find=":hvězda2:" replace="☆"/>
+    <item find="soubr" replace="souhlas"/>
+    <item find=":deštník2:" replace=""/>
+    <item find=":štěstí:" replace=""/>
+    <item find=":složka2:" replace=""/>
+    <item find=":dokument2:" replace=""/>
+    <item find="techto" replace="těchto"/>
+    <item find=":déšť:" replace="☔"/>
+    <item find=":zaškrtávací pole:" replace="☐"/>
+    <item find="jejihc" replace="jejich"/>
+    <item find="zakona" replace="zákona"/>
+    <item find=":zvonek2:" replace=""/>
+    <item find=":trojzubec:" replace=""/>
+    <item find=":_j:" replace="ⱼ"/>
+    <item find=":kouzelník:" replace="慄"/>
+    <item find=":štít:" replace=""/>
+    <item find=":masáž:" replace=""/>
+    <item find=":medaile:" replace=""/>
+    <item find=":taška:" replace=""/>
+    <item find=":^m:" replace="ᵐ"/>
+    <item find=":písmo2:" replace=""/>
+    <item find="byli jsem" replace="byli jsme"/>
+    <item find="joden" replace="jeden"/>
+    <item find=":kokosový ořech:" replace="便"/>
+    <item find=":přesýpací hodiny2:" replace="⏳"/>
+    <item find=":lokomotiva:" replace=""/>
+    <item find=":rtěnka:" replace=""/>
+    <item find="vdoucí" replace="vedoucí"/>
+    <item find=":maják:" replace=""/>
+    <item find=":chí:" replace="χ"/>
+    <item find=":_0:" replace="₀"/>
+    <item find=":sud:" replace=""/>
+    <item find="kdyby jsi" replace="kdybys"/>
+    <item find=":10.30:" replace=""/>
+    <item find=":vlajky2:" replace=""/>
+    <item find=":začátečník:" replace=""/>
+    <item find=":turban:" replace=""/>
+    <item find=":brokolice:" replace="復"/>
+    <item find=":syntetizér:" replace=""/>
+    <item find=":bez výrazu:" replace=""/>
+    <item find=":^r:" replace="ʳ"/>
+    <item find=":pětiúhelník2:" replace="⬟"/>
+    <item find="vprůběhu" replace="v průběhu"/>
+    <item find=":zaznamenat:" replace="⏺"/>
+    <item find=":_beta:" replace="ᵦ"/>
+    <item find=":jablko:" replace=""/>
+    <item find=":perský:" replace="☫"/>
+    <item find="t.j." replace="tj."/>
+    <item find=":detektiv:" replace=""/>
+    <item find=":zmrzlinový pohár:" replace=""/>
+    <item find=":objímající:" replace="珞"/>
+    <item find=":_):" replace="₎"/>
+    <item find="vesmyslu" replace="ve smyslu"/>
+    <item find=":Ksí:" replace="Ξ"/>
+  </items>
+  <UpperCaseExceptions/>
+  <TwoUpperLetterExceptions/>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

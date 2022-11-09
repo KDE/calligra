@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find=".*p´.*" replace="ṕ"/>
+    <item find=".*r´.*" replace="ŕ"/>
+    <item find=".*P´.*" replace="Ṕ"/>
+    <item find=".*H´.*" replace="H́"/>
+    <item find=".*R´.*" replace="Ŕ"/>
+    <item find=".*ḃ.*" replace="b́"/>
+    <item find=".*d´.*" replace="ď"/>
+    <item find=".*Ḣ.*" replace="H́"/>
+    <item find=".*n´.*" replace="ń"/>
+    <item find=".*m´.*" replace="ḿ"/>
+    <item find=".*ḣ.*" replace="h́"/>
+    <item find=".*b´.*" replace="b́"/>
+    <item find=".*L´.*" replace="Ľ"/>
+    <item find=".*f´.*" replace="f́"/>
+    <item find=".*S´.*" replace="Ś"/>
+    <item find=".*v´.*" replace="v́"/>
+    <item find=".*G´.*" replace="Ǵ"/>
+    <item find=".*M´.*" replace="Ḿ"/>
+    <item find=".*Ḟ.*" replace="F́"/>
+    <item find=".*V´.*" replace="V́"/>
+    <item find=".*D´.*" replace="D́"/>
+    <item find=".*Ď.*" replace="D́"/>
+    <item find=".*s´.*" replace="ś"/>
+    <item find=".*h´.*" replace="h́"/>
+    <item find=".*ḟ.*" replace="f́"/>
+    <item find=".*N´.*" replace="Ń"/>
+    <item find=".*T´.*" replace="T́"/>
+    <item find=".*g´.*" replace="ǵ"/>
+    <item find=".*K´.*" replace="Ḱ"/>
+    <item find=".*B´.*" replace="B́"/>
+    <item find=".*t´.*" replace="ť"/>
+    <item find=".*k´.*" replace="ḱ"/>
+    <item find=".*Ť.*" replace="T́"/>
+    <item find=".*l´.*" replace="ľ"/>
+    <item find=".*F´.*" replace="F́"/>
+    <item find=".*Ḃ.*" replace="B́"/>
+  </items>
+  <UpperCaseExceptions/>
+  <TwoUpperLetterExceptions/>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

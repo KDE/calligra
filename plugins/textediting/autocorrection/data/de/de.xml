@@ -1,444 +1,1972 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE autocorrection>
 <Word>
- <items>
-  <item find="(C)" replace="©" />
-  <item find="(R)" replace="®" />
-  <item find="(c)" replace="©" />
-  <item find="(r)" replace="®" />
-  <item find="ADNERE" replace="andere" />
-  <item find="ADNERS" replace="anders" />
-  <item find="ARBIETE" replace="arbeite" />
-  <item find="AWR" replace="war" />
-  <item find="Adnere" replace="andere" />
-  <item find="Adners" replace="anders" />
-  <item find="Arbiete" replace="arbeite" />
-  <item find="Awr" replace="war" />
-  <item find="BEKANT" replace="bekannt" />
-  <item find="BELÄSTIGNUG" replace="Belästigung" />
-  <item find="BEREIS" replace="bereits" />
-  <item find="BERIETS" replace="bereits" />
-  <item find="BUCHSTBAE" replace="Buchstabe" />
-  <item find="Bekant" replace="bekannt" />
-  <item find="Belästignug" replace="Belästigung" />
-  <item find="Bereis" replace="bereits" />
-  <item find="Beriets" replace="bereits" />
-  <item find="Buchstbae" replace="Buchstabe" />
-  <item find="DACHET" replace="dachte" />
-  <item find="DASELBE" replace="dasselbe" />
-  <item find="DEI" replace="die" />
-  <item find="DEIS" replace="dies" />
-  <item find="DEKNE" replace="denke" />
-  <item find="DOCKUMENT" replace="Dokument" />
-  <item find="DRE" replace="der" />
-  <item find="DSA" replace="das" />
-  <item find="Dachet" replace="dachte" />
-  <item find="Daselbe" replace="dasselbe" />
-  <item find="Dei" replace="die" />
-  <item find="Deis" replace="dies" />
-  <item find="Dekne" replace="denke" />
-  <item find="Dockument" replace="Dokument" />
-  <item find="Dre" replace="der" />
-  <item find="Dsa" replace="das" />
-  <item find="DÄHMLICH" replace="dämlich" />
-  <item find="DßA" replace="daß" />
-  <item find="Dßa" replace="daß" />
-  <item find="Dähmlich" replace="dämlich" />
-  <item find="EDR" replace="der" />
-  <item find="EMFEHLEN" replace="empfehlen" />
-  <item find="ENTWICKLUGN" replace="Entwicklung" />
-  <item find="ENWICKLUNG" replace="Entwicklung" />
-  <item find="EREICHEN" replace="erreichen" />
-  <item find="EREICHT" replace="erreicht" />
-  <item find="ERHLATEN" replace="erhalten" />
-  <item find="ERTS" replace="erst" />
-  <item find="Edr" replace="der" />
-  <item find="Emfehlen" replace="empfehlen" />
-  <item find="Entwicklugn" replace="Entwicklung" />
-  <item find="Enwicklung" replace="Entwicklung" />
-  <item find="Ereichen" replace="erreichen" />
-  <item find="Ereicht" replace="erreicht" />
-  <item find="Erhlaten" replace="erhalten" />
-  <item find="Erts" replace="erst" />
-  <item find="FINDN" replace="finden" />
-  <item find="FNADEN" replace="fanden" />
-  <item find="FNESTER" replace="Fenster" />
-  <item find="FOLLGENDE" replace="folgende" />
-  <item find="FRA" replace="Frau" />
-  <item find="FRAGN" replace="fragen" />
-  <item find="FREUDNE" replace="Freunde" />
-  <item find="FRIMA" replace="Firma" />
-  <item find="FSAT" replace="fast" />
-  <item find="Findn" replace="finden" />
-  <item find="Fnaden" replace="fanden" />
-  <item find="Fnester" replace="Fenster" />
-  <item find="Follgende" replace="folgende" />
-  <item find="Fra" replace="Frau" />
-  <item find="Fragn" replace="fragen" />
-  <item find="Freudne" replace="Freunde" />
-  <item find="Frima" replace="Firma" />
-  <item find="Fsat" replace="fast" />
-  <item find="GECHICHTE" replace="Geschichte" />
-  <item find="GEHN" replace="gehen" />
-  <item find="GEHTS" replace="geht's" />
-  <item find="GEIDCHT" replace="Gedicht" />
-  <item find="GESCHICHTNE" replace="Geschichten" />
-  <item find="GESHICHTE" replace="Geschichte" />
-  <item find="GIBTS" replace="gibt's" />
-  <item find="GNAZ" replace="ganz" />
-  <item find="Gechichte" replace="Geschichte" />
-  <item find="Gehn" replace="gehen" />
-  <item find="Gehts" replace="geht's" />
-  <item find="Geidcht" replace="Gedicht" />
-  <item find="Geschichtne" replace="Geschichten" />
-  <item find="Geshichte" replace="Geschichte" />
-  <item find="Gibts" replace="gibt's" />
-  <item find="Gnaz" replace="ganz" />
-  <item find="HABN" replace="haben" />
-  <item find="HBE" replace="habe" />
-  <item find="HUETE" replace="heute" />
-  <item find="Habn" replace="haben" />
-  <item find="Hbe" replace="habe" />
-  <item find="Huete" replace="heute" />
-  <item find="IEN" replace="ein" />
-  <item find="IENIGE" replace="einige" />
-  <item find="IERONISCH" replace="ironisch" />
-  <item find="IHC" replace="ich" />
-  <item find="INTRIEGE" replace="Intrige" />
-  <item find="IRES" replace="ihres" />
-  <item find="Ien" replace="ein" />
-  <item find="Ienige" replace="einige" />
-  <item find="Ieronisch" replace="ironisch" />
-  <item find="Ihc" replace="ich" />
-  <item find="Intriege" replace="Intrige" />
-  <item find="Ires" replace="ihres" />
-  <item find="JARE" replace="Jahre" />
-  <item find="JETTZ" replace="jetzt" />
-  <item find="JEZT" replace="jetzt" />
-  <item find="Jare" replace="Jahre" />
-  <item find="Jettz" replace="jetzt" />
-  <item find="Jezt" replace="jetzt" />
-  <item find="KIEN" replace="kein" />
-  <item find="KIENE" replace="keine" />
-  <item find="KIENSE" replace="keines" />
-  <item find="KLRA" replace="klar" />
-  <item find="KNAN" replace="kann" />
-  <item find="KOPEI" replace="Kopie" />
-  <item find="KRES" replace="Kreis" />
-  <item find="Kien" replace="kein" />
-  <item find="Kiene" replace="keine" />
-  <item find="Kiense" replace="keines" />
-  <item find="Klra" replace="klar" />
-  <item find="Knan" replace="kann" />
-  <item find="Kopei" replace="Kopie" />
-  <item find="Kres" replace="Kreis" />
-  <item find="KÖNTE" replace="könnte" />
-  <item find="Könte" replace="könnte" />
-  <item find="LEBN" replace="leben" />
-  <item find="LEISTNUG" replace="Leistung" />
-  <item find="LIZENTZ" replace="Lizenz" />
-  <item find="LUETE" replace="Leute" />
-  <item find="Lebn" replace="leben" />
-  <item find="Leistnug" replace="Leistung" />
-  <item find="Lizentz" replace="Lizenz" />
-  <item find="Luete" replace="Leute" />
-  <item find="M2" replace="m²" />
-  <item find="M3" replace="m³" />
-  <item find="MACHN" replace="machen" />
-  <item find="MFG" replace="Mit freundlichen Grüßen" />
-  <item find="MTI" replace="mit" />
-  <item find="Machn" replace="machen" />
-  <item find="Mti" replace="mit" />
-  <item find="NCIHT" replace="nicht" />
-  <item find="Nciht" replace="nicht" />
-  <item find="NÄHMLICH" replace="nämlich" />
-  <item find="Nähmlich" replace="nämlich" />
-  <item find="OFENBAR" replace="offenbar" />
-  <item find="Ofenbar" replace="offenbar" />
-  <item find="PIKNIK" replace="Picknick" />
-  <item find="PORBLEM" replace="Problem" />
-  <item find="Piknik" replace="Picknick" />
-  <item find="Porblem" replace="Problem" />
-  <item find="RECHNUG" replace="Rechnung" />
-  <item find="RHYTMUS" replace="Rhythmus" />
-  <item find="Rechnug" replace="Rechnung" />
-  <item find="Rhytmus" replace="Rhythmus" />
-  <item find="SAHCE" replace="Sache" />
-  <item find="SEPERAT" replace="separat" />
-  <item find="SERH" replace="sehr" />
-  <item find="SGDH" replace="Sehr geehrte Damen und Herren" />
-  <item find="SIEN" replace="sein" />
-  <item find="Sahce" replace="Sache" />
-  <item find="Seperat" replace="separat" />
-  <item find="Serh" replace="sehr" />
-  <item find="Sien" replace="sein" />
-  <item find="UAS" replace="aus" />
-  <item find="UDN" replace="und" />
-  <item find="UMZUFRIEDEN" replace="unzufrieden" />
-  <item find="Uas" replace="aus" />
-  <item find="Udn" replace="und" />
-  <item find="Umzufrieden" replace="unzufrieden" />
-  <item find="VEILLEICHT" replace="vielleicht" />
-  <item find="VIELEICHT" replace="vielleicht" />
-  <item find="VORANG" replace="Vorrang" />
-  <item find="Veilleicht" replace="vielleicht" />
-  <item find="Vieleicht" replace="vielleicht" />
-  <item find="Vorang" replace="Vorrang" />
-  <item find="WEDRE" replace="werde" />
-  <item find="WIRDS" replace="wird's" />
-  <item find="WROT" replace="Wort" />
-  <item find="Wedre" replace="werde" />
-  <item find="Wirds" replace="wird's" />
-  <item find="Wrot" replace="Wort" />
-  <item find="WÜDRE" replace="würde" />
-  <item find="Wüdre" replace="würde" />
-  <item find="ZITE" replace="Zeit" />
-  <item find="Zite" replace="Zeit" />
-  <item find="adnere" replace="andere" />
-  <item find="adners" replace="anders" />
-  <item find="arbiete" replace="arbeite" />
-  <item find="awr" replace="war" />
-  <item find="bekant" replace="bekannt" />
-  <item find="belästignug" replace="Belästigung" />
-  <item find="bereis" replace="bereits" />
-  <item find="beriets" replace="bereits" />
-  <item find="buchstbae" replace="Buchstabe" />
-  <item find="dachet" replace="dachte" />
-  <item find="daselbe" replace="dasselbe" />
-  <item find="dei" replace="die" />
-  <item find="deis" replace="dies" />
-  <item find="dekne" replace="denke" />
-  <item find="dockument" replace="Dokument" />
-  <item find="dre" replace="der" />
-  <item find="dsa" replace="das" />
-  <item find="dßa" replace="daß" />
-  <item find="dähmlich" replace="dämlich" />
-  <item find="edr" replace="der" />
-  <item find="emfehlen" replace="empfehlen" />
-  <item find="entwicklugn" replace="Entwicklung" />
-  <item find="enwicklung" replace="Entwicklung" />
-  <item find="ereichen" replace="erreichen" />
-  <item find="ereicht" replace="erreicht" />
-  <item find="erhlaten" replace="erhalten" />
-  <item find="erts" replace="erst" />
-  <item find="findn" replace="finden" />
-  <item find="fnaden" replace="fanden" />
-  <item find="fnester" replace="Fenster" />
-  <item find="follgende" replace="folgende" />
-  <item find="fra" replace="Frau" />
-  <item find="fragn" replace="fragen" />
-  <item find="freudne" replace="Freunde" />
-  <item find="frima" replace="Firma" />
-  <item find="fsat" replace="fast" />
-  <item find="gechichte" replace="Geschichte" />
-  <item find="gehn" replace="gehen" />
-  <item find="gehts" replace="geht's" />
-  <item find="geidcht" replace="Gedicht" />
-  <item find="geschichtne" replace="Geschichten" />
-  <item find="geshichte" replace="Geschichte" />
-  <item find="gibts" replace="gibt's" />
-  <item find="gnaz" replace="ganz" />
-  <item find="habn" replace="haben" />
-  <item find="hbe" replace="habe" />
-  <item find="huete" replace="heute" />
-  <item find="ien" replace="ein" />
-  <item find="ienige" replace="einige" />
-  <item find="ieronisch" replace="ironisch" />
-  <item find="ihc" replace="ich" />
-  <item find="intriege" replace="Intrige" />
-  <item find="ires" replace="ihres" />
-  <item find="jare" replace="Jahre" />
-  <item find="jettz" replace="jetzt" />
-  <item find="jezt" replace="jetzt" />
-  <item find="kien" replace="kein" />
-  <item find="kiene" replace="keine" />
-  <item find="kiense" replace="keines" />
-  <item find="klra" replace="klar" />
-  <item find="knan" replace="kann" />
-  <item find="kopei" replace="Kopie" />
-  <item find="kres" replace="Kreis" />
-  <item find="könte" replace="könnte" />
-  <item find="lebn" replace="leben" />
-  <item find="leistnug" replace="Leistung" />
-  <item find="lizentz" replace="Lizenz" />
-  <item find="luete" replace="Leute" />
-  <item find="machn" replace="machen" />
-  <item find="mti" replace="mit" />
-  <item find="nciht" replace="nicht" />
-  <item find="nähmlich" replace="nämlich" />
-  <item find="ofenbar" replace="offenbar" />
-  <item find="piknik" replace="Picknick" />
-  <item find="porblem" replace="Problem" />
-  <item find="rechnug" replace="Rechnung" />
-  <item find="rhytmus" replace="Rhythmus" />
-  <item find="sahce" replace="Sache" />
-  <item find="seperat" replace="separat" />
-  <item find="serh" replace="sehr" />
-  <item find="sien" replace="sein" />
-  <item find="uas" replace="aus" />
-  <item find="udn" replace="und" />
-  <item find="umzufrieden" replace="unzufrieden" />
-  <item find="veilleicht" replace="vielleicht" />
-  <item find="vieleicht" replace="vielleicht" />
-  <item find="vorang" replace="Vorrang" />
-  <item find="wedre" replace="werde" />
-  <item find="wirds" replace="wird's" />
-  <item find="wrot" replace="Wort" />
-  <item find="wüdre" replace="würde" />
-  <item find="zite" replace="Zeit" />
-  <item find="ÄNLICH" replace="ähnlich" />
-  <item find="Änlich" replace="ähnlich" />
-  <item find="änlich" replace="ähnlich" />
- </items>
- <UpperCaseExceptions>
-  <word exception="fkt." />
-  <word exception="ges." />
-  <word exception="nr." />
-  <word exception="str." />
-  <word exception="Abk." />
-  <word exception="Abs." />
-  <word exception="Abschn." />
-  <word exception="Abt." />
-  <word exception="Adr." />
-  <word exception="allg." />
-  <word exception="amerik." />
-  <word exception="Anh." />
-  <word exception="Anm." />
-  <word exception="Apr." />
-  <word exception="Art." />
-  <word exception="Aufl." />
-  <word exception="Aug." />
-  <word exception="Ausschl." />
-  <word exception="Bd." />
-  <word exception="Bed." />
-  <word exception="bes." />
-  <word exception="best." />
-  <word exception="Bez." />
-  <word exception="bzgl." />
-  <word exception="bzw." />
-  <word exception="ca." />
-  <word exception="Dez." />
-  <word exception="dgl." />
-  <word exception="Di." />
-  <word exception="Dipl." />
-  <word exception="Do." />
-  <word exception="Dr." />
-  <word exception="dt." />
-  <word exception="dtsch." />
-  <word exception="Durchschn." />
-  <word exception="dzt." />
-  <word exception="e.G." />
-  <word exception="e.V." />
-  <word exception="ehem." />
-  <word exception="einschl." />
-  <word exception="erw." />
-  <word exception="etc." />
-  <word exception="evtl." />
-  <word exception="fam." />
-  <word exception="Feb." />
-  <word exception="ff." />
-  <word exception="Fr." />
-  <word exception="geb." />
-  <word exception="gem." />
-  <word exception="ges." />
-  <word exception="gesch." />
-  <word exception="geschl." />
-  <word exception="gest." />
-  <word exception="ggf." />
-  <word exception="Hbf." />
-  <word exception="Ing." />
-  <word exception="Jan." />
-  <word exception="Jg." />
-  <word exception="Jgg." />
-  <word exception="Jh." />
-  <word exception="lfd." />
-  <word exception="max." />
-  <word exception="med." />
-  <word exception="Mi." />
-  <word exception="min." />
-  <word exception="Mio." />
-  <word exception="Mo." />
-  <word exception="möbl." />
-  <word exception="MwSt." />
-  <word exception="nat." />
-  <word exception="neg." />
-  <word exception="nördl." />
-  <word exception="Nov." />
-  <word exception="Nr." />
-  <word exception="Nrn." />
-  <word exception="o.Ä." />
-  <word exception="Okt." />
-  <word exception="Org." />
-  <word exception="orig." />
-  <word exception="orth." />
-  <word exception="östl." />
-  <word exception="Pfg." />
-  <word exception="Pos." />
-  <word exception="priv." />
-  <word exception="Prof." />
-  <word exception="prov." />
-  <word exception="rer." />
-  <word exception="Sa." />
-  <word exception="Sep." />
-  <word exception="Sept." />
-  <word exception="So." />
-  <word exception="St." />
-  <word exception="Stck." />
-  <word exception="Std." />
-  <word exception="Str." />
-  <word exception="südl." />
-  <word exception="tel." />
-  <word exception="tgl." />
-  <word exception="u.a." />
-  <word exception="u.Ä." />
-  <word exception="ugs." />
-  <word exception="ungew." />
-  <word exception="Univ." />
-  <word exception="unterw." />
-  <word exception="urspr." />
-  <word exception="usw." />
-  <word exception="Verz." />
-  <word exception="vgl." />
-  <word exception="Vol." />
-  <word exception="Vollm." />
-  <word exception="Vorn." />
-  <word exception="wahrsch." />
-  <word exception="Wdh." />
-  <word exception="Wdhlg." />
-  <word exception="westl." />
-  <word exception="wg." />
-  <word exception="Whg." />
-  <word exception="wö." />
-  <word exception="z.B." />
-  <word exception="z.Zt." />
-  <word exception="Ztg." />
-  <word exception="zus." />
-  <word exception="zzgl." />
- </UpperCaseExceptions>
- <TwoUpperLetterExceptions>
-  <word exception="AGs" />
-  <word exception="BAföG" />
-  <word exception="CDs" />
-  <word exception="ESt" />
-  <word exception="EStG" />
-  <word exception="ICs" />
-  <word exception="IGs" />
-  <word exception="KGaA" />
-  <word exception="KSt" />
-  <word exception="KStG" />
-  <word exception="LPs" />
-  <word exception="MCs" />
-  <word exception="PCs" />
-  <word exception="RAe" />
-  <word exception="TVs" />
-  <word exception="USt" />
-  <word exception="UStG" />
-  <word exception="VSt" />
-  <word exception="WGs" />
- </TwoUpperLetterExceptions>
- <DoubleQuote>
-  <doublequote begin="„" end="”"/>
- </DoubleQuote>
- <SimpleQuote>
-  <simplequote begin="‚" end="’"/>
- </SimpleQuote>
+  <items>
+    <item find=":Straßensperre:" replace=""/>
+    <item find=":Briefumschlag fliegend:" replace=""/>
+    <item find=":Funken:" replace="❇"/>
+    <item find=":Smiley enttäuscht:" replace=""/>
+    <item find=":Sikhismus:" replace="☬"/>
+    <item find=".*(tm)" replace="™"/>
+    <item find="Lizentzierung" replace="Lizenzierung"/>
+    <item find=":Kreuzfahrtschiff:" replace=""/>
+    <item find="lebn" replace="leben"/>
+    <item find=":Violine:" replace=""/>
+    <item find=":Baby:" replace=""/>
+    <item find=":Blaulicht:" replace=""/>
+    <item find=":Kochen:" replace=""/>
+    <item find=":Gewichtheber:" replace=""/>
+    <item find=":Auto:" replace=""/>
+    <item find=":Sandwich:" replace="索"/>
+    <item find="Hypotek" replace="Hypothek"/>
+    <item find=":Zeichen Gewitter:" replace="☈"/>
+    <item find=":^beta:" replace="ᵝ"/>
+    <item find=":Bett:" replace=""/>
+    <item find="Vokl" replace="Volk"/>
+    <item find=":Schulranzen:" replace=""/>
+    <item find=":Wutblase links:" replace=""/>
+    <item find=":Bierkrüge:" replace=""/>
+    <item find=":Pferderennen:" replace=""/>
+    <item find=":Glaskugel:" replace=""/>
+    <item find=":Würfel 1:" replace="⚀"/>
+    <item find=":Uhr 2:" replace=""/>
+    <item find="Firna" replace="Firma"/>
+    <item find=":Kino:" replace=""/>
+    <item find=":Schneemann:" replace="⛄"/>
+    <item find=":Mond halb abnehmend:" replace=""/>
+    <item find=":Stundenhotel:" replace=""/>
+    <item find=":Abfalleimer:" replace=""/>
+    <item find=":Eintrittskarten:" replace=""/>
+    <item find=":ypsilon:" replace="υ"/>
+    <item find=":Ohr:" replace=""/>
+    <item find=":Gesicht traurig:" replace=""/>
+    <item find=":Tiger:" replace=""/>
+    <item find=":Familie:" replace=""/>
+    <item find=":Golfplatz:" replace="⛳"/>
+    <item find=":Aktienkurs:" replace=""/>
+    <item find=":Daumen unten:" replace=""/>
+    <item find=":Sportschuh:" replace=""/>
+    <item find=":Autobahn:" replace=""/>
+    <item find=":Knaben:" replace=""/>
+    <item find=":Mutter und Schraube:" replace=""/>
+    <item find=":Diesellokomotive:" replace=""/>
+    <item find=":Noten aufsteigend:" replace=""/>
+    <item find="dre" replace="der"/>
+    <item find=":Noten 16:" replace="♬"/>
+    <item find=":!?:" replace="⁉"/>
+    <item find="https:\\" replace="https://"/>
+    <item find="Kommite" replace="Komitee"/>
+    <item find=":Buch:" replace=""/>
+    <item find=":Smiley zwinkernd kopfstehend:" replace=""/>
+    <item find=":Recycling:" replace="♲"/>
+    <item find=":Stadion:" replace=""/>
+    <item find=":Herz weiß:" replace="♡"/>
+    <item find="Bibliotekh" replace="Bibliothek"/>
+    <item find=":Psi:" replace="Ψ"/>
+    <item find=":Hand:" replace="✋"/>
+    <item find=":_i:" replace="ᵢ"/>
+    <item find=":Spannung:" replace="⚡"/>
+    <item find=":Sternfläche:" replace="★"/>
+    <item find="Stren" replace="Stern"/>
+    <item find=":NW:" replace="↖"/>
+    <item find=":Sportplatz:" replace="⛹"/>
+    <item find=":Rahmen mit Kacheln:" replace=""/>
+    <item find=":lateinisches Kreuz schwarz:" replace=""/>
+    <item find="odf" replace="ODF"/>
+    <item find=":Teilmenge:" replace="⊂"/>
+    <item find=":Hand rechts:" replace=""/>
+    <item find=":Gelschein mit Flügeln:" replace=""/>
+    <item find=":/:" replace="∕"/>
+    <item find=":Bildschirm:" replace=""/>
+    <item find="umbedingt" replace="unbedingt"/>
+    <item find="Gruss" replace="Gruß"/>
+    <item find=":psi:" replace="ψ"/>
+    <item find=":Würfel 2:" replace="⚁"/>
+    <item find=":Abschnitt schwierig:" replace=""/>
+    <item find=":Gesicht ROFL:" replace="藍"/>
+    <item find=":Uhr 2.30:" replace=""/>
+    <item find="Bibliothrk" replace="Bibliothek"/>
+    <item find="wedre" replace="werde"/>
+    <item find="ihc" replace="ich"/>
+    <item find=":Applaus:" replace=""/>
+    <item find=":Zeichen Saturn:" replace="♄"/>
+    <item find=":Geburtstag:" replace=""/>
+    <item find=":Zitrone:" replace=""/>
+    <item find="cm2" replace="cm²"/>
+    <item find=":Zeichen Zwillinge:" replace="♊"/>
+    <item find=":Schlüssel alt:" replace=""/>
+    <item find=":Pause 2:" replace="턼"/>
+    <item find=":Blondine:" replace=""/>
+    <item find="intregrieren" replace="integrieren"/>
+    <item find=":q.e.d.:" replace="∎"/>
+    <item find=":Etikett:" replace=""/>
+    <item find=":Sprinten:" replace=""/>
+    <item find=":existiert:" replace="∃"/>
+    <item find=":Winkel:" replace="∡"/>
+    <item find=":Berg:" replace="⛰"/>
+    <item find=":Zeichen Fische:" replace="♓"/>
+    <item find=":Smiley schwindelig:" replace=""/>
+    <item find=":existiert nicht:" replace="∄"/>
+    <item find=":Smiley genießerisch küssend:" replace=""/>
+    <item find=":Pfirsich:" replace=""/>
+    <item find=":Schleife doppelt:" replace="➿"/>
+    <item find=":Smiley verwirrt:" replace=""/>
+    <item find=":Tintenfisch:" replace="撚"/>
+    <item find=":registriert:" replace="®"/>
+    <item find=":Sprechblase blau:" replace=""/>
+    <item find=":Eiscreme:" replace=""/>
+    <item find=":Schloss:" replace=""/>
+    <item find=":pi:" replace="π"/>
+    <item find=":Tastatur:" replace="⌨"/>
+    <item find=":Handyverbot:" replace=""/>
+    <item find=":Block:" replace=""/>
+    <item find=":^delta:" replace="ᵟ"/>
+    <item find="adneren" replace="anderen"/>
+    <item find=":Denkblase:" replace=""/>
+    <item find=":Telefon schwarz:" replace="☎"/>
+    <item find=":Kokosnuss:" replace="便"/>
+    <item find=":bewölkt 2:" replace=""/>
+    <item find=":Schach Springer schwarz:" replace="♞"/>
+    <item find=":Windspiel:" replace=""/>
+    <item find=":Handy:" replace=""/>
+    <item find=":Schloss offen:" replace=""/>
+    <item find=":Herz orange:" replace="李"/>
+    <item find=":Karotte:" replace="凌"/>
+    <item find=":Projektor:" replace=""/>
+    <item find=":O 2:" replace="⇒"/>
+    <item find=":Kaminuhr:" replace=""/>
+    <item find=":Telefon Modem:" replace=""/>
+    <item find=":Noten absteigend:" replace=""/>
+    <item find=":^4:" replace="⁴"/>
+    <item find="fragn" replace="fragen"/>
+    <item find=":Smiley ängstlich:" replace=""/>
+    <item find=":Tischtennis:" replace=""/>
+    <item find=":Gesicht Bär:" replace=""/>
+    <item find=":Malx:" replace="×"/>
+    <item find=":Bushaltestelle:" replace=""/>
+    <item find=":Braut:" replace=""/>
+    <item find="widergeben" replace="wiedergeben"/>
+    <item find=":Rang niederer:" replace=""/>
+    <item find=":Pause 4:" replace="턽"/>
+    <item find=":Smiley errötet:" replace=""/>
+    <item find=":Bombe:" replace=""/>
+    <item find=":Häuser:" replace=""/>
+    <item find=":rho:" replace="ρ"/>
+    <item find=":Seiten beschrieben:" replace=""/>
+    <item find=":_r:" replace="ᵣ"/>
+    <item find=":Briefumschlag mit Marke:" replace=""/>
+    <item find=":Flagge weiß 2:" replace=""/>
+    <item find=":Boxen:" replace="壘"/>
+    <item find=":Totenkopf:" replace=""/>
+    <item find=":Haus mit Garten:" replace=""/>
+    <item find=":Portmonee:" replace=""/>
+    <item find=":Torte:" replace=""/>
+    <item find=":Schaf:" replace=""/>
+    <item find="an´s" replace="ans"/>
+    <item find=":Thermometer:" replace=""/>
+    <item find=":Diagramm steigend:" replace=""/>
+    <item find=":Blitz:" replace=""/>
+    <item find=":Blatt fliegend:" replace=""/>
+    <item find="dähmlich" replace="dämlich"/>
+    <item find=":Täschchen:" replace=""/>
+    <item find=":Kommunismus:" replace="☭"/>
+    <item find=":^x:" replace="ˣ"/>
+    <item find="Piknik" replace="Picknick"/>
+    <item find=":Küken vorne:" replace=""/>
+    <item find=":Herzdekoration:" replace=""/>
+    <item find=":Sicherheit:" replace=""/>
+    <item find=":Palme:" replace=""/>
+    <item find=":Mond Viertel 2:" replace=""/>
+    <item find="an’s" replace="ans"/>
+    <item find=":Signalstärke:" replace=""/>
+    <item find=":Schach König schwarz:" replace="♚"/>
+    <item find=":Bitcoin:" replace="₿"/>
+    <item find=":Smiley Grinsen:" replace=""/>
+    <item find=":Volumenintegral:" replace="∰"/>
+    <item find=":Melone:" replace=""/>
+    <item find=":Alien:" replace=""/>
+    <item find=":sigma:" replace="σ"/>
+    <item find=":Avocado:" replace="陋"/>
+    <item find=":5/8:" replace="⅝"/>
+    <item find=":Posthorn:" replace=""/>
+    <item find=":Symbol Faxgerät:" replace=""/>
+    <item find=".*&lt;-.*" replace="←"/>
+    <item find=":Smiley überrascht:" replace=""/>
+    <item find=":Gesicht Maus:" replace=""/>
+    <item find="knan" replace="kann"/>
+    <item find=":Bahnstrecke:" replace=""/>
+    <item find=":^5:" replace="⁵"/>
+    <item find=":Kreuz schwarz:" replace="♣"/>
+    <item find=":Pause 8:" replace="턾"/>
+    <item find="Rhytmus" replace="Rhythmus"/>
+    <item find=":Aufzählung:" replace="•"/>
+    <item find=":hundert Punkte:" replace=""/>
+    <item find=":Trophäe:" replace=""/>
+    <item find=":Häkchen:" replace="✓"/>
+    <item find=":Durchschnitt:" replace="∩"/>
+    <item find="Gechichte" replace="Geschichte"/>
+    <item find=":Tanababa Baum:" replace=""/>
+    <item find=":Katzengesicht schmollend:" replace=""/>
+    <item find=":Nacht:" replace=""/>
+    <item find=":Tokyo:" replace=""/>
+    <item find=":Fahrräder verboten:" replace=""/>
+    <item find="Fnester" replace="Fenster"/>
+    <item find=":Leopard:" replace=""/>
+    <item find=":Fotoapparat:" replace=""/>
+    <item find=":Zeigefinger rechts 2:" replace="☛"/>
+    <item find=":Biene:" replace=""/>
+    <item find=":Symbol Tastatur:" replace=""/>
+    <item find=":Damen:" replace=""/>
+    <item find=":Schach Läufer weiß:" replace="♗"/>
+    <item find="geht´s" replace="geht’s"/>
+    <item find=":Regenbogen:" replace=""/>
+    <item find=":Hot Dog:" replace=""/>
+    <item find=":^A:" replace="ᴬ"/>
+    <item find=":Handy ausgeschaltet:" replace=""/>
+    <item find=":Jacke:" replace="痢"/>
+    <item find=":Kästchen 2:" replace="☑"/>
+    <item find=":Gesicht Hirsch:" replace="歷"/>
+    <item find=":&gt;=:" replace="≥"/>
+    <item find=":X:" replace=""/>
+    <item find=":Nachricht herunterladen:" replace=""/>
+    <item find=":Smiley verärgert:" replace=""/>
+    <item find=":Sonne:" replace="☼"/>
+    <item find=":^7:" replace="⁷"/>
+    <item find=":Note 8:" replace="♪"/>
+    <item find=":Schild 2:" replace=""/>
+    <item find=":Smiley leckend:" replace=""/>
+    <item find=":Alpha:" replace="Α"/>
+    <item find=":Mahjongg:" replace=""/>
+    <item find=":Dolch:" replace=""/>
+    <item find=":&lt;=:" replace="≤"/>
+    <item find=":Traktor:" replace=""/>
+    <item find="Bekanter" replace="Bekannter"/>
+    <item find=":Burrito:" replace=""/>
+    <item find=":NS 2:" replace="⇕"/>
+    <item find=":Paar Frauen:" replace=""/>
+    <item find=":Vanillesoße:" replace=""/>
+    <item find=":_8:" replace="₈"/>
+    <item find=":Wunderkerze:" replace=""/>
+    <item find=":Mond Viertel 4:" replace=""/>
+    <item find="veilleicht" replace="vielleicht"/>
+    <item find=":Helligkeit niedrig:" replace=""/>
+    <item find=":Smiley:" replace="☺"/>
+    <item find=":U-Bahn:" replace=""/>
+    <item find=":Gesicht Dollar:" replace="螺"/>
+    <item find=":Karteischrank:" replace=""/>
+    <item find=":Quadratfläche groß:" replace="■"/>
+    <item find=":Technik:" replace="⚙"/>
+    <item find=":Baum:" replace=""/>
+    <item find=":Kästchen 3:" replace="☒"/>
+    <item find=":Fischerei:" replace=""/>
+    <item find="ereicht" replace="erreicht"/>
+    <item find=":Sonnenblume:" replace=""/>
+    <item find=":Hand Liebe:" replace="蘭"/>
+    <item find=":Blume weiß:" replace=""/>
+    <item find="1/2" replace="½"/>
+    <item find=":Kurvenintegral:" replace="∮"/>
+    <item find=":S-Bahn:" replace=""/>
+    <item find=":Feuerwerk:" replace=""/>
+    <item find=":Notizseite leer:" replace=""/>
+    <item find=":Rosette:" replace=""/>
+    <item find="Piknick" replace="Picknick"/>
+    <item find=":Spritze:" replace=""/>
+    <item find=":Würfel 4:" replace="⚃"/>
+    <item find=":Postfiliale japanisch:" replace=""/>
+    <item find=":Fußball:" replace="⚽"/>
+    <item find=":Paket:" replace=""/>
+    <item find=":Häkchen 2:" replace=""/>
+    <item find=":Augen:" replace=""/>
+    <item find=":Anker:" replace="⚓"/>
+    <item find="gibt's" replace="gibt’s"/>
+    <item find=":Socken:" replace="罹"/>
+    <item find=":Tulpe:" replace=""/>
+    <item find="Rythmus" replace="Rhythmus"/>
+    <item find=":Smiley müde:" replace=""/>
+    <item find=":Spinnennetz:" replace=""/>
+    <item find="Rechnug" replace="Rechnung"/>
+    <item find=":Smiley Schweiß:" replace=""/>
+    <item find=":Teetasse:" replace=""/>
+    <item find=":Lippenstift:" replace=""/>
+    <item find=".*(r)" replace="®"/>
+    <item find=":Wasserwelle:" replace=""/>
+    <item find="&lt;--&gt;" replace="↔"/>
+    <item find=":Hund:" replace=""/>
+    <item find=":Silhouette:" replace=""/>
+    <item find="beerits" replace="bereits"/>
+    <item find=":Gesicht Drache:" replace=""/>
+    <item find=":_7:" replace="₇"/>
+    <item find=":Marienkäfer:" replace=""/>
+    <item find=":Krake:" replace=""/>
+    <item find=":kleines enthält:" replace="∍"/>
+    <item find=":Tropfen weiß:" replace=""/>
+    <item find=":Bücher:" replace=""/>
+    <item find=":Gesicht Fuchs:" replace="力"/>
+    <item find=":Gesicht Mann:" replace=""/>
+    <item find=":...:" replace="…"/>
+    <item find=":Fernseher:" replace=""/>
+    <item find=":Wintersport:" replace=""/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find=":Erde Amerika:" replace=""/>
+    <item find=":Blatt fallend:" replace=""/>
+    <item find=":Katzengesicht spöttisch:" replace=""/>
+    <item find=":schlüpfendes Küken:" replace=""/>
+    <item find="kiense" replace="keines"/>
+    <item find=":Gesicht Giraffe:" replace="漣"/>
+    <item find=":Schnecke:" replace=""/>
+    <item find=":Reis gekocht:" replace=""/>
+    <item find=":Kuchen:" replace="不"/>
+    <item find="m3" replace="m³"/>
+    <item find=":_):" replace="₎"/>
+    <item find="Vokla" replace="Vokal"/>
+    <item find=":Kleinbus:" replace=""/>
+    <item find=":Feldhockey:" replace=""/>
+    <item find=":_j:" replace="ⱼ"/>
+    <item find="1/4" replace="¼"/>
+    <item find="arbietet" replace="arbeitet"/>
+    <item find=":Zeichen Erde:" replace="♁"/>
+    <item find=":Zeichen Löwe:" replace="♌"/>
+    <item find=":Keyboard:" replace=""/>
+    <item find=":Integral:" replace="∫"/>
+    <item find=":Gesicht Bart:" replace="倫"/>
+    <item find=":Zeichen Waage:" replace="♎"/>
+    <item find=":Mountainbiker:" replace=""/>
+    <item find=":Ellipse:" replace="⬭"/>
+    <item find=".*..." replace="…"/>
+    <item find="Belästignug" replace="Belästigung"/>
+    <item find=":Quadrat groß:" replace="□"/>
+    <item find=":Schriftrolle:" replace=""/>
+    <item find=":geschieden:" replace="⚮"/>
+    <item find=":Tänzer:" replace=""/>
+    <item find=":Neuladen:" replace=""/>
+    <item find=":X fett:" replace=""/>
+    <item find=":Rang höherer:" replace=""/>
+    <item find=":wolkig:" replace=""/>
+    <item find=":7/8:" replace="⅞"/>
+    <item find="in’s" replace="ins"/>
+    <item find=":Faust rechts:" replace="卵"/>
+    <item find=":Video:" replace=""/>
+    <item find="knna" replace="kann"/>
+    <item find="Verat" replace="Verrat"/>
+    <item find="ires" replace="ihres"/>
+    <item find=":Schere oben:" replace="✁"/>
+    <item find="Reperatur" replace="Reparatur"/>
+    <item find=":Baseball:" replace="⚾"/>
+    <item find=":Rho:" replace="Ρ"/>
+    <item find=":Aufzählung 5:" replace="‣"/>
+    <item find=":Handschuhe:" replace="理"/>
+    <item find="wüdre" replace="würde"/>
+    <item find=":Zeigefinger links 2:" replace="☚"/>
+    <item find=":S 2:" replace="⇓"/>
+    <item find=":^D:" replace="ᴰ"/>
+    <item find=":Smiley Freude:" replace=""/>
+    <item find="nähmlich" replace="nämlich"/>
+    <item find=":Karteikasten:" replace=""/>
+    <item find=":Dateiordner schwarz:" replace=""/>
+    <item find="beriets" replace="bereits"/>
+    <item find=":Sechsecksfläche:" replace="⬢"/>
+    <item find=":Chanukkia:" replace=""/>
+    <item find=":Klemmbrett:" replace=""/>
+    <item find=":kappa:" replace="κ"/>
+    <item find=":Baguette:" replace="稜"/>
+    <item find=":Dokument mit Text:" replace=""/>
+    <item find=":Uhr 4:" replace=""/>
+    <item find=":Flagge schwarz:" replace="⚑"/>
+    <item find=":Kopf sprechend:" replace=""/>
+    <item find=":Buch offen:" replace=""/>
+    <item find=":Glocke weiß:" replace=""/>
+    <item find=":Piepser:" replace=""/>
+    <item find=":Minuten:" replace="′"/>
+    <item find=":Computermaus 1:" replace=""/>
+    <item find=":Smiley neutral:" replace=""/>
+    <item find=":Krone:" replace=""/>
+    <item find=":Kästchen:" replace="☐"/>
+    <item find=":Sternfläche klein:" replace="⭑"/>
+    <item find=":Flagge dreieckig:" replace=""/>
+    <item find=":Gamma:" replace="Γ"/>
+    <item find=":Uhr 5:" replace=""/>
+    <item find=":Curry:" replace=""/>
+    <item find=":Notensymbol 2:" replace="텞"/>
+    <item find=":&lt;&gt;:" replace="≠"/>
+    <item find=":Rose:" replace=""/>
+    <item find=":Affe Augen verschließend:" replace=""/>
+    <item find=":Gesicht Nerd:" replace="邏"/>
+    <item find=":3/4:" replace="¾"/>
+    <item find=":Smiley 2:" replace="☻"/>
+    <item find=":Rakete:" replace=""/>
+    <item find=":!!:" replace="‼"/>
+    <item find=":Hähnchenschenkel:" replace=""/>
+    <item find=":Uhr 11:" replace=""/>
+    <item find=":Brot:" replace=""/>
+    <item find=":Zeigefinger links flach:" replace=""/>
+    <item find=":Polizeiauto:" replace=""/>
+    <item find=":Gesicht Kuh:" replace=""/>
+    <item find=":Kreis groß:" replace="◯"/>
+    <item find="unentgeldlich" replace="unentgeltlich"/>
+    <item find=":Uhr 6.30:" replace=""/>
+    <item find=":Fertigessenbox:" replace="率"/>
+    <item find=":Paar verliebt:" replace=""/>
+    <item find=":^chi:" replace="ᵡ"/>
+    <item find=":Eta:" replace="Η"/>
+    <item find=":Lastwagen:" replace="⛟"/>
+    <item find=":Kleid:" replace=""/>
+    <item find=":Gesicht Affe:" replace=""/>
+    <item find=":Stimmungsblase Blitz:" replace=""/>
+    <item find=":Privatsphäre:" replace=""/>
+    <item find=":Kartenspiel:" replace=""/>
+    <item find=":Eintrittskarte:" replace=""/>
+    <item find=":Stoppschild:" replace=""/>
+    <item find=":Megaphon 2:" replace=""/>
+    <item find=":Gesicht Panda:" replace=""/>
+    <item find="http:\\" replace="http://"/>
+    <item find=":Schließfach:" replace=""/>
+    <item find="mti" replace="mit"/>
+    <item find=":Notensymbol 4:" replace="텟"/>
+    <item find=":Party:" replace=""/>
+    <item find=":Medaille gold:" replace="磊"/>
+    <item find=":Seite eingerollt:" replace=""/>
+    <item find=":Zeigefinger unten flach:" replace=""/>
+    <item find=":verheiratet:" replace="⚭"/>
+    <item find=":Note 4:" replace="♩"/>
+    <item find=":_p:" replace="ₚ"/>
+    <item find="findn" replace="finden"/>
+    <item find=":Uhr 8.30:" replace=""/>
+    <item find=":Katzengesicht lachend:" replace=""/>
+    <item find=":Eisbahn:" replace="⛸"/>
+    <item find=":Notizseite:" replace=""/>
+    <item find="dsa" replace="das"/>
+    <item find=":Gesicht Magier:" replace="慄"/>
+    <item find=":Smiley Augenbraue erhoben:" replace="廊"/>
+    <item find=":Hibiskus:" replace=""/>
+    <item find=":^g:" replace="ᵍ"/>
+    <item find=":Ampel horizontal:" replace=""/>
+    <item find=":Smiley lachend:" replace=""/>
+    <item find=":Hand Finger gekreuzt:" replace="爛"/>
+    <item find=":Symbol Bildschirm:" replace=""/>
+    <item find=":fl:" replace="ﬂ"/>
+    <item find=":Kiwi:" replace="諾"/>
+    <item find=":Couch:" replace=""/>
+    <item find=":Wachsstift:" replace=""/>
+    <item find=":Weintraube:" replace=""/>
+    <item find=":Saxophone:" replace=""/>
+    <item find=":^O:" replace="ᴼ"/>
+    <item find=":Smiley verrückt:" replace="浪"/>
+    <item find=":Gesicht Wolf:" replace=""/>
+    <item find=":Damenschuh:" replace=""/>
+    <item find=":_=:" replace="₌"/>
+    <item find=":Pfanne:" replace="菱"/>
+    <item find=":^gamma:" replace="ᵞ"/>
+    <item find=":Gesicht Roboter:" replace="烙"/>
+    <item find=":Seilbahn:" replace=""/>
+    <item find=":Mandarine:" replace=""/>
+    <item find=":^alpha:" replace="ᵅ"/>
+    <item find=":Zeichen Mars:" replace="♂"/>
+    <item find=":Straßenbahnwaggon:" replace=""/>
+    <item find=":Maximieren:" replace=""/>
+    <item find=":Reis:" replace=""/>
+    <item find=":Knutschfleck:" replace=""/>
+    <item find="Erflg" replace="Erfolg"/>
+    <item find=":Hände:" replace=""/>
+    <item find=":Bild:" replace=""/>
+    <item find=":Briefkasten geöffnet leer:" replace=""/>
+    <item find=":Herren:" replace=""/>
+    <item find=":Schach Dame schwarz:" replace="♛"/>
+    <item find=":Katzengesicht müde:" replace=""/>
+    <item find="Garranti" replace="Garantie"/>
+    <item find="Entgeld" replace="Entgelt"/>
+    <item find=":Honig:" replace=""/>
+    <item find=":Notizseiten leer:" replace=""/>
+    <item find=":_phi:" replace="ᵩ"/>
+    <item find="Porblem" replace="Problem"/>
+    <item find=":Joystick:" replace=""/>
+    <item find=":Smiley grinsend:" replace=""/>
+    <item find=":Aufzählung 3:" replace=""/>
+    <item find=":Stimmungsblase:" replace=""/>
+    <item find=":Person Hände hebend:" replace=""/>
+    <item find=":Bonbon:" replace=""/>
+    <item find=":Quadrat kleiner:" replace="◽"/>
+    <item find=":Faust vorne:" replace=""/>
+    <item find=":Wutblase blau:" replace=""/>
+    <item find=":3/8:" replace="⅜"/>
+    <item find=":für alle:" replace="∀"/>
+    <item find=":Wrestler:" replace="祿"/>
+    <item find=":Krankenwagen:" replace=""/>
+    <item find="paralell" replace="parallel"/>
+    <item find=":Bartträger:" replace=""/>
+    <item find=":_3:" replace="₃"/>
+    <item find=":Gesicht Gorilla:" replace="轢"/>
+    <item find=":Zeichen Pluto:" replace="♇"/>
+    <item find=":^U:" replace="ᵁ"/>
+    <item find=":Teleskop:" replace=""/>
+    <item find=":Gesicht Greis:" replace="陸"/>
+    <item find=":Blüte Kirsche:" replace=""/>
+    <item find=":Kugelschreiber:" replace=""/>
+    <item find=":WC:" replace=""/>
+    <item find=":Briefkasten voll:" replace=""/>
+    <item find=":^t:" replace="ᵗ"/>
+    <item find=":lambda:" replace="λ"/>
+    <item find=":NO 2:" replace="⇗"/>
+    <item find=":^R:" replace="ᴿ"/>
+    <item find=":^-:" replace="⁻"/>
+    <item find=":Werkstatt:" replace=""/>
+    <item find="emfehlen" replace="empfehlen"/>
+    <item find=":Gefahr:" replace="⚠"/>
+    <item find="stheen" replace="stehen"/>
+    <item find="Zite" replace="Zeit"/>
+    <item find=":^L:" replace="ᴸ"/>
+    <item find=":^V:" replace="ⱽ"/>
+    <item find="erhlate" replace="erhalte"/>
+    <item find=":Fahrrad:" replace=""/>
+    <item find=":Komet:" replace="☄"/>
+    <item find=":Insel:" replace=""/>
+    <item find=":Kreis Schatten oben:" replace=""/>
+    <item find=":Pudel:" replace=""/>
+    <item find=":Hand schreibend:" replace=""/>
+    <item find=":Quadratfläche kleiner:" replace="◾"/>
+    <item find=":Melodie:" replace=""/>
+    <item find=":Mond Gesicht neu:" replace=""/>
+    <item find=":Synagoge:" replace=""/>
+    <item find=":Senior:" replace=""/>
+    <item find=":Permanentpapier:" replace="♾"/>
+    <item find=":Erde Asien:" replace=""/>
+    <item find=":Notizblock:" replace=""/>
+    <item find=":Tastentelefon schwarz:" replace=""/>
+    <item find=":Tankstelle:" replace="⛽"/>
+    <item find=":Kreuzzeichen 2:" replace="❎"/>
+    <item find=":Pinguin:" replace=""/>
+    <item find=":Schreibfeder 2:" replace="✒"/>
+    <item find=":Gesicht Gehirn:" replace="易"/>
+    <item find=":Smiley schmollend:" replace=""/>
+    <item find=":Fünfeck:" replace="⬠"/>
+    <item find=":Zeichen Widder:" replace="♈"/>
+    <item find="Apperat" replace="Apparat"/>
+    <item find=":Stift oben:" replace="✐"/>
+    <item find="ereichst" replace="erreichst"/>
+    <item find=":_9:" replace="₉"/>
+    <item find=":Kaaba:" replace=""/>
+    <item find=":Smiley Lächeln:" replace=""/>
+    <item find=":Mann Anzug:" replace=""/>
+    <item find=":Smiley stumm:" replace=""/>
+    <item find=":Hand oben:" replace=""/>
+    <item find=":Herz wachsend:" replace=""/>
+    <item find=":N:" replace="↑"/>
+    <item find=":Zeichen Merkur:" replace="☿"/>
+    <item find=":Dokument mit Bild:" replace=""/>
+    <item find=":Herrenschuh:" replace=""/>
+    <item find=":Zeigefinger rechts schwarz:" replace=""/>
+    <item find=":Sekunden:" replace="″"/>
+    <item find=":Pfannkuchen:" replace="丹"/>
+    <item find=":Faust:" replace="✊"/>
+    <item find="hbe" replace="habe"/>
+    <item find=":Thermalquelle:" replace="♨"/>
+    <item find=":Notensymbol 16:" replace="텡"/>
+    <item find="jezt" replace="jetzt"/>
+    <item find="änlich" replace="ähnlich"/>
+    <item find=":Zeigefinger oben schwarz:" replace=""/>
+    <item find=":Desktopfenster:" replace=""/>
+    <item find=":Uhr:" replace="⌚"/>
+    <item find=":Wasserbüffel:" replace=""/>
+    <item find=":Noten Auflösung:" replace="♮"/>
+    <item find=":omikron:" replace="ο"/>
+    <item find=":^k:" replace="ᵏ"/>
+    <item find="Tribühne" replace="Tribüne"/>
+    <item find=":Sternschnuppe:" replace=""/>
+    <item find="adneres" replace="anderes"/>
+    <item find=":Karpfenpfanne:" replace=""/>
+    <item find=":Won:" replace="₩"/>
+    <item find=":Pik schwarz:" replace="♠"/>
+    <item find=":Integral 2:" replace="∬"/>
+    <item find=":_u:" replace="ᵤ"/>
+    <item find=":Paar:" replace=""/>
+    <item find=":Handball:" replace="菉"/>
+    <item find=":Zeigefinger unten weiß:" replace=""/>
+    <item find=":Kreditkarte:" replace=""/>
+    <item find="m2" replace="m²"/>
+    <item find=":Kalender:" replace=""/>
+    <item find=":Schüssel:" replace=""/>
+    <item find=":Winkel 2:" replace="∠"/>
+    <item find=":Flagge schwarz 2:" replace=""/>
+    <item find=":Türkische Lira:" replace="₺"/>
+    <item find=":Schildkröte:" replace=""/>
+    <item find="umzufrieden" replace="unzufrieden"/>
+    <item find="Grupe" replace="Gruppe"/>
+    <item find=":Schwitzen:" replace=""/>
+    <item find=":Smiley schwitzend:" replace=""/>
+    <item find="kien" replace="kein"/>
+    <item find=":Mond Sichel:" replace=""/>
+    <item find=":Hand Spock:" replace=""/>
+    <item find=":Weihnachten:" replace=""/>
+    <item find=":eta:" replace="η"/>
+    <item find=":Sonnenuntergang:" replace=""/>
+    <item find=":Restaurant:" replace=""/>
+    <item find=":Smiley erschrocken:" replace=""/>
+    <item find=":Parallelogramm:" replace="▱"/>
+    <item find=":Sprechblasen 3:" replace=""/>
+    <item find="Widergabe" replace="Wiedergabe"/>
+    <item find=":Quadratfläche größer:" replace="⬛"/>
+    <item find=":Quadrat:" replace="◻"/>
+    <item find=":Teigtasche:" replace="寧"/>
+    <item find=":Golfer:" replace=""/>
+    <item find=":Baukran:" replace=""/>
+    <item find="km2" replace="km²"/>
+    <item find=":Schlange:" replace=""/>
+    <item find=":^K:" replace="ᴷ"/>
+    <item find=":Frau stillend:" replace="櫓"/>
+    <item find=":Gedenkschleife:" replace=""/>
+    <item find="korregieren" replace="korrigieren"/>
+    <item find="follgende" replace="folgende"/>
+    <item find=":Katzengesicht weinend:" replace=""/>
+    <item find="Amalgan" replace="Amalgam"/>
+    <item find=":beta:" replace="β"/>
+    <item find=":Smiley übergebend:" replace="冷"/>
+    <item find=":teilt:" replace="∣"/>
+    <item find=":Lieferwagen:" replace=""/>
+    <item find=":Wichtel:" replace=""/>
+    <item find=":Zylinderhut:" replace=""/>
+    <item find=":Lupe:" replace=""/>
+    <item find=":nicht parallel:" replace="∦"/>
+    <item find=":Zirkus:" replace=""/>
+    <item find=":Netzwerk:" replace=""/>
+    <item find=":_h:" replace="ₕ"/>
+    <item find=":^n:" replace="ⁿ"/>
+    <item find=":Sonnebrille:" replace=""/>
+    <item find=":Fechter:" replace="鷺"/>
+    <item find=":Mittelfinger:" replace=""/>
+    <item find=":Lineal:" replace=""/>
+    <item find="huete" replace="heute"/>
+    <item find=":Damensandalen:" replace=""/>
+    <item find=":Trapez:" replace="⏢"/>
+    <item find=":Riesenrad:" replace=""/>
+    <item find=":Baseballkappe:" replace="梨"/>
+    <item find=":Telefonstandort:" replace="✆"/>
+    <item find=":Achterbahn:" replace=""/>
+    <item find=":Essensschüssel:" replace=""/>
+    <item find=":My:" replace="Μ"/>
+    <item find=":Omikron:" replace="Ο"/>
+    <item find="währendt" replace="während"/>
+    <item find=":Karte Ass:" replace=""/>
+    <item find="Lizens" replace="Lizenz"/>
+    <item find=":^r:" replace="ʳ"/>
+    <item find=":^E:" replace="ᴱ"/>
+    <item find=":Gesicht sabbernd:" replace="襤"/>
+    <item find=":Friedenstaube:" replace=""/>
+    <item find=":Wahlurne:" replace=""/>
+    <item find=":Daumen oben 2:" replace=""/>
+    <item find=":_a:" replace="ₐ"/>
+    <item find=":Produkt:" replace="∏"/>
+    <item find=":Babyengel:" replace=""/>
+    <item find="Wrot" replace="Wort"/>
+    <item find=":Schokoriegel:" replace=""/>
+    <item find=":Uhr 11.30:" replace=""/>
+    <item find=":Uhr 1:" replace=""/>
+    <item find=":Tornado:" replace=""/>
+    <item find=":_5:" replace="₅"/>
+    <item find=":Pflanze:" replace=""/>
+    <item find=":Zeichen Haut braun:" replace=""/>
+    <item find="erhlaten" replace="erhalten"/>
+    <item find=":^H:" replace="ᴴ"/>
+    <item find="Grüsse" replace="Grüße"/>
+    <item find=":Smiley feixend:" replace=""/>
+    <item find=":Smiley Monokel:" replace="類"/>
+    <item find=":Diskette alt:" replace=""/>
+    <item find=":% 3:" replace="‱"/>
+    <item find=":Phi:" replace="Φ"/>
+    <item find=":Kirche:" replace="⛪"/>
+    <item find="Lizentz" replace="Lizenz"/>
+    <item find="fsat" replace="fast"/>
+    <item find=":NW 2:" replace="⇖"/>
+    <item find=":Schach Turm schwarz:" replace="♜"/>
+    <item find=":Hand gedreht:" replace="駱"/>
+    <item find=":Glocke:" replace=""/>
+    <item find=":Bandspeicher:" replace=""/>
+    <item find=":Symbol Schleife:" replace="➰"/>
+    <item find=":Karte Bube:" replace=""/>
+    <item find=":Damenhemd:" replace=""/>
+    <item find=":Ziege:" replace=""/>
+    <item find=":Uhr 3:" replace=""/>
+    <item find=":?:" replace="❓"/>
+    <item find=":Flagge kariert:" replace=""/>
+    <item find=":Karte Joker:" replace=""/>
+    <item find=":^h:" replace="ʰ"/>
+    <item find=":Telefonhörer rechts:" replace=""/>
+    <item find=":Camping:" replace=""/>
+    <item find=":Peso:" replace="₱"/>
+    <item find=":Dango:" replace=""/>
+    <item find=":Haken schwarz:" replace="✔"/>
+    <item find=":Keltenkreuz:" replace=""/>
+    <item find=":Quadratfläche:" replace="◼"/>
+    <item find=":Banknote Pfund:" replace=""/>
+    <item find=":Nachricht eintreffend:" replace=""/>
+    <item find=":Pizza:" replace=""/>
+    <item find=":Wecker:" replace="⏰"/>
+    <item find=":Orthodoxie:" replace="☦"/>
+    <item find=":^a:" replace="ᵃ"/>
+    <item find="Dnak" replace="Dank"/>
+    <item find=":Zeigefinger rechts flach:" replace=""/>
+    <item find=":Strand:" replace=""/>
+    <item find=":Karo schwarz:" replace="♦"/>
+    <item find=":Gespenst:" replace=""/>
+    <item find=":% 2:" replace="‰"/>
+    <item find=":WO 2:" replace="⇔"/>
+    <item find=":Park:" replace=""/>
+    <item find=":Kollision:" replace=""/>
+    <item find=":Erde Afrika:" replace=""/>
+    <item find=":chi:" replace="χ"/>
+    <item find=":Schere weiß:" replace="✄"/>
+    <item find=":delta:" replace="δ"/>
+    <item find=":Schach Dame weiß:" replace="♕"/>
+    <item find=":_beta:" replace="ᵦ"/>
+    <item find=":Herz klopfend:" replace=""/>
+    <item find=":Chilischote:" replace=""/>
+    <item find="Buchstbae" replace="Buchstabe"/>
+    <item find=":Hochgeschwindigkeitszug:" replace=""/>
+    <item find=":^0:" replace="⁰"/>
+    <item find=":Alarm ausgeschaltet:" replace=""/>
+    <item find=":regnerisch 2:" replace=""/>
+    <item find=":Dateiordner weiß:" replace=""/>
+    <item find=":Domino:" replace=""/>
+    <item find=":Flagge weiß:" replace="⚐"/>
+    <item find=":Kreuzzeichen:" replace="❌"/>
+    <item find=":Kreisfläche klein:" replace="⚫"/>
+    <item find=":Hand Aufruf:" replace="酪"/>
+    <item find=":Smiley nachdenklich:" replace=""/>
+    <item find=":Bootssteg:" replace="⛵"/>
+    <item find=":Dateiordner weiß offen:" replace=""/>
+    <item find=":Noten 8:" replace="♫"/>
+    <item find=":Weihnachtsmann:" replace=""/>
+    <item find=":Biogefährdung:" replace="☣"/>
+    <item find=":Herz funkelnd:" replace=""/>
+    <item find="sgdh" replace="Sehr geehrte Damen und Herren"/>
+    <item find=":Schmetterling:" replace="曆"/>
+    <item find="kienes" replace="keines"/>
+    <item find="Zeti" replace="Zeit"/>
+    <item find=":Glühlampe:" replace=""/>
+    <item find=":griechisches Kreuz:" replace="✚"/>
+    <item find=":Auge:" replace=""/>
+    <item find="ien" replace="ein"/>
+    <item find="wiederspiegeln" replace="widerspiegeln"/>
+    <item find=":Fabrik:" replace=""/>
+    <item find=":Mädchen:" replace=""/>
+    <item find="Komitte" replace="Komitee"/>
+    <item find=":_o:" replace="ₒ"/>
+    <item find=":Weinglas:" replace=""/>
+    <item find=":Frau schwanger:" replace="擄"/>
+    <item find=":nicht Obermenge:" replace="⊅"/>
+    <item find=":Theta:" replace="Θ"/>
+    <item find=":Hand OK 2:" replace=""/>
+    <item find=":Zeichen Haut hell:" replace=""/>
+    <item find="nciht" replace="nicht"/>
+    <item find=":Pommes Frites:" replace=""/>
+    <item find=":Maus:" replace=""/>
+    <item find=":Schneeketten:" replace="⛓"/>
+    <item find=":Waage:" replace="⚖"/>
+    <item find=":Rennmotorrad:" replace=""/>
+    <item find=":Gesicht Adler:" replace="礪"/>
+    <item find=":Skyline:" replace=""/>
+    <item find=":Kuss:" replace=""/>
+    <item find=":Jota:" replace="Ι"/>
+    <item find=":Herzen:" replace=""/>
+    <item find=":Element:" replace="∈"/>
+    <item find=":Ölfass:" replace=""/>
+    <item find="Fru" replace="Frau"/>
+    <item find=":Klavier:" replace=""/>
+    <item find=":Dateiordner:" replace=""/>
+    <item find=":---:" replace="—"/>
+    <item find=":Basketball:" replace=""/>
+    <item find=":Übernachtung:" replace=""/>
+    <item find=":Trompete:" replace=""/>
+    <item find=":O:" replace="→"/>
+    <item find=":Notizzettel leer:" replace=""/>
+    <item find=":^3:" replace="³"/>
+    <item find=":Kot:" replace=""/>
+    <item find="Kries" replace="Kreis"/>
+    <item find=":Victory 2:" replace=""/>
+    <item find="wird's" replace="wird’s"/>
+    <item find=":Briefumschlag:" replace=""/>
+    <item find=":Raute mit Punkt:" replace=""/>
+    <item find=":Gurke:" replace="勒"/>
+    <item find=":1/8:" replace="⅛"/>
+    <item find=":Rechteck:" replace="▭"/>
+    <item find="edr" replace="der"/>
+    <item find=":Mond neu:" replace=""/>
+    <item find="mm3" replace="mm³"/>
+    <item find="machn" replace="machen"/>
+    <item find=":Toilette:" replace=""/>
+    <item find=":Keine Piraten:" replace=""/>
+    <item find=":Zigarre:" replace=""/>
+    <item find=":^+:" replace="⁺"/>
+    <item find=":SW:" replace="↙"/>
+    <item find=":Davidstern:" replace="✡"/>
+    <item find=":Wal auftauchend:" replace=""/>
+    <item find=":Wut:" replace=""/>
+    <item find=":Markierfeld X:" replace=""/>
+    <item find=":_+:" replace="₊"/>
+    <item find=":Bento:" replace=""/>
+    <item find=":Schlangenträger:" replace="⛎"/>
+    <item find=":Banknote Dollar:" replace=""/>
+    <item find=":Personen querend:" replace=""/>
+    <item find=":Seniorin:" replace=""/>
+    <item find=":Katzengesicht küssend:" replace=""/>
+    <item find=":CD:" replace=""/>
+    <item find=":Schneefall 2:" replace=""/>
+    <item find=":Dreieck rechts:" replace="⊿"/>
+    <item find=":Gesicht Vampir:" replace="率"/>
+    <item find="ereichen" replace="erreichen"/>
+    <item find="Entwicklugn" replace="Entwicklung"/>
+    <item find="ftp:\\" replace="ftp://"/>
+    <item find=":Wohnmobil:" replace=""/>
+    <item find="jettz" replace="jetzt"/>
+    <item find="dekne" replace="denke"/>
+    <item find=":Gesicht lügend:" replace="拉"/>
+    <item find=":Smiley enttäuscht erleichtert:" replace=""/>
+    <item find=":Zeta:" replace="Ζ"/>
+    <item find="Vorat" replace="Vorrat"/>
+    <item find=":Smiley unfroh:" replace=""/>
+    <item find=":Müllentsorgung:" replace=""/>
+    <item find=":Karte König:" replace=""/>
+    <item find=":Karo weiß:" replace="♢"/>
+    <item find="korregierst" replace="korrigierst"/>
+    <item find=":Briefkasten leer:" replace=""/>
+    <item find=":Person betend:" replace=""/>
+    <item find=":my:" replace="μ"/>
+    <item find=":enthält nicht:" replace="∌"/>
+    <item find="Freudne" replace="Freunde"/>
+    <item find=":Fähre:" replace="⛴"/>
+    <item find=":Hai:" replace="麗"/>
+    <item find=":Wüste:" replace=""/>
+    <item find=":Seite:" replace=""/>
+    <item find=":epsilon:" replace="ε"/>
+    <item find=":^jota:" replace="ᶥ"/>
+    <item find=":Gesicht Thermometer:" replace="裸"/>
+    <item find=":Gesicht Pferd:" replace=""/>
+    <item find=":Softeis:" replace=""/>
+    <item find="fnaden" replace="fanden"/>
+    <item find=":1/2:" replace="½"/>
+    <item find=":Herz drehend:" replace=""/>
+    <item find=":--:" replace="–"/>
+    <item find=":Wiederherstellen:" replace=""/>
+    <item find=":Schere unten:" replace="✃"/>
+    <item find=":Farsi:" replace="☫"/>
+    <item find="sien" replace="sein"/>
+    <item find="adnere" replace="andere"/>
+    <item find=":Flaggen:" replace=""/>
+    <item find="Accesoir" replace="Accesoire"/>
+    <item find=":Seite beschrieben:" replace=""/>
+    <item find=":Notiz:" replace=""/>
+    <item find=":Bankgebäude:" replace=""/>
+    <item find=":^m:" replace="ᵐ"/>
+    <item find=":Eidechse:" replace="年"/>
+    <item find=":Klingel:" replace=""/>
+    <item find=":Denkblase links:" replace=""/>
+    <item find=":Mauli:" replace="☹"/>
+    <item find=":1/4:" replace="¼"/>
+    <item find=":Posteingang:" replace=""/>
+    <item find=":Delta:" replace="Δ"/>
+    <item find=":Schwerter:" replace="⚔"/>
+    <item find=":Kreis:" replace="○"/>
+    <item find="seperat" replace="separat"/>
+    <item find=":Wechselstube:" replace=""/>
+    <item find=":Gesicht übel:" replace="濫"/>
+    <item find=":Heißgetränk:" replace="☕"/>
+    <item find=":Schiff:" replace=""/>
+    <item find=":Minidisc:" replace=""/>
+    <item find=":Salat:" replace="綾"/>
+    <item find=":^phi:" replace="ᵠ"/>
+    <item find=":Sektflasche:" replace=""/>
+    <item find=":Popcorn:" replace=""/>
+    <item find=":Tomate:" replace=""/>
+    <item find=":Fotoblitz:" replace=""/>
+    <item find=":Banane:" replace=""/>
+    <item find="an's" replace="ans"/>
+    <item find=":Gesicht denkend:" replace="樂"/>
+    <item find=":Stern:" replace="☆"/>
+    <item find=":Gebetsperlen:" replace=""/>
+    <item find=":Uhr 6:" replace=""/>
+    <item find=":Malx 2:" replace="✖"/>
+    <item find=":Lautstärke:" replace=""/>
+    <item find=":Uhr 5.30:" replace=""/>
+    <item find=":Drache:" replace=""/>
+    <item find=":Oden:" replace=""/>
+    <item find=".*(c)" replace="©"/>
+    <item find=":Ghettoblaster:" replace=""/>
+    <item find=":Person Hand hebend:" replace=""/>
+    <item find=":Motorboot:" replace=""/>
+    <item find=":Schlüssel:" replace=""/>
+    <item find="Argumnet" replace="Argument"/>
+    <item find=":~~:" replace="≈"/>
+    <item find=":Katzengesicht verliebt:" replace=""/>
+    <item find="Entwicklug" replace="Entwicklung"/>
+    <item find=":Zeichen Jupiter:" replace="♃"/>
+    <item find=":Tau:" replace="Τ"/>
+    <item find=":Zeichen Skorpion:" replace="♏"/>
+    <item find=":Pilz:" replace=""/>
+    <item find=":Flugzeug rechts:" replace=""/>
+    <item find=":Schweinenase:" replace=""/>
+    <item find=":Drehregler:" replace=""/>
+    <item find=":_-:" replace="₋"/>
+    <item find="klra" replace="klar"/>
+    <item find=":^):" replace="⁾"/>
+    <item find=":Diagramm Säulen:" replace=""/>
+    <item find="Leistnug" replace="Leistung"/>
+    <item find=":Medaille:" replace=""/>
+    <item find="Intregation" replace="Integration"/>
+    <item find=":Stopp:" replace="⏹"/>
+    <item find=":Museum:" replace=""/>
+    <item find=":Bowling:" replace=""/>
+    <item find=":Smiley lächelnd:" replace=""/>
+    <item find=":Geldautomat:" replace=""/>
+    <item find=":Wassermelone:" replace=""/>
+    <item find=":Symbol Warnung:" replace=""/>
+    <item find=":Medaille bronze:" replace="雷"/>
+    <item find=":Bad:" replace=""/>
+    <item find=":Halloween:" replace=""/>
+    <item find=":Gesicht Frosch:" replace=""/>
+    <item find=":schreiben:" replace="✍"/>
+    <item find=":Daumen oben:" replace=""/>
+    <item find=":gamma:" replace="γ"/>
+    <item find=":Mais:" replace=""/>
+    <item find=":Badminton:" replace=""/>
+    <item find=":Uhr 0.30:" replace=""/>
+    <item find=":Rechtecksfläche:" replace="▬"/>
+    <item find=":Pause 1:" replace="턻"/>
+    <item find=":Zeichen Schütze:" replace="♐"/>
+    <item find="awr" replace="war"/>
+    <item find=":Schwein:" replace=""/>
+    <item find=":ff:" replace="ﬀ"/>
+    <item find=":Wildschwein:" replace=""/>
+    <item find=":Gesicht Hamster:" replace=""/>
+    <item find=":Namensschild:" replace=""/>
+    <item find=":Megaphon laut:" replace=""/>
+    <item find=":Daumen unten 2:" replace=""/>
+    <item find=":Meermensch:" replace="隆"/>
+    <item find=":Speck:" replace="肋"/>
+    <item find="Frima" replace="Firma"/>
+    <item find="in´s" replace="ins"/>
+    <item find=":Trikot:" replace=""/>
+    <item find=":Turban:" replace=""/>
+    <item find=":Notizseiten:" replace=""/>
+    <item find=":Zeigefinger oben:" replace="☝"/>
+    <item find=":Uhr 10:" replace=""/>
+    <item find=":ffl:" replace="ﬄ"/>
+    <item find="arbietest" replace="arbeitest"/>
+    <item find="Assessoir" replace="Accessoire"/>
+    <item find="Komunikation" replace="Kommunikation"/>
+    <item find="Sahce" replace="Sache"/>
+    <item find=":Computermaus 2:" replace=""/>
+    <item find=":TM:" replace="™"/>
+    <item find=":Zoll:" replace=""/>
+    <item find=":Zeigefinger unten:" replace="☟"/>
+    <item find="Porzelan" replace="Porzellan"/>
+    <item find=":_1:" replace="₁"/>
+    <item find=":Babyflasche:" replace=""/>
+    <item find=":Pi:" replace="Π"/>
+    <item find=":+-:" replace="±"/>
+    <item find=":Smiley finster:" replace=""/>
+    <item find=":Gesicht Mädchen:" replace=""/>
+    <item find=":Fleischknochen:" replace=""/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find=":Teller Besteck:" replace=""/>
+    <item find=":Kleeblatt:" replace=""/>
+    <item find="Geidcht" replace="Gedicht"/>
+    <item find=":Ny:" replace="Ν"/>
+    <item find=":Hotel:" replace=""/>
+    <item find=":Kimono:" replace=""/>
+    <item find=":Propellerflugzeug:" replace=""/>
+    <item find="Kommittee" replace="Komitee"/>
+    <item find=":Schneefall:" replace="☃"/>
+    <item find=":Gepäck:" replace=""/>
+    <item find=":Buch geschlossen:" replace=""/>
+    <item find=":Hände oben:" replace="爐"/>
+    <item find=":Krämerladen:" replace=""/>
+    <item find=":Gesicht Kopftuch:" replace="崙"/>
+    <item find=":Spiralkalender:" replace=""/>
+    <item find=":Cricket:" replace=""/>
+    <item find=":NO:" replace="↗"/>
+    <item find=":Smiley beharrend:" replace=""/>
+    <item find=":Wurzel 4:" replace="∜"/>
+    <item find=":Ameise:" replace=""/>
+    <item find=":^y:" replace="ʸ"/>
+    <item find=":Glückskeks:" replace="怒"/>
+    <item find=":Dollar dick:" replace=""/>
+    <item find=":Dreieck:" replace="△"/>
+    <item find=":ABC:" replace=""/>
+    <item find=":und:" replace="∧"/>
+    <item find=":Fußspuren:" replace=""/>
+    <item find=":Erde Meridian:" replace=""/>
+    <item find=":Person traurig:" replace=""/>
+    <item find=":Landung:" replace=""/>
+    <item find=":Henkelkreuz:" replace="☥"/>
+    <item find=":Zeitung gerollt:" replace=""/>
+    <item find=":Widder:" replace=""/>
+    <item find=":Jonglieren:" replace="魯"/>
+    <item find=":Drucker:" replace=""/>
+    <item find=":Einkaufstasche:" replace=""/>
+    <item find="Freudnin" replace="Freundin"/>
+    <item find=":Curling:" replace="樓"/>
+    <item find=":^b:" replace="ᵇ"/>
+    <item find=":Kneipe japanisch:" replace=""/>
+    <item find=":^s:" replace="ˢ"/>
+    <item find=":Telefon weiß:" replace="☏"/>
+    <item find=":Affe:" replace=""/>
+    <item find=":Taxi vorne:" replace=""/>
+    <item find=":Schleife:" replace=""/>
+    <item find="dei" replace="die"/>
+    <item find=":Mond voll:" replace=""/>
+    <item find=":Sauna:" replace="淪"/>
+    <item find=":Blitz schwarz:" replace=""/>
+    <item find=":Partitur:" replace=""/>
+    <item find=":Häschenohren:" replace=""/>
+    <item find=":Anfänger:" replace=""/>
+    <item find=":Euro:" replace="€"/>
+    <item find=":Giftstoffe:" replace="☠"/>
+    <item find=":Snowboard:" replace=""/>
+    <item find=":^w:" replace="ʷ"/>
+    <item find=":Komprimierung:" replace=""/>
+    <item find="arbieten" replace="arbeiten"/>
+    <item find="dise" replace="dies"/>
+    <item find=":Radfahrer:" replace=""/>
+    <item find=":Smiley weinend:" replace=""/>
+    <item find=":Zeichen Sonne:" replace="☉"/>
+    <item find="Vorang" replace="Vorrang"/>
+    <item find=":Pistole:" replace=""/>
+    <item find=":Kaktus:" replace=""/>
+    <item find=":_0:" replace="₀"/>
+    <item find=":Straßenbahn:" replace=""/>
+    <item find=":Getränk:" replace=""/>
+    <item find=":Krebs:" replace="呂"/>
+    <item find="adners" replace="anders"/>
+    <item find=":tau:" replace="τ"/>
+    <item find=":Yen:" replace="¥"/>
+    <item find=":Mond halb zunehmend:" replace=""/>
+    <item find=":Uhr 7.30:" replace=""/>
+    <item find=":Telefonhörer links:" replace=""/>
+    <item find="Datein" replace="Dateien"/>
+    <item find=":Seite eingekreist:" replace=""/>
+    <item find=":Smiley kleinlaut:" replace=""/>
+    <item find=":Faust links:" replace="亂"/>
+    <item find=":Blume welkend:" replace="鹿"/>
+    <item find="Voklae" replace="Vokale"/>
+    <item find=":^o:" replace="ᵒ"/>
+    <item find=":Mond Gesicht halb abnehmend:" replace=""/>
+    <item find=":Cocktailglas:" replace=""/>
+    <item find="uas" replace="aus"/>
+    <item find=":Stift unten links:" replace=""/>
+    <item find=":Noten b:" replace="♭"/>
+    <item find=":doppel b:" replace="턫"/>
+    <item find="sthet" replace="steht"/>
+    <item find=":Wimpel schwarz:" replace=""/>
+    <item find=":Zeichen Haut schwarz:" replace=""/>
+    <item find=":Mond Gesicht halb zunehmend:" replace=""/>
+    <item find=":Computermaus:" replace=""/>
+    <item find=":Fisch tropisch:" replace=""/>
+    <item find=":Silhouetten:" replace=""/>
+    <item find=":Smiley Teufel:" replace=""/>
+    <item find=":^M:" replace="ᴹ"/>
+    <item find="bekant" replace="bekannt"/>
+    <item find=":!:" replace="❕"/>
+    <item find="Aquisition" replace="Akquisition"/>
+    <item find=":Schach Springer weiß:" replace="♘"/>
+    <item find=":Regenschirm geschlossen:" replace=""/>
+    <item find=":Smiley Sterne:" replace="朗"/>
+    <item find=":Pfund:" replace="£"/>
+    <item find=":Essstäbchen:" replace="異"/>
+    <item find=":Kreuz weiß:" replace="♧"/>
+    <item find=":Minimieren:" replace=""/>
+    <item find=":keine Minderjährigen:" replace=""/>
+    <item find=":Urne:" replace="⚱"/>
+    <item find=":Gesicht Clown:" replace="嵐"/>
+    <item find="dnake" replace="danke"/>
+    <item find=":Berbahn:" replace=""/>
+    <item find=":Juwel:" replace=""/>
+    <item find=":Milch:" replace="拏"/>
+    <item find=":^J:" replace="ᴶ"/>
+    <item find=":Feuerwehrwagen:" replace=""/>
+    <item find=":Karte Japan:" replace=""/>
+    <item find=":Mikrofon 2:" replace=""/>
+    <item find=":Notizzettel:" replace=""/>
+    <item find=":Markierfeld X fett:" replace=""/>
+    <item find=":Damenhut:" replace=""/>
+    <item find=":S:" replace="↓"/>
+    <item find=":^1:" replace="¹"/>
+    <item find=":Skorpion:" replace="廬"/>
+    <item find=":^P:" replace="ᴾ"/>
+    <item find=":Gesicht Löwe:" replace="女"/>
+    <item find=":unendlich:" replace="∞"/>
+    <item find=":^l:" replace="ˡ"/>
+    <item find=":_(:" replace="₍"/>
+    <item find=":Parallelogrammfläche:" replace="▰"/>
+    <item find=":Ypsilon:" replace="Υ"/>
+    <item find=":Kopfhörer:" replace=""/>
+    <item find=":Smiley heulend:" replace=""/>
+    <item find=":Xi:" replace="Ξ"/>
+    <item find="Ieroni" replace="Ironie"/>
+    <item find=":Wolke:" replace="☁"/>
+    <item find="fandn" replace="fanden"/>
+    <item find=":Erdnuss:" replace="樂"/>
+    <item find=":Manoküre:" replace=""/>
+    <item find=":Gesicht Dinosaurier:" replace="秊"/>
+    <item find=":DVD:" replace=""/>
+    <item find=":Blatt:" replace=""/>
+    <item find=":Lesezeichen:" replace=""/>
+    <item find=":Andreaskreuz:" replace="☓"/>
+    <item find=":Badewanne:" replace=""/>
+    <item find=":Ochse:" replace=""/>
+    <item find="Bibliotehk" replace="Bibliothek"/>
+    <item find=":Gesicht Kind:" replace="戮"/>
+    <item find=":^f:" replace="ᶠ"/>
+    <item find=":-:" replace="−"/>
+    <item find=":Christentum:" replace="☧"/>
+    <item find=":Gesicht T-Rex:" replace="練"/>
+    <item find=":Schwindel:" replace=""/>
+    <item find=":Herz:" replace=""/>
+    <item find=":Fuji:" replace=""/>
+    <item find=":Strahlen links:" replace=""/>
+    <item find=":Hammer:" replace=""/>
+    <item find=":Tropfen schwarz:" replace=""/>
+    <item find=":Hrywnja:" replace="₴"/>
+    <item find=":Symbol verboten:" replace=""/>
+    <item find=":Surfen:" replace=""/>
+    <item find=":Dschinn:" replace="吏"/>
+    <item find="Garrantie" replace="Garantie"/>
+    <item find=":Rahmen mit X:" replace=""/>
+    <item find="bekantes" replace="bekanntes"/>
+    <item find=":Hilal:" replace="☪"/>
+    <item find="3/4" replace="¾"/>
+    <item find=":^i:" replace="ⁱ"/>
+    <item find=":Birne:" replace=""/>
+    <item find="komunizieren" replace="kommunizieren"/>
+    <item find=":Uhr 9.30:" replace=""/>
+    <item find=":Karussellpferd:" replace=""/>
+    <item find=":Kampfflugzeug:" replace=""/>
+    <item find=":Sonne weiß:" replace=""/>
+    <item find=":Muskeln:" replace=""/>
+    <item find=":Gespann:" replace=""/>
+    <item find=":Briefkasten:" replace=""/>
+    <item find=":Fußgänger:" replace=""/>
+    <item find=":Dokument leer:" replace=""/>
+    <item find=":Kamel:" replace=""/>
+    <item find="Freundinen" replace="Freundinnen"/>
+    <item find=":Sprechblase rechts:" replace=""/>
+    <item find=":Reißzwecke:" replace=""/>
+    <item find=":Peace:" replace="☮"/>
+    <item find=":Stern leuchtend:" replace=""/>
+    <item find=":Rugby:" replace=""/>
+    <item find=":Graduiertenhut:" replace=""/>
+    <item find=":Lippen:" replace=""/>
+    <item find=":Smiley strahlend:" replace=""/>
+    <item find=":Würfel 5:" replace="⚄"/>
+    <item find=":Becher:" replace="磻"/>
+    <item find=":Damen und Herren:" replace=""/>
+    <item find=":Summe:" replace="∑"/>
+    <item find=":Bahnhof:" replace=""/>
+    <item find=":Gesicht Massage:" replace=""/>
+    <item find=":Gesicht Tiger:" replace=""/>
+    <item find=":Aufnahme:" replace="⏺"/>
+    <item find=":Gesicht Erwachsener:" replace="六"/>
+    <item find=":Noten Kreuz:" replace="♯"/>
+    <item find=":Regen:" replace="⛆"/>
+    <item find=":^d:" replace="ᵈ"/>
+    <item find=":Zelt:" replace="⛺"/>
+    <item find=":Gesicht Junge:" replace=""/>
+    <item find=":Kreis klein:" replace="⚪"/>
+    <item find=":Sechseck:" replace="⬡"/>
+    <item find=":SW 2:" replace="⇙"/>
+    <item find="Komite" replace="Komitee"/>
+    <item find=":Polizeiauto vorne:" replace=""/>
+    <item find=":Lockenwickler:" replace=""/>
+    <item find=":Blume:" replace="⚘"/>
+    <item find=":Lira:" replace="₤"/>
+    <item find="Sone" replace="Sonne"/>
+    <item find=":Gesicht umarmend:" replace="珞"/>
+    <item find=":Zeichen Venus:" replace="♀"/>
+    <item find=":Filmklappe:" replace=""/>
+    <item find=":Motorroller:" replace=""/>
+    <item find=":Bogenschießen:" replace=""/>
+    <item find=":Abzeichen:" replace=""/>
+    <item find=":Ente:" replace="閭"/>
+    <item find="wird´s" replace="wird’s"/>
+    <item find=":Briefkasten geöffnet voll:" replace=""/>
+    <item find=":Gotteshaus:" replace=""/>
+    <item find=":Kerze:" replace=""/>
+    <item find=":zeta:" replace="ζ"/>
+    <item find=":Süßkartoffel:" replace=""/>
+    <item find="Apperatur" replace="Apparatur"/>
+    <item find=":Rennauto:" replace=""/>
+    <item find=":Küken:" replace=""/>
+    <item find=":Schule:" replace=""/>
+    <item find=":Bergschwebebahn:" replace=""/>
+    <item find=":Quadrat klein:" replace="▫"/>
+    <item find=":Zug:" replace=""/>
+    <item find=":Stift:" replace="✏"/>
+    <item find=":Wickelraum:" replace=""/>
+    <item find="dssa" replace="dass"/>
+    <item find="heiss" replace="heiß"/>
+    <item find=":Perlboot:" replace=""/>
+    <item find=":Schüssel 2:" replace="北"/>
+    <item find=":_k:" replace="ₖ"/>
+    <item find=":Football:" replace=""/>
+    <item find=":Diskette weiß:" replace=""/>
+    <item find="Stien" replace="Stein"/>
+    <item find=":Zeichen Steinbock:" replace="♑"/>
+    <item find=":Sprechblasen:" replace=""/>
+    <item find=":Zeichen Krebs:" replace="♋"/>
+    <item find=":Rind:" replace=""/>
+    <item find=":Feuer:" replace=""/>
+    <item find=":windig:" replace=""/>
+    <item find=":phi:" replace="φ"/>
+    <item find=":Regen 2:" replace=""/>
+    <item find=":Ampel:" replace=""/>
+    <item find=":Seiten leer:" replace=""/>
+    <item find=":Videokamera:" replace=""/>
+    <item find="Enwicklung" replace="Entwicklung"/>
+    <item find=":Telefonhörer:" replace=""/>
+    <item find=":Satellit:" replace=""/>
+    <item find=":enthält:" replace="∋"/>
+    <item find="gnaz" replace="ganz"/>
+    <item find=":Smiley Zunge zwinkernd:" replace=""/>
+    <item find=":^v:" replace="ᵛ"/>
+    <item find=":Mikrofon:" replace=""/>
+    <item find=":Passkontrolle:" replace=""/>
+    <item find=":Würfel 3:" replace="⚂"/>
+    <item find=":Kappa:" replace="Κ"/>
+    <item find=":Zeichen Neptun:" replace="♆"/>
+    <item find=":Ananas:" replace=""/>
+    <item find=":Anruf:" replace=""/>
+    <item find=":^(:" replace="⁽"/>
+    <item find=":Smiley explodierend:" replace="勞"/>
+    <item find=":Sushi:" replace=""/>
+    <item find=":Gesicht Katze:" replace=""/>
+    <item find=":Sonne Gesicht:" replace=""/>
+    <item find=":Apfel:" replace=""/>
+    <item find=":Vereinigung:" replace="∪"/>
+    <item find=":Schere:" replace="✂"/>
+    <item find=":Delfin:" replace=""/>
+    <item find=":Zeigefinger links schwarz:" replace=""/>
+    <item find=":Dateiordner offen:" replace=""/>
+    <item find=":Spiralblock:" replace=""/>
+    <item find=":Smiley Grimasse:" replace=""/>
+    <item find=":Gewitter:" replace="⛈"/>
+    <item find=":Sonnenaufgang:" replace=""/>
+    <item find="Geschichtne" replace="Geschichten"/>
+    <item find=":Erdbeere:" replace=""/>
+    <item find=":Würfel 6:" replace="⚅"/>
+    <item find=":Katzengesicht Freudentränen:" replace=""/>
+    <item find=":SO:" replace="↘"/>
+    <item find=":Person schmollend:" replace=""/>
+    <item find=":_t:" replace="ₜ"/>
+    <item find=":Polizist:" replace=""/>
+    <item find="mfg" replace="Mit freundlichen Grüßen"/>
+    <item find=":Preisschild:" replace=""/>
+    <item find=":_chi:" replace="ᵪ"/>
+    <item find=":Gesicht Schwein:" replace=""/>
+    <item find="Rechnnug" replace="Rechnung"/>
+    <item find=":^u:" replace="ᵘ"/>
+    <item find=":Rhombus:" replace="◊"/>
+    <item find=":^8:" replace="⁸"/>
+    <item find=":Mondschau:" replace=""/>
+    <item find=":Lautstärke niedrig:" replace=""/>
+    <item find=":Moschee:" replace=""/>
+    <item find=":Information:" replace=""/>
+    <item find=":Dokument:" replace=""/>
+    <item find=":Musik:" replace=""/>
+    <item find=":Zutritt verboten:" replace=""/>
+    <item find=":_rho:" replace="ᵨ"/>
+    <item find="Prozellan" replace="Porzellan"/>
+    <item find=":Ei:" replace="讀"/>
+    <item find=":Dekoration:" replace=""/>
+    <item find="udn" replace="und"/>
+    <item find=":theta:" replace="θ"/>
+    <item find=":teilt nicht:" replace="∤"/>
+    <item find=":Schach Bauer schwarz:" replace="♟"/>
+    <item find=":Müllentsorgung verboten:" replace=""/>
+    <item find="Geshichte" replace="Geschichte"/>
+    <item find=":Sonnenaufgang 2:" replace=""/>
+    <item find=":^B:" replace="ᴮ"/>
+    <item find=":Smiley schreiend:" replace=""/>
+    <item find=":Hand gespreizt:" replace=""/>
+    <item find=":Sonne 2:" replace="☀"/>
+    <item find="sthest" replace="stehst"/>
+    <item find=":Gesicht Elfe:" replace="利"/>
+    <item find=":Kreisfläche:" replace="●"/>
+    <item find=":ffi:" replace="ﬃ"/>
+    <item find=":Rauchen verboten:" replace=""/>
+    <item find=":^e:" replace="ᵉ"/>
+    <item find="Intriege" replace="Intrige"/>
+    <item find=":Strahlen rechts:" replace=""/>
+    <item find="erts" replace="erst"/>
+    <item find=":Hase:" replace=""/>
+    <item find=":Piraten:" replace=""/>
+    <item find=":Postfiliale:" replace=""/>
+    <item find=":Katze:" replace=""/>
+    <item find=":Truthahn:" replace="旅"/>
+    <item find=":Mond Gesicht voll:" replace=""/>
+    <item find="Fra" replace="Frau"/>
+    <item find=":Stoppuhr:" replace="⏱"/>
+    <item find=":Smiley ausdruckslos:" replace=""/>
+    <item find=":Taschenlampe:" replace=""/>
+    <item find=":Gesicht Nashorn:" replace="憐"/>
+    <item find=":Bus vorne:" replace=""/>
+    <item find=":Patriarchenkreuz:" replace="☨"/>
+    <item find=":Gesicht Prinz:" replace="老"/>
+    <item find=":Tastentelefon weiß:" replace=""/>
+    <item find=":Schach König weiß:" replace="♔"/>
+    <item find=":Symbol Drucker:" replace=""/>
+    <item find="Lizensierung" replace="Lizenzierung"/>
+    <item find=":Kernenergie:" replace="⚛"/>
+    <item find=":Schild:" replace="⛨"/>
+    <item find="veilliecht" replace="vielleicht"/>
+    <item find=":Donut:" replace=""/>
+    <item find=":Heroldsstab:" replace="⚚"/>
+    <item find=":Sonnenschirm:" replace="⛱"/>
+    <item find=":Sake:" replace=""/>
+    <item find=":Integral 3:" replace="∭"/>
+    <item find=":Händeschütteln:" replace="欄"/>
+    <item find=":Bikini:" replace=""/>
+    <item find="&lt;--" replace="←"/>
+    <item find=":Kurs steigend:" replace=""/>
+    <item find=":Zunge:" replace=""/>
+    <item find=":Lokomotive:" replace=""/>
+    <item find=":Herz schwarz:" replace="♥"/>
+    <item find=":^W:" replace="ᵂ"/>
+    <item find=":Judo:" replace="屢"/>
+    <item find="Kommitee" replace="Komitee"/>
+    <item find=":Gesicht Zebra:" replace="煉"/>
+    <item find=":Wal:" replace=""/>
+    <item find=":Smiley verliebt:" replace=""/>
+    <item find=":Computerspiel:" replace=""/>
+    <item find=":^c:" replace="ᶜ"/>
+    <item find=":Karteikarte:" replace=""/>
+    <item find=":Tür:" replace=""/>
+    <item find=":Gesicht Augen rollend:" replace=""/>
+    <item find="Kopei" replace="Kopie"/>
+    <item find=":Strahlen unten:" replace=""/>
+    <item find="korregiert" replace="korrigiert"/>
+    <item find=":2/3:" replace="⅔"/>
+    <item find=":Stern kleiner:" replace="⭐"/>
+    <item find="Rytmus" replace="Rhythmus"/>
+    <item find=":Fee:" replace="栗"/>
+    <item find=":Smiley bestürzt:" replace=""/>
+    <item find=":Person akzeptierend:" replace=""/>
+    <item find="Kres" replace="Kreis"/>
+    <item find=":Krankenhaus:" replace=""/>
+    <item find=":Hand links:" replace=""/>
+    <item find=":Schreibfeder:" replace="✑"/>
+    <item find=":Handtasche:" replace=""/>
+    <item find=":Zeigefinger links:" replace="☜"/>
+    <item find=":Rosette schwarz:" replace=""/>
+    <item find=":Schach Läufer schwarz:" replace="♝"/>
+    <item find=":Haarschnitt:" replace=""/>
+    <item find=":Yoga:" replace="律"/>
+    <item find=":Hochzeit:" replace=""/>
+    <item find=":Herz Pfeil:" replace=""/>
+    <item find=":Uhr 10.30:" replace=""/>
+    <item find=":omega:" replace="ω"/>
+    <item find="Bekante" replace="Bekannte"/>
+    <item find=":Schleudergefahr:" replace="⛐"/>
+    <item find=":Ratte:" replace=""/>
+    <item find=":E-Mail:" replace=""/>
+    <item find=":Billard:" replace=""/>
+    <item find=":Abflug:" replace=""/>
+    <item find=":^p:" replace="ᵖ"/>
+    <item find=":Schrift verkleinern:" replace=""/>
+    <item find=":Speiseeis:" replace=""/>
+    <item find=":Baht:" replace="฿"/>
+    <item find=":Paar Männer:" replace=""/>
+    <item find=":WO:" replace="↔"/>
+    <item find=":Postausgang:" replace=""/>
+    <item find=":Smiley Engel:" replace=""/>
+    <item find=":Seite leer:" replace=""/>
+    <item find=":Violinschlüssel:" replace="턞"/>
+    <item find=":Gesicht niesend:" replace="蠟"/>
+    <item find=":oder:" replace="∨"/>
+    <item find=":Gesicht Anzug:" replace="蘆"/>
+    <item find=":Berg schneebedeckt:" replace=""/>
+    <item find=":Geschenk:" replace=""/>
+    <item find=":Radio:" replace=""/>
+    <item find=":Quadrat größer:" replace="⬜"/>
+    <item find="ieronisch" replace="ironisch"/>
+    <item find=":! 2:" replace="❗"/>
+    <item find=":regnerisch:" replace="☔"/>
+    <item find=":Fußabdrücke:" replace=""/>
+    <item find=":Smiley küssend:" replace=""/>
+    <item find=":Gesicht bandagiert:" replace="洛"/>
+    <item find=":Fischfrikadelle:" replace=""/>
+    <item find=":Hand 2:" replace=""/>
+    <item find=":Schwimmen:" replace=""/>
+    <item find="cm3" replace="cm³"/>
+    <item find=":Schach Turm weiß:" replace="♖"/>
+    <item find=":alpha:" replace="α"/>
+    <item find=":Zeichen Haut leicht braun:" replace=""/>
+    <item find=":Radschlag:" replace="露"/>
+    <item find=":Schieberegler:" replace=""/>
+    <item find=":Vulkan:" replace=""/>
+    <item find=":Kastanie:" replace=""/>
+    <item find=":Om:" replace=""/>
+    <item find=":Krawatte:" replace=""/>
+    <item find=":W:" replace="←"/>
+    <item find=":Lautsprecher laut:" replace=""/>
+    <item find=":Copyright:" replace="©"/>
+    <item find="daselbe" replace="dasselbe"/>
+    <item find=":Kreis Schatten:" replace=""/>
+    <item find=":xi:" replace="ξ"/>
+    <item find=":Sämling:" replace=""/>
+    <item find=":N 2:" replace="⇑"/>
+    <item find=":Einkaufswagen:" replace=""/>
+    <item find=":Rupie:" replace="₹"/>
+    <item find=":Trinkwasser:" replace=""/>
+    <item find=":Post:" replace="✉"/>
+    <item find=":Wappenlilie:" replace="⚜"/>
+    <item find=":Gesicht Weihnachtsfrau:" replace="虜"/>
+    <item find=":Fledermaus:" replace="驪"/>
+    <item find=":Pik weiß:" replace="♤"/>
+    <item find=":Hahn:" replace=""/>
+    <item find=":Wasserball:" replace="綠"/>
+    <item find=":Füller:" replace=""/>
+    <item find="Standart" replace="Standard"/>
+    <item find=":Wachmann:" replace=""/>
+    <item find="gibt´s" replace="gibt’s"/>
+    <item find=":Reiscracker:" replace=""/>
+    <item find=":bewölkt:" replace="⛅"/>
+    <item find=":^theta:" replace="ᶿ"/>
+    <item find=":Smiley Zunge:" replace=""/>
+    <item find=":Lambda:" replace="Λ"/>
+    <item find=":_4:" replace="₄"/>
+    <item find=":Eishockey:" replace=""/>
+    <item find=":Bierkrug:" replace=""/>
+    <item find=":Blumenstrauß 2:" replace=""/>
+    <item find=":Neblig:" replace=""/>
+    <item find=":Luftballon:" replace=""/>
+    <item find="mm2" replace="mm²"/>
+    <item find=":Gesicht Hund:" replace=""/>
+    <item find=":Konserve:" replace="參"/>
+    <item find="hielig" replace="heilig"/>
+    <item find=":Zyklon:" replace=""/>
+    <item find=":Trommel:" replace="論"/>
+    <item find=":^6:" replace="⁶"/>
+    <item find=":Person vorbeugend:" replace=""/>
+    <item find=":Einhorn:" replace="濾"/>
+    <item find=":Spaghetti:" replace=""/>
+    <item find=":Brille:" replace=""/>
+    <item find=":Uhr 4.30:" replace=""/>
+    <item find=":Igel:" replace="璉"/>
+    <item find=":Pentagramm:" replace="⛤"/>
+    <item find=":Rollstuhl:" replace="♿"/>
+    <item find=":Markierfeld Haken:" replace=""/>
+    <item find=":Schwebebahn:" replace=""/>
+    <item find=":Diskette schwarz:" replace=""/>
+    <item find=":Zweibalkenkreuz:" replace="‡"/>
+    <item find=":PC alt:" replace=""/>
+    <item find=":Uhr 7:" replace=""/>
+    <item find=":Laufen:" replace=""/>
+    <item find=":Käsestück:" replace="燎"/>
+    <item find=":Zeigefinger oben flach 2:" replace=""/>
+    <item find=":Pinsel:" replace=""/>
+    <item find="geht's" replace="geht’s"/>
+    <item find=":Jeans:" replace=""/>
+    <item find=":Service:" replace=""/>
+    <item find="&lt;-&gt;" replace="↔"/>
+    <item find="Buchsabe" replace="Buchstabe"/>
+    <item find=":Geodreieck:" replace=""/>
+    <item find=":_l:" replace="ₗ"/>
+    <item find=":Herz gebrochen:" replace=""/>
+    <item find=":Apfel 2:" replace=""/>
+    <item find="gehn" replace="gehen"/>
+    <item find=":Medizin:" replace="⚕"/>
+    <item find=":Eule:" replace="黎"/>
+    <item find=":Katzengesicht lächelnd:" replace=""/>
+    <item find="enldich" replace="endlich"/>
+    <item find=":Springbrunnen:" replace="⛲"/>
+    <item find=":jota:" replace="ι"/>
+    <item find=":Zeigefinger links weiß:" replace=""/>
+    <item find=":Lolli:" replace=""/>
+    <item find=":Fisch:" replace=""/>
+    <item find=":ny:" replace="ν"/>
+    <item find=":Dokument mit Text und Bild:" replace=""/>
+    <item find=":Gesicht Hase:" replace=""/>
+    <item find=":Funkeln:" replace="✨"/>
+    <item find=":neblig 2:" replace=""/>
+    <item find=":Burg:" replace=""/>
+    <item find=":Einkaufsladen:" replace=""/>
+    <item find=":Herz dick:" replace="❤"/>
+    <item find=":Quadratfläche klein:" replace="▪"/>
+    <item find="in's" replace="ins"/>
+    <item find=":Hand winkend:" replace=""/>
+    <item find=":Zeitung:" replace=""/>
+    <item find=":Außerirdischer:" replace=""/>
+    <item find=":Gitarre:" replace=""/>
+    <item find="Auswal" replace="Auswahl"/>
+    <item find=":Milchstraße:" replace=""/>
+    <item find=":Zeigefinger unten flach 2:" replace=""/>
+    <item find=":Notensymbol:" replace="텝"/>
+    <item find=":Hubschrauber:" replace=""/>
+    <item find=":Bauarbeiter:" replace=""/>
+    <item find="errinern" replace="erinnern"/>
+    <item find=":^9:" replace="⁹"/>
+    <item find=":Kartoffel:" replace="凜"/>
+    <item find=":Reißzwecke rund:" replace=""/>
+    <item find=":Volleyball:" replace=""/>
+    <item find=":Steak:" replace="數"/>
+    <item find=":Abbrechen:" replace=""/>
+    <item find=":Einfahrt verboten:" replace="⛔"/>
+    <item find=":^j:" replace="ʲ"/>
+    <item find=":^z:" replace="ᶻ"/>
+    <item find=":^2:" replace="²"/>
+    <item find=":Cent:" replace="¢"/>
+    <item find=":Kanu:" replace=""/>
+    <item find=":Lautsprecher leise:" replace=""/>
+    <item find=":Liebesbrief:" replace=""/>
+    <item find="Erflog" replace="Erfolg"/>
+    <item find=":Victory:" replace="✌"/>
+    <item find=":Jerusalemkreuz:" replace="☩"/>
+    <item find="adequat" replace="adäquat"/>
+    <item find=":Farbpalette:" replace=""/>
+    <item find=":Kreuz:" replace="†"/>
+    <item find=":Uhr 9:" replace=""/>
+    <item find=":Smiley zwinkernd:" replace=""/>
+    <item find=":1/3:" replace="⅓"/>
+    <item find=":Spielautomat:" replace=""/>
+    <item find=":Notensymbol 8:" replace="텠"/>
+    <item find=":Hochgeschwindigkeitszug japanisch:" replace=""/>
+    <item find=":^I:" replace="ᴵ"/>
+    <item find=":Mond Viertel 3:" replace=""/>
+    <item find=":Batterie:" replace=""/>
+    <item find="--&gt;" replace="→"/>
+    <item find=":Blumenstrauß:" replace=""/>
+    <item find=":Recycling 2:" replace="♻"/>
+    <item find=":Grille:" replace="聯"/>
+    <item find=".*-&gt;.*" replace="→"/>
+    <item find="daß" replace="dass"/>
+    <item find=":Smiley leise:" replace="狼"/>
+    <item find=":Reisbällchen:" replace=""/>
+    <item find=":_e:" replace="ₑ"/>
+    <item find=":Diskette:" replace=""/>
+    <item find=":Briefumschlag mit Blitz:" replace=""/>
+    <item find=":Smiley Sonnenbrille:" replace=""/>
+    <item find="Faru" replace="Frau"/>
+    <item find=":Schach Bauer weiß:" replace="♙"/>
+    <item find=":i:" replace="ℹ"/>
+    <item find=":Einschienenbahn:" replace=""/>
+    <item find=":Freiheitsstatue:" replace=""/>
+    <item find=":Krokodil:" replace=""/>
+    <item find=":Taschenrechner:" replace=""/>
+    <item find=":Lautstärke hoch:" replace=""/>
+    <item find=":Haken weiß:" replace="✅"/>
+    <item find="Prioität" replace="Priorität"/>
+    <item find=":_s:" replace="ₛ"/>
+    <item find=":PC:" replace=""/>
+    <item find=":Garnele:" replace=""/>
+    <item find=":Passionskreuz:" replace="✝"/>
+    <item find=":Roller:" replace=""/>
+    <item find=":Messer:" replace=""/>
+    <item find=":Flughafen:" replace="✈"/>
+    <item find=":Hand gehörnt:" replace="落"/>
+    <item find=":Mann tanzend:" replace=""/>
+    <item find=":Gesicht Frau:" replace=""/>
+    <item find=":Zeichen Stier:" replace="♉"/>
+    <item find=":Nase:" replace=""/>
+    <item find="Acksessoir" replace="Accesoire"/>
+    <item find=":Mund:" replace=""/>
+    <item find=":nicht Teilmenge:" replace="⊄"/>
+    <item find=":partiell:" replace="∂"/>
+    <item find=":Zeigefinger oben flach:" replace=""/>
+    <item find="Kartein" replace="Karteien"/>
+    <item find=":^G:" replace="ᴳ"/>
+    <item find=":Weltkarte:" replace=""/>
+    <item find=":Regenschirm:" replace="☂"/>
+    <item find=":Koala:" replace=""/>
+    <item find=":Smiley Angstschweiß:" replace=""/>
+    <item find=":Selfie:" replace="盧"/>
+    <item find=":Fladenbrot:" replace="陵"/>
+    <item find=":Puppen:" replace=""/>
+    <item find=":Loch:" replace=""/>
+    <item find=":Banknote Yen:" replace=""/>
+    <item find=":Huhn:" replace=""/>
+    <item find=":_6:" replace="₆"/>
+    <item find=":Uhr 12:" replace=""/>
+    <item find=":Klapphandy:" replace=""/>
+    <item find=":Medaille silber:" replace="賂"/>
+    <item find=":Dreiecksfläche:" replace="▲"/>
+    <item find=":Mond zunehmend:" replace="☽"/>
+    <item find=":Gesicht Zombie:" replace="履"/>
+    <item find=":Symbol CD:" replace=""/>
+    <item find=":nicht:" replace="¬"/>
+    <item find=":Blüte:" replace=""/>
+    <item find=":Aufzählung 4:" replace=""/>
+    <item find=":Aufzählung 2:" replace="◦"/>
+    <item find="seelig" replace="selig"/>
+    <item find=":Malpunkt:" replace="·"/>
+    <item find="Nunner" replace="Nummer"/>
+    <item find=":Fünfecksfläche:" replace="⬟"/>
+    <item find=":UFO:" replace=""/>
+    <item find=":Gratulation:" replace=""/>
+    <item find=":Schlafen:" replace=""/>
+    <item find=":Bergeisen:" replace="⛏"/>
+    <item find=":Trinkglas:" replace="弄"/>
+    <item find="Luete" replace="Leute"/>
+    <item find=":Denkblase rechts:" replace=""/>
+    <item find=":Ring:" replace=""/>
+    <item find=":Zeichen Uranus:" replace="♅"/>
+    <item find=":griechisches Kreuz 2:" replace="✙"/>
+    <item find=":Sigma:" replace="Σ"/>
+    <item find=":Taco:" replace=""/>
+    <item find=":Schlitten:" replace=""/>
+    <item find=":^phi 2:" replace="ᶲ"/>
+    <item find="bereis" replace="bereits"/>
+    <item find=":Videokassette:" replace=""/>
+    <item find=":Gesicht Schulterzucken:" replace="路"/>
+    <item find=":Hand OK:" replace=""/>
+    <item find=":Zeichen Jungfrau:" replace="♍"/>
+    <item find=":_n:" replace="ₙ"/>
+    <item find=":Beta:" replace="Β"/>
+    <item find=":Sprechblase:" replace=""/>
+    <item find=":Strahlen oben:" replace=""/>
+    <item find=":Dreizack:" replace=""/>
+    <item find=":Chi:" replace="Χ"/>
+    <item find=":Smiley triumphierend:" replace=""/>
+    <item find=":Aubergine:" replace=""/>
+    <item find=":Lautsprecher stumm:" replace=""/>
+    <item find=":Zeichen Blitz:" replace="☇"/>
+    <item find=":Flugzeug oben:" replace=""/>
+    <item find="erinern" replace="erinnern"/>
+    <item find=":Kobold:" replace=""/>
+    <item find=":Hamburger:" replace=""/>
+    <item find="kiene" replace="keine"/>
+    <item find=":Smiley freudig küssend:" replace=""/>
+    <item find=":Taxi:" replace=""/>
+    <item find=":^N:" replace="ᴺ"/>
+    <item find=":sigma 2:" replace="ς"/>
+    <item find=":_gamma:" replace="ᵧ"/>
+    <item find=":Ruderboot:" replace=""/>
+    <item find=":Smiley Luftkuss:" replace=""/>
+    <item find=":Vibrationsalarm:" replace=""/>
+    <item find=":Auto vorne:" replace=""/>
+    <item find=":NS:" replace="↕"/>
+    <item find=":^T:" replace="ᵀ"/>
+    <item find=":Recyclingpapier:" replace="♼"/>
+    <item find=":Herz Schleife:" replace=""/>
+    <item find=":Smiley Maske:" replace=""/>
+    <item find=":Skigebiet:" replace="⛷"/>
+    <item find="vieleicht" replace="vielleicht"/>
+    <item find=":Abrisskalender:" replace=""/>
+    <item find=":Smiley besorgt:" replace=""/>
+    <item find="deis" replace="dies"/>
+    <item find=":Pferd:" replace=""/>
+    <item find=":Burg japanisch:" replace=""/>
+    <item find=":Bus:" replace=""/>
+    <item find=":Parabolantenne:" replace=""/>
+    <item find=":Geldsack:" replace=""/>
+    <item find=":Tastatur 2:" replace=""/>
+    <item find=":^=:" replace="⁼"/>
+    <item find=":Karte Dame:" replace=""/>
+    <item find=":Keks:" replace=""/>
+    <item find=":W 2:" replace="⇐"/>
+    <item find=":Smiley verhalten:" replace="來"/>
+    <item find=":Zeigefinger unten schwarz:" replace=""/>
+    <item find="Hypotehk" replace="Hypothek"/>
+    <item find=":Optionsfeld:" replace=""/>
+    <item find=":Epsilon:" replace="Ε"/>
+    <item find=":Smiley Zunge genießerisch:" replace=""/>
+    <item find=":Feuerwehrauto:" replace=""/>
+    <item find=":Chemie:" replace="⚗"/>
+    <item find=":Dromedar:" replace=""/>
+    <item find=":kein Trinkwasser:" replace=""/>
+    <item find=":Sektgläser:" replace="壟"/>
+    <item find="arbiete" replace="arbeite"/>
+    <item find=":Löffel:" replace="籠"/>
+    <item find=":Faxgerät:" replace=""/>
+    <item find=":Trackball:" replace=""/>
+    <item find=":Käfer:" replace=""/>
+    <item find=":Elefant:" replace=""/>
+    <item find="könte" replace="könnte"/>
+    <item find=":Gesicht Cowboy:" replace="鸞"/>
+    <item find="serh" replace="sehr"/>
+    <item find=":Schekel:" replace="₪"/>
+    <item find=":Smiley gequält:" replace=""/>
+    <item find="Fraeg" replace="Frage"/>
+    <item find="habn" replace="haben"/>
+    <item find=":Smiley erleichtert:" replace=""/>
+    <item find="Komittee" replace="Komitee"/>
+    <item find=":Kräuter:" replace=""/>
+    <item find=":Briefumschlag mit Stift:" replace=""/>
+    <item find=":Filmkamera:" replace=""/>
+    <item find=":Prinzessin:" replace=""/>
+    <item find=":Helligkeit hoch:" replace=""/>
+    <item find=":Mond Viertel 1:" replace=""/>
+    <item find=":Notizblock dekoriert:" replace=""/>
+    <item find=":Gesicht Facepalm:" replace="臘"/>
+    <item find=":Gesicht abweisend:" replace=""/>
+    <item find=":Spinne:" replace=""/>
+    <item find=":Schraubenschlüssel:" replace=""/>
+    <item find=":Croissant:" replace="縷"/>
+    <item find=":Zeigefinger rechts weiß:" replace=""/>
+    <item find=":Festplatte:" replace=""/>
+    <item find=":Kirschen:" replace=""/>
+    <item find=":Vogel:" replace=""/>
+    <item find="ienige" replace="einige"/>
+    <item find=":Uhr 8:" replace=""/>
+    <item find=":Doppelkreuz:" replace="턪"/>
+    <item find=":Spielwürfel:" replace=""/>
+    <item find=":lateinisches Kreuz weiß:" replace=""/>
+    <item find=":^epsilon:" replace="ᵋ"/>
+    <item find=":Amphore:" replace=""/>
+    <item find=":Stadt:" replace=""/>
+    <item find=":Zeichen Haut sehr hell:" replace=""/>
+    <item find=":Detektiv:" replace=""/>
+    <item find=":nachts:" replace=""/>
+    <item find=":Banknote Euro:" replace=""/>
+    <item find=":Mikroskop:" replace=""/>
+    <item find=":Büroklammer:" replace=""/>
+    <item find=":Stummschaltung:" replace=""/>
+    <item find=":Brokkoli:" replace="復"/>
+    <item find=":leere Menge:" replace="∅"/>
+    <item find=":Brezel:" replace="泌"/>
+    <item find=":Damenstiefel:" replace=""/>
+    <item find=":Bürogebäude:" replace=""/>
+    <item find="Ironi" replace="Ironie"/>
+    <item find=":Diagramm fallend:" replace=""/>
+    <item find=":_2:" replace="₂"/>
+    <item find=":Klettern:" replace="輪"/>
+    <item find="ereiche" replace="erreiche"/>
+    <item find=":Oberleitungsbus:" replace=""/>
+    <item find=":Wimpel weiß:" replace=""/>
+    <item find=":Gesicht Reißverschluss:" replace="蘿"/>
+    <item find=":Dusche:" replace=""/>
+    <item find=":Pille:" replace=""/>
+    <item find="ofenbar" replace="offenbar"/>
+    <item find="dßa" replace="dass"/>
+    <item find=":SO 2:" replace="⇘"/>
+    <item find=":Theater:" replace=""/>
+    <item find="beries" replace="bereits"/>
+    <item find=":Kugelfisch:" replace=""/>
+    <item find=":Smiley schlafend:" replace=""/>
+    <item find=":Bergbau:" replace="⚒"/>
+    <item find="Garanti" replace="Garantie"/>
+    <item find=":Telefonhörer Seite:" replace=""/>
+    <item find=":Stern klein:" replace="⭒"/>
+    <item find=":Bogen:" replace=""/>
+    <item find=":Büroklammern:" replace=""/>
+    <item find=":fi:" replace="ﬁ"/>
+    <item find=":Affe Ohren verschließend:" replace=""/>
+    <item find=":Affe Mund verschließend:" replace=""/>
+    <item find=":Tischuhr:" replace="⏲"/>
+    <item find=":Sanduhr:" replace="⌛"/>
+    <item find=":Sarg:" replace="⚰"/>
+    <item find=":Zeichen Wassermann:" replace="♒"/>
+    <item find=":Kette:" replace=""/>
+    <item find=":Schneeflocke:" replace="❄"/>
+    <item find=":Megaphon:" replace=""/>
+    <item find=":_m:" replace="ₘ"/>
+    <item find=":Smiley schimpfend:" replace="郎"/>
+    <item find=":Ying Yang:" replace="☯"/>
+    <item find=":Helm:" replace="⛑"/>
+    <item find=":Omega:" replace="Ω"/>
+    <item find=":Wurzel:" replace="√"/>
+    <item find=":Sitz:" replace=""/>
+    <item find=":Sanduhr 2:" replace="⏳"/>
+    <item find=":\\:" replace="∖"/>
+    <item find=":Waggon:" replace=""/>
+    <item find=":Smiley übermüdet:" replace=""/>
+    <item find="Dockument" replace="Dokument"/>
+    <item find=":Uhr 3.30:" replace=""/>
+    <item find="Stenr" replace="Stern"/>
+    <item find="errinnern" replace="erinnern"/>
+    <item find=":Wurzel 3:" replace="∛"/>
+    <item find=":Haus verfallen:" replace=""/>
+    <item find=":Smiley schläfrig:" replace=""/>
+    <item find=":Moyai Statue:" replace=""/>
+    <item find=":_x:" replace="ₓ"/>
+    <item find=":Schrift vergrößern:" replace=""/>
+    <item find="wärend" replace="während"/>
+    <item find=":Herz schwarz 2:" replace=""/>
+    <item find=":Uhr 1.30:" replace=""/>
+    <item find=":Lautsprecher:" replace=""/>
+    <item find=":Schal:" replace="泥"/>
+    <item find=":parallel:" replace="∥"/>
+    <item find=":Fußgänger verboten:" replace=""/>
+    <item find=":Lupe 2:" replace=""/>
+    <item find=":Malteserkreuz:" replace="✠"/>
+    <item find=":Flugzeug:" replace=""/>
+    <item find=":kleines Element:" replace="∊"/>
+    <item find="Jare" replace="Jahre"/>
+    <item find=":Mond abnehmend:" replace="☾"/>
+    <item find=":Streifenhörnchen:" replace=""/>
+    <item find=":Obermenge:" replace="⊃"/>
+    <item find=":Pause:" replace="⏸"/>
+    <item find="Ieronie" replace="Ironie"/>
+    <item find=":Fußballtor:" replace="聾"/>
+    <item find=":Tennis:" replace=""/>
+    <item find="intriegieren" replace="intrigieren"/>
+    <item find=":Kreisfläche groß:" replace="⬤"/>
+    <item find=":kein Element:" replace="∉"/>
+    <item find=":Radioaktivität:" replace="☢"/>
+    <item find=":Gesicht lächelnd:" replace=""/>
+    <item find=":Hermesstab:" replace="☤"/>
+    <item find=":_v:" replace="ᵥ"/>
+    <item find=":Stecker:" replace=""/>
+    <item find=":Kartei:" replace=""/>
+    <item find=":Achtung:" replace="☡"/>
+    <item find=":Zeigefinger rechts:" replace="☞"/>
+    <item find=":? 2:" replace="❔"/>
+    <item find=":Stift unten rechts:" replace="✎"/>
+    <item find="dachet" replace="dachte"/>
+    <item find=":Hemd:" replace=""/>
+    <item find=":-+:" replace="∓"/>
+    <item find=":Aktenkoffer:" replace=""/>
+    <item find=":Oger:" replace=""/>
+    <item find=":Hand unten:" replace=""/>
+    <item find=":Haus:" replace=""/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="Bed."/>
+    <word exception="u.Ä."/>
+    <word exception="dtsch."/>
+    <word exception="urspr."/>
+    <word exception="gest."/>
+    <word exception="Dez."/>
+    <word exception="Mi."/>
+    <word exception="bzw."/>
+    <word exception="Prof."/>
+    <word exception="Nr."/>
+    <word exception="ff."/>
+    <word exception="östl."/>
+    <word exception="Jg."/>
+    <word exception="Aufl."/>
+    <word exception="Pos."/>
+    <word exception="o.Ä."/>
+    <word exception="orth."/>
+    <word exception="Abk."/>
+    <word exception="Bez."/>
+    <word exception="e.G."/>
+    <word exception="westl."/>
+    <word exception="~ges."/>
+    <word exception="erw."/>
+    <word exception="Verz."/>
+    <word exception="Wdhlg."/>
+    <word exception="Anm."/>
+    <word exception="St."/>
+    <word exception="ungew."/>
+    <word exception="priv."/>
+    <word exception="lfd."/>
+    <word exception="Jgg."/>
+    <word exception="einschl."/>
+    <word exception="Nov."/>
+    <word exception="ges."/>
+    <word exception="Sept."/>
+    <word exception="Bd."/>
+    <word exception="Dr."/>
+    <word exception="bzgl."/>
+    <word exception="nördl."/>
+    <word exception="ca."/>
+    <word exception="Jan."/>
+    <word exception="Abs."/>
+    <word exception="Pfg."/>
+    <word exception="So."/>
+    <word exception="dgl."/>
+    <word exception="geschl."/>
+    <word exception="MwSt."/>
+    <word exception="nat."/>
+    <word exception="unterw."/>
+    <word exception="amerik."/>
+    <word exception="wö."/>
+    <word exception="ugs."/>
+    <word exception="prov."/>
+    <word exception="rer."/>
+    <word exception="Feb."/>
+    <word exception="wg."/>
+    <word exception="Sep."/>
+    <word exception="Abschn."/>
+    <word exception="Apr."/>
+    <word exception="südl."/>
+    <word exception="dzt."/>
+    <word exception="wahrsch."/>
+    <word exception="gem."/>
+    <word exception="Okt."/>
+    <word exception="max."/>
+    <word exception="Nrn."/>
+    <word exception="Ing."/>
+    <word exception="tel."/>
+    <word exception="Vol."/>
+    <word exception="usw."/>
+    <word exception="Ausschl."/>
+    <word exception="Mo."/>
+    <word exception="z.Zt."/>
+    <word exception="~nr."/>
+    <word exception="dt."/>
+    <word exception="Aug."/>
+    <word exception="evtl."/>
+    <word exception="geb."/>
+    <word exception="Stck."/>
+    <word exception="~fkt."/>
+    <word exception="orig."/>
+    <word exception="e.V."/>
+    <word exception="zus."/>
+    <word exception="Adr."/>
+    <word exception="Ztg."/>
+    <word exception="Hbf."/>
+    <word exception="bes."/>
+    <word exception="Jh."/>
+    <word exception="Di."/>
+    <word exception="vgl."/>
+    <word exception="Str."/>
+    <word exception="z.B."/>
+    <word exception="Dipl."/>
+    <word exception="min."/>
+    <word exception="zzgl."/>
+    <word exception="Do."/>
+    <word exception="ggf."/>
+    <word exception="~str."/>
+    <word exception="Vollm."/>
+    <word exception="Mio."/>
+    <word exception="etc."/>
+    <word exception="Sa."/>
+    <word exception="best."/>
+    <word exception="Org."/>
+    <word exception="fam."/>
+    <word exception="Std."/>
+    <word exception="Abt."/>
+    <word exception="med."/>
+    <word exception="u.a."/>
+    <word exception="Whg."/>
+    <word exception="ehem."/>
+    <word exception="gesch."/>
+    <word exception="Durchschn."/>
+    <word exception="Anh."/>
+    <word exception="Univ."/>
+    <word exception="neg."/>
+    <word exception="tgl."/>
+    <word exception="Fr."/>
+    <word exception="allg."/>
+    <word exception="Art."/>
+    <word exception="Vorn."/>
+    <word exception="Wdh."/>
+    <word exception="möbl."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="LPs"/>
+    <word exception="VSt"/>
+    <word exception="EStG"/>
+    <word exception="IGs"/>
+    <word exception="ICs"/>
+    <word exception="MCs"/>
+    <word exception="KSt"/>
+    <word exception="USt"/>
+    <word exception="KGaA"/>
+    <word exception="AGs"/>
+    <word exception="TVs"/>
+    <word exception="KStG"/>
+    <word exception="CDs"/>
+    <word exception="ESt"/>
+    <word exception="BAföG"/>
+    <word exception="PCs"/>
+    <word exception="RAe"/>
+    <word exception="WGs"/>
+    <word exception="UStG"/>
+    <word exception="OOo"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
 </Word>

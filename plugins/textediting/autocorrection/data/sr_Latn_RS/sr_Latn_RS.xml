@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find="1/2" replace="½"/>
+    <item find="1/4" replace="¼"/>
+    <item find="&lt;-&gt;" replace="↔"/>
+    <item find=".*(R)" replace="®"/>
+    <item find="&lt;--" replace="←"/>
+    <item find=".*&lt;-.*" replace="←"/>
+    <item find="--&gt;" replace="→"/>
+    <item find=".*-&gt;.*" replace="→"/>
+    <item find="&lt;--&gt;" replace="↔"/>
+    <item find=".*(C)" replace="©"/>
+    <item find=".*(tm)" replace="™"/>
+    <item find="3/4" replace="¾"/>
+    <item find=".*..." replace="…"/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="apr."/>
+    <word exception="mn."/>
+    <word exception="god."/>
+    <word exception="engl."/>
+    <word exception="tzv."/>
+    <word exception="pril."/>
+    <word exception="mat."/>
+    <word exception="stud."/>
+    <word exception="muz."/>
+    <word exception="o.m."/>
+    <word exception="gimn."/>
+    <word exception="itd."/>
+    <word exception="prid."/>
+    <word exception="fr."/>
+    <word exception="instr."/>
+    <word exception="vok."/>
+    <word exception="razr."/>
+    <word exception="npr."/>
+    <word exception="tj."/>
+    <word exception="prav."/>
+    <word exception="jedn."/>
+    <word exception="prof."/>
+    <word exception="nepr."/>
+    <word exception="v."/>
+    <word exception="lok."/>
+    <word exception="ist."/>
+    <word exception="okt."/>
+    <word exception="pol."/>
+    <word exception="dipl."/>
+    <word exception="br."/>
+    <word exception="mar."/>
+    <word exception="aku."/>
+    <word exception="nom."/>
+    <word exception="sep."/>
+    <word exception="bot."/>
+    <word exception="o.g."/>
+    <word exception="jan."/>
+    <word exception="rim."/>
+    <word exception="feb."/>
+    <word exception="a.d."/>
+    <word exception="g.p.n.e."/>
+    <word exception="mit."/>
+    <word exception="dr."/>
+    <word exception="lat."/>
+    <word exception="geogr."/>
+    <word exception="dat."/>
+    <word exception="v.d."/>
+    <word exception="sr."/>
+    <word exception="hem."/>
+    <word exception="m."/>
+    <word exception="str."/>
+    <word exception="zool."/>
+    <word exception="gen."/>
+    <word exception="ž."/>
+    <word exception="žar."/>
+    <word exception="d.o.o."/>
+    <word exception="arh."/>
+    <word exception="odg."/>
+    <word exception="teol."/>
+    <word exception="šk."/>
+    <word exception="uč."/>
+    <word exception="astr."/>
+    <word exception="pokr."/>
+    <word exception="bibl."/>
+    <word exception="avg."/>
+    <word exception="dec."/>
+    <word exception="g.n.e."/>
+    <word exception="med."/>
+    <word exception="g."/>
+    <word exception="gram."/>
+    <word exception="fig."/>
+    <word exception="r."/>
+    <word exception="geom."/>
+    <word exception="gr."/>
+    <word exception="vid."/>
+    <word exception="čl."/>
+    <word exception="sv."/>
+    <word exception="org."/>
+    <word exception="sl."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="IPv4"/>
+    <word exception="MHz"/>
+    <word exception="EUnet"/>
+    <word exception="KHz"/>
+    <word exception="GHz"/>
+    <word exception="FBiH"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

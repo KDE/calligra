@@ -1,0 +1,1606 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find=":И2:" replace="⇒"/>
+    <item find=":пощенска станция:" replace=""/>
+    <item find=":бегач:" replace=""/>
+    <item find=":дипломиране:" replace=""/>
+    <item find=":слушалки:" replace=""/>
+    <item find=".*(tm)" replace="™"/>
+    <item find=":йога:" replace="律"/>
+    <item find=":целувка3:" replace=""/>
+    <item find=":кон3:" replace=""/>
+    <item find=":спане:" replace=""/>
+    <item find=":голф:" replace=""/>
+    <item find=":око:" replace=""/>
+    <item find=":изходяща поща:" replace=""/>
+    <item find=":любов:" replace=""/>
+    <item find=":празна бележка:" replace=""/>
+    <item find=":ходила:" replace=""/>
+    <item find=":бенто:" replace=""/>
+    <item find=":вампир:" replace="率"/>
+    <item find=":отметка2:" replace="✔"/>
+    <item find=":отрицание:" replace="¬"/>
+    <item find=":тъмни очила 2:" replace=""/>
+    <item find=":празна страница:" replace=""/>
+    <item find=":!2:" replace="❗"/>
+    <item find=":надолу3:" replace=""/>
+    <item find=":дъждовно:" replace=""/>
+    <item find=":пси:" replace="ψ"/>
+    <item find=":масаж:" replace=""/>
+    <item find=":бюлетина:" replace=""/>
+    <item find=":делта:" replace="δ"/>
+    <item find=":бял цар:" replace="♔"/>
+    <item find=":капки пот:" replace=""/>
+    <item find=":селфи:" replace="盧"/>
+    <item find="&lt;&lt;" replace="«"/>
+    <item find=":огън:" replace=""/>
+    <item find=":нагоре2:" replace=""/>
+    <item find=":супа:" replace="北"/>
+    <item find=":тротинетка:" replace=""/>
+    <item find=":обувка2:" replace=""/>
+    <item find=":пощенска кутия 5:" replace=""/>
+    <item find=":Слънце:" replace="☉"/>
+    <item find=":лъчи4:" replace=""/>
+    <item find=":!?:" replace="⁉"/>
+    <item find=":таймер:" replace="⏲"/>
+    <item find=":тениска:" replace=""/>
+    <item find=":наляво6:" replace=""/>
+    <item find=":череп:" replace=""/>
+    <item find=":пудел:" replace=""/>
+    <item find=":двойка:" replace=""/>
+    <item find=":турска лира:" replace="₺"/>
+    <item find=":календар3:" replace=""/>
+    <item find=":кръст:" replace="†"/>
+    <item find=":костюм:" replace=""/>
+    <item find=":примка2:" replace="➿"/>
+    <item find=":батерия:" replace=""/>
+    <item find=":видеокасета:" replace=""/>
+    <item find=":църква:" replace="⛪"/>
+    <item find=":снежен човек:" replace="☃"/>
+    <item find=":кънка:" replace="⛸"/>
+    <item find=":самолет4:" replace=""/>
+    <item find=":чадър:" replace="☂"/>
+    <item find=":вълк:" replace=""/>
+    <item find=":_i:" replace="ᵢ"/>
+    <item find=":работник:" replace=""/>
+    <item find=":3 ч:" replace=""/>
+    <item find=":русалка:" replace="隆"/>
+    <item find=":да2:" replace=""/>
+    <item find=":нло:" replace=""/>
+    <item find=":ракета:" replace=""/>
+    <item find="odf" replace="ODF"/>
+    <item find=":джокер:" replace=""/>
+    <item find=":безкрайност:" replace="∞"/>
+    <item find=":пиле:" replace=""/>
+    <item find=":синагога:" replace=""/>
+    <item find=":безизразно лице:" replace=""/>
+    <item find=":музей:" replace=""/>
+    <item find=":/:" replace="∕"/>
+    <item find=":10.30:" replace=""/>
+    <item find=":гама:" replace="γ"/>
+    <item find=":поничка:" replace=""/>
+    <item find=":бяло цвете:" replace=""/>
+    <item find=":филм:" replace=""/>
+    <item find=":окачена железница:" replace=""/>
+    <item find=":къща:" replace=""/>
+    <item find=":пощенска кутия:" replace=""/>
+    <item find=":спагети:" replace=""/>
+    <item find=":бронз:" replace="雷"/>
+    <item find=":котка:" replace=""/>
+    <item find=":момиче:" replace=""/>
+    <item find=":успоредно на:" replace="∥"/>
+    <item find=":поле за отметка 4:" replace=""/>
+    <item find=":музика:" replace=""/>
+    <item find=":слънчоглед:" replace=""/>
+    <item find=":плик:" replace="✉"/>
+    <item find=":мобилен телефон 2:" replace=""/>
+    <item find=":молив2:" replace="✏"/>
+    <item find=":призрак:" replace=""/>
+    <item find=":Тета:" replace="Θ"/>
+    <item find=":подсмихната котка:" replace=""/>
+    <item find=":диез:" replace="♯"/>
+    <item find=":баня:" replace=""/>
+    <item find=":хамстер:" replace=""/>
+    <item find=":рециклиране:" replace="♲"/>
+    <item find=":детелина:" replace=""/>
+    <item find=":мъгливо:" replace=""/>
+    <item find=":балонче2:" replace=""/>
+    <item find=":фонтан:" replace="⛲"/>
+    <item find=":ромб с точка:" replace=""/>
+    <item find=":хапче:" replace=""/>
+    <item find=":радост:" replace=""/>
+    <item find=":сърп и чук:" replace="☭"/>
+    <item find=":видеоигра:" replace=""/>
+    <item find=".*(R)" replace="®"/>
+    <item find=":надолу6:" replace=""/>
+    <item find=":плик2:" replace=""/>
+    <item find=":вимпел:" replace=""/>
+    <item find=":лъв2:" replace="女"/>
+    <item find=":парти4:" replace=""/>
+    <item find=":сума:" replace="∑"/>
+    <item find=":не надмножество:" replace="⊅"/>
+    <item find=":ин-ян:" replace="☯"/>
+    <item find=":първа четвърт:" replace=""/>
+    <item find=":данго:" replace=""/>
+    <item find=":глобус3:" replace=""/>
+    <item find=":планина2:" replace=""/>
+    <item find=":мъж:" replace=""/>
+    <item find=":звънец3:" replace=""/>
+    <item find=":поп:" replace=""/>
+    <item find=":Мю:" replace="Μ"/>
+    <item find=":цяла нота:" replace="텝"/>
+    <item find=":сърце украса:" replace=""/>
+    <item find=":високоговорител:" replace=""/>
+    <item find=":коала:" replace=""/>
+    <item find=":^4:" replace="⁴"/>
+    <item find=":урна:" replace="⚱"/>
+    <item find=":.:" replace="…"/>
+    <item find=":не подмножество:" replace="⊄"/>
+    <item find=":стоп:" replace=""/>
+    <item find=":Йота:" replace="Ι"/>
+    <item find=":карти:" replace=""/>
+    <item find=":проектор:" replace=""/>
+    <item find=":плъх:" replace=""/>
+    <item find=":_r:" replace="ᵣ"/>
+    <item find=":лира:" replace="₤"/>
+    <item find=":чай:" replace=""/>
+    <item find=":клоун:" replace="嵐"/>
+    <item find=":сандал:" replace=""/>
+    <item find=":момче:" replace=""/>
+    <item find=":не споменавам зло:" replace=""/>
+    <item find=":С2:" replace="⇑"/>
+    <item find=":зар3:" replace="⚂"/>
+    <item find=":корона:" replace=""/>
+    <item find=":кожа1:" replace=""/>
+    <item find=":^фи:" replace="ᵠ"/>
+    <item find=":бележка3:" replace=""/>
+    <item find=":^x:" replace="ˣ"/>
+    <item find=":облачно:" replace=""/>
+    <item find=":цвете2:" replace="鹿"/>
+    <item find=":факс:" replace=""/>
+    <item find=":душ:" replace=""/>
+    <item find=":11 ч:" replace=""/>
+    <item find=":кану:" replace=""/>
+    <item find=":катинар:" replace=""/>
+    <item find=":пясъчен часовник:" replace="⌛"/>
+    <item find=":везна:" replace="⚖"/>
+    <item find=":мъгла:" replace=""/>
+    <item find=":празни бележки:" replace=""/>
+    <item find=":йена2:" replace=""/>
+    <item find=":факс2:" replace=""/>
+    <item find=":крава2:" replace=""/>
+    <item find=":^бета:" replace="ᵝ"/>
+    <item find=":фея:" replace="栗"/>
+    <item find=":интеграл3:" replace="∭"/>
+    <item find=":домино:" replace=""/>
+    <item find=":5/8:" replace="⅝"/>
+    <item find=":дъга:" replace=""/>
+    <item find=":Ета:" replace="Η"/>
+    <item find=":дама:" replace=""/>
+    <item find=":овен2:" replace=""/>
+    <item find=":имейл:" replace=""/>
+    <item find=":правоъгълник:" replace="▭"/>
+    <item find=":подсмихване:" replace=""/>
+    <item find=":комета:" replace="☄"/>
+    <item find=":земя:" replace="♁"/>
+    <item find=":сечение:" replace="∩"/>
+    <item find=":изгрев2:" replace=""/>
+    <item find=":2 ч:" replace=""/>
+    <item find=":двоен диез:" replace="턪"/>
+    <item find=":^5:" replace="⁵"/>
+    <item find=":щастие:" replace=""/>
+    <item find=":целуваща котка:" replace=""/>
+    <item find=":зебра:" replace="煉"/>
+    <item find=":успоредник2:" replace="▰"/>
+    <item find=":сепия:" replace="撚"/>
+    <item find=":хибискус:" replace=""/>
+    <item find=":химикалка:" replace=""/>
+    <item find=":юмрук4:" replace="卵"/>
+    <item find=":розетка2:" replace=""/>
+    <item find=":^A:" replace="ᴬ"/>
+    <item find=":пиленце:" replace=""/>
+    <item find=":надясно6:" replace=""/>
+    <item find=":произведение:" replace="∏"/>
+    <item find=":объркване:" replace=""/>
+    <item find=":&gt;=:" replace="≥"/>
+    <item find=":калинка:" replace=""/>
+    <item find=":^7:" replace="⁷"/>
+    <item find=":пушенето забранено:" replace=""/>
+    <item find=":коледа:" replace=""/>
+    <item find=":диаграма5:" replace=""/>
+    <item find=":крокодил:" replace=""/>
+    <item find=":тежкоатлет:" replace=""/>
+    <item find=":&lt;=:" replace="≤"/>
+    <item find=":птица:" replace=""/>
+    <item find=":шестоъгълник:" replace="⬡"/>
+    <item find=":въжена линия:" replace=""/>
+    <item find=":джамия:" replace=""/>
+    <item find=":_8:" replace="₈"/>
+    <item find=":рамен:" replace=""/>
+    <item find=":обувка3:" replace=""/>
+    <item find=":книга:" replace=""/>
+    <item find=":консерва:" replace="參"/>
+    <item find=":и:" replace="∧"/>
+    <item find=":сърце2:" replace=""/>
+    <item find=":шал:" replace="泥"/>
+    <item find=":дивиди:" replace=""/>
+    <item find=":хризма:" replace="☧"/>
+    <item find=":бюст:" replace=""/>
+    <item find=":ноти:" replace="♫"/>
+    <item find=":не:" replace=""/>
+    <item find=":полицейска кола 2:" replace=""/>
+    <item find=":кубичен корен:" replace="∛"/>
+    <item find="1/2" replace="½"/>
+    <item find=":релси:" replace=""/>
+    <item find=":къща3:" replace=""/>
+    <item find=":вол:" replace=""/>
+    <item find=":театър:" replace=""/>
+    <item find=":поле за отметка 6:" replace=""/>
+    <item find=":наляво2:" replace=""/>
+    <item find=":кърлинг:" replace="樓"/>
+    <item find=":пощенска кутия 4:" replace=""/>
+    <item find=":правоъгълник2:" replace="▬"/>
+    <item find=":надясно3:" replace="☛"/>
+    <item find=":сигма:" replace="σ"/>
+    <item find=":чаша3:" replace="弄"/>
+    <item find=":отворен катинар:" replace=""/>
+    <item find=":тоалетна2:" replace=""/>
+    <item find=":банка:" replace=""/>
+    <item find=":яхния:" replace=""/>
+    <item find=":пръст:" replace=""/>
+    <item find=":семейство:" replace=""/>
+    <item find=":полицейска лампа:" replace=""/>
+    <item find=":':" replace="’"/>
+    <item find=":риба:" replace=""/>
+    <item find=":намаляващ полумесец:" replace=""/>
+    <item find=":футбол2:" replace="聾"/>
+    <item find=":9 ч:" replace=""/>
+    <item find=":език2:" replace=""/>
+    <item find=":пица:" replace=""/>
+    <item find=":изкуство:" replace=""/>
+    <item find=":локомотив2:" replace=""/>
+    <item find=":боулинг:" replace=""/>
+    <item find=":_7:" replace="₇"/>
+    <item find=":ферибот:" replace="⛴"/>
+    <item find=":велосипед:" replace=""/>
+    <item find=":хлъзгав път:" replace="⛐"/>
+    <item find=":бенгалски огън:" replace=""/>
+    <item find=":двойка2:" replace=""/>
+    <item find=":свитък:" replace=""/>
+    <item find=":целуване:" replace=""/>
+    <item find=":стереоуредба:" replace=""/>
+    <item find=":анкх:" replace="☥"/>
+    <item find=":контрола:" replace=""/>
+    <item find=":дъжд2:" replace="⛆"/>
+    <item find=":длани:" replace="爐"/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find=":слушалка4:" replace=""/>
+    <item find=":предупреждение:" replace="⚠"/>
+    <item find=":замък:" replace=""/>
+    <item find=":балонче8:" replace=""/>
+    <item find=":4 ч:" replace=""/>
+    <item find=":готвене:" replace=""/>
+    <item find=":документ4:" replace=""/>
+    <item find=":акула:" replace="麗"/>
+    <item find=":_):" replace="₎"/>
+    <item find=":бекон:" replace="肋"/>
+    <item find=":панделка2:" replace=""/>
+    <item find=":инч:" replace="″"/>
+    <item find=":лупа2:" replace=""/>
+    <item find=":_j:" replace="ⱼ"/>
+    <item find="1/4" replace="¼"/>
+    <item find=":буря2:" replace="☈"/>
+    <item find=":да:" replace=""/>
+    <item find=":гневно лице:" replace=""/>
+    <item find=":пистолет:" replace=""/>
+    <item find=":петел:" replace=""/>
+    <item find=":наближаващо пълнолуние:" replace=""/>
+    <item find=":луна2:" replace=""/>
+    <item find=":палма:" replace=""/>
+    <item find=":оризова топка:" replace=""/>
+    <item find=":бюстове:" replace=""/>
+    <item find=":риба2:" replace=""/>
+    <item find=":бурито:" replace=""/>
+    <item find=":водолей:" replace="♒"/>
+    <item find=":петоъгълник:" replace="⬠"/>
+    <item find=":ръка3:" replace=""/>
+    <item find=":лъчи2:" replace=""/>
+    <item find=":вятърни камбанки:" replace=""/>
+    <item find=":папка:" replace=""/>
+    <item find=":изчервяване:" replace=""/>
+    <item find=":балонче3:" replace=""/>
+    <item find=":7/8:" replace="⅞"/>
+    <item find=":маджонг:" replace=""/>
+    <item find=":x:" replace="×"/>
+    <item find=":фехтовач:" replace="鷺"/>
+    <item find=":пощенска кутия 2:" replace=""/>
+    <item find=":поле за отметка:" replace="☐"/>
+    <item find=":наляво5:" replace=""/>
+    <item find=":телефон3:" replace=""/>
+    <item find=":нептун:" replace="♆"/>
+    <item find=":храм:" replace=""/>
+    <item find=":медал2:" replace=""/>
+    <item find="желате" replace="желаете"/>
+    <item find=":ноти2:" replace="♬"/>
+    <item find=":^D:" replace="ᴰ"/>
+    <item find=":балонче6:" replace=""/>
+    <item find=":парти2:" replace=""/>
+    <item find=":тържествуване:" replace=""/>
+    <item find=":влизането забранено:" replace="⛔"/>
+    <item find=":отегчение:" replace=""/>
+    <item find=":връзка:" replace=""/>
+    <item find=":лимон:" replace=""/>
+    <item find=":нагоре3:" replace=""/>
+    <item find=":фойерверки:" replace=""/>
+    <item find=":букет2:" replace=""/>
+    <item find=":яйце:" replace="讀"/>
+    <item find=":ом:" replace=""/>
+    <item find=":квадратен корен:" replace="√"/>
+    <item find=":плачеща котка:" replace=""/>
+    <item find=":11.30:" replace=""/>
+    <item find=":омега:" replace="ω"/>
+    <item find=":скорпион:" replace="♏"/>
+    <item find=":палто:" replace="痢"/>
+    <item find=":перо:" replace="✑"/>
+    <item find=":котка2:" replace=""/>
+    <item find=":ръка2:" replace=""/>
+    <item find=":самолет3:" replace=""/>
+    <item find=":с главата надолу:" replace=""/>
+    <item find=":картотека:" replace=""/>
+    <item find=":имп:" replace=""/>
+    <item find=":жезъл:" replace="⚚"/>
+    <item find=":гущер:" replace="年"/>
+    <item find=":киви:" replace="諾"/>
+    <item find=":мрежа:" replace=""/>
+    <item find=":каро:" replace="♦"/>
+    <item find=":панда:" replace=""/>
+    <item find=":вестник:" replace=""/>
+    <item find=":мръщене2:" replace=""/>
+    <item find=":окей3:" replace=""/>
+    <item find=":3/4:" replace="¾"/>
+    <item find=":страница4:" replace=""/>
+    <item find=":звезда:" replace="★"/>
+    <item find=":!!:" replace="‼"/>
+    <item find=":вулкан:" replace=""/>
+    <item find=":гривна:" replace="₴"/>
+    <item find=":крикет:" replace=""/>
+    <item find=":ботуш:" replace=""/>
+    <item find=":x2:" replace="❌"/>
+    <item find=":каро2:" replace="♢"/>
+    <item find=":ню:" replace="ν"/>
+    <item find=":отметка5:" replace=""/>
+    <item find=":автобус2:" replace=""/>
+    <item find=":свобода:" replace=""/>
+    <item find=":залез:" replace=""/>
+    <item find=":режисьорска клапа:" replace=""/>
+    <item find=":хотел2:" replace=""/>
+    <item find=":напитка:" replace="磻"/>
+    <item find=":кораб2:" replace=""/>
+    <item find=":ухилено лице:" replace=""/>
+    <item find=":млечен път:" replace=""/>
+    <item find=":досада:" replace=""/>
+    <item find=":пилешко бутче:" replace=""/>
+    <item find=":тъмни очила:" replace=""/>
+    <item find=":бор:" replace=""/>
+    <item find=":яйчен крем:" replace=""/>
+    <item find=":_p:" replace="ₚ"/>
+    <item find=":начинаещ:" replace=""/>
+    <item find=":маска:" replace=""/>
+    <item find=":пощенска тръба:" replace=""/>
+    <item find=":възрастна жена:" replace=""/>
+    <item find=":шоколад:" replace=""/>
+    <item find=":рожден ден:" replace=""/>
+    <item find=":кръг:" replace="○"/>
+    <item find=":дискета3:" replace=""/>
+    <item find=":квадрат2:" replace="■"/>
+    <item find=":кристална топка:" replace=""/>
+    <item find=":^g:" replace="ᵍ"/>
+    <item find=":Фарси:" replace="☫"/>
+    <item find=":слънце2:" replace=""/>
+    <item find=":ключ сол:" replace="턞"/>
+    <item find=":спатия2:" replace="♧"/>
+    <item find=":fl:" replace="ﬂ"/>
+    <item find=":балонче4:" replace=""/>
+    <item find=":седалка:" replace=""/>
+    <item find=":мръщене:" replace=""/>
+    <item find=":мишка4:" replace=""/>
+    <item find=":рокля:" replace=""/>
+    <item find=":ученическа чанта:" replace=""/>
+    <item find=":^O:" replace="ᴼ"/>
+    <item find=":замък2:" replace=""/>
+    <item find=":боклук:" replace=""/>
+    <item find=":сноубордист:" replace=""/>
+    <item find=":кихане:" replace="蠟"/>
+    <item find=":шестнадесетина нота:" replace="텡"/>
+    <item find=":метро:" replace=""/>
+    <item find=":пиано:" replace=""/>
+    <item find=":_=:" replace="₌"/>
+    <item find=":православен кръст:" replace="☦"/>
+    <item find=":трактор:" replace=""/>
+    <item find=":кимоно:" replace=""/>
+    <item find=":пиленце2:" replace=""/>
+    <item find=":ромб:" replace="◊"/>
+    <item find=":куче:" replace=""/>
+    <item find=":Капа:" replace="Κ"/>
+    <item find=":език4:" replace=""/>
+    <item find=":микрофон:" replace=""/>
+    <item find=":календар2:" replace=""/>
+    <item find=":малка звезда 2:" replace="⭑"/>
+    <item find=":рак:" replace="♋"/>
+    <item find=":мълния:" replace=""/>
+    <item find=":близнаци:" replace="♊"/>
+    <item find=":седмосвещник:" replace=""/>
+    <item find=":осмина пауза:" replace="턾"/>
+    <item find=":примка:" replace="➰"/>
+    <item find=":кааба:" replace=""/>
+    <item find=":пчела:" replace=""/>
+    <item find=":йота:" replace="ι"/>
+    <item find=":триъгълник за списък:" replace="‣"/>
+    <item find=":бележка:" replace=""/>
+    <item find=":усмивка3:" replace=""/>
+    <item find=":гримаса:" replace=""/>
+    <item find=":пауза:" replace="⏸"/>
+    <item find=":късмет:" replace="爛"/>
+    <item find=":часовник:" replace="⌚"/>
+    <item find=":шейна:" replace=""/>
+    <item find=":пари2:" replace=""/>
+    <item find=":кушетка:" replace=""/>
+    <item find=":ухо:" replace=""/>
+    <item find=":мегафон2:" replace=""/>
+    <item find=":мълния3:" replace="☇"/>
+    <item find=":3/8:" replace="⅜"/>
+    <item find=":молив:" replace="✎"/>
+    <item find=":хокей2:" replace=""/>
+    <item find=":двоен бемол:" replace="턫"/>
+    <item find=":_3:" replace="₃"/>
+    <item find=":отпътуване:" replace=""/>
+    <item find=":^U:" replace="ᵁ"/>
+    <item find=":победа2:" replace=""/>
+    <item find=":цветче2:" replace=""/>
+    <item find=":пясъчен часовник 2:" replace="⏳"/>
+    <item find=":слон:" replace=""/>
+    <item find=":капка2:" replace=""/>
+    <item find=":фотоапарат:" replace=""/>
+    <item find=":елф:" replace="利"/>
+    <item find=":успоредник:" replace="▱"/>
+    <item find=":^t:" replace="ᵗ"/>
+    <item find=":ръкавици:" replace="理"/>
+    <item find=":^R:" replace="ᴿ"/>
+    <item find=":кокосов орех:" replace="便"/>
+    <item find=":^-:" replace="⁻"/>
+    <item find=":6 ч:" replace=""/>
+    <item find=":катерач:" replace="輪"/>
+    <item find=":латински кръст 2:" replace=""/>
+    <item find=":стоп2:" replace="⏹"/>
+    <item find=":куче2:" replace=""/>
+    <item find=":победа:" replace="✌"/>
+    <item find=":палачинки:" replace="丹"/>
+    <item find=":^L:" replace="ᴸ"/>
+    <item find=":^V:" replace="ⱽ"/>
+    <item find=":бикини:" replace=""/>
+    <item find=":принцеса:" replace=""/>
+    <item find=":плик7:" replace=""/>
+    <item find=":медицина:" replace="⚕"/>
+    <item find=":триумф:" replace=""/>
+    <item find=":трофей:" replace=""/>
+    <item find=":слушалка:" replace=""/>
+    <item find=":охлюв:" replace=""/>
+    <item find=":купа:" replace="♥"/>
+    <item find=":скиор:" replace="⛷"/>
+    <item find=":джойстик:" replace=""/>
+    <item find=":Фи:" replace="Φ"/>
+    <item find=":чук:" replace=""/>
+    <item find=":балонче10:" replace=""/>
+    <item find=":_9:" replace="₉"/>
+    <item find=":листо:" replace=""/>
+    <item find=":развод:" replace="⚮"/>
+    <item find=":грозде:" replace=""/>
+    <item find=":цигулка:" replace=""/>
+    <item find="пипилянка" replace="пепелянка"/>
+    <item find=":принтер:" replace=""/>
+    <item find=":кръст2:" replace="‡"/>
+    <item find=":леопард:" replace=""/>
+    <item find=":ножица2:" replace="✄"/>
+    <item find=":ипсилон:" replace="υ"/>
+    <item find=":обмяна:" replace=""/>
+    <item find=":цяла пауза:" replace="턻"/>
+    <item find=":документ3:" replace=""/>
+    <item find=":Пси:" replace="Ψ"/>
+    <item find=":шестоъгълник2:" replace="⬢"/>
+    <item find=":Ро:" replace="Ρ"/>
+    <item find=":промил:" replace="‰"/>
+    <item find=":последна четвърт:" replace=""/>
+    <item find=":силен плач:" replace=""/>
+    <item find=":извънземно:" replace=""/>
+    <item find=":голям кръг:" replace="◯"/>
+    <item find=":малтийски кръст:" replace="✠"/>
+    <item find=":кабарче:" replace=""/>
+    <item find=":^k:" replace="ᵏ"/>
+    <item find=":сребро:" replace="賂"/>
+    <item find=":старец:" replace="陸"/>
+    <item find=":_u:" replace="ᵤ"/>
+    <item find=":лале:" replace=""/>
+    <item find=":звънец:" replace=""/>
+    <item find=":хелоуин:" replace=""/>
+    <item find=":прегръдка:" replace="珞"/>
+    <item find=":пика:" replace="♠"/>
+    <item find=":оден:" replace=""/>
+    <item find=":новолуние:" replace=""/>
+    <item find=":вятър:" replace=""/>
+    <item find=":знаме4:" replace="⚐"/>
+    <item find=":намръщен човек:" replace=""/>
+    <item find=":^тета:" replace="ᶿ"/>
+    <item find=":риби:" replace="♓"/>
+    <item find=":ноти3:" replace=""/>
+    <item find=":пика2:" replace="♤"/>
+    <item find=":интеграл2:" replace="∬"/>
+    <item find=":жираф:" replace="漣"/>
+    <item find=":кестен:" replace=""/>
+    <item find=":нощ:" replace=""/>
+    <item find=":зелена ябълка:" replace=""/>
+    <item find=":надясно4:" replace=""/>
+    <item find=":^K:" replace="ᴷ"/>
+    <item find=":папка2:" replace=""/>
+    <item find=":хи:" replace="χ"/>
+    <item find=":баскетбол:" replace=""/>
+    <item find=":разочарование:" replace=""/>
+    <item find=":молив3:" replace="✐"/>
+    <item find=":чадър2:" replace=""/>
+    <item find=":зета:" replace="ζ"/>
+    <item find=":дъжд:" replace="☔"/>
+    <item find=":кран:" replace=""/>
+    <item find=":малък квадрат:" replace="◽"/>
+    <item find=":евро2:" replace=""/>
+    <item find=":триъгълник2:" replace="▲"/>
+    <item find=":намръщено лице:" replace="☹"/>
+    <item find=":_h:" replace="ₕ"/>
+    <item find=":^n:" replace="ⁿ"/>
+    <item find=":пи:" replace="π"/>
+    <item find=":училище:" replace=""/>
+    <item find=":шапка:" replace=""/>
+    <item find=":окей2:" replace=""/>
+    <item find=":Хи:" replace="Χ"/>
+    <item find=":мегафон:" replace=""/>
+    <item find=":слушалка3:" replace=""/>
+    <item find=":мислене:" replace="樂"/>
+    <item find=":ИЗ2:" replace="⇔"/>
+    <item find=":надясно5:" replace=""/>
+    <item find=":половина пауза:" replace="턼"/>
+    <item find=":^r:" replace="ʳ"/>
+    <item find=":^E:" replace="ᴱ"/>
+    <item find=":зар4:" replace="⚃"/>
+    <item find=":пентаграм:" replace="⛤"/>
+    <item find=":магьосник:" replace="慄"/>
+    <item find=":циклон:" replace=""/>
+    <item find=":_a:" replace="ₐ"/>
+    <item find=":ресторант:" replace=""/>
+    <item find=":бележка2:" replace=""/>
+    <item find=":меркурий:" replace="☿"/>
+    <item find=":балонче9:" replace=""/>
+    <item find=":хокей:" replace=""/>
+    <item find=":планина:" replace="⛰"/>
+    <item find=":диаграма4:" replace=""/>
+    <item find=":тромпет:" replace=""/>
+    <item find=":кръг4:" replace=""/>
+    <item find=":_5:" replace="₅"/>
+    <item find=":^H:" replace="ᴴ"/>
+    <item find=":буболечка:" replace=""/>
+    <item find=":влак3:" replace=""/>
+    <item find=":ключ2:" replace=""/>
+    <item find=":очила:" replace=""/>
+    <item find=":кораб:" replace=""/>
+    <item find=":кула:" replace=""/>
+    <item find=":5.30:" replace=""/>
+    <item find=":звук:" replace=""/>
+    <item find=":вон:" replace="₩"/>
+    <item find=":плик3:" replace=""/>
+    <item find=":долар3:" replace=""/>
+    <item find=":смутена усмивка:" replace=""/>
+    <item find=":дева:" replace="♍"/>
+    <item find=".*(C)" replace="©"/>
+    <item find=":двойка4:" replace=""/>
+    <item find=":пк:" replace=""/>
+    <item find=":нота2:" replace="♪"/>
+    <item find=":?:" replace="❓"/>
+    <item find=":за мъже:" replace=""/>
+    <item find=":броколи:" replace="復"/>
+    <item find=":паяк:" replace=""/>
+    <item find=":паяжина:" replace=""/>
+    <item find=":^h:" replace="ʰ"/>
+    <item find=":обединение:" replace="∪"/>
+    <item find=":плаж:" replace=""/>
+    <item find=":балонче с реплика:" replace=""/>
+    <item find=":велосипедист2:" replace=""/>
+    <item find=":лък:" replace=""/>
+    <item find=":рупия:" replace="₹"/>
+    <item find=":плик8:" replace=""/>
+    <item find=":поле за отметка 5:" replace=""/>
+    <item find=":монорелс:" replace=""/>
+    <item find=":такси:" replace=""/>
+    <item find=":хамбургер:" replace=""/>
+    <item find=":билка:" replace=""/>
+    <item find=":^a:" replace="ᵃ"/>
+    <item find=":ярост:" replace=""/>
+    <item find=":x4:" replace=""/>
+    <item find=":клечки:" replace="異"/>
+    <item find=":език3:" replace=""/>
+    <item find=":пипер:" replace=""/>
+    <item find=":коктейл:" replace=""/>
+    <item find=":зар6:" replace="⚅"/>
+    <item find=":радостна котка:" replace=""/>
+    <item find=":пари3:" replace="螺"/>
+    <item find=":тюрбан:" replace=""/>
+    <item find=":екран:" replace=""/>
+    <item find=":каубой:" replace="鸞"/>
+    <item find=":кола:" replace=""/>
+    <item find=":^0:" replace="⁰"/>
+    <item find=":целувка2:" replace=""/>
+    <item find=":новолуние2:" replace=""/>
+    <item find=":горила:" replace="轢"/>
+    <item find=":клавиатура:" replace="⌨"/>
+    <item find=":жонглиране:" replace="魯"/>
+    <item find=":биткойн:" replace="₿"/>
+    <item find=":голям квадрат:" replace="⬜"/>
+    <item find=":медал:" replace=""/>
+    <item find=":бебе3:" replace="櫓"/>
+    <item find=":парк:" replace=""/>
+    <item find=":вагон:" replace=""/>
+    <item find=":китара:" replace=""/>
+    <item find=":нарастващ полумесец:" replace=""/>
+    <item find=":знаме:" replace=""/>
+    <item find=":коза:" replace=""/>
+    <item find=":зачертан звънец:" replace=""/>
+    <item find=":хляб:" replace=""/>
+    <item find=":дупка:" replace=""/>
+    <item find="рекация" replace="реакция"/>
+    <item find=":без мобилни телефони:" replace=""/>
+    <item find=":разочарование и облекчение:" replace=""/>
+    <item find=":пастел:" replace=""/>
+    <item find=":сърце:" replace="❤"/>
+    <item find=":внимание:" replace="☡"/>
+    <item find=":Япония:" replace=""/>
+    <item find=":фи:" replace="φ"/>
+    <item find=":квадрат:" replace="□"/>
+    <item find=":Тау:" replace="Τ"/>
+    <item find=":_o:" replace="ₒ"/>
+    <item find=":руса коса:" replace=""/>
+    <item find=":долар2:" replace=""/>
+    <item find=":билет:" replace=""/>
+    <item find=":кон:" replace=""/>
+    <item find=":ъгъл2:" replace="∡"/>
+    <item find=":амфора:" replace=""/>
+    <item find=":секундомер:" replace="⏱"/>
+    <item find=":---:" replace="—"/>
+    <item find=":бета:" replace="β"/>
+    <item find=":дискета2:" replace=""/>
+    <item find=":вана:" replace=""/>
+    <item find=":тениска2:" replace=""/>
+    <item find=":^3:" replace="³"/>
+    <item find=":регистрирана марка:" replace="®"/>
+    <item find=":парти3:" replace="壟"/>
+    <item find=":цилиндър:" replace=""/>
+    <item find=":1/8:" replace="⅛"/>
+    <item find=":количка:" replace=""/>
+    <item find=":полицейска кола:" replace=""/>
+    <item find=":вкусно:" replace=""/>
+    <item find=":счетоводна книга:" replace=""/>
+    <item find=":книга2:" replace=""/>
+    <item find=":8 ч:" replace=""/>
+    <item find=":влюбена котка:" replace=""/>
+    <item find=":отворени длани:" replace=""/>
+    <item find=":кино:" replace=""/>
+    <item find=":книга3:" replace=""/>
+    <item find=":^+:" replace="⁺"/>
+    <item find=":пълнолуние:" replace=""/>
+    <item find=":уран:" replace="♅"/>
+    <item find=":_+:" replace="₊"/>
+    <item find=":поле за отметка 3:" replace="☒"/>
+    <item find=":храна:" replace="菱"/>
+    <item find=":забранено за велосипеди:" replace=""/>
+    <item find=":къщи:" replace=""/>
+    <item find=":самолет6:" replace=""/>
+    <item find=":втурване:" replace=""/>
+    <item find=":краставица:" replace="勒"/>
+    <item find=":средна звезда:" replace="⭐"/>
+    <item find=":_ро:" replace="ᵨ"/>
+    <item find=":забранено хвърлянето на отпадъци:" replace=""/>
+    <item find=":шок:" replace=""/>
+    <item find=":не успоредно на:" replace="∦"/>
+    <item find=":съдържа:" replace="∋"/>
+    <item find=":бременна:" replace="擄"/>
+    <item find=":плик6:" replace=""/>
+    <item find=":фабрика:" replace=""/>
+    <item find=":плъзгач:" replace=""/>
+    <item find=":ро:" replace="ρ"/>
+    <item find=":глобус:" replace=""/>
+    <item find=":чудовище:" replace=""/>
+    <item find=":празно множество:" replace="∅"/>
+    <item find=":З2:" replace="⇐"/>
+    <item find=":празник:" replace=""/>
+    <item find=":кактус:" replace=""/>
+    <item find=":кит:" replace=""/>
+    <item find=":букет:" replace=""/>
+    <item find=":мотоциклет:" replace=""/>
+    <item find=":писък:" replace=""/>
+    <item find=":град:" replace=""/>
+    <item find=":пот:" replace=""/>
+    <item find=":мълчание:" replace="蘿"/>
+    <item find=":кола3:" replace=""/>
+    <item find=":не чувам зло:" replace=""/>
+    <item find=":октопод:" replace=""/>
+    <item find=":слънчево:" replace="☀"/>
+    <item find=":С:" replace="↑"/>
+    <item find=":компютър:" replace=""/>
+    <item find=":изгрев3:" replace=""/>
+    <item find=":г-жа коледа:" replace="虜"/>
+    <item find=":лъв:" replace="♌"/>
+    <item find=":сън:" replace=""/>
+    <item find=":1/2:" replace="½"/>
+    <item find=":омикрон:" replace="ο"/>
+    <item find=":компактдиск:" replace=""/>
+    <item find=":костенурка:" replace=""/>
+    <item find=":--:" replace="–"/>
+    <item find=":извънземно2:" replace=""/>
+    <item find=":стадион:" replace=""/>
+    <item find=":черна царица:" replace="♛"/>
+    <item find=":чаша:" replace=""/>
+    <item find=":линийка2:" replace=""/>
+    <item find=":кола2:" replace=""/>
+    <item find=":термометър2:" replace="裸"/>
+    <item find=":тета:" replace="θ"/>
+    <item find=":момчета:" replace=""/>
+    <item find=":гъба:" replace=""/>
+    <item find=":^m:" replace="ᵐ"/>
+    <item find=":бацу:" replace=""/>
+    <item find=":динозавър2:" replace="練"/>
+    <item find=":рупор:" replace=""/>
+    <item find=":принтер2:" replace=""/>
+    <item find=":тракбол:" replace=""/>
+    <item find=":смущение:" replace=""/>
+    <item find=":3.30:" replace=""/>
+    <item find=":1/4:" replace="¼"/>
+    <item find=":кадуцей:" replace="☤"/>
+    <item find=":надясно2:" replace=""/>
+    <item find=":мир:" replace="☮"/>
+    <item find=":лагер:" replace=""/>
+    <item find=":бамбук:" replace=""/>
+    <item find=":лифт:" replace=""/>
+    <item find=":пингвин:" replace=""/>
+    <item find=":легло:" replace=""/>
+    <item find=":мравка:" replace=""/>
+    <item find=":алфа:" replace="α"/>
+    <item find=":риба3:" replace=""/>
+    <item find=":линийка:" replace=""/>
+    <item find=":монокъл:" replace="類"/>
+    <item find=":евро:" replace="€"/>
+    <item find=":скарида:" replace="戀"/>
+    <item find=":билярд:" replace=""/>
+    <item find=":близалка:" replace=""/>
+    <item find=":бяла пешка:" replace="♙"/>
+    <item find=":телец:" replace="♉"/>
+    <item find=":плик5:" replace=""/>
+    <item find=":_-:" replace="₋"/>
+    <item find=":^):" replace="⁾"/>
+    <item find=":ръка4:" replace="駱"/>
+    <item find=":телескоп:" replace=""/>
+    <item find=":информация:" replace="ℹ"/>
+    <item find=":половина нота:" replace="텞"/>
+    <item find=":кожа4:" replace=""/>
+    <item find=":Пи:" replace="Π"/>
+    <item find=":^йота:" replace="ᶥ"/>
+    <item find=":салата:" replace="綾"/>
+    <item find=":андреевски кръст:" replace="☓"/>
+    <item find=":име:" replace=""/>
+    <item find=":змиеносец:" replace="⛎"/>
+    <item find=":папка4:" replace=""/>
+    <item find=":намигане:" replace=""/>
+    <item find=":архивен шкаф:" replace=""/>
+    <item find=":пейджър:" replace=""/>
+    <item find=":динозавър:" replace="秊"/>
+    <item find=":зарове:" replace=""/>
+    <item find=":кожа3:" replace=""/>
+    <item find=":обаждане:" replace=""/>
+    <item find=":мандарина:" replace=""/>
+    <item find=":статуя:" replace=""/>
+    <item find=":йена:" replace="¥"/>
+    <item find=":самолет:" replace="✈"/>
+    <item find=":ръкопляскане:" replace=""/>
+    <item find=":картина:" replace=""/>
+    <item find=":еднорог:" replace="濾"/>
+    <item find=":танцьор:" replace=""/>
+    <item find=":рак2:" replace="呂"/>
+    <item find=":телефон2:" replace="☏"/>
+    <item find=":календар:" replace=""/>
+    <item find=":подмножество:" replace="⊂"/>
+    <item find=":умножение2:" replace="✖"/>
+    <item find=":заек2:" replace=""/>
+    <item find=":стрелки:" replace=""/>
+    <item find=":ноти4:" replace=""/>
+    <item find=":прасе:" replace=""/>
+    <item find=":неловка усмивка:" replace=""/>
+    <item find=":ff:" replace="ﬀ"/>
+    <item find=":малко „принадлежи на“:" replace="∊"/>
+    <item find=":кафе:" replace="☕"/>
+    <item find=":щепсел:" replace=""/>
+    <item find=":забранено:" replace=""/>
+    <item find=":квадратче:" replace="▫"/>
+    <item find=":сняг:" replace=""/>
+    <item find=":локомотив:" replace=""/>
+    <item find=":фризьор:" replace=""/>
+    <item find=":СЗ2:" replace="⇖"/>
+    <item find=":нагоре4:" replace=""/>
+    <item find=":стрелец:" replace="♐"/>
+    <item find=":светкавица:" replace=""/>
+    <item find=":твърд диск:" replace=""/>
+    <item find=":бутон за избор:" replace=""/>
+    <item find=":бадминтон:" replace=""/>
+    <item find=":кроасан:" replace="縷"/>
+    <item find=":магазин:" replace=""/>
+    <item find=":ъгъл:" replace="∠"/>
+    <item find=":Зета:" replace="Ζ"/>
+    <item find=":кожа5:" replace=""/>
+    <item find=":габърче:" replace=""/>
+    <item find=":силен смях:" replace="藍"/>
+    <item find=":Фуджи:" replace=""/>
+    <item find=":документ2:" replace=""/>
+    <item find=":ffl:" replace="ﬄ"/>
+    <item find=":влюбено лице:" replace=""/>
+    <item find=":лотарингски кръст:" replace="☨"/>
+    <item find=":авокадо:" replace="陋"/>
+    <item find=":Луна:" replace="☽"/>
+    <item find=":знамена:" replace=""/>
+    <item find=":леко метро:" replace=""/>
+    <item find=":триъгълен флаг:" replace=""/>
+    <item find=":7 ч:" replace=""/>
+    <item find=":овца:" replace=""/>
+    <item find=":облекчение:" replace=""/>
+    <item find=":страх:" replace=""/>
+    <item find=":смях:" replace=""/>
+    <item find=":надмножество:" replace="⊃"/>
+    <item find=":пържена скарида:" replace=""/>
+    <item find=":чадър3:" replace="⛱"/>
+    <item find=":отворена уста:" replace=""/>
+    <item find=":100:" replace=""/>
+    <item find=":хеликоптер:" replace=""/>
+    <item find=":куфарче:" replace=""/>
+    <item find=":хващане за главата:" replace="臘"/>
+    <item find=":самолет2:" replace=""/>
+    <item find=":_1:" replace="₁"/>
+    <item find=":+-:" replace="±"/>
+    <item find=":хотел:" replace=""/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find=":елипса:" replace="⬭"/>
+    <item find=":за всички:" replace="∀"/>
+    <item find=":страница3:" replace=""/>
+    <item find=":високоговорител4:" replace=""/>
+    <item find=":надясно:" replace="☞"/>
+    <item find=":лъчи:" replace=""/>
+    <item find=":морков:" replace="凌"/>
+    <item find=":булка:" replace=""/>
+    <item find=":клипборд:" replace=""/>
+    <item find=":юмрук:" replace="✊"/>
+    <item find=":брада:" replace="倫"/>
+    <item find=":дядо коледа:" replace=""/>
+    <item find=":уста:" replace=""/>
+    <item find=":вестник2:" replace=""/>
+    <item find=":7.30:" replace=""/>
+    <item find=":облачно2:" replace=""/>
+    <item find=":давидова звезда:" replace="✡"/>
+    <item find=":^y:" replace="ʸ"/>
+    <item find=":бомба:" replace=""/>
+    <item find=":Епсилон:" replace="Ε"/>
+    <item find=":щит:" replace=""/>
+    <item find=":балон:" replace=""/>
+    <item find=":запис:" replace="⏺"/>
+    <item find=":_бета:" replace="ᵦ"/>
+    <item find=":интеграл:" replace="∫"/>
+    <item find=":увеселително влакче:" replace=""/>
+    <item find=":борба:" replace="祿"/>
+    <item find=":максимизиране:" replace=""/>
+    <item find=":каска:" replace="⛑"/>
+    <item find=":полумесец:" replace=""/>
+    <item find=":облак:" replace="☁"/>
+    <item find=":Бета:" replace="Β"/>
+    <item find=":диаграма3:" replace=""/>
+    <item find=":мозък:" replace="易"/>
+    <item find=":снежен човек 2:" replace="⛄"/>
+    <item find=":песо:" replace="₱"/>
+    <item find=":видеокамера:" replace=""/>
+    <item find=":котва:" replace="⚓"/>
+    <item find=":звезда2:" replace="☆"/>
+    <item find=":бебе:" replace=""/>
+    <item find=":ккнигоразделител2:" replace=""/>
+    <item find=":камион3:" replace=""/>
+    <item find=":^алфа:" replace="ᵅ"/>
+    <item find=":целувка5:" replace=""/>
+    <item find=":ръкостискане:" replace="欄"/>
+    <item find=":^b:" replace="ᵇ"/>
+    <item find=":ябълка:" replace=""/>
+    <item find=":^s:" replace="ˢ"/>
+    <item find=":гимнастик:" replace="露"/>
+    <item find=":британска лира:" replace="£"/>
+    <item find=":орел:" replace="礪"/>
+    <item find=":сладолед2:" replace=""/>
+    <item find=":цвете:" replace="⚘"/>
+    <item find=":авторски права:" replace="©"/>
+    <item find=":език:" replace=""/>
+    <item find=":вход забранен:" replace=""/>
+    <item find=":бръснар:" replace=""/>
+    <item find=":ИЗ:" replace="↔"/>
+    <item find=":ягода:" replace=""/>
+    <item find=":изумление:" replace=""/>
+    <item find=":^w:" replace="ʷ"/>
+    <item find=":рециклирана хартия:" replace="♼"/>
+    <item find=":СИ2:" replace="⇗"/>
+    <item find=":сърце подарък:" replace=""/>
+    <item find=":спатия:" replace="♣"/>
+    <item find=":_0:" replace="₀"/>
+    <item find=":попадение:" replace=""/>
+    <item find=":маркова глава:" replace=""/>
+    <item find=":не виждам зло:" replace=""/>
+    <item find=":празник2:" replace=""/>
+    <item find=":горещи извори:" replace="♨"/>
+    <item find=":Луна2:" replace="☾"/>
+    <item find=":скъпоценен камък:" replace=""/>
+    <item find=":полицай:" replace=""/>
+    <item find=":Омега:" replace="Ω"/>
+    <item find=":сънливост:" replace=""/>
+    <item find=":ножица:" replace="✂"/>
+    <item find=":асо:" replace=""/>
+    <item find=":глава:" replace=""/>
+    <item find=":пари:" replace=""/>
+    <item find=":бейзбол:" replace="⚾"/>
+    <item find=":Ню:" replace="Ν"/>
+    <item find=":телефон:" replace="☎"/>
+    <item find=":^o:" replace="ᵒ"/>
+    <item find=":суши:" replace=""/>
+    <item find=":танабата:" replace=""/>
+    <item find=":^епсилон:" replace="ᵋ"/>
+    <item find=":кожа2:" replace=""/>
+    <item find=":юпитер:" replace="♃"/>
+    <item find=":празни страници:" replace=""/>
+    <item find=":барабан:" replace="論"/>
+    <item find=":мопед:" replace=""/>
+    <item find=":^M:" replace="ᴹ"/>
+    <item find=":неутрално лице:" replace=""/>
+    <item find=":отметка:" replace="✓"/>
+    <item find=":!:" replace="❕"/>
+    <item find=":1 ч:" replace=""/>
+    <item find="серизона" replace="сериозна"/>
+    <item find=":малка звезда:" replace="⭒"/>
+    <item find=":бат:" replace="฿"/>
+    <item find=":кръгло габърче:" replace=""/>
+    <item find=":чантичка:" replace=""/>
+    <item find=":мост:" replace=""/>
+    <item find=":гара:" replace=""/>
+    <item find=":нърд:" replace="邏"/>
+    <item find=":високоговорител2:" replace=""/>
+    <item find=":очи:" replace=""/>
+    <item find=":_фи:" replace="ᵩ"/>
+    <item find=":топка:" replace="⛹"/>
+    <item find=":непитейна вода:" replace=""/>
+    <item find=":листо2:" replace=""/>
+    <item find=":^J:" replace="ᴶ"/>
+    <item find=":катинар и ключ:" replace=""/>
+    <item find=":звезда4:" replace=""/>
+    <item find=":пържени картофки:" replace=""/>
+    <item find=":клавиатура3:" replace=""/>
+    <item find=":писане:" replace="✍"/>
+    <item find=":слушалка2:" replace=""/>
+    <item find=":мишка2:" replace=""/>
+    <item find=":^1:" replace="¹"/>
+    <item find=":1.30:" replace=""/>
+    <item find=":^P:" replace="ᴾ"/>
+    <item find=":^l:" replace="ˡ"/>
+    <item find=":бутон:" replace=""/>
+    <item find=":океан:" replace=""/>
+    <item find=":изпражнение:" replace=""/>
+    <item find=":_(:" replace="₍"/>
+    <item find=":сърце с искри:" replace=""/>
+    <item find=":курабийка:" replace="怒"/>
+    <item find=":Гама:" replace="Γ"/>
+    <item find=":пинг-понг:" replace=""/>
+    <item find=":напитка2:" replace=""/>
+    <item find=":ориз:" replace=""/>
+    <item find=":фенер:" replace=""/>
+    <item find=":звезда и полумесец:" replace="☪"/>
+    <item find=":?2:" replace="❔"/>
+    <item find=":забранено пиратство:" replace=""/>
+    <item find=":пакет:" replace=""/>
+    <item find="серизони" replace="сериозни"/>
+    <item find=":окей:" replace=""/>
+    <item find=":лупа:" replace=""/>
+    <item find=":мишка3:" replace=""/>
+    <item find=":-:" replace="−"/>
+    <item find=":^f:" replace="ᶠ"/>
+    <item find=":частна производна:" replace="∂"/>
+    <item find=":параграф:" replace="§"/>
+    <item find=":звънни ми:" replace="酪"/>
+    <item find=":ножица4:" replace="✃"/>
+    <item find=":забранено за пешеходци:" replace=""/>
+    <item find=":дете:" replace="戮"/>
+    <item find=":обувка:" replace=""/>
+    <item find=":ругатня:" replace="郎"/>
+    <item find=":балонче7:" replace=""/>
+    <item find=":тревога:" replace=""/>
+    <item find=":усмихнато лице 2:" replace=""/>
+    <item find=":_хи:" replace="ᵪ"/>
+    <item find=":шекел:" replace="₪"/>
+    <item find=":нож2:" replace=""/>
+    <item find=":плач:" replace=""/>
+    <item find=":замаяно лице:" replace=""/>
+    <item find="3/4" replace="¾"/>
+    <item find=":^i:" replace="ⁱ"/>
+    <item find=":хандбал:" replace="菉"/>
+    <item find=":З:" replace="←"/>
+    <item find=":черен кон:" replace="♞"/>
+    <item find=":размисъл:" replace=""/>
+    <item find=":автобус:" replace=""/>
+    <item find=":нос:" replace=""/>
+    <item find=":звезда3:" replace=""/>
+    <item find=":бинт:" replace="洛"/>
+    <item find="порграма" replace="програма"/>
+    <item find=":шапка2:" replace=""/>
+    <item find=":пешеходци:" replace=""/>
+    <item find=":моторница:" replace=""/>
+    <item find=":длан:" replace="✋"/>
+    <item find=":възрастен мъж:" replace=""/>
+    <item find=":ета:" replace="η"/>
+    <item find=":надолу:" replace="☟"/>
+    <item find=":банкомат:" replace=""/>
+    <item find=":телефонна слушалка:" replace="✆"/>
+    <item find=":панделка:" replace=""/>
+    <item find=":^d:" replace="ᵈ"/>
+    <item find=":мускул:" replace=""/>
+    <item find="&gt;&gt;" replace="»"/>
+    <item find=":усмихната котка:" replace=""/>
+    <item find=":заглушаване:" replace=""/>
+    <item find=":тенис:" replace=""/>
+    <item find=":микроскоп:" replace=""/>
+    <item find=":телефон4:" replace=""/>
+    <item find=":тоалетна3:" replace=""/>
+    <item find=":плувец:" replace=""/>
+    <item find=":лисица:" replace="力"/>
+    <item find=":изненада:" replace=""/>
+    <item find=":СИ:" replace="↗"/>
+    <item find=":ЮЗ:" replace="↙"/>
+    <item find=":сателит:" replace=""/>
+    <item find=":биологична опасност:" replace="☣"/>
+    <item find=":радио:" replace=""/>
+    <item find=":катинар и перо:" replace=""/>
+    <item find=":маймуна2:" replace=""/>
+    <item find=":отметка4:" replace=""/>
+    <item find=":тигър2:" replace=""/>
+    <item find=":нагоре5:" replace=""/>
+    <item find=":вимпел2:" replace=""/>
+    <item find=":вежда:" replace="廊"/>
+    <item find=":гръцки кръст 2:" replace="✙"/>
+    <item find=":пуканки:" replace=""/>
+    <item find=":сърфист:" replace=""/>
+    <item find=":прилеп:" replace="驪"/>
+    <item find=":воден бивол:" replace=""/>
+    <item find=":целувка:" replace=""/>
+    <item find=":рамка:" replace=""/>
+    <item find=":ананас:" replace=""/>
+    <item find=":минибус:" replace=""/>
+    <item find=":_k:" replace="ₖ"/>
+    <item find=":Ади Шакти:" replace="☬"/>
+    <item find=":влак:" replace=""/>
+    <item find=":зомби:" replace="履"/>
+    <item find=":усмихнато лице:" replace=""/>
+    <item find=":термометър:" replace=""/>
+    <item find=":линейка:" replace=""/>
+    <item find=":зар1:" replace="⚀"/>
+    <item find=":светофар:" replace=""/>
+    <item find=":вериги:" replace="⛓"/>
+    <item find=":компютър2:" replace=""/>
+    <item find=":Ю:" replace="↓"/>
+    <item find=":4.30:" replace=""/>
+    <item find=":такси2:" replace=""/>
+    <item find=":^v:" replace="ᵛ"/>
+    <item find=":багаж:" replace=""/>
+    <item find=":водна топка:" replace="綠"/>
+    <item find=":паспорт:" replace=""/>
+    <item find=":оризов крекер:" replace=""/>
+    <item find=":детектив:" replace=""/>
+    <item find=":бебе2:" replace=""/>
+    <item find=":кръг2:" replace="●"/>
+    <item find=":сова:" replace="黎"/>
+    <item find=":^(:" replace="⁽"/>
+    <item find=":кредитна карта:" replace=""/>
+    <item find=":яркост:" replace=""/>
+    <item find=":бележник:" replace=""/>
+    <item find=":буря:" replace=""/>
+    <item find=":искра:" replace="❇"/>
+    <item find=":СЮ2:" replace="⇕"/>
+    <item find=":зар5:" replace="⚄"/>
+    <item find=":изключен мобилен телефон:" replace=""/>
+    <item find=":подарък:" replace=""/>
+    <item find=":аламбик:" replace="⚗"/>
+    <item find=":осмина нота:" replace="텠"/>
+    <item find=":четвъртина пауза:" replace="턽"/>
+    <item find=":носорог:" replace="憐"/>
+    <item find=":плутон:" replace="♇"/>
+    <item find=":интеграл4:" replace="∮"/>
+    <item find=":овен:" replace="♈"/>
+    <item find=":шрифт2:" replace=""/>
+    <item find=":кинокамера:" replace=""/>
+    <item find=":не принадлежи на:" replace="∉"/>
+    <item find=":черен топ:" replace="♜"/>
+    <item find=":гребна лодка:" replace=""/>
+    <item find=":вале:" replace=""/>
+    <item find=":шрифт:" replace=""/>
+    <item find=":цукими:" replace=""/>
+    <item find=":нацупена котка:" replace=""/>
+    <item find=":кръг3:" replace=""/>
+    <item find=":козирог:" replace="♑"/>
+    <item find=":повръщане:" replace="冷"/>
+    <item find=":_t:" replace="ₜ"/>
+    <item find=":устни:" replace=""/>
+    <item find=":хералдическа лилия:" replace="⚜"/>
+    <item find=":пълнолуние2:" replace=""/>
+    <item find=":състезание:" replace=""/>
+    <item find=":тоалетна:" replace=""/>
+    <item find=":^u:" replace="ᵘ"/>
+    <item find=":бира:" replace=""/>
+    <item find=":мю:" replace="μ"/>
+    <item find=":5 ч:" replace=""/>
+    <item find=":минидиск:" replace=""/>
+    <item find=":^8:" replace="⁸"/>
+    <item find=":британска лира 2:" replace=""/>
+    <item find=":сандвич:" replace="索"/>
+    <item find=":писане2:" replace=""/>
+    <item find=":спок:" replace=""/>
+    <item find=":страници:" replace=""/>
+    <item find=":9.30:" replace=""/>
+    <item find=":слънце:" replace=""/>
+    <item find=":мобилен телефон:" replace=""/>
+    <item find=":^B:" replace="ᴮ"/>
+    <item find=":монетен автомат:" replace=""/>
+    <item find=":инструменти:" replace=""/>
+    <item find=":оранжево сърце:" replace="李"/>
+    <item find=":не съдържа:" replace="∌"/>
+    <item find=":капка:" replace=""/>
+    <item find=":антена:" replace=""/>
+    <item find=":ffi:" replace="ﬃ"/>
+    <item find=":^e:" replace="ᵉ"/>
+    <item find=":разбито сърце:" replace=""/>
+    <item find=":вълнение:" replace="朗"/>
+    <item find=":купа2:" replace="♡"/>
+    <item find=":кукли:" replace=""/>
+    <item find=":край на доказателство:" replace="∎"/>
+    <item find=":телевизор:" replace=""/>
+    <item find=":страница:" replace=""/>
+    <item find=":пощенска станция 2:" replace=""/>
+    <item find=":Омикрон:" replace="Ο"/>
+    <item find=":ръгби:" replace=""/>
+    <item find=":магистрала:" replace=""/>
+    <item find=":възрастен:" replace="六"/>
+    <item find=":любов2:" replace="蘭"/>
+    <item find=":гняв:" replace=""/>
+    <item find=":студена пот:" replace=""/>
+    <item find=":надолу2:" replace=""/>
+    <item find=":фъстъци:" replace="樂"/>
+    <item find=":_гама:" replace="ᵧ"/>
+    <item find=":умора:" replace=""/>
+    <item find=":офис:" replace=""/>
+    <item find=":крушка:" replace=""/>
+    <item find=":петоъгълник2:" replace="⬟"/>
+    <item find=":музика2:" replace=""/>
+    <item find=":трамвай2:" replace=""/>
+    <item find=":шъткане:" replace="狼"/>
+    <item find=":момичета:" replace=""/>
+    <item find=":спринцовка:" replace=""/>
+    <item find=":портмоне:" replace=""/>
+    <item find=":инвалиден стол:" replace="♿"/>
+    <item find=":робот:" replace="烙"/>
+    <item find=":^W:" replace="ᵂ"/>
+    <item find=":бял кон:" replace="♘"/>
+    <item find=":ножица3:" replace="✁"/>
+    <item find=":голям кръг 2:" replace="⬤"/>
+    <item find=":^c:" replace="ᶜ"/>
+    <item find=":крава:" replace=""/>
+    <item find=":тризъбец:" replace=""/>
+    <item find=":скорпион2:" replace="廬"/>
+    <item find=":Венера:" replace="♀"/>
+    <item find=":стъпки:" replace=""/>
+    <item find=":рециклиране2:" replace="♻"/>
+    <item find=":усмивка2:" replace="☻"/>
+    <item find=":кръжащи сърца:" replace=""/>
+    <item find=":2/3:" replace="⅔"/>
+    <item find=":кирка:" replace="⛏"/>
+    <item find=":митница:" replace=""/>
+    <item find=":лъчи3:" replace=""/>
+    <item find=":пеперуда:" replace="曆"/>
+    <item find="серизоен" replace="сериозен"/>
+    <item find=":кръгче за списък:" replace="◦"/>
+    <item find=":съществува:" replace="∃"/>
+    <item find=":латински кръст 3:" replace=""/>
+    <item find=":кит2:" replace=""/>
+    <item find=":за жени:" replace=""/>
+    <item find=":сирене:" replace="燎"/>
+    <item find=":или:" replace="∨"/>
+    <item find=":чук и кирка:" replace="⚒"/>
+    <item find=":тако:" replace=""/>
+    <item find=":принц:" replace="老"/>
+    <item find=":триъгълник:" replace="△"/>
+    <item find=":^p:" replace="ᵖ"/>
+    <item find=":целувка4:" replace=""/>
+    <item find=":бял офицер:" replace="♗"/>
+    <item find=":саке:" replace=""/>
+    <item find=":малък квадрат 2:" replace="◾"/>
+    <item find=":високоговорител3:" replace=""/>
+    <item find=":abc:" replace=""/>
+    <item find=":не2:" replace=""/>
+    <item find=":карта:" replace=""/>
+    <item find=":самолет5:" replace=""/>
+    <item find=":СЗ:" replace="↖"/>
+    <item find=":билет2:" replace=""/>
+    <item find=":мишка:" replace=""/>
+    <item find=":вишна:" replace=""/>
+    <item find=":цирк:" replace=""/>
+    <item find=":мечове:" replace="⚔"/>
+    <item find=":бяла царица:" replace="♕"/>
+    <item find=":свинска зурла:" replace=""/>
+    <item find=":сила на сигнала:" replace=""/>
+    <item find=":Кси:" replace="Ξ"/>
+    <item find=":2.30:" replace=""/>
+    <item find=":малко „съдържа“:" replace="∍"/>
+    <item find=":8.30:" replace=""/>
+    <item find=":бекар:" replace="♮"/>
+    <item find=":ЮИ2:" replace="⇘"/>
+    <item find=":наляво:" replace="☜"/>
+    <item find=":голф2:" replace="⛳"/>
+    <item find=":везни:" replace="♎"/>
+    <item find=":четвъртина нота:" replace="텟"/>
+    <item find=":камион2:" replace=""/>
+    <item find=":клавиатура2:" replace=""/>
+    <item find=":риболов:" replace=""/>
+    <item find=":платноходка:" replace="⛵"/>
+    <item find=":жаба:" replace=""/>
+    <item find=":зигзаг:" replace="⚡"/>
+    <item find=":сладолед:" replace=""/>
+    <item find=":яркост2:" replace=""/>
+    <item find=":нарастващо сърце:" replace=""/>
+    <item find=":банан:" replace=""/>
+    <item find=":злато:" replace="磊"/>
+    <item find=":болница:" replace=""/>
+    <item find=":незаинтересуван:" replace=""/>
+    <item find=":глобус2:" replace=""/>
+    <item find=":дискета:" replace=""/>
+    <item find=":йерусалимски кръст:" replace="☩"/>
+    <item find=":_4:" replace="₄"/>
+    <item find=":мед:" replace=""/>
+    <item find=":постоянство:" replace=""/>
+    <item find=":болт и гайка:" replace=""/>
+    <item find=":^хи:" replace="ᵡ"/>
+    <item find=":информация2:" replace=""/>
+    <item find=":папка5:" replace=""/>
+    <item find=":черен офицер:" replace="♝"/>
+    <item find=":келтски кръст:" replace=""/>
+    <item find=":прилошаване:" replace="濫"/>
+    <item find=":^6:" replace="⁶"/>
+    <item find=":Сигма:" replace="Σ"/>
+    <item find=":вълна:" replace=""/>
+    <item find=":Слънце2:" replace="☼"/>
+    <item find=":нацупен човек:" replace=""/>
+    <item find=":квадратче2:" replace="▪"/>
+    <item find=":чорапи:" replace="罹"/>
+    <item find=":входяща поща:" replace=""/>
+    <item find=":партитура:" replace=""/>
+    <item find=":свещ:" replace=""/>
+    <item find=":кнедла:" replace="寧"/>
+    <item find=":делфин:" replace=""/>
+    <item find=":бял кръг:" replace="⚪"/>
+    <item find=":глобус4:" replace=""/>
+    <item find=":сладък картоф:" replace=""/>
+    <item find=":торта:" replace=""/>
+    <item find=":бензиноколонка:" replace="⛽"/>
+    <item find=":замайване:" replace=""/>
+    <item find=":_l:" replace="ₗ"/>
+    <item find=":над 18 години:" replace=""/>
+    <item find=":перо2:" replace="✒"/>
+    <item find=":интеграл5:" replace="∰"/>
+    <item find=":танцьор2:" replace=""/>
+    <item find=":щит2:" replace="⛨"/>
+    <item find=":усмихнат имп:" replace=""/>
+    <item find=":пръстен:" replace=""/>
+    <item find=":зъбно колело:" replace="⚙"/>
+    <item find=":велосипедист:" replace=""/>
+    <item find=":влак2:" replace=""/>
+    <item find=":СЮ:" replace="↕"/>
+    <item find=":надолу4:" replace=""/>
+    <item find=":свиване на рамене:" replace="路"/>
+    <item find=":юмрук2:" replace=""/>
+    <item find=":патладжан:" replace=""/>
+    <item find=":бира2:" replace=""/>
+    <item find=":кламер2:" replace=""/>
+    <item find=":голям квадрат 2:" replace="⬛"/>
+    <item find=":футбол:" replace="⚽"/>
+    <item find=":кламер:" replace=""/>
+    <item find=":усмихната котка 2:" replace=""/>
+    <item find=":алкална хартия:" replace="♾"/>
+    <item find=":фенерче:" replace=""/>
+    <item find=":празна бележка 2:" replace=""/>
+    <item find=":10 ч:" replace=""/>
+    <item find=":гвардеец:" replace=""/>
+    <item find=":триъгълник3:" replace=""/>
+    <item find=":палатка:" replace="⛺"/>
+    <item find=":ангел:" replace=""/>
+    <item find=":пушене:" replace=""/>
+    <item find=":^9:" replace="⁹"/>
+    <item find=":глиган:" replace=""/>
+    <item find=":питейна вода:" replace=""/>
+    <item find=":бемол:" replace="♭"/>
+    <item find=":наляво4:" replace=""/>
+    <item find=":торнадо:" replace=""/>
+    <item find=":вратовръзка:" replace=""/>
+    <item find=":четвърти корен:" replace="∜"/>
+    <item find=":книги:" replace=""/>
+    <item find=":^j:" replace="ʲ"/>
+    <item find=":бележки:" replace=""/>
+    <item find=":^z:" replace="ᶻ"/>
+    <item find=":^2:" replace="²"/>
+    <item find=":тролейбус:" replace=""/>
+    <item find=":Делта:" replace="Δ"/>
+    <item find=":рибно кюфте:" replace=""/>
+    <item find=":ухилване:" replace=""/>
+    <item find=":франзела:" replace="稜"/>
+    <item find=":броеница:" replace=""/>
+    <item find=":гаечен ключ:" replace=""/>
+    <item find=":минимизиране:" replace=""/>
+    <item find=":1/3:" replace="⅓"/>
+    <item find=":праскова:" replace=""/>
+    <item find=":не дели:" replace="∤"/>
+    <item find=":знаме3:" replace="⚑"/>
+    <item find=":епсилон:" replace="ε"/>
+    <item find=":^I:" replace="ᴵ"/>
+    <item find=":червило:" replace=""/>
+    <item find=":след пълнолуние:" replace=""/>
+    <item find=":сатурн:" replace="♄"/>
+    <item find=":^Фи:" replace="ᶲ"/>
+    <item find=":пай:" replace="不"/>
+    <item find=":прозорец:" replace=""/>
+    <item find=":знамена2:" replace=""/>
+    <item find=":12 ч:" replace=""/>
+    <item find=":_e:" replace="ₑ"/>
+    <item find=":Ю2:" replace="⇓"/>
+    <item find=":Ипсилон:" replace="Υ"/>
+    <item find=":пиленце3:" replace=""/>
+    <item find=":слюнка:" replace="襤"/>
+    <item find=":среден квадрат 2:" replace="◼"/>
+    <item find=":змия:" replace=""/>
+    <item find=":нагоре:" replace="☝"/>
+    <item find=":_s:" replace="ₛ"/>
+    <item find=":дюнер:" replace="陵"/>
+    <item find=":балонче с мисъл:" replace=""/>
+    <item find=":документ:" replace=""/>
+    <item find=":ски:" replace=""/>
+    <item find=":кутия:" replace=""/>
+    <item find=":сърцебиене:" replace=""/>
+    <item find=":младоженец:" replace="蘆"/>
+    <item find=":лъжец:" replace="拉"/>
+    <item find=":пищяща котка:" replace=""/>
+    <item find=":тау:" replace="τ"/>
+    <item find=":Ламбда:" replace="Λ"/>
+    <item find=":спирка:" replace=""/>
+    <item find=":рога:" replace="落"/>
+    <item find=":търговска марка:" replace="™"/>
+    <item find=":рамка2:" replace=""/>
+    <item find=":заешки уши:" replace=""/>
+    <item find=":саксофон:" replace=""/>
+    <item find=":искри:" replace="✨"/>
+    <item find=":не съществува:" replace="∄"/>
+    <item find=":черно сърце:" replace=""/>
+    <item find=":звънец2:" replace=""/>
+    <item find=":зачертана уста:" replace=""/>
+    <item find=":^G:" replace="ᴳ"/>
+    <item find=":царевица:" replace=""/>
+    <item find=":къри:" replace=""/>
+    <item find=":будилник:" replace="⏰"/>
+    <item find=":Алфа:" replace="Α"/>
+    <item find=":кола4:" replace=""/>
+    <item find=":И:" replace="→"/>
+    <item find=":x3:" replace="❎"/>
+    <item find=":различно от:" replace="≠"/>
+    <item find=":брак:" replace="⚭"/>
+    <item find=":градус:" replace="°"/>
+    <item find=":лунапарк:" replace=""/>
+    <item find=":ламбда:" replace="λ"/>
+    <item find=":_6:" replace="₆"/>
+    <item find=":лунапарк2:" replace=""/>
+    <item find=":синтезатор:" replace=""/>
+    <item find=":прасе2:" replace=""/>
+    <item find=":отказ:" replace=""/>
+    <item find=":кон2:" replace=""/>
+    <item find=":ковчег:" replace="⚰"/>
+    <item find=":пожарна:" replace=""/>
+    <item find=":пъпеш:" replace=""/>
+    <item find=":камион:" replace="⛟"/>
+    <item find=":диаграма2:" replace=""/>
+    <item find=":сауна:" replace="淪"/>
+    <item find=":дели:" replace="∣"/>
+    <item find=":джин:" replace="吏"/>
+    <item find=":точка в средата:" replace="·"/>
+    <item find=":мида:" replace=""/>
+    <item find=":микрофон2:" replace=""/>
+    <item find=":_n:" replace="ₙ"/>
+    <item find=":папка3:" replace=""/>
+    <item find=":нота:" replace="♩"/>
+    <item find=":зар2:" replace="⚁"/>
+    <item find=":любовно писмо:" replace=""/>
+    <item find=":камила2:" replace=""/>
+    <item find=":храна за вкъщи:" replace="率"/>
+    <item find=":трамвай:" replace=""/>
+    <item find=":трева:" replace=""/>
+    <item find=":ЮИ:" replace="↘"/>
+    <item find=":12.30:" replace=""/>
+    <item find=":радиоактивност:" replace="☢"/>
+    <item find=":стръкче:" replace=""/>
+    <item find=":сигма2:" replace="ς"/>
+    <item find=":волейбол:" replace=""/>
+    <item find=":~:" replace="≈"/>
+    <item find=":оптичен диск:" replace=""/>
+    <item find=":облак2:" replace="⛅"/>
+    <item find=":магазин2:" replace=""/>
+    <item find=":^N:" replace="ᴺ"/>
+    <item find=":молитва:" replace=""/>
+    <item find=":пристигане:" replace=""/>
+    <item find=":усмивка4:" replace="來"/>
+    <item find=":ръчна чанта:" replace=""/>
+    <item find=":претцел:" replace="泌"/>
+    <item find=":^T:" replace="ᵀ"/>
+    <item find=":снежинка:" replace="❄"/>
+    <item find=":страница2:" replace=""/>
+    <item find=":мишка5:" replace=""/>
+    <item find=":модем:" replace=""/>
+    <item find=":ЮЗ2:" replace="⇙"/>
+    <item find=":молив4:" replace=""/>
+    <item find=":черна пешка:" replace="♟"/>
+    <item find=":настърган лед:" replace=""/>
+    <item find=":пустиня:" replace=""/>
+    <item find=":врата:" replace=""/>
+    <item find=":празен документ:" replace=""/>
+    <item find=":^=:" replace="⁼"/>
+    <item find=":диаграма:" replace=""/>
+    <item find=":дискета4:" replace=""/>
+    <item find=":режим вибрация:" replace=""/>
+    <item find=":латински кръст:" replace="✝"/>
+    <item find=":маймуна:" replace=""/>
+    <item find=":конфети:" replace=""/>
+    <item find=":сърна:" replace="歷"/>
+    <item find=":пуйка:" replace="旅"/>
+    <item find=":гълъб:" replace=""/>
+    <item find=":книгоразделител:" replace=""/>
+    <item find=":кси:" replace="ξ"/>
+    <item find=":невинен:" replace=""/>
+    <item find=":балонче:" replace=""/>
+    <item find=":картоф:" replace="凜"/>
+    <item find=":цветче:" replace=""/>
+    <item find=":планинска железница:" replace=""/>
+    <item find=":пощенска кутия 3:" replace=""/>
+    <item find=":бурундук:" replace=""/>
+    <item find=":месо:" replace=""/>
+    <item find=":бисквитка:" replace=""/>
+    <item find=":круша:" replace=""/>
+    <item find=":касета:" replace=""/>
+    <item find=":цент:" replace="¢"/>
+    <item find=":отметка3:" replace="✅"/>
+    <item find=":дрехи:" replace=""/>
+    <item find=":дънки:" replace=""/>
+    <item find=":щурец:" replace="聯"/>
+    <item find=":таралеж:" replace="璉"/>
+    <item find=":домат:" replace=""/>
+    <item find=":забрадка:" replace="崙"/>
+    <item find=":юмрук3:" replace="亂"/>
+    <item find=":камила:" replace=""/>
+    <item find=":Марс:" replace="♂"/>
+    <item find=":бял топ:" replace="♖"/>
+    <item find=":дракон:" replace=""/>
+    <item find=":черен цар:" replace="♚"/>
+    <item find=":сватба:" replace=""/>
+    <item find=":^гама:" replace="ᵞ"/>
+    <item find=":пожарна2:" replace=""/>
+    <item find=":диня:" replace=""/>
+    <item find=":мечка:" replace=""/>
+    <item find=":точка за списък:" replace="•"/>
+    <item find=":писалка:" replace=""/>
+    <item find=":базов пункт:" replace="‱"/>
+    <item find=":стяга:" replace=""/>
+    <item find=":калкулатор:" replace=""/>
+    <item find=":атом:" replace="⚛"/>
+    <item find=":изгрев:" replace=""/>
+    <item find=":две сърца:" replace=""/>
+    <item find=":дълбок поклон:" replace=""/>
+    <item find=":_2:" replace="₂"/>
+    <item find=":ключ:" replace=""/>
+    <item find=":поле за отметка 2:" replace="☑"/>
+    <item find=":жена:" replace=""/>
+    <item find=":строеж:" replace=""/>
+    <item find=":трапец:" replace="⏢"/>
+    <item find=":принадлежи на:" replace="∈"/>
+    <item find=":листо3:" replace=""/>
+    <item find=":пържола:" replace="數"/>
+    <item find=":мляко:" replace="拏"/>
+    <item find=":прим:" replace="′"/>
+    <item find=":мълния2:" replace=""/>
+    <item find=":етикет:" replace=""/>
+    <item find=":лъжица:" replace="籠"/>
+    <item find=":знаме2:" replace=""/>
+    <item find=":тигър:" replace=""/>
+    <item find=":американски футбол:" replace=""/>
+    <item find=":балонче5:" replace=""/>
+    <item find=":fi:" replace="ﬁ"/>
+    <item find=":патица:" replace="閭"/>
+    <item find=":силен звук:" replace=""/>
+    <item find=":гръцки кръст:" replace="✚"/>
+    <item find=":дърво:" replace=""/>
+    <item find=":наляво3:" replace="☚"/>
+    <item find=":четка:" replace=""/>
+    <item find=":бележник2:" replace=""/>
+    <item find=":остров:" replace=""/>
+    <item find=":среден квадрат:" replace="◻"/>
+    <item find=":розетка:" replace=""/>
+    <item find=":пират:" replace=""/>
+    <item find=":каскада:" replace=""/>
+    <item find=":_m:" replace="ₘ"/>
+    <item find=":гоблин:" replace=""/>
+    <item find=":бутон2:" replace=""/>
+    <item find=":каскет:" replace="梨"/>
+    <item find=":\\:" replace="∖"/>
+    <item find=":правоъгълен триъгълник:" replace="⊿"/>
+    <item find=":джудо:" replace="屢"/>
+    <item find=":маникюр:" replace=""/>
+    <item find=":пешеходец:" replace=""/>
+    <item find=":_x:" replace="ₓ"/>
+    <item find=":роза:" replace=""/>
+    <item find=":отрова:" replace="☠"/>
+    <item find=":облак3:" replace="⛈"/>
+    <item find=":бонбон:" replace=""/>
+    <item find=":информация3:" replace=""/>
+    <item find=":усмивка:" replace="☺"/>
+    <item find=":нож:" replace=""/>
+    <item find=":^делта:" replace="ᵟ"/>
+    <item find=":изоставен багаж:" replace=""/>
+    <item find=":черен кръг:" replace="⚫"/>
+    <item find=":къща2:" replace=""/>
+    <item find=":двойка3:" replace=""/>
+    <item find=":6.30:" replace=""/>
+    <item find=":дракон2:" replace=""/>
+    <item find=":_v:" replace="ᵥ"/>
+    <item find=":сблъсък:" replace=""/>
+    <item find=":луна:" replace=""/>
+    <item find=":капа:" replace="κ"/>
+    <item find=":надолу5:" replace=""/>
+    <item find=":кошче:" replace=""/>
+    <item find=":бебешка бутилка:" replace=""/>
+    <item find=":варел:" replace=""/>
+    <item find=":-+:" replace="∓"/>
+    <item find=":хотдог:" replace=""/>
+    <item find=":чиния:" replace=""/>
+    <item find=":светофар2:" replace=""/>
+    <item find=":заек:" replace=""/>
+    <item find=":бокс:" replace="壘"/>
+    <item find=":плик4:" replace=""/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="т.н."/>
+    <word exception="др."/>
+    <word exception="к.т.н."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="MHz"/>
+    <word exception="THz"/>
+    <word exception="GHz"/>
+    <word exception="ЦП"/>
+    <word exception="КД"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

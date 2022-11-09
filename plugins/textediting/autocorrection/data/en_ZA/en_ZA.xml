@@ -1,0 +1,1190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find="liev" replace="live"/>
+    <item find="willbe" replace="will be"/>
+    <item find=":Sango:" replace=""/>
+    <item find="wiull" replace="will"/>
+    <item find="struggel" replace="struggle"/>
+    <item find="tkaing" replace="taking"/>
+    <item find="alway" replace="always"/>
+    <item find=":100%:" replace=""/>
+    <item find="consonent" replace="consonant"/>
+    <item find="thme" replace="them"/>
+    <item find="reconize" replace="recognise"/>
+    <item find="acn" replace="can"/>
+    <item find="knowldge" replace="knowledge"/>
+    <item find="puting" replace="putting"/>
+    <item find="befoer" replace="before"/>
+    <item find="tets" replace="test"/>
+    <item find=":Move:" replace=""/>
+    <item find="attentioin" replace="attention"/>
+    <item find="gemeral" replace="general"/>
+    <item find="thna" replace="than"/>
+    <item find="UnitedStates" replace="United States"/>
+    <item find="exhcanges" replace="exchanges"/>
+    <item find="hapens" replace="happens"/>
+    <item find="thenew" replace="the new"/>
+    <item find="differemt" replace="different"/>
+    <item find="whent he" replace="when the"/>
+    <item find="becaus" replace="because"/>
+    <item find="perhpas" replace="perhaps"/>
+    <item find="beleiev" replace="believe"/>
+    <item find=":Blink:" replace=""/>
+    <item find="ohter" replace="other"/>
+    <item find="feild" replace="field"/>
+    <item find="iwth" replace="with"/>
+    <item find="tkae" replace="take"/>
+    <item find="driveing" replace="driving"/>
+    <item find="sohw" replace="show"/>
+    <item find="merchent" replace="merchant"/>
+    <item find="disatisfied" replace="dissatisfied"/>
+    <item find="andthe" replace="and the"/>
+    <item find="embarass" replace="embarrass"/>
+    <item find="nwe" replace="new"/>
+    <item find="actualyl" replace="actually"/>
+    <item find="soudns" replace="sounds"/>
+    <item find="creme" replace="crème"/>
+    <item find=":Empty Set:" replace="∅"/>
+    <item find="tiogether" replace="together"/>
+    <item find="responsability" replace="responsibility"/>
+    <item find="htese" replace="these"/>
+    <item find="1/4" replace="¼"/>
+    <item find="percentto" replace="percent to"/>
+    <item find="warrent" replace="warrant"/>
+    <item find="thansk" replace="thanks"/>
+    <item find="tellt he" replace="tell the"/>
+    <item find="nkow" replace="know"/>
+    <item find=":Fill:" replace=""/>
+    <item find="chnage" replace="change"/>
+    <item find="committe" replace="committee"/>
+    <item find=":^(:" replace="⁽"/>
+    <item find="totaly" replace="totally"/>
+    <item find="lenght" replace="length"/>
+    <item find="ahve" replace="have"/>
+    <item find="specificalyl" replace="specifically"/>
+    <item find=":---:" replace="—"/>
+    <item find="arond" replace="around"/>
+    <item find="beleived" replace="believed"/>
+    <item find="sectino" replace="section"/>
+    <item find="almots" replace="almost"/>
+    <item find="untill" replace="until"/>
+    <item find="ofthe" replace="of the"/>
+    <item find="guidlines" replace="guidelines"/>
+    <item find=":inch:" replace="″"/>
+    <item find="alreayd" replace="already"/>
+    <item find="alwyas" replace="always"/>
+    <item find="presance" replace="presence"/>
+    <item find="wrod" replace="word"/>
+    <item find="werre" replace="were"/>
+    <item find="acommodate" replace="accommodate"/>
+    <item find="overthe" replace="over the"/>
+    <item find="would of been" replace="would have been"/>
+    <item find="challanges" replace="challenges"/>
+    <item find="improvment" replace="improvement"/>
+    <item find="thsoe" replace="those"/>
+    <item find="simpyl" replace="simply"/>
+    <item find="oppertunity" replace="opportunity"/>
+    <item find=":Right:" replace=""/>
+    <item find=":Cell:" replace=""/>
+    <item find="waht" replace="what"/>
+    <item find="calcullated" replace="calculated"/>
+    <item find="agressive" replace="aggressive"/>
+    <item find="mispell" replace="misspell"/>
+    <item find=":\\:" replace="∖"/>
+    <item find=":none:" replace=""/>
+    <item find=":Flat:" replace="♭"/>
+    <item find="mesage" replace="message"/>
+    <item find="develope" replace="develop"/>
+    <item find="suprised" replace="surprised"/>
+    <item find="wehn" replace="when"/>
+    <item find="compleated" replace="completed"/>
+    <item find="havebeen" replace="have been"/>
+    <item find="acheived" replace="achieved"/>
+    <item find="comited" replace="committed"/>
+    <item find="hting" replace="thing"/>
+    <item find="oxident" replace="oxidant"/>
+    <item find="deatils" replace="details"/>
+    <item find="tje" replace="the"/>
+    <item find="haev" replace="have"/>
+    <item find="unliek" replace="unlike"/>
+    <item find="undert he" replace="under the"/>
+    <item find="tyhat" replace="that"/>
+    <item find=":!:" replace="❕"/>
+    <item find="tongiht" replace="tonight"/>
+    <item find="porblems" replace="problems"/>
+    <item find="soem" replace="some"/>
+    <item find="labratory" replace="laboratory"/>
+    <item find="tlaking" replace="talking"/>
+    <item find="amkes" replace="makes"/>
+    <item find="studnet" replace="student"/>
+    <item find="additinal" replace="additional"/>
+    <item find="cooporate" replace="cooperate"/>
+    <item find="agreemeent" replace="agreement"/>
+    <item find="gettin" replace="getting"/>
+    <item find="atthe" replace="at the"/>
+    <item find="konws" replace="knows"/>
+    <item find="lieutenent" replace="lieutenant"/>
+    <item find="affraid" replace="afraid"/>
+    <item find=":Integral:" replace="∫"/>
+    <item find="shcool" replace="school"/>
+    <item find=":clipboard:" replace=""/>
+    <item find="thier" replace="their"/>
+    <item find="responsiblity" replace="responsibility"/>
+    <item find="betwen" replace="between"/>
+    <item find="oeprator" replace="operator"/>
+    <item find="saidhe" replace="said he"/>
+    <item find="geting" replace="getting"/>
+    <item find=":Price:" replace=""/>
+    <item find="gloabl" replace="global"/>
+    <item find="whta" replace="what"/>
+    <item find="almsot" replace="almost"/>
+    <item find="whihc" replace="which"/>
+    <item find="devellopments" replace="developments"/>
+    <item find="giveing" replace="giving"/>
+    <item find="goign" replace="going"/>
+    <item find="cliant" replace="client"/>
+    <item find="firends" replace="friends"/>
+    <item find="esle" replace="else"/>
+    <item find="liekd" replace="liked"/>
+    <item find="timne" replace="time"/>
+    <item find="baout" replace="about"/>
+    <item find=":Computers:" replace=""/>
+    <item find="anbd" replace="and"/>
+    <item find="forthe" replace="for the"/>
+    <item find="sucessfull" replace="successful"/>
+    <item find="allwyas" replace="always"/>
+    <item find="desision" replace="decision"/>
+    <item find="togehter" replace="together"/>
+    <item find="couldthe" replace="could the"/>
+    <item find="dispaly" replace="display"/>
+    <item find="successfulyl" replace="successfully"/>
+    <item find="donig" replace="doing"/>
+    <item find="appeares" replace="appears"/>
+    <item find=":mu:" replace="μ"/>
+    <item find=":^-:" replace="⁻"/>
+    <item find="stopry" replace="story"/>
+    <item find="obediant" replace="obedient"/>
+    <item find="mkae" replace="make"/>
+    <item find="itnerest" replace="interest"/>
+    <item find="foudn" replace="found"/>
+    <item find=": degrees:" replace="°"/>
+    <item find="thgat" replace="that"/>
+    <item find="comtain" replace="contain"/>
+    <item find="becausethe" replace="because the"/>
+    <item find=":Foot:" replace=""/>
+    <item find="comntains" replace="contains"/>
+    <item find="aquisition" replace="acquisition"/>
+    <item find="haveing" replace="having"/>
+    <item find=":zeta:" replace="ζ"/>
+    <item find="reccommend" replace="recommend"/>
+    <item find="cpoy" replace="copy"/>
+    <item find="fianlly" replace="finally"/>
+    <item find="ytou" replace="you"/>
+    <item find="virtualyl" replace="virtually"/>
+    <item find="doimg" replace="doing"/>
+    <item find="hadbeen" replace="had been"/>
+    <item find="accidant" replace="accident"/>
+    <item find="lisense" replace="licence"/>
+    <item find="rythm" replace="rhythm"/>
+    <item find="efort" replace="effort"/>
+    <item find=":':" replace="’"/>
+    <item find="candidtaes" replace="candidates"/>
+    <item find="exchagnes" replace="exchanges"/>
+    <item find="govenment" replace="government"/>
+    <item find="selectoin" replace="selection"/>
+    <item find="negotiaing" replace="negotiating"/>
+    <item find="youare" replace="you are"/>
+    <item find="imediate" replace="immediate"/>
+    <item find="sot hat" replace="so that"/>
+    <item find="equippment" replace="equipment"/>
+    <item find="desicions" replace="decisions"/>
+    <item find="indenpendence" replace="independence"/>
+    <item find="considerit" replace="considerate"/>
+    <item find="gonig" replace="going"/>
+    <item find="knowlege" replace="knowledge"/>
+    <item find="beleive" replace="believe"/>
+    <item find="audeince" replace="audience"/>
+    <item find=":rate:" replace=""/>
+    <item find="recieved" replace="received"/>
+    <item find=":Parallelogram:" replace="▰"/>
+    <item find="beleieve" replace="believe"/>
+    <item find="occured" replace="occurred"/>
+    <item find="thegovernment" replace="the government"/>
+    <item find="neccessary" replace="necessary"/>
+    <item find="understnad" replace="understand"/>
+    <item find=":Droplets:" replace=""/>
+    <item find="accross" replace="across"/>
+    <item find=":mean:" replace=""/>
+    <item find="ititial" replace="initial"/>
+    <item find="wa snot" replace="was not"/>
+    <item find="committment" replace="commitment"/>
+    <item find="adn" replace="and"/>
+    <item find=":Name:" replace=""/>
+    <item find="wiht" replace="with"/>
+    <item find="frmo" replace="from"/>
+    <item find=":upsilon:" replace="υ"/>
+    <item find=":Anchor:" replace="⚓"/>
+    <item find="unpleasently" replace="unpleasantly"/>
+    <item find="calulated" replace="calculated"/>
+    <item find="agreemnet" replace="agreement"/>
+    <item find="necassarily" replace="necessarily"/>
+    <item find="alwasy" replace="always"/>
+    <item find="cieling" replace="ceiling"/>
+    <item find=":Rotation:" replace=""/>
+    <item find="hsi" replace="his"/>
+    <item find="accesories" replace="accessories"/>
+    <item find=":Line:" replace=""/>
+    <item find="iwll" replace="will"/>
+    <item find=":Back:" replace=""/>
+    <item find="rumers" replace="rumors"/>
+    <item find="respomd" replace="respond"/>
+    <item find="sceduled" replace="scheduled"/>
+    <item find="reccomend" replace="recommend"/>
+    <item find="parliment" replace="parliament"/>
+    <item find="owrk" replace="work"/>
+    <item find="oppotunity" replace="opportunity"/>
+    <item find="wierd" replace="weird"/>
+    <item find=":!?:" replace="⁉"/>
+    <item find=":sheet:" replace=""/>
+    <item find="abscence" replace="absence"/>
+    <item find="nwo" replace="now"/>
+    <item find=":Save:" replace=""/>
+    <item find=":tau:" replace="τ"/>
+    <item find="questoin" replace="question"/>
+    <item find="ofits" replace="of its"/>
+    <item find="woudl" replace="would"/>
+    <item find="directiosn" replace="direction"/>
+    <item find="composate" replace="composite"/>
+    <item find=":Partial:" replace="∂"/>
+    <item find="statment" replace="statement"/>
+    <item find=":epsilon:" replace="Ε"/>
+    <item find=":delta:" replace="Δ"/>
+    <item find=":Superset:" replace="⊃"/>
+    <item find="thetwo" replace="the two"/>
+    <item find="should of been" replace="should have been"/>
+    <item find="morgage" replace="mortgage"/>
+    <item find="brodcast" replace="broadcast"/>
+    <item find=":Zoom:" replace=""/>
+    <item find="beleif" replace="belief"/>
+    <item find="oft he" replace="of the"/>
+    <item find="diffrent" replace="different"/>
+    <item find="charachter" replace="character"/>
+    <item find="developors" replace="developers"/>
+    <item find="tath" replace="that"/>
+    <item find=":Diamond:" replace="♦"/>
+    <item find="tkaes" replace="takes"/>
+    <item find=":iota:" replace="Ι"/>
+    <item find="neccessarily" replace="necessarily"/>
+    <item find="responsibile" replace="responsible"/>
+    <item find="equivalant" replace="equivalent"/>
+    <item find=":_):" replace="₎"/>
+    <item find="toldt he" replace="told the"/>
+    <item find="cusotmer" replace="customer"/>
+    <item find="mroe" replace="more"/>
+    <item find="arguements" replace="arguments"/>
+    <item find="foward" replace="forward"/>
+    <item find="onthe" replace="on the"/>
+    <item find="mispellings" replace="misspellings"/>
+    <item find="pciture" replace="picture"/>
+    <item find="sucess" replace="success"/>
+    <item find="orginization" replace="organisation"/>
+    <item find=":infinite:" replace="∞"/>
+    <item find="fammiliar" replace="familiar"/>
+    <item find="cna" replace="can"/>
+    <item find="claer" replace="clear"/>
+    <item find="thatthe" replace="that the"/>
+    <item find="necesarily" replace="necessarily"/>
+    <item find="comunity" replace="community"/>
+    <item find="adequite" replace="adequate"/>
+    <item find="gruop" replace="group"/>
+    <item find="withe" replace="with"/>
+    <item find="receieve" replace="receive"/>
+    <item find="freinds" replace="friends"/>
+    <item find="devellop" replace="develop"/>
+    <item find=":down:" replace="☟"/>
+    <item find="wroking" replace="working"/>
+    <item find="wuould" replace="would"/>
+    <item find="caharcter" replace="character"/>
+    <item find="aggresive" replace="aggressive"/>
+    <item find="moeny" replace="money"/>
+    <item find="appointiment" replace="appointment"/>
+    <item find="porblem" replace="problem"/>
+    <item find="desisions" replace="decisions"/>
+    <item find="completness" replace="completeness"/>
+    <item find="reult" replace="result"/>
+    <item find="reommend" replace="recommend"/>
+    <item find="wnated" replace="wanted"/>
+    <item find="restaraunt" replace="restaurant"/>
+    <item find=":Walloon:" replace=""/>
+    <item find=":pi:" replace="π"/>
+    <item find="must of had" replace="must have had"/>
+    <item find="papaer" replace="paper"/>
+    <item find="useing" replace="using"/>
+    <item find="hewas" replace="he was"/>
+    <item find="otu" replace="out"/>
+    <item find="apparant" replace="apparent"/>
+    <item find="statments" replace="statements"/>
+    <item find="atmospher" replace="atmosphere"/>
+    <item find="recomendations" replace="recommendations"/>
+    <item find="restuarant" replace="restaurant"/>
+    <item find="coudl" replace="could"/>
+    <item find="thnig" replace="thing"/>
+    <item find="saidthat" replace="said that"/>
+    <item find="colection" replace="collection"/>
+    <item find="likly" replace="likely"/>
+    <item find="comunicate" replace="communicate"/>
+    <item find="peopel" replace="people"/>
+    <item find="committy" replace="committee"/>
+    <item find=":Rectangle:" replace="▬"/>
+    <item find="andone" replace="and one"/>
+    <item find="poeple" replace="people"/>
+    <item find="apparrent" replace="apparent"/>
+    <item find="wroet" replace="wrote"/>
+    <item find="accomodate" replace="accommodate"/>
+    <item find=":gamma:" replace="γ"/>
+    <item find="yoiu" replace="you"/>
+    <item find="reserach" replace="research"/>
+    <item find=":Right Triangle:" replace="⊿"/>
+    <item find=":Cloud:" replace="☁"/>
+    <item find="seh" replace="she"/>
+    <item find="compleatness" replace="completeness"/>
+    <item find="simalar" replace="similar"/>
+    <item find=":Calendar:" replace=""/>
+    <item find=":Circle:" replace="○"/>
+    <item find="alomst" replace="almost"/>
+    <item find="occurence" replace="occurrence"/>
+    <item find=":Flower:" replace="⚘"/>
+    <item find="vulnerible" replace="vulnerable"/>
+    <item find=":like:" replace=""/>
+    <item find="traditionalyl" replace="traditionally"/>
+    <item find="would of had" replace="would have had"/>
+    <item find=":Not Subset:" replace="⊄"/>
+    <item find="wohle" replace="whole"/>
+    <item find="mkaes" replace="makes"/>
+    <item find="directer" replace="director"/>
+    <item find="wihch" replace="which"/>
+    <item find="hismelf" replace="himself"/>
+    <item find="corproation" replace="corporation"/>
+    <item find=":beta:" replace="β"/>
+    <item find="beleives" replace="believes"/>
+    <item find="askt he" replace="ask the"/>
+    <item find="excercise" replace="exercise"/>
+    <item find="abouta" replace="about a"/>
+    <item find="bve" replace="be"/>
+    <item find="familliar" replace="familiar"/>
+    <item find="wherre" replace="where"/>
+    <item find="garantee" replace="guarantee"/>
+    <item find="quetions" replace="questions"/>
+    <item find=":right:" replace="☛"/>
+    <item find="themselfs" replace="themselves"/>
+    <item find="bakc" replace="back"/>
+    <item find=":Sun:" replace="☉"/>
+    <item find="awya" replace="away"/>
+    <item find="recieving" replace="receiving"/>
+    <item find="desicion" replace="decision"/>
+    <item find="opposit" replace="opposite"/>
+    <item find=":Information:" replace="ℹ"/>
+    <item find="cusotmers" replace="customers"/>
+    <item find="alwats" replace="always"/>
+    <item find="termoil" replace="turmoil"/>
+    <item find="comtains" replace="contains"/>
+    <item find="tecnical" replace="technical"/>
+    <item find="quesion" replace="question"/>
+    <item find="threatend" replace="threatened"/>
+    <item find=":--:" replace="–"/>
+    <item find="htey" replace="they"/>
+    <item find="decisons" replace="decisions"/>
+    <item find="might of been" replace="might have been"/>
+    <item find="exprience" replace="experience"/>
+    <item find="uknown" replace="unknown"/>
+    <item find="quetion" replace="question"/>
+    <item find="impossable" replace="impossible"/>
+    <item find=":Square:" replace="□"/>
+    <item find="orginized" replace="organised"/>
+    <item find="could of had" replace="could have had"/>
+    <item find=":Notes:" replace="♫"/>
+    <item find="shiped" replace="shipped"/>
+    <item find="documnet" replace="document"/>
+    <item find="owuld" replace="would"/>
+    <item find="certian" replace="certain"/>
+    <item find="agian" replace="again"/>
+    <item find="indepedent" replace="independent"/>
+    <item find="stpo" replace="stop"/>
+    <item find="withthe" replace="with the"/>
+    <item find="librarry" replace="library"/>
+    <item find="approrpriate" replace="appropriate"/>
+    <item find="sufficiant" replace="sufficient"/>
+    <item find="foriegn" replace="foreign"/>
+    <item find="postition" replace="position"/>
+    <item find="learnign" replace="learning"/>
+    <item find="fwe" replace="few"/>
+    <item find="follwoing" replace="following"/>
+    <item find=":lambda:" replace="Λ"/>
+    <item find=":Intersection:" replace="∩"/>
+    <item find="abotu" replace="about"/>
+    <item find=":Bushi:" replace=""/>
+    <item find=":eta:" replace="Β"/>
+    <item find="hapened" replace="happened"/>
+    <item find=":Bullet:" replace="•"/>
+    <item find="hge" replace="he"/>
+    <item find="resorces" replace="resources"/>
+    <item find="compleatly" replace="completely"/>
+    <item find="towrad" replace="toward"/>
+    <item find="occurrance" replace="occurrence"/>
+    <item find="zip code" replace="postcode"/>
+    <item find="responsable" replace="responsible"/>
+    <item find="differnt" replace="different"/>
+    <item find="untilll" replace="until"/>
+    <item find="availalbe" replace="available"/>
+    <item find="conspiricy" replace="conspiracy"/>
+    <item find=":!!:" replace="‼"/>
+    <item find=":Divides:" replace="∣"/>
+    <item find="compair" replace="compare"/>
+    <item find="deptartment" replace="department"/>
+    <item find=":Power:" replace=""/>
+    <item find=":Ellipse:" replace="⬭"/>
+    <item find="addtional" replace="additional"/>
+    <item find=":Brown:" replace="☹"/>
+    <item find="comapny" replace="company"/>
+    <item find="ctaegory" replace="category"/>
+    <item find="truley" replace="truly"/>
+    <item find="someting" replace="something"/>
+    <item find="enought" replace="enough"/>
+    <item find="memeber" replace="member"/>
+    <item find="jsut" replace="just"/>
+    <item find="aywa" replace="away"/>
+    <item find="wief" replace="wife"/>
+    <item find="opperation" replace="operation"/>
+    <item find="showinf" replace="showing"/>
+    <item find="changeing" replace="changing"/>
+    <item find=":Section:" replace="§"/>
+    <item find="mkaing" replace="making"/>
+    <item find=":^):" replace="⁾"/>
+    <item find="begining" replace="beginning"/>
+    <item find="comming" replace="coming"/>
+    <item find="lonly" replace="lonely"/>
+    <item find="approrpiate" replace="appropriate"/>
+    <item find="onepoint" replace="one point"/>
+    <item find="htis" replace="this"/>
+    <item find="conferance" replace="conference"/>
+    <item find=":month:" replace=""/>
+    <item find="permanant" replace="permanent"/>
+    <item find="drnik" replace="drink"/>
+    <item find=":-:" replace="−"/>
+    <item find="cotten" replace="cotton"/>
+    <item find="herat" replace="heart"/>
+    <item find="ont he" replace="on the"/>
+    <item find="acheiving" replace="achieving"/>
+    <item find="recomendation" replace="recommendation"/>
+    <item find="combintation" replace="combination"/>
+    <item find="sercumstances" replace="circumstances"/>
+    <item find="paymetns" replace="payments"/>
+    <item find="artical" replace="article"/>
+    <item find="yuo" replace="you"/>
+    <item find="freindly" replace="friendly"/>
+    <item find="somthing" replace="something"/>
+    <item find="committments" replace="commitments"/>
+    <item find="opposate" replace="opposite"/>
+    <item find="fora" replace="for a"/>
+    <item find="reluctent" replace="reluctant"/>
+    <item find="inteh" replace="in the"/>
+    <item find="byt he" replace="by the"/>
+    <item find="psoition" replace="position"/>
+    <item find="tryed" replace="tried"/>
+    <item find="represetned" replace="represented"/>
+    <item find="aquisitions" replace="acquisitions"/>
+    <item find="themself" replace="themselves"/>
+    <item find=":alpha:" replace="α"/>
+    <item find=":_-:" replace="₋"/>
+    <item find="htere" replace="there"/>
+    <item find="especialyl" replace="especially"/>
+    <item find=":feet:" replace=""/>
+    <item find="usualyl" replace="usually"/>
+    <item find="nver" replace="never"/>
+    <item find="charactor" replace="character"/>
+    <item find="circut" replace="circuit"/>
+    <item find="becausea" replace="because a"/>
+    <item find="docuement" replace="document"/>
+    <item find="gruops" replace="groups"/>
+    <item find="challange" replace="challenge"/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find="cliche" replace="cliché"/>
+    <item find="shesaid" replace="she said"/>
+    <item find="espesially" replace="especially"/>
+    <item find=":Clover:" replace=""/>
+    <item find="changable" replace="changeable"/>
+    <item find="importnat" replace="important"/>
+    <item find="recomended" replace="recommended"/>
+    <item find=":Alpha:" replace="Α"/>
+    <item find="comntain" replace="contain"/>
+    <item find="liek" replace="like"/>
+    <item find="thta" replace="that"/>
+    <item find=":sigma:" replace="Σ"/>
+    <item find="comittee" replace="committee"/>
+    <item find="onyl" replace="only"/>
+    <item find="finalyl" replace="finally"/>
+    <item find="thsi" replace="this"/>
+    <item find="efel" replace="feel"/>
+    <item find="recieve" replace="receive"/>
+    <item find=":Product:" replace="∏"/>
+    <item find="librery" replace="library"/>
+    <item find=":Ring:" replace=""/>
+    <item find="freind" replace="friend"/>
+    <item find=":French:" replace=""/>
+    <item find="experiance" replace="experience"/>
+    <item find="wriet" replace="write"/>
+    <item find="articel" replace="article"/>
+    <item find="devellops" replace="develop"/>
+    <item find="againstt he" replace="against the"/>
+    <item find=":xi:" replace="ξ"/>
+    <item find="hasbeen" replace="has been"/>
+    <item find="anothe" replace="another"/>
+    <item find=":.:" replace="…"/>
+    <item find="liuke" replace="like"/>
+    <item find="instaleld" replace="installed"/>
+    <item find="candidtae" replace="candidate"/>
+    <item find="experienc" replace="experience"/>
+    <item find=":Wall:" replace="⛹"/>
+    <item find=":Shell:" replace=""/>
+    <item find="exprienced" replace="experienced"/>
+    <item find="successfuly" replace="successfully"/>
+    <item find="developement" replace="development"/>
+    <item find="may of been" replace="may have been"/>
+    <item find="saidit" replace="said it"/>
+    <item find="thesame" replace="the same"/>
+    <item find="excellant" replace="excellent"/>
+    <item find="claerly" replace="clearly"/>
+    <item find="stroy" replace="story"/>
+    <item find="mispelling" replace="misspelling"/>
+    <item find="wouldbe" replace="would be"/>
+    <item find="develloping" replace="developing"/>
+    <item find="insted" replace="instead"/>
+    <item find="boxs" replace="boxes"/>
+    <item find="strentgh" replace="strength"/>
+    <item find=":Instrction:" replace=""/>
+    <item find=":Pager:" replace=""/>
+    <item find="tyhe" replace="the"/>
+    <item find="diaplay" replace="display"/>
+    <item find="sentance" replace="sentence"/>
+    <item find="tonihgt" replace="tonight"/>
+    <item find="successfull" replace="successful"/>
+    <item find="idaes" replace="ideas"/>
+    <item find="appearence" replace="appearance"/>
+    <item find="thefirst" replace="the first"/>
+    <item find="their are" replace="there are"/>
+    <item find="quater" replace="quarter"/>
+    <item find="furneral" replace="funeral"/>
+    <item find="necesary" replace="necessary"/>
+    <item find="doe snot" replace="does not"/>
+    <item find="adequit" replace="adequate"/>
+    <item find="differances" replace="differences"/>
+    <item find="religous" replace="religious"/>
+    <item find="allwasy" replace="always"/>
+    <item find="opposible" replace="opposable"/>
+    <item find="peices" replace="pieces"/>
+    <item find="pwoer" replace="power"/>
+    <item find="stnad" replace="stand"/>
+    <item find=":and:" replace="∧"/>
+    <item find="applicaitons" replace="applications"/>
+    <item find="becomeing" replace="becoming"/>
+    <item find="bcak" replace="back"/>
+    <item find="oneof" replace="one of"/>
+    <item find="tihs" replace="this"/>
+    <item find=":kappa:" replace="Κ"/>
+    <item find="corproations" replace="corporations"/>
+    <item find="sidewalk" replace="pavement"/>
+    <item find="directers" replace="directors"/>
+    <item find=":Crescent Moon:" replace=""/>
+    <item find="otehr" replace="other"/>
+    <item find="saidt he" replace="said the"/>
+    <item find=":Hexagon:" replace="⬡"/>
+    <item find="oging" replace="going"/>
+    <item find="develloper" replace="developer"/>
+    <item find="docuemnt" replace="document"/>
+    <item find=":e-mail:" replace=""/>
+    <item find="convertable" replace="convertible"/>
+    <item find="confirmmation" replace="confirmation"/>
+    <item find="nothign" replace="nothing"/>
+    <item find="makeing" replace="making"/>
+    <item find="andteh" replace="and the"/>
+    <item find="becuse" replace="because"/>
+    <item find=":Brightness:" replace=""/>
+    <item find="cutsomer" replace="customer"/>
+    <item find="devellopment" replace="development"/>
+    <item find="inwhich" replace="in which"/>
+    <item find=":start:" replace="★"/>
+    <item find=":Camera:" replace=""/>
+    <item find="3/4" replace="¾"/>
+    <item find="comanies" replace="companies"/>
+    <item find="feilds" replace="fields"/>
+    <item find="swiming" replace="swimming"/>
+    <item find="whic" replace="which"/>
+    <item find="performence" replace="performance"/>
+    <item find="truely" replace="truly"/>
+    <item find="shoudl" replace="should"/>
+    <item find="acomodate" replace="accommodate"/>
+    <item find="stoyr" replace="story"/>
+    <item find="htink" replace="think"/>
+    <item find="defendent" replace="defendant"/>
+    <item find="peolpe" replace="people"/>
+    <item find=".*(C)" replace="©"/>
+    <item find=":Bookmark:" replace=""/>
+    <item find="chanegs" replace="changes"/>
+    <item find="charector" replace="character"/>
+    <item find="fowards" replace="forwards"/>
+    <item find=":up:" replace="☝"/>
+    <item find="becuase" replace="because"/>
+    <item find="witht he" replace="with the"/>
+    <item find="tthe" replace="the"/>
+    <item find="yera" replace="year"/>
+    <item find="consultent" replace="consultant"/>
+    <item find=".*(R)" replace="®"/>
+    <item find="oppasite" replace="opposite"/>
+    <item find="loev" replace="love"/>
+    <item find="ptogress" replace="progress"/>
+    <item find=":Dash:" replace=""/>
+    <item find="amke" replace="make"/>
+    <item find="writting" replace="writing"/>
+    <item find="must of been" replace="must have been"/>
+    <item find="todya" replace="today"/>
+    <item find="recomend" replace="recommend"/>
+    <item find="distribusion" replace="distribution"/>
+    <item find="represnt" replace="represent"/>
+    <item find=":Flags:" replace=""/>
+    <item find="develloped" replace="developed"/>
+    <item find="smae" replace="same"/>
+    <item find="oppotunities" replace="opportunities"/>
+    <item find=":Parallel:" replace="∥"/>
+    <item find="perhasp" replace="perhaps"/>
+    <item find=":?:" replace="❓"/>
+    <item find="necassary" replace="necessary"/>
+    <item find="happend" replace="happened"/>
+    <item find="smoe" replace="some"/>
+    <item find="will of been" replace="will have been"/>
+    <item find="differant" replace="different"/>
+    <item find="secratary" replace="secretary"/>
+    <item find="recrod" replace="record"/>
+    <item find="thnigs" replace="things"/>
+    <item find=":true:" replace=""/>
+    <item find=":chart:" replace=""/>
+    <item find="tghe" replace="the"/>
+    <item find="familair" replace="familiar"/>
+    <item find="diferences" replace="differences"/>
+    <item find=":mile:" replace="♂"/>
+    <item find="ballance" replace="balance"/>
+    <item find=":Envelope:" replace="✉"/>
+    <item find="doign" replace="doing"/>
+    <item find="decison" replace="decision"/>
+    <item find="somewaht" replace="somewhat"/>
+    <item find="beggining" replace="beginning"/>
+    <item find="doind" replace="doing"/>
+    <item find="faeture" replace="feature"/>
+    <item find="comapnies" replace="companies"/>
+    <item find="mysefl" replace="myself"/>
+    <item find="forwrd" replace="forward"/>
+    <item find="thecompany" replace="the company"/>
+    <item find="hearign" replace="hearing"/>
+    <item find=":chi:" replace="χ"/>
+    <item find="hesaid" replace="he said"/>
+    <item find="hvaing" replace="having"/>
+    <item find="idae" replace="idea"/>
+    <item find="theri" replace="their"/>
+    <item find=":Block:" replace=""/>
+    <item find=":Maths:" replace=""/>
+    <item find=":in:" replace="∈"/>
+    <item find="balence" replace="balance"/>
+    <item find="separeate" replace="separate"/>
+    <item find=":Warning:" replace="⚠"/>
+    <item find="littel" replace="little"/>
+    <item find="pleasent" replace="pleasant"/>
+    <item find=":year:" replace="⚙"/>
+    <item find="arguement" replace="argument"/>
+    <item find="saidthe" replace="said the"/>
+    <item find="independance" replace="independence"/>
+    <item find=":Cellphone:" replace=""/>
+    <item find="gaurd" replace="guard"/>
+    <item find="charecter" replace="character"/>
+    <item find="helpfull" replace="helpful"/>
+    <item find="difefrent" replace="different"/>
+    <item find="representives" replace="representatives"/>
+    <item find="fromthe" replace="from the"/>
+    <item find="claered" replace="cleared"/>
+    <item find="sincerly" replace="sincerely"/>
+    <item find="konwn" replace="known"/>
+    <item find=":omega:" replace="Ω"/>
+    <item find="itneresting" replace="interesting"/>
+    <item find="might of had" replace="might have had"/>
+    <item find="eforts" replace="efforts"/>
+    <item find="condolances" replace="condolences"/>
+    <item find=":Note:" replace="♩"/>
+    <item find="gievn" replace="given"/>
+    <item find="rwite" replace="write"/>
+    <item find="faetures" replace="features"/>
+    <item find="i snot" replace="is not"/>
+    <item find="goverment" replace="government"/>
+    <item find="udnerstand" replace="understand"/>
+    <item find="knwon" replace="known"/>
+    <item find="andt he" replace="and the"/>
+    <item find="somethign" replace="something"/>
+    <item find="questiosn" replace="questions"/>
+    <item find="peice" replace="piece"/>
+    <item find="immediatly" replace="immediately"/>
+    <item find="prominant" replace="prominent"/>
+    <item find=":text:" replace="⛺"/>
+    <item find="hvae" replace="have"/>
+    <item find="their is" replace="there is"/>
+    <item find="thge" replace="the"/>
+    <item find=":Heartbeat:" replace=""/>
+    <item find="dollers" replace="dollars"/>
+    <item find=":Sound:" replace="£"/>
+    <item find="soudn" replace="sound"/>
+    <item find="inthe" replace="in the"/>
+    <item find="marraige" replace="marriage"/>
+    <item find="develpment" replace="development"/>
+    <item find="advanage" replace="advantage"/>
+    <item find="suposed" replace="supposed"/>
+    <item find="ocur" replace="occur"/>
+    <item find="discoverd" replace="discovered"/>
+    <item find="alot" replace="a lot"/>
+    <item find="questioms" replace="questions"/>
+    <item find=":Button:" replace=""/>
+    <item find="maintenence" replace="maintenance"/>
+    <item find="itis" replace="it is"/>
+    <item find="omre" replace="more"/>
+    <item find="didnot" replace="did not"/>
+    <item find="cheif" replace="chief"/>
+    <item find="chekc" replace="check"/>
+    <item find="butthe" replace="but the"/>
+    <item find="tahn" replace="than"/>
+    <item find="who;ve" replace="who’ve"/>
+    <item find="follwo" replace="follow"/>
+    <item find="identofy" replace="identify"/>
+    <item find="liveing" replace="living"/>
+    <item find="commadn" replace="command"/>
+    <item find="isthe" replace="is the"/>
+    <item find="agreemnets" replace="agreements"/>
+    <item find="may of had" replace="may have had"/>
+    <item find="doese" replace="does"/>
+    <item find=":or:" replace="∨"/>
+    <item find="chaneg" replace="change"/>
+    <item find="asdvertising" replace="advertising"/>
+    <item find="changng" replace="changing"/>
+    <item find="yersa" replace="years"/>
+    <item find="whicht he" replace="which the"/>
+    <item find="definately" replace="definitely"/>
+    <item find=":range:" replace=""/>
+    <item find="develeoprs" replace="developers"/>
+    <item find="dcument" replace="document"/>
+    <item find="reveiw" replace="review"/>
+    <item find=":Moon:" replace="☽"/>
+    <item find=":Office:" replace=""/>
+    <item find=":Make:" replace=""/>
+    <item find="developements" replace="developments"/>
+    <item find=":omicron:" replace="Ο"/>
+    <item find="remeber" replace="remember"/>
+    <item find="paymetn" replace="payment"/>
+    <item find="commitee" replace="committee"/>
+    <item find=":Ruler:" replace=""/>
+    <item find="tehy" replace="they"/>
+    <item find="benifit" replace="benefit"/>
+    <item find="independant" replace="independent"/>
+    <item find="vrey" replace="very"/>
+    <item find="becasue" replace="because"/>
+    <item find="firts" replace="first"/>
+    <item find="benifits" replace="benefits"/>
+    <item find=":angle:" replace="∠"/>
+    <item find="resollution" replace="resolution"/>
+    <item find="partof" replace="part of"/>
+    <item find="knwos" replace="knows"/>
+    <item find="thatt he" replace="that the"/>
+    <item find="yuor" replace="your"/>
+    <item find="ehr" replace="her"/>
+    <item find="shineing" replace="shining"/>
+    <item find="grwo" replace="grow"/>
+    <item find=":rho:" replace="ρ"/>
+    <item find="excitment" replace="excitement"/>
+    <item find="familar" replace="familiar"/>
+    <item find="acheive" replace="achieve"/>
+    <item find="gerat" replace="great"/>
+    <item find="cutsomers" replace="customer"/>
+    <item find="exchagne" replace="exchange"/>
+    <item find=":Not Superset:" replace="⊅"/>
+    <item find="divsion" replace="division"/>
+    <item find=":left:" replace="☚"/>
+    <item find="tothe" replace="to the"/>
+    <item find="importent" replace="important"/>
+    <item find="teh" replace="the"/>
+    <item find="categiory" replace="category"/>
+    <item find=":Link:" replace=""/>
+    <item find=":Mute:" replace=""/>
+    <item find="inital" replace="initial"/>
+    <item find=":psi:" replace="ψ"/>
+    <item find="amde" replace="made"/>
+    <item find="tomorow" replace="tomorrow"/>
+    <item find="becauseyou" replace="because you"/>
+    <item find="tjhe" replace="the"/>
+    <item find="specificaly" replace="specifically"/>
+    <item find="agreemeents" replace="agreements"/>
+    <item find="thigsn" replace="things"/>
+    <item find="danceing" replace="dancing"/>
+    <item find=":Whip:" replace=""/>
+    <item find="ihs" replace="his"/>
+    <item find="signifacnt" replace="significant"/>
+    <item find="differance" replace="difference"/>
+    <item find=":Watch:" replace="⌚"/>
+    <item find="scedule" replace="schedule"/>
+    <item find="beutiful" replace="beautiful"/>
+    <item find="transfered" replace="transferred"/>
+    <item find=":radix:" replace=""/>
+    <item find="outof" replace="out of"/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find="developor" replace="developer"/>
+    <item find="potentialy" replace="potentially"/>
+    <item find="improvemnt" replace="improvement"/>
+    <item find=":notequal:" replace="≠"/>
+    <item find="taht" replace="that"/>
+    <item find="indecate" replace="indicate"/>
+    <item find=":Grey:" replace=""/>
+    <item find="catagory" replace="category"/>
+    <item find="cooparate" replace="cooperate"/>
+    <item find="corruptable" replace="corruptible"/>
+    <item find="afterthe" replace="after the"/>
+    <item find=":Gamma:" replace="Γ"/>
+    <item find="accordingto" replace="according to"/>
+    <item find=":Top right:" replace="©"/>
+    <item find=":_(:" replace="₍"/>
+    <item find="disign" replace="design"/>
+    <item find=":nu:" replace="ν"/>
+    <item find="itnerested" replace="interested"/>
+    <item find="lastyear" replace="last year"/>
+    <item find=":phi:" replace="φ"/>
+    <item find="quaters" replace="quarters"/>
+    <item find="personalyl" replace="personally"/>
+    <item find="seance" replace="séance"/>
+    <item find="itnerests" replace="interests"/>
+    <item find="ahppen" replace="happen"/>
+    <item find=":Subset:" replace="⊂"/>
+    <item find="speach" replace="speech"/>
+    <item find="should of had" replace="should have had"/>
+    <item find="wtih" replace="with"/>
+    <item find="probelms" replace="problems"/>
+    <item find="wya" replace="way"/>
+    <item find="effecient" replace="efficient"/>
+    <item find="hapen" replace="happen"/>
+    <item find="applicaiton" replace="application"/>
+    <item find="possable" replace="possible"/>
+    <item find="quesions" replace="questions"/>
+    <item find="lookign" replace="looking"/>
+    <item find="tghis" replace="this"/>
+    <item find=":Ganda:" replace=""/>
+    <item find="influance" replace="influence"/>
+    <item find="talekd" replace="talked"/>
+    <item find="totalyl" replace="totally"/>
+    <item find="libary" replace="library"/>
+    <item find="representativs" replace="representatives"/>
+    <item find="insurence" replace="insurance"/>
+    <item find=":Union:" replace="∪"/>
+    <item find="int he" replace="in the"/>
+    <item find="hwich" replace="which"/>
+    <item find="porvide" replace="provide"/>
+    <item find="conected" replace="connected"/>
+    <item find="responce" replace="response"/>
+    <item find=":Heart:" replace="❤"/>
+    <item find="ocasion" replace="occasion"/>
+    <item find="Ameria" replace="America"/>
+    <item find="completly" replace="completely"/>
+    <item find="odf" replace="ODF"/>
+    <item find="audiance" replace="audience"/>
+    <item find=":Keyboard:" replace="⌨"/>
+    <item find="beacuse" replace="because"/>
+    <item find="realyl" replace="really"/>
+    <item find="applyed" replace="applied"/>
+    <item find="eligable" replace="eligible"/>
+    <item find="whcih" replace="which"/>
+    <item find="percentof" replace="percent of"/>
+    <item find="documnets" replace="documents"/>
+    <item find="wnat" replace="want"/>
+    <item find="veyr" replace="very"/>
+    <item find="myu" replace="my"/>
+    <item find=":~Radio Button:" replace=""/>
+    <item find="watn" replace="want"/>
+    <item find="hapening" replace="happening"/>
+    <item find="forwrds" replace="forwards"/>
+    <item find="aboutit" replace="about it"/>
+    <item find="exhcange" replace="exchange"/>
+    <item find="dissonent" replace="dissonant"/>
+    <item find="reveiwing" replace="reviewing"/>
+    <item find="strugle" replace="struggle"/>
+    <item find="becauseof" replace="because of"/>
+    <item find="managment" replace="management"/>
+    <item find="wnats" replace="wants"/>
+    <item find="jugment" replace="judgment"/>
+    <item find="fromt he" replace="from the"/>
+    <item find="hlep" replace="help"/>
+    <item find="eyt" replace="yet"/>
+    <item find="mantain" replace="maintain"/>
+    <item find="1/2" replace="½"/>
+    <item find="documetn" replace="document"/>
+    <item find="allready" replace="already"/>
+    <item find=":yes:" replace=""/>
+    <item find="pregnent" replace="pregnant"/>
+    <item find=":List:" replace="✊"/>
+    <item find="alraedy" replace="already"/>
+    <item find=":Folder:" replace=""/>
+    <item find="blase" replace="blasé"/>
+    <item find="includ" replace="include"/>
+    <item find="becomming" replace="becoming"/>
+    <item find="beginining" replace="beginning"/>
+    <item find="levle" replace="level"/>
+    <item find="probelm" replace="problem"/>
+    <item find="hte" replace="the"/>
+    <item find=":/:" replace="∕"/>
+    <item find=":theta:" replace="Θ"/>
+    <item find="respomse" replace="response"/>
+    <item find=":Pentagon:" replace="⬟"/>
+    <item find="especally" replace="especially"/>
+    <item find="similiar" replace="similar"/>
+    <item find="atention" replace="attention"/>
+    <item find="could of been" replace="could have been"/>
+    <item find="perminent" replace="permanent"/>
+    <item find="infomation" replace="information"/>
+    <item find="comany" replace="company"/>
+    <item find="wokr" replace="work"/>
+    <item find=":Socket:" replace=""/>
+    <item find="anual" replace="annual"/>
+    <item find="informatoin" replace="information"/>
+    <item find="indenpendent" replace="independent"/>
+    <item find="thisyear" replace="this year"/>
+    <item find="charachters" replace="characters"/>
+    <item find="decor" replace="décor"/>
+    <item find="imediatly" replace="immediately"/>
+    <item find="talkign" replace="talking"/>
+    <item find="somtimes" replace="sometimes"/>
+    <item find="woh" replace="who"/>
+    <item find="soical" replace="social"/>
+    <item find="thne" replace="then"/>
+    <item find="devellopers" replace="developers"/>
+    <item find="considerite" replace="considerate"/>
+    <item find="alreday" replace="already"/>
+    <item find="knwo" replace="know"/>
+    <item find="occassion" replace="occasion"/>
+    <item find="yeras" replace="years"/>
+    <item find="cxan" replace="can"/>
+    <item find="litttle" replace="little"/>
+    <item find="interum" replace="interim"/>
+    <item find="hsa" replace="has"/>
+    <item find="mesages" replace="messages"/>
+    <item find="sitll" replace="still"/>
+    <item find="suppossed" replace="supposed"/>
+    <item find="witha" replace="with a"/>
+    <item find="windoes" replace="windows"/>
+    <item find="fidn" replace="find"/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="vs."/>
+    <word exception="no."/>
+    <word exception="Hon."/>
+    <word exception="B.Sc."/>
+    <word exception="viz."/>
+    <word exception="int."/>
+    <word exception="q."/>
+    <word exception="M.Sc."/>
+    <word exception="avg."/>
+    <word exception="w."/>
+    <word exception="sec."/>
+    <word exception="defn."/>
+    <word exception="Adv."/>
+    <word exception="etc."/>
+    <word exception="acc."/>
+    <word exception="d."/>
+    <word exception="in."/>
+    <word exception="hr."/>
+    <word exception="bu."/>
+    <word exception="e."/>
+    <word exception="min."/>
+    <word exception="c."/>
+    <word exception="ext."/>
+    <word exception="specif."/>
+    <word exception="ins."/>
+    <word exception="qty."/>
+    <word exception="proj."/>
+    <word exception="ibid."/>
+    <word exception="P.O."/>
+    <word exception="rd."/>
+    <word exception="j."/>
+    <word exception="wed."/>
+    <word exception="dept."/>
+    <word exception="o."/>
+    <word exception="assoc."/>
+    <word exception="resp."/>
+    <word exception="fri."/>
+    <word exception="Sgt."/>
+    <word exception="h."/>
+    <word exception="thurs."/>
+    <word exception="oct."/>
+    <word exception="dr."/>
+    <word exception="orig."/>
+    <word exception="x."/>
+    <word exception="sep."/>
+    <word exception="ib."/>
+    <word exception="excl."/>
+    <word exception="reqd."/>
+    <word exception="r.p.m."/>
+    <word exception="i.e."/>
+    <word exception="acct."/>
+    <word exception="obj."/>
+    <word exception="ie."/>
+    <word exception="ne."/>
+    <word exception="apt."/>
+    <word exception="ed."/>
+    <word exception="eg."/>
+    <word exception="v."/>
+    <word exception="n."/>
+    <word exception="cu."/>
+    <word exception="ln."/>
+    <word exception="Mr."/>
+    <word exception="equip."/>
+    <word exception="hrs."/>
+    <word exception="jr."/>
+    <word exception="Capt."/>
+    <word exception="nat."/>
+    <word exception="Soc."/>
+    <word exception="z."/>
+    <word exception="var."/>
+    <word exception="appt."/>
+    <word exception="lit."/>
+    <word exception="esp."/>
+    <word exception="rel."/>
+    <word exception="p.a."/>
+    <word exception="gov."/>
+    <word exception="univ."/>
+    <word exception="asst."/>
+    <word exception="psi."/>
+    <word exception="a."/>
+    <word exception="govt."/>
+    <word exception="Ind."/>
+    <word exception="Sub-Lt."/>
+    <word exception="ct."/>
+    <word exception="Prof."/>
+    <word exception="s."/>
+    <word exception="prev."/>
+    <word exception="approx."/>
+    <word exception="e.m.f."/>
+    <word exception="ob."/>
+    <word exception="jul."/>
+    <word exception="sun."/>
+    <word exception="cont."/>
+    <word exception="Bros."/>
+    <word exception="nov."/>
+    <word exception="nos."/>
+    <word exception="inc."/>
+    <word exception="natl."/>
+    <word exception="pl."/>
+    <word exception="C.Lit."/>
+    <word exception="sw."/>
+    <word exception="est."/>
+    <word exception="anon."/>
+    <word exception="sat."/>
+    <word exception="sci."/>
+    <word exception="seq."/>
+    <word exception="Rs."/>
+    <word exception="nw."/>
+    <word exception="seqq."/>
+    <word exception="m."/>
+    <word exception="rec."/>
+    <word exception="Snr."/>
+    <word exception="Tel."/>
+    <word exception="ave."/>
+    <word exception="r."/>
+    <word exception="y."/>
+    <word exception="b."/>
+    <word exception="p."/>
+    <word exception="f."/>
+    <word exception="corp."/>
+    <word exception="amt."/>
+    <word exception="co."/>
+    <word exception="mun."/>
+    <word exception="jnr."/>
+    <word exception="mon."/>
+    <word exception="dec."/>
+    <word exception="rt."/>
+    <word exception="Brit."/>
+    <word exception="norm."/>
+    <word exception="l."/>
+    <word exception="misc."/>
+    <word exception="mar."/>
+    <word exception="feb."/>
+    <word exception="max."/>
+    <word exception="rev."/>
+    <word exception="tues."/>
+    <word exception="Econ."/>
+    <word exception="t."/>
+    <word exception="aug."/>
+    <word exception="ft."/>
+    <word exception="Revd."/>
+    <word exception="kt."/>
+    <word exception="req."/>
+    <word exception="sch."/>
+    <word exception="Supt."/>
+    <word exception="subj."/>
+    <word exception="jan."/>
+    <word exception="org."/>
+    <word exception="vol."/>
+    <word exception="se."/>
+    <word exception="q.t."/>
+    <word exception="apr."/>
+    <word exception="sq."/>
+    <word exception="sr."/>
+    <word exception="Mrs."/>
+    <word exception="mi."/>
+    <word exception="Lt."/>
+    <word exception="Ph.D."/>
+    <word exception="sept."/>
+    <word exception="k."/>
+    <word exception="neg."/>
+    <word exception="g."/>
+    <word exception="Sen."/>
+    <word exception="temp."/>
+    <word exception="Central African Rep."/>
+    <word exception="u."/>
+    <word exception="pos."/>
+    <word exception="spec."/>
+    <word exception="e.g."/>
+    <word exception="st."/>
+    <word exception="tot."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="MSc"/>
+    <word exception="THz"/>
+    <word exception="LPs"/>
+    <word exception="BSc"/>
+    <word exception="OOo's"/>
+    <word exception="MPhil"/>
+    <word exception="ICs"/>
+    <word exception="MCs"/>
+    <word exception="ODs"/>
+    <word exception="XEmacs"/>
+    <word exception="DStv"/>
+    <word exception="TVs"/>
+    <word exception="OKing"/>
+    <word exception="DJs"/>
+    <word exception="CDs"/>
+    <word exception="OKed"/>
+    <word exception="PCs"/>
+    <word exception="MPs"/>
+    <word exception="MHz"/>
+    <word exception="SAfm"/>
+    <word exception="OOo"/>
+    <word exception="OKs"/>
+    <word exception="XFree86"/>
+    <word exception="GHz"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

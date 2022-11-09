@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find="1/2" replace="½"/>
+    <item find="1/4" replace="¼"/>
+    <item find="&lt;-&gt;" replace="↔"/>
+    <item find="&lt;--" replace="←"/>
+    <item find=".*&lt;-.*" replace="←"/>
+    <item find="--&gt;" replace="→"/>
+    <item find=".*-&gt;.*" replace="→"/>
+    <item find="&lt;--&gt;" replace="↔"/>
+    <item find="3/4" replace="¾"/>
+    <item find=".*..." replace="…"/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="бот."/>
+    <word exception="бр."/>
+    <word exception="итд."/>
+    <word exception="вид."/>
+    <word exception="в."/>
+    <word exception="непр."/>
+    <word exception="аку."/>
+    <word exception="лок."/>
+    <word exception="лат."/>
+    <word exception="г.п.н.е."/>
+    <word exception="библ."/>
+    <word exception="арх."/>
+    <word exception="муз."/>
+    <word exception="ном."/>
+    <word exception="дипл."/>
+    <word exception="разр."/>
+    <word exception="ср."/>
+    <word exception="тј."/>
+    <word exception="г.н.е."/>
+    <word exception="грам."/>
+    <word exception="чл."/>
+    <word exception="дец."/>
+    <word exception="апр."/>
+    <word exception="гр."/>
+    <word exception="гимн."/>
+    <word exception="орг."/>
+    <word exception="рим."/>
+    <word exception="енгл."/>
+    <word exception="мат."/>
+    <word exception="г."/>
+    <word exception="хем."/>
+    <word exception="одг."/>
+    <word exception="д.о.о."/>
+    <word exception="в.д."/>
+    <word exception="фиг."/>
+    <word exception="проф."/>
+    <word exception="р."/>
+    <word exception="зоол."/>
+    <word exception="геогр."/>
+    <word exception="теол."/>
+    <word exception="геом."/>
+    <word exception="ист."/>
+    <word exception="ген."/>
+    <word exception="о.г."/>
+    <word exception="год."/>
+    <word exception="шк."/>
+    <word exception="мар."/>
+    <word exception="студ."/>
+    <word exception="прав."/>
+    <word exception="пол."/>
+    <word exception="мн."/>
+    <word exception="јан."/>
+    <word exception="једн."/>
+    <word exception="авг."/>
+    <word exception="ж."/>
+    <word exception="тзв."/>
+    <word exception="инстр."/>
+    <word exception="уч."/>
+    <word exception="а.д."/>
+    <word exception="астр."/>
+    <word exception="прид."/>
+    <word exception="нпр."/>
+    <word exception="окт."/>
+    <word exception="мед."/>
+    <word exception="сл."/>
+    <word exception="стр."/>
+    <word exception="вок."/>
+    <word exception="прил."/>
+    <word exception="фр."/>
+    <word exception="св."/>
+    <word exception="о.м."/>
+    <word exception="м."/>
+    <word exception="сеп."/>
+    <word exception="покр."/>
+    <word exception="жар."/>
+    <word exception="мит."/>
+    <word exception="др."/>
+    <word exception="феб."/>
+    <word exception="дат."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="ЕУнет"/>
+    <word exception="ФБиХ"/>
+    <word exception="ИПв4"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

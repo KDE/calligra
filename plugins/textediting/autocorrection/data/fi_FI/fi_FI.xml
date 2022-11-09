@@ -1,0 +1,1636 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find=":jousimies:" replace="♐"/>
+    <item find=":nuotit3:" replace=""/>
+    <item find=":^l:" replace="ˡ"/>
+    <item find=":kuudestoistaosanuotti:" replace="텡"/>
+    <item find=":suuri neliö:" replace="⬜"/>
+    <item find=":vaalea tukka:" replace=""/>
+    <item find=":jousi:" replace=""/>
+    <item find=":vauva:" replace=""/>
+    <item find=":kasvava kuunsirppi:" replace=""/>
+    <item find=":Zeeta:" replace="Ζ"/>
+    <item find=":omena:" replace=""/>
+    <item find=":suklaa:" replace=""/>
+    <item find=":_=:" replace="₌"/>
+    <item find=":limitä:" replace=""/>
+    <item find=":kappa:" replace="κ"/>
+    <item find=":kirjanmerkki:" replace=""/>
+    <item find=":paistettu katkarapu:" replace=""/>
+    <item find=":won:" replace="₩"/>
+    <item find=":painike2:" replace=""/>
+    <item find=":Turkin liira:" replace="₺"/>
+    <item find=":_a:" replace="ₐ"/>
+    <item find=":katso ei ilkeä:" replace=""/>
+    <item find=":patsas:" replace=""/>
+    <item find=":^a:" replace="ᵃ"/>
+    <item find=":kameli2:" replace=""/>
+    <item find=":juoksija:" replace=""/>
+    <item find=":hiekkaranta:" replace=""/>
+    <item find=":kylmä hiki:" replace=""/>
+    <item find=":pippuri:" replace=""/>
+    <item find=":hattu2:" replace=""/>
+    <item find=":valehtelee:" replace="拉"/>
+    <item find=":mitali:" replace=""/>
+    <item find=":rukoilu:" replace=""/>
+    <item find=":_h:" replace="ₕ"/>
+    <item find=":EW:" replace="↔"/>
+    <item find=":vhs:" replace=""/>
+    <item find=":kahvaristi:" replace="☩"/>
+    <item find=":hehkulamppu:" replace=""/>
+    <item find=":dinosaurus:" replace="秊"/>
+    <item find=":_(:" replace="₍"/>
+    <item find=":tulivuori:" replace=""/>
+    <item find=":viha:" replace=""/>
+    <item find=":kansio3:" replace=""/>
+    <item find=":^4:" replace="⁴"/>
+    <item find=":viiri:" replace=""/>
+    <item find=":palmu:" replace=""/>
+    <item find=":sanomalehti:" replace=""/>
+    <item find=":merirosvo:" replace=""/>
+    <item find=":8 t:" replace=""/>
+    <item find=":kurkku:" replace="勒"/>
+    <item find=":syömäpuikot:" replace="異"/>
+    <item find=":leikepöytä:" replace=""/>
+    <item find=":marks chapter:" replace=""/>
+    <item find=":alas2:" replace=""/>
+    <item find=":puolitauko:" replace="턼"/>
+    <item find=":mietteliäs:" replace=""/>
+    <item find=":amerikkalainen jalkapallo:" replace=""/>
+    <item find=":traktori:" replace=""/>
+    <item find=":alennusmerkki:" replace="♭"/>
+    <item find=":merenhenkilö:" replace="隆"/>
+    <item find="3/4" replace="¾"/>
+    <item find=":huulet:" replace=""/>
+    <item find=":^j:" replace="ʲ"/>
+    <item find=".*&lt;-.*" replace="←"/>
+    <item find=":aavikko:" replace=""/>
+    <item find=":3/4:" replace="¾"/>
+    <item find=":käsi4:" replace="駱"/>
+    <item find=":kukka2:" replace="鹿"/>
+    <item find=":kynsilakka:" replace=""/>
+    <item find=":varoitus:" replace="⚠"/>
+    <item find=":avaa lukitus:" replace=""/>
+    <item find=":ruutu2:" replace="♢"/>
+    <item find=":vesipuhveli:" replace=""/>
+    <item find=":^P:" replace="ᴾ"/>
+    <item find=":N2:" replace="⇑"/>
+    <item find=":_k:" replace="ₖ"/>
+    <item find=":onnentoivotus:" replace="爛"/>
+    <item find=":nopat:" replace=""/>
+    <item find=":valkoinen sotilas:" replace="♙"/>
+    <item find=":ffl:" replace="ﬄ"/>
+    <item find=":biljardi:" replace=""/>
+    <item find=":skootteri2:" replace=""/>
+    <item find=":sivu4:" replace=""/>
+    <item find=":rotta:" replace=""/>
+    <item find=":valkoinen kuningas:" replace="♔"/>
+    <item find=":viiri2:" replace=""/>
+    <item find=":lehti3:" replace=""/>
+    <item find=":tennis:" replace=""/>
+    <item find=":_1:" replace="₁"/>
+    <item find=":jalkapallo2:" replace="聾"/>
+    <item find=":yrtti:" replace=""/>
+    <item find=":sieni:" replace=""/>
+    <item find=":^theeta:" replace="ᶿ"/>
+    <item find=":napakymppi:" replace=""/>
+    <item find=":suu:" replace=""/>
+    <item find=":piirakka:" replace="不"/>
+    <item find=":nuotti2:" replace="♪"/>
+    <item find=":kännykkä:" replace=""/>
+    <item find=":liput2:" replace=""/>
+    <item find=":^G:" replace="ᴳ"/>
+    <item find=":popcorn:" replace=""/>
+    <item find=":kalmari:" replace="撚"/>
+    <item find=":^N:" replace="ᴺ"/>
+    <item find=":lyijykynä:" replace="✎"/>
+    <item find=":kasetti:" replace=""/>
+    <item find=":käärö:" replace=""/>
+    <item find=":ovi:" replace=""/>
+    <item find=":myrsky:" replace=""/>
+    <item find=":puisto:" replace=""/>
+    <item find=":lahja:" replace=""/>
+    <item find=":joulu:" replace=""/>
+    <item find=":kukko:" replace=""/>
+    <item find=":parturi:" replace=""/>
+    <item find=":suutelu4:" replace=""/>
+    <item find=":Aurinko2:" replace="☼"/>
+    <item find=":ympyrä2:" replace="●"/>
+    <item find=":^+:" replace="⁺"/>
+    <item find=":soittokello:" replace=""/>
+    <item find=":perhonen:" replace="曆"/>
+    <item find=":tyhjä muistilehtiö:" replace=""/>
+    <item find=":pii:" replace="π"/>
+    <item find=":Epsilon:" replace="Ε"/>
+    <item find=":tipu:" replace=""/>
+    <item find=":kännykkä kiinni:" replace=""/>
+    <item find=":oikealle6:" replace=""/>
+    <item find=":korkeajännite:" replace="⚡"/>
+    <item find=":kukkaro:" replace=""/>
+    <item find=":lentokone:" replace="✈"/>
+    <item find=":kukinto:" replace=""/>
+    <item find=":puolisuunnikas:" replace="⏢"/>
+    <item find=":vaatteet:" replace=""/>
+    <item find=":kymmenestuhannesosa:" replace="‱"/>
+    <item find=":helikopteri:" replace=""/>
+    <item find=":integraali:" replace="∫"/>
+    <item find=":^beeta:" replace="ᵝ"/>
+    <item find=":villisika:" replace=""/>
+    <item find=":pettynyt:" replace=""/>
+    <item find=":nauha2:" replace=""/>
+    <item find=":4.30:" replace=""/>
+    <item find=":kalastus:" replace=""/>
+    <item find=":^e:" replace="ᵉ"/>
+    <item find=":atomi:" replace="⚛"/>
+    <item find=":itkevä kissa:" replace=""/>
+    <item find=":luottokortti:" replace=""/>
+    <item find=":asiakirja3:" replace=""/>
+    <item find=":pisara2:" replace=""/>
+    <item find=":rukousnauha:" replace=""/>
+    <item find=":signaalin vahvuus:" replace=""/>
+    <item find=":tuskainen:" replace=""/>
+    <item find=":kelkka:" replace=""/>
+    <item find=":luuri3:" replace=""/>
+    <item find=":jäätelö2:" replace=""/>
+    <item find=":^L:" replace="ᴸ"/>
+    <item find=":pienempi neliö:" replace="◽"/>
+    <item find=":koira2:" replace=""/>
+    <item find=":ei ole olemassa:" replace="∄"/>
+    <item find=":kieli:" replace=""/>
+    <item find=":kuunsirppi:" replace=""/>
+    <item find=":myky:" replace="寧"/>
+    <item find=":linkki:" replace=""/>
+    <item find=":kypärä:" replace="⛑"/>
+    <item find=":tytöt:" replace=""/>
+    <item find=":pihvi:" replace="數"/>
+    <item find=":juhla:" replace=""/>
+    <item find=":x2:" replace="❌"/>
+    <item find=":juhla3:" replace="壟"/>
+    <item find=":kirja2:" replace=""/>
+    <item find=":oikealle5:" replace=""/>
+    <item find=":kalat:" replace="♓"/>
+    <item find=":häät:" replace=""/>
+    <item find="odf" replace="ODF"/>
+    <item find=":vaaka:" replace="♎"/>
+    <item find=":kupla2:" replace=""/>
+    <item find=":luuri4:" replace=""/>
+    <item find=":nuotit2:" replace="♬"/>
+    <item find=":syntymäpäivä:" replace=""/>
+    <item find=":hevonen:" replace=""/>
+    <item find=":kaikille:" replace="∀"/>
+    <item find=":_x:" replace="ₓ"/>
+    <item find=":sakset2:" replace="✄"/>
+    <item find=":ok:" replace=""/>
+    <item find=":pahoinvointi:" replace="濫"/>
+    <item find=":neptunus:" replace="♆"/>
+    <item find=":peruna:" replace="凜"/>
+    <item find=":ilo:" replace=""/>
+    <item find=":haltia:" replace="利"/>
+    <item find=":10.30:" replace=""/>
+    <item find=":kreikkalainen risti:" replace="✚"/>
+    <item find=":nuppineula:" replace=""/>
+    <item find=":postilaatikko5:" replace=""/>
+    <item find=":tiikeri2:" replace=""/>
+    <item find=":!:" replace="❕"/>
+    <item find=":vartija:" replace=""/>
+    <item find=":Sigma:" replace="Σ"/>
+    <item find=":Japani:" replace=""/>
+    <item find=":tuhkauurna:" replace="⚱"/>
+    <item find=":kuumat lähteet:" replace="♨"/>
+    <item find=":tulostin2:" replace=""/>
+    <item find=":kieli3:" replace=""/>
+    <item find=":dvd:" replace=""/>
+    <item find=":silmät:" replace=""/>
+    <item find=":kirjekuori8:" replace=""/>
+    <item find=":_e:" replace="ₑ"/>
+    <item find=":100:" replace=""/>
+    <item find=":jeni2:" replace=""/>
+    <item find=":kansio5:" replace=""/>
+    <item find=":^7:" replace="⁷"/>
+    <item find=":irvistävä:" replace=""/>
+    <item find=":noppa1:" replace="⚀"/>
+    <item find=":tomaatti:" replace=""/>
+    <item find=":rintakuva:" replace=""/>
+    <item find=":sushi:" replace=""/>
+    <item find=":pallo:" replace="•"/>
+    <item find=":aste:" replace="°"/>
+    <item find=":domino:" replace=""/>
+    <item find=":stop:" replace=""/>
+    <item find=":katkarapu:" replace="戀"/>
+    <item find=":suudelma2:" replace=""/>
+    <item find=":pekoni:" replace="肋"/>
+    <item find=":kookospähkinä:" replace="便"/>
+    <item find=":koripallo:" replace=""/>
+    <item find=":tau:" replace="τ"/>
+    <item find=":poliisiauto2:" replace=""/>
+    <item find=":noppa3:" replace="⚂"/>
+    <item find=":banaani:" replace=""/>
+    <item find=":käärmeenkantaja:" replace="⛎"/>
+    <item find=":muistilappu3:" replace=""/>
+    <item find=":neliö:" replace="□"/>
+    <item find=":x4:" replace=""/>
+    <item find=":juomakelpoinen vesi:" replace=""/>
+    <item find=":kirsikka:" replace=""/>
+    <item find=":komeetta:" replace="☄"/>
+    <item find=":^h:" replace="ʰ"/>
+    <item find=":säteet:" replace=""/>
+    <item find=":silmukka:" replace="➰"/>
+    <item find=":kirjekuori:" replace="✉"/>
+    <item find=":ensimmäinen neljännes:" replace=""/>
+    <item find=":iho2:" replace=""/>
+    <item find=":_-:" replace="₋"/>
+    <item find=":curry:" replace=""/>
+    <item find=":parta:" replace="倫"/>
+    <item find=":polkupyörä:" replace=""/>
+    <item find=":suunnikas:" replace="▱"/>
+    <item find=":tanssija2:" replace=""/>
+    <item find=":nuotit4:" replace=""/>
+    <item find=":kylpy:" replace=""/>
+    <item find=":pyörätuoli:" replace="♿"/>
+    <item find=":sateista:" replace=""/>
+    <item find=":lumiukko2:" replace="⛄"/>
+    <item find=":ihminen murjottaa:" replace=""/>
+    <item find=":vesipallo:" replace="綠"/>
+    <item find=":uros:" replace="♂"/>
+    <item find=":aikuinen:" replace="六"/>
+    <item find=":kamera:" replace=""/>
+    <item find=":paperiliitin2:" replace=""/>
+    <item find=":lasi:" replace=""/>
+    <item find=":pariskunta4:" replace=""/>
+    <item find=":ruutu:" replace="♦"/>
+    <item find=":musta sydän:" replace=""/>
+    <item find=":tietoja2:" replace=""/>
+    <item find=".*..." replace="…"/>
+    <item find=":hymy3:" replace=""/>
+    <item find=":lambda:" replace="λ"/>
+    <item find=":moottoritie:" replace=""/>
+    <item find=":valintaruutu4:" replace=""/>
+    <item find=":taco:" replace=""/>
+    <item find=":prinsessa:" replace=""/>
+    <item find=":kuu2:" replace=""/>
+    <item find=":risti:" replace="†"/>
+    <item find=":liikennevalo:" replace=""/>
+    <item find=":puu:" replace=""/>
+    <item find=":^i:" replace="ⁱ"/>
+    <item find=":suorakulmio2:" replace="▬"/>
+    <item find=":uusikuu2:" replace=""/>
+    <item find=":rintakuvat:" replace=""/>
+    <item find="--&gt;" replace="→"/>
+    <item find=":salmiakki:" replace="◊"/>
+    <item find=":myrsky2:" replace="☈"/>
+    <item find=":osakekurssi5:" replace=""/>
+    <item find=":kreikkalainen risti2:" replace="✙"/>
+    <item find=":osajoukko:" replace="⊂"/>
+    <item find=":NE2:" replace="⇗"/>
+    <item find=":pelokas:" replace=""/>
+    <item find=":kaiutin3:" replace=""/>
+    <item find=":neljännesnuotti:" replace="텟"/>
+    <item find=":Nyy:" replace="Ν"/>
+    <item find=":metro:" replace=""/>
+    <item find=":Oomega:" replace="Ω"/>
+    <item find=":levyke2:" replace=""/>
+    <item find=":pommi:" replace=""/>
+    <item find=":kaavio3:" replace=""/>
+    <item find="&lt;-&gt;" replace="↔"/>
+    <item find=":kuorma-auto:" replace="⛟"/>
+    <item find=":aalto:" replace=""/>
+    <item find=":kännykkä2:" replace=""/>
+    <item find=":sateenvarjo2:" replace=""/>
+    <item find=":ankka:" replace="閭"/>
+    <item find=":peliohjain:" replace=""/>
+    <item find=":psii:" replace="ψ"/>
+    <item find=":huivi:" replace="崙"/>
+    <item find=":valintaruutu2:" replace="☑"/>
+    <item find=":käärme:" replace=""/>
+    <item find=":partituuri:" replace=""/>
+    <item find=":^=:" replace="⁼"/>
+    <item find=":kauppa:" replace=""/>
+    <item find=":tuli:" replace=""/>
+    <item find=":riisikeksi:" replace=""/>
+    <item find=":sekeli:" replace="₪"/>
+    <item find=":rakkaus2:" replace="蘭"/>
+    <item find=":oksentaa:" replace="冷"/>
+    <item find=":fontti:" replace=""/>
+    <item find=":puhelin:" replace="☎"/>
+    <item find=":tarkastusmerkki:" replace="✓"/>
+    <item find=":kenkä3:" replace=""/>
+    <item find=":ilmaraitiotie:" replace=""/>
+    <item find=":_beeta:" replace="ᵦ"/>
+    <item find=":erisuuri:" replace="≠"/>
+    <item find=":vihreä omena:" replace=""/>
+    <item find=":pää:" replace=""/>
+    <item find=":Kuu2:" replace="☾"/>
+    <item find=":kortisto:" replace=""/>
+    <item find=":vasara ja jakoavain:" replace=""/>
+    <item find=":kulma:" replace="∠"/>
+    <item find=":koala:" replace=""/>
+    <item find=":1/8:" replace="⅛"/>
+    <item find=":räiskyjä:" replace=""/>
+    <item find=":leirintäalue:" replace=""/>
+    <item find=":kirjat:" replace=""/>
+    <item find=".*(C)" replace="©"/>
+    <item find=":kestopaperi:" replace="♾"/>
+    <item find=":neliöjuuri:" replace="√"/>
+    <item find=":kala2:" replace=""/>
+    <item find=":megafoni:" replace=""/>
+    <item find=":punastunut:" replace=""/>
+    <item find=":levyke4:" replace=""/>
+    <item find=":kilpi2:" replace="⛨"/>
+    <item find=":lyijykynä2:" replace="✏"/>
+    <item find=":muistivihko:" replace=""/>
+    <item find=":_8:" replace="₈"/>
+    <item find=":^alfa:" replace="ᵅ"/>
+    <item find=":elokuvakamera:" replace=""/>
+    <item find=":_m:" replace="ₘ"/>
+    <item find=":ylös2:" replace=""/>
+    <item find=":silmälasit:" replace=""/>
+    <item find=":lähtö:" replace=""/>
+    <item find=":lisko:" replace="年"/>
+    <item find=":sauna:" replace="淪"/>
+    <item find=":vasen4:" replace=""/>
+    <item find=":musta kuningas:" replace="♚"/>
+    <item find=":valintaruutu3:" replace="☒"/>
+    <item find=":^B:" replace="ᴮ"/>
+    <item find=":faksi:" replace=""/>
+    <item find=":taskurapu:" replace="呂"/>
+    <item find=":S:" replace="↓"/>
+    <item find=":burrito:" replace=""/>
+    <item find=":ei ylijoukko:" replace="⊅"/>
+    <item find=":herätyskello:" replace="⏰"/>
+    <item find=":Lambda:" replace="Λ"/>
+    <item find=":-:" replace="−"/>
+    <item find=":ypsilon:" replace="υ"/>
+    <item find=":ajanotto:" replace="⏱"/>
+    <item find=":myötähäpeä:" replace="臘"/>
+    <item find=":auringonkukka:" replace=""/>
+    <item find=":sateenvarjo:" replace="☂"/>
+    <item find=":ioota:" replace="ι"/>
+    <item find=":jätkä:" replace=""/>
+    <item find=":euro2:" replace=""/>
+    <item find=":tartuntavaara:" replace="☣"/>
+    <item find=":NW:" replace="↖"/>
+    <item find=":kilpa:" replace=""/>
+    <item find=":sydämenlyönti:" replace=""/>
+    <item find=":^9:" replace="⁹"/>
+    <item find=":_0:" replace="₀"/>
+    <item find=":tietoja:" replace="ℹ"/>
+    <item find=":&lt;=:" replace="≤"/>
+    <item find=":keilailu:" replace=""/>
+    <item find=":moottorivene:" replace=""/>
+    <item find=":1/2:" replace="½"/>
+    <item find=":tarkastusmerkki2:" replace="✔"/>
+    <item find=":kierrätys2:" replace="♻"/>
+    <item find=":_l:" replace="ₗ"/>
+    <item find=":tölkki:" replace="參"/>
+    <item find=":vuori2:" replace=""/>
+    <item find=":^c:" replace="ᶜ"/>
+    <item find=":^E:" replace="ᴱ"/>
+    <item find=":ylösalaisin:" replace=""/>
+    <item find=":menora:" replace=""/>
+    <item find=":tuuma:" replace="″"/>
+    <item find=":dinosaurus2:" replace="練"/>
+    <item find=":pääsylippu2:" replace=""/>
+    <item find=":raskaana:" replace="擄"/>
+    <item find=":Aurinko:" replace="☉"/>
+    <item find=":summa:" replace="∑"/>
+    <item find=":ruusuke2:" replace=""/>
+    <item find=":pyörivät sydämet:" replace=""/>
+    <item find=":kuulokkeet:" replace=""/>
+    <item find=":persikka:" replace=""/>
+    <item find=":hiiri3:" replace=""/>
+    <item find=":sakset3:" replace="✁"/>
+    <item find=":rekka:" replace=""/>
+    <item find=":säteet4:" replace=""/>
+    <item find=":vahaliitu:" replace=""/>
+    <item find=":käsi3:" replace=""/>
+    <item find=":nuotit:" replace="♫"/>
+    <item find=":hämmästynyt:" replace=""/>
+    <item find=":ksii:" replace="ξ"/>
+    <item find=":pariskunta2:" replace=""/>
+    <item find=":raskas dollarimerkki:" replace=""/>
+    <item find=":curling:" replace="樓"/>
+    <item find=":naaras:" replace="♀"/>
+    <item find=":itku:" replace=""/>
+    <item find=":radiopainike:" replace=""/>
+    <item find=":projektori:" replace=""/>
+    <item find=":säihkyvä sydän:" replace=""/>
+    <item find=":kansio:" replace=""/>
+    <item find=":mustekala:" replace=""/>
+    <item find=":\\:" replace="∖"/>
+    <item find=":7/8:" replace="⅞"/>
+    <item find=":pilvistä:" replace=""/>
+    <item find=":kukinto2:" replace=""/>
+    <item find=":nauhoita:" replace="⏺"/>
+    <item find=":voileipä:" replace="索"/>
+    <item find=":salkku:" replace=""/>
+    <item find=":salaatti:" replace="綾"/>
+    <item find=":+-:" replace="±"/>
+    <item find=":juhla2:" replace=""/>
+    <item find=":viulu:" replace=""/>
+    <item find=":korva:" replace=""/>
+    <item find=":kenkä:" replace=""/>
+    <item find=":nosturi:" replace=""/>
+    <item find=":kello:" replace="⌚"/>
+    <item find=":sentti:" replace="¢"/>
+    <item find=":huuto:" replace=""/>
+    <item find=":nyrkki3:" replace="亂"/>
+    <item find=":tähti:" replace="★"/>
+    <item find=":neljännestauko:" replace="턽"/>
+    <item find=":---:" replace="—"/>
+    <item find=":päärynä:" replace=""/>
+    <item find=":hedelmäpeli:" replace=""/>
+    <item find=":kalenteri3:" replace=""/>
+    <item find=":_+:" replace="₊"/>
+    <item find=":kevyt raide:" replace=""/>
+    <item find=":hertta2:" replace="♡"/>
+    <item find=":mies:" replace=""/>
+    <item find=":nuottiavain:" replace="턞"/>
+    <item find=":^f:" replace="ᶠ"/>
+    <item find=":sakset:" replace="✂"/>
+    <item find=":_o:" replace="ₒ"/>
+    <item find=":tähti2:" replace="☆"/>
+    <item find=":kyyhky:" replace=""/>
+    <item find=":yksiraide:" replace=""/>
+    <item find=":solmio:" replace=""/>
+    <item find=":kirjekuori3:" replace=""/>
+    <item find=":onnellisuus:" replace=""/>
+    <item find=":nuolet:" replace=""/>
+    <item find=":suorakulmio:" replace="▭"/>
+    <item find=":salama:" replace=""/>
+    <item find=":taide:" replace=""/>
+    <item find=":lentokone3:" replace=""/>
+    <item find=":iho4:" replace=""/>
+    <item find=":jänis:" replace=""/>
+    <item find=":kirja3:" replace=""/>
+    <item find=":ufo:" replace=""/>
+    <item find=":vauvan pullo:" replace=""/>
+    <item find=":1/3:" replace="⅓"/>
+    <item find=":maapallo3:" replace=""/>
+    <item find=":kynttilä:" replace=""/>
+    <item find=":kurtistus:" replace=""/>
+    <item find=":fl:" replace="ﬂ"/>
+    <item find=":_2:" replace="₂"/>
+    <item find=":auringonnousu:" replace=""/>
+    <item find=":turbaani:" replace=""/>
+    <item find=":koulureppu:" replace=""/>
+    <item find=":SW2:" replace="⇙"/>
+    <item find=":mehiläinen:" replace=""/>
+    <item find=":talo3:" replace=""/>
+    <item find=":levyke:" replace=""/>
+    <item find=":myrkky:" replace="☠"/>
+    <item find=":saturnus:" replace="♄"/>
+    <item find=":modeemi:" replace=""/>
+    <item find=":laput oksassa:" replace=""/>
+    <item find=":ylähattu:" replace=""/>
+    <item find=":valintaruutu5:" replace=""/>
+    <item find=":_9:" replace="₉"/>
+    <item find=":alaikäinen:" replace=""/>
+    <item find=":mikrofoni2:" replace=""/>
+    <item find=":kakku:" replace=""/>
+    <item find=":avioero:" replace="⚮"/>
+    <item find=":hymy2:" replace="☻"/>
+    <item find=":taimi:" replace=""/>
+    <item find=":SE2:" replace="⇘"/>
+    <item find=":^o:" replace="ᵒ"/>
+    <item find=":aivastus:" replace="蠟"/>
+    <item find=":tupla-alennusmerkki:" replace="턫"/>
+    <item find=":kuu ja riisiä:" replace=""/>
+    <item find=":maahockey2:" replace=""/>
+    <item find=":valkoinen kukka:" replace=""/>
+    <item find=":jooga:" replace="律"/>
+    <item find=":oranssi sydän:" replace="李"/>
+    <item find=":passi:" replace=""/>
+    <item find=":ketjut:" replace="⛓"/>
+    <item find=":nyrkki:" replace="✊"/>
+    <item find=":soittokello3:" replace=""/>
+    <item find=":lämpömittari2:" replace="裸"/>
+    <item find=":muukalainen2:" replace=""/>
+    <item find=":vesimeloni:" replace=""/>
+    <item find=":tipu3:" replace=""/>
+    <item find=":latinalainen risti3:" replace=""/>
+    <item find=":W:" replace="←"/>
+    <item find=":karhu:" replace=""/>
+    <item find=":puolinuotti:" replace="텞"/>
+    <item find=":jeni:" replace="¥"/>
+    <item find=":lukko2:" replace=""/>
+    <item find=":minibussi:" replace=""/>
+    <item find=":sinnikäs:" replace=""/>
+    <item find=":vihainen:" replace=""/>
+    <item find=":hunaja:" replace=""/>
+    <item find=":_4:" replace="₄"/>
+    <item find=":ankkuri:" replace="⚓"/>
+    <item find=":vasara ja sirppi:" replace="☭"/>
+    <item find=":valintaruutu6:" replace=""/>
+    <item find=":--:" replace="–"/>
+    <item find=":helpottunut:" replace=""/>
+    <item find=":tulppaani:" replace=""/>
+    <item find=":enkeli:" replace=""/>
+    <item find=":apilanlehti:" replace=""/>
+    <item find=":kastanja:" replace=""/>
+    <item find=":_):" replace="₎"/>
+    <item find=":nyrkki4:" replace="卵"/>
+    <item find=":hymyilevä pikkupiru:" replace=""/>
+    <item find=":kettu:" replace="力"/>
+    <item find=":2 t:" replace=""/>
+    <item find=":noppa6:" replace="⚅"/>
+    <item find=":lippalakki:" replace="梨"/>
+    <item find=":täysikuu:" replace=""/>
+    <item find=":_6:" replace="₆"/>
+    <item find=":täysikuu2:" replace=""/>
+    <item find=":kirjanmerkki2:" replace=""/>
+    <item find=":pässi:" replace=""/>
+    <item find=":^H:" replace="ᴴ"/>
+    <item find=":lumisadetta:" replace=""/>
+    <item find=":äänestyslipuke:" replace=""/>
+    <item find=":4 t:" replace=""/>
+    <item find=":jongleeraus:" replace="魯"/>
+    <item find=":juomakelvoton vesi:" replace=""/>
+    <item find=":aurinkolasit2:" replace=""/>
+    <item find=":Tau:" replace="Τ"/>
+    <item find=":murjottava kissa:" replace=""/>
+    <item find=":talo:" replace=""/>
+    <item find=":asiakirja4:" replace=""/>
+    <item find=":kupla4:" replace=""/>
+    <item find=":lehmä:" replace=""/>
+    <item find=":kalenteri:" replace=""/>
+    <item find=":Adi Shakti:" replace="☬"/>
+    <item find=":cocktail:" replace=""/>
+    <item find=":tiimalasi:" replace="⌛"/>
+    <item find=":pentagrammi:" replace="⛤"/>
+    <item find=":surfaaja:" replace=""/>
+    <item find=":tikkari:" replace=""/>
+    <item find=":suihkulähde:" replace="⛲"/>
+    <item find=":merkurius:" replace="☿"/>
+    <item find=":hattu:" replace=""/>
+    <item find=":kaavio:" replace=""/>
+    <item find=":raketti:" replace=""/>
+    <item find=":ylös5:" replace=""/>
+    <item find=":sateenkaari:" replace=""/>
+    <item find=":dollari2:" replace=""/>
+    <item find=":spock:" replace=""/>
+    <item find=":ilmapallo:" replace=""/>
+    <item find=":pc:" replace=""/>
+    <item find=":maltalainen risti:" replace="✠"/>
+    <item find=":valas:" replace=""/>
+    <item find=":jakoavain:" replace=""/>
+    <item find=":kiipeilijä:" replace="輪"/>
+    <item find=":mahjong:" replace=""/>
+    <item find=":säädin:" replace=""/>
+    <item find=":nyrkkeily:" replace="壘"/>
+    <item find=":_t:" replace="ₜ"/>
+    <item find=":1.30:" replace=""/>
+    <item find=":suurenna:" replace=""/>
+    <item find=":noutoruoka:" replace="率"/>
+    <item find=".*(R)" replace="®"/>
+    <item find=":puku:" replace=""/>
+    <item find=":asema:" replace=""/>
+    <item find=":nainen:" replace=""/>
+    <item find=":postilaatikko4:" replace=""/>
+    <item find=":perhe:" replace=""/>
+    <item find=":tai:" replace="∨"/>
+    <item find=":muistivihko2:" replace=""/>
+    <item find=":kulho:" replace="北"/>
+    <item find=":kirjekuori6:" replace=""/>
+    <item find=":vaijerihissi:" replace=""/>
+    <item find=":näppäimistö2:" replace=""/>
+    <item find=":ei piratismia:" replace=""/>
+    <item find=":viipurinrinkeli:" replace="泌"/>
+    <item find=":saapuminen:" replace=""/>
+    <item find=":liukusäädin:" replace=""/>
+    <item find=":Alfa:" replace="Α"/>
+    <item find=":aloittelija:" replace=""/>
+    <item find=":hakulaite:" replace=""/>
+    <item find=":videokamera:" replace=""/>
+    <item find=":ei kuulu:" replace="∉"/>
+    <item find=":valmistuminen:" replace=""/>
+    <item find=":käänteinen ei kuulu:" replace="∌"/>
+    <item find=":x3:" replace="❎"/>
+    <item find=":^T:" replace="ᵀ"/>
+    <item find=":kova ääni:" replace=""/>
+    <item find=":toimisto:" replace=""/>
+    <item find=":hampurilainen:" replace=""/>
+    <item find=":hymy4:" replace="來"/>
+    <item find=":kupla9:" replace=""/>
+    <item find=":ei kännyköitä:" replace=""/>
+    <item find=":nörtti:" replace="邏"/>
+    <item find=":kävelemässä:" replace=""/>
+    <item find=":musta ympyrä:" replace="⚫"/>
+    <item find=":pojat:" replace=""/>
+    <item find=":Omikron:" replace="Ο"/>
+    <item find=":ylennysmerkki:" replace="♯"/>
+    <item find=":paketti:" replace=""/>
+    <item find=":puhelin4:" replace=""/>
+    <item find=":integraali5:" replace="∰"/>
+    <item find=":sydämet silminä:" replace=""/>
+    <item find=":9 t:" replace=""/>
+    <item find=":torvi:" replace=""/>
+    <item find=":miekat:" replace="⚔"/>
+    <item find=":osittaisderivaatta:" replace="∂"/>
+    <item find=":vasemmalle6:" replace=""/>
+    <item find=":ikkuna:" replace=""/>
+    <item find=":pingis:" replace=""/>
+    <item find=":&gt;=:" replace="≥"/>
+    <item find=":iso ympyrä:" replace="◯"/>
+    <item find=":huutava kissa:" replace=""/>
+    <item find=":^3:" replace="³"/>
+    <item find=":sigma:" replace="σ"/>
+    <item find=":pieni neliö:" replace="▫"/>
+    <item find=":ff:" replace="ﬀ"/>
+    <item find=":kaiutin:" replace=""/>
+    <item find=":E:" replace="→"/>
+    <item find=":saksofoni:" replace=""/>
+    <item find=":^W:" replace="ᵂ"/>
+    <item find=":taksi:" replace=""/>
+    <item find=":ei huvittunut:" replace=""/>
+    <item find=":kansio4:" replace=""/>
+    <item find=":liput:" replace=""/>
+    <item find=":_v:" replace="ᵥ"/>
+    <item find=":ääni:" replace=""/>
+    <item find=":muistilappusivu:" replace=""/>
+    <item find=":':" replace="’"/>
+    <item find=":hevonen3:" replace=""/>
+    <item find=":raakalainen:" replace=""/>
+    <item find=":torni:" replace=""/>
+    <item find=":euro:" replace="€"/>
+    <item find=":drinkki:" replace="磻"/>
+    <item find=":lentopallo:" replace=""/>
+    <item find=":ffi:" replace="ﬃ"/>
+    <item find=":vaahteranlehti:" replace=""/>
+    <item find=":pikkupiru:" replace=""/>
+    <item find=":7.30:" replace=""/>
+    <item find=":ääretön:" replace="∞"/>
+    <item find=":oinas:" replace="♈"/>
+    <item find=":_n:" replace="ₙ"/>
+    <item find=":mutru:" replace="☹"/>
+    <item find=":uninen:" replace=""/>
+    <item find=":joulupukki:" replace=""/>
+    <item find=":linnunrata:" replace=""/>
+    <item find=":näppäimistö:" replace="⌨"/>
+    <item find=":N:" replace="↑"/>
+    <item find=":lippu:" replace=""/>
+    <item find=":vasen:" replace="☜"/>
+    <item find=":pokaali:" replace=""/>
+    <item find=":^Fii:" replace="ᶲ"/>
+    <item find=":suorakulmainen kolmio:" replace="⊿"/>
+    <item find=":huimaus:" replace=""/>
+    <item find=":pettynyt helpottunut:" replace=""/>
+    <item find=":lilja:" replace="⚜"/>
+    <item find=":3 t:" replace=""/>
+    <item find=":ympyrä4:" replace=""/>
+    <item find=":krokotiili:" replace=""/>
+    <item find=":keiju:" replace="栗"/>
+    <item find=":linna2:" replace=""/>
+    <item find=":tarkastusmerkki4:" replace=""/>
+    <item find=":kalakakku:" replace=""/>
+    <item find=":lehti2:" replace=""/>
+    <item find=":kansio2:" replace=""/>
+    <item find=":paloauto2:" replace=""/>
+    <item find=":sumuista:" replace=""/>
+    <item find=":kuusikulmio2:" replace="⬢"/>
+    <item find=":säteet3:" replace=""/>
+    <item find=":^r:" replace="ʳ"/>
+    <item find=":olut2:" replace=""/>
+    <item find=":tulli:" replace=""/>
+    <item find=":juna3:" replace=""/>
+    <item find=":Gamma:" replace="Γ"/>
+    <item find=":^A:" replace="ᴬ"/>
+    <item find=":pluto:" replace="♇"/>
+    <item find=":nuotti:" replace="♩"/>
+    <item find=":musiikki2:" replace=""/>
+    <item find=":leikkaus:" replace="∩"/>
+    <item find=":yö:" replace=""/>
+    <item find=":virne:" replace=""/>
+    <item find=":porkkana:" replace="凌"/>
+    <item find=":apina:" replace=""/>
+    <item find=":jakaa:" replace="∣"/>
+    <item find=":hämmentynyt:" replace=""/>
+    <item find=":ambulanssi:" replace=""/>
+    <item find=":hanskat:" replace="理"/>
+    <item find=":velho:" replace="慄"/>
+    <item find=":ostoskassit:" replace=""/>
+    <item find=":pilvi:" replace="☁"/>
+    <item find=":^khii:" replace="ᵡ"/>
+    <item find=":hevonen2:" replace=""/>
+    <item find=":musta torni:" replace="♜"/>
+    <item find=":sähköposti:" replace=""/>
+    <item find=":sivellin:" replace=""/>
+    <item find=":kummitus:" replace=""/>
+    <item find=":hiiri2:" replace=""/>
+    <item find=":kitara:" replace=""/>
+    <item find=":keskikokoinen neliö2:" replace="◼"/>
+    <item find=":^1:" replace="¹"/>
+    <item find=":latinalainen risti2:" replace=""/>
+    <item find=":leopardi:" replace=""/>
+    <item find=":neitsyt:" replace="♍"/>
+    <item find=":tyhjä asiakirja:" replace=""/>
+    <item find=":pilvi3:" replace="⛈"/>
+    <item find=":kilpikonna:" replace=""/>
+    <item find=":kauris:" replace="♑"/>
+    <item find=":!2:" replace="❗"/>
+    <item find=":Delta:" replace="Δ"/>
+    <item find=":kyllä2:" replace=""/>
+    <item find=":_j:" replace="ⱼ"/>
+    <item find=":tähti4:" replace=""/>
+    <item find=":fontti2:" replace=""/>
+    <item find=":pääkallo:" replace=""/>
+    <item find=":morsian:" replace=""/>
+    <item find=":^8:" replace="⁸"/>
+    <item find=":talot:" replace=""/>
+    <item find=":kirjekuori5:" replace=""/>
+    <item find=":skootteri:" replace=""/>
+    <item find=":hymiö:" replace=""/>
+    <item find=":2/3:" replace="⅔"/>
+    <item find=":vinoristi:" replace="☓"/>
+    <item find=":asiakirja:" replace=""/>
+    <item find=":megafoni2:" replace=""/>
+    <item find=":tiikeri:" replace=""/>
+    <item find=":pieni käänteinen kuuluu:" replace="∍"/>
+    <item find=":pistooli:" replace=""/>
+    <item find=":pronssimitali:" replace="雷"/>
+    <item find=":hai:" replace="麗"/>
+    <item find=":raitiovaunu:" replace=""/>
+    <item find=":pilvi2:" replace="⛅"/>
+    <item find=":khii:" replace="χ"/>
+    <item find=":ylijoukko:" replace="⊃"/>
+    <item find=":satelliitti:" replace=""/>
+    <item find=":auto4:" replace=""/>
+    <item find=":omikron:" replace="ο"/>
+    <item find=":hymyilevä kissa:" replace=""/>
+    <item find=":tietoverkko:" replace=""/>
+    <item find=":sivut:" replace=""/>
+    <item find=":paita2:" replace=""/>
+    <item find=":tuleva lokero:" replace=""/>
+    <item find=":vanha:" replace="陸"/>
+    <item find=":leipä:" replace=""/>
+    <item find=":jäätelö:" replace=""/>
+    <item find=":sydän:" replace="❤"/>
+    <item find=":tuulikello:" replace=""/>
+    <item find=":.:" replace="…"/>
+    <item find=":kyllä:" replace=""/>
+    <item find=":hamsteri:" replace=""/>
+    <item find=":ok3:" replace=""/>
+    <item find=":daavidintähti:" replace="✡"/>
+    <item find=":siankärsä:" replace=""/>
+    <item find=":mänty:" replace=""/>
+    <item find=":SE:" replace="↘"/>
+    <item find=":zombi:" replace="履"/>
+    <item find=":koulu:" replace=""/>
+    <item find=":ajatuskupla:" replace=""/>
+    <item find=":W2:" replace="⇐"/>
+    <item find=":tietokone2:" replace=""/>
+    <item find=":juoma2:" replace=""/>
+    <item find=":_5:" replace="₅"/>
+    <item find=":ei yhdensuuntainen:" replace="∦"/>
+    <item find=":kissa2:" replace=""/>
+    <item find=":viisikulmio:" replace="⬠"/>
+    <item find=":lyijykynä3:" replace="✐"/>
+    <item find="&lt;--&gt;" replace="↔"/>
+    <item find=":susi:" replace=""/>
+    <item find=":pääsylippu:" replace=""/>
+    <item find=":on olemassa:" replace="∃"/>
+    <item find=":kalkkuna:" replace="旅"/>
+    <item find=":peikko:" replace=""/>
+    <item find=":kuva:" replace=""/>
+    <item find=":teatteri:" replace=""/>
+    <item find=":jupiter:" replace="♃"/>
+    <item find=":10 t:" replace=""/>
+    <item find=":riisipallo:" replace=""/>
+    <item find=":pöllö:" replace="黎"/>
+    <item find=":virnistys:" replace=""/>
+    <item find=":vanhempi nainen:" replace=""/>
+    <item find=":kiinanruusu:" replace=""/>
+    <item find=":^K:" replace="ᴷ"/>
+    <item find=":roskat:" replace=""/>
+    <item find=":pata2:" replace="♤"/>
+    <item find=":NS:" replace="↕"/>
+    <item find=":avioliitto:" replace="⚭"/>
+    <item find=":suuri ympyrä2:" replace="⬤"/>
+    <item find=":^v:" replace="ᵛ"/>
+    <item find=":^z:" replace="ᶻ"/>
+    <item find=":raitiovaunu2:" replace=""/>
+    <item find=":kahvi:" replace="☕"/>
+    <item find=":kupla6:" replace=""/>
+    <item find=":miehet:" replace=""/>
+    <item find=":fi:" replace="ﬁ"/>
+    <item find=":ohutleipä:" replace="陵"/>
+    <item find=":rhoo:" replace="ρ"/>
+    <item find=":vilja:" replace=""/>
+    <item find=":oikea3:" replace="☛"/>
+    <item find=":sade:" replace="☔"/>
+    <item find=":rakkaus:" replace=""/>
+    <item find=":sarvet:" replace="落"/>
+    <item find=":moottoripyörä:" replace=""/>
+    <item find=":vasen2:" replace=""/>
+    <item find=":farkut:" replace=""/>
+    <item find=":ratas:" replace="⚙"/>
+    <item find="1/2" replace="½"/>
+    <item find=":räiske:" replace="❇"/>
+    <item find=":^x:" replace="ˣ"/>
+    <item find=":sitruuna:" replace=""/>
+    <item find=":Kuu:" replace="☽"/>
+    <item find=":jänis2:" replace=""/>
+    <item find=":sydän2:" replace=""/>
+    <item find=":laiva:" replace=""/>
+    <item find=":lähtevä lokero:" replace=""/>
+    <item find=":integraali3:" replace="∭"/>
+    <item find=":x:" replace="×"/>
+    <item find=":maapähkinät:" replace="樂"/>
+    <item find=":lohikäärme2:" replace=""/>
+    <item find=":riisi:" replace=""/>
+    <item find=":liira:" replace="₤"/>
+    <item find=":ei soittokelloa:" replace=""/>
+    <item find=":olankohautus:" replace="路"/>
+    <item find=":ja:" replace="∧"/>
+    <item find=":suudelma:" replace=""/>
+    <item find=":antenni:" replace=""/>
+    <item find=":Eeta:" replace="Η"/>
+    <item find=":vetoketju:" replace="蘿"/>
+    <item find=":tupakointi kielletty:" replace=""/>
+    <item find=":villakoira:" replace=""/>
+    <item find=":vasen3:" replace="☚"/>
+    <item find=":panda:" replace=""/>
+    <item find=":lääketieteellinen:" replace="⚕"/>
+    <item find=":suurennuslasi:" replace=""/>
+    <item find=":kirahvi:" replace="漣"/>
+    <item find=":vastaanotin:" replace=""/>
+    <item find=":vauva3:" replace="櫓"/>
+    <item find=":kehys2:" replace=""/>
+    <item find=":parkuva:" replace=""/>
+    <item find=":keskikokoinen neliö:" replace="◻"/>
+    <item find=":tassunjäljet:" replace=""/>
+    <item find=":/:" replace="∕"/>
+    <item find=":Ypsilon:" replace="Υ"/>
+    <item find=":ok2:" replace=""/>
+    <item find=":nuku:" replace=""/>
+    <item find=":lentokone5:" replace=""/>
+    <item find=":ramen:" replace=""/>
+    <item find=":pyöreä nuppineula:" replace=""/>
+    <item find=":pannukakut:" replace="丹"/>
+    <item find=":sade2:" replace="⛆"/>
+    <item find=":pallo2:" replace="‣"/>
+    <item find=":markkinat2:" replace=""/>
+    <item find=":elefantti:" replace=""/>
+    <item find=":delfiini:" replace=""/>
+    <item find=":iho5:" replace=""/>
+    <item find=":maski:" replace=""/>
+    <item find=":1/4:" replace="¼"/>
+    <item find=":sairaala:" replace=""/>
+    <item find=":aurinko2:" replace=""/>
+    <item find=":söpöys:" replace=""/>
+    <item find=":tietokone:" replace=""/>
+    <item find=":puukko2:" replace=""/>
+    <item find=":donitsi:" replace=""/>
+    <item find=":kriketti:" replace=""/>
+    <item find=":myy:" replace="μ"/>
+    <item find=":12 t:" replace=""/>
+    <item find=":kierrätyspaperi:" replace="♼"/>
+    <item find=":nyrkki2:" replace=""/>
+    <item find=":kananmuna:" replace="讀"/>
+    <item find=":^U:" replace="ᵁ"/>
+    <item find=":uupunut:" replace=""/>
+    <item find=":aurinkolasit:" replace=""/>
+    <item find=":lumihiutale:" replace="❄"/>
+    <item find=":tynnyri:" replace=""/>
+    <item find=":polttoainepumppu:" replace="⛽"/>
+    <item find=":^t:" replace="ᵗ"/>
+    <item find=":ruumisarkku:" replace="⚰"/>
+    <item find=":musta lähetti:" replace="♝"/>
+    <item find=":ruisku:" replace=""/>
+    <item find=":meloni:" replace=""/>
+    <item find=":syntetisaattori:" replace=""/>
+    <item find=":12.30:" replace=""/>
+    <item find=":kokkaaminen:" replace=""/>
+    <item find=":punastuminen:" replace=""/>
+    <item find=":suojatie:" replace=""/>
+    <item find=":nuket:" replace=""/>
+    <item find=":^gamma:" replace="ᵞ"/>
+    <item find=":räiskeet:" replace="✨"/>
+    <item find=":taksi2:" replace=""/>
+    <item find=":kupla7:" replace=""/>
+    <item find=":markkinat:" replace=""/>
+    <item find=":lentokone4:" replace=""/>
+    <item find=":nauru:" replace=""/>
+    <item find=":luisuva auto:" replace="⛐"/>
+    <item find=":bussipysäkki:" replace=""/>
+    <item find=":^D:" replace="ᴰ"/>
+    <item find=":^u:" replace="ᵘ"/>
+    <item find=":siili:" replace="璉"/>
+    <item find=":ellipsi:" replace="⬭"/>
+    <item find=":osa:" replace="§"/>
+    <item find=":ympyrä:" replace="○"/>
+    <item find=":6 t:" replace=""/>
+    <item find=":SW:" replace="↙"/>
+    <item find=":^J:" replace="ᴶ"/>
+    <item find=":_s:" replace="ₛ"/>
+    <item find=":näyttö:" replace=""/>
+    <item find=":väsynyt kasvo:" replace=""/>
+    <item find=":^0:" replace="⁰"/>
+    <item find=":kaukoputki:" replace=""/>
+    <item find=":lihas:" replace=""/>
+    <item find=":auto3:" replace=""/>
+    <item find=":kaiutin4:" replace=""/>
+    <item find=":poliisiauto:" replace=""/>
+    <item find=":pieni kuuluu:" replace="∊"/>
+    <item find=":näppäimistö3:" replace=""/>
+    <item find=":huulipuna:" replace=""/>
+    <item find=":vampyyri:" replace="率"/>
+    <item find=":8.30:" replace=""/>
+    <item find=":koira:" replace=""/>
+    <item find=":vaimenna:" replace=""/>
+    <item find=":tipu2:" replace=""/>
+    <item find=":suutelu:" replace=""/>
+    <item find=":tanssija:" replace=""/>
+    <item find=":sika:" replace=""/>
+    <item find=":!!:" replace="‼"/>
+    <item find=":luistin:" replace="⛸"/>
+    <item find=":integraali2:" replace="∬"/>
+    <item find=":vasara ja hakku:" replace="⚒"/>
+    <item find=":juusto:" replace="燎"/>
+    <item find=":hikipisarat:" replace=""/>
+    <item find=":tarkastusmerkki5:" replace=""/>
+    <item find=":laskin:" replace=""/>
+    <item find=":pieni neliö2:" replace="▪"/>
+    <item find=":kahdeksasosanuotti:" replace="텠"/>
+    <item find=":rupia:" replace="₹"/>
+    <item find=":postitoimisto:" replace=""/>
+    <item find=":kala:" replace=""/>
+    <item find=":om:" replace=""/>
+    <item find=":monokkeli:" replace="類"/>
+    <item find=":juna:" replace=""/>
+    <item find=":abc:" replace=""/>
+    <item find=":paloauto:" replace=""/>
+    <item find=":_3:" replace="₃"/>
+    <item find=":hymy:" replace="☺"/>
+    <item find=":värinätila:" replace=""/>
+    <item find=":E2:" replace="⇒"/>
+    <item find=":sulkapallo:" replace=""/>
+    <item find=":karkki:" replace=""/>
+    <item find=":sukat:" replace="罹"/>
+    <item find=":suutelu kissa:" replace=""/>
+    <item find=":tyhjä joukko:" replace="∅"/>
+    <item find=":radio:" replace=""/>
+    <item find=":noppa2:" replace="⚁"/>
+    <item find=":kanootti:" replace=""/>
+    <item find=":soita:" replace="酪"/>
+    <item find=":kasvava sydän:" replace=""/>
+    <item find=":tulostin:" replace=""/>
+    <item find=":kupla5:" replace=""/>
+    <item find=":kaulaliina:" replace="泥"/>
+    <item find=":pataruoka:" replace=""/>
+    <item find=":^ioota:" replace="ᶥ"/>
+    <item find=":hullunkurinen:" replace="浪"/>
+    <item find=":kokonuotti:" replace="텝"/>
+    <item find=":nukkuva:" replace=""/>
+    <item find=":mot:" replace="∎"/>
+    <item find=":optinen levy:" replace=""/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find=":puhelin3:" replace="✆"/>
+    <item find=":maaorava:" replace=""/>
+    <item find=":valkoinen lähetti:" replace="♗"/>
+    <item find=":auringonlasku:" replace=""/>
+    <item find=":piano:" replace=""/>
+    <item find=":jääkiekko:" replace=""/>
+    <item find=":kädenpuristus:" replace="欄"/>
+    <item find=":sulhanen:" replace="蘆"/>
+    <item find=":pussi:" replace=""/>
+    <item find=":_r:" replace="ᵣ"/>
+    <item find=":^w:" replace="ʷ"/>
+    <item find=":^s:" replace="ˢ"/>
+    <item find=":kristusmonogrammi:" replace="☧"/>
+    <item find=":Fuji:" replace=""/>
+    <item find=":kielletty:" replace=""/>
+    <item find=":kakka:" replace=""/>
+    <item find=":stadion:" replace=""/>
+    <item find=":liikennevalo2:" replace=""/>
+    <item find=":S2:" replace="⇓"/>
+    <item find=":kenkä2:" replace=""/>
+    <item find=":postilaatikko2:" replace=""/>
+    <item find=":alfa:" replace="α"/>
+    <item find=":3.30:" replace=""/>
+    <item find=":negaatio:" replace="¬"/>
+    <item find=":kupla:" replace=""/>
+    <item find=":hotelli:" replace=""/>
+    <item find=":risti3:" replace="♣"/>
+    <item find=":uskonnonharjoitus:" replace=""/>
+    <item find=":kriketti2:" replace="聯"/>
+    <item find=":takki:" replace="痢"/>
+    <item find=":lyijykynä4:" replace=""/>
+    <item find=":linna:" replace=""/>
+    <item find=":saari:" replace=""/>
+    <item find=":rekisteröity:" replace="®"/>
+    <item find=":pariskunta3:" replace=""/>
+    <item find=":ruoka:" replace="菱"/>
+    <item find=":^2:" replace="²"/>
+    <item find=":kurtistus2:" replace=""/>
+    <item find=":ankh:" replace="☥"/>
+    <item find=":hiiri:" replace=""/>
+    <item find=":kilpi:" replace=""/>
+    <item find=":paini:" replace="祿"/>
+    <item find=":talo2:" replace=""/>
+    <item find=":naiset:" replace=""/>
+    <item find=":rummut2:" replace="論"/>
+    <item find=":pienenevä lähes täysi kuu:" replace=""/>
+    <item find=":lautanen:" replace=""/>
+    <item find=":kimono:" replace=""/>
+    <item find=":suunnikas2:" replace="▰"/>
+    <item find=":hymysilmät:" replace=""/>
+    <item find=":valintaruutu:" replace="☐"/>
+    <item find=":kelttiläinen risti:" replace=""/>
+    <item find=":pieni tähti:" replace="⭒"/>
+    <item find=":moskeija:" replace=""/>
+    <item find=":jokeri:" replace=""/>
+    <item find=":pankki:" replace=""/>
+    <item find=":prinssi:" replace="老"/>
+    <item find=":muistilehtiö:" replace=""/>
+    <item find=":kukka:" replace="⚘"/>
+    <item find=":musta kuningatar:" replace="♛"/>
+    <item find=":kuulakärkikynä:" replace=""/>
+    <item find=":poliisimies:" replace=""/>
+    <item find=":promille:" replace="‰"/>
+    <item find=":sydämet silminä kissa:" replace=""/>
+    <item find=":hodari:" replace=""/>
+    <item find=":11 t:" replace=""/>
+    <item find=":laatikko:" replace=""/>
+    <item find=":lyhty:" replace=""/>
+    <item find=":kaksoset:" replace="♊"/>
+    <item find=":huomaa:" replace="☡"/>
+    <item find=":sika2:" replace=""/>
+    <item find=":sykloni:" replace=""/>
+    <item find=":museo:" replace=""/>
+    <item find=":spagetti:" replace=""/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find=":kolmiolippu:" replace=""/>
+    <item find=":golf2:" replace="⛳"/>
+    <item find=":NW2:" replace="⇖"/>
+    <item find=":yhdensuuntainen:" replace="∥"/>
+    <item find=":kuutiojuuri:" replace="∛"/>
+    <item find=":suutelu3:" replace=""/>
+    <item find=":bussi2:" replace=""/>
+    <item find=":lumiukko:" replace="☃"/>
+    <item find=":ranskalaiset:" replace=""/>
+    <item find=":faksi2:" replace=""/>
+    <item find=":painonnostaja:" replace=""/>
+    <item find=":pingviini:" replace=""/>
+    <item find=":tähti3:" replace=""/>
+    <item find=":_rhoo:" replace="ᵨ"/>
+    <item find=":nimi:" replace=""/>
+    <item find=":postilaatikko:" replace=""/>
+    <item find=":integraali4:" replace="∮"/>
+    <item find=":pikavene:" replace=""/>
+    <item find=":bikinit:" replace=""/>
+    <item find=":pilvistä2:" replace=""/>
+    <item find=":pankkiautomaatti:" replace=""/>
+    <item find=":voitto2:" replace=""/>
+    <item find=":videopeli:" replace=""/>
+    <item find=":unohdetut matkatavarat:" replace=""/>
+    <item find=":ei:" replace=""/>
+    <item find=":iho1:" replace=""/>
+    <item find=":ohjainpallo:" replace=""/>
+    <item find=":voisarvi:" replace="縷"/>
+    <item find=":viimeinen neljännes:" replace=""/>
+    <item find=":oikea:" replace="☞"/>
+    <item find=":lapsi:" replace="戮"/>
+    <item find=":dango:" replace=""/>
+    <item find=":palautusmerkki:" replace="♮"/>
+    <item find=":jalokivi:" replace=""/>
+    <item find=":ei2:" replace=""/>
+    <item find=":nauha:" replace=""/>
+    <item find=":valkoinen ratsu:" replace="♘"/>
+    <item find=".*(tm)" replace="™"/>
+    <item find=":jin jang:" replace="☯"/>
+    <item find=":vuoristorata:" replace=""/>
+    <item find=":tilikirja:" replace=""/>
+    <item find=":rugby-pallo:" replace=""/>
+    <item find=":5.30:" replace=""/>
+    <item find=":klovni:" replace="嵐"/>
+    <item find="&lt;--" replace="←"/>
+    <item find=":kolmio2:" replace="▲"/>
+    <item find=":sateenvarjo3:" replace="⛱"/>
+    <item find=":sivu2:" replace=""/>
+    <item find=":juna2:" replace=""/>
+    <item find=":matkatavarat:" replace=""/>
+    <item find=":ei polkupyöriä:" replace=""/>
+    <item find=":pienempi neliö2:" replace="◾"/>
+    <item find=":lintu:" replace=""/>
+    <item find=":lohikäärme:" replace=""/>
+    <item find=":Kaaba:" replace=""/>
+    <item find=":lusikka:" replace="籠"/>
+    <item find=":juhla4:" replace=""/>
+    <item find=":9.30:" replace=""/>
+    <item find=":hikinen hymy:" replace=""/>
+    <item find=":suurennuslasi2:" replace=""/>
+    <item find=":delta:" replace="δ"/>
+    <item find=":ei osajoukko:" replace="⊄"/>
+    <item find=":maapallo:" replace=""/>
+    <item find=":törmäys:" replace=""/>
+    <item find=":kaiutin2:" replace=""/>
+    <item find=":kiivi:" replace="諾"/>
+    <item find=":pysäytä2:" replace="⏹"/>
+    <item find=":_fii:" replace="ᵩ"/>
+    <item find=":neliö2:" replace="■"/>
+    <item find=":^b:" replace="ᵇ"/>
+    <item find=":nasta:" replace=""/>
+    <item find=":theeta:" replace="θ"/>
+    <item find=":pienenevä kuunsirppi:" replace=""/>
+    <item find=":!?:" replace="⁉"/>
+    <item find=":kynänterä2:" replace="✒"/>
+    <item find=":ilmeetön:" replace=""/>
+    <item find=":11.30:" replace=""/>
+    <item find=":alembic:" replace="⚗"/>
+    <item find=":hieronta:" replace=""/>
+    <item find=":ei pääsyä:" replace="⛔"/>
+    <item find=":jänönkorvat:" replace=""/>
+    <item find=":kuningas:" replace=""/>
+    <item find=":aivot:" replace="易"/>
+    <item find=":kuu:" replace=""/>
+    <item find=":eeta:" replace="η"/>
+    <item find=":salama3:" replace="☇"/>
+    <item find=":pienennä:" replace=""/>
+    <item find=":cd:" replace=""/>
+    <item find=":kirjoitus2:" replace=""/>
+    <item find=":3/8:" replace="⅜"/>
+    <item find=":kameli:" replace=""/>
+    <item find=":radioaktiivinen:" replace="☢"/>
+    <item find=":oomega:" replace="ω"/>
+    <item find=":piste keskellä:" replace="·"/>
+    <item find=":tulo:" replace="∏"/>
+    <item find=":kauppa2:" replace=""/>
+    <item find=":auto2:" replace=""/>
+    <item find=":aurinko:" replace=""/>
+    <item find=":musta sotilas:" replace="♟"/>
+    <item find=":pyrähdys:" replace=""/>
+    <item find=":tuplaylennysmerkki:" replace="턪"/>
+    <item find=":painike:" replace=""/>
+    <item find=":skorpioni:" replace="♏"/>
+    <item find=":hiiri4:" replace=""/>
+    <item find=":bataatti:" replace=""/>
+    <item find=":kukkakimppu:" replace=""/>
+    <item find=":1 t:" replace=""/>
+    <item find=":pääsy kielletty:" replace=""/>
+    <item find=":sake:" replace=""/>
+    <item find=":sauva:" replace="⚚"/>
+    <item find=":muurahainen:" replace=""/>
+    <item find=":ötökkä:" replace=""/>
+    <item find=":fii:" replace="φ"/>
+    <item find=":punta2:" replace=""/>
+    <item find=":7 t:" replace=""/>
+    <item find=":uranus:" replace="♅"/>
+    <item find=":tyhjä sivu:" replace=""/>
+    <item find=":salama2:" replace=""/>
+    <item find=":lippu2:" replace=""/>
+    <item find=":valkoinen ympyrä:" replace="⚪"/>
+    <item find=":pata:" replace="♠"/>
+    <item find=":Farsi:" replace="☫"/>
+    <item find=":neljäs juuri:" replace="∜"/>
+    <item find=":^I:" replace="ᴵ"/>
+    <item find=":ilotulitus:" replace=""/>
+    <item find=":sammakko:" replace=""/>
+    <item find=":caduceus:" replace="☤"/>
+    <item find="1/4" replace="¼"/>
+    <item find=":kaksi sydäntä:" replace=""/>
+    <item find=":Pii:" replace="Π"/>
+    <item find=":tarkastusmerkki3:" replace="✅"/>
+    <item find=":vesimies:" replace="♒"/>
+    <item find=":punta:" replace="£"/>
+    <item find=":taskulamppu:" replace=""/>
+    <item find=":stereo:" replace=""/>
+    <item find=":silmä:" replace=""/>
+    <item find=":mansikka:" replace=""/>
+    <item find=":liha:" replace=""/>
+    <item find=":noppa4:" replace="⚃"/>
+    <item find=":tyttö:" replace=""/>
+    <item find=":_i:" replace="ᵢ"/>
+    <item find=":postilaatikko3:" replace=""/>
+    <item find=":säteet2:" replace=""/>
+    <item find=":raha3:" replace="螺"/>
+    <item find=":Myy:" replace="Μ"/>
+    <item find=":gamma:" replace="γ"/>
+    <item find=":ei jaa:" replace="∤"/>
+    <item find=":tornado:" replace=""/>
+    <item find=":pisara:" replace=""/>
+    <item find=":valuutanvaihto:" replace=""/>
+    <item find=":^delta:" replace="ᵟ"/>
+    <item find=":kiskot:" replace=""/>
+    <item find=":klaffitaulu:" replace=""/>
+    <item find=":mega:" replace=""/>
+    <item find=":iho3:" replace=""/>
+    <item find=":kirkkaus2:" replace=""/>
+    <item find=":silmänisku:" replace=""/>
+    <item find=":käänteinen kuuluu:" replace="∋"/>
+    <item find=":ortodoksiristi:" replace="☦"/>
+    <item find=":5 t:" replace=""/>
+    <item find=":lampun henki:" replace="吏"/>
+    <item find=":työläinen:" replace=""/>
+    <item find=":vuoristorautatie:" replace=""/>
+    <item find=":_gamma:" replace="ᵧ"/>
+    <item find=":unioni:" replace="∪"/>
+    <item find=":sivu:" replace=""/>
+    <item find=":ruusu:" replace=""/>
+    <item find=":maapallo2:" replace=""/>
+    <item find=":^p:" replace="ᵖ"/>
+    <item find=":lahja sydän:" replace=""/>
+    <item find=":rauha:" replace="☮"/>
+    <item find=":sydänkoristelu:" replace=""/>
+    <item find=":kahdeksasosatauko:" replace="턾"/>
+    <item find=":postitoimisto2:" replace=""/>
+    <item find=":käsi2:" replace=""/>
+    <item find=":jäätelöannos:" replace=""/>
+    <item find=":aurinkoinen:" replace="☀"/>
+    <item find=":kristallipallo:" replace=""/>
+    <item find=":hipsu:" replace="′"/>
+    <item find=":_p:" replace="ₚ"/>
+    <item find=":kylpyamme:" replace=""/>
+    <item find=":käsipallo:" replace="菉"/>
+    <item find=":maito:" replace="拏"/>
+    <item find=":beeta:" replace="β"/>
+    <item find=":kuule ei ilkeä:" replace=""/>
+    <item find=":valas2:" replace=""/>
+    <item find=":kirkko:" replace="⛪"/>
+    <item find=":leijona:" replace="♌"/>
+    <item find=":lämpömittari:" replace=""/>
+    <item find=":kotka:" replace="礪"/>
+    <item find=":kiintolevy:" replace=""/>
+    <item find=":purjevene:" replace="⛵"/>
+    <item find=":lehmä2:" replace=""/>
+    <item find=":oden:" replace=""/>
+    <item find=":poika:" replace=""/>
+    <item find=":^-:" replace="⁻"/>
+    <item find=":kartta:" replace=""/>
+    <item find=":ylös:" replace="☝"/>
+    <item find=":vasen5:" replace=""/>
+    <item find=":baht:" replace="฿"/>
+    <item find=":sohva:" replace=""/>
+    <item find=":NE:" replace="↗"/>
+    <item find=":akku:" replace=""/>
+    <item find=":vuohi:" replace=""/>
+    <item find=":paita:" replace=""/>
+    <item find=":zeeta:" replace="ζ"/>
+    <item find=":paperikori:" replace=""/>
+    <item find=":lukko3:" replace=""/>
+    <item find=":ajastinkello:" replace="⏲"/>
+    <item find=":vanhempi mies:" replace=""/>
+    <item find=":robotti:" replace="烙"/>
+    <item find=":ässä:" replace=""/>
+    <item find=":sähköbussi:" replace=""/>
+    <item find=":raivo:" replace=""/>
+    <item find=":golf:" replace=""/>
+    <item find=":rakkauskirje:" replace=""/>
+    <item find=":kala3:" replace=""/>
+    <item find=":kynänterä:" replace="✑"/>
+    <item find=":halloween:" replace=""/>
+    <item find=":kolmikärki:" replace=""/>
+    <item find=":ylös4:" replace=""/>
+    <item find=":pyöräilijä:" replace=""/>
+    <item find=":raha2:" replace=""/>
+    <item find=":rypäleet:" replace=""/>
+    <item find=":kirjoitus:" replace="✍"/>
+    <item find=":vapaus:" replace=""/>
+    <item find=":kieli4:" replace=""/>
+    <item find=":juhlinta:" replace=""/>
+    <item find=":lippu3:" replace="⚑"/>
+    <item find=":voimistelija:" replace="露"/>
+    <item find=":puhelin2:" replace="☏"/>
+    <item find=":junanvaunu:" replace=""/>
+    <item find=":kupla8:" replace=""/>
+    <item find=":nenä:" replace=""/>
+    <item find=":Ksii:" replace="Ξ"/>
+    <item find=":virne kissa:" replace=""/>
+    <item find=":leipä2:" replace="稜"/>
+    <item find=":ananas:" replace=""/>
+    <item find=":tyhjät sivut:" replace=""/>
+    <item find=":Theeta:" replace="Θ"/>
+    <item find=":alas3:" replace=""/>
+    <item find=":suutelu2:" replace=""/>
+    <item find=":ei jalankulkijoita:" replace=""/>
+    <item find=":valtameri:" replace=""/>
+    <item find=":kirjekuori4:" replace=""/>
+    <item find=":järkyttynyt:" replace="勞"/>
+    <item find=":pizza:" replace=""/>
+    <item find=":kissa:" replace=""/>
+    <item find=":2.30:" replace=""/>
+    <item find=":tee:" replace=""/>
+    <item find=":etsivä:" replace=""/>
+    <item find=":tupakointi:" replace=""/>
+    <item find=":sirkus:" replace=""/>
+    <item find=":pallo3:" replace="◦"/>
+    <item find=":kirja:" replace=""/>
+    <item find=":tekijänoikeus:" replace="©"/>
+    <item find=":filmi:" replace=""/>
+    <item find=":maa:" replace="♁"/>
+    <item find=":kuningatar:" replace=""/>
+    <item find=":risti2:" replace="‡"/>
+    <item find=":simpukka:" replace=""/>
+    <item find=":saapas:" replace=""/>
+    <item find=":hiki:" replace=""/>
+    <item find=":hopeamitali:" replace="賂"/>
+    <item find=":kuulakärkikynä2:" replace=""/>
+    <item find=":muukalainen:" replace=""/>
+    <item find=":Fii:" replace="Φ"/>
+    <item find=":pyörivä valo:" replace=""/>
+    <item find=":mikrofoni:" replace=""/>
+    <item find=":pesäpallo:" replace="⚾"/>
+    <item find=":viivain:" replace=""/>
+    <item find=":maapallo4:" replace=""/>
+    <item find=":seitti:" replace=""/>
+    <item find=":mikroskooppi:" replace=""/>
+    <item find=":kaktus:" replace=""/>
+    <item find=":6.30:" replace=""/>
+    <item find=":kalenteri2:" replace=""/>
+    <item find=":vessa3:" replace=""/>
+    <item find=":kieli2:" replace=""/>
+    <item find=":bitcoin:" replace="₿"/>
+    <item find=":sivu3:" replace=""/>
+    <item find=":ei hyvä:" replace=""/>
+    <item find=":hiihtäjä:" replace="⛷"/>
+    <item find=":munakoiso:" replace=""/>
+    <item find=":_7:" replace="₇"/>
+    <item find=":sänky:" replace=""/>
+    <item find=":kokotauko:" replace="턻"/>
+    <item find=":pidot2:" replace=""/>
+    <item find=":hotelli2:" replace=""/>
+    <item find=":lol:" replace="藍"/>
+    <item find=":auringonnousu3:" replace=""/>
+    <item find=":auringonnousu2:" replace=""/>
+    <item find=":riemuvoitto:" replace=""/>
+    <item find=":Lothringenin risti:" replace="☨"/>
+    <item find=":^6:" replace="⁶"/>
+    <item find=":salamointia:" replace=""/>
+    <item find=":hiihto:" replace=""/>
+    <item find=":^m:" replace="ᵐ"/>
+    <item find=":suihku:" replace=""/>
+    <item find=":hys:" replace="狼"/>
+    <item find=":^):" replace="⁾"/>
+    <item find=":vessa2:" replace=""/>
+    <item find=":muistio:" replace=""/>
+    <item find=":uimari:" replace=""/>
+    <item find=":amfora:" replace=""/>
+    <item find=":hakku:" replace="⛏"/>
+    <item find=":ihminen kurtistaa:" replace=""/>
+    <item find=":härkä:" replace="♉"/>
+    <item find=":valkoinen kuningatar:" replace="♕"/>
+    <item find=":ei suuta:" replace=""/>
+    <item find=":laiva2:" replace=""/>
+    <item find=":peura:" replace="歷"/>
+    <item find=":kulma2:" replace="∡"/>
+    <item find=":hryvnia:" replace="₴"/>
+    <item find=":avoin suu:" replace=""/>
+    <item find=":arkistokaappi:" replace=""/>
+    <item find=":vuori:" replace="⛰"/>
+    <item find=":Beeta:" replace="Β"/>
+    <item find=":lukko:" replace=""/>
+    <item find=":reikä:" replace=""/>
+    <item find=":judo:" replace="屢"/>
+    <item find=":cowboy:" replace="鸞"/>
+    <item find=":synagoga:" replace=""/>
+    <item find=":ostoskärryt:" replace=""/>
+    <item find=":hiustenleikkuu:" replace=""/>
+    <item find=":avain2:" replace=""/>
+    <item find=":jalanjäljet:" replace=""/>
+    <item find=":auto:" replace=""/>
+    <item find=":vanukas:" replace=""/>
+    <item find=":lappu:" replace=""/>
+    <item find=":tietoja3:" replace=""/>
+    <item find=":paperiliitin:" replace=""/>
+    <item find=":krapu:" replace="♋"/>
+    <item find=":sandaali:" replace=""/>
+    <item find=":trumpetti:" replace=""/>
+    <item find=":kukkakimppu2:" replace=""/>
+    <item find=":mutteri ja pultti:" replace=""/>
+    <item find=":kertomerkki2:" replace="✖"/>
+    <item find=":avokado:" replace="陋"/>
+    <item find=":^y:" replace="ʸ"/>
+    <item find=":peruuta:" replace=""/>
+    <item find=":tv:" replace=""/>
+    <item find=":apina2:" replace=""/>
+    <item find=":parsakaali:" replace="復"/>
+    <item find=":selfie:" replace="盧"/>
+    <item find=":ruusuke:" replace=""/>
+    <item find=":jalkapallo:" replace="⚽"/>
+    <item find=":lentokone6:" replace=""/>
+    <item find=":latinalainen risti:" replace="✝"/>
+    <item find=":^k:" replace="ᵏ"/>
+    <item find=":kasvava lähes täysi kuu:" replace=""/>
+    <item find=":maissi:" replace=""/>
+    <item find=":viivain2:" replace=""/>
+    <item find=":nyy:" replace="ν"/>
+    <item find=":sideharso:" replace="洛"/>
+    <item find=":särkynyt sydän:" replace=""/>
+    <item find=":suuri neliö2:" replace="⬛"/>
+    <item find=":kirkkaus:" replace=""/>
+    <item find=":pieni tähti2:" replace="⭑"/>
+    <item find=":mitali2:" replace=""/>
+    <item find=":vasara:" replace=""/>
+    <item find=":puukko:" replace=""/>
+    <item find=":zzz:" replace=""/>
+    <item find=":hymiö kissa:" replace=""/>
+    <item find=":puhu ei ilkeä:" replace=""/>
+    <item find=":kana:" replace=""/>
+    <item find=":roskaus kielletty:" replace=""/>
+    <item find=":raha:" replace=""/>
+    <item find=":oikealle4:" replace=""/>
+    <item find=":leppäkerttu:" replace=""/>
+    <item find=":elokuva:" replace=""/>
+    <item find=":^V:" replace="ⱽ"/>
+    <item find=":hiiri5:" replace=""/>
+    <item find=":kaavio4:" replace=""/>
+    <item find=":Kappa:" replace="Κ"/>
+    <item find=":noppa5:" replace="⚄"/>
+    <item find=":asiakirja2:" replace=""/>
+    <item find=":luuri2:" replace=""/>
+    <item find=":?:" replace="❓"/>
+    <item find=":pallon pelaaja:" replace="⛹"/>
+    <item find=":avoimet kädet:" replace=""/>
+    <item find=":EW2:" replace="⇔"/>
+    <item find=":^n:" replace="ⁿ"/>
+    <item find=":lumilautailija:" replace=""/>
+    <item find=":kirjekuori7:" replace=""/>
+    <item find=":ylös3:" replace=""/>
+    <item find=":huolestunut:" replace=""/>
+    <item find=":keskeytä:" replace="⏸"/>
+    <item find=":hyssyttelevä:" replace=""/>
+    <item find=":istuin:" replace=""/>
+    <item find=":lentokone2:" replace=""/>
+    <item find=":soutuvene:" replace=""/>
+    <item find=":bambu:" replace=""/>
+    <item find=":mandariini:" replace=""/>
+    <item find=":kaupunki:" replace=""/>
+    <item find=":epsilon:" replace="ε"/>
+    <item find=":huimaantunut:" replace=""/>
+    <item find=":keskikokoinen tähti:" replace="⭐"/>
+    <item find=":sigma2:" replace="ς"/>
+    <item find=":_u:" replace="ᵤ"/>
+    <item find=":kupla3:" replace=""/>
+    <item find=":vessa:" replace=""/>
+    <item find=":kämmenet2:" replace="爐"/>
+    <item find=":pariskunta:" replace=""/>
+    <item find=":~:" replace="≈"/>
+    <item find=":md:" replace=""/>
+    <item find=":sarvikuono:" replace="憐"/>
+    <item find=":Khii:" replace="Χ"/>
+    <item find=":kuorma-auto2:" replace=""/>
+    <item find=":ympyrä3:" replace=""/>
+    <item find=":pidot:" replace=""/>
+    <item find=":peso:" replace="₱"/>
+    <item find=":hertta:" replace="♥"/>
+    <item find=":sumu:" replace=""/>
+    <item find=":soitto:" replace=""/>
+    <item find=":kello2:" replace=""/>
+    <item find=":kolmio3:" replace=""/>
+    <item find=":Ioota:" replace="Ι"/>
+    <item find=":^d:" replace="ᵈ"/>
+    <item find=":kiroilee:" replace="郎"/>
+    <item find=":valkoinen torni:" replace="♖"/>
+    <item find=":joulumuori:" replace="虜"/>
+    <item find=":lasi3:" replace="弄"/>
+    <item find=":miekkailija:" replace="鷺"/>
+    <item find=":pyöräilijä2:" replace=""/>
+    <item find=":töpseli:" replace=""/>
+    <item find=":sanomalehti2:" replace=""/>
+    <item find=":pilleri:" replace=""/>
+    <item find=":kolmio:" replace="△"/>
+    <item find=":alas:" replace="☟"/>
+    <item find=":rakennustyömaa:" replace=""/>
+    <item find=":silmukka2:" replace="➿"/>
+    <item find=":bussi:" replace=""/>
+    <item find=":Psii:" replace="Ψ"/>
+    <item find=":keksi:" replace=""/>
+    <item find=":käsi:" replace="✋"/>
+    <item find=":teltta:" replace="⛺"/>
+    <item find=":sormi:" replace=""/>
+    <item find=":neutraalit kasvot:" replace=""/>
+    <item find=":kupla10:" replace=""/>
+    <item find=":silmänpyöritys:" replace=""/>
+    <item find=":veturi:" replace=""/>
+    <item find=":Rhoo:" replace="Ρ"/>
+    <item find=":käsilaukku:" replace=""/>
+    <item find=":taputus:" replace=""/>
+    <item find=":kuusikulmio:" replace="⬡"/>
+    <item find=":hämähäkki:" replace=""/>
+    <item find=":keksi2:" replace="怒"/>
+    <item find=":alas6:" replace=""/>
+    <item find=":kultamitali:" replace="磊"/>
+    <item find=":alas5:" replace=""/>
+    <item find=":iloinen kissa:" replace=""/>
+    <item find=":kananjalka:" replace=""/>
+    <item find=":kierrätys:" replace="♲"/>
+    <item find=":ravintola:" replace=""/>
+    <item find=":yksisarvinen:" replace="濾"/>
+    <item find=":olut:" replace=""/>
+    <item find=":NS2:" replace="⇕"/>
+    <item find=":halaus:" replace="珞"/>
+    <item find=":musta ratsu:" replace="♞"/>
+    <item find=":avain:" replace=""/>
+    <item find=":kruunu:" replace=""/>
+    <item find=":eväsrasia:" replace=""/>
+    <item find=":^M:" replace="ᴹ"/>
+    <item find=":tuuli:" replace=""/>
+    <item find=":ajattelee:" replace="樂"/>
+    <item find=":sakset4:" replace="✃"/>
+    <item find=":hämillään:" replace=""/>
+    <item find=":voitto:" replace="✌"/>
+    <item find=":^R:" replace="ᴿ"/>
+    <item find=":risti4:" replace="♧"/>
+    <item find=":viisikulmio2:" replace="⬟"/>
+    <item find=":5/8:" replace="⅝"/>
+    <item find=":kehys:" replace=""/>
+    <item find=":^epsilon:" replace="ᵋ"/>
+    <item find=":^5:" replace="⁵"/>
+    <item find=":innostunut:" replace="朗"/>
+    <item find=":etana:" replace=""/>
+    <item find=":uusikuu:" replace=""/>
+    <item find=":_khii:" replace="ᵪ"/>
+    <item find=":vauva2:" replace=""/>
+    <item find=".*-&gt;.*" replace="→"/>
+    <item find=":gorilla:" replace="轢"/>
+    <item find=":puristin:" replace=""/>
+    <item find=":tiimalasi2:" replace="⏳"/>
+    <item find=":lippu4:" replace="⚐"/>
+    <item find=":oikea2:" replace=""/>
+    <item find=":lautta:" replace="⛴"/>
+    <item find=":kuuluu:" replace="∈"/>
+    <item find=":^(:" replace="⁽"/>
+    <item find=":lepakko:" replace="驪"/>
+    <item find=":veturi2:" replace=""/>
+    <item find=":tm:" replace="™"/>
+    <item find=":kirjekuori2:" replace=""/>
+    <item find=":tehdas:" replace=""/>
+    <item find=":musiikki:" replace=""/>
+    <item find=":silta:" replace=""/>
+    <item find=":puhekupla:" replace=""/>
+    <item find=":^fii:" replace="ᵠ"/>
+    <item find=":seepra:" replace="煉"/>
+    <item find=":?2:" replace="❔"/>
+    <item find=":kuolaa:" replace="襤"/>
+    <item find=":lammas:" replace=""/>
+    <item find=":tyhjä muistilappu:" replace=""/>
+    <item find=":syvä kumarrus:" replace=""/>
+    <item find=":tähti ja sirppi:" replace="☪"/>
+    <item find=":alas4:" replace=""/>
+    <item find=":^O:" replace="ᴼ"/>
+    <item find=":nami:" replace=""/>
+    <item find=":vaijerirata:" replace=""/>
+    <item find=":sormus:" replace=""/>
+    <item find=":levyke3:" replace=""/>
+    <item find=":virnistys2:" replace=""/>
+    <item find=":-+:" replace="∓"/>
+    <item find=":^g:" replace="ᵍ"/>
+    <item find=":viaton:" replace=""/>
+    <item find=":pelikortit:" replace=""/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="ts."/>
+    <word exception="sos."/>
+    <word exception="ent."/>
+    <word exception="suom."/>
+    <word exception="tms."/>
+    <word exception="prof."/>
+    <word exception="o.s."/>
+    <word exception="puh.joht."/>
+    <word exception="ns."/>
+    <word exception="sos.dem."/>
+    <word exception="nimim."/>
+    <word exception="nk."/>
+    <word exception="milj."/>
+    <word exception="mrd."/>
+    <word exception="mm."/>
+    <word exception="vt."/>
+    <word exception="yht."/>
+    <word exception="ym."/>
+    <word exception="lut."/>
+    <word exception="dem."/>
+    <word exception="maist."/>
+    <word exception="ed."/>
+    <word exception="huom."/>
+    <word exception="jne."/>
+    <word exception="jKr."/>
+    <word exception="vrt."/>
+    <word exception="em."/>
+    <word exception="yms."/>
+    <word exception="eKr."/>
+    <word exception="ks."/>
+    <word exception="os."/>
+    <word exception="lis."/>
+    <word exception="puh."/>
+    <word exception="so."/>
+    <word exception="ilm."/>
+    <word exception="pj."/>
+    <word exception="esim."/>
+    <word exception="toim."/>
+    <word exception="sd."/>
+    <word exception="ao."/>
+    <word exception="alk."/>
+    <word exception="kok."/>
+    <word exception="lkm."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="OOo"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

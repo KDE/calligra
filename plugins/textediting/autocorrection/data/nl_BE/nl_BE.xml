@@ -1,0 +1,1352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find=":veiligheid:" replace=""/>
+    <item find="abcent" replace="absent"/>
+    <item find=":chronometer:" replace="⏱"/>
+    <item find=":dobbelsteen2:" replace="⚁"/>
+    <item find=":grote cirkel2:" replace="⬤"/>
+    <item find=".*(tm)" replace="™"/>
+    <item find=":kus2:" replace=""/>
+    <item find=":^beta:" replace="ᵝ"/>
+    <item find="abbonnee" replace="abonnee"/>
+    <item find=":rijstcracker:" replace=""/>
+    <item find=":mannengezicht:" replace=""/>
+    <item find=":kalender:" replace=""/>
+    <item find=":!2:" replace="❗"/>
+    <item find=":laag volume:" replace=""/>
+    <item find=":integraal3:" replace="∭"/>
+    <item find=":achtbaan:" replace=""/>
+    <item find=":kleiner vierkant2:" replace="◾"/>
+    <item find=":slapend:" replace=""/>
+    <item find=":dobbelsteen6:" replace="⚅"/>
+    <item find=":geopend slot:" replace=""/>
+    <item find=":hoge helderheid:" replace=""/>
+    <item find=":bergspoorweg:" replace=""/>
+    <item find=":Waterman:" replace="♒"/>
+    <item find=":rechthoek2:" replace="▬"/>
+    <item find=":opengeslagen boek:" replace=""/>
+    <item find=":zwarte toren:" replace="♜"/>
+    <item find=":draaimolenpaard:" replace=""/>
+    <item find=":!?:" replace="⁉"/>
+    <item find=":som:" replace="∑"/>
+    <item find=":Uranus:" replace="♅"/>
+    <item find=":opsommingsteken2:" replace="‣"/>
+    <item find=":oproep:" replace=""/>
+    <item find=":wuivende hand:" replace=""/>
+    <item find=":NW2:" replace="⇖"/>
+    <item find=":cirkel2:" replace="●"/>
+    <item find=":uurwerk:" replace="⌚"/>
+    <item find=":witte toren:" replace="♖"/>
+    <item find=":Psi:" replace="Ψ"/>
+    <item find=":gif:" replace="☠"/>
+    <item find=":vrouwen:" replace=""/>
+    <item find=":pieper:" replace=""/>
+    <item find=":zwarte vlag:" replace="⚑"/>
+    <item find=":e-mail:" replace=""/>
+    <item find=":_i:" replace="ᵢ"/>
+    <item find=":NW:" replace="↖"/>
+    <item find=":trompet:" replace=""/>
+    <item find="anderzins" replace="anderszins"/>
+    <item find="odf" replace="ODF"/>
+    <item find=":bliksem:" replace="☇"/>
+    <item find=":kruis van Lotharingen:" replace="☨"/>
+    <item find=":/:" replace="∕"/>
+    <item find=":pagina:" replace=""/>
+    <item find=":liniaal:" replace=""/>
+    <item find=":wekker:" replace="⏰"/>
+    <item find=":hartslag:" replace=""/>
+    <item find=":psi:" replace="ψ"/>
+    <item find=":schoppen:" replace="♠"/>
+    <item find=":kwart noot:" replace="텟"/>
+    <item find=":naar boven:" replace="☝"/>
+    <item find=":Fuji berg:" replace=""/>
+    <item find=":sportschoen:" replace=""/>
+    <item find=":Mu:" replace="Μ"/>
+    <item find=":Maagd:" replace="♍"/>
+    <item find=":poedel:" replace=""/>
+    <item find=":zandloper:" replace="⌛"/>
+    <item find=":hibiscus:" replace=""/>
+    <item find=":standbeeld:" replace=""/>
+    <item find=":ellips:" replace="⬭"/>
+    <item find=":volle geopende mailbox:" replace=""/>
+    <item find=":computer:" replace=""/>
+    <item find=":regenboog:" replace=""/>
+    <item find=":varken:" replace=""/>
+    <item find=":wolf:" replace=""/>
+    <item find=":rat:" replace=""/>
+    <item find=":schattigheid:" replace=""/>
+    <item find=":grimas:" replace=""/>
+    <item find=":microfoon:" replace=""/>
+    <item find="revenue" replace="revenu"/>
+    <item find=".*(R)" replace="®"/>
+    <item find="rethorische" replace="retorische"/>
+    <item find="wezelijk" replace="wezenlijk"/>
+    <item find=":pi:" replace="π"/>
+    <item find=":vuist:" replace="✊"/>
+    <item find=":meloen:" replace=""/>
+    <item find=":^delta:" replace="ᵟ"/>
+    <item find=":oneindig:" replace="∞"/>
+    <item find=":joker:" replace=""/>
+    <item find=":omslag:" replace="✉"/>
+    <item find="bedrijfsschap" replace="bedrijfschap"/>
+    <item find=":golf:" replace="⛳"/>
+    <item find=":auto:" replace=""/>
+    <item find=":zwart paard:" replace="♞"/>
+    <item find=":fontein:" replace="⛲"/>
+    <item find=":permanent papier:" replace="♾"/>
+    <item find=":geschaafd ijs:" replace=""/>
+    <item find=":rolstoel:" replace="♿"/>
+    <item find=":handtas:" replace=""/>
+    <item find=":megafoon:" replace=""/>
+    <item find=":geldautomaat:" replace=""/>
+    <item find="recu" replace="reçu"/>
+    <item find=":^4:" replace="⁴"/>
+    <item find=":honderd punten:" replace=""/>
+    <item find=":politiewagen:" replace=""/>
+    <item find=":OK teken:" replace=""/>
+    <item find="saturday" replace="Saturday"/>
+    <item find=":driehoek:" replace="△"/>
+    <item find=":hoed2:" replace=""/>
+    <item find=":roomijs:" replace=""/>
+    <item find=":motorsport:" replace=""/>
+    <item find="gezamelijk" replace="gezamenlijk"/>
+    <item find=":tong4:" replace=""/>
+    <item find=":rho:" replace="ρ"/>
+    <item find=":_r:" replace="ᵣ"/>
+    <item find=":slapen:" replace=""/>
+    <item find=":zeilboot:" replace="⛵"/>
+    <item find="acorderen" replace="accorderen"/>
+    <item find=":integraal5:" replace="∰"/>
+    <item find=":Japans postkantoor:" replace=""/>
+    <item find=":silhouet:" replace=""/>
+    <item find=":naar links wijzende hand:" replace=""/>
+    <item find=":cent:" replace="¢"/>
+    <item find=":kus3:" replace=""/>
+    <item find=":schoppen2:" replace="♤"/>
+    <item find=":kattenkop:" replace=""/>
+    <item find=":bladwijzer2:" replace=""/>
+    <item find=":tractor:" replace=""/>
+    <item find=":paar vrouwen:" replace=""/>
+    <item find=":faxapparaat:" replace=""/>
+    <item find=":citroen:" replace=""/>
+    <item find=":^x:" replace="ˣ"/>
+    <item find=":bierkroezen:" replace=""/>
+    <item find=":voetganger:" replace=""/>
+    <item find=":aas:" replace=""/>
+    <item find=":knop2:" replace=""/>
+    <item find=":hamer en moker:" replace="⚒"/>
+    <item find=":vereniging:" replace="∪"/>
+    <item find=":kwart pauze:" replace="턽"/>
+    <item find=":ZO2:" replace="⇘"/>
+    <item find=":schaar:" replace="✂"/>
+    <item find=":baht:" replace="฿"/>
+    <item find=":jersey:" replace=""/>
+    <item find=":kaartsysteem:" replace=""/>
+    <item find=":sigma:" replace="σ"/>
+    <item find=":5/8:" replace="⅝"/>
+    <item find="accellereren" replace="accelereren"/>
+    <item find=".*&lt;-.*" replace="←"/>
+    <item find=":paperclip:" replace=""/>
+    <item find=":ZW2:" replace="⇙"/>
+    <item find=":^5:" replace="⁵"/>
+    <item find=":tong:" replace=""/>
+    <item find=":moer en schroef:" replace=""/>
+    <item find=":monorail:" replace=""/>
+    <item find=":scherp:" replace="♯"/>
+    <item find=":pinguïn:" replace=""/>
+    <item find=":volle maan2:" replace=""/>
+    <item find=":Neptunus:" replace="♆"/>
+    <item find=":^A:" replace="ᴬ"/>
+    <item find=":verkeerslicht2:" replace=""/>
+    <item find=":&gt;=:" replace="≥"/>
+    <item find=":^7:" replace="⁷"/>
+    <item find="friday" replace="Friday"/>
+    <item find=":middelmatig vierkant:" replace="◻"/>
+    <item find=":ronde punaise:" replace=""/>
+    <item find=":bevreesd:" replace=""/>
+    <item find=":kabouter:" replace=""/>
+    <item find=":&lt;=:" replace="≤"/>
+    <item find=":schrijfveer:" replace="✑"/>
+    <item find=":camera:" replace=""/>
+    <item find="hardstikke" replace="hartstikke"/>
+    <item find=":integraal4:" replace="∮"/>
+    <item find=":_8:" replace="₈"/>
+    <item find=":hamburger:" replace=""/>
+    <item find=":bier:" replace=""/>
+    <item find="commité" replace="comité"/>
+    <item find=":vulkaan:" replace=""/>
+    <item find=":gekrulde pagina:" replace=""/>
+    <item find=":voetafdruk:" replace=""/>
+    <item find=":gebed:" replace=""/>
+    <item find=":kleding:" replace=""/>
+    <item find=":ring:" replace=""/>
+    <item find=":stijgende grafiek:" replace=""/>
+    <item find="1/2" replace="½"/>
+    <item find=":sigma2:" replace="ς"/>
+    <item find=":dolfijn:" replace=""/>
+    <item find=":kruiden:" replace=""/>
+    <item find=":wassende maan:" replace=""/>
+    <item find=":stoom locomotief:" replace=""/>
+    <item find=":koptelefoon:" replace=""/>
+    <item find=":Informatie:" replace="ℹ"/>
+    <item find=":autobus2:" replace=""/>
+    <item find=":nu:" replace="ν"/>
+    <item find="brilliant" replace="briljant"/>
+    <item find=":paddenstoel:" replace=""/>
+    <item find=":banaan:" replace=""/>
+    <item find=":ster:" replace="★"/>
+    <item find="woordvoerdster" replace="woordvoerster"/>
+    <item find=":':" replace="’"/>
+    <item find=":integraal2:" replace="∬"/>
+    <item find=":slangendrager:" replace="⛎"/>
+    <item find=":neus:" replace=""/>
+    <item find="&lt;--&gt;" replace="↔"/>
+    <item find=":witte cirkel:" replace="⚪"/>
+    <item find=":aardbol4:" replace=""/>
+    <item find=":_7:" replace="₇"/>
+    <item find=":bewaker:" replace=""/>
+    <item find=":oudere man:" replace=""/>
+    <item find=":zonnebloem:" replace=""/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find=":urne:" replace="⚱"/>
+    <item find=":zweetdruppels:" replace=""/>
+    <item find="geboortebeperking" replace="geboortenbeperking"/>
+    <item find=":_):" replace="₎"/>
+    <item find=":chi rho:" replace="☧"/>
+    <item find=":mannelijk:" replace="♂"/>
+    <item find=":lus2:" replace="➿"/>
+    <item find=":deur:" replace=""/>
+    <item find=":fabriek:" replace=""/>
+    <item find=":rugby:" replace=""/>
+    <item find=":muziek:" replace=""/>
+    <item find=":hartelijk lachend:" replace=""/>
+    <item find=":_j:" replace="ⱼ"/>
+    <item find=":zeshoek2:" replace="⬢"/>
+    <item find=":krant:" replace=""/>
+    <item find="1/4" replace="¼"/>
+    <item find=":kaartspel:" replace=""/>
+    <item find=":schaap:" replace=""/>
+    <item find=":voetsporen:" replace=""/>
+    <item find=":timer:" replace="⏲"/>
+    <item find=":sleutel:" replace="턞"/>
+    <item find=":bunny oren:" replace=""/>
+    <item find=":tijger:" replace=""/>
+    <item find=":hart met pijl:" replace=""/>
+    <item find=".*..." replace="…"/>
+    <item find=":shekel:" replace="₪"/>
+    <item find=":geest:" replace=""/>
+    <item find=":niet gelijk aan:" replace="≠"/>
+    <item find=":moersleutel:" replace=""/>
+    <item find="thursday" replace="Thursday"/>
+    <item find="aggressie" replace="agressie"/>
+    <item find=":pruilend persoon:" replace=""/>
+    <item find=":family:" replace=""/>
+    <item find=":7/8:" replace="⅞"/>
+    <item find=":bioscoop:" replace=""/>
+    <item find=":boeken:" replace=""/>
+    <item find=":rechthoekige driehoek:" replace="⊿"/>
+    <item find=":x:" replace="×"/>
+    <item find=":onschuldig:" replace=""/>
+    <item find="nummeriek" replace="numeriek"/>
+    <item find=":Rho:" replace="Ρ"/>
+    <item find=":vermoeid:" replace=""/>
+    <item find=":Saturnus:" replace="♄"/>
+    <item find=":duizelig:" replace=""/>
+    <item find=":klein in:" replace="∊"/>
+    <item find=":dalende grafiek:" replace=""/>
+    <item find="frusteren" replace="frustreren"/>
+    <item find=":neutraal gezicht:" replace=""/>
+    <item find="altans" replace="althans"/>
+    <item find=":panda:" replace=""/>
+    <item find=":kapper:" replace=""/>
+    <item find=":bestaat:" replace="∃"/>
+    <item find=":kappa:" replace="κ"/>
+    <item find=":roeiboot:" replace=""/>
+    <item find=":filmcamera:" replace=""/>
+    <item find=":vlaggen:" replace=""/>
+    <item find=":surfer:" replace=""/>
+    <item find="bedriegelijk" replace="bedrieglijk"/>
+    <item find="neit" replace="niet"/>
+    <item find=":potlood3:" replace="✐"/>
+    <item find=":blije kat:" replace=""/>
+    <item find=":overwinning:" replace="✌"/>
+    <item find=":schildpad:" replace=""/>
+    <item find=":Gamma:" replace="Γ"/>
+    <item find=":videocamera:" replace=""/>
+    <item find=":reuzenrad:" replace=""/>
+    <item find=":kus:" replace=""/>
+    <item find=":cycloon:" replace=""/>
+    <item find=":middelpunt:" replace="·"/>
+    <item find=":3/4:" replace="¾"/>
+    <item find=":baseball:" replace="⚾"/>
+    <item find=":!!:" replace="‼"/>
+    <item find=":open mond:" replace=""/>
+    <item find=":douane:" replace=""/>
+    <item find=":kussende kat:" replace=""/>
+    <item find=":muizengezicht:" replace=""/>
+    <item find=":dobbelsteen1:" replace="⚀"/>
+    <item find=":gefeliciteerd:" replace=""/>
+    <item find=":x2:" replace="❌"/>
+    <item find=":oceaan:" replace=""/>
+    <item find="repressaille" replace="represaille"/>
+    <item find=":beginner:" replace=""/>
+    <item find=":kimono:" replace=""/>
+    <item find=":^chi:" replace="ᵡ"/>
+    <item find=":vinkje:" replace="✓"/>
+    <item find=":Eta:" replace="Η"/>
+    <item find=":badkuip:" replace=""/>
+    <item find=":tong2:" replace=""/>
+    <item find=":knop:" replace=""/>
+    <item find=":zonder mond:" replace=""/>
+    <item find=":pizza:" replace=""/>
+    <item find=":staf:" replace="⚚"/>
+    <item find=":verliefd paar:" replace=""/>
+    <item find=":gezichtsmassage:" replace=""/>
+    <item find=":kersen:" replace=""/>
+    <item find=":dobbelsteen3:" replace="⚂"/>
+    <item find=":_p:" replace="ₚ"/>
+    <item find=":Schorpioen:" replace="♏"/>
+    <item find=":paspoort:" replace=""/>
+    <item find=":bamboe:" replace=""/>
+    <item find=":paar mannen:" replace=""/>
+    <item find=":spraakballon:" replace=""/>
+    <item find=":trein3:" replace=""/>
+    <item find=":atoom:" replace="⚛"/>
+    <item find=":^g:" replace="ᵍ"/>
+    <item find=":fl:" replace="ﬂ"/>
+    <item find=":Zon:" replace="☉"/>
+    <item find="beamte" replace="beambte"/>
+    <item find=":zandloper2:" replace="⏳"/>
+    <item find=":^O:" replace="ᴼ"/>
+    <item find=":lachend duiveltje:" replace=""/>
+    <item find=":Japanse kroeg:" replace=""/>
+    <item find=":schaar met ondermes:" replace="✃"/>
+    <item find=":kus4:" replace=""/>
+    <item find=":Kreeft:" replace="♋"/>
+    <item find=":lege geopende mailbox:" replace=""/>
+    <item find=":hoge hoed:" replace=""/>
+    <item find=":geit:" replace=""/>
+    <item find=":_=:" replace="₌"/>
+    <item find=":^gamma:" replace="ᵞ"/>
+    <item find=":bestandsmappen:" replace=""/>
+    <item find=":masker:" replace=""/>
+    <item find="houwvast" replace="houvast"/>
+    <item find=":open bestandsmappen:" replace=""/>
+    <item find=":aardbei:" replace=""/>
+    <item find=":grootboek:" replace=""/>
+    <item find=":kuikens vanaf de voorzijde:" replace=""/>
+    <item find=":^alpha:" replace="ᵅ"/>
+    <item find=":Turkse lire:" replace="₺"/>
+    <item find=":hondenkop:" replace=""/>
+    <item find=":maïs:" replace=""/>
+    <item find=":tropische vis:" replace=""/>
+    <item find=":opsommingsteken:" replace="•"/>
+    <item find=":koekje:" replace=""/>
+    <item find=":ijsje:" replace=""/>
+    <item find=":mu:" replace="μ"/>
+    <item find=":vrouwengezicht:" replace=""/>
+    <item find=":keuzevak:" replace="☐"/>
+    <item find=":Melkweg:" replace=""/>
+    <item find=":kapsel:" replace=""/>
+    <item find=":schelp:" replace=""/>
+    <item find=":_phi:" replace="ᵩ"/>
+    <item find=":vonk:" replace="❇"/>
+    <item find=":graduatie:" replace=""/>
+    <item find=":alarm uitgeschakeld:" replace=""/>
+    <item find=":kippenpoot:" replace=""/>
+    <item find=":3/8:" replace="⅜"/>
+    <item find=":scheiding:" replace="⚮"/>
+    <item find=":helicopter:" replace=""/>
+    <item find=":vrijheidsbeeld:" replace=""/>
+    <item find=":_3:" replace="₃"/>
+    <item find=":injectiespuit:" replace=""/>
+    <item find=":^U:" replace="ᵁ"/>
+    <item find=":fonkelend hart:" replace=""/>
+    <item find=":hamer:" replace=""/>
+    <item find=":^t:" replace="ᵗ"/>
+    <item find=":lambda:" replace="λ"/>
+    <item find=":^R:" replace="ᴿ"/>
+    <item find=":zwaarden:" replace="⚔"/>
+    <item find=":zitplaats:" replace=""/>
+    <item find=":^-:" replace="⁻"/>
+    <item find=":verkeersbord werken:" replace=""/>
+    <item find=":woede:" replace=""/>
+    <item find=":hryvnia:" replace="₴"/>
+    <item find=":^L:" replace="ᴸ"/>
+    <item find=":^V:" replace="ⱽ"/>
+    <item find=":lus:" replace="➰"/>
+    <item find="posthuum" replace="postuum"/>
+    <item find=":trein2:" replace=""/>
+    <item find=":kastanje:" replace=""/>
+    <item find=":naar rechts wijzende hand:" replace=""/>
+    <item find=":entreekaartje:" replace=""/>
+    <item find=":rijst:" replace=""/>
+    <item find=":witte bloem:" replace=""/>
+    <item find=":basispunt:" replace="‱"/>
+    <item find=":Boogschutter:" replace="♐"/>
+    <item find=":Auteursrecht:" replace="©"/>
+    <item find=":_9:" replace="₉"/>
+    <item find=":middelmatige ster:" replace="⭐"/>
+    <item find=":hoek2:" replace="∡"/>
+    <item find="permiteren" replace="permitteren"/>
+    <item find=":N:" replace="↑"/>
+    <item find=":kip:" replace=""/>
+    <item find=":engel:" replace=""/>
+    <item find=":wagon:" replace=""/>
+    <item find=":gefrituurde garnaal:" replace=""/>
+    <item find="fabricant" replace="fabrikant"/>
+    <item find=":keuzerondje:" replace=""/>
+    <item find=":pruilende kat:" replace=""/>
+    <item find="asperine" replace="aspirine"/>
+    <item find=":raket:" replace=""/>
+    <item find=":laatste kwartier:" replace=""/>
+    <item find=":spaghetti:" replace=""/>
+    <item find=":auto3:" replace=""/>
+    <item find=":^k:" replace="ᵏ"/>
+    <item find=":ontgoocheld:" replace=""/>
+    <item find="milimeter" replace="millimeter"/>
+    <item find=":mond:" replace=""/>
+    <item find=":koffie:" replace="☕"/>
+    <item find=":keuzevak3:" replace="☒"/>
+    <item find=":_u:" replace="ᵤ"/>
+    <item find=":achtste pauze:" replace="턾"/>
+    <item find=":fietser:" replace=""/>
+    <item find=":bushalte:" replace=""/>
+    <item find=":ruit:" replace="◊"/>
+    <item find=":anker:" replace="⚓"/>
+    <item find=":vreugde:" replace=""/>
+    <item find=":eta:" replace="η"/>
+    <item find=":draaiende harten:" replace=""/>
+    <item find=":pakket:" replace=""/>
+    <item find=":aardbol:" replace=""/>
+    <item find=":drakenkop:" replace=""/>
+    <item find=":viering:" replace=""/>
+    <item find=":^K:" replace="ᴷ"/>
+    <item find=":afnemende maan:" replace=""/>
+    <item find="voorwensel" replace="voorwendsel"/>
+    <item find=":bankgebouw:" replace=""/>
+    <item find="monday" replace="Monday"/>
+    <item find=":beta:" replace="β"/>
+    <item find=":posthoorn:" replace=""/>
+    <item find=":Latijns kruis:" replace="✝"/>
+    <item find=":rechthoek:" replace="▭"/>
+    <item find=":_h:" replace="ₕ"/>
+    <item find=":roos:" replace=""/>
+    <item find=":^n:" replace="ⁿ"/>
+    <item find=":nieuwe maan:" replace=""/>
+    <item find=":woedend:" replace=""/>
+    <item find="tafreel" replace="tafereel"/>
+    <item find=":baby2:" replace=""/>
+    <item find=":^r:" replace="ʳ"/>
+    <item find=":^E:" replace="ᴱ"/>
+    <item find=":_a:" replace="ₐ"/>
+    <item find=":babyflesje:" replace=""/>
+    <item find=":onweer:" replace="⛈"/>
+    <item find=":paard:" replace=""/>
+    <item find="burgelijk" replace="burgerlijk"/>
+    <item find=":won:" replace="₩"/>
+    <item find=":ZW:" replace="↙"/>
+    <item find=":_5:" replace="₅"/>
+    <item find="apiritief" replace="aperitief"/>
+    <item find=":bedienend personeel:" replace=""/>
+    <item find=":yin yang:" replace="☯"/>
+    <item find=":^H:" replace="ᴴ"/>
+    <item find=":domino:" replace=""/>
+    <item find=":Phi:" replace="Φ"/>
+    <item find=":verkeerslicht:" replace=""/>
+    <item find=":vliegend blad:" replace=""/>
+    <item find=":kat:" replace=""/>
+    <item find=":hartdecoratie:" replace=""/>
+    <item find=":damesschoen:" replace=""/>
+    <item find=":schreeuw:" replace=""/>
+    <item find=":vogel:" replace=""/>
+    <item find=":euro bankbiljet:" replace=""/>
+    <item find=":naambord:" replace=""/>
+    <item find=":?:" replace="❓"/>
+    <item find=":ram:" replace=""/>
+    <item find="stylistisch" replace="stilistisch"/>
+    <item find=":volle maan:" replace=""/>
+    <item find="aksepteren" replace="accepteren"/>
+    <item find=":^h:" replace="ʰ"/>
+    <item find=":buidel:" replace=""/>
+    <item find=":toetsenbord:" replace="⌨"/>
+    <item find=":uitwerpselen:" replace=""/>
+    <item find=":liefdesbrief:" replace=""/>
+    <item find=":creditcard:" replace=""/>
+    <item find=":luidspreker:" replace=""/>
+    <item find=":^a:" replace="ᵃ"/>
+    <item find="contrôle" replace="controle"/>
+    <item find=":meisjesgezicht:" replace=""/>
+    <item find=":fietser2:" replace=""/>
+    <item find=":Jupiter:" replace="♃"/>
+    <item find=":fronsend persoon:" replace=""/>
+    <item find=":rijstbal:" replace=""/>
+    <item find=":chi:" replace="χ"/>
+    <item find=":kleine ster2:" replace="⭑"/>
+    <item find=":delta:" replace="δ"/>
+    <item find=":_beta:" replace="ᵦ"/>
+    <item find=":zweet:" replace=""/>
+    <item find=":Vissen:" replace="♓"/>
+    <item find=":vierkant2:" replace="■"/>
+    <item find=":dollar bankbiljet:" replace=""/>
+    <item find=":melodie:" replace=""/>
+    <item find=":^0:" replace="⁰"/>
+    <item find=":lippenstift:" replace=""/>
+    <item find=":parallelogram:" replace="▱"/>
+    <item find=":brood:" replace=""/>
+    <item find=":applaus:" replace=""/>
+    <item find=":tram2:" replace=""/>
+    <item find=":berg:" replace="⛰"/>
+    <item find=":ei:" replace=""/>
+    <item find=":pistool:" replace=""/>
+    <item find=":geen afval gooien:" replace=""/>
+    <item find="akademikus" replace="academicus"/>
+    <item find=":brug:" replace=""/>
+    <item find=":_o:" replace="ₒ"/>
+    <item find=":rechts3:" replace="☛"/>
+    <item find=":zonnig:" replace="☀"/>
+    <item find=":Theta:" replace="Θ"/>
+    <item find=":telefoon2:" replace="☏"/>
+    <item find=":bikini:" replace=""/>
+    <item find=":kleiner vierkant:" replace="◽"/>
+    <item find=":---:" replace="—"/>
+    <item find="amandement" replace="amendement"/>
+    <item find=":O:" replace="→"/>
+    <item find=":vlag:" replace="⚐"/>
+    <item find=":^3:" replace="³"/>
+    <item find=":snowboard:" replace=""/>
+    <item find=":yen:" replace="¥"/>
+    <item find=":snikken:" replace=""/>
+    <item find=":mahjong:" replace=""/>
+    <item find=":1/8:" replace="⅛"/>
+    <item find=":warm water bron:" replace="♨"/>
+    <item find=":doodskist:" replace="⚰"/>
+    <item find=":kruisje:" replace="†"/>
+    <item find=":^+:" replace="⁺"/>
+    <item find=":zestiende noot:" replace="텡"/>
+    <item find=":_+:" replace="₊"/>
+    <item find=":mandarijn:" replace=""/>
+    <item find="millard" replace="miljard"/>
+    <item find=":snoep:" replace=""/>
+    <item find=":paardenhoofd:" replace=""/>
+    <item find=":notities2:" replace="♬"/>
+    <item find=":lachend2:" replace="☻"/>
+    <item find=":CD:" replace=""/>
+    <item find=":niet roken:" replace=""/>
+    <item find=":vijfhoek2:" replace="⬟"/>
+    <item find=":Omicron:" replace="Ο"/>
+    <item find=":spreek geen kwaad:" replace=""/>
+    <item find=":party:" replace=""/>
+    <item find=":ster en wassende maan:" replace="☪"/>
+    <item find=":signaalsterkte:" replace=""/>
+    <item find=":Kerstmis:" replace=""/>
+    <item find=":hoogspanning:" replace="⚡"/>
+    <item find=":aap:" replace=""/>
+    <item find=":Zeta:" replace="Ζ"/>
+    <item find=":juweel:" replace=""/>
+    <item find=":oudere vrouw:" replace=""/>
+    <item find=":bad:" replace=""/>
+    <item find="abbonnement" replace="abonnement"/>
+    <item find=":danser:" replace=""/>
+    <item find="ethnisch" replace="etnisch"/>
+    <item find=":^iota:" replace="ᶥ"/>
+    <item find=":biljart:" replace=""/>
+    <item find=":hamster:" replace=""/>
+    <item find=":Afnemende halvemaan:" replace=""/>
+    <item find=":epsilon:" replace="ε"/>
+    <item find=":product:" replace="∏"/>
+    <item find=":gesloten slot:" replace=""/>
+    <item find=":bagage:" replace=""/>
+    <item find=":vlees:" replace=""/>
+    <item find=":vierde graadswortel:" replace="∜"/>
+    <item find=":W2:" replace="⇐"/>
+    <item find=":vliegtuig:" replace="✈"/>
+    <item find=":1/2:" replace="½"/>
+    <item find=":cactus:" replace=""/>
+    <item find=":--:" replace="–"/>
+    <item find=":hoek:" replace="∠"/>
+    <item find=":Farsi:" replace="☫"/>
+    <item find=":buigend:" replace=""/>
+    <item find=":aubergine:" replace=""/>
+    <item find=":zaklamp:" replace=""/>
+    <item find=":portemonnee:" replace=""/>
+    <item find=":Japans kasteel:" replace=""/>
+    <item find=":circustent:" replace=""/>
+    <item find=":^m:" replace="ᵐ"/>
+    <item find=":zonsondergang:" replace=""/>
+    <item find=":damessandaal:" replace=""/>
+    <item find=":postvak UIT:" replace=""/>
+    <item find=":distilleerkolf:" replace="⚗"/>
+    <item find=":Weegschaal:" replace="♎"/>
+    <item find=":hart:" replace="❤"/>
+    <item find=":1/4:" replace="¼"/>
+    <item find=":Delta:" replace="Δ"/>
+    <item find="gevoegelijk" replace="gevoeglijk"/>
+    <item find=":vinkje2:" replace="✔"/>
+    <item find=":zwaailicht:" replace=""/>
+    <item find=":^phi:" replace="ᵠ"/>
+    <item find=":ster3:" replace=""/>
+    <item find=":luipaard:" replace=""/>
+    <item find=":triomf:" replace=""/>
+    <item find=".*(c)" replace="©"/>
+    <item find=":trapezium:" replace="⏢"/>
+    <item find=":Iota:" replace="Ι"/>
+    <item find=":aardbol3:" replace=""/>
+    <item find=":beer:" replace=""/>
+    <item find=":Tau:" replace="Τ"/>
+    <item find=":_-:" replace="₋"/>
+    <item find="geweldadig" replace="gewelddadig"/>
+    <item find=":^):" replace="⁾"/>
+    <item find=":huis met tuin:" replace=""/>
+    <item find=":gokautomaat:" replace=""/>
+    <item find=":deelt niet:" replace="∤"/>
+    <item find=":Grieks kruis2:" replace="✙"/>
+    <item find=":Halloween:" replace=""/>
+    <item find=":gamma:" replace="γ"/>
+    <item find=":omgekeerd vergrootglas:" replace=""/>
+    <item find=":gerecycleerd papier:" replace="♼"/>
+    <item find=":zonsopgang3:" replace=""/>
+    <item find=":schooltas:" replace=""/>
+    <item find=":Davidster:" replace="✡"/>
+    <item find=":blozen:" replace=""/>
+    <item find=":ballon:" replace=""/>
+    <item find=":ff:" replace="ﬀ"/>
+    <item find=":cirkel:" replace="○"/>
+    <item find=":apenkop:" replace=""/>
+    <item find=":kameel:" replace=""/>
+    <item find=":kleine ster:" replace="⭒"/>
+    <item find="sunday" replace="Sunday"/>
+    <item find=":schaats:" replace="⛸"/>
+    <item find=":krik:" replace=""/>
+    <item find=":pauze:" replace="턻"/>
+    <item find=":regenscherm:" replace="☂"/>
+    <item find=":benzinepomp:" replace="⛽"/>
+    <item find=":taart:" replace=""/>
+    <item find=":ffl:" replace="ﬄ"/>
+    <item find=":oversteekplaats voor kinderen:" replace=""/>
+    <item find=":harten:" replace="♥"/>
+    <item find=":dubbel kruisje:" replace="‡"/>
+    <item find=":nacht:" replace=""/>
+    <item find=":druppels:" replace=""/>
+    <item find=":doorsnede:" replace="∩"/>
+    <item find=":maan:" replace=""/>
+    <item find=":kokende schaal:" replace=""/>
+    <item find=":iota:" replace="ι"/>
+    <item find=":_1:" replace="₁"/>
+    <item find=":viool:" replace=""/>
+    <item find=":Pi:" replace="Π"/>
+    <item find="abusiefelijk" replace="abusievelijk"/>
+    <item find=":verrast:" replace=""/>
+    <item find=":buitenaards monster:" replace=""/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find=":Upsilon:" replace="Υ"/>
+    <item find=":verbijsterd:" replace=""/>
+    <item find=":postkantoor:" replace=""/>
+    <item find=":grijnzend gezicht:" replace=""/>
+    <item find=":kristallen bol:" replace=""/>
+    <item find=":watermeloen:" replace=""/>
+    <item find=":recycleren2:" replace="♻"/>
+    <item find=":tram:" replace=""/>
+    <item find=":regen:" replace="☔"/>
+    <item find=":opkomende walvis:" replace=""/>
+    <item find=":blondine:" replace=""/>
+    <item find=":hangende spoorweg:" replace=""/>
+    <item find="millieu" replace="milieu"/>
+    <item find=":sterretje:" replace=""/>
+    <item find=":uitglijdend kuiken:" replace=""/>
+    <item find=":NO:" replace="↗"/>
+    <item find="hopenlijk" replace="hopelijk"/>
+    <item find=":Z:" replace="↓"/>
+    <item find=":toilet2:" replace=""/>
+    <item find=":^y:" replace="ʸ"/>
+    <item find=":krokodil:" replace=""/>
+    <item find=":koeienkop:" replace=""/>
+    <item find="extravegant" replace="extravagant"/>
+    <item find=":koppeling:" replace=""/>
+    <item find=":mobiel:" replace=""/>
+    <item find=":roken:" replace=""/>
+    <item find=":…:" replace="…"/>
+    <item find=":theekopje:" replace=""/>
+    <item find="adendum" replace="addendum"/>
+    <item find=":zoete aardappel:" replace=""/>
+    <item find=":bevat:" replace="∋"/>
+    <item find=":OW:" replace="↔"/>
+    <item find=":+/-:" replace="±"/>
+    <item find=":gloeilamp:" replace=""/>
+    <item find=":witte koning:" replace="♔"/>
+    <item find=":auto2:" replace=""/>
+    <item find=":natuurlijk:" replace="♮"/>
+    <item find=":hoog volume:" replace=""/>
+    <item find=":^b:" replace="ᵇ"/>
+    <item find=":teleurgesteld maar opgelucht:" replace=""/>
+    <item find=":^s:" replace="ˢ"/>
+    <item find=":skiër:" replace="⛷"/>
+    <item find=":regen2:" replace="⛆"/>
+    <item find=":slak:" replace=""/>
+    <item find="eensgezinswoning" replace="eensgezinswoning"/>
+    <item find=":dobbelsteen4:" replace="⚃"/>
+    <item find=":honingbij:" replace=""/>
+    <item find="interesant" replace="interessant"/>
+    <item find="procedé" replace="procédé"/>
+    <item find=":Ram:" replace="♈"/>
+    <item find=":ziekenhuis:" replace=""/>
+    <item find=":bouwvakker:" replace=""/>
+    <item find=":recycleren:" replace="♲"/>
+    <item find=":andreaskruis:" replace="☓"/>
+    <item find=":^w:" replace="ʷ"/>
+    <item find=":hamer en sikkel:" replace="☭"/>
+    <item find=":_0:" replace="₀"/>
+    <item find="hte" replace="het"/>
+    <item find=":tau:" replace="τ"/>
+    <item find=":keuzevak2:" replace="☑"/>
+    <item find=":^o:" replace="ᵒ"/>
+    <item find=":witte pion:" replace="♙"/>
+    <item find=":klaver:" replace=""/>
+    <item find=":klembord:" replace=""/>
+    <item find=":boeket:" replace=""/>
+    <item find=":ziekenwagen:" replace=""/>
+    <item find=":halve pauze:" replace="턼"/>
+    <item find=":stekker:" replace=""/>
+    <item find=":Z2:" replace="⇓"/>
+    <item find=":^M:" replace="ᴹ"/>
+    <item find=":schrift:" replace="✍"/>
+    <item find=":kalender2:" replace=""/>
+    <item find=":!:" replace="❕"/>
+    <item find=":driehoekige vlag:" replace=""/>
+    <item find=":ruiten2:" replace="♢"/>
+    <item find=":trofee:" replace=""/>
+    <item find=":en:" replace="∧"/>
+    <item find=":sneeuwman2:" replace="⛄"/>
+    <item find=":wintersport:" replace=""/>
+    <item find=":bewolkt:" replace="⛅"/>
+    <item find=":gensters:" replace="✨"/>
+    <item find=":tijgerkop:" replace=""/>
+    <item find=":vergrootglas:" replace=""/>
+    <item find=":naar beneden:" replace="☟"/>
+    <item find=":^J:" replace="ᴶ"/>
+    <item find=":^1:" replace="¹"/>
+    <item find="sateliet" replace="satelliet"/>
+    <item find=":^P:" replace="ᴾ"/>
+    <item find=":^l:" replace="ˡ"/>
+    <item find=":pijnboom:" replace=""/>
+    <item find=":geschenk:" replace=""/>
+    <item find=":koe:" replace=""/>
+    <item find=":maan2:" replace=""/>
+    <item find=":NZ2:" replace="⇕"/>
+    <item find=":_(:" replace="₍"/>
+    <item find=":paraplu2:" replace=""/>
+    <item find=":knipoog:" replace=""/>
+    <item find=":Xi:" replace="Ξ"/>
+    <item find=":kusplek:" replace=""/>
+    <item find=":saxofoon:" replace=""/>
+    <item find="ergenis" replace="ergernis"/>
+    <item find=":poppen:" replace=""/>
+    <item find=":niet blij:" replace=""/>
+    <item find=":DVD:" replace=""/>
+    <item find=":?2:" replace="❔"/>
+    <item find=":driehoek2:" replace="▲"/>
+    <item find=":zwarte koning:" replace="♚"/>
+    <item find=":-:" replace="−"/>
+    <item find=":^f:" replace="ᶠ"/>
+    <item find="niemandalletje" replace="niemendalletje"/>
+    <item find="applaudiseren" replace="applaudisseren"/>
+    <item find=":voetgangers verboden:" replace=""/>
+    <item find=":computerspel:" replace=""/>
+    <item find=":koud zweet:" replace=""/>
+    <item find=":kruis van Jeruzalem:" replace="☩"/>
+    <item find="minitieus" replace="minutieus"/>
+    <item find=":pond:" replace="£"/>
+    <item find=":^Phi:" replace="ᶲ"/>
+    <item find=":superset:" replace="⊃"/>
+    <item find="3/4" replace="¾"/>
+    <item find=":^i:" replace="ⁱ"/>
+    <item find=":nieuwe maan2:" replace=""/>
+    <item find=":zwemmer:" replace=""/>
+    <item find=":stoofpot:" replace=""/>
+    <item find=":MiniDisc:" replace=""/>
+    <item find="barbeque" replace="barbecue"/>
+    <item find=":tent:" replace="⛺"/>
+    <item find=":bril:" replace=""/>
+    <item find=":trilmodus:" replace=""/>
+    <item find=":huis:" replace=""/>
+    <item find=":vuurwerk:" replace=""/>
+    <item find=":volume:" replace=""/>
+    <item find="sumier" replace="summier"/>
+    <item find=":filmklapper:" replace=""/>
+    <item find=":tennis:" replace=""/>
+    <item find=":Tweelingen:" replace="♊"/>
+    <item find=":scrollen:" replace=""/>
+    <item find=":^d:" replace="ᵈ"/>
+    <item find=":hand:" replace="✋"/>
+    <item find=":winkel:" replace=""/>
+    <item find=":hotel2:" replace=""/>
+    <item find=":inktvis:" replace=""/>
+    <item find="barriëre" replace="barrière"/>
+    <item find=":kersenbloesem:" replace=""/>
+    <item find=":huwelijk:" replace="⚭"/>
+    <item find=":bom:" replace=""/>
+    <item find=":videoband:" replace=""/>
+    <item find=":wisselkoers:" replace=""/>
+    <item find=":schaar met bovenmes:" replace="✁"/>
+    <item find=":lelie:" replace="⚜"/>
+    <item find=":helm:" replace="⛑"/>
+    <item find="intervieuw" replace="interview"/>
+    <item find=":postbus:" replace=""/>
+    <item find=":zwarte cirkel:" replace="⚫"/>
+    <item find=":sneeuwvlok:" replace="❄"/>
+    <item find=":verliefd:" replace=""/>
+    <item find=":vermenigvuldigen2:" replace="✖"/>
+    <item find=":zeta:" replace="ζ"/>
+    <item find=":school:" replace=""/>
+    <item find=":verstild:" replace=""/>
+    <item find=":vrachtwagen:" replace="⛟"/>
+    <item find=":lint:" replace=""/>
+    <item find=":rechts:" replace="☞"/>
+    <item find=":uitgeschakelde mobiel:" replace=""/>
+    <item find=":renner:" replace=""/>
+    <item find=":zonnebril:" replace=""/>
+    <item find=":varkensneus:" replace=""/>
+    <item find=":koala:" replace=""/>
+    <item find="uitwijden" replace="uitweiden"/>
+    <item find=":storm:" replace="☈"/>
+    <item find=":_k:" replace="ₖ"/>
+    <item find=":konijnengezicht:" replace=""/>
+    <item find=":druiven:" replace=""/>
+    <item find="tuesday" replace="Tuesday"/>
+    <item find=":geen toegang:" replace="⛔"/>
+    <item find=":phi:" replace="φ"/>
+    <item find=":toilet:" replace=""/>
+    <item find=":vinkje3:" replace="✅"/>
+    <item find=":in:" replace="∈"/>
+    <item find=":radioactief:" replace="☢"/>
+    <item find=":voetbal:" replace="⚽"/>
+    <item find=":blad:" replace=""/>
+    <item find=":diskette:" replace=""/>
+    <item find=":^v:" replace="ᵛ"/>
+    <item find=":donut:" replace=""/>
+    <item find=":telefoon:" replace="☎"/>
+    <item find=":kever:" replace=""/>
+    <item find=":grijns:" replace=""/>
+    <item find=":Pluto:" replace="♇"/>
+    <item find=":Kappa:" replace="Κ"/>
+    <item find=":satellietschotel:" replace=""/>
+    <item find=":stortbad:" replace=""/>
+    <item find=":lolly:" replace=""/>
+    <item find=":witte loper:" replace="♗"/>
+    <item find=":^(:" replace="⁽"/>
+    <item find=":eerste kwartier:" replace=""/>
+    <item find=":os:" replace=""/>
+    <item find=":fietsen verboden:" replace=""/>
+    <item find=":verboden toegang bord:" replace=""/>
+    <item find=":niet drinkbaar water:" replace=""/>
+    <item find=":kruidenier:" replace=""/>
+    <item find=":tong3:" replace=""/>
+    <item find="krediteren" replace="crediteren"/>
+    <item find=":Zon2:" replace="☼"/>
+    <item find=":peer:" replace=""/>
+    <item find=":_t:" replace="ₜ"/>
+    <item find="agregaat" replace="aggregaat"/>
+    <item find=":spieren:" replace=""/>
+    <item find=":_chi:" replace="ᵪ"/>
+    <item find=":kettingen:" replace="⛓"/>
+    <item find=":open handen:" replace=""/>
+    <item find=":^u:" replace="ᵘ"/>
+    <item find=":lach:" replace=""/>
+    <item find=":yen bankbiljet:" replace=""/>
+    <item find=":^8:" replace="⁸"/>
+    <item find=":boogschieten:" replace=""/>
+    <item find=":televisie:" replace=""/>
+    <item find=":drinkbaar water:" replace=""/>
+    <item find=":per duizend:" replace="‰"/>
+    <item find=":vijfhoek:" replace="⛤"/>
+    <item find=":geldbuidel:" replace=""/>
+    <item find=":_rho:" replace="ᵨ"/>
+    <item find=":walvis:" replace=""/>
+    <item find=":potlood2:" replace="✏"/>
+    <item find=":schrijfveer2:" replace="✒"/>
+    <item find=":NZ:" replace="↕"/>
+    <item find="gedistileerd" replace="gedistilleerd"/>
+    <item find=":theta:" replace="θ"/>
+    <item find="gerechterlijke" replace="gerechtelijke"/>
+    <item find=":slipgevaar:" replace="⛐"/>
+    <item find=":vrouwelijk:" replace="♀"/>
+    <item find=":^B:" replace="ᴮ"/>
+    <item find=":ffi:" replace="ﬃ"/>
+    <item find=":^e:" replace="ᵉ"/>
+    <item find=":achtste noot:" replace="텠"/>
+    <item find=":peso:" replace="₱"/>
+    <item find=":minderjarige:" replace=""/>
+    <item find=":prinses:" replace=""/>
+    <item find=":parallelogram2:" replace="▰"/>
+    <item find=":koningin:" replace=""/>
+    <item find=":omicron:" replace="ο"/>
+    <item find=":dobbelsteen5:" replace="⚄"/>
+    <item find=":zon:" replace=""/>
+    <item find=":jurk:" replace=""/>
+    <item find=":chocolade:" replace=""/>
+    <item find=":taxi2:" replace=""/>
+    <item find="dichtsbijzijnde" replace="dichtstbijzijnde"/>
+    <item find=":bel:" replace=""/>
+    <item find=":botsing:" replace=""/>
+    <item find=":punaise:" replace=""/>
+    <item find=":tulp:" replace=""/>
+    <item find=":pulserend hart:" replace=""/>
+    <item find="concureren" replace="concurreren"/>
+    <item find="impressario" replace="impresario"/>
+    <item find=":partituur:" replace=""/>
+    <item find=":lege verzameling:" replace="∅"/>
+    <item find=":aardbol2:" replace=""/>
+    <item find=":dobbelspel:" replace=""/>
+    <item find=":duim omlaag:" replace=""/>
+    <item find=":wenende kat:" replace=""/>
+    <item find="&lt;--" replace="←"/>
+    <item find=":tanabataboom:" replace=""/>
+    <item find=":^W:" replace="ᵂ"/>
+    <item find=":kogelvis:" replace=""/>
+    <item find=":^c:" replace="ᶜ"/>
+    <item find=":ok2:" replace=""/>
+    <item find=":oor:" replace=""/>
+    <item find=":opsommingsteken3:" replace="◦"/>
+    <item find=":weegschaal:" replace="⚖"/>
+    <item find=":niet:" replace="¬"/>
+    <item find=":2/3:" replace="⅔"/>
+    <item find=":drietand:" replace=""/>
+    <item find=":telescoop:" replace=""/>
+    <item find=":omhoog wijzende hand:" replace=""/>
+    <item find=":vla:" replace=""/>
+    <item find=":station:" replace=""/>
+    <item find="leiddraad" replace="leidraad"/>
+    <item find=":Maltezer kruis:" replace="✠"/>
+    <item find=":metro:" replace=""/>
+    <item find=":sectie:" replace="§"/>
+    <item find=":verloren bagage:" replace=""/>
+    <item find=":verjaardag:" replace=""/>
+    <item find=":tulband:" replace=""/>
+    <item find=":varkenskop:" replace=""/>
+    <item find=":rupee:" replace="₹"/>
+    <item find=":basketbal:" replace=""/>
+    <item find=":vis:" replace=""/>
+    <item find=":omega:" replace="ω"/>
+    <item find=":herenschoen:" replace=""/>
+    <item find=":ananas:" replace=""/>
+    <item find=":Aarde:" replace="♁"/>
+    <item find=":^p:" replace="ᵖ"/>
+    <item find=":blozend:" replace=""/>
+    <item find=":tandwiel:" replace="⚙"/>
+    <item find=":Nu:" replace="Ν"/>
+    <item find=":N2:" replace="⇑"/>
+    <item find=":vierkantswortel:" replace="√"/>
+    <item find="hoogelijk" replace="hooglijk"/>
+    <item find=":spijkerbroek:" replace=""/>
+    <item find=":piano:" replace=""/>
+    <item find=":abc:" replace=""/>
+    <item find=":schild:" replace="⛨"/>
+    <item find=":volharden:" replace=""/>
+    <item find=":halve noot:" replace="텞"/>
+    <item find=":kabelbaan:" replace=""/>
+    <item find=":^C:" replace="ᴰ"/>
+    <item find=":geodriehoek:" replace=""/>
+    <item find=":boos:" replace=""/>
+    <item find=":fronsen:" replace=""/>
+    <item find=":visserij:" replace=""/>
+    <item find=":schreeuwende kat:" replace=""/>
+    <item find=":kleurenpalet:" replace=""/>
+    <item find=":meesmuilende kat:" replace=""/>
+    <item find=":muis:" replace=""/>
+    <item find=":alpha:" replace="α"/>
+    <item find=":buitenaardse:" replace=""/>
+    <item find=":noot:" replace="텝"/>
+    <item find=":deelt:" replace="∣"/>
+    <item find=":minibus:" replace=""/>
+    <item find=":graad:" replace="°"/>
+    <item find=":Maan:" replace="☽"/>
+    <item find=":ruiten:" replace="♦"/>
+    <item find=":gedeeltelijk:" replace="∂"/>
+    <item find=":W:" replace="←"/>
+    <item find=":Tokyo toren:" replace=""/>
+    <item find=":xi:" replace="ξ"/>
+    <item find=":aktetas:" replace=""/>
+    <item find=":witte schaar:" replace="✄"/>
+    <item find=":ZO:" replace="↘"/>
+    <item find=":boek:" replace=""/>
+    <item find=":tropisch drankje:" replace=""/>
+    <item find=":^theta:" replace="ᶿ"/>
+    <item find=":verboden voor mobiele telefoon:" replace=""/>
+    <item find=":Lambda:" replace="Λ"/>
+    <item find=":gekweld:" replace=""/>
+    <item find=":_4:" replace="₄"/>
+    <item find=":kerrie:" replace=""/>
+    <item find=":vlaggen2:" replace=""/>
+    <item find=":derde graadswortel:" replace="∛"/>
+    <item find=":politie:" replace=""/>
+    <item find=":bevat niet:" replace="∌"/>
+    <item find=":verliefde kat:" replace=""/>
+    <item find=":of:" replace="∨"/>
+    <item find=":silhouetten:" replace=""/>
+    <item find=":zwarte koningin:" replace="♛"/>
+    <item find=":^6:" replace="⁶"/>
+    <item find=":jongensgezicht:" replace=""/>
+    <item find=":Grieks kruis:" replace="✚"/>
+    <item find=":vuur:" replace=""/>
+    <item find=":bloem:" replace="⚘"/>
+    <item find=":privacy:" replace=""/>
+    <item find=":bloesem:" replace=""/>
+    <item find=":groene appel:" replace=""/>
+    <item find=":Japan:" replace=""/>
+    <item find="&lt;-&gt;" replace="↔"/>
+    <item find=":_l:" replace="ₗ"/>
+    <item find=":Kwikzilver:" replace="☿"/>
+    <item find=":geld:" replace=""/>
+    <item find=":hart met lint:" replace=""/>
+    <item find=":boom:" replace=""/>
+    <item find=":lachend:" replace="☺"/>
+    <item find=":koning:" replace=""/>
+    <item find=":trolleybus:" replace=""/>
+    <item find="carriëre" replace="carrière"/>
+    <item find=":voor alle:" replace="∀"/>
+    <item find=":witte koningin:" replace="♕"/>
+    <item find=":middelmatig vierkant2:" replace="◼"/>
+    <item find=":huilen:" replace=""/>
+    <item find=":slang:" replace=""/>
+    <item find=":bestaat niet:" replace="∄"/>
+    <item find=":kantoor:" replace=""/>
+    <item find=":radio:" replace=""/>
+    <item find=":draak:" replace=""/>
+    <item find=":bericht downloaden:" replace=""/>
+    <item find=":sake:" replace=""/>
+    <item find=":potlood:" replace="✎"/>
+    <item find=":versierd kladblok:" replace=""/>
+    <item find=":afwijzend:" replace=""/>
+    <item find="onmiddelijk" replace="onmiddellijk"/>
+    <item find=":konijn:" replace=""/>
+    <item find=":fiets:" replace=""/>
+    <item find=":gedachteballon:" replace=""/>
+    <item find=":zoete lach:" replace=""/>
+    <item find=":ster4:" replace=""/>
+    <item find=":nadenkend:" replace=""/>
+    <item find=":euro:" replace="€"/>
+    <item find=":duim omhoog:" replace=""/>
+    <item find="recencent" replace="recensent"/>
+    <item find=":Alfa:" replace="Α"/>
+    <item find=":klein vierkant:" replace="▫"/>
+    <item find=":^9:" replace="⁹"/>
+    <item find=":haan:" replace=""/>
+    <item find=":jammie:" replace=""/>
+    <item find=":groot vierkant:" replace="⬜"/>
+    <item find=":Japanse boemannen:" replace=""/>
+    <item find=":slaperig:" replace=""/>
+    <item find="enigzins" replace="enigszins"/>
+    <item find=":zaailing:" replace=""/>
+    <item find=":twee harten:" replace=""/>
+    <item find=":^2:" replace="²"/>
+    <item find=":^j:" replace="ʲ"/>
+    <item find=":^z:" replace="ᶻ"/>
+    <item find=":ogen:" replace=""/>
+    <item find=":batterij:" replace=""/>
+    <item find=":links:" replace="☜"/>
+    <item find=":volle mailbox:" replace=""/>
+    <item find=":1/3:" replace="⅓"/>
+    <item find="aanrijken" replace="aanreiken"/>
+    <item find=":hond:" replace=""/>
+    <item find=":^I:" replace="ᴵ"/>
+    <item find=":mist:" replace=""/>
+    <item find="--&gt;" replace="→"/>
+    <item find=":perzik:" replace=""/>
+    <item find=":zonsopgang2:" replace=""/>
+    <item find=":mannen:" replace=""/>
+    <item find=":geluk:" replace=""/>
+    <item find=".*-&gt;.*" replace="→"/>
+    <item find=":opgelucht:" replace=""/>
+    <item find=":Leeuw:" replace="♌"/>
+    <item find=":_e:" replace="ₑ"/>
+    <item find=":palmboom:" replace=""/>
+    <item find=":Japanse Kobold:" replace=""/>
+    <item find=":frons:" replace="☹"/>
+    <item find=":bezorgd:" replace=""/>
+    <item find=":Kerstman:" replace=""/>
+    <item find=":_s:" replace="ₛ"/>
+    <item find=":cocktailglas:" replace=""/>
+    <item find=":kerk:" replace="⛪"/>
+    <item find=":notities:" replace="♫"/>
+    <item find=":wolk:" replace="☁"/>
+    <item find=":klein vierkant2:" replace="▪"/>
+    <item find=":baby:" replace=""/>
+    <item find=":wisselkantoor:" replace=""/>
+    <item find=":tm:" replace="™"/>
+    <item find="bonefide" replace="bonafide"/>
+    <item find=":^G:" replace="ᴳ"/>
+    <item find=":patat:" replace=""/>
+    <item find=":x3:" replace="❎"/>
+    <item find=":bruid:" replace=""/>
+    <item find=":komeet:" replace="☄"/>
+    <item find=":_6:" replace="₆"/>
+    <item find=":dempen:" replace=""/>
+    <item find=":verward:" replace=""/>
+    <item find=":meesmuilen:" replace=""/>
+    <item find=":bowlen:" replace=""/>
+    <item find=":kolomdiagram:" replace=""/>
+    <item find=":geen deelverzameling:" replace="⊄"/>
+    <item find=":windspel:" replace=""/>
+    <item find=":zwarte loper:" replace="♝"/>
+    <item find=":Sigma:" replace="Σ"/>
+    <item find=":microscoop:" replace=""/>
+    <item find=":tomaat:" replace=""/>
+    <item find=":sneeuwman:" replace="☃"/>
+    <item find=":_n:" replace="ₙ"/>
+    <item find=":Beta:" replace="Β"/>
+    <item find="falikant" replace="faliekant"/>
+    <item find=":afgevallen blad:" replace=""/>
+    <item find=":zie geen kwaad:" replace=""/>
+    <item find=":Chi:" replace="Χ"/>
+    <item find=":wit paard:" replace="♘"/>
+    <item find=":notitie:" replace="♩"/>
+    <item find=":upsilon:" replace="υ"/>
+    <item find=":Steenbok:" replace="♑"/>
+    <item find=":geregistreerd:" replace="®"/>
+    <item find=":overhemd:" replace=""/>
+    <item find=":~:" replace="≈"/>
+    <item find=":^N:" replace="ᴺ"/>
+    <item find=":_gamma:" replace="ᵧ"/>
+    <item find=":olifant:" replace=""/>
+    <item find="nochthans" replace="nochtans"/>
+    <item find=":trein:" replace=""/>
+    <item find=":^T:" replace="ᵀ"/>
+    <item find=":lachende kat:" replace=""/>
+    <item find=":helderheid:" replace=""/>
+    <item find=":ster2:" replace="☆"/>
+    <item find=":Maan2:" replace="☾"/>
+    <item find=":deelverzameling:" replace="⊂"/>
+    <item find=":schip:" replace=""/>
+    <item find=":manicure:" replace=""/>
+    <item find=":bladwijzer:" replace=""/>
+    <item find=":niet in:" replace="∉"/>
+    <item find=":gebroken hart:" replace=""/>
+    <item find=":raceboot:" replace=""/>
+    <item find=":mier:" replace=""/>
+    <item find=":notitie2:" replace="♪"/>
+    <item find=":^=:" replace="⁼"/>
+    <item find=":sushi:" replace=""/>
+    <item find=":afval:" replace=""/>
+    <item find=":wijnglas:" replace=""/>
+    <item find=":omlaag wijzende hand:" replace=""/>
+    <item find=":Epsilon:" replace="Ε"/>
+    <item find=":dromedaris:" replace=""/>
+    <item find=":dik dollarteken:" replace=""/>
+    <item find=":waarschuwing:" replace="☡"/>
+    <item find=":vrede:" replace="☮"/>
+    <item find="feitenlijk" replace="feitelijk"/>
+    <item find=":viskoekje:" replace=""/>
+    <item find="ommelet" replace="omelet"/>
+    <item find=":orthodox kruis:" replace="☦"/>
+    <item find=":hotel:" replace=""/>
+    <item find=":kuiken:" replace=""/>
+    <item find=":lire:" replace="₤"/>
+    <item find=":E2:" replace="⇒"/>
+    <item find=":vrachtwagen2:" replace=""/>
+    <item find=":^epsilon:" replace="ᵋ"/>
+    <item find=":dameslaars:" replace=""/>
+    <item find=":honing:" replace=""/>
+    <item find=":brandweerwagen:" replace=""/>
+    <item find=":duim:" replace="″"/>
+    <item find="wednesday" replace="Wednesday"/>
+    <item find=":harten2:" replace="♡"/>
+    <item find=":mes:" replace=""/>
+    <item find=":blocnote:" replace=""/>
+    <item find="pitoresk" replace="pittoresk"/>
+    <item find=":_2:" replace="₂"/>
+    <item find=":grote cirkel:" replace="◯"/>
+    <item find="apartement" replace="appartement"/>
+    <item find=":taxi:" replace=""/>
+    <item find=":eerste:" replace="′"/>
+    <item find=":integraal:" replace="∫"/>
+    <item find=":pil:" replace=""/>
+    <item find=":lieveheersbeestje:" replace=""/>
+    <item find=":autobus:" replace=""/>
+    <item find=":restaurant:" replace=""/>
+    <item find=":waterbuffel:" replace=""/>
+    <item find=":hoor geen kwaad:" replace=""/>
+    <item find=":fi:" replace="ﬁ"/>
+    <item find=":inkomend bericht:" replace=""/>
+    <item find=":doodskop:" replace=""/>
+    <item find=":zwarte pion:" replace="♟"/>
+    <item find=":zonsopgang:" replace=""/>
+    <item find=":_m:" replace="ₘ"/>
+    <item find=":postvak IN:" replace=""/>
+    <item find=":pond bankbiljet:" replace=""/>
+    <item find=":Omega:" replace="Ω"/>
+    <item find=":zeshoek:" replace="⬡"/>
+    <item find=":appel:" replace=""/>
+    <item find=":politiewagen2:" replace=""/>
+    <item find=":\\:" replace="∖"/>
+    <item find=":medisch:" replace="⚕"/>
+    <item find=":uitdrukkingsloos:" replace=""/>
+    <item find=":dameshoed:" replace=""/>
+    <item find=":kussend:" replace=""/>
+    <item find=":gitaar:" replace=""/>
+    <item find=":_x:" replace="ₓ"/>
+    <item find=":kikkerkop:" replace=""/>
+    <item find=":bal:" replace="⛹"/>
+    <item find=":ferry:" replace="⛴"/>
+    <item find=":parallel:" replace="∥"/>
+    <item find=":moe:" replace=""/>
+    <item find=":Stier:" replace="♉"/>
+    <item find=":links3:" replace="☚"/>
+    <item find=":echtpaar:" replace=""/>
+    <item find=":parasol:" replace="⛱"/>
+    <item find=":kasteel:" replace=""/>
+    <item find=":theater:" replace=""/>
+    <item find=":vierkant:" replace="□"/>
+    <item find=":lege mailbox:" replace=""/>
+    <item find=":paardenrennen:" replace=""/>
+    <item find=":niet parallel:" replace="∦"/>
+    <item find="onsteltenis" replace="ontsteltenis"/>
+    <item find=":_v:" replace="ᵥ"/>
+    <item find="sabbotage" replace="sabotage"/>
+    <item find=":NO2:" replace="⇗"/>
+    <item find=":stropdas:" replace=""/>
+    <item find=":vlak:" replace="♭"/>
+    <item find=":kroon:" replace=""/>
+    <item find="faillisement" replace="faillissement"/>
+    <item find=":OW2:" replace="⇔"/>
+    <item find=":groot vierkant2:" replace="⬛"/>
+    <item find=":-+:" replace="∓"/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="apr."/>
+    <word exception="aug."/>
+    <word exception="incl."/>
+    <word exception="n."/>
+    <word exception="d."/>
+    <word exception="id."/>
+    <word exception="nl."/>
+    <word exception="Prof."/>
+    <word exception="ff."/>
+    <word exception="o."/>
+    <word exception="betr."/>
+    <word exception="orth."/>
+    <word exception="lit."/>
+    <word exception="di."/>
+    <word exception="vnl."/>
+    <word exception="verg."/>
+    <word exception="vr."/>
+    <word exception="ref."/>
+    <word exception="vol."/>
+    <word exception="vb."/>
+    <word exception="j."/>
+    <word exception="sept."/>
+    <word exception="i."/>
+    <word exception="priv."/>
+    <word exception="div."/>
+    <word exception="cf."/>
+    <word exception="z."/>
+    <word exception="mnl."/>
+    <word exception="u."/>
+    <word exception="rek."/>
+    <word exception="inl."/>
+    <word exception="Dr."/>
+    <word exception="ca."/>
+    <word exception="vert."/>
+    <word exception="v."/>
+    <word exception="pag."/>
+    <word exception="tbr."/>
+    <word exception="f."/>
+    <word exception="h."/>
+    <word exception="hfst."/>
+    <word exception="okt."/>
+    <word exception="jl."/>
+    <word exception="nat."/>
+    <word exception="w."/>
+    <word exception="evt."/>
+    <word exception="x."/>
+    <word exception="jr."/>
+    <word exception="b."/>
+    <word exception="art."/>
+    <word exception="e."/>
+    <word exception="afl."/>
+    <word exception="facs."/>
+    <word exception="rer."/>
+    <word exception="ib."/>
+    <word exception="y."/>
+    <word exception="sep."/>
+    <word exception="p."/>
+    <word exception="fl."/>
+    <word exception="jan."/>
+    <word exception="ong."/>
+    <word exception="zgn."/>
+    <word exception="feb."/>
+    <word exception="tbs."/>
+    <word exception="uitg."/>
+    <word exception="gem."/>
+    <word exception="eig."/>
+    <word exception="max."/>
+    <word exception="bijv."/>
+    <word exception="tel."/>
+    <word exception="ws."/>
+    <word exception="c."/>
+    <word exception="sec."/>
+    <word exception="nov."/>
+    <word exception="m."/>
+    <word exception="str."/>
+    <word exception="geb."/>
+    <word exception="aub."/>
+    <word exception="orig."/>
+    <word exception="univ."/>
+    <word exception="afd."/>
+    <word exception="ed."/>
+    <word exception="nr."/>
+    <word exception="alg."/>
+    <word exception="wek."/>
+    <word exception="plv."/>
+    <word exception="resp."/>
+    <word exception="afk."/>
+    <word exception="vnw."/>
+    <word exception="vv."/>
+    <word exception="derg."/>
+    <word exception="svp."/>
+    <word exception="k."/>
+    <word exception="zg."/>
+    <word exception="s."/>
+    <word exception="vgl."/>
+    <word exception="vlg."/>
+    <word exception="fa."/>
+    <word exception="t."/>
+    <word exception="it."/>
+    <word exception="min."/>
+    <word exception="do."/>
+    <word exception="opm."/>
+    <word exception="ibid."/>
+    <word exception="mv."/>
+    <word exception="cat."/>
+    <word exception="versch."/>
+    <word exception="etc."/>
+    <word exception="bijz."/>
+    <word exception="red."/>
+    <word exception="q."/>
+    <word exception="med."/>
+    <word exception="g."/>
+    <word exception="wed."/>
+    <word exception="fig."/>
+    <word exception="r."/>
+    <word exception="st."/>
+    <word exception="l."/>
+    <word exception="a."/>
+    <word exception="neg."/>
+    <word exception="afb."/>
+    <word exception="rel."/>
+    <word exception="enz."/>
+    <word exception="afz."/>
+    <word exception="blz."/>
+    <word exception="tst."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="OOo"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

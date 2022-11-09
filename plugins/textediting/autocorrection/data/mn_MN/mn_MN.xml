@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find="сонсдоно" replace="сонстоно"/>
+    <item find=":дэс дараалалын тэмдэг:" replace="•"/>
+    <item find=":өнцөг:" replace="∠"/>
+    <item find="луугаа" replace="уруугаа"/>
+    <item find="тус бүрт" replace="тусбүрд"/>
+    <item find="уулзая" replace="уулзъя"/>
+    <item find=":^-:" replace="⁻"/>
+    <item find="муруйгаа" replace="мурийгаа"/>
+    <item find="давалгааг" replace="давлагааг"/>
+    <item find="нөхцлөөс" replace="нөхцөлөөс"/>
+    <item find="дууриал" replace="дуурайл"/>
+    <item find=":эта:" replace="Β"/>
+    <item find="номондоо" replace="номдоо"/>
+    <item find="зургаадугаар" replace="зургадугаар"/>
+    <item find=":Лямбда:" replace="Λ"/>
+    <item find="хоёр дугаар" replace="хоёрдугаар"/>
+    <item find="нөхцлийг" replace="нөхцөлийг"/>
+    <item find="эрх зүй" replace="эрхзүй"/>
+    <item find="тав дугаар" replace="тавдугаар"/>
+    <item find="лүү" replace="уруу"/>
+    <item find="тус бүрийг" replace="тусбүрийг"/>
+    <item find="ноогдворуудаар" replace="ногдворуудаар"/>
+    <item find="харуулая" replace="харуулъя"/>
+    <item find=":дээш:" replace="☝"/>
+    <item find="давхрага" replace="давхарга"/>
+    <item find="компьютерүүдийг" replace="компьютеруудыг"/>
+    <item find="дараахь" replace="дараах"/>
+    <item find="функцаас" replace="функцээс"/>
+    <item find="тус бүрийн" replace="тусбүрийн"/>
+    <item find=":Дуу:" replace=""/>
+    <item find="долоо дугаар" replace="долдугаар"/>
+    <item find="ноогдворуудаа" replace="ногдворуудаа"/>
+    <item find=".*(tm)" replace="™"/>
+    <item find="нилээд" replace="нэлээд"/>
+    <item find="ноогдворыг" replace="ногдворыг"/>
+    <item find="авъяас" replace="авьяас"/>
+    <item find=":Зэрэг:" replace=""/>
+    <item find="функцуудаас" replace="функцүүдээс"/>
+    <item find="бадируун" replace="бадриун"/>
+    <item find=":омега:" replace="Ω"/>
+    <item find=":эпсилон:" replace="Ε"/>
+    <item find=":доогуур:" replace="⚘"/>
+    <item find="амьтаны" replace="амьтны"/>
+    <item find="бодоё" replace="бодъё"/>
+    <item find="тус бүрээс" replace="тусбүрээс"/>
+    <item find=":тэнцүү биш:" replace="≠"/>
+    <item find="давалгаанд" replace="давлагаанд"/>
+    <item find=":эллипс:" replace="⬭"/>
+    <item find="дотны" replace="дотнын"/>
+    <item find="мөрдөлгөөнүүдийг" replace="мөрдлөгүүдийг"/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find=":Гар утас:" replace=""/>
+    <item find=":Баруун дээд:" replace="©"/>
+    <item find="идэвхитэй" replace="идэвхтэй"/>
+    <item find="таньд" replace="танд"/>
+    <item find=":сар:" replace=""/>
+    <item find=":хи:" replace="χ"/>
+    <item find="есдэх" replace="ес дэх"/>
+    <item find=":Гэр бүл:" replace=""/>
+    <item find="--&gt;" replace="→"/>
+    <item find="ашиглалтанд" replace="ашиглалтад"/>
+    <item find="төвшингийн" replace="төвшний"/>
+    <item find="мөрдөлгөөс" replace="мөрдлөгөөс"/>
+    <item find="функцын" replace="функцийн"/>
+    <item find=":дундаж:" replace=""/>
+    <item find=":Параллелограмм:" replace="▰"/>
+    <item find="муруйг" replace="мурийг"/>
+    <item find=":зета:" replace="ζ"/>
+    <item find=":зүүн:" replace="☚"/>
+    <item find="ажилын" replace="ажлын"/>
+    <item find="түвшингүүдийн" replace="төвшнүүдийн"/>
+    <item find="хайрцганд" replace="хайрцагт"/>
+    <item find=":хадгалсан:" replace=""/>
+    <item find=":ном:" replace=""/>
+    <item find="функцуудынхаа" replace="функцүүдийнхээ"/>
+    <item find="яасанч" replace="яасан ч"/>
+    <item find=":өөрийн:" replace=""/>
+    <item find="функцаасаа" replace="функцээсээ"/>
+    <item find="төрөгдмөл" replace="төрмөл"/>
+    <item find="тус бүр" replace="тусбүр"/>
+    <item find="төрөгдөх" replace="төрөх"/>
+    <item find="долоодахь" replace="долоо дахь"/>
+    <item find="гүйцэт" replace="гүйцэд"/>
+    <item find="магадлагаа" replace="магадалгаа"/>
+    <item find="давалгаа" replace="давлагаа"/>
+    <item find=":Гамма:" replace="Γ"/>
+    <item find="1/4" replace="¼"/>
+    <item find="надыг" replace="намайг"/>
+    <item find="шудрага" replace="шударга"/>
+    <item find=":дельта:" replace="Δ"/>
+    <item find="давалгаатай" replace="давлагаатай"/>
+    <item find="мяраалаг" replace="мариалаг"/>
+    <item find="төрөгдсөн" replace="төрсөн"/>
+    <item find="дэгдээхий" replace="дэгдээхэй"/>
+    <item find=":Дуугүй:" replace=""/>
+    <item find=":Дугуй:" replace=""/>
+    <item find=":Цаглабар:" replace=""/>
+    <item find="ноогдворуудад" replace="ногдворуудад"/>
+    <item find=":шалгах:" replace=""/>
+    <item find="тавдахь" replace="тав дахь"/>
+    <item find="хэзээч" replace="хэзээ ч"/>
+    <item find=":Зөөх:" replace=""/>
+    <item find="үгий" replace="үгийг"/>
+    <item find="ном зүйд" replace="номзүйд"/>
+    <item find="ноогдворуудтайгаа" replace="ногдворуудтайгаа"/>
+    <item find="ө" replace="ө"/>
+    <item find=":дээш доош гүйлгэх:" replace=""/>
+    <item find="ноогдворуудыг" replace="ногдворуудыг"/>
+    <item find=":Сигма:" replace="Σ"/>
+    <item find=":цэс:" replace=""/>
+    <item find=":Хүү:" replace=""/>
+    <item find=":--:" replace="–"/>
+    <item find=":ро:" replace="ρ"/>
+    <item find=":каппа:" replace="Κ"/>
+    <item find=".*(c)" replace="©"/>
+    <item find=":Градус:" replace="°"/>
+    <item find=":Instrction:" replace=""/>
+    <item find="байхав" replace="байх вэ"/>
+    <item find="ес дүгээр" replace="есдүгээр"/>
+    <item find="функцуудыг" replace="функцүүдийг"/>
+    <item find=":цахим холбоос:" replace=""/>
+    <item find="хайрцагны" replace="хайрцгийн"/>
+    <item find="юмуу" replace="юм уу"/>
+    <item find="хайрцагнаасаа" replace="хайрцгаасаа"/>
+    <item find=":Тоо:" replace="μ"/>
+    <item find=":Хоосон олонлог:" replace="∅"/>
+    <item find="хэрнээ" replace="хирнээ"/>
+    <item find=":^(:" replace="⁽"/>
+    <item find="гольдрил" replace="голдрил"/>
+    <item find=":шугам:" replace=""/>
+    <item find=":квадрат:" replace="■"/>
+    <item find=":эхлэл:" replace="★"/>
+    <item find="бйа" replace="бай"/>
+    <item find="байнуу" replace="байна уу"/>
+    <item find="функцуудаараа" replace="функцүүдээрээ"/>
+    <item find="түвшин" replace="төвшин"/>
+    <item find="давхцана" replace="давхацна"/>
+    <item find="энүүнээс" replace="үүнээс"/>
+    <item find="компьютерүүдийн" replace="компьютеруудын"/>
+    <item find="надын" replace="миний"/>
+    <item find=".*(r)" replace="®"/>
+    <item find=":ба:" replace="∧"/>
+    <item find=":муж:" replace=""/>
+    <item find="томъёо" replace="томьёо"/>
+    <item find="болчоод" replace="болчихоод"/>
+    <item find=":Товч:" replace=""/>
+    <item find="мэрэглэх" replace="мэргэлэх"/>
+    <item find="мөрдөлгөөнүүдийн" replace="мөрдлөгүүдийн"/>
+    <item find=":тэлэлт:" replace="✊"/>
+    <item find="энүүнийг" replace="үүнийг"/>
+    <item find="хайрцагнаас" replace="хайрцгаас"/>
+    <item find=":хавтас:" replace=""/>
+    <item find=":тау:" replace="τ"/>
+    <item find="ноогдворт" replace="ногдворт"/>
+    <item find="нэг дүгээр" replace="нэгдүгээр"/>
+    <item find="хүүхэддээ" replace="хүүхдэдээ"/>
+    <item find="уушиг" replace="уушги"/>
+    <item find="голдирол" replace="голдрил"/>
+    <item find="нөхцлүүдийн" replace="нөхцөлүүдийн"/>
+    <item find="ноогдвороос" replace="ногдвороос"/>
+    <item find=":Мат:" replace=""/>
+    <item find="бйав" replace="байв"/>
+    <item find=":Баруун:" replace=""/>
+    <item find=":мэдээлэл:" replace="ℹ"/>
+    <item find=":Хана:" replace="⛹"/>
+    <item find="тус бүрд" replace="тусбүрд"/>
+    <item find="мөрдөлгөөнүүдэд" replace="мөрдлөгүүдэд"/>
+    <item find="тус бүрээр" replace="тусбүрээр"/>
+    <item find=":Таван өнцөгт:" replace="⬟"/>
+    <item find="төлвийг" replace="төлөвийг"/>
+    <item find=":Хуваагч:" replace="∣"/>
+    <item find=":тэмдэглэл:" replace="¬"/>
+    <item find="3/4" replace="¾"/>
+    <item find="дөрөв дүгээр" replace="дөрөвдүгээр"/>
+    <item find=":хуудас:" replace=""/>
+    <item find="хүртлэх" replace="хүртэлх"/>
+    <item find="компьютерийг" replace="компьютерыг"/>
+    <item find=":үнэн:" replace=""/>
+    <item find=":захиа:" replace=""/>
+    <item find=":Parallel:" replace="∥"/>
+    <item find="үнсэх" replace="үнэсэх"/>
+    <item find="компьютерийн" replace="компьютерын"/>
+    <item find=":бүтэгдэхүүн:" replace="∏"/>
+    <item find=":бичвэр:" replace="⛺"/>
+    <item find="халтиргаа" replace="халтираа"/>
+    <item find=":Эргүүлэлт:" replace=""/>
+    <item find="зургаадахь" replace="зургаа дахь"/>
+    <item find="ноогдвороор" replace="ногдвороор"/>
+    <item find="Ө" replace="Ө"/>
+    <item find="номнууд" replace="номууд"/>
+    <item find=":эрэмбэлэх:" replace="√"/>
+    <item find="Ё" replace="Ё"/>
+    <item find=":/:" replace="∕"/>
+    <item find="нөхцлүүдтэй" replace="нөхцөлүүдтэй"/>
+    <item find="муруйд" replace="мурийд"/>
+    <item find="гуравдахь" replace="гурав дахь"/>
+    <item find=":Масштаб:" replace=""/>
+    <item find="хүртэлхи" replace="хүртэлх"/>
+    <item find="тус бүртэй" replace="тусбүртэй"/>
+    <item find="хоёрдахь" replace="хоёр дахь"/>
+    <item find=":баруун:" replace="☛"/>
+    <item find="дөрөвдэх" replace="дөрөв дэх"/>
+    <item find="мөрдөлгөөнүүдээр" replace="мөрдлөгүүдээр"/>
+    <item find=":дотор:" replace="∈"/>
+    <item find=":Хошоонгор:" replace=""/>
+    <item find="функцуудад" replace="функцүүдэд"/>
+    <item find="&lt;--&gt;" replace="↔"/>
+    <item find=":Бор:" replace="☹"/>
+    <item find=":!:" replace="❕"/>
+    <item find=":нийлбэр:" replace="∑"/>
+    <item find=":_-:" replace="₋"/>
+    <item find="(e)" replace="€"/>
+    <item find=":клипборд:" replace=""/>
+    <item find="хэнч" replace="хэн ч"/>
+    <item find="зовиур" replace="зовуурь"/>
+    <item find=":Нэгдэл:" replace="∪"/>
+    <item find="таньдаа" replace="тандаа"/>
+    <item find="галарей" replace="галерей"/>
+    <item find="үнсэж" replace="үнэсэж"/>
+    <item find="магадлгаа" replace="магадалгаа"/>
+    <item find="арав дугаар" replace="аравдугаар"/>
+    <item find=":Сар:" replace="☽"/>
+    <item find=":файл:" replace=""/>
+    <item find=":тета:" replace="Θ"/>
+    <item find="сонсдон" replace="сонстон"/>
+    <item find=":дугтуй:" replace="✉"/>
+    <item find=":бета:" replace="β"/>
+    <item find="ном зүйг" replace="номзүйг"/>
+    <item find=":Эх олонлог:" replace="⊃"/>
+    <item find=":Гэгээ:" replace=""/>
+    <item find="ё" replace="ё"/>
+    <item find=":Санго хэл:" replace=""/>
+    <item find="бүрт" replace="бүрд"/>
+    <item find=":Үүл:" replace="☁"/>
+    <item find="лүүгээ" replace="уруугаа"/>
+    <item find="давалгаануудыг" replace="давлагаануудыг"/>
+    <item find="шалгалтандаа" replace="шалгалтдаа"/>
+    <item find=".*..." replace="…"/>
+    <item find=":түлхүүр:" replace=""/>
+    <item find="болчхов" replace="болчихов"/>
+    <item find="бизээ" replace="биз ээ"/>
+    <item find=":.:" replace="…"/>
+    <item find="компьютерүүдэд" replace="компьютеруудад"/>
+    <item find=":нэрс:" replace=""/>
+    <item find=":-:" replace="−"/>
+    <item find=":хүчин зүйл:" replace=""/>
+    <item find=":хязгааргүй:" replace="∞"/>
+    <item find="функцуудаар" replace="функцүүдээр"/>
+    <item find="номонд" replace="номд"/>
+    <item find=":Make:" replace=""/>
+    <item find="моньд" replace="монди"/>
+    <item find="ном зүй" replace="номзүй"/>
+    <item find="Ү" replace="Ү"/>
+    <item find="функцуудтайгаа" replace="функцүүдтэйгээ"/>
+    <item find="руугаа" replace="уруугаа"/>
+    <item find="гурав дугаар" replace="гуравдугаар"/>
+    <item find=":Тийм:" replace=""/>
+    <item find="хальтирах" replace="халтирах"/>
+    <item find=":Бүрхүүл:" replace=""/>
+    <item find="эрвээхий" replace="эрвээхэй"/>
+    <item find=":дөрвөлжин:" replace=""/>
+    <item find="сургааль" replace="сургаал"/>
+    <item find="үүсч" replace="үүсэж"/>
+    <item find="&lt;-&gt;" replace="↔"/>
+    <item find=":Огтлолцол:" replace="∩"/>
+    <item find="ноогдворууд" replace="ногдворууд"/>
+    <item find=":Дэд олонлог:" replace="⊂"/>
+    <item find=":зөвшөөрөл:" replace=""/>
+    <item find=":доош:" replace="☟"/>
+    <item find="нөхцлүүдийг" replace="нөхцөлүүдийг"/>
+    <item find="тиймээ" replace="тийм ээ"/>
+    <item find="гэлүү" replace="гэнэ билээ үү"/>
+    <item find=":өөрчлөх:" replace="⚖"/>
+    <item find="компьютерээс" replace="компьютероос"/>
+    <item find="компьютертай" replace="компьютертой"/>
+    <item find="давалгаанууд" replace="давлагаанууд"/>
+    <item find="өсч" replace="өсөж"/>
+    <item find=":гадас:" replace="⚓"/>
+    <item find=":богино:" replace=""/>
+    <item find=":Алмааз:" replace="♦"/>
+    <item find="компьютерээр" replace="компьютероор"/>
+    <item find="компьютерүүд" replace="компьютерууд"/>
+    <item find=":тайлбар:" replace="☡"/>
+    <item find=":хулгана:" replace=""/>
+    <item find=":Лугшилт:" replace=""/>
+    <item find=":Франц хэл:" replace=""/>
+    <item find=":хуулах:" replace=""/>
+    <item find="гараж" replace="гарааш"/>
+    <item find="хаалтанд" replace="хаалтад"/>
+    <item find="суртчилгаа" replace="сурталчилгаа"/>
+    <item find=":үгүй:" replace=""/>
+    <item find=":тэмдэглэгээ:" replace=""/>
+    <item find="яахав" replace="яах вэ"/>
+    <item find=":нууц үг:" replace=""/>
+    <item find="гэнээ" replace="гэнэ ээ"/>
+    <item find=":\\:" replace="∖"/>
+    <item find=":хэсэг:" replace="§"/>
+    <item find=":кси:" replace="ξ"/>
+    <item find="мөрдөлгөөнүүдээ" replace="мөрдлөгүүдээ"/>
+    <item find="асуултанд" replace="асуултад"/>
+    <item find=":_(:" replace="₍"/>
+    <item find=":юпсилон:" replace="υ"/>
+    <item find="ү" replace="ү"/>
+    <item find=":гамма:" replace="γ"/>
+    <item find=":уншилт:" replace=""/>
+    <item find="түвшин," replace="төвшин,"/>
+    <item find=":хоосон:" replace=""/>
+    <item find="халтиргаатай" replace="халтираатай"/>
+    <item find=":анхааруулга:" replace="⚠"/>
+    <item find=":офис:" replace=""/>
+    <item find="компьютертэй" replace="компьютертой"/>
+    <item find=":фи:" replace="φ"/>
+    <item find="сонсдож" replace="сонстож"/>
+    <item find=":Фут:" replace=""/>
+    <item find=":тодруулах:" replace=""/>
+    <item find=":факс:" replace=""/>
+    <item find="хайрцагнуудын" replace="хайрцгуудын"/>
+    <item find=":Буцах:" replace=""/>
+    <item find=":олдсон:" replace="£"/>
+    <item find=":Далбаа:" replace=""/>
+    <item find=":Дэд олонлог биш:" replace="⊄"/>
+    <item find="давцан" replace="тавцан"/>
+    <item find="компьютераас" replace="компьютероос"/>
+    <item find=":харьцуулан тохируулах:" replace="⌚"/>
+    <item find="өвчтөнг" replace="өвчтөнийг"/>
+    <item find=":Тэгш өнцөгт гурвалжин:" replace="⊿"/>
+    <item find=":_):" replace="₎"/>
+    <item find=":Интеграл:" replace="∫"/>
+    <item find=":диаграмм:" replace=""/>
+    <item find="үзэмжиндээ" replace="үзэмждээ"/>
+    <item find="рүү" replace="уруу"/>
+    <item find="корпорацийн" replace="корпорацын"/>
+    <item find="мөрдөлгөөнүүд" replace="мөрдлөгүүд"/>
+    <item find=":Хавирган сар:" replace=""/>
+    <item find=":':" replace="’"/>
+    <item find="мөрдөлгөөнүүдээс" replace="мөрдлөгүүдээс"/>
+    <item find=":Зүрх:" replace="❤"/>
+    <item find=":товшилт:" replace=""/>
+    <item find=":Ганда хэл:" replace=""/>
+    <item find="нөхцлүүдээс" replace="нөхцөлүүдээс"/>
+    <item find=":Альфа:" replace="Α"/>
+    <item find=":Дусаагуур:" replace=""/>
+    <item find="бодьтой" replace="бодитой"/>
+    <item find="луу" replace="уруу"/>
+    <item find="руу" replace="уруу"/>
+    <item find="бйасан" replace="байсан"/>
+    <item find=":Хөл:" replace=""/>
+    <item find="оронг" replace="орныг"/>
+    <item find=":---:" replace="—"/>
+    <item find=":!!:" replace="‼"/>
+    <item find="долоодугаар" replace="долдугаар"/>
+    <item find=":Валоон хэл:" replace=""/>
+    <item find=":Холбоос:" replace=""/>
+    <item find="дэхь" replace="дэх"/>
+    <item find="нөхцлүүд" replace="нөхцөлүүд"/>
+    <item find="функцаа" replace="функцээ"/>
+    <item find="ном зүйн" replace="номзүйн"/>
+    <item find="өсч," replace="өсөж,"/>
+    <item find="шургуу" replace="шаргуу"/>
+    <item find=".*-&gt;.*" replace="→"/>
+    <item find=":Нүд:" replace=""/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find="мөрдөлгөөг" replace="мөрдлөгийг"/>
+    <item find="хойт" replace="хойд"/>
+    <item find="хайрцагнуудаас" replace="хайрцгуудаас"/>
+    <item find="функцыг" replace="функцийг"/>
+    <item find=":алхам:" replace=""/>
+    <item find="ноогдвор" replace="ногдвор"/>
+    <item find="муруйн" replace="мурийн"/>
+    <item find=":пи:" replace="π"/>
+    <item find="тэрнийхээ" replace="түүнийхээ"/>
+    <item find=":үсэглэл:" replace=""/>
+    <item find="1/2" replace="½"/>
+    <item find="хандалдат" replace="хандалтат"/>
+    <item find="давилуун" replace="давлиун"/>
+    <item find="хасч" replace="хасаж"/>
+    <item find="рүүгээ" replace="уруугаа"/>
+    <item find="түвшнээс" replace="төвшнөөс"/>
+    <item find="бйана" replace="байна"/>
+    <item find="батлая" replace="баталъя"/>
+    <item find="төрөгдөнө" replace="төрнө"/>
+    <item find="байнаа" replace="байна аа"/>
+    <item find="нөхөддөө" replace="нөхдөдөө"/>
+    <item find=":Нар:" replace="☉"/>
+    <item find="ноогдворуудтай" replace="ногдворуудтай"/>
+    <item find="бодьё" replace="бодъё"/>
+    <item find=":ажиллаж байгаа:" replace=""/>
+    <item find="хэр" replace="хир"/>
+    <item find=":Camera:" replace=""/>
+    <item find="нисч," replace="нисэж,"/>
+    <item find=":альфа:" replace="α"/>
+    <item find=":тэгш өнцөгт:" replace="▬"/>
+    <item find=":омикрон:" replace="Ο"/>
+    <item find=":гол:" replace="☔"/>
+    <item find="сонголтонд" replace="сонголтод"/>
+    <item find="функцуудын" replace="функцүүдийн"/>
+    <item find="цөмий нь" replace="цөмийг нь"/>
+    <item find="функцуудтай" replace="функцүүдтэй"/>
+    <item find=":пси:" replace="ψ"/>
+    <item find="идэвхи" replace="идэвх"/>
+    <item find="түвэгтэй" replace="төвөгтэй"/>
+    <item find="аравдахь" replace="арав дахь"/>
+    <item find=":Хавтгай:" replace="♭"/>
+    <item find="функцуудаасаа" replace="функцүүдээсээ"/>
+    <item find=":Боолт:" replace=""/>
+    <item find="мөрдөлгөөр" replace="мөрдлөгөөр"/>
+    <item find="мөрдөлгөөнүүдтэй" replace="мөрдлөгүүдтэй"/>
+    <item find="мөрдөлгөө." replace="мөрдлөг."/>
+    <item find=":тойрог:" replace="○"/>
+    <item find=":буюу:" replace="∨"/>
+    <item find=":тор:" replace=""/>
+    <item find="функцаараа" replace="функцээрээ"/>
+    <item find="эмэгнэлт" replace="эмгэнэлт"/>
+    <item find=":жил:" replace="⚙"/>
+    <item find="шавьж" replace="шавж"/>
+    <item find="утгандаа" replace="утгадаа"/>
+    <item find=":хэвлэж байгаа:" replace="✍"/>
+    <item find=":^):" replace="⁾"/>
+    <item find="засч" replace="засаж"/>
+    <item find=":зурвас:" replace=""/>
+    <item find=":Зургаан өнцөгт:" replace="⬡"/>
+    <item find=":имэйл:" replace=""/>
+    <item find=":блок:" replace=""/>
+    <item find="нөхцлүүдэд" replace="нөхцөлүүдэд"/>
+    <item find="хүсч" replace="хүсэж"/>
+    <item find=":арга хэмжээ:" replace=""/>
+    <item find=":Ханш:" replace=""/>
+    <item find=":иота:" replace="Ι"/>
+    <item find=":хэдийнэ байгаа:" replace="∃"/>
+    <item find="шалгалтанд" replace="шалгалтад"/>
+    <item find=":цагийн байдал:" replace=""/>
+    <item find="хэрээр" replace="хирээр"/>
+    <item find=":Милл:" replace="♂"/>
+    <item find=":100 Оноо:" replace=""/>
+    <item find="нилээн" replace="нэлээн"/>
+    <item find="нөхцлүүдээр" replace="нөхцөлүүдээр"/>
+    <item find="сонсдох" replace="сонстох"/>
+    <item find="ноогдвороо" replace="ногдвороо"/>
+    <item find=":дуу:" replace=""/>
+    <item find=":Эх олонлог биш:" replace="⊅"/>
+    <item find=":шиг:" replace=""/>
+    <item find=":Саарал:" replace=""/>
+    <item find="зургаа дугаар" replace="зургадугаар"/>
+    <item find="нөхцлийн" replace="нөхцөлийн"/>
+    <item find=".*&lt;-.*" replace="←"/>
+    <item find="ямарч" replace="ямар ч"/>
+    <item find="төлвийн" replace="төлөвийн"/>
+    <item find="судлая" replace="судалъя"/>
+    <item find="гадны" replace="гаднын"/>
+    <item find=":Компьютер:" replace=""/>
+    <item find="найм дугаар" replace="наймдугаар"/>
+    <item find="хайрцагнууд" replace="хайрцгууд"/>
+    <item find=":хүснэгт:" replace=""/>
+    <item find=":инч:" replace="″"/>
+    <item find="судлаж" replace="судалж"/>
+    <item find=":Шулуун:" replace=""/>
+    <item find="функцад" replace="функцэд"/>
+    <item find="номхотгох" replace="номхтгох"/>
+    <item find="&lt;--" replace="←"/>
+    <item find=":язгуур:" replace=""/>
+    <item find="тэрнийг" replace="түүнийг"/>
+    <item find="функцуудынх" replace="функцүүдийнх"/>
+    <item find=":Дел:" replace="∂"/>
+    <item find="ноогдворуудаас" replace="ногдворуудаас"/>
+    <item find=":байхгүй:" replace=""/>
+    <item find=":Гар:" replace="⌨"/>
+    <item find="наймдахь" replace="найм дахь"/>
+    <item find="функцаар" replace="функцээр"/>
+    <item find=":Дүүргэх:" replace=""/>
+    <item find="сонсдов" replace="сонстов"/>
+    <item find="компьютераар" replace="компьютероор"/>
+    <item find=":зэрэгцүүлэх:" replace=""/>
+    <item find="нисч" replace="нисэж"/>
+    <item find="үнсэв" replace="үнэсэв"/>
+    <item find=":~Радио товч:" replace=""/>
+    <item find="вэб" replace="веб"/>
+    <item find=":!?:" replace="⁉"/>
+    <item find=":Хадгалах:" replace=""/>
+    <item find=":?:" replace="❓"/>
+    <item find="нөхцлөөр" replace="нөхцөлөөр"/>
+    <item find=":алга:" replace=""/>
+    <item find=":ню:" replace="ν"/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="г.м."/>
+    <word exception="мин."/>
+    <word exception="Хон."/>
+    <word exception="сек."/>
+    <word exception="Мог."/>
+    <word exception="Гах."/>
+    <word exception="Ж.нь"/>
+    <word exception="Үхэ."/>
+    <word exception="Туу."/>
+    <word exception="Мор."/>
+    <word exception="Нох."/>
+    <word exception="Хул."/>
+    <word exception="Тах."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="ГГц"/>
+    <word exception="МГц"/>
+    <word exception="КД-үүд"/>
+    <word exception="ПК-ууд"/>
+    <word exception="КД-ний"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

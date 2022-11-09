@@ -1,0 +1,1007 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find="oook" replace="ook"/>
+    <item find="‛n" replace="'n"/>
+    <item find="‘n" replace="'n"/>
+    <item find=":/:" replace="∕"/>
+    <item find="ookal" replace="ook al"/>
+    <item find="onmidellik" replace="onmiddellik"/>
+    <item find="agresie" replace="aggressie"/>
+    <item find="nei" replace="nie"/>
+    <item find="suid asië" replace="Suid-Asië"/>
+    <item find="nadta" replace="nadat"/>
+    <item find="‘’n" replace="‘'n"/>
+    <item find="‛N" replace="'n"/>
+    <item find="1/2" replace="½"/>
+    <item find=":…:" replace="…"/>
+    <item find="heir" replace="hier"/>
+    <item find="gebasseerd" replace="gebaseerd"/>
+    <item find="heirdie" replace="hierdie"/>
+    <item find=".*(R)" replace="®"/>
+    <item find="terywl" replace="terwyl"/>
+    <item find="interesant " replace="interessant"/>
+    <item find="maaar" replace="maar"/>
+    <item find=":---:" replace="—"/>
+    <item find="agresies" replace="aggressies"/>
+    <item find="suid amerika" replace="Suid-Amerika"/>
+    <item find="verinneweer" replace="verrinneweer"/>
+    <item find="onmidelikset" replace="onmiddellikste"/>
+    <item find="hierdeis" replace="hierdies"/>
+    <item find="wrod" replace="hier"/>
+    <item find="hieride" replace="hierdie"/>
+    <item find="agressies" replace="aggressies"/>
+    <item find="‘’N" replace="‘'n"/>
+    <item find="trug" replace="terug"/>
+    <item find="onmiddelike" replace="onmiddellike"/>
+    <item find="odf" replace="ODF"/>
+    <item find="weees" replace="wees"/>
+    <item find="onmidellikste" replace="onmiddellikste"/>
+    <item find="heirmee" replace="hiermee"/>
+    <item find="dta" replace="dat"/>
+    <item find="sooos" replace="soos"/>
+    <item find="3/4" replace="¾"/>
+    <item find="sondre" replace="sonder"/>
+    <item find="suid asie" replace="Suid-Asië"/>
+    <item find=":^):" replace="⁾"/>
+    <item find="interresant" replace="interessant"/>
+    <item find=":?:" replace="❓"/>
+    <item find="saaam" replace="saam"/>
+    <item find="gebasseerde" replace="gebaseerde"/>
+    <item find="erstens" replace="eerstens"/>
+    <item find="klien" replace="klein"/>
+    <item find="sos" replace="soos"/>
+    <item find="endie" replace="en die"/>
+    <item find="interressant" replace="interessant"/>
+    <item find="veol" replace="voel"/>
+    <item find="basseer" replace="baseer"/>
+    <item find="duuur" replace="duur"/>
+    <item find="maaak" replace="maak"/>
+    <item find="onmidelliker" replace="onmiddelliker"/>
+    <item find="díé" replace="dié"/>
+    <item find=":\\:" replace="∖"/>
+    <item find=":^(:" replace="⁽"/>
+    <item find="weeer" replace="weer"/>
+    <item find="sla" replace="sal"/>
+    <item find="staaan" replace="staan"/>
+    <item find="wli" replace="wil"/>
+    <item find="onmideliker" replace="onmiddelliker"/>
+    <item find="heo" replace="hoe"/>
+    <item find="neimand" replace="niemand"/>
+    <item find=":!!:" replace="‼"/>
+    <item find="heirop" replace="hierop"/>
+    <item find="onmidellike" replace="onmiddellike"/>
+    <item find="menes" replace="mense"/>
+    <item find="aggresies" replace="aggressies"/>
+    <item find="teeen" replace="teen"/>
+    <item find=":_-:" replace="₋"/>
+    <item find="gebuirk" replace="gebruik"/>
+    <item find="díe" replace="dié"/>
+    <item find="behorot" replace="behoort"/>
+    <item find="heirdies" replace="hierdies"/>
+    <item find="midde ooste" replace="Midde-Ooste"/>
+    <item find="heirheen" replace="hierheen"/>
+    <item find="gebasseer" replace="gebaseer"/>
+    <item find="nisk" replace="niks"/>
+    <item find=":!:" replace="❕"/>
+    <item find="uo" replace="ou"/>
+    <item find="verrineweer" replace="verrinneweer"/>
+    <item find="`n" replace="'n"/>
+    <item find="behort" replace="behoort"/>
+    <item find="onmidelik" replace="onmiddellik"/>
+    <item find="adt" replace="dat"/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find="’N" replace="'n"/>
+    <item find="heirby" replace="hierby"/>
+    <item find=":^-:" replace="⁻"/>
+    <item find="’n" replace="'n"/>
+    <item find=":-:" replace="−"/>
+    <item find=".*(C)" replace="©"/>
+    <item find=":_(:" replace="₍"/>
+    <item find="`N" replace="'n"/>
+    <item find=":--:" replace="–"/>
+    <item find=":':" replace="’"/>
+    <item find="veir" replace="vier"/>
+    <item find="heirvan" replace="hiervan"/>
+    <item find="agressie" replace="aggressie"/>
+    <item find="slaë" replace="slae"/>
+    <item find="weeet" replace="weet"/>
+    <item find="daroor" replace="daaroor"/>
+    <item find="noord amerika" replace="Noord-Amerika"/>
+    <item find="si" replace="is"/>
+    <item find="snoder" replace="sonder"/>
+    <item find="heiroor" replace="hieroor"/>
+    <item find="‘N" replace="'n"/>
+    <item find="1/4" replace="¼"/>
+    <item find=":!?:" replace="⁉"/>
+    <item find="indie" replace="in die"/>
+    <item find="mesne" replace="mense"/>
+    <item find="onmiddelikste" replace="onmiddellikste"/>
+    <item find="slef" replace="self"/>
+    <item find="onmiddeliker" replace="onmiddelliker"/>
+    <item find="nadtat" replace="nadat"/>
+    <item find="onmiddelik" replace="onmiddellik"/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find="onmidelike" replace="onmiddellike"/>
+    <item find=":_):" replace="₎"/>
+    <item find="suid afrika" replace="Suid-Afrika"/>
+    <item find="ooor" replace="oor"/>
+    <item find="aggresie" replace="aggressie"/>
+    <item find="mesn" replace="mens"/>
+    <item find="meot" replace="moet"/>
+    <item find="heirso" replace="hierso"/>
+    <item find="heirna" replace="hierna"/>
+    <item find="selg" replace="sleg"/>
+    <item find="heiraan" replace="hieraan"/>
+    <item find="hierdei" replace="hierdie"/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="jur."/>
+    <word exception="Eseg."/>
+    <word exception="t.o.v."/>
+    <word exception="Vr."/>
+    <word exception="veek."/>
+    <word exception="dierk."/>
+    <word exception="chem."/>
+    <word exception="gimn."/>
+    <word exception="ged."/>
+    <word exception="gesk."/>
+    <word exception="bes.vnw."/>
+    <word exception="Jak."/>
+    <word exception="jhr."/>
+    <word exception="kal."/>
+    <word exception="konkr."/>
+    <word exception="dir."/>
+    <word exception="glos."/>
+    <word exception="b.v.p."/>
+    <word exception="fin."/>
+    <word exception="gebr."/>
+    <word exception="jg."/>
+    <word exception="k.u."/>
+    <word exception="Hons.B.Mus."/>
+    <word exception="ad val."/>
+    <word exception="verg."/>
+    <word exception="houtw."/>
+    <word exception="vh."/>
+    <word exception="verbet."/>
+    <word exception="ekv."/>
+    <word exception="t.w.v"/>
+    <word exception="Joh."/>
+    <word exception="Gen."/>
+    <word exception="D.Ch.D."/>
+    <word exception="d.w.s."/>
+    <word exception="dl."/>
+    <word exception="kwor."/>
+    <word exception="fotogr."/>
+    <word exception="B.Soc.Sc."/>
+    <word exception="adv."/>
+    <word exception="h.k."/>
+    <word exception="kr."/>
+    <word exception="p."/>
+    <word exception="drieh."/>
+    <word exception="dos."/>
+    <word exception="h."/>
+    <word exception="n."/>
+    <word exception="aff."/>
+    <word exception="m.a.w."/>
+    <word exception="Ind."/>
+    <word exception="ds."/>
+    <word exception="cwt."/>
+    <word exception="knr."/>
+    <word exception="D.Sc."/>
+    <word exception="komp."/>
+    <word exception="B.Com.Hons."/>
+    <word exception="Bt."/>
+    <word exception="Edms."/>
+    <word exception="k.b.a."/>
+    <word exception="vkw."/>
+    <word exception="fol."/>
+    <word exception="con."/>
+    <word exception="Hab."/>
+    <word exception="Klaagl."/>
+    <word exception="brig."/>
+    <word exception="bv."/>
+    <word exception="b.g."/>
+    <word exception="dist."/>
+    <word exception="n.C."/>
+    <word exception="Heb."/>
+    <word exception="kol."/>
+    <word exception="gell."/>
+    <word exception="biol."/>
+    <word exception="hfst."/>
+    <word exception="inst."/>
+    <word exception="ed."/>
+    <word exception="bew."/>
+    <word exception="I.D.H.M."/>
+    <word exception="maj."/>
+    <word exception="fut."/>
+    <word exception="Deut."/>
+    <word exception="D.Diac."/>
+    <word exception="Dipl.M.W."/>
+    <word exception="krygsk."/>
+    <word exception="b.nw."/>
+    <word exception="D.Bibli."/>
+    <word exception="Hons.B.Joern."/>
+    <word exception="vr."/>
+    <word exception="Ef."/>
+    <word exception="D.M."/>
+    <word exception="Hons.B.Ch.D."/>
+    <word exception="Indon."/>
+    <word exception="korp."/>
+    <word exception="v. en b."/>
+    <word exception="D.Arch."/>
+    <word exception="a."/>
+    <word exception="beeldh."/>
+    <word exception="nr."/>
+    <word exception="i.d."/>
+    <word exception="how."/>
+    <word exception="gew."/>
+    <word exception="Cis."/>
+    <word exception="genl."/>
+    <word exception="B.Litt."/>
+    <word exception="do."/>
+    <word exception="koopv."/>
+    <word exception="jt."/>
+    <word exception="Gall."/>
+    <word exception="B.Compt."/>
+    <word exception="ib."/>
+    <word exception="M.Sc."/>
+    <word exception="fakt."/>
+    <word exception="e.m.e."/>
+    <word exception="kontam."/>
+    <word exception="D.Com."/>
+    <word exception="Kol."/>
+    <word exception="betr.vnw."/>
+    <word exception="e.d.m."/>
+    <word exception="dw."/>
+    <word exception="m."/>
+    <word exception="iter."/>
+    <word exception="geneal."/>
+    <word exception="adj.dir."/>
+    <word exception="hidrol."/>
+    <word exception="kard."/>
+    <word exception="bk."/>
+    <word exception="Wo."/>
+    <word exception="Hag."/>
+    <word exception="Ma."/>
+    <word exception="B.Ing."/>
+    <word exception="eenh."/>
+    <word exception="i.v.m."/>
+    <word exception="j."/>
+    <word exception="fig."/>
+    <word exception="D.B.L."/>
+    <word exception="b.s."/>
+    <word exception="h.b.s."/>
+    <word exception="c.s."/>
+    <word exception="inf."/>
+    <word exception="k.a.v."/>
+    <word exception="ellipt."/>
+    <word exception="bd."/>
+    <word exception="eint."/>
+    <word exception="it."/>
+    <word exception="Jhb."/>
+    <word exception="ks."/>
+    <word exception="ad lib."/>
+    <word exception="geadr."/>
+    <word exception="abs."/>
+    <word exception="aand."/>
+    <word exception="Geref."/>
+    <word exception="B.Proc."/>
+    <word exception="dift."/>
+    <word exception="D.Soc.Sc."/>
+    <word exception="kosmogr."/>
+    <word exception="u."/>
+    <word exception="D.Phil."/>
+    <word exception="kon."/>
+    <word exception="geb."/>
+    <word exception="D.T.O."/>
+    <word exception="fonet."/>
+    <word exception="d."/>
+    <word exception="kln."/>
+    <word exception="hfs."/>
+    <word exception="So."/>
+    <word exception="br."/>
+    <word exception="fur."/>
+    <word exception="cap."/>
+    <word exception="i.f.p."/>
+    <word exception="HH.KK.HH."/>
+    <word exception="klin.psig."/>
+    <word exception="gem."/>
+    <word exception="komdo."/>
+    <word exception="fec."/>
+    <word exception="Ed."/>
+    <word exception="v.a.b."/>
+    <word exception="Dl."/>
+    <word exception="bouk."/>
+    <word exception="jl."/>
+    <word exception="D.B.A."/>
+    <word exception="geneesk."/>
+    <word exception="Germ."/>
+    <word exception="visk."/>
+    <word exception="Bot."/>
+    <word exception="B.Th."/>
+    <word exception="kwant."/>
+    <word exception="dat."/>
+    <word exception="kartogr."/>
+    <word exception="Dan."/>
+    <word exception="Xh."/>
+    <word exception="Hebr."/>
+    <word exception="instr."/>
+    <word exception="ex.div."/>
+    <word exception="impf."/>
+    <word exception="ill."/>
+    <word exception="verd."/>
+    <word exception="iem."/>
+    <word exception="bmn."/>
+    <word exception="dnr."/>
+    <word exception="adb."/>
+    <word exception="genl.maj."/>
+    <word exception="B.L.C."/>
+    <word exception="r."/>
+    <word exception="eil."/>
+    <word exception="Dipl.S.M.A."/>
+    <word exception="Hi."/>
+    <word exception="fonol."/>
+    <word exception="ww."/>
+    <word exception="c."/>
+    <word exception="ekon."/>
+    <word exception="Est."/>
+    <word exception="vdr."/>
+    <word exception="Herv."/>
+    <word exception="koppelww."/>
+    <word exception="H.H."/>
+    <word exception="J.Sir."/>
+    <word exception="ginekol."/>
+    <word exception="kpl."/>
+    <word exception="Feb."/>
+    <word exception="fam."/>
+    <word exception="D.Ing."/>
+    <word exception="per cap."/>
+    <word exception="H.K.M."/>
+    <word exception="kat."/>
+    <word exception="kww."/>
+    <word exception="Hons.B.Sc."/>
+    <word exception="veggenl."/>
+    <word exception="geomorfol."/>
+    <word exception="gall."/>
+    <word exception="geïll."/>
+    <word exception="J.S."/>
+    <word exception="vlg."/>
+    <word exception="v."/>
+    <word exception="betr."/>
+    <word exception="Dem."/>
+    <word exception="i.p.v."/>
+    <word exception="aanw."/>
+    <word exception="byw."/>
+    <word exception="bde."/>
+    <word exception="bdr."/>
+    <word exception="et seq."/>
+    <word exception="kw."/>
+    <word exception="etim."/>
+    <word exception="jr."/>
+    <word exception="des."/>
+    <word exception="Fr."/>
+    <word exception="bt."/>
+    <word exception="fr."/>
+    <word exception="adj."/>
+    <word exception="Gal."/>
+    <word exception="bst."/>
+    <word exception="del."/>
+    <word exception="cur.vit."/>
+    <word exception="e.bmn."/>
+    <word exception="konj."/>
+    <word exception="kpln."/>
+    <word exception="ad."/>
+    <word exception="e.m.k."/>
+    <word exception="biochem."/>
+    <word exception="Bop."/>
+    <word exception="bl."/>
+    <word exception="aanm."/>
+    <word exception="fl."/>
+    <word exception="geol."/>
+    <word exception="d.t."/>
+    <word exception="B.M."/>
+    <word exception="ens."/>
+    <word exception="neg."/>
+    <word exception="kt."/>
+    <word exception="e.e."/>
+    <word exception="H.Ed.Geb."/>
+    <word exception="HH.MM."/>
+    <word exception="ik."/>
+    <word exception="Jul."/>
+    <word exception="gen."/>
+    <word exception="homon."/>
+    <word exception="Hons."/>
+    <word exception="gs."/>
+    <word exception="v.C."/>
+    <word exception="g."/>
+    <word exception="abstr."/>
+    <word exception="agb."/>
+    <word exception="Dipl.Teol."/>
+    <word exception="Di."/>
+    <word exception="her."/>
+    <word exception="verafr."/>
+    <word exception="Bfn."/>
+    <word exception="versk."/>
+    <word exception="Hong."/>
+    <word exception="afd."/>
+    <word exception="boekh."/>
+    <word exception="bod."/>
+    <word exception="eskn."/>
+    <word exception="drs."/>
+    <word exception="vl."/>
+    <word exception="D.P.L."/>
+    <word exception="komb."/>
+    <word exception="jkv."/>
+    <word exception="aamw.vnw."/>
+    <word exception="M.Com."/>
+    <word exception="vs."/>
+    <word exception="is."/>
+    <word exception="o."/>
+    <word exception="bes."/>
+    <word exception="enkl."/>
+    <word exception="Jud."/>
+    <word exception="voegw."/>
+    <word exception="dim."/>
+    <word exception="hosp."/>
+    <word exception="aanh."/>
+    <word exception="eg."/>
+    <word exception="filol."/>
+    <word exception="maks."/>
+    <word exception="kopp."/>
+    <word exception="B.Sc.Agric."/>
+    <word exception="a.asb."/>
+    <word exception="div."/>
+    <word exception="kap."/>
+    <word exception="hl."/>
+    <word exception="Ir."/>
+    <word exception="veldm."/>
+    <word exception="kpln.genl."/>
+    <word exception="Mrt."/>
+    <word exception="intens."/>
+    <word exception="dipl."/>
+    <word exception="H.P.O.D."/>
+    <word exception="hist."/>
+    <word exception="verv."/>
+    <word exception="D.G.A."/>
+    <word exception="Eks."/>
+    <word exception="geod."/>
+    <word exception="verspr."/>
+    <word exception="gev. en geb."/>
+    <word exception="Br."/>
+    <word exception="vdg."/>
+    <word exception="kl."/>
+    <word exception="kwal."/>
+    <word exception="e.d."/>
+    <word exception="ges."/>
+    <word exception="G.S.O."/>
+    <word exception="bep."/>
+    <word exception="I.M."/>
+    <word exception="bls."/>
+    <word exception="Bpk."/>
+    <word exception="ver."/>
+    <word exception="ad if."/>
+    <word exception="kub."/>
+    <word exception="versam."/>
+    <word exception="diam."/>
+    <word exception="Hons.B.A."/>
+    <word exception="Jap."/>
+    <word exception="kk."/>
+    <word exception="D.Litt. et Phil."/>
+    <word exception="Isr."/>
+    <word exception="infin."/>
+    <word exception="B.Mil."/>
+    <word exception="verpl."/>
+    <word exception="dt."/>
+    <word exception="fem."/>
+    <word exception="vert."/>
+    <word exception="esk."/>
+    <word exception="B.Optom."/>
+    <word exception="Idg."/>
+    <word exception="v.h.t.h."/>
+    <word exception="D.G.G."/>
+    <word exception="Des."/>
+    <word exception="vgl."/>
+    <word exception="kons."/>
+    <word exception="H.d.L."/>
+    <word exception="verlosk."/>
+    <word exception="get."/>
+    <word exception="D.Sc.Agric."/>
+    <word exception="b.k."/>
+    <word exception="brig.genl."/>
+    <word exception="bet."/>
+    <word exception="dupl."/>
+    <word exception="Kh."/>
+    <word exception="afh."/>
+    <word exception="B.Jur."/>
+    <word exception="d.i."/>
+    <word exception="kurs."/>
+    <word exception="b.n."/>
+    <word exception="huish."/>
+    <word exception="verk."/>
+    <word exception="kindert."/>
+    <word exception="bn."/>
+    <word exception="fisiol."/>
+    <word exception="Eng."/>
+    <word exception="kopelww."/>
+    <word exception="e.s."/>
+    <word exception="e.g."/>
+    <word exception="Ch.B."/>
+    <word exception="hs."/>
+    <word exception="D.C.L."/>
+    <word exception="Kaapl."/>
+    <word exception="x."/>
+    <word exception="intr."/>
+    <word exception="It."/>
+    <word exception="v.l."/>
+    <word exception="B.Sc."/>
+    <word exception="i.c."/>
+    <word exception="a.d."/>
+    <word exception="Chin."/>
+    <word exception="filat."/>
+    <word exception="grondk."/>
+    <word exception="verb."/>
+    <word exception="abl."/>
+    <word exception="D.Admin."/>
+    <word exception="B.Pharm."/>
+    <word exception="indust."/>
+    <word exception="byl."/>
+    <word exception="hoofart."/>
+    <word exception="elektron."/>
+    <word exception="insl."/>
+    <word exception="byv."/>
+    <word exception="Do."/>
+    <word exception="et al."/>
+    <word exception="aanb."/>
+    <word exception="D.Th."/>
+    <word exception="imp."/>
+    <word exception="demob."/>
+    <word exception="kookk."/>
+    <word exception="cad."/>
+    <word exception="i.l."/>
+    <word exception="Hons.B.Bibl."/>
+    <word exception="H.Eerw."/>
+    <word exception="verl.dw."/>
+    <word exception="V.D.O."/>
+    <word exception="Sep."/>
+    <word exception="bro."/>
+    <word exception="Hons.B.Compt."/>
+    <word exception="s."/>
+    <word exception="Dipl.Psig.Verpl."/>
+    <word exception="krist."/>
+    <word exception="hww."/>
+    <word exception="Ber.Ps."/>
+    <word exception="eetk."/>
+    <word exception="Em."/>
+    <word exception="afk."/>
+    <word exception="adjt."/>
+    <word exception="Hons.B.Admin."/>
+    <word exception="Kron."/>
+    <word exception="ind."/>
+    <word exception="best."/>
+    <word exception="Hos."/>
+    <word exception="kom."/>
+    <word exception="embr."/>
+    <word exception="B.Rad."/>
+    <word exception="koll."/>
+    <word exception="Ex."/>
+    <word exception="Brab."/>
+    <word exception="a.b."/>
+    <word exception="D.Litt."/>
+    <word exception="cum div."/>
+    <word exception="Jer."/>
+    <word exception="veroud."/>
+    <word exception="Afr."/>
+    <word exception="digk."/>
+    <word exception="b."/>
+    <word exception="kmdmt."/>
+    <word exception="fis."/>
+    <word exception="B.D."/>
+    <word exception="i."/>
+    <word exception="B.Prim.Ed."/>
+    <word exception="gefr."/>
+    <word exception="komm."/>
+    <word exception="B.Paed."/>
+    <word exception="H.K.H."/>
+    <word exception="hoogl."/>
+    <word exception="farm."/>
+    <word exception="bs."/>
+    <word exception="o.a.."/>
+    <word exception="cresc."/>
+    <word exception="H.Gel."/>
+    <word exception="int."/>
+    <word exception="G.Ing."/>
+    <word exception="adm."/>
+    <word exception="besk."/>
+    <word exception="geogr."/>
+    <word exception="fout."/>
+    <word exception="hk."/>
+    <word exception="b.d."/>
+    <word exception="gebrs."/>
+    <word exception="Zim."/>
+    <word exception="B.Phil."/>
+    <word exception="H.Ed."/>
+    <word exception="kernfis."/>
+    <word exception="ir."/>
+    <word exception="filos."/>
+    <word exception="ing."/>
+    <word exception="Vl."/>
+    <word exception="ad loc."/>
+    <word exception="i.v."/>
+    <word exception="gesert."/>
+    <word exception="vgw."/>
+    <word exception="gewest."/>
+    <word exception="antw."/>
+    <word exception="Jav."/>
+    <word exception="adj.min."/>
+    <word exception="klemt."/>
+    <word exception="D.Theol."/>
+    <word exception="Fen."/>
+    <word exception="kp."/>
+    <word exception="B.Com."/>
+    <word exception="boekdr."/>
+    <word exception="ko."/>
+    <word exception="Kan."/>
+    <word exception="B.Theol."/>
+    <word exception="gereg."/>
+    <word exception="boekb."/>
+    <word exception="Edma."/>
+    <word exception="genet."/>
+    <word exception="di."/>
+    <word exception="B.Ed.Ph."/>
+    <word exception="gal."/>
+    <word exception="aanget."/>
+    <word exception="Dipl.Bedryf.Verpl."/>
+    <word exception="Ven."/>
+    <word exception="e.c."/>
+    <word exception="kmdt."/>
+    <word exception="elektr."/>
+    <word exception="Egip."/>
+    <word exception="B.Ed."/>
+    <word exception="J.C."/>
+    <word exception="g.v."/>
+    <word exception="germ."/>
+    <word exception="byskr."/>
+    <word exception="geom."/>
+    <word exception="e.a."/>
+    <word exception="Gael."/>
+    <word exception="hss."/>
+    <word exception="l."/>
+    <word exception="M.Cur."/>
+    <word exception="Fin."/>
+    <word exception="HH.EE."/>
+    <word exception="o.a."/>
+    <word exception="Her."/>
+    <word exception="koëf."/>
+    <word exception="Nov."/>
+    <word exception="v.c."/>
+    <word exception="diss."/>
+    <word exception="h.t.l."/>
+    <word exception="bep.lw."/>
+    <word exception="verg.tr."/>
+    <word exception="Jun."/>
+    <word exception="D.Ed."/>
+    <word exception="biofis."/>
+    <word exception="byg."/>
+    <word exception="dw.dnr."/>
+    <word exception="dept."/>
+    <word exception="e.o."/>
+    <word exception="Febr."/>
+    <word exception="asb."/>
+    <word exception="joern."/>
+    <word exception="impr."/>
+    <word exception="Dip.Cur.Admin."/>
+    <word exception="B.Sc.Agric.Hons."/>
+    <word exception="burg."/>
+    <word exception="kuunsgesk."/>
+    <word exception="entom."/>
+    <word exception="aant."/>
+    <word exception="voors."/>
+    <word exception="ca."/>
+    <word exception="gegalv."/>
+    <word exception="e."/>
+    <word exception="kav."/>
+    <word exception="Dbn."/>
+    <word exception="D.Cur."/>
+    <word exception="Kelt."/>
+    <word exception="gram."/>
+    <word exception="Gr."/>
+    <word exception="De."/>
+    <word exception="V.d.S."/>
+    <word exception="dekl."/>
+    <word exception="k.a."/>
+    <word exception="kop."/>
+    <word exception="Fri."/>
+    <word exception="aardr."/>
+    <word exception="y."/>
+    <word exception="Hons.B.Th."/>
+    <word exception="veearts."/>
+    <word exception="insp.genl."/>
+    <word exception="G.T.S."/>
+    <word exception="Jan."/>
+    <word exception="v.g."/>
+    <word exception="h.c."/>
+    <word exception="def."/>
+    <word exception="B.Econ.Sc."/>
+    <word exception="Zam."/>
+    <word exception="Belg."/>
+    <word exception="dom."/>
+    <word exception="h.v."/>
+    <word exception="Bras."/>
+    <word exception="Ges."/>
+    <word exception="kan."/>
+    <word exception="D.Compt."/>
+    <word exception="konst."/>
+    <word exception="e.v."/>
+    <word exception="Sa."/>
+    <word exception="Ed.Agb."/>
+    <word exception="i.t.v."/>
+    <word exception="v.hv."/>
+    <word exception="dep."/>
+    <word exception="fb."/>
+    <word exception="hulpww."/>
+    <word exception="Dr.Rer.Pol."/>
+    <word exception="hers."/>
+    <word exception="kn."/>
+    <word exception="z."/>
+    <word exception="univ."/>
+    <word exception="dra."/>
+    <word exception="k.m.b."/>
+    <word exception="lw."/>
+    <word exception="t."/>
+    <word exception="ins."/>
+    <word exception="Byb."/>
+    <word exception="f."/>
+    <word exception="hum."/>
+    <word exception="B.Iur."/>
+    <word exception="etnol."/>
+    <word exception="dial."/>
+    <word exception="Hons.B. in Publ.Admin."/>
+    <word exception="bosb."/>
+    <word exception="k."/>
+    <word exception="homof."/>
+    <word exception="gest."/>
+    <word exception="Dr.Med."/>
+    <word exception="inskr."/>
+    <word exception="b.kw."/>
+    <word exception="cf."/>
+    <word exception="D.V.Sc."/>
+    <word exception="etc."/>
+    <word exception="Ev."/>
+    <word exception="B.Econ."/>
+    <word exception="Ned."/>
+    <word exception="gemasj."/>
+    <word exception="kons.genl."/>
+    <word exception="ek."/>
+    <word exception="bw."/>
+    <word exception="Hons.B.Sc.Agric."/>
+    <word exception="verl."/>
+    <word exception="Jes."/>
+    <word exception="d.m.v."/>
+    <word exception="Hons.B.Soc.Sc."/>
+    <word exception="inkl."/>
+    <word exception="gesinsk."/>
+    <word exception="hoev."/>
+    <word exception="H.O.D."/>
+    <word exception="gev."/>
+    <word exception="ghn."/>
+    <word exception="ev."/>
+    <word exception="s.nw."/>
+    <word exception="insp."/>
+    <word exception="kapt."/>
+    <word exception="homog."/>
+    <word exception="eks."/>
+    <word exception="Hons.B.Diac."/>
+    <word exception="heelk."/>
+    <word exception="dok."/>
+    <word exception="eerw."/>
+    <word exception="kooph."/>
+    <word exception="bourek."/>
+    <word exception="ko-ef."/>
+    <word exception="elektrotegn."/>
+    <word exception="dm."/>
+    <word exception="d.d."/>
+    <word exception="Holl."/>
+    <word exception="Brit."/>
+    <word exception="b.o."/>
+    <word exception="verklw."/>
+    <word exception="Hott."/>
+    <word exception="krg."/>
+    <word exception="cet.par."/>
+    <word exception="korr."/>
+    <word exception="eksp."/>
+    <word exception="D.Econ."/>
+    <word exception="helmintol."/>
+    <word exception="klass."/>
+    <word exception="chir."/>
+    <word exception="bot."/>
+    <word exception="B.Cur."/>
+    <word exception="Ph.D."/>
+    <word exception="D.Inst.Agrar."/>
+    <word exception="k.v.a."/>
+    <word exception="Sept."/>
+    <word exception="w."/>
+    <word exception="H.Geb."/>
+    <word exception="I.D.S.M."/>
+    <word exception="Kor."/>
+    <word exception="dbl."/>
+    <word exception="bg."/>
+    <word exception="Hons.B.Com."/>
+    <word exception="Frk."/>
+    <word exception="dv."/>
+    <word exception="flot."/>
+    <word exception="H.M."/>
+    <word exception="B.Diac."/>
+    <word exception="B.Huish."/>
+    <word exception="m.b.v."/>
+    <word exception="v.d."/>
+    <word exception="Hons.B.Cur."/>
+    <word exception="id."/>
+    <word exception="Hd."/>
+    <word exception="dr."/>
+    <word exception="ibid."/>
+    <word exception="goew."/>
+    <word exception="D.D."/>
+    <word exception="corr."/>
+    <word exception="Filem."/>
+    <word exception="geoorl."/>
+    <word exception="B.Mus."/>
+    <word exception="admin."/>
+    <word exception="beh."/>
+    <word exception="D.Mus."/>
+    <word exception="m.b.t."/>
+    <word exception="E.T.S."/>
+    <word exception="e.s.m."/>
+    <word exception="Kie."/>
+    <word exception="verl.t."/>
+    <word exception="Hons.B.Econ."/>
+    <word exception="inh."/>
+    <word exception="Chr."/>
+    <word exception="deelsgen."/>
+    <word exception="ko-op."/>
+    <word exception="frekw."/>
+    <word exception="Okt."/>
+    <word exception="gr."/>
+    <word exception="B.Sec.Ed."/>
+    <word exception="hr."/>
+    <word exception="dem."/>
+    <word exception="fitopatol."/>
+    <word exception="em."/>
+    <word exception="i.e."/>
+    <word exception="getr."/>
+    <word exception="bedr."/>
+    <word exception="Dr.Rer.Nat."/>
+    <word exception="Got."/>
+    <word exception="i.a."/>
+    <word exception="koöp."/>
+    <word exception="q."/>
+    <word exception="Hoogl."/>
+    <word exception="afs."/>
+    <word exception="dies."/>
+    <word exception="no."/>
+    <word exception="bibl."/>
+    <word exception="str."/>
+    <word exception="D.Med.Vet."/>
+    <word exception="kdoor."/>
+    <word exception="insekt."/>
+    <word exception="afl."/>
+    <word exception="Pta."/>
+    <word exception="veet."/>
+    <word exception="H.S.O.D."/>
+    <word exception="Apr."/>
+    <word exception="euf."/>
+    <word exception="juf."/>
+    <word exception="Kon."/>
+    <word exception="M.Ed."/>
+    <word exception="Ch.M."/>
+    <word exception="disk."/>
+    <word exception="Aug."/>
+    <word exception="geneesh."/>
+    <word exception="kdr."/>
+    <word exception="Fil."/>
+    <word exception="faks."/>
+    <word exception="i.t."/>
+    <word exception="incog."/>
+    <word exception="B.S. en S."/>
+    <word exception="verw."/>
+    <word exception="dgl."/>
+    <word exception="Eur."/>
+    <word exception="geriat."/>
+    <word exception="inl."/>
+    <word exception="Hooggel."/>
+    <word exception="afb."/>
+    <word exception="H.Eks."/>
+    <word exception="dir.genl."/>
+    <word exception="D.Mil."/>
+    <word exception="a.a."/>
+    <word exception="D.Pharm."/>
+    <word exception="B.V.Sc."/>
+    <word exception="c.q."/>
+    <word exception="kar."/>
+    <word exception="hst."/>
+    <word exception="vk."/>
+    <word exception="Jos."/>
+    <word exception="D.P.A."/>
+    <word exception="Kons."/>
+    <word exception="bev."/>
+    <word exception="Hand."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="BCompt"/>
+    <word exception="BHuish"/>
+    <word exception="BRad"/>
+    <word exception="BTheol"/>
+    <word exception="DArch"/>
+    <word exception="DCur"/>
+    <word exception="BJuris"/>
+    <word exception="BProc"/>
+    <word exception="DAdmin"/>
+    <word exception="DLitt et Phil"/>
+    <word exception="DTheol"/>
+    <word exception="BEcon(Ed)"/>
+    <word exception="DLitt"/>
+    <word exception="BInstAgrar(Hons)"/>
+    <word exception="DMedVet"/>
+    <word exception="BScAgric"/>
+    <word exception="MHz"/>
+    <word exception="BCom(Hons)"/>
+    <word exception="DIng"/>
+    <word exception="BIur"/>
+    <word exception="GIng"/>
+    <word exception="BSc"/>
+    <word exception="DCompt"/>
+    <word exception="DChD"/>
+    <word exception="BPrimEd"/>
+    <word exception="DTh"/>
+    <word exception="BCur(Ed et Adm)"/>
+    <word exception="BLitt"/>
+    <word exception="DEcon"/>
+    <word exception="DSc"/>
+    <word exception="DCom"/>
+    <word exception="BIuris"/>
+    <word exception="BMil"/>
+    <word exception="BEdPh"/>
+    <word exception="DScAgric"/>
+    <word exception="BSc(Hons)"/>
+    <word exception="BCur"/>
+    <word exception="BSc(Ed)"/>
+    <word exception="BEconSc"/>
+    <word exception="BJur"/>
+    <word exception="BOptom"/>
+    <word exception="BEcon"/>
+    <word exception="DMus"/>
+    <word exception="DInstAgrar"/>
+    <word exception="BCom(Ed)"/>
+    <word exception="BSocSc"/>
+    <word exception="BSecEd"/>
+    <word exception="BEd"/>
+    <word exception="BCur(I et A)"/>
+    <word exception="BDiac"/>
+    <word exception="BIng"/>
+    <word exception="BCom"/>
+    <word exception="DBibli"/>
+    <word exception="BTh"/>
+    <word exception="DEd"/>
+    <word exception="DSocSc"/>
+    <word exception="DVSc"/>
+    <word exception="BScAgric(Hons)"/>
+    <word exception="DPharm"/>
+    <word exception="BPaed"/>
+    <word exception="BPharm"/>
+    <word exception="BVSc"/>
+    <word exception="DPhil"/>
+    <word exception="BMus"/>
+    <word exception="MSc"/>
+    <word exception="DMil"/>
+    <word exception="BComHons"/>
+    <word exception="BPhil"/>
+    <word exception="DDiac"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

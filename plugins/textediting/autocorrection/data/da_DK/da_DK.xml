@@ -1,0 +1,2390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find=":vimpel2:" replace=""/>
+    <item find=":okse:" replace=""/>
+    <item find=":x4:" replace=""/>
+    <item find=":savle:" replace="襤"/>
+    <item find=":scooter2:" replace=""/>
+    <item find=":7/8:" replace="⅞"/>
+    <item find="anullere" replace="annullere"/>
+    <item find=":Vandmanden:" replace="♒"/>
+    <item find=":Iota:" replace="Ι"/>
+    <item find="modn oget" replace="mod noget"/>
+    <item find=":Theta:" replace="Θ"/>
+    <item find="eftern ogle" replace="efter nogle"/>
+    <item find=":^K:" replace="ᴷ"/>
+    <item find=":drik:" replace="磻"/>
+    <item find=":ånd:" replace="吏"/>
+    <item find=":avocado:" replace="陋"/>
+    <item find="ærgelse" replace="ærgrelse"/>
+    <item find="overe t" replace="over et"/>
+    <item find=":^delta:" replace="ᵟ"/>
+    <item find=":klør2:" replace="♧"/>
+    <item find=":udtryksløs:" replace=""/>
+    <item find=":golf:" replace=""/>
+    <item find="asistance" replace="assistance"/>
+    <item find="ford et" replace="for det"/>
+    <item find=":taxa2:" replace=""/>
+    <item find=":cyklist:" replace=""/>
+    <item find=":Sol2:" replace="☼"/>
+    <item find="bagd e" replace="bag de"/>
+    <item find="omd e" replace="om de"/>
+    <item find=":sky:" replace="☁"/>
+    <item find="fran ogle" replace="fra nogle"/>
+    <item find=":pile:" replace=""/>
+    <item find=":^4:" replace="⁴"/>
+    <item find="sædvanligvist" replace="sædvanligvis"/>
+    <item find="skrfit" replace="skrift"/>
+    <item find=":bøger:" replace=""/>
+    <item find=":frihed:" replace=""/>
+    <item find=":Tau:" replace="Τ"/>
+    <item find=":to hjerter:" replace=""/>
+    <item find=":grønt æble:" replace=""/>
+    <item find=":dråbe:" replace=""/>
+    <item find=":familie:" replace=""/>
+    <item find="unde rnogle" replace="under nogle"/>
+    <item find=":pille:" replace=""/>
+    <item find=":won:" replace="₩"/>
+    <item find=":^T:" replace="ᵀ"/>
+    <item find=":noder4:" replace=""/>
+    <item find="sindsygdom" replace="sindssygdom"/>
+    <item find=":abc:" replace=""/>
+    <item find=":standhaftig:" replace=""/>
+    <item find="kompetance" replace="kompetence"/>
+    <item find=":sort løber:" replace="♝"/>
+    <item find=":fest:" replace=""/>
+    <item find=":siger intet ondt:" replace=""/>
+    <item find=":hjerter:" replace="♥"/>
+    <item find=":kaffe:" replace="☕"/>
+    <item find=":sejlbåd:" replace="⛵"/>
+    <item find=":barn:" replace="戮"/>
+    <item find=":stjerne4:" replace=""/>
+    <item find=":solnedgang:" replace=""/>
+    <item find=":_8:" replace="₈"/>
+    <item find=":fisk:" replace=""/>
+    <item find=":epsilon:" replace="ε"/>
+    <item find=":tom notesblok:" replace=""/>
+    <item find="viderekommende" replace="viderekomne"/>
+    <item find="redigere altid" replace="redigerer altid"/>
+    <item find=":synagoge:" replace=""/>
+    <item find=":teater:" replace=""/>
+    <item find="køre aldrig" replace="kører aldrig"/>
+    <item find="opnåes" replace="opnås"/>
+    <item find="statistiken" replace="statistikken"/>
+    <item find=":SE2:" replace="⇘"/>
+    <item find="me dde" replace="med de"/>
+    <item find=":Mælkevejen:" replace=""/>
+    <item find=":partiel:" replace="∂"/>
+    <item find=":mellemstort kvadrat2:" replace="◼"/>
+    <item find=":fuldmåne2:" replace=""/>
+    <item find=":snemand:" replace="☃"/>
+    <item find=":nøgle2:" replace=""/>
+    <item find=":surfer:" replace=""/>
+    <item find=":massage:" replace=""/>
+    <item find=":ø:" replace=""/>
+    <item find=":chi:" replace="χ"/>
+    <item find="Http:" replace="http:"/>
+    <item find=":arbejder:" replace=""/>
+    <item find=":?2:" replace="❔"/>
+    <item find=":bjørn:" replace=""/>
+    <item find=":skrive:" replace="✍"/>
+    <item find=":rektangel2:" replace="▬"/>
+    <item find=":Jul:" replace=""/>
+    <item find=":lokomotiv2:" replace=""/>
+    <item find=":museum:" replace=""/>
+    <item find=":hibiscus:" replace=""/>
+    <item find=":venstre3:" replace="☚"/>
+    <item find=":færge:" replace="⛴"/>
+    <item find=":slot2:" replace=""/>
+    <item find=":fødselsdag:" replace=""/>
+    <item find=":lille kvadrat:" replace="▫"/>
+    <item find=":motorvej:" replace=""/>
+    <item find="jjeg" replace="jeg"/>
+    <item find=":kvart pause:" replace="턽"/>
+    <item find=":kløver:" replace=""/>
+    <item find=":ældre kvinde:" replace=""/>
+    <item find=":bank:" replace=""/>
+    <item find=":^U:" replace="ᵁ"/>
+    <item find=":ramme:" replace=""/>
+    <item find="høre aldrig" replace="hører aldrig"/>
+    <item find="ti lnoget" replace="til noget"/>
+    <item find="celluid" replace="celluloid"/>
+    <item find=":latinsk kors3:" replace=""/>
+    <item find=":glad kat:" replace=""/>
+    <item find="noegle" replace="nogle"/>
+    <item find=":slange:" replace=""/>
+    <item find=":eksisterer ikke:" replace="∄"/>
+    <item find=":kærlighedsbrev:" replace=""/>
+    <item find=":ikke:" replace="¬"/>
+    <item find="imorgen" replace="i morgen"/>
+    <item find=":kvadratrod:" replace="√"/>
+    <item find=":afkrydsningsboks6:" replace=""/>
+    <item find="lækkerbidsken" replace="lækkerbisken"/>
+    <item find="efterd et" replace="efter det"/>
+    <item find=":Bil3:" replace=""/>
+    <item find=":stemmeseddel:" replace=""/>
+    <item find=":5 t:" replace=""/>
+    <item find=":sushi:" replace=""/>
+    <item find=":bandende:" replace="郎"/>
+    <item find="skruppe af" replace="skrubbe af"/>
+    <item find="ba gnoget" replace="bag noget"/>
+    <item find="irationel" replace="irrationel"/>
+    <item find=":fest4:" replace=""/>
+    <item find="præferance" replace="præference"/>
+    <item find="markulering" replace="makulering"/>
+    <item find=":billede:" replace=""/>
+    <item find=":SE:" replace="↘"/>
+    <item find=":^G:" replace="ᴳ"/>
+    <item find="førn ogle" replace="før nogle"/>
+    <item find=":slikkepind:" replace=""/>
+    <item find=":bro:" replace=""/>
+    <item find="stadgi" replace="stadig"/>
+    <item find=":tog:" replace=""/>
+    <item find=":^y:" replace="ʸ"/>
+    <item find="sejg" replace="sej"/>
+    <item find="redigere gerne" replace="redigerer gerne"/>
+    <item find="fr aen" replace="fra en"/>
+    <item find=":saks2:" replace="✄"/>
+    <item find=":tunge4:" replace=""/>
+    <item find="o mnoget" replace="om noget"/>
+    <item find=":andreaskors:" replace="☓"/>
+    <item find="forsåvidt" replace="for så vidt"/>
+    <item find=":citron:" replace=""/>
+    <item find="flrer" replace="flere"/>
+    <item find=":diagram2:" replace=""/>
+    <item find=":nymåne2:" replace=""/>
+    <item find=":saks:" replace="✂"/>
+    <item find=":skuldertræk:" replace="路"/>
+    <item find=":Saturn:" replace="♄"/>
+    <item find=":kokosnød:" replace="便"/>
+    <item find=":boble10:" replace=""/>
+    <item find="forann ogen" replace="foran nogen"/>
+    <item find="staniol" replace="stanniol"/>
+    <item find=":genbrugspapir:" replace="♼"/>
+    <item find="gøre gengæl" replace="gøre gengæld"/>
+    <item find=":kage:" replace=""/>
+    <item find=":^k:" replace="ᵏ"/>
+    <item find="anmasende" replace="anmassende"/>
+    <item find=":op2:" replace=""/>
+    <item find=":parallelogram2:" replace="▰"/>
+    <item find="frae t" replace="fra et"/>
+    <item find=":tunge2:" replace=""/>
+    <item find=":mandetegn:" replace="♂"/>
+    <item find=":vinkel2:" replace="∡"/>
+    <item find="ove rnogen" replace="over nogen"/>
+    <item find=":letbane:" replace=""/>
+    <item find=":nuttethed:" replace=""/>
+    <item find=":orange hjerte:" replace="李"/>
+    <item find=":bitcoin:" replace="₿"/>
+    <item find="forann oget" replace="foran noget"/>
+    <item find=":fontæne:" replace="⛲"/>
+    <item find=":busstoppested:" replace=""/>
+    <item find=":sejr:" replace="✌"/>
+    <item find="følgeligt" replace="følgelig"/>
+    <item find=":sort bonde:" replace="♟"/>
+    <item find="agresiv" replace="aggressiv"/>
+    <item find=":euro2:" replace=""/>
+    <item find=":Farsi:" replace="☫"/>
+    <item find=":sky2:" replace="⛅"/>
+    <item find=":^f:" replace="ᶠ"/>
+    <item find=":fuldmåne:" replace=""/>
+    <item find=":mus3:" replace=""/>
+    <item find=":minibus:" replace=""/>
+    <item find=":første kvarter:" replace=""/>
+    <item find=":hører intet ondt:" replace=""/>
+    <item find=":fægter:" replace="鷺"/>
+    <item find="afe t" replace="af et"/>
+    <item find=":Ksi:" replace="Ξ"/>
+    <item find="USAs" replace="USA's"/>
+    <item find="åbnt" replace="åbent"/>
+    <item find="abbonnement" replace="abonnement"/>
+    <item find=":regn2:" replace="⛆"/>
+    <item find=":forsigtig:" replace="☡"/>
+    <item find=":peanuts:" replace="樂"/>
+    <item find="meneske" replace="menneske"/>
+    <item find=":flyver5:" replace=""/>
+    <item find=":mandarin:" replace=""/>
+    <item find=":gamma:" replace="γ"/>
+    <item find="medd en" replace="med den"/>
+    <item find="fr anogen" replace="fra nogen"/>
+    <item find=":helnode:" replace="텝"/>
+    <item find=":finger:" replace=""/>
+    <item find="omgåes" replace="omgås"/>
+    <item find=":gift:" replace="☠"/>
+    <item find=":Slangeholderen:" replace="⛎"/>
+    <item find=":kiste:" replace="⚰"/>
+    <item find=":smiley:" replace=""/>
+    <item find=":løkke2:" replace="➿"/>
+    <item find=":g-nøgle:" replace="턞"/>
+    <item find="vudere" replace="vurdere"/>
+    <item find=":højtaler2:" replace=""/>
+    <item find=":svimmelt ansigt:" replace=""/>
+    <item find=":euro:" replace="€"/>
+    <item find=":næve3:" replace="亂"/>
+    <item find=":^):" replace="⁾"/>
+    <item find=":stjerne2:" replace="☆"/>
+    <item find=":Gamma:" replace="Γ"/>
+    <item find=":atom:" replace="⚛"/>
+    <item find=":triangulært flag:" replace=""/>
+    <item find="tilhøre gerne" replace="tilhører gerne"/>
+    <item find="ie n" replace="i en"/>
+    <item find=":tv:" replace=""/>
+    <item find=":is:" replace=""/>
+    <item find="diskution" replace="diskussion"/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find=":høj hat:" replace=""/>
+    <item find=":mindreårig:" replace=""/>
+    <item find=":_i:" replace="ᵢ"/>
+    <item find=":fl:" replace="ﬂ"/>
+    <item find=":spøgelse:" replace=""/>
+    <item find=":mindre kvadrat2:" replace="◾"/>
+    <item find=":pizza:" replace=""/>
+    <item find=":Rho:" replace="Ρ"/>
+    <item find="terrænnet" replace="terrænet"/>
+    <item find=":løber:" replace=""/>
+    <item find=":flag3:" replace="⚑"/>
+    <item find="satdig" replace="stadig"/>
+    <item find=":blyant2:" replace="✏"/>
+    <item find=":slingrende bil:" replace="⛐"/>
+    <item find=":\\:" replace="∖"/>
+    <item find="frad et" replace="fra det"/>
+    <item find=":varemærke:" replace="®"/>
+    <item find=":dråbe2:" replace=""/>
+    <item find=":kjole:" replace=""/>
+    <item find=":ned2:" replace=""/>
+    <item find=":^H:" replace="ᴴ"/>
+    <item find="medn ogle" replace="med nogle"/>
+    <item find="&lt;--&gt;" replace="↔"/>
+    <item find="forand e" replace="foran de"/>
+    <item find=":sort springer:" replace="♞"/>
+    <item find="indkludere" replace="inkludere"/>
+    <item find=":ingen klokke:" replace=""/>
+    <item find=":hotel2:" replace=""/>
+    <item find=":gris:" replace=""/>
+    <item find=":tom noteside:" replace=""/>
+    <item find=":sauna:" replace="淪"/>
+    <item find=":stik:" replace=""/>
+    <item find="p ånogen" replace="på nogen"/>
+    <item find="kasere" replace="kassere"/>
+    <item find=":gear:" replace="⚙"/>
+    <item find=":palme:" replace=""/>
+    <item find="ydeligere" replace="yderligere"/>
+    <item find="pån ogle" replace="på nogle"/>
+    <item find="ti lden" replace="til den"/>
+    <item find="lissom" replace="ligesom"/>
+    <item find=":mus2:" replace=""/>
+    <item find=":punkttegn2:" replace="‣"/>
+    <item find="medaille" replace="medalje"/>
+    <item find=":fiskeflag:" replace=""/>
+    <item find=":sokker:" replace="罹"/>
+    <item find=":shekel:" replace="₪"/>
+    <item find=":amerikanskfodbold:" replace=""/>
+    <item find=":mappe5:" replace=""/>
+    <item find="ome t" replace="om et"/>
+    <item find=":^c:" replace="ᶜ"/>
+    <item find="vedn ogle" replace="ved nogle"/>
+    <item find="p ånoget" replace="på noget"/>
+    <item find=":ikke divisor i:" replace="∤"/>
+    <item find=":buste:" replace=""/>
+    <item find="modd en" replace="mod den"/>
+    <item find=":vindue:" replace=""/>
+    <item find=":læber:" replace=""/>
+    <item find=":risscene:" replace=""/>
+    <item find=":træ:" replace=""/>
+    <item find=":golf2:" replace="⛳"/>
+    <item find=":regnskabsbog:" replace=""/>
+    <item find=":spaghetti:" replace=""/>
+    <item find=":dinosaur2:" replace="練"/>
+    <item find=":penge3:" replace="螺"/>
+    <item find=":tanabatatræ:" replace=""/>
+    <item find="adgnag" replace="adgang"/>
+    <item find=":and:" replace="閭"/>
+    <item find=":Epsilon:" replace="Ε"/>
+    <item find="bagd et" replace="bag det"/>
+    <item find="dene" replace="denne"/>
+    <item find="melelm" replace="mellem"/>
+    <item find=":æske:" replace=""/>
+    <item find=":S2:" replace="⇓"/>
+    <item find="hvor imod" replace="hvorimod"/>
+    <item find=":pose:" replace=""/>
+    <item find=":hat:" replace=""/>
+    <item find=":':" replace="’"/>
+    <item find=":tørklæde:" replace="崙"/>
+    <item find=":terninger:" replace=""/>
+    <item find=":etiket:" replace=""/>
+    <item find=":Cirkus:" replace=""/>
+    <item find="venstre sidde" replace="venstre side"/>
+    <item find=":bogmærke2:" replace=""/>
+    <item find=":pentagram:" replace="⛤"/>
+    <item find=":vædder:" replace=""/>
+    <item find=":Julemand:" replace=""/>
+    <item find="parallellitet" replace="parallelitet"/>
+    <item find=":hængebane:" replace=""/>
+    <item find="bronce" replace="bronze"/>
+    <item find="fr anoget" replace="fra noget"/>
+    <item find=":konvolut2:" replace=""/>
+    <item find=":omikron:" replace="ο"/>
+    <item find="inddirekte" replace="indirekte"/>
+    <item find=":blyant:" replace="✎"/>
+    <item find=":kolbe:" replace="⚗"/>
+    <item find=":elpære:" replace=""/>
+    <item find="me dnoget" replace="med noget"/>
+    <item find="advocado" replace="avocado"/>
+    <item find=":knap:" replace=""/>
+    <item find=":lastbil:" replace="⛟"/>
+    <item find=":blad3:" replace=""/>
+    <item find=":sæde:" replace=""/>
+    <item find=":ræv:" replace="力"/>
+    <item find=":^E:" replace="ᴱ"/>
+    <item find="sandsynligvist" replace="sandsynligvis"/>
+    <item find="--&gt;" replace="→"/>
+    <item find="staidg" replace="stadig"/>
+    <item find=":ananas:" replace=""/>
+    <item find=":nørd:" replace="邏"/>
+    <item find="paralel" replace="parallel"/>
+    <item find="istedet" replace="i stedet"/>
+    <item find=":robot:" replace="烙"/>
+    <item find=":piger:" replace=""/>
+    <item find=":bil3:" replace=""/>
+    <item find="a fnogle" replace="af nogle"/>
+    <item find="allene" replace="alene"/>
+    <item find="marteriale" replace="materiale"/>
+    <item find=":spar:" replace="♠"/>
+    <item find=":mappe4:" replace=""/>
+    <item find=":dybstegte rejser:" replace=""/>
+    <item find=":blyant4:" replace=""/>
+    <item find="zigeuner" replace="sigøjner"/>
+    <item find=":halv pause:" replace="턼"/>
+    <item find="formodenlig" replace="formodentlig"/>
+    <item find=":buster:" replace=""/>
+    <item find=":hvid dronning:" replace="♕"/>
+    <item find=":lås op:" replace=""/>
+    <item find="kassere gerne" replace="kasserer gerne"/>
+    <item find=":merkurstav:" replace="☤"/>
+    <item find="jvf." replace="jf."/>
+    <item find=":Lambda:" replace="Λ"/>
+    <item find="hovedkuls" replace="hovedkulds"/>
+    <item find=":tallerken:" replace=""/>
+    <item find=":spændt:" replace="朗"/>
+    <item find="oplysniger" replace="oplysninger"/>
+    <item find=":hus2:" replace=""/>
+    <item find=":^9:" replace="⁹"/>
+    <item find="unde rdet" replace="under det"/>
+    <item find="familje" replace="familie"/>
+    <item find=":kontor:" replace=""/>
+    <item find=":trekant3:" replace=""/>
+    <item find=":edderkop:" replace=""/>
+    <item find=":Sigma:" replace="Σ"/>
+    <item find=":bi:" replace=""/>
+    <item find="antiparti" replace="antipati"/>
+    <item find="efterd en" replace="efter den"/>
+    <item find="pristalregulering" replace="pristalsregulering"/>
+    <item find=":hund:" replace=""/>
+    <item find="indklusiv" replace="inklusiv"/>
+    <item find=":broccoli:" replace="復"/>
+    <item find=":stop:" replace=""/>
+    <item find=":gom:" replace="蘆"/>
+    <item find=":bederum:" replace=""/>
+    <item find=":hvidt tårn:" replace="♖"/>
+    <item find="undgåes" replace="undgås"/>
+    <item find=":tom mængde:" replace="∅"/>
+    <item find=":bento:" replace=""/>
+    <item find=":mahjong:" replace=""/>
+    <item find=":afkrydsningsboks:" replace="☐"/>
+    <item find=":diskette3:" replace=""/>
+    <item find=":træt ansigt:" replace=""/>
+    <item find=":ellipse:" replace="⬭"/>
+    <item find=":100:" replace=""/>
+    <item find=":^V:" replace="ⱽ"/>
+    <item find=":yen:" replace="¥"/>
+    <item find=":kimono:" replace=""/>
+    <item find="pc'ere" replace="pc'er"/>
+    <item find=":højre5:" replace=""/>
+    <item find="muliggører" replace="muliggør"/>
+    <item find=":smilende2:" replace="☻"/>
+    <item find=":tåget:" replace=""/>
+    <item find=":lol:" replace="藍"/>
+    <item find=":posthus:" replace=""/>
+    <item find=":lettet:" replace=""/>
+    <item find="påd en" replace="på den"/>
+    <item find=":rasende:" replace=""/>
+    <item find=":solopgang:" replace=""/>
+    <item find=":grin:" replace=""/>
+    <item find="tatse" replace="taste"/>
+    <item find=":og:" replace="∧"/>
+    <item find=":dimmission:" replace=""/>
+    <item find=":koala:" replace=""/>
+    <item find=":link:" replace=""/>
+    <item find=":kniv:" replace=""/>
+    <item find="noegt" replace="noget"/>
+    <item find="p ådet" replace="på det"/>
+    <item find=":cd:" replace=""/>
+    <item find="ve dnoget" replace="ved noget"/>
+    <item find=":rynke:" replace=""/>
+    <item find=":hot dog:" replace=""/>
+    <item find=":Side3:" replace=""/>
+    <item find=":kaninører:" replace=""/>
+    <item find=":biograf:" replace=""/>
+    <item find=":cirkel4:" replace=""/>
+    <item find="kauktion" replace="kaution"/>
+    <item find="kolision" replace="kollision"/>
+    <item find=":afkrydsningsboks5:" replace=""/>
+    <item find=":bad:" replace=""/>
+    <item find="nievau" replace="niveau"/>
+    <item find=":^I:" replace="ᴵ"/>
+    <item find="undern ogle" replace="under nogle"/>
+    <item find="høre gerne" replace="hører gerne"/>
+    <item find=":skæg:" replace="倫"/>
+    <item find=":abe2:" replace=""/>
+    <item find="svedske" replace="sveske"/>
+    <item find=":højtaler4:" replace=""/>
+    <item find=":doughnut:" replace=""/>
+    <item find="ti lnogen" replace="til nogen"/>
+    <item find=":reje:" replace="戀"/>
+    <item find=":guitar:" replace=""/>
+    <item find="mading" replace="madding"/>
+    <item find=":^h:" replace="ʰ"/>
+    <item find="diciplin" replace="disciplin"/>
+    <item find=":klode3:" replace=""/>
+    <item find="medd et" replace="med det"/>
+    <item find=":sko:" replace=""/>
+    <item find=":lås2:" replace=""/>
+    <item find=":timeglas:" replace="⌛"/>
+    <item find=":sandwich:" replace="索"/>
+    <item find=":Kappa:" replace="Κ"/>
+    <item find=":^g:" replace="ᵍ"/>
+    <item find="ti ldet" replace="til det"/>
+    <item find="grundliggende" replace="grundlæggende"/>
+    <item find=":^w:" replace="ʷ"/>
+    <item find="klogeligt" replace="klogelig"/>
+    <item find=":ypsilon:" replace="υ"/>
+    <item find="ove rde" replace="over de"/>
+    <item find=":blink:" replace=""/>
+    <item find="okmring" replace="omkring"/>
+    <item find=":bogmærke:" replace=""/>
+    <item find="idag" replace="i dag"/>
+    <item find=":termometer2:" replace="裸"/>
+    <item find="arangement" replace="arrangement"/>
+    <item find=":hus:" replace=""/>
+    <item find="komission" replace="kommission"/>
+    <item find="hivs" replace="hvis"/>
+    <item find="diamentral" replace="diametral"/>
+    <item find=":uden mund:" replace=""/>
+    <item find="låd" replace="lod"/>
+    <item find="afn ogen" replace="af nogen"/>
+    <item find="celloid" replace="celluloid"/>
+    <item find="mo dden" replace="mod den"/>
+    <item find=":stråler3:" replace=""/>
+    <item find="ie t" replace="i et"/>
+    <item find=":ambulance:" replace=""/>
+    <item find=":briller:" replace=""/>
+    <item find=":boble5:" replace=""/>
+    <item find=":huse:" replace=""/>
+    <item find="lådden" replace="lodden"/>
+    <item find=":danser2:" replace=""/>
+    <item find=":voksen:" replace="六"/>
+    <item find="ve dnogen" replace="ved nogen"/>
+    <item find=":pie:" replace="不"/>
+    <item find="addressere" replace="adressere"/>
+    <item find=":maske:" replace=""/>
+    <item find=":skyet:" replace=""/>
+    <item find="nogetsomhelst" replace="noget som helst"/>
+    <item find=":navn:" replace=""/>
+    <item find=":buket:" replace=""/>
+    <item find=":ser intet ondt:" replace=""/>
+    <item find=":sigma:" replace="σ"/>
+    <item find=":kat med smørret grin:" replace=""/>
+    <item find=":raket:" replace=""/>
+    <item find="tild et" replace="til det"/>
+    <item find=":kappa:" replace="κ"/>
+    <item find=":^Phi:" replace="ᶲ"/>
+    <item find=":blad2:" replace=""/>
+    <item find="burau" replace="bureau"/>
+    <item find=":radio:" replace=""/>
+    <item find=":Delta:" replace="Δ"/>
+    <item find=":konvolut:" replace="✉"/>
+    <item find="frad en" replace="fra den"/>
+    <item find=":dango:" replace=""/>
+    <item find=":biologisk farligt:" replace="☣"/>
+    <item find=":diagram4:" replace=""/>
+    <item find=":rynker panden:" replace=""/>
+    <item find="gnemen" replace="gennem"/>
+    <item find="unde rde" replace="under de"/>
+    <item find=":skib:" replace=""/>
+    <item find=":næve2:" replace=""/>
+    <item find=":dokumentmappe:" replace=""/>
+    <item find=":op4:" replace=""/>
+    <item find=":Hul:" replace=""/>
+    <item find=":videokamera:" replace=""/>
+    <item find=":metro:" replace=""/>
+    <item find=":forpint:" replace=""/>
+    <item find=":enhjørning:" replace="濾"/>
+    <item find=":frø:" replace=""/>
+    <item find=":^e:" replace="ᵉ"/>
+    <item find=":flag2:" replace=""/>
+    <item find=":kran:" replace=""/>
+    <item find=":terning3:" replace="⚂"/>
+    <item find="afd e" replace="af de"/>
+    <item find="progam" replace="program"/>
+    <item find="modd e" replace="mod de"/>
+    <item find="offenlig" replace="offentlig"/>
+    <item find="dødsstille" replace="dødstille"/>
+    <item find=":baby:" replace=""/>
+    <item find=":netværk:" replace=""/>
+    <item find="a fdet" replace="af det"/>
+    <item find=":Uranus:" replace="♅"/>
+    <item find="hvormeget" replace="hvor meget"/>
+    <item find=":høj lyd:" replace=""/>
+    <item find="fø rnoget" replace="før noget"/>
+    <item find=":steak:" replace="數"/>
+    <item find=":_phi:" replace="ᵩ"/>
+    <item find=":strand:" replace=""/>
+    <item find=":diagram:" replace=""/>
+    <item find=":eftertænksom:" replace=""/>
+    <item find=":konstruktion:" replace=""/>
+    <item find=":skrig:" replace=""/>
+    <item find=":printer2:" replace=""/>
+    <item find="spørsmål" replace="spørgsmål"/>
+    <item find=":monokel:" replace="類"/>
+    <item find="unde rnogen" replace="under nogen"/>
+    <item find=":hockey:" replace=""/>
+    <item find="nummerede" replace="nummererede"/>
+    <item find="reperation" replace="reparation"/>
+    <item find=":stjernekaster:" replace=""/>
+    <item find=":telefon:" replace="☎"/>
+    <item find="detaille" replace="detalje"/>
+    <item find=":Motorcykel:" replace=""/>
+    <item find=":zeta:" replace="ζ"/>
+    <item find=":delta:" replace="δ"/>
+    <item find=":brusebad:" replace=""/>
+    <item find=":genbrug2:" replace="♻"/>
+    <item find=":_t:" replace="ₜ"/>
+    <item find=":gammel:" replace="陸"/>
+    <item find=":solskin:" replace="☀"/>
+    <item find=":postboks:" replace=""/>
+    <item find="debatere" replace="debattere"/>
+    <item find=":hankekors:" replace="☥"/>
+    <item find=":stor cirkel2:" replace="⬤"/>
+    <item find=":kamera:" replace=""/>
+    <item find=":ruder2:" replace="♢"/>
+    <item find=":højre trekant:" replace="⊿"/>
+    <item find=":telefonboks:" replace="✆"/>
+    <item find=":triumf:" replace=""/>
+    <item find=":smileydjævel:" replace=""/>
+    <item find=":^5:" replace="⁵"/>
+    <item find=":lastbil2:" replace=""/>
+    <item find=":måne:" replace=""/>
+    <item find="bagn oget" replace="bag noget"/>
+    <item find=":3/4:" replace="¾"/>
+    <item find="brædt" replace="bræt"/>
+    <item find="efte rnogle" replace="efter nogle"/>
+    <item find=":ulv:" replace=""/>
+    <item find=":telefon3:" replace=""/>
+    <item find="afn oget" replace="af noget"/>
+    <item find=":ældre mand:" replace=""/>
+    <item find=":kvalme:" replace="濫"/>
+    <item find=":lommeregner:" replace=""/>
+    <item find=":lup:" replace=""/>
+    <item find=":konvolut3:" replace=""/>
+    <item find=":håndtaske:" replace=""/>
+    <item find=":modtager3:" replace=""/>
+    <item find=":snegl:" replace=""/>
+    <item find=":domino:" replace=""/>
+    <item find=":joystick:" replace=""/>
+    <item find=":fiskefrikadelle:" replace=""/>
+    <item find=":scooter:" replace=""/>
+    <item find=":flyver3:" replace=""/>
+    <item find=":menorah:" replace=""/>
+    <item find="silhouet" replace="silhuet"/>
+    <item find=":småkage2:" replace="怒"/>
+    <item find=":Vægtløfter:" replace=""/>
+    <item find=":vinker:" replace=""/>
+    <item find="odf" replace="ODF"/>
+    <item find="muligtvis" replace="muligvis"/>
+    <item find="fr ade" replace="fra de"/>
+    <item find=":Løven:" replace="♌"/>
+    <item find=":agurk:" replace="勒"/>
+    <item find=":grader:" replace="°"/>
+    <item find="efte rden" replace="efter den"/>
+    <item find="kommr" replace="kommer"/>
+    <item find=":_6:" replace="₆"/>
+    <item find=":politibil2:" replace=""/>
+    <item find=":ild:" replace=""/>
+    <item find=":ny:" replace="ν"/>
+    <item find="ifærd" replace="i færd"/>
+    <item find="rædselslagen" replace="rædselsslagen"/>
+    <item find=":genbrug:" replace="♲"/>
+    <item find="ove rden" replace="over den"/>
+    <item find=":violin:" replace=""/>
+    <item find="abbonere" replace="abonnere"/>
+    <item find=":ikke-drikkevand:" replace=""/>
+    <item find=":grisetryne:" replace=""/>
+    <item find=":yin yang:" replace="☯"/>
+    <item find="bekræftige" replace="bekræfte"/>
+    <item find="involde" replace="indvolde"/>
+    <item find=":roset2:" replace=""/>
+    <item find=":øre:" replace=""/>
+    <item find=":forbløffet:" replace=""/>
+    <item find=":dokument4:" replace=""/>
+    <item find="betragted" replace="betragtet"/>
+    <item find="informatin" replace="information"/>
+    <item find="tile t" replace="til et"/>
+    <item find=":iota:" replace="ι"/>
+    <item find=":vulkan:" replace=""/>
+    <item find=":helikopter:" replace=""/>
+    <item find=":note3:" replace=""/>
+    <item find=":sigma2:" replace="ς"/>
+    <item find=":selfie:" replace="盧"/>
+    <item find="annulere" replace="annullere"/>
+    <item find="me dnogle" replace="med nogle"/>
+    <item find="fasade" replace="facade"/>
+    <item find=":risbolle:" replace=""/>
+    <item find="1/2" replace="½"/>
+    <item find=":kaktus:" replace=""/>
+    <item find=":slik:" replace=""/>
+    <item find=":ko2:" replace=""/>
+    <item find="supleant" replace="suppleant"/>
+    <item find="som værrende" replace="som værende"/>
+    <item find="hirarki" replace="hierarki"/>
+    <item find=":åbne hænder:" replace=""/>
+    <item find=":ufo:" replace=""/>
+    <item find=":Habit:" replace=""/>
+    <item find=":indkørsel forbudt:" replace="⛔"/>
+    <item find=":Skorpionen:" replace="♏"/>
+    <item find=":N2:" replace="⇑"/>
+    <item find=":gnister:" replace="✨"/>
+    <item find=":pige:" replace=""/>
+    <item find=":skål2:" replace=""/>
+    <item find=":_4:" replace="₄"/>
+    <item find=":rygning forbudt:" replace=""/>
+    <item find=":ffi:" replace="ﬃ"/>
+    <item find=":merkur:" replace="☿"/>
+    <item find=":tulipan:" replace=""/>
+    <item find=":notesblok:" replace=""/>
+    <item find=":NW2:" replace="⇖"/>
+    <item find=":skin5:" replace=""/>
+    <item find=":^1:" replace="¹"/>
+    <item find=":punkttegn:" replace="•"/>
+    <item find=":postkasse3:" replace=""/>
+    <item find=":tomat:" replace=""/>
+    <item find=":par2:" replace=""/>
+    <item find=":papirklips2:" replace=""/>
+    <item find=":!!:" replace="‼"/>
+    <item find=".*..." replace="…"/>
+    <item find=":^s:" replace="ˢ"/>
+    <item find=":mus:" replace=""/>
+    <item find="fo rde" replace="for de"/>
+    <item find="addresere" replace="adressere"/>
+    <item find=":4 t:" replace=""/>
+    <item find=":Zeta:" replace="Ζ"/>
+    <item find="indstallere" replace="installere"/>
+    <item find=":skoletaske:" replace=""/>
+    <item find="polonaise" replace="polonæse"/>
+    <item find=":smilende kat:" replace=""/>
+    <item find="forøvrigt" replace="for øvrigt"/>
+    <item find=":ja:" replace=""/>
+    <item find=":tiger2:" replace=""/>
+    <item find="gemmen" replace="gennem"/>
+    <item find="genenm" replace="gennem"/>
+    <item find="eftere n" replace="efter en"/>
+    <item find=":roset:" replace=""/>
+    <item find=":kanin:" replace=""/>
+    <item find=":knust hjerte:" replace=""/>
+    <item find="forrædder" replace="forræder"/>
+    <item find=":statue:" replace=""/>
+    <item find=":^M:" replace="ᴹ"/>
+    <item find=":computerspil:" replace=""/>
+    <item find=":par3:" replace=""/>
+    <item find=":es:" replace=""/>
+    <item find="vedd en" replace="ved den"/>
+    <item find=":snowboarder:" replace=""/>
+    <item find=":regn:" replace="☔"/>
+    <item find=":danser:" replace=""/>
+    <item find="initiv" replace="intiativ"/>
+    <item find=":hund2:" replace=""/>
+    <item find=":fugl:" replace=""/>
+    <item find=":_2:" replace="₂"/>
+    <item find="overn ogen" replace="over nogen"/>
+    <item find=":Omega:" replace="Ω"/>
+    <item find="meddelse" replace="meddelelse"/>
+    <item find=":fodbold2:" replace="聾"/>
+    <item find="fo rdet" replace="for det"/>
+    <item find=":_p:" replace="ₚ"/>
+    <item find=":kringle:" replace="泌"/>
+    <item find=":_o:" replace="ₒ"/>
+    <item find="ærgelig" replace="ærgerlig"/>
+    <item find=":varme kilder:" replace="♨"/>
+    <item find=":indeholder:" replace="∋"/>
+    <item find=":indkøbsvogn:" replace=""/>
+    <item find=":boblende hjerte:" replace=""/>
+    <item find=":højre3:" replace="☛"/>
+    <item find=":kranie:" replace=""/>
+    <item find=":stopur:" replace="⏱"/>
+    <item find=":vandmelon:" replace=""/>
+    <item find="fr anogle" replace="fra nogle"/>
+    <item find=":gakket:" replace="浪"/>
+    <item find="fø rnogen" replace="før nogen"/>
+    <item find=":lyn:" replace=""/>
+    <item find=":croissant:" replace="縷"/>
+    <item find=":dumpling:" replace="寧"/>
+    <item find=":sekskant2:" replace="⬢"/>
+    <item find=":stjerne og halvmåne:" replace="☪"/>
+    <item find=":hjelm:" replace="⛑"/>
+    <item find="hvilkesomhelst" replace="hvilke som helst"/>
+    <item find=":krone:" replace=""/>
+    <item find=":nej:" replace=""/>
+    <item find="hvorsomhelst" replace="hvor som helst"/>
+    <item find=":rynke2:" replace=""/>
+    <item find=":antenne:" replace=""/>
+    <item find=":gymnast:" replace="露"/>
+    <item find=":_-:" replace="₋"/>
+    <item find=":sko2:" replace=""/>
+    <item find=":trompet:" replace=""/>
+    <item find="forand et" replace="foran det"/>
+    <item find="tredie" replace="tredje"/>
+    <item find="tild en" replace="til den"/>
+    <item find="ove rnoget" replace="over noget"/>
+    <item find=":ægteskab:" replace="⚭"/>
+    <item find=":peber:" replace=""/>
+    <item find=":^P:" replace="ᴾ"/>
+    <item find="aligevel" replace="alligevel"/>
+    <item find=":bekymret:" replace=""/>
+    <item find=":hamburger:" replace=""/>
+    <item find="forn ogen" replace="for nogen"/>
+    <item find=":skarp:" replace="♯"/>
+    <item find=":næve:" replace="✊"/>
+    <item find="fabriken" replace="fabrikken"/>
+    <item find=":sekskant:" replace="⬡"/>
+    <item find="påd et" replace="på det"/>
+    <item find="efte rdet" replace="efter det"/>
+    <item find="nsæten" replace="næsten"/>
+    <item find="klokkeslet" replace="klokkeslæt"/>
+    <item find=":terning6:" replace="⚅"/>
+    <item find="oprørs tendenser" replace="oprørstendenser"/>
+    <item find=":penge:" replace=""/>
+    <item find=":solbriller:" replace=""/>
+    <item find=":affald:" replace=""/>
+    <item find=":drage:" replace=""/>
+    <item find=":insekt:" replace=""/>
+    <item find="fo rnogle" replace="for nogle"/>
+    <item find=":griner:" replace=""/>
+    <item find=":afkrydsningsboks4:" replace=""/>
+    <item find="fora ndet" replace="foran det"/>
+    <item find=":prik:" replace="·"/>
+    <item find=":terning5:" replace="⚄"/>
+    <item find=":^i:" replace="ⁱ"/>
+    <item find=":megafon2:" replace=""/>
+    <item find="fungere aldrig" replace="fungerer aldrig"/>
+    <item find=":sværd:" replace="⚔"/>
+    <item find=":sveddråber:" replace=""/>
+    <item find=":vindharpe:" replace=""/>
+    <item find="a fden" replace="af den"/>
+    <item find="vedd et" replace="ved det"/>
+    <item find="sansynligvis" replace="sandsynligvis"/>
+    <item find=":eksisterer:" replace="∃"/>
+    <item find="lære gerne" replace="lærer gerne"/>
+    <item find=":spar2:" replace="♤"/>
+    <item find=":kano:" replace=""/>
+    <item find=":mobil:" replace=""/>
+    <item find=":Tvillingerne:" replace="♊"/>
+    <item find="profesion" replace="profession"/>
+    <item find="efte rnogen" replace="efter nogen"/>
+    <item find="p åden" replace="på den"/>
+    <item find=":afkrydsning5:" replace=""/>
+    <item find=":højre:" replace="☞"/>
+    <item find=":tiltagende næsten fuldmåne:" replace=""/>
+    <item find=":pengeautomat:" replace=""/>
+    <item find="a fet" replace="af et"/>
+    <item find=":postkasse2:" replace=""/>
+    <item find="fremfor" replace="frem for"/>
+    <item find="ihvertfald" replace="i hvert fald"/>
+    <item find=":karry:" replace=""/>
+    <item find="allesammen" replace="alle sammen"/>
+    <item find=":skrigende kat:" replace=""/>
+    <item find=":held og lykke:" replace="爛"/>
+    <item find=":Minidisk:" replace=""/>
+    <item find="ensuisasme" replace="entusiasme"/>
+    <item find="unde rnoget" replace="under noget"/>
+    <item find=":tennis:" replace=""/>
+    <item find=":psi:" replace="ψ"/>
+    <item find=":integral4:" replace="∮"/>
+    <item find="halvtres" replace="halvtreds"/>
+    <item find=":egern:" replace=""/>
+    <item find="krusus" replace="kursus"/>
+    <item find="in ogle" replace="i nogle"/>
+    <item find="dokunemt" replace="dokument"/>
+    <item find=":barber:" replace=""/>
+    <item find=":dobbeltkryds:" replace="턪"/>
+    <item find=":paragraf:" replace="§"/>
+    <item find="tlibage" replace="tilbage"/>
+    <item find=":skjold2:" replace="⛨"/>
+    <item find=":paraply:" replace="☂"/>
+    <item find="fåes" replace="fås"/>
+    <item find=":storm2:" replace="☈"/>
+    <item find="tild e" replace="til de"/>
+    <item find=":sejr2:" replace=""/>
+    <item find=":skorpion:" replace="廬"/>
+    <item find=":Skytten:" replace="♐"/>
+    <item find="der med ikke sagt" replace="dermed ikke sagt"/>
+    <item find="redigere aldrig" replace="redigerer aldrig"/>
+    <item find=":ikke delmængde:" replace="⊄"/>
+    <item find=":Afkrydsning3:" replace="✅"/>
+    <item find="nummerisk" replace="numerisk"/>
+    <item find=":kiwi:" replace="諾"/>
+    <item find="hvemsomhelst" replace="hvem som helst"/>
+    <item find=":fransk lilje:" replace="⚜"/>
+    <item find=":tornado:" replace=""/>
+    <item find=":banan:" replace=""/>
+    <item find=":hvid konge:" replace="♔"/>
+    <item find=":sporvogn2:" replace=""/>
+    <item find=":_9:" replace="₉"/>
+    <item find="irelevant" replace="irrelevant"/>
+    <item find=":nat:" replace=""/>
+    <item find=":ørken:" replace=""/>
+    <item find=":Øje:" replace=""/>
+    <item find=":sommerfugl:" replace="曆"/>
+    <item find=":bånd:" replace=""/>
+    <item find=":efterladt bagage:" replace=""/>
+    <item find="hisle" replace="hilse"/>
+    <item find="optræde aldrig" replace="optræder aldrig"/>
+    <item find="p åen" replace="på en"/>
+    <item find=":kanyle:" replace=""/>
+    <item find="apropo" replace="apropos"/>
+    <item find="dise" replace="disse"/>
+    <item find=":sover:" replace=""/>
+    <item find=":vagt:" replace=""/>
+    <item find=":lykke:" replace=""/>
+    <item find=":Davidsstjerne:" replace="✡"/>
+    <item find=":N:" replace="↑"/>
+    <item find=":trolleybus:" replace=""/>
+    <item find=":hotel:" replace=""/>
+    <item find=":lille tilhører:" replace="∊"/>
+    <item find="påny" replace="på ny"/>
+    <item find="coutume" replace="kutyme"/>
+    <item find=":håndflade2:" replace="爐"/>
+    <item find="afe n" replace="af en"/>
+    <item find=":sort tårn:" replace="♜"/>
+    <item find=":hat2:" replace=""/>
+    <item find=":næse:" replace=""/>
+    <item find="fora nde" replace="foran de"/>
+    <item find=":tastatur:" replace="⌨"/>
+    <item find=":op:" replace="☝"/>
+    <item find=":notesbog2:" replace=""/>
+    <item find=":blomstre2:" replace=""/>
+    <item find="fø rdet" replace="før det"/>
+    <item find=":hjerteøjne:" replace=""/>
+    <item find=":dåse:" replace="參"/>
+    <item find=":saks3:" replace="✁"/>
+    <item find=":hammer og sejl:" replace="☭"/>
+    <item find="bekræftigelse" replace="bekræftelse"/>
+    <item find=":medicin:" replace="⚕"/>
+    <item find=":traktor:" replace=""/>
+    <item find=":^phi:" replace="ᵠ"/>
+    <item find="fø rnogle" replace="før nogle"/>
+    <item find=":krebs:" replace="呂"/>
+    <item find=":bus:" replace=""/>
+    <item find=":lys:" replace=""/>
+    <item find=":Neptun:" replace="♆"/>
+    <item find=":fest2:" replace=""/>
+    <item find="modd et" replace="mod det"/>
+    <item find=":tromme:" replace=""/>
+    <item find="efterd e" replace="efter de"/>
+    <item find=":nyse:" replace="蠟"/>
+    <item find=":hvid cirkel:" replace="⚪"/>
+    <item find=":Knæfald:" replace=""/>
+    <item find="vudering" replace="vurdering"/>
+    <item find="begydnte" replace="begyndte"/>
+    <item find=":nøgle:" replace=""/>
+    <item find=":parallelogram:" replace="▱"/>
+    <item find=":dinosaur:" replace="秊"/>
+    <item find=":_rho:" replace="ᵨ"/>
+    <item find=":gave:" replace=""/>
+    <item find=":riskiks:" replace=""/>
+    <item find=":avis:" replace=""/>
+    <item find="værdibegræb" replace="værdibegreb"/>
+    <item find="me dden" replace="med den"/>
+    <item find="omd en" replace="om den"/>
+    <item find=":hånd3:" replace=""/>
+    <item find=":markerer kapitel:" replace=""/>
+    <item find=":1 t:" replace=""/>
+    <item find=":fersken:" replace=""/>
+    <item find=":information2:" replace=""/>
+    <item find=":blomst:" replace="⚘"/>
+    <item find=":NE:" replace="↗"/>
+    <item find="ti lnogle" replace="til nogle"/>
+    <item find="anulere" replace="annullere"/>
+    <item find="ove rnogle" replace="over nogle"/>
+    <item find=":snefald:" replace=""/>
+    <item find=":kalkun:" replace="旅"/>
+    <item find=":Ræs:" replace=""/>
+    <item find="indholder" replace="indeholder"/>
+    <item find=":Bog3:" replace=""/>
+    <item find=":kat med hjerteformede øjne:" replace=""/>
+    <item find=":&lt;=:" replace="≤"/>
+    <item find=":svævebane:" replace=""/>
+    <item find=":--:" replace="–"/>
+    <item find=":side2:" replace=""/>
+    <item find="petrolium" replace="petroleum"/>
+    <item find="vede n" replace="ved en"/>
+    <item find=":Pi:" replace="Π"/>
+    <item find=":kysser4:" replace=""/>
+    <item find=":takeout:" replace="率"/>
+    <item find=":glæde:" replace=""/>
+    <item find=":svømmer:" replace=""/>
+    <item find="skræder" replace="skrædder"/>
+    <item find="påe te" replace="på et"/>
+    <item find=":_(:" replace="₍"/>
+    <item find=":tomme:" replace="″"/>
+    <item find=":fjerde rod:" replace="∜"/>
+    <item find="mo dnogen" replace="mod nogen"/>
+    <item find=":moske:" replace=""/>
+    <item find=":rensdyr:" replace="歷"/>
+    <item find=".*(tm)" replace="™"/>
+    <item find=":pc:" replace=""/>
+    <item find="afd en" replace="af den"/>
+    <item find="unægteligt" replace="unægtelig"/>
+    <item find=":side4:" replace=""/>
+    <item find=":fax2:" replace=""/>
+    <item find=":Alfa:" replace="Α"/>
+    <item find=":billet2:" replace=""/>
+    <item find=":kvindetegn:" replace="♀"/>
+    <item find=":termometer:" replace=""/>
+    <item find=":tysse:" replace="狼"/>
+    <item find="køre gerne" replace="kører gerne"/>
+    <item find="fora nden" replace="foran den"/>
+    <item find=":^A:" replace="ᴬ"/>
+    <item find=":kyllingeben:" replace=""/>
+    <item find=":bjerg:" replace="⛰"/>
+    <item find=":stort kvadrat:" replace="⬜"/>
+    <item find=":ned4:" replace=""/>
+    <item find=":harddisk:" replace=""/>
+    <item find=":_r:" replace="ᵣ"/>
+    <item find=":mindre kvadrat:" replace="◽"/>
+    <item find=":klokke2:" replace=""/>
+    <item find="ove rdet" replace="over det"/>
+    <item find=":hvid bonde:" replace="♙"/>
+    <item find=":druer:" replace=""/>
+    <item find=":venstre5:" replace=""/>
+    <item find=":_7:" replace="₇"/>
+    <item find="unde rden" replace="under den"/>
+    <item find=":telefon2:" replace="☏"/>
+    <item find="agressiv" replace="aggressiv"/>
+    <item find="førd en" replace="før den"/>
+    <item find=":lort:" replace=""/>
+    <item find=":om symbol:" replace=""/>
+    <item find=":NW:" replace="↖"/>
+    <item find="alerede" replace="allerede"/>
+    <item find=":kors:" replace="†"/>
+    <item find="underd en" replace="under den"/>
+    <item find=":Jupiter:" replace="♃"/>
+    <item find="apperat" replace="apparat"/>
+    <item find="temmeligt" replace="temmelig"/>
+    <item find=":_a:" replace="ₐ"/>
+    <item find=":amfora:" replace=""/>
+    <item find=":_gamma:" replace="ᵧ"/>
+    <item find=":trekant:" replace="△"/>
+    <item find=":modtager:" replace=""/>
+    <item find="nogensomhelst" replace="nogen som helst"/>
+    <item find=":_m:" replace="ₘ"/>
+    <item find=":femkant2:" replace="⬟"/>
+    <item find=":boble9:" replace=""/>
+    <item find=":ingen cykler:" replace=""/>
+    <item find=":by:" replace=""/>
+    <item find=":smilende3:" replace=""/>
+    <item find=":^=:" replace="⁼"/>
+    <item find=":ned:" replace="☟"/>
+    <item find=":aftagende halvmåne:" replace=""/>
+    <item find=":skriftrulle:" replace=""/>
+    <item find=":hoved:" replace=""/>
+    <item find="nætsen" replace="næsten"/>
+    <item find=":græsk kors:" replace="✚"/>
+    <item find=":integral5:" replace="∰"/>
+    <item find=":zzz:" replace=""/>
+    <item find=":storm:" replace=""/>
+    <item find=":^x:" replace="ˣ"/>
+    <item find=":beta:" replace="β"/>
+    <item find=":handsker:" replace="理"/>
+    <item find=":sporvogn:" replace=""/>
+    <item find=":lineal:" replace=""/>
+    <item find=":node:" replace="♩"/>
+    <item find=":1/2:" replace="½"/>
+    <item find=":stjerne:" replace="★"/>
+    <item find="terorisere" replace="terrorisere"/>
+    <item find=":1/4:" replace="¼"/>
+    <item find=":aubergine:" replace=""/>
+    <item find="afn ogle" replace="af nogle"/>
+    <item find=":boble8:" replace=""/>
+    <item find=":avis2:" replace=""/>
+    <item find=":herrer:" replace=""/>
+    <item find="kakave" replace="kakao"/>
+    <item find="kolosal" replace="kolossal"/>
+    <item find=":hvid løber:" replace="♗"/>
+    <item find="tile n" replace="til en"/>
+    <item find=":My:" replace="Μ"/>
+    <item find=":ris:" replace=""/>
+    <item find=":pære:" replace=""/>
+    <item find=":filmkamera:" replace=""/>
+    <item find=":SW2:" replace="⇙"/>
+    <item find=":my:" replace="μ"/>
+    <item find=":sider:" replace=""/>
+    <item find=":boom:" replace=""/>
+    <item find=":monoskinne:" replace=""/>
+    <item find=":forvirret:" replace=""/>
+    <item find="fo rden" replace="for den"/>
+    <item find=":glas:" replace=""/>
+    <item find=":lysstyrke2:" replace=""/>
+    <item find="fungere ofte" replace="fungerer ofte"/>
+    <item find="fo rnoget" replace="for noget"/>
+    <item find=":alfa:" replace="α"/>
+    <item find=":jeans:" replace=""/>
+    <item find="ba gde" replace="bag de"/>
+    <item find=":cricket:" replace=""/>
+    <item find=":modtager2:" replace=""/>
+    <item find="forane t" replace="foran et"/>
+    <item find=":jordbær:" replace=""/>
+    <item find=":trafiklys:" replace=""/>
+    <item find=":leopard:" replace=""/>
+    <item find="bagn ogen" replace="bag nogen"/>
+    <item find=":søvnig:" replace=""/>
+    <item find="væsenlig" replace="væsentlig"/>
+    <item find=":skin3:" replace=""/>
+    <item find="førd e" replace="før de"/>
+    <item find=":vind:" replace=""/>
+    <item find=":pindsvin:" replace="璉"/>
+    <item find=":EW2:" replace="⇔"/>
+    <item find="tiln ogle" replace="til nogle"/>
+    <item find=":^beta:" replace="ᵝ"/>
+    <item find=":elefant:" replace=""/>
+    <item find="medn oget" replace="med noget"/>
+    <item find=":musik:" replace=""/>
+    <item find=":venstre4:" replace=""/>
+    <item find="kmomer" replace="kommer"/>
+    <item find=":_l:" replace="ₗ"/>
+    <item find="bagn ogle" replace="bag nogle"/>
+    <item find=":fyrværkeri:" replace=""/>
+    <item find=":myre:" replace=""/>
+    <item find=":^L:" replace="ᴸ"/>
+    <item find="til gengæl" replace="til gengæld"/>
+    <item find=":badminton:" replace=""/>
+    <item find=":champignon:" replace=""/>
+    <item find="forn ogle" replace="for nogle"/>
+    <item find=":fodspor:" replace=""/>
+    <item find="udngå" replace="undgå"/>
+    <item find=":tåge:" replace=""/>
+    <item find=":kylling2:" replace=""/>
+    <item find=":keltisk kors:" replace=""/>
+    <item find=":skraldespand:" replace=""/>
+    <item find="magge ret" replace="makke ret"/>
+    <item find=":kontakt mig:" replace="酪"/>
+    <item find=":5/8:" replace="⅝"/>
+    <item find="seperation" replace="saparation"/>
+    <item find="igang" replace="i gang"/>
+    <item find="egenlig" replace="egentlig"/>
+    <item find="udemærket" replace="udmærket"/>
+    <item find=":hakke:" replace="⛏"/>
+    <item find="tiln oget" replace="til noget"/>
+    <item find=":tungt dollarskilt:" replace=""/>
+    <item find=":Ost:" replace="燎"/>
+    <item find="frad e" replace="fra de"/>
+    <item find=":^j:" replace="ʲ"/>
+    <item find=":NS2:" replace="⇕"/>
+    <item find=":mappe:" replace=""/>
+    <item find=":grædende kat:" replace=""/>
+    <item find="vedd e" replace="ved de"/>
+    <item find=":kim:" replace=""/>
+    <item find="gengæl" replace="gengæld"/>
+    <item find=":kat med trutmund:" replace=""/>
+    <item find=":flyver2:" replace=""/>
+    <item find="åbentlys" replace="åbenlys"/>
+    <item find=":ørn:" replace="礪"/>
+    <item find=":kalender:" replace=""/>
+    <item find=":Bog:" replace=""/>
+    <item find=":brud:" replace=""/>
+    <item find="overenskomst situationen" replace="overenskomstsituationen"/>
+    <item find=":perler:" replace=""/>
+    <item find=":camping:" replace=""/>
+    <item find="me ddet" replace="med det"/>
+    <item find="mo dnoget" replace="mod noget"/>
+    <item find=":^u:" replace="ᵘ"/>
+    <item find=":foreningsmængde:" replace="∪"/>
+    <item find=":kaaba:" replace=""/>
+    <item find="infeksion" replace="infektion"/>
+    <item find=":konge:" replace=""/>
+    <item find=":blondt hår:" replace=""/>
+    <item find=":diagram5:" replace=""/>
+    <item find=":ruller med øjnene:" replace=""/>
+    <item find=":mand:" replace=""/>
+    <item find="a fnogen" replace="af nogen"/>
+    <item find=":optag:" replace="⏺"/>
+    <item find=":babykylling:" replace=""/>
+    <item find=":kanin2:" replace=""/>
+    <item find=":naturlig:" replace="♮"/>
+    <item find=":lanterne:" replace=""/>
+    <item find=":^chi:" replace="ᵡ"/>
+    <item find="parantes" replace="parentes"/>
+    <item find=":skjold:" replace=""/>
+    <item find=":lira:" replace="₤"/>
+    <item find=":Vægten:" replace="♎"/>
+    <item find=":ugle:" replace="黎"/>
+    <item find=":sol:" replace=""/>
+    <item find=":hjerter2:" replace="♡"/>
+    <item find=":mus4:" replace=""/>
+    <item find=":havskabning:" replace="隆"/>
+    <item find=":Latinsk kors:" replace="✝"/>
+    <item find=":flyver:" replace="✈"/>
+    <item find=":overlap:" replace=""/>
+    <item find="ba gden" replace="bag den"/>
+    <item find=":Adi Shakti:" replace="☬"/>
+    <item find=":tolden:" replace=""/>
+    <item find=":_+:" replace="₊"/>
+    <item find="score gerne" replace="scorer gerne"/>
+    <item find="kokurent" replace="konkurrent"/>
+    <item find=":ja2:" replace=""/>
+    <item find=":pirat:" replace=""/>
+    <item find=":kamel2:" replace=""/>
+    <item find=":E2:" replace="⇒"/>
+    <item find=":hest2:" replace=""/>
+    <item find=":^theta:" replace="ᶿ"/>
+    <item find=":par:" replace=""/>
+    <item find="overd e" replace="over de"/>
+    <item find=":nej2:" replace=""/>
+    <item find=":næve4:" replace="卵"/>
+    <item find="opføre gerne" replace="opfører gerne"/>
+    <item find=":+-:" replace="±"/>
+    <item find="korespondance" replace="korrespondance"/>
+    <item find=":spor:" replace=""/>
+    <item find=":firben:" replace="年"/>
+    <item find=":judo:" replace="屢"/>
+    <item find=":klode2:" replace=""/>
+    <item find=":lyn3:" replace="☇"/>
+    <item find=":skrifttype2:" replace=""/>
+    <item find=":damer:" replace=""/>
+    <item find=":pund2:" replace=""/>
+    <item find=":tidstagningsur:" replace="⏲"/>
+    <item find="ordenlig" replace="ordentlig"/>
+    <item find=":hvid springer:" replace="♘"/>
+    <item find="igår" replace="i går"/>
+    <item find="1/4" replace="¼"/>
+    <item find="nogele" replace="nogle"/>
+    <item find="opsumere" replace="opsummere"/>
+    <item find="kommision" replace="kommission"/>
+    <item find=":hjerte:" replace="❤"/>
+    <item find=":tom note:" replace=""/>
+    <item find=":udklipsholder:" replace=""/>
+    <item find=":^0:" replace="⁰"/>
+    <item find=":gulerod:" replace="凌"/>
+    <item find=":regnbue:" replace=""/>
+    <item find=":^a:" replace="ᵃ"/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find=":stereo:" replace=""/>
+    <item find="forlængst" replace="for længst"/>
+    <item find=":op5:" replace=""/>
+    <item find=":12 t:" replace=""/>
+    <item find=":trapez:" replace="⏢"/>
+    <item find=":sum:" replace="∑"/>
+    <item find=":marked2:" replace=""/>
+    <item find=":konvolut6:" replace=""/>
+    <item find="fædrende" replace="fædrene"/>
+    <item find=":fisk2:" replace=""/>
+    <item find=":dreng:" replace=""/>
+    <item find=":konvolut7:" replace=""/>
+    <item find="besigte" replace="besigtige"/>
+    <item find=":Hånd2:" replace=""/>
+    <item find="plyds" replace="plys"/>
+    <item find="p ået" replace="på et"/>
+    <item find="reperere" replace="reparere"/>
+    <item find=":optisk disk:" replace=""/>
+    <item find=":luftsporvogn:" replace=""/>
+    <item find=":klør:" replace="♣"/>
+    <item find=":bambus:" replace=""/>
+    <item find=":cowboy:" replace="鸞"/>
+    <item find=":taleboble:" replace=""/>
+    <item find="hvilketsomhelst" replace="hvilket som helst"/>
+    <item find=":^R:" replace="ᴿ"/>
+    <item find=":^l:" replace="ˡ"/>
+    <item find="o mde" replace="om de"/>
+    <item find="uheldigtvis" replace="uheldigvis"/>
+    <item find=":slæde:" replace=""/>
+    <item find="ngoet" replace="noget"/>
+    <item find=":bjergbane:" replace=""/>
+    <item find=":gange2:" replace="✖"/>
+    <item find=":baseball:" replace="⚾"/>
+    <item find=":pung:" replace=""/>
+    <item find="sindsyg" replace="sindssyg"/>
+    <item find=":skriver2:" replace=""/>
+    <item find=":mælk:" replace="拏"/>
+    <item find=":fødder:" replace=""/>
+    <item find=":kassette:" replace=""/>
+    <item find=":sort hjerte:" replace=""/>
+    <item find="betødning" replace="betydning"/>
+    <item find=":bronze:" replace="雷"/>
+    <item find=":noteside:" replace=""/>
+    <item find="uheldigvist" replace="uheldigvis"/>
+    <item find=":glimmer:" replace="❇"/>
+    <item find=":tyrkisk lira:" replace="₺"/>
+    <item find=":EW:" replace="↔"/>
+    <item find=":jakke:" replace="痢"/>
+    <item find="optræde altid" replace="optræder altid"/>
+    <item find=":tunge3:" replace=""/>
+    <item find=":gris2:" replace=""/>
+    <item find="udiciplineret" replace="udisciplineret"/>
+    <item find=":blitz:" replace=""/>
+    <item find=":_n:" replace="ₙ"/>
+    <item find=":noder3:" replace=""/>
+    <item find=":x3:" replace="❎"/>
+    <item find=":højre2:" replace=""/>
+    <item find=":-+:" replace="∓"/>
+    <item find=":stjerne3:" replace=""/>
+    <item find=":^O:" replace="ᴼ"/>
+    <item find="tiblage" replace="tilbage"/>
+    <item find=":tankeboble:" replace=""/>
+    <item find=":buket2:" replace=""/>
+    <item find=":vandbøffel:" replace=""/>
+    <item find=":komet:" replace="☄"/>
+    <item find=":drenge:" replace=""/>
+    <item find=":zebra:" replace="煉"/>
+    <item find="gladeligt" replace="gladelig"/>
+    <item find=":håndtryk:" replace="欄"/>
+    <item find=":øl:" replace=""/>
+    <item find=":hospital:" replace=""/>
+    <item find=":mappe2:" replace=""/>
+    <item find=":krystalkugle:" replace=""/>
+    <item find=":konvolut5:" replace=""/>
+    <item find="menesker" replace="mennesker"/>
+    <item find=":mad:" replace="菱"/>
+    <item find="korespondent" replace="korrespondent"/>
+    <item find=":boble6:" replace=""/>
+    <item find=":Vædderen:" replace="♈"/>
+    <item find=":pen:" replace=""/>
+    <item find=":løve:" replace="女"/>
+    <item find=":bryllup:" replace=""/>
+    <item find=":pennespids2:" replace="✒"/>
+    <item find=":theta:" replace="θ"/>
+    <item find="pludslig" replace="pludselig"/>
+    <item find=":bus2:" replace=""/>
+    <item find=":-:" replace="−"/>
+    <item find=":Jerusalem-kors:" replace="☩"/>
+    <item find=":skildpadde:" replace=""/>
+    <item find="pån ogen" replace="på nogen"/>
+    <item find="dete" replace="dette"/>
+    <item find=":the:" replace=""/>
+    <item find=":x:" replace="×"/>
+    <item find=":2/3:" replace="⅔"/>
+    <item find=":fru julemand:" replace="虜"/>
+    <item find=":pund:" replace="£"/>
+    <item find=":11 t:" replace=""/>
+    <item find=":bjergbestiger:" replace="輪"/>
+    <item find=":toilet:" replace=""/>
+    <item find="vede t" replace="ved et"/>
+    <item find=":støvle:" replace=""/>
+    <item find="monotom" replace="monoton"/>
+    <item find=":halstørklæde:" replace="泥"/>
+    <item find="opsumering" replace="opsummering"/>
+    <item find=":engel:" replace=""/>
+    <item find="fran ogen" replace="fra nogen"/>
+    <item find=":sove:" replace=""/>
+    <item find="fo rnogen" replace="for nogen"/>
+    <item find="vædske" replace="væske"/>
+    <item find=":E:" replace="→"/>
+    <item find=":boble7:" replace=""/>
+    <item find="iøjeblikket" replace="i øjeblikket"/>
+    <item find=":halvmåne:" replace=""/>
+    <item find=":klap:" replace=""/>
+    <item find="in ogen" replace="i noget"/>
+    <item find=":flag4:" replace="⚐"/>
+    <item find="tilfældigvist" replace="tilfældigvis"/>
+    <item find=":Halloween:" replace=""/>
+    <item find="accelere" replace="accelerere"/>
+    <item find=":due:" replace=""/>
+    <item find=":gorilla:" replace="轢"/>
+    <item find="leve vilkår" replace="levevilkår"/>
+    <item find=":ring:" replace=""/>
+    <item find=":Psi:" replace="Ψ"/>
+    <item find=":gentagne hjerter:" replace=""/>
+    <item find=":majs:" replace=""/>
+    <item find=":eta:" replace="η"/>
+    <item find=":ned6:" replace=""/>
+    <item find=":basispunkt:" replace="‱"/>
+    <item find=":^v:" replace="ᵛ"/>
+    <item find=":ikke godt:" replace=""/>
+    <item find="undern oget" replace="under noget"/>
+    <item find=":kærlighed:" replace=""/>
+    <item find="gjordt" replace="gjort"/>
+    <item find=":minimer:" replace=""/>
+    <item find=":ned5:" replace=""/>
+    <item find=":klokke:" replace=""/>
+    <item find="altsammen" replace="alt sammen"/>
+    <item find=":spind:" replace=""/>
+    <item find="mo ddet" replace="mod det"/>
+    <item find="bagd en" replace="bag den"/>
+    <item find=":klaver:" replace=""/>
+    <item find=":fodbold:" replace="⚽"/>
+    <item find="sansynlig" replace="sandsynlig"/>
+    <item find="yderliger" replace="yderligere"/>
+    <item find=":mums:" replace=""/>
+    <item find=":^B:" replace="ᴮ"/>
+    <item find=":Penge2:" replace=""/>
+    <item find=":skyet2:" replace=""/>
+    <item find="reflektion" replace="refleksion"/>
+    <item find=":kamel:" replace=""/>
+    <item find=":dronning:" replace=""/>
+    <item find="overd et" replace="over det"/>
+    <item find=":ok2:" replace=""/>
+    <item find=":^d:" replace="ᵈ"/>
+    <item find="gallionsfigur" replace="galionsfigur"/>
+    <item find="o mnogle" replace="om nogle"/>
+    <item find=":Hest3:" replace=""/>
+    <item find=":goblin:" replace=""/>
+    <item find="een" replace="én"/>
+    <item find=":streg:" replace=""/>
+    <item find=":computer2:" replace=""/>
+    <item find="nde" replace="ned"/>
+    <item find=":.:" replace="…"/>
+    <item find="sakl" replace="skal"/>
+    <item find=":urt:" replace=""/>
+    <item find=":højtaler3:" replace=""/>
+    <item find="vedn oget" replace="ved noget"/>
+    <item find=":kirke:" replace="⛪"/>
+    <item find=":ikke parallel:" replace="∦"/>
+    <item find=":konvolut8:" replace=""/>
+    <item find=":3/8:" replace="⅜"/>
+    <item find=":fe:" replace="栗"/>
+    <item find=":W:" replace="←"/>
+    <item find="henholdsvist" replace="henholdsvis"/>
+    <item find="&lt;-&gt;" replace="↔"/>
+    <item find="heldigvist" replace="heldigvis"/>
+    <item find="modn ogle" replace="mod nogle"/>
+    <item find=":diagram3:" replace=""/>
+    <item find="luxus" replace="luksus"/>
+    <item find=":tiltagende halvmåne:" replace=""/>
+    <item find=":ingen mobil:" replace=""/>
+    <item find=":sko3:" replace=""/>
+    <item find=":skyder:" replace=""/>
+    <item find=":stor cirkel:" replace="◯"/>
+    <item find=":Fuji:" replace=""/>
+    <item find=":lynlås:" replace="蘿"/>
+    <item find="ve dden" replace="ved den"/>
+    <item find=":^3:" replace="³"/>
+    <item find=":skjorte:" replace=""/>
+    <item find=":dokument:" replace=""/>
+    <item find=":hest:" replace=""/>
+    <item find="institutet" replace="instituttet"/>
+    <item find=":Veksling:" replace=""/>
+    <item find=":rupee:" replace="₹"/>
+    <item find=":bånd2:" replace=""/>
+    <item find="direktørene" replace="direktørerne"/>
+    <item find="distrait" replace="distræt"/>
+    <item find=":telefon4:" replace=""/>
+    <item find="telf" replace="tlf."/>
+    <item find=":?:" replace="❓"/>
+    <item find=":måne2:" replace=""/>
+    <item find=":stadion:" replace=""/>
+    <item find=":tøj:" replace=""/>
+    <item find="alså" replace="altså"/>
+    <item find="eftern oget" replace="efter noget"/>
+    <item find=":mellemstort kvadrat:" replace="◻"/>
+    <item find=":rund knappenål:" replace=""/>
+    <item find="differance" replace="difference"/>
+    <item find="fr adet" replace="fra det"/>
+    <item find="fora nnogle" replace="foran nogle"/>
+    <item find="o met" replace="om et"/>
+    <item find=":kvadrat2:" replace="■"/>
+    <item find=":batteri:" replace=""/>
+    <item find="inflydelse" replace="indflydelse"/>
+    <item find=":bil:" replace=""/>
+    <item find=":bjerg2:" replace=""/>
+    <item find="imperie" replace="imperium"/>
+    <item find=":lommelygte:" replace=""/>
+    <item find=":^-:" replace="⁻"/>
+    <item find=":fest3:" replace="壟"/>
+    <item find=":bil2:" replace=""/>
+    <item find=":x2:" replace="❌"/>
+    <item find=":taxa:" replace=""/>
+    <item find=":mus5:" replace=""/>
+    <item find="gibs" replace="gips"/>
+    <item find=":ruder:" replace="♦"/>
+    <item find="seperat" replace="separat"/>
+    <item find=":^o:" replace="ᵒ"/>
+    <item find=":alf:" replace="利"/>
+    <item find=":pennespids:" replace="✑"/>
+    <item find="Http" replace="http"/>
+    <item find=":park:" replace=""/>
+    <item find=":hval2:" replace=""/>
+    <item find=":^p:" replace="ᵖ"/>
+    <item find="omn ogle" replace="om nogle"/>
+    <item find=":dokument3:" replace=""/>
+    <item find=":knus:" replace="珞"/>
+    <item find=":kvartnode:" replace="텟"/>
+    <item find=":får:" replace=""/>
+    <item find="mo dnogle" replace="mod nogle"/>
+    <item find="abbonement" replace="abonnement"/>
+    <item find=":Måne2:" replace="☾"/>
+    <item find=":blæksprutte:" replace=""/>
+    <item find=":tårn:" replace=""/>
+    <item find=":projektor:" replace=""/>
+    <item find="papirene" replace="papirerne"/>
+    <item find=":mappe3:" replace=""/>
+    <item find=":baby2:" replace=""/>
+    <item find=":annuller:" replace=""/>
+    <item find=":terning4:" replace="⚃"/>
+    <item find=":noder:" replace="♫"/>
+    <item find="PC'ere" replace="PC'er"/>
+    <item find=":popcorn:" replace=""/>
+    <item find=":vhs:" replace=""/>
+    <item find=":solopgang3:" replace=""/>
+    <item find=":mariehøne:" replace=""/>
+    <item find=":blad:" replace=""/>
+    <item find="adgagn" replace="adgang"/>
+    <item find="resource" replace="ressource"/>
+    <item find=":gravid:" replace="擄"/>
+    <item find=":tyst:" replace=""/>
+    <item find=":^2:" replace="²"/>
+    <item find=":pastil:" replace="◊"/>
+    <item find=":butik:" replace=""/>
+    <item find=":Beta:" replace="Β"/>
+    <item find=":læbestift:" replace=""/>
+    <item find=":volleybold:" replace=""/>
+    <item find=":radioknap:" replace=""/>
+    <item find="referance" replace="reference"/>
+    <item find="charteque" replace="chartek"/>
+    <item find="p ånogle" replace="på nogle"/>
+    <item find="række faktore" replace="række faktorer"/>
+    <item find="me dnogen" replace="med nogen"/>
+    <item find=":boble2:" replace=""/>
+    <item find=":skiløber:" replace="⛷"/>
+    <item find=":Seng:" replace=""/>
+    <item find="førn ogen" replace="før nogen"/>
+    <item find=":hjerne:" replace="易"/>
+    <item find="adlrig" replace="aldrig"/>
+    <item find=":chokeret:" replace="勞"/>
+    <item find=":sort cirkel:" replace="⚫"/>
+    <item find="accellerere" replace="accelerere"/>
+    <item find="formenlig" replace="formentlig"/>
+    <item find=":cocktail:" replace=""/>
+    <item find="formandsskab" replace="formandskab"/>
+    <item find=":frygtsom:" replace=""/>
+    <item find=":printer:" replace=""/>
+    <item find=":paskontrol:" replace=""/>
+    <item find="ve ddet" replace="ved det"/>
+    <item find="tage afsted" replace="tage af sted"/>
+    <item find=":blomst2:" replace="鹿"/>
+    <item find="konstantere" replace="konstatere"/>
+    <item find=":film:" replace=""/>
+    <item find=":diskette:" replace=""/>
+    <item find=":skuffet:" replace=""/>
+    <item find="nåes" replace="nås"/>
+    <item find=":diskette2:" replace=""/>
+    <item find=":radioaktiv:" replace="☢"/>
+    <item find=":smørret:" replace=""/>
+    <item find=":^b:" replace="ᵇ"/>
+    <item find=":venstre6:" replace=""/>
+    <item find=":hånd:" replace="✋"/>
+    <item find=":diskette4:" replace=""/>
+    <item find=":politibetjent:" replace=""/>
+    <item find=":flyver4:" replace=""/>
+    <item find=":pi:" replace="π"/>
+    <item find=":bede:" replace=""/>
+    <item find="konklution" replace="konklusion"/>
+    <item find=":partitur:" replace=""/>
+    <item find="bundtmager" replace="buntmager"/>
+    <item find="ialtfald" replace="i alt fald"/>
+    <item find=":sandal:" replace=""/>
+    <item find="financiel" replace="finansiel"/>
+    <item find="o mdet" replace="om det"/>
+    <item find=":skærm:" replace=""/>
+    <item find=":^N:" replace="ᴺ"/>
+    <item find=":Krebsen:" replace="♋"/>
+    <item find="karussel" replace="karrusel"/>
+    <item find=":^epsilon:" replace="ᵋ"/>
+    <item find=":femkant:" replace="⬠"/>
+    <item find=":vrede:" replace=""/>
+    <item find=":pommes frites:" replace=""/>
+    <item find=":information:" replace="ℹ"/>
+    <item find="forn oget" replace="for noget"/>
+    <item find=":fladbrød:" replace="陵"/>
+    <item find=":primtegn:" replace="′"/>
+    <item find=":ffl:" replace="ﬄ"/>
+    <item find=":klode4:" replace=""/>
+    <item find=":hammer og skruenøgle:" replace=""/>
+    <item find=":Ny:" replace="Ν"/>
+    <item find=":lysstyrke:" replace=""/>
+    <item find="mo dde" replace="mod de"/>
+    <item find=":hus3:" replace=""/>
+    <item find=":fodgængerovergang:" replace=""/>
+    <item find=":ankomst:" replace=""/>
+    <item find="påd e" replace="på de"/>
+    <item find="f.ex." replace="f.eks."/>
+    <item find="åbentbart" replace="åbenbart"/>
+    <item find=":haj:" replace="麗"/>
+    <item find=":vampyr:" replace="率"/>
+    <item find=":rødme:" replace=""/>
+    <item find=":hammer:" replace=""/>
+    <item find=":mund:" replace=""/>
+    <item find="hveranden" replace="hver anden"/>
+    <item find=":dollar2:" replace=""/>
+    <item find=":toilet2:" replace=""/>
+    <item find=":salat:" replace="綾"/>
+    <item find=":uartig:" replace=""/>
+    <item find=":urne:" replace="⚱"/>
+    <item find="ba gnogle" replace="bag nogle"/>
+    <item find=":op3:" replace=""/>
+    <item find=".*(c)" replace="©"/>
+    <item find=":vandpolo:" replace="綠"/>
+    <item find=":hulk:" replace=""/>
+    <item find=":tastatur3:" replace=""/>
+    <item find=":phi:" replace="φ"/>
+    <item find=":trofæ:" replace=""/>
+    <item find="systemt" replace="systemet"/>
+    <item find="fora nnogen" replace="foran nogen"/>
+    <item find=":smilende:" replace="☺"/>
+    <item find="i følge" replace="ifølge"/>
+    <item find=":integral:" replace="∫"/>
+    <item find=":baht:" replace="฿"/>
+    <item find="imun" replace="immun"/>
+    <item find=":smil:" replace=""/>
+    <item find=":musik2:" replace=""/>
+    <item find=":ballon:" replace=""/>
+    <item find=":modtager4:" replace=""/>
+    <item find=":rose:" replace=""/>
+    <item find=":hryvnia:" replace="₴"/>
+    <item find="a fnoget" replace="af noget"/>
+    <item find=":stav:" replace="⚚"/>
+    <item find="kollosal" replace="kolossal"/>
+    <item find="fr aden" replace="fra den"/>
+    <item find=":marked:" replace=""/>
+    <item find=":fodgænger:" replace=""/>
+    <item find=":blomstre:" replace=""/>
+    <item find=":klokke3:" replace=""/>
+    <item find=":afkrydsningsboks2:" replace="☑"/>
+    <item find=":venstre:" replace="☜"/>
+    <item find=":politibil:" replace=""/>
+    <item find=":trackball:" replace=""/>
+    <item find=":terning1:" replace="⚀"/>
+    <item find=":dobbelt-b:" replace="턫"/>
+    <item find="underd e" replace="under de"/>
+    <item find=":stråler4:" replace=""/>
+    <item find=":mobil2:" replace=""/>
+    <item find=":melon:" replace=""/>
+    <item find=":uendelig:" replace="∞"/>
+    <item find="hovede" replace="hoved"/>
+    <item find=".*-&gt;.*" replace="→"/>
+    <item find=":rullestol:" replace="♿"/>
+    <item find=":_1:" replace="₁"/>
+    <item find=":notat:" replace=""/>
+    <item find=":Stenbukken:" replace="♑"/>
+    <item find=":tog3:" replace=""/>
+    <item find=":10 t:" replace=""/>
+    <item find=":solopgang2:" replace=""/>
+    <item find=":sød kartoffel:" replace=""/>
+    <item find=":grimasse:" replace="☹"/>
+    <item find=":afkrydsning4:" replace=""/>
+    <item find="in oget" replace="i noget"/>
+    <item find="medlemsskab" replace="medlemskab"/>
+    <item find="EUs" replace="EU's"/>
+    <item find="underd et" replace="under det"/>
+    <item find=":SW:" replace="↙"/>
+    <item find=":højre6:" replace=""/>
+    <item find=":megafon:" replace=""/>
+    <item find=":højre4:" replace=""/>
+    <item find="efte ren" replace="efter en"/>
+    <item find="o mnogen" replace="om nogen"/>
+    <item find=":pause:" replace="⏸"/>
+    <item find=":solsikke:" replace=""/>
+    <item find=":Side:" replace=""/>
+    <item find="oplysnigner" replace="oplysninger"/>
+    <item find=":stille:" replace=""/>
+    <item find=".*(r)" replace="®"/>
+    <item find=":9 t:" replace=""/>
+    <item find=":sved:" replace=""/>
+    <item find=":uskyldig:" replace=""/>
+    <item find=":node2:" replace="♪"/>
+    <item find=":rumvæsen2:" replace=""/>
+    <item find=":magiker:" replace="慄"/>
+    <item find="viktig" replace="vigtig"/>
+    <item find=":taco:" replace=""/>
+    <item find="heiraki" replace="hierarki"/>
+    <item find=":terning2:" replace="⚁"/>
+    <item find="3/4" replace="¾"/>
+    <item find=":suk-hjerte:" replace="臘"/>
+    <item find=":_s:" replace="ₛ"/>
+    <item find=":glas3:" replace="弄"/>
+    <item find=":nymåne:" replace=""/>
+    <item find="hvilkensomhelst" replace="hvilken som helst"/>
+    <item find=":muskel:" replace=""/>
+    <item find="tiln ogen" replace="til nogen"/>
+    <item find=":badekar:" replace=""/>
+    <item find=":madlavning:" replace=""/>
+    <item find=":svedigt smil:" replace=""/>
+    <item find=":punkttegn3:" replace="◦"/>
+    <item find=":blyant3:" replace="✐"/>
+    <item find="hjælpe gerne" replace="hjælper gerne"/>
+    <item find=":signalstyrke:" replace=""/>
+    <item find=":cirkel3:" replace=""/>
+    <item find=":billiard:" replace=""/>
+    <item find=":aftagende fuldmåne:" replace=""/>
+    <item find="tilhøre altid" replace="tilhører altid"/>
+    <item find="navnligt" replace="navnlig"/>
+    <item find=":maksimer:" replace=""/>
+    <item find="debatør" replace="debattør"/>
+    <item find=":curling:" replace="樓"/>
+    <item find=":ædelsten:" replace=""/>
+    <item find=":beskæmmet:" replace=""/>
+    <item find=":eller:" replace="∨"/>
+    <item find=":kys:" replace=""/>
+    <item find="score ikke" replace="scorer ikke"/>
+    <item find="velbekommen" replace="velbekomme"/>
+    <item find="&lt;--" replace="←"/>
+    <item find=":stråler2:" replace=""/>
+    <item find=":knap2:" replace=""/>
+    <item find=":lastvogn:" replace=""/>
+    <item find=":6 t:" replace=""/>
+    <item find=":2 t:" replace=""/>
+    <item find="efte rnoget" replace="efter noget"/>
+    <item find=":forbinding:" replace="洛"/>
+    <item find="indkorporere" replace="inkorporere"/>
+    <item find=":trafiklys2:" replace=""/>
+    <item find=":ortodoks kors:" replace="☦"/>
+    <item find="dekadance" replace="dekadence"/>
+    <item find="overd en" replace="over den"/>
+    <item find=":næsehorn:" replace="憐"/>
+    <item find=":fyrretræ:" replace=""/>
+    <item find=":ufornøjet:" replace=""/>
+    <item find="muligvist" replace="muligvis"/>
+    <item find=":puddel:" replace=""/>
+    <item find=":promille:" replace="‰"/>
+    <item find=":Spock:" replace=""/>
+    <item find=":yoga:" replace="律"/>
+    <item find=":hammer og mejsel:" replace="⚒"/>
+    <item find=":kortregister:" replace=""/>
+    <item find=":tau:" replace="τ"/>
+    <item find=":afkrydsningsboks3:" replace="☒"/>
+    <item find="manuskrift" replace="manuskript"/>
+    <item find=":lille indeholder:" replace="∍"/>
+    <item find="fungere ikke" replace="fungerer ikke"/>
+    <item find=":klovn:" replace="嵐"/>
+    <item find="sædvanelig" replace="sædvanlig"/>
+    <item find=":Fiskene:" replace="♓"/>
+    <item find="retteligt" replace="rettelig"/>
+    <item find=":overmængde:" replace="⊃"/>
+    <item find=":græsk kors2:" replace="✙"/>
+    <item find=":kvinde:" replace=""/>
+    <item find=":mikroskop:" replace=""/>
+    <item find="abbonnere" replace="abonnere"/>
+    <item find=":hamster:" replace=""/>
+    <item find="http:\" replace="http://"/>
+    <item find=":tomt dokument:" replace=""/>
+    <item find=":lyn2:" replace=""/>
+    <item find=":NS:" replace="↕"/>
+    <item find="vedn ogen" replace="ved nogen"/>
+    <item find="omd et" replace="om det"/>
+    <item find=":udmattet:" replace=""/>
+    <item find=":medalje2:" replace=""/>
+    <item find="o mden" replace="om den"/>
+    <item find=":afkrydsning2:" replace="✔"/>
+    <item find=":fabrik:" replace=""/>
+    <item find=":^+:" replace="⁺"/>
+    <item find=":rotte:" replace=""/>
+    <item find="afd et " replace="af det"/>
+    <item find=":rumvæsen:" replace=""/>
+    <item find=":Tyren:" replace="♉"/>
+    <item find="klasifikation" replace="klassifikation"/>
+    <item find=":æble:" replace=""/>
+    <item find=":delmængde:" replace="⊂"/>
+    <item find=":snefnug:" replace="❄"/>
+    <item find=":kartoffel:" replace="凜"/>
+    <item find=":åben mund:" replace=""/>
+    <item find=":løftet øjenbryn:" replace="廊"/>
+    <item find=":computer:" replace=""/>
+    <item find="ialt" replace="i alt"/>
+    <item find=":skin2:" replace=""/>
+    <item find=":rutchebane:" replace=""/>
+    <item find=":bordtennis:" replace=""/>
+    <item find=":tromme2:" replace="論"/>
+    <item find=":hjertedekoration:" replace=""/>
+    <item find=":skrabet is:" replace=""/>
+    <item find="ingeniøer" replace="ingeniører"/>
+    <item find=":chokolade:" replace=""/>
+    <item find=":trommestikker:" replace="異"/>
+    <item find=":sofa:" replace=""/>
+    <item find="påe n" replace="på en"/>
+    <item find=":par4:" replace=""/>
+    <item find=":rho:" replace="ρ"/>
+    <item find=":sake:" replace=""/>
+    <item find=":Ypsilon:" replace="Υ"/>
+    <item find=":joker:" replace=""/>
+    <item find=":^J:" replace="ᴶ"/>
+    <item find=":flagermus:" replace="驪"/>
+    <item find=":Boble4:" replace=""/>
+    <item find=":snemand2:" replace="⛄"/>
+    <item find=":lyd:" replace=""/>
+    <item find=":lineal2:" replace=""/>
+    <item find=":baby3:" replace="櫓"/>
+    <item find=":parallel:" replace="∥"/>
+    <item find="indkluderer" replace="inkluderer"/>
+    <item find=":benzinpumpe:" replace="⛽"/>
+    <item find=":kat2:" replace=""/>
+    <item find=":~:" replace="≈"/>
+    <item find=":sølv:" replace="賂"/>
+    <item find=":øl2:" replace=""/>
+    <item find=":billet:" replace=""/>
+    <item find="porgram" replace="program"/>
+    <item find="midaldrene" replace="midaldrende"/>
+    <item find="overn oget" replace="over noget"/>
+    <item find=":e-mail:" replace=""/>
+    <item find=":_h:" replace="ₕ"/>
+    <item find=":manicure:" replace=""/>
+    <item find=":på hovedet:" replace=""/>
+    <item find=":NE2:" replace="⇗"/>
+    <item find="konferance" replace="komference"/>
+    <item find=":dobbeltkors:" replace="‡"/>
+    <item find=":trold:" replace=""/>
+    <item find="linolium" replace="linoleum"/>
+    <item find=":bog2:" replace=""/>
+    <item find=":cyklist2:" replace=""/>
+    <item find="eftern ogen" replace="efter nogen"/>
+    <item find="naturligvist" replace="naturligvis"/>
+    <item find=":^t:" replace="ᵗ"/>
+    <item find="pån oget" replace="på noget"/>
+    <item find=":hovedtelefoner:" replace=""/>
+    <item find="radisse" replace="radise"/>
+    <item find=":cirkel:" replace="○"/>
+    <item find=":klemhane:" replace=""/>
+    <item find=":^iota:" replace="ᶥ"/>
+    <item find=":tom side:" replace=""/>
+    <item find=":drikkevand:" replace=""/>
+    <item find="nædste" replace="næste"/>
+    <item find=":rødmer:" replace=""/>
+    <item find=":tomme sider:" replace=""/>
+    <item find=":bombe:" replace=""/>
+    <item find="beskadelse" replace="beskadigelse"/>
+    <item find=":Japan:" replace=""/>
+    <item find=":Fest:" replace=""/>
+    <item find=":kunst:" replace=""/>
+    <item find=":pen2:" replace=""/>
+    <item find=":sugemærke:" replace=""/>
+    <item find=":skilsmisse:" replace="⚮"/>
+    <item find=":ramme2:" replace=""/>
+    <item find=":^gamma:" replace="ᵞ"/>
+    <item find=":posthus2:" replace=""/>
+    <item find=":fårekylling2:" replace="聯"/>
+    <item find="byro" replace="bureau"/>
+    <item find=":vækkeur:" replace="⏰"/>
+    <item find=":Lokomotiv:" replace=""/>
+    <item find=":noder2:" replace="♬"/>
+    <item find=":fællesmængde:" replace="∩"/>
+    <item find=":brandbil2:" replace=""/>
+    <item find=":skib2:" replace=""/>
+    <item find=":tænker:" replace="樂"/>
+    <item find=":pistol:" replace=""/>
+    <item find=":&gt;=:" replace="≥"/>
+    <item find=":roterende lys:" replace=""/>
+    <item find=":!?:" replace="⁉"/>
+    <item find=":vinkel:" replace="∠"/>
+    <item find="medd e" replace="med de"/>
+    <item find="intelektuel" replace="intellektuel"/>
+    <item find=":anker:" replace="⚓"/>
+    <item find=":afgang:" replace=""/>
+    <item find="komemer" replace="kommer"/>
+    <item find=":Jorden:" replace="♁"/>
+    <item find="argentur" replace="agentur"/>
+    <item find=":information3:" replace=""/>
+    <item find=":hjerte2:" replace=""/>
+    <item find=":basketball:" replace=""/>
+    <item find="nemligt" replace="nemlig"/>
+    <item find=":hornhøjtaler:" replace=""/>
+    <item find=":Kirsebær:" replace=""/>
+    <item find=":vanillecreme:" replace=""/>
+    <item find=":konvolut4:" replace=""/>
+    <item find=":klaptræ:" replace=""/>
+    <item find="gnenem" replace="gennem"/>
+    <item find=":honning:" replace=""/>
+    <item find=":bull's eye:" replace=""/>
+    <item find=":papirklips:" replace=""/>
+    <item find=":forskellig fra:" replace="≠"/>
+    <item find=":indeholder ikke:" replace="∌"/>
+    <item find=":advarsel:" replace="⚠"/>
+    <item find=":kat:" replace=""/>
+    <item find="akceptere" replace="acceptere"/>
+    <item find="efte rde" replace="efter de"/>
+    <item find=":opkast:" replace="冷"/>
+    <item find="alrdig" replace="aldrig"/>
+    <item find=":_5:" replace="₅"/>
+    <item find=":_v:" replace="ᵥ"/>
+    <item find=":butik2:" replace=""/>
+    <item find=":guld:" replace="磊"/>
+    <item find="akumulere" replace="akkumulere"/>
+    <item find=":postkasse4:" replace=""/>
+    <item find=":bevis slut:" replace="∎"/>
+    <item find="paralellitet" replace="parallellitet"/>
+    <item find=":ged:" replace=""/>
+    <item find=":^6:" replace="⁶"/>
+    <item find=":pensel:" replace=""/>
+    <item find=":Sol:" replace="☉"/>
+    <item find=":urskive:" replace="⌚"/>
+    <item find="ansvarhavende" replace="ansvarshavende"/>
+    <item find=":^n:" replace="ⁿ"/>
+    <item find=":vibrerer:" replace=""/>
+    <item find=":hane:" replace=""/>
+    <item find=":_3:" replace="₃"/>
+    <item find=":højtaler:" replace=""/>
+    <item find=":!2:" replace="❗"/>
+    <item find=":bue:" replace=""/>
+    <item find=":S:" replace="↓"/>
+    <item find=":Eta:" replace="Η"/>
+    <item find=":knappenål:" replace=""/>
+    <item find=":hvid blomst:" replace=""/>
+    <item find=":satellit:" replace=""/>
+    <item find=":!:" replace="❕"/>
+    <item find=":klipning:" replace=""/>
+    <item find=":kniv2:" replace=""/>
+    <item find=":permanent papir:" replace="♾"/>
+    <item find=":lås:" replace=""/>
+    <item find=":integral3:" replace="∭"/>
+    <item find=":vred:" replace=""/>
+    <item find="molestrere" replace="molestere"/>
+    <item find=":tilhører:" replace="∈"/>
+    <item find=":skrifttype:" replace=""/>
+    <item find=":8 t:" replace=""/>
+    <item find=":horn:" replace=""/>
+    <item find=":Ok3:" replace=""/>
+    <item find=":rugby:" replace=""/>
+    <item find=":orne:" replace=""/>
+    <item find=":hjerteslag:" replace=""/>
+    <item find=":/:" replace="∕"/>
+    <item find=":saxofon:" replace=""/>
+    <item find=":dvd:" replace=""/>
+    <item find=":_e:" replace="ₑ"/>
+    <item find=":prinsesse:" replace=""/>
+    <item find=":lås3:" replace=""/>
+    <item find=":regnvejr:" replace=""/>
+    <item find="hinadnen" replace="hinanden"/>
+    <item find=":hel pause:" replace="턻"/>
+    <item find=":ottendedel pause:" replace="턾"/>
+    <item find=":kalender2:" replace=""/>
+    <item find=":fisk3:" replace=""/>
+    <item find=":hockey2:" replace=""/>
+    <item find=":halvnode:" replace="텞"/>
+    <item find=":Chi:" replace="Χ"/>
+    <item find=":brandbil:" replace=""/>
+    <item find=":^W:" replace="ᵂ"/>
+    <item find=":lille stjerne2:" replace="⭑"/>
+    <item find="kassere aldrig" replace="kasserer aldrig"/>
+    <item find=":produkt:" replace="∏"/>
+    <item find="frae n" replace="fra en"/>
+    <item find=":3 t:" replace=""/>
+    <item find=":ottendedelsnode:" replace="텠"/>
+    <item find=":fiske:" replace=""/>
+    <item find="hislen" replace="hilsen"/>
+    <item find=":cent:" replace="¢"/>
+    <item find="beskade" replace="beskadige"/>
+    <item find=":skuffet lettet:" replace=""/>
+    <item find="a fen" replace="af en"/>
+    <item find=":ur:" replace=""/>
+    <item find=":ikke overmængde:" replace="⊅"/>
+    <item find=":dør:" replace=""/>
+    <item find="dejg" replace="dej"/>
+    <item find="optræde gerne" replace="optræder gerne"/>
+    <item find=":postkasse:" replace=""/>
+    <item find="ford en" replace="for den"/>
+    <item find="p åete" replace="på et"/>
+    <item find=":ingen adgang:" replace=""/>
+    <item find="akumullere" replace="akkumulere"/>
+    <item find="naturligtvis" replace="naturligvis"/>
+    <item find=":spillemaskine:" replace=""/>
+    <item find=":fester:" replace=""/>
+    <item find=":Solbriller2:" replace=""/>
+    <item find=":Omikron:" replace="Ο"/>
+    <item find=":Malteserkors:" replace="✠"/>
+    <item find="intensioner" replace="intentioner"/>
+    <item find="fungere gerne" replace="fungerer gerne"/>
+    <item find="ve dde" replace="ved de"/>
+    <item find=":brydning:" replace="祿"/>
+    <item find=":stort kvadrat2:" replace="⬛"/>
+    <item find=":kubikrod:" replace="∛"/>
+    <item find="forhåbenlig" replace="forhåbentlig"/>
+    <item find="konkurence" replace="konkurrence"/>
+    <item find=":skøjte:" replace="⛸"/>
+    <item find="verj" replace="vejr"/>
+    <item find="kontrolere" replace="kontrollere"/>
+    <item find=":pakke:" replace=""/>
+    <item find="kassere altid" replace="kasserer altid"/>
+    <item find=":affald forbudt:" replace=""/>
+    <item find="ford e" replace="for de"/>
+    <item find=":saks4:" replace="✃"/>
+    <item find=":restaurant:" replace=""/>
+    <item find=":skål:" replace=""/>
+    <item find="hieraki" replace="hierarki"/>
+    <item find=":cykel:" replace=""/>
+    <item find=":kæder:" replace="⛓"/>
+    <item find=":copyright:" replace="©"/>
+    <item find=":ske:" replace="籠"/>
+    <item find="fora net" replace="foran et"/>
+    <item find="fr aet" replace="fra et"/>
+    <item find=":1/8:" replace="⅛"/>
+    <item find=":drink2:" replace=""/>
+    <item find=":kyssende kat:" replace=""/>
+    <item find=":skin1:" replace=""/>
+    <item find="omn oget" replace="om noget"/>
+    <item find=":burrito:" replace=""/>
+    <item find=":omega:" replace="ω"/>
+    <item find="avenu" replace="avenue"/>
+    <item find=":kalender3:" replace=""/>
+    <item find=":ksi:" replace="ξ"/>
+    <item find=":mappeskab:" replace=""/>
+    <item find=":bacon:" replace="肋"/>
+    <item find=":sol2:" replace=""/>
+    <item find=":knægt:" replace=""/>
+    <item find=":ingen piratkopiering:" replace=""/>
+    <item find=":løkke:" replace="➰"/>
+    <item find="aggresiv" replace="aggressiv"/>
+    <item find=":skruenøgle:" replace=""/>
+    <item find=":softice:" replace=""/>
+    <item find="sædvaneligvist" replace="sædvanligvis"/>
+    <item find=":pingvin:" replace=""/>
+    <item find=":Jomfruen:" replace="♍"/>
+    <item find=":venstre2:" replace=""/>
+    <item find=":divisor i:" replace="∣"/>
+    <item find="spetakel" replace="spektakel"/>
+    <item find=":mikrofon:" replace=""/>
+    <item find=":Latter:" replace=""/>
+    <item find=":mellemstor stjerne:" replace="⭐"/>
+    <item find="hovedsagentlig" replace="hovedsagelig"/>
+    <item find="inhold" replace="indhold"/>
+    <item find="skrevte" replace="skrevet"/>
+    <item find=":vægt:" replace="⚖"/>
+    <item find=":brød2:" replace="稜"/>
+    <item find=":peso:" replace="₱"/>
+    <item find=":fi:" replace="ﬁ"/>
+    <item find=":flad:" replace="♭"/>
+    <item find="mysterie" replace="mysterium"/>
+    <item find=":løgner:" replace="拉"/>
+    <item find=":^8:" replace="⁸"/>
+    <item find=":koldsved:" replace=""/>
+    <item find=":møtrik og bolt:" replace=""/>
+    <item find=":hval:" replace=""/>
+    <item find=":timeglas2:" replace="⏳"/>
+    <item find=":tm:" replace="™"/>
+    <item find="interresse" replace="interesse"/>
+    <item find=":kysser:" replace=""/>
+    <item find=":kysser3:" replace=""/>
+    <item find=":lille stjerne:" replace="⭒"/>
+    <item find="modn ogen" replace="mod nogen"/>
+    <item find=":græs:" replace=""/>
+    <item find=":bikini:" replace=""/>
+    <item find="fø rden" replace="før den"/>
+    <item find="ti lde" replace="til de"/>
+    <item find=":for alle:" replace="∀"/>
+    <item find=":sutteflaske:" replace=""/>
+    <item find=":svimmel:" replace=""/>
+    <item find=":tunge:" replace=""/>
+    <item find=":bagage:" replace=""/>
+    <item find=":panda:" replace=""/>
+    <item find="omn ogen" replace="om nogen"/>
+    <item find=":tilhører ikke:" replace="∉"/>
+    <item find="pasivisere" replace="passivisere"/>
+    <item find="ba gnogen" replace="bag nogen"/>
+    <item find=":hjerterytme:" replace=""/>
+    <item find=":afkrydsning:" replace="✓"/>
+    <item find=":neutral:" replace=""/>
+    <item find=":forbudt:" replace=""/>
+    <item find="sålænge" replace="så længe"/>
+    <item find="blir" replace="bliver"/>
+    <item find="mlelem" replace="mellem"/>
+    <item find="ensusiasme" replace="entusiasme"/>
+    <item find=":modem:" replace=""/>
+    <item find=":begynder:" replace=""/>
+    <item find=":_=:" replace="₌"/>
+    <item find="dislog" replace="dialog"/>
+    <item find=":kastanje:" replace=""/>
+    <item find="hianden" replace="hinanden"/>
+    <item find=":---:" replace="—"/>
+    <item find=":giraf:" replace="漣"/>
+    <item find=":dukker:" replace=""/>
+    <item find=":skinnebil:" replace=""/>
+    <item find=":personsøger:" replace=""/>
+    <item find=":stråler:" replace=""/>
+    <item find="kna" replace="kan"/>
+    <item find=":indeks:" replace=""/>
+    <item find="kavalleri" replace="kavaleri"/>
+    <item find=":robåd:" replace=""/>
+    <item find=":Pluto:" replace="♇"/>
+    <item find=":slukket mobiltelefon:" replace=""/>
+    <item find=":trefork:" replace=""/>
+    <item find=":kysser2:" replace=""/>
+    <item find="forand en" replace="foran den"/>
+    <item find=":slot:" replace=""/>
+    <item find=":ski:" replace=""/>
+    <item find=":boksehandske:" replace="壘"/>
+    <item find=":fred:" replace="☮"/>
+    <item find=":farveblyant:" replace=""/>
+    <item find=":_chi:" replace="ᵪ"/>
+    <item find=":ko:" replace=""/>
+    <item find=":mikrofon2:" replace=""/>
+    <item find=":stop2:" replace="⏹"/>
+    <item find="uadskillige" replace="uadskillelige"/>
+    <item find="dødsyg" replace="dødssyg"/>
+    <item find=":tog2:" replace=""/>
+    <item find=":krokodille:" replace=""/>
+    <item find="p åde" replace="på de"/>
+    <item find="impressario" replace="impresario"/>
+    <item find=".*&lt;-.*" replace="←"/>
+    <item find=":ff:" replace="ﬀ"/>
+    <item find=":^alfa:" replace="ᵅ"/>
+    <item find=":mega:" replace=""/>
+    <item find=":^7:" replace="⁷"/>
+    <item find=":sidste kvarter:" replace=""/>
+    <item find="overn ogle" replace="over nogle"/>
+    <item find=":kvadrat:" replace="□"/>
+    <item find=":paraply3:" replace="⛱"/>
+    <item find="sporenstrengs" replace="sporenstregs"/>
+    <item find=":zap:" replace="⚡"/>
+    <item find="suplement" replace="supplement"/>
+    <item find=":cyklon:" replace=""/>
+    <item find="ve dnogle" replace="ved nogle"/>
+    <item find=":teleskop:" replace=""/>
+    <item find=":slips:" replace=""/>
+    <item find="iøvrigt" replace="i øvrigt"/>
+    <item find=":lille kvadrat2:" replace="▪"/>
+    <item find=":oden:" replace=""/>
+    <item find=":cirkel2:" replace="●"/>
+    <item find="sansynligvist" replace="sandsynligvis"/>
+    <item find="Htp" replace="http"/>
+    <item find="rødmusset" replace="rødmosset"/>
+    <item find=":synthesizer:" replace=""/>
+    <item find=":stuvning:" replace=""/>
+    <item find=":græder:" replace=""/>
+    <item find=":småkage:" replace=""/>
+    <item find=":motorbåd:" replace=""/>
+    <item find="fejg" replace="fej"/>
+    <item find=":bowling:" replace=""/>
+    <item find=":hav:" replace=""/>
+    <item find=":jonglering:" replace="魯"/>
+    <item find="paralelle" replace="parallelle"/>
+    <item find="hovedsaglig" replace="hovedsagelig"/>
+    <item find=":skjorte2:" replace=""/>
+    <item find=":trekant2:" replace="▲"/>
+    <item find=":kasket:" replace="梨"/>
+    <item find="ba gdet" replace="bag det"/>
+    <item find=":paraply2:" replace=""/>
+    <item find=":prins:" replace="老"/>
+    <item find=":1/3:" replace="⅓"/>
+    <item find=":^(:" replace="⁽"/>
+    <item find=":skin4:" replace=""/>
+    <item find="diaglo" replace="dialog"/>
+    <item find=":brød:" replace=""/>
+    <item find=":^D:" replace="ᴰ"/>
+    <item find="bureu" replace="bureau"/>
+    <item find=":flag:" replace=""/>
+    <item find=":_x:" replace="ₓ"/>
+    <item find=":control:" replace=""/>
+    <item find=":speedbåd:" replace=""/>
+    <item find=":telt:" replace="⛺"/>
+    <item find=":kort:" replace=""/>
+    <item find=":fax:" replace=""/>
+    <item find=":ned3:" replace=""/>
+    <item find=":skole:" replace=""/>
+    <item find="diciplineret" replace="disciplineret"/>
+    <item find="aldrigt" replace="aldrig"/>
+    <item find=":^z:" replace="ᶻ"/>
+    <item find=":kærlighed2:" replace="蘭"/>
+    <item find="Damnark" replace="Danmark"/>
+    <item find=":ok:" replace=""/>
+    <item find="afd et" replace="af det"/>
+    <item find="fran oget" replace="fra noget"/>
+    <item find=":tastatur2:" replace=""/>
+    <item find=":7 t:" replace=""/>
+    <item find=":lambda:" replace="λ"/>
+    <item find=":gavehjerte:" replace=""/>
+    <item find=":kylling3:" replace=""/>
+    <item find=":sort dronning:" replace="♛"/>
+    <item find=":drage2:" replace=""/>
+    <item find=":Lothringen-kors:" replace="☨"/>
+    <item find=":_k:" replace="ₖ"/>
+    <item find=":skal:" replace=""/>
+    <item find=":smilende4:" replace="來"/>
+    <item find=":_u:" replace="ᵤ"/>
+    <item find="registere" replace="registrere"/>
+    <item find=":medalje:" replace=""/>
+    <item find=":klode:" replace=""/>
+    <item find="priviligeret" replace="privilegeret"/>
+    <item find="fora nnoget" replace="foran noget"/>
+    <item find="førd et" replace="før det"/>
+    <item find=":chi rho:" replace="☧"/>
+    <item find=":latinsk kors2:" replace=""/>
+    <item find=":zombie:" replace="履"/>
+    <item find=":yen2:" replace=""/>
+    <item find=":håndbold:" replace="菉"/>
+    <item find="påe t" replace="på et"/>
+    <item find=":lup2:" replace=""/>
+    <item find="shok" replace="chok"/>
+    <item find=":bold:" replace="⛹"/>
+    <item find="a fde" replace="af de"/>
+    <item find=":dokument2:" replace=""/>
+    <item find="undern ogen" replace="under nogen"/>
+    <item find=":ingen fodgængere:" replace=""/>
+    <item find=":Detektiv:" replace=""/>
+    <item find=":_j:" replace="ⱼ"/>
+    <item find=":kylling:" replace=""/>
+    <item find="forann ogle" replace="foran nogle"/>
+    <item find=":integral2:" replace="∬"/>
+    <item find=":^m:" replace="ᵐ"/>
+    <item find=":boble3:" replace=""/>
+    <item find=":pandekager:" replace="丹"/>
+    <item find=":Måne:" replace="☽"/>
+    <item find=":øjne:" replace=""/>
+    <item find=":W2:" replace="⇐"/>
+    <item find="højre sidde" replace="højre side"/>
+    <item find=":person med trutmund:" replace=""/>
+    <item find=":rektangel:" replace="▭"/>
+    <item find=":abe:" replace=""/>
+    <item find=":_0:" replace="₀"/>
+    <item find=":flyver6:" replace=""/>
+    <item find=":kød:" replace=""/>
+    <item find=":vimpel:" replace=""/>
+    <item find="forane n" replace="foran en"/>
+    <item find=":Boble:" replace=""/>
+    <item find=":tiger:" replace=""/>
+    <item find="addresse" replace="adresse"/>
+    <item find=":turban:" replace=""/>
+    <item find="exempel" replace="eksempel"/>
+    <item find=":sekstendedelsnode:" replace="텡"/>
+    <item find=":sort konge:" replace="♚"/>
+    <item find=":delfin:" replace=""/>
+    <item find="tilfældigtvis" replace="tilfældigvis"/>
+    <item find="fø rde" replace="før de"/>
+    <item find=":ramennudler:" replace=""/>
+    <item find=":ringer:" replace=""/>
+    <item find="hvadsomhelst" replace="hvad som helst"/>
+    <item find=":hånd4:" replace="駱"/>
+    <item find=":^r:" replace="ʳ"/>
+    <item find=":sky3:" replace="⛈"/>
+    <item find=":_beta:" replace="ᵦ"/>
+    <item find="førn oget" replace="før noget"/>
+    <item find=":Phi:" replace="Φ"/>
+    <item find="konkurent" replace="konkurrent"/>
+    <item find=":_):" replace="₎"/>
+    <item find=":æg:" replace="讀"/>
+    <item find=":station:" replace=""/>
+    <item find=":kreditkort:" replace=""/>
+    <item find=":rygning:" replace=""/>
+    <item find="fora nen" replace="foran en"/>
+    <item find="medn ogen" replace="med nogen"/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="j.nr."/>
+    <word exception="m.h.t."/>
+    <word exception="ø."/>
+    <word exception="vs."/>
+    <word exception="par."/>
+    <word exception="stk."/>
+    <word exception="ugtl."/>
+    <word exception="osv."/>
+    <word exception="ndr."/>
+    <word exception="e.l."/>
+    <word exception="q."/>
+    <word exception="merc."/>
+    <word exception="w."/>
+    <word exception="mio."/>
+    <word exception="forb."/>
+    <word exception="ekskl."/>
+    <word exception="etc."/>
+    <word exception="henh."/>
+    <word exception="d."/>
+    <word exception="pag."/>
+    <word exception="nr."/>
+    <word exception="mfl."/>
+    <word exception="hr."/>
+    <word exception="mht."/>
+    <word exception="evt."/>
+    <word exception="e."/>
+    <word exception="scient."/>
+    <word exception="f.Kr."/>
+    <word exception="min."/>
+    <word exception="c."/>
+    <word exception="sek."/>
+    <word exception="p.p.s"/>
+    <word exception="ibid."/>
+    <word exception="exam.art."/>
+    <word exception="m.fl."/>
+    <word exception="ifm."/>
+    <word exception="j."/>
+    <word exception="lic."/>
+    <word exception="p.s."/>
+    <word exception="årh."/>
+    <word exception="o."/>
+    <word exception="th."/>
+    <word exception="h."/>
+    <word exception="ml."/>
+    <word exception="gnsntl."/>
+    <word exception="dr."/>
+    <word exception="psych."/>
+    <word exception="x."/>
+    <word exception="vedr."/>
+    <word exception="frk."/>
+    <word exception="forh."/>
+    <word exception="e.Kr."/>
+    <word exception="cur."/>
+    <word exception="tv."/>
+    <word exception="tdl."/>
+    <word exception="kgl."/>
+    <word exception="bd."/>
+    <word exception="mezz."/>
+    <word exception="att."/>
+    <word exception="agro."/>
+    <word exception="do."/>
+    <word exception="ph.d."/>
+    <word exception="v."/>
+    <word exception="ult."/>
+    <word exception="n."/>
+    <word exception="å."/>
+    <word exception="vedk."/>
+    <word exception="jun."/>
+    <word exception="vsa."/>
+    <word exception="tdr."/>
+    <word exception="hrs."/>
+    <word exception="jf."/>
+    <word exception="jr."/>
+    <word exception="p.t."/>
+    <word exception="obs."/>
+    <word exception="fmd."/>
+    <word exception="d.å."/>
+    <word exception="cand."/>
+    <word exception="maks."/>
+    <word exception="z."/>
+    <word exception="fa."/>
+    <word exception="mrs."/>
+    <word exception="t.v."/>
+    <word exception="exam.dat."/>
+    <word exception="adr."/>
+    <word exception="mv."/>
+    <word exception="p.a."/>
+    <word exception="pkt."/>
+    <word exception="mdr."/>
+    <word exception="kld."/>
+    <word exception="pct."/>
+    <word exception="exam.pharm."/>
+    <word exception="a."/>
+    <word exception="okt."/>
+    <word exception="inkl."/>
+    <word exception="pharm."/>
+    <word exception="fig."/>
+    <word exception="n.b."/>
+    <word exception="s.u."/>
+    <word exception="s."/>
+    <word exception="c.c."/>
+    <word exception="LI."/>
+    <word exception="m.v.h."/>
+    <word exception="kr."/>
+    <word exception="el."/>
+    <word exception="stud."/>
+    <word exception="techn."/>
+    <word exception="fhv."/>
+    <word exception="t.h."/>
+    <word exception="nov."/>
+    <word exception="kl."/>
+    <word exception="vha."/>
+    <word exception="hhv."/>
+    <word exception="el.lign."/>
+    <word exception="fl."/>
+    <word exception="ift."/>
+    <word exception="mr."/>
+    <word exception="o.k."/>
+    <word exception="tlf."/>
+    <word exception="matr.nr."/>
+    <word exception="oecon."/>
+    <word exception="mdl."/>
+    <word exception="alm."/>
+    <word exception="dvs."/>
+    <word exception="pga."/>
+    <word exception="ling.merc."/>
+    <word exception="a.m.b.a."/>
+    <word exception="d.s."/>
+    <word exception="ang."/>
+    <word exception="eksam."/>
+    <word exception="hort."/>
+    <word exception="brom."/>
+    <word exception="sen."/>
+    <word exception="m."/>
+    <word exception="td."/>
+    <word exception="vær."/>
+    <word exception="odont."/>
+    <word exception="r."/>
+    <word exception="jur."/>
+    <word exception="y."/>
+    <word exception="pr."/>
+    <word exception="lrs."/>
+    <word exception="b."/>
+    <word exception="lign."/>
+    <word exception="p."/>
+    <word exception="f."/>
+    <word exception="art."/>
+    <word exception="mvh."/>
+    <word exception="geom."/>
+    <word exception="scient.pol."/>
+    <word exception="co."/>
+    <word exception="iht."/>
+    <word exception="jnr."/>
+    <word exception="dec."/>
+    <word exception="phil."/>
+    <word exception="gl."/>
+    <word exception="arch."/>
+    <word exception="l."/>
+    <word exception="d.s.s."/>
+    <word exception="ff."/>
+    <word exception="polit."/>
+    <word exception="mrk."/>
+    <word exception="ca."/>
+    <word exception="med."/>
+    <word exception="prc."/>
+    <word exception="feb."/>
+    <word exception="t."/>
+    <word exception="aug."/>
+    <word exception="f.eks."/>
+    <word exception="m.v."/>
+    <word exception="m.a.o."/>
+    <word exception="theol."/>
+    <word exception="o.a."/>
+    <word exception="beg."/>
+    <word exception="afd."/>
+    <word exception="fr."/>
+    <word exception="kbh."/>
+    <word exception="polyt."/>
+    <word exception="sdr."/>
+    <word exception="tskf."/>
+    <word exception="sml."/>
+    <word exception="jan."/>
+    <word exception="vol."/>
+    <word exception="p.v.a."/>
+    <word exception="mia."/>
+    <word exception="o.l."/>
+    <word exception="i."/>
+    <word exception="d.d."/>
+    <word exception="if."/>
+    <word exception="St."/>
+    <word exception="mag."/>
+    <word exception="adm.pol."/>
+    <word exception="afs."/>
+    <word exception="k."/>
+    <word exception="æ."/>
+    <word exception="pæd."/>
+    <word exception="m.m."/>
+    <word exception="g."/>
+    <word exception="Skt."/>
+    <word exception="h.c."/>
+    <word exception="u."/>
+    <word exception="st."/>
+    <word exception="bl.a."/>
+    <word exception="vedl."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="OOo"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

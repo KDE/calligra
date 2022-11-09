@@ -1,0 +1,2488 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find=":delik:" replace=""/>
+    <item find=":ay:" replace=""/>
+    <item find=":kruvasan:" replace="縷"/>
+    <item find=":kaşık:" replace="籠"/>
+    <item find=":x4:" replace=""/>
+    <item find=":gözler:" replace=""/>
+    <item find=":bebek2:" replace=""/>
+    <item find=":hançer:" replace="†"/>
+    <item find=":çizelge:" replace=""/>
+    <item find=":siyah kalp:" replace=""/>
+    <item find=":yukarı2:" replace=""/>
+    <item find="Ünvan" replace="unvan"/>
+    <item find=":7/8:" replace="⅞"/>
+    <item find=":görme:" replace=""/>
+    <item find=":kilit:" replace=""/>
+    <item find=":Iota:" replace="Ι"/>
+    <item find=":Lamda:" replace="Λ"/>
+    <item find=":^K:" replace="ᴷ"/>
+    <item find=":kiraz:" replace=""/>
+    <item find=":ev:" replace=""/>
+    <item find="Uyuya kal" replace="Uyuyakal"/>
+    <item find=":yemek çubuğu:" replace="異"/>
+    <item find="Atelye" replace="Atölye"/>
+    <item find="Şöför" replace="şoför"/>
+    <item find="Psikiyatrist" replace="Psikiyatr"/>
+    <item find=":goril:" replace="轢"/>
+    <item find=":dalga:" replace=""/>
+    <item find=":bebek3:" replace="櫓"/>
+    <item find=":^delta:" replace="ᵟ"/>
+    <item find=":sihirbaz:" replace="慄"/>
+    <item find=":ejderha:" replace=""/>
+    <item find=":golf:" replace=""/>
+    <item find=":zar:" replace=""/>
+    <item find="Supab" replace="Supap"/>
+    <item find=":samanyolu:" replace=""/>
+    <item find=":cilt4:" replace=""/>
+    <item find=":zombi:" replace="履"/>
+    <item find=":^4:" replace="⁴"/>
+    <item find=":uyku:" replace=""/>
+    <item find="Arasıra" replace="Ara sıra"/>
+    <item find=":çim:" replace=""/>
+    <item find=":Tau:" replace="Τ"/>
+    <item find=":vagon:" replace=""/>
+    <item find=":özçekim:" replace="盧"/>
+    <item find=":genç ay:" replace=""/>
+    <item find=":lale:" replace=""/>
+    <item find=":danscı:" replace=""/>
+    <item find="Azerbeycan" replace="Azerbaycan"/>
+    <item find=":makas4:" replace="✃"/>
+    <item find=":tehlike:" replace="⚡"/>
+    <item find="dökümanter" replace="dokümanter"/>
+    <item find="Kibri" replace="Kirpi"/>
+    <item find="Şohben" replace="Şofben"/>
+    <item find=":won:" replace="₩"/>
+    <item find=":^T:" replace="ᵀ"/>
+    <item find="hegamonya" replace="hegemonya"/>
+    <item find=":bebek:" replace=""/>
+    <item find=":mil başına:" replace="‰"/>
+    <item find=":abc:" replace=""/>
+    <item find="Kanpanya" replace="Kampanya"/>
+    <item find=":beyaz kale:" replace="♖"/>
+    <item find="Candarma" replace="Jandarma"/>
+    <item find=":köpek:" replace=""/>
+    <item find=":kaka:" replace=""/>
+    <item find=":_8:" replace="₈"/>
+    <item find=":epsilon:" replace="ε"/>
+    <item find="alobora" replace="alabora"/>
+    <item find=":civciv:" replace=""/>
+    <item find=":klasör3:" replace=""/>
+    <item find=":domuz:" replace=""/>
+    <item find=":SE2:" replace="⇘"/>
+    <item find="Teravi" replace="Teravih"/>
+    <item find=":flama2:" replace=""/>
+    <item find=":tek gözlük:" replace="類"/>
+    <item find=":chi:" replace="χ"/>
+    <item find=":merperson:" replace="隆"/>
+    <item find="proleterya" replace="proletarya"/>
+    <item find="Kokareç" replace="Kokoreç"/>
+    <item find=":?2:" replace="❔"/>
+    <item find="Maydonoz" replace="Maydanoz"/>
+    <item find=":bayraklar2:" replace=""/>
+    <item find=":ibadet:" replace=""/>
+    <item find=":Farsça:" replace="☫"/>
+    <item find=":kedi2:" replace=""/>
+    <item find="labaratuar" replace="laboratuvar"/>
+    <item find=":radyo düğmesi:" replace=""/>
+    <item find=":numara2:" replace=""/>
+    <item find=":küçük yıldız:" replace="⭒"/>
+    <item find="hakkaten" replace="hakikaten"/>
+    <item find=":yağmurlu:" replace=""/>
+    <item find="Terevi" replace="Teravih"/>
+    <item find=":merkür:" replace="☿"/>
+    <item find="Boğça" replace="Poğaça"/>
+    <item find=":ekmek2:" replace="稜"/>
+    <item find=":peri:" replace="栗"/>
+    <item find="anfi" replace="amfi"/>
+    <item find="Nalet" replace="Lanet"/>
+    <item find=":büyüteç2:" replace=""/>
+    <item find=":^U:" replace="ᵁ"/>
+    <item find="Şok olmak" replace="Şoke olmak"/>
+    <item find=":duraklat:" replace="⏸"/>
+    <item find=":kravat:" replace=""/>
+    <item find=":kalp gözlü kedi:" replace=""/>
+    <item find=":iniş:" replace=""/>
+    <item find=":çatık bakışlı:" replace=""/>
+    <item find="kokareç" replace="kokoreç"/>
+    <item find=":gazete:" replace=""/>
+    <item find="Kiprik" replace="Kirpik"/>
+    <item find="istepne" replace="stepne"/>
+    <item find="asvalt" replace="asfalt"/>
+    <item find=":yazı:" replace="✍"/>
+    <item find=":sentezleyici:" replace=""/>
+    <item find="Ablem" replace="Amblem"/>
+    <item find=":raylar2:" replace=""/>
+    <item find=":vinç:" replace=""/>
+    <item find=":tuvalet2:" replace=""/>
+    <item find="makina" replace="makine"/>
+    <item find="atelye" replace="atölye"/>
+    <item find=":boğa:" replace="♉"/>
+    <item find=":11 s:" replace=""/>
+    <item find=":düğün:" replace=""/>
+    <item find="Münübüs" replace="Minibüs"/>
+    <item find="egzos" replace="egzoz"/>
+    <item find=":yalancı:" replace="拉"/>
+    <item find="komünükasyon" replace="komünikasyon"/>
+    <item find=":notalar3:" replace=""/>
+    <item find=":ayak:" replace=""/>
+    <item find=":SE:" replace="↘"/>
+    <item find=":aşağı4:" replace=""/>
+    <item find=":^G:" replace="ᴳ"/>
+    <item find="öğe" replace="öge"/>
+    <item find=":onay işareti4:" replace=""/>
+    <item find="Karnıbahar" replace="Karnabahar"/>
+    <item find=":kalanın yarısı:" replace="턼"/>
+    <item find=":^y:" replace="ʸ"/>
+    <item find=":üçgen:" replace="△"/>
+    <item find=":maça:" replace="♠"/>
+    <item find=":hareket topu:" replace=""/>
+    <item find=":sisli:" replace=""/>
+    <item find="Adele" replace="Adale"/>
+    <item find=":çiçek:" replace="⚘"/>
+    <item find=":zarf:" replace="✉"/>
+    <item find=":raylar4:" replace=""/>
+    <item find=":sağ2:" replace=""/>
+    <item find=":büyük kare:" replace="⬜"/>
+    <item find=":notalar:" replace="♫"/>
+    <item find=":bulut3:" replace="⛈"/>
+    <item find=":dönen kalpler:" replace=""/>
+    <item find="egsoz" replace="egzoz"/>
+    <item find=":^k:" replace="ᵏ"/>
+    <item find=":kart dizini:" replace=""/>
+    <item find="Çiflik" replace="Çiftlik"/>
+    <item find=":mevcuttur:" replace="∃"/>
+    <item find=":aşağı2:" replace=""/>
+    <item find=":çizelge3:" replace=""/>
+    <item find=":siyah fil:" replace="♝"/>
+    <item find="Revanş" replace="Rövanş"/>
+    <item find=":hentbol:" replace="菉"/>
+    <item find=":düğme:" replace=""/>
+    <item find=":bitcoin:" replace="₿"/>
+    <item find="arabeks" replace="arabesk"/>
+    <item find=":damlacık:" replace=""/>
+    <item find=":yaşlı kadın:" replace=""/>
+    <item find=":çember3:" replace=""/>
+    <item find=":geri dönüşüm:" replace="♲"/>
+    <item find=":sekizlik nota:" replace="텠"/>
+    <item find=":hayret içinde:" replace=""/>
+    <item find=":kraliçe:" replace=""/>
+    <item find=":^f:" replace="ᶠ"/>
+    <item find=":güreş:" replace="祿"/>
+    <item find="Rasgele" replace="Rastgele"/>
+    <item find="Aparatif" replace="Aperitif"/>
+    <item find=":dolunay sonrası:" replace=""/>
+    <item find=":paralelkenar2:" replace="▰"/>
+    <item find=":tren3:" replace=""/>
+    <item find="Bir kaç" replace="Birkaç"/>
+    <item find=":dil3:" replace=""/>
+    <item find=":suşi:" replace=""/>
+    <item find="Peştemal" replace="Peştamal"/>
+    <item find=":deve2:" replace=""/>
+    <item find="Birhaber" replace="Bihaber"/>
+    <item find=":kum saati:" replace="⌛"/>
+    <item find=":karides:" replace="戀"/>
+    <item find=":bayrak4:" replace="⚐"/>
+    <item find=":onay kutusu2:" replace="☑"/>
+    <item find="matba" replace="matbaa"/>
+    <item find="Labaratuar" replace="Laboratuvar"/>
+    <item find="Pisiklet" replace="Bisiklet"/>
+    <item find=":kelepçe:" replace=""/>
+    <item find=":sinek2:" replace="♧"/>
+    <item find="azerbeycan" replace="Azerbaycan"/>
+    <item find="gangren" replace="kangren"/>
+    <item find="kaysı" replace="kayısı"/>
+    <item find=":hoparlör4:" replace=""/>
+    <item find=":onay işareti2:" replace="✔"/>
+    <item find=":küçük ni:" replace="∍"/>
+    <item find="raslantı" replace="rastlantı"/>
+    <item find=":^):" replace="⁾"/>
+    <item find=":mobilet2:" replace=""/>
+    <item find="Tesbih" replace="Tespih"/>
+    <item find=":atom:" replace="⚛"/>
+    <item find="Uluslar arası" replace="Uluslararası"/>
+    <item find="Dinazor" replace="Dinozor"/>
+    <item find="htp" replace="http"/>
+    <item find="vejeteryan" replace="vejetaryen"/>
+    <item find=":tv:" replace=""/>
+    <item find=":müze:" replace=""/>
+    <item find=":çan dili:" replace=""/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find=":upsilon:" replace="υ"/>
+    <item find="Aşofman" replace="Eşofman"/>
+    <item find=":_i:" replace="ᵢ"/>
+    <item find=":fl:" replace="ﬂ"/>
+    <item find=":cilt1:" replace=""/>
+    <item find=":pizza:" replace=""/>
+    <item find=":yetişkin:" replace="六"/>
+    <item find=":\\:" replace="∖"/>
+    <item find=":tako:" replace=""/>
+    <item find="silahşör" replace="silahşor"/>
+    <item find=":boş not sayfası:" replace=""/>
+    <item find=":somurtan:" replace=""/>
+    <item find=":daha küçük kare:" replace="◽"/>
+    <item find=":^teta:" replace="ᶿ"/>
+    <item find=":öpen kedi:" replace=""/>
+    <item find="Kare kök" replace="Karekök"/>
+    <item find=":dolap:" replace=""/>
+    <item find=":^H:" replace="ᴴ"/>
+    <item find="sohpet" replace="sohbet"/>
+    <item find=":kapı:" replace=""/>
+    <item find=":postane:" replace=""/>
+    <item find=":balık tutmak:" replace=""/>
+    <item find=":börek:" replace=""/>
+    <item find="Payton" replace="Fayton"/>
+    <item find=":yay:" replace="♐"/>
+    <item find=":daha küçük kare2:" replace="◾"/>
+    <item find=":boş küme:" replace="∅"/>
+    <item find="çukulata" replace="çikolata"/>
+    <item find=":hotel2:" replace=""/>
+    <item find="Tabiyat" replace="Tabiat"/>
+    <item find="parlementer" replace="parlamenter"/>
+    <item find=":sauna:" replace="淪"/>
+    <item find=":kadın:" replace=""/>
+    <item find="Prooram" replace="Program"/>
+    <item find=":oyuncak bebekler:" replace=""/>
+    <item find=":çubuk kraker:" replace="泌"/>
+    <item find=":tabanca:" replace=""/>
+    <item find=":eğlenmeyen:" replace=""/>
+    <item find="Menapoz" replace="Menopoz"/>
+    <item find=":elbise:" replace=""/>
+    <item find="Labaratuvar" replace="Laboratuvar"/>
+    <item find=":öpücük3:" replace=""/>
+    <item find=":paralel:" replace="∥"/>
+    <item find="bujiteri" replace="bijuteri"/>
+    <item find="Aporlor" replace="Hoparlör"/>
+    <item find=":ağaç:" replace=""/>
+    <item find=":yeni ay2:" replace=""/>
+    <item find="Utopya" replace="Ütopya"/>
+    <item find=":beşgen2:" replace="⬟"/>
+    <item find="Zınba" replace="Zımba"/>
+    <item find=":hapşırma:" replace="蠟"/>
+    <item find=":uçak5:" replace=""/>
+    <item find=":^c:" replace="ᶜ"/>
+    <item find=":pastırma:" replace="肋"/>
+    <item find=":piyano:" replace=""/>
+    <item find="aperatif" replace="aperitif"/>
+    <item find="subap" replace="supap"/>
+    <item find="Komünükasyon" replace="Komünikasyon"/>
+    <item find=":araba2:" replace=""/>
+    <item find=":golf2:" replace="⛳"/>
+    <item find=":leopar:" replace=""/>
+    <item find="Tasviye" replace="Tasfiye"/>
+    <item find="makosen" replace="mokasen"/>
+    <item find=":müzik2:" replace=""/>
+    <item find=":horoz:" replace=""/>
+    <item find=":üçgen2:" replace="▲"/>
+    <item find="labaratuvar" replace="laboratuvar"/>
+    <item find="Menejer" replace="Menajer"/>
+    <item find="Çala kalem" replace="Çalakalem"/>
+    <item find=":ramen:" replace=""/>
+    <item find="restorant" replace="restoran"/>
+    <item find=":polis otosu2:" replace=""/>
+    <item find="Parelel" replace="Paralel"/>
+    <item find=":rupi:" replace="₹"/>
+    <item find=":Epsilon:" replace="Ε"/>
+    <item find="Haremlik selamlık" replace="Harem selamlık"/>
+    <item find="yada" replace="ya da"/>
+    <item find="Kazazade" replace="Kazazede"/>
+    <item find="zenaat" replace="zanaat"/>
+    <item find=":S2:" replace="⇓"/>
+    <item find=":bisikletçi:" replace=""/>
+    <item find=":':" replace="’"/>
+    <item find=":tart:" replace="不"/>
+    <item find=":döngü:" replace="➰"/>
+    <item find="Tasfir" replace="Tasvir"/>
+    <item find=":etiket:" replace=""/>
+    <item find="çinakop" replace="çinekop"/>
+    <item find="mahçup" replace="mahcup"/>
+    <item find=":pentagram:" replace="⛤"/>
+    <item find=":kulaklık:" replace=""/>
+    <item find=":domuz burnu:" replace=""/>
+    <item find="eşgal" replace="eşkâl"/>
+    <item find=":kayak:" replace=""/>
+    <item find="klavuz" replace="kılavuz"/>
+    <item find="Çinakop" replace="Çinekop"/>
+    <item find=":kabarcık2:" replace=""/>
+    <item find=":avro:" replace="€"/>
+    <item find="Valeybol" replace="Voleybol"/>
+    <item find=":şans:" replace=""/>
+    <item find="afilli" replace="afili"/>
+    <item find="ilizyon" replace="illüzyon"/>
+    <item find="Cenderme" replace="Jandarma"/>
+    <item find="Makina" replace="Makine"/>
+    <item find=":aşk2:" replace="蘭"/>
+    <item find=":^E:" replace="ᴱ"/>
+    <item find="supab" replace="supap"/>
+    <item find="Teferuat" replace="Teferruat"/>
+    <item find=":akrep:" replace="♏"/>
+    <item find=":Lorraine haçı:" replace="☨"/>
+    <item find=":kabarcık7:" replace=""/>
+    <item find="süpriz" replace="sürpriz"/>
+    <item find=":kurşun3:" replace="◦"/>
+    <item find=":kazma:" replace="⛏"/>
+    <item find=":eldiven:" replace="理"/>
+    <item find=":bilet:" replace=""/>
+    <item find=":süt:" replace="拏"/>
+    <item find=":ananas:" replace=""/>
+    <item find=":patates:" replace="凜"/>
+    <item find="Küvöz" replace="Kuvöz"/>
+    <item find=":turuncu kalp:" replace="李"/>
+    <item find=":robot:" replace="烙"/>
+    <item find=":somurtan kedi:" replace=""/>
+    <item find="Minisküs" replace="Menüsküs"/>
+    <item find=":çapa:" replace="⚓"/>
+    <item find="Promasyon" replace="Promosyon"/>
+    <item find=":tırnak bakımı:" replace=""/>
+    <item find="süprüz" replace="sürpriz"/>
+    <item find=":araba:" replace=""/>
+    <item find=":kupa2:" replace="♡"/>
+    <item find=":boş belge:" replace=""/>
+    <item find="üvertür" replace="uvertür"/>
+    <item find=":uçak:" replace="✈"/>
+    <item find=":başörtüsü:" replace="崙"/>
+    <item find=":not sayfası:" replace=""/>
+    <item find="karegrafi" replace="koreografi"/>
+    <item find="ünvan" replace="unvan"/>
+    <item find="Eşkal" replace="Eşkâl"/>
+    <item find="kolleksiyon" replace="koleksiyon"/>
+    <item find=":kare2:" replace="■"/>
+    <item find=":birleşim:" replace="∪"/>
+    <item find="boğa yılanı" replace="boa yılanı"/>
+    <item find="http:\\" replace="http://"/>
+    <item find="deynek" replace="değnek"/>
+    <item find=":D:" replace="→"/>
+    <item find="mazallah" replace="maazallah"/>
+    <item find=":^9:" replace="⁹"/>
+    <item find=":koltuk:" replace=""/>
+    <item find=":Sigma:" replace="Σ"/>
+    <item find=":yaprak:" replace=""/>
+    <item find=":jimnastikçi:" replace="露"/>
+    <item find=":ayçiçeği:" replace=""/>
+    <item find="Herkeş" replace="Herkes"/>
+    <item find=":çember:" replace="○"/>
+    <item find=":balon:" replace=""/>
+    <item find="Artiz" replace="Artist"/>
+    <item find=":büst:" replace=""/>
+    <item find=":sırıtma:" replace=""/>
+    <item find=":dönen ışık:" replace=""/>
+    <item find=":bento:" replace=""/>
+    <item find=":üst küme:" replace="⊃"/>
+    <item find="veleybol" replace="voleybol"/>
+    <item find="Ünüforma" replace="Üniforma"/>
+    <item find="selilöz" replace="selüloz"/>
+    <item find="tiyo" replace="tüyo"/>
+    <item find="Almünyum" replace="Alüminyum"/>
+    <item find=":plüto:" replace="♇"/>
+    <item find=":karo:" replace="♦"/>
+    <item find=":taban puan:" replace="‱"/>
+    <item find="Mazallah" replace="Maazallah"/>
+    <item find=":arı:" replace=""/>
+    <item find="tiskinmek" replace="tiksinmek"/>
+    <item find=":disket3:" replace=""/>
+    <item find=":cin:" replace=""/>
+    <item find=":100:" replace=""/>
+    <item find=":örümcek:" replace=""/>
+    <item find=":son çeyrek:" replace=""/>
+    <item find=":^V:" replace="ⱽ"/>
+    <item find=":10 s:" replace=""/>
+    <item find="ataç" replace="ataş"/>
+    <item find=":yen:" replace="¥"/>
+    <item find=":tiyatro:" replace=""/>
+    <item find=":kimono:" replace=""/>
+    <item find=":tatlı çörek:" replace=""/>
+    <item find=":lol:" replace="藍"/>
+    <item find=":ni değil:" replace="∌"/>
+    <item find=":geri dönüşüm2:" replace="♻"/>
+    <item find=":radyoaktif:" replace="☢"/>
+    <item find="Bilader" replace="Birader"/>
+    <item find=":yumurta:" replace="讀"/>
+    <item find=":6 s:" replace=""/>
+    <item find=":çeyrek nota:" replace="텟"/>
+    <item find=":not:" replace=""/>
+    <item find=":jüpiter:" replace="♃"/>
+    <item find=":şaşkın:" replace=""/>
+    <item find="ultümaton" replace="ültimatom"/>
+    <item find=":yumruk4:" replace="卵"/>
+    <item find=":armut:" replace=""/>
+    <item find=":kaydırıcı:" replace=""/>
+    <item find=":koala:" replace=""/>
+    <item find="Arozöz" replace="Arazöz"/>
+    <item find=":parti:" replace=""/>
+    <item find=":hediye kalp:" replace=""/>
+    <item find="gazte" replace="gazete"/>
+    <item find=":zil2:" replace=""/>
+    <item find="promasyon" replace="promosyon"/>
+    <item find="yeraltı" replace="yer altı"/>
+    <item find=":Güneş:" replace="☉"/>
+    <item find=":^çi:" replace="ᵡ"/>
+    <item find=":cd:" replace=""/>
+    <item find=":nu:" replace="ν"/>
+    <item find="Ahpap" replace="Ahbap"/>
+    <item find=":Ki:" replace="Ξ"/>
+    <item find="Tesbit" replace="Tespit"/>
+    <item find="Menisküs" replace="Menüsküs"/>
+    <item find=":traktör:" replace=""/>
+    <item find=":kriket:" replace=""/>
+    <item find=":fide:" replace=""/>
+    <item find=":sol3:" replace="☚"/>
+    <item find=":fare3:" replace=""/>
+    <item find=":yağmur:" replace="☔"/>
+    <item find="Tetanoz" replace="Tetanos"/>
+    <item find="muacir" replace="muhacir"/>
+    <item find=":^I:" replace="ᴵ"/>
+    <item find=":gemi2:" replace=""/>
+    <item find=":kabarcık6:" replace=""/>
+    <item find="parelel" replace="paralel"/>
+    <item find="artiz" replace="artist"/>
+    <item find="insiyatif" replace="inisiyatif"/>
+    <item find="Şarz" replace="Şarj"/>
+    <item find="klüp" replace="kulüp"/>
+    <item find=":Ay:" replace="☽"/>
+    <item find=":masa tenisi:" replace=""/>
+    <item find=":semaver:" replace="⚱"/>
+    <item find="Ekzantrik" replace="Eksantrik"/>
+    <item find=":takvim2:" replace=""/>
+    <item find=":kitap:" replace=""/>
+    <item find=":maymun2:" replace=""/>
+    <item find="Üvertür" replace="Uvertür"/>
+    <item find=":çadır:" replace="⛺"/>
+    <item find="Artis" replace="Artist"/>
+    <item find=":çeşme:" replace="⛲"/>
+    <item find=":^h:" replace="ʰ"/>
+    <item find=":çağrı:" replace=""/>
+    <item find=":palmiye:" replace=""/>
+    <item find=":Japon:" replace=""/>
+    <item find="enstütü" replace="enstitü"/>
+    <item find=":2 s:" replace=""/>
+    <item find=":kabarcık9:" replace=""/>
+    <item find=":güneş:" replace=""/>
+    <item find=":B:" replace="←"/>
+    <item find="Heycan" replace="Heyecan"/>
+    <item find=":Kappa:" replace="Κ"/>
+    <item find=":^g:" replace="ᵍ"/>
+    <item find=":kalem ucu2:" replace="✒"/>
+    <item find=":bulantı:" replace="濫"/>
+    <item find=":hokkabaz:" replace="魯"/>
+    <item find=":^w:" replace="ʷ"/>
+    <item find=":volkan:" replace=""/>
+    <item find=":kırılmış buz:" replace=""/>
+    <item find=":derece:" replace="°"/>
+    <item find="Melemen" replace="Menemen"/>
+    <item find="usûl" replace="usul"/>
+    <item find="Yanısıra" replace="Yanı sıra"/>
+    <item find=":tropi:" replace=""/>
+    <item find="Ceryan" replace="Cereyan"/>
+    <item find="kibri" replace="kirpi"/>
+    <item find="Http:\\" replace="http://"/>
+    <item find="Askari" replace="Asgari"/>
+    <item find="dekarasyon" replace="dekorasyon"/>
+    <item find=":dağ demiryolu:" replace=""/>
+    <item find=":kriko:" replace=""/>
+    <item find="Muşanba" replace="Muşamba"/>
+    <item find="Yımırta" replace="Yumurta"/>
+    <item find=":değildir:" replace="¬"/>
+    <item find="Kopye" replace="Kopya"/>
+    <item find=":madalya2:" replace=""/>
+    <item find=":günbatımı:" replace=""/>
+    <item find=":anten:" replace=""/>
+    <item find=":mevcut değildir:" replace="∄"/>
+    <item find="Şanzuman" replace="Şanzıman"/>
+    <item find=":ambulans:" replace=""/>
+    <item find=":kedi:" replace=""/>
+    <item find=":kayakçı:" replace="⛷"/>
+    <item find="Nötür" replace="Nötr"/>
+    <item find="hiç bir" replace="hiçbir"/>
+    <item find=":maske:" replace=""/>
+    <item find=":şırınga:" replace=""/>
+    <item find=":açı2:" replace="∡"/>
+    <item find=":buket:" replace=""/>
+    <item find="nisbet" replace="nispet"/>
+    <item find=":sigma:" replace="σ"/>
+    <item find=":yiyecek:" replace="菱"/>
+    <item find=":Teta:" replace="Θ"/>
+    <item find="sandöviç" replace="sandviç"/>
+    <item find=":kappa:" replace="κ"/>
+    <item find="kare kök" replace="karekök"/>
+    <item find=":veya:" replace="∨"/>
+    <item find=":Delta:" replace="Δ"/>
+    <item find="kolanya" replace="kolonya"/>
+    <item find="dinazor" replace="dinozor"/>
+    <item find=":onaltılık nota:" replace="텡"/>
+    <item find=":bandaj:" replace="洛"/>
+    <item find=":itfaiye arabası2:" replace=""/>
+    <item find=":_ro:" replace="ᵨ"/>
+    <item find="Kareografi" replace="Koreografi"/>
+    <item find=":dango:" replace=""/>
+    <item find="aliminyum" replace="alüminyum"/>
+    <item find=":benek:" replace="❇"/>
+    <item find="Vurdum duymaz" replace="Vurdumduymaz"/>
+    <item find=":metro:" replace=""/>
+    <item find="provakatör" replace="provokatör"/>
+    <item find=":gelin:" replace=""/>
+    <item find=":ilk çeyrek:" replace=""/>
+    <item find="müracat" replace="müracaat"/>
+    <item find=":^e:" replace="ᵉ"/>
+    <item find="Birşey" replace="Bir şey"/>
+    <item find="İstakoz" replace="Istakoz"/>
+    <item find=":flaş:" replace=""/>
+    <item find="artis" replace="artist"/>
+    <item find=":kıyafet:" replace=""/>
+    <item find="Anotomi" replace="Anatomi"/>
+    <item find="Hoşçakal" replace="Hoşça kal"/>
+    <item find="Harfiyat" replace="Hafriyat"/>
+    <item find="turizim" replace="turizm"/>
+    <item find=":içecek2:" replace=""/>
+    <item find=":açı:" replace="∠"/>
+    <item find="laboratuar" replace="laboratuvar"/>
+    <item find=":çerçeve:" replace=""/>
+    <item find=":teta:" replace="θ"/>
+    <item find="masus" replace="mahsus"/>
+    <item find=":kabarcık4:" replace=""/>
+    <item find=":dikdörtgen:" replace="▭"/>
+    <item find="çenber" replace="çember"/>
+    <item find=":dondurma:" replace=""/>
+    <item find=":taksi:" replace=""/>
+    <item find=":sevinen kedi:" replace=""/>
+    <item find=":çoraplar:" replace="罹"/>
+    <item find="teferuat" replace="teferruat"/>
+    <item find=":belge:" replace=""/>
+    <item find="katalok" replace="katalog"/>
+    <item find="tenefüs" replace="teneffüs"/>
+    <item find="Mataryal" replace="Materyal"/>
+    <item find="Halisinasyon" replace="Halüsinasyon"/>
+    <item find="Acitasyon" replace="Ajitasyon"/>
+    <item find=":zil:" replace=""/>
+    <item find="açıcak" replace="açacak"/>
+    <item find="Hegamonya" replace="Hegemonya"/>
+    <item find=":inşaat:" replace=""/>
+    <item find=":kulak:" replace=""/>
+    <item find=":boş not:" replace=""/>
+    <item find=":telefon:" replace="☎"/>
+    <item find=":zeta:" replace="ζ"/>
+    <item find=":delta:" replace="δ"/>
+    <item find="Opsayt" replace="Ofsayt"/>
+    <item find="Silahşör" replace="Silahşor"/>
+    <item find=":_t:" replace="ₜ"/>
+    <item find=":dişi:" replace="♀"/>
+    <item find="kordale" replace="kurdele"/>
+    <item find=":kamera:" replace=""/>
+    <item find="Süprüz" replace="Sürpriz"/>
+    <item find=":zar5:" replace="⚄"/>
+    <item find=":şimşek:" replace=""/>
+    <item find="yımırta" replace="yumurta"/>
+    <item find=":şölen2:" replace=""/>
+    <item find=":^5:" replace="⁵"/>
+    <item find="İsbat" replace="İspat"/>
+    <item find=":sinyal gücü:" replace=""/>
+    <item find="Cimnastik" replace="Jimnastik"/>
+    <item find="alarım" replace="alarm"/>
+    <item find=":3/4:" replace="¾"/>
+    <item find=":siyah at:" replace="♞"/>
+    <item find=":telefon3:" replace=""/>
+    <item find=":Upsilon:" replace="Υ"/>
+    <item find=":çizgili sincap:" replace=""/>
+    <item find="kalemşör" replace="kalemşor"/>
+    <item find=":tavşan2:" replace=""/>
+    <item find="sibop" replace="supap"/>
+    <item find=":büyük dolar işareti:" replace=""/>
+    <item find=":yonca:" replace=""/>
+    <item find="(e)" replace="€"/>
+    <item find=":domino:" replace=""/>
+    <item find=":posta kutusu2:" replace=""/>
+    <item find="ekzantrik" replace="eksantrik"/>
+    <item find=":menorah:" replace=""/>
+    <item find="Yeldeğirmeni" replace="Yel değirmeni"/>
+    <item find=":yatak:" replace=""/>
+    <item find=":büftek:" replace="數"/>
+    <item find="odf" replace="ODF"/>
+    <item find="Eşgal" replace="Eşkâl"/>
+    <item find=":ateş:" replace=""/>
+    <item find=":belge3:" replace=""/>
+    <item find=":gemi:" replace=""/>
+    <item find=":öküz:" replace=""/>
+    <item find=":bomba:" replace=""/>
+    <item find=":_6:" replace="₆"/>
+    <item find="Tenefüs" replace="Teneffüs"/>
+    <item find=":parti3:" replace="壟"/>
+    <item find="Yanlız" replace="Yalnız"/>
+    <item find="akşam üzeri" replace="akşamüzeri"/>
+    <item find="muşanba" replace="muşamba"/>
+    <item find=":motosiklet:" replace=""/>
+    <item find="Vehamet" replace="Vahamet"/>
+    <item find=":altın:" replace="磊"/>
+    <item find="rasgele" replace="rastgele"/>
+    <item find=":teneke kutu:" replace="參"/>
+    <item find=":yin yang:" replace="☯"/>
+    <item find=":şimşek3:" replace="☇"/>
+    <item find=":polis otosu:" replace=""/>
+    <item find="acitasyon" replace="ajitasyon"/>
+    <item find=":saç kesimi:" replace=""/>
+    <item find=":göz kırpmak:" replace=""/>
+    <item find=":kot:" replace=""/>
+    <item find="Poaça" replace="Poğaça"/>
+    <item find=":şaşırmış:" replace=""/>
+    <item find=":beyaz çiçek:" replace=""/>
+    <item find=":kaplıca:" replace="♨"/>
+    <item find=":sarı saç:" replace=""/>
+    <item find=":iota:" replace="ι"/>
+    <item find=":kask:" replace="⛑"/>
+    <item find=":helikopter:" replace=""/>
+    <item find="müsbet" replace="müspet"/>
+    <item find=":büyük kare2:" replace="⬛"/>
+    <item find=":sigma2:" replace="ς"/>
+    <item find=":tamam:" replace=""/>
+    <item find=":korkmuş:" replace=""/>
+    <item find="Şemşiye" replace="Şemsiye"/>
+    <item find=":tuvalet:" replace=""/>
+    <item find="1/2" replace="½"/>
+    <item find=":yağmur2:" replace="⛆"/>
+    <item find=":dolunay2:" replace=""/>
+    <item find=":omuz silkme:" replace="路"/>
+    <item find="Vaz geçmek" replace="Vazgeçmek"/>
+    <item find="Egzantrik" replace="Eksantrik"/>
+    <item find="kominist" replace="komünist"/>
+    <item find=":gülümseme2:" replace="☻"/>
+    <item find=":tıp sembolü:" replace="☤"/>
+    <item find=":kızarmış:" replace=""/>
+    <item find="sueter" replace="süveter"/>
+    <item find=":eski ay:" replace=""/>
+    <item find="miğde" replace="mide"/>
+    <item find="istakoz" replace="ıstakoz"/>
+    <item find=":yarış:" replace=""/>
+    <item find=":karınca:" replace=""/>
+    <item find=":hastane:" replace=""/>
+    <item find=":ufo:" replace=""/>
+    <item find=":N2:" replace="⇑"/>
+    <item find=":hindi:" replace="旅"/>
+    <item find=":cep telefonu:" replace=""/>
+    <item find="fasülye" replace="fasulye"/>
+    <item find=":Kabe:" replace=""/>
+    <item find=":çerez2:" replace="怒"/>
+    <item find=":_4:" replace="₄"/>
+    <item find=":ffi:" replace="ﬃ"/>
+    <item find=":yer imi:" replace=""/>
+    <item find=":kum saati2:" replace="⏳"/>
+    <item find="Yeraltı" replace="Yer altı"/>
+    <item find=":kule:" replace=""/>
+    <item find=":NW2:" replace="⇖"/>
+    <item find=":^1:" replace="¹"/>
+    <item find="Nergiz" replace="Nergis"/>
+    <item find=":bisikletçi2:" replace=""/>
+    <item find="Pehriz" replace="Perhiz"/>
+    <item find=":paket:" replace=""/>
+    <item find="abonoz" replace="abanoz"/>
+    <item find=":kadınlar:" replace=""/>
+    <item find=":ağız:" replace=""/>
+    <item find=":xi:" replace="ξ"/>
+    <item find=":kale:" replace=""/>
+    <item find=":!!:" replace="‼"/>
+    <item find="Gazte" replace="Gazete"/>
+    <item find=":elf:" replace="利"/>
+    <item find="Acenta" replace="Acente"/>
+    <item find=":çift:" replace=""/>
+    <item find=":^s:" replace="ˢ"/>
+    <item find="Öğe" replace="Öge"/>
+    <item find="Selilöz" replace="Selüloz"/>
+    <item find="eşkal" replace="eşkâl"/>
+    <item find=":tren:" replace=""/>
+    <item find="Masus" replace="Mahsus"/>
+    <item find="Kaysı" replace="Kayısı"/>
+    <item find=":aile:" replace=""/>
+    <item find="sükûtuhayal" replace="sukutuhayal"/>
+    <item find=":Zeta:" replace="Ζ"/>
+    <item find="Lavobo" replace="Lavabo"/>
+    <item find="parlemento" replace="parlemento"/>
+    <item find=":evler3:" replace=""/>
+    <item find="sezeryan" replace="sezaryen"/>
+    <item find="müsvette" replace="müsvedde"/>
+    <item find=":küre4:" replace=""/>
+    <item find=":faks:" replace=""/>
+    <item find=":fırtına:" replace=""/>
+    <item find="fesetmek" replace="feshetmek"/>
+    <item find=":uçak6:" replace=""/>
+    <item find="aparatif" replace="aperitif"/>
+    <item find="arefe" replace="arife"/>
+    <item find="müsade" replace="müsaade"/>
+    <item find="Şifai" replace="Şifahi"/>
+    <item find=":el3:" replace=""/>
+    <item find="Sezeryan" replace="Sezaryen"/>
+    <item find=":beyaz piyon:" replace="♙"/>
+    <item find=":düğme2:" replace=""/>
+    <item find=":kuş:" replace=""/>
+    <item find=":papaz:" replace=""/>
+    <item find=":anahtar2:" replace=""/>
+    <item find="sudyen" replace="sütyen"/>
+    <item find="faide" replace="fayda"/>
+    <item find=":^M:" replace="ᴹ"/>
+    <item find="Çenber" replace="Çember"/>
+    <item find="pardesü" replace="pardösü"/>
+    <item find="laylon" replace="naylon"/>
+    <item find="civata" replace="cıvata"/>
+    <item find="eksozt" replace="egzoz"/>
+    <item find=":çay:" replace=""/>
+    <item find=":geyik:" replace="歷"/>
+    <item find="Yayınlamak" replace="Yayımlamak"/>
+    <item find="orjinal" replace="orijinal"/>
+    <item find=":oğlak:" replace="♑"/>
+    <item find=":gülen kedi:" replace=""/>
+    <item find=":timsah:" replace=""/>
+    <item find="Abondone" replace="Abandone"/>
+    <item find="megolaman" replace="megaloman"/>
+    <item find="Laylon" replace="Naylon"/>
+    <item find="Dekarasyon" replace="Dekorasyon"/>
+    <item find=":ebegümeci:" replace=""/>
+    <item find="Tahtarevalli" replace="Tahterevalli"/>
+    <item find=":_2:" replace="₂"/>
+    <item find=":yukarı:" replace="☝"/>
+    <item find="harfiyat" replace="hafriyat"/>
+    <item find=":hindistan cevizi:" replace="便"/>
+    <item find=":Omega:" replace="Ω"/>
+    <item find="tabiyat" replace="tabiat"/>
+    <item find=":büyük daire2:" replace="⬤"/>
+    <item find=":_p:" replace="ₚ"/>
+    <item find="mozayik" replace="mozaik"/>
+    <item find=":_o:" replace="ₒ"/>
+    <item find="tenbel" replace="tembel"/>
+    <item find="Çeçaron" replace="Çaçaron"/>
+    <item find=":şapka2:" replace=""/>
+    <item find=":yeni ay:" replace=""/>
+    <item find=":doğum günü:" replace=""/>
+    <item find=":siyah şah:" replace="♚"/>
+    <item find="Tribuşon" replace="Tirbuşon"/>
+    <item find="aptes" replace="abdest"/>
+    <item find=":yorgun:" replace=""/>
+    <item find=":istasyon:" replace=""/>
+    <item find=":beşgen:" replace="⬠"/>
+    <item find=":kızarmış karides:" replace=""/>
+    <item find=":kestane:" replace=""/>
+    <item find=":roket:" replace=""/>
+    <item find=":_gama:" replace="ᵧ"/>
+    <item find="tirbüşon" replace="tirbuşon"/>
+    <item find="yanlız" replace="yalnız"/>
+    <item find=":yemek:" replace=""/>
+    <item find=":tırmanıcı:" replace="輪"/>
+    <item find=":kurdele:" replace=""/>
+    <item find=":kasırga:" replace=""/>
+    <item find="oğmak" replace="ovmak"/>
+    <item find="Süpriz" replace="Sürpriz"/>
+    <item find=":sarılma:" replace="珞"/>
+    <item find=":üst germe:" replace=""/>
+    <item find=":yazı2:" replace=""/>
+    <item find=":_-:" replace="₋"/>
+    <item find="uluslar arası" replace="uluslararası"/>
+    <item find="civa" replace="cıva"/>
+    <item find="mentalite" replace="mantalite"/>
+    <item find=":trompet:" replace=""/>
+    <item find=":Türk lirası:" replace="₺"/>
+    <item find="Ensitü" replace="Enstitü"/>
+    <item find="Deynek" replace="Değnek"/>
+    <item find="tasviye" replace="tasfiye"/>
+    <item find=":turta:" replace="寧"/>
+    <item find="Hoporlör" replace="Hoparlör"/>
+    <item find=":klasör:" replace=""/>
+    <item find=":3 s:" replace=""/>
+    <item find="Gaste" replace="Gazete"/>
+    <item find="Ahçı" replace="Aşçı"/>
+    <item find="Penbe" replace="Pembe"/>
+    <item find=":mum:" replace=""/>
+    <item find=":vampir:" replace="率"/>
+    <item find=":^P:" replace="ᴾ"/>
+    <item find="kopye" replace="kopya"/>
+    <item find=":alıcı3:" replace=""/>
+    <item find=":içinde değil:" replace="∉"/>
+    <item find=":tanabata ağacı:" replace=""/>
+    <item find=":hamburger:" replace=""/>
+    <item find=":küvet:" replace=""/>
+    <item find=":iki kalp:" replace=""/>
+    <item find="oparasyon" replace="operasyon"/>
+    <item find="yalnış" replace="yanlış"/>
+    <item find=":harita:" replace=""/>
+    <item find="Difransiyel" replace="Diferansiyel"/>
+    <item find=":lokomotif2:" replace=""/>
+    <item find=":çam:" replace=""/>
+    <item find="Karma karışık" replace="Karmakarışık"/>
+    <item find="Alimünyum" replace="Alüminyum"/>
+    <item find="tamüden" replace="taammüden"/>
+    <item find="Oce" replace="Oje"/>
+    <item find=":cetvel2:" replace=""/>
+    <item find="megoloman" replace="megaloman"/>
+    <item find=":kayan araba:" replace="⛐"/>
+    <item find="Istırap" replace="Izdırap"/>
+    <item find=":oyun kolu:" replace=""/>
+    <item find="Radyosyon" replace="Radyasyon"/>
+    <item find=":böler:" replace="∣"/>
+    <item find="Palyoça" replace="Palyaço"/>
+    <item find=":dil:" replace=""/>
+    <item find=":yüzücü:" replace=""/>
+    <item find=":paralelkenar:" replace="▱"/>
+    <item find=":tramvay2:" replace=""/>
+    <item find=":çekiç:" replace=""/>
+    <item find="Aperatif" replace="Aperitif"/>
+    <item find=":güvercin:" replace=""/>
+    <item find=":kalem4:" replace=""/>
+    <item find=":damat:" replace="蘆"/>
+    <item find=":^i:" replace="ⁱ"/>
+    <item find=":zar3:" replace="⚂"/>
+    <item find=":orta kare2:" replace="◼"/>
+    <item find="aşofman" replace="eşofman"/>
+    <item find="Büyültmek" replace="Büyütmek"/>
+    <item find="Mustarip" replace="Muzdarip"/>
+    <item find=":gündoğumu2:" replace=""/>
+    <item find=":kamp:" replace=""/>
+    <item find=":9 s:" replace=""/>
+    <item find="Boy pos" replace="Boy bos"/>
+    <item find=":imbik:" replace="⚗"/>
+    <item find=":bulut:" replace="☁"/>
+    <item find=":çekiç ve ingiliz anahtarı:" replace=""/>
+    <item find="matamatik" replace="matematik"/>
+    <item find=":biyolojik tehlike:" replace="☣"/>
+    <item find=":termometre:" replace=""/>
+    <item find=":sandalet:" replace=""/>
+    <item find="Herkez" replace="Herkes"/>
+    <item find="Zatüre" replace="Zatürre"/>
+    <item find=":çift3:" replace=""/>
+    <item find=":elips:" replace="⬭"/>
+    <item find=":onay kutusu4:" replace=""/>
+    <item find=":dağ:" replace="⛰"/>
+    <item find="mürüvet" replace="mürüvvet"/>
+    <item find=":alt küme değil:" replace="⊄"/>
+    <item find="zerafet" replace="zarafet"/>
+    <item find=":çizelge5:" replace=""/>
+    <item find=":kano:" replace=""/>
+    <item find=":atm:" replace=""/>
+    <item find=":iptal et:" replace=""/>
+    <item find=":öfke:" replace=""/>
+    <item find="pehriz" replace="perhiz"/>
+    <item find=":zar6:" replace="⚅"/>
+    <item find="Alobora" replace="Alabora"/>
+    <item find=":sessiz:" replace=""/>
+    <item find=":boynuzlar:" replace="落"/>
+    <item find="kontür" replace="kontör"/>
+    <item find=":kızarmak:" replace=""/>
+    <item find=":mücevher:" replace=""/>
+    <item find=":makas2:" replace="✄"/>
+    <item find=":domates:" replace=""/>
+    <item find="Aşantiyon" replace="Eşantiyon"/>
+    <item find=":kurşun:" replace="•"/>
+    <item find="nötür" replace="nötr"/>
+    <item find=":psi:" replace="ψ"/>
+    <item find="Sarmısak" replace="Sarımsak"/>
+    <item find=":yıldız4:" replace=""/>
+    <item find=":not3:" replace=""/>
+    <item find=":integral4:" replace="∮"/>
+    <item find="cübbe" replace="cüppe"/>
+    <item find=":şeytan:" replace=""/>
+    <item find=":plaj:" replace=""/>
+    <item find=":zafer:" replace=""/>
+    <item find=":anahtar:" replace=""/>
+    <item find=":lamba:" replace=""/>
+    <item find="Menecer" replace="Menajer"/>
+    <item find="Kolleksiyon" replace="Koleksiyon"/>
+    <item find=":kertenkele:" replace="年"/>
+    <item find=":erkek domuz:" replace=""/>
+    <item find=":sağ4:" replace=""/>
+    <item find="informasyon" replace="enformasyon"/>
+    <item find=":para:" replace=""/>
+    <item find=":banka:" replace=""/>
+    <item find="zatüre" replace="zatürre"/>
+    <item find="espiri" replace="espri"/>
+    <item find="mürivet" replace="mürüvvet"/>
+    <item find=":balık:" replace="♓"/>
+    <item find=":hokey:" replace=""/>
+    <item find="Oğmak" replace="Ovmak"/>
+    <item find=":dördüncü dereceden kök:" replace="∜"/>
+    <item find="sne" replace="sen"/>
+    <item find=":patates kızartması:" replace=""/>
+    <item find=":isim:" replace=""/>
+    <item find=":_çi:" replace="ᵪ"/>
+    <item find=":korsanlık yok:" replace=""/>
+    <item find="Müracat" replace="Müracaat"/>
+    <item find=":notalar2:" replace="♬"/>
+    <item find=":ter damlaları:" replace=""/>
+    <item find=":_9:" replace="₉"/>
+    <item find=":eşkenar dörtgen:" replace="◊"/>
+    <item find=":bira2:" replace=""/>
+    <item find="ukte" replace="ukde"/>
+    <item find="Enstütü" replace="Enstitü"/>
+    <item find="menejer" replace="menajer"/>
+    <item find="lavobo" replace="lavabo"/>
+    <item find="Malesef" replace="Maalesef"/>
+    <item find="Vejeteryan" replace="Vejetaryen"/>
+    <item find=":otobüs:" replace=""/>
+    <item find=":yüzük:" replace=""/>
+    <item find="türübün" replace="tribün"/>
+    <item find="Akşam üzeri" replace="Akşamüzeri"/>
+    <item find="İstepne" replace="Stepne"/>
+    <item find=":orta boy yıldız:" replace="⭐"/>
+    <item find=":nota2:" replace="♪"/>
+    <item find=":yüksek ses:" replace=""/>
+    <item find="Birgün" replace="Bir gün"/>
+    <item find="Kordale" replace="Kurdele"/>
+    <item find=":hotel:" replace=""/>
+    <item find=":yürüyüş:" replace=""/>
+    <item find=":tenis:" replace=""/>
+    <item find=":video kamera:" replace=""/>
+    <item find="satlık" replace="satılık"/>
+    <item find=":sigara içilebilir:" replace=""/>
+    <item find="birfiil" replace="bilfiil"/>
+    <item find="döküman" replace="doküman"/>
+    <item find="İzalasyon" replace="İzolasyon"/>
+    <item find="Mürivet" replace="Mürüvvet"/>
+    <item find=":evler:" replace=""/>
+    <item find="Florasan" replace="Floresan"/>
+    <item find=":koşucu:" replace=""/>
+    <item find=":araba3:" replace=""/>
+    <item find=":sayfa:" replace=""/>
+    <item find="isbat" replace="ispat"/>
+    <item find=":tüm nota:" replace="텝"/>
+    <item find=":tamam3:" replace=""/>
+    <item find=":keçi:" replace=""/>
+    <item find="Ropörtaj" replace="Röportaj"/>
+    <item find="yeldeğirmeni" replace="yel değirmeni"/>
+    <item find=":içki:" replace="磻"/>
+    <item find=":karekök:" replace="√"/>
+    <item find="seramoni" replace="seremoni"/>
+    <item find=":kabarcık8:" replace=""/>
+    <item find="Ötenazi" replace="Ötanazi"/>
+    <item find=":faks2:" replace=""/>
+    <item find="roma rakamları" replace="Romen rakamları"/>
+    <item find="penbe" replace="pembe"/>
+    <item find="Matamatik" replace="Matematik"/>
+    <item find=":sirk:" replace=""/>
+    <item find=":kilit2:" replace=""/>
+    <item find="Parlementer" replace="Parlamenter"/>
+    <item find=":Yunan haçı2:" replace="✙"/>
+    <item find=":melek:" replace=""/>
+    <item find=":kar tanesi:" replace="❄"/>
+    <item find="poaça" replace="poğaça"/>
+    <item find="Fermar" replace="Fermuar"/>
+    <item find="fermar" replace="fermuar"/>
+    <item find=":davul2:" replace="論"/>
+    <item find=":zarf5:" replace=""/>
+    <item find="Suç üstü" replace="Suçüstü"/>
+    <item find="Ön görmek" replace="Öngörmek"/>
+    <item find="ultrasyon" replace="ultrason"/>
+    <item find=":sol5:" replace=""/>
+    <item find="egzantrik" replace="eksantrik"/>
+    <item find="Akapunktur" replace="Akupunktur"/>
+    <item find=":çocuk:" replace="戮"/>
+    <item find="entrasan" replace="enteresan"/>
+    <item find=":gökkuşağı:" replace=""/>
+    <item find=":hortum:" replace=""/>
+    <item find=":aşağı6:" replace=""/>
+    <item find=":yaşlı:" replace="陸"/>
+    <item find=":dünya:" replace="♁"/>
+    <item find=":NE:" replace="↗"/>
+    <item find=":md:" replace=""/>
+    <item find=":öpücük:" replace=""/>
+    <item find=":polis:" replace=""/>
+    <item find="Restorant" replace="Restoran"/>
+    <item find=":cam:" replace=""/>
+    <item find="yayınlamak" replace="yayımlamak"/>
+    <item find=":kas:" replace=""/>
+    <item find=":borazan2:" replace=""/>
+    <item find=":uçak3:" replace=""/>
+    <item find=":yumruk:" replace="✊"/>
+    <item find="Cübbe" replace="Cüppe"/>
+    <item find=":sabit disk:" replace=""/>
+    <item find=":7 s:" replace=""/>
+    <item find=":kahve:" replace="☕"/>
+    <item find=":altıgen:" replace="⬡"/>
+    <item find=":iyi şans:" replace="爛"/>
+    <item find=":sus:" replace="狼"/>
+    <item find=":&lt;=:" replace="≤"/>
+    <item find=":--:" replace="–"/>
+    <item find=":göz rulo:" replace=""/>
+    <item find="menecer" replace="menajer"/>
+    <item find=":Pi:" replace="Π"/>
+    <item find=":fare5:" replace=""/>
+    <item find="Vaz geç" replace="Vazgeç"/>
+    <item find=":çift bemol:" replace="턫"/>
+    <item find="Arefe" replace="Arife"/>
+    <item find=":kuyrukluyıldız:" replace="☄"/>
+    <item find=":saat:" replace=""/>
+    <item find=":_(:" replace="₍"/>
+    <item find=":balık3:" replace=""/>
+    <item find="ön görmek" replace="öngörmek"/>
+    <item find=".*(tm)" replace="™"/>
+    <item find=":pc:" replace=""/>
+    <item find="Raslantı" replace="Rastlantı"/>
+    <item find=":Alfa:" replace="Α"/>
+    <item find="Müsade" replace="Müsaade"/>
+    <item find=":posta kutusu3:" replace=""/>
+    <item find="Kilot" replace="Külot"/>
+    <item find=":8 s:" replace=""/>
+    <item find=":^A:" replace="ᴬ"/>
+    <item find=":işaretler bölümü:" replace=""/>
+    <item find="seyehat" replace="seyahat"/>
+    <item find=":İngiliz haçı:" replace=""/>
+    <item find=":kızak:" replace=""/>
+    <item find=":zafer işareti2:" replace=""/>
+    <item find="karnıbahar" replace="karnabahar"/>
+    <item find=":_r:" replace="ᵣ"/>
+    <item find=":kredi kartı:" replace=""/>
+    <item find=":hıçkıran:" replace=""/>
+    <item find="şifai" replace="şifahi"/>
+    <item find="Oparasyon" replace="Operasyon"/>
+    <item find=":kaktüs:" replace=""/>
+    <item find=":top:" replace="⛹"/>
+    <item find=":_7:" replace="₇"/>
+    <item find="cimnastik" replace="jimnastik"/>
+    <item find=":telefon2:" replace="☏"/>
+    <item find=":küre2:" replace=""/>
+    <item find=":köri:" replace=""/>
+    <item find="Taamüden" replace="Taammüden"/>
+    <item find=":stadyum:" replace=""/>
+    <item find=":cetvel:" replace=""/>
+    <item find="Opörler" replace="Hoparlör"/>
+    <item find=":NW:" replace="↖"/>
+    <item find=":sanat:" replace=""/>
+    <item find=":kartuş:" replace=""/>
+    <item find=":bayrak2:" replace=""/>
+    <item find=":havai fişek:" replace=""/>
+    <item find=":halterci:" replace=""/>
+    <item find="Mütaakip" replace="Müteakip"/>
+    <item find=":kalp atışı:" replace=""/>
+    <item find=":yukarı4:" replace=""/>
+    <item find=":_a:" replace="ₐ"/>
+    <item find=":salyangoz:" replace=""/>
+    <item find=":amfora:" replace=""/>
+    <item find=":Mu:" replace="Μ"/>
+    <item find="Vürüs" replace="Virüs"/>
+    <item find=":klasör5:" replace=""/>
+    <item find="herkez" replace="herkes"/>
+    <item find=":zarf3:" replace=""/>
+    <item find=":_m:" replace="ₘ"/>
+    <item find=":küçük kare:" replace="▫"/>
+    <item find=":balık köftesi:" replace=""/>
+    <item find=":tebrik:" replace=""/>
+    <item find=":yunus:" replace=""/>
+    <item find=":^=:" replace="⁼"/>
+    <item find="Sibop" replace="Supap"/>
+    <item find="tekneloji" replace="teknoloji"/>
+    <item find=":biber:" replace=""/>
+    <item find=":özgürlük heykeli:" replace=""/>
+    <item find="Döküman" replace="Doküman"/>
+    <item find=":ve:" replace="∧"/>
+    <item find=":kederli:" replace=""/>
+    <item find=":integral5:" replace="∰"/>
+    <item find="revanş" replace="rövanş"/>
+    <item find=":zarf6:" replace=""/>
+    <item find=":lolipop:" replace=""/>
+    <item find=":fuar:" replace=""/>
+    <item find=":zzz:" replace=""/>
+    <item find="ahpap" replace="ahbap"/>
+    <item find=":bisiklet giremez:" replace=""/>
+    <item find=":ikizler:" replace="♊"/>
+    <item find=":^x:" replace="ˣ"/>
+    <item find=":beta:" replace="β"/>
+    <item find=":zarf8:" replace=""/>
+    <item find="Gravat" replace="Kravat"/>
+    <item find="evsane" replace="efsane"/>
+    <item find=":altıgen2:" replace="⬢"/>
+    <item find=":1/2:" replace="½"/>
+    <item find=":hesap makinesi:" replace=""/>
+    <item find=":grivna:" replace="₴"/>
+    <item find=":1/4:" replace="¼"/>
+    <item find=":boynuz:" replace=""/>
+    <item find=":tepetaklak:" replace=""/>
+    <item find=":mandalina:" replace=""/>
+    <item find="gravat" replace="kravat"/>
+    <item find=":çanta:" replace=""/>
+    <item find="konsansüs" replace="konsensüs"/>
+    <item find="şemşiye" replace="şemsiye"/>
+    <item find=":uydu:" replace=""/>
+    <item find="mütahit" replace="müteahhit"/>
+    <item find=":Latin haçı3:" replace=""/>
+    <item find="Halisünasyon" replace="Halüsinasyon"/>
+    <item find=":SW2:" replace="⇙"/>
+    <item find=":eşit değil:" replace="≠"/>
+    <item find="oce" replace="oje"/>
+    <item find="Faide" replace="Fayda"/>
+    <item find=":makas3:" replace="✁"/>
+    <item find=":yazıcı:" replace=""/>
+    <item find=":kalkan2:" replace="⛨"/>
+    <item find=":bulut2:" replace="⛅"/>
+    <item find="tribuşon" replace="tirbuşon"/>
+    <item find="Tahüt" replace="Taahhüt"/>
+    <item find=":alfa:" replace="α"/>
+    <item find="Pekçok" replace="Pek çok"/>
+    <item find=":cep telefonu yok:" replace=""/>
+    <item find="rezarvasyon" replace="rezervasyon"/>
+    <item find="teravi" replace="teravih"/>
+    <item find=":hilal:" replace=""/>
+    <item find=":karpuz:" replace=""/>
+    <item find="Roma rakamları" replace="Romen rakamları"/>
+    <item find=":krepler:" replace="丹"/>
+    <item find="alimünyum" replace="alüminyum"/>
+    <item find=":barış:" replace="☮"/>
+    <item find=":makas:" replace="✂"/>
+    <item find=":neptün:" replace="♆"/>
+    <item find="gardolap" replace="gardırop"/>
+    <item find=":cilt5:" replace=""/>
+    <item find=":bayraklar:" replace=""/>
+    <item find="taktim" replace="takdim"/>
+    <item find="sandoviç" replace="sandviç"/>
+    <item find=":şemsiye3:" replace="⛱"/>
+    <item find=":EW2:" replace="⇔"/>
+    <item find=":kalkan:" replace=""/>
+    <item find=":halsiz:" replace=""/>
+    <item find=":hokey2:" replace=""/>
+    <item find=":^beta:" replace="ᵝ"/>
+    <item find=":evet:" replace=""/>
+    <item find="Mönü" replace="Menü"/>
+    <item find=":yukarı5:" replace=""/>
+    <item find=":lunapark hız treni:" replace=""/>
+    <item find=":ay2:" replace=""/>
+    <item find=":kaş:" replace="廊"/>
+    <item find=":klavye2:" replace=""/>
+    <item find=":_l:" replace="ₗ"/>
+    <item find=":zehir:" replace="☠"/>
+    <item find="yövmiye" replace="yevmiye"/>
+    <item find=":sırıtan kedi:" replace=""/>
+    <item find=":^L:" replace="ᴸ"/>
+    <item find=":badminton:" replace=""/>
+    <item find="Klüp" replace="Kulüp"/>
+    <item find=":İngiliz anahtarı:" replace=""/>
+    <item find=":klavye3:" replace=""/>
+    <item find=":iyi değil:" replace=""/>
+    <item find="florasan" replace="floresan"/>
+    <item find="Pantalon" replace="Pantolon"/>
+    <item find="Muacir" replace="Muhacir"/>
+    <item find=":5/8:" replace="⅝"/>
+    <item find=":gülen yüz:" replace=""/>
+    <item find=":gülüş:" replace=""/>
+    <item find=":bilgisayar2:" replace=""/>
+    <item find=":balık2:" replace=""/>
+    <item find=":yuvarlak raptiye:" replace=""/>
+    <item find=":kovboy:" replace="鸞"/>
+    <item find="şanzuman" replace="şanzıman"/>
+    <item find="canbaz" replace="cambaz"/>
+    <item find="ciyer" replace="ciğer"/>
+    <item find="tesbit" replace="tespit"/>
+    <item find=":mu:" replace="μ"/>
+    <item find=":dil4:" replace=""/>
+    <item find=":bagaj:" replace=""/>
+    <item find="Tastik" replace="Tasdik"/>
+    <item find=":kablo:" replace=""/>
+    <item find=":^j:" replace="ʲ"/>
+    <item find=":NS2:" replace="⇕"/>
+    <item find="Zerafet" replace="Zarafet"/>
+    <item find="Asvalt" replace="Asfalt"/>
+    <item find=":içme suyu:" replace=""/>
+    <item find=":pano:" replace=""/>
+    <item find="Boğa yılanı" replace="Boa yılanı"/>
+    <item find="pantalon" replace="pantolon"/>
+    <item find="tanpon" replace="tampon"/>
+    <item find=":taç:" replace=""/>
+    <item find=":küre:" replace=""/>
+    <item find=":Latin haçı2:" replace=""/>
+    <item find="celatin" replace="jelatin"/>
+    <item find="Afilli" replace="Afili"/>
+    <item find=":endişeli:" replace=""/>
+    <item find="Taşaron" replace="Taşeron"/>
+    <item find="ıstambul" replace="İstanbul"/>
+    <item find=":çerçeve2:" replace=""/>
+    <item find=":^u:" replace="ᵘ"/>
+    <item find=":avro2:" replace=""/>
+    <item find="akapunktur" replace="akupunktur"/>
+    <item find=":hayır:" replace=""/>
+    <item find="Celatin" replace="Jelatin"/>
+    <item find=":kalkış:" replace=""/>
+    <item find="Ana kara" replace="Anakara"/>
+    <item find=":mont:" replace="痢"/>
+    <item find=":öpücük4:" replace=""/>
+    <item find=":resim:" replace=""/>
+    <item find="Rakkam" replace="Rakam"/>
+    <item find="Birfiil" replace="Bilfiil"/>
+    <item find="Faliyet" replace="Faaliyet"/>
+    <item find=":sayfa3:" replace=""/>
+    <item find=":kaplumbağa:" replace=""/>
+    <item find=":şimşek2:" replace=""/>
+    <item find=":hayalet:" replace=""/>
+    <item find=":sinek:" replace="♣"/>
+    <item find=":nötr yüz:" replace=""/>
+    <item find=":lira:" replace="₤"/>
+    <item find=":cam3:" replace="弄"/>
+    <item find=":geri dönüşümlü kağıt:" replace="♼"/>
+    <item find=":el feneri:" replace=""/>
+    <item find=":ekmek:" replace=""/>
+    <item find=":sol:" replace="☜"/>
+    <item find=":kafatası:" replace=""/>
+    <item find=":Adi Shakti:" replace="☬"/>
+    <item find=":bovling:" replace=""/>
+    <item find="ceton" replace="jeton"/>
+    <item find=":eskrimci:" replace="鷺"/>
+    <item find=":_+:" replace="₊"/>
+    <item find="Su çiçeği" replace="Suçiçeği"/>
+    <item find="Karekter" replace="Karakter"/>
+    <item find=":güneşli:" replace="☀"/>
+    <item find="Miğde" replace="Mide"/>
+    <item find="Muhattap" replace="Muhatap"/>
+    <item find=":rüzgar:" replace=""/>
+    <item find="ensitü" replace="enstitü"/>
+    <item find=":küçük yıldız2:" replace="⭑"/>
+    <item find=":sağ6:" replace=""/>
+    <item find=":pirinç kraker:" replace=""/>
+    <item find="Fiat" replace="Fiyat"/>
+    <item find=":bekçi:" replace=""/>
+    <item find=":E2:" replace="⇒"/>
+    <item find=":_pi:" replace="ᵩ"/>
+    <item find="Espiri" replace="Espri"/>
+    <item find="İnkilap" replace="İnkılap"/>
+    <item find="Komidin" replace="Komodin"/>
+    <item find=":mağaza:" replace=""/>
+    <item find=":+-:" replace="±"/>
+    <item find="karisör" replace="karoser"/>
+    <item find=":öfkeli:" replace=""/>
+    <item find=":kumar makinesi:" replace=""/>
+    <item find=":uzaylı2:" replace=""/>
+    <item find=":vites:" replace="⚙"/>
+    <item find=":judo:" replace="屢"/>
+    <item find=":maskara:" replace="浪"/>
+    <item find=":yer imi2:" replace=""/>
+    <item find=":yaşlı adam:" replace=""/>
+    <item find="Traş" replace="Tıraş"/>
+    <item find=":klasör4:" replace=""/>
+    <item find="ıstırap" replace="ızdırap"/>
+    <item find="çeçaron" replace="çaçaron"/>
+    <item find=":sol6:" replace=""/>
+    <item find=":aşağı3:" replace=""/>
+    <item find="Müsvette" replace="Müsvedde"/>
+    <item find="aşkolsun" replace="aşk olsun"/>
+    <item find="Kavonoz" replace="Kavanoz"/>
+    <item find="1/4" replace="¼"/>
+    <item find="okşizen" replace="oksijen"/>
+    <item find="pekçok" replace="pek çok"/>
+    <item find=":boş sayfa:" replace=""/>
+    <item find=":^0:" replace="⁰"/>
+    <item find="bilimum" replace="bilumum"/>
+    <item find=":gözlük:" replace=""/>
+    <item find=":ördek:" replace="閭"/>
+    <item find=":göz:" replace=""/>
+    <item find="Gardolap" replace="Gardırop"/>
+    <item find=":^a:" replace="ᵃ"/>
+    <item find=":para2:" replace=""/>
+    <item find="Tafsiye" replace="Tavsiye"/>
+    <item find=":pirinç topu:" replace=""/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find=":stereo:" replace=""/>
+    <item find=":sarsılmış:" replace="勞"/>
+    <item find=":borazan:" replace=""/>
+    <item find=":bölüm:" replace="§"/>
+    <item find=":ni:" replace="∋"/>
+    <item find="Ukte" replace="Ukde"/>
+    <item find=":uğur böceği:" replace=""/>
+    <item find="layik" replace="laik"/>
+    <item find=":korsan:" replace=""/>
+    <item find=":asa:" replace="⚚"/>
+    <item find="mütaakip" replace="müteakip"/>
+    <item find="Dekaratör" replace="Dekoratör"/>
+    <item find=":futbol2:" replace="聾"/>
+    <item find="Çukulata" replace="Çikolata"/>
+    <item find=":pirinç sahnesi:" replace=""/>
+    <item find=":gündoğumu:" replace=""/>
+    <item find="Büsküüt" replace="Bisküvi"/>
+    <item find="Gider ayak" replace="Giderayak"/>
+    <item find=":otobüs2:" replace=""/>
+    <item find="Aptes" replace="Abdest"/>
+    <item find=":kelebek:" replace="曆"/>
+    <item find=":baykuş:" replace="黎"/>
+    <item find=":giriş yasak:" replace="⛔"/>
+    <item find=":adam:" replace=""/>
+    <item find="Filim" replace="Film"/>
+    <item find="kurdela" replace="kurdele"/>
+    <item find="Usûl" replace="Usul"/>
+    <item find=":küçüktür:" replace="∊"/>
+    <item find=":sövgü:" replace="郎"/>
+    <item find=":^R:" replace="ᴿ"/>
+    <item find=":^l:" replace="ˡ"/>
+    <item find=":lamda:" replace="λ"/>
+    <item find="abondone" replace="abandone"/>
+    <item find=":kartlar:" replace=""/>
+    <item find=":evet2:" replace=""/>
+    <item find="Aşkolsun" replace="Aşk olsun"/>
+    <item find=":ruj:" replace=""/>
+    <item find=":uyarı:" replace="⚠"/>
+    <item find=":kapla:" replace=""/>
+    <item find=":alt küme:" replace="⊂"/>
+    <item find=":gül:" replace=""/>
+    <item find=":posta kutusu:" replace=""/>
+    <item find=":projektör:" replace=""/>
+    <item find=":yeşil elma:" replace=""/>
+    <item find=":kabarcık5:" replace=""/>
+    <item find=":satürn:" replace="♄"/>
+    <item find=":kaplan:" replace=""/>
+    <item find="cenderme" replace="jandarma"/>
+    <item find=":el:" replace="✋"/>
+    <item find=":kitap2:" replace=""/>
+    <item find=":somurtuk:" replace="☹"/>
+    <item find=":nota anahtarı:" replace="턞"/>
+    <item find="vehamet" replace="vahamet"/>
+    <item find="melhem" replace="merhem"/>
+    <item find="Temize gitmek" replace="Temyize gitmek"/>
+    <item find=":somun ve cıvata:" replace=""/>
+    <item find="allerji" replace="alerji"/>
+    <item find=":pasaport:" replace=""/>
+    <item find=":EW:" replace="↔"/>
+    <item find=":mantar:" replace=""/>
+    <item find=":gülümseme4:" replace="來"/>
+    <item find="jipon" replace="jüpon"/>
+    <item find=":çin dominosu:" replace=""/>
+    <item find="çekinser" replace="çekimser"/>
+    <item find="egsantrik" replace="eksantrik"/>
+    <item find="inkilap" replace="inkılap"/>
+    <item find=":masum:" replace=""/>
+    <item find="Layik" replace="Laik"/>
+    <item find=":_n:" replace="ₙ"/>
+    <item find=":gündoğumu3:" replace=""/>
+    <item find=":sağ üçgen:" replace="⊿"/>
+    <item find=":x3:" replace="❎"/>
+    <item find=":bemol:" replace="♭"/>
+    <item find=":kalp:" replace="❤"/>
+    <item find=":dudaklar:" replace=""/>
+    <item find=":-+:" replace="∓"/>
+    <item find="aşentiyon" replace="eşantiyon"/>
+    <item find="gaste" replace="gazete"/>
+    <item find="Sellektör" replace="Selektör"/>
+    <item find=":fil:" replace=""/>
+    <item find="Melhem" replace="Merhem"/>
+    <item find=":^O:" replace="ᴼ"/>
+    <item find=":yelkenli:" replace="⛵"/>
+    <item find=":sıçan:" replace=""/>
+    <item find=":nota:" replace="♩"/>
+    <item find=":buket2:" replace=""/>
+    <item find=":davul:" replace=""/>
+    <item find=":bisiklet:" replace=""/>
+    <item find="Seramoni" replace="Seremoni"/>
+    <item find=":çember2:" replace="●"/>
+    <item find=":patlıcan:" replace=""/>
+    <item find=":ataç:" replace=""/>
+    <item find=":konuşma:" replace=""/>
+    <item find=":eşarp:" replace="泥"/>
+    <item find=":kupa:" replace="♥"/>
+    <item find=":yarım nota:" replace="텞"/>
+    <item find="Arabeks" replace="Arabesk"/>
+    <item find="ilüzyon" replace="illüzyon"/>
+    <item find=":zebra:" replace="煉"/>
+    <item find=":balina:" replace=""/>
+    <item find="Loğusa" replace="Lohusa"/>
+    <item find=":işçi:" replace=""/>
+    <item find="Sükûtuhayal" replace="Sukutuhayal"/>
+    <item find="Motorsiklet" replace="Motosiklet"/>
+    <item find=":uzaylı:" replace=""/>
+    <item find="terevi" replace="teravih"/>
+    <item find="şohben" replace="şofben"/>
+    <item find="Istanbul" replace="İstanbul"/>
+    <item find=":aşağı5:" replace=""/>
+    <item find=":yaprak2:" replace=""/>
+    <item find="acaip" replace="acayip"/>
+    <item find="hoşgeldin" replace="hoş geldin"/>
+    <item find="Muzur" replace="Muzır"/>
+    <item find=":cilt3:" replace=""/>
+    <item find=":yüzünü buruşturan:" replace=""/>
+    <item find="sellektör" replace="selektör"/>
+    <item find=":tren2:" replace=""/>
+    <item find="ropörtaj" replace="röportaj"/>
+    <item find=":-:" replace="−"/>
+    <item find=":dolar2:" replace=""/>
+    <item find=":telif hakkı:" replace="©"/>
+    <item find=":noel:" replace=""/>
+    <item find=":x:" replace="×"/>
+    <item find="sarmısak" replace="sarımsak"/>
+    <item find=":2/3:" replace="⅔"/>
+    <item find="hoporlör" replace="hoparlör"/>
+    <item find=":yengeç:" replace="♋"/>
+    <item find="şöför" replace="şoför"/>
+    <item find=":kilise:" replace="⛪"/>
+    <item find=":ayı:" replace=""/>
+    <item find=":kalp atımı:" replace=""/>
+    <item find=":pencere:" replace=""/>
+    <item find=":disket2:" replace=""/>
+    <item find=":cinema:" replace=""/>
+    <item find="ve ya" replace="veya"/>
+    <item find="Satlık" replace="Satılık"/>
+    <item find=":bronz:" replace="雷"/>
+    <item find=":Gama:" replace="Γ"/>
+    <item find=":pastel boya:" replace=""/>
+    <item find=":ofis:" replace=""/>
+    <item find=":ağlayan kedi:" replace=""/>
+    <item find=":5 s:" replace=""/>
+    <item find="Civa" replace="Cıva"/>
+    <item find="fantazi" replace="fantezi"/>
+    <item find="Proğram" replace="Program"/>
+    <item find="karma karışık" replace="karmakarışık"/>
+    <item find=":salatalık:" replace="勒"/>
+    <item find=":uranüs:" replace="♅"/>
+    <item find=":çember4:" replace=""/>
+    <item find=":disket4:" replace=""/>
+    <item find=":hap:" replace=""/>
+    <item find="Parende" replace="Perende"/>
+    <item find="tahüt" replace="taahhüt"/>
+    <item find=":at2:" replace=""/>
+    <item find=":siyah vezir:" replace="♛"/>
+    <item find=":kirpi:" replace="璉"/>
+    <item find=":para3:" replace="螺"/>
+    <item find=":fuar2:" replace=""/>
+    <item find="Parağraf" replace="Paragraf"/>
+    <item find="Karisör" replace="Karoser"/>
+    <item find="heycan" replace="heyecan"/>
+    <item find=":kurbağa:" replace=""/>
+    <item find=":hediye:" replace=""/>
+    <item find=":havadan tramvay:" replace=""/>
+    <item find=":manda:" replace=""/>
+    <item find=":optik disk:" replace=""/>
+    <item find="Kollektif" replace="Kolektif"/>
+    <item find=":Psi:" replace="Ψ"/>
+    <item find=":alarm saati:" replace="⏰"/>
+    <item find=":eta:" replace="η"/>
+    <item find=":^v:" replace="ᵛ"/>
+    <item find="kollektif" replace="kolektif"/>
+    <item find=":siyah nokta:" replace="⚫"/>
+    <item find="difransiyel" replace="diferansiyel"/>
+    <item find="kiprik" replace="kirpik"/>
+    <item find="filim" replace="film"/>
+    <item find="pisiklet" replace="bisiklet"/>
+    <item find=":çizelge4:" replace=""/>
+    <item find=":sağ5:" replace=""/>
+    <item find=":bayrak:" replace="☓"/>
+    <item find=":reşit olmayan:" replace=""/>
+    <item find=":kronometre:" replace="⏱"/>
+    <item find=":aşağı:" replace="☟"/>
+    <item find="İlüzyon" replace="İllüzyon"/>
+    <item find=":üçgen bayrak:" replace=""/>
+    <item find=":^B:" replace="ᴮ"/>
+    <item find="Tekneloji" replace="Teknoloji"/>
+    <item find=":raylar3:" replace=""/>
+    <item find="vürüs" replace="virüs"/>
+    <item find=":parça:" replace=""/>
+    <item find=":titreşim kipi:" replace=""/>
+    <item find="Egzost" replace="Egzoz"/>
+    <item find="Serbes" replace="Serbest"/>
+    <item find=":bilgi:" replace="ℹ"/>
+    <item find="kırahatane" replace="kıraathane"/>
+    <item find=":yumruk3:" replace="亂"/>
+    <item find=":boşanma:" replace="⚮"/>
+    <item find=":^d:" replace="ᵈ"/>
+    <item find="Türübün" replace="Tribün"/>
+    <item find=":boynuzlu gülen yüz:" replace=""/>
+    <item find="bilader" replace="birader"/>
+    <item find=":kabarcık3:" replace=""/>
+    <item find=":çift diyez:" replace="턪"/>
+    <item find="Palyanço" replace="Palyaço"/>
+    <item find=":.:" replace="…"/>
+    <item find=":duyma:" replace=""/>
+    <item find=":atan kalp:" replace=""/>
+    <item find=":patlamış mısır:" replace=""/>
+    <item find="serbes" replace="serbest"/>
+    <item find=":ejderha2:" replace=""/>
+    <item find="mataryal" replace="materyal"/>
+    <item find=":takvim:" replace=""/>
+    <item find="peştemal" replace="peştamal"/>
+    <item find=":güneş2:" replace=""/>
+    <item find="Döğmek" replace="Dövmek"/>
+    <item find="kilot" replace="külot"/>
+    <item find=":körling:" replace="樓"/>
+    <item find=":3/8:" replace="⅜"/>
+    <item find="opörler" replace="hoparlör"/>
+    <item find="südyen" replace="sütyen"/>
+    <item find=":onay işareti5:" replace=""/>
+    <item find=":onay işareti3:" replace="✅"/>
+    <item find=":ekran:" replace=""/>
+    <item find=":civciv2:" replace=""/>
+    <item find="Kolanya" replace="Kolonya"/>
+    <item find="mustarip" replace="muzdarip"/>
+    <item find=":minibüs:" replace=""/>
+    <item find="halisinasyon" replace="halüsinasyon"/>
+    <item find=":fener:" replace=""/>
+    <item find=":Fuji:" replace=""/>
+    <item find=":patlama:" replace=""/>
+    <item find="Açıcak" replace="Açacak"/>
+    <item find=":pound:" replace="£"/>
+    <item find=":hafif raylı:" replace=""/>
+    <item find="askari" replace="asgari"/>
+    <item find=":^3:" replace="³"/>
+    <item find=":dizin:" replace=""/>
+    <item find=":kızgın2:" replace=""/>
+    <item find=":notalar4:" replace=""/>
+    <item find=":döngü2:" replace="➿"/>
+    <item find="loğusa" replace="lohusa"/>
+    <item find="ahçı" replace="aşçı"/>
+    <item find=":telefon4:" replace=""/>
+    <item find=":?:" replace="❓"/>
+    <item find=":kalamar:" replace="撚"/>
+    <item find=":tabut:" replace="⚰"/>
+    <item find="ötenazi" replace="ötanazi"/>
+    <item find="Ve ya" replace="Veya"/>
+    <item find=":K:" replace="↑"/>
+    <item find="Pardesü" replace="Pardösü"/>
+    <item find="Megoloman" replace="Megaloman"/>
+    <item find=":kırık kalp:" replace=""/>
+    <item find=":heykel:" replace=""/>
+    <item find="Fantazi" replace="Fantezi"/>
+    <item find="Zenaat" replace="Zanaat"/>
+    <item find=":aşk:" replace=""/>
+    <item find=":kale2:" replace=""/>
+    <item find="Canbaz" replace="Cambaz"/>
+    <item find="Eskirim" replace="Eskrim"/>
+    <item find=":sol4:" replace=""/>
+    <item find=":damlacık2:" replace=""/>
+    <item find=":^-:" replace="⁻"/>
+    <item find=":kaydırma:" replace=""/>
+    <item find=":lokanta:" replace=""/>
+    <item find=":x2:" replace="❌"/>
+    <item find=":şaşkın yüz:" replace=""/>
+    <item find=":boş sayfalar:" replace=""/>
+    <item find=":yasak:" replace=""/>
+    <item find="naturel" replace="natürel"/>
+    <item find=":peynir:" replace="燎"/>
+    <item find=":^o:" replace="ᵒ"/>
+    <item find="fiat" replace="fiyat"/>
+    <item find="Http" replace="http"/>
+    <item find=":şeker:" replace=""/>
+    <item find=":park:" replace=""/>
+    <item find=":^p:" replace="ᵖ"/>
+    <item find=":fare4:" replace=""/>
+    <item find=":el2:" replace=""/>
+    <item find="Rezarvasyon" replace="Rezervasyon"/>
+    <item find=":üzüm:" replace=""/>
+    <item find=":termometre2:" replace="裸"/>
+    <item find="Proleterya" replace="Proletarya"/>
+    <item find="antiparantez" replace="antrparantez"/>
+    <item find="çiflik" replace="çiftlik"/>
+    <item find=":kar kayakçısı:" replace=""/>
+    <item find="Seyehat" replace="Seyahat"/>
+    <item find=":yılan:" replace=""/>
+    <item find=":böcek:" replace=""/>
+    <item find=":kısmen:" replace="∂"/>
+    <item find="malesef" replace="maalesef"/>
+    <item find="vurdum duymaz" replace="vurdumduymaz"/>
+    <item find=":bulutlu2:" replace=""/>
+    <item find=":gülümseme:" replace="☺"/>
+    <item find="Ceton" replace="Jeton"/>
+    <item find="Megolaman" replace="Megaloman"/>
+    <item find=":elma:" replace=""/>
+    <item find=":kontrol:" replace=""/>
+    <item find=":bilet2:" replace=""/>
+    <item find="Okşizen" replace="Oksijen"/>
+    <item find=":tavşan:" replace=""/>
+    <item find=":vhs:" replace=""/>
+    <item find="Kakafoni" replace="Kakofoni"/>
+    <item find="Mahsuz" replace="Mahsus"/>
+    <item find=":kokteyl:" replace=""/>
+    <item find=":pound2:" replace=""/>
+    <item find=":^2:" replace="²"/>
+    <item find="hıristiyan" replace="hristiyan"/>
+    <item find="psikiyatrist" replace="psikiyatr"/>
+    <item find="taamüden" replace="taammüden"/>
+    <item find=":Beta:" replace="Β"/>
+    <item find=":kurabiye:" replace=""/>
+    <item find=":zürafa:" replace="漣"/>
+    <item find="Acaip" replace="Acayip"/>
+    <item find="parağraf" replace="paragraf"/>
+    <item find=":^Pi:" replace="ᶲ"/>
+    <item find="Kurdale" replace="Kurdele"/>
+    <item find=":defter:" replace=""/>
+    <item find=":fırtına2:" replace="☈"/>
+    <item find="Parlemento" replace="Parlamento"/>
+    <item find=":^gama:" replace="ᵞ"/>
+    <item find=":sağ:" replace="☞"/>
+    <item find=":orta nokta:" replace="·"/>
+    <item find="almünyum" replace="alüminyum"/>
+    <item find=":düşünce balonu:" replace=""/>
+    <item find="vaz geçmek" replace="vazgeçmek"/>
+    <item find=":aç:" replace=""/>
+    <item find=":tatlı patates:" replace=""/>
+    <item find="maydonoz" replace="maydanoz"/>
+    <item find=":öpücük işareti:" replace=""/>
+    <item find=":uyuyan:" replace=""/>
+    <item find="Tamüden" replace="Taammüden"/>
+    <item find=":disket:" replace=""/>
+    <item find="Mentalite" replace="Mantalite"/>
+    <item find=":paralel değil:" replace="∦"/>
+    <item find=":uçak2:" replace=""/>
+    <item find=":film:" replace=""/>
+    <item find=":balina2:" replace=""/>
+    <item find=":kardan adam:" replace="☃"/>
+    <item find=":onay kutusu5:" replace=""/>
+    <item find=":kalem2:" replace="✏"/>
+    <item find=":havai fişek gösterisi:" replace=""/>
+    <item find=":hukuk sembolü:" replace="⚖"/>
+    <item find=":kalpli gözler:" replace=""/>
+    <item find="Turizim" replace="Turizm"/>
+    <item find=":omicron:" replace="ο"/>
+    <item find=":e-posta:" replace=""/>
+    <item find=":^b:" replace="ᵇ"/>
+    <item find=":trafik ışığı:" replace=""/>
+    <item find=":hoparlör3:" replace=""/>
+    <item find=":dükkan:" replace=""/>
+    <item find="Lağbo" replace="Lavabo"/>
+    <item find="Makosen" replace="Mokasen"/>
+    <item find=":pi:" replace="π"/>
+    <item find=":dur:" replace=""/>
+    <item find="Südyen" replace="Sütyen"/>
+    <item find="Çekinser" replace="Çekimser"/>
+    <item find=":iyilik sembolü:" replace="☧"/>
+    <item find=":sandal:" replace=""/>
+    <item find="Provakatör" replace="Provokatör"/>
+    <item find=":bayrak3:" replace="⚑"/>
+    <item find=":beyaz vezir:" replace="♕"/>
+    <item find=":^N:" replace="ᴺ"/>
+    <item find=":tavşan kulakları:" replace=""/>
+    <item find=":kare:" replace="□"/>
+    <item find=":^epsilon:" replace="ᵋ"/>
+    <item find=":duş:" replace=""/>
+    <item find="gangaster" replace="gangster"/>
+    <item find=":çilek:" replace=""/>
+    <item find=":gözleme:" replace="陵"/>
+    <item find="maystro" replace="maestro"/>
+    <item find=":rozet2:" replace=""/>
+    <item find=":tepsi2:" replace=""/>
+    <item find=":terazi:" replace="♎"/>
+    <item find="palyanço" replace="palyaço"/>
+    <item find=":izle:" replace="⌚"/>
+    <item find="kavonoz" replace="kavanoz"/>
+    <item find=":ffl:" replace="ﬄ"/>
+    <item find=":fermuar:" replace="蘿"/>
+    <item find="Ciyer" replace="Ciğer"/>
+    <item find="sandüviç" replace="sandviç"/>
+    <item find="Civata" replace="Cıvata"/>
+    <item find=":zarf7:" replace=""/>
+    <item find=":mızrak:" replace=""/>
+    <item find=":kurdele2:" replace=""/>
+    <item find="maktül" replace="maktul"/>
+    <item find=":alkış:" replace=""/>
+    <item find=":Kudüs haçı:" replace="☩"/>
+    <item find=":ada:" replace=""/>
+    <item find=":şemsiye2:" replace=""/>
+    <item find=":kapalı cep telefonu:" replace=""/>
+    <item find="Sne" replace="Sen"/>
+    <item find=":tabak:" replace=""/>
+    <item find=":ot:" replace=""/>
+    <item find="tetanoz" replace="tetanos"/>
+    <item find=":bambu:" replace=""/>
+    <item find="Çukolata" replace="Çikolata"/>
+    <item find=":bıçak2:" replace=""/>
+    <item find=":zamanlayıcı saat:" replace="⏲"/>
+    <item find="tenbih" replace="tembih"/>
+    <item find="mönü" replace="menü"/>
+    <item find="antreman" replace="antrenman"/>
+    <item find=":yum:" replace=""/>
+    <item find=":dingin:" replace=""/>
+    <item find=":dolunay:" replace=""/>
+    <item find=":orta kare:" replace="◻"/>
+    <item find=".*(c)" replace="©"/>
+    <item find=":cami:" replace=""/>
+    <item find="suç üstü" replace="suçüstü"/>
+    <item find="tahtarevalli" replace="tahterevalli"/>
+    <item find=":phi:" replace="φ"/>
+    <item find=":kartal:" replace="礪"/>
+    <item find=":cadılar bayramı:" replace=""/>
+    <item find=":integral:" replace="∫"/>
+    <item find=":siyah kale:" replace="♜"/>
+    <item find=":zar2:" replace="⚁"/>
+    <item find=":büyült:" replace=""/>
+    <item find=":mutlu:" replace=""/>
+    <item find="nergiz" replace="nergis"/>
+    <item find=":baht:" replace="฿"/>
+    <item find=":yamuk:" replace="⏢"/>
+    <item find="Şarter" replace="Şalter"/>
+    <item find=":çağrı cihazı:" replace=""/>
+    <item find=":maymun:" replace=""/>
+    <item find="tesbih" replace="tespih"/>
+    <item find=":saksafon:" replace=""/>
+    <item find="ceryan" replace="cereyan"/>
+    <item find=":beyaz at:" replace="♘"/>
+    <item find="egzost" replace="egzoz"/>
+    <item find=":rahatlamış:" replace=""/>
+    <item find="assubay" replace="astsubay"/>
+    <item find="palyoça" replace="palyaço"/>
+    <item find=":tespih:" replace=""/>
+    <item find="Jipon" replace="Jüpon"/>
+    <item find=":Ay2:" replace="☾"/>
+    <item find="Ultrasyon" replace="Ultrason"/>
+    <item find=":danışma3:" replace=""/>
+    <item find="Konsansüs" replace="Konsensüs"/>
+    <item find="Orjinal" replace="Orijinal"/>
+    <item find=":şölen:" replace=""/>
+    <item find=":kalem ucu:" replace="✑"/>
+    <item find=":heyecanlı:" replace="朗"/>
+    <item find="Müsbet" replace="Müspet"/>
+    <item find=":yazı tipi2:" replace=""/>
+    <item find=":tek boynuzlu at:" replace="濾"/>
+    <item find="Bulüz" replace="Bluz"/>
+    <item find="ıstanbul" replace="İstanbul"/>
+    <item find=":mobil2:" replace=""/>
+    <item find="Nisbet" replace="Nispet"/>
+    <item find="Maktül" replace="Maktul"/>
+    <item find=":beyaz çember:" replace="⚪"/>
+    <item find="Karsör" replace="Karoser"/>
+    <item find=":kaniş:" replace=""/>
+    <item find=":_1:" replace="₁"/>
+    <item find=":ataç2:" replace=""/>
+    <item find="Riks" replace="Risk"/>
+    <item find="izalasyon" replace="izolasyon"/>
+    <item find=":gömlek2:" replace=""/>
+    <item find="büyültmek" replace="büyütmek"/>
+    <item find=":okul çantası:" replace=""/>
+    <item find=":belge2:" replace=""/>
+    <item find="Bilimum" replace="Bilumum"/>
+    <item find="meyva" replace="meyve"/>
+    <item find=":tilki:" replace="力"/>
+    <item find=":erkekler:" replace=""/>
+    <item find="haremlik selamlık" replace="harem selamlık"/>
+    <item find=":yazı tipi:" replace=""/>
+    <item find=":SW:" replace="↙"/>
+    <item find="Sağnak" replace="Sağanak"/>
+    <item find=":gergedan:" replace="憐"/>
+    <item find=":deve:" replace=""/>
+    <item find=":bağlantı:" replace=""/>
+    <item find="Katalok" replace="Katalog"/>
+    <item find=":gümüş:" replace="賂"/>
+    <item find=":fıstıklar:" replace="樂"/>
+    <item find="Entellektüel" replace="Entelektüel"/>
+    <item find="şok olmak" replace="şoke olmak"/>
+    <item find="prooram" replace="program"/>
+    <item find=":parmak:" replace=""/>
+    <item find="Mürüvet" replace="Mürüvvet"/>
+    <item find=".*(r)" replace="®"/>
+    <item find=":kalem3:" replace="✐"/>
+    <item find=":hayal kırıklığına uğramış:" replace=""/>
+    <item find="aritmatik" replace="aritmetik"/>
+    <item find="kitlemek" replace="kilitlemek"/>
+    <item find=":burun:" replace=""/>
+    <item find=":dua:" replace=""/>
+    <item find="mahfolmak" replace="mahvolmak"/>
+    <item find=":hayal kırıklığından rahatlamış:" replace=""/>
+    <item find="kanpanya" replace="kampanya"/>
+    <item find="Sudyen" replace="Sütyen"/>
+    <item find="ana kara" replace="anakara"/>
+    <item find="Mundar" replace="Murdar"/>
+    <item find="3/4" replace="¾"/>
+    <item find=":penguen:" replace=""/>
+    <item find="Tiskinmek" replace="Tiksinmek"/>
+    <item find=":küçük kare2:" replace="▪"/>
+    <item find=":_s:" replace="ₛ"/>
+    <item find=":kalıcı kağıt:" replace="♾"/>
+    <item find="Mefta" replace="Mevta"/>
+    <item find=":pasta:" replace=""/>
+    <item find=":çikolata:" replace=""/>
+    <item find="Tenbih" replace="Tembih"/>
+    <item find=":klavye:" replace="⌨"/>
+    <item find=":canavar:" replace=""/>
+    <item find="eşkiya" replace="eşkıya"/>
+    <item find=":büyüteç:" replace=""/>
+    <item find=":keman:" replace=""/>
+    <item find=":müzik:" replace=""/>
+    <item find=":parlaklık:" replace=""/>
+    <item find=":rozet:" replace=""/>
+    <item find="teşfik" replace="teşvik"/>
+    <item find=":çizgi:" replace=""/>
+    <item find="taşaron" replace="taşeron"/>
+    <item find=":bilgisayar:" replace=""/>
+    <item find=":soğuk terleyen:" replace=""/>
+    <item find="Hiç bir" replace="Hiçbir"/>
+    <item find=":berber:" replace=""/>
+    <item find=":spock:" replace=""/>
+    <item find=":sakal:" replace="倫"/>
+    <item find=":sinagog:" replace=""/>
+    <item find="Kirbit" replace="Kibrit"/>
+    <item find=":kamyon2:" replace=""/>
+    <item find=":aslan:" replace="♌"/>
+    <item find=":gama:" replace="γ"/>
+    <item find=":pil:" replace=""/>
+    <item find=":kivi:" replace="諾"/>
+    <item find="ıskonto" replace="iskonto"/>
+    <item find="Hıristiyan" replace="Hristiyan"/>
+    <item find="Egsantrik" replace="Eksantrik"/>
+    <item find="Iskonto" replace="İskonto"/>
+    <item find=":sevimlilik:" replace=""/>
+    <item find="Kokreç" replace="Kokoreç"/>
+    <item find=":havuç:" replace="凌"/>
+    <item find="aporlor" replace="hoparlör"/>
+    <item find="eksoz" replace="egzoz"/>
+    <item find=":film kamerası:" replace=""/>
+    <item find=":el4:" replace="駱"/>
+    <item find=":yılancı:" replace="⛎"/>
+    <item find=":tatlı:" replace=""/>
+    <item find=":çanak:" replace="北"/>
+    <item find="Ezzane" replace="Eczane"/>
+    <item find=":kayıt:" replace="⏺"/>
+    <item find=":hoparlör2:" replace=""/>
+    <item find=":çeyrek kalan:" replace="턽"/>
+    <item find="Kırahatane" replace="Kıraathane"/>
+    <item find=":yaprak3:" replace=""/>
+    <item find="Mütahit" replace="Müteahhit"/>
+    <item find=":çöp atılmaz:" replace=""/>
+    <item find=":yoga:" replace="律"/>
+    <item find=":tau:" replace="τ"/>
+    <item find="akordiyon" replace="akordeon"/>
+    <item find=":kardan adam2:" replace="⛄"/>
+    <item find="kakafoni" replace="kakofoni"/>
+    <item find="Tolorans" replace="Tolerans"/>
+    <item find=":çarpı2:" replace="✖"/>
+    <item find=":boks:" replace="壘"/>
+    <item find="kokreç" replace="kokoreç"/>
+    <item find=":şeftali:" replace=""/>
+    <item find=":kristal küre:" replace=""/>
+    <item find="amartisör" replace="amortisör"/>
+    <item find=":mikroskop:" replace=""/>
+    <item find=":sayfalar:" replace=""/>
+    <item find=":hamster:" replace=""/>
+    <item find=":el sıkışma:" replace="欄"/>
+    <item find="beyfendi" replace="beyefendi"/>
+    <item find=":danışma2:" replace=""/>
+    <item find=":NS:" replace="↕"/>
+    <item find="mokasen" replace="makosen"/>
+    <item find=":asal:" replace="′"/>
+    <item find="mahsuz" replace="mahsus"/>
+    <item find="menapoz" replace="menopoz"/>
+    <item find="küpür" replace="kupür"/>
+    <item find=":4 s:" replace=""/>
+    <item find=":erkek:" replace="♂"/>
+    <item find=":lokomotif:" replace=""/>
+    <item find="boy pos" replace="boy bos"/>
+    <item find=":kutu:" replace=""/>
+    <item find="Manüpülasyon" replace="Manipülasyon"/>
+    <item find=":limon:" replace=""/>
+    <item find=":^+:" replace="⁺"/>
+    <item find="Teşfik" replace="Teşvik"/>
+    <item find="Sueter" replace="Süveter"/>
+    <item find=":ortodoks haçı:" replace="☦"/>
+    <item find="Eksozt" replace="Egzoz"/>
+    <item find=":defter2:" replace=""/>
+    <item find=":kar:" replace=""/>
+    <item find=":dur2:" replace="⏹"/>
+    <item find="Abonoz" replace="Abanoz"/>
+    <item find=":zafer işareti:" replace="✌"/>
+    <item find=":çöl:" replace=""/>
+    <item find=":köpek balığı:" replace="麗"/>
+    <item find="Ultümaton" replace="Ültimatom"/>
+    <item find=":yıldız:" replace="★"/>
+    <item find="ezzane" replace="eczane"/>
+    <item find="birşey" replace="bir şey"/>
+    <item find=":şemsiye:" replace="☂"/>
+    <item find="Küpür" replace="Kupür"/>
+    <item find=":açık eller:" replace=""/>
+    <item find="opsayt" replace="ofsayt"/>
+    <item find=":içilemez su:" replace=""/>
+    <item find="birhaber" replace="bihaber"/>
+    <item find="Sohpet" replace="Sohbet"/>
+    <item find="Kollej" replace="Kolej"/>
+    <item find=":Nu:" replace="Ν"/>
+    <item find=":hız teknesi:" replace=""/>
+    <item find=":öpücük2:" replace=""/>
+    <item find=":fare:" replace=""/>
+    <item find=":krema:" replace=""/>
+    <item find=":sandviç:" replace="索"/>
+    <item find="büsküüt" replace="bisküvi"/>
+    <item find="sağnak" replace="sağanak"/>
+    <item find=":kesişim:" replace="∩"/>
+    <item find=":Latin haçı:" replace="✝"/>
+    <item find="Hoşgeldin" replace="Hoş geldin"/>
+    <item find="lağbo" replace="lavabo"/>
+    <item find=":üst küme değil:" replace="⊅"/>
+    <item find=":trafik ışığı2:" replace=""/>
+    <item find="Tiyo" replace="Tüyo"/>
+    <item find="Eşkiya" replace="Eşkıya"/>
+    <item find="Fites" replace="Vites"/>
+    <item find="Mokasen" replace="Makosen"/>
+    <item find=":alıcı2:" replace=""/>
+    <item find=":küp kök:" replace="∛"/>
+    <item find=":rho:" replace="ρ"/>
+    <item find="Sandoviç" replace="Sandviç"/>
+    <item find=":sake:" replace=""/>
+    <item find=":joker:" replace=""/>
+    <item find=":^J:" replace="ᴶ"/>
+    <item find=":koç:" replace="♈"/>
+    <item find=":diyez:" replace="♯"/>
+    <item find=":çığlık:" replace=""/>
+    <item find=":kabuk:" replace=""/>
+    <item find=":parti2:" replace=""/>
+    <item find="traş" replace="tıraş"/>
+    <item find="tasfir" replace="tasvir"/>
+    <item find=":parti4:" replace=""/>
+    <item find=":çöp:" replace=""/>
+    <item find=":kirli sepeti:" replace=""/>
+    <item find=":dinazor:" replace="秊"/>
+    <item find=":~:" replace="≈"/>
+    <item find="İstihap hatti" replace="İstiap haddi"/>
+    <item find="kirbit" replace="kibrit"/>
+    <item find=":sonsuz:" replace="∞"/>
+    <item find=":kanepe:" replace=""/>
+    <item find=":evlilik:" replace="⚭"/>
+    <item find=":inek:" replace=""/>
+    <item find=":at3:" replace=""/>
+    <item find="Kontür" replace="Kontör"/>
+    <item find="Eşortman" replace="Eşofman"/>
+    <item find=":_h:" replace="ₕ"/>
+    <item find=":NE2:" replace="⇗"/>
+    <item find="menisküs" replace="menüsküs"/>
+    <item find=":kamyon:" replace="⛟"/>
+    <item find=":bulutlu:" replace=""/>
+    <item find="uyuya kal" replace="uyuyakal"/>
+    <item find=":santa:" replace=""/>
+    <item find=":^t:" replace="ᵗ"/>
+    <item find=":not defteri:" replace=""/>
+    <item find=":^iota:" replace="ᶥ"/>
+    <item find=":düşünüyor:" replace="樂"/>
+    <item find=":sis:" replace=""/>
+    <item find=":bebek biberonu:" replace=""/>
+    <item find=":güneş gözlüğü2:" replace=""/>
+    <item find=":mobilet:" replace=""/>
+    <item find="Karegrafi" replace="Koreografi"/>
+    <item find=":zar1:" replace="⚀"/>
+    <item find=":Güneş2:" replace="☼"/>
+    <item find=":tepsi:" replace=""/>
+    <item find="Egsoz" replace="Egzoz"/>
+    <item find=":nil anahtarı:" replace="☥"/>
+    <item find="bir kaç" replace="birkaç"/>
+    <item find=":tavuk:" replace=""/>
+    <item find=":gazete2:" replace=""/>
+    <item find="Bujiteri" replace="Bijuteri"/>
+    <item find="Akordiyon" replace="Akordeon"/>
+    <item find=":&gt;=:" replace="≥"/>
+    <item find="rakkam" replace="rakam"/>
+    <item find="İnsiyatif" replace="İnisiyatif"/>
+    <item find=":belge4:" replace=""/>
+    <item find=":radyo:" replace=""/>
+    <item find="Müsayit" replace="Müsait"/>
+    <item find="halisünasyon" replace="halüsinasyon"/>
+    <item find=":yorgun surat:" replace=""/>
+    <item find=":alıcı:" replace=""/>
+    <item find=":!?:" replace="⁉"/>
+    <item find=":üç çeyrek ay:" replace=""/>
+    <item find=":bilgisayar oyunu:" replace=""/>
+    <item find=":mezuniyet:" replace=""/>
+    <item find="Anfi" replace="Amfi"/>
+    <item find=":fabrika:" replace=""/>
+    <item find=":masaj:" replace=""/>
+    <item find=":yumruk2:" replace=""/>
+    <item find=":köprü:" replace=""/>
+    <item find="arozöz" replace="arazöz"/>
+    <item find=":banyo:" replace=""/>
+    <item find="Istambul" replace="İstanbul"/>
+    <item find="Egzos" replace="Egzoz"/>
+    <item find=":karo2:" replace="♢"/>
+    <item find=":brokoli:" replace="復"/>
+    <item find=":beyaz şah:" replace="♔"/>
+    <item find=":açık ağız:" replace=""/>
+    <item find="aşantiyon" replace="eşantiyon"/>
+    <item find=":Malta haçı:" replace="✠"/>
+    <item find="Meyva" replace="Meyve"/>
+    <item find=":ispatın sonu:" replace="∎"/>
+    <item find="ünüforma" replace="üniforma"/>
+    <item find=":_5:" replace="₅"/>
+    <item find=":_v:" replace="ᵥ"/>
+    <item find="Gangren" replace="Kangren"/>
+    <item find="afaroz" replace="aforoz"/>
+    <item find="manüpülasyon" replace="manipülasyon"/>
+    <item find="Kurdela" replace="Kurdele"/>
+    <item find=":market arabası:" replace=""/>
+    <item find=":okul:" replace=""/>
+    <item find=":^6:" replace="⁶"/>
+    <item find=":çizelge2:" replace=""/>
+    <item find="muzur" replace="muzır"/>
+    <item find="komidin" replace="komodin"/>
+    <item find=":muz:" replace=""/>
+    <item find=":üçgen3:" replace=""/>
+    <item find=":tümü için:" replace="∀"/>
+    <item find=":tramvay:" replace=""/>
+    <item find="Yada" replace="Ya da"/>
+    <item find="Fesetmek" replace="Feshetmek"/>
+    <item find="şarter" replace="şalter"/>
+    <item find="gider ayak" replace="giderayak"/>
+    <item find=":^n:" replace="ⁿ"/>
+    <item find=":kova:" replace="♒"/>
+    <item find=":zar4:" replace="⚃"/>
+    <item find=":kurt:" replace=""/>
+    <item find="Fasülye" replace="Fasulye"/>
+    <item find=":_3:" replace="₃"/>
+    <item find="herkeş" replace="herkes"/>
+    <item find=":flama:" replace=""/>
+    <item find=":!2:" replace="❗"/>
+    <item find="sütüdyo" replace="stüdyo"/>
+    <item find=":ev2:" replace=""/>
+    <item find=":gitar:" replace=""/>
+    <item find=":yıldız2:" replace="☆"/>
+    <item find="Şayibe" replace="Şaibe"/>
+    <item find=":büstler:" replace=""/>
+    <item find="Muaffak" replace="Muvaffak"/>
+    <item find=":Eta:" replace="Η"/>
+    <item find="eşortman" replace="eşofman"/>
+    <item find=":oda:" replace=""/>
+    <item find=":G:" replace="↓"/>
+    <item find=":takas:" replace=""/>
+    <item find=":!:" replace="❕"/>
+    <item find="muhattap" replace="muhatap"/>
+    <item find=":inek2:" replace=""/>
+    <item find=":integral3:" replace="∭"/>
+    <item find="Beyfendi" replace="Beyefendi"/>
+    <item find=":zarf2:" replace=""/>
+    <item find=":içinde:" replace="∈"/>
+    <item find="Tenbel" replace="Tembel"/>
+    <item find=":sekizinci kalan:" replace="턾"/>
+    <item find="Afaroz" replace="Aforoz"/>
+    <item find=":dalgın:" replace=""/>
+    <item find="acenta" replace="acente"/>
+    <item find=":facepalm:" replace="臘"/>
+    <item find=":/:" replace="∕"/>
+    <item find=":dvd:" replace=""/>
+    <item find=":_e:" replace="ₑ"/>
+    <item find=":oklar:" replace=""/>
+    <item find="Maystro" replace="Maestro"/>
+    <item find="İnformasyon" replace="Enformasyon"/>
+    <item find=":itfaiye arabası:" replace=""/>
+    <item find=":oylama:" replace=""/>
+    <item find=":postane2:" replace=""/>
+    <item find=":^pi:" replace="ᵠ"/>
+    <item find="bulüz" replace="bluz"/>
+    <item find=":pirinç:" replace=""/>
+    <item find=":çığlık atan kedi:" replace=""/>
+    <item find="yanısıra" replace="yanı sıra"/>
+    <item find=":et:" replace=""/>
+    <item find=":Chi:" replace="Χ"/>
+    <item find=":^W:" replace="ᵂ"/>
+    <item find=":uykulu:" replace=""/>
+    <item find=":kayıtlı:" replace="®"/>
+    <item find=":buz:" replace=""/>
+    <item find=":onay kutusu6:" replace=""/>
+    <item find="kazazade" replace="kazazede"/>
+    <item find=":beyzbol:" replace="⚾"/>
+    <item find=":bal:" replace=""/>
+    <item find="İlizyon" replace="İllüzyon"/>
+    <item find=":cent:" replace="¢"/>
+    <item find=":tekerlekli sandalye:" replace="♿"/>
+    <item find="tolorans" replace="tolerans"/>
+    <item find=":beyaz fil:" replace="♗"/>
+    <item find=":takvim3:" replace=""/>
+    <item find=":gece:" replace=""/>
+    <item find="valeybol" replace="voleybol"/>
+    <item find=":sağ3:" replace="☛"/>
+    <item find=":kızgın:" replace=""/>
+    <item find="arasıra" replace="ara sıra"/>
+    <item find="eskirim" replace="eskrim"/>
+    <item find="Kominist" replace="Komünist"/>
+    <item find=":rugby futbolu:" replace=""/>
+    <item find=":yukarı3:" replace=""/>
+    <item find=":acemi:" replace=""/>
+    <item find=":Omikron:" replace="Ο"/>
+    <item find=":neşe:" replace=""/>
+    <item find="dekaratör" replace="dekoratör"/>
+    <item find=":toplam:" replace="∑"/>
+    <item find=":küre3:" replace=""/>
+    <item find="karsör" replace="karoser"/>
+    <item find=":dikkat:" replace="☡"/>
+    <item find="mundar" replace="murdar"/>
+    <item find=":şapka:" replace=""/>
+    <item find=":kavun:" replace=""/>
+    <item find="Alarım" replace="Alarm"/>
+    <item find=":civciv3:" replace=""/>
+    <item find=":tamam2:" replace=""/>
+    <item find=":Ro:" replace="Ρ"/>
+    <item find=":çift2:" replace=""/>
+    <item find="fites" replace="vites"/>
+    <item find="Şevkat" replace="Şefkat"/>
+    <item find=":maça2:" replace="♤"/>
+    <item find=":parlaklık2:" replace=""/>
+    <item find=":basketbol:" replace=""/>
+    <item find="Taktim" replace="Takdim"/>
+    <item find=":konuşma balonu:" replace=""/>
+    <item find=":gümrük:" replace=""/>
+    <item find=":çizme:" replace=""/>
+    <item find="Sütüdyo" replace="Stüdyo"/>
+    <item find="kollej" replace="kolej"/>
+    <item find=":1/8:" replace="⅛"/>
+    <item find=":taksi2:" replace=""/>
+    <item find="şarz" replace="Şarj"/>
+    <item find=":hançer2:" replace="‡"/>
+    <item find="zınba" replace="zımba"/>
+    <item find=":başlık:" replace=""/>
+    <item find="Barsak" replace="Bağırsak"/>
+    <item find=":omega:" replace="ω"/>
+    <item find=":doğal:" replace="♮"/>
+    <item find="mefta" replace="mevta"/>
+    <item find=":köpek2:" replace=""/>
+    <item find=":kitaplar:" replace=""/>
+    <item find=":şehir:" replace=""/>
+    <item find=":sol2:" replace=""/>
+    <item find=":ifadesiz:" replace=""/>
+    <item find="çala kalem" replace="çalakalem"/>
+    <item find=":yıldız3:" replace=""/>
+    <item find=":dikdörtgen2:" replace="▬"/>
+    <item find=":beyin:" replace="易"/>
+    <item find="tastik" replace="tasdik"/>
+    <item find=":mikrofon:" replace=""/>
+    <item find="erezyon" replace="erozyon"/>
+    <item find=":futbol:" replace="⚽"/>
+    <item find=":otoyol:" replace=""/>
+    <item find="Aliminyum" replace="Alüminyum"/>
+    <item find=":sörfçü:" replace=""/>
+    <item find=":silindir şapka:" replace=""/>
+    <item find="barsak" replace="bağırsak"/>
+    <item find="Erezyon" replace="Erozyon"/>
+    <item find=":dinazor2:" replace="練"/>
+    <item find=":kitap3:" replace=""/>
+    <item find=":peso:" replace="₱"/>
+    <item find=":fi:" replace="ﬁ"/>
+    <item find="parende" replace="perende"/>
+    <item find=":onay kutusu3:" replace="☒"/>
+    <item find=":ayakkabı2:" replace=""/>
+    <item find=":^8:" replace="⁸"/>
+    <item find=":azimli:" replace=""/>
+    <item find=":troleybüs:" replace=""/>
+    <item find=":tm:" replace="™"/>
+    <item find="Dökümanter" replace="Dokümanter"/>
+    <item find="radyosyon" replace="radyasyon"/>
+    <item find=":çift4:" replace=""/>
+    <item find=":voleybol:" replace=""/>
+    <item find=":benekler:" replace="✨"/>
+    <item find=":bikini:" replace=""/>
+    <item find=":kaplan2:" replace=""/>
+    <item find=":sarık:" replace=""/>
+    <item find=":kurşun2:" replace="‣"/>
+    <item find=":panda:" replace=""/>
+    <item find=":zil çalma:" replace=""/>
+    <item find="temize gitmek" replace="temyize gitmek"/>
+    <item find=":inç:" replace="″"/>
+    <item find=":öpüşme:" replace=""/>
+    <item find="birgün" replace="bir gün"/>
+    <item find="candarma" replace="jandarma"/>
+    <item find=":yaya geçidi:" replace=""/>
+    <item find=":küçült:" replace=""/>
+    <item find=":modem:" replace=""/>
+    <item find=":başak:" replace="♍"/>
+    <item find=":benzin pompası:" replace="⛽"/>
+    <item find=":fare2:" replace=""/>
+    <item find=":1 s:" replace=""/>
+    <item find=":_=:" replace="₌"/>
+    <item find="Yövmiye" replace="Yevmiye"/>
+    <item find="Allerji" replace="Alerji"/>
+    <item find="Kitlemek" replace="Kilitlemek"/>
+    <item find=":raptiye:" replace=""/>
+    <item find="entellektüel" replace="entelektüel"/>
+    <item find=":---:" replace="—"/>
+    <item find=":araba4:" replace=""/>
+    <item find="Subap" replace="Supap"/>
+    <item find="Sandüviç" replace="Sandviç"/>
+    <item find=":siyah piyon:" replace="♟"/>
+    <item find="muaffak" replace="muvaffak"/>
+    <item find=":asma demiryolu:" replace=""/>
+    <item find="Evsane" replace="Efsane"/>
+    <item find=":zarf4:" replace=""/>
+    <item find=":hamile:" replace="擄"/>
+    <item find=":paten:" replace="⛸"/>
+    <item find=":güveç:" replace=""/>
+    <item find=":prenses:" replace=""/>
+    <item find=":ağlayan:" replace=""/>
+    <item find=":raylar:" replace=""/>
+    <item find=":rüzgar zili:" replace=""/>
+    <item find=":ağ:" replace=""/>
+    <item find="Aşentiyon" replace="Eşantiyon"/>
+    <item find="Amartisör" replace="Amortisör"/>
+    <item find="faliyet" replace="faaliyet"/>
+    <item find="ablem" replace="amblem"/>
+    <item find="riks" replace="risk"/>
+    <item find=":sosisli:" replace=""/>
+    <item find=":puan:" replace=""/>
+    <item find=":mikrofon2:" replace=""/>
+    <item find=":tek raylı demiryolu:" replace=""/>
+    <item find=":alıcı4:" replace=""/>
+    <item find="boğça" replace="poğaça"/>
+    <item find=":su topu:" replace="綠"/>
+    <item find=":çiçek2:" replace=""/>
+    <item find=":prens:" replace="老"/>
+    <item find=":bira:" replace=""/>
+    <item find="Yalnış" replace="Yanlış"/>
+    <item find=":yaya giremez:" replace=""/>
+    <item find=":ff:" replace="ﬀ"/>
+    <item find=":^alfa:" replace="ᵅ"/>
+    <item find=":palmiye2:" replace="爐"/>
+    <item find=":mega:" replace=""/>
+    <item find=":^7:" replace="⁷"/>
+    <item find=":kanatlı but:" replace=""/>
+    <item find="istihap hatti" replace="istiap haddi"/>
+    <item find="Assubay" replace="Astsubay"/>
+    <item find=":çatık:" replace=""/>
+    <item find=":Davud'un yıldızı:" replace="✡"/>
+    <item find="vaz geç" replace="vazgeç"/>
+    <item find=":teleskop:" replace=""/>
+    <item find=":çarpım:" replace="∏"/>
+    <item find="Antiparantez" replace="Antrparantez"/>
+    <item find=":yarasa:" replace="驪"/>
+    <item find=":kız:" replace=""/>
+    <item find="Mahçup" replace="Mahcup"/>
+    <item find=":oden:" replace=""/>
+    <item find="Sandöviç" replace="Sandviç"/>
+    <item find=":uçak4:" replace=""/>
+    <item find="Htp" replace="http"/>
+    <item find=":parmakizi:" replace=""/>
+    <item find=":onay işareti:" replace="✓"/>
+    <item find="Kalemşör" replace="Kalemşor"/>
+    <item find=":ahtapot:" replace=""/>
+    <item find=":bıçak:" replace=""/>
+    <item find="minisküs" replace="menüsküs"/>
+    <item find=":mağaza2:" replace=""/>
+    <item find=":cilt2:" replace=""/>
+    <item find=":kilit3:" replace=""/>
+    <item find=":1/3:" replace="⅓"/>
+    <item find="Ataç" replace="Ataş"/>
+    <item find=":^(:" replace="⁽"/>
+    <item find="şayibe" replace="şaibe"/>
+    <item find=":madalya:" replace=""/>
+    <item find="Laboratuar" replace="Laboratuvar"/>
+    <item find=":om:" replace=""/>
+    <item find=":danscı2:" replace=""/>
+    <item find="Aritmatik" replace="Aritmetik"/>
+    <item find=":^D:" replace="ᴰ"/>
+    <item find="hoşçakal" replace="hoşça kal"/>
+    <item find="karekter" replace="karakter"/>
+    <item find=":_x:" replace="ₓ"/>
+    <item find="utopya" replace="ütopya"/>
+    <item find=":bütün kalan:" replace="턻"/>
+    <item find=":okyanus:" replace=""/>
+    <item find="tafsiye" replace="tavsiye"/>
+    <item find=":kabarcık:" replace=""/>
+    <item find=":kızlar:" replace=""/>
+    <item find=":salata:" replace="綾"/>
+    <item find="su çiçeği" replace="suçiçeği"/>
+    <item find=":feribot:" replace="⛴"/>
+    <item find=":dağ teleferiği:" replace=""/>
+    <item find="müsayit" replace="müsait"/>
+    <item find="Hakkaten" replace="Hakikaten"/>
+    <item find=":^z:" replace="ᶻ"/>
+    <item find="küvöz" replace="kuvöz"/>
+    <item find="Gangaster" replace="Gangster"/>
+    <item find=":klasör2:" replace=""/>
+    <item find=":otobüs durağı:" replace=""/>
+    <item find=":zil3:" replace=""/>
+    <item find="proğram" replace="program"/>
+    <item find=":mısır:" replace=""/>
+    <item find=":orak çekiç:" replace="☭"/>
+    <item find=":zambak:" replace="⚜"/>
+    <item find=":torba:" replace=""/>
+    <item find=":ağzı yok:" replace=""/>
+    <item find=":bilardo:" replace=""/>
+    <item find=":kılıçlar:" replace="⚔"/>
+    <item find=":avakado:" replace="陋"/>
+    <item find="Tanpon" replace="Tampon"/>
+    <item find=":koyun:" replace=""/>
+    <item find="nalet" replace="lanet"/>
+    <item find="Matba" replace="Matbaa"/>
+    <item find=":gülümseme3:" replace=""/>
+    <item find="Naturel" replace="Natürel"/>
+    <item find=":boya fırçası:" replace=""/>
+    <item find="çukolata" replace="çikolata"/>
+    <item find=":_k:" replace="ₖ"/>
+    <item find="kurdale" replace="kurdele"/>
+    <item find=":ağzı sulanmış:" replace="襤"/>
+    <item find="münübüs" replace="minibüs"/>
+    <item find=":bagaj taşıyıcısı:" replace=""/>
+    <item find=":zincirler:" replace="⛓"/>
+    <item find=":Yunan haçı:" replace="✚"/>
+    <item find=":_u:" replace="ᵤ"/>
+    <item find=":domuz2:" replace=""/>
+    <item find=":ses:" replace=""/>
+    <item find="Antreman" replace="Antrenman"/>
+    <item find=":sayfa4:" replace=""/>
+    <item find="Tirbüşon" replace="Tirbuşon"/>
+    <item find=":dedektif:" replace=""/>
+    <item find="Eksoz" replace="Egzoz"/>
+    <item find=":yen2:" replace=""/>
+    <item find="şevkat" replace="şefkat"/>
+    <item find="Klavuz" replace="Kılavuz"/>
+    <item find=":boş not defteri:" replace=""/>
+    <item find="melemen" replace="menemen"/>
+    <item find="kareografi" replace="koreografi"/>
+    <item find=":kadın noel baba:" replace="虜"/>
+    <item find=":sayfa2:" replace=""/>
+    <item find="anotomi" replace="anatomi"/>
+    <item find="Mozayik" replace="Mozaik"/>
+    <item find="adele" replace="adale"/>
+    <item find="Veleybol" replace="Voleybol"/>
+    <item find=":_j:" replace="ⱼ"/>
+    <item find=":at:" replace=""/>
+    <item find=":gömlek:" replace=""/>
+    <item find=":integral2:" replace="∬"/>
+    <item find=":kabarcık10:" replace=""/>
+    <item find=":^m:" replace="ᵐ"/>
+    <item find=":sigara içilmez:" replace=""/>
+    <item find="döğmek" replace="dövmek"/>
+    <item find=":kalem:" replace="✎"/>
+    <item find=":hoparlör:" replace=""/>
+    <item find="motorsiklet" replace="motosiklet"/>
+    <item find="Entrasan" replace="Enteresan"/>
+    <item find=":aşk mektubu:" replace=""/>
+    <item find=":W2:" replace="⇐"/>
+    <item find="payton" replace="fayton"/>
+    <item find=":posta kutusu4:" replace=""/>
+    <item find=":_0:" replace="₀"/>
+    <item find=":şekel:" replace="₪"/>
+    <item find=":kalp yerleşimi:" replace=""/>
+    <item find=":makarna:" replace=""/>
+    <item find=":onay kutusu:" replace="☐"/>
+    <item find=":büyük çember:" replace="◯"/>
+    <item find=":el çantası:" replace=""/>
+    <item find=":bölmez:" replace="∤"/>
+    <item find=":ayakkabı:" replace=""/>
+    <item find=":kriket2:" replace="聯"/>
+    <item find=":dağ2:" replace=""/>
+    <item find=":ay yıldız:" replace="☪"/>
+    <item find=":motorlu tekne:" replace=""/>
+    <item find=":^r:" replace="ʳ"/>
+    <item find=":yazıcı2:" replace=""/>
+    <item find=":girilmez işareti:" replace=""/>
+    <item find=":_beta:" replace="ᵦ"/>
+    <item find=":kusma:" replace="冷"/>
+    <item find=":12 s:" replace=""/>
+    <item find=":Phi:" replace="Φ"/>
+    <item find="Mahfolmak" replace="Mahvolmak"/>
+    <item find=":ayakkabı3:" replace=""/>
+    <item find=":_):" replace="₎"/>
+    <item find=":dil2:" replace=""/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="apr."/>
+    <word exception="req."/>
+    <word exception="aug."/>
+    <word exception="n."/>
+    <word exception="d."/>
+    <word exception="proj."/>
+    <word exception="obj."/>
+    <word exception="excl."/>
+    <word exception="in."/>
+    <word exception="sat."/>
+    <word exception="o."/>
+    <word exception="mon."/>
+    <word exception="lit."/>
+    <word exception="var."/>
+    <word exception="temp."/>
+    <word exception="misc."/>
+    <word exception="j."/>
+    <word exception="se."/>
+    <word exception="spec."/>
+    <word exception="sept."/>
+    <word exception="acct."/>
+    <word exception="sun."/>
+    <word exception="esp."/>
+    <word exception="z."/>
+    <word exception="specif."/>
+    <word exception="u."/>
+    <word exception="psi."/>
+    <word exception="ne."/>
+    <word exception="ln."/>
+    <word exception="mi."/>
+    <word exception="v."/>
+    <word exception="f."/>
+    <word exception="h."/>
+    <word exception="approx."/>
+    <word exception="nat."/>
+    <word exception="w."/>
+    <word exception="sq."/>
+    <word exception="govt."/>
+    <word exception="mun."/>
+    <word exception="x."/>
+    <word exception="mar."/>
+    <word exception="jr."/>
+    <word exception="b."/>
+    <word exception="e."/>
+    <word exception="ib."/>
+    <word exception="cont."/>
+    <word exception="y."/>
+    <word exception="sep."/>
+    <word exception="p."/>
+    <word exception="no."/>
+    <word exception="vs."/>
+    <word exception="jan."/>
+    <word exception="norm."/>
+    <word exception="jul."/>
+    <word exception="feb."/>
+    <word exception="ave."/>
+    <word exception="hrs."/>
+    <word exception="thurs."/>
+    <word exception="max."/>
+    <word exception="dr."/>
+    <word exception="appt."/>
+    <word exception="hr."/>
+    <word exception="ct."/>
+    <word exception="sci."/>
+    <word exception="c."/>
+    <word exception="sr."/>
+    <word exception="nov."/>
+    <word exception="m."/>
+    <word exception="reqd."/>
+    <word exception="nw."/>
+    <word exception="co."/>
+    <word exception="orig."/>
+    <word exception="univ."/>
+    <word exception="pl."/>
+    <word exception="corp."/>
+    <word exception="qty."/>
+    <word exception="oct."/>
+    <word exception="nos."/>
+    <word exception="rev."/>
+    <word exception="resp."/>
+    <word exception="inc."/>
+    <word exception="est."/>
+    <word exception="k."/>
+    <word exception="s."/>
+    <word exception="gov."/>
+    <word exception="t."/>
+    <word exception="rd."/>
+    <word exception="min."/>
+    <word exception="ibid."/>
+    <word exception="dept."/>
+    <word exception="etc."/>
+    <word exception="dec."/>
+    <word exception="natl."/>
+    <word exception="avg."/>
+    <word exception="tues."/>
+    <word exception="q."/>
+    <word exception="ext."/>
+    <word exception="asst."/>
+    <word exception="fri."/>
+    <word exception="assoc."/>
+    <word exception="g."/>
+    <word exception="int."/>
+    <word exception="ft."/>
+    <word exception="pos."/>
+    <word exception="wed."/>
+    <word exception="r."/>
+    <word exception="tot."/>
+    <word exception="st."/>
+    <word exception="l."/>
+    <word exception="sw."/>
+    <word exception="a."/>
+    <word exception="neg."/>
+    <word exception="rec."/>
+    <word exception="defn."/>
+    <word exception="rel."/>
+    <word exception="equip."/>
+    <word exception="subj."/>
+    <word exception="prev."/>
+    <word exception="apt."/>
+    <word exception="org."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="MCs"/>
+    <word exception="MHz"/>
+    <word exception="PCs"/>
+    <word exception="THz"/>
+    <word exception="GHz"/>
+    <word exception="TVs"/>
+    <word exception="ICs"/>
+    <word exception="LPs"/>
+    <word exception="OOo"/>
+    <word exception="CDs"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

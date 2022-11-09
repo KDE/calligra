@@ -1,0 +1,1881 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find=":avall5:" replace=""/>
+    <item find=":estàtua:" replace=""/>
+    <item find=":meló:" replace=""/>
+    <item find="comisió" replace="comissió"/>
+    <item find=":fulla3:" replace=""/>
+    <item find=":dinosaure:" replace="秊"/>
+    <item find=":monocle:" replace="類"/>
+    <item find="contrassenya" replace="contrasenya"/>
+    <item find=".*(tm)" replace="™"/>
+    <item find=":hexàgon:" replace="⬡"/>
+    <item find=":lluna nova2:" replace=""/>
+    <item find=":ulleres:" replace=""/>
+    <item find=":Sol2:" replace="☼"/>
+    <item find=":_fi:" replace="ᵩ"/>
+    <item find=":^beta:" replace="ᵝ"/>
+    <item find=":cursa:" replace=""/>
+    <item find=":mareig:" replace=""/>
+    <item find=":kaba:" replace=""/>
+    <item find=":llanxa motora:" replace=""/>
+    <item find=":estrella petita2:" replace="⭑"/>
+    <item find=":carro:" replace=""/>
+    <item find=":guió:" replace=""/>
+    <item find=":!2:" replace="❗"/>
+    <item find=":registrat:" replace="®"/>
+    <item find=":poma:" replace=""/>
+    <item find=":bandera2:" replace=""/>
+    <item find=":lluna creixent:" replace=""/>
+    <item find=":reciclatge:" replace="♲"/>
+    <item find=":tramvia:" replace=""/>
+    <item find=":cases:" replace=""/>
+    <item find=":dreta4:" replace=""/>
+    <item find=":om:" replace=""/>
+    <item find=":prohibits els vianants:" replace=""/>
+    <item find=":marca de verificació3:" replace="✅"/>
+    <item find=":júpiter:" replace="♃"/>
+    <item find=":música:" replace=""/>
+    <item find="contrassenyes" replace="contrasenyes"/>
+    <item find=":ovni:" replace=""/>
+    <item find="inmunitat" replace="immunitat"/>
+    <item find=":got3:" replace="弄"/>
+    <item find=":!?:" replace="⁉"/>
+    <item find=":vaixell:" replace=""/>
+    <item find=":criquet2:" replace="聯"/>
+    <item find=":quadrat2:" replace="■"/>
+    <item find=":oceà:" replace=""/>
+    <item find=":abella:" replace=""/>
+    <item find=":arribada:" replace=""/>
+    <item find="escritori" replace="escriptori"/>
+    <item find=":festa:" replace=""/>
+    <item find=":calculadora:" replace=""/>
+    <item find=":ennuvolat:" replace=""/>
+    <item find=":xupa-xups:" replace=""/>
+    <item find=":pàgines buides:" replace=""/>
+    <item find=":enllaç:" replace=""/>
+    <item find="maquinaris" replace="maquinari"/>
+    <item find=":Psi:" replace="Ψ"/>
+    <item find=":galeta2:" replace="怒"/>
+    <item find=":mode vibració:" replace=""/>
+    <item find=":sense expressió:" replace=""/>
+    <item find=":ninot de neu:" replace="☃"/>
+    <item find=":_i:" replace="ᵢ"/>
+    <item find=":amor:" replace=""/>
+    <item find=":festí2:" replace=""/>
+    <item find=":bala:" replace="•"/>
+    <item find=":cadenes:" replace="⛓"/>
+    <item find=":superposa:" replace=""/>
+    <item find=":mà2:" replace=""/>
+    <item find=":índex:" replace=""/>
+    <item find="sera" replace="serà"/>
+    <item find=":verge:" replace="♍"/>
+    <item find=":busts:" replace=""/>
+    <item find=":dònut:" replace=""/>
+    <item find="necesitat" replace="necessitat"/>
+    <item find=":/:" replace="∕"/>
+    <item find=":cor decoratiu:" replace=""/>
+    <item find=":10.30:" replace=""/>
+    <item find=":bústia:" replace=""/>
+    <item find=":gat2:" replace=""/>
+    <item find=":auricular3:" replace=""/>
+    <item find=":voleibol:" replace=""/>
+    <item find=":psi:" replace="ψ"/>
+    <item find=":gallina:" replace=""/>
+    <item find=":escut:" replace=""/>
+    <item find=":llum giratori:" replace=""/>
+    <item find=":gamba:" replace="戀"/>
+    <item find="imposible" replace="impossible"/>
+    <item find=":dutxa:" replace=""/>
+    <item find=":cuixa de pollastre:" replace=""/>
+    <item find=":quadrat mitjà2:" replace="◼"/>
+    <item find=":casella de selecció:" replace="☐"/>
+    <item find=":enrojolada:" replace=""/>
+    <item find=":auricular4:" replace=""/>
+    <item find=":dit:" replace=""/>
+    <item find=":or:" replace="磊"/>
+    <item find=":ovella:" replace=""/>
+    <item find=":Èpsilon:" replace="Ε"/>
+    <item find=":porta-retalls:" replace=""/>
+    <item find=":aigua no potable:" replace=""/>
+    <item find=":te:" replace=""/>
+    <item find=":disquet3:" replace=""/>
+    <item find=":creu ortodoxa:" replace="☦"/>
+    <item find=":engranatge:" replace="⚙"/>
+    <item find=":Fi:" replace="Φ"/>
+    <item find=":Terra4:" replace=""/>
+    <item find=":cargol i femella:" replace=""/>
+    <item find=":blanca:" replace="텞"/>
+    <item find=":conill:" replace=""/>
+    <item find=":biquini:" replace=""/>
+    <item find=":lira turca:" replace="₺"/>
+    <item find=":muntanya2:" replace=""/>
+    <item find=":pel·lícula:" replace=""/>
+    <item find=":herba:" replace=""/>
+    <item find=":monocarril suspès:" replace=""/>
+    <item find=".*(R)" replace="®"/>
+    <item find=":no:" replace=""/>
+    <item find=":pi:" replace="π"/>
+    <item find=":pa de pita:" replace="陵"/>
+    <item find=":prohibit:" replace=""/>
+    <item find=":maledicció:" replace="郎"/>
+    <item find=":ratolí5:" replace=""/>
+    <item find=":^delta:" replace="ᵟ"/>
+    <item find=":vestits:" replace=""/>
+    <item find=":mesquita:" replace=""/>
+    <item find=":subconjunt:" replace="⊂"/>
+    <item find=":ram de flors2:" replace=""/>
+    <item find="búsqueda" replace="cerca"/>
+    <item find="inmobiliari" replace="immobiliari"/>
+    <item find=":golf:" replace=""/>
+    <item find=":lliga_ffi:" replace="ﬃ"/>
+    <item find=":spock:" replace=""/>
+    <item find=":cor2:" replace=""/>
+    <item find=":aigua potable:" replace=""/>
+    <item find=":cercle negre:" replace="⚫"/>
+    <item find=":11 h:" replace=""/>
+    <item find=":dango:" replace=""/>
+    <item find=":^4:" replace="⁴"/>
+    <item find=":5 h:" replace=""/>
+    <item find=":.:" replace="…"/>
+    <item find=":quimono:" replace=""/>
+    <item find=":reina negra:" replace="♛"/>
+    <item find=":document buit:" replace=""/>
+    <item find=":escúter2:" replace=""/>
+    <item find=":estació:" replace=""/>
+    <item find=":coala:" replace=""/>
+    <item find=":rectangle:" replace="▭"/>
+    <item find=":safata2:" replace=""/>
+    <item find=":cotxe4:" replace=""/>
+    <item find=":llibres:" replace=""/>
+    <item find=":_r:" replace="ᵣ"/>
+    <item find=":arrel cúbica:" replace="∛"/>
+    <item find=":casella de selecció5:" replace=""/>
+    <item find="Suissa" replace="Suïssa"/>
+    <item find=":cotxe2:" replace=""/>
+    <item find=":marcador2:" replace=""/>
+    <item find=":megàfon:" replace=""/>
+    <item find=":prohibides les bicicletes:" replace=""/>
+    <item find=":pluja:" replace="☔"/>
+    <item find=":tractor:" replace=""/>
+    <item find=":oració:" replace=""/>
+    <item find=":fantasma:" replace=""/>
+    <item find=":sobre5:" replace=""/>
+    <item find=":floc de neu:" replace="❄"/>
+    <item find=":paper reciclat:" replace="♼"/>
+    <item find=":llibertat:" replace=""/>
+    <item find="la sugerència" replace="el suggeriment"/>
+    <item find=":^x:" replace="ˣ"/>
+    <item find=":piña:" replace=""/>
+    <item find=":esquerra2:" replace=""/>
+    <item find=":alta tensió:" replace="⚡"/>
+    <item find=":cavall:" replace=""/>
+    <item find=":flor:" replace="⚘"/>
+    <item find=":trajo:" replace=""/>
+    <item find=":ien:" replace="¥"/>
+    <item find=":hibisc:" replace=""/>
+    <item find=":ulleres de sol:" replace=""/>
+    <item find=":tauró:" replace="麗"/>
+    <item find=":baht:" replace="฿"/>
+    <item find=":conté petit:" replace="∍"/>
+    <item find=":marca de verificació2:" replace="✔"/>
+    <item find=":sigma:" replace="σ"/>
+    <item find=":5/8:" replace="⅝"/>
+    <item find=":cap per avall:" replace=""/>
+    <item find=":ona:" replace=""/>
+    <item find=":pinça:" replace=""/>
+    <item find=":illa:" replace=""/>
+    <item find=":rúpia:" replace="₹"/>
+    <item find=":moltó:" replace=""/>
+    <item find=".*&lt;-.*" replace="←"/>
+    <item find=":formatge:" replace="燎"/>
+    <item find=":moto:" replace=""/>
+    <item find=":aplaudiment:" replace=""/>
+    <item find=":barca de rems:" replace=""/>
+    <item find=":banys:" replace=""/>
+    <item find=":^5:" replace="⁵"/>
+    <item find=":casa2:" replace=""/>
+    <item find=":Lluna2:" replace="☾"/>
+    <item find=":telèfon3:" replace=""/>
+    <item find="tenen que" replace="s'han de"/>
+    <item find=":adormit:" replace=""/>
+    <item find=":monorail:" replace=""/>
+    <item find=":estofat:" replace=""/>
+    <item find=":raïm:" replace=""/>
+    <item find=":estrella2:" replace="☆"/>
+    <item find=":boirós:" replace=""/>
+    <item find=":llibreta:" replace=""/>
+    <item find=":sortida del sol3:" replace=""/>
+    <item find=":vaixell2:" replace=""/>
+    <item find=":robot:" replace="烙"/>
+    <item find=":gat cridant:" replace=""/>
+    <item find=":control lliscant:" replace=""/>
+    <item find=":cercle gran2:" replace="⬤"/>
+    <item find=":llaç2:" replace=""/>
+    <item find=":goril·la:" replace="轢"/>
+    <item find=":serveis:" replace=""/>
+    <item find=":altaveu2:" replace=""/>
+    <item find=":endoll:" replace=""/>
+    <item find=":dòlar2:" replace=""/>
+    <item find=":biberó:" replace=""/>
+    <item find=":dau2:" replace="⚁"/>
+    <item find=":estrella mitjana:" replace="⭐"/>
+    <item find=":font termal:" replace="♨"/>
+    <item find=":^A:" replace="ᴬ"/>
+    <item find=":crani:" replace=""/>
+    <item find=":notes3:" replace=""/>
+    <item find=":telèfon2:" replace="☏"/>
+    <item find=":&gt;=:" replace="≥"/>
+    <item find=":patata:" replace="凜"/>
+    <item find=":^7:" replace="⁷"/>
+    <item find=":núvol2:" replace="⛅"/>
+    <item find="misatge" replace="missatge"/>
+    <item find=":corona:" replace=""/>
+    <item find="masiva" replace="massiva"/>
+    <item find=":crismó:" replace="☧"/>
+    <item find="extrany" replace="estrany"/>
+    <item find=":búfal d'aigua:" replace=""/>
+    <item find=":Òmicron:" replace="Ο"/>
+    <item find=":sonalles eòliques:" replace=""/>
+    <item find=":&lt;=:" replace="≤"/>
+    <item find=":picada d'ullet:" replace=""/>
+    <item find=":no2:" replace=""/>
+    <item find=":mi:" replace="μ"/>
+    <item find=":bústia2:" replace=""/>
+    <item find=":grau:" replace="°"/>
+    <item find=":puny3:" replace="亂"/>
+    <item find=":_8:" replace="₈"/>
+    <item find=":creixent i estrella:" replace="☪"/>
+    <item find=":hoquei2:" replace=""/>
+    <item find=":cotxe de polícia:" replace=""/>
+    <item find=":carpeta3:" replace=""/>
+    <item find=":integral5:" replace="∰"/>
+    <item find=":càmera:" replace=""/>
+    <item find=":pallasso:" replace="嵐"/>
+    <item find=":informació2:" replace=""/>
+    <item find=":neptú:" replace="♆"/>
+    <item find=":nerd:" replace="邏"/>
+    <item find=":decepció:" replace=""/>
+    <item find=":rei:" replace=""/>
+    <item find=":galeta:" replace=""/>
+    <item find=":nois:" replace=""/>
+    <item find="avans" replace="abans"/>
+    <item find=":bròquil:" replace="復"/>
+    <item find=":nota:" replace="♩"/>
+    <item find=":handbol:" replace="菉"/>
+    <item find=":sigma2:" replace="ς"/>
+    <item find="excelent" replace="excel·lent"/>
+    <item find=":auricular2:" replace=""/>
+    <item find="sab" replace="sap"/>
+    <item find=":peó negre:" replace="♟"/>
+    <item find=":trèvols2:" replace="♧"/>
+    <item find=":lliga_fi:" replace="ﬁ"/>
+    <item find=":brillantor:" replace=""/>
+    <item find="cantitat" replace="quantitat"/>
+    <item find=":ulls:" replace=""/>
+    <item find=":fira2:" replace=""/>
+    <item find=":producte:" replace="∏"/>
+    <item find=":xinxeta:" replace=""/>
+    <item find=":lira:" replace="₤"/>
+    <item find=":bústia3:" replace=""/>
+    <item find=":trineu:" replace=""/>
+    <item find=":ni:" replace="ν"/>
+    <item find=":bona sort:" replace="爛"/>
+    <item find=":no divideix:" replace="∤"/>
+    <item find=":eriçó:" replace="璉"/>
+    <item find=":estrella4:" replace=""/>
+    <item find=":':" replace="’"/>
+    <item find=":Khi:" replace="Χ"/>
+    <item find=":veler:" replace="⛵"/>
+    <item find=":préssec:" replace=""/>
+    <item find=":per a qualsevol:" replace="∀"/>
+    <item find="solicitut" replace="sol·licitud"/>
+    <item find="&lt;--&gt;" replace="↔"/>
+    <item find=":puny4:" replace="卵"/>
+    <item find=":negació:" replace="¬"/>
+    <item find=":_7:" replace="₇"/>
+    <item find=":beguda2:" replace=""/>
+    <item find="inmigrant" replace="immigrant"/>
+    <item find="ilusió" replace="il·lusió"/>
+    <item find=":flor2:" replace=""/>
+    <item find=":llengua2:" replace=""/>
+    <item find=":casc:" replace="⛑"/>
+    <item find=":patates fregides:" replace=""/>
+    <item find=":confús:" replace=""/>
+    <item find=":pera:" replace=""/>
+    <item find="cocaina" replace="cocaïna"/>
+    <item find=":ànec:" replace="閭"/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find=":secció:" replace="§"/>
+    <item find=":sabata2:" replace=""/>
+    <item find=":caniche:" replace=""/>
+    <item find="colecció" replace="col·lecció"/>
+    <item find=":peus:" replace=""/>
+    <item find=":lluna nova:" replace=""/>
+    <item find=":palmera:" replace=""/>
+    <item find="reduit" replace="reduït"/>
+    <item find=":_):" replace="₎"/>
+    <item find=":teatre:" replace=""/>
+    <item find="posibilitats" replace="possibilitats"/>
+    <item find=":_j:" replace="ⱼ"/>
+    <item find="pasada" replace="passada"/>
+    <item find=":conté:" replace="∋"/>
+    <item find=":bombolla9:" replace=""/>
+    <item find=":avió2:" replace=""/>
+    <item find=":clau2:" replace=""/>
+    <item find=":sortida:" replace=""/>
+    <item find=":estrella:" replace="★"/>
+    <item find=":clau anglesa:" replace=""/>
+    <item find=":marca registrada:" replace="™"/>
+    <item find=":notes2:" replace="♬"/>
+    <item find=":cors2:" replace="♡"/>
+    <item find=":dona:" replace=""/>
+    <item find=":funicular:" replace=""/>
+    <item find=":guitarra:" replace=""/>
+    <item find=":suor fred:" replace=""/>
+    <item find=":llapis4:" replace=""/>
+    <item find=":cercle4:" replace=""/>
+    <item find="veins" replace="veïns"/>
+    <item find=":aixecador:" replace=""/>
+    <item find=":ambulància:" replace=""/>
+    <item find=":ocàs:" replace=""/>
+    <item find=":bento:" replace=""/>
+    <item find=":pensatiu:" replace=""/>
+    <item find=":dreta3:" replace="☛"/>
+    <item find=":no paral·lel:" replace="∦"/>
+    <item find="solicitud" replace="sol·licitud"/>
+    <item find=":ancià:" replace="陸"/>
+    <item find=":persa:" replace="☫"/>
+    <item find=":doble bemoll:" replace="턫"/>
+    <item find=":8 h:" replace=""/>
+    <item find=":el·lipse:" replace="⬭"/>
+    <item find=":mà:" replace="✋"/>
+    <item find=":7/8:" replace="⅞"/>
+    <item find=":llibre3:" replace=""/>
+    <item find=":tarta:" replace="不"/>
+    <item find=":x:" replace="×"/>
+    <item find="profesional" replace="professional"/>
+    <item find=":cor taronja:" replace="李"/>
+    <item find=":marca de verificació:" replace="✓"/>
+    <item find=":decebuda alleujada:" replace=""/>
+    <item find=":escúter:" replace=""/>
+    <item find=":martell:" replace=""/>
+    <item find=":bitcoin:" replace="₿"/>
+    <item find=":quadrat petit:" replace="▫"/>
+    <item find=":^D:" replace="ᴰ"/>
+    <item find="inmoble" replace="immoble"/>
+    <item find=":granissat:" replace=""/>
+    <item find=":avió4:" replace=""/>
+    <item find=":camió de bombers:" replace=""/>
+    <item find=":panda:" replace=""/>
+    <item find=":kappa:" replace="κ"/>
+    <item find=":11.30:" replace=""/>
+    <item find=":orelles de conill:" replace=""/>
+    <item find="increible" replace="increïble"/>
+    <item find=":ungles:" replace=""/>
+    <item find=":basquetbol:" replace="⚾"/>
+    <item find="a baix" replace="abaix"/>
+    <item find=":poma verda:" replace=""/>
+    <item find=":marca de verificació4:" replace=""/>
+    <item find=":Gamma:" replace="Γ"/>
+    <item find=":petó3:" replace=""/>
+    <item find=":desert:" replace=""/>
+    <item find=":llibre2:" replace=""/>
+    <item find=":notes:" replace="♫"/>
+    <item find=":projector:" replace=""/>
+    <item find=":rellotge de sorra2:" replace="⏳"/>
+    <item find=":EO2:" replace="⇔"/>
+    <item find="aixo" replace="això"/>
+    <item find=":bústia4:" replace=""/>
+    <item find=":3/4:" replace="¾"/>
+    <item find=":noi:" replace=""/>
+    <item find=":!!:" replace="‼"/>
+    <item find=":avís:" replace="⚠"/>
+    <item find=":ratolí de bola:" replace=""/>
+    <item find=":diari2:" replace=""/>
+    <item find=":x2:" replace="❌"/>
+    <item find=":vaca:" replace=""/>
+    <item find=":fulla:" replace=""/>
+    <item find=":reina:" replace=""/>
+    <item find=":minimitza:" replace=""/>
+    <item find=":dau1:" replace="⚀"/>
+    <item find=":vaquer:" replace="鸞"/>
+    <item find="lse" replace="les"/>
+    <item find=":terra:" replace="♁"/>
+    <item find=":Eta:" replace="Η"/>
+    <item find=":torre:" replace=""/>
+    <item find=":videojoc:" replace=""/>
+    <item find=":exasperació:" replace="臘"/>
+    <item find=":explosió:" replace=""/>
+    <item find=":pizza:" replace=""/>
+    <item find=":so alt:" replace=""/>
+    <item find=":ordinador:" replace=""/>
+    <item find=":espagueti:" replace=""/>
+    <item find=":aquari:" replace="♒"/>
+    <item find=":nevada:" replace=""/>
+    <item find=":_p:" replace="ₚ"/>
+    <item find=":plujós:" replace=""/>
+    <item find=":4 h:" replace=""/>
+    <item find=":pa:" replace=""/>
+    <item find=":novell:" replace=""/>
+    <item find=":surfista de neu:" replace=""/>
+    <item find=":medalla2:" replace=""/>
+    <item find=":gat somrient:" replace=""/>
+    <item find=":gat sorneguer:" replace=""/>
+    <item find=":mòdem:" replace=""/>
+    <item find=":espases:" replace="⚔"/>
+    <item find=":^g:" replace="ᵍ"/>
+    <item find=":tren3:" replace=""/>
+    <item find=":xeringa:" replace=""/>
+    <item find=":caduceu:" replace="☤"/>
+    <item find="suicidi" replace="suïcidi"/>
+    <item find=":ninot de neu2:" replace="⛄"/>
+    <item find=":fl:" replace="ﬂ"/>
+    <item find=":cabra:" replace=""/>
+    <item find=":telèfon:" replace="☎"/>
+    <item find=":ankh:" replace="☥"/>
+    <item find="asegura" replace="assegura"/>
+    <item find=":^O:" replace="ᴼ"/>
+    <item find=":sinagoga:" replace=""/>
+    <item find=":permès fumar:" replace=""/>
+    <item find=":mà4:" replace="駱"/>
+    <item find=":_=:" replace="₌"/>
+    <item find=":bemoll:" replace="♭"/>
+    <item find=":^gamma:" replace="ᵞ"/>
+    <item find=":pastanaga:" replace="凌"/>
+    <item find=":angoixada:" replace=""/>
+    <item find=":petó:" replace=""/>
+    <item find=":casa3:" replace=""/>
+    <item find=":cercle:" replace="○"/>
+    <item find=":vídeo:" replace=""/>
+    <item find="presió" replace="pressió"/>
+    <item find=":document4:" replace=""/>
+    <item find=":semàfor2:" replace=""/>
+    <item find=":rodona:" replace="텝"/>
+    <item find=":ramen:" replace=""/>
+    <item find="enfermetat" replace="malaltia"/>
+    <item find=":reina blanca:" replace="♕"/>
+    <item find=":somriure4:" replace="來"/>
+    <item find=":amunt:" replace="☝"/>
+    <item find=":amunt2:" replace=""/>
+    <item find=":cors giratoris:" replace=""/>
+    <item find=":coet:" replace=""/>
+    <item find=":ciutat:" replace=""/>
+    <item find=":informació:" replace="ℹ"/>
+    <item find=":ulleres de sol2:" replace=""/>
+    <item find=":pc:" replace=""/>
+    <item find="antigüetat" replace="antiguitat"/>
+    <item find=":elf:" replace="利"/>
+    <item find="reduida" replace="reduïda"/>
+    <item find=":excitat:" replace="朗"/>
+    <item find=":bus2:" replace=""/>
+    <item find=":que no veu el mal:" replace=""/>
+    <item find=":victòria:" replace="✌"/>
+    <item find=":creu de Malta:" replace="✠"/>
+    <item find=":3/8:" replace="⅜"/>
+    <item find=":tisores4:" replace="✃"/>
+    <item find=":_3:" replace="₃"/>
+    <item find=":torre negra:" replace="♜"/>
+    <item find=":cavall negre:" replace="♞"/>
+    <item find=":foll:" replace="浪"/>
+    <item find="necesari" replace="necessari"/>
+    <item find=":^U:" replace="ᵁ"/>
+    <item find=":auricular del telèfon:" replace=""/>
+    <item find=":no és subconjunt:" replace="⊄"/>
+    <item find=":bola:" replace="⛹"/>
+    <item find=":escut2:" replace="⛨"/>
+    <item find=":helicòpter:" replace=""/>
+    <item find=":avall2:" replace=""/>
+    <item find=":ratolí3:" replace=""/>
+    <item find=":^t:" replace="ᵗ"/>
+    <item find=":lambda:" replace="λ"/>
+    <item find=":^R:" replace="ᴿ"/>
+    <item find=":sirena:" replace="隆"/>
+    <item find=":^-:" replace="⁻"/>
+    <item find=":paper lliure d'àcid:" replace="♾"/>
+    <item find=":boxa:" replace="壘"/>
+    <item find=":^fi:" replace="ᵠ"/>
+    <item find=":llampec:" replace=""/>
+    <item find=":bota:" replace=""/>
+    <item find=":ou:" replace="讀"/>
+    <item find=":mico:" replace=""/>
+    <item find=":^L:" replace="ᴸ"/>
+    <item find=":^V:" replace="ⱽ"/>
+    <item find=":halloween:" replace=""/>
+    <item find=":ballarí:" replace=""/>
+    <item find=":llaminadura:" replace=""/>
+    <item find=":cercapersones:" replace=""/>
+    <item find=":cors:" replace="♥"/>
+    <item find=":ganivet:" replace=""/>
+    <item find=":camell:" replace=""/>
+    <item find=":esquirol:" replace=""/>
+    <item find=":adult:" replace="六"/>
+    <item find=":quadrat:" replace="□"/>
+    <item find=":pàgina3:" replace=""/>
+    <item find="despreci" replace="menyspreu"/>
+    <item find=":menorà:" replace=""/>
+    <item find=":bossa de mà:" replace=""/>
+    <item find=":amunt4:" replace=""/>
+    <item find=":sandvitx:" replace="索"/>
+    <item find=":corredor:" replace=""/>
+    <item find=":medalla:" replace=""/>
+    <item find=":_9:" replace="₉"/>
+    <item find=":papir:" replace=""/>
+    <item find=":cúrling :" replace="樓"/>
+    <item find=":bateria:" replace=""/>
+    <item find=":dòmino:" replace=""/>
+    <item find=":N:" replace="↑"/>
+    <item find=":integral2:" replace="∬"/>
+    <item find=":porc2:" replace=""/>
+    <item find=":lliura:" replace="£"/>
+    <item find=":diagrama4:" replace=""/>
+    <item find=":ocell:" replace=""/>
+    <item find=":matrimoni:" replace="⚭"/>
+    <item find=":ulls de cor:" replace=""/>
+    <item find=":bossa:" replace=""/>
+    <item find=":banderes2:" replace=""/>
+    <item find=":nas de porc:" replace=""/>
+    <item find=":plutó:" replace="♇"/>
+    <item find=":calendari:" replace=""/>
+    <item find=":festa2:" replace=""/>
+    <item find=":^k:" replace="ᵏ"/>
+    <item find="les suggerències" replace="els suggeriments"/>
+    <item find="aci" replace="ací"/>
+    <item find=":rinoceront:" replace="憐"/>
+    <item find=":marc2:" replace=""/>
+    <item find=":regal:" replace=""/>
+    <item find=":rei blanc:" replace="♔"/>
+    <item find=":llapis3:" replace="✐"/>
+    <item find=":nen:" replace="戮"/>
+    <item find=":_u:" replace="ᵤ"/>
+    <item find=":rosetó2:" replace=""/>
+    <item find=":bloqueig:" replace=""/>
+    <item find=":forat:" replace=""/>
+    <item find=":formiga:" replace=""/>
+    <item find=":pa2:" replace="稜"/>
+    <item find=":SE2:" replace="⇘"/>
+    <item find=":cor espurnejant:" replace=""/>
+    <item find=":llavis:" replace=""/>
+    <item find=":duana:" replace=""/>
+    <item find=":massatge:" replace=""/>
+    <item find="profesora" replace="professora"/>
+    <item find=":golf2:" replace="⛳"/>
+    <item find="solicitar" replace="sol·licitar"/>
+    <item find=":eta:" replace="η"/>
+    <item find=":carta d'amor:" replace=""/>
+    <item find=":^K:" replace="ᴷ"/>
+    <item find=":sautor:" replace="☓"/>
+    <item find=":cadira de rodes:" replace="♿"/>
+    <item find=":babejar:" replace="襤"/>
+    <item find=":equipatge:" replace=""/>
+    <item find=":beta:" replace="β"/>
+    <item find=":mentider:" replace="拉"/>
+    <item find=":burrito:" replace=""/>
+    <item find=":perseverància:" replace=""/>
+    <item find=":cansament:" replace=""/>
+    <item find=":rajos:" replace=""/>
+    <item find=":pintallavis:" replace=""/>
+    <item find=":rajos2:" replace=""/>
+    <item find="proces" replace="procés"/>
+    <item find=":_h:" replace="ₕ"/>
+    <item find=":^n:" replace="ⁿ"/>
+    <item find=":bandera triangular:" replace=""/>
+    <item find=":creu llatina3:" replace=""/>
+    <item find=":ràdio:" replace=""/>
+    <item find=":avall6:" replace=""/>
+    <item find="catala" replace="català"/>
+    <item find=":^r:" replace="ʳ"/>
+    <item find=":^E:" replace="ᴱ"/>
+    <item find=":boca:" replace=""/>
+    <item find=":bust:" replace=""/>
+    <item find=":_a:" replace="ₐ"/>
+    <item find=":cavall blanc:" replace="♘"/>
+    <item find=":malcarat:" replace="☹"/>
+    <item find=":dòlar:" replace=""/>
+    <item find=":galeta d'arròs:" replace=""/>
+    <item find=":won:" replace="₩"/>
+    <item find=":EO:" replace="↔"/>
+    <item find=":circ:" replace=""/>
+    <item find=":bandera:" replace=""/>
+    <item find="aconteixement" replace="esdeveniment"/>
+    <item find=":índex de targetes:" replace=""/>
+    <item find=":_5:" replace="₅"/>
+    <item find="produit" replace="produït"/>
+    <item find=":targeta de crèdit:" replace=""/>
+    <item find=":alfa:" replace="α"/>
+    <item find=":^H:" replace="ᴴ"/>
+    <item find=":alfil blanc:" replace="♗"/>
+    <item find=":riure molt:" replace="藍"/>
+    <item find=":gimnasta:" replace="露"/>
+    <item find=":vaquers:" replace=""/>
+    <item find="qeu" replace="que"/>
+    <item find="aburrit" replace="avorrit"/>
+    <item find=":sortida del sol:" replace=""/>
+    <item find=":5.30:" replace=""/>
+    <item find=":cicló:" replace=""/>
+    <item find="camvi" replace="canvi"/>
+    <item find=":dos cors:" replace=""/>
+    <item find=":estrella petita:" replace="⭒"/>
+    <item find=":carpeta4:" replace=""/>
+    <item find="nomes" replace="només"/>
+    <item find=".*(C)" replace="©"/>
+    <item find=":llaç:" replace=""/>
+    <item find=":?:" replace="❓"/>
+    <item find=":lleopard:" replace=""/>
+    <item find=":rosetó:" replace=""/>
+    <item find=":drac2:" replace=""/>
+    <item find=":no pertany:" replace="∉"/>
+    <item find=":enregistra:" replace="⏺"/>
+    <item find=":NE:" replace="↗"/>
+    <item find=":construcció:" replace=""/>
+    <item find=":tiquet2:" replace=""/>
+    <item find=":^h:" replace="ʰ"/>
+    <item find=":castell2:" replace=""/>
+    <item find=":tulipa:" replace=""/>
+    <item find=":vaca2:" replace=""/>
+    <item find=":carpeta5:" replace=""/>
+    <item find=":àries:" replace="♈"/>
+    <item find=":urà:" replace="♅"/>
+    <item find=":SO2:" replace="⇙"/>
+    <item find=":bombolla3:" replace=""/>
+    <item find=":arròs:" replace=""/>
+    <item find=":dormint:" replace=""/>
+    <item find=":diable somrient:" replace=""/>
+    <item find=":telèfon apagat:" replace=""/>
+    <item find=":senglar:" replace=""/>
+    <item find=":amunt5:" replace=""/>
+    <item find=":zebra:" replace="煉"/>
+    <item find=":pastís de peix:" replace=""/>
+    <item find=":pregària:" replace=""/>
+    <item find=":esquerra5:" replace=""/>
+    <item find="els tamanys" replace="les mides"/>
+    <item find=":semàfor:" replace=""/>
+    <item find=":cartes:" replace=""/>
+    <item find=":peix3:" replace=""/>
+    <item find=":diagrama5:" replace=""/>
+    <item find=":^a:" replace="ᵃ"/>
+    <item find="profesionals" replace="professionals"/>
+    <item find=":peix:" replace=""/>
+    <item find="seguent" replace="següent"/>
+    <item find=":xarxa:" replace=""/>
+    <item find=":x4:" replace=""/>
+    <item find=":sobre:" replace="✉"/>
+    <item find=":àncora:" replace="⚓"/>
+    <item find=":arbre:" replace=""/>
+    <item find=":euro2:" replace=""/>
+    <item find="paisos" replace="països"/>
+    <item find=":delta:" replace="δ"/>
+    <item find="dificil" replace="difícil"/>
+    <item find=":NE2:" replace="⇗"/>
+    <item find=":_beta:" replace="ᵦ"/>
+    <item find=":drac:" replace=""/>
+    <item find=":ratolí2:" replace=""/>
+    <item find=":llibre:" replace=""/>
+    <item find=":piques2:" replace="♤"/>
+    <item find=":micròfon2:" replace=""/>
+    <item find="inmigració" replace="immigració"/>
+    <item find=":^0:" replace="⁰"/>
+    <item find=":sí:" replace=""/>
+    <item find="conectar" replace="connectar"/>
+    <item find=":selfie:" replace="盧"/>
+    <item find=":ien2:" replace=""/>
+    <item find=":parella4:" replace=""/>
+    <item find=":casa:" replace=""/>
+    <item find=":abric:" replace="痢"/>
+    <item find=":celebració:" replace=""/>
+    <item find=":adi xacti:" replace="☬"/>
+    <item find=":reciclatge2:" replace="♻"/>
+    <item find="interprets" replace="intèrprets"/>
+    <item find="terrasa" replace="terrassa"/>
+    <item find=":disquet:" replace=""/>
+    <item find=":somrient:" replace=""/>
+    <item find=":quart minvant:" replace=""/>
+    <item find=":dormir:" replace=""/>
+    <item find=":satèl·lit:" replace=""/>
+    <item find=":gamba fregida:" replace=""/>
+    <item find=":pàgina de notes:" replace=""/>
+    <item find=":lluna gibosa minvant:" replace=""/>
+    <item find=":rialla:" replace=""/>
+    <item find=":silenci de negra:" replace="턽"/>
+    <item find=":temporitzador:" replace="⏲"/>
+    <item find="promedi" replace="mitjana "/>
+    <item find=":pingüí:" replace=""/>
+    <item find=":pell2:" replace=""/>
+    <item find=":diable:" replace=""/>
+    <item find=":Lluna:" replace="☽"/>
+    <item find=":_o:" replace="ₒ"/>
+    <item find=":confosa:" replace=""/>
+    <item find=":safata:" replace=""/>
+    <item find=":Theta:" replace="Θ"/>
+    <item find=":gat ploraner:" replace=""/>
+    <item find=":lluna2:" replace=""/>
+    <item find=":taure:" replace="♉"/>
+    <item find=":3 h:" replace=""/>
+    <item find=":sumatori:" replace="∑"/>
+    <item find=":mà3:" replace=""/>
+    <item find=":1 h:" replace=""/>
+    <item find=":esquiador:" replace="⛷"/>
+    <item find=":porc:" replace=""/>
+    <item find=":---:" replace="—"/>
+    <item find=":avió:" replace="✈"/>
+    <item find=":O:" replace="←"/>
+    <item find=":esbergínia:" replace=""/>
+    <item find=":^3:" replace="³"/>
+    <item find=":locomotora:" replace=""/>
+    <item find=":aranya:" replace=""/>
+    <item find=":seient:" replace=""/>
+    <item find=":cap:" replace=""/>
+    <item find=":via làctia:" replace=""/>
+    <item find=":mahjong:" replace=""/>
+    <item find=":1/8:" replace="⅛"/>
+    <item find=":balena2:" replace=""/>
+    <item find=":diana:" replace=""/>
+    <item find="pendre" replace="prendre"/>
+    <item find=":^+:" replace="⁺"/>
+    <item find=":llengua4:" replace=""/>
+    <item find=":_+:" replace="₊"/>
+    <item find=":àguila:" replace="礪"/>
+    <item find=":bombolla5:" replace=""/>
+    <item find="apertura" replace="obertura"/>
+    <item find=":ratolí:" replace=""/>
+    <item find=":triangle2:" replace="▲"/>
+    <item find=":casella de selecció4:" replace=""/>
+    <item find=":prohibit fumar:" replace=""/>
+    <item find=":silenci de rodona:" replace="턻"/>
+    <item find=":mico2:" replace=""/>
+    <item find="línea" replace="línia"/>
+    <item find=":carn:" replace=""/>
+    <item find=":prima:" replace="′"/>
+    <item find=":rictus:" replace=""/>
+    <item find=":bomba:" replace=""/>
+    <item find=":falç i martell:" replace="☭"/>
+    <item find=":fax2:" replace=""/>
+    <item find="colaboració" replace="col·laboració"/>
+    <item find=":hrívnia:" replace="₴"/>
+    <item find=":alleujament:" replace=""/>
+    <item find=":rugbi:" replace=""/>
+    <item find=":tipus de lletra:" replace=""/>
+    <item find=":Zeta:" replace="Ζ"/>
+    <item find=":bebè3:" replace="櫓"/>
+    <item find="posible" replace="possible"/>
+    <item find=":bala2:" replace="‣"/>
+    <item find=":via:" replace=""/>
+    <item find=":no és igual:" replace="≠"/>
+    <item find=":pas de vianants:" replace=""/>
+    <item find=":fax:" replace=""/>
+    <item find=":rombe:" replace="◊"/>
+    <item find=":camió2:" replace=""/>
+    <item find=":troleibús:" replace=""/>
+    <item find=":marca de llavis:" replace=""/>
+    <item find=":pàgina4:" replace=""/>
+    <item find="l'instalació" replace="la instal·lació"/>
+    <item find=":marcador:" replace=""/>
+    <item find=":colom:" replace=""/>
+    <item find=":^iota:" replace="ᶥ"/>
+    <item find=":Ksi:" replace="Ξ"/>
+    <item find=":serp:" replace=""/>
+    <item find=":goteta:" replace=""/>
+    <item find=":calendari2:" replace=""/>
+    <item find=":vestit:" replace=""/>
+    <item find=":pell5:" replace=""/>
+    <item find=":semicorxera:" replace="텡"/>
+    <item find="a munt" replace="amunt"/>
+    <item find=":1/2:" replace="½"/>
+    <item find=":cotxe de policia2:" replace=""/>
+    <item find=":elefant:" replace=""/>
+    <item find=":cactus:" replace=""/>
+    <item find=":escalador:" replace="輪"/>
+    <item find=":escriptura2:" replace=""/>
+    <item find=":--:" replace="–"/>
+    <item find=":acampada:" replace=""/>
+    <item find=":àngel:" replace=""/>
+    <item find=":arrel quàrtica:" replace="∜"/>
+    <item find=":girafa:" replace="漣"/>
+    <item find=":Ípsilon:" replace="Υ"/>
+    <item find=":escola:" replace=""/>
+    <item find=":10 h:" replace=""/>
+    <item find=":infinit:" replace="∞"/>
+    <item find=":paperera:" replace=""/>
+    <item find=":cara marejada:" replace=""/>
+    <item find=":^m:" replace="ᵐ"/>
+    <item find=":escombraries:" replace=""/>
+    <item find=":samarreta:" replace=""/>
+    <item find=":lliura2:" replace=""/>
+    <item find="cancelar" replace="cancel·lar"/>
+    <item find=":3.30:" replace=""/>
+    <item find=":1/4:" replace="¼"/>
+    <item find=":Delta:" replace="Δ"/>
+    <item find=":altaveu4:" replace=""/>
+    <item find=":vampir:" replace="率"/>
+    <item find=":petó2:" replace=""/>
+    <item find=":tempesta:" replace=""/>
+    <item find="menu" replace="menú"/>
+    <item find="siusplau" replace="si us plau"/>
+    <item find=":bloqueig2:" replace=""/>
+    <item find=":amunt3:" replace=""/>
+    <item find=":integral3:" replace="∭"/>
+    <item find=":triomf:" replace=""/>
+    <item find=":dau5:" replace="⚄"/>
+    <item find=":diari:" replace=""/>
+    <item find=":cinema:" replace=""/>
+    <item find=":micròfon:" replace=""/>
+    <item find=":telèfon4:" replace=""/>
+    <item find=":mercuri:" replace="☿"/>
+    <item find=":Iota:" replace="Ι"/>
+    <item find=":felicitat:" replace=""/>
+    <item find=":pentàgon2:" replace="⬟"/>
+    <item find=":dreta2:" replace=""/>
+    <item find=":oficina de correus2:" replace=""/>
+    <item find=":ciclista2:" replace=""/>
+    <item find=":múscul:" replace=""/>
+    <item find=":lupa:" replace=""/>
+    <item find=":batec:" replace=""/>
+    <item find=":joc:" replace=""/>
+    <item find=":Tau:" replace="Τ"/>
+    <item find="cambia" replace="canvia"/>
+    <item find=":barret2:" replace=""/>
+    <item find=":_-:" replace="₋"/>
+    <item find=":^):" replace="⁾"/>
+    <item find="quasevols" replace="quassevol"/>
+    <item find=":curri:" replace=""/>
+    <item find="unes sugerències" replace="els suggeriments"/>
+    <item find=":llengua:" replace=""/>
+    <item find=":rellotge de sorra:" replace="⌛"/>
+    <item find=":peix2:" replace=""/>
+    <item find=":agulla de cap rodó:" replace=""/>
+    <item find=":trapezi:" replace="⏢"/>
+    <item find=":bombolla7:" replace=""/>
+    <item find=":pensant:" replace="樂"/>
+    <item find=":avocat:" replace="陋"/>
+    <item find="títul" replace="títol"/>
+    <item find=":enrojolada2:" replace=""/>
+    <item find=":llampec3:" replace="☇"/>
+    <item find=":cranc:" replace="♋"/>
+    <item find=":màquina escurabutxaques:" replace=""/>
+    <item find=":cercle2:" replace="●"/>
+    <item find=":punt volat:" replace="·"/>
+    <item find=":gamma:" replace="γ"/>
+    <item find=":Japó:" replace=""/>
+    <item find=":maximitza:" replace=""/>
+    <item find="la suggerència" replace="el suggeriment"/>
+    <item find="profesor" replace="professor"/>
+    <item find="un tamany" replace="una mida"/>
+    <item find=":ípsilon:" replace="υ"/>
+    <item find=":campana:" replace=""/>
+    <item find=":ordinador2:" replace=""/>
+    <item find=":avió6:" replace=""/>
+    <item find=":ff:" replace="ﬀ"/>
+    <item find=":casella de selecció2:" replace="☑"/>
+    <item find=":pell3:" replace=""/>
+    <item find=":bombeta:" replace=""/>
+    <item find="familia" replace="família"/>
+    <item find=":tomàquet:" replace=""/>
+    <item find=":pastís:" replace=""/>
+    <item find=":para2:" replace="⏹"/>
+    <item find=":dvd:" replace=""/>
+    <item find=":impressora2:" replace=""/>
+    <item find=":somriure2:" replace="☻"/>
+    <item find=":nit:" replace=""/>
+    <item find=":paraigua3:" replace="⛱"/>
+    <item find=":bolet:" replace=""/>
+    <item find=":nàusea:" replace="濫"/>
+    <item find=":llimona:" replace=""/>
+    <item find=":cogombre:" replace="勒"/>
+    <item find=":notes4:" replace=""/>
+    <item find=":cresta:" replace="寧"/>
+    <item find=":ffl:" replace="ﬄ"/>
+    <item find=":botiga2:" replace=""/>
+    <item find="les sugerències" replace="els suggeriments"/>
+    <item find=":llapis:" replace="✎"/>
+    <item find="pero" replace="però"/>
+    <item find=":ploma2:" replace="✒"/>
+    <item find=":motxilla escolar:" replace=""/>
+    <item find=":corneta:" replace=""/>
+    <item find=":lluna en quart minvant:" replace=""/>
+    <item find=":femení:" replace="♀"/>
+    <item find=":100:" replace=""/>
+    <item find=":no llenceu escombraries:" replace=""/>
+    <item find=":lluna gibosa creixent:" replace=""/>
+    <item find="conexió" replace="connexió"/>
+    <item find=":esquerra4:" replace=""/>
+    <item find=":teclat3:" replace=""/>
+    <item find=":iota:" replace="ι"/>
+    <item find=":castanya:" replace=""/>
+    <item find=":_1:" replace="₁"/>
+    <item find=":Pi:" replace="Π"/>
+    <item find=":cervell:" replace="易"/>
+    <item find=":diners2:" replace=""/>
+    <item find=":+-:" replace="±"/>
+    <item find=":tv:" replace=""/>
+    <item find=":centelleigs:" replace="✨"/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find=":^alfa:" replace="ᵅ"/>
+    <item find="reb" replace="rep"/>
+    <item find=":camió de bombers2:" replace=""/>
+    <item find=":malabarista:" replace="魯"/>
+    <item find=":pell4:" replace=""/>
+    <item find=":final de la demostració:" replace="∎"/>
+    <item find=":ksi:" replace="ξ"/>
+    <item find=":cercle blanc:" replace="⚪"/>
+    <item find=":rajos3:" replace=""/>
+    <item find=":ro:" replace="ρ"/>
+    <item find=":núvol:" replace="☁"/>
+    <item find=":ping-pong:" replace=""/>
+    <item find=":victòria2:" replace=""/>
+    <item find=":NO:" replace="↖"/>
+    <item find=":7.30:" replace=""/>
+    <item find=":pantalla:" replace=""/>
+    <item find="politica" replace="política"/>
+    <item find=":anell:" replace=""/>
+    <item find=":cercle gran:" replace="◯"/>
+    <item find=":^y:" replace="ʸ"/>
+    <item find=":sandàlia:" replace=""/>
+    <item find=":violí:" replace=""/>
+    <item find=":crema:" replace=""/>
+    <item find=":embaràs:" replace="擄"/>
+    <item find=":gat:" replace=""/>
+    <item find=":boira:" replace=""/>
+    <item find=":graduació:" replace=""/>
+    <item find=":àmfora:" replace=""/>
+    <item find=":que no sent el mal:" replace=""/>
+    <item find=":futbol2:" replace="聾"/>
+    <item find=":bucle2:" replace="➿"/>
+    <item find=":petó4:" replace=""/>
+    <item find=":ploma:" replace="✑"/>
+    <item find=":autopista:" replace=""/>
+    <item find=":NS2:" replace="⇕"/>
+    <item find=":lluna plena:" replace=""/>
+    <item find=":martell i clau:" replace=""/>
+    <item find=":tall de cabells:" replace=""/>
+    <item find=":festí:" replace=""/>
+    <item find=":guineu:" replace="力"/>
+    <item find=":silenci de corxera:" replace="턾"/>
+    <item find=":conill2:" replace=""/>
+    <item find=":cèntim:" replace="¢"/>
+    <item find="deshauci" replace="desnonament"/>
+    <item find=":9 h:" replace=""/>
+    <item find=":^b:" replace="ᵇ"/>
+    <item find=":encaixada:" replace="欄"/>
+    <item find=":ok3:" replace=""/>
+    <item find=":crispetes:" replace=""/>
+    <item find=":^s:" replace="ˢ"/>
+    <item find=":pollastre2:" replace=""/>
+    <item find=":triangle rectangle:" replace="⊿"/>
+    <item find=":sí2:" replace=""/>
+    <item find=":plançó:" replace=""/>
+    <item find=":noia:" replace=""/>
+    <item find=":banc:" replace=""/>
+    <item find=":cd:" replace=""/>
+    <item find=":gotes de suor:" replace=""/>
+    <item find="ilegal" replace="il·legal"/>
+    <item find=":timbal2:" replace="論"/>
+    <item find=":bol:" replace="北"/>
+    <item find=":imatge:" replace=""/>
+    <item find=":bombolla8:" replace=""/>
+    <item find=":sabata3:" replace=""/>
+    <item find=":focs artificials:" replace=""/>
+    <item find=":megàfon2:" replace=""/>
+    <item find=":muntanya russa:" replace=""/>
+    <item find=":E:" replace="→"/>
+    <item find=":^w:" replace="ʷ"/>
+    <item find=":hamburguesa:" replace=""/>
+    <item find="unio" replace="unió"/>
+    <item find=":comodí:" replace=""/>
+    <item find="instalacions" replace="instal·lacions"/>
+    <item find=":_0:" replace="₀"/>
+    <item find=":ciclista:" replace=""/>
+    <item find=":corxera:" replace="텠"/>
+    <item find=":nuvi:" replace="蘆"/>
+    <item find=":que no parla el mal:" replace=""/>
+    <item find=":integral4:" replace="∮"/>
+    <item find=":tortuga:" replace=""/>
+    <item find="agraiment" replace="agraïment"/>
+    <item find=":tau:" replace="τ"/>
+    <item find=":rectangle2:" replace="▬"/>
+    <item find=":èpsilon:" replace="ε"/>
+    <item find=":quadrat mitjà:" replace="◻"/>
+    <item find=":boca oberta:" replace=""/>
+    <item find=":pertany petit:" replace="∊"/>
+    <item find=":dau4:" replace="⚃"/>
+    <item find=":document2:" replace=""/>
+    <item find=":^o:" replace="ᵒ"/>
+    <item find="inmigrants" replace="immigrants"/>
+    <item find=":pop:" replace=""/>
+    <item find=":rata:" replace=""/>
+    <item find=":masculí:" replace="♂"/>
+    <item find=":gorra:" replace="梨"/>
+    <item find="aillada" replace="aïllada"/>
+    <item find=":diners:" replace=""/>
+    <item find="cumpleanys" replace="aniversari"/>
+    <item find=":menor d'edat:" replace=""/>
+    <item find=":gos2:" replace=""/>
+    <item find=":persona sorruda:" replace=""/>
+    <item find=":timbal:" replace=""/>
+    <item find=":calendari3:" replace=""/>
+    <item find=":avall3:" replace=""/>
+    <item find=":bola de cristall:" replace=""/>
+    <item find=":partitura:" replace=""/>
+    <item find=":tigre:" replace=""/>
+    <item find=":^M:" replace="ᴹ"/>
+    <item find=":!:" replace="❕"/>
+    <item find=":sol:" replace=""/>
+    <item find=":parc:" replace=""/>
+    <item find=":O2:" replace="⇐"/>
+    <item find=":parada de bus:" replace=""/>
+    <item find=":diamants2:" replace="♢"/>
+    <item find="inmediata" replace="immediata"/>
+    <item find=":pluja2:" replace="⛆"/>
+    <item find="aigues" replace="aigües"/>
+    <item find=":policia:" replace=""/>
+    <item find=":bloc de notes2:" replace=""/>
+    <item find=":ferri:" replace="⛴"/>
+    <item find=":tisores:" replace="✂"/>
+    <item find="email" replace="correu electrònic"/>
+    <item find=":pertany:" replace="∈"/>
+    <item find=":kiwi:" replace="諾"/>
+    <item find=":^J:" replace="ᴶ"/>
+    <item find=":sorruda:" replace=""/>
+    <item find="posibles" replace="possibles"/>
+    <item find="l'universitat" replace="la universitat"/>
+    <item find=":S:" replace="↓"/>
+    <item find=":_khi:" replace="ᵪ"/>
+    <item find=":^1:" replace="¹"/>
+    <item find=":vagó de tren:" replace=""/>
+    <item find=":bàdminton:" replace=""/>
+    <item find=":1.30:" replace=""/>
+    <item find="el tamany" replace="la mida"/>
+    <item find=":lot:" replace=""/>
+    <item find=":^P:" replace="ᴾ"/>
+    <item find=":cirera:" replace=""/>
+    <item find=":^l:" replace="ˡ"/>
+    <item find=":becaire:" replace="♮"/>
+    <item find=":sobre7:" replace=""/>
+    <item find="anular" replace="anul·lar"/>
+    <item find=":festa3:" replace="壟"/>
+    <item find="endarrera" replace="endarrere"/>
+    <item find=":minibús:" replace=""/>
+    <item find=":banderola:" replace=""/>
+    <item find=":ying-yang:" replace="☯"/>
+    <item find=":_(:" replace="₍"/>
+    <item find=":avió3:" replace=""/>
+    <item find=":paleta de pintura:" replace=""/>
+    <item find=":creu grega:" replace="✚"/>
+    <item find=":plor:" replace=""/>
+    <item find=":mel:" replace=""/>
+    <item find=":sauna:" replace="淪"/>
+    <item find=":as:" replace=""/>
+    <item find=":bastó d'Esculapi:" replace="⚕"/>
+    <item find=":intersecció:" replace="∩"/>
+    <item find=":bombolla6:" replace=""/>
+    <item find=":?2:" replace="❔"/>
+    <item find=":finestra:" replace=""/>
+    <item find=":dreta5:" replace=""/>
+    <item find=":paraigua2:" replace=""/>
+    <item find=":xocolata:" replace=""/>
+    <item find=":^f:" replace="ᶠ"/>
+    <item find=":-:" replace="−"/>
+    <item find="impar" replace="imparell"/>
+    <item find=":Fuji:" replace=""/>
+    <item find=":pell1:" replace=""/>
+    <item find=":banyes:" replace="落"/>
+    <item find=":claqueta:" replace=""/>
+    <item find=":pau:" replace="☮"/>
+    <item find=":noies:" replace=""/>
+    <item find=":sobre4:" replace=""/>
+    <item find=":pebrot:" replace=""/>
+    <item find="agravi" replace="greuge"/>
+    <item find=":prostració:" replace=""/>
+    <item find=":platja:" replace=""/>
+    <item find=":cella:" replace="廊"/>
+    <item find=":pàgina:" replace=""/>
+    <item find=":multiplicació2:" replace="✖"/>
+    <item find=":botó2:" replace=""/>
+    <item find=":^i:" replace="ⁱ"/>
+    <item find=":ratpenat:" replace="驪"/>
+    <item find=":ós:" replace=""/>
+    <item find=":parella:" replace=""/>
+    <item find=":disquet4:" replace=""/>
+    <item find="arruinada" replace="arruïnada"/>
+    <item find=":ioga:" replace="律"/>
+    <item find=":MiniDisc:" replace=""/>
+    <item find=":plàtan:" replace=""/>
+    <item find=":sense boca:" replace=""/>
+    <item find=":bombolla:" replace=""/>
+    <item find=":rajos4:" replace=""/>
+    <item find=":avió5:" replace=""/>
+    <item find=":ballarí2:" replace=""/>
+    <item find=":gemma:" replace=""/>
+    <item find=":^khi:" replace="ᵡ"/>
+    <item find=":tennis:" replace=""/>
+    <item find=":llet:" replace="拏"/>
+    <item find=":cometa:" replace="☄"/>
+    <item find=":família:" replace=""/>
+    <item find=":trofeu:" replace=""/>
+    <item find=":^d:" replace="ᵈ"/>
+    <item find=":cancel·la:" replace=""/>
+    <item find=":amanida:" replace="綾"/>
+    <item find=":pic:" replace="⛏"/>
+    <item find=":nota2:" replace="♪"/>
+    <item find=":hotel2:" replace=""/>
+    <item find=":bombolla4:" replace=""/>
+    <item find=":grua:" replace=""/>
+    <item find=":gira-sol:" replace=""/>
+    <item find=":llangardaix:" replace="年"/>
+    <item find="inmobiliàries" replace="immobiliàries"/>
+    <item find="veina" replace="veïna"/>
+    <item find=":sofà:" replace=""/>
+    <item find=":cuina:" replace=""/>
+    <item find=":per mil:" replace="‰"/>
+    <item find=":pàgines:" replace=""/>
+    <item find=":dau6:" replace="⚅"/>
+    <item find=":direcció prohibida:" replace="⛔"/>
+    <item find=":carpeta2:" replace=""/>
+    <item find=":zeta:" replace="ζ"/>
+    <item find=":estrella de David:" replace="✡"/>
+    <item find=":marc:" replace=""/>
+    <item find=":cabells rossos:" replace=""/>
+    <item find=":empremtes:" replace=""/>
+    <item find=":dreta6:" replace=""/>
+    <item find=":fada:" replace="栗"/>
+    <item find=":divideix:" replace="∣"/>
+    <item find=":conjunt buit:" replace="∅"/>
+    <item find=":_k:" replace="ₖ"/>
+    <item find=":per a emportar:" replace="率"/>
+    <item find=":por:" replace=""/>
+    <item find=":esgrimidor:" replace="鷺"/>
+    <item find=":mussol:" replace="黎"/>
+    <item find=":cafè:" replace="☕"/>
+    <item find=":somriure3:" replace=""/>
+    <item find=":escriptura:" replace="✍"/>
+    <item find=":plat:" replace=""/>
+    <item find=":cor amb llaç:" replace=""/>
+    <item find=":croissant:" replace="縷"/>
+    <item find=":_ro:" replace="ᵨ"/>
+    <item find=":cronòmetre:" replace="⏱"/>
+    <item find=":mocador de cap:" replace="崙"/>
+    <item find=":4.30:" replace=""/>
+    <item find=":bafarada:" replace=""/>
+    <item find=":^v:" replace="ᵛ"/>
+    <item find=":esquerra6:" replace=""/>
+    <item find=":extraterrestre2:" replace=""/>
+    <item find=":arc de sant Martí:" replace=""/>
+    <item find=":Kappa:" replace="Κ"/>
+    <item find=":menjar:" replace="菱"/>
+    <item find=":esquí:" replace=""/>
+    <item find=":capricorn:" replace="♑"/>
+    <item find="colectiu" replace="col·lectiu"/>
+    <item find=":bombolla10:" replace=""/>
+    <item find=":font:" replace="⛲"/>
+    <item find=":ratolí4:" replace=""/>
+    <item find=":^(:" replace="⁽"/>
+    <item find=":trèvol:" replace=""/>
+    <item find=":taüt:" replace="⚰"/>
+    <item find=":bengala:" replace=""/>
+    <item find="tinc que" replace="he de"/>
+    <item find=":força del senyal:" replace=""/>
+    <item find=":clip2:" replace=""/>
+    <item find=":gos:" replace=""/>
+    <item find="inmediatament" replace="immediatament"/>
+    <item find=":tigre2:" replace=""/>
+    <item find=":verí:" replace="☠"/>
+    <item find="continuitat" replace="continuïtat"/>
+    <item find=":cocodril:" replace=""/>
+    <item find=":núvia:" replace=""/>
+    <item find=":bloc de notes buit:" replace=""/>
+    <item find="tantmateix" replace="tanmateix"/>
+    <item find=":tramvia2:" replace=""/>
+    <item find=":cor negre:" replace=""/>
+    <item find=":pollastre:" replace=""/>
+    <item find=":teclat2:" replace=""/>
+    <item find=":cotxe lliscant:" replace="⛐"/>
+    <item find=":videocàmera:" replace=""/>
+    <item find=":SO:" replace="↙"/>
+    <item find="diseny" replace="disseny"/>
+    <item find=":_t:" replace="ₜ"/>
+    <item find=":surfista:" replace=""/>
+    <item find=":paral·lelogram:" replace="▱"/>
+    <item find=":regle:" replace=""/>
+    <item find=":cartutx:" replace=""/>
+    <item find=":bicicleta:" replace=""/>
+    <item find=":parella2:" replace=""/>
+    <item find=":botó d'opció:" replace=""/>
+    <item find=":no conté:" replace="∌"/>
+    <item find=":campana3:" replace=""/>
+    <item find=":nom:" replace=""/>
+    <item find=":centelleig:" replace="❇"/>
+    <item find=":llit:" replace=""/>
+    <item find=":urna:" replace="⚱"/>
+    <item find=":estrella3:" replace=""/>
+    <item find="asunto" replace="assumpte"/>
+    <item find=":^u:" replace="ᵘ"/>
+    <item find=":moniato:" replace=""/>
+    <item find=":^8:" replace="⁸"/>
+    <item find=":escorpí:" replace="♏"/>
+    <item find=":cavall2:" replace=""/>
+    <item find=":mag:" replace="慄"/>
+    <item find=":gat alegre:" replace=""/>
+    <item find=":botó:" replace=""/>
+    <item find=":arbre del Tanabata:" replace=""/>
+    <item find=":theta:" replace="θ"/>
+    <item find=":barret de copa:" replace=""/>
+    <item find=":somriure suant:" replace=""/>
+    <item find=":mare nadal:" replace="虜"/>
+    <item find=":9.30:" replace=""/>
+    <item find=":atònit:" replace=""/>
+    <item find=":^B:" replace="ᴮ"/>
+    <item find="perque" replace="perquè"/>
+    <item find="novela" replace="novel·la"/>
+    <item find="periode" replace="període"/>
+    <item find=":quadrat més petit:" replace="◽"/>
+    <item find="inmersió" replace="immersió"/>
+    <item find=":rosari:" replace=""/>
+    <item find=":^e:" replace="ᵉ"/>
+    <item find=":auriculars:" replace=""/>
+    <item find=":saturn:" replace="♄"/>
+    <item find=":òmicron:" replace="ο"/>
+    <item find=":gat plorant:" replace=""/>
+    <item find=":triangle:" replace="△"/>
+    <item find=":vòmit:" replace="冷"/>
+    <item find=":peso:" replace="₱"/>
+    <item find="endevant" replace="endavant"/>
+    <item find=":llengua3:" replace=""/>
+    <item find=":cérvol:" replace="歷"/>
+    <item find=":bus:" replace=""/>
+    <item find=":creu celta:" replace=""/>
+    <item find=":pont:" replace=""/>
+    <item find=":sintetitzador:" replace=""/>
+    <item find=":taxi2:" replace=""/>
+    <item find=":fàbrica:" replace=""/>
+    <item find=":sobre8:" replace=""/>
+    <item find=":ull:" replace=""/>
+    <item find=":polzada:" replace="″"/>
+    <item find=":plata:" replace="賂"/>
+    <item find=":arc:" replace=""/>
+    <item find=":ràbia:" replace=""/>
+    <item find=":església:" replace="⛪"/>
+    <item find=":tren lleuger:" replace=""/>
+    <item find="construit" replace="construït"/>
+    <item find=":disquet2:" replace=""/>
+    <item find=":banyera:" replace=""/>
+    <item find="&lt;--" replace="←"/>
+    <item find="ingresos" replace="ingressos"/>
+    <item find=":quadrat gran2:" replace="⬛"/>
+    <item find=":castell:" replace=""/>
+    <item find=":disc òptic:" replace=""/>
+    <item find=":^W:" replace="ᵂ"/>
+    <item find=":punt base:" replace="‱"/>
+    <item find=":cervesa:" replace=""/>
+    <item find=":Ro:" replace="Ρ"/>
+    <item find=":divorci:" replace="⚮"/>
+    <item find=":cloïssa:" replace=""/>
+    <item find=":^c:" replace="ᶜ"/>
+    <item find=":ok2:" replace=""/>
+    <item find=":crit:" replace=""/>
+    <item find=":caixer:" replace=""/>
+    <item find=":creu de Jerusalem:" replace="☩"/>
+    <item find="frances" replace="francès"/>
+    <item find="inteligent" replace="intel·ligent"/>
+    <item find=":tisores2:" replace="✄"/>
+    <item find=":2/3:" replace="⅔"/>
+    <item find=":creu llatina2:" replace=""/>
+    <item find="donat que" replace="atès que"/>
+    <item find=":memoràndum:" replace=""/>
+    <item find=":metro:" replace=""/>
+    <item find=":futbol:" replace="⚽"/>
+    <item find=":teclat:" replace="⌨"/>
+    <item find=":regle2:" replace=""/>
+    <item find=":lupa2:" replace=""/>
+    <item find=":existeix:" replace="∃"/>
+    <item find=":suor:" replace=""/>
+    <item find=":brillantor2:" replace=""/>
+    <item find=":muntanya:" replace="⛰"/>
+    <item find="errònea" replace="errònia"/>
+    <item find="fetxa" replace="data"/>
+    <item find=":omega:" replace="ω"/>
+    <item find=":lleó:" replace="♌"/>
+    <item find=":cervesa2:" replace=""/>
+    <item find="aqui" replace="aquí"/>
+    <item find="ningu" replace="ningú"/>
+    <item find=":fletxes:" replace=""/>
+    <item find=":trèvols:" replace="♣"/>
+    <item find=":princesa:" replace=""/>
+    <item find=":quart creixent:" replace=""/>
+    <item find=":diagrama3:" replace=""/>
+    <item find=":^p:" replace="ᵖ"/>
+    <item find=":llibre comptable:" replace=""/>
+    <item find=":tren2:" replace=""/>
+    <item find=":N2:" replace="⇑"/>
+    <item find=":saxofon:" replace=""/>
+    <item find=":bandera3:" replace="⚑"/>
+    <item find=":khi:" replace="χ"/>
+    <item find=":zombi:" replace="履"/>
+    <item find=":piano:" replace=""/>
+    <item find=":bronze:" replace="雷"/>
+    <item find=":abc:" replace=""/>
+    <item find=":quadrat més petit2:" replace="◾"/>
+    <item find=":amor2:" replace="蘭"/>
+    <item find=":etiqueta:" replace=""/>
+    <item find=":consigna:" replace=""/>
+    <item find="expresar" replace="expressar"/>
+    <item find=":gelat:" replace=""/>
+    <item find=":flor blanca:" replace=""/>
+    <item find=":caixa:" replace=""/>
+    <item find=":homes:" replace=""/>
+    <item find=":estadi:" replace=""/>
+    <item find=":sortida del sol2:" replace=""/>
+    <item find="agraiments" replace="agraïments"/>
+    <item find=":seductor:" replace=""/>
+    <item find=":bambú:" replace=""/>
+    <item find=":ganivet2:" replace=""/>
+    <item find=":informació3:" replace=""/>
+    <item find=":unicorn:" replace="濾"/>
+    <item find=":palmell2:" replace="爐"/>
+    <item find="intelectual" replace="intel·lectual"/>
+    <item find=":casament:" replace=""/>
+    <item find=":reunió:" replace="∪"/>
+    <item find=":locomotora2:" replace=""/>
+    <item find=":tren:" replace=""/>
+    <item find="tals com" replace="com ara"/>
+    <item find=":embenat:" replace="洛"/>
+    <item find=":festa4:" replace=""/>
+    <item find=":pesca:" replace=""/>
+    <item find=":2.30:" replace=""/>
+    <item find=":8.30:" replace=""/>
+    <item find=":pirateria prohibida:" replace=""/>
+    <item find=":alfil negre:" replace="♝"/>
+    <item find=":Sol:" replace="☉"/>
+    <item find=":microscopi:" replace=""/>
+    <item find=":bombolla2:" replace=""/>
+    <item find=":guants:" replace="理"/>
+    <item find=":ganyotes:" replace=""/>
+    <item find=":disc dur:" replace=""/>
+    <item find="atrassar" replace="endarrerir"/>
+    <item find=":correu-e:" replace=""/>
+    <item find=":paquet:" replace=""/>
+    <item find=":nadal:" replace=""/>
+    <item find="dle" replace="del"/>
+    <item find=":cullera:" replace="籠"/>
+    <item find=":avall:" replace="☟"/>
+    <item find=":nyam:" replace=""/>
+    <item find=":document3:" replace=""/>
+    <item find=":dromedari:" replace=""/>
+    <item find=":turbant:" replace=""/>
+    <item find=":cor trencat:" replace=""/>
+    <item find=":sobre3:" replace=""/>
+    <item find=":quadrat gran:" replace="⬜"/>
+    <item find=":zzz:" replace=""/>
+    <item find=":campana2:" replace=""/>
+    <item find=":mapa:" replace=""/>
+    <item find=":fira:" replace=""/>
+    <item find=":guàrdia:" replace=""/>
+    <item find=":desbloqueig:" replace=""/>
+    <item find=":creu de Lorena:" replace="☨"/>
+    <item find=":pollastre3:" replace=""/>
+    <item find=":cacauets:" replace="樂"/>
+    <item find=":superconjunt:" replace="⊃"/>
+    <item find=":bou:" replace=""/>
+    <item find="necesaris" replace="necessaris"/>
+    <item find=":barret:" replace=""/>
+    <item find=":^theta:" replace="ᶿ"/>
+    <item find=":impressora:" replace=""/>
+    <item find=":Lambda:" replace="Λ"/>
+    <item find=":nedador:" replace=""/>
+    <item find=":papallona:" replace="曆"/>
+    <item find=":_4:" replace="₄"/>
+    <item find=":beguda:" replace="磻"/>
+    <item find=":mans obertes:" replace=""/>
+    <item find=":barba:" replace="倫"/>
+    <item find="SoftCatalà" replace="Softcatalà"/>
+    <item find=":bala3:" replace="◦"/>
+    <item find=":nota buida:" replace=""/>
+    <item find="una suggerència" replace="el suggeriment"/>
+    <item find=":antena:" replace=""/>
+    <item find=":Mi:" replace="Μ"/>
+    <item find=":2 h:" replace=""/>
+    <item find=":llauna:" replace="參"/>
+    <item find=":altaveu:" replace=""/>
+    <item find=":dinosaure2:" replace="練"/>
+    <item find=":^6:" replace="⁶"/>
+    <item find=":pàgina buida:" replace=""/>
+    <item find=":Terra3:" replace=""/>
+    <item find=":vent:" replace=""/>
+    <item find=":marca pàgines:" replace=""/>
+    <item find=":despertador:" replace="⏰"/>
+    <item find=":alambí:" replace="⚗"/>
+    <item find=":diagrama:" replace=""/>
+    <item find=":ogre:" replace=""/>
+    <item find=":o:" replace="∨"/>
+    <item find=":maletí:" replace=""/>
+    <item find=":S2:" replace="⇓"/>
+    <item find=":sorruda2:" replace=""/>
+    <item find="interesos" replace="interessos"/>
+    <item find=":tifa:" replace=""/>
+    <item find=":no existeix:" replace="∄"/>
+    <item find=":pic i martell:" replace="⚒"/>
+    <item find="&lt;-&gt;" replace="↔"/>
+    <item find=":llampec2:" replace=""/>
+    <item find="asegurar" replace="assegurar"/>
+    <item find=":_l:" replace="ₗ"/>
+    <item find="aço" replace="açò"/>
+    <item find=":príncep:" replace="老"/>
+    <item find=":música2:" replace=""/>
+    <item find="embaixada" replace="ambaixada"/>
+    <item find=":jota:" replace=""/>
+    <item find=":granota:" replace=""/>
+    <item find="instalació" replace="instal·lació"/>
+    <item find=":armari:" replace=""/>
+    <item find=":pentagrama:" replace="⛤"/>
+    <item find="gratuitament" replace="gratuïtament"/>
+    <item find=":risc biològic:" replace="☣"/>
+    <item find=":home gran:" replace=""/>
+    <item find=":d'acord:" replace=""/>
+    <item find=":persona enfadada:" replace=""/>
+    <item find=":SE:" replace="↘"/>
+    <item find=":escena amb arròs:" replace=""/>
+    <item find=":clau:" replace="턞"/>
+    <item find=":sake:" replace=""/>
+    <item find="pasió" replace="passió"/>
+    <item find=":volcà:" replace=""/>
+    <item find=":detectiu:" replace=""/>
+    <item find=":porta:" replace=""/>
+    <item find=":Terra:" replace=""/>
+    <item find=":paral·lel:" replace="∥"/>
+    <item find=":bebè2:" replace=""/>
+    <item find=":frankfurt:" replace=""/>
+    <item find=":criquet:" replace=""/>
+    <item find=":estop:" replace=""/>
+    <item find=":orella:" replace=""/>
+    <item find=":calamar:" replace="撚"/>
+    <item find=":marca de verificació5:" replace=""/>
+    <item find=":euro:" replace="€"/>
+    <item find=":prat:" replace=""/>
+    <item find=":lluna:" replace=""/>
+    <item find=":Alfa:" replace="Α"/>
+    <item find=":^9:" replace="⁹"/>
+    <item find=":parella3:" replace=""/>
+    <item find=":no és superconjunt:" replace="⊅"/>
+    <item find=":gat somrient2:" replace=""/>
+    <item find=":cotxe3:" replace=""/>
+    <item find=":diamants:" replace="♦"/>
+    <item find=":bany:" replace=""/>
+    <item find=":^j:" replace="ʲ"/>
+    <item find=":^z:" replace="ᶻ"/>
+    <item find=":copa:" replace=""/>
+    <item find=":^2:" replace="²"/>
+    <item find=":pancakes:" replace="丹"/>
+    <item find=":bitlles:" replace=""/>
+    <item find="uns tamanys" replace="unes mides"/>
+    <item find=":1/3:" replace="⅓"/>
+    <item find="l'icona" replace="la icona"/>
+    <item find=":còctel:" replace=""/>
+    <item find=":hoquei:" replace=""/>
+    <item find=":^I:" replace="ᴵ"/>
+    <item find=":panís:" replace=""/>
+    <item find=":prohibits els mòbils:" replace=""/>
+    <item find="--&gt;" replace="→"/>
+    <item find=":gat amb ulls de cor:" replace=""/>
+    <item find=":judo:" replace="屢"/>
+    <item find=":peixos:" replace="♓"/>
+    <item find=":creu grega2:" replace="✙"/>
+    <item find=":bucle:" replace="➰"/>
+    <item find=":geni:" replace="吏"/>
+    <item find=":pinzell:" replace=""/>
+    <item find=".*-&gt;.*" replace="→"/>
+    <item find=":tipus de lletra2:" replace=""/>
+    <item find=":home:" replace=""/>
+    <item find=":_e:" replace="ₑ"/>
+    <item find=":precaució:" replace="☡"/>
+    <item find=":control:" replace=""/>
+    <item find="pasat" replace="passat"/>
+    <item find=":museu:" replace=""/>
+    <item find=":i:" replace="∧"/>
+    <item find=":plorosa:" replace=""/>
+    <item find=":aniversari:" replace=""/>
+    <item find=":trucada:" replace=""/>
+    <item find="la última" replace="l'última"/>
+    <item find=":_s:" replace="ₛ"/>
+    <item find=":càmera de cine:" replace=""/>
+    <item find=":dofí:" replace=""/>
+    <item find=":6 h:" replace=""/>
+    <item find=":diners3:" replace="螺"/>
+    <item find=":daga:" replace="†"/>
+    <item find=":altaveu3:" replace=""/>
+    <item find=":extraterrestre:" replace=""/>
+    <item find="gairebe" replace="gairebé"/>
+    <item find=":sostingut:" replace="♯"/>
+    <item find=":waterpolo:" replace="綠"/>
+    <item find=":pretzel:" replace="泌"/>
+    <item find=":doble sostingut:" replace="턪"/>
+    <item find=":^G:" replace="ᴳ"/>
+    <item find=":canoa:" replace=""/>
+    <item find=":globus de pensament:" replace=""/>
+    <item find=":nas:" replace=""/>
+    <item find=":esquerra3:" replace="☚"/>
+    <item find=":peó blanc:" replace="♙"/>
+    <item find=":goteta2:" replace=""/>
+    <item find=":x3:" replace="❎"/>
+    <item find=":paral·lelogram2:" replace="▰"/>
+    <item find=":arrelq:" replace="√"/>
+    <item find=":palanca de control:" replace=""/>
+    <item find=":oficina:" replace=""/>
+    <item find="programaris" replace="programari"/>
+    <item find=":sobre6:" replace=""/>
+    <item find=":_6:" replace="₆"/>
+    <item find=":bandera4:" replace="⚐"/>
+    <item find=":trident:" replace=""/>
+    <item find=":dona gran:" replace=""/>
+    <item find=":camió:" replace="⛟"/>
+    <item find=":pàgina2:" replace=""/>
+    <item find=":pare nadal:" replace=""/>
+    <item find=":lluna plena2:" replace=""/>
+    <item find=":creu llatina:" replace="✝"/>
+    <item find=":botiga:" replace=""/>
+    <item find=":piques:" replace="♠"/>
+    <item find=":flaix:" replace=""/>
+    <item find="ultims" replace="últims"/>
+    <item find=":paraigua:" replace="☂"/>
+    <item find=":balena:" replace=""/>
+    <item find=":Ni:" replace="Ν"/>
+    <item find=":mandarina:" replace=""/>
+    <item find=":sagitari:" replace="♐"/>
+    <item find=":12 h:" replace=""/>
+    <item find=":pausa:" replace="⏸"/>
+    <item find=":Sigma:" replace="Σ"/>
+    <item find=":ram de flors:" replace=""/>
+    <item find=":lluna en quart creixent:" replace=""/>
+    <item find=":enfadat:" replace=""/>
+    <item find=":_n:" replace="ₙ"/>
+    <item find=":Beta:" replace="Β"/>
+    <item find=":puny:" replace="✊"/>
+    <item find=":treballador:" replace=""/>
+    <item find=":dau3:" replace="⚂"/>
+    <item find=":copyright:" replace="©"/>
+    <item find=":billar:" replace=""/>
+    <item find=":bola d'arròs:" replace=""/>
+    <item find=":balança:" replace="♎"/>
+    <item find=":angle:" replace="∠"/>
+    <item find=":rosa:" replace=""/>
+    <item find=":integral:" replace="∫"/>
+    <item find=":ennuvolat2:" replace=""/>
+    <item find=":innocent:" replace=""/>
+    <item find="unes suggerències" replace="els suggeriments"/>
+    <item find="tambe" replace="també"/>
+    <item find=":12.30:" replace=""/>
+    <item find=":carpeta:" replace=""/>
+    <item find=":daga2:" replace="‡"/>
+    <item find=":casella de selecció6:" replace=""/>
+    <item find="atribuit" replace="atribuït"/>
+    <item find=":~:" replace="≈"/>
+    <item find=":banderola2:" replace=""/>
+    <item find=":píndola:" replace=""/>
+    <item find=":gall:" replace=""/>
+    <item find=":tiquet:" replace=""/>
+    <item find="colegi" replace="col·legi"/>
+    <item find=":cotxe:" replace=""/>
+    <item find=":maduixa:" replace=""/>
+    <item find=":^N:" replace="ᴺ"/>
+    <item find=":_gamma:" replace="ᵧ"/>
+    <item find=":arronsar-se d'espatlles:" replace="路"/>
+    <item find=":dones:" replace=""/>
+    <item find=":NS:" replace="↕"/>
+    <item find=":flor de lis:" replace="⚜"/>
+    <item find=":^T:" replace="ᵀ"/>
+    <item find=":vianant:" replace=""/>
+    <item find=":entrada prohibida:" replace=""/>
+    <item find=":oficina de correus:" replace=""/>
+    <item find=":banderes:" replace=""/>
+    <item find=":^èpsilon:" replace="ᵋ"/>
+    <item find=":sabata:" replace=""/>
+    <item find=":hexàgon2:" replace="⬢"/>
+    <item find=":bebè:" replace=""/>
+    <item find=":llapis2:" replace="✏"/>
+    <item find=":lluita:" replace="祿"/>
+    <item find="sesions" replace="sessions"/>
+    <item find=":^=:" replace="⁼"/>
+    <item find=":hospital:" replace=""/>
+    <item find=":sushi:" replace=""/>
+    <item find=":serveis2:" replace=""/>
+    <item find=":estèreo:" replace=""/>
+    <item find=":cercle3:" replace=""/>
+    <item find=":dolent:" replace=""/>
+    <item find=":coco:" replace="便"/>
+    <item find=":assortidor de combustible:" replace="⛽"/>
+    <item find=":angle2:" replace="∡"/>
+    <item find=":trompeta:" replace=""/>
+    <item find=":teranyina:" replace=""/>
+    <item find=":rellotge:" replace="⌚"/>
+    <item find="neixement" replace="naixement"/>
+    <item find=":cara neutral:" replace=""/>
+    <item find="pais" replace="país"/>
+    <item find=":patí:" replace="⛸"/>
+    <item find=":cor:" replace="❤"/>
+    <item find=":bloqueig3:" replace=""/>
+    <item find=":mòbil2:" replace=""/>
+    <item find=":corbata:" replace=""/>
+    <item find=":pistola:" replace=""/>
+    <item find=":clip:" replace=""/>
+    <item find=":bessons:" replace="♊"/>
+    <item find=":nota3:" replace=""/>
+    <item find="es sap" replace="se sap"/>
+    <item find=":núvol3:" replace="⛈"/>
+    <item find=":negra:" replace="텟"/>
+    <item find=":hotel:" replace=""/>
+    <item find=":abraçada:" replace="珞"/>
+    <item find="traició" replace="traïció"/>
+    <item find=":caragol:" replace=""/>
+    <item find=":samarreta2:" replace=""/>
+    <item find=":àtom:" replace="⚛"/>
+    <item find=":termòmetre2:" replace="裸"/>
+    <item find=":emprenyat:" replace=""/>
+    <item find=":avall4:" replace=""/>
+    <item find=":pentàgon:" replace="⬠"/>
+    <item find="cumanda" replace="comanda"/>
+    <item find=":mitjons:" replace="罹"/>
+    <item find=":màscara:" replace=""/>
+    <item find=":E2:" replace="⇒"/>
+    <item find=":passaport:" replace=""/>
+    <item find=":tornado:" replace=""/>
+    <item find=":globus:" replace=""/>
+    <item find=":rei negre:" replace="♚"/>
+    <item find=":insecte:" replace=""/>
+    <item find=":termòmetre:" replace=""/>
+    <item find="inmediat" replace="immediat"/>
+    <item find=":avorriment:" replace=""/>
+    <item find=":_2:" replace="₂"/>
+    <item find=":oden:" replace=""/>
+    <item find=":puny2:" replace=""/>
+    <item find="aixi" replace="així"/>
+    <item find=":bistec:" replace="數"/>
+    <item find=":silenci:" replace=""/>
+    <item find=":taxi:" replace=""/>
+    <item find="asistir" replace="assistir"/>
+    <item find=":bolígraf:" replace=""/>
+    <item find=":dau:" replace=""/>
+    <item find=":dreta:" replace="☞"/>
+    <item find=":esternut:" replace="蠟"/>
+    <item find=":document:" replace=""/>
+    <item find=":silenci de blanca:" replace="턼"/>
+    <item find=":restaurant:" replace=""/>
+    <item find=":cor bategant:" replace=""/>
+    <item find=":divises:" replace=""/>
+    <item find=":foc:" replace=""/>
+    <item find=":fi:" replace="φ"/>
+    <item find=":mòbil:" replace=""/>
+    <item find="per lo tant" replace="per tant"/>
+    <item find=":ulls rodolant:" replace=""/>
+    <item find=":llop:" replace=""/>
+    <item find=":radioactiu:" replace="☢"/>
+    <item find=":hàmster:" replace=""/>
+    <item find=":_m:" replace="ₘ"/>
+    <item find=":Omega:" replace="Ω"/>
+    <item find=":cremallera:" replace="蘿"/>
+    <item find=":casella de selecció3:" replace="☒"/>
+    <item find=":\\:" replace="∖"/>
+    <item find=":assolellat:" replace="☀"/>
+    <item find=":xéquel:" replace="₪"/>
+    <item find=":telescopi:" replace=""/>
+    <item find=":bloc de notes:" replace=""/>
+    <item find=":cavall3:" replace=""/>
+    <item find=":marieta:" replace=""/>
+    <item find=":torre blanca:" replace="♖"/>
+    <item find=":nines japoneses:" replace=""/>
+    <item find=":taco:" replace=""/>
+    <item find="película" replace="pel·lícula"/>
+    <item find=":7 h:" replace=""/>
+    <item find=":bufanda:" replace="泥"/>
+    <item find=":barberia:" replace=""/>
+    <item find=":_x:" replace="ₓ"/>
+    <item find=":somriure:" replace="☺"/>
+    <item find=":follet:" replace=""/>
+    <item find="traduit" replace="traduït"/>
+    <item find=":sol2:" replace=""/>
+    <item find=":gall dindi:" replace="旅"/>
+    <item find=":so:" replace=""/>
+    <item find=":bastonets:" replace="異"/>
+    <item find=":tempesta2:" replace="☈"/>
+    <item find="inmensa" replace="immensa"/>
+    <item find=":Terra2:" replace=""/>
+    <item find=":parcial:" replace="∂"/>
+    <item find=":^Fi:" replace="ᶲ"/>
+    <item find="misió" replace="missió"/>
+    <item find=":bacó:" replace="肋"/>
+    <item find=":gat fent petó:" replace=""/>
+    <item find=":sobre2:" replace=""/>
+    <item find=":tisores3:" replace="✁"/>
+    <item find=":tenda:" replace="⛺"/>
+    <item find=":6.30:" replace=""/>
+    <item find=":_v:" replace="ᵥ"/>
+    <item find=":NO2:" replace="⇖"/>
+    <item find="una sugerència" replace="la suggeriment"/>
+    <item find="destruit" replace="destruït"/>
+    <item find=":fulla2:" replace=""/>
+    <item find=":diagrama2:" replace=""/>
+    <item find="inmens" replace="immens"/>
+    <item find=":quadrat petit2:" replace="▪"/>
+    <item find=":espelma:" replace=""/>
+    <item find=":esquerra:" replace="☜"/>
+    <item find=":-+:" replace="∓"/>
+    <item find=":síndria:" replace=""/>
+    <item find=":pirata:" replace=""/>
+    <item find=":pàgina de notes buida:" replace=""/>
+    <item find=":telefèric:" replace=""/>
+    <item find=":serpentari:" replace="⛎"/>
+    <item find="posibilitat" replace="possibilitat"/>
+    <item find=":triangle3:" replace=""/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="1a."/>
+    <word exception="Im."/>
+    <word exception="prov."/>
+    <word exception="p. e."/>
+    <word exception="int."/>
+    <word exception="Hble."/>
+    <word exception="núm."/>
+    <word exception="M. Il.ltre."/>
+    <word exception="adv."/>
+    <word exception="etc."/>
+    <word exception="febr."/>
+    <word exception="Sta."/>
+    <word exception="pg."/>
+    <word exception="acad."/>
+    <word exception="Il·lma."/>
+    <word exception="4a."/>
+    <word exception="c."/>
+    <word exception="op. cit."/>
+    <word exception="p.ex."/>
+    <word exception="íd."/>
+    <word exception="Sr."/>
+    <word exception="pol."/>
+    <word exception="secre."/>
+    <word exception="des."/>
+    <word exception="ref."/>
+    <word exception="3r."/>
+    <word exception="oct."/>
+    <word exception="reg."/>
+    <word exception="aprox."/>
+    <word exception="M. H. Sra."/>
+    <word exception="àt."/>
+    <word exception="M. H. Sr."/>
+    <word exception="2a."/>
+    <word exception="dt."/>
+    <word exception="abr."/>
+    <word exception="d/v"/>
+    <word exception="Emm."/>
+    <word exception="ed."/>
+    <word exception="v."/>
+    <word exception="hect."/>
+    <word exception="pres."/>
+    <word exception="ptge."/>
+    <word exception="llic."/>
+    <word exception="p. d."/>
+    <word exception="M. I. Sr."/>
+    <word exception="arq."/>
+    <word exception="telegr."/>
+    <word exception="8é."/>
+    <word exception="H."/>
+    <word exception="Excm."/>
+    <word exception="exp."/>
+    <word exception="supl."/>
+    <word exception="quint."/>
+    <word exception="dv."/>
+    <word exception="rbla."/>
+    <word exception="esp."/>
+    <word exception="I."/>
+    <word exception="7a."/>
+    <word exception="5a."/>
+    <word exception="7è."/>
+    <word exception="dupl."/>
+    <word exception="Ima."/>
+    <word exception="8a."/>
+    <word exception="gov."/>
+    <word exception="M. Hble. Sra."/>
+    <word exception="2n."/>
+    <word exception="6é."/>
+    <word exception="Il.lm."/>
+    <word exception="8è."/>
+    <word exception="eng."/>
+    <word exception="ex."/>
+    <word exception="Emma."/>
+    <word exception="9è."/>
+    <word exception="dte."/>
+    <word exception="s."/>
+    <word exception="av."/>
+    <word exception="jul."/>
+    <word exception="mín."/>
+    <word exception="dl."/>
+    <word exception="nov."/>
+    <word exception="esq."/>
+    <word exception="M. Il·ltre."/>
+    <word exception="Il·ltre."/>
+    <word exception="4t."/>
+    <word exception="imp."/>
+    <word exception="pl."/>
+    <word exception="tel."/>
+    <word exception="aj."/>
+    <word exception="dg."/>
+    <word exception="màx."/>
+    <word exception="gral."/>
+    <word exception="d. C."/>
+    <word exception="5è."/>
+    <word exception="3a."/>
+    <word exception="gen."/>
+    <word exception="a. C."/>
+    <word exception="Mn."/>
+    <word exception="jur."/>
+    <word exception="ds."/>
+    <word exception="pàg."/>
+    <word exception="pta."/>
+    <word exception="adj."/>
+    <word exception="exc."/>
+    <word exception="art."/>
+    <word exception="entl."/>
+    <word exception="7é."/>
+    <word exception="M. Hble. Sr."/>
+    <word exception="6a."/>
+    <word exception="Kg."/>
+    <word exception="Il·lm."/>
+    <word exception="mil."/>
+    <word exception="admtiva"/>
+    <word exception="Excma."/>
+    <word exception="Km."/>
+    <word exception="dj."/>
+    <word exception="ag."/>
+    <word exception="rest."/>
+    <word exception="feb."/>
+    <word exception="ago."/>
+    <word exception="rev."/>
+    <word exception="cap."/>
+    <word exception="6è."/>
+    <word exception="vol."/>
+    <word exception="aux."/>
+    <word exception="esc."/>
+    <word exception="9a."/>
+    <word exception="admtiu."/>
+    <word exception="M. I. Sra."/>
+    <word exception="St."/>
+    <word exception="1r."/>
+    <word exception="inst."/>
+    <word exception="Dra."/>
+    <word exception="dc."/>
+    <word exception="bxs."/>
+    <word exception="9é."/>
+    <word exception="Sra."/>
+    <word exception="Il.lma."/>
+    <word exception="Dr."/>
+    <word exception="5é."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="MHz"/>
+    <word exception="THz"/>
+    <word exception="GHz"/>
+    <word exception="OOo"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

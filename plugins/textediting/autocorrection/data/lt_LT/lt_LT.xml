@@ -1,0 +1,1949 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find=":biliardas:" replace=""/>
+    <item find=":dinozauras 2:" replace="練"/>
+    <item find=":informacija:" replace="ℹ"/>
+    <item find=":namas 3:" replace=""/>
+    <item find=":būgnai:" replace="♦"/>
+    <item find=".*(tm)" replace="™"/>
+    <item find=":segtuvas:" replace=""/>
+    <item find=":skrybėlė 2:" replace=""/>
+    <item find=":šaknis 4:" replace="∜"/>
+    <item find=":miegantis:" replace=""/>
+    <item find=":plakanti širdis:" replace=""/>
+    <item find=":_fi:" replace="ᵩ"/>
+    <item find=":širdis:" replace="❤"/>
+    <item find=":^beta:" replace="ᵝ"/>
+    <item find=":chronometras:" replace="⏱"/>
+    <item find=":sumuštinis:" replace="索"/>
+    <item find=":oranžinė širdis:" replace="李"/>
+    <item find=":!2:" replace="❗"/>
+    <item find="paie" replace="apie"/>
+    <item find=":Venera:" replace="♀"/>
+    <item find=":gairelė 2:" replace=""/>
+    <item find=":katė:" replace=""/>
+    <item find=":kasetė:" replace=""/>
+    <item find=":vaizdo kasetė:" replace=""/>
+    <item find=":nepriklauso:" replace="∉"/>
+    <item find=":durys:" replace=""/>
+    <item find=":džinas:" replace="吏"/>
+    <item find=":pilnoji nata:" replace="텝"/>
+    <item find=":om:" replace=""/>
+    <item find=":įrašymas:" replace="⏺"/>
+    <item find=":burundukas:" replace=""/>
+    <item find=":pora 2:" replace=""/>
+    <item find=":arbata:" replace=""/>
+    <item find=":bučinys 5:" replace=""/>
+    <item find=":įniršęs:" replace=""/>
+    <item find=":!?:" replace="⁉"/>
+    <item find=":dokumentas 3:" replace=""/>
+    <item find=":šaltas prakaitas:" replace=""/>
+    <item find=":kino kamera:" replace=""/>
+    <item find=":informacija 2:" replace=""/>
+    <item find=":kateris 2:" replace=""/>
+    <item find=":zombis:" replace="履"/>
+    <item find=":bučinio žymė:" replace=""/>
+    <item find=":lemputė:" replace=""/>
+    <item find=":karvė 2:" replace=""/>
+    <item find=":pirkiniai:" replace=""/>
+    <item find=":Psi:" replace="Ψ"/>
+    <item find=":atviri delnai:" replace=""/>
+    <item find=":klounas:" replace="嵐"/>
+    <item find=":pica:" replace=""/>
+    <item find=":plaktukas:" replace=""/>
+    <item find=":_i:" replace="ᵢ"/>
+    <item find=":traktorius:" replace=""/>
+    <item find=":širdys 2:" replace="♡"/>
+    <item find=":vokas 6:" replace=""/>
+    <item find=":kino juosta:" replace=""/>
+    <item find=":žaibas 2:" replace=""/>
+    <item find=":gaublys 2:" replace=""/>
+    <item find=":trikampis 2:" replace="▲"/>
+    <item find=":besisukančios širdys:" replace=""/>
+    <item find=":žymimoji akutė:" replace=""/>
+    <item find=":liežuvis:" replace=""/>
+    <item find=":šliaužiklis:" replace=""/>
+    <item find=":kuprinė:" replace=""/>
+    <item find=":/:" replace="∕"/>
+    <item find=":skydas 2:" replace="⛨"/>
+    <item find=":psi:" replace="ψ"/>
+    <item find=":greitoji pagalba:" replace=""/>
+    <item find=":dėžė:" replace=""/>
+    <item find=":inkaras:" replace="⚓"/>
+    <item find=":debesis 3:" replace="⛈"/>
+    <item find=":liniuotė:" replace=""/>
+    <item find=":kauliukas 3:" replace="⚂"/>
+    <item find=":lošimo automatas:" replace=""/>
+    <item find=":diskelis 4:" replace=""/>
+    <item find=":burna:" replace=""/>
+    <item find=":triumfas:" replace=""/>
+    <item find=":raganosis:" replace="憐"/>
+    <item find=":laikrodis:" replace="⌚"/>
+    <item find=":Dovydo žvaigždė:" replace="✡"/>
+    <item find=":fejerverkai:" replace=""/>
+    <item find=":rankų paspaudimas:" replace="欄"/>
+    <item find=":aštuntinė nata:" replace="텠"/>
+    <item find=":lagaminėlis:" replace=""/>
+    <item find=".*(P)" replace="℗"/>
+    <item find="tiap" replace="taip"/>
+    <item find=":Fi:" replace="Φ"/>
+    <item find=":telefonas 2:" replace="☏"/>
+    <item find=":Gama:" replace="Γ"/>
+    <item find=":badmintonas:" replace=""/>
+    <item find=":gimnastas:" replace="露"/>
+    <item find=":žirklės:" replace="✂"/>
+    <item find=":žongliravimas:" replace="魯"/>
+    <item find=":šriftas 2:" replace=""/>
+    <item find=":sandauga:" replace="∏"/>
+    <item find=":parduotuvė:" replace=""/>
+    <item find=".*(R)" replace="®"/>
+    <item find=":pi:" replace="π"/>
+    <item find=":gūžčiojimas:" replace="路"/>
+    <item find=":didelis garsas:" replace=""/>
+    <item find=":žadintuvas:" replace="⏰"/>
+    <item find=":vokas 5:" replace=""/>
+    <item find=":^delta:" replace="ᵟ"/>
+    <item find=":motoroleris:" replace=""/>
+    <item find=":kolonėlė:" replace="⛽"/>
+    <item find=":burlaivis:" replace="⛵"/>
+    <item find=":biustai:" replace=""/>
+    <item find=":debesis 2:" replace="⛅"/>
+    <item find=":zuikio ausys:" replace=""/>
+    <item find=":išnaša 5:" replace=""/>
+    <item find=":dešinėn 3:" replace="☛"/>
+    <item find=":langelis 2:" replace="☑"/>
+    <item find=":ciklonas:" replace=""/>
+    <item find=":berniukai:" replace=""/>
+    <item find=":pradedantysis:" replace=""/>
+    <item find=":11 h:" replace=""/>
+    <item find=":langas:" replace=""/>
+    <item find=":dango:" replace=""/>
+    <item find=":regbis:" replace=""/>
+    <item find=":laikrodis 2:" replace=""/>
+    <item find=":vaivorykštė:" replace=""/>
+    <item find=":^4:" replace="⁴"/>
+    <item find=":5 h:" replace=""/>
+    <item find=":autobusų stotelė:" replace=""/>
+    <item find=":palapinė:" replace="⛺"/>
+    <item find=":Spokas:" replace=""/>
+    <item find=":.:" replace="…"/>
+    <item find=":perdengti:" replace=""/>
+    <item find=":šiukšlės:" replace=""/>
+    <item find=":Paukščių takas:" replace=""/>
+    <item find=":vidutinis kvadratas:" replace="◻"/>
+    <item find=":žvaigždė 2:" replace="☆"/>
+    <item find=":vaikai:" replace=""/>
+    <item find=":Teta:" replace="Θ"/>
+    <item find=":cilindras:" replace=""/>
+    <item find=":paršas:" replace=""/>
+    <item find=":_r:" replace="ᵣ"/>
+    <item find=":skritulys 3:" replace=""/>
+    <item find=":gaublys 4:" replace=""/>
+    <item find=":gorila:" replace="轢"/>
+    <item find=":išvykimas:" replace=""/>
+    <item find=":tušti lapai:" replace=""/>
+    <item find=":kvadratas 2:" replace="■"/>
+    <item find=":kompiuteris 3:" replace=""/>
+    <item find=":^x:" replace="ˣ"/>
+    <item find=":pašto ragas:" replace=""/>
+    <item find=":AD2:" replace="⇘"/>
+    <item find=":kriauklė:" replace=""/>
+    <item find=":sušis:" replace=""/>
+    <item find=":traukinys 2:" replace=""/>
+    <item find=":būgnas:" replace="論"/>
+    <item find=":ligatūra ff:" replace="ﬀ"/>
+    <item find=":seilėjimasis:" replace="襤"/>
+    <item find="pasiųlyme" replace="pasiūlyme"/>
+    <item find=":smeigtukas:" replace=""/>
+    <item find=":apsvaigimas:" replace=""/>
+    <item find=":jaunikis:" replace="蘆"/>
+    <item find="įdėjai" replace="idėjai"/>
+    <item find=":atsisakyti:" replace=""/>
+    <item find=":trofėjus:" replace=""/>
+    <item find=":susiraukęs:" replace="☹"/>
+    <item find=":skorpionas:" replace="廬"/>
+    <item find=":policija 2:" replace=""/>
+    <item find=":triušis 2:" replace=""/>
+    <item find=":šviesoforas:" replace=""/>
+    <item find=":sigma:" replace="σ"/>
+    <item find=":kūjis ir pjautuvas:" replace="☭"/>
+    <item find=":kinrožė:" replace=""/>
+    <item find=":5/8:" replace="⅝"/>
+    <item find=":oda 4:" replace=""/>
+    <item find=":žibintas:" replace=""/>
+    <item find=":šviesūs plaukai:" replace=""/>
+    <item find=".*&lt;-.*" replace="←"/>
+    <item find=":dešinėn 2:" replace=""/>
+    <item find=":nuotaka:" replace=""/>
+    <item find=":spinduliai 3:" replace=""/>
+    <item find=":japoniški pietūs:" replace=""/>
+    <item find=":batonas:" replace="稜"/>
+    <item find=":^5:" replace="⁵"/>
+    <item find=":lotyniškas kryžius 3:" replace=""/>
+    <item find=":tsukimi:" replace=""/>
+    <item find=":rozetė:" replace=""/>
+    <item find=":kaukolė:" replace=""/>
+    <item find=":medalis 2:" replace=""/>
+    <item find=":krabas:" replace="呂"/>
+    <item find=":skara:" replace="崙"/>
+    <item find=":mirktelėjimas:" replace=""/>
+    <item find=":kauliukas 6:" replace="⚅"/>
+    <item find=":varnelė 3:" replace="✅"/>
+    <item find=":langelis 3:" replace="☒"/>
+    <item find=":popieriaus lapas 2:" replace=""/>
+    <item find=":spintelė:" replace=""/>
+    <item find=":^A:" replace="ᴬ"/>
+    <item find=":susirūpinimas:" replace=""/>
+    <item find=":&gt;=:" replace="≥"/>
+    <item find=":namas 2:" replace=""/>
+    <item find=":^7:" replace="⁷"/>
+    <item find=":biustas:" replace=""/>
+    <item find=":svarstyklės:" replace="⚖"/>
+    <item find=":perspėjimas:" replace="⚠"/>
+    <item find=":lūpos:" replace=""/>
+    <item find=":sunkvežimis:" replace="⛟"/>
+    <item find=":diskelis:" replace=""/>
+    <item find=":saitas:" replace=""/>
+    <item find=":kairėn 6:" replace=""/>
+    <item find=":Tokijo bokštas:" replace=""/>
+    <item find=":&lt;=:" replace="≤"/>
+    <item find=":nerimas:" replace=""/>
+    <item find=":pomidoras:" replace=""/>
+    <item find=":miestas:" replace=""/>
+    <item find=":mi:" replace="μ"/>
+    <item find=":alfas:" replace="利"/>
+    <item find=":vakarėlis 4:" replace=""/>
+    <item find=":_8:" replace="₈"/>
+    <item find=":išnaša 7:" replace=""/>
+    <item find=":laikraštis:" replace=""/>
+    <item find=":koldūnas:" replace="寧"/>
+    <item find=":jena:" replace="¥"/>
+    <item find=":colis:" replace="″"/>
+    <item find=":kepimas:" replace=""/>
+    <item find=":akiniai:" replace=""/>
+    <item find=":kvadratas:" replace="□"/>
+    <item find=":kabantis traukinys:" replace=""/>
+    <item find=":pudelis:" replace=""/>
+    <item find=":plaukikas:" replace=""/>
+    <item find=":pakelta ranka:" replace=""/>
+    <item find=":integralas 4:" replace="∮"/>
+    <item find="bsu" replace="bus"/>
+    <item find=":in-jang:" replace="☯"/>
+    <item find=":ligatūra ffi:" replace="ﬃ"/>
+    <item find=":telefono ragelis 4:" replace=""/>
+    <item find=":rašymas 2:" replace=""/>
+    <item find=":varnelė:" replace="✓"/>
+    <item find=":perdirbimas2:" replace="♻"/>
+    <item find=":aureolė:" replace=""/>
+    <item find=":autobusas 2:" replace=""/>
+    <item find=":lupa 2:" replace=""/>
+    <item find=":dziudo:" replace="屢"/>
+    <item find=":tuščias dokumentas:" replace=""/>
+    <item find=":Andriaus kryžius:" replace="☓"/>
+    <item find=":pasitenkinimas:" replace=""/>
+    <item find=":moksliukas:" replace="邏"/>
+    <item find=":Helovinas:" replace=""/>
+    <item find=":9 h 30 min:" replace=""/>
+    <item find=":gama:" replace="γ"/>
+    <item find=":D2:" replace="⇒"/>
+    <item find=":bilietas:" replace=""/>
+    <item find=":undinė:" replace="隆"/>
+    <item find=":žemyn 2:" replace=""/>
+    <item find=":grivina:" replace="₴"/>
+    <item find=":lira:" replace="₤"/>
+    <item find=":ni:" replace="ν"/>
+    <item find=":tramvajus:" replace=""/>
+    <item find=":kėdė:" replace=""/>
+    <item find=":garsiakalbis 5:" replace=""/>
+    <item find=":spinduliai:" replace=""/>
+    <item find=":':" replace="’"/>
+    <item find=":kirpimas:" replace=""/>
+    <item find=":tortas:" replace=""/>
+    <item find=":kivis:" replace="諾"/>
+    <item find=":kairėn 4:" replace=""/>
+    <item find="&lt;--&gt;" replace="↔"/>
+    <item find=":kėgliai:" replace=""/>
+    <item find=":duona:" replace=""/>
+    <item find=":plojimas:" replace=""/>
+    <item find=":skėtis:" replace="☂"/>
+    <item find=":pergalė 2:" replace=""/>
+    <item find=":_7:" replace="₇"/>
+    <item find=":morka:" replace="凌"/>
+    <item find="stadijonas" replace="stadionas"/>
+    <item find=":kūdikis 3:" replace="櫓"/>
+    <item find=":sūris:" replace="燎"/>
+    <item find=":stadionas:" replace=""/>
+    <item find=":šešiakampis 2:" replace="⬢"/>
+    <item find=":čiaudulys:" replace="蠟"/>
+    <item find=":vakarėlis 2:" replace=""/>
+    <item find=":Asklepijo lazda:" replace="⚕"/>
+    <item find=":kiaušinis:" replace="讀"/>
+    <item find=":lapas 3:" replace=""/>
+    <item find=":_gama:" replace="ᵧ"/>
+    <item find=":pirštai:" replace="爛"/>
+    <item find=":vėliava 2:" replace=""/>
+    <item find=":asmenukė:" replace="盧"/>
+    <item find=":baltas skritulys:" replace="⚪"/>
+    <item find=":aplankas 3:" replace=""/>
+    <item find=":langelis:" replace="☐"/>
+    <item find=":melionas:" replace=""/>
+    <item find=":žirklės 2:" replace="✄"/>
+    <item find=":plaštaka 2:" replace=""/>
+    <item find=":tinklinis:" replace=""/>
+    <item find=":žėrėjimas:" replace="❇"/>
+    <item find=":prakaitas:" replace=""/>
+    <item find=":mikrofonas:" replace=""/>
+    <item find=":rogutės:" replace=""/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find=":2 h 30 min:" replace=""/>
+    <item find=":beisbolas:" replace="⚾"/>
+    <item find=":skambinimas:" replace="酪"/>
+    <item find=":integralas 2:" replace="∬"/>
+    <item find=":gerai 2:" replace=""/>
+    <item find="pasiųlymai" replace="pasiūlymai"/>
+    <item find=":stop:" replace=""/>
+    <item find=":pėdos:" replace=""/>
+    <item find=":katės riksmas:" replace=""/>
+    <item find=":_):" replace="₎"/>
+    <item find="įdėjoms" replace="idėjoms"/>
+    <item find=":telefono ragelis:" replace=""/>
+    <item find=":vėliava 3:" replace="⚑"/>
+    <item find=":_j:" replace="ⱼ"/>
+    <item find=":žibintuvėlis:" replace=""/>
+    <item find=":angelas:" replace=""/>
+    <item find=":nėštumas:" replace="擄"/>
+    <item find=":gitara:" replace=""/>
+    <item find=":bažnyčia:" replace="⛪"/>
+    <item find=":promilė:" replace="‰"/>
+    <item find="musm" replace="mums"/>
+    <item find=":kūdikio buteliukas:" replace=""/>
+    <item find="pasiųlymų" replace="pasiūlymų"/>
+    <item find=":suraukti antakiai:" replace=""/>
+    <item find=":princesė:" replace=""/>
+    <item find=":vyrų ženklas:" replace=""/>
+    <item find=":voras:" replace=""/>
+    <item find=":oda 5:" replace=""/>
+    <item find=":pasimetimas:" replace=""/>
+    <item find=":peilis:" replace=""/>
+    <item find=".*..." replace="…"/>
+    <item find=":alus:" replace=""/>
+    <item find=":medis:" replace=""/>
+    <item find="nse" replace="nes"/>
+    <item find=":sausainis:" replace=""/>
+    <item find=":spageti:" replace=""/>
+    <item find=":8 h 30 min:" replace=""/>
+    <item find=":kalakutas:" replace="旅"/>
+    <item find=":tūzas:" replace=""/>
+    <item find=":Žemė:" replace="♁"/>
+    <item find=":8 h:" replace=""/>
+    <item find=":mergaitės:" replace=""/>
+    <item find=":pora 3:" replace=""/>
+    <item find=":nuostaba:" replace=""/>
+    <item find=":7/8:" replace="⅞"/>
+    <item find=":moteris:" replace=""/>
+    <item find=":kinas:" replace=""/>
+    <item find=":x:" replace="×"/>
+    <item find=":niam:" replace=""/>
+    <item find=":fabrikas:" replace=""/>
+    <item find=":šalmas:" replace="⛑"/>
+    <item find=":^gama:" replace="ᵞ"/>
+    <item find=":medus:" replace=""/>
+    <item find=":balsavimas:" replace=""/>
+    <item find=":^D:" replace="ᴰ"/>
+    <item find=":tenisas:" replace=""/>
+    <item find=":ledai 2:" replace=""/>
+    <item find=":lokomotyvas 2:" replace=""/>
+    <item find=":ryžių rutuliukas:" replace=""/>
+    <item find="abiems" replace="abiem"/>
+    <item find=":dokumentas 4:" replace=""/>
+    <item find=":panda:" replace=""/>
+    <item find=":pelė 4:" replace=""/>
+    <item find=":fechtuotojas:" replace="鷺"/>
+    <item find=":telefonai išjungti:" replace=""/>
+    <item find=":ligatūra fi:" replace="ﬁ"/>
+    <item find=":perbrauktas varpelis:" replace=""/>
+    <item find=":telefonas 3:" replace="✆"/>
+    <item find="įdėjomis" replace="idėjomis"/>
+    <item find=":žalias obuolys:" replace=""/>
+    <item find=":šoninė:" replace="肋"/>
+    <item find=":rodyklės:" replace=""/>
+    <item find=":meilės laiškas:" replace=""/>
+    <item find=":Jupiteris:" replace="♃"/>
+    <item find=":termometras 2:" replace="裸"/>
+    <item find=":gėlės žiedas:" replace=""/>
+    <item find=":baltųjų pėstininkas:" replace="♙"/>
+    <item find=":piliulė:" replace=""/>
+    <item find=":suaugęs:" replace="六"/>
+    <item find=":kaukas:" replace=""/>
+    <item find=":3/4:" replace="¾"/>
+    <item find=":!!:" replace="‼"/>
+    <item find=":pagyvenusi moteris:" replace=""/>
+    <item find=":svaras 2:" replace=""/>
+    <item find=":sąvaržėlė 2:" replace=""/>
+    <item find=":namai:" replace=""/>
+    <item find=":x2:" replace="❌"/>
+    <item find=":kruasanas:" replace="縷"/>
+    <item find=":laikmatis:" replace="⏲"/>
+    <item find=":vakarėlis 3:" replace="壟"/>
+    <item find=":kilpos:" replace="➿"/>
+    <item find=":kimono:" replace=""/>
+    <item find=":vilkas:" replace=""/>
+    <item find=":^chi:" replace="ᵡ"/>
+    <item find=":graikiškas kryžius 2:" replace="✙"/>
+    <item find=":Eta:" replace="Η"/>
+    <item find=":teatras:" replace=""/>
+    <item find=":sraigė:" replace=""/>
+    <item find=":užtvaras:" replace=""/>
+    <item find=":_p:" replace="ₚ"/>
+    <item find=":kvatojimas:" replace="藍"/>
+    <item find=":nelygu:" replace="≠"/>
+    <item find=":4 h:" replace=""/>
+    <item find=":sąvaržėlė:" replace=""/>
+    <item find=":peilis 2:" replace=""/>
+    <item find=":vonia:" replace=""/>
+    <item find=":pita:" replace="陵"/>
+    <item find=":ne 2:" replace=""/>
+    <item find=":Avinas:" replace="♈"/>
+    <item find=":motociklas:" replace=""/>
+    <item find=":žirafa:" replace="漣"/>
+    <item find=":^g:" replace="ᵍ"/>
+    <item find=":kepsnys:" replace="數"/>
+    <item find=":artėjanti delčia:" replace=""/>
+    <item find=":varpelis:" replace=""/>
+    <item find=":pinigai:" replace=""/>
+    <item find=":juokas:" replace=""/>
+    <item find=":bulvė:" replace="凜"/>
+    <item find=":^O:" replace="ᴼ"/>
+    <item find=":sinagoga:" replace=""/>
+    <item find=":delnai:" replace="爐"/>
+    <item find=":_=:" replace="₌"/>
+    <item find=":VA:" replace="↕"/>
+    <item find="akda" replace="kada"/>
+    <item find=":šaukštas:" replace="籠"/>
+    <item find=":spinduliai 2:" replace=""/>
+    <item find=":karis:" replace=""/>
+    <item find=":automobilis 2:" replace=""/>
+    <item find=":baltųjų bokštas:" replace="♖"/>
+    <item find=":varpelis 3:" replace=""/>
+    <item find=":garsiakalbis:" replace=""/>
+    <item find=":žvejyba:" replace=""/>
+    <item find=":neišraiškingas:" replace=""/>
+    <item find=":karstas:" replace="⚰"/>
+    <item find=":rašiklis:" replace=""/>
+    <item find=":barzda:" replace="倫"/>
+    <item find=":žiurkėnas:" replace=""/>
+    <item find=":muzika:" replace=""/>
+    <item find=":žemyn 6:" replace=""/>
+    <item find=":balandis:" replace=""/>
+    <item find=":skruzdėlė:" replace=""/>
+    <item find=":smeigtukas 2:" replace=""/>
+    <item find=":tvarstis:" replace="洛"/>
+    <item find=":vardas:" replace=""/>
+    <item find=":vaikas:" replace="戮"/>
+    <item find=":termometras:" replace=""/>
+    <item find=":pirštas:" replace=""/>
+    <item find=":nėra poaibis:" replace="⊄"/>
+    <item find=":1 h 30 min:" replace=""/>
+    <item find=":tuščia aibė:" replace="∅"/>
+    <item find=":džinsai:" replace=""/>
+    <item find="greai" replace="gerai"/>
+    <item find=":perdirbimas:" replace="♲"/>
+    <item find=":mieguistas:" replace=""/>
+    <item find=":akys širdelės:" replace=""/>
+    <item find=":spinduliai 4:" replace=""/>
+    <item find=":išnaša 9:" replace=""/>
+    <item find=":sankirta:" replace="∩"/>
+    <item find=":raštelis:" replace=""/>
+    <item find=":maža žvaigždė 2:" replace="⭑"/>
+    <item find=":troškinys:" replace=""/>
+    <item find=":kumštis 3:" replace="亂"/>
+    <item find=":3/8:" replace="⅜"/>
+    <item find=":bankas:" replace=""/>
+    <item find=":pašto dėžė:" replace=""/>
+    <item find=":mobilusis 2:" replace=""/>
+    <item find=":boružė:" replace=""/>
+    <item find=":automobilis:" replace=""/>
+    <item find=":rodyklė:" replace=""/>
+    <item find=":_3:" replace="₃"/>
+    <item find=":žirklės 4:" replace="✃"/>
+    <item find=":megafonas 2:" replace=""/>
+    <item find=":^U:" replace="ᵁ"/>
+    <item find=":taksi:" replace=""/>
+    <item find=":tamsūs akiniai 2:" replace=""/>
+    <item find=":jaunatis 2:" replace=""/>
+    <item find=":ne:" replace=""/>
+    <item find=":skylė:" replace=""/>
+    <item find=":sniegas:" replace=""/>
+    <item find="apei" replace="apie"/>
+    <item find=":^t:" replace="ᵗ"/>
+    <item find=":lambda:" replace="λ"/>
+    <item find=":^R:" replace="ᴿ"/>
+    <item find=":žolės riedulys:" replace=""/>
+    <item find=":VD:" replace="↗"/>
+    <item find=":daigas:" replace=""/>
+    <item find=":^-:" replace="⁻"/>
+    <item find="siūsti" replace="siųsti"/>
+    <item find=":diezas:" replace="♯"/>
+    <item find=":^fi:" replace="ᵠ"/>
+    <item find=":kiaulė:" replace=""/>
+    <item find=":bloknotas:" replace=""/>
+    <item find=":^L:" replace="ᴸ"/>
+    <item find=":^V:" replace="ⱽ"/>
+    <item find=":kirtiklis:" replace="⛏"/>
+    <item find=":banglentininkas:" replace=""/>
+    <item find=":neigimas:" replace="¬"/>
+    <item find=":robotas:" replace="烙"/>
+    <item find=":avis:" replace=""/>
+    <item find=":vedybos:" replace="⚭"/>
+    <item find=":stalo tenisas:" replace=""/>
+    <item find=":saulėgrąža:" replace=""/>
+    <item find=":smėlio laikrodis 2:" replace="⏳"/>
+    <item find=":piniginė:" replace=""/>
+    <item find=":Jautis:" replace="♉"/>
+    <item find=":šekelis:" replace="₪"/>
+    <item find=":lietus:" replace="☔"/>
+    <item find=":_9:" replace="₉"/>
+    <item find=":alus 2:" replace=""/>
+    <item find=":Kaaba:" replace=""/>
+    <item find=":pipiras:" replace=""/>
+    <item find=":kaspinas:" replace=""/>
+    <item find=":kontaktų kortelės:" replace=""/>
+    <item find=":svirplys:" replace="聯"/>
+    <item find=":vėmimas:" replace="冷"/>
+    <item find=":pora 4:" replace=""/>
+    <item find=":dama:" replace=""/>
+    <item find=":natos 8:" replace="♫"/>
+    <item find=":kairėn 5:" replace=""/>
+    <item find=":šiukšliadėžė:" replace=""/>
+    <item find=":saulė:" replace="☀"/>
+    <item find=":ausinės:" replace=""/>
+    <item find=":dinozauras:" replace="秊"/>
+    <item find=":katės bučinys:" replace=""/>
+    <item find=":namas:" replace=""/>
+    <item find=":šuo 2:" replace=""/>
+    <item find=":omikron:" replace="ο"/>
+    <item find=":^k:" replace="ᵏ"/>
+    <item find=":sakė:" replace=""/>
+    <item find=":avinas:" replace=""/>
+    <item find=":veržlė ir varžtas:" replace=""/>
+    <item find="dviems" replace="dviem"/>
+    <item find=":_u:" replace="ᵤ"/>
+    <item find=":spyna 3:" replace=""/>
+    <item find=":perdirbtas popierius:" replace="♼"/>
+    <item find=":gerai 3:" replace=""/>
+    <item find=":vonas:" replace="₩"/>
+    <item find=":grafikas žemyn:" replace=""/>
+    <item find=":išdidinti:" replace=""/>
+    <item find=":dešinėn 4:" replace=""/>
+    <item find=":lietus 2:" replace="⛆"/>
+    <item find=":sumažinti:" replace=""/>
+    <item find="pasiųlymuose" replace="pasiūlymuose"/>
+    <item find=":garsas:" replace=""/>
+    <item find=":kaukė:" replace=""/>
+    <item find=":bulius:" replace=""/>
+    <item find=":eta:" replace="η"/>
+    <item find=":avokadas:" replace="陋"/>
+    <item find=":žibanti širdis:" replace=""/>
+    <item find=":plunksna:" replace="✑"/>
+    <item find=":persikas:" replace=""/>
+    <item find=":menora:" replace=""/>
+    <item find=":pašto dėžutė 1:" replace=""/>
+    <item find=":spaustuvas:" replace=""/>
+    <item find=":ožka:" replace=""/>
+    <item find=":sunkvežimis 3:" replace=""/>
+    <item find=":Jeruzalės kryžius:" replace="☩"/>
+    <item find=":^K:" replace="ᴷ"/>
+    <item find=":beta:" replace="β"/>
+    <item find=":apmaudas:" replace="臘"/>
+    <item find=":pirtis:" replace="淪"/>
+    <item find=":varnelė 2:" replace="✔"/>
+    <item find=":žemyn 5:" replace=""/>
+    <item find=":paštas 2:" replace=""/>
+    <item find=":kirpykla:" replace=""/>
+    <item find=":meilė:" replace=""/>
+    <item find=":_h:" replace="ₕ"/>
+    <item find=":^n:" replace="ⁿ"/>
+    <item find=":lapeliai:" replace=""/>
+    <item find="įdėja" replace="idėja"/>
+    <item find=":riestainis:" replace="泌"/>
+    <item find=":kalnas 2:" replace=""/>
+    <item find=":5 h 30 min:" replace=""/>
+    <item find=":stotis:" replace=""/>
+    <item find=":mikrofonas 2:" replace=""/>
+    <item find=":lėkštė:" replace=""/>
+    <item find=":telefonas:" replace="☎"/>
+    <item find=":KD:" replace="↔"/>
+    <item find=":viešbutis 2:" replace=""/>
+    <item find=":braškė:" replace=""/>
+    <item find=":Omikron:" replace="Ο"/>
+    <item find=":kokosas:" replace="便"/>
+    <item find="šeip" replace="šiaip"/>
+    <item find=":^r:" replace="ʳ"/>
+    <item find=":ženklelis 2:" replace="‣"/>
+    <item find=":^E:" replace="ᴱ"/>
+    <item find=":pykinimas:" replace="濫"/>
+    <item find="gryžti" replace="grįžti"/>
+    <item find=":ryžiai:" replace=""/>
+    <item find=":_a:" replace="ₐ"/>
+    <item find=":kulšis:" replace=""/>
+    <item find="ištikrųjų" replace="iš tikrųjų"/>
+    <item find=":baterija:" replace=""/>
+    <item find=":dekoratyvinė širdis:" replace=""/>
+    <item find=":vėjo varpelis:" replace=""/>
+    <item find=":rankinis:" replace="菉"/>
+    <item find=":trikampė liniuotė:" replace=""/>
+    <item find=":kištukas:" replace=""/>
+    <item find=":Adi Šakti:" replace="☬"/>
+    <item find=":_5:" replace="₅"/>
+    <item find=":veidas be burnos:" replace=""/>
+    <item find=":alfa:" replace="α"/>
+    <item find=":dviratininkas:" replace=""/>
+    <item find=":^H:" replace="ᴴ"/>
+    <item find=":skritulys 4:" replace=""/>
+    <item find=":domino:" replace=""/>
+    <item find=":atgaila:" replace=""/>
+    <item find=":juodųjų rikis:" replace="♝"/>
+    <item find=":katė 2:" replace=""/>
+    <item find=":kateris:" replace=""/>
+    <item find=":mažas priklauso:" replace="∊"/>
+    <item find=":palmė:" replace=""/>
+    <item find=":nusivylimas:" replace=""/>
+    <item find=":lokomotyvas:" replace=""/>
+    <item find=":taip 2:" replace=""/>
+    <item find=":policija:" replace=""/>
+    <item find=":kepuraitė:" replace="梨"/>
+    <item find=":Neptūnas:" replace="♆"/>
+    <item find=":skėtis 2:" replace=""/>
+    <item find=":knyga 3:" replace=""/>
+    <item find=":telefono ragelis 3:" replace=""/>
+    <item find=".*(C)" replace="©"/>
+    <item find=":širdis 2:" replace=""/>
+    <item find=":šikšnosparnis:" replace="驪"/>
+    <item find=":?:" replace="❓"/>
+    <item find=":įspėjimas:" replace="☡"/>
+    <item find=":kauliukas 2:" replace="⚁"/>
+    <item find=":ragai:" replace="落"/>
+    <item find=":susižavėjimas:" replace="朗"/>
+    <item find=":buritas:" replace=""/>
+    <item find=":mėsa:" replace=""/>
+    <item find=":^h:" replace="ʰ"/>
+    <item find=":mikroskopas:" replace=""/>
+    <item find=":bemolis:" replace="♭"/>
+    <item find="kažaks" replace="kažkas"/>
+    <item find=":lėktuvas 2:" replace=""/>
+    <item find=":N18:" replace=""/>
+    <item find=":D:" replace="→"/>
+    <item find=":pilis:" replace=""/>
+    <item find=":šypsena 5:" replace="來"/>
+    <item find=":Dzeta:" replace="Ζ"/>
+    <item find=":vėliava:" replace=""/>
+    <item find=":^a:" replace="ᵃ"/>
+    <item find=":ženklelis 3:" replace="◦"/>
+    <item find=":x4:" replace=""/>
+    <item find=":ankas:" replace="☥"/>
+    <item find=":ne piratams:" replace=""/>
+    <item find=":karūna:" replace=""/>
+    <item find=":el. paštas:" replace=""/>
+    <item find="šei" replace="šie"/>
+    <item find=":aulinis batas:" replace=""/>
+    <item find=":skambutis:" replace=""/>
+    <item find=":suknelė:" replace=""/>
+    <item find=":žirgas 2:" replace=""/>
+    <item find=":chi:" replace="χ"/>
+    <item find=":vidutinė žvaigždė:" replace="⭐"/>
+    <item find=":sintezatorius:" replace=""/>
+    <item find=":delta:" replace="δ"/>
+    <item find=":_beta:" replace="ᵦ"/>
+    <item find=":egzistuoja:" replace="∃"/>
+    <item find=":saulėtekis 3:" replace=""/>
+    <item find=":tualetas 2:" replace=""/>
+    <item find=":vynuogės:" replace=""/>
+    <item find=":^0:" replace="⁰"/>
+    <item find=":mažesnis kvadratas 2:" replace="◾"/>
+    <item find=":kukurūzai:" replace=""/>
+    <item find=":praėjimo nėra:" replace="⛔"/>
+    <item find=":Saulė:" replace="☉"/>
+    <item find=":vestuvės:" replace=""/>
+    <item find=":kostiumas:" replace=""/>
+    <item find=":valetas:" replace=""/>
+    <item find=":mojavimas:" replace=""/>
+    <item find=":biorizika:" replace="☣"/>
+    <item find=":pranešimų gaviklis:" replace=""/>
+    <item find=":vėjas:" replace=""/>
+    <item find=":pelė 3:" replace=""/>
+    <item find=":traukinys 3:" replace=""/>
+    <item find="ens" replace="nes"/>
+    <item find=":oda 1:" replace=""/>
+    <item find=":kūdikis:" replace=""/>
+    <item find=":diskelis 2:" replace=""/>
+    <item find=":užrašinė:" replace=""/>
+    <item find=":rėmelis 2:" replace=""/>
+    <item find=":vidutinis kvadratas 2:" replace="◼"/>
+    <item find=":debesuota:" replace=""/>
+    <item find=":spurga:" replace=""/>
+    <item find=":žvaigždė ir pusmėnulis:" replace="☪"/>
+    <item find=":plaktukas ir raktas:" replace=""/>
+    <item find=":kilpa:" replace="➰"/>
+    <item find=":banginis 2:" replace=""/>
+    <item find=":senjoras:" replace="陸"/>
+    <item find=":pelė 2:" replace=""/>
+    <item find=":garsiakalbis 4:" replace=""/>
+    <item find=":viščiukas 2:" replace=""/>
+    <item find=":piktas:" replace=""/>
+    <item find=":stovykla:" replace=""/>
+    <item find=":gėlė:" replace="⚘"/>
+    <item find=":šokėjas:" replace=""/>
+    <item find=":bitė:" replace=""/>
+    <item find=":ateivis 2:" replace=""/>
+    <item find=":_o:" replace="ₒ"/>
+    <item find=":mėnulis 4:" replace=""/>
+    <item find=":turi:" replace="∋"/>
+    <item find=":išnaša 3:" replace=""/>
+    <item find=":brokolis:" replace="復"/>
+    <item find=":triušis:" replace=""/>
+    <item find=":ligatūra ffl:" replace="ﬄ"/>
+    <item find=":puokštė 2:" replace=""/>
+    <item find="įdėjoje" replace="idėjoje"/>
+    <item find=":liūtas:" replace="女"/>
+    <item find=":nėra viršaibis:" replace="⊅"/>
+    <item find=":brangakmenis:" replace=""/>
+    <item find=":3 h:" replace=""/>
+    <item find=":kino projektorius:" replace=""/>
+    <item find=":Jota:" replace="Ι"/>
+    <item find=":1 h:" replace=""/>
+    <item find=":paketas:" replace=""/>
+    <item find=":---:" replace="—"/>
+    <item find=":vynai 2:" replace="♤"/>
+    <item find=":^3:" replace="³"/>
+    <item find="t.y." replace="t. y."/>
+    <item find=":tornadas:" replace=""/>
+    <item find=":sudaužyta širdis:" replace=""/>
+    <item find=":gaisrinė 2:" replace=""/>
+    <item find=":velniūkštis:" replace=""/>
+    <item find=":1/8:" replace="⅛"/>
+    <item find=":tiltas:" replace=""/>
+    <item find=":Moai:" replace=""/>
+    <item find=":rašiklis 2:" replace=""/>
+    <item find=":aštuntinė pauzė:" replace="턾"/>
+    <item find=":pergalė:" replace="✌"/>
+    <item find=":krokodilas:" replace=""/>
+    <item find=":^+:" replace="⁺"/>
+    <item find=":_+:" replace="₊"/>
+    <item find=":slidininkas:" replace="⛷"/>
+    <item find=":Liūtas:" replace="♌"/>
+    <item find=":mažesnis kvadratas:" replace="◽"/>
+    <item find=":manipuliatorius:" replace=""/>
+    <item find=":ramus:" replace=""/>
+    <item find=":varnelė 4:" replace=""/>
+    <item find=":faksas 2:" replace=""/>
+    <item find=":bomba:" replace=""/>
+    <item find=":saulėlydis:" replace=""/>
+    <item find=":lūpdažis:" replace=""/>
+    <item find=":keltuvas 2:" replace=""/>
+    <item find=":valiutos:" replace=""/>
+    <item find=":Kaducėjus:" replace="⚚"/>
+    <item find=":lašas 2:" replace=""/>
+    <item find=":md diskas:" replace=""/>
+    <item find=":žuvis:" replace=""/>
+    <item find=":atomas:" replace="⚛"/>
+    <item find=":stop 2:" replace="⏹"/>
+    <item find=":sniego senis:" replace="☃"/>
+    <item find=":laivas:" replace=""/>
+    <item find=":tyla:" replace="狼"/>
+    <item find=":nedalija:" replace="∤"/>
+    <item find=":žvaigždė 3:" replace=""/>
+    <item find=":kryžiai:" replace="♣"/>
+    <item find=":pagyvenęs vyras:" replace=""/>
+    <item find=":dėklas:" replace=""/>
+    <item find=":baltųjų karalius:" replace="♔"/>
+    <item find=":lapelis:" replace=""/>
+    <item find=":žemyn:" replace="☟"/>
+    <item find=":naktis:" replace=""/>
+    <item find=":Uranas:" replace="♅"/>
+    <item find=":Ksi:" replace="Ξ"/>
+    <item find=":ananasas:" replace=""/>
+    <item find=":epsilon:" replace="ε"/>
+    <item find=":atvykimas:" replace=""/>
+    <item find=":paspirtukas:" replace=""/>
+    <item find=":lietinga:" replace=""/>
+    <item find=":^jota:" replace="ᶥ"/>
+    <item find=":beždžionė:" replace=""/>
+    <item find=":ligatūra fl:" replace="ﬂ"/>
+    <item find=":rėmelis:" replace=""/>
+    <item find=":mergaitė:" replace=""/>
+    <item find=":krumpliaratis:" replace="⚙"/>
+    <item find=":nata 8:" replace="♪"/>
+    <item find=":1/2:" replace="½"/>
+    <item find=":kriketas:" replace=""/>
+    <item find=":žemyn 4:" replace=""/>
+    <item find=":ūkanota:" replace=""/>
+    <item find=":raktas:" replace=""/>
+    <item find=":kvailystė:" replace="浪"/>
+    <item find=":--:" replace="–"/>
+    <item find=":troleibusas:" replace=""/>
+    <item find=":ugnikalnis:" replace=""/>
+    <item find=":tigras:" replace=""/>
+    <item find=":knyga:" replace=""/>
+    <item find=":sielvartas:" replace=""/>
+    <item find=":VD2:" replace="⇗"/>
+    <item find=":10 h:" replace=""/>
+    <item find=":lapas:" replace=""/>
+    <item find=":pirkinių vežimėlis:" replace=""/>
+    <item find=":vibracija:" replace=""/>
+    <item find=":magnetofonas:" replace=""/>
+    <item find=":viščiukas:" replace=""/>
+    <item find=":kalbos išnaša:" replace=""/>
+    <item find=":^m:" replace="ᵐ"/>
+    <item find=":kumštis 4:" replace="卵"/>
+    <item find=":bulvytės:" replace=""/>
+    <item find=":oda 2:" replace=""/>
+    <item find=":1/4:" replace="¼"/>
+    <item find=":Delta:" replace="Δ"/>
+    <item find=":kranas:" replace=""/>
+    <item find=":valgomosios lazdelės:" replace="異"/>
+    <item find=":palydovas:" replace=""/>
+    <item find=":žemyn galva:" replace=""/>
+    <item find=":dubuo:" replace=""/>
+    <item find=":kamera:" replace=""/>
+    <item find=":erelis:" replace="礪"/>
+    <item find=":7 h 30 min:" replace=""/>
+    <item find="i" replace="į"/>
+    <item find=":šalikas:" replace="泥"/>
+    <item find=":neegzistuoja:" replace="∄"/>
+    <item find=":pašto dėžutė 2:" replace=""/>
+    <item find=":mokykla:" replace=""/>
+    <item find=":Žuvys:" replace="♓"/>
+    <item find=":šeima:" replace=""/>
+    <item find=":sniego senis 2:" replace="⛄"/>
+    <item find=":vyšnios:" replace=""/>
+    <item find=":žaibas 3:" replace="☇"/>
+    <item find=":kryžiai 2:" replace="♧"/>
+    <item find=":zebras:" replace="煉"/>
+    <item find=":lupa:" replace=""/>
+    <item find=":Tau:" replace="Τ"/>
+    <item find=":grafikas aukštyn:" replace=""/>
+    <item find=":ligoninė:" replace=""/>
+    <item find=":_-:" replace="₋"/>
+    <item find=":^):" replace="⁾"/>
+    <item find=":žirklės 3:" replace="✁"/>
+    <item find=":skritulys:" replace="○"/>
+    <item find="geriua" replace="geriau"/>
+    <item find=":kriaušė:" replace=""/>
+    <item find=":gūsis:" replace=""/>
+    <item find=":natos 16:" replace="♬"/>
+    <item find=":batatas:" replace=""/>
+    <item find=":plaštaka 3:" replace=""/>
+    <item find=":VK2:" replace="⇖"/>
+    <item find=":bananas:" replace=""/>
+    <item find=":sunkvežimis 2:" replace=""/>
+    <item find=":kompiuteris:" replace=""/>
+    <item find=":dzeta:" replace="ζ"/>
+    <item find=":ausis:" replace=""/>
+    <item find=":diskelis 3:" replace=""/>
+    <item find=":driežas:" replace="年"/>
+    <item find=":moterų ženklas:" replace=""/>
+    <item find=":išsekimas:" replace=""/>
+    <item find=":šypsena 2:" replace="☻"/>
+    <item find=":spausdintuvas 2:" replace=""/>
+    <item find=":veržliaraktis:" replace=""/>
+    <item find=":raudonis 2:" replace=""/>
+    <item find=":vėliavos:" replace=""/>
+    <item find=":tulpė:" replace=""/>
+    <item find=":plunksna 2:" replace="✒"/>
+    <item find=":dvd:" replace=""/>
+    <item find=":dovana:" replace=""/>
+    <item find=":poaibis:" replace="⊂"/>
+    <item find=":pusinė pauzė:" replace="턼"/>
+    <item find=":balionas:" replace=""/>
+    <item find=":mėnulis 2:" replace="☾"/>
+    <item find=":šypsenėlė:" replace=""/>
+    <item find=":VA2:" replace="⇕"/>
+    <item find=":šaknis:" replace="√"/>
+    <item find=":AK2:" replace="⇙"/>
+    <item find=":tuščias lapas:" replace=""/>
+    <item find=":keltų kryžius:" replace=""/>
+    <item find=":išnaša 8:" replace=""/>
+    <item find=":pilnatis:" replace=""/>
+    <item find=":grandinės:" replace="⛓"/>
+    <item find=":debesis:" replace="☁"/>
+    <item find=":jena 2:" replace=""/>
+    <item find=":taip:" replace=""/>
+    <item find=":maža žvaigždė:" replace="⭒"/>
+    <item find="agl" replace="gal"/>
+    <item find=":6 h 30 min:" replace=""/>
+    <item find=":višta:" replace=""/>
+    <item find=":kaktusas:" replace=""/>
+    <item find=":bučinys 4:" replace=""/>
+    <item find=":rupija:" replace="₹"/>
+    <item find=":krištolo rutulys:" replace=""/>
+    <item find=":autobusiukas:" replace=""/>
+    <item find=":kampo minutė:" replace="′"/>
+    <item find=":100:" replace=""/>
+    <item find=":amerikietiškas futbolas:" replace=""/>
+    <item find=":audra:" replace=""/>
+    <item find="įdėjų" replace="idėjų"/>
+    <item find=":Mergelė:" replace="♍"/>
+    <item find=":pušis:" replace=""/>
+    <item find=":žiedas:" replace=""/>
+    <item find=":lėktuvas 6:" replace=""/>
+    <item find=":žvaigždė 4:" replace=""/>
+    <item find=":_1:" replace="₁"/>
+    <item find=":Pi:" replace="Π"/>
+    <item find=":+-:" replace="±"/>
+    <item find=":statinė:" replace=""/>
+    <item find=":tv:" replace=""/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find=":^alfa:" replace="ᵅ"/>
+    <item find=":skėtis 3:" replace="⛱"/>
+    <item find=":aplankas 4:" replace=""/>
+    <item find=":tamsūs akiniai:" replace=""/>
+    <item find=":obuolys:" replace=""/>
+    <item find=":dykuma:" replace=""/>
+    <item find=":stulpelinė diagrama:" replace=""/>
+    <item find=":ksi:" replace="ξ"/>
+    <item find=":telefonas 5:" replace=""/>
+    <item find=":popieriaus lapas:" replace=""/>
+    <item find=":ro:" replace="ρ"/>
+    <item find=":miegas:" replace=""/>
+    <item find=":nepasitenkinimas:" replace=""/>
+    <item find=":Ipsilon:" replace="Υ"/>
+    <item find=":svaras:" replace="£"/>
+    <item find=":delfinas:" replace=""/>
+    <item find=":popieriaus lapas 3:" replace=""/>
+    <item find=":^y:" replace="ʸ"/>
+    <item find=":kryžius 2:" replace="‡"/>
+    <item find=":sala:" replace=""/>
+    <item find=":bengališka ugnelė:" replace=""/>
+    <item find=":karštos versmės:" replace="♨"/>
+    <item find=":lenktynės:" replace=""/>
+    <item find=":akademinė kepurė:" replace=""/>
+    <item find=":penkiakampis:" replace="⬠"/>
+    <item find=":žvakė:" replace=""/>
+    <item find=":fontanas:" replace="⛲"/>
+    <item find=":būgnai 2:" replace="♢"/>
+    <item find=":didelis apskritimas:" replace="◯"/>
+    <item find=":verksmas:" replace=""/>
+    <item find=":pieštukas:" replace="✎"/>
+    <item find=":dalija:" replace="∣"/>
+    <item find=":šuo:" replace=""/>
+    <item find=":vairasvirtė:" replace=""/>
+    <item find=":kalendorius 3:" replace=""/>
+    <item find="įdėją" replace="idėją"/>
+    <item find=":knyga 2:" replace=""/>
+    <item find=":Saturnas:" replace="♄"/>
+    <item find=":smuiko raktas:" replace="턞"/>
+    <item find=":langelis 5:" replace=""/>
+    <item find=":pėstiesiems draudžiama:" replace=""/>
+    <item find=":kauliukas 4:" replace="⚃"/>
+    <item find=":Maltos kryžius:" replace="✠"/>
+    <item find=":pelėda:" replace="黎"/>
+    <item find=":knyslė:" replace=""/>
+    <item find=":snaigė:" replace="❄"/>
+    <item find=":laikraštis 2:" replace=""/>
+    <item find=":9 h:" replace=""/>
+    <item find=":^b:" replace="ᵇ"/>
+    <item find=":žemės riešutai:" replace="樂"/>
+    <item find=":^s:" replace="ˢ"/>
+    <item find=":šešioliktinė nata:" replace="텡"/>
+    <item find=":spyna:" replace=""/>
+    <item find=":susiraukusi katė:" replace=""/>
+    <item find=":užtraukta burna:" replace="蘿"/>
+    <item find=":kanoja:" replace=""/>
+    <item find=":teptukas:" replace=""/>
+    <item find=":draudžiamasis ženklas:" replace=""/>
+    <item find=":bilietas 2:" replace=""/>
+    <item find=":švirkštas:" replace=""/>
+    <item find=":futbolo vartai:" replace="聾"/>
+    <item find=":lokys:" replace=""/>
+    <item find=":ilgalaikis popierius:" replace="♾"/>
+    <item find=":kremas:" replace=""/>
+    <item find=":spausdintuvas:" replace=""/>
+    <item find=":Vandenis:" replace="♒"/>
+    <item find=":^w:" replace="ʷ"/>
+    <item find=":turbanas:" replace=""/>
+    <item find=":šriftas:" replace=""/>
+    <item find=":tuščias lapelis užrašams:" replace=""/>
+    <item find=":dešinėn:" replace="☞"/>
+    <item find=":_0:" replace="₀"/>
+    <item find=":nešiukšlinti:" replace=""/>
+    <item find=":autobusas:" replace=""/>
+    <item find=":tau:" replace="τ"/>
+    <item find=":KD2:" replace="⇔"/>
+    <item find=":pora:" replace=""/>
+    <item find=":pelė:" replace=""/>
+    <item find=":^o:" replace="ᵒ"/>
+    <item find="bnet" replace="bent"/>
+    <item find=":AK:" replace="↙"/>
+    <item find=":maistas išsinešimui:" replace="率"/>
+    <item find=":žirgas:" replace=""/>
+    <item find=":lėktuvas 3:" replace=""/>
+    <item find="tasi" replace="tarsi"/>
+    <item find=":raketa:" replace=""/>
+    <item find=":teta:" replace="θ"/>
+    <item find=":citrina:" replace=""/>
+    <item find=":baltųjų žirgas:" replace="♘"/>
+    <item find=":^M:" replace="ᴹ"/>
+    <item find=":kaspinas 2:" replace=""/>
+    <item find=":!:" replace="❕"/>
+    <item find="pasiųlymus" replace="pasiūlymus"/>
+    <item find=":Kalėdų Senelis:" replace=""/>
+    <item find=":pyktis:" replace=""/>
+    <item find=":kometa:" replace="☄"/>
+    <item find=":begalybė:" replace="∞"/>
+    <item find=":keltas:" replace="⛴"/>
+    <item find=":lygiagretainis:" replace="▱"/>
+    <item find=":K2:" replace="⇐"/>
+    <item find=":aštuonkojis:" replace=""/>
+    <item find=":^J:" replace="ᴶ"/>
+    <item find=":nieko negirdžiu:" replace=""/>
+    <item find=":kalendorius 2:" replace=""/>
+    <item find=":^1:" replace="¹"/>
+    <item find=":AD:" replace="↘"/>
+    <item find=":joga:" replace="律"/>
+    <item find=":^P:" replace="ᴾ"/>
+    <item find=":ženklelis:" replace="•"/>
+    <item find=":^l:" replace="ˡ"/>
+    <item find=":Plutonas:" replace="♇"/>
+    <item find=":gyvatė:" replace=""/>
+    <item find=":aplankas 5:" replace=""/>
+    <item find=":liežuvis 3:" replace=""/>
+    <item find="įdėjas" replace="idėjas"/>
+    <item find=":tualetas:" replace=""/>
+    <item find=":ryškumas:" replace=""/>
+    <item find=":_(:" replace="₍"/>
+    <item find=":bronzos medalis:" replace="雷"/>
+    <item find=":radioaktyvumas:" replace="☢"/>
+    <item find=":paštas:" replace=""/>
+    <item find=":karalius:" replace=""/>
+    <item find=":Šaulys:" replace="♐"/>
+    <item find=":?2:" replace="❔"/>
+    <item find=":gėlė 2:" replace="鹿"/>
+    <item find=":-:" replace="−"/>
+    <item find=":sidabro medalis:" replace="賂"/>
+    <item find=":^f:" replace="ᶠ"/>
+    <item find="šoi" replace="šio"/>
+    <item find=":krevetė:" replace="戀"/>
+    <item find=":paukštis:" replace=""/>
+    <item find=":juokas su prakaitu:" replace=""/>
+    <item find=":baklažanas:" replace=""/>
+    <item find=":Saulė 2:" replace="☼"/>
+    <item find=":pačiūža:" replace="⛸"/>
+    <item find=":kūjis ir kirtiklis:" replace="⚒"/>
+    <item find=":elipsė:" replace="⬭"/>
+    <item find=":distiliatorius:" replace="⚗"/>
+    <item find=":žymelė:" replace=""/>
+    <item find=":doleris 2:" replace=""/>
+    <item find=":^i:" replace="ⁱ"/>
+    <item find=":princas:" replace="老"/>
+    <item find=":autoriaus teisės:" replace="©"/>
+    <item find=":trišakis:" replace=""/>
+    <item find=":arba:" replace="∨"/>
+    <item find=":salotos:" replace="綾"/>
+    <item find=":sofa:" replace=""/>
+    <item find=":manikiūras:" replace=""/>
+    <item find=":antis:" replace="閭"/>
+    <item find=":palengvėjimas:" replace=""/>
+    <item find=":akys:" replace=""/>
+    <item find=":keiksmai:" replace="郎"/>
+    <item find=":Ožiaragis:" replace="♑"/>
+    <item find=":ateivis:" replace=""/>
+    <item find=":prakaito lašai:" replace=""/>
+    <item find=":mygtukas 2:" replace=""/>
+    <item find=":didelis kvadratas 2:" replace="⬛"/>
+    <item find=":linksmieji kalneliai:" replace=""/>
+    <item find=":blynai:" replace="丹"/>
+    <item find=":tualetas 3:" replace=""/>
+    <item find=":bučinys 2:" replace=""/>
+    <item find=":lašas:" replace=""/>
+    <item find=":kampas:" replace="∠"/>
+    <item find=":plaštaka:" replace="✋"/>
+    <item find=":^d:" replace="ᵈ"/>
+    <item find=":džokeris:" replace=""/>
+    <item find=":ugnis:" replace=""/>
+    <item find=":radijas:" replace=""/>
+    <item find=":žolė:" replace=""/>
+    <item find=":mečetė:" replace=""/>
+    <item find="akd" replace="kad"/>
+    <item find=":vienaragis:" replace="濾"/>
+    <item find=":auganti širdis:" replace=""/>
+    <item find=":aukšta įtampa:" replace="⚡"/>
+    <item find=":kompiuteris 2:" replace=""/>
+    <item find=":drabužiai:" replace=""/>
+    <item find=":paveikslas:" replace=""/>
+    <item find=":pesas:" replace="₱"/>
+    <item find=":juodųjų karalius:" replace="♚"/>
+    <item find=":cirkas:" replace=""/>
+    <item find=":Japonija:" replace=""/>
+    <item find=":gimtadienis:" replace=""/>
+    <item find=":šokas:" replace="勞"/>
+    <item find=":muitinė:" replace=""/>
+    <item find=":delninukė:" replace=""/>
+    <item find=":mėnulis:" replace="☽"/>
+    <item find=":12 h 30 min:" replace=""/>
+    <item find=":mažas kvadratas 2:" replace="▪"/>
+    <item find=":trimitas:" replace=""/>
+    <item find=":V:" replace="↑"/>
+    <item find=":kava:" replace="☕"/>
+    <item find=":pėstysis:" replace=""/>
+    <item find=":telefono ragelis 2:" replace=""/>
+    <item find=":bagažas:" replace=""/>
+    <item find="vsio" replace="viso"/>
+    <item find=":bekaras:" replace="♮"/>
+    <item find=":išnaša 10:" replace=""/>
+    <item find=":statusis trikampis:" replace="⊿"/>
+    <item find=":koala:" replace=""/>
+    <item find=":kupranugaris 2:" replace=""/>
+    <item find=":katės šypsena:" replace=""/>
+    <item find=":kalnas:" replace="⛰"/>
+    <item find=",," replace="„"/>
+    <item find=":aukštyn 4:" replace=""/>
+    <item find=":integralas:" replace="∫"/>
+    <item find=":_k:" replace="ₖ"/>
+    <item find=":krepšinis:" replace=""/>
+    <item find=":pusinė nata:" replace="텞"/>
+    <item find=":A2:" replace="⇓"/>
+    <item find=":katės džiaugsmas:" replace=""/>
+    <item find=":mobilusis:" replace=""/>
+    <item find=":_ro:" replace="ᵨ"/>
+    <item find=":Fudzijama:" replace=""/>
+    <item find=":pieštukas 4:" replace=""/>
+    <item find="siųlyti" replace="siūlyti"/>
+    <item find=":juoda širdis:" replace=""/>
+    <item find=":bankomatas:" replace=""/>
+    <item find=":fotoaparatas:" replace=""/>
+    <item find=":saulėtekis 2:" replace=""/>
+    <item find=":juodųjų valdovė:" replace="♛"/>
+    <item find=":^v:" replace="ᵛ"/>
+    <item find=":karuselė:" replace=""/>
+    <item find=":lotyniškas kryžius:" replace="✝"/>
+    <item find=":aukso medalis:" replace="磊"/>
+    <item find=":doleris:" replace=""/>
+    <item find="pasiųlymu" replace="pasiūlymu"/>
+    <item find=":pelė 5:" replace=""/>
+    <item find=":gaisrinė:" replace=""/>
+    <item find=":kairėn 2:" replace=""/>
+    <item find=":juodųjų žirgas:" replace="♞"/>
+    <item find=":^(:" replace="⁽"/>
+    <item find=":megafonas:" replace=""/>
+    <item find=":magas:" replace="慄"/>
+    <item find=":perbrauktas dviratis:" replace=""/>
+    <item find=":debesuota 2:" replace=""/>
+    <item find=":švyturėlis:" replace=""/>
+    <item find=":marškinėliai 2:" replace=""/>
+    <item find=":artėjanti pilnatis:" replace=""/>
+    <item find=":Iranas:" replace="☫"/>
+    <item find=":stačiatikių kryžius:" replace="☦"/>
+    <item find=":lėlės:" replace=""/>
+    <item find=":pingvinas:" replace=""/>
+    <item find=":viščiukas 3:" replace=""/>
+    <item find=":pistoletas:" replace=""/>
+    <item find=":akmenslydis:" replace="樓"/>
+    <item find=":balta gėlė:" replace=""/>
+    <item find=":kiaulė 2:" replace=""/>
+    <item find=":taurė 2:" replace="弄"/>
+    <item find=":laivas 2:" replace=""/>
+    <item find=":langelis 4:" replace=""/>
+    <item find=":saulė 2:" replace=""/>
+    <item find=":vaizdo žaidimas:" replace=""/>
+    <item find=":nieko nesakau:" replace=""/>
+    <item find=":mygtukas:" replace=""/>
+    <item find=":penklinė:" replace=""/>
+    <item find="įdėjose" replace="idėjose"/>
+    <item find=":_t:" replace="ₜ"/>
+    <item find=":telefonai draudžiami:" replace=""/>
+    <item find=":stačiakampis 2:" replace="▬"/>
+    <item find=":liežuvis 2:" replace=""/>
+    <item find=":_chi:" replace="ᵪ"/>
+    <item find=":šaipymasis 2:" replace=""/>
+    <item find=":urna:" replace="⚱"/>
+    <item find=":širdis su kaspinu:" replace=""/>
+    <item find=":^u:" replace="ᵘ"/>
+    <item find=":kaka:" replace=""/>
+    <item find=":nustebęs:" replace=""/>
+    <item find=":marškinėliai:" replace=""/>
+    <item find=":aštuntinės natos:" replace=""/>
+    <item find=":pilnoji pauzė:" replace="턻"/>
+    <item find=":^8:" replace="⁸"/>
+    <item find=":gyvatnešis:" replace="⛎"/>
+    <item find=":^teta:" replace="ᶿ"/>
+    <item find=":skritulys 2:" replace="●"/>
+    <item find="kolidorius" replace="koridorius"/>
+    <item find=":knygos:" replace=""/>
+    <item find="pasiųlymais" replace="pasiūlymais"/>
+    <item find=":išnaša 2:" replace=""/>
+    <item find=":tinklas:" replace=""/>
+    <item find=":smėlio laikrodis:" replace="⌛"/>
+    <item find=":akis:" replace=""/>
+    <item find=":vokas 8:" replace=""/>
+    <item find=":apžvalgos ratas:" replace=""/>
+    <item find=":rozetė 2:" replace=""/>
+    <item find=":dokumentas 2:" replace=""/>
+    <item find=":skydas:" replace=""/>
+    <item find=":Marsas:" replace="♂"/>
+    <item find=":plaštaka 4:" replace="駱"/>
+    <item find=":^B:" replace="ᴮ"/>
+    <item find=":akcijų grafikas:" replace=""/>
+    <item find=":saulėtekis:" replace=""/>
+    <item find=":dviratis:" replace=""/>
+    <item find=":ledai:" replace=""/>
+    <item find=":draudžiama:" replace=""/>
+    <item find=":^e:" replace="ᵉ"/>
+    <item find=":graikiškas kryžius:" replace="✚"/>
+    <item find=":ekranas:" replace=""/>
+    <item find=":nelygiagretu:" replace="∦"/>
+    <item find=":artėjantis priešpilnis:" replace=""/>
+    <item find=":vokas:" replace="✉"/>
+    <item find=":didelis kvadratas:" replace="⬜"/>
+    <item find=":laipsnis:" replace="°"/>
+    <item find=":kumštis:" replace="✊"/>
+    <item find=":žemyn 3:" replace=""/>
+    <item find=":golfas 2:" replace="⛳"/>
+    <item find="darugas" replace="draugas"/>
+    <item find=":pianinas:" replace=""/>
+    <item find=":vandenynas:" replace=""/>
+    <item find=":batas:" replace=""/>
+    <item find=":rašymas:" replace="✍"/>
+    <item find=":boksas:" replace="壘"/>
+    <item find=":paletė:" replace=""/>
+    <item find=":Kapa:" replace="Κ"/>
+    <item find=":automobilis 3:" replace=""/>
+    <item find=":rombas:" replace="◊"/>
+    <item find=":katės akys širdelės:" replace=""/>
+    <item find=":neturi:" replace="∌"/>
+    <item find=":kapa:" replace="κ"/>
+    <item find=":šaknis 3:" replace="∛"/>
+    <item find=":aukštyn 3:" replace=""/>
+    <item find=":standusis diskas:" replace=""/>
+    <item find=":centas:" replace="¢"/>
+    <item find=":trikampis:" replace="△"/>
+    <item find="&lt;--" replace="←"/>
+    <item find=":monoklis:" replace="類"/>
+    <item find=":mažas kvadratas:" replace="▫"/>
+    <item find=":kalmaras:" replace="撚"/>
+    <item find=":^W:" replace="ᵂ"/>
+    <item find=":vynai:" replace="♠"/>
+    <item find=":biuras:" replace=""/>
+    <item find=":baltųjų valdovė:" replace="♕"/>
+    <item find=":žuvis 3:" replace=""/>
+    <item find=":Ro:" replace="Ρ"/>
+    <item find=":tušti lapeliai:" replace=""/>
+    <item find=":nieko nematau:" replace=""/>
+    <item find=":pyragas:" replace="不"/>
+    <item find="pasiųlymą" replace="pasiūlymą"/>
+    <item find=":^c:" replace="ᶜ"/>
+    <item find=":Vėžys:" replace="♋"/>
+    <item find=":registruota:" replace="®"/>
+    <item find=":sargybinis:" replace=""/>
+    <item find=":agurkas:" replace="勒"/>
+    <item find=":2/3:" replace="⅔"/>
+    <item find=":lapė:" replace="力"/>
+    <item find=":metro:" replace=""/>
+    <item find=":malda:" replace=""/>
+    <item find=":valdikliai:" replace=""/>
+    <item find=":smuikas:" replace=""/>
+    <item find=":3 h 30 min:" replace=""/>
+    <item find=":kaubojus:" replace="鸞"/>
+    <item find=":lengvasis geležinkelis:" replace=""/>
+    <item find="blogiua" replace="blogiau"/>
+    <item find=":bučinys:" replace=""/>
+    <item find=":raktas 2:" replace=""/>
+    <item find=":vokas 4:" replace=""/>
+    <item find=":tako:" replace=""/>
+    <item find=":omega:" replace="ω"/>
+    <item find=":meilumas:" replace=""/>
+    <item find=":gaublys 3:" replace=""/>
+    <item find=":lygiagretu:" replace="∥"/>
+    <item find=":bikinis:" replace=""/>
+    <item find=":golfas:" replace=""/>
+    <item find=":faksas:" replace=""/>
+    <item find=":vampyras:" replace="率"/>
+    <item find=":pabaisa:" replace=""/>
+    <item find=":^p:" replace="ᵖ"/>
+    <item find=":tramvajus 2:" replace=""/>
+    <item find=":Turkijos lira:" replace="₺"/>
+    <item find=":paliktas bagažas:" replace=""/>
+    <item find=":policininkas:" replace=""/>
+    <item find=":rūkas:" replace=""/>
+    <item find=":geriamas vanduo:" replace=""/>
+    <item find=":abc:" replace=""/>
+    <item find=":darbininkas:" replace=""/>
+    <item find=":viešbutis:" replace=""/>
+    <item find=":keltuvas:" replace=""/>
+    <item find=":kepta krevetė:" replace=""/>
+    <item find=":kalendorius:" replace=""/>
+    <item find=":garsiakalbis 2:" replace=""/>
+    <item find=":optinis diskas:" replace=""/>
+    <item find=":lankas:" replace=""/>
+    <item find=":nieko gero:" replace=""/>
+    <item find=":ketvirtinė nata:" replace="텟"/>
+    <item find=":stačiakampis:" replace="▭"/>
+    <item find=":bėgikas:" replace=""/>
+    <item find=":ežys:" replace="璉"/>
+    <item find=":traukinys:" replace=""/>
+    <item find=":lapai:" replace=""/>
+    <item find=":vakarėlis:" replace=""/>
+    <item find=":suma:" replace="∑"/>
+    <item find=":vagonas:" replace=""/>
+    <item find=":drugelis:" replace="曆"/>
+    <item find=":masažas:" replace=""/>
+    <item find=":suglumimas:" replace=""/>
+    <item find=":signalo stiprumas:" replace=""/>
+    <item find=":ledinukas:" replace=""/>
+    <item find=":kauliukas 1:" replace="⚀"/>
+    <item find=":mėnulis 3:" replace=""/>
+    <item find=":valiutos kurso grafikas:" replace=""/>
+    <item find=":valtis:" replace=""/>
+    <item find=":Laisvės statula:" replace=""/>
+    <item find=":dvi širdys:" replace=""/>
+    <item find=":pauzė:" replace="⏸"/>
+    <item find=":A:" replace="↓"/>
+    <item find=":kauliukas 5:" replace="⚄"/>
+    <item find=":Lotaringijos kryžius:" replace="☨"/>
+    <item find=":kalnų geležinkelis:" replace=""/>
+    <item find=":šokoladas:" replace=""/>
+    <item find=":lėktuvas:" replace="✈"/>
+    <item find=":batas 2:" replace=""/>
+    <item find=":japoniškas vėrinukas:" replace=""/>
+    <item find=":nata 4:" replace="♩"/>
+    <item find=":katės verkimas:" replace=""/>
+    <item find=":kaklaraištis:" replace=""/>
+    <item find=":Lambda:" replace="Λ"/>
+    <item find=":slystantis automobilis:" replace="⛐"/>
+    <item find=":tanabata:" replace=""/>
+    <item find=":popieriaus lapas 4:" replace=""/>
+    <item find=":paplūdimys:" replace=""/>
+    <item find=":ryklys:" replace="麗"/>
+    <item find=":pašto dėžutė 4:" replace=""/>
+    <item find=":_4:" replace="₄"/>
+    <item find=":žuvies suktinukas:" replace=""/>
+    <item find=":trikampis 3:" replace=""/>
+    <item find=":elnias:" replace="歷"/>
+    <item find=":gėlės žiedas 2:" replace=""/>
+    <item find=":antena:" replace=""/>
+    <item find=":lapelis užrašams:" replace=""/>
+    <item find=":Mi:" replace="Μ"/>
+    <item find=":2 h:" replace=""/>
+    <item find=":apkabinimas:" replace="珞"/>
+    <item find=":^6:" replace="⁶"/>
+    <item find=":telefonas 4:" replace=""/>
+    <item find=":priešpilnis:" replace=""/>
+    <item find=":užrašinė 2:" replace=""/>
+    <item find=":vokas 2:" replace=""/>
+    <item find=":bazinis punktas:" replace="‱"/>
+    <item find=":mėsainis:" replace=""/>
+    <item find=":šviesoforas 2:" replace=""/>
+    <item find=":kokteilis:" replace=""/>
+    <item find=":apsvaigęs:" replace=""/>
+    <item find=":nso:" replace=""/>
+    <item find=":kaštonas:" replace=""/>
+    <item find=":maistas:" replace="菱"/>
+    <item find="&lt;-&gt;" replace="↔"/>
+    <item find=":kreidelė:" replace=""/>
+    <item find=":_l:" replace="ₗ"/>
+    <item find=":gairelė:" replace=""/>
+    <item find=":vandensvydis:" replace="綠"/>
+    <item find=":kiekvienas:" replace="∀"/>
+    <item find=":jota:" replace="ι"/>
+    <item find=":gėrimas 2:" replace=""/>
+    <item find=":vėžlys:" replace=""/>
+    <item find=":pentagrama:" replace="⛤"/>
+    <item find=":dvigubas bemolis:" replace="턫"/>
+    <item find=":ketvirtinė pauzė:" replace="턽"/>
+    <item find=":vartomos akys:" replace=""/>
+    <item find=":K:" replace="←"/>
+    <item find=":gerai:" replace=""/>
+    <item find=":Merkurijus:" replace="☿"/>
+    <item find=":antakis:" replace="廊"/>
+    <item find=":ryškumas 2:" replace=""/>
+    <item find=":kupranugaris:" replace=""/>
+    <item find=":vikšras:" replace=""/>
+    <item find="pasiųlymui" replace="pasiūlymui"/>
+    <item find=":susiraukimas 2:" replace=""/>
+    <item find=":šešiakampis:" replace="⬡"/>
+    <item find=":taksi 2:" replace=""/>
+    <item find=":dalinė:" replace="∂"/>
+    <item find=":modemas:" replace=""/>
+    <item find=":gaidys:" replace=""/>
+    <item find=":dramblys:" replace=""/>
+    <item find=":pasų kontrolė:" replace=""/>
+    <item find=":žiurkė:" replace=""/>
+    <item find=":rožinis:" replace=""/>
+    <item find=":žaibas:" replace=""/>
+    <item find=":nuodai:" replace="☠"/>
+    <item find=":vežimėlis:" replace="♿"/>
+    <item find=":Alfa:" replace="Α"/>
+    <item find=":ritinys:" replace=""/>
+    <item find=":^9:" replace="⁹"/>
+    <item find=":susiraukimas:" replace=""/>
+    <item find="ati" replace="tai"/>
+    <item find=":juodųjų bokštas:" replace="♜"/>
+    <item find=":taika:" replace="☮"/>
+    <item find=":langelis 6:" replace=""/>
+    <item find=":pinigai 3:" replace="螺"/>
+    <item find=":restoranas:" replace=""/>
+    <item find=":varpelis 2:" replace=""/>
+    <item find=":banginis:" replace=""/>
+    <item find=":^j:" replace="ʲ"/>
+    <item find=":^z:" replace="ᶻ"/>
+    <item find=":^2:" replace="²"/>
+    <item find=":rožė:" replace=""/>
+    <item find=":ryžių paplotėlis:" replace=""/>
+    <item find=":baimė:" replace=""/>
+    <item find="įdėjos" replace="idėjos"/>
+    <item find=":vaiduoklis:" replace=""/>
+    <item find=":paltas:" replace="痢"/>
+    <item find=":žirgas 3:" replace=""/>
+    <item find=":1/3:" replace="⅓"/>
+    <item find=":^I:" replace="ᴵ"/>
+    <item find=":meilė 2:" replace="蘭"/>
+    <item find="--&gt;" replace="→"/>
+    <item find="beabejo" replace="be abejo"/>
+    <item find="pasiųlymas" replace="pasiūlymas"/>
+    <item find=":kardai:" replace="⚔"/>
+    <item find=".*-&gt;.*" replace="→"/>
+    <item find=":katės pasitenkinimas:" replace=""/>
+    <item find=":sąjunga:" replace="∪"/>
+    <item find=":_e:" replace="ₑ"/>
+    <item find=":pilis 2:" replace=""/>
+    <item find=":širdys:" replace="♥"/>
+    <item find=":raudonis:" replace=""/>
+    <item find=":nerūkoma:" replace=""/>
+    <item find=":sprogimas:" replace=""/>
+    <item find=":aukštyn 2:" replace=""/>
+    <item find=":aukštyn 5:" replace=""/>
+    <item find=":žvaigždė:" replace="★"/>
+    <item find=":euras 2:" replace=""/>
+    <item find=":kryžius:" replace="†"/>
+    <item find=":madžongas:" replace=""/>
+    <item find=":tuščias lapelis:" replace=""/>
+    <item find=":kumštis 2:" replace=""/>
+    <item find=":_s:" replace="ₛ"/>
+    <item find=":pliauškė:" replace=""/>
+    <item find=":medalis:" replace=""/>
+    <item find=":automobilis 4:" replace=""/>
+    <item find=":pravira burna:" replace=""/>
+    <item find=":įrodymo pabaiga:" replace="∎"/>
+    <item find=":6 h:" replace=""/>
+    <item find=":riksmas:" replace=""/>
+    <item find=":aštuntinės natos 2:" replace=""/>
+    <item find=":tm:" replace="™"/>
+    <item find=":dviratininkas 2:" replace=""/>
+    <item find=":žymelė 2:" replace=""/>
+    <item find=":skyrybos:" replace="⚮"/>
+    <item find=":kairėn 3:" replace="☚"/>
+    <item find=":drakonas:" replace=""/>
+    <item find=":^G:" replace="ᴳ"/>
+    <item find=":rankinė:" replace=""/>
+    <item find="ksda" replace="kada"/>
+    <item find=":Kristaus monograma:" replace="☧"/>
+    <item find=":bezdžionė 2:" replace=""/>
+    <item find=":trikampė vėliava:" replace=""/>
+    <item find=":skardinė:" replace="參"/>
+    <item find=":minties išnaša:" replace=""/>
+    <item find=":gaublys:" replace=""/>
+    <item find=":tigras 2:" replace=""/>
+    <item find=":nosis:" replace=""/>
+    <item find=":x3:" replace="❎"/>
+    <item find=":garsiakalbis 3:" replace=""/>
+    <item find=":kairėn:" replace="☜"/>
+    <item find=":_6:" replace="₆"/>
+    <item find=":karvė:" replace=""/>
+    <item find=":baltųjų rikis:" replace="♗"/>
+    <item find=":lova:" replace=""/>
+    <item find=":alpinistas:" replace="輪"/>
+    <item find=":žolelė:" replace=""/>
+    <item find=":smegenys:" replace="易"/>
+    <item find=":verkimas:" replace=""/>
+    <item find=":taškas:" replace="·"/>
+    <item find=":seklys:" replace=""/>
+    <item find=":šaipymasis:" replace=""/>
+    <item find=":Ni:" replace="Ν"/>
+    <item find=":Kalėdos:" replace=""/>
+    <item find=":nuovargis:" replace=""/>
+    <item find=":12 h:" replace=""/>
+    <item find=":Sigma:" replace="Σ"/>
+    <item find=":melagis:" replace="拉"/>
+    <item find=":amfora:" replace=""/>
+    <item find=":pieštukas 3:" replace="✐"/>
+    <item find=":4 h 30 min:" replace=""/>
+    <item find=":audra 2:" replace="☈"/>
+    <item find=":žemėlapis:" replace=""/>
+    <item find=":_n:" replace="ₙ"/>
+    <item find=":artėjanti jaunatis:" replace=""/>
+    <item find=":Beta:" replace="Β"/>
+    <item find=":pinigai 2:" replace=""/>
+    <item find=":mandarinas:" replace=""/>
+    <item find=":slidės:" replace=""/>
+    <item find=":klaviatūra 2:" replace=""/>
+    <item find=":Chi:" replace="Χ"/>
+    <item find="kalida" replace="klaida"/>
+    <item find=":mažas turi:" replace="∍"/>
+    <item find=":oda 3:" replace=""/>
+    <item find=":raumuo:" replace=""/>
+    <item find=":snieglentininkas:" replace=""/>
+    <item find=":delčia:" replace=""/>
+    <item find=":kaducėjus:" replace="☤"/>
+    <item find=":~:" replace="≈"/>
+    <item find=":batas 3:" replace=""/>
+    <item find="visdėlto" replace="vis dėlto"/>
+    <item find=":^N:" replace="ᴺ"/>
+    <item find=":sigma 2:" replace="ς"/>
+    <item find=":lotyniškas kryžius 2:" replace=""/>
+    <item find=":bėgiai:" replace=""/>
+    <item find=":^T:" replace="ᵀ"/>
+    <item find=":muziejus:" replace=""/>
+    <item find=":heraldinė lelija:" replace="⚜"/>
+    <item find=":voratinklis:" replace=""/>
+    <item find=":spyna 2:" replace=""/>
+    <item find=":vėliava 4:" replace="⚐"/>
+    <item find=":muzika 2:" replace=""/>
+    <item find=":aplankas 2:" replace=""/>
+    <item find=":greitkelis:" replace=""/>
+    <item find=":lygiagretainis 2:" replace="▰"/>
+    <item find=":dešinėn 5:" replace=""/>
+    <item find=":vėliavos 2:" replace=""/>
+    <item find=":smeigtukas 3:" replace=""/>
+    <item find=":Tailando batas:" replace="฿"/>
+    <item find=":ipsilon:" replace="υ"/>
+    <item find=":užrašinė 3:" replace=""/>
+    <item find=":daugyba 2:" replace="✖"/>
+    <item find=":sandalas:" replace=""/>
+    <item find=":^=:" replace="⁼"/>
+    <item find=":aukštyn:" replace="☝"/>
+    <item find=":gėrimas:" replace="磻"/>
+    <item find=":integralas 5:" replace="∰"/>
+    <item find=":kauliukas:" replace=""/>
+    <item find=":Epsilon:" replace="Ε"/>
+    <item find=":žėrėjimas 2:" replace="✨"/>
+    <item find=":Skorpionas:" replace="♏"/>
+    <item find=":grybas:" replace=""/>
+    <item find=":dešinėn 6:" replace=""/>
+    <item find=":šypsena 3:" replace=""/>
+    <item find=":Svarstyklės:" replace="♎"/>
+    <item find=":atrakinta spyna:" replace=""/>
+    <item find=":dvigubas diezas:" replace="턪"/>
+    <item find="pasiųlymams" replace="pasiūlymams"/>
+    <item find=":drakonas 2:" replace=""/>
+    <item find=":kompaktinis diskas:" replace=""/>
+    <item find=":taikinys:" replace=""/>
+    <item find=":kojinės:" replace="罹"/>
+    <item find="ri" replace="ir"/>
+    <item find=":pusmėnulis:" replace=""/>
+    <item find=":vienbėgis geležinkelis:" replace=""/>
+    <item find=":skrybėlė:" replace=""/>
+    <item find=":saksofonas:" replace=""/>
+    <item find=":žuvis 2:" replace=""/>
+    <item find=":VK:" replace="↖"/>
+    <item find=":nuviliantis palengvėjimas:" replace=""/>
+    <item find=":lėktuvas 5:" replace=""/>
+    <item find=":grimasa:" replace=""/>
+    <item find=":Dvyniai:" replace="♊"/>
+    <item find=":pavargęs:" replace=""/>
+    <item find=":imtynės:" replace="祿"/>
+    <item find=":negeriamas vanduo:" replace=""/>
+    <item find=":10 h 30 min:" replace=""/>
+    <item find=":pilnatis 2:" replace=""/>
+    <item find=":pirštinės:" replace="理"/>
+    <item find=":spragėsiai:" replace=""/>
+    <item find=":azijinis buivolas:" replace=""/>
+    <item find=":išnaša:" replace=""/>
+    <item find=":integralas 3:" replace="∭"/>
+    <item find=":puokštė:" replace=""/>
+    <item find=":futbolas:" replace="⚽"/>
+    <item find=":dobilas:" replace=""/>
+    <item find=":pienas:" replace="拏"/>
+    <item find=":^epsilon:" replace="ᵋ"/>
+    <item find=":aplankas:" replace=""/>
+    <item find=":juodas skritulys:" replace="⚫"/>
+    <item find=":ledo ritulys:" replace=""/>
+    <item find=":galva:" replace=""/>
+    <item find=":išnaša 6:" replace=""/>
+    <item find=":kūdikis 2:" replace=""/>
+    <item find=":berniukas:" replace=""/>
+    <item find=":vokas 7:" replace=""/>
+    <item find=":viršaibis:" replace="⊃"/>
+    <item find=":pašto dėžutė 3:" replace=""/>
+    <item find=":leopardas:" replace=""/>
+    <item find=":kortos:" replace=""/>
+    <item find=":juodųjų pėstininkas:" replace="♟"/>
+    <item find=":skaičiuotuvas:" replace=""/>
+    <item find=":_2:" replace="₂"/>
+    <item find=":trapecija:" replace="⏢"/>
+    <item find=":klaviatūra 3:" replace=""/>
+    <item find=":šokis:" replace=""/>
+    <item find=":minkšti ledai:" replace=""/>
+    <item find=":katės šypsena 2:" replace=""/>
+    <item find=":pakeltos rankos:" replace=""/>
+    <item find=":išjungtas garsas:" replace=""/>
+    <item find=":vonia 2:" replace=""/>
+    <item find=":varnelė 5:" replace=""/>
+    <item find=":besišypsantis velniūkštis:" replace=""/>
+    <item find=":džiaugsmas:" replace=""/>
+    <item find=":pieštukas 2:" replace="✏"/>
+    <item find=":didelis apskritimas 2:" replace="⬤"/>
+    <item find=":fi:" replace="φ"/>
+    <item find=":klaviatūra:" replace="⌨"/>
+    <item find=":atkaklumas:" replace=""/>
+    <item find=":liežuvis 4:" replace=""/>
+    <item find=":taurė:" replace=""/>
+    <item find=":pėdsakai:" replace=""/>
+    <item find=":dokumentas:" replace=""/>
+    <item find=":11 h 30 min:" replace=""/>
+    <item find=":mąstymas:" replace="樂"/>
+    <item find="pasiųlymo" replace="pasiūlymo"/>
+    <item find=":piratai:" replace=""/>
+    <item find="kda" replace="kad"/>
+    <item find=":bučinys 3:" replace=""/>
+    <item find=":_m:" replace="ₘ"/>
+    <item find=":sunkiaatletis:" replace=""/>
+    <item find=":šypsena:" replace="☺"/>
+    <item find=":Omega:" replace="Ω"/>
+    <item find="amn" replace="man"/>
+    <item find=":mokėjimo kortelė:" replace=""/>
+    <item find=":\\:" replace="∖"/>
+    <item find=":lapas 2:" replace=""/>
+    <item find=":varlė:" replace=""/>
+    <item find=":blykstė:" replace=""/>
+    <item find=":priklauso:" replace="∈"/>
+    <item find=":vokas 3:" replace=""/>
+    <item find="tirkai" replace="tikrai"/>
+    <item find=":Morkaus ženklas:" replace=""/>
+    <item find=":dušas:" replace=""/>
+    <item find=":informacija 3:" replace=""/>
+    <item find=":7 h:" replace=""/>
+    <item find=":bitkoinas:" replace="₿"/>
+    <item find=":_x:" replace="ₓ"/>
+    <item find=":vyras:" replace=""/>
+    <item find=":šypsena 4:" replace=""/>
+    <item find=":rūkymas:" replace=""/>
+    <item find="klaba" replace="kalba"/>
+    <item find=":parduotuvė 2:" replace=""/>
+    <item find=":penkiakampis 2:" replace="⬟"/>
+    <item find=":dešrainis:" replace=""/>
+    <item find=":išnaša 4:" replace=""/>
+    <item find=":kamuolys:" replace="⛹"/>
+    <item find=":fėja:" replace="栗"/>
+    <item find=":^Fi:" replace="ᶲ"/>
+    <item find=":teleskopas:" replace=""/>
+    <item find=":jaunatis:" replace=""/>
+    <item find=":bambukas:" replace=""/>
+    <item find=":dėklas 2:" replace=""/>
+    <item find=":_v:" replace="ᵥ"/>
+    <item find=":lėktuvas 4:" replace=""/>
+    <item find=":sraigtasparnis:" replace=""/>
+    <item find=":paragrafas:" replace="§"/>
+    <item find=":sausainis 2:" replace="怒"/>
+    <item find=":miegas 2:" replace=""/>
+    <item find=":ir:" replace="∧"/>
+    <item find=":saldainis:" replace=""/>
+    <item find=":parkas:" replace=""/>
+    <item find=":-+:" replace="∓"/>
+    <item find=":V2:" replace="⇑"/>
+    <item find=":arbūzas:" replace=""/>
+    <item find=":etiketė:" replace=""/>
+    <item find=":kampas 2:" replace="∡"/>
+    <item find=":euras:" replace="€"/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="mlrd."/>
+    <word exception="zool."/>
+    <word exception="p. d."/>
+    <word exception="vv."/>
+    <word exception="sl."/>
+    <word exception="vėlyv."/>
+    <word exception="red."/>
+    <word exception="poligr."/>
+    <word exception="gv."/>
+    <word exception="rad."/>
+    <word exception="vyr."/>
+    <word exception="e. p."/>
+    <word exception="l. e. p."/>
+    <word exception="kub."/>
+    <word exception="žemd."/>
+    <word exception="arch."/>
+    <word exception="teatr."/>
+    <word exception="egz."/>
+    <word exception="gyd."/>
+    <word exception="atsisk. sąsk."/>
+    <word exception="ir t. t."/>
+    <word exception="A. V."/>
+    <word exception="m. e."/>
+    <word exception="knyg."/>
+    <word exception="eil."/>
+    <word exception="Įn."/>
+    <word exception="el. p."/>
+    <word exception="gr."/>
+    <word exception="kr."/>
+    <word exception="atsak."/>
+    <word exception="mok."/>
+    <word exception="aps."/>
+    <word exception="pat."/>
+    <word exception="raj."/>
+    <word exception="J. E."/>
+    <word exception="dir."/>
+    <word exception="kun."/>
+    <word exception="p."/>
+    <word exception="insp."/>
+    <word exception="vns."/>
+    <word exception="ir pan."/>
+    <word exception="tarm."/>
+    <word exception="pan."/>
+    <word exception="akt."/>
+    <word exception="dll."/>
+    <word exception="aklg."/>
+    <word exception="up."/>
+    <word exception="fin."/>
+    <word exception="hidr."/>
+    <word exception="mžb."/>
+    <word exception="adv."/>
+    <word exception="pr. Kr."/>
+    <word exception="fot."/>
+    <word exception="indecl."/>
+    <word exception="k. a."/>
+    <word exception="bažn."/>
+    <word exception="vad."/>
+    <word exception="aut."/>
+    <word exception="glžk."/>
+    <word exception="men."/>
+    <word exception="kand."/>
+    <word exception="sp."/>
+    <word exception="nkt."/>
+    <word exception="adr."/>
+    <word exception="prot."/>
+    <word exception="kom."/>
+    <word exception="gram."/>
+    <word exception="geol."/>
+    <word exception="psichol."/>
+    <word exception="kuop."/>
+    <word exception="plg."/>
+    <word exception="poet."/>
+    <word exception="bibl."/>
+    <word exception="niek."/>
+    <word exception="muz."/>
+    <word exception="š. m."/>
+    <word exception="jst."/>
+    <word exception="filol."/>
+    <word exception="inform."/>
+    <word exception="skv."/>
+    <word exception="vnt."/>
+    <word exception="min."/>
+    <word exception="dirig."/>
+    <word exception="tech."/>
+    <word exception="prof."/>
+    <word exception="sport."/>
+    <word exception="iron."/>
+    <word exception="poez."/>
+    <word exception="pagr."/>
+    <word exception="prž."/>
+    <word exception="biol."/>
+    <word exception="istor."/>
+    <word exception="tekst."/>
+    <word exception="psl."/>
+    <word exception="teol."/>
+    <word exception="med."/>
+    <word exception="kab."/>
+    <word exception="buv."/>
+    <word exception="mjr."/>
+    <word exception="lit."/>
+    <word exception="pvz."/>
+    <word exception="skg."/>
+    <word exception="d."/>
+    <word exception="menk."/>
+    <word exception="ved."/>
+    <word exception="įterpt."/>
+    <word exception="beasm."/>
+    <word exception="sekr."/>
+    <word exception="ž. ū."/>
+    <word exception="p. m. e."/>
+    <word exception="žr."/>
+    <word exception="t. p."/>
+    <word exception="vulg."/>
+    <word exception="vtv."/>
+    <word exception="tel."/>
+    <word exception="astr."/>
+    <word exception="pss."/>
+    <word exception="ež."/>
+    <word exception="drp."/>
+    <word exception="kul."/>
+    <word exception="ppr."/>
+    <word exception="mst."/>
+    <word exception="asist."/>
+    <word exception="relig."/>
+    <word exception="mokyt."/>
+    <word exception="stud."/>
+    <word exception="koresp."/>
+    <word exception="ofic."/>
+    <word exception="bkl."/>
+    <word exception="anglic."/>
+    <word exception="v."/>
+    <word exception="dėst."/>
+    <word exception="dipl."/>
+    <word exception="ltn."/>
+    <word exception="mgnt."/>
+    <word exception="virš."/>
+    <word exception="buh."/>
+    <word exception="proc."/>
+    <word exception="t. t."/>
+    <word exception="b. k."/>
+    <word exception="sąsk."/>
+    <word exception="dš."/>
+    <word exception="ntk."/>
+    <word exception="tir."/>
+    <word exception="prok."/>
+    <word exception="įv. reikš."/>
+    <word exception="kv."/>
+    <word exception="kln."/>
+    <word exception="a. s."/>
+    <word exception="komp."/>
+    <word exception="pirm."/>
+    <word exception="b."/>
+    <word exception="išt."/>
+    <word exception="sutr."/>
+    <word exception="r."/>
+    <word exception="sr."/>
+    <word exception="gen."/>
+    <word exception="apyl."/>
+    <word exception="val."/>
+    <word exception="e."/>
+    <word exception="avd."/>
+    <word exception="depart."/>
+    <word exception="moksl."/>
+    <word exception="N."/>
+    <word exception="įv."/>
+    <word exception="žml."/>
+    <word exception="pr."/>
+    <word exception="sen."/>
+    <word exception="chem."/>
+    <word exception="šachm."/>
+    <word exception="mit."/>
+    <word exception="kpt."/>
+    <word exception="a."/>
+    <word exception="tūkst."/>
+    <word exception="faks."/>
+    <word exception="stat."/>
+    <word exception="gerb."/>
+    <word exception="m. m."/>
+    <word exception="asmv."/>
+    <word exception="filos."/>
+    <word exception="fak."/>
+    <word exception="dgs."/>
+    <word exception="kat."/>
+    <word exception="g."/>
+    <word exception="bdv."/>
+    <word exception="anat."/>
+    <word exception="gim."/>
+    <word exception="vyresn."/>
+    <word exception="sąs."/>
+    <word exception="kn."/>
+    <word exception="džn."/>
+    <word exception="kt."/>
+    <word exception="t. y."/>
+    <word exception="burž."/>
+    <word exception="str."/>
+    <word exception="sek."/>
+    <word exception="pav."/>
+    <word exception="fiziol."/>
+    <word exception="neol."/>
+    <word exception="lot."/>
+    <word exception="bot."/>
+    <word exception="techn."/>
+    <word exception="etc."/>
+    <word exception="kyš."/>
+    <word exception="filat."/>
+    <word exception="prv."/>
+    <word exception="V."/>
+    <word exception="el."/>
+    <word exception="orn."/>
+    <word exception="K."/>
+    <word exception="J. Em."/>
+    <word exception="fil."/>
+    <word exception="veiksm."/>
+    <word exception="doc."/>
+    <word exception="apyg."/>
+    <word exception="fam."/>
+    <word exception="mgr."/>
+    <word exception="prl."/>
+    <word exception="psn."/>
+    <word exception="flk."/>
+    <word exception="mstl."/>
+    <word exception="pavad."/>
+    <word exception="mat."/>
+    <word exception="rš."/>
+    <word exception="akad."/>
+    <word exception="lingv."/>
+    <word exception="farm."/>
+    <word exception="idiom."/>
+    <word exception="st."/>
+    <word exception="apskr."/>
+    <word exception="asm. k."/>
+    <word exception="įl."/>
+    <word exception="al."/>
+    <word exception="s."/>
+    <word exception="geom."/>
+    <word exception="av."/>
+    <word exception="juok."/>
+    <word exception="G."/>
+    <word exception="fiz."/>
+    <word exception="chir."/>
+    <word exception="jūr"/>
+    <word exception="sav."/>
+    <word exception="grm."/>
+    <word exception="plk."/>
+    <word exception="teis."/>
+    <word exception="priešd."/>
+    <word exception="pl."/>
+    <word exception="polit."/>
+    <word exception="a. k."/>
+    <word exception="amer."/>
+    <word exception="mln."/>
+    <word exception="inž."/>
+    <word exception="vlsč."/>
+    <word exception="mėn."/>
+    <word exception="jng."/>
+    <word exception="kar."/>
+    <word exception="Nr."/>
+    <word exception="upl."/>
+    <word exception="m."/>
+    <word exception="t."/>
+    <word exception="pil."/>
+    <word exception="kl."/>
+    <word exception="saviv."/>
+    <word exception="dr."/>
+    <word exception="prk."/>
+    <word exception="bt."/>
+    <word exception="dkt."/>
+    <word exception="archit."/>
+    <word exception="ekon."/>
+    <word exception="mot."/>
+    <word exception="lekt."/>
+    <word exception="spec."/>
+    <word exception="k."/>
+    <word exception="šnek."/>
+    <word exception="dail."/>
+    <word exception="vksm."/>
+    <word exception="nr."/>
+    <word exception="skyr."/>
+    <word exception="geogr."/>
+    <word exception="kaln."/>
+    <word exception="sk."/>
+    <word exception="pšt."/>
+    <word exception="Vt."/>
+    <word exception="vet."/>
+    <word exception="log."/>
+    <word exception="dek."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="MHz"/>
+    <word exception="THz"/>
+    <word exception="GHz"/>
+    <word exception="OOo"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

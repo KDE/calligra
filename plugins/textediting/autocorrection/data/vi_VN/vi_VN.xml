@@ -1,0 +1,1032 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find="dễ dải" replace="dễ dãi"/>
+    <item find="chìu" replace="chiều"/>
+    <item find="thũng thĩnh" replace="thủng thỉnh"/>
+    <item find="vàn bạc" replace="vàng bạc"/>
+    <item find="chải nghiệm" replace="trải nghiệm"/>
+    <item find="bờm sờm" replace="bờm xờm"/>
+    <item find="cây xắn" replace="cây sắn"/>
+    <item find="sào xạo" replace="sào sạo"/>
+    <item find="sửa hộp" replace="sữa hộp"/>
+    <item find=":100%:" replace=""/>
+    <item find="bạt màu" replace="bạc màu"/>
+    <item find="dầy" replace="rầy"/>
+    <item find="míu" replace="miếu"/>
+    <item find="lịu chừng" replace="liệu chừng"/>
+    <item find="lở làng" replace="lỡ làng"/>
+    <item find=":Thông tin:" replace="ℹ"/>
+    <item find="cuối đầu" replace="cúi đầu"/>
+    <item find="xa săm" replace="xa xăm"/>
+    <item find="chỗng" replace="chổng"/>
+    <item find="muôn vàng" replace="muôn vàn"/>
+    <item find="chải chiếu" replace="trải chiếu"/>
+    <item find="đả rồi" replace="đã rồi"/>
+    <item find="xung sướng" replace="sung sướng"/>
+    <item find="lể mể" replace="lễ mễ"/>
+    <item find="trêu trọc" replace="trêu chọc"/>
+    <item find="sôn sao" replace="xôn xao"/>
+    <item find="bị ngả" replace="bị ngã"/>
+    <item find="giầu rĩ" replace="rầu rĩ"/>
+    <item find=":Tự chọn::" replace=""/>
+    <item find="xượt" replace="sượt"/>
+    <item find="hẳng" replace="hẵng"/>
+    <item find="híu" replace="hiếu"/>
+    <item find="phủ phàng" replace="phũ phàng"/>
+    <item find="dỡ thậm tệ" replace="dở thậm tệ"/>
+    <item find="lắm truyện" replace="lắm chuyện"/>
+    <item find="bung sung" replace="bung xung"/>
+    <item find="nghỉa" replace="nghĩa"/>
+    <item find=":Thước:" replace=""/>
+    <item find="suổng" replace="xuổng"/>
+    <item find=":Ghi chú:" replace="♩"/>
+    <item find="mặt lỗ" replace="mặt rỗ"/>
+    <item find="ngã nào" replace="ngả nào"/>
+    <item find="dây lát" replace="giây lát"/>
+    <item find=":Đường:" replace=""/>
+    <item find=":Tường:" replace="⛹"/>
+    <item find="chuyện củ" replace="chuyện cũ"/>
+    <item find="rãi rác" replace="rải rác"/>
+    <item find="biễn" replace="biển"/>
+    <item find="xào sạc" replace="xào xạc"/>
+    <item find="giầy" replace="rầy"/>
+    <item find="xã cánh" replace="sã cánh"/>
+    <item find="cúi bài" replace="cuối bài"/>
+    <item find=":≤:" replace="≤"/>
+    <item find="kiễu" replace="kĩu"/>
+    <item find="trải đầu" replace="chải đầu"/>
+    <item find="1/4" replace="¼"/>
+    <item find="khẫu" replace="khẩu"/>
+    <item find="mủi tên" replace="mũi tên"/>
+    <item find="thưở nào" replace="thuở nào"/>
+    <item find="xàn xàn" replace="sàn sàn"/>
+    <item find="lở dở" replace="lỡ dở"/>
+    <item find="sa xỉ" replace="xa xỉ"/>
+    <item find="giấu hiệu" replace="dấu hiệu"/>
+    <item find="ngả xuống" replace="ngã xuống"/>
+    <item find="giã rượi" replace="rã rượi"/>
+    <item find="sung trận" replace="xung trận"/>
+    <item find="vẻ vời" replace="vẽ vời"/>
+    <item find="xuy xuyển" replace="suy suyển"/>
+    <item find="sung khắc" replace="xung khắc"/>
+    <item find="sổ số" replace="xổ số"/>
+    <item find=":Điền:" replace=""/>
+    <item find=":Độ sáng:" replace=""/>
+    <item find=":^(:" replace="⁽"/>
+    <item find=":đồ thị:" replace=""/>
+    <item find="nói chiện" replace="nói chuyện"/>
+    <item find="sanh sao" replace="xanh xao"/>
+    <item find=":---:" replace="—"/>
+    <item find=":Tròn:" replace="○"/>
+    <item find="bỉu" replace="biểu"/>
+    <item find="dgx" replace="dưỡng"/>
+    <item find="dàn lửa" replace="giàn lửa"/>
+    <item find="cũ su hào" replace="củ su hào"/>
+    <item find="bình tỉnh" replace="bình tĩnh"/>
+    <item find="SG" replace="Sài Gòn"/>
+    <item find="dễ giãi" replace="dễ dãi"/>
+    <item find=":phạm vi:" replace=""/>
+    <item find=":Tích:" replace="∏"/>
+    <item find="soay" replace="xoay"/>
+    <item find=":inch:" replace="″"/>
+    <item find="sát xao" replace="sát sao"/>
+    <item find="khiêu gan" replace="khêu gan"/>
+    <item find="diếu" replace="díu"/>
+    <item find="nhà máy lọc giầu" replace="nhà máy lọc dầu"/>
+    <item find=":Thư mục:" replace=""/>
+    <item find="ngả lẽ" replace="ngã lẽ"/>
+    <item find="ngạo mạng" replace="ngạo mạn"/>
+    <item find="dáng vẽ" replace="dáng vẻ"/>
+    <item find="xổ xố" replace="xổ số"/>
+    <item find=":\\:" replace="∖"/>
+    <item find="xào xạo" replace="sào sạo"/>
+    <item find="thiu huỷ" replace="thiêu huỷ"/>
+    <item find="rổi tay" replace="rỗi tay"/>
+    <item find="số mạn" replace="số mạng"/>
+    <item find=":Liên kết:" replace="⛏"/>
+    <item find="giứt" replace="giựt"/>
+    <item find="tháo gở" replace="tháo gỡ"/>
+    <item find="sớn xác" replace="sớn sác"/>
+    <item find=":!:" replace="❕"/>
+    <item find="xầy" replace="sầy"/>
+    <item find=":Hợp:" replace="∪"/>
+    <item find="phiêu bạc" replace="phiêu bạt"/>
+    <item find="cố gng" replace="cố gắng"/>
+    <item find="sa sỉ he" replace="xa xỉ"/>
+    <item find="sí nghiệp" replace="xí nghiệp"/>
+    <item find=":Tập con:" replace="⊂"/>
+    <item find="xuất ăn" replace="suất ăn"/>
+    <item find="hung dử" replace="hung dữ"/>
+    <item find=":Lịch:" replace=""/>
+    <item find="vẽ vang" replace="vẻ vang"/>
+    <item find="tí nửa" replace="tí nữa"/>
+    <item find="dồng" replace="giồng"/>
+    <item find=":nu (ν):" replace="ν"/>
+    <item find="dàn hỏa tiễn" replace="giàn hỏa tiễn"/>
+    <item find="lễ giác" replace="lể giác"/>
+    <item find="tgf" replace="tường"/>
+    <item find="xẽ sàng" replace="sẽ sàng"/>
+    <item find="lẩy lừng" replace="lẫy lừng"/>
+    <item find="xoán" replace="soán"/>
+    <item find="hủy" replace="huỷ"/>
+    <item find="dùm" replace="giùm"/>
+    <item find="bắt buột" replace="bắt buộc"/>
+    <item find="ngào ngạc" replace="ngào ngạt"/>
+    <item find="xoạn" replace="soạn"/>
+    <item find=":Cờ:" replace=""/>
+    <item find="xát xao" replace="sát sao"/>
+    <item find="sấu sí" replace="xấu xí"/>
+    <item find="ngã màu" replace="ngả màu"/>
+    <item find="xa sầm" replace="sa sầm"/>
+    <item find="truyện lạ đó đâ" replace="chuyện lạ đó đâ"/>
+    <item find=":Nút chọn ~một:" replace=""/>
+    <item find="xấy" replace="sấy"/>
+    <item find="lỗ chằng" replace="rỗ chằng"/>
+    <item find="thêm mửa" replace="thêm nữa"/>
+    <item find="xít sao" replace="sít sao"/>
+    <item find="ko" replace="không"/>
+    <item find="thỡ" replace="thở"/>
+    <item find="cãy" replace="cãi"/>
+    <item find=".*&lt;-.*" replace="←"/>
+    <item find="ngả ba lòng" replace="ngã ba lòng"/>
+    <item find="dỡ tay" replace="dở tay"/>
+    <item find="phgf" replace="phường"/>
+    <item find=":Khối:" replace=""/>
+    <item find="thỉu" replace="thiểu"/>
+    <item find=":Từng phần:" replace="∂"/>
+    <item find="diu đường" replace="diêu đường"/>
+    <item find=":Nhẫn:" replace=""/>
+    <item find="xẽ xàng" replace="sẽ sàng"/>
+    <item find="nhiu" replace="nhiêu"/>
+    <item find="lầm giầm" replace="lầm dầm"/>
+    <item find="xù xụ" replace="sù sụ"/>
+    <item find=":Vuông:" replace="■"/>
+    <item find="riếu" replace="ríu"/>
+    <item find="nở lòng" replace="nỡ lòng"/>
+    <item find="nổi đau khổ" replace="nỗi đau khổ"/>
+    <item find=":gama (γ):" replace="γ"/>
+    <item find=":Khác tập con:" replace="⊄"/>
+    <item find="phõng" replace="phỏng"/>
+    <item find=":mu:" replace="μ"/>
+    <item find="sát nhập" replace="sáp nhập"/>
+    <item find="suôi" replace="xuôi"/>
+    <item find="khiu" replace="khiêu"/>
+    <item find=":^-:" replace="⁻"/>
+    <item find="sì xào" replace="xì xào"/>
+    <item find="Thứ Bẩy" replace="Thứ Bảy"/>
+    <item find="thg" replace="thương"/>
+    <item find="chỏi" replace="chõi"/>
+    <item find="người mẩu" replace="người mẫu"/>
+    <item find="truyện nọ truyện kia" replace="chuyện nọ chuyện kia"/>
+    <item find="sá tội" replace="xá tội"/>
+    <item find="bổ xung" replace="bổ sung"/>
+    <item find="giấu vết" replace="dấu vết"/>
+    <item find=":Song song:" replace="∥"/>
+    <item find="trầm bỗng" replace="trầm bổng"/>
+    <item find="điềm gỡ" replace="điềm gở"/>
+    <item find=":thêta (θ):" replace="Θ"/>
+    <item find="ăn xung mặc sướng" replace="ăn sung mặc sướng"/>
+    <item find="xì sụt" replace="sì sụt"/>
+    <item find="một đổi" replace="một đỗi"/>
+    <item find="sây sẩm" replace="xây xẩm"/>
+    <item find=":Văn phòng:" replace=""/>
+    <item find="sà lách" replace="xà lách"/>
+    <item find="xu xẽ" replace="su sẽ"/>
+    <item find=":':" replace="’"/>
+    <item find="sung kích" replace="xung kích"/>
+    <item find="khẫy" replace="khẩy"/>
+    <item find=":Mặt trăng:" replace="☽"/>
+    <item find="suất nhập khẩu" replace="xuất nhập khẩu"/>
+    <item find="thiêu thối" replace="thiu thối"/>
+    <item find="sít xao" replace="sít sao"/>
+    <item find="hẵn" replace="hẳn"/>
+    <item find="nước mắt dàn giụa" replace="nước mắt giàn giụa"/>
+    <item find="sương sườn" replace="xương sườn"/>
+    <item find=":Máy tính:" replace=""/>
+    <item find="ràu ràu" replace="dàu dàu"/>
+    <item find=":bảng nháp:" replace=""/>
+    <item find="sã tắc" replace="xã tắc"/>
+    <item find="gở gạc" replace="gỡ gạc"/>
+    <item find="rươu" replace="rượu"/>
+    <item find="cuối rạp" replace="cúi rạp"/>
+    <item find="xát xạt" replace="sát sạt"/>
+    <item find="quái gỡ" replace="quái gở"/>
+    <item find="sữa sang" replace="sửa sang"/>
+    <item find="Thứ bẩy" replace="Thứ bảy"/>
+    <item find="vẻ tranh" replace="vẽ tranh"/>
+    <item find="té ngả" replace="té ngã"/>
+    <item find="đg" replace="đương"/>
+    <item find="giầu hoả" replace="dầu hoả"/>
+    <item find="dấu nhẹm" replace="giấu nhẹm"/>
+    <item find=":Nút:" replace=""/>
+    <item find="dàn nho" replace="giàn nho"/>
+    <item find="to sù" replace="to xù"/>
+    <item find=":Lục giác:" replace="⬡"/>
+    <item find="mổi" replace="mỗi"/>
+    <item find="định kỷ" replace="định kỳ"/>
+    <item find=":upxilon (υ):" replace="υ"/>
+    <item find="ngf" replace="người"/>
+    <item find=":Không có mục nào:" replace="⛔"/>
+    <item find="dẩy" replace="dẫy"/>
+    <item find="giầu vậy" replace="dầu vậy"/>
+    <item find="sẫy" replace="sẩy"/>
+    <item find="rỗ chỗ" replace="lỗ chỗ"/>
+    <item find=":Chỉ dẫn:" replace=""/>
+    <item find="lịu pháp" replace="liệu pháp"/>
+    <item find="xuôn" replace="suôn"/>
+    <item find="sích" replace="xích"/>
+    <item find="xì sào" replace="xì xào"/>
+    <item find=":Lùi:" replace=""/>
+    <item find="xọ dừa" replace="sọ dừa"/>
+    <item find="tĩnh táo" replace="tỉnh táo"/>
+    <item find="đỗi thay" replace="đổi thay"/>
+    <item find="thẽ" replace="thẻ"/>
+    <item find="dàn khoan" replace="giàn khoan"/>
+    <item find=":Liên kết lưu:" replace=""/>
+    <item find="xườn" replace="sườn"/>
+    <item find="xắp xếp" replace="sắp xếp"/>
+    <item find="xiều" replace="xìu"/>
+    <item find=":!?:" replace="⁉"/>
+    <item find="thước tha" replace="thướt tha"/>
+    <item find="xạn" replace="sạn"/>
+    <item find="sót dạ" replace="xót dạ"/>
+    <item find="đóng giấu" replace="đóng dấu"/>
+    <item find=":Quất:" replace=""/>
+    <item find="sa hoa" replace="xa hoa"/>
+    <item find="giàn nhạc" replace="dàn nhạc"/>
+    <item find="nghĩ phép" replace="nghỉ phép"/>
+    <item find="sa xả" replace="sa sả"/>
+    <item find="dãi lụa" replace="dải lụa"/>
+    <item find="sạ kích" replace="xạ kích"/>
+    <item find=":iôta (ι):" replace="Ι"/>
+    <item find="xa xầm" replace="sa sầm"/>
+    <item find="đồ củ" replace="đồ cũ"/>
+    <item find=":đenta (δ):" replace="Δ"/>
+    <item find="sa lộ" replace="xa lộ"/>
+    <item find="sỗ xàng" replace="sỗ sàng"/>
+    <item find="đi ngũ" replace="đi ngủ"/>
+    <item find="buộc miệng nói" replace="buột miệng nói"/>
+    <item find="thắc chặt" replace="thắt chặt)"/>
+    <item find=":Chia:" replace="∣"/>
+    <item find="phíu" replace="phiếu"/>
+    <item find="xuốt" replace="suốt"/>
+    <item find="xình" replace="sình"/>
+    <item find="sa lạ" replace="xa lạ"/>
+    <item find=":Tập cha:" replace="⊃"/>
+    <item find="dỏi" replace="dõi"/>
+    <item find="giấu câu" replace="dấu câu"/>
+    <item find=":Hoa:" replace="⚘"/>
+    <item find="phông chử" replace="phông chữ"/>
+    <item find=":năm:" replace="⚙"/>
+    <item find="gã con cho ai" replace="gả con cho ai"/>
+    <item find="sạt lỡ" replace="sạt lở"/>
+    <item find="bẻ mặt" replace="bẽ mặt"/>
+    <item find="cữa" replace="cửa"/>
+    <item find="xướt" replace="sướt"/>
+    <item find="sả thân" replace="xả thân"/>
+    <item find="nhỉu" replace="nhiểu"/>
+    <item find=":_):" replace="₎"/>
+    <item find=":Tam giác vuông:" replace="⊿"/>
+    <item find=":Phần:" replace="§"/>
+    <item find="liêu điêu" replace="liu điu"/>
+    <item find=":Tập rỗng:" replace="∅"/>
+    <item find=":Mặt trời:" replace="☉"/>
+    <item find="sụp lỡ" replace="sụp lở"/>
+    <item find="nghiệt ngả" replace="nghiệt ngã"/>
+    <item find="hoa nỡ" replace="hoa nở"/>
+    <item find="dàn chải" replace="dàn trải"/>
+    <item find="con giấu" replace="con dấu"/>
+    <item find="giành thời gian" replace="dành thời gian"/>
+    <item find="giã vờ" replace="giả vờ"/>
+    <item find="mưa giầm" replace="mưa dầm"/>
+    <item find="tròng ghẹo" replace="chòng ghẹo"/>
+    <item find="xỉ nhục" replace="sỉ nhục"/>
+    <item find="thìu" replace="thiều"/>
+    <item find="chgs" replace="chướng"/>
+    <item find="xeo" replace="seo"/>
+    <item find="thỗi" replace="thổi"/>
+    <item find="bơi chải," replace="bơi trải,"/>
+    <item find="lịu lí" replace="liệu lí"/>
+    <item find="xám hối" replace="sám hối"/>
+    <item find="tíu mạ" replace="tiếu mạ"/>
+    <item find="giàn trải" replace="dàn trải"/>
+    <item find=":Toán:" replace=""/>
+    <item find="diều diệu" replace="dìu dịu"/>
+    <item find="thãng" replace="thảng"/>
+    <item find="chải khăn" replace="trải khăn"/>
+    <item find="cầng" replace="cần"/>
+    <item find="rẩy" replace="rẫy"/>
+    <item find="xổ sách" replace="sổ sách"/>
+    <item find="ngã đầu" replace="ngả đầu"/>
+    <item find="kịu" replace="kiệu"/>
+    <item find="áo củ" replace="áo cũ"/>
+    <item find="rầu thơm" replace="dầu thơm"/>
+    <item find="xuy suyễn" replace="suy suyễn"/>
+    <item find="mải mải" replace="mãi mãi"/>
+    <item find="đcj" replace="được"/>
+    <item find="tuần lể" replace="tuần lễ"/>
+    <item find="khôgn" replace="không"/>
+    <item find="tĩu" replace="tiễu"/>
+    <item find="chút nửa" replace="chút nữa"/>
+    <item find="sôn xao" replace="xôn xao"/>
+    <item find="đặc hàng" replace="đặt hàng"/>
+    <item find="phở sào" replace="phở xào"/>
+    <item find="qủy" replace="quỷ"/>
+    <item find="phiệu" replace="phịu"/>
+    <item find="đũ" replace="đủ"/>
+    <item find=":Gan-đa:" replace=""/>
+    <item find="sụt sùi" replace="xụt xùi"/>
+    <item find=":Gama (γ):" replace="Γ"/>
+    <item find=":Phải:" replace=""/>
+    <item find="riết chặt" replace="siết chặt"/>
+    <item find="liu hữu" replace="liêu hữu"/>
+    <item find="lgx" replace="lưỡng"/>
+    <item find="tô vẻ" replace="tô vẽ"/>
+    <item find="trùng da mắt" replace="chùng da mắt"/>
+    <item find="siu tự nhiên" replace="siêu tự nhiên"/>
+    <item find="chải thảm" replace="trải thảm"/>
+    <item find=":Cảnh báo:" replace="⚠"/>
+    <item find="đồ giã mạo" replace="đồ giả mạo"/>
+    <item find="dơm dớm" replace="rơm rớm"/>
+    <item find="ddcj" replace="được"/>
+    <item find="rỗ hổng" replace="lỗ hổng"/>
+    <item find="quả xung" replace="quả sung"/>
+    <item find="sã hội" replace="xã hội"/>
+    <item find="nhứt răng" replace="nhức răng"/>
+    <item find="cgx" replace="cũng"/>
+    <item find="chơi bời" replace="trơi bời"/>
+    <item find="hỉu" replace="hiểu"/>
+    <item find="sì sào" replace="xì xào"/>
+    <item find="lãng đảng" replace="lãng đãng"/>
+    <item find="sung phong" replace="xung phong"/>
+    <item find="đở" replace="đỡ"/>
+    <item find="xậy" replace="sậy"/>
+    <item find="lễ mể" replace="lễ mễ"/>
+    <item find="thũng thẳng" replace="thủng thẳng"/>
+    <item find="suy sét" replace="suy xét"/>
+    <item find="có vẽ" replace="có vẻ"/>
+    <item find="dành nhau" replace="giành nhau"/>
+    <item find="rặt dìu" replace="dặt dìu"/>
+    <item find="một nữa" replace="một nửa"/>
+    <item find="xa sỉ" replace="xa xỉ"/>
+    <item find="&lt;-&gt;" replace="↔"/>
+    <item find="bãi hoải" replace="bải hoải"/>
+    <item find="nhở tay" replace="nhỡ tay"/>
+    <item find="xục xạo" replace="sục sạo"/>
+    <item find="bẽ ra" replace="bẻ ra"/>
+    <item find="mĩu" replace="miễu"/>
+    <item find="thgj" replace="thượng"/>
+    <item find="cải cọ" replace="cãi cọ"/>
+    <item find="biều" replace="bìu"/>
+    <item find="--&gt;" replace="→"/>
+    <item find="cãi ngọt" replace="cải ngọt"/>
+    <item find="dổi" replace="dỗi"/>
+    <item find="tỉnh tâm" replace="tĩnh tâm"/>
+    <item find="kỉu" replace="kiểu"/>
+    <item find="cúi cùng" replace="cuối cùng"/>
+    <item find="kiểu mẩu" replace="kiểu mẫu"/>
+    <item find=":Chấm điểm:" replace="•"/>
+    <item find="lao sao" replace="lao xao"/>
+    <item find="phỉnh mủi" replace="phỉnh mũi"/>
+    <item find="vẻ hình" replace="vẽ hình"/>
+    <item find="sương sẩu" replace="xương xẩu"/>
+    <item find="chân trọng" replace="trân trọng"/>
+    <item find="tg" replace="tương"/>
+    <item find="suyến" replace="xuyến"/>
+    <item find="xỉa chân" replace="sỉa chân"/>
+    <item find="muổi" replace="muỗi"/>
+    <item find="sữa sắc đẹp" replace="sửa sắc đẹp"/>
+    <item find="&lt;--" replace="←"/>
+    <item find="tìu" replace="tiều"/>
+    <item find="ngả gục" replace="ngã gục"/>
+    <item find="phụ bạt" replace="phụ bạc"/>
+    <item find=":beta:" replace="β"/>
+    <item find="xỗ xàng" replace="sỗ sàng"/>
+    <item find="piêu" replace="piu"/>
+    <item find="nhắc nhỡ" replace="nhắc nhở"/>
+    <item find="sạ hương" replace="xạ hương"/>
+    <item find="xương mù" replace="sương mù"/>
+    <item find="thịu" replace="thiệu"/>
+    <item find="hiêu" replace="hiu"/>
+    <item find="riêu riêu" replace="riu riu"/>
+    <item find="cây sung" replace="cây sung"/>
+    <item find=":Vỏ:" replace=""/>
+    <item find="sinh nỡ" replace="sinh nở"/>
+    <item find="giàn hàng" replace="dàn hàng"/>
+    <item find="xì xì" replace="sì sì"/>
+    <item find="phân giã" replace="phân rã"/>
+    <item find="tiếu tít" replace="tíu tít"/>
+    <item find="xuối" replace="suối"/>
+    <item find=":Khác tập cha:" replace="⊅"/>
+    <item find="sanh mạn" replace="sanh mạng"/>
+    <item find="gắn sức" replace="gắng sức"/>
+    <item find=":Di chuyển:" replace=""/>
+    <item find="lỗ đổ" replace="lỗ đỗ"/>
+    <item find="chủm" replace="chũm"/>
+    <item find="dì rầm" replace="rì rầm"/>
+    <item find="sác nhận" replace="xác nhận"/>
+    <item find="đả đành" replace="đã đành"/>
+    <item find=":kapa (κ):" replace="Κ"/>
+    <item find=":--:" replace="–"/>
+    <item find="lể mễ" replace="lễ mễ"/>
+    <item find="cỏi lòng" replace="cõi lòng"/>
+    <item find="vàn vọt" replace="vàng vọt"/>
+    <item find=":Bầu dục:" replace="⬭"/>
+    <item find="ma quỹ" replace="ma quỷ"/>
+    <item find="xa sả" replace="sa sả"/>
+    <item find="ghẻ lỡ" replace="ghẻ lở"/>
+    <item find="cũ khoai" replace="củ khoai"/>
+    <item find="ngã người" replace="ngả người"/>
+    <item find="mô tã" replace="mô tả"/>
+    <item find=":tháng:" replace=""/>
+    <item find="dàn thiêu" replace="giàn thiêu"/>
+    <item find="xa xĩ" replace="xa xỉ"/>
+    <item find="xa xả" replace="sa sả"/>
+    <item find="hảy" replace="hãy"/>
+    <item find="hõi" replace="hỏi"/>
+    <item find="phg" replace="phương"/>
+    <item find="xuồng xã" replace="suồng sã"/>
+    <item find="sưởng" replace="xưởng"/>
+    <item find="dỹ nhiên" replace="dĩ nhiên"/>
+    <item find="ddg" replace="đương"/>
+    <item find="nx" replace="những"/>
+    <item find="xe củ" replace="xe cũ"/>
+    <item find="xá kể" replace="sá kể"/>
+    <item find="kng" replace="không"/>
+    <item find="diúp" replace="giúp"/>
+    <item find=":Di động:" replace=""/>
+    <item find=":đúng:" replace=""/>
+    <item find=":Bushi:" replace=""/>
+    <item find="xơn" replace="sơn"/>
+    <item find="sa xẩy" replace="sa sẩy"/>
+    <item find="chịu nỗi" replace="chịu nổi"/>
+    <item find="tgj" replace="tượng"/>
+    <item find="lảng đảng" replace="lãng đãng"/>
+    <item find="sám sịt" replace="xám xịt"/>
+    <item find="lủng cũng" replace="lủng củng"/>
+    <item find="dã man" replace="giã man"/>
+    <item find="sắt xon" replace="sắt son"/>
+    <item find="xô vanh" replace="sô vanh"/>
+    <item find=":Bàn phím:" replace="⌨"/>
+    <item find="sĩ xiện" replace="sĩ diện"/>
+    <item find="giã đông" replace="rã đông"/>
+    <item find="câu truyện" replace="cuốn truyện"/>
+    <item find="sào sạc" replace="xào xạc"/>
+    <item find="soài" replace="xoài"/>
+    <item find=":Trên phải:" replace="©"/>
+    <item find="đái giầm" replace="đái dầm"/>
+    <item find="đả làm" replace="đã làm"/>
+    <item find="xáp" replace="sáp"/>
+    <item find="sỉu" replace="xỉu"/>
+    <item find=":Xám:" replace=""/>
+    <item find=":!!:" replace="‼"/>
+    <item find="ngã mũ" replace="ngả mũ"/>
+    <item find="t/g" replace="thời gian"/>
+    <item find="trôi nỗi" replace="trôi nổi"/>
+    <item find="nghỉ ngợi" replace="nghĩ ngợi"/>
+    <item find="xổ toẹt" replace="sổ toẹt"/>
+    <item find="liếu" replace="líu"/>
+    <item find="xít xịt" replace="sít sịt"/>
+    <item find=":hoặc:" replace="∨"/>
+    <item find="sường xượng" replace="sường sượng"/>
+    <item find="hàn gắng" replace="hàn gắn"/>
+    <item find="khõi" replace="khỏi"/>
+    <item find="dãn" replace="giãn"/>
+    <item find="kthúc" replace="kết thúc"/>
+    <item find=":Làm tròn:" replace="£"/>
+    <item find="su hướng" replace="xu hướng"/>
+    <item find="giàn dựng" replace="dàn dựng"/>
+    <item find="sô bồ" replace="xô bồ"/>
+    <item find="dgj" replace="dượng"/>
+    <item find=":Ngắt:" replace=""/>
+    <item find="xung mãn" replace="sung mãn"/>
+    <item find="đả nghe" replace="đã nghe"/>
+    <item find="xu sẽ" replace="su sẽ"/>
+    <item find="sung đột" replace="xung đột"/>
+    <item find="trãi" replace="trải"/>
+    <item find=":^):" replace="⁾"/>
+    <item find="quê củ" replace="quê cũ"/>
+    <item find="sản suất" replace="sản xuất"/>
+    <item find=":psi (ψ):" replace="ψ"/>
+    <item find="xấu sí" replace="xấu xí"/>
+    <item find="khuỷn sông" replace="khuỷu sông"/>
+    <item find="xỗ sàng" replace="sỗ sàng"/>
+    <item find="kể lễ" replace="kể lể"/>
+    <item find=":-:" replace="−"/>
+    <item find="sẽ xàng" replace="sẽ sàng"/>
+    <item find="cứng cõi" replace="cứng cỏi"/>
+    <item find="sấp sỉ" replace="xấp xỉ"/>
+    <item find="dàn thiên lý" replace="giàn thiên lý"/>
+    <item find="suề" replace="xuề"/>
+    <item find=".*(tm)" replace="™"/>
+    <item find="trao đỗi" replace="trao đổi"/>
+    <item find=":thư điện tử:" replace=""/>
+    <item find=":Mây:" replace="☁"/>
+    <item find="xĩ xố" replace="sĩ số"/>
+    <item find="tẫy" replace="tẩy"/>
+    <item find="thay đỗi" replace="thay đổi"/>
+    <item find="bám siết" replace="bám riết"/>
+    <item find="ngở" replace="ngỡ"/>
+    <item find="dg" replace="dương"/>
+    <item find="suyên" replace="xuyên"/>
+    <item find="truyện bịa" replace="chuyện bịa"/>
+    <item find="rỗ lãi" replace="lỗ lãi"/>
+    <item find="bcj" replace="buộc"/>
+    <item find=": độ:" replace="°"/>
+    <item find="quá củ" replace="quá cũ"/>
+    <item find=":_-:" replace="₋"/>
+    <item find="dàn giáo" replace="giàn giáo"/>
+    <item find=":Danh sách:" replace="✊"/>
+    <item find="to sụ" replace="to xụ"/>
+    <item find=":Phút:" replace=""/>
+    <item find="sô đẩy" replace="xô đẩy"/>
+    <item find="sát xạt" replace="sát sạt"/>
+    <item find="giàn xếp" replace="dàn xếp"/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find="đặc cọc" replace="đặt cọc"/>
+    <item find="giọa" replace="doạ"/>
+    <item find="nhĩu" replace="nhiễu"/>
+    <item find="phìu" replace="phiều"/>
+    <item find=":không có:" replace=""/>
+    <item find="xướng mắt" replace="sướng mắt"/>
+    <item find=":Cỏ ba lá:" replace=""/>
+    <item find="phiu" replace="phiêu"/>
+    <item find="lụp sụp" replace="lụp xụp"/>
+    <item find="bcs" replace="bước"/>
+    <item find="suồng xã" replace="suồng sã"/>
+    <item find="công quỷ" replace="công quỹ"/>
+    <item find="xuy nghỉ" replace="suy nghĩ"/>
+    <item find="xoát" replace="soát"/>
+    <item find="mẫy" replace="mẩy"/>
+    <item find="xĩ diện" replace="sĩ diện"/>
+    <item find="soa dịu" replace="xoa dịu"/>
+    <item find="từng chải" replace="từng trải"/>
+    <item find="ngã nghiêng" replace="ngả nghiêng"/>
+    <item find="cải nhau" replace="cãi nhau"/>
+    <item find="kíu" replace="kiếu"/>
+    <item find="dịu kế" replace="diệu kế"/>
+    <item find="chiếu chít" replace="chíu chít"/>
+    <item find=":trang:" replace=""/>
+    <item find="cặn bả" replace="cặn bã"/>
+    <item find="tỉnh vật" replace="tĩnh vật"/>
+    <item find="tuyễn" replace="tuyển"/>
+    <item find="chuyện cổ tích" replace="truyện cổ tích"/>
+    <item find="dẩn" replace="dẫn"/>
+    <item find="sữa chữa" replace="sửa chữa"/>
+    <item find="sọ xừa" replace="sọ dừa"/>
+    <item find="xo xánh" replace="so sánh"/>
+    <item find="xúc xắc" replace="súc sắc"/>
+    <item find=":.:" replace="…"/>
+    <item find="xụt xịt" replace="sụt sịt"/>
+    <item find="thĩnh" replace="thỉnh"/>
+    <item find="xấp mặt" replace="sấp mặt"/>
+    <item find="suất xứ" replace="xuất xứ"/>
+    <item find=":omega (ω):" replace="Ω"/>
+    <item find="sương sống" replace="xương sống"/>
+    <item find="xẩy" replace="sẩy"/>
+    <item find="buột dây" replace="buộc dây"/>
+    <item find="quá đổi" replace="quá đỗi"/>
+    <item find="thắt mắt" replace="thắc mắc"/>
+    <item find="cổi" replace="cỗi"/>
+    <item find="moại" replace="mọi"/>
+    <item find="sán rạn" replace="xán lạn"/>
+    <item find="dặt giũ" replace="giặt giũ"/>
+    <item find="sìu" replace="xìu"/>
+    <item find="lỗi" replace="lổi"/>
+    <item find="biễu" replace="bĩu"/>
+    <item find="yêu giấu" replace="yêu dấu"/>
+    <item find="xàn xạt" replace="sàn sạt"/>
+    <item find="tỏ vẽ" replace="tỏ vẻ"/>
+    <item find="dìu mướp" replace="diều mướp"/>
+    <item find="chuyễn" replace="chuyển"/>
+    <item find="rầu vậy" replace="dầu vậy"/>
+    <item find=":Neo:" replace="⚓"/>
+    <item find="lảng đãng" replace="lãng đãng"/>
+    <item find="che dấu" replace="che giấu"/>
+    <item find="gở rối" replace="gỡ rối"/>
+    <item find="cuối mặt" replace="cúi mặt"/>
+    <item find="cổ gắng" replace="cố gắng"/>
+    <item find=":Lưu:" replace=""/>
+    <item find="ngạt nhiên" replace="ngạc nhiên"/>
+    <item find="đc" replace="được"/>
+    <item find="xấp sỉ" replace="xấp xỉ"/>
+    <item find="suy xuyển" replace="suy suyển"/>
+    <item find="ép buột" replace="ép buộc"/>
+    <item find="dìu hâu" replace="diều hâu"/>
+    <item find="phẩu" replace="phẫu"/>
+    <item find=":Trăng lưỡi liềm:" replace=""/>
+    <item find="hgs" replace="hướng"/>
+    <item find="tíu lâm" replace="tiếu lâm"/>
+    <item find="xường xượng" replace="sường sượng"/>
+    <item find=":lên:" replace="☝"/>
+    <item find="lổi" replace="lỗi"/>
+    <item find="cữ nhân" replace="cử nhân"/>
+    <item find=":cơ số:" replace=""/>
+    <item find="dỡ dang" replace="dở dang"/>
+    <item find=".*-&gt;.*" replace="→"/>
+    <item find="nổi lòng" replace="nỗi lòng"/>
+    <item find="nhứu" replace="nhíu"/>
+    <item find="từ giả" replace="từ giã"/>
+    <item find=":xi (ξ):" replace="ξ"/>
+    <item find="xan sẻ" replace="san sẻ"/>
+    <item find="hg" replace="hương"/>
+    <item find="sồ xề" replace="sồ sề"/>
+    <item find="nhiều nửa" replace="nhiều nữa"/>
+    <item find="dịu vợi" replace="diệu vợi"/>
+    <item find="tiu xài" replace="tiêu xài"/>
+    <item find="lkết" replace="liên kết"/>
+    <item find="xụt xùi" replace="sụt sùi"/>
+    <item find="sú uế" replace="xú uế"/>
+    <item find="bạt tình" replace="bạc tình"/>
+    <item find="thỉng thoảng" replace="thỉnh thoảng"/>
+    <item find="nói truyện" replace="nói chuyện"/>
+    <item find="con hiêu" replace="con hươu"/>
+    <item find="tháo dở" replace="tháo dỡ"/>
+    <item find="giàu giàu" replace="dàu dàu"/>
+    <item find="nghuệch ngoặc" replace="nguệch ngoạc"/>
+    <item find="màu vàn" replace="màu vàng"/>
+    <item find="chuyện chuyền kỳ" replace="truyện truyền kỳ"/>
+    <item find="hỗi" replace="hổi"/>
+    <item find="vẩy" replace="vẫy"/>
+    <item find="nhiếu" replace="nhíu"/>
+    <item find="cãi bẹ xanh" replace="cải bẹ xanh"/>
+    <item find=":có:" replace=""/>
+    <item find=":Oua-lunh:" replace=""/>
+    <item find="trỡ" replace="trở"/>
+    <item find="nhiệu" replace="nhịu"/>
+    <item find="tỉu" replace="tiểu"/>
+    <item find="3/4" replace="¾"/>
+    <item find="yên tỉnh" replace="yên tĩnh"/>
+    <item find="kiu" replace="kiêu"/>
+    <item find="sù xụ" replace="sù sụ"/>
+    <item find="mổ sẻ" replace="mổ xẻ"/>
+    <item find="phe phẫy" replace="phe phẩy"/>
+    <item find="xuyễn" replace="suyễn"/>
+    <item find="mẩm mạp" replace="mẫm mạp"/>
+    <item find="thgr" replace="thưỏng"/>
+    <item find=":lam-đa (λ):" replace="Λ"/>
+    <item find=".*(C)" replace="©"/>
+    <item find="nghĩ hè" replace="nghỉ hè"/>
+    <item find="lg" replace="lương"/>
+    <item find="rổng" replace="rỗng"/>
+    <item find=":o ngắn (ο):" replace="Ο"/>
+    <item find="nghĩ học" replace="nghỉ học"/>
+    <item find=":Ngũ giác:" replace="⬟"/>
+    <item find="giàn đội" replace="dàn đội"/>
+    <item find="kham nỗi" replace="kham nổi"/>
+    <item find="làm siết" replace="làm riết"/>
+    <item find="xút" replace="sút"/>
+    <item find=":tau (τ):" replace="τ"/>
+    <item find="hàng ngủ" replace="hàng ngũ"/>
+    <item find="xương muối" replace="sương muối"/>
+    <item find="xổ tay" replace="sổ tay"/>
+    <item find=".*(R)" replace="®"/>
+    <item find="bạn củ" replace="bạn cũ"/>
+    <item find="ngủ lục" replace="ngũ lục"/>
+    <item find="thíu" replace="thiếu"/>
+    <item find=":In:" replace="✍"/>
+    <item find="năm sung tháng hạn" replace="năm xung tháng hạn"/>
+    <item find="xọc" replace="sọc"/>
+    <item find="diệu hiền" replace="dịu hiền"/>
+    <item find="sác suất" replace="xác xuất"/>
+    <item find="bay bỗng" replace="bay bổng"/>
+    <item find="xuy xuyễn" replace="suy suyễn"/>
+    <item find="xoái" replace="soái"/>
+    <item find="rời giã" replace="rời rã"/>
+    <item find="nhứt nhối" replace="nhức nhối"/>
+    <item find=":xichma (Σ):" replace="Σ"/>
+    <item find="nử" replace="nữ"/>
+    <item find="siu loại" replace="siêu loại"/>
+    <item find="giầu máy" replace="dầu máy"/>
+    <item find=":và:" replace="∧"/>
+    <item find=":vô hạn:" replace="∞"/>
+    <item find="sướng danh" replace="xướng danh"/>
+    <item find="giấu chân" replace="dấu chân"/>
+    <item find="nổi buồn" replace="nỗi buồn"/>
+    <item find=":Nổi:" replace="♭"/>
+    <item find="bàn hoàn" replace="bàng hoàng"/>
+    <item find="khuôn giấu" replace="khuôn dấu"/>
+    <item find="miu" replace="miêu"/>
+    <item find="soa bóp" replace="xoa bóp"/>
+    <item find="suy nghỉ" replace="suy nghĩ"/>
+    <item find=":?:" replace="❓"/>
+    <item find=":chi (χ):" replace="χ"/>
+    <item find="giàn cảnh" replace="dàn cảnh"/>
+    <item find="xôi" replace="sôi"/>
+    <item find="ngả tư" replace="ngã tư"/>
+    <item find="buồn dầu" replace="buồn rầu"/>
+    <item find="lỏm bỏm" replace="lõm bõm"/>
+    <item find="sa cách" replace="xa cách"/>
+    <item find="vãi" replace="vải"/>
+    <item find="xồ sề" replace="sồ sề"/>
+    <item find=":Xoay:" replace=""/>
+    <item find="nf" replace="nhiều"/>
+    <item find="xáo ngữ" replace="sáo ngữ"/>
+    <item find="xổ cái" replace="sổ cái"/>
+    <item find="&lt;--&gt;" replace="↔"/>
+    <item find="nhìu" replace="nhiều"/>
+    <item find="thã" replace="thả"/>
+    <item find="giả biệ" replace="giã biệ"/>
+    <item find="phũ định" replace="phủ định"/>
+    <item find=":rô (ρ):" replace="ρ"/>
+    <item find=":góc:" replace="∠"/>
+    <item find="đánh giấu" replace="đánh dấu"/>
+    <item find="tháo vác" replace="tháo vát"/>
+    <item find="giả gạo" replace="giã gạo"/>
+    <item find=":in:" replace="∈"/>
+    <item find="lang bạc" replace="lang bạt"/>
+    <item find="truyễn" replace="chuyển"/>
+    <item find="nhừu" replace="nhiều"/>
+    <item find="gioạng" replace="doạng"/>
+    <item find="lổ đỗ" replace="lỗ đỗ"/>
+    <item find="sước" replace="xước"/>
+    <item find="lgj" replace="lượng"/>
+    <item find="nữa chừng" replace="nửa chừng"/>
+    <item find="bốc dở" replace="bốc dỡ"/>
+    <item find="làm mẩu" replace="làm mẫu"/>
+    <item find="lần nửa" replace="lần nữa"/>
+    <item find="xớn xác" replace="sớn sác"/>
+    <item find="xá quản" replace="sá quản"/>
+    <item find="tgr" replace="tưởng"/>
+    <item find="tiu chuẩn" replace="tiêu chuẩn"/>
+    <item find="chỉa" replace="chĩa"/>
+    <item find="HN" replace="Hà Nội"/>
+    <item find="xừu" replace="xìu"/>
+    <item find="thõ" replace="thỏ"/>
+    <item find="thưở mới" replace="thuở mới"/>
+    <item find="sán lạn" replace="xán lạn"/>
+    <item find="riều" replace="rìu"/>
+    <item find="giơm giớm" replace="rơm rớm"/>
+    <item find="xụt sùi" replace="xụt xùi"/>
+    <item find="xì xụp" replace="sì sụp"/>
+    <item find="xương giá" replace="sương giá"/>
+    <item find="đội ngủ" replace="đội ngũ"/>
+    <item find="xo sánh" replace="so sanh"/>
+    <item find="cuốn chuyện" replace="câu chuyện"/>
+    <item find=":xuống:" replace="☟"/>
+    <item find=":Hình chữ nhật:" replace="▬"/>
+    <item find="ngã vàng" replace="ngả vàng"/>
+    <item find="nữa đêm" replace="nửa đêm"/>
+    <item find="hơn nửa" replace="hơn nữa"/>
+    <item find="giã nhóm" replace="rã nhóm"/>
+    <item find="sấc" replace="xấc"/>
+    <item find="lể hội" replace="lễ hội"/>
+    <item find="mẩu hệ" replace="mẫu hệ"/>
+    <item find=":Máy ảnh:" replace=""/>
+    <item find=":pi (π):" replace="π"/>
+    <item find="bàn trải" replace="bàn chải"/>
+    <item find="suống" replace="xuống"/>
+    <item find=":trung bình:" replace=""/>
+    <item find="riệu" replace="rượu"/>
+    <item find="hgf" replace="hàng"/>
+    <item find="xuy nghĩ" replace="suy nghĩ"/>
+    <item find="sung lực" replace="xung lực"/>
+    <item find="giầu lòng" replace="rầu lòng"/>
+    <item find="đi rỗi" replace="đi rổi"/>
+    <item find="phỉnh bụng" replace="phĩnh bụng"/>
+    <item find="dấu đi" replace="giấu đi"/>
+    <item find="dĩu" replace="diễu"/>
+    <item find=":văn bản:" replace="⛺"/>
+    <item find="ngoãn nửa" replace="ngoãn nữa"/>
+    <item find="mặc dầu" replace="mặc dù"/>
+    <item find="ngã ngớn" replace="ngả ngớn"/>
+    <item find="thứ bẩy" replace="thứ bảy"/>
+    <item find="vủ" replace="vũ"/>
+    <item find="trời nỗi" replace="trời nổi"/>
+    <item find=":Gạch:" replace=""/>
+    <item find="t/y" replace="tình yêu"/>
+    <item find="chỉu" replace="chiểu"/>
+    <item find=":trái:" replace="☚"/>
+    <item find="diệu giọng" replace="dịu giọng"/>
+    <item find="xánh" replace="sánh"/>
+    <item find=":Bì thư:" replace="✉"/>
+    <item find="nổi nhớ" replace="nỗi nhớ"/>
+    <item find="nhứt đầu" replace="nhức đầu"/>
+    <item find="vàng bạt" replace="vàng bạc"/>
+    <item find=":có dạng:" replace=""/>
+    <item find="bgf" replace="buồng"/>
+    <item find="xh" replace="xã hội"/>
+    <item find="tính mạn" replace="tính mạng"/>
+    <item find="chử viết" replace="chữ viết"/>
+    <item find="chiệu" replace="chịu"/>
+    <item find="nghành nghề" replace="ngành nghề"/>
+    <item find="củng được" replace="cũng được"/>
+    <item find="xà lúp" replace="sà lúp"/>
+    <item find="đgf" replace="đường"/>
+    <item find="hịu" replace="hiệu"/>
+    <item find="dấu giếm" replace="giấu giếm"/>
+    <item find=":Family:" replace=""/>
+    <item find="phảy" replace="phải"/>
+    <item find="sa săm" replace="xa xăm"/>
+    <item find=":Nâu:" replace="☹"/>
+    <item find="thân mẩu" replace="thân mẫu"/>
+    <item find="vàn óng" replace="vàng óng"/>
+    <item find="giầu ăn" replace="dầu ăn"/>
+    <item find="xung xướng" replace="sung sướng"/>
+    <item find="lở dỡ" replace="lỡ dở"/>
+    <item find="đông đặt" replace="đông đặc"/>
+    <item find="quỷ từ thiện" replace="quỹ từ thiện"/>
+    <item find="tiêu nguỷu" replace="tiu nguỷu"/>
+    <item find="xắt xon" replace="sắt son"/>
+    <item find="tiền bạt" replace="tiền bạc"/>
+    <item find="bãy" replace="bãi"/>
+    <item find="cữ tạ" replace="cử tạ"/>
+    <item find="chiu" replace="chiêu"/>
+    <item find=":Giá:" replace=""/>
+    <item find="nhg" replace="nhưng"/>
+    <item find="trải chuốt" replace="chải chuốt"/>
+    <item find="kiêng cử" replace="kiêng cữ"/>
+    <item find="đở buồn" replace="đỡ buồn"/>
+    <item find=":Thu Phóng:" replace=""/>
+    <item find="ngộ nhở" replace="ngộ nhỡ"/>
+    <item find=":Make:" replace=""/>
+    <item find="sem" replace="xem"/>
+    <item find=":phi (φ):" replace="φ"/>
+    <item find="giãi nắng" replace="dãi nắng"/>
+    <item find=":epxilon (ε):" replace="Ε"/>
+    <item find="làm giầu" replace="làm giàu"/>
+    <item find="giầu thơm" replace="dầu thơm"/>
+    <item find="vô giuyên" replace="vô duyên"/>
+    <item find="tiu bỉu" replace="tiêu biểu"/>
+    <item find="lũng lẵng" replace="lủng lẳng"/>
+    <item find=":Hình bình hành:" replace="▰"/>
+    <item find=":Tắt âm:" replace=""/>
+    <item find="cãi lương" replace="cải lương"/>
+    <item find=":êta (η):" replace="Β"/>
+    <item find=":Tim:" replace="❤"/>
+    <item find="giòng" replace="dòng"/>
+    <item find=":Giọt nhỏ:" replace=""/>
+    <item find="sa lánh" replace="xa lánh"/>
+    <item find="phã" replace="phả"/>
+    <item find="quỹ quái" replace="quỷ quái"/>
+    <item find="nhứt óc" replace="nhức óc"/>
+    <item find="sương xẩu" replace="xương xẩu"/>
+    <item find="cuối chào" replace="cúi chào"/>
+    <item find="diệu ngọt" replace="dịu ngọt"/>
+    <item find="chỉnh sữa" replace="chỉnh sửa"/>
+    <item find="sơi" replace="xơi"/>
+    <item find="xuy xét" replace="suy xét"/>
+    <item find="ngả rẽ" replace="ngã rẽ"/>
+    <item find="xa xá" replace="sa sá"/>
+    <item find="xg" replace="xương"/>
+    <item find="xồ xề" replace="sồ sề"/>
+    <item find="lưởng" replace="lưỡng"/>
+    <item find="kinh ngạt" replace="kinh ngạc"/>
+    <item find="chải ga" replace="trải ga"/>
+    <item find="quộc sống" replace="cuộc sống"/>
+    <item find="lầm lở" replace="lầm lỡ"/>
+    <item find="xớm" replace="sớm"/>
+    <item find="xim" replace="sim"/>
+    <item find=":phút:" replace=""/>
+    <item find="xì xụt" replace="sì sụt"/>
+    <item find="sửa dê" replace="sữa dê"/>
+    <item find=":xêta (ζ):" replace="ζ"/>
+    <item find="sữa xe" replace="sửa xe"/>
+    <item find="cở" replace="cỡ"/>
+    <item find="suân" replace="xuân"/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find="trgr" replace="trưởng"/>
+    <item find="hgj" replace="hạng"/>
+    <item find=":Luỹ thừa:" replace=""/>
+    <item find="tiển" replace="tiễn"/>
+    <item find="ddgf" replace="đường"/>
+    <item find="sục xạo" replace="sục sạo"/>
+    <item find="sửa bò" replace="sữa bò"/>
+    <item find="cúi con đường" replace="cuối con đường"/>
+    <item find=":_(:" replace="₍"/>
+    <item find="diu cữu" replace="diêu cữu"/>
+    <item find="phũi" replace="phủi"/>
+    <item find="hẫy" replace="hẩy"/>
+    <item find="trgf" replace="trường"/>
+    <item find="truyển" replace="chuyển"/>
+    <item find="cố gắn" replace="cố gắng"/>
+    <item find="nước giãi" replace="nước dãi"/>
+    <item find=":dặm:" replace="♂"/>
+    <item find=":Giao:" replace="∩"/>
+    <item find=":phải:" replace="☛"/>
+    <item find="sữa chửa" replace="sửa chữa"/>
+    <item find=":bắt đầu:" replace="★"/>
+    <item find="xắc" replace="sắc"/>
+    <item find="chuyện truyền kỳ" replace="truyện truyền kỳ"/>
+    <item find="nâng đở" replace="nâng đỡ"/>
+    <item find="mũi lòng" replace="mủi lòng"/>
+    <item find="lũng củng," replace="lủng củng"/>
+    <item find="sàn xạn" replace="sàn sạn"/>
+    <item find=":không bằng:" replace="≠"/>
+    <item find="bản ngả" replace="bản ngã"/>
+    <item find="rổi việc" replace="rỗi việc"/>
+    <item find="xung sức" replace="sung sức"/>
+    <item find="xung túc" replace="sung túc"/>
+    <item find="tròng tréo" replace="chồng chéo"/>
+    <item find="giẫy nẩy" replace="giãy nảy"/>
+    <item find=":Anfa:" replace="Α"/>
+    <item find=":Tích phân:" replace="∫"/>
+    <item find="xít xao" replace="sít sao"/>
+    <item find="rễ ràng" replace="dễ dàng"/>
+    <item find="thủy chiều" replace="thủy triều"/>
+    <item find="thiễu" replace="thiểu"/>
+    <item find="liu thuộc" replace="liêu thuộc"/>
+    <item find="xai" replace="sai"/>
+    <item find=":Xan-gô:" replace=""/>
+    <item find=":Quan sát:" replace="⌚"/>
+    <item find="xung công" replace="sung công"/>
+    <item find="sỗi" replace="sổi"/>
+    <item find="vồng" replace="giồng"/>
+    <item find="gắng bó" replace="gắn bó"/>
+    <item find="cách nhau cả thướt" replace="cách nhau cả thước"/>
+    <item find="đễ" replace="để"/>
+    <item find="dành lấy" replace="giành lấy"/>
+    <item find=":Tên:" replace=""/>
+    <item find="sác sơ" replace="xác xơ"/>
+    <item find="buồn bả" replace="buồn bã"/>
+    <item find="sung động" replace="xung động"/>
+    <item find=":Nhịp tim:" replace=""/>
+    <item find="bíu xén" replace="biếu xén"/>
+    <item find="củng vậy" replace="cũng vậy"/>
+    <item find=".*..." replace="…"/>
+    <item find="sụt xùi" replace="sụt sùi"/>
+    <item find="lãng mạng" replace="lãng mạn"/>
+    <item find=":xuất:" replace=""/>
+    <item find="sửa đỗi" replace="sửa đổi"/>
+    <item find=":Pháp:" replace=""/>
+    <item find="rầu đèn" replace="dầu đèn"/>
+    <item find=":Nhấp nháy:" replace=""/>
+    <item find="lìu" replace="liều"/>
+    <item find="cây xen" replace="cân sen"/>
+    <item find="chải qua" replace="trải qua"/>
+    <item find="sịu dữ liệu" replace="siêu dữ liệu"/>
+    <item find="xang" replace="sang"/>
+    <item find="đã đảo" replace="đả đảo"/>
+    <item find="sữa soạn" replace="sửa soạn"/>
+    <item find="ngạc nhiên quá đổi" replace="ngạc nhiên quá đỗi"/>
+    <item find="tỉnh điện" replace="tĩnh điện"/>
+    <item find="trg" replace="trang"/>
+    <item find=":Hình thoi:" replace="♦"/>
+    <item find="buồn giầu" replace="buồn rầu"/>
+    <item find="dành khó" replace="giành khó"/>
+    <item find="kìu" replace="kiều"/>
+    <item find="lĩu" replace="liễu"/>
+    <item find="lỡ dỡ" replace="lỡ dở"/>
+    <item find="su thời" replace="xu thời"/>
+    <item find="1/2" replace="½"/>
+    <item find="sàn xạt" replace="sàn sạt"/>
+    <item find="nói liệu" replace="nói lịu"/>
+    <item find="bữu" replace="bĩu"/>
+    <item find="lở dại" replace="lỡ dại"/>
+    <item find="HCM" replace="Hồ Chí Minh"/>
+    <item find="siết róng" replace="riết róng"/>
+    <item find="thgf" replace="thường"/>
+    <item find=":anfa:" replace="α"/>
+    <item find="bỗi" replace="bổi"/>
+    <item find=":/:" replace="∕"/>
+    <item find="dể" replace="dễ"/>
+    <item find="xĩ số" replace="sĩ số"/>
+    <item find="phgj" replace="phượng"/>
+    <item find="xóc vọng" replace="sóc vọng"/>
+    <item find="thiêu thiêu" replace="thiu thiu"/>
+    <item find="séo" replace="xéo"/>
+    <item find="xây xát" replace="sây sát"/>
+    <item find="sác xuất" replace="xác xuất"/>
+    <item find="nẩu" replace="nẫu"/>
+    <item find="nịu" replace="niệu"/>
+    <item find="sáo trộn" replace="xáo trộn"/>
+    <item find="kể truyện" replace="kể chuyện"/>
+    <item find="lổ đổ" replace="lỗ đỗ"/>
+    <item find=":Socket:" replace=""/>
+    <item find="xè xè" replace="sè sè"/>
+    <item find="giành tiền mua" replace="dành tiền mua"/>
+    <item find="chg" replace="chương"/>
+    <item find="nghĩ ngơi" replace="nghỉ ngơi"/>
+    <item find="xành" replace="sành"/>
+    <item find="giây điện" replace="dây điện"/>
+    <item find="xượng" replace="sượng"/>
+    <item find="xan bằng" replace="san bằng"/>
+    <item find=":bảng:" replace=""/>
+    <item find="cơm xuất" replace="cơm suất"/>
+    <item find="thưở xưa" replace="thuở xưa"/>
+    <item find="kôhng" replace="không"/>
+    <item find="xãy" replace="xảy"/>
+    <item find=":Chuột:" replace=""/>
+    <item find="trgj" replace="trượng"/>
+    <item find="xoạt" replace="soạt"/>
+    <item find=":Ô:" replace=""/>
+    <item find="siết ráo" replace="riết ráo"/>
+    <item find="xính" replace="sính"/>
+  </items>
+  <UpperCaseExceptions/>
+  <TwoUpperLetterExceptions>
+    <word exception="MHz"/>
+    <word exception="THz"/>
+    <word exception="KHz"/>
+    <word exception="GHz"/>
+    <word exception="OOo"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>

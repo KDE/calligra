@@ -1,0 +1,2008 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE autocorrection>
+<Word>
+  <items>
+    <item find=":balon:" replace=""/>
+    <item find=":par4:" replace=""/>
+    <item find=":molitva:" replace=""/>
+    <item find=":-a:" replace="ā"/>
+    <item find=":tvornica:" replace=""/>
+    <item find=":prst:" replace=""/>
+    <item find=":stereo:" replace=""/>
+    <item find=":kišovito:" replace=""/>
+    <item find=":zatvarač:" replace="蘿"/>
+    <item find=":putovnica:" replace=""/>
+    <item find=":proslava:" replace=""/>
+    <item find=":srce:" replace="❤"/>
+    <item find=":koža2:" replace=""/>
+    <item find=":umnožak:" replace="∏"/>
+    <item find=":_fi:" replace="ᵩ"/>
+    <item find=":^beta:" replace="ᵝ"/>
+    <item find=":zvučnik:" replace=""/>
+    <item find=":kocka2:" replace="⚁"/>
+    <item find=":čekić i motika:" replace="⚒"/>
+    <item find=":kikiriki:" replace=""/>
+    <item find=":šekel:" replace="₪"/>
+    <item find=":nogomet2:" replace="聾"/>
+    <item find=":srednji kvadrat2:" replace="◼"/>
+    <item find=":!2:" replace="❗"/>
+    <item find=":tigar2:" replace=""/>
+    <item find=":grafikon5:" replace=""/>
+    <item find=":pospan:" replace=""/>
+    <item find=":kuglanje:" replace=""/>
+    <item find=":petlja:" replace="➰"/>
+    <item find=":stranica3:" replace=""/>
+    <item find=":om:" replace=""/>
+    <item find=":poštanski sandučić 4:" replace=""/>
+    <item find=":kuća:" replace=""/>
+    <item find=":bubanj:" replace=""/>
+    <item find=":pljeskanje:" replace=""/>
+    <item find=":perle:" replace=""/>
+    <item find=":utišaj:" replace=""/>
+    <item find=":pobjeda2:" replace=""/>
+    <item find=":kamion2:" replace=""/>
+    <item find=":kocka:" replace=""/>
+    <item find=":avion5:" replace=""/>
+    <item find=":!?:" replace="⁉"/>
+    <item find=":šaka4:" replace="卵"/>
+    <item find=":pahuljica:" replace="❄"/>
+    <item find=":traktor:" replace=""/>
+    <item find=":predznak2:" replace="‣"/>
+    <item find=":toranj:" replace=""/>
+    <item find=":kišobran3:" replace="⛱"/>
+    <item find=":bljesak:" replace=""/>
+    <item find=":dječaci:" replace=""/>
+    <item find=":klaun:" replace="嵐"/>
+    <item find=":tanabata stablo:" replace=""/>
+    <item find=":Psi:" replace="Ψ"/>
+    <item find=":smješak:" replace=""/>
+    <item find=":optički disk:" replace=""/>
+    <item find=":crkva:" replace="⛪"/>
+    <item find=":kovrčav:" replace="樓"/>
+    <item find=":pica:" replace=""/>
+    <item find=":telefon2:" replace="☏"/>
+    <item find=":_i:" replace="ᵢ"/>
+    <item find=":dlan preko lica:" replace="臘"/>
+    <item find=":kreditna kartica:" replace=""/>
+    <item find=":nož:" replace=""/>
+    <item find=":klizaljka:" replace="⛸"/>
+    <item find=":mapa2:" replace=""/>
+    <item find=":vanzemaljac:" replace=""/>
+    <item find=":polumjesec:" replace=""/>
+    <item find=":princ:" replace="老"/>
+    <item find=":/:" replace="∕"/>
+    <item find=":bandaža:" replace="洛"/>
+    <item find=":psi:" replace="ψ"/>
+    <item find=":krofna:" replace=""/>
+    <item find=":rižna scena:" replace=""/>
+    <item find=":dva srca:" replace=""/>
+    <item find=":ruka3:" replace=""/>
+    <item find=":zvijezda:" replace="★"/>
+    <item find=":miš4:" replace=""/>
+    <item find=":balončić6:" replace=""/>
+    <item find=":Djed Božićnjak:" replace=""/>
+    <item find=":balončić8:" replace=""/>
+    <item find=":par:" replace=""/>
+    <item find=":patlidžan:" replace=""/>
+    <item find=":majmun:" replace=""/>
+    <item find=":maska:" replace=""/>
+    <item find=":ljubav2:" replace="蘭"/>
+    <item find=":stranice:" replace=""/>
+    <item find=":ukrasi srca:" replace=""/>
+    <item find=":pčela:" replace=""/>
+    <item find=":jecati:" replace=""/>
+    <item find=":vatra:" replace=""/>
+    <item find=":ili:" replace="∨"/>
+    <item find=":vatrogasna kola:" replace=""/>
+    <item find=":karta:" replace=""/>
+    <item find=":Fi:" replace="Φ"/>
+    <item find=":bolnica:" replace=""/>
+    <item find=":veliki krug2:" replace="⬤"/>
+    <item find=":Gama:" replace="Γ"/>
+    <item find=":11,30:" replace=""/>
+    <item find=":omotnica7:" replace=""/>
+    <item find=":leptir:" replace="曆"/>
+    <item find=":pozivanje:" replace=""/>
+    <item find=":bez mobitela:" replace=""/>
+    <item find=":pi:" replace="π"/>
+    <item find=":kalendar3:" replace=""/>
+    <item find=":jen:" replace="¥"/>
+    <item find=":^delta:" replace="ᵟ"/>
+    <item find=":omotnica3:" replace=""/>
+    <item find=":radioaktivno:" replace="☢"/>
+    <item find=":par3:" replace=""/>
+    <item find=":lav:" replace="女"/>
+    <item find=":peterokut:" replace="⬠"/>
+    <item find=":golf:" replace=""/>
+    <item find=":uzbuđen:" replace="朗"/>
+    <item find=":auto:" replace=""/>
+    <item find=":kokos:" replace="便"/>
+    <item find=":slegnuti ramenima:" replace="路"/>
+    <item find=":zvuk:" replace=""/>
+    <item find=":spock:" replace=""/>
+    <item find=":postoji:" replace="∃"/>
+    <item find=":11 h:" replace=""/>
+    <item find=":plač:" replace=""/>
+    <item find=":dango:" replace=""/>
+    <item find=":^4:" replace="⁴"/>
+    <item find=":5 h:" replace=""/>
+    <item find=":.:" replace="…"/>
+    <item find=":biljka:" replace=""/>
+    <item find=":kliži:" replace=""/>
+    <item find=":desno5:" replace=""/>
+    <item find=":zrake4:" replace=""/>
+    <item find=":_r:" replace="ᵣ"/>
+    <item find=":cvijet:" replace="⚘"/>
+    <item find=":cent:" replace="¢"/>
+    <item find=":golubica:" replace=""/>
+    <item find=":mag2:" replace=""/>
+    <item find=":gorila:" replace="轢"/>
+    <item find=":slinjenje:" replace="襤"/>
+    <item find=":faks2:" replace=""/>
+    <item find=":^x:" replace="ˣ"/>
+    <item find=":ne vidi zlo:" replace=""/>
+    <item find=":mig:" replace=""/>
+    <item find=":sreća:" replace=""/>
+    <item find=":rogovi bika2:" replace=""/>
+    <item find=":svinja:" replace=""/>
+    <item find=":kvadratni korijen:" replace="√"/>
+    <item find=":lokomotiva:" replace=""/>
+    <item find=":mapa3:" replace=""/>
+    <item find=":helikopter:" replace=""/>
+    <item find=":plesač2:" replace=""/>
+    <item find=":kuhanje:" replace=""/>
+    <item find=":baht:" replace="฿"/>
+    <item find=":J:" replace="↓"/>
+    <item find=":trgovina2:" replace=""/>
+    <item find=":razvod:" replace="⚮"/>
+    <item find=":sigma:" replace="σ"/>
+    <item find=":5/8:" replace="⅝"/>
+    <item find=":avion2:" replace=""/>
+    <item find=":maglovito:" replace=""/>
+    <item find=":ključ2:" replace=""/>
+    <item find=":gimnastičar:" replace="露"/>
+    <item find=":tigar:" replace=""/>
+    <item find=":brod:" replace=""/>
+    <item find=":pravokutnik:" replace="▭"/>
+    <item find=":lijevo:" replace="☜"/>
+    <item find=":dinja:" replace=""/>
+    <item find=":tramvaj:" replace=""/>
+    <item find=":kuća2:" replace=""/>
+    <item find=":usta:" replace=""/>
+    <item find=":^5:" replace="⁵"/>
+    <item find=":pribadača:" replace=""/>
+    <item find=":monokl:" replace="類"/>
+    <item find=":krug:" replace="○"/>
+    <item find=":mali u:" replace="∊"/>
+    <item find=":robot:" replace="烙"/>
+    <item find=":utikač:" replace=""/>
+    <item find=":gore2:" replace=""/>
+    <item find=":igraća palica:" replace=""/>
+    <item find=":trokut2:" replace="▲"/>
+    <item find=":olovka4:" replace=""/>
+    <item find=":^A:" replace="ᴬ"/>
+    <item find=":&gt;=:" replace="≥"/>
+    <item find=":riblji kolač:" replace=""/>
+    <item find=":^7:" replace="⁷"/>
+    <item find=":zap:" replace="⚡"/>
+    <item find=":telefon:" replace="☎"/>
+    <item find=":komet:" replace="☄"/>
+    <item find=":stranica:" replace=""/>
+    <item find=":ukrasna vrpca2:" replace=""/>
+    <item find=":4,30:" replace=""/>
+    <item find=":SZ2:" replace="⇖"/>
+    <item find=":&lt;=:" replace="≤"/>
+    <item find=":'e:" replace="ȅ"/>
+    <item find=":grafikon2:" replace=""/>
+    <item find=":mi:" replace="μ"/>
+    <item find=":žičara:" replace=""/>
+    <item find=":glasački listić:" replace=""/>
+    <item find=":bez piratstva:" replace=""/>
+    <item find=":_8:" replace="₈"/>
+    <item find=":policijski auto:" replace=""/>
+    <item find=":teleskop:" replace=""/>
+    <item find=":integral5:" replace="∰"/>
+    <item find=":hot dog:" replace=""/>
+    <item find=":hamburger:" replace=""/>
+    <item find=":ptica:" replace=""/>
+    <item find=":dokument4:" replace=""/>
+    <item find=":caduceus:" replace="☤"/>
+    <item find=":saksofon:" replace=""/>
+    <item find=":nerd:" replace="邏"/>
+    <item find=":tiho:" replace="狼"/>
+    <item find=":bejzbol:" replace="⚾"/>
+    <item find=":nlo:" replace=""/>
+    <item find=":oprez:" replace="☡"/>
+    <item find=":za van:" replace="率"/>
+    <item find=":olakšanje:" replace=""/>
+    <item find=":miš2:" replace=""/>
+    <item find=":vjetar:" replace=""/>
+    <item find=":border:" replace=""/>
+    <item find=":nota:" replace="♩"/>
+    <item find=":balončić7:" replace=""/>
+    <item find=":sigma2:" replace="ς"/>
+    <item find=":odrastao:" replace="六"/>
+    <item find=":autorska prava:" replace="©"/>
+    <item find=":motika:" replace="⛏"/>
+    <item find=":smiješak3:" replace=""/>
+    <item find=":'o:" replace="ȍ"/>
+    <item find=":zvono:" replace=""/>
+    <item find=":bezizrazno:" replace=""/>
+    <item find=":dolje3:" replace=""/>
+    <item find=":vatromet:" replace=""/>
+    <item find=":paprikaš:" replace=""/>
+    <item find=":minimiziraj:" replace=""/>
+    <item find=":vuk:" replace=""/>
+    <item find="med. Lab." replace="med. lab."/>
+    <item find=":kvačica3:" replace="✅"/>
+    <item find=":rođendan:" replace=""/>
+    <item find=":gama:" replace="γ"/>
+    <item find=":autobus2:" replace=""/>
+    <item find=":lira:" replace="₤"/>
+    <item find=":čekić:" replace=""/>
+    <item find=":ni:" replace="ν"/>
+    <item find=":pisač:" replace=""/>
+    <item find=":':" replace="’"/>
+    <item find=":sunčano:" replace="☀"/>
+    <item find=":anđeo:" replace=""/>
+    <item find=":_7:" replace="₇"/>
+    <item find=":iskra:" replace="❇"/>
+    <item find=":zaslon:" replace=""/>
+    <item find=":stolni tenis:" replace=""/>
+    <item find=":motka:" replace="⚚"/>
+    <item find=":bijeli kralj:" replace="♔"/>
+    <item find=":zmaj:" replace=""/>
+    <item find=":sloboda:" replace=""/>
+    <item find=":paralelogram2:" replace="▰"/>
+    <item find=":sladoled:" replace=""/>
+    <item find=":snjegović:" replace="☃"/>
+    <item find=":noga peradi:" replace=""/>
+    <item find=":tipka2:" replace=""/>
+    <item find=":pile:" replace=""/>
+    <item find=":_gama:" replace="ᵧ"/>
+    <item find=":ženski:" replace="♀"/>
+    <item find=":zečije uši:" replace=""/>
+    <item find=":ambulanta:" replace=""/>
+    <item find=":gore5:" replace=""/>
+    <item find=":oznaka:" replace=""/>
+    <item find=":vepar:" replace=""/>
+    <item find=":zlatna medalja:" replace="磊"/>
+    <item find=":&gt;&gt;:" replace="≫"/>
+    <item find=":oči:" replace=""/>
+    <item find=":stop:" replace=""/>
+    <item find=":skijanje:" replace=""/>
+    <item find=":ciklon:" replace=""/>
+    <item find=":_):" replace="₎"/>
+    <item find=":čekić i ključ:" replace=""/>
+    <item find=":glava:" replace=""/>
+    <item find=":kari:" replace=""/>
+    <item find=":chi rho:" replace="☧"/>
+    <item find=":vlak3:" replace=""/>
+    <item find=":pješčani sat2:" replace="⏳"/>
+    <item find=":_j:" replace="ⱼ"/>
+    <item find=":boksanje:" replace="壘"/>
+    <item find=":omotnica5:" replace=""/>
+    <item find=":mali izvan:" replace="∍"/>
+    <item find=":SJ2:" replace="⇕"/>
+    <item find=":trofej:" replace=""/>
+    <item find=":gitara:" replace=""/>
+    <item find=":grad:" replace=""/>
+    <item find=":dolje5:" replace=""/>
+    <item find=":jež:" replace="璉"/>
+    <item find=":diplomiranje:" replace=""/>
+    <item find=":gušter:" replace="年"/>
+    <item find=":vilenjak:" replace="利"/>
+    <item find=":sendvič:" replace="索"/>
+    <item find=":bljeskalica:" replace=""/>
+    <item find=":američki nogomet:" replace=""/>
+    <item find=":lijevo6:" replace=""/>
+    <item find=":izlazak sunca3:" replace=""/>
+    <item find=":sat:" replace="⌚"/>
+    <item find=":drvo:" replace=""/>
+    <item find=":bento:" replace=""/>
+    <item find=":vjeverica:" replace=""/>
+    <item find=":8 h:" replace=""/>
+    <item find=":globus2:" replace=""/>
+    <item find="%o" replace="‰"/>
+    <item find=":7/8:" replace="⅞"/>
+    <item find=":Upravljačka kuglica:" replace=""/>
+    <item find=":ustrajati:" replace=""/>
+    <item find=":šetanje:" replace=""/>
+    <item find=":slatki osmjeh:" replace=""/>
+    <item find=":x:" replace="×"/>
+    <item find=":biciklist:" replace=""/>
+    <item find=":mišić:" replace=""/>
+    <item find=":^gama:" replace="ᵞ"/>
+    <item find=":novine2:" replace=""/>
+    <item find=":piće:" replace="磻"/>
+    <item find=":toalet:" replace=""/>
+    <item find=":nasmješena mačka:" replace=""/>
+    <item find=":jaje:" replace="讀"/>
+    <item find=":bitcoin:" replace="₿"/>
+    <item find=":^D:" replace="ᴰ"/>
+    <item find=":stop2:" replace="⏹"/>
+    <item find=":kanu:" replace=""/>
+    <item find=":kuća3:" replace=""/>
+    <item find=":novac:" replace=""/>
+    <item find=":knedla:" replace="寧"/>
+    <item find=":morski pas:" replace="麗"/>
+    <item find=":dinosaur:" replace="秊"/>
+    <item find=":pladanj2:" replace=""/>
+    <item find=":panda:" replace=""/>
+    <item find=":brod2:" replace=""/>
+    <item find=":5,30:" replace=""/>
+    <item find=":predznak3:" replace="◦"/>
+    <item find=":lopta:" replace="⛹"/>
+    <item find=":poprsja:" replace=""/>
+    <item find=":primatelj:" replace=""/>
+    <item find=":skuter:" replace=""/>
+    <item find=":majmun2:" replace=""/>
+    <item find=":surfer:" replace=""/>
+    <item find=":muzej:" replace=""/>
+    <item find=":njega noktiju:" replace=""/>
+    <item find=":štapići za jelo:" replace="異"/>
+    <item find=":kokice:" replace=""/>
+    <item find=":ispod 18:" replace=""/>
+    <item find=":floppy4:" replace=""/>
+    <item find=":svjetlucajuće srce:" replace=""/>
+    <item find=":puž:" replace=""/>
+    <item find=":šal:" replace="泥"/>
+    <item find=":notes:" replace=""/>
+    <item find=":krug3:" replace=""/>
+    <item find=":3/4:" replace="¾"/>
+    <item find=":Vaga:" replace="♎"/>
+    <item find=":!!:" replace="‼"/>
+    <item find=":10,30:" replace=""/>
+    <item find=":polumjesec2:" replace=""/>
+    <item find=":poštanski sandučić:" replace=""/>
+    <item find=":Rak:" replace="♋"/>
+    <item find=":x2:" replace="❌"/>
+    <item find=":ravnalo2:" replace=""/>
+    <item find=":cipela:" replace=""/>
+    <item find=":keltski križ:" replace=""/>
+    <item find=":mačka koja se duri:" replace=""/>
+    <item find=":bijela kraljica:" replace="♕"/>
+    <item find=":kemijska olovka2:" replace=""/>
+    <item find=":pijetao:" replace=""/>
+    <item find=":jednotračna pruga:" replace=""/>
+    <item find=":brodica:" replace="⛵"/>
+    <item find=":bilježnica:" replace=""/>
+    <item find=":snijeg:" replace=""/>
+    <item find=":kimono:" replace=""/>
+    <item find=":kišobran:" replace="☂"/>
+    <item find=":Eta:" replace="Η"/>
+    <item find=":prtljaga:" replace=""/>
+    <item find=":breskva:" replace=""/>
+    <item find=":bodež2:" replace="‡"/>
+    <item find=":knjige:" replace=""/>
+    <item find=":otvorene ruke:" replace=""/>
+    <item find=":djelomično:" replace="∂"/>
+    <item find=":riba3:" replace=""/>
+    <item find=":_p:" replace="ₚ"/>
+    <item find=":shaved ice:" replace=""/>
+    <item find=":4 h:" replace=""/>
+    <item find=":potvrdni okvir 6:" replace=""/>
+    <item find=":_hi:" replace="ᵪ"/>
+    <item find=":mrkva:" replace="凌"/>
+    <item find=":četvrti korijen:" replace="∜"/>
+    <item find=":pita:" replace="不"/>
+    <item find=":riba2:" replace=""/>
+    <item find=":eighth rest:" replace="턾"/>
+    <item find=":žirafa:" replace="漣"/>
+    <item find=":poljubac4:" replace=""/>
+    <item find=":^g:" replace="ᵍ"/>
+    <item find=":ured:" replace=""/>
+    <item find=":rezultat:" replace=""/>
+    <item find=":mačka koja plače:" replace=""/>
+    <item find=":lokot:" replace=""/>
+    <item find=":prazan skup:" replace="∅"/>
+    <item find=":fl:" replace="ﬂ"/>
+    <item find=":jezik3:" replace=""/>
+    <item find=":naopako:" replace=""/>
+    <item find=":šokiran:" replace="勞"/>
+    <item find=":Riba:" replace="♓"/>
+    <item find=":ankh:" replace="☥"/>
+    <item find=":sjedalo:" replace=""/>
+    <item find=":pisanje2:" replace=""/>
+    <item find=":^O:" replace="ᴼ"/>
+    <item find=":sinagoga:" replace=""/>
+    <item find=":pošta2:" replace=""/>
+    <item find=":zastava2:" replace=""/>
+    <item find=":faks:" replace=""/>
+    <item find=":atom:" replace="⚛"/>
+    <item find=":^hi:" replace="ᵡ"/>
+    <item find=":_=:" replace="₌"/>
+    <item find=":krumpir:" replace="凜"/>
+    <item find=":funta:" replace="£"/>
+    <item find=":imp:" replace=""/>
+    <item find=":Vodenjak:" replace="♒"/>
+    <item find=":zastave:" replace=""/>
+    <item find=":izlazak sunca:" replace=""/>
+    <item find=":slatkoća:" replace=""/>
+    <item find=":kristalna kugla:" replace=""/>
+    <item find=":aparati za klađenje:" replace=""/>
+    <item find=":bambus:" replace=""/>
+    <item find=":ramen:" replace=""/>
+    <item find=":poprsje:" replace=""/>
+    <item find=":crtica:" replace=""/>
+    <item find=":okvir2:" replace=""/>
+    <item find=":zabava2:" replace=""/>
+    <item find=":Davidova zvijezda:" replace="✡"/>
+    <item find=":penjač:" replace="輪"/>
+    <item find="med. Dent." replace="med. dent."/>
+    <item find=":vlak smrti:" replace=""/>
+    <item find=":lutke:" replace=""/>
+    <item find=":koktel:" replace=""/>
+    <item find="%oo" replace="‱"/>
+    <item find=":konj3:" replace=""/>
+    <item find=":kut:" replace="∠"/>
+    <item find=":isključen mobitel:" replace=""/>
+    <item find=":pc:" replace=""/>
+    <item find=":smijeh:" replace=""/>
+    <item find=":Ovan:" replace="♈"/>
+    <item find=":kruška:" replace=""/>
+    <item find=":majca:" replace=""/>
+    <item find=":suncokret:" replace=""/>
+    <item find=":rotirka:" replace=""/>
+    <item find=":koš za smeće:" replace=""/>
+    <item find=":zlobni smiješak:" replace=""/>
+    <item find=":zastava4:" replace="⚐"/>
+    <item find=":3/8:" replace="⅜"/>
+    <item find=":6,30:" replace=""/>
+    <item find=":lokot2:" replace=""/>
+    <item find=":blokić:" replace=""/>
+    <item find=":prsten:" replace=""/>
+    <item find=":_3:" replace="₃"/>
+    <item find=":^U:" replace="ᵁ"/>
+    <item find=":govance:" replace=""/>
+    <item find=":nije u:" replace="∉"/>
+    <item find=":taksi:" replace=""/>
+    <item find=":mladenka:" replace=""/>
+    <item find=":prijemnik4:" replace=""/>
+    <item find=":paralelogram:" replace="▱"/>
+    <item find="med. Chem." replace="med. chem."/>
+    <item find=":noć:" replace=""/>
+    <item find=":ne:" replace=""/>
+    <item find=":pentagram:" replace="⛤"/>
+    <item find=":vesela mačka:" replace=""/>
+    <item find=":oštro:" replace="♯"/>
+    <item find=":^t:" replace="ᵗ"/>
+    <item find=":lambda:" replace="λ"/>
+    <item find=":ošamućeno lice:" replace=""/>
+    <item find=":^R:" replace="ᴿ"/>
+    <item find=":novi mjesec:" replace=""/>
+    <item find=":^-:" replace="⁻"/>
+    <item find=":kaktus:" replace=""/>
+    <item find=":^fi:" replace="ᵠ"/>
+    <item find=":svjetiljka:" replace=""/>
+    <item find=":svinja2:" replace=""/>
+    <item find=":mobitel2:" replace=""/>
+    <item find=":crni top:" replace="♜"/>
+    <item find=":^L:" replace="ᴸ"/>
+    <item find=":^V:" replace="ⱽ"/>
+    <item find=":grožđe:" replace=""/>
+    <item find=":hokej:" replace=""/>
+    <item find=":latinski križ:" replace="✝"/>
+    <item find=":srebrna medalja:" replace="賂"/>
+    <item find=":bljesak3:" replace="☇"/>
+    <item find=":cvat2:" replace=""/>
+    <item find=":skijaš:" replace="⛷"/>
+    <item find=":teški dolarski znak:" replace=""/>
+    <item find=":oblačno:" replace=""/>
+    <item find=":krumpirići:" replace=""/>
+    <item find=":tvrdi disk:" replace=""/>
+    <item find=":plaža:" replace=""/>
+    <item find=":_9:" replace="₉"/>
+    <item find=":ruža:" replace=""/>
+    <item find=":Kaaba:" replace=""/>
+    <item find=":policijski auto2:" replace=""/>
+    <item find=":obrva:" replace="廊"/>
+    <item find=":kip:" replace=""/>
+    <item find=":integral2:" replace="∬"/>
+    <item find=":'u:" replace="ȕ"/>
+    <item find=":ne govori zlo:" replace=""/>
+    <item find=":vila:" replace="栗"/>
+    <item find=":whole rest:" replace="턻"/>
+    <item find=":bor:" replace=""/>
+    <item find=":izvan:" replace="∋"/>
+    <item find=":novi mjesec2:" replace=""/>
+    <item find=":mobitel:" replace=""/>
+    <item find=":sparkler:" replace=""/>
+    <item find=":lubanja:" replace=""/>
+    <item find=":slatko:" replace=""/>
+    <item find=":omikron:" replace="ο"/>
+    <item find=":auto3:" replace=""/>
+    <item find=":grljenje:" replace="珞"/>
+    <item find=":^k:" replace="ᵏ"/>
+    <item find=":staklo3:" replace="弄"/>
+    <item find=":krevet:" replace=""/>
+    <item find=":bilješke4:" replace=""/>
+    <item find=":ljut:" replace=""/>
+    <item find=":-e:" replace="ē"/>
+    <item find=":ošamućen:" replace=""/>
+    <item find=":krava2:" replace=""/>
+    <item find=":spajalica:" replace=""/>
+    <item find=":8,30:" replace=""/>
+    <item find=":sunčane naočale2:" replace=""/>
+    <item find=":_u:" replace="ᵤ"/>
+    <item find=":slanina:" replace="肋"/>
+    <item find=":crni lovac:" replace="♝"/>
+    <item find=":kocka3:" replace="⚂"/>
+    <item find=":mačka sa srcolikim očima:" replace=""/>
+    <item find=":dolazak:" replace=""/>
+    <item find=":kemijska olovka:" replace=""/>
+    <item find=":duh:" replace=""/>
+    <item find=":prazan blokić:" replace=""/>
+    <item find=":golf2:" replace="⛳"/>
+    <item find=":bočica za bebe:" replace=""/>
+    <item find=":eta:" replace="η"/>
+    <item find=":zvijezda2:" replace="☆"/>
+    <item find=":ragbi nogomet:" replace=""/>
+    <item find=":menora:" replace=""/>
+    <item find=":trokutasta zastava:" replace=""/>
+    <item find=":džamija:" replace=""/>
+    <item find=":odjeljak:" replace="§"/>
+    <item find=":žena:" replace=""/>
+    <item find=":oblizati:" replace=""/>
+    <item find=":kukuruz:" replace=""/>
+    <item find=":presjek:" replace="∩"/>
+    <item find=":pušenje:" replace=""/>
+    <item find=":top hat:" replace=""/>
+    <item find=":umjetnost:" replace=""/>
+    <item find=":^K:" replace="ᴷ"/>
+    <item find=":kapljica2:" replace=""/>
+    <item find=":zelena jabuka:" replace=""/>
+    <item find=":poštanski sandučić 2:" replace=""/>
+    <item find=":beta:" replace="β"/>
+    <item find=":burrito:" replace=""/>
+    <item find=":škola:" replace=""/>
+    <item find=":klapkalo:" replace=""/>
+    <item find=":dvostruko oštro:" replace="턪"/>
+    <item find=":pik:" replace="♠"/>
+    <item find=":otključaj:" replace=""/>
+    <item find=":pravokutnik2:" replace="▬"/>
+    <item find=":cirkus:" replace=""/>
+    <item find=":rogovi bika:" replace=""/>
+    <item find=":_h:" replace="ₕ"/>
+    <item find=":^n:" replace="ⁿ"/>
+    <item find=":planinska žičara:" replace=""/>
+    <item find=":truba:" replace=""/>
+    <item find=":manji kvadrat:" replace="◽"/>
+    <item find=":kišobran2:" replace=""/>
+    <item find=":Omikron:" replace="Ο"/>
+    <item find=":jagoda:" replace=""/>
+    <item find=":^r:" replace="ʳ"/>
+    <item find=":^E:" replace="ᴱ"/>
+    <item find=":cijela nota:" replace="텝"/>
+    <item find=":palačinke:" replace="丹"/>
+    <item find=":_a:" replace="ₐ"/>
+    <item find=":carina:" replace=""/>
+    <item find=":termometar:" replace=""/>
+    <item find=":mikrofon:" replace=""/>
+    <item find=":smiješak2:" replace="☻"/>
+    <item find=":duh iz svjetiljke:" replace="吏"/>
+    <item find=":baterija:" replace=""/>
+    <item find=":prirodno:" replace="♮"/>
+    <item find=":sretno:" replace="爛"/>
+    <item find=":povraćanje:" replace="冷"/>
+    <item find=":won:" replace="₩"/>
+    <item find=":nos:" replace=""/>
+    <item find=":nosorog:" replace="憐"/>
+    <item find=":_5:" replace="₅"/>
+    <item find=":IZ:" replace="↔"/>
+    <item find=":alfa:" replace="α"/>
+    <item find=":yin yang:" replace="☯"/>
+    <item find=":bez zvona:" replace=""/>
+    <item find=":^H:" replace="ᴴ"/>
+    <item find=":domino:" replace=""/>
+    <item find=":dolje6:" replace=""/>
+    <item find=":svijeća:" replace=""/>
+    <item find=":bez bikicala:" replace=""/>
+    <item find=":Lav:" replace="♌"/>
+    <item find=":djevojčice:" replace=""/>
+    <item find=":kikiriki2:" replace=""/>
+    <item find=":zabranjeno:" replace=""/>
+    <item find=":gljiva:" replace=""/>
+    <item find="med. Biochem." replace="med. biochem."/>
+    <item find=":pauza:" replace="⏸"/>
+    <item find=":ortodoksni križ:" replace="☦"/>
+    <item find=":krava:" replace=""/>
+    <item find=":šal oko vrata:" replace="崙"/>
+    <item find=":recikliranje:" replace="♲"/>
+    <item find=":trajekt:" replace="⛴"/>
+    <item find=":narančasto srce:" replace="李"/>
+    <item find=":?:" replace="❓"/>
+    <item find=":spajalica2:" replace=""/>
+    <item find=":kralj:" replace=""/>
+    <item find=":cura:" replace=""/>
+    <item find=":mapa4:" replace=""/>
+    <item find=":Merkur:" replace="☿"/>
+    <item find=":zvonce na vjetar:" replace=""/>
+    <item find=":semafor2:" replace=""/>
+    <item find=":floppy2:" replace=""/>
+    <item find=":^h:" replace="ʰ"/>
+    <item find=":žarulja:" replace=""/>
+    <item find=":olovka3:" replace="✐"/>
+    <item find=":prostačenje:" replace="郎"/>
+    <item find=":kubni korijen:" replace="∛"/>
+    <item find=":štit2:" replace="⛨"/>
+    <item find=":violina:" replace=""/>
+    <item find=":zebra:" replace="煉"/>
+    <item find=":ok:" replace=""/>
+    <item find=":zmija:" replace=""/>
+    <item find=":globus4:" replace=""/>
+    <item find=":pješčani sat:" replace="⌛"/>
+    <item find=":ravnalo:" replace=""/>
+    <item find=":^a:" replace="ᵃ"/>
+    <item find=":lijevo3:" replace="☚"/>
+    <item find=":banka:" replace=""/>
+    <item find=":x4:" replace=""/>
+    <item find=":vage:" replace="⚖"/>
+    <item find=":oko:" replace=""/>
+    <item find=":Jupiter:" replace="♃"/>
+    <item find=":smiješak:" replace="☺"/>
+    <item find=":ulaznica2:" replace=""/>
+    <item find=":euro2:" replace=""/>
+    <item find=":hladan znoj:" replace=""/>
+    <item find=":jezik4:" replace=""/>
+    <item find=":delta:" replace="δ"/>
+    <item find=":cvrčak2:" replace="聯"/>
+    <item find=":_beta:" replace="ᵦ"/>
+    <item find=":ljubljenje:" replace=""/>
+    <item find=":selfi:" replace="盧"/>
+    <item find=":teretni kamion:" replace=""/>
+    <item find=":trudnica:" replace="擄"/>
+    <item find=":kvačica4:" replace=""/>
+    <item find=":^0:" replace="⁰"/>
+    <item find=":otok:" replace=""/>
+    <item find=":trokut3:" replace=""/>
+    <item find=":Djevica:" replace="♍"/>
+    <item find=":paket:" replace=""/>
+    <item find=":tipkovnica3:" replace=""/>
+    <item find=":park:" replace=""/>
+    <item find=":rak:" replace="呂"/>
+    <item find=":telefon4:" replace=""/>
+    <item find=":masaža:" replace=""/>
+    <item find=":oblak3:" replace="⛈"/>
+    <item find=":fleur de lis:" replace="⚜"/>
+    <item find=":prime:" replace="′"/>
+    <item find=":md:" replace=""/>
+    <item find=":medalja2:" replace=""/>
+    <item find=":žongliranje:" replace="魯"/>
+    <item find=":žaba:" replace=""/>
+    <item find=":desno3:" replace="☛"/>
+    <item find=":12,30:" replace=""/>
+    <item find=":okretna srca:" replace=""/>
+    <item find=":planinska željeznica:" replace=""/>
+    <item find=":_o:" replace="ₒ"/>
+    <item find=":Škorpion:" replace="♏"/>
+    <item find=":noć vještica:" replace=""/>
+    <item find=":osoba koja se duri:" replace=""/>
+    <item find=":Theta:" replace="Θ"/>
+    <item find=":okrugla pribadača:" replace=""/>
+    <item find=":pejdžer:" replace=""/>
+    <item find=":3 h:" replace=""/>
+    <item find=":grafikon:" replace=""/>
+    <item find=":kauč:" replace=""/>
+    <item find=":bikini:" replace=""/>
+    <item find=":semafor:" replace=""/>
+    <item find=":Jota:" replace="Ι"/>
+    <item find=":1 h:" replace=""/>
+    <item find=":kocka6:" replace="⚅"/>
+    <item find=":---:" replace="—"/>
+    <item find=":Pluton:" replace="♇"/>
+    <item find=":tramvaj2:" replace=""/>
+    <item find=":^3:" replace="³"/>
+    <item find=":olovka:" replace="✎"/>
+    <item find=":odlazak:" replace=""/>
+    <item find=":haljina:" replace=""/>
+    <item find=":jack:" replace=""/>
+    <item find=":oznaka poglavlja:" replace=""/>
+    <item find=":mahjong:" replace=""/>
+    <item find=":1/8:" replace="⅛"/>
+    <item find=":zabrinut:" replace=""/>
+    <item find=":novac2:" replace=""/>
+    <item find=":mlijeko:" replace="拏"/>
+    <item find=":cvat:" replace=""/>
+    <item find=":dokument:" replace=""/>
+    <item find=":kolačić:" replace=""/>
+    <item find=":hrana:" replace="菱"/>
+    <item find=":^+:" replace="⁺"/>
+    <item find=":_10:" replace="₁₀"/>
+    <item find=":_+:" replace="₊"/>
+    <item find=":Hi:" replace="Χ"/>
+    <item find=":meso:" replace=""/>
+    <item find=":half rest:" replace="턼"/>
+    <item find=":srcolike oči:" replace=""/>
+    <item find=":balončić4:" replace=""/>
+    <item find=":nije dobro:" replace=""/>
+    <item find=":balon govora:" replace=""/>
+    <item find=":nadskup:" replace="⊃"/>
+    <item find=":brak:" replace="⚭"/>
+    <item find=":gradska željeznica:" replace=""/>
+    <item find=":bomba:" replace=""/>
+    <item find=":okvir:" replace=""/>
+    <item find=":kriket:" replace=""/>
+    <item find=":brokula:" replace="復"/>
+    <item find=":kalendar:" replace=""/>
+    <item find=":Zeta:" replace="Ζ"/>
+    <item find=":žlica:" replace="籠"/>
+    <item find=":informacija3:" replace=""/>
+    <item find=":šprica:" replace=""/>
+    <item find=":glavna knjiga:" replace=""/>
+    <item find=":usnice:" replace=""/>
+    <item find=":mladoženja:" replace="蘆"/>
+    <item find=":bubanj2:" replace="論"/>
+    <item find=":hrvanje:" replace="祿"/>
+    <item find=":Ksi:" replace="Ξ"/>
+    <item find=":vrata:" replace=""/>
+    <item find=":bijeli lovac:" replace="♗"/>
+    <item find=":perec:" replace="泌"/>
+    <item find=":epsilon:" replace="ε"/>
+    <item find=":^jota:" replace="ᶥ"/>
+    <item find=":potvrdni okvir 4:" replace=""/>
+    <item find=":prazna bilješka:" replace=""/>
+    <item find=":dvorac2:" replace=""/>
+    <item find=":1/2:" replace="½"/>
+    <item find=":miš3:" replace=""/>
+    <item find=":pobjeda:" replace="✌"/>
+    <item find=":trkač:" replace=""/>
+    <item find=":postolje za kartice:" replace=""/>
+    <item find=":--:" replace="–"/>
+    <item find=":šiljak2:" replace="✒"/>
+    <item find=":planina2:" replace=""/>
+    <item find=":izbočen mjesec2:" replace=""/>
+    <item find=":svinjski nos:" replace=""/>
+    <item find=":Farsi:" replace="☫"/>
+    <item find=":umorno lice:" replace=""/>
+    <item find=":nasmješeni vražićak:" replace=""/>
+    <item find=":zdjela:" replace="北"/>
+    <item find=":ne dijeli:" replace="∤"/>
+    <item find=":10 h:" replace=""/>
+    <item find=":omotnica:" replace="✉"/>
+    <item find=":zamišljen:" replace=""/>
+    <item find=":vibracija:" replace=""/>
+    <item find=":kolač:" replace=""/>
+    <item find=":^m:" replace="ᵐ"/>
+    <item find=":lignja:" replace="撚"/>
+    <item find=":čokolada:" replace=""/>
+    <item find=":1/4:" replace="¼"/>
+    <item find=":bilježnica2:" replace=""/>
+    <item find=":Delta:" replace="Δ"/>
+    <item find=":vampir:" replace="率"/>
+    <item find=":tref:" replace="♣"/>
+    <item find=":svjetlina2:" replace=""/>
+    <item find=":3,30:" replace=""/>
+    <item find=":kamera:" replace=""/>
+    <item find=":koža3:" replace=""/>
+    <item find=":zvučnici3:" replace=""/>
+    <item find=":integral3:" replace="∭"/>
+    <item find=":zvono3:" replace=""/>
+    <item find=":flopi:" replace=""/>
+    <item find=":pas2:" replace=""/>
+    <item find=":cerenje:" replace=""/>
+    <item find=":Tau:" replace="Τ"/>
+    <item find=":karo2:" replace="♢"/>
+    <item find=":_-:" replace="₋"/>
+    <item find=":^):" replace="⁾"/>
+    <item find=":magla:" replace=""/>
+    <item find=":hit:" replace=""/>
+    <item find=":sadnica:" replace=""/>
+    <item find=":Blizanci:" replace="♊"/>
+    <item find=":deva:" replace=""/>
+    <item find=":omotnica8:" replace=""/>
+    <item find=":vrpca:" replace=""/>
+    <item find=":poziv:" replace="酪"/>
+    <item find=":most:" replace=""/>
+    <item find=":kapljica:" replace=""/>
+    <item find=":Sunce2:" replace="☼"/>
+    <item find=":šator:" replace="⛺"/>
+    <item find=":hi:" replace="χ"/>
+    <item find=":kvadrat2:" replace="■"/>
+    <item find=":orezak:" replace="數"/>
+    <item find=":torbica:" replace=""/>
+    <item find=":kocka5:" replace="⚄"/>
+    <item find=":vrući izvor:" replace="♨"/>
+    <item find=":zmaj2:" replace=""/>
+    <item find=":cvijet2:" replace="鹿"/>
+    <item find=":star:" replace="陸"/>
+    <item find=":zabilješka:" replace=""/>
+    <item find=":sandala:" replace=""/>
+    <item find=":pilula:" replace=""/>
+    <item find=":u:" replace="∈"/>
+    <item find=":bez usta:" replace=""/>
+    <item find=":škoprion:" replace="廬"/>
+    <item find=":ff:" replace="ﬀ"/>
+    <item find=":zrake3:" replace=""/>
+    <item find=":crni skakač:" replace="♞"/>
+    <item find=":poveznica:" replace=""/>
+    <item find=":zupčanik:" replace="⚙"/>
+    <item find=":štoperica:" replace="⏱"/>
+    <item find=":dvd:" replace=""/>
+    <item find=":modem:" replace=""/>
+    <item find=":čizma:" replace=""/>
+    <item find=":za sve:" replace="∀"/>
+    <item find=":nije podskup:" replace="⊄"/>
+    <item find=":potvrdni okvir 5:" replace=""/>
+    <item find=":pustinja:" replace=""/>
+    <item find=":bez pješaka:" replace=""/>
+    <item find=":kihanje:" replace="蠟"/>
+    <item find=":srednji kvadrat:" replace="◻"/>
+    <item find=":ffl:" replace="ﬄ"/>
+    <item find=":turban:" replace=""/>
+    <item find=":omotnica6:" replace=""/>
+    <item find=":lokomotiva2:" replace=""/>
+    <item find=":latinski križ2:" replace=""/>
+    <item find=":muškarac:" replace=""/>
+    <item find=":100:" replace=""/>
+    <item find=":goblin:" replace=""/>
+    <item find=":klizeći auto:" replace="⛐"/>
+    <item find=":poljubac3:" replace=""/>
+    <item find=":rukomet:" replace="菉"/>
+    <item find=":međuspremnik:" replace=""/>
+    <item find=":lijevo5:" replace=""/>
+    <item find=":_1:" replace="₁"/>
+    <item find=":oblak2:" replace="⛅"/>
+    <item find=":Pi:" replace="Π"/>
+    <item find=":SJ:" replace="↕"/>
+    <item find=":+-:" replace="±"/>
+    <item find=":tv:" replace=""/>
+    <item find=":&lt;&lt;:" replace="≪"/>
+    <item find=":^alfa:" replace="ᵅ"/>
+    <item find=":nije paralelno:" replace="∦"/>
+    <item find=":pecanje:" replace=""/>
+    <item find=":djetelina:" replace=""/>
+    <item find=":otvorena usta:" replace=""/>
+    <item find=":poljubac2:" replace=""/>
+    <item find=":benzinska pumpa:" replace="⛽"/>
+    <item find=":majca2:" replace=""/>
+    <item find=":list2:" replace=""/>
+    <item find=":gozba:" replace=""/>
+    <item find=":ksi:" replace="ξ"/>
+    <item find=":salata:" replace="綾"/>
+    <item find=":slatki krumpir:" replace=""/>
+    <item find=":da2:" replace=""/>
+    <item find=":ro:" replace="ρ"/>
+    <item find=":množenje2:" replace="✖"/>
+    <item find=":bodež:" replace="†"/>
+    <item find=":hokej2:" replace=""/>
+    <item find=":JI2:" replace="⇘"/>
+    <item find=":omotnica4:" replace=""/>
+    <item find=":Ipsilon:" replace="Υ"/>
+    <item find=":sidro:" replace="⚓"/>
+    <item find=":alembic:" replace="⚗"/>
+    <item find=":Z:" replace="←"/>
+    <item find=":zvučnik4:" replace=""/>
+    <item find=":srce2:" replace="♡"/>
+    <item find=":zec2:" replace=""/>
+    <item find=":bijeli top:" replace="♖"/>
+    <item find=":^y:" replace="ʸ"/>
+    <item find=":termometar2:" replace="裸"/>
+    <item find=":krokodil:" replace=""/>
+    <item find=":osoba koja se mršti:" replace=""/>
+    <item find=":zastava:" replace=""/>
+    <item find=":čarape:" replace="罹"/>
+    <item find=":džudo:" replace="屢"/>
+    <item find=":dlan2:" replace="爐"/>
+    <item find=":nije jednako:" replace="≠"/>
+    <item find=":šišmiš:" replace="驪"/>
+    <item find=":auto2:" replace=""/>
+    <item find=":SI2:" replace="⇗"/>
+    <item find=":zapanjen:" replace=""/>
+    <item find=":ruka2:" replace=""/>
+    <item find=":pile3:" replace=""/>
+    <item find=":rozeta2:" replace=""/>
+    <item find=":riba:" replace=""/>
+    <item find=":kit:" replace=""/>
+    <item find=":poljubac:" replace=""/>
+    <item find=":snimanje:" replace="⏺"/>
+    <item find=":beba2:" replace=""/>
+    <item find=":9 h:" replace=""/>
+    <item find=":^b:" replace="ᵇ"/>
+    <item find=":ok3:" replace=""/>
+    <item find=":muški:" replace="♂"/>
+    <item find=":^s:" replace="ˢ"/>
+    <item find=":čaša:" replace=""/>
+    <item find=":bijeli krug:" replace="⚪"/>
+    <item find=":patka:" replace="閭"/>
+    <item find=":lampa:" replace=""/>
+    <item find=":zvijezda4:" replace=""/>
+    <item find=":cd:" replace=""/>
+    <item find=":detektiv:" replace=""/>
+    <item find=":reciklirani papir:" replace="♼"/>
+    <item find=":^w:" replace="ʷ"/>
+    <item find=":pitka voda:" replace=""/>
+    <item find=":kivi:" replace="諾"/>
+    <item find=":satelit:" replace=""/>
+    <item find=":polovinka:" replace="텞"/>
+    <item find=":_0:" replace="₀"/>
+    <item find=":desno2:" replace=""/>
+    <item find=":kovčeg:" replace=""/>
+    <item find=":princeza:" replace=""/>
+    <item find=":glasni zvuk:" replace=""/>
+    <item find=":avion6:" replace=""/>
+    <item find=":integral4:" replace="∮"/>
+    <item find=":stupanj:" replace="°"/>
+    <item find=":zabava4:" replace=""/>
+    <item find=":razmjena:" replace=""/>
+    <item find=":škare2:" replace="✄"/>
+    <item find=":tau:" replace="τ"/>
+    <item find=":stariji muškarac:" replace=""/>
+    <item find=":ox:" replace=""/>
+    <item find=":^o:" replace="ᵒ"/>
+    <item find=":podskup:" replace="⊂"/>
+    <item find=":nije pitka voda:" replace=""/>
+    <item find=":prženi škampi:" replace=""/>
+    <item find=":brončana medalja:" replace="雷"/>
+    <item find=":kalkulator:" replace=""/>
+    <item find=":košarka:" replace=""/>
+    <item find=":raketa:" replace=""/>
+    <item find=":Z2:" replace="⇐"/>
+    <item find=":saonice:" replace=""/>
+    <item find=":postiđen:" replace=""/>
+    <item find=":^M:" replace="ᴹ"/>
+    <item find=":bubamara:" replace=""/>
+    <item find=":tulipan:" replace=""/>
+    <item find=":fontana:" replace="⛲"/>
+    <item find=":!:" replace="❕"/>
+    <item find=":ormarić:" replace=""/>
+    <item find=":prozor:" replace=""/>
+    <item find=":nož2:" replace=""/>
+    <item find=":trolejbus:" replace=""/>
+    <item find=":2,30:" replace=""/>
+    <item find=":piće2:" replace=""/>
+    <item find=":informacije:" replace="ℹ"/>
+    <item find=":jednorog:" replace="濾"/>
+    <item find=":ace:" replace=""/>
+    <item find=":JZ2:" replace="⇙"/>
+    <item find=":7,30:" replace=""/>
+    <item find=":^J:" replace="ᴶ"/>
+    <item find=":polumjesec1:" replace=""/>
+    <item find=":vrisak:" replace=""/>
+    <item find=":prva četvrt:" replace=""/>
+    <item find=":grčki križ2:" replace="✙"/>
+    <item find=":zrake:" replace=""/>
+    <item find=":S:" replace="↑"/>
+    <item find=":^1:" replace="¹"/>
+    <item find=":joga:" replace="律"/>
+    <item find=":dečko:" replace=""/>
+    <item find=":^P:" replace="ᴾ"/>
+    <item find=":omotnica2:" replace=""/>
+    <item find=":nezanimljiv:" replace=""/>
+    <item find=":^l:" replace="ˡ"/>
+    <item find=":kiša:" replace="☔"/>
+    <item find=":_(:" replace="₍"/>
+    <item find=":balončić10:" replace=""/>
+    <item find=":kuboj:" replace="鸞"/>
+    <item find=":andrijin križ:" replace="☓"/>
+    <item find=":zmijonosac:" replace="⛎"/>
+    <item find=":sauna:" replace="淪"/>
+    <item find=":tuš:" replace=""/>
+    <item find=":kaciga:" replace="⛑"/>
+    <item find=":?2:" replace="❔"/>
+    <item find=":leopard:" replace=""/>
+    <item find=":film:" replace=""/>
+    <item find=":9,30:" replace=""/>
+    <item find=":oluja:" replace=""/>
+    <item find=":ne bacaj smeće:" replace=""/>
+    <item find=":-:" replace="−"/>
+    <item find=":^f:" replace="ᶠ"/>
+    <item find=":hibiskus:" replace=""/>
+    <item find=":kokoš:" replace=""/>
+    <item find=":puls:" replace=""/>
+    <item find=":Mjesec:" replace="☽"/>
+    <item find=":motocikl:" replace=""/>
+    <item find=":trokut:" replace="△"/>
+    <item find=":spavanje:" replace=""/>
+    <item find=":Fuji:" replace=""/>
+    <item find=":slomljeno srce:" replace=""/>
+    <item find=":avion:" replace="✈"/>
+    <item find=":bazni poen:" replace="‱"/>
+    <item find=":školjka:" replace=""/>
+    <item find=":Sunce:" replace="☉"/>
+    <item find=":kruh:" replace=""/>
+    <item find=":vlak2:" replace=""/>
+    <item find=":limun:" replace=""/>
+    <item find=":bez pušenja:" replace=""/>
+    <item find=":slon:" replace=""/>
+    <item find=":^i:" replace="ⁱ"/>
+    <item find=":ljutnja:" replace=""/>
+    <item find=":yen2:" replace=""/>
+    <item find=":mala zvijezda:" replace="⭒"/>
+    <item find=":dizač utega:" replace=""/>
+    <item find=":traper:" replace=""/>
+    <item find=":koža5:" replace=""/>
+    <item find=":video igra:" replace=""/>
+    <item find=":početnik:" replace=""/>
+    <item find=":luk:" replace=""/>
+    <item find=":radnik:" replace=""/>
+    <item find=":vanzemaljac2:" replace=""/>
+    <item find=":kit2:" replace=""/>
+    <item find=":izlazak sunca2:" replace=""/>
+    <item find=":točka u sredini:" replace="·"/>
+    <item find=":I2:" replace="⇒"/>
+    <item find=":miš5:" replace=""/>
+    <item find=":zabranjen ulaz:" replace="⛔"/>
+    <item find=":med:" replace=""/>
+    <item find=":balon misli:" replace=""/>
+    <item find=":^d:" replace="ᵈ"/>
+    <item find=":mreža:" replace=""/>
+    <item find=":beskonačno:" replace="∞"/>
+    <item find=":poklon srce:" replace=""/>
+    <item find=":mrštenje2:" replace=""/>
+    <item find=":dinosaur2:" replace="練"/>
+    <item find=":autobusna stanica:" replace=""/>
+    <item find=":zbroj:" replace="∑"/>
+    <item find=":nota2:" replace="♪"/>
+    <item find=":hotel2:" replace=""/>
+    <item find=":dolje4:" replace=""/>
+    <item find=":novac3:" replace="螺"/>
+    <item find=":oblak:" replace="☁"/>
+    <item find=":promil:" replace="‰"/>
+    <item find=":manji kvadrat2:" replace="◾"/>
+    <item find=":gore4:" replace=""/>
+    <item find=":ne čuj zlo:" replace=""/>
+    <item find=":pivo:" replace=""/>
+    <item find=":škare3:" replace="✁"/>
+    <item find=":mikroskop:" replace=""/>
+    <item find=":matica i vijak:" replace=""/>
+    <item find=":dvorac:" replace=""/>
+    <item find=":IZ2:" replace="⇔"/>
+    <item find=":karo:" replace="♦"/>
+    <item find="med. Techn." replace="med. techn."/>
+    <item find=":zeta:" replace="ζ"/>
+    <item find=":odbojka:" replace=""/>
+    <item find=":rupa:" replace=""/>
+    <item find=":lanci:" replace="⛓"/>
+    <item find=":kava:" replace="☕"/>
+    <item find=":policajac:" replace=""/>
+    <item find=":mjesec:" replace=""/>
+    <item find=":prazne stranice:" replace=""/>
+    <item find=":rogovi:" replace="落"/>
+    <item find=":wc2:" replace=""/>
+    <item find=":koala:" replace=""/>
+    <item find=":mačevi:" replace="⚔"/>
+    <item find=":sir:" replace="燎"/>
+    <item find=":medvjed:" replace=""/>
+    <item find=":_k:" replace="ₖ"/>
+    <item find=":špageti:" replace=""/>
+    <item find=":taktika:" replace=""/>
+    <item find=":buket2:" replace=""/>
+    <item find=":kutija:" replace=""/>
+    <item find=":razmišljanje:" replace="樂"/>
+    <item find=":crni pijun:" replace="♟"/>
+    <item find=":mjesec2:" replace=""/>
+    <item find=":Jeruzalemski križ:" replace="☩"/>
+    <item find=":_ro:" replace="ᵨ"/>
+    <item find=":mega:" replace=""/>
+    <item find=":rumenilo:" replace=""/>
+    <item find=":dolar2:" replace=""/>
+    <item find=":sova:" replace="黎"/>
+    <item find=":^v:" replace="ᵛ"/>
+    <item find=":plivač:" replace=""/>
+    <item find=":crna kraljica:" replace="♛"/>
+    <item find=":štakor:" replace=""/>
+    <item find=":'i:" replace="ȉ"/>
+    <item find=":Lorraine križ:" replace="☨"/>
+    <item find=":smeće:" replace=""/>
+    <item find=":font:" replace=""/>
+    <item find=":^(:" replace="⁽"/>
+    <item find=":trešnja:" replace=""/>
+    <item find=":buket:" replace=""/>
+    <item find=":školska torba:" replace=""/>
+    <item find=":kraljica:" replace=""/>
+    <item find=":trijumf:" replace=""/>
+    <item find=":starija žena:" replace=""/>
+    <item find=":mučnina:" replace="濫"/>
+    <item find=":kolica:" replace="♿"/>
+    <item find=":pauk:" replace=""/>
+    <item find=":J2:" replace="⇓"/>
+    <item find=":maksimalno:" replace=""/>
+    <item find=":trozubac:" replace=""/>
+    <item find=":izgradnja:" replace=""/>
+    <item find=":mapa5:" replace=""/>
+    <item find=":_t:" replace="ₜ"/>
+    <item find=":bankomat:" replace=""/>
+    <item find=":pivo2:" replace=""/>
+    <item find=":konj2:" replace=""/>
+    <item find=":zec:" replace=""/>
+    <item find=":zvono2:" replace=""/>
+    <item find=":čuvar:" replace=""/>
+    <item find=":smiješak4:" replace="來"/>
+    <item find=":urna:" replace="⚱"/>
+    <item find=":projektor:" replace=""/>
+    <item find=":lisica:" replace="力"/>
+    <item find=":^u:" replace="ᵘ"/>
+    <item find=":srednja zvijezda:" replace="⭐"/>
+    <item find=":namrgođeno:" replace="☹"/>
+    <item find=":ratni brod:" replace=""/>
+    <item find=":šaka:" replace="✊"/>
+    <item find=":jezik:" replace=""/>
+    <item find=":^8:" replace="⁸"/>
+    <item find=":crno srce:" replace=""/>
+    <item find=":mala zvijezda2:" replace="⭑"/>
+    <item find=":vulkan:" replace=""/>
+    <item find=":balončić3:" replace=""/>
+    <item find=":stopalo:" replace=""/>
+    <item find=":mag:" replace=""/>
+    <item find=":turska:" replace="旅"/>
+    <item find=":Božić:" replace=""/>
+    <item find=":tajmer:" replace="⏲"/>
+    <item find=":theta:" replace="θ"/>
+    <item find=":nije nadskup:" replace="⊅"/>
+    <item find=":krosan:" replace="縷"/>
+    <item find=":mrštenje:" replace=""/>
+    <item find=":^B:" replace="ᴮ"/>
+    <item find=":pezo:" replace="₱"/>
+    <item find=":pisač2:" replace=""/>
+    <item find=":trava:" replace=""/>
+    <item find=":ffi:" replace="ﬃ"/>
+    <item find=":^e:" replace="ᵉ"/>
+    <item find=":žene:" replace=""/>
+    <item find=":mali kvadrat2:" replace="▪"/>
+    <item find=":Saturn:" replace="♄"/>
+    <item find=":štit:" replace=""/>
+    <item find=":koza:" replace=""/>
+    <item find=":wc:" replace=""/>
+    <item find=":mikrofon2:" replace=""/>
+    <item find=":šešir2:" replace=""/>
+    <item find=":poštanski sandučić 3:" replace=""/>
+    <item find=":recikliranje2:" replace="♻"/>
+    <item find=":mačka koja se ljubi:" replace=""/>
+    <item find=":mačka s zlobnim smješkom:" replace=""/>
+    <item find=":da:" replace=""/>
+    <item find=":pas:" replace=""/>
+    <item find=":oblačno2:" replace=""/>
+    <item find=":biološka opasnost:" replace="☣"/>
+    <item find=":tipka:" replace=""/>
+    <item find=":otkucaj srca:" replace=""/>
+    <item find=":grivnja:" replace="₴"/>
+    <item find=":Kapa:" replace="Κ"/>
+    <item find=":budilica:" replace="⏰"/>
+    <item find=":kapa:" replace="κ"/>
+    <item find=":strelice:" replace=""/>
+    <item find=":balončić9:" replace=""/>
+    <item find=":lol:" replace="藍"/>
+    <item find=":telefon0:" replace="✆"/>
+    <item find=":mačka koja vrišti:" replace=""/>
+    <item find=":lokot3:" replace=""/>
+    <item find=":ljubavno pismo:" replace=""/>
+    <item find=":floppy3:" replace=""/>
+    <item find=":ne ulazi:" replace=""/>
+    <item find=":palma:" replace=""/>
+    <item find=":konj:" replace=""/>
+    <item find=":četvrtinka:" replace="텟"/>
+    <item find=":^W:" replace="ᵂ"/>
+    <item find=":bombon:" replace=""/>
+    <item find=":škare:" replace="✂"/>
+    <item find=":Ro:" replace="Ρ"/>
+    <item find=":odjeća:" replace=""/>
+    <item find=":vatrogasna kola2:" replace=""/>
+    <item find=":zabava:" replace=""/>
+    <item find=":^c:" replace="ᶜ"/>
+    <item find=":ok2:" replace=""/>
+    <item find=":kolačić2:" replace="怒"/>
+    <item find=":krema:" replace=""/>
+    <item find=":veliki krug:" replace="◯"/>
+    <item find=":neutralno lice:" replace=""/>
+    <item find=":zvučnik2:" replace=""/>
+    <item find=":zbunjen:" replace=""/>
+    <item find=":jabuka:" replace=""/>
+    <item find=":iskre:" replace="✨"/>
+    <item find=":2/3:" replace="⅔"/>
+    <item find=":Mjesec2:" replace="☾"/>
+    <item find=":veliki kvadrat:" replace="⬜"/>
+    <item find=":glazba2:" replace=""/>
+    <item find=":metro:" replace=""/>
+    <item find=":tenis:" replace=""/>
+    <item find=":zastave2:" replace=""/>
+    <item find=":bijeli cvijet:" replace=""/>
+    <item find=":vhs:" replace=""/>
+    <item find=":kvačica2:" replace="✔"/>
+    <item find=":upozorenje:" replace="⚠"/>
+    <item find=":kist:" replace=""/>
+    <item find=":kada:" replace=""/>
+    <item find=":omega:" replace="ω"/>
+    <item find=":dolje2:" replace=""/>
+    <item find=":loptica riže:" replace=""/>
+    <item find=":ocean:" replace=""/>
+    <item find=":pudlica:" replace=""/>
+    <item find=":ananas:" replace=""/>
+    <item find=":trajni papir:" replace="♾"/>
+    <item find=":zalazak sunca:" replace=""/>
+    <item find=":šesterokut2:" replace="⬢"/>
+    <item find=":^p:" replace="ᵖ"/>
+    <item find=":Turska lira:" replace="₺"/>
+    <item find=":gore:" replace="☝"/>
+    <item find=":telefon3:" replace=""/>
+    <item find=":zombi:" replace="履"/>
+    <item find=":piano:" replace=""/>
+    <item find=":^10:" replace="¹⁰"/>
+    <item find=":limenka:" replace="參"/>
+    <item find=":abc:" replace=""/>
+    <item find=":dragulj:" replace=""/>
+    <item find=":naočale:" replace=""/>
+    <item find=":kraj dokaza:" replace="∎"/>
+    <item find=":dolje:" replace="☟"/>
+    <item find=":pik2:" replace="♤"/>
+    <item find=":lijevo4:" replace=""/>
+    <item find=":indeks:" replace=""/>
+    <item find=":vila2:" replace=""/>
+    <item find=":trgovina:" replace=""/>
+    <item find=":Neptun:" replace="♆"/>
+    <item find=":vjenčanje:" replace=""/>
+    <item find=":desno6:" replace=""/>
+    <item find=":predznak:" replace="•"/>
+    <item find=":dokument3:" replace=""/>
+    <item find=":ovca:" replace=""/>
+    <item find=":kocka4:" replace="⚃"/>
+    <item find=":rubalj:" replace="₹"/>
+    <item find=":gore3:" replace=""/>
+    <item find=":jezik2:" replace=""/>
+    <item find=":grafikon3:" replace=""/>
+    <item find=":kruh2:" replace="稜"/>
+    <item find=":frizura:" replace=""/>
+    <item find=":minibus:" replace=""/>
+    <item find=":šiljak:" replace="✑"/>
+    <item find=":kvačica:" replace="✓"/>
+    <item find=":nevinost:" replace=""/>
+    <item find=":lažljivac:" replace="拉"/>
+    <item find=":paralelno:" replace="∥"/>
+    <item find=":balončić2:" replace=""/>
+    <item find=":SZ:" replace="↖"/>
+    <item find=":zzz:" replace=""/>
+    <item find=":mapa:" replace=""/>
+    <item find=":unija:" replace="∪"/>
+    <item find=":crni kralj:" replace="♚"/>
+    <item find=":note:" replace="♫"/>
+    <item find=":stanica:" replace=""/>
+    <item find=":uho:" replace=""/>
+    <item find=":^theta:" replace="ᶿ"/>
+    <item find=":gozba2:" replace=""/>
+    <item find=":Lambda:" replace="Λ"/>
+    <item find=":pješački prijelaz:" replace=""/>
+    <item find=":_4:" replace="₄"/>
+    <item find=":pištolj:" replace=""/>
+    <item find=":antena:" replace=""/>
+    <item find=":Mi:" replace="Μ"/>
+    <item find=":2 h:" replace=""/>
+    <item find=":Zemlja:" replace="♁"/>
+    <item find=":koža4:" replace=""/>
+    <item find=":^6:" replace="⁶"/>
+    <item find=":nije:" replace="¬"/>
+    <item find=":FI:" replace="ﬁ"/>
+    <item find=":informacija2:" replace=""/>
+    <item find=":lizalica:" replace=""/>
+    <item find=":rice cracker:" replace=""/>
+    <item find=":pogačica:" replace="陵"/>
+    <item find=":avion3:" replace=""/>
+    <item find=":note2:" replace="♬"/>
+    <item find=":ogre:" replace=""/>
+    <item find=":S2:" replace="⇑"/>
+    <item find=":cipela2:" replace=""/>
+    <item find=":utišan:" replace=""/>
+    <item find=":Japan:" replace=""/>
+    <item find=":trapez:" replace="⏢"/>
+    <item find=":list:" replace=""/>
+    <item find=":inč:" replace="″"/>
+    <item find=":jelen:" replace="歷"/>
+    <item find=":dizalica:" replace=""/>
+    <item find=":_l:" replace="ₗ"/>
+    <item find=":automobil4:" replace=""/>
+    <item find=":muškarci:" replace=""/>
+    <item find=":boom:" replace=""/>
+    <item find=":jota:" replace="ι"/>
+    <item find=":kalendar2:" replace=""/>
+    <item find=":mačka:" replace=""/>
+    <item find=":ruž:" replace=""/>
+    <item find=":krastavac:" replace="勒"/>
+    <item find=":romb:" replace="◊"/>
+    <item find=":ne postoji:" replace="∄"/>
+    <item find=":ruka4:" replace="駱"/>
+    <item find=":radio:" replace=""/>
+    <item find=":sunce:" replace=""/>
+    <item find=":sake:" replace=""/>
+    <item find=":pirat:" replace=""/>
+    <item find=":novine:" replace=""/>
+    <item find=":otisci nogu:" replace=""/>
+    <item find=":zračni tramvaj:" replace=""/>
+    <item find=":pošta:" replace=""/>
+    <item find=":preklapanje:" replace=""/>
+    <item find=":obitelj:" replace=""/>
+    <item find=":1,30:" replace=""/>
+    <item find=":nogomet:" replace="⚽"/>
+    <item find=":bijeli skakač:" replace="♘"/>
+    <item find=":euro:" replace="€"/>
+    <item find=":-o:" replace="ō"/>
+    <item find=":vagon:" replace=""/>
+    <item find=":Alfa:" replace="Α"/>
+    <item find=":^9:" replace="⁹"/>
+    <item find=":bilješke3:" replace=""/>
+    <item find=":mrav:" replace=""/>
+    <item find=":zrake2:" replace=""/>
+    <item find=":glazba:" replace=""/>
+    <item find=":deva2:" replace=""/>
+    <item find=":^j:" replace="ʲ"/>
+    <item find=":^z:" replace="ᶻ"/>
+    <item find=":^2:" replace="²"/>
+    <item find=":utrka:" replace=""/>
+    <item find=":planina:" replace="⛰"/>
+    <item find=":nije izvan:" replace="∌"/>
+    <item find=":I:" replace="→"/>
+    <item find=":čamac:" replace=""/>
+    <item find=":šaka3:" replace="亂"/>
+    <item find=":bijeli pijun:" replace="♙"/>
+    <item find=":1/3:" replace="⅓"/>
+    <item find=":delfin:" replace=""/>
+    <item find=":^I:" replace="ᴵ"/>
+    <item find=":knjiga3:" replace=""/>
+    <item find=":kamion:" replace="⛟"/>
+    <item find=":brijač:" replace=""/>
+    <item find="med. Vet." replace="med. vet."/>
+    <item find=":kruna:" replace=""/>
+    <item find=":kuće:" replace=""/>
+    <item find=":registrirano:" replace="®"/>
+    <item find=":čaj:" replace=""/>
+    <item find=":zvijezda3:" replace=""/>
+    <item find=":bijes:" replace=""/>
+    <item find=":desni trokut:" replace="⊿"/>
+    <item find=":pingvin:" replace=""/>
+    <item find=":_e:" replace="ₑ"/>
+    <item find=":tanjur:" replace=""/>
+    <item find=":i:" replace="∧"/>
+    <item find=":krug4:" replace=""/>
+    <item find=":srca:" replace="♥"/>
+    <item find=":desno4:" replace=""/>
+    <item find=":kolutanje očima:" replace=""/>
+    <item find=":Strijelac:" replace="♐"/>
+    <item find=":rajčica:" replace=""/>
+    <item find=":_s:" replace="ₛ"/>
+    <item find=":plesač:" replace=""/>
+    <item find=":izbočen mjesec1:" replace=""/>
+    <item find=":smješak mačka:" replace=""/>
+    <item find=":6 h:" replace=""/>
+    <item find=":koža1:" replace=""/>
+    <item find=":ovan:" replace=""/>
+    <item find=":dijeli:" replace="∣"/>
+    <item find=":krug2:" replace="●"/>
+    <item find=":tm:" replace="™"/>
+    <item find=":kiša2:" replace="⛆"/>
+    <item find=":šesterokut:" replace="⬡"/>
+    <item find=":škamp:" replace="戀"/>
+    <item find=":gđa Mraz:" replace="虜"/>
+    <item find=":kampiranje:" replace=""/>
+    <item find=":^G:" replace="ᴳ"/>
+    <item find=":lijes:" replace="⚰"/>
+    <item find=":x3:" replace="❎"/>
+    <item find=":zabava3:" replace="壟"/>
+    <item find=":krajon:" replace=""/>
+    <item find=":plava kosa:" replace=""/>
+    <item find=":_6:" replace="₆"/>
+    <item find=":stranica bez bilješki:" replace=""/>
+    <item find=":e-pošta:" replace=""/>
+    <item find=":poklon:" replace=""/>
+    <item find=":čekić i srp:" replace="☭"/>
+    <item find=":zadnja četvrt:" replace=""/>
+    <item find=":šesnaestinka:" replace="텡"/>
+    <item find=":šešir:" replace=""/>
+    <item find=":bljesak2:" replace=""/>
+    <item find=":Bik:" replace="♉"/>
+    <item find=":avokado:" replace="陋"/>
+    <item find=":beba3:" replace="櫓"/>
+    <item find=":Ni:" replace="Ν"/>
+    <item find=":sunce2:" replace=""/>
+    <item find=":mandarina:" replace=""/>
+    <item find=":kesten:" replace=""/>
+    <item find=":odustati:" replace=""/>
+    <item find=":12 h:" replace=""/>
+    <item find=":oznaka poljupca:" replace=""/>
+    <item find=":Jarac:" replace="♑"/>
+    <item find=":Sigma:" replace="Σ"/>
+    <item find=":motorni čamac:" replace=""/>
+    <item find=":tipkovnica:" replace="⌨"/>
+    <item find=":ime:" replace=""/>
+    <item find=":knjiga:" replace=""/>
+    <item find=":amfora:" replace=""/>
+    <item find=":kut2:" replace="∡"/>
+    <item find=":zastava3:" replace="⚑"/>
+    <item find=":zvijezda i polumjesec:" replace="☪"/>
+    <item find=":mačevalac:" replace="鷺"/>
+    <item find=":_n:" replace="ₙ"/>
+    <item find=":Beta:" replace="Β"/>
+    <item find=":uplašen:" replace=""/>
+    <item find=":mačka2:" replace=""/>
+    <item find=":sajam:" replace=""/>
+    <item find=":par2:" replace=""/>
+    <item find=":gliser:" replace=""/>
+    <item find=":quarter rest:" replace="턽"/>
+    <item find=":JI:" replace="↘"/>
+    <item find=":grčki križ:" replace="✚"/>
+    <item find=":stega:" replace=""/>
+    <item find=":rukavice:" replace="理"/>
+    <item find=":integral:" replace="∫"/>
+    <item find=":rezočarano olakšanje:" replace=""/>
+    <item find=":lubenica:" replace=""/>
+    <item find=":cipela3:" replace=""/>
+    <item find=":~:" replace="≈"/>
+    <item find=":prijemnik3:" replace=""/>
+    <item find=":^N:" replace="ᴺ"/>
+    <item find=":medalja:" replace=""/>
+    <item find=":ne2:" replace=""/>
+    <item find=":sintizajzer:" replace=""/>
+    <item find=":umoran:" replace=""/>
+    <item find=":^T:" replace="ᵀ"/>
+    <item find=":vaterpolo:" replace="綠"/>
+    <item find=":Adi Shakti:" replace="☬"/>
+    <item find=":peterokut2:" replace="⬟"/>
+    <item find=":puni mjesec2:" replace=""/>
+    <item find=":bicikl:" replace=""/>
+    <item find=":mir:" replace="☮"/>
+    <item find=":skuter2:" replace=""/>
+    <item find=":hrčak:" replace=""/>
+    <item find=":ipsilon:" replace="υ"/>
+    <item find=":orao:" replace="礪"/>
+    <item find=":tipkovnica2:" replace=""/>
+    <item find=":veliki kvadrat2:" replace="⬛"/>
+    <item find=":kes:" replace=""/>
+    <item find=":mali kvadrat:" replace="▫"/>
+    <item find=":^=:" replace="⁼"/>
+    <item find=":sushi:" replace=""/>
+    <item find=":dokument2:" replace=""/>
+    <item find=":Epsilon:" replace="Ε"/>
+    <item find=":sladoled2:" replace=""/>
+    <item find=":kukac:" replace=""/>
+    <item find=":kravata:" replace=""/>
+    <item find=":stranica bilješki:" replace=""/>
+    <item find=":vrećica:" replace=""/>
+    <item find=":prazan dokument:" replace=""/>
+    <item find=":memo:" replace=""/>
+    <item find=":SI:" replace="↗"/>
+    <item find=":slušalice:" replace=""/>
+    <item find=":duga:" replace=""/>
+    <item find=":restoran:" replace=""/>
+    <item find=":trkaća staza:" replace=""/>
+    <item find=":val:" replace=""/>
+    <item find=":izborni gumb:" replace=""/>
+    <item find=":glazbeni ključ:" replace="턞"/>
+    <item find=":osmjeh:" replace=""/>
+    <item find=":grimasa:" replace=""/>
+    <item find=":tref2:" replace="♧"/>
+    <item find=":'a:" replace="ȁ"/>
+    <item find=":hotel:" replace=""/>
+    <item find=":kvadrat:" replace="□"/>
+    <item find=":klečanje:" replace=""/>
+    <item find=":kornjača:" replace=""/>
+    <item find=":kućica za označavanje5:" replace=""/>
+    <item find=":miš:" replace=""/>
+    <item find=":tornado:" replace=""/>
+    <item find=":kaput:" replace="痢"/>
+    <item find=":zvučnik1:" replace=""/>
+    <item find=":medicinsko:" replace="⚕"/>
+    <item find=":^epsilon:" replace="ᵋ"/>
+    <item find=":ključ:" replace=""/>
+    <item find=":merperson:" replace="隆"/>
+    <item find=":rog:" replace=""/>
+    <item find=":globus:" replace=""/>
+    <item find=":slika:" replace=""/>
+    <item find=":sunčane naočale:" replace=""/>
+    <item find=":font2:" replace=""/>
+    <item find=":škare4:" replace="✃"/>
+    <item find=":avion4:" replace=""/>
+    <item find=":potvrdni okvir 2:" replace="☑"/>
+    <item find=":zany:" replace="浪"/>
+    <item find=":riža:" replace=""/>
+    <item find=":filmska kamera:" replace=""/>
+    <item find=":kino:" replace=""/>
+    <item find=":računalo2:" replace=""/>
+    <item find=":Mliječna staza:" replace=""/>
+    <item find=":pile2:" replace=""/>
+    <item find=":slatke kapi:" replace=""/>
+    <item find=":prazna stranica:" replace=""/>
+    <item find=":_2:" replace="₂"/>
+    <item find=":oden:" replace=""/>
+    <item find=":ljubav:" replace=""/>
+    <item find=":kontrolno dugme:" replace=""/>
+    <item find=":taksi2:" replace=""/>
+    <item find=":JZ:" replace="↙"/>
+    <item find=":desno:" replace="☞"/>
+    <item find=":biciklist2:" replace=""/>
+    <item find=":prijamnik2:" replace=""/>
+    <item find=":svjetlina:" replace=""/>
+    <item find=":kazalište:" replace=""/>
+    <item find=":karte:" replace=""/>
+    <item find=":balončić:" replace=""/>
+    <item find=":autobus:" replace=""/>
+    <item find=":olovka2:" replace="✏"/>
+    <item find=":bolno:" replace=""/>
+    <item find=":bilijar:" replace=""/>
+    <item find=":elipsa:" replace="⬭"/>
+    <item find=":ravno:" replace="♭"/>
+    <item find=":grafikon4:" replace=""/>
+    <item find=":razočaran:" replace=""/>
+    <item find=":fi:" replace="φ"/>
+    <item find=":rozeta:" replace=""/>
+    <item find=":pisanje:" replace="✍"/>
+    <item find=":list3:" replace=""/>
+    <item find=":ostavljena prtljaga:" replace=""/>
+    <item find=":globus3:" replace=""/>
+    <item find=":ruka:" replace="✋"/>
+    <item find=":_m:" replace="ₘ"/>
+    <item find=":stadion:" replace=""/>
+    <item find=":badminton:" replace=""/>
+    <item find=":-i:" replace="ī"/>
+    <item find=":dvostruko ravno:" replace="턫"/>
+    <item find=":Omega:" replace="Ω"/>
+    <item find=":dijete:" replace="戮"/>
+    <item find=":knjiga2:" replace=""/>
+    <item find=":\\:" replace="∖"/>
+    <item find=":paprika:" replace=""/>
+    <item find=":snjegović2:" replace="⛄"/>
+    <item find=":taco:" replace=""/>
+    <item find=":kupka:" replace=""/>
+    <item find=":potvrdni okvir 3:" replace="☒"/>
+    <item find=":hobotnica:" replace=""/>
+    <item find=":-u:" replace="ū"/>
+    <item find=":7 h:" replace=""/>
+    <item find=":otrov:" replace="☠"/>
+    <item find=":šaka2:" replace=""/>
+    <item find=":crni krug:" replace="⚫"/>
+    <item find=":_x:" replace="ₓ"/>
+    <item find=":džoker:" replace=""/>
+    <item find=":zabilješka2:" replace=""/>
+    <item find=":Malteški križ:" replace="✠"/>
+    <item find=":autoput:" replace=""/>
+    <item find=":potvrdni okvir:" replace="☐"/>
+    <item find=":ručna torba:" replace=""/>
+    <item find=":kompjuter:" replace=""/>
+    <item find=":^Fi:" replace="ᶲ"/>
+    <item find=":vodeni bizon:" replace=""/>
+    <item find=":jačina signala:" replace=""/>
+    <item find=":brada:" replace="倫"/>
+    <item find=":mozak:" replace="易"/>
+    <item find=":osminka:" replace="텠"/>
+    <item find=":Uran:" replace="♅"/>
+    <item find=":stranica2:" replace=""/>
+    <item find=":latinski križ3:" replace=""/>
+    <item find=":lijevo2:" replace=""/>
+    <item find=":oluja2:" replace="☈"/>
+    <item find=":_v:" replace="ᵥ"/>
+    <item find=":vlak:" replace=""/>
+    <item find=":video kamera:" replace=""/>
+    <item find=":kocka1:" replace="⚀"/>
+    <item find=":beba:" replace=""/>
+    <item find=":petlja2:" replace="➿"/>
+    <item find=":banana:" replace=""/>
+    <item find=":klizač:" replace=""/>
+    <item find=":-+:" replace="∓"/>
+    <item find=":kutijica:" replace=""/>
+    <item find=":funta2:" replace=""/>
+    <item find=":pladanj:" replace=""/>
+    <item find=":rukovanje:" replace="欄"/>
+    <item find=":odijelo:" replace=""/>
+    <item find=":puni mjesec:" replace=""/>
+    <item find=":balončić5:" replace=""/>
+  </items>
+  <UpperCaseExceptions>
+    <word exception="suet."/>
+    <word exception="mlrd."/>
+    <word exception="zool."/>
+    <word exception="svrš."/>
+    <word exception="pj."/>
+    <word exception="anon."/>
+    <word exception="ant."/>
+    <word exception="turc."/>
+    <word exception="graf."/>
+    <word exception="nizoz."/>
+    <word exception="stsl."/>
+    <word exception="čit."/>
+    <word exception="aeronaut."/>
+    <word exception="čak."/>
+    <word exception="sign."/>
+    <word exception="prim."/>
+    <word exception="arch."/>
+    <word exception="bud."/>
+    <word exception="pravosl."/>
+    <word exception="afr."/>
+    <word exception="philol."/>
+    <word exception="arheol."/>
+    <word exception="litt."/>
+    <word exception="geo."/>
+    <word exception="kajk."/>
+    <word exception="des."/>
+    <word exception="neutr."/>
+    <word exception="lic."/>
+    <word exception="trg."/>
+    <word exception="petrol."/>
+    <word exception="pat."/>
+    <word exception="iud."/>
+    <word exception="kršć."/>
+    <word exception="psih."/>
+    <word exception="graec."/>
+    <word exception="garn."/>
+    <word exception="engl."/>
+    <word exception="ž."/>
+    <word exception="gtk."/>
+    <word exception="tisk."/>
+    <word exception="slav."/>
+    <word exception="msgr."/>
+    <word exception="tzv."/>
+    <word exception="lign."/>
+    <word exception="zast."/>
+    <word exception="rkp."/>
+    <word exception="hist."/>
+    <word exception="psych."/>
+    <word exception="mađ."/>
+    <word exception="maricult."/>
+    <word exception="mus."/>
+    <word exception="ital."/>
+    <word exception="lok."/>
+    <word exception="otechn."/>
+    <word exception="fin."/>
+    <word exception="agr."/>
+    <word exception="asteč."/>
+    <word exception="šk."/>
+    <word exception="ul."/>
+    <word exception="praesc."/>
+    <word exception="nom."/>
+    <word exception="hidr."/>
+    <word exception="tur."/>
+    <word exception="pčel."/>
+    <word exception="prid."/>
+    <word exception="tehn."/>
+    <word exception="ethnol."/>
+    <word exception="iur."/>
+    <word exception="forens."/>
+    <word exception="phys."/>
+    <word exception="knjiž."/>
+    <word exception="phon."/>
+    <word exception="škol."/>
+    <word exception="franc."/>
+    <word exception="angl."/>
+    <word exception="imp."/>
+    <word exception="etn."/>
+    <word exception="glav."/>
+    <word exception="enkl."/>
+    <word exception="meton."/>
+    <word exception="prot."/>
+    <word exception="podr."/>
+    <word exception="gov."/>
+    <word exception="kom."/>
+    <word exception="aliment."/>
+    <word exception="umj."/>
+    <word exception="gram."/>
+    <word exception="lat."/>
+    <word exception="ie."/>
+    <word exception="turism."/>
+    <word exception="vojn."/>
+    <word exception="cin."/>
+    <word exception="geol."/>
+    <word exception="plf."/>
+    <word exception="odr."/>
+    <word exception="poet."/>
+    <word exception="bibl."/>
+    <word exception="rkt."/>
+    <word exception="gkt."/>
+    <word exception="rib."/>
+    <word exception="inform."/>
+    <word exception="min."/>
+    <word exception="act."/>
+    <word exception="neodr."/>
+    <word exception="medior."/>
+    <word exception="sred."/>
+    <word exception="am."/>
+    <word exception="met."/>
+    <word exception="prof."/>
+    <word exception="nac."/>
+    <word exception="kbr."/>
+    <word exception="l."/>
+    <word exception="gosp."/>
+    <word exception="fasc."/>
+    <word exception="crkv."/>
+    <word exception="iron."/>
+    <word exception="kulin."/>
+    <word exception="priv."/>
+    <word exception="isl."/>
+    <word exception="biol."/>
+    <word exception="biotechn."/>
+    <word exception="hrv."/>
+    <word exception="nat."/>
+    <word exception="amb."/>
+    <word exception="arh."/>
+    <word exception="logoped."/>
+    <word exception="orator."/>
+    <word exception="lik."/>
+    <word exception="text."/>
+    <word exception="kazal."/>
+    <word exception="ideol."/>
+    <word exception="anthrop."/>
+    <word exception="teol."/>
+    <word exception="orij."/>
+    <word exception="neob."/>
+    <word exception="arhit."/>
+    <word exception="žarg."/>
+    <word exception="silv."/>
+    <word exception="dem."/>
+    <word exception="traff."/>
+    <word exception="logist."/>
+    <word exception="god."/>
+    <word exception="rehab."/>
+    <word exception="osn."/>
+    <word exception="top."/>
+    <word exception="mariscient."/>
+    <word exception="alg."/>
+    <word exception="izg."/>
+    <word exception="dent."/>
+    <word exception="stom."/>
+    <word exception="polon."/>
+    <word exception="hip."/>
+    <word exception="potenc."/>
+    <word exception="prenes."/>
+    <word exception="nro."/>
+    <word exception="vulg."/>
+    <word exception="mech."/>
+    <word exception="paed."/>
+    <word exception="tel."/>
+    <word exception="inf."/>
+    <word exception="aeroing."/>
+    <word exception="aquacult."/>
+    <word exception="razr."/>
+    <word exception="art."/>
+    <word exception="univ."/>
+    <word exception="crim."/>
+    <word exception="merid."/>
+    <word exception="hr."/>
+    <word exception="alb."/>
+    <word exception="opr."/>
+    <word exception="alž."/>
+    <word exception="augm."/>
+    <word exception="dacorom."/>
+    <word exception="gener."/>
+    <word exception="urb."/>
+    <word exception="zn."/>
+    <word exception="theol."/>
+    <word exception="asist."/>
+    <word exception="relig."/>
+    <word exception="stud."/>
+    <word exception="ind."/>
+    <word exception="srp."/>
+    <word exception="znanstv."/>
+    <word exception="obs."/>
+    <word exception="služb."/>
+    <word exception="uč."/>
+    <word exception="v."/>
+    <word exception="oecol."/>
+    <word exception="uzv."/>
+    <word exception="dipl."/>
+    <word exception="stcsl."/>
+    <word exception="posl."/>
+    <word exception="grč."/>
+    <word exception="geophys."/>
+    <word exception="vlč."/>
+    <word exception="istr."/>
+    <word exception="odn."/>
+    <word exception="cheming."/>
+    <word exception="transf."/>
+    <word exception="akc."/>
+    <word exception="geod."/>
+    <word exception="čl."/>
+    <word exception="komp."/>
+    <word exception="usp."/>
+    <word exception="ak."/>
+    <word exception="atr."/>
+    <word exception="metaf."/>
+    <word exception="rel."/>
+    <word exception="opć."/>
+    <word exception="int."/>
+    <word exception="r."/>
+    <word exception="rlg."/>
+    <word exception="math."/>
+    <word exception="geoing."/>
+    <word exception="gen."/>
+    <word exception="rud."/>
+    <word exception="knjiš."/>
+    <word exception="im."/>
+    <word exception="lusit."/>
+    <word exception="kolon."/>
+    <word exception="imperf."/>
+    <word exception="dijal."/>
+    <word exception="prez."/>
+    <word exception="ing."/>
+    <word exception="aor."/>
+    <word exception="br."/>
+    <word exception="ekol."/>
+    <word exception="pr."/>
+    <word exception="indiv."/>
+    <word exception="anal."/>
+    <word exception="chem."/>
+    <word exception="ling."/>
+    <word exception="krat."/>
+    <word exception="ob."/>
+    <word exception="npr."/>
+    <word exception="kem."/>
+    <word exception="hisp."/>
+    <word exception="bank."/>
+    <word exception="meteor."/>
+    <word exception="fon."/>
+    <word exception="rn."/>
+    <word exception="musicol."/>
+    <word exception="nutr."/>
+    <word exception="prom."/>
+    <word exception="zam."/>
+    <word exception="pren."/>
+    <word exception="austr."/>
+    <word exception="mag."/>
+    <word exception="g."/>
+    <word exception="gl."/>
+    <word exception="trp."/>
+    <word exception="impf."/>
+    <word exception="vezn."/>
+    <word exception="anat."/>
+    <word exception="eufem."/>
+    <word exception="az."/>
+    <word exception="supl."/>
+    <word exception="naut."/>
+    <word exception="cult."/>
+    <word exception="ph."/>
+    <word exception="educ."/>
+    <word exception="pleon."/>
+    <word exception="glazb."/>
+    <word exception="aedif."/>
+    <word exception="mar."/>
+    <word exception="fiziol."/>
+    <word exception="transp."/>
+    <word exception="pravn."/>
+    <word exception="neder."/>
+    <word exception="mons."/>
+    <word exception="neol."/>
+    <word exception="nav."/>
+    <word exception="slov."/>
+    <word exception="bot."/>
+    <word exception="posr."/>
+    <word exception="mr."/>
+    <word exception="techn."/>
+    <word exception="term."/>
+    <word exception="physioth."/>
+    <word exception="filat."/>
+    <word exception="soc."/>
+    <word exception="el."/>
+    <word exception="šp."/>
+    <word exception="indekl."/>
+    <word exception="izv."/>
+    <word exception="sv."/>
+    <word exception="secur."/>
+    <word exception="fil."/>
+    <word exception="razg."/>
+    <word exception="reg."/>
+    <word exception="germ."/>
+    <word exception="č."/>
+    <word exception="fam."/>
+    <word exception="pejor."/>
+    <word exception="hung."/>
+    <word exception="mat."/>
+    <word exception="pf."/>
+    <word exception="pov."/>
+    <word exception="informatol."/>
+    <word exception="admin."/>
+    <word exception="akad."/>
+    <word exception="lingv."/>
+    <word exception="farm."/>
+    <word exception="musl."/>
+    <word exception="st."/>
+    <word exception="dosl."/>
+    <word exception="diag."/>
+    <word exception="asir."/>
+    <word exception="bl."/>
+    <word exception="catech."/>
+    <word exception="kinol."/>
+    <word exception="nesvrš."/>
+    <word exception="museol."/>
+    <word exception="comp."/>
+    <word exception="pharm."/>
+    <word exception="av."/>
+    <word exception="fiz."/>
+    <word exception="eur."/>
+    <word exception="appl."/>
+    <word exception="etnol."/>
+    <word exception="pom."/>
+    <word exception="burz."/>
+    <word exception="russ."/>
+    <word exception="prir."/>
+    <word exception="tj."/>
+    <word exception="oecoing."/>
+    <word exception="pl."/>
+    <word exception="biochem."/>
+    <word exception="knj."/>
+    <word exception="amer."/>
+    <word exception="lab."/>
+    <word exception="pril."/>
+    <word exception="inv."/>
+    <word exception="genet."/>
+    <word exception="inž."/>
+    <word exception="tipogr."/>
+    <word exception="geoinf."/>
+    <word exception="jud."/>
+    <word exception="poč."/>
+    <word exception="bacc."/>
+    <word exception="prij."/>
+    <word exception="phil."/>
+    <word exception="bohem."/>
+    <word exception="m."/>
+    <word exception="prosp."/>
+    <word exception="publ."/>
+    <word exception="vok."/>
+    <word exception="retor."/>
+    <word exception="oec."/>
+    <word exception="mol."/>
+    <word exception="astron."/>
+    <word exception="sociol."/>
+    <word exception="građ."/>
+    <word exception="archeol."/>
+    <word exception="industr."/>
+    <word exception="antrop."/>
+    <word exception="tal."/>
+    <word exception="hind."/>
+    <word exception="comm."/>
+    <word exception="ekon."/>
+    <word exception="sanit."/>
+    <word exception="refer."/>
+    <word exception="spec."/>
+    <word exception="zb."/>
+    <word exception="corat."/>
+    <word exception="exp."/>
+    <word exception="ucrain."/>
+    <word exception="rij."/>
+    <word exception="sc."/>
+    <word exception="geogr."/>
+    <word exception="mil."/>
+    <word exception="fr."/>
+    <word exception="tis."/>
+    <word exception="actuar."/>
+    <word exception="eng."/>
+    <word exception="vet."/>
+    <word exception="log."/>
+    <word exception="polytechn."/>
+  </UpperCaseExceptions>
+  <TwoUpperLetterExceptions>
+    <word exception="THz"/>
+    <word exception="HŽu"/>
+    <word exception="PCjem"/>
+    <word exception="CTom"/>
+    <word exception="EUi"/>
+    <word exception="CTu"/>
+    <word exception="TVa"/>
+    <word exception="EUu"/>
+    <word exception="PCja"/>
+    <word exception="HVu"/>
+    <word exception="HPu"/>
+    <word exception="MWh"/>
+    <word exception="EUa"/>
+    <word exception="HŽom"/>
+    <word exception="EUom"/>
+    <word exception="PCjom"/>
+    <word exception="EUem"/>
+    <word exception="TVu"/>
+    <word exception="HVom"/>
+    <word exception="HŽa"/>
+    <word exception="CTa"/>
+    <word exception="PCju"/>
+    <word exception="CVa"/>
+    <word exception="TVom"/>
+    <word exception="HVa"/>
+    <word exception="CVom"/>
+    <word exception="PCom"/>
+    <word exception="MHz"/>
+    <word exception="OOo"/>
+    <word exception="HPa"/>
+    <word exception="CVu"/>
+    <word exception="HPom"/>
+    <word exception="GHz"/>
+    <word exception="PCa"/>
+    <word exception="PCu"/>
+  </TwoUpperLetterExceptions>
+  <DoubleQuote>
+    <doublequote begin="" end=""/>
+  </DoubleQuote>
+  <SimpleQuote>
+    <simplequote begin="" end=""/>
+  </SimpleQuote>
+</Word>
