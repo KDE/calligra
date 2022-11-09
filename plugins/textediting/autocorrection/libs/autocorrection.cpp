@@ -46,44 +46,7 @@ AutoCorrection::AutoCorrection()
     readConfig();
 }
 
-AutoCorrection::AutoCorrection(const AutoCorrection &other)
-{
-    operator=(other);
-}
-
 AutoCorrection::~AutoCorrection() = default;
-
-void AutoCorrection::operator=(const AutoCorrection &other)
-{
-    mSingleSpaces = other.mSingleSpaces;
-    mUppercaseFirstCharOfSentence = other.mUppercaseFirstCharOfSentence;
-    mFixTwoUppercaseChars = other.mFixTwoUppercaseChars;
-    mAutoFractions = other.mAutoFractions;
-    mCapitalizeWeekDays = other.mAdvancedAutocorrect;
-    mAdvancedAutocorrect = other.mAdvancedAutocorrect;
-
-    mReplaceDoubleQuotes = other.mReplaceDoubleQuotes;
-    mReplaceSingleQuotes = other.mReplaceSingleQuotes;
-
-    mAutoFormatUrl = other.mAutoFormatUrl;
-    mAutoBoldUnderline = other.mAutoBoldUnderline;
-    mEnabled = other.mEnabled;
-    mSuperScriptAppendix = other.mSuperScriptAppendix;
-
-    mAddNonBreakingSpace = other.mAddNonBreakingSpace;
-    mMaxFindStringLenght = other.mMaxFindStringLenght;
-    mMinFindStringLenght = other.mMinFindStringLenght;
-
-    mAutoCorrectLang = other.mAutoCorrectLang;
-    mCacheNameOfDays = other.mCacheNameOfDays;
-    mUpperCaseExceptions = other.mUpperCaseExceptions;
-    mTwoUpperLetterExceptions = other.mTwoUpperLetterExceptions;
-    mAutocorrectEntries = other.mAutocorrectEntries;
-    mSuperScriptEntries = other.mSuperScriptEntries;
-    mTypographicSingleQuotes = other.mTypographicSingleQuotes;
-    mTypographicDoubleQuotes = other.mTypographicDoubleQuotes;
-    mLinkColor = other.mLinkColor;
-}
 
 void AutoCorrection::selectStringOnMaximumSearchString(QTextCursor &cursor, int cursorPosition)
 {
@@ -1172,12 +1135,16 @@ void AutoCorrection::writeAutoCorrectionXmlFile()
         return;
     }
     const QString fname = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/calligra/autocorrect/") + mAutoCorrectLang + QLatin1String(".xml");
-    qInfo()<<Q_FUNC_INFO<<mAutoCorrectLang<<fname;
-    QFileInfo fileInfo(fname);
+    writeAutoCorrectionXmlFile(fname);
+}
+
+void AutoCorrection::writeAutoCorrectionXmlFile(const QString &fileName)
+{
+    QFileInfo fileInfo(fileName);
     QDir().mkpath(fileInfo.absolutePath());
-    QFile file(fname);
+    QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qCDebug(AUTOCORRECTION_LOG) << "Failed to open:" << fname;
+        qCDebug(AUTOCORRECTION_LOG) << "Failed to open:" << fileName;
         return;
     }
 

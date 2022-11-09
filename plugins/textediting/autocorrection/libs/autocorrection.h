@@ -24,7 +24,6 @@ public:
     };
 
     explicit AutoCorrection();
-    explicit AutoCorrection(const AutoCorrection &other);
     virtual ~AutoCorrection();
 
     void setLanguage(const QString &lang, bool forceGlobal = false);
@@ -79,6 +78,7 @@ public:
     Q_REQUIRED_RESULT bool addAutoCorrect(const QString &currentWord, const QString &replaceWord);
 
     void writeAutoCorrectionXmlFile();
+    void writeAutoCorrectionXmlFile(const QString &fileName);
 
     void setNonBreakingSpace(QChar nonBreakingSpace);
 
@@ -93,10 +93,7 @@ public:
     void readConfig();
     void writeConfig();
 
-    void operator=(const AutoCorrection &other);
-
 protected:
-
     Q_REQUIRED_RESULT bool isFrenchLanguage() const;
 
     void fixTwoUppercaseChars();

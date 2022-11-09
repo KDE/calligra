@@ -14,7 +14,7 @@ RichTextEditWithAutoCorrectionTest::RichTextEditWithAutoCorrectionTest() = defau
 
 void RichTextEditWithAutoCorrectionTest::shouldNotAutocorrectWhenDisabled()
 {
-    PimCommon::RichTextEditWithAutoCorrection richtext(nullptr);
+    RichTextEditWithAutoCorrection richtext(nullptr);
     QHash<QString, QString> entries;
     const QString originalWord = QStringLiteral("FOOFOO");
     const QString replaceWord = QStringLiteral("BLABLA");
@@ -29,7 +29,7 @@ void RichTextEditWithAutoCorrectionTest::shouldNotAutocorrectWhenDisabled()
 
 void RichTextEditWithAutoCorrectionTest::shouldReplaceWordWhenExactText()
 {
-    PimCommon::RichTextEditWithAutoCorrection richtext(nullptr);
+    RichTextEditWithAutoCorrection richtext(nullptr);
     const QString originalWord = QStringLiteral("FOOFOO");
     const QString replaceWord = QStringLiteral("BLABLA");
     QHash<QString, QString> entries;
@@ -46,7 +46,7 @@ void RichTextEditWithAutoCorrectionTest::shouldReplaceWordWhenExactText()
 
 void RichTextEditWithAutoCorrectionTest::shouldNotReplaceWordWhenInexactText()
 {
-    PimCommon::RichTextEditWithAutoCorrection richtext(nullptr);
+    RichTextEditWithAutoCorrection richtext(nullptr);
     const QString originalWord = QStringLiteral("FOOFOO");
     const QString replaceWord = QStringLiteral("BLABLA");
     QHash<QString, QString> entries;
@@ -64,7 +64,7 @@ void RichTextEditWithAutoCorrectionTest::shouldNotReplaceWordWhenInexactText()
 
 void RichTextEditWithAutoCorrectionTest::shouldReplaceWhenPressEnter()
 {
-    PimCommon::RichTextEditWithAutoCorrection richtext(nullptr);
+    RichTextEditWithAutoCorrection richtext(nullptr);
     const QString originalWord = QStringLiteral("FOOFOO");
     const QString replaceWord = QStringLiteral("BLABLA");
     QHash<QString, QString> entries;
@@ -81,7 +81,7 @@ void RichTextEditWithAutoCorrectionTest::shouldReplaceWhenPressEnter()
 
 void RichTextEditWithAutoCorrectionTest::shouldReplaceWhenPressReturn()
 {
-    PimCommon::RichTextEditWithAutoCorrection richtext(nullptr);
+    RichTextEditWithAutoCorrection richtext(nullptr);
     const QString originalWord = QStringLiteral("FOOFOO");
     const QString replaceWord = QStringLiteral("BLABLA");
     QHash<QString, QString> entries;
