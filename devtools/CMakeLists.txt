@@ -1,3 +1,7 @@
+#if(SHOULD_BUILD_APP_UPDATEAUTOCORRECTION)
+    add_subdirectory(autocorrection)
+#endif()
+
 if(SHOULD_BUILD_APP_CSTESTER)
     add_subdirectory( cstester )
 endif()
