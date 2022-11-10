@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AutocorrectPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2007-07-27 16:48+0300\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -20,339 +20,33 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || n%10>=5 && n%10<=9 || n"
 "%100>=11 && n%100<=14 ? 2 : 3);\n"
 
-#: Autocorrect.cpp:25
+#: Autocorrect.cpp:26
 #, fuzzy, kde-format
 #| msgid "Autocorrection"
 msgid "Configure &Autocorrection..."
 msgstr "Аўтакарэкцыя"
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, AutocorrectConfig)
-#: Autocorrect.cpp:29 Autocorrect.cpp:78 AutocorrectConfig.ui:14
-#: AutocorrectConfigDialog.cpp:364
-#, kde-format
-msgid "Autocorrection"
-msgstr "Аўтакарэкцыя"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_1)
-#: AutocorrectConfig.ui:24
+#: Autocorrect.cpp:30
 #, fuzzy, kde-format
 #| msgid "Autocorrection"
-msgid "Si&mple Autocorrection"
+msgid "Enable Autocorrection"
 msgstr "Аўтакарэкцыя"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperCase)
-#: AutocorrectConfig.ui:30
-#, kde-format
-msgid ""
-"Detect when a new sentence is started and always ensure that the first "
-"character is an uppercase character"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, upperCase)
-#: AutocorrectConfig.ui:34
-#, kde-format
-msgid ""
-"Convert &first letter of a sentence automatically to uppercase\n"
-"(e.g. \"my house. in this town\" to \"my house. In this town\")"
-msgstr ""
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperUpper)
-#: AutocorrectConfig.ui:44
-#, kde-format
-msgid ""
-"All words are checked for the common mistake of holding the shift key down a "
-"bit too long. If some words must have two uppercase characters, then those "
-"exceptions should be added in the 'Exceptions' tab."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, upperUpper)
-#: AutocorrectConfig.ui:48
-#, kde-format
-msgid ""
-"Convert &two uppercase characters to one uppercase and one lowercase "
-"character\n"
-" (e.g. PErfect to Perfect)"
-msgstr ""
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoFormatUrl)
-#: AutocorrectConfig.ui:55
-#, kde-format
-msgid ""
-"Detect when a URL (Uniform Resource Locator) is typed and provide formatting "
-"that matches the way an Internet browser would show a URL."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoFormatUrl)
-#: AutocorrectConfig.ui:58
-#, kde-format
-msgid "Autoformat &URLs"
-msgstr ""
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, ignoreDoubleSpace)
-#: AutocorrectConfig.ui:65
-#, kde-format
-msgid ""
-"Make sure that more than one space cannot be typed, as this is a common "
-"mistake which is quite hard to find in formatted text."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, ignoreDoubleSpace)
-#: AutocorrectConfig.ui:68
-#, kde-format
-msgid "&Suppress double spaces"
-msgstr ""
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, trimParagraphs)
-#: AutocorrectConfig.ui:75
-#, kde-format
-msgid ""
-"Keep correct formatting and indenting of sentences by automatically removing "
-"spaces typed at the beginning and end of a paragraph."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, trimParagraphs)
-#: AutocorrectConfig.ui:78
-#, kde-format
-msgid "R&emove spaces at the beginning and end of paragraphs"
-msgstr ""
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoChangeFormat)
-#: AutocorrectConfig.ui:85
-#, kde-format
-msgid ""
-"When you use _underline_ or *bold*, the text between the underscores or "
-"asterisks will be converted to underlined or bold text."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoChangeFormat)
-#: AutocorrectConfig.ui:88
-#, kde-format
-msgid "Automatically do &bold and underline formatting"
-msgstr ""
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoReplaceNumber)
-#: AutocorrectConfig.ui:95
-#, kde-format
-msgid "Most standard fraction notations will be converted when available"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoReplaceNumber)
-#: AutocorrectConfig.ui:98
-#, kde-format
-msgid "Re&place 1/2... with ½..."
-msgstr ""
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, useNumberStyle)
-#: AutocorrectConfig.ui:108
-#, kde-format
-msgid ""
-"When typing '1)' or similar in front of a paragraph, automatically convert "
-"the paragraph to use that numbering style. This has the advantage that "
-"further paragraphs will also be numbered and the spacing is done correctly."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, useNumberStyle)
-#: AutocorrectConfig.ui:111
-#, kde-format
-msgid "Use &autonumbering for numbered paragraphs"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoSuperScript)
-#: AutocorrectConfig.ui:121
-#, kde-format
-msgid "Rep&lace 1st... with 1^st..."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, capitalizeDaysName)
-#: AutocorrectConfig.ui:128
-#, kde-format
-msgid "Capitalize name of days"
-msgstr ""
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, useBulletStyle)
-#: AutocorrectConfig.ui:138
-#, kde-format
-msgid ""
-"When typing '*' or '-' in front of a paragraph, automatically convert the "
-"paragraph to use that list-style. Using a list-style formatting means that a "
-"correct bullet is used to draw the list."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, useBulletStyle)
-#: AutocorrectConfig.ui:141
-#, kde-format
-msgid "Use l&ist-formatting for bulleted paragraphs"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, defaultBulletStyle)
-#. i18n: ectx: property (text), widget (QPushButton, doubleDefault)
-#. i18n: ectx: property (text), widget (QPushButton, singleDefault)
-#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
-#: AutocorrectConfig.ui:178 AutocorrectConfig.ui:253 AutocorrectConfig.ui:308
-#: AutocorrectConfig.ui:360
-#, kde-format
-msgid "Default"
-msgstr ""
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: AutocorrectConfig.ui:214
-#, kde-format
-msgid "Custom &Quotes"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, typographicDoubleQuotes)
-#: AutocorrectConfig.ui:220
-#, kde-format
-msgid "Replace &double quotes with typographical quotes"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, typographicSingleQuotes)
-#: AutocorrectConfig.ui:275
-#, kde-format
-msgid "Replace &single quotes with typographical quotes"
-msgstr ""
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: AutocorrectConfig.ui:344
-#, fuzzy, kde-format
-#| msgid "Autocorrection"
-msgid "Ad&vanced Autocorrection"
-msgstr "Аўтакарэкцыя"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: AutocorrectConfig.ui:352
-#, kde-format
-msgid "Replacements and exceptions for language:"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
-#: AutocorrectConfig.ui:365
-#, kde-format
-msgid "All Languages"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, advancedAutocorrection)
-#: AutocorrectConfig.ui:375
-#, kde-format
-msgid "&Enable word replacement"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoCorrectionWithFormat)
-#: AutocorrectConfig.ui:385
-#, kde-format
-msgid "Replace &text with format"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, findLabel)
-#: AutocorrectConfig.ui:394
-#, kde-format
-msgid "&Find"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QToolButton, specialChar1)
-#. i18n: ectx: property (text), widget (QToolButton, specialChar2)
-#: AutocorrectConfig.ui:407 AutocorrectConfig.ui:427
-#, kde-format
-msgid "..."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, replaceLabel)
-#: AutocorrectConfig.ui:414
-#, kde-format
-msgid "Re&place"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, addButton)
-#. i18n: ectx: property (text), widget (QPushButton, add1)
-#: AutocorrectConfig.ui:438 AutocorrectConfig.ui:562
-#: AutocorrectConfigDialog.cpp:281
-#, kde-format
-msgid "&Add"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, removeButton)
-#. i18n: ectx: property (text), widget (QPushButton, remove2)
-#: AutocorrectConfig.ui:445 AutocorrectConfig.ui:637
-#, kde-format
-msgid "Remove"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, changeFormat)
-#: AutocorrectConfig.ui:455
-#, kde-format
-msgid "C&hange Format..."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, clearFormat)
-#: AutocorrectConfig.ui:465
-#, kde-format
-msgid "C&lear Format"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
-#: AutocorrectConfig.ui:503
-#, kde-format
-msgid "Find"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
-#: AutocorrectConfig.ui:508
-#, kde-format
-msgid "Replace"
-msgstr ""
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: AutocorrectConfig.ui:517
-#, kde-format
-msgid "E&xceptions"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: AutocorrectConfig.ui:525
-#, kde-format
-msgid "Do not treat as the end of a sentence:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoinclude1)
-#. i18n: ectx: property (text), widget (QCheckBox, autoinclude2)
-#: AutocorrectConfig.ui:551 AutocorrectConfig.ui:619
-#, kde-format
-msgid "Autoinclude"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, remove1)
-#: AutocorrectConfig.ui:569
-#, kde-format
-msgid "R&emove"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: AutocorrectConfig.ui:593
-#, kde-format
-msgid "Accept two uppercase letters in:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, add2)
-#: AutocorrectConfig.ui:630
-#, kde-format
-msgid "A&dd"
-msgstr ""
-
-#: AutocorrectConfigDialog.cpp:277
-#, kde-format
-msgid "&Modify"
-msgstr ""
-
-#: AutocorrectConfigDialog.cpp:378
-#, kde-format
-msgid "Select Character"
-msgstr ""
 
 #: AutocorrectFactory.cpp:16
 #, fuzzy, kde-format
 #| msgid "Autocorrection"
 msgid "Autocorrect"
 msgstr "Аўтакарэкцыя"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Si&mple Autocorrection"
+#~ msgstr "Аўтакарэкцыя"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Ad&vanced Autocorrection"
+#~ msgstr "Аўтакарэкцыя"
 
 #, fuzzy
 #~| msgid "Autocorrection"

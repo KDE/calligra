@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -67,20 +67,27 @@ msgstr "تەڭشەك(&S)"
 msgid "Spellcheck"
 msgstr "ئىملا تەكشۈر"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Cover selection"
+msgid "AutoCorrection"
+msgstr "مۇقاۋا تاللاش"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
 msgstr "تەھرىرلەش"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "ئىملا تەكشۈر نەتىجىسى"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr ""
@@ -2840,11 +2847,6 @@ msgstr ""
 #~| msgid "Edit"
 #~ msgid "3rd Edit"
 #~ msgstr "تەھرىرلەش"
-
-#, fuzzy
-#~| msgid "Cover selection"
-#~ msgid "Author's section"
-#~ msgstr "مۇقاۋا تاللاش"
 
 #~ msgid "File to open"
 #~ msgstr "ئاچىدىغان ھۆججەت"

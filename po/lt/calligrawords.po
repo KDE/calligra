@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2015-12-29 20:55+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -69,20 +69,27 @@ msgstr "&Nuostatos"
 msgid "Spellcheck"
 msgstr "Korektorius"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Author tool"
+msgid "AutoCorrection"
+msgstr "Rašytojo įrankis"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
 msgstr "Keisti"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Rašybos tikrinimo rezultatai"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "Pakeisti kintamąjį į"
@@ -3166,11 +3173,6 @@ msgstr ""
 #~| msgid "Edit"
 #~ msgid "3rd Edit"
 #~ msgstr "Keisti"
-
-#, fuzzy
-#~| msgid "Author tool"
-#~ msgid "Author's section"
-#~ msgstr "Rašytojo įrankis"
 
 #~ msgid "File to open"
 #~ msgstr "Atverti failą"

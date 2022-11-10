@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2004-11-09 13:46+0100\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -67,21 +67,28 @@ msgstr "Dibarzhoù a bep seurt"
 msgid "Spellcheck"
 msgstr "Gwiriekaat ar skritur"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Apply Autocorrection"
+msgid "AutoCorrection"
+msgstr "Arloañ ar reizhañ ent emgefreek"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "Aozañ ar skrid"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, fuzzy, kde-format
 #| msgid "Spell Checker Behavior"
 msgid "Spell Check Result"
 msgstr "Emzalc'h gwirieker ar skritur"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, fuzzy, kde-format
 #| msgid "Change Margin Frame"
 msgid "Change Variable To"
@@ -4756,9 +4763,6 @@ msgstr "Enlakaat ur bajenn"
 
 #~ msgid "Edit Variable..."
 #~ msgstr "Aozañ ar c'hiz ..."
-
-#~ msgid "Apply Autocorrection"
-#~ msgstr "Arloañ ar reizhañ ent emgefreek"
 
 #~ msgid "Create Style From Selection..."
 #~ msgstr "Krouiñ ar c'hiz eus an diuzadenn ..."

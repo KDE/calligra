@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2006-10-05 19:47+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -67,20 +67,27 @@ msgstr "Seting Pelbagai"
 msgid "Spellcheck"
 msgstr "Periksa ejaan"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Apply Autocorrection"
+msgid "AutoCorrection"
+msgstr "Guna Autopembetulan"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "Isih Teks"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Keputusan Semak Eja"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "Ubah Variabel Ke"
@@ -6301,9 +6308,6 @@ msgstr "Selitkan Halaman"
 
 #~ msgid "Edit Variable..."
 #~ msgstr "Edit Variabel..."
-
-#~ msgid "Apply Autocorrection"
-#~ msgstr "Guna Autopembetulan"
 
 #, fuzzy
 #~ msgid ""

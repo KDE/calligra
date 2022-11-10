@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2007-10-31 23:31+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -70,20 +70,27 @@ msgstr "&Agordo"
 msgid "Spellcheck"
 msgstr "Literumado"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Attention"
+msgid "AutoCorrection"
+msgstr "Atenton"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
 msgstr "Redakti"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Rezulto de literumado"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, fuzzy, kde-format
 #| msgid "&Variable"
 msgid "Change Variable To"
@@ -3446,11 +3453,6 @@ msgstr "Enmetu tabelon"
 
 #~ msgid "Finished"
 #~ msgstr "Finita"
-
-#, fuzzy
-#~| msgid "Attention"
-#~ msgid "Author's section"
-#~ msgstr "Atenton"
 
 #, fuzzy
 #~| msgid "&Page Mode"

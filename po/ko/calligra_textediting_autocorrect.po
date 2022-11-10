@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2022-04-16 21:36+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -18,344 +18,179 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 21.08.1\n"
 
-#: Autocorrect.cpp:25
+#: Autocorrect.cpp:26
 #, kde-format
 msgid "Configure &Autocorrection..."
 msgstr "자동 고침 설정(&A)..."
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, AutocorrectConfig)
-#: Autocorrect.cpp:29 Autocorrect.cpp:78 AutocorrectConfig.ui:14
-#: AutocorrectConfigDialog.cpp:364
-#, kde-format
-msgid "Autocorrection"
+#: Autocorrect.cpp:30
+#, fuzzy, kde-format
+#| msgid "Autocorrection"
+msgid "Enable Autocorrection"
 msgstr "자동 고침"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_1)
-#: AutocorrectConfig.ui:24
-#, kde-format
-msgid "Si&mple Autocorrection"
-msgstr "간단한 자동 고침(&M)"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperCase)
-#: AutocorrectConfig.ui:30
-#, kde-format
-msgid ""
-"Detect when a new sentence is started and always ensure that the first "
-"character is an uppercase character"
-msgstr "새 문장의 시작을 확인하고 항상 첫 글자를 대문자로 유지"
-
-#. i18n: ectx: property (text), widget (QCheckBox, upperCase)
-#: AutocorrectConfig.ui:34
-#, kde-format
-msgid ""
-"Convert &first letter of a sentence automatically to uppercase\n"
-"(e.g. \"my house. in this town\" to \"my house. In this town\")"
-msgstr ""
-"문장의 첫 글자를 자동으로 대문자로 변환(&F)\n"
-"(예: \"my house. in this town\"을 \"my house. In this town\"으로)"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperUpper)
-#: AutocorrectConfig.ui:44
-#, kde-format
-msgid ""
-"All words are checked for the common mistake of holding the shift key down a "
-"bit too long. If some words must have two uppercase characters, then those "
-"exceptions should be added in the 'Exceptions' tab."
-msgstr ""
-"모든 단어를 검사하여 Shift 키를 오래 누르고 있었는지를 검사합니다. 일부 단어"
-"가 두 개 이상의 대문자가 들어 있어야만 하면 예외 탭에서 추가할 수 있습니다."
-
-#. i18n: ectx: property (text), widget (QCheckBox, upperUpper)
-#: AutocorrectConfig.ui:48
-#, kde-format
-msgid ""
-"Convert &two uppercase characters to one uppercase and one lowercase "
-"character\n"
-" (e.g. PErfect to Perfect)"
-msgstr ""
-"두 대문자 글자를 하나의 대문자와 하나의 소문자로 변환(&T)\n"
-" (예: PErfect를 Perfect로)"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoFormatUrl)
-#: AutocorrectConfig.ui:55
-#, kde-format
-msgid ""
-"Detect when a URL (Uniform Resource Locator) is typed and provide formatting "
-"that matches the way an Internet browser would show a URL."
-msgstr ""
-"URL이 입력되었는지를 확인하고 인터넷 브라우저가 URL을 표시할 수 있도록 서식"
-"을 지정합니다."
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoFormatUrl)
-#: AutocorrectConfig.ui:58
-#, kde-format
-msgid "Autoformat &URLs"
-msgstr "URL 자동 서식 적용(&U)"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, ignoreDoubleSpace)
-#: AutocorrectConfig.ui:65
-#, kde-format
-msgid ""
-"Make sure that more than one space cannot be typed, as this is a common "
-"mistake which is quite hard to find in formatted text."
-msgstr ""
-"서식 있는 텍스트에서 찾기 어려운 실수인 두 개 이상의 공백을 입력하는 것을 방"
-"지해 줍니다."
-
-#. i18n: ectx: property (text), widget (QCheckBox, ignoreDoubleSpace)
-#: AutocorrectConfig.ui:68
-#, kde-format
-msgid "&Suppress double spaces"
-msgstr "공백 두 개 제거(&S)"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, trimParagraphs)
-#: AutocorrectConfig.ui:75
-#, kde-format
-msgid ""
-"Keep correct formatting and indenting of sentences by automatically removing "
-"spaces typed at the beginning and end of a paragraph."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, trimParagraphs)
-#: AutocorrectConfig.ui:78
-#, kde-format
-msgid "R&emove spaces at the beginning and end of paragraphs"
-msgstr "문단의 시작과 끝에 붙는 공백 지우기(&E)"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoChangeFormat)
-#: AutocorrectConfig.ui:85
-#, kde-format
-msgid ""
-"When you use _underline_ or *bold*, the text between the underscores or "
-"asterisks will be converted to underlined or bold text."
-msgstr ""
-"_밑줄_이나 *굵게*를 사용하면 밑줄이나 별표 사이의 글자를 자동으로 밑줄 친 글"
-"자나 굵은 글자로 변환합니다."
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoChangeFormat)
-#: AutocorrectConfig.ui:88
-#, kde-format
-msgid "Automatically do &bold and underline formatting"
-msgstr "굵게, 밑줄 서식 자동 적용(&B)"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoReplaceNumber)
-#: AutocorrectConfig.ui:95
-#, kde-format
-msgid "Most standard fraction notations will be converted when available"
-msgstr "사용 가능한 경우 표준 분수 기호로 변환"
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoReplaceNumber)
-#: AutocorrectConfig.ui:98
-#, kde-format
-msgid "Re&place 1/2... with ½..."
-msgstr "1/2...를 ½...로 변환(&P)"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, useNumberStyle)
-#: AutocorrectConfig.ui:108
-#, kde-format
-msgid ""
-"When typing '1)' or similar in front of a paragraph, automatically convert "
-"the paragraph to use that numbering style. This has the advantage that "
-"further paragraphs will also be numbered and the spacing is done correctly."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, useNumberStyle)
-#: AutocorrectConfig.ui:111
-#, kde-format
-msgid "Use &autonumbering for numbered paragraphs"
-msgstr "번호를 지정한 문단에 자동 번호 매기기 사용(&A)"
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoSuperScript)
-#: AutocorrectConfig.ui:121
-#, kde-format
-msgid "Rep&lace 1st... with 1^st..."
-msgstr "1st...를 1^st...로 변경(&L)"
-
-#. i18n: ectx: property (text), widget (QCheckBox, capitalizeDaysName)
-#: AutocorrectConfig.ui:128
-#, kde-format
-msgid "Capitalize name of days"
-msgstr "요일 이름 첫 글자를 대문자화"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, useBulletStyle)
-#: AutocorrectConfig.ui:138
-#, kde-format
-msgid ""
-"When typing '*' or '-' in front of a paragraph, automatically convert the "
-"paragraph to use that list-style. Using a list-style formatting means that a "
-"correct bullet is used to draw the list."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, useBulletStyle)
-#: AutocorrectConfig.ui:141
-#, kde-format
-msgid "Use l&ist-formatting for bulleted paragraphs"
-msgstr "머리글 기호가 있는 문단에 목록 형식 사용(&I)"
-
-#. i18n: ectx: property (text), widget (QPushButton, defaultBulletStyle)
-#. i18n: ectx: property (text), widget (QPushButton, doubleDefault)
-#. i18n: ectx: property (text), widget (QPushButton, singleDefault)
-#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
-#: AutocorrectConfig.ui:178 AutocorrectConfig.ui:253 AutocorrectConfig.ui:308
-#: AutocorrectConfig.ui:360
-#, kde-format
-msgid "Default"
-msgstr "기본값"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: AutocorrectConfig.ui:214
-#, kde-format
-msgid "Custom &Quotes"
-msgstr "사용자 정의 인용문(&Q)"
-
-#. i18n: ectx: property (text), widget (QCheckBox, typographicDoubleQuotes)
-#: AutocorrectConfig.ui:220
-#, kde-format
-msgid "Replace &double quotes with typographical quotes"
-msgstr "큰 따옴표를 타이포그래피 따옴표로 변환(&D)"
-
-#. i18n: ectx: property (text), widget (QCheckBox, typographicSingleQuotes)
-#: AutocorrectConfig.ui:275
-#, kde-format
-msgid "Replace &single quotes with typographical quotes"
-msgstr "작은 따옴표를 타이포그래피 따옴표로 변환(&S)"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: AutocorrectConfig.ui:344
-#, kde-format
-msgid "Ad&vanced Autocorrection"
-msgstr "고급 자동 고침(&V)"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: AutocorrectConfig.ui:352
-#, kde-format
-msgid "Replacements and exceptions for language:"
-msgstr "언어별 바꾸기와 예외:"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
-#: AutocorrectConfig.ui:365
-#, kde-format
-msgid "All Languages"
-msgstr "모든 언어"
-
-#. i18n: ectx: property (text), widget (QCheckBox, advancedAutocorrection)
-#: AutocorrectConfig.ui:375
-#, kde-format
-msgid "&Enable word replacement"
-msgstr "단어 대체 사용(&E)"
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoCorrectionWithFormat)
-#: AutocorrectConfig.ui:385
-#, kde-format
-msgid "Replace &text with format"
-msgstr "서식 있는 텍스트 바꾸기(&T)"
-
-#. i18n: ectx: property (text), widget (QLabel, findLabel)
-#: AutocorrectConfig.ui:394
-#, kde-format
-msgid "&Find"
-msgstr "찾기(&F)"
-
-#. i18n: ectx: property (text), widget (QToolButton, specialChar1)
-#. i18n: ectx: property (text), widget (QToolButton, specialChar2)
-#: AutocorrectConfig.ui:407 AutocorrectConfig.ui:427
-#, kde-format
-msgid "..."
-msgstr "..."
-
-#. i18n: ectx: property (text), widget (QLabel, replaceLabel)
-#: AutocorrectConfig.ui:414
-#, kde-format
-msgid "Re&place"
-msgstr "바꾸기(&P)"
-
-#. i18n: ectx: property (text), widget (QPushButton, addButton)
-#. i18n: ectx: property (text), widget (QPushButton, add1)
-#: AutocorrectConfig.ui:438 AutocorrectConfig.ui:562
-#: AutocorrectConfigDialog.cpp:281
-#, kde-format
-msgid "&Add"
-msgstr "추가(&A)"
-
-#. i18n: ectx: property (text), widget (QPushButton, removeButton)
-#. i18n: ectx: property (text), widget (QPushButton, remove2)
-#: AutocorrectConfig.ui:445 AutocorrectConfig.ui:637
-#, kde-format
-msgid "Remove"
-msgstr "삭제"
-
-#. i18n: ectx: property (text), widget (QPushButton, changeFormat)
-#: AutocorrectConfig.ui:455
-#, kde-format
-msgid "C&hange Format..."
-msgstr "서식 변경(&H)..."
-
-#. i18n: ectx: property (text), widget (QPushButton, clearFormat)
-#: AutocorrectConfig.ui:465
-#, kde-format
-msgid "C&lear Format"
-msgstr "서식 삭제(&L)"
-
-#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
-#: AutocorrectConfig.ui:503
-#, kde-format
-msgid "Find"
-msgstr "찾기"
-
-#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
-#: AutocorrectConfig.ui:508
-#, kde-format
-msgid "Replace"
-msgstr "바꾸기"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: AutocorrectConfig.ui:517
-#, kde-format
-msgid "E&xceptions"
-msgstr "예외(&X):"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: AutocorrectConfig.ui:525
-#, kde-format
-msgid "Do not treat as the end of a sentence:"
-msgstr "문장의 끝으로 간주하지 않음:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoinclude1)
-#. i18n: ectx: property (text), widget (QCheckBox, autoinclude2)
-#: AutocorrectConfig.ui:551 AutocorrectConfig.ui:619
-#, kde-format
-msgid "Autoinclude"
-msgstr "자동 포함"
-
-#. i18n: ectx: property (text), widget (QPushButton, remove1)
-#: AutocorrectConfig.ui:569
-#, kde-format
-msgid "R&emove"
-msgstr "삭제(&E)"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: AutocorrectConfig.ui:593
-#, kde-format
-msgid "Accept two uppercase letters in:"
-msgstr "대문자 두 개 허용:"
-
-#. i18n: ectx: property (text), widget (QPushButton, add2)
-#: AutocorrectConfig.ui:630
-#, kde-format
-msgid "A&dd"
-msgstr "추가(&D)"
-
-#: AutocorrectConfigDialog.cpp:277
-#, kde-format
-msgid "&Modify"
-msgstr "수정(&M)"
-
-#: AutocorrectConfigDialog.cpp:378
-#, kde-format
-msgid "Select Character"
-msgstr "문자 선택"
 
 #: AutocorrectFactory.cpp:16
 #, kde-format
 msgid "Autocorrect"
 msgstr "자동 고침"
+
+#~ msgid "Si&mple Autocorrection"
+#~ msgstr "간단한 자동 고침(&M)"
+
+#~ msgid ""
+#~ "Detect when a new sentence is started and always ensure that the first "
+#~ "character is an uppercase character"
+#~ msgstr "새 문장의 시작을 확인하고 항상 첫 글자를 대문자로 유지"
+
+#~ msgid ""
+#~ "Convert &first letter of a sentence automatically to uppercase\n"
+#~ "(e.g. \"my house. in this town\" to \"my house. In this town\")"
+#~ msgstr ""
+#~ "문장의 첫 글자를 자동으로 대문자로 변환(&F)\n"
+#~ "(예: \"my house. in this town\"을 \"my house. In this town\"으로)"
+
+#~ msgid ""
+#~ "All words are checked for the common mistake of holding the shift key "
+#~ "down a bit too long. If some words must have two uppercase characters, "
+#~ "then those exceptions should be added in the 'Exceptions' tab."
+#~ msgstr ""
+#~ "모든 단어를 검사하여 Shift 키를 오래 누르고 있었는지를 검사합니다. 일부 단"
+#~ "어가 두 개 이상의 대문자가 들어 있어야만 하면 예외 탭에서 추가할 수 있습니"
+#~ "다."
+
+#~ msgid ""
+#~ "Convert &two uppercase characters to one uppercase and one lowercase "
+#~ "character\n"
+#~ " (e.g. PErfect to Perfect)"
+#~ msgstr ""
+#~ "두 대문자 글자를 하나의 대문자와 하나의 소문자로 변환(&T)\n"
+#~ " (예: PErfect를 Perfect로)"
+
+#~ msgid ""
+#~ "Detect when a URL (Uniform Resource Locator) is typed and provide "
+#~ "formatting that matches the way an Internet browser would show a URL."
+#~ msgstr ""
+#~ "URL이 입력되었는지를 확인하고 인터넷 브라우저가 URL을 표시할 수 있도록 서"
+#~ "식을 지정합니다."
+
+#~ msgid "Autoformat &URLs"
+#~ msgstr "URL 자동 서식 적용(&U)"
+
+#~ msgid ""
+#~ "Make sure that more than one space cannot be typed, as this is a common "
+#~ "mistake which is quite hard to find in formatted text."
+#~ msgstr ""
+#~ "서식 있는 텍스트에서 찾기 어려운 실수인 두 개 이상의 공백을 입력하는 것을 "
+#~ "방지해 줍니다."
+
+#~ msgid "&Suppress double spaces"
+#~ msgstr "공백 두 개 제거(&S)"
+
+#~ msgid "R&emove spaces at the beginning and end of paragraphs"
+#~ msgstr "문단의 시작과 끝에 붙는 공백 지우기(&E)"
+
+#~ msgid ""
+#~ "When you use _underline_ or *bold*, the text between the underscores or "
+#~ "asterisks will be converted to underlined or bold text."
+#~ msgstr ""
+#~ "_밑줄_이나 *굵게*를 사용하면 밑줄이나 별표 사이의 글자를 자동으로 밑줄 친 "
+#~ "글자나 굵은 글자로 변환합니다."
+
+#~ msgid "Automatically do &bold and underline formatting"
+#~ msgstr "굵게, 밑줄 서식 자동 적용(&B)"
+
+#~ msgid "Most standard fraction notations will be converted when available"
+#~ msgstr "사용 가능한 경우 표준 분수 기호로 변환"
+
+#~ msgid "Re&place 1/2... with ½..."
+#~ msgstr "1/2...를 ½...로 변환(&P)"
+
+#~ msgid "Use &autonumbering for numbered paragraphs"
+#~ msgstr "번호를 지정한 문단에 자동 번호 매기기 사용(&A)"
+
+#~ msgid "Rep&lace 1st... with 1^st..."
+#~ msgstr "1st...를 1^st...로 변경(&L)"
+
+#~ msgid "Capitalize name of days"
+#~ msgstr "요일 이름 첫 글자를 대문자화"
+
+#~ msgid "Use l&ist-formatting for bulleted paragraphs"
+#~ msgstr "머리글 기호가 있는 문단에 목록 형식 사용(&I)"
+
+#~ msgid "Default"
+#~ msgstr "기본값"
+
+#~ msgid "Custom &Quotes"
+#~ msgstr "사용자 정의 인용문(&Q)"
+
+#~ msgid "Replace &double quotes with typographical quotes"
+#~ msgstr "큰 따옴표를 타이포그래피 따옴표로 변환(&D)"
+
+#~ msgid "Replace &single quotes with typographical quotes"
+#~ msgstr "작은 따옴표를 타이포그래피 따옴표로 변환(&S)"
+
+#~ msgid "Ad&vanced Autocorrection"
+#~ msgstr "고급 자동 고침(&V)"
+
+#~ msgid "Replacements and exceptions for language:"
+#~ msgstr "언어별 바꾸기와 예외:"
+
+#~ msgid "All Languages"
+#~ msgstr "모든 언어"
+
+#~ msgid "&Enable word replacement"
+#~ msgstr "단어 대체 사용(&E)"
+
+#~ msgid "Replace &text with format"
+#~ msgstr "서식 있는 텍스트 바꾸기(&T)"
+
+#~ msgid "&Find"
+#~ msgstr "찾기(&F)"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Re&place"
+#~ msgstr "바꾸기(&P)"
+
+#~ msgid "&Add"
+#~ msgstr "추가(&A)"
+
+#~ msgid "Remove"
+#~ msgstr "삭제"
+
+#~ msgid "C&hange Format..."
+#~ msgstr "서식 변경(&H)..."
+
+#~ msgid "C&lear Format"
+#~ msgstr "서식 삭제(&L)"
+
+#~ msgid "Find"
+#~ msgstr "찾기"
+
+#~ msgid "Replace"
+#~ msgstr "바꾸기"
+
+#~ msgid "E&xceptions"
+#~ msgstr "예외(&X):"
+
+#~ msgid "Do not treat as the end of a sentence:"
+#~ msgstr "문장의 끝으로 간주하지 않음:"
+
+#~ msgid "Autoinclude"
+#~ msgstr "자동 포함"
+
+#~ msgid "R&emove"
+#~ msgstr "삭제(&E)"
+
+#~ msgid "Accept two uppercase letters in:"
+#~ msgstr "대문자 두 개 허용:"
+
+#~ msgid "A&dd"
+#~ msgstr "추가(&D)"
+
+#~ msgid "&Modify"
+#~ msgstr "수정(&M)"
+
+#~ msgid "Select Character"
+#~ msgstr "문자 선택"

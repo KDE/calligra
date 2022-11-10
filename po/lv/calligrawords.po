@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2009-08-18 11:09+0300\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -71,20 +71,27 @@ msgstr "Ie&statījumi"
 msgid "Spellcheck"
 msgstr "Pareizrakstības pārbaude"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Autocorrection"
+msgid "AutoCorrection"
+msgstr "Autokorekcija"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
 msgstr "Rediģēt"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Pareizrakstības pārbaudes rezultāts"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "Mainīt mainīgo uz"
@@ -3513,11 +3520,6 @@ msgstr ""
 #~| msgid "Edit"
 #~ msgid "3rd Edit"
 #~ msgstr "Rediģēt"
-
-#, fuzzy
-#~| msgid "Autocorrection"
-#~ msgid "Author's section"
-#~ msgstr "Autokorekcija"
 
 #~ msgid "File to open"
 #~ msgstr "Atveramais fails"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2014-10-20 19:38+0000\n"
 "Last-Translator: Samir Ribić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -64,20 +64,27 @@ msgstr "&Postavke"
 msgid "Spellcheck"
 msgstr "Provjera pravopisa"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Author tool"
+msgid "AutoCorrection"
+msgstr "Autorski alat"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
 msgstr "Izmijeni"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Rezultat provjere pravopisa"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "Promijeni varijablu u"
@@ -3963,11 +3970,6 @@ msgstr "Drugi tekst"
 #~| msgid "Edit"
 #~ msgid "3rd Edit"
 #~ msgstr "Izmijeni"
-
-#, fuzzy
-#~| msgid "Author tool"
-#~ msgid "Author's section"
-#~ msgstr "Autorski alat"
 
 #, fuzzy
 #~| msgid "Section"

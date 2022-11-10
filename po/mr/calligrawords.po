@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2013-04-12 16:20+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -66,20 +66,27 @@ msgstr "संयोजना (&S)"
 msgid "Spellcheck"
 msgstr "स्पेलिंग तपासणी"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Author tool"
+msgid "AutoCorrection"
+msgstr "लेखक साधन"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
 msgstr "संपादन"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "स्पेलिंग तपासणी निकाल"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "परिवर्तनीय यामध्ये बदला"
@@ -3883,11 +3890,6 @@ msgstr "इतर मजकूर"
 #~| msgid "Edit"
 #~ msgid "3rd Edit"
 #~ msgstr "संपादन"
-
-#, fuzzy
-#~| msgid "Author tool"
-#~ msgid "Author's section"
-#~ msgstr "लेखक साधन"
 
 #~ msgid "File to open"
 #~ msgstr "उघडावयाची फाईल"

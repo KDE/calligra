@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2006-12-17 13:48+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -70,20 +70,27 @@ msgstr "Xar hil moslamalar"
 msgid "Spellcheck"
 msgstr "Imloni tekshirish"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Apply Autocorrection"
+msgid "AutoCorrection"
+msgstr "Avto-toʻgʻrilashni qoʻllash"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "Matnni tahrirlash"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Imloni tekshirish natijasi"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "Oʻzgaruvchini oʻzgartirish"
@@ -5410,9 +5417,6 @@ msgstr "Betni qoʻyish"
 
 #~ msgid "Edit Variable..."
 #~ msgstr "Oʻzgaruvchini tahrirlash"
-
-#~ msgid "Apply Autocorrection"
-#~ msgstr "Avto-toʻgʻrilashni qoʻllash"
 
 #~ msgid "Create Style From Selection..."
 #~ msgstr "Tanlangandan uslub yaratish"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_text\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2018-05-09 09:34+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -3080,7 +3080,7 @@ msgstr "Автовиправлення"
 msgid "Key Press"
 msgstr "Натискання клавіші"
 
-#: TextTool.cpp:2912
+#: TextTool.cpp:2930
 #, kde-format
 msgid ""
 "This link points to the program or script '%1'.\n"
@@ -3091,7 +3091,7 @@ msgstr ""
 "Зловмисні програми можуть пошкодити ваш комп’ютер. Ви справді бажаєте "
 "запустити цю програму?"
 
-#: TextTool.cpp:2917
+#: TextTool.cpp:2935
 #, kde-format
 msgid "Open Link?"
 msgstr "Відкрити посилання?"

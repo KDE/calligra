@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2020-10-11 17:05+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -3073,7 +3073,7 @@ msgstr "Αυτόματη διόρθωση"
 msgid "Key Press"
 msgstr "Πίεση πλήκτρου"
 
-#: TextTool.cpp:2912
+#: TextTool.cpp:2930
 #, kde-format
 msgid ""
 "This link points to the program or script '%1'.\n"
@@ -3084,7 +3084,7 @@ msgstr ""
 "Τα κακόβουλα προγράμματα μπορούν να κάνουν ζημιά στον υπολογιστή σας. "
 "Επιθυμείτε σίγουρα την εκτέλεση αυτού του προγράμματος;"
 
-#: TextTool.cpp:2917
+#: TextTool.cpp:2935
 #, kde-format
 msgid "Open Link?"
 msgstr "Άνοιγμα συνδέσμου;"

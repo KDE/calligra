@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/TextShape.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2007-07-22 14:30-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -3014,7 +3014,7 @@ msgstr "Uathcheartú"
 msgid "Key Press"
 msgstr "Eochairbhrú"
 
-#: TextTool.cpp:2912
+#: TextTool.cpp:2930
 #, kde-format
 msgid ""
 "This link points to the program or script '%1'.\n"
@@ -3022,7 +3022,7 @@ msgid ""
 "this program?"
 msgstr ""
 
-#: TextTool.cpp:2917
+#: TextTool.cpp:2935
 #, kde-format
 msgid "Open Link?"
 msgstr "Oscail an Nasc?"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2015-02-24 23:30+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -3059,7 +3059,7 @@ msgstr "Automatsko ispravljanje"
 msgid "Key Press"
 msgstr "Pritisak dugmeta"
 
-#: TextTool.cpp:2912
+#: TextTool.cpp:2930
 #, kde-format
 msgid ""
 "This link points to the program or script '%1'.\n"
@@ -3070,7 +3070,7 @@ msgstr ""
 "Zloćudni program može naštetiti vašem računaru.Da li ste sigurni da želite "
 "pokrenuti ovaj program?"
 
-#: TextTool.cpp:2917
+#: TextTool.cpp:2935
 #, kde-format
 msgid "Open Link?"
 msgstr "Otvori link?"

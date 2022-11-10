@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2019-08-27 06:56+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -69,20 +69,27 @@ msgstr "&Einstellungen"
 msgid "Spellcheck"
 msgstr "Rechtschreibprüfung"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Autocorrection"
+msgid "AutoCorrection"
+msgstr "Autokorrektur"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
 msgstr "Bearbeiten"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Ergebnis der Rechtschreibprüfung"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "Variable ändern in"
@@ -4086,11 +4093,6 @@ msgstr "Anderer Text"
 
 #~ msgid "Finished"
 #~ msgstr "Beendet"
-
-#, fuzzy
-#~| msgid "Autocorrection"
-#~ msgid "Author's section"
-#~ msgstr "Autokorrektur"
 
 #, fuzzy
 #~| msgid "Page Edge:"

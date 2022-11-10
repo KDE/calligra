@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2007-01-26 06:23+0100\n"
 "Last-Translator: Siarhei Liantsevich <serzh.by@gmail.com>\n"
 "Language-Team: Belarusian\n"
@@ -67,20 +67,26 @@ msgstr "Дадатковыя параметры"
 msgid "Spellcheck"
 msgstr "Праверка правапісу"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+msgid "AutoCorrection"
+msgstr "Ужыць аўтавыпраўленне"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "Змяніць"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, fuzzy, kde-format
 msgid "Spell Check Result"
 msgstr "Вынік праверкі правапісу"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, fuzzy, kde-format
 msgid "Change Variable To"
 msgstr "Змяніць значэнне поля на"
@@ -6429,10 +6435,6 @@ msgstr "Уставіць старонку"
 #, fuzzy
 #~ msgid "Edit Variable..."
 #~ msgstr "Змяніць поле..."
-
-#, fuzzy
-#~ msgid "Apply Autocorrection"
-#~ msgstr "Ужыць аўтавыпраўленне"
 
 #, fuzzy
 #~ msgid ""

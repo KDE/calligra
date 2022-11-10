@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2007-10-14 16:07+0000\n"
 "Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
 "Language-Team: <en@li.org>\n"
@@ -3002,7 +3002,7 @@ msgstr "إدراج"
 msgid "Key Press"
 msgstr "مفتاح ضغط"
 
-#: TextTool.cpp:2912
+#: TextTool.cpp:2930
 #, fuzzy, kde-format
 msgid ""
 "This link points to the program or script '%1'.\n"
@@ -3010,7 +3010,7 @@ msgid ""
 "this program?"
 msgstr "هذا وصلة نقطة إلى برنامج أو برنامج نصي حاسوب هل إلى تنفيذ برنامج?"
 
-#: TextTool.cpp:2917
+#: TextTool.cpp:2935
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "فتح وصلة؟"

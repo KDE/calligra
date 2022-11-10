@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2015-09-09 09:40+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -67,20 +67,27 @@ msgstr "&Beállítások"
 msgid "Spellcheck"
 msgstr "Helyesírás-ellenőrzés"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Apply Autocorrection"
+msgid "AutoCorrection"
+msgstr "Automatikus javítás végrehajtása"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
 msgstr "Szerkesztés"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "A helyesírás-ellenőrzés eredménye"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "A változó módosítása erre"
@@ -6875,9 +6882,6 @@ msgstr "Egyéb szöveg"
 
 #~ msgid "Edit Variable..."
 #~ msgstr "Változó szerkesztése..."
-
-#~ msgid "Apply Autocorrection"
-#~ msgstr "Automatikus javítás végrehajtása"
 
 #, fuzzy
 #~ msgid ""

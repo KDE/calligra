@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2014-03-27 22:44+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -3230,7 +3230,7 @@ msgstr "Automaatsche Korrektuur"
 msgid "Key Press"
 msgstr "Tastdruck"
 
-#: TextTool.cpp:2912
+#: TextTool.cpp:2930
 #, kde-format
 msgid ""
 "This link points to the program or script '%1'.\n"
@@ -3241,7 +3241,7 @@ msgstr ""
 "Bööshaftig Programmen köönt Dien Reekner schaden. Wullt Du dit Programm "
 "redig utföhren?"
 
-#: TextTool.cpp:2917
+#: TextTool.cpp:2935
 #, kde-format
 msgid "Open Link?"
 msgstr "Link opmaken?"

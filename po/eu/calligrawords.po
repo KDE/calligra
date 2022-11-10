@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2013-11-12 10:11+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@euskalnet.net>\n"
 "Language-Team: Basque <kde-i18n-doc@kde.org>\n"
@@ -70,20 +70,27 @@ msgstr "E&zarpenak"
 msgid "Spellcheck"
 msgstr "Ortografia-egiaztapena"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Author tool"
+msgid "AutoCorrection"
+msgstr "Author tresna"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
 msgstr "Editatu"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Egiaztapen ortografikoaren emaitza"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "Aldatu aldagaia balio honetara"
@@ -3941,11 +3948,6 @@ msgstr "Beste testua"
 #~| msgid "Edit"
 #~ msgid "3rd Edit"
 #~ msgstr "Editatu"
-
-#, fuzzy
-#~| msgid "Author tool"
-#~ msgid "Author's section"
-#~ msgstr "Author tresna"
 
 #~ msgid "File to open"
 #~ msgstr "Ireki beharreko fitxategia"

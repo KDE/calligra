@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AutocorrectPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2008-01-11 08:01+0000\n"
 "Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -18,355 +18,207 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: KAider 0.1\n"
 
-#: Autocorrect.cpp:25
+#: Autocorrect.cpp:26
 #, kde-format
 msgid "Configure &Autocorrection..."
 msgstr "اضبط التصحيح التل&قائي"
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, AutocorrectConfig)
-#: Autocorrect.cpp:29 Autocorrect.cpp:78 AutocorrectConfig.ui:14
-#: AutocorrectConfigDialog.cpp:364
-#, kde-format
-msgid "Autocorrection"
+#: Autocorrect.cpp:30
+#, fuzzy, kde-format
+#| msgid "Autocorrection"
+msgid "Enable Autocorrection"
 msgstr "التصحيح التلقائي"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_1)
-#: AutocorrectConfig.ui:24
-#, kde-format
-msgid "Si&mple Autocorrection"
-msgstr "تصحيح تلقائي &بسيط"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperCase)
-#: AutocorrectConfig.ui:30
-#, kde-format
-msgid ""
-"Detect when a new sentence is started and always ensure that the first "
-"character is an uppercase character"
-msgstr "تفحص عندما تبدأ جملة جديدة و تأكد دائما أن الحرف الأول حرف علوي."
-
-#. i18n: ectx: property (text), widget (QCheckBox, upperCase)
-#: AutocorrectConfig.ui:34
-#, kde-format
-msgid ""
-"Convert &first letter of a sentence automatically to uppercase\n"
-"(e.g. \"my house. in this town\" to \"my house. In this town\")"
-msgstr ""
-"حول الحرف الأ&ول من أول كلمة في الجملة بشكل تلقائي لحرف علوي\n"
-"(مثال: \"my house. in this town\" إلى \"my house. In this town\")"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperUpper)
-#: AutocorrectConfig.ui:44
-#, kde-format
-msgid ""
-"All words are checked for the common mistake of holding the shift key down a "
-"bit too long. If some words must have two uppercase characters, then those "
-"exceptions should be added in the 'Exceptions' tab."
-msgstr ""
-"كل الكلمات تٌدقّق من أجل الخطأ المشترك بالضغط المستمر لفترة شيئا ما طويلة على "
-"المفتاح shift.إذا كان لدى بعض الكلمات حرفان علويان فإن هذه الإستثناءات يجب "
-"أن تضاف إلى لسان 'الاستثناءات'."
-
-#. i18n: ectx: property (text), widget (QCheckBox, upperUpper)
-#: AutocorrectConfig.ui:48
-#, kde-format
-msgid ""
-"Convert &two uppercase characters to one uppercase and one lowercase "
-"character\n"
-" (e.g. PErfect to Perfect)"
-msgstr ""
-"حول حرفا&ن علويان أحدهما إلى حرف علوي و الآخر إلى حرف سفلي\n"
-" (مثلا PErfect إلى Perfect)"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoFormatUrl)
-#: AutocorrectConfig.ui:55
-#, kde-format
-msgid ""
-"Detect when a URL (Uniform Resource Locator) is typed and provide formatting "
-"that matches the way an Internet browser would show a URL."
-msgstr ""
-"تفحص كتابة عنوان وب واستعمل تنسيقا يلائم الطريقة التي يعرض بها  متصفح "
-"الإنترنت عنوانا ما."
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoFormatUrl)
-#: AutocorrectConfig.ui:58
-#, kde-format
-msgid "Autoformat &URLs"
-msgstr "تنسيق آلي ل&عناوين الوب"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, ignoreDoubleSpace)
-#: AutocorrectConfig.ui:65
-#, kde-format
-msgid ""
-"Make sure that more than one space cannot be typed, as this is a common "
-"mistake which is quite hard to find in formatted text."
-msgstr ""
-"يمنعك من كتابة أكثر من فراغ واحد على التوالي، حيث أن هذا خطاء شائع يصعب كشفه "
-"في النصوص المنسقة."
-
-#. i18n: ectx: property (text), widget (QCheckBox, ignoreDoubleSpace)
-#: AutocorrectConfig.ui:68
-#, kde-format
-msgid "&Suppress double spaces"
-msgstr "أ&زل الفراغات المزدوجة"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, trimParagraphs)
-#: AutocorrectConfig.ui:75
-#, kde-format
-msgid ""
-"Keep correct formatting and indenting of sentences by automatically removing "
-"spaces typed at the beginning and end of a paragraph."
-msgstr ""
-"حافظ على التنسيق والإزاحة الصحيحين، و ذلك عن طريق حذف المسافات الفارغة من "
-"بداية و نهاية كل فقرة تلقائياً."
-
-#. i18n: ectx: property (text), widget (QCheckBox, trimParagraphs)
-#: AutocorrectConfig.ui:78
-#, kde-format
-msgid "R&emove spaces at the beginning and end of paragraphs"
-msgstr "أ&زل الفراغات في بداية ونهاية الفقرة."
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoChangeFormat)
-#: AutocorrectConfig.ui:85
-#, kde-format
-msgid ""
-"When you use _underline_ or *bold*, the text between the underscores or "
-"asterisks will be converted to underlined or bold text."
-msgstr ""
-"عند استخدامك ل _مسطر_ أو *عريض* فإن النص الذي بين الشرطتين السفليتين أو بين "
-"النجمتين سيحَوّله إلى نص مسطر أو عريض."
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoChangeFormat)
-#: AutocorrectConfig.ui:88
-#, kde-format
-msgid "Automatically do &bold and underline formatting"
-msgstr "قم بتنسيق \"عريض\" و \"خط سفلي\" تلقائياً"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoReplaceNumber)
-#: AutocorrectConfig.ui:95
-#, kde-format
-msgid "Most standard fraction notations will be converted when available"
-msgstr "ستحوّل معظم الكسور عند توفرها"
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoReplaceNumber)
-#: AutocorrectConfig.ui:98
-#, kde-format
-msgid "Re&place 1/2... with ½..."
-msgstr "استبدل بـ 1/2... ½..."
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, useNumberStyle)
-#: AutocorrectConfig.ui:108
-#, kde-format
-msgid ""
-"When typing '1)' or similar in front of a paragraph, automatically convert "
-"the paragraph to use that numbering style. This has the advantage that "
-"further paragraphs will also be numbered and the spacing is done correctly."
-msgstr ""
-"عند كتابة ( '1)' أو ما يشابه عند بداية فقرة، أعد تنسيق هذه الفقرة لكي تستخدم "
-"هذا الترقيم  تلقائيا. حتى تكون الفقرات القادمة مرقمة أيضا ولتتم الإزاحة بشكل "
-"صحيح."
-
-#. i18n: ectx: property (text), widget (QCheckBox, useNumberStyle)
-#: AutocorrectConfig.ui:111
-#, kde-format
-msgid "Use &autonumbering for numbered paragraphs"
-msgstr "استخدم التر&قيم التلقائي للفقرات المرقمة"
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoSuperScript)
-#: AutocorrectConfig.ui:121
-#, kde-format
-msgid "Rep&lace 1st... with 1^st..."
-msgstr "استبدل بـ 1st... 1^st..."
-
-#. i18n: ectx: property (text), widget (QCheckBox, capitalizeDaysName)
-#: AutocorrectConfig.ui:128
-#, kde-format
-msgid "Capitalize name of days"
-msgstr "أظهر أسماء الأيام بأحرف كبيرة"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, useBulletStyle)
-#: AutocorrectConfig.ui:138
-#, kde-format
-msgid ""
-"When typing '*' or '-' in front of a paragraph, automatically convert the "
-"paragraph to use that list-style. Using a list-style formatting means that a "
-"correct bullet is used to draw the list."
-msgstr ""
-"عند طباعة '*' أو '-' في بداية فقرة، استعمل نفس هذا النمط فيها تلقائيا . يعني "
-"استخدام نمط القائمة وضع علامة ترقيم مناسبة لكتابة اللائحة."
-
-#. i18n: ectx: property (text), widget (QCheckBox, useBulletStyle)
-#: AutocorrectConfig.ui:141
-#, kde-format
-msgid "Use l&ist-formatting for bulleted paragraphs"
-msgstr "استخدم تن&سيق اللائحة للفقرات المؤشرة."
-
-#. i18n: ectx: property (text), widget (QPushButton, defaultBulletStyle)
-#. i18n: ectx: property (text), widget (QPushButton, doubleDefault)
-#. i18n: ectx: property (text), widget (QPushButton, singleDefault)
-#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
-#: AutocorrectConfig.ui:178 AutocorrectConfig.ui:253 AutocorrectConfig.ui:308
-#: AutocorrectConfig.ui:360
-#, kde-format
-msgid "Default"
-msgstr "افتراضي"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: AutocorrectConfig.ui:214
-#, kde-format
-msgid "Custom &Quotes"
-msgstr "&علامات اقتباس مخصّصة"
-
-#. i18n: ectx: property (text), widget (QCheckBox, typographicDoubleQuotes)
-#: AutocorrectConfig.ui:220
-#, kde-format
-msgid "Replace &double quotes with typographical quotes"
-msgstr "استبدل علامة الاقتباس المزدوجة ('') بعلامة اقتباس مطبعية"
-
-#. i18n: ectx: property (text), widget (QCheckBox, typographicSingleQuotes)
-#: AutocorrectConfig.ui:275
-#, kde-format
-msgid "Replace &single quotes with typographical quotes"
-msgstr "استبدل علامة الاقتباس المفردة (') بعلامة اقتباس مطبعية"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: AutocorrectConfig.ui:344
-#, kde-format
-msgid "Ad&vanced Autocorrection"
-msgstr "تصحيح تلقائي متق&دم"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: AutocorrectConfig.ui:352
-#, kde-format
-msgid "Replacements and exceptions for language:"
-msgstr "الاستبدالات والاستثناءات للغة:"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
-#: AutocorrectConfig.ui:365
-#, kde-format
-msgid "All Languages"
-msgstr "كل اللغات"
-
-#. i18n: ectx: property (text), widget (QCheckBox, advancedAutocorrection)
-#: AutocorrectConfig.ui:375
-#, kde-format
-msgid "&Enable word replacement"
-msgstr "استعمل است&بدال الكلمات"
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoCorrectionWithFormat)
-#: AutocorrectConfig.ui:385
-#, kde-format
-msgid "Replace &text with format"
-msgstr "استبدل ال&نص بالتنسيق"
-
-#. i18n: ectx: property (text), widget (QLabel, findLabel)
-#: AutocorrectConfig.ui:394
-#, kde-format
-msgid "&Find"
-msgstr "ا&بحث"
-
-#. i18n: ectx: property (text), widget (QToolButton, specialChar1)
-#. i18n: ectx: property (text), widget (QToolButton, specialChar2)
-#: AutocorrectConfig.ui:407 AutocorrectConfig.ui:427
-#, kde-format
-msgid "..."
-msgstr "..."
-
-#. i18n: ectx: property (text), widget (QLabel, replaceLabel)
-#: AutocorrectConfig.ui:414
-#, kde-format
-msgid "Re&place"
-msgstr "است&بدل"
-
-#. i18n: ectx: property (text), widget (QPushButton, addButton)
-#. i18n: ectx: property (text), widget (QPushButton, add1)
-#: AutocorrectConfig.ui:438 AutocorrectConfig.ui:562
-#: AutocorrectConfigDialog.cpp:281
-#, kde-format
-msgid "&Add"
-msgstr "أ&ضف"
-
-#. i18n: ectx: property (text), widget (QPushButton, removeButton)
-#. i18n: ectx: property (text), widget (QPushButton, remove2)
-#: AutocorrectConfig.ui:445 AutocorrectConfig.ui:637
-#, kde-format
-msgid "Remove"
-msgstr "احذف"
-
-#. i18n: ectx: property (text), widget (QPushButton, changeFormat)
-#: AutocorrectConfig.ui:455
-#, kde-format
-msgid "C&hange Format..."
-msgstr "غ&يّر التنسيق..."
-
-#. i18n: ectx: property (text), widget (QPushButton, clearFormat)
-#: AutocorrectConfig.ui:465
-#, kde-format
-msgid "C&lear Format"
-msgstr "ام&سح التنسيق"
-
-#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
-#: AutocorrectConfig.ui:503
-#, kde-format
-msgid "Find"
-msgstr "اعثر"
-
-#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
-#: AutocorrectConfig.ui:508
-#, kde-format
-msgid "Replace"
-msgstr "استبدل"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: AutocorrectConfig.ui:517
-#, kde-format
-msgid "E&xceptions"
-msgstr "الاست&ثناءات"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: AutocorrectConfig.ui:525
-#, kde-format
-msgid "Do not treat as the end of a sentence:"
-msgstr "لا تعاملها كنهاية جملة:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoinclude1)
-#. i18n: ectx: property (text), widget (QCheckBox, autoinclude2)
-#: AutocorrectConfig.ui:551 AutocorrectConfig.ui:619
-#, kde-format
-msgid "Autoinclude"
-msgstr "التضمين التلقائي"
-
-#. i18n: ectx: property (text), widget (QPushButton, remove1)
-#: AutocorrectConfig.ui:569
-#, kde-format
-msgid "R&emove"
-msgstr "ا&حذف"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: AutocorrectConfig.ui:593
-#, kde-format
-msgid "Accept two uppercase letters in:"
-msgstr "اقبل حرفين علويين في:"
-
-#. i18n: ectx: property (text), widget (QPushButton, add2)
-#: AutocorrectConfig.ui:630
-#, kde-format
-msgid "A&dd"
-msgstr "أ&ضف"
-
-#: AutocorrectConfigDialog.cpp:277
-#, kde-format
-msgid "&Modify"
-msgstr "&عدّل"
-
-#: AutocorrectConfigDialog.cpp:378
-#, kde-format
-msgid "Select Character"
-msgstr "انتق محرفا"
 
 #: AutocorrectFactory.cpp:16
 #, fuzzy, kde-format
 msgid "Autocorrect"
 msgstr "التصحيح التلقائي"
+
+#~ msgid "Si&mple Autocorrection"
+#~ msgstr "تصحيح تلقائي &بسيط"
+
+#~ msgid ""
+#~ "Detect when a new sentence is started and always ensure that the first "
+#~ "character is an uppercase character"
+#~ msgstr "تفحص عندما تبدأ جملة جديدة و تأكد دائما أن الحرف الأول حرف علوي."
+
+#~ msgid ""
+#~ "Convert &first letter of a sentence automatically to uppercase\n"
+#~ "(e.g. \"my house. in this town\" to \"my house. In this town\")"
+#~ msgstr ""
+#~ "حول الحرف الأ&ول من أول كلمة في الجملة بشكل تلقائي لحرف علوي\n"
+#~ "(مثال: \"my house. in this town\" إلى \"my house. In this town\")"
+
+#~ msgid ""
+#~ "All words are checked for the common mistake of holding the shift key "
+#~ "down a bit too long. If some words must have two uppercase characters, "
+#~ "then those exceptions should be added in the 'Exceptions' tab."
+#~ msgstr ""
+#~ "كل الكلمات تٌدقّق من أجل الخطأ المشترك بالضغط المستمر لفترة شيئا ما طويلة "
+#~ "على المفتاح shift.إذا كان لدى بعض الكلمات حرفان علويان فإن هذه "
+#~ "الإستثناءات يجب أن تضاف إلى لسان 'الاستثناءات'."
+
+#~ msgid ""
+#~ "Convert &two uppercase characters to one uppercase and one lowercase "
+#~ "character\n"
+#~ " (e.g. PErfect to Perfect)"
+#~ msgstr ""
+#~ "حول حرفا&ن علويان أحدهما إلى حرف علوي و الآخر إلى حرف سفلي\n"
+#~ " (مثلا PErfect إلى Perfect)"
+
+#~ msgid ""
+#~ "Detect when a URL (Uniform Resource Locator) is typed and provide "
+#~ "formatting that matches the way an Internet browser would show a URL."
+#~ msgstr ""
+#~ "تفحص كتابة عنوان وب واستعمل تنسيقا يلائم الطريقة التي يعرض بها  متصفح "
+#~ "الإنترنت عنوانا ما."
+
+#~ msgid "Autoformat &URLs"
+#~ msgstr "تنسيق آلي ل&عناوين الوب"
+
+#~ msgid ""
+#~ "Make sure that more than one space cannot be typed, as this is a common "
+#~ "mistake which is quite hard to find in formatted text."
+#~ msgstr ""
+#~ "يمنعك من كتابة أكثر من فراغ واحد على التوالي، حيث أن هذا خطاء شائع يصعب "
+#~ "كشفه في النصوص المنسقة."
+
+#~ msgid "&Suppress double spaces"
+#~ msgstr "أ&زل الفراغات المزدوجة"
+
+#~ msgid ""
+#~ "Keep correct formatting and indenting of sentences by automatically "
+#~ "removing spaces typed at the beginning and end of a paragraph."
+#~ msgstr ""
+#~ "حافظ على التنسيق والإزاحة الصحيحين، و ذلك عن طريق حذف المسافات الفارغة من "
+#~ "بداية و نهاية كل فقرة تلقائياً."
+
+#~ msgid "R&emove spaces at the beginning and end of paragraphs"
+#~ msgstr "أ&زل الفراغات في بداية ونهاية الفقرة."
+
+#~ msgid ""
+#~ "When you use _underline_ or *bold*, the text between the underscores or "
+#~ "asterisks will be converted to underlined or bold text."
+#~ msgstr ""
+#~ "عند استخدامك ل _مسطر_ أو *عريض* فإن النص الذي بين الشرطتين السفليتين أو "
+#~ "بين النجمتين سيحَوّله إلى نص مسطر أو عريض."
+
+#~ msgid "Automatically do &bold and underline formatting"
+#~ msgstr "قم بتنسيق \"عريض\" و \"خط سفلي\" تلقائياً"
+
+#~ msgid "Most standard fraction notations will be converted when available"
+#~ msgstr "ستحوّل معظم الكسور عند توفرها"
+
+#~ msgid "Re&place 1/2... with ½..."
+#~ msgstr "استبدل بـ 1/2... ½..."
+
+#~ msgid ""
+#~ "When typing '1)' or similar in front of a paragraph, automatically "
+#~ "convert the paragraph to use that numbering style. This has the advantage "
+#~ "that further paragraphs will also be numbered and the spacing is done "
+#~ "correctly."
+#~ msgstr ""
+#~ "عند كتابة ( '1)' أو ما يشابه عند بداية فقرة، أعد تنسيق هذه الفقرة لكي "
+#~ "تستخدم هذا الترقيم  تلقائيا. حتى تكون الفقرات القادمة مرقمة أيضا ولتتم "
+#~ "الإزاحة بشكل صحيح."
+
+#~ msgid "Use &autonumbering for numbered paragraphs"
+#~ msgstr "استخدم التر&قيم التلقائي للفقرات المرقمة"
+
+#~ msgid "Rep&lace 1st... with 1^st..."
+#~ msgstr "استبدل بـ 1st... 1^st..."
+
+#~ msgid "Capitalize name of days"
+#~ msgstr "أظهر أسماء الأيام بأحرف كبيرة"
+
+#~ msgid ""
+#~ "When typing '*' or '-' in front of a paragraph, automatically convert the "
+#~ "paragraph to use that list-style. Using a list-style formatting means "
+#~ "that a correct bullet is used to draw the list."
+#~ msgstr ""
+#~ "عند طباعة '*' أو '-' في بداية فقرة، استعمل نفس هذا النمط فيها تلقائيا . "
+#~ "يعني استخدام نمط القائمة وضع علامة ترقيم مناسبة لكتابة اللائحة."
+
+#~ msgid "Use l&ist-formatting for bulleted paragraphs"
+#~ msgstr "استخدم تن&سيق اللائحة للفقرات المؤشرة."
+
+#~ msgid "Default"
+#~ msgstr "افتراضي"
+
+#~ msgid "Custom &Quotes"
+#~ msgstr "&علامات اقتباس مخصّصة"
+
+#~ msgid "Replace &double quotes with typographical quotes"
+#~ msgstr "استبدل علامة الاقتباس المزدوجة ('') بعلامة اقتباس مطبعية"
+
+#~ msgid "Replace &single quotes with typographical quotes"
+#~ msgstr "استبدل علامة الاقتباس المفردة (') بعلامة اقتباس مطبعية"
+
+#~ msgid "Ad&vanced Autocorrection"
+#~ msgstr "تصحيح تلقائي متق&دم"
+
+#~ msgid "Replacements and exceptions for language:"
+#~ msgstr "الاستبدالات والاستثناءات للغة:"
+
+#~ msgid "All Languages"
+#~ msgstr "كل اللغات"
+
+#~ msgid "&Enable word replacement"
+#~ msgstr "استعمل است&بدال الكلمات"
+
+#~ msgid "Replace &text with format"
+#~ msgstr "استبدل ال&نص بالتنسيق"
+
+#~ msgid "&Find"
+#~ msgstr "ا&بحث"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Re&place"
+#~ msgstr "است&بدل"
+
+#~ msgid "&Add"
+#~ msgstr "أ&ضف"
+
+#~ msgid "Remove"
+#~ msgstr "احذف"
+
+#~ msgid "C&hange Format..."
+#~ msgstr "غ&يّر التنسيق..."
+
+#~ msgid "C&lear Format"
+#~ msgstr "ام&سح التنسيق"
+
+#~ msgid "Find"
+#~ msgstr "اعثر"
+
+#~ msgid "Replace"
+#~ msgstr "استبدل"
+
+#~ msgid "E&xceptions"
+#~ msgstr "الاست&ثناءات"
+
+#~ msgid "Do not treat as the end of a sentence:"
+#~ msgstr "لا تعاملها كنهاية جملة:"
+
+#~ msgid "Autoinclude"
+#~ msgstr "التضمين التلقائي"
+
+#~ msgid "R&emove"
+#~ msgstr "ا&حذف"
+
+#~ msgid "Accept two uppercase letters in:"
+#~ msgstr "اقبل حرفين علويين في:"
+
+#~ msgid "A&dd"
+#~ msgstr "أ&ضف"
+
+#~ msgid "&Modify"
+#~ msgstr "&عدّل"
+
+#~ msgid "Select Character"
+#~ msgstr "انتق محرفا"
 
 #, fuzzy
 #~| msgid "Si&mple Autocorrection"

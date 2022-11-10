@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2004-08-16 18:16+0100\n"
 "Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -73,20 +73,27 @@ msgstr "Gosodiadau Amrywiol"
 msgid "Spellcheck"
 msgstr "Gwirio Sillafu"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Apply Autocorrection"
+msgid "AutoCorrection"
+msgstr "Gweithredu Hunan-gwblhau"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "Trefnu Testun"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Canlyniad Gwirio Sillafu"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "Newid Newidyn i"
@@ -6380,9 +6387,6 @@ msgstr "Mewnosod Tudalen"
 
 #~ msgid "Edit Variable..."
 #~ msgstr "Golygu Newidyn..."
-
-#~ msgid "Apply Autocorrection"
-#~ msgstr "Gweithredu Hunan-gwblhau"
 
 #, fuzzy
 #~ msgid ""

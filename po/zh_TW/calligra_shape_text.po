@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2015-09-21 18:44+0800\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional <zh-l10n@lists.linux.org.tw>\n"
@@ -3038,7 +3038,7 @@ msgstr "自動校正"
 msgid "Key Press"
 msgstr "按鍵"
 
-#: TextTool.cpp:2912
+#: TextTool.cpp:2930
 #, kde-format
 msgid ""
 "This link points to the program or script '%1'.\n"
@@ -3048,7 +3048,7 @@ msgstr ""
 "這個連結指向一個程式或文稿 %1。\n"
 "這有可能造成您電腦的危險。您確定要執行此程式嗎？"
 
-#: TextTool.cpp:2917
+#: TextTool.cpp:2935
 #, kde-format
 msgid "Open Link?"
 msgstr "要開啟連結嗎？"

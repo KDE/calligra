@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2009-04-22 00:21+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -3193,7 +3193,7 @@ msgstr "जोडू"
 msgid "Key Press"
 msgstr ""
 
-#: TextTool.cpp:2912
+#: TextTool.cpp:2930
 #, kde-format
 msgid ""
 "This link points to the program or script '%1'.\n"
@@ -3201,7 +3201,7 @@ msgid ""
 "this program?"
 msgstr ""
 
-#: TextTool.cpp:2917
+#: TextTool.cpp:2935
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Open Link?"

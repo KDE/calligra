@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2014-03-13 00:38+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -69,20 +69,27 @@ msgstr "&Instellen"
 msgid "Spellcheck"
 msgstr "Klookschriever"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Autocorrection"
+msgid "AutoCorrection"
+msgstr "Automaatsche Korrektuur"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
 msgstr "Bewerken"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Klookschriever-Resultaat"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "Variable ännern na"
@@ -3710,11 +3717,6 @@ msgstr "Anner Text"
 #~| msgid "Edit"
 #~ msgid "3rd Edit"
 #~ msgstr "Bewerken"
-
-#, fuzzy
-#~| msgid "Autocorrection"
-#~ msgid "Author's section"
-#~ msgstr "Automaatsche Korrektuur"
 
 #, fuzzy
 #~| msgid "Page Description"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AutocorrectPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2016-11-21 22:33+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -19,366 +19,222 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Autocorrect.cpp:25
+#: Autocorrect.cpp:26
 #, kde-format
 msgid "Configure &Autocorrection..."
 msgstr "&Autocorrectie instellen..."
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, AutocorrectConfig)
-#: Autocorrect.cpp:29 Autocorrect.cpp:78 AutocorrectConfig.ui:14
-#: AutocorrectConfigDialog.cpp:364
-#, kde-format
-msgid "Autocorrection"
+#: Autocorrect.cpp:30
+#, fuzzy, kde-format
+#| msgid "Autocorrection"
+msgid "Enable Autocorrection"
 msgstr "Autocorrectie"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_1)
-#: AutocorrectConfig.ui:24
-#, kde-format
-msgid "Si&mple Autocorrection"
-msgstr "Een&voudige autocorrectie"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperCase)
-#: AutocorrectConfig.ui:30
-#, kde-format
-msgid ""
-"Detect when a new sentence is started and always ensure that the first "
-"character is an uppercase character"
-msgstr ""
-"Herken wanneer er een nieuwe zin wordt gestart en zorg ervoor dat de eerste "
-"letter altijd een hoofdletter is"
-
-#. i18n: ectx: property (text), widget (QCheckBox, upperCase)
-#: AutocorrectConfig.ui:34
-#, kde-format
-msgid ""
-"Convert &first letter of a sentence automatically to uppercase\n"
-"(e.g. \"my house. in this town\" to \"my house. In this town\")"
-msgstr ""
-"Zet de eerste letter van het eerste woord in een zin automatisch om in een "
-"&hoofdletter.\n"
-"(bijv. \"bla. dit is een test\" naar \"bla. Dit is een test\")"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperUpper)
-#: AutocorrectConfig.ui:44
-#, kde-format
-msgid ""
-"All words are checked for the common mistake of holding the shift key down a "
-"bit too long. If some words must have two uppercase characters, then those "
-"exceptions should be added in the 'Exceptions' tab."
-msgstr ""
-"Alle woorden worden gecontroleerd op de veelgemaakte fout van 2 hoofdletters "
-"achter elkaar in een woord, als gevolg van het iets te lang ingedrukt houden "
-"van de Shift-toets. Woorden die wel met twee hoofdletters dienen te beginnen "
-"kunt u toevoegen aan het tabblad \"Uitzonderingen\"."
-
-#. i18n: ectx: property (text), widget (QCheckBox, upperUpper)
-#: AutocorrectConfig.ui:48
-#, kde-format
-msgid ""
-"Convert &two uppercase characters to one uppercase and one lowercase "
-"character\n"
-" (e.g. PErfect to Perfect)"
-msgstr ""
-"Zet 2 h&oofdletters aan het begin van een woord automatisch om in een "
-"hoofdletter en een kleine letter.\n"
-"(bij. HAllo naar Hallo)"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoFormatUrl)
-#: AutocorrectConfig.ui:55
-#, kde-format
-msgid ""
-"Detect when a URL (Uniform Resource Locator) is typed and provide formatting "
-"that matches the way an Internet browser would show a URL."
-msgstr ""
-"Herken wanneer er een URL-adres (bijv. een internetadres) wordt getypt en "
-"maak deze automatisch op in de stijl zoals een Webbrowser ze toont."
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoFormatUrl)
-#: AutocorrectConfig.ui:58
-#, kde-format
-msgid "Autoformat &URLs"
-msgstr "&URL-adressen automatisch opmaken"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, ignoreDoubleSpace)
-#: AutocorrectConfig.ui:65
-#, kde-format
-msgid ""
-"Make sure that more than one space cannot be typed, as this is a common "
-"mistake which is quite hard to find in formatted text."
-msgstr ""
-"Zorg ervoor dat er geen twee spaties achter elkaar kunnen worden getypt. Dit "
-"is namelijk een veelvoorkomende fout, welke moeilijk terug te vinden is in "
-"opgemaakte tekst."
-
-#. i18n: ectx: property (text), widget (QCheckBox, ignoreDoubleSpace)
-#: AutocorrectConfig.ui:68
-#, kde-format
-msgid "&Suppress double spaces"
-msgstr "Dubbele &spaties verwijderen"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, trimParagraphs)
-#: AutocorrectConfig.ui:75
-#, kde-format
-msgid ""
-"Keep correct formatting and indenting of sentences by automatically removing "
-"spaces typed at the beginning and end of a paragraph."
-msgstr ""
-"Zorg voor een goede opmaak en inspringwijze van zinnen door automatisch de "
-"spaties die aan het begin en einde van een alinea getypt zijn te verwijderen."
-
-#. i18n: ectx: property (text), widget (QCheckBox, trimParagraphs)
-#: AutocorrectConfig.ui:78
-#, kde-format
-msgid "R&emove spaces at the beginning and end of paragraphs"
-msgstr "V&erwijder spaties aan het begin en einde van alinea's"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoChangeFormat)
-#: AutocorrectConfig.ui:85
-#, kde-format
-msgid ""
-"When you use _underline_ or *bold*, the text between the underscores or "
-"asterisks will be converted to underlined or bold text."
-msgstr ""
-"Als u in uw tekst gebruik maakt van _onderstrepen_ of *vet*, dan wordt de "
-"tekst tussen de streepjes of asterisken respectievelijk onderstreept of vet "
-"gemaakt."
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoChangeFormat)
-#: AutocorrectConfig.ui:88
-#, kde-format
-msgid "Automatically do &bold and underline formatting"
-msgstr "Automatisch zorgen voor de o&pmaak van vette en onderstreepte tekst"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoReplaceNumber)
-#: AutocorrectConfig.ui:95
-#, kde-format
-msgid "Most standard fraction notations will be converted when available"
-msgstr "Indien beschikbaar zullen de meeste standaard breuken worden omgezet"
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoReplaceNumber)
-#: AutocorrectConfig.ui:98
-#, kde-format
-msgid "Re&place 1/2... with ½..."
-msgstr "1/2... verva&ngen door ½..."
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, useNumberStyle)
-#: AutocorrectConfig.ui:108
-#, kde-format
-msgid ""
-"When typing '1)' or similar in front of a paragraph, automatically convert "
-"the paragraph to use that numbering style. This has the advantage that "
-"further paragraphs will also be numbered and the spacing is done correctly."
-msgstr ""
-"Als u '1)' of iets dergelijks aan het begin van een alinea intypt, dan zal "
-"de alinea automatisch die manier van nummeren gebruiken. Dit heeft als "
-"voordeel dat opvolgende alinea's ook zullen worden genummerd, en dat de "
-"spatiëring op de juiste wijze wordt toegepast."
-
-#. i18n: ectx: property (text), widget (QCheckBox, useNumberStyle)
-#: AutocorrectConfig.ui:111
-#, kde-format
-msgid "Use &autonumbering for numbered paragraphs"
-msgstr "&Autonummering gebruiken voor genummerde alinea's"
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoSuperScript)
-#: AutocorrectConfig.ui:121
-#, kde-format
-msgid "Rep&lace 1st... with 1^st..."
-msgstr "1st... verv&angen door 1^st..."
-
-#. i18n: ectx: property (text), widget (QCheckBox, capitalizeDaysName)
-#: AutocorrectConfig.ui:128
-#, kde-format
-msgid "Capitalize name of days"
-msgstr "Dagnamen van hoofdletter voorzien"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, useBulletStyle)
-#: AutocorrectConfig.ui:138
-#, kde-format
-msgid ""
-"When typing '*' or '-' in front of a paragraph, automatically convert the "
-"paragraph to use that list-style. Using a list-style formatting means that a "
-"correct bullet is used to draw the list."
-msgstr ""
-"Als u een '*' of '-' voor een alinea typt, dan zal de alinea automatisch die "
-"lijststijl gebruiken. Het gebruiken van lijststijl-opmaak betekent dat het "
-"juiste opsommingsteken zal worden gebruik om de lijst op te maken."
-
-#. i18n: ectx: property (text), widget (QCheckBox, useBulletStyle)
-#: AutocorrectConfig.ui:141
-#, kde-format
-msgid "Use l&ist-formatting for bulleted paragraphs"
-msgstr "L&ijstopmaak gebruiken voor opgesomde alinea's"
-
-#. i18n: ectx: property (text), widget (QPushButton, defaultBulletStyle)
-#. i18n: ectx: property (text), widget (QPushButton, doubleDefault)
-#. i18n: ectx: property (text), widget (QPushButton, singleDefault)
-#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
-#: AutocorrectConfig.ui:178 AutocorrectConfig.ui:253 AutocorrectConfig.ui:308
-#: AutocorrectConfig.ui:360
-#, kde-format
-msgid "Default"
-msgstr "Standaard"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: AutocorrectConfig.ui:214
-#, kde-format
-msgid "Custom &Quotes"
-msgstr "Aangepaste aan&halingstekens"
-
-#. i18n: ectx: property (text), widget (QCheckBox, typographicDoubleQuotes)
-#: AutocorrectConfig.ui:220
-#, kde-format
-msgid "Replace &double quotes with typographical quotes"
-msgstr ""
-"&Dubbele aanhalingstekens vervangen door typografische aanhalingstekens"
-
-#. i18n: ectx: property (text), widget (QCheckBox, typographicSingleQuotes)
-#: AutocorrectConfig.ui:275
-#, kde-format
-msgid "Replace &single quotes with typographical quotes"
-msgstr ""
-"Enkelvoudige aanhalingstekens vervangen door typografi&sche aanhalingstekens"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: AutocorrectConfig.ui:344
-#, kde-format
-msgid "Ad&vanced Autocorrection"
-msgstr "Gea&vanceerde autocorrectie"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: AutocorrectConfig.ui:352
-#, kde-format
-msgid "Replacements and exceptions for language:"
-msgstr "Vervangingen en uitzonderingen voor taal:"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
-#: AutocorrectConfig.ui:365
-#, kde-format
-msgid "All Languages"
-msgstr "Alle talen"
-
-#. i18n: ectx: property (text), widget (QCheckBox, advancedAutocorrection)
-#: AutocorrectConfig.ui:375
-#, kde-format
-msgid "&Enable word replacement"
-msgstr "Woordv&ervanging activeren"
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoCorrectionWithFormat)
-#: AutocorrectConfig.ui:385
-#, kde-format
-msgid "Replace &text with format"
-msgstr "&Tekst vervangen met opmaak"
-
-#. i18n: ectx: property (text), widget (QLabel, findLabel)
-#: AutocorrectConfig.ui:394
-#, kde-format
-msgid "&Find"
-msgstr "&Zoeken"
-
-#. i18n: ectx: property (text), widget (QToolButton, specialChar1)
-#. i18n: ectx: property (text), widget (QToolButton, specialChar2)
-#: AutocorrectConfig.ui:407 AutocorrectConfig.ui:427
-#, kde-format
-msgid "..."
-msgstr "..."
-
-#. i18n: ectx: property (text), widget (QLabel, replaceLabel)
-#: AutocorrectConfig.ui:414
-#, kde-format
-msgid "Re&place"
-msgstr "Ve&rvangen"
-
-#. i18n: ectx: property (text), widget (QPushButton, addButton)
-#. i18n: ectx: property (text), widget (QPushButton, add1)
-#: AutocorrectConfig.ui:438 AutocorrectConfig.ui:562
-#: AutocorrectConfigDialog.cpp:281
-#, kde-format
-msgid "&Add"
-msgstr "&Toevoegen"
-
-#. i18n: ectx: property (text), widget (QPushButton, removeButton)
-#. i18n: ectx: property (text), widget (QPushButton, remove2)
-#: AutocorrectConfig.ui:445 AutocorrectConfig.ui:637
-#, kde-format
-msgid "Remove"
-msgstr "Verwijderen"
-
-#. i18n: ectx: property (text), widget (QPushButton, changeFormat)
-#: AutocorrectConfig.ui:455
-#, kde-format
-msgid "C&hange Format..."
-msgstr "O&pmaak wijzigen..."
-
-#. i18n: ectx: property (text), widget (QPushButton, clearFormat)
-#: AutocorrectConfig.ui:465
-#, kde-format
-msgid "C&lear Format"
-msgstr "Opmaa&k verwijderen"
-
-#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
-#: AutocorrectConfig.ui:503
-#, kde-format
-msgid "Find"
-msgstr "Zoeken"
-
-#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
-#: AutocorrectConfig.ui:508
-#, kde-format
-msgid "Replace"
-msgstr "Vervangen"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: AutocorrectConfig.ui:517
-#, kde-format
-msgid "E&xceptions"
-msgstr "Uit&zonderingen"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: AutocorrectConfig.ui:525
-#, kde-format
-msgid "Do not treat as the end of a sentence:"
-msgstr "Beschouw dit niet als einde van een zin:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, autoinclude1)
-#. i18n: ectx: property (text), widget (QCheckBox, autoinclude2)
-#: AutocorrectConfig.ui:551 AutocorrectConfig.ui:619
-#, kde-format
-msgid "Autoinclude"
-msgstr "Auto-insluiten"
-
-#. i18n: ectx: property (text), widget (QPushButton, remove1)
-#: AutocorrectConfig.ui:569
-#, kde-format
-msgid "R&emove"
-msgstr "V&erwijderen"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: AutocorrectConfig.ui:593
-#, kde-format
-msgid "Accept two uppercase letters in:"
-msgstr "Twee hoofdletters accepteren in:"
-
-#. i18n: ectx: property (text), widget (QPushButton, add2)
-#: AutocorrectConfig.ui:630
-#, kde-format
-msgid "A&dd"
-msgstr "&Toevoegen"
-
-#: AutocorrectConfigDialog.cpp:277
-#, kde-format
-msgid "&Modify"
-msgstr "&Wijzigen"
-
-#: AutocorrectConfigDialog.cpp:378
-#, kde-format
-msgid "Select Character"
-msgstr "Teken selecteren"
 
 #: AutocorrectFactory.cpp:16
 #, kde-format
 msgid "Autocorrect"
 msgstr "Autocorrectie"
+
+#~ msgid "Si&mple Autocorrection"
+#~ msgstr "Een&voudige autocorrectie"
+
+#~ msgid ""
+#~ "Detect when a new sentence is started and always ensure that the first "
+#~ "character is an uppercase character"
+#~ msgstr ""
+#~ "Herken wanneer er een nieuwe zin wordt gestart en zorg ervoor dat de "
+#~ "eerste letter altijd een hoofdletter is"
+
+#~ msgid ""
+#~ "Convert &first letter of a sentence automatically to uppercase\n"
+#~ "(e.g. \"my house. in this town\" to \"my house. In this town\")"
+#~ msgstr ""
+#~ "Zet de eerste letter van het eerste woord in een zin automatisch om in "
+#~ "een &hoofdletter.\n"
+#~ "(bijv. \"bla. dit is een test\" naar \"bla. Dit is een test\")"
+
+#~ msgid ""
+#~ "All words are checked for the common mistake of holding the shift key "
+#~ "down a bit too long. If some words must have two uppercase characters, "
+#~ "then those exceptions should be added in the 'Exceptions' tab."
+#~ msgstr ""
+#~ "Alle woorden worden gecontroleerd op de veelgemaakte fout van 2 "
+#~ "hoofdletters achter elkaar in een woord, als gevolg van het iets te lang "
+#~ "ingedrukt houden van de Shift-toets. Woorden die wel met twee "
+#~ "hoofdletters dienen te beginnen kunt u toevoegen aan het tabblad "
+#~ "\"Uitzonderingen\"."
+
+#~ msgid ""
+#~ "Convert &two uppercase characters to one uppercase and one lowercase "
+#~ "character\n"
+#~ " (e.g. PErfect to Perfect)"
+#~ msgstr ""
+#~ "Zet 2 h&oofdletters aan het begin van een woord automatisch om in een "
+#~ "hoofdletter en een kleine letter.\n"
+#~ "(bij. HAllo naar Hallo)"
+
+#~ msgid ""
+#~ "Detect when a URL (Uniform Resource Locator) is typed and provide "
+#~ "formatting that matches the way an Internet browser would show a URL."
+#~ msgstr ""
+#~ "Herken wanneer er een URL-adres (bijv. een internetadres) wordt getypt en "
+#~ "maak deze automatisch op in de stijl zoals een Webbrowser ze toont."
+
+#~ msgid "Autoformat &URLs"
+#~ msgstr "&URL-adressen automatisch opmaken"
+
+#~ msgid ""
+#~ "Make sure that more than one space cannot be typed, as this is a common "
+#~ "mistake which is quite hard to find in formatted text."
+#~ msgstr ""
+#~ "Zorg ervoor dat er geen twee spaties achter elkaar kunnen worden getypt. "
+#~ "Dit is namelijk een veelvoorkomende fout, welke moeilijk terug te vinden "
+#~ "is in opgemaakte tekst."
+
+#~ msgid "&Suppress double spaces"
+#~ msgstr "Dubbele &spaties verwijderen"
+
+#~ msgid ""
+#~ "Keep correct formatting and indenting of sentences by automatically "
+#~ "removing spaces typed at the beginning and end of a paragraph."
+#~ msgstr ""
+#~ "Zorg voor een goede opmaak en inspringwijze van zinnen door automatisch "
+#~ "de spaties die aan het begin en einde van een alinea getypt zijn te "
+#~ "verwijderen."
+
+#~ msgid "R&emove spaces at the beginning and end of paragraphs"
+#~ msgstr "V&erwijder spaties aan het begin en einde van alinea's"
+
+#~ msgid ""
+#~ "When you use _underline_ or *bold*, the text between the underscores or "
+#~ "asterisks will be converted to underlined or bold text."
+#~ msgstr ""
+#~ "Als u in uw tekst gebruik maakt van _onderstrepen_ of *vet*, dan wordt de "
+#~ "tekst tussen de streepjes of asterisken respectievelijk onderstreept of "
+#~ "vet gemaakt."
+
+#~ msgid "Automatically do &bold and underline formatting"
+#~ msgstr "Automatisch zorgen voor de o&pmaak van vette en onderstreepte tekst"
+
+#~ msgid "Most standard fraction notations will be converted when available"
+#~ msgstr ""
+#~ "Indien beschikbaar zullen de meeste standaard breuken worden omgezet"
+
+#~ msgid "Re&place 1/2... with ½..."
+#~ msgstr "1/2... verva&ngen door ½..."
+
+#~ msgid ""
+#~ "When typing '1)' or similar in front of a paragraph, automatically "
+#~ "convert the paragraph to use that numbering style. This has the advantage "
+#~ "that further paragraphs will also be numbered and the spacing is done "
+#~ "correctly."
+#~ msgstr ""
+#~ "Als u '1)' of iets dergelijks aan het begin van een alinea intypt, dan "
+#~ "zal de alinea automatisch die manier van nummeren gebruiken. Dit heeft "
+#~ "als voordeel dat opvolgende alinea's ook zullen worden genummerd, en dat "
+#~ "de spatiëring op de juiste wijze wordt toegepast."
+
+#~ msgid "Use &autonumbering for numbered paragraphs"
+#~ msgstr "&Autonummering gebruiken voor genummerde alinea's"
+
+#~ msgid "Rep&lace 1st... with 1^st..."
+#~ msgstr "1st... verv&angen door 1^st..."
+
+#~ msgid "Capitalize name of days"
+#~ msgstr "Dagnamen van hoofdletter voorzien"
+
+#~ msgid ""
+#~ "When typing '*' or '-' in front of a paragraph, automatically convert the "
+#~ "paragraph to use that list-style. Using a list-style formatting means "
+#~ "that a correct bullet is used to draw the list."
+#~ msgstr ""
+#~ "Als u een '*' of '-' voor een alinea typt, dan zal de alinea automatisch "
+#~ "die lijststijl gebruiken. Het gebruiken van lijststijl-opmaak betekent "
+#~ "dat het juiste opsommingsteken zal worden gebruik om de lijst op te maken."
+
+#~ msgid "Use l&ist-formatting for bulleted paragraphs"
+#~ msgstr "L&ijstopmaak gebruiken voor opgesomde alinea's"
+
+#~ msgid "Default"
+#~ msgstr "Standaard"
+
+#~ msgid "Custom &Quotes"
+#~ msgstr "Aangepaste aan&halingstekens"
+
+#~ msgid "Replace &double quotes with typographical quotes"
+#~ msgstr ""
+#~ "&Dubbele aanhalingstekens vervangen door typografische aanhalingstekens"
+
+#~ msgid "Replace &single quotes with typographical quotes"
+#~ msgstr ""
+#~ "Enkelvoudige aanhalingstekens vervangen door typografi&sche "
+#~ "aanhalingstekens"
+
+#~ msgid "Ad&vanced Autocorrection"
+#~ msgstr "Gea&vanceerde autocorrectie"
+
+#~ msgid "Replacements and exceptions for language:"
+#~ msgstr "Vervangingen en uitzonderingen voor taal:"
+
+#~ msgid "All Languages"
+#~ msgstr "Alle talen"
+
+#~ msgid "&Enable word replacement"
+#~ msgstr "Woordv&ervanging activeren"
+
+#~ msgid "Replace &text with format"
+#~ msgstr "&Tekst vervangen met opmaak"
+
+#~ msgid "&Find"
+#~ msgstr "&Zoeken"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Re&place"
+#~ msgstr "Ve&rvangen"
+
+#~ msgid "&Add"
+#~ msgstr "&Toevoegen"
+
+#~ msgid "Remove"
+#~ msgstr "Verwijderen"
+
+#~ msgid "C&hange Format..."
+#~ msgstr "O&pmaak wijzigen..."
+
+#~ msgid "C&lear Format"
+#~ msgstr "Opmaa&k verwijderen"
+
+#~ msgid "Find"
+#~ msgstr "Zoeken"
+
+#~ msgid "Replace"
+#~ msgstr "Vervangen"
+
+#~ msgid "E&xceptions"
+#~ msgstr "Uit&zonderingen"
+
+#~ msgid "Do not treat as the end of a sentence:"
+#~ msgstr "Beschouw dit niet als einde van een zin:"
+
+#~ msgid "Autoinclude"
+#~ msgstr "Auto-insluiten"
+
+#~ msgid "R&emove"
+#~ msgstr "V&erwijderen"
+
+#~ msgid "Accept two uppercase letters in:"
+#~ msgstr "Twee hoofdletters accepteren in:"
+
+#~ msgid "A&dd"
+#~ msgstr "&Toevoegen"
+
+#~ msgid "&Modify"
+#~ msgstr "&Wijzigen"
+
+#~ msgid "Select Character"
+#~ msgstr "Teken selecteren"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Si&mple Autocorrection"

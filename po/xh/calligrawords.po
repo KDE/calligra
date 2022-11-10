@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2002-11-08 16:06+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -78,20 +78,27 @@ msgstr "Izicwangcisoa ze Misc"
 msgid "Spellcheck"
 msgstr "Ukhangelo lopelo"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Apply Autocorrection"
+msgid "AutoCorrection"
+msgstr "Faka Ulungiso oluzenzekelayo"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "Beka Umbhalo kakuhle"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, fuzzy, kde-format
 msgid "Spell Check Result"
 msgstr "Ukhangelo Lopelo"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "Tshintsha Okutshintshayo Kwi"
@@ -6200,9 +6207,6 @@ msgstr "Faka I Table"
 
 #~ msgid "Edit Variable..."
 #~ msgstr "Hlela Ezitshintshayo..."
-
-#~ msgid "Apply Autocorrection"
-#~ msgstr "Faka Ulungiso oluzenzekelayo"
 
 #, fuzzy
 #~ msgid ""

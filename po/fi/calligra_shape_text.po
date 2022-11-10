@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2022-07-29 11:40+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -3100,7 +3100,7 @@ msgstr "Automaattikorjaus"
 msgid "Key Press"
 msgstr "Näppäinpainallus"
 
-#: TextTool.cpp:2912
+#: TextTool.cpp:2930
 #, kde-format
 msgid ""
 "This link points to the program or script '%1'.\n"
@@ -3111,7 +3111,7 @@ msgstr ""
 "Pahantahtoiset ohjelmat voivat vahingoittaa tietokonettasi. Haluatko "
 "varmasti ajaa tämän ohjelman?"
 
-#: TextTool.cpp:2917
+#: TextTool.cpp:2935
 #, kde-format
 msgid "Open Link?"
 msgstr "Avataanko linkki?"

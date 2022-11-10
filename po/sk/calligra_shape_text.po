@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_text\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2019-10-06 19:22+0200\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -3054,7 +3054,7 @@ msgstr "Automatické opravy"
 msgid "Key Press"
 msgstr "Stlačenie klávesy"
 
-#: TextTool.cpp:2912
+#: TextTool.cpp:2930
 #, kde-format
 msgid ""
 "This link points to the program or script '%1'.\n"
@@ -3065,7 +3065,7 @@ msgstr ""
 "Škodlivé programy môžu poškodiť váš počítač. Určite chcete spustiť tento "
 "program?"
 
-#: TextTool.cpp:2917
+#: TextTool.cpp:2935
 #, kde-format
 msgid "Open Link?"
 msgstr "Otvoriť odkaz?"

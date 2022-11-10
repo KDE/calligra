@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2021-11-15 17:28+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -73,20 +73,27 @@ msgstr "&Nastavenia"
 msgid "Spellcheck"
 msgstr "Kontrola pravopisu"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Author's section"
+msgid "AutoCorrection"
+msgstr "Sekcia autora"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
 msgstr "Editovať"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Výsledok kontroly pravopisu"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "Zmeniť premennú na"
@@ -3374,9 +3381,6 @@ msgstr "Iný text"
 
 #~ msgid "Finished"
 #~ msgstr "Dokončené"
-
-#~ msgid "Author's section"
-#~ msgstr "Sekcia autora"
 
 #~ msgid "Badge:"
 #~ msgstr "Znak:"

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-09-12 00:45+0000\n"
-"PO-Revision-Date: 2022-10-28 13:25+0300\n"
+"PO-Revision-Date: 2022-11-09 13:17+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17182,22 +17182,22 @@ msgstr "Satır başlığını göster"
 #: part/View.cpp:365
 #, kde-format
 msgid "Horizontal Scrollbar"
-msgstr "Yatay Kaydırma Çubuğu"
+msgstr "Yatay Sarma Çubuğu"
 
 #: part/View.cpp:366
 #, kde-format
 msgid "Show the horizontal scrollbar"
-msgstr "Yatay kaydırma çubuğunu göster"
+msgstr "Yatay sarma çubuğunu göster"
 
 #: part/View.cpp:371
 #, kde-format
 msgid "Vertical Scrollbar"
-msgstr "Dikey Kaydırma Çubuğu"
+msgstr "Dikey Sarma Çubuğu"
 
 #: part/View.cpp:372
 #, kde-format
 msgid "Show the vertical scrollbar"
-msgstr "Dikey kaydırma çubuğunu göster"
+msgstr "Dikey sarma çubuğunu göster"
 
 #: part/View.cpp:377
 #, kde-format

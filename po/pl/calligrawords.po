@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2021-08-15 08:11+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -76,20 +76,27 @@ msgstr "U&stawienia"
 msgid "Spellcheck"
 msgstr "Pisownia"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Author's section"
+msgid "AutoCorrection"
+msgstr "Sekcja autora"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
 msgstr "Edycja"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Wyniki sprawdzania pisowni"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "Zmień zmienną na"
@@ -4105,9 +4112,6 @@ msgstr "Inny tekst"
 
 #~ msgid "Finished"
 #~ msgstr "Ukończono"
-
-#~ msgid "Author's section"
-#~ msgstr "Sekcja autora"
 
 #~ msgid "Badge:"
 #~ msgstr "Odznaka:"

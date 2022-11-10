@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -66,20 +66,26 @@ msgstr "Поставки на рамка"
 msgid "Spellcheck"
 msgstr "Проверка на правопис"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+msgid "AutoCorrection"
+msgstr "Самопоправање"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "Уреди &текст"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, fuzzy, kde-format
 msgid "Spell Check Result"
 msgstr "Проверка на правопис"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, fuzzy, kde-format
 msgid "Change Variable To"
 msgstr "&Променливи по избор..."
@@ -4760,10 +4766,6 @@ msgstr "KWord - Вметни табела"
 #, fuzzy
 #~ msgid "Edit Variable..."
 #~ msgstr "&Променливи по избор..."
-
-#, fuzzy
-#~ msgid "Apply Autocorrection"
-#~ msgstr "Самопоправање"
 
 #, fuzzy
 #~ msgid "Create Style From Selection..."

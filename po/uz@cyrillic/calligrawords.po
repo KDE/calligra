@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2006-12-17 13:48+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -70,20 +70,27 @@ msgstr "Хар ҳил мосламалар"
 msgid "Spellcheck"
 msgstr "Имлони текшириш"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Autocorrection"
+msgid "AutoCorrection"
+msgstr "Авто-тўғрилаш"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "Матнни таҳрирлаш"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "Имлони текшириш натижаси"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "Ўзгарувчини ўзгартириш"
@@ -3094,11 +3101,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "3rd Edit"
 #~ msgstr "Матнни таҳрирлаш"
-
-#, fuzzy
-#~| msgid "Autocorrection"
-#~ msgid "Author's section"
-#~ msgstr "Авто-тўғрилаш"
 
 #~ msgid "File to open"
 #~ msgstr "Очиш учун файл"

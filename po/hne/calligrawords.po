@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-08-08 00:16+0000\n"
+"POT-Creation-Date: 2022-11-10 00:46+0000\n"
 "PO-Revision-Date: 2009-03-03 11:08+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -70,20 +70,27 @@ msgstr "सेटिंग (&S)"
 msgid "Spellcheck"
 msgstr "हिज्जा जांच"
 
+#. i18n: ectx: Menu (AutoCorrection)
+#: part/calligrawords.rc:83
+#, fuzzy, kde-format
+#| msgid "Autocorrection"
+msgid "AutoCorrection"
+msgstr "अपने अपन सुधार"
+
 #. i18n: ectx: ToolBar (edit_toolbar)
-#: part/calligrawords.rc:92
+#: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
 msgstr "संपादन"
 
 #. i18n: ectx: Menu (check_spell_list)
-#: part/calligrawords.rc:148
+#: part/calligrawords.rc:150
 #, kde-format
 msgid "Spell Check Result"
 msgstr "हिज्जा जांच परिनाम"
 
 #. i18n: ectx: Menu (variable_list)
-#: part/calligrawords.rc:175
+#: part/calligrawords.rc:177
 #, kde-format
 msgid "Change Variable To"
 msgstr "चर ये मां बदलव"
@@ -3380,11 +3387,6 @@ msgstr "अऊ दूसर पेज"
 #~| msgid "Edit"
 #~ msgid "3rd Edit"
 #~ msgstr "संपादन"
-
-#, fuzzy
-#~| msgid "Autocorrection"
-#~ msgid "Author's section"
-#~ msgstr "अपने अपन सुधार"
 
 #, fuzzy
 #~| msgid "Page Edge:"
