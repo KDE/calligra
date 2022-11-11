@@ -1,9 +1,9 @@
 # Translation of calligra_textediting_autocorrect.po to Catalan
-# Copyright (C) 2008-2021 This_file_is_part_of_KDE
+# Copyright (C) 2008-2022 This_file_is_part_of_KDE
 # This file is distributed under the same license as the AutoCorrectPlugin package.
 #
 # Rafael Carreras <rcarreras@caliu.cat>, 2008.
-# Josep M. Ferrer <txemaq@gmail.com>, 2008, 2010, 2013, 2014, 2016, 2018, 2021.
+# Josep M. Ferrer <txemaq@gmail.com>, 2008, 2010, 2013, 2014, 2016, 2018, 2021, 2022.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2015, 2020.
 msgid ""
@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2021-11-11 19:55+0100\n"
+"PO-Revision-Date: 2022-11-10 08:26+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -29,206 +29,11 @@ msgid "Configure &Autocorrection..."
 msgstr "Configura la correcció &automàtica..."
 
 #: Autocorrect.cpp:30
-#, fuzzy, kde-format
-#| msgid "Autocorrection"
+#, kde-format
 msgid "Enable Autocorrection"
-msgstr "Correcció automàtica"
+msgstr "Activa la correcció automàtica"
 
 #: AutocorrectFactory.cpp:16
 #, kde-format
 msgid "Autocorrect"
 msgstr "Correcció automàtica"
-
-#~ msgid "Si&mple Autocorrection"
-#~ msgstr "Correcció automàtica si&mple"
-
-#~ msgid ""
-#~ "Detect when a new sentence is started and always ensure that the first "
-#~ "character is an uppercase character"
-#~ msgstr ""
-#~ "Detecta quan s'inicia una frase nova i sempre s'assegura que el primer "
-#~ "caràcter és en majúscules"
-
-#~ msgid ""
-#~ "Convert &first letter of a sentence automatically to uppercase\n"
-#~ "(e.g. \"my house. in this town\" to \"my house. In this town\")"
-#~ msgstr ""
-#~ "Converteix la &primera lletra d'una frase automàticament a majúscula\n"
-#~ "(per exemple, «casa meva. en aquest poble» a «casa meva. En aquest poble»)"
-
-#~ msgid ""
-#~ "All words are checked for the common mistake of holding the shift key "
-#~ "down a bit too long. If some words must have two uppercase characters, "
-#~ "then those exceptions should be added in the 'Exceptions' tab."
-#~ msgstr ""
-#~ "Totes les paraules es revisen per l'errada comuna de polsar la tecla de "
-#~ "majúscules durant massa temps. Si algunes paraules han d'estar en "
-#~ "majúscules, s'han d'afegir aquestes excepcions a la pestanya «Excepcions»."
-
-#~ msgid ""
-#~ "Convert &two uppercase characters to one uppercase and one lowercase "
-#~ "character\n"
-#~ " (e.g. PErfect to Perfect)"
-#~ msgstr ""
-#~ "Conver&teix dos caràcters en majúscules en un en majúscules i un en "
-#~ "minúscules\n"
-#~ " (p. ex.: PErfecte a Perfecte)"
-
-#~ msgid ""
-#~ "Detect when a URL (Uniform Resource Locator) is typed and provide "
-#~ "formatting that matches the way an Internet browser would show a URL."
-#~ msgstr ""
-#~ "Detecta quan s'escriu un URL (Uniform Resource Locator) i proporciona un "
-#~ "format per tal que un navegador d'Internet pugui mostrar un URL."
-
-#~ msgid "Autoformat &URLs"
-#~ msgstr "Dona format automàticament als &URL"
-
-#~ msgid ""
-#~ "Make sure that more than one space cannot be typed, as this is a common "
-#~ "mistake which is quite hard to find in formatted text."
-#~ msgstr ""
-#~ "Assegura que no es pot escriure més d'un espai, ja que aquest és un error "
-#~ "comú bastant difícil de trobar en text amb format."
-
-#~ msgid "&Suppress double spaces"
-#~ msgstr "&Suprimeix els dobles espais"
-
-#~ msgid ""
-#~ "Keep correct formatting and indenting of sentences by automatically "
-#~ "removing spaces typed at the beginning and end of a paragraph."
-#~ msgstr ""
-#~ "Manté el format i el sagnat de les frases eliminant automàticament els "
-#~ "espais escrits a l'inici i el final d'un paràgraf."
-
-#~ msgid "R&emove spaces at the beginning and end of paragraphs"
-#~ msgstr "&Elimina els espais al principi i al final dels paràgrafs"
-
-#~ msgid ""
-#~ "When you use _underline_ or *bold*, the text between the underscores or "
-#~ "asterisks will be converted to underlined or bold text."
-#~ msgstr ""
-#~ "Quan useu _subratllat_ o *negreta*, el text entre els guions baixos o els "
-#~ "asteriscs es convertiran en texts subratllats o en negreta."
-
-#~ msgid "Automatically do &bold and underline formatting"
-#~ msgstr "Automàticament dona format en negreta i su&bratllat"
-
-#~ msgid "Most standard fraction notations will be converted when available"
-#~ msgstr ""
-#~ "La majoria de notacions de fraccions estàndard es convertiran quan "
-#~ "estiguin disponibles"
-
-#~ msgid "Re&place 1/2... with ½..."
-#~ msgstr "Su&bstitueix 1/2... per ½..."
-
-#~ msgid ""
-#~ "When typing '1)' or similar in front of a paragraph, automatically "
-#~ "convert the paragraph to use that numbering style. This has the advantage "
-#~ "that further paragraphs will also be numbered and the spacing is done "
-#~ "correctly."
-#~ msgstr ""
-#~ "Quan escriviu «1)» o quelcom similar a principi de paràgraf, converteix "
-#~ "automàticament el paràgraf per a usar aquest estil numèric. Això té "
-#~ "l'avantatge que els següents paràgrafs també es numeraran i que l'espaiat "
-#~ "es fa correctament."
-
-#~ msgid "Use &autonumbering for numbered paragraphs"
-#~ msgstr "Usa la numeració &automàtica per a paràgrafs numerats"
-
-#~ msgid "Rep&lace 1st... with 1^st..."
-#~ msgstr "Su&bstitueix 1r... per 1^r..."
-
-#~ msgid "Capitalize name of days"
-#~ msgstr "Posa en majúscules els noms dels dies"
-
-#~ msgid ""
-#~ "When typing '*' or '-' in front of a paragraph, automatically convert the "
-#~ "paragraph to use that list-style. Using a list-style formatting means "
-#~ "that a correct bullet is used to draw the list."
-#~ msgstr ""
-#~ "Quan s'escriu «*» o «-» al principi d'un paràgraf, converteix "
-#~ "automàticament el paràgraf per a usar aquest estil de llista. Usar un "
-#~ "format d'estil de llista vol dir que s'usa un pic correcte per a fer la "
-#~ "llista."
-
-#~ msgid "Use l&ist-formatting for bulleted paragraphs"
-#~ msgstr "Usa el format de ll&ista per als paràgrafs amb pics"
-
-#~ msgid "Default"
-#~ msgstr "Per omissió"
-
-#~ msgid "Custom &Quotes"
-#~ msgstr "Co&metes personalitzades"
-
-#~ msgid "Replace &double quotes with typographical quotes"
-#~ msgstr "Substitueix les cometes &dobles per cometes tipogràfiques"
-
-#~ msgid "Replace &single quotes with typographical quotes"
-#~ msgstr "Substitueix les cometes &simples per cometes tipogràfiques"
-
-#~ msgid "Ad&vanced Autocorrection"
-#~ msgstr "Correcció automàtica a&vançada"
-
-#~ msgid "Replacements and exceptions for language:"
-#~ msgstr "Substitucions i excepcions per idioma:"
-
-#~ msgid "All Languages"
-#~ msgstr "Tots els idiomes"
-
-#~ msgid "&Enable word replacement"
-#~ msgstr "Habilita la substitució d&e la paraula"
-
-#~ msgid "Replace &text with format"
-#~ msgstr "Substitueix el &text amb format"
-
-#~ msgid "&Find"
-#~ msgstr "&Cerca"
-
-#~ msgid "..."
-#~ msgstr "..."
-
-#~ msgid "Re&place"
-#~ msgstr "&Substitueix"
-
-#~ msgid "&Add"
-#~ msgstr "&Afegeix"
-
-#~ msgid "Remove"
-#~ msgstr "Elimina"
-
-#~ msgid "C&hange Format..."
-#~ msgstr "Ca&nvia el format..."
-
-#~ msgid "C&lear Format"
-#~ msgstr "Nete&ja el format"
-
-#~ msgid "Find"
-#~ msgstr "Cerca"
-
-#~ msgid "Replace"
-#~ msgstr "Substitueix"
-
-#~ msgid "E&xceptions"
-#~ msgstr "E&xcepcions"
-
-#~ msgid "Do not treat as the end of a sentence:"
-#~ msgstr "No tractis com a final de frase:"
-
-#~ msgid "Autoinclude"
-#~ msgstr "Inclou automàticament"
-
-#~ msgid "R&emove"
-#~ msgstr "&Elimina"
-
-#~ msgid "Accept two uppercase letters in:"
-#~ msgstr "Accepta dues majúscules en:"
-
-#~ msgid "A&dd"
-#~ msgstr "A&fegeix"
-
-#~ msgid "&Modify"
-#~ msgstr "&Modifica"
-
-#~ msgid "Select Character"
-#~ msgstr "Selecciona el caràcter"
