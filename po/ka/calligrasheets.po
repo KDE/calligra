@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-09-12 00:45+0000\n"
-"PO-Revision-Date: 2022-09-23 17:07+0200\n"
+"PO-Revision-Date: 2022-11-11 06:26+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 #: core/Currency.cpp:35 core/Currency.cpp:81
 #, kde-format
@@ -3952,7 +3952,7 @@ msgstr ""
 #: functions/conversion.xml:267
 #, kde-format
 msgid "Numeral"
-msgstr ""
+msgstr "რიცხვობრივი"
 
 #: functions/conversion.xml:271
 #, kde-format
@@ -5445,12 +5445,12 @@ msgstr ""
 #: functions/engineering.xml:153 functions/engineering.xml:172
 #, kde-format
 msgid "Lower limit"
-msgstr ""
+msgstr "ქვედა ლიმიტი"
 
 #: functions/engineering.xml:157 functions/engineering.xml:176
 #, kde-format
 msgid "Upper limit"
-msgstr ""
+msgstr "ზედა ლიმიტი"
 
 #: functions/engineering.xml:161
 #, kde-format
@@ -6763,7 +6763,7 @@ msgstr ""
 #: functions/financial.xml:334
 #, kde-format
 msgid "Factor"
-msgstr ""
+msgstr "ფაქტორი"
 
 #: functions/financial.xml:338
 #, kde-format
@@ -9137,7 +9137,7 @@ msgstr "დიაპაზონი"
 #: functions/math.xml:348 functions/math.xml:433
 #, kde-format
 msgid "Criteria"
-msgstr ""
+msgstr "კრიტერიუმი"
 
 #: functions/math.xml:352
 #, kde-format
@@ -10356,7 +10356,7 @@ msgstr ""
 #: functions/math.xml:1269
 #, kde-format
 msgid "Dimension"
-msgstr ""
+msgstr "განზომილება"
 
 #: functions/math.xml:1273
 #, kde-format
@@ -12931,7 +12931,7 @@ msgstr ""
 #: functions/statistical.xml:1708
 #, kde-format
 msgid "mean"
-msgstr ""
+msgstr "მიშვნელობა"
 
 #: functions/statistical.xml:1712
 #, kde-format
@@ -14752,7 +14752,7 @@ msgstr "&ჩასწორება"
 #: part/calligrasheets.rc:22
 #, kde-format
 msgid "Fi&ll"
-msgstr ""
+msgstr "&შევსება"
 
 #. i18n: ectx: Menu (Clear)
 #: part/calligrasheets.rc:35
@@ -14789,7 +14789,7 @@ msgstr "&ჩასმა"
 #: part/calligrasheets.rc:89
 #, kde-format
 msgid "&External Data"
-msgstr ""
+msgstr "&გარე მონაცემები"
 
 #. i18n: ectx: Menu (Format)
 #: part/calligrasheets.rc:96
@@ -14808,19 +14808,19 @@ msgstr "უჯრედების შერწყმა"
 #: part/calligrasheets.rc:112
 #, kde-format
 msgid "&Row"
-msgstr ""
+msgstr "&მწკრივი"
 
 #. i18n: ectx: Menu (Column)
 #: part/calligrasheets.rc:118
 #, kde-format
 msgid "&Column"
-msgstr ""
+msgstr "&სვეტი"
 
 #. i18n: ectx: Menu (Sheet)
 #: part/calligrasheets.rc:124
 #, kde-format
 msgid "&Sheet"
-msgstr ""
+msgstr "&ფურცელი"
 
 #. i18n: ectx: Menu (PrintRange)
 #: part/calligrasheets.rc:132
@@ -14954,7 +14954,7 @@ msgstr ""
 #: part/chart/ChartDatabaseSelector.ui:58
 #, kde-format
 msgid "Data Format"
-msgstr ""
+msgstr "მონაცემების ფორმატი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_dataInRows)
 #: part/chart/ChartDatabaseSelector.ui:64
@@ -15233,13 +15233,13 @@ msgstr ""
 #: part/dialogs/PageLayoutSheetPage.ui:156
 #, kde-format
 msgid "Center horizontally"
-msgstr ""
+msgstr "ჰორიზონტალურად დაცენტრება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, verticalCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:163
 #, kde-format
 msgid "Center vertically"
-msgstr ""
+msgstr "ვერტიკალურად დაცენტრება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/PageLayoutSheetPage.ui:173
@@ -15629,7 +15629,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:193
 #, kde-format
 msgid "Show &grid"
-msgstr ""
+msgstr "&ბადის ჩვენება"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, autoCalcCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:200
@@ -15648,7 +15648,7 @@ msgstr ""
 #: part/dialogs/SheetSelectPage.cpp:19
 #, kde-format
 msgid "Sheets"
-msgstr ""
+msgstr "ფურცლები"
 
 #. i18n: ectx: property (text), widget (QRadioButton, allSheetsButton)
 #: part/dialogs/SheetSelectWidget.ui:40
@@ -16374,12 +16374,12 @@ msgstr "ფონტის ზომა"
 #: ui/CellToolBase.cpp:221
 #, kde-format
 msgid "Increase Font Size"
-msgstr ""
+msgstr "ფონტის ზომის გაზრდა"
 
 #: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Decrease Font Size"
-msgstr ""
+msgstr "ფონტის ზომის შესრულება"
 
 #: ui/CellToolBase.cpp:231
 #, kde-format
@@ -16404,7 +16404,7 @@ msgstr ""
 #: ui/CellToolBase.cpp:246
 #, kde-format
 msgid "Align Center"
-msgstr ""
+msgstr "ცენტრზე სწორება"
 
 #. i18n: ectx: property (text), widget (QRadioButton, center)
 #: ui/CellToolBase.cpp:247 ui/dialogs/PositionWidget.ui:68
@@ -16430,7 +16430,7 @@ msgstr ""
 #: ui/CellToolBase.cpp:263
 #, kde-format
 msgid "Align Top"
-msgstr ""
+msgstr "ზემოთ სწორება"
 
 #. i18n: ectx: property (text), widget (QRadioButton, top)
 #: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:299
@@ -16463,7 +16463,7 @@ msgstr ""
 #: ui/CellToolBase.cpp:277
 #, kde-format
 msgid "Align Bottom"
-msgstr ""
+msgstr "ძირის სწორება"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bottom)
 #: ui/CellToolBase.cpp:278 ui/CellToolBase.cpp:305
@@ -16572,7 +16572,7 @@ msgstr ""
 #: ui/CellToolBase.cpp:338
 #, kde-format
 msgid "Wrap Text"
-msgstr ""
+msgstr "ტექსტს გადატანა"
 
 #: ui/CellToolBase.cpp:339
 #, kde-format
@@ -17053,7 +17053,7 @@ msgstr ""
 #: ui/CellToolBase.cpp:1792
 msgctxt "(qtundo-format)"
 msgid "Wrap Text"
-msgstr ""
+msgstr "ტექსტს გადატანა"
 
 #: ui/CellToolBase.cpp:1804
 msgctxt "(qtundo-format)"
@@ -17073,7 +17073,7 @@ msgstr ""
 #: ui/CellToolBase.cpp:1899
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
-msgstr ""
+msgstr "ტექსტის გასუფთავება"
 
 #: ui/CellToolBase.cpp:1953
 #, kde-format
@@ -17110,7 +17110,7 @@ msgstr ""
 #: ui/CellToolBase_p.cpp:719
 msgctxt "(qtundo-format)"
 msgid "Time Format"
-msgstr ""
+msgstr "დროის ფორმატი"
 
 #: ui/CellToolBase_p.cpp:724
 msgctxt "(qtundo-format)"
@@ -17403,12 +17403,12 @@ msgstr "მნიშვნელობის შეცვლა"
 #: ui/commands/DataManipulators.cpp:180 ui/commands/DataManipulators.cpp:191
 msgctxt "(qtundo-format)"
 msgid "Insert Cells"
-msgstr ""
+msgstr "უჯრედების ჩასმა"
 
 #: ui/commands/DataManipulators.cpp:193
 msgctxt "(qtundo-format)"
 msgid "Remove Cells"
-msgstr ""
+msgstr "უჯრედების წაშლა"
 
 #: ui/commands/DeleteCommand.cpp:22
 msgctxt "(qtundo-format)"
@@ -17519,7 +17519,7 @@ msgstr ""
 #: ui/commands/RowColumnManipulators.cpp:573
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
-msgstr ""
+msgstr "სვეტების ჩასმა"
 
 #: ui/commands/RowColumnManipulators.cpp:575
 msgctxt "(qtundo-format)"
@@ -17530,7 +17530,7 @@ msgstr ""
 #: ui/commands/RowColumnManipulators.cpp:650
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
-msgstr ""
+msgstr "მწკრივების ჩასმა"
 
 #: ui/commands/RowColumnManipulators.cpp:652
 msgctxt "(qtundo-format)"
@@ -17680,7 +17680,7 @@ msgstr ""
 #: ui/dialogs/ConditionalDialog.cpp:197 ui/dialogs/ConditionalDialog.cpp:216
 #, kde-format
 msgid "<none>"
-msgstr ""
+msgstr "<არცერთი>"
 
 #. i18ncheckarg
 #: ui/dialogs/ConditionalDialog.cpp:141
@@ -17807,7 +17807,7 @@ msgstr ""
 #: ui/dialogs/ConsolidateDialog.cpp:83
 #, kde-format
 msgid "Variance"
-msgstr ""
+msgstr "ცვალებადობა"
 
 #: ui/dialogs/ConsolidateDialog.cpp:105
 #, kde-format
@@ -17874,7 +17874,7 @@ msgstr "ფუნქცია:"
 #: ui/dialogs/ConsolidateWidget.ui:48
 #, kde-format
 msgid "Reference:"
-msgstr ""
+msgstr "მიბმა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: ui/dialogs/ConsolidateWidget.ui:61
@@ -17976,13 +17976,13 @@ msgstr ""
 #: ui/dialogs/DatabaseDialog.cpp:235
 #, kde-format
 msgid "equals"
-msgstr ""
+msgstr "უდრის"
 
 #: ui/dialogs/DatabaseDialog.cpp:201 ui/dialogs/DatabaseDialog.cpp:220
 #: ui/dialogs/DatabaseDialog.cpp:236
 #, kde-format
 msgid "not equal"
-msgstr ""
+msgstr "არ უდრის"
 
 #: ui/dialogs/DatabaseDialog.cpp:202 ui/dialogs/DatabaseDialog.cpp:221
 #: ui/dialogs/DatabaseDialog.cpp:237
@@ -18183,7 +18183,7 @@ msgstr "თარიღი და დრო"
 #: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutDialog.cpp:975
 #, kde-format
 msgid "Currency:"
-msgstr ""
+msgstr "ვალუტა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutDialog.cpp:971
@@ -18195,7 +18195,7 @@ msgstr "ფორმატი:"
 #: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutDialog.cpp:948
 #, kde-format
 msgid "Postfix:"
-msgstr ""
+msgstr "Postfix:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutDialog.cpp:958
@@ -18313,7 +18313,7 @@ msgstr ""
 #: ui/dialogs/FindDialog.cpp:35
 #, kde-format
 msgid "Search in:"
-msgstr ""
+msgstr "ძებნა:"
 
 #: ui/dialogs/FindDialog.cpp:43
 #, kde-format
@@ -18607,7 +18607,7 @@ msgstr ""
 #: ui/dialogs/InsertDialog.cpp:49
 #, kde-format
 msgid "Insert Cells"
-msgstr ""
+msgstr "უჯრედების ჩასმა"
 
 #: ui/dialogs/InsertDialog.cpp:52
 #, kde-format
@@ -18632,7 +18632,7 @@ msgstr ""
 #: ui/dialogs/InsertDialog.cpp:56
 #, kde-format
 msgid "Remove Cells"
-msgstr ""
+msgstr "უჯრედების წაშლა"
 
 #: ui/dialogs/LayoutDialog.cpp:139
 #, kde-format
@@ -18663,7 +18663,7 @@ msgstr ""
 #: ui/dialogs/LayoutDialog.cpp:720
 #, kde-format
 msgid "Cell Format"
-msgstr ""
+msgstr "უჯრედის ფორმატი"
 
 #: ui/dialogs/LayoutDialog.cpp:728
 #, kde-format
@@ -18985,7 +18985,7 @@ msgstr "ფონის ფერი:"
 #: ui/dialogs/LayoutDialog.cpp:3184
 #, kde-format
 msgid "No Color"
-msgstr ""
+msgstr "ფერის გარეშე"
 
 #: ui/dialogs/ListDialog.cpp:47
 #, kde-format
@@ -18995,12 +18995,12 @@ msgstr ""
 #: ui/dialogs/ListDialog.cpp:57
 #, kde-format
 msgid "List:"
-msgstr ""
+msgstr "სია:"
 
 #: ui/dialogs/ListDialog.cpp:64
 #, kde-format
 msgid "Entry:"
-msgstr ""
+msgstr "ჩანაწერი:"
 
 #: ui/dialogs/ListDialog.cpp:74 ui/ExternalEditor.cpp:61
 #, kde-format
@@ -19087,12 +19087,12 @@ msgstr ""
 #: ui/dialogs/NamedAreaDialog.cpp:229
 #, kde-format
 msgid "Cells:"
-msgstr ""
+msgstr "უჯრედები:"
 
 #: ui/dialogs/NamedAreaDialog.cpp:236
 #, kde-format
 msgid "Sheet:"
-msgstr ""
+msgstr "ფურცელი:"
 
 #: ui/dialogs/NamedAreaDialog.cpp:243
 #, kde-format
@@ -19131,13 +19131,13 @@ msgstr "ოპერატორი"
 #: ui/dialogs/pivotfilters.ui:41
 #, kde-format
 msgid "And"
-msgstr ""
+msgstr "და"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, Operator)
 #: ui/dialogs/pivotfilters.ui:46
 #, kde-format
 msgid "Or"
-msgstr ""
+msgstr "ან"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/dialogs/pivotfilters.ui:61
@@ -19149,25 +19149,25 @@ msgstr "ველი"
 #: ui/dialogs/pivotfilters.ui:89
 #, kde-format
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, Condition)
 #: ui/dialogs/pivotfilters.ui:94
 #, kde-format
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, Condition)
 #: ui/dialogs/pivotfilters.ui:99
 #, kde-format
 msgid "=="
-msgstr ""
+msgstr "=="
 
 #. i18n: ectx: property (text), item, widget (QComboBox, Condition)
 #: ui/dialogs/pivotfilters.ui:104
 #, kde-format
 msgid "!="
-msgstr ""
+msgstr "!="
 
 #: ui/dialogs/pivotmain.cpp:49
 #, kde-format
@@ -19195,7 +19195,7 @@ msgstr "ჭდეები"
 #: ui/dialogs/pivotmain.ui:46
 #, kde-format
 msgid "Select Option"
-msgstr ""
+msgstr "აირჩიეთ პარამეტრი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
 #. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
@@ -19216,7 +19216,7 @@ msgstr ""
 #: ui/dialogs/pivotmain.ui:64 ui/dialogs/pivotoptions.ui:67
 #, kde-format
 msgid "max"
-msgstr ""
+msgstr "მაქსიმუმი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
 #. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
@@ -19260,7 +19260,7 @@ msgstr ""
 #: ui/dialogs/pivotoptions.ui:26
 #, kde-format
 msgid "Value Type"
-msgstr ""
+msgstr "მნიშვნელობის ტიპი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: ui/dialogs/pivotoptions.ui:33

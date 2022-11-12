@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2022-09-23 16:27+0200\n"
+"PO-Revision-Date: 2022-11-11 06:24+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -17,23 +17,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 #: Autocorrect.cpp:26
 #, kde-format
 msgid "Configure &Autocorrection..."
-msgstr ""
+msgstr "&ავტოკორექციის მორგება..."
 
 #: Autocorrect.cpp:30
-#, fuzzy, kde-format
-#| msgid "Autocorrection"
+#, kde-format
 msgid "Enable Autocorrection"
-msgstr "ავტოკორექცია"
+msgstr "ავტოკორექციის ჩართვა"
 
 #: AutocorrectFactory.cpp:16
 #, kde-format
 msgid "Autocorrect"
-msgstr "ავტომატური შეცვლა"
+msgstr "ავტოკორექცია"
 
 #~ msgid "All Languages"
 #~ msgstr "ყველა ენა"

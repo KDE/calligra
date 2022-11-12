@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2022-09-23 15:06+0200\n"
+"PO-Revision-Date: 2022-11-11 06:18+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,20 +16,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 #. i18n: ectx: Menu (Shapes)
 #: data/braindumpui.rc:8
 #, kde-format
 msgctxt "@title:menu"
 msgid "Shapes"
-msgstr ""
+msgstr "მოყვანილობები"
 
 #. i18n: ectx: Menu (Shapes)
 #: data/braindumpview.rc:23
 #, kde-format
 msgid "Shapes"
-msgstr ""
+msgstr "მოყვანილობები"
 
 #. i18n: tag category attribute name
 #: data/states/states/states.xml:3
@@ -126,32 +126,32 @@ msgstr "მისამართი:"
 #: plugins/webshape/WebShapeConfigWidget.ui:40
 #, kde-format
 msgid "Use a cache copy"
-msgstr ""
+msgstr "ქეშირებული ასლის გამოყენება"
 
 #: plugins/webshape/WebShapeFactory.cpp:34
 #, kde-format
 msgid "Web Shape"
-msgstr ""
+msgstr "Web ფორმა"
 
 #: plugins/webshape/WebShapeFactory.cpp:36
 #, kde-format
 msgid "A web shape"
-msgstr ""
+msgstr "Web ფორმა"
 
 #: plugins/webshape/WebToolFactory.cpp:31
 #, kde-format
 msgid "Web shape editing"
-msgstr ""
+msgstr "Web ფორმის ჩასწორება"
 
 #: src/AboutData.h:31
 #, kde-format
 msgid "Braindump"
-msgstr ""
+msgstr "Braindump"
 
 #: src/AboutData.h:32
 #, kde-format
 msgid "Braindump: directly from your brain to the computer."
-msgstr ""
+msgstr "Braindump: პირდაპირ თქვენი ტვინიდან კომპიუტერამდე."
 
 #: src/AboutData.h:34
 #, kde-format
@@ -344,9 +344,9 @@ msgstr ""
 #: src/View.cpp:384
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
-msgstr ""
+msgstr "ფორმების დაჯგუფება"
 
 #: src/View.cpp:406
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
-msgstr ""
+msgstr "ფორმების განჯგუფება"

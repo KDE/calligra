@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-23 00:46+0000\n"
-"PO-Revision-Date: 2022-09-23 16:52+0200\n"
+"PO-Revision-Date: 2022-11-11 06:23+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -230,7 +230,7 @@ msgstr ""
 #: flake/commands/KoShapeGroupCommand.cpp:82
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
-msgstr ""
+msgstr "ფორმების დაჯგუფება"
 
 #: flake/commands/KoShapeGroupCommand.cpp:84
 msgctxt "(qtundo-format)"
@@ -240,7 +240,7 @@ msgstr ""
 #: flake/commands/KoShapeKeepAspectRatioCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Keep Aspect Ratio"
-msgstr ""
+msgstr "საწყისი ფარდობის შენარჩუნება"
 
 #: flake/commands/KoShapeLockCommand.cpp:23
 msgctxt "(qtundo-format)"
@@ -312,7 +312,7 @@ msgstr ""
 #: flake/commands/KoShapeUngroupCommand.cpp:46
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
-msgstr ""
+msgstr "ფორმების განჯგუფება"
 
 #: flake/commands/KoSubpathJoinCommand.cpp:38
 msgctxt "(qtundo-format)"
@@ -1990,12 +1990,12 @@ msgstr "მილიმეტრი (მმ)"
 #: odf/KoUnit.cpp:39
 #, kde-format
 msgid "Centimeters (cm)"
-msgstr ""
+msgstr "სანტიმეტრი (სმ)"
 
 #: odf/KoUnit.cpp:41
 #, kde-format
 msgid "Decimeters (dm)"
-msgstr ""
+msgstr "დეციმეტრი (დმ)"
 
 #: odf/KoUnit.cpp:43
 #, kde-format
@@ -2005,12 +2005,12 @@ msgstr "ინჩი (in)"
 #: odf/KoUnit.cpp:45
 #, kde-format
 msgid "Pica (pi)"
-msgstr ""
+msgstr "Pica (pi)"
 
 #: odf/KoUnit.cpp:47
 #, kde-format
 msgid "Cicero (cc)"
-msgstr ""
+msgstr "Cicero (cc)"
 
 #: odf/KoUnit.cpp:49
 #, kde-format
@@ -2025,7 +2025,7 @@ msgstr "პიქსელი (px)"
 #: odf/KoUnit.cpp:53
 #, kde-format
 msgid "Unsupported unit"
-msgstr ""
+msgstr "მხარდაუჭერელი ერთეული"
 
 #: pageapp/commands/KoPAChangeMasterPageCommand.cpp:21
 msgctxt "(qtundo-format)"
@@ -2203,7 +2203,7 @@ msgstr "ფენის სახელის შეცვლა"
 #: pageapp/KoPADocumentStructureDocker.cpp:100
 #, kde-format
 msgid "Slide"
-msgstr ""
+msgstr "სლაიდი"
 
 #: pageapp/KoPADocumentModel.cpp:317
 #, kde-format
@@ -3226,7 +3226,7 @@ msgstr ""
 #: pigment/KoCompositeOp.cpp:21 pigment/KoCompositeOpRegistry.cpp:26
 #, kde-format
 msgid "Arithmetic"
-msgstr ""
+msgstr "არითმეტიკა"
 
 #: pigment/KoCompositeOp.cpp:22 pigment/KoCompositeOpRegistry.cpp:29
 #, kde-format
@@ -3291,7 +3291,7 @@ msgstr ""
 #: pigment/resources/KoStopGradient.cpp:421
 #, kde-format
 msgid "SVG Gradient"
-msgstr ""
+msgstr "SVG გრადიენტი"
 
 #: rdf/InsertSemanticObjectReferenceAction.cpp:43
 #, kde-format
@@ -4110,13 +4110,13 @@ msgstr "ელფოტა:"
 #: widgets/KoConfigAuthorPage.ui:127 widgets/koDocumentInfoAuthorWidget.ui:114
 #, kde-format
 msgid "Telephone (home):"
-msgstr ""
+msgstr "ტელეფონი (სახლი):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhoneWork)
 #: widgets/KoConfigAuthorPage.ui:143 widgets/koDocumentInfoAuthorWidget.ui:124
 #, kde-format
 msgid "Telephone (work):"
-msgstr ""
+msgstr "ტელეფონი (სამუშაო):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFaxDesc)
 #: widgets/KoConfigAuthorPage.ui:159 widgets/koDocumentInfoAuthorWidget.ui:134
@@ -4134,7 +4134,7 @@ msgstr "ქუჩა:"
 #: widgets/KoConfigAuthorPage.ui:191 widgets/koDocumentInfoAuthorWidget.ui:154
 #, kde-format
 msgid "Postal code:"
-msgstr ""
+msgstr "საფოსტო კოდი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCityDesc)
 #: widgets/KoConfigAuthorPage.ui:207 widgets/koDocumentInfoAuthorWidget.ui:164
@@ -4795,12 +4795,12 @@ msgstr ""
 #: widgets/KoModeBox.cpp:587
 #, kde-format
 msgid "Left side"
-msgstr ""
+msgstr "მარცხენა მხარე"
 
 #: widgets/KoModeBox.cpp:588
 #, kde-format
 msgid "Right side"
-msgstr ""
+msgstr "მარჯვენა მხარე"
 
 #: widgets/KoPageLayoutDialog.cpp:33
 #, kde-format
@@ -5036,12 +5036,12 @@ msgstr ""
 #: widgets/KoRuler.cpp:1267
 #, kde-format
 msgid "Left indent"
-msgstr ""
+msgstr "მარცხნივ შეწევა"
 
 #: widgets/KoRuler.cpp:1268
 #, kde-format
 msgid "Right indent"
-msgstr ""
+msgstr "მარჯვნივ შეწევა"
 
 #: widgets/KoShadowConfigWidget.cpp:55
 #, kde-format
@@ -5098,7 +5098,7 @@ msgstr ""
 #: widgets/KoStrokeConfigWidget.cpp:203
 #, kde-format
 msgid "Thickness:"
-msgstr ""
+msgstr "სისქე:"
 
 #: widgets/KoStrokeConfigWidget.cpp:213
 #, kde-format
@@ -5167,12 +5167,12 @@ msgstr ""
 #: widgets/KoTagToolButton.cpp:60
 #, kde-format
 msgid "Rename tag"
-msgstr ""
+msgstr "ჭდის გადარქმევა"
 
 #: widgets/KoTagToolButton.cpp:71
 #, kde-format
 msgid "Delete this tag"
-msgstr ""
+msgstr "ამ ჭდის წაშლა"
 
 #: widgets/KoTagToolButton.cpp:89
 #, kde-format
@@ -5246,22 +5246,22 @@ msgstr "%1%"
 #: widgets/KoZoomMode.cpp:14
 #, kde-format
 msgid "Fit Page Width"
-msgstr ""
+msgstr "გვერდის სიგანეში ჩატევა"
 
 #: widgets/KoZoomMode.cpp:15
 #, kde-format
 msgid "Fit Page"
-msgstr ""
+msgstr "გვერდის ჩატევა"
 
 #: widgets/KoZoomMode.cpp:17
 #, kde-format
 msgid "Actual Pixels"
-msgstr ""
+msgstr "რეალური პიქსელები"
 
 #: widgets/KoZoomMode.cpp:21
 #, kde-format
 msgid "Fit Text Width"
-msgstr ""
+msgstr "ტექსტის სიგანეში ჩატევა"
 
 #: widgets/KoZoomWidget.cpp:69
 #, kde-format

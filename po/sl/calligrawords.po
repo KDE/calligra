@@ -1,7 +1,7 @@
 # translation of kword.po to Slovenian
 # Translation of kword.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-# $Id: calligrawords.po 1637959 2022-11-11 01:38:02Z scripty $
+# $Id: calligrawords.po 1638034 2022-11-12 01:35:49Z scripty $
 # $Source$
 #
 # Marko Samastur <markos@elite.org>, 2000.
@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2022-11-10 12:06+0100\n"
+"PO-Revision-Date: 2022-11-11 09:18+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
