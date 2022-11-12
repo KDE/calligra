@@ -1411,8 +1411,21 @@ void CellToolBase::triggerAction(const QString &name)
 
 void CellToolBase::cellStyle()
 {
-    QPointer<CellFormatDialog> dialog = new CellFormatDialog(canvas()->canvasWidget(), selection());
-    dialog->exec();
+    LayoutDialog *dialog = new LayoutDialog(canvas()->canvasWidget(), selection()->activeSheet(), nullptr, false);
+    QRect range = selection()->firstRange();
+    CellStorage *cs = selection()->activeSheet()->fullCellStorage();
+    Style style = cs->style(range);
+    bool multicell = ((range.width() > 1) || (range.height() > 1));
+    dialog->setStyle(style, multicell);
+    if (dialog->exec()) {
+        // TODO - this needs a macro command as there are non-style options in that dialog, see LayoutDialog::slotApply
+        Style style = dialog->style(multicell);
+        StyleCommand* command = new StyleCommand();
+        command->setSheet(selection()->activeSheet());
+        command->add(*selection());
+        command->setStyle(style);
+        command->execute(canvas());
+    }
     delete dialog;
 }
 
@@ -1420,7 +1433,9 @@ void CellToolBase::setDefaultStyle()
 {
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
-    command->setDefault();
+    Style s;
+    s.setDefault();
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1445,7 +1460,9 @@ void CellToolBase::setStyle(const QString& stylename)
     if (selection()->activeSheet()->fullMap()->styleManager()->style(stylename)) {
         StyleCommand* command = new StyleCommand();
         command->setSheet(selection()->activeSheet());
-        command->setParentName(stylename);
+        Style s;
+        s.setParentName(stylename);
+        command->setStyle(s);
         command->add(*selection());
         command->execute(canvas());
     }
@@ -1497,7 +1514,9 @@ void CellToolBase::bold(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
-    command->setFontBold(enable);
+    Style s;
+    s.setFontBold(enable);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
     if (editor()) {
@@ -1511,7 +1530,9 @@ void CellToolBase::underline(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
-    command->setFontUnderline(enable);
+    Style s;
+    s.setFontUnderline(enable);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
     if (editor()) {
@@ -1525,7 +1546,9 @@ void CellToolBase::strikeOut(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
-    command->setFontStrike(enable);
+    Style s;
+    s.setFontStrikeOut(enable);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
     if (editor()) {
@@ -1540,7 +1563,9 @@ void CellToolBase::italic(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
-    command->setFontItalic(enable);
+    Style s;
+    s.setFontItalic(enable);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
     if (editor()) {
@@ -1554,7 +1579,9 @@ void CellToolBase::font(const QString& font)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
-    command->setFontFamily(font.toLatin1());
+    Style s;
+    s.setFontFamily(font.toLatin1());
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
     // Don't leave the focus in the toolbars combo box ...
@@ -1572,7 +1599,9 @@ void CellToolBase::fontSize(int size)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
-    command->setFontSize(size);
+    Style s;
+    s.setFontSize(size);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
     // Don't leave the focus in the toolbars combo box ...
@@ -1593,7 +1622,9 @@ void CellToolBase::increaseFontSize()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
-    command->setFontSize(size + 1);
+    Style s;
+    s.setFontSize(size + 1);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1606,7 +1637,9 @@ void CellToolBase::decreaseFontSize()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
-    command->setFontSize(size - 1);
+    Style s;
+    s.setFontSize(size - 1);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1616,7 +1649,9 @@ void CellToolBase::changeTextColor(const KoColor &color)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Text Color"));
-    command->setFontColor(color.toQColor());
+    Style s;
+    s.setFontColor(color.toQColor());
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1626,7 +1661,9 @@ void CellToolBase::alignLeft(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Horizontal Alignment"));
-    command->setHorizontalAlignment(enable ? Style::Left : Style::HAlignUndefined);
+    Style s;
+    s.setHAlign(enable ? Style::Left : Style::HAlignUndefined);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1636,7 +1673,9 @@ void CellToolBase::alignRight(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Horizontal Alignment"));
-    command->setHorizontalAlignment(enable ? Style::Right : Style::HAlignUndefined);
+    Style s;
+    s.setHAlign(enable ? Style::Right : Style::HAlignUndefined);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1646,7 +1685,9 @@ void CellToolBase::alignCenter(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Horizontal Alignment"));
-    command->setHorizontalAlignment(enable ? Style::Center : Style::HAlignUndefined);
+    Style s;
+    s.setHAlign(enable ? Style::Center : Style::HAlignUndefined);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1656,7 +1697,9 @@ void CellToolBase::alignTop(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Vertical Alignment"));
-    command->setVerticalAlignment(enable ? Style::Top : Style::VAlignUndefined);
+    Style s;
+    s.setVAlign(enable ? Style::Top : Style::VAlignUndefined);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1666,7 +1709,9 @@ void CellToolBase::alignBottom(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Vertical Alignment"));
-    command->setVerticalAlignment(enable ? Style::Bottom : Style::VAlignUndefined);
+    Style s;
+    s.setVAlign(enable ? Style::Bottom : Style::VAlignUndefined);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1676,7 +1721,9 @@ void CellToolBase::alignMiddle(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Vertical Alignment"));
-    command->setVerticalAlignment(enable ? Style::Middle : Style::VAlignUndefined);
+    Style s;
+    s.setVAlign(enable ? Style::Middle : Style::VAlignUndefined);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1687,10 +1734,12 @@ void CellToolBase::borderLeft()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
+    Style s;
     if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft)
-        command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+        s.setRightBorderPen(QPen(color, 1, Qt::SolidLine));
     else
-        command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+        s.setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1701,10 +1750,12 @@ void CellToolBase::borderRight()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
+    Style s;
     if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft)
-        command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+        s.setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
     else
-        command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+        s.setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1715,7 +1766,9 @@ void CellToolBase::borderTop()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
-    command->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
+    Style s;
+    s.setTopBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1726,7 +1779,9 @@ void CellToolBase::borderBottom()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
-    command->setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
+    Style s;
+    s.setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1737,10 +1792,12 @@ void CellToolBase::borderAll()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
-    command->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    Style s;
+    s.setTopBorderPen(QPen(color, 1, Qt::SolidLine));
+    s.setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
+    s.setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+    s.setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setStyle(s);
     command->setHorizontalPen(QPen(color, 1, Qt::SolidLine));
     command->setVerticalPen(QPen(color, 1, Qt::SolidLine));
     command->add(*selection());
@@ -1752,10 +1809,12 @@ void CellToolBase::borderRemove()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
-    command->setTopBorderPen(QPen(Qt::NoPen));
-    command->setBottomBorderPen(QPen(Qt::NoPen));
-    command->setLeftBorderPen(QPen(Qt::NoPen));
-    command->setRightBorderPen(QPen(Qt::NoPen));
+    Style s;
+    s.setTopBorderPen(QPen(Qt::NoPen));
+    s.setBottomBorderPen(QPen(Qt::NoPen));
+    s.setLeftBorderPen(QPen(Qt::NoPen));
+    s.setRightBorderPen(QPen(Qt::NoPen));
+    command->setStyle(s);
     command->setHorizontalPen(QPen(Qt::NoPen));
     command->setVerticalPen(QPen(Qt::NoPen));
     command->add(*selection());
@@ -1768,10 +1827,12 @@ void CellToolBase::borderOutline()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
-    command->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    Style s;
+    s.setTopBorderPen(QPen(color, 1, Qt::SolidLine));
+    s.setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
+    s.setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+    s.setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1790,9 +1851,11 @@ void CellToolBase::wrapText(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Wrap Text"));
-    command->setMultiRow(enable);
-    command->setVerticalText(false);
-    command->setAngle(0);
+    Style s;
+    s.setWrapText(enable);
+    s.setVerticalText(false);
+    s.setAngle(0);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1802,9 +1865,11 @@ void CellToolBase::verticalText(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Vertical Text"));
-    command->setVerticalText(enable);
-    command->setMultiRow(false);
-    command->setAngle(0);
+    Style s;
+    s.setVerticalText(enable);
+    s.setWrapText(false);
+    s.setAngle(0);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1821,7 +1886,9 @@ void CellToolBase::percent(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Format Percent"));
-    command->setFormatType(enable ? Format::Percentage : Format::Generic);
+    Style s;
+    s.setFormatType(enable ? Format::Percentage : Format::Generic);
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1831,7 +1898,9 @@ void CellToolBase::currency(bool enable)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Format Money"));
-    command->setFormatType(enable ? Format::Money : Format::Generic);
+    Style s;
+    s.setFormatType(enable ? Format::Money : Format::Generic);
+    command->setStyle(s);
 
     command->add(*selection());
     command->execute(canvas());
@@ -1861,7 +1930,9 @@ void CellToolBase::changeBackgroundColor(const KoColor &color)
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Background Color"));
-    command->setBackgroundColor(color.toQColor());
+    Style s;
+    s.setBackgroundColor(color.toQColor());
+    command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
 }

@@ -129,6 +129,7 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType,
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     QScopedPointer<KAboutData> aboutData(aboutDataGenerator());
+    KLocalizedString::setApplicationDomain(aboutData->componentName().toLatin1().data());
     KAboutData::setApplicationData(*aboutData);
 
     setWindowIcon(QIcon::fromTheme(windowIconName, windowIcon()));

@@ -126,7 +126,9 @@ void ViewAdaptor::setSelectionTextColor(const QColor& txtColor)
     StyleCommand* command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Text Color"));
-    command->setFontColor(txtColor);
+    Style s;
+    s.setFontColor(txtColor);
+    command->setStyle(s);
     command->add(*m_view->selection());
     command->execute();
 }
@@ -136,7 +138,9 @@ void ViewAdaptor::setSelectionBgColor(const QColor& bgColor)
     StyleCommand* command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Background Color"));
-    command->setBackgroundColor(bgColor);
+    Style s;
+    s.setBackgroundColor(bgColor);
+    command->setStyle(s);
     command->add(*m_view->selection());
     command->execute();
 }
@@ -146,7 +150,9 @@ void ViewAdaptor::setSelectionBorderColor(const QColor& bgColor)
     StyleCommand* command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Background Color"));
-    command->setBackgroundColor(bgColor);
+    Style s;
+    s.setBackgroundColor(bgColor);
+    command->setStyle(s);
     command->add(*m_view->selection());
     command->execute();
 }
@@ -156,10 +162,12 @@ void ViewAdaptor::setLeftBorderColor(const QColor& color)
     StyleCommand* command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
+    Style s;
     if (m_view->activeSheet()->layoutDirection() == Qt::RightToLeft)
-        command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+        s.setRightBorderPen(QPen(color, 1, Qt::SolidLine));
     else
-        command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+        s.setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setStyle(s);
     command->add(*m_view->selection());
     command->execute();
 }
@@ -169,7 +177,9 @@ void ViewAdaptor::setTopBorderColor(const QColor& color)
     StyleCommand* command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
-    command->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
+    Style s;
+    s.setTopBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setStyle(s);
     command->add(*m_view->selection());
     command->execute();
 }
@@ -179,10 +189,12 @@ void ViewAdaptor::setRightBorderColor(const QColor& color)
     StyleCommand* command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
+    Style s;
     if (m_view->activeSheet()->layoutDirection() == Qt::RightToLeft)
-        command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+        s.setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
     else
-        command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+        s.setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setStyle(s);
     command->add(*m_view->selection());
     command->execute();
 }
@@ -192,7 +204,9 @@ void ViewAdaptor::setBottomBorderColor(const QColor& color)
     StyleCommand* command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
-    command->setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
+    Style s;
+    s.setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setStyle(s);
     command->add(*m_view->selection());
     command->execute();
 }
@@ -202,10 +216,12 @@ void ViewAdaptor::setAllBorderColor(const QColor& color)
     StyleCommand* command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
-    command->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    Style s;
+    s.setTopBorderPen(QPen(color, 1, Qt::SolidLine));
+    s.setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
+    s.setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+    s.setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setStyle(s);
     command->setHorizontalPen(QPen(color, 1, Qt::SolidLine));
     command->setVerticalPen(QPen(color, 1, Qt::SolidLine));
     command->add(*m_view->selection());
@@ -217,10 +233,12 @@ void ViewAdaptor::setOutlineBorderColor(const QColor& color)
     StyleCommand* command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
-    command->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    Style s;
+    s.setTopBorderPen(QPen(color, 1, Qt::SolidLine));
+    s.setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
+    s.setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+    s.setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setStyle(s);
     command->add(*m_view->selection());
     command->execute();
 }

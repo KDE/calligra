@@ -71,6 +71,14 @@ set (dialogs_DIR_SRCS
     dialogs/GoalSeekDialog.cpp
     dialogs/GotoDialog.cpp
     dialogs/InsertDialog.cpp
+    dialogs/LayoutWidgets.cpp
+    dialogs/LayoutPage_Border.cpp
+    dialogs/LayoutPage_Float.cpp
+    dialogs/LayoutPage_Font.cpp
+    dialogs/LayoutPage_General.cpp
+    dialogs/LayoutPage_Pattern.cpp
+    dialogs/LayoutPage_Position.cpp
+    dialogs/LayoutPage_Protection.cpp
     dialogs/LayoutDialog.cpp
     dialogs/ListDialog.cpp
     dialogs/NamedAreaDialog.cpp

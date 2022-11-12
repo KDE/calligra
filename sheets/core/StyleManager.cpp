@@ -110,7 +110,7 @@ bool StyleManager::checkCircle(QString const & name, QString const & parent)
         return checkCircle(name, style->parentName());
 }
 
-bool StyleManager::validateStyleName(QString const & name, CustomStyle * style)
+bool StyleManager::validateStyleName(QString const & name)
 {
     if (m_defaultStyle->name() == name || name == "Default")
         return false;
@@ -119,7 +119,7 @@ bool StyleManager::validateStyleName(QString const & name, CustomStyle * style)
     CustomStyles::const_iterator end  = m_styles.constEnd();
 
     while (iter != end) {
-        if (iter.key() == name && iter.value() != style)
+        if (iter.key() == name)
             return false;
 
         ++iter;

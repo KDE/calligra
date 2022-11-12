@@ -241,7 +241,10 @@ QString Localization::formatBool(bool val) const
 // TODO - we should let the caller specify whether to use scientific format or not
 QString Localization::formatNumber(double num, int precision) const
 {
-    return d->locale.toString(num, 'g', precision);
+    char fmt = 'f';
+    // use scientific format?
+    if ((num > 1e9) || (num < -1e9) || ((num > 0) && (num < 1e-8)) || ((num < 0) && (num > -1e-8))) fmt = 'e';
+    return d->locale.toString(num, fmt, precision);
 }
 
 QString Localization::formatCurrency(double num, const QString &currencySymbol, int precision) const

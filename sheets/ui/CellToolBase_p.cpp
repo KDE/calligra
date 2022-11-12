@@ -697,45 +697,48 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
 
     StyleCommand* command = new StyleCommand();
     command->setSheet(q->selection()->activeSheet());
+    Style s;
+    QPen pen;
 
     switch (_ev->key()) {
     case Qt::Key_Exclam:
         command->setText(kundo2_i18n("Number Format"));
-        command->setFormatType(Format::Number);
-        command->setPrecision(2);
+        s.setFormatType(Format::Number);
+        s.setPrecision(2);
         break;
 
     case Qt::Key_Dollar:
         command->setText(kundo2_i18n("Currency Format"));
-        command->setFormatType(Format::Money);
+        s.setFormatType(Format::Money);
         break;
 
     case Qt::Key_Percent:
         command->setText(kundo2_i18n("Percentage Format"));
-        command->setFormatType(Format::Percentage);
+        s.setFormatType(Format::Percentage);
         break;
 
     case Qt::Key_At:
         command->setText(kundo2_i18n("Time Format"));
-        command->setFormatType(Format::SecondeTime);
+        s.setFormatType(Format::SecondeTime);
         break;
 
     case Qt::Key_NumberSign:
         command->setText(kundo2_i18n("Date Format"));
-        command->setFormatType(Format::ShortDate);
+        s.setFormatType(Format::ShortDate);
         break;
 
     case Qt::Key_AsciiCircum:
         command->setText(kundo2_i18n("Scientific Format"));
-        command->setFormatType(Format::Scientific);
+        s.setFormatType(Format::Scientific);
         break;
 
     case Qt::Key_Ampersand:
         command->setText(kundo2_i18n("Change Border"));
-        command->setTopBorderPen(QPen(q->canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-        command->setBottomBorderPen(QPen(q->canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-        command->setLeftBorderPen(QPen(q->canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-        command->setRightBorderPen(QPen(q->canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+        pen = QPen(q->canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine);
+        s.setTopBorderPen(pen);
+        s.setBottomBorderPen(pen);
+        s.setLeftBorderPen(pen);
+        s.setRightBorderPen(pen);
         break;
 
     default:
@@ -743,6 +746,7 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
         return false;
     }
 
+    command->setStyle(s);
     command->add(*q->selection());
     command->execute();
     _ev->accept(); // QKeyEvent

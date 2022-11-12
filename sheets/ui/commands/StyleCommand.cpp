@@ -20,13 +20,11 @@ StyleCommand::StyleCommand(KUndo2Command* parent)
         , m_verticalPen(QPen(QColor(), 0, Qt::NoPen))
         , m_horizontalPenChanged(false)
         , m_verticalPenChanged(false)
-        , m_style(new Style())
 {
 }
 
 StyleCommand::~StyleCommand()
 {
-    delete m_style;
 }
 
 bool StyleCommand::process(Element* element)
@@ -34,59 +32,59 @@ bool StyleCommand::process(Element* element)
     const QRect range = element->rect();
     CellStorage *cs = m_sheet->fullCellStorage();
 
-    if (m_style->isDefault())
+    if (m_style.isDefault())
         setText(kundo2_i18n("Reset Style"));
     else
         setText(kundo2_i18n("Change Style"));
 
     // special handling for the border
-    bool hasLeftPen = m_style->hasAttribute(Style::LeftPen);
-    bool hasRightPen = m_style->hasAttribute(Style::RightPen);
-    bool hasTopPen = m_style->hasAttribute(Style::TopPen);
-    bool hasBottomPen = m_style->hasAttribute(Style::BottomPen);
-    const QPen leftPen = m_style->leftBorderPen();
-    const QPen rightPen = m_style->rightBorderPen();
-    const QPen topPen = m_style->topBorderPen();
-    const QPen bottomPen = m_style->bottomBorderPen();
-    m_style->clearAttribute(Style::LeftPen);
-    m_style->clearAttribute(Style::RightPen);
-    m_style->clearAttribute(Style::TopPen);
-    m_style->clearAttribute(Style::BottomPen);
+    bool hasLeftPen = m_style.hasAttribute(Style::LeftPen);
+    bool hasRightPen = m_style.hasAttribute(Style::RightPen);
+    bool hasTopPen = m_style.hasAttribute(Style::TopPen);
+    bool hasBottomPen = m_style.hasAttribute(Style::BottomPen);
+    const QPen leftPen = m_style.leftBorderPen();
+    const QPen rightPen = m_style.rightBorderPen();
+    const QPen topPen = m_style.topBorderPen();
+    const QPen bottomPen = m_style.bottomBorderPen();
+    m_style.clearAttribute(Style::LeftPen);
+    m_style.clearAttribute(Style::RightPen);
+    m_style.clearAttribute(Style::TopPen);
+    m_style.clearAttribute(Style::BottomPen);
 
     // use the horizontal/vertical pens
     if (m_horizontalPenChanged) {
-        m_style->setTopBorderPen(m_horizontalPen);
-        m_style->setBottomBorderPen(m_horizontalPen);
+        m_style.setTopBorderPen(m_horizontalPen);
+        m_style.setBottomBorderPen(m_horizontalPen);
         hasTopPen = hasBottomPen = true;
     }
     if (m_verticalPenChanged) {
-        m_style->setLeftBorderPen(m_verticalPen);
-        m_style->setRightBorderPen(m_verticalPen);
+        m_style.setLeftBorderPen(m_verticalPen);
+        m_style.setRightBorderPen(m_verticalPen);
         hasLeftPen = hasRightPen = true;
     }
 
     // special handling for indentation: reset the indentation first
-    if (m_style->hasAttribute(Style::Indentation)) {
+    if (m_style.hasAttribute(Style::Indentation)) {
         Style style;
         style.setIndentation(0);
         cs->setStyle(Region(range), style);
     }
 
     // set the actual style
-    cs->setStyle(Region(range), *m_style);
+    cs->setStyle(Region(range), m_style);
 
     // prepare to restore pens
-    m_style->clearAttribute(Style::LeftPen);
-    m_style->clearAttribute(Style::RightPen);
-    m_style->clearAttribute(Style::TopPen);
-    m_style->clearAttribute(Style::BottomPen);
+    m_style.clearAttribute(Style::LeftPen);
+    m_style.clearAttribute(Style::RightPen);
+    m_style.clearAttribute(Style::TopPen);
+    m_style.clearAttribute(Style::BottomPen);
 
     // set the outer border styles
     Style style;
     if (hasLeftPen) {
         style.setLeftBorderPen(leftPen);
         cs->setStyle(Region(QRect(range.left(), range.top(), 1, range.height())), style);
-        m_style->setLeftBorderPen(leftPen); // restore pen
+        m_style.setLeftBorderPen(leftPen); // restore pen
         // reset the border of the adjacent cell
         if (range.left() > 1) {
             Style tmpStyle;
@@ -100,7 +98,7 @@ bool StyleCommand::process(Element* element)
         style.clear();
         style.setRightBorderPen(rightPen);
         cs->setStyle(Region(QRect(range.right(), range.top(), 1, range.height())), style);
-        m_style->setRightBorderPen(rightPen); // restore pen
+        m_style.setRightBorderPen(rightPen); // restore pen
         // reset the border of the adjacent cell
         if (range.right() < KS_colMax) {
             Style tmpStyle;
@@ -114,7 +112,7 @@ bool StyleCommand::process(Element* element)
         style.clear();
         style.setTopBorderPen(topPen);
         cs->setStyle(Region(QRect(range.left(), range.top(), range.width(), 1)), style);
-        m_style->setTopBorderPen(topPen); // restore pen
+        m_style.setTopBorderPen(topPen); // restore pen
         // reset the border of the adjacent cell
         if (range.top() > 1) {
             Style tmpStyle;
@@ -128,7 +126,7 @@ bool StyleCommand::process(Element* element)
         style.clear();
         style.setBottomBorderPen(bottomPen);
         cs->setStyle(Region(QRect(range.left(), range.bottom(), range.width(), 1)), style);
-        m_style->setBottomBorderPen(bottomPen); // restore pen
+        m_style.setBottomBorderPen(bottomPen); // restore pen
         // reset the border of the adjacent cell
         if (range.bottom() < KS_rowMax) {
             Style tmpStyle;

@@ -55,7 +55,7 @@ public:
     void resetDefaultStyle();
 
     bool checkCircle(QString const & name, QString const & parent);
-    bool validateStyleName(QString const & name, CustomStyle * style);
+    bool validateStyleName(QString const & name);
     void changeName(QString const & oldName, QString const & newName);
 
     void insertStyle(CustomStyle *style);

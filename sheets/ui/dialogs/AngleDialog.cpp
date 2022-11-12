@@ -66,7 +66,9 @@ void AngleDialog::slotOk()
 
     StyleCommand* manipulator = new StyleCommand(macroCommand);
     manipulator->setSheet(m_selection->activeSheet());
-    manipulator->setAngle(-m_pAngle->value());
+    Style s;
+    s.setAngle(-m_pAngle->value());
+    manipulator->setStyle(s);
     manipulator->add(*m_selection);
 
     AdjustColumnRowManipulator* manipulator2 = new AdjustColumnRowManipulator(macroCommand);

@@ -25,7 +25,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
     <x>0</x>
     <y>0</y>
     <width>783</width>
-    <height>761</height>
+    <height>439</height>
    </rect>
   </property>
   <layout class="QGridLayout">
@@ -79,42 +79,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
      </layout>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QGroupBox" name="buttonGroup2">
-     <property name="whatsThis">
-      <string>&lt;qt&gt;Set the content position vertically in the cell.
-&lt;b&gt;Top&lt;/b&gt; means the content will be displayed on top of the cell.
-&lt;b&gt;Middle&lt;/b&gt; means the content will be in the middle vertically in the cell.
-&lt;b&gt;Bottom&lt;/b&gt; means the content of the cell will be displayed at the bottom of the cell.&lt;/qt&gt;</string>
-     </property>
-     <property name="title">
-      <string>Vertical</string>
-     </property>
-     <layout class="QVBoxLayout">
-      <item>
-       <widget class="QRadioButton" name="top">
-        <property name="text">
-         <string>Top</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="middle">
-        <property name="text">
-         <string>Middle</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="bottom">
-        <property name="text">
-         <string>Bottom</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="1" column="1">
     <widget class="QGroupBox" name="groupBox4">
      <property name="whatsThis">
@@ -159,6 +123,42 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
      </layout>
     </widget>
    </item>
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="buttonGroup2">
+     <property name="whatsThis">
+      <string>&lt;qt&gt;Set the content position vertically in the cell.
+&lt;b&gt;Top&lt;/b&gt; means the content will be displayed on top of the cell.
+&lt;b&gt;Middle&lt;/b&gt; means the content will be in the middle vertically in the cell.
+&lt;b&gt;Bottom&lt;/b&gt; means the content of the cell will be displayed at the bottom of the cell.&lt;/qt&gt;</string>
+     </property>
+     <property name="title">
+      <string>Vertical</string>
+     </property>
+     <layout class="QVBoxLayout">
+      <item>
+       <widget class="QRadioButton" name="top">
+        <property name="text">
+         <string>Top</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="middle">
+        <property name="text">
+         <string>Middle</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="bottom">
+        <property name="text">
+         <string>Bottom</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="2" column="1">
     <widget class="QGroupBox" name="indentGroup">
      <property name="whatsThis">
@@ -169,139 +169,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QGroupBox" name="groupBox5">
-     <property name="whatsThis">
-      <string>When checked, this has the same effect as Format -&gt;Merge Cells. You need to have at least two consecutive cells selected. Those consecutive cells are then merged into a bigger one.
-When a merged cell is selected and when you uncheck this, then all cells come back to their original size as before the merging. It has the same effect as Format -&gt; Dissociate Cells.</string>
-     </property>
-     <property name="title">
-      <string>Merge Cells</string>
-     </property>
-     <layout class="QHBoxLayout">
-      <item>
-       <widget class="QCheckBox" name="mergeCell">
-        <property name="text">
-         <string>Merge cells</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QGroupBox" name="sizeCellGroup">
-     <property name="whatsThis">
-      <string>The unit used here is the one set in Format -&gt; Page Layout.. dialog.</string>
-     </property>
-     <property name="title">
-      <string>Size of Cell</string>
-     </property>
-     <layout class="QGridLayout">
-      <item row="0" column="1">
-       <layout class="QGridLayout">
-        <item row="1" column="0" colspan="3">
-         <widget class="QCheckBox" name="defaultHeight">
-          <property name="whatsThis">
-           <string>If checked, the default height will be used for the cell instead of the value above.</string>
-          </property>
-          <property name="text">
-           <string>Default height (%1)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Expanding</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>10</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="textLabel3">
-          <property name="text">
-           <string>Height:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QFrame" name="m_heightPanel">
-          <property name="whatsThis">
-           <string>Set the height of the cell.</string>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Plain</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="0">
-       <layout class="QGridLayout">
-        <item row="1" column="0" colspan="3">
-         <widget class="QCheckBox" name="defaultWidth">
-          <property name="whatsThis">
-           <string>If checked, the default width will be used for the cell instead of the value above.</string>
-          </property>
-          <property name="text">
-           <string>Default width (%1)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Expanding</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>16</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="0" column="1">
-         <widget class="QFrame" name="m_widthPanel">
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Plain</enum>
-          </property>
-          <property name="lineWidth">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="textLabel2">
-          <property name="text">
-           <string>Width:</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="0">
+   <item row="1" column="0" rowspan="2">
     <widget class="QGroupBox" name="groupBox3">
      <property name="whatsThis">
       <string>This is only available when the rotation is 0°.
@@ -313,21 +181,21 @@ Vertical text puts your text vertically.</string>
      </property>
      <layout class="QVBoxLayout">
       <item>
-       <widget class="QCheckBox" name="multi">
+       <widget class="Calligra::Sheets::LayoutCheckbox" name="multi">
         <property name="text">
          <string>Wrap text</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="vertical">
+       <widget class="Calligra::Sheets::LayoutCheckbox" name="vertical">
         <property name="text">
          <string>Vertical text</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="shrinkToFit">
+       <widget class="Calligra::Sheets::LayoutCheckbox" name="shrinkToFit">
         <property name="text">
          <string>Shrink to fit</string>
         </property>
@@ -338,6 +206,13 @@ Vertical text puts your text vertically.</string>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Calligra::Sheets::LayoutCheckbox</class>
+   <extends>QCheckBox</extends>
+   <header>ui/dialogs/LayoutWidgets.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>standard</tabstop>
   <tabstop>left</tabstop>
@@ -349,9 +224,6 @@ Vertical text puts your text vertically.</string>
   <tabstop>multi</tabstop>
   <tabstop>angleRotation</tabstop>
   <tabstop>spinBox3</tabstop>
-  <tabstop>mergeCell</tabstop>
-  <tabstop>defaultWidth</tabstop>
-  <tabstop>defaultHeight</tabstop>
  </tabstops>
  <resources/>
  <connections/>

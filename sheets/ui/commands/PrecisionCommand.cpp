@@ -26,9 +26,8 @@ bool PrecisionCommand::performCommands()
     Style curStyle = m_sheet->fullCellStorage()->style(boundingRect().left(), boundingRect().top());
     int prec = curStyle.precision();
 
-    // TODO base this on the cell's contents ...
     if (prec < 0) prec = m_sheet->map()->calculationSettings()->defaultDecimalPrecision();
-    if (prec < 0) prec = 8;
+    if (prec < 0) prec = 2;
     prec += (m_decrease ? -1 : 1);
     if (prec > 10) prec = 10;
     if (prec < 0) prec = 0;

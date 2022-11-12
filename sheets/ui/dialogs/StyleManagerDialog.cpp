@@ -172,13 +172,17 @@ void StyleManagerDialog::slotOk()
     if (name == i18n("Default")) {
         StyleCommand* command = new StyleCommand();
         command->setSheet(m_selection->activeSheet());
-        command->setDefault();
+        Style s;
+        s.setDefault();
+        command->setStyle(s);
         command->add(*m_selection);
         command->execute(m_selection->canvas());
     } else {
         StyleCommand* command = new StyleCommand();
         command->setSheet(m_selection->activeSheet());
-        command->setParentName(name);
+        Style s;
+        s.setParentName(name);
+        command->setStyle(s);
         command->add(*m_selection);
         command->execute(m_selection->canvas());
     }
@@ -205,21 +209,18 @@ void StyleManagerDialog::slotNew()
         newName = i18n("style%1" , m_styleManager->count() + i);
     }
 
-    CustomStyle* style = new CustomStyle(newName, parentStyle);
-    style->setType(Style::TENTATIVE);
+    CustomStyle style(newName, parentStyle);
+    style.setType(Style::TENTATIVE);
 
-    QPointer<CellFormatDialog> dialog = new CellFormatDialog(this, m_selection, style, m_styleManager);
-    dialog->exec();
-    delete dialog;
-
-    if (style->type() == Style::TENTATIVE) {
-        delete style;
-        return;
+    LayoutDialog *dialog = new LayoutDialog(this, m_selection->activeSheet(), m_styleManager, true);
+    dialog->setCustomStyle(style);
+    if (dialog->exec()) {
+        CustomStyle *newStyle = new CustomStyle(dialog->customStyle());
+        m_styleManager->m_styles[ newStyle->name()] = newStyle;
+        slotDisplayMode(m_displayBox->currentIndex());
     }
 
-    m_styleManager->m_styles[ style->name()] = style;
-
-    slotDisplayMode(m_displayBox->currentIndex());
+    delete dialog;
 }
 
 void StyleManagerDialog::slotEdit()
@@ -240,11 +241,14 @@ void StyleManagerDialog::slotEdit()
     if (!style)
         return;
 
-    QPointer<CellFormatDialog> dialog = new CellFormatDialog(this, m_selection, style, m_styleManager);
-    dialog->exec();
-
-    if (dialog->result() == Accepted)
+    LayoutDialog *dialog = new LayoutDialog(this, m_selection->activeSheet(), m_styleManager, true);
+    dialog->setCustomStyle(*style);
+    if (dialog->exec()) {
+        m_styleManager->m_styles.remove(style->name());
+        *style = dialog->customStyle();
+        m_styleManager->m_styles[ style->name()] = style;
         m_selection->emitRefreshSheetViews();
+    }
 
     slotDisplayMode(m_displayBox->currentIndex());
     delete dialog;

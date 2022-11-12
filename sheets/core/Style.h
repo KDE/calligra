@@ -194,64 +194,70 @@ public:
     Currency currency() const;
 
     QFont  font()         const;
-    bool   bold()         const;
-    bool   italic()       const;
-    bool   underline()    const;
-    bool   strikeOut()    const;
+
+    bool bold() const { return getBoolValue(FontBold); }
+    bool italic() const { return getBoolValue(FontItalic); }
+    bool underline() const { return getBoolValue(FontUnderline); }
+    bool strikeOut() const { return getBoolValue(FontStrike); }
+
     uint   fontFlags()    const;
     int    fontSize()     const;
     int    precision()    const;
-    bool   thousandsSep() const;
+    bool   thousandsSep() const { return getBoolValue(ThousandsSep); }
     int    angle()        const;
     double indentation()  const;
-    bool   shrinkToFit()  const;
-    bool   verticalText() const;
-    bool   wrapText()     const;
-    bool   printText()    const;
-    bool   hideAll()      const;
-    bool   hideFormula()  const;
-    bool   notProtected() const;
+    bool   shrinkToFit()  const { return getBoolValue(ShrinkToFit); }
+    bool   verticalText() const { return getBoolValue(VerticalText); }
+    bool   wrapText()     const { return getBoolValue(MultiRow); }
+    bool   printText()    const { return !getBoolValue(DontPrintText); }
+    bool   hideAll()      const { return getBoolValue(HideAll); }
+    bool   hideFormula()  const { return getBoolValue(HideFormula); }
+    bool   notProtected() const { return getBoolValue(NotProtected); }
+
     bool   isDefault()    const;
     bool   isEmpty()      const;
 
+    bool getBoolValue(Key key) const;
 
 public:
-    void setHAlign(HAlign align);
-    void setVAlign(VAlign align);
     void setFont(QFont const & font);
     void setFontFamily(QString const & fam);
-    void setFontBold(bool enable);
-    void setFontItalic(bool enable);
-    void setFontUnderline(bool enable);
-    void setFontStrikeOut(bool enable);
-    void setFontSize(int size);
-    void setFontColor(QColor const & color);
-    void setRightBorderPen(QPen const & pen);
-    void setBottomBorderPen(QPen const & pen);
-    void setLeftBorderPen(QPen const & pen);
-    void setTopBorderPen(QPen const & pen);
-    void setFallDiagonalPen(QPen const & pen);
-    void setGoUpDiagonalPen(QPen const & pen);
-    void setAngle(int angle);
-    void setIndentation(double indent);
-    void setBackgroundBrush(QBrush const & brush);
-    void setFloatFormat(FloatFormat format);
-    void setFloatColor(FloatColor color);
-    void setFormatType(Format::Type format);
-    void setCustomFormat(QString const & strFormat);
-    void setPrecision(int precision);
-    void setThousandsSep(bool thousandsSep);
-    void setPrefix(QString const & prefix);
-    void setPostfix(QString const & postfix);
     void setCurrency(Currency const & currency);
-    void setWrapText(bool enable);
-    void setHideAll(bool enable);
-    void setHideFormula(bool enable);
-    void setNotProtected(bool enable);
-    void setDontPrintText(bool enable);
-    void setVerticalText(bool enable);
-    void setShrinkToFit(bool enable);
-    void setBackgroundColor(QColor const & color);
+
+    void setHAlign(HAlign align) { insertSubStyle(HorizontalAlignment, align); }
+    void setVAlign(VAlign align) { insertSubStyle(VerticalAlignment, align); }
+    void setFontBold(bool enable) { insertSubStyle(FontBold, enable); }
+    void setFontItalic(bool enable) { insertSubStyle(FontItalic, enable); }
+    void setFontUnderline(bool enable) { insertSubStyle(FontUnderline, enable); }
+    void setFontStrikeOut(bool enable) { insertSubStyle(FontStrike, enable); }
+    void setFontSize(int size) { insertSubStyle(FontSize, size); }
+    void setFontColor(QColor const & color) { insertSubStyle(FontColor, color); }
+    void setRightBorderPen(QPen const & pen) { insertSubStyle(RightPen, pen); }
+    void setBottomBorderPen(QPen const & pen) { insertSubStyle(BottomPen, pen); }
+    void setLeftBorderPen(QPen const & pen) { insertSubStyle(LeftPen, pen); }
+    void setTopBorderPen(QPen const & pen) { insertSubStyle(TopPen, pen); }
+    void setFallDiagonalPen(QPen const & pen) { insertSubStyle(FallDiagonalPen, pen); }
+    void setGoUpDiagonalPen(QPen const & pen) { insertSubStyle(GoUpDiagonalPen, pen); }
+    void setAngle(int angle) { insertSubStyle(Angle, angle); }
+    void setIndentation(double indent) { insertSubStyle(Indentation, indent); }
+    void setBackgroundBrush(QBrush const & brush) { insertSubStyle(BackgroundBrush, brush); }
+    void setFloatFormat(FloatFormat format) { insertSubStyle(FloatFormatKey, format); }
+    void setFloatColor(FloatColor color) { insertSubStyle(FloatColorKey, color); }
+    void setFormatType(Format::Type format) { insertSubStyle(FormatTypeKey, format); }
+    void setCustomFormat(QString const & strFormat) { insertSubStyle(CustomFormat, strFormat); }
+    void setPrecision(int precision) { insertSubStyle(Precision, precision); }
+    void setThousandsSep(bool thousandsSep) { insertSubStyle(ThousandsSep, thousandsSep); }
+    void setPrefix(QString const & prefix) { insertSubStyle(Prefix, prefix); }
+    void setPostfix(QString const & postfix) { insertSubStyle(Postfix, postfix); }
+    void setWrapText(bool enable) { insertSubStyle(MultiRow, enable); }
+    void setHideAll(bool enable) { insertSubStyle(HideAll, enable); }
+    void setHideFormula(bool enable) { insertSubStyle(HideFormula, enable); }
+    void setNotProtected(bool enable) { insertSubStyle(NotProtected, enable); }
+    void setDontPrintText(bool enable) { insertSubStyle(DontPrintText, enable); }
+    void setVerticalText(bool enable) { insertSubStyle(VerticalText, enable); }
+    void setShrinkToFit(bool enable) {  insertSubStyle(ShrinkToFit, enable); }
+    void setBackgroundColor(QColor const & color) { insertSubStyle(BackgroundColor, color); }
+
     void setDefault();
     void clear();
 
@@ -286,11 +292,12 @@ public:
     /** Defined style elements - used when saving the style */
     virtual QSet<Style::Key> definedKeys(const StyleManager *) const;
 
+    virtual void insertSubStyle(Key key, const QVariant& value);
+
 protected:
     QList<SharedSubStyle> subStyles() const;
 
     SharedSubStyle createSubStyle(Key key, const QVariant& value);
-    virtual void insertSubStyle(Key key, const QVariant& value);
     void insertSubStyle(const SharedSubStyle& subStyle);
     bool releaseSubStyle(Key key);
 
@@ -424,22 +431,24 @@ public:
     QString name;
 };
 
-template<Style::Key key, class Value1>
+template<class Value1>
 class SubStyleOne : public SubStyle
 {
 public:
-    SubStyleOne(const Value1& v = Value1()) : SubStyle(), value1(v) {}
+    SubStyleOne(Style::Key type, const Value1& v = Value1()) : SubStyle(), value1(v), m_type(type) {}
     Style::Key type() const override {
-        return key;
+        return m_type;
     }
     void dump() const override {
         debugSheetsStyle << debugData();
     }
     QString debugData(bool withName = true) const override {
-        QString out; if (withName) out = name(key) + ' '; QDebug qdbg(&out); qdbg << value1; return out;
+        QString out; if (withName) out = name(m_type) + ' '; QDebug qdbg(&out); qdbg << value1; return out;
     }
     uint koHash() const override { return uint(type()) ^ ::qHash(value1); }
     Value1 value1;
+private:
+    Style::Key m_type;
 };
 
 } // namespace Sheets

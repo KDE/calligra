@@ -40,23 +40,21 @@ static uint calculateValue(QPen const & pen)
 
 // specialized debug method
 template<>
-QString SubStyleOne<Style::CurrencyFormat, Currency>::debugData(bool withName) const
+QString SubStyleOne<Currency>::debugData(bool withName) const
 {
-    QString out; if (withName) out = name(Style::CurrencyFormat) + ' '; QDebug qdbg(&out); qdbg << value1.symbol(); return out;
+    QString out; if (withName) out = name(m_type) + ' '; QDebug qdbg(&out); qdbg << value1.symbol(); return out;
 }
 
-template<Style::Key key>
-class PenStyle : public SubStyleOne<key, QPen>
+class PenStyle : public SubStyleOne<QPen>
 {
 public:
-    PenStyle(const QPen& p = Qt::NoPen) : SubStyleOne<key, QPen>(p) {}
+    PenStyle(Style::Key type, const QPen& p = Qt::NoPen) : SubStyleOne<QPen>(type, p) {}
 };
 
-template<Style::Key key>
-class BorderPenStyle : public PenStyle<key>
+class BorderPenStyle : public PenStyle
 {
 public:
-    BorderPenStyle(const QPen& p = Qt::NoPen) : PenStyle<key>(p), value(calculateValue(p)) {}
+    BorderPenStyle(Style::Key key, const QPen& p = Qt::NoPen) : PenStyle(key, p), value(calculateValue(p)) {}
     int value;
 };
 
@@ -171,165 +169,173 @@ bool Style::hasAttribute(Key key) const
 }
 
 
+bool Style::getBoolValue(Key key) const
+{
+    if (!d->subStyles.contains(key))
+        return SubStyleOne<bool>(key).value1;
+    return static_cast<const SubStyleOne<bool>*>(d->subStyles[key].data())->value1;
+}
+
+
 uint Style::bottomPenValue() const
 {
     if (!d->subStyles.contains(BottomPen))
-        return BorderPenStyle<BottomPen>().value;
-    return static_cast<const BorderPenStyle<BottomPen>*>(d->subStyles[BottomPen].data())->value;
+        return BorderPenStyle(BottomPen).value;
+    return static_cast<const BorderPenStyle*>(d->subStyles[BottomPen].data())->value;
 }
 
 uint Style::rightPenValue() const
 {
     if (!d->subStyles.contains(RightPen))
-        return BorderPenStyle<RightPen>().value;
-    return static_cast<const BorderPenStyle<RightPen>*>(d->subStyles[RightPen].data())->value;
+        return BorderPenStyle(RightPen).value;
+    return static_cast<const BorderPenStyle*>(d->subStyles[RightPen].data())->value;
 }
 
 uint Style::leftPenValue() const
 {
     if (!d->subStyles.contains(LeftPen))
-        return BorderPenStyle<LeftPen>().value;
-    return static_cast<const BorderPenStyle<LeftPen>*>(d->subStyles[LeftPen].data())->value;
+        return BorderPenStyle(LeftPen).value;
+    return static_cast<const BorderPenStyle*>(d->subStyles[LeftPen].data())->value;
 }
 
 uint Style::topPenValue() const
 {
     if (!d->subStyles.contains(TopPen))
-        return BorderPenStyle<TopPen>().value;
-    return static_cast<const BorderPenStyle<TopPen>*>(d->subStyles[TopPen].data())->value;
-}
-
-QColor Style::fontColor() const
-{
-    if (!d->subStyles.contains(FontColor))
-        return SubStyleOne<FontColor, QColor>(Qt::black).value1;
-    return static_cast<const SubStyleOne<FontColor, QColor>*>(d->subStyles[FontColor].data())->value1;
-}
-
-QColor Style::backgroundColor() const
-{
-    if (!d->subStyles.contains(BackgroundColor))
-        return SubStyleOne<BackgroundColor, QColor>().value1;
-    return static_cast<const SubStyleOne<BackgroundColor, QColor>*>(d->subStyles[BackgroundColor].data())->value1;
+        return BorderPenStyle(TopPen).value;
+    return static_cast<const BorderPenStyle*>(d->subStyles[TopPen].data())->value;
 }
 
 QPen Style::rightBorderPen() const
 {
     if (!d->subStyles.contains(RightPen))
-        return BorderPenStyle<RightPen>().value1;
-    return static_cast<const BorderPenStyle<RightPen>*>(d->subStyles[RightPen].data())->value1;
+        return BorderPenStyle(RightPen).value1;
+    return static_cast<const BorderPenStyle*>(d->subStyles[RightPen].data())->value1;
 }
 
 QPen Style::bottomBorderPen() const
 {
     if (!d->subStyles.contains(BottomPen))
-        return BorderPenStyle<BottomPen>().value1;
-    return static_cast<const BorderPenStyle<BottomPen>*>(d->subStyles[BottomPen].data())->value1;
+        return BorderPenStyle(BottomPen).value1;
+    return static_cast<const BorderPenStyle*>(d->subStyles[BottomPen].data())->value1;
 }
 
 QPen Style::leftBorderPen() const
 {
     if (!d->subStyles.contains(LeftPen))
-        return BorderPenStyle<LeftPen>().value1;
-    return static_cast<const BorderPenStyle<LeftPen>*>(d->subStyles[LeftPen].data())->value1;
+        return BorderPenStyle(LeftPen).value1;
+    return static_cast<const BorderPenStyle*>(d->subStyles[LeftPen].data())->value1;
 }
 
 QPen Style::topBorderPen() const
 {
     if (!d->subStyles.contains(TopPen))
-        return BorderPenStyle<TopPen>().value1;
-    return static_cast<const BorderPenStyle<TopPen>*>(d->subStyles[TopPen].data())->value1;
+        return BorderPenStyle(TopPen).value1;
+    return static_cast<const BorderPenStyle*>(d->subStyles[TopPen].data())->value1;
 }
 
 QPen Style::fallDiagonalPen() const
 {
     if (!d->subStyles.contains(FallDiagonalPen))
-        return PenStyle<FallDiagonalPen>().value1;
-    return static_cast<const PenStyle<FallDiagonalPen>*>(d->subStyles[FallDiagonalPen].data())->value1;
+        return BorderPenStyle(FallDiagonalPen).value1;
+    return static_cast<const BorderPenStyle*>(d->subStyles[FallDiagonalPen].data())->value1;
 }
 
 QPen Style::goUpDiagonalPen() const
 {
     if (!d->subStyles.contains(GoUpDiagonalPen))
-        return PenStyle<GoUpDiagonalPen>().value1;
-    return static_cast<const PenStyle<GoUpDiagonalPen>*>(d->subStyles[GoUpDiagonalPen].data())->value1;
+        return BorderPenStyle(GoUpDiagonalPen).value1;
+    return static_cast<const BorderPenStyle*>(d->subStyles[GoUpDiagonalPen].data())->value1;
+}
+
+QColor Style::fontColor() const
+{
+    if (!d->subStyles.contains(FontColor))
+        return SubStyleOne<QColor>(FontColor, Qt::black).value1;
+    return static_cast<const SubStyleOne<QColor>*>(d->subStyles[FontColor].data())->value1;
+}
+
+QColor Style::backgroundColor() const
+{
+    if (!d->subStyles.contains(BackgroundColor))
+        return SubStyleOne<QColor>(BackgroundColor).value1;
+    return static_cast<const SubStyleOne<QColor>*>(d->subStyles[BackgroundColor].data())->value1;
 }
 
 QBrush Style::backgroundBrush() const
 {
     if (!d->subStyles.contains(BackgroundBrush))
-        return SubStyleOne<BackgroundBrush, QBrush>(Qt::white).value1;
-    return static_cast<const SubStyleOne<BackgroundBrush, QBrush>*>(d->subStyles[BackgroundBrush].data())->value1;
+        return SubStyleOne<QBrush>(BackgroundBrush, Qt::white).value1;
+    return static_cast<const SubStyleOne<QBrush>*>(d->subStyles[BackgroundBrush].data())->value1;
 }
 
 QString Style::customFormat() const
 {
     if (!d->subStyles.contains(CustomFormat))
-        return SubStyleOne<CustomFormat, QString>().value1;
-    return static_cast<const SubStyleOne<CustomFormat, QString>*>(d->subStyles[CustomFormat].data())->value1;
+        return SubStyleOne<QString>(CustomFormat).value1;
+    return static_cast<const SubStyleOne<QString>*>(d->subStyles[CustomFormat].data())->value1;
 }
 
 QString Style::prefix() const
 {
     if (!d->subStyles.contains(Prefix))
-        return SubStyleOne<Prefix, QString>().value1;
-    return static_cast<const SubStyleOne<Prefix, QString>*>(d->subStyles[Prefix].data())->value1;
+        return SubStyleOne<QString>(Prefix).value1;
+    return static_cast<const SubStyleOne<QString>*>(d->subStyles[Prefix].data())->value1;
 }
 
 QString Style::postfix() const
 {
     if (!d->subStyles.contains(Postfix))
-        return SubStyleOne<Postfix, QString>().value1;
-    return static_cast<const SubStyleOne<Postfix, QString>*>(d->subStyles[Postfix].data())->value1;
+        return SubStyleOne<QString>(Postfix).value1;
+    return static_cast<const SubStyleOne<QString>*>(d->subStyles[Postfix].data())->value1;
 }
 
 QString Style::fontFamily() const
 {
     if (!d->subStyles.contains(FontFamily))
         return KoGlobal::defaultFont().family(); // SubStyleOne<FontFamily, QString>().value1;
-    return static_cast<const SubStyleOne<FontFamily, QString>*>(d->subStyles[FontFamily].data())->value1;
+    return static_cast<const SubStyleOne<QString>*>(d->subStyles[FontFamily].data())->value1;
 }
 
 Style::HAlign Style::halign() const
 {
     if (!d->subStyles.contains(HorizontalAlignment))
-        return SubStyleOne<HorizontalAlignment, Style::HAlign>().value1;
-    return static_cast<const SubStyleOne<HorizontalAlignment, Style::HAlign>*>(d->subStyles[HorizontalAlignment].data())->value1;
+        return SubStyleOne<Style::HAlign>(HorizontalAlignment).value1;
+    return static_cast<const SubStyleOne<Style::HAlign>*>(d->subStyles[HorizontalAlignment].data())->value1;
 }
 
 Style::VAlign Style::valign() const
 {
     if (!d->subStyles.contains(VerticalAlignment))
-        return SubStyleOne<VerticalAlignment, Style::VAlign>().value1;
-    return static_cast<const SubStyleOne<VerticalAlignment, Style::VAlign>*>(d->subStyles[VerticalAlignment].data())->value1;
+        return SubStyleOne<Style::VAlign>(VerticalAlignment).value1;
+    return static_cast<const SubStyleOne<Style::VAlign>*>(d->subStyles[VerticalAlignment].data())->value1;
 }
 
 Style::FloatFormat Style::floatFormat() const
 {
     if (!d->subStyles.contains(FloatFormatKey))
-        return SubStyleOne<FloatFormatKey, FloatFormat>().value1;
-    return static_cast<const SubStyleOne<FloatFormatKey, FloatFormat>*>(d->subStyles[FloatFormatKey].data())->value1;
+        return SubStyleOne<FloatFormat>(FloatFormatKey).value1;
+    return static_cast<const SubStyleOne<FloatFormat>*>(d->subStyles[FloatFormatKey].data())->value1;
 }
 
 Style::FloatColor Style::floatColor() const
 {
     if (!d->subStyles.contains(FloatColorKey))
-        return SubStyleOne<FloatColorKey, FloatColor>().value1;
-    return static_cast<const SubStyleOne<FloatColorKey, FloatColor>*>(d->subStyles[FloatColorKey].data())->value1;
+        return SubStyleOne<FloatColor>(FloatColorKey).value1;
+    return static_cast<const SubStyleOne<FloatColor>*>(d->subStyles[FloatColorKey].data())->value1;
 }
 
 Format::Type Style::formatType() const
 {
     if (!d->subStyles.contains(FormatTypeKey))
-        return SubStyleOne<FormatTypeKey, Format::Type>().value1;
-    return static_cast<const SubStyleOne<FormatTypeKey, Format::Type>*>(d->subStyles[FormatTypeKey].data())->value1;
+        return SubStyleOne<Format::Type>(FormatTypeKey).value1;
+    return static_cast<const SubStyleOne<Format::Type>*>(d->subStyles[FormatTypeKey].data())->value1;
 }
 
 Currency Style::currency() const
 {
     if (!d->subStyles.contains(CurrencyFormat))
         return Currency();
-    return static_cast<const SubStyleOne<CurrencyFormat, Currency>*>(d->subStyles[CurrencyFormat].data())->value1;
+    return static_cast<const SubStyleOne<Currency>*>(d->subStyles[CurrencyFormat].data())->value1;
 }
 
 QFont Style::font() const
@@ -344,116 +350,33 @@ QFont Style::font() const
     return font;
 }
 
-bool Style::bold() const
-{
-    if (!d->subStyles.contains(FontBold))
-        return SubStyleOne<FontBold, bool>().value1;
-    return static_cast<const SubStyleOne<FontBold, bool>*>(d->subStyles[FontBold].data())->value1;
-}
-
-bool Style::italic() const
-{
-    if (!d->subStyles.contains(FontItalic))
-        return SubStyleOne<FontItalic, bool>().value1;
-    return static_cast<const SubStyleOne<FontItalic, bool>*>(d->subStyles[FontItalic].data())->value1;
-}
-
-bool Style::underline() const
-{
-    if (!d->subStyles.contains(FontUnderline))
-        return SubStyleOne<FontUnderline, bool>().value1;
-    return static_cast<const SubStyleOne<FontUnderline, bool>*>(d->subStyles[FontUnderline].data())->value1;
-}
-
-bool Style::strikeOut() const
-{
-    if (!d->subStyles.contains(FontStrike))
-        return SubStyleOne<FontStrike, bool>().value1;
-    return static_cast<const SubStyleOne<FontStrike, bool>*>(d->subStyles[FontStrike].data())->value1;
-}
 
 int Style::fontSize() const
 {
     if (!d->subStyles.contains(FontSize))
-        return KoGlobal::defaultFont().pointSize(); //SubStyleOne<FontSize, int>().value1;
-    return static_cast<const SubStyleOne<FontSize, int>*>(d->subStyles[FontSize].data())->value1;
+        return KoGlobal::defaultFont().pointSize(); //SubStyleOne<int>(FontSize).value1;
+    return static_cast<const SubStyleOne<int>*>(d->subStyles[FontSize].data())->value1;
 }
 
 int Style::precision() const
 {
     if (!d->subStyles.contains(Precision))
-        return -1; //SubStyleOne<Precision, int>().value1;
-    return static_cast<const SubStyleOne<Precision, int>*>(d->subStyles[Precision].data())->value1;
-}
-
-bool Style::thousandsSep() const
-{
-    if (!d->subStyles.contains(ThousandsSep))
-        return false;
-    return static_cast<const SubStyleOne<ThousandsSep, bool>*>(d->subStyles[ThousandsSep].data())->value1;
+        return -1; //SubStyleOne<int>(Precision).value1;
+    return static_cast<const SubStyleOne<int>*>(d->subStyles[Precision].data())->value1;
 }
 
 int Style::angle() const
 {
     if (!d->subStyles.contains(Angle))
-        return SubStyleOne<Angle, int>().value1;
-    return static_cast<const SubStyleOne<Angle, int>*>(d->subStyles[Angle].data())->value1;
+        return SubStyleOne<int>(Angle).value1;
+    return static_cast<const SubStyleOne<int>*>(d->subStyles[Angle].data())->value1;
 }
 
 double Style::indentation() const
 {
     if (!d->subStyles.contains(Indentation))
-        return SubStyleOne<Indentation, int>().value1;
-    return static_cast<const SubStyleOne<Indentation, int>*>(d->subStyles[Indentation].data())->value1;
-}
-
-bool Style::shrinkToFit() const
-{
-    if (!d->subStyles.contains(ShrinkToFit))
-        return SubStyleOne<ShrinkToFit, bool>().value1;
-    return static_cast<const SubStyleOne<ShrinkToFit, bool>*>(d->subStyles[ShrinkToFit].data())->value1;
-}
-
-bool Style::verticalText() const
-{
-    if (!d->subStyles.contains(VerticalText))
-        return SubStyleOne<VerticalText, bool>().value1;
-    return static_cast<const SubStyleOne<VerticalText, bool>*>(d->subStyles[VerticalText].data())->value1;
-}
-
-bool Style::wrapText() const
-{
-    if (!d->subStyles.contains(MultiRow))
-        return SubStyleOne<MultiRow, bool>().value1;
-    return static_cast<const SubStyleOne<MultiRow, bool>*>(d->subStyles[MultiRow].data())->value1;
-}
-
-bool Style::printText() const
-{
-    if (!d->subStyles.contains(DontPrintText))
-        return !SubStyleOne<DontPrintText, bool>().value1;
-    return !static_cast<const SubStyleOne<DontPrintText, bool>*>(d->subStyles[DontPrintText].data())->value1;
-}
-
-bool Style::hideAll() const
-{
-    if (!d->subStyles.contains(HideAll))
-        return SubStyleOne<HideAll, bool>().value1;
-    return static_cast<const SubStyleOne<HideAll, bool>*>(d->subStyles[HideAll].data())->value1;
-}
-
-bool Style::hideFormula() const
-{
-    if (!d->subStyles.contains(HideFormula))
-        return SubStyleOne<HideFormula, bool>().value1;
-    return static_cast<const SubStyleOne<HideFormula, bool>*>(d->subStyles[HideFormula].data())->value1;
-}
-
-bool Style::notProtected() const
-{
-    if (!d->subStyles.contains(NotProtected))
-        return SubStyleOne<NotProtected, bool>().value1;
-    return static_cast<const SubStyleOne<NotProtected, bool>*>(d->subStyles[NotProtected].data())->value1;
+        return SubStyleOne<int>(Indentation).value1;
+    return static_cast<const SubStyleOne<int>*>(d->subStyles[Indentation].data())->value1;
 }
 
 bool Style::isDefault() const
@@ -464,16 +387,6 @@ bool Style::isDefault() const
 bool Style::isEmpty() const
 {
     return d->subStyles.isEmpty();
-}
-
-void Style::setHAlign(HAlign align)
-{
-    insertSubStyle(HorizontalAlignment, align);
-}
-
-void Style::setVAlign(VAlign align)
-{
-    insertSubStyle(VerticalAlignment, align);
 }
 
 void Style::setFont(QFont const & font)
@@ -498,166 +411,11 @@ void Style::setFontFamily(QString const & family)
     insertSubStyle(FontFamily, font);
 }
 
-void Style::setFontBold(bool enabled)
-{
-    insertSubStyle(FontBold, enabled);
-}
-
-void Style::setFontItalic(bool enabled)
-{
-    insertSubStyle(FontItalic, enabled);
-}
-
-void Style::setFontUnderline(bool enabled)
-{
-    insertSubStyle(FontUnderline, enabled);
-}
-
-void Style::setFontStrikeOut(bool enabled)
-{
-    insertSubStyle(FontStrike, enabled);
-}
-
-void Style::setFontSize(int size)
-{
-    insertSubStyle(FontSize, size);
-}
-
-void Style::setFontColor(QColor const & color)
-{
-    insertSubStyle(FontColor, color);
-}
-
-void Style::setBackgroundColor(QColor const & color)
-{
-    insertSubStyle(BackgroundColor, color);
-}
-
-void Style::setRightBorderPen(QPen const & pen)
-{
-    insertSubStyle(RightPen, pen);
-}
-
-void Style::setBottomBorderPen(QPen const & pen)
-{
-    insertSubStyle(BottomPen, pen);
-}
-
-void Style::setLeftBorderPen(QPen const & pen)
-{
-    insertSubStyle(LeftPen, pen);
-}
-
-void Style::setTopBorderPen(QPen const & pen)
-{
-    insertSubStyle(TopPen, pen);
-}
-
-void Style::setFallDiagonalPen(QPen const & pen)
-{
-    insertSubStyle(FallDiagonalPen, pen);
-}
-
-void Style::setGoUpDiagonalPen(QPen const & pen)
-{
-    insertSubStyle(GoUpDiagonalPen, pen);
-}
-
-void Style::setAngle(int angle)
-{
-    insertSubStyle(Angle, angle);
-}
-
-void Style::setIndentation(double indent)
-{
-    insertSubStyle(Indentation, indent);
-}
-
-void Style::setBackgroundBrush(QBrush const & brush)
-{
-    insertSubStyle(BackgroundBrush, brush);
-}
-
-void Style::setFloatFormat(FloatFormat format)
-{
-    insertSubStyle(FloatFormatKey, format);
-}
-
-void Style::setFloatColor(FloatColor color)
-{
-    insertSubStyle(FloatColorKey, color);
-}
-
-void Style::setFormatType(Format::Type format)
-{
-    insertSubStyle(FormatTypeKey, format);
-}
-
-void Style::setCustomFormat(QString const & strFormat)
-{
-    insertSubStyle(CustomFormat, strFormat);
-}
-
-void Style::setPrecision(int precision)
-{
-    insertSubStyle(Precision, precision);
-}
-
-void Style::setThousandsSep(bool thousandsSep)
-{
-    insertSubStyle(ThousandsSep, thousandsSep);
-}
-
-void Style::setPrefix(QString const & prefix)
-{
-    insertSubStyle(Prefix, prefix);
-}
-
-void Style::setPostfix(QString const & postfix)
-{
-    insertSubStyle(Postfix, postfix);
-}
-
 void Style::setCurrency(Currency const & currency)
 {
     QVariant variant;
     variant.setValue(currency);
     insertSubStyle(CurrencyFormat, variant);
-}
-
-void Style::setWrapText(bool enable)
-{
-    insertSubStyle(MultiRow, enable);
-}
-
-void Style::setHideAll(bool enable)
-{
-    insertSubStyle(HideAll, enable);
-}
-
-void Style::setHideFormula(bool enable)
-{
-    insertSubStyle(HideFormula, enable);
-}
-
-void Style::setNotProtected(bool enable)
-{
-    insertSubStyle(NotProtected, enable);
-}
-
-void Style::setDontPrintText(bool enable)
-{
-    insertSubStyle(DontPrintText, enable);
-}
-
-void Style::setVerticalText(bool enable)
-{
-    insertSubStyle(VerticalText, enable);
-}
-
-void Style::setShrinkToFit(bool enable)
-{
-    insertSubStyle(ShrinkToFit, enable);
 }
 
 void Style::setDefault()
@@ -683,85 +441,70 @@ bool Style::compare(const SubStyle* one, const SubStyle* two)
         return static_cast<const NamedStyle*>(one)->name == static_cast<const NamedStyle*>(two)->name;
         // borders
     case LeftPen:
-        return static_cast<const SubStyleOne<LeftPen, QPen>*>(one)->value1 == static_cast<const SubStyleOne<LeftPen, QPen>*>(two)->value1;
     case RightPen:
-        return static_cast<const SubStyleOne<RightPen, QPen>*>(one)->value1 == static_cast<const SubStyleOne<RightPen, QPen>*>(two)->value1;
     case TopPen:
-        return static_cast<const SubStyleOne<TopPen, QPen>*>(one)->value1 == static_cast<const SubStyleOne<TopPen, QPen>*>(two)->value1;
     case BottomPen:
-        return static_cast<const SubStyleOne<BottomPen, QPen>*>(one)->value1 == static_cast<const SubStyleOne<BottomPen, QPen>*>(two)->value1;
     case FallDiagonalPen:
-        return static_cast<const SubStyleOne<FallDiagonalPen, QPen>*>(one)->value1 == static_cast<const SubStyleOne<FallDiagonalPen, QPen>*>(two)->value1;
     case GoUpDiagonalPen:
-        return static_cast<const SubStyleOne<GoUpDiagonalPen, QPen>*>(one)->value1 == static_cast<const SubStyleOne<GoUpDiagonalPen, QPen>*>(two)->value1;
+        return static_cast<const SubStyleOne<QPen>*>(one)->value1 == static_cast<const SubStyleOne<QPen>*>(two)->value1;
         // layout
     case HorizontalAlignment:
-        return static_cast<const SubStyleOne<HorizontalAlignment, HAlign>*>(one)->value1 == static_cast<const SubStyleOne<HorizontalAlignment, HAlign>*>(two)->value1;
+        return static_cast<const SubStyleOne<HAlign>*>(one)->value1 == static_cast<const SubStyleOne<HAlign>*>(two)->value1;
     case VerticalAlignment:
-        return static_cast<const SubStyleOne<VerticalAlignment, VAlign>*>(one)->value1 == static_cast<const SubStyleOne<VerticalAlignment, VAlign>*>(two)->value1;
+        return static_cast<const SubStyleOne<VAlign>*>(one)->value1 == static_cast<const SubStyleOne<VAlign>*>(two)->value1;
     case MultiRow:
-        return static_cast<const SubStyleOne<MultiRow, bool>*>(one)->value1 == static_cast<const SubStyleOne<MultiRow, bool>*>(two)->value1;
     case VerticalText:
-        return static_cast<const SubStyleOne<VerticalText, bool>*>(one)->value1 == static_cast<const SubStyleOne<VerticalText, bool>*>(two)->value1;
     case ShrinkToFit:
-        return static_cast<const SubStyleOne<ShrinkToFit, bool>*>(one)->value1 == static_cast<const SubStyleOne<ShrinkToFit, bool>*>(two)->value1;
+        return static_cast<const SubStyleOne<bool>*>(one)->value1 == static_cast<const SubStyleOne<bool>*>(two)->value1;
     case Angle:
-        return static_cast<const SubStyleOne<Angle, int>*>(one)->value1 == static_cast<const SubStyleOne<Angle, int>*>(two)->value1;
+        return static_cast<const SubStyleOne<int>*>(one)->value1 == static_cast<const SubStyleOne<int>*>(two)->value1;
     case Indentation:
-        return static_cast<const SubStyleOne<Indentation, int>*>(one)->value1 == static_cast<const SubStyleOne<Indentation, int>*>(two)->value1;
+        return static_cast<const SubStyleOne<int>*>(one)->value1 == static_cast<const SubStyleOne<int>*>(two)->value1;
         // content format
     case Prefix:
-        return static_cast<const SubStyleOne<Prefix, QString>*>(one)->value1 == static_cast<const SubStyleOne<Prefix, QString>*>(two)->value1;
+        return static_cast<const SubStyleOne<QString>*>(one)->value1 == static_cast<const SubStyleOne<QString>*>(two)->value1;
     case Postfix:
-        return static_cast<const SubStyleOne<Postfix, QString>*>(one)->value1 == static_cast<const SubStyleOne<Postfix, QString>*>(two)->value1;
+        return static_cast<const SubStyleOne<QString>*>(one)->value1 == static_cast<const SubStyleOne<QString>*>(two)->value1;
     case Precision:
-        return static_cast<const SubStyleOne<Precision, int>*>(one)->value1 == static_cast<const SubStyleOne<Precision, int>*>(two)->value1;
+        return static_cast<const SubStyleOne<int>*>(one)->value1 == static_cast<const SubStyleOne<int>*>(two)->value1;
     case ThousandsSep:
-        return static_cast<const SubStyleOne<ThousandsSep, bool>*>(one)->value1 == static_cast<const SubStyleOne<ThousandsSep, bool>*>(two)->value1;
+        return static_cast<const SubStyleOne<bool>*>(one)->value1 == static_cast<const SubStyleOne<bool>*>(two)->value1;
     case FormatTypeKey:
-        return static_cast<const SubStyleOne<FormatTypeKey, Format::Type>*>(one)->value1 == static_cast<const SubStyleOne<FormatTypeKey, Format::Type>*>(two)->value1;
+        return static_cast<const SubStyleOne<Format::Type>*>(one)->value1 == static_cast<const SubStyleOne<Format::Type>*>(two)->value1;
     case FloatFormatKey:
-        return static_cast<const SubStyleOne<FloatFormatKey, FloatFormat>*>(one)->value1 == static_cast<const SubStyleOne<FloatFormatKey, FloatFormat>*>(two)->value1;
+        return static_cast<const SubStyleOne<FloatFormat>*>(one)->value1 == static_cast<const SubStyleOne<FloatFormat>*>(two)->value1;
     case FloatColorKey:
-        return static_cast<const SubStyleOne<FloatColorKey, FloatColor>*>(one)->value1 == static_cast<const SubStyleOne<FloatColorKey, FloatColor>*>(two)->value1;
+        return static_cast<const SubStyleOne<FloatColor>*>(one)->value1 == static_cast<const SubStyleOne<FloatColor>*>(two)->value1;
     case CurrencyFormat: {
-        Currency currencyOne = static_cast<const SubStyleOne<CurrencyFormat, Currency>*>(one)->value1;
-        Currency currencyTwo = static_cast<const SubStyleOne<CurrencyFormat, Currency>*>(two)->value1;
+        Currency currencyOne = static_cast<const SubStyleOne<Currency>*>(one)->value1;
+        Currency currencyTwo = static_cast<const SubStyleOne<Currency>*>(two)->value1;
         if (currencyOne != currencyTwo)
             return false;
         return true;
     }
     case CustomFormat:
-        return static_cast<const SubStyleOne<CustomFormat, QString>*>(one)->value1 == static_cast<const SubStyleOne<CustomFormat, QString>*>(two)->value1;
+        return static_cast<const SubStyleOne<QString>*>(one)->value1 == static_cast<const SubStyleOne<QString>*>(two)->value1;
         // background
     case BackgroundBrush:
-        return static_cast<const SubStyleOne<BackgroundBrush, QBrush>*>(one)->value1 == static_cast<const SubStyleOne<BackgroundBrush, QBrush>*>(two)->value1;
+        return static_cast<const SubStyleOne<QBrush>*>(one)->value1 == static_cast<const SubStyleOne<QBrush>*>(two)->value1;
     case BackgroundColor:
-        return static_cast<const SubStyleOne<BackgroundColor, QColor>*>(one)->value1 == static_cast<const SubStyleOne<BackgroundColor, QColor>*>(two)->value1;
+        return static_cast<const SubStyleOne<QColor>*>(one)->value1 == static_cast<const SubStyleOne<QColor>*>(two)->value1;
         // font
     case FontColor:
-        return static_cast<const SubStyleOne<FontColor, QColor>*>(one)->value1 == static_cast<const SubStyleOne<FontColor, QColor>*>(two)->value1;
+        return static_cast<const SubStyleOne<QColor>*>(one)->value1 == static_cast<const SubStyleOne<QColor>*>(two)->value1;
     case FontFamily:
-        return static_cast<const SubStyleOne<FontFamily, QString>*>(one)->value1 == static_cast<const SubStyleOne<FontFamily, QString>*>(two)->value1;
+        return static_cast<const SubStyleOne<QString>*>(one)->value1 == static_cast<const SubStyleOne<QString>*>(two)->value1;
     case FontSize:
-        return static_cast<const SubStyleOne<FontSize, int>*>(one)->value1 == static_cast<const SubStyleOne<FontSize, int>*>(two)->value1;
+        return static_cast<const SubStyleOne<int>*>(one)->value1 == static_cast<const SubStyleOne<int>*>(two)->value1;
     case FontBold:
-        return static_cast<const SubStyleOne<FontBold, bool>*>(one)->value1 == static_cast<const SubStyleOne<FontBold, bool>*>(two)->value1;
     case FontItalic:
-        return static_cast<const SubStyleOne<FontItalic, bool>*>(one)->value1 == static_cast<const SubStyleOne<FontItalic, bool>*>(two)->value1;
     case FontStrike:
-        return static_cast<const SubStyleOne<FontStrike, bool>*>(one)->value1 == static_cast<const SubStyleOne<FontStrike, bool>*>(two)->value1;
     case FontUnderline:
-        return static_cast<const SubStyleOne<FontUnderline, bool>*>(one)->value1 == static_cast<const SubStyleOne<FontUnderline, bool>*>(two)->value1;
-        //misc
     case DontPrintText:
-        return static_cast<const SubStyleOne<DontPrintText, bool>*>(one)->value1 == static_cast<const SubStyleOne<DontPrintText, bool>*>(two)->value1;
     case NotProtected:
-        return static_cast<const SubStyleOne<NotProtected, bool>*>(one)->value1 == static_cast<const SubStyleOne<NotProtected, bool>*>(two)->value1;
     case HideAll:
-        return static_cast<const SubStyleOne<HideAll, bool>*>(one)->value1 == static_cast<const SubStyleOne<HideAll, bool>*>(two)->value1;
     case HideFormula:
-        return static_cast<const SubStyleOne<HideFormula, bool>*>(one)->value1 == static_cast<const SubStyleOne<HideFormula, bool>*>(two)->value1;
+        return static_cast<const SubStyleOne<bool>*>(one)->value1 == static_cast<const SubStyleOne<bool>*>(two)->value1;
     default:
         return false;
     }
@@ -883,114 +626,63 @@ SharedSubStyle Style::createSubStyle(Key key, const QVariant& value)
         newSubStyle = new NamedStyle(value.value<QString>());
         break;
     case LeftPen:
-        newSubStyle = new BorderPenStyle<LeftPen>(value.value<QPen>());
-        break;
     case RightPen:
-        newSubStyle = new BorderPenStyle<RightPen>(value.value<QPen>());
-        break;
     case TopPen:
-        newSubStyle = new BorderPenStyle<TopPen>(value.value<QPen>());
-        break;
     case BottomPen:
-        newSubStyle = new BorderPenStyle<BottomPen>(value.value<QPen>());
-        break;
     case FallDiagonalPen:
-        newSubStyle = new BorderPenStyle<FallDiagonalPen>(value.value<QPen>());
-        break;
     case GoUpDiagonalPen:
-        newSubStyle = new BorderPenStyle<GoUpDiagonalPen>(value.value<QPen>());
-        break;
-        // layout
-    case HorizontalAlignment:
-        newSubStyle = new SubStyleOne<HorizontalAlignment, HAlign>((HAlign)value.value<int>());
-        break;
-    case VerticalAlignment:
-        newSubStyle = new SubStyleOne<VerticalAlignment, VAlign>((VAlign)value.value<int>());
+        newSubStyle = new BorderPenStyle(key, value.value<QPen>());
         break;
     case MultiRow:
-        newSubStyle = new SubStyleOne<MultiRow, bool>(value.value<bool>());
-        break;
     case VerticalText:
-        newSubStyle = new SubStyleOne<VerticalText, bool>(value.value<bool>());
+    case ShrinkToFit:
+    case ThousandsSep:
+    case FontBold:
+    case FontItalic:
+    case FontStrike:
+    case FontUnderline:
+    case DontPrintText:
+    case NotProtected:
+    case HideAll:
+    case HideFormula:
+        newSubStyle = new SubStyleOne<bool>(key, value.value<bool>());
         break;
     case Angle:
-        newSubStyle = new SubStyleOne<Angle, int>(value.value<int>());
-        break;
     case Indentation:
-        newSubStyle = new SubStyleOne<Indentation, int>(value.value<int>());
-        break;
-    case ShrinkToFit:
-        newSubStyle = new SubStyleOne<ShrinkToFit,bool>(value.value<bool>());
-        break;
-        // content format
-    case Prefix:
-        newSubStyle = new SubStyleOne<Prefix, QString>(value.value<QString>());
-        break;
-    case Postfix:
-        newSubStyle = new SubStyleOne<Postfix, QString>(value.value<QString>());
-        break;
     case Precision:
-        newSubStyle = new SubStyleOne<Precision, int>(value.value<int>());
+    case FontSize:
+        newSubStyle = new SubStyleOne<int>(key, value.value<int>());
         break;
-    case ThousandsSep:
-        newSubStyle = new SubStyleOne<ThousandsSep, bool>(value.value<bool>());
+    case Prefix:
+    case Postfix:
+    case CustomFormat:
+    case FontFamily:
+        newSubStyle = new SubStyleOne<QString>(key, value.value<QString>());
+        break;
+    case HorizontalAlignment:
+        newSubStyle = new SubStyleOne<HAlign>(key, (HAlign)value.value<int>());
+        break;
+    case VerticalAlignment:
+        newSubStyle = new SubStyleOne<VAlign>(key, (VAlign)value.value<int>());
         break;
     case FormatTypeKey:
-        newSubStyle = new SubStyleOne<FormatTypeKey, Format::Type>((Format::Type)value.value<int>());
+        newSubStyle = new SubStyleOne<Format::Type>(key, (Format::Type)value.value<int>());
         break;
     case FloatFormatKey:
-        newSubStyle = new SubStyleOne<FloatFormatKey, FloatFormat>((FloatFormat)value.value<int>());
+        newSubStyle = new SubStyleOne<FloatFormat>(key, (FloatFormat)value.value<int>());
         break;
     case FloatColorKey:
-        newSubStyle = new SubStyleOne<FloatColorKey, FloatColor>((FloatColor)value.value<int>());
+        newSubStyle = new SubStyleOne<FloatColor>(key, (FloatColor)value.value<int>());
         break;
     case CurrencyFormat:
-        newSubStyle = new SubStyleOne<CurrencyFormat, Currency>(value.value<Currency>());
+        newSubStyle = new SubStyleOne<Currency>(key, value.value<Currency>());
         break;
-    case CustomFormat:
-        newSubStyle = new SubStyleOne<CustomFormat, QString>(value.value<QString>());
-        break;
-        // background
     case BackgroundBrush:
-        newSubStyle = new SubStyleOne<BackgroundBrush, QBrush>(value.value<QBrush>());
+        newSubStyle = new SubStyleOne<QBrush>(key, value.value<QBrush>());
         break;
     case BackgroundColor:
-        newSubStyle = new SubStyleOne<BackgroundColor, QColor>(value.value<QColor>());
-        break;
-        // font
     case FontColor:
-        newSubStyle = new SubStyleOne<FontColor, QColor>(value.value<QColor>());
-        break;
-    case FontFamily:
-        newSubStyle = new SubStyleOne<FontFamily, QString>(value.value<QString>());
-        break;
-    case FontSize:
-        newSubStyle = new SubStyleOne<FontSize, int>(value.value<int>());
-        break;
-    case FontBold:
-        newSubStyle = new SubStyleOne<FontBold, bool>(value.value<bool>());
-        break;
-    case FontItalic:
-        newSubStyle = new SubStyleOne<FontItalic, bool>(value.value<bool>());
-        break;
-    case FontStrike:
-        newSubStyle = new SubStyleOne<FontStrike, bool>(value.value<bool>());
-        break;
-    case FontUnderline:
-        newSubStyle = new SubStyleOne<FontUnderline, bool>(value.value<bool>());
-        break;
-        //misc
-    case DontPrintText:
-        newSubStyle = new SubStyleOne<DontPrintText, bool>(value.value<bool>());
-        break;
-    case NotProtected:
-        newSubStyle = new SubStyleOne<NotProtected, bool>(value.value<bool>());
-        break;
-    case HideAll:
-        newSubStyle = new SubStyleOne<HideAll, bool>(value.value<bool>());
-        break;
-    case HideFormula:
-        newSubStyle = new SubStyleOne<HideFormula, bool>(value.value<bool>());
+        newSubStyle = new SubStyleOne<QColor>(key, value.value<QColor>());
         break;
     }
     return newSubStyle;

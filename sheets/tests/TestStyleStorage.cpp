@@ -26,8 +26,8 @@ void TestStyleStorage::testGarbageCollection()
     QRect rect(5, 5, 1, 1);
     QColor c1(Qt::red);
     QColor c2(Qt::blue);
-    SharedSubStyle style1(new SubStyleOne<Style::BackgroundColor, QColor>(c1));
-    SharedSubStyle style2(new SubStyleOne<Style::BackgroundColor, QColor>(c2));
+    SharedSubStyle style1(new SubStyleOne<QColor>(Style::BackgroundColor, c1));
+    SharedSubStyle style2(new SubStyleOne<QColor>(Style::BackgroundColor, c2));
     // we need to do this for multiple cells, so hopefully we'll end up with substyles that are for the same cell but not in the same leafnode in the rtree
     for (int i = 0; i < 100; i++)
         storage.insert(rect.adjusted(10*i, 0, 10*i, 0), style1);

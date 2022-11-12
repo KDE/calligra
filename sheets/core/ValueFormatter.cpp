@@ -239,8 +239,8 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
 
     double dblval = double(numToDouble(value));
     // Is it an integer within a 64bit range?
-    if (fmt != Format::Scientific)
-        if (((dblval >= 1) || (dblval <= -1)) && (dblval - ((int64_t)dblval) == 0)) precision = 8;
+//    if (fmt != Format::Scientific)
+//        if (((dblval >= 1) || (dblval <= -1)) && (dblval - ((int64_t)dblval) == 0)) precision = 8;
 
     int numExpDigits = 0; // QString::number() will be used
     // try to split formatstring into prefix, formatstring and postfix.
@@ -268,22 +268,14 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         }
     }
 
-    // TODO - precision should only affect numbers after the decimal point, not everything ...
     int p = precision;
 
     if (p == -1) {
         // If precision (obtained from the cell style) is -1 (arbitrary), use the document default decimal precision
         // and if that value is -1 too then use either automatic decimal place adjustment or a hardcoded default.
         p = settings()->defaultDecimalPrecision();
-        if (p == -1) {
-            if (fmt == Format::Number) {
-                QString s = QString::number(dblval, 'f', 10);
-                int _p = s.indexOf('.');
-                p = _p >= 0 ? qMax(0, 10 - _p) : 8;
-            } else {
-                p = 2; // hardcoded default
-            }
-        }
+        if (p == -1)
+            p = 2; // hardcoded default
     }
 
     QString localizedNumber;
