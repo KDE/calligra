@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-23 00:46+0000\n"
+"POT-Creation-Date: 2022-11-13 00:46+0000\n"
 "PO-Revision-Date: 2022-11-06 01:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -873,62 +873,62 @@ msgstr "粘贴偏移："
 msgid "Paste at Cursor:"
 msgstr "于光标处粘贴:"
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:199
 #, kde-format
 msgid "Only print and exit"
 msgstr "仅打印并退出"
 
-#: main/KoApplication.cpp:199
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr "打开一个新的文档，基于给定的模板 (desktopfile 名称)"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:201
 #, kde-format
 msgid "Open a new document based on the given template file"
 msgstr "打开一个新的文档，基于给定的模板文件"
 
-#: main/KoApplication.cpp:201
+#: main/KoApplication.cpp:202
 #, kde-format
 msgid "Override display DPI"
 msgstr "覆盖显示 DPI"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:203
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "仅导出到 PDF 并退出"
 
-#: main/KoApplication.cpp:203
+#: main/KoApplication.cpp:204
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "导出的 PDF 文件名"
 
-#: main/KoApplication.cpp:204
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "只加载文件，然后退出"
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:206
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr "加载文件，显示窗口和进度条，然后退出"
 
-#: main/KoApplication.cpp:206
+#: main/KoApplication.cpp:207
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr "用于写入信息配置的文件名。"
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:208
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr "加载文件并保存为 ODF 文件，用于调试。"
 
-#: main/KoApplication.cpp:208
+#: main/KoApplication.cpp:209
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr "要打开的文件或 URL"
 
-#: main/KoApplication.cpp:218
+#: main/KoApplication.cpp:219
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -939,12 +939,12 @@ msgstr ""
 "这种做法不被推荐。\n"
 "请另行下载安装本程序的64位版本。。"
 
-#: main/KoApplication.cpp:262
+#: main/KoApplication.cpp:263
 #, kde-format
 msgid "%1: Critical Error"
 msgstr "%1︰ 严重错误"
 
-#: main/KoApplication.cpp:262
+#: main/KoApplication.cpp:263
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -952,22 +952,22 @@ msgid ""
 "Try restarting or reinstalling."
 msgstr "找不到必需的应用程序组件。这可能是安装问题。请尝试重新启动或重新安装。"
 
-#: main/KoApplication.cpp:511
+#: main/KoApplication.cpp:512
 #, kde-format
 msgid "No template found for: %1"
 msgstr "没有找到适合 %1 的模板"
 
-#: main/KoApplication.cpp:514
+#: main/KoApplication.cpp:515
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "适合 %1 的模板太多"
 
-#: main/KoApplication.cpp:536 main/KoApplication.cpp:554
+#: main/KoApplication.cpp:537 main/KoApplication.cpp:555
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "模板 %1 加载失败。"
 
-#: main/KoApplication.cpp:544
+#: main/KoApplication.cpp:545
 #, kde-format
 msgid "No template found at: %1"
 msgstr "没有在此处发现模板︰%1"

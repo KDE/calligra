@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-23 00:46+0000\n"
+"POT-Creation-Date: 2022-11-13 00:46+0000\n"
 "PO-Revision-Date: 2020-12-06 07:56+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque\n"
@@ -896,66 +896,66 @@ msgstr "Itsaste-desplazamendua:"
 msgid "Paste at Cursor:"
 msgstr "Itsatsi kurtsorea dagoen lekuan:"
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:199
 #, kde-format
 msgid "Only print and exit"
 msgstr "Soilik inprimatu eta irten"
 
-#: main/KoApplication.cpp:199
+#: main/KoApplication.cpp:200
 #, fuzzy, kde-format
 #| msgid "Open a new document with a template"
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr "Ireki dokumentu berria txantiloi bat erabiliz"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:201
 #, fuzzy, kde-format
 #| msgid "Open a new document with a template"
 msgid "Open a new document based on the given template file"
 msgstr "Ireki dokumentu berria txantiloi bat erabiliz"
 
-#: main/KoApplication.cpp:201
+#: main/KoApplication.cpp:202
 #, kde-format
 msgid "Override display DPI"
 msgstr "Gainidatzi pantailaren DPIa"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:203
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "Soilik esportatu PDFra eta irten"
 
-#: main/KoApplication.cpp:203
+#: main/KoApplication.cpp:204
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "PDFra esportatzeko fitxategiaren izena"
 
-#: main/KoApplication.cpp:204
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "soilik kargatu fitxategia eta, gero, irten"
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:206
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr ""
 "kargatu fitxategia, erakutsi leihoa eta aurrerapen-barra eta, gero, irten"
 
-#: main/KoApplication.cpp:206
+#: main/KoApplication.cpp:207
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr ""
 "Errendimendu-analisiaren informazioa idatzi behar zaion fitxategiaren izena."
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:208
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr "Kargatu fitxategi bat eta gorde ODF fitxategi gisa. Arazteko balio du."
 
-#: main/KoApplication.cpp:208
+#: main/KoApplication.cpp:209
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr ""
 
-#: main/KoApplication.cpp:218
+#: main/KoApplication.cpp:219
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -963,12 +963,12 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: main/KoApplication.cpp:262
+#: main/KoApplication.cpp:263
 #, fuzzy, kde-format
 msgid "%1: Critical Error"
 msgstr "Hitzen amaiera"
 
-#: main/KoApplication.cpp:262
+#: main/KoApplication.cpp:263
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -976,22 +976,22 @@ msgid ""
 "Try restarting or reinstalling."
 msgstr ""
 
-#: main/KoApplication.cpp:511
+#: main/KoApplication.cpp:512
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Ez da txantiloirik aurkitu honentzat: %1"
 
-#: main/KoApplication.cpp:514
+#: main/KoApplication.cpp:515
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Txantiloi gehiegi aurkitu dira honentzat: %1"
 
-#: main/KoApplication.cpp:536 main/KoApplication.cpp:554
+#: main/KoApplication.cpp:537 main/KoApplication.cpp:555
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Huts egin du %1 txantiloia kargatzean."
 
-#: main/KoApplication.cpp:544
+#: main/KoApplication.cpp:545
 #, fuzzy, kde-format
 #| msgid "No template found for: %1"
 msgid "No template found at: %1"

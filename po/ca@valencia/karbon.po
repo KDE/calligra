@@ -175,17 +175,17 @@ msgstr "Subdivisions:"
 #: plugins/roundcorners/RoundCornersPlugin.cpp:82
 msgctxt "(qtundo-format)"
 msgid "Round Corners"
-msgstr "Cantonades arredonides"
+msgstr "Cantons arredonits"
 
 #: plugins/roundcorners/RoundCornersPlugin.cpp:53
 #, kde-format
 msgid "&Round Corners..."
-msgstr "Cantonades a&rredonides..."
+msgstr "Cantons a&rredonits..."
 
 #: plugins/roundcorners/RoundCornersPlugin.cpp:99
 #, kde-format
 msgid "Round Corners"
-msgstr "Cantonades arredonides"
+msgstr "Cantons arredonits"
 
 #: plugins/roundcorners/RoundCornersPlugin.cpp:115
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:133

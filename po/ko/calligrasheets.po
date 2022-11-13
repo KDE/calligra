@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-12 00:45+0000\n"
+"POT-Creation-Date: 2022-11-13 00:46+0000\n"
 "PO-Revision-Date: 2022-05-15 22:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -3206,37 +3206,36 @@ msgid "Header1"
 msgstr "머리글1"
 
 #: core/StyleManager.cpp:172 ui/CellToolBase.cpp:169
-#: ui/dialogs/LayoutDialog.cpp:159 ui/dialogs/LayoutDialog.cpp:160
-#: ui/dialogs/LayoutDialog.cpp:166 ui/dialogs/LayoutDialog.cpp:228
-#: ui/dialogs/LayoutDialog.cpp:244 ui/dialogs/StyleManagerDialog.cpp:99
-#: ui/dialogs/StyleManagerDialog.cpp:139 ui/dialogs/StyleManagerDialog.cpp:172
-#: ui/dialogs/StyleManagerDialog.cpp:194 ui/dialogs/StyleManagerDialog.cpp:235
-#: ui/dialogs/StyleManagerDialog.cpp:261 ui/dialogs/StyleManagerDialog.cpp:282
+#: ui/dialogs/LayoutPage_General.cpp:127 ui/dialogs/LayoutPage_General.cpp:146
+#: ui/dialogs/StyleManagerDialog.cpp:99 ui/dialogs/StyleManagerDialog.cpp:139
+#: ui/dialogs/StyleManagerDialog.cpp:172 ui/dialogs/StyleManagerDialog.cpp:198
+#: ui/dialogs/StyleManagerDialog.cpp:236 ui/dialogs/StyleManagerDialog.cpp:265
+#: ui/dialogs/StyleManagerDialog.cpp:286
 #, kde-format
 msgid "Default"
 msgstr "기본값"
 
-#: core/ValueFormatter.cpp:542 core/ValueFormatter.cpp:548
+#: core/ValueFormatter.cpp:529 core/ValueFormatter.cpp:535
 #, kde-format
 msgid "AM"
 msgstr "오전"
 
-#: core/ValueFormatter.cpp:542 core/ValueFormatter.cpp:548
+#: core/ValueFormatter.cpp:529 core/ValueFormatter.cpp:535
 #, kde-format
 msgid "PM"
 msgstr "오후"
 
-#: core/ValueFormatter.cpp:552
+#: core/ValueFormatter.cpp:539
 #, kde-format
 msgid "h"
 msgstr "시간"
 
-#: core/ValueFormatter.cpp:554
+#: core/ValueFormatter.cpp:541
 #, kde-format
 msgid "min"
 msgstr "분"
 
-#: core/ValueFormatter.cpp:556
+#: core/ValueFormatter.cpp:543
 #, kde-format
 msgid "s"
 msgstr "초"
@@ -3246,7 +3245,7 @@ msgstr "초"
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutDialog.cpp:892 ui/dialogs/SpecialPasteWidget.ui:51
+#: ui/dialogs/LayoutPage_Float.cpp:94 ui/dialogs/SpecialPasteWidget.ui:51
 #, kde-format
 msgid "Text"
 msgstr "텍스트"
@@ -3342,12 +3341,12 @@ msgstr "예제"
 msgid "Related Functions"
 msgstr "관련 함수"
 
-#: engine/Localization.cpp:413
+#: engine/Localization.cpp:416
 #, kde-format
 msgid "true"
 msgstr "참"
 
-#: engine/Localization.cpp:414
+#: engine/Localization.cpp:417
 #, kde-format
 msgid "false"
 msgstr "거짓"
@@ -3944,7 +3943,7 @@ msgstr "CARY(12; 0)은 0을 반환함"
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
 #: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutDialog.cpp:860
+#: ui/dialogs/LayoutPage_Float.cpp:62
 #, kde-format
 msgid "Number"
 msgstr "숫자"
@@ -3954,7 +3953,7 @@ msgstr "숫자"
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
 #: ui/CellToolBase.cpp:163 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutDialog.cpp:850 ui/dialogs/SpecialPasteWidget.ui:58
+#: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
 msgstr "서식"
@@ -4300,7 +4299,7 @@ msgstr "날짜와 시간"
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutDialog.cpp:880
+#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
 #, kde-format
 msgid "Date"
 msgstr "날짜"
@@ -4374,7 +4373,7 @@ msgstr "DAYS360(\"2002/02/22\"; \"2002/04/21\"; FALSE)는 59를 반환함"
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
 #: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutDialog.cpp:884
+#: ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid "Time"
 msgstr "시간"
@@ -7007,7 +7006,7 @@ msgstr "분수 달러"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutDialog.cpp:876
+#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid "Fraction"
 msgstr "분수"
@@ -8216,8 +8215,7 @@ msgid "Manual"
 msgstr "설명서"
 
 #: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:442
-#: ui/dialogs/LayoutDialog.cpp:981 ui/dialogs/LayoutDialog.cpp:1427
-#: ui/dialogs/LayoutDialog.cpp:1489
+#: ui/dialogs/LayoutPage_Float.cpp:182 ui/dialogs/LayoutPage_Float.cpp:579
 #, kde-format
 msgid "Automatic"
 msgstr "자동"
@@ -14237,7 +14235,7 @@ msgstr "FINDB(찾을_텍스트;다음_텍스트에서;바이트위치 시작)"
 msgid "Source string"
 msgstr "원본 문자열"
 
-#: functions/text.xml:352
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:134
 #, kde-format
 msgid "Position"
 msgstr "위치"
@@ -15565,9 +15563,8 @@ msgstr "외부 데이터(&E)"
 msgid "F&ormat"
 msgstr "서식(&O)"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox5)
 #. i18n: ectx: Menu (MergeCellMenu)
-#: part/calligrasheets.rc:104 ui/dialogs/PositionWidget.ui:179
+#: part/calligrasheets.rc:104
 #, kde-format
 msgid "Merge Cells"
 msgstr "셀 병합"
@@ -15647,7 +15644,7 @@ msgstr "활성화"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolBase.cpp:212
-#: ui/CellToolOptionWidgets.xml:3
+#: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
 msgstr "글꼴"
@@ -15719,7 +15716,7 @@ msgid "First column as label"
 msgstr "첫 번째 열을 머리글로"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:127
 #, kde-format
 msgid "Data Format"
 msgstr "데이터 서식"
@@ -16075,7 +16072,7 @@ msgstr "수평"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup2)
 #: part/dialogs/PageLayoutSheetPage.ui:335 ui/CellToolBase.cpp:345
-#: ui/dialogs/PositionWidget.ui:91
+#: ui/dialogs/PositionWidget.ui:135
 #, kde-format
 msgid "Vertical"
 msgstr "수직"
@@ -17013,7 +17010,7 @@ msgstr ""
 "활성 시트를 삭제하려고 합니다.\n"
 "계속 진행하시겠습니까?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1465
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1482
 #, kde-format
 msgid "Enter name:"
 msgstr "이름 입력:"
@@ -17073,21 +17070,21 @@ msgstr "CountA: "
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1618
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1651
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "글자색 변경"
 
-#: part/ViewAdaptor.cpp:138 part/ViewAdaptor.cpp:148 ui/CellToolBase.cpp:1863
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1932
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "배경색 바꾸기"
 
-#: part/ViewAdaptor.cpp:158 part/ViewAdaptor.cpp:171 part/ViewAdaptor.cpp:181
-#: part/ViewAdaptor.cpp:194 part/ViewAdaptor.cpp:204 part/ViewAdaptor.cpp:219
-#: ui/CellToolBase.cpp:1689 ui/CellToolBase.cpp:1703 ui/CellToolBase.cpp:1717
-#: ui/CellToolBase.cpp:1728 ui/CellToolBase.cpp:1739 ui/CellToolBase.cpp:1754
-#: ui/CellToolBase.cpp:1770 ui/CellToolBase_p.cpp:734
+#: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
+#: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
+#: ui/CellToolBase.cpp:1736 ui/CellToolBase.cpp:1752 ui/CellToolBase.cpp:1768
+#: ui/CellToolBase.cpp:1781 ui/CellToolBase.cpp:1794 ui/CellToolBase.cpp:1811
+#: ui/CellToolBase.cpp:1829 ui/CellToolBase_p.cpp:736
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "테두리 변경"
@@ -17117,7 +17114,7 @@ msgstr "스타일 관리자..."
 msgid "Edit and organize cell styles"
 msgstr "셀 스타일 편집 및 구성"
 
-#: ui/CellToolBase.cpp:179 ui/dialogs/LayoutDialog.cpp:133
+#: ui/CellToolBase.cpp:179 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
@@ -17143,22 +17140,20 @@ msgstr "셀에서 스타일"
 msgid "Create a new style based on the currently selected cell"
 msgstr "현재 선택한 셀의 스타일에서 새 스타일 만들기"
 
-#. i18n: ectx: property (text), item, widget (KComboBox, weight_combo)
-#: ui/CellToolBase.cpp:192 ui/dialogs/FontWidget.ui:82
-#: ui/dialogs/LayoutDialog.cpp:1738
+#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
+#: ui/CellToolBase.cpp:192 ui/dialogs/FontWidget.ui:83
 #, kde-format
 msgid "Bold"
 msgstr "굵게"
 
-#. i18n: ectx: property (text), item, widget (KComboBox, style_combo)
-#: ui/CellToolBase.cpp:197 ui/dialogs/FontWidget.ui:57
-#: ui/dialogs/LayoutDialog.cpp:1749
+#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
+#: ui/CellToolBase.cpp:197 ui/dialogs/FontWidget.ui:58
 #, kde-format
 msgid "Italic"
 msgstr "이탤릭"
 
-#. i18n: ectx: property (text), widget (QCheckBox, underline)
-#: ui/CellToolBase.cpp:202 ui/dialogs/FontWidget.ui:100
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, underline)
+#: ui/CellToolBase.cpp:202 ui/dialogs/FontWidget.ui:101
 #, kde-format
 msgid "Underline"
 msgstr "밑줄"
@@ -17246,7 +17241,7 @@ msgstr "위쪽 정렬"
 
 #. i18n: ectx: property (text), widget (QRadioButton, top)
 #: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:299
-#: ui/dialogs/PositionWidget.ui:97
+#: ui/dialogs/PositionWidget.ui:141
 #, kde-format
 msgid "Top"
 msgstr "위쪽"
@@ -17262,7 +17257,7 @@ msgid "Align Middle"
 msgstr "수직 가운데 정렬"
 
 #. i18n: ectx: property (text), widget (QRadioButton, middle)
-#: ui/CellToolBase.cpp:271 ui/dialogs/PositionWidget.ui:104
+#: ui/CellToolBase.cpp:271 ui/dialogs/PositionWidget.ui:148
 #, kde-format
 msgid "Middle"
 msgstr "가운데"
@@ -17279,7 +17274,7 @@ msgstr "아래쪽 정렬"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bottom)
 #: ui/CellToolBase.cpp:278 ui/CellToolBase.cpp:305
-#: ui/dialogs/PositionWidget.ui:111
+#: ui/dialogs/PositionWidget.ui:155
 #, kde-format
 msgid "Bottom"
 msgstr "아래쪽"
@@ -17428,7 +17423,7 @@ msgstr "백분율 형식"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
 #: ui/CellToolBase.cpp:359 ui/dialogs/DataFormatWidget.ui:102
-#: ui/dialogs/LayoutDialog.cpp:864
+#: ui/dialogs/LayoutPage_Float.cpp:66
 #, kde-format
 msgid "Percent"
 msgstr "백분율"
@@ -17445,7 +17440,7 @@ msgstr "통화 형식"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
 #: ui/CellToolBase.cpp:365 ui/dialogs/DataFormatWidget.ui:95
-#: ui/dialogs/LayoutDialog.cpp:868
+#: ui/dialogs/LayoutPage_Float.cpp:70
 #, kde-format
 msgid "Money"
 msgstr "돈"
@@ -17490,7 +17485,7 @@ msgstr "배경색"
 msgid "Cells..."
 msgstr "셀..."
 
-#: ui/CellToolBase.cpp:392 ui/CellToolBase_p.cpp:1155
+#: ui/CellToolBase.cpp:392 ui/CellToolBase_p.cpp:1159
 #, kde-format
 msgid "Insert Cells..."
 msgstr "셀 삽입..."
@@ -17675,7 +17670,7 @@ msgstr "수식 선택"
 msgid "Insert a function"
 msgstr "함수 삽입"
 
-#: ui/CellToolBase.cpp:491 ui/CellToolBase.cpp:2026
+#: ui/CellToolBase.cpp:491 ui/CellToolBase.cpp:2097
 #, kde-format
 msgid "Others..."
 msgstr "기타..."
@@ -17831,64 +17826,64 @@ msgstr "텍스트 커서의 참조 형식(상대, 절대, 혼합) 전환"
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1464
+#: ui/CellToolBase.cpp:1481
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "셀에서 스타일 만들기"
 
-#: ui/CellToolBase.cpp:1473
+#: ui/CellToolBase.cpp:1490
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "스타일 이름을 비워 둘 수 없습니다."
 
-#: ui/CellToolBase.cpp:1478 ui/dialogs/LayoutDialog.cpp:199
+#: ui/CellToolBase.cpp:1495 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "같은 이름의 스타일이 이미 존재합니다."
 
-#: ui/CellToolBase.cpp:1499 ui/CellToolBase.cpp:1513 ui/CellToolBase.cpp:1527
-#: ui/CellToolBase.cpp:1542 ui/CellToolBase.cpp:1556 ui/CellToolBase.cpp:1574
-#: ui/CellToolBase.cpp:1595 ui/CellToolBase.cpp:1608
+#: ui/CellToolBase.cpp:1516 ui/CellToolBase.cpp:1532 ui/CellToolBase.cpp:1548
+#: ui/CellToolBase.cpp:1565 ui/CellToolBase.cpp:1581 ui/CellToolBase.cpp:1601
+#: ui/CellToolBase.cpp:1624 ui/CellToolBase.cpp:1639
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "글꼴 변경"
 
-#: ui/CellToolBase.cpp:1628 ui/CellToolBase.cpp:1638 ui/CellToolBase.cpp:1648
+#: ui/CellToolBase.cpp:1663 ui/CellToolBase.cpp:1675 ui/CellToolBase.cpp:1687
 msgctxt "(qtundo-format)"
 msgid "Change Horizontal Alignment"
 msgstr "가로 정렬 변경"
 
-#: ui/CellToolBase.cpp:1658 ui/CellToolBase.cpp:1668 ui/CellToolBase.cpp:1678
+#: ui/CellToolBase.cpp:1699 ui/CellToolBase.cpp:1711 ui/CellToolBase.cpp:1723
 msgctxt "(qtundo-format)"
 msgid "Change Vertical Alignment"
 msgstr "세로 정렬 변경"
 
-#: ui/CellToolBase.cpp:1792
+#: ui/CellToolBase.cpp:1853
 msgctxt "(qtundo-format)"
 msgid "Wrap Text"
 msgstr "텍스트 자동 줄 바꿈"
 
-#: ui/CellToolBase.cpp:1804
+#: ui/CellToolBase.cpp:1867
 msgctxt "(qtundo-format)"
 msgid "Vertical Text"
 msgstr "세로 텍스트"
 
-#: ui/CellToolBase.cpp:1823
+#: ui/CellToolBase.cpp:1888
 msgctxt "(qtundo-format)"
 msgid "Format Percent"
 msgstr "백분율 서식 지정"
 
-#: ui/CellToolBase.cpp:1833
+#: ui/CellToolBase.cpp:1900
 msgctxt "(qtundo-format)"
 msgid "Format Money"
 msgstr "통화 서식 지정"
 
-#: ui/CellToolBase.cpp:1899
+#: ui/CellToolBase.cpp:1970
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "텍스트 지우기"
 
-#: ui/CellToolBase.cpp:1953
+#: ui/CellToolBase.cpp:2024
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -17897,52 +17892,52 @@ msgstr ""
 "사용 가능한 데이터베이스 드라이버가 없습니다. 이 기능을 사용하려면 필요한 Qt "
 "데이터베이스 드라이버를 설치해야 합니다."
 
-#: ui/CellToolBase.cpp:1989 ui/CellToolBase.cpp:2001
+#: ui/CellToolBase.cpp:2060 ui/CellToolBase.cpp:2072
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "여러 셀을 선택해야 합니다."
 
-#: ui/CellToolBase.cpp:2490
+#: ui/CellToolBase.cpp:2561
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "바꾸기"
 
-#: ui/CellToolBase_p.cpp:703
+#: ui/CellToolBase_p.cpp:705
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "숫자 서식"
 
-#: ui/CellToolBase_p.cpp:709
+#: ui/CellToolBase_p.cpp:711
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "통화 서식"
 
-#: ui/CellToolBase_p.cpp:714
+#: ui/CellToolBase_p.cpp:716
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "백분율 서식"
 
-#: ui/CellToolBase_p.cpp:719
+#: ui/CellToolBase_p.cpp:721
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "시간 서식"
 
-#: ui/CellToolBase_p.cpp:724
+#: ui/CellToolBase_p.cpp:726
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "날짜 서식"
 
-#: ui/CellToolBase_p.cpp:729
+#: ui/CellToolBase_p.cpp:731
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "과학적 서식"
 
-#: ui/CellToolBase_p.cpp:1159
+#: ui/CellToolBase_p.cpp:1163
 #, kde-format
 msgid "Delete Cells..."
 msgstr "셀 삭제..."
 
-#: ui/CellToolBase_p.cpp:1163
+#: ui/CellToolBase_p.cpp:1167
 #, kde-format
 msgid "Selection List..."
 msgstr "선택 목록..."
@@ -18265,12 +18260,12 @@ msgctxt "(qtundo-format)"
 msgid "Remove Named Area"
 msgstr "이름이 있는 영역 삭제"
 
-#: ui/commands/PrecisionCommand.cpp:46
+#: ui/commands/PrecisionCommand.cpp:45
 msgctxt "(qtundo-format)"
 msgid "Increase Precision"
 msgstr "소수점 아래 자릿수 증가"
 
-#: ui/commands/PrecisionCommand.cpp:48
+#: ui/commands/PrecisionCommand.cpp:47
 msgctxt "(qtundo-format)"
 msgid "Decrease Precision"
 msgstr "소수점 아래 자릿수 감소"
@@ -18409,12 +18404,12 @@ msgctxt "(qtundo-format)"
 msgid "Correct Misspelled Words"
 msgstr "맞춤법이 잘못된 단어 수정"
 
-#: ui/commands/StyleCommand.cpp:38
+#: ui/commands/StyleCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Reset Style"
 msgstr "스타일 초기화"
 
-#: ui/commands/StyleCommand.cpp:40
+#: ui/commands/StyleCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "스타일 변경"
@@ -18999,51 +18994,51 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:183
-#: ui/dialogs/LayoutDialog.cpp:902 ui/dialogs/LayoutDialog.cpp:2422
-#: ui/dialogs/LayoutDialog.cpp:3195
+#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
+#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
+#: ui/dialogs/LayoutPage_Pattern.cpp:147
 #, kde-format
 msgid "Preview"
 msgstr "미리 보기"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutDialog.cpp:856
+#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
 #, kde-format
 msgid "Generic"
 msgstr "일반"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutDialog.cpp:888
+#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
 #, kde-format
 msgid "Date and Time"
 msgstr "날짜와 시간"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutDialog.cpp:975
+#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
 #, kde-format
 msgid "Currency:"
 msgstr "통화:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutDialog.cpp:971
+#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
 #, kde-format
 msgid "Format:"
 msgstr "서식:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutDialog.cpp:948
+#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
 #, kde-format
 msgid "Postfix:"
 msgstr "접미사:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutDialog.cpp:958
+#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
 #, kde-format
 msgid "Precision:"
 msgstr "소수점 아래 자릿수:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutDialog.cpp:954
+#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
 #, kde-format
 msgid "Prefix:"
 msgstr "접두사:"
@@ -19186,7 +19181,7 @@ msgid "Fewer Options"
 msgstr "더 적은 옵션"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
-#: ui/dialogs/FontWidget.ui:32
+#: ui/dialogs/FontWidget.ui:33
 #, kde-format
 msgid ""
 "You can select here the font style, size and color, including some "
@@ -19202,9 +19197,8 @@ msgstr ""
 "모든 셀에 사용하는 기본 글꼴과 현재 사용하는 스타일은 서식 -> 스타일 관리자 "
 "메뉴에서 선택할 수 있습니다."
 
-#. i18n: ectx: property (whatsThis), widget (KComboBox, style_combo)
-#. i18n: ectx: property (whatsThis), widget (KComboBox, size_combo)
-#: ui/dialogs/FontWidget.ui:40 ui/dialogs/FontWidget.ui:148
+#. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
+#: ui/dialogs/FontWidget.ui:41
 #, kde-format
 msgid ""
 "Choose the style for your font for the currently selected cells. When you "
@@ -19218,21 +19212,23 @@ msgstr ""
 "셀의 현재 스타일 설정을 모두 유지합니다. 이 상태에서 스타일을 로만으로 변경하"
 "면 선택한 모든 셀의 스타일을 로만체 글꼴로 변경합니다."
 
-#. i18n: ectx: property (text), item, widget (KComboBox, style_combo)
-#. i18n: ectx: property (text), item, widget (KComboBox, weight_combo)
-#: ui/dialogs/FontWidget.ui:47 ui/dialogs/FontWidget.ui:72
+#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
+#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
+#. i18n: ectx: property (specialValueText), widget (QSpinBox, size_spinner)
+#: ui/dialogs/FontWidget.ui:48 ui/dialogs/FontWidget.ui:73
+#: ui/dialogs/FontWidget.ui:152
 #, kde-format
 msgid "Varying (No Change)"
 msgstr "다양함(변경하지 않음)"
 
-#. i18n: ectx: property (text), item, widget (KComboBox, style_combo)
-#: ui/dialogs/FontWidget.ui:52 ui/dialogs/LayoutDialog.cpp:1747
+#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
+#: ui/dialogs/FontWidget.ui:53
 #, kde-format
 msgid "Roman"
 msgstr "로만"
 
-#. i18n: ectx: property (whatsThis), widget (KComboBox, weight_combo)
-#: ui/dialogs/FontWidget.ui:65
+#. i18n: ectx: property (whatsThis), widget (QComboBox, weight_combo)
+#: ui/dialogs/FontWidget.ui:66
 #, kde-format
 msgid ""
 "Choose the weight for your font for the currently selected cells. When you "
@@ -19246,47 +19242,46 @@ msgstr ""
 "재 글꼴 굵기 설정을 모두 유지합니다. 이 상태에서 글꼴 굵기를 굵게로 변경하면 "
 "선택한 모든 셀의 글꼴을 굵게 변경합니다."
 
-#. i18n: ectx: property (text), item, widget (KComboBox, weight_combo)
+#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
 #. i18n: ectx: property (text), item, widget (QComboBox, ValueType)
-#: ui/dialogs/FontWidget.ui:77 ui/dialogs/LayoutDialog.cpp:1736
-#: ui/dialogs/pivotoptions.ui:81
+#: ui/dialogs/FontWidget.ui:78 ui/dialogs/pivotoptions.ui:81
 #, kde-format
 msgid "Normal"
 msgstr "일반"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
-#: ui/dialogs/FontWidget.ui:90 ui/dialogs/LayoutDialog.cpp:2387
-#: ui/dialogs/LayoutDialog.cpp:3159
+#: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:324
+#: ui/dialogs/LayoutPage_Pattern.cpp:119
 #, kde-format
 msgid "Color:"
 msgstr "색:"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, underline)
-#: ui/dialogs/FontWidget.ui:97
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, underline)
+#: ui/dialogs/FontWidget.ui:98
 #, kde-format
 msgid "If this is checked, the current cell text will be underlined."
 msgstr "이 옵션을 선택하면 현재 셀 텍스트에 밑줄을 표시합니다."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
-#: ui/dialogs/FontWidget.ui:107
+#: ui/dialogs/FontWidget.ui:108
 #, kde-format
 msgid "Size:"
 msgstr "크기:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
-#: ui/dialogs/FontWidget.ui:114
+#: ui/dialogs/FontWidget.ui:115
 #, kde-format
 msgid "Weight:"
 msgstr "글꼴 굵기:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
-#: ui/dialogs/FontWidget.ui:121
+#: ui/dialogs/FontWidget.ui:122
 #, kde-format
 msgid "Style:"
 msgstr "스타일:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorButton, textColorButton)
-#: ui/dialogs/FontWidget.ui:128
+#: ui/dialogs/FontWidget.ui:129
 #, kde-format
 msgid ""
 "Choose the color for the current cell text. Clicking on the color bar will "
@@ -19296,20 +19291,26 @@ msgstr ""
 "현재 셀 글자색을 선택하십시오. 색상 표시줄을 클릭하면 새로운 색을 선택할 수 "
 "있는 표준 KDE 색 선택 대화 상자가 나타납니다."
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, strike)
-#: ui/dialogs/FontWidget.ui:138
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, strike)
+#: ui/dialogs/FontWidget.ui:139
 #, kde-format
 msgid "This will strike out the current cell text if this is checked."
 msgstr "이 옵션을 선택하면 현재 셀 텍스트에 취소선을 표시합니다."
 
-#. i18n: ectx: property (text), widget (QCheckBox, strike)
-#: ui/dialogs/FontWidget.ui:141
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, strike)
+#: ui/dialogs/FontWidget.ui:142
 #, kde-format
 msgid "Strike out"
 msgstr "취소선"
 
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, size_spinner)
+#: ui/dialogs/FontWidget.ui:149
+#, kde-format
+msgid "Choose the font size."
+msgstr ""
+
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
-#: ui/dialogs/FontWidget.ui:176
+#: ui/dialogs/FontWidget.ui:180
 #, kde-format
 msgid ""
 "This box lists all your available font families. Click on one family to set "
@@ -19319,7 +19320,7 @@ msgstr ""
 "류를 선택하십시오."
 
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
-#: ui/dialogs/FontWidget.ui:195
+#: ui/dialogs/FontWidget.ui:199
 #, kde-format
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
@@ -19492,78 +19493,50 @@ msgstr "열 삭제"
 msgid "Remove Cells"
 msgstr "셀 삭제"
 
-#: ui/dialogs/LayoutDialog.cpp:139
-#, kde-format
-msgctxt "Name of the style"
-msgid "Name:"
-msgstr "이름:"
-
-#: ui/dialogs/LayoutDialog.cpp:151
-#, kde-format
-msgid "Inherit style:"
-msgstr "상속 스타일:"
-
-#: ui/dialogs/LayoutDialog.cpp:203
-#, kde-format
-msgid "The style name can not be empty."
-msgstr "스타일 이름을 비워 둘 수 없습니다."
-
-#: ui/dialogs/LayoutDialog.cpp:215
-#, kde-format
-msgid "A style cannot inherit from itself."
-msgstr "스타일은 자기 자신으로부터 상속받을 수 없습니다."
-
-#: ui/dialogs/LayoutDialog.cpp:219
-#, kde-format
-msgid "The style cannot inherit from '%1' because of recursive references."
-msgstr "재귀 참조로 때문에 '%1'에서 스타일을 상속받을 수 없습니다."
-
-#: ui/dialogs/LayoutDialog.cpp:720
+#: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
 msgid "Cell Format"
 msgstr "셀 서식"
 
-#: ui/dialogs/LayoutDialog.cpp:728
-#, kde-format
-msgid "&General"
+#: ui/dialogs/LayoutDialog.cpp:122
+#, fuzzy, kde-format
+#| msgid "&General"
+msgid "General"
 msgstr "일반(&G)"
 
-#: ui/dialogs/LayoutDialog.cpp:734
+#: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
-msgid "&Data Format"
-msgstr "데이터 서식(&D)"
+msgid "Border"
+msgstr "테두리"
 
-#: ui/dialogs/LayoutDialog.cpp:737
-#, kde-format
-msgid "&Font"
-msgstr "글꼴(&F)"
-
-#: ui/dialogs/LayoutDialog.cpp:743
-#, kde-format
-msgid "&Position"
-msgstr "위치(&P)"
-
-#: ui/dialogs/LayoutDialog.cpp:746
-#, kde-format
-msgid "&Border"
-msgstr "테두리(&B)"
-
-#: ui/dialogs/LayoutDialog.cpp:749
-#, kde-format
-msgid "Back&ground"
+#: ui/dialogs/LayoutDialog.cpp:140
+#, fuzzy, kde-format
+#| msgid "Back&ground"
+msgid "Background"
 msgstr "배경(&G)"
 
-#: ui/dialogs/LayoutDialog.cpp:752
-#, kde-format
-msgid "&Cell Protection"
+#: ui/dialogs/LayoutDialog.cpp:143
+#, fuzzy, kde-format
+#| msgid "&Cell Protection"
+msgid "Cell Protection"
 msgstr "셀 보호(&C)"
 
-#: ui/dialogs/LayoutDialog.cpp:798
-msgctxt "(qtundo-format)"
-msgid "Change Format"
-msgstr "서식 변경"
+#: ui/dialogs/LayoutPage_Border.cpp:273
+#, kde-format
+msgid "Preselect"
+msgstr "미리 선택"
 
-#: ui/dialogs/LayoutDialog.cpp:857
+#: ui/dialogs/LayoutPage_Border.cpp:295 ui/dialogs/LayoutPage_Pattern.cpp:97
+#, kde-format
+msgid "Pattern"
+msgstr "패턴"
+
+#: ui/dialogs/LayoutPage_Border.cpp:328
+#, kde-format
+msgid "Customize"
+msgstr "사용자 정의"
+
+#: ui/dialogs/LayoutPage_Float.cpp:59
 #, kde-format
 msgid ""
 "This is the default format and Calligra Sheets autodetects the actual data "
@@ -19576,7 +19549,7 @@ msgstr ""
 "시간을 오른쪽 정렬하고 다른 것은 왼쪽 정렬합니다."
 
 # 실제 시스템 설정 프로그램의 메뉴 구조를 반영할 것
-#: ui/dialogs/LayoutDialog.cpp:861
+#: ui/dialogs/LayoutPage_Float.cpp:63
 #, kde-format
 msgid ""
 "The number notation uses the notation you globally choose in System Settings "
@@ -19586,7 +19559,7 @@ msgstr ""
 "시스템 설정 -> 지역 설정 -> 서식 -> 숫자 탭에서 전역 설정한 숫자 표기법을 사"
 "용합니다. 숫자는 기본적으로 오른쪽 정렬합니다."
 
-#: ui/dialogs/LayoutDialog.cpp:865
+#: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
 msgid ""
 "When you have a number in the current cell and you switch from the dcell "
@@ -19603,7 +19576,7 @@ msgstr ""
 "일반 셀 서식으로 다시 전환하면 12로 되돌아갑니다.\n"
 "서식 도구 모음에서 백분율 아이콘을 사용할 수도 있습니다."
 
-#: ui/dialogs/LayoutDialog.cpp:869
+#: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
 msgid ""
 "The Money format converts your number into money notation using the settings "
@@ -19619,12 +19592,12 @@ msgstr ""
 "서식 도구 모음의 통화 아이콘을 사용하여 셀 서식을 현재 통화처럼 보이도록 설정"
 "할 수도 있습니다."
 
-#: ui/dialogs/LayoutDialog.cpp:872
+#: ui/dialogs/LayoutPage_Float.cpp:74
 #, kde-format
 msgid "Scientific"
 msgstr "과학"
 
-#: ui/dialogs/LayoutDialog.cpp:873
+#: ui/dialogs/LayoutPage_Float.cpp:75
 #, kde-format
 msgid ""
 "The scientific format changes your number using the scientific notation. For "
@@ -19634,7 +19607,7 @@ msgstr ""
 "과학 서식은 과학적 표기법으로 숫자를 변경합니다. 예를 들어 0.0012는 1.2E-03으"
 "로 변경합니다. 일반 셀 서식으로 되돌아가면 0.0012가 다시 표시됩니다."
 
-#: ui/dialogs/LayoutDialog.cpp:877
+#: ui/dialogs/LayoutPage_Float.cpp:79
 #, kde-format
 msgid ""
 "The fraction format changes your number into a fraction. For example, 0.1 "
@@ -19655,7 +19628,7 @@ msgstr ""
 "8/16\"입니다. 숫자가 1.4이고 같은 분수 설정을 선택했다면 가장 가까운 1/16의 "
 "정수배인 \"1 6/16\"을 표시합니다."
 
-#: ui/dialogs/LayoutDialog.cpp:881
+#: ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
 msgid ""
 "To enter a date, you should enter it in one of the formats set in System "
@@ -19671,7 +19644,7 @@ msgstr ""
 "숫자를 아래로 드래그하는 것처럼 날짜를 아래로 드래그하면 다음 셀에도 날짜가 "
 "표시됩니다."
 
-#: ui/dialogs/LayoutDialog.cpp:885
+#: ui/dialogs/LayoutPage_Float.cpp:87
 #, kde-format
 msgid ""
 "This formats your cell content as a time. To enter a time, you should enter "
@@ -19690,7 +19663,7 @@ msgstr ""
 "셀의 숫자를 시간으로 처리할 수 없으면 Calligra Sheet에서는 시스템 설정에 지정"
 "한 전역 서식으로 00:00을 표시합니다."
 
-#: ui/dialogs/LayoutDialog.cpp:889
+#: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
 msgid ""
 "This formats your cell content as date and time. To enter a date and a time, "
@@ -19709,7 +19682,7 @@ msgstr ""
 "스템 서식입니다. 셀의 숫자를 날짜와 시간으로 처리할 수 없으면 Calligra Sheet"
 "에서는 시스템 설정에 지정한 전역 서식으로 00:00을 표시합니다."
 
-#: ui/dialogs/LayoutDialog.cpp:893
+#: ui/dialogs/LayoutPage_Float.cpp:95
 #, kde-format
 msgid ""
 "This formats your cell content as text. This can be useful if you want a "
@@ -19723,19 +19696,19 @@ msgstr ""
 "를 왼쪽으로 정렬하며, 계산이나 수식에 사용할 수 없습니다. 또한 셀 정렬 방식"
 "을 변경합니다."
 
-#: ui/dialogs/LayoutDialog.cpp:896
+#: ui/dialogs/LayoutPage_Float.cpp:98
 #, kde-format
 msgid "Custom"
 msgstr "사용자 정의"
 
-#: ui/dialogs/LayoutDialog.cpp:897
+#: ui/dialogs/LayoutPage_Float.cpp:99
 #, kde-format
 msgid "The custom format does not work yet. To be enabled in the next release."
 msgstr ""
 "사용자 정의 서식은 아직 작동하지 않습니다. 다음 릴리스에서 활성화될 예정입니"
 "다."
 
-#: ui/dialogs/LayoutDialog.cpp:906
+#: ui/dialogs/LayoutPage_Float.cpp:107
 #, kde-format
 msgid ""
 "This will display a preview of your choice so you can know what it does "
@@ -19744,12 +19717,12 @@ msgstr ""
 "선택을 미리 표시하여 확인 단추를 클릭하기 전에 서식을 어떻게 변경할지를 확인"
 "할 수 있습니다."
 
-#: ui/dialogs/LayoutDialog.cpp:917
+#: ui/dialogs/LayoutPage_Float.cpp:117
 #, kde-format
 msgid "Displays choices of format for the fraction, date or time formats."
 msgstr "분수, 날짜 또는 시간 서식의 세부 서식 선택을 표시합니다."
 
-#: ui/dialogs/LayoutDialog.cpp:927
+#: ui/dialogs/LayoutPage_Float.cpp:127
 #, kde-format
 msgid ""
 "You can add here a Postfix such as a $HK symbol to the end of each cell "
@@ -19758,12 +19731,12 @@ msgstr ""
 "$HK 기호처럼 셀 내용에 선택한 서식을 지정한 후 붙일 접미사를 추가할 수 있습니"
 "다."
 
-#: ui/dialogs/LayoutDialog.cpp:931
+#: ui/dialogs/LayoutPage_Float.cpp:130
 #, kde-format
 msgid "variable"
 msgstr "변수"
 
-#: ui/dialogs/LayoutDialog.cpp:934
+#: ui/dialogs/LayoutPage_Float.cpp:133
 #, kde-format
 msgid ""
 "You can control how many digits are displayed after the decimal point for "
@@ -19774,7 +19747,7 @@ msgstr ""
 "소수점 자릿수 증가 또는 소수점 자릿수 감소 단추를 사용하여 변경할 수도 있습니"
 "다."
 
-#: ui/dialogs/LayoutDialog.cpp:938
+#: ui/dialogs/LayoutPage_Float.cpp:137
 #, kde-format
 msgid ""
 "You can add here a Prefix such as a $ symbol at the start of each cell "
@@ -19783,7 +19756,7 @@ msgstr ""
 "$ 기호처럼 셀 내용에 선택한 서식을 지정하기 전에 붙일 접두사를 추가할 수 있습"
 "니다."
 
-#: ui/dialogs/LayoutDialog.cpp:942
+#: ui/dialogs/LayoutPage_Float.cpp:141
 #, kde-format
 msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
@@ -19792,115 +19765,111 @@ msgstr ""
 "양수 값 앞에 + 기호를 표시할지 여부와 음수 값을 빨간색으로 표시할지 여부를 선"
 "택할 수 있습니다."
 
-#: ui/dialogs/LayoutDialog.cpp:1122
+#: ui/dialogs/LayoutPage_Float.cpp:284
 #, kde-format
 msgid "Halves 1/2"
 msgstr "이등분 1/2"
 
-#: ui/dialogs/LayoutDialog.cpp:1123
+#: ui/dialogs/LayoutPage_Float.cpp:285
 #, kde-format
 msgid "Quarters 1/4"
 msgstr "사등분 1/4"
 
-#: ui/dialogs/LayoutDialog.cpp:1124
+#: ui/dialogs/LayoutPage_Float.cpp:286
 #, kde-format
 msgid "Eighths 1/8"
 msgstr "팔등분 1/8"
 
-#: ui/dialogs/LayoutDialog.cpp:1125
+#: ui/dialogs/LayoutPage_Float.cpp:287
 #, kde-format
 msgid "Sixteenths 1/16"
 msgstr "16등분 1/16"
 
-#: ui/dialogs/LayoutDialog.cpp:1126
+#: ui/dialogs/LayoutPage_Float.cpp:288
 #, kde-format
 msgid "Tenths 1/10"
 msgstr "10등분 1/10"
 
-#: ui/dialogs/LayoutDialog.cpp:1127
+#: ui/dialogs/LayoutPage_Float.cpp:289
 #, kde-format
 msgid "Hundredths 1/100"
 msgstr "100등분 1/100"
 
-#: ui/dialogs/LayoutDialog.cpp:1128
+#: ui/dialogs/LayoutPage_Float.cpp:290
 #, kde-format
 msgid "One digit 5/9"
 msgstr "한 자리 5/9"
 
-#: ui/dialogs/LayoutDialog.cpp:1129
+#: ui/dialogs/LayoutPage_Float.cpp:291
 #, kde-format
 msgid "Two digits 15/22"
 msgstr "두 자리 15/22"
 
-#: ui/dialogs/LayoutDialog.cpp:1130
+#: ui/dialogs/LayoutPage_Float.cpp:292
 #, kde-format
 msgid "Three digits 153/652"
 msgstr "세 자리 153/652"
 
-#: ui/dialogs/LayoutDialog.cpp:1160 ui/dialogs/LayoutDialog.cpp:1161
-#: ui/dialogs/LayoutDialog.cpp:1219 ui/dialogs/LayoutDialog.cpp:1220
-#: ui/dialogs/LayoutDialog.cpp:1261 ui/dialogs/LayoutDialog.cpp:1262
+#: ui/dialogs/LayoutPage_Float.cpp:322 ui/dialogs/LayoutPage_Float.cpp:323
+#: ui/dialogs/LayoutPage_Float.cpp:378 ui/dialogs/LayoutPage_Float.cpp:379
+#: ui/dialogs/LayoutPage_Float.cpp:418 ui/dialogs/LayoutPage_Float.cpp:419
 #, kde-format
 msgid "System: "
 msgstr "시스템:"
 
-#: ui/dialogs/LayoutDialog.cpp:1171
+#: ui/dialogs/LayoutPage_Float.cpp:332
 #, kde-format
 msgid " (=[mm]:ss)"
 msgstr "(=[mm]:ss)"
 
-#: ui/dialogs/LayoutDialog.cpp:1172
+#: ui/dialogs/LayoutPage_Float.cpp:333
 #, kde-format
 msgid " (=[hh]:mm:ss)"
 msgstr "(=[hh]:mm:ss)"
 
-#: ui/dialogs/LayoutDialog.cpp:1173
+#: ui/dialogs/LayoutPage_Float.cpp:334
 #, kde-format
 msgid " (=[hh]:mm)"
 msgstr "(=[hh]:mm)"
 
 # 테스트 문자열
-#: ui/dialogs/LayoutDialog.cpp:1651
+#: ui/dialogs/LayoutPage_Font.cpp:53
 #, kde-format
 msgid "Dolor Ipse"
 msgstr "다람쥐 헌 쳇바퀴에 타고파"
 
-#: ui/dialogs/LayoutDialog.cpp:1897
+#: ui/dialogs/LayoutPage_General.cpp:48
 #, kde-format
-msgid "Default width (%1 %2)"
-msgstr "기본 너비(%1 %2)"
+msgctxt "Name of the style"
+msgid "Name:"
+msgstr "이름:"
 
-#: ui/dialogs/LayoutDialog.cpp:1915
+#: ui/dialogs/LayoutPage_General.cpp:59
 #, kde-format
-msgid "Default height (%1 %2)"
-msgstr "기본 높이(%1 %2)"
+msgid "Inherit style:"
+msgstr "상속 스타일:"
 
-#: ui/dialogs/LayoutDialog.cpp:2300
+#: ui/dialogs/LayoutPage_General.cpp:94
 #, kde-format
-msgid "Border"
-msgstr "테두리"
+msgid "The style name can not be empty."
+msgstr "스타일 이름을 비워 둘 수 없습니다."
 
-#: ui/dialogs/LayoutDialog.cpp:2327
+#: ui/dialogs/LayoutPage_General.cpp:106
 #, kde-format
-msgid "Preselect"
-msgstr "미리 선택"
+msgid "A style cannot inherit from itself."
+msgstr "스타일은 자기 자신으로부터 상속받을 수 없습니다."
 
-#: ui/dialogs/LayoutDialog.cpp:2358 ui/dialogs/LayoutDialog.cpp:3086
+#: ui/dialogs/LayoutPage_General.cpp:110
 #, kde-format
-msgid "Pattern"
-msgstr "패턴"
+msgid "The style cannot inherit from '%1' because of recursive references."
+msgstr "재귀 참조로 때문에 '%1'에서 스타일을 상속받을 수 없습니다."
 
-#: ui/dialogs/LayoutDialog.cpp:2391
-#, kde-format
-msgid "Customize"
-msgstr "사용자 정의"
-
-#: ui/dialogs/LayoutDialog.cpp:3168
+#: ui/dialogs/LayoutPage_Pattern.cpp:128
 #, kde-format
 msgid "Background color:"
 msgstr "배경색:"
 
-#: ui/dialogs/LayoutDialog.cpp:3184
+#: ui/dialogs/LayoutPage_Pattern.cpp:136
 #, kde-format
 msgid "No Color"
 msgstr "색 없음"
@@ -20230,8 +20199,30 @@ msgstr ""
 msgid "Standard"
 msgstr "표준"
 
-#. i18n: ectx: property (whatsThis), widget (QGroupBox, buttonGroup2)
+#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox4)
+#: ui/dialogs/PositionWidget.ui:85
+#, kde-format
+msgid ""
+"Your text will appear oriented in the angle you set here. Positive values "
+"will move it counter-clockwise and negative values will move it clockwise."
+msgstr ""
+"여기에서 설정한 각도로 텍스트를 기울입니다. 양수 값은 반시계 방향으로 기울이"
+"고 음수 값은 시계 방향으로 기울입니다."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox4)
 #: ui/dialogs/PositionWidget.ui:88
+#, kde-format
+msgid "Rotation"
+msgstr "회전"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, spinBox3)
+#: ui/dialogs/PositionWidget.ui:110
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (whatsThis), widget (QGroupBox, buttonGroup2)
+#: ui/dialogs/PositionWidget.ui:132
 #, kde-format
 msgid ""
 "<qt>Set the content position vertically in the cell.\n"
@@ -20245,28 +20236,6 @@ msgstr ""
 "<b>위쪽</b>: 내용을 셀 위쪽에 표시합니다.\n"
 "<b>가운데</b>: 내용을 셀 세로 가운데에 표시합니다.\n"
 "<b>아래쪽</b>: 내용을 셀 아래쪽에 표시합니다.</qt>"
-
-#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox4)
-#: ui/dialogs/PositionWidget.ui:121
-#, kde-format
-msgid ""
-"Your text will appear oriented in the angle you set here. Positive values "
-"will move it counter-clockwise and negative values will move it clockwise."
-msgstr ""
-"여기에서 설정한 각도로 텍스트를 기울입니다. 양수 값은 반시계 방향으로 기울이"
-"고 음수 값은 시계 방향으로 기울입니다."
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox4)
-#: ui/dialogs/PositionWidget.ui:124
-#, kde-format
-msgid "Rotation"
-msgstr "회전"
-
-#. i18n: ectx: property (suffix), widget (QSpinBox, spinBox3)
-#: ui/dialogs/PositionWidget.ui:146
-#, kde-format
-msgid "°"
-msgstr "°"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:165
@@ -20284,89 +20253,8 @@ msgstr ""
 msgid "Indent"
 msgstr "들여쓰기"
 
-#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox5)
-#: ui/dialogs/PositionWidget.ui:176
-#, kde-format
-msgid ""
-"When checked, this has the same effect as Format ->Merge Cells. You need to "
-"have at least two consecutive cells selected. Those consecutive cells are "
-"then merged into a bigger one.\n"
-"When a merged cell is selected and when you uncheck this, then all cells "
-"come back to their original size as before the merging. It has the same "
-"effect as Format -> Dissociate Cells."
-msgstr ""
-"이 옵션을 선택하면 서식->셀 병합과 같은 효과가 있습니다. 최소 두 개의 인접한 "
-"셀을 선택해야 합니다. 이 때 이 연속한 셀은 하나의 큰 셀로 병합됩니다.\n"
-"병합된 셀을 선택하고 이 옵션의 선택을 취소하면 모든 셀이 병합 전 원래 크기로 "
-"돌아옵니다. 서식 -> 셀 분리와 같은 효과가 있습니다."
-
-#. i18n: ectx: property (text), widget (QCheckBox, mergeCell)
-#: ui/dialogs/PositionWidget.ui:185
-#, kde-format
-msgid "Merge cells"
-msgstr "셀 병합"
-
-#. i18n: ectx: property (whatsThis), widget (QGroupBox, sizeCellGroup)
-#: ui/dialogs/PositionWidget.ui:195
-#, kde-format
-msgid "The unit used here is the one set in Format -> Page Layout.. dialog."
-msgstr ""
-"여기에 사용한 단위는 서식 -> 쪽 레이아웃... 대화 상자에서 설정한 단위입니다."
-
-#. i18n: ectx: property (title), widget (QGroupBox, sizeCellGroup)
-#: ui/dialogs/PositionWidget.ui:198
-#, kde-format
-msgid "Size of Cell"
-msgstr "셀 크기"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, defaultHeight)
-#: ui/dialogs/PositionWidget.ui:206
-#, kde-format
-msgid ""
-"If checked, the default height will be used for the cell instead of the "
-"value above."
-msgstr "이 옵션을 선택하면 위에 지정한 값 대신 셀에 기본 높이를 사용합니다."
-
-#. i18n: ectx: property (text), widget (QCheckBox, defaultHeight)
-#: ui/dialogs/PositionWidget.ui:209
-#, no-c-format, kde-format
-msgid "Default height (%1)"
-msgstr "기본 높이(%1)"
-
-#. i18n: ectx: property (text), widget (QLabel, textLabel3)
-#: ui/dialogs/PositionWidget.ui:232
-#, kde-format
-msgid "Height:"
-msgstr "높이:"
-
-#. i18n: ectx: property (whatsThis), widget (QFrame, m_heightPanel)
-#: ui/dialogs/PositionWidget.ui:239
-#, kde-format
-msgid "Set the height of the cell."
-msgstr "셀의 높이를 설정하십시오."
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, defaultWidth)
-#: ui/dialogs/PositionWidget.ui:256
-#, kde-format
-msgid ""
-"If checked, the default width will be used for the cell instead of the value "
-"above."
-msgstr "이 옵션을 선택하면 위에 지정한 값 대신 셀에 기본 너비를 사용합니다."
-
-#. i18n: ectx: property (text), widget (QCheckBox, defaultWidth)
-#: ui/dialogs/PositionWidget.ui:259
-#, no-c-format, kde-format
-msgid "Default width (%1)"
-msgstr "기본 너비(%1)"
-
-#. i18n: ectx: property (text), widget (QLabel, textLabel2)
-#: ui/dialogs/PositionWidget.ui:295
-#, kde-format
-msgid "Width:"
-msgstr "너비:"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox3)
-#: ui/dialogs/PositionWidget.ui:309
+#: ui/dialogs/PositionWidget.ui:177
 #, kde-format
 msgid ""
 "This is only available when the rotation is 0°.\n"
@@ -20382,31 +20270,31 @@ msgstr ""
 "세로 텍스트 옵션은 텍스트를 세로로 배치합니다."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
-#: ui/dialogs/PositionWidget.ui:312
+#: ui/dialogs/PositionWidget.ui:180
 #, kde-format
 msgid "Text Option"
 msgstr "텍스트 옵션"
 
-#. i18n: ectx: property (text), widget (QCheckBox, multi)
-#: ui/dialogs/PositionWidget.ui:318
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, multi)
+#: ui/dialogs/PositionWidget.ui:186
 #, kde-format
 msgid "Wrap text"
 msgstr "텍스트 자동 줄 바꿈"
 
-#. i18n: ectx: property (text), widget (QCheckBox, vertical)
-#: ui/dialogs/PositionWidget.ui:325
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, vertical)
+#: ui/dialogs/PositionWidget.ui:193
 #, kde-format
 msgid "Vertical text"
 msgstr "세로 텍스트"
 
-#. i18n: ectx: property (text), widget (QCheckBox, shrinkToFit)
-#: ui/dialogs/PositionWidget.ui:332
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, shrinkToFit)
+#: ui/dialogs/PositionWidget.ui:200
 #, kde-format
 msgid "Shrink to fit"
 msgstr "축소해서 맞춤"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, ProtectionWidget)
-#: ui/dialogs/ProtectionWidget.ui:34
+#: ui/dialogs/ProtectionWidget.ui:35
 #, kde-format
 msgid ""
 "This tab enables you to set Cell Protection. All cells are protected by "
@@ -20431,13 +20319,13 @@ msgstr ""
 "오."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
-#: ui/dialogs/ProtectionWidget.ui:40
+#: ui/dialogs/ProtectionWidget.ui:41
 #, kde-format
 msgid "Printing"
 msgstr "인쇄"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_bDontPrint)
-#: ui/dialogs/ProtectionWidget.ui:47
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bDontPrint)
+#: ui/dialogs/ProtectionWidget.ui:48
 #, kde-format
 msgid ""
 "If checked, the content of the cell will not be printed. If this is not "
@@ -20448,20 +20336,20 @@ msgstr ""
 "본값) 셀 내용을 인쇄합니다.\n"
 "셀이 보호되어 있어도 인쇄할 수 있습니다"
 
-#. i18n: ectx: property (text), widget (QCheckBox, m_bDontPrint)
-#: ui/dialogs/ProtectionWidget.ui:50
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bDontPrint)
+#: ui/dialogs/ProtectionWidget.ui:51
 #, kde-format
 msgid "&Do not print text"
 msgstr "텍스트를 인쇄하지 않음(&D)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/ProtectionWidget.ui:60
+#: ui/dialogs/ProtectionWidget.ui:61
 #, kde-format
 msgid "Protection"
 msgstr "보호"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_bHideAll)
-#: ui/dialogs/ProtectionWidget.ui:68
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bHideAll)
+#: ui/dialogs/ProtectionWidget.ui:69
 #, kde-format
 msgid ""
 "This hides the cell content and works only when the sheet is protected. "
@@ -20470,14 +20358,14 @@ msgstr ""
 "이 옵션은 셀 내용을 숨기며, 시트가 보호된 경우에만 작동합니다. 셀 자체의 보"
 "호 여부는 중요하지 않습니다."
 
-#. i18n: ectx: property (text), widget (QCheckBox, m_bHideAll)
-#: ui/dialogs/ProtectionWidget.ui:71
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideAll)
+#: ui/dialogs/ProtectionWidget.ui:72
 #, kde-format
 msgid "Hide &all"
 msgstr "모두 숨기기(&A)"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_bIsProtected)
-#: ui/dialogs/ProtectionWidget.ui:96
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
+#: ui/dialogs/ProtectionWidget.ui:97
 #, kde-format
 msgid ""
 "If checked, the cell content will be protected. This is the default "
@@ -20491,14 +20379,14 @@ msgstr ""
 "이 설정의 자세한 정보는 사용자 설명서의 고급 Calligra Sheet 장을 참조하십시"
 "오. 셀이 보호되면 내용을 변경할 수 없습니다."
 
-#. i18n: ectx: property (text), widget (QCheckBox, m_bIsProtected)
-#: ui/dialogs/ProtectionWidget.ui:99
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
+#: ui/dialogs/ProtectionWidget.ui:100
 #, kde-format
 msgid "&Protected"
 msgstr "보호됨(&P)"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_bHideFormula)
-#: ui/dialogs/ProtectionWidget.ui:129
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bHideFormula)
+#: ui/dialogs/ProtectionWidget.ui:130
 #, kde-format
 msgid ""
 "When this is checked, the cell is still visible. However, its contents do "
@@ -20510,8 +20398,8 @@ msgstr ""
 "니다. 수식 숨기기 옵션은 사용자가 수식이 포함된 셀의 수식을 보지 못하도록 합"
 "니다. 이 옵션을 사용하려면 시트를 보호해야 합니다."
 
-#. i18n: ectx: property (text), widget (QCheckBox, m_bHideFormula)
-#: ui/dialogs/ProtectionWidget.ui:132
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideFormula)
+#: ui/dialogs/ProtectionWidget.ui:133
 #, kde-format
 msgid "&Hide formula"
 msgstr "수식 숨기기(&H)"
@@ -20621,7 +20509,7 @@ msgstr "수정(&M)..."
 msgid "&Delete..."
 msgstr "삭제(&D)..."
 
-#: ui/dialogs/StyleManagerDialog.cpp:202 ui/dialogs/StyleManagerDialog.cpp:205
+#: ui/dialogs/StyleManagerDialog.cpp:206 ui/dialogs/StyleManagerDialog.cpp:209
 #, kde-format
 msgid "style%1"
 msgstr "스타일%1"
@@ -20780,6 +20668,77 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "링크를 여시겠습니까?"
+
+#~ msgid "&Data Format"
+#~ msgstr "데이터 서식(&D)"
+
+#~ msgid "&Font"
+#~ msgstr "글꼴(&F)"
+
+#~ msgid "&Position"
+#~ msgstr "위치(&P)"
+
+#~ msgid "&Border"
+#~ msgstr "테두리(&B)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Format"
+#~ msgstr "서식 변경"
+
+#~ msgid "Default width (%1 %2)"
+#~ msgstr "기본 너비(%1 %2)"
+
+#~ msgid "Default height (%1 %2)"
+#~ msgstr "기본 높이(%1 %2)"
+
+#~ msgid ""
+#~ "When checked, this has the same effect as Format ->Merge Cells. You need "
+#~ "to have at least two consecutive cells selected. Those consecutive cells "
+#~ "are then merged into a bigger one.\n"
+#~ "When a merged cell is selected and when you uncheck this, then all cells "
+#~ "come back to their original size as before the merging. It has the same "
+#~ "effect as Format -> Dissociate Cells."
+#~ msgstr ""
+#~ "이 옵션을 선택하면 서식->셀 병합과 같은 효과가 있습니다. 최소 두 개의 인접"
+#~ "한 셀을 선택해야 합니다. 이 때 이 연속한 셀은 하나의 큰 셀로 병합됩니다.\n"
+#~ "병합된 셀을 선택하고 이 옵션의 선택을 취소하면 모든 셀이 병합 전 원래 크기"
+#~ "로 돌아옵니다. 서식 -> 셀 분리와 같은 효과가 있습니다."
+
+#~ msgid "Merge cells"
+#~ msgstr "셀 병합"
+
+#~ msgid "The unit used here is the one set in Format -> Page Layout.. dialog."
+#~ msgstr ""
+#~ "여기에 사용한 단위는 서식 -> 쪽 레이아웃... 대화 상자에서 설정한 단위입니"
+#~ "다."
+
+#~ msgid "Size of Cell"
+#~ msgstr "셀 크기"
+
+#~ msgid ""
+#~ "If checked, the default height will be used for the cell instead of the "
+#~ "value above."
+#~ msgstr "이 옵션을 선택하면 위에 지정한 값 대신 셀에 기본 높이를 사용합니다."
+
+#~ msgid "Default height (%1)"
+#~ msgstr "기본 높이(%1)"
+
+#~ msgid "Height:"
+#~ msgstr "높이:"
+
+#~ msgid "Set the height of the cell."
+#~ msgstr "셀의 높이를 설정하십시오."
+
+#~ msgid ""
+#~ "If checked, the default width will be used for the cell instead of the "
+#~ "value above."
+#~ msgstr "이 옵션을 선택하면 위에 지정한 값 대신 셀에 기본 너비를 사용합니다."
+
+#~ msgid "Default width (%1)"
+#~ msgstr "기본 너비(%1)"
+
+#~ msgid "Width:"
+#~ msgstr "너비:"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Add Comment"

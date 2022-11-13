@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-23 00:46+0000\n"
+"POT-Creation-Date: 2022-11-13 00:46+0000\n"
 "PO-Revision-Date: 2021-04-18 12:06+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -884,68 +884,68 @@ msgstr "Versatz beim Einfügen:"
 msgid "Paste at Cursor:"
 msgstr "Am Cursor einfügen:"
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:199
 #, kde-format
 msgid "Only print and exit"
 msgstr "Nur drucken und beenden"
 
-#: main/KoApplication.cpp:199
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr ""
 "Neues Dokument auf der Basis der angegebenen Vorlage (Name der Desktop-"
 "Datei) erstellen"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:201
 #, kde-format
 msgid "Open a new document based on the given template file"
 msgstr "Neues Dokument auf der Basis der angegebenen Vorlage erstellen"
 
-#: main/KoApplication.cpp:201
+#: main/KoApplication.cpp:202
 #, kde-format
 msgid "Override display DPI"
 msgstr "Bildschirm-DPI überschreiben"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:203
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "Nur als PDF exportieren und beenden"
 
-#: main/KoApplication.cpp:203
+#: main/KoApplication.cpp:204
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "Dateiname für PDF-Export"
 
-#: main/KoApplication.cpp:204
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "nur die Datei laden und dann beenden"
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:206
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr ""
 "die Datei laden, das Fenster und die Prozessleiste anzeigen und dann das "
 "Programm beenden"
 
-#: main/KoApplication.cpp:206
+#: main/KoApplication.cpp:207
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr "Dateiname um die Autoreninformationen hinein zu schreiben"
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:208
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr ""
 "Eine Datei laden und sie als ODF-Datei speichern. Zum Beheben von Fehlern "
 "gedacht."
 
-#: main/KoApplication.cpp:208
+#: main/KoApplication.cpp:209
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr "Zu öffnende Datei(en) oder URLs (Adressen)"
 
-#: main/KoApplication.cpp:218
+#: main/KoApplication.cpp:219
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -957,12 +957,12 @@ msgstr ""
 "Dies wird nicht empfohlen.\n"
 "Bitte laden Sie eine X64-Version von Krita herunter und installieren Sie sie."
 
-#: main/KoApplication.cpp:262
+#: main/KoApplication.cpp:263
 #, kde-format
 msgid "%1: Critical Error"
 msgstr "%1: Kritischer Fehler"
 
-#: main/KoApplication.cpp:262
+#: main/KoApplication.cpp:263
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -973,22 +973,22 @@ msgstr ""
 "Die kann ein Installationsproblem sein.\n"
 "Versuchen Sie, neu zu starten oder installieren Sie neu."
 
-#: main/KoApplication.cpp:511
+#: main/KoApplication.cpp:512
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Keine Vorlage gefunden für: %1"
 
-#: main/KoApplication.cpp:514
+#: main/KoApplication.cpp:515
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Zu viele Vorlagen gefunden für: %1"
 
-#: main/KoApplication.cpp:536 main/KoApplication.cpp:554
+#: main/KoApplication.cpp:537 main/KoApplication.cpp:555
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Vorlage %1 lässt sich nicht laden."
 
-#: main/KoApplication.cpp:544
+#: main/KoApplication.cpp:545
 #, kde-format
 msgid "No template found at: %1"
 msgstr "Keine Vorlage gefunden unter %1"

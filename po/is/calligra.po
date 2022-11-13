@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-23 00:46+0000\n"
+"POT-Creation-Date: 2022-11-13 00:46+0000\n"
 "PO-Revision-Date: 2015-01-29 09:07+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -934,62 +934,62 @@ msgstr "Líma skyggnu"
 msgid "Paste at Cursor:"
 msgstr ""
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:199
 #, fuzzy, kde-format
 msgid "Only print and exit"
 msgstr "Bara prenta og hætta"
 
-#: main/KoApplication.cpp:199
+#: main/KoApplication.cpp:200
 #, fuzzy, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr "Búa til nýtt skjal út frá sniðskrá"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:201
 #, fuzzy, kde-format
 msgid "Open a new document based on the given template file"
 msgstr "Búa til nýtt skjal út frá sniðskrá"
 
-#: main/KoApplication.cpp:201
+#: main/KoApplication.cpp:202
 #, fuzzy, kde-format
 msgid "Override display DPI"
 msgstr "Hunsa upplausn skjás"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:203
 #, fuzzy, kde-format
 msgid "Only export to PDF and exit"
 msgstr "Bara prenta og hætta"
 
-#: main/KoApplication.cpp:203
+#: main/KoApplication.cpp:204
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr ""
 
-#: main/KoApplication.cpp:204
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "just load the file and then exit"
 msgstr ""
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:206
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr ""
 
-#: main/KoApplication.cpp:206
+#: main/KoApplication.cpp:207
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr ""
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:208
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr ""
 
-#: main/KoApplication.cpp:208
+#: main/KoApplication.cpp:209
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr ""
 
-#: main/KoApplication.cpp:218
+#: main/KoApplication.cpp:219
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -997,12 +997,12 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: main/KoApplication.cpp:262
+#: main/KoApplication.cpp:263
 #, fuzzy, kde-format
 msgid "%1: Critical Error"
 msgstr "Undirbúningsvilla"
 
-#: main/KoApplication.cpp:262
+#: main/KoApplication.cpp:263
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -1010,22 +1010,22 @@ msgid ""
 "Try restarting or reinstalling."
 msgstr ""
 
-#: main/KoApplication.cpp:511
+#: main/KoApplication.cpp:512
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "Of mörg snið fundust fyrir: %1"
 
-#: main/KoApplication.cpp:514
+#: main/KoApplication.cpp:515
 #, fuzzy, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Of mörg snið fundust fyrir: %1"
 
-#: main/KoApplication.cpp:536 main/KoApplication.cpp:554
+#: main/KoApplication.cpp:537 main/KoApplication.cpp:555
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "Mistókst að hlaða inn sniðinu %1."
 
-#: main/KoApplication.cpp:544
+#: main/KoApplication.cpp:545
 #, fuzzy, kde-format
 msgid "No template found at: %1"
 msgstr "Of mörg snið fundust fyrir: %1"

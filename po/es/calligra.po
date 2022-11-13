@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-23 00:46+0000\n"
+"POT-Creation-Date: 2022-11-13 00:46+0000\n"
 "PO-Revision-Date: 2021-10-07 16:17+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -886,66 +886,66 @@ msgstr "Desplazamiento al pegar:"
 msgid "Paste at Cursor:"
 msgstr "Pegar en el cursor:"
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:199
 #, kde-format
 msgid "Only print and exit"
 msgstr "Solo imprimir y salir"
 
-#: main/KoApplication.cpp:199
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr ""
 "Abrir un documento nuevo según la plantilla indicada (nombre de archivo de "
 "escritorio)"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:201
 #, kde-format
 msgid "Open a new document based on the given template file"
 msgstr "Abrir un documento nuevo según el archivo de plantilla indicado"
 
-#: main/KoApplication.cpp:201
+#: main/KoApplication.cpp:202
 #, kde-format
 msgid "Override display DPI"
 msgstr "Sustituir DPI de la pantalla"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:203
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "Solo exportar a PDF y salir"
 
-#: main/KoApplication.cpp:203
+#: main/KoApplication.cpp:204
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "Nombre del archivo de exportación a PDF"
 
-#: main/KoApplication.cpp:204
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "solo cargar el archivo y salir"
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:206
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr "cargar el archivo, mostrar la ventana y la barra de progreso y salir"
 
-#: main/KoApplication.cpp:206
+#: main/KoApplication.cpp:207
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr ""
 "Nombre del archivo en el que escribir la información de análisis de "
 "rendimiento."
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:208
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr "Cargar un archivo y guardarlo como ODF. Orientado a la depuración."
 
-#: main/KoApplication.cpp:208
+#: main/KoApplication.cpp:209
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr "Archivo(s) o URL(s) para abrir"
 
-#: main/KoApplication.cpp:218
+#: main/KoApplication.cpp:219
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -956,12 +956,12 @@ msgstr ""
 "Esto es algo no recomendable.\n"
 "Por favor, descargue e instale la compilación x86 en su lugar."
 
-#: main/KoApplication.cpp:262
+#: main/KoApplication.cpp:263
 #, kde-format
 msgid "%1: Critical Error"
 msgstr "%1: Error crítico"
 
-#: main/KoApplication.cpp:262
+#: main/KoApplication.cpp:263
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -972,22 +972,22 @@ msgstr ""
 "Puede ser debido a un fallo en la instalación.\n"
 "Intente reiniciar la aplicación o reinstalarla."
 
-#: main/KoApplication.cpp:511
+#: main/KoApplication.cpp:512
 #, kde-format
 msgid "No template found for: %1"
 msgstr "No se ha encontrado ninguna plantilla para: %1"
 
-#: main/KoApplication.cpp:514
+#: main/KoApplication.cpp:515
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Encontradas demasiadas plantillas para: %1"
 
-#: main/KoApplication.cpp:536 main/KoApplication.cpp:554
+#: main/KoApplication.cpp:537 main/KoApplication.cpp:555
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Fallo al cargar la plantilla %1."
 
-#: main/KoApplication.cpp:544
+#: main/KoApplication.cpp:545
 #, kde-format
 msgid "No template found at: %1"
 msgstr "No se ha encontrado ninguna plantilla en: %1"

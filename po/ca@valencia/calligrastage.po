@@ -1860,22 +1860,22 @@ msgstr "Quatre quadros"
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
 #, kde-format
 msgid "Corners In"
-msgstr "Entrada de cantonades"
+msgstr "Entrada de cantons"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
 #, kde-format
 msgid "Corners In Reverse"
-msgstr "Entrada de cantonades inverses"
+msgstr "Entrada de cantons inversos"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
 #, kde-format
 msgid "Corners Out"
-msgstr "Eixida de cantonades"
+msgstr "Eixida de cantons"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
 #, kde-format
 msgid "Corners Out Reverse"
-msgstr "Eixida de cantonades inverses"
+msgstr "Eixida de cantons inversos"
 
 # msgid "Delete page effect"
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17

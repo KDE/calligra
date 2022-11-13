@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-23 00:46+0000\n"
+"POT-Creation-Date: 2022-11-13 00:46+0000\n"
 "PO-Revision-Date: 2022-11-02 11:16+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -886,64 +886,64 @@ msgstr "Yapıştırma ofseti:"
 msgid "Paste at Cursor:"
 msgstr "İmleç konumuna yapıştır:"
 
-#: main/KoApplication.cpp:198
+#: main/KoApplication.cpp:199
 #, kde-format
 msgid "Only print and exit"
 msgstr "Yalnızca yazdır ve çık"
 
-#: main/KoApplication.cpp:199
+#: main/KoApplication.cpp:200
 #, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr "Verilen şablona göre (masaüstü dosyası adı) yeni bir belge aç"
 
-#: main/KoApplication.cpp:200
+#: main/KoApplication.cpp:201
 #, kde-format
 msgid "Open a new document based on the given template file"
 msgstr "Verilen şablon tabanlı yeni bir belge aç"
 
-#: main/KoApplication.cpp:201
+#: main/KoApplication.cpp:202
 #, kde-format
 msgid "Override display DPI"
 msgstr "Ekran DPI değerinin üzerine yaz"
 
-#: main/KoApplication.cpp:202
+#: main/KoApplication.cpp:203
 #, kde-format
 msgid "Only export to PDF and exit"
 msgstr "Sadece PDF olarak dışa aktar ve çık"
 
-#: main/KoApplication.cpp:203
+#: main/KoApplication.cpp:204
 #, kde-format
 msgid "Filename for export-pdf"
 msgstr "Dışa aktarılacak PDF adı"
 
-#: main/KoApplication.cpp:204
+#: main/KoApplication.cpp:205
 #, kde-format
 msgid "just load the file and then exit"
 msgstr "yalnızca dosyayı yükle ve çık"
 
-#: main/KoApplication.cpp:205
+#: main/KoApplication.cpp:206
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
 msgstr "dosyayı yükle, pencereyi ve ilerleme çubuğunu göster ve çık"
 
-#: main/KoApplication.cpp:206
+#: main/KoApplication.cpp:207
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr "Profil bilgisinin yazılacağı dosya adı."
 
-#: main/KoApplication.cpp:207
+#: main/KoApplication.cpp:208
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
 msgstr ""
 "Bir dosya yükle ve onu ODF dosyası olarak kaydet. Hata ayıklama için "
 "tasarlanmıştır."
 
-#: main/KoApplication.cpp:208
+#: main/KoApplication.cpp:209
 #, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr "Açılacak dosya(lar) veya URL('ler)"
 
-#: main/KoApplication.cpp:218
+#: main/KoApplication.cpp:219
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -954,12 +954,12 @@ msgstr ""
 "Bu önerilmemektedir.\n"
 "Lütfen bunun yerine x64 dosyalarını indirin ve kurun."
 
-#: main/KoApplication.cpp:262
+#: main/KoApplication.cpp:263
 #, kde-format
 msgid "%1: Critical Error"
 msgstr "%1: Kritik Hata"
 
-#: main/KoApplication.cpp:262
+#: main/KoApplication.cpp:263
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -970,22 +970,22 @@ msgstr ""
 "Bu bir kurulum sorunu olabilir.\n"
 "Yeniden başlatmayı veya yeniden kurmayı deneyin."
 
-#: main/KoApplication.cpp:511
+#: main/KoApplication.cpp:512
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Bunun için bir şablon bulunamadı: %1"
 
-#: main/KoApplication.cpp:514
+#: main/KoApplication.cpp:515
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "%1 için çok fazla şablon bulundu"
 
-#: main/KoApplication.cpp:536 main/KoApplication.cpp:554
+#: main/KoApplication.cpp:537 main/KoApplication.cpp:555
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "%1 şablonu yüklenemedi."
 
-#: main/KoApplication.cpp:544
+#: main/KoApplication.cpp:545
 #, kde-format
 msgid "No template found at: %1"
 msgstr "Burada bir şablon bulunamadı: %1"

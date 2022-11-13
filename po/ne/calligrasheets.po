@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-12 00:45+0000\n"
+"POT-Creation-Date: 2022-11-13 00:46+0000\n"
 "PO-Revision-Date: 2007-08-24 15:27+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -3222,37 +3222,36 @@ msgid "Header1"
 msgstr "हेडर1"
 
 #: core/StyleManager.cpp:172 ui/CellToolBase.cpp:169
-#: ui/dialogs/LayoutDialog.cpp:159 ui/dialogs/LayoutDialog.cpp:160
-#: ui/dialogs/LayoutDialog.cpp:166 ui/dialogs/LayoutDialog.cpp:228
-#: ui/dialogs/LayoutDialog.cpp:244 ui/dialogs/StyleManagerDialog.cpp:99
-#: ui/dialogs/StyleManagerDialog.cpp:139 ui/dialogs/StyleManagerDialog.cpp:172
-#: ui/dialogs/StyleManagerDialog.cpp:194 ui/dialogs/StyleManagerDialog.cpp:235
-#: ui/dialogs/StyleManagerDialog.cpp:261 ui/dialogs/StyleManagerDialog.cpp:282
+#: ui/dialogs/LayoutPage_General.cpp:127 ui/dialogs/LayoutPage_General.cpp:146
+#: ui/dialogs/StyleManagerDialog.cpp:99 ui/dialogs/StyleManagerDialog.cpp:139
+#: ui/dialogs/StyleManagerDialog.cpp:172 ui/dialogs/StyleManagerDialog.cpp:198
+#: ui/dialogs/StyleManagerDialog.cpp:236 ui/dialogs/StyleManagerDialog.cpp:265
+#: ui/dialogs/StyleManagerDialog.cpp:286
 #, kde-format
 msgid "Default"
 msgstr "पूर्वनिर्धारित"
 
-#: core/ValueFormatter.cpp:542 core/ValueFormatter.cpp:548
+#: core/ValueFormatter.cpp:529 core/ValueFormatter.cpp:535
 #, kde-format
 msgid "AM"
 msgstr "पूर्वान्हवान्ह"
 
-#: core/ValueFormatter.cpp:542 core/ValueFormatter.cpp:548
+#: core/ValueFormatter.cpp:529 core/ValueFormatter.cpp:535
 #, kde-format
 msgid "PM"
 msgstr "अपरान्ह"
 
-#: core/ValueFormatter.cpp:552
+#: core/ValueFormatter.cpp:539
 #, kde-format
 msgid "h"
 msgstr "घण्टा"
 
-#: core/ValueFormatter.cpp:554
+#: core/ValueFormatter.cpp:541
 #, kde-format
 msgid "min"
 msgstr "मिनेट"
 
-#: core/ValueFormatter.cpp:556
+#: core/ValueFormatter.cpp:543
 #, kde-format
 msgid "s"
 msgstr "सेकेन्ड"
@@ -3262,7 +3261,7 @@ msgstr "सेकेन्ड"
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutDialog.cpp:892 ui/dialogs/SpecialPasteWidget.ui:51
+#: ui/dialogs/LayoutPage_Float.cpp:94 ui/dialogs/SpecialPasteWidget.ui:51
 #, kde-format
 msgid "Text"
 msgstr "पाठ"
@@ -3362,12 +3361,12 @@ msgstr ""
 msgid "Related Functions"
 msgstr "<h2>सम्बन्धित प्रकार्य</h2><ul>"
 
-#: engine/Localization.cpp:413
+#: engine/Localization.cpp:416
 #, kde-format
 msgid "true"
 msgstr "ठीक"
 
-#: engine/Localization.cpp:414
+#: engine/Localization.cpp:417
 #, kde-format
 msgid "false"
 msgstr "बेठीक"
@@ -3995,7 +3994,7 @@ msgstr "सन्दर्भ:"
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
 #: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutDialog.cpp:860
+#: ui/dialogs/LayoutPage_Float.cpp:62
 #, kde-format
 msgid "Number"
 msgstr "सङ्ख्या"
@@ -4005,7 +4004,7 @@ msgstr "सङ्ख्या"
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
 #: ui/CellToolBase.cpp:163 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutDialog.cpp:850 ui/dialogs/SpecialPasteWidget.ui:58
+#: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
 msgstr "ढाँचा"
@@ -4347,7 +4346,7 @@ msgstr "डेटा प्रकार"
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutDialog.cpp:880
+#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
 #, kde-format
 msgid "Date"
 msgstr "मिति"
@@ -4422,7 +4421,7 @@ msgstr "सन्दर्भ:"
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
 #: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutDialog.cpp:884
+#: ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid "Time"
 msgstr "समय"
@@ -7249,7 +7248,7 @@ msgstr "गुयाना डलर"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutDialog.cpp:876
+#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid "Fraction"
 msgstr "भिन्न"
@@ -8414,8 +8413,7 @@ msgid "Manual"
 msgstr "म्यानुअल"
 
 #: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:442
-#: ui/dialogs/LayoutDialog.cpp:981 ui/dialogs/LayoutDialog.cpp:1427
-#: ui/dialogs/LayoutDialog.cpp:1489
+#: ui/dialogs/LayoutPage_Float.cpp:182 ui/dialogs/LayoutPage_Float.cpp:579
 #, kde-format
 msgid "Automatic"
 msgstr "स्वचालित"
@@ -14696,7 +14694,7 @@ msgstr "पाठ लम्बाइ"
 msgid "Source string"
 msgstr "क्रमबद्ध"
 
-#: functions/text.xml:352
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:134
 #, kde-format
 msgid "Position"
 msgstr "स्थिति"
@@ -16134,9 +16132,8 @@ msgstr "बाह्य डेटा"
 msgid "F&ormat"
 msgstr "ढाँचा"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox5)
 #. i18n: ectx: Menu (MergeCellMenu)
-#: part/calligrasheets.rc:104 ui/dialogs/PositionWidget.ui:179
+#: part/calligrasheets.rc:104
 #, kde-format
 msgid "Merge Cells"
 msgstr "कक्ष गाभ्नुहोस्"
@@ -16218,7 +16215,7 @@ msgstr "पाना लुकाउनुहोस्"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolBase.cpp:212
-#: ui/CellToolOptionWidgets.xml:3
+#: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, fuzzy, kde-format
 #| msgid "&Font"
 msgid "Font"
@@ -16299,7 +16296,7 @@ msgid "First column as label"
 msgstr "पहिलो स्तम्भले हेडर समाविष्ट गर्छ"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:127
 #, fuzzy, kde-format
 #| msgid "&Data Format"
 msgid "Data Format"
@@ -16699,7 +16696,7 @@ msgstr "तेर्सो"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup2)
 #: part/dialogs/PageLayoutSheetPage.ui:335 ui/CellToolBase.cpp:345
-#: ui/dialogs/PositionWidget.ui:91
+#: ui/dialogs/PositionWidget.ui:135
 #, kde-format
 msgid "Vertical"
 msgstr "ठाडो"
@@ -17689,7 +17686,7 @@ msgstr ""
 "तपाईँले सक्रिय पाना हटाउँदै हुनुहुन्छ ।\n"
 "तपाईँ जारी राख्न चाहनुहुन्छ?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1465
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1482
 #, kde-format
 msgid "Enter name:"
 msgstr "नाम प्रविष्ट गर्नुहोस्:"
@@ -17749,25 +17746,25 @@ msgstr "गणनाA: "
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1618
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1651
 #, fuzzy
 #| msgid "Change Text Color"
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "पाठ रङ परिवर्तन गर्नुहोस्"
 
-#: part/ViewAdaptor.cpp:138 part/ViewAdaptor.cpp:148 ui/CellToolBase.cpp:1863
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1932
 #, fuzzy
 #| msgid "Change Background Color"
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "पृष्ठभूमि रङ परिवर्तन गर्नुहोस्"
 
-#: part/ViewAdaptor.cpp:158 part/ViewAdaptor.cpp:171 part/ViewAdaptor.cpp:181
-#: part/ViewAdaptor.cpp:194 part/ViewAdaptor.cpp:204 part/ViewAdaptor.cpp:219
-#: ui/CellToolBase.cpp:1689 ui/CellToolBase.cpp:1703 ui/CellToolBase.cpp:1717
-#: ui/CellToolBase.cpp:1728 ui/CellToolBase.cpp:1739 ui/CellToolBase.cpp:1754
-#: ui/CellToolBase.cpp:1770 ui/CellToolBase_p.cpp:734
+#: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
+#: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
+#: ui/CellToolBase.cpp:1736 ui/CellToolBase.cpp:1752 ui/CellToolBase.cpp:1768
+#: ui/CellToolBase.cpp:1781 ui/CellToolBase.cpp:1794 ui/CellToolBase.cpp:1811
+#: ui/CellToolBase.cpp:1829 ui/CellToolBase_p.cpp:736
 #, fuzzy
 #| msgid "Change Border"
 msgctxt "(qtundo-format)"
@@ -17800,7 +17797,7 @@ msgstr "शैली प्रबन्धक"
 msgid "Edit and organize cell styles"
 msgstr "कक्ष शैली सम्पादन गर्नुहोस् र संगठित गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:179 ui/dialogs/LayoutDialog.cpp:133
+#: ui/CellToolBase.cpp:179 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
@@ -17827,22 +17824,20 @@ msgstr "कक्षको शैली"
 msgid "Create a new style based on the currently selected cell"
 msgstr "हालै चयन गरिएका कक्षमा आधारित नयाँ शैली सिर्जना गर्नुहोस्"
 
-#. i18n: ectx: property (text), item, widget (KComboBox, weight_combo)
-#: ui/CellToolBase.cpp:192 ui/dialogs/FontWidget.ui:82
-#: ui/dialogs/LayoutDialog.cpp:1738
+#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
+#: ui/CellToolBase.cpp:192 ui/dialogs/FontWidget.ui:83
 #, kde-format
 msgid "Bold"
 msgstr "बाक्लो"
 
-#. i18n: ectx: property (text), item, widget (KComboBox, style_combo)
-#: ui/CellToolBase.cpp:197 ui/dialogs/FontWidget.ui:57
-#: ui/dialogs/LayoutDialog.cpp:1749
+#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
+#: ui/CellToolBase.cpp:197 ui/dialogs/FontWidget.ui:58
 #, kde-format
 msgid "Italic"
 msgstr "छड्के"
 
-#. i18n: ectx: property (text), widget (QCheckBox, underline)
-#: ui/CellToolBase.cpp:202 ui/dialogs/FontWidget.ui:100
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, underline)
+#: ui/CellToolBase.cpp:202 ui/dialogs/FontWidget.ui:101
 #, kde-format
 msgid "Underline"
 msgstr "अधोरेखा"
@@ -17932,7 +17927,7 @@ msgstr "माथि पङ्क्तिबद्ध गर्नुहोस�
 
 #. i18n: ectx: property (text), widget (QRadioButton, top)
 #: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:299
-#: ui/dialogs/PositionWidget.ui:97
+#: ui/dialogs/PositionWidget.ui:141
 #, kde-format
 msgid "Top"
 msgstr "माथि"
@@ -17948,7 +17943,7 @@ msgid "Align Middle"
 msgstr "बीचमा पङ्क्तिबद्ध गर्नुहोस्"
 
 #. i18n: ectx: property (text), widget (QRadioButton, middle)
-#: ui/CellToolBase.cpp:271 ui/dialogs/PositionWidget.ui:104
+#: ui/CellToolBase.cpp:271 ui/dialogs/PositionWidget.ui:148
 #, kde-format
 msgid "Middle"
 msgstr "बीच"
@@ -17965,7 +17960,7 @@ msgstr "तल पङ्क्तिबद्ध गर्नुहोस्"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bottom)
 #: ui/CellToolBase.cpp:278 ui/CellToolBase.cpp:305
-#: ui/dialogs/PositionWidget.ui:111
+#: ui/dialogs/PositionWidget.ui:155
 #, kde-format
 msgid "Bottom"
 msgstr "तल"
@@ -18118,7 +18113,7 @@ msgstr "प्रतिशत ढाँचा"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
 #: ui/CellToolBase.cpp:359 ui/dialogs/DataFormatWidget.ui:102
-#: ui/dialogs/LayoutDialog.cpp:864
+#: ui/dialogs/LayoutPage_Float.cpp:66
 #, kde-format
 msgid "Percent"
 msgstr "प्रतिशत"
@@ -18135,7 +18130,7 @@ msgstr "मुद्रा ढाँचा"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
 #: ui/CellToolBase.cpp:365 ui/dialogs/DataFormatWidget.ui:95
-#: ui/dialogs/LayoutDialog.cpp:868
+#: ui/dialogs/LayoutPage_Float.cpp:70
 #, kde-format
 msgid "Money"
 msgstr "मुद्रा"
@@ -18180,7 +18175,7 @@ msgstr "पृष्ठभूमि रङ"
 msgid "Cells..."
 msgstr "कक्ष..."
 
-#: ui/CellToolBase.cpp:392 ui/CellToolBase_p.cpp:1155
+#: ui/CellToolBase.cpp:392 ui/CellToolBase_p.cpp:1159
 #, kde-format
 msgid "Insert Cells..."
 msgstr "कक्ष घुसाउनुहोस्..."
@@ -18367,7 +18362,7 @@ msgstr "सूत्र चयन"
 msgid "Insert a function"
 msgstr "प्रकार्य घुसाउनुहोस्"
 
-#: ui/CellToolBase.cpp:491 ui/CellToolBase.cpp:2026
+#: ui/CellToolBase.cpp:491 ui/CellToolBase.cpp:2097
 #, kde-format
 msgid "Others..."
 msgstr "अन्य..."
@@ -18534,80 +18529,80 @@ msgstr "कर्सरमा क्लिपबोर्डका सामा�
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1464
+#: ui/CellToolBase.cpp:1481
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "कक्षबाट शैली सिर्जना गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:1473
+#: ui/CellToolBase.cpp:1490
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "शैली नाम खाली गर्न सकिँदैन ।"
 
-#: ui/CellToolBase.cpp:1478 ui/dialogs/LayoutDialog.cpp:199
+#: ui/CellToolBase.cpp:1495 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "यो नामको शैली पहिले अवस्थित छ ।"
 
-#: ui/CellToolBase.cpp:1499 ui/CellToolBase.cpp:1513 ui/CellToolBase.cpp:1527
-#: ui/CellToolBase.cpp:1542 ui/CellToolBase.cpp:1556 ui/CellToolBase.cpp:1574
-#: ui/CellToolBase.cpp:1595 ui/CellToolBase.cpp:1608
+#: ui/CellToolBase.cpp:1516 ui/CellToolBase.cpp:1532 ui/CellToolBase.cpp:1548
+#: ui/CellToolBase.cpp:1565 ui/CellToolBase.cpp:1581 ui/CellToolBase.cpp:1601
+#: ui/CellToolBase.cpp:1624 ui/CellToolBase.cpp:1639
 #, fuzzy
 #| msgid "Change Font"
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "फन्ट परिवर्तन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:1628 ui/CellToolBase.cpp:1638 ui/CellToolBase.cpp:1648
+#: ui/CellToolBase.cpp:1663 ui/CellToolBase.cpp:1675 ui/CellToolBase.cpp:1687
 #, fuzzy
 #| msgid "Change Horizontal Alignment"
 msgctxt "(qtundo-format)"
 msgid "Change Horizontal Alignment"
 msgstr "तेर्सो पङ्क्तिबद्धता परिवर्तन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:1658 ui/CellToolBase.cpp:1668 ui/CellToolBase.cpp:1678
+#: ui/CellToolBase.cpp:1699 ui/CellToolBase.cpp:1711 ui/CellToolBase.cpp:1723
 #, fuzzy
 #| msgid "Change Vertical Alignment"
 msgctxt "(qtundo-format)"
 msgid "Change Vertical Alignment"
 msgstr "ठाडो पङ्क्तिबद्धता परिवर्तन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:1792
+#: ui/CellToolBase.cpp:1853
 #, fuzzy
 #| msgid "Wrap Text"
 msgctxt "(qtundo-format)"
 msgid "Wrap Text"
 msgstr "पाठ बेर्नुहोस्"
 
-#: ui/CellToolBase.cpp:1804
+#: ui/CellToolBase.cpp:1867
 #, fuzzy
 #| msgid "Vertical Text"
 msgctxt "(qtundo-format)"
 msgid "Vertical Text"
 msgstr "ठाडो पाठ"
 
-#: ui/CellToolBase.cpp:1823
+#: ui/CellToolBase.cpp:1888
 #, fuzzy
 #| msgid "Format Percent"
 msgctxt "(qtundo-format)"
 msgid "Format Percent"
 msgstr "प्रतिशत ढाँचाबद्ध गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:1833
+#: ui/CellToolBase.cpp:1900
 #, fuzzy
 #| msgid "Format Money"
 msgctxt "(qtundo-format)"
 msgid "Format Money"
 msgstr "मुद्रा ढाँचाबद्ध गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:1899
+#: ui/CellToolBase.cpp:1970
 #, fuzzy
 #| msgid "Clear Text"
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "पाठ खाली गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:1953
+#: ui/CellToolBase.cpp:2024
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -18619,67 +18614,67 @@ msgstr ""
 "डाटाबेस ड्राइभर उपलब्ध छैन ।  यो विशेषता प्रयोग गर्न तपाईँले आवश्यकिय Qt 3 डाटाबेस "
 "ड्राइभर स्थापना गर्नु आवश्यक हुन्छ ।"
 
-#: ui/CellToolBase.cpp:1989 ui/CellToolBase.cpp:2001
+#: ui/CellToolBase.cpp:2060 ui/CellToolBase.cpp:2072
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "तपाईँले बहुविध कक्ष चयन गर्नुपर्छ ।"
 
-#: ui/CellToolBase.cpp:2490
+#: ui/CellToolBase.cpp:2561
 #, fuzzy
 #| msgid "Replace Named Area"
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "नामाकरण गरिएको क्षेत्र प्रतिस्थापन गर्नुहोस्"
 
-#: ui/CellToolBase_p.cpp:703
+#: ui/CellToolBase_p.cpp:705
 #, fuzzy
 #| msgid "Number Format"
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "सङ्ख्या ढाँचा"
 
-#: ui/CellToolBase_p.cpp:709
+#: ui/CellToolBase_p.cpp:711
 #, fuzzy
 #| msgid "Currency Format"
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "मुद्रा ढाँचा"
 
-#: ui/CellToolBase_p.cpp:714
+#: ui/CellToolBase_p.cpp:716
 #, fuzzy
 #| msgid "Percentage Format"
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "प्रतिशत ढाँचा"
 
-#: ui/CellToolBase_p.cpp:719
+#: ui/CellToolBase_p.cpp:721
 #, fuzzy
 #| msgid "Time Format"
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "समय ढाँचा"
 
-#: ui/CellToolBase_p.cpp:724
+#: ui/CellToolBase_p.cpp:726
 #, fuzzy
 #| msgid "Date Format"
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "डेटा ढाँचा"
 
-#: ui/CellToolBase_p.cpp:729
+#: ui/CellToolBase_p.cpp:731
 #, fuzzy
 #| msgid "Scientific Format"
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "वैज्ञानिक ढाँचा"
 
-#: ui/CellToolBase_p.cpp:1159
+#: ui/CellToolBase_p.cpp:1163
 #, fuzzy, kde-format
 #| msgid "Insert Cells..."
 msgid "Delete Cells..."
 msgstr "कक्ष घुसाउनुहोस्..."
 
-#: ui/CellToolBase_p.cpp:1163
+#: ui/CellToolBase_p.cpp:1167
 #, kde-format
 msgid "Selection List..."
 msgstr "चयन सूची..."
@@ -19041,14 +19036,14 @@ msgctxt "(qtundo-format)"
 msgid "Remove Named Area"
 msgstr "नामाकरण गरिएको क्षेत्र हटाउनुहोस्"
 
-#: ui/commands/PrecisionCommand.cpp:46
+#: ui/commands/PrecisionCommand.cpp:45
 #, fuzzy
 #| msgid "Increase Precision"
 msgctxt "(qtundo-format)"
 msgid "Increase Precision"
 msgstr "सूक्ष्मता बढाउनुहोस्"
 
-#: ui/commands/PrecisionCommand.cpp:48
+#: ui/commands/PrecisionCommand.cpp:47
 #, fuzzy
 #| msgid "Decrease Precision"
 msgctxt "(qtundo-format)"
@@ -19237,14 +19232,14 @@ msgctxt "(qtundo-format)"
 msgid "Correct Misspelled Words"
 msgstr "गलत हिज्जे भएका शब्द सुधार गर्नुहोस्"
 
-#: ui/commands/StyleCommand.cpp:38
+#: ui/commands/StyleCommand.cpp:36
 #, fuzzy
 #| msgid "Reset Style"
 msgctxt "(qtundo-format)"
 msgid "Reset Style"
 msgstr "शैली पुन सेट गर्नुहोस्"
 
-#: ui/commands/StyleCommand.cpp:40
+#: ui/commands/StyleCommand.cpp:38
 #, fuzzy
 #| msgid "Change Style"
 msgctxt "(qtundo-format)"
@@ -19849,52 +19844,52 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:183
-#: ui/dialogs/LayoutDialog.cpp:902 ui/dialogs/LayoutDialog.cpp:2422
-#: ui/dialogs/LayoutDialog.cpp:3195
+#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
+#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
+#: ui/dialogs/LayoutPage_Pattern.cpp:147
 #, kde-format
 msgid "Preview"
 msgstr "पूर्वावलोकन"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutDialog.cpp:856
+#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
 #, kde-format
 msgid "Generic"
 msgstr "जेनेरिक"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutDialog.cpp:888
+#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
 #, fuzzy, kde-format
 #| msgid "Data Type"
 msgid "Date and Time"
 msgstr "डेटा प्रकार"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutDialog.cpp:975
+#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
 #, kde-format
 msgid "Currency:"
 msgstr "मुद्रा:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutDialog.cpp:971
+#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
 #, kde-format
 msgid "Format:"
 msgstr "ढाँचा:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutDialog.cpp:948
+#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
 #, kde-format
 msgid "Postfix:"
 msgstr "प्रत्यय:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutDialog.cpp:958
+#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
 #, kde-format
 msgid "Precision:"
 msgstr "सूक्ष्मता:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutDialog.cpp:954
+#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
 #, kde-format
 msgid "Prefix:"
 msgstr "उपसर्ग:"
@@ -20044,7 +20039,7 @@ msgid "Fewer Options"
 msgstr "थोरै विकल्प"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
-#: ui/dialogs/FontWidget.ui:32
+#: ui/dialogs/FontWidget.ui:33
 #, fuzzy, kde-format
 #| msgid ""
 #| "You can select here the font style, size and color, including some "
@@ -20067,9 +20062,8 @@ msgstr ""
 "पूर्वनिर्धारित फन्ट हालै प्रयोग गरिएको शैलीसँग ढाँचा -> शैली प्रबन्धक मेनुका सबै कक्षका लागि "
 "सेट गरिन्छ ।"
 
-#. i18n: ectx: property (whatsThis), widget (KComboBox, style_combo)
-#. i18n: ectx: property (whatsThis), widget (KComboBox, size_combo)
-#: ui/dialogs/FontWidget.ui:40 ui/dialogs/FontWidget.ui:148
+#. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
+#: ui/dialogs/FontWidget.ui:41
 #, kde-format
 msgid ""
 "Choose the style for your font for the currently selected cells. When you "
@@ -20083,21 +20077,23 @@ msgstr ""
 "हालको शैली सेटिङ रहने तरिकाले छोडिने छ । उदाहरणका लागि रोमनमा परिवर्तन गर्दा सबै चयन "
 "गरिएका पाठका कक्ष शैली रोमनमा परिवर्तन हुनेछन् ।"
 
-#. i18n: ectx: property (text), item, widget (KComboBox, style_combo)
-#. i18n: ectx: property (text), item, widget (KComboBox, weight_combo)
-#: ui/dialogs/FontWidget.ui:47 ui/dialogs/FontWidget.ui:72
+#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
+#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
+#. i18n: ectx: property (specialValueText), widget (QSpinBox, size_spinner)
+#: ui/dialogs/FontWidget.ui:48 ui/dialogs/FontWidget.ui:73
+#: ui/dialogs/FontWidget.ui:152
 #, kde-format
 msgid "Varying (No Change)"
 msgstr "बदल्नु (परिवर्तन गरिएको छैन)"
 
-#. i18n: ectx: property (text), item, widget (KComboBox, style_combo)
-#: ui/dialogs/FontWidget.ui:52 ui/dialogs/LayoutDialog.cpp:1747
+#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
+#: ui/dialogs/FontWidget.ui:53
 #, kde-format
 msgid "Roman"
 msgstr "रोमन"
 
-#. i18n: ectx: property (whatsThis), widget (KComboBox, weight_combo)
-#: ui/dialogs/FontWidget.ui:65
+#. i18n: ectx: property (whatsThis), widget (QComboBox, weight_combo)
+#: ui/dialogs/FontWidget.ui:66
 #, kde-format
 msgid ""
 "Choose the weight for your font for the currently selected cells. When you "
@@ -20111,48 +20107,47 @@ msgstr ""
 "तपाईँका सबै हालका वजन सेटिङ राख्ने तरिकाले यसलाई छोडिन्छ । उदाहरणका लागि बाक्लो "
 "बनाउदा सबै चयन गरिएका कक्षका फन्ट वजन बाक्लोमा परिवर्तन हुनेछ ।"
 
-#. i18n: ectx: property (text), item, widget (KComboBox, weight_combo)
+#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
 #. i18n: ectx: property (text), item, widget (QComboBox, ValueType)
-#: ui/dialogs/FontWidget.ui:77 ui/dialogs/LayoutDialog.cpp:1736
-#: ui/dialogs/pivotoptions.ui:81
+#: ui/dialogs/FontWidget.ui:78 ui/dialogs/pivotoptions.ui:81
 #, kde-format
 msgid "Normal"
 msgstr "सामान्य"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
-#: ui/dialogs/FontWidget.ui:90 ui/dialogs/LayoutDialog.cpp:2387
-#: ui/dialogs/LayoutDialog.cpp:3159
+#: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:324
+#: ui/dialogs/LayoutPage_Pattern.cpp:119
 #, kde-format
 msgid "Color:"
 msgstr "रङ:"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, underline)
-#: ui/dialogs/FontWidget.ui:97
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, underline)
+#: ui/dialogs/FontWidget.ui:98
 #, fuzzy, kde-format
 #| msgid "If this is checked, the current cell text wil be underlined."
 msgid "If this is checked, the current cell text will be underlined."
 msgstr "यो जाँच गरिएमा, हालको कक्षको पाठ अधोरेखा लागेको हुनेछ ।"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
-#: ui/dialogs/FontWidget.ui:107
+#: ui/dialogs/FontWidget.ui:108
 #, kde-format
 msgid "Size:"
 msgstr "साइज:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
-#: ui/dialogs/FontWidget.ui:114
+#: ui/dialogs/FontWidget.ui:115
 #, kde-format
 msgid "Weight:"
 msgstr "वजन:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
-#: ui/dialogs/FontWidget.ui:121
+#: ui/dialogs/FontWidget.ui:122
 #, kde-format
 msgid "Style:"
 msgstr "शैली:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorButton, textColorButton)
-#: ui/dialogs/FontWidget.ui:128
+#: ui/dialogs/FontWidget.ui:129
 #, kde-format
 msgid ""
 "Choose the color for the current cell text. Clicking on the color bar will "
@@ -20162,20 +20157,26 @@ msgstr ""
 "हालका कक्ष पाठका लागि रङ चयन गर्नुहोस् । रङ पट्टीमा क्लिक गर्दा तपाईँले नयाँ रङ रोज्न "
 "सक्ने मानक KDE चयन रङ संवादमा ल्याउने छ जहाँ तपाईँ नयाँ रङ रोज्न सक्षम हुनु हुनेछ ।"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, strike)
-#: ui/dialogs/FontWidget.ui:138
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, strike)
+#: ui/dialogs/FontWidget.ui:139
 #, kde-format
 msgid "This will strike out the current cell text if this is checked."
 msgstr "यदि जाँच गरिएमा यसले हालको कक्ष पाठ स्ट्राइकआउट गर्नेछ ।"
 
-#. i18n: ectx: property (text), widget (QCheckBox, strike)
-#: ui/dialogs/FontWidget.ui:141
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, strike)
+#: ui/dialogs/FontWidget.ui:142
 #, kde-format
 msgid "Strike out"
 msgstr "स्ट्राइकआउट"
 
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, size_spinner)
+#: ui/dialogs/FontWidget.ui:149
+#, kde-format
+msgid "Choose the font size."
+msgstr ""
+
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
-#: ui/dialogs/FontWidget.ui:176
+#: ui/dialogs/FontWidget.ui:180
 #, kde-format
 msgid ""
 "This box lists all your available font families. Click on one family to set "
@@ -20185,7 +20186,7 @@ msgstr ""
 "परिवारमा क्लिक गर्नुहोस् ।"
 
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
-#: ui/dialogs/FontWidget.ui:195
+#: ui/dialogs/FontWidget.ui:199
 #, kde-format
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
@@ -20359,82 +20360,50 @@ msgstr "स्तम्भ हटाउनुहोस्"
 msgid "Remove Cells"
 msgstr "कक्ष हटाउनुहोस्"
 
-#: ui/dialogs/LayoutDialog.cpp:139
-#, fuzzy, kde-format
-#| msgid "Name:"
-msgctxt "Name of the style"
-msgid "Name:"
-msgstr "नाम:"
-
-#: ui/dialogs/LayoutDialog.cpp:151
-#, kde-format
-msgid "Inherit style:"
-msgstr "क्रमागत शैली:"
-
-#: ui/dialogs/LayoutDialog.cpp:203
-#, fuzzy, kde-format
-#| msgid "The style name cannot be empty."
-msgid "The style name can not be empty."
-msgstr "शैली नाम खाली गर्न सकिँदैन ।"
-
-#: ui/dialogs/LayoutDialog.cpp:215
-#, kde-format
-msgid "A style cannot inherit from itself."
-msgstr "एउटा शैली आफैबाट क्रमागत हुन सक्दैन ।"
-
-#: ui/dialogs/LayoutDialog.cpp:219
-#, kde-format
-msgid "The style cannot inherit from '%1' because of recursive references."
-msgstr "पुनरावृत्तिक सन्दर्भका कारणले शैली '%1' बाट क्रमागत हुन सक्दैन ।"
-
-#: ui/dialogs/LayoutDialog.cpp:720
+#: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
 msgid "Cell Format"
 msgstr "कक्ष ढाँचा"
 
-#: ui/dialogs/LayoutDialog.cpp:728
-#, kde-format
-msgid "&General"
+#: ui/dialogs/LayoutDialog.cpp:122
+#, fuzzy, kde-format
+#| msgid "&General"
+msgid "General"
 msgstr "साधारण"
 
-#: ui/dialogs/LayoutDialog.cpp:734
+#: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
-msgid "&Data Format"
-msgstr "डेटा ढाँचा"
-
-#: ui/dialogs/LayoutDialog.cpp:737
-#, kde-format
-msgid "&Font"
-msgstr "फन्ट"
-
-#: ui/dialogs/LayoutDialog.cpp:743
-#, kde-format
-msgid "&Position"
-msgstr "स्थिति"
-
-#: ui/dialogs/LayoutDialog.cpp:746
-#, kde-format
-msgid "&Border"
+msgid "Border"
 msgstr "किनारा"
 
-#: ui/dialogs/LayoutDialog.cpp:749
-#, kde-format
-msgid "Back&ground"
+#: ui/dialogs/LayoutDialog.cpp:140
+#, fuzzy, kde-format
+#| msgid "Back&ground"
+msgid "Background"
 msgstr "पृष्ठभूमि"
 
-#: ui/dialogs/LayoutDialog.cpp:752
-#, kde-format
-msgid "&Cell Protection"
+#: ui/dialogs/LayoutDialog.cpp:143
+#, fuzzy, kde-format
+#| msgid "&Cell Protection"
+msgid "Cell Protection"
 msgstr "कक्ष सुरक्षा"
 
-#: ui/dialogs/LayoutDialog.cpp:798
-#, fuzzy
-#| msgid "Change Format"
-msgctxt "(qtundo-format)"
-msgid "Change Format"
-msgstr "ढाँचा परिवर्तन गर्नुहोस्"
+#: ui/dialogs/LayoutPage_Border.cpp:273
+#, kde-format
+msgid "Preselect"
+msgstr "पूर्वचयन"
 
-#: ui/dialogs/LayoutDialog.cpp:857
+#: ui/dialogs/LayoutPage_Border.cpp:295 ui/dialogs/LayoutPage_Pattern.cpp:97
+#, kde-format
+msgid "Pattern"
+msgstr "बान्की"
+
+#: ui/dialogs/LayoutPage_Border.cpp:328
+#, kde-format
+msgid "Customize"
+msgstr "अनुकूलन गर्नुहोस्"
+
+#: ui/dialogs/LayoutPage_Float.cpp:59
 #, fuzzy, kde-format
 #| msgid ""
 #| "This is the default format and KSpread autodetects the actual data type "
@@ -20450,7 +20419,7 @@ msgstr ""
 "प्रकार आफैँले पत्ता लगाउँछ । पूर्वनिर्धारित रुपमा, केडीई स्प्रेड दायाँले कक्षमा नम्बर, मिति, "
 "समय समर्थन गर्छ, र बायाँले अन्यलाई समर्थन गर्छ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:861
+#: ui/dialogs/LayoutPage_Float.cpp:63
 #, fuzzy, kde-format
 #| msgid ""
 #| "The number notation uses the notation you globally choose in KControl -> "
@@ -20464,7 +20433,7 @@ msgstr ""
 "नम्बर नोटेसनले तपाईँले विश्वव्यापी रुपमा केडीई नियन्त्रण -> क्षेत्रिय र पहुँचयोग्य -> मा "
 "रोजेका नम्बर ट्याब प्रयोग गर्छ । नम्बर पूर्वनिर्धारित रुपमा दायाँ समर्थित हुन्छन् ।"
 
-#: ui/dialogs/LayoutDialog.cpp:865
+#: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
 msgid ""
 "When you have a number in the current cell and you switch from the dcell "
@@ -20482,7 +20451,7 @@ msgstr ""
 "ल्याउने छ ।\n"
 "तपाईँले ढाँचा उपकरणपट्टीमा प्रतिशत प्रतिमा पनि प्रयोग गर्न सक्नुहुन्छ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:869
+#: ui/dialogs/LayoutPage_Float.cpp:71
 #, fuzzy, kde-format
 #| msgid ""
 #| "The Money format converts your number into money notation using the "
@@ -20505,12 +20474,12 @@ msgstr ""
 "तपाईँको हालको मुद्रा जस्तो देखिने गरि कक्ष ढाँचा सेट गर्न ढाँचा उपकरणपट्टीमा मुद्रा प्रतिमा "
 "प्रयोग गर्न सक्नुहुन्छ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:872
+#: ui/dialogs/LayoutPage_Float.cpp:74
 #, kde-format
 msgid "Scientific"
 msgstr "वैज्ञानिक"
 
-#: ui/dialogs/LayoutDialog.cpp:873
+#: ui/dialogs/LayoutPage_Float.cpp:75
 #, kde-format
 msgid ""
 "The scientific format changes your number using the scientific notation. For "
@@ -20521,7 +20490,7 @@ msgstr ""
 "लागि, 0.0012 , 1.2E-03 मा परिवर्तन हुनेछ । जेनेरिक कक्ष ढाँचा प्रयोग गरेर पछाडि जाँदा "
 "फेरि 0.0012 प्रदर्शित हुनेछ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:877
+#: ui/dialogs/LayoutPage_Float.cpp:79
 #, kde-format
 msgid ""
 "The fraction format changes your number into a fraction. For example, 0.1 "
@@ -20543,7 +20512,7 @@ msgstr ""
 "1.4 भएमा र भिन्न 1/16 रोजेमा त्यसपछि कक्ष \"1 6/16\" प्रदर्शित हुने छ जुन सबैभन्दा "
 "नजिकको सोह्रौ भिन्न हो ।"
 
-#: ui/dialogs/LayoutDialog.cpp:881
+#: ui/dialogs/LayoutPage_Float.cpp:83
 #, fuzzy, kde-format
 #| msgid ""
 #| "To enter a date, you should enter it in one of the formats set in "
@@ -20564,7 +20533,7 @@ msgstr ""
 "ढाँचा ।\n"
 "तपाईँले नम्बर ताने जस्तै गरेर मिति तान्न सक्नुहुन्छ र पछिल्लो कक्षले पनि मिति प्राप्त गर्नेछ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:885
+#: ui/dialogs/LayoutPage_Float.cpp:87
 #, fuzzy, kde-format
 #| msgid ""
 #| "This formats your cell content as a time. To enter a time, you should "
@@ -20591,7 +20560,7 @@ msgstr ""
 "ढाँचा हो । कक्षको नम्बरले सामयका रुपमा सम्वेदना नदेखाएमा, केडीई स्प्रेडले तपाईँसँग केससडीई "
 "नियन्त्रणमा भएको विश्वब्यापि ढाँचामा 00:00 प्रदर्शित गर्नेछ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:889
+#: ui/dialogs/LayoutPage_Float.cpp:91
 #, fuzzy, kde-format
 #| msgid ""
 #| "This formats your cell content as a time. To enter a time, you should "
@@ -20618,7 +20587,7 @@ msgstr ""
 "ढाँचा हो । कक्षको नम्बरले सामयका रुपमा सम्वेदना नदेखाएमा, केडीई स्प्रेडले तपाईँसँग केससडीई "
 "नियन्त्रणमा भएको विश्वब्यापि ढाँचामा 00:00 प्रदर्शित गर्नेछ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:893
+#: ui/dialogs/LayoutPage_Float.cpp:95
 #, kde-format
 msgid ""
 "This formats your cell content as text. This can be useful if you want a "
@@ -20633,17 +20602,17 @@ msgstr ""
 "पाठका रुपमा ढाँचावद्ध गर्दा, तीनलाई गणना वा सूत्रमा प्रयोग गर्न सकिने छैन । यसले कक्ष "
 "समर्थन गरिएको तरिका पनि परिवर्तन गर्छ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:896
+#: ui/dialogs/LayoutPage_Float.cpp:98
 #, kde-format
 msgid "Custom"
 msgstr "अनुकूल"
 
-#: ui/dialogs/LayoutDialog.cpp:897
+#: ui/dialogs/LayoutPage_Float.cpp:99
 #, kde-format
 msgid "The custom format does not work yet. To be enabled in the next release."
 msgstr "अनुकूल ढाँचाले अहिले कार्य गर्दैन । पछिल्लो संस्करणमा सक्षम पारिने छ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:906
+#: ui/dialogs/LayoutPage_Float.cpp:107
 #, kde-format
 msgid ""
 "This will display a preview of your choice so you can know what it does "
@@ -20652,12 +20621,12 @@ msgstr ""
 "यसले तपाईँको रोजाइको पूर्वावलोकन प्रदर्शन गर्नेछ त्यसैले यसलाई वैद्य पार्न 'ठीक छ' बटनमा "
 "क्लिक गर्नुभन्दा पहिले यसले के गर्नेछ तपाईँले जान्न सक्नुहुन्छ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:917
+#: ui/dialogs/LayoutPage_Float.cpp:117
 #, kde-format
 msgid "Displays choices of format for the fraction, date or time formats."
 msgstr "भिन्न, मिति र समय ढाँचाका लागि ढाँचाको रोजाइ प्रदर्शन गर्छ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:927
+#: ui/dialogs/LayoutPage_Float.cpp:127
 #, kde-format
 msgid ""
 "You can add here a Postfix such as a $HK symbol to the end of each cell "
@@ -20666,12 +20635,12 @@ msgstr ""
 "तपाईँले यहाँ $HK प्रतिक जस्तै प्रत्यय जाँच गरिएको ढाँचामा प्रत्येक कक्ष सामाग्रीको अन्त्यमा "
 "थप्न सक्नुहुन्छ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:931
+#: ui/dialogs/LayoutPage_Float.cpp:130
 #, kde-format
 msgid "variable"
 msgstr "चल"
 
-#: ui/dialogs/LayoutDialog.cpp:934
+#: ui/dialogs/LayoutPage_Float.cpp:133
 #, kde-format
 msgid ""
 "You can control how many digits are displayed after the decimal point for "
@@ -20682,7 +20651,7 @@ msgstr ""
 "सक्नुहुन्छ । यसले ढाँचा उपकरणपट्टीमा सूक्ष्मता बढाउने वा सूक्ष्मता घटाउने प्रतिमा प्रयोग गरेर "
 "परिवर्तन गर्न सक्नेछ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:938
+#: ui/dialogs/LayoutPage_Float.cpp:137
 #, kde-format
 msgid ""
 "You can add here a Prefix such as a $ symbol at the start of each cell "
@@ -20691,7 +20660,7 @@ msgstr ""
 "तपाईँले यहाँ $ प्रतिक जस्तै उपसर्ग जाँच गरिएको ढाँचामा प्रत्येक कक्ष सामाग्रीको सुरुमा थप्न "
 "सक्नुहुन्छ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:942
+#: ui/dialogs/LayoutPage_Float.cpp:141
 #, kde-format
 msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
@@ -20700,117 +20669,115 @@ msgstr ""
 "तपाईँले धनात्मक मान + चिन्हको अगुवाई गरेर प्रदर्शित गर्ने तथा ऋणात्मक मान रातोमा देखाउने "
 "रोज्न सक्नुहुन्छ ।"
 
-#: ui/dialogs/LayoutDialog.cpp:1122
+#: ui/dialogs/LayoutPage_Float.cpp:284
 #, kde-format
 msgid "Halves 1/2"
 msgstr "आधा 1/2"
 
-#: ui/dialogs/LayoutDialog.cpp:1123
+#: ui/dialogs/LayoutPage_Float.cpp:285
 #, kde-format
 msgid "Quarters 1/4"
 msgstr "चौथाई 1/4"
 
-#: ui/dialogs/LayoutDialog.cpp:1124
+#: ui/dialogs/LayoutPage_Float.cpp:286
 #, kde-format
 msgid "Eighths 1/8"
 msgstr "आठ भागको एक भाग 1/8"
 
-#: ui/dialogs/LayoutDialog.cpp:1125
+#: ui/dialogs/LayoutPage_Float.cpp:287
 #, kde-format
 msgid "Sixteenths 1/16"
 msgstr "सोह्र भागको एक भाग 1/16"
 
-#: ui/dialogs/LayoutDialog.cpp:1126
+#: ui/dialogs/LayoutPage_Float.cpp:288
 #, kde-format
 msgid "Tenths 1/10"
 msgstr "दश भागको एक भाग 1/10"
 
-#: ui/dialogs/LayoutDialog.cpp:1127
+#: ui/dialogs/LayoutPage_Float.cpp:289
 #, kde-format
 msgid "Hundredths 1/100"
 msgstr "सय भागको एक भाग 1/100"
 
-#: ui/dialogs/LayoutDialog.cpp:1128
+#: ui/dialogs/LayoutPage_Float.cpp:290
 #, kde-format
 msgid "One digit 5/9"
 msgstr "एक अङ्क 5/9"
 
-#: ui/dialogs/LayoutDialog.cpp:1129
+#: ui/dialogs/LayoutPage_Float.cpp:291
 #, kde-format
 msgid "Two digits 15/22"
 msgstr "दुइ अङ्क 15/22"
 
-#: ui/dialogs/LayoutDialog.cpp:1130
+#: ui/dialogs/LayoutPage_Float.cpp:292
 #, kde-format
 msgid "Three digits 153/652"
 msgstr "तिन अङ्क 153/652"
 
-#: ui/dialogs/LayoutDialog.cpp:1160 ui/dialogs/LayoutDialog.cpp:1161
-#: ui/dialogs/LayoutDialog.cpp:1219 ui/dialogs/LayoutDialog.cpp:1220
-#: ui/dialogs/LayoutDialog.cpp:1261 ui/dialogs/LayoutDialog.cpp:1262
+#: ui/dialogs/LayoutPage_Float.cpp:322 ui/dialogs/LayoutPage_Float.cpp:323
+#: ui/dialogs/LayoutPage_Float.cpp:378 ui/dialogs/LayoutPage_Float.cpp:379
+#: ui/dialogs/LayoutPage_Float.cpp:418 ui/dialogs/LayoutPage_Float.cpp:419
 #, kde-format
 msgid "System: "
 msgstr "प्रणाली: "
 
-#: ui/dialogs/LayoutDialog.cpp:1171
+#: ui/dialogs/LayoutPage_Float.cpp:332
 #, fuzzy, kde-format
 #| msgid " (=[mm]::ss)"
 msgid " (=[mm]:ss)"
 msgstr " (=[mm]::ss)"
 
-#: ui/dialogs/LayoutDialog.cpp:1172
+#: ui/dialogs/LayoutPage_Float.cpp:333
 #, fuzzy, kde-format
 #| msgid " (=[hh]::mm::ss)"
 msgid " (=[hh]:mm:ss)"
 msgstr " (=[hh]::mm::ss)"
 
-#: ui/dialogs/LayoutDialog.cpp:1173
+#: ui/dialogs/LayoutPage_Float.cpp:334
 #, fuzzy, kde-format
 #| msgid " (=[hh]::mm)"
 msgid " (=[hh]:mm)"
 msgstr " (=[hh]::mm)"
 
-#: ui/dialogs/LayoutDialog.cpp:1651
+#: ui/dialogs/LayoutPage_Font.cpp:53
 #, kde-format
 msgid "Dolor Ipse"
 msgstr "डलर इप्स"
 
-#: ui/dialogs/LayoutDialog.cpp:1897
-#, kde-format
-msgid "Default width (%1 %2)"
-msgstr "पूर्वनिर्धारित चौडाइ (%1 %2)"
+#: ui/dialogs/LayoutPage_General.cpp:48
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgctxt "Name of the style"
+msgid "Name:"
+msgstr "नाम:"
 
-#: ui/dialogs/LayoutDialog.cpp:1915
+#: ui/dialogs/LayoutPage_General.cpp:59
 #, kde-format
-msgid "Default height (%1 %2)"
-msgstr "पूर्वनिर्धारित उचाइ (%1 %2)"
+msgid "Inherit style:"
+msgstr "क्रमागत शैली:"
 
-#: ui/dialogs/LayoutDialog.cpp:2300
+#: ui/dialogs/LayoutPage_General.cpp:94
+#, fuzzy, kde-format
+#| msgid "The style name cannot be empty."
+msgid "The style name can not be empty."
+msgstr "शैली नाम खाली गर्न सकिँदैन ।"
+
+#: ui/dialogs/LayoutPage_General.cpp:106
 #, kde-format
-msgid "Border"
-msgstr "किनारा"
+msgid "A style cannot inherit from itself."
+msgstr "एउटा शैली आफैबाट क्रमागत हुन सक्दैन ।"
 
-#: ui/dialogs/LayoutDialog.cpp:2327
+#: ui/dialogs/LayoutPage_General.cpp:110
 #, kde-format
-msgid "Preselect"
-msgstr "पूर्वचयन"
+msgid "The style cannot inherit from '%1' because of recursive references."
+msgstr "पुनरावृत्तिक सन्दर्भका कारणले शैली '%1' बाट क्रमागत हुन सक्दैन ।"
 
-#: ui/dialogs/LayoutDialog.cpp:2358 ui/dialogs/LayoutDialog.cpp:3086
-#, kde-format
-msgid "Pattern"
-msgstr "बान्की"
-
-#: ui/dialogs/LayoutDialog.cpp:2391
-#, kde-format
-msgid "Customize"
-msgstr "अनुकूलन गर्नुहोस्"
-
-#: ui/dialogs/LayoutDialog.cpp:3168
+#: ui/dialogs/LayoutPage_Pattern.cpp:128
 #, kde-format
 msgid "Background color:"
 msgstr "पृष्ठभूमि रङ:"
 
-#: ui/dialogs/LayoutDialog.cpp:3184
+#: ui/dialogs/LayoutPage_Pattern.cpp:136
 #, kde-format
 msgid "No Color"
 msgstr "कुनै रङ होइन"
@@ -21165,8 +21132,30 @@ msgstr ""
 msgid "Standard"
 msgstr "मानक"
 
-#. i18n: ectx: property (whatsThis), widget (QGroupBox, buttonGroup2)
+#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox4)
+#: ui/dialogs/PositionWidget.ui:85
+#, kde-format
+msgid ""
+"Your text will appear oriented in the angle you set here. Positive values "
+"will move it counter-clockwise and negative values will move it clockwise."
+msgstr ""
+"तपाईँले यहाँ सेट गरेको पाठ कोणमा अभिविन्यस्त देखिने छ । धनात्मक मानले यसलाई घडीको "
+"विपरित दिशामा सार्नेछ र ऋणात्मक मानले यसलाई घडीको दिशामा सर्नेछ ।"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox4)
 #: ui/dialogs/PositionWidget.ui:88
+#, kde-format
+msgid "Rotation"
+msgstr "परिक्रमण"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, spinBox3)
+#: ui/dialogs/PositionWidget.ui:110
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (whatsThis), widget (QGroupBox, buttonGroup2)
+#: ui/dialogs/PositionWidget.ui:132
 #, kde-format
 msgid ""
 "<qt>Set the content position vertically in the cell.\n"
@@ -21180,28 +21169,6 @@ msgstr ""
 "<b>माथि</b> यसको अर्थ सामाग्री कक्षको माथि प्रदर्शित हुनेछ ।\n"
 "<b>बीच</b> यसको अर्थ सामाग्री कक्षमा ठाडो गरी बीचमा प्रदर्शित हुनेछ ।\n"
 "<b>तल</b> यसको अर्थ कक्षको सामाग्री कक्षको तल प्रदर्शित हुनेछ ।</qt>"
-
-#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox4)
-#: ui/dialogs/PositionWidget.ui:121
-#, kde-format
-msgid ""
-"Your text will appear oriented in the angle you set here. Positive values "
-"will move it counter-clockwise and negative values will move it clockwise."
-msgstr ""
-"तपाईँले यहाँ सेट गरेको पाठ कोणमा अभिविन्यस्त देखिने छ । धनात्मक मानले यसलाई घडीको "
-"विपरित दिशामा सार्नेछ र ऋणात्मक मानले यसलाई घडीको दिशामा सर्नेछ ।"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox4)
-#: ui/dialogs/PositionWidget.ui:124
-#, kde-format
-msgid "Rotation"
-msgstr "परिक्रमण"
-
-#. i18n: ectx: property (suffix), widget (QSpinBox, spinBox3)
-#: ui/dialogs/PositionWidget.ui:146
-#, kde-format
-msgid "°"
-msgstr "°"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:165
@@ -21222,98 +21189,8 @@ msgstr ""
 msgid "Indent"
 msgstr "इन्डेन्ट"
 
-#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox5)
-#: ui/dialogs/PositionWidget.ui:176
-#, fuzzy, kde-format
-#| msgid ""
-#| "When checked, this has the same effect as Data ->Merge Cells. You need to "
-#| "have at least two consecutive cells selected. Those consecutive cells are "
-#| "then merged into a bigger one.\n"
-#| "When a merged cell is selected and when you uncheck this, then all cells "
-#| "come back to their original size as before the merging. It has the same "
-#| "effect as Data -> Dissociate Cells."
-msgid ""
-"When checked, this has the same effect as Format ->Merge Cells. You need to "
-"have at least two consecutive cells selected. Those consecutive cells are "
-"then merged into a bigger one.\n"
-"When a merged cell is selected and when you uncheck this, then all cells "
-"come back to their original size as before the merging. It has the same "
-"effect as Format -> Dissociate Cells."
-msgstr ""
-"जाँच गर्दा, यसले डेटा -> गाभ्ने कक्ष जस्तै समान प्रभाव पार्छ । तपाईँले कम्तिमा दुइवटा क्रमिक "
-"कक्ष चयन गरिएको हुनु आवश्यक छ । त्यसपछि ती क्रमिक कक्ष ठूलो एकमा गाभिन्छन ।\n"
-"गाभिएको एक कक्ष चयन गर्दा र यसलाई चिनो हटाइएमा, त्यसपछि सबै कक्ष तीनका गाभ्न भन्दा "
-"पहिलेको जस्तै मौलिक साइजमा फर्कन्छन् । यसको डेटा -> अलग गरिने कक्षमा जस्तै समान प्रभाव "
-"पर्छ ।"
-
-#. i18n: ectx: property (text), widget (QCheckBox, mergeCell)
-#: ui/dialogs/PositionWidget.ui:185
-#, kde-format
-msgid "Merge cells"
-msgstr "कक्ष गाभ्नुहोस्"
-
-#. i18n: ectx: property (whatsThis), widget (QGroupBox, sizeCellGroup)
-#: ui/dialogs/PositionWidget.ui:195
-#, kde-format
-msgid "The unit used here is the one set in Format -> Page Layout.. dialog."
-msgstr "यहाँ प्रयोग गरिएको एकाइ ढाँचा -> पृष्ठ रुपरेखा.. संवादको एउटा सेट हो ।"
-
-#. i18n: ectx: property (title), widget (QGroupBox, sizeCellGroup)
-#: ui/dialogs/PositionWidget.ui:198
-#, kde-format
-msgid "Size of Cell"
-msgstr "कक्षको साइज"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, defaultHeight)
-#: ui/dialogs/PositionWidget.ui:206
-#, kde-format
-msgid ""
-"If checked, the default height will be used for the cell instead of the "
-"value above."
-msgstr ""
-"यदि जाँच भएमा, कक्षका लागि माथिको मानको साटोमा पूर्वनिर्धारित उचाइ प्रयोग गरिने छ ।"
-
-#. i18n: ectx: property (text), widget (QCheckBox, defaultHeight)
-#: ui/dialogs/PositionWidget.ui:209
-#, no-c-format, kde-format
-msgid "Default height (%1)"
-msgstr "पूर्वनिर्धारित उचाइ (%1)"
-
-#. i18n: ectx: property (text), widget (QLabel, textLabel3)
-#: ui/dialogs/PositionWidget.ui:232
-#, kde-format
-msgid "Height:"
-msgstr "उचाइ:"
-
-#. i18n: ectx: property (whatsThis), widget (QFrame, m_heightPanel)
-#: ui/dialogs/PositionWidget.ui:239
-#, kde-format
-msgid "Set the height of the cell."
-msgstr "कक्षको उचाइ सेट गर्नुहोस् ।"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, defaultWidth)
-#: ui/dialogs/PositionWidget.ui:256
-#, kde-format
-msgid ""
-"If checked, the default width will be used for the cell instead of the value "
-"above."
-msgstr ""
-"यदि जाँच भएमा, कक्षका लागि माथिको मानको साटोमा पूर्वनिर्धारित चौडाइ प्रयोग गरिने छ ।"
-
-#. i18n: ectx: property (text), widget (QCheckBox, defaultWidth)
-#: ui/dialogs/PositionWidget.ui:259
-#, no-c-format, kde-format
-msgid "Default width (%1)"
-msgstr "पूर्वनिर्धारित चौडाइ (%1)"
-
-#. i18n: ectx: property (text), widget (QLabel, textLabel2)
-#: ui/dialogs/PositionWidget.ui:295
-#, kde-format
-msgid "Width:"
-msgstr "चौडाइ:"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox3)
-#: ui/dialogs/PositionWidget.ui:309
+#: ui/dialogs/PositionWidget.ui:177
 #, kde-format
 msgid ""
 "This is only available when the rotation is 0°.\n"
@@ -21328,32 +21205,32 @@ msgstr ""
 "ठाडो पाठले तपाईँको पाठ ठाडोगरि राख्छ ।"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
-#: ui/dialogs/PositionWidget.ui:312
+#: ui/dialogs/PositionWidget.ui:180
 #, kde-format
 msgid "Text Option"
 msgstr "पाठ विकल्प"
 
-#. i18n: ectx: property (text), widget (QCheckBox, multi)
-#: ui/dialogs/PositionWidget.ui:318
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, multi)
+#: ui/dialogs/PositionWidget.ui:186
 #, kde-format
 msgid "Wrap text"
 msgstr "पृष्ठ बेर्नुहोस्"
 
-#. i18n: ectx: property (text), widget (QCheckBox, vertical)
-#: ui/dialogs/PositionWidget.ui:325
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, vertical)
+#: ui/dialogs/PositionWidget.ui:193
 #, kde-format
 msgid "Vertical text"
 msgstr "ठाडो पाठ"
 
-#. i18n: ectx: property (text), widget (QCheckBox, shrinkToFit)
-#: ui/dialogs/PositionWidget.ui:332
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, shrinkToFit)
+#: ui/dialogs/PositionWidget.ui:200
 #, fuzzy, kde-format
 #| msgid "Strike out"
 msgid "Shrink to fit"
 msgstr "स्ट्राइकआउट"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, ProtectionWidget)
-#: ui/dialogs/ProtectionWidget.ui:34
+#: ui/dialogs/ProtectionWidget.ui:35
 #, fuzzy, kde-format
 #| msgid ""
 #| "This tab enables you to set Cell Protection. All cells are protected by "
@@ -21392,13 +21269,13 @@ msgstr ""
 "सक्नुहुन्छ ।"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
-#: ui/dialogs/ProtectionWidget.ui:40
+#: ui/dialogs/ProtectionWidget.ui:41
 #, kde-format
 msgid "Printing"
 msgstr "मुद्रण"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_bDontPrint)
-#: ui/dialogs/ProtectionWidget.ui:47
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bDontPrint)
+#: ui/dialogs/ProtectionWidget.ui:48
 #, kde-format
 msgid ""
 "If checked, the content of the cell will not be printed. If this is not "
@@ -21409,20 +21286,20 @@ msgstr ""
 "कक्षको सामाग्री मुद्रण हुने छ ।\n"
 "याद गर्नुहोस् यदि कक्ष सुरक्षित भएमा तपाईँले यसलाई मुद्रण गर्न सक्नुहुन्छ ।"
 
-#. i18n: ectx: property (text), widget (QCheckBox, m_bDontPrint)
-#: ui/dialogs/ProtectionWidget.ui:50
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bDontPrint)
+#: ui/dialogs/ProtectionWidget.ui:51
 #, kde-format
 msgid "&Do not print text"
 msgstr "पाठ मुद्रण नगर्नुहोस्"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/ProtectionWidget.ui:60
+#: ui/dialogs/ProtectionWidget.ui:61
 #, kde-format
 msgid "Protection"
 msgstr "सुरक्षा"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_bHideAll)
-#: ui/dialogs/ProtectionWidget.ui:68
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bHideAll)
+#: ui/dialogs/ProtectionWidget.ui:69
 #, kde-format
 msgid ""
 "This hides the cell content and works only when the sheet is protected. "
@@ -21431,14 +21308,14 @@ msgstr ""
 "यसले कक्ष सामाग्री लुकाउछ र पाना सुरक्षित भएको बेलामा मात्र कार्य गर्छ । कक्ष आफैँ सुरक्षित "
 "हुनु वा नहुनुमा कुनै अर्थ छैन ।"
 
-#. i18n: ectx: property (text), widget (QCheckBox, m_bHideAll)
-#: ui/dialogs/ProtectionWidget.ui:71
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideAll)
+#: ui/dialogs/ProtectionWidget.ui:72
 #, kde-format
 msgid "Hide &all"
 msgstr "सबै लुकाउनुहोस्"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_bIsProtected)
-#: ui/dialogs/ProtectionWidget.ui:96
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
+#: ui/dialogs/ProtectionWidget.ui:97
 #, fuzzy, kde-format
 #| msgid ""
 #| "If checked, the cell content will be protected. This is the default "
@@ -21458,14 +21335,14 @@ msgstr ""
 "सम्पुर्ण पाना सुरक्षा गर्नु आवश्यक हुन्छ । विस्तृत विवरणका लागि उन्नत केडीई स्प्रेड अध्यायको "
 "म्यानुअलमा हेर्नुहोस् । कक्ष सुरक्षित हुदाँ, यसको सामाग्री परिवर्तन गर्न सकिदैन ।"
 
-#. i18n: ectx: property (text), widget (QCheckBox, m_bIsProtected)
-#: ui/dialogs/ProtectionWidget.ui:99
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
+#: ui/dialogs/ProtectionWidget.ui:100
 #, kde-format
 msgid "&Protected"
 msgstr "सुरक्षित"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_bHideFormula)
-#: ui/dialogs/ProtectionWidget.ui:129
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bHideFormula)
+#: ui/dialogs/ProtectionWidget.ui:130
 #, kde-format
 msgid ""
 "When this is checked, the cell is still visible. However, its contents do "
@@ -21477,8 +21354,8 @@ msgstr ""
 "सूत्र लुकाएपछि सूत्र समावेश गरिएको कक्षमा मात्र कार्य हुन्छ त्यसैले प्रयोगकर्ताले सूत्र देख्न "
 "सक्दैन । यो कार्य गर्नाका लागि पाना सुरक्षित भएको हुनुपर्छ ।"
 
-#. i18n: ectx: property (text), widget (QCheckBox, m_bHideFormula)
-#: ui/dialogs/ProtectionWidget.ui:132
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideFormula)
+#: ui/dialogs/ProtectionWidget.ui:133
 #, kde-format
 msgid "&Hide formula"
 msgstr "सूत्र लुकाउनुहोस्"
@@ -21589,7 +21466,7 @@ msgstr "परिमार्जन गर्नुहोस्..."
 msgid "&Delete..."
 msgstr "मेट्नुहोस्..."
 
-#: ui/dialogs/StyleManagerDialog.cpp:202 ui/dialogs/StyleManagerDialog.cpp:205
+#: ui/dialogs/StyleManagerDialog.cpp:206 ui/dialogs/StyleManagerDialog.cpp:209
 #, kde-format
 msgid "style%1"
 msgstr "शैली %1"
@@ -21751,6 +21628,90 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "लिङ्क खोल्नुहुन्छ ?"
+
+#~ msgid "&Data Format"
+#~ msgstr "डेटा ढाँचा"
+
+#~ msgid "&Font"
+#~ msgstr "फन्ट"
+
+#~ msgid "&Position"
+#~ msgstr "स्थिति"
+
+#~ msgid "&Border"
+#~ msgstr "किनारा"
+
+#, fuzzy
+#~| msgid "Change Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Format"
+#~ msgstr "ढाँचा परिवर्तन गर्नुहोस्"
+
+#~ msgid "Default width (%1 %2)"
+#~ msgstr "पूर्वनिर्धारित चौडाइ (%1 %2)"
+
+#~ msgid "Default height (%1 %2)"
+#~ msgstr "पूर्वनिर्धारित उचाइ (%1 %2)"
+
+#, fuzzy
+#~| msgid ""
+#~| "When checked, this has the same effect as Data ->Merge Cells. You need "
+#~| "to have at least two consecutive cells selected. Those consecutive cells "
+#~| "are then merged into a bigger one.\n"
+#~| "When a merged cell is selected and when you uncheck this, then all cells "
+#~| "come back to their original size as before the merging. It has the same "
+#~| "effect as Data -> Dissociate Cells."
+#~ msgid ""
+#~ "When checked, this has the same effect as Format ->Merge Cells. You need "
+#~ "to have at least two consecutive cells selected. Those consecutive cells "
+#~ "are then merged into a bigger one.\n"
+#~ "When a merged cell is selected and when you uncheck this, then all cells "
+#~ "come back to their original size as before the merging. It has the same "
+#~ "effect as Format -> Dissociate Cells."
+#~ msgstr ""
+#~ "जाँच गर्दा, यसले डेटा -> गाभ्ने कक्ष जस्तै समान प्रभाव पार्छ । तपाईँले कम्तिमा दुइवटा "
+#~ "क्रमिक कक्ष चयन गरिएको हुनु आवश्यक छ । त्यसपछि ती क्रमिक कक्ष ठूलो एकमा गाभिन्छन ।\n"
+#~ "गाभिएको एक कक्ष चयन गर्दा र यसलाई चिनो हटाइएमा, त्यसपछि सबै कक्ष तीनका गाभ्न "
+#~ "भन्दा पहिलेको जस्तै मौलिक साइजमा फर्कन्छन् । यसको डेटा -> अलग गरिने कक्षमा जस्तै समान "
+#~ "प्रभाव पर्छ ।"
+
+#~ msgid "Merge cells"
+#~ msgstr "कक्ष गाभ्नुहोस्"
+
+#~ msgid "The unit used here is the one set in Format -> Page Layout.. dialog."
+#~ msgstr "यहाँ प्रयोग गरिएको एकाइ ढाँचा -> पृष्ठ रुपरेखा.. संवादको एउटा सेट हो ।"
+
+#~ msgid "Size of Cell"
+#~ msgstr "कक्षको साइज"
+
+#~ msgid ""
+#~ "If checked, the default height will be used for the cell instead of the "
+#~ "value above."
+#~ msgstr ""
+#~ "यदि जाँच भएमा, कक्षका लागि माथिको मानको साटोमा पूर्वनिर्धारित उचाइ प्रयोग गरिने "
+#~ "छ ।"
+
+#~ msgid "Default height (%1)"
+#~ msgstr "पूर्वनिर्धारित उचाइ (%1)"
+
+#~ msgid "Height:"
+#~ msgstr "उचाइ:"
+
+#~ msgid "Set the height of the cell."
+#~ msgstr "कक्षको उचाइ सेट गर्नुहोस् ।"
+
+#~ msgid ""
+#~ "If checked, the default width will be used for the cell instead of the "
+#~ "value above."
+#~ msgstr ""
+#~ "यदि जाँच भएमा, कक्षका लागि माथिको मानको साटोमा पूर्वनिर्धारित चौडाइ प्रयोग गरिने "
+#~ "छ ।"
+
+#~ msgid "Default width (%1)"
+#~ msgstr "पूर्वनिर्धारित चौडाइ (%1)"
+
+#~ msgid "Width:"
+#~ msgstr "चौडाइ:"
 
 #, fuzzy
 #~| msgid "Add Comment"
