@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-13 00:46+0000\n"
-"PO-Revision-Date: 2022-09-07 15:55+0300\n"
+"PO-Revision-Date: 2022-11-13 19:20+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -19906,7 +19906,7 @@ msgstr "Перекреслити"
 #: ui/dialogs/FontWidget.ui:149
 #, kde-format
 msgid "Choose the font size."
-msgstr ""
+msgstr "Виберіть розмір шрифту."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
 #: ui/dialogs/FontWidget.ui:180
@@ -20097,10 +20097,9 @@ msgid "Cell Format"
 msgstr "Формат комірки"
 
 #: ui/dialogs/LayoutDialog.cpp:122
-#, fuzzy, kde-format
-#| msgid "&General"
+#, kde-format
 msgid "General"
-msgstr "&Загальне"
+msgstr "Загальне"
 
 #: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
@@ -20108,16 +20107,14 @@ msgid "Border"
 msgstr "Границя"
 
 #: ui/dialogs/LayoutDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Back&ground"
+#, kde-format
 msgid "Background"
-msgstr "Т&ло"
+msgstr "Тло"
 
 #: ui/dialogs/LayoutDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "&Cell Protection"
+#, kde-format
 msgid "Cell Protection"
-msgstr "Захист &комірки"
+msgstr "Захист комірки"
 
 #: ui/dialogs/LayoutPage_Border.cpp:273
 #, kde-format

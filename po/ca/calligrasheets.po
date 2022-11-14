@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-13 00:46+0000\n"
-"PO-Revision-Date: 2022-09-07 14:53+0200\n"
+"PO-Revision-Date: 2022-11-13 09:32+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19790,7 +19790,7 @@ msgstr "Barrat"
 #: ui/dialogs/FontWidget.ui:149
 #, kde-format
 msgid "Choose the font size."
-msgstr ""
+msgstr "Trieu la mida del tipus de lletra."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
 #: ui/dialogs/FontWidget.ui:180
@@ -19984,10 +19984,9 @@ msgid "Cell Format"
 msgstr "Format de la cel·la"
 
 #: ui/dialogs/LayoutDialog.cpp:122
-#, fuzzy, kde-format
-#| msgid "&General"
+#, kde-format
 msgid "General"
-msgstr "&General"
+msgstr "General"
 
 #: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
@@ -19995,16 +19994,14 @@ msgid "Border"
 msgstr "Vores"
 
 #: ui/dialogs/LayoutDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Back&ground"
+#, kde-format
 msgid "Background"
-msgstr "F&ons"
+msgstr "Fons"
 
 #: ui/dialogs/LayoutDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "&Cell Protection"
+#, kde-format
 msgid "Cell Protection"
-msgstr "Prot&ecció de la cel·la"
+msgstr "Protecció de la cel·la"
 
 #: ui/dialogs/LayoutPage_Border.cpp:273
 #, kde-format
@@ -21190,196 +21187,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Obro l'enllaç?"
-
-#~ msgid "&Data Format"
-#~ msgstr "Format de les &dades"
-
-#~ msgid "&Font"
-#~ msgstr "&Tipus de lletra"
-
-#~ msgid "&Position"
-#~ msgstr "&Posició"
-
-#~ msgid "&Border"
-#~ msgstr "&Vores"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Format"
-#~ msgstr "Canvi de format"
-
-#~ msgid "Default width (%1 %2)"
-#~ msgstr "Amplada per defecte (%1 %2)"
-
-#~ msgid "Default height (%1 %2)"
-#~ msgstr "Alçada per defecte (%1 %2)"
-
-#~ msgid ""
-#~ "When checked, this has the same effect as Format ->Merge Cells. You need "
-#~ "to have at least two consecutive cells selected. Those consecutive cells "
-#~ "are then merged into a bigger one.\n"
-#~ "When a merged cell is selected and when you uncheck this, then all cells "
-#~ "come back to their original size as before the merging. It has the same "
-#~ "effect as Format -> Dissociate Cells."
-#~ msgstr ""
-#~ "Quan està marcat, té el mateix efecte que Format ->Fusiona cel·les. Heu "
-#~ "de tenir seleccionades almenys dues cel·les consecutives. Llavors "
-#~ "aquestes es fusionen en una de sola més gran.\n"
-#~ "Quan està seleccionada una cel·la fusionada i desmarqueu això, totes les "
-#~ "cel·les tornen a la seva mida original d'abans de fusionar-les. Té el "
-#~ "mateix efecte que Format -> Dissocia les cel·les."
-
-#~ msgid "Merge cells"
-#~ msgstr "Fusiona les cel·les"
-
-#~ msgid "The unit used here is the one set in Format -> Page Layout.. dialog."
-#~ msgstr ""
-#~ "La unitat que s'usa aquí és l'arranjada al diàleg Format ->Disposició de "
-#~ "pàgina."
-
-#~ msgid "Size of Cell"
-#~ msgstr "Mida de la cel·la"
-
-#~ msgid ""
-#~ "If checked, the default height will be used for the cell instead of the "
-#~ "value above."
-#~ msgstr ""
-#~ "Si està marcat, s'usarà l'alçada per defecte per a la cel·la en lloc del "
-#~ "valor de dalt."
-
-#~ msgid "Default height (%1)"
-#~ msgstr "Alçada per defecte (%1)"
-
-#~ msgid "Height:"
-#~ msgstr "Alçada:"
-
-#~ msgid "Set the height of the cell."
-#~ msgstr "Arranja l'alçada de la cel·la."
-
-#~ msgid ""
-#~ "If checked, the default width will be used for the cell instead of the "
-#~ "value above."
-#~ msgstr ""
-#~ "Si està marcat, s'usarà l'amplada per defecte per a la cel·la en comptes "
-#~ "del valor de dalt."
-
-#~ msgid "Default width (%1)"
-#~ msgstr "Amplada per defecte (%1)"
-
-#~ msgid "Width:"
-#~ msgstr "Amplada:"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add Comment"
-#~ msgstr "Afegeix un comentari"
-
-#~ msgid "Increase Indent"
-#~ msgstr "Augmenta el sagnat"
-
-#~ msgid "Increase the indentation"
-#~ msgstr "Augmenta el sagnat"
-
-#~ msgid "Decrease Indent"
-#~ msgstr "Disminueix el sagnat"
-
-#~ msgid "Decrease the indentation"
-#~ msgstr "Disminueix el sagnat"
-
-#~ msgid "Upper Case"
-#~ msgstr "Majúscules"
-
-# msgid "Upper Case"
-#~ msgid "Upper"
-#~ msgstr "Majúscules"
-
-#~ msgid "Convert all letters to upper case"
-#~ msgstr "Converteix totes les lletres a majúscules"
-
-#~ msgid "Lower Case"
-#~ msgstr "Minúscules"
-
-# msgid "Peru"
-#~ msgid "Lower"
-#~ msgstr "Minúscules"
-
-#~ msgid "Convert all letters to lower case"
-#~ msgstr "Converteix totes les lletres a minúscules"
-
-#~ msgid "Convert First Letter to Upper Case"
-#~ msgstr "Converteix la primera lletra en majúscula"
-
-#~ msgid "First Letter Upper"
-#~ msgstr "Primera lletra en majúscula"
-
-#~ msgid "Capitalize the first letter"
-#~ msgstr "Posa la primera lletra en majúscula"
-
-# msgid "Comment"
-#~ msgid "Comment..."
-#~ msgstr "Comentari..."
-
-#~ msgid "Edit a comment for this cell"
-#~ msgstr "Edita un comentari per a aquesta cel·la"
-
-#~ msgid "Remove Comment"
-#~ msgstr "Elimina el comentari"
-
-#~ msgid "Remove this cell's comment"
-#~ msgstr "Elimina aquest comentari de la cel·la"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Switch to uppercase"
-#~ msgstr "Canvia a majúscules"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Switch to lowercase"
-#~ msgstr "Canvia a minúscules"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "First letter uppercase"
-#~ msgstr "Primera lletra en majúscula"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove Comment"
-#~ msgstr "Elimina el comentari"
-
-#~ msgid "Clear Comment"
-#~ msgstr "Neteja el comentari"
-
-# msgid "Change Text"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Case"
-#~ msgstr "Canvia la caixa"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Increase Indentation"
-#~ msgstr "Augmenta el sagnat"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Decrease Indentation"
-#~ msgstr "Disminueix el sagnat"
-
-#~ msgid "Cell Comment"
-#~ msgstr "Comentari de la cel·la"
-
-#~ msgid "&Left"
-#~ msgstr "E&squerra"
-
-#~ msgid "&Right"
-#~ msgstr "D&reta"
-
-#~ msgid "&Up"
-#~ msgstr "A&munt"
-
-#~ msgid "&Down"
-#~ msgstr "A&vall"
-
-#~ msgid "Autosum"
-#~ msgstr "Suma automàtica"
-
-#~ msgid "Insert the 'sum' function"
-#~ msgstr "Insereix la funció sumatori"
-
-# msgid "Formula Selection"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fill Selection"
-#~ msgstr "Omple la selecció"
