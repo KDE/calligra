@@ -1,22 +1,23 @@
 # translation of AutocorrectPlugin.po to Italian
 # Copyright (C) 2008 This_file_is_part_of_KDE
 # This file is distributed under the same license as the Koffice package.
-#
 # Luciano Montanaro <mikelima@cirulla.net>, 2008.
+# Vincenzo Reale <smart2128vr@gmail.com>, 2022.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: AutocorrectPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2016-11-22 20:44+0100\n"
-"Last-Translator: Luciano Montanaro <mikelima@cirulla.net>\n"
+"PO-Revision-Date: 2022-11-11 10:58+0100\n"
+"Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 22.08.3\n"
 
 #: Autocorrect.cpp:26
 #, kde-format
@@ -24,10 +25,9 @@ msgid "Configure &Autocorrection..."
 msgstr "Configura la correzione &automatica..."
 
 #: Autocorrect.cpp:30
-#, fuzzy, kde-format
-#| msgid "Autocorrection"
+#, kde-format
 msgid "Enable Autocorrection"
-msgstr "Correzione automatica"
+msgstr "Abilita la correzione automatica"
 
 #: AutocorrectFactory.cpp:16
 #, kde-format

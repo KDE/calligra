@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-13 00:46+0000\n"
-"PO-Revision-Date: 2022-09-07 15:27+0200\n"
+"PO-Revision-Date: 2022-11-14 09:02+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 22.08.3\n"
 
 #: core/Currency.cpp:35 core/Currency.cpp:81
 #, kde-format
@@ -19839,7 +19839,7 @@ msgstr "Sbarrato"
 #: ui/dialogs/FontWidget.ui:149
 #, kde-format
 msgid "Choose the font size."
-msgstr ""
+msgstr "Scegli la dimensione del carattere."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
 #: ui/dialogs/FontWidget.ui:180
@@ -20032,10 +20032,9 @@ msgid "Cell Format"
 msgstr "Formato cella"
 
 #: ui/dialogs/LayoutDialog.cpp:122
-#, fuzzy, kde-format
-#| msgid "&General"
+#, kde-format
 msgid "General"
-msgstr "&Generale"
+msgstr "Generale"
 
 #: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
@@ -20043,16 +20042,14 @@ msgid "Border"
 msgstr "Bordo"
 
 #: ui/dialogs/LayoutDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Back&ground"
+#, kde-format
 msgid "Background"
-msgstr "&Sfondo"
+msgstr "Sfondo"
 
 #: ui/dialogs/LayoutDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "&Cell Protection"
+#, kde-format
 msgid "Cell Protection"
-msgstr "&Protezione celle"
+msgstr "Protezione celle"
 
 #: ui/dialogs/LayoutPage_Border.cpp:273
 #, kde-format

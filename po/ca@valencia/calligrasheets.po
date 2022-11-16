@@ -16805,7 +16805,7 @@ msgid ""
 "If this box is checked Calligra Sheets will display the actual formulae in "
 "cells rather than the results."
 msgstr ""
-"Si esta casella està marcada, Sheets de Calligra mostrarà la fórmula real a "
+"Si esta casella està marcada, Sheets de Calligra mostrarà la fórmula real en "
 "les cel·les en comptes dels resultats."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFormulaCheckBox)
@@ -17018,7 +17018,7 @@ msgstr "Distingix entre majúscules i minúscules"
 #: part/Find.cpp:35
 #, kde-format
 msgid "Match cases when searching"
-msgstr "Coincidències de majúscules a les busques"
+msgstr "Coincidències de majúscules en les busques"
 
 #: part/HeaderItems.cpp:161 part/HeaderWidgets.cpp:155
 #, kde-format

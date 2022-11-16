@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-13 00:46+0000\n"
-"PO-Revision-Date: 2022-11-14 14:17+0300\n"
+"PO-Revision-Date: 2022-11-15 05:02+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -13579,11 +13579,11 @@ msgid ""
 "can run, a t-test can tell you how likely it is that any speed difference "
 "between the two groups of people is due to their height."
 msgstr ""
-"Bir t-test iki veri kümesini karşılaştırı ve etkilenen bazı değişkenlerin "
-"sebep olduğu ikisi arasındaki herhangi bir değişikliğin olasılığını "
-"çıkartır. Örneğin iki veri kümesi, bir tanesi 30 uzun insanın koşabildiği "
-"hızı içerir ve diğer 30 kısa insanın koşabildiği hızı, bir t-test iki grup "
-"insan arasındaki herhangi hız farkının boyları ile alakalı olma olasılığını "
+"Bir t-test iki veri kümesini karşılaştırır ve etkilenen bazı değişkenlerin "
+"neden olduğu ikisi arasındaki herhangi bir değişikliğin olasılığını çıkarır. "
+"Örneğin iki veri kümesi, bir tanesi 30 uzun insanın koşabildiği hızı içerir "
+"ve diğer 30 kısa insanın koşabildiği hızı, bir t-test iki grup insan "
+"arasındaki herhangi hız farkının boyları ile alakalı olma olasılığını "
 "söyleyebilir."
 
 #: functions/statistical.xml:1486
@@ -14842,7 +14842,7 @@ msgstr "TOGGLE(\"MeRhAbA\"), \"mErHaBa\" döndürür"
 #, kde-format
 msgid ""
 "The CLEAN() function removes every non-printable character from the string"
-msgstr "CLEAN() işlevi, diziden basılamayan karakterleri çıkartır"
+msgstr "CLEAN() işlevi, diziden basılamayan karakterleri çıkarır"
 
 #: functions/text.xml:625
 #, kde-format
@@ -17814,7 +17814,7 @@ msgstr "Hücreleri Kaldır..."
 #: ui/CellToolBase.cpp:399
 #, kde-format
 msgid "Removes the cells from the spreadsheet"
-msgstr "Geçerli hücreyi hesap tablosundan çıkartır"
+msgstr "Geçerli hücreyi hesap tablosundan çıkarır"
 
 #: ui/CellToolBase.cpp:405 ui/CellToolBase.cpp:406
 #, kde-format
