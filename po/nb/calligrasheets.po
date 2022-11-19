@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-12 00:45+0000\n"
+"POT-Creation-Date: 2022-11-13 00:46+0000\n"
 "PO-Revision-Date: 2022-05-29 19:42+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -3224,37 +3224,36 @@ msgid "Header1"
 msgstr "Topptekst1"
 
 #: core/StyleManager.cpp:172 ui/CellToolBase.cpp:169
-#: ui/dialogs/LayoutDialog.cpp:159 ui/dialogs/LayoutDialog.cpp:160
-#: ui/dialogs/LayoutDialog.cpp:166 ui/dialogs/LayoutDialog.cpp:228
-#: ui/dialogs/LayoutDialog.cpp:244 ui/dialogs/StyleManagerDialog.cpp:99
-#: ui/dialogs/StyleManagerDialog.cpp:139 ui/dialogs/StyleManagerDialog.cpp:172
-#: ui/dialogs/StyleManagerDialog.cpp:194 ui/dialogs/StyleManagerDialog.cpp:235
-#: ui/dialogs/StyleManagerDialog.cpp:261 ui/dialogs/StyleManagerDialog.cpp:282
+#: ui/dialogs/LayoutPage_General.cpp:127 ui/dialogs/LayoutPage_General.cpp:146
+#: ui/dialogs/StyleManagerDialog.cpp:99 ui/dialogs/StyleManagerDialog.cpp:139
+#: ui/dialogs/StyleManagerDialog.cpp:172 ui/dialogs/StyleManagerDialog.cpp:198
+#: ui/dialogs/StyleManagerDialog.cpp:236 ui/dialogs/StyleManagerDialog.cpp:265
+#: ui/dialogs/StyleManagerDialog.cpp:286
 #, kde-format
 msgid "Default"
 msgstr "Standard"
 
-#: core/ValueFormatter.cpp:542 core/ValueFormatter.cpp:548
+#: core/ValueFormatter.cpp:529 core/ValueFormatter.cpp:535
 #, kde-format
 msgid "AM"
 msgstr "am"
 
-#: core/ValueFormatter.cpp:542 core/ValueFormatter.cpp:548
+#: core/ValueFormatter.cpp:529 core/ValueFormatter.cpp:535
 #, kde-format
 msgid "PM"
 msgstr "pm"
 
-#: core/ValueFormatter.cpp:552
+#: core/ValueFormatter.cpp:539
 #, kde-format
 msgid "h"
 msgstr "t"
 
-#: core/ValueFormatter.cpp:554
+#: core/ValueFormatter.cpp:541
 #, kde-format
 msgid "min"
 msgstr "min"
 
-#: core/ValueFormatter.cpp:556
+#: core/ValueFormatter.cpp:543
 #, kde-format
 msgid "s"
 msgstr "s"
@@ -3264,7 +3263,7 @@ msgstr "s"
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutDialog.cpp:892 ui/dialogs/SpecialPasteWidget.ui:51
+#: ui/dialogs/LayoutPage_Float.cpp:94 ui/dialogs/SpecialPasteWidget.ui:51
 #, kde-format
 msgid "Text"
 msgstr "Tekst"
@@ -3360,12 +3359,12 @@ msgstr "Eksempler"
 msgid "Related Functions"
 msgstr "Beslektede funksjoner"
 
-#: engine/Localization.cpp:413
+#: engine/Localization.cpp:416
 #, kde-format
 msgid "true"
 msgstr "sann"
 
-#: engine/Localization.cpp:414
+#: engine/Localization.cpp:417
 #, kde-format
 msgid "false"
 msgstr "usann"
@@ -3972,7 +3971,7 @@ msgstr "CARY(12;0) gir 0"
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
 #: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutDialog.cpp:860
+#: ui/dialogs/LayoutPage_Float.cpp:62
 #, kde-format
 msgid "Number"
 msgstr "Tall"
@@ -3982,7 +3981,7 @@ msgstr "Tall"
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
 #: ui/CellToolBase.cpp:163 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutDialog.cpp:850 ui/dialogs/SpecialPasteWidget.ui:58
+#: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
 msgstr "Format"
@@ -4331,7 +4330,7 @@ msgstr "Dato & Tid"
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutDialog.cpp:880
+#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
 #, kde-format
 msgid "Date"
 msgstr "Dato"
@@ -4406,7 +4405,7 @@ msgstr "DAYS360(\"2002-02-22\"; \"2002-04-21\"; Usann) gir 59"
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
 #: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutDialog.cpp:884
+#: ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid "Time"
 msgstr "Tid"
@@ -5622,9 +5621,9 @@ msgid ""
 "1E-12), f (femto, 1E-15), a (atto, 1E-18)."
 msgstr ""
 "For metriske enheter kan hvilke som helst av disse prefiksene brukes:: E "
-"(exa, 1E+18), P (peta, 1E+15), T (tera, 1E+12), G (giga, 1E+09), M (mega, 1E"
-"+06), k (kilo, 1E+03), h (hecto, 1E+02), e (deka, 1E+01), d (deci, 1E-01), c "
-"(centi, 1E-02), m (milli, 1E-03), u (micro, 1E-06), n (nano, 1E-09), p "
+"(exa, 1E+18), P (peta, 1E+15), T (tera, 1E+12), G (giga, 1E+09), M (mega, "
+"1E+06), k (kilo, 1E+03), h (hecto, 1E+02), e (deka, 1E+01), d (deci, 1E-01), "
+"c (centi, 1E-02), m (milli, 1E-03), u (micro, 1E-06), n (nano, 1E-09), p "
 "(pico, 1E-12), f (femto, 1E-15), a (atto, 1E-18)."
 
 #: functions/engineering.xml:142
@@ -6426,8 +6425,8 @@ msgstr "IMDIV(\"12+i\";\"12-i\") gir «0,986207+0,16551i»"
 msgid ""
 "The IMSUB() returns the difference of several complex numbers of form x+yi."
 msgstr ""
-"IMSUB()-funksjonen gir differansen mellom flere komplekse tall med formen x"
-"+yi."
+"IMSUB()-funksjonen gir differansen mellom flere komplekse tall med formen "
+"x+yi."
 
 #: functions/engineering.xml:785
 #, kde-format
@@ -7084,7 +7083,7 @@ msgstr "Dollarbrøk"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutDialog.cpp:876
+#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid "Fraction"
 msgstr "Brøk"
@@ -8315,8 +8314,7 @@ msgid "Manual"
 msgstr "Manuell"
 
 #: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:442
-#: ui/dialogs/LayoutDialog.cpp:981 ui/dialogs/LayoutDialog.cpp:1427
-#: ui/dialogs/LayoutDialog.cpp:1489
+#: ui/dialogs/LayoutPage_Float.cpp:182 ui/dialogs/LayoutPage_Float.cpp:579
 #, kde-format
 msgid "Automatic"
 msgstr "Automatisk"
@@ -8425,9 +8423,9 @@ msgid ""
 "return. It is one of the following: \"directory\" returns the path of the "
 "current directory, \"numfile\" returns the number of active documents, "
 "\"release\" returns the version of Calligra Sheets as text, \"recalc\" "
-"returns the current recalculation mode: \"Automatic\" or \"Manual\", \"system"
-"\" returns the name of the operating environment, \"osversion\" returns the "
-"current operating system."
+"returns the current recalculation mode: \"Automatic\" or \"Manual\", "
+"\"system\" returns the name of the operating environment, \"osversion\" "
+"returns the current operating system."
 msgstr ""
 "Funksjonen INFO() gir informasjon om det gjeldende operativmiljøet. "
 "Parametertypen angir hvilken type informasjon som skal gis. Det er en av "
@@ -14393,7 +14391,7 @@ msgstr "FINDB(finn_tekst;tekst;BytePosisjon start)"
 msgid "Source string"
 msgstr "Kildestreng"
 
-#: functions/text.xml:352
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:134
 #, kde-format
 msgid "Position"
 msgstr "Posisjon"
@@ -15742,9 +15740,8 @@ msgstr "&Eksterne data"
 msgid "F&ormat"
 msgstr "F&ormat"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox5)
 #. i18n: ectx: Menu (MergeCellMenu)
-#: part/calligrasheets.rc:104 ui/dialogs/PositionWidget.ui:179
+#: part/calligrasheets.rc:104
 #, kde-format
 msgid "Merge Cells"
 msgstr "Slå sammen celler"
@@ -15824,7 +15821,7 @@ msgstr "Aktiver"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolBase.cpp:212
-#: ui/CellToolOptionWidgets.xml:3
+#: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
 msgstr "Skrift"
@@ -15896,7 +15893,7 @@ msgid "First column as label"
 msgstr "Første kolonne som overskrift"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:127
 #, kde-format
 msgid "Data Format"
 msgstr "Dataformat"
@@ -16255,7 +16252,7 @@ msgstr "Vannrett"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup2)
 #: part/dialogs/PageLayoutSheetPage.ui:335 ui/CellToolBase.cpp:345
-#: ui/dialogs/PositionWidget.ui:91
+#: ui/dialogs/PositionWidget.ui:135
 #, kde-format
 msgid "Vertical"
 msgstr "Loddrett"
@@ -17204,7 +17201,7 @@ msgstr ""
 "Du er i ferd med å fjerne arket som er i bruk.\n"
 "Vil du fortsette?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1465
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1482
 #, kde-format
 msgid "Enter name:"
 msgstr "Oppgi navn:"
@@ -17264,21 +17261,21 @@ msgstr "TellA: "
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1618
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1651
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Endre tekstfarge"
 
-#: part/ViewAdaptor.cpp:138 part/ViewAdaptor.cpp:148 ui/CellToolBase.cpp:1863
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1932
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Endre bakgrunnsfarge"
 
-#: part/ViewAdaptor.cpp:158 part/ViewAdaptor.cpp:171 part/ViewAdaptor.cpp:181
-#: part/ViewAdaptor.cpp:194 part/ViewAdaptor.cpp:204 part/ViewAdaptor.cpp:219
-#: ui/CellToolBase.cpp:1689 ui/CellToolBase.cpp:1703 ui/CellToolBase.cpp:1717
-#: ui/CellToolBase.cpp:1728 ui/CellToolBase.cpp:1739 ui/CellToolBase.cpp:1754
-#: ui/CellToolBase.cpp:1770 ui/CellToolBase_p.cpp:734
+#: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
+#: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
+#: ui/CellToolBase.cpp:1736 ui/CellToolBase.cpp:1752 ui/CellToolBase.cpp:1768
+#: ui/CellToolBase.cpp:1781 ui/CellToolBase.cpp:1794 ui/CellToolBase.cpp:1811
+#: ui/CellToolBase.cpp:1829 ui/CellToolBase_p.cpp:736
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Endre kantlinje"
@@ -17308,7 +17305,7 @@ msgstr "Stilhåndterer …"
 msgid "Edit and organize cell styles"
 msgstr "Rediger og organiser cellestiler"
 
-#: ui/CellToolBase.cpp:179 ui/dialogs/LayoutDialog.cpp:133
+#: ui/CellToolBase.cpp:179 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
@@ -17334,22 +17331,20 @@ msgstr "Stil fra cellen"
 msgid "Create a new style based on the currently selected cell"
 msgstr "Lag en ny stil basert på den valgte cellen"
 
-#. i18n: ectx: property (text), item, widget (KComboBox, weight_combo)
-#: ui/CellToolBase.cpp:192 ui/dialogs/FontWidget.ui:82
-#: ui/dialogs/LayoutDialog.cpp:1738
+#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
+#: ui/CellToolBase.cpp:192 ui/dialogs/FontWidget.ui:83
 #, kde-format
 msgid "Bold"
 msgstr "Halvfet"
 
-#. i18n: ectx: property (text), item, widget (KComboBox, style_combo)
-#: ui/CellToolBase.cpp:197 ui/dialogs/FontWidget.ui:57
-#: ui/dialogs/LayoutDialog.cpp:1749
+#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
+#: ui/CellToolBase.cpp:197 ui/dialogs/FontWidget.ui:58
 #, kde-format
 msgid "Italic"
 msgstr "Kursiv"
 
-#. i18n: ectx: property (text), widget (QCheckBox, underline)
-#: ui/CellToolBase.cpp:202 ui/dialogs/FontWidget.ui:100
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, underline)
+#: ui/CellToolBase.cpp:202 ui/dialogs/FontWidget.ui:101
 #, kde-format
 msgid "Underline"
 msgstr "Understreket"
@@ -17437,7 +17432,7 @@ msgstr "Toppjuster"
 
 #. i18n: ectx: property (text), widget (QRadioButton, top)
 #: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:299
-#: ui/dialogs/PositionWidget.ui:97
+#: ui/dialogs/PositionWidget.ui:141
 #, kde-format
 msgid "Top"
 msgstr "Øverst"
@@ -17453,7 +17448,7 @@ msgid "Align Middle"
 msgstr "Midtstill loddrett"
 
 #. i18n: ectx: property (text), widget (QRadioButton, middle)
-#: ui/CellToolBase.cpp:271 ui/dialogs/PositionWidget.ui:104
+#: ui/CellToolBase.cpp:271 ui/dialogs/PositionWidget.ui:148
 #, kde-format
 msgid "Middle"
 msgstr "Midtstilt"
@@ -17470,7 +17465,7 @@ msgstr "Bunnjuster"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bottom)
 #: ui/CellToolBase.cpp:278 ui/CellToolBase.cpp:305
-#: ui/dialogs/PositionWidget.ui:111
+#: ui/dialogs/PositionWidget.ui:155
 #, kde-format
 msgid "Bottom"
 msgstr "Nederst"
@@ -17619,7 +17614,7 @@ msgstr "Prosentformat"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
 #: ui/CellToolBase.cpp:359 ui/dialogs/DataFormatWidget.ui:102
-#: ui/dialogs/LayoutDialog.cpp:864
+#: ui/dialogs/LayoutPage_Float.cpp:66
 #, kde-format
 msgid "Percent"
 msgstr "Prosent"
@@ -17636,7 +17631,7 @@ msgstr "Pengeformat"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
 #: ui/CellToolBase.cpp:365 ui/dialogs/DataFormatWidget.ui:95
-#: ui/dialogs/LayoutDialog.cpp:868
+#: ui/dialogs/LayoutPage_Float.cpp:70
 #, kde-format
 msgid "Money"
 msgstr "Valuta"
@@ -17681,7 +17676,7 @@ msgstr "Bakgrunnsfarge"
 msgid "Cells..."
 msgstr "Celler …"
 
-#: ui/CellToolBase.cpp:392 ui/CellToolBase_p.cpp:1155
+#: ui/CellToolBase.cpp:392 ui/CellToolBase_p.cpp:1159
 #, kde-format
 msgid "Insert Cells..."
 msgstr "Sett inn celler …"
@@ -17868,7 +17863,7 @@ msgstr "Formelvalg"
 msgid "Insert a function"
 msgstr "Sett inn en funksjon"
 
-#: ui/CellToolBase.cpp:491 ui/CellToolBase.cpp:2026
+#: ui/CellToolBase.cpp:491 ui/CellToolBase.cpp:2097
 #, kde-format
 msgid "Others..."
 msgstr "Andre …"
@@ -18023,116 +18018,116 @@ msgstr "Permuter festing av referansen ved tekstmarkøren"
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1464
+#: ui/CellToolBase.cpp:1481
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "Lag stil fra celle"
 
-#: ui/CellToolBase.cpp:1473
+#: ui/CellToolBase.cpp:1490
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "Stilnavnet kan ikke være tomt."
 
-#: ui/CellToolBase.cpp:1478 ui/dialogs/LayoutDialog.cpp:199
+#: ui/CellToolBase.cpp:1495 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "En stil med dette navnet finnes allerede."
 
-#: ui/CellToolBase.cpp:1499 ui/CellToolBase.cpp:1513 ui/CellToolBase.cpp:1527
-#: ui/CellToolBase.cpp:1542 ui/CellToolBase.cpp:1556 ui/CellToolBase.cpp:1574
-#: ui/CellToolBase.cpp:1595 ui/CellToolBase.cpp:1608
+#: ui/CellToolBase.cpp:1516 ui/CellToolBase.cpp:1532 ui/CellToolBase.cpp:1548
+#: ui/CellToolBase.cpp:1565 ui/CellToolBase.cpp:1581 ui/CellToolBase.cpp:1601
+#: ui/CellToolBase.cpp:1624 ui/CellToolBase.cpp:1639
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Endre skrift"
 
-#: ui/CellToolBase.cpp:1628 ui/CellToolBase.cpp:1638 ui/CellToolBase.cpp:1648
+#: ui/CellToolBase.cpp:1663 ui/CellToolBase.cpp:1675 ui/CellToolBase.cpp:1687
 msgctxt "(qtundo-format)"
 msgid "Change Horizontal Alignment"
 msgstr "Endre vannrett innretting"
 
-#: ui/CellToolBase.cpp:1658 ui/CellToolBase.cpp:1668 ui/CellToolBase.cpp:1678
+#: ui/CellToolBase.cpp:1699 ui/CellToolBase.cpp:1711 ui/CellToolBase.cpp:1723
 msgctxt "(qtundo-format)"
 msgid "Change Vertical Alignment"
 msgstr "Endre loddrett innretting"
 
-#: ui/CellToolBase.cpp:1792
+#: ui/CellToolBase.cpp:1853
 msgctxt "(qtundo-format)"
 msgid "Wrap Text"
 msgstr "Bryt tekst"
 
-#: ui/CellToolBase.cpp:1804
+#: ui/CellToolBase.cpp:1867
 msgctxt "(qtundo-format)"
 msgid "Vertical Text"
 msgstr "Loddrett tekst"
 
-#: ui/CellToolBase.cpp:1823
+#: ui/CellToolBase.cpp:1888
 msgctxt "(qtundo-format)"
 msgid "Format Percent"
 msgstr "Prosentformat"
 
-#: ui/CellToolBase.cpp:1833
+#: ui/CellToolBase.cpp:1900
 msgctxt "(qtundo-format)"
 msgid "Format Money"
 msgstr "Pengeformat"
 
-#: ui/CellToolBase.cpp:1899
+#: ui/CellToolBase.cpp:1970
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Tøm tekst"
 
-#: ui/CellToolBase.cpp:1953
+#: ui/CellToolBase.cpp:2024
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1989 ui/CellToolBase.cpp:2001
+#: ui/CellToolBase.cpp:2060 ui/CellToolBase.cpp:2072
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Du må velge flere celler."
 
-#: ui/CellToolBase.cpp:2490
+#: ui/CellToolBase.cpp:2561
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Erstatt"
 
-#: ui/CellToolBase_p.cpp:703
+#: ui/CellToolBase_p.cpp:705
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Tallformat"
 
-#: ui/CellToolBase_p.cpp:709
+#: ui/CellToolBase_p.cpp:711
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Valutaformat"
 
-#: ui/CellToolBase_p.cpp:714
+#: ui/CellToolBase_p.cpp:716
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Prosentformat"
 
-#: ui/CellToolBase_p.cpp:719
+#: ui/CellToolBase_p.cpp:721
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Tidsformat"
 
-#: ui/CellToolBase_p.cpp:724
+#: ui/CellToolBase_p.cpp:726
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Datoformat"
 
-#: ui/CellToolBase_p.cpp:729
+#: ui/CellToolBase_p.cpp:731
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Vitenskapelig format"
 
-#: ui/CellToolBase_p.cpp:1159
+#: ui/CellToolBase_p.cpp:1163
 #, kde-format
 msgid "Delete Cells..."
 msgstr "Slett celler …"
 
-#: ui/CellToolBase_p.cpp:1163
+#: ui/CellToolBase_p.cpp:1167
 #, kde-format
 msgid "Selection List..."
 msgstr "Alternativliste …"
@@ -18457,12 +18452,12 @@ msgctxt "(qtundo-format)"
 msgid "Remove Named Area"
 msgstr "Fjern navngitt område"
 
-#: ui/commands/PrecisionCommand.cpp:46
+#: ui/commands/PrecisionCommand.cpp:45
 msgctxt "(qtundo-format)"
 msgid "Increase Precision"
 msgstr "Øk presisjonsnivået"
 
-#: ui/commands/PrecisionCommand.cpp:48
+#: ui/commands/PrecisionCommand.cpp:47
 msgctxt "(qtundo-format)"
 msgid "Decrease Precision"
 msgstr "Senk presisjonsnivået"
@@ -18601,12 +18596,12 @@ msgctxt "(qtundo-format)"
 msgid "Correct Misspelled Words"
 msgstr "Rett opp feilstavede ord"
 
-#: ui/commands/StyleCommand.cpp:38
+#: ui/commands/StyleCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Reset Style"
 msgstr "Tilbakestill stil"
 
-#: ui/commands/StyleCommand.cpp:40
+#: ui/commands/StyleCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Endre stil"
@@ -19194,51 +19189,51 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:183
-#: ui/dialogs/LayoutDialog.cpp:902 ui/dialogs/LayoutDialog.cpp:2422
-#: ui/dialogs/LayoutDialog.cpp:3195
+#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
+#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
+#: ui/dialogs/LayoutPage_Pattern.cpp:147
 #, kde-format
 msgid "Preview"
 msgstr "Forhåndsvis"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutDialog.cpp:856
+#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
 #, kde-format
 msgid "Generic"
 msgstr "Generisk"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutDialog.cpp:888
+#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
 #, kde-format
 msgid "Date and Time"
 msgstr "Dato og klokkeslett"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutDialog.cpp:975
+#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
 #, kde-format
 msgid "Currency:"
 msgstr "Valuta:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutDialog.cpp:971
+#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
 #, kde-format
 msgid "Format:"
 msgstr "Format:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutDialog.cpp:948
+#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
 #, kde-format
 msgid "Postfix:"
 msgstr "Sufffiks:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutDialog.cpp:958
+#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
 #, kde-format
 msgid "Precision:"
 msgstr "Presisjon:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutDialog.cpp:954
+#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
 #, kde-format
 msgid "Prefix:"
 msgstr "Prefiks:"
@@ -19380,7 +19375,7 @@ msgid "Fewer Options"
 msgstr "Færre valg"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
-#: ui/dialogs/FontWidget.ui:32
+#: ui/dialogs/FontWidget.ui:33
 #, kde-format
 msgid ""
 "You can select here the font style, size and color, including some "
@@ -19396,9 +19391,8 @@ msgstr ""
 "Standard skrift for alle celler settes opp i menyen Format->Stilbehandler "
 "med den stilen som er i bruk i øyeblikket."
 
-#. i18n: ectx: property (whatsThis), widget (KComboBox, style_combo)
-#. i18n: ectx: property (whatsThis), widget (KComboBox, size_combo)
-#: ui/dialogs/FontWidget.ui:40 ui/dialogs/FontWidget.ui:148
+#. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
+#: ui/dialogs/FontWidget.ui:41
 #, kde-format
 msgid ""
 "Choose the style for your font for the currently selected cells. When you "
@@ -19413,21 +19407,23 @@ msgstr ""
 "stilen beholdes. Hvis det for eksempel endres til Roman, så blir tekststilen "
 "satt til Roman for alle markerte celler."
 
-#. i18n: ectx: property (text), item, widget (KComboBox, style_combo)
-#. i18n: ectx: property (text), item, widget (KComboBox, weight_combo)
-#: ui/dialogs/FontWidget.ui:47 ui/dialogs/FontWidget.ui:72
+#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
+#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
+#. i18n: ectx: property (specialValueText), widget (QSpinBox, size_spinner)
+#: ui/dialogs/FontWidget.ui:48 ui/dialogs/FontWidget.ui:73
+#: ui/dialogs/FontWidget.ui:152
 #, kde-format
 msgid "Varying (No Change)"
 msgstr "Varierende (Ingen endring)"
 
-#. i18n: ectx: property (text), item, widget (KComboBox, style_combo)
-#: ui/dialogs/FontWidget.ui:52 ui/dialogs/LayoutDialog.cpp:1747
+#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
+#: ui/dialogs/FontWidget.ui:53
 #, kde-format
 msgid "Roman"
 msgstr "Roman"
 
-#. i18n: ectx: property (whatsThis), widget (KComboBox, weight_combo)
-#: ui/dialogs/FontWidget.ui:65
+#. i18n: ectx: property (whatsThis), widget (QComboBox, weight_combo)
+#: ui/dialogs/FontWidget.ui:66
 #, kde-format
 msgid ""
 "Choose the weight for your font for the currently selected cells. When you "
@@ -19442,47 +19438,46 @@ msgstr ""
 "beholdes om denne innstillinga beholdes. Endres det til Halvfet, for "
 "eksempel, så endres skriftsorten for alle cellene til Halvfet."
 
-#. i18n: ectx: property (text), item, widget (KComboBox, weight_combo)
+#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
 #. i18n: ectx: property (text), item, widget (QComboBox, ValueType)
-#: ui/dialogs/FontWidget.ui:77 ui/dialogs/LayoutDialog.cpp:1736
-#: ui/dialogs/pivotoptions.ui:81
+#: ui/dialogs/FontWidget.ui:78 ui/dialogs/pivotoptions.ui:81
 #, kde-format
 msgid "Normal"
 msgstr "Normal"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
-#: ui/dialogs/FontWidget.ui:90 ui/dialogs/LayoutDialog.cpp:2387
-#: ui/dialogs/LayoutDialog.cpp:3159
+#: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:324
+#: ui/dialogs/LayoutPage_Pattern.cpp:119
 #, kde-format
 msgid "Color:"
 msgstr "Farge:"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, underline)
-#: ui/dialogs/FontWidget.ui:97
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, underline)
+#: ui/dialogs/FontWidget.ui:98
 #, kde-format
 msgid "If this is checked, the current cell text will be underlined."
 msgstr "Hvis dette er krysset av blir tekst i gjeldende celle understreket."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
-#: ui/dialogs/FontWidget.ui:107
+#: ui/dialogs/FontWidget.ui:108
 #, kde-format
 msgid "Size:"
 msgstr "Størrelse:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
-#: ui/dialogs/FontWidget.ui:114
+#: ui/dialogs/FontWidget.ui:115
 #, kde-format
 msgid "Weight:"
 msgstr "Skriftsort:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
-#: ui/dialogs/FontWidget.ui:121
+#: ui/dialogs/FontWidget.ui:122
 #, kde-format
 msgid "Style:"
 msgstr "Stil:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorButton, textColorButton)
-#: ui/dialogs/FontWidget.ui:128
+#: ui/dialogs/FontWidget.ui:129
 #, kde-format
 msgid ""
 "Choose the color for the current cell text. Clicking on the color bar will "
@@ -19492,20 +19487,26 @@ msgstr ""
 "Velg farge for tekst i gjeldende celle. KDEs standarddialog for fargevalg "
 "vises ved å trykke på fargestolpen, der kan den nye fargen velges."
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, strike)
-#: ui/dialogs/FontWidget.ui:138
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, strike)
+#: ui/dialogs/FontWidget.ui:139
 #, kde-format
 msgid "This will strike out the current cell text if this is checked."
 msgstr "Dette stryker over teksten i gjeldende celle hvis det krysses av."
 
-#. i18n: ectx: property (text), widget (QCheckBox, strike)
-#: ui/dialogs/FontWidget.ui:141
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, strike)
+#: ui/dialogs/FontWidget.ui:142
 #, kde-format
 msgid "Strike out"
 msgstr "Gjennomstrekning"
 
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, size_spinner)
+#: ui/dialogs/FontWidget.ui:149
+#, kde-format
+msgid "Choose the font size."
+msgstr ""
+
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
-#: ui/dialogs/FontWidget.ui:176
+#: ui/dialogs/FontWidget.ui:180
 #, kde-format
 msgid ""
 "This box lists all your available font families. Click on one family to set "
@@ -19515,7 +19516,7 @@ msgstr ""
 "definere det i gjeldende celle."
 
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
-#: ui/dialogs/FontWidget.ui:195
+#: ui/dialogs/FontWidget.ui:199
 #, kde-format
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
@@ -19687,78 +19688,47 @@ msgstr "Fjern kolonner"
 msgid "Remove Cells"
 msgstr "Fjern celler"
 
-#: ui/dialogs/LayoutDialog.cpp:139
-#, kde-format
-msgctxt "Name of the style"
-msgid "Name:"
-msgstr "Navn:"
-
-#: ui/dialogs/LayoutDialog.cpp:151
-#, kde-format
-msgid "Inherit style:"
-msgstr "Arvet stil:"
-
-#: ui/dialogs/LayoutDialog.cpp:203
-#, kde-format
-msgid "The style name can not be empty."
-msgstr "Stilnavnet kan ikke være tomt."
-
-#: ui/dialogs/LayoutDialog.cpp:215
-#, kde-format
-msgid "A style cannot inherit from itself."
-msgstr "En stil kan ikke arve fra seg selv."
-
-#: ui/dialogs/LayoutDialog.cpp:219
-#, kde-format
-msgid "The style cannot inherit from '%1' because of recursive references."
-msgstr "Stilen kan ikke arve fra '%1' på grunn av rekursive referanser."
-
-#: ui/dialogs/LayoutDialog.cpp:720
+#: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
 msgid "Cell Format"
 msgstr "Celleformat"
 
-#: ui/dialogs/LayoutDialog.cpp:728
+#: ui/dialogs/LayoutDialog.cpp:122
 #, kde-format
-msgid "&General"
-msgstr "&Generelt"
+msgid "General"
+msgstr ""
 
-#: ui/dialogs/LayoutDialog.cpp:734
+#: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
-msgid "&Data Format"
-msgstr "&Dataformat"
+msgid "Border"
+msgstr "Ramme"
 
-#: ui/dialogs/LayoutDialog.cpp:737
+#: ui/dialogs/LayoutDialog.cpp:140
 #, kde-format
-msgid "&Font"
-msgstr "Skri&ft"
+msgid "Background"
+msgstr ""
 
-#: ui/dialogs/LayoutDialog.cpp:743
+#: ui/dialogs/LayoutDialog.cpp:143
 #, kde-format
-msgid "&Position"
-msgstr "&Posisjon"
+msgid "Cell Protection"
+msgstr ""
 
-#: ui/dialogs/LayoutDialog.cpp:746
+#: ui/dialogs/LayoutPage_Border.cpp:273
 #, kde-format
-msgid "&Border"
-msgstr "&Ramme"
+msgid "Preselect"
+msgstr "Forvalg"
 
-#: ui/dialogs/LayoutDialog.cpp:749
+#: ui/dialogs/LayoutPage_Border.cpp:295 ui/dialogs/LayoutPage_Pattern.cpp:97
 #, kde-format
-msgid "Back&ground"
-msgstr "Bak&grunn"
+msgid "Pattern"
+msgstr "Mønster"
 
-#: ui/dialogs/LayoutDialog.cpp:752
+#: ui/dialogs/LayoutPage_Border.cpp:328
 #, kde-format
-msgid "&Cell Protection"
-msgstr "&Beskyttelse av celler"
+msgid "Customize"
+msgstr "Tilpass"
 
-#: ui/dialogs/LayoutDialog.cpp:798
-msgctxt "(qtundo-format)"
-msgid "Change Format"
-msgstr "Endre format"
-
-#: ui/dialogs/LayoutDialog.cpp:857
+#: ui/dialogs/LayoutPage_Float.cpp:59
 #, kde-format
 msgid ""
 "This is the default format and Calligra Sheets autodetects the actual data "
@@ -19771,7 +19741,7 @@ msgstr ""
 "vil   Calligra Sheets høyrejustere i cellen tall, datoer og klokkeslett, og "
 "venstrejustere alt annet."
 
-#: ui/dialogs/LayoutDialog.cpp:861
+#: ui/dialogs/LayoutPage_Float.cpp:63
 #, kde-format
 msgid ""
 "The number notation uses the notation you globally choose in System Settings "
@@ -19782,7 +19752,7 @@ msgstr ""
 ">Felles utseende og oppførsel->Lokale->Land/region og språk, på fanen Tall. "
 "Som standard er tall høyrejustert."
 
-#: ui/dialogs/LayoutDialog.cpp:865
+#: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
 msgid ""
 "When you have a number in the current cell and you switch from the dcell "
@@ -19799,7 +19769,7 @@ msgstr ""
 "så blir tallet 1,200%. Bytter du tilbake til Tall så blir tallet 12 igjen.\n"
 "Du kan også bruke Prosent-ikonet på Format-verktøylinja."
 
-#: ui/dialogs/LayoutDialog.cpp:869
+#: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
 msgid ""
 "The Money format converts your number into money notation using the settings "
@@ -19816,12 +19786,12 @@ msgstr ""
 "Du kan også bruke Valuta-ikonet på Format-verktøylinja for å stille inn "
 "celleformatet til den valutaen du bruker."
 
-#: ui/dialogs/LayoutDialog.cpp:872
+#: ui/dialogs/LayoutPage_Float.cpp:74
 #, kde-format
 msgid "Scientific"
 msgstr "Vitenskapelig"
 
-#: ui/dialogs/LayoutDialog.cpp:873
+#: ui/dialogs/LayoutPage_Float.cpp:75
 #, kde-format
 msgid ""
 "The scientific format changes your number using the scientific notation. For "
@@ -19832,7 +19802,7 @@ msgstr ""
 "eksempel: 0.0012 blir endret til 1.2E-03. Hvis celleformatet endres tilbake "
 "til Tall, så vises det 0.0012 igjen."
 
-#: ui/dialogs/LayoutDialog.cpp:877
+#: ui/dialogs/LayoutPage_Float.cpp:79
 #, kde-format
 msgid ""
 "The fraction format changes your number into a fraction. For example, 0.1 "
@@ -19854,7 +19824,7 @@ msgstr ""
 "med samme brøkvalg, så vises det «1 6/16» som er den nærmeste sekstendels-"
 "brøken."
 
-#: ui/dialogs/LayoutDialog.cpp:881
+#: ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
 msgid ""
 "To enter a date, you should enter it in one of the formats set in System "
@@ -19871,7 +19841,7 @@ msgstr ""
 "På samme måte som tall kan trekkes nedover, kan også datoer trekkes, de "
 "neste cellene får også en dato."
 
-#: ui/dialogs/LayoutDialog.cpp:885
+#: ui/dialogs/LayoutPage_Float.cpp:87
 #, kde-format
 msgid ""
 "This formats your cell content as a time. To enter a time, you should enter "
@@ -19892,7 +19862,7 @@ msgstr ""
 "tidspunkt, vil Calligra Sheets vise 00:00 i det globale formatet definert i "
 "Systeminnstillinger."
 
-#: ui/dialogs/LayoutDialog.cpp:889
+#: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
 msgid ""
 "This formats your cell content as date and time. To enter a date and a time, "
@@ -19913,7 +19883,7 @@ msgstr ""
 "og tid,  vil Calligra Sheets vise 00:00 i det globale formatet definert i "
 "Systeminnstillinger."
 
-#: ui/dialogs/LayoutDialog.cpp:893
+#: ui/dialogs/LayoutPage_Float.cpp:95
 #, kde-format
 msgid ""
 "This formats your cell content as text. This can be useful if you want a "
@@ -19928,17 +19898,17 @@ msgstr ""
 "formateres som tekst, kan de ikke brukes i beregninger eller formler. Det "
 "endrer også justeringa i cellen."
 
-#: ui/dialogs/LayoutDialog.cpp:896
+#: ui/dialogs/LayoutPage_Float.cpp:98
 #, kde-format
 msgid "Custom"
 msgstr "Selvvalgt"
 
-#: ui/dialogs/LayoutDialog.cpp:897
+#: ui/dialogs/LayoutPage_Float.cpp:99
 #, kde-format
 msgid "The custom format does not work yet. To be enabled in the next release."
 msgstr "Selvvalgt format virker ikke ennå, skal skrus på i neste utgave."
 
-#: ui/dialogs/LayoutDialog.cpp:906
+#: ui/dialogs/LayoutPage_Float.cpp:107
 #, kde-format
 msgid ""
 "This will display a preview of your choice so you can know what it does "
@@ -19947,12 +19917,12 @@ msgstr ""
 "Dette viser en forhåndsvisning av det formatet som er valgt, så du kan se "
 "hva det gjør før du trykker OK-knappen for å godta det."
 
-#: ui/dialogs/LayoutDialog.cpp:917
+#: ui/dialogs/LayoutPage_Float.cpp:117
 #, kde-format
 msgid "Displays choices of format for the fraction, date or time formats."
 msgstr "Viser formatvalg for brøk, dato- og tidsformatene."
 
-#: ui/dialogs/LayoutDialog.cpp:927
+#: ui/dialogs/LayoutPage_Float.cpp:127
 #, kde-format
 msgid ""
 "You can add here a Postfix such as a $HK symbol to the end of each cell "
@@ -19961,12 +19931,12 @@ msgstr ""
 "Her kan du legge til et suffiks, som f.eks. symbolet $HK, til slutten av "
 "hvert celleinnhold i det avkryssede formatet."
 
-#: ui/dialogs/LayoutDialog.cpp:931
+#: ui/dialogs/LayoutPage_Float.cpp:130
 #, kde-format
 msgid "variable"
 msgstr "variabel"
 
-#: ui/dialogs/LayoutDialog.cpp:934
+#: ui/dialogs/LayoutPage_Float.cpp:133
 #, kde-format
 msgid ""
 "You can control how many digits are displayed after the decimal point for "
@@ -19977,7 +19947,7 @@ msgstr ""
 "tallverdier. Dette kan også endres med ikonene Vis flere/færre signifikante "
 "sifre på Format-verktøylinja. "
 
-#: ui/dialogs/LayoutDialog.cpp:938
+#: ui/dialogs/LayoutPage_Float.cpp:137
 #, kde-format
 msgid ""
 "You can add here a Prefix such as a $ symbol at the start of each cell "
@@ -19986,7 +19956,7 @@ msgstr ""
 "Her kan du legge til et prefiks, slik som et $-symbol på begynnelsen av "
 "hvert celleinnhold som har det avkryssede formatet."
 
-#: ui/dialogs/LayoutDialog.cpp:942
+#: ui/dialogs/LayoutPage_Float.cpp:141
 #, kde-format
 msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
@@ -19995,114 +19965,110 @@ msgstr ""
 "Du kan velge om positive verdier skal vises med et + foran, og om negative "
 "verdier skal vises med rød skrift."
 
-#: ui/dialogs/LayoutDialog.cpp:1122
+#: ui/dialogs/LayoutPage_Float.cpp:284
 #, kde-format
 msgid "Halves 1/2"
 msgstr "Halve 1/2"
 
-#: ui/dialogs/LayoutDialog.cpp:1123
+#: ui/dialogs/LayoutPage_Float.cpp:285
 #, kde-format
 msgid "Quarters 1/4"
 msgstr "Firedeler 1/4"
 
-#: ui/dialogs/LayoutDialog.cpp:1124
+#: ui/dialogs/LayoutPage_Float.cpp:286
 #, kde-format
 msgid "Eighths 1/8"
 msgstr "Åttedeler 1/8"
 
-#: ui/dialogs/LayoutDialog.cpp:1125
+#: ui/dialogs/LayoutPage_Float.cpp:287
 #, kde-format
 msgid "Sixteenths 1/16"
 msgstr "Sekstendeler 1/16"
 
-#: ui/dialogs/LayoutDialog.cpp:1126
+#: ui/dialogs/LayoutPage_Float.cpp:288
 #, kde-format
 msgid "Tenths 1/10"
 msgstr "Tideler 1/10"
 
-#: ui/dialogs/LayoutDialog.cpp:1127
+#: ui/dialogs/LayoutPage_Float.cpp:289
 #, kde-format
 msgid "Hundredths 1/100"
 msgstr "Hundredeler 1/100"
 
-#: ui/dialogs/LayoutDialog.cpp:1128
+#: ui/dialogs/LayoutPage_Float.cpp:290
 #, kde-format
 msgid "One digit 5/9"
 msgstr "Ett siffer 5/9"
 
-#: ui/dialogs/LayoutDialog.cpp:1129
+#: ui/dialogs/LayoutPage_Float.cpp:291
 #, kde-format
 msgid "Two digits 15/22"
 msgstr "To siffer 15/22"
 
-#: ui/dialogs/LayoutDialog.cpp:1130
+#: ui/dialogs/LayoutPage_Float.cpp:292
 #, kde-format
 msgid "Three digits 153/652"
 msgstr "Tre siffer 153/652"
 
-#: ui/dialogs/LayoutDialog.cpp:1160 ui/dialogs/LayoutDialog.cpp:1161
-#: ui/dialogs/LayoutDialog.cpp:1219 ui/dialogs/LayoutDialog.cpp:1220
-#: ui/dialogs/LayoutDialog.cpp:1261 ui/dialogs/LayoutDialog.cpp:1262
+#: ui/dialogs/LayoutPage_Float.cpp:322 ui/dialogs/LayoutPage_Float.cpp:323
+#: ui/dialogs/LayoutPage_Float.cpp:378 ui/dialogs/LayoutPage_Float.cpp:379
+#: ui/dialogs/LayoutPage_Float.cpp:418 ui/dialogs/LayoutPage_Float.cpp:419
 #, kde-format
 msgid "System: "
 msgstr "System: "
 
-#: ui/dialogs/LayoutDialog.cpp:1171
+#: ui/dialogs/LayoutPage_Float.cpp:332
 #, kde-format
 msgid " (=[mm]:ss)"
 msgstr " (=[mm]::ss)"
 
-#: ui/dialogs/LayoutDialog.cpp:1172
+#: ui/dialogs/LayoutPage_Float.cpp:333
 #, kde-format
 msgid " (=[hh]:mm:ss)"
 msgstr " (=[hh]::mm::ss)"
 
-#: ui/dialogs/LayoutDialog.cpp:1173
+#: ui/dialogs/LayoutPage_Float.cpp:334
 #, kde-format
 msgid " (=[hh]:mm)"
 msgstr " (=[hh]::mm)"
 
-#: ui/dialogs/LayoutDialog.cpp:1651
+#: ui/dialogs/LayoutPage_Font.cpp:53
 #, kde-format
 msgid "Dolor Ipse"
 msgstr "Skriftprøve"
 
-#: ui/dialogs/LayoutDialog.cpp:1897
+#: ui/dialogs/LayoutPage_General.cpp:48
 #, kde-format
-msgid "Default width (%1 %2)"
-msgstr "Standardbredde (%1 %2)"
+msgctxt "Name of the style"
+msgid "Name:"
+msgstr "Navn:"
 
-#: ui/dialogs/LayoutDialog.cpp:1915
+#: ui/dialogs/LayoutPage_General.cpp:59
 #, kde-format
-msgid "Default height (%1 %2)"
-msgstr "Standardhøyde (%1 %2)"
+msgid "Inherit style:"
+msgstr "Arvet stil:"
 
-#: ui/dialogs/LayoutDialog.cpp:2300
+#: ui/dialogs/LayoutPage_General.cpp:94
 #, kde-format
-msgid "Border"
-msgstr "Ramme"
+msgid "The style name can not be empty."
+msgstr "Stilnavnet kan ikke være tomt."
 
-#: ui/dialogs/LayoutDialog.cpp:2327
+#: ui/dialogs/LayoutPage_General.cpp:106
 #, kde-format
-msgid "Preselect"
-msgstr "Forvalg"
+msgid "A style cannot inherit from itself."
+msgstr "En stil kan ikke arve fra seg selv."
 
-#: ui/dialogs/LayoutDialog.cpp:2358 ui/dialogs/LayoutDialog.cpp:3086
+#: ui/dialogs/LayoutPage_General.cpp:110
 #, kde-format
-msgid "Pattern"
-msgstr "Mønster"
+msgid "The style cannot inherit from '%1' because of recursive references."
+msgstr "Stilen kan ikke arve fra '%1' på grunn av rekursive referanser."
 
-#: ui/dialogs/LayoutDialog.cpp:2391
-#, kde-format
-msgid "Customize"
-msgstr "Tilpass"
-
-#: ui/dialogs/LayoutDialog.cpp:3168
+#: ui/dialogs/LayoutPage_Pattern.cpp:128
 #, kde-format
 msgid "Background color:"
 msgstr "Bakgrunnsfarge:"
 
-#: ui/dialogs/LayoutDialog.cpp:3184
+#: ui/dialogs/LayoutPage_Pattern.cpp:136
 #, kde-format
 msgid "No Color"
 msgstr "Ingen farge"
@@ -20432,8 +20398,30 @@ msgstr ""
 msgid "Standard"
 msgstr "Standard"
 
-#. i18n: ectx: property (whatsThis), widget (QGroupBox, buttonGroup2)
+#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox4)
+#: ui/dialogs/PositionWidget.ui:85
+#, kde-format
+msgid ""
+"Your text will appear oriented in the angle you set here. Positive values "
+"will move it counter-clockwise and negative values will move it clockwise."
+msgstr ""
+"Teksten vises rotert med den vinkelen som oppgis her. Positive verdier "
+"roterer moturs, negative verdier roterer medurs."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox4)
 #: ui/dialogs/PositionWidget.ui:88
+#, kde-format
+msgid "Rotation"
+msgstr "Rotering"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, spinBox3)
+#: ui/dialogs/PositionWidget.ui:110
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (whatsThis), widget (QGroupBox, buttonGroup2)
+#: ui/dialogs/PositionWidget.ui:132
 #, kde-format
 msgid ""
 "<qt>Set the content position vertically in the cell.\n"
@@ -20447,28 +20435,6 @@ msgstr ""
 "<b>Øverst</b> betyr at innholdet vises øverst i cellen.\n"
 "<b>Midstilt</b> betyr at innholdet vises sentrert loddrett i cellen.\n"
 "<b>Nederst</b> betyr at innholdet vises nederst i cellen.</qt>"
-
-#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox4)
-#: ui/dialogs/PositionWidget.ui:121
-#, kde-format
-msgid ""
-"Your text will appear oriented in the angle you set here. Positive values "
-"will move it counter-clockwise and negative values will move it clockwise."
-msgstr ""
-"Teksten vises rotert med den vinkelen som oppgis her. Positive verdier "
-"roterer moturs, negative verdier roterer medurs."
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox4)
-#: ui/dialogs/PositionWidget.ui:124
-#, kde-format
-msgid "Rotation"
-msgstr "Rotering"
-
-#. i18n: ectx: property (suffix), widget (QSpinBox, spinBox3)
-#: ui/dialogs/PositionWidget.ui:146
-#, kde-format
-msgid "°"
-msgstr "°"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:165
@@ -20486,95 +20452,8 @@ msgstr ""
 msgid "Indent"
 msgstr "Innrykk"
 
-#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox5)
-#: ui/dialogs/PositionWidget.ui:176
-#, kde-format
-msgid ""
-"When checked, this has the same effect as Format ->Merge Cells. You need to "
-"have at least two consecutive cells selected. Those consecutive cells are "
-"then merged into a bigger one.\n"
-"When a merged cell is selected and when you uncheck this, then all cells "
-"come back to their original size as before the merging. It has the same "
-"effect as Format -> Dissociate Cells."
-msgstr ""
-"Når dette er krysset av, har det samme virkning som Format → Slå sammen "
-"celler. Du må ha minst to sammenhengende celler markert. Disse "
-"sammenhengende cellene blir da slått sammen til én større.\n"
-"Når en sammenslått celle markeres og dette krysset tas bort, så får alle "
-"delcellene tilbake sin opprinnelige størrelse før sammenslåingen. Det har "
-"samme virkning som Format → Del celler."
-
-#. i18n: ectx: property (text), widget (QCheckBox, mergeCell)
-#: ui/dialogs/PositionWidget.ui:185
-#, kde-format
-msgid "Merge cells"
-msgstr "Slå sammen celler"
-
-#. i18n: ectx: property (whatsThis), widget (QGroupBox, sizeCellGroup)
-#: ui/dialogs/PositionWidget.ui:195
-#, kde-format
-msgid "The unit used here is the one set in Format -> Page Layout.. dialog."
-msgstr ""
-"Enheten som brukes her er den som bestemmes i dialogen Format → Sideoppsett."
-
-#. i18n: ectx: property (title), widget (QGroupBox, sizeCellGroup)
-#: ui/dialogs/PositionWidget.ui:198
-#, kde-format
-msgid "Size of Cell"
-msgstr "Cellestørrelse"
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, defaultHeight)
-#: ui/dialogs/PositionWidget.ui:206
-#, kde-format
-msgid ""
-"If checked, the default height will be used for the cell instead of the "
-"value above."
-msgstr ""
-"Hvis dette er krysset av blir standardhøyden brukt for cellen, i stedet for "
-"verdien over."
-
-#. i18n: ectx: property (text), widget (QCheckBox, defaultHeight)
-#: ui/dialogs/PositionWidget.ui:209
-#, no-c-format, kde-format
-msgid "Default height (%1)"
-msgstr "Standardhøyde (%1)"
-
-#. i18n: ectx: property (text), widget (QLabel, textLabel3)
-#: ui/dialogs/PositionWidget.ui:232
-#, kde-format
-msgid "Height:"
-msgstr "Høyde:"
-
-#. i18n: ectx: property (whatsThis), widget (QFrame, m_heightPanel)
-#: ui/dialogs/PositionWidget.ui:239
-#, kde-format
-msgid "Set the height of the cell."
-msgstr "Stiller inn høyden på cellen."
-
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, defaultWidth)
-#: ui/dialogs/PositionWidget.ui:256
-#, kde-format
-msgid ""
-"If checked, the default width will be used for the cell instead of the value "
-"above."
-msgstr ""
-"Hvis dette er krysset av blir standardbredden brukt for cellen, i stedet for "
-"verdien over."
-
-#. i18n: ectx: property (text), widget (QCheckBox, defaultWidth)
-#: ui/dialogs/PositionWidget.ui:259
-#, no-c-format, kde-format
-msgid "Default width (%1)"
-msgstr "Standardbredde (%1)"
-
-#. i18n: ectx: property (text), widget (QLabel, textLabel2)
-#: ui/dialogs/PositionWidget.ui:295
-#, kde-format
-msgid "Width:"
-msgstr "Bredde:"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox3)
-#: ui/dialogs/PositionWidget.ui:309
+#: ui/dialogs/PositionWidget.ui:177
 #, kde-format
 msgid ""
 "This is only available when the rotation is 0°.\n"
@@ -20590,31 +20469,31 @@ msgstr ""
 "Loddrett tekst plasserer teksten loddrett."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
-#: ui/dialogs/PositionWidget.ui:312
+#: ui/dialogs/PositionWidget.ui:180
 #, kde-format
 msgid "Text Option"
 msgstr "Tekstvalg"
 
-#. i18n: ectx: property (text), widget (QCheckBox, multi)
-#: ui/dialogs/PositionWidget.ui:318
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, multi)
+#: ui/dialogs/PositionWidget.ui:186
 #, kde-format
 msgid "Wrap text"
 msgstr "Bryt tekst"
 
-#. i18n: ectx: property (text), widget (QCheckBox, vertical)
-#: ui/dialogs/PositionWidget.ui:325
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, vertical)
+#: ui/dialogs/PositionWidget.ui:193
 #, kde-format
 msgid "Vertical text"
 msgstr "Loddrett tekst"
 
-#. i18n: ectx: property (text), widget (QCheckBox, shrinkToFit)
-#: ui/dialogs/PositionWidget.ui:332
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, shrinkToFit)
+#: ui/dialogs/PositionWidget.ui:200
 #, kde-format
 msgid "Shrink to fit"
 msgstr "Krymp til det passer"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, ProtectionWidget)
-#: ui/dialogs/ProtectionWidget.ui:34
+#: ui/dialogs/ProtectionWidget.ui:35
 #, kde-format
 msgid ""
 "This tab enables you to set Cell Protection. All cells are protected by "
@@ -20640,13 +20519,13 @@ msgstr ""
 "Avansert Calliga Sheets."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
-#: ui/dialogs/ProtectionWidget.ui:40
+#: ui/dialogs/ProtectionWidget.ui:41
 #, kde-format
 msgid "Printing"
 msgstr "Utskrift"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_bDontPrint)
-#: ui/dialogs/ProtectionWidget.ui:47
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bDontPrint)
+#: ui/dialogs/ProtectionWidget.ui:48
 #, kde-format
 msgid ""
 "If checked, the content of the cell will not be printed. If this is not "
@@ -20657,20 +20536,20 @@ msgstr ""
 "ikke er krysset av (standard), så blir celleinnholdet skrevet ut.\n"
 "Merk at du kan skrive det ut selv om cellen er beskyttet"
 
-#. i18n: ectx: property (text), widget (QCheckBox, m_bDontPrint)
-#: ui/dialogs/ProtectionWidget.ui:50
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bDontPrint)
+#: ui/dialogs/ProtectionWidget.ui:51
 #, kde-format
 msgid "&Do not print text"
 msgstr "&Ikke skriv ut tekst"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/ProtectionWidget.ui:60
+#: ui/dialogs/ProtectionWidget.ui:61
 #, kde-format
 msgid "Protection"
 msgstr "Beskyttelse"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_bHideAll)
-#: ui/dialogs/ProtectionWidget.ui:68
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bHideAll)
+#: ui/dialogs/ProtectionWidget.ui:69
 #, kde-format
 msgid ""
 "This hides the cell content and works only when the sheet is protected. "
@@ -20679,14 +20558,14 @@ msgstr ""
 "Dette skjuler celleinnholdet og virker bare når arket er beskyttet. Om "
 "cellen selv er beskyttet eller ikke spiller ingen rolle."
 
-#. i18n: ectx: property (text), widget (QCheckBox, m_bHideAll)
-#: ui/dialogs/ProtectionWidget.ui:71
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideAll)
+#: ui/dialogs/ProtectionWidget.ui:72
 #, kde-format
 msgid "Hide &all"
 msgstr "Skjul &alle"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_bIsProtected)
-#: ui/dialogs/ProtectionWidget.ui:96
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
+#: ui/dialogs/ProtectionWidget.ui:97
 #, kde-format
 msgid ""
 "If checked, the cell content will be protected. This is the default "
@@ -20701,14 +20580,14 @@ msgstr ""
 "brukerhåndboka, kapittelet om Avansert Calligra Shells. Når en celle er "
 "beskyttet kan innholdet ikke endres."
 
-#. i18n: ectx: property (text), widget (QCheckBox, m_bIsProtected)
-#: ui/dialogs/ProtectionWidget.ui:99
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
+#: ui/dialogs/ProtectionWidget.ui:100
 #, kde-format
 msgid "&Protected"
 msgstr "&Beskyttet"
 
-#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_bHideFormula)
-#: ui/dialogs/ProtectionWidget.ui:129
+#. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bHideFormula)
+#: ui/dialogs/ProtectionWidget.ui:130
 #, kde-format
 msgid ""
 "When this is checked, the cell is still visible. However, its contents do "
@@ -20720,8 +20599,8 @@ msgstr ""
 "i Formel-linja. Dette virker bare for celler som inneholder formler slik at "
 "brukeren ikke kan se formelen, og arket må være beskyttet."
 
-#. i18n: ectx: property (text), widget (QCheckBox, m_bHideFormula)
-#: ui/dialogs/ProtectionWidget.ui:132
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideFormula)
+#: ui/dialogs/ProtectionWidget.ui:133
 #, kde-format
 msgid "&Hide formula"
 msgstr "&Skjul formel"
@@ -20831,7 +20710,7 @@ msgstr "&Endre …"
 msgid "&Delete..."
 msgstr "&Fjern …"
 
-#: ui/dialogs/StyleManagerDialog.cpp:202 ui/dialogs/StyleManagerDialog.cpp:205
+#: ui/dialogs/StyleManagerDialog.cpp:206 ui/dialogs/StyleManagerDialog.cpp:209
 #, kde-format
 msgid "style%1"
 msgstr "stil%1"
