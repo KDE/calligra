@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-13 00:46+0000\n"
-"PO-Revision-Date: 2022-11-06 01:05\n"
+"PO-Revision-Date: 2022-11-19 14:47\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -19009,10 +19009,9 @@ msgid "Cell Format"
 msgstr "单元格格式"
 
 #: ui/dialogs/LayoutDialog.cpp:122
-#, fuzzy, kde-format
-#| msgid "&General"
+#, kde-format
 msgid "General"
-msgstr "常规(&G)"
+msgstr ""
 
 #: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
@@ -19020,16 +19019,14 @@ msgid "Border"
 msgstr "边框"
 
 #: ui/dialogs/LayoutDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Back&ground"
+#, kde-format
 msgid "Background"
-msgstr "背景(&G)"
+msgstr ""
 
 #: ui/dialogs/LayoutDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "&Cell Protection"
+#, kde-format
 msgid "Cell Protection"
-msgstr "单元格保护(&C)"
+msgstr ""
 
 #: ui/dialogs/LayoutPage_Border.cpp:273
 #, kde-format
@@ -20078,42 +20075,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "打开链接？"
-
-#~ msgid "&Data Format"
-#~ msgstr "数据格式(&D)"
-
-#~ msgid "&Font"
-#~ msgstr "字体(&F)"
-
-#~ msgid "&Position"
-#~ msgstr "位置(&P)"
-
-#~ msgid "&Border"
-#~ msgstr "边框(&B)"
-
-#~ msgid "Default width (%1 %2)"
-#~ msgstr "默认宽度(%1 %2)"
-
-#~ msgid "Default height (%1 %2)"
-#~ msgstr "默认高度(%1 %2)"
-
-#~ msgid "Merge cells"
-#~ msgstr "合并单元格"
-
-#~ msgid "Size of Cell"
-#~ msgstr "单元格大小"
-
-#~ msgid "Default height (%1)"
-#~ msgstr "默认高度(%1)"
-
-#~ msgid "Height:"
-#~ msgstr "高度："
-
-#~ msgid "Set the height of the cell."
-#~ msgstr "设定单元格的高度。"
-
-#~ msgid "Default width (%1)"
-#~ msgstr "默认宽度(%1)"
-
-#~ msgid "Width:"
-#~ msgstr "宽度："
