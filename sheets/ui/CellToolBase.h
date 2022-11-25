@@ -150,18 +150,12 @@ protected Q_SLOTS:
 
     // -- cell style actions --
     void cellStyle();
-    void setDefaultStyle();
     void styleDialog();
     void setStyle(const QString& name);
     void createStyleFromCell();
     // -- font actions --
-    void italic(bool enable);
-    void underline(bool enable);
-    void strikeOut(bool enable);
     void font(const QString& font);
     void fontSize(int size);
-    void increaseFontSize();
-    void decreaseFontSize();
     void changeTextColor(const KoColor &);
     // -- horizontal alignment actions --
     void alignLeft(bool enable);
@@ -181,12 +175,8 @@ protected Q_SLOTS:
     void borderOutline();
     void borderColor(const KoColor &);
     // -- text layout actions --
-    void wrapText(bool enable);
-    void verticalText(bool enable);
     void changeAngle();
     // -- value format actions --
-    void percent(bool enable);
-    void currency(bool enable);
     void increasePrecision();
     void decreasePrecision();
     // -- misc style attribute actions --

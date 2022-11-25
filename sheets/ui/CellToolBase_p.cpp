@@ -87,11 +87,6 @@ void CellToolBase::Private::updateActions(const Cell& cell)
 
     const Style style = cell.style();
 
-    // -- font actions --
-    ACTION_EXEC("italic", setChecked(style.italic()));
-    ACTION_EXEC("underline", setChecked(style.underline()));
-    ACTION_EXEC("strikeOut", setChecked(style.strikeOut()));
-
     static_cast<KFontAction*>(q->action("font"))->setFont(style.fontFamily());
     static_cast<KFontSizeAction*>(q->action("fontSize"))->setFontSize(style.fontSize());
     // -- horizontal alignment actions --
@@ -102,13 +97,6 @@ void CellToolBase::Private::updateActions(const Cell& cell)
     ACTION_EXEC("alignTop", setChecked(style.valign() == Style::Top));
     ACTION_EXEC("alignMiddle", setChecked(style.valign() == Style::Middle));
     ACTION_EXEC("alignBottom", setChecked(style.valign() == Style::Bottom));
-
-    ACTION_EXEC("verticalText", setChecked(style.verticalText()));
-    ACTION_EXEC("wrapText", setChecked(style.wrapText()));
-
-    Format::Type ft = style.formatType();
-    ACTION_EXEC("percent", setChecked(ft == Format::Percentage));
-    ACTION_EXEC("currency", setChecked(ft == Format::Money));
 
     const bool showFormulas = q->selection()->activeSheet()->getShowFormula();
     q->action("alignLeft")->setEnabled(!showFormulas);
@@ -1107,7 +1095,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
         popupActions.append(popupMenuActions["separator2"]);
         popupActions.append(q->action("clearAll"));
         popupActions.append(q->action("adjust"));
-        popupActions.append(q->action("setDefaultStyle"));
+        popupActions.append(actions->action("setDefaultStyle"));
         popupActions.append(q->action("setAreaName"));
 
         if (!q->selection()->isColumnOrRowSelected()) {

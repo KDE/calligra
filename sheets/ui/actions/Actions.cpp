@@ -93,6 +93,16 @@ void Actions::createActions()
     addAction(new SortDesc(this));
     // Style
     addAction(new Bold(this));
+    addAction(new Italic(this));
+    addAction(new Underline(this));
+    addAction(new Strikeout(this));
+    addAction(new WrapText(this));
+    addAction(new VerticalText(this));
+    addAction(new IncreaseFontSize(this));
+    addAction(new DecreaseFontSize(this));
+    addAction(new PercentFormat(this));
+    addAction(new MoneyFormat(this));
+    addAction(new DefaultStyle(this));
     // TextCase
     addAction(new TextCase(this, CaseManipulator::Upper));
     addAction(new TextCase(this, CaseManipulator::Lower));

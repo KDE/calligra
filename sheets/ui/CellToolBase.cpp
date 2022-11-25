@@ -166,11 +166,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::cellStyle);
     action->setToolTip(i18n("Set the cell formatting"));
 
-    action = new QAction(i18n("Default"), this);
-    addAction("setDefaultStyle", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::setDefaultStyle);
-    action->setToolTip(i18n("Resets to the default format"));
-
     action = new QAction(i18n("Style Manager..."), this);
     addAction("styleDialog", action);
     connect(action, &QAction::triggered, this, &CellToolBase::styleDialog);
@@ -189,20 +184,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- font actions --
 
-    action = new KToggleAction(koIcon("format-text-italic"), i18n("Italic"), this);
-    addAction("italic", action);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
-    connect(action, &QAction::triggered, this, &CellToolBase::italic);
-
-    action = new KToggleAction(koIcon("format-text-underline"), i18n("Underline"), this);
-    addAction("underline", action);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
-    connect(action, &QAction::triggered, this, &CellToolBase::underline);
-
-    action = new KToggleAction(koIcon("format-text-strikethrough"), i18n("Strike Out"), this);
-    addAction("strikeOut", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::strikeOut);
-
     auto fontAction = new KFontAction(i18n("Select Font..."), this);
     fontAction->setIconText(i18n("Font"));
     addAction("font", fontAction);
@@ -212,14 +193,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     fontSizeAction->setIconText(i18n("Font Size"));
     addAction("fontSize", fontSizeAction);
     connect(fontSizeAction, &KFontSizeAction::fontSizeChanged, this, &CellToolBase::fontSize);
-
-    action = new QAction(koIcon("format-font-size-more"), i18n("Increase Font Size"), this);
-    addAction("increaseFontSize", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::increaseFontSize);
-
-    action = new QAction(koIcon("format-font-size-less"), i18n("Decrease Font Size"), this);
-    addAction("decreaseFontSize", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::decreaseFontSize);
 
     auto colorAction = new KoColorPopupAction(this);
     colorAction->setIcon(koIcon("format-text-color"));
@@ -330,18 +303,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- text layout actions --
 
-    action = new KToggleAction(koIcon("multirow"), i18n("Wrap Text"), this);
-    action->setIconText(i18n("Wrap"));
-    addAction("wrapText", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::wrapText);
-    action->setToolTip(i18n("Make the cell text wrap onto multiple lines"));
-
-    action = new KToggleAction(koIcon("format-text-direction-vertical"), i18n("Vertical Text"), this);
-    action->setIconText(i18n("Vertical"));
-    addAction("verticalText", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::verticalText);
-    action->setToolTip(i18n("Print cell contents vertically"));
-
     action = new QAction(i18n("Change Angle..."), this);
     action->setIconText(i18n("Angle"));
     addAction("changeAngle", action);
@@ -349,18 +310,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Change the angle that cell contents are printed"));
 
     // -- value format actions --
-
-    action = new KToggleAction(koIcon("format-number-percent"), i18n("Percent Format"), this);
-    action->setIconText(i18n("Percent"));
-    addAction("percent", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::percent);
-    action->setToolTip(i18n("Set the cell formatting to look like a percentage"));
-
-    action = new KToggleAction(koIcon("format-currency"), i18n("Money Format"), this);
-    action->setIconText(i18n("Money"));
-    addAction("currency", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::currency);
-    action->setToolTip(i18n("Set the cell formatting to look like your local currency"));
 
     action = new QAction(koIcon("format-precision-more"), i18n("Increase Precision"), this);
     addAction("increasePrecision", action);
@@ -1418,17 +1367,6 @@ void CellToolBase::cellStyle()
     delete dialog;
 }
 
-void CellToolBase::setDefaultStyle()
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    Style s;
-    s.setDefault();
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
 void CellToolBase::styleDialog()
 {
     Map* const map = selection()->activeSheet()->fullMap();
@@ -1498,55 +1436,6 @@ void CellToolBase::createStyleFromCell()
     static_cast<KSelectAction*>(action("setStyle"))->setItems(functionList);
 }
 
-void CellToolBase::underline(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Font"));
-    Style s;
-    s.setFontUnderline(enable);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-    if (editor()) {
-        const Cell cell = Cell(selection()->activeSheet(), selection()->marker());
-        editor()->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
-    }
-}
-
-void CellToolBase::strikeOut(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Font"));
-    Style s;
-    s.setFontStrikeOut(enable);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-    if (editor()) {
-        const Cell cell = Cell(selection()->activeSheet(), selection()->marker());
-        editor()->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
-    }
-}
-
-
-void CellToolBase::italic(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Font"));
-    Style s;
-    s.setFontItalic(enable);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-    if (editor()) {
-        const Cell cell = Cell(selection()->activeSheet(), selection()->marker());
-        editor()->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
-    }
-}
-
 void CellToolBase::font(const QString& font)
 {
     StyleCommand* command = new StyleCommand();
@@ -1585,36 +1474,6 @@ void CellToolBase::fontSize(int size)
     } else {
         canvas()->canvasWidget()->setFocus();
     }
-}
-
-void CellToolBase::increaseFontSize()
-{
-    const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
-    const int size = style.fontSize();
-
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Font"));
-    Style s;
-    s.setFontSize(size + 1);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::decreaseFontSize()
-{
-    const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
-    const int size = style.fontSize();
-
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Font"));
-    Style s;
-    s.setFontSize(size - 1);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
 }
 
 void CellToolBase::changeTextColor(const KoColor &color)
@@ -1819,64 +1678,11 @@ void CellToolBase::borderColor(const KoColor &color)
     command->execute(canvas());
 }
 
-void CellToolBase::wrapText(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Wrap Text"));
-    Style s;
-    s.setWrapText(enable);
-    s.setVerticalText(false);
-    s.setAngle(0);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::verticalText(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Vertical Text"));
-    Style s;
-    s.setVerticalText(enable);
-    s.setWrapText(false);
-    s.setAngle(0);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
 void CellToolBase::changeAngle()
 {
     QPointer<AngleDialog> dialog = new AngleDialog(canvas()->canvasWidget(), selection());
     dialog->exec();
     delete dialog;
-}
-
-void CellToolBase::percent(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Format Percent"));
-    Style s;
-    s.setFormatType(enable ? Format::Percentage : Format::Generic);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::currency(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Format Money"));
-    Style s;
-    s.setFormatType(enable ? Format::Money : Format::Generic);
-    command->setStyle(s);
-
-    command->add(*selection());
-    command->execute(canvas());
 }
 
 void CellToolBase::increasePrecision()
