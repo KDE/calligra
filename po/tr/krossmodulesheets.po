@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2022-10-20 12:04+0300\n"
+"PO-Revision-Date: 2022-11-24 17:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 22.08.3\n"
 
 #. i18n: ectx: Menu (tools)
 #: scripting.rc:4
@@ -548,7 +548,7 @@ msgstr "OpenDocument Hesap Tablosu"
 
 #: scripts/odfpyexport.py:222
 msgid "No OpenDocument Spreadsheet file to read from defined."
-msgstr "Belirtilenden okumak için bir OpenDocument Hesap Tablosu yok."
+msgstr "Tanımlıdan okumak için bir OpenDocument Hesap Tablosu yok."
 
 #: scripts/odfpyexport.py:236
 msgid "OdfPy Export"
