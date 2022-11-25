@@ -34,15 +34,19 @@ Indent::Indent(Actions *actions, bool negative)
     , m_negative(negative)
 {
     m_negative = negative;
-    bool negicon = negative;
-    if (QApplication::isRightToLeft()) negicon = !negicon;
-    m_action->setIcon( negicon ? koIcon("format-indent-less") : koIcon("format-indent-more") );
 }
 
 Indent::~Indent()
 {
 }
 
+QAction *Indent::createAction() {
+    QAction *res = CellAction::createAction();
+    bool negicon = m_negative;
+    if (QApplication::isRightToLeft()) negicon = !negicon;
+    res->setIcon( negicon ? koIcon("format-indent-less") : koIcon("format-indent-more") );
+    return res;
+}
 
 void Indent::execute(Selection *selection, Sheet *sheet, QWidget *)
 {

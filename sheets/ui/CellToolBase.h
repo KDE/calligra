@@ -155,7 +155,6 @@ protected Q_SLOTS:
     void setStyle(const QString& name);
     void createStyleFromCell();
     // -- font actions --
-    void bold(bool enable);
     void italic(bool enable);
     void underline(bool enable);
     void strikeOut(bool enable);

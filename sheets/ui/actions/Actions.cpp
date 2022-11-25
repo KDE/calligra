@@ -17,11 +17,13 @@
 #include "Link.h"
 #include "Merge.h"
 #include "Sort.h"
+#include "Style.h"
 #include "TextCase.h"
 #include "Validity.h"
 
-
 #include "engine/SheetsDebug.h"
+#include "ui/CellToolBase.h"
+
 
 using namespace Calligra::Sheets;
 
@@ -89,6 +91,8 @@ void Actions::createActions()
     addAction(new Sort(this));
     addAction(new SortInc(this));
     addAction(new SortDesc(this));
+    // Style
+    addAction(new Bold(this));
     // TextCase
     addAction(new TextCase(this, CaseManipulator::Upper));
     addAction(new TextCase(this, CaseManipulator::Lower));
@@ -103,6 +107,7 @@ void Actions::createActions()
 
 void Actions::addAction(CellAction *a)
 {
+    m_tool->addCellAction(a);
     QString name = a->name();
     if (cellActions.contains(name))
         warnSheets << "Duplicated cell action: " << name;
@@ -126,8 +131,15 @@ QAction *Actions::action(const QString &name)
 void Actions::updateOnChange(bool readWrite, Selection *selection, const Cell &activeCell)
 {
     for (CellAction *cellAction : cellActions) {
+        QAction *a = cellAction->action();
+
         bool enabled = cellAction->shouldBeEnabled(readWrite, selection, activeCell);
-        cellAction->action()->setEnabled(enabled);
+        a->setEnabled(enabled);
+
+        bool checked = cellAction->shouldBeChecked(selection, activeCell);
+        const bool blocked = a->blockSignals(true);
+        a->setChecked(checked);
+        a->blockSignals(blocked);
     }
 }
 

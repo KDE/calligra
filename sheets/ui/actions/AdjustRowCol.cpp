@@ -37,21 +37,26 @@ InsertRemoveRowCol::InsertRemoveRowCol(Actions *actions, bool insert, bool row)
     , m_insert(insert)
     , m_row(row)
 {
-    QString tooltip;
-    if (row) {
-        if (insert) tooltip = i18n("Inserts a new row into the spreadsheet");
-        else tooltip = i18n("Removes a row from the spreadsheet");
-    } else {
-        if (insert) tooltip = i18n("Inserts a new column into the spreadsheet");
-        else tooltip = i18n("Removes the selected columns from the spreadsheet");
-    }
-    m_action->setToolTip(tooltip);
 }
 
 InsertRemoveRowCol::~InsertRemoveRowCol()
 {
 }
 
+
+QAction *InsertRemoveRowCol::createAction() {
+    QAction *res = CellAction::createAction();
+    QString tooltip;
+    if (m_row) {
+        if (m_insert) tooltip = i18n("Inserts a new row into the spreadsheet");
+        else tooltip = i18n("Removes a row from the spreadsheet");
+    } else {
+        if (m_insert) tooltip = i18n("Inserts a new column into the spreadsheet");
+        else tooltip = i18n("Removes the selected columns from the spreadsheet");
+    }
+    res->setToolTip(tooltip);
+    return res;
+}
 
 void InsertRemoveRowCol::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -89,20 +94,26 @@ ShowHideRowCol::ShowHideRowCol(Actions *actions, bool show, bool row)
     , m_show(show)
     , m_row(row)
 {
-    QString tooltip;
-    if (row) {
-        if (show) tooltip = i18n("Show hidden rows in the selection");
-        else tooltip = i18n("Hide the selected rows");
-    } else {
-        if (show) tooltip = i18n("Show hidden columns in the selection");
-        else tooltip = i18n("Hide the selected columns");
-    }
-    m_action->setToolTip(tooltip);
 }
 
 ShowHideRowCol::~ShowHideRowCol()
 {
 }
+
+QAction *ShowHideRowCol::createAction() {
+    QAction *res = CellAction::createAction();
+    QString tooltip;
+    if (m_row) {
+        if (m_show) tooltip = i18n("Show hidden rows in the selection");
+        else tooltip = i18n("Hide the selected rows");
+    } else {
+        if (m_show) tooltip = i18n("Show hidden columns in the selection");
+        else tooltip = i18n("Hide the selected columns");
+    }
+    res->setToolTip(tooltip);
+    return res;
+}
+
 
 void ShowHideRowCol::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -159,17 +170,23 @@ EqualizeRowCol::EqualizeRowCol(Actions *actions, bool row)
     : CellAction(actions, row ? "equalizeRow" : "equalizeCol", row ? i18n("Equalize Row") : i18n("Equalize Column"), row ? koIcon("adjustrow") : koIcon("adjustcol"), QString())
     , m_row(row)
 {
-    QString tooltip;
-    if (row)
-        tooltip = i18n("Resizes selected rows to be the same size");
-    else
-        tooltip = i18n("Resizes selected columns to be the same size");
-    m_action->setToolTip(tooltip);
 }
 
 EqualizeRowCol::~EqualizeRowCol()
 {
 }
+
+QAction *EqualizeRowCol::createAction() {
+    QAction *res = CellAction::createAction();
+    QString tooltip;
+    if (m_row)
+        tooltip = i18n("Resizes selected rows to be the same size");
+    else
+        tooltip = i18n("Resizes selected columns to be the same size");
+    res->setToolTip(tooltip);
+    return res;
+}
+
 
 void EqualizeRowCol::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -226,20 +243,26 @@ AdjustRowCol::AdjustRowCol(Actions *actions, bool row, bool col)
     , m_row(row)
     , m_col(col)
 {
-    QString tooltip;
-    if (row) {
-        if (col)
-            tooltip = i18n("Adjusts row/column size so that the contents will fit");
-        else
-            tooltip = i18n("Adjusts row size so that the contents will fit");
-    } else
-        tooltip = i18n("Adjusts column size so that the contents will fit");
-    m_action->setToolTip(tooltip);
 }
 
 AdjustRowCol::~AdjustRowCol()
 {
 }
+
+QAction *AdjustRowCol::createAction() {
+    QAction *res = CellAction::createAction();
+    QString tooltip;
+    if (m_row) {
+        if (m_col)
+            tooltip = i18n("Adjusts row/column size so that the contents will fit");
+        else
+            tooltip = i18n("Adjusts row size so that the contents will fit");
+    } else
+        tooltip = i18n("Adjusts column size so that the contents will fit");
+    res->setToolTip(tooltip);
+    return res;
+}
+
 
 void AdjustRowCol::execute(Selection *selection, Sheet *sheet, QWidget *)
 {

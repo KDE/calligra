@@ -29,6 +29,7 @@ public:
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
     virtual bool enabledForSelection(Selection *selection, const Cell &activeCell) override;
+    virtual QAction *createAction() override;
 
     bool m_negative;
 };

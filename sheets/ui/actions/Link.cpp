@@ -78,11 +78,16 @@ void Link::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 ClearLink::ClearLink(Actions *actions)
     : CellAction(actions, "clearHyperlink", i18n("Link"), koIcon("view-sort-ascending"), i18n("Remove a link"))
 {
-    m_action->setIconText(i18n("Remove Link"));
 }
 
 ClearLink::~ClearLink()
 {
+}
+
+QAction *ClearLink::createAction() {
+    QAction *res = CellAction::createAction();
+    res->setIconText(i18n("Remove Link"));
+    return res;
 }
 
 // We're just keeping this enabled for everything, no need to check every selection change

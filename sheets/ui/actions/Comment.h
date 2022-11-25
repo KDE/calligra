@@ -40,6 +40,7 @@ public:
     virtual ~ClearComment();
 
 protected:
+    virtual QAction *createAction() override;
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
 

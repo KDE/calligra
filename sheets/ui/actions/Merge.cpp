@@ -23,20 +23,25 @@ Merge::Merge(Actions *actions, bool horizontal, bool vertical)
     , m_horizontal(horizontal)
     , m_vertical(vertical)
 {
-    QString tooltip;
-    if (horizontal)
-        tooltip = i18n("Merge the selected region horizontally");
-    else if (vertical)
-        tooltip = i18n("Merge the selected region vertically");
-    else
-        tooltip = i18n("Merge the selected region");
-    m_action->setToolTip(tooltip);
 }
 
 Merge::~Merge()
 {
 }
 
+
+QAction *Merge::createAction() {
+    QAction *res = CellAction::createAction();
+    QString tooltip;
+    if (m_horizontal)
+        tooltip = i18n("Merge the selected region horizontally");
+    else if (m_vertical)
+        tooltip = i18n("Merge the selected region vertically");
+    else
+        tooltip = i18n("Merge the selected region");
+    res->setToolTip(tooltip);
+    return res;
+}
 
 void Merge::execute(Selection *selection, Sheet *sheet, QWidget *)
 {

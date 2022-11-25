@@ -189,11 +189,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- font actions --
 
-    action = new KToggleAction(koIcon("format-text-bold"), i18n("Bold"), this);
-    addAction("bold", action);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
-    connect(action, &QAction::triggered, this, &CellToolBase::bold);
-
     action = new KToggleAction(koIcon("format-text-italic"), i18n("Italic"), this);
     addAction("italic", action);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
@@ -1090,18 +1085,12 @@ void CellToolBase::selectionChanged(const Region& region)
         const Style style = cell.style();
         if (style.notProtected()) {
             if (selection()->isSingular()) {
-                if (!action("bold")->isEnabled()) {
-                    d->setProtectedActionsEnabled(true);
-                }
+                d->setProtectedActionsEnabled(true);
             } else { // more than one cell
-                if (action("bold")->isEnabled()) {
-                    d->setProtectedActionsEnabled(false);
-                }
-            }
-        } else {
-            if (action("bold")->isEnabled()) {
                 d->setProtectedActionsEnabled(false);
             }
+        } else {
+            d->setProtectedActionsEnabled(false);
         }
     }
 
@@ -1507,22 +1496,6 @@ void CellToolBase::createStyleFromCell()
     QStringList functionList(static_cast<KSelectAction*>(action("setStyle"))->items());
     functionList.push_back(styleName);
     static_cast<KSelectAction*>(action("setStyle"))->setItems(functionList);
-}
-
-void CellToolBase::bold(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Font"));
-    Style s;
-    s.setFontBold(enable);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-    if (editor()) {
-        const Cell cell = Cell(selection()->activeSheet(), selection()->marker());
-        editor()->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
-    }
 }
 
 void CellToolBase::underline(bool enable)

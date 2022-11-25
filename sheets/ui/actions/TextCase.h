@@ -60,6 +60,7 @@ public:
 
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual QAction *createAction() override;
 
     static QString actionName(CaseManipulator::CaseMode dir);
     static QString actionCaption(CaseManipulator::CaseMode dir);

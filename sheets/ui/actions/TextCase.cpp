@@ -22,17 +22,22 @@ TextCase::TextCase(Actions *actions, CaseManipulator::CaseMode mode)
     : CellAction(actions, actionName(mode), actionCaption(mode), actionIcon(mode), actionToolTip(mode))
     , m_mode(mode)
 {
-    QString itext;
-    switch (mode) {
-    case CaseManipulator::Upper:      itext = i18n("Upper"); break;
-    case CaseManipulator::Lower:      itext = i18n("Lower"); break;
-    case CaseManipulator::FirstUpper: itext = i18n("First Letter Upper"); break;
-    };
-    m_action->setIconText(itext);
 }
 
 TextCase::~TextCase()
 {
+}
+
+QAction *TextCase::createAction() {
+    QAction *res = CellAction::createAction();
+    QString itext;
+    switch (m_mode) {
+    case CaseManipulator::Upper:      itext = i18n("Upper"); break;
+    case CaseManipulator::Lower:      itext = i18n("Lower"); break;
+    case CaseManipulator::FirstUpper: itext = i18n("First Letter Upper"); break;
+    };
+    res->setIconText(itext);
+    return res;
 }
 
 void TextCase::execute(Selection *selection, Sheet *sheet, QWidget *)

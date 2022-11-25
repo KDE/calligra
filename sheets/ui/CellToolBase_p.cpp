@@ -88,7 +88,6 @@ void CellToolBase::Private::updateActions(const Cell& cell)
     const Style style = cell.style();
 
     // -- font actions --
-    ACTION_EXEC("bold", setChecked(style.bold()));
     ACTION_EXEC("italic", setChecked(style.italic()));
     ACTION_EXEC("underline", setChecked(style.underline()));
     ACTION_EXEC("strikeOut", setChecked(style.strikeOut()));

@@ -30,6 +30,7 @@ public:
 
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual QAction *createAction() override;
 
     CSVDialog *m_dlg;
 };
@@ -42,6 +43,7 @@ public:
 
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual QAction *createAction() override;
 
     CSVDialog *m_dlg;
 };

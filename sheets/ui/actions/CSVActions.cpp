@@ -40,7 +40,6 @@ InsertFromFile::InsertFromFile(Actions *actions)
     : CellAction(actions, "insertFromTextfile", i18n("Insert From &Text File..."), koIcon("text-plain"), i18n("Insert data from a text file to the current cursor position/selection"))
     , m_dlg(nullptr)
 {
-    m_action->setIconText(i18n("Text File"));
     m_closeEditor = true;
 }
 
@@ -48,6 +47,13 @@ InsertFromFile::~InsertFromFile()
 {
     if (m_dlg) delete m_dlg;
 }
+
+QAction *InsertFromFile::createAction() {
+    QAction *res = CellAction::createAction();
+    res->setIconText(i18n("Text File"));
+    return res;
+}
+
 
 void InsertFromFile::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
@@ -112,13 +118,18 @@ InsertFromClipboard::InsertFromClipboard(Actions *actions)
     : CellAction(actions, "insertFromClipboard", i18n("Insert From &Clipboard..."), koIcon("edit-paste"), i18n("Insert CSV data from the clipboard to the current cursor position/selection"))
     , m_dlg(nullptr)
 {
-    m_action->setIconText(i18n("Clipboard"));
     m_closeEditor = true;
 }
 
 InsertFromClipboard::~InsertFromClipboard()
 {
     if (m_dlg) delete m_dlg;
+}
+
+QAction *InsertFromClipboard::createAction() {
+    QAction *res = CellAction::createAction();
+    res->setIconText(i18n("Clipboard"));
+    return res;
 }
 
 void InsertFromClipboard::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)

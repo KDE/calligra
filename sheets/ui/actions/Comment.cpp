@@ -56,11 +56,16 @@ void Comment::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 ClearComment::ClearComment(Actions *actions)
     : CellAction(actions, "clearComment", i18n("Clear Comment"), koIcon("delete-comment"), i18n("Remove this cell's comment"))
 {
-    m_action->setIconText(i18n("Remove Comment"));
 }
 
 ClearComment::~ClearComment()
 {
+}
+
+QAction *ClearComment::createAction() {
+    QAction *res = CellAction::createAction();
+    res->setIconText(i18n("Remove Comment"));
+    return res;
 }
 
 // We're just keeping this enabled for everything, no need to check every selection change

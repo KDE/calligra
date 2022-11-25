@@ -13,6 +13,7 @@ set (actions_DIR_SRCS
     actions/Link.cpp
     actions/Merge.cpp
     actions/Sort.cpp
+    actions/Style.cpp
     actions/TextCase.cpp
     actions/Validity.cpp
     )

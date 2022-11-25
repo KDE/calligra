@@ -61,13 +61,18 @@ void SetValidity::execute(Selection *selection, Sheet *sheet, QWidget *canvasWid
 ClearValidity::ClearValidity(Actions *actions)
     : CellAction(actions, "clearValidity", i18n("Validity"), QIcon(), i18n("Remove the validity tests on this cell"))
 {
-    m_action->setIconText(i18n("Remove Validity"));
 }
 
 ClearValidity::~ClearValidity()
 {
 }
 
+
+QAction *ClearValidity::createAction() {
+    QAction *res = CellAction::createAction();
+    res->setIconText(i18n("Remove Validity"));
+    return res;
+}
 
 void ClearValidity::execute(Selection *selection, Sheet *sheet, QWidget *)
 {

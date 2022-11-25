@@ -13,23 +13,31 @@
 
 #include <KoCanvasBase.h>
 
+#include <KToggleAction>
 #include <QAction>
 
 using namespace Calligra::Sheets;
 
 CellAction::CellAction(Actions *actions, const QString &actionName, const QString &caption, const QIcon &icon, const QString &tooltip)
     : m_actions(actions)
+    , m_caption(caption)
+    , m_icon(icon)
     , m_name(actionName)
+    , m_tooltip(tooltip)
     , m_closeEditor(false)
+    , m_action(nullptr)
 {
-    m_tool = actions->tool();
-    if (!icon.isNull())
-        m_action = new QAction(icon, caption, m_tool);
+}
+
+QAction *CellAction::createAction() {
+    QAction *res;
+    if (!m_icon.isNull())
+        res = new QAction(m_icon, m_caption, m_actions->tool());
     else
-        m_action = new QAction(caption, m_tool);
-    m_tool->addCellAction(this);
-    if (tooltip.length()) m_action->setToolTip(tooltip);
-    connect(m_action, &QAction::triggered, this, &CellAction::triggered);
+        res = new QAction(m_caption, m_actions->tool());
+    if (m_tooltip.length()) res->setToolTip(m_tooltip);
+    connect(res, &QAction::triggered, this, &CellAction::triggered);
+    return res;
 }
 
 CellAction::~CellAction()
@@ -37,6 +45,12 @@ CellAction::~CellAction()
     // We cannot delete this as the tool will do so.
     // TODO - don't delete these in the tool ... we can only do this after everything has been moved out of tool code
     // delete m_action;
+}
+
+// This cannot be in the constructor as it uses virtual functions.
+QAction *CellAction::action() {
+    if (!m_action) m_action = createAction();
+    return m_action;
 }
 
 // Triggerts the action manually. Keeping as a separate call in case we need to do things differently.
@@ -47,8 +61,9 @@ void CellAction::trigger()
 
 void CellAction::triggered()
 {
-    if (m_closeEditor) m_tool->selection()->emitCloseEditor(true);
-    execute(m_tool->selection(), m_tool->selection()->activeSheet(), m_tool->canvas()->canvasWidget());
+    Selection *sel = m_actions->tool()->selection();
+    if (m_closeEditor) sel->emitCloseEditor(true);
+    execute(sel, sel->activeSheet(), m_actions->tool()->canvas()->canvasWidget());
 }
 
 bool CellAction::shouldBeEnabled(bool readWrite, Selection *selection, const Cell &activeCell)
@@ -75,5 +90,50 @@ bool CellAction::enabledForSelection(Selection *, const Cell &)
 {
     return true;
 }
+
+
+// *********** ToggleableCellAction ***********
+
+
+ToggleableCellAction::ToggleableCellAction(Actions *actions, const QString &actionName, const QString &caption, const QIcon &icon, const QString &tooltip)
+    :
+        CellAction(actions, actionName, caption, icon, tooltip)
+{
+}
+
+ToggleableCellAction::~ToggleableCellAction() {
+    // nothing here
+}
+
+QAction *ToggleableCellAction::createAction()
+{
+    KToggleAction *res;
+    if (!m_icon.isNull())
+        res = new KToggleAction(m_icon, m_caption, m_actions->tool());
+    else
+        res = new KToggleAction(m_caption, m_actions->tool());
+    if (m_tooltip.length()) res->setToolTip(m_tooltip);
+    connect(res, &KToggleAction::triggered, this, &ToggleableCellAction::triggered);
+
+    return res;
+}
+
+void ToggleableCellAction::triggered(bool enabled) {
+    Selection *sel = m_actions->tool()->selection();
+    if (m_closeEditor) sel->emitCloseEditor(true);
+    executeToggled(enabled, sel, sel->activeSheet(), m_actions->tool()->canvas()->canvasWidget());
+}
+
+
+bool ToggleableCellAction::shouldBeChecked(Selection *selection, const Cell &activeCell)
+{
+    return checkedForSelection(selection, activeCell);
+}
+
+bool ToggleableCellAction::checkedForSelection(Selection *, const Cell &)
+{
+    return false;
+}
+
 
 

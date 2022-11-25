@@ -10,12 +10,6 @@
 
 #include <KLocalizedString>
 
-/*
-#include "engine/CellBaseStorage.h"
-#include "engine/MapBase.h"
-#include "engine/NamedAreaManager.h"
-#include "ui/Selection.h"
-*/
 #include "engine/CellBase.h"
 #include "engine/Value.h"
 #include "core/Sheet.h"
@@ -132,9 +126,10 @@ void AutoSum::execute(Selection *selection, Sheet *sheet, QWidget *)
     }
 
     // We have nothing.
-    m_tool->createEditor(true, true, true);
-    m_tool->editor()->setText("=SUM()");
-    m_tool->editor()->setCursorPosition(5);
+    CellToolBase *tool = m_actions->tool();
+    tool->createEditor(true, true, true);
+    tool->editor()->setText("=SUM()");
+    tool->editor()->setCursorPosition(5);
 }
 
 
