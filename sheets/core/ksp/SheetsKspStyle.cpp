@@ -144,7 +144,7 @@ void Ksp::saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, 
         format.setAttribute("custom", style.customFormat());
 
     if (keysToStore.contains(Style::FormatTypeKey) && style.formatType() == Format::Money) {
-        format.setAttribute("type", (int) style.currency().index());
+        format.setAttribute("type", 0);
         format.setAttribute("symbol", style.currency().symbol());
     }
 
@@ -326,11 +326,8 @@ bool Ksp::loadStyle(Style *style, KoXmlElement& format)
         ok = true;
         Currency currency;
         if (format.hasAttribute("type")) {
-            currency = Currency(format.attribute("type").toInt(&ok));
-            if (!ok) {
-                if (format.hasAttribute("symbol"))
-                    currency = Currency(format.attribute("symbol"));
-            }
+            if (format.hasAttribute("symbol"))
+                currency = Currency(format.attribute("symbol"));
         } else if (format.hasAttribute("symbol"))
             currency = Currency(format.attribute("symbol"));
         style->setCurrency(currency);

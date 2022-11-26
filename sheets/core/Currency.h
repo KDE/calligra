@@ -31,22 +31,11 @@ public:
 
     /**
      * Constructor.
-     * Creates a currency corresponding to the given currency table index.
-     * If \p index is omitted or zero, a currency with the locale default
-     * currency unit is created.
-     */
-    explicit Currency(int index = 0);
-
-    /**
-     * Constructor.
      * Creates a currency corresponding to \p code .
-     * Looks up the index.
-     * If the code is found more than once: saved without country info.
-     * If the code is not found, \p code is handled as custom unit.
      * \param code the code, e.g. EUR, USD,..
      * \param format the format, e.g. the code in Gnumeric format is [$EUR]
      */
-    explicit Currency(QString const & code, Format format = Native);
+    Currency(QString const & code = QString(), Format format = Native);
 
     /**
      * Destructor.
@@ -60,16 +49,15 @@ public:
     }
 
     QString code(Format format = Native) const;
-    QString country() const;
     QString name() const;
     QString symbol() const;
-    int     index() const;
 
-    static QString chooseString(int type, bool & ok);
-
+    static QList<QString> symbols();
+    QString symbolToCode(const QString &code);
 private:
-    int     m_index;
+    static void loadSymbols();
     QString m_code;
+    static QMap<QString, QString> m_symbols;
 };
 
 } // namespace Sheets

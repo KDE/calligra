@@ -178,18 +178,17 @@ LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFor
     currency = new KComboBox(box);
     grid->addWidget(currency, 1, 3);
 
+    m_currencies = Currency::symbols();
+    int index = 0;
     // fill the currency combo box
     currency->insertItem(0, i18n("Automatic"));
-    int index = 2; //ignore first two in the list
-    bool ok = true;
-    QString text;
-    while (ok) {
-        text = Currency::chooseString(index, ok);
-        if (ok)
-            currency->insertItem(index - 1, text);
-        else
-            break;
-        ++index;
+    for (QString curr : m_currencies) {
+        Currency c(curr);
+        QString symbol = c.symbol();
+        QString text = curr;
+        if (symbol.size() && symbol != curr) text +=" (" + c.symbol() + ")";
+        index++;
+        currency->insertItem(index, text);
     }
     currency->setCurrentIndex(0);
 
@@ -422,10 +421,11 @@ void LayoutPageFloat::datetimeInit()
 
 void LayoutPageFloat::currencyChanged(const QString &)
 {
-    int index = currency->currentIndex();
-    if (index > 0)
-        ++index;
-    m_currency = Currency(index);
+    int index = currency->currentIndex() - 1;
+    if (index < 0)
+        m_currency = Currency();
+    else
+        m_currency = Currency(m_currencies[index]);
 
     makeformat();
 }
@@ -574,15 +574,11 @@ void LayoutPageFloat::apply(Style *style, bool partial)
         style->setFormatType(newFormatType);
         if (money->isChecked()) {
             Currency currency;
-            int index = this->currency->currentIndex();
-            if (index == 0) {
-                if (this->currency->currentText() == i18n("Automatic"))
-                    currency = Currency();
-                else
-                    currency = Currency(this->currency->currentText());
-            } else {
-                currency = Currency(++index);
-            }
+            int index = this->currency->currentIndex() - 1;
+            if (index < 0)
+                currency = Currency();
+            else
+                currency = Currency(m_currencies[index]);
             style->setCurrency(currency);
         }
         if (newFormatType == Format::Scientific) {
@@ -640,16 +636,11 @@ void LayoutPageFloat::loadFrom(const Style &style, bool /*partial*/)
         else if (cellFormatType == Format::Money) {
             money->setChecked(true);
             m_currency = style.currency();
-            QString tmp;
-            if (m_currency.index() == 1)   // custom currency unit
-                tmp = m_currency.symbol();
-            else {
-                bool ok = true;
-                tmp = Currency::chooseString(m_currency.index(), ok);
-                if (!ok)
-                    tmp = m_currency.symbol();
-            }
-            currency->setCurrentIndex(currency->findText(tmp));
+            int pos = m_currencies.indexOf(m_currency.code());
+            if (pos >= 0)
+                currency->setCurrentIndex(pos + 1);
+            else
+                currency->setCurrentIndex(0);
         } else if (cellFormatType == Format::Scientific)
             scientific->setChecked(true);
         else if (Format::isDate(cellFormatType))
@@ -664,6 +655,8 @@ void LayoutPageFloat::loadFrom(const Style &style, bool /*partial*/)
             customFormat->setChecked(true);
     }
 
+    // enable controls as needed
+    slotChangeState();
 }
 
 

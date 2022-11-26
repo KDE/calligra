@@ -102,6 +102,7 @@ protected:
     QString m_prefix, m_postfix;
     bool m_bFormatColorChanged;
     Currency m_currency;
+    QList<QString> m_currencies;
 
     QPixmap* formatOnlyNegSignedPixmap;
     QPixmap* formatRedOnlyNegSignedPixmap;

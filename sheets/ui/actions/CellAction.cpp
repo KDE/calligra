@@ -20,12 +20,12 @@ using namespace Calligra::Sheets;
 
 CellAction::CellAction(Actions *actions, const QString &actionName, const QString &caption, const QIcon &icon, const QString &tooltip)
     : m_actions(actions)
-    , m_caption(caption)
-    , m_icon(icon)
     , m_name(actionName)
+    , m_caption(caption)
     , m_tooltip(tooltip)
-    , m_closeEditor(false)
+    , m_icon(icon)
     , m_action(nullptr)
+    , m_closeEditor(false)
 {
 }
 

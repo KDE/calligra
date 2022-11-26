@@ -1319,11 +1319,11 @@ Currency Odf::numberCurrency(const QString &_format)
     if(!_format.isEmpty()) {
         QString f = QString(_format.at(0));
         Currency currStart = Currency(f);
-        if (currStart.index() > 1)
+        if (currStart.code() != f)
             return currStart;
         f = QString(_format.at(_format.size()-1));
         Currency currEnd = Currency(f);
-        if (currEnd.index() > 1)
+        if (currEnd.code() != f)
             return currEnd;
     }
     return Currency(QString());
