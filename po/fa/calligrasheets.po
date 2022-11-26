@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:46+0000\n"
+"POT-Creation-Date: 2022-11-26 00:46+0000\n"
 "PO-Revision-Date: 2011-09-26 14:19+0330\n"
 "Last-Translator: Mohamad Reza Mirdamadi <mohi@ubuntu.ir>\n"
 "Language-Team: Farsi (Persian) <>\n"
@@ -3254,12 +3254,11 @@ msgstr "سرآیند"
 msgid "Header1"
 msgstr "سرآیند۱"
 
-#: core/StyleManager.cpp:172 ui/CellToolBase.cpp:169
-#: ui/dialogs/LayoutPage_General.cpp:127 ui/dialogs/LayoutPage_General.cpp:146
-#: ui/dialogs/StyleManagerDialog.cpp:99 ui/dialogs/StyleManagerDialog.cpp:139
-#: ui/dialogs/StyleManagerDialog.cpp:172 ui/dialogs/StyleManagerDialog.cpp:198
-#: ui/dialogs/StyleManagerDialog.cpp:236 ui/dialogs/StyleManagerDialog.cpp:265
-#: ui/dialogs/StyleManagerDialog.cpp:286
+#: core/StyleManager.cpp:172 ui/dialogs/LayoutPage_General.cpp:127
+#: ui/dialogs/LayoutPage_General.cpp:146 ui/dialogs/StyleManagerDialog.cpp:99
+#: ui/dialogs/StyleManagerDialog.cpp:139 ui/dialogs/StyleManagerDialog.cpp:172
+#: ui/dialogs/StyleManagerDialog.cpp:198 ui/dialogs/StyleManagerDialog.cpp:236
+#: ui/dialogs/StyleManagerDialog.cpp:265 ui/dialogs/StyleManagerDialog.cpp:286
 #, kde-format
 msgid "Default"
 msgstr "پیش‌فرض"
@@ -4099,7 +4098,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "تووالو"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:444 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:388 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "دادگان"
@@ -16239,7 +16238,7 @@ msgstr "مخفی کردن برگه"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:212
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:188
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, fuzzy, kde-format
 #| msgid "&Font"
@@ -16723,8 +16722,7 @@ msgstr "افقی"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup2)
-#: part/dialogs/PageLayoutSheetPage.ui:335 ui/CellToolBase.cpp:345
-#: ui/dialogs/PositionWidget.ui:135
+#: part/dialogs/PageLayoutSheetPage.ui:335 ui/dialogs/PositionWidget.ui:135
 #, kde-format
 msgid "Vertical"
 msgstr "عمودی"
@@ -16752,15 +16750,15 @@ msgid "Up"
 msgstr "بالا"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:301 ui/CellToolBase.cpp:254
-#: ui/CellToolBase.cpp:293 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:301 ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:261 ui/dialogs/PositionWidget.ui:75
 #, kde-format
 msgid "Right"
 msgstr "راست"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:302 ui/CellToolBase.cpp:240
-#: ui/CellToolBase.cpp:287 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:302 ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:255 ui/dialogs/PositionWidget.ui:61
 #, kde-format
 msgid "Left"
 msgstr "چپ"
@@ -16776,7 +16774,7 @@ msgstr "پایین، اولین ستون"
 #. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/CellToolBase.cpp:317 ui/dialogs/DatabaseDialog.cpp:711
+#: ui/CellToolBase.cpp:285 ui/dialogs/DatabaseDialog.cpp:711
 #: ui/dialogs/DatabaseDialog.cpp:712 ui/dialogs/DocumentSettingsDialog.cpp:124
 #: ui/dialogs/pivotfilters.ui:36 ui/dialogs/pivotoptions.ui:95
 #: ui/dialogs/pivotoptions.ui:104 ui/dialogs/pivotsubtotals.ui:21
@@ -17718,7 +17716,7 @@ msgstr ""
 "در شرف حذف برگه فعال هستید.\n"
 "می‌خواهید ادامه دهید؟"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1482
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1409
 #, kde-format
 msgid "Enter name:"
 msgstr "وارد کردن نام:"
@@ -17778,14 +17776,14 @@ msgstr "شمارشA: "
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1651
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1483
 #, fuzzy
 #| msgid "Change Text Color"
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "تغییر رنگ متن"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1932
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1711
 #, fuzzy
 #| msgid "Change Background Color"
 msgctxt "(qtundo-format)"
@@ -17794,9 +17792,9 @@ msgstr "نغییر رنگ زمینه"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase.cpp:1736 ui/CellToolBase.cpp:1752 ui/CellToolBase.cpp:1768
-#: ui/CellToolBase.cpp:1781 ui/CellToolBase.cpp:1794 ui/CellToolBase.cpp:1811
-#: ui/CellToolBase.cpp:1829 ui/CellToolBase_p.cpp:736
+#: ui/CellToolBase.cpp:1568 ui/CellToolBase.cpp:1584 ui/CellToolBase.cpp:1600
+#: ui/CellToolBase.cpp:1613 ui/CellToolBase.cpp:1626 ui/CellToolBase.cpp:1643
+#: ui/CellToolBase.cpp:1661 ui/CellToolBase_p.cpp:723
 #, fuzzy
 #| msgid "Change Border"
 msgctxt "(qtundo-format)"
@@ -17813,827 +17811,699 @@ msgstr "قالب سلول..."
 msgid "Set the cell formatting"
 msgstr "تنظیم قالب‌بندی سلول"
 
-#: ui/CellToolBase.cpp:172
-#, kde-format
-msgid "Resets to the default format"
-msgstr "به قالب پیش‌فرض بازنشانی می‌کند"
-
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:169
 #, fuzzy, kde-format
 #| msgid "Style Manager"
 msgid "Style Manager..."
 msgstr "مدیر سبک"
 
-#: ui/CellToolBase.cpp:177
+#: ui/CellToolBase.cpp:172
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr "ویرایش و سازماندهی سبکهای سلول"
 
-#: ui/CellToolBase.cpp:179 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:174 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "سبک"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "اعمال یک سبک از پیش تعریف‌شده سلولهای برگزیده"
 
-#: ui/CellToolBase.cpp:184
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "ایجاد سبک از سلول..."
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:180
 #, fuzzy, kde-format
 #| msgid "Style of Cell"
 msgid "Style From Cell"
 msgstr "سبک سلول"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:183
 #, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "ایجاد یک سبک جدید بر اساس سلولی که اخیراً برگزیده‌شده"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
-#: ui/CellToolBase.cpp:192 ui/dialogs/FontWidget.ui:83
-#, kde-format
-msgid "Bold"
-msgstr "توپر"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
-#: ui/CellToolBase.cpp:197 ui/dialogs/FontWidget.ui:58
-#, kde-format
-msgid "Italic"
-msgstr "کج"
-
-#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, underline)
-#: ui/CellToolBase.cpp:202 ui/dialogs/FontWidget.ui:101
-#, kde-format
-msgid "Underline"
-msgstr "زیرخط"
-
-#: ui/CellToolBase.cpp:207
-#, kde-format
-msgid "Strike Out"
-msgstr "حذف کردن"
-
-#: ui/CellToolBase.cpp:211
+#: ui/CellToolBase.cpp:187
 #, kde-format
 msgid "Select Font..."
 msgstr "برگزیدن قلم..."
 
-#: ui/CellToolBase.cpp:216
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Select Font Size"
 msgstr "برگزیدن اندازه قلم"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:193
 #, fuzzy, kde-format
 #| msgid "Select Font Size"
 msgid "Font Size"
 msgstr "برگزیدن اندازه قلم"
 
-#: ui/CellToolBase.cpp:221
-#, kde-format
-msgid "Increase Font Size"
-msgstr "افزایش اندازه قلم"
-
-#: ui/CellToolBase.cpp:225
-#, kde-format
-msgid "Decrease Font Size"
-msgstr "کاهش اندازه قلم"
-
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:199
 #, kde-format
 msgid "Text Color"
 msgstr "رنگ متن"
 
-#: ui/CellToolBase.cpp:232
+#: ui/CellToolBase.cpp:200
 #, fuzzy, kde-format
 #| msgid "Set the background color"
 msgid "Set the text color"
 msgstr "تنظیم رنگ زمینه"
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Align Left"
 msgstr "تراز چپ"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Left justify the cell contents"
 msgstr "هم‌ترازی چپ محتویات سلول"
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Align Center"
 msgstr "تراز مرکز"
 
 #. i18n: ectx: property (text), widget (QRadioButton, center)
-#: ui/CellToolBase.cpp:247 ui/dialogs/PositionWidget.ui:68
+#: ui/CellToolBase.cpp:215 ui/dialogs/PositionWidget.ui:68
 #, kde-format
 msgid "Center"
 msgstr "مرکز"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Center the cell contents"
 msgstr "مرکزی کردن محتویات سلول"
 
-#: ui/CellToolBase.cpp:253
+#: ui/CellToolBase.cpp:221
 #, kde-format
 msgid "Align Right"
 msgstr "تراز راست"
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Right justify the cell contents"
 msgstr "هم‌ترازی راست محتویات سلول"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Align Top"
 msgstr "تراز بالا"
 
 #. i18n: ectx: property (text), widget (QRadioButton, top)
-#: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:299
+#: ui/CellToolBase.cpp:232 ui/CellToolBase.cpp:267
 #: ui/dialogs/PositionWidget.ui:141
 #, kde-format
 msgid "Top"
 msgstr "بالا"
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:235
 #, kde-format
 msgid "Align cell contents along the top of the cell"
 msgstr "تراز محتویات سلول در امتداد بالای سلول"
 
-#: ui/CellToolBase.cpp:270
+#: ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Align Middle"
 msgstr "تراز وسط"
 
 #. i18n: ectx: property (text), widget (QRadioButton, middle)
-#: ui/CellToolBase.cpp:271 ui/dialogs/PositionWidget.ui:148
+#: ui/CellToolBase.cpp:239 ui/dialogs/PositionWidget.ui:148
 #, kde-format
 msgid "Middle"
 msgstr "وسط"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:242
 #, kde-format
 msgid "Align cell contents centered in the cell"
 msgstr "تراز مرکزی محتویات سلول در سلول"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:245
 #, kde-format
 msgid "Align Bottom"
 msgstr "تراز پایین"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bottom)
-#: ui/CellToolBase.cpp:278 ui/CellToolBase.cpp:305
+#: ui/CellToolBase.cpp:246 ui/CellToolBase.cpp:273
 #: ui/dialogs/PositionWidget.ui:155
 #, kde-format
 msgid "Bottom"
 msgstr "پایین"
 
-#: ui/CellToolBase.cpp:281
+#: ui/CellToolBase.cpp:249
 #, kde-format
 msgid "Align cell contents along the bottom of the cell"
 msgstr "تراز محتویات سلول در امتداد پایین سلول"
 
-#: ui/CellToolBase.cpp:286
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Border Left"
 msgstr "لبه چپ"
 
-#: ui/CellToolBase.cpp:290
+#: ui/CellToolBase.cpp:258
 #, kde-format
 msgid "Set a left border to the selected area"
 msgstr "تنظیم لبه چپ نسبت به ناحیه برگزیده"
 
-#: ui/CellToolBase.cpp:292
+#: ui/CellToolBase.cpp:260
 #, kde-format
 msgid "Border Right"
 msgstr "لبه راست"
 
-#: ui/CellToolBase.cpp:296
+#: ui/CellToolBase.cpp:264
 #, kde-format
 msgid "Set a right border to the selected area"
 msgstr "تنظیم لبه راست نسبت به ناحیه برگزیده"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "Border Top"
 msgstr "لبه بالا"
 
-#: ui/CellToolBase.cpp:302
+#: ui/CellToolBase.cpp:270
 #, kde-format
 msgid "Set a top border to the selected area"
 msgstr "تنظیم لبه بالا نسبت به ناحیه برگزیده"
 
-#: ui/CellToolBase.cpp:304
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Border Bottom"
 msgstr "لبه پایین"
 
-#: ui/CellToolBase.cpp:308
+#: ui/CellToolBase.cpp:276
 #, kde-format
 msgid "Set a bottom border to the selected area"
 msgstr "تنظیم لبه پایین نسبت به ناحیه برگزیده"
 
-#: ui/CellToolBase.cpp:310
+#: ui/CellToolBase.cpp:278
 #, kde-format
 msgid "All Borders"
 msgstr "همه لبه‌ها"
 
-#: ui/CellToolBase.cpp:311 ui/dialogs/FormulaDialog.cpp:84
+#: ui/CellToolBase.cpp:279 ui/dialogs/FormulaDialog.cpp:84
 #: ui/dialogs/FormulaDialog.cpp:190 ui/dialogs/FormulaDialog.cpp:722
 #: ui/FilterPopup.cpp:55
 #, kde-format
 msgid "All"
 msgstr "همه"
 
-#: ui/CellToolBase.cpp:314
+#: ui/CellToolBase.cpp:282
 #, kde-format
 msgid "Set a border around all cells in the selected area"
 msgstr "تنظیم لبه دور همه سلولها در ناحیه برگزیده"
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:284
 #, fuzzy, kde-format
 #| msgid "All Borders"
 msgid "No Borders"
 msgstr "همه لبه‌ها"
 
-#: ui/CellToolBase.cpp:320
+#: ui/CellToolBase.cpp:288
 #, kde-format
 msgid "Remove all borders in the selected area"
 msgstr "حذف همه لبه‌ها در ناحیه برگزیده"
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "Border Outline"
 msgstr "طرح کلی لبه"
 
-#: ui/CellToolBase.cpp:323
+#: ui/CellToolBase.cpp:291
 #, fuzzy, kde-format
 #| msgid "Border Outline"
 msgid "Outline"
 msgstr "طرح کلی لبه"
 
-#: ui/CellToolBase.cpp:326
+#: ui/CellToolBase.cpp:294
 #, kde-format
 msgid "Set a border to the outline of the selected area"
 msgstr "تنظیم یک لبه برای طرح کلی ناحیه برگزیده"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:298
 #, kde-format
 msgid "Select a new border color"
 msgstr "برگزیدن یک رنگ جدید لبه"
 
-#: ui/CellToolBase.cpp:331
+#: ui/CellToolBase.cpp:299
 #, kde-format
 msgid "Border Color"
 msgstr "رنگ لبه"
 
-#: ui/CellToolBase.cpp:338
-#, kde-format
-msgid "Wrap Text"
-msgstr "سطربندی متن"
-
-#: ui/CellToolBase.cpp:339
-#, fuzzy, kde-format
-#| msgid "Wrap text"
-msgid "Wrap"
-msgstr "سطربندی متن"
-
-#: ui/CellToolBase.cpp:342
-#, kde-format
-msgid "Make the cell text wrap onto multiple lines"
-msgstr "سطربندی کردن متن سلول در خطوط متعدد"
-
-#: ui/CellToolBase.cpp:344
-#, kde-format
-msgid "Vertical Text"
-msgstr "متن عمودی"
-
-#: ui/CellToolBase.cpp:348
-#, kde-format
-msgid "Print cell contents vertically"
-msgstr "چاپ عمودی محتویات سلول"
-
-#: ui/CellToolBase.cpp:350
+#: ui/CellToolBase.cpp:306
 #, kde-format
 msgid "Change Angle..."
 msgstr "تغيير زاويه..."
 
-#: ui/CellToolBase.cpp:351
+#: ui/CellToolBase.cpp:307
 #, fuzzy, kde-format
 #| msgid "Angle:"
 msgid "Angle"
 msgstr "زاویه:"
 
-#: ui/CellToolBase.cpp:354
+#: ui/CellToolBase.cpp:310
 #, kde-format
 msgid "Change the angle that cell contents are printed"
 msgstr "تغییر زاویه‌ای که محتویات سلول چاپ می‌شوند"
 
-#: ui/CellToolBase.cpp:358
-#, kde-format
-msgid "Percent Format"
-msgstr "قالب درصد"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/CellToolBase.cpp:359 ui/dialogs/DataFormatWidget.ui:102
-#: ui/dialogs/LayoutPage_Float.cpp:66
-#, kde-format
-msgid "Percent"
-msgstr "درصد"
-
-#: ui/CellToolBase.cpp:362
-#, kde-format
-msgid "Set the cell formatting to look like a percentage"
-msgstr "تنظیم قالب‌بندی سلول برای مشابه بودن به درصد"
-
-#: ui/CellToolBase.cpp:364
-#, kde-format
-msgid "Money Format"
-msgstr "قالب پول"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/CellToolBase.cpp:365 ui/dialogs/DataFormatWidget.ui:95
-#: ui/dialogs/LayoutPage_Float.cpp:70
-#, kde-format
-msgid "Money"
-msgstr "پول"
-
-#: ui/CellToolBase.cpp:368
-#, kde-format
-msgid "Set the cell formatting to look like your local currency"
-msgstr "تنظیم قالب‌بندی سلول برای مشابه بودن با پول رایج محلیتان"
-
-#: ui/CellToolBase.cpp:370
+#: ui/CellToolBase.cpp:314
 #, kde-format
 msgid "Increase Precision"
 msgstr "افزایش دقت"
 
-#: ui/CellToolBase.cpp:373
+#: ui/CellToolBase.cpp:317
 #, kde-format
 msgid "Increase the decimal precision shown onscreen"
 msgstr "افزایش دقت ده‌دهی نمایش داده‌شده روی پرده"
 
-#: ui/CellToolBase.cpp:375
+#: ui/CellToolBase.cpp:319
 #, kde-format
 msgid "Decrease Precision"
 msgstr "کاهش دقت"
 
-#: ui/CellToolBase.cpp:378
+#: ui/CellToolBase.cpp:322
 #, kde-format
 msgid "Decrease the decimal precision shown onscreen"
 msgstr "کاهش دقت ده‌دهی نمایش داده‌شده روی پرده"
 
-#: ui/CellToolBase.cpp:384
+#: ui/CellToolBase.cpp:328
 #, kde-format
 msgid "Set the background color"
 msgstr "تنظیم رنگ زمینه"
 
-#: ui/CellToolBase.cpp:385
+#: ui/CellToolBase.cpp:329
 #, kde-format
 msgid "Background Color"
 msgstr "رنگ زمینه"
 
-#: ui/CellToolBase.cpp:391 ui/CellToolBase.cpp:397
+#: ui/CellToolBase.cpp:335 ui/CellToolBase.cpp:341
 #, kde-format
 msgid "Cells..."
 msgstr "سلولها..."
 
-#: ui/CellToolBase.cpp:392 ui/CellToolBase_p.cpp:1159
+#: ui/CellToolBase.cpp:336 ui/CellToolBase_p.cpp:1146
 #, kde-format
 msgid "Insert Cells..."
 msgstr "درج سلولها..."
 
-#: ui/CellToolBase.cpp:393
+#: ui/CellToolBase.cpp:337
 #, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "درج یک سلول خالی در صفحه گسترده"
 
-#: ui/CellToolBase.cpp:398
+#: ui/CellToolBase.cpp:342
 #, kde-format
 msgid "Remove Cells..."
 msgstr "حذف سلولها..."
 
-#: ui/CellToolBase.cpp:399
+#: ui/CellToolBase.cpp:343
 #, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "سلولها را از صفحه گسترده حذف می‌کند"
 
-#: ui/CellToolBase.cpp:405 ui/CellToolBase.cpp:406
+#: ui/CellToolBase.cpp:349 ui/CellToolBase.cpp:350
 #, kde-format
 msgid "Clear All"
 msgstr "پاک کردن همه"
 
-#: ui/CellToolBase.cpp:407
+#: ui/CellToolBase.cpp:351
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "حذف همه محتویات و قالب‌بندی سلول جاری"
 
-#: ui/CellToolBase.cpp:411
+#: ui/CellToolBase.cpp:355
 #, kde-format
 msgid "Contents"
 msgstr "محتویات"
 
-#: ui/CellToolBase.cpp:412
+#: ui/CellToolBase.cpp:356
 #, kde-format
 msgid "Clear Contents"
 msgstr "پاک کردن محتویات"
 
-#: ui/CellToolBase.cpp:413
+#: ui/CellToolBase.cpp:357
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "حذف محتویات سلول جاری"
 
-#: ui/CellToolBase.cpp:417
+#: ui/CellToolBase.cpp:361
 #, kde-format
 msgid "Conditional Styles..."
 msgstr "سبکهای شرطی..."
 
-#: ui/CellToolBase.cpp:418
+#: ui/CellToolBase.cpp:362
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "تنظیم سبک سلول بر اساس شرایط معین"
 
-#: ui/CellToolBase.cpp:422 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:366 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr "سبکهای شرطی"
 
-#: ui/CellToolBase.cpp:423
+#: ui/CellToolBase.cpp:367
 #, kde-format
 msgid "Remove Conditional Styles"
 msgstr "حذف سبکهای شرطی"
 
-#: ui/CellToolBase.cpp:424
+#: ui/CellToolBase.cpp:368
 #, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "حذف سبکهای شرطی سلول"
 
-#: ui/CellToolBase.cpp:430
+#: ui/CellToolBase.cpp:374
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "پالایه &خودکار‌"
 
-#: ui/CellToolBase.cpp:433
+#: ui/CellToolBase.cpp:377
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "افزودن پالایه خودکار به گستره سلول"
 
-#: ui/CellToolBase.cpp:437
+#: ui/CellToolBase.cpp:381
 #, kde-format
 msgid "&Function..."
 msgstr "&تابع...‌"
 
-#: ui/CellToolBase.cpp:440
+#: ui/CellToolBase.cpp:384
 #, kde-format
 msgid "Insert math expression"
 msgstr "درج عبارت ریاضی"
 
-#: ui/CellToolBase.cpp:443
+#: ui/CellToolBase.cpp:387
 #, kde-format
 msgid "From &Database..."
 msgstr "از &دادگان...‌"
 
-#: ui/CellToolBase.cpp:447
+#: ui/CellToolBase.cpp:391
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "درج داده از دادگان SQL"
 
-#: ui/CellToolBase.cpp:450
+#: ui/CellToolBase.cpp:394
 #, kde-format
 msgid "Custom Lists..."
 msgstr "فهرستهای سفارشی..."
 
-#: ui/CellToolBase.cpp:453
+#: ui/CellToolBase.cpp:397
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "ایجاد فهرستهای سفارشی برای مرتب‌سازی یا پر کردن خودکار"
 
-#: ui/CellToolBase.cpp:455
+#: ui/CellToolBase.cpp:399
 #, kde-format
 msgid "&Consolidate..."
 msgstr "&تثبیت...‌"
 
-#: ui/CellToolBase.cpp:458
+#: ui/CellToolBase.cpp:402
 #, kde-format
 msgid "Create a region of summary data from a group of similar regions"
 msgstr "ایجاد منطقه‌ای از داده‌های خلاصه از گروهی از مناطق مشابه"
 
-#: ui/CellToolBase.cpp:460
+#: ui/CellToolBase.cpp:404
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "پیگردی &هدف...‌"
 
-#: ui/CellToolBase.cpp:463
+#: ui/CellToolBase.cpp:407
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "تکرار محاسبه برای یافتن مقدار مشخص"
 
-#: ui/CellToolBase.cpp:465
+#: ui/CellToolBase.cpp:409
 #, kde-format
 msgid "&Subtotals..."
 msgstr "&جمعهای جزئی...‌"
 
-#: ui/CellToolBase.cpp:468
+#: ui/CellToolBase.cpp:412
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
 msgstr "ایجاد نوع متفاوتی از جمعهای جزئی برای یک فهرست یا دادگان"
 
-#: ui/CellToolBase.cpp:470
+#: ui/CellToolBase.cpp:414
 #, fuzzy, kde-format
 #| msgid "&Subtotals..."
 msgid "&Pivot Tables..."
 msgstr "&جمعهای جزئی...‌"
 
-#: ui/CellToolBase.cpp:473
+#: ui/CellToolBase.cpp:417
 #, fuzzy, kde-format
 #| msgid "&Subtotals..."
 msgid "Create Pivot Tables"
 msgstr "&جمعهای جزئی...‌"
 
-#: ui/CellToolBase.cpp:475
+#: ui/CellToolBase.cpp:419
 #, kde-format
 msgid "Area Name..."
 msgstr "نام ناحیه..."
 
-#: ui/CellToolBase.cpp:478
+#: ui/CellToolBase.cpp:422
 #, kde-format
 msgid "Set a name for a region of the spreadsheet"
 msgstr "تنظیم یک نام برای منطقه‌ای از صفحه گسترده"
 
-#: ui/CellToolBase.cpp:480
+#: ui/CellToolBase.cpp:424
 #, kde-format
 msgid "Named Areas..."
 msgstr "نواحی نام‌دار..."
 
-#: ui/CellToolBase.cpp:482 ui/dialogs/NamedAreaDialog.cpp:49
+#: ui/CellToolBase.cpp:426 ui/dialogs/NamedAreaDialog.cpp:49
 #, kde-format
 msgid "Named Areas"
 msgstr "ناحیه نام‌دار"
 
-#: ui/CellToolBase.cpp:484
+#: ui/CellToolBase.cpp:428
 #, kde-format
 msgid "Edit or select named areas"
 msgstr "ویرایش یا گزینش نواحی نام‌دار"
 
-#: ui/CellToolBase.cpp:488
+#: ui/CellToolBase.cpp:432
 #, kde-format
 msgid "Formula Selection"
 msgstr "گزینش فرمول"
 
-#: ui/CellToolBase.cpp:490
+#: ui/CellToolBase.cpp:434
 #, kde-format
 msgid "Insert a function"
 msgstr "درج یک تابع"
 
-#: ui/CellToolBase.cpp:491 ui/CellToolBase.cpp:2097
+#: ui/CellToolBase.cpp:435 ui/CellToolBase.cpp:1876
 #, kde-format
 msgid "Others..."
 msgstr "غیره..."
 
-#: ui/CellToolBase.cpp:499
+#: ui/CellToolBase.cpp:443
 #, kde-format
 msgid "Modify Cell"
 msgstr "تغییر سلول"
 
-#: ui/CellToolBase.cpp:503
+#: ui/CellToolBase.cpp:447
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "ویرایش سلول مشخص‌شده"
 
-#: ui/CellToolBase.cpp:506
+#: ui/CellToolBase.cpp:450
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "حرکت شیء سلول به تخته یادداشت"
 
-#: ui/CellToolBase.cpp:510
+#: ui/CellToolBase.cpp:454
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "رونوشت شیء سلول به تخته یادداشت"
 
-#: ui/CellToolBase.cpp:514
+#: ui/CellToolBase.cpp:458
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "چسباندن محتویات تخته یادداشت در مکان‌نما"
 
-#: ui/CellToolBase.cpp:517
+#: ui/CellToolBase.cpp:461
 #, kde-format
 msgid "Special Paste..."
 msgstr "چسباندن ویژه..."
 
-#: ui/CellToolBase.cpp:520
+#: ui/CellToolBase.cpp:464
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "چسباندن محتویات تخته یادداشت با گزینه‌های ویژه"
 
-#: ui/CellToolBase.cpp:522
+#: ui/CellToolBase.cpp:466
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "چسباندن با درج"
 
-#: ui/CellToolBase.cpp:525
+#: ui/CellToolBase.cpp:469
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "سلولی را از تخته یادداشت در صفحه گسترده درج می‌کند"
 
-#: ui/CellToolBase.cpp:528
+#: ui/CellToolBase.cpp:472
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "همه سلولها را در کاربرگ جاری برمی‌گزیند"
 
-#: ui/CellToolBase.cpp:545
+#: ui/CellToolBase.cpp:489
 #, kde-format
 msgid "Goto Cell..."
 msgstr "برو به سلول..."
 
-#: ui/CellToolBase.cpp:546
+#: ui/CellToolBase.cpp:490
 #, fuzzy, kde-format
 #| msgid "Goto Cell"
 msgid "Goto"
 msgstr "برو به سلول"
 
-#: ui/CellToolBase.cpp:550
+#: ui/CellToolBase.cpp:494
 #, kde-format
 msgid "Move to a particular cell"
 msgstr "حرکت به یک سلول ویژه"
 
-#: ui/CellToolBase.cpp:553
+#: ui/CellToolBase.cpp:497
 #, kde-format
 msgid "Check the spelling"
 msgstr "بررسی هجی"
 
-#: ui/CellToolBase.cpp:556
+#: ui/CellToolBase.cpp:500
 #, kde-format
 msgid "Run Inspector..."
 msgstr "اجرای بازرس..."
 
-#: ui/CellToolBase.cpp:562
+#: ui/CellToolBase.cpp:506
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "نمایش برگه..."
 
-#: ui/CellToolBase.cpp:568
+#: ui/CellToolBase.cpp:512
 #, kde-format
 msgid "Auto-Format..."
 msgstr "قالب‌بندی خودکار..."
 
-#: ui/CellToolBase.cpp:571
+#: ui/CellToolBase.cpp:515
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "تنظیم قالب‌بندی کاربرگ"
 
-#: ui/CellToolBase.cpp:573
+#: ui/CellToolBase.cpp:517
 #, fuzzy, kde-format
 #| msgid "Locale Settings"
 msgid "Document Settings..."
 msgstr "تنظیمات محلی"
 
-#: ui/CellToolBase.cpp:576
+#: ui/CellToolBase.cpp:520
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "نمایش شاخص &توضیح‌"
 
-#: ui/CellToolBase.cpp:578
+#: ui/CellToolBase.cpp:522
 #, fuzzy, kde-format
 #| msgid "Remove Columns"
 msgid "Break Before Column"
 msgstr "حذف ستونها"
 
-#: ui/CellToolBase.cpp:581
+#: ui/CellToolBase.cpp:525
 #, fuzzy, kde-format
 #| msgid "Show column as &numbers"
 msgid "Column Break"
 msgstr "نمایش ستون به صورت &شماره‌"
 
-#: ui/CellToolBase.cpp:582
+#: ui/CellToolBase.cpp:526
 #, kde-format
 msgid "Set a manual page break before the column"
 msgstr ""
 
-#: ui/CellToolBase.cpp:584
+#: ui/CellToolBase.cpp:528
 #, fuzzy, kde-format
 #| msgid "Remove Columns"
 msgid "Break Before Row"
 msgstr "حذف ستونها"
 
-#: ui/CellToolBase.cpp:587
+#: ui/CellToolBase.cpp:531
 #, fuzzy, kde-format
 #| msgid "Header"
 msgid "Row Break"
 msgstr "سرآیند"
 
-#: ui/CellToolBase.cpp:588
+#: ui/CellToolBase.cpp:532
 #, kde-format
 msgid "Set a manual page break before the row"
 msgstr ""
 
-#: ui/CellToolBase.cpp:592
+#: ui/CellToolBase.cpp:536
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "حفاظت"
 
-#: ui/CellToolBase.cpp:596
+#: ui/CellToolBase.cpp:540
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "حفاظت"
 
-#: ui/CellToolBase.cpp:597
+#: ui/CellToolBase.cpp:541
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "چسباندن محتویات تخته یادداشت در مکان‌نما"
 
-#: ui/CellToolBase.cpp:1409
+#: ui/CellToolBase.cpp:1347
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1481
+#: ui/CellToolBase.cpp:1408
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "ایجاد سبک از سلول"
 
-#: ui/CellToolBase.cpp:1490
+#: ui/CellToolBase.cpp:1417
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "نام سبک نمی‌تواند خالی باشد."
 
-#: ui/CellToolBase.cpp:1495 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1422 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "يک سبک با اين نام از قبل موجود است."
 
-#: ui/CellToolBase.cpp:1516 ui/CellToolBase.cpp:1532 ui/CellToolBase.cpp:1548
-#: ui/CellToolBase.cpp:1565 ui/CellToolBase.cpp:1581 ui/CellToolBase.cpp:1601
-#: ui/CellToolBase.cpp:1624 ui/CellToolBase.cpp:1639
+#: ui/CellToolBase.cpp:1443 ui/CellToolBase.cpp:1463
 #, fuzzy
 #| msgid "Change Font"
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "تغيير قلم"
 
-#: ui/CellToolBase.cpp:1663 ui/CellToolBase.cpp:1675 ui/CellToolBase.cpp:1687
+#: ui/CellToolBase.cpp:1495 ui/CellToolBase.cpp:1507 ui/CellToolBase.cpp:1519
 #, fuzzy
 #| msgid "Change Horizontal Alignment"
 msgctxt "(qtundo-format)"
 msgid "Change Horizontal Alignment"
 msgstr "تغییر تراز افقی"
 
-#: ui/CellToolBase.cpp:1699 ui/CellToolBase.cpp:1711 ui/CellToolBase.cpp:1723
+#: ui/CellToolBase.cpp:1531 ui/CellToolBase.cpp:1543 ui/CellToolBase.cpp:1555
 #, fuzzy
 #| msgid "Change Vertical Alignment"
 msgctxt "(qtundo-format)"
 msgid "Change Vertical Alignment"
 msgstr "تغییر تراز عمودی"
 
-#: ui/CellToolBase.cpp:1853
-#, fuzzy
-#| msgid "Wrap Text"
-msgctxt "(qtundo-format)"
-msgid "Wrap Text"
-msgstr "سطربندی متن"
-
-#: ui/CellToolBase.cpp:1867
-#, fuzzy
-#| msgid "Vertical Text"
-msgctxt "(qtundo-format)"
-msgid "Vertical Text"
-msgstr "متن عمودی"
-
-#: ui/CellToolBase.cpp:1888
-#, fuzzy
-#| msgid "Format Percent"
-msgctxt "(qtundo-format)"
-msgid "Format Percent"
-msgstr "قالب‌بندی درصد"
-
-#: ui/CellToolBase.cpp:1900
-#, fuzzy
-#| msgid "Format Money"
-msgctxt "(qtundo-format)"
-msgid "Format Money"
-msgstr "قالب‌بندی پول رایج"
-
-#: ui/CellToolBase.cpp:1970
+#: ui/CellToolBase.cpp:1749
 #, fuzzy
 #| msgid "Clear Text"
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "پاک کردن متن"
 
-#: ui/CellToolBase.cpp:2024
+#: ui/CellToolBase.cpp:1803
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -18645,67 +18515,67 @@ msgstr ""
 "گردانندگان دادگان موجود نیست.  برای استفاده از این ویژگی، لازم است "
 "گردانندگان دادگان Qt 3 لازم را نصب کنید."
 
-#: ui/CellToolBase.cpp:2060 ui/CellToolBase.cpp:2072
+#: ui/CellToolBase.cpp:1839 ui/CellToolBase.cpp:1851
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "باید سلولهای متعددی برگزینید."
 
-#: ui/CellToolBase.cpp:2561
+#: ui/CellToolBase.cpp:2340
 #, fuzzy
 #| msgid "Replace Named Area"
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "جایگزینی ناحیه نام‌دار"
 
-#: ui/CellToolBase_p.cpp:705
+#: ui/CellToolBase_p.cpp:692
 #, fuzzy
 #| msgid "Number Format"
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "قالب عدد"
 
-#: ui/CellToolBase_p.cpp:711
+#: ui/CellToolBase_p.cpp:698
 #, fuzzy
 #| msgid "Currency Format"
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "قالب واحد پول"
 
-#: ui/CellToolBase_p.cpp:716
+#: ui/CellToolBase_p.cpp:703
 #, fuzzy
 #| msgid "Percentage Format"
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "قالب درصد"
 
-#: ui/CellToolBase_p.cpp:721
+#: ui/CellToolBase_p.cpp:708
 #, fuzzy
 #| msgid "Time Format"
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "قالب زمان"
 
-#: ui/CellToolBase_p.cpp:726
+#: ui/CellToolBase_p.cpp:713
 #, fuzzy
 #| msgid "Date Format"
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "قالب تاریخ"
 
-#: ui/CellToolBase_p.cpp:731
+#: ui/CellToolBase_p.cpp:718
 #, fuzzy
 #| msgid "Scientific Format"
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "قالب علمی"
 
-#: ui/CellToolBase_p.cpp:1163
+#: ui/CellToolBase_p.cpp:1150
 #, fuzzy, kde-format
 #| msgid "Insert Cells..."
 msgid "Delete Cells..."
 msgstr "درج سلولها..."
 
-#: ui/CellToolBase_p.cpp:1167
+#: ui/CellToolBase_p.cpp:1154
 #, kde-format
 msgid "Selection List..."
 msgstr "فهرست گزینش..."
@@ -19878,6 +19748,18 @@ msgstr ""
 msgid "Preview"
 msgstr "پیش‌نمایش"
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
+#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
+#, kde-format
+msgid "Money"
+msgstr "پول"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
+#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
+#, kde-format
+msgid "Percent"
+msgstr "درصد"
+
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton)
 #: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
 #, kde-format
@@ -20120,6 +20002,12 @@ msgstr "تغییر )بدون تغییر("
 msgid "Roman"
 msgstr "رومانی"
 
+#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
+#: ui/dialogs/FontWidget.ui:58
+#, kde-format
+msgid "Italic"
+msgstr "کج"
+
 #. i18n: ectx: property (whatsThis), widget (QComboBox, weight_combo)
 #: ui/dialogs/FontWidget.ui:66
 #, kde-format
@@ -20143,6 +20031,12 @@ msgstr ""
 msgid "Normal"
 msgstr "عادی"
 
+#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
+#: ui/dialogs/FontWidget.ui:83
+#, kde-format
+msgid "Bold"
+msgstr "توپر"
+
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:324
 #: ui/dialogs/LayoutPage_Pattern.cpp:119
@@ -20156,6 +20050,12 @@ msgstr "رنگ:"
 #| msgid "If this is checked, the current cell text wil be underlined."
 msgid "If this is checked, the current cell text will be underlined."
 msgstr "اگر این علامت زده شود، متن سلول جاری زیر خط‌دار می‌شود."
+
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, underline)
+#: ui/dialogs/FontWidget.ui:101
+#, kde-format
+msgid "Underline"
+msgstr "زیرخط"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: ui/dialogs/FontWidget.ui:108
@@ -21653,6 +21553,71 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "پیوند باز شود؟"
+
+#~ msgid "Resets to the default format"
+#~ msgstr "به قالب پیش‌فرض بازنشانی می‌کند"
+
+#~ msgid "Strike Out"
+#~ msgstr "حذف کردن"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "افزایش اندازه قلم"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "کاهش اندازه قلم"
+
+#~ msgid "Wrap Text"
+#~ msgstr "سطربندی متن"
+
+#, fuzzy
+#~| msgid "Wrap text"
+#~ msgid "Wrap"
+#~ msgstr "سطربندی متن"
+
+#~ msgid "Make the cell text wrap onto multiple lines"
+#~ msgstr "سطربندی کردن متن سلول در خطوط متعدد"
+
+#~ msgid "Vertical Text"
+#~ msgstr "متن عمودی"
+
+#~ msgid "Print cell contents vertically"
+#~ msgstr "چاپ عمودی محتویات سلول"
+
+#~ msgid "Percent Format"
+#~ msgstr "قالب درصد"
+
+#~ msgid "Set the cell formatting to look like a percentage"
+#~ msgstr "تنظیم قالب‌بندی سلول برای مشابه بودن به درصد"
+
+#~ msgid "Money Format"
+#~ msgstr "قالب پول"
+
+#~ msgid "Set the cell formatting to look like your local currency"
+#~ msgstr "تنظیم قالب‌بندی سلول برای مشابه بودن با پول رایج محلیتان"
+
+#, fuzzy
+#~| msgid "Wrap Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Wrap Text"
+#~ msgstr "سطربندی متن"
+
+#, fuzzy
+#~| msgid "Vertical Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Text"
+#~ msgstr "متن عمودی"
+
+#, fuzzy
+#~| msgid "Format Percent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format Percent"
+#~ msgstr "قالب‌بندی درصد"
+
+#, fuzzy
+#~| msgid "Format Money"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format Money"
+#~ msgstr "قالب‌بندی پول رایج"
 
 #~ msgid "&Data Format"
 #~ msgstr "قالب &داده‌"

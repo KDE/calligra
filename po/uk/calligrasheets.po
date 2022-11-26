@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:46+0000\n"
+"POT-Creation-Date: 2022-11-26 00:46+0000\n"
 "PO-Revision-Date: 2022-11-13 19:20+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -3213,12 +3213,11 @@ msgstr "Заголовок"
 msgid "Header1"
 msgstr "Заголовок1"
 
-#: core/StyleManager.cpp:172 ui/CellToolBase.cpp:169
-#: ui/dialogs/LayoutPage_General.cpp:127 ui/dialogs/LayoutPage_General.cpp:146
-#: ui/dialogs/StyleManagerDialog.cpp:99 ui/dialogs/StyleManagerDialog.cpp:139
-#: ui/dialogs/StyleManagerDialog.cpp:172 ui/dialogs/StyleManagerDialog.cpp:198
-#: ui/dialogs/StyleManagerDialog.cpp:236 ui/dialogs/StyleManagerDialog.cpp:265
-#: ui/dialogs/StyleManagerDialog.cpp:286
+#: core/StyleManager.cpp:172 ui/dialogs/LayoutPage_General.cpp:127
+#: ui/dialogs/LayoutPage_General.cpp:146 ui/dialogs/StyleManagerDialog.cpp:99
+#: ui/dialogs/StyleManagerDialog.cpp:139 ui/dialogs/StyleManagerDialog.cpp:172
+#: ui/dialogs/StyleManagerDialog.cpp:198 ui/dialogs/StyleManagerDialog.cpp:236
+#: ui/dialogs/StyleManagerDialog.cpp:265 ui/dialogs/StyleManagerDialog.cpp:286
 #, kde-format
 msgid "Default"
 msgstr "Типовий"
@@ -4036,7 +4035,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") повертає 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:444 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:388 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "База даних"
@@ -16079,7 +16078,7 @@ msgstr "Задіяти"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:212
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:188
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
@@ -16517,8 +16516,7 @@ msgstr "По горизонталі"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup2)
-#: part/dialogs/PageLayoutSheetPage.ui:335 ui/CellToolBase.cpp:345
-#: ui/dialogs/PositionWidget.ui:135
+#: part/dialogs/PageLayoutSheetPage.ui:335 ui/dialogs/PositionWidget.ui:135
 #, kde-format
 msgid "Vertical"
 msgstr "По вертикалі"
@@ -16545,15 +16543,15 @@ msgid "Up"
 msgstr "Вгору"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:301 ui/CellToolBase.cpp:254
-#: ui/CellToolBase.cpp:293 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:301 ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:261 ui/dialogs/PositionWidget.ui:75
 #, kde-format
 msgid "Right"
 msgstr "Праворуч"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:302 ui/CellToolBase.cpp:240
-#: ui/CellToolBase.cpp:287 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:302 ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:255 ui/dialogs/PositionWidget.ui:61
 #, kde-format
 msgid "Left"
 msgstr "Ліворуч"
@@ -16569,7 +16567,7 @@ msgstr "Вниз, перша колонка"
 #. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/CellToolBase.cpp:317 ui/dialogs/DatabaseDialog.cpp:711
+#: ui/CellToolBase.cpp:285 ui/dialogs/DatabaseDialog.cpp:711
 #: ui/dialogs/DatabaseDialog.cpp:712 ui/dialogs/DocumentSettingsDialog.cpp:124
 #: ui/dialogs/pivotfilters.ui:36 ui/dialogs/pivotoptions.ui:95
 #: ui/dialogs/pivotoptions.ui:104 ui/dialogs/pivotsubtotals.ui:21
@@ -17467,7 +17465,7 @@ msgstr ""
 "Ви збираєтесь вилучити активний аркуш.\n"
 "Продовжити?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1482
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1409
 #, kde-format
 msgid "Enter name:"
 msgstr "Введіть назву:"
@@ -17527,14 +17525,14 @@ msgstr "CountA: "
 msgid "%1x%2"
 msgstr "%1⨯%2"
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1651
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1483
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr ""
 "Змінити колір тексту\n"
 "зміну кольору тексту"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1932
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1711
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr ""
@@ -17543,9 +17541,9 @@ msgstr ""
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase.cpp:1736 ui/CellToolBase.cpp:1752 ui/CellToolBase.cpp:1768
-#: ui/CellToolBase.cpp:1781 ui/CellToolBase.cpp:1794 ui/CellToolBase.cpp:1811
-#: ui/CellToolBase.cpp:1829 ui/CellToolBase_p.cpp:736
+#: ui/CellToolBase.cpp:1568 ui/CellToolBase.cpp:1584 ui/CellToolBase.cpp:1600
+#: ui/CellToolBase.cpp:1613 ui/CellToolBase.cpp:1626 ui/CellToolBase.cpp:1643
+#: ui/CellToolBase.cpp:1661 ui/CellToolBase_p.cpp:723
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr ""
@@ -17562,806 +17560,679 @@ msgstr "Формат комірки…"
 msgid "Set the cell formatting"
 msgstr "Форматування комірки"
 
-#: ui/CellToolBase.cpp:172
-#, kde-format
-msgid "Resets to the default format"
-msgstr "Скинути до типового формату"
-
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Style Manager..."
 msgstr "Керування стилями…"
 
-#: ui/CellToolBase.cpp:177
+#: ui/CellToolBase.cpp:172
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr "Редагування і керування стилями комірок"
 
-#: ui/CellToolBase.cpp:179 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:174 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "Стиль"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "Застосувати до вибраних комірок стиль, який вже визначено"
 
-#: ui/CellToolBase.cpp:184
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "Створити стиль з комірки…"
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:180
 #, kde-format
 msgid "Style From Cell"
 msgstr "Стиль за коміркою"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:183
 #, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "Створити новий стиль на основі вибраної зараз комірки"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
-#: ui/CellToolBase.cpp:192 ui/dialogs/FontWidget.ui:83
-#, kde-format
-msgid "Bold"
-msgstr "Жирний"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
-#: ui/CellToolBase.cpp:197 ui/dialogs/FontWidget.ui:58
-#, kde-format
-msgid "Italic"
-msgstr "Курсив"
-
-#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, underline)
-#: ui/CellToolBase.cpp:202 ui/dialogs/FontWidget.ui:101
-#, kde-format
-msgid "Underline"
-msgstr "Підкреслити"
-
-#: ui/CellToolBase.cpp:207
-#, kde-format
-msgid "Strike Out"
-msgstr "Закреслений"
-
-#: ui/CellToolBase.cpp:211
+#: ui/CellToolBase.cpp:187
 #, kde-format
 msgid "Select Font..."
 msgstr "Вибрати шрифт…"
 
-#: ui/CellToolBase.cpp:216
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Select Font Size"
 msgstr "Виберіть розмір шрифту"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Font Size"
 msgstr "Розмір шрифту"
 
-#: ui/CellToolBase.cpp:221
-#, kde-format
-msgid "Increase Font Size"
-msgstr "Збільшити розмір шрифту"
-
-#: ui/CellToolBase.cpp:225
-#, kde-format
-msgid "Decrease Font Size"
-msgstr "Зменшити розмір шрифту"
-
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:199
 #, kde-format
 msgid "Text Color"
 msgstr "Колір тексту"
 
-#: ui/CellToolBase.cpp:232
+#: ui/CellToolBase.cpp:200
 #, kde-format
 msgid "Set the text color"
 msgstr "Вказати колір тексту"
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Align Left"
 msgstr "По лівому краю"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Left justify the cell contents"
 msgstr "Вирівняти вміст комірки ліворуч"
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Align Center"
 msgstr "По центру"
 
 #. i18n: ectx: property (text), widget (QRadioButton, center)
-#: ui/CellToolBase.cpp:247 ui/dialogs/PositionWidget.ui:68
+#: ui/CellToolBase.cpp:215 ui/dialogs/PositionWidget.ui:68
 #, kde-format
 msgid "Center"
 msgstr "По центру"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Center the cell contents"
 msgstr "Вирівняти вміст комірки по центру"
 
-#: ui/CellToolBase.cpp:253
+#: ui/CellToolBase.cpp:221
 #, kde-format
 msgid "Align Right"
 msgstr "По правому краю"
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Right justify the cell contents"
 msgstr "Вирівняти вміст комірки праворуч"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Align Top"
 msgstr "Вгору"
 
 #. i18n: ectx: property (text), widget (QRadioButton, top)
-#: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:299
+#: ui/CellToolBase.cpp:232 ui/CellToolBase.cpp:267
 #: ui/dialogs/PositionWidget.ui:141
 #, kde-format
 msgid "Top"
 msgstr "Зверху"
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:235
 #, kde-format
 msgid "Align cell contents along the top of the cell"
 msgstr "Вирівняти вміст комірки по верху"
 
-#: ui/CellToolBase.cpp:270
+#: ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Align Middle"
 msgstr "По середині"
 
 #. i18n: ectx: property (text), widget (QRadioButton, middle)
-#: ui/CellToolBase.cpp:271 ui/dialogs/PositionWidget.ui:148
+#: ui/CellToolBase.cpp:239 ui/dialogs/PositionWidget.ui:148
 #, kde-format
 msgid "Middle"
 msgstr "Посередині"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:242
 #, kde-format
 msgid "Align cell contents centered in the cell"
 msgstr "Вирівняти вміст по середині комірки"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:245
 #, kde-format
 msgid "Align Bottom"
 msgstr "До низу"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bottom)
-#: ui/CellToolBase.cpp:278 ui/CellToolBase.cpp:305
+#: ui/CellToolBase.cpp:246 ui/CellToolBase.cpp:273
 #: ui/dialogs/PositionWidget.ui:155
 #, kde-format
 msgid "Bottom"
 msgstr "Внизу"
 
-#: ui/CellToolBase.cpp:281
+#: ui/CellToolBase.cpp:249
 #, kde-format
 msgid "Align cell contents along the bottom of the cell"
 msgstr "Вирівняти вміст комірки до низу"
 
-#: ui/CellToolBase.cpp:286
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Border Left"
 msgstr "Ліва межа"
 
-#: ui/CellToolBase.cpp:290
+#: ui/CellToolBase.cpp:258
 #, kde-format
 msgid "Set a left border to the selected area"
 msgstr "Вказати ліву межу для вибраної ділянки"
 
-#: ui/CellToolBase.cpp:292
+#: ui/CellToolBase.cpp:260
 #, kde-format
 msgid "Border Right"
 msgstr "Права межа"
 
-#: ui/CellToolBase.cpp:296
+#: ui/CellToolBase.cpp:264
 #, kde-format
 msgid "Set a right border to the selected area"
 msgstr "Вказати праву межу для вибраної ділянки"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "Border Top"
 msgstr "Верхня межа"
 
-#: ui/CellToolBase.cpp:302
+#: ui/CellToolBase.cpp:270
 #, kde-format
 msgid "Set a top border to the selected area"
 msgstr "Вказати верхню межу для вибраної ділянки"
 
-#: ui/CellToolBase.cpp:304
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Border Bottom"
 msgstr "Нижня межа"
 
-#: ui/CellToolBase.cpp:308
+#: ui/CellToolBase.cpp:276
 #, kde-format
 msgid "Set a bottom border to the selected area"
 msgstr "Вказати нижню межу для вибраної ділянки"
 
-#: ui/CellToolBase.cpp:310
+#: ui/CellToolBase.cpp:278
 #, kde-format
 msgid "All Borders"
 msgstr "Всі межі"
 
-#: ui/CellToolBase.cpp:311 ui/dialogs/FormulaDialog.cpp:84
+#: ui/CellToolBase.cpp:279 ui/dialogs/FormulaDialog.cpp:84
 #: ui/dialogs/FormulaDialog.cpp:190 ui/dialogs/FormulaDialog.cpp:722
 #: ui/FilterPopup.cpp:55
 #, kde-format
 msgid "All"
 msgstr "Всі"
 
-#: ui/CellToolBase.cpp:314
+#: ui/CellToolBase.cpp:282
 #, kde-format
 msgid "Set a border around all cells in the selected area"
 msgstr "Вказати межі навколо всіх комірок у вибраній ділянці"
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:284
 #, kde-format
 msgid "No Borders"
 msgstr "Без меж"
 
-#: ui/CellToolBase.cpp:320
+#: ui/CellToolBase.cpp:288
 #, kde-format
 msgid "Remove all borders in the selected area"
 msgstr "Вилучити всі межі в вибраній ділянці"
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "Border Outline"
 msgstr "Контур межі"
 
-#: ui/CellToolBase.cpp:323
+#: ui/CellToolBase.cpp:291
 #, kde-format
 msgid "Outline"
 msgstr "Контур"
 
-#: ui/CellToolBase.cpp:326
+#: ui/CellToolBase.cpp:294
 #, kde-format
 msgid "Set a border to the outline of the selected area"
 msgstr "Вказати межу контуру вибраної ділянки"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:298
 #, kde-format
 msgid "Select a new border color"
 msgstr "Вибрати новий колір межі"
 
-#: ui/CellToolBase.cpp:331
+#: ui/CellToolBase.cpp:299
 #, kde-format
 msgid "Border Color"
 msgstr "Колір межі"
 
-#: ui/CellToolBase.cpp:338
-#, kde-format
-msgid "Wrap Text"
-msgstr "Перенос тексту"
-
-#: ui/CellToolBase.cpp:339
-#, kde-format
-msgid "Wrap"
-msgstr "Переносити рядки"
-
-#: ui/CellToolBase.cpp:342
-#, kde-format
-msgid "Make the cell text wrap onto multiple lines"
-msgstr "Зробити, щоб текст у комірці переносився за рядками"
-
-#: ui/CellToolBase.cpp:344
-#, kde-format
-msgid "Vertical Text"
-msgstr "Вертикальний текст"
-
-#: ui/CellToolBase.cpp:348
-#, kde-format
-msgid "Print cell contents vertically"
-msgstr "Друкувати вміст комірки вертикально"
-
-#: ui/CellToolBase.cpp:350
+#: ui/CellToolBase.cpp:306
 #, kde-format
 msgid "Change Angle..."
 msgstr "Змінити кут…"
 
-#: ui/CellToolBase.cpp:351
+#: ui/CellToolBase.cpp:307
 #, kde-format
 msgid "Angle"
 msgstr "Кут"
 
-#: ui/CellToolBase.cpp:354
+#: ui/CellToolBase.cpp:310
 #, kde-format
 msgid "Change the angle that cell contents are printed"
 msgstr "Змінити кут, під яким друкуватиметься вміст комірки"
 
-#: ui/CellToolBase.cpp:358
-#, kde-format
-msgid "Percent Format"
-msgstr "Формат відсотків"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/CellToolBase.cpp:359 ui/dialogs/DataFormatWidget.ui:102
-#: ui/dialogs/LayoutPage_Float.cpp:66
-#, kde-format
-msgid "Percent"
-msgstr "Відсоток"
-
-#: ui/CellToolBase.cpp:362
-#, kde-format
-msgid "Set the cell formatting to look like a percentage"
-msgstr "Формат комірки має виглядати як відсотки"
-
-#: ui/CellToolBase.cpp:364
-#, kde-format
-msgid "Money Format"
-msgstr "Формат грошей"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/CellToolBase.cpp:365 ui/dialogs/DataFormatWidget.ui:95
-#: ui/dialogs/LayoutPage_Float.cpp:70
-#, kde-format
-msgid "Money"
-msgstr "Гроші"
-
-#: ui/CellToolBase.cpp:368
-#, kde-format
-msgid "Set the cell formatting to look like your local currency"
-msgstr "Формат комірки має відповідати грошовій системі вашої країни"
-
-#: ui/CellToolBase.cpp:370
+#: ui/CellToolBase.cpp:314
 #, kde-format
 msgid "Increase Precision"
 msgstr "Збільшити точність"
 
-#: ui/CellToolBase.cpp:373
+#: ui/CellToolBase.cpp:317
 #, kde-format
 msgid "Increase the decimal precision shown onscreen"
 msgstr "Збільшити десяткову точність на екрані"
 
-#: ui/CellToolBase.cpp:375
+#: ui/CellToolBase.cpp:319
 #, kde-format
 msgid "Decrease Precision"
 msgstr "Зменшити точність"
 
-#: ui/CellToolBase.cpp:378
+#: ui/CellToolBase.cpp:322
 #, kde-format
 msgid "Decrease the decimal precision shown onscreen"
 msgstr "Зменшити десяткову точність на екрані"
 
-#: ui/CellToolBase.cpp:384
+#: ui/CellToolBase.cpp:328
 #, kde-format
 msgid "Set the background color"
 msgstr "Вказати колір тла"
 
-#: ui/CellToolBase.cpp:385
+#: ui/CellToolBase.cpp:329
 #, kde-format
 msgid "Background Color"
 msgstr "Колір тла"
 
-#: ui/CellToolBase.cpp:391 ui/CellToolBase.cpp:397
+#: ui/CellToolBase.cpp:335 ui/CellToolBase.cpp:341
 #, kde-format
 msgid "Cells..."
 msgstr "Комірки…"
 
-#: ui/CellToolBase.cpp:392 ui/CellToolBase_p.cpp:1159
+#: ui/CellToolBase.cpp:336 ui/CellToolBase_p.cpp:1146
 #, kde-format
 msgid "Insert Cells..."
 msgstr "Вставити комірки…"
 
-#: ui/CellToolBase.cpp:393
+#: ui/CellToolBase.cpp:337
 #, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "Вставити в електронну таблицю порожню комірку"
 
-#: ui/CellToolBase.cpp:398
+#: ui/CellToolBase.cpp:342
 #, kde-format
 msgid "Remove Cells..."
 msgstr "Вилучити комірки…"
 
-#: ui/CellToolBase.cpp:399
+#: ui/CellToolBase.cpp:343
 #, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "Вилучає комірки з електронної таблиці"
 
-#: ui/CellToolBase.cpp:405 ui/CellToolBase.cpp:406
+#: ui/CellToolBase.cpp:349 ui/CellToolBase.cpp:350
 #, kde-format
 msgid "Clear All"
 msgstr "Очистити все"
 
-#: ui/CellToolBase.cpp:407
+#: ui/CellToolBase.cpp:351
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Вилучити увесь вміст і форматування поточної комірки"
 
-#: ui/CellToolBase.cpp:411
+#: ui/CellToolBase.cpp:355
 #, kde-format
 msgid "Contents"
 msgstr "Вміст"
 
-#: ui/CellToolBase.cpp:412
+#: ui/CellToolBase.cpp:356
 #, kde-format
 msgid "Clear Contents"
 msgstr "Очистити вміст"
 
-#: ui/CellToolBase.cpp:413
+#: ui/CellToolBase.cpp:357
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Вилучити вміст поточної комірки"
 
-#: ui/CellToolBase.cpp:417
+#: ui/CellToolBase.cpp:361
 #, kde-format
 msgid "Conditional Styles..."
 msgstr "Умовне форматування комірки…"
 
-#: ui/CellToolBase.cpp:418
+#: ui/CellToolBase.cpp:362
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "Встановити формат комірки залежно від певних умов"
 
-#: ui/CellToolBase.cpp:422 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:366 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr "Умовні стилі"
 
-#: ui/CellToolBase.cpp:423
+#: ui/CellToolBase.cpp:367
 #, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Вилучити умовне форматування"
 
-#: ui/CellToolBase.cpp:424
+#: ui/CellToolBase.cpp:368
 #, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Вилучити умовне форматування комірки"
 
-#: ui/CellToolBase.cpp:430
+#: ui/CellToolBase.cpp:374
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "&Автофільтр"
 
-#: ui/CellToolBase.cpp:433
+#: ui/CellToolBase.cpp:377
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "Додати автоматичний фільтр до діапазону комірок"
 
-#: ui/CellToolBase.cpp:437
+#: ui/CellToolBase.cpp:381
 #, kde-format
 msgid "&Function..."
 msgstr "&Функція…"
 
-#: ui/CellToolBase.cpp:440
+#: ui/CellToolBase.cpp:384
 #, kde-format
 msgid "Insert math expression"
 msgstr "Вставити математичний вираз"
 
-#: ui/CellToolBase.cpp:443
+#: ui/CellToolBase.cpp:387
 #, kde-format
 msgid "From &Database..."
 msgstr "З &бази даних…"
 
-#: ui/CellToolBase.cpp:447
+#: ui/CellToolBase.cpp:391
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Вставити дані з бази даних SQL"
 
-#: ui/CellToolBase.cpp:450
+#: ui/CellToolBase.cpp:394
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Нетипові списки…"
 
-#: ui/CellToolBase.cpp:453
+#: ui/CellToolBase.cpp:397
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Створити нетипові списки для впорядкування або автозаповнення"
 
-#: ui/CellToolBase.cpp:455
+#: ui/CellToolBase.cpp:399
 #, kde-format
 msgid "&Consolidate..."
 msgstr "&Консолідувати…"
 
-#: ui/CellToolBase.cpp:458
+#: ui/CellToolBase.cpp:402
 #, kde-format
 msgid "Create a region of summary data from a group of similar regions"
 msgstr "Створити ділянку з даними підсумків з групи подібних ділянок"
 
-#: ui/CellToolBase.cpp:460
+#: ui/CellToolBase.cpp:404
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Пошук розв’язку…"
 
-#: ui/CellToolBase.cpp:463
+#: ui/CellToolBase.cpp:407
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Повторення підрахунку, щоб знайти певне значення"
 
-#: ui/CellToolBase.cpp:465
+#: ui/CellToolBase.cpp:409
 #, kde-format
 msgid "&Subtotals..."
 msgstr "Промі&жні підсумки…"
 
-#: ui/CellToolBase.cpp:468
+#: ui/CellToolBase.cpp:412
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
 msgstr "Створити інший вид проміжних підсумків для списку або бази даних"
 
-#: ui/CellToolBase.cpp:470
+#: ui/CellToolBase.cpp:414
 #, kde-format
 msgid "&Pivot Tables..."
 msgstr "Зв&едені таблиці…"
 
-#: ui/CellToolBase.cpp:473
+#: ui/CellToolBase.cpp:417
 #, kde-format
 msgid "Create Pivot Tables"
 msgstr "Створити зведені таблиці"
 
-#: ui/CellToolBase.cpp:475
+#: ui/CellToolBase.cpp:419
 #, kde-format
 msgid "Area Name..."
 msgstr "Назвати ділянку…"
 
-#: ui/CellToolBase.cpp:478
+#: ui/CellToolBase.cpp:422
 #, kde-format
 msgid "Set a name for a region of the spreadsheet"
 msgstr "Вкажіть назву ділянки електронної таблиці"
 
-#: ui/CellToolBase.cpp:480
+#: ui/CellToolBase.cpp:424
 #, kde-format
 msgid "Named Areas..."
 msgstr "Ділянки з назвами…"
 
-#: ui/CellToolBase.cpp:482 ui/dialogs/NamedAreaDialog.cpp:49
+#: ui/CellToolBase.cpp:426 ui/dialogs/NamedAreaDialog.cpp:49
 #, kde-format
 msgid "Named Areas"
 msgstr "Ділянки з назвами"
 
-#: ui/CellToolBase.cpp:484
+#: ui/CellToolBase.cpp:428
 #, kde-format
 msgid "Edit or select named areas"
 msgstr "Змінити або вибрати названі ділянки"
 
-#: ui/CellToolBase.cpp:488
+#: ui/CellToolBase.cpp:432
 #, kde-format
 msgid "Formula Selection"
 msgstr "Вибір формули"
 
-#: ui/CellToolBase.cpp:490
+#: ui/CellToolBase.cpp:434
 #, kde-format
 msgid "Insert a function"
 msgstr "Вставити функцію"
 
-#: ui/CellToolBase.cpp:491 ui/CellToolBase.cpp:2097
+#: ui/CellToolBase.cpp:435 ui/CellToolBase.cpp:1876
 #, kde-format
 msgid "Others..."
 msgstr "Інші…"
 
-#: ui/CellToolBase.cpp:499
+#: ui/CellToolBase.cpp:443
 #, kde-format
 msgid "Modify Cell"
 msgstr "Змінити комірку"
 
-#: ui/CellToolBase.cpp:503
+#: ui/CellToolBase.cpp:447
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Редагувати підсвічену комірку"
 
-#: ui/CellToolBase.cpp:506
+#: ui/CellToolBase.cpp:450
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Перенести об'єкт комірки до буфера"
 
-#: ui/CellToolBase.cpp:510
+#: ui/CellToolBase.cpp:454
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Скопіювати об'єкт комірки до буфера"
 
-#: ui/CellToolBase.cpp:514
+#: ui/CellToolBase.cpp:458
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Вставити вміст буфера в поточну позицію курсора"
 
-#: ui/CellToolBase.cpp:517
+#: ui/CellToolBase.cpp:461
 #, kde-format
 msgid "Special Paste..."
 msgstr "Спеціальна вставка…"
 
-#: ui/CellToolBase.cpp:520
+#: ui/CellToolBase.cpp:464
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Вставити зі спеціальними параметрами вміст буфера"
 
-#: ui/CellToolBase.cpp:522
+#: ui/CellToolBase.cpp:466
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Вставити з новими рядками"
 
-#: ui/CellToolBase.cpp:525
+#: ui/CellToolBase.cpp:469
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Вставляє комірку з буфера в електронну таблицю"
 
-#: ui/CellToolBase.cpp:528
+#: ui/CellToolBase.cpp:472
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Обирає всі комірки поточного аркуша"
 
-#: ui/CellToolBase.cpp:545
+#: ui/CellToolBase.cpp:489
 #, kde-format
 msgid "Goto Cell..."
 msgstr "Перейти до комірки…"
 
-#: ui/CellToolBase.cpp:546
+#: ui/CellToolBase.cpp:490
 #, kde-format
 msgid "Goto"
 msgstr "Перейти до комірки"
 
-#: ui/CellToolBase.cpp:550
+#: ui/CellToolBase.cpp:494
 #, kde-format
 msgid "Move to a particular cell"
 msgstr "Перейти до певної комірки"
 
-#: ui/CellToolBase.cpp:553
+#: ui/CellToolBase.cpp:497
 #, kde-format
 msgid "Check the spelling"
 msgstr "Перевірка правопису"
 
-#: ui/CellToolBase.cpp:556
+#: ui/CellToolBase.cpp:500
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Запуск інспектора…"
 
-#: ui/CellToolBase.cpp:562
+#: ui/CellToolBase.cpp:506
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Показати QTableView…"
 
-#: ui/CellToolBase.cpp:568
+#: ui/CellToolBase.cpp:512
 #, kde-format
 msgid "Auto-Format..."
 msgstr "Автоформатування…"
 
-#: ui/CellToolBase.cpp:571
+#: ui/CellToolBase.cpp:515
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Вкажіть форматування аркуша"
 
-#: ui/CellToolBase.cpp:573
+#: ui/CellToolBase.cpp:517
 #, kde-format
 msgid "Document Settings..."
 msgstr "Параметри документа…"
 
-#: ui/CellToolBase.cpp:576
+#: ui/CellToolBase.cpp:520
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Показати діалогове вікно параметрів документа"
 
-#: ui/CellToolBase.cpp:578
+#: ui/CellToolBase.cpp:522
 #, kde-format
 msgid "Break Before Column"
 msgstr "Розрив перед колонкою"
 
-#: ui/CellToolBase.cpp:581
+#: ui/CellToolBase.cpp:525
 #, kde-format
 msgid "Column Break"
 msgstr "Розрив колонки"
 
-#: ui/CellToolBase.cpp:582
+#: ui/CellToolBase.cpp:526
 #, kde-format
 msgid "Set a manual page break before the column"
 msgstr "Додати вручну розрив сторінки перед колонкою"
 
-#: ui/CellToolBase.cpp:584
+#: ui/CellToolBase.cpp:528
 #, kde-format
 msgid "Break Before Row"
 msgstr "Розрив перед рядком"
 
-#: ui/CellToolBase.cpp:587
+#: ui/CellToolBase.cpp:531
 #, kde-format
 msgid "Row Break"
 msgstr "Розрив рядка"
 
-#: ui/CellToolBase.cpp:588
+#: ui/CellToolBase.cpp:532
 #, kde-format
 msgid "Set a manual page break before the row"
 msgstr "Додати вручну розрив сторінки перед рядком"
 
-#: ui/CellToolBase.cpp:592
+#: ui/CellToolBase.cpp:536
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Змінити прив’язку посилання"
 
-#: ui/CellToolBase.cpp:596
+#: ui/CellToolBase.cpp:540
 #, kde-format
 msgid "Permute fixation"
 msgstr "Змінити порядок прив’язки"
 
-#: ui/CellToolBase.cpp:597
+#: ui/CellToolBase.cpp:541
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Змінити порядок прив’язки посилання комірки, у якій перебуває курсор"
 
-#: ui/CellToolBase.cpp:1409
+#: ui/CellToolBase.cpp:1347
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Не вдалося знайти дію %1"
 
-#: ui/CellToolBase.cpp:1481
+#: ui/CellToolBase.cpp:1408
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "Створити стиль з комірки"
 
-#: ui/CellToolBase.cpp:1490
+#: ui/CellToolBase.cpp:1417
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "Назва стилю не може бути порожньою."
 
-#: ui/CellToolBase.cpp:1495 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1422 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "Стиль з такою назвою вже існує."
 
-#: ui/CellToolBase.cpp:1516 ui/CellToolBase.cpp:1532 ui/CellToolBase.cpp:1548
-#: ui/CellToolBase.cpp:1565 ui/CellToolBase.cpp:1581 ui/CellToolBase.cpp:1601
-#: ui/CellToolBase.cpp:1624 ui/CellToolBase.cpp:1639
+#: ui/CellToolBase.cpp:1443 ui/CellToolBase.cpp:1463
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr ""
 "Змінити шрифт\n"
 "зміну шрифту"
 
-#: ui/CellToolBase.cpp:1663 ui/CellToolBase.cpp:1675 ui/CellToolBase.cpp:1687
+#: ui/CellToolBase.cpp:1495 ui/CellToolBase.cpp:1507 ui/CellToolBase.cpp:1519
 msgctxt "(qtundo-format)"
 msgid "Change Horizontal Alignment"
 msgstr ""
 "Змінити горизонтальне вирівнювання\n"
 "зміну горизонтального вирівнювання"
 
-#: ui/CellToolBase.cpp:1699 ui/CellToolBase.cpp:1711 ui/CellToolBase.cpp:1723
+#: ui/CellToolBase.cpp:1531 ui/CellToolBase.cpp:1543 ui/CellToolBase.cpp:1555
 msgctxt "(qtundo-format)"
 msgid "Change Vertical Alignment"
 msgstr ""
 "Змінити вертикальне вирівнювання\n"
 "зміну вертикального вирівнювання"
 
-#: ui/CellToolBase.cpp:1853
-msgctxt "(qtundo-format)"
-msgid "Wrap Text"
-msgstr ""
-"Перенести текст\n"
-"перенесення тексту"
-
-#: ui/CellToolBase.cpp:1867
-msgctxt "(qtundo-format)"
-msgid "Vertical Text"
-msgstr ""
-"Вертикальний текст\n"
-"вертикальний текст"
-
-#: ui/CellToolBase.cpp:1888
-msgctxt "(qtundo-format)"
-msgid "Format Percent"
-msgstr ""
-"Форматувати як відсотки\n"
-"форматування у режимі відсотків"
-
-#: ui/CellToolBase.cpp:1900
-msgctxt "(qtundo-format)"
-msgid "Format Money"
-msgstr ""
-"Форматувати як гроші\n"
-"форматування у режимі грошей"
-
-#: ui/CellToolBase.cpp:1970
+#: ui/CellToolBase.cpp:1749
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr ""
 "Вилучити текст\n"
 "вилучення тексту"
 
-#: ui/CellToolBase.cpp:2024
+#: ui/CellToolBase.cpp:1803
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -18370,66 +18241,66 @@ msgstr ""
 "Драйвери баз даних недоступні. Щоб мати змогу скористатися цією можливістю, "
 "вам слід встановити необхідні драйвери баз даних з Qt."
 
-#: ui/CellToolBase.cpp:2060 ui/CellToolBase.cpp:2072
+#: ui/CellToolBase.cpp:1839 ui/CellToolBase.cpp:1851
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Вам слід позначити щонайменше дві комірки."
 
-#: ui/CellToolBase.cpp:2561
+#: ui/CellToolBase.cpp:2340
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr ""
 "Замінити\n"
 "заміну"
 
-#: ui/CellToolBase_p.cpp:705
+#: ui/CellToolBase_p.cpp:692
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr ""
 "Формат числа\n"
 "форматування у режимі числа"
 
-#: ui/CellToolBase_p.cpp:711
+#: ui/CellToolBase_p.cpp:698
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr ""
 "Формат валюти\n"
 "форматування у режимі грошей"
 
-#: ui/CellToolBase_p.cpp:716
+#: ui/CellToolBase_p.cpp:703
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr ""
 "Формат відсотків\n"
 "форматування у режимі відсотків"
 
-#: ui/CellToolBase_p.cpp:721
+#: ui/CellToolBase_p.cpp:708
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr ""
 "Формат часу\n"
 "форматування у режимі часу"
 
-#: ui/CellToolBase_p.cpp:726
+#: ui/CellToolBase_p.cpp:713
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr ""
 "Формат дати\n"
 "форматування у режимі дати"
 
-#: ui/CellToolBase_p.cpp:731
+#: ui/CellToolBase_p.cpp:718
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr ""
 "Науковий формат\n"
 "форматування у режимі інженерного запису"
 
-#: ui/CellToolBase_p.cpp:1163
+#: ui/CellToolBase_p.cpp:1150
 #, kde-format
 msgid "Delete Cells..."
 msgstr "Вилучити комірки…"
 
-#: ui/CellToolBase_p.cpp:1167
+#: ui/CellToolBase_p.cpp:1154
 #, kde-format
 msgid "Selection List..."
 msgstr "Список вибору…"
@@ -19597,6 +19468,18 @@ msgstr ""
 msgid "Preview"
 msgstr "Перегляд"
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
+#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
+#, kde-format
+msgid "Money"
+msgstr "Гроші"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
+#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
+#, kde-format
+msgid "Percent"
+msgstr "Відсоток"
+
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton)
 #: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
 #, kde-format
@@ -19824,6 +19707,12 @@ msgstr "Різний (без зміни)"
 msgid "Roman"
 msgstr "Roman"
 
+#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
+#: ui/dialogs/FontWidget.ui:58
+#, kde-format
+msgid "Italic"
+msgstr "Курсив"
+
 #. i18n: ectx: property (whatsThis), widget (QComboBox, weight_combo)
 #: ui/dialogs/FontWidget.ui:66
 #, kde-format
@@ -19847,6 +19736,12 @@ msgstr ""
 msgid "Normal"
 msgstr "Звичайний"
 
+#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
+#: ui/dialogs/FontWidget.ui:83
+#, kde-format
+msgid "Bold"
+msgstr "Жирний"
+
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:324
 #: ui/dialogs/LayoutPage_Pattern.cpp:119
@@ -19859,6 +19754,12 @@ msgstr "Колір:"
 #, kde-format
 msgid "If this is checked, the current cell text will be underlined."
 msgstr "Якщо буде позначено, текст поточної комірки буде підкреслено."
+
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, underline)
+#: ui/dialogs/FontWidget.ui:101
+#, kde-format
+msgid "Underline"
+msgstr "Підкреслити"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: ui/dialogs/FontWidget.ui:108
@@ -21283,6 +21184,69 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Відкрити посилання?"
+
+#~ msgid "Resets to the default format"
+#~ msgstr "Скинути до типового формату"
+
+#~ msgid "Strike Out"
+#~ msgstr "Закреслений"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "Збільшити розмір шрифту"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "Зменшити розмір шрифту"
+
+#~ msgid "Wrap Text"
+#~ msgstr "Перенос тексту"
+
+#~ msgid "Wrap"
+#~ msgstr "Переносити рядки"
+
+#~ msgid "Make the cell text wrap onto multiple lines"
+#~ msgstr "Зробити, щоб текст у комірці переносився за рядками"
+
+#~ msgid "Vertical Text"
+#~ msgstr "Вертикальний текст"
+
+#~ msgid "Print cell contents vertically"
+#~ msgstr "Друкувати вміст комірки вертикально"
+
+#~ msgid "Percent Format"
+#~ msgstr "Формат відсотків"
+
+#~ msgid "Set the cell formatting to look like a percentage"
+#~ msgstr "Формат комірки має виглядати як відсотки"
+
+#~ msgid "Money Format"
+#~ msgstr "Формат грошей"
+
+#~ msgid "Set the cell formatting to look like your local currency"
+#~ msgstr "Формат комірки має відповідати грошовій системі вашої країни"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Wrap Text"
+#~ msgstr ""
+#~ "Перенести текст\n"
+#~ "перенесення тексту"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Text"
+#~ msgstr ""
+#~ "Вертикальний текст\n"
+#~ "вертикальний текст"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format Percent"
+#~ msgstr ""
+#~ "Форматувати як відсотки\n"
+#~ "форматування у режимі відсотків"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format Money"
+#~ msgstr ""
+#~ "Форматувати як гроші\n"
+#~ "форматування у режимі грошей"
 
 #~ msgid "&Data Format"
 #~ msgstr "Формат &даних"

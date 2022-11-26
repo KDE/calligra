@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:46+0000\n"
+"POT-Creation-Date: 2022-11-26 00:46+0000\n"
 "PO-Revision-Date: 2022-11-14 09:02+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -3210,12 +3210,11 @@ msgstr "Intestazione"
 msgid "Header1"
 msgstr "Intestazione1"
 
-#: core/StyleManager.cpp:172 ui/CellToolBase.cpp:169
-#: ui/dialogs/LayoutPage_General.cpp:127 ui/dialogs/LayoutPage_General.cpp:146
-#: ui/dialogs/StyleManagerDialog.cpp:99 ui/dialogs/StyleManagerDialog.cpp:139
-#: ui/dialogs/StyleManagerDialog.cpp:172 ui/dialogs/StyleManagerDialog.cpp:198
-#: ui/dialogs/StyleManagerDialog.cpp:236 ui/dialogs/StyleManagerDialog.cpp:265
-#: ui/dialogs/StyleManagerDialog.cpp:286
+#: core/StyleManager.cpp:172 ui/dialogs/LayoutPage_General.cpp:127
+#: ui/dialogs/LayoutPage_General.cpp:146 ui/dialogs/StyleManagerDialog.cpp:99
+#: ui/dialogs/StyleManagerDialog.cpp:139 ui/dialogs/StyleManagerDialog.cpp:172
+#: ui/dialogs/StyleManagerDialog.cpp:198 ui/dialogs/StyleManagerDialog.cpp:236
+#: ui/dialogs/StyleManagerDialog.cpp:265 ui/dialogs/StyleManagerDialog.cpp:286
 #, kde-format
 msgid "Default"
 msgstr "Predefinito"
@@ -4037,7 +4036,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") restituisce 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:444 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:388 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Database"
@@ -16148,7 +16147,7 @@ msgstr "Attivazione"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:212
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:188
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
@@ -16583,8 +16582,7 @@ msgstr "Orizzontale"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup2)
-#: part/dialogs/PageLayoutSheetPage.ui:335 ui/CellToolBase.cpp:345
-#: ui/dialogs/PositionWidget.ui:135
+#: part/dialogs/PageLayoutSheetPage.ui:335 ui/dialogs/PositionWidget.ui:135
 #, kde-format
 msgid "Vertical"
 msgstr "Verticale"
@@ -16611,15 +16609,15 @@ msgid "Up"
 msgstr "Su"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:301 ui/CellToolBase.cpp:254
-#: ui/CellToolBase.cpp:293 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:301 ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:261 ui/dialogs/PositionWidget.ui:75
 #, kde-format
 msgid "Right"
 msgstr "Destra"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:302 ui/CellToolBase.cpp:240
-#: ui/CellToolBase.cpp:287 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:302 ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:255 ui/dialogs/PositionWidget.ui:61
 #, kde-format
 msgid "Left"
 msgstr "Sinistra"
@@ -16635,7 +16633,7 @@ msgstr "Giù, prima colonna"
 #. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/CellToolBase.cpp:317 ui/dialogs/DatabaseDialog.cpp:711
+#: ui/CellToolBase.cpp:285 ui/dialogs/DatabaseDialog.cpp:711
 #: ui/dialogs/DatabaseDialog.cpp:712 ui/dialogs/DocumentSettingsDialog.cpp:124
 #: ui/dialogs/pivotfilters.ui:36 ui/dialogs/pivotoptions.ui:95
 #: ui/dialogs/pivotoptions.ui:104 ui/dialogs/pivotsubtotals.ui:21
@@ -17533,7 +17531,7 @@ msgstr ""
 "Stai per rimuovere il foglio attivo.\n"
 "Vuoi continuare?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1482
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1409
 #, kde-format
 msgid "Enter name:"
 msgstr "Inserisci nome:"
@@ -17593,21 +17591,21 @@ msgstr "CountA: "
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1651
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1483
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Cambia colore testo"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1932
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1711
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Cambia colore sfondo"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase.cpp:1736 ui/CellToolBase.cpp:1752 ui/CellToolBase.cpp:1768
-#: ui/CellToolBase.cpp:1781 ui/CellToolBase.cpp:1794 ui/CellToolBase.cpp:1811
-#: ui/CellToolBase.cpp:1829 ui/CellToolBase_p.cpp:736
+#: ui/CellToolBase.cpp:1568 ui/CellToolBase.cpp:1584 ui/CellToolBase.cpp:1600
+#: ui/CellToolBase.cpp:1613 ui/CellToolBase.cpp:1626 ui/CellToolBase.cpp:1643
+#: ui/CellToolBase.cpp:1661 ui/CellToolBase_p.cpp:723
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Cambia bordi"
@@ -17622,791 +17620,672 @@ msgstr "Formato cella..."
 msgid "Set the cell formatting"
 msgstr "Imposta il formato delle celle"
 
-#: ui/CellToolBase.cpp:172
-#, kde-format
-msgid "Resets to the default format"
-msgstr "Ripristina formato predefinito"
-
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Style Manager..."
 msgstr "Gestione stili..."
 
-#: ui/CellToolBase.cpp:177
+#: ui/CellToolBase.cpp:172
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr "Modifica e organizza gli stili delle celle"
 
-#: ui/CellToolBase.cpp:179 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:174 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "Stile"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "Applica uno stile prefissato alle celle selezionate"
 
-#: ui/CellToolBase.cpp:184
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "Crea uno stile dalle celle..."
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:180
 #, kde-format
 msgid "Style From Cell"
 msgstr "Cattura stile cella"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:183
 #, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "Crea un nuovo stile basandosi su quello della cella selezionata"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
-#: ui/CellToolBase.cpp:192 ui/dialogs/FontWidget.ui:83
-#, kde-format
-msgid "Bold"
-msgstr "Grassetto"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
-#: ui/CellToolBase.cpp:197 ui/dialogs/FontWidget.ui:58
-#, kde-format
-msgid "Italic"
-msgstr "Corsivo"
-
-#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, underline)
-#: ui/CellToolBase.cpp:202 ui/dialogs/FontWidget.ui:101
-#, kde-format
-msgid "Underline"
-msgstr "Sottolineato"
-
-#: ui/CellToolBase.cpp:207
-#, kde-format
-msgid "Strike Out"
-msgstr "Sbarrato"
-
-#: ui/CellToolBase.cpp:211
+#: ui/CellToolBase.cpp:187
 #, kde-format
 msgid "Select Font..."
 msgstr "Scegli il carattere..."
 
-#: ui/CellToolBase.cpp:216
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Select Font Size"
 msgstr "Scegli dimensione caratteri"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Font Size"
 msgstr "Dimensione caratteri"
 
-#: ui/CellToolBase.cpp:221
-#, kde-format
-msgid "Increase Font Size"
-msgstr "Aumenta dimensione caratteri"
-
-#: ui/CellToolBase.cpp:225
-#, kde-format
-msgid "Decrease Font Size"
-msgstr "Diminuisci dimensione caratteri"
-
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:199
 #, kde-format
 msgid "Text Color"
 msgstr "Colore testo"
 
-#: ui/CellToolBase.cpp:232
+#: ui/CellToolBase.cpp:200
 #, kde-format
 msgid "Set the text color"
 msgstr "Imposta colore del testo"
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Align Left"
 msgstr "Allinea a sinistra"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Left justify the cell contents"
 msgstr "Giustifica a sinistra i contenuti della cella"
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Align Center"
 msgstr "Allinea al centro"
 
 #. i18n: ectx: property (text), widget (QRadioButton, center)
-#: ui/CellToolBase.cpp:247 ui/dialogs/PositionWidget.ui:68
+#: ui/CellToolBase.cpp:215 ui/dialogs/PositionWidget.ui:68
 #, kde-format
 msgid "Center"
 msgstr "Centro"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Center the cell contents"
 msgstr "Centra i contenuti delle celle"
 
-#: ui/CellToolBase.cpp:253
+#: ui/CellToolBase.cpp:221
 #, kde-format
 msgid "Align Right"
 msgstr "Allinea a destra"
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Right justify the cell contents"
 msgstr "Giustifica a destra i contenuti delle celle"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Align Top"
 msgstr "Allinea verso l'alto"
 
 #. i18n: ectx: property (text), widget (QRadioButton, top)
-#: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:299
+#: ui/CellToolBase.cpp:232 ui/CellToolBase.cpp:267
 #: ui/dialogs/PositionWidget.ui:141
 #, kde-format
 msgid "Top"
 msgstr "Alto"
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:235
 #, kde-format
 msgid "Align cell contents along the top of the cell"
 msgstr "Posiziona il contenuto nella parte alta della cella"
 
-#: ui/CellToolBase.cpp:270
+#: ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Align Middle"
 msgstr "Allinea al centro"
 
 #. i18n: ectx: property (text), widget (QRadioButton, middle)
-#: ui/CellToolBase.cpp:271 ui/dialogs/PositionWidget.ui:148
+#: ui/CellToolBase.cpp:239 ui/dialogs/PositionWidget.ui:148
 #, kde-format
 msgid "Middle"
 msgstr "Centro"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:242
 #, kde-format
 msgid "Align cell contents centered in the cell"
 msgstr "Posiziona al centro il contenuto della cella"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:245
 #, kde-format
 msgid "Align Bottom"
 msgstr "Allinea in basso"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bottom)
-#: ui/CellToolBase.cpp:278 ui/CellToolBase.cpp:305
+#: ui/CellToolBase.cpp:246 ui/CellToolBase.cpp:273
 #: ui/dialogs/PositionWidget.ui:155
 #, kde-format
 msgid "Bottom"
 msgstr "Basso"
 
-#: ui/CellToolBase.cpp:281
+#: ui/CellToolBase.cpp:249
 #, kde-format
 msgid "Align cell contents along the bottom of the cell"
 msgstr "Posiziona il contenuto nella parte bassa della cella"
 
-#: ui/CellToolBase.cpp:286
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Border Left"
 msgstr "Bordo sinistro"
 
-#: ui/CellToolBase.cpp:290
+#: ui/CellToolBase.cpp:258
 #, kde-format
 msgid "Set a left border to the selected area"
 msgstr "Metti un bordo a sinistra dell'area selezionata"
 
-#: ui/CellToolBase.cpp:292
+#: ui/CellToolBase.cpp:260
 #, kde-format
 msgid "Border Right"
 msgstr "Bordo destro"
 
-#: ui/CellToolBase.cpp:296
+#: ui/CellToolBase.cpp:264
 #, kde-format
 msgid "Set a right border to the selected area"
 msgstr "Metti un bordo a destra dell'area selezionata"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "Border Top"
 msgstr "Bordo superiore"
 
-#: ui/CellToolBase.cpp:302
+#: ui/CellToolBase.cpp:270
 #, kde-format
 msgid "Set a top border to the selected area"
 msgstr "Metti un bordo superiore all'area selezionata"
 
-#: ui/CellToolBase.cpp:304
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Border Bottom"
 msgstr "Bordo inferiore"
 
-#: ui/CellToolBase.cpp:308
+#: ui/CellToolBase.cpp:276
 #, kde-format
 msgid "Set a bottom border to the selected area"
 msgstr "Metti un bordo inferiore all'area selezionata"
 
-#: ui/CellToolBase.cpp:310
+#: ui/CellToolBase.cpp:278
 #, kde-format
 msgid "All Borders"
 msgstr "Tutti i bordi"
 
-#: ui/CellToolBase.cpp:311 ui/dialogs/FormulaDialog.cpp:84
+#: ui/CellToolBase.cpp:279 ui/dialogs/FormulaDialog.cpp:84
 #: ui/dialogs/FormulaDialog.cpp:190 ui/dialogs/FormulaDialog.cpp:722
 #: ui/FilterPopup.cpp:55
 #, kde-format
 msgid "All"
 msgstr "Tutte"
 
-#: ui/CellToolBase.cpp:314
+#: ui/CellToolBase.cpp:282
 #, kde-format
 msgid "Set a border around all cells in the selected area"
 msgstr "Metti un bordo attorno a ogni cella dell'area selezionata"
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:284
 #, kde-format
 msgid "No Borders"
 msgstr "Nessun bordo"
 
-#: ui/CellToolBase.cpp:320
+#: ui/CellToolBase.cpp:288
 #, kde-format
 msgid "Remove all borders in the selected area"
 msgstr "Rimuovi tutti i bordi dall'area selezionata"
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "Border Outline"
 msgstr "Bordi perimetrali"
 
-#: ui/CellToolBase.cpp:323
+#: ui/CellToolBase.cpp:291
 #, kde-format
 msgid "Outline"
 msgstr "Perimetrali"
 
-#: ui/CellToolBase.cpp:326
+#: ui/CellToolBase.cpp:294
 #, kde-format
 msgid "Set a border to the outline of the selected area"
 msgstr "Metti un bordo sul perimetro dell'area selezionata"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:298
 #, kde-format
 msgid "Select a new border color"
 msgstr "Seleziona un nuovo colore per il bordo"
 
-#: ui/CellToolBase.cpp:331
+#: ui/CellToolBase.cpp:299
 #, kde-format
 msgid "Border Color"
 msgstr "Colore del bordo"
 
-#: ui/CellToolBase.cpp:338
-#, kde-format
-msgid "Wrap Text"
-msgstr "Testo a capo"
-
-#: ui/CellToolBase.cpp:339
-#, kde-format
-msgid "Wrap"
-msgstr "Testo a capo"
-
-#: ui/CellToolBase.cpp:342
-#, kde-format
-msgid "Make the cell text wrap onto multiple lines"
-msgstr "Permette al testo nella cella di distribuirsi su più righe"
-
-#: ui/CellToolBase.cpp:344
-#, kde-format
-msgid "Vertical Text"
-msgstr "Testo verticale"
-
-#: ui/CellToolBase.cpp:348
-#, kde-format
-msgid "Print cell contents vertically"
-msgstr "Stampa il contenuto della cella verticalmente"
-
-#: ui/CellToolBase.cpp:350
+#: ui/CellToolBase.cpp:306
 #, kde-format
 msgid "Change Angle..."
 msgstr "Cambia angolo..."
 
-#: ui/CellToolBase.cpp:351
+#: ui/CellToolBase.cpp:307
 #, kde-format
 msgid "Angle"
 msgstr "Angolo"
 
-#: ui/CellToolBase.cpp:354
+#: ui/CellToolBase.cpp:310
 #, kde-format
 msgid "Change the angle that cell contents are printed"
 msgstr "Cambia l'inclinazione con la quale è stampato il contenuto delle celle"
 
-#: ui/CellToolBase.cpp:358
-#, kde-format
-msgid "Percent Format"
-msgstr "Formato percentuale"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/CellToolBase.cpp:359 ui/dialogs/DataFormatWidget.ui:102
-#: ui/dialogs/LayoutPage_Float.cpp:66
-#, kde-format
-msgid "Percent"
-msgstr "Percentuale"
-
-#: ui/CellToolBase.cpp:362
-#, kde-format
-msgid "Set the cell formatting to look like a percentage"
-msgstr "Presenta il contenuto della cella in formato percentuale"
-
-#: ui/CellToolBase.cpp:364
-#, kde-format
-msgid "Money Format"
-msgstr "Formato valuta"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/CellToolBase.cpp:365 ui/dialogs/DataFormatWidget.ui:95
-#: ui/dialogs/LayoutPage_Float.cpp:70
-#, kde-format
-msgid "Money"
-msgstr "Valuta"
-
-#: ui/CellToolBase.cpp:368
-#, kde-format
-msgid "Set the cell formatting to look like your local currency"
-msgstr "Presenta il contenuto della cella nel formato della valuta locale"
-
-#: ui/CellToolBase.cpp:370
+#: ui/CellToolBase.cpp:314
 #, kde-format
 msgid "Increase Precision"
 msgstr "Aumenta precisione"
 
-#: ui/CellToolBase.cpp:373
+#: ui/CellToolBase.cpp:317
 #, kde-format
 msgid "Increase the decimal precision shown onscreen"
 msgstr "Incrementa il numero di decimali mostrati sullo schermo"
 
-#: ui/CellToolBase.cpp:375
+#: ui/CellToolBase.cpp:319
 #, kde-format
 msgid "Decrease Precision"
 msgstr "Riduci precisione"
 
-#: ui/CellToolBase.cpp:378
+#: ui/CellToolBase.cpp:322
 #, kde-format
 msgid "Decrease the decimal precision shown onscreen"
 msgstr "Diminuisci il numero di decimali mostrati sullo schermo"
 
-#: ui/CellToolBase.cpp:384
+#: ui/CellToolBase.cpp:328
 #, kde-format
 msgid "Set the background color"
 msgstr "Imposta colore dello sfondo"
 
-#: ui/CellToolBase.cpp:385
+#: ui/CellToolBase.cpp:329
 #, kde-format
 msgid "Background Color"
 msgstr "Colore di sfondo"
 
-#: ui/CellToolBase.cpp:391 ui/CellToolBase.cpp:397
+#: ui/CellToolBase.cpp:335 ui/CellToolBase.cpp:341
 #, kde-format
 msgid "Cells..."
 msgstr "Celle..."
 
-#: ui/CellToolBase.cpp:392 ui/CellToolBase_p.cpp:1159
+#: ui/CellToolBase.cpp:336 ui/CellToolBase_p.cpp:1146
 #, kde-format
 msgid "Insert Cells..."
 msgstr "Inserisci celle..."
 
-#: ui/CellToolBase.cpp:393
+#: ui/CellToolBase.cpp:337
 #, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "Inserisce una cella vuota nel foglio di calcolo"
 
-#: ui/CellToolBase.cpp:398
+#: ui/CellToolBase.cpp:342
 #, kde-format
 msgid "Remove Cells..."
 msgstr "Rimuovi celle..."
 
-#: ui/CellToolBase.cpp:399
+#: ui/CellToolBase.cpp:343
 #, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "Rimuove queste celle dal foglio di calcolo"
 
-#: ui/CellToolBase.cpp:405 ui/CellToolBase.cpp:406
+#: ui/CellToolBase.cpp:349 ui/CellToolBase.cpp:350
 #, kde-format
 msgid "Clear All"
 msgstr "Cancella tutto"
 
-#: ui/CellToolBase.cpp:407
+#: ui/CellToolBase.cpp:351
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Elimina tutti i contenuti e le formattazioni di questa cella"
 
-#: ui/CellToolBase.cpp:411
+#: ui/CellToolBase.cpp:355
 #, kde-format
 msgid "Contents"
 msgstr "Contenuti"
 
-#: ui/CellToolBase.cpp:412
+#: ui/CellToolBase.cpp:356
 #, kde-format
 msgid "Clear Contents"
 msgstr "Cancella i contenuti"
 
-#: ui/CellToolBase.cpp:413
+#: ui/CellToolBase.cpp:357
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Rimuovi il contenuto di questa cella"
 
-#: ui/CellToolBase.cpp:417
+#: ui/CellToolBase.cpp:361
 #, kde-format
 msgid "Conditional Styles..."
 msgstr "Attributi condizionali"
 
-#: ui/CellToolBase.cpp:418
+#: ui/CellToolBase.cpp:362
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "Imposta formato cella sulla base di determinate condizioni"
 
-#: ui/CellToolBase.cpp:422 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:366 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr "Stili condizionati"
 
-#: ui/CellToolBase.cpp:423
+#: ui/CellToolBase.cpp:367
 #, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Rimuovi stili condizionali"
 
-#: ui/CellToolBase.cpp:424
+#: ui/CellToolBase.cpp:368
 #, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Rimuovi la formattazione condizionale per la cella"
 
-#: ui/CellToolBase.cpp:430
+#: ui/CellToolBase.cpp:374
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "Filtro &automatico"
 
-#: ui/CellToolBase.cpp:433
+#: ui/CellToolBase.cpp:377
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "Aggiunge un filtro automatico a un gruppo di celle"
 
-#: ui/CellToolBase.cpp:437
+#: ui/CellToolBase.cpp:381
 #, kde-format
 msgid "&Function..."
 msgstr "Fun&zione..."
 
-#: ui/CellToolBase.cpp:440
+#: ui/CellToolBase.cpp:384
 #, kde-format
 msgid "Insert math expression"
 msgstr "Inserisci espressione matematica"
 
-#: ui/CellToolBase.cpp:443
+#: ui/CellToolBase.cpp:387
 #, kde-format
 msgid "From &Database..."
 msgstr "&Da un database..."
 
-#: ui/CellToolBase.cpp:447
+#: ui/CellToolBase.cpp:391
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Inserisce dati da un database SQL"
 
-#: ui/CellToolBase.cpp:450
+#: ui/CellToolBase.cpp:394
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Elenchi personalizzati..."
 
-#: ui/CellToolBase.cpp:453
+#: ui/CellToolBase.cpp:397
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 "Crea elenchi personalizzati per l'ordinamento o il riempimento automatico."
 
-#: ui/CellToolBase.cpp:455
+#: ui/CellToolBase.cpp:399
 #, kde-format
 msgid "&Consolidate..."
 msgstr "&Consolida..."
 
-#: ui/CellToolBase.cpp:458
+#: ui/CellToolBase.cpp:402
 #, kde-format
 msgid "Create a region of summary data from a group of similar regions"
 msgstr "Crea una regione di riassunto dei dati da un gruppo di regioni simili"
 
-#: ui/CellToolBase.cpp:460
+#: ui/CellToolBase.cpp:404
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Ricerca obiettivo..."
 
-#: ui/CellToolBase.cpp:463
+#: ui/CellToolBase.cpp:407
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Ripete un calcolo fino a trovare un valore specifico"
 
-#: ui/CellToolBase.cpp:465
+#: ui/CellToolBase.cpp:409
 #, kde-format
 msgid "&Subtotals..."
 msgstr "&Subtotali..."
 
-#: ui/CellToolBase.cpp:468
+#: ui/CellToolBase.cpp:412
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
 msgstr "Crea diversi tipi di subtotali per una lista o un database"
 
-#: ui/CellToolBase.cpp:470
+#: ui/CellToolBase.cpp:414
 #, kde-format
 msgid "&Pivot Tables..."
 msgstr "Tabelle &pivot..."
 
-#: ui/CellToolBase.cpp:473
+#: ui/CellToolBase.cpp:417
 #, kde-format
 msgid "Create Pivot Tables"
 msgstr "Crea tabelle pivot"
 
-#: ui/CellToolBase.cpp:475
+#: ui/CellToolBase.cpp:419
 #, kde-format
 msgid "Area Name..."
 msgstr "Nome area..."
 
-#: ui/CellToolBase.cpp:478
+#: ui/CellToolBase.cpp:422
 #, kde-format
 msgid "Set a name for a region of the spreadsheet"
 msgstr "Assegna un nome ad una regione del foglio di calcolo"
 
-#: ui/CellToolBase.cpp:480
+#: ui/CellToolBase.cpp:424
 #, kde-format
 msgid "Named Areas..."
 msgstr "Aree con nome..."
 
-#: ui/CellToolBase.cpp:482 ui/dialogs/NamedAreaDialog.cpp:49
+#: ui/CellToolBase.cpp:426 ui/dialogs/NamedAreaDialog.cpp:49
 #, kde-format
 msgid "Named Areas"
 msgstr "Aree con nome"
 
-#: ui/CellToolBase.cpp:484
+#: ui/CellToolBase.cpp:428
 #, kde-format
 msgid "Edit or select named areas"
 msgstr "Modifica o seleziona delle aree con nome."
 
-#: ui/CellToolBase.cpp:488
+#: ui/CellToolBase.cpp:432
 #, kde-format
 msgid "Formula Selection"
 msgstr "Selezione formula"
 
-#: ui/CellToolBase.cpp:490
+#: ui/CellToolBase.cpp:434
 #, kde-format
 msgid "Insert a function"
 msgstr "Inserisci una funzione"
 
-#: ui/CellToolBase.cpp:491 ui/CellToolBase.cpp:2097
+#: ui/CellToolBase.cpp:435 ui/CellToolBase.cpp:1876
 #, kde-format
 msgid "Others..."
 msgstr "Altri..."
 
-#: ui/CellToolBase.cpp:499
+#: ui/CellToolBase.cpp:443
 #, kde-format
 msgid "Modify Cell"
 msgstr "Modifica cella"
 
-#: ui/CellToolBase.cpp:503
+#: ui/CellToolBase.cpp:447
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Modifica la cella evidenziata"
 
-#: ui/CellToolBase.cpp:506
+#: ui/CellToolBase.cpp:450
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Sposta l'oggetto della cella negli appunti"
 
-#: ui/CellToolBase.cpp:510
+#: ui/CellToolBase.cpp:454
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Copia l'oggetto della cella negli appunti"
 
-#: ui/CellToolBase.cpp:514
+#: ui/CellToolBase.cpp:458
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Incolla il contenuto degli appunti al cursore"
 
-#: ui/CellToolBase.cpp:517
+#: ui/CellToolBase.cpp:461
 #, kde-format
 msgid "Special Paste..."
 msgstr "Incolla speciale..."
 
-#: ui/CellToolBase.cpp:520
+#: ui/CellToolBase.cpp:464
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Incolla il contenuto degli appunti con opzioni speciali"
 
-#: ui/CellToolBase.cpp:522
+#: ui/CellToolBase.cpp:466
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Incolla inserendo"
 
-#: ui/CellToolBase.cpp:525
+#: ui/CellToolBase.cpp:469
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Inserisce nel foglio di calcolo una cella presa dagli appunti"
 
-#: ui/CellToolBase.cpp:528
+#: ui/CellToolBase.cpp:472
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Seleziona tutte le celle del foglio di lavoro attivo"
 
-#: ui/CellToolBase.cpp:545
+#: ui/CellToolBase.cpp:489
 #, kde-format
 msgid "Goto Cell..."
 msgstr "Vai alla cella..."
 
-#: ui/CellToolBase.cpp:546
+#: ui/CellToolBase.cpp:490
 #, kde-format
 msgid "Goto"
 msgstr "Vai"
 
-#: ui/CellToolBase.cpp:550
+#: ui/CellToolBase.cpp:494
 #, kde-format
 msgid "Move to a particular cell"
 msgstr "Spostati su una particolare cella"
 
-#: ui/CellToolBase.cpp:553
+#: ui/CellToolBase.cpp:497
 #, kde-format
 msgid "Check the spelling"
 msgstr "Controllo ortografico"
 
-#: ui/CellToolBase.cpp:556
+#: ui/CellToolBase.cpp:500
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Inizia ispezione..."
 
-#: ui/CellToolBase.cpp:562
+#: ui/CellToolBase.cpp:506
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Mostra QTableView..."
 
-#: ui/CellToolBase.cpp:568
+#: ui/CellToolBase.cpp:512
 #, kde-format
 msgid "Auto-Format..."
 msgstr "Formattazione automatica..."
 
-#: ui/CellToolBase.cpp:571
+#: ui/CellToolBase.cpp:515
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Imposta la formattazione del foglio di lavoro"
 
-#: ui/CellToolBase.cpp:573
+#: ui/CellToolBase.cpp:517
 #, kde-format
 msgid "Document Settings..."
 msgstr "Impostazioni documento..."
 
-#: ui/CellToolBase.cpp:576
+#: ui/CellToolBase.cpp:520
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Apri il modulo per configurare il documento"
 
-#: ui/CellToolBase.cpp:578
+#: ui/CellToolBase.cpp:522
 #, kde-format
 msgid "Break Before Column"
 msgstr "Interrompi prima della colonna"
 
-#: ui/CellToolBase.cpp:581
+#: ui/CellToolBase.cpp:525
 #, kde-format
 msgid "Column Break"
 msgstr "Interruzione alla colonna"
 
-#: ui/CellToolBase.cpp:582
+#: ui/CellToolBase.cpp:526
 #, kde-format
 msgid "Set a manual page break before the column"
 msgstr "Imponi un salto pagina prima della colonna"
 
-#: ui/CellToolBase.cpp:584
+#: ui/CellToolBase.cpp:528
 #, kde-format
 msgid "Break Before Row"
 msgstr "Interrompi prima della riga"
 
-#: ui/CellToolBase.cpp:587
+#: ui/CellToolBase.cpp:531
 #, kde-format
 msgid "Row Break"
 msgstr "Interruzione alla riga"
 
-#: ui/CellToolBase.cpp:588
+#: ui/CellToolBase.cpp:532
 #, kde-format
 msgid "Set a manual page break before the row"
 msgstr "Imponi un salto pagina prima della riga"
 
-#: ui/CellToolBase.cpp:592
+#: ui/CellToolBase.cpp:536
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Permuta il modo di fissare i riferimenti"
 
-#: ui/CellToolBase.cpp:596
+#: ui/CellToolBase.cpp:540
 #, kde-format
 msgid "Permute fixation"
 msgstr "Permuta il modo di fissare"
 
-#: ui/CellToolBase.cpp:597
+#: ui/CellToolBase.cpp:541
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Permuta il modo di fissare il riferimento al cursore al testo"
 
-#: ui/CellToolBase.cpp:1409
+#: ui/CellToolBase.cpp:1347
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Impossibile individuare l'azione %1"
 
-#: ui/CellToolBase.cpp:1481
+#: ui/CellToolBase.cpp:1408
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "Crea uno stile dalla cella"
 
-#: ui/CellToolBase.cpp:1490
+#: ui/CellToolBase.cpp:1417
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "Il nome dello stile non può essere vuoto."
 
-#: ui/CellToolBase.cpp:1495 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1422 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "Esiste già uno stile con questo nome."
 
-#: ui/CellToolBase.cpp:1516 ui/CellToolBase.cpp:1532 ui/CellToolBase.cpp:1548
-#: ui/CellToolBase.cpp:1565 ui/CellToolBase.cpp:1581 ui/CellToolBase.cpp:1601
-#: ui/CellToolBase.cpp:1624 ui/CellToolBase.cpp:1639
+#: ui/CellToolBase.cpp:1443 ui/CellToolBase.cpp:1463
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Cambia caratteri"
 
-#: ui/CellToolBase.cpp:1663 ui/CellToolBase.cpp:1675 ui/CellToolBase.cpp:1687
+#: ui/CellToolBase.cpp:1495 ui/CellToolBase.cpp:1507 ui/CellToolBase.cpp:1519
 msgctxt "(qtundo-format)"
 msgid "Change Horizontal Alignment"
 msgstr "Cambia allineamento orizzontale"
 
-#: ui/CellToolBase.cpp:1699 ui/CellToolBase.cpp:1711 ui/CellToolBase.cpp:1723
+#: ui/CellToolBase.cpp:1531 ui/CellToolBase.cpp:1543 ui/CellToolBase.cpp:1555
 msgctxt "(qtundo-format)"
 msgid "Change Vertical Alignment"
 msgstr "Cambia allineamento verticale"
 
-#: ui/CellToolBase.cpp:1853
-msgctxt "(qtundo-format)"
-msgid "Wrap Text"
-msgstr "Testo a capo"
-
-#: ui/CellToolBase.cpp:1867
-msgctxt "(qtundo-format)"
-msgid "Vertical Text"
-msgstr "Testo verticale"
-
-#: ui/CellToolBase.cpp:1888
-msgctxt "(qtundo-format)"
-msgid "Format Percent"
-msgstr "Formato percentuale"
-
-#: ui/CellToolBase.cpp:1900
-msgctxt "(qtundo-format)"
-msgid "Format Money"
-msgstr "Formato monetario"
-
-#: ui/CellToolBase.cpp:1970
+#: ui/CellToolBase.cpp:1749
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Cancella testo"
 
-#: ui/CellToolBase.cpp:2024
+#: ui/CellToolBase.cpp:1803
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -18415,52 +18294,52 @@ msgstr ""
 "Nessun driver disponibile per i database. Per usare questa funzione devi "
 "installare i driver per database di Qt."
 
-#: ui/CellToolBase.cpp:2060 ui/CellToolBase.cpp:2072
+#: ui/CellToolBase.cpp:1839 ui/CellToolBase.cpp:1851
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Devi selezionare più di una cella."
 
-#: ui/CellToolBase.cpp:2561
+#: ui/CellToolBase.cpp:2340
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Sostituisci"
 
-#: ui/CellToolBase_p.cpp:705
+#: ui/CellToolBase_p.cpp:692
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Formato numero"
 
-#: ui/CellToolBase_p.cpp:711
+#: ui/CellToolBase_p.cpp:698
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Formato valuta"
 
-#: ui/CellToolBase_p.cpp:716
+#: ui/CellToolBase_p.cpp:703
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Formato percentuale"
 
-#: ui/CellToolBase_p.cpp:721
+#: ui/CellToolBase_p.cpp:708
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Formato ora"
 
-#: ui/CellToolBase_p.cpp:726
+#: ui/CellToolBase_p.cpp:713
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Formato data"
 
-#: ui/CellToolBase_p.cpp:731
+#: ui/CellToolBase_p.cpp:718
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Formato scientifico"
 
-#: ui/CellToolBase_p.cpp:1163
+#: ui/CellToolBase_p.cpp:1150
 #, kde-format
 msgid "Delete Cells..."
 msgstr "Elimina celle..."
 
-#: ui/CellToolBase_p.cpp:1167
+#: ui/CellToolBase_p.cpp:1154
 #, kde-format
 msgid "Selection List..."
 msgstr "Lista di selezione..."
@@ -19529,6 +19408,18 @@ msgstr ""
 msgid "Preview"
 msgstr "Anteprima"
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
+#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
+#, kde-format
+msgid "Money"
+msgstr "Valuta"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
+#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
+#, kde-format
+msgid "Percent"
+msgstr "Percentuale"
+
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton)
 #: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
 #, kde-format
@@ -19756,6 +19647,12 @@ msgstr "Vario (nessuna modifica)"
 msgid "Roman"
 msgstr "Roman"
 
+#. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
+#: ui/dialogs/FontWidget.ui:58
+#, kde-format
+msgid "Italic"
+msgstr "Corsivo"
+
 #. i18n: ectx: property (whatsThis), widget (QComboBox, weight_combo)
 #: ui/dialogs/FontWidget.ui:66
 #, kde-format
@@ -19779,6 +19676,12 @@ msgstr ""
 msgid "Normal"
 msgstr "Normale"
 
+#. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
+#: ui/dialogs/FontWidget.ui:83
+#, kde-format
+msgid "Bold"
+msgstr "Grassetto"
+
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:324
 #: ui/dialogs/LayoutPage_Pattern.cpp:119
@@ -19791,6 +19694,12 @@ msgstr "Colore:"
 #, kde-format
 msgid "If this is checked, the current cell text will be underlined."
 msgstr "Se è marcata, il testo della cella corrente sarà sottolineato."
+
+#. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, underline)
+#: ui/dialogs/FontWidget.ui:101
+#, kde-format
+msgid "Underline"
+msgstr "Sottolineato"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: ui/dialogs/FontWidget.ui:108
@@ -21222,6 +21131,61 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Aprire il collegamento?"
+
+#~ msgid "Resets to the default format"
+#~ msgstr "Ripristina formato predefinito"
+
+#~ msgid "Strike Out"
+#~ msgstr "Sbarrato"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "Aumenta dimensione caratteri"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "Diminuisci dimensione caratteri"
+
+#~ msgid "Wrap Text"
+#~ msgstr "Testo a capo"
+
+#~ msgid "Wrap"
+#~ msgstr "Testo a capo"
+
+#~ msgid "Make the cell text wrap onto multiple lines"
+#~ msgstr "Permette al testo nella cella di distribuirsi su più righe"
+
+#~ msgid "Vertical Text"
+#~ msgstr "Testo verticale"
+
+#~ msgid "Print cell contents vertically"
+#~ msgstr "Stampa il contenuto della cella verticalmente"
+
+#~ msgid "Percent Format"
+#~ msgstr "Formato percentuale"
+
+#~ msgid "Set the cell formatting to look like a percentage"
+#~ msgstr "Presenta il contenuto della cella in formato percentuale"
+
+#~ msgid "Money Format"
+#~ msgstr "Formato valuta"
+
+#~ msgid "Set the cell formatting to look like your local currency"
+#~ msgstr "Presenta il contenuto della cella nel formato della valuta locale"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Wrap Text"
+#~ msgstr "Testo a capo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Text"
+#~ msgstr "Testo verticale"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format Percent"
+#~ msgstr "Formato percentuale"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format Money"
+#~ msgstr "Formato monetario"
 
 #~ msgid "&Data Format"
 #~ msgstr "&Formato dati"
