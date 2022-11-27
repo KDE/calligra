@@ -8,6 +8,7 @@
 
 #include "AdjustRowCol.h"
 #include "AutoSum.h"
+#include "Border.h"
 #include "Comment.h"
 #include "CSVActions.h"
 #include "Fill.h"
@@ -60,6 +61,14 @@ void Actions::createActions()
     addAction(new ResizeRowCol(this, true));
     // AutoSum
     addAction(new AutoSum(this));
+    // Border
+    addAction(new BorderLeft(this));
+    addAction(new BorderRight(this));
+    addAction(new BorderTop(this));
+    addAction(new BorderBottom(this));
+    addAction(new BorderAll(this));
+    addAction(new BorderNone(this));
+    addAction(new BorderOutline(this));
     // Comment
     addAction(new Comment(this));
     addAction(new ClearComment(this));

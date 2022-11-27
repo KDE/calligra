@@ -135,6 +135,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     d->initialized = false;
     d->popupListChoose = 0;
     d->lastEditorWithFocus = EmbeddedEditor;
+    d->borderColor = Qt::black;
 
     d->findOptions = 0;
     d->findLeftColumn = 0;
@@ -251,53 +252,11 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- border actions --
 
-    action = new QAction(koIcon("format-border-set-left"), i18n("Border Left"), this);
-    action->setIconText(i18n("Left"));
-    addAction("borderLeft", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::borderLeft);
-    action->setToolTip(i18n("Set a left border to the selected area"));
-
-    action = new QAction(koIcon("format-border-set-right"), i18n("Border Right"), this);
-    action->setIconText(i18n("Right"));
-    addAction("borderRight", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::borderRight);
-    action->setToolTip(i18n("Set a right border to the selected area"));
-
-    action = new QAction(koIcon("format-border-set-top"), i18n("Border Top"), this);
-    action->setIconText(i18n("Top"));
-    addAction("borderTop", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::borderTop);
-    action->setToolTip(i18n("Set a top border to the selected area"));
-
-    action = new QAction(koIcon("format-border-set-bottom"), i18n("Border Bottom"), this);
-    action->setIconText(i18n("Bottom"));
-    addAction("borderBottom", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::borderBottom);
-    action->setToolTip(i18n("Set a bottom border to the selected area"));
-
-    action = new QAction(koIcon("format-border-set-all"), i18n("All Borders"), this);
-    action->setIconText(i18n("All"));
-    addAction("borderAll", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::borderAll);
-    action->setToolTip(i18n("Set a border around all cells in the selected area"));
-
-    action = new QAction(koIcon("format-border-set-none"), i18n("No Borders"), this);
-    action->setIconText(i18n("None"));
-    addAction("borderRemove", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::borderRemove);
-    action->setToolTip(i18n("Remove all borders in the selected area"));
-
-    action = new QAction(koIcon("format-border-set-external"), i18n("Border Outline"), this);
-    action->setIconText(i18n("Outline"));
-    addAction("borderOutline", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::borderOutline);
-    action->setToolTip(i18n("Set a border to the outline of the selected area"));
-
     colorAction = new KoColorPopupAction(this);
     colorAction->setIcon(koIcon("format-stroke-color"));
     colorAction->setToolTip(i18n("Select a new border color"));
     colorAction->setText(i18n("Border Color"));
-    colorAction->setCurrentColor(Qt::black);
+    colorAction->setCurrentColor(selectedBorderColor());
     addAction("borderColor", colorAction);
     connect(colorAction, &KoColorPopupAction::colorChanged, this, &CellToolBase::borderColor);
 
@@ -1347,6 +1306,11 @@ void CellToolBase::triggerAction(const QString &name)
         KMessageBox::sorry(canvas()->canvasWidget(), i18n("Unable to locate action %1", name));
 }
 
+QColor CellToolBase::selectedBorderColor() const
+{
+    return d->borderColor;
+}
+
 void CellToolBase::cellStyle()
 {
     LayoutDialog *dialog = new LayoutDialog(canvas()->canvasWidget(), selection()->activeSheet(), nullptr, false);
@@ -1560,120 +1524,13 @@ void CellToolBase::alignMiddle(bool enable)
     command->execute(canvas());
 }
 
-void CellToolBase::borderLeft()
-{
-    QColor color = static_cast<KoColorPopupAction*>(action("borderColor"))->currentColor();
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Border"));
-    Style s;
-    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft)
-        s.setRightBorderPen(QPen(color, 1, Qt::SolidLine));
-    else
-        s.setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::borderRight()
-{
-    QColor color = static_cast<KoColorPopupAction*>(action("borderColor"))->currentColor();
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Border"));
-    Style s;
-    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft)
-        s.setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
-    else
-        s.setRightBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::borderTop()
-{
-    QColor color = static_cast<KoColorPopupAction*>(action("borderColor"))->currentColor();
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Border"));
-    Style s;
-    s.setTopBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::borderBottom()
-{
-    QColor color = static_cast<KoColorPopupAction*>(action("borderColor"))->currentColor();
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Border"));
-    Style s;
-    s.setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::borderAll()
-{
-    QColor color = static_cast<KoColorPopupAction*>(action("borderColor"))->currentColor();
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Border"));
-    Style s;
-    s.setTopBorderPen(QPen(color, 1, Qt::SolidLine));
-    s.setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
-    s.setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
-    s.setRightBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setStyle(s);
-    command->setHorizontalPen(QPen(color, 1, Qt::SolidLine));
-    command->setVerticalPen(QPen(color, 1, Qt::SolidLine));
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::borderRemove()
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Border"));
-    Style s;
-    s.setTopBorderPen(QPen(Qt::NoPen));
-    s.setBottomBorderPen(QPen(Qt::NoPen));
-    s.setLeftBorderPen(QPen(Qt::NoPen));
-    s.setRightBorderPen(QPen(Qt::NoPen));
-    command->setStyle(s);
-    command->setHorizontalPen(QPen(Qt::NoPen));
-    command->setVerticalPen(QPen(Qt::NoPen));
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::borderOutline()
-{
-    QColor color = static_cast<KoColorPopupAction*>(action("borderColor"))->currentColor();
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Border"));
-    Style s;
-    s.setTopBorderPen(QPen(color, 1, Qt::SolidLine));
-    s.setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
-    s.setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
-    s.setRightBorderPen(QPen(color, 1, Qt::SolidLine));
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
 void CellToolBase::borderColor(const KoColor &color)
 {
     BorderColorCommand* command = new BorderColorCommand();
     command->setSheet(selection()->activeSheet());
-    command->setColor(color.toQColor());
+    QColor c = color.toQColor();
+    d->borderColor = c;
+    command->setColor(c);
     command->add(*selection());
     command->execute(canvas());
 }

@@ -4,6 +4,7 @@ set (actions_DIR_SRCS
     actions/Actions.cpp
     actions/AdjustRowCol.cpp
     actions/AutoSum.cpp
+    actions/Border.cpp
     actions/Comment.cpp
     actions/CSVActions.cpp
     actions/Fill.cpp

@@ -78,6 +78,7 @@ public:
     QPoint findEnd;
     QHash<int, QString> wordCollection;
     Actions *actions;
+    QColor borderColor;
 
     struct {
         Sheet * currentSheet;

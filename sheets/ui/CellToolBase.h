@@ -107,6 +107,8 @@ public:
     virtual QPointF offset() const = 0;
     virtual QSizeF size() const = 0;
 
+    QColor selectedBorderColor() const;
+
 public Q_SLOTS:
     /**
      * Scrolls to the cell located at \p location.
@@ -166,13 +168,6 @@ protected Q_SLOTS:
     void alignMiddle(bool enable);
     void alignBottom(bool enable);
     // -- border actions --
-    void borderLeft();
-    void borderRight();
-    void borderTop();
-    void borderBottom();
-    void borderAll();
-    void borderRemove();
-    void borderOutline();
     void borderColor(const KoColor &);
     // -- text layout actions --
     void changeAngle();
