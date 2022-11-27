@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:46+0000\n"
+"POT-Creation-Date: 2022-11-27 00:46+0000\n"
 "PO-Revision-Date: 2004-11-29 01:53-0800\n"
 "Last-Translator: Tamil PC <tamilpc@ambalam.com>\n"
 "Language-Team: Tamil <en@li.org>\n"
@@ -16,3083 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-
-#: core/Currency.cpp:35 core/Currency.cpp:81
-#, kde-format
-msgid "Australia"
-msgstr "ஆஸ்திரேலியா"
-
-#: core/Currency.cpp:35 core/Currency.cpp:36 core/Currency.cpp:37
-#: core/Currency.cpp:38 core/Currency.cpp:39
-#, kde-format
-msgid "Dollar"
-msgstr "டாலர்"
-
-#: core/Currency.cpp:36 core/Currency.cpp:111
-#, kde-format
-msgid "Canada"
-msgstr "கனடா"
-
-#: core/Currency.cpp:37
-#, fuzzy, kde-format
-#| msgid "Caribbea"
-msgid "Caribbean"
-msgstr "கரிபியா"
-
-#: core/Currency.cpp:38 core/Currency.cpp:248
-#, kde-format
-msgid "New Zealand"
-msgstr "நியூசிலாந்து"
-
-#: core/Currency.cpp:39 core/Currency.cpp:322 core/Currency.cpp:323
-#: core/Currency.cpp:324
-#, kde-format
-msgid "United States"
-msgstr "ஐக்கிய அமெரிக்கா"
-
-#: core/Currency.cpp:43 core/Currency.cpp:82 core/Currency.cpp:83
-#, kde-format
-msgid "Austria"
-msgstr "ஆஸ்திரியா"
-
-#: core/Currency.cpp:43 core/Currency.cpp:44 core/Currency.cpp:45
-#: core/Currency.cpp:46 core/Currency.cpp:47 core/Currency.cpp:48
-#: core/Currency.cpp:49 core/Currency.cpp:50 core/Currency.cpp:51
-#: core/Currency.cpp:52 core/Currency.cpp:53 core/Currency.cpp:54
-#: core/Currency.cpp:55 core/Currency.cpp:56 core/Currency.cpp:57
-#: core/Currency.cpp:58 core/Currency.cpp:59 core/Currency.cpp:60
-#: core/Currency.cpp:61 core/Currency.cpp:62 core/Currency.cpp:73
-#: core/Currency.cpp:82 core/Currency.cpp:90 core/Currency.cpp:130
-#: core/Currency.cpp:150 core/Currency.cpp:152 core/Currency.cpp:154
-#: core/Currency.cpp:156 core/Currency.cpp:160 core/Currency.cpp:164
-#: core/Currency.cpp:168 core/Currency.cpp:178 core/Currency.cpp:187
-#: core/Currency.cpp:191 core/Currency.cpp:204 core/Currency.cpp:212
-#: core/Currency.cpp:214 core/Currency.cpp:226 core/Currency.cpp:229
-#: core/Currency.cpp:234 core/Currency.cpp:244 core/Currency.cpp:267
-#: core/Currency.cpp:278 core/Currency.cpp:281 core/Currency.cpp:288
-#: core/Currency.cpp:290 core/Currency.cpp:295
-#, kde-format
-msgid "Euro"
-msgstr "யூரோ"
-
-#: core/Currency.cpp:44 core/Currency.cpp:90 core/Currency.cpp:91
-#, kde-format
-msgid "Belgium"
-msgstr "பெல்சியம்"
-
-#: core/Currency.cpp:45 core/Currency.cpp:130 core/Currency.cpp:131
-#, kde-format
-msgid "Cyprus"
-msgstr "சைப்ருஸ்"
-
-#: core/Currency.cpp:46 core/Currency.cpp:150 core/Currency.cpp:151
-#, kde-format
-msgid "Finland"
-msgstr "பின்லாந்து"
-
-#: core/Currency.cpp:47 core/Currency.cpp:152 core/Currency.cpp:153
-#, kde-format
-msgid "France"
-msgstr "பிரான்சு"
-
-#: core/Currency.cpp:48 core/Currency.cpp:160 core/Currency.cpp:161
-#, kde-format
-msgid "Germany"
-msgstr "ஜெர்மனி"
-
-#: core/Currency.cpp:49 core/Currency.cpp:164 core/Currency.cpp:165
-#, kde-format
-msgid "Greece"
-msgstr "கிரீஸ்"
-
-#: core/Currency.cpp:50 core/Currency.cpp:187 core/Currency.cpp:188
-#: core/Currency.cpp:189
-#, kde-format
-msgid "Ireland"
-msgstr "ஐயர்லாந்து"
-
-#: core/Currency.cpp:51 core/Currency.cpp:191 core/Currency.cpp:192
-#, kde-format
-msgid "Italy"
-msgstr "இத்தாலி"
-
-#: core/Currency.cpp:52 core/Currency.cpp:204 core/Currency.cpp:205
-#, kde-format
-msgid "Latvia"
-msgstr "லட்வியா"
-
-#: core/Currency.cpp:53 core/Currency.cpp:212 core/Currency.cpp:213
-#, kde-format
-msgid "Lithuania"
-msgstr "லித்துவேனியா"
-
-#: core/Currency.cpp:54 core/Currency.cpp:214 core/Currency.cpp:215
-#, kde-format
-msgid "Luxembourg"
-msgstr "லக்ஸம்பர்க்"
-
-#: core/Currency.cpp:55 core/Currency.cpp:223 core/Currency.cpp:224
-#, kde-format
-msgid "Malta"
-msgstr "மால்டா"
-
-#: core/Currency.cpp:56 core/Currency.cpp:234
-#, kde-format
-msgid "Monaco"
-msgstr "மொனாகோ"
-
-#: core/Currency.cpp:57 core/Currency.cpp:244 core/Currency.cpp:245
-#, kde-format
-msgid "Netherlands"
-msgstr "நெதர்லாந்து"
-
-#: core/Currency.cpp:58 core/Currency.cpp:267 core/Currency.cpp:268
-#, kde-format
-msgid "Portugal"
-msgstr "போர்த்துக்கல்"
-
-#: core/Currency.cpp:59 core/Currency.cpp:281
-#, kde-format
-msgid "San Marino"
-msgstr "சான் மரீனோ"
-
-#: core/Currency.cpp:60 core/Currency.cpp:288 core/Currency.cpp:289
-#, kde-format
-msgid "Slovakia"
-msgstr "சுலோவேக்கியா"
-
-#: core/Currency.cpp:61 core/Currency.cpp:290 core/Currency.cpp:291
-#, kde-format
-msgid "Slovenia"
-msgstr "சுலோவீனியா"
-
-#: core/Currency.cpp:62 core/Currency.cpp:295 core/Currency.cpp:296
-#, kde-format
-msgid "Spain"
-msgstr "ஸ்பெயின்"
-
-#: core/Currency.cpp:64
-#, kde-format
-msgid "Pound"
-msgstr "பவுண்டு"
-
-#: core/Currency.cpp:64 core/Currency.cpp:321
-#, kde-format
-msgid "United Kingdom"
-msgstr "ஐக்கிய இராஜ்ஜியம்"
-
-#: core/Currency.cpp:66 core/Currency.cpp:194
-#, kde-format
-msgid "Japan"
-msgstr "ஜப்பான்"
-
-#: core/Currency.cpp:66 core/Currency.cpp:194
-#, kde-format
-msgid "Yen"
-msgstr "யென்"
-
-#: core/Currency.cpp:68
-#, kde-format
-msgid "AFA"
-msgstr "AFA"
-
-#: core/Currency.cpp:68
-#, fuzzy, kde-format
-#| msgid "Afghani"
-msgid "Afghani (old)"
-msgstr "அப்கானி"
-
-#: core/Currency.cpp:68 core/Currency.cpp:69
-#, kde-format
-msgid "Afghanistan"
-msgstr "ஆப்கானிஸ்தான்"
-
-#: core/Currency.cpp:69
-#, fuzzy, kde-format
-#| msgid "AFA"
-msgid "AFN"
-msgstr "AFA"
-
-#: core/Currency.cpp:69
-#, kde-format
-msgid "Afghani"
-msgstr "அப்கானி"
-
-#: core/Currency.cpp:70
-#, kde-format
-msgid "Albania"
-msgstr "அல்பானியா"
-
-#: core/Currency.cpp:70
-#, kde-format
-msgid "Lek"
-msgstr "லெக்"
-
-#: core/Currency.cpp:71
-#, kde-format
-msgid "Algeria"
-msgstr "அல்ஜீரியா"
-
-#: core/Currency.cpp:71
-#, kde-format
-msgid "Algerian Dinar"
-msgstr "அல்ஜீரிய தினார்"
-
-#: core/Currency.cpp:71
-#, kde-format
-msgid "DZD"
-msgstr "DZD"
-
-#: core/Currency.cpp:72
-#, kde-format
-msgid "American Samoa"
-msgstr "அமெரிக்க சமோவா"
-
-#: core/Currency.cpp:72 core/Currency.cpp:103 core/Currency.cpp:138
-#: core/Currency.cpp:139 core/Currency.cpp:142 core/Currency.cpp:169
-#: core/Currency.cpp:176 core/Currency.cpp:225 core/Currency.cpp:232
-#: core/Currency.cpp:254 core/Currency.cpp:258 core/Currency.cpp:260
-#: core/Currency.cpp:269 core/Currency.cpp:316 core/Currency.cpp:322
-#: core/Currency.cpp:330
-#, kde-format
-msgid "US Dollar"
-msgstr "யுஎஸ் டாலர்"
-
-#: core/Currency.cpp:72 core/Currency.cpp:103 core/Currency.cpp:138
-#: core/Currency.cpp:139 core/Currency.cpp:142 core/Currency.cpp:169
-#: core/Currency.cpp:176 core/Currency.cpp:225 core/Currency.cpp:232
-#: core/Currency.cpp:254 core/Currency.cpp:258 core/Currency.cpp:260
-#: core/Currency.cpp:269 core/Currency.cpp:316 core/Currency.cpp:322
-#: core/Currency.cpp:330
-#, kde-format
-msgid "USD"
-msgstr "USD"
-
-#: core/Currency.cpp:73 core/Currency.cpp:74
-#, kde-format
-msgid "Andorra"
-msgstr "அன்டோரா"
-
-#: core/Currency.cpp:73 core/Currency.cpp:82 core/Currency.cpp:90
-#: core/Currency.cpp:130 core/Currency.cpp:150 core/Currency.cpp:152
-#: core/Currency.cpp:154 core/Currency.cpp:156 core/Currency.cpp:160
-#: core/Currency.cpp:164 core/Currency.cpp:168 core/Currency.cpp:178
-#: core/Currency.cpp:187 core/Currency.cpp:191 core/Currency.cpp:204
-#: core/Currency.cpp:212 core/Currency.cpp:214 core/Currency.cpp:223
-#: core/Currency.cpp:226 core/Currency.cpp:229 core/Currency.cpp:234
-#: core/Currency.cpp:244 core/Currency.cpp:267 core/Currency.cpp:278
-#: core/Currency.cpp:281 core/Currency.cpp:288 core/Currency.cpp:290
-#: core/Currency.cpp:295
-#, kde-format
-msgid "EUR"
-msgstr "EUR"
-
-#: core/Currency.cpp:74
-#, kde-format
-msgid "ADP"
-msgstr "ADP"
-
-#: core/Currency.cpp:74
-#, kde-format
-msgid "Andorran Peseta"
-msgstr "அன்டோர்ரன் பெசெட்டா"
-
-#: core/Currency.cpp:75
-#, kde-format
-msgid "AOA"
-msgstr "AOA"
-
-#: core/Currency.cpp:75
-#, kde-format
-msgid "Angola"
-msgstr "அங்கோலா"
-
-#: core/Currency.cpp:75
-#, kde-format
-msgid "Kwanza"
-msgstr "கவான்சா"
-
-#: core/Currency.cpp:76
-#, kde-format
-msgid "Anguilla"
-msgstr "Anguilla"
-
-#: core/Currency.cpp:76 core/Currency.cpp:77 core/Currency.cpp:135
-#: core/Currency.cpp:167 core/Currency.cpp:236 core/Currency.cpp:276
-#: core/Currency.cpp:277 core/Currency.cpp:279
-#, kde-format
-msgid "East Caribbean Dollar"
-msgstr "கிழக்கு காரிபியான் டாலர்"
-
-#: core/Currency.cpp:76 core/Currency.cpp:77 core/Currency.cpp:167
-#: core/Currency.cpp:236 core/Currency.cpp:276 core/Currency.cpp:277
-#: core/Currency.cpp:279
-#, kde-format
-msgid "XCD"
-msgstr "XCD"
-
-#: core/Currency.cpp:77
-#, kde-format
-msgid "Antigua And Barbuda"
-msgstr "அன்டிகுவா மற்றும் பார்புடா"
-
-#: core/Currency.cpp:78
-#, kde-format
-msgid "ARS"
-msgstr "ARS"
-
-#: core/Currency.cpp:78
-#, kde-format
-msgid "Argentina"
-msgstr "ஆர்ஜென்டீனா"
-
-#: core/Currency.cpp:78
-#, kde-format
-msgid "Argentine Peso"
-msgstr "ஆர்ஜென்டீனா பீசொ"
-
-#: core/Currency.cpp:79
-#, kde-format
-msgid "AMD"
-msgstr "AMD"
-
-#: core/Currency.cpp:79
-#, kde-format
-msgid "Armenia"
-msgstr "ஆர்மீனியா"
-
-#: core/Currency.cpp:79
-#, kde-format
-msgid "Armenian Dram"
-msgstr "அர்மனியன் டிரம்"
-
-#: core/Currency.cpp:80
-#, kde-format
-msgid "AWG"
-msgstr "AWG"
-
-#: core/Currency.cpp:80
-#, kde-format
-msgid "Aruba"
-msgstr "அறுபா"
-
-#: core/Currency.cpp:80
-#, fuzzy, kde-format
-#| msgid "Aruban Guilder"
-msgid "Aruban Florin"
-msgstr "அறுபன் கில்டர்"
-
-#: core/Currency.cpp:81 core/Currency.cpp:119 core/Currency.cpp:120
-#: core/Currency.cpp:177 core/Currency.cpp:198 core/Currency.cpp:242
-#: core/Currency.cpp:253 core/Currency.cpp:317
-#, kde-format
-msgid "AUD"
-msgstr "AUD"
-
-#: core/Currency.cpp:81 core/Currency.cpp:119 core/Currency.cpp:120
-#: core/Currency.cpp:177 core/Currency.cpp:198 core/Currency.cpp:242
-#: core/Currency.cpp:253 core/Currency.cpp:317
-#, kde-format
-msgid "Australian Dollar"
-msgstr "ஆஸ்திரேலியா பகுதி"
-
-#: core/Currency.cpp:83
-#, kde-format
-msgid "S"
-msgstr "S"
-
-#: core/Currency.cpp:83
-#, kde-format
-msgid "Schilling"
-msgstr "எழுத்துசரிபார்த்தல்"
-
-#: core/Currency.cpp:84
-#, kde-format
-msgid "AZM"
-msgstr "AZM"
-
-#: core/Currency.cpp:84
-#, kde-format
-msgid "Azerbaijan"
-msgstr "அசர்பைசான்"
-
-#: core/Currency.cpp:84
-#, kde-format
-msgid "Azerbaijanian Manat"
-msgstr "அசர்பைசான் மனாட்"
-
-#: core/Currency.cpp:85
-#, kde-format
-msgid "BSD"
-msgstr "BSD"
-
-#: core/Currency.cpp:85
-#, kde-format
-msgid "Bahamas"
-msgstr "பகாமாசு"
-
-#: core/Currency.cpp:85
-#, kde-format
-msgid "Bahamian Dollar"
-msgstr "பஹ்மியினா டாலர்"
-
-#: core/Currency.cpp:86
-#, kde-format
-msgid "BHD"
-msgstr "BHD"
-
-#: core/Currency.cpp:86
-#, kde-format
-msgid "Bahrain"
-msgstr "பாஹரேன்"
-
-#: core/Currency.cpp:86
-#, kde-format
-msgid "Bahraini Dinar"
-msgstr "பாஹரேன்னின் டினார்"
-
-#: core/Currency.cpp:87
-#, kde-format
-msgid "BDT"
-msgstr "BDT"
-
-#: core/Currency.cpp:87
-#, kde-format
-msgid "Bangladesh"
-msgstr "வங்காளதேசம்"
-
-#: core/Currency.cpp:87
-#, kde-format
-msgid "Taka"
-msgstr "டாகா "
-
-#: core/Currency.cpp:88
-#, kde-format
-msgid "BBD"
-msgstr "BBD"
-
-#: core/Currency.cpp:88
-#, kde-format
-msgid "Barbados"
-msgstr "பார்பேடோஸ்"
-
-#: core/Currency.cpp:88
-#, kde-format
-msgid "Barbados Dollar"
-msgstr "பார்பேடோஸ் டாலர்"
-
-#: core/Currency.cpp:89
-#, kde-format
-msgid "Belarus"
-msgstr "பெலாரூஸ்"
-
-#: core/Currency.cpp:89
-#, fuzzy, kde-format
-msgid "Belarusian Ruble"
-msgstr "பெலாரூசியனின் ரூப்"
-
-#: core/Currency.cpp:89
-#, kde-format
-msgid "p."
-msgstr "p."
-
-#: core/Currency.cpp:91
-#, kde-format
-msgid "BF"
-msgstr "BF"
-
-#: core/Currency.cpp:91 core/Currency.cpp:153 core/Currency.cpp:215
-#, kde-format
-msgid "Franc"
-msgstr "பிரன்க்"
-
-#: core/Currency.cpp:92
-#, kde-format
-msgid "BZ$"
-msgstr "BZ$"
-
-#: core/Currency.cpp:92
-#, kde-format
-msgid "Belize"
-msgstr "பெல்சி"
-
-#: core/Currency.cpp:92
-#, kde-format
-msgid "Belize Dollar"
-msgstr "பெல்சி டாலர்"
-
-#: core/Currency.cpp:93
-#, kde-format
-msgid "Benin"
-msgstr "பெனின்"
-
-#: core/Currency.cpp:93 core/Currency.cpp:107 core/Currency.cpp:127
-#: core/Currency.cpp:173 core/Currency.cpp:222 core/Currency.cpp:250
-#: core/Currency.cpp:284 core/Currency.cpp:309
-#, kde-format
-msgid "CFA Franc BCEAO"
-msgstr "CFA பிரான்சஸ் BCEAO"
-
-#: core/Currency.cpp:93 core/Currency.cpp:107 core/Currency.cpp:127
-#: core/Currency.cpp:173 core/Currency.cpp:222 core/Currency.cpp:250
-#: core/Currency.cpp:284 core/Currency.cpp:309
-#, kde-format
-msgid "XOF"
-msgstr "XOF"
-
-#: core/Currency.cpp:94
-#, kde-format
-msgid "BMD"
-msgstr "BMD"
-
-#: core/Currency.cpp:94
-#, kde-format
-msgid "Bermuda"
-msgstr "பேர்மூடா"
-
-#: core/Currency.cpp:94
-#, kde-format
-msgid "Bermudian Dollar"
-msgstr "டாலரின் பகுதி"
-
-#: core/Currency.cpp:95 core/Currency.cpp:96
-#, kde-format
-msgid "Bhutan"
-msgstr "பொத்தான்"
-
-#: core/Currency.cpp:95 core/Currency.cpp:183
-#, kde-format
-msgid "INR"
-msgstr "INR"
-
-#: core/Currency.cpp:95 core/Currency.cpp:183
-#, kde-format
-msgid "Indian Rupee"
-msgstr "இந்திய ரூபாய்"
-
-#: core/Currency.cpp:96
-#, kde-format
-msgid "BTN"
-msgstr "BTN"
-
-#: core/Currency.cpp:96
-#, kde-format
-msgid "Ngultrum"
-msgstr "நகுல்டிரும் "
-
-#: core/Currency.cpp:97 core/Currency.cpp:98
-#, kde-format
-msgid "Bolivia"
-msgstr "பொலிவியா"
-
-#: core/Currency.cpp:97
-#, kde-format
-msgid "Boliviano"
-msgstr "போல்வைனவொ"
-
-#: core/Currency.cpp:97 core/Currency.cpp:328
-#, kde-format
-msgid "Bs"
-msgstr "Bs"
-
-#: core/Currency.cpp:98
-#, kde-format
-msgid "BOV"
-msgstr "BOV"
-
-#: core/Currency.cpp:98
-#, kde-format
-msgid "Mvdol"
-msgstr "வீடோல்"
-
-#: core/Currency.cpp:99
-#, kde-format
-msgid "BAM"
-msgstr "BAM"
-
-#: core/Currency.cpp:99
-#, kde-format
-msgid "Bosnia And Herzegovina"
-msgstr "பொசுனியா மற்றும் கேர்சிகொவினா"
-
-#: core/Currency.cpp:99
-#, kde-format
-msgid "Convertible Marks"
-msgstr "மாற்ற கூடிய மதிப்பெண்"
-
-#: core/Currency.cpp:100
-#, kde-format
-msgid "BWP"
-msgstr "BWP"
-
-#: core/Currency.cpp:100
-#, kde-format
-msgid "Botswana"
-msgstr "பொட்சுவானா"
-
-#: core/Currency.cpp:100
-#, kde-format
-msgid "Pula"
-msgstr "புலா"
-
-#: core/Currency.cpp:101
-#, kde-format
-msgid "Bouvet Island"
-msgstr "போல்வெட் தீவு"
-
-#: core/Currency.cpp:101 core/Currency.cpp:300
-#, kde-format
-msgid "NOK"
-msgstr "NOK"
-
-#: core/Currency.cpp:101 core/Currency.cpp:255 core/Currency.cpp:300
-#, kde-format
-msgid "Norwegian Krone"
-msgstr "நார்விஜியன் க்ரோன்"
-
-#: core/Currency.cpp:102
-#, kde-format
-msgid "Brazil"
-msgstr "பிரேசில்"
-
-#: core/Currency.cpp:102
-#, kde-format
-msgid "Brazilian Real"
-msgstr "பிரெசிலியன்  "
-
-#: core/Currency.cpp:102
-#, kde-format
-msgid "R$"
-msgstr "R$"
-
-#: core/Currency.cpp:103
-#, kde-format
-msgid "British Indian Ocean Territory"
-msgstr "இந்திய பிரிட்டிஷ் சமுத்திரம் பரப்பளவு"
-
-#: core/Currency.cpp:104
-#, kde-format
-msgid "BND"
-msgstr "BND"
-
-#: core/Currency.cpp:104
-#, kde-format
-msgid "Brunei Darussalam"
-msgstr "புருனெ டர்ஸ்சலாம்"
-
-#: core/Currency.cpp:104
-#, kde-format
-msgid "Brunei Dollar"
-msgstr "புருனெ டாலர்"
-
-#: core/Currency.cpp:105
-#, kde-format
-msgid "BGL"
-msgstr "BGL"
-
-#: core/Currency.cpp:105 core/Currency.cpp:106
-#, kde-format
-msgid "Bulgaria"
-msgstr "பல்கேரியா"
-
-#: core/Currency.cpp:105
-#, kde-format
-msgid "Lev"
-msgstr "Lev"
-
-#: core/Currency.cpp:106
-#, kde-format
-msgid "BGN"
-msgstr "BGN"
-
-#: core/Currency.cpp:106
-#, kde-format
-msgid "Bulgarian Lev"
-msgstr "பல்கேரியா லிவ்"
-
-#: core/Currency.cpp:107
-#, kde-format
-msgid "Burkina Faso"
-msgstr "பர்கியன் பாசொ"
-
-#: core/Currency.cpp:108
-#, kde-format
-msgid "BIF"
-msgstr "BIF"
-
-#: core/Currency.cpp:108
-#, kde-format
-msgid "Burundi"
-msgstr "புருண்டி"
-
-#: core/Currency.cpp:108
-#, kde-format
-msgid "Burundi Franc"
-msgstr "புருண்டி பெரானிக்"
-
-#: core/Currency.cpp:109
-#, kde-format
-msgid "Cambodia"
-msgstr "கம்போடியா"
-
-#: core/Currency.cpp:109
-#, kde-format
-msgid "KHR"
-msgstr "KHR"
-
-#: core/Currency.cpp:109
-#, kde-format
-msgid "Riel"
-msgstr "ரைல்"
-
-#: core/Currency.cpp:110 core/Currency.cpp:114 core/Currency.cpp:115
-#: core/Currency.cpp:123 core/Currency.cpp:143 core/Currency.cpp:157
-#, kde-format
-msgid "CFA Franc BEAC"
-msgstr "CFA பிரன்க் BEAC"
-
-#: core/Currency.cpp:110
-#, kde-format
-msgid "Cameroon"
-msgstr "கமரூன்"
-
-#: core/Currency.cpp:110 core/Currency.cpp:114 core/Currency.cpp:115
-#: core/Currency.cpp:123 core/Currency.cpp:143 core/Currency.cpp:157
-#, kde-format
-msgid "XAF"
-msgstr "XAF"
-
-#: core/Currency.cpp:111
-#, kde-format
-msgid "CAD"
-msgstr "CAD"
-
-#: core/Currency.cpp:111
-#, kde-format
-msgid "Canadian Dollar"
-msgstr "கெனடியன் டாலர்"
-
-#: core/Currency.cpp:112
-#, kde-format
-msgid "CVE"
-msgstr "CVE"
-
-#: core/Currency.cpp:112
-#, kde-format
-msgid "Cape Verde"
-msgstr "கேப் வெர்தி"
-
-#: core/Currency.cpp:112
-#, kde-format
-msgid "Cape Verde Escudo"
-msgstr "கேப் வெர்டி இஸ்கியுடொ"
-
-#: core/Currency.cpp:113
-#, kde-format
-msgid "Cayman Islands"
-msgstr "கேமான் தீவுகள்"
-
-#: core/Currency.cpp:113
-#, kde-format
-msgid "Cayman Islands Dollar"
-msgstr "கேமான் தீவுகள் டாலர்"
-
-#: core/Currency.cpp:113
-#, kde-format
-msgid "KYD"
-msgstr "KYD"
-
-#: core/Currency.cpp:114
-#, kde-format
-msgid "Central African Republic"
-msgstr "மத்திய ஆப்பிக்க குடியரசு"
-
-#: core/Currency.cpp:115
-#, kde-format
-msgid "Chad"
-msgstr "சேடு "
-
-#: core/Currency.cpp:116
-#, kde-format
-msgid "Ch$"
-msgstr "Ch$"
-
-#: core/Currency.cpp:116 core/Currency.cpp:117
-#, kde-format
-msgid "Chile"
-msgstr "சிலி"
-
-#: core/Currency.cpp:116
-#, kde-format
-msgid "Chilean Peso"
-msgstr "சிலியன் பிசொ"
-
-#: core/Currency.cpp:117
-#, kde-format
-msgid "CLF"
-msgstr "CLF"
-
-#: core/Currency.cpp:117
-#, kde-format
-msgid "Unidades de fomento"
-msgstr "யுனிடெட்ஸ் டி பொர்"
-
-#: core/Currency.cpp:118
-#, kde-format
-msgid "CNY"
-msgstr "CNY"
-
-#: core/Currency.cpp:118
-#, kde-format
-msgid "China"
-msgstr "சீனா"
-
-#: core/Currency.cpp:118
-#, kde-format
-msgid "Yuan Renminbi"
-msgstr "யுனா ரென்மின்பி"
-
-#: core/Currency.cpp:119
-#, kde-format
-msgid "Christmas Island"
-msgstr "கிறிஸ்மஸ் தீவு"
-
-#: core/Currency.cpp:120
-#, kde-format
-msgid "Cocos (Keeling) Islands"
-msgstr "கொகோஸ் (கீலிங்) தீவு"
-
-#: core/Currency.cpp:121
-#, kde-format
-msgid "C$"
-msgstr "C$"
-
-#: core/Currency.cpp:121
-#, kde-format
-msgid "Colombia"
-msgstr "கொலம்பியா"
-
-#: core/Currency.cpp:121
-#, kde-format
-msgid "Colombian Peso"
-msgstr "கொலம்பியன் பிசொ"
-
-#: core/Currency.cpp:122
-#, kde-format
-msgid "Comoro Franc"
-msgstr "கோமொரொ பீரான்க்"
-
-#: core/Currency.cpp:122
-#, kde-format
-msgid "Comoros"
-msgstr "கோமொரொ"
-
-#: core/Currency.cpp:122
-#, kde-format
-msgid "KMF"
-msgstr "KMF"
-
-#: core/Currency.cpp:123
-#, kde-format
-msgid "Congo"
-msgstr "கான்கோ"
-
-#: core/Currency.cpp:124
-#, kde-format
-msgid "CDF"
-msgstr "CDF"
-
-#: core/Currency.cpp:124
-#, kde-format
-msgid "Congo, The Democratic Republic Of"
-msgstr "கான்கோ, ஜனநாயக குடியரசு "
-
-#: core/Currency.cpp:124
-#, kde-format
-msgid "Franc Congolais"
-msgstr "பிரான்க் காங்கோலிஸ் "
-
-#: core/Currency.cpp:125
-#, kde-format
-msgid "Cook Islands"
-msgstr "கோக் தீவு"
-
-#: core/Currency.cpp:125 core/Currency.cpp:248 core/Currency.cpp:252
-#: core/Currency.cpp:265 core/Currency.cpp:310
-#, kde-format
-msgid "NZD"
-msgstr "NZD"
-
-#: core/Currency.cpp:125 core/Currency.cpp:248 core/Currency.cpp:252
-#: core/Currency.cpp:265 core/Currency.cpp:310
-#, kde-format
-msgid "New Zealand Dollar"
-msgstr "நியுசிலந்து டாலர்"
-
-#: core/Currency.cpp:126 core/Currency.cpp:141
-#, kde-format
-msgid "C"
-msgstr "C"
-
-#: core/Currency.cpp:126
-#, kde-format
-msgid "Costa Rica"
-msgstr "கோஸ்ட ரிகா"
-
-#: core/Currency.cpp:126
-#, kde-format
-msgid "Costa Rican Colon"
-msgstr "கோஸ்ட ரிகா கோலன்"
-
-#: core/Currency.cpp:127
-#, kde-format
-msgid "Cote D'Ivoire"
-msgstr "கோட் டி'ஐவோரி"
-
-#: core/Currency.cpp:128
-#, kde-format
-msgid "Croatia"
-msgstr "குரோவேசியா"
-
-#: core/Currency.cpp:128
-#, kde-format
-msgid "Croatian kuna"
-msgstr "Croatian kuna"
-
-#: core/Currency.cpp:128
-#, kde-format
-msgid "kn"
-msgstr "kn"
-
-#: core/Currency.cpp:129
-#, kde-format
-msgid "CUP"
-msgstr "CUP"
-
-#: core/Currency.cpp:129
-#, kde-format
-msgid "Cuba"
-msgstr "கியுபா"
-
-#: core/Currency.cpp:129
-#, kde-format
-msgid "Cuban Peso"
-msgstr "கியுபா பிசோ"
-
-#: core/Currency.cpp:131
-#, kde-format
-msgid "CYP"
-msgstr "CYP"
-
-#: core/Currency.cpp:131
-#, kde-format
-msgid "Cyprus Pound"
-msgstr "சைப்ருஸ் பவுன்டி"
-
-#: core/Currency.cpp:132
-#, kde-format
-msgid "Czech Koruna"
-msgstr "செச் கரொனா"
-
-#: core/Currency.cpp:132
-#, fuzzy, kde-format
-#| msgid "Czech Koruna"
-msgid "Czechia"
-msgstr "செச் கரொனா"
-
-#: core/Currency.cpp:132
-#, kde-format
-msgid "Kc"
-msgstr "Kc"
-
-#: core/Currency.cpp:133 core/Currency.cpp:148 core/Currency.cpp:166
-#, kde-format
-msgid "Danish Krone"
-msgstr "டானிஸ்க் கோரோனி"
-
-#: core/Currency.cpp:133
-#, kde-format
-msgid "Denmark"
-msgstr "டென்மார்க்"
-
-#: core/Currency.cpp:133 core/Currency.cpp:145 core/Currency.cpp:148
-#: core/Currency.cpp:255 core/Currency.cpp:302
-#, kde-format
-msgid "kr"
-msgstr "kr"
-
-#: core/Currency.cpp:134
-#, kde-format
-msgid "DJF"
-msgstr "DJF"
-
-#: core/Currency.cpp:134
-#, kde-format
-msgid "Djibouti"
-msgstr "சிபூட்டி"
-
-#: core/Currency.cpp:134
-#, kde-format
-msgid "Djibouti Franc"
-msgstr "ப்ரென்சு சிபூட்டி"
-
-#: core/Currency.cpp:135
-#, kde-format
-msgid "Dominica"
-msgstr "டொமினிக்கா"
-
-#: core/Currency.cpp:135
-#, kde-format
-msgid "RD$"
-msgstr "RD$"
-
-#: core/Currency.cpp:136
-#, kde-format
-msgid "DOP"
-msgstr "DOP"
-
-#: core/Currency.cpp:136
-#, kde-format
-msgid "Dominican Peso"
-msgstr "டொமனிக்கன் பெசொ"
-
-#: core/Currency.cpp:136
-#, kde-format
-msgid "Dominican Republic"
-msgstr "டொமினிக்கன் குடியரசு"
-
-#: core/Currency.cpp:137 core/Currency.cpp:138
-#, kde-format
-msgid "East Timor"
-msgstr "கிழக்கு டிமோர்"
-
-#: core/Currency.cpp:137
-#, kde-format
-msgid "TPE"
-msgstr "TPE"
-
-#: core/Currency.cpp:137
-#, kde-format
-msgid "Timor Escudo"
-msgstr "டிமோர் எஸ்குடோ"
-
-#: core/Currency.cpp:139
-#, kde-format
-msgid "Ecuador"
-msgstr "ஈக்குவேடோர்"
-
-#: core/Currency.cpp:140
-#, kde-format
-msgid "EGP"
-msgstr "EGP"
-
-#: core/Currency.cpp:140
-#, kde-format
-msgid "Egypt"
-msgstr "எகிப்து"
-
-#: core/Currency.cpp:140
-#, kde-format
-msgid "Egyptian Pound"
-msgstr "எகிப்து பவுன்டு"
-
-#: core/Currency.cpp:141 core/Currency.cpp:142
-#, kde-format
-msgid "El Salvador"
-msgstr "எல் சல்வடோர்"
-
-#: core/Currency.cpp:141
-#, kde-format
-msgid "El Salvador Colon"
-msgstr "எல் சல்வடோர் கொலொன்"
-
-#: core/Currency.cpp:143
-#, kde-format
-msgid "Equatorial Guinea"
-msgstr "மத்தியக்கோட்டுக் கினி"
-
-#: core/Currency.cpp:144
-#, kde-format
-msgid "ERN"
-msgstr "ERN"
-
-#: core/Currency.cpp:144
-#, kde-format
-msgid "Eritrea"
-msgstr "எரிட்ரேயா"
-
-#: core/Currency.cpp:144
-#, kde-format
-msgid "Nakfa"
-msgstr "நக்ஃபா"
-
-#: core/Currency.cpp:145
-#, kde-format
-msgid "Estonia"
-msgstr "எசுதோனியா"
-
-#: core/Currency.cpp:145
-#, kde-format
-msgid "Kroon"
-msgstr "க்ரூன்"
-
-#: core/Currency.cpp:146
-#, kde-format
-msgid "ETB"
-msgstr "ETB"
-
-#: core/Currency.cpp:146
-#, kde-format
-msgid "Ethiopia"
-msgstr "எதியோப்பியா"
-
-#: core/Currency.cpp:146
-#, kde-format
-msgid "Ethiopian Birr"
-msgstr "எதியோப்பியா பிர்"
-
-#: core/Currency.cpp:147
-#, kde-format
-msgid "FKP"
-msgstr "FKP"
-
-#: core/Currency.cpp:147
-#, kde-format
-msgid "Falkland Island (Malvinas)"
-msgstr "பால்க்லான்டு தீவுகள் (மால்வினாஸ்)"
-
-#: core/Currency.cpp:147
-#, kde-format
-msgid "Falkland Islands Pound"
-msgstr "பால்க்லான்டு தீவு பவுன்டு"
-
-#: core/Currency.cpp:148
-#, kde-format
-msgid "Faeroe Islands"
-msgstr "பேரோ தீவுகள்"
-
-#: core/Currency.cpp:149
-#, kde-format
-msgid "FJD"
-msgstr "FJD"
-
-#: core/Currency.cpp:149
-#, kde-format
-msgid "Fiji"
-msgstr "பிஜி"
-
-#: core/Currency.cpp:149
-#, kde-format
-msgid "Fiji Dollar"
-msgstr "பிஜி டாலர்"
-
-#: core/Currency.cpp:151
-#, kde-format
-msgid "Markka"
-msgstr "மரக்கா"
-
-#: core/Currency.cpp:151
-#, kde-format
-msgid "mk"
-msgstr "FJD"
-
-#: core/Currency.cpp:153 core/Currency.cpp:215
-#, kde-format
-msgid "F"
-msgstr "F"
-
-#: core/Currency.cpp:154
-#, kde-format
-msgid "French Guiana"
-msgstr "ப்ரென்சு கைனா"
-
-#: core/Currency.cpp:155 core/Currency.cpp:247 core/Currency.cpp:331
-#, kde-format
-msgid "CFP Franc"
-msgstr "CFP ப்ராங்"
-
-#: core/Currency.cpp:155
-#, kde-format
-msgid "French Polynesia"
-msgstr "பிரெஞ்சு பாலினீசியா"
-
-#: core/Currency.cpp:155 core/Currency.cpp:247 core/Currency.cpp:331
-#, kde-format
-msgid "XPF"
-msgstr "XPF"
-
-#: core/Currency.cpp:156
-#, kde-format
-msgid "Franc Southern Territories"
-msgstr "தெற்கு பிரெஞ்ச் பிரதேசங்கள்"
-
-#: core/Currency.cpp:157
-#, kde-format
-msgid "Gabon"
-msgstr "கபோன்"
-
-#: core/Currency.cpp:158
-#, kde-format
-msgid "Dalasi"
-msgstr "டலாசி"
-
-#: core/Currency.cpp:158
-#, kde-format
-msgid "GMD"
-msgstr "GMD"
-
-#: core/Currency.cpp:158
-#, kde-format
-msgid "Gambia"
-msgstr "கம்பியா"
-
-#: core/Currency.cpp:159
-#, kde-format
-msgid "GEL"
-msgstr "GEL"
-
-#: core/Currency.cpp:159
-#, kde-format
-msgid "Georgia"
-msgstr "சோர்சியா"
-
-#: core/Currency.cpp:159
-#, kde-format
-msgid "Lari"
-msgstr "லரி"
-
-#: core/Currency.cpp:161
-#, kde-format
-msgid "DM"
-msgstr "DM"
-
-#: core/Currency.cpp:161
-#, kde-format
-msgid "German Mark"
-msgstr "ஜெர்மன் மார்க்கு"
-
-#: core/Currency.cpp:162
-#, kde-format
-msgid "Cedi"
-msgstr "செடி"
-
-#: core/Currency.cpp:162
-#, kde-format
-msgid "GHC"
-msgstr "GHC"
-
-#: core/Currency.cpp:162
-#, kde-format
-msgid "Ghana"
-msgstr "கானா"
-
-#: core/Currency.cpp:163
-#, kde-format
-msgid "GIP"
-msgstr "GIP"
-
-#: core/Currency.cpp:163
-#, kde-format
-msgid "Gibraltar"
-msgstr "ஜிப்ரால்ட்ர்"
-
-#: core/Currency.cpp:163
-#, kde-format
-msgid "Gibraltar Pound"
-msgstr "ஜிப்ரால்ட்ர் பவுன்டு"
-
-#: core/Currency.cpp:165
-#, kde-format
-msgid "Drachma"
-msgstr "டார்க்மா"
-
-#: core/Currency.cpp:165
-#, kde-format
-msgid "GRD"
-msgstr "GRD"
-
-#: core/Currency.cpp:166
-#, kde-format
-msgid "DKK"
-msgstr "DKK"
-
-#: core/Currency.cpp:166
-#, kde-format
-msgid "Greenland"
-msgstr "கிரீன்லாந்து"
-
-#: core/Currency.cpp:167
-#, kde-format
-msgid "Grenada"
-msgstr "கிரனாடா"
-
-#: core/Currency.cpp:168
-#, kde-format
-msgid "Guadeloupe"
-msgstr "காஉடிலொபி"
-
-#: core/Currency.cpp:169
-#, kde-format
-msgid "Guam"
-msgstr "குவாம்"
-
-#: core/Currency.cpp:170
-#, kde-format
-msgid "Guatemala"
-msgstr "குவாதமாலா"
-
-#: core/Currency.cpp:170
-#, kde-format
-msgid "Q"
-msgstr "Q"
-
-#: core/Currency.cpp:170
-#, kde-format
-msgid "Quetzal"
-msgstr "குஎட்சால்"
-
-#: core/Currency.cpp:171
-#, kde-format
-msgid "GNF"
-msgstr "GNF"
-
-#: core/Currency.cpp:171
-#, kde-format
-msgid "Guinea"
-msgstr "கினி"
-
-#: core/Currency.cpp:171
-#, kde-format
-msgid "Guinea Franc"
-msgstr "கினி பிரென்ச்"
-
-#: core/Currency.cpp:172
-#, kde-format
-msgid "GWP"
-msgstr "GWP"
-
-#: core/Currency.cpp:172 core/Currency.cpp:173
-#, kde-format
-msgid "Guinea-Bissau"
-msgstr "கினி-பீசோ"
-
-#: core/Currency.cpp:172
-#, kde-format
-msgid "Guinea-Bissau Peso"
-msgstr "கினி-பிசாசு பீசோ"
-
-#: core/Currency.cpp:174
-#, kde-format
-msgid "GYD"
-msgstr "GYD"
-
-#: core/Currency.cpp:174
-#, kde-format
-msgid "Guyana"
-msgstr "கயானா"
-
-#: core/Currency.cpp:174
-#, kde-format
-msgid "Guyana Dollar"
-msgstr "கயானா டாலர்"
-
-#: core/Currency.cpp:175
-#, kde-format
-msgid "Gourde"
-msgstr "கொர்டி"
-
-#: core/Currency.cpp:175
-#, kde-format
-msgid "HTG"
-msgstr "HTG"
-
-#: core/Currency.cpp:175 core/Currency.cpp:176
-#, kde-format
-msgid "Haiti"
-msgstr "கையிட்டி"
-
-#: core/Currency.cpp:177
-#, kde-format
-msgid "Heard Island And McDonald Islands"
-msgstr "ஹியர்டு தீவு மற்றும் மெக்டோனால்டு தீவுகள்"
-
-#: core/Currency.cpp:178
-#, kde-format
-msgid "Holy See (Vatican City State)"
-msgstr "ஹொலி சி (வாடிகன் நகர மாநிலம்"
-
-#: core/Currency.cpp:179
-#, kde-format
-msgid "Honduras"
-msgstr "ஹண்டுராஸ்"
-
-#: core/Currency.cpp:179
-#, kde-format
-msgid "L"
-msgstr "L"
-
-#: core/Currency.cpp:179
-#, kde-format
-msgid "Lempira"
-msgstr "லிம்பிர"
-
-#: core/Currency.cpp:180
-#, kde-format
-msgid "HKD"
-msgstr "HKD"
-
-#: core/Currency.cpp:180
-#, kde-format
-msgid "Hong Kong"
-msgstr "ஹாங்காங்"
-
-#: core/Currency.cpp:180
-#, kde-format
-msgid "Hong Kong Dollar"
-msgstr "ஹாங்காங் டாலர்"
-
-#: core/Currency.cpp:181
-#, kde-format
-msgid "Forint"
-msgstr "ப்ராயின்ட்"
-
-#: core/Currency.cpp:181
-#, kde-format
-msgid "Ft"
-msgstr "Ft"
-
-#: core/Currency.cpp:181
-#, kde-format
-msgid "Hungary"
-msgstr "ஹங்கேரி"
-
-#: core/Currency.cpp:182
-#, kde-format
-msgid "Iceland"
-msgstr "ஐஸ்லாந்து"
-
-#: core/Currency.cpp:182
-#, kde-format
-msgid "Iceland Krona"
-msgstr "ஐஸ்லாந்து க்ரோனா"
-
-#: core/Currency.cpp:182
-#, kde-format
-msgid "kr."
-msgstr "kr."
-
-#: core/Currency.cpp:183
-#, kde-format
-msgid "India"
-msgstr "இந்தியா"
-
-#: core/Currency.cpp:184
-#, kde-format
-msgid "Indonesia"
-msgstr "இந்தோனேசியா"
-
-#: core/Currency.cpp:184
-#, kde-format
-msgid "Rp"
-msgstr "Rp"
-
-#: core/Currency.cpp:184
-#, kde-format
-msgid "Rupiah"
-msgstr "ருபியா"
-
-#: core/Currency.cpp:185
-#, kde-format
-msgid "IRR"
-msgstr "IRR"
-
-#: core/Currency.cpp:185
-#, kde-format
-msgid "Iran, Islamic Republic Of"
-msgstr "ஈரான், இஸ்லாமிய குடியரசு ஈரான்,"
-
-#: core/Currency.cpp:185
-#, kde-format
-msgid "Iranian Rial"
-msgstr "ஈரானிய ரியால்"
-
-#: core/Currency.cpp:186
-#, kde-format
-msgid "IQD"
-msgstr "IQD"
-
-#: core/Currency.cpp:186
-#, kde-format
-msgid "Iraq"
-msgstr "ஈராக்"
-
-#: core/Currency.cpp:186
-#, kde-format
-msgid "Iraqi Dinar"
-msgstr "ஈராக்கிய தினார்"
-
-#: core/Currency.cpp:188
-#, kde-format
-msgid "IR----"
-msgstr "IR----"
-
-#: core/Currency.cpp:188
-#, kde-format
-msgid "Punt"
-msgstr "புன்ட்"
-
-#: core/Currency.cpp:189
-#, kde-format
-msgid "IEX"
-msgstr "IEX"
-
-#: core/Currency.cpp:189
-#, kde-format
-msgid "Pence"
-msgstr "பென்ஸ்"
-
-#: core/Currency.cpp:190
-#, kde-format
-msgid "ILS"
-msgstr "ILS"
-
-#: core/Currency.cpp:190
-#, kde-format
-msgid "Israel"
-msgstr "இஸ்ரேல்"
-
-#: core/Currency.cpp:190
-#, kde-format
-msgid "New Israeli Sheqel"
-msgstr "புது இஸ்ரேல் ஷ்க்குல்"
-
-#: core/Currency.cpp:192
-#, kde-format
-msgid "L."
-msgstr "L."
-
-#: core/Currency.cpp:192
-#, kde-format
-msgid "Lira"
-msgstr "லிரா"
-
-#: core/Currency.cpp:193
-#, kde-format
-msgid "J$"
-msgstr "J$"
-
-#: core/Currency.cpp:193
-#, kde-format
-msgid "Jamaica"
-msgstr "சமேய்க்கா"
-
-#: core/Currency.cpp:193
-#, kde-format
-msgid "Jamaican Dollar"
-msgstr "சமேய்க்கா டாலர்"
-
-#: core/Currency.cpp:194
-#, kde-format
-msgid "JPY"
-msgstr "JPY"
-
-#: core/Currency.cpp:195
-#, kde-format
-msgid "JOD"
-msgstr "JOD"
-
-#: core/Currency.cpp:195
-#, kde-format
-msgid "Jordan"
-msgstr "ஜார்டன்"
-
-#: core/Currency.cpp:195
-#, kde-format
-msgid "Jordanian Dinar"
-msgstr "ஜார்டன் தினார்"
-
-#: core/Currency.cpp:196
-#, kde-format
-msgid "KZT"
-msgstr "KZT"
-
-#: core/Currency.cpp:196
-#, kde-format
-msgid "Kazakhstan"
-msgstr "கசகிஸ்தான்"
-
-#: core/Currency.cpp:196
-#, kde-format
-msgid "Tenge"
-msgstr "டென்ஜி"
-
-#: core/Currency.cpp:197
-#, kde-format
-msgid "KES"
-msgstr "KES"
-
-#: core/Currency.cpp:197
-#, kde-format
-msgid "Kenya"
-msgstr "கென்யா"
-
-#: core/Currency.cpp:197
-#, kde-format
-msgid "Kenyan Shilling"
-msgstr "கென்யா ஷில்லிங்"
-
-#: core/Currency.cpp:198
-#, kde-format
-msgid "Kiribati"
-msgstr "கிரிபாடி"
-
-#: core/Currency.cpp:199
-#, kde-format
-msgid "KPW"
-msgstr "KPW"
-
-#: core/Currency.cpp:199
-#, kde-format
-msgid "Korea, Democratic People's Republic Of"
-msgstr "மக்கலின் சுதந்திர குடியரசு கொரியா "
-
-#: core/Currency.cpp:199
-#, kde-format
-msgid "North Korean Won"
-msgstr "வடக் கொரிய வொன்"
-
-#: core/Currency.cpp:200
-#, kde-format
-msgid "KRW"
-msgstr "KRW"
-
-#: core/Currency.cpp:200
-#, kde-format
-msgid "Korea, Republic Of"
-msgstr "குடியரசு கொரிய"
-
-#: core/Currency.cpp:200
-#, kde-format
-msgid "Won"
-msgstr "வோன்"
-
-#: core/Currency.cpp:201
-#, kde-format
-msgid "KWD"
-msgstr "KWD"
-
-#: core/Currency.cpp:201
-#, kde-format
-msgid "Kuwait"
-msgstr "குவைத்"
-
-#: core/Currency.cpp:201
-#, kde-format
-msgid "Kuwaiti Dinar"
-msgstr "குவைத் தினார்"
-
-#: core/Currency.cpp:202
-#, kde-format
-msgid "KGS"
-msgstr "KGS"
-
-#: core/Currency.cpp:202
-#, kde-format
-msgid "Kyrgyzstan"
-msgstr "கிரைகிஸ்த்தான்"
-
-#: core/Currency.cpp:202
-#, kde-format
-msgid "Som"
-msgstr "சம்"
-
-#: core/Currency.cpp:203
-#, kde-format
-msgid "Kip"
-msgstr "கிப்"
-
-#: core/Currency.cpp:203
-#, kde-format
-msgid "LAK"
-msgstr "Kip"
-
-#: core/Currency.cpp:203
-#, kde-format
-msgid "Lao People's Democratic Republic"
-msgstr "மக்கள் சுதந்திர குடியரசு லவொ"
-
-#: core/Currency.cpp:205
-#, kde-format
-msgid "Latvian Lats"
-msgstr "லட்விய லாட்கள்"
-
-#: core/Currency.cpp:205
-#, kde-format
-msgid "Ls"
-msgstr "Ls"
-
-#: core/Currency.cpp:206
-#, kde-format
-msgid "LBP"
-msgstr "LBP"
-
-#: core/Currency.cpp:206
-#, kde-format
-msgid "Lebanese Pound"
-msgstr "லெபனானின் பவுன்டு"
-
-#: core/Currency.cpp:206
-#, kde-format
-msgid "Lebanon"
-msgstr "லெபனான்"
-
-#: core/Currency.cpp:207 core/Currency.cpp:208
-#, kde-format
-msgid "Lesotho"
-msgstr "லெசோதோ"
-
-#: core/Currency.cpp:207 core/Currency.cpp:240 core/Currency.cpp:294
-#, kde-format
-msgid "Rand"
-msgstr "ராணடு"
-
-#: core/Currency.cpp:207 core/Currency.cpp:240
-#, kde-format
-msgid "ZAR"
-msgstr "ZAR"
-
-#: core/Currency.cpp:208
-#, kde-format
-msgid "LSL"
-msgstr "LSL"
-
-#: core/Currency.cpp:208
-#, kde-format
-msgid "Loti"
-msgstr "லொட்டி"
-
-#: core/Currency.cpp:209
-#, kde-format
-msgid "LRD"
-msgstr "LRD"
-
-#: core/Currency.cpp:209
-#, kde-format
-msgid "Liberia"
-msgstr "லைபீரியா"
-
-#: core/Currency.cpp:209
-#, kde-format
-msgid "Liberian Dollar"
-msgstr "லிபரியன் டாலர்"
-
-#: core/Currency.cpp:210
-#, kde-format
-msgid "LYD"
-msgstr "LYD"
-
-#: core/Currency.cpp:210
-#, kde-format
-msgid "Libyan Arab Jamahiriya"
-msgstr "லிபரியன் அராபிய ஜமாஹிரியா"
-
-#: core/Currency.cpp:210
-#, fuzzy, kde-format
-#| msgid "Lybian Dinar"
-msgid "Libyan Dinar"
-msgstr "லிபரியன் டினார்"
-
-#: core/Currency.cpp:211
-#, kde-format
-msgid "CHF"
-msgstr "CHF"
-
-#: core/Currency.cpp:211
-#, kde-format
-msgid "Liechtenstein"
-msgstr "லீச்சென்சுதீன்"
-
-#: core/Currency.cpp:211 core/Currency.cpp:303
-#, kde-format
-msgid "Swiss Franc"
-msgstr "ஸ்விஸ் ஃப்ராங்"
-
-#: core/Currency.cpp:213
-#, kde-format
-msgid "Lithuanian Litus"
-msgstr "லிதுவேனியன் லித்திஸ்"
-
-#: core/Currency.cpp:213
-#, kde-format
-msgid "Lt"
-msgstr "Lt"
-
-#: core/Currency.cpp:216
-#, kde-format
-msgid "MOP"
-msgstr "MOP"
-
-#: core/Currency.cpp:216
-#, kde-format
-msgid "Macao"
-msgstr "மகாவோ"
-
-#: core/Currency.cpp:216
-#, kde-format
-msgid "Pataca"
-msgstr "பதாகா"
-
-#: core/Currency.cpp:217
-#, kde-format
-msgid "Denar"
-msgstr "தினார்"
-
-#: core/Currency.cpp:217
-#, kde-format
-msgid "MKD"
-msgstr "MKD"
-
-#: core/Currency.cpp:217
-#, kde-format
-msgid "Macedonia, The Former Yugoslav Republic Of"
-msgstr "மெசெடோனிய முந்தய யுகோலோவிய குடியரசின், மெசெடோனிய"
-
-#: core/Currency.cpp:218
-#, kde-format
-msgid "MGF"
-msgstr "MGF"
-
-#: core/Currency.cpp:218
-#, kde-format
-msgid "Madagascar"
-msgstr "மடகாஸசுகார்"
-
-#: core/Currency.cpp:218
-#, kde-format
-msgid "Malagasy Franc"
-msgstr "மாலகசி ஃப்ராங்"
-
-#: core/Currency.cpp:219 core/Currency.cpp:335
-#, kde-format
-msgid "Kwacha"
-msgstr "க்குவாச்சா"
-
-#: core/Currency.cpp:219
-#, kde-format
-msgid "MWK"
-msgstr "MWK"
-
-#: core/Currency.cpp:219
-#, kde-format
-msgid "Malawi"
-msgstr "மலாவி"
-
-#: core/Currency.cpp:220
-#, kde-format
-msgid "MYR"
-msgstr "MYR"
-
-#: core/Currency.cpp:220
-#, kde-format
-msgid "Malaysia"
-msgstr "மலேசியா"
-
-#: core/Currency.cpp:220
-#, kde-format
-msgid "Malaysian Ringgit"
-msgstr "மலேசியன் ரின்கிட்"
-
-#: core/Currency.cpp:221
-#, kde-format
-msgid "MVR"
-msgstr "MVR"
-
-#: core/Currency.cpp:221
-#, kde-format
-msgid "Maldives"
-msgstr "மாலைதீவுகள்"
-
-#: core/Currency.cpp:221
-#, kde-format
-msgid "Rufiyaa"
-msgstr "ருஃப்பியா"
-
-#: core/Currency.cpp:222
-#, kde-format
-msgid "Mali"
-msgstr "மாலி"
-
-#: core/Currency.cpp:223
-#, fuzzy, kde-format
-#| msgid "EUR"
-msgid "EURO"
-msgstr "EUR"
-
-#: core/Currency.cpp:224
-#, kde-format
-msgid "MTL"
-msgstr "MTL"
-
-#: core/Currency.cpp:224
-#, kde-format
-msgid "Maltese Lira"
-msgstr "மால்டீசு லிரா"
-
-#: core/Currency.cpp:225
-#, kde-format
-msgid "Marshall Islands"
-msgstr "மார்சல் தீவுகள்"
-
-#: core/Currency.cpp:226
-#, kde-format
-msgid "Martinique"
-msgstr "மார்டினீக்கு"
-
-#: core/Currency.cpp:227
-#, kde-format
-msgid "MRO"
-msgstr "MRO"
-
-#: core/Currency.cpp:227
-#, kde-format
-msgid "Mauritania"
-msgstr "மொரிசியேனியா"
-
-#: core/Currency.cpp:227
-#, kde-format
-msgid "Ouguiya"
-msgstr "ஓயுங்கியா"
-
-#: core/Currency.cpp:228
-#, kde-format
-msgid "MUR"
-msgstr "MUR"
-
-#: core/Currency.cpp:228
-#, kde-format
-msgid "Mauritius"
-msgstr "மொரீசியசு"
-
-#: core/Currency.cpp:228
-#, kde-format
-msgid "Mauritius Rupee"
-msgstr "மொரீசியஸ் ரூபாய்"
-
-#: core/Currency.cpp:229
-#, kde-format
-msgid "Mayotte"
-msgstr "மயோட்டி"
-
-#: core/Currency.cpp:230
-#, kde-format
-msgid "MXN"
-msgstr "MXN"
-
-#: core/Currency.cpp:230
-#, kde-format
-msgid "Mexican Peso"
-msgstr "மெக்சிகன் பெசொ"
-
-#: core/Currency.cpp:230 core/Currency.cpp:231
-#, kde-format
-msgid "Mexico"
-msgstr "மெக்ஸிகோ"
-
-#: core/Currency.cpp:231
-#, kde-format
-msgid "MXV"
-msgstr "MXV"
-
-#: core/Currency.cpp:231
-#, kde-format
-msgid "Mexican Unidad de Inversion (UDI)"
-msgstr "மெக்சிகன் உனைடட் டீ இண்வர்ஷன்"
-
-#: core/Currency.cpp:232
-#, kde-format
-msgid "Micronesia, Federated States Of"
-msgstr "மைக்ரோனீசியக் குடியரசு மாநிலங்கள்"
-
-#: core/Currency.cpp:233
-#, kde-format
-msgid "MDL"
-msgstr "MDL"
-
-#: core/Currency.cpp:233
-#, kde-format
-msgid "Moldova, Republic Of"
-msgstr "மொல்டொவிய குடியரசு"
-
-#: core/Currency.cpp:233
-#, kde-format
-msgid "Moldovan Leu"
-msgstr "மொல்டொவன் லியு"
-
-#: core/Currency.cpp:235
-#, kde-format
-msgid "MNT"
-msgstr "MNT"
-
-#: core/Currency.cpp:235
-#, kde-format
-msgid "Mongolia"
-msgstr "மொங்கோலியா"
-
-#: core/Currency.cpp:235
-#, kde-format
-msgid "Tugrik"
-msgstr "டக்ரிக்"
-
-#: core/Currency.cpp:236
-#, kde-format
-msgid "Montserrat"
-msgstr "மொன்சாராட்"
-
-#: core/Currency.cpp:237 core/Currency.cpp:332
-#, kde-format
-msgid "MAD"
-msgstr "MAD"
-
-#: core/Currency.cpp:237 core/Currency.cpp:332
-#, kde-format
-msgid "Moroccan Dirham"
-msgstr "மொரோக்கென் திர்ஹம்"
-
-#: core/Currency.cpp:237
-#, kde-format
-msgid "Morocco"
-msgstr "மொரோக்கோ"
-
-#: core/Currency.cpp:238
-#, kde-format
-msgid "MZM"
-msgstr "MZM"
-
-#: core/Currency.cpp:238
-#, kde-format
-msgid "Metical"
-msgstr "மெட்டிகல்"
-
-#: core/Currency.cpp:238
-#, kde-format
-msgid "Mozambique"
-msgstr "மொசாம்பிக்"
-
-#: core/Currency.cpp:239
-#, kde-format
-msgid "Kyat"
-msgstr "கயட்"
-
-#: core/Currency.cpp:239
-#, kde-format
-msgid "MMK"
-msgstr "MMK"
-
-#: core/Currency.cpp:239
-#, kde-format
-msgid "Myanmar"
-msgstr "மியான்மர் "
-
-#: core/Currency.cpp:240 core/Currency.cpp:241
-#, kde-format
-msgid "Namibia"
-msgstr "நாமிபியா"
-
-#: core/Currency.cpp:241
-#, kde-format
-msgid "NAD"
-msgstr "NAD"
-
-#: core/Currency.cpp:241
-#, kde-format
-msgid "Namibia Dollar"
-msgstr "நாமிபியா டாலர் "
-
-#: core/Currency.cpp:242
-#, kde-format
-msgid "Nauru"
-msgstr "நவுரு"
-
-#: core/Currency.cpp:243
-#, kde-format
-msgid "NPR"
-msgstr "NPR"
-
-#: core/Currency.cpp:243
-#, kde-format
-msgid "Nepal"
-msgstr "நேபாளம்"
-
-#: core/Currency.cpp:243
-#, kde-format
-msgid "Nepalese Rupee"
-msgstr "நேபாளிய ரூபாய்"
-
-#: core/Currency.cpp:245
-#, kde-format
-msgid "Guilder"
-msgstr "கில்டர்"
-
-#: core/Currency.cpp:245
-#, kde-format
-msgid "fl"
-msgstr "fl"
-
-#: core/Currency.cpp:246
-#, kde-format
-msgid "ANG"
-msgstr "ANG"
-
-#: core/Currency.cpp:246
-#, fuzzy, kde-format
-#| msgid "Netherlands Antillan Guilder"
-msgid "Netherlands Antillean Guilder"
-msgstr "நெதர்லாந்து அதிலியன் கில்டர்"
-
-#: core/Currency.cpp:246
-#, kde-format
-msgid "Netherlands Antilles"
-msgstr "நெதர்லாந்து அன்டில்சு"
-
-#: core/Currency.cpp:247
-#, kde-format
-msgid "New Caledonia"
-msgstr "புதிய கலிடோனியா"
-
-#: core/Currency.cpp:249
-#, kde-format
-msgid "Cordoba Oro"
-msgstr "கோர்டோபா ஓரொ"
-
-#: core/Currency.cpp:249
-#, kde-format
-msgid "NIO"
-msgstr "NIO"
-
-#: core/Currency.cpp:249
-#, kde-format
-msgid "Nicaragua"
-msgstr "நிக்கராகுவா"
-
-#: core/Currency.cpp:250
-#, kde-format
-msgid "Niger"
-msgstr "நைகர்"
-
-#: core/Currency.cpp:251
-#, kde-format
-msgid "NGN"
-msgstr "NGN"
-
-#: core/Currency.cpp:251
-#, kde-format
-msgid "Naira"
-msgstr "னைரா"
-
-#: core/Currency.cpp:251
-#, kde-format
-msgid "Nigeria"
-msgstr "நைசீரியா"
-
-#: core/Currency.cpp:252
-#, kde-format
-msgid "Niue"
-msgstr "நியூ"
-
-#: core/Currency.cpp:253
-#, kde-format
-msgid "Norfolk Islands"
-msgstr "னொர்ஃபோல்க் தீவுகள்"
-
-#: core/Currency.cpp:254
-#, kde-format
-msgid "Northern Mariana Islands"
-msgstr "வட மரியானா தீவுகள்"
-
-#: core/Currency.cpp:255
-#, kde-format
-msgid "Norway"
-msgstr "நோர்வே"
-
-#: core/Currency.cpp:256
-#, kde-format
-msgid "OMR"
-msgstr "OMR"
-
-#: core/Currency.cpp:256
-#, kde-format
-msgid "Oman"
-msgstr "ஓமான்"
-
-#: core/Currency.cpp:256
-#, kde-format
-msgid "Rial Omani"
-msgstr "ரியல் ஓமனி"
-
-#: core/Currency.cpp:257
-#, kde-format
-msgid "PKR"
-msgstr "PKR"
-
-#: core/Currency.cpp:257
-#, kde-format
-msgid "Pakistan"
-msgstr "பாகிஸ்தான்"
-
-#: core/Currency.cpp:257
-#, kde-format
-msgid "Pakistan Rupee"
-msgstr "பாகிஸ்தான் ரூபாய்"
-
-#: core/Currency.cpp:258
-#, kde-format
-msgid "Palau"
-msgstr "பலாவு"
-
-#: core/Currency.cpp:259
-#, kde-format
-msgid "Balboa"
-msgstr "பல்போவா"
-
-#: core/Currency.cpp:259
-#, kde-format
-msgid "PAB"
-msgstr "PAB"
-
-#: core/Currency.cpp:259 core/Currency.cpp:260
-#, kde-format
-msgid "Panama"
-msgstr "பனாமா"
-
-#: core/Currency.cpp:261
-#, kde-format
-msgid "Kina"
-msgstr "கினா"
-
-#: core/Currency.cpp:261
-#, kde-format
-msgid "PGK"
-msgstr "PGK"
-
-#: core/Currency.cpp:261
-#, kde-format
-msgid "Papua New Guinea"
-msgstr "பப்புவா நீயூ கினி"
-
-#: core/Currency.cpp:262
-#, kde-format
-msgid "G"
-msgstr "G"
-
-#: core/Currency.cpp:262
-#, kde-format
-msgid "Guarani"
-msgstr "குவரானி"
-
-#: core/Currency.cpp:262
-#, kde-format
-msgid "Paraguay"
-msgstr "பராகுவாய்"
-
-#: core/Currency.cpp:263
-#, kde-format
-msgid "Nuevo Sol"
-msgstr "னேவோ சால்"
-
-#: core/Currency.cpp:263
-#, kde-format
-msgid "PEN"
-msgstr "PEN"
-
-#: core/Currency.cpp:263
-#, kde-format
-msgid "Peru"
-msgstr "பெரு"
-
-#: core/Currency.cpp:264
-#, kde-format
-msgid "PHP"
-msgstr "PHP"
-
-#: core/Currency.cpp:264
-#, kde-format
-msgid "Philippine Peso"
-msgstr "பிலிப்பைன்ஸ் பெசோ"
-
-#: core/Currency.cpp:264
-#, kde-format
-msgid "Philippines"
-msgstr "பிலிப்பைன்ஸ்"
-
-#: core/Currency.cpp:265
-#, kde-format
-msgid "Pitcairn"
-msgstr "பிட்காய்ர்ன்"
-
-#: core/Currency.cpp:266
-#, kde-format
-msgid "Poland"
-msgstr "போலாந்து"
-
-#: core/Currency.cpp:266
-#, kde-format
-msgid "Zloty"
-msgstr "ஸ்லோத்யி"
-
-#: core/Currency.cpp:266
-#, kde-format
-msgid "zt"
-msgstr "zt"
-
-#: core/Currency.cpp:268
-#, kde-format
-msgid "Esc."
-msgstr "Esc."
-
-#: core/Currency.cpp:268
-#, kde-format
-msgid "Escudo"
-msgstr "எஸ்குடோ"
-
-#: core/Currency.cpp:269
-#, kde-format
-msgid "Puerto Rico"
-msgstr "போர்ட்டோ ரீக்கோ"
-
-#: core/Currency.cpp:270
-#, kde-format
-msgid "QAR"
-msgstr "QAR"
-
-#: core/Currency.cpp:270
-#, kde-format
-msgid "Qatar"
-msgstr "கத்தார்"
-
-#: core/Currency.cpp:270
-#, kde-format
-msgid "Qatari Rial"
-msgstr "கத்தாரி ரியல்"
-
-#: core/Currency.cpp:271
-#, kde-format
-msgid "LEI"
-msgstr "LEI"
-
-#: core/Currency.cpp:271
-#, kde-format
-msgid "Leu"
-msgstr "Leu"
-
-#: core/Currency.cpp:271
-#, kde-format
-msgid "Romania"
-msgstr "ருமேனியா"
-
-#: core/Currency.cpp:272
-#, kde-format
-msgid "RUR"
-msgstr "RUR"
-
-#: core/Currency.cpp:272 core/Currency.cpp:273
-#, kde-format
-msgid "Russian Federation"
-msgstr "ரஷ்யன் குடியரசு "
-
-#: core/Currency.cpp:272 core/Currency.cpp:273
-#, kde-format
-msgid "Russian Ruble"
-msgstr "ரஷ்யன் ருபல்"
-
-#: core/Currency.cpp:273
-#, kde-format
-msgid "RUB"
-msgstr "RUB"
-
-#: core/Currency.cpp:274
-#, kde-format
-msgid "RWF"
-msgstr "RWF"
-
-#: core/Currency.cpp:274
-#, kde-format
-msgid "Rwanda"
-msgstr "ருவாண்டா"
-
-#: core/Currency.cpp:274
-#, kde-format
-msgid "Rwanda Franc"
-msgstr "ருவாண்டாஃப்ராங்"
-
-#: core/Currency.cpp:275
-#, kde-format
-msgid "SHP"
-msgstr "SHP"
-
-#: core/Currency.cpp:275
-#, kde-format
-msgid "Saint Helena"
-msgstr "சென்_ெஹலெனா"
-
-#: core/Currency.cpp:275
-#, kde-format
-msgid "Saint Helena Pound"
-msgstr "சென்_ெஹலெனா பவுடு"
-
-#: core/Currency.cpp:276
-#, kde-format
-msgid "Saint Kitts And Nevis"
-msgstr "சென் கிட்சு மற்றும் நெவிசு"
-
-#: core/Currency.cpp:277
-#, kde-format
-msgid "Saint Lucia"
-msgstr "சென். லூசீயா"
-
-#: core/Currency.cpp:278
-#, kde-format
-msgid "Saint Pierre And Miquelon"
-msgstr "செயின்ட் பெய்ரி மற்றும் மெஃகிலியொன்"
-
-#: core/Currency.cpp:279
-#, kde-format
-msgid "Saint Vincent And The Grenadines"
-msgstr "சென் வின்சென்ட் மற்றும் கிரெனடைன்சு"
-
-#: core/Currency.cpp:280
-#, kde-format
-msgid "Samoa"
-msgstr "சமோவா"
-
-#: core/Currency.cpp:280
-#, kde-format
-msgid "Tala"
-msgstr "டலா"
-
-#: core/Currency.cpp:280
-#, kde-format
-msgid "WST"
-msgstr "WST"
-
-#: core/Currency.cpp:282
-#, kde-format
-msgid "Dobra"
-msgstr "டொப்ரா"
-
-#: core/Currency.cpp:282
-#, kde-format
-msgid "STD"
-msgstr "STD"
-
-#: core/Currency.cpp:282
-#, kde-format
-msgid "Sao Tome And Principe"
-msgstr "சாவோ டோமி மற்றும் பிரின்கிப்பி"
-
-#: core/Currency.cpp:283
-#, kde-format
-msgid "SAR"
-msgstr "SAR"
-
-#: core/Currency.cpp:283
-#, kde-format
-msgid "Saudi Arabia"
-msgstr "சவூதி அரேபியா"
-
-#: core/Currency.cpp:283
-#, kde-format
-msgid "Saudi Riyal"
-msgstr "சவூதி ரியால்"
-
-#: core/Currency.cpp:284
-#, kde-format
-msgid "Senegal"
-msgstr "செனகல்"
-
-#: core/Currency.cpp:285
-#, kde-format
-msgid "SCR"
-msgstr "SCR"
-
-#: core/Currency.cpp:285
-#, kde-format
-msgid "Seychelles"
-msgstr "சீசெல்சு"
-
-#: core/Currency.cpp:285
-#, kde-format
-msgid "Seychelles Rupee"
-msgstr "செஷில்ஸ் ரூபாய்"
-
-#: core/Currency.cpp:286
-#, kde-format
-msgid "Leone"
-msgstr "லியோன்"
-
-#: core/Currency.cpp:286
-#, kde-format
-msgid "SLL"
-msgstr "SLL"
-
-#: core/Currency.cpp:286
-#, kde-format
-msgid "Sierra Leone"
-msgstr "சியராலியோன்"
-
-#: core/Currency.cpp:287
-#, kde-format
-msgid "SGD"
-msgstr "SGD"
-
-#: core/Currency.cpp:287
-#, kde-format
-msgid "Singapore"
-msgstr "சிங்கப்பூர்"
-
-#: core/Currency.cpp:287
-#, kde-format
-msgid "Singapore Dollar"
-msgstr "சிங்கப்பூர் டாலர்"
-
-#: core/Currency.cpp:289
-#, kde-format
-msgid "Sk"
-msgstr "Sk"
-
-#: core/Currency.cpp:289
-#, kde-format
-msgid "Slovak Koruna"
-msgstr "ஸ்லோவாக் கொருனா"
-
-#: core/Currency.cpp:291
-#, fuzzy, kde-format
-msgid "SIT"
-msgstr "WST"
-
-#: core/Currency.cpp:291
-#, fuzzy, kde-format
-msgid "Tolar"
-msgstr "டாலர்"
-
-#: core/Currency.cpp:292
-#, kde-format
-msgid "SBD"
-msgstr "SBD"
-
-#: core/Currency.cpp:292
-#, kde-format
-msgid "Solomon Islands"
-msgstr "சாலமன் தீவுகள்"
-
-#: core/Currency.cpp:292
-#, kde-format
-msgid "Solomon Islands Dollar"
-msgstr "சாலமன் தீவுகளின் டாலர்"
-
-#: core/Currency.cpp:293
-#, kde-format
-msgid "SOS"
-msgstr "SOS"
-
-#: core/Currency.cpp:293
-#, kde-format
-msgid "Somali Shilling"
-msgstr "சோமாலி ஷில்லிங்"
-
-#: core/Currency.cpp:293
-#, kde-format
-msgid "Somalia"
-msgstr "சோமாலியா"
-
-#: core/Currency.cpp:294
-#, kde-format
-msgid "R"
-msgstr "R"
-
-#: core/Currency.cpp:294
-#, kde-format
-msgid "South Africa"
-msgstr "தென்னாபிரிக்கா"
-
-#: core/Currency.cpp:296
-#, kde-format
-msgid "Peseta"
-msgstr "பெசெட்டா"
-
-#: core/Currency.cpp:296
-#, kde-format
-msgid "Pts"
-msgstr "Pts"
-
-#: core/Currency.cpp:297
-#, kde-format
-msgid "LKR"
-msgstr "LKR"
-
-#: core/Currency.cpp:297
-#, kde-format
-msgid "Sri Lanka"
-msgstr "ஸ்ரீலங்கா"
-
-#: core/Currency.cpp:297
-#, kde-format
-msgid "Sri Lanka Rupee"
-msgstr "இலங்கை ரூபாய்"
-
-#: core/Currency.cpp:298
-#, kde-format
-msgid "SDD"
-msgstr "SDD"
-
-#: core/Currency.cpp:298
-#, kde-format
-msgid "Sudan"
-msgstr "சூடான்"
-
-#: core/Currency.cpp:298
-#, kde-format
-msgid "Sudanese Dinar"
-msgstr "சூடான் தினார்"
-
-#: core/Currency.cpp:299
-#, kde-format
-msgid "SRG"
-msgstr "SDD"
-
-#: core/Currency.cpp:299
-#, kde-format
-msgid "Suriname"
-msgstr "சூரினாம்"
-
-#: core/Currency.cpp:299
-#, kde-format
-msgid "Suriname Guilder"
-msgstr "சுரினேம் கில்டர்"
-
-#: core/Currency.cpp:300
-#, kde-format
-msgid "Svalbard And Jan Mayen"
-msgstr "ஸ்வால்பார்டு மற்றும் ஜான் மாயென்"
-
-#: core/Currency.cpp:301
-#, kde-format
-msgid "Lilangeni"
-msgstr "லிலாங்கனி"
-
-#: core/Currency.cpp:301
-#, kde-format
-msgid "SZL"
-msgstr "SZL"
-
-#: core/Currency.cpp:301
-#, kde-format
-msgid "Swaziland"
-msgstr "சுவாசிலாந்து"
-
-#: core/Currency.cpp:302
-#, kde-format
-msgid "Sweden"
-msgstr "சுவீடன்"
-
-#: core/Currency.cpp:302
-#, kde-format
-msgid "Swedish Krona"
-msgstr "ஸ்வீடிஷ் க்ரொனா"
-
-#: core/Currency.cpp:303
-#, kde-format
-msgid "SFr."
-msgstr "SFr."
-
-#: core/Currency.cpp:303
-#, kde-format
-msgid "Switzerland"
-msgstr "சுவிட்சர்லாந்து"
-
-#: core/Currency.cpp:304
-#, kde-format
-msgid "SYP"
-msgstr "SYP"
-
-#: core/Currency.cpp:304
-#, kde-format
-msgid "Syrian Arab Republic"
-msgstr "சிரியன் அரபு குடியரசு"
-
-#: core/Currency.cpp:304
-#, kde-format
-msgid "Syrian Pound"
-msgstr "சிரியன் பவுன்டு"
-
-#: core/Currency.cpp:305
-#, kde-format
-msgid "New Taiwan Dollar"
-msgstr "புது தாய்வான் டாலர்"
-
-#: core/Currency.cpp:305
-#, kde-format
-msgid "TWD"
-msgstr "TWD"
-
-#: core/Currency.cpp:305
-#, kde-format
-msgid "Taiwan, Province Of China"
-msgstr "தாய்வான்,சீன மாநிலம்"
-
-#: core/Currency.cpp:306
-#, kde-format
-msgid "Somoni"
-msgstr "சோமாலி"
-
-#: core/Currency.cpp:306
-#, kde-format
-msgid "TJS"
-msgstr "TJS"
-
-#: core/Currency.cpp:306
-#, kde-format
-msgid "Tajikistan"
-msgstr "தசிக்கிசுதான்"
-
-#: core/Currency.cpp:307
-#, kde-format
-msgid "TZS"
-msgstr "TZS"
-
-#: core/Currency.cpp:307
-#, kde-format
-msgid "Tanzania, United Republic Of"
-msgstr "ஐக்கிய குடியரசு டான்சானியா"
-
-#: core/Currency.cpp:307
-#, kde-format
-msgid "Tanzanian Shilling"
-msgstr "டான்சானியா ஷில்லிங்"
-
-#: core/Currency.cpp:308
-#, kde-format
-msgid "Baht"
-msgstr "பாட்"
-
-#: core/Currency.cpp:308
-#, kde-format
-msgid "THB"
-msgstr "THB"
-
-#: core/Currency.cpp:308
-#, kde-format
-msgid "Thailand"
-msgstr "தாய்லாந்து"
-
-#: core/Currency.cpp:309
-#, kde-format
-msgid "Togo"
-msgstr "டோகோ"
-
-#: core/Currency.cpp:310
-#, kde-format
-msgid "Tokelau"
-msgstr "டொகெலிய"
-
-#: core/Currency.cpp:311
-#, kde-format
-msgid "Pa'anga"
-msgstr "பாங்கா"
-
-#: core/Currency.cpp:311
-#, kde-format
-msgid "TOP"
-msgstr "மேல்:"
-
-#: core/Currency.cpp:311
-#, kde-format
-msgid "Tonga"
-msgstr "டொங்கா"
-
-#: core/Currency.cpp:312
-#, kde-format
-msgid "TT$"
-msgstr "TT$"
-
-#: core/Currency.cpp:312
-#, kde-format
-msgid "Trinidad And Tobago"
-msgstr "டிரிடாட் மற்றும் டொபாகோ"
-
-#: core/Currency.cpp:312
-#, kde-format
-msgid "Trinidad and Tobago Dollar"
-msgstr "டிரினாட் மற்றும் டொபகொ டாலர்"
-
-#: core/Currency.cpp:313
-#, kde-format
-msgid "TND"
-msgstr "TND"
-
-#: core/Currency.cpp:313
-#, kde-format
-msgid "Tunisia"
-msgstr "டியூனீசியா"
-
-#: core/Currency.cpp:313
-#, kde-format
-msgid "Tunisian Dinar"
-msgstr "துனிசியன் தினார்"
-
-#: core/Currency.cpp:314
-#, kde-format
-msgid "TL"
-msgstr "TL"
-
-#: core/Currency.cpp:314
-#, kde-format
-msgid "Turkey"
-msgstr "துருக்கி"
-
-#: core/Currency.cpp:314
-#, kde-format
-msgid "Turkish Lira"
-msgstr "துருகிஷ் லிர"
-
-#: core/Currency.cpp:315
-#, kde-format
-msgid "Manat"
-msgstr "மனாட்"
-
-#: core/Currency.cpp:315
-#, kde-format
-msgid "TMM"
-msgstr "TMM"
-
-#: core/Currency.cpp:315
-#, kde-format
-msgid "Turkmenistan"
-msgstr "துருக்மேனிசுதான்"
-
-#: core/Currency.cpp:316
-#, kde-format
-msgid "Turks And Caicos Islands"
-msgstr "துருக்கிஸ் மற்றும் கைசோஸ் தீவுகள்"
-
-#: core/Currency.cpp:317
-#, kde-format
-msgid "Tuvalu"
-msgstr "துவாலு"
-
-#: core/Currency.cpp:318
-#, kde-format
-msgid "UGX"
-msgstr "UGX"
-
-#: core/Currency.cpp:318
-#, kde-format
-msgid "Uganda"
-msgstr "உகாண்டா"
-
-#: core/Currency.cpp:318
-#, kde-format
-msgid "Uganda Shilling"
-msgstr "உகான்டா ஷில்லிங்"
-
-#: core/Currency.cpp:319
-#, kde-format
-msgid "Hryvnia"
-msgstr "ஹரிவினிய"
-
-#: core/Currency.cpp:319
-#, kde-format
-msgid "UAH"
-msgstr "UAH"
-
-#: core/Currency.cpp:319
-#, kde-format
-msgid "Ukraine"
-msgstr "உக்ரேயின்"
-
-#: core/Currency.cpp:320
-#, kde-format
-msgid "AED"
-msgstr "AED"
-
-#: core/Currency.cpp:320
-#, kde-format
-msgid "UAE Dirham"
-msgstr "UAE டிர்ஹாம்"
-
-#: core/Currency.cpp:320
-#, kde-format
-msgid "United Arab Emirates"
-msgstr "ஐக்கிய அராபிய எமிரேட்சு"
-
-#: core/Currency.cpp:321
-#, kde-format
-msgid "GBP"
-msgstr "GBP"
-
-#: core/Currency.cpp:321
-#, kde-format
-msgid "Pound Sterling"
-msgstr "பவுன்டு ஸ்டெர்லிங்"
-
-#: core/Currency.cpp:323
-#, kde-format
-msgid "US Dollar (Next day)"
-msgstr "US டாலர்( அடுத்த நாள்)"
-
-#: core/Currency.cpp:323
-#, kde-format
-msgid "USN"
-msgstr "USN"
-
-#: core/Currency.cpp:324
-#, kde-format
-msgid "US Dollar (Same day)"
-msgstr "US டாலர்( அதே நாள்)"
-
-#: core/Currency.cpp:324
-#, kde-format
-msgid "USS"
-msgstr "USS"
-
-#: core/Currency.cpp:325
-#, kde-format
-msgid "NU$"
-msgstr "NU$"
-
-#: core/Currency.cpp:325
-#, kde-format
-msgid "Peso Uruguayo"
-msgstr "பெசோ உராகுஏ"
-
-#: core/Currency.cpp:325
-#, kde-format
-msgid "Uruguay"
-msgstr "உருகுவே"
-
-#: core/Currency.cpp:326
-#, kde-format
-msgid "UZS"
-msgstr "UZS"
-
-#: core/Currency.cpp:326
-#, kde-format
-msgid "Uzbekistan"
-msgstr "உஸ்பெக்கிஸ்தான்"
-
-#: core/Currency.cpp:326
-#, kde-format
-msgid "Uzbekistan Sum"
-msgstr "உஸ்பெக்கிஸ்தான் சம்"
-
-#: core/Currency.cpp:327
-#, kde-format
-msgid "VUV"
-msgstr "VUV"
-
-#: core/Currency.cpp:327
-#, kde-format
-msgid "Vanuatu"
-msgstr "வனாட்டு"
-
-#: core/Currency.cpp:327
-#, kde-format
-msgid "Vatu"
-msgstr "வட்டு"
-
-#: core/Currency.cpp:328
-#, kde-format
-msgid "Bolivar"
-msgstr "பொல்வீயார்"
-
-#: core/Currency.cpp:328
-#, kde-format
-msgid "Venezuela"
-msgstr "வெனிசுலா"
-
-#: core/Currency.cpp:329
-#, kde-format
-msgid "Dong"
-msgstr "டாங்"
-
-#: core/Currency.cpp:329
-#, kde-format
-msgid "VND"
-msgstr "VND"
-
-#: core/Currency.cpp:329
-#, kde-format
-msgid "Viet Nam"
-msgstr "வியட்னாம்"
-
-#: core/Currency.cpp:330
-#, kde-format
-msgid "Virgin Islands"
-msgstr "கண்ணித் தீவு"
-
-#: core/Currency.cpp:331
-#, kde-format
-msgid "Wallis And Futuna"
-msgstr "வாலிஸ் மற்றும் புடான"
-
-#: core/Currency.cpp:332
-#, kde-format
-msgid "Western Sahara"
-msgstr "மேற்கு சஹாரா"
-
-#: core/Currency.cpp:333
-#, kde-format
-msgid "YER"
-msgstr "YER"
-
-#: core/Currency.cpp:333
-#, kde-format
-msgid "Yemen"
-msgstr "யேமன்"
-
-#: core/Currency.cpp:333
-#, kde-format
-msgid "Yemeni Rial"
-msgstr "யேமென் ரியால்"
-
-#: core/Currency.cpp:334
-#, kde-format
-msgid "YUM"
-msgstr "YUM"
-
-#: core/Currency.cpp:334
-#, kde-format
-msgid "Yugoslavia"
-msgstr "யூகோசுலாவியா"
-
-#: core/Currency.cpp:334
-#, kde-format
-msgid "Yugoslavian Dinar"
-msgstr "யூகோசுலாவியா தினார்"
-
-#: core/Currency.cpp:335
-#, kde-format
-msgid "ZMK"
-msgstr "ZMK"
-
-#: core/Currency.cpp:335
-#, kde-format
-msgid "Zambia"
-msgstr "சாம்பியா"
-
-#: core/Currency.cpp:336
-#, kde-format
-msgid "ZWD"
-msgstr "ZWD"
-
-#: core/Currency.cpp:336
-#, kde-format
-msgid "Zimbabwe"
-msgstr "ஜிம்பாப்வே"
-
-#: core/Currency.cpp:336
-#, kde-format
-msgid "Zimbabwe Dollar"
-msgstr "ஜிம்பாப்வே டாலர்"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -8478,7 +5401,7 @@ msgid "Manual"
 msgstr "கைமுறை"
 
 #: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:442
-#: ui/dialogs/LayoutPage_Float.cpp:182 ui/dialogs/LayoutPage_Float.cpp:579
+#: ui/dialogs/LayoutPage_Float.cpp:184
 #, kde-format
 msgid "Automatic"
 msgstr "தன்னியக்க"
@@ -20200,71 +17123,71 @@ msgid ""
 "and whether negative values are shown in red."
 msgstr ""
 
-#: ui/dialogs/LayoutPage_Float.cpp:284
+#: ui/dialogs/LayoutPage_Float.cpp:283
 #, kde-format
 msgid "Halves 1/2"
 msgstr "பாதிகள் 1/2"
 
-#: ui/dialogs/LayoutPage_Float.cpp:285
+#: ui/dialogs/LayoutPage_Float.cpp:284
 #, kde-format
 msgid "Quarters 1/4"
 msgstr "கால்பங்குகள் 1/4"
 
-#: ui/dialogs/LayoutPage_Float.cpp:286
+#: ui/dialogs/LayoutPage_Float.cpp:285
 #, kde-format
 msgid "Eighths 1/8"
 msgstr "எட்டிலொரு பங்குகள் 1/8"
 
-#: ui/dialogs/LayoutPage_Float.cpp:287
+#: ui/dialogs/LayoutPage_Float.cpp:286
 #, kde-format
 msgid "Sixteenths 1/16"
 msgstr "பதினாறிலொன்று பங்குகள்"
 
-#: ui/dialogs/LayoutPage_Float.cpp:288
+#: ui/dialogs/LayoutPage_Float.cpp:287
 #, kde-format
 msgid "Tenths 1/10"
 msgstr "பத்திலொரு பங்குகள் 1/10"
 
-#: ui/dialogs/LayoutPage_Float.cpp:289
+#: ui/dialogs/LayoutPage_Float.cpp:288
 #, kde-format
 msgid "Hundredths 1/100"
 msgstr "நூற்றிலொரு பங்கு 1/100"
 
-#: ui/dialogs/LayoutPage_Float.cpp:290
+#: ui/dialogs/LayoutPage_Float.cpp:289
 #, kde-format
 msgid "One digit 5/9"
 msgstr "ஒரு இலக்கம் 5/9"
 
-#: ui/dialogs/LayoutPage_Float.cpp:291
+#: ui/dialogs/LayoutPage_Float.cpp:290
 #, kde-format
 msgid "Two digits 15/22"
 msgstr "இரண்டு இலக்கங்கள் 15/22"
 
-#: ui/dialogs/LayoutPage_Float.cpp:292
+#: ui/dialogs/LayoutPage_Float.cpp:291
 #, kde-format
 msgid "Three digits 153/652"
 msgstr "மூன்று இலக்கங்கள் 153/652"
 
-#: ui/dialogs/LayoutPage_Float.cpp:322 ui/dialogs/LayoutPage_Float.cpp:323
-#: ui/dialogs/LayoutPage_Float.cpp:378 ui/dialogs/LayoutPage_Float.cpp:379
-#: ui/dialogs/LayoutPage_Float.cpp:418 ui/dialogs/LayoutPage_Float.cpp:419
+#: ui/dialogs/LayoutPage_Float.cpp:321 ui/dialogs/LayoutPage_Float.cpp:322
+#: ui/dialogs/LayoutPage_Float.cpp:377 ui/dialogs/LayoutPage_Float.cpp:378
+#: ui/dialogs/LayoutPage_Float.cpp:417 ui/dialogs/LayoutPage_Float.cpp:418
 #, kde-format
 msgid "System: "
 msgstr "கணினி:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:332
+#: ui/dialogs/LayoutPage_Float.cpp:331
 #, fuzzy, kde-format
 #| msgid " (=[mm]::ss)"
 msgid " (=[mm]:ss)"
 msgstr " (=[mm]::ss)"
 
-#: ui/dialogs/LayoutPage_Float.cpp:333
+#: ui/dialogs/LayoutPage_Float.cpp:332
 #, fuzzy, kde-format
 #| msgid " (=[hh]::mm::ss)"
 msgid " (=[hh]:mm:ss)"
 msgstr " (=[hh]::mm::ss)"
 
-#: ui/dialogs/LayoutPage_Float.cpp:334
+#: ui/dialogs/LayoutPage_Float.cpp:333
 #, fuzzy, kde-format
 #| msgid " (=[hh]::mm)"
 msgid " (=[hh]:mm)"
@@ -21090,6 +18013,1834 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "இணைப்பை திற"
+
+#~ msgid "Australia"
+#~ msgstr "ஆஸ்திரேலியா"
+
+#~ msgid "Dollar"
+#~ msgstr "டாலர்"
+
+#~ msgid "Canada"
+#~ msgstr "கனடா"
+
+#, fuzzy
+#~| msgid "Caribbea"
+#~ msgid "Caribbean"
+#~ msgstr "கரிபியா"
+
+#~ msgid "New Zealand"
+#~ msgstr "நியூசிலாந்து"
+
+#~ msgid "United States"
+#~ msgstr "ஐக்கிய அமெரிக்கா"
+
+#~ msgid "Austria"
+#~ msgstr "ஆஸ்திரியா"
+
+#~ msgid "Euro"
+#~ msgstr "யூரோ"
+
+#~ msgid "Belgium"
+#~ msgstr "பெல்சியம்"
+
+#~ msgid "Cyprus"
+#~ msgstr "சைப்ருஸ்"
+
+#~ msgid "Finland"
+#~ msgstr "பின்லாந்து"
+
+#~ msgid "France"
+#~ msgstr "பிரான்சு"
+
+#~ msgid "Germany"
+#~ msgstr "ஜெர்மனி"
+
+#~ msgid "Greece"
+#~ msgstr "கிரீஸ்"
+
+#~ msgid "Ireland"
+#~ msgstr "ஐயர்லாந்து"
+
+#~ msgid "Italy"
+#~ msgstr "இத்தாலி"
+
+#~ msgid "Latvia"
+#~ msgstr "லட்வியா"
+
+#~ msgid "Lithuania"
+#~ msgstr "லித்துவேனியா"
+
+#~ msgid "Luxembourg"
+#~ msgstr "லக்ஸம்பர்க்"
+
+#~ msgid "Malta"
+#~ msgstr "மால்டா"
+
+#~ msgid "Monaco"
+#~ msgstr "மொனாகோ"
+
+#~ msgid "Netherlands"
+#~ msgstr "நெதர்லாந்து"
+
+#~ msgid "Portugal"
+#~ msgstr "போர்த்துக்கல்"
+
+#~ msgid "San Marino"
+#~ msgstr "சான் மரீனோ"
+
+#~ msgid "Slovakia"
+#~ msgstr "சுலோவேக்கியா"
+
+#~ msgid "Slovenia"
+#~ msgstr "சுலோவீனியா"
+
+#~ msgid "Spain"
+#~ msgstr "ஸ்பெயின்"
+
+#~ msgid "Pound"
+#~ msgstr "பவுண்டு"
+
+#~ msgid "United Kingdom"
+#~ msgstr "ஐக்கிய இராஜ்ஜியம்"
+
+#~ msgid "Japan"
+#~ msgstr "ஜப்பான்"
+
+#~ msgid "Yen"
+#~ msgstr "யென்"
+
+#~ msgid "AFA"
+#~ msgstr "AFA"
+
+#, fuzzy
+#~| msgid "Afghani"
+#~ msgid "Afghani (old)"
+#~ msgstr "அப்கானி"
+
+#~ msgid "Afghanistan"
+#~ msgstr "ஆப்கானிஸ்தான்"
+
+#, fuzzy
+#~| msgid "AFA"
+#~ msgid "AFN"
+#~ msgstr "AFA"
+
+#~ msgid "Afghani"
+#~ msgstr "அப்கானி"
+
+#~ msgid "Albania"
+#~ msgstr "அல்பானியா"
+
+#~ msgid "Lek"
+#~ msgstr "லெக்"
+
+#~ msgid "Algeria"
+#~ msgstr "அல்ஜீரியா"
+
+#~ msgid "Algerian Dinar"
+#~ msgstr "அல்ஜீரிய தினார்"
+
+#~ msgid "DZD"
+#~ msgstr "DZD"
+
+#~ msgid "American Samoa"
+#~ msgstr "அமெரிக்க சமோவா"
+
+#~ msgid "US Dollar"
+#~ msgstr "யுஎஸ் டாலர்"
+
+#~ msgid "USD"
+#~ msgstr "USD"
+
+#~ msgid "Andorra"
+#~ msgstr "அன்டோரா"
+
+#~ msgid "EUR"
+#~ msgstr "EUR"
+
+#~ msgid "ADP"
+#~ msgstr "ADP"
+
+#~ msgid "Andorran Peseta"
+#~ msgstr "அன்டோர்ரன் பெசெட்டா"
+
+#~ msgid "AOA"
+#~ msgstr "AOA"
+
+#~ msgid "Angola"
+#~ msgstr "அங்கோலா"
+
+#~ msgid "Kwanza"
+#~ msgstr "கவான்சா"
+
+#~ msgid "Anguilla"
+#~ msgstr "Anguilla"
+
+#~ msgid "East Caribbean Dollar"
+#~ msgstr "கிழக்கு காரிபியான் டாலர்"
+
+#~ msgid "XCD"
+#~ msgstr "XCD"
+
+#~ msgid "Antigua And Barbuda"
+#~ msgstr "அன்டிகுவா மற்றும் பார்புடா"
+
+#~ msgid "ARS"
+#~ msgstr "ARS"
+
+#~ msgid "Argentina"
+#~ msgstr "ஆர்ஜென்டீனா"
+
+#~ msgid "Argentine Peso"
+#~ msgstr "ஆர்ஜென்டீனா பீசொ"
+
+#~ msgid "AMD"
+#~ msgstr "AMD"
+
+#~ msgid "Armenia"
+#~ msgstr "ஆர்மீனியா"
+
+#~ msgid "Armenian Dram"
+#~ msgstr "அர்மனியன் டிரம்"
+
+#~ msgid "AWG"
+#~ msgstr "AWG"
+
+#~ msgid "Aruba"
+#~ msgstr "அறுபா"
+
+#, fuzzy
+#~| msgid "Aruban Guilder"
+#~ msgid "Aruban Florin"
+#~ msgstr "அறுபன் கில்டர்"
+
+#~ msgid "AUD"
+#~ msgstr "AUD"
+
+#~ msgid "Australian Dollar"
+#~ msgstr "ஆஸ்திரேலியா பகுதி"
+
+#~ msgid "S"
+#~ msgstr "S"
+
+#~ msgid "Schilling"
+#~ msgstr "எழுத்துசரிபார்த்தல்"
+
+#~ msgid "AZM"
+#~ msgstr "AZM"
+
+#~ msgid "Azerbaijan"
+#~ msgstr "அசர்பைசான்"
+
+#~ msgid "Azerbaijanian Manat"
+#~ msgstr "அசர்பைசான் மனாட்"
+
+#~ msgid "BSD"
+#~ msgstr "BSD"
+
+#~ msgid "Bahamas"
+#~ msgstr "பகாமாசு"
+
+#~ msgid "Bahamian Dollar"
+#~ msgstr "பஹ்மியினா டாலர்"
+
+#~ msgid "BHD"
+#~ msgstr "BHD"
+
+#~ msgid "Bahrain"
+#~ msgstr "பாஹரேன்"
+
+#~ msgid "Bahraini Dinar"
+#~ msgstr "பாஹரேன்னின் டினார்"
+
+#~ msgid "BDT"
+#~ msgstr "BDT"
+
+#~ msgid "Bangladesh"
+#~ msgstr "வங்காளதேசம்"
+
+#~ msgid "Taka"
+#~ msgstr "டாகா "
+
+#~ msgid "BBD"
+#~ msgstr "BBD"
+
+#~ msgid "Barbados"
+#~ msgstr "பார்பேடோஸ்"
+
+#~ msgid "Barbados Dollar"
+#~ msgstr "பார்பேடோஸ் டாலர்"
+
+#~ msgid "Belarus"
+#~ msgstr "பெலாரூஸ்"
+
+#, fuzzy
+#~ msgid "Belarusian Ruble"
+#~ msgstr "பெலாரூசியனின் ரூப்"
+
+#~ msgid "p."
+#~ msgstr "p."
+
+#~ msgid "BF"
+#~ msgstr "BF"
+
+#~ msgid "Franc"
+#~ msgstr "பிரன்க்"
+
+#~ msgid "BZ$"
+#~ msgstr "BZ$"
+
+#~ msgid "Belize"
+#~ msgstr "பெல்சி"
+
+#~ msgid "Belize Dollar"
+#~ msgstr "பெல்சி டாலர்"
+
+#~ msgid "Benin"
+#~ msgstr "பெனின்"
+
+#~ msgid "CFA Franc BCEAO"
+#~ msgstr "CFA பிரான்சஸ் BCEAO"
+
+#~ msgid "XOF"
+#~ msgstr "XOF"
+
+#~ msgid "BMD"
+#~ msgstr "BMD"
+
+#~ msgid "Bermuda"
+#~ msgstr "பேர்மூடா"
+
+#~ msgid "Bermudian Dollar"
+#~ msgstr "டாலரின் பகுதி"
+
+#~ msgid "Bhutan"
+#~ msgstr "பொத்தான்"
+
+#~ msgid "INR"
+#~ msgstr "INR"
+
+#~ msgid "Indian Rupee"
+#~ msgstr "இந்திய ரூபாய்"
+
+#~ msgid "BTN"
+#~ msgstr "BTN"
+
+#~ msgid "Ngultrum"
+#~ msgstr "நகுல்டிரும் "
+
+#~ msgid "Bolivia"
+#~ msgstr "பொலிவியா"
+
+#~ msgid "Boliviano"
+#~ msgstr "போல்வைனவொ"
+
+#~ msgid "Bs"
+#~ msgstr "Bs"
+
+#~ msgid "BOV"
+#~ msgstr "BOV"
+
+#~ msgid "Mvdol"
+#~ msgstr "வீடோல்"
+
+#~ msgid "BAM"
+#~ msgstr "BAM"
+
+#~ msgid "Bosnia And Herzegovina"
+#~ msgstr "பொசுனியா மற்றும் கேர்சிகொவினா"
+
+#~ msgid "Convertible Marks"
+#~ msgstr "மாற்ற கூடிய மதிப்பெண்"
+
+#~ msgid "BWP"
+#~ msgstr "BWP"
+
+#~ msgid "Botswana"
+#~ msgstr "பொட்சுவானா"
+
+#~ msgid "Pula"
+#~ msgstr "புலா"
+
+#~ msgid "Bouvet Island"
+#~ msgstr "போல்வெட் தீவு"
+
+#~ msgid "NOK"
+#~ msgstr "NOK"
+
+#~ msgid "Norwegian Krone"
+#~ msgstr "நார்விஜியன் க்ரோன்"
+
+#~ msgid "Brazil"
+#~ msgstr "பிரேசில்"
+
+#~ msgid "Brazilian Real"
+#~ msgstr "பிரெசிலியன்  "
+
+#~ msgid "R$"
+#~ msgstr "R$"
+
+#~ msgid "British Indian Ocean Territory"
+#~ msgstr "இந்திய பிரிட்டிஷ் சமுத்திரம் பரப்பளவு"
+
+#~ msgid "BND"
+#~ msgstr "BND"
+
+#~ msgid "Brunei Darussalam"
+#~ msgstr "புருனெ டர்ஸ்சலாம்"
+
+#~ msgid "Brunei Dollar"
+#~ msgstr "புருனெ டாலர்"
+
+#~ msgid "BGL"
+#~ msgstr "BGL"
+
+#~ msgid "Bulgaria"
+#~ msgstr "பல்கேரியா"
+
+#~ msgid "Lev"
+#~ msgstr "Lev"
+
+#~ msgid "BGN"
+#~ msgstr "BGN"
+
+#~ msgid "Bulgarian Lev"
+#~ msgstr "பல்கேரியா லிவ்"
+
+#~ msgid "Burkina Faso"
+#~ msgstr "பர்கியன் பாசொ"
+
+#~ msgid "BIF"
+#~ msgstr "BIF"
+
+#~ msgid "Burundi"
+#~ msgstr "புருண்டி"
+
+#~ msgid "Burundi Franc"
+#~ msgstr "புருண்டி பெரானிக்"
+
+#~ msgid "Cambodia"
+#~ msgstr "கம்போடியா"
+
+#~ msgid "KHR"
+#~ msgstr "KHR"
+
+#~ msgid "Riel"
+#~ msgstr "ரைல்"
+
+#~ msgid "CFA Franc BEAC"
+#~ msgstr "CFA பிரன்க் BEAC"
+
+#~ msgid "Cameroon"
+#~ msgstr "கமரூன்"
+
+#~ msgid "XAF"
+#~ msgstr "XAF"
+
+#~ msgid "CAD"
+#~ msgstr "CAD"
+
+#~ msgid "Canadian Dollar"
+#~ msgstr "கெனடியன் டாலர்"
+
+#~ msgid "CVE"
+#~ msgstr "CVE"
+
+#~ msgid "Cape Verde"
+#~ msgstr "கேப் வெர்தி"
+
+#~ msgid "Cape Verde Escudo"
+#~ msgstr "கேப் வெர்டி இஸ்கியுடொ"
+
+#~ msgid "Cayman Islands"
+#~ msgstr "கேமான் தீவுகள்"
+
+#~ msgid "Cayman Islands Dollar"
+#~ msgstr "கேமான் தீவுகள் டாலர்"
+
+#~ msgid "KYD"
+#~ msgstr "KYD"
+
+#~ msgid "Central African Republic"
+#~ msgstr "மத்திய ஆப்பிக்க குடியரசு"
+
+#~ msgid "Chad"
+#~ msgstr "சேடு "
+
+#~ msgid "Ch$"
+#~ msgstr "Ch$"
+
+#~ msgid "Chile"
+#~ msgstr "சிலி"
+
+#~ msgid "Chilean Peso"
+#~ msgstr "சிலியன் பிசொ"
+
+#~ msgid "CLF"
+#~ msgstr "CLF"
+
+#~ msgid "Unidades de fomento"
+#~ msgstr "யுனிடெட்ஸ் டி பொர்"
+
+#~ msgid "CNY"
+#~ msgstr "CNY"
+
+#~ msgid "China"
+#~ msgstr "சீனா"
+
+#~ msgid "Yuan Renminbi"
+#~ msgstr "யுனா ரென்மின்பி"
+
+#~ msgid "Christmas Island"
+#~ msgstr "கிறிஸ்மஸ் தீவு"
+
+#~ msgid "Cocos (Keeling) Islands"
+#~ msgstr "கொகோஸ் (கீலிங்) தீவு"
+
+#~ msgid "C$"
+#~ msgstr "C$"
+
+#~ msgid "Colombia"
+#~ msgstr "கொலம்பியா"
+
+#~ msgid "Colombian Peso"
+#~ msgstr "கொலம்பியன் பிசொ"
+
+#~ msgid "Comoro Franc"
+#~ msgstr "கோமொரொ பீரான்க்"
+
+#~ msgid "Comoros"
+#~ msgstr "கோமொரொ"
+
+#~ msgid "KMF"
+#~ msgstr "KMF"
+
+#~ msgid "Congo"
+#~ msgstr "கான்கோ"
+
+#~ msgid "CDF"
+#~ msgstr "CDF"
+
+#~ msgid "Congo, The Democratic Republic Of"
+#~ msgstr "கான்கோ, ஜனநாயக குடியரசு "
+
+#~ msgid "Franc Congolais"
+#~ msgstr "பிரான்க் காங்கோலிஸ் "
+
+#~ msgid "Cook Islands"
+#~ msgstr "கோக் தீவு"
+
+#~ msgid "NZD"
+#~ msgstr "NZD"
+
+#~ msgid "New Zealand Dollar"
+#~ msgstr "நியுசிலந்து டாலர்"
+
+#~ msgid "C"
+#~ msgstr "C"
+
+#~ msgid "Costa Rica"
+#~ msgstr "கோஸ்ட ரிகா"
+
+#~ msgid "Costa Rican Colon"
+#~ msgstr "கோஸ்ட ரிகா கோலன்"
+
+#~ msgid "Cote D'Ivoire"
+#~ msgstr "கோட் டி'ஐவோரி"
+
+#~ msgid "Croatia"
+#~ msgstr "குரோவேசியா"
+
+#~ msgid "Croatian kuna"
+#~ msgstr "Croatian kuna"
+
+#~ msgid "kn"
+#~ msgstr "kn"
+
+#~ msgid "CUP"
+#~ msgstr "CUP"
+
+#~ msgid "Cuba"
+#~ msgstr "கியுபா"
+
+#~ msgid "Cuban Peso"
+#~ msgstr "கியுபா பிசோ"
+
+#~ msgid "CYP"
+#~ msgstr "CYP"
+
+#~ msgid "Cyprus Pound"
+#~ msgstr "சைப்ருஸ் பவுன்டி"
+
+#~ msgid "Czech Koruna"
+#~ msgstr "செச் கரொனா"
+
+#, fuzzy
+#~| msgid "Czech Koruna"
+#~ msgid "Czechia"
+#~ msgstr "செச் கரொனா"
+
+#~ msgid "Kc"
+#~ msgstr "Kc"
+
+#~ msgid "Danish Krone"
+#~ msgstr "டானிஸ்க் கோரோனி"
+
+#~ msgid "Denmark"
+#~ msgstr "டென்மார்க்"
+
+#~ msgid "kr"
+#~ msgstr "kr"
+
+#~ msgid "DJF"
+#~ msgstr "DJF"
+
+#~ msgid "Djibouti"
+#~ msgstr "சிபூட்டி"
+
+#~ msgid "Djibouti Franc"
+#~ msgstr "ப்ரென்சு சிபூட்டி"
+
+#~ msgid "Dominica"
+#~ msgstr "டொமினிக்கா"
+
+#~ msgid "RD$"
+#~ msgstr "RD$"
+
+#~ msgid "DOP"
+#~ msgstr "DOP"
+
+#~ msgid "Dominican Peso"
+#~ msgstr "டொமனிக்கன் பெசொ"
+
+#~ msgid "Dominican Republic"
+#~ msgstr "டொமினிக்கன் குடியரசு"
+
+#~ msgid "East Timor"
+#~ msgstr "கிழக்கு டிமோர்"
+
+#~ msgid "TPE"
+#~ msgstr "TPE"
+
+#~ msgid "Timor Escudo"
+#~ msgstr "டிமோர் எஸ்குடோ"
+
+#~ msgid "Ecuador"
+#~ msgstr "ஈக்குவேடோர்"
+
+#~ msgid "EGP"
+#~ msgstr "EGP"
+
+#~ msgid "Egypt"
+#~ msgstr "எகிப்து"
+
+#~ msgid "Egyptian Pound"
+#~ msgstr "எகிப்து பவுன்டு"
+
+#~ msgid "El Salvador"
+#~ msgstr "எல் சல்வடோர்"
+
+#~ msgid "El Salvador Colon"
+#~ msgstr "எல் சல்வடோர் கொலொன்"
+
+#~ msgid "Equatorial Guinea"
+#~ msgstr "மத்தியக்கோட்டுக் கினி"
+
+#~ msgid "ERN"
+#~ msgstr "ERN"
+
+#~ msgid "Eritrea"
+#~ msgstr "எரிட்ரேயா"
+
+#~ msgid "Nakfa"
+#~ msgstr "நக்ஃபா"
+
+#~ msgid "Estonia"
+#~ msgstr "எசுதோனியா"
+
+#~ msgid "Kroon"
+#~ msgstr "க்ரூன்"
+
+#~ msgid "ETB"
+#~ msgstr "ETB"
+
+#~ msgid "Ethiopia"
+#~ msgstr "எதியோப்பியா"
+
+#~ msgid "Ethiopian Birr"
+#~ msgstr "எதியோப்பியா பிர்"
+
+#~ msgid "FKP"
+#~ msgstr "FKP"
+
+#~ msgid "Falkland Island (Malvinas)"
+#~ msgstr "பால்க்லான்டு தீவுகள் (மால்வினாஸ்)"
+
+#~ msgid "Falkland Islands Pound"
+#~ msgstr "பால்க்லான்டு தீவு பவுன்டு"
+
+#~ msgid "Faeroe Islands"
+#~ msgstr "பேரோ தீவுகள்"
+
+#~ msgid "FJD"
+#~ msgstr "FJD"
+
+#~ msgid "Fiji"
+#~ msgstr "பிஜி"
+
+#~ msgid "Fiji Dollar"
+#~ msgstr "பிஜி டாலர்"
+
+#~ msgid "Markka"
+#~ msgstr "மரக்கா"
+
+#~ msgid "mk"
+#~ msgstr "FJD"
+
+#~ msgid "F"
+#~ msgstr "F"
+
+#~ msgid "French Guiana"
+#~ msgstr "ப்ரென்சு கைனா"
+
+#~ msgid "CFP Franc"
+#~ msgstr "CFP ப்ராங்"
+
+#~ msgid "French Polynesia"
+#~ msgstr "பிரெஞ்சு பாலினீசியா"
+
+#~ msgid "XPF"
+#~ msgstr "XPF"
+
+#~ msgid "Franc Southern Territories"
+#~ msgstr "தெற்கு பிரெஞ்ச் பிரதேசங்கள்"
+
+#~ msgid "Gabon"
+#~ msgstr "கபோன்"
+
+#~ msgid "Dalasi"
+#~ msgstr "டலாசி"
+
+#~ msgid "GMD"
+#~ msgstr "GMD"
+
+#~ msgid "Gambia"
+#~ msgstr "கம்பியா"
+
+#~ msgid "GEL"
+#~ msgstr "GEL"
+
+#~ msgid "Georgia"
+#~ msgstr "சோர்சியா"
+
+#~ msgid "Lari"
+#~ msgstr "லரி"
+
+#~ msgid "DM"
+#~ msgstr "DM"
+
+#~ msgid "German Mark"
+#~ msgstr "ஜெர்மன் மார்க்கு"
+
+#~ msgid "Cedi"
+#~ msgstr "செடி"
+
+#~ msgid "GHC"
+#~ msgstr "GHC"
+
+#~ msgid "Ghana"
+#~ msgstr "கானா"
+
+#~ msgid "GIP"
+#~ msgstr "GIP"
+
+#~ msgid "Gibraltar"
+#~ msgstr "ஜிப்ரால்ட்ர்"
+
+#~ msgid "Gibraltar Pound"
+#~ msgstr "ஜிப்ரால்ட்ர் பவுன்டு"
+
+#~ msgid "Drachma"
+#~ msgstr "டார்க்மா"
+
+#~ msgid "GRD"
+#~ msgstr "GRD"
+
+#~ msgid "DKK"
+#~ msgstr "DKK"
+
+#~ msgid "Greenland"
+#~ msgstr "கிரீன்லாந்து"
+
+#~ msgid "Grenada"
+#~ msgstr "கிரனாடா"
+
+#~ msgid "Guadeloupe"
+#~ msgstr "காஉடிலொபி"
+
+#~ msgid "Guam"
+#~ msgstr "குவாம்"
+
+#~ msgid "Guatemala"
+#~ msgstr "குவாதமாலா"
+
+#~ msgid "Q"
+#~ msgstr "Q"
+
+#~ msgid "Quetzal"
+#~ msgstr "குஎட்சால்"
+
+#~ msgid "GNF"
+#~ msgstr "GNF"
+
+#~ msgid "Guinea"
+#~ msgstr "கினி"
+
+#~ msgid "Guinea Franc"
+#~ msgstr "கினி பிரென்ச்"
+
+#~ msgid "GWP"
+#~ msgstr "GWP"
+
+#~ msgid "Guinea-Bissau"
+#~ msgstr "கினி-பீசோ"
+
+#~ msgid "Guinea-Bissau Peso"
+#~ msgstr "கினி-பிசாசு பீசோ"
+
+#~ msgid "GYD"
+#~ msgstr "GYD"
+
+#~ msgid "Guyana"
+#~ msgstr "கயானா"
+
+#~ msgid "Guyana Dollar"
+#~ msgstr "கயானா டாலர்"
+
+#~ msgid "Gourde"
+#~ msgstr "கொர்டி"
+
+#~ msgid "HTG"
+#~ msgstr "HTG"
+
+#~ msgid "Haiti"
+#~ msgstr "கையிட்டி"
+
+#~ msgid "Heard Island And McDonald Islands"
+#~ msgstr "ஹியர்டு தீவு மற்றும் மெக்டோனால்டு தீவுகள்"
+
+#~ msgid "Holy See (Vatican City State)"
+#~ msgstr "ஹொலி சி (வாடிகன் நகர மாநிலம்"
+
+#~ msgid "Honduras"
+#~ msgstr "ஹண்டுராஸ்"
+
+#~ msgid "L"
+#~ msgstr "L"
+
+#~ msgid "Lempira"
+#~ msgstr "லிம்பிர"
+
+#~ msgid "HKD"
+#~ msgstr "HKD"
+
+#~ msgid "Hong Kong"
+#~ msgstr "ஹாங்காங்"
+
+#~ msgid "Hong Kong Dollar"
+#~ msgstr "ஹாங்காங் டாலர்"
+
+#~ msgid "Forint"
+#~ msgstr "ப்ராயின்ட்"
+
+#~ msgid "Ft"
+#~ msgstr "Ft"
+
+#~ msgid "Hungary"
+#~ msgstr "ஹங்கேரி"
+
+#~ msgid "Iceland"
+#~ msgstr "ஐஸ்லாந்து"
+
+#~ msgid "Iceland Krona"
+#~ msgstr "ஐஸ்லாந்து க்ரோனா"
+
+#~ msgid "kr."
+#~ msgstr "kr."
+
+#~ msgid "India"
+#~ msgstr "இந்தியா"
+
+#~ msgid "Indonesia"
+#~ msgstr "இந்தோனேசியா"
+
+#~ msgid "Rp"
+#~ msgstr "Rp"
+
+#~ msgid "Rupiah"
+#~ msgstr "ருபியா"
+
+#~ msgid "IRR"
+#~ msgstr "IRR"
+
+#~ msgid "Iran, Islamic Republic Of"
+#~ msgstr "ஈரான், இஸ்லாமிய குடியரசு ஈரான்,"
+
+#~ msgid "Iranian Rial"
+#~ msgstr "ஈரானிய ரியால்"
+
+#~ msgid "IQD"
+#~ msgstr "IQD"
+
+#~ msgid "Iraq"
+#~ msgstr "ஈராக்"
+
+#~ msgid "Iraqi Dinar"
+#~ msgstr "ஈராக்கிய தினார்"
+
+#~ msgid "IR----"
+#~ msgstr "IR----"
+
+#~ msgid "Punt"
+#~ msgstr "புன்ட்"
+
+#~ msgid "IEX"
+#~ msgstr "IEX"
+
+#~ msgid "Pence"
+#~ msgstr "பென்ஸ்"
+
+#~ msgid "ILS"
+#~ msgstr "ILS"
+
+#~ msgid "Israel"
+#~ msgstr "இஸ்ரேல்"
+
+#~ msgid "New Israeli Sheqel"
+#~ msgstr "புது இஸ்ரேல் ஷ்க்குல்"
+
+#~ msgid "L."
+#~ msgstr "L."
+
+#~ msgid "Lira"
+#~ msgstr "லிரா"
+
+#~ msgid "J$"
+#~ msgstr "J$"
+
+#~ msgid "Jamaica"
+#~ msgstr "சமேய்க்கா"
+
+#~ msgid "Jamaican Dollar"
+#~ msgstr "சமேய்க்கா டாலர்"
+
+#~ msgid "JPY"
+#~ msgstr "JPY"
+
+#~ msgid "JOD"
+#~ msgstr "JOD"
+
+#~ msgid "Jordan"
+#~ msgstr "ஜார்டன்"
+
+#~ msgid "Jordanian Dinar"
+#~ msgstr "ஜார்டன் தினார்"
+
+#~ msgid "KZT"
+#~ msgstr "KZT"
+
+#~ msgid "Kazakhstan"
+#~ msgstr "கசகிஸ்தான்"
+
+#~ msgid "Tenge"
+#~ msgstr "டென்ஜி"
+
+#~ msgid "KES"
+#~ msgstr "KES"
+
+#~ msgid "Kenya"
+#~ msgstr "கென்யா"
+
+#~ msgid "Kenyan Shilling"
+#~ msgstr "கென்யா ஷில்லிங்"
+
+#~ msgid "Kiribati"
+#~ msgstr "கிரிபாடி"
+
+#~ msgid "KPW"
+#~ msgstr "KPW"
+
+#~ msgid "Korea, Democratic People's Republic Of"
+#~ msgstr "மக்கலின் சுதந்திர குடியரசு கொரியா "
+
+#~ msgid "North Korean Won"
+#~ msgstr "வடக் கொரிய வொன்"
+
+#~ msgid "KRW"
+#~ msgstr "KRW"
+
+#~ msgid "Korea, Republic Of"
+#~ msgstr "குடியரசு கொரிய"
+
+#~ msgid "Won"
+#~ msgstr "வோன்"
+
+#~ msgid "KWD"
+#~ msgstr "KWD"
+
+#~ msgid "Kuwait"
+#~ msgstr "குவைத்"
+
+#~ msgid "Kuwaiti Dinar"
+#~ msgstr "குவைத் தினார்"
+
+#~ msgid "KGS"
+#~ msgstr "KGS"
+
+#~ msgid "Kyrgyzstan"
+#~ msgstr "கிரைகிஸ்த்தான்"
+
+#~ msgid "Som"
+#~ msgstr "சம்"
+
+#~ msgid "Kip"
+#~ msgstr "கிப்"
+
+#~ msgid "LAK"
+#~ msgstr "Kip"
+
+#~ msgid "Lao People's Democratic Republic"
+#~ msgstr "மக்கள் சுதந்திர குடியரசு லவொ"
+
+#~ msgid "Latvian Lats"
+#~ msgstr "லட்விய லாட்கள்"
+
+#~ msgid "Ls"
+#~ msgstr "Ls"
+
+#~ msgid "LBP"
+#~ msgstr "LBP"
+
+#~ msgid "Lebanese Pound"
+#~ msgstr "லெபனானின் பவுன்டு"
+
+#~ msgid "Lebanon"
+#~ msgstr "லெபனான்"
+
+#~ msgid "Lesotho"
+#~ msgstr "லெசோதோ"
+
+#~ msgid "Rand"
+#~ msgstr "ராணடு"
+
+#~ msgid "ZAR"
+#~ msgstr "ZAR"
+
+#~ msgid "LSL"
+#~ msgstr "LSL"
+
+#~ msgid "Loti"
+#~ msgstr "லொட்டி"
+
+#~ msgid "LRD"
+#~ msgstr "LRD"
+
+#~ msgid "Liberia"
+#~ msgstr "லைபீரியா"
+
+#~ msgid "Liberian Dollar"
+#~ msgstr "லிபரியன் டாலர்"
+
+#~ msgid "LYD"
+#~ msgstr "LYD"
+
+#~ msgid "Libyan Arab Jamahiriya"
+#~ msgstr "லிபரியன் அராபிய ஜமாஹிரியா"
+
+#, fuzzy
+#~| msgid "Lybian Dinar"
+#~ msgid "Libyan Dinar"
+#~ msgstr "லிபரியன் டினார்"
+
+#~ msgid "CHF"
+#~ msgstr "CHF"
+
+#~ msgid "Liechtenstein"
+#~ msgstr "லீச்சென்சுதீன்"
+
+#~ msgid "Swiss Franc"
+#~ msgstr "ஸ்விஸ் ஃப்ராங்"
+
+#~ msgid "Lithuanian Litus"
+#~ msgstr "லிதுவேனியன் லித்திஸ்"
+
+#~ msgid "Lt"
+#~ msgstr "Lt"
+
+#~ msgid "MOP"
+#~ msgstr "MOP"
+
+#~ msgid "Macao"
+#~ msgstr "மகாவோ"
+
+#~ msgid "Pataca"
+#~ msgstr "பதாகா"
+
+#~ msgid "Denar"
+#~ msgstr "தினார்"
+
+#~ msgid "MKD"
+#~ msgstr "MKD"
+
+#~ msgid "Macedonia, The Former Yugoslav Republic Of"
+#~ msgstr "மெசெடோனிய முந்தய யுகோலோவிய குடியரசின், மெசெடோனிய"
+
+#~ msgid "MGF"
+#~ msgstr "MGF"
+
+#~ msgid "Madagascar"
+#~ msgstr "மடகாஸசுகார்"
+
+#~ msgid "Malagasy Franc"
+#~ msgstr "மாலகசி ஃப்ராங்"
+
+#~ msgid "Kwacha"
+#~ msgstr "க்குவாச்சா"
+
+#~ msgid "MWK"
+#~ msgstr "MWK"
+
+#~ msgid "Malawi"
+#~ msgstr "மலாவி"
+
+#~ msgid "MYR"
+#~ msgstr "MYR"
+
+#~ msgid "Malaysia"
+#~ msgstr "மலேசியா"
+
+#~ msgid "Malaysian Ringgit"
+#~ msgstr "மலேசியன் ரின்கிட்"
+
+#~ msgid "MVR"
+#~ msgstr "MVR"
+
+#~ msgid "Maldives"
+#~ msgstr "மாலைதீவுகள்"
+
+#~ msgid "Rufiyaa"
+#~ msgstr "ருஃப்பியா"
+
+#~ msgid "Mali"
+#~ msgstr "மாலி"
+
+#, fuzzy
+#~| msgid "EUR"
+#~ msgid "EURO"
+#~ msgstr "EUR"
+
+#~ msgid "MTL"
+#~ msgstr "MTL"
+
+#~ msgid "Maltese Lira"
+#~ msgstr "மால்டீசு லிரா"
+
+#~ msgid "Marshall Islands"
+#~ msgstr "மார்சல் தீவுகள்"
+
+#~ msgid "Martinique"
+#~ msgstr "மார்டினீக்கு"
+
+#~ msgid "MRO"
+#~ msgstr "MRO"
+
+#~ msgid "Mauritania"
+#~ msgstr "மொரிசியேனியா"
+
+#~ msgid "Ouguiya"
+#~ msgstr "ஓயுங்கியா"
+
+#~ msgid "MUR"
+#~ msgstr "MUR"
+
+#~ msgid "Mauritius"
+#~ msgstr "மொரீசியசு"
+
+#~ msgid "Mauritius Rupee"
+#~ msgstr "மொரீசியஸ் ரூபாய்"
+
+#~ msgid "Mayotte"
+#~ msgstr "மயோட்டி"
+
+#~ msgid "MXN"
+#~ msgstr "MXN"
+
+#~ msgid "Mexican Peso"
+#~ msgstr "மெக்சிகன் பெசொ"
+
+#~ msgid "Mexico"
+#~ msgstr "மெக்ஸிகோ"
+
+#~ msgid "MXV"
+#~ msgstr "MXV"
+
+#~ msgid "Mexican Unidad de Inversion (UDI)"
+#~ msgstr "மெக்சிகன் உனைடட் டீ இண்வர்ஷன்"
+
+#~ msgid "Micronesia, Federated States Of"
+#~ msgstr "மைக்ரோனீசியக் குடியரசு மாநிலங்கள்"
+
+#~ msgid "MDL"
+#~ msgstr "MDL"
+
+#~ msgid "Moldova, Republic Of"
+#~ msgstr "மொல்டொவிய குடியரசு"
+
+#~ msgid "Moldovan Leu"
+#~ msgstr "மொல்டொவன் லியு"
+
+#~ msgid "MNT"
+#~ msgstr "MNT"
+
+#~ msgid "Mongolia"
+#~ msgstr "மொங்கோலியா"
+
+#~ msgid "Tugrik"
+#~ msgstr "டக்ரிக்"
+
+#~ msgid "Montserrat"
+#~ msgstr "மொன்சாராட்"
+
+#~ msgid "MAD"
+#~ msgstr "MAD"
+
+#~ msgid "Moroccan Dirham"
+#~ msgstr "மொரோக்கென் திர்ஹம்"
+
+#~ msgid "Morocco"
+#~ msgstr "மொரோக்கோ"
+
+#~ msgid "MZM"
+#~ msgstr "MZM"
+
+#~ msgid "Metical"
+#~ msgstr "மெட்டிகல்"
+
+#~ msgid "Mozambique"
+#~ msgstr "மொசாம்பிக்"
+
+#~ msgid "Kyat"
+#~ msgstr "கயட்"
+
+#~ msgid "MMK"
+#~ msgstr "MMK"
+
+#~ msgid "Myanmar"
+#~ msgstr "மியான்மர் "
+
+#~ msgid "Namibia"
+#~ msgstr "நாமிபியா"
+
+#~ msgid "NAD"
+#~ msgstr "NAD"
+
+#~ msgid "Namibia Dollar"
+#~ msgstr "நாமிபியா டாலர் "
+
+#~ msgid "Nauru"
+#~ msgstr "நவுரு"
+
+#~ msgid "NPR"
+#~ msgstr "NPR"
+
+#~ msgid "Nepal"
+#~ msgstr "நேபாளம்"
+
+#~ msgid "Nepalese Rupee"
+#~ msgstr "நேபாளிய ரூபாய்"
+
+#~ msgid "Guilder"
+#~ msgstr "கில்டர்"
+
+#~ msgid "fl"
+#~ msgstr "fl"
+
+#~ msgid "ANG"
+#~ msgstr "ANG"
+
+#, fuzzy
+#~| msgid "Netherlands Antillan Guilder"
+#~ msgid "Netherlands Antillean Guilder"
+#~ msgstr "நெதர்லாந்து அதிலியன் கில்டர்"
+
+#~ msgid "Netherlands Antilles"
+#~ msgstr "நெதர்லாந்து அன்டில்சு"
+
+#~ msgid "New Caledonia"
+#~ msgstr "புதிய கலிடோனியா"
+
+#~ msgid "Cordoba Oro"
+#~ msgstr "கோர்டோபா ஓரொ"
+
+#~ msgid "NIO"
+#~ msgstr "NIO"
+
+#~ msgid "Nicaragua"
+#~ msgstr "நிக்கராகுவா"
+
+#~ msgid "Niger"
+#~ msgstr "நைகர்"
+
+#~ msgid "NGN"
+#~ msgstr "NGN"
+
+#~ msgid "Naira"
+#~ msgstr "னைரா"
+
+#~ msgid "Nigeria"
+#~ msgstr "நைசீரியா"
+
+#~ msgid "Niue"
+#~ msgstr "நியூ"
+
+#~ msgid "Norfolk Islands"
+#~ msgstr "னொர்ஃபோல்க் தீவுகள்"
+
+#~ msgid "Northern Mariana Islands"
+#~ msgstr "வட மரியானா தீவுகள்"
+
+#~ msgid "Norway"
+#~ msgstr "நோர்வே"
+
+#~ msgid "OMR"
+#~ msgstr "OMR"
+
+#~ msgid "Oman"
+#~ msgstr "ஓமான்"
+
+#~ msgid "Rial Omani"
+#~ msgstr "ரியல் ஓமனி"
+
+#~ msgid "PKR"
+#~ msgstr "PKR"
+
+#~ msgid "Pakistan"
+#~ msgstr "பாகிஸ்தான்"
+
+#~ msgid "Pakistan Rupee"
+#~ msgstr "பாகிஸ்தான் ரூபாய்"
+
+#~ msgid "Palau"
+#~ msgstr "பலாவு"
+
+#~ msgid "Balboa"
+#~ msgstr "பல்போவா"
+
+#~ msgid "PAB"
+#~ msgstr "PAB"
+
+#~ msgid "Panama"
+#~ msgstr "பனாமா"
+
+#~ msgid "Kina"
+#~ msgstr "கினா"
+
+#~ msgid "PGK"
+#~ msgstr "PGK"
+
+#~ msgid "Papua New Guinea"
+#~ msgstr "பப்புவா நீயூ கினி"
+
+#~ msgid "G"
+#~ msgstr "G"
+
+#~ msgid "Guarani"
+#~ msgstr "குவரானி"
+
+#~ msgid "Paraguay"
+#~ msgstr "பராகுவாய்"
+
+#~ msgid "Nuevo Sol"
+#~ msgstr "னேவோ சால்"
+
+#~ msgid "PEN"
+#~ msgstr "PEN"
+
+#~ msgid "Peru"
+#~ msgstr "பெரு"
+
+#~ msgid "PHP"
+#~ msgstr "PHP"
+
+#~ msgid "Philippine Peso"
+#~ msgstr "பிலிப்பைன்ஸ் பெசோ"
+
+#~ msgid "Philippines"
+#~ msgstr "பிலிப்பைன்ஸ்"
+
+#~ msgid "Pitcairn"
+#~ msgstr "பிட்காய்ர்ன்"
+
+#~ msgid "Poland"
+#~ msgstr "போலாந்து"
+
+#~ msgid "Zloty"
+#~ msgstr "ஸ்லோத்யி"
+
+#~ msgid "zt"
+#~ msgstr "zt"
+
+#~ msgid "Esc."
+#~ msgstr "Esc."
+
+#~ msgid "Escudo"
+#~ msgstr "எஸ்குடோ"
+
+#~ msgid "Puerto Rico"
+#~ msgstr "போர்ட்டோ ரீக்கோ"
+
+#~ msgid "QAR"
+#~ msgstr "QAR"
+
+#~ msgid "Qatar"
+#~ msgstr "கத்தார்"
+
+#~ msgid "Qatari Rial"
+#~ msgstr "கத்தாரி ரியல்"
+
+#~ msgid "LEI"
+#~ msgstr "LEI"
+
+#~ msgid "Leu"
+#~ msgstr "Leu"
+
+#~ msgid "Romania"
+#~ msgstr "ருமேனியா"
+
+#~ msgid "RUR"
+#~ msgstr "RUR"
+
+#~ msgid "Russian Federation"
+#~ msgstr "ரஷ்யன் குடியரசு "
+
+#~ msgid "Russian Ruble"
+#~ msgstr "ரஷ்யன் ருபல்"
+
+#~ msgid "RUB"
+#~ msgstr "RUB"
+
+#~ msgid "RWF"
+#~ msgstr "RWF"
+
+#~ msgid "Rwanda"
+#~ msgstr "ருவாண்டா"
+
+#~ msgid "Rwanda Franc"
+#~ msgstr "ருவாண்டாஃப்ராங்"
+
+#~ msgid "SHP"
+#~ msgstr "SHP"
+
+#~ msgid "Saint Helena"
+#~ msgstr "சென்_ெஹலெனா"
+
+#~ msgid "Saint Helena Pound"
+#~ msgstr "சென்_ெஹலெனா பவுடு"
+
+#~ msgid "Saint Kitts And Nevis"
+#~ msgstr "சென் கிட்சு மற்றும் நெவிசு"
+
+#~ msgid "Saint Lucia"
+#~ msgstr "சென். லூசீயா"
+
+#~ msgid "Saint Pierre And Miquelon"
+#~ msgstr "செயின்ட் பெய்ரி மற்றும் மெஃகிலியொன்"
+
+#~ msgid "Saint Vincent And The Grenadines"
+#~ msgstr "சென் வின்சென்ட் மற்றும் கிரெனடைன்சு"
+
+#~ msgid "Samoa"
+#~ msgstr "சமோவா"
+
+#~ msgid "Tala"
+#~ msgstr "டலா"
+
+#~ msgid "WST"
+#~ msgstr "WST"
+
+#~ msgid "Dobra"
+#~ msgstr "டொப்ரா"
+
+#~ msgid "STD"
+#~ msgstr "STD"
+
+#~ msgid "Sao Tome And Principe"
+#~ msgstr "சாவோ டோமி மற்றும் பிரின்கிப்பி"
+
+#~ msgid "SAR"
+#~ msgstr "SAR"
+
+#~ msgid "Saudi Arabia"
+#~ msgstr "சவூதி அரேபியா"
+
+#~ msgid "Saudi Riyal"
+#~ msgstr "சவூதி ரியால்"
+
+#~ msgid "Senegal"
+#~ msgstr "செனகல்"
+
+#~ msgid "SCR"
+#~ msgstr "SCR"
+
+#~ msgid "Seychelles"
+#~ msgstr "சீசெல்சு"
+
+#~ msgid "Seychelles Rupee"
+#~ msgstr "செஷில்ஸ் ரூபாய்"
+
+#~ msgid "Leone"
+#~ msgstr "லியோன்"
+
+#~ msgid "SLL"
+#~ msgstr "SLL"
+
+#~ msgid "Sierra Leone"
+#~ msgstr "சியராலியோன்"
+
+#~ msgid "SGD"
+#~ msgstr "SGD"
+
+#~ msgid "Singapore"
+#~ msgstr "சிங்கப்பூர்"
+
+#~ msgid "Singapore Dollar"
+#~ msgstr "சிங்கப்பூர் டாலர்"
+
+#~ msgid "Sk"
+#~ msgstr "Sk"
+
+#~ msgid "Slovak Koruna"
+#~ msgstr "ஸ்லோவாக் கொருனா"
+
+#, fuzzy
+#~ msgid "SIT"
+#~ msgstr "WST"
+
+#, fuzzy
+#~ msgid "Tolar"
+#~ msgstr "டாலர்"
+
+#~ msgid "SBD"
+#~ msgstr "SBD"
+
+#~ msgid "Solomon Islands"
+#~ msgstr "சாலமன் தீவுகள்"
+
+#~ msgid "Solomon Islands Dollar"
+#~ msgstr "சாலமன் தீவுகளின் டாலர்"
+
+#~ msgid "SOS"
+#~ msgstr "SOS"
+
+#~ msgid "Somali Shilling"
+#~ msgstr "சோமாலி ஷில்லிங்"
+
+#~ msgid "Somalia"
+#~ msgstr "சோமாலியா"
+
+#~ msgid "R"
+#~ msgstr "R"
+
+#~ msgid "South Africa"
+#~ msgstr "தென்னாபிரிக்கா"
+
+#~ msgid "Peseta"
+#~ msgstr "பெசெட்டா"
+
+#~ msgid "Pts"
+#~ msgstr "Pts"
+
+#~ msgid "LKR"
+#~ msgstr "LKR"
+
+#~ msgid "Sri Lanka"
+#~ msgstr "ஸ்ரீலங்கா"
+
+#~ msgid "Sri Lanka Rupee"
+#~ msgstr "இலங்கை ரூபாய்"
+
+#~ msgid "SDD"
+#~ msgstr "SDD"
+
+#~ msgid "Sudan"
+#~ msgstr "சூடான்"
+
+#~ msgid "Sudanese Dinar"
+#~ msgstr "சூடான் தினார்"
+
+#~ msgid "SRG"
+#~ msgstr "SDD"
+
+#~ msgid "Suriname"
+#~ msgstr "சூரினாம்"
+
+#~ msgid "Suriname Guilder"
+#~ msgstr "சுரினேம் கில்டர்"
+
+#~ msgid "Svalbard And Jan Mayen"
+#~ msgstr "ஸ்வால்பார்டு மற்றும் ஜான் மாயென்"
+
+#~ msgid "Lilangeni"
+#~ msgstr "லிலாங்கனி"
+
+#~ msgid "SZL"
+#~ msgstr "SZL"
+
+#~ msgid "Swaziland"
+#~ msgstr "சுவாசிலாந்து"
+
+#~ msgid "Sweden"
+#~ msgstr "சுவீடன்"
+
+#~ msgid "Swedish Krona"
+#~ msgstr "ஸ்வீடிஷ் க்ரொனா"
+
+#~ msgid "SFr."
+#~ msgstr "SFr."
+
+#~ msgid "Switzerland"
+#~ msgstr "சுவிட்சர்லாந்து"
+
+#~ msgid "SYP"
+#~ msgstr "SYP"
+
+#~ msgid "Syrian Arab Republic"
+#~ msgstr "சிரியன் அரபு குடியரசு"
+
+#~ msgid "Syrian Pound"
+#~ msgstr "சிரியன் பவுன்டு"
+
+#~ msgid "New Taiwan Dollar"
+#~ msgstr "புது தாய்வான் டாலர்"
+
+#~ msgid "TWD"
+#~ msgstr "TWD"
+
+#~ msgid "Taiwan, Province Of China"
+#~ msgstr "தாய்வான்,சீன மாநிலம்"
+
+#~ msgid "Somoni"
+#~ msgstr "சோமாலி"
+
+#~ msgid "TJS"
+#~ msgstr "TJS"
+
+#~ msgid "Tajikistan"
+#~ msgstr "தசிக்கிசுதான்"
+
+#~ msgid "TZS"
+#~ msgstr "TZS"
+
+#~ msgid "Tanzania, United Republic Of"
+#~ msgstr "ஐக்கிய குடியரசு டான்சானியா"
+
+#~ msgid "Tanzanian Shilling"
+#~ msgstr "டான்சானியா ஷில்லிங்"
+
+#~ msgid "Baht"
+#~ msgstr "பாட்"
+
+#~ msgid "THB"
+#~ msgstr "THB"
+
+#~ msgid "Thailand"
+#~ msgstr "தாய்லாந்து"
+
+#~ msgid "Togo"
+#~ msgstr "டோகோ"
+
+#~ msgid "Tokelau"
+#~ msgstr "டொகெலிய"
+
+#~ msgid "Pa'anga"
+#~ msgstr "பாங்கா"
+
+#~ msgid "TOP"
+#~ msgstr "மேல்:"
+
+#~ msgid "Tonga"
+#~ msgstr "டொங்கா"
+
+#~ msgid "TT$"
+#~ msgstr "TT$"
+
+#~ msgid "Trinidad And Tobago"
+#~ msgstr "டிரிடாட் மற்றும் டொபாகோ"
+
+#~ msgid "Trinidad and Tobago Dollar"
+#~ msgstr "டிரினாட் மற்றும் டொபகொ டாலர்"
+
+#~ msgid "TND"
+#~ msgstr "TND"
+
+#~ msgid "Tunisia"
+#~ msgstr "டியூனீசியா"
+
+#~ msgid "Tunisian Dinar"
+#~ msgstr "துனிசியன் தினார்"
+
+#~ msgid "TL"
+#~ msgstr "TL"
+
+#~ msgid "Turkey"
+#~ msgstr "துருக்கி"
+
+#~ msgid "Turkish Lira"
+#~ msgstr "துருகிஷ் லிர"
+
+#~ msgid "Manat"
+#~ msgstr "மனாட்"
+
+#~ msgid "TMM"
+#~ msgstr "TMM"
+
+#~ msgid "Turkmenistan"
+#~ msgstr "துருக்மேனிசுதான்"
+
+#~ msgid "Turks And Caicos Islands"
+#~ msgstr "துருக்கிஸ் மற்றும் கைசோஸ் தீவுகள்"
+
+#~ msgid "Tuvalu"
+#~ msgstr "துவாலு"
+
+#~ msgid "UGX"
+#~ msgstr "UGX"
+
+#~ msgid "Uganda"
+#~ msgstr "உகாண்டா"
+
+#~ msgid "Uganda Shilling"
+#~ msgstr "உகான்டா ஷில்லிங்"
+
+#~ msgid "Hryvnia"
+#~ msgstr "ஹரிவினிய"
+
+#~ msgid "UAH"
+#~ msgstr "UAH"
+
+#~ msgid "Ukraine"
+#~ msgstr "உக்ரேயின்"
+
+#~ msgid "AED"
+#~ msgstr "AED"
+
+#~ msgid "UAE Dirham"
+#~ msgstr "UAE டிர்ஹாம்"
+
+#~ msgid "United Arab Emirates"
+#~ msgstr "ஐக்கிய அராபிய எமிரேட்சு"
+
+#~ msgid "GBP"
+#~ msgstr "GBP"
+
+#~ msgid "Pound Sterling"
+#~ msgstr "பவுன்டு ஸ்டெர்லிங்"
+
+#~ msgid "US Dollar (Next day)"
+#~ msgstr "US டாலர்( அடுத்த நாள்)"
+
+#~ msgid "USN"
+#~ msgstr "USN"
+
+#~ msgid "US Dollar (Same day)"
+#~ msgstr "US டாலர்( அதே நாள்)"
+
+#~ msgid "USS"
+#~ msgstr "USS"
+
+#~ msgid "NU$"
+#~ msgstr "NU$"
+
+#~ msgid "Peso Uruguayo"
+#~ msgstr "பெசோ உராகுஏ"
+
+#~ msgid "Uruguay"
+#~ msgstr "உருகுவே"
+
+#~ msgid "UZS"
+#~ msgstr "UZS"
+
+#~ msgid "Uzbekistan"
+#~ msgstr "உஸ்பெக்கிஸ்தான்"
+
+#~ msgid "Uzbekistan Sum"
+#~ msgstr "உஸ்பெக்கிஸ்தான் சம்"
+
+#~ msgid "VUV"
+#~ msgstr "VUV"
+
+#~ msgid "Vanuatu"
+#~ msgstr "வனாட்டு"
+
+#~ msgid "Vatu"
+#~ msgstr "வட்டு"
+
+#~ msgid "Bolivar"
+#~ msgstr "பொல்வீயார்"
+
+#~ msgid "Venezuela"
+#~ msgstr "வெனிசுலா"
+
+#~ msgid "Dong"
+#~ msgstr "டாங்"
+
+#~ msgid "VND"
+#~ msgstr "VND"
+
+#~ msgid "Viet Nam"
+#~ msgstr "வியட்னாம்"
+
+#~ msgid "Virgin Islands"
+#~ msgstr "கண்ணித் தீவு"
+
+#~ msgid "Wallis And Futuna"
+#~ msgstr "வாலிஸ் மற்றும் புடான"
+
+#~ msgid "Western Sahara"
+#~ msgstr "மேற்கு சஹாரா"
+
+#~ msgid "YER"
+#~ msgstr "YER"
+
+#~ msgid "Yemen"
+#~ msgstr "யேமன்"
+
+#~ msgid "Yemeni Rial"
+#~ msgstr "யேமென் ரியால்"
+
+#~ msgid "YUM"
+#~ msgstr "YUM"
+
+#~ msgid "Yugoslavia"
+#~ msgstr "யூகோசுலாவியா"
+
+#~ msgid "Yugoslavian Dinar"
+#~ msgstr "யூகோசுலாவியா தினார்"
+
+#~ msgid "ZMK"
+#~ msgstr "ZMK"
+
+#~ msgid "Zambia"
+#~ msgstr "சாம்பியா"
+
+#~ msgid "ZWD"
+#~ msgstr "ZWD"
+
+#~ msgid "Zimbabwe"
+#~ msgstr "ஜிம்பாப்வே"
+
+#~ msgid "Zimbabwe Dollar"
+#~ msgstr "ஜிம்பாப்வே டாலர்"
 
 #, fuzzy
 #~ msgid "Resets to the default format"
