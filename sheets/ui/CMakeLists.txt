@@ -3,6 +3,7 @@ set (actions_DIR_SRCS
     actions/CellAction.cpp
     actions/Actions.cpp
     actions/AdjustRowCol.cpp
+    actions/Align.cpp
     actions/AutoSum.cpp
     actions/Border.cpp
     actions/Comment.cpp

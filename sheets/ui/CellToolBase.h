@@ -159,14 +159,6 @@ protected Q_SLOTS:
     void font(const QString& font);
     void fontSize(int size);
     void changeTextColor(const KoColor &);
-    // -- horizontal alignment actions --
-    void alignLeft(bool enable);
-    void alignRight(bool enable);
-    void alignCenter(bool enable);
-    // -- vertical alignment actions --
-    void alignTop(bool enable);
-    void alignMiddle(bool enable);
-    void alignBottom(bool enable);
     // -- border actions --
     void borderColor(const KoColor &);
     // -- text layout actions --

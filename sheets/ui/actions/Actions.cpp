@@ -7,6 +7,7 @@
 #include "Actions.h"
 
 #include "AdjustRowCol.h"
+#include "Align.h"
 #include "AutoSum.h"
 #include "Border.h"
 #include "Comment.h"
@@ -59,6 +60,13 @@ void Actions::createActions()
     addAction(new AdjustRowCol(this, false, true));
     addAction(new ResizeRowCol(this, false));
     addAction(new ResizeRowCol(this, true));
+    // Align
+    addAction(new AlignLeft(this));
+    addAction(new AlignRight(this));
+    addAction(new AlignCenter(this));
+    addAction(new AlignTop(this));
+    addAction(new AlignBottom(this));
+    addAction(new AlignMiddle(this));
     // AutoSum
     addAction(new AutoSum(this));
     // Border

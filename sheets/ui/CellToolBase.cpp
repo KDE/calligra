@@ -202,54 +202,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("textColor", colorAction);
     connect(colorAction, &KoColorPopupAction::colorChanged, this, &CellToolBase::changeTextColor);
 
-    // -- horizontal alignment actions --
-
-    QActionGroup* groupAlign = new QActionGroup(this);
-    action = new KToggleAction(koIcon("format-justify-left"), i18n("Align Left"), this);
-    action->setIconText(i18n("Left"));
-    addAction("alignLeft", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::alignLeft);
-    action->setToolTip(i18n("Left justify the cell contents"));
-    action->setActionGroup(groupAlign);
-
-    action = new KToggleAction(koIcon("format-justify-center"), i18n("Align Center"), this);
-    action->setIconText(i18n("Center"));
-    addAction("alignCenter", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::alignCenter);
-    action->setToolTip(i18n("Center the cell contents"));
-    action->setActionGroup(groupAlign);
-
-    action = new KToggleAction(koIcon("format-justify-right"), i18n("Align Right"), this);
-    action->setIconText(i18n("Right"));
-    addAction("alignRight", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::alignRight);
-    action->setToolTip(i18n("Right justify the cell contents"));
-    action->setActionGroup(groupAlign);
-
-    // -- vertical alignment actions --
-
-    QActionGroup* groupPos = new QActionGroup(this);
-    action = new KToggleAction(koIcon("format-align-vertical-top"), i18n("Align Top"), this);
-    action->setIconText(i18n("Top"));
-    addAction("alignTop", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::alignTop);
-    action->setToolTip(i18n("Align cell contents along the top of the cell"));
-    action->setActionGroup(groupPos);
-
-    action = new KToggleAction(koIcon("format-align-vertical-center"), i18n("Align Middle"), this);
-    action->setIconText(i18n("Middle"));
-    addAction("alignMiddle", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::alignMiddle);
-    action->setToolTip(i18n("Align cell contents centered in the cell"));
-    action->setActionGroup(groupPos);
-
-    action = new KToggleAction(koIcon("format-align-vertical-bottom"), i18n("Align Bottom"), this);
-    action->setIconText(i18n("Bottom"));
-    addAction("alignBottom", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::alignBottom);
-    action->setToolTip(i18n("Align cell contents along the bottom of the cell"));
-    action->setActionGroup(groupPos);
-
     // -- border actions --
 
     colorAction = new KoColorPopupAction(this);
@@ -1447,78 +1399,6 @@ void CellToolBase::changeTextColor(const KoColor &color)
     command->setText(kundo2_i18n("Change Text Color"));
     Style s;
     s.setFontColor(color.toQColor());
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::alignLeft(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Horizontal Alignment"));
-    Style s;
-    s.setHAlign(enable ? Style::Left : Style::HAlignUndefined);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::alignRight(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Horizontal Alignment"));
-    Style s;
-    s.setHAlign(enable ? Style::Right : Style::HAlignUndefined);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::alignCenter(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Horizontal Alignment"));
-    Style s;
-    s.setHAlign(enable ? Style::Center : Style::HAlignUndefined);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::alignTop(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Vertical Alignment"));
-    Style s;
-    s.setVAlign(enable ? Style::Top : Style::VAlignUndefined);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::alignBottom(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Vertical Alignment"));
-    Style s;
-    s.setVAlign(enable ? Style::Bottom : Style::VAlignUndefined);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::alignMiddle(bool enable)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Vertical Alignment"));
-    Style s;
-    s.setVAlign(enable ? Style::Middle : Style::VAlignUndefined);
     command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
