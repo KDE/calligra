@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-27 00:46+0000\n"
+"POT-Creation-Date: 2022-11-28 00:49+0000\n"
 "PO-Revision-Date: 2008-07-04 16:32+0300\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -885,7 +885,7 @@ msgstr "Numurs"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:163 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:164 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -945,7 +945,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "IMABS(\"-i\") atgriež 1"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:388 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:299 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "Datums"
@@ -12463,7 +12463,7 @@ msgstr "Noslēpt tabulu"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:188
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:189
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, fuzzy, kde-format
 msgid "Font"
@@ -12919,15 +12919,13 @@ msgid "Up"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:301 ui/CellToolBase.cpp:222
-#: ui/CellToolBase.cpp:261 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:301 ui/dialogs/PositionWidget.ui:75
 #, fuzzy, kde-format
 msgid "Right"
 msgstr "Svars:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:302 ui/CellToolBase.cpp:208
-#: ui/CellToolBase.cpp:255 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:302 ui/dialogs/PositionWidget.ui:61
 #, fuzzy, kde-format
 msgid "Left"
 msgstr "&Teksts"
@@ -12943,10 +12941,10 @@ msgstr "Ievietot Kolonu(as)"
 #. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/CellToolBase.cpp:285 ui/dialogs/DatabaseDialog.cpp:711
-#: ui/dialogs/DatabaseDialog.cpp:712 ui/dialogs/DocumentSettingsDialog.cpp:124
-#: ui/dialogs/pivotfilters.ui:36 ui/dialogs/pivotoptions.ui:95
-#: ui/dialogs/pivotoptions.ui:104 ui/dialogs/pivotsubtotals.ui:21
+#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
+#: ui/dialogs/DocumentSettingsDialog.cpp:124 ui/dialogs/pivotfilters.ui:36
+#: ui/dialogs/pivotoptions.ui:95 ui/dialogs/pivotoptions.ui:104
+#: ui/dialogs/pivotsubtotals.ui:21
 #, kde-format
 msgid "None"
 msgstr "Nav"
@@ -13809,7 +13807,7 @@ msgstr ""
 "Jūs taisaties dzēst aktīvo tabulu.\n"
 "Vai vēlaties turpināt?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1409
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1325
 #, fuzzy, kde-format
 msgid "Enter name:"
 msgstr "Internets"
@@ -13869,13 +13867,13 @@ msgstr "Skaits: %1"
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1483
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1399
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Mainīt tekstu"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1711
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1448
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
@@ -13883,756 +13881,573 @@ msgstr "Fona Krāsa"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase.cpp:1568 ui/CellToolBase.cpp:1584 ui/CellToolBase.cpp:1600
-#: ui/CellToolBase.cpp:1613 ui/CellToolBase.cpp:1626 ui/CellToolBase.cpp:1643
-#: ui/CellToolBase.cpp:1661 ui/CellToolBase_p.cpp:723
+#: ui/CellToolBase_p.cpp:710
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Mainīt apmales krāsu"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:163
 #, kde-format
 msgid "Cell Format..."
 msgstr "Rūtiņas Formāts..."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:168
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "Style Manager..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr ""
 
-#: ui/CellToolBase.cpp:174 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:175 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, fuzzy, kde-format
 msgid "Style"
 msgstr "Stils:"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:177
 #, fuzzy, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "Pārvietoties pa kreisi"
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:180
 #, fuzzy, kde-format
 msgid "Create Style From Cell..."
 msgstr "Rūtiņas stils"
 
-#: ui/CellToolBase.cpp:180
+#: ui/CellToolBase.cpp:181
 #, fuzzy, kde-format
 msgid "Style From Cell"
 msgstr "Rūtiņas stils"
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:184
 #, fuzzy, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "Pārvietoties pa kreisi"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:188
 #, fuzzy, kde-format
 msgid "Select Font..."
 msgstr "Izvēlēties Fontu"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Select Font Size"
 msgstr "Fonta Izmēra Izvēle"
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:194
 #, fuzzy, kde-format
 #| msgid "Select Font Size"
 msgid "Font Size"
 msgstr "Fonta Izmēra Izvēle"
 
-#: ui/CellToolBase.cpp:199
+#: ui/CellToolBase.cpp:200
 #, kde-format
 msgid "Text Color"
 msgstr "Teksta Krāsa"
 
-#: ui/CellToolBase.cpp:200
+#: ui/CellToolBase.cpp:201
 #, fuzzy, kde-format
 msgid "Set the text color"
 msgstr "Mainīt pamata krāsu"
 
-#: ui/CellToolBase.cpp:207
-#, fuzzy, kde-format
-msgid "Align Left"
-msgstr "Izlīdzināt pa kreisi"
-
-#: ui/CellToolBase.cpp:211
-#, fuzzy, kde-format
-msgid "Left justify the cell contents"
-msgstr "Izņemt komentāru"
-
-#: ui/CellToolBase.cpp:214
-#, fuzzy, kde-format
-msgid "Align Center"
-msgstr "Izlīdzināt pa vidu"
-
-#. i18n: ectx: property (text), widget (QRadioButton, center)
-#: ui/CellToolBase.cpp:215 ui/dialogs/PositionWidget.ui:68
-#, fuzzy, kde-format
-msgid "Center"
-msgstr "Izlīdzināt pa vidu"
-
-#: ui/CellToolBase.cpp:218
-#, fuzzy, kde-format
-msgid "Center the cell contents"
-msgstr "Izņemt komentāru"
-
-#: ui/CellToolBase.cpp:221
-#, fuzzy, kde-format
-msgid "Align Right"
-msgstr "Izlīdzināt pa labi"
-
-#: ui/CellToolBase.cpp:225
-#, fuzzy, kde-format
-msgid "Right justify the cell contents"
-msgstr "Izņemt komentāru"
-
-#: ui/CellToolBase.cpp:231
-#, fuzzy, kde-format
-msgid "Align Top"
-msgstr "Izlīdzināt uz augšu"
-
-#. i18n: ectx: property (text), widget (QRadioButton, top)
-#: ui/CellToolBase.cpp:232 ui/CellToolBase.cpp:267
-#: ui/dialogs/PositionWidget.ui:141
-#, kde-format
-msgid "Top"
-msgstr ""
-
-#: ui/CellToolBase.cpp:235
-#, fuzzy, kde-format
-msgid "Align cell contents along the top of the cell"
-msgstr "Apvienot šūnas"
-
-#: ui/CellToolBase.cpp:238
-#, fuzzy, kde-format
-msgid "Align Middle"
-msgstr "Izlīdzināt pa centru"
-
-#. i18n: ectx: property (text), widget (QRadioButton, middle)
-#: ui/CellToolBase.cpp:239 ui/dialogs/PositionWidget.ui:148
-#, kde-format
-msgid "Middle"
-msgstr "Vidējā"
-
-#: ui/CellToolBase.cpp:242
-#, fuzzy, kde-format
-msgid "Align cell contents centered in the cell"
-msgstr "Apvienot šūnas"
-
-#: ui/CellToolBase.cpp:245
-#, fuzzy, kde-format
-msgid "Align Bottom"
-msgstr "Izlīdzināšanas poga"
-
-#. i18n: ectx: property (text), widget (QRadioButton, bottom)
-#: ui/CellToolBase.cpp:246 ui/CellToolBase.cpp:273
-#: ui/dialogs/PositionWidget.ui:155
-#, fuzzy, kde-format
-msgid "Bottom"
-msgstr "Izlīdzināšanas poga"
-
-#: ui/CellToolBase.cpp:249
-#, fuzzy, kde-format
-msgid "Align cell contents along the bottom of the cell"
-msgstr "Apvienot šūnas"
-
-#: ui/CellToolBase.cpp:254
-#, fuzzy, kde-format
-msgid "Border Left"
-msgstr "Apmale pa kreisi"
-
-#: ui/CellToolBase.cpp:258
-#, fuzzy, kde-format
-msgid "Set a left border to the selected area"
-msgstr "Pārvietoties pa kreisi"
-
-#: ui/CellToolBase.cpp:260
-#, kde-format
-msgid "Border Right"
-msgstr "Apmale pa Labi"
-
-#: ui/CellToolBase.cpp:264
-#, fuzzy, kde-format
-msgid "Set a right border to the selected area"
-msgstr "Pārvietoties pa kreisi"
-
-#: ui/CellToolBase.cpp:266
-#, kde-format
-msgid "Border Top"
-msgstr "Apmale uz augšu"
-
-#: ui/CellToolBase.cpp:270
-#, fuzzy, kde-format
-msgid "Set a top border to the selected area"
-msgstr "Pārvietoties pa kreisi"
-
-#: ui/CellToolBase.cpp:272
-#, kde-format
-msgid "Border Bottom"
-msgstr "Apakšējais Rāmis"
-
-#: ui/CellToolBase.cpp:276
-#, fuzzy, kde-format
-msgid "Set a bottom border to the selected area"
-msgstr "Pārvietoties pa kreisi"
-
-#: ui/CellToolBase.cpp:278
-#, fuzzy, kde-format
-msgid "All Borders"
-msgstr "Visas apmales"
-
-#: ui/CellToolBase.cpp:279 ui/dialogs/FormulaDialog.cpp:84
-#: ui/dialogs/FormulaDialog.cpp:190 ui/dialogs/FormulaDialog.cpp:722
-#: ui/FilterPopup.cpp:55
-#, kde-format
-msgid "All"
-msgstr "Visi"
-
-#: ui/CellToolBase.cpp:282
-#, fuzzy, kde-format
-msgid "Set a border around all cells in the selected area"
-msgstr "Pārvietoties pa kreisi"
-
-#: ui/CellToolBase.cpp:284
-#, fuzzy, kde-format
-msgid "No Borders"
-msgstr "Visas apmales"
-
-#: ui/CellToolBase.cpp:288
-#, fuzzy, kde-format
-msgid "Remove all borders in the selected area"
-msgstr "Pārvietoties pa kreisi"
-
-#: ui/CellToolBase.cpp:290
-#, kde-format
-msgid "Border Outline"
-msgstr "Apmales Aprises"
-
-#: ui/CellToolBase.cpp:291
-#, fuzzy, kde-format
-#| msgid "Border Outline"
-msgid "Outline"
-msgstr "Apmales Aprises"
-
-#: ui/CellToolBase.cpp:294
-#, fuzzy, kde-format
-msgid "Set a border to the outline of the selected area"
-msgstr "Pārvietoties pa kreisi"
-
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:209
 #, fuzzy, kde-format
 msgid "Select a new border color"
 msgstr "Mainīt apmales krāsu"
 
-#: ui/CellToolBase.cpp:299
+#: ui/CellToolBase.cpp:210
 #, kde-format
 msgid "Border Color"
 msgstr "Rāmja Krāsa"
 
-#: ui/CellToolBase.cpp:306
+#: ui/CellToolBase.cpp:217
 #, kde-format
 msgid "Change Angle..."
 msgstr "Mainīt Leņķi..."
 
-#: ui/CellToolBase.cpp:307
+#: ui/CellToolBase.cpp:218
 #, fuzzy, kde-format
 #| msgid "Angle:"
 msgid "Angle"
 msgstr "Leņķis:"
 
-#: ui/CellToolBase.cpp:310
+#: ui/CellToolBase.cpp:221
 #, kde-format
 msgid "Change the angle that cell contents are printed"
 msgstr ""
 
-#: ui/CellToolBase.cpp:314
+#: ui/CellToolBase.cpp:225
 #, fuzzy, kde-format
 msgid "Increase Precision"
 msgstr "Palielināt precizitāti"
 
-#: ui/CellToolBase.cpp:317
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Increase the decimal precision shown onscreen"
 msgstr ""
 
-#: ui/CellToolBase.cpp:319
+#: ui/CellToolBase.cpp:230
 #, fuzzy, kde-format
 msgid "Decrease Precision"
 msgstr "Samazināt precizitāti"
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Decrease the decimal precision shown onscreen"
 msgstr ""
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:239
 #, fuzzy, kde-format
 msgid "Set the background color"
 msgstr "Mainīt pamata krāsu"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:240
 #, kde-format
 msgid "Background Color"
 msgstr "Fona Krāsa"
 
-#: ui/CellToolBase.cpp:335 ui/CellToolBase.cpp:341
+#: ui/CellToolBase.cpp:246 ui/CellToolBase.cpp:252
 #, fuzzy, kde-format
 msgid "Cells..."
 msgstr "Šūna:"
 
-#: ui/CellToolBase.cpp:336 ui/CellToolBase_p.cpp:1146
+#: ui/CellToolBase.cpp:247 ui/CellToolBase_p.cpp:1133
 #, fuzzy, kde-format
 msgid "Insert Cells..."
 msgstr "Ievietot Rūtiņu(as)..."
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:248
 #, fuzzy, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "Iespraust Tabulu"
 
-#: ui/CellToolBase.cpp:342
+#: ui/CellToolBase.cpp:253
 #, fuzzy, kde-format
 msgid "Remove Cells..."
 msgstr "Dzēst Rūtiņu(as)..."
 
-#: ui/CellToolBase.cpp:343
+#: ui/CellToolBase.cpp:254
 #, fuzzy, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "Iespraust Tabulu"
 
-#: ui/CellToolBase.cpp:349 ui/CellToolBase.cpp:350
+#: ui/CellToolBase.cpp:260 ui/CellToolBase.cpp:261
 #, fuzzy, kde-format
 msgid "Clear All"
 msgstr "Dzēst Visu"
 
-#: ui/CellToolBase.cpp:351
+#: ui/CellToolBase.cpp:262
 #, fuzzy, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:355
+#: ui/CellToolBase.cpp:266
 #, fuzzy, kde-format
 msgid "Contents"
 msgstr "Komentārs"
 
-#: ui/CellToolBase.cpp:356
+#: ui/CellToolBase.cpp:267
 #, fuzzy, kde-format
 msgid "Clear Contents"
 msgstr "Komentārs"
 
-#: ui/CellToolBase.cpp:357
+#: ui/CellToolBase.cpp:268
 #, fuzzy, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:361
+#: ui/CellToolBase.cpp:272
 #, fuzzy, kde-format
 msgid "Conditional Styles..."
 msgstr "Rūtiņas nosacījuma atribūti..."
 
-#: ui/CellToolBase.cpp:362
+#: ui/CellToolBase.cpp:273
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr ""
 
-#: ui/CellToolBase.cpp:366 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:277 ui/dialogs/ConditionalDialog.cpp:242
 #, fuzzy, kde-format
 msgid "Conditional Styles"
 msgstr "Statusa rūtiņas atribūti"
 
-#: ui/CellToolBase.cpp:367
+#: ui/CellToolBase.cpp:278
 #, fuzzy, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:368
+#: ui/CellToolBase.cpp:279
 #, fuzzy, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:374
+#: ui/CellToolBase.cpp:285
 #, fuzzy, kde-format
 #| msgid "Autofill"
 msgid "&Auto-Filter"
 msgstr "Autoaizpildīt"
 
-#: ui/CellToolBase.cpp:377
+#: ui/CellToolBase.cpp:288
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:381
+#: ui/CellToolBase.cpp:292
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Funkcija"
 
-#: ui/CellToolBase.cpp:384
+#: ui/CellToolBase.cpp:295
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "&Matemātiskā izteiksme..."
 
-#: ui/CellToolBase.cpp:387
+#: ui/CellToolBase.cpp:298
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Datums"
 
-#: ui/CellToolBase.cpp:391
+#: ui/CellToolBase.cpp:302
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Datums"
 
-#: ui/CellToolBase.cpp:394
+#: ui/CellToolBase.cpp:305
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Kārtot sarakstus..."
 
-#: ui/CellToolBase.cpp:397
+#: ui/CellToolBase.cpp:308
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:399
+#: ui/CellToolBase.cpp:310
 #, fuzzy, kde-format
 msgid "&Consolidate..."
 msgstr "Konsolidēt..."
 
-#: ui/CellToolBase.cpp:402
+#: ui/CellToolBase.cpp:313
 #, kde-format
 msgid "Create a region of summary data from a group of similar regions"
 msgstr ""
 
-#: ui/CellToolBase.cpp:404
+#: ui/CellToolBase.cpp:315
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "&Sērijas"
 
-#: ui/CellToolBase.cpp:407
+#: ui/CellToolBase.cpp:318
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:409
+#: ui/CellToolBase.cpp:320
 #, fuzzy, kde-format
 msgid "&Subtotals..."
 msgstr "Šķirot..."
 
-#: ui/CellToolBase.cpp:412
+#: ui/CellToolBase.cpp:323
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
 msgstr ""
 
-#: ui/CellToolBase.cpp:414
+#: ui/CellToolBase.cpp:325
 #, fuzzy, kde-format
 msgid "&Pivot Tables..."
 msgstr "Šķirot..."
 
-#: ui/CellToolBase.cpp:417
+#: ui/CellToolBase.cpp:328
 #, fuzzy, kde-format
 msgid "Create Pivot Tables"
 msgstr "Šķirot..."
 
-#: ui/CellToolBase.cpp:419
+#: ui/CellToolBase.cpp:330
 #, fuzzy, kde-format
 msgid "Area Name..."
 msgstr "Abgabala nosaukums..."
 
-#: ui/CellToolBase.cpp:422
+#: ui/CellToolBase.cpp:333
 #, fuzzy, kde-format
 msgid "Set a name for a region of the spreadsheet"
 msgstr "Iespraust Tabulu"
 
-#: ui/CellToolBase.cpp:424
+#: ui/CellToolBase.cpp:335
 #, fuzzy, kde-format
 msgid "Named Areas..."
 msgstr "Rādīt apgabalu..."
 
-#: ui/CellToolBase.cpp:426 ui/dialogs/NamedAreaDialog.cpp:49
+#: ui/CellToolBase.cpp:337 ui/dialogs/NamedAreaDialog.cpp:49
 #, fuzzy, kde-format
 msgid "Named Areas"
 msgstr "Izmest rūtiņu"
 
-#: ui/CellToolBase.cpp:428
+#: ui/CellToolBase.cpp:339
 #, fuzzy, kde-format
 msgid "Edit or select named areas"
 msgstr "Šķirot palielinot"
 
-#: ui/CellToolBase.cpp:432
+#: ui/CellToolBase.cpp:343
 #, kde-format
 msgid "Formula Selection"
 msgstr "Forrmulas Iezīmējums"
 
-#: ui/CellToolBase.cpp:434
+#: ui/CellToolBase.cpp:345
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Iespraust funkciju"
 
-#: ui/CellToolBase.cpp:435 ui/CellToolBase.cpp:1876
+#: ui/CellToolBase.cpp:346 ui/CellToolBase.cpp:1613
 #, kde-format
 msgid "Others..."
 msgstr "Citi..."
 
-#: ui/CellToolBase.cpp:443
+#: ui/CellToolBase.cpp:354
 #, kde-format
 msgid "Modify Cell"
 msgstr "Mainīt Rūtiņu"
 
-#: ui/CellToolBase.cpp:447
+#: ui/CellToolBase.cpp:358
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Mainīt teksta krāsu"
 
-#: ui/CellToolBase.cpp:450
+#: ui/CellToolBase.cpp:361
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:454
+#: ui/CellToolBase.cpp:365
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:458
+#: ui/CellToolBase.cpp:369
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:461
+#: ui/CellToolBase.cpp:372
 #, kde-format
 msgid "Special Paste..."
 msgstr "Īpaši Ielīmēt..."
 
-#: ui/CellToolBase.cpp:464
+#: ui/CellToolBase.cpp:375
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:466
+#: ui/CellToolBase.cpp:377
 #, fuzzy, kde-format
 msgid "Paste with Insertion"
 msgstr "Ielīmēt ar ievietošanu..."
 
-#: ui/CellToolBase.cpp:469
+#: ui/CellToolBase.cpp:380
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Iespraust Tabulu"
 
-#: ui/CellToolBase.cpp:472
+#: ui/CellToolBase.cpp:383
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:489
+#: ui/CellToolBase.cpp:400
 #, kde-format
 msgid "Goto Cell..."
 msgstr "Iet uz Rūtiņu..."
 
-#: ui/CellToolBase.cpp:490
+#: ui/CellToolBase.cpp:401
 #, fuzzy, kde-format
 msgid "Goto"
 msgstr "Iet uz šūnu"
 
-#: ui/CellToolBase.cpp:494
+#: ui/CellToolBase.cpp:405
 #, kde-format
 msgid "Move to a particular cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:497
+#: ui/CellToolBase.cpp:408
 #, kde-format
 msgid "Check the spelling"
 msgstr ""
 
-#: ui/CellToolBase.cpp:500
+#: ui/CellToolBase.cpp:411
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:506
+#: ui/CellToolBase.cpp:417
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Rādīt &Rindas Galveni"
 
-#: ui/CellToolBase.cpp:512
+#: ui/CellToolBase.cpp:423
 #, fuzzy, kde-format
 msgid "Auto-Format..."
 msgstr "Rūtiņas Formāts..."
 
-#: ui/CellToolBase.cpp:515
+#: ui/CellToolBase.cpp:426
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:517
+#: ui/CellToolBase.cpp:428
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Lokāles Parametri"
 
-#: ui/CellToolBase.cpp:520
+#: ui/CellToolBase.cpp:431
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Rādīt komentāra &indikātoru"
 
-#: ui/CellToolBase.cpp:522
+#: ui/CellToolBase.cpp:433
 #, fuzzy, kde-format
 msgid "Break Before Column"
 msgstr "Aizvākt kolonu(as)"
 
-#: ui/CellToolBase.cpp:525
+#: ui/CellToolBase.cpp:436
 #, fuzzy, kde-format
 msgid "Column Break"
 msgstr "numurs"
 
-#: ui/CellToolBase.cpp:526
+#: ui/CellToolBase.cpp:437
 #, kde-format
 msgid "Set a manual page break before the column"
 msgstr ""
 
-#: ui/CellToolBase.cpp:528
+#: ui/CellToolBase.cpp:439
 #, fuzzy, kde-format
 msgid "Break Before Row"
 msgstr "Aizvākt kolonu(as)"
 
-#: ui/CellToolBase.cpp:531
+#: ui/CellToolBase.cpp:442
 #, fuzzy, kde-format
 msgid "Row Break"
 msgstr "lielāks kā"
 
-#: ui/CellToolBase.cpp:532
+#: ui/CellToolBase.cpp:443
 #, kde-format
 msgid "Set a manual page break before the row"
 msgstr ""
 
-#: ui/CellToolBase.cpp:536
+#: ui/CellToolBase.cpp:447
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Precizitāte"
 
-#: ui/CellToolBase.cpp:540
+#: ui/CellToolBase.cpp:451
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Precizitāte"
 
-#: ui/CellToolBase.cpp:541
+#: ui/CellToolBase.cpp:452
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:1347
+#: ui/CellToolBase.cpp:1258
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1408
+#: ui/CellToolBase.cpp:1324
 #, fuzzy, kde-format
 msgid "Create Style From Cell"
 msgstr "Rūtiņas stils"
 
-#: ui/CellToolBase.cpp:1417
+#: ui/CellToolBase.cpp:1333
 #, fuzzy, kde-format
 msgid "The style name cannot be empty."
 msgstr "Tabulas nosaukums nevar palikt tukš."
 
-#: ui/CellToolBase.cpp:1422 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1338 ui/dialogs/LayoutPage_General.cpp:90
 #, fuzzy, kde-format
 msgid "A style with this name already exists."
 msgstr "Fails jau eksistē"
 
-#: ui/CellToolBase.cpp:1443 ui/CellToolBase.cpp:1463
+#: ui/CellToolBase.cpp:1359 ui/CellToolBase.cpp:1379
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Mainīt fontu"
 
-#: ui/CellToolBase.cpp:1495 ui/CellToolBase.cpp:1507 ui/CellToolBase.cpp:1519
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change Horizontal Alignment"
-msgstr "Apvienot šūnas"
-
-#: ui/CellToolBase.cpp:1531 ui/CellToolBase.cpp:1543 ui/CellToolBase.cpp:1555
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change Vertical Alignment"
-msgstr "Apvienot šūnas"
-
-#: ui/CellToolBase.cpp:1749
+#: ui/CellToolBase.cpp:1486
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Mainīt tekstu"
 
-#: ui/CellToolBase.cpp:1803
+#: ui/CellToolBase.cpp:1540
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1839 ui/CellToolBase.cpp:1851
+#: ui/CellToolBase.cpp:1576 ui/CellToolBase.cpp:1588
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Jums jāiezīmē vairakas rūtiņas."
 
-#: ui/CellToolBase.cpp:2340
+#: ui/CellToolBase.cpp:2077
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Septembris"
 
-#: ui/CellToolBase_p.cpp:692
+#: ui/CellToolBase_p.cpp:679
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Pārbaužu skaits"
 
-#: ui/CellToolBase_p.cpp:698
+#: ui/CellToolBase_p.cpp:685
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Esošā vērtība"
 
-#: ui/CellToolBase_p.cpp:703
+#: ui/CellToolBase_p.cpp:690
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Procenta formāts"
 
-#: ui/CellToolBase_p.cpp:708
+#: ui/CellToolBase_p.cpp:695
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Laika Formāts"
 
-#: ui/CellToolBase_p.cpp:713
+#: ui/CellToolBase_p.cpp:700
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Datumu Formāts"
 
-#: ui/CellToolBase_p.cpp:718
+#: ui/CellToolBase_p.cpp:705
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Zinātnisks"
 
-#: ui/CellToolBase_p.cpp:1150
+#: ui/CellToolBase_p.cpp:1137
 #, fuzzy, kde-format
 msgid "Delete Cells..."
 msgstr "Ievietot Rūtiņu(as)..."
 
-#: ui/CellToolBase_p.cpp:1154
+#: ui/CellToolBase_p.cpp:1141
 #, fuzzy, kde-format
 msgid "Selection List..."
 msgstr "Iezīmētā saraksts..."
@@ -16080,6 +15895,12 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
 
+#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
+#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
+#, kde-format
+msgid "All"
+msgstr "Visi"
+
 #: ui/dialogs/FormulaDialog.cpp:115
 #, kde-format
 msgid "Insert function"
@@ -16896,6 +16717,12 @@ msgstr ""
 msgid "Standard"
 msgstr "Standarta"
 
+#. i18n: ectx: property (text), widget (QRadioButton, center)
+#: ui/dialogs/PositionWidget.ui:68
+#, fuzzy, kde-format
+msgid "Center"
+msgstr "Izlīdzināt pa vidu"
+
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox4)
 #: ui/dialogs/PositionWidget.ui:85
 #, kde-format
@@ -16927,6 +16754,24 @@ msgid ""
 "<b>Bottom</b> means the content of the cell will be displayed at the bottom "
 "of the cell.</qt>"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, top)
+#: ui/dialogs/PositionWidget.ui:141
+#, kde-format
+msgid "Top"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, middle)
+#: ui/dialogs/PositionWidget.ui:148
+#, kde-format
+msgid "Middle"
+msgstr "Vidējā"
+
+#. i18n: ectx: property (text), widget (QRadioButton, bottom)
+#: ui/dialogs/PositionWidget.ui:155
+#, fuzzy, kde-format
+msgid "Bottom"
+msgstr "Izlīdzināšanas poga"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:165
@@ -17331,6 +17176,121 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Atvērt Norādi?"
+
+#, fuzzy
+#~ msgid "Align Left"
+#~ msgstr "Izlīdzināt pa kreisi"
+
+#, fuzzy
+#~ msgid "Left justify the cell contents"
+#~ msgstr "Izņemt komentāru"
+
+#, fuzzy
+#~ msgid "Align Center"
+#~ msgstr "Izlīdzināt pa vidu"
+
+#, fuzzy
+#~ msgid "Center the cell contents"
+#~ msgstr "Izņemt komentāru"
+
+#, fuzzy
+#~ msgid "Align Right"
+#~ msgstr "Izlīdzināt pa labi"
+
+#, fuzzy
+#~ msgid "Right justify the cell contents"
+#~ msgstr "Izņemt komentāru"
+
+#, fuzzy
+#~ msgid "Align Top"
+#~ msgstr "Izlīdzināt uz augšu"
+
+#, fuzzy
+#~ msgid "Align cell contents along the top of the cell"
+#~ msgstr "Apvienot šūnas"
+
+#, fuzzy
+#~ msgid "Align Middle"
+#~ msgstr "Izlīdzināt pa centru"
+
+#, fuzzy
+#~ msgid "Align cell contents centered in the cell"
+#~ msgstr "Apvienot šūnas"
+
+#, fuzzy
+#~ msgid "Align Bottom"
+#~ msgstr "Izlīdzināšanas poga"
+
+#, fuzzy
+#~ msgid "Align cell contents along the bottom of the cell"
+#~ msgstr "Apvienot šūnas"
+
+#, fuzzy
+#~ msgid "Border Left"
+#~ msgstr "Apmale pa kreisi"
+
+#, fuzzy
+#~ msgid "Set a left border to the selected area"
+#~ msgstr "Pārvietoties pa kreisi"
+
+#~ msgid "Border Right"
+#~ msgstr "Apmale pa Labi"
+
+#, fuzzy
+#~ msgid "Set a right border to the selected area"
+#~ msgstr "Pārvietoties pa kreisi"
+
+#~ msgid "Border Top"
+#~ msgstr "Apmale uz augšu"
+
+#, fuzzy
+#~ msgid "Set a top border to the selected area"
+#~ msgstr "Pārvietoties pa kreisi"
+
+#~ msgid "Border Bottom"
+#~ msgstr "Apakšējais Rāmis"
+
+#, fuzzy
+#~ msgid "Set a bottom border to the selected area"
+#~ msgstr "Pārvietoties pa kreisi"
+
+#, fuzzy
+#~ msgid "All Borders"
+#~ msgstr "Visas apmales"
+
+#, fuzzy
+#~ msgid "Set a border around all cells in the selected area"
+#~ msgstr "Pārvietoties pa kreisi"
+
+#, fuzzy
+#~ msgid "No Borders"
+#~ msgstr "Visas apmales"
+
+#, fuzzy
+#~ msgid "Remove all borders in the selected area"
+#~ msgstr "Pārvietoties pa kreisi"
+
+#~ msgid "Border Outline"
+#~ msgstr "Apmales Aprises"
+
+#, fuzzy
+#~| msgid "Border Outline"
+#~ msgid "Outline"
+#~ msgstr "Apmales Aprises"
+
+#, fuzzy
+#~ msgid "Set a border to the outline of the selected area"
+#~ msgstr "Pārvietoties pa kreisi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Horizontal Alignment"
+#~ msgstr "Apvienot šūnas"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Vertical Alignment"
+#~ msgstr "Apvienot šūnas"
 
 #, fuzzy
 #~ msgid "Australia"

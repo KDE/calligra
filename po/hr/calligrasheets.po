@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-27 00:46+0000\n"
+"POT-Creation-Date: 2022-11-28 00:49+0000\n"
 "PO-Revision-Date: 2009-09-29 21:08+0200\n"
 "Last-Translator: Marko Dimjasevic <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -866,7 +866,7 @@ msgstr "Broj"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:163 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:164 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -921,7 +921,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") vraća 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:388 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:299 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Baza podataka"
@@ -11962,7 +11962,7 @@ msgstr "Sakrij tabelu"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:188
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:189
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, fuzzy, kde-format
 msgid "Font"
@@ -12427,15 +12427,13 @@ msgid "Up"
 msgstr "Gore"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:301 ui/CellToolBase.cpp:222
-#: ui/CellToolBase.cpp:261 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:301 ui/dialogs/PositionWidget.ui:75
 #, kde-format
 msgid "Right"
 msgstr "Desno"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:302 ui/CellToolBase.cpp:208
-#: ui/CellToolBase.cpp:255 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:302 ui/dialogs/PositionWidget.ui:61
 #, kde-format
 msgid "Left"
 msgstr "Lijevo"
@@ -12451,10 +12449,10 @@ msgstr "Umetni _stupce"
 #. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/CellToolBase.cpp:285 ui/dialogs/DatabaseDialog.cpp:711
-#: ui/dialogs/DatabaseDialog.cpp:712 ui/dialogs/DocumentSettingsDialog.cpp:124
-#: ui/dialogs/pivotfilters.ui:36 ui/dialogs/pivotoptions.ui:95
-#: ui/dialogs/pivotoptions.ui:104 ui/dialogs/pivotsubtotals.ui:21
+#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
+#: ui/dialogs/DocumentSettingsDialog.cpp:124 ui/dialogs/pivotfilters.ui:36
+#: ui/dialogs/pivotoptions.ui:95 ui/dialogs/pivotoptions.ui:104
+#: ui/dialogs/pivotsubtotals.ui:21
 #, kde-format
 msgid "None"
 msgstr "Nijedan"
@@ -13323,7 +13321,7 @@ msgstr ""
 "Ukloniti će te aktivnu tabelu..\n"
 "Da li zbilja želite nastaviti?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1409
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1325
 #, kde-format
 msgid "Enter name:"
 msgstr "Unesite ime:"
@@ -13383,13 +13381,13 @@ msgstr "Stupac %1"
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1483
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1399
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Promijeni kut"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1711
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1448
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
@@ -13397,711 +13395,527 @@ msgstr "Boja pozadine"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase.cpp:1568 ui/CellToolBase.cpp:1584 ui/CellToolBase.cpp:1600
-#: ui/CellToolBase.cpp:1613 ui/CellToolBase.cpp:1626 ui/CellToolBase.cpp:1643
-#: ui/CellToolBase.cpp:1661 ui/CellToolBase_p.cpp:723
+#: ui/CellToolBase_p.cpp:710
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Promijeni boju ruba"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:163
 #, kde-format
 msgid "Cell Format..."
 msgstr "Format ćelije …"
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:168
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "U&kloni komentar"
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 #| msgid "Style Manager"
 msgid "Style Manager..."
 msgstr "Upravitelj stilom"
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr ""
 
-#: ui/CellToolBase.cpp:174 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:175 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "Stil"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:177
 #, fuzzy, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "Pomakni prema lijevo"
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:180
 #, fuzzy, kde-format
 msgid "Create Style From Cell..."
 msgstr "Veličina ćelije"
 
-#: ui/CellToolBase.cpp:180
+#: ui/CellToolBase.cpp:181
 #, fuzzy, kde-format
 msgid "Style From Cell"
 msgstr "Veličina ćelije"
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:184
 #, fuzzy, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "Pomakni prema lijevo"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:188
 #, kde-format
 msgid "Select Font..."
 msgstr "Izaberi pismo"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Select Font Size"
 msgstr "Izaberite veličinu pisma"
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:194
 #, fuzzy, kde-format
 #| msgid "Select Font Size"
 msgid "Font Size"
 msgstr "Izaberite veličinu pisma"
 
-#: ui/CellToolBase.cpp:199
+#: ui/CellToolBase.cpp:200
 #, kde-format
 msgid "Text Color"
 msgstr "Boja teksta"
 
-#: ui/CellToolBase.cpp:200
+#: ui/CellToolBase.cpp:201
 #, fuzzy, kde-format
 msgid "Set the text color"
 msgstr "Boja pozadine"
 
-#: ui/CellToolBase.cpp:207
-#, kde-format
-msgid "Align Left"
-msgstr "Poravnaj lijevo"
-
-#: ui/CellToolBase.cpp:211
-#, fuzzy, kde-format
-msgid "Left justify the cell contents"
-msgstr "U&kloni komentar"
-
-#: ui/CellToolBase.cpp:214
-#, kde-format
-msgid "Align Center"
-msgstr "Centrirano"
-
-#. i18n: ectx: property (text), widget (QRadioButton, center)
-#: ui/CellToolBase.cpp:215 ui/dialogs/PositionWidget.ui:68
-#, fuzzy, kde-format
-msgid "Center"
-msgstr "Centrirano"
-
-#: ui/CellToolBase.cpp:218
-#, fuzzy, kde-format
-msgid "Center the cell contents"
-msgstr "U&kloni komentar"
-
-#: ui/CellToolBase.cpp:221
-#, kde-format
-msgid "Align Right"
-msgstr "Poravnaj desno"
-
-#: ui/CellToolBase.cpp:225
-#, fuzzy, kde-format
-msgid "Right justify the cell contents"
-msgstr "U&kloni komentar"
-
-#: ui/CellToolBase.cpp:231
-#, kde-format
-msgid "Align Top"
-msgstr "Poravnato gore"
-
-#. i18n: ectx: property (text), widget (QRadioButton, top)
-#: ui/CellToolBase.cpp:232 ui/CellToolBase.cpp:267
-#: ui/dialogs/PositionWidget.ui:141
-#, kde-format
-msgid "Top"
-msgstr ""
-
-#: ui/CellToolBase.cpp:235
-#, fuzzy, kde-format
-msgid "Align cell contents along the top of the cell"
-msgstr "Spoji ćelije"
-
-#: ui/CellToolBase.cpp:238
-#, kde-format
-msgid "Align Middle"
-msgstr "Poravnaj po sredini"
-
-#. i18n: ectx: property (text), widget (QRadioButton, middle)
-#: ui/CellToolBase.cpp:239 ui/dialogs/PositionWidget.ui:148
-#, kde-format
-msgid "Middle"
-msgstr "Sredina"
-
-#: ui/CellToolBase.cpp:242
-#, fuzzy, kde-format
-msgid "Align cell contents centered in the cell"
-msgstr "Spoji ćelije"
-
-#: ui/CellToolBase.cpp:245
-#, kde-format
-msgid "Align Bottom"
-msgstr "Poravnaj dolje"
-
-#. i18n: ectx: property (text), widget (QRadioButton, bottom)
-#: ui/CellToolBase.cpp:246 ui/CellToolBase.cpp:273
-#: ui/dialogs/PositionWidget.ui:155
-#, fuzzy, kde-format
-msgid "Bottom"
-msgstr "Poravnaj dolje"
-
-#: ui/CellToolBase.cpp:249
-#, fuzzy, kde-format
-msgid "Align cell contents along the bottom of the cell"
-msgstr "Spoji ćelije"
-
-#: ui/CellToolBase.cpp:254
-#, kde-format
-msgid "Border Left"
-msgstr "Lijevi rub"
-
-#: ui/CellToolBase.cpp:258
-#, fuzzy, kde-format
-msgid "Set a left border to the selected area"
-msgstr "Pomakni prema lijevo"
-
-#: ui/CellToolBase.cpp:260
-#, kde-format
-msgid "Border Right"
-msgstr "Desni rub"
-
-#: ui/CellToolBase.cpp:264
-#, fuzzy, kde-format
-msgid "Set a right border to the selected area"
-msgstr "Pomakni prema lijevo"
-
-#: ui/CellToolBase.cpp:266
-#, kde-format
-msgid "Border Top"
-msgstr "Gornji rub"
-
-#: ui/CellToolBase.cpp:270
-#, fuzzy, kde-format
-msgid "Set a top border to the selected area"
-msgstr "Pomakni prema lijevo"
-
-#: ui/CellToolBase.cpp:272
-#, kde-format
-msgid "Border Bottom"
-msgstr "Donji rub"
-
-#: ui/CellToolBase.cpp:276
-#, fuzzy, kde-format
-msgid "Set a bottom border to the selected area"
-msgstr "Pomakni prema lijevo"
-
-#: ui/CellToolBase.cpp:278
-#, kde-format
-msgid "All Borders"
-msgstr "Svi rubovi"
-
-#: ui/CellToolBase.cpp:279 ui/dialogs/FormulaDialog.cpp:84
-#: ui/dialogs/FormulaDialog.cpp:190 ui/dialogs/FormulaDialog.cpp:722
-#: ui/FilterPopup.cpp:55
-#, kde-format
-msgid "All"
-msgstr "Sve"
-
-#: ui/CellToolBase.cpp:282
-#, fuzzy, kde-format
-msgid "Set a border around all cells in the selected area"
-msgstr "Pomakni prema lijevo"
-
-#: ui/CellToolBase.cpp:284
-#, fuzzy, kde-format
-#| msgid "All Borders"
-msgid "No Borders"
-msgstr "Svi rubovi"
-
-#: ui/CellToolBase.cpp:288
-#, fuzzy, kde-format
-msgid "Remove all borders in the selected area"
-msgstr "Pomakni prema lijevo"
-
-#: ui/CellToolBase.cpp:290
-#, kde-format
-msgid "Border Outline"
-msgstr "Kontura ruba"
-
-#: ui/CellToolBase.cpp:291
-#, fuzzy, kde-format
-#| msgid "Border Outline"
-msgid "Outline"
-msgstr "Kontura ruba"
-
-#: ui/CellToolBase.cpp:294
-#, fuzzy, kde-format
-msgid "Set a border to the outline of the selected area"
-msgstr "Pomakni prema lijevo"
-
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:209
 #, fuzzy, kde-format
 msgid "Select a new border color"
 msgstr "Boja ruba"
 
-#: ui/CellToolBase.cpp:299
+#: ui/CellToolBase.cpp:210
 #, kde-format
 msgid "Border Color"
 msgstr "Boja ruba"
 
-#: ui/CellToolBase.cpp:306
+#: ui/CellToolBase.cpp:217
 #, kde-format
 msgid "Change Angle..."
 msgstr "Promijeni kut …"
 
-#: ui/CellToolBase.cpp:307
+#: ui/CellToolBase.cpp:218
 #, fuzzy, kde-format
 #| msgid "Angle:"
 msgid "Angle"
 msgstr "Kut:"
 
-#: ui/CellToolBase.cpp:310
+#: ui/CellToolBase.cpp:221
 #, kde-format
 msgid "Change the angle that cell contents are printed"
 msgstr ""
 
-#: ui/CellToolBase.cpp:314
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Increase Precision"
 msgstr "Uvećaj preciznost"
 
-#: ui/CellToolBase.cpp:317
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Increase the decimal precision shown onscreen"
 msgstr ""
 
-#: ui/CellToolBase.cpp:319
+#: ui/CellToolBase.cpp:230
 #, kde-format
 msgid "Decrease Precision"
 msgstr "Smanji preciznost"
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Decrease the decimal precision shown onscreen"
 msgstr ""
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:239
 #, fuzzy, kde-format
 msgid "Set the background color"
 msgstr "Boja pozadine"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:240
 #, kde-format
 msgid "Background Color"
 msgstr "Boja pozadine"
 
-#: ui/CellToolBase.cpp:335 ui/CellToolBase.cpp:341
+#: ui/CellToolBase.cpp:246 ui/CellToolBase.cpp:252
 #, fuzzy, kde-format
 #| msgid "Cells:"
 msgid "Cells..."
 msgstr "Ćelije:"
 
-#: ui/CellToolBase.cpp:336 ui/CellToolBase_p.cpp:1146
+#: ui/CellToolBase.cpp:247 ui/CellToolBase_p.cpp:1133
 #, kde-format
 msgid "Insert Cells..."
 msgstr "Umetni ćelije …"
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:248
 #, fuzzy, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "Umetni novi list."
 
-#: ui/CellToolBase.cpp:342
+#: ui/CellToolBase.cpp:253
 #, fuzzy, kde-format
 msgid "Remove Cells..."
 msgstr "Ukloni ćeliju ..."
 
-#: ui/CellToolBase.cpp:343
+#: ui/CellToolBase.cpp:254
 #, fuzzy, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "Umetni novi list."
 
-#: ui/CellToolBase.cpp:349 ui/CellToolBase.cpp:350
+#: ui/CellToolBase.cpp:260 ui/CellToolBase.cpp:261
 #, fuzzy, kde-format
 #| msgid "Clear &All"
 msgid "Clear All"
 msgstr "&Očisti sve"
 
-#: ui/CellToolBase.cpp:351
+#: ui/CellToolBase.cpp:262
 #, fuzzy, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "U&kloni komentar"
 
-#: ui/CellToolBase.cpp:355
+#: ui/CellToolBase.cpp:266
 #, fuzzy, kde-format
 msgid "Contents"
 msgstr "Komentar"
 
-#: ui/CellToolBase.cpp:356
+#: ui/CellToolBase.cpp:267
 #, fuzzy, kde-format
 msgid "Clear Contents"
 msgstr "Komentar"
 
-#: ui/CellToolBase.cpp:357
+#: ui/CellToolBase.cpp:268
 #, fuzzy, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "U&kloni komentar"
 
-#: ui/CellToolBase.cpp:361
+#: ui/CellToolBase.cpp:272
 #, fuzzy, kde-format
 #| msgid "Condition"
 msgid "Conditional Styles..."
 msgstr "Uvjet"
 
-#: ui/CellToolBase.cpp:362
+#: ui/CellToolBase.cpp:273
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr ""
 
-#: ui/CellToolBase.cpp:366 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:277 ui/dialogs/ConditionalDialog.cpp:242
 #, fuzzy, kde-format
 #| msgid "Condition"
 msgid "Conditional Styles"
 msgstr "Uvjet"
 
-#: ui/CellToolBase.cpp:367
+#: ui/CellToolBase.cpp:278
 #, fuzzy, kde-format
 msgid "Remove Conditional Styles"
 msgstr "U&kloni komentar"
 
-#: ui/CellToolBase.cpp:368
+#: ui/CellToolBase.cpp:279
 #, fuzzy, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "U&kloni komentar"
 
-#: ui/CellToolBase.cpp:374
+#: ui/CellToolBase.cpp:285
 #, fuzzy, kde-format
 #| msgid "Autofill"
 msgid "&Auto-Filter"
 msgstr "samodopunjavanje"
 
-#: ui/CellToolBase.cpp:377
+#: ui/CellToolBase.cpp:288
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:381
+#: ui/CellToolBase.cpp:292
 #, kde-format
 msgid "&Function..."
 msgstr "&Funkcija …"
 
-#: ui/CellToolBase.cpp:384
+#: ui/CellToolBase.cpp:295
 #, kde-format
 msgid "Insert math expression"
 msgstr "Ubaci matematički izraz"
 
-#: ui/CellToolBase.cpp:387
+#: ui/CellToolBase.cpp:298
 #, kde-format
 msgid "From &Database..."
 msgstr "Iz baze po&dataka …"
 
-#: ui/CellToolBase.cpp:391
+#: ui/CellToolBase.cpp:302
 #, fuzzy, kde-format
 #| msgid "From &Database..."
 msgid "Insert data from a SQL database"
 msgstr "Iz baze po&dataka …"
 
-#: ui/CellToolBase.cpp:394
+#: ui/CellToolBase.cpp:305
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Prilagođeni popisi …"
 
-#: ui/CellToolBase.cpp:397
+#: ui/CellToolBase.cpp:308
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:399
+#: ui/CellToolBase.cpp:310
 #, kde-format
 msgid "&Consolidate..."
 msgstr "&Konsolidiraj …"
 
-#: ui/CellToolBase.cpp:402
+#: ui/CellToolBase.cpp:313
 #, kde-format
 msgid "Create a region of summary data from a group of similar regions"
 msgstr ""
 
-#: ui/CellToolBase.cpp:404
+#: ui/CellToolBase.cpp:315
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Traženje cilja …"
 
-#: ui/CellToolBase.cpp:407
+#: ui/CellToolBase.cpp:318
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:409
+#: ui/CellToolBase.cpp:320
 #, kde-format
 msgid "&Subtotals..."
 msgstr "&Podzbroj …"
 
-#: ui/CellToolBase.cpp:412
+#: ui/CellToolBase.cpp:323
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
 msgstr ""
 
-#: ui/CellToolBase.cpp:414
+#: ui/CellToolBase.cpp:325
 #, fuzzy, kde-format
 #| msgid "&Subtotals..."
 msgid "&Pivot Tables..."
 msgstr "&Podzbroj …"
 
-#: ui/CellToolBase.cpp:417
+#: ui/CellToolBase.cpp:328
 #, fuzzy, kde-format
 #| msgid "&Subtotals..."
 msgid "Create Pivot Tables"
 msgstr "&Podzbroj …"
 
-#: ui/CellToolBase.cpp:419
+#: ui/CellToolBase.cpp:330
 #, kde-format
 msgid "Area Name..."
 msgstr "Ime područja …"
 
-#: ui/CellToolBase.cpp:422
+#: ui/CellToolBase.cpp:333
 #, fuzzy, kde-format
 msgid "Set a name for a region of the spreadsheet"
 msgstr "Umetni novi list."
 
-#: ui/CellToolBase.cpp:424
+#: ui/CellToolBase.cpp:335
 #, fuzzy, kde-format
 msgid "Named Areas..."
 msgstr "Prikaži područje..."
 
-#: ui/CellToolBase.cpp:426 ui/dialogs/NamedAreaDialog.cpp:49
+#: ui/CellToolBase.cpp:337 ui/dialogs/NamedAreaDialog.cpp:49
 #, fuzzy, kde-format
 msgid "Named Areas"
 msgstr "Ukloni sve"
 
-#: ui/CellToolBase.cpp:428
+#: ui/CellToolBase.cpp:339
 #, fuzzy, kde-format
 msgid "Edit or select named areas"
 msgstr "Ukloni sve"
 
-#: ui/CellToolBase.cpp:432
+#: ui/CellToolBase.cpp:343
 #, kde-format
 msgid "Formula Selection"
 msgstr "Izbornik formule"
 
-#: ui/CellToolBase.cpp:434
+#: ui/CellToolBase.cpp:345
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Umetni stupac"
 
-#: ui/CellToolBase.cpp:435 ui/CellToolBase.cpp:1876
+#: ui/CellToolBase.cpp:346 ui/CellToolBase.cpp:1613
 #, kde-format
 msgid "Others..."
 msgstr "Ostalo …"
 
-#: ui/CellToolBase.cpp:443
+#: ui/CellToolBase.cpp:354
 #, kde-format
 msgid "Modify Cell"
 msgstr "Promijeni ćeliju"
 
-#: ui/CellToolBase.cpp:447
+#: ui/CellToolBase.cpp:358
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Promijeni kut"
 
-#: ui/CellToolBase.cpp:450
+#: ui/CellToolBase.cpp:361
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Ne postoje podaci u spremniku s isječcima."
 
-#: ui/CellToolBase.cpp:454
+#: ui/CellToolBase.cpp:365
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Ne postoje podaci u spremniku s isječcima."
 
-#: ui/CellToolBase.cpp:458
+#: ui/CellToolBase.cpp:369
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "U&kloni komentar"
 
-#: ui/CellToolBase.cpp:461
+#: ui/CellToolBase.cpp:372
 #, kde-format
 msgid "Special Paste..."
 msgstr "Posebno umetanje …"
 
-#: ui/CellToolBase.cpp:464
+#: ui/CellToolBase.cpp:375
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "U&kloni komentar"
 
-#: ui/CellToolBase.cpp:466
+#: ui/CellToolBase.cpp:377
 #, fuzzy, kde-format
 msgid "Paste with Insertion"
 msgstr "Umetni ćeliju"
 
-#: ui/CellToolBase.cpp:469
+#: ui/CellToolBase.cpp:380
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Umetni novi list."
 
-#: ui/CellToolBase.cpp:472
+#: ui/CellToolBase.cpp:383
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "U&kloni komentar"
 
-#: ui/CellToolBase.cpp:489
+#: ui/CellToolBase.cpp:400
 #, kde-format
 msgid "Goto Cell..."
 msgstr "Idi na ćeliju …"
 
-#: ui/CellToolBase.cpp:490
+#: ui/CellToolBase.cpp:401
 #, fuzzy, kde-format
 msgid "Goto"
 msgstr "Idi na ćeliju"
 
-#: ui/CellToolBase.cpp:494
+#: ui/CellToolBase.cpp:405
 #, kde-format
 msgid "Move to a particular cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:497
+#: ui/CellToolBase.cpp:408
 #, kde-format
 msgid "Check the spelling"
 msgstr ""
 
-#: ui/CellToolBase.cpp:500
+#: ui/CellToolBase.cpp:411
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:506
+#: ui/CellToolBase.cpp:417
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Prikaži broj stupca..."
 
-#: ui/CellToolBase.cpp:512
+#: ui/CellToolBase.cpp:423
 #, fuzzy, kde-format
 #| msgid "AutoFormat..."
 msgid "Auto-Format..."
 msgstr "SamoOblikovanje..."
 
-#: ui/CellToolBase.cpp:515
+#: ui/CellToolBase.cpp:426
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "U&kloni komentar"
 
-#: ui/CellToolBase.cpp:517
+#: ui/CellToolBase.cpp:428
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Parametri"
 
-#: ui/CellToolBase.cpp:520
+#: ui/CellToolBase.cpp:431
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Prikaži broj stupca"
 
-#: ui/CellToolBase.cpp:522
+#: ui/CellToolBase.cpp:433
 #, fuzzy, kde-format
 msgid "Break Before Column"
 msgstr "Ukloni stupac"
 
-#: ui/CellToolBase.cpp:525
+#: ui/CellToolBase.cpp:436
 #, fuzzy, kde-format
 msgid "Column Break"
 msgstr "Broj"
 
-#: ui/CellToolBase.cpp:526
+#: ui/CellToolBase.cpp:437
 #, kde-format
 msgid "Set a manual page break before the column"
 msgstr ""
 
-#: ui/CellToolBase.cpp:528
+#: ui/CellToolBase.cpp:439
 #, fuzzy, kde-format
 msgid "Break Before Row"
 msgstr "Ukloni stupac"
 
-#: ui/CellToolBase.cpp:531
+#: ui/CellToolBase.cpp:442
 #, fuzzy, kde-format
 #| msgid "Header"
 msgid "Row Break"
 msgstr "Zaglavlje"
 
-#: ui/CellToolBase.cpp:532
+#: ui/CellToolBase.cpp:443
 #, kde-format
 msgid "Set a manual page break before the row"
 msgstr ""
 
-#: ui/CellToolBase.cpp:536
+#: ui/CellToolBase.cpp:447
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Zaštita"
 
-#: ui/CellToolBase.cpp:540
+#: ui/CellToolBase.cpp:451
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Zaštita"
 
-#: ui/CellToolBase.cpp:541
+#: ui/CellToolBase.cpp:452
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "U&kloni komentar"
 
-#: ui/CellToolBase.cpp:1347
+#: ui/CellToolBase.cpp:1258
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1408
+#: ui/CellToolBase.cpp:1324
 #, fuzzy, kde-format
 msgid "Create Style From Cell"
 msgstr "Veličina ćelije"
 
-#: ui/CellToolBase.cpp:1417
+#: ui/CellToolBase.cpp:1333
 #, fuzzy, kde-format
 msgid "The style name cannot be empty."
 msgstr "Ime tabele ne može biti prazno."
 
-#: ui/CellToolBase.cpp:1422 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1338 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "Stil takvog imena već postoji"
 
-#: ui/CellToolBase.cpp:1443 ui/CellToolBase.cpp:1463
+#: ui/CellToolBase.cpp:1359 ui/CellToolBase.cpp:1379
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Izgled ćelije"
 
-#: ui/CellToolBase.cpp:1495 ui/CellToolBase.cpp:1507 ui/CellToolBase.cpp:1519
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change Horizontal Alignment"
-msgstr "Spoji ćelije"
-
-#: ui/CellToolBase.cpp:1531 ui/CellToolBase.cpp:1543 ui/CellToolBase.cpp:1555
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change Vertical Alignment"
-msgstr "Spoji ćelije"
-
-#: ui/CellToolBase.cpp:1749
+#: ui/CellToolBase.cpp:1486
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Promijeni kut"
 
-#: ui/CellToolBase.cpp:1803
+#: ui/CellToolBase.cpp:1540
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14110,60 +13924,60 @@ msgstr ""
 "Nema dostupnih upravljačkih programa za baze podataka! Morate složiti Qt s "
 "odgovrajućim upravljačkim programima."
 
-#: ui/CellToolBase.cpp:1839 ui/CellToolBase.cpp:1851
+#: ui/CellToolBase.cpp:1576 ui/CellToolBase.cpp:1588
 #, fuzzy, kde-format
 msgid "You must select multiple cells."
 msgstr "Stil tabele"
 
-#: ui/CellToolBase.cpp:2340
+#: ui/CellToolBase.cpp:2077
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Naselje"
 
-#: ui/CellToolBase_p.cpp:692
+#: ui/CellToolBase_p.cpp:679
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Broj pokušaja"
 
-#: ui/CellToolBase_p.cpp:698
+#: ui/CellToolBase_p.cpp:685
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Valuta:"
 
-#: ui/CellToolBase_p.cpp:703
+#: ui/CellToolBase_p.cpp:690
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Format postotka"
 
-#: ui/CellToolBase_p.cpp:708
+#: ui/CellToolBase_p.cpp:695
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Format vremena"
 
-#: ui/CellToolBase_p.cpp:713
+#: ui/CellToolBase_p.cpp:700
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Oblik datuma"
 
-#: ui/CellToolBase_p.cpp:718
+#: ui/CellToolBase_p.cpp:705
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Znanstvena"
 
-#: ui/CellToolBase_p.cpp:1150
+#: ui/CellToolBase_p.cpp:1137
 #, fuzzy, kde-format
 #| msgid "Insert Cells..."
 msgid "Delete Cells..."
 msgstr "Umetni ćelije …"
 
-#: ui/CellToolBase_p.cpp:1154
+#: ui/CellToolBase_p.cpp:1141
 #, kde-format
 msgid "Selection List..."
 msgstr "Izaberite pismo"
@@ -15650,6 +15464,12 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
 
+#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
+#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
+#, kde-format
+msgid "All"
+msgstr "Sve"
+
 #: ui/dialogs/FormulaDialog.cpp:115
 #, fuzzy, kde-format
 msgid "Insert function"
@@ -16478,6 +16298,12 @@ msgstr ""
 msgid "Standard"
 msgstr "Standardno"
 
+#. i18n: ectx: property (text), widget (QRadioButton, center)
+#: ui/dialogs/PositionWidget.ui:68
+#, fuzzy, kde-format
+msgid "Center"
+msgstr "Centrirano"
+
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox4)
 #: ui/dialogs/PositionWidget.ui:85
 #, kde-format
@@ -16509,6 +16335,24 @@ msgid ""
 "<b>Bottom</b> means the content of the cell will be displayed at the bottom "
 "of the cell.</qt>"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, top)
+#: ui/dialogs/PositionWidget.ui:141
+#, kde-format
+msgid "Top"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, middle)
+#: ui/dialogs/PositionWidget.ui:148
+#, kde-format
+msgid "Middle"
+msgstr "Sredina"
+
+#. i18n: ectx: property (text), widget (QRadioButton, bottom)
+#: ui/dialogs/PositionWidget.ui:155
+#, fuzzy, kde-format
+msgid "Bottom"
+msgstr "Poravnaj dolje"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:165
@@ -16917,6 +16761,114 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Otvori vezu?"
+
+#~ msgid "Align Left"
+#~ msgstr "Poravnaj lijevo"
+
+#, fuzzy
+#~ msgid "Left justify the cell contents"
+#~ msgstr "U&kloni komentar"
+
+#~ msgid "Align Center"
+#~ msgstr "Centrirano"
+
+#, fuzzy
+#~ msgid "Center the cell contents"
+#~ msgstr "U&kloni komentar"
+
+#~ msgid "Align Right"
+#~ msgstr "Poravnaj desno"
+
+#, fuzzy
+#~ msgid "Right justify the cell contents"
+#~ msgstr "U&kloni komentar"
+
+#~ msgid "Align Top"
+#~ msgstr "Poravnato gore"
+
+#, fuzzy
+#~ msgid "Align cell contents along the top of the cell"
+#~ msgstr "Spoji ćelije"
+
+#~ msgid "Align Middle"
+#~ msgstr "Poravnaj po sredini"
+
+#, fuzzy
+#~ msgid "Align cell contents centered in the cell"
+#~ msgstr "Spoji ćelije"
+
+#~ msgid "Align Bottom"
+#~ msgstr "Poravnaj dolje"
+
+#, fuzzy
+#~ msgid "Align cell contents along the bottom of the cell"
+#~ msgstr "Spoji ćelije"
+
+#~ msgid "Border Left"
+#~ msgstr "Lijevi rub"
+
+#, fuzzy
+#~ msgid "Set a left border to the selected area"
+#~ msgstr "Pomakni prema lijevo"
+
+#~ msgid "Border Right"
+#~ msgstr "Desni rub"
+
+#, fuzzy
+#~ msgid "Set a right border to the selected area"
+#~ msgstr "Pomakni prema lijevo"
+
+#~ msgid "Border Top"
+#~ msgstr "Gornji rub"
+
+#, fuzzy
+#~ msgid "Set a top border to the selected area"
+#~ msgstr "Pomakni prema lijevo"
+
+#~ msgid "Border Bottom"
+#~ msgstr "Donji rub"
+
+#, fuzzy
+#~ msgid "Set a bottom border to the selected area"
+#~ msgstr "Pomakni prema lijevo"
+
+#~ msgid "All Borders"
+#~ msgstr "Svi rubovi"
+
+#, fuzzy
+#~ msgid "Set a border around all cells in the selected area"
+#~ msgstr "Pomakni prema lijevo"
+
+#, fuzzy
+#~| msgid "All Borders"
+#~ msgid "No Borders"
+#~ msgstr "Svi rubovi"
+
+#, fuzzy
+#~ msgid "Remove all borders in the selected area"
+#~ msgstr "Pomakni prema lijevo"
+
+#~ msgid "Border Outline"
+#~ msgstr "Kontura ruba"
+
+#, fuzzy
+#~| msgid "Border Outline"
+#~ msgid "Outline"
+#~ msgstr "Kontura ruba"
+
+#, fuzzy
+#~ msgid "Set a border to the outline of the selected area"
+#~ msgstr "Pomakni prema lijevo"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Horizontal Alignment"
+#~ msgstr "Spoji ćelije"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Vertical Alignment"
+#~ msgstr "Spoji ćelije"
 
 #~ msgid "Australia"
 #~ msgstr "Australija"

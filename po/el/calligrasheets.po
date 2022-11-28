@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-27 00:46+0000\n"
+"POT-Creation-Date: 2022-11-28 00:49+0000\n"
 "PO-Revision-Date: 2020-10-01 11:38+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -917,7 +917,7 @@ msgstr "Αριθμός"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:163 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:164 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -976,7 +976,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") επιστρέφει 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:388 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:299 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Βάση δεδομένων"
@@ -13134,7 +13134,7 @@ msgstr "Ενεργοποίηση"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:188
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:189
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
@@ -13596,15 +13596,13 @@ msgid "Up"
 msgstr "Πάνω"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
-#: part/dialogs/PreferenceDialog.cpp:301 ui/CellToolBase.cpp:222
-#: ui/CellToolBase.cpp:261 ui/dialogs/PositionWidget.ui:75
+#: part/dialogs/PreferenceDialog.cpp:301 ui/dialogs/PositionWidget.ui:75
 #, kde-format
 msgid "Right"
 msgstr "Δεξιά"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
-#: part/dialogs/PreferenceDialog.cpp:302 ui/CellToolBase.cpp:208
-#: ui/CellToolBase.cpp:255 ui/dialogs/PositionWidget.ui:61
+#: part/dialogs/PreferenceDialog.cpp:302 ui/dialogs/PositionWidget.ui:61
 #, kde-format
 msgid "Left"
 msgstr "Αριστερά"
@@ -13620,10 +13618,10 @@ msgstr "Κάτω, πρώτη στήλη"
 #. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/CellToolBase.cpp:285 ui/dialogs/DatabaseDialog.cpp:711
-#: ui/dialogs/DatabaseDialog.cpp:712 ui/dialogs/DocumentSettingsDialog.cpp:124
-#: ui/dialogs/pivotfilters.ui:36 ui/dialogs/pivotoptions.ui:95
-#: ui/dialogs/pivotoptions.ui:104 ui/dialogs/pivotsubtotals.ui:21
+#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
+#: ui/dialogs/DocumentSettingsDialog.cpp:124 ui/dialogs/pivotfilters.ui:36
+#: ui/dialogs/pivotoptions.ui:95 ui/dialogs/pivotoptions.ui:104
+#: ui/dialogs/pivotsubtotals.ui:21
 #, kde-format
 msgid "None"
 msgstr "Κανένα"
@@ -14522,7 +14520,7 @@ msgstr ""
 "Πρόκειται να αφαιρέσετε το ενεργό φύλλο.\n"
 "Επιθυμείτε να συνεχίσετε;"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1409
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1325
 #, kde-format
 msgid "Enter name:"
 msgstr "Εισάγετε όνομα:"
@@ -14582,704 +14580,523 @@ msgstr "Πλήθος: "
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1483
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1399
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Τροποποίηση χρώματος κειμένου"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1711
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1448
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Τροποποίηση χρώματος φόντου"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase.cpp:1568 ui/CellToolBase.cpp:1584 ui/CellToolBase.cpp:1600
-#: ui/CellToolBase.cpp:1613 ui/CellToolBase.cpp:1626 ui/CellToolBase.cpp:1643
-#: ui/CellToolBase.cpp:1661 ui/CellToolBase_p.cpp:723
+#: ui/CellToolBase_p.cpp:710
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Τροποποίηση περιγράμματος"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:163
 #, kde-format
 msgid "Cell Format..."
 msgstr "Μορφή κελιού..."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:168
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Ορισμός μορφοποίησης του κελιού"
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "Style Manager..."
 msgstr "Διαχειριστής στιλ..."
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr "Επεξεργασία και οργάνωση των στιλ κελιών"
 
-#: ui/CellToolBase.cpp:174 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:175 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "Στιλ"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:177
 #, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "Εφαρμογή ενός προκαθορισμένου στιλ στα επιλεγμένα κελιά"
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:180
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "Δημιουργία στιλ από κελί..."
 
-#: ui/CellToolBase.cpp:180
+#: ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Style From Cell"
 msgstr "Στιλ από κελί"
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:184
 #, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "Δημιουργία ενός νέου στιλ βασισμένο στο τρέχον επιλεγμένο κελί"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:188
 #, kde-format
 msgid "Select Font..."
 msgstr "Επιλογή γραμματοσειράς..."
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Select Font Size"
 msgstr "Επιλογή μεγέθους γραμματοσειράς"
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Font Size"
 msgstr "Μέγεθος γραμματοσειράς"
 
-#: ui/CellToolBase.cpp:199
+#: ui/CellToolBase.cpp:200
 #, kde-format
 msgid "Text Color"
 msgstr "Χρώμα κειμένου"
 
-#: ui/CellToolBase.cpp:200
+#: ui/CellToolBase.cpp:201
 #, kde-format
 msgid "Set the text color"
 msgstr "Ορισμός του χρώματος κειμένου"
 
-#: ui/CellToolBase.cpp:207
-#, kde-format
-msgid "Align Left"
-msgstr "Στοίχιση αριστερά"
-
-#: ui/CellToolBase.cpp:211
-#, kde-format
-msgid "Left justify the cell contents"
-msgstr "Στοίχιση αριστερά των περιεχομένων του κελιού"
-
-#: ui/CellToolBase.cpp:214
-#, kde-format
-msgid "Align Center"
-msgstr "Στοίχιση στο κέντρο"
-
-#. i18n: ectx: property (text), widget (QRadioButton, center)
-#: ui/CellToolBase.cpp:215 ui/dialogs/PositionWidget.ui:68
-#, kde-format
-msgid "Center"
-msgstr "Κέντρο"
-
-#: ui/CellToolBase.cpp:218
-#, kde-format
-msgid "Center the cell contents"
-msgstr "Ευθυγράμμιση στο κέντρο των περιεχομένων του κελιού"
-
-#: ui/CellToolBase.cpp:221
-#, kde-format
-msgid "Align Right"
-msgstr "Στοίχιση δεξιά"
-
-#: ui/CellToolBase.cpp:225
-#, kde-format
-msgid "Right justify the cell contents"
-msgstr "Στοίχιση δεξιά των περιεχομένων του κελιού"
-
-#: ui/CellToolBase.cpp:231
-#, kde-format
-msgid "Align Top"
-msgstr "Στοίχιση πάνω"
-
-#. i18n: ectx: property (text), widget (QRadioButton, top)
-#: ui/CellToolBase.cpp:232 ui/CellToolBase.cpp:267
-#: ui/dialogs/PositionWidget.ui:141
-#, kde-format
-msgid "Top"
-msgstr "Πάνω"
-
-#: ui/CellToolBase.cpp:235
-#, kde-format
-msgid "Align cell contents along the top of the cell"
-msgstr "Στοίχιση των περιεχομένου του κελιού στο πάνω μέρος του"
-
-#: ui/CellToolBase.cpp:238
-#, kde-format
-msgid "Align Middle"
-msgstr "Στοίχιση στο κέντρο"
-
-#. i18n: ectx: property (text), widget (QRadioButton, middle)
-#: ui/CellToolBase.cpp:239 ui/dialogs/PositionWidget.ui:148
-#, kde-format
-msgid "Middle"
-msgstr "Κέντρο"
-
-#: ui/CellToolBase.cpp:242
-#, kde-format
-msgid "Align cell contents centered in the cell"
-msgstr "Στοίχιση των περιεχομένων του κελιού στο κέντρο του"
-
-#: ui/CellToolBase.cpp:245
-#, kde-format
-msgid "Align Bottom"
-msgstr "Στοίχιση κάτω"
-
-#. i18n: ectx: property (text), widget (QRadioButton, bottom)
-#: ui/CellToolBase.cpp:246 ui/CellToolBase.cpp:273
-#: ui/dialogs/PositionWidget.ui:155
-#, kde-format
-msgid "Bottom"
-msgstr "Κάτω"
-
-#: ui/CellToolBase.cpp:249
-#, kde-format
-msgid "Align cell contents along the bottom of the cell"
-msgstr "Στοίχιση των περιεχομένων του κελιού στο κάτω μέρος του"
-
-#: ui/CellToolBase.cpp:254
-#, kde-format
-msgid "Border Left"
-msgstr "Περίγραμμα αριστερά"
-
-#: ui/CellToolBase.cpp:258
-#, kde-format
-msgid "Set a left border to the selected area"
-msgstr "Ορισμός ενός αριστερού περιγράμματος στην επιλεγμένη περιοχή"
-
-#: ui/CellToolBase.cpp:260
-#, kde-format
-msgid "Border Right"
-msgstr "Περίγραμμα δεξιά"
-
-#: ui/CellToolBase.cpp:264
-#, kde-format
-msgid "Set a right border to the selected area"
-msgstr "Ορισμός ενός δεξιού περιγράμματος στην επιλεγμένη περιοχή"
-
-#: ui/CellToolBase.cpp:266
-#, kde-format
-msgid "Border Top"
-msgstr "Περίγραμμα πάνω"
-
-#: ui/CellToolBase.cpp:270
-#, kde-format
-msgid "Set a top border to the selected area"
-msgstr "Ορισμός ενός πάνω περιγράμματος στην επιλεγμένη περιοχή"
-
-#: ui/CellToolBase.cpp:272
-#, kde-format
-msgid "Border Bottom"
-msgstr "Περίγραμμα κάτω"
-
-#: ui/CellToolBase.cpp:276
-#, kde-format
-msgid "Set a bottom border to the selected area"
-msgstr "Ορισμός ενός κάτω περιγράμματος στην επιλεγμένη περιοχή"
-
-#: ui/CellToolBase.cpp:278
-#, kde-format
-msgid "All Borders"
-msgstr "Όλα τα περιγράμματα"
-
-#: ui/CellToolBase.cpp:279 ui/dialogs/FormulaDialog.cpp:84
-#: ui/dialogs/FormulaDialog.cpp:190 ui/dialogs/FormulaDialog.cpp:722
-#: ui/FilterPopup.cpp:55
-#, kde-format
-msgid "All"
-msgstr "Όλα"
-
-#: ui/CellToolBase.cpp:282
-#, kde-format
-msgid "Set a border around all cells in the selected area"
-msgstr ""
-"Ορισμός ενός περιγράμματος γύρω από όλα τα κελιά στην επιλεγμένη περιοχή"
-
-#: ui/CellToolBase.cpp:284
-#, kde-format
-msgid "No Borders"
-msgstr "Χωρίς περιγράμματα"
-
-#: ui/CellToolBase.cpp:288
-#, kde-format
-msgid "Remove all borders in the selected area"
-msgstr "Αφαίρεση όλων των περιγραμμάτων στην επιλεγμένη περιοχή"
-
-#: ui/CellToolBase.cpp:290
-#, kde-format
-msgid "Border Outline"
-msgstr "Περίγραμμα ορίων"
-
-#: ui/CellToolBase.cpp:291
-#, kde-format
-msgid "Outline"
-msgstr "Περίγραμμα"
-
-#: ui/CellToolBase.cpp:294
-#, kde-format
-msgid "Set a border to the outline of the selected area"
-msgstr "Ορισμός ενός περιγράμματος στα όρια της επιλεγμένης περιοχής"
-
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:209
 #, kde-format
 msgid "Select a new border color"
 msgstr "Επιλογή ενός νέου χρώματος περιγράμματος"
 
-#: ui/CellToolBase.cpp:299
+#: ui/CellToolBase.cpp:210
 #, kde-format
 msgid "Border Color"
 msgstr "Χρώμα περιγράμματος"
 
-#: ui/CellToolBase.cpp:306
+#: ui/CellToolBase.cpp:217
 #, kde-format
 msgid "Change Angle..."
 msgstr "Τροποποίηση γωνίας..."
 
-#: ui/CellToolBase.cpp:307
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Angle"
 msgstr "Γωνία"
 
-#: ui/CellToolBase.cpp:310
+#: ui/CellToolBase.cpp:221
 #, kde-format
 msgid "Change the angle that cell contents are printed"
 msgstr ""
 "Τροποποίηση της γωνίας με την οποία τα περιεχόμενα του κελιού εκτυπώνονται"
 
-#: ui/CellToolBase.cpp:314
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Increase Precision"
 msgstr "Αύξηση ακρίβειας"
 
-#: ui/CellToolBase.cpp:317
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Increase the decimal precision shown onscreen"
 msgstr "Αύξηση της δεκαδικής ακρίβειας που φαίνεται στην οθόνη"
 
-#: ui/CellToolBase.cpp:319
+#: ui/CellToolBase.cpp:230
 #, kde-format
 msgid "Decrease Precision"
 msgstr "Μείωση ακρίβειας"
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Decrease the decimal precision shown onscreen"
 msgstr "Μείωση της δεκαδικής ακρίβειας που φαίνεται στην οθόνη"
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:239
 #, kde-format
 msgid "Set the background color"
 msgstr "Ορισμός του χρώματος φόντου"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:240
 #, kde-format
 msgid "Background Color"
 msgstr "Χρώμα φόντου"
 
-#: ui/CellToolBase.cpp:335 ui/CellToolBase.cpp:341
+#: ui/CellToolBase.cpp:246 ui/CellToolBase.cpp:252
 #, kde-format
 msgid "Cells..."
 msgstr "Κελιά..."
 
-#: ui/CellToolBase.cpp:336 ui/CellToolBase_p.cpp:1146
+#: ui/CellToolBase.cpp:247 ui/CellToolBase_p.cpp:1133
 #, kde-format
 msgid "Insert Cells..."
 msgstr "Εισαγωγή κελιών..."
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:248
 #, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "Εισαγωγή ενός κενού κελιού στο φύλλο εργασίας"
 
-#: ui/CellToolBase.cpp:342
+#: ui/CellToolBase.cpp:253
 #, kde-format
 msgid "Remove Cells..."
 msgstr "Αφαίρεση κελιών..."
 
-#: ui/CellToolBase.cpp:343
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "Αφαίρεση των κελιών από το φύλλο εργασίας"
 
-#: ui/CellToolBase.cpp:349 ui/CellToolBase.cpp:350
+#: ui/CellToolBase.cpp:260 ui/CellToolBase.cpp:261
 #, kde-format
 msgid "Clear All"
 msgstr "Καθαρισμός όλων"
 
-#: ui/CellToolBase.cpp:351
+#: ui/CellToolBase.cpp:262
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Καθαρισμός όλων των περιεχομένων και μορφοποίησης του τρέχοντος κελιού"
 
-#: ui/CellToolBase.cpp:355
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "Contents"
 msgstr "Περιεχόμενα"
 
-#: ui/CellToolBase.cpp:356
+#: ui/CellToolBase.cpp:267
 #, kde-format
 msgid "Clear Contents"
 msgstr "Καθαρισμός περιεχομένων"
 
-#: ui/CellToolBase.cpp:357
+#: ui/CellToolBase.cpp:268
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Αφαίρεση των περιεχομένων του τρέχοντος κελιού"
 
-#: ui/CellToolBase.cpp:361
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Conditional Styles..."
 msgstr "Υπό συνθήκη στιλ..."
 
-#: ui/CellToolBase.cpp:362
+#: ui/CellToolBase.cpp:273
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "Ορισμός στιλ του κελιού βασισμένο σε διάφορες συνθήκες"
 
-#: ui/CellToolBase.cpp:366 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:277 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr "Υπό συνθήκη στιλ"
 
-#: ui/CellToolBase.cpp:367
+#: ui/CellToolBase.cpp:278
 #, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Αφαίρεση των υπό συνθήκη στιλ"
 
-#: ui/CellToolBase.cpp:368
+#: ui/CellToolBase.cpp:279
 #, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Αφαίρεση των υπό συνθήκη στιλ κελιών"
 
-#: ui/CellToolBase.cpp:374
+#: ui/CellToolBase.cpp:285
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "&Αυτόματο φίλτρο"
 
-#: ui/CellToolBase.cpp:377
+#: ui/CellToolBase.cpp:288
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "Προσθήκη ενός αυτόματου φίλτρο σε ένα εύρος κελιών"
 
-#: ui/CellToolBase.cpp:381
+#: ui/CellToolBase.cpp:292
 #, kde-format
 msgid "&Function..."
 msgstr "&Συνάρτηση..."
 
-#: ui/CellToolBase.cpp:384
+#: ui/CellToolBase.cpp:295
 #, kde-format
 msgid "Insert math expression"
 msgstr "Εισαγωγή μαθηματικής έκφρασης"
 
-#: ui/CellToolBase.cpp:387
+#: ui/CellToolBase.cpp:298
 #, kde-format
 msgid "From &Database..."
 msgstr "Από &βάση δεδομένων..."
 
-#: ui/CellToolBase.cpp:391
+#: ui/CellToolBase.cpp:302
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Εισαγωγή δεδομένων από μια βάση δεδομένων SQL"
 
-#: ui/CellToolBase.cpp:394
+#: ui/CellToolBase.cpp:305
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Προσαρμοσμένες λίστες..."
 
-#: ui/CellToolBase.cpp:397
+#: ui/CellToolBase.cpp:308
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Δημιουργία προσαρμοσμένων λιστών για ταξινόμηση ή αυτόματη συμπλήρωση"
 
-#: ui/CellToolBase.cpp:399
+#: ui/CellToolBase.cpp:310
 #, kde-format
 msgid "&Consolidate..."
 msgstr "Σ&υγχώνευση..."
 
-#: ui/CellToolBase.cpp:402
+#: ui/CellToolBase.cpp:313
 #, kde-format
 msgid "Create a region of summary data from a group of similar regions"
 msgstr ""
 "Δημιουργία μιας περιοχής δεδομένων περίληψης από μία ομάδα παρόμοιων περιοχών"
 
-#: ui/CellToolBase.cpp:404
+#: ui/CellToolBase.cpp:315
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "Αναζήτηση &στόχου..."
 
-#: ui/CellToolBase.cpp:407
+#: ui/CellToolBase.cpp:318
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Επανάληψη υπολογισμού για την εύρεση μιας συγκεκριμένης τιμής"
 
-#: ui/CellToolBase.cpp:409
+#: ui/CellToolBase.cpp:320
 #, kde-format
 msgid "&Subtotals..."
 msgstr "&Μερικά σύνολα..."
 
-#: ui/CellToolBase.cpp:412
+#: ui/CellToolBase.cpp:323
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
 msgstr ""
 "Δημιουργία διαφορετικού είδους μερικών συνόλων σε μία λίστα ή βάση δεδομένων"
 
-#: ui/CellToolBase.cpp:414
+#: ui/CellToolBase.cpp:325
 #, kde-format
 msgid "&Pivot Tables..."
 msgstr "Συγκεντρωτικοί (&pivot) πίνακες..."
 
-#: ui/CellToolBase.cpp:417
+#: ui/CellToolBase.cpp:328
 #, kde-format
 msgid "Create Pivot Tables"
 msgstr "Δημιουργία συγκεντρωτικών πινάκων"
 
-#: ui/CellToolBase.cpp:419
+#: ui/CellToolBase.cpp:330
 #, kde-format
 msgid "Area Name..."
 msgstr "Όνομα περιοχής..."
 
-#: ui/CellToolBase.cpp:422
+#: ui/CellToolBase.cpp:333
 #, kde-format
 msgid "Set a name for a region of the spreadsheet"
 msgstr "Καθορισμός μιας ονομασίας για μια περιοχή του λογιστικού φύλλου"
 
-#: ui/CellToolBase.cpp:424
+#: ui/CellToolBase.cpp:335
 #, kde-format
 msgid "Named Areas..."
 msgstr "Περιοχές με ονομασία..."
 
-#: ui/CellToolBase.cpp:426 ui/dialogs/NamedAreaDialog.cpp:49
+#: ui/CellToolBase.cpp:337 ui/dialogs/NamedAreaDialog.cpp:49
 #, kde-format
 msgid "Named Areas"
 msgstr "Περιοχές με ονομασία"
 
-#: ui/CellToolBase.cpp:428
+#: ui/CellToolBase.cpp:339
 #, kde-format
 msgid "Edit or select named areas"
 msgstr "Επεξεργασία ή επιλογή περιοχών με ονομασία"
 
-#: ui/CellToolBase.cpp:432
+#: ui/CellToolBase.cpp:343
 #, kde-format
 msgid "Formula Selection"
 msgstr "Επιλογή μαθηματικού τύπου"
 
-#: ui/CellToolBase.cpp:434
+#: ui/CellToolBase.cpp:345
 #, kde-format
 msgid "Insert a function"
 msgstr "Εισαγωγή μιας συνάρτησης"
 
-#: ui/CellToolBase.cpp:435 ui/CellToolBase.cpp:1876
+#: ui/CellToolBase.cpp:346 ui/CellToolBase.cpp:1613
 #, kde-format
 msgid "Others..."
 msgstr "Άλλες..."
 
-#: ui/CellToolBase.cpp:443
+#: ui/CellToolBase.cpp:354
 #, kde-format
 msgid "Modify Cell"
 msgstr "Τροποποίηση κελιού"
 
-#: ui/CellToolBase.cpp:447
+#: ui/CellToolBase.cpp:358
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Επεξεργασία του τονισμένου κελιού"
 
-#: ui/CellToolBase.cpp:450
+#: ui/CellToolBase.cpp:361
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Μετακίνηση του αντικειμένου του κελιού στο πρόχειρο"
 
-#: ui/CellToolBase.cpp:454
+#: ui/CellToolBase.cpp:365
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Αντιγραφή του αντικειμένου του κελιού στο πρόχειρο"
 
-#: ui/CellToolBase.cpp:458
+#: ui/CellToolBase.cpp:369
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Επικόλληση των περιεχομένων του προχείρου στο δρομέα"
 
-#: ui/CellToolBase.cpp:461
+#: ui/CellToolBase.cpp:372
 #, kde-format
 msgid "Special Paste..."
 msgstr "Ειδική επικόλληση..."
 
-#: ui/CellToolBase.cpp:464
+#: ui/CellToolBase.cpp:375
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Επικόλληση των περιεχομένων του προχείρου με ειδικές επιλογές"
 
-#: ui/CellToolBase.cpp:466
+#: ui/CellToolBase.cpp:377
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Επικόλληση με εισαγωγή"
 
-#: ui/CellToolBase.cpp:469
+#: ui/CellToolBase.cpp:380
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Εισάγει ένα κελί από το πρόχειρο στο φύλλο εργασίας"
 
-#: ui/CellToolBase.cpp:472
+#: ui/CellToolBase.cpp:383
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Επιλογή όλων των κελιών στο τρέχον φύλλο εργασίας"
 
-#: ui/CellToolBase.cpp:489
+#: ui/CellToolBase.cpp:400
 #, kde-format
 msgid "Goto Cell..."
 msgstr "Μετάβαση στο κελί..."
 
-#: ui/CellToolBase.cpp:490
+#: ui/CellToolBase.cpp:401
 #, kde-format
 msgid "Goto"
 msgstr "Μετάβαση"
 
-#: ui/CellToolBase.cpp:494
+#: ui/CellToolBase.cpp:405
 #, kde-format
 msgid "Move to a particular cell"
 msgstr "Μετακίνηση σε ένα συγκεκριμένο κελί"
 
-#: ui/CellToolBase.cpp:497
+#: ui/CellToolBase.cpp:408
 #, kde-format
 msgid "Check the spelling"
 msgstr "Ορθογραφικός έλεγχος"
 
-#: ui/CellToolBase.cpp:500
+#: ui/CellToolBase.cpp:411
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Εκτέλεση επιθεωρητή..."
 
-#: ui/CellToolBase.cpp:506
+#: ui/CellToolBase.cpp:417
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Εμφάνιση QTableView..."
 
-#: ui/CellToolBase.cpp:512
+#: ui/CellToolBase.cpp:423
 #, kde-format
 msgid "Auto-Format..."
 msgstr "Αυτόματη μορφοποίηση..."
 
-#: ui/CellToolBase.cpp:515
+#: ui/CellToolBase.cpp:426
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Καθορισμός της μορφοποίησης του φύλλου εργασίας"
 
-#: ui/CellToolBase.cpp:517
+#: ui/CellToolBase.cpp:428
 #, kde-format
 msgid "Document Settings..."
 msgstr "Ρυθμίσεις εγγράφου..."
 
-#: ui/CellToolBase.cpp:520
+#: ui/CellToolBase.cpp:431
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Εμφάνιση διαλόγου ρυθμίσεων εγγράφου"
 
-#: ui/CellToolBase.cpp:522
+#: ui/CellToolBase.cpp:433
 #, kde-format
 msgid "Break Before Column"
 msgstr "Αλλαγή σελίδας πριν από τη στήλη"
 
-#: ui/CellToolBase.cpp:525
+#: ui/CellToolBase.cpp:436
 #, kde-format
 msgid "Column Break"
 msgstr "Αλλαγή σελίδας στη στήλη"
 
-#: ui/CellToolBase.cpp:526
+#: ui/CellToolBase.cpp:437
 #, kde-format
 msgid "Set a manual page break before the column"
 msgstr "Ορισμός χειροκίνητης αλλαγής σελίδας πριν από τη στήλη"
 
-#: ui/CellToolBase.cpp:528
+#: ui/CellToolBase.cpp:439
 #, kde-format
 msgid "Break Before Row"
 msgstr "Αλλαγή σελίδας πριν από τη γραμμή"
 
-#: ui/CellToolBase.cpp:531
+#: ui/CellToolBase.cpp:442
 #, kde-format
 msgid "Row Break"
 msgstr "Αλλαγή σελίδας στη γραμμή"
 
-#: ui/CellToolBase.cpp:532
+#: ui/CellToolBase.cpp:443
 #, kde-format
 msgid "Set a manual page break before the row"
 msgstr "Ορισμός χειροκίνητης αλλαγής σελίδας πριν από τη γραμμή"
 
-#: ui/CellToolBase.cpp:536
+#: ui/CellToolBase.cpp:447
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Μετάθεση σταθερού σημείου αναφοράς"
 
-#: ui/CellToolBase.cpp:540
+#: ui/CellToolBase.cpp:451
 #, kde-format
 msgid "Permute fixation"
 msgstr "Μετάθεση σταθερού σημείου"
 
-#: ui/CellToolBase.cpp:541
+#: ui/CellToolBase.cpp:452
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Μετάθεση του σταθερού σημείου αναφοράς στο δρομέα κειμένου"
 
-#: ui/CellToolBase.cpp:1347
+#: ui/CellToolBase.cpp:1258
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1408
+#: ui/CellToolBase.cpp:1324
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "Δημιουργία στιλ από κελί"
 
-#: ui/CellToolBase.cpp:1417
+#: ui/CellToolBase.cpp:1333
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "Το όνομα στιλ δεν μπορεί να είναι κενό."
 
-#: ui/CellToolBase.cpp:1422 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1338 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "Ένα στιλ με αυτό το όνομα υπάρχει ήδη."
 
-#: ui/CellToolBase.cpp:1443 ui/CellToolBase.cpp:1463
+#: ui/CellToolBase.cpp:1359 ui/CellToolBase.cpp:1379
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Τροποποίηση γραμματοσειράς"
 
-#: ui/CellToolBase.cpp:1495 ui/CellToolBase.cpp:1507 ui/CellToolBase.cpp:1519
-msgctxt "(qtundo-format)"
-msgid "Change Horizontal Alignment"
-msgstr "Τροποποίηση οριζόντιας στοίχισης"
-
-#: ui/CellToolBase.cpp:1531 ui/CellToolBase.cpp:1543 ui/CellToolBase.cpp:1555
-msgctxt "(qtundo-format)"
-msgid "Change Vertical Alignment"
-msgstr "Τροποποίηση κατακόρυφης στοίχισης"
-
-#: ui/CellToolBase.cpp:1749
+#: ui/CellToolBase.cpp:1486
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Καθαρισμός κειμένου"
 
-#: ui/CellToolBase.cpp:1803
+#: ui/CellToolBase.cpp:1540
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15288,52 +15105,52 @@ msgstr ""
 "Δεν υπάρχουν διαθέσιμοι οδηγοί βάσης δεδομένων. Πρέπει να εγκαταστήσετε τους "
 "απαραίτητους οδηγούς βάσης δεδομένων της Qt."
 
-#: ui/CellToolBase.cpp:1839 ui/CellToolBase.cpp:1851
+#: ui/CellToolBase.cpp:1576 ui/CellToolBase.cpp:1588
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Πρέπει να επιλέξετε πολλαπλά κελιά."
 
-#: ui/CellToolBase.cpp:2340
+#: ui/CellToolBase.cpp:2077
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Αντικατάσταση"
 
-#: ui/CellToolBase_p.cpp:692
+#: ui/CellToolBase_p.cpp:679
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Μορφή αριθμού"
 
-#: ui/CellToolBase_p.cpp:698
+#: ui/CellToolBase_p.cpp:685
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Μορφή νομίσματος"
 
-#: ui/CellToolBase_p.cpp:703
+#: ui/CellToolBase_p.cpp:690
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Μορφή ποσοστού"
 
-#: ui/CellToolBase_p.cpp:708
+#: ui/CellToolBase_p.cpp:695
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Μορφή ώρας"
 
-#: ui/CellToolBase_p.cpp:713
+#: ui/CellToolBase_p.cpp:700
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Μορφή ημερομηνίας"
 
-#: ui/CellToolBase_p.cpp:718
+#: ui/CellToolBase_p.cpp:705
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Επιστημονική μορφή"
 
-#: ui/CellToolBase_p.cpp:1150
+#: ui/CellToolBase_p.cpp:1137
 #, kde-format
 msgid "Delete Cells..."
 msgstr "Διαγραφή κελιών..."
 
-#: ui/CellToolBase_p.cpp:1154
+#: ui/CellToolBase_p.cpp:1141
 #, kde-format
 msgid "Selection List..."
 msgstr "Λίστα επιλογής..."
@@ -16769,6 +16586,12 @@ msgstr ""
 "Μπορείτε να δείτε μια προεπισκόπηση της γραμματοσειράς που επιλέγετε για το "
 "τρέχον κελί."
 
+#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
+#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
+#, kde-format
+msgid "All"
+msgstr "Όλα"
+
 #: ui/dialogs/FormulaDialog.cpp:115
 #, kde-format
 msgid "Insert function"
@@ -17667,6 +17490,12 @@ msgstr ""
 msgid "Standard"
 msgstr "Τυπική"
 
+#. i18n: ectx: property (text), widget (QRadioButton, center)
+#: ui/dialogs/PositionWidget.ui:68
+#, kde-format
+msgid "Center"
+msgstr "Κέντρο"
+
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox4)
 #: ui/dialogs/PositionWidget.ui:85
 #, kde-format
@@ -17706,6 +17535,24 @@ msgstr ""
 "Το <b>Κέντρο</b> εμφανίζει το περιεχόμενο στο κέντρο κατακόρυφα του κελιού.\n"
 "Το <b>Κάτω</b> σημαίνει ότι το περιεχόμενο του κελιού θα εμφανίζεται στο "
 "κάτω μέρος του κελιού.</qt>"
+
+#. i18n: ectx: property (text), widget (QRadioButton, top)
+#: ui/dialogs/PositionWidget.ui:141
+#, kde-format
+msgid "Top"
+msgstr "Πάνω"
+
+#. i18n: ectx: property (text), widget (QRadioButton, middle)
+#: ui/dialogs/PositionWidget.ui:148
+#, kde-format
+msgid "Middle"
+msgstr "Κέντρο"
+
+#. i18n: ectx: property (text), widget (QRadioButton, bottom)
+#: ui/dialogs/PositionWidget.ui:155
+#, kde-format
+msgid "Bottom"
+msgstr "Κάτω"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:165
@@ -18149,6 +17996,96 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Άνοιγμα δεσμού;"
+
+#~ msgid "Align Left"
+#~ msgstr "Στοίχιση αριστερά"
+
+#~ msgid "Left justify the cell contents"
+#~ msgstr "Στοίχιση αριστερά των περιεχομένων του κελιού"
+
+#~ msgid "Align Center"
+#~ msgstr "Στοίχιση στο κέντρο"
+
+#~ msgid "Center the cell contents"
+#~ msgstr "Ευθυγράμμιση στο κέντρο των περιεχομένων του κελιού"
+
+#~ msgid "Align Right"
+#~ msgstr "Στοίχιση δεξιά"
+
+#~ msgid "Right justify the cell contents"
+#~ msgstr "Στοίχιση δεξιά των περιεχομένων του κελιού"
+
+#~ msgid "Align Top"
+#~ msgstr "Στοίχιση πάνω"
+
+#~ msgid "Align cell contents along the top of the cell"
+#~ msgstr "Στοίχιση των περιεχομένου του κελιού στο πάνω μέρος του"
+
+#~ msgid "Align Middle"
+#~ msgstr "Στοίχιση στο κέντρο"
+
+#~ msgid "Align cell contents centered in the cell"
+#~ msgstr "Στοίχιση των περιεχομένων του κελιού στο κέντρο του"
+
+#~ msgid "Align Bottom"
+#~ msgstr "Στοίχιση κάτω"
+
+#~ msgid "Align cell contents along the bottom of the cell"
+#~ msgstr "Στοίχιση των περιεχομένων του κελιού στο κάτω μέρος του"
+
+#~ msgid "Border Left"
+#~ msgstr "Περίγραμμα αριστερά"
+
+#~ msgid "Set a left border to the selected area"
+#~ msgstr "Ορισμός ενός αριστερού περιγράμματος στην επιλεγμένη περιοχή"
+
+#~ msgid "Border Right"
+#~ msgstr "Περίγραμμα δεξιά"
+
+#~ msgid "Set a right border to the selected area"
+#~ msgstr "Ορισμός ενός δεξιού περιγράμματος στην επιλεγμένη περιοχή"
+
+#~ msgid "Border Top"
+#~ msgstr "Περίγραμμα πάνω"
+
+#~ msgid "Set a top border to the selected area"
+#~ msgstr "Ορισμός ενός πάνω περιγράμματος στην επιλεγμένη περιοχή"
+
+#~ msgid "Border Bottom"
+#~ msgstr "Περίγραμμα κάτω"
+
+#~ msgid "Set a bottom border to the selected area"
+#~ msgstr "Ορισμός ενός κάτω περιγράμματος στην επιλεγμένη περιοχή"
+
+#~ msgid "All Borders"
+#~ msgstr "Όλα τα περιγράμματα"
+
+#~ msgid "Set a border around all cells in the selected area"
+#~ msgstr ""
+#~ "Ορισμός ενός περιγράμματος γύρω από όλα τα κελιά στην επιλεγμένη περιοχή"
+
+#~ msgid "No Borders"
+#~ msgstr "Χωρίς περιγράμματα"
+
+#~ msgid "Remove all borders in the selected area"
+#~ msgstr "Αφαίρεση όλων των περιγραμμάτων στην επιλεγμένη περιοχή"
+
+#~ msgid "Border Outline"
+#~ msgstr "Περίγραμμα ορίων"
+
+#~ msgid "Outline"
+#~ msgstr "Περίγραμμα"
+
+#~ msgid "Set a border to the outline of the selected area"
+#~ msgstr "Ορισμός ενός περιγράμματος στα όρια της επιλεγμένης περιοχής"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Horizontal Alignment"
+#~ msgstr "Τροποποίηση οριζόντιας στοίχισης"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Vertical Alignment"
+#~ msgstr "Τροποποίηση κατακόρυφης στοίχισης"
 
 #~ msgid "Australia"
 #~ msgstr "Αυστραλία"
