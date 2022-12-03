@@ -211,30 +211,28 @@ bool Validity::testValidity(const CellBase* cell) const
         || (d->restriction == Date && (val.format() == Value::fmt_Date))) {
         switch (d->cond) {
         case Validity::Equal:
-            valid = val.equal(d->minValue, cs);
+            valid = calc->naturalEqual(val, d->minValue, cs);
             break;
         case Validity::DifferentTo:
-            valid = !val.equal(d->minValue, cs);
+            valid = !calc->naturalEqual(val, d->minValue, cs);
             break;
         case Validity::Superior:
-            valid = val.greater(d->minValue, cs);
+            valid = calc->naturalGreater(val, d->minValue, cs);
             break;
         case Validity::Inferior:
-            valid = val.less(d->minValue, cs);
+            valid = calc->naturalLower(val, d->minValue, cs);
             break;
         case Validity::SuperiorEqual:
-            valid = (val.compare(d->minValue, cs)) >= 0;
+            valid = calc->naturalGequal(val, d->minValue, cs);
             break;
         case Validity::InferiorEqual:
-            valid = (val.compare(d->minValue, cs)) <= 0;
+            valid = calc->naturalLequal(val, d->minValue, cs);
             break;
         case Validity::Between:
-            valid = (val.compare(d->minValue, cs) >= 0 &&
-                     val.compare(d->maxValue, cs) <= 0);
+            valid = (calc->naturalGequal(val, d->minValue, cs) && calc->naturalLequal(val, d->maxValue, cs));
             break;
         case Validity::Different:
-            valid = (val.compare(d->minValue, cs) < 0 ||
-                     val.compare(d->maxValue, cs) > 0);
+            valid = (calc->naturalLower(val, d->minValue, cs) || calc->naturalGreater(val, d->maxValue, cs));
             break;
         default :
             break;

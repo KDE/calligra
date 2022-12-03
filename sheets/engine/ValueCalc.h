@@ -321,25 +321,6 @@ protected:
     std::map<QString, arrayWalkFunc> awFuncs;
 };
 
-inline bool approxEqual(double a, double b)
-{
-    if (a == b)
-        return true;
-    double x = a - b;
-    return (x < 0.0 ? -x : x)
-           < ((a < 0.0 ? -a : a) *(1.0 / (16777216.0 * 16777216.0)));
-}
-
-inline double approxFloor(double a)
-{
-    double b = floor(a);
-    // The second approxEqual() is necessary for values that are near the limit
-    // of numbers representable with 4 bits stripped off. (#i12446#)
-    if (approxEqual(a - 1.0, b) && !approxEqual(a, b))
-        return b + 1.0;
-    return b;
-}
-
 } // namespace Sheets
 } // namespace Calligra
 

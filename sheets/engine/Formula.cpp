@@ -1557,7 +1557,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
                 ;
             else if (val2.isError())
                 val1 = val2;
-            else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) == 0)
+            else if (calc->naturalEqual(val1, val2, calc->settings()->caseSensitiveComparisons()))
                 val1 = Value(true);
             else
                 val1 = Value(false);
@@ -1568,13 +1568,13 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
 
             // less than
         case Opcode::Less:
-            val1 = d->valueOrElement(fe, stack.pop());
             val2 = d->valueOrElement(fe, stack.pop());
+            val1 = d->valueOrElement(fe, stack.pop());
             if (val1.isError())
                 ;
             else if (val2.isError())
                 val1 = val2;
-            else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) < 0)
+            else if (calc->naturalLower(val1, val2, calc->settings()->caseSensitiveComparisons()))
                 val1 = Value(true);
             else
                 val1 = Value(false);
@@ -1585,13 +1585,13 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
 
             // greater than
         case Opcode::Greater: {
-            val1 = d->valueOrElement(fe, stack.pop());
             val2 = d->valueOrElement(fe, stack.pop());
+            val1 = d->valueOrElement(fe, stack.pop());
             if (val1.isError())
                 ;
             else if (val2.isError())
                 val1 = val2;
-            else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) > 0)
+            else if (calc->naturalGreater(val1, val2, calc->settings()->caseSensitiveComparisons()))
                 val1 = Value(true);
             else
                 val1 = Value(false);
