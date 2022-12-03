@@ -602,11 +602,16 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
 {
     CellStorage *storage = fullCellStorage();
     Region::ConstIterator endOfList = region.constEnd();
+    QRect used = usedArea();
     for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it) {
         QRect range = (*it)->rect();
         // Complete rows selected ?
         if ((*it)->isRow()) {
-            for (int row = range.top(); row <= range.bottom(); ++row) {
+            int from = range.top();
+            int to = range.bottom();
+            if (from < used.top()) from = used.top();
+            if (to > used.bottom()) to = used.bottom();
+            for (int row = from; row <= to; ++row) {
                 Cell cell = storage->firstInRow(row);
                 while (!cell.isNull()) {
                     if (!cellIsEmpty(cell, _type))
@@ -617,7 +622,11 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
         }
         // Complete columns selected ?
         else if ((*it)->isColumn()) {
-            for (int col = range.left(); col <= range.right(); ++col) {
+            int from = range.left();
+            int to = range.right();
+            if (from < used.left()) from = used.left();
+            if (to > used.right()) to = used.right();
+            for (int col = from; col <= to; ++col) {
                 Cell cell = storage->firstInColumn(col);
                 while (!cell.isNull()) {
                     if (!cellIsEmpty(cell, _type))
@@ -628,6 +637,8 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
         } else {
             int right  = range.right();
             int bottom = range.bottom();
+            if (bottom > used.bottom()) bottom = used.bottom();
+            if (right > used.right()) right = used.right();
             for (int x = range.left(); x <= right; ++x)
                 for (int y = range.top(); y <= bottom; ++y) {
                     Cell cell(this, x, y);

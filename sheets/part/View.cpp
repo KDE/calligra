@@ -1659,14 +1659,14 @@ void View::showColumnHeader(bool enable)
 {
     doc()->map()->applicationSettings()->setShowColumnHeader(enable);
     d->columnHeader->setVisible(enable);
-    d->selectAllButton->setVisible(enable && d->rowHeader->isVisible());
+    d->selectAllButton->setVisible(enable && d->rowHeader->isVisibleTo(this));
 }
 
 void View::showRowHeader(bool enable)
 {
     doc()->map()->applicationSettings()->setShowRowHeader(enable);
     d->rowHeader->setVisible(enable);
-    d->selectAllButton->setVisible(enable && d->columnHeader->isVisible());
+    d->selectAllButton->setVisible(enable && d->columnHeader->isVisibleTo(this));
 }
 
 void View::showHorizontalScrollBar(bool enable)
