@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread_prf\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-28 00:49+0000\n"
+"POT-Creation-Date: 2022-12-04 00:46+0000\n"
 "PO-Revision-Date: 2022-09-23 10:12+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -137,7 +137,7 @@ msgstr "Niepoprawny dokument. Nazwa arkusza jest pusta."
 msgid "Sheet%1"
 msgstr "Arkusz%1"
 
-#: core/Sheet.cpp:644
+#: core/Sheet.cpp:655
 #, kde-format
 msgid "Validation for cell %1 failed"
 msgstr "Nieudane potwierdzenie poprawności komórki %1"

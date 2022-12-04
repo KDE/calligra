@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-28 00:49+0000\n"
+"POT-Creation-Date: 2022-12-04 00:46+0000\n"
 "PO-Revision-Date: 2022-11-14 09:02+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -126,7 +126,7 @@ msgstr "Documento non valido. Manca nome del foglio."
 msgid "Sheet%1"
 msgstr "Foglio%1"
 
-#: core/Sheet.cpp:644
+#: core/Sheet.cpp:655
 #, kde-format
 msgid "Validation for cell %1 failed"
 msgstr "La convalida della cella %1 non è riuscita"

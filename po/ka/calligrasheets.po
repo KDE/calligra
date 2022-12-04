@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-28 00:49+0000\n"
+"POT-Creation-Date: 2022-12-04 00:46+0000\n"
 "PO-Revision-Date: 2022-11-14 18:51+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -118,7 +118,7 @@ msgstr "არასწორი დოკუმენტი. ფურცლი
 msgid "Sheet%1"
 msgstr "ფურცელი%1"
 
-#: core/Sheet.cpp:644
+#: core/Sheet.cpp:655
 #, kde-format
 msgid "Validation for cell %1 failed"
 msgstr ""

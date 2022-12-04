@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-28 00:49+0000\n"
+"POT-Creation-Date: 2022-12-04 00:46+0000\n"
 "PO-Revision-Date: 2017-05-16 06:38-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-i18n-doc@kde.org>\n"
@@ -129,7 +129,7 @@ msgstr "המסמך לא תקף. שם הגיליון ריק."
 msgid "Sheet%1"
 msgstr "גיליון%1"
 
-#: core/Sheet.cpp:644
+#: core/Sheet.cpp:655
 #, kde-format
 msgid "Validation for cell %1 failed"
 msgstr ""

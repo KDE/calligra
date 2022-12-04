@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-28 00:49+0000\n"
+"POT-Creation-Date: 2022-12-04 00:46+0000\n"
 "PO-Revision-Date: 2022-05-11 21:25+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -135,7 +135,7 @@ msgstr "Неверный формат документа. Название ли�
 msgid "Sheet%1"
 msgstr "Лист%1"
 
-#: core/Sheet.cpp:644
+#: core/Sheet.cpp:655
 #, kde-format
 msgid "Validation for cell %1 failed"
 msgstr "Ошибка проверки ячейки %1"

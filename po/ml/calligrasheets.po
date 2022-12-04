@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-28 00:49+0000\n"
+"POT-Creation-Date: 2022-12-04 00:46+0000\n"
 "PO-Revision-Date: 2008-12-29 20:21-0500\n"
 "Last-Translator: Manu S Madhav <manusmad@gmail.com>\n"
 "Language-Team: SMC <smc.org.in>\n"
@@ -117,7 +117,7 @@ msgstr ""
 msgid "Sheet%1"
 msgstr "ഷീറ്റ്%1"
 
-#: core/Sheet.cpp:644
+#: core/Sheet.cpp:655
 #, fuzzy, kde-format
 #| msgid "Parsing of formula in cell <i>%1</i> failed."
 msgid "Validation for cell %1 failed"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-28 00:49+0000\n"
+"POT-Creation-Date: 2022-12-04 00:46+0000\n"
 "PO-Revision-Date: 2009-03-03 11:45+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -121,7 +121,7 @@ msgstr "अवैध कागद. सीट नाम खाली हे."
 msgid "Sheet%1"
 msgstr "सीट %1"
 
-#: core/Sheet.cpp:644
+#: core/Sheet.cpp:655
 #, fuzzy, kde-format
 #| msgid "Validation for cell <i>%1</i> failed"
 msgid "Validation for cell %1 failed"

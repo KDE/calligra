@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-28 00:49+0000\n"
+"POT-Creation-Date: 2022-12-04 00:46+0000\n"
 "PO-Revision-Date: 2021-08-21 16:25+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -121,7 +121,7 @@ msgstr "अवैध दस्तावेज़. शीट नाम रिक�
 msgid "Sheet%1"
 msgstr "शीट %1"
 
-#: core/Sheet.cpp:644
+#: core/Sheet.cpp:655
 #, fuzzy, kde-format
 #| msgid "Validation for cell <i>%1</i> failed"
 msgid "Validation for cell %1 failed"
