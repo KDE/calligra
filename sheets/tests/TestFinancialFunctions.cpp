@@ -11,6 +11,7 @@
 
 void TestFinancialFunctions::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 

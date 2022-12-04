@@ -8,6 +8,7 @@
 #include <QVector>
 #include <QDebug>
 #include <QTest>
+#include <KLocalizedString>
 
 #include "core/ColFormatStorage.h"
 #include "engine/calligra_sheets_limits.h"
@@ -18,6 +19,7 @@ using namespace Calligra::Sheets;
 
 void TestColFormatStorage::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     m_map = new Map();
     m_sheet = dynamic_cast<Sheet *>(m_map->addNewSheet());
 }

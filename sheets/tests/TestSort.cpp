@@ -18,9 +18,9 @@ using namespace Calligra::Sheets;
 
 void TestSort::AscendingOrder()
 {
-    Map map;
-    Sheet* sheet = new Sheet(&map, "Sheet1");
-    map.addSheet(sheet);
+    m_map = new Map;
+    m_map->addNewSheet();
+    Sheet* sheet = dynamic_cast<Sheet *>(m_map->sheet(0));
 
     Value cellvalue;
 
@@ -59,7 +59,7 @@ void TestSort::AscendingOrder()
 
     command->addCriterion(0, Qt::AscendingOrder, Qt::CaseInsensitive);
 
-    command->add(selection->lastRange());
+    command->add(*selection);
     QCOMPARE(selection->lastRange(), QRect(1,1,1,3));
 
     // Execute sort
@@ -72,9 +72,9 @@ void TestSort::AscendingOrder()
 
 void TestSort::DescendingOrder()
 {
-    Map map;
-    Sheet* sheet = new Sheet(&map, "Sheet1");
-    map.addSheet(sheet);
+    m_map = new Map;
+    m_map->addNewSheet();
+    Sheet* sheet = dynamic_cast<Sheet *>(m_map->sheet(0));
 
     Value cellvalue;
 
@@ -112,7 +112,7 @@ void TestSort::DescendingOrder()
 
     command->addCriterion(0, Qt::DescendingOrder, Qt::CaseInsensitive);
 
-    command->add(selection->lastRange());
+    command->add(*selection);
     QCOMPARE(selection->lastRange(), QRect(2,1,1,3));
 
     // Execute sort

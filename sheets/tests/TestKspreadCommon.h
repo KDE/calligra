@@ -8,6 +8,8 @@
 
 #include <QTest>
 
+#include <KLocalizedString>
+
 #include <float.h> // DBL_EPSILON
 #include <math.h>
 

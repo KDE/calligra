@@ -69,6 +69,7 @@ QString TestOpenFormula::convertFromOpenFormula(const QString& expr)
 
 void TestOpenFormula::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 

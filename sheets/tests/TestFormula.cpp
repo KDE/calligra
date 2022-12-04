@@ -94,6 +94,7 @@ Value TestFormula::evaluate(const QString& formula, Value& ex)
 
 void TestFormula::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
 
     MapBase *map = new MapBase();

@@ -25,6 +25,7 @@ void TestLogicFunctions::cleanup()
 
 void TestLogicFunctions::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 

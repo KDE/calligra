@@ -20,6 +20,7 @@ using namespace Calligra::Sheets;
 
 void TestValueParser::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     m_calcsettings = new CalculationSettings();
     m_parser = new ValueParser(m_calcsettings);
 

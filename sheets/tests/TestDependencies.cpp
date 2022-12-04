@@ -6,6 +6,7 @@
 
 #include <QTest>
 #include <QCoreApplication>
+#include <KLocalizedString>
 
 #include "engine/CellBase.h"
 #include "engine/CellBaseStorage.h"
@@ -20,6 +21,7 @@ using namespace Calligra::Sheets;
 
 void TestDependencies::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     m_map = new MapBase;
     m_sheet = m_map->addNewSheet();
     m_sheet->setSheetName("Sheet1");

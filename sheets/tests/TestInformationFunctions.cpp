@@ -37,6 +37,7 @@ Value TestInformationFunctions::evaluate(const QString& formula, Value& ex, cons
 
 void TestInformationFunctions::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
     m_map = new MapBase;
     // some tests are sensitive to locale, so use C for all tests

@@ -13,6 +13,8 @@ namespace Calligra
 namespace Sheets
 {
 
+class Map;
+
 class TestSort : public QObject
 {
     Q_OBJECT
@@ -21,6 +23,8 @@ private Q_SLOTS:
     void AscendingOrder();
     void DescendingOrder();
 
+private:
+    Map *m_map;
 };
 
 } // namespace Sheets

@@ -114,6 +114,7 @@ Value TestStatisticalFunctions::evaluate(const QString& formula)
 
 void TestStatisticalFunctions::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
     m_map = new MapBase;
     m_map->addNewSheet();

@@ -5,6 +5,7 @@
 #include "TestRegion.h"
 
 #include <QTest>
+#include <KLocalizedString>
 
 #include "engine/calligra_sheets_limits.h"
 #include "engine/MapBase.h"
@@ -15,6 +16,7 @@ using namespace Calligra::Sheets;
 
 void TestRegion::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     m_map = new MapBase;
     SheetBase* sheet = m_map->addNewSheet();
     sheet->setSheetName("Sheet1");

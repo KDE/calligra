@@ -8,6 +8,7 @@
 
 void TestTrigFunctions::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 

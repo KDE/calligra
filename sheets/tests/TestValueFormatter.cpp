@@ -30,6 +30,7 @@ public:
 
 void TestValueFormatter::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     qRegisterMetaType<Format::Type>();
 
     m_calcsettings = new CalculationSettings();

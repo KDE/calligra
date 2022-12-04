@@ -9,6 +9,7 @@
 
 void TestDatetimeFunctions::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 

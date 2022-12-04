@@ -45,6 +45,7 @@ Value TestDatabaseFunctions::evaluate(const QString& formula, Value& ex)
 
 void TestDatabaseFunctions::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
     m_map = new MapBase;
     m_map->addNewSheet();

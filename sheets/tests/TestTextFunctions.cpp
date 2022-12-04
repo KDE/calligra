@@ -12,6 +12,7 @@
 
 void TestTextFunctions::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
 
     m_map = new MapBase;

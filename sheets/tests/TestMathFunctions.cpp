@@ -82,6 +82,7 @@ Value TestMathFunctions::evaluate(const QString& formula)
 
 void TestMathFunctions::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
 
     m_map = new MapBase;

@@ -35,6 +35,7 @@ Value ValueWithFormat(T i, Value::Format fmt)
 
 void TestValueConverter::initTestCase()
 {
+    KLocalizedString::setApplicationDomain("sheets");
     m_calcsettings = new CalculationSettings();
     m_parser = new ValueParser(m_calcsettings);
     m_converter = new ValueConverter(m_parser);
