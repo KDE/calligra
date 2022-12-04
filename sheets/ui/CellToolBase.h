@@ -186,8 +186,6 @@ protected Q_SLOTS:
     void goalSeek();
     void subtotals();
     void pivot();
-    void setAreaName();
-    void namedAreaDialog();
     void formulaSelection(const QString& expression);
     // -- general editing actions --
     void edit();

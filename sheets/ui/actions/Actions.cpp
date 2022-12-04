@@ -18,6 +18,7 @@
 #include "InsertSpecialChar.h"
 #include "Link.h"
 #include "Merge.h"
+#include "NamedAreas.h"
 #include "Sort.h"
 #include "Style.h"
 #include "TextCase.h"
@@ -104,6 +105,9 @@ void Actions::createActions()
     addAction(new Merge(this, true, false));
     addAction(new Merge(this, false, true));
     addAction(new RemoveMerge(this));
+    // NamedAreas
+    addAction(new AddNamedArea(this));
+    addAction(new ManageNamedAreas(this));
     // Sort
     addAction(new Sort(this));
     addAction(new SortInc(this));

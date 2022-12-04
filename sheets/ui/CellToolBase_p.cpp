@@ -1083,7 +1083,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
         popupActions.append(q->action("clearAll"));
         popupActions.append(q->action("adjust"));
         popupActions.append(actions->action("setDefaultStyle"));
-        popupActions.append(q->action("setAreaName"));
+        popupActions.append(actions->action("setAreaName"));
 
         if (!q->selection()->isColumnOrRowSelected()) {
             popupActions.append(popupMenuActions["separator3"]);

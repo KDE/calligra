@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   SPDX-FileCopyrightText: 2022 Tomas Mecir <mecirt@gmail.com>
    SPDX-FileCopyrightText: 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    SPDX-FileCopyrightText: 2002-2003 Norbert Andres <nandres@web.de>
    SPDX-FileCopyrightText: 2002 Ariya Hidayat <ariya@kde.org>
@@ -40,50 +41,27 @@ class NamedAreaDialog : public KoDialog
 public:
     NamedAreaDialog(QWidget* parent, Selection* selection);
 
-public Q_SLOTS:
-    void slotOk();
+Q_SIGNALS:
+
+protected Q_SLOTS:
+    void slotActivated();
     void slotClose();
-    void slotNew();
-    void slotEdit();
     void slotRemove();
-    void displayAreaValues(const QString& name);
+    void slotSave();
+    void selectionModified(const Region& region);
 
 private:
-    Selection*      m_selection;
-    QListWidget*    m_list;
-    QLabel*         m_rangeName;
-    QPushButton*    m_newButton;
-    QPushButton*    m_editButton;
-    QPushButton*    m_removeButton;
-};
+    void fillData();
 
+    Selection*   m_selection;
+    QListWidget* m_list;
+    QLabel*      m_rangeName;
+    QPushButton* m_removeButton;
 
-/**
- * \ingroup UI
- * Dialog to edit a named area.
- */
-class EditNamedAreaDialog : public KoDialog
-{
-    Q_OBJECT
-
-public:
-    EditNamedAreaDialog(QWidget* parent, Selection* selection);
-    ~EditNamedAreaDialog() override;
-
-    QString areaName() const;
-    void setAreaName(const QString& areaname);
-    void setRegion(const Region& region);
-
-public Q_SLOTS:
-    void slotOk();
-    void slotAreaNameModified(const QString&);
-
-private:
-    Selection*  m_selection;
-    KLineEdit*  m_areaNameEdit;
-    KComboBox*  m_sheets;
-    KLineEdit*  m_cellRange;
-    QString     m_initialAreaName;
+    KLineEdit*   m_areaNameEdit;
+    KComboBox*   m_sheets;
+    KLineEdit*   m_cellRange;
+    QPushButton* m_saveButton;
 };
 
 } // namespace Sheets

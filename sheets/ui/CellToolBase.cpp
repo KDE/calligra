@@ -59,7 +59,6 @@
 #include "commands/StyleCommand.h"
 
 // dialogs
-#include "dialogs/AddNamedAreaDialog.h"
 #include "dialogs/AngleDialog.h"
 #include "dialogs/AutoFormatDialog.h"
 #include "dialogs/ConditionalDialog.h"
@@ -71,7 +70,6 @@
 #include "dialogs/InsertDialog.h"
 #include "dialogs/LayoutDialog.h"
 #include "dialogs/ListDialog.h"
-#include "dialogs/NamedAreaDialog.h"
 #include "dialogs/PasteInsertDialog.h"
 #include "dialogs/SpecialPasteDialog.h"
 #include "dialogs/StyleManagerDialog.h"
@@ -327,19 +325,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::pivot);
     action->setToolTip(i18n("Create Pivot Tables"));
     
-    action = new QAction(i18n("Area Name..."), this);
-    addAction("setAreaName", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::setAreaName);
-    action->setToolTip(i18n("Set a name for a region of the spreadsheet"));
-
-    action = new QAction(i18n("Named Areas..."), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_G));
-    action->setIconText(i18n("Named Areas"));
-    action->setIcon(koIcon("bookmarks"));
-    action->setToolTip(i18n("Edit or select named areas"));
-    addAction("namedAreaDialog", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::namedAreaDialog);
-
     selectAction = new KSelectAction(i18n("Formula Selection"), this);
     addAction("formulaSelection", selectAction);
     selectAction->setToolTip(i18n("Insert a function"));
@@ -1590,20 +1575,6 @@ void CellToolBase::pivot()
     }
 
     QPointer<Pivot> dialog = new Pivot(canvas()->canvasWidget(), selection());
-    dialog->exec();
-    delete dialog;
-}
-
-void CellToolBase::setAreaName()
-{
-    QPointer<AddNamedAreaDialog> dialog = new AddNamedAreaDialog(canvas()->canvasWidget(), selection());
-    dialog->exec();
-    delete dialog;
-}
-
-void CellToolBase::namedAreaDialog()
-{
-    QPointer<NamedAreaDialog> dialog = new NamedAreaDialog(canvas()->canvasWidget(), selection());
     dialog->exec();
     delete dialog;
 }

@@ -14,6 +14,7 @@ set (actions_DIR_SRCS
     actions/InsertSpecialChar.cpp
     actions/Link.cpp
     actions/Merge.cpp
+    actions/NamedAreas.cpp
     actions/Sort.cpp
     actions/Style.cpp
     actions/TextCase.cpp
@@ -21,10 +22,12 @@ set (actions_DIR_SRCS
     )
 
 set (action_dialogs_DIR_SRCS
+    actions/dialogs/AddNamedAreaDialog.cpp
     actions/dialogs/CharacterSelectDialog.cpp
     actions/dialogs/CommentDialog.cpp
     actions/dialogs/CSVDialog.cpp
     actions/dialogs/LinkDialog.cpp
+    actions/dialogs/NamedAreaDialog.cpp
     actions/dialogs/Resize2Dialog.cpp
     actions/dialogs/SeriesDialog.cpp
     actions/dialogs/ShowColRowDialog.cpp
@@ -62,7 +65,6 @@ set (commands_DIR_SRCS
 
 
 set (dialogs_DIR_SRCS
-    dialogs/AddNamedAreaDialog.cpp
     dialogs/AngleDialog.cpp
     dialogs/AutoFormatDialog.cpp
     dialogs/ConditionalDialog.cpp
@@ -84,7 +86,6 @@ set (dialogs_DIR_SRCS
     dialogs/LayoutPage_Protection.cpp
     dialogs/LayoutDialog.cpp
     dialogs/ListDialog.cpp
-    dialogs/NamedAreaDialog.cpp
     dialogs/PasteInsertDialog.cpp
     dialogs/ShowDialog.cpp
     dialogs/SpecialPasteDialog.cpp

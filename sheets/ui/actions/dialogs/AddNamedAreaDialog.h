@@ -13,7 +13,7 @@
 
 #include <KoDialog.h>
 
-class KLineEdit;
+class QLineEdit;
 
 namespace Calligra
 {
@@ -30,15 +30,15 @@ class AddNamedAreaDialog : public KoDialog
     Q_OBJECT
 
 public:
-    AddNamedAreaDialog(QWidget* parent, Selection* selection);
+    AddNamedAreaDialog(QWidget* parent);
+
+    QString areaName() const;
 
 public Q_SLOTS:
-    void slotOk();
     void slotAreaNameChanged(const QString& name);
 
 protected:
-    Selection*  m_selection;
-    KLineEdit*  m_areaName;
+    QLineEdit*  m_areaName;
 };
 
 } // namespace Sheets
