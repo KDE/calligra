@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2022-09-23 15:26+0200\n"
+"PO-Revision-Date: 2022-12-04 06:45+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgia <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: actions/AccidentalAction.cpp:54
 #, kde-format
 msgid "Double flat"
-msgstr ""
+msgstr "ორმაგი-ბემოლი"
 
 #: actions/AccidentalAction.cpp:55
 #, kde-format
@@ -38,22 +38,22 @@ msgstr "ნატურალური"
 #, kde-format
 msgctxt "raised half a step"
 msgid "Sharp"
-msgstr ""
+msgstr "დიეზი"
 
 #: actions/AccidentalAction.cpp:58
 #, kde-format
 msgid "Double sharp"
-msgstr ""
+msgstr "ორმაგი დიეზი"
 
 #: actions/AccidentalAction.cpp:61 actions/KeySignatureAction.cpp:38
 #, kde-format
 msgid "%1 flats"
-msgstr ""
+msgstr "%1 ბემოლი"
 
 #: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:39
 #, kde-format
 msgid "%1 sharps"
-msgstr ""
+msgstr "%1 დიეზი"
 
 #: actions/DotsAction.cpp:34
 #, kde-format
@@ -124,7 +124,7 @@ msgstr "ნოტი"
 #: actions/NoteEntryAction.cpp:55
 #, kde-format
 msgid "rest"
-msgstr ""
+msgstr "პაუზა"
 
 #: actions/NoteEntryAction.cpp:57
 #, kde-format
@@ -179,12 +179,12 @@ msgstr "უცნობი ნოტა"
 #: actions/NoteEntryAction.cpp:67
 #, kde-format
 msgid "Unknown rest"
-msgstr ""
+msgstr "უცნობი პაუზა"
 
 #: actions/RemoveBarAction.cpp:22
 #, kde-format
 msgid "Remove bar"
-msgstr ""
+msgstr "ტაქტის წაშლა"
 
 #: actions/SelectionAction.cpp:32
 #, kde-format
@@ -224,22 +224,22 @@ msgstr "ტენორი"
 #: actions/SetClefAction.cpp:46
 #, kde-format
 msgid "C clef on line %1"
-msgstr ""
+msgstr "C გასაღები ხაზზე %1"
 
 #: actions/SetClefAction.cpp:49
 #, kde-format
 msgid "Unknown clef"
-msgstr ""
+msgstr "უცნობი გასაღები"
 
 #: actions/TiedNoteAction.cpp:33
 #, kde-format
 msgid "Tied notes"
-msgstr ""
+msgstr "ლიგა"
 
 #: commands/AddBarsCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Add measures"
-msgstr ""
+msgstr "ტაქტების დამატება"
 
 #: commands/AddDotCommand.cpp:17
 msgctxt "(qtundo-format)"
@@ -249,7 +249,7 @@ msgstr "წერტილის დამატება"
 #: commands/AddNoteCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Set chord duration"
-msgstr ""
+msgstr "აკორდის ხანგრძლივობის დაყენება"
 
 #: commands/AddNoteCommand.cpp:31
 msgctxt "(qtundo-format)"
@@ -269,88 +269,88 @@ msgstr "ნაწილი %1"
 #: commands/ChangePartDetailsCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Change part details"
-msgstr ""
+msgstr "პარტიის დეტალების შეცვლა"
 
 #: commands/CreateChordCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Add chord"
-msgstr ""
+msgstr "აკორდის დამაება"
 
 #: commands/CreateChordCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Add rest"
-msgstr ""
+msgstr "პაუზის დამატება"
 
 #: commands/MakeRestCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Convert chord to rest"
-msgstr ""
+msgstr "აკორდის პაუზად გადაკეთება"
 
 #: commands/RemoveBarCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Remove bar"
-msgstr ""
+msgstr "ტაქტის წაშლა"
 
 #: commands/RemoveChordCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Remove rest"
-msgstr ""
+msgstr "პაუზის წაშლა"
 
 #: commands/RemoveChordCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Remove chord"
-msgstr ""
+msgstr "აკორდის წაშლა"
 
 #: commands/RemoveNoteCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Remove note"
-msgstr ""
+msgstr "ნოტის წაშლა"
 
 #: commands/RemovePartCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Remove part"
-msgstr ""
+msgstr "პარტიის წაშლა"
 
 #: commands/RemoveStaffElementCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Remove clef"
-msgstr ""
+msgstr "გასაღების წაშლა"
 
 #: commands/RemoveStaffElementCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Remove staff element"
-msgstr ""
+msgstr "სტანის ელემენტის წაშლა"
 
 #: commands/SetAccidentalsCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Set accidentals"
-msgstr ""
+msgstr "ალტერაციის ნიშნების დაყენება"
 
 #: commands/SetClefCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Change clef"
-msgstr ""
+msgstr "გასაღების შეცვლა"
 
 #: commands/SetKeySignatureCommand.cpp:25
 #: commands/SetKeySignatureCommand.cpp:72
 msgctxt "(qtundo-format)"
 msgid "Change key signature"
-msgstr ""
+msgstr "ტონალობის შეცვლა"
 
 #: commands/SetTimeSignatureCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Change time signature"
-msgstr ""
+msgstr "ტაქტის ზომის შეცვლა"
 
 #: commands/ToggleTiedNoteCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Toggle Note Tie"
-msgstr ""
+msgstr "ნოტის ლიგის გადართვა"
 
 #: dialogs/KeySignatureDialog.cpp:15
 #, kde-format
 msgid "Set key signature"
-msgstr ""
+msgstr "გასაღების ხელმოწერის დაყენება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/KeySignatureDialog.ui:63
@@ -371,60 +371,60 @@ msgstr "გაზომვა"
 #: dialogs/KeySignatureDialog.ui:88
 #, kde-format
 msgid "through"
-msgstr ""
+msgstr "სადამდე"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/KeySignatureDialog.ui:139
 #, kde-format
 msgid "through end of piece"
-msgstr ""
+msgstr "პიესის ბოლომდე"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/KeySignatureDialog.ui:180
 #, kde-format
 msgid "to next key change"
-msgstr ""
+msgstr "ტონალობის შემდეგ ცვლილებამდე"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: dialogs/KeySignatureDialog.ui:205
 #, kde-format
 msgid "Staves"
-msgstr ""
+msgstr "ნოტების დამტარებლები"
 
 #. i18n: ectx: property (text), widget (QRadioButton, allStaves)
 #: dialogs/KeySignatureDialog.ui:211
 #, kde-format
 msgid "Update all staves"
-msgstr ""
+msgstr "ყველა ნოტის დამტარებლის განახლება"
 
 #. i18n: ectx: property (text), widget (QRadioButton, selectedStaff)
 #: dialogs/KeySignatureDialog.ui:221
 #, kde-format
 msgid "Only update selected staff"
-msgstr ""
+msgstr "მხოლოდ მონიშნულების განახლება"
 
 #: dialogs/PartDetailsDialog.cpp:19
 #, kde-format
 msgid "Part details"
-msgstr ""
+msgstr "პარტიის მონაცემები"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/PartDetailsDialog.ui:18
 #, kde-format
 msgid "Name:"
-msgstr ""
+msgstr "სახელი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/PartDetailsDialog.ui:34
 #, kde-format
 msgid "Short name:"
-msgstr ""
+msgstr "მოკლე სახელი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/PartDetailsDialog.ui:50
 #, kde-format
 msgid "Staves:"
-msgstr ""
+msgstr "ნოტების დამტარებლები:"
 
 #. i18n: ectx: property (text), widget (QToolButton, editPart)
 #. i18n: ectx: property (text), widget (QToolButton, addPart)
@@ -464,7 +464,7 @@ msgstr "ხმა 4"
 #: SimpleEntryTool.cpp:678
 #, kde-format
 msgid "Add measures"
-msgstr ""
+msgstr "ტაქტების დამატება"
 
 #. i18n: ectx: property (text), widget (QToolButton, importButton)
 #: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:78
@@ -491,7 +491,7 @@ msgstr "Music Shape"
 #: MusicShapeFactory.cpp:38
 #, kde-format
 msgid "A shape which provides a music editor"
-msgstr ""
+msgstr "ნოტური პარტიტურის ობიექტი"
 
 #: MusicTool.cpp:85
 #, kde-format
@@ -501,12 +501,12 @@ msgstr "ნაწილებ"
 #: MusicToolFactory.cpp:19
 #, kde-format
 msgid "Music editing, parts"
-msgstr ""
+msgstr "ნოტური პარტიტურის რედაქტორი"
 
 #: SimpleEntryTool.cpp:226
 #, kde-format
 msgid "Clef"
-msgstr ""
+msgstr "გასაღები"
 
 #: SimpleEntryTool.cpp:255
 #, kde-format
@@ -521,7 +521,7 @@ msgstr "გასაღების ხელმოწერა"
 #: SimpleEntryTool.cpp:679
 #, kde-format
 msgid "Add how many measures?"
-msgstr ""
+msgstr "რამდენი ტაქტი დავამატო?"
 
 #: SimpleEntryTool.cpp:743
 #, kde-format

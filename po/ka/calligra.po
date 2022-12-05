@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-13 00:46+0000\n"
-"PO-Revision-Date: 2022-11-11 06:23+0100\n"
+"PO-Revision-Date: 2022-12-04 06:30+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -245,23 +245,23 @@ msgstr "საწყისი ფარდობის შენარჩუნ�
 #: flake/commands/KoShapeLockCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Lock shapes"
-msgstr ""
+msgstr "ფორმის დაბლოკვა"
 
 #: flake/commands/KoShapeMoveCommand.cpp:36
 #: flake/commands/KoShapeMoveCommand.cpp:54
 msgctxt "(qtundo-format)"
 msgid "Move shapes"
-msgstr ""
+msgstr "ფორმის გადატანა"
 
 #: flake/commands/KoShapeRenameCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Rename Shape"
-msgstr ""
+msgstr "ფორმის სახელის გადარქმევა"
 
 #: flake/commands/KoShapeReorderCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Reorder shapes"
-msgstr ""
+msgstr "ფორმების გადალაგება"
 
 #: flake/commands/KoShapeRunAroundCommand.cpp:59
 msgctxt "(qtundo-format)"
@@ -273,7 +273,7 @@ msgstr ""
 #: flake/commands/KoShapeShadowCommand.cpp:82
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
-msgstr ""
+msgstr "ჩრდილის დაყენება"
 
 #: flake/commands/KoShapeShearCommand.cpp:38
 msgctxt "(qtundo-format)"
@@ -283,7 +283,7 @@ msgstr ""
 #: flake/commands/KoShapeSizeCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Resize shapes"
-msgstr ""
+msgstr "ფორმების ზომის შეცვლა"
 
 #: flake/commands/KoShapeStrokeCommand.cpp:59
 #: flake/commands/KoShapeStrokeCommand.cpp:78
@@ -297,7 +297,7 @@ msgstr ""
 #: flake/commands/KoShapeTransparencyCommand.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Set opacity"
-msgstr ""
+msgstr "გაუმჭვირვალობის დაყენება"
 
 #: flake/commands/KoShapeUnclipCommand.cpp:107
 msgctxt "(qtundo-format)"
@@ -506,27 +506,27 @@ msgstr ""
 #: flake/tools/KoPathTool.cpp:130
 #, kde-format
 msgid "Insert point"
-msgstr ""
+msgstr "წერტილის ჩასმა"
 
 #: flake/tools/KoPathTool.cpp:135
 #, kde-format
 msgid "Remove point"
-msgstr ""
+msgstr "წერტილის წაშლა"
 
 #: flake/tools/KoPathTool.cpp:140
 #, kde-format
 msgid "Break at point"
-msgstr ""
+msgstr "გასატეხი წერტილი"
 
 #: flake/tools/KoPathTool.cpp:144
 #, kde-format
 msgid "Break at segment"
-msgstr ""
+msgstr "გასატეხი სეგმენტი"
 
 #: flake/tools/KoPathTool.cpp:148
 #, kde-format
 msgid "Join with segment"
-msgstr ""
+msgstr "სეგმენტით შეერთება"
 
 #: flake/tools/KoPathTool.cpp:153
 #, kde-format
@@ -576,7 +576,7 @@ msgstr ""
 #: flake/tools/KoPathToolFactory.cpp:17
 #, kde-format
 msgid "Path editing"
-msgstr ""
+msgstr "ბილიკის ჩასწორება"
 
 #: flake/tools/KoZoomToolFactory.cpp:17 widgets/KoZoomController_p.h:28
 #: widgets/KoZoomWidget.cpp:52
@@ -588,7 +588,7 @@ msgstr "გადიდება"
 #: flake/tools/KoZoomToolWidget.ui:20
 #, kde-format
 msgid "Zoom In"
-msgstr ""
+msgstr "გადიდება"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
 #: flake/tools/KoZoomToolWidget.ui:30
@@ -656,7 +656,7 @@ msgstr "სკრიპტის ფაილის შესრულება 
 #: kross/KoScriptingPart.cpp:86
 #, kde-format
 msgid "Script Manager..."
-msgstr ""
+msgstr "სკრიპტის მმართველი..."
 
 #: kross/KoScriptingPart.cpp:160
 #, kde-format
@@ -1000,9 +1000,9 @@ msgid "Always use this template"
 msgstr ""
 
 #: main/KoDocument.cpp:549
-#, kde-format
+#, fuzzy, kde-format
 msgid "Making backup..."
-msgstr ""
+msgstr "მარქაფი..."
 
 #: main/KoDocument.cpp:564
 #, kde-format
@@ -1281,12 +1281,12 @@ msgstr ""
 #: main/KoDocument.cpp:2263
 #, kde-format
 msgid "a spreadsheet"
-msgstr ""
+msgstr "ელცხრილი"
 
 #: main/KoDocument.cpp:2264
 #, kde-format
 msgid "a presentation"
-msgstr ""
+msgstr "პრეზენტაცია"
 
 #: main/KoDocument.cpp:2265
 #, kde-format
@@ -1370,9 +1370,9 @@ msgid "Match only whole words"
 msgstr ""
 
 #: main/KoFindText.cpp:47
-#, kde-format
+#, fuzzy, kde-format
 msgid "Whole Words Only"
-msgstr ""
+msgstr "მხოლოდ მთლიანი სიტყვები"
 
 #: main/KoFindText.cpp:48
 #, kde-format
@@ -1451,9 +1451,9 @@ msgid "Show Docker Titlebars"
 msgstr ""
 
 #: main/KoMainWindow.cpp:355
-#, kde-format
+#, fuzzy, kde-format
 msgid "Dockers"
-msgstr ""
+msgstr "პანელები"
 
 #: main/KoMainWindow.cpp:660
 #, kde-format
@@ -1463,12 +1463,12 @@ msgstr ""
 #: main/KoMainWindow.cpp:665
 #, kde-format
 msgid "Save as %1"
-msgstr ""
+msgstr "შენახვა, როგორც %1"
 
 #: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:388
 #, kde-format
 msgid "%1 (unknown file type)"
-msgstr ""
+msgstr "%1 (უცნობი ფაილის ტიპი)"
 
 #: main/KoMainWindow.cpp:855
 #, kde-format
@@ -1492,7 +1492,7 @@ msgstr ""
 #: main/KoMainWindow.cpp:870
 #, kde-format
 msgid "Confirm Export"
-msgstr ""
+msgstr "გატანის დადასტურება"
 
 #: main/KoMainWindow.cpp:871
 #, kde-format
@@ -3956,9 +3956,10 @@ msgid "Underline"
 msgstr "ხაზგასმული"
 
 #: text/KoTextEditor_format.cpp:99
+#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Strike Out"
-msgstr ""
+msgstr "ხაზის გადასმა"
 
 #: text/KoTextEditor_format.cpp:132 text/KoTextEditor_format.cpp:133
 msgctxt "(qtundo-format)"

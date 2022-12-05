@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2022-09-23 15:21+0200\n"
+"PO-Revision-Date: 2022-12-04 06:37+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -189,6 +189,8 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
+"დოკუმენტი შეიცავს გარე ბმულს, დაშორებულ დოკუმენტამდე\n"
+"%1"
 
 #: KoFormulaShape.cpp:211
 #, kde-format
@@ -238,12 +240,12 @@ msgstr "კვადრატული ფესვის ჩასმა"
 #: KoFormulaTool.cpp:414
 #, kde-format
 msgid "Insert fraction"
-msgstr ""
+msgstr "ნაწილის ჩასმა"
 
 #: KoFormulaTool.cpp:416
 #, kde-format
 msgid "Insert bevelled fraction"
-msgstr ""
+msgstr "კონუსური ნაწილის ჩასმა"
 
 #: KoFormulaTool.cpp:419
 #, kde-format
@@ -253,22 +255,22 @@ msgstr "3x3 ცხრილის ჩასმა"
 #: KoFormulaTool.cpp:423
 #, kde-format
 msgid "Insert 2 dimensional vector"
-msgstr ""
+msgstr "2-განზომილებიანი ვექტორის ჩასმა"
 
 #: KoFormulaTool.cpp:426
 #, kde-format
 msgid "Insert subscript"
-msgstr ""
+msgstr "ქვესკრიპტის ჩასმ"
 
 #: KoFormulaTool.cpp:428
 #, kde-format
 msgid "Insert superscript"
-msgstr ""
+msgstr "ზესკრიპტის ჩასმ"
 
 #: KoFormulaTool.cpp:430
 #, kde-format
 msgid "Insert sub- and superscript"
-msgstr ""
+msgstr "ქვე- და ზესკრიპტის ჩასმა"
 
 #: KoFormulaTool.cpp:432
 #, kde-format
@@ -333,9 +335,9 @@ msgstr "დამუშავების შეცდომა."
 #: KoM2MMLForumulaTool.cpp:201
 #, kde-format
 msgid "Edit formula with LaTeX/Matlab syntax"
-msgstr ""
+msgstr "ფორმულის ჩასწორება LaTeX/Matlab-ის სინტაქსით"
 
 #: KoM2MMLForumulaTool.cpp:203
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
-msgstr ""
+msgstr "ფორმულის ჩასწორება LaTeX-ის სინტაქსით"

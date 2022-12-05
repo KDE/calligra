@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-04 00:46+0000\n"
+"POT-Creation-Date: 2022-12-05 00:46+0000\n"
 "PO-Revision-Date: 2022-11-24 17:34+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -904,7 +904,7 @@ msgstr "Sayı"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:164 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:162 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -962,7 +962,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") işlevi, 99 döndürür"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:299 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:297 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Veritabanı"
@@ -12868,7 +12868,7 @@ msgstr "Etkinleştir"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:189
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:187
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
@@ -14247,7 +14247,7 @@ msgstr ""
 "Etkin tablo kaldırılacak.\n"
 "Sürdürmek istiyor musunuz?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1325
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1310
 #, kde-format
 msgid "Enter name:"
 msgstr "Ad girin:"
@@ -14307,12 +14307,12 @@ msgstr "HesaplaA: "
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1399
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1384
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Metin Rengini Değiştir"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1448
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1433
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Arka Plan Rengini Değiştir"
@@ -14324,503 +14324,478 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kenarlığı Değiştir"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Cell Format..."
 msgstr "Hücre Biçimi..."
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Hücre biçimini ayarla"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:168
 #, kde-format
 msgid "Style Manager..."
 msgstr "Biçem Yöneticisi..."
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr "Hücre biçemlerini düzenle ve organize et"
 
-#: ui/CellToolBase.cpp:175 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:173 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "Biçem"
 
-#: ui/CellToolBase.cpp:177
+#: ui/CellToolBase.cpp:175
 #, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "Seçili hücrelere önceden tanımlanmış bir biçem uygula"
 
-#: ui/CellToolBase.cpp:180
+#: ui/CellToolBase.cpp:178
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "Hücreden Biçem Oluştur..."
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "Style From Cell"
 msgstr "Hücreden Biçem"
 
-#: ui/CellToolBase.cpp:184
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "Seçili hücreyi temel alarak yeni bir biçem oluştur"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Select Font..."
 msgstr "Yazıtipi Seç..."
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "Select Font Size"
 msgstr "Yazıtipi Boyutu Seç"
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Font Size"
 msgstr "Yazıtipi Boyutu"
 
-#: ui/CellToolBase.cpp:200
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Text Color"
 msgstr "Metin Rengi"
 
-#: ui/CellToolBase.cpp:201
+#: ui/CellToolBase.cpp:199
 #, kde-format
 msgid "Set the text color"
 msgstr "Metin rengini ayarla"
 
-#: ui/CellToolBase.cpp:209
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Select a new border color"
 msgstr "Yeni bir kenarlık rengi seç"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:208
 #, kde-format
 msgid "Border Color"
 msgstr "Kenarlık Rengi"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:215
 #, kde-format
 msgid "Change Angle..."
 msgstr "Açıyı Değiştir..."
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:216
 #, kde-format
 msgid "Angle"
 msgstr "Açı"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:219
 #, kde-format
 msgid "Change the angle that cell contents are printed"
 msgstr "Hücre içeriğinin yazıldığı açıyı değiştirin"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:223
 #, kde-format
 msgid "Increase Precision"
 msgstr "Kesinliği Artır"
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:226
 #, kde-format
 msgid "Increase the decimal precision shown onscreen"
 msgstr "Ekranda görülen ondalık kesinliği arttır"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Decrease Precision"
 msgstr "Kesinliği Azalt"
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Decrease the decimal precision shown onscreen"
 msgstr "Ekranda görülen ondalık kesinliği azalt"
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:237
 #, kde-format
 msgid "Set the background color"
 msgstr "Arka plan rengini ayarla"
 
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Background Color"
 msgstr "Arka Plan Rengi"
 
-#: ui/CellToolBase.cpp:246 ui/CellToolBase.cpp:252
+#: ui/CellToolBase.cpp:244 ui/CellToolBase.cpp:250
 #, kde-format
 msgid "Cells..."
 msgstr "Hücreler..."
 
-#: ui/CellToolBase.cpp:247 ui/CellToolBase_p.cpp:1133
+#: ui/CellToolBase.cpp:245 ui/CellToolBase_p.cpp:1133
 #, kde-format
 msgid "Insert Cells..."
 msgstr "Hücre Ekle..."
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:246
 #, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "Hesap tablosuna boş bir hücre ekle"
 
-#: ui/CellToolBase.cpp:253
+#: ui/CellToolBase.cpp:251
 #, kde-format
 msgid "Remove Cells..."
 msgstr "Hücreleri Kaldır..."
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:252
 #, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "Geçerli hücreyi hesap tablosundan çıkarır"
 
-#: ui/CellToolBase.cpp:260 ui/CellToolBase.cpp:261
+#: ui/CellToolBase.cpp:258 ui/CellToolBase.cpp:259
 #, kde-format
 msgid "Clear All"
 msgstr "Tümünü Temizle"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:260
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Geçerli hücrenin tüm içeriğini ve biçimlenmesini sil"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:264
 #, kde-format
 msgid "Contents"
 msgstr "İçerik"
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:265
 #, kde-format
 msgid "Clear Contents"
 msgstr "İçeriği Temizle"
 
-#: ui/CellToolBase.cpp:268
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Geçerli hücrenin içeriğini sil"
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:270
 #, kde-format
 msgid "Conditional Styles..."
 msgstr "Koşullu Biçemler..."
 
-#: ui/CellToolBase.cpp:273
+#: ui/CellToolBase.cpp:271
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "Hücre biçemini belirli durumlara göre değiştir"
 
-#: ui/CellToolBase.cpp:277 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:275 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr "Koşullu Biçemler"
 
-#: ui/CellToolBase.cpp:278
+#: ui/CellToolBase.cpp:276
 #, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Koşullu Biçemleri Kaldır"
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:277
 #, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Koşullu hücre biçemlerini kaldır"
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:283
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "&Otomatik Süzme"
 
-#: ui/CellToolBase.cpp:288
+#: ui/CellToolBase.cpp:286
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "Bir hücre aralığına otomatik süzgeç ekle"
 
-#: ui/CellToolBase.cpp:292
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "&Function..."
 msgstr "&İşlev..."
 
-#: ui/CellToolBase.cpp:295
+#: ui/CellToolBase.cpp:293
 #, kde-format
 msgid "Insert math expression"
 msgstr "Matematiksel ifade ekle"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:296
 #, kde-format
 msgid "From &Database..."
 msgstr "&Veritabanından..."
 
-#: ui/CellToolBase.cpp:302
+#: ui/CellToolBase.cpp:300
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL veritabanından veri ekle"
 
-#: ui/CellToolBase.cpp:305
+#: ui/CellToolBase.cpp:303
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Özel Listeler..."
 
-#: ui/CellToolBase.cpp:308
+#: ui/CellToolBase.cpp:306
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Sıralama veya otomatik tamamlama için özel liseler oluştur"
 
-#: ui/CellToolBase.cpp:310
+#: ui/CellToolBase.cpp:308
 #, kde-format
 msgid "&Consolidate..."
 msgstr "&Birleştir..."
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:311
 #, kde-format
 msgid "Create a region of summary data from a group of similar regions"
 msgstr "Benzer bir grup bölgeden bir özet veri bölgesi oluştur"
 
-#: ui/CellToolBase.cpp:315
+#: ui/CellToolBase.cpp:313
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Hedef Araması..."
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:316
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "İşlemi kesin bir değer bulmak için tekrarlıyor"
 
-#: ui/CellToolBase.cpp:320
+#: ui/CellToolBase.cpp:318
 #, kde-format
 msgid "&Subtotals..."
 msgstr "&Ara Toplamlar..."
 
-#: ui/CellToolBase.cpp:323
+#: ui/CellToolBase.cpp:321
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
 msgstr "Bir veritabanı veya listeye farklı nitelikte aratoplamları oluştur"
 
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:323
 #, kde-format
 msgid "&Pivot Tables..."
 msgstr "&Özet Tablolar..."
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:326
 #, kde-format
 msgid "Create Pivot Tables"
 msgstr "Özet Tablolar Oluştur"
 
-#: ui/CellToolBase.cpp:330
-#, kde-format
-msgid "Area Name..."
-msgstr "Alan Adı..."
-
-#: ui/CellToolBase.cpp:333
-#, kde-format
-msgid "Set a name for a region of the spreadsheet"
-msgstr "Hesap tablosunun bir bölgesi için bir ad ayarla"
-
-#: ui/CellToolBase.cpp:335
-#, kde-format
-msgid "Named Areas..."
-msgstr "Adlandırılmış Alanlar..."
-
-#: ui/CellToolBase.cpp:337 ui/dialogs/NamedAreaDialog.cpp:49
-#, kde-format
-msgid "Named Areas"
-msgstr "Adlandırılmış Alanlar"
-
-#: ui/CellToolBase.cpp:339
-#, kde-format
-msgid "Edit or select named areas"
-msgstr "Adlandırılmış alanları düzenle veya seç"
-
-#: ui/CellToolBase.cpp:343
+#: ui/CellToolBase.cpp:328
 #, kde-format
 msgid "Formula Selection"
 msgstr "Formül Seçimi"
 
-#: ui/CellToolBase.cpp:345
+#: ui/CellToolBase.cpp:330
 #, kde-format
 msgid "Insert a function"
 msgstr "Bir işlev ekle"
 
-#: ui/CellToolBase.cpp:346 ui/CellToolBase.cpp:1613
+#: ui/CellToolBase.cpp:331 ui/CellToolBase.cpp:1584
 #, kde-format
 msgid "Others..."
 msgstr "Diğerleri..."
 
-#: ui/CellToolBase.cpp:354
+#: ui/CellToolBase.cpp:339
 #, kde-format
 msgid "Modify Cell"
 msgstr "Hücreyi Düzenle"
 
-#: ui/CellToolBase.cpp:358
+#: ui/CellToolBase.cpp:343
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Vurgulanmış hücreyi düzenle"
 
-#: ui/CellToolBase.cpp:361
+#: ui/CellToolBase.cpp:346
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Hücre nesnesini panoya taşı"
 
-#: ui/CellToolBase.cpp:365
+#: ui/CellToolBase.cpp:350
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Hücre nesnesini panoya kopyala"
 
-#: ui/CellToolBase.cpp:369
+#: ui/CellToolBase.cpp:354
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Pano içeriğini imlecin olduğu yere yapıştır"
 
-#: ui/CellToolBase.cpp:372
+#: ui/CellToolBase.cpp:357
 #, kde-format
 msgid "Special Paste..."
 msgstr "Özel Yapıştır..."
 
-#: ui/CellToolBase.cpp:375
+#: ui/CellToolBase.cpp:360
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Pano içeriğini özel seçeneklerle yapıştır"
 
-#: ui/CellToolBase.cpp:377
+#: ui/CellToolBase.cpp:362
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Ekleyerek Yapıştır"
 
-#: ui/CellToolBase.cpp:380
+#: ui/CellToolBase.cpp:365
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Panodan bir hücreyi hesap tablosuna ekler"
 
-#: ui/CellToolBase.cpp:383
+#: ui/CellToolBase.cpp:368
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Geçerli çalışma tablosundaki tüm hücreleri seçer"
 
-#: ui/CellToolBase.cpp:400
+#: ui/CellToolBase.cpp:385
 #, kde-format
 msgid "Goto Cell..."
 msgstr "Hücreye Git..."
 
-#: ui/CellToolBase.cpp:401
+#: ui/CellToolBase.cpp:386
 #, kde-format
 msgid "Goto"
 msgstr "Git"
 
-#: ui/CellToolBase.cpp:405
+#: ui/CellToolBase.cpp:390
 #, kde-format
 msgid "Move to a particular cell"
 msgstr "Belirli bir hücreye taşı"
 
-#: ui/CellToolBase.cpp:408
+#: ui/CellToolBase.cpp:393
 #, kde-format
 msgid "Check the spelling"
 msgstr "Yazım denetimi yap"
 
-#: ui/CellToolBase.cpp:411
+#: ui/CellToolBase.cpp:396
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Denetleyiciyi Çalıştır..."
 
-#: ui/CellToolBase.cpp:417
+#: ui/CellToolBase.cpp:402
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView Ögesini Göster..."
 
-#: ui/CellToolBase.cpp:423
+#: ui/CellToolBase.cpp:408
 #, kde-format
 msgid "Auto-Format..."
 msgstr "Otomatik Biçim..."
 
-#: ui/CellToolBase.cpp:426
+#: ui/CellToolBase.cpp:411
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Çalışma tablosu biçimini ayarla"
 
-#: ui/CellToolBase.cpp:428
+#: ui/CellToolBase.cpp:413
 #, kde-format
 msgid "Document Settings..."
 msgstr "Belge Ayarları..."
 
-#: ui/CellToolBase.cpp:431
+#: ui/CellToolBase.cpp:416
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Belge ayarları penceresini göster"
 
-#: ui/CellToolBase.cpp:433
+#: ui/CellToolBase.cpp:418
 #, kde-format
 msgid "Break Before Column"
 msgstr "Sütundan Önce Kes"
 
-#: ui/CellToolBase.cpp:436
+#: ui/CellToolBase.cpp:421
 #, kde-format
 msgid "Column Break"
 msgstr "Sütun Sonu"
 
-#: ui/CellToolBase.cpp:437
+#: ui/CellToolBase.cpp:422
 #, kde-format
 msgid "Set a manual page break before the column"
 msgstr "Sütundan önce elle sayfa sonu ayarla"
 
-#: ui/CellToolBase.cpp:439
+#: ui/CellToolBase.cpp:424
 #, kde-format
 msgid "Break Before Row"
 msgstr "Satırdan Önce Sonlandır"
 
-#: ui/CellToolBase.cpp:442
+#: ui/CellToolBase.cpp:427
 #, kde-format
 msgid "Row Break"
 msgstr "Satırı Sonu"
 
-#: ui/CellToolBase.cpp:443
+#: ui/CellToolBase.cpp:428
 #, kde-format
 msgid "Set a manual page break before the row"
 msgstr "Satırdan önce el ile sayfa sonu ayarla"
 
-#: ui/CellToolBase.cpp:447
+#: ui/CellToolBase.cpp:432
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Başvuru sabitini değiştir"
 
-#: ui/CellToolBase.cpp:451
+#: ui/CellToolBase.cpp:436
 #, kde-format
 msgid "Permute fixation"
 msgstr "Sabiti değiştir"
 
-#: ui/CellToolBase.cpp:452
+#: ui/CellToolBase.cpp:437
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Metin imlecindeki başvuru sabitini değiştir"
 
-#: ui/CellToolBase.cpp:1258
+#: ui/CellToolBase.cpp:1243
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "%1 eylemi bulunamıyor"
 
-#: ui/CellToolBase.cpp:1324
+#: ui/CellToolBase.cpp:1309
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "Hücreden Biçem Oluştur"
 
-#: ui/CellToolBase.cpp:1333
+#: ui/CellToolBase.cpp:1318
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "Biçem adı boş olamaz."
 
-#: ui/CellToolBase.cpp:1338 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1323 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "Bu adda bir biçem halihazırda var."
 
-#: ui/CellToolBase.cpp:1359 ui/CellToolBase.cpp:1379
+#: ui/CellToolBase.cpp:1344 ui/CellToolBase.cpp:1364
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Yazıtipini Değiştir"
 
-#: ui/CellToolBase.cpp:1486
+#: ui/CellToolBase.cpp:1471
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Metni Temizle"
 
-#: ui/CellToolBase.cpp:1540
+#: ui/CellToolBase.cpp:1525
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14829,12 +14804,12 @@ msgstr ""
 "Veritabanı sürücüsü bulunamadı. Bu özelliği kullanabilmeniz için Qt "
 "veritabanı sürücülerine gerek duyuluyor."
 
-#: ui/CellToolBase.cpp:1576 ui/CellToolBase.cpp:1588
+#: ui/CellToolBase.cpp:1561 ui/CellToolBase.cpp:1573
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Birden fazla hücre seçmelisiniz."
 
-#: ui/CellToolBase.cpp:2077
+#: ui/CellToolBase.cpp:2048
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Değiştir"
@@ -15189,12 +15164,12 @@ msgstr "Hücreleri Ayır"
 msgid "Merging of columns or rows is not supported."
 msgstr "Satırların veya sütunların birleştirilmesi desteklenmemektedir."
 
-#: ui/commands/NamedAreaCommand.cpp:20 ui/commands/NamedAreaCommand.cpp:36
+#: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:42
 msgctxt "(qtundo-format)"
 msgid "Add Named Area"
 msgstr "Adlandırılmış Alan Ekle"
 
-#: ui/commands/NamedAreaCommand.cpp:38
+#: ui/commands/NamedAreaCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Remove Named Area"
 msgstr "Adlandırılmış Alanı Kaldır"
@@ -15352,35 +15327,6 @@ msgstr "Biçemi Sıfırla"
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Biçemi Değiştir"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:34
-#, kde-format
-msgid "Add Named Area"
-msgstr "Adlandırılmış Alan Ekle"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:43
-#, kde-format
-msgid "Enter the area name:"
-msgstr "Alan adını girin:"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:75
-#, kde-format
-msgid ""
-"The named area '%1' already exists.\n"
-"Do you want to replace it?"
-msgstr ""
-"\"%1\" adlı bir alan halihazırda var.\n"
-"Üzerine yazmak istiyor musunuz?"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:77
-#, kde-format
-msgid "Replace Named Area"
-msgstr "Adlandırılmış Alanı Değiştir"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:83 ui/dialogs/NamedAreaDialog.cpp:300
-msgctxt "(qtundo-format)"
-msgid "Replace Named Area"
-msgstr "Adlandırılmış Alanı Değiştir"
 
 #: ui/dialogs/AngleDialog.cpp:31
 #, kde-format
@@ -16912,66 +16858,6 @@ msgstr ""
 "Girdi alanı boş değil.\n"
 "Sürdürmek istiyor musunuz?"
 
-#: ui/dialogs/NamedAreaDialog.cpp:48
-#, kde-format
-msgid "&Select"
-msgstr "&Seç"
-
-#: ui/dialogs/NamedAreaDialog.cpp:66 ui/dialogs/NamedAreaDialog.cpp:113
-#, kde-format
-msgid "Area: %1"
-msgstr "Alan: %1"
-
-#: ui/dialogs/NamedAreaDialog.cpp:74 ui/dialogs/StyleManagerDialog.cpp:58
-#, kde-format
-msgid "&New..."
-msgstr "Ye&ni..."
-
-#: ui/dialogs/NamedAreaDialog.cpp:76
-#, kde-format
-msgid "&Edit..."
-msgstr "Dü&zenle..."
-
-#: ui/dialogs/NamedAreaDialog.cpp:78
-#, kde-format
-msgid "&Remove"
-msgstr "&Kaldır"
-
-#: ui/dialogs/NamedAreaDialog.cpp:145
-#, kde-format
-msgid "New Named Area"
-msgstr "Yeni Adlandırılmış Alan"
-
-#: ui/dialogs/NamedAreaDialog.cpp:172
-#, kde-format
-msgid "Edit Named Area"
-msgstr "Adlandırılmış Alanı Düzenle"
-
-#: ui/dialogs/NamedAreaDialog.cpp:185
-#, kde-format
-msgid "Do you really want to remove this named area?"
-msgstr "Bu adlandırılmış alanı gerçekten kaldırmak istiyor musunuz?"
-
-#: ui/dialogs/NamedAreaDialog.cpp:186
-#, kde-format
-msgid "Remove Named Area"
-msgstr "Adlandırılmış Alanı Kaldır"
-
-#: ui/dialogs/NamedAreaDialog.cpp:229
-#, kde-format
-msgid "Cells:"
-msgstr "Hücreler:"
-
-#: ui/dialogs/NamedAreaDialog.cpp:236
-#, kde-format
-msgid "Sheet:"
-msgstr "Sayfa:"
-
-#: ui/dialogs/NamedAreaDialog.cpp:243
-#, kde-format
-msgid "Area name:"
-msgstr "Alan adı:"
-
 #: ui/dialogs/PasteInsertDialog.cpp:26
 #, kde-format
 msgid "Paste Inserting Cells"
@@ -17510,6 +17396,11 @@ msgstr "Özel Biçemler"
 msgid "Hierarchical"
 msgstr "Hiyerarşik"
 
+#: ui/dialogs/StyleManagerDialog.cpp:58
+#, kde-format
+msgid "&New..."
+msgstr "Ye&ni..."
+
 #: ui/dialogs/StyleManagerDialog.cpp:60
 #, kde-format
 msgid "&Modify..."
@@ -17679,6 +17570,74 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Bağlantıyı Aç?"
+
+#~ msgid "Area Name..."
+#~ msgstr "Alan Adı..."
+
+#~ msgid "Set a name for a region of the spreadsheet"
+#~ msgstr "Hesap tablosunun bir bölgesi için bir ad ayarla"
+
+#~ msgid "Named Areas..."
+#~ msgstr "Adlandırılmış Alanlar..."
+
+#~ msgid "Named Areas"
+#~ msgstr "Adlandırılmış Alanlar"
+
+#~ msgid "Edit or select named areas"
+#~ msgstr "Adlandırılmış alanları düzenle veya seç"
+
+#~ msgid "Add Named Area"
+#~ msgstr "Adlandırılmış Alan Ekle"
+
+#~ msgid "Enter the area name:"
+#~ msgstr "Alan adını girin:"
+
+#~ msgid ""
+#~ "The named area '%1' already exists.\n"
+#~ "Do you want to replace it?"
+#~ msgstr ""
+#~ "\"%1\" adlı bir alan halihazırda var.\n"
+#~ "Üzerine yazmak istiyor musunuz?"
+
+#~ msgid "Replace Named Area"
+#~ msgstr "Adlandırılmış Alanı Değiştir"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace Named Area"
+#~ msgstr "Adlandırılmış Alanı Değiştir"
+
+#~ msgid "&Select"
+#~ msgstr "&Seç"
+
+#~ msgid "Area: %1"
+#~ msgstr "Alan: %1"
+
+#~ msgid "&Edit..."
+#~ msgstr "Dü&zenle..."
+
+#~ msgid "&Remove"
+#~ msgstr "&Kaldır"
+
+#~ msgid "New Named Area"
+#~ msgstr "Yeni Adlandırılmış Alan"
+
+#~ msgid "Edit Named Area"
+#~ msgstr "Adlandırılmış Alanı Düzenle"
+
+#~ msgid "Do you really want to remove this named area?"
+#~ msgstr "Bu adlandırılmış alanı gerçekten kaldırmak istiyor musunuz?"
+
+#~ msgid "Remove Named Area"
+#~ msgstr "Adlandırılmış Alanı Kaldır"
+
+#~ msgid "Cells:"
+#~ msgstr "Hücreler:"
+
+#~ msgid "Sheet:"
+#~ msgstr "Sayfa:"
+
+#~ msgid "Area name:"
+#~ msgstr "Alan adı:"
 
 #~ msgid "Align Left"
 #~ msgstr "Sola Hizala"

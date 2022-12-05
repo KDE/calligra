@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-04 00:46+0000\n"
+"POT-Creation-Date: 2022-12-05 00:46+0000\n"
 "PO-Revision-Date: 2007-08-24 15:27+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -925,7 +925,7 @@ msgstr "सङ्ख्या"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:164 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:162 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -988,7 +988,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "टुभालु"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:299 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:297 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "डाटाबेस"
@@ -13136,7 +13136,7 @@ msgstr "पाना लुकाउनुहोस्"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:189
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:187
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, fuzzy, kde-format
 #| msgid "&Font"
@@ -14605,7 +14605,7 @@ msgstr ""
 "तपाईँले सक्रिय पाना हटाउँदै हुनुहुन्छ ।\n"
 "तपाईँ जारी राख्न चाहनुहुन्छ?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1325
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1310
 #, kde-format
 msgid "Enter name:"
 msgstr "नाम प्रविष्ट गर्नुहोस्:"
@@ -14665,14 +14665,14 @@ msgstr "गणनाA: "
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1399
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1384
 #, fuzzy
 #| msgid "Change Text Color"
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "पाठ रङ परिवर्तन गर्नुहोस्"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1448
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1433
 #, fuzzy
 #| msgid "Change Background Color"
 msgctxt "(qtundo-format)"
@@ -14688,526 +14688,501 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "किनारा परिवर्तन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Cell Format..."
 msgstr "कक्ष ढाँचा..."
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "कक्ष ढाँचा सेट गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:168
 #, fuzzy, kde-format
 #| msgid "Style Manager"
 msgid "Style Manager..."
 msgstr "शैली प्रबन्धक"
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr "कक्ष शैली सम्पादन गर्नुहोस् र संगठित गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:175 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:173 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "शैली"
 
-#: ui/CellToolBase.cpp:177
+#: ui/CellToolBase.cpp:175
 #, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "चयन गरिएका कक्षमा पूर्वपरिभाषित शैली लागू गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:180
+#: ui/CellToolBase.cpp:178
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "कक्षबाट शैली सिर्जना गर्नुहोस्..."
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 #| msgid "Style of Cell"
 msgid "Style From Cell"
 msgstr "कक्षको शैली"
 
-#: ui/CellToolBase.cpp:184
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "हालै चयन गरिएका कक्षमा आधारित नयाँ शैली सिर्जना गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Select Font..."
 msgstr "फन्ट चयन गर्नुहोस्..."
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "Select Font Size"
 msgstr "फन्ट साइज चयन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:192
 #, fuzzy, kde-format
 #| msgid "Select Font Size"
 msgid "Font Size"
 msgstr "फन्ट साइज चयन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:200
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Text Color"
 msgstr "पाठ रङ"
 
-#: ui/CellToolBase.cpp:201
+#: ui/CellToolBase.cpp:199
 #, fuzzy, kde-format
 #| msgid "Set the background color"
 msgid "Set the text color"
 msgstr "पृष्ठभूमि रङ सेट गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:209
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Select a new border color"
 msgstr "नयाँ किनारा रङ चयन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:208
 #, kde-format
 msgid "Border Color"
 msgstr "किनारा रङ"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:215
 #, kde-format
 msgid "Change Angle..."
 msgstr "कोण परिवर्तन गर्नुहोस्..."
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:216
 #, fuzzy, kde-format
 #| msgid "Angle:"
 msgid "Angle"
 msgstr "कोण:"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:219
 #, kde-format
 msgid "Change the angle that cell contents are printed"
 msgstr "मुद्रण गरिएका कक्ष सामाग्रीका कोण परिवर्तन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:223
 #, kde-format
 msgid "Increase Precision"
 msgstr "सूक्ष्मता बढाउनुहोस्"
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:226
 #, kde-format
 msgid "Increase the decimal precision shown onscreen"
 msgstr "पर्दामा देखिएका दशमलव सूक्ष्मता बढाउनुहोस्"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Decrease Precision"
 msgstr "सूक्ष्मता घटाउनुहोस्"
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Decrease the decimal precision shown onscreen"
 msgstr "पर्दामा देखिएका दशमलव सूक्ष्मता घटाउनुहोस्"
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:237
 #, kde-format
 msgid "Set the background color"
 msgstr "पृष्ठभूमि रङ सेट गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Background Color"
 msgstr "पृष्ठभूमि रङ"
 
-#: ui/CellToolBase.cpp:246 ui/CellToolBase.cpp:252
+#: ui/CellToolBase.cpp:244 ui/CellToolBase.cpp:250
 #, kde-format
 msgid "Cells..."
 msgstr "कक्ष..."
 
-#: ui/CellToolBase.cpp:247 ui/CellToolBase_p.cpp:1133
+#: ui/CellToolBase.cpp:245 ui/CellToolBase_p.cpp:1133
 #, kde-format
 msgid "Insert Cells..."
 msgstr "कक्ष घुसाउनुहोस्..."
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:246
 #, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "स्प्रेडसिटमा खाली कक्ष घुसाउनुहोस्"
 
-#: ui/CellToolBase.cpp:253
+#: ui/CellToolBase.cpp:251
 #, kde-format
 msgid "Remove Cells..."
 msgstr "कक्ष हटाउनुहोस्..."
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:252
 #, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "स्प्रेडसिटबाट कक्ष हटाउनुहोस्"
 
-#: ui/CellToolBase.cpp:260 ui/CellToolBase.cpp:261
+#: ui/CellToolBase.cpp:258 ui/CellToolBase.cpp:259
 #, kde-format
 msgid "Clear All"
 msgstr "सबै खाली गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:260
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "हालको कक्षका सबै सामाग्री र ढाँचा मेट्नुहोस्"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:264
 #, kde-format
 msgid "Contents"
 msgstr "सामाग्री"
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:265
 #, kde-format
 msgid "Clear Contents"
 msgstr "सामाग्री खाली गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:268
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "हालको कक्षका सामाग्री हटाउनुहोस्"
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:270
 #, kde-format
 msgid "Conditional Styles..."
 msgstr "ससर्त शैली..."
 
-#: ui/CellToolBase.cpp:273
+#: ui/CellToolBase.cpp:271
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "निश्चित सर्तमा आधारित कक्ष शैली सेट गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:277 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:275 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr "सशर्त शैली"
 
-#: ui/CellToolBase.cpp:278
+#: ui/CellToolBase.cpp:276
 #, kde-format
 msgid "Remove Conditional Styles"
 msgstr "ससर्त शैली हटाउनुहोस्"
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:277
 #, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "ससर्त कक्ष शैली हटाउनुहोस्"
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:283
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "स्वत-फिल्टर"
 
-#: ui/CellToolBase.cpp:288
+#: ui/CellToolBase.cpp:286
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "एउटा स्वचालित फिल्टर कक्ष दायरामा थप्नुहोस्"
 
-#: ui/CellToolBase.cpp:292
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "&Function..."
 msgstr "प्रकार्य..."
 
-#: ui/CellToolBase.cpp:295
+#: ui/CellToolBase.cpp:293
 #, kde-format
 msgid "Insert math expression"
 msgstr "गणित अभिव्यक्ति घुसाउनुहोस्"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:296
 #, kde-format
 msgid "From &Database..."
 msgstr "डाटाबेसबाट..."
 
-#: ui/CellToolBase.cpp:302
+#: ui/CellToolBase.cpp:300
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL डाटाबेसबाट डेटा घुसाउनुहोस्"
 
-#: ui/CellToolBase.cpp:305
+#: ui/CellToolBase.cpp:303
 #, kde-format
 msgid "Custom Lists..."
 msgstr "अनुकूल सूची..."
 
-#: ui/CellToolBase.cpp:308
+#: ui/CellToolBase.cpp:306
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "क्रमबद्धता वा स्वत: भर्नका लागि अनुकूल सूची सिर्जना गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:310
+#: ui/CellToolBase.cpp:308
 #, kde-format
 msgid "&Consolidate..."
 msgstr "सङ्गठित गर्नुहोस्..."
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:311
 #, kde-format
 msgid "Create a region of summary data from a group of similar regions"
 msgstr "उस्तै क्षेत्रका समूहबाट डेटा सारांशको क्षेत्र सिर्जना गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:315
+#: ui/CellToolBase.cpp:313
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "लक्ष्य खोजी..."
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:316
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "निर्दिष्ट मान फेला पार्न गणना दोहोर्याउनुहोस्"
 
-#: ui/CellToolBase.cpp:320
+#: ui/CellToolBase.cpp:318
 #, kde-format
 msgid "&Subtotals..."
 msgstr "उप-जोड..."
 
-#: ui/CellToolBase.cpp:323
+#: ui/CellToolBase.cpp:321
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
 msgstr "सूची वा डाटाबेसमा उप-जोडका विभिन्न प्रकारा सिर्जना गर्नुहोस।"
 
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:323
 #, fuzzy, kde-format
 #| msgid "&Subtotals..."
 msgid "&Pivot Tables..."
 msgstr "उप-जोड..."
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:326
 #, fuzzy, kde-format
 #| msgid "&Subtotals..."
 msgid "Create Pivot Tables"
 msgstr "उप-जोड..."
 
-#: ui/CellToolBase.cpp:330
-#, kde-format
-msgid "Area Name..."
-msgstr "क्षेत्र नाम..."
-
-#: ui/CellToolBase.cpp:333
-#, kde-format
-msgid "Set a name for a region of the spreadsheet"
-msgstr "स्प्रेडसिटको क्षेत्रका लागि नाम सेट गर्नुहोस्"
-
-#: ui/CellToolBase.cpp:335
-#, kde-format
-msgid "Named Areas..."
-msgstr "नामाकरण गरिएका क्षेत्र..."
-
-#: ui/CellToolBase.cpp:337 ui/dialogs/NamedAreaDialog.cpp:49
-#, kde-format
-msgid "Named Areas"
-msgstr "नामाकरण गरिएको क्षेत्र"
-
-#: ui/CellToolBase.cpp:339
-#, kde-format
-msgid "Edit or select named areas"
-msgstr "नामाकरण गरिएका क्षेत्र सम्पादन गर्नुहोस् वा चयन गर्नुहोस्"
-
-#: ui/CellToolBase.cpp:343
+#: ui/CellToolBase.cpp:328
 #, kde-format
 msgid "Formula Selection"
 msgstr "सूत्र चयन"
 
-#: ui/CellToolBase.cpp:345
+#: ui/CellToolBase.cpp:330
 #, kde-format
 msgid "Insert a function"
 msgstr "प्रकार्य घुसाउनुहोस्"
 
-#: ui/CellToolBase.cpp:346 ui/CellToolBase.cpp:1613
+#: ui/CellToolBase.cpp:331 ui/CellToolBase.cpp:1584
 #, kde-format
 msgid "Others..."
 msgstr "अन्य..."
 
-#: ui/CellToolBase.cpp:354
+#: ui/CellToolBase.cpp:339
 #, kde-format
 msgid "Modify Cell"
 msgstr "कक्ष परिमार्जन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:358
+#: ui/CellToolBase.cpp:343
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "हाइलाइट गरिएको कक्ष सम्पादन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:361
+#: ui/CellToolBase.cpp:346
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "कक्ष वस्तु क्लिपबोर्डमा सार्नुहोस्"
 
-#: ui/CellToolBase.cpp:365
+#: ui/CellToolBase.cpp:350
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "क्लिपबोर्डमा वस्तु कक्ष प्रतिलिपि गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:369
+#: ui/CellToolBase.cpp:354
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "कर्सरमा क्लिपबोर्डका सामाग्री टाँस्नुहोस्"
 
-#: ui/CellToolBase.cpp:372
+#: ui/CellToolBase.cpp:357
 #, kde-format
 msgid "Special Paste..."
 msgstr "विशेष टाँस्नुहोस्..."
 
-#: ui/CellToolBase.cpp:375
+#: ui/CellToolBase.cpp:360
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "विशेष विकल्पसहित क्लिपबोर्डका सामाग्री टाँस्नुहोस्"
 
-#: ui/CellToolBase.cpp:377
+#: ui/CellToolBase.cpp:362
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "प्रवेशनसँग टाँस्नुहोस्"
 
-#: ui/CellToolBase.cpp:380
+#: ui/CellToolBase.cpp:365
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "क्लिपबोर्डबाट स्प्रेडसिटमा कक्ष घुसाउँदछ"
 
-#: ui/CellToolBase.cpp:383
+#: ui/CellToolBase.cpp:368
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "हालको पानामा सबै कक्ष चयन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:400
+#: ui/CellToolBase.cpp:385
 #, kde-format
 msgid "Goto Cell..."
 msgstr "कक्षमा जानुहोस्..."
 
-#: ui/CellToolBase.cpp:401
+#: ui/CellToolBase.cpp:386
 #, fuzzy, kde-format
 #| msgid "Goto Cell"
 msgid "Goto"
 msgstr "कक्षमा जानुहोस्"
 
-#: ui/CellToolBase.cpp:405
+#: ui/CellToolBase.cpp:390
 #, kde-format
 msgid "Move to a particular cell"
 msgstr "विशिष्ट कक्षमा सार्नुहोस्"
 
-#: ui/CellToolBase.cpp:408
+#: ui/CellToolBase.cpp:393
 #, kde-format
 msgid "Check the spelling"
 msgstr "हिज्जे जाँच गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:411
+#: ui/CellToolBase.cpp:396
 #, kde-format
 msgid "Run Inspector..."
 msgstr "निरीक्षक चलाउनुहोस्..."
 
-#: ui/CellToolBase.cpp:417
+#: ui/CellToolBase.cpp:402
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "पाना देखाउनुहोस्..."
 
-#: ui/CellToolBase.cpp:423
+#: ui/CellToolBase.cpp:408
 #, fuzzy, kde-format
 #| msgid "AutoFormat..."
 msgid "Auto-Format..."
 msgstr "स्वत: ढाँचा..."
 
-#: ui/CellToolBase.cpp:426
+#: ui/CellToolBase.cpp:411
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "कार्यपाना ढाँचा सेट गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:428
+#: ui/CellToolBase.cpp:413
 #, fuzzy, kde-format
 #| msgid "Locale Settings"
 msgid "Document Settings..."
 msgstr "लोकेल सेटिङ"
 
-#: ui/CellToolBase.cpp:431
+#: ui/CellToolBase.cpp:416
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "टिप्पणी सूचक देखाउनुहोस्"
 
-#: ui/CellToolBase.cpp:433
+#: ui/CellToolBase.cpp:418
 #, fuzzy, kde-format
 #| msgid "Remove Columns"
 msgid "Break Before Column"
 msgstr "स्तम्भ हटाउनुहोस्"
 
-#: ui/CellToolBase.cpp:436
+#: ui/CellToolBase.cpp:421
 #, fuzzy, kde-format
 #| msgid "Show column as &numbers"
 msgid "Column Break"
 msgstr "सङ्ख्याको रुपमा स्तम्भ देखाउनुहोस्"
 
-#: ui/CellToolBase.cpp:437
+#: ui/CellToolBase.cpp:422
 #, kde-format
 msgid "Set a manual page break before the column"
 msgstr ""
 
-#: ui/CellToolBase.cpp:439
+#: ui/CellToolBase.cpp:424
 #, fuzzy, kde-format
 #| msgid "Remove Columns"
 msgid "Break Before Row"
 msgstr "स्तम्भ हटाउनुहोस्"
 
-#: ui/CellToolBase.cpp:442
+#: ui/CellToolBase.cpp:427
 #, fuzzy, kde-format
 #| msgid "Header"
 msgid "Row Break"
 msgstr "हेडर"
 
-#: ui/CellToolBase.cpp:443
+#: ui/CellToolBase.cpp:428
 #, kde-format
 msgid "Set a manual page break before the row"
 msgstr ""
 
-#: ui/CellToolBase.cpp:447
+#: ui/CellToolBase.cpp:432
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:451
+#: ui/CellToolBase.cpp:436
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:452
+#: ui/CellToolBase.cpp:437
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "कर्सरमा क्लिपबोर्डका सामाग्री टाँस्नुहोस्"
 
-#: ui/CellToolBase.cpp:1258
+#: ui/CellToolBase.cpp:1243
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1324
+#: ui/CellToolBase.cpp:1309
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "कक्षबाट शैली सिर्जना गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:1333
+#: ui/CellToolBase.cpp:1318
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "शैली नाम खाली गर्न सकिँदैन ।"
 
-#: ui/CellToolBase.cpp:1338 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1323 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "यो नामको शैली पहिले अवस्थित छ ।"
 
-#: ui/CellToolBase.cpp:1359 ui/CellToolBase.cpp:1379
+#: ui/CellToolBase.cpp:1344 ui/CellToolBase.cpp:1364
 #, fuzzy
 #| msgid "Change Font"
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "फन्ट परिवर्तन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:1486
+#: ui/CellToolBase.cpp:1471
 #, fuzzy
 #| msgid "Clear Text"
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "पाठ खाली गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:1540
+#: ui/CellToolBase.cpp:1525
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -15219,12 +15194,12 @@ msgstr ""
 "डाटाबेस ड्राइभर उपलब्ध छैन ।  यो विशेषता प्रयोग गर्न तपाईँले आवश्यकिय Qt 3 डाटाबेस "
 "ड्राइभर स्थापना गर्नु आवश्यक हुन्छ ।"
 
-#: ui/CellToolBase.cpp:1576 ui/CellToolBase.cpp:1588
+#: ui/CellToolBase.cpp:1561 ui/CellToolBase.cpp:1573
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "तपाईँले बहुविध कक्ष चयन गर्नुपर्छ ।"
 
-#: ui/CellToolBase.cpp:2077
+#: ui/CellToolBase.cpp:2048
 #, fuzzy
 #| msgid "Replace Named Area"
 msgctxt "(qtundo-format)"
@@ -15627,14 +15602,14 @@ msgstr "कक्ष छुट्याउनुहोस्"
 msgid "Merging of columns or rows is not supported."
 msgstr "स्तम्भ र पङ्क्ति गाभ्न समर्थित छैन ।"
 
-#: ui/commands/NamedAreaCommand.cpp:20 ui/commands/NamedAreaCommand.cpp:36
+#: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:42
 #, fuzzy
 #| msgid "Add Named Area"
 msgctxt "(qtundo-format)"
 msgid "Add Named Area"
 msgstr "नामाकरण गरिएको क्षेत्र थप्नुहोस्"
 
-#: ui/commands/NamedAreaCommand.cpp:38
+#: ui/commands/NamedAreaCommand.cpp:44
 #, fuzzy
 #| msgid "Remove Named Area"
 msgctxt "(qtundo-format)"
@@ -15850,37 +15825,6 @@ msgstr "शैली पुन सेट गर्नुहोस्"
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "शैली परिवर्तन गर्नुहोस्"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:34
-#, kde-format
-msgid "Add Named Area"
-msgstr "नामाकरण गरिएको क्षेत्र थप्नुहोस्"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:43
-#, kde-format
-msgid "Enter the area name:"
-msgstr "क्षेत्र नाम प्रविष्ट गर्नुहोस्:"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:75
-#, kde-format
-msgid ""
-"The named area '%1' already exists.\n"
-"Do you want to replace it?"
-msgstr ""
-"नामाकरण गरिएको क्षेत्र %1 पहिले नै अवस्थित छ । \n"
-" तपाईँ यसलाई प्रतिस्थापन गर्न चाहानुहुन्छ ?"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:77
-#, kde-format
-msgid "Replace Named Area"
-msgstr "नामाकरण गरिएको क्षेत्र प्रतिस्थापन गर्नुहोस्"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:83 ui/dialogs/NamedAreaDialog.cpp:300
-#, fuzzy
-#| msgid "Replace Named Area"
-msgctxt "(qtundo-format)"
-msgid "Replace Named Area"
-msgstr "नामाकरण गरिएको क्षेत्र प्रतिस्थापन गर्नुहोस्"
 
 #: ui/dialogs/AngleDialog.cpp:31
 #, kde-format
@@ -17481,66 +17425,6 @@ msgstr ""
 "प्रविष्टि क्षेत्र खाली छैन ।\n"
 "तपाईँ जारी राख्न चाहनुहुन्छ?"
 
-#: ui/dialogs/NamedAreaDialog.cpp:48
-#, kde-format
-msgid "&Select"
-msgstr "चयन"
-
-#: ui/dialogs/NamedAreaDialog.cpp:66 ui/dialogs/NamedAreaDialog.cpp:113
-#, kde-format
-msgid "Area: %1"
-msgstr "क्षेत्र: %1"
-
-#: ui/dialogs/NamedAreaDialog.cpp:74 ui/dialogs/StyleManagerDialog.cpp:58
-#, kde-format
-msgid "&New..."
-msgstr "नयाँ..."
-
-#: ui/dialogs/NamedAreaDialog.cpp:76
-#, kde-format
-msgid "&Edit..."
-msgstr "सम्पादन गर्नुहोस्..."
-
-#: ui/dialogs/NamedAreaDialog.cpp:78
-#, kde-format
-msgid "&Remove"
-msgstr "हटाउनुहोस्"
-
-#: ui/dialogs/NamedAreaDialog.cpp:145
-#, kde-format
-msgid "New Named Area"
-msgstr "नयाँ नामाकरण गरिएको क्षेत्र"
-
-#: ui/dialogs/NamedAreaDialog.cpp:172
-#, kde-format
-msgid "Edit Named Area"
-msgstr "नामाकरण गरिएको क्षेत्र सम्पादन गर्नुहोस्"
-
-#: ui/dialogs/NamedAreaDialog.cpp:185
-#, kde-format
-msgid "Do you really want to remove this named area?"
-msgstr "तपाईँ यो नामाकरण गरिएको क्षेत्र साँच्चिकै हटाउन चाहानुहुन्छ ?"
-
-#: ui/dialogs/NamedAreaDialog.cpp:186
-#, kde-format
-msgid "Remove Named Area"
-msgstr "नामाकरण गरिएको क्षेत्र हटाउनुहोस्"
-
-#: ui/dialogs/NamedAreaDialog.cpp:229
-#, kde-format
-msgid "Cells:"
-msgstr "कक्ष:"
-
-#: ui/dialogs/NamedAreaDialog.cpp:236
-#, kde-format
-msgid "Sheet:"
-msgstr "पाना:"
-
-#: ui/dialogs/NamedAreaDialog.cpp:243
-#, kde-format
-msgid "Area name:"
-msgstr "क्षेत्र नाम:"
-
 #: ui/dialogs/PasteInsertDialog.cpp:26
 #, kde-format
 msgid "Paste Inserting Cells"
@@ -18121,6 +18005,11 @@ msgstr "अनुकूल शैली"
 msgid "Hierarchical"
 msgstr "सोपानक्रमिक"
 
+#: ui/dialogs/StyleManagerDialog.cpp:58
+#, kde-format
+msgid "&New..."
+msgstr "नयाँ..."
+
 #: ui/dialogs/StyleManagerDialog.cpp:60
 #, kde-format
 msgid "&Modify..."
@@ -18293,6 +18182,76 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "लिङ्क खोल्नुहुन्छ ?"
+
+#~ msgid "Area Name..."
+#~ msgstr "क्षेत्र नाम..."
+
+#~ msgid "Set a name for a region of the spreadsheet"
+#~ msgstr "स्प्रेडसिटको क्षेत्रका लागि नाम सेट गर्नुहोस्"
+
+#~ msgid "Named Areas..."
+#~ msgstr "नामाकरण गरिएका क्षेत्र..."
+
+#~ msgid "Named Areas"
+#~ msgstr "नामाकरण गरिएको क्षेत्र"
+
+#~ msgid "Edit or select named areas"
+#~ msgstr "नामाकरण गरिएका क्षेत्र सम्पादन गर्नुहोस् वा चयन गर्नुहोस्"
+
+#~ msgid "Add Named Area"
+#~ msgstr "नामाकरण गरिएको क्षेत्र थप्नुहोस्"
+
+#~ msgid "Enter the area name:"
+#~ msgstr "क्षेत्र नाम प्रविष्ट गर्नुहोस्:"
+
+#~ msgid ""
+#~ "The named area '%1' already exists.\n"
+#~ "Do you want to replace it?"
+#~ msgstr ""
+#~ "नामाकरण गरिएको क्षेत्र %1 पहिले नै अवस्थित छ । \n"
+#~ " तपाईँ यसलाई प्रतिस्थापन गर्न चाहानुहुन्छ ?"
+
+#~ msgid "Replace Named Area"
+#~ msgstr "नामाकरण गरिएको क्षेत्र प्रतिस्थापन गर्नुहोस्"
+
+#, fuzzy
+#~| msgid "Replace Named Area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace Named Area"
+#~ msgstr "नामाकरण गरिएको क्षेत्र प्रतिस्थापन गर्नुहोस्"
+
+#~ msgid "&Select"
+#~ msgstr "चयन"
+
+#~ msgid "Area: %1"
+#~ msgstr "क्षेत्र: %1"
+
+#~ msgid "&Edit..."
+#~ msgstr "सम्पादन गर्नुहोस्..."
+
+#~ msgid "&Remove"
+#~ msgstr "हटाउनुहोस्"
+
+#~ msgid "New Named Area"
+#~ msgstr "नयाँ नामाकरण गरिएको क्षेत्र"
+
+#~ msgid "Edit Named Area"
+#~ msgstr "नामाकरण गरिएको क्षेत्र सम्पादन गर्नुहोस्"
+
+#~ msgid "Do you really want to remove this named area?"
+#~ msgstr "तपाईँ यो नामाकरण गरिएको क्षेत्र साँच्चिकै हटाउन चाहानुहुन्छ ?"
+
+#~ msgid "Remove Named Area"
+#~ msgstr "नामाकरण गरिएको क्षेत्र हटाउनुहोस्"
+
+#~ msgid "Cells:"
+#~ msgstr "कक्ष:"
+
+#~ msgid "Sheet:"
+#~ msgstr "पाना:"
+
+#~ msgid "Area name:"
+#~ msgstr "क्षेत्र नाम:"
 
 #~ msgid "Align Left"
 #~ msgstr "बायाँ पङ्क्तिबद्ध गर्नुहोस्"

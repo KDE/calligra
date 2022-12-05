@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2022-09-23 15:14+0200\n"
+"PO-Revision-Date: 2022-12-04 06:34+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -43,24 +43,24 @@ msgstr "დასრულება"
 #: AxesConfigWidget.cpp:83
 #, kde-format
 msgid "Near-axis"
-msgstr ""
+msgstr "ღერძთან-ახლო"
 
 #: AxesConfigWidget.cpp:84
 #, kde-format
 msgid "Other-side"
-msgstr ""
+msgstr "მეორე-მხარე"
 
 #: AxesConfigWidget.cpp:253 AxesConfigWidget.cpp:261 ChartTool.cpp:994
 #: DataSetConfigWidget.cpp:353
 #, kde-format
 msgid "Axistitle"
-msgstr ""
+msgstr "ღერძისსათაური"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShow)
 #: AxesConfigWidget.ui:45
 #, kde-format
 msgid "Show Axis"
-msgstr ""
+msgstr "ღერძის ჩვენება"
 
 #. i18n: ectx: property (text), widget (QToolButton, axisScalingButton)
 #: AxesConfigWidget.ui:58
@@ -84,13 +84,13 @@ msgstr "შრიფტი"
 #: AxesConfigWidget.ui:81
 #, kde-format
 msgid "Show Major Grid"
-msgstr ""
+msgstr "ძირითადი ბადის ჩვენება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMinorGridLines)
 #: AxesConfigWidget.ui:88
 #, kde-format
 msgid "Show Minor Grid"
-msgstr ""
+msgstr "დამხმარე ბადის ჩვენება"
 
 #. i18n: ectx: property (text), widget (QLabel, barPropertiesLabel)
 #: AxesConfigWidget.ui:119
@@ -121,7 +121,7 @@ msgstr "%"
 #: AxesConfigWidget.ui:154
 #, kde-format
 msgid "Gap Between Sets"
-msgstr ""
+msgstr "დაშორება სეტებს შორის"
 
 #. i18n: ectx: property (text), widget (QLabel, gapBetweenBarsLabel)
 #: AxesConfigWidget.ui:167
@@ -458,7 +458,7 @@ msgstr "თვე"
 #: ChartShapeFactory.cpp:398
 #, kde-format
 msgid "Growth in %"
-msgstr ""
+msgstr "ზრდა %-ში"
 
 #: ChartShapeFactory.cpp:460
 #, kde-format
@@ -478,7 +478,7 @@ msgstr ""
 #: ChartShapeFactory.cpp:465
 #, kde-format
 msgid "Open"
-msgstr ""
+msgstr "გახსნა"
 
 #: ChartShapeFactory.cpp:466
 #, kde-format
@@ -498,22 +498,22 @@ msgstr "დახურვა"
 #: ChartShapeFactory.cpp:583
 #, kde-format
 msgid "Growth"
-msgstr ""
+msgstr "გაზრდა"
 
 #: ChartTool.cpp:103
 #, kde-format
 msgid "Do something"
-msgstr ""
+msgstr "რამე გააკეთე"
 
 #: ChartTool.cpp:108
 #, kde-format
 msgid "Do something else"
-msgstr ""
+msgstr "რამე სხვა გააკეთე"
 
 #: ChartTool.cpp:277
 #, kde-format
 msgid "Titles"
-msgstr ""
+msgstr "სათაურები"
 
 #: ChartTool.cpp:292
 #, kde-format
@@ -521,64 +521,64 @@ msgid "Legend"
 msgstr "შინაარსი"
 
 #: ChartTool.cpp:312
-#, kde-format
+#, fuzzy, kde-format
 msgid "Plot Area"
-msgstr ""
+msgstr "დასახაზი ადგილი"
 
 #: ChartTool.cpp:1142
 msgctxt "(qtundo-format)"
 msgid "Show Legend"
-msgstr ""
+msgstr "ახსნის ჩვენება"
 
 #: ChartTool.cpp:1144
 msgctxt "(qtundo-format)"
 msgid "Hide Legend"
-msgstr ""
+msgstr "ახსნის დამალვა"
 
 #: ChartToolFactory.cpp:29
 #, kde-format
 msgid "Chart editing"
-msgstr ""
+msgstr "გრაფიკის ჩასწორება"
 
 #: commands/AddRemoveAxisCommand.cpp:37
 msgctxt "(qtundo-format)"
 msgid "Add Axis"
-msgstr ""
+msgstr "ღერძის დამატება"
 
 #: commands/AddRemoveAxisCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Remove Axis"
-msgstr ""
+msgstr "ღერძის წაშლა"
 
 #: commands/AxisCommand.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Show Axis Title"
-msgstr ""
+msgstr "ღერძის სათაურის ჩვენება"
 
 #: commands/AxisCommand.cpp:122
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Title"
-msgstr ""
+msgstr "ღერძის სათაურის დამალვა"
 
 #: commands/AxisCommand.cpp:147
 msgctxt "(qtundo-format)"
 msgid "Show Axis"
-msgstr ""
+msgstr "ღერძის ჩვენება"
 
 #: commands/AxisCommand.cpp:149
 msgctxt "(qtundo-format)"
 msgid "Hide Axis"
-msgstr ""
+msgstr "ღერძის დამალვა"
 
 #: commands/AxisCommand.cpp:158
 msgctxt "(qtundo-format)"
 msgid "Show Axis Labels"
-msgstr ""
+msgstr "ღერძის ჭდეების ჩვენება"
 
 #: commands/AxisCommand.cpp:160
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Labels"
-msgstr ""
+msgstr "ღერძის ჭდეების დამალვა"
 
 #: commands/AxisCommand.cpp:169
 msgctxt "(qtundo-format)"
@@ -868,12 +868,12 @@ msgstr ""
 #: DataSet.cpp:262
 #, kde-format
 msgid "Series %1"
-msgstr ""
+msgstr "სერიები %1"
 
 #: DataSetConfigWidget.cpp:196 PlotAreaConfigWidget.cpp:232
 #, kde-format
 msgid "Chart Type"
-msgstr ""
+msgstr "გრაფიკის ტიპი"
 
 #: DataSetConfigWidget.cpp:203 DataSetConfigWidget.cpp:208
 #: DataSetConfigWidget.cpp:213 DataSetConfigWidget.cpp:221
@@ -1062,7 +1062,7 @@ msgstr ""
 #: dialogs/AxisScalingDialog.ui:32
 #, kde-format
 msgid "Step Width:"
-msgstr ""
+msgstr "ბიჯის სიგანე:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/AxisScalingDialog.ui:65
@@ -1218,13 +1218,13 @@ msgstr ""
 #: dialogs/ScatterDataSetTableModel.cpp:104
 #, kde-format
 msgid "X-Values"
-msgstr ""
+msgstr "X-მნიშვნელობები"
 
 #: dialogs/BubbleDataSetTableModel.cpp:105
 #: dialogs/ScatterDataSetTableModel.cpp:105
 #, kde-format
 msgid "Y-Values"
-msgstr ""
+msgstr "Y-მნიშვნელობები"
 
 #: dialogs/BubbleDataSetTableModel.cpp:106
 #, kde-format
@@ -1236,14 +1236,14 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Label: %1"
-msgstr ""
+msgstr "ჭდე: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:148
 #: dialogs/ScatterDataSetTableModel.cpp:144
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default label: %1"
-msgstr ""
+msgstr "ნაგულისხმები ჭდე: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:153
 #: dialogs/ScatterDataSetTableModel.cpp:149
@@ -1279,13 +1279,13 @@ msgstr ""
 #: dialogs/CellRegionDialog.ui:49
 #, kde-format
 msgid "Y Values:"
-msgstr ""
+msgstr "Y მნიშვნელობები:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/CellRegionDialog.ui:59
 #, kde-format
 msgid "X Values:"
-msgstr ""
+msgstr "X მნიშვნელობები:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/CellRegionDialog.ui:72
@@ -1319,7 +1319,7 @@ msgstr ""
 #: dialogs/ChartTableEditor.ui:14
 #, kde-format
 msgid "Data Editor"
-msgstr ""
+msgstr "მონაცემების რედაქტორი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInRows)
 #: dialogs/ChartTableEditor.ui:29
@@ -1389,15 +1389,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:114
-#, kde-format
+#, fuzzy, kde-format
 msgid "Variance"
-msgstr ""
+msgstr "ცვალებადობა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:119
 #, kde-format
 msgid "From Data table"
-msgstr ""
+msgstr "მონაცემების ცხრილიდან"
 
 #. i18n: ectx: property (text), widget (QLabel, valueLabel)
 #: dialogs/FormatErrorBarDialog.ui:144
@@ -1462,7 +1462,7 @@ msgstr "ორივე"
 #: dialogs/NewAxisDialog.ui:20
 #, kde-format
 msgid "New Axis"
-msgstr ""
+msgstr "ახალი ღერძი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dimensionIsX)
 #: dialogs/NewAxisDialog.ui:46
@@ -1487,7 +1487,7 @@ msgstr "სათაური:"
 #: dialogs/PieDataEditor.cpp:55
 #, kde-format
 msgid "Pie Data Editor"
-msgstr ""
+msgstr "Pie -ის მონაცემების რედაქტორი"
 
 #. i18n: ectx: property (shortcut), widget (QPushButton, deleteSelection)
 #: dialogs/PieDataEditor.ui:52
@@ -1503,13 +1503,13 @@ msgstr "მწკრივი %1"
 #: dialogs/ScatterDataEditor.cpp:111
 #, kde-format
 msgid "Scatter Data Editor"
-msgstr ""
+msgstr "Scatter მონაცემების რედაქტორი"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
 #: dialogs/StockDataEditor.cpp:88 dialogs/StockDataEditor.ui:26
 #, kde-format
 msgid "Stock Data Editor"
-msgstr ""
+msgstr "Stock მონაცემების რედაქტორი"
 
 #: dialogs/StockDataEditor.cpp:98
 #, kde-format
@@ -1633,7 +1633,7 @@ msgstr "თანამდებობა"
 #: LegendConfigWidget.ui:107
 #, kde-format
 msgid "Show Legend"
-msgstr ""
+msgstr "ახსნის ჩვენება"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: LegendConfigWidget.ui:130
@@ -1645,7 +1645,7 @@ msgstr "ორიენტაცია"
 #: LegendConfigWidget.ui:147
 #, kde-format
 msgid "Fonts..."
-msgstr ""
+msgstr "ფონტები..."
 
 #: PieConfigWidget.cpp:101
 #, kde-format
@@ -1793,4 +1793,4 @@ msgstr ""
 #: widgets/StrokeConfigWidget.cpp:211
 #, kde-format
 msgid "Change the color of the line"
-msgstr ""
+msgstr "ხაზის ფერის შეცვლა"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-04 00:46+0000\n"
+"POT-Creation-Date: 2022-12-05 00:46+0000\n"
 "PO-Revision-Date: 2019-01-19 19:46+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -878,7 +878,7 @@ msgstr "數字"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:164 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:162 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -935,7 +935,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") 傳回 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:299 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:297 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "資料庫"
@@ -12397,7 +12397,7 @@ msgstr "啟用"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:189
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:187
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
@@ -13752,7 +13752,7 @@ msgstr ""
 "您即將移除作用中的工作表。\n"
 "您要繼續嗎？"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1325
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1310
 #, kde-format
 msgid "Enter name:"
 msgstr "輸入名稱："
@@ -13812,12 +13812,12 @@ msgstr "計數A："
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1399
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1384
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "變更文字顏色"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1448
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1433
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "變更背景顏色"
@@ -13829,505 +13829,480 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "變更框線"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Cell Format..."
 msgstr "儲存格格式..."
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "設定儲存格格式"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:168
 #, kde-format
 msgid "Style Manager..."
 msgstr "樣式管理員..."
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr "編輯並組織儲存格樣式"
 
-#: ui/CellToolBase.cpp:175 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:173 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "樣式"
 
-#: ui/CellToolBase.cpp:177
+#: ui/CellToolBase.cpp:175
 #, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "對所選取的儲存格套用預先定義的樣式"
 
-#: ui/CellToolBase.cpp:180
+#: ui/CellToolBase.cpp:178
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "從儲存格建立樣式..."
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "Style From Cell"
 msgstr "從儲存格建立樣式"
 
-#: ui/CellToolBase.cpp:184
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "根據目前選取的儲存格建立新樣式"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Select Font..."
 msgstr "選擇字型..."
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "Select Font Size"
 msgstr "選擇字型大小"
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Font Size"
 msgstr "字型大小"
 
-#: ui/CellToolBase.cpp:200
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Text Color"
 msgstr "文字顏色"
 
-#: ui/CellToolBase.cpp:201
+#: ui/CellToolBase.cpp:199
 #, kde-format
 msgid "Set the text color"
 msgstr "設定文字顏色"
 
-#: ui/CellToolBase.cpp:209
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Select a new border color"
 msgstr "選擇新的框線顏色"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:208
 #, kde-format
 msgid "Border Color"
 msgstr "框線顏色"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:215
 #, kde-format
 msgid "Change Angle..."
 msgstr "改變角度..."
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:216
 #, kde-format
 msgid "Angle"
 msgstr "角度"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:219
 #, kde-format
 msgid "Change the angle that cell contents are printed"
 msgstr "改變儲存格內容列印時的角度"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:223
 #, kde-format
 msgid "Increase Precision"
 msgstr "增加精準度"
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:226
 #, kde-format
 msgid "Increase the decimal precision shown onscreen"
 msgstr "增加顯示於螢幕的小數精準度"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Decrease Precision"
 msgstr "減少精準度"
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Decrease the decimal precision shown onscreen"
 msgstr "減少顯示於螢幕的小數精準度"
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:237
 #, kde-format
 msgid "Set the background color"
 msgstr "設定背景顏色"
 
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Background Color"
 msgstr "背景顏色"
 
-#: ui/CellToolBase.cpp:246 ui/CellToolBase.cpp:252
+#: ui/CellToolBase.cpp:244 ui/CellToolBase.cpp:250
 #, kde-format
 msgid "Cells..."
 msgstr "儲存格..."
 
-#: ui/CellToolBase.cpp:247 ui/CellToolBase_p.cpp:1133
+#: ui/CellToolBase.cpp:245 ui/CellToolBase_p.cpp:1133
 #, kde-format
 msgid "Insert Cells..."
 msgstr "插入儲存格..."
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:246
 #, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "插入空白儲存格至工作表中"
 
-#: ui/CellToolBase.cpp:253
+#: ui/CellToolBase.cpp:251
 #, kde-format
 msgid "Remove Cells..."
 msgstr "移除儲存格..."
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:252
 #, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "將儲存格從工作表中移除"
 
-#: ui/CellToolBase.cpp:260 ui/CellToolBase.cpp:261
+#: ui/CellToolBase.cpp:258 ui/CellToolBase.cpp:259
 #, kde-format
 msgid "Clear All"
 msgstr "全部清除"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:260
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "刪除目前儲存格中的所有內容與格式"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:264
 #, kde-format
 msgid "Contents"
 msgstr "內容"
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:265
 #, kde-format
 msgid "Clear Contents"
 msgstr "清除內容"
 
-#: ui/CellToolBase.cpp:268
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "移除目前儲存格的內容"
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:270
 #, kde-format
 msgid "Conditional Styles..."
 msgstr "有條件的儲存格樣式..."
 
-#: ui/CellToolBase.cpp:273
+#: ui/CellToolBase.cpp:271
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "基於某種條件設定儲存格樣式"
 
-#: ui/CellToolBase.cpp:277 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:275 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr "有條件樣式"
 
-#: ui/CellToolBase.cpp:278
+#: ui/CellToolBase.cpp:276
 #, kde-format
 msgid "Remove Conditional Styles"
 msgstr "移除有條件的儲存格樣式"
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:277
 #, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "移除有條件的儲存格樣式"
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:283
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "自動過濾(&A)"
 
-#: ui/CellToolBase.cpp:288
+#: ui/CellToolBase.cpp:286
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "將自動過濾器新增到指定範圍內的儲存格"
 
-#: ui/CellToolBase.cpp:292
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "&Function..."
 msgstr "函數(&F)..."
 
-#: ui/CellToolBase.cpp:295
+#: ui/CellToolBase.cpp:293
 #, kde-format
 msgid "Insert math expression"
 msgstr "插入數學表示式"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:296
 #, kde-format
 msgid "From &Database..."
 msgstr "從資料庫(&D)..."
 
-#: ui/CellToolBase.cpp:302
+#: ui/CellToolBase.cpp:300
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "插入 SQL 資料庫的資料"
 
-#: ui/CellToolBase.cpp:305
+#: ui/CellToolBase.cpp:303
 #, kde-format
 msgid "Custom Lists..."
 msgstr "自訂清單..."
 
-#: ui/CellToolBase.cpp:308
+#: ui/CellToolBase.cpp:306
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "建立用於排序或自動填滿的自訂清單"
 
-#: ui/CellToolBase.cpp:310
+#: ui/CellToolBase.cpp:308
 #, kde-format
 msgid "&Consolidate..."
 msgstr "聯合(&C)..."
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:311
 #, kde-format
 msgid "Create a region of summary data from a group of similar regions"
 msgstr "從類似範圍的群組中建立摘要資料的範圍"
 
-#: ui/CellToolBase.cpp:315
+#: ui/CellToolBase.cpp:313
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "目標搜索(&G)..."
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:316
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "重複計算以找尋指定的數值"
 
-#: ui/CellToolBase.cpp:320
+#: ui/CellToolBase.cpp:318
 #, kde-format
 msgid "&Subtotals..."
 msgstr "小計(&S)..."
 
-#: ui/CellToolBase.cpp:323
+#: ui/CellToolBase.cpp:321
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
 msgstr "建立不同種類的小計到清單或資料庫中"
 
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:323
 #, fuzzy, kde-format
 #| msgid "&Subtotals..."
 msgid "&Pivot Tables..."
 msgstr "小計(&S)..."
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:326
 #, fuzzy, kde-format
 #| msgid "&Subtotals..."
 msgid "Create Pivot Tables"
 msgstr "小計(&S)..."
 
-#: ui/CellToolBase.cpp:330
-#, kde-format
-msgid "Area Name..."
-msgstr "區域名稱..."
-
-#: ui/CellToolBase.cpp:333
-#, kde-format
-msgid "Set a name for a region of the spreadsheet"
-msgstr "設定工作表中的區域的名稱"
-
-#: ui/CellToolBase.cpp:335
-#, kde-format
-msgid "Named Areas..."
-msgstr "命名區域..."
-
-#: ui/CellToolBase.cpp:337 ui/dialogs/NamedAreaDialog.cpp:49
-#, kde-format
-msgid "Named Areas"
-msgstr "命名區域"
-
-#: ui/CellToolBase.cpp:339
-#, kde-format
-msgid "Edit or select named areas"
-msgstr "編輯或選擇命名區域"
-
-#: ui/CellToolBase.cpp:343
+#: ui/CellToolBase.cpp:328
 #, kde-format
 msgid "Formula Selection"
 msgstr "公式選擇區"
 
-#: ui/CellToolBase.cpp:345
+#: ui/CellToolBase.cpp:330
 #, kde-format
 msgid "Insert a function"
 msgstr "插入函數"
 
-#: ui/CellToolBase.cpp:346 ui/CellToolBase.cpp:1613
+#: ui/CellToolBase.cpp:331 ui/CellToolBase.cpp:1584
 #, kde-format
 msgid "Others..."
 msgstr "其它..."
 
-#: ui/CellToolBase.cpp:354
+#: ui/CellToolBase.cpp:339
 #, kde-format
 msgid "Modify Cell"
 msgstr "修改儲存格"
 
-#: ui/CellToolBase.cpp:358
+#: ui/CellToolBase.cpp:343
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "編輯突顯的儲存格"
 
-#: ui/CellToolBase.cpp:361
+#: ui/CellToolBase.cpp:346
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "將儲存格物件移動到剪貼簿"
 
-#: ui/CellToolBase.cpp:365
+#: ui/CellToolBase.cpp:350
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "複製儲存格物件至剪貼簿"
 
-#: ui/CellToolBase.cpp:369
+#: ui/CellToolBase.cpp:354
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "在游標處貼上剪貼簿內容"
 
-#: ui/CellToolBase.cpp:372
+#: ui/CellToolBase.cpp:357
 #, kde-format
 msgid "Special Paste..."
 msgstr "特別貼上..."
 
-#: ui/CellToolBase.cpp:375
+#: ui/CellToolBase.cpp:360
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "以特定選項貼上剪貼簿的內容"
 
-#: ui/CellToolBase.cpp:377
+#: ui/CellToolBase.cpp:362
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "貼上插入項目"
 
-#: ui/CellToolBase.cpp:380
+#: ui/CellToolBase.cpp:365
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "將儲存格自剪貼簿插入工作表中"
 
-#: ui/CellToolBase.cpp:383
+#: ui/CellToolBase.cpp:368
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "選取目前工表中所有的儲存格"
 
-#: ui/CellToolBase.cpp:400
+#: ui/CellToolBase.cpp:385
 #, kde-format
 msgid "Goto Cell..."
 msgstr "移至儲存格..."
 
-#: ui/CellToolBase.cpp:401
+#: ui/CellToolBase.cpp:386
 #, kde-format
 msgid "Goto"
 msgstr "移至"
 
-#: ui/CellToolBase.cpp:405
+#: ui/CellToolBase.cpp:390
 #, kde-format
 msgid "Move to a particular cell"
 msgstr "移動到特定的儲存格"
 
-#: ui/CellToolBase.cpp:408
+#: ui/CellToolBase.cpp:393
 #, kde-format
 msgid "Check the spelling"
 msgstr "檢查拼字"
 
-#: ui/CellToolBase.cpp:411
+#: ui/CellToolBase.cpp:396
 #, kde-format
 msgid "Run Inspector..."
 msgstr "執行檢查員..."
 
-#: ui/CellToolBase.cpp:417
+#: ui/CellToolBase.cpp:402
 #, kde-format
 msgid "Show QTableView..."
 msgstr "顯示 QTableView..."
 
-#: ui/CellToolBase.cpp:423
+#: ui/CellToolBase.cpp:408
 #, kde-format
 msgid "Auto-Format..."
 msgstr "自動格式化..."
 
-#: ui/CellToolBase.cpp:426
+#: ui/CellToolBase.cpp:411
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "設定工作表的格式"
 
-#: ui/CellToolBase.cpp:428
+#: ui/CellToolBase.cpp:413
 #, kde-format
 msgid "Document Settings..."
 msgstr "文件設定..."
 
-#: ui/CellToolBase.cpp:431
+#: ui/CellToolBase.cpp:416
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "顯示文件設定對話框"
 
-#: ui/CellToolBase.cpp:433
+#: ui/CellToolBase.cpp:418
 #, kde-format
 msgid "Break Before Column"
 msgstr "在欄之前中斷"
 
-#: ui/CellToolBase.cpp:436
+#: ui/CellToolBase.cpp:421
 #, kde-format
 msgid "Column Break"
 msgstr "欄中斷"
 
-#: ui/CellToolBase.cpp:437
+#: ui/CellToolBase.cpp:422
 #, kde-format
 msgid "Set a manual page break before the column"
 msgstr "在欄之前設定手動頁面中斷"
 
-#: ui/CellToolBase.cpp:439
+#: ui/CellToolBase.cpp:424
 #, kde-format
 msgid "Break Before Row"
 msgstr "在列之前中斷"
 
-#: ui/CellToolBase.cpp:442
+#: ui/CellToolBase.cpp:427
 #, kde-format
 msgid "Row Break"
 msgstr "列中斷"
 
-#: ui/CellToolBase.cpp:443
+#: ui/CellToolBase.cpp:428
 #, kde-format
 msgid "Set a manual page break before the row"
 msgstr "在列之前設定手動頁面中斷"
 
-#: ui/CellToolBase.cpp:447
+#: ui/CellToolBase.cpp:432
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "排列參考定位"
 
-#: ui/CellToolBase.cpp:451
+#: ui/CellToolBase.cpp:436
 #, kde-format
 msgid "Permute fixation"
 msgstr "排列定位"
 
-#: ui/CellToolBase.cpp:452
+#: ui/CellToolBase.cpp:437
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "在游標處排列參考定位"
 
-#: ui/CellToolBase.cpp:1258
+#: ui/CellToolBase.cpp:1243
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1324
+#: ui/CellToolBase.cpp:1309
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "從儲存格建立樣式"
 
-#: ui/CellToolBase.cpp:1333
+#: ui/CellToolBase.cpp:1318
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "樣式名稱不能是空的。"
 
-#: ui/CellToolBase.cpp:1338 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1323 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "此名稱的樣式已經存在。"
 
-#: ui/CellToolBase.cpp:1359 ui/CellToolBase.cpp:1379
+#: ui/CellToolBase.cpp:1344 ui/CellToolBase.cpp:1364
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "改變字型"
 
-#: ui/CellToolBase.cpp:1486
+#: ui/CellToolBase.cpp:1471
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "清除文字"
 
-#: ui/CellToolBase.cpp:1540
+#: ui/CellToolBase.cpp:1525
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -14337,12 +14312,12 @@ msgid ""
 "necessary Qt database drivers."
 msgstr "沒有可用的資料庫驅動程式。您必須以必要的驅動程式編譯 Qt。"
 
-#: ui/CellToolBase.cpp:1576 ui/CellToolBase.cpp:1588
+#: ui/CellToolBase.cpp:1561 ui/CellToolBase.cpp:1573
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "您必須選擇多個儲存格。"
 
-#: ui/CellToolBase.cpp:2077
+#: ui/CellToolBase.cpp:2048
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "取代"
@@ -14695,12 +14670,12 @@ msgstr "分離儲存格"
 msgid "Merging of columns or rows is not supported."
 msgstr "不支援合併欄或列。"
 
-#: ui/commands/NamedAreaCommand.cpp:20 ui/commands/NamedAreaCommand.cpp:36
+#: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:42
 msgctxt "(qtundo-format)"
 msgid "Add Named Area"
 msgstr "新增命名區域"
 
-#: ui/commands/NamedAreaCommand.cpp:38
+#: ui/commands/NamedAreaCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Remove Named Area"
 msgstr "移除命名區域"
@@ -14862,35 +14837,6 @@ msgstr "重置樣式"
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "變更樣式"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:34
-#, kde-format
-msgid "Add Named Area"
-msgstr "新增命名區域"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:43
-#, kde-format
-msgid "Enter the area name:"
-msgstr "輸入區域名稱："
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:75
-#, kde-format
-msgid ""
-"The named area '%1' already exists.\n"
-"Do you want to replace it?"
-msgstr ""
-"命名區域 %1 已存在。\n"
-"您要取代它嗎？"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:77
-#, kde-format
-msgid "Replace Named Area"
-msgstr "取代命名區域。"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:83 ui/dialogs/NamedAreaDialog.cpp:300
-msgctxt "(qtundo-format)"
-msgid "Replace Named Area"
-msgstr "取代命名區域。"
 
 #: ui/dialogs/AngleDialog.cpp:31
 #, kde-format
@@ -16389,66 +16335,6 @@ msgstr ""
 "項目區域不是空的。\n"
 "您要繼續嗎？"
 
-#: ui/dialogs/NamedAreaDialog.cpp:48
-#, kde-format
-msgid "&Select"
-msgstr "選取(&S)"
-
-#: ui/dialogs/NamedAreaDialog.cpp:66 ui/dialogs/NamedAreaDialog.cpp:113
-#, kde-format
-msgid "Area: %1"
-msgstr "區域： %1"
-
-#: ui/dialogs/NamedAreaDialog.cpp:74 ui/dialogs/StyleManagerDialog.cpp:58
-#, kde-format
-msgid "&New..."
-msgstr "新增(&N)"
-
-#: ui/dialogs/NamedAreaDialog.cpp:76
-#, kde-format
-msgid "&Edit..."
-msgstr "編輯(&E)..."
-
-#: ui/dialogs/NamedAreaDialog.cpp:78
-#, kde-format
-msgid "&Remove"
-msgstr "移除(&R)"
-
-#: ui/dialogs/NamedAreaDialog.cpp:145
-#, kde-format
-msgid "New Named Area"
-msgstr "新增命名區域"
-
-#: ui/dialogs/NamedAreaDialog.cpp:172
-#, kde-format
-msgid "Edit Named Area"
-msgstr "編輯命名區域"
-
-#: ui/dialogs/NamedAreaDialog.cpp:185
-#, kde-format
-msgid "Do you really want to remove this named area?"
-msgstr "您真的要移除這個命名區域嗎？"
-
-#: ui/dialogs/NamedAreaDialog.cpp:186
-#, kde-format
-msgid "Remove Named Area"
-msgstr "移除命名區域"
-
-#: ui/dialogs/NamedAreaDialog.cpp:229
-#, kde-format
-msgid "Cells:"
-msgstr "儲存格："
-
-#: ui/dialogs/NamedAreaDialog.cpp:236
-#, kde-format
-msgid "Sheet:"
-msgstr "工作表："
-
-#: ui/dialogs/NamedAreaDialog.cpp:243
-#, kde-format
-msgid "Area name:"
-msgstr "區域名稱："
-
 #: ui/dialogs/PasteInsertDialog.cpp:26
 #, kde-format
 msgid "Paste Inserting Cells"
@@ -16993,6 +16879,11 @@ msgstr "自訂的樣式"
 msgid "Hierarchical"
 msgstr "階層"
 
+#: ui/dialogs/StyleManagerDialog.cpp:58
+#, kde-format
+msgid "&New..."
+msgstr "新增(&N)"
+
 #: ui/dialogs/StyleManagerDialog.cpp:60
 #, kde-format
 msgid "&Modify..."
@@ -17161,6 +17052,74 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "開啟連結？"
+
+#~ msgid "Area Name..."
+#~ msgstr "區域名稱..."
+
+#~ msgid "Set a name for a region of the spreadsheet"
+#~ msgstr "設定工作表中的區域的名稱"
+
+#~ msgid "Named Areas..."
+#~ msgstr "命名區域..."
+
+#~ msgid "Named Areas"
+#~ msgstr "命名區域"
+
+#~ msgid "Edit or select named areas"
+#~ msgstr "編輯或選擇命名區域"
+
+#~ msgid "Add Named Area"
+#~ msgstr "新增命名區域"
+
+#~ msgid "Enter the area name:"
+#~ msgstr "輸入區域名稱："
+
+#~ msgid ""
+#~ "The named area '%1' already exists.\n"
+#~ "Do you want to replace it?"
+#~ msgstr ""
+#~ "命名區域 %1 已存在。\n"
+#~ "您要取代它嗎？"
+
+#~ msgid "Replace Named Area"
+#~ msgstr "取代命名區域。"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace Named Area"
+#~ msgstr "取代命名區域。"
+
+#~ msgid "&Select"
+#~ msgstr "選取(&S)"
+
+#~ msgid "Area: %1"
+#~ msgstr "區域： %1"
+
+#~ msgid "&Edit..."
+#~ msgstr "編輯(&E)..."
+
+#~ msgid "&Remove"
+#~ msgstr "移除(&R)"
+
+#~ msgid "New Named Area"
+#~ msgstr "新增命名區域"
+
+#~ msgid "Edit Named Area"
+#~ msgstr "編輯命名區域"
+
+#~ msgid "Do you really want to remove this named area?"
+#~ msgstr "您真的要移除這個命名區域嗎？"
+
+#~ msgid "Remove Named Area"
+#~ msgstr "移除命名區域"
+
+#~ msgid "Cells:"
+#~ msgstr "儲存格："
+
+#~ msgid "Sheet:"
+#~ msgstr "工作表："
+
+#~ msgid "Area name:"
+#~ msgstr "區域名稱："
 
 #~ msgid "Align Left"
 #~ msgstr "靠左對齊"

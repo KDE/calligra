@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2022-09-23 15:32+0200\n"
+"PO-Revision-Date: 2022-12-04 06:48+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: ChangeImageCommand.cpp:26
 msgctxt "(qtundo-format)"
@@ -111,7 +111,7 @@ msgstr "გამოსახულება"
 #: PictureShapeFactory.cpp:33
 #, kde-format
 msgid "Image shape that can display jpg, png etc."
-msgstr ""
+msgstr "სურათის ფორმა, რომელსაც შეუძლია აჩვენოს jpg, png და ა.შ."
 
 #: PictureTool.cpp:95
 #, kde-format
@@ -121,7 +121,7 @@ msgstr "სტანდარტული"
 #: PictureTool.cpp:96
 #, kde-format
 msgid "Greyscale"
-msgstr ""
+msgstr "ნაცრისფერი შკალა"
 
 #: PictureTool.cpp:97
 #, kde-format
@@ -131,7 +131,7 @@ msgstr "შავთეთრი"
 #: PictureTool.cpp:98
 #, kde-format
 msgid "Watermark"
-msgstr ""
+msgstr "ჭვირნიშანი"
 
 #: PictureToolFactory.cpp:19
 #, kde-format

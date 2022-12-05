@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-04 00:46+0000\n"
+"POT-Creation-Date: 2022-12-05 00:46+0000\n"
 "PO-Revision-Date: 2008-04-17 22:27+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -895,7 +895,7 @@ msgstr "ตัวเลข"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:164 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:162 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -953,7 +953,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") จะได้ค่า 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:299 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:297 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "ฐานข้อมูล"
@@ -12352,7 +12352,7 @@ msgstr "ซ่อนแผ่นงาน"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:189
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:187
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
@@ -13727,7 +13727,7 @@ msgstr ""
 "คุณกำลังจะทำการลบแผ่นงานที่กำลังทำงานอยู่\n"
 "คุณต้องการจะทำต่อไปจริงหรือไม่ ?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1325
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1310
 #, kde-format
 msgid "Enter name:"
 msgstr "ป้อนชื่อ:"
@@ -13787,14 +13787,14 @@ msgstr "นับจำนวน: %1"
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1399
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1384
 #, fuzzy
 #| msgid "Change Text Color"
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "เปลี่ยนข้อความ"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1448
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1433
 #, fuzzy
 #| msgid "Change Background Color"
 msgctxt "(qtundo-format)"
@@ -13810,532 +13810,506 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "เปลี่ยนเส้นขอบ"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Cell Format..."
 msgstr "รูปแบบเซลล์..."
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "ตั้งค่ารูปแบบเซลล์"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:168
 #, fuzzy, kde-format
 #| msgid "Style Manager"
 msgid "Style Manager..."
 msgstr "ตัวจัดการรูปแบบ"
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr "แก้ไขและจัดการรูปแบบเซลล์"
 
-#: ui/CellToolBase.cpp:175 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:173 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, fuzzy, kde-format
 msgid "Style"
 msgstr "รูปแบบ:"
 
-#: ui/CellToolBase.cpp:177
+#: ui/CellToolBase.cpp:175
 #, fuzzy, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "ตั้งค่าเส้นขอบด้านบนให้พื้นที่ที่เลือก"
 
-#: ui/CellToolBase.cpp:180
+#: ui/CellToolBase.cpp:178
 #, fuzzy, kde-format
 msgid "Create Style From Cell..."
 msgstr "&สร้างแม่แบบจากเอกสาร..."
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 #| msgid "Style of Cell"
 msgid "Style From Cell"
 msgstr "รูปแบบเซลล์"
 
-#: ui/CellToolBase.cpp:184
+#: ui/CellToolBase.cpp:182
 #, fuzzy, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "ตั้งค่าเส้นขอบด้านบนให้พื้นที่ที่เลือก"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Select Font..."
 msgstr "เลือกแบบอักษร..."
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "Select Font Size"
 msgstr "เลือกขนาดตัวอักษร"
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Font Size"
 msgstr "ขนาดตัวอักษร"
 
-#: ui/CellToolBase.cpp:200
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Text Color"
 msgstr "สีตัวอักษร"
 
-#: ui/CellToolBase.cpp:201
+#: ui/CellToolBase.cpp:199
 #, fuzzy, kde-format
 #| msgid "Set the background color"
 msgid "Set the text color"
 msgstr "ตั้งค่าสีพื้นหลัง"
 
-#: ui/CellToolBase.cpp:209
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 msgid "Select a new border color"
 msgstr "เลือกสีเส้นขอบใหม่"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:208
 #, kde-format
 msgid "Border Color"
 msgstr "สีของเส้นขอบ"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:215
 #, kde-format
 msgid "Change Angle..."
 msgstr "เปลี่ยนค่ามุม..."
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:216
 #, kde-format
 msgid "Angle"
 msgstr "มุม"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:219
 #, kde-format
 msgid "Change the angle that cell contents are printed"
 msgstr "เปลี่ยนมุมที่จะให้เนื้อหาเซลล์ถูกพิมพ์เอียงไป"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:223
 #, kde-format
 msgid "Increase Precision"
 msgstr "เพิ่มจำนวนทศนิยม"
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:226
 #, kde-format
 msgid "Increase the decimal precision shown onscreen"
 msgstr "เพิ่มจำนวนเลขทศนิยมที่จะแสดงบนหน้าจอ"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Decrease Precision"
 msgstr "ลดจำนวนทศนิยม"
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Decrease the decimal precision shown onscreen"
 msgstr "ลดจำนวนเลขทศนิยมที่จะแสดงบนหน้าจอ"
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:237
 #, kde-format
 msgid "Set the background color"
 msgstr "ตั้งค่าสีพื้นหลัง"
 
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Background Color"
 msgstr "สีพื้นหลัง"
 
-#: ui/CellToolBase.cpp:246 ui/CellToolBase.cpp:252
+#: ui/CellToolBase.cpp:244 ui/CellToolBase.cpp:250
 #, kde-format
 msgid "Cells..."
 msgstr "เซลล์..."
 
-#: ui/CellToolBase.cpp:247 ui/CellToolBase_p.cpp:1133
+#: ui/CellToolBase.cpp:245 ui/CellToolBase_p.cpp:1133
 #, kde-format
 msgid "Insert Cells..."
 msgstr "แทรกเซลล์..."
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:246
 #, fuzzy, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "แทรกเซลล์เปล่าเข้าไปยังแผ่นงาน"
 
-#: ui/CellToolBase.cpp:253
+#: ui/CellToolBase.cpp:251
 #, kde-format
 msgid "Remove Cells..."
 msgstr "ลบเซลล์..."
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:252
 #, fuzzy, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "ลบเซลล์ปัจจุบันออกจากแผ่นงาน"
 
-#: ui/CellToolBase.cpp:260 ui/CellToolBase.cpp:261
+#: ui/CellToolBase.cpp:258 ui/CellToolBase.cpp:259
 #, fuzzy, kde-format
 #| msgid "Clear &All"
 msgid "Clear All"
 msgstr "ล้างทั้ง&หมด"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:260
 #, fuzzy, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "ลบเนื้อหาและรูปแบบทั้งหมดออกจากเซลล์ปัจจุบัน"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:264
 #, fuzzy, kde-format
 msgid "Contents"
 msgstr "หมายเหตุ"
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:265
 #, fuzzy, kde-format
 msgid "Clear Contents"
 msgstr "หมายเหตุ"
 
-#: ui/CellToolBase.cpp:268
+#: ui/CellToolBase.cpp:266
 #, fuzzy, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "ลบเนื้อหาออกจากเซลล์ปัจจุบัน"
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:270
 #, fuzzy, kde-format
 #| msgid "Conditional Cell Attributes..."
 msgid "Conditional Styles..."
 msgstr "รูปแบบเงื่อนไขของเซลล์..."
 
-#: ui/CellToolBase.cpp:273
+#: ui/CellToolBase.cpp:271
 #, fuzzy, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "ตั้งค่ารูปแบบของเซลล์ตามเงื่อนไขที่ต้องการ"
 
-#: ui/CellToolBase.cpp:277 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:275 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr "รูปแบบเงื่อนไขเซลล์"
 
-#: ui/CellToolBase.cpp:278
+#: ui/CellToolBase.cpp:276
 #, fuzzy, kde-format
 msgid "Remove Conditional Styles"
 msgstr "ลบรูปแบบเงื่อนไขเซลล์"
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:277
 #, fuzzy, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "ลบรูปแบบเงื่อนไขเซลล์"
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:283
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "ตัวกรองอัตโนมัติ"
 
-#: ui/CellToolBase.cpp:288
+#: ui/CellToolBase.cpp:286
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "เพิ่มตัวกรองอัตโนมัติไปยังช่วงของเซลล์"
 
-#: ui/CellToolBase.cpp:292
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "&Function..."
 msgstr "&ฟังก์ชัน..."
 
-#: ui/CellToolBase.cpp:295
+#: ui/CellToolBase.cpp:293
 #, kde-format
 msgid "Insert math expression"
 msgstr "แทรกนิพจน์คณิตศาสตร์"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:296
 #, kde-format
 msgid "From &Database..."
 msgstr "จากฐาน&ข้อมูล..."
 
-#: ui/CellToolBase.cpp:302
+#: ui/CellToolBase.cpp:300
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "แทรกข้อมูลจากฐานข้อมูลแบบ SQL"
 
-#: ui/CellToolBase.cpp:305
+#: ui/CellToolBase.cpp:303
 #, kde-format
 msgid "Custom Lists..."
 msgstr "รายการกำหนดเอง..."
 
-#: ui/CellToolBase.cpp:308
+#: ui/CellToolBase.cpp:306
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "สร้างรายการกำหนดเองสำหรับการเรียงลำดับหรือเติมเต็มอัตโนมัติ"
 
-#: ui/CellToolBase.cpp:310
+#: ui/CellToolBase.cpp:308
 #, kde-format
 msgid "&Consolidate..."
 msgstr "ผ&สานเซลล์.."
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:311
 #, fuzzy, kde-format
 msgid "Create a region of summary data from a group of similar regions"
 msgstr "สร้างขอบเขตของการรวมค่าข้อมูลจากกลุ่มของขอบเขตที่คล้ายกัน"
 
-#: ui/CellToolBase.cpp:315
+#: ui/CellToolBase.cpp:313
 #, kde-format
 msgid "&Goal Seek..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:316
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:320
+#: ui/CellToolBase.cpp:318
 #, fuzzy, kde-format
 msgid "&Subtotals..."
 msgstr "เรียง&ลำดับ..."
 
-#: ui/CellToolBase.cpp:323
+#: ui/CellToolBase.cpp:321
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
 msgstr ""
 
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:323
 #, fuzzy, kde-format
 msgid "&Pivot Tables..."
 msgstr "เรียง&ลำดับ..."
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:326
 #, fuzzy, kde-format
 msgid "Create Pivot Tables"
 msgstr "เรียง&ลำดับ..."
 
-#: ui/CellToolBase.cpp:330
-#, kde-format
-msgid "Area Name..."
-msgstr "ชื่อพื้นที่..."
-
-#: ui/CellToolBase.cpp:333
-#, kde-format
-msgid "Set a name for a region of the spreadsheet"
-msgstr "ตั้งชื่อพื้นที่ของแผ่นงานตารางคำนวณ"
-
-#: ui/CellToolBase.cpp:335
-#, kde-format
-msgid "Named Areas..."
-msgstr "พื้นที่ที่ถูกกำหนดชื่อ..."
-
-#: ui/CellToolBase.cpp:337 ui/dialogs/NamedAreaDialog.cpp:49
-#, fuzzy, kde-format
-#| msgid "Named Areas..."
-msgid "Named Areas"
-msgstr "พื้นที่ที่ถูกกำหนดชื่อ..."
-
-#: ui/CellToolBase.cpp:339
-#, kde-format
-msgid "Edit or select named areas"
-msgstr "แก้ไขหรือเลือกพื้นที่ที่ถูกกำหนดชื่อ"
-
-#: ui/CellToolBase.cpp:343
+#: ui/CellToolBase.cpp:328
 #, kde-format
 msgid "Formula Selection"
 msgstr "การเลือกสูตร"
 
-#: ui/CellToolBase.cpp:345
+#: ui/CellToolBase.cpp:330
 #, kde-format
 msgid "Insert a function"
 msgstr "แทรกฟังก์ชัน"
 
-#: ui/CellToolBase.cpp:346 ui/CellToolBase.cpp:1613
+#: ui/CellToolBase.cpp:331 ui/CellToolBase.cpp:1584
 #, kde-format
 msgid "Others..."
 msgstr "อื่น ๆ..."
 
-#: ui/CellToolBase.cpp:354
+#: ui/CellToolBase.cpp:339
 #, kde-format
 msgid "Modify Cell"
 msgstr "แก้ไขเซลล์"
 
-#: ui/CellToolBase.cpp:358
+#: ui/CellToolBase.cpp:343
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "แก้ไขการเน้นสีเซลล์"
 
-#: ui/CellToolBase.cpp:361
+#: ui/CellToolBase.cpp:346
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "ย้ายวัตถุเซลล์ไปยังคลิปบอร์ด"
 
-#: ui/CellToolBase.cpp:365
+#: ui/CellToolBase.cpp:350
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "คัดลอกวัตถุเซลล์ไปยังคลิปบอร์ด"
 
-#: ui/CellToolBase.cpp:369
+#: ui/CellToolBase.cpp:354
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "วางเนื้อหาจากคลิปบอร์ดไปยังตำแหน่งเคอร์เซอร์"
 
-#: ui/CellToolBase.cpp:372
+#: ui/CellToolBase.cpp:357
 #, kde-format
 msgid "Special Paste..."
 msgstr "วางแบบพิเศษ..."
 
-#: ui/CellToolBase.cpp:375
+#: ui/CellToolBase.cpp:360
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "วางเนื้อหาจากคลิปบอร์ดด้วยตัวเลือกพิเศษ"
 
-#: ui/CellToolBase.cpp:377
+#: ui/CellToolBase.cpp:362
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "วางพร้อมทำการแทรก..."
 
-#: ui/CellToolBase.cpp:380
+#: ui/CellToolBase.cpp:365
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "แทรกเซลล์จากคลิปบอร์ดเข้าไปยังแผ่นงาน"
 
-#: ui/CellToolBase.cpp:383
+#: ui/CellToolBase.cpp:368
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "เลือกทุกเซลล์ที่อยู่ในแผ่นงานปัจจุบัน"
 
-#: ui/CellToolBase.cpp:400
+#: ui/CellToolBase.cpp:385
 #, kde-format
 msgid "Goto Cell..."
 msgstr "ไปยังเซลล์..."
 
-#: ui/CellToolBase.cpp:401
+#: ui/CellToolBase.cpp:386
 #, kde-format
 msgid "Goto"
 msgstr "ไปยัง"
 
-#: ui/CellToolBase.cpp:405
+#: ui/CellToolBase.cpp:390
 #, kde-format
 msgid "Move to a particular cell"
 msgstr "ย้ายไปยังเซลล์บางส่วน"
 
-#: ui/CellToolBase.cpp:408
+#: ui/CellToolBase.cpp:393
 #, kde-format
 msgid "Check the spelling"
 msgstr "ตรวจสอบคำสะกด"
 
-#: ui/CellToolBase.cpp:411
+#: ui/CellToolBase.cpp:396
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:417
+#: ui/CellToolBase.cpp:402
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "แสดงแผ่นงาน..."
 
-#: ui/CellToolBase.cpp:423
+#: ui/CellToolBase.cpp:408
 #, kde-format
 msgid "Auto-Format..."
 msgstr "รูปแบบอัตโนมัติ..."
 
-#: ui/CellToolBase.cpp:426
+#: ui/CellToolBase.cpp:411
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "ตั้งค่ารูปแบบของแผ่นงาน"
 
-#: ui/CellToolBase.cpp:428
+#: ui/CellToolBase.cpp:413
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "รูปแบบภาษาท้องถิ่น"
 
-#: ui/CellToolBase.cpp:431
+#: ui/CellToolBase.cpp:416
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "แสดงตัวบ่งว่ามี&หมายเหตุ"
 
-#: ui/CellToolBase.cpp:433
+#: ui/CellToolBase.cpp:418
 #, fuzzy, kde-format
 #| msgid "Remove Columns"
 msgid "Break Before Column"
 msgstr "ลบสดมภ์"
 
-#: ui/CellToolBase.cpp:436
+#: ui/CellToolBase.cpp:421
 #, fuzzy, kde-format
 msgid "Column Break"
 msgstr "จำนวนที่สอง"
 
-#: ui/CellToolBase.cpp:437
+#: ui/CellToolBase.cpp:422
 #, kde-format
 msgid "Set a manual page break before the column"
 msgstr ""
 
-#: ui/CellToolBase.cpp:439
+#: ui/CellToolBase.cpp:424
 #, fuzzy, kde-format
 #| msgid "Remove Columns"
 msgid "Break Before Row"
 msgstr "ลบสดมภ์"
 
-#: ui/CellToolBase.cpp:442
+#: ui/CellToolBase.cpp:427
 #, fuzzy, kde-format
 msgid "Row Break"
 msgstr "มากกว่า"
 
-#: ui/CellToolBase.cpp:443
+#: ui/CellToolBase.cpp:428
 #, kde-format
 msgid "Set a manual page break before the row"
 msgstr ""
 
-#: ui/CellToolBase.cpp:447
+#: ui/CellToolBase.cpp:432
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "การป้องกัน"
 
-#: ui/CellToolBase.cpp:451
+#: ui/CellToolBase.cpp:436
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "การป้องกัน"
 
-#: ui/CellToolBase.cpp:452
+#: ui/CellToolBase.cpp:437
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "วางเนื้อหาจากคลิปบอร์ดไปยังตำแหน่งเคอร์เซอร์"
 
-#: ui/CellToolBase.cpp:1258
+#: ui/CellToolBase.cpp:1243
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1324
+#: ui/CellToolBase.cpp:1309
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "สร้างรูปแบบจากเซลล์"
 
-#: ui/CellToolBase.cpp:1333
+#: ui/CellToolBase.cpp:1318
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "ชื่อรูปแบบไม่สามารถว่างไว้ได้"
 
-#: ui/CellToolBase.cpp:1338 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1323 ui/dialogs/LayoutPage_General.cpp:90
 #, fuzzy, kde-format
 msgid "A style with this name already exists."
 msgstr "มีแฟ้มอยู่แล้ว"
 
-#: ui/CellToolBase.cpp:1359 ui/CellToolBase.cpp:1379
+#: ui/CellToolBase.cpp:1344 ui/CellToolBase.cpp:1364
 #, fuzzy
 #| msgid "Change Font"
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "เปลี่ยนแบบอักษร"
 
-#: ui/CellToolBase.cpp:1486
+#: ui/CellToolBase.cpp:1471
 #, fuzzy
 #| msgid "Clear Text"
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "ล้างข้อความ"
 
-#: ui/CellToolBase.cpp:1540
+#: ui/CellToolBase.cpp:1525
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr "ไม่มีไดรเวอร์สำหรับฐานข้อมูลอยู่ ! คุณต้องคอมไพล์ Qt ใหม่ พร้อมกับไดรเวอร์ที่ต้องการใช้"
 
-#: ui/CellToolBase.cpp:1576 ui/CellToolBase.cpp:1588
+#: ui/CellToolBase.cpp:1561 ui/CellToolBase.cpp:1573
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "คุณต้องเลือกเซลล์หลายเซลล์ก่อน"
 
-#: ui/CellToolBase.cpp:2077
+#: ui/CellToolBase.cpp:2048
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
@@ -14736,14 +14710,14 @@ msgstr "แยกเซลล์"
 msgid "Merging of columns or rows is not supported."
 msgstr ""
 
-#: ui/commands/NamedAreaCommand.cpp:20 ui/commands/NamedAreaCommand.cpp:36
+#: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:42
 #, fuzzy
 #| msgid "Add Named Area"
 msgctxt "(qtundo-format)"
 msgid "Add Named Area"
 msgstr "เพิ่มพื้นที่ที่กำหนดชื่อ"
 
-#: ui/commands/NamedAreaCommand.cpp:38
+#: ui/commands/NamedAreaCommand.cpp:44
 #, fuzzy
 #| msgid "Remove Named Area"
 msgctxt "(qtundo-format)"
@@ -14959,34 +14933,6 @@ msgstr "ปรับรูปแบบกลับเป็นค่าปริ
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "เปลี่ยนรูปแบบ"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:34
-#, kde-format
-msgid "Add Named Area"
-msgstr "เพิ่มพื้นที่ที่กำหนดชื่อ"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:43
-#, kde-format
-msgid "Enter the area name:"
-msgstr "ป้อนชื่อของพื้นที่:"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:75
-#, kde-format
-msgid ""
-"The named area '%1' already exists.\n"
-"Do you want to replace it?"
-msgstr ""
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:77
-#, fuzzy, kde-format
-msgid "Replace Named Area"
-msgstr "แสดงพื้นที่ที่ถูกกำหนดชื่อ"
-
-#: ui/dialogs/AddNamedAreaDialog.cpp:83 ui/dialogs/NamedAreaDialog.cpp:300
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Replace Named Area"
-msgstr "แสดงพื้นที่ที่ถูกกำหนดชื่อ"
 
 #: ui/dialogs/AngleDialog.cpp:31
 #, kde-format
@@ -16452,68 +16398,6 @@ msgstr ""
 "พื้นที่ที่เติมไม่ใช่พื้นที่ว่าง\n"
 "คุณต้องการทำต่อไปใช่หรือไม่ ?"
 
-#: ui/dialogs/NamedAreaDialog.cpp:48
-#, kde-format
-msgid "&Select"
-msgstr "เลือก"
-
-#: ui/dialogs/NamedAreaDialog.cpp:66 ui/dialogs/NamedAreaDialog.cpp:113
-#, kde-format
-msgid "Area: %1"
-msgstr "พื้นที่: %1"
-
-#: ui/dialogs/NamedAreaDialog.cpp:74 ui/dialogs/StyleManagerDialog.cpp:58
-#, kde-format
-msgid "&New..."
-msgstr "สร้างให&ม่..."
-
-#: ui/dialogs/NamedAreaDialog.cpp:76
-#, kde-format
-msgid "&Edit..."
-msgstr "แก้ไข..."
-
-#: ui/dialogs/NamedAreaDialog.cpp:78
-#, fuzzy, kde-format
-msgid "&Remove"
-msgstr "&ลบหมายเหตุ"
-
-#: ui/dialogs/NamedAreaDialog.cpp:145
-#, fuzzy, kde-format
-msgid "New Named Area"
-msgstr "ลบเซลล์"
-
-#: ui/dialogs/NamedAreaDialog.cpp:172
-#, fuzzy, kde-format
-#| msgid "Edit Area"
-msgid "Edit Named Area"
-msgstr "แก้ไขพื้นที่"
-
-#: ui/dialogs/NamedAreaDialog.cpp:185
-#, fuzzy, kde-format
-#| msgid "Do you really want to remove this area name?"
-msgid "Do you really want to remove this named area?"
-msgstr "คุณต้องการลบชื่อพื้นที่นี้ใช่หรือไม่ ?"
-
-#: ui/dialogs/NamedAreaDialog.cpp:186
-#, kde-format
-msgid "Remove Named Area"
-msgstr "ลบพื้นที่ที่กำหนดชื่อ"
-
-#: ui/dialogs/NamedAreaDialog.cpp:229
-#, kde-format
-msgid "Cells:"
-msgstr "เซลล์:"
-
-#: ui/dialogs/NamedAreaDialog.cpp:236
-#, kde-format
-msgid "Sheet:"
-msgstr "แผ่นงาน:"
-
-#: ui/dialogs/NamedAreaDialog.cpp:243
-#, kde-format
-msgid "Area name:"
-msgstr "ชื่อพื้นที่:"
-
 #: ui/dialogs/PasteInsertDialog.cpp:26
 #, kde-format
 msgid "Paste Inserting Cells"
@@ -17033,6 +16917,11 @@ msgstr "รูปแบบกำหนดเอง"
 msgid "Hierarchical"
 msgstr "ข้อความทางแนวตั้ง"
 
+#: ui/dialogs/StyleManagerDialog.cpp:58
+#, kde-format
+msgid "&New..."
+msgstr "สร้างให&ม่..."
+
 #: ui/dialogs/StyleManagerDialog.cpp:60
 #, kde-format
 msgid "&Modify..."
@@ -17203,6 +17092,77 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "เปิดที่อยู่เชื่อมโยง ?"
+
+#~ msgid "Area Name..."
+#~ msgstr "ชื่อพื้นที่..."
+
+#~ msgid "Set a name for a region of the spreadsheet"
+#~ msgstr "ตั้งชื่อพื้นที่ของแผ่นงานตารางคำนวณ"
+
+#~ msgid "Named Areas..."
+#~ msgstr "พื้นที่ที่ถูกกำหนดชื่อ..."
+
+#, fuzzy
+#~| msgid "Named Areas..."
+#~ msgid "Named Areas"
+#~ msgstr "พื้นที่ที่ถูกกำหนดชื่อ..."
+
+#~ msgid "Edit or select named areas"
+#~ msgstr "แก้ไขหรือเลือกพื้นที่ที่ถูกกำหนดชื่อ"
+
+#~ msgid "Add Named Area"
+#~ msgstr "เพิ่มพื้นที่ที่กำหนดชื่อ"
+
+#~ msgid "Enter the area name:"
+#~ msgstr "ป้อนชื่อของพื้นที่:"
+
+#, fuzzy
+#~ msgid "Replace Named Area"
+#~ msgstr "แสดงพื้นที่ที่ถูกกำหนดชื่อ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace Named Area"
+#~ msgstr "แสดงพื้นที่ที่ถูกกำหนดชื่อ"
+
+#~ msgid "&Select"
+#~ msgstr "เลือก"
+
+#~ msgid "Area: %1"
+#~ msgstr "พื้นที่: %1"
+
+#~ msgid "&Edit..."
+#~ msgstr "แก้ไข..."
+
+#, fuzzy
+#~ msgid "&Remove"
+#~ msgstr "&ลบหมายเหตุ"
+
+#, fuzzy
+#~ msgid "New Named Area"
+#~ msgstr "ลบเซลล์"
+
+#, fuzzy
+#~| msgid "Edit Area"
+#~ msgid "Edit Named Area"
+#~ msgstr "แก้ไขพื้นที่"
+
+#, fuzzy
+#~| msgid "Do you really want to remove this area name?"
+#~ msgid "Do you really want to remove this named area?"
+#~ msgstr "คุณต้องการลบชื่อพื้นที่นี้ใช่หรือไม่ ?"
+
+#~ msgid "Remove Named Area"
+#~ msgstr "ลบพื้นที่ที่กำหนดชื่อ"
+
+#~ msgid "Cells:"
+#~ msgstr "เซลล์:"
+
+#~ msgid "Sheet:"
+#~ msgstr "แผ่นงาน:"
+
+#~ msgid "Area name:"
+#~ msgstr "ชื่อพื้นที่:"
 
 #~ msgid "Align Left"
 #~ msgstr "เรียงชิดด้านซ้าย"

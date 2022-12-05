@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2022-09-23 16:53+0200\n"
+"PO-Revision-Date: 2022-12-04 06:46+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: ellipse/EllipseShapeConfigCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -31,12 +31,12 @@ msgstr "რკალი"
 #: ellipse/EllipseShapeConfigWidget.cpp:17
 #, kde-format
 msgid "Pie"
-msgstr ""
+msgstr "სექტორი"
 
 #: ellipse/EllipseShapeConfigWidget.cpp:18
 #, kde-format
 msgid "Chord"
-msgstr ""
+msgstr "სეგმენტი"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, EllipseShapeConfigWidget)
 #: ellipse/EllipseShapeConfigWidget.ui:13
@@ -120,12 +120,12 @@ msgstr ""
 #: enhancedpath/EnhancedPathShapeFactory.cpp:26
 #, kde-format
 msgid "An enhanced path shape"
-msgstr ""
+msgstr "გაუმჯობესებული კონტური"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:28
 #, kde-format
 msgid "An enhanced path"
-msgstr ""
+msgstr "გაუმჯობესებული კონტური"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:145
 #, kde-format
@@ -172,12 +172,12 @@ msgstr "მრგვალი ისარი"
 #: enhancedpath/EnhancedPathShapeFactory.cpp:449
 #, kde-format
 msgid "Gearhead"
-msgstr ""
+msgstr "ადამიანი"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:451
 #, kde-format
 msgid "A gearhead"
-msgstr ""
+msgstr "ადამიანი"
 
 #: rectangle/RectangleShapeConfigCommand.cpp:19
 msgctxt "(qtundo-format)"

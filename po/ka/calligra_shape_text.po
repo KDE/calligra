@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2022-09-23 16:54+0200\n"
+"PO-Revision-Date: 2022-12-04 06:51+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -31,7 +31,7 @@ msgstr ""
 #: AnnotationTextShapeFactory.cpp:41
 #, kde-format
 msgid "Annotation Shape"
-msgstr ""
+msgstr "ანოტაციის ფორმა"
 
 #: commands/AcceptChangeCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -54,24 +54,24 @@ msgstr "ჩართვა"
 #, kde-format
 msgctxt "(qtundo-format) Enable/Disable Grow To Fit Width"
 msgid "%1 Grow To Fit Width"
-msgstr ""
+msgstr "%1 სიგანეში ჩატევამდე გადიდება"
 
 #: commands/AutoResizeCommand.cpp:25
 #, kde-format
 msgctxt "(qtundo-format) Enable/Disable Grow To Fit Height"
 msgid "%1 Grow To Fit Height"
-msgstr ""
+msgstr "%1 სიმაღლეში ჩატევამდე გადიდება"
 
 #: commands/AutoResizeCommand.cpp:28
 #, kde-format
 msgctxt "(qtundo-format) Enable/Disable Shrink To Fit"
 msgid "%1 Shrink To Fit"
-msgstr ""
+msgstr "%1 ჩატევამდე დაპატარავება"
 
 #: commands/ChangeListLevelCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Change List Level"
-msgstr ""
+msgstr "სიის დონის შეცვლა"
 
 #: commands/RejectChangeCommand.cpp:34
 msgctxt "(qtundo-format)"
@@ -185,7 +185,7 @@ msgstr "სუფიქსი:"
 #: dialogs/BibliographyConfigureDialog.ui:70
 #, kde-format
 msgid "Number entries"
-msgstr ""
+msgstr "ჩანაწერების რაოდენობა"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: dialogs/BibliographyConfigureDialog.ui:80
@@ -197,25 +197,25 @@ msgstr "დალაგება"
 #: dialogs/BibliographyConfigureDialog.ui:86
 #, kde-format
 msgid "Sort by position"
-msgstr ""
+msgstr "მდებარეობით დალაგება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, sortKeyGroupBox)
 #: dialogs/BibliographyConfigureDialog.ui:93
 #, kde-format
 msgid "Sort keys"
-msgstr ""
+msgstr "გასაღებების დალაგება"
 
 #. i18n: ectx: property (text), widget (QPushButton, addSortKeyButton)
 #: dialogs/BibliographyConfigureDialog.ui:103
 #, kde-format
 msgid "Add sort key"
-msgstr ""
+msgstr "დალაგების გასაღების დამატება"
 
 #. i18n: ectx: property (text), widget (QLabel, sortAlgorithmLabel)
 #: dialogs/BibliographyConfigureDialog.ui:131
 #, kde-format
 msgid "Sort algorithm:"
-msgstr ""
+msgstr "დალაგების ალგორითმი:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sortAlgorithm)
 #: dialogs/BibliographyConfigureDialog.ui:139
@@ -414,7 +414,7 @@ msgstr ""
 #: dialogs/ChangeConfigureDialog.ui:231
 #, kde-format
 msgid "Format Changes"
-msgstr ""
+msgstr "ფორმატის ცვლილებები"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ChangeTrackingOptions)
 #: dialogs/ChangeTrackingOptionsWidget.ui:14
@@ -426,7 +426,7 @@ msgstr ""
 #: dialogs/ChangeTrackingOptionsWidget.ui:142
 #, kde-format
 msgid "Configure Settings"
-msgstr ""
+msgstr "პარამეტრების მორგება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, recordChangesCheckBox)
 #: dialogs/ChangeTrackingOptionsWidget.ui:175
@@ -569,7 +569,7 @@ msgstr "გაფრთხილება"
 #: dialogs/CitationInsertionDialog.cpp:73
 #, kde-format
 msgid "Short name%1"
-msgstr ""
+msgstr "მოკლე სახელი%1"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, CitationInsertionDialog)
 #: dialogs/CitationInsertionDialog.ui:20
@@ -1081,7 +1081,7 @@ msgstr "ხელითმითითებული5"
 #: dialogs/InsertBibliographyDialog.ui:178
 #, kde-format
 msgid "Available fields "
-msgstr ""
+msgstr "ხელმისაწვდომი ველები "
 
 #. i18n: ectx: property (text), widget (QPushButton, add)
 #: dialogs/InsertBibliographyDialog.ui:192
@@ -1294,7 +1294,7 @@ msgstr ""
 #: dialogs/ListLevelWidget.ui:117
 #, kde-format
 msgid "LABEL"
-msgstr ""
+msgstr "ჭდე"
 
 #. i18n: ectx: property (text), widget (QLabel, tabStopLabel)
 #: dialogs/ListLevelWidget.ui:149
@@ -1357,7 +1357,7 @@ msgstr ""
 #: dialogs/ListLevelWidget.ui:454
 #, kde-format
 msgid "Bullet"
-msgstr ""
+msgstr "ტყვია"
 
 #. i18n: ectx: attribute (title), widget (QWidget, imageTab)
 #: dialogs/ListLevelWidget.ui:459
@@ -1743,7 +1743,7 @@ msgstr ""
 #: dialogs/ParagraphGeneral.cpp:55
 #, kde-format
 msgid "Decorations"
-msgstr ""
+msgstr "დეკორაციები"
 
 #: dialogs/ParagraphGeneral.cpp:60
 #, kde-format
@@ -1760,7 +1760,7 @@ msgstr "ერთი"
 #, kde-format
 msgctxt "Line spacing value"
 msgid "1.5 Lines"
-msgstr ""
+msgstr "1.5 ხაზი"
 
 #: dialogs/ParagraphIndentSpacing.cpp:27
 #, kde-format
@@ -1790,7 +1790,7 @@ msgstr "ფიქსირებული"
 #, kde-format
 msgctxt "Line spacing type"
 msgid "At least"
-msgstr ""
+msgstr "მინიმუმ"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/ParagraphIndentSpacing.ui:20
@@ -1814,7 +1814,7 @@ msgstr "მარჯვენა:"
 #: dialogs/ParagraphIndentSpacing.ui:71
 #, kde-format
 msgid "First Line:"
-msgstr ""
+msgstr "პირველი ხაზი:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
 #: dialogs/ParagraphIndentSpacing.ui:87
@@ -1826,7 +1826,7 @@ msgstr ""
 #: dialogs/ParagraphIndentSpacing.ui:100
 #, kde-format
 msgid "Line Spacing"
-msgstr ""
+msgstr "ხაზებს შუა მანძილი"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, proportional)
 #: dialogs/ParagraphIndentSpacing.ui:134
@@ -1929,7 +1929,7 @@ msgstr ""
 #: dialogs/SectionFormatDialog.ui:29
 #, kde-format
 msgid "Section name:"
-msgstr ""
+msgstr "სექციის სახელი:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SectionsSplitDialog)
 #: dialogs/SectionsSplitDialog.ui:6
@@ -2597,7 +2597,7 @@ msgstr "მარჯვნივ სწორება"
 #: TextTool.cpp:256
 #, kde-format
 msgid "Align Center"
-msgstr ""
+msgstr "ცენტრზე სწორება"
 
 #: TextTool.cpp:264
 #, kde-format
@@ -2637,12 +2637,12 @@ msgstr ""
 #: TextTool.cpp:310
 #, kde-format
 msgid "Increase Font Size"
-msgstr ""
+msgstr "ფონტის ზომის გაზრდა"
 
 #: TextTool.cpp:315
 #, kde-format
 msgid "Decrease Font Size"
-msgstr ""
+msgstr "ფონტის ზომის შესრულება"
 
 #: TextTool.cpp:321
 #, kde-format
@@ -2893,12 +2893,12 @@ msgstr ""
 #: TextTool.cpp:574
 #, kde-format
 msgid "Insertion"
-msgstr ""
+msgstr "ჩასმა"
 
 #: TextTool.cpp:576
 #, kde-format
 msgid "Deletion"
-msgstr ""
+msgstr "წაშლა"
 
 #: TextTool.cpp:578
 #, kde-format
@@ -2963,7 +2963,7 @@ msgstr "ავტოკორექცია"
 #: TextTool.cpp:2616
 #, kde-format
 msgid "Key Press"
-msgstr ""
+msgstr "ღილაკის დაწოლა"
 
 #: TextTool.cpp:2930
 #, kde-format

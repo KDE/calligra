@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2022-09-23 16:45+0200\n"
+"PO-Revision-Date: 2022-12-04 06:53+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: karbon/image/ImageExport.cpp:90
 #, kde-format
@@ -305,7 +305,7 @@ msgstr ""
 #: sheets/csv/exportdialogui.ui:132
 #, kde-format
 msgid "Sheets"
-msgstr ""
+msgstr "ფურცლები"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel4)
 #: sheets/csv/exportdialogui.ui:145
@@ -853,7 +853,7 @@ msgstr ""
 #: words/ascii/ImportDialogUI.ui:65
 #, kde-format
 msgid "End of Paragraph"
-msgstr ""
+msgstr "პარაგრაფის დასასრული"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
 #: words/ascii/ImportDialogUI.ui:71

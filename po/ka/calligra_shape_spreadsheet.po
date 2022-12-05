@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2022-09-23 15:35+0200\n"
+"PO-Revision-Date: 2022-12-04 06:48+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -55,6 +55,8 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
+"დოკუმენტი შეიცავს გარე ბმულს, დაშორებულ დოკუმენტამდე\n"
+"%1"
 
 #: TableShape.cpp:289
 #, kde-format
@@ -79,7 +81,7 @@ msgstr "ელექტრონული ცხრილი"
 #: TableShapeFactory.cpp:39
 #, kde-format
 msgid "Spreadsheet Shape"
-msgstr ""
+msgstr "ელცხრილის ფორმა"
 
 #: TableTool.cpp:218
 #, kde-format
@@ -104,17 +106,17 @@ msgstr "გატანა"
 #: TableTool.cpp:704
 #, kde-format
 msgid "Sheets"
-msgstr ""
+msgstr "ფურცლები"
 
 #: TableTool.cpp:746
 #, kde-format
 msgid "Sheet:"
-msgstr ""
+msgstr "ფურცელი:"
 
 #: TableTool.cpp:748
 #, kde-format
 msgid "Selected Sheet"
-msgstr ""
+msgstr "შერჩეული ფურცელი"
 
 #: TableTool.cpp:763
 #, kde-format

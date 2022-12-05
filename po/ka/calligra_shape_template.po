@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2022-09-23 15:35+0200\n"
+"PO-Revision-Date: 2022-12-04 06:49+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: ChangeSomethingCommand.cpp:34
 msgctxt "(qtundo-format)"
@@ -31,7 +31,7 @@ msgstr "შაბლონის ფორმა"
 #: TemplateShapeFactory.cpp:34
 #, kde-format
 msgid "Simple shape that is used as a template for developing other shapes."
-msgstr ""
+msgstr "მარტივი ფორმა, რომელიც სხვა ფორმების დახატვისას ნიმუშად გამოიყენება."
 
 #: TemplateTool.cpp:77
 #, kde-format
