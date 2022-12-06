@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-13 00:46+0000\n"
-"PO-Revision-Date: 2022-12-04 06:30+0100\n"
+"PO-Revision-Date: 2022-12-05 05:27+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -496,12 +496,12 @@ msgstr ""
 #: flake/tools/KoPathTool.cpp:120
 #, kde-format
 msgid "Segment to Line"
-msgstr ""
+msgstr "სეგმენტი ხაზამდე"
 
 #: flake/tools/KoPathTool.cpp:125
 #, kde-format
 msgid "Segment to Curve"
-msgstr ""
+msgstr "სეგმენტი მრუდამდე"
 
 #: flake/tools/KoPathTool.cpp:130
 #, kde-format
@@ -536,12 +536,12 @@ msgstr "წერტილების შერწყმა"
 #: flake/tools/KoPathTool.cpp:157
 #, kde-format
 msgid "To Path"
-msgstr ""
+msgstr "ბილიკამდე"
 
 #: flake/tools/KoPathTool.cpp:190
 #, kde-format
 msgid "Line/Curve"
-msgstr ""
+msgstr "ხაზი/მრუდი"
 
 #: flake/tools/KoPathTool.cpp:528
 #, kde-format
@@ -661,7 +661,7 @@ msgstr "სკრიპტის მმართველი..."
 #: kross/KoScriptingPart.cpp:160
 #, kde-format
 msgid "Execute Script File"
-msgstr ""
+msgstr "სკრიპტის ფაილის შესრულება"
 
 #: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
 #, kde-format
@@ -903,12 +903,12 @@ msgstr ""
 #: main/KoApplication.cpp:204
 #, kde-format
 msgid "Filename for export-pdf"
-msgstr ""
+msgstr "ფაილის სახელი გასატანად-pdf"
 
 #: main/KoApplication.cpp:205
 #, kde-format
 msgid "just load the file and then exit"
-msgstr ""
+msgstr "უბრალოდ ჩატვირთე ფაილი და დაასრულე მუშაობა"
 
 #: main/KoApplication.cpp:206
 #, kde-format
@@ -954,38 +954,38 @@ msgstr ""
 #: main/KoApplication.cpp:512
 #, kde-format
 msgid "No template found for: %1"
-msgstr ""
+msgstr "%1-სთვის შაბლონი ვერ ვიპოვე"
 
 #: main/KoApplication.cpp:515
 #, kde-format
 msgid "Too many templates found for: %1"
-msgstr ""
+msgstr "ნაპოვნია მეტისმეტად ბევრი შაბლონი %1-სთვის"
 
 #: main/KoApplication.cpp:537 main/KoApplication.cpp:555
 #, kde-format
 msgid "Template %1 failed to load."
-msgstr ""
+msgstr "შაბლონის ('%1') ჩატვირთვის შეცდომა."
 
 #: main/KoApplication.cpp:545
 #, kde-format
 msgid "No template found at: %1"
-msgstr ""
+msgstr "შაბლონი ვერ ვიპოვე მისამართზე: %1"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:166
 #, kde-format
 msgctxt "@title:window"
 msgid "Recover Files"
-msgstr ""
+msgstr "ფაილების აღდგენა"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:171
 #, kde-format
 msgid "The following autosave file can be recovered:"
-msgstr ""
+msgstr "შემდეგი ავტომატურად შენახული ფაილის აღდგენა შესაძლებელია:"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:174
 #, kde-format
 msgid "The following autosave files can be recovered:"
-msgstr ""
+msgstr "შემდეგი ავტომატურად შენახული ფაილების აღდგენა შესაძლებელია:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:94
@@ -997,10 +997,10 @@ msgstr ""
 #: main/KoDetailsPaneBase.ui:97
 #, kde-format
 msgid "Always use this template"
-msgstr ""
+msgstr "ყოველთვის გამოიყენეთ ეს შაბლონი"
 
 #: main/KoDocument.cpp:549
-#, fuzzy, kde-format
+#, kde-format
 msgid "Making backup..."
 msgstr "მარქაფი..."
 
@@ -1015,6 +1015,8 @@ msgid ""
 "Could not save\n"
 "%1"
 msgstr ""
+"შენახვის შეცდომა\n"
+"%1"
 
 #: main/KoDocument.cpp:594
 #, kde-format
@@ -1022,11 +1024,13 @@ msgid ""
 "Could not save %1\n"
 "Reason: %2"
 msgstr ""
+"%1-ის შენახვის შეცდომა\n"
+"მიზეზი: %2"
 
 #: main/KoDocument.cpp:623
 #, kde-format
 msgid "Document <i>%1</i> saved"
-msgstr ""
+msgstr "დოკუმენტი <i>%1</i> შენახულია"
 
 #: main/KoDocument.cpp:711
 #, kde-format
@@ -1038,17 +1042,17 @@ msgstr ""
 #: main/KoDocument.cpp:714
 #, kde-format
 msgid "Autosaving..."
-msgstr ""
+msgstr "ავტომატური შენახვა..."
 
 #: main/KoDocument.cpp:726
 #, kde-format
 msgid "Error during autosave! Partition full?"
-msgstr ""
+msgstr "ავტომატური შენახვის შეცდომა! დისკზე ადგილი არის?"
 
 #: main/KoDocument.cpp:819
 #, kde-format
 msgid "Could not create the file for saving"
-msgstr ""
+msgstr "შესანახად ფაილის შენახვის შეცდომა"
 
 #: main/KoDocument.cpp:863 main/KoDocument.cpp:885 main/KoDocument.cpp:916
 #: main/KoDocument.cpp:950
@@ -1090,17 +1094,17 @@ msgstr "ფაილი არ არსებობს: %1."
 #: main/KoDocument.cpp:1463
 #, kde-format
 msgid "Opening Document"
-msgstr ""
+msgstr "დოკუმენტის გახსნა"
 
 #: main/KoDocument.cpp:1478
 #, kde-format
 msgid "Could not create the filter plugin"
-msgstr ""
+msgstr "ფილტრის დამატების შექმნის შეცდომა"
 
 #: main/KoDocument.cpp:1481
 #, kde-format
 msgid "Could not create the output document"
-msgstr ""
+msgstr "გამოსატანი დოკუმენტის შექმნის შეცდომა"
 
 #: main/KoDocument.cpp:1484
 #, kde-format
@@ -1110,22 +1114,22 @@ msgstr "ფაილი ვერ მოიძებნა"
 #: main/KoDocument.cpp:1487
 #, kde-format
 msgid "Cannot create storage"
-msgstr ""
+msgstr "საცავის შექნის შეცდომა"
 
 #: main/KoDocument.cpp:1490
 #, kde-format
 msgid "Bad MIME type"
-msgstr ""
+msgstr "არასწორი MIME ტიპი"
 
 #: main/KoDocument.cpp:1493
 #, kde-format
 msgid "Error in embedded document"
-msgstr ""
+msgstr "შეცდომა ჩაშენებულ დოკუმენტში"
 
 #: main/KoDocument.cpp:1496
 #, kde-format
 msgid "Format not recognized"
-msgstr ""
+msgstr "ფორმატი უცნობია"
 
 #: main/KoDocument.cpp:1499
 #, kde-format
@@ -1170,7 +1174,7 @@ msgstr ""
 #: main/KoDocument.cpp:1527
 #, kde-format
 msgid "Failed to download remote file"
-msgstr ""
+msgstr "დაშორებული ფაილის გადმოწერის შეცდომა"
 
 #: main/KoDocument.cpp:1534
 #, kde-format
@@ -1184,11 +1188,14 @@ msgid ""
 "Reason: %1.\n"
 "%3"
 msgstr ""
+"%2-ის გახსნის შეცდომა.\n"
+"მიზეზი: %1.\n"
+"%3"
 
 #: main/KoDocument.cpp:1596
 #, kde-format
 msgid "Document <i>%1</i> loaded"
-msgstr ""
+msgstr "დოკუმენტი <i>%1</i> ჩაიტვირთა"
 
 #: main/KoDocument.cpp:1659 odf/KoOdfReadStore.cpp:98
 #, kde-format
@@ -1205,7 +1212,7 @@ msgstr ""
 #: main/KoDocument.cpp:1692
 #, kde-format
 msgid "%1 is not a file."
-msgstr ""
+msgstr "%1 ფაილი არაა."
 
 #: main/KoDocument.cpp:1707
 #, kde-format
@@ -1257,7 +1264,7 @@ msgstr ""
 #: main/KoDocument.cpp:2165
 #, kde-format
 msgid "Internal error: saveXML not implemented"
-msgstr ""
+msgstr "შიდა შეცდომა: saveXML განხორციელებული არაა"
 
 #: main/KoDocument.cpp:2202
 #, kde-format
@@ -1265,6 +1272,8 @@ msgid ""
 "Could not open\n"
 "%1"
 msgstr ""
+"გახსნის შეცდომა\n"
+"%1"
 
 #: main/KoDocument.cpp:2205
 #, kde-format
@@ -1272,11 +1281,13 @@ msgid ""
 "Could not open %1\n"
 "Reason: %2"
 msgstr ""
+"%1-ის გახსნის შეცდომა\n"
+"მიზეზი: %2"
 
 #: main/KoDocument.cpp:2262
 #, kde-format
 msgid "a word processing"
-msgstr ""
+msgstr "სიტყვების დამუშავება"
 
 #: main/KoDocument.cpp:2263
 #, kde-format
@@ -1370,7 +1381,7 @@ msgid "Match only whole words"
 msgstr ""
 
 #: main/KoFindText.cpp:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Whole Words Only"
 msgstr "მხოლოდ მთლიანი სიტყვები"
 
@@ -1417,7 +1428,7 @@ msgstr "გატანა..."
 #: main/KoMainWindow.cpp:298
 #, kde-format
 msgid "En&crypt Document"
-msgstr ""
+msgstr "&დოკუმენტის დაშიფვრა"
 
 #: main/KoMainWindow.cpp:303
 #, kde-format
@@ -1451,14 +1462,14 @@ msgid "Show Docker Titlebars"
 msgstr ""
 
 #: main/KoMainWindow.cpp:355
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dockers"
 msgstr "პანელები"
 
 #: main/KoMainWindow.cpp:660
 #, kde-format
 msgid "(write protected)"
-msgstr ""
+msgstr "(ჩაწერისგან დაცული)"
 
 #: main/KoMainWindow.cpp:665
 #, kde-format
@@ -1522,7 +1533,7 @@ msgstr "PDF-ად გატანა"
 #: main/KoMainWindow.cpp:1502
 #, kde-format
 msgid "Cannot export to the specified file"
-msgstr ""
+msgstr "მითითებულ ფაილში გატანის შეცდომა"
 
 #: main/KoMainWindow.cpp:1701 pageapp/KoPADocumentStructureDocker.cpp:80
 #, kde-format
@@ -1549,18 +1560,18 @@ msgstr "შეტყობინება"
 #: main/KoMainWindow.cpp:2113
 #, kde-format
 msgid "Show %1 Toolbar"
-msgstr ""
+msgstr "%1 პანელის ჩვენება"
 
 #: main/KoMainWindow.cpp:2115
 #, kde-format
 msgid "Hide %1 Toolbar"
-msgstr ""
+msgstr "%1 პანელის დამალვა"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
 #: main/KoOpenPane.cpp:123 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
 #, kde-format
 msgid "Open Existing Document"
-msgstr ""
+msgstr "არსებული დოკუმენტის გახსნა"
 
 #: main/KoOpenPane.cpp:199
 #, kde-format
@@ -1570,7 +1581,7 @@ msgstr "ახლახანს გასნილი დოკუმენტ�
 #: main/KoOpenPane.cpp:299
 #, kde-format
 msgid "Custom Document"
-msgstr ""
+msgstr "ხელით მითითებული დოკუმენტი"
 
 #: main/KoPrintingDialog.cpp:43
 #, kde-format
@@ -2040,7 +2051,7 @@ msgstr ""
 #: pageapp/commands/KoPAChangePageLayoutCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Set Page Layout"
-msgstr ""
+msgstr "გვერდის განლაგების დაყენება"
 
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:18
 msgctxt "(qtundo-format)"
@@ -2070,50 +2081,50 @@ msgstr ""
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:26
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
-msgstr ""
+msgstr "სლაიდის წაშლა"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:29
 msgctxt "(qtundo-format) Delete one page"
 msgid "Delete page"
-msgstr ""
+msgstr "გვერდის წაშლა"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:50
 msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "სლაიდის წაშლა"
+msgstr[1] "სლაიდების წაშლა"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:53
 msgctxt "(qtundo-format)"
 msgid "Delete page"
 msgid_plural "Delete pages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "გვერდის წაშლა"
+msgstr[1] "გვერდების წაშლა"
 
 #: pageapp/commands/KoPAPageInsertCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Insert slide"
-msgstr ""
+msgstr "სლაიდის ჩასმა"
 
 #: pageapp/commands/KoPAPageInsertCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Insert page"
-msgstr ""
+msgstr "გვერდის ჩასმა"
 
 #: pageapp/commands/KoPAPageMoveCommand.cpp:45
 msgctxt "(qtundo-format)"
 msgid "Move slide"
 msgid_plural "Move slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "სლაიდის გადატანა"
+msgstr[1] "სლაიდების გადატანა"
 
 #: pageapp/commands/KoPAPageMoveCommand.cpp:48
 msgctxt "(qtundo-format)"
 msgid "Move page"
 msgid_plural "Move pages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "გვერდის გადატანა"
+msgstr[1] "გვერდების გატანა"
 
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, kde-format
@@ -2547,7 +2558,7 @@ msgstr ""
 #: pageapp/widgets/KoPageNavigator.cpp:56
 #, kde-format
 msgid "Slide %1/%2"
-msgstr ""
+msgstr "სლაიდი %1/%2"
 
 #: pageapp/widgets/KoPageNavigator.cpp:57
 #, kde-format
@@ -3201,27 +3212,27 @@ msgstr "YCbCr"
 #: pigment/KoColorModelStandardIds.cpp:21
 #, kde-format
 msgid "8 Bits"
-msgstr ""
+msgstr "8 ბიტიანი"
 
 #: pigment/KoColorModelStandardIds.cpp:22
 #, kde-format
 msgid "16 Bits"
-msgstr ""
+msgstr "16 ბიტიანი"
 
 #: pigment/KoColorModelStandardIds.cpp:23
 #, kde-format
 msgid "16 Bits Float"
-msgstr ""
+msgstr "16 ბიტიანი, მცურავმძიმიანი"
 
 #: pigment/KoColorModelStandardIds.cpp:24
 #, kde-format
 msgid "32 Bits Float"
-msgstr ""
+msgstr "32 ბიტიანი, მცურავმძიმიანი"
 
 #: pigment/KoColorModelStandardIds.cpp:25
 #, kde-format
 msgid "64 Bits Float"
-msgstr ""
+msgstr "64 ბიტიანი, მცურავმძიმიანი"
 
 #: pigment/KoCompositeOp.cpp:21 pigment/KoCompositeOpRegistry.cpp:26
 #, kde-format
@@ -3326,7 +3337,7 @@ msgstr ""
 #: rdf/KoDocumentRdfEditWidget.cpp:341
 #, kde-format
 msgid "Rdf"
-msgstr ""
+msgstr "Rdf"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: rdf/KoDocumentRdfEditWidget.ui:21
@@ -3512,19 +3523,19 @@ msgstr ""
 #: rdf/KoSemanticStylesheetsEditor.ui:29
 #, kde-format
 msgid "Variables Available"
-msgstr ""
+msgstr "ხელმისაწვდომი ცვლადები"
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
 #: rdf/KoSemanticStylesheetsEditor.ui:62
 #, kde-format
 msgid "Description"
-msgstr ""
+msgstr "აღწერა"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, stylesheets)
 #: rdf/KoSemanticStylesheetsEditor.ui:107
 #, kde-format
 msgid "Stylesheet Name"
-msgstr ""
+msgstr "სტილების ცხრილის სახელი"
 
 #: rdf/KoSopranoTableModel.cpp:71
 #, kde-format
@@ -3835,7 +3846,7 @@ msgstr ""
 #, kde-format
 msgctxt "new numbered section name"
 msgid "New section %1"
-msgstr ""
+msgstr "ახალი სექცია %1"
 
 #: text/KoText.cpp:19
 #, kde-format
@@ -3869,7 +3880,7 @@ msgstr "სანიშნის დამატება"
 #: text/KoTextEditor.cpp:485
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
-msgstr ""
+msgstr "ანოტაციის დამატება"
 
 #: text/KoTextEditor.cpp:509
 msgctxt "(qtundo-format)"
@@ -3956,7 +3967,6 @@ msgid "Underline"
 msgstr "ხაზგასმული"
 
 #: text/KoTextEditor_format.cpp:99
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Strike Out"
 msgstr "ხაზის გადასმა"
@@ -3989,7 +3999,7 @@ msgstr ""
 #: text/KoTextEditor_format.cpp:269 text/KoTextEditor_format.cpp:271
 msgctxt "(qtundo-format)"
 msgid "Increase font size"
-msgstr ""
+msgstr "ფონტის ზომის გაზრდა"
 
 #: text/KoTextEditor_format.cpp:282
 msgctxt "(qtundo-format)"
@@ -3999,7 +4009,7 @@ msgstr "ფონტის დაყენება"
 #: text/KoTextEditor_format.cpp:295
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
-msgstr ""
+msgstr "ფონტის ზომის დაყენება"
 
 #: text/KoTextEditor_format.cpp:308
 msgctxt "(qtundo-format)"
@@ -4009,17 +4019,17 @@ msgstr "ფონის ფერის დაყენება"
 #: text/KoTextEditor_format.cpp:321
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
-msgstr ""
+msgstr "ტექსტის ფერის დაყენება"
 
 #: text/KoTextEditor_format.cpp:349 text/KoTextEditor_format.cpp:388
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
-msgstr ""
+msgstr "სიმბოლოს სტილის დაყენება"
 
 #: text/KoTextEditor_format.cpp:455
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
-msgstr ""
+msgstr "პარაგრაფის სტილის დაყენება"
 
 #: text/KoTextEditor_format.cpp:517
 msgctxt "(qtundo-format)"
@@ -4029,7 +4039,7 @@ msgstr "ფორმატირება"
 #: text/KoTextEditor_p.h:145 text/KoTextEditor_p.h:181
 msgctxt "(qtundo-format)"
 msgid "Format"
-msgstr ""
+msgstr "ფორმატი"
 
 #: text/styles/KoStyleManager.cpp:93 text/styles/KoStyleManager.cpp:98
 #, kde-format
