@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2022-12-04 06:34+0100\n"
+"PO-Revision-Date: 2022-12-06 06:12+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -107,6 +107,16 @@ msgid ""
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "size:8pt; font-weight:600;\">Bar Properties</span></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"size:8pt; font-weight:600;\">ზოლის თვისებები</span></p></body></html>"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, explodeFactor)
 #. i18n: ectx: property (suffix), widget (QSpinBox, gapBetweenBars)
@@ -127,7 +137,7 @@ msgstr "დაშორება სეტებს შორის"
 #: AxesConfigWidget.ui:167
 #, kde-format
 msgid "Gap Between Bars"
-msgstr ""
+msgstr "დაშორება ზოლებს შორის"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowTitle)
 #: AxesConfigWidget.ui:193
@@ -139,27 +149,27 @@ msgstr "სათაურის ჩვენება"
 #: AxesConfigWidget.ui:201
 #, kde-format
 msgid "Primary X Axis"
-msgstr ""
+msgstr "ძირითადი X ღერძი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:206 DataSetConfigWidget.ui:95
 #, kde-format
 msgid "Primary Y Axis"
-msgstr ""
+msgstr "ძირითადი Y ღერძი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:211
 #, kde-format
 msgid "Secondary X Axis"
-msgstr ""
+msgstr "დამხმარე X ღერძი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:216 DataSetConfigWidget.ui:100
 #, kde-format
 msgid "Secondary Y Axis"
-msgstr ""
+msgstr "დამხმარე T ღერძი"
 
 #: ChartShape.cpp:311
 #, kde-format
@@ -209,6 +219,8 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
+"დოკუმენტი შეიცავს გარე ბმულს, დაშორებულ დოკუმენტამდე\n"
+"%1"
 
 #: ChartShape.cpp:788
 #, kde-format
@@ -233,7 +245,7 @@ msgstr "გრაფიკი"
 #: ChartShapeFactory.cpp:60
 #, kde-format
 msgid "Business charts"
-msgstr ""
+msgstr "ბიზნეს-გრაფიკები"
 
 #: ChartShapeFactory.cpp:79 DataSetConfigWidget.cpp:202
 #: PlotAreaConfigWidget.cpp:236
@@ -375,22 +387,22 @@ msgstr ""
 #: ChartShapeFactory.cpp:222
 #, kde-format
 msgid "Radar Chart"
-msgstr ""
+msgstr "რადარის გრაფიკი"
 
 #: ChartShapeFactory.cpp:223
 #, kde-format
 msgid "Radar chart"
-msgstr ""
+msgstr "რადარის გრაფიკი"
 
 #: ChartShapeFactory.cpp:233
 #, kde-format
 msgid "Filled Radar Chart"
-msgstr ""
+msgstr "რადარის შევსებული გრაფიკი"
 
 #: ChartShapeFactory.cpp:234
 #, kde-format
 msgid "Filled radar chart"
-msgstr ""
+msgstr "რადარის შევსებული გრაფიკი"
 
 #: ChartShapeFactory.cpp:244
 #, kde-format
@@ -463,17 +475,17 @@ msgstr "ზრდა %-ში"
 #: ChartShapeFactory.cpp:460
 #, kde-format
 msgid "Share A"
-msgstr ""
+msgstr "A-ის გაზიარება"
 
 #: ChartShapeFactory.cpp:461
 #, kde-format
 msgid "Share B"
-msgstr ""
+msgstr "B-ის გაზიარება"
 
 #: ChartShapeFactory.cpp:462
 #, kde-format
 msgid "Share C"
-msgstr ""
+msgstr "C-ის გაზიარება"
 
 #: ChartShapeFactory.cpp:465
 #, kde-format
@@ -521,7 +533,7 @@ msgid "Legend"
 msgstr "შინაარსი"
 
 #: ChartTool.cpp:312
-#, fuzzy, kde-format
+#, kde-format
 msgid "Plot Area"
 msgstr "დასახაზი ადგილი"
 
@@ -713,12 +725,12 @@ msgstr ""
 #: commands/ChartTypeCommand.cpp:123
 msgctxt "(qtundo-format)"
 msgid "Circle Chart"
-msgstr ""
+msgstr "წრის გრაფიკი"
 
 #: commands/ChartTypeCommand.cpp:126
 msgctxt "(qtundo-format)"
 msgid "Ring Chart"
-msgstr ""
+msgstr "ბეჭდის გრაფიკი"
 
 #: commands/ChartTypeCommand.cpp:129
 msgctxt "(qtundo-format)"
@@ -1198,7 +1210,7 @@ msgstr "ხელით"
 #: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
 #, kde-format
 msgid "Remove data set"
-msgstr ""
+msgstr "მონაცემების სეტის წაშლა"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetBefore)
@@ -1212,7 +1224,7 @@ msgstr ""
 #: dialogs/ScatterDataSetTableModel.cpp:103
 #, kde-format
 msgid "Dataset Name"
-msgstr ""
+msgstr "მონაცემების სეტის სახელი"
 
 #: dialogs/BubbleDataSetTableModel.cpp:104
 #: dialogs/ScatterDataSetTableModel.cpp:104
@@ -1229,7 +1241,7 @@ msgstr "Y-მნიშვნელობები"
 #: dialogs/BubbleDataSetTableModel.cpp:106
 #, kde-format
 msgid "Bubble Size"
-msgstr ""
+msgstr "ბუშტის ზომა"
 
 #: dialogs/BubbleDataSetTableModel.cpp:146
 #: dialogs/ScatterDataSetTableModel.cpp:142
@@ -1362,6 +1374,19 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
 "weight:600;\"></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">შეცდომის კატეგორია</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"weight:600;\"></p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:94
@@ -1379,17 +1404,17 @@ msgstr "პროცენტი"
 #: dialogs/FormatErrorBarDialog.ui:104
 #, kde-format
 msgid "Error Margin"
-msgstr ""
+msgstr "შეცდომის ზღვარი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:109
 #, kde-format
 msgid "Standard Deviation"
-msgstr ""
+msgstr "სტანდარტული აცდენა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Variance"
 msgstr "ცვალებადობა"
 
@@ -1416,7 +1441,7 @@ msgstr "უარყოფითი"
 #: dialogs/FormatErrorBarDialog.ui:207
 #, kde-format
 msgid "Same for both"
-msgstr ""
+msgstr "იგივე ორივესთვს"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/FormatErrorBarDialog.ui:226 dialogs/PieDataEditor.cpp:33
@@ -1445,6 +1470,16 @@ msgid ""
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "weight:600;\">Error Indicator</span></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">შეცდომის მაჩვენებელი</span></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, posIndicator)
 #: dialogs/FormatErrorBarDialog.ui:325
@@ -1650,7 +1685,7 @@ msgstr "ფონტები..."
 #: PieConfigWidget.cpp:101
 #, kde-format
 msgid "Data Point %1"
-msgstr ""
+msgstr "მონაცემის წერტილი %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
@@ -1690,7 +1725,7 @@ msgstr "ჰორიზონტალური პანელები"
 #: PlotAreaConfigWidget.ui:82
 #, kde-format
 msgid "Edit Data..."
-msgstr ""
+msgstr "მონაცემების ჩასწორება..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)

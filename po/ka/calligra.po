@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-13 00:46+0000\n"
-"PO-Revision-Date: 2022-12-05 05:27+0100\n"
+"PO-Revision-Date: 2022-12-06 06:07+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -118,7 +118,7 @@ msgstr "ბილიკად გარდაქმნა"
 #: flake/commands/KoPathBreakAtPointCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Break subpath at points"
-msgstr ""
+msgstr "ქვებილიკის მითითებულ წერტილებში გაწყვეტა"
 
 #: flake/commands/KoPathCombineCommand.cpp:45
 msgctxt "(qtundo-format)"
@@ -175,12 +175,12 @@ msgstr "ქვებილიკის გაწყვეტა"
 #: flake/commands/KoPathSegmentTypeCommand.cpp:121
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
-msgstr ""
+msgstr "სეგმენტების მრუდებით შეცვლა"
 
 #: flake/commands/KoPathSegmentTypeCommand.cpp:123
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
-msgstr ""
+msgstr "სეგმენტების ხაზებით შეცვლა"
 
 #: flake/commands/KoPathShapeMarkerCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -203,7 +203,7 @@ msgstr "ფონის დაყენაბება"
 #: flake/commands/KoShapeClipCommand.cpp:73
 msgctxt "(qtundo-format)"
 msgid "Clip Shape"
-msgstr ""
+msgstr "ფორმის ამოჭრა"
 
 #: flake/commands/KoShapeCreateCommand.cpp:39
 msgctxt "(qtundo-format)"
@@ -213,19 +213,19 @@ msgstr "მოხაზულობის შექმნა"
 #: flake/commands/KoShapeDeleteCommand.cpp:43
 msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
-msgstr ""
+msgstr "ფორმის წაშლა"
 
 #: flake/commands/KoShapeDeleteCommand.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Delete shape"
 msgid_plural "Delete shapes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ფორმის წაშლა"
+msgstr[1] "ფორმების წაშლა"
 
 #: flake/commands/KoShapeDistributeCommand.cpp:117
 msgctxt "(qtundo-format)"
 msgid "Distribute shapes"
-msgstr ""
+msgstr "განაწილებული ფორმები"
 
 #: flake/commands/KoShapeGroupCommand.cpp:82
 msgctxt "(qtundo-format)"
@@ -235,7 +235,7 @@ msgstr "ფორმების დაჯგუფება"
 #: flake/commands/KoShapeGroupCommand.cpp:84
 msgctxt "(qtundo-format)"
 msgid "Add shapes to group"
-msgstr ""
+msgstr "ფორმების ჯგუფიში ჩამატება"
 
 #: flake/commands/KoShapeKeepAspectRatioCommand.cpp:17
 msgctxt "(qtundo-format)"
