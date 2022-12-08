@@ -1412,7 +1412,7 @@ msgstr "Distingix entre majúscules i minúscules"
 #: main/KoFindText.cpp:46
 #, kde-format
 msgid "Match cases when searching"
-msgstr "Coincidix les caixes a les busques"
+msgstr "Coincidix les caixes en les busques"
 
 #: main/KoFindText.cpp:47
 #, kde-format
