@@ -15,24 +15,16 @@
 #include <QSpinBox>
 #include <QVBoxLayout>
 
-#include <KoCanvasBase.h>
-
-#include "core/Cell.h"
-#include "../Selection.h"
-
-#include "../commands/StyleCommand.h"
-#include "../commands/RowColumnManipulators.h"
+#include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 
-AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
+AngleDialog::AngleDialog(QWidget* parent, int angle)
         : KoDialog(parent)
 {
     setCaption(i18n("Change Angle"));
     setModal(true);
     setButtons(Ok | Cancel | Default);
-
-    m_selection = selection;
 
     QWidget *page = new QWidget();
     setMainWidget(page);
@@ -56,29 +48,17 @@ AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
 
     connect(this, &KoDialog::okClicked, this, &AngleDialog::slotOk);
     connect(this, &KoDialog::defaultClicked, this, &AngleDialog::slotDefault);
-    int angle = - Cell(m_selection->activeSheet(), m_selection->marker()).style().angle();
     m_pAngle->setValue(angle);
 }
 
 void AngleDialog::slotOk()
 {
-    KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Change Angle"));
-
-    StyleCommand* manipulator = new StyleCommand(macroCommand);
-    manipulator->setSheet(m_selection->activeSheet());
-    Style s;
-    s.setAngle(-m_pAngle->value());
-    manipulator->setStyle(s);
-    manipulator->add(*m_selection);
-
-    AdjustColumnRowManipulator* manipulator2 = new AdjustColumnRowManipulator(macroCommand);
-    manipulator2->setSheet(m_selection->activeSheet());
-    manipulator2->setAdjustColumn(true);
-    manipulator2->setAdjustRow(true);
-    manipulator2->add(*m_selection);
-
-    m_selection->canvas()->addCommand(macroCommand);
     accept();
+}
+
+int AngleDialog::angle()
+{
+    return m_pAngle->value();
 }
 
 void AngleDialog::slotDefault()

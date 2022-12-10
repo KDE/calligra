@@ -161,8 +161,6 @@ protected Q_SLOTS:
     void changeTextColor(const KoColor &);
     // -- border actions --
     void borderColor(const KoColor &);
-    // -- text layout actions --
-    void changeAngle();
     // -- value format actions --
     void increasePrecision();
     void decreasePrecision();

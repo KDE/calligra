@@ -1,4 +1,5 @@
 // This file is part of the KDE project
+// SPDX-FileCopyrightText: 2022 Tomas Mecir <mecirt@gmail.com>
 // SPDX-FileCopyrightText: 2006-2008 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 // SPDX-FileCopyrightText: 2005-2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 // SPDX-FileCopyrightText: 2002-2005 Ariya Hidayat <ariya@kde.org>
@@ -59,7 +60,6 @@
 #include "commands/StyleCommand.h"
 
 // dialogs
-#include "dialogs/AngleDialog.h"
 #include "dialogs/AutoFormatDialog.h"
 #include "dialogs/ConditionalDialog.h"
 #include "dialogs/ConsolidateDialog.h"
@@ -209,14 +209,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     colorAction->setCurrentColor(selectedBorderColor());
     addAction("borderColor", colorAction);
     connect(colorAction, &KoColorPopupAction::colorChanged, this, &CellToolBase::borderColor);
-
-    // -- text layout actions --
-
-    action = new QAction(i18n("Change Angle..."), this);
-    action->setIconText(i18n("Angle"));
-    addAction("changeAngle", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::changeAngle);
-    action->setToolTip(i18n("Change the angle that cell contents are printed"));
 
     // -- value format actions --
 
@@ -1398,13 +1390,6 @@ void CellToolBase::borderColor(const KoColor &color)
     command->setColor(c);
     command->add(*selection());
     command->execute(canvas());
-}
-
-void CellToolBase::changeAngle()
-{
-    QPointer<AngleDialog> dialog = new AngleDialog(canvas()->canvasWidget(), selection());
-    dialog->exec();
-    delete dialog;
 }
 
 void CellToolBase::increasePrecision()

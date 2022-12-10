@@ -29,13 +29,13 @@ class AngleDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    AngleDialog(QWidget* parent, Selection* selection);
+    AngleDialog(QWidget* parent, int angle);
 
+    int angle();
 public Q_SLOTS:
     void slotOk();
     void slotDefault();
 protected:
-    Selection* m_selection;
     QSpinBox *m_pAngle;
 };
 

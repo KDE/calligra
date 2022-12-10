@@ -4,6 +4,7 @@ set (actions_DIR_SRCS
     actions/Actions.cpp
     actions/AdjustRowCol.cpp
     actions/Align.cpp
+    actions/Angle.cpp
     actions/AutoSum.cpp
     actions/Border.cpp
     actions/Comment.cpp
@@ -23,6 +24,7 @@ set (actions_DIR_SRCS
 
 set (action_dialogs_DIR_SRCS
     actions/dialogs/AddNamedAreaDialog.cpp
+    actions/dialogs/AngleDialog.cpp
     actions/dialogs/CharacterSelectDialog.cpp
     actions/dialogs/CommentDialog.cpp
     actions/dialogs/CSVDialog.cpp
@@ -65,7 +67,6 @@ set (commands_DIR_SRCS
 
 
 set (dialogs_DIR_SRCS
-    dialogs/AngleDialog.cpp
     dialogs/AutoFormatDialog.cpp
     dialogs/ConditionalDialog.cpp
     dialogs/ConsolidateDialog.cpp
