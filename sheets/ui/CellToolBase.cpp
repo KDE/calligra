@@ -54,7 +54,6 @@
 #include "commands/MergeCommand.h"
 #include "commands/PageBreakCommand.h"
 #include "commands/PasteCommand.h"
-#include "commands/PrecisionCommand.h"
 #include "commands/RowColumnManipulators.h"
 #include "commands/SpellCheckCommand.h"
 #include "commands/StyleCommand.h"
@@ -209,18 +208,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     colorAction->setCurrentColor(selectedBorderColor());
     addAction("borderColor", colorAction);
     connect(colorAction, &KoColorPopupAction::colorChanged, this, &CellToolBase::borderColor);
-
-    // -- value format actions --
-
-    action = new QAction(koIcon("format-precision-more"), i18n("Increase Precision"), this);
-    addAction("increasePrecision", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::increasePrecision);
-    action->setToolTip(i18n("Increase the decimal precision shown onscreen"));
-
-    action = new QAction(koIcon("format-precision-less"), i18n("Decrease Precision"), this);
-    addAction("decreasePrecision", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::decreasePrecision);
-    action->setToolTip(i18n("Decrease the decimal precision shown onscreen"));
 
     // -- misc style attribute actions --
 
@@ -1390,25 +1377,6 @@ void CellToolBase::borderColor(const KoColor &color)
     command->setColor(c);
     command->add(*selection());
     command->execute(canvas());
-}
-
-void CellToolBase::increasePrecision()
-{
-    PrecisionCommand* command = new PrecisionCommand();
-    command->setSheet(selection()->activeSheet());
-    command->add(*selection());
-    if (!command->execute())
-        delete command;
-}
-
-void CellToolBase::decreasePrecision()
-{
-    PrecisionCommand* command = new PrecisionCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setDecrease(true);
-    command->add(*selection());
-    if (!command->execute())
-        delete command;
 }
 
 void CellToolBase::changeBackgroundColor(const KoColor &color)

@@ -8,6 +8,10 @@
 #include "Style.h"
 #include "Actions.h"
 
+#include "engine/CalculationSettings.h"
+#include "engine/MapBase.h"
+#include "core/CellStorage.h"
+#include "core/Sheet.h"
 #include "ui/commands/StyleCommand.h"
 #include "ui/CellEditorBase.h"
 #include "ui/CellToolBase.h"
@@ -345,6 +349,75 @@ void DecreaseFontSize::execute(Selection *selection, Sheet *sheet, QWidget *)
     command->add(*selection);
     command->execute(selection->canvas());
 }
+
+
+IncreasePrecision::IncreasePrecision(Actions *actions)
+    : CellAction(actions, "increasePrecision", i18n("Increase Precision"), koIcon("format-precision-more"), i18n("Increase the decimal precision shown onscreen"))
+{
+}
+
+IncreasePrecision::~IncreasePrecision()
+{
+}
+
+void IncreasePrecision::execute(Selection *selection, Sheet *sheet, QWidget *)
+{
+    PrecisionCommand* command = new PrecisionCommand();
+    command->setSheet(sheet);
+    command->add(*selection);
+    command->execute(selection->canvas());
+}
+
+DecreasePrecision::DecreasePrecision(Actions *actions)
+    : CellAction(actions, "decreasePrecision", i18n("Decrease Precision"), koIcon("format-precision-less"), i18n("Decrease the decimal precision shown onscreen"))
+{
+}
+
+DecreasePrecision::~DecreasePrecision()
+{
+}
+
+void DecreasePrecision::execute(Selection *selection, Sheet *sheet, QWidget *)
+{
+    PrecisionCommand* command = new PrecisionCommand();
+    command->setSheet(sheet);
+    command->add(*selection);
+    command->setDecrease(true);
+    command->execute(selection->canvas());
+}
+
+PrecisionCommand::PrecisionCommand()
+        : AbstractRegionCommand()
+{
+    setDecrease(false);
+}
+
+bool PrecisionCommand::performCommands()
+{
+    Style curStyle = m_sheet->fullCellStorage()->style(boundingRect().left(), boundingRect().top());
+    int prec = curStyle.precision();
+
+    if (prec < 0) prec = m_sheet->map()->calculationSettings()->defaultDecimalPrecision();
+    if (prec < 0) prec = 2;
+    prec += (m_decrease ? -1 : 1);
+    if (prec > 10) prec = 10;
+    if (prec < 0) prec = 0;
+
+    Style style;
+    style.setPrecision(prec);
+    m_sheet->fullCellStorage()->setStyle(*this, style);
+    return true;
+}
+
+void PrecisionCommand::setDecrease(bool decrease)
+{
+    m_decrease = decrease;
+    if (!m_decrease)
+        setText(kundo2_i18n("Increase Precision"));
+    else
+        setText(kundo2_i18n("Decrease Precision"));
+}
+
 
 DefaultStyle::DefaultStyle(Actions *actions)
     : CellAction(actions, "setDefaultStyle", i18n("Default"), QIcon(), i18n("Resets to the default format"))

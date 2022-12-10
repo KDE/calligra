@@ -56,7 +56,6 @@ set (commands_DIR_SRCS
     commands/MergeCommand.cpp
     commands/NamedAreaCommand.cpp
     commands/PageBreakCommand.cpp
-    commands/PrecisionCommand.cpp
     commands/RowColumnManipulators.cpp
     commands/SheetCommands.cpp
     commands/SpellCheckCommand.cpp

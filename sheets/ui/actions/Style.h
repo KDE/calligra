@@ -11,6 +11,8 @@
 
 #include "CellAction.h"
 
+#include "ui/commands/AbstractRegionCommand.h"
+
 
 namespace Calligra
 {
@@ -131,6 +133,27 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
 
+class IncreasePrecision : public CellAction {
+Q_OBJECT
+public:
+    IncreasePrecision(Actions *actions);
+    virtual ~IncreasePrecision();
+
+protected:
+    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+};
+
+class DecreasePrecision : public CellAction {
+Q_OBJECT
+public:
+    DecreasePrecision(Actions *actions);
+    virtual ~DecreasePrecision();
+
+protected:
+    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+};
+
+
 class DefaultStyle : public CellAction {
 Q_OBJECT
 public:
@@ -143,9 +166,21 @@ protected:
 
 
 
+/**
+ * \ingroup Commands
+ * \brief Sets the decimal precision level.
+ */
+class PrecisionCommand : public AbstractRegionCommand
+{
+public:
+    PrecisionCommand();
 
+    void setDecrease(bool decrease);
 
-
+protected:
+    bool performCommands() override;
+    bool m_decrease  : 1;
+};
 
 
 

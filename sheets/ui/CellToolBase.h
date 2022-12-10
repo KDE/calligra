@@ -161,9 +161,6 @@ protected Q_SLOTS:
     void changeTextColor(const KoColor &);
     // -- border actions --
     void borderColor(const KoColor &);
-    // -- value format actions --
-    void increasePrecision();
-    void decreasePrecision();
     // -- misc style attribute actions --
     void changeBackgroundColor(const KoColor &);
     // -- cell insert/remove actions --

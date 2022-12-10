@@ -124,6 +124,8 @@ void Actions::createActions()
     addAction(new VerticalText(this));
     addAction(new IncreaseFontSize(this));
     addAction(new DecreaseFontSize(this));
+    addAction(new IncreasePrecision(this));
+    addAction(new DecreasePrecision(this));
     addAction(new PercentFormat(this));
     addAction(new MoneyFormat(this));
     addAction(new DefaultStyle(this));
