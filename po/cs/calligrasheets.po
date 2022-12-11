@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-05 00:46+0000\n"
+"POT-Creation-Date: 2022-12-11 00:47+0000\n"
 "PO-Revision-Date: 2022-06-27 14:46+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -870,7 +870,7 @@ msgstr "Číslo"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:162 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:161 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -928,7 +928,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") vrací 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:297 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:276 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Databáze"
@@ -12123,7 +12123,7 @@ msgstr "Aktivovat"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:187
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:186
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
@@ -13445,7 +13445,7 @@ msgstr ""
 "Chystáte se odstranit aktivní list.\n"
 "Přejete si pokračovat?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1310
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1289
 #, kde-format
 msgid "Enter name:"
 msgstr "Zadejte název:"
@@ -13505,12 +13505,12 @@ msgstr "PočetA"
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1384
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1363
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Změnit barvu textu"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1433
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1386
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Změnit barvu pozadí"
@@ -13522,478 +13522,443 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Změnit ohraničení"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:160
 #, kde-format
 msgid "Cell Format..."
 msgstr "Formát buňky..."
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:165
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Nastavit formátování buňky"
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Style Manager..."
 msgstr "Správce stylů..."
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr "Upravit a organizovat styly buněk"
 
-#: ui/CellToolBase.cpp:173 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:172 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "Styl"
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "Použít předdefinovaný styl na označené buňky"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:177
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "Vytvořit styl z buňky..."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:178
 #, kde-format
 msgid "Style From Cell"
 msgstr "Styl z buňky"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "Vytvořit nový styl na základě označené buňky"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:185
 #, kde-format
 msgid "Select Font..."
 msgstr "Vybrat písmo..."
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:190
 #, kde-format
 msgid "Select Font Size"
 msgstr "Vybrat velikost písma"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "Font Size"
 msgstr "Velikost písma"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:197
 #, kde-format
 msgid "Text Color"
 msgstr "Barva textu"
 
-#: ui/CellToolBase.cpp:199
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Set the text color"
 msgstr "Nastavit barvu textu"
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:206
 #, kde-format
 msgid "Select a new border color"
 msgstr "Vyberte novou barvu ohraničení"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Border Color"
 msgstr "Barva ohraničení"
 
-#: ui/CellToolBase.cpp:215
-#, kde-format
-msgid "Change Angle..."
-msgstr "Změnit úhel..."
-
 #: ui/CellToolBase.cpp:216
-#, kde-format
-msgid "Angle"
-msgstr "Úhel"
-
-#: ui/CellToolBase.cpp:219
-#, kde-format
-msgid "Change the angle that cell contents are printed"
-msgstr "Změnit úhel, pod kterým je obsah buňky tisknut"
-
-#: ui/CellToolBase.cpp:223
-#, kde-format
-msgid "Increase Precision"
-msgstr "Zvýšit přesnost"
-
-#: ui/CellToolBase.cpp:226
-#, kde-format
-msgid "Increase the decimal precision shown onscreen"
-msgstr "Zvětšit desetinnou přesnost zobrazenou na obrazovce"
-
-#: ui/CellToolBase.cpp:228
-#, kde-format
-msgid "Decrease Precision"
-msgstr "Snížit přesnost"
-
-#: ui/CellToolBase.cpp:231
-#, kde-format
-msgid "Decrease the decimal precision shown onscreen"
-msgstr "Zmenšit desetinnou přesnost zobrazenou na obrazovce"
-
-#: ui/CellToolBase.cpp:237
 #, kde-format
 msgid "Set the background color"
 msgstr "Nastavit barvu pozadí"
 
-#: ui/CellToolBase.cpp:238
+#: ui/CellToolBase.cpp:217
 #, kde-format
 msgid "Background Color"
 msgstr "Barva pozadí"
 
-#: ui/CellToolBase.cpp:244 ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:223 ui/CellToolBase.cpp:229
 #, kde-format
 msgid "Cells..."
 msgstr "Buňky..."
 
-#: ui/CellToolBase.cpp:245 ui/CellToolBase_p.cpp:1133
+#: ui/CellToolBase.cpp:224 ui/CellToolBase_p.cpp:1133
 #, kde-format
 msgid "Insert Cells..."
 msgstr "Vložit buňky..."
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "Vložit do sešitu prázdnou buňku"
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:230
 #, kde-format
 msgid "Remove Cells..."
 msgstr "Odstranit buňky..."
 
-#: ui/CellToolBase.cpp:252
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "Odstraní buňky ze sešitu"
 
-#: ui/CellToolBase.cpp:258 ui/CellToolBase.cpp:259
+#: ui/CellToolBase.cpp:237 ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Clear All"
 msgstr "Vyprázdnit vše"
 
-#: ui/CellToolBase.cpp:260
+#: ui/CellToolBase.cpp:239
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Smazat veškerý obsah a formátování současné buňky"
 
-#: ui/CellToolBase.cpp:264
+#: ui/CellToolBase.cpp:243
 #, kde-format
 msgid "Contents"
 msgstr "Obsah"
 
-#: ui/CellToolBase.cpp:265
+#: ui/CellToolBase.cpp:244
 #, kde-format
 msgid "Clear Contents"
 msgstr "Smazat obsah"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:245
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Odstranit obsah současné buňky"
 
-#: ui/CellToolBase.cpp:270
+#: ui/CellToolBase.cpp:249
 #, kde-format
 msgid "Conditional Styles..."
 msgstr "Podmíněné styly..."
 
-#: ui/CellToolBase.cpp:271
+#: ui/CellToolBase.cpp:250
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "Nastavit formát buňky podle určitých podmínek"
 
-#: ui/CellToolBase.cpp:275 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:254 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr "Podmíněné styly"
 
-#: ui/CellToolBase.cpp:276
+#: ui/CellToolBase.cpp:255
 #, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Odstranit podmíněné styly"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:256
 #, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Odstranit podmíněné styly buňky"
 
-#: ui/CellToolBase.cpp:283
+#: ui/CellToolBase.cpp:262
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "&Automatické vyplnění"
 
-#: ui/CellToolBase.cpp:286
+#: ui/CellToolBase.cpp:265
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:290
+#: ui/CellToolBase.cpp:269
 #, kde-format
 msgid "&Function..."
 msgstr "&Funkce..."
 
-#: ui/CellToolBase.cpp:293
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Insert math expression"
 msgstr "Vložit matematický výraz"
 
-#: ui/CellToolBase.cpp:296
+#: ui/CellToolBase.cpp:275
 #, kde-format
 msgid "From &Database..."
 msgstr "Z &databáze..."
 
-#: ui/CellToolBase.cpp:300
+#: ui/CellToolBase.cpp:279
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Vložit data z SQL databáze"
 
-#: ui/CellToolBase.cpp:303
+#: ui/CellToolBase.cpp:282
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Vlastní seznamy..."
 
-#: ui/CellToolBase.cpp:306
+#: ui/CellToolBase.cpp:285
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Vytvořit vlastní seznamy pro řazení nebo automatické vyplnění"
 
-#: ui/CellToolBase.cpp:308
+#: ui/CellToolBase.cpp:287
 #, kde-format
 msgid "&Consolidate..."
 msgstr "&Konsolidovat..."
 
-#: ui/CellToolBase.cpp:311
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "Create a region of summary data from a group of similar regions"
 msgstr "Vytvořit oblast se shrnutými daty ze skupiny podobných oblastí"
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:292
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Hledání cíle..."
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:295
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Opakování výpočtu k nalezení určité hodnoty"
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:297
 #, kde-format
 msgid "&Subtotals..."
 msgstr "&Mezisoučty..."
 
-#: ui/CellToolBase.cpp:321
+#: ui/CellToolBase.cpp:300
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
 msgstr "Vytvořit různé druhy mezisoučtů seznamu nebo databáze"
 
-#: ui/CellToolBase.cpp:323
+#: ui/CellToolBase.cpp:302
 #, kde-format
 msgid "&Pivot Tables..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:326
+#: ui/CellToolBase.cpp:305
 #, kde-format
 msgid "Create Pivot Tables"
 msgstr ""
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:307
 #, kde-format
 msgid "Formula Selection"
 msgstr "Výběr vzorce"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:309
 #, kde-format
 msgid "Insert a function"
 msgstr "Vložit funkci"
 
-#: ui/CellToolBase.cpp:331 ui/CellToolBase.cpp:1584
+#: ui/CellToolBase.cpp:310 ui/CellToolBase.cpp:1537
 #, kde-format
 msgid "Others..."
 msgstr "Jiné..."
 
-#: ui/CellToolBase.cpp:339
+#: ui/CellToolBase.cpp:318
 #, kde-format
 msgid "Modify Cell"
 msgstr "Upravit buňku"
 
-#: ui/CellToolBase.cpp:343
+#: ui/CellToolBase.cpp:322
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Upravit zvýrazněnou buňku"
 
-#: ui/CellToolBase.cpp:346
+#: ui/CellToolBase.cpp:325
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Přesunout obsah buňky do schránky"
 
-#: ui/CellToolBase.cpp:350
+#: ui/CellToolBase.cpp:329
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Kopírovat obsah buňky do schránky"
 
-#: ui/CellToolBase.cpp:354
+#: ui/CellToolBase.cpp:333
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Vložit obsah schránky na pozici kurzoru"
 
-#: ui/CellToolBase.cpp:357
+#: ui/CellToolBase.cpp:336
 #, kde-format
 msgid "Special Paste..."
 msgstr "Vložit jinak..."
 
-#: ui/CellToolBase.cpp:360
+#: ui/CellToolBase.cpp:339
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Vložit obsah schránky se speciálními volbami"
 
-#: ui/CellToolBase.cpp:362
+#: ui/CellToolBase.cpp:341
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Vložit se vsunutím"
 
-#: ui/CellToolBase.cpp:365
+#: ui/CellToolBase.cpp:344
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Vloží buňku ze schránky to tabulky."
 
-#: ui/CellToolBase.cpp:368
+#: ui/CellToolBase.cpp:347
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Vybrat všechny buňky v listu"
 
-#: ui/CellToolBase.cpp:385
+#: ui/CellToolBase.cpp:364
 #, kde-format
 msgid "Goto Cell..."
 msgstr "Přejít na buňku..."
 
-#: ui/CellToolBase.cpp:386
+#: ui/CellToolBase.cpp:365
 #, kde-format
 msgid "Goto"
 msgstr "Přejít na"
 
-#: ui/CellToolBase.cpp:390
+#: ui/CellToolBase.cpp:369
 #, kde-format
 msgid "Move to a particular cell"
 msgstr "Přesunout na určitou buňku"
 
-#: ui/CellToolBase.cpp:393
+#: ui/CellToolBase.cpp:372
 #, kde-format
 msgid "Check the spelling"
 msgstr "Zkontrolovat pravopis"
 
-#: ui/CellToolBase.cpp:396
+#: ui/CellToolBase.cpp:375
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Spustit inspektor..."
 
-#: ui/CellToolBase.cpp:402
+#: ui/CellToolBase.cpp:381
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Zobrazit QTableView..."
 
-#: ui/CellToolBase.cpp:408
+#: ui/CellToolBase.cpp:387
 #, kde-format
 msgid "Auto-Format..."
 msgstr "Automatický formát..."
 
-#: ui/CellToolBase.cpp:411
+#: ui/CellToolBase.cpp:390
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Nastavit formát pracovního listu"
 
-#: ui/CellToolBase.cpp:413
+#: ui/CellToolBase.cpp:392
 #, kde-format
 msgid "Document Settings..."
 msgstr "Nastavení dokumentu..."
 
-#: ui/CellToolBase.cpp:416
+#: ui/CellToolBase.cpp:395
 #, kde-format
 msgid "Show document settings dialog"
 msgstr ""
 
-#: ui/CellToolBase.cpp:418
+#: ui/CellToolBase.cpp:397
 #, kde-format
 msgid "Break Before Column"
 msgstr "Zalomit před sloupcem"
 
-#: ui/CellToolBase.cpp:421
+#: ui/CellToolBase.cpp:400
 #, kde-format
 msgid "Column Break"
 msgstr "Zalomení sloupce"
 
-#: ui/CellToolBase.cpp:422
+#: ui/CellToolBase.cpp:401
 #, kde-format
 msgid "Set a manual page break before the column"
 msgstr ""
 
-#: ui/CellToolBase.cpp:424
+#: ui/CellToolBase.cpp:403
 #, kde-format
 msgid "Break Before Row"
 msgstr "Zalomit před řádkem"
 
-#: ui/CellToolBase.cpp:427
+#: ui/CellToolBase.cpp:406
 #, kde-format
 msgid "Row Break"
 msgstr "Zalomení řádku"
 
-#: ui/CellToolBase.cpp:428
+#: ui/CellToolBase.cpp:407
 #, kde-format
 msgid "Set a manual page break before the row"
 msgstr ""
 
-#: ui/CellToolBase.cpp:432
+#: ui/CellToolBase.cpp:411
 #, kde-format
 msgid "Permute reference fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:436
+#: ui/CellToolBase.cpp:415
 #, kde-format
 msgid "Permute fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:437
+#: ui/CellToolBase.cpp:416
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1243
+#: ui/CellToolBase.cpp:1222
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1309
+#: ui/CellToolBase.cpp:1288
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "Vytvořit styl z buňky"
 
-#: ui/CellToolBase.cpp:1318
+#: ui/CellToolBase.cpp:1297
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "Název stylu nesmí být prázdný."
 
-#: ui/CellToolBase.cpp:1323 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1302 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "Styl s takovým jménem již existuje."
 
-#: ui/CellToolBase.cpp:1344 ui/CellToolBase.cpp:1364
+#: ui/CellToolBase.cpp:1323 ui/CellToolBase.cpp:1343
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Změnit písmo"
 
-#: ui/CellToolBase.cpp:1471
+#: ui/CellToolBase.cpp:1424
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Vymazat text"
 
-#: ui/CellToolBase.cpp:1525
+#: ui/CellToolBase.cpp:1478
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14002,12 +13967,12 @@ msgstr ""
 "Žádné databázové ovladače nejsou dostupné. Je třeba nainstalovat potřebné "
 "ovladače databáze Qt."
 
-#: ui/CellToolBase.cpp:1561 ui/CellToolBase.cpp:1573
+#: ui/CellToolBase.cpp:1514 ui/CellToolBase.cpp:1526
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Musíte vybrat několik buněk."
 
-#: ui/CellToolBase.cpp:2048
+#: ui/CellToolBase.cpp:2001
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Nahradit"
@@ -14371,16 +14336,6 @@ msgctxt "(qtundo-format)"
 msgid "Remove Named Area"
 msgstr "Odstranit pojmenovanou oblast"
 
-#: ui/commands/PrecisionCommand.cpp:45
-msgctxt "(qtundo-format)"
-msgid "Increase Precision"
-msgstr "Zvýšit přesnost"
-
-#: ui/commands/PrecisionCommand.cpp:47
-msgctxt "(qtundo-format)"
-msgid "Decrease Precision"
-msgstr "Snížit přesnost"
-
 #: ui/commands/RowColumnManipulators.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Resize Column"
@@ -14524,21 +14479,6 @@ msgstr "Resetovat styl"
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Změnit styl"
-
-#: ui/dialogs/AngleDialog.cpp:31
-#, kde-format
-msgid "Change Angle"
-msgstr "Změnit úhel"
-
-#: ui/dialogs/AngleDialog.cpp:42
-#, kde-format
-msgid "Angle:"
-msgstr "Úhel:"
-
-#: ui/dialogs/AngleDialog.cpp:65
-msgctxt "(qtundo-format)"
-msgid "Change Angle"
-msgstr "Změnit úhel"
 
 #: ui/dialogs/AutoFormatDialog.cpp:60
 #, kde-format
@@ -16642,6 +16582,45 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Otevřít odkaz?"
+
+#~ msgid "Change Angle..."
+#~ msgstr "Změnit úhel..."
+
+#~ msgid "Angle"
+#~ msgstr "Úhel"
+
+#~ msgid "Change the angle that cell contents are printed"
+#~ msgstr "Změnit úhel, pod kterým je obsah buňky tisknut"
+
+#~ msgid "Increase Precision"
+#~ msgstr "Zvýšit přesnost"
+
+#~ msgid "Increase the decimal precision shown onscreen"
+#~ msgstr "Zvětšit desetinnou přesnost zobrazenou na obrazovce"
+
+#~ msgid "Decrease Precision"
+#~ msgstr "Snížit přesnost"
+
+#~ msgid "Decrease the decimal precision shown onscreen"
+#~ msgstr "Zmenšit desetinnou přesnost zobrazenou na obrazovce"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Precision"
+#~ msgstr "Zvýšit přesnost"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Precision"
+#~ msgstr "Snížit přesnost"
+
+#~ msgid "Change Angle"
+#~ msgstr "Změnit úhel"
+
+#~ msgid "Angle:"
+#~ msgstr "Úhel:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Angle"
+#~ msgstr "Změnit úhel"
 
 #~ msgid "Area Name..."
 #~ msgstr "Název oblasti..."

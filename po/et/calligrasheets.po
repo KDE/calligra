@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-05 00:46+0000\n"
+"POT-Creation-Date: 2022-12-11 00:47+0000\n"
 "PO-Revision-Date: 2019-12-18 21:55+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -899,7 +899,7 @@ msgstr "Arv"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:162 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:161 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -956,7 +956,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") tagastab 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:297 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:276 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Andmebaas"
@@ -12806,7 +12806,7 @@ msgstr "Aktiveeri"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:187
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:186
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
@@ -14174,7 +14174,7 @@ msgstr ""
 "See eemaldaks aktiivse tabeli.\n"
 "Kas tahad jätkata?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1310
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1289
 #, kde-format
 msgid "Enter name:"
 msgstr "Sisesta nimi:"
@@ -14234,12 +14234,12 @@ msgstr "CountA: "
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1384
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1363
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Teksti värvi muutmine"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1433
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1386
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Tausta värvi muutmine"
@@ -14251,479 +14251,444 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Piirde muutmine"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:160
 #, kde-format
 msgid "Cell Format..."
 msgstr "Lahtri vorming..."
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:165
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Määra lahtri vorming"
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Style Manager..."
 msgstr "Stiilihaldur..."
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr "Muuda ja korralda lahtrite stiile"
 
-#: ui/CellToolBase.cpp:173 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:172 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "Stiil"
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "Rakenda olemasoleva stiil valitud lahtritele"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:177
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "Loo lahtri põhjal stiil..."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:178
 #, kde-format
 msgid "Style From Cell"
 msgstr "Stiil lahtri põhjal"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "Loo uus stiil parajasti valitud lahtri põhjal"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:185
 #, kde-format
 msgid "Select Font..."
 msgstr "Vali font..."
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:190
 #, kde-format
 msgid "Select Font Size"
 msgstr "Vali fondi suurus"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "Font Size"
 msgstr "Fondi suurus"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:197
 #, kde-format
 msgid "Text Color"
 msgstr "Teksti värv"
 
-#: ui/CellToolBase.cpp:199
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Set the text color"
 msgstr "Määrab teksti värvi"
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:206
 #, kde-format
 msgid "Select a new border color"
 msgstr "Valib uue piirde värvi"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Border Color"
 msgstr "Piirde värv"
 
-#: ui/CellToolBase.cpp:215
-#, kde-format
-msgid "Change Angle..."
-msgstr "Muuda nurka..."
-
 #: ui/CellToolBase.cpp:216
-#, kde-format
-msgid "Angle"
-msgstr "Nurk"
-
-#: ui/CellToolBase.cpp:219
-#, kde-format
-msgid "Change the angle that cell contents are printed"
-msgstr "Muudab nurka, mille all lahtri sisu kuvatakse"
-
-#: ui/CellToolBase.cpp:223
-#, kde-format
-msgid "Increase Precision"
-msgstr "Suurenda täpsust"
-
-#: ui/CellToolBase.cpp:226
-#, kde-format
-msgid "Increase the decimal precision shown onscreen"
-msgstr "Suurendab näidatavate kümnendkohtade arvu"
-
-#: ui/CellToolBase.cpp:228
-#, kde-format
-msgid "Decrease Precision"
-msgstr "Vähenda täpsust"
-
-#: ui/CellToolBase.cpp:231
-#, kde-format
-msgid "Decrease the decimal precision shown onscreen"
-msgstr "Vähendab näidatavate kümnendkohtade arvu"
-
-#: ui/CellToolBase.cpp:237
 #, kde-format
 msgid "Set the background color"
 msgstr "Määrab tausta värvi"
 
-#: ui/CellToolBase.cpp:238
+#: ui/CellToolBase.cpp:217
 #, kde-format
 msgid "Background Color"
 msgstr "Tausta värv"
 
-#: ui/CellToolBase.cpp:244 ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:223 ui/CellToolBase.cpp:229
 #, kde-format
 msgid "Cells..."
 msgstr "Lahtrid..."
 
-#: ui/CellToolBase.cpp:245 ui/CellToolBase_p.cpp:1133
+#: ui/CellToolBase.cpp:224 ui/CellToolBase_p.cpp:1133
 #, kde-format
 msgid "Insert Cells..."
 msgstr "Lisa lahtrid..."
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "Lisab tabelisse tühja lahtri"
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:230
 #, kde-format
 msgid "Remove Cells..."
 msgstr "Eemalda lahtrid..."
 
-#: ui/CellToolBase.cpp:252
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "Eemaldab aktiivse lahtri lehelt"
 
-#: ui/CellToolBase.cpp:258 ui/CellToolBase.cpp:259
+#: ui/CellToolBase.cpp:237 ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Clear All"
 msgstr "Puhasta kõik"
 
-#: ui/CellToolBase.cpp:260
+#: ui/CellToolBase.cpp:239
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Kustutab aktiivse lahtri kogu sisu ja vormingu"
 
-#: ui/CellToolBase.cpp:264
+#: ui/CellToolBase.cpp:243
 #, kde-format
 msgid "Contents"
 msgstr "Sisu"
 
-#: ui/CellToolBase.cpp:265
+#: ui/CellToolBase.cpp:244
 #, kde-format
 msgid "Clear Contents"
 msgstr "Puhasta sisu"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:245
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Eemaldab aktiivse lahtri sisu"
 
-#: ui/CellToolBase.cpp:270
+#: ui/CellToolBase.cpp:249
 #, kde-format
 msgid "Conditional Styles..."
 msgstr "Tingimuslikud lstiilid..."
 
-#: ui/CellToolBase.cpp:271
+#: ui/CellToolBase.cpp:250
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "Määrab lahtri stiili vastavalt teatud tingimustele"
 
-#: ui/CellToolBase.cpp:275 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:254 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr "Tingimuslikud stiilid"
 
-#: ui/CellToolBase.cpp:276
+#: ui/CellToolBase.cpp:255
 #, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Eemalda tingimuslikud stiilid"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:256
 #, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Eemaldab tingimuslikud lahtri stiilid"
 
-#: ui/CellToolBase.cpp:283
+#: ui/CellToolBase.cpp:262
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "&Automaatfilter"
 
-#: ui/CellToolBase.cpp:286
+#: ui/CellToolBase.cpp:265
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "Lisab lahtrite vahemikule automaatfiltri"
 
-#: ui/CellToolBase.cpp:290
+#: ui/CellToolBase.cpp:269
 #, kde-format
 msgid "&Function..."
 msgstr "&Funktsioon..."
 
-#: ui/CellToolBase.cpp:293
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Insert math expression"
 msgstr "Lisab matemaatilise avaldise"
 
-#: ui/CellToolBase.cpp:296
+#: ui/CellToolBase.cpp:275
 #, kde-format
 msgid "From &Database..."
 msgstr "An&dmebaasist..."
 
-#: ui/CellToolBase.cpp:300
+#: ui/CellToolBase.cpp:279
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Lisab andmed SQL-andmebaasist"
 
-#: ui/CellToolBase.cpp:303
+#: ui/CellToolBase.cpp:282
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Kohandatud nimekirjad..."
 
-#: ui/CellToolBase.cpp:306
+#: ui/CellToolBase.cpp:285
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Tekitab kohandatud nimekirjad sorteerimise või automaattäitmise jaoks"
 
-#: ui/CellToolBase.cpp:308
+#: ui/CellToolBase.cpp:287
 #, kde-format
 msgid "&Consolidate..."
 msgstr "&Konsolideeri..."
 
-#: ui/CellToolBase.cpp:311
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "Create a region of summary data from a group of similar regions"
 msgstr ""
 "Loob ala, mis sisaldab kokkuvõtvaid andmeid grupi või sarnase ala baasil"
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:292
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Sihtmärgi otsing..."
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:295
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Arvutust korratakse leidmaks määratud väärtust"
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:297
 #, kde-format
 msgid "&Subtotals..."
 msgstr "&Vahekokkuvõtted..."
 
-#: ui/CellToolBase.cpp:321
+#: ui/CellToolBase.cpp:300
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
 msgstr "Koostab erinevat liiki vahekokkuvõtteid nimekirja või andmebaasi jaoks"
 
-#: ui/CellToolBase.cpp:323
+#: ui/CellToolBase.cpp:302
 #, kde-format
 msgid "&Pivot Tables..."
 msgstr "&Risttabelid..."
 
-#: ui/CellToolBase.cpp:326
+#: ui/CellToolBase.cpp:305
 #, kde-format
 msgid "Create Pivot Tables"
 msgstr "Risttabeli loomine"
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:307
 #, kde-format
 msgid "Formula Selection"
 msgstr "Valemi valik"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:309
 #, kde-format
 msgid "Insert a function"
 msgstr "Lisab funktsiooni"
 
-#: ui/CellToolBase.cpp:331 ui/CellToolBase.cpp:1584
+#: ui/CellToolBase.cpp:310 ui/CellToolBase.cpp:1537
 #, kde-format
 msgid "Others..."
 msgstr "Teised..."
 
-#: ui/CellToolBase.cpp:339
+#: ui/CellToolBase.cpp:318
 #, kde-format
 msgid "Modify Cell"
 msgstr "Muuda lahtrit"
 
-#: ui/CellToolBase.cpp:343
+#: ui/CellToolBase.cpp:322
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Muudab esiletõstetud lahtrit"
 
-#: ui/CellToolBase.cpp:346
+#: ui/CellToolBase.cpp:325
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Liigutab lahtri objekti lõikepuhvrisse"
 
-#: ui/CellToolBase.cpp:350
+#: ui/CellToolBase.cpp:329
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Kopeerib lahtri objekti lõikepuhvrisse"
 
-#: ui/CellToolBase.cpp:354
+#: ui/CellToolBase.cpp:333
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Asetab lõikepuhvri sisu kursori kohale"
 
-#: ui/CellToolBase.cpp:357
+#: ui/CellToolBase.cpp:336
 #, kde-format
 msgid "Special Paste..."
 msgstr "Aseta valikuliselt"
 
-#: ui/CellToolBase.cpp:360
+#: ui/CellToolBase.cpp:339
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Asetab lõikepuhvri sisu erimääranguid kasutades"
 
-#: ui/CellToolBase.cpp:362
+#: ui/CellToolBase.cpp:341
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Aseta koos lisamisega"
 
-#: ui/CellToolBase.cpp:365
+#: ui/CellToolBase.cpp:344
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Tõstab lahtri lõikepuhvrist tabelisse"
 
-#: ui/CellToolBase.cpp:368
+#: ui/CellToolBase.cpp:347
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Valib kõik aktiivse lehe lahtrid"
 
-#: ui/CellToolBase.cpp:385
+#: ui/CellToolBase.cpp:364
 #, kde-format
 msgid "Goto Cell..."
 msgstr "Mine lahtrisse..."
 
-#: ui/CellToolBase.cpp:386
+#: ui/CellToolBase.cpp:365
 #, kde-format
 msgid "Goto"
 msgstr "Liikumine"
 
-#: ui/CellToolBase.cpp:390
+#: ui/CellToolBase.cpp:369
 #, kde-format
 msgid "Move to a particular cell"
 msgstr "Liigub määratud lahtrisse"
 
-#: ui/CellToolBase.cpp:393
+#: ui/CellToolBase.cpp:372
 #, kde-format
 msgid "Check the spelling"
 msgstr "Kontrollib õigekirja"
 
-#: ui/CellToolBase.cpp:396
+#: ui/CellToolBase.cpp:375
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Käivita inspektor..."
 
-#: ui/CellToolBase.cpp:402
+#: ui/CellToolBase.cpp:381
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Näita QTableView'd..."
 
-#: ui/CellToolBase.cpp:408
+#: ui/CellToolBase.cpp:387
 #, kde-format
 msgid "Auto-Format..."
 msgstr "Automaatvormindus..."
 
-#: ui/CellToolBase.cpp:411
+#: ui/CellToolBase.cpp:390
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Määrab tabeli vorminduse"
 
-#: ui/CellToolBase.cpp:413
+#: ui/CellToolBase.cpp:392
 #, kde-format
 msgid "Document Settings..."
 msgstr "Dokumendi seadistused..."
 
-#: ui/CellToolBase.cpp:416
+#: ui/CellToolBase.cpp:395
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Dokumendi seadistuste dialoogi näitamine"
 
-#: ui/CellToolBase.cpp:418
+#: ui/CellToolBase.cpp:397
 #, kde-format
 msgid "Break Before Column"
 msgstr "Katkestus veeru ees"
 
-#: ui/CellToolBase.cpp:421
+#: ui/CellToolBase.cpp:400
 #, kde-format
 msgid "Column Break"
 msgstr "Veeru katkestus"
 
-#: ui/CellToolBase.cpp:422
+#: ui/CellToolBase.cpp:401
 #, kde-format
 msgid "Set a manual page break before the column"
 msgstr "Käsitsi lehekülje katkestuse määramine veeru ette"
 
-#: ui/CellToolBase.cpp:424
+#: ui/CellToolBase.cpp:403
 #, kde-format
 msgid "Break Before Row"
 msgstr "Katkestus rea ees"
 
-#: ui/CellToolBase.cpp:427
+#: ui/CellToolBase.cpp:406
 #, kde-format
 msgid "Row Break"
 msgstr "Rea katkestus"
 
-#: ui/CellToolBase.cpp:428
+#: ui/CellToolBase.cpp:407
 #, kde-format
 msgid "Set a manual page break before the row"
 msgstr "Käsitsi lehekülje katkestuse määramine rea ette"
 
-#: ui/CellToolBase.cpp:432
+#: ui/CellToolBase.cpp:411
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Keri võimalikud viited läbi"
 
-#: ui/CellToolBase.cpp:436
+#: ui/CellToolBase.cpp:415
 #, kde-format
 msgid "Permute fixation"
 msgstr "Keri viited läbi"
 
-#: ui/CellToolBase.cpp:437
+#: ui/CellToolBase.cpp:416
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Tekstikursori juures asuva viite variantide läbikerimine"
 
-#: ui/CellToolBase.cpp:1243
+#: ui/CellToolBase.cpp:1222
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1309
+#: ui/CellToolBase.cpp:1288
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "Lahtri põhjal stiili loomine"
 
-#: ui/CellToolBase.cpp:1318
+#: ui/CellToolBase.cpp:1297
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "Stiil ei saa olla nimeta."
 
-#: ui/CellToolBase.cpp:1323 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1302 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "Selle nimega stiil on juba olemas."
 
-#: ui/CellToolBase.cpp:1344 ui/CellToolBase.cpp:1364
+#: ui/CellToolBase.cpp:1323 ui/CellToolBase.cpp:1343
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Fondi muutmine"
 
-#: ui/CellToolBase.cpp:1471
+#: ui/CellToolBase.cpp:1424
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Teksti puhastamine"
 
-#: ui/CellToolBase.cpp:1525
+#: ui/CellToolBase.cpp:1478
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14732,12 +14697,12 @@ msgstr ""
 "Andmebaasidraivereid pole saada. Selleks tuleb Qt kompileerida vajalike "
 "draiveritega."
 
-#: ui/CellToolBase.cpp:1561 ui/CellToolBase.cpp:1573
+#: ui/CellToolBase.cpp:1514 ui/CellToolBase.cpp:1526
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Valida tuleb mitu lahtrit."
 
-#: ui/CellToolBase.cpp:2048
+#: ui/CellToolBase.cpp:2001
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Asenda"
@@ -15102,16 +15067,6 @@ msgctxt "(qtundo-format)"
 msgid "Remove Named Area"
 msgstr "Eemalda nimega ala"
 
-#: ui/commands/PrecisionCommand.cpp:45
-msgctxt "(qtundo-format)"
-msgid "Increase Precision"
-msgstr "Suurenda täpsust"
-
-#: ui/commands/PrecisionCommand.cpp:47
-msgctxt "(qtundo-format)"
-msgid "Decrease Precision"
-msgstr "Vähenda täpsust"
-
 #: ui/commands/RowColumnManipulators.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Resize Column"
@@ -15255,21 +15210,6 @@ msgstr "Lähtesta stiil"
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Muuda stiili"
-
-#: ui/dialogs/AngleDialog.cpp:31
-#, kde-format
-msgid "Change Angle"
-msgstr "Muuda nurka"
-
-#: ui/dialogs/AngleDialog.cpp:42
-#, kde-format
-msgid "Angle:"
-msgstr "Nurk:"
-
-#: ui/dialogs/AngleDialog.cpp:65
-msgctxt "(qtundo-format)"
-msgid "Change Angle"
-msgstr "Muuda nurka"
 
 #: ui/dialogs/AutoFormatDialog.cpp:60
 #, kde-format
@@ -17492,6 +17432,45 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Kas avada link?"
+
+#~ msgid "Change Angle..."
+#~ msgstr "Muuda nurka..."
+
+#~ msgid "Angle"
+#~ msgstr "Nurk"
+
+#~ msgid "Change the angle that cell contents are printed"
+#~ msgstr "Muudab nurka, mille all lahtri sisu kuvatakse"
+
+#~ msgid "Increase Precision"
+#~ msgstr "Suurenda täpsust"
+
+#~ msgid "Increase the decimal precision shown onscreen"
+#~ msgstr "Suurendab näidatavate kümnendkohtade arvu"
+
+#~ msgid "Decrease Precision"
+#~ msgstr "Vähenda täpsust"
+
+#~ msgid "Decrease the decimal precision shown onscreen"
+#~ msgstr "Vähendab näidatavate kümnendkohtade arvu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Precision"
+#~ msgstr "Suurenda täpsust"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Precision"
+#~ msgstr "Vähenda täpsust"
+
+#~ msgid "Change Angle"
+#~ msgstr "Muuda nurka"
+
+#~ msgid "Angle:"
+#~ msgstr "Nurk:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Angle"
+#~ msgstr "Muuda nurka"
 
 #~ msgid "Area Name..."
 #~ msgstr "Ala nimi..."
