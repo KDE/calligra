@@ -166,9 +166,9 @@ void InsertFromClipboard::execute(Selection *selection, Sheet *sheet, QWidget *c
         }
 
         QRect range = selection->lastRange();
-        if (numCols < range.width())
+        if (numCols != range.width())
             range.setRight(range.left() + numCols - 1);
-        if (numRows < range.height())
+        if (numRows != range.height())
             range.setBottom(range.top() + numRows - 1);
 
         CSVDataCommand* command = new CSVDataCommand();
@@ -250,9 +250,9 @@ void TextToColumns::execute(Selection *selection, Sheet *sheet, QWidget *canvasW
         }
 
         QRect range = selection->lastRange();
-        if (numCols < range.width())
+        if (numCols != range.width())
             range.setRight(range.left() + numCols - 1);
-        if (numRows < range.height())
+        if (numRows != range.height())
             range.setBottom(range.top() + numRows - 1);
 
         CSVDataCommand* command = new CSVDataCommand();
