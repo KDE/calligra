@@ -61,7 +61,6 @@
 // dialogs
 #include "dialogs/AutoFormatDialog.h"
 #include "dialogs/ConditionalDialog.h"
-#include "dialogs/ConsolidateDialog.h"
 #include "dialogs/DatabaseDialog.h"
 #include "dialogs/DocumentSettingsDialog.h"
 #include "dialogs/GoalSeekDialog.h"
@@ -283,11 +282,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("sortList", action);
     connect(action, &QAction::triggered, this, &CellToolBase::sortList);
     action->setToolTip(i18n("Create custom lists for sorting or autofill"));
-
-    action = new QAction(i18n("&Consolidate..."), this);
-    addAction("consolidate", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::consolidate);
-    action->setToolTip(i18n("Create a region of summary data from a group of similar regions"));
 
     action = new QAction(i18n("&Goal Seek..."), this);
     addAction("goalSeek", action);
@@ -1491,13 +1485,6 @@ void CellToolBase::sortList()
     QPointer<ListDialog> dialog = new ListDialog(canvas()->canvasWidget());
     dialog->exec();
     delete dialog;
-}
-
-void CellToolBase::consolidate()
-{
-    selection()->emitCloseEditor(true);
-    ConsolidateDialog * dialog = new ConsolidateDialog(canvas()->canvasWidget(), selection());
-    dialog->show(); // dialog deletes itself later
 }
 
 void CellToolBase::goalSeek()

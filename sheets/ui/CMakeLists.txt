@@ -8,6 +8,7 @@ set (actions_DIR_SRCS
     actions/AutoSum.cpp
     actions/Border.cpp
     actions/Comment.cpp
+    actions/Consolidate.cpp
     actions/CSVActions.cpp
     actions/Fill.cpp
     actions/Indent.cpp
@@ -27,6 +28,7 @@ set (action_dialogs_DIR_SRCS
     actions/dialogs/AngleDialog.cpp
     actions/dialogs/CharacterSelectDialog.cpp
     actions/dialogs/CommentDialog.cpp
+    actions/dialogs/ConsolidateDialog.cpp
     actions/dialogs/CSVDialog.cpp
     actions/dialogs/LinkDialog.cpp
     actions/dialogs/NamedAreaDialog.cpp
@@ -38,6 +40,8 @@ set (action_dialogs_DIR_SRCS
     )
 
 ki18n_wrap_ui(action_dialogs_DIR_SRCS
+    actions/dialogs/ConsolidateWidget.ui
+    actions/dialogs/ConsolidateDetailsWidget.ui
     actions/dialogs/SortWidget.ui
     actions/dialogs/SortDetailsWidget.ui
     )
@@ -68,7 +72,6 @@ set (commands_DIR_SRCS
 set (dialogs_DIR_SRCS
     dialogs/AutoFormatDialog.cpp
     dialogs/ConditionalDialog.cpp
-    dialogs/ConsolidateDialog.cpp
     dialogs/DatabaseDialog.cpp
     dialogs/DocumentSettingsDialog.cpp
     dialogs/FindDialog.cpp
@@ -99,8 +102,6 @@ set (dialogs_DIR_SRCS
 
 
 ki18n_wrap_ui(dialogs_DIR_SRCS
-    dialogs/ConsolidateWidget.ui
-    dialogs/ConsolidateDetailsWidget.ui
     dialogs/FontWidget.ui
     dialogs/GoalSeekWidget.ui
     dialogs/PositionWidget.ui

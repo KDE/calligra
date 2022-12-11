@@ -18,6 +18,8 @@
 
 #include <KoDialog.h>
 
+#include "engine/Region.h"
+
 namespace Calligra
 {
 namespace Sheets
@@ -44,6 +46,15 @@ class ConsolidateDialog : public KoDialog
 public:
     ConsolidateDialog(QWidget* parent, Selection* selection);
     ~ConsolidateDialog() override;
+
+    QList<Region> sourceRegions() const;
+    Region targetRegion() const;
+    QString function() const;
+    bool rowHeaders() const;
+    bool colHeaders() const;
+
+Q_SIGNALS:
+    void applyChange();
 
 public Q_SLOTS:
     void accept() override;

@@ -12,6 +12,7 @@
 #include "AutoSum.h"
 #include "Border.h"
 #include "Comment.h"
+#include "Consolidate.h"
 #include "CSVActions.h"
 #include "Fill.h"
 #include "Indent.h"
@@ -84,6 +85,8 @@ void Actions::createActions()
     // Comment
     addAction(new Comment(this));
     addAction(new ClearComment(this));
+    // Consolidate
+    addAction(new Consolidate(this));
     // CSVActions
     addAction(new InsertFromFile(this));
     addAction(new InsertFromClipboard(this));

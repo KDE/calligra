@@ -177,7 +177,6 @@ protected Q_SLOTS:
     void insertFormula();
     void insertFromDatabase();
     void sortList();
-    void consolidate();
     void goalSeek();
     void subtotals();
     void pivot();
