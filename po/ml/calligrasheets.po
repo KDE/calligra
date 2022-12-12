@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-11 00:47+0000\n"
+"POT-Creation-Date: 2022-12-12 00:47+0000\n"
 "PO-Revision-Date: 2008-12-29 20:21-0500\n"
 "Last-Translator: Manu S Madhav <manusmad@gmail.com>\n"
 "Language-Team: SMC <smc.org.in>\n"
@@ -871,7 +871,7 @@ msgstr "അക്കം"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:161 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:160 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -926,7 +926,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") 99 നല്‍കുന്നു"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:276 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:275 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "വിവരസംഭരണി"
@@ -12308,7 +12308,7 @@ msgstr "സജീവ ഷീറ്റ്"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:186
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:185
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
@@ -12794,8 +12794,7 @@ msgstr "ഒന്നുമില്ല"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/ConsolidateDialog.cpp:76 ui/dialogs/pivotsubtotals.ui:38
-#: ui/dialogs/SubtotalDialog.cpp:267
+#: ui/dialogs/pivotsubtotals.ui:38 ui/dialogs/SubtotalDialog.cpp:267
 #, fuzzy, kde-format
 #| msgid "Sun"
 msgid "Sum"
@@ -12803,8 +12802,7 @@ msgstr "സൂര്യന്‍"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/ConsolidateDialog.cpp:80 ui/dialogs/pivotsubtotals.ui:58
-#: ui/dialogs/SubtotalDialog.cpp:263
+#: ui/dialogs/pivotsubtotals.ui:58 ui/dialogs/SubtotalDialog.cpp:263
 #, fuzzy, kde-format
 #| msgid "Mon"
 msgid "Min"
@@ -12812,8 +12810,7 @@ msgstr "Mon"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/ConsolidateDialog.cpp:79 ui/dialogs/pivotsubtotals.ui:53
-#: ui/dialogs/SubtotalDialog.cpp:262
+#: ui/dialogs/pivotsubtotals.ui:53 ui/dialogs/SubtotalDialog.cpp:262
 #, fuzzy, kde-format
 #| msgid "May"
 msgid "Max"
@@ -12821,16 +12818,14 @@ msgstr "മേയ്"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/ConsolidateDialog.cpp:77 ui/dialogs/pivotsubtotals.ui:48
-#: ui/dialogs/SubtotalDialog.cpp:259
+#: ui/dialogs/pivotsubtotals.ui:48 ui/dialogs/SubtotalDialog.cpp:259
 #, kde-format
 msgid "Average"
 msgstr "ശരാശരി"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/ConsolidateDialog.cpp:78 ui/dialogs/pivotsubtotals.ui:43
-#: ui/dialogs/SubtotalDialog.cpp:260
+#: ui/dialogs/pivotsubtotals.ui:43 ui/dialogs/SubtotalDialog.cpp:260
 #, kde-format
 msgid "Count"
 msgstr "എണ്ണം"
@@ -13690,7 +13685,7 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1289
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1283
 #, kde-format
 msgid "Enter name:"
 msgstr "പേരു് നല്‍കുക:"
@@ -13752,13 +13747,13 @@ msgstr "എണ്ണം: "
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1363
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1357
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "വ്യത്യാസങ്ങള്‍ പ്രാബല്യത്തില്‍ വരാന്‍."
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1386
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1380
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
@@ -13772,483 +13767,472 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "പ്രൊഫൈല്‍ _മാറ്റുക"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Cell Format..."
 msgstr "കളം ഫോര്‍മാറ്റ്..."
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:164
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "സമയ മേഖല ഉറപ്പിക്കുക: "
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 msgid "Style Manager..."
 msgstr "വോള്യം മാനേജര്‍"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr ""
 
-#: ui/CellToolBase.cpp:172 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:171 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "ശൈലി"
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 #| msgid "Create a new style based on the currently selected cell"
 msgid "Apply a predefined style to the selected cells"
 msgstr "ഇപ്പോള്‍ തെരഞ്ഞെടുത്തിരിക്കുന്ന കളത്തെ അടിസ്ഥാനമാക്കി പുതിയ ശൈലിയുണ്ടാക്കുക"
 
-#: ui/CellToolBase.cpp:177
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "കളത്തില്‍നിന്നു ശൈലി സൃഷ്ടിക്കുക..."
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:177
 #, kde-format
 msgid "Style From Cell"
 msgstr "കളത്തില്‍നിന്നും ശൈലി"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:180
 #, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "ഇപ്പോള്‍ തെരഞ്ഞെടുത്തിരിക്കുന്ന കളത്തെ അടിസ്ഥാനമാക്കി പുതിയ ശൈലിയുണ്ടാക്കുക"
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:184
 #, fuzzy, kde-format
 msgid "Select Font..."
 msgstr "ഒരു അറ തെരഞ്ഞെടുക്കുക"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:189
 #, fuzzy, kde-format
 msgid "Select Font Size"
 msgstr "തുടങ്ങാന്‍ തിരഞ്ഞെടുത്ത് പുറത്ത് കടക്കുക."
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:190
 #, kde-format
 msgid "Font Size"
 msgstr "അക്ഷരസഞ്ചയ വലിപ്പം"
 
-#: ui/CellToolBase.cpp:197
+#: ui/CellToolBase.cpp:196
 #, kde-format
 msgid "Text Color"
 msgstr "പദാവലി നിറം"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:197
 #, fuzzy, kde-format
 msgid "Set the text color"
 msgstr "സമയ മേഖല ഉറപ്പിക്കുക: "
 
-#: ui/CellToolBase.cpp:206
+#: ui/CellToolBase.cpp:205
 #, fuzzy, kde-format
 msgid "Select a new border color"
 msgstr "വ്യത്യാസങ്ങള്‍ പ്രാബല്യത്തില്‍ വരാന്‍."
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:206
 #, fuzzy, kde-format
 msgid "Border Color"
 msgstr "വ്യത്യാസങ്ങള്‍ പ്രാബല്യത്തില്‍ വരാന്‍."
 
-#: ui/CellToolBase.cpp:216
+#: ui/CellToolBase.cpp:215
 #, fuzzy, kde-format
 msgid "Set the background color"
 msgstr "സമയ മേഖല ഉറപ്പിക്കുക: "
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:216
 #, kde-format
 msgid "Background Color"
 msgstr "പശ്ചാത്തലനിറം"
 
-#: ui/CellToolBase.cpp:223 ui/CellToolBase.cpp:229
+#: ui/CellToolBase.cpp:222 ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Cells..."
 msgstr "കളങ്ങള്‍..."
 
-#: ui/CellToolBase.cpp:224 ui/CellToolBase_p.cpp:1133
+#: ui/CellToolBase.cpp:223 ui/CellToolBase_p.cpp:1133
 #, kde-format
 msgid "Insert Cells..."
 msgstr "കളങ്ങള്‍ ചേര്‍ക്കുക..."
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:224
 #, fuzzy, kde-format
 #| msgid "Insert a new sheet"
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "ഒരു പുതിയ ഷീറ്റ് ചേര്‍ക്കുക"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:229
 #, kde-format
 msgid "Remove Cells..."
 msgstr "കളങ്ങള്‍ നീക്കം ചെയ്യുക..."
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:230
 #, fuzzy, kde-format
 #| msgid "Remove this cell's comment"
 msgid "Removes the cells from the spreadsheet"
 msgstr "ഈ കളത്തിന്റെ കമന്റ് നീക്കം ചെയ്യുക"
 
-#: ui/CellToolBase.cpp:237 ui/CellToolBase.cpp:238
+#: ui/CellToolBase.cpp:236 ui/CellToolBase.cpp:237
 #, kde-format
 msgid "Clear All"
 msgstr "എല്ലാം തുടച്ചുനീക്കുക"
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "ഈ കളത്തിന്റെ ഉള്ളടക്കങ്ങളും ഫോര്‍മാറ്റിങ്ങും വൃത്തിയാക്കുക"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:242
 #, kde-format
 msgid "Contents"
 msgstr "ഉള്ളടക്കങ്ങള്‍"
 
-#: ui/CellToolBase.cpp:244
+#: ui/CellToolBase.cpp:243
 #, kde-format
 msgid "Clear Contents"
 msgstr "ഉള്ളടക്കങ്ങള്‍ വൃത്തിയാക്കുക"
 
-#: ui/CellToolBase.cpp:245
+#: ui/CellToolBase.cpp:244
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "ഈ കളത്തിന്റെ ഉള്ളടക്കങ്ങള്‍ നീക്കം ചെയ്യുക"
 
-#: ui/CellToolBase.cpp:249
+#: ui/CellToolBase.cpp:248
 #, fuzzy, kde-format
 #| msgid "Condition"
 msgid "Conditional Styles..."
 msgstr "അവസ്ഥ"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:249
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr ""
 
-#: ui/CellToolBase.cpp:254 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:253 ui/dialogs/ConditionalDialog.cpp:242
 #, fuzzy, kde-format
 #| msgid "Condition"
 msgid "Conditional Styles"
 msgstr "അവസ്ഥ"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:254
 #, fuzzy, kde-format
 #| msgid "Condition"
 msgid "Remove Conditional Styles"
 msgstr "അവസ്ഥ"
 
-#: ui/CellToolBase.cpp:256
+#: ui/CellToolBase.cpp:255
 #, fuzzy, kde-format
 #| msgid "Move to the last sheet"
 msgid "Remove the conditional cell styles"
 msgstr "അവസാനത്തെ ഷീറ്റിലേക്കു് നീങ്ങുക"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:261
 #, fuzzy, kde-format
 msgid "&Auto-Filter"
 msgstr "ഓട്ടോ-ഓപ്പണ്‍ ഉറപ്പു് വരുത്തുക"
 
-#: ui/CellToolBase.cpp:265
+#: ui/CellToolBase.cpp:264
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:268
 #, kde-format
 msgid "&Function..."
 msgstr "&ഫങ്ഷന്‍..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:271
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "രഹസ്യ രീതിയില്‍ പ്രവര്‍ത്തിപ്പിയ്ക്കുക"
 
-#: ui/CellToolBase.cpp:275
+#: ui/CellToolBase.cpp:274
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "സി.ഡിയില്‍ നിന്നും ഓഡിയോ കംപ്യൂട്ടറിലേയ്ക്കു് പകര്‍ത്തുന്നു"
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:278
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "സി.ഡിയില്‍ നിന്നും ഓഡിയോ കംപ്യൂട്ടറിലേയ്ക്കു് പകര്‍ത്തുന്നു"
 
-#: ui/CellToolBase.cpp:282
+#: ui/CellToolBase.cpp:281
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "പ്രിയ ജാലകം"
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:284
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:287
-#, fuzzy, kde-format
-#| msgid "Mongolia"
-msgid "&Consolidate..."
-msgstr "മംഗോളിയ"
-
-#: ui/CellToolBase.cpp:290
-#, kde-format
-msgid "Create a region of summary data from a group of similar regions"
-msgstr ""
-
-#: ui/CellToolBase.cpp:292
+#: ui/CellToolBase.cpp:286
 #, fuzzy, kde-format
 #| msgid "Goal Seek"
 msgid "&Goal Seek..."
 msgstr "ഗോള്‍ തെരയുക"
 
-#: ui/CellToolBase.cpp:295
+#: ui/CellToolBase.cpp:289
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:297
+#: ui/CellToolBase.cpp:291
 #, fuzzy, kde-format
 #| msgid "Subtotal"
 msgid "&Subtotals..."
 msgstr "മൊത്തം"
 
-#: ui/CellToolBase.cpp:300
+#: ui/CellToolBase.cpp:294
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
 msgstr ""
 
-#: ui/CellToolBase.cpp:302
+#: ui/CellToolBase.cpp:296
 #, fuzzy, kde-format
 #| msgid "Subtotal"
 msgid "&Pivot Tables..."
 msgstr "മൊത്തം"
 
-#: ui/CellToolBase.cpp:305
+#: ui/CellToolBase.cpp:299
 #, kde-format
 msgid "Create Pivot Tables"
 msgstr ""
 
-#: ui/CellToolBase.cpp:307
+#: ui/CellToolBase.cpp:301
 #, kde-format
 msgid "Formula Selection"
 msgstr "ഫോര്‍മുല തെരഞ്ഞെടുക്കല്‍"
 
-#: ui/CellToolBase.cpp:309
+#: ui/CellToolBase.cpp:303
 #, kde-format
 msgid "Insert a function"
 msgstr "ഫങ്ഷന്‍ ചേര്‍ക്കുക"
 
-#: ui/CellToolBase.cpp:310 ui/CellToolBase.cpp:1537
+#: ui/CellToolBase.cpp:304 ui/CellToolBase.cpp:1524
 #, kde-format
 msgid "Others..."
 msgstr "മറ്റുള്ളവ..."
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:312
 #, kde-format
 msgid "Modify Cell"
 msgstr "കളത്തില്‍ മാറ്റം വരുത്തുക"
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:316
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "_വീഡിയോ ഘടിപ്പിയ്ക്കുമ്പോള്‍ എഡിറ്റ് ചെയ്യുക"
 
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:319
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "കളവസ്തു ക്ലിപ്ബോര്‍ഡിലേക്കു് നീക്കുക"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:323
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "കളവസ്തു ക്ലിപ്ബോര്‍ഡിലേക്കു് പകര്‍ത്തുക"
 
-#: ui/CellToolBase.cpp:333
+#: ui/CellToolBase.cpp:327
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "ക്ലിപ്ബോര്‍ഡിന്റെ ഉള്ളടക്കങ്ങള്‍ കഴ്സറുള്ളിടത്തു് ഒട്ടിക്കുക"
 
-#: ui/CellToolBase.cpp:336
+#: ui/CellToolBase.cpp:330
 #, kde-format
 msgid "Special Paste..."
 msgstr "പ്രത്യേക ഒട്ടിപ്പു്..."
 
-#: ui/CellToolBase.cpp:339
+#: ui/CellToolBase.cpp:333
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "ക്ലിപ്ബോര്‍ഡിന്റെ ഉള്ളടക്കങ്ങള്‍ പ്രത്യേക ഐച്ഛികങ്ങളോടുകൂടി ഒട്ടിക്കുക"
 
-#: ui/CellToolBase.cpp:341
+#: ui/CellToolBase.cpp:335
 #, fuzzy, kde-format
 msgid "Paste with Insertion"
 msgstr "ഇതേ പേരുള്ള ഒരു ഫയല്‍ നിലവിലുണ്ട്"
 
-#: ui/CellToolBase.cpp:344
+#: ui/CellToolBase.cpp:338
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "ക്ലിപ്ബോര്‍ഡിന്റെ ഉള്ളടക്കങ്ങള്‍ കഴ്സറുള്ളിടത്തു് ഒട്ടിക്കുക"
 
-#: ui/CellToolBase.cpp:347
+#: ui/CellToolBase.cpp:341
 #, fuzzy, kde-format
 #| msgid "Select all sheets"
 msgid "Selects all cells in the current sheet"
 msgstr "എല്ലാ ഷീറ്റുകളും തെരഞ്ഞെടുക്കുക"
 
-#: ui/CellToolBase.cpp:364
+#: ui/CellToolBase.cpp:358
 #, kde-format
 msgid "Goto Cell..."
 msgstr "കളത്തിലേക്കു് പോവുക..."
 
-#: ui/CellToolBase.cpp:365
+#: ui/CellToolBase.cpp:359
 #, fuzzy, kde-format
 #| msgid "Goto Cell"
 msgid "Goto"
 msgstr "കളത്തിലേക്കു് പോകുക"
 
-#: ui/CellToolBase.cpp:369
+#: ui/CellToolBase.cpp:363
 #, fuzzy, kde-format
 msgid "Move to a particular cell"
 msgstr "എല്ലാം ചവറ്റുകുട്ടയിലേക്കു് നീക്കുക"
 
-#: ui/CellToolBase.cpp:372
+#: ui/CellToolBase.cpp:366
 #, fuzzy, kde-format
 msgid "Check the spelling"
 msgstr "പരിശോധന ബിറ്റ്"
 
-#: ui/CellToolBase.cpp:375
+#: ui/CellToolBase.cpp:369
 #, fuzzy, kde-format
 msgid "Run Inspector..."
 msgstr "ഓട്ടോ-റണ്‍ ഉറപ്പു് വരുത്തുക"
 
-#: ui/CellToolBase.cpp:381
+#: ui/CellToolBase.cpp:375
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "ഷീറ്റ് കാണിക്കുക..."
 
-#: ui/CellToolBase.cpp:387
+#: ui/CellToolBase.cpp:381
 #, kde-format
 msgid "Auto-Format..."
 msgstr "സ്വയം-ഫോര്‍മാറ്റ്:"
 
-#: ui/CellToolBase.cpp:390
+#: ui/CellToolBase.cpp:384
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "സമയ മേഖല ഉറപ്പിക്കുക: "
 
-#: ui/CellToolBase.cpp:392
+#: ui/CellToolBase.cpp:386
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "സെറ്റ് UI ലോക്കലെ (Set UI Locale): "
 
-#: ui/CellToolBase.cpp:395
+#: ui/CellToolBase.cpp:389
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "വെബ്കാം ഡിവൈസ് സ്ട്രിങ് സൂചകം"
 
-#: ui/CellToolBase.cpp:397
+#: ui/CellToolBase.cpp:391
 #, fuzzy, kde-format
 #| msgid "Remove Columns"
 msgid "Break Before Column"
 msgstr "നിരകള്‍ നീക്കം ചെയ്യുക"
 
-#: ui/CellToolBase.cpp:400
+#: ui/CellToolBase.cpp:394
 #, fuzzy, kde-format
 #| msgid "Column Header"
 msgid "Column Break"
 msgstr "നിര തലക്കെട്ടു്"
 
-#: ui/CellToolBase.cpp:401
+#: ui/CellToolBase.cpp:395
 #, kde-format
 msgid "Set a manual page break before the column"
 msgstr ""
 
-#: ui/CellToolBase.cpp:403
+#: ui/CellToolBase.cpp:397
 #, fuzzy, kde-format
 #| msgid "Remove Columns"
 msgid "Break Before Row"
 msgstr "നിരകള്‍ നീക്കം ചെയ്യുക"
 
-#: ui/CellToolBase.cpp:406
+#: ui/CellToolBase.cpp:400
 #, fuzzy, kde-format
 #| msgid "Row Header"
 msgid "Row Break"
 msgstr "വരി തലക്കെട്ടു്"
 
-#: ui/CellToolBase.cpp:407
+#: ui/CellToolBase.cpp:401
 #, kde-format
 msgid "Set a manual page break before the row"
 msgstr ""
 
-#: ui/CellToolBase.cpp:411
+#: ui/CellToolBase.cpp:405
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "സുരക്ഷിതത്വം"
 
-#: ui/CellToolBase.cpp:415
+#: ui/CellToolBase.cpp:409
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "സുരക്ഷിതത്വം"
 
-#: ui/CellToolBase.cpp:416
+#: ui/CellToolBase.cpp:410
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "ക്ലിപ്ബോര്‍ഡിന്റെ ഉള്ളടക്കങ്ങള്‍ കഴ്സറുള്ളിടത്തു് ഒട്ടിക്കുക"
 
-#: ui/CellToolBase.cpp:1222
+#: ui/CellToolBase.cpp:1216
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1288
+#: ui/CellToolBase.cpp:1282
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "കളത്തില്‍നിന്നു ശൈലി സൃഷ്ടിക്കുക"
 
-#: ui/CellToolBase.cpp:1297
+#: ui/CellToolBase.cpp:1291
 #, fuzzy, kde-format
 #| msgid "The style name can not be empty."
 msgid "The style name cannot be empty."
 msgstr "ശൈലീനാമം ശുന്യമാകാന്‍ പാടില്ല."
 
-#: ui/CellToolBase.cpp:1302 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1296 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "ഈ പേരുള്ള ഒരു ശൈലി ഇപ്പോഴേയുണ്ടു്"
 
-#: ui/CellToolBase.cpp:1323 ui/CellToolBase.cpp:1343
+#: ui/CellToolBase.cpp:1317 ui/CellToolBase.cpp:1337
 #, fuzzy
 #| msgid "Change Font"
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "അക്ഷരസഞ്ചയം മാറ്റുക"
 
-#: ui/CellToolBase.cpp:1424
+#: ui/CellToolBase.cpp:1418
 #, fuzzy
 #| msgid "Clear Text"
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "പദാവലി വൃത്തിയാക്കുക"
 
-#: ui/CellToolBase.cpp:1478
+#: ui/CellToolBase.cpp:1472
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1514 ui/CellToolBase.cpp:1526
+#: ui/CellToolBase.cpp:1501 ui/CellToolBase.cpp:1513
 #, fuzzy, kde-format
 #| msgid "Select Multiple Cells"
 msgid "You must select multiple cells."
 msgstr "അനവധി കളങ്ങള്‍ തെരഞ്ഞെടുക്കുക"
 
-#: ui/CellToolBase.cpp:2001
+#: ui/CellToolBase.cpp:1988
 #, fuzzy
 #| msgid "September"
 msgctxt "(qtundo-format)"
@@ -14968,144 +14952,6 @@ msgstr ""
 msgid ""
 "If the first value is a string, the second value also has to be a string."
 msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_rowHeader)
-#: ui/dialogs/ConsolidateDetailsWidget.ui:35
-#, fuzzy, kde-format
-msgid "Description in rows"
-msgstr "രഹസ്യ രീതിയില്‍ പ്രവര്‍ത്തിപ്പിയ്ക്കുക"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_columnHeader)
-#: ui/dialogs/ConsolidateDetailsWidget.ui:42
-#, fuzzy, kde-format
-msgid "Description in columns"
-msgstr "രഹസ്യ രീതിയില്‍ പ്രവര്‍ത്തിപ്പിയ്ക്കുക"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_copyData)
-#: ui/dialogs/ConsolidateDetailsWidget.ui:49
-#, fuzzy, kde-format
-#| msgid "Co&py data"
-msgid "Copy data"
-msgstr "ഡാറ്റ &പകര്‍ത്തുക"
-
-#: ui/dialogs/ConsolidateDialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Mongolia"
-msgid "Consolidate"
-msgstr "മംഗോളിയ"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/ConsolidateDialog.cpp:81 ui/dialogs/pivotsubtotals.ui:63
-#: ui/dialogs/SubtotalDialog.cpp:264
-#, kde-format
-msgid "Product"
-msgstr ""
-
-#: ui/dialogs/ConsolidateDialog.cpp:82
-#, fuzzy, kde-format
-msgid "Standard Deviation"
-msgstr ": സാധാരണ ഉല്‍ക്കാപതന തോത്"
-
-#: ui/dialogs/ConsolidateDialog.cpp:83
-#, fuzzy, kde-format
-#| msgid "France"
-msgid "Variance"
-msgstr "ഫ്രാന്‍സ്"
-
-#: ui/dialogs/ConsolidateDialog.cpp:105
-#, kde-format
-msgid "You have to define at least one source range."
-msgstr ""
-
-#: ui/dialogs/ConsolidateDialog.cpp:124
-#, kde-format
-msgid "%1 is not a valid cell range."
-msgstr ""
-
-#: ui/dialogs/ConsolidateDialog.cpp:147
-#, kde-format
-msgid ""
-"The range\n"
-"%1\n"
-"is too small"
-msgstr ""
-"പരിധി\n"
-"%1\n"
-"വളരെ കുറവാണു്"
-
-#: ui/dialogs/ConsolidateDialog.cpp:153 ui/dialogs/ConsolidateDialog.cpp:164
-#, kde-format
-msgid ""
-"The range\n"
-"%1\n"
-"is too large"
-msgstr ""
-"പരിധി\n"
-"%1\n"
-"വളരെ കൂടുതലാണു്"
-
-#: ui/dialogs/ConsolidateDialog.cpp:175
-#, kde-format
-msgid ""
-"The ranges\n"
-"%1\n"
-"and\n"
-"%2\n"
-"have different size"
-msgstr ""
-
-#: ui/dialogs/ConsolidateDialog.cpp:182
-#, fuzzy
-#| msgid "Mongolia"
-msgctxt "(qtundo-format)"
-msgid "Consolidate"
-msgstr "മംഗോളിയ"
-
-#: ui/dialogs/ConsolidateDialog.cpp:194 ui/dialogs/ConsolidateDialog.cpp:248
-#: ui/dialogs/ConsolidateDialog.cpp:303 ui/dialogs/ConsolidateDialog.cpp:374
-#, kde-format
-msgid "The source range intersects the destination range."
-msgstr ""
-
-#: ui/dialogs/ConsolidateDialog.cpp:469
-#, fuzzy, kde-format
-msgid ""
-"The range\n"
-"%1\n"
-" is malformed"
-msgstr "സമയത്തിന്റെ വേഗത ഇപ്പോള്‍ x"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/ConsolidateWidget.ui:35
-#, fuzzy, kde-format
-#| msgid "&Function:"
-msgid "Function:"
-msgstr "&ഫങ്ഷന്‍:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/ConsolidateWidget.ui:48
-#, fuzzy, kde-format
-msgid "Reference:"
-msgstr "ഡിസ്ക് _വീണ്ടും വായിക്കുക"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/ConsolidateWidget.ui:61
-#, fuzzy, kde-format
-msgid "Entered references:"
-msgstr "നക്ഷത്രനിരീക്ഷണാലയത്തിന്റെ പേര് ടൈപ്പ് ചെയ്യുക"
-
-#. i18n: ectx: property (text), widget (QPushButton, m_addButton)
-#: ui/dialogs/ConsolidateWidget.ui:73 ui/dialogs/ListDialog.cpp:70
-#, kde-format
-msgid "Add"
-msgstr "കൂട്ടിച്ചേര്‍ക്കുക"
-
-#. i18n: ectx: property (text), widget (QPushButton, m_removeButton)
-#: ui/dialogs/ConsolidateWidget.ui:80 ui/dialogs/InsertDialog.cpp:51
-#: ui/dialogs/ListDialog.cpp:81
-#, kde-format
-msgid "Remove"
-msgstr "നീക്കം ചെയ്യുക"
 
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, fuzzy, kde-format
@@ -15879,6 +15725,11 @@ msgstr "നിരകള്‍ ചേര്‍ക്കുക"
 msgid "Insert Cells"
 msgstr "കളങ്ങള്‍ ചേര്‍ക്കുക"
 
+#: ui/dialogs/InsertDialog.cpp:51 ui/dialogs/ListDialog.cpp:81
+#, kde-format
+msgid "Remove"
+msgstr "നീക്കം ചെയ്യുക"
+
 #: ui/dialogs/InsertDialog.cpp:52
 #, kde-format
 msgid "Move towards left"
@@ -16244,6 +16095,11 @@ msgstr "പട്ടിക:"
 msgid "Entry:"
 msgstr "എന്‍ട്രി:"
 
+#: ui/dialogs/ListDialog.cpp:70
+#, kde-format
+msgid "Add"
+msgstr "കൂട്ടിച്ചേര്‍ക്കുക"
+
 #: ui/dialogs/ListDialog.cpp:74 ui/ExternalEditor.cpp:61
 #, kde-format
 msgid "Cancel"
@@ -16482,6 +16338,12 @@ msgstr "അടിസ്ഥാനം"
 #| msgid "Fill Selection"
 msgid "Manual Selection"
 msgstr "തെരഞ്ഞെടുത്തതു് നിറയ്ക്കുക"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
+#: ui/dialogs/pivotsubtotals.ui:63 ui/dialogs/SubtotalDialog.cpp:264
+#, kde-format
+msgid "Product"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, SortBy)
 #: ui/dialogs/pivotsubtotals.ui:73
@@ -16976,6 +16838,82 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "കണ്ണി തുറക്കട്ടെ?"
+
+#, fuzzy
+#~| msgid "Mongolia"
+#~ msgid "&Consolidate..."
+#~ msgstr "മംഗോളിയ"
+
+#, fuzzy
+#~ msgid "Description in rows"
+#~ msgstr "രഹസ്യ രീതിയില്‍ പ്രവര്‍ത്തിപ്പിയ്ക്കുക"
+
+#, fuzzy
+#~ msgid "Description in columns"
+#~ msgstr "രഹസ്യ രീതിയില്‍ പ്രവര്‍ത്തിപ്പിയ്ക്കുക"
+
+#, fuzzy
+#~| msgid "Co&py data"
+#~ msgid "Copy data"
+#~ msgstr "ഡാറ്റ &പകര്‍ത്തുക"
+
+#, fuzzy
+#~| msgid "Mongolia"
+#~ msgid "Consolidate"
+#~ msgstr "മംഗോളിയ"
+
+#, fuzzy
+#~ msgid "Standard Deviation"
+#~ msgstr ": സാധാരണ ഉല്‍ക്കാപതന തോത്"
+
+#, fuzzy
+#~| msgid "France"
+#~ msgid "Variance"
+#~ msgstr "ഫ്രാന്‍സ്"
+
+#~ msgid ""
+#~ "The range\n"
+#~ "%1\n"
+#~ "is too small"
+#~ msgstr ""
+#~ "പരിധി\n"
+#~ "%1\n"
+#~ "വളരെ കുറവാണു്"
+
+#~ msgid ""
+#~ "The range\n"
+#~ "%1\n"
+#~ "is too large"
+#~ msgstr ""
+#~ "പരിധി\n"
+#~ "%1\n"
+#~ "വളരെ കൂടുതലാണു്"
+
+#, fuzzy
+#~| msgid "Mongolia"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Consolidate"
+#~ msgstr "മംഗോളിയ"
+
+#, fuzzy
+#~ msgid ""
+#~ "The range\n"
+#~ "%1\n"
+#~ " is malformed"
+#~ msgstr "സമയത്തിന്റെ വേഗത ഇപ്പോള്‍ x"
+
+#, fuzzy
+#~| msgid "&Function:"
+#~ msgid "Function:"
+#~ msgstr "&ഫങ്ഷന്‍:"
+
+#, fuzzy
+#~ msgid "Reference:"
+#~ msgstr "ഡിസ്ക് _വീണ്ടും വായിക്കുക"
+
+#, fuzzy
+#~ msgid "Entered references:"
+#~ msgstr "നക്ഷത്രനിരീക്ഷണാലയത്തിന്റെ പേര് ടൈപ്പ് ചെയ്യുക"
 
 #~ msgid "Change Angle..."
 #~ msgstr "കോണ്‍ മാറ്റുക..."
