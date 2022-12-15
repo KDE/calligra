@@ -16100,6 +16100,12 @@ msgstr ""
 msgid "Open Link?"
 msgstr ""
 
+#~ msgid "Angle"
+#~ msgstr "კუთხე"
+
+#~ msgid "Angle:"
+#~ msgstr "კუთხე:"
+
 #~ msgid "Variance"
 #~ msgstr "ცვალებადობა"
 
@@ -16108,12 +16114,6 @@ msgstr ""
 
 #~ msgid "Reference:"
 #~ msgstr "მიბმა:"
-
-#~ msgid "Angle"
-#~ msgstr "კუთხე"
-
-#~ msgid "Angle:"
-#~ msgstr "კუთხე:"
 
 #~ msgid "&Select"
 #~ msgstr "&მონიშნული"

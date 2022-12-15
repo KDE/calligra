@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-12 00:47+0000\n"
-"PO-Revision-Date: 2022-12-11 21:29+0100\n"
+"PO-Revision-Date: 2022-12-14 12:28+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -320,7 +320,7 @@ msgstr "#NAME?"
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
-msgstr ""
+msgstr "#NUM!"
 
 #: engine/Value.cpp:645
 #, kde-format
@@ -3843,7 +3843,7 @@ msgstr ""
 #: functions/financial.xml:1080
 #, kde-format
 msgid "Yield"
-msgstr ""
+msgstr "Rendimento"
 
 #: functions/financial.xml:464 functions/financial.xml:781
 #: functions/financial.xml:928 functions/financial.xml:971
@@ -4298,7 +4298,7 @@ msgstr ""
 #: functions/financial.xml:842
 #, kde-format
 msgid "Payment"
-msgstr ""
+msgstr "Pagamento"
 
 #: functions/financial.xml:850 functions/financial.xml:999
 #, kde-format
@@ -7253,7 +7253,7 @@ msgstr ""
 #: functions/math.xml:1250 functions/math.xml:1285
 #, kde-format
 msgid "Matrix"
-msgstr ""
+msgstr "Matrix"
 
 #: functions/math.xml:1254
 #, kde-format
@@ -12719,7 +12719,7 @@ msgstr "Cela columna "
 #: part/Headers.cpp:232 part/Headers.cpp:732
 #, kde-format
 msgid "Area is too large."
-msgstr ""
+msgstr "Area es troppo grande."
 
 #: part/PrintJob.cpp:87
 #, kde-format
@@ -12884,7 +12884,7 @@ msgstr "&Crea patrono ex documento..."
 #: part/View.cpp:314
 #, kde-format
 msgid "Anchor"
-msgstr ""
+msgstr "Ancora"
 
 #: part/View.cpp:315 part/View.cpp:1084 part/View.cpp:1544
 #, kde-format

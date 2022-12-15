@@ -1,21 +1,21 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Giovanni Sora <g.sora@tiscali.it>, 2013, 2020.
+# Giovanni Sora <g.sora@tiscali.it>, 2013, 2020, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-12-20 00:43+0000\n"
-"PO-Revision-Date: 2020-02-10 22:11+0100\n"
-"Last-Translator: Giovanni Sora <g.sora@tiscali.it>\n"
+"PO-Revision-Date: 2022-12-14 12:29+0100\n"
+"Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:25
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:20
@@ -241,14 +241,14 @@ msgstr ""
 #: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:22
 #, kde-format
 msgid "Cb"
-msgstr ""
+msgstr "Cb"
 
 #: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:27
 #: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:22
 #: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:23
 #, kde-format
 msgid "Cr"
-msgstr ""
+msgstr "Cr"
 
 #: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.h:74
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-13 00:46+0000\n"
-"PO-Revision-Date: 2022-12-06 06:07+0100\n"
+"PO-Revision-Date: 2022-12-14 18:11+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1709,7 +1709,7 @@ msgstr "სახელი უკვე გამოიყენება."
 #: main/KoTemplateCreateDia.cpp:452
 #, kde-format
 msgid "Do you really want to remove that group?"
-msgstr ""
+msgstr "ნამდვილად გნებავთ ამ ჯგუფის წაშლა?"
 
 #: main/KoTemplateCreateDia.cpp:453
 #, kde-format
@@ -2594,7 +2594,7 @@ msgstr "გამრავლება"
 #: pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
 msgid "Alpha mask"
-msgstr ""
+msgstr "ალფას ნიღაბი"
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:250
 #: pigment/colorspaces/KoLabColorSpace.cpp:34
@@ -2915,19 +2915,19 @@ msgstr ""
 #: pigment/KoCompositeOpRegistry.cpp:84
 #, kde-format
 msgid "Copy Red"
-msgstr ""
+msgstr "წითლის კოპირება"
 
 #: pigment/compositeops/KoCompositeOps.h:166
 #: pigment/KoCompositeOpRegistry.cpp:85
 #, kde-format
 msgid "Copy Green"
-msgstr ""
+msgstr "მწვანის კოპირება"
 
 #: pigment/compositeops/KoCompositeOps.h:167
 #: pigment/KoCompositeOpRegistry.cpp:86
 #, kde-format
 msgid "Copy Blue"
-msgstr ""
+msgstr "ლურჯის კოპირება"
 
 #: pigment/compositeops/KoCompositeOps.h:168
 #: pigment/KoCompositeOpRegistry.cpp:88
@@ -5042,7 +5042,7 @@ msgstr ""
 #: widgets/KoRuler.cpp:1266
 #, kde-format
 msgid "First line indent"
-msgstr ""
+msgstr "პირველი ხაზის შეწევა"
 
 #: widgets/KoRuler.cpp:1267
 #, kde-format
