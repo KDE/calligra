@@ -200,7 +200,6 @@ find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
     ItemViews
     JobWidgets
     KCMUtils
-    KDELibs4Support
     KIO
     Kross
     Notifications

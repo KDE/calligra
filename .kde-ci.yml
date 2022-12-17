@@ -21,7 +21,6 @@ Dependencies:
     'frameworks/kitemviews': '@latest'
     'frameworks/kjobwidgets': '@latest'
     'frameworks/kcmutils': '@latest'
-    'frameworks/kdelibs4support': '@latest'
     'frameworks/kio': '@latest'
     'frameworks/kross': '@latest'
     'frameworks/knotifications': '@latest'
