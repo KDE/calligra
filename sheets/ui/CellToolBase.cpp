@@ -380,18 +380,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::documentSettingsDialog);
     action->setToolTip(i18n("Show document settings dialog"));
 
-    action = new KToggleAction(i18n("Break Before Column"), this);
-    addAction("format_break_before_column", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::breakBeforeColumn);
-    action->setIconText(i18n("Column Break"));
-    action->setToolTip(i18n("Set a manual page break before the column"));
-
-    action = new KToggleAction(i18n("Break Before Row"), this);
-    addAction("format_break_before_row", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::breakBeforeRow);
-    action->setIconText(i18n("Row Break"));
-    action->setToolTip(i18n("Set a manual page break before the row"));
-
     // Editor actions:
     // Set up the permutation of the reference fixations action.
     action = new QAction(i18n("Permute reference fixation"), this);
@@ -862,28 +850,6 @@ void CellToolBase::selectionChanged(const Region& region)
         focusEditorRequested();
         return;
     }
-
-    // State of manual page breaks before columns/rows.
-    bool columnBreakChecked = false;
-    bool columnBreakEnabled = false;
-    bool rowBreakChecked = false;
-    bool rowBreakEnabled = false;
-    const Region::ConstIterator end(selection()->constEnd());
-    for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it) {
-        const Sheet *const sheet = dynamic_cast<Sheet *>((*it)->sheet());
-        if (!sheet) continue;
-        const QRect range = (*it)->rect();
-        const int column = range.left();
-        const int row = range.top();
-        columnBreakChecked |= sheet->columnFormats()->hasPageBreak(column);
-        columnBreakEnabled |= (column != 1);
-        rowBreakChecked |= sheet->rowFormats()->hasPageBreak(row);
-        rowBreakEnabled |= (row != 1);
-    }
-    action("format_break_before_column")->setChecked(columnBreakChecked);
-    action("format_break_before_column")->setEnabled(columnBreakEnabled);
-    action("format_break_before_row")->setChecked(rowBreakChecked);
-    action("format_break_before_row")->setEnabled(rowBreakEnabled);
 
     const Cell cell = Cell(selection()->activeSheet(), selection()->cursor());
     if (!cell) {
@@ -2152,26 +2118,6 @@ void CellToolBase::documentSettingsDialog()
     QPointer<DocumentSettingsDialog> dialog = new DocumentSettingsDialog(selection(), canvas()->canvasWidget());
     dialog->exec();
     delete dialog;
-}
-
-void CellToolBase::breakBeforeColumn(bool enable)
-{
-    PageBreakCommand *command = new PageBreakCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setMode(PageBreakCommand::BreakBeforeColumn);
-    command->setBreak(enable);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::breakBeforeRow(bool enable)
-{
-    PageBreakCommand *command = new PageBreakCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setMode(PageBreakCommand::BreakBeforeRow);
-    command->setBreak(enable);
-    command->add(*selection());
-    command->execute(canvas());
 }
 
 void CellToolBase::setExternalEditor(Calligra::Sheets::ExternalEditor *editor)

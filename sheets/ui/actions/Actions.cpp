@@ -22,6 +22,7 @@
 #include "Link.h"
 #include "Merge.h"
 #include "NamedAreas.h"
+#include "PageBreak.h"
 #include "Sort.h"
 #include "Style.h"
 #include "TextCase.h"
@@ -117,6 +118,9 @@ void Actions::createActions()
     // NamedAreas
     addAction(new AddNamedArea(this));
     addAction(new ManageNamedAreas(this));
+    // PageBreak
+    addAction(new PageBreakColumn(this));
+    addAction(new PageBreakRow(this));
     // Sort
     addAction(new Sort(this));
     addAction(new SortInc(this));
