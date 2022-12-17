@@ -14,13 +14,12 @@
 
 #include <KoDialog.h>
 
-class KComboBox;
+class QComboBox;
 
 namespace Calligra
 {
 namespace Sheets
 {
-class Selection;
 
 /**
  * \ingroup UI
@@ -30,16 +29,18 @@ class GotoDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    GotoDialog(QWidget* parent, Selection* selection);
+    GotoDialog(QWidget* parent, const QList<QString> &choices);
 
+Q_SIGNALS:
+    void gotoCell(const QString &);
 public Q_SLOTS:
-    void slotOk();
+    void slotClose();
+    void slotApply();
     void textChanged(const QString &_text);
 
 
 protected:
-    Selection* m_selection;
-    KComboBox* m_nameCell;
+    QComboBox *m_nameCell;
 };
 
 } // namespace Sheets

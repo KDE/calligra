@@ -115,7 +115,6 @@ void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
 
     // These actions are always enabled.
     q->action("copy")->setEnabled(true);
-    q->action("gotoCell")->setEnabled(true);
     q->action("edit_find")->setEnabled(true);
     q->action("edit_find_next")->setEnabled(true);
     q->action("edit_find_last")->setEnabled(true);

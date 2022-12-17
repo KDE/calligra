@@ -205,7 +205,6 @@ protected Q_SLOTS:
     void slotReplace(const QString &newText, int, int, int);
     Cell nextFindValidCell(int col, int row);
     // -- misc actions --
-    void gotoCell();
     void spellCheck();
     void inspector();
     void qTableView();

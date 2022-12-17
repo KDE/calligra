@@ -87,6 +87,7 @@ void AddNamedArea::execute(Selection *selection, Sheet *sheet, QWidget *canvasWi
 
 ManageNamedAreas::ManageNamedAreas(Actions *actions)
     : CellAction(actions, "namedAreaDialog", i18n("Named Areas..."), koIcon("bookmarks"), i18n("Edit or select named areas"))
+    , m_dlg(nullptr)
 {
 }
 

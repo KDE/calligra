@@ -64,7 +64,6 @@
 #include "dialogs/DatabaseDialog.h"
 #include "dialogs/DocumentSettingsDialog.h"
 #include "dialogs/GoalSeekDialog.h"
-#include "dialogs/GotoDialog.h"
 #include "dialogs/InsertDialog.h"
 #include "dialogs/LayoutDialog.h"
 #include "dialogs/ListDialog.h"
@@ -354,13 +353,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("edit_replace", action);
 
     // -- misc actions --
-
-    action = new QAction(koIcon("go-jump"), i18n("Goto Cell..."), this);
-    action->setIconText(i18n("Goto"));
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_G));
-    addAction("gotoCell", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::gotoCell);
-    action->setToolTip(i18n("Move to a particular cell"));
 
     action = KStandardAction::spelling(this, SLOT(spellCheck()), this);
     action->setToolTip(i18n("Check the spelling"));
@@ -2029,14 +2021,6 @@ void CellToolBase::slotReplace(const QString &newText, int, int, int)
         command->setSheet(d->searchInSheets.currentSheet);
         command->add(Region(d->findPos, d->searchInSheets.currentSheet));
     }
-}
-
-void CellToolBase::gotoCell()
-{
-    QPointer<GotoDialog> dialog = new GotoDialog(canvas()->canvasWidget(), selection());
-    dialog->exec();
-    delete dialog;
-    scrollToCell(selection()->cursor());
 }
 
 void CellToolBase::spellCheck()

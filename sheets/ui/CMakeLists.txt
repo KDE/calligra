@@ -11,6 +11,7 @@ set (actions_DIR_SRCS
     actions/Consolidate.cpp
     actions/CSVActions.cpp
     actions/Fill.cpp
+    actions/Goto.cpp
     actions/Indent.cpp
     actions/InsertSeries.cpp
     actions/InsertSpecialChar.cpp
@@ -30,6 +31,7 @@ set (action_dialogs_DIR_SRCS
     actions/dialogs/CommentDialog.cpp
     actions/dialogs/ConsolidateDialog.cpp
     actions/dialogs/CSVDialog.cpp
+    actions/dialogs/GotoDialog.cpp
     actions/dialogs/LinkDialog.cpp
     actions/dialogs/NamedAreaDialog.cpp
     actions/dialogs/Resize2Dialog.cpp
@@ -77,7 +79,6 @@ set (dialogs_DIR_SRCS
     dialogs/FindDialog.cpp
     dialogs/FormulaDialog.cpp
     dialogs/GoalSeekDialog.cpp
-    dialogs/GotoDialog.cpp
     dialogs/InsertDialog.cpp
     dialogs/LayoutWidgets.cpp
     dialogs/LayoutPage_Border.cpp
