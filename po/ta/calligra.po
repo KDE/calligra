@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:46+0000\n"
+"POT-Creation-Date: 2022-12-21 00:46+0000\n"
 "PO-Revision-Date: 2021-01-18 19:22+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -815,14 +815,14 @@ msgstr "மறுபடி செய்: %1"
 msgid "<empty>"
 msgstr ""
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1522
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1476
 #: main/KoUndoStackAction.cpp:33
 #, fuzzy, kde-format
 #| msgid "Red"
 msgid "Redo"
 msgstr "சிவப்பு"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1521
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1475
 #: main/KoUndoStackAction.cpp:25
 #, fuzzy, kde-format
 #| msgid "Undo: %1"
@@ -1344,13 +1344,13 @@ msgid ""
 "an old version."
 msgstr ""
 
-#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2554 main/KoMainWindow.cpp:1227
+#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2548 main/KoDocument.cpp:2577
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "தலைப்பில்லாதது"
 
-#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1230
+#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1408,7 +1408,7 @@ msgstr "சார்ட்ரியுஸ்"
 msgid "a drawing"
 msgstr "கரும் ஆரஞ்சு"
 
-#: main/KoDocument.cpp:2558
+#: main/KoDocument.cpp:2581
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1420,7 +1420,7 @@ msgstr ""
 "<p>ஆவணம் <b>'%1'</b> மாற்றியமைக்கப்பட்டுள்ளது.</p><p>நீங்கள் இதை சேமிக்க "
 "விரும்புகிறீர்களா?</p>"
 
-#: main/KoDocument.cpp:2560
+#: main/KoDocument.cpp:2583
 #, fuzzy, kde-format
 #| msgid "Create Document"
 msgid "Close Document"
@@ -1587,7 +1587,7 @@ msgstr "திருத்தப் பாதுகாப்பு"
 msgid "Save as %1"
 msgstr "வெளிர் பச்சை"
 
-#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:388
+#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:390
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (தெரியாத கோப்பு வகை)"
@@ -1625,43 +1625,43 @@ msgstr "ஏற்றுமதியை உறுதிசெய்"
 msgid "Export"
 msgstr "ஏற்றுமதி..."
 
-#: main/KoMainWindow.cpp:964
+#: main/KoMainWindow.cpp:969
 #, kde-format
 msgid "untitled"
 msgstr "தலைப்பில்லாதது"
 
-#: main/KoMainWindow.cpp:1292
+#: main/KoMainWindow.cpp:1245
 #, kde-format
 msgid "Open Document"
 msgstr "ஆவணத்தை திற "
 
-#: main/KoMainWindow.cpp:1301 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1254 pageapp/KoPAView.cpp:524
 #, kde-format
 msgid "Import Document"
 msgstr "ஆவணத்தை இறக்கு"
 
-#: main/KoMainWindow.cpp:1465
+#: main/KoMainWindow.cpp:1419
 #, fuzzy, kde-format
 #| msgid "E&xport..."
 msgid "Export as PDF"
 msgstr "ஏற்றுமதி..."
 
-#: main/KoMainWindow.cpp:1502
+#: main/KoMainWindow.cpp:1456
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1701 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
 #, fuzzy, kde-format
 msgid "Document"
 msgstr "ஆவணத்தை திற "
 
-#: main/KoMainWindow.cpp:1709
+#: main/KoMainWindow.cpp:1663
 #, fuzzy, kde-format
 msgid "Document - %1"
 msgstr "ஆவண தலைப்பு"
 
-#: main/KoMainWindow.cpp:1746
+#: main/KoMainWindow.cpp:1700
 #, fuzzy, kde-format
 #| msgid ""
 #| "You will lose all your changes!\n"
@@ -1673,17 +1673,17 @@ msgstr ""
 "நீங்கள் மாற்றம் செய்தவையை இழக்க நேரிடும்!\n"
 "உங்களுக்கு தொடர வேண்டுமா?"
 
-#: main/KoMainWindow.cpp:1748
+#: main/KoMainWindow.cpp:1702
 #, fuzzy, kde-format
 msgid "Warning"
 msgstr "கரும் ஆரஞ்சு"
 
-#: main/KoMainWindow.cpp:2113
+#: main/KoMainWindow.cpp:2067
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1 கருவிப்பட்டையை காட்டு"
 
-#: main/KoMainWindow.cpp:2115
+#: main/KoMainWindow.cpp:2069
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "கருவிப்பட்டி %1 யை மறை"
@@ -4920,19 +4920,19 @@ msgstr ""
 msgid "This document does not support encryption"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:351
+#: widgets/KoDocumentInfoDlg.cpp:352
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:353
+#: widgets/KoDocumentInfoDlg.cpp:354
 #, fuzzy, kde-format
 msgid "Confirm Decrypt"
 msgstr "ஏற்றுமதியை உறுதிசெய்"
 
-#: widgets/KoDocumentInfoDlg.cpp:354
+#: widgets/KoDocumentInfoDlg.cpp:355
 #, fuzzy, kde-format
 msgid "Decrypt"
 msgstr "விவரிப்பு:"
@@ -4945,7 +4945,7 @@ msgid ""
 msgstr ""
 
 #: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
-#: widgets/KoDocumentInfoDlg.cpp:409 widgets/KoDocumentInfoDlg.cpp:417
+#: widgets/KoDocumentInfoDlg.cpp:411 widgets/KoDocumentInfoDlg.cpp:419
 #, fuzzy, kde-format
 msgid "Save Document"
 msgstr "ஆவணத்தை சேமி .."
@@ -4953,12 +4953,11 @@ msgstr "ஆவணத்தை சேமி .."
 #: widgets/KoDocumentInfoDlg.cpp:373
 #, kde-format
 msgid ""
-"<qt>The document has been changed since it was opened. To complete the "
-"decryption the document needs to be saved.<p>Do you want to save the "
-"document now?</qt>"
+"<qt>To complete the decryption the document needs to be saved.<p>Do you want "
+"to save the document now?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:391
+#: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4966,24 +4965,24 @@ msgid ""
 "file to OASIS OpenDocument?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:393
+#: widgets/KoDocumentInfoDlg.cpp:395
 #, fuzzy, kde-format
 msgid "Change Filetype"
 msgstr "பட்டியல் வகையை மாற்று"
 
-#: widgets/KoDocumentInfoDlg.cpp:394
+#: widgets/KoDocumentInfoDlg.cpp:396
 #, fuzzy, kde-format
 msgid "Change"
 msgstr "எழுத்துவகையை மாற்று"
 
-#: widgets/KoDocumentInfoDlg.cpp:407
+#: widgets/KoDocumentInfoDlg.cpp:409
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "encryption, please save the document.</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:415
+#: widgets/KoDocumentInfoDlg.cpp:417
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "
@@ -5695,7 +5694,7 @@ msgstr "முடிவு"
 msgid "Zoom to All"
 msgstr "முடிவு"
 
-#: widgetutils/KoFileDialog.cpp:463
+#: widgetutils/KoFileDialog.cpp:454
 #, kde-format
 msgid "All supported formats"
 msgstr ""

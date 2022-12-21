@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:46+0000\n"
+"POT-Creation-Date: 2022-12-21 00:46+0000\n"
 "PO-Revision-Date: 2015-09-21 15:03+0800\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -762,13 +762,13 @@ msgstr "重做 %1"
 msgid "<empty>"
 msgstr "空白"
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1522
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1476
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "重做"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1521
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1475
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1270,13 +1270,13 @@ msgid ""
 "an old version."
 msgstr "文件 <i>%1</i> 包含了幾個版本。請到「檔案」─「版本」中去開啟舊的版本。"
 
-#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2554 main/KoMainWindow.cpp:1227
+#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2548 main/KoDocument.cpp:2577
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "未命名"
 
-#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1230
+#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1331,14 +1331,14 @@ msgstr "流程圖"
 msgid "a drawing"
 msgstr "繪圖"
 
-#: main/KoDocument.cpp:2558
+#: main/KoDocument.cpp:2581
 #, fuzzy, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
 "Do you want to save your changes or discard them?"
 msgstr "<p>文件 <b>%1</b> 已被修改。</p><p>您是否要儲存？</p>"
 
-#: main/KoDocument.cpp:2560
+#: main/KoDocument.cpp:2583
 #, fuzzy, kde-format
 msgid "Close Document"
 msgstr "自訂文件"
@@ -1496,7 +1496,7 @@ msgstr "（寫入保護）"
 msgid "Save as %1"
 msgstr "另存為 %1"
 
-#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:388
+#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:390
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1（未知檔案型態）"
@@ -1530,42 +1530,42 @@ msgstr "確認匯出"
 msgid "Export"
 msgstr "匯出"
 
-#: main/KoMainWindow.cpp:964
+#: main/KoMainWindow.cpp:969
 #, fuzzy, kde-format
 msgid "untitled"
 msgstr "未命名"
 
-#: main/KoMainWindow.cpp:1292
+#: main/KoMainWindow.cpp:1245
 #, kde-format
 msgid "Open Document"
 msgstr "開啟文件"
 
-#: main/KoMainWindow.cpp:1301 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1254 pageapp/KoPAView.cpp:524
 #, kde-format
 msgid "Import Document"
 msgstr "匯入文件"
 
-#: main/KoMainWindow.cpp:1465
+#: main/KoMainWindow.cpp:1419
 #, fuzzy, kde-format
 msgid "Export as PDF"
 msgstr "匯出為 PDF 檔..."
 
-#: main/KoMainWindow.cpp:1502
+#: main/KoMainWindow.cpp:1456
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1701 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
 #, kde-format
 msgid "Document"
 msgstr "文件"
 
-#: main/KoMainWindow.cpp:1709
+#: main/KoMainWindow.cpp:1663
 #, kde-format
 msgid "Document - %1"
 msgstr "文件 - %1"
 
-#: main/KoMainWindow.cpp:1746
+#: main/KoMainWindow.cpp:1700
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1574,17 +1574,17 @@ msgstr ""
 "您將遺失上次儲存後所有的變更！\n"
 "您要繼續嗎？"
 
-#: main/KoMainWindow.cpp:1748
+#: main/KoMainWindow.cpp:1702
 #, kde-format
 msgid "Warning"
 msgstr "警告"
 
-#: main/KoMainWindow.cpp:2113
+#: main/KoMainWindow.cpp:2067
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "顯示 %1 工具列"
 
-#: main/KoMainWindow.cpp:2115
+#: main/KoMainWindow.cpp:2069
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "隱藏 %1 工具列"
@@ -4673,19 +4673,19 @@ msgstr "此文件將不會被加密"
 msgid "This document does not support encryption"
 msgstr "此文件未支援加密"
 
-#: widgets/KoDocumentInfoDlg.cpp:351
+#: widgets/KoDocumentInfoDlg.cpp:352
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr "<qt>解密此文件會移除它的密碼保護。 <p>您還是要解密此檔案嗎？</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:353
+#: widgets/KoDocumentInfoDlg.cpp:354
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "確認解密"
 
-#: widgets/KoDocumentInfoDlg.cpp:354
+#: widgets/KoDocumentInfoDlg.cpp:355
 #, kde-format
 msgid "Decrypt"
 msgstr "解密"
@@ -4698,22 +4698,25 @@ msgid ""
 msgstr "<qt>您的文件無法自動儲存。 <p>要完成解密，請儲存此文件。</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
-#: widgets/KoDocumentInfoDlg.cpp:409 widgets/KoDocumentInfoDlg.cpp:417
+#: widgets/KoDocumentInfoDlg.cpp:411 widgets/KoDocumentInfoDlg.cpp:419
 #, kde-format
 msgid "Save Document"
 msgstr "儲存文件"
 
 #: widgets/KoDocumentInfoDlg.cpp:373
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<qt>The document has been changed since it was opened. To complete the "
+#| "decryption the document needs to be saved.<p>Do you want to save the "
+#| "document now?</qt>"
 msgid ""
-"<qt>The document has been changed since it was opened. To complete the "
-"decryption the document needs to be saved.<p>Do you want to save the "
-"document now?</qt>"
+"<qt>To complete the decryption the document needs to be saved.<p>Do you want "
+"to save the document now?</qt>"
 msgstr ""
 "<qt>文件開啟後被變更了。要完成文件的解密，必須要儲存它。 <p>您要現在儲存文件"
 "嗎？</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:391
+#: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4723,24 +4726,24 @@ msgstr ""
 "<qt>文件目前儲存為 %1。此文件需要被變更為 OASIS OpenDocument 的格式才能被加"
 "密。 <p>您要將檔案格式轉換為 OASIS OpenDocument 嗎？</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:393
+#: widgets/KoDocumentInfoDlg.cpp:395
 #, kde-format
 msgid "Change Filetype"
 msgstr "改變檔案類型"
 
-#: widgets/KoDocumentInfoDlg.cpp:394
+#: widgets/KoDocumentInfoDlg.cpp:396
 #, kde-format
 msgid "Change"
 msgstr "改變"
 
-#: widgets/KoDocumentInfoDlg.cpp:407
+#: widgets/KoDocumentInfoDlg.cpp:409
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "encryption, please save the document.</qt>"
 msgstr "<qt>您的文件無法自動儲存。 <p>要完成加密，請儲存此文件。</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:415
+#: widgets/KoDocumentInfoDlg.cpp:417
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "
@@ -5415,7 +5418,7 @@ msgstr "縮放到選取區"
 msgid "Zoom to All"
 msgstr "縮放到全部"
 
-#: widgetutils/KoFileDialog.cpp:463
+#: widgetutils/KoFileDialog.cpp:454
 #, kde-format
 msgid "All supported formats"
 msgstr ""

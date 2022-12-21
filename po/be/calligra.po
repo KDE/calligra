@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:46+0000\n"
+"POT-Creation-Date: 2022-12-21 00:46+0000\n"
 "PO-Revision-Date: 2008-01-01 23:07+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -795,13 +795,13 @@ msgstr "Чырвоны"
 msgid "<empty>"
 msgstr ""
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1522
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1476
 #: main/KoUndoStackAction.cpp:33
 #, fuzzy, kde-format
 msgid "Redo"
 msgstr "Чырвоны"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1521
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1475
 #: main/KoUndoStackAction.cpp:25
 #, fuzzy, kde-format
 msgid "Undo"
@@ -1304,13 +1304,13 @@ msgid ""
 "an old version."
 msgstr ""
 
-#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2554 main/KoMainWindow.cpp:1227
+#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2548 main/KoDocument.cpp:2577
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, fuzzy, kde-format
 msgid "Untitled"
 msgstr "Безназоўны"
 
-#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1230
+#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1183
 #, fuzzy, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1366,7 +1366,7 @@ msgstr "дыяграма"
 msgid "a drawing"
 msgstr "малюнак"
 
-#: main/KoDocument.cpp:2558
+#: main/KoDocument.cpp:2581
 #, fuzzy, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1374,7 +1374,7 @@ msgid ""
 msgstr ""
 "<p>Дакумент <b>'%1'</b> быў зменены.</p><p>Вы жадаеце захаваць яго?</p>"
 
-#: main/KoDocument.cpp:2560
+#: main/KoDocument.cpp:2583
 #, fuzzy, kde-format
 msgid "Close Document"
 msgstr "Іншы дакумент"
@@ -1534,7 +1534,7 @@ msgstr "абарона ад запісу"
 msgid "Save as %1"
 msgstr "Захаваць як %1"
 
-#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:388
+#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:390
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (невядомы тып файла)"
@@ -1572,42 +1572,42 @@ msgstr "Пацверджанне экспарту"
 msgid "Export"
 msgstr "Экспарт"
 
-#: main/KoMainWindow.cpp:964
+#: main/KoMainWindow.cpp:969
 #, fuzzy, kde-format
 msgid "untitled"
 msgstr "Безназоўны"
 
-#: main/KoMainWindow.cpp:1292
+#: main/KoMainWindow.cpp:1245
 #, fuzzy, kde-format
 msgid "Open Document"
 msgstr "Адкрыць дакумент"
 
-#: main/KoMainWindow.cpp:1301 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1254 pageapp/KoPAView.cpp:524
 #, fuzzy, kde-format
 msgid "Import Document"
 msgstr "Імпарт дакумента"
 
-#: main/KoMainWindow.cpp:1465
+#: main/KoMainWindow.cpp:1419
 #, fuzzy, kde-format
 msgid "Export as PDF"
 msgstr "Экспарт..."
 
-#: main/KoMainWindow.cpp:1502
+#: main/KoMainWindow.cpp:1456
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1701 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
 #, fuzzy, kde-format
 msgid "Document"
 msgstr "Дакумент"
 
-#: main/KoMainWindow.cpp:1709
+#: main/KoMainWindow.cpp:1663
 #, fuzzy, kde-format
 msgid "Document - %1"
 msgstr "Дакумента - %1"
 
-#: main/KoMainWindow.cpp:1746
+#: main/KoMainWindow.cpp:1700
 #, fuzzy, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1616,17 +1616,17 @@ msgstr ""
 "Усё змены будуць згубленыя!\n"
 "Вы жадаеце працягнуць?"
 
-#: main/KoMainWindow.cpp:1748
+#: main/KoMainWindow.cpp:1702
 #, fuzzy, kde-format
 msgid "Warning"
 msgstr "Папярэджанне"
 
-#: main/KoMainWindow.cpp:2113
+#: main/KoMainWindow.cpp:2067
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Паказаць панель прылад %1 "
 
-#: main/KoMainWindow.cpp:2115
+#: main/KoMainWindow.cpp:2069
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Схаваць панель прылад %1 "
@@ -4739,19 +4739,19 @@ msgstr "Гэты дакумент нешыфраваны"
 msgid "This document does not support encryption"
 msgstr "Гэты дакумент нешыфраваны"
 
-#: widgets/KoDocumentInfoDlg.cpp:351
+#: widgets/KoDocumentInfoDlg.cpp:352
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:353
+#: widgets/KoDocumentInfoDlg.cpp:354
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Пацверджанне расшыфроўкі"
 
-#: widgets/KoDocumentInfoDlg.cpp:354
+#: widgets/KoDocumentInfoDlg.cpp:355
 #, kde-format
 msgid "Decrypt"
 msgstr "Расшыфраваць"
@@ -4764,7 +4764,7 @@ msgid ""
 msgstr ""
 
 #: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
-#: widgets/KoDocumentInfoDlg.cpp:409 widgets/KoDocumentInfoDlg.cpp:417
+#: widgets/KoDocumentInfoDlg.cpp:411 widgets/KoDocumentInfoDlg.cpp:419
 #, kde-format
 msgid "Save Document"
 msgstr "Запісаць дакумент"
@@ -4772,12 +4772,11 @@ msgstr "Запісаць дакумент"
 #: widgets/KoDocumentInfoDlg.cpp:373
 #, kde-format
 msgid ""
-"<qt>The document has been changed since it was opened. To complete the "
-"decryption the document needs to be saved.<p>Do you want to save the "
-"document now?</qt>"
+"<qt>To complete the decryption the document needs to be saved.<p>Do you want "
+"to save the document now?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:391
+#: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4785,24 +4784,24 @@ msgid ""
 "file to OASIS OpenDocument?</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:393
+#: widgets/KoDocumentInfoDlg.cpp:395
 #, kde-format
 msgid "Change Filetype"
 msgstr "Змяніць тып файлу"
 
-#: widgets/KoDocumentInfoDlg.cpp:394
+#: widgets/KoDocumentInfoDlg.cpp:396
 #, kde-format
 msgid "Change"
 msgstr "Змяніць"
 
-#: widgets/KoDocumentInfoDlg.cpp:407
+#: widgets/KoDocumentInfoDlg.cpp:409
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "encryption, please save the document.</qt>"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:415
+#: widgets/KoDocumentInfoDlg.cpp:417
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "
@@ -5478,7 +5477,7 @@ msgstr "Калекцыя"
 msgid "Zoom to All"
 msgstr "Маштабаванне"
 
-#: widgetutils/KoFileDialog.cpp:463
+#: widgetutils/KoFileDialog.cpp:454
 #, kde-format
 msgid "All supported formats"
 msgstr ""

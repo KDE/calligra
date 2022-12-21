@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:46+0000\n"
+"POT-Creation-Date: 2022-12-21 00:46+0000\n"
 "PO-Revision-Date: 2008-01-27 21:10+0700\n"
 "Last-Translator: Hoàng Đức Hiếu <hieu.d.hoang@gmail.com>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -846,13 +846,13 @@ msgstr "&Tháo gỡ View"
 msgid "<empty>"
 msgstr ""
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1522
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1476
 #: main/KoUndoStackAction.cpp:33
 #, fuzzy, kde-format
 msgid "Redo"
 msgstr "&Tháo gỡ View"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1521
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1475
 #: main/KoUndoStackAction.cpp:25
 #, fuzzy, kde-format
 msgid "Undo"
@@ -1381,13 +1381,13 @@ msgstr ""
 "Tài liệu này chứa vài phiên bản. Dùng Tệp -> Các phiên bản để mở một phiên "
 "bản cũ."
 
-#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2554 main/KoMainWindow.cpp:1227
+#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2548 main/KoDocument.cpp:2577
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "Không đề"
 
-#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1230
+#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1444,7 +1444,7 @@ msgstr "một biểu đồ"
 msgid "a drawing"
 msgstr "một bức vẽ"
 
-#: main/KoDocument.cpp:2558
+#: main/KoDocument.cpp:2581
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1455,7 +1455,7 @@ msgid ""
 msgstr ""
 "<p>Tài liệu <b>'%1'</b> đã bị thay đổi.</p><p>Bạn có muốn lưu nó không?</p>"
 
-#: main/KoDocument.cpp:2560
+#: main/KoDocument.cpp:2583
 #, fuzzy, kde-format
 msgid "Close Document"
 msgstr "Tài liệu Riêng"
@@ -1620,7 +1620,7 @@ msgstr "(bảo vệ khỏi ghi)"
 msgid "Save as %1"
 msgstr "Lưu vào %1"
 
-#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:388
+#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:390
 #, fuzzy, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (kiểu file không xác định)"
@@ -1658,44 +1658,44 @@ msgstr "Xác nhận Xuất"
 msgid "Export"
 msgstr "Xuất"
 
-#: main/KoMainWindow.cpp:964
+#: main/KoMainWindow.cpp:969
 #, fuzzy, kde-format
 #| msgid "Untitled"
 msgid "untitled"
 msgstr "Không đề"
 
-#: main/KoMainWindow.cpp:1292
+#: main/KoMainWindow.cpp:1245
 #, fuzzy, kde-format
 msgid "Open Document"
 msgstr "Mở tài liệu"
 
-#: main/KoMainWindow.cpp:1301 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1254 pageapp/KoPAView.cpp:524
 #, kde-format
 msgid "Import Document"
 msgstr "Nhập Tài liệu"
 
-#: main/KoMainWindow.cpp:1465
+#: main/KoMainWindow.cpp:1419
 #, fuzzy, kde-format
 #| msgid "Export as PDF..."
 msgid "Export as PDF"
 msgstr "Xuất ra PDF..."
 
-#: main/KoMainWindow.cpp:1502
+#: main/KoMainWindow.cpp:1456
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1701 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
 #, kde-format
 msgid "Document"
 msgstr "Tài liệu"
 
-#: main/KoMainWindow.cpp:1709
+#: main/KoMainWindow.cpp:1663
 #, kde-format
 msgid "Document - %1"
 msgstr "Tài liệu - %1"
 
-#: main/KoMainWindow.cpp:1746
+#: main/KoMainWindow.cpp:1700
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1704,17 +1704,17 @@ msgstr ""
 "Bạn sẽ mất tất cả các thay đổi kể từ lần lưu cuối\n"
 "Bạn có muốn tiếp tục không?"
 
-#: main/KoMainWindow.cpp:1748
+#: main/KoMainWindow.cpp:1702
 #, kde-format
 msgid "Warning"
 msgstr "Cảnh báo"
 
-#: main/KoMainWindow.cpp:2113
+#: main/KoMainWindow.cpp:2067
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Hiện thanh công cụ %1"
 
-#: main/KoMainWindow.cpp:2115
+#: main/KoMainWindow.cpp:2069
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Ẩn thanh công cụ %1"
@@ -4983,7 +4983,7 @@ msgstr "Tài liệu này không được mã hoá"
 msgid "This document does not support encryption"
 msgstr "Tài liệu này không được mã hoá"
 
-#: widgets/KoDocumentInfoDlg.cpp:351
+#: widgets/KoDocumentInfoDlg.cpp:352
 #, fuzzy, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4992,12 +4992,12 @@ msgstr ""
 "<qt>Giải mã tài liệu sẽ làm mất mật mã bảo vệ nó.<p>Bạn có muốn giải mã tệp?"
 "</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:353
+#: widgets/KoDocumentInfoDlg.cpp:354
 #, fuzzy, kde-format
 msgid "Confirm Decrypt"
 msgstr "Chấp nhận Giải mã"
 
-#: widgets/KoDocumentInfoDlg.cpp:354
+#: widgets/KoDocumentInfoDlg.cpp:355
 #, kde-format
 msgid "Decrypt"
 msgstr "Giải mã"
@@ -5012,22 +5012,25 @@ msgstr ""
 "mã, xin hãy lưu tài liệu.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
-#: widgets/KoDocumentInfoDlg.cpp:409 widgets/KoDocumentInfoDlg.cpp:417
+#: widgets/KoDocumentInfoDlg.cpp:411 widgets/KoDocumentInfoDlg.cpp:419
 #, kde-format
 msgid "Save Document"
 msgstr "Lưu Tài liệu"
 
 #: widgets/KoDocumentInfoDlg.cpp:373
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<qt>The document has been changed since it was opened. To complete the "
+#| "decryption the document needs to be saved.<p>Do you want to save the "
+#| "document now?</qt>"
 msgid ""
-"<qt>The document has been changed since it was opened. To complete the "
-"decryption the document needs to be saved.<p>Do you want to save the "
-"document now?</qt>"
+"<qt>To complete the decryption the document needs to be saved.<p>Do you want "
+"to save the document now?</qt>"
 msgstr ""
 "<qt>Tài liệu đã bị thay đổi kể từ khi nó được mở ra. Để hoàn thành giải mã, "
 "tài liệu cần được lưu lại.<p>Bạn có muốn lưu tài liệu này bây giờ không?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:391
+#: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -5038,17 +5041,17 @@ msgstr ""
 "liệu Mở OASIS</b> để mã hoá.<p>Bạn có muốn chuyển tệp sang Tài liệu Mở OASIS?"
 "</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:393
+#: widgets/KoDocumentInfoDlg.cpp:395
 #, kde-format
 msgid "Change Filetype"
 msgstr "Thay đổi loại tệp"
 
-#: widgets/KoDocumentInfoDlg.cpp:394
+#: widgets/KoDocumentInfoDlg.cpp:396
 #, kde-format
 msgid "Change"
 msgstr "Thay đổi"
 
-#: widgets/KoDocumentInfoDlg.cpp:407
+#: widgets/KoDocumentInfoDlg.cpp:409
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -5057,7 +5060,7 @@ msgstr ""
 "<qt>Tài liệu của bạn không thể được lưu tự động.<p>Để hoàn thành mã hoá, xin "
 "hãy lưu tài liệu.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:415
+#: widgets/KoDocumentInfoDlg.cpp:417
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "
@@ -5779,7 +5782,7 @@ msgstr "Bộ"
 msgid "Zoom to All"
 msgstr "Bộ"
 
-#: widgetutils/KoFileDialog.cpp:463
+#: widgetutils/KoFileDialog.cpp:454
 #, kde-format
 msgid "All supported formats"
 msgstr ""

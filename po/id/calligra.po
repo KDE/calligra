@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:46+0000\n"
+"POT-Creation-Date: 2022-12-21 00:46+0000\n"
 "PO-Revision-Date: 2022-09-27 17:54+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -750,13 +750,13 @@ msgstr "Ulang %1"
 msgid "<empty>"
 msgstr "<kosong>"
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1522
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1476
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "Ulang"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1521
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1475
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1269,13 +1269,13 @@ msgstr ""
 "Dokumen <i>%1</i>  berisi berbagai versi. Menuju ke File->Versi untuk "
 "membuka sebuah versi lawas."
 
-#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2554 main/KoMainWindow.cpp:1227
+#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2548 main/KoDocument.cpp:2577
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "Tak berjudul"
 
-#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1230
+#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1332,7 +1332,7 @@ msgstr "sebuah bagan"
 msgid "a drawing"
 msgstr "sebuah gambaran"
 
-#: main/KoDocument.cpp:2558
+#: main/KoDocument.cpp:2581
 #, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1341,7 +1341,7 @@ msgstr ""
 "Dokumen \"%1\" telah dimodifikasi.\n"
 "Apakah kamu ingin menyimpan perubahanmu atau membuangnya?"
 
-#: main/KoDocument.cpp:2560
+#: main/KoDocument.cpp:2583
 #, kde-format
 msgid "Close Document"
 msgstr "Tutup Dokumen"
@@ -1501,7 +1501,7 @@ msgstr "(tulisan diproteksi)"
 msgid "Save as %1"
 msgstr "Simpan sebagai %1"
 
-#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:388
+#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:390
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (tipe tak diketahui)"
@@ -1539,42 +1539,42 @@ msgstr "Konfirmasikan Ekspor"
 msgid "Export"
 msgstr "Ekspor"
 
-#: main/KoMainWindow.cpp:964
+#: main/KoMainWindow.cpp:969
 #, kde-format
 msgid "untitled"
 msgstr "tak berjudul"
 
-#: main/KoMainWindow.cpp:1292
+#: main/KoMainWindow.cpp:1245
 #, kde-format
 msgid "Open Document"
 msgstr "Buka Dokumen"
 
-#: main/KoMainWindow.cpp:1301 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1254 pageapp/KoPAView.cpp:524
 #, kde-format
 msgid "Import Document"
 msgstr "Impor Dokumen"
 
-#: main/KoMainWindow.cpp:1465
+#: main/KoMainWindow.cpp:1419
 #, kde-format
 msgid "Export as PDF"
 msgstr "Ekspor sebagai PDF"
 
-#: main/KoMainWindow.cpp:1502
+#: main/KoMainWindow.cpp:1456
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr "Tidak bisa mengekspor ke file yang ditentukan"
 
-#: main/KoMainWindow.cpp:1701 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
 #, kde-format
 msgid "Document"
 msgstr "Dokumen"
 
-#: main/KoMainWindow.cpp:1709
+#: main/KoMainWindow.cpp:1663
 #, kde-format
 msgid "Document - %1"
 msgstr "Dokumen - %1"
 
-#: main/KoMainWindow.cpp:1746
+#: main/KoMainWindow.cpp:1700
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1583,17 +1583,17 @@ msgstr ""
 "Kamu akan kehilangan semua perubahan yang dibuat sejak terakhir kamu simpan\n"
 "Apakah kamu ingin terus?"
 
-#: main/KoMainWindow.cpp:1748
+#: main/KoMainWindow.cpp:1702
 #, kde-format
 msgid "Warning"
 msgstr "Peringatan"
 
-#: main/KoMainWindow.cpp:2113
+#: main/KoMainWindow.cpp:2067
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Tampilkan Bilah Alat %1"
 
-#: main/KoMainWindow.cpp:2115
+#: main/KoMainWindow.cpp:2069
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Sembunyikan Bilah Alat %1"
@@ -4670,7 +4670,7 @@ msgstr "Dokumen ini tidaklah dienkripsi"
 msgid "This document does not support encryption"
 msgstr "Dokumen ini belum mendukung pengenkripsian"
 
-#: widgets/KoDocumentInfoDlg.cpp:351
+#: widgets/KoDocumentInfoDlg.cpp:352
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4679,12 +4679,12 @@ msgstr ""
 "<qt>Pendekripsian dokumen akan menghapus proteksi kata sandi darinya."
 "<p>Apakah kamu masih ingin mendekripsikan si file?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:353
+#: widgets/KoDocumentInfoDlg.cpp:354
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Konfirmasi Dekripsi"
 
-#: widgets/KoDocumentInfoDlg.cpp:354
+#: widgets/KoDocumentInfoDlg.cpp:355
 #, kde-format
 msgid "Decrypt"
 msgstr "Dekripsi"
@@ -4699,23 +4699,26 @@ msgstr ""
 "pendekripsian, silakan simpan si dokumen.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
-#: widgets/KoDocumentInfoDlg.cpp:409 widgets/KoDocumentInfoDlg.cpp:417
+#: widgets/KoDocumentInfoDlg.cpp:411 widgets/KoDocumentInfoDlg.cpp:419
 #, kde-format
 msgid "Save Document"
 msgstr "Simpan Dokumen"
 
 #: widgets/KoDocumentInfoDlg.cpp:373
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<qt>The document has been changed since it was opened. To complete the "
+#| "decryption the document needs to be saved.<p>Do you want to save the "
+#| "document now?</qt>"
 msgid ""
-"<qt>The document has been changed since it was opened. To complete the "
-"decryption the document needs to be saved.<p>Do you want to save the "
-"document now?</qt>"
+"<qt>To complete the decryption the document needs to be saved.<p>Do you want "
+"to save the document now?</qt>"
 msgstr ""
 "<qt>Dokumen telah diubah semenjak dibuka. Untuk melengkapi dekripsi si "
 "dokumen perlu disimpan.<p>Apakah kamu ingin menyimpan si dokumen sekarang?</"
 "qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:391
+#: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4726,17 +4729,17 @@ msgstr ""
 "OpenDocument</b> supaya terenkripsi.<p>Apakah kamu ingin mengubah si file ke "
 "OASIS OpenDocument?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:393
+#: widgets/KoDocumentInfoDlg.cpp:395
 #, kde-format
 msgid "Change Filetype"
 msgstr "Ubah TipeFile"
 
-#: widgets/KoDocumentInfoDlg.cpp:394
+#: widgets/KoDocumentInfoDlg.cpp:396
 #, kde-format
 msgid "Change"
 msgstr "Ubah"
 
-#: widgets/KoDocumentInfoDlg.cpp:407
+#: widgets/KoDocumentInfoDlg.cpp:409
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4745,7 +4748,7 @@ msgstr ""
 "<qt>Dokumenmu tidak bisa disimpan secara otomatis.<p>Untuk melengkapi "
 "pengenkripsian, silakan simpan si dokumen.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:415
+#: widgets/KoDocumentInfoDlg.cpp:417
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "
@@ -5449,7 +5452,7 @@ msgstr "Zoom untuk Seleksi"
 msgid "Zoom to All"
 msgstr "Zoom untuk Semua"
 
-#: widgetutils/KoFileDialog.cpp:463
+#: widgetutils/KoFileDialog.cpp:454
 #, kde-format
 msgid "All supported formats"
 msgstr "Semua format yang didukung"

@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kplatomodels\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:46+0000\n"
+"POT-Creation-Date: 2022-12-21 00:46+0000\n"
 "PO-Revision-Date: 2021-12-30 11:01+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -764,13 +764,13 @@ msgstr "Refaire %1"
 msgid "<empty>"
 msgstr "<vide>"
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1522
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1476
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "Refaire"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1521
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1475
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1288,13 +1288,13 @@ msgstr ""
 "Le document <i>%1</i> contient plusieurs versions. Aller à Fichier / "
 "Versions pour ouvrir une ancienne version."
 
-#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2554 main/KoMainWindow.cpp:1227
+#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2548 main/KoDocument.cpp:2577
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1230
+#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1351,7 +1351,7 @@ msgstr "un graphique"
 msgid "a drawing"
 msgstr "un traceur"
 
-#: main/KoDocument.cpp:2558
+#: main/KoDocument.cpp:2581
 #, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1360,7 +1360,7 @@ msgstr ""
 "Le document « %1 » a été modifié.\n"
 "Voulez-vous enregistrer vos changements ou les abandonner ?"
 
-#: main/KoDocument.cpp:2560
+#: main/KoDocument.cpp:2583
 #, kde-format
 msgid "Close Document"
 msgstr "Fermer le document"
@@ -1520,7 +1520,7 @@ msgstr "(protégé en écriture)"
 msgid "Save as %1"
 msgstr "Enregistrer comme %1"
 
-#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:388
+#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:390
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (type de fichier inconnu)"
@@ -1558,42 +1558,42 @@ msgstr "Confirmer l'exportation"
 msgid "Export"
 msgstr "Exporter"
 
-#: main/KoMainWindow.cpp:964
+#: main/KoMainWindow.cpp:969
 #, kde-format
 msgid "untitled"
 msgstr "Sans titre"
 
-#: main/KoMainWindow.cpp:1292
+#: main/KoMainWindow.cpp:1245
 #, kde-format
 msgid "Open Document"
 msgstr "Ouvrir le document"
 
-#: main/KoMainWindow.cpp:1301 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1254 pageapp/KoPAView.cpp:524
 #, kde-format
 msgid "Import Document"
 msgstr "Importer le document"
 
-#: main/KoMainWindow.cpp:1465
+#: main/KoMainWindow.cpp:1419
 #, kde-format
 msgid "Export as PDF"
 msgstr "Exporter comme PDF"
 
-#: main/KoMainWindow.cpp:1502
+#: main/KoMainWindow.cpp:1456
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr "Impossible d'exporter vers le fichier précisé"
 
-#: main/KoMainWindow.cpp:1701 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
 #, kde-format
 msgid "Document"
 msgstr "Document"
 
-#: main/KoMainWindow.cpp:1709
+#: main/KoMainWindow.cpp:1663
 #, kde-format
 msgid "Document - %1"
 msgstr "Document - %1"
 
-#: main/KoMainWindow.cpp:1746
+#: main/KoMainWindow.cpp:1700
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1603,17 +1603,17 @@ msgstr ""
 "enregistrement\n"
 "Voulez--vous continuer ? "
 
-#: main/KoMainWindow.cpp:1748
+#: main/KoMainWindow.cpp:1702
 #, kde-format
 msgid "Warning"
 msgstr "Attention"
 
-#: main/KoMainWindow.cpp:2113
+#: main/KoMainWindow.cpp:2067
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "afficher la barre d'outils %1 "
 
-#: main/KoMainWindow.cpp:2115
+#: main/KoMainWindow.cpp:2069
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Masquer la barre d'outils %1 "
@@ -4685,7 +4685,7 @@ msgstr "Ce document n'est pas chiffré"
 msgid "This document does not support encryption"
 msgstr "Ce document n'accepte pas le chiffrement"
 
-#: widgets/KoDocumentInfoDlg.cpp:351
+#: widgets/KoDocumentInfoDlg.cpp:352
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4694,12 +4694,12 @@ msgstr ""
 "<qt>Déchiffrer le document supprimera la protection par mot de passe. "
 "<p>Voulez--vous encore déchiffrer ce fichier ?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:353
+#: widgets/KoDocumentInfoDlg.cpp:354
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Confirmer le déchiffrement"
 
-#: widgets/KoDocumentInfoDlg.cpp:354
+#: widgets/KoDocumentInfoDlg.cpp:355
 #, kde-format
 msgid "Decrypt"
 msgstr "Déchiffrer"
@@ -4714,23 +4714,26 @@ msgstr ""
 "déchiffrement, veuillez enregistrer le document.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
-#: widgets/KoDocumentInfoDlg.cpp:409 widgets/KoDocumentInfoDlg.cpp:417
+#: widgets/KoDocumentInfoDlg.cpp:411 widgets/KoDocumentInfoDlg.cpp:419
 #, kde-format
 msgid "Save Document"
 msgstr "Enregistrer le document"
 
 #: widgets/KoDocumentInfoDlg.cpp:373
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<qt>The document has been changed since it was opened. To complete the "
+#| "decryption the document needs to be saved.<p>Do you want to save the "
+#| "document now?</qt>"
 msgid ""
-"<qt>The document has been changed since it was opened. To complete the "
-"decryption the document needs to be saved.<p>Do you want to save the "
-"document now?</qt>"
+"<qt>To complete the decryption the document needs to be saved.<p>Do you want "
+"to save the document now?</qt>"
 msgstr ""
 "<qt>Le document a été modifié depuis son ouverture. Pour terminer le "
 "déchiffrement, le document doit être enregistré. <p>Voulez--vous enregistrer "
 "le document maintenant ?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:391
+#: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4741,17 +4744,17 @@ msgstr ""
 "modifié en <b>OASIS OpenDocument</b> pour être chiffré. <p>Voulez--vous "
 "transformer le fichier en OASIS OpenDocument ? </qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:393
+#: widgets/KoDocumentInfoDlg.cpp:395
 #, kde-format
 msgid "Change Filetype"
 msgstr "Modifier le type de fichier"
 
-#: widgets/KoDocumentInfoDlg.cpp:394
+#: widgets/KoDocumentInfoDlg.cpp:396
 #, kde-format
 msgid "Change"
 msgstr "Modifier"
 
-#: widgets/KoDocumentInfoDlg.cpp:407
+#: widgets/KoDocumentInfoDlg.cpp:409
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4760,7 +4763,7 @@ msgstr ""
 "<qt>Impossible d'enregistrer automatique votre document.<p>Pour terminer le "
 "chiffrement, veuillez enregistrer le document.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:415
+#: widgets/KoDocumentInfoDlg.cpp:417
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "
@@ -5468,7 +5471,7 @@ msgstr "Zoomer la sélection"
 msgid "Zoom to All"
 msgstr "Zoomer tout"
 
-#: widgetutils/KoFileDialog.cpp:463
+#: widgetutils/KoFileDialog.cpp:454
 #, kde-format
 msgid "All supported formats"
 msgstr "Tous les formats pris en charge"
