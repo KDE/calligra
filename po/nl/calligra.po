@@ -25,14 +25,14 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-21 00:46+0000\n"
-"PO-Revision-Date: 2022-08-29 16:59+0200\n"
+"PO-Revision-Date: 2022-12-21 16:35+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 22.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -40,7 +40,7 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
 "Niels Reedijk,Rinse de Vries,Karel van der Zande,Maarten Rütten,Sander "
-"Koning, Bram Schoenmakers,Natalie Koning,Freek de Kruijf - t/m 2021"
+"Koning, Bram Schoenmakers,Natalie Koning,Freek de Kruijf - t/m 2022"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -4726,18 +4726,13 @@ msgid "Save Document"
 msgstr "Document opslaan"
 
 #: widgets/KoDocumentInfoDlg.cpp:373
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The document has been changed since it was opened. To complete the "
-#| "decryption the document needs to be saved.<p>Do you want to save the "
-#| "document now?</qt>"
+#, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
-"<qt>Het document is gewijzigd tijdens het openen. Om het ontcijferen te "
-"voltooien dient het eerst te worden opgeslagen.<p>Wilt u het document nu "
-"opslaan?</qt>"
+"<qt>Om het ontcijferen te voltooien dient het eerst te worden opgeslagen."
+"<p>Wilt u het document nu opslaan?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format

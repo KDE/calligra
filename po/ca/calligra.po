@@ -3,7 +3,7 @@
 #
 # Sebastià Pla <sastia@retemail.es>, 2000.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2005, 2006.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2020, 2021.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2020, 2021, 2022.
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-21 00:46+0000\n"
-"PO-Revision-Date: 2022-07-08 16:53+0200\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2022-12-21 13:41+0100\n"
+"Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Kate 22.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -4706,17 +4706,13 @@ msgid "Save Document"
 msgstr "Desa el document"
 
 #: widgets/KoDocumentInfoDlg.cpp:373
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The document has been changed since it was opened. To complete the "
-#| "decryption the document needs to be saved.<p>Do you want to save the "
-#| "document now?</qt>"
+#, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
-"<qt>El document s'ha modificat des que es va obrir. Per a completar el "
-"desencriptatge, cal desar el document.<p>Voleu desar ara el document?</qt>"
+"<qt>Per a completar el desencriptatge, cal desar el document.<p>Voleu desar-"
+"loara?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
@@ -4756,7 +4752,7 @@ msgid ""
 "document now?</qt>"
 msgstr ""
 "<qt>S'ha modificat el document des que es va obrir. Per a completar "
-"l'encriptatge, cal desar el document.<p>Voleu desar ara el document?</qt>"
+"l'encriptatge, cal desar el document.<p>Voleu desar-lo ara?</qt>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, remove)
 #: widgets/KoEditColorSet.ui:55
@@ -5461,57 +5457,3 @@ msgstr "Tots els formats acceptats"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
-
-#~ msgid "Key Press"
-#~ msgstr "Tecla premuda"
-
-#~ msgid "Install Script Package"
-#~ msgstr "Instal·la paquet de scripts"
-
-#~ msgid "Could not read the package \"%1\"."
-#~ msgstr "No s'ha pogut llegir el paquet «%1»."
-
-#~ msgid "The package \"%1\" does not contain a valid install.rc file."
-#~ msgstr "El paquet «%1» no conté un fitxer install.rc vàlid."
-
-#~ msgid "Failed to parse the install.rc file at package \"%1\"."
-#~ msgstr "No s'ha pogut analitzar el fitxer install.rc del paquet «%1»."
-
-#~ msgid ""
-#~ "Failed to determinate location where the package \"%1\" should be "
-#~ "installed to."
-#~ msgstr ""
-#~ "No s'ha pogut determinar la localització on s'ha d'instal·lar el paquet "
-#~ "«%1»."
-
-#~ msgid ""
-#~ "A script package with the name \"%1\" already exists. Replace this "
-#~ "package?"
-#~ msgstr ""
-#~ "Ja existeix un paquet de scripts amb el nom «%1». Voleu sobreescriure "
-#~ "aquest paquet?"
-
-#~ msgid "Replace"
-#~ msgstr "Substitueix"
-
-#~ msgid ""
-#~ "Could not uninstall this script package. You may not have sufficient "
-#~ "permissions to delete the folder \"%1\"."
-#~ msgstr ""
-#~ "No s'ha pogut desinstal·lar el paquet de scripts. Pot ser que no teniu "
-#~ "prou permisos per a eliminar la carpeta «%1»."
-
-#~ msgid ""
-#~ "Could not uninstall the script package \"%1\". You may not have "
-#~ "sufficient permissions to delete the folder \"%1\"."
-#~ msgstr ""
-#~ "No s'ha pogut desinstal·lar el paquet de scripts. Pot ser que no teniu "
-#~ "prou permisos per a eliminar la carpeta «%1»."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Download resource"
-#~ msgstr "Descarrega el recurs"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Share Resource"
-#~ msgstr "Comparteix el recurs"
