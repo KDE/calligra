@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-21 00:46+0000\n"
-"PO-Revision-Date: 2022-12-21 13:41+0100\n"
-"Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
+"PO-Revision-Date: 2022-12-22 17:36+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Kate 22.08.3\n"
+"X-Generator: Lokalize 20.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -1294,7 +1294,7 @@ msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr ""
-"<p>El document <b>«%1»</b> ha estat modificat.</p><p>Voleu desar-lo?</p>"
+"<p>El document <b>«%1»</b> ha estat modificat.</p><p>El voleu desar?</p>"
 
 #: main/KoDocument.cpp:2165
 #, kde-format
@@ -4711,8 +4711,8 @@ msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
-"<qt>Per a completar el desencriptatge, cal desar el document.<p>Voleu desar-"
-"loara?</qt>"
+"<qt>Per a completar el desencriptatge, cal desar el document.<p>El voleu "
+"desar ara?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
@@ -4752,7 +4752,7 @@ msgid ""
 "document now?</qt>"
 msgstr ""
 "<qt>S'ha modificat el document des que es va obrir. Per a completar "
-"l'encriptatge, cal desar el document.<p>Voleu desar-lo ara?</qt>"
+"l'encriptatge, cal desar el document.<p>El voleu desar ara?</qt>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, remove)
 #: widgets/KoEditColorSet.ui:55

@@ -1,32 +1,32 @@
 # translation of koffice.po to Slovenian
 # Translation of koffice.po to Slovenian
 # Copyright (C) 2001,2002,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligra.po 1640555 2022-12-21 01:39:54Z scripty $
+# $Id: calligra.po 1640640 2022-12-23 01:39:18Z scripty $
 # $Source$
+#
 #
 # Marko Samastur <markos@elite.org>, 2000.
 # Andrej Vernekar <andrej.vernekar@gmail.com>, 2002,2003, 2005, 2006, 2007, 2008, 2010, 2011, 2012.
 # Gregor Rakar <gregor.rakar@kiss.si>, 2003, 2004, 2005.
 # Jure Repinc <jlp@holodeck1.com>, 2006.
-# Matjaž Jeran <matjaz.jeran@amis.net>, 2019.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2019, 2022.
 # Martin Srebotnjak <miles@filmsi.net>, 2022.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-21 00:46+0000\n"
-"PO-Revision-Date: 2022-11-15 13:48+0100\n"
+"PO-Revision-Date: 2022-12-22 07:33+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "Translator: Andrej Vernekar <andrej.vernekar@gmail.com>\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4734,17 +4734,13 @@ msgid "Save Document"
 msgstr "Shrani dokument"
 
 #: widgets/KoDocumentInfoDlg.cpp:373
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The document has been changed since it was opened. To complete the "
-#| "decryption the document needs to be saved.<p>Do you want to save the "
-#| "document now?</qt>"
+#, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
-"<qt>Dokument je bil po odprtju spremenjen. Za dokončanje dešifriranja je "
-"dokument treba shraniti.<p>Ali želite shraniti dokument zdaj?</qt>"
+"<qt>Za dokončanje dešifriranja je dokument treba shraniti.<p>Ali želite "
+"shraniti dokument zdaj?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
