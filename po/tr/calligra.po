@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-21 00:46+0000\n"
-"PO-Revision-Date: 2022-11-24 16:58+0300\n"
+"PO-Revision-Date: 2022-12-23 20:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4631,12 +4631,12 @@ msgstr "';' kullanın (Örnek: Office;KDE;Calligra)"
 #: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:315
 #, kde-format
 msgid "This document will be decrypted"
-msgstr "Bu belgenin şifrelemesi açılacak"
+msgstr "Bu belgenin şifresi çözülecek"
 
 #: widgets/KoDocumentInfoDlg.cpp:221 widgets/KoDocumentInfoDlg.cpp:317
 #, kde-format
 msgid "Do not decrypt"
-msgstr "Şifrelemeyi açma"
+msgstr "Şifreyi çözme"
 
 #: widgets/KoDocumentInfoDlg.cpp:223 widgets/KoDocumentInfoDlg.cpp:319
 #, kde-format
@@ -4646,7 +4646,7 @@ msgstr "Bu belge şifrelenmiş"
 #: widgets/KoDocumentInfoDlg.cpp:225 widgets/KoDocumentInfoDlg.cpp:321
 #, kde-format
 msgid "D&ecrypt"
-msgstr "&Şifrelemeyi Aç"
+msgstr "&Şifre Çöz"
 
 #: widgets/KoDocumentInfoDlg.cpp:229 widgets/KoDocumentInfoDlg.cpp:325
 #, kde-format
@@ -4674,18 +4674,18 @@ msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
-"<qt>Belgenin şifresinin çözülmesi parola korumasını kaldıracaktır.<p>Dosyayı "
-"deşifrelemeyi hala istiyor musunuz?</qt>"
+"<qt>Belgenin şifresinin çözülmesi parola korumasını kaldıracaktır.<p>Dosya "
+"şifresini çözmeyi hâlâ istiyor musunuz?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:354
 #, kde-format
 msgid "Confirm Decrypt"
-msgstr "Şifrelemeyi Doğrula"
+msgstr "Şifre Çözmeyi Onayla"
 
 #: widgets/KoDocumentInfoDlg.cpp:355
 #, kde-format
 msgid "Decrypt"
-msgstr "Şifrelemeyi Aç"
+msgstr "Şifreyi Çöz"
 
 #: widgets/KoDocumentInfoDlg.cpp:365
 #, kde-format
@@ -4693,8 +4693,8 @@ msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "decryption, please save the document.</qt>"
 msgstr ""
-"<qt>Belgeniz otomatik kaydedilemedi.<p>Şifre açmayı tamamlamak için lütfen "
-"belgeyi kaydedin.</qt>"
+"<qt>Belgeniz otomatik olarak kaydedilemedi.<p>Şifre çözmeyi tamamlamak için "
+"lütfen belgeyi kaydedin.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
 #: widgets/KoDocumentInfoDlg.cpp:411 widgets/KoDocumentInfoDlg.cpp:419
@@ -4703,18 +4703,13 @@ msgid "Save Document"
 msgstr "Belgeyi Kaydet"
 
 #: widgets/KoDocumentInfoDlg.cpp:373
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The document has been changed since it was opened. To complete the "
-#| "decryption the document needs to be saved.<p>Do you want to save the "
-#| "document now?</qt>"
+#, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
-"<qt>Belge açıldıktan sonra değiştirildi. Şifre açmanın tamamlanması için "
-"belgenin kaydedilmesi gereklidir.<p>Belgeyi şimdi kaydetmek ister misiniz?</"
-"qt>"
+"<qt>Şifre çözmenin tamamlanması için belgenin kaydedilmesi gerekli."
+"<p>Belgeyi şimdi kaydetmek istiyor musunuz?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
