@@ -21,6 +21,7 @@ set (actions_DIR_SRCS
     actions/PageBreak.cpp
     actions/Sort.cpp
     actions/Style.cpp
+    actions/Subtotals.cpp
     actions/TextCase.cpp
     actions/Validity.cpp
     )
@@ -39,6 +40,7 @@ set (action_dialogs_DIR_SRCS
     actions/dialogs/SeriesDialog.cpp
     actions/dialogs/ShowColRowDialog.cpp
     actions/dialogs/SortDialog.cpp
+    actions/dialogs/SubtotalDialog.cpp
     actions/dialogs/ValidityDialog.cpp
     )
 
@@ -47,6 +49,8 @@ ki18n_wrap_ui(action_dialogs_DIR_SRCS
     actions/dialogs/ConsolidateDetailsWidget.ui
     actions/dialogs/SortWidget.ui
     actions/dialogs/SortDetailsWidget.ui
+    actions/dialogs/SubtotalWidget.ui
+    actions/dialogs/SubtotalsDetailsWidget.ui
     )
 
 set (commands_DIR_SRCS
@@ -95,7 +99,6 @@ set (dialogs_DIR_SRCS
     dialogs/ShowDialog.cpp
     dialogs/SpecialPasteDialog.cpp
     dialogs/StyleManagerDialog.cpp
-    dialogs/SubtotalDialog.cpp
     dialogs/pivot.cpp
     dialogs/pivotfilters.cpp
     dialogs/pivotoptions.cpp
@@ -109,8 +112,6 @@ ki18n_wrap_ui(dialogs_DIR_SRCS
     dialogs/PositionWidget.ui
     dialogs/ProtectionWidget.ui
     dialogs/SpecialPasteWidget.ui
-    dialogs/SubtotalWidget.ui
-    dialogs/SubtotalsDetailsWidget.ui
     dialogs/pivot.ui
     dialogs/pivotfilters.ui
     dialogs/pivotoptions.ui

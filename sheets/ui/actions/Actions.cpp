@@ -25,6 +25,7 @@
 #include "PageBreak.h"
 #include "Sort.h"
 #include "Style.h"
+#include "Subtotals.h"
 #include "TextCase.h"
 #include "Validity.h"
 
@@ -139,6 +140,8 @@ void Actions::createActions()
     addAction(new PercentFormat(this));
     addAction(new MoneyFormat(this));
     addAction(new DefaultStyle(this));
+    // Subtotals
+    addAction(new Subtotals(this));
     // TextCase
     addAction(new TextCase(this, CaseManipulator::Upper));
     addAction(new TextCase(this, CaseManipulator::Lower));

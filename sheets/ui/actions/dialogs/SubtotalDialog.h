@@ -30,9 +30,17 @@ public:
     SubtotalDialog(QWidget* parent, Selection* selection);
     ~SubtotalDialog() override;
 
+    bool removeExisting() const;
+    bool summaryBelow() const;
+    bool summaryOnly() const;
+    bool ignoreEmpty() const;
+
+    QList<int> columns() const;
+    int primaryColumn() const;
+    int funcCode() const;
+
 public Q_SLOTS: // reimplemented
     void accept() override;
-    void reject() override;
 
 private Q_SLOTS:
     void slotUser1();
@@ -40,9 +48,6 @@ private Q_SLOTS:
 private:
     void fillColumnBoxes();
     void fillFunctionBox();
-    void removeSubtotalLines();
-    bool addSubtotal(int mainCol, int column, int row, int topRow,
-                     bool addRow, QString const & text);
 
     class Private;
     Private *const d;

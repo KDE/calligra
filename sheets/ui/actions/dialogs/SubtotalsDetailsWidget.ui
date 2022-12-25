@@ -24,31 +24,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>279</width>
-    <height>139</height>
+    <width>332</width>
+    <height>106</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QCheckBox" name="m_replaceSubtotals">
-     <property name="text">
-      <string>&amp;Replace current Subtotals</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="m_pageBreak">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string>&amp;Page break between groups</string>
-     </property>
-    </widget>
-   </item>
    <item>
     <widget class="QCheckBox" name="m_summaryBelow">
      <property name="text">

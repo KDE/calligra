@@ -70,7 +70,6 @@
 #include "dialogs/PasteInsertDialog.h"
 #include "dialogs/SpecialPasteDialog.h"
 #include "dialogs/StyleManagerDialog.h"
-#include "dialogs/SubtotalDialog.h"
 #include "dialogs/pivot.h"
 
 // strategies
@@ -287,11 +286,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::goalSeek);
     action->setToolTip(i18n("Repeating calculation to find a specific value"));
 
-    action = new QAction(i18n("&Subtotals..."), this);
-    addAction("subtotals", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::subtotals);
-    action->setToolTip(i18n("Create different kind of subtotals to a list or database"));
-    
     action = new QAction(i18n("&Pivot Tables..."), this);
     addAction("Pivot", action);
     connect(action, &QAction::triggered, this, &CellToolBase::pivot);
@@ -1451,18 +1445,6 @@ void CellToolBase::goalSeek()
 
     GoalSeekDialog* dialog = new GoalSeekDialog(canvas()->canvasWidget(), selection());
     dialog->show(); // dialog deletes itself later
-}
-
-void CellToolBase::subtotals()
-{
-    if ((selection()->lastRange().width() < 2) || (selection()->lastRange().height() < 2)) {
-        KMessageBox::error(canvas()->canvasWidget(), i18n("You must select multiple cells."));
-        return;
-    }
-
-    QPointer<SubtotalDialog> dialog = new SubtotalDialog(canvas()->canvasWidget(), selection());
-    dialog->exec();
-    delete dialog;
 }
 
 void CellToolBase::pivot()

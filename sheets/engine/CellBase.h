@@ -203,6 +203,23 @@ public:
     void setValidity(Validity validity);
 
 
+    /**
+     * Encodes the cell's formula into a text representation.
+     *
+     * \param fixedReferences encode relative references absolutely (this is used for copying
+     *             a cell to make the paste operation create a formula that points
+     *             to the original cells, not the cells at the same relative position)
+     * \see decodeFormula()
+     */
+    QString encodeFormula(bool fixedReferences = false) const;
+
+    /**
+     * Decodes a text representation \p text into a formula expression.
+     *
+     * \see encodeFormula()
+     */
+    QString decodeFormula(const QString& text) const;
+
 
 
 

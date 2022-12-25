@@ -131,7 +131,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
          <string>The data is grouped in columns. Their rows are compared in the specified order. If the data in two rows is equal, the next given row gets compared until the two column groups differ in one of the rows. Then, the complete column is moved to it final position.</string>
         </property>
         <property name="text">
-         <string>Sort data grouped in columns horizontally</string>
+         <string>Sort Columns</string>
         </property>
        </widget>
       </item>
@@ -144,7 +144,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
          <string>The data is grouped in rows. Their columns are compared in the specified order. If the data in two columns is equal, the next given column gets compared until the two row groups differ in one of the columns. Then, the complete row is moved to it final position.</string>
         </property>
         <property name="text">
-         <string>Sort data grouped in rows vertically</string>
+         <string>Sort Rows</string>
         </property>
        </widget>
       </item>

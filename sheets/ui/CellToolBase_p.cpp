@@ -1,4 +1,5 @@
 // This file is part of the KDE project
+// SPDX-FileCopyrightText: 2022 Tomas Mecir <mecirt@gmail.com>
 // SPDX-FileCopyrightText: 2006-2008 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 // SPDX-FileCopyrightText: 2006 Robert Knight <robertknight@gmail.com>
 // SPDX-FileCopyrightText: 2006 Inge Wallin <inge@lysator.liu.se>
@@ -97,9 +98,6 @@ void CellToolBase::Private::updateActions(const Cell& cell)
         const bool simpleSelection = q->selection()->isSingular() || colSelected || rowSelected;
         q->action("sheetFormat")->setEnabled(!simpleSelection);
         q->action("createStyleFromCell")->setEnabled(simpleSelection); // just from one cell
-
-        const bool contiguousSelection = q->selection()->isContiguous();
-        q->action("subtotals")->setEnabled(contiguousSelection);
     }
 }
 
