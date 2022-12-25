@@ -62,7 +62,6 @@ set (commands_DIR_SRCS
     commands/AutoFormatCommand.cpp
     commands/BorderColorCommand.cpp
     commands/ConditionCommand.cpp
-    commands/CSVDataCommand.cpp
     commands/DeleteCommand.cpp
     commands/MergeCommand.cpp
     commands/NamedAreaCommand.cpp
