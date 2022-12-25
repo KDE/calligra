@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdelibs_colors4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-21 00:46+0000\n"
-"PO-Revision-Date: 2021-03-02 13:01+0000\n"
+"PO-Revision-Date: 2022-12-23 20:49+0000\n"
 "Last-Translator: Pedro Morais <morais@kde.org>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -4732,18 +4732,13 @@ msgid "Save Document"
 msgstr "Gravar o Documento"
 
 #: widgets/KoDocumentInfoDlg.cpp:373
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The document has been changed since it was opened. To complete the "
-#| "decryption the document needs to be saved.<p>Do you want to save the "
-#| "document now?</qt>"
+#, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
-"<qt>O documento foi alterado desde o seu último acesso. Para completar a "
-"descodificação, o documento tem de ser gravado.<p>Deseja gravar agora o "
-"documento?</qt>"
+"<qt>Para completar a descodificação, o documento tem de ser gravado."
+"<p>Deseja gravar agora o documento?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
@@ -5490,6 +5485,3 @@ msgstr "Todos os formatos suportados"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
-
-#~ msgid "Key Press"
-#~ msgstr "Pressionar de Tecla"

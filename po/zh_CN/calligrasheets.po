@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-18 00:53+0000\n"
-"PO-Revision-Date: 2022-12-13 12:20\n"
+"PO-Revision-Date: 2022-12-24 11:42\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -16400,24 +16400,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "打开链接？"
-
-#~ msgid "Goto Cell..."
-#~ msgstr "转到单元格..."
-
-#~ msgid "Goto"
-#~ msgstr "转到"
-
-#~ msgid "Move to a particular cell"
-#~ msgstr "转到某个特定的单元格"
-
-#~ msgid "Column Break"
-#~ msgstr "列分隔"
-
-#~ msgid "Row Break"
-#~ msgstr "行分隔"
-
-#~ msgid "Goto Cell"
-#~ msgstr "转到单元格"
-
-#~ msgid "Enter cell:"
-#~ msgstr "输入单元格："
