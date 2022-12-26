@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-18 00:53+0000\n"
+"POT-Creation-Date: 2022-12-26 00:53+0000\n"
 "PO-Revision-Date: 2004-09-09 12:35+0100\n"
 "Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -927,7 +927,7 @@ msgstr "Rhif"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:159 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:158 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -987,7 +987,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Mae ARABIC(\"XCIX\") yn dychwelyd 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:274 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:273 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Cronfa Ddata"
@@ -13291,7 +13291,7 @@ msgstr "Cuddio Dalen"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:184
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:183
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, fuzzy, kde-format
 #| msgid "&Font"
@@ -13802,41 +13802,40 @@ msgstr "Dim"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38 ui/dialogs/SubtotalDialog.cpp:267
+#: ui/dialogs/pivotsubtotals.ui:38
 #, kde-format
 msgid "Sum"
 msgstr "Swm"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58 ui/dialogs/SubtotalDialog.cpp:263
+#: ui/dialogs/pivotsubtotals.ui:58
 #, kde-format
 msgid "Min"
 msgstr "Lleiafswm"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53 ui/dialogs/SubtotalDialog.cpp:262
+#: ui/dialogs/pivotsubtotals.ui:53
 #, kde-format
 msgid "Max"
 msgstr "Uchafswm"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48 ui/dialogs/SubtotalDialog.cpp:259
+#: ui/dialogs/pivotsubtotals.ui:48
 #, kde-format
 msgid "Average"
 msgstr "Cyfartaledd"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43 ui/dialogs/SubtotalDialog.cpp:260
+#: ui/dialogs/pivotsubtotals.ui:43
 #, kde-format
 msgid "Count"
 msgstr "Cyfrif"
 
 #: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:441
-#: ui/dialogs/SubtotalDialog.cpp:261
 #, kde-format
 msgid "CountA"
 msgstr "CountA"
@@ -14672,7 +14671,7 @@ msgstr ""
 "Rydych ar fin gwaredu'r ddalen gyfredol.\n"
 "Ydych am barhau?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1241
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1235
 #, kde-format
 msgid "Enter name:"
 msgstr "Rhowch enw:"
@@ -14732,13 +14731,13 @@ msgstr "CountA : "
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1315
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1309
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Newid Testun"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1338
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1332
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
@@ -14746,411 +14745,401 @@ msgstr "Lliw Cefndir"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:709
+#: ui/CellToolBase_p.cpp:707
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Newid Lliw'r Ffin"
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:157
 #, kde-format
 msgid "Cell Format..."
 msgstr "Fformat Cell..."
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Gosod fformatio'r gell."
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:164
 #, fuzzy, kde-format
 #| msgid "Style Manager"
 msgid "Style Manager..."
 msgstr "Rheoydd Arddull"
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:167
 #, fuzzy, kde-format
 msgid "Edit and organize cell styles"
 msgstr "Golygu a threfnu arddulliau cell."
 
-#: ui/CellToolBase.cpp:170 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:169 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "Arddull"
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "Gweithredu arddull rhag-ddiffiniedig i'r celloedd detholedig."
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "Creu Arddull o Gell..."
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:175
 #, fuzzy, kde-format
 #| msgid "Style of Cell"
 msgid "Style From Cell"
 msgstr "Arddull Cell"
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:178
 #, fuzzy, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "Creu arddull newydd a seilir ar y gell ddetholedig."
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Select Font..."
 msgstr "Dewis Wynebfath..."
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:187
 #, kde-format
 msgid "Select Font Size"
 msgstr "Dewis Maint Wynebfath"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:188
 #, fuzzy, kde-format
 #| msgid "Select Font Size"
 msgid "Font Size"
 msgstr "Dewis Maint Wynebfath"
 
-#: ui/CellToolBase.cpp:195
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Text Color"
 msgstr "Lliw Testun"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:195
 #, fuzzy, kde-format
 msgid "Set the text color"
 msgstr "Gosod lliw'r cefndir"
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:203
 #, fuzzy, kde-format
 msgid "Select a new border color"
 msgstr "Gosod lliw newydd i'r ffin."
 
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:204
 #, kde-format
 msgid "Border Color"
 msgstr "Lliw Ffin"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:213
 #, fuzzy, kde-format
 msgid "Set the background color"
 msgstr "Gosod lliw'r cefndir"
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Background Color"
 msgstr "Lliw Cefndir"
 
-#: ui/CellToolBase.cpp:221 ui/CellToolBase.cpp:227
+#: ui/CellToolBase.cpp:220 ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 #| msgid "Cells:"
 msgid "Cells..."
 msgstr "Celloedd"
 
-#: ui/CellToolBase.cpp:222 ui/CellToolBase_p.cpp:1132
+#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:1130
 #, kde-format
 msgid "Insert Cells..."
 msgstr "Mewnosod Celloedd..."
 
-#: ui/CellToolBase.cpp:223
+#: ui/CellToolBase.cpp:222
 #, fuzzy, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "Mewnosod cell wag yn y daenlen."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:227
 #, kde-format
 msgid "Remove Cells..."
 msgstr "Gwaredu Celloedd..."
 
-#: ui/CellToolBase.cpp:229
+#: ui/CellToolBase.cpp:228
 #, fuzzy, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "Gwaredu'r gell gyfredol o'r daenlen."
 
-#: ui/CellToolBase.cpp:235 ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:234 ui/CellToolBase.cpp:235
 #, fuzzy, kde-format
 #| msgid "Clear &All"
 msgid "Clear All"
 msgstr "Gwagu'r Cwbl"
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:236
 #, fuzzy, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Dileu cynnwys a fformatio y gell gyfredol."
 
-#: ui/CellToolBase.cpp:241
+#: ui/CellToolBase.cpp:240
 #, fuzzy, kde-format
 msgid "Contents"
 msgstr "Sylwadau"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:241
 #, fuzzy, kde-format
 msgid "Clear Contents"
 msgstr "Sylwadau"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:242
 #, fuzzy, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Dileu cynnwys y gell gyfredol."
 
-#: ui/CellToolBase.cpp:247
+#: ui/CellToolBase.cpp:246
 #, fuzzy, kde-format
 #| msgid "Conditional Cell Attributes..."
 msgid "Conditional Styles..."
 msgstr "Priodoleddau Cell Amodol ..."
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:247
 #, fuzzy, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "Gosod fformat y gell wedi'i seilio ar rai amodau."
 
-#: ui/CellToolBase.cpp:252 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:251 ui/dialogs/ConditionalDialog.cpp:242
 #, fuzzy, kde-format
 #| msgid "Conditional Cell Attributes"
 msgid "Conditional Styles"
 msgstr "Priodoleddau Cell Amodol"
 
-#: ui/CellToolBase.cpp:253
+#: ui/CellToolBase.cpp:252
 #, fuzzy, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Gwaredu'r fformatio amodol y gell."
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:253
 #, fuzzy, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Gwaredu'r fformatio amodol y gell."
 
-#: ui/CellToolBase.cpp:260
+#: ui/CellToolBase.cpp:259
 #, fuzzy, kde-format
 #| msgid "Autofill"
 msgid "&Auto-Filter"
 msgstr "Hunan-lenwi"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:262
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "&Function..."
 msgstr "&Ffwythiant..."
 
-#: ui/CellToolBase.cpp:270
+#: ui/CellToolBase.cpp:269
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Mewnosod mynegiad mathemateg"
 
-#: ui/CellToolBase.cpp:273
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "From &Database..."
 msgstr "O Gronfa &Ddata..."
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:276
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Mewnosod data o gronfa ddata SQL."
 
-#: ui/CellToolBase.cpp:280
+#: ui/CellToolBase.cpp:279
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Rhestr Addasiedig..."
 
-#: ui/CellToolBase.cpp:283
+#: ui/CellToolBase.cpp:282
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Creu rhestri addasiedig i drefnu neu hunan-lenwi. "
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:284
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Ymofyn Cyrchnod..."
 
-#: ui/CellToolBase.cpp:288
+#: ui/CellToolBase.cpp:287
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Ailadrodd cyfrifiad i ganfod gwerth penodol."
 
-#: ui/CellToolBase.cpp:290
-#, kde-format
-msgid "&Subtotals..."
-msgstr "&Is-gyfansymiau..."
-
-#: ui/CellToolBase.cpp:293
-#, fuzzy, kde-format
-msgid "Create different kind of subtotals to a list or database"
-msgstr "Creu gwahanol mathau o is-gyfansymiau mewn rhestr neu gronfa ddata."
-
-#: ui/CellToolBase.cpp:295
+#: ui/CellToolBase.cpp:289
 #, fuzzy, kde-format
 #| msgid "&Subtotals..."
 msgid "&Pivot Tables..."
 msgstr "&Is-gyfansymiau..."
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:292
 #, fuzzy, kde-format
 #| msgid "&Subtotals..."
 msgid "Create Pivot Tables"
 msgstr "&Is-gyfansymiau..."
 
-#: ui/CellToolBase.cpp:300
+#: ui/CellToolBase.cpp:294
 #, kde-format
 msgid "Formula Selection"
 msgstr "Dewis Fformiwla"
 
-#: ui/CellToolBase.cpp:302
+#: ui/CellToolBase.cpp:296
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Mewnosod ffwythiant."
 
-#: ui/CellToolBase.cpp:303 ui/CellToolBase.cpp:1482
+#: ui/CellToolBase.cpp:297 ui/CellToolBase.cpp:1464
 #, kde-format
 msgid "Others..."
 msgstr "Eraill..."
 
-#: ui/CellToolBase.cpp:311
+#: ui/CellToolBase.cpp:305
 #, kde-format
 msgid "Modify Cell"
 msgstr "Addasu Cell"
 
-#: ui/CellToolBase.cpp:315
+#: ui/CellToolBase.cpp:309
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Golygu'r gell amlygedig."
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:312
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Symud y gwrthrych cell i'r gludfwrdd."
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:316
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Copïo'r gwrthrych cell i'r gludfwrdd."
 
-#: ui/CellToolBase.cpp:326
+#: ui/CellToolBase.cpp:320
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Mewnosod cynnwys y gludfwrdd wrth leoliad cyfredol y cyrchydd."
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:323
 #, kde-format
 msgid "Special Paste..."
 msgstr "Gludo Arbennig..."
 
-#: ui/CellToolBase.cpp:332
+#: ui/CellToolBase.cpp:326
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Gludo cynnwys y gludfwrdd efo dewisiadau arbennig."
 
-#: ui/CellToolBase.cpp:334
+#: ui/CellToolBase.cpp:328
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Gludo wrth Fewnosod"
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:331
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Mewnosod cell o'r gludfwrdd yn y daenlen."
 
-#: ui/CellToolBase.cpp:340
+#: ui/CellToolBase.cpp:334
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Ail-gyfrifo gwerth pob cell yn y weithlen gyfredol."
 
-#: ui/CellToolBase.cpp:358
+#: ui/CellToolBase.cpp:352
 #, fuzzy, kde-format
 msgid "Check the spelling"
 msgstr "Cywiro sillafu."
 
-#: ui/CellToolBase.cpp:361
+#: ui/CellToolBase.cpp:355
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:367
+#: ui/CellToolBase.cpp:361
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Dangos Dalen..."
 
-#: ui/CellToolBase.cpp:373
+#: ui/CellToolBase.cpp:367
 #, fuzzy, kde-format
 #| msgid "AutoFormat..."
 msgid "Auto-Format..."
 msgstr "HunanFformatio..."
 
-#: ui/CellToolBase.cpp:376
+#: ui/CellToolBase.cpp:370
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Gosod fformatio'r weithlen."
 
-#: ui/CellToolBase.cpp:378
+#: ui/CellToolBase.cpp:372
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Paramedrau Bro"
 
-#: ui/CellToolBase.cpp:381
+#: ui/CellToolBase.cpp:375
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "D&angos dangosydd sylwad"
 
-#: ui/CellToolBase.cpp:385
+#: ui/CellToolBase.cpp:379
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Gwarchodaeth"
 
-#: ui/CellToolBase.cpp:389
+#: ui/CellToolBase.cpp:383
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Gwarchodaeth"
 
-#: ui/CellToolBase.cpp:390
+#: ui/CellToolBase.cpp:384
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Mewnosod cynnwys y gludfwrdd wrth leoliad cyfredol y cyrchydd."
 
-#: ui/CellToolBase.cpp:1174
+#: ui/CellToolBase.cpp:1168
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1240
+#: ui/CellToolBase.cpp:1234
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "Creu Arddull o Gell "
 
-#: ui/CellToolBase.cpp:1249
+#: ui/CellToolBase.cpp:1243
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "Ni all enw arddull fod yn wag."
 
-#: ui/CellToolBase.cpp:1254 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1248 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "Mae arddull â'r enw yma yn bodoli eisioes."
 
-#: ui/CellToolBase.cpp:1275 ui/CellToolBase.cpp:1295
+#: ui/CellToolBase.cpp:1269 ui/CellToolBase.cpp:1289
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Newid Fformat"
 
-#: ui/CellToolBase.cpp:1376
+#: ui/CellToolBase.cpp:1370
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Newid Testun"
 
-#: ui/CellToolBase.cpp:1430
+#: ui/CellToolBase.cpp:1424
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15159,61 +15148,61 @@ msgstr ""
 "Dim gyrryddion cronfa ddata ar gael!  Rhaid i chi grynhoi Qt efo'r "
 "gyrryddion angenrheidiol."
 
-#: ui/CellToolBase.cpp:1459 ui/CellToolBase.cpp:1471
+#: ui/CellToolBase.cpp:1453
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Rhaid dewis cellau lluosol."
 
-#: ui/CellToolBase.cpp:1946
+#: ui/CellToolBase.cpp:1928
 #, fuzzy
 #| msgid "Replacement"
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Amnewidiad"
 
-#: ui/CellToolBase_p.cpp:678
+#: ui/CellToolBase_p.cpp:676
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Nifer o arbrofion"
 
-#: ui/CellToolBase_p.cpp:684
+#: ui/CellToolBase_p.cpp:682
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Arian:"
 
-#: ui/CellToolBase_p.cpp:689
+#: ui/CellToolBase_p.cpp:687
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Fformat Canran"
 
-#: ui/CellToolBase_p.cpp:694
+#: ui/CellToolBase_p.cpp:692
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Fformat amser"
 
-#: ui/CellToolBase_p.cpp:699
+#: ui/CellToolBase_p.cpp:697
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Fformat dyddiad"
 
-#: ui/CellToolBase_p.cpp:704
+#: ui/CellToolBase_p.cpp:702
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Gwyddonol"
 
-#: ui/CellToolBase_p.cpp:1136
+#: ui/CellToolBase_p.cpp:1134
 #, fuzzy, kde-format
 #| msgid "Insert Cells..."
 msgid "Delete Cells..."
 msgstr "Mewnosod Celloedd..."
 
-#: ui/CellToolBase_p.cpp:1140
+#: ui/CellToolBase_p.cpp:1138
 #, kde-format
 msgid "Selection List..."
 msgstr "Rhestr Dewisiadau..."
@@ -16061,7 +16050,6 @@ msgstr "Dechrau yng nghell"
 
 #. i18n: ectx: property (text), widget (QRadioButton, resultButton)
 #: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
-#: ui/dialogs/SubtotalDialog.cpp:100
 #, kde-format
 msgid "Result"
 msgstr "Canlyniad"
@@ -17261,7 +17249,7 @@ msgid "Manual Selection"
 msgstr "Dewis Fformiwla"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63 ui/dialogs/SubtotalDialog.cpp:264
+#: ui/dialogs/pivotsubtotals.ui:63
 #, kde-format
 msgid "Product"
 msgstr "Cynnyrch"
@@ -17602,99 +17590,6 @@ msgstr "&Ymofyn Cyrchnod..."
 msgid "style%1"
 msgstr "arddull %1"
 
-#: ui/dialogs/SubtotalDialog.cpp:42
-#, kde-format
-msgid "Subtotals"
-msgstr "Is-gyfansymiau"
-
-#: ui/dialogs/SubtotalDialog.cpp:44
-#, kde-format
-msgid "Remove All"
-msgstr "Gwaredu Popeth"
-
-#: ui/dialogs/SubtotalDialog.cpp:84
-#, kde-format
-msgid "You need to select at least one column for adding subtotals."
-msgstr "Rhaid i chi ddewis o leiaf un golofn i adio is-gyfansymiau."
-
-#: ui/dialogs/SubtotalDialog.cpp:157
-#, kde-format
-msgid "Grand Total"
-msgstr "Cyfanswm Terfynol"
-
-#: ui/dialogs/SubtotalDialog.cpp:244
-#, kde-format
-msgid "Column '%1' "
-msgstr "Colofn '%1'"
-
-#: ui/dialogs/SubtotalDialog.cpp:265
-#, kde-format
-msgid "StDev"
-msgstr "StDev"
-
-#: ui/dialogs/SubtotalDialog.cpp:266
-#, kde-format
-msgid "StDevP"
-msgstr "StDevP"
-
-#: ui/dialogs/SubtotalDialog.cpp:268
-#, kde-format
-msgid "Var"
-msgstr "Var"
-
-#: ui/dialogs/SubtotalDialog.cpp:269
-#, kde-format
-msgid "VarP"
-msgstr "VarP"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_replaceSubtotals)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:35
-#, kde-format
-msgid "&Replace current Subtotals"
-msgstr "Di&sodli is-gyfansymiau cyfredol"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_pageBreak)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:48
-#, kde-format
-msgid "&Page break between groups"
-msgstr "Toriad &tudalen rhwng grwpiau"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_summaryBelow)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:55
-#, kde-format
-msgid "&Summary below data"
-msgstr "Crynodeb &islaw data"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_summaryOnly)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:68
-#, kde-format
-msgid "Summary &only"
-msgstr "Crynodeb yn &unig"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_IgnoreBox)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:75
-#, kde-format
-msgid "&Ignore empty cells when looking for changes"
-msgstr "&Anwybyddu celloedd gwag wrth edrych am newidiadau"
-
-#. i18n: ectx: property (text), widget (QLabel, m_eachChangeLabel)
-#: ui/dialogs/SubtotalWidget.ui:35
-#, kde-format
-msgid "At each change in:"
-msgstr "Gyda bob newid yn:"
-
-#. i18n: ectx: property (text), widget (QLabel, m_useFunctionLabel)
-#: ui/dialogs/SubtotalWidget.ui:45
-#, kde-format
-msgid "Use function:"
-msgstr "Defnyddio ffwythiant:"
-
-#. i18n: ectx: property (text), widget (QLabel, m_addSubtotalToLabel)
-#: ui/dialogs/SubtotalWidget.ui:55
-#, kde-format
-msgid "Add Subtotal to:"
-msgstr "Ychwanegu'r is-gyfanswm at:"
-
 #: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 #| msgid "April"
@@ -17757,6 +17652,64 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Agor Cyswllt?"
+
+#~ msgid "&Subtotals..."
+#~ msgstr "&Is-gyfansymiau..."
+
+#, fuzzy
+#~ msgid "Create different kind of subtotals to a list or database"
+#~ msgstr "Creu gwahanol mathau o is-gyfansymiau mewn rhestr neu gronfa ddata."
+
+#~ msgid "Subtotals"
+#~ msgstr "Is-gyfansymiau"
+
+#~ msgid "Remove All"
+#~ msgstr "Gwaredu Popeth"
+
+#~ msgid "You need to select at least one column for adding subtotals."
+#~ msgstr "Rhaid i chi ddewis o leiaf un golofn i adio is-gyfansymiau."
+
+#~ msgid "Grand Total"
+#~ msgstr "Cyfanswm Terfynol"
+
+#~ msgid "Column '%1' "
+#~ msgstr "Colofn '%1'"
+
+#~ msgid "StDev"
+#~ msgstr "StDev"
+
+#~ msgid "StDevP"
+#~ msgstr "StDevP"
+
+#~ msgid "Var"
+#~ msgstr "Var"
+
+#~ msgid "VarP"
+#~ msgstr "VarP"
+
+#~ msgid "&Replace current Subtotals"
+#~ msgstr "Di&sodli is-gyfansymiau cyfredol"
+
+#~ msgid "&Page break between groups"
+#~ msgstr "Toriad &tudalen rhwng grwpiau"
+
+#~ msgid "&Summary below data"
+#~ msgstr "Crynodeb &islaw data"
+
+#~ msgid "Summary &only"
+#~ msgstr "Crynodeb yn &unig"
+
+#~ msgid "&Ignore empty cells when looking for changes"
+#~ msgstr "&Anwybyddu celloedd gwag wrth edrych am newidiadau"
+
+#~ msgid "At each change in:"
+#~ msgstr "Gyda bob newid yn:"
+
+#~ msgid "Use function:"
+#~ msgstr "Defnyddio ffwythiant:"
+
+#~ msgid "Add Subtotal to:"
+#~ msgstr "Ychwanegu'r is-gyfanswm at:"
 
 #~ msgid "Goto Cell..."
 #~ msgstr "Mynd i Gell..."

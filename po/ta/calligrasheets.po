@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-18 00:53+0000\n"
+"POT-Creation-Date: 2022-12-26 00:53+0000\n"
 "PO-Revision-Date: 2004-11-29 01:53-0800\n"
 "Last-Translator: Tamil PC <tamilpc@ambalam.com>\n"
 "Language-Team: Tamil <en@li.org>\n"
@@ -912,7 +912,7 @@ msgstr "எண்"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:159 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:158 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -971,7 +971,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") 99 திரும்பும்"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:274 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:273 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "தரவுத்தளம்"
@@ -13017,7 +13017,7 @@ msgstr "தாளை மறை"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:184
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:183
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, fuzzy, kde-format
 msgid "Font"
@@ -13524,41 +13524,40 @@ msgstr "எதுவுமில்லை"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38 ui/dialogs/SubtotalDialog.cpp:267
+#: ui/dialogs/pivotsubtotals.ui:38
 #, kde-format
 msgid "Sum"
 msgstr "கூட்டு"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58 ui/dialogs/SubtotalDialog.cpp:263
+#: ui/dialogs/pivotsubtotals.ui:58
 #, kde-format
 msgid "Min"
 msgstr "கழித்தல்"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53 ui/dialogs/SubtotalDialog.cpp:262
+#: ui/dialogs/pivotsubtotals.ui:53
 #, kde-format
 msgid "Max"
 msgstr "அதிகபட்ச"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48 ui/dialogs/SubtotalDialog.cpp:259
+#: ui/dialogs/pivotsubtotals.ui:48
 #, kde-format
 msgid "Average"
 msgstr "சராசரி"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43 ui/dialogs/SubtotalDialog.cpp:260
+#: ui/dialogs/pivotsubtotals.ui:43
 #, kde-format
 msgid "Count"
 msgstr "கூட்டு"
 
 #: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:441
-#: ui/dialogs/SubtotalDialog.cpp:261
 #, kde-format
 msgid "CountA"
 msgstr "எண்ணிக்கைA"
@@ -14392,7 +14391,7 @@ msgstr ""
 "நீங்கள் செயல்பாட்டில் உள்ள அட்டவணையை நீக்க போகிறீர்கள்.\n"
 "பரவாயில்லையா?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1241
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1235
 #, kde-format
 msgid "Enter name:"
 msgstr "பெயரை நுழைக்க"
@@ -14452,13 +14451,13 @@ msgstr "எண்ணிக்கை: %1"
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1315
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1309
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "உரையை மாற்றுக"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1338
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1332
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
@@ -14466,410 +14465,400 @@ msgstr "பின்னணி நிறம்"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:709
+#: ui/CellToolBase_p.cpp:707
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "ஓரம் நிறம் மாற்றுக"
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:157
 #, kde-format
 msgid "Cell Format..."
 msgstr "அறை வடிவமைப்பு"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "அறைகளை தானாக வடிவமைத்தல்."
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:164
 #, fuzzy, kde-format
 #| msgid "Style Manager"
 msgid "Style Manager..."
 msgstr "பாணியின் மேலாளர் "
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:167
 #, fuzzy, kde-format
 msgid "Edit and organize cell styles"
 msgstr "அறையின் பாணிகளை மாற்றி அமைக்கவும் "
 
-#: ui/CellToolBase.cpp:170 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:169 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "பாணி"
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "தேர்ந்தெடுத்த அறைகளை முன் வரையறுக்கப்பட்ட பாணியை குறிப்பிடு."
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "பாணியை அறையிலிருந்து உருவாக்கு..."
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:175
 #, fuzzy, kde-format
 #| msgid "Style of Cell"
 msgid "Style From Cell"
 msgstr "அறையின் பாணி "
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:178
 #, fuzzy, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "தற்போது தேர்ந்தெடுத்த அறையின் புலத்தில் புதிய பாணியை உருவாக்கு."
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Select Font..."
 msgstr "எழுத்துரு தேர்வு செய்"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:187
 #, kde-format
 msgid "Select Font Size"
 msgstr "எழுத்துவகை அளவை தேர்வு செய்"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:188
 #, fuzzy, kde-format
 #| msgid "Select Font Size"
 msgid "Font Size"
 msgstr "எழுத்துவகை அளவை தேர்வு செய்"
 
-#: ui/CellToolBase.cpp:195
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Text Color"
 msgstr "உரை நிறம்"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:195
 #, fuzzy, kde-format
 msgid "Set the text color"
 msgstr "பின்னணி நிறத்தை அமை"
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:203
 #, fuzzy, kde-format
 msgid "Select a new border color"
 msgstr "புதிய ஓரத்தின் நிறத்தை தேர்வு செய்க:"
 
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:204
 #, kde-format
 msgid "Border Color"
 msgstr "ஓரம் நிறம்"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:213
 #, fuzzy, kde-format
 msgid "Set the background color"
 msgstr "பின்னணி நிறத்தை அமை"
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Background Color"
 msgstr "பின்னணி நிறம்"
 
-#: ui/CellToolBase.cpp:221 ui/CellToolBase.cpp:227
+#: ui/CellToolBase.cpp:220 ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 #| msgid "Cells:"
 msgid "Cells..."
 msgstr "செல்கள்"
 
-#: ui/CellToolBase.cpp:222 ui/CellToolBase_p.cpp:1132
+#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:1130
 #, kde-format
 msgid "Insert Cells..."
 msgstr "அறைகளை செருகு..."
 
-#: ui/CellToolBase.cpp:223
+#: ui/CellToolBase.cpp:222
 #, fuzzy, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "காலி அறையை விரித்தாளிற்குள் சொருகு"
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:227
 #, kde-format
 msgid "Remove Cells..."
 msgstr "அறைகளை நீக்கு..."
 
-#: ui/CellToolBase.cpp:229
+#: ui/CellToolBase.cpp:228
 #, fuzzy, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "விரித்தாளிலிருந்து தற்போதைய அறையை நீக்கு."
 
-#: ui/CellToolBase.cpp:235 ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:234 ui/CellToolBase.cpp:235
 #, fuzzy, kde-format
 #| msgid "Clear &All"
 msgid "Clear All"
 msgstr "காலி செய் &எல்லாவற்றையும்"
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:236
 #, fuzzy, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "தற்போதைய அறையின் வடிவம் மற்றும் அனைத்து உள்ளடக்கத்தையும் அழி."
 
-#: ui/CellToolBase.cpp:241
+#: ui/CellToolBase.cpp:240
 #, fuzzy, kde-format
 msgid "Contents"
 msgstr "குறிப்புரை"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:241
 #, fuzzy, kde-format
 msgid "Clear Contents"
 msgstr "குறிப்புரை"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:242
 #, fuzzy, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "அறையின் தொகுப்புகளை வலப்படுத்தவும். "
 
-#: ui/CellToolBase.cpp:247
+#: ui/CellToolBase.cpp:246
 #, fuzzy, kde-format
 #| msgid "Conditional Cell Attributes..."
 msgid "Conditional Styles..."
 msgstr "நிபந்தனை அறை பண்புகள் ..."
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:247
 #, fuzzy, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "சில விதிமுறைக்கு தகுந்தவாறு அறை வடிவத்தை அமை."
 
-#: ui/CellToolBase.cpp:252 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:251 ui/dialogs/ConditionalDialog.cpp:242
 #, fuzzy, kde-format
 #| msgid "Conditional Cell Attributes"
 msgid "Conditional Styles"
 msgstr "நிபந்தனை அறை பண்புகள்"
 
-#: ui/CellToolBase.cpp:253
+#: ui/CellToolBase.cpp:252
 #, fuzzy, kde-format
 msgid "Remove Conditional Styles"
 msgstr "இந்த கட்டுப்பாடுள்ள அறையை நீக்கு"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:253
 #, fuzzy, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "இந்த கட்டுப்பாடுள்ள அறையை நீக்கு"
 
-#: ui/CellToolBase.cpp:260
+#: ui/CellToolBase.cpp:259
 #, fuzzy, kde-format
 #| msgid "Autofill"
 msgid "&Auto-Filter"
 msgstr "தன்னியக்கமாக நிரப்பு"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:262
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "&Function..."
 msgstr "செயல்கூறு..."
 
-#: ui/CellToolBase.cpp:270
+#: ui/CellToolBase.cpp:269
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "math  தொடரை சொருகு."
 
-#: ui/CellToolBase.cpp:273
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "From &Database..."
 msgstr "துவக்கம் &தரவுத்தளம் ..."
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:276
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL தரவுத்தளத்திலிருந்து பொருளை செருகவும்"
 
-#: ui/CellToolBase.cpp:280
+#: ui/CellToolBase.cpp:279
 #, kde-format
 msgid "Custom Lists..."
 msgstr "தனிப்பயன் பட்டியல்..."
 
-#: ui/CellToolBase.cpp:283
+#: ui/CellToolBase.cpp:282
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "வரிசையாக்கம் அல்லது தானேநிரப்ப தனிப்பயன்பட்டியலை உருவாக்குக "
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:284
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&இலக்குத்தேடு"
 
-#: ui/CellToolBase.cpp:288
+#: ui/CellToolBase.cpp:287
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "திரும்பத்திரும்ப கணக்கிடப்படுகிறது ஒரு குறித்த பொருளை தேட."
 
-#: ui/CellToolBase.cpp:290
-#, kde-format
-msgid "&Subtotals..."
-msgstr "&உப தொகை எண்கள்"
-
-#: ui/CellToolBase.cpp:293
-#, fuzzy, kde-format
-msgid "Create different kind of subtotals to a list or database"
-msgstr "பட்டியல் அல்லது தரவுத்தளத்துக்கு வெவ்வேறு துணை கூட்டுதலை உருவாக்கு."
-
-#: ui/CellToolBase.cpp:295
+#: ui/CellToolBase.cpp:289
 #, fuzzy, kde-format
 #| msgid "&Subtotals..."
 msgid "&Pivot Tables..."
 msgstr "&உப தொகை எண்கள்"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:292
 #, fuzzy, kde-format
 #| msgid "&Subtotals..."
 msgid "Create Pivot Tables"
 msgstr "&உப தொகை எண்கள்"
 
-#: ui/CellToolBase.cpp:300
+#: ui/CellToolBase.cpp:294
 #, kde-format
 msgid "Formula Selection"
 msgstr "வாய்பாடு தேர்வு"
 
-#: ui/CellToolBase.cpp:302
+#: ui/CellToolBase.cpp:296
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "செயல்கூற்றை செருகு"
 
-#: ui/CellToolBase.cpp:303 ui/CellToolBase.cpp:1482
+#: ui/CellToolBase.cpp:297 ui/CellToolBase.cpp:1464
 #, kde-format
 msgid "Others..."
 msgstr "மற்றவைகள்..."
 
-#: ui/CellToolBase.cpp:311
+#: ui/CellToolBase.cpp:305
 #, kde-format
 msgid "Modify Cell"
 msgstr "சிற்றறையை மாற்று"
 
-#: ui/CellToolBase.cpp:315
+#: ui/CellToolBase.cpp:309
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "முனைப்புறுத்தப்பட்ட அறைகளை திருத்து "
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:312
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "அறை பொருளை இடைநிலைப் பலகைக்கு கொண்டு செல்."
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:316
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "அறை பொருளை இடைநிலைப் பலகைக்கு மாற்றுக."
 
-#: ui/CellToolBase.cpp:326
+#: ui/CellToolBase.cpp:320
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "இடைநிலையின் உள்ளடக்கத்தின் காட்டியில் ஒட்டுக. "
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:323
 #, kde-format
 msgid "Special Paste..."
 msgstr "சிறப்பு ஒட்டு..."
 
-#: ui/CellToolBase.cpp:332
+#: ui/CellToolBase.cpp:326
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "சிறப்பு விருப்பத்தேர்வுகளுடன் இடைநிலையின் உள்ளடக்கத்தை ஒட்டுக."
 
-#: ui/CellToolBase.cpp:334
+#: ui/CellToolBase.cpp:328
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "செருகளுடன் ஒட்டு..."
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:331
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "இடைநிலையில் இருந்து விரிதாளுக்கு அறையை சொருகு. "
 
-#: ui/CellToolBase.cpp:340
+#: ui/CellToolBase.cpp:334
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "தற்போதைய தாளில் உள்ள அனைத்து அறையின் மதிப்பையும் மறுகணக்கிடு."
 
-#: ui/CellToolBase.cpp:358
+#: ui/CellToolBase.cpp:352
 #, fuzzy, kde-format
 msgid "Check the spelling"
 msgstr "சொல் திருத்தம் "
 
-#: ui/CellToolBase.cpp:361
+#: ui/CellToolBase.cpp:355
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:367
+#: ui/CellToolBase.cpp:361
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "தாளை காட்டு"
 
-#: ui/CellToolBase.cpp:373
+#: ui/CellToolBase.cpp:367
 #, fuzzy, kde-format
 #| msgid "AutoFormat..."
 msgid "Auto-Format..."
 msgstr "தானே வடிவமை"
 
-#: ui/CellToolBase.cpp:376
+#: ui/CellToolBase.cpp:370
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "பணித்தாள் வடிவமை"
 
-#: ui/CellToolBase.cpp:378
+#: ui/CellToolBase.cpp:372
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "வட்டார அளவுருக்கள்"
 
-#: ui/CellToolBase.cpp:381
+#: ui/CellToolBase.cpp:375
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "விளக்க சுட்டியை காட்டு"
 
-#: ui/CellToolBase.cpp:385
+#: ui/CellToolBase.cpp:379
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "பாதுகாவலர்"
 
-#: ui/CellToolBase.cpp:389
+#: ui/CellToolBase.cpp:383
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "பாதுகாவலர்"
 
-#: ui/CellToolBase.cpp:390
+#: ui/CellToolBase.cpp:384
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "இடைநிலையின் உள்ளடக்கத்தின் காட்டியில் ஒட்டுக. "
 
-#: ui/CellToolBase.cpp:1174
+#: ui/CellToolBase.cpp:1168
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1240
+#: ui/CellToolBase.cpp:1234
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "சிற்றறையின் பாந்தம் "
 
-#: ui/CellToolBase.cpp:1249
+#: ui/CellToolBase.cpp:1243
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "அட்டவணை பெயர் காலியாக இருக்க முடியாது. "
 
-#: ui/CellToolBase.cpp:1254 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1248 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "வார்ப்புரு பெயர் ஏற்கனவே உள்ளது"
 
-#: ui/CellToolBase.cpp:1275 ui/CellToolBase.cpp:1295
+#: ui/CellToolBase.cpp:1269 ui/CellToolBase.cpp:1289
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "அமைப்பை மாற்று"
 
-#: ui/CellToolBase.cpp:1376
+#: ui/CellToolBase.cpp:1370
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "உரையை மாற்றுக"
 
-#: ui/CellToolBase.cpp:1430
+#: ui/CellToolBase.cpp:1424
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14877,61 +14866,61 @@ msgid ""
 msgstr ""
 "தகவல்தள இயக்கிகள் ஏதும் காணப்படவில்லை. தங்கள் Qt யை தேவையான இயக்கியுடன் தொகுக்க வேண்டும்."
 
-#: ui/CellToolBase.cpp:1459 ui/CellToolBase.cpp:1471
+#: ui/CellToolBase.cpp:1453
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "நீங்கள் பல சிற்றறைகளை தேர்ந்தெடுக்க வேண்டும்."
 
-#: ui/CellToolBase.cpp:1946
+#: ui/CellToolBase.cpp:1928
 #, fuzzy
 #| msgid "Replacement"
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "இடமாற்றம்"
 
-#: ui/CellToolBase_p.cpp:678
+#: ui/CellToolBase_p.cpp:676
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "வெள்ளோட்டத்தின் எண்ணிக்கை "
 
-#: ui/CellToolBase_p.cpp:684
+#: ui/CellToolBase_p.cpp:682
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "பணம்"
 
-#: ui/CellToolBase_p.cpp:689
+#: ui/CellToolBase_p.cpp:687
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "விழுக்காடு வடிவமைப்பு "
 
-#: ui/CellToolBase_p.cpp:694
+#: ui/CellToolBase_p.cpp:692
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "நேர வடிவமைப்பு"
 
-#: ui/CellToolBase_p.cpp:699
+#: ui/CellToolBase_p.cpp:697
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "தேதி வடிவமைப்பு "
 
-#: ui/CellToolBase_p.cpp:704
+#: ui/CellToolBase_p.cpp:702
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "ஆய்வறிவு சார்ந்த"
 
-#: ui/CellToolBase_p.cpp:1136
+#: ui/CellToolBase_p.cpp:1134
 #, fuzzy, kde-format
 #| msgid "Insert Cells..."
 msgid "Delete Cells..."
 msgstr "அறைகளை செருகு..."
 
-#: ui/CellToolBase_p.cpp:1140
+#: ui/CellToolBase_p.cpp:1138
 #, kde-format
 msgid "Selection List..."
 msgstr "தேர்ந்தெடுத்த பட்டியல்"
@@ -15772,7 +15761,6 @@ msgstr "Starting in cell"
 
 #. i18n: ectx: property (text), widget (QRadioButton, resultButton)
 #: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
-#: ui/dialogs/SubtotalDialog.cpp:100
 #, kde-format
 msgid "Result"
 msgstr "விளைவு"
@@ -16971,7 +16959,7 @@ msgid "Manual Selection"
 msgstr "வாய்பாடு தேர்வு"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63 ui/dialogs/SubtotalDialog.cpp:264
+#: ui/dialogs/pivotsubtotals.ui:63
 #, kde-format
 msgid "Product"
 msgstr "உற்பத்தி"
@@ -17312,99 +17300,6 @@ msgstr "&இலக்குத்தேடு"
 msgid "style%1"
 msgstr "பாணி%1"
 
-#: ui/dialogs/SubtotalDialog.cpp:42
-#, kde-format
-msgid "Subtotals"
-msgstr "உப தொகை எண்கள்"
-
-#: ui/dialogs/SubtotalDialog.cpp:44
-#, kde-format
-msgid "Remove All"
-msgstr "எல்லாவற்றையும் நீக்கு."
-
-#: ui/dialogs/SubtotalDialog.cpp:84
-#, kde-format
-msgid "You need to select at least one column for adding subtotals."
-msgstr "உப தொகை எண்களை இணைக்க ஒரு நெடுவரிசையையாவது தேர்ந்தெடுக்க வேண்டும்"
-
-#: ui/dialogs/SubtotalDialog.cpp:157
-#, kde-format
-msgid "Grand Total"
-msgstr "மொத்த எண்ணிக்கை"
-
-#: ui/dialogs/SubtotalDialog.cpp:244
-#, kde-format
-msgid "Column '%1' "
-msgstr "நெடுவரிசை '%1'"
-
-#: ui/dialogs/SubtotalDialog.cpp:265
-#, kde-format
-msgid "StDev"
-msgstr "StDev"
-
-#: ui/dialogs/SubtotalDialog.cpp:266
-#, kde-format
-msgid "StDevP"
-msgstr "StDevP"
-
-#: ui/dialogs/SubtotalDialog.cpp:268
-#, kde-format
-msgid "Var"
-msgstr "Var"
-
-#: ui/dialogs/SubtotalDialog.cpp:269
-#, kde-format
-msgid "VarP"
-msgstr "VarP "
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_replaceSubtotals)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:35
-#, kde-format
-msgid "&Replace current Subtotals"
-msgstr "நடப்பு உப தொகையை மற்றியமை  "
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_pageBreak)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:48
-#, kde-format
-msgid "&Page break between groups"
-msgstr "குழுக்களுக்கு இடையே பக்கவெட்டு"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_summaryBelow)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:55
-#, kde-format
-msgid "&Summary below data"
-msgstr "சுருக்கத்தின் கீழ் தரவு"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_summaryOnly)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:68
-#, kde-format
-msgid "Summary &only"
-msgstr "சுருக்கம் மட்டும்"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_IgnoreBox)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:75
-#, kde-format
-msgid "&Ignore empty cells when looking for changes"
-msgstr "மாற்றத்திற்கு பார்வையிடும் போது காலியான அறையை &தவிர்"
-
-#. i18n: ectx: property (text), widget (QLabel, m_eachChangeLabel)
-#: ui/dialogs/SubtotalWidget.ui:35
-#, kde-format
-msgid "At each change in:"
-msgstr "ஒவ்வொரு மாற்றத்தின் போதும்:"
-
-#. i18n: ectx: property (text), widget (QLabel, m_useFunctionLabel)
-#: ui/dialogs/SubtotalWidget.ui:45
-#, kde-format
-msgid "Use function:"
-msgstr "செயல்களை பயன்படுத்து"
-
-#. i18n: ectx: property (text), widget (QLabel, m_addSubtotalToLabel)
-#: ui/dialogs/SubtotalWidget.ui:55
-#, kde-format
-msgid "Add Subtotal to:"
-msgstr "உப தொகையின் சேர்ப்பு"
-
 #: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 #| msgid "April"
@@ -17467,6 +17362,64 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "இணைப்பை திற"
+
+#~ msgid "&Subtotals..."
+#~ msgstr "&உப தொகை எண்கள்"
+
+#, fuzzy
+#~ msgid "Create different kind of subtotals to a list or database"
+#~ msgstr "பட்டியல் அல்லது தரவுத்தளத்துக்கு வெவ்வேறு துணை கூட்டுதலை உருவாக்கு."
+
+#~ msgid "Subtotals"
+#~ msgstr "உப தொகை எண்கள்"
+
+#~ msgid "Remove All"
+#~ msgstr "எல்லாவற்றையும் நீக்கு."
+
+#~ msgid "You need to select at least one column for adding subtotals."
+#~ msgstr "உப தொகை எண்களை இணைக்க ஒரு நெடுவரிசையையாவது தேர்ந்தெடுக்க வேண்டும்"
+
+#~ msgid "Grand Total"
+#~ msgstr "மொத்த எண்ணிக்கை"
+
+#~ msgid "Column '%1' "
+#~ msgstr "நெடுவரிசை '%1'"
+
+#~ msgid "StDev"
+#~ msgstr "StDev"
+
+#~ msgid "StDevP"
+#~ msgstr "StDevP"
+
+#~ msgid "Var"
+#~ msgstr "Var"
+
+#~ msgid "VarP"
+#~ msgstr "VarP "
+
+#~ msgid "&Replace current Subtotals"
+#~ msgstr "நடப்பு உப தொகையை மற்றியமை  "
+
+#~ msgid "&Page break between groups"
+#~ msgstr "குழுக்களுக்கு இடையே பக்கவெட்டு"
+
+#~ msgid "&Summary below data"
+#~ msgstr "சுருக்கத்தின் கீழ் தரவு"
+
+#~ msgid "Summary &only"
+#~ msgstr "சுருக்கம் மட்டும்"
+
+#~ msgid "&Ignore empty cells when looking for changes"
+#~ msgstr "மாற்றத்திற்கு பார்வையிடும் போது காலியான அறையை &தவிர்"
+
+#~ msgid "At each change in:"
+#~ msgstr "ஒவ்வொரு மாற்றத்தின் போதும்:"
+
+#~ msgid "Use function:"
+#~ msgstr "செயல்களை பயன்படுத்து"
+
+#~ msgid "Add Subtotal to:"
+#~ msgstr "உப தொகையின் சேர்ப்பு"
 
 #~ msgid "Goto Cell..."
 #~ msgstr "சிற்றறைக்கு செல்..."

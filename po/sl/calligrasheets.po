@@ -1,7 +1,7 @@
 # translation of kspread.po to Slovenian
 # Translation of kspread.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligrasheets.po 1640312 2022-12-18 01:52:49Z scripty $
+# $Id: calligrasheets.po 1640837 2022-12-26 01:48:16Z scripty $
 # $Source$
 #
 #
@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-18 00:53+0000\n"
+"POT-Creation-Date: 2022-12-26 00:53+0000\n"
 "PO-Revision-Date: 2022-11-14 08:55+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -909,7 +909,7 @@ msgstr "Število"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:159 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:158 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -967,7 +967,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") vrne 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:274 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:273 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Zbirka podatkov"
@@ -12800,7 +12800,7 @@ msgstr "Omogoči"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:184
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:183
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
@@ -13293,41 +13293,40 @@ msgstr "Brez"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38 ui/dialogs/SubtotalDialog.cpp:267
+#: ui/dialogs/pivotsubtotals.ui:38
 #, kde-format
 msgid "Sum"
 msgstr "Vsota"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58 ui/dialogs/SubtotalDialog.cpp:263
+#: ui/dialogs/pivotsubtotals.ui:58
 #, kde-format
 msgid "Min"
 msgstr "Minimum"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53 ui/dialogs/SubtotalDialog.cpp:262
+#: ui/dialogs/pivotsubtotals.ui:53
 #, kde-format
 msgid "Max"
 msgstr "Maksimum"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48 ui/dialogs/SubtotalDialog.cpp:259
+#: ui/dialogs/pivotsubtotals.ui:48
 #, kde-format
 msgid "Average"
 msgstr "Povprečje"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43 ui/dialogs/SubtotalDialog.cpp:260
+#: ui/dialogs/pivotsubtotals.ui:43
 #, kde-format
 msgid "Count"
 msgstr "Štetje"
 
 #: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:441
-#: ui/dialogs/SubtotalDialog.cpp:261
 #, kde-format
 msgid "CountA"
 msgstr "ŠtetjeA"
@@ -14172,7 +14171,7 @@ msgstr ""
 "Odstranili boste aktivni list.\n"
 "Želite nadaljevati?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1241
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1235
 #, kde-format
 msgid "Enter name:"
 msgstr "Vnesite ime:"
@@ -14232,405 +14231,395 @@ msgstr "PreštetoA: "
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1315
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1309
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Spremeni barvo besedila"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1338
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1332
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Spremeni barvo ozadja"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:709
+#: ui/CellToolBase_p.cpp:707
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Spremeni obrobo"
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:157
 #, kde-format
 msgid "Cell Format..."
 msgstr "Oblika celice ..."
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Določite oblikovanje celice"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "Style Manager..."
 msgstr "Upravitelj slogov ..."
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr "Uredi in organiziraj sloge celic"
 
-#: ui/CellToolBase.cpp:170 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:169 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "Slog"
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "Uporabi že določen slog na izbranih celicah"
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "Ustvari slog iz celice ..."
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:175
 #, kde-format
 msgid "Style From Cell"
 msgstr "Slog iz celice"
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:178
 #, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "Ustvari nov slog osnovan na trenutno izbrani celici"
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Select Font..."
 msgstr "Izberite pisavo ..."
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:187
 #, kde-format
 msgid "Select Font Size"
 msgstr "Izberite velikost pisave"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:188
 #, kde-format
 msgid "Font Size"
 msgstr "Velikost pisave"
 
-#: ui/CellToolBase.cpp:195
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Text Color"
 msgstr "Barva besedila"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:195
 #, kde-format
 msgid "Set the text color"
 msgstr "Nastavi barvo besedila"
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:203
 #, kde-format
 msgid "Select a new border color"
 msgstr "Izberite novo barvo obrobe"
 
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:204
 #, kde-format
 msgid "Border Color"
 msgstr "Barva roba"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:213
 #, kde-format
 msgid "Set the background color"
 msgstr "Nastavi barvo ozadja"
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Background Color"
 msgstr "Barva ozadja"
 
-#: ui/CellToolBase.cpp:221 ui/CellToolBase.cpp:227
+#: ui/CellToolBase.cpp:220 ui/CellToolBase.cpp:226
 #, kde-format
 msgid "Cells..."
 msgstr "Celice ..."
 
-#: ui/CellToolBase.cpp:222 ui/CellToolBase_p.cpp:1132
+#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:1130
 #, kde-format
 msgid "Insert Cells..."
 msgstr "Vstavi celice ..."
 
-#: ui/CellToolBase.cpp:223
+#: ui/CellToolBase.cpp:222
 #, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "Vstavi prazno celico v preglednico"
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:227
 #, kde-format
 msgid "Remove Cells..."
 msgstr "Odstrani celice ..."
 
-#: ui/CellToolBase.cpp:229
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "Odstrani celice iz preglednice"
 
-#: ui/CellToolBase.cpp:235 ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:234 ui/CellToolBase.cpp:235
 #, kde-format
 msgid "Clear All"
 msgstr "Počisti vse"
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:236
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Počisti vso vsebino in oblikovanje trenutne celice"
 
-#: ui/CellToolBase.cpp:241
+#: ui/CellToolBase.cpp:240
 #, kde-format
 msgid "Contents"
 msgstr "Vsebina"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:241
 #, kde-format
 msgid "Clear Contents"
 msgstr "Pobriši vsebino"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:242
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Odstrani vsebino trenutne celice"
 
-#: ui/CellToolBase.cpp:247
+#: ui/CellToolBase.cpp:246
 #, kde-format
 msgid "Conditional Styles..."
 msgstr "Pogoji slogi ..."
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:247
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "Nastavi obliko celice glede na določene pogoje"
 
-#: ui/CellToolBase.cpp:252 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:251 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr "Pogoji slogi"
 
-#: ui/CellToolBase.cpp:253
+#: ui/CellToolBase.cpp:252
 #, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Odstrani pogojne sloge"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:253
 #, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Odstrani sloge pogojnega oblikovanja celice"
 
-#: ui/CellToolBase.cpp:260
+#: ui/CellToolBase.cpp:259
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "S&amodejno filtriraj"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:262
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "Dodaj avtomatski filter na obsegu celic"
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "&Function..."
 msgstr "&Funkcija ..."
 
-#: ui/CellToolBase.cpp:270
+#: ui/CellToolBase.cpp:269
 #, kde-format
 msgid "Insert math expression"
 msgstr "Vstavi matematični izraz"
 
-#: ui/CellToolBase.cpp:273
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "From &Database..."
 msgstr "Iz &zbirke podatkov ..."
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:276
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Vstavi podatke iz zbirke podatkov SQL"
 
-#: ui/CellToolBase.cpp:280
+#: ui/CellToolBase.cpp:279
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Lastni seznami ..."
 
-#: ui/CellToolBase.cpp:283
+#: ui/CellToolBase.cpp:282
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Ustvari lastne sezname za razvrščanje ali samodejno zapolnjevanje"
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:284
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "Iskanje &cilja ..."
 
-#: ui/CellToolBase.cpp:288
+#: ui/CellToolBase.cpp:287
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Ponavljajoč izračun za iskanje določene vrednosti"
 
-#: ui/CellToolBase.cpp:290
-#, kde-format
-msgid "&Subtotals..."
-msgstr "&Delne vsote ..."
-
-#: ui/CellToolBase.cpp:293
-#, kde-format
-msgid "Create different kind of subtotals to a list or database"
-msgstr "Ustvari drugačno vrsto delnih vsot na seznamu ali v zbirki podatkov"
-
-#: ui/CellToolBase.cpp:295
+#: ui/CellToolBase.cpp:289
 #, kde-format
 msgid "&Pivot Tables..."
 msgstr "&Vrtilne tabele..."
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:292
 #, kde-format
 msgid "Create Pivot Tables"
 msgstr "Ustvari vrstilne tabele"
 
-#: ui/CellToolBase.cpp:300
+#: ui/CellToolBase.cpp:294
 #, kde-format
 msgid "Formula Selection"
 msgstr "Izbor formule"
 
-#: ui/CellToolBase.cpp:302
+#: ui/CellToolBase.cpp:296
 #, kde-format
 msgid "Insert a function"
 msgstr "Vstavi funkcijo"
 
-#: ui/CellToolBase.cpp:303 ui/CellToolBase.cpp:1482
+#: ui/CellToolBase.cpp:297 ui/CellToolBase.cpp:1464
 #, kde-format
 msgid "Others..."
 msgstr "Drugo ..."
 
-#: ui/CellToolBase.cpp:311
+#: ui/CellToolBase.cpp:305
 #, kde-format
 msgid "Modify Cell"
 msgstr "Uredi celico"
 
-#: ui/CellToolBase.cpp:315
+#: ui/CellToolBase.cpp:309
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Uredi poudarjeno celico"
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:312
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Premakni predmet celice na odložišče"
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:316
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Kopiraj predmet celice v odložišče"
 
-#: ui/CellToolBase.cpp:326
+#: ui/CellToolBase.cpp:320
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Prilepi vsebino odložišča ob kazalcu"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:323
 #, kde-format
 msgid "Special Paste..."
 msgstr "Posebno lepljenje ..."
 
-#: ui/CellToolBase.cpp:332
+#: ui/CellToolBase.cpp:326
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Prilepi vsebino odložišča s posebnimi možnostmi"
 
-#: ui/CellToolBase.cpp:334
+#: ui/CellToolBase.cpp:328
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Prilepi z vstavljanjem"
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:331
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Vstavi celico iz odložišča v preglednico"
 
-#: ui/CellToolBase.cpp:340
+#: ui/CellToolBase.cpp:334
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Preračunaj vrednost vseh celic na trenutnem listu"
 
-#: ui/CellToolBase.cpp:358
+#: ui/CellToolBase.cpp:352
 #, kde-format
 msgid "Check the spelling"
 msgstr "Preveri črkovanje"
 
-#: ui/CellToolBase.cpp:361
+#: ui/CellToolBase.cpp:355
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Zaženi Inšpektorja ..."
 
-#: ui/CellToolBase.cpp:367
+#: ui/CellToolBase.cpp:361
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Prikaži QTableView ..."
 
-#: ui/CellToolBase.cpp:373
+#: ui/CellToolBase.cpp:367
 #, kde-format
 msgid "Auto-Format..."
 msgstr "Samodejno oblikovanje ..."
 
-#: ui/CellToolBase.cpp:376
+#: ui/CellToolBase.cpp:370
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Nastavi oblikovanje delovnega lista"
 
-#: ui/CellToolBase.cpp:378
+#: ui/CellToolBase.cpp:372
 #, kde-format
 msgid "Document Settings..."
 msgstr "Nastavitve dokumenta ..."
 
-#: ui/CellToolBase.cpp:381
+#: ui/CellToolBase.cpp:375
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Prikaži pogovorno okno za nastavitev dokumenta"
 
-#: ui/CellToolBase.cpp:385
+#: ui/CellToolBase.cpp:379
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Permutiraj referenčno fiksacijo"
 
-#: ui/CellToolBase.cpp:389
+#: ui/CellToolBase.cpp:383
 #, kde-format
 msgid "Permute fixation"
 msgstr "Permutiraj fiksacijo"
 
-#: ui/CellToolBase.cpp:390
+#: ui/CellToolBase.cpp:384
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Permutirajte fiksacijo sklica na kazalec besedila"
 
-#: ui/CellToolBase.cpp:1174
+#: ui/CellToolBase.cpp:1168
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Ni mogoče locirati dejavnosti %1"
 
-#: ui/CellToolBase.cpp:1240
+#: ui/CellToolBase.cpp:1234
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "Ustvari slog iz celice"
 
-#: ui/CellToolBase.cpp:1249
+#: ui/CellToolBase.cpp:1243
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "Ime sloga ne more biti prazno."
 
-#: ui/CellToolBase.cpp:1254 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1248 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "Slog s tem imenom že obstaja."
 
-#: ui/CellToolBase.cpp:1275 ui/CellToolBase.cpp:1295
+#: ui/CellToolBase.cpp:1269 ui/CellToolBase.cpp:1289
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Spremeni pisavo"
 
-#: ui/CellToolBase.cpp:1376
+#: ui/CellToolBase.cpp:1370
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Počisti besedilo"
 
-#: ui/CellToolBase.cpp:1430
+#: ui/CellToolBase.cpp:1424
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14639,52 +14628,52 @@ msgstr ""
 "Na voljo ni gonilnikov za baze podatkov. Če želite uporabljati to zmožnost, "
 "morate namestiti ustrezne gonilnike za podatkovno bazo Qt."
 
-#: ui/CellToolBase.cpp:1459 ui/CellToolBase.cpp:1471
+#: ui/CellToolBase.cpp:1453
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Izbrati morate več celic."
 
-#: ui/CellToolBase.cpp:1946
+#: ui/CellToolBase.cpp:1928
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Zamenjaj"
 
-#: ui/CellToolBase_p.cpp:678
+#: ui/CellToolBase_p.cpp:676
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Oblika števila"
 
-#: ui/CellToolBase_p.cpp:684
+#: ui/CellToolBase_p.cpp:682
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Oblika valute"
 
-#: ui/CellToolBase_p.cpp:689
+#: ui/CellToolBase_p.cpp:687
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Odstotkovna oblika"
 
-#: ui/CellToolBase_p.cpp:694
+#: ui/CellToolBase_p.cpp:692
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Oblika časa"
 
-#: ui/CellToolBase_p.cpp:699
+#: ui/CellToolBase_p.cpp:697
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Oblika datuma"
 
-#: ui/CellToolBase_p.cpp:704
+#: ui/CellToolBase_p.cpp:702
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Znanstveni format"
 
-#: ui/CellToolBase_p.cpp:1136
+#: ui/CellToolBase_p.cpp:1134
 #, kde-format
 msgid "Delete Cells..."
 msgstr "Izbriši celice..."
 
-#: ui/CellToolBase_p.cpp:1140
+#: ui/CellToolBase_p.cpp:1138
 #, kde-format
 msgid "Selection List..."
 msgstr "Seznam izbora ..."
@@ -15456,7 +15445,6 @@ msgstr "Začetek v celici"
 
 #. i18n: ectx: property (text), widget (QRadioButton, resultButton)
 #: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
-#: ui/dialogs/SubtotalDialog.cpp:100
 #, kde-format
 msgid "Result"
 msgstr "Rezultat"
@@ -16704,7 +16692,7 @@ msgid "Manual Selection"
 msgstr "Ročna izbira"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63 ui/dialogs/SubtotalDialog.cpp:264
+#: ui/dialogs/pivotsubtotals.ui:63
 #, kde-format
 msgid "Product"
 msgstr "Produkt"
@@ -17088,99 +17076,6 @@ msgstr "&Zbriši ..."
 msgid "style%1"
 msgstr "slog%1"
 
-#: ui/dialogs/SubtotalDialog.cpp:42
-#, kde-format
-msgid "Subtotals"
-msgstr "Delne vsote"
-
-#: ui/dialogs/SubtotalDialog.cpp:44
-#, kde-format
-msgid "Remove All"
-msgstr "Odstrani vse"
-
-#: ui/dialogs/SubtotalDialog.cpp:84
-#, kde-format
-msgid "You need to select at least one column for adding subtotals."
-msgstr "Izbrati morate vsaj en stolpec za prikaz delnih vsot."
-
-#: ui/dialogs/SubtotalDialog.cpp:157
-#, kde-format
-msgid "Grand Total"
-msgstr "Vse skupaj"
-
-#: ui/dialogs/SubtotalDialog.cpp:244
-#, kde-format
-msgid "Column '%1' "
-msgstr "Stolpec '%1' "
-
-#: ui/dialogs/SubtotalDialog.cpp:265
-#, kde-format
-msgid "StDev"
-msgstr "StDev"
-
-#: ui/dialogs/SubtotalDialog.cpp:266
-#, kde-format
-msgid "StDevP"
-msgstr "StDevP"
-
-#: ui/dialogs/SubtotalDialog.cpp:268
-#, kde-format
-msgid "Var"
-msgstr "Var"
-
-#: ui/dialogs/SubtotalDialog.cpp:269
-#, kde-format
-msgid "VarP"
-msgstr "VarP"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_replaceSubtotals)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:35
-#, kde-format
-msgid "&Replace current Subtotals"
-msgstr "&Zamenjaj trenutne delne vsote"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_pageBreak)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:48
-#, kde-format
-msgid "&Page break between groups"
-msgstr "&Prelom strani med skupinami"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_summaryBelow)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:55
-#, kde-format
-msgid "&Summary below data"
-msgstr "P&ovzetek pod podatki"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_summaryOnly)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:68
-#, kde-format
-msgid "Summary &only"
-msgstr "&Samo povzetek"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_IgnoreBox)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:75
-#, kde-format
-msgid "&Ignore empty cells when looking for changes"
-msgstr "P&rezri prazne celice med iskanjem sprememb"
-
-#. i18n: ectx: property (text), widget (QLabel, m_eachChangeLabel)
-#: ui/dialogs/SubtotalWidget.ui:35
-#, kde-format
-msgid "At each change in:"
-msgstr "Pri vsaki spremeni v:"
-
-#. i18n: ectx: property (text), widget (QLabel, m_useFunctionLabel)
-#: ui/dialogs/SubtotalWidget.ui:45
-#, kde-format
-msgid "Use function:"
-msgstr "Uporabi funkcijo:"
-
-#. i18n: ectx: property (text), widget (QLabel, m_addSubtotalToLabel)
-#: ui/dialogs/SubtotalWidget.ui:55
-#, kde-format
-msgid "Add Subtotal to:"
-msgstr "Dodaj delno vsoto k:"
-
 #: ui/ExternalEditor.cpp:56
 #, kde-format
 msgid "Apply"
@@ -17242,6 +17137,63 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Odprem povezavo?"
+
+#~ msgid "&Subtotals..."
+#~ msgstr "&Delne vsote ..."
+
+#~ msgid "Create different kind of subtotals to a list or database"
+#~ msgstr "Ustvari drugačno vrsto delnih vsot na seznamu ali v zbirki podatkov"
+
+#~ msgid "Subtotals"
+#~ msgstr "Delne vsote"
+
+#~ msgid "Remove All"
+#~ msgstr "Odstrani vse"
+
+#~ msgid "You need to select at least one column for adding subtotals."
+#~ msgstr "Izbrati morate vsaj en stolpec za prikaz delnih vsot."
+
+#~ msgid "Grand Total"
+#~ msgstr "Vse skupaj"
+
+#~ msgid "Column '%1' "
+#~ msgstr "Stolpec '%1' "
+
+#~ msgid "StDev"
+#~ msgstr "StDev"
+
+#~ msgid "StDevP"
+#~ msgstr "StDevP"
+
+#~ msgid "Var"
+#~ msgstr "Var"
+
+#~ msgid "VarP"
+#~ msgstr "VarP"
+
+#~ msgid "&Replace current Subtotals"
+#~ msgstr "&Zamenjaj trenutne delne vsote"
+
+#~ msgid "&Page break between groups"
+#~ msgstr "&Prelom strani med skupinami"
+
+#~ msgid "&Summary below data"
+#~ msgstr "P&ovzetek pod podatki"
+
+#~ msgid "Summary &only"
+#~ msgstr "&Samo povzetek"
+
+#~ msgid "&Ignore empty cells when looking for changes"
+#~ msgstr "P&rezri prazne celice med iskanjem sprememb"
+
+#~ msgid "At each change in:"
+#~ msgstr "Pri vsaki spremeni v:"
+
+#~ msgid "Use function:"
+#~ msgstr "Uporabi funkcijo:"
+
+#~ msgid "Add Subtotal to:"
+#~ msgstr "Dodaj delno vsoto k:"
 
 #~ msgid "Goto Cell..."
 #~ msgstr "Pojdi v celico ..."

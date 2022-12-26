@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-18 00:53+0000\n"
+"POT-Creation-Date: 2022-12-26 00:53+0000\n"
 "PO-Revision-Date: 2011-07-07 08:22+0000\n"
 "Last-Translator: \n"
 "Language-Team:  <is@li.org>\n"
@@ -883,7 +883,7 @@ msgstr "Tala"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:159 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:158 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -943,7 +943,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "IMABS(\"-i\") skilar 1"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:274 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:273 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "Gagnagrunnur"
@@ -12286,7 +12286,7 @@ msgstr "Virkja"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:184
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:183
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, fuzzy, kde-format
 msgid "Font"
@@ -12771,41 +12771,40 @@ msgstr "Engin"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38 ui/dialogs/SubtotalDialog.cpp:267
+#: ui/dialogs/pivotsubtotals.ui:38
 #, kde-format
 msgid "Sum"
 msgstr "Summa"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58 ui/dialogs/SubtotalDialog.cpp:263
+#: ui/dialogs/pivotsubtotals.ui:58
 #, kde-format
 msgid "Min"
 msgstr "Lágmark"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53 ui/dialogs/SubtotalDialog.cpp:262
+#: ui/dialogs/pivotsubtotals.ui:53
 #, kde-format
 msgid "Max"
 msgstr "Hámark"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48 ui/dialogs/SubtotalDialog.cpp:259
+#: ui/dialogs/pivotsubtotals.ui:48
 #, kde-format
 msgid "Average"
 msgstr "Meðaltal"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43 ui/dialogs/SubtotalDialog.cpp:260
+#: ui/dialogs/pivotsubtotals.ui:43
 #, kde-format
 msgid "Count"
 msgstr "Fjöldi"
 
 #: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:441
-#: ui/dialogs/SubtotalDialog.cpp:261
 #, fuzzy, kde-format
 msgid "CountA"
 msgstr "FjöldiA"
@@ -13616,7 +13615,7 @@ msgstr ""
 "Þú ert á leið með að eyða töflu í notkun.\n"
 "Viltu halda áfram?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1241
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1235
 #, fuzzy, kde-format
 msgid "Enter name:"
 msgstr "Sláðu inn heiti:"
@@ -13676,13 +13675,13 @@ msgstr "Talning: %1"
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1315
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1309
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Breyta texta"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1338
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1332
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
@@ -13690,457 +13689,447 @@ msgstr "Breyta bakgrunnslit"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:709
+#: ui/CellToolBase_p.cpp:707
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Breyta ramma"
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:157
 #, fuzzy, kde-format
 msgid "Cell Format..."
 msgstr "Formhönnun reita..."
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:164
 #, fuzzy, kde-format
 msgid "Style Manager..."
 msgstr "Sniðstjóri"
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr ""
 
-#: ui/CellToolBase.cpp:170 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:169 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, fuzzy, kde-format
 msgid "Style"
 msgstr "Stíll"
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "Fara til vinstri"
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:174
 #, fuzzy, kde-format
 msgid "Create Style From Cell..."
 msgstr "Útlit reitar"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:175
 #, fuzzy, kde-format
 msgid "Style From Cell"
 msgstr "Útlit reitar"
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:178
 #, fuzzy, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "Fara til vinstri"
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:182
 #, fuzzy, kde-format
 msgid "Select Font..."
 msgstr "Velja letur..."
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:187
 #, kde-format
 msgid "Select Font Size"
 msgstr "Velja leturstærð"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:188
 #, fuzzy, kde-format
 #| msgid "Select Font Size"
 msgid "Font Size"
 msgstr "Leturstærð"
 
-#: ui/CellToolBase.cpp:195
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Text Color"
 msgstr "Litur texta"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:195
 #, fuzzy, kde-format
 msgid "Set the text color"
 msgstr "Breyta bakgrunnslit"
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:203
 #, fuzzy, kde-format
 msgid "Select a new border color"
 msgstr "Breyta lit á ramma"
 
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:204
 #, kde-format
 msgid "Border Color"
 msgstr "Litur jaðra"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:213
 #, fuzzy, kde-format
 msgid "Set the background color"
 msgstr "Breyta bakgrunnslit"
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Background Color"
 msgstr "Bakgrunnslitur"
 
-#: ui/CellToolBase.cpp:221 ui/CellToolBase.cpp:227
+#: ui/CellToolBase.cpp:220 ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 msgid "Cells..."
 msgstr "Reitur:"
 
-#: ui/CellToolBase.cpp:222 ui/CellToolBase_p.cpp:1132
+#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:1130
 #, fuzzy, kde-format
 msgid "Insert Cells..."
 msgstr "Setja inn reit(i)..."
 
-#: ui/CellToolBase.cpp:223
+#: ui/CellToolBase.cpp:222
 #, fuzzy, kde-format
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "Bæta við töflu"
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:227
 #, fuzzy, kde-format
 msgid "Remove Cells..."
 msgstr "Eyða reit(um)..."
 
-#: ui/CellToolBase.cpp:229
+#: ui/CellToolBase.cpp:228
 #, fuzzy, kde-format
 msgid "Removes the cells from the spreadsheet"
 msgstr "Bæta við töflu"
 
-#: ui/CellToolBase.cpp:235 ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:234 ui/CellToolBase.cpp:235
 #, fuzzy, kde-format
 msgid "Clear All"
 msgstr "Hreinsa allt"
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:236
 #, fuzzy, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:241
+#: ui/CellToolBase.cpp:240
 #, fuzzy, kde-format
 msgid "Contents"
 msgstr "Innihald"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:241
 #, fuzzy, kde-format
 msgid "Clear Contents"
 msgstr "Eyða innihaldi"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:242
 #, fuzzy, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:247
+#: ui/CellToolBase.cpp:246
 #, fuzzy, kde-format
 msgid "Conditional Styles..."
 msgstr "Eiginleikar reita, háðir skilyrðum..."
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:247
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr ""
 
-#: ui/CellToolBase.cpp:252 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:251 ui/dialogs/ConditionalDialog.cpp:242
 #, fuzzy, kde-format
 msgid "Conditional Styles"
 msgstr "Skilyrtir stílar"
 
-#: ui/CellToolBase.cpp:253
+#: ui/CellToolBase.cpp:252
 #, fuzzy, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:253
 #, fuzzy, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:260
+#: ui/CellToolBase.cpp:259
 #, fuzzy, kde-format
 #| msgid "Autofill"
 msgid "&Auto-Filter"
 msgstr "Sjálffylling"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:262
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:266
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Fall"
 
-#: ui/CellToolBase.cpp:270
+#: ui/CellToolBase.cpp:269
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "&Stærðfræðileg segð..."
 
-#: ui/CellToolBase.cpp:273
+#: ui/CellToolBase.cpp:272
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Dags."
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:276
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Dags."
 
-#: ui/CellToolBase.cpp:280
+#: ui/CellToolBase.cpp:279
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Raða listum..."
 
-#: ui/CellToolBase.cpp:283
+#: ui/CellToolBase.cpp:282
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:284
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "&Raðir..."
 
-#: ui/CellToolBase.cpp:288
+#: ui/CellToolBase.cpp:287
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:290
-#, fuzzy, kde-format
-msgid "&Subtotals..."
-msgstr "Raða..."
-
-#: ui/CellToolBase.cpp:293
-#, kde-format
-msgid "Create different kind of subtotals to a list or database"
-msgstr ""
-
-#: ui/CellToolBase.cpp:295
+#: ui/CellToolBase.cpp:289
 #, fuzzy, kde-format
 msgid "&Pivot Tables..."
 msgstr "Raða..."
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:292
 #, fuzzy, kde-format
 msgid "Create Pivot Tables"
 msgstr "Raða..."
 
-#: ui/CellToolBase.cpp:300
+#: ui/CellToolBase.cpp:294
 #, kde-format
 msgid "Formula Selection"
 msgstr "Velja formúlu"
 
-#: ui/CellToolBase.cpp:302
+#: ui/CellToolBase.cpp:296
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Setja inn dálk(a)"
 
-#: ui/CellToolBase.cpp:303 ui/CellToolBase.cpp:1482
+#: ui/CellToolBase.cpp:297 ui/CellToolBase.cpp:1464
 #, kde-format
 msgid "Others..."
 msgstr "Aðrir..."
 
-#: ui/CellToolBase.cpp:311
+#: ui/CellToolBase.cpp:305
 #, kde-format
 msgid "Modify Cell"
 msgstr "Breyta reit"
 
-#: ui/CellToolBase.cpp:315
+#: ui/CellToolBase.cpp:309
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Breyta lit á texta"
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:312
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:316
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:326
+#: ui/CellToolBase.cpp:320
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:323
 #, kde-format
 msgid "Special Paste..."
 msgstr "Líma sérstakt..."
 
-#: ui/CellToolBase.cpp:332
+#: ui/CellToolBase.cpp:326
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:334
+#: ui/CellToolBase.cpp:328
 #, fuzzy, kde-format
 msgid "Paste with Insertion"
 msgstr "Líma með innsetningu..."
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:331
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Bæta við töflu"
 
-#: ui/CellToolBase.cpp:340
+#: ui/CellToolBase.cpp:334
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:358
+#: ui/CellToolBase.cpp:352
 #, kde-format
 msgid "Check the spelling"
 msgstr ""
 
-#: ui/CellToolBase.cpp:361
+#: ui/CellToolBase.cpp:355
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:367
+#: ui/CellToolBase.cpp:361
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Sýna fyrirsögn á röð"
 
-#: ui/CellToolBase.cpp:373
+#: ui/CellToolBase.cpp:367
 #, fuzzy, kde-format
 msgid "Auto-Format..."
 msgstr "Formhönnun reita..."
 
-#: ui/CellToolBase.cpp:376
+#: ui/CellToolBase.cpp:370
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:378
+#: ui/CellToolBase.cpp:372
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Staðbundin viðföng"
 
-#: ui/CellToolBase.cpp:381
+#: ui/CellToolBase.cpp:375
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Sýna vísir að athugasemd"
 
-#: ui/CellToolBase.cpp:385
+#: ui/CellToolBase.cpp:379
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Nákvæmni"
 
-#: ui/CellToolBase.cpp:389
+#: ui/CellToolBase.cpp:383
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Nákvæmni"
 
-#: ui/CellToolBase.cpp:390
+#: ui/CellToolBase.cpp:384
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:1174
+#: ui/CellToolBase.cpp:1168
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1240
+#: ui/CellToolBase.cpp:1234
 #, fuzzy, kde-format
 msgid "Create Style From Cell"
 msgstr "Útlit reitar"
 
-#: ui/CellToolBase.cpp:1249
+#: ui/CellToolBase.cpp:1243
 #, fuzzy, kde-format
 msgid "The style name cannot be empty."
 msgstr "Nafn töflu má ekki vera autt"
 
-#: ui/CellToolBase.cpp:1254 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1248 ui/dialogs/LayoutPage_General.cpp:90
 #, fuzzy, kde-format
 msgid "A style with this name already exists."
 msgstr "Skráin er til fyrir"
 
-#: ui/CellToolBase.cpp:1275 ui/CellToolBase.cpp:1295
+#: ui/CellToolBase.cpp:1269 ui/CellToolBase.cpp:1289
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Breyta leturgerð"
 
-#: ui/CellToolBase.cpp:1376
+#: ui/CellToolBase.cpp:1370
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Breyta texta"
 
-#: ui/CellToolBase.cpp:1430
+#: ui/CellToolBase.cpp:1424
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1459 ui/CellToolBase.cpp:1471
+#: ui/CellToolBase.cpp:1453
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Þú verður að velja fleira en einn reit."
 
-#: ui/CellToolBase.cpp:1946
+#: ui/CellToolBase.cpp:1928
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Skipta út"
 
-#: ui/CellToolBase_p.cpp:678
+#: ui/CellToolBase_p.cpp:676
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Tölusnið"
 
-#: ui/CellToolBase_p.cpp:684
+#: ui/CellToolBase_p.cpp:682
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Núviriði"
 
-#: ui/CellToolBase_p.cpp:689
+#: ui/CellToolBase_p.cpp:687
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Prósentuframsetning"
 
-#: ui/CellToolBase_p.cpp:694
+#: ui/CellToolBase_p.cpp:692
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Tímasnið"
 
-#: ui/CellToolBase_p.cpp:699
+#: ui/CellToolBase_p.cpp:697
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Snið á dagsetningu"
 
-#: ui/CellToolBase_p.cpp:704
+#: ui/CellToolBase_p.cpp:702
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Vísindaleg"
 
-#: ui/CellToolBase_p.cpp:1136
+#: ui/CellToolBase_p.cpp:1134
 #, fuzzy, kde-format
 msgid "Delete Cells..."
 msgstr "Setja inn reit(i)..."
 
-#: ui/CellToolBase_p.cpp:1140
+#: ui/CellToolBase_p.cpp:1138
 #, fuzzy, kde-format
 msgid "Selection List..."
 msgstr "Vallisti..."
@@ -14949,7 +14938,6 @@ msgstr "Strengur"
 
 #. i18n: ectx: property (text), widget (QRadioButton, resultButton)
 #: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
-#: ui/dialogs/SubtotalDialog.cpp:100
 #, fuzzy, kde-format
 msgid "Result"
 msgstr "Útkoma"
@@ -16122,7 +16110,7 @@ msgid "Manual Selection"
 msgstr "Velja formúlu"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63 ui/dialogs/SubtotalDialog.cpp:264
+#: ui/dialogs/pivotsubtotals.ui:63
 #, fuzzy, kde-format
 msgid "Product"
 msgstr "Vara"
@@ -16463,99 +16451,6 @@ msgstr "&Eyða..."
 msgid "style%1"
 msgstr "Snið:"
 
-#: ui/dialogs/SubtotalDialog.cpp:42
-#, fuzzy, kde-format
-msgid "Subtotals"
-msgstr "Millisamtölur"
-
-#: ui/dialogs/SubtotalDialog.cpp:44
-#, fuzzy, kde-format
-msgid "Remove All"
-msgstr "Fjarlægja allt"
-
-#: ui/dialogs/SubtotalDialog.cpp:84
-#, fuzzy, kde-format
-msgid "You need to select at least one column for adding subtotals."
-msgstr "Þú getur ekki falið síðustu sýnilegu töfluna."
-
-#: ui/dialogs/SubtotalDialog.cpp:157
-#, fuzzy, kde-format
-msgid "Grand Total"
-msgstr "Heildarstig"
-
-#: ui/dialogs/SubtotalDialog.cpp:244
-#, fuzzy, kde-format
-msgid "Column '%1' "
-msgstr "Dálkur %1"
-
-#: ui/dialogs/SubtotalDialog.cpp:265
-#, fuzzy, kde-format
-msgid "StDev"
-msgstr "Staðalfrávik"
-
-#: ui/dialogs/SubtotalDialog.cpp:266
-#, fuzzy, kde-format
-msgid "StDevP"
-msgstr "Skref"
-
-#: ui/dialogs/SubtotalDialog.cpp:268
-#, fuzzy, kde-format
-msgid "Var"
-msgstr "Var"
-
-#: ui/dialogs/SubtotalDialog.cpp:269
-#, kde-format
-msgid "VarP"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_replaceSubtotals)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:35
-#, kde-format
-msgid "&Replace current Subtotals"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_pageBreak)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:48
-#, kde-format
-msgid "&Page break between groups"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_summaryBelow)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:55
-#, kde-format
-msgid "&Summary below data"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_summaryOnly)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:68
-#, kde-format
-msgid "Summary &only"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_IgnoreBox)
-#: ui/dialogs/SubtotalsDetailsWidget.ui:75
-#, kde-format
-msgid "&Ignore empty cells when looking for changes"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, m_eachChangeLabel)
-#: ui/dialogs/SubtotalWidget.ui:35
-#, kde-format
-msgid "At each change in:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, m_useFunctionLabel)
-#: ui/dialogs/SubtotalWidget.ui:45
-#, fuzzy, kde-format
-msgid "Use function:"
-msgstr "Setja inn dálk(a)"
-
-#. i18n: ectx: property (text), widget (QLabel, m_addSubtotalToLabel)
-#: ui/dialogs/SubtotalWidget.ui:55
-#, fuzzy, kde-format
-msgid "Add Subtotal to:"
-msgstr "Raða..."
-
 #: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 #| msgid "April"
@@ -16616,6 +16511,50 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Setja inn dálk(a)"
+
+#, fuzzy
+#~ msgid "&Subtotals..."
+#~ msgstr "Raða..."
+
+#, fuzzy
+#~ msgid "Subtotals"
+#~ msgstr "Millisamtölur"
+
+#, fuzzy
+#~ msgid "Remove All"
+#~ msgstr "Fjarlægja allt"
+
+#, fuzzy
+#~ msgid "You need to select at least one column for adding subtotals."
+#~ msgstr "Þú getur ekki falið síðustu sýnilegu töfluna."
+
+#, fuzzy
+#~ msgid "Grand Total"
+#~ msgstr "Heildarstig"
+
+#, fuzzy
+#~ msgid "Column '%1' "
+#~ msgstr "Dálkur %1"
+
+#, fuzzy
+#~ msgid "StDev"
+#~ msgstr "Staðalfrávik"
+
+#, fuzzy
+#~ msgid "StDevP"
+#~ msgstr "Skref"
+
+#, fuzzy
+#~ msgid "Var"
+#~ msgstr "Var"
+
+#, fuzzy
+#~ msgid "Use function:"
+#~ msgstr "Setja inn dálk(a)"
+
+#, fuzzy
+#~ msgid "Add Subtotal to:"
+#~ msgstr "Raða..."
 
 #~ msgid "Goto Cell..."
 #~ msgstr "Fara í reit..."
