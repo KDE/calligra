@@ -163,12 +163,33 @@ void CellToolBase::Private::processEnterKey(QKeyEvent* event)
     event->accept(); // QKeyEvent
 }
 
+Calligra::Sheets::MoveTo CellToolBase::Private::directionForKey(int key) {
+    Sheet * const sheet = q->selection()->activeSheet();
+    if (key == Qt::Key_Down) return Bottom;
+    if (key == Qt::Key_Up) return Top;
+    if (key == Qt::Key_Left) {
+        if (sheet->layoutDirection() == Qt::RightToLeft)
+            return Right;
+        return Left;
+    }
+    if (key == Qt::Key_Right) {
+        if (sheet->layoutDirection() == Qt::RightToLeft)
+            return Left;
+        return Right;
+    }
+    if (key == Qt::Key_Tab) return Right;
+    //Shift+Tab moves to the left
+    if (key == Qt::Key_Backtab) return Left;
+    Q_ASSERT(false);
+    return NoMovement;
+}
+
 void CellToolBase::Private::processArrowKey(QKeyEvent *event)
 {
     /* NOTE:  hitting the tab key also calls this function.  Don't forget
         to account for it
     */
-     Sheet * const sheet = q->selection()->activeSheet();
+    Sheet * const sheet = q->selection()->activeSheet();
     if (!sheet)
         return;
 
@@ -176,40 +197,9 @@ void CellToolBase::Private::processArrowKey(QKeyEvent *event)
     if (!q->selection()->referenceSelectionMode())
       q->selection()->emitCloseEditor(true);
 
-    Calligra::Sheets::MoveTo direction = Bottom;
+    Calligra::Sheets::MoveTo direction = directionForKey(event->key());
     bool makingSelection = event->modifiers() & Qt::ShiftModifier;
-
-    switch (event->key()) {
-    case Qt::Key_Down:
-        direction = Bottom;
-        break;
-    case Qt::Key_Up:
-        direction = Top;
-        break;
-    case Qt::Key_Left:
-        if (sheet->layoutDirection() == Qt::RightToLeft)
-            direction = Right;
-        else
-            direction = Left;
-        break;
-    case Qt::Key_Right:
-        if (sheet->layoutDirection() == Qt::RightToLeft)
-            direction = Left;
-        else
-            direction = Right;
-        break;
-    case Qt::Key_Tab:
-        direction = Right;
-        break;
-    case Qt::Key_Backtab:
-        //Shift+Tab moves to the left
-        direction = Left;
-        makingSelection = false;
-        break;
-    default:
-        Q_ASSERT(false);
-        break;
-    }
+    if (event->key() == Qt::Key_Backtab) makingSelection = false;
 
     moveDirection(direction, makingSelection);
     event->accept(); // QKeyEvent
@@ -378,272 +368,87 @@ void CellToolBase::Private::processOtherKey(QKeyEvent *event)
     }
 }
 
+// Helper for control-movement. Returns the next cell.
+Cell CellToolBase::Private::nextMarginCellInDirection(const Cell &cell, Calligra::Sheets::MoveTo direction)
+{
+    if (direction == NoMovement) return cell;   // shouldn't happen
+    if (cell.isNull()) return cell;
+
+    QPoint cursor = cell.cellPosition();
+    Sheet *sheet = cell.fullSheet();
+    const CellStorage *storage = sheet->fullCellStorage();
+
+    QPoint next = visibleCellInDirection(cursor, sheet, direction);
+    if (next == cursor) return cell;  // no movement
+
+    Cell nextCell(sheet, next);
+    if (!nextCell.isEmpty()) {
+        // If our cell was empty, we're now done
+        if (cell.isEmpty()) return nextCell;
+
+        // otherwise, we want to keep going until we find an empty one. Then we return the one immediately before.
+        Cell res = nextCell;
+        while (!nextCell.isEmpty()) {
+            res = nextCell;
+            QPoint nextcursor = nextCell.cellPosition();
+            next = visibleCellInDirection(nextcursor, sheet, direction);
+            if (next == nextcursor) break;  // we have hit the edge
+            nextCell = Cell(sheet, next);
+        }
+        return res;
+    }
+
+    // The next cell is empty. We want to keep going until we find a non-empty one, or the end.
+    // We'll advance the index past all the empty cells, to speed things up.
+    while (nextCell.isEmpty()) {
+        if (direction == Bottom) {
+            Cell c = storage->nextInColumn(nextCell.column(), nextCell.row(), CellStorage::VisitContent);
+            // hit the end?
+            if (c.isNull()) return Cell(sheet, nextCell.column(), KS_rowMax);
+            nextCell = Cell(sheet, nextCell.column(), c.row() - 1);
+        }
+        if (direction == Top) {
+            Cell c = storage->prevInColumn(nextCell.column(), nextCell.row(), CellStorage::VisitContent);
+            // hit the end?
+            if (c.isNull()) return Cell(sheet, nextCell.column(), 1);
+            nextCell = Cell(sheet, nextCell.column(), c.row() + 1);
+        }
+        if (direction == Right) {
+            Cell c = storage->nextInRow(nextCell.column(), nextCell.row(), CellStorage::VisitContent);
+            // hit the end?
+            if (c.isNull()) return Cell(sheet, KS_colMax, nextCell.row());
+            nextCell = Cell(sheet, c.column() - 1, nextCell.row());
+        }
+        if (direction == Left) {
+            Cell c = storage->prevInRow(nextCell.column(), nextCell.row(), CellStorage::VisitContent);
+            // hit the end?
+            if (c.isNull()) return Cell(sheet, 1, nextCell.row());
+            nextCell = Cell(sheet, c.column() + 1, nextCell.row());
+        }
+
+        QPoint nextcursor = nextCell.cellPosition();
+        next = visibleCellInDirection(nextcursor, sheet, direction);
+        if (next == nextcursor) return nextCell;   // this shouldn't happen, but just in case ...
+        nextCell = Cell(sheet, next);
+    }
+    return nextCell;
+}
+
 bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
 {
-     Sheet * const sheet = q->selection()->activeSheet();
+    Sheet * const sheet = q->selection()->activeSheet();
     if (!sheet)
         return false;
 
+    Calligra::Sheets::MoveTo direction = directionForKey(event->key());
     bool makingSelection = event->modifiers() & Qt::ShiftModifier;
 
-    Cell cell;
-    Cell lastCell;
-    QPoint destination;
-    bool searchThroughEmpty = true;
-    int row;
-    int col;
-
     QPoint marker = q->selection()->marker();
-    CellStorage *cells = sheet->fullCellStorage();
+    Cell cell = Cell(sheet, marker.x(), marker.y());
 
-    /* here, we want to move to the first or last cell in the given direction that is
-        actually being used.  Ignore empty cells and cells on hidden rows/columns */
-    switch (event->key()) {
-        //Ctrl+Qt::Key_Up
-    case Qt::Key_Up:
-
-        cell = Cell(sheet, marker.x(), marker.y());
-        if ((!cell.isNull()) && (!cell.isEmpty()) && (marker.y() != 1)) {
-            lastCell = cell;
-            row = marker.y() - 1;
-            cell = Cell(sheet, cell.column(), row);
-            while ((!cell.isNull()) && (row > 0) && (!cell.isEmpty())) {
-                if (!sheet->rowFormats()->isHiddenOrFiltered(cell.row())) {
-                    lastCell = cell;
-                    searchThroughEmpty = false;
-                }
-                row--;
-                if (row > 0)
-                    cell = Cell(sheet, cell.column(), row);
-            }
-            cell = lastCell;
-        }
-        if (searchThroughEmpty) {
-            cell = cells->prevInColumn(marker.x(), marker.y(), CellStorage::VisitContent);
-
-            while ((!cell.isNull()) &&
-                    (cell.isEmpty() || (sheet->rowFormats()->isHiddenOrFiltered(cell.row())))) {
-                cell = cells->prevInColumn(cell.column(), cell.row(), CellStorage::VisitContent);
-            }
-        }
-
-        if (cell.isNull())
-            row = 1;
-        else
-            row = cell.row();
-
-        int lastHiddenOrFiltered;
-        while (sheet->rowFormats()->isHiddenOrFiltered(row, &lastHiddenOrFiltered)) {
-            row = lastHiddenOrFiltered + 1;
-        }
-
-        destination.setX(qBound(1, marker.x(), q->maxCol()));
-        destination.setY(qBound(1, row, q->maxRow()));
-        break;
-
-        //Ctrl+Qt::Key_Down
-    case Qt::Key_Down:
-
-        cell = Cell(sheet, marker.x(), marker.y());
-        if ((!cell.isNull()) && (!cell.isEmpty()) && (marker.y() != q->maxRow())) {
-            lastCell = cell;
-            row = marker.y() + 1;
-            cell = Cell(sheet, cell.column(), row);
-            while ((!cell.isNull()) && (row < q->maxRow()) && (!cell.isEmpty())) {
-                if (!(sheet->rowFormats()->isHiddenOrFiltered(cell.row()))) {
-                    lastCell = cell;
-                    searchThroughEmpty = false;
-                }
-                row++;
-                cell = Cell(sheet, cell.column(), row);
-            }
-            cell = lastCell;
-        }
-        if (searchThroughEmpty) {
-            cell = cells->nextInColumn(marker.x(), marker.y(), CellStorage::VisitContent);
-
-            while ((!cell.isNull()) &&
-                    (cell.isEmpty() || (sheet->rowFormats()->isHiddenOrFiltered(cell.row())))) {
-                cell = cells->nextInColumn(cell.column(), cell.row(), CellStorage::VisitContent);
-            }
-        }
-
-        if (cell.isNull())
-            row = marker.y();
-        else
-            row = cell.row();
-
-        int firstHiddenOrFiltered;
-        while (row >= 1 && sheet->rowFormats()->isHiddenOrFiltered(row, 0, &firstHiddenOrFiltered)) {
-            row = firstHiddenOrFiltered - 1;
-        }
-
-        destination.setX(qBound(1, marker.x(), q->maxCol()));
-        destination.setY(qBound(1, row, q->maxRow()));
-        break;
-
-//Ctrl+Qt::Key_Left
-    case Qt::Key_Left:
-
-        if (sheet->layoutDirection() == Qt::RightToLeft) {
-            cell = Cell(sheet, marker.x(), marker.y());
-            if ((!cell.isNull()) && (!cell.isEmpty()) && (marker.x() != q->maxCol())) {
-                lastCell = cell;
-                col = marker.x() + 1;
-                cell = Cell(sheet, col, cell.row());
-                while ((!cell.isNull()) && (col < q->maxCol()) && (!cell.isEmpty())) {
-                    if (!(sheet->columnFormats()->isHiddenOrFiltered(cell.column()))) {
-                        lastCell = cell;
-                        searchThroughEmpty = false;
-                    }
-                    col++;
-                    cell = Cell(sheet, col, cell.row());
-                }
-                cell = lastCell;
-            }
-            if (searchThroughEmpty) {
-                cell = cells->nextInRow(marker.x(), marker.y(), CellStorage::VisitContent);
-
-                while ((!cell.isNull()) &&
-                        (cell.isEmpty() || (sheet->columnFormats()->isHiddenOrFiltered(cell.column())))) {
-                    cell = cells->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
-                }
-            }
-
-            if (cell.isNull())
-                col = marker.x();
-            else
-                col = cell.column();
-
-            while (sheet->columnFormats()->isHiddenOrFiltered(col)) {
-                col--;
-            }
-
-            destination.setX(qBound(1, col, q->maxCol()));
-            destination.setY(qBound(1, marker.y(), q->maxRow()));
-        } else {
-            cell = Cell(sheet, marker.x(), marker.y());
-            if ((!cell.isNull()) && (!cell.isEmpty()) && (marker.x() != 1)) {
-                lastCell = cell;
-                col = marker.x() - 1;
-                cell = Cell(sheet, col, cell.row());
-                while ((!cell.isNull()) && (col > 0) && (!cell.isEmpty())) {
-                    if (!(sheet->columnFormats()->isHiddenOrFiltered(cell.column()))) {
-                        lastCell = cell;
-                        searchThroughEmpty = false;
-                    }
-                    col--;
-                    if (col > 0)
-                        cell = Cell(sheet, col, cell.row());
-                }
-                cell = lastCell;
-            }
-            if (searchThroughEmpty) {
-                cell = cells->prevInRow(marker.x(), marker.y(), CellStorage::VisitContent);
-
-                while ((!cell.isNull()) &&
-                        (cell.isEmpty() || (sheet->columnFormats()->isHiddenOrFiltered(cell.column())))) {
-                    cell = cells->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
-                }
-            }
-
-            if (cell.isNull())
-                col = 1;
-            else
-                col = cell.column();
-
-            while (sheet->columnFormats()->isHiddenOrFiltered(col)) {
-                col++;
-            }
-
-            destination.setX(qBound(1, col, q->maxCol()));
-            destination.setY(qBound(1, marker.y(), q->maxRow()));
-        }
-        break;
-
-//Ctrl+Qt::Key_Right
-    case Qt::Key_Right:
-
-        if (sheet->layoutDirection() == Qt::RightToLeft) {
-            cell = Cell(sheet, marker.x(), marker.y());
-            if ((!cell.isNull()) && (!cell.isEmpty()) && (marker.x() != 1)) {
-                lastCell = cell;
-                col = marker.x() - 1;
-                cell = Cell(sheet, col, cell.row());
-                while ((!cell.isNull()) && (col > 0) && (!cell.isEmpty())) {
-                    if (!(sheet->columnFormats()->isHiddenOrFiltered(cell.column()))) {
-                        lastCell = cell;
-                        searchThroughEmpty = false;
-                    }
-                    col--;
-                    if (col > 0)
-                        cell = Cell(sheet, col, cell.row());
-                }
-                cell = lastCell;
-            }
-            if (searchThroughEmpty) {
-                cell = cells->prevInRow(marker.x(), marker.y(), CellStorage::VisitContent);
-
-                while ((!cell.isNull()) &&
-                        (cell.isEmpty() || (sheet->columnFormats()->isHiddenOrFiltered(cell.column())))) {
-                    cell = cells->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
-                }
-            }
-
-            if (cell.isNull())
-                col = 1;
-            else
-                col = cell.column();
-
-            while (sheet->columnFormats()->isHiddenOrFiltered(col)) {
-                col++;
-            }
-
-            destination.setX(qBound(1, col, q->maxCol()));
-            destination.setY(qBound(1, marker.y(), q->maxRow()));
-        } else {
-            cell = Cell(sheet, marker.x(), marker.y());
-            if ((!cell.isNull()) && (!cell.isEmpty()) && (marker.x() != q->maxCol())) {
-                lastCell = cell;
-                col = marker.x() + 1;
-                cell = Cell(sheet, col, cell.row());
-                while ((!cell.isNull()) && (col < q->maxCol()) && (!cell.isEmpty())) {
-                    if (!(sheet->columnFormats()->isHiddenOrFiltered(cell.column()))) {
-                        lastCell = cell;
-                        searchThroughEmpty = false;
-                    }
-                    col++;
-                    cell = Cell(sheet, col, cell.row());
-                }
-                cell = lastCell;
-            }
-            if (searchThroughEmpty) {
-                cell = cells->nextInRow(marker.x(), marker.y(), CellStorage::VisitContent);
-
-                while ((!cell.isNull()) &&
-                        (cell.isEmpty() || (sheet->columnFormats()->isHiddenOrFiltered(cell.column())))) {
-                    cell = cells->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
-                }
-            }
-
-            if (cell.isNull())
-                col = marker.x();
-            else
-                col = cell.column();
-
-            while (sheet->columnFormats()->isHiddenOrFiltered(col)) {
-                col--;
-            }
-
-            destination.setX(qBound(1, col, q->maxCol()));
-            destination.setY(qBound(1, marker.y(), q->maxRow()));
-        }
-        break;
-
-    }
-
-    if (marker == destination)
-        return false;
+    Cell tgcell = nextMarginCellInDirection(cell, direction);
+    QPoint destination = tgcell.cellPosition();
+    if (destination == marker) return false;
 
     if (makingSelection) {
         q->selection()->update(destination);
@@ -725,6 +530,44 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
     return true;
 }
 
+QPoint CellToolBase::Private::visibleCellInDirection(QPoint point, Sheet *sheet, Calligra::Sheets::MoveTo direction)
+{
+    int col = point.x();
+    int row = point.y();
+    Cell cell(sheet, col, row);
+    cell = cell.masterCell();   // in case it's part of a merged one
+    int first = 0, last = 0;
+    switch (direction) {
+        case NoMovement:
+            return point;
+        case BottomFirst:
+        case Bottom:
+            row += cell.mergedYCells() + 1;
+            if (direction == BottomFirst) col = 1;
+            while ((row <= q->maxRow()) && sheet->rowFormats()->isHiddenOrFiltered(row, &last, &first))
+                row = last + 1;
+            break;
+        case Top:
+            // Can't do row-- as we could be in the middle of a merged cell
+            row = cell.row() - 1;
+            while ((row >= 1) && sheet->rowFormats()->isHiddenOrFiltered(row, &last, &first))
+                row = first - 1;
+            break;
+        case Left:
+            col = cell.column() - 1;
+            while ((col >= 1) && sheet->columnFormats()->isHiddenOrFiltered(col, &last, &first))
+                col = first - 1;
+            break;
+        case Right:
+            col += cell.mergedXCells() + 1;
+            while ((col <= q->maxCol()) && sheet->columnFormats()->isHiddenOrFiltered(col, &last, &first))
+                col = last + 1;
+            break;
+    }
+    if ((row < 1) || (col < 1) || (row > q->maxRow()) || (col > q->maxCol())) return point;
+    return QPoint(col, row);
+}
+
 QRect CellToolBase::Private::moveDirection(Calligra::Sheets::MoveTo direction, bool extendSelection)
 {
     debugSheetsUI << "Canvas::moveDirection";
@@ -733,70 +576,8 @@ QRect CellToolBase::Private::moveDirection(Calligra::Sheets::MoveTo direction, b
     if (!sheet)
         return QRect();
 
-    QPoint destination;
     QPoint cursor = q->selection()->cursor();
-
-    QPoint cellCorner = cursor;
-    Cell cell(sheet, cursor.x(), cursor.y());
-
-    /* cell is either the same as the marker, or the cell that is forced obscuring
-        the marker cell
-    */
-    if (cell.isPartOfMerged()) {
-        cell = cell.masterCell();
-        cellCorner = QPoint(cell.column(), cell.row());
-    }
-
-    /* how many cells must we move to get to the next cell? */
-    int offset = 0;
-    switch (direction)
-        /* for each case, figure out how far away the next cell is and then keep
-            going one row/col at a time after that until a visible row/col is found
-
-            NEVER use cell.column() or cell.row() -- it might be a default cell
-        */
-    {
-    case Bottom:
-        offset = cell.mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
-        while (((cursor.y() + offset) <= q->maxRow()) && sheet->rowFormats()->isHiddenOrFiltered(cursor.y() + offset)) {
-            offset++;
-        }
-
-        destination = QPoint(cursor.x(), qMin(cursor.y() + offset, q->maxRow()));
-        break;
-    case Top:
-        offset = (cellCorner.y() - cursor.y()) - 1;
-        while (((cursor.y() + offset) >= 1) && sheet->rowFormats()->isHiddenOrFiltered(cursor.y() + offset)) {
-            offset--;
-        }
-        destination = QPoint(cursor.x(), qMax(cursor.y() + offset, 1));
-        break;
-    case Left:
-        offset = (cellCorner.x() - cursor.x()) - 1;
-        while (((cursor.x() + offset) >= 1) && sheet->columnFormats()->isHiddenOrFiltered(cursor.x() + offset)) {
-            offset--;
-        }
-        destination = QPoint(qMax(cursor.x() + offset, 1), cursor.y());
-        break;
-    case Right:
-        offset = cell.mergedXCells() - (cursor.x() - cellCorner.x()) + 1;
-        while (((cursor.x() + offset) <= q->maxCol()) && sheet->columnFormats()->isHiddenOrFiltered(cursor.x() + offset)) {
-            offset++;
-        }
-        destination = QPoint(qMin(cursor.x() + offset, q->maxCol()), cursor.y());
-        break;
-    case BottomFirst:
-        offset = cell.mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
-        while (((cursor.y() + offset) <= q->maxRow()) && sheet->rowFormats()->isHiddenOrFiltered(cursor.y() + offset)) {
-            ++offset;
-        }
-
-        destination = QPoint(1, qMin(cursor.y() + offset, q->maxRow()));
-        break;
-    case NoMovement:
-        destination = cursor;
-        break;
-    }
+    QPoint destination = CellToolBase::Private::visibleCellInDirection(cursor, sheet, direction);
 
     if (extendSelection) {
         q->selection()->update(destination);

@@ -90,6 +90,8 @@ public:
     void updateActions(const Cell& cell);
     void setProtectedActionsEnabled(bool enable);
 
+    Calligra::Sheets::MoveTo directionForKey(int key);
+
     void processEnterKey(QKeyEvent *event);
     void processArrowKey(QKeyEvent *event);
     void processEscapeKey(QKeyEvent *event);
@@ -100,6 +102,10 @@ public:
     void processOtherKey(QKeyEvent *event);
     bool processControlArrowKey(QKeyEvent *event);
     bool formatKeyPress(QKeyEvent *event);
+
+    /** Which cell to move to when moving in this direction? */
+    QPoint visibleCellInDirection(QPoint point, Sheet *sheet, Calligra::Sheets::MoveTo direction);
+    Cell nextMarginCellInDirection(const Cell &cell, Calligra::Sheets::MoveTo direction);
 
     /**
      * returns the rect that needs to be redrawn
