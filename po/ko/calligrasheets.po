@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:53+0000\n"
+"POT-Creation-Date: 2022-12-27 00:48+0000\n"
 "PO-Revision-Date: 2022-05-15 22:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -14003,7 +14003,7 @@ msgstr "배경색 바꾸기"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:707
+#: ui/CellToolBase_p.cpp:512
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "테두리 변경"
@@ -14104,7 +14104,7 @@ msgstr "배경색"
 msgid "Cells..."
 msgstr "셀..."
 
-#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:1130
+#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:911
 #, kde-format
 msgid "Insert Cells..."
 msgstr "셀 삽입..."
@@ -14399,42 +14399,42 @@ msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "바꾸기"
 
-#: ui/CellToolBase_p.cpp:676
+#: ui/CellToolBase_p.cpp:481
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "숫자 서식"
 
-#: ui/CellToolBase_p.cpp:682
+#: ui/CellToolBase_p.cpp:487
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "통화 서식"
 
-#: ui/CellToolBase_p.cpp:687
+#: ui/CellToolBase_p.cpp:492
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "백분율 서식"
 
-#: ui/CellToolBase_p.cpp:692
+#: ui/CellToolBase_p.cpp:497
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "시간 서식"
 
-#: ui/CellToolBase_p.cpp:697
+#: ui/CellToolBase_p.cpp:502
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "날짜 서식"
 
-#: ui/CellToolBase_p.cpp:702
+#: ui/CellToolBase_p.cpp:507
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "과학적 서식"
 
-#: ui/CellToolBase_p.cpp:1134
+#: ui/CellToolBase_p.cpp:915
 #, kde-format
 msgid "Delete Cells..."
 msgstr "셀 삭제..."
 
-#: ui/CellToolBase_p.cpp:1138
+#: ui/CellToolBase_p.cpp:919
 #, kde-format
 msgid "Selection List..."
 msgstr "선택 목록..."

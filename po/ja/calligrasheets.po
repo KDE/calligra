@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:53+0000\n"
+"POT-Creation-Date: 2022-12-27 00:48+0000\n"
 "PO-Revision-Date: 2014-11-09 15:21-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -14000,7 +14000,7 @@ msgstr "背景色を変更"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:707
+#: ui/CellToolBase_p.cpp:512
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "境界を変更"
@@ -14101,7 +14101,7 @@ msgstr "背景色"
 msgid "Cells..."
 msgstr "セル..."
 
-#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:1130
+#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:911
 #, kde-format
 msgid "Insert Cells..."
 msgstr "セルを挿入..."
@@ -14403,42 +14403,42 @@ msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "置換"
 
-#: ui/CellToolBase_p.cpp:676
+#: ui/CellToolBase_p.cpp:481
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "数値書式"
 
-#: ui/CellToolBase_p.cpp:682
+#: ui/CellToolBase_p.cpp:487
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "通貨書式"
 
-#: ui/CellToolBase_p.cpp:687
+#: ui/CellToolBase_p.cpp:492
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "パーセント書式"
 
-#: ui/CellToolBase_p.cpp:692
+#: ui/CellToolBase_p.cpp:497
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "時間書式"
 
-#: ui/CellToolBase_p.cpp:697
+#: ui/CellToolBase_p.cpp:502
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "日付書式"
 
-#: ui/CellToolBase_p.cpp:702
+#: ui/CellToolBase_p.cpp:507
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "科学表記"
 
-#: ui/CellToolBase_p.cpp:1134
+#: ui/CellToolBase_p.cpp:915
 #, kde-format
 msgid "Delete Cells..."
 msgstr "セルを削除..."
 
-#: ui/CellToolBase_p.cpp:1138
+#: ui/CellToolBase_p.cpp:919
 #, kde-format
 msgid "Selection List..."
 msgstr "選択リスト..."

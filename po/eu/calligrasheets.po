@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:53+0000\n"
+"POT-Creation-Date: 2022-12-27 00:48+0000\n"
 "PO-Revision-Date: 2013-12-23 17:34+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@euskalnet.net>\n"
 "Language-Team: Basque <kde-i18n-doc@kde.org>\n"
@@ -14561,7 +14561,7 @@ msgstr "Atzeko planoaren kolorea aldatu"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:707
+#: ui/CellToolBase_p.cpp:512
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Ertza aldatu"
@@ -14662,7 +14662,7 @@ msgstr "Atzeko planoaren kolorea"
 msgid "Cells..."
 msgstr "Gelaxkak..."
 
-#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:1130
+#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:911
 #, kde-format
 msgid "Insert Cells..."
 msgstr "Gelaxkak txertatu..."
@@ -14963,42 +14963,42 @@ msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Ordeztu"
 
-#: ui/CellToolBase_p.cpp:676
+#: ui/CellToolBase_p.cpp:481
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Zenbaki-formatua"
 
-#: ui/CellToolBase_p.cpp:682
+#: ui/CellToolBase_p.cpp:487
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Moneta-formatua"
 
-#: ui/CellToolBase_p.cpp:687
+#: ui/CellToolBase_p.cpp:492
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Ehuneko-formatua"
 
-#: ui/CellToolBase_p.cpp:692
+#: ui/CellToolBase_p.cpp:497
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Ordu-formatua"
 
-#: ui/CellToolBase_p.cpp:697
+#: ui/CellToolBase_p.cpp:502
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Data-formatua"
 
-#: ui/CellToolBase_p.cpp:702
+#: ui/CellToolBase_p.cpp:507
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Formatu zientifikoa"
 
-#: ui/CellToolBase_p.cpp:1134
+#: ui/CellToolBase_p.cpp:915
 #, kde-format
 msgid "Delete Cells..."
 msgstr "Gelaxkak ezabatu..."
 
-#: ui/CellToolBase_p.cpp:1138
+#: ui/CellToolBase_p.cpp:919
 #, kde-format
 msgid "Selection List..."
 msgstr "Hautapen-zerrenda..."

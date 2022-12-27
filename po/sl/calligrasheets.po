@@ -1,7 +1,7 @@
 # translation of kspread.po to Slovenian
 # Translation of kspread.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligrasheets.po 1640837 2022-12-26 01:48:16Z scripty $
+# $Id: calligrasheets.po 1640887 2022-12-27 01:41:08Z scripty $
 # $Source$
 #
 #
@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:53+0000\n"
+"POT-Creation-Date: 2022-12-27 00:48+0000\n"
 "PO-Revision-Date: 2022-11-14 08:55+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -14243,7 +14243,7 @@ msgstr "Spremeni barvo ozadja"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:707
+#: ui/CellToolBase_p.cpp:512
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Spremeni obrobo"
@@ -14344,7 +14344,7 @@ msgstr "Barva ozadja"
 msgid "Cells..."
 msgstr "Celice ..."
 
-#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:1130
+#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:911
 #, kde-format
 msgid "Insert Cells..."
 msgstr "Vstavi celice ..."
@@ -14638,42 +14638,42 @@ msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Zamenjaj"
 
-#: ui/CellToolBase_p.cpp:676
+#: ui/CellToolBase_p.cpp:481
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Oblika števila"
 
-#: ui/CellToolBase_p.cpp:682
+#: ui/CellToolBase_p.cpp:487
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Oblika valute"
 
-#: ui/CellToolBase_p.cpp:687
+#: ui/CellToolBase_p.cpp:492
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Odstotkovna oblika"
 
-#: ui/CellToolBase_p.cpp:692
+#: ui/CellToolBase_p.cpp:497
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Oblika časa"
 
-#: ui/CellToolBase_p.cpp:697
+#: ui/CellToolBase_p.cpp:502
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Oblika datuma"
 
-#: ui/CellToolBase_p.cpp:702
+#: ui/CellToolBase_p.cpp:507
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Znanstveni format"
 
-#: ui/CellToolBase_p.cpp:1134
+#: ui/CellToolBase_p.cpp:915
 #, kde-format
 msgid "Delete Cells..."
 msgstr "Izbriši celice..."
 
-#: ui/CellToolBase_p.cpp:1138
+#: ui/CellToolBase_p.cpp:919
 #, kde-format
 msgid "Selection List..."
 msgstr "Seznam izbora ..."

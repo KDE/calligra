@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:53+0000\n"
+"POT-Creation-Date: 2022-12-27 00:48+0000\n"
 "PO-Revision-Date: 2008-12-29 20:21-0500\n"
 "Last-Translator: Manu S Madhav <manusmad@gmail.com>\n"
 "Language-Team: SMC <smc.org.in>\n"
@@ -13760,7 +13760,7 @@ msgstr "വ്യത്യാസങ്ങള്‍ പ്രാബല്യത�
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:707
+#: ui/CellToolBase_p.cpp:512
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
@@ -13863,7 +13863,7 @@ msgstr "പശ്ചാത്തലനിറം"
 msgid "Cells..."
 msgstr "കളങ്ങള്‍..."
 
-#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:1130
+#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:911
 #, kde-format
 msgid "Insert Cells..."
 msgstr "കളങ്ങള്‍ ചേര്‍ക്കുക..."
@@ -14177,55 +14177,55 @@ msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "സെപ്റ്റംബര്‍"
 
-#: ui/CellToolBase_p.cpp:676
+#: ui/CellToolBase_p.cpp:481
 #, fuzzy
 #| msgid "Number Format"
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "അക്കം ഫോര്‍മാറ്റ്"
 
-#: ui/CellToolBase_p.cpp:682
+#: ui/CellToolBase_p.cpp:487
 #, fuzzy
 #| msgid "Currency Format"
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "കറന്‍സി ഫോര്‍മാറ്റ്"
 
-#: ui/CellToolBase_p.cpp:687
+#: ui/CellToolBase_p.cpp:492
 #, fuzzy
 #| msgid "Percentage Format"
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "ശതമാന ഫോര്‍മാറ്റ്"
 
-#: ui/CellToolBase_p.cpp:692
+#: ui/CellToolBase_p.cpp:497
 #, fuzzy
 #| msgid "Time Format"
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "സമയം ഫോര്‍മാറ്റ്"
 
-#: ui/CellToolBase_p.cpp:697
+#: ui/CellToolBase_p.cpp:502
 #, fuzzy
 #| msgid "Date Format"
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "തീയതി ഫോര്‍മാറ്റ്"
 
-#: ui/CellToolBase_p.cpp:702
+#: ui/CellToolBase_p.cpp:507
 #, fuzzy
 #| msgid "Scientific Format"
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "ശാസ്ത്രീയ ഫോര്‍മാറ്റ്"
 
-#: ui/CellToolBase_p.cpp:1134
+#: ui/CellToolBase_p.cpp:915
 #, fuzzy, kde-format
 #| msgid "Insert Cells..."
 msgid "Delete Cells..."
 msgstr "കളങ്ങള്‍ ചേര്‍ക്കുക..."
 
-#: ui/CellToolBase_p.cpp:1138
+#: ui/CellToolBase_p.cpp:919
 #, kde-format
 msgid "Selection List..."
 msgstr "തെരഞ്ഞെടുപ്പു് പട്ടിക..."

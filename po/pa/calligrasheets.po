@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:53+0000\n"
+"POT-Creation-Date: 2022-12-27 00:48+0000\n"
 "PO-Revision-Date: 2010-12-26 09:50+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -13576,7 +13576,7 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ ਬਦਲੋ"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:707
+#: ui/CellToolBase_p.cpp:512
 #, fuzzy
 #| msgid "Change Background Color"
 msgctxt "(qtundo-format)"
@@ -13689,7 +13689,7 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 msgid "Cells..."
 msgstr "ਸੈੱਲ..."
 
-#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:1130
+#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:911
 #, fuzzy, kde-format
 #| msgid "Insert Link"
 msgid "Insert Cells..."
@@ -14009,54 +14009,54 @@ msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "ਬਦਲੋ"
 
-#: ui/CellToolBase_p.cpp:676
+#: ui/CellToolBase_p.cpp:481
 #, fuzzy
 #| msgid "Number Format"
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "ਨੰਬਰ ਫਾਰਮੈਟ"
 
-#: ui/CellToolBase_p.cpp:682
+#: ui/CellToolBase_p.cpp:487
 #, fuzzy
 #| msgid "Currency Format"
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "ਮੁਦਰਾ ਫਾਰਮੈਟ"
 
-#: ui/CellToolBase_p.cpp:687
+#: ui/CellToolBase_p.cpp:492
 #, fuzzy
 #| msgid "Percentage Format"
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "ਫੀਸਦੀ ਫਾਰਮੈਟ"
 
-#: ui/CellToolBase_p.cpp:692
+#: ui/CellToolBase_p.cpp:497
 #, fuzzy
 #| msgid "Time Format"
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "ਸਮਾਂ ਫਾਰਮੈਟ"
 
-#: ui/CellToolBase_p.cpp:697
+#: ui/CellToolBase_p.cpp:502
 #, fuzzy
 #| msgid "Date Format"
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "ਮਿਤੀ ਫਾਰਮੈਟ"
 
-#: ui/CellToolBase_p.cpp:702
+#: ui/CellToolBase_p.cpp:507
 #, fuzzy
 #| msgid "Percentage Format"
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "ਫੀਸਦੀ ਫਾਰਮੈਟ"
 
-#: ui/CellToolBase_p.cpp:1134
+#: ui/CellToolBase_p.cpp:915
 #, kde-format
 msgid "Delete Cells..."
 msgstr "...ਸੈੱਲ ਹਟਾਓ"
 
-#: ui/CellToolBase_p.cpp:1138
+#: ui/CellToolBase_p.cpp:919
 #, kde-format
 msgid "Selection List..."
 msgstr "ਲਿਸਟ ਚੋਣ..."

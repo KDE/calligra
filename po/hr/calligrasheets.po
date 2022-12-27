@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:53+0000\n"
+"POT-Creation-Date: 2022-12-27 00:48+0000\n"
 "PO-Revision-Date: 2009-09-29 21:08+0200\n"
 "Last-Translator: Marko Dimjasevic <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -13389,7 +13389,7 @@ msgstr "Boja pozadine"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:707
+#: ui/CellToolBase_p.cpp:512
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
@@ -13494,7 +13494,7 @@ msgstr "Boja pozadine"
 msgid "Cells..."
 msgstr "Ćelije:"
 
-#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:1130
+#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:911
 #, kde-format
 msgid "Insert Cells..."
 msgstr "Umetni ćelije …"
@@ -13802,49 +13802,49 @@ msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Naselje"
 
-#: ui/CellToolBase_p.cpp:676
+#: ui/CellToolBase_p.cpp:481
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Broj pokušaja"
 
-#: ui/CellToolBase_p.cpp:682
+#: ui/CellToolBase_p.cpp:487
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Valuta:"
 
-#: ui/CellToolBase_p.cpp:687
+#: ui/CellToolBase_p.cpp:492
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Format postotka"
 
-#: ui/CellToolBase_p.cpp:692
+#: ui/CellToolBase_p.cpp:497
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Format vremena"
 
-#: ui/CellToolBase_p.cpp:697
+#: ui/CellToolBase_p.cpp:502
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Oblik datuma"
 
-#: ui/CellToolBase_p.cpp:702
+#: ui/CellToolBase_p.cpp:507
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Znanstvena"
 
-#: ui/CellToolBase_p.cpp:1134
+#: ui/CellToolBase_p.cpp:915
 #, fuzzy, kde-format
 #| msgid "Insert Cells..."
 msgid "Delete Cells..."
 msgstr "Umetni ćelije …"
 
-#: ui/CellToolBase_p.cpp:1138
+#: ui/CellToolBase_p.cpp:919
 #, kde-format
 msgid "Selection List..."
 msgstr "Izaberite pismo"
