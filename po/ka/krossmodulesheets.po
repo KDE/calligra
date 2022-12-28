@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2022-09-23 17:12+0200\n"
+"PO-Revision-Date: 2022-12-27 08:42+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #. i18n: ectx: Menu (tools)
 #: scripting.rc:4
@@ -179,7 +179,7 @@ msgstr "რედაქტორი"
 
 #: scripts/consoledocker.py:269
 msgid "Inspect"
-msgstr ""
+msgstr "შეამოწმეთ"
 
 #: scripts/csvexport.py:25
 msgid "CSV Export"
@@ -245,7 +245,7 @@ msgstr ""
 
 #: scripts/csvimport.py:72 scripts/vcardimport.py:60
 msgid "No current sheet."
-msgstr ""
+msgstr "მიმდინარე ფურცლის გარეშე."
 
 #: scripts/csvimport.py:76 scripts/vcardimport.py:70
 msgid "Invalid sheet \"%1\" defined."
@@ -305,7 +305,7 @@ msgstr ""
 #: scripts/csvoptions.ui:184
 #, kde-format
 msgid "Strict"
-msgstr ""
+msgstr "მკაცრი"
 
 #: scripts/htmlexport.py:221
 msgid "No such file \"%1\" to read from."
@@ -327,7 +327,7 @@ msgstr ""
 
 #: scripts/htmlexport.py:366
 msgid "HTML Export"
-msgstr ""
+msgstr "HTML-ში გატანა"
 
 #: scripts/htmlexport.py:371
 msgid "Read from OpenDocument Spreadsheet File"
@@ -343,7 +343,7 @@ msgstr ""
 
 #: scripts/htmlexport.py:380
 msgid "HTML Documents"
-msgstr ""
+msgstr "HTML დოკუმენტები"
 
 #: scripts/htmlexport.py:382
 msgid "HTML Document Information"
@@ -371,7 +371,7 @@ msgstr ""
 
 #: scripts/htmlexport.py:428
 msgid "Export aborted."
-msgstr ""
+msgstr "გატანა გაუქმდა."
 
 #: scripts/htmlexport.py:447
 msgid "Exporting..."
@@ -475,7 +475,7 @@ msgstr "უჯრედის მნიშვნელობა"
 
 #: scripts/myorca.py:148
 msgid "Sheet Name"
-msgstr ""
+msgstr "ფურცლის სახელი"
 
 #: scripts/myorca.py:154
 msgid "Cell Name if selection changed"
@@ -551,7 +551,7 @@ msgstr ""
 
 #: scripts/odfpyexport.py:254
 msgid "Sheets"
-msgstr ""
+msgstr "ფურცლები"
 
 #: scripts/odfpyexport.py:280
 msgid "No OpenDocument file to write defined."
@@ -593,7 +593,7 @@ msgstr ""
 
 #: scripts/pytime.py:11
 msgid "PYTIME(string)"
-msgstr ""
+msgstr "PYTIME(სტრიქონი)"
 
 #: scripts/pytime.py:12
 msgid "The datetime format string."
@@ -1255,7 +1255,7 @@ msgstr ""
 #: scripts/scripts.rc:60
 #, kde-format
 msgid "Orca Screen Reader"
-msgstr ""
+msgstr "Orca - ეკრანის მკითხველი"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:64
@@ -1404,7 +1404,7 @@ msgstr "არასწორი თარიღი"
 
 #: scripts/yfinance.py:81
 msgid "Invalid type"
-msgstr ""
+msgstr "არასწორი ტიპი"
 
 #: scripts/yfinance.py:99 scripts/yweather.py:68
 msgid "Web services request failed"
