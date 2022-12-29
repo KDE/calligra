@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2022-12-27 08:42+0100\n"
+"PO-Revision-Date: 2022-12-28 09:05+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -27,17 +27,17 @@ msgstr "&ხელსაწყოები"
 #: ScriptingFunction.cpp:36
 #, kde-format
 msgid "No such script."
-msgstr ""
+msgstr "სკრიპტი არ არსებობს."
 
 #: ScriptingFunction.cpp:82
 #, kde-format
 msgid "No such script function."
-msgstr ""
+msgstr "სკრიპტის ფუნქცია არ არსებობს."
 
 #: ScriptingFunction.cpp:96
 #, kde-format
 msgid "No return value."
-msgstr ""
+msgstr "დასაბრუნებელი მნიშვნელობის გარეშე."
 
 #: ScriptingFunction.cpp:134 ScriptingFunction.cpp:135
 #: ScriptingFunction.cpp:142
@@ -90,7 +90,7 @@ msgstr "დიაპაზონი"
 #: ScriptingWriter.h:226
 msgctxt "(qtundo-format)"
 msgid "Set Values"
-msgstr ""
+msgstr "მნიშვნელობების დაყენება"
 
 #: scripts/consoledocker.py:63
 msgctxt "Menu"
@@ -203,7 +203,7 @@ msgstr "ყველა ფაილი"
 
 #: scripts/csvexport.py:32 scripts/csvimport.py:32
 msgid "Comma-Separated-Value Files"
-msgstr ""
+msgstr "მძმით-გამოყოფილ-მნიშვნელობების ფაილები"
 
 #: scripts/csvexport.py:34
 msgctxt "Options page name"
@@ -212,11 +212,11 @@ msgstr "გატანა"
 
 #: scripts/csvexport.py:34
 msgid "Export Sheets and ranges"
-msgstr ""
+msgstr "ფურცლებისა და დიაპაზონების გატანა"
 
 #: scripts/csvexport.py:39 scripts/csvimport.py:38
 msgid "Comma Separated Value Options"
-msgstr ""
+msgstr "მძიმით გამოყოფილი მნიშვნელობის მორგება"
 
 #: scripts/csvexport.py:39 scripts/csvimport.py:38
 msgid "Options"
@@ -224,7 +224,7 @@ msgstr "გამართვა"
 
 #: scripts/csvexport.py:79
 msgid "No CSV file chosen"
-msgstr ""
+msgstr "CSV ფაილი არჩეული არაა"
 
 #: scripts/csvimport.py:25
 msgid "CSV Import"
@@ -232,7 +232,7 @@ msgstr "CSV-ის შემოტანა"
 
 #: scripts/csvimport.py:29
 msgid "Import from CSV File"
-msgstr ""
+msgstr "CSV ფაილიდან შემოტანა"
 
 #: scripts/csvimport.py:29 scripts/htmlexport.py:371 scripts/vcardimport.py:40
 #: scripts/xmlviewer.py:30
@@ -257,7 +257,7 @@ msgstr ""
 
 #: scripts/csvimport.py:84 scripts/vcardimport.py:56
 msgid "File '%1' not found."
-msgstr ""
+msgstr "ფაილი ვერ ვიპოვე: %1."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: scripts/csvoptions.ui:21
@@ -269,7 +269,7 @@ msgstr "გამყოფი:"
 #: scripts/csvoptions.ui:58
 #, kde-format
 msgid "Line terminator"
-msgstr ""
+msgstr "ხაზის დაბოლოება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: scripts/csvoptions.ui:100
@@ -339,7 +339,7 @@ msgstr ""
 
 #: scripts/htmlexport.py:377
 msgid "Save to HTML File"
-msgstr ""
+msgstr "HTML ფაილში შენახვა"
 
 #: scripts/htmlexport.py:380
 msgid "HTML Documents"
