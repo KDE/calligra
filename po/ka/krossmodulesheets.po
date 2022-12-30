@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2022-12-29 07:51+0100\n"
+"PO-Revision-Date: 2022-12-30 06:03+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -56,11 +56,12 @@ msgid ""
 "Scriptfile \"%1\" is not executable. Please set the executable-attribute on "
 "that file."
 msgstr ""
+"სკრიპტის ფაილი \"%1\" გაშვებადი არაა. საჭიროა, ფაილზე ეს ატრიბუტი დააყენოთ."
 
 #: ScriptingPart.cpp:72
 #, kde-format
 msgid "Scriptfile \"%1\" is in a temporary directory. Execution denied."
-msgstr ""
+msgstr "სკრიპტი \"%1\" დროებით საქაღალდეშია. გაშვება აკრძალულია."
 
 #: ScriptingPart.cpp:77
 #, kde-format
@@ -70,7 +71,7 @@ msgstr "სკრიპტის (\"%1\") შესრულების შე�
 #: ScriptingPart.cpp:80
 #, kde-format
 msgid "Errors on execution of scripts."
-msgstr "შეცდომა სკრიპტის შესრულებისას"
+msgstr "შეცდომა სკრიპტის შესრულებისას."
 
 #: ScriptingWidgets.cpp:67
 #, kde-format
@@ -137,7 +138,7 @@ msgstr "ფაილის გახსნა"
 
 #: scripts/consoledocker.py:98
 msgid "<qt>Failed to open file \"%1\"<br><br>%2</qt>"
-msgstr ""
+msgstr "<qt>შეცდომა \"%1\" ფაილის გახსნისას<br><br>%2</qt>"
 
 #: scripts/consoledocker.py:98 scripts/consoledocker.py:108
 #: scripts/csvexport.py:46 scripts/csvimport.py:45 scripts/htmlexport.py:444
@@ -147,7 +148,7 @@ msgstr "შეცდომა"
 
 #: scripts/consoledocker.py:108
 msgid "<qt>Failed to save file \"%1\"<br><br>%2</qt>"
-msgstr ""
+msgstr "<qt>შეცდომა \"%1\" ფაილის შენახვისას<br><br>%2</qt>"
 
 #: scripts/consoledocker.py:114
 msgid "Save File"
@@ -241,7 +242,7 @@ msgstr "გახსნა"
 
 #: scripts/csvimport.py:34 scripts/vcardimport.py:47
 msgid "Import to sheet beginning at cell"
-msgstr ""
+msgstr "შემოტანა ფურცელთან, რომელიც უჯრედთან იწყება"
 
 #: scripts/csvimport.py:72 scripts/vcardimport.py:60
 msgid "No current sheet."
@@ -249,11 +250,11 @@ msgstr "მიმდინარე ფურცლის გარეშე."
 
 #: scripts/csvimport.py:76 scripts/vcardimport.py:70
 msgid "Invalid sheet \"%1\" defined."
-msgstr ""
+msgstr "აღწერილი ფურცელი \"%1\" არასწორია."
 
 #: scripts/csvimport.py:80
 msgid "Invalid cell \"%1\" defined."
-msgstr ""
+msgstr "აღწერილი უჯრედი \"%1\" არასწორია."
 
 #: scripts/csvimport.py:84 scripts/vcardimport.py:56
 msgid "File '%1' not found."
@@ -317,13 +318,15 @@ msgstr "ფაილის (\"%1\") გახსნის შეცდომა.
 
 #: scripts/htmlexport.py:236
 msgid "No sheets which could be exported to HTML."
-msgstr ""
+msgstr "ფურცლები, რომლის გატანაც HTML-ში შეიძლება, არ არსებობს."
 
 #: scripts/htmlexport.py:309
 msgid ""
 "Failed to create HTML file \"%1\":\n"
 "%2"
 msgstr ""
+"HTML ფაილის \"%1\" შექმნის შეცდომა:\n"
+"%2"
 
 #: scripts/htmlexport.py:366
 msgid "HTML Export"
@@ -331,11 +334,11 @@ msgstr "HTML-ში გატანა"
 
 #: scripts/htmlexport.py:371
 msgid "Read from OpenDocument Spreadsheet File"
-msgstr ""
+msgstr "OpenDocument Spreadsheet ფაილიდან წაკითხვა"
 
 #: scripts/htmlexport.py:374
 msgid "OpenDocument Spreadsheet Files"
-msgstr ""
+msgstr "OpenDocument -ის ელცხრილის ფაილები"
 
 #: scripts/htmlexport.py:377
 msgid "Save to HTML File"
@@ -367,7 +370,7 @@ msgstr "ჩავანაცვლო ფაილი?"
 
 #: scripts/htmlexport.py:426 scripts/logger.py:30
 msgid "The file \"%1\" does already exist. Overwrite the file?"
-msgstr ""
+msgstr "ფაილი \"%1\" უკვე არსებობს. გადავაწერო?"
 
 #: scripts/htmlexport.py:428
 msgid "Export aborted."
@@ -440,6 +443,8 @@ msgid ""
 "Failed to write Log File \"%1\":\n"
 "%2"
 msgstr ""
+"\"%1\" ჟურნალის ფაილის ჩაწერის შეცდომა:\n"
+"%2"
 
 #: scripts/logger.py:50
 msgid "Failed to create listener for sheetname '%1' and range '%2'"
@@ -479,15 +484,15 @@ msgstr "ფურცლის სახელი"
 
 #: scripts/myorca.py:154
 msgid "Cell Name if selection changed"
-msgstr ""
+msgstr "უჯრედის სახელი, თუ მონიშნული შეიცვალა"
 
 #: scripts/myorca.py:159
 msgid "Cell Value if selection changed"
-msgstr ""
+msgstr "უჯრედის მნიშვნელობა, თუ მონიშნული შეიცვალა"
 
 #: scripts/myorca.py:164
 msgid "Sheet Name if sheet changed"
-msgstr ""
+msgstr "ფურცლის სახელი, თუ ფურცელი შეიცვალა"
 
 #: scripts/myorca.py:188
 msgid "Calligra Spreadsheet"
@@ -495,7 +500,7 @@ msgstr "Calligra -ის ელცხრილი"
 
 #: scripts/myorca.py:198
 msgid "Failed to connect with the Orca HTTP-Server."
-msgstr ""
+msgstr "Orca-ის HTTP სერვერთან მიერთების შეცდომა."
 
 #: scripts/myorca.py:201
 msgid "Url:"
@@ -637,7 +642,7 @@ msgstr ""
 #: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
 #: scripts/rpyfunctions.py:121
 msgid "mean of the distribution"
-msgstr ""
+msgstr "განაწილების საშუალო"
 
 #: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
 #: scripts/rpyfunctions.py:124 scripts/rpyfunctions.py:126
@@ -657,12 +662,12 @@ msgstr ""
 #: scripts/rpyfunctions.py:210 scripts/rpyfunctions.py:215
 #: scripts/rpyfunctions.py:217
 msgid "observation"
-msgstr ""
+msgstr "დაკვირვება"
 
 #: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
 #: scripts/rpyfunctions.py:121
 msgid "standard deviation of the distribution"
-msgstr ""
+msgstr "განაწილების სტანდარტული აცდენა"
 
 #: scripts/rpyfunctions.py:118
 msgid ""
@@ -722,7 +727,7 @@ msgstr ""
 #: scripts/rpyfunctions.py:198 scripts/rpyfunctions.py:205
 #: scripts/rpyfunctions.py:212 scripts/rpyfunctions.py:219
 msgid "probability"
-msgstr ""
+msgstr "ალბათობა"
 
 #: scripts/rpyfunctions.py:123
 msgid ""
@@ -909,7 +914,7 @@ msgstr ""
 #: scripts/rpyfunctions.py:173 scripts/rpyfunctions.py:175
 #: scripts/rpyfunctions.py:177
 msgid "the mean of the distribution"
-msgstr ""
+msgstr "საშუალო განაწილება"
 
 #: scripts/rpyfunctions.py:174
 msgid ""
@@ -951,7 +956,7 @@ msgstr ""
 #: scripts/rpyfunctions.py:191 scripts/rpyfunctions.py:194
 #: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:198
 msgid "the number of trials"
-msgstr ""
+msgstr "გამოცდების რაოდენობა"
 
 #: scripts/rpyfunctions.py:187 scripts/rpyfunctions.py:189
 #: scripts/rpyfunctions.py:191 scripts/rpyfunctions.py:194
@@ -959,7 +964,7 @@ msgstr ""
 #: scripts/rpyfunctions.py:208 scripts/rpyfunctions.py:210
 #: scripts/rpyfunctions.py:212
 msgid "the probability of success in each trial"
-msgstr ""
+msgstr "თითოეული გამოცდის წარმატების ალბათობა"
 
 #: scripts/rpyfunctions.py:188
 msgid ""
@@ -1001,17 +1006,17 @@ msgstr ""
 #: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:203
 #: scripts/rpyfunctions.py:205
 msgid "the number of balls drawn"
-msgstr ""
+msgstr "დახატული ბურთების დაოდენობა"
 
 #: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:203
 #: scripts/rpyfunctions.py:205
 msgid "the number of black balls"
-msgstr ""
+msgstr "შავი ბურთების რაოდენობა"
 
 #: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:203
 #: scripts/rpyfunctions.py:205
 msgid "the number of red balls"
-msgstr ""
+msgstr "წითელი ბურთების რაოდენობა"
 
 #: scripts/rpyfunctions.py:202
 msgid ""
@@ -1052,7 +1057,7 @@ msgstr ""
 #: scripts/rpyfunctions.py:215 scripts/rpyfunctions.py:217
 #: scripts/rpyfunctions.py:219
 msgid "the center of the distribution"
-msgstr ""
+msgstr "განაწილების ცენტრი"
 
 #: scripts/rpyfunctions.py:216
 msgid ""
@@ -1089,7 +1094,7 @@ msgstr "CSV ფაილი"
 #: scripts/scripts.rc:5
 #, kde-format
 msgid "Import from a Comma-Separated-Value File"
-msgstr ""
+msgstr "CSV ფაილიდან შემოტანა"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:9
@@ -1101,7 +1106,7 @@ msgstr "vCard ფაილი"
 #: scripts/scripts.rc:9
 #, kde-format
 msgid "Import from a vCard File"
-msgstr ""
+msgstr "მონაცემების წაკითხვა vCard ფაილიდან"
 
 #. i18n: tag collection attribute text
 #: scripts/scripts.rc:15
@@ -1119,7 +1124,7 @@ msgstr "შემცველობის გატანა"
 #: scripts/scripts.rc:16
 #, kde-format
 msgid "Export to a Comma-Separated-Value File"
-msgstr ""
+msgstr "CSV ფაილში გატანა"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:20
@@ -1155,7 +1160,7 @@ msgstr "ფუნქციები"
 #: scripts/scripts.rc:30
 #, kde-format
 msgid "Scripting formula functions"
-msgstr ""
+msgstr "სკრიპტის ფორმულის ფუნქციები"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:31
@@ -1180,7 +1185,7 @@ msgstr "YFinance"
 #: scripts/scripts.rc:35
 #, kde-format
 msgid "Yahoo! Finance formula function"
-msgstr ""
+msgstr "Yahoo! Finance -ის ფორმულების მხარდაჭერა"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:39
@@ -1192,7 +1197,7 @@ msgstr "YWeather"
 #: scripts/scripts.rc:39
 #, kde-format
 msgid "Yahoo! Weather formula function"
-msgstr ""
+msgstr "Yahoo! Weather -ის ფორმულების მხარდაჭერა"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:43
@@ -1204,7 +1209,7 @@ msgstr "PyTime"
 #: scripts/scripts.rc:43
 #, kde-format
 msgid "Time formula function"
-msgstr ""
+msgstr "დროის ფორმულების მხარდაჭერა"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:48
@@ -1216,7 +1221,7 @@ msgstr "PyRegExp"
 #: scripts/scripts.rc:48
 #, kde-format
 msgid "Regular Expression formula function"
-msgstr ""
+msgstr "რეგულარული გამოსახულების ფორმულების მხარდაჭერა"
 
 #. i18n: tag collection attribute text
 #: scripts/scripts.rc:55
@@ -1249,7 +1254,7 @@ msgstr ""
 #: scripts/scripts.rc:60
 #, kde-format
 msgid "Orca Speech"
-msgstr ""
+msgstr "Orca -ის საუბარი"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:60
@@ -1279,7 +1284,7 @@ msgstr "Docker"
 #: scripts/scripts.rc:70
 #, kde-format
 msgid "Scripting Docker Widgets"
-msgstr ""
+msgstr "სცენარის პანელის ვიჯეტები"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:71
@@ -1291,14 +1296,14 @@ msgstr "Python-ის კონსოლი"
 #: scripts/scripts.rc:71
 #, kde-format
 msgid "Interactive Python Console Docker"
-msgstr ""
+msgstr "Python-ის ინტერაქტიური კონსოლის გახსნა"
 
 #. i18n: tag script attribute text
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:76
 #, kde-format
 msgid "Ruby Snippets"
-msgstr ""
+msgstr "Ruby -ის ფრაგმენტები"
 
 #: scripts/vcardimport.py:34
 msgid "Import vCard"
@@ -1322,11 +1327,11 @@ msgstr "მანიფესტის წაკითხვის შეცდ�
 
 #: scripts/xmlviewer.py:168 scripts/xmlviewer.py:265
 msgid "Failed to extract \"%1\" to \"%2\""
-msgstr ""
+msgstr "\"%1\"-ის \"%2\"-ში გაშლის შეცდომა"
 
 #: scripts/xmlviewer.py:175
 msgid "<qt>Failed to execute program:<br><br>%1 \"%2\"</qt>"
-msgstr ""
+msgstr "<qt>პროგრამის შესრულების შეცდომა:<br><br>%1 \"%2\"</qt>"
 
 #: scripts/xmlviewer.py:187
 msgid "Open with..."
@@ -1346,7 +1351,7 @@ msgstr "შედარება..."
 
 #: scripts/xmlviewer.py:225
 msgid "Compare with OpenDocument file:"
-msgstr ""
+msgstr "OpenDocument ფაილთან შედარება:"
 
 #: scripts/xmlviewer.py:238
 msgid "No OpenDocument file to compare with selected."
@@ -1372,11 +1377,11 @@ msgstr ""
 
 #: scripts/yfinance.py:41
 msgid "YFINANCE(string,string,string)"
-msgstr ""
+msgstr "YFINANCE(სტრიქონი,სტრიქონი,სტრიქონი)"
 
 #: scripts/yfinance.py:42
 msgid "The ticker symbol."
-msgstr ""
+msgstr "ტიკერის სიმბოლო."
 
 #: scripts/yfinance.py:43
 msgid "The date."
@@ -1385,6 +1390,8 @@ msgstr "თარიღი."
 #: scripts/yfinance.py:44
 msgid "The type: Date, Open, High, Low, Close, Volume or AdjClose."
 msgstr ""
+"ტიპი: Date(თარიღი), Open(გახსნა), High(მაღალი), Low(დაბალი), Close(დახურვა), "
+"Volume or AdjClose."
 
 #: scripts/yfinance.py:45
 msgid "YFINANCE(\"YHOO\";\"20060119\";\"Open\")"
@@ -1408,15 +1415,15 @@ msgstr "არასწორი ტიპი"
 
 #: scripts/yfinance.py:99 scripts/yweather.py:68
 msgid "Web services request failed"
-msgstr ""
+msgstr "ვებ სერვისის მოთხოვნის შეცდომა"
 
 #: scripts/yfinance.py:110
 msgid "No stock"
-msgstr ""
+msgstr "აქციების გარეშე"
 
 #: scripts/yfinance.py:113
 msgid "Invalid stock"
-msgstr ""
+msgstr "დაუშვებელი აქციები"
 
 #: scripts/yweather.py:39
 msgid ""
@@ -1430,11 +1437,11 @@ msgstr "YWEATHER(სტრიქონი;სტრიქონი)"
 
 #: scripts/yweather.py:42
 msgid "The US zip code, Location ID or cell that contains them."
-msgstr ""
+msgstr "US საფოსტო კოდი, მდებარეობის ID ან უჯრედი, რომელიც მათ შეიცავს."
 
 #: scripts/yweather.py:43
 msgid "Units for temperature. f=Fahrenheit and c=Celsius"
-msgstr ""
+msgstr "ტემპერატურის საზომი ერთეული. f=ფარენჰეიტი და c= ცელსიუსი"
 
 #: scripts/yweather.py:44
 msgid "YWEATHER(\"=A1\")"
