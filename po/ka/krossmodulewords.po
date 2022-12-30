@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 02:41+0200\n"
-"PO-Revision-Date: 2022-09-23 14:42+0200\n"
+"PO-Revision-Date: 2022-12-29 07:56+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #. i18n: ectx: Menu (tools)
 #: scripting.rc:4
@@ -171,7 +171,7 @@ msgstr "ცვლადები"
 #: scripts/scripts.rc:60
 #, kde-format
 msgid "Scripting variables for Words"
-msgstr ""
+msgstr "სკრიპტის ცვლადები სიტყვებისთვის"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:62
@@ -195,37 +195,37 @@ msgstr "სემპლები"
 #: scripts/scripts.rc:80
 #, kde-format
 msgid "Samples to demonstrate scripting with Words"
-msgstr ""
+msgstr "სიტყვების სკრიპტინგის მაგალითები"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:81
 #, kde-format
 msgid "Insert Shape..."
-msgstr ""
+msgstr "ფიგურის ჩასსმა..."
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:81
 #, kde-format
 msgid "Python script to insert a shape"
-msgstr ""
+msgstr "Python-ის სკრიპტი ფიგურის ჩასასმელად"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:85
 #, kde-format
 msgid "Control Cursor..."
-msgstr ""
+msgstr "კურსორის კონტროლი..."
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:85
 #, kde-format
 msgid "Ruby script that demonstrates how to control the cursor"
-msgstr ""
+msgstr "Ruby-ის სკრიპტი კურსორის კონტროლის დემონსტრაციისთვის"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:89
 #, kde-format
 msgid "Execute Action..."
-msgstr ""
+msgstr "ქმედების შესრულება..."
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:89
@@ -237,7 +237,7 @@ msgstr "Python-ის სკრიპტი ქმედებების დ�
 #: scripts/scripts.rc:93
 #, kde-format
 msgid "Tool Actions..."
-msgstr ""
+msgstr "ხელსაწყოს ქმედებები..."
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:93
@@ -249,7 +249,7 @@ msgstr "Python-ის სკრიპტი ხელსაწყოს ქმ�
 #: scripts/scripts.rc:97
 #, kde-format
 msgid "Progressbar"
-msgstr ""
+msgstr "მიმდინარეობის ზოლი"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:97
@@ -315,10 +315,10 @@ msgstr "Python-ის სკრიპტი ცვლადებთან მ�
 #: scripts/scripts.rc:122
 #, kde-format
 msgid "All Shapes"
-msgstr ""
+msgstr "ყველა ფიგურა"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:122
 #, kde-format
 msgid "Python script adds all shapes"
-msgstr ""
+msgstr "Python-ის სკრიპტი ყველა ფიგურას ამატებს"

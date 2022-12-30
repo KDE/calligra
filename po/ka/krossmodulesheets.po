@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2022-12-28 09:05+0100\n"
+"PO-Revision-Date: 2022-12-29 07:51+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -65,12 +65,12 @@ msgstr ""
 #: ScriptingPart.cpp:77
 #, kde-format
 msgid "Failed to execute scriptfile \"%1\""
-msgstr ""
+msgstr "სკრიპტის (\"%1\") შესრულების შეცდომა"
 
 #: ScriptingPart.cpp:80
 #, kde-format
 msgid "Errors on execution of scripts."
-msgstr ""
+msgstr "შეცდომა სკრიპტის შესრულებისას"
 
 #: ScriptingWidgets.cpp:67
 #, kde-format
@@ -155,11 +155,11 @@ msgstr "ფაილის შენახვა"
 
 #: scripts/consoledocker.py:123
 msgid "Compiled! %1"
-msgstr ""
+msgstr "აიგო! %1"
 
 #: scripts/consoledocker.py:131
 msgid "Executed! %1"
-msgstr ""
+msgstr "შესრულდა! %1"
 
 #: scripts/consoledocker.py:229
 msgid "Name"
@@ -281,25 +281,25 @@ msgstr ""
 #: scripts/csvoptions.ui:127
 #, kde-format
 msgid "Double quote"
-msgstr ""
+msgstr "ორმაგი ბრჭყალი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: scripts/csvoptions.ui:137
 #, kde-format
 msgid "Quote char:"
-msgstr ""
+msgstr "ციტირების სიმბოლო:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, QuotingCheckBox)
 #: scripts/csvoptions.ui:170
 #, kde-format
 msgid "Quoting"
-msgstr ""
+msgstr "ციტირება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, SkipInitialSpaceCheckBox)
 #: scripts/csvoptions.ui:177
 #, kde-format
 msgid "Skip initial space"
-msgstr ""
+msgstr "პირველი გამოტოვების იგნორი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, StrictCheckBox)
 #: scripts/csvoptions.ui:184
@@ -309,11 +309,11 @@ msgstr "მკაცრი"
 
 #: scripts/htmlexport.py:221
 msgid "No such file \"%1\" to read from."
-msgstr ""
+msgstr "წასაკითხი ფაილი \"%1\" არ არსებობს."
 
 #: scripts/htmlexport.py:230
 msgid "Failed to open the file \"%1\"."
-msgstr ""
+msgstr "ფაილის (\"%1\") გახსნის შეცდომა."
 
 #: scripts/htmlexport.py:236
 msgid "No sheets which could be exported to HTML."
@@ -347,7 +347,7 @@ msgstr "HTML დოკუმენტები"
 
 #: scripts/htmlexport.py:382
 msgid "HTML Document Information"
-msgstr ""
+msgstr "HTML დოკუმენტის ინფორმაცია"
 
 #: scripts/htmlexport.py:382
 msgid "Info"
@@ -355,7 +355,7 @@ msgstr "ინფორმაცია"
 
 #: scripts/htmlexport.py:388
 msgid "Style of the HTML Document"
-msgstr ""
+msgstr "HTML დოკუმენტის სტილი"
 
 #: scripts/htmlexport.py:388
 msgid "Styles"
@@ -447,19 +447,19 @@ msgstr ""
 
 #: scripts/myorca.py:86
 msgid "Failed to create listener"
-msgstr ""
+msgstr "მომსმენის შექმნის შეცდომა"
 
 #: scripts/myorca.py:96
 msgid "Sheet name changed"
-msgstr ""
+msgstr "ფურცლის სახელი შეიცვალა"
 
 #: scripts/myorca.py:100
 msgid "Show sheet %1"
-msgstr ""
+msgstr "%1 ფურცლის ჩვენება"
 
 #: scripts/myorca.py:104
 msgid "Hide sheet %1"
-msgstr ""
+msgstr "%1 ფურცლის დამალვა"
 
 #: scripts/myorca.py:136
 msgid "Action"
@@ -491,7 +491,7 @@ msgstr ""
 
 #: scripts/myorca.py:188
 msgid "Calligra Spreadsheet"
-msgstr ""
+msgstr "Calligra -ის ელცხრილი"
 
 #: scripts/myorca.py:198
 msgid "Failed to connect with the Orca HTTP-Server."
@@ -539,7 +539,7 @@ msgstr "OdfPy -დან გატანა"
 
 #: scripts/odfpyexport.py:241
 msgid "Save to OpenDocument File"
-msgstr ""
+msgstr "OpenDocument ფაილში ჩწერა"
 
 #: scripts/odfpyexport.py:249
 msgid "All Supported Files"
@@ -547,7 +547,7 @@ msgstr "ყველა მხარდაჭერილი ფაილი"
 
 #: scripts/odfpyexport.py:254
 msgid "Export Sheets"
-msgstr ""
+msgstr "ფურცლების გატანა"
 
 #: scripts/odfpyexport.py:254
 msgid "Sheets"
@@ -565,23 +565,23 @@ msgstr ""
 
 #: scripts/pyregexp.py:11
 msgid "PYREGEXP(string)"
-msgstr ""
+msgstr "PYREGEXP(სტრიქონი)"
 
 #: scripts/pyregexp.py:12
 msgid "The input string."
-msgstr ""
+msgstr "შეყვანილი სტრიქონი."
 
 #: scripts/pyregexp.py:13
 msgid "The regular expression."
-msgstr ""
+msgstr "რეგულარული გამოსახულება."
 
 #: scripts/pyregexp.py:14
 msgid "Replace with."
-msgstr ""
+msgstr "ჩანაცვლება."
 
 #: scripts/pyregexp.py:15
 msgid "PYREGEXP(\"Some String\",\"(S|m)\",\"A\")"
-msgstr ""
+msgstr "PYREGEXP(\"Some String\",\"(S|m)\",\"A\")"
 
 #: scripts/pyregexp.py:25
 msgid "Invalid regexp"
@@ -597,7 +597,7 @@ msgstr "PYTIME(სტრიქონი)"
 
 #: scripts/pytime.py:12
 msgid "The datetime format string."
-msgstr ""
+msgstr "თარიღისა და დროის ფორმატის სტიქონი."
 
 #: scripts/pytime.py:13
 msgid "PYTIME()"
@@ -765,13 +765,13 @@ msgstr ""
 #: scripts/rpyfunctions.py:184 scripts/rpyfunctions.py:215
 #: scripts/rpyfunctions.py:217 scripts/rpyfunctions.py:219
 msgid "the scale parameter of the distribution"
-msgstr ""
+msgstr "დისტრიბუტივის მასშტაბს პარამეტრი"
 
 #: scripts/rpyfunctions.py:131 scripts/rpyfunctions.py:133
 #: scripts/rpyfunctions.py:135 scripts/rpyfunctions.py:166
 #: scripts/rpyfunctions.py:168 scripts/rpyfunctions.py:170
 msgid "the shape parameter of the distribution"
-msgstr ""
+msgstr "დისტრიბუტივის ფიგურის პარამეტრი"
 
 #: scripts/rpyfunctions.py:132
 msgid ""
@@ -794,12 +794,12 @@ msgstr ""
 #: scripts/rpyfunctions.py:138 scripts/rpyfunctions.py:140
 #: scripts/rpyfunctions.py:142
 msgid "the first shape parameter of the distribution"
-msgstr ""
+msgstr "დისტრიბუტივის პირველი ფიგურის პარამეტრი"
 
 #: scripts/rpyfunctions.py:138 scripts/rpyfunctions.py:140
 #: scripts/rpyfunctions.py:142
 msgid "the second scale parameter of the distribution"
-msgstr ""
+msgstr "დისტრიბუტივის მეორე მასშტაბის პარამეტრი"
 
 #: scripts/rpyfunctions.py:139
 msgid ""
@@ -1131,7 +1131,7 @@ msgstr "HTML ფაილი"
 #: scripts/scripts.rc:20
 #, kde-format
 msgid "Export to a HTML File"
-msgstr ""
+msgstr "HTML-ში ფაილში გატანა"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:24
@@ -1143,7 +1143,7 @@ msgstr "OdfPy -ის ფაილი"
 #: scripts/scripts.rc:24
 #, kde-format
 msgid "Export to an OpenDocument File"
-msgstr ""
+msgstr "OpenDocument ფაილში გატანა"
 
 #. i18n: tag collection attribute text
 #: scripts/scripts.rc:30
@@ -1261,13 +1261,13 @@ msgstr "Orca - ეკრანის მკითხველი"
 #: scripts/scripts.rc:64
 #, kde-format
 msgid "Logger"
-msgstr ""
+msgstr "ჟურნალი"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:64
 #, kde-format
 msgid "Log changes in cells to a file"
-msgstr ""
+msgstr "უჯრედების ცვლილებების ჟურნალში ჩაწერა"
 
 #. i18n: tag collection attribute text
 #: scripts/scripts.rc:70
@@ -1302,7 +1302,7 @@ msgstr ""
 
 #: scripts/vcardimport.py:34
 msgid "Import vCard"
-msgstr ""
+msgstr "VCard ფაილების შემოტანა"
 
 #: scripts/vcardimport.py:45
 msgid "vCard Files"
@@ -1310,15 +1310,15 @@ msgstr "vCard ფაილები"
 
 #: scripts/xmlviewer.py:30
 msgid "Open OpenDocument File"
-msgstr ""
+msgstr "OpenDocument ფაილის გახსნა"
 
 #: scripts/xmlviewer.py:32
 msgid "OpenDocument Files"
-msgstr ""
+msgstr "OpenDocument ფაილები"
 
 #: scripts/xmlviewer.py:57
 msgid "Failed to read the manifest"
-msgstr ""
+msgstr "მანიფესტის წაკითხვის შეცდომა"
 
 #: scripts/xmlviewer.py:168 scripts/xmlviewer.py:265
 msgid "Failed to extract \"%1\" to \"%2\""
@@ -1338,7 +1338,7 @@ msgstr "ფილტრი"
 
 #: scripts/xmlviewer.py:199
 msgid "No program defined."
-msgstr ""
+msgstr "პროგრამა აღწერილი არაა."
 
 #: scripts/xmlviewer.py:214
 msgid "Compare..."
@@ -1354,7 +1354,7 @@ msgstr ""
 
 #: scripts/xmlviewer.py:242
 msgid "No command selected."
-msgstr ""
+msgstr "ბრძანება არჩეული არაა."
 
 #: scripts/xmlviewer.py:253
 msgid "The OpenDocument file does not contain any file named \"%1\""
@@ -1396,7 +1396,7 @@ msgstr "YFINANCE(\"=C14\";\"=C15\";\"=C16\")"
 
 #: scripts/yfinance.py:65
 msgid "Invalid symbol"
-msgstr ""
+msgstr "არასწორი სიმბოლო"
 
 #: scripts/yfinance.py:69
 msgid "Invalid date"
@@ -1426,7 +1426,7 @@ msgstr ""
 
 #: scripts/yweather.py:41
 msgid "YWEATHER(string;string)"
-msgstr ""
+msgstr "YWEATHER(სტრიქონი;სტრიქონი)"
 
 #: scripts/yweather.py:42
 msgid "The US zip code, Location ID or cell that contains them."
