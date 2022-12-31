@@ -865,8 +865,8 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
 
         if (!q->selection()->isColumnOrRowSelected()) {
             popupActions.append(popupMenuActions["separator3"]);
-            popupActions.append(popupMenuActions["insertCell"]);
-            popupActions.append(popupMenuActions["deleteCell"]);
+            popupActions.append(q->action("insertCell"));
+            popupActions.append(q->action("deleteCell"));
         } else if (q->selection()->isColumnSelected()) {
             popupActions.append(actions->action("resizeCol"));
             popupActions.append(actions->action("adjustColumn"));
@@ -907,14 +907,6 @@ void CellToolBase::Private::createPopupMenuActions()
         action->setSeparator(true);
         popupMenuActions.insert(QString("separator%1").arg(i), action);
     }
-
-    action = new QAction(koIcon("insertcell"), i18n("Insert Cells..."), q);
-    connect(action, &QAction::triggered, q, &CellToolBase::insertCells);
-    popupMenuActions.insert("insertCell", action);
-
-    action = new QAction(koIcon("removecell"), i18n("Delete Cells..."), q);
-    connect(action, &QAction::triggered, q, &CellToolBase::deleteCells);
-    popupMenuActions.insert("deleteCell", action);
 
     action = new QAction(i18n("Selection List..."), q);
     connect(action, &QAction::triggered, q, &CellToolBase::listChoosePopupMenu);

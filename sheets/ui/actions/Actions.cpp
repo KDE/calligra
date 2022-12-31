@@ -11,6 +11,7 @@
 #include "Angle.h"
 #include "AutoSum.h"
 #include "Border.h"
+#include "Cells.h"
 #include "Comment.h"
 #include "Consolidate.h"
 #include "CSVActions.h"
@@ -85,6 +86,9 @@ void Actions::createActions()
     addAction(new BorderAll(this));
     addAction(new BorderNone(this));
     addAction(new BorderOutline(this));
+    // Cells
+    addAction(new CellsInsert(this));
+    addAction(new CellsRemove(this));
     // Comment
     addAction(new Comment(this));
     addAction(new ClearComment(this));

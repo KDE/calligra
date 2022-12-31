@@ -22,7 +22,6 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Selection;
 
 /**
  * \ingroup UI
@@ -34,14 +33,17 @@ class InsertDialog : public KoDialog
 public:
     enum Mode { Insert, Remove };
 
-    InsertDialog(QWidget* parent, Selection* selection, Mode _mode);
+    InsertDialog(QWidget* parent, Mode _mode);
+
+    bool moveRowsChecked();
+    bool moveColumnsChecked();
+    bool insertRowsChecked();
+    bool insertColumnsChecked();
 
 public Q_SLOTS:
     void slotOk();
 
 private:
-    Selection* m_selection;
-
     QRadioButton *rb1;
     QRadioButton *rb2;
     QRadioButton *rb3;

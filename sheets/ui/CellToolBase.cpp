@@ -64,7 +64,6 @@
 #include "dialogs/DatabaseDialog.h"
 #include "dialogs/DocumentSettingsDialog.h"
 #include "dialogs/GoalSeekDialog.h"
-#include "dialogs/InsertDialog.h"
 #include "dialogs/LayoutDialog.h"
 #include "dialogs/ListDialog.h"
 #include "dialogs/PasteInsertDialog.h"
@@ -214,20 +213,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     colorAction->setText(i18n("Background Color"));
     addAction("backgroundColor", colorAction);
     connect(colorAction, &KoColorPopupAction::colorChanged, this, &CellToolBase::changeBackgroundColor);
-
-    // -- cell insert/remove actions --
-
-    action = new QAction(koIcon("insertcell"), i18n("Cells..."), this);
-    action->setIconText(i18n("Insert Cells..."));
-    action->setToolTip(i18n("Insert a blank cell into the spreadsheet"));
-    addAction("insertCell", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::insertCells);
-
-    action = new QAction(koIcon("removecell"), i18n("Cells..."), this);
-    action->setIconText(i18n("Remove Cells..."));
-    action->setToolTip(i18n("Removes the cells from the spreadsheet"));
-    addAction("deleteCell", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::deleteCells);
 
     // -- cell content actions --
 
@@ -1335,20 +1320,6 @@ void CellToolBase::changeBackgroundColor(const KoColor &color)
     command->setStyle(s);
     command->add(*selection());
     command->execute(canvas());
-}
-
-void CellToolBase::insertCells()
-{
-    QPointer<InsertDialog> dialog = new InsertDialog(canvas()->canvasWidget(), selection(), InsertDialog::Insert);
-    dialog->exec();
-    delete dialog;
-}
-
-void CellToolBase::deleteCells()
-{
-    QPointer<InsertDialog> dialog = new InsertDialog(canvas()->canvasWidget(), selection(), InsertDialog::Remove);
-    dialog->exec();
-    delete dialog;
 }
 
 void CellToolBase::clearAll()
