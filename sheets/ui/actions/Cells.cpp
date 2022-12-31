@@ -14,17 +14,6 @@
 
 #include <KLocalizedString>
 
-/*
-#include "core/Cell.h"
-#include "core/Style.h"
-#include "ui/Selection.h"
-#include "ui/commands/StyleCommand.h"
-#include "ui/commands/RowColumnManipulators.h"
-
-
-#include "KoCanvasBase.h"
-*/
-
 
 
 using namespace Calligra::Sheets;
