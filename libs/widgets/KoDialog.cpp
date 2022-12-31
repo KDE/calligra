@@ -858,8 +858,6 @@ void KoDialog::setDetailsWidgetVisible(bool visible)
 
             d->mDetailsWidget->show();
 
-            adjustSize();
-
             if (layout()) {
                 layout()->activate();
                 layout()->setEnabled(true);
@@ -873,7 +871,6 @@ void KoDialog::setDetailsWidgetVisible(bool visible)
 
         if (layout()) {
             layout()->activate();
-            adjustSize();
         }
 
     }
