@@ -36,8 +36,11 @@ public:
     StyleManagerDialog(QWidget* parent, Selection* selection, StyleManager* manager);
     ~StyleManagerDialog() override;
 
+Q_SIGNALS:
+    void setStyle(const QString &name);
+
 protected Q_SLOTS:
-    void slotOk();
+    void slotApply();
     void slotNew();
     void slotEdit();
     void slotRemove();

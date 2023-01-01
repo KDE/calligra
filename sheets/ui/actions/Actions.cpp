@@ -26,6 +26,7 @@
 #include "PageBreak.h"
 #include "Sort.h"
 #include "Style.h"
+#include "Styles.h"
 #include "Subtotals.h"
 #include "TextCase.h"
 #include "Validity.h"
@@ -144,6 +145,10 @@ void Actions::createActions()
     addAction(new PercentFormat(this));
     addAction(new MoneyFormat(this));
     addAction(new DefaultStyle(this));
+    // Styles
+    addAction(new StyleFromCell(this));
+    addAction(new SetStyle(this));
+    addAction(new ShowStyleManager(this));
     // Subtotals
     addAction(new Subtotals(this));
     // TextCase
@@ -193,6 +198,13 @@ void Actions::updateOnChange(bool readWrite, Selection *selection, const Cell &a
         const bool blocked = a->blockSignals(true);
         a->setChecked(checked);
         a->blockSignals(blocked);
+    }
+}
+
+void Actions::init()
+{
+    for (CellAction *cellAction : cellActions) {
+        cellAction->init();
     }
 }
 

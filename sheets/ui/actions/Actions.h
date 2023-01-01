@@ -35,6 +35,8 @@ public:
     Actions(CellToolBase *tool);
     ~Actions();
 
+    /** For actions that need access to the cell tool, which isn't yet constructed fully in the constructor. */
+    void init();
     CellToolBase *tool() { return m_tool; }
     void updateOnChange(bool readWrite, Selection *selection, const Cell &activeCell);
     CellAction *cellAction(const QString &name);

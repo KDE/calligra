@@ -22,6 +22,7 @@ set (actions_DIR_SRCS
     actions/PageBreak.cpp
     actions/Sort.cpp
     actions/Style.cpp
+    actions/Styles.cpp
     actions/Subtotals.cpp
     actions/TextCase.cpp
     actions/Validity.cpp
@@ -42,6 +43,7 @@ set (action_dialogs_DIR_SRCS
     actions/dialogs/SeriesDialog.cpp
     actions/dialogs/ShowColRowDialog.cpp
     actions/dialogs/SortDialog.cpp
+    actions/dialogs/StyleManagerDialog.cpp
     actions/dialogs/SubtotalDialog.cpp
     actions/dialogs/ValidityDialog.cpp
     )
@@ -98,7 +100,6 @@ set (dialogs_DIR_SRCS
     dialogs/PasteInsertDialog.cpp
     dialogs/ShowDialog.cpp
     dialogs/SpecialPasteDialog.cpp
-    dialogs/StyleManagerDialog.cpp
     dialogs/pivot.cpp
     dialogs/pivotfilters.cpp
     dialogs/pivotoptions.cpp

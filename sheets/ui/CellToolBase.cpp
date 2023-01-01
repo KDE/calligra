@@ -68,7 +68,6 @@
 #include "dialogs/ListDialog.h"
 #include "dialogs/PasteInsertDialog.h"
 #include "dialogs/SpecialPasteDialog.h"
-#include "dialogs/StyleManagerDialog.h"
 #include "dialogs/pivot.h"
 
 // strategies
@@ -101,7 +100,6 @@
 // Qt
 #include <QStandardPaths>
 #include <QClipboard>
-#include <QInputDialog>
 #include <QBuffer>
 #include <QMimeData>
 #include <QMenu>
@@ -159,22 +157,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_F));
     connect(action, &QAction::triggered, this, &CellToolBase::cellStyle);
     action->setToolTip(i18n("Set the cell formatting"));
-
-    action = new QAction(i18n("Style Manager..."), this);
-    addAction("styleDialog", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::styleDialog);
-    action->setToolTip(i18n("Edit and organize cell styles"));
-
-    auto selectAction = new KSelectAction(i18n("Style"), this);
-    addAction("setStyle", selectAction);
-    selectAction->setToolTip(i18n("Apply a predefined style to the selected cells"));
-    connect(selectAction, QOverload<const QString &>::of(&KSelectAction::triggered), this, &CellToolBase::setStyle);
-
-    action = new QAction(i18n("Create Style From Cell..."), this);
-    action->setIconText(i18n("Style From Cell"));
-    addAction("createStyleFromCell", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::createStyleFromCell);
-    action->setToolTip(i18n("Create a new style based on the currently selected cell"));
 
     // -- font actions --
 
@@ -276,7 +258,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::pivot);
     action->setToolTip(i18n("Create Pivot Tables"));
     
-    selectAction = new KSelectAction(i18n("Formula Selection"), this);
+    KSelectAction *selectAction = new KSelectAction(i18n("Formula Selection"), this);
     addAction("formulaSelection", selectAction);
     selectAction->setToolTip(i18n("Insert a function"));
     QStringList functionList = {"SUM", "AVERAGE", "IF", "COUNT", "MIN", "MAX", i18n("Others...")};
@@ -627,9 +609,6 @@ void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> 
     // paint the selection rectangle
     selection()->update();
     populateWordCollection();
-    // Initialize cell style selection action.
-    const StyleManager* styleManager = selection()->activeSheet()->fullMap()->styleManager();
-    static_cast<KSelectAction*>(this->action("setStyle"))->setItems(styleManager->styleNames());
 
     // Establish connections.
     connect(selection(), &Selection::changed,
@@ -669,6 +648,11 @@ void CellToolBase::addCellAction(CellAction *a)
 
 void CellToolBase::init()
 {
+    Sheet *sheet = selection()->activeSheet();
+    StyleManager *manager = sheet->fullMap()->styleManager();
+    connect(manager, &StyleManager::styleListChanged, selection(), &Selection::refreshSheetViews);
+
+    d->actions->init();
 }
 
 QList<QPointer<QWidget> >  CellToolBase::createOptionWidgets()
@@ -1176,75 +1160,6 @@ void CellToolBase::cellStyle()
         command->execute(canvas());
     }
     delete dialog;
-}
-
-void CellToolBase::styleDialog()
-{
-    Map* const map = selection()->activeSheet()->fullMap();
-    StyleManager* const styleManager = map->styleManager();
-    QPointer<StyleManagerDialog> dialog = new StyleManagerDialog(canvas()->canvasWidget(), selection(), styleManager);
-    dialog->exec();
-    delete dialog;
-
-    static_cast<KSelectAction*>(action("setStyle"))->setItems(styleManager->styleNames());
-    if (selection()->activeSheet())
-        map->addDamage(new CellDamage(selection()->activeSheet(), Region(1, 1, maxCol(), maxRow()), CellDamage::Appearance));
-    canvas()->canvasWidget()->update();
-}
-
-void CellToolBase::setStyle(const QString& stylename)
-{
-    debugSheets << "CellToolBase::setStyle(" << stylename << ")";
-    if (selection()->activeSheet()->fullMap()->styleManager()->style(stylename)) {
-        StyleCommand* command = new StyleCommand();
-        command->setSheet(selection()->activeSheet());
-        Style s;
-        s.setParentName(stylename);
-        command->setStyle(s);
-        command->add(*selection());
-        command->execute(canvas());
-    }
-}
-
-void CellToolBase::createStyleFromCell()
-{
-    QPoint p(selection()->marker());
-    Cell cell = Cell(selection()->activeSheet(), p.x(), p.y());
-
-    bool ok = false;
-    QString styleName("");
-
-    while (true) {
-        styleName = QInputDialog::getText(canvas()->canvasWidget(),
-                                          i18n("Create Style From Cell"),
-                                          i18n("Enter name:"), QLineEdit::Normal, styleName, &ok);
-
-        if (!ok) // User pushed an OK button.
-            return;
-
-        styleName = styleName.trimmed();
-
-        if (styleName.length() < 1) {
-            KMessageBox::sorry(canvas()->canvasWidget(), i18n("The style name cannot be empty."));
-            continue;
-        }
-
-        if (selection()->activeSheet()->fullMap()->styleManager()->style(styleName) != 0) {
-            KMessageBox::sorry(canvas()->canvasWidget(), i18n("A style with this name already exists."));
-            continue;
-        }
-        break;
-    }
-
-    const Style cellStyle = cell.style();
-    CustomStyle*  style = new CustomStyle(styleName);
-    style->merge(cellStyle);
-
-    selection()->activeSheet()->fullMap()->styleManager()->insertStyle(style);
-    cell.setStyle(*style);
-    QStringList functionList(static_cast<KSelectAction*>(action("setStyle"))->items());
-    functionList.push_back(styleName);
-    static_cast<KSelectAction*>(action("setStyle"))->setItems(functionList);
 }
 
 void CellToolBase::font(const QString& font)

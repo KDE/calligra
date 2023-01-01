@@ -152,9 +152,6 @@ protected Q_SLOTS:
 
     // -- cell style actions --
     void cellStyle();
-    void styleDialog();
-    void setStyle(const QString& name);
-    void createStyleFromCell();
     // -- font actions --
     void font(const QString& font);
     void fontSize(int size);

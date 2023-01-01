@@ -30,6 +30,7 @@ void StyleManager::resetDefaultStyle()
 {
     delete m_defaultStyle;
     m_defaultStyle = new CustomStyle;
+    emit styleListChanged();
 }
 
 void StyleManager::createBuiltinStyles()
@@ -51,6 +52,8 @@ void StyleManager::createBuiltinStyles()
     header2->setType(Style::BUILTIN);
 
     m_styles[ header2->name()] = header2;
+
+    emit styleListChanged();
 }
 
 // Mapping between Oasis and our styles. Only used in loading/saving.
@@ -96,6 +99,7 @@ void StyleManager::takeStyle(CustomStyle * style)
     if (i != m_styles.end()) {
         debugSheetsODF << "Erasing style entry for" << style->name();
         m_styles.erase(i);
+        emit styleListChanged();
     }
 }
 
@@ -145,6 +149,7 @@ void StyleManager::changeName(QString const & oldName, QString const & newName)
         CustomStyle * s = iter.value();
         m_styles.erase(iter);
         m_styles[newName] = s;
+        emit styleListChanged();
     }
 }
 
@@ -163,6 +168,7 @@ void StyleManager::insertStyle(CustomStyle *style)
     if (base != name)
         style->setName(name);
     m_styles[name] = style;
+    emit styleListChanged();
 }
 
 QStringList StyleManager::styleNames(bool includeDefault) const

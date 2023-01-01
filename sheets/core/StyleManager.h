@@ -10,6 +10,7 @@
 #include "sheets_core_export.h"
 #include <QMap>
 #include <QString>
+#include <QObject>
 
 class QStringList;
 
@@ -32,9 +33,9 @@ typedef QMap<QString, CustomStyle*> CustomStyles;
  * The StyleManager takes care of named styles. It also provides some static
  * methods for the preloading of OpenDocument autostyles.
  */
-class CALLIGRA_SHEETS_CORE_EXPORT StyleManager
-{
-    friend class StyleManagerDialog;
+class CALLIGRA_SHEETS_CORE_EXPORT StyleManager : public QObject {
+Q_OBJECT
+//    friend class StyleManagerDialog;
 
 public:
     StyleManager();
@@ -75,6 +76,9 @@ public:
 
    /// OpenDocument name to internal name (on loading) or vice versa (on saving)
     QString openDocumentName(const QString&) const;
+
+Q_SIGNALS:
+    void styleListChanged();
 
 private:
     void dump() const;

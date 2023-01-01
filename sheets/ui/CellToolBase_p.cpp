@@ -97,7 +97,6 @@ void CellToolBase::Private::updateActions(const Cell& cell)
         const bool rowSelected = q->selection()->isRowSelected();
         const bool simpleSelection = q->selection()->isSingular() || colSelected || rowSelected;
         q->action("sheetFormat")->setEnabled(!simpleSelection);
-        q->action("createStyleFromCell")->setEnabled(simpleSelection); // just from one cell
     }
 }
 
