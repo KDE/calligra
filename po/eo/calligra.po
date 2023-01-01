@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-21 00:46+0000\n"
+"POT-Creation-Date: 2023-01-01 00:57+0000\n"
 "PO-Revision-Date: 2015-03-25 21:20+0100\n"
 "Last-Translator: Axel Rousseau <axel.rousseau@esperanto-france.org>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -4773,7 +4773,7 @@ msgstr ""
 msgid "&Details"
 msgstr "Detalo"
 
-#: widgets/KoDialog.cpp:1004
+#: widgets/KoDialog.cpp:1001
 #, kde-format
 msgid "Get help..."
 msgstr ""

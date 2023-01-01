@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-21 00:46+0000\n"
+"POT-Creation-Date: 2023-01-01 00:57+0000\n"
 "PO-Revision-Date: 2002-11-09 11:12+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -4650,7 +4650,7 @@ msgstr ""
 msgid "&Details"
 msgstr "&Okungagqibekanga"
 
-#: widgets/KoDialog.cpp:1004
+#: widgets/KoDialog.cpp:1001
 #, kde-format
 msgid "Get help..."
 msgstr ""

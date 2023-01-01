@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-27 00:48+0000\n"
+"POT-Creation-Date: 2023-01-01 00:57+0000\n"
 "PO-Revision-Date: 2004-05-25 15:26+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -880,7 +880,7 @@ msgstr "Niverenn"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:158 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:157 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -937,7 +937,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "99 e zistaol ARABIC(\"XCIX\")"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:273 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:258 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Stlennvon"
@@ -12526,7 +12526,7 @@ msgstr "Kuzhat ar folenn"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:183
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:182
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, fuzzy, kde-format
 #| msgid "&Font"
@@ -13921,7 +13921,7 @@ msgstr ""
 "Emaoc'h o vont da zilemel ar folenn red.\n"
 "Fellout a ra deoc'h kenderc'hel ?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1235
+#: part/View.cpp:1872 ui/CellToolBase.cpp:1220
 #, kde-format
 msgid "Enter name:"
 msgstr "Roit an anv :"
@@ -13981,14 +13981,14 @@ msgstr "KontA : "
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1309
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1294
 #, fuzzy
 #| msgid "Change Text Color"
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Kemmañ liv ar skrid"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1332
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1317
 #, fuzzy
 #| msgid "Change Background Color"
 msgctxt "(qtundo-format)"
@@ -14004,411 +14004,385 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kemmañ ar bevenn"
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:156
 #, kde-format
 msgid "Cell Format..."
 msgstr "Furmad al log ..."
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Lakaat furmad ar folenn labour."
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:163
 #, fuzzy, kde-format
 #| msgid "Style Manager"
 msgid "Style Manager..."
 msgstr "Merour ar gizioù"
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Edit and organize cell styles"
 msgstr ""
 
-#: ui/CellToolBase.cpp:169 ui/dialogs/LayoutPage_General.cpp:42
+#: ui/CellToolBase.cpp:168 ui/dialogs/LayoutPage_General.cpp:42
 #: ui/dialogs/StyleManagerDialog.cpp:44
 #, kde-format
 msgid "Style"
 msgstr "Giz"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 msgid "Apply a predefined style to the selected cells"
 msgstr "Diskennit ar folenn dibabet."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Create Style From Cell..."
 msgstr "Krouiñ ar c'hiz eus al log ..."
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:174
 #, fuzzy, kde-format
 #| msgid "Style of Cell"
 msgid "Style From Cell"
 msgstr "Giz al log"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:177
 #, fuzzy, kde-format
 msgid "Create a new style based on the currently selected cell"
 msgstr "Diskennit ar folenn dibabet."
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Select Font..."
 msgstr "Dibabit un nodrezh ..."
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Select Font Size"
 msgstr "Dibabit ment an nodrezh"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:187
 #, fuzzy, kde-format
 #| msgid "Select Font Size"
 msgid "Font Size"
 msgstr "Dibabit ment an nodrezh"
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Text Color"
 msgstr "Liv ar skrid"
 
-#: ui/CellToolBase.cpp:195
+#: ui/CellToolBase.cpp:194
 #, fuzzy, kde-format
 #| msgid "Set the background color"
 msgid "Set the text color"
 msgstr "Lakaat liv drekleur"
 
-#: ui/CellToolBase.cpp:203
+#: ui/CellToolBase.cpp:202
 #, fuzzy, kde-format
 msgid "Select a new border color"
 msgstr "Kemmañ liv ar bevenn"
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:203
 #, kde-format
 msgid "Border Color"
 msgstr "Liv ar vevenn"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:212
 #, kde-format
 msgid "Set the background color"
 msgstr "Lakaat liv drekleur"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:213
 #, kde-format
 msgid "Background Color"
 msgstr "Liv an drekleur"
 
-#: ui/CellToolBase.cpp:220 ui/CellToolBase.cpp:226
-#, fuzzy, kde-format
-#| msgid "Cells:"
-msgid "Cells..."
-msgstr "Logoù :"
-
-#: ui/CellToolBase.cpp:221 ui/CellToolBase_p.cpp:911
-#, kde-format
-msgid "Insert Cells..."
-msgstr "Enlakaat logoù ..."
-
-#: ui/CellToolBase.cpp:222
-#, fuzzy, kde-format
-msgid "Insert a blank cell into the spreadsheet"
-msgstr "Enlakaat ur folenn nevez."
-
-#: ui/CellToolBase.cpp:227
-#, kde-format
-msgid "Remove Cells..."
-msgstr "Lemel al logoù ..."
-
-#: ui/CellToolBase.cpp:228
-#, fuzzy, kde-format
-msgid "Removes the cells from the spreadsheet"
-msgstr "Enlakaat ur folenn nevez."
-
-#: ui/CellToolBase.cpp:234 ui/CellToolBase.cpp:235
+#: ui/CellToolBase.cpp:219 ui/CellToolBase.cpp:220
 #, fuzzy, kde-format
 #| msgid "Clear &All"
 msgid "Clear All"
 msgstr "Goullonderiñ an &holl re"
 
-#: ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:221
 #, fuzzy, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Adenvel ar folenn bev."
 
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Contents"
 msgstr "Endalc'had"
 
-#: ui/CellToolBase.cpp:241
+#: ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 #| msgid "Contents"
 msgid "Clear Contents"
 msgstr "Endalc'had"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:227
 #, fuzzy, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Adenvel ar folenn bev."
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:231
 #, fuzzy, kde-format
 #| msgid "Custom Styles"
 msgid "Conditional Styles..."
 msgstr "Gizioù diouzoc'h"
 
-#: ui/CellToolBase.cpp:247
+#: ui/CellToolBase.cpp:232
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr ""
 
-#: ui/CellToolBase.cpp:251 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:236 ui/dialogs/ConditionalDialog.cpp:242
 #, fuzzy, kde-format
 #| msgid "Custom Styles"
 msgid "Conditional Styles"
 msgstr "Gizioù diouzoc'h"
 
-#: ui/CellToolBase.cpp:252
+#: ui/CellToolBase.cpp:237
 #, fuzzy, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Lakaat furmad ar folenn labour."
 
-#: ui/CellToolBase.cpp:253
+#: ui/CellToolBase.cpp:238
 #, fuzzy, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Lakaat furmad ar folenn labour."
 
-#: ui/CellToolBase.cpp:259
+#: ui/CellToolBase.cpp:244
 #, fuzzy, kde-format
 #| msgid "File"
 msgid "&Auto-Filter"
 msgstr "Restr"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:247
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:251
 #, kde-format
 msgid "&Function..."
 msgstr "&Fonksion ..."
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:254
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Troienn reolataet"
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:257
 #, kde-format
 msgid "From &Database..."
 msgstr "Eus ar &stlennvon ..."
 
-#: ui/CellToolBase.cpp:276
+#: ui/CellToolBase.cpp:261
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Enlakaat ar roadoù eus ar stlennvon"
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:264
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Rolloù diouzoc'h ..."
 
-#: ui/CellToolBase.cpp:282
+#: ui/CellToolBase.cpp:267
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:284
+#: ui/CellToolBase.cpp:269
 #, kde-format
 msgid "&Goal Seek..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:287
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:289
+#: ui/CellToolBase.cpp:274
 #, kde-format
 msgid "&Pivot Tables..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:292
+#: ui/CellToolBase.cpp:277
 #, kde-format
 msgid "Create Pivot Tables"
 msgstr ""
 
-#: ui/CellToolBase.cpp:294
+#: ui/CellToolBase.cpp:279
 #, kde-format
 msgid "Formula Selection"
 msgstr "Diuzadenn ar formulenn"
 
-#: ui/CellToolBase.cpp:296
+#: ui/CellToolBase.cpp:281
 #, kde-format
 msgid "Insert a function"
 msgstr "Enlakaat ur fonksion"
 
-#: ui/CellToolBase.cpp:297 ui/CellToolBase.cpp:1464
+#: ui/CellToolBase.cpp:282 ui/CellToolBase.cpp:1435
 #, kde-format
 msgid "Others..."
 msgstr "Ar re all ..."
 
-#: ui/CellToolBase.cpp:305
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "Modify Cell"
 msgstr "Kemmañ al log"
 
-#: ui/CellToolBase.cpp:309
+#: ui/CellToolBase.cpp:294
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Kemmañ ledander ar vann."
 
-#: ui/CellToolBase.cpp:312
+#: ui/CellToolBase.cpp:297
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Adenvel ar folenn bev."
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:301
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Adenvel ar folenn bev."
 
-#: ui/CellToolBase.cpp:320
+#: ui/CellToolBase.cpp:305
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Adenvel ar folenn bev."
 
-#: ui/CellToolBase.cpp:323
+#: ui/CellToolBase.cpp:308
 #, fuzzy, kde-format
 #| msgid "S&pecial Character..."
 msgid "Special Paste..."
 msgstr "Arouezenn &dibar ..."
 
-#: ui/CellToolBase.cpp:326
+#: ui/CellToolBase.cpp:311
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Adenvel ar folenn bev."
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:313
 #, fuzzy, kde-format
 #| msgid "Paste & Insert"
 msgid "Paste with Insertion"
 msgstr "Pegañ hag ensoc'hañ"
 
-#: ui/CellToolBase.cpp:331
+#: ui/CellToolBase.cpp:316
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Enlakaat ur folenn nevez."
 
-#: ui/CellToolBase.cpp:334
+#: ui/CellToolBase.cpp:319
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Enlakaat ur folenn nevez."
 
-#: ui/CellToolBase.cpp:352
+#: ui/CellToolBase.cpp:337
 #, kde-format
 msgid "Check the spelling"
 msgstr "Gwiriekaat ar skritur"
 
-#: ui/CellToolBase.cpp:355
+#: ui/CellToolBase.cpp:340
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:361
+#: ui/CellToolBase.cpp:346
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Diskouez ar folenn ..."
 
-#: ui/CellToolBase.cpp:367
+#: ui/CellToolBase.cpp:352
 #, fuzzy, kde-format
 #| msgid "Format"
 msgid "Auto-Format..."
 msgstr "Furmadiñ"
 
-#: ui/CellToolBase.cpp:370
+#: ui/CellToolBase.cpp:355
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Lakaat furmad ar folenn labour"
 
-#: ui/CellToolBase.cpp:372
+#: ui/CellToolBase.cpp:357
 #, fuzzy, kde-format
 #| msgid "Locale Settings"
 msgid "Document Settings..."
 msgstr "Dibarzhoù an broelañ"
 
-#: ui/CellToolBase.cpp:375
+#: ui/CellToolBase.cpp:360
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Dis&kouez barenn ar formulennoù"
 
-#: ui/CellToolBase.cpp:379
+#: ui/CellToolBase.cpp:364
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Permute reference fixation"
 msgstr "Gwarez al &log"
 
-#: ui/CellToolBase.cpp:383
+#: ui/CellToolBase.cpp:368
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Permute fixation"
 msgstr "Gwarez al &log"
 
-#: ui/CellToolBase.cpp:384
+#: ui/CellToolBase.cpp:369
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Adenvel ar folenn bev."
 
-#: ui/CellToolBase.cpp:1168
+#: ui/CellToolBase.cpp:1153
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1234
+#: ui/CellToolBase.cpp:1219
 #, kde-format
 msgid "Create Style From Cell"
 msgstr "Krouiñ ar c'hiz eus al log"
 
-#: ui/CellToolBase.cpp:1243
+#: ui/CellToolBase.cpp:1228
 #, kde-format
 msgid "The style name cannot be empty."
 msgstr "N'hell ket bezañ goullo anv ar c'hiz."
 
-#: ui/CellToolBase.cpp:1248 ui/dialogs/LayoutPage_General.cpp:90
+#: ui/CellToolBase.cpp:1233 ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "A style with this name already exists."
 msgstr "Bez' ez eus ur c'hiz a vez graet an anv-mañ dioutañ endeo."
 
-#: ui/CellToolBase.cpp:1269 ui/CellToolBase.cpp:1289
+#: ui/CellToolBase.cpp:1254 ui/CellToolBase.cpp:1274
 #, fuzzy
 #| msgid "Change Font"
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Kemmañ an nodrezh"
 
-#: ui/CellToolBase.cpp:1370
+#: ui/CellToolBase.cpp:1341
 #, fuzzy
 #| msgid "Clear Text"
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Goullonderiñ ar skrid"
 
-#: ui/CellToolBase.cpp:1424
+#: ui/CellToolBase.cpp:1395
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1453
+#: ui/CellToolBase.cpp:1424
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Red eo deoc'h da zibab meur a log."
 
-#: ui/CellToolBase.cpp:1928
+#: ui/CellToolBase.cpp:1899
 #, fuzzy
 #| msgid "Replacement"
 msgctxt "(qtundo-format)"
@@ -14454,13 +14428,7 @@ msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Skiantel"
 
-#: ui/CellToolBase_p.cpp:915
-#, fuzzy, kde-format
-#| msgid "Insert Cells..."
-msgid "Delete Cells..."
-msgstr "Enlakaat logoù ..."
-
-#: ui/CellToolBase_p.cpp:919
+#: ui/CellToolBase_p.cpp:911
 #, kde-format
 msgid "Selection List..."
 msgstr "Roll dibab ..."
@@ -15883,68 +15851,6 @@ msgstr ""
 msgid "Current value:"
 msgstr "Gwerzh red :"
 
-#: ui/dialogs/InsertDialog.cpp:42 ui/dialogs/PasteInsertDialog.cpp:37
-#, kde-format
-msgid "Insert"
-msgstr "Enlakaat"
-
-#: ui/dialogs/InsertDialog.cpp:45 ui/dialogs/PasteInsertDialog.cpp:39
-#, kde-format
-msgid "Move towards right"
-msgstr "Fiñval war-du a-zehou"
-
-#: ui/dialogs/InsertDialog.cpp:46 ui/dialogs/PasteInsertDialog.cpp:40
-#, fuzzy, kde-format
-#| msgid "Move towards left"
-msgid "Move towards bottom"
-msgstr "Fiñval war-du a-gleiz"
-
-#: ui/dialogs/InsertDialog.cpp:47
-#, kde-format
-msgid "Insert rows"
-msgstr "Enlakaat linennoù"
-
-#: ui/dialogs/InsertDialog.cpp:48
-#, kde-format
-msgid "Insert columns"
-msgstr "Enlakaat bannoù"
-
-#: ui/dialogs/InsertDialog.cpp:49
-#, kde-format
-msgid "Insert Cells"
-msgstr "Enlakaat logoù"
-
-#: ui/dialogs/InsertDialog.cpp:51 ui/dialogs/ListDialog.cpp:81
-#, kde-format
-msgid "Remove"
-msgstr "Lemel"
-
-#: ui/dialogs/InsertDialog.cpp:52
-#, kde-format
-msgid "Move towards left"
-msgstr "Fiñval war-du a-gleiz"
-
-#: ui/dialogs/InsertDialog.cpp:53
-#, fuzzy, kde-format
-#| msgid "Move towards left"
-msgid "Move towards top"
-msgstr "Fiñval war-du a-gleiz"
-
-#: ui/dialogs/InsertDialog.cpp:54
-#, kde-format
-msgid "Remove rows"
-msgstr "Dilemel al linennoù"
-
-#: ui/dialogs/InsertDialog.cpp:55
-#, kde-format
-msgid "Remove columns"
-msgstr "Dilemel ar bannoù"
-
-#: ui/dialogs/InsertDialog.cpp:56
-#, kde-format
-msgid "Remove Cells"
-msgstr "Lemel al logoù"
-
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
 msgid "Cell Format"
@@ -16307,6 +16213,11 @@ msgstr "&Nullañ"
 msgid "New"
 msgstr "&Nevez"
 
+#: ui/dialogs/ListDialog.cpp:81
+#, kde-format
+msgid "Remove"
+msgstr "Lemel"
+
 #: ui/dialogs/ListDialog.cpp:84
 #, fuzzy, kde-format
 #| msgid "&Modify"
@@ -16346,6 +16257,22 @@ msgstr ""
 #| msgid "Insert Cells"
 msgid "Paste Inserting Cells"
 msgstr "Enlakaat logoù"
+
+#: ui/dialogs/PasteInsertDialog.cpp:37
+#, kde-format
+msgid "Insert"
+msgstr "Enlakaat"
+
+#: ui/dialogs/PasteInsertDialog.cpp:39
+#, kde-format
+msgid "Move towards right"
+msgstr "Fiñval war-du a-zehou"
+
+#: ui/dialogs/PasteInsertDialog.cpp:40
+#, fuzzy, kde-format
+#| msgid "Move towards left"
+msgid "Move towards bottom"
+msgstr "Fiñval war-du a-gleiz"
 
 #: ui/dialogs/pivot.cpp:31
 #, fuzzy, kde-format
@@ -16953,6 +16880,56 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Digeriñ al liamm ?"
+
+#, fuzzy
+#~| msgid "Cells:"
+#~ msgid "Cells..."
+#~ msgstr "Logoù :"
+
+#~ msgid "Insert Cells..."
+#~ msgstr "Enlakaat logoù ..."
+
+#, fuzzy
+#~ msgid "Insert a blank cell into the spreadsheet"
+#~ msgstr "Enlakaat ur folenn nevez."
+
+#~ msgid "Remove Cells..."
+#~ msgstr "Lemel al logoù ..."
+
+#, fuzzy
+#~ msgid "Removes the cells from the spreadsheet"
+#~ msgstr "Enlakaat ur folenn nevez."
+
+#, fuzzy
+#~| msgid "Insert Cells..."
+#~ msgid "Delete Cells..."
+#~ msgstr "Enlakaat logoù ..."
+
+#~ msgid "Insert rows"
+#~ msgstr "Enlakaat linennoù"
+
+#~ msgid "Insert columns"
+#~ msgstr "Enlakaat bannoù"
+
+#~ msgid "Insert Cells"
+#~ msgstr "Enlakaat logoù"
+
+#~ msgid "Move towards left"
+#~ msgstr "Fiñval war-du a-gleiz"
+
+#, fuzzy
+#~| msgid "Move towards left"
+#~ msgid "Move towards top"
+#~ msgstr "Fiñval war-du a-gleiz"
+
+#~ msgid "Remove rows"
+#~ msgstr "Dilemel al linennoù"
+
+#~ msgid "Remove columns"
+#~ msgstr "Dilemel ar bannoù"
+
+#~ msgid "Remove Cells"
+#~ msgstr "Lemel al logoù"
 
 #~ msgid "Remove All"
 #~ msgstr "Lemel an holl re"

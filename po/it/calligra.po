@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-21 00:46+0000\n"
+"POT-Creation-Date: 2023-01-01 00:57+0000\n"
 "PO-Revision-Date: 2022-12-21 22:59+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -4503,7 +4503,7 @@ msgstr " – "
 msgid "&Details"
 msgstr "&Dettagli"
 
-#: widgets/KoDialog.cpp:1004
+#: widgets/KoDialog.cpp:1001
 #, kde-format
 msgid "Get help..."
 msgstr "Ottieni aiuto..."

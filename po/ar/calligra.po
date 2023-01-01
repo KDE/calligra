@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-21 00:46+0000\n"
+"POT-Creation-Date: 2023-01-01 00:57+0000\n"
 "PO-Revision-Date: 2008-01-12 07:26+0000\n"
 "Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -4608,7 +4608,7 @@ msgstr ""
 msgid "&Details"
 msgstr "ا&فتراضي"
 
-#: widgets/KoDialog.cpp:1004
+#: widgets/KoDialog.cpp:1001
 #, kde-format
 msgid "Get help..."
 msgstr ""
