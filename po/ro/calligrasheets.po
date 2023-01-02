@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-01 00:57+0000\n"
+"POT-Creation-Date: 2023-01-02 01:02+0000\n"
 "PO-Revision-Date: 2022-05-05 10:23+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -124,21 +124,18 @@ msgstr "Selecție"
 msgid "Validation for cell %1 failed"
 msgstr ""
 
-#: core/StyleManager.cpp:37
+#: core/StyleManager.cpp:38
 #, fuzzy, kde-format
 msgid "Header"
 msgstr "an"
 
-#: core/StyleManager.cpp:46
+#: core/StyleManager.cpp:47
 #, fuzzy, kde-format
 msgid "Header1"
 msgstr "an"
 
-#: core/StyleManager.cpp:172 ui/dialogs/LayoutPage_General.cpp:127
-#: ui/dialogs/LayoutPage_General.cpp:146 ui/dialogs/StyleManagerDialog.cpp:99
-#: ui/dialogs/StyleManagerDialog.cpp:139 ui/dialogs/StyleManagerDialog.cpp:172
-#: ui/dialogs/StyleManagerDialog.cpp:198 ui/dialogs/StyleManagerDialog.cpp:236
-#: ui/dialogs/StyleManagerDialog.cpp:265 ui/dialogs/StyleManagerDialog.cpp:286
+#: core/StyleManager.cpp:178 ui/dialogs/LayoutPage_General.cpp:127
+#: ui/dialogs/LayoutPage_General.cpp:146
 #, fuzzy, kde-format
 msgid "Default"
 msgstr "Rezultat Y"
@@ -878,7 +875,7 @@ msgstr "Număr"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:157 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:155 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -935,7 +932,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "IMABS(\"-i\") = 1"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:258 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:240 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "Dată"
@@ -12245,7 +12242,7 @@ msgstr "Activează"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:182
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:164
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
@@ -13569,7 +13566,7 @@ msgstr ""
 "Sunteți pe cale să ștergeți tabelul activ.\n"
 "Doriți să continuați?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1220
+#: part/View.cpp:1872
 #, fuzzy, kde-format
 msgid "Enter name:"
 msgstr "Internet"
@@ -13629,13 +13626,13 @@ msgstr "Total: %1"
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1294
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1209
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Modifică text"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1317
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1232
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
@@ -13643,415 +13640,364 @@ msgstr "Culoare fundal"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:512
+#: ui/CellToolBase_p.cpp:511
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Modifică culoare margine"
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 msgid "Cell Format..."
 msgstr "Formatare celulă..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Șterge comentariu"
 
 #: ui/CellToolBase.cpp:163
-#, kde-format
-msgid "Style Manager..."
-msgstr ""
-
-#: ui/CellToolBase.cpp:166
-#, kde-format
-msgid "Edit and organize cell styles"
-msgstr ""
-
-#: ui/CellToolBase.cpp:168 ui/dialogs/LayoutPage_General.cpp:42
-#: ui/dialogs/StyleManagerDialog.cpp:44
-#, fuzzy, kde-format
-msgid "Style"
-msgstr "Stil:"
-
-#: ui/CellToolBase.cpp:170
-#, fuzzy, kde-format
-msgid "Apply a predefined style to the selected cells"
-msgstr "Mută la stânga"
-
-#: ui/CellToolBase.cpp:173
-#, fuzzy, kde-format
-msgid "Create Style From Cell..."
-msgstr "Stil celulă"
-
-#: ui/CellToolBase.cpp:174
-#, fuzzy, kde-format
-msgid "Style From Cell"
-msgstr "Stil celulă"
-
-#: ui/CellToolBase.cpp:177
-#, fuzzy, kde-format
-msgid "Create a new style based on the currently selected cell"
-msgstr "Mută la stânga"
-
-#: ui/CellToolBase.cpp:181
 #, fuzzy, kde-format
 msgid "Select Font..."
 msgstr "Selectează font"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:168
 #, kde-format
 msgid "Select Font Size"
 msgstr "Selectează mărime font"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:169
 #, fuzzy, kde-format
 msgid "Font Size"
 msgstr "Selectează mărime font"
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:175
 #, kde-format
 msgid "Text Color"
 msgstr "Culoare text"
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:176
 #, fuzzy, kde-format
 msgid "Set the text color"
 msgstr "Modifică culoare fundal"
 
-#: ui/CellToolBase.cpp:202
+#: ui/CellToolBase.cpp:184
 #, fuzzy, kde-format
 msgid "Select a new border color"
 msgstr "Modifică culoare margine"
 
-#: ui/CellToolBase.cpp:203
+#: ui/CellToolBase.cpp:185
 #, kde-format
 msgid "Border Color"
 msgstr "Culoare margine"
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:194
 #, fuzzy, kde-format
 msgid "Set the background color"
 msgstr "Modifică culoare fundal"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:195
 #, kde-format
 msgid "Background Color"
 msgstr "Culoare fundal"
 
-#: ui/CellToolBase.cpp:219 ui/CellToolBase.cpp:220
+#: ui/CellToolBase.cpp:201 ui/CellToolBase.cpp:202
 #, fuzzy, kde-format
 msgid "Clear All"
 msgstr "An"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:203
 #, fuzzy, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 msgid "Contents"
 msgstr "Comentariu"
 
-#: ui/CellToolBase.cpp:226
+#: ui/CellToolBase.cpp:208
 #, fuzzy, kde-format
 msgid "Clear Contents"
 msgstr "Comentariu"
 
-#: ui/CellToolBase.cpp:227
+#: ui/CellToolBase.cpp:209
 #, fuzzy, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:213
 #, fuzzy, kde-format
 msgid "Conditional Styles..."
 msgstr "Atribute celulă condițională..."
 
-#: ui/CellToolBase.cpp:232
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr ""
 
-#: ui/CellToolBase.cpp:236 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:218 ui/dialogs/ConditionalDialog.cpp:242
 #, fuzzy, kde-format
 msgid "Conditional Styles"
 msgstr "Atribute celulă condițională"
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:219
 #, fuzzy, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:238
+#: ui/CellToolBase.cpp:220
 #, fuzzy, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:244
+#: ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 msgid "&Auto-Filter"
 msgstr "Umplere automată"
 
-#: ui/CellToolBase.cpp:247
+#: ui/CellToolBase.cpp:229
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Funcție"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:236
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Expresie &matematică..."
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:239
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Dată"
 
-#: ui/CellToolBase.cpp:261
+#: ui/CellToolBase.cpp:243
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Dată"
 
-#: ui/CellToolBase.cpp:264
+#: ui/CellToolBase.cpp:246
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Sortează liste..."
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:249
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:251
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "&Serii..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:256
 #, fuzzy, kde-format
 msgid "&Pivot Tables..."
 msgstr "Sortează..."
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:259
 #, fuzzy, kde-format
 msgid "Create Pivot Tables"
 msgstr "Sortează..."
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:261
 #, kde-format
 msgid "Formula Selection"
 msgstr "Selecție formulă"
 
-#: ui/CellToolBase.cpp:281
+#: ui/CellToolBase.cpp:263
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Inserează coloană(e)"
 
-#: ui/CellToolBase.cpp:282 ui/CellToolBase.cpp:1435
+#: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:1350
 #, kde-format
 msgid "Others..."
 msgstr "Altele..."
 
-#: ui/CellToolBase.cpp:290
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Modify Cell"
 msgstr "Modifică celula"
 
-#: ui/CellToolBase.cpp:294
+#: ui/CellToolBase.cpp:276
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Modifică culoare text"
 
-#: ui/CellToolBase.cpp:297
+#: ui/CellToolBase.cpp:279
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:283
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:305
+#: ui/CellToolBase.cpp:287
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:308
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "Special Paste..."
 msgstr "Lipește special..."
 
-#: ui/CellToolBase.cpp:311
+#: ui/CellToolBase.cpp:293
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:295
 #, fuzzy, kde-format
 msgid "Paste with Insertion"
 msgstr "Lipește cu inserare..."
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:298
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Inserează tabel"
 
-#: ui/CellToolBase.cpp:319
+#: ui/CellToolBase.cpp:301
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:319
 #, kde-format
 msgid "Check the spelling"
 msgstr ""
 
-#: ui/CellToolBase.cpp:340
+#: ui/CellToolBase.cpp:322
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:346
+#: ui/CellToolBase.cpp:328
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Afișează antet de linie"
 
-#: ui/CellToolBase.cpp:352
+#: ui/CellToolBase.cpp:334
 #, fuzzy, kde-format
 msgid "Auto-Format..."
 msgstr "Formatare celulă..."
 
-#: ui/CellToolBase.cpp:355
+#: ui/CellToolBase.cpp:337
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:357
+#: ui/CellToolBase.cpp:339
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Parametrii locali"
 
-#: ui/CellToolBase.cpp:360
+#: ui/CellToolBase.cpp:342
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Afișează indicator de comentariu"
 
-#: ui/CellToolBase.cpp:364
+#: ui/CellToolBase.cpp:346
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Precizie"
 
-#: ui/CellToolBase.cpp:368
+#: ui/CellToolBase.cpp:350
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Precizie"
 
-#: ui/CellToolBase.cpp:369
+#: ui/CellToolBase.cpp:351
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:1153
+#: ui/CellToolBase.cpp:1137
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1219
-#, fuzzy, kde-format
-msgid "Create Style From Cell"
-msgstr "Stil celulă"
-
-#: ui/CellToolBase.cpp:1228
-#, fuzzy, kde-format
-msgid "The style name cannot be empty."
-msgstr "Numele tabelului nu poate fi gol."
-
-#: ui/CellToolBase.cpp:1233 ui/dialogs/LayoutPage_General.cpp:90
-#, fuzzy, kde-format
-msgid "A style with this name already exists."
-msgstr "Fișierul există deja"
-
-#: ui/CellToolBase.cpp:1254 ui/CellToolBase.cpp:1274
+#: ui/CellToolBase.cpp:1169 ui/CellToolBase.cpp:1189
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Modifică font"
 
-#: ui/CellToolBase.cpp:1341
+#: ui/CellToolBase.cpp:1256
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Modifică text"
 
-#: ui/CellToolBase.cpp:1395
+#: ui/CellToolBase.cpp:1310
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1424
+#: ui/CellToolBase.cpp:1339
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Trebuie să selectați mai multe celule."
 
-#: ui/CellToolBase.cpp:1899
+#: ui/CellToolBase.cpp:1814
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Septembrie"
 
-#: ui/CellToolBase_p.cpp:481
+#: ui/CellToolBase_p.cpp:480
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Număr de încercări"
 
-#: ui/CellToolBase_p.cpp:487
+#: ui/CellToolBase_p.cpp:486
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Valoare prezentă"
 
-#: ui/CellToolBase_p.cpp:492
+#: ui/CellToolBase_p.cpp:491
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Format procent"
 
-#: ui/CellToolBase_p.cpp:497
+#: ui/CellToolBase_p.cpp:496
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Format timp"
 
-#: ui/CellToolBase_p.cpp:502
+#: ui/CellToolBase_p.cpp:501
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Format dată"
 
-#: ui/CellToolBase_p.cpp:507
+#: ui/CellToolBase_p.cpp:506
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Științific"
 
-#: ui/CellToolBase_p.cpp:911
+#: ui/CellToolBase_p.cpp:910
 #, fuzzy, kde-format
 msgid "Selection List..."
 msgstr "Listă selecție..."
@@ -15686,6 +15632,11 @@ msgstr ""
 msgid "Dolor Ipse"
 msgstr "(ăĂâÂîÎșȘțȚ) Dolor Ipse"
 
+#: ui/dialogs/LayoutPage_General.cpp:42
+#, fuzzy, kde-format
+msgid "Style"
+msgstr "Stil:"
+
 #: ui/dialogs/LayoutPage_General.cpp:48
 #, fuzzy, kde-format
 msgctxt "Name of the style"
@@ -15696,6 +15647,11 @@ msgstr "Redenumește"
 #, fuzzy, kde-format
 msgid "Inherit style:"
 msgstr "Stil tabel"
+
+#: ui/dialogs/LayoutPage_General.cpp:90
+#, fuzzy, kde-format
+msgid "A style with this name already exists."
+msgstr "Fișierul există deja"
 
 #: ui/dialogs/LayoutPage_General.cpp:94
 #, fuzzy, kde-format
@@ -16292,46 +16248,6 @@ msgstr "Înmulțire"
 msgid "Division"
 msgstr "Împărțire"
 
-#: ui/dialogs/StyleManagerDialog.cpp:33
-#, kde-format
-msgid "Style Manager"
-msgstr ""
-
-#: ui/dialogs/StyleManagerDialog.cpp:48
-#, fuzzy, kde-format
-msgid "All Styles"
-msgstr "Stil:"
-
-#: ui/dialogs/StyleManagerDialog.cpp:49
-#, fuzzy, kde-format
-msgid "Custom Styles"
-msgstr "Sortează liste..."
-
-#: ui/dialogs/StyleManagerDialog.cpp:50
-#, fuzzy, kde-format
-msgid "Hierarchical"
-msgstr "Text vertical"
-
-#: ui/dialogs/StyleManagerDialog.cpp:58
-#, fuzzy, kde-format
-msgid "&New..."
-msgstr "Nou"
-
-#: ui/dialogs/StyleManagerDialog.cpp:60
-#, fuzzy, kde-format
-msgid "&Modify..."
-msgstr "&Adaugă/schimbă comentariu..."
-
-#: ui/dialogs/StyleManagerDialog.cpp:62
-#, fuzzy, kde-format
-msgid "&Delete..."
-msgstr "&Serii..."
-
-#: ui/dialogs/StyleManagerDialog.cpp:206 ui/dialogs/StyleManagerDialog.cpp:209
-#, fuzzy, kde-format
-msgid "style%1"
-msgstr "Stil:"
-
 #: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 #| msgid "April"
@@ -16391,6 +16307,58 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Inserează coloană(e)"
+
+#, fuzzy
+#~ msgid "Apply a predefined style to the selected cells"
+#~ msgstr "Mută la stânga"
+
+#, fuzzy
+#~ msgid "Create Style From Cell..."
+#~ msgstr "Stil celulă"
+
+#, fuzzy
+#~ msgid "Style From Cell"
+#~ msgstr "Stil celulă"
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected cell"
+#~ msgstr "Mută la stânga"
+
+#, fuzzy
+#~ msgid "Create Style From Cell"
+#~ msgstr "Stil celulă"
+
+#, fuzzy
+#~ msgid "The style name cannot be empty."
+#~ msgstr "Numele tabelului nu poate fi gol."
+
+#, fuzzy
+#~ msgid "All Styles"
+#~ msgstr "Stil:"
+
+#, fuzzy
+#~ msgid "Custom Styles"
+#~ msgstr "Sortează liste..."
+
+#, fuzzy
+#~ msgid "Hierarchical"
+#~ msgstr "Text vertical"
+
+#, fuzzy
+#~ msgid "&New..."
+#~ msgstr "Nou"
+
+#, fuzzy
+#~ msgid "&Modify..."
+#~ msgstr "&Adaugă/schimbă comentariu..."
+
+#, fuzzy
+#~ msgid "&Delete..."
+#~ msgstr "&Serii..."
+
+#, fuzzy
+#~ msgid "style%1"
+#~ msgstr "Stil:"
 
 #, fuzzy
 #~ msgid "Cells..."

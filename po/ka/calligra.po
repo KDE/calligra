@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-01 00:57+0000\n"
-"PO-Revision-Date: 2022-12-14 18:11+0100\n"
+"PO-Revision-Date: 2023-01-01 06:21+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -36,22 +36,22 @@ msgstr "ბილიკის დახატვა"
 #: basicflakes/plugin/KoPencilToolFactory.cpp:16
 #, kde-format
 msgid "Freehand path"
-msgstr ""
+msgstr "კონტური ხელით"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:448
 #, kde-format
 msgid "Angle snapping delta:"
-msgstr ""
+msgstr "მიმაგრების კუთხის ინტერვალი:"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:455
 #, kde-format
 msgid "Activate angle snap:"
-msgstr ""
+msgstr "კუთხეების მიმაგრების ჩართვა:"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:463
 #, kde-format
 msgid "Angle Constraints"
-msgstr ""
+msgstr "კუთხის შეზღუდვები"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:467
 #: basicflakes/tools/KoPencilTool.cpp:336 widgets/KoGradientEditWidget.cpp:147
@@ -278,7 +278,7 @@ msgstr "ჩრდილის დაყენება"
 #: flake/commands/KoShapeShearCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
-msgstr ""
+msgstr "ობიექტების დახრა"
 
 #: flake/commands/KoShapeSizeCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -302,12 +302,12 @@ msgstr "გაუმჭვირვალობის დაყენება"
 #: flake/commands/KoShapeUnclipCommand.cpp:107
 msgctxt "(qtundo-format)"
 msgid "Unclip Shape"
-msgstr ""
+msgstr "ობიექტის მიმაგრების მოხსნა"
 
 #: flake/commands/KoShapeUnclipCommand.cpp:116
 msgctxt "(qtundo-format)"
 msgid "Unclip Shapes"
-msgstr ""
+msgstr "ობიექტების მმაგრების მოხსნა"
 
 #: flake/commands/KoShapeUngroupCommand.cpp:46
 msgctxt "(qtundo-format)"
@@ -317,17 +317,17 @@ msgstr "ფორმების განჯგუფება"
 #: flake/commands/KoSubpathJoinCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Close subpath"
-msgstr ""
+msgstr "ქვეკონტურის დახურვა"
 
 #: flake/commands/KoSubpathJoinCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Join subpaths"
-msgstr ""
+msgstr "ქვეკონტურების შეერთბა"
 
 #: flake/commands/KoSubpathRemoveCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
-msgstr ""
+msgstr "ქვეკონტურის წაშლა"
 
 #: flake/KoConnectionShapeConfigWidget.cpp:17
 #, kde-format
@@ -351,12 +351,12 @@ msgstr "ტიპი:"
 #: flake/KoConnectionShapeFactory.cpp:22
 #, kde-format
 msgid "Tie"
-msgstr ""
+msgstr "შემაერთებელი ხაზი"
 
 #: flake/KoConnectionShapeFactory.cpp:24
 #, kde-format
 msgid "A connection between two other shapes"
-msgstr ""
+msgstr "კავშირი ორ სხვადასხვა ფიგურას შორის"
 
 #: flake/KoGridData.cpp:210
 #, kde-format
@@ -371,12 +371,12 @@ msgstr "ბადის ჩვენება/დამალვა"
 #: flake/KoPathShapeFactory.cpp:22
 #, kde-format
 msgid "Simple path shape"
-msgstr ""
+msgstr "უბრალო კონტური"
 
 #: flake/KoPathShapeFactory.cpp:24
 #, kde-format
 msgid "A simple path shape"
-msgstr ""
+msgstr "უბრალო კონტური"
 
 #: flake/KoShapeController.cpp:60 rdf/InsertSemanticObjectCreateAction.cpp:46
 #: rdf/InsertSemanticObjectReferenceAction.cpp:51
@@ -388,7 +388,7 @@ msgstr "%1-ის მორგება"
 #: flake/KoShapePaste.cpp:155
 msgctxt "(qtundo-format)"
 msgid "Paste Shapes"
-msgstr ""
+msgstr "ობიექტების ჩასმა"
 
 #: flake/KoToolManager.cpp:451
 #, kde-format
@@ -398,7 +398,7 @@ msgstr "აქტიური ხელსაწყო: %1"
 #: flake/KoToolProxy.cpp:587
 msgctxt "(qtundo-format)"
 msgid "Paste Image"
-msgstr ""
+msgstr "გამოსახულების ჩასმა"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nodeSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:30
@@ -416,13 +416,13 @@ msgstr "ხაზების გაგრძელება"
 #: flake/SnapGuideConfigWidget.ui:56
 #, kde-format
 msgid "Bounding box of shape"
-msgstr ""
+msgstr "ობიექტის ფართობი"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, snapDistance)
 #: flake/SnapGuideConfigWidget.ui:72
 #, kde-format
 msgid "Proximity distance where snapping happens"
-msgstr ""
+msgstr "დაშორება, რა დროსაც მიბმა ხდება"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, snapDistance)
 #: flake/SnapGuideConfigWidget.ui:75
@@ -451,7 +451,7 @@ msgstr "წამყვანი ხაზები"
 #: flake/svg/SvgShapeFactory.cpp:23
 #, kde-format
 msgid "Embedded svg shape"
-msgstr ""
+msgstr "ჩადგმული SVG ობიექტი"
 
 #: flake/tools/KoCreateShapesToolFactory.cpp:16
 #, kde-format
@@ -486,12 +486,12 @@ msgstr "სიმეტრიული წერტილი"
 #: flake/tools/KoPathTool.cpp:112
 #, kde-format
 msgid "Make curve point"
-msgstr ""
+msgstr "წერტილის ნაწილის მრუდად გარდაქმნა"
 
 #: flake/tools/KoPathTool.cpp:116
 #, kde-format
 msgid "Make line point"
-msgstr ""
+msgstr "ხაზის მონაკვეთის წერტილადგარდაქმნა"
 
 #: flake/tools/KoPathTool.cpp:120
 #, kde-format
@@ -546,7 +546,7 @@ msgstr "ხაზი/მრუდი"
 #: flake/tools/KoPathTool.cpp:528
 #, kde-format
 msgid "Drag to move handle."
-msgstr ""
+msgstr "კონტროლის წერტილის გადასატანად გადაათრიეთ ის"
 
 #: flake/tools/KoPathTool.cpp:592
 #, kde-format
@@ -556,7 +556,7 @@ msgstr ""
 #: flake/tools/KoPathTool.cpp:594
 #, kde-format
 msgid "Drag to move control point."
-msgstr ""
+msgstr "საკონტროლო წერტილის გადატანად გადაათრიეთ ის."
 
 #: flake/tools/KoPathTool.cpp:619
 #, kde-format
@@ -858,12 +858,12 @@ msgstr "ერთეულები:"
 #: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
-msgstr ""
+msgstr "მართვის წერტილის რადიუსი:"
 
 #: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
 msgid "Grab sensitivity:"
-msgstr ""
+msgstr "ჩაჭერის მგრძნობიარობა"
 
 #: main/config/KoConfigMiscPage.cpp:99
 #, kde-format
@@ -893,12 +893,12 @@ msgstr ""
 #: main/KoApplication.cpp:202
 #, kde-format
 msgid "Override display DPI"
-msgstr ""
+msgstr "ეკრანის DPI-ის გადაფარვა"
 
 #: main/KoApplication.cpp:203
 #, kde-format
 msgid "Only export to PDF and exit"
-msgstr ""
+msgstr "PDF-ში გატანა და გასვლა"
 
 #: main/KoApplication.cpp:204
 #, kde-format
@@ -928,7 +928,7 @@ msgstr ""
 #: main/KoApplication.cpp:209
 #, kde-format
 msgid "File(s) or URL(s) to open"
-msgstr ""
+msgstr "გასახსნელი ბმულები და ფაილები"
 
 #: main/KoApplication.cpp:219
 #, kde-format
@@ -941,7 +941,7 @@ msgstr ""
 #: main/KoApplication.cpp:263
 #, kde-format
 msgid "%1: Critical Error"
-msgstr ""
+msgstr "%1: კრიტიკული შეცდომა"
 
 #: main/KoApplication.cpp:263
 #, kde-format
@@ -1058,7 +1058,7 @@ msgstr "შესანახად ფაილის შენახვის 
 #: main/KoDocument.cpp:950
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr ""
+msgstr "%1-ის ჩაწერის შეცდომა. დანაყოფი გადავსებულია?"
 
 #: main/KoDocument.cpp:870
 #, kde-format
@@ -1346,7 +1346,7 @@ msgstr "ფაილის გატანის შეცდომა."
 #: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
 #, kde-format
 msgid "Missing Export Filter"
-msgstr ""
+msgstr "გატანის ფილტრის გარეშე"
 
 #: main/KoFilterManager.cpp:518
 #, kde-format
@@ -1358,7 +1358,7 @@ msgstr ""
 #: main/KoFilterManager.cpp:520
 #, kde-format
 msgid "Missing Import Filter"
-msgstr ""
+msgstr "აკლია შემოტანის ფილტრი"
 
 #: main/KoFilterManager_p.cpp:30
 #, kde-format
@@ -1373,12 +1373,12 @@ msgstr "დიდი ასოს გმრძნობიარე"
 #: main/KoFindText.cpp:46
 #, kde-format
 msgid "Match cases when searching"
-msgstr ""
+msgstr "ძებნისას დიდი და პატარა ასოების სხვაობის დამთხვევა"
 
 #: main/KoFindText.cpp:47
 #, kde-format
 msgid "Match only whole words"
-msgstr ""
+msgstr "მხოლოდ სრული სიტყვების დამთხვევა"
 
 #: main/KoFindText.cpp:47
 #, kde-format
@@ -1388,7 +1388,7 @@ msgstr "მხოლოდ მთლიანი სიტყვები"
 #: main/KoFindText.cpp:48
 #, kde-format
 msgid "Find from Cursor"
-msgstr ""
+msgstr "კურსორიდან ძებნა"
 
 #: main/KoFindText.cpp:48
 #, kde-format
@@ -1433,7 +1433,7 @@ msgstr "&დოკუმენტის დაშიფვრა"
 #: main/KoMainWindow.cpp:303
 #, kde-format
 msgid "&Uncompress to Directory"
-msgstr ""
+msgstr "საქაღალდეში &გაშლა"
 
 #: main/KoMainWindow.cpp:308
 #, kde-format
@@ -1453,7 +1453,7 @@ msgstr "მთელი ეკრანის რეჟიმი"
 #: main/KoMainWindow.cpp:343
 #, kde-format
 msgid "Show Dockers"
-msgstr ""
+msgstr "პანელების ჩვენება"
 
 #: main/KoMainWindow.cpp:348
 #, kde-format
@@ -1779,7 +1779,7 @@ msgstr "&გახსნა"
 #: main/KoVersionDialog.cpp:120
 #, kde-format
 msgid "A new version could not be added"
-msgstr ""
+msgstr "ახალი ვერსიის დამატება შეუძებელია"
 
 #: main/KoVersionDialog.cpp:227 main/KoVersionDialog.cpp:229
 #, kde-format
@@ -1789,7 +1789,7 @@ msgstr "თარიღი: %1"
 #: main/KoView.cpp:330
 #, kde-format
 msgid "Active Author Profile"
-msgstr ""
+msgstr "აქტიური ავტორის პროფილი"
 
 #: main/KoView.cpp:342 main/KoView.cpp:396
 #, kde-format
@@ -1800,7 +1800,7 @@ msgstr "ანონიმურად"
 #: main/KoView.cpp:395 widgets/KoConfigAuthorPage.cpp:69
 #, kde-format
 msgid "Default Author Profile"
-msgstr ""
+msgstr "ნაგულისხმები ავტორის პროფილი"
 
 #: odf/KoDocumentInfo.cpp:40
 #, kde-format
@@ -2438,7 +2438,7 @@ msgstr "გვერდის კოპირება"
 #: pageapp/KoPAView.cpp:395 pageapp/KoPAView.cpp:396
 #, kde-format
 msgid "Copy the current page"
-msgstr ""
+msgstr "მიმდინარე გვერდის კოპირება"
 
 #: pageapp/KoPAView.cpp:399
 #, kde-format
@@ -2448,7 +2448,7 @@ msgstr "გვერდის წაშლა"
 #: pageapp/KoPAView.cpp:402 pageapp/KoPAView.cpp:403
 #, kde-format
 msgid "Delete the current page"
-msgstr ""
+msgstr "მიმდინარე გვერდის წაშლა"
 
 #: pageapp/KoPAView.cpp:406
 #, kde-format
@@ -2491,13 +2491,13 @@ msgstr ""
 #: pageapp/KoPAView.cpp:666
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
-msgstr ""
+msgstr "გვერდის განლაგების შეცვლა"
 
 #. i18n: ectx: property (text), widget (QPushButton, backgroundImage)
 #: pageapp/tools/backgroundTool/BackgroundToolWidget.ui:43
 #, kde-format
 msgid "Set image ..."
-msgstr ""
+msgstr "გამოსახულების დაყენება ..."
 
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
@@ -2508,12 +2508,12 @@ msgstr "ფონი"
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
 #, kde-format
 msgid "Page Background"
-msgstr ""
+msgstr "გვერდის ფონი"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
 #, kde-format
 msgid "Page Design"
-msgstr ""
+msgstr "გვერდის დიზაინი"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
 #, kde-format
@@ -2700,7 +2700,7 @@ msgstr ""
 #: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken32.h:235
 #, kde-format
 msgid "Alpha darken"
-msgstr ""
+msgstr "ალფა-არხის გამუქება"
 
 #: pigment/compositeops/KoCompositeOpBehind.h:26
 #: pigment/KoCompositeOpRegistry.cpp:69
@@ -2724,7 +2724,7 @@ msgstr "წაშლა"
 #: pigment/KoCompositeOpRegistry.cpp:70
 #, kde-format
 msgid "Greater"
-msgstr ""
+msgstr "მეტი"
 
 #: pigment/compositeops/KoCompositeOpOver.h:49
 #: pigment/compositeops/KoOptimizedCompositeOpOver128.h:238
@@ -2744,25 +2744,25 @@ msgstr "დადება"
 #: pigment/KoCompositeOpRegistry.cpp:75
 #, kde-format
 msgid "Grain Merge"
-msgstr ""
+msgstr "მარცვლების შერწყმა"
 
 #: pigment/compositeops/KoCompositeOps.h:103
 #: pigment/KoCompositeOpRegistry.cpp:76
 #, kde-format
 msgid "Grain Extract"
-msgstr ""
+msgstr "მარცვლის გამოყოფა"
 
 #: pigment/compositeops/KoCompositeOps.h:104
 #: pigment/KoCompositeOpRegistry.cpp:74
 #, kde-format
 msgid "Hard Mix"
-msgstr ""
+msgstr "უხეში შერევა"
 
 #: pigment/compositeops/KoCompositeOps.h:105
 #: pigment/KoCompositeOpRegistry.cpp:79
 #, kde-format
 msgid "Geometric Mean"
-msgstr ""
+msgstr "საშუალო გეომეტრიული"
 
 #: pigment/compositeops/KoCompositeOps.h:106
 #: pigment/KoCompositeOpRegistry.cpp:77
@@ -2774,7 +2774,7 @@ msgstr "პარალელური"
 #: pigment/KoCompositeOpRegistry.cpp:78
 #, kde-format
 msgid "Allanon"
-msgstr ""
+msgstr "საშუალო არითმეტიკული"
 
 #: pigment/compositeops/KoCompositeOps.h:109
 #: pigment/KoCompositeOpRegistry.cpp:53
@@ -2786,13 +2786,13 @@ msgstr "ეკრანი"
 #: pigment/KoCompositeOpRegistry.cpp:49
 #, kde-format
 msgid "Color Dodge"
-msgstr ""
+msgstr "ფერის გაღიავება"
 
 #: pigment/compositeops/KoCompositeOps.h:111
 #: pigment/KoCompositeOpRegistry.cpp:50
 #, kde-format
 msgid "Linear Dodge"
-msgstr ""
+msgstr "ხაზოვანი გაღიაევბა"
 
 #: pigment/compositeops/KoCompositeOps.h:112 pigment/KoCompositeOp.cpp:23
 #: pigment/KoCompositeOpRegistry.cpp:28 pigment/KoCompositeOpRegistry.cpp:51
@@ -2804,54 +2804,54 @@ msgstr "გაღიავება"
 #: pigment/KoCompositeOpRegistry.cpp:56
 #, kde-format
 msgid "Hard Light"
-msgstr ""
+msgstr "მაგარი სინათლე"
 
 #: pigment/compositeops/KoCompositeOps.h:114
 #: pigment/KoCompositeOpRegistry.cpp:58
 #, kde-format
 msgid "Soft Light (SVG)"
-msgstr ""
+msgstr "რბილი სინათლე (SVG)"
 
 #: pigment/compositeops/KoCompositeOps.h:115
 #: pigment/KoCompositeOpRegistry.cpp:57
 #, kde-format
 msgid "Soft Light (Photoshop)"
-msgstr ""
+msgstr "რბილი სინათლე (Photoshop)"
 
 #: pigment/compositeops/KoCompositeOps.h:116
 #: pigment/KoCompositeOpRegistry.cpp:59
 #, kde-format
 msgid "Gamma Light"
-msgstr ""
+msgstr "გამის განათება"
 
 #: pigment/compositeops/KoCompositeOps.h:117
 #: pigment/KoCompositeOpRegistry.cpp:55
 #, kde-format
 msgid "Vivid Light"
-msgstr ""
+msgstr "კაშკაშა სინათლე"
 
 #: pigment/compositeops/KoCompositeOps.h:118
 #: pigment/KoCompositeOpRegistry.cpp:54
 #, kde-format
 msgid "Pin Light"
-msgstr ""
+msgstr "წერტილოვანი სინათლე"
 
 #: pigment/compositeops/KoCompositeOps.h:119
 #: pigment/KoCompositeOpRegistry.cpp:52
 #, kde-format
 msgid "Linear Light"
-msgstr ""
+msgstr "ხაზოვანი განათება"
 
 #: pigment/compositeops/KoCompositeOps.h:121
 #, kde-format
 msgid "Color Burn"
-msgstr ""
+msgstr "ფერის გამუქება"
 
 #: pigment/compositeops/KoCompositeOps.h:122
 #: pigment/KoCompositeOpRegistry.cpp:44
 #, kde-format
 msgid "Linear Burn"
-msgstr ""
+msgstr "წრფივი გამუქება"
 
 #: pigment/compositeops/KoCompositeOps.h:123 pigment/KoCompositeOp.cpp:24
 #: pigment/KoCompositeOpRegistry.cpp:27 pigment/KoCompositeOpRegistry.cpp:45
@@ -2863,7 +2863,7 @@ msgstr "გამუქება"
 #: pigment/KoCompositeOpRegistry.cpp:46
 #, kde-format
 msgid "Gamma Dark"
-msgstr ""
+msgstr "გამის გამუქება"
 
 #: pigment/compositeops/KoCompositeOps.h:126
 #: pigment/KoCompositeOpRegistry.cpp:37
@@ -2874,7 +2874,7 @@ msgstr "დამატება"
 #: pigment/compositeops/KoCompositeOps.h:128
 #, kde-format
 msgid "Inversed-Subtract"
-msgstr ""
+msgstr "უკუღმა-გამოკლება"
 
 #: pigment/compositeops/KoCompositeOps.h:130
 #: pigment/KoCompositeOpRegistry.cpp:40
@@ -2886,7 +2886,7 @@ msgstr "გაყოფა"
 #: pigment/KoCompositeOpRegistry.cpp:66
 #, kde-format
 msgid "Arcus Tangent"
-msgstr ""
+msgstr "მხები სხივი"
 
 #: pigment/compositeops/KoCompositeOps.h:133
 #: pigment/KoCompositeOpRegistry.cpp:62
@@ -2904,12 +2904,12 @@ msgstr "გამორიცხვა"
 #: pigment/KoCompositeOpRegistry.cpp:63
 #, kde-format
 msgid "Equivalence"
-msgstr ""
+msgstr "ეკვივალენტური"
 
 #: pigment/compositeops/KoCompositeOps.h:136
 #, kde-format
 msgid "Additive-Subtractive"
-msgstr ""
+msgstr "ადიტიური დამატება"
 
 #: pigment/compositeops/KoCompositeOps.h:165
 #: pigment/KoCompositeOpRegistry.cpp:84
@@ -2933,12 +2933,12 @@ msgstr "ლურჯის კოპირება"
 #: pigment/KoCompositeOpRegistry.cpp:88
 #, kde-format
 msgid "Tangent Normalmap"
-msgstr ""
+msgstr "მხების ნორმალების რუკა"
 
 #: pigment/compositeops/KoCompositeOps.h:169
 #, kde-format
 msgid "Combine Normal Maps"
-msgstr ""
+msgstr "ნორმალის რუკების კომბინირება"
 
 #: pigment/compositeops/KoCompositeOps.h:171 pigment/KoCompositeOp.cpp:18
 #: pigment/KoCompositeOpRegistry.cpp:90
@@ -2962,13 +2962,13 @@ msgstr "გაჯერებულობა"
 #: pigment/KoCompositeOpRegistry.cpp:95
 #, kde-format
 msgid "Increase Saturation"
-msgstr ""
+msgstr "გაჯერებულობის გაზრდა"
 
 #: pigment/compositeops/KoCompositeOps.h:175
 #: pigment/KoCompositeOpRegistry.cpp:94
 #, kde-format
 msgid "Decrease Saturation"
-msgstr ""
+msgstr "გაჯერებულობის შემცირება"
 
 #: pigment/compositeops/KoCompositeOps.h:176
 #: pigment/KoCompositeOpRegistry.cpp:93
@@ -2980,55 +2980,55 @@ msgstr "სიკაშკაშე"
 #: pigment/KoCompositeOpRegistry.cpp:97
 #, kde-format
 msgid "Increase Luminosity"
-msgstr ""
+msgstr "სიკაშკაშის გაზრდა"
 
 #: pigment/compositeops/KoCompositeOps.h:178
 #: pigment/KoCompositeOpRegistry.cpp:96
 #, kde-format
 msgid "Decrease Luminosity"
-msgstr ""
+msgstr "სიკაშკაშის შემცირება"
 
 #: pigment/compositeops/KoCompositeOps.h:179
 #: pigment/KoCompositeOpRegistry.cpp:47
 #, kde-format
 msgid "Darker Color"
-msgstr ""
+msgstr "უფრო მუქი"
 
 #: pigment/compositeops/KoCompositeOps.h:180
 #: pigment/KoCompositeOpRegistry.cpp:60
 #, kde-format
 msgid "Lighter Color"
-msgstr ""
+msgstr "უფრო ღია"
 
 #: pigment/compositeops/KoCompositeOps.h:182
 #: pigment/KoCompositeOpRegistry.cpp:99
 #, kde-format
 msgid "Color HSI"
-msgstr ""
+msgstr "HSI ფერი"
 
 #: pigment/compositeops/KoCompositeOps.h:183
 #: pigment/KoCompositeOpRegistry.cpp:100
 #, kde-format
 msgid "Hue HSI"
-msgstr ""
+msgstr "HSI ტონი"
 
 #: pigment/compositeops/KoCompositeOps.h:184
 #: pigment/KoCompositeOpRegistry.cpp:101
 #, kde-format
 msgid "Saturation HSI"
-msgstr ""
+msgstr "HSI გაჯერებულობა"
 
 #: pigment/compositeops/KoCompositeOps.h:185
 #: pigment/KoCompositeOpRegistry.cpp:104
 #, kde-format
 msgid "Increase Saturation HSI"
-msgstr ""
+msgstr "HSI გაჯერებულობის გაზრდა"
 
 #: pigment/compositeops/KoCompositeOps.h:186
 #: pigment/KoCompositeOpRegistry.cpp:103
 #, kde-format
 msgid "Decrease Saturation HSI"
-msgstr ""
+msgstr "HSI გაჯერებულობის შემცირება"
 
 #: pigment/compositeops/KoCompositeOps.h:187
 #: pigment/KoCompositeOpRegistry.cpp:102
@@ -3040,85 +3040,85 @@ msgstr "ინტენსვობა"
 #: pigment/KoCompositeOpRegistry.cpp:106
 #, kde-format
 msgid "Increase Intensity"
-msgstr ""
+msgstr "ინტენსივობის გაზრდა"
 
 #: pigment/compositeops/KoCompositeOps.h:189
 #: pigment/KoCompositeOpRegistry.cpp:105
 #, kde-format
 msgid "Decrease Intensity"
-msgstr ""
+msgstr "ინტენსივობის შემცირება"
 
 #: pigment/compositeops/KoCompositeOps.h:191
 #: pigment/KoCompositeOpRegistry.cpp:108
 #, kde-format
 msgid "Color HSL"
-msgstr ""
+msgstr "HSL ფერი"
 
 #: pigment/compositeops/KoCompositeOps.h:192
 #: pigment/KoCompositeOpRegistry.cpp:109
 #, kde-format
 msgid "Hue HSL"
-msgstr ""
+msgstr "HSL ტონი"
 
 #: pigment/compositeops/KoCompositeOps.h:193
 #: pigment/KoCompositeOpRegistry.cpp:110
 #, kde-format
 msgid "Saturation HSL"
-msgstr ""
+msgstr "HSL გაჯერებულობა"
 
 #: pigment/compositeops/KoCompositeOps.h:194
 #: pigment/KoCompositeOpRegistry.cpp:113
 #, kde-format
 msgid "Increase Saturation HSL"
-msgstr ""
+msgstr "HSL გაჯერებულობის გაზრდა"
 
 #: pigment/compositeops/KoCompositeOps.h:195
 #: pigment/KoCompositeOpRegistry.cpp:112
 #, kde-format
 msgid "Decrease Saturation HSL"
-msgstr ""
+msgstr "HSL გაჯერებულობის შემცირება"
 
 #: pigment/compositeops/KoCompositeOps.h:197
 #: pigment/KoCompositeOpRegistry.cpp:115
 #, kde-format
 msgid "Increase Lightness"
-msgstr ""
+msgstr "განათებულობის გაზრდა"
 
 #: pigment/compositeops/KoCompositeOps.h:198
 #: pigment/KoCompositeOpRegistry.cpp:114
 #, kde-format
 msgid "Decrease Lightness"
-msgstr ""
+msgstr "განათებულობის შემცირება"
 
 #: pigment/compositeops/KoCompositeOps.h:200
 #: pigment/KoCompositeOpRegistry.cpp:117
 #, kde-format
 msgid "Color HSV"
-msgstr ""
+msgstr "ფერის HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:201
 #: pigment/KoCompositeOpRegistry.cpp:118
 #, kde-format
 msgid "Hue HSV"
-msgstr ""
+msgstr "HSV ტონი"
 
 #: pigment/compositeops/KoCompositeOps.h:202
 #: pigment/KoCompositeOpRegistry.cpp:119
 #, kde-format
 msgid "Saturation HSV"
-msgstr ""
+msgstr "HSV გაჯერებულობა"
 
 #: pigment/compositeops/KoCompositeOps.h:203
 #: pigment/KoCompositeOpRegistry.cpp:122
 #, kde-format
 msgid "Increase Saturation HSV"
-msgstr ""
+msgstr "HSV გაჯერებულობის გაზრდა"
 
 #: pigment/compositeops/KoCompositeOps.h:204
 #: pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
 msgid "Decrease Saturation HSV"
-msgstr ""
+msgstr "HSV გაჯერებულობის შემცირება"
 
 #: pigment/compositeops/KoCompositeOps.h:205
 #: pigment/KoCompositeOpRegistry.cpp:120
@@ -3142,7 +3142,7 @@ msgstr "მნიშვნელობის შემცირება"
 #: pigment/KoBasicHistogramProducers.cpp:419
 #, kde-format
 msgid "Generic RGB Histogram"
-msgstr ""
+msgstr "ზოგადი RGB ჰისტოგრამა"
 
 #: pigment/KoBasicHistogramProducers.cpp:356
 #, kde-format
@@ -3172,7 +3172,7 @@ msgstr "L*"
 #: pigment/KoBasicHistogramProducers.cpp:503
 #, kde-format
 msgid "Generic L*a*b* Histogram"
-msgstr ""
+msgstr "ზოგადი L*a*b* ჰისტოგრამა"
 
 #: pigment/KoColorModelStandardIds.cpp:13
 #, kde-format
@@ -3272,7 +3272,7 @@ msgstr "მიქსი"
 #: pigment/KoCompositeOpRegistry.cpp:41
 #, kde-format
 msgid "Inverse Subtract"
-msgstr ""
+msgstr "უკუღმა გამოკლება"
 
 #: pigment/KoCompositeOpRegistry.cpp:43
 #, kde-format
@@ -3282,22 +3282,22 @@ msgstr "გამუქება"
 #: pigment/KoCompositeOpRegistry.cpp:64
 #, kde-format
 msgid "Additive Subtractive"
-msgstr ""
+msgstr "ადიტიური დამატება"
 
 #: pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
 msgid "Alpha Darken"
-msgstr ""
+msgstr "ალფა-არხის გამუქება"
 
 #: pigment/KoCompositeOpRegistry.cpp:81
 #, kde-format
 msgid "Bumpmap"
-msgstr ""
+msgstr "რელიეფური"
 
 #: pigment/KoCompositeOpRegistry.cpp:82
 #, kde-format
 msgid "Combine Normal Map"
-msgstr ""
+msgstr "ნორმალის რუკების კომბინირება"
 
 #: pigment/resources/KoStopGradient.cpp:421
 #, kde-format
@@ -3343,7 +3343,7 @@ msgstr "Rdf"
 #: rdf/KoDocumentRdfEditWidget.ui:21
 #, kde-format
 msgid "Triples"
-msgstr ""
+msgstr "სამეულები"
 
 #. i18n: ectx: property (text), widget (QPushButton, newStylesheet)
 #. i18n: ectx: property (text), widget (QPushButton, newTripleButton)
@@ -3391,7 +3391,7 @@ msgstr "სახელების სივრცე"
 #: rdf/KoDocumentRdfEditWidget.ui:137
 #, kde-format
 msgid "Semantic"
-msgstr ""
+msgstr "სემანტიკურები"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: rdf/KoDocumentRdfEditWidget.ui:156
@@ -3469,7 +3469,7 @@ msgstr "გაშვება"
 #: rdf/KoDocumentRdfEditWidget.ui:221
 #, kde-format
 msgid "Stylesheets"
-msgstr ""
+msgstr "სტილის ფურცლები"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: rdf/KoDocumentRdfEditWidget.ui:227
@@ -3484,7 +3484,7 @@ msgstr ""
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:101
 #, kde-format
 msgid "Apply Stylesheet"
-msgstr ""
+msgstr "სტილების ფურცლის გადატარება"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
 #: rdf/KoSemanticStylesheetsEditor.cpp:107
@@ -3501,12 +3501,12 @@ msgstr "მომხმარებელი"
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:126
 #, kde-format
 msgid "Reapply Current"
-msgstr ""
+msgstr "მიმდინარეს თავიდან გადატარება"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:131
 #, kde-format
 msgid "Disassociate"
-msgstr ""
+msgstr "განცალკევება"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:151
 #, kde-format
@@ -3517,7 +3517,7 @@ msgstr "%1-ის ჩასწორება"
 #: rdf/KoSemanticStylesheetsEditor.ui:17
 #, kde-format
 msgid "Stylesheet Definition"
-msgstr ""
+msgstr "სტილების ცხრილის აღწერა"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: rdf/KoSemanticStylesheetsEditor.ui:29
@@ -3550,7 +3550,7 @@ msgstr "URI"
 #: rdf/KoSopranoTableModel.cpp:75 rdf/KoSopranoTableModelDelegate.cpp:31
 #, kde-format
 msgid "Literal"
-msgstr ""
+msgstr "კონსტანტა"
 
 #: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:32
 #, kde-format
@@ -3570,7 +3570,7 @@ msgstr "თემა"
 #: rdf/KoSopranoTableModel.cpp:123
 #, kde-format
 msgid "Predicate"
-msgstr ""
+msgstr "პრედიკატი"
 
 #: rdf/KoSopranoTableModel.cpp:125
 #, kde-format
@@ -3580,17 +3580,17 @@ msgstr "ობიექტი"
 #: rdf/KoSopranoTableModel.cpp:127
 #, kde-format
 msgid "Obj Type"
-msgstr ""
+msgstr "ობიექტის ტიპი"
 
 #: rdf/KoSopranoTableModel.cpp:129
 #, kde-format
 msgid "DataType"
-msgstr ""
+msgstr "მონაცემის ტიპი"
 
 #: rdf/KoSopranoTableModel.cpp:131
 #, kde-format
 msgid "Stored In"
-msgstr ""
+msgstr "დამახსოვრებულია"
 
 #: store/KoEncryptedStore.cpp:228
 #, kde-format
@@ -3675,12 +3675,12 @@ msgstr ""
 #: text/commands/ChangeListCommand.cpp:89
 msgctxt "(qtundo-format)"
 msgid "Change List"
-msgstr ""
+msgstr "სიის შეცვლა"
 
 #: text/commands/ChangeStylesMacroCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Change Styles"
-msgstr ""
+msgstr "სტილების შეცვლა"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:263
 #, kde-format
@@ -3713,42 +3713,42 @@ msgstr "მწკრივის წაშლა"
 #: text/commands/InsertNoteCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Insert Footnote"
-msgstr ""
+msgstr "სქოლიოს ჩასმა"
 
 #: text/commands/InsertNoteCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Insert Endnote"
-msgstr ""
+msgstr "ბოლოსართის ჩასმა"
 
 #: text/commands/InsertTableColumnCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Insert Column Right"
-msgstr ""
+msgstr "სვეტის მარჯვნივ ჩასმა"
 
 #: text/commands/InsertTableColumnCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Insert Column Left"
-msgstr ""
+msgstr "სვეტის მარცხნივ ჩასმა"
 
 #: text/commands/InsertTableRowCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Insert Row Below"
-msgstr ""
+msgstr "მწკრივის ქვემოთ ჩასმა"
 
 #: text/commands/InsertTableRowCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Insert Row Above"
-msgstr ""
+msgstr "მწკრივის ზემოთ ჩასმა"
 
 #: text/commands/ListItemNumberingCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Change List Numbering"
-msgstr ""
+msgstr "ხაზების დანომრვის შეცვლა"
 
 #: text/commands/NewSectionCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "New Section"
-msgstr ""
+msgstr "ახალი სექცია"
 
 #: text/commands/ParagraphFormattingCommand.cpp:82
 msgctxt "(qtundo-format)"
@@ -3758,32 +3758,32 @@ msgstr ""
 #: text/commands/RenameSectionCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Rename Section"
-msgstr ""
+msgstr "სექციის გადარქმევა"
 
 #: text/commands/ResizeTableCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
-msgstr ""
+msgstr "სვეტის სიგანის მორგება"
 
 #: text/commands/ResizeTableCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
-msgstr ""
+msgstr "მწკრივის სიმაღლის მორგება"
 
 #: text/commands/SplitSectionsCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Split sections startings"
-msgstr ""
+msgstr "მონიშნულის დასაწყისების დაყოფა"
 
 #: text/commands/SplitSectionsCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Split sections endings"
-msgstr ""
+msgstr "მონიშნულის დასასრულების დაყოფა"
 
 #: text/commands/TextPasteCommand.cpp:51
 msgctxt "(qtundo-format)"
 msgid "Paste As Text"
-msgstr ""
+msgstr "ტექსტის სახით ჩასმა"
 
 #: text/commands/TextPasteCommand.cpp:53
 msgctxt "(qtundo-format)"
@@ -3793,7 +3793,7 @@ msgstr "ჩასმა"
 #: text/InsertTextLocator.cpp:14
 #, kde-format
 msgid "Index Reference"
-msgstr ""
+msgstr "მანიშნებელი"
 
 #: text/InsertTextReferenceAction.cpp:22 text/InsertTextReferenceAction.cpp:50
 #, kde-format
@@ -3885,12 +3885,12 @@ msgstr "ანოტაციის დამატება"
 #: text/KoTextEditor.cpp:509
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
-msgstr ""
+msgstr "ინდექსის ჩასმა"
 
 #: text/KoTextEditor.cpp:535
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
-msgstr ""
+msgstr "ცვლადის ჩასმა"
 
 #: text/KoTextEditor.cpp:602
 msgctxt "(qtundo-format)"
@@ -3984,7 +3984,7 @@ msgstr ""
 #: text/KoTextEditor_format.cpp:184 text/KoTextEditor_format.cpp:185
 msgctxt "(qtundo-format)"
 msgid "Decrease Indent"
-msgstr ""
+msgstr "შეწევის შემცირება"
 
 #: text/KoTextEditor_format.cpp:220 text/KoTextEditor_format.cpp:221
 msgctxt "(qtundo-format)"
@@ -4820,17 +4820,17 @@ msgstr "გვერდის განლაგება"
 #: widgets/KoPageLayoutDialog.cpp:95
 #, kde-format
 msgid "Apply to document"
-msgstr ""
+msgstr "დოკუმენტზე გადატარება"
 
 #: widgets/KoPageLayoutWidget.cpp:175
 #, kde-format
 msgid "Left Edge:"
-msgstr ""
+msgstr "მარცხენა კიდე:"
 
 #: widgets/KoPageLayoutWidget.cpp:176
 #, kde-format
 msgid "Right Edge:"
-msgstr ""
+msgstr "მარჯვენა კიდე:"
 
 #: widgets/KoPageLayoutWidget.cpp:179
 #, kde-format
@@ -4840,7 +4840,7 @@ msgstr ""
 #: widgets/KoPageLayoutWidget.cpp:180
 #, kde-format
 msgid "Page Edge:"
-msgstr ""
+msgstr "გვერდის კიდე:"
 
 #: widgets/KoPageLayoutWidget.cpp:276
 #, kde-format
@@ -4856,7 +4856,7 @@ msgstr ""
 #: widgets/KoPageLayoutWidget.cpp:280
 #, kde-format
 msgid "Page Layout:"
-msgstr ""
+msgstr "გვერდის განლაგება:"
 
 #: widgets/KoPageLayoutWidget.cpp:281
 #, kde-format

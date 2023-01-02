@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-01 00:57+0000\n"
+"POT-Creation-Date: 2023-01-02 01:02+0000\n"
 "PO-Revision-Date: 2000-06-08 07:00+0100\n"
 "Last-Translator: Dimitar Indovski <dime@gord.com.mk>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -122,21 +122,18 @@ msgstr "Избери"
 msgid "Validation for cell %1 failed"
 msgstr ""
 
-#: core/StyleManager.cpp:37
+#: core/StyleManager.cpp:38
 #, fuzzy, kde-format
 msgid "Header"
 msgstr "Создади котва"
 
-#: core/StyleManager.cpp:46
+#: core/StyleManager.cpp:47
 #, fuzzy, kde-format
 msgid "Header1"
 msgstr "Создади котва"
 
-#: core/StyleManager.cpp:172 ui/dialogs/LayoutPage_General.cpp:127
-#: ui/dialogs/LayoutPage_General.cpp:146 ui/dialogs/StyleManagerDialog.cpp:99
-#: ui/dialogs/StyleManagerDialog.cpp:139 ui/dialogs/StyleManagerDialog.cpp:172
-#: ui/dialogs/StyleManagerDialog.cpp:198 ui/dialogs/StyleManagerDialog.cpp:236
-#: ui/dialogs/StyleManagerDialog.cpp:265 ui/dialogs/StyleManagerDialog.cpp:286
+#: core/StyleManager.cpp:178 ui/dialogs/LayoutPage_General.cpp:127
+#: ui/dialogs/LayoutPage_General.cpp:146
 #, fuzzy, kde-format
 msgid "Default"
 msgstr "Резултат Y"
@@ -849,7 +846,7 @@ msgstr "Ноември"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:157 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:155 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -904,7 +901,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Крајна вредност"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:258 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:240 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "Датум"
@@ -11816,7 +11813,7 @@ msgstr "Скриј Табела"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:182
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:164
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, fuzzy, kde-format
 msgid "Font"
@@ -13143,7 +13140,7 @@ msgstr ""
 "Ќе ја одстраните активната табела.\n"
 "Дали сакате да продолжите?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1220
+#: part/View.cpp:1872
 #, fuzzy, kde-format
 msgid "Enter name:"
 msgstr "Инт"
@@ -13203,13 +13200,13 @@ msgstr "Колона "
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1294
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1209
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Смени Име на Табела"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1317
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1232
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
@@ -13217,416 +13214,365 @@ msgstr "Боја на Позадина"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:512
+#: ui/CellToolBase_p.cpp:511
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Боја на Граница"
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 msgid "Cell Format..."
 msgstr "Формат"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Атрибути на релациски келии"
 
 #: ui/CellToolBase.cpp:163
-#, kde-format
-msgid "Style Manager..."
-msgstr ""
-
-#: ui/CellToolBase.cpp:166
-#, kde-format
-msgid "Edit and organize cell styles"
-msgstr ""
-
-#: ui/CellToolBase.cpp:168 ui/dialogs/LayoutPage_General.cpp:42
-#: ui/dialogs/StyleManagerDialog.cpp:44
-#, fuzzy, kde-format
-msgid "Style"
-msgstr "Стил:"
-
-#: ui/CellToolBase.cpp:170
-#, fuzzy, kde-format
-msgid "Apply a predefined style to the selected cells"
-msgstr "Помести кон лево"
-
-#: ui/CellToolBase.cpp:173
-#, fuzzy, kde-format
-msgid "Create Style From Cell..."
-msgstr "Одстрани келија"
-
-#: ui/CellToolBase.cpp:174
-#, fuzzy, kde-format
-msgid "Style From Cell"
-msgstr "Одстрани келија"
-
-#: ui/CellToolBase.cpp:177
-#, fuzzy, kde-format
-msgid "Create a new style based on the currently selected cell"
-msgstr "Помести кон лево"
-
-#: ui/CellToolBase.cpp:181
 #, fuzzy, kde-format
 msgid "Select Font..."
 msgstr "Избери Фонт"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:168
 #, kde-format
 msgid "Select Font Size"
 msgstr "Избери Големина на Фонт"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:169
 #, fuzzy, kde-format
 #| msgid "Select Font Size"
 msgid "Font Size"
 msgstr "Избери Големина на Фонт"
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:175
 #, kde-format
 msgid "Text Color"
 msgstr "Боја на Текст"
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:176
 #, fuzzy, kde-format
 msgid "Set the text color"
 msgstr "Боја на позадина"
 
-#: ui/CellToolBase.cpp:202
+#: ui/CellToolBase.cpp:184
 #, fuzzy, kde-format
 msgid "Select a new border color"
 msgstr "Боја на Граница"
 
-#: ui/CellToolBase.cpp:203
+#: ui/CellToolBase.cpp:185
 #, kde-format
 msgid "Border Color"
 msgstr "Боја на Граница"
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:194
 #, fuzzy, kde-format
 msgid "Set the background color"
 msgstr "Боја на позадина"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:195
 #, kde-format
 msgid "Background Color"
 msgstr "Боја на Позадина"
 
-#: ui/CellToolBase.cpp:219 ui/CellToolBase.cpp:220
+#: ui/CellToolBase.cpp:201 ui/CellToolBase.cpp:202
 #, fuzzy, kde-format
 msgid "Clear All"
 msgstr "Келија"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:203
 #, fuzzy, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Одстрани колона"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 msgid "Contents"
 msgstr "Централно"
 
-#: ui/CellToolBase.cpp:226
+#: ui/CellToolBase.cpp:208
 #, fuzzy, kde-format
 msgid "Clear Contents"
 msgstr "Централно"
 
-#: ui/CellToolBase.cpp:227
+#: ui/CellToolBase.cpp:209
 #, fuzzy, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Одстрани колона"
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:213
 #, fuzzy, kde-format
 msgid "Conditional Styles..."
 msgstr "Атрибути на релациски келии"
 
-#: ui/CellToolBase.cpp:232
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr ""
 
-#: ui/CellToolBase.cpp:236 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:218 ui/dialogs/ConditionalDialog.cpp:242
 #, fuzzy, kde-format
 msgid "Conditional Styles"
 msgstr "Атрибути на релациски келии"
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:219
 #, fuzzy, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Атрибути на релациски келии"
 
-#: ui/CellToolBase.cpp:238
+#: ui/CellToolBase.cpp:220
 #, fuzzy, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Атрибути на релациски келии"
 
-#: ui/CellToolBase.cpp:244
+#: ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 msgid "&Auto-Filter"
 msgstr "аке е неточно"
 
-#: ui/CellToolBase.cpp:247
+#: ui/CellToolBase.cpp:229
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Функција"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:236
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Вметни Табела"
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:239
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Датум"
 
-#: ui/CellToolBase.cpp:261
+#: ui/CellToolBase.cpp:243
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Датум"
 
-#: ui/CellToolBase.cpp:264
+#: ui/CellToolBase.cpp:246
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Подреди"
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:249
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:251
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "Серии..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:256
 #, fuzzy, kde-format
 msgid "&Pivot Tables..."
 msgstr "Подреди"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:259
 #, fuzzy, kde-format
 msgid "Create Pivot Tables"
 msgstr "Подреди"
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:261
 #, kde-format
 msgid "Formula Selection"
 msgstr "Формула Избор"
 
-#: ui/CellToolBase.cpp:281
+#: ui/CellToolBase.cpp:263
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Вметни колона"
 
-#: ui/CellToolBase.cpp:282 ui/CellToolBase.cpp:1435
+#: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:1350
 #, kde-format
 msgid "Others..."
 msgstr "Останати..."
 
-#: ui/CellToolBase.cpp:290
+#: ui/CellToolBase.cpp:272
 #, fuzzy, kde-format
 msgid "Modify Cell"
 msgstr "Уреди Келија"
 
-#: ui/CellToolBase.cpp:294
+#: ui/CellToolBase.cpp:276
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Боја на текст"
 
-#: ui/CellToolBase.cpp:297
+#: ui/CellToolBase.cpp:279
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Одстрани колона"
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:283
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Одстрани колона"
 
-#: ui/CellToolBase.cpp:305
+#: ui/CellToolBase.cpp:287
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Одстрани колона"
 
-#: ui/CellToolBase.cpp:308
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "Special Paste..."
 msgstr "Специајно Вметни..."
 
-#: ui/CellToolBase.cpp:311
+#: ui/CellToolBase.cpp:293
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Одстрани колона"
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:295
 #, fuzzy, kde-format
 msgid "Paste with Insertion"
 msgstr "Вметни келија"
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:298
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Вметни Табела"
 
-#: ui/CellToolBase.cpp:319
+#: ui/CellToolBase.cpp:301
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Одстрани колона"
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:319
 #, kde-format
 msgid "Check the spelling"
 msgstr ""
 
-#: ui/CellToolBase.cpp:340
+#: ui/CellToolBase.cpp:322
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:346
+#: ui/CellToolBase.cpp:328
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Колона"
 
-#: ui/CellToolBase.cpp:352
+#: ui/CellToolBase.cpp:334
 #, fuzzy, kde-format
 msgid "Auto-Format..."
 msgstr "Формат"
 
-#: ui/CellToolBase.cpp:355
+#: ui/CellToolBase.cpp:337
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Атрибути на релациски келии"
 
-#: ui/CellToolBase.cpp:357
+#: ui/CellToolBase.cpp:339
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Стринг"
 
-#: ui/CellToolBase.cpp:360
+#: ui/CellToolBase.cpp:342
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Формула"
 
-#: ui/CellToolBase.cpp:364
+#: ui/CellToolBase.cpp:346
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Прецизност"
 
-#: ui/CellToolBase.cpp:368
+#: ui/CellToolBase.cpp:350
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Прецизност"
 
-#: ui/CellToolBase.cpp:369
+#: ui/CellToolBase.cpp:351
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Одстрани колона"
 
-#: ui/CellToolBase.cpp:1153
+#: ui/CellToolBase.cpp:1137
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1219
-#, fuzzy, kde-format
-msgid "Create Style From Cell"
-msgstr "Одстрани келија"
-
-#: ui/CellToolBase.cpp:1228
-#, fuzzy, kde-format
-msgid "The style name cannot be empty."
-msgstr "Името на табела не смее да биде празно."
-
-#: ui/CellToolBase.cpp:1233 ui/dialogs/LayoutPage_General.cpp:90
-#, fuzzy, kde-format
-msgid "A style with this name already exists."
-msgstr "Табела со исто име веќе постои."
-
-#: ui/CellToolBase.cpp:1254 ui/CellToolBase.cpp:1274
+#: ui/CellToolBase.cpp:1169 ui/CellToolBase.cpp:1189
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Смени Име на Табела"
 
-#: ui/CellToolBase.cpp:1341
+#: ui/CellToolBase.cpp:1256
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Смени Име на Табела"
 
-#: ui/CellToolBase.cpp:1395
+#: ui/CellToolBase.cpp:1310
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1424
+#: ui/CellToolBase.cpp:1339
 #, fuzzy, kde-format
 msgid "You must select multiple cells."
 msgstr "Стил на Табела..."
 
-#: ui/CellToolBase.cpp:1899
+#: ui/CellToolBase.cpp:1814
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Замени текст"
 
-#: ui/CellToolBase_p.cpp:481
+#: ui/CellToolBase_p.cpp:480
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Број на обиди"
 
-#: ui/CellToolBase_p.cpp:487
+#: ui/CellToolBase_p.cpp:486
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Моментално"
 
-#: ui/CellToolBase_p.cpp:492
+#: ui/CellToolBase_p.cpp:491
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Формат на Процент"
 
-#: ui/CellToolBase_p.cpp:497
+#: ui/CellToolBase_p.cpp:496
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Формат на Броеви"
 
-#: ui/CellToolBase_p.cpp:502
+#: ui/CellToolBase_p.cpp:501
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Формат"
 
-#: ui/CellToolBase_p.cpp:507
+#: ui/CellToolBase_p.cpp:506
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Формат на Процент"
 
-#: ui/CellToolBase_p.cpp:911
+#: ui/CellToolBase_p.cpp:910
 #, fuzzy, kde-format
 msgid "Selection List..."
 msgstr "Избери Фонт"
@@ -15256,6 +15202,11 @@ msgstr ""
 msgid "Dolor Ipse"
 msgstr "Боја"
 
+#: ui/dialogs/LayoutPage_General.cpp:42
+#, fuzzy, kde-format
+msgid "Style"
+msgstr "Стил:"
+
 #: ui/dialogs/LayoutPage_General.cpp:48
 #, fuzzy, kde-format
 msgctxt "Name of the style"
@@ -15266,6 +15217,11 @@ msgstr "Преименувај"
 #, fuzzy, kde-format
 msgid "Inherit style:"
 msgstr "Стил на Табела..."
+
+#: ui/dialogs/LayoutPage_General.cpp:90
+#, fuzzy, kde-format
+msgid "A style with this name already exists."
+msgstr "Табела со исто име веќе постои."
 
 #: ui/dialogs/LayoutPage_General.cpp:94
 #, fuzzy, kde-format
@@ -15858,46 +15814,6 @@ msgstr "Множење"
 msgid "Division"
 msgstr "Делење"
 
-#: ui/dialogs/StyleManagerDialog.cpp:33
-#, kde-format
-msgid "Style Manager"
-msgstr ""
-
-#: ui/dialogs/StyleManagerDialog.cpp:48
-#, fuzzy, kde-format
-msgid "All Styles"
-msgstr "Стил:"
-
-#: ui/dialogs/StyleManagerDialog.cpp:49
-#, fuzzy, kde-format
-msgid "Custom Styles"
-msgstr "Подреди"
-
-#: ui/dialogs/StyleManagerDialog.cpp:50
-#, fuzzy, kde-format
-msgid "Hierarchical"
-msgstr "Финансиски"
-
-#: ui/dialogs/StyleManagerDialog.cpp:58
-#, kde-format
-msgid "&New..."
-msgstr ""
-
-#: ui/dialogs/StyleManagerDialog.cpp:60
-#, fuzzy, kde-format
-msgid "&Modify..."
-msgstr "Уреди Келија"
-
-#: ui/dialogs/StyleManagerDialog.cpp:62
-#, fuzzy, kde-format
-msgid "&Delete..."
-msgstr "Серии..."
-
-#: ui/dialogs/StyleManagerDialog.cpp:206 ui/dialogs/StyleManagerDialog.cpp:209
-#, fuzzy, kde-format
-msgid "style%1"
-msgstr "Стил:"
-
 #: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 #| msgid "April"
@@ -15957,6 +15873,54 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Вметни колона"
+
+#, fuzzy
+#~ msgid "Apply a predefined style to the selected cells"
+#~ msgstr "Помести кон лево"
+
+#, fuzzy
+#~ msgid "Create Style From Cell..."
+#~ msgstr "Одстрани келија"
+
+#, fuzzy
+#~ msgid "Style From Cell"
+#~ msgstr "Одстрани келија"
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected cell"
+#~ msgstr "Помести кон лево"
+
+#, fuzzy
+#~ msgid "Create Style From Cell"
+#~ msgstr "Одстрани келија"
+
+#, fuzzy
+#~ msgid "The style name cannot be empty."
+#~ msgstr "Името на табела не смее да биде празно."
+
+#, fuzzy
+#~ msgid "All Styles"
+#~ msgstr "Стил:"
+
+#, fuzzy
+#~ msgid "Custom Styles"
+#~ msgstr "Подреди"
+
+#, fuzzy
+#~ msgid "Hierarchical"
+#~ msgstr "Финансиски"
+
+#, fuzzy
+#~ msgid "&Modify..."
+#~ msgstr "Уреди Келија"
+
+#, fuzzy
+#~ msgid "&Delete..."
+#~ msgstr "Серии..."
+
+#, fuzzy
+#~ msgid "style%1"
+#~ msgstr "Стил:"
 
 #, fuzzy
 #~ msgid "Cells..."

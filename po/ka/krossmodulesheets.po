@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2022-12-30 06:03+0100\n"
+"PO-Revision-Date: 2023-01-01 06:39+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1355,7 +1355,7 @@ msgstr "OpenDocument ფაილთან შედარება:"
 
 #: scripts/xmlviewer.py:238
 msgid "No OpenDocument file to compare with selected."
-msgstr ""
+msgstr "მონიშნულთან შესადარებლად OpenDocument ფაილი მითითებული არაა."
 
 #: scripts/xmlviewer.py:242
 msgid "No command selected."

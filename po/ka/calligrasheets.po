@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-01 00:57+0000\n"
-"PO-Revision-Date: 2022-12-04 06:54+0100\n"
+"POT-Creation-Date: 2023-01-02 01:02+0000\n"
+"PO-Revision-Date: 2023-01-01 06:38+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -123,21 +123,18 @@ msgstr "ფურცელი%1"
 msgid "Validation for cell %1 failed"
 msgstr ""
 
-#: core/StyleManager.cpp:37
+#: core/StyleManager.cpp:38
 #, kde-format
 msgid "Header"
 msgstr "სათაური"
 
-#: core/StyleManager.cpp:46
+#: core/StyleManager.cpp:47
 #, kde-format
 msgid "Header1"
 msgstr "თავსართი1"
 
-#: core/StyleManager.cpp:172 ui/dialogs/LayoutPage_General.cpp:127
-#: ui/dialogs/LayoutPage_General.cpp:146 ui/dialogs/StyleManagerDialog.cpp:99
-#: ui/dialogs/StyleManagerDialog.cpp:139 ui/dialogs/StyleManagerDialog.cpp:172
-#: ui/dialogs/StyleManagerDialog.cpp:198 ui/dialogs/StyleManagerDialog.cpp:236
-#: ui/dialogs/StyleManagerDialog.cpp:265 ui/dialogs/StyleManagerDialog.cpp:286
+#: core/StyleManager.cpp:178 ui/dialogs/LayoutPage_General.cpp:127
+#: ui/dialogs/LayoutPage_General.cpp:146
 #, kde-format
 msgid "Default"
 msgstr "ნაგულისხმევი"
@@ -165,7 +162,7 @@ msgstr "წთ"
 #: core/ValueFormatter.cpp:543
 #, kde-format
 msgid "s"
-msgstr ""
+msgstr "წმ"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
 #. i18n: ectx: property (text), widget (QRadioButton, textButton)
@@ -397,7 +394,7 @@ msgstr ""
 #: functions/bitops.xml:40
 #, kde-format
 msgid "BITLSHIFT(value; shift size)"
-msgstr ""
+msgstr "BITLSHIFT(მნიშვნელობა; წანაცვლების ზომა)"
 
 #: functions/bitops.xml:53
 #, kde-format
@@ -416,7 +413,7 @@ msgstr ""
 #: functions/bitops.xml:58
 #, kde-format
 msgid "BITRSHIFT(value; shift size)"
-msgstr ""
+msgstr "BITRSHIFT(მნიშვნელობა; წანაცვლების ზომა)"
 
 #: functions/bitops.xml:75
 #, kde-format
@@ -481,12 +478,12 @@ msgstr "BOOL2STRING(მნიშვნელობა)"
 #: functions/conversion.xml:17
 #, kde-format
 msgid "BOOL2STRING(true) returns \"True\""
-msgstr ""
+msgstr "BOOL2STRING(true) 1-ს აბრუნებს"
 
 #: functions/conversion.xml:18
 #, kde-format
 msgid "BOOL2STRING(false) returns \"False\""
-msgstr ""
+msgstr "BOOL2STRING(false) 0-ს აბრუნებს"
 
 #: functions/conversion.xml:19
 #, kde-format
@@ -515,17 +512,17 @@ msgstr "INT2BOOL(მნიშვნელობა)"
 #: functions/conversion.xml:33
 #, kde-format
 msgid "INT2BOOL(1) returns true"
-msgstr ""
+msgstr "INT2BOOL(1) 1-ს აბრუნებს"
 
 #: functions/conversion.xml:34
 #, kde-format
 msgid "INT2BOOL(0) returns false"
-msgstr ""
+msgstr "INT2BOOL(0) 0-ს აბრუნებს"
 
 #: functions/conversion.xml:35
 #, kde-format
 msgid "OR(INT2BOOL(1); false) returns true"
-msgstr ""
+msgstr "OR(INT2BOOL(1); false) 1-ს აბრუნებს"
 
 #: functions/conversion.xml:48
 #, kde-format
@@ -548,7 +545,7 @@ msgstr "BOOL2INT(True) 1 -ს აბრუნებს"
 #: functions/conversion.xml:51
 #, kde-format
 msgid "BOOL2INT(False) returns 0"
-msgstr ""
+msgstr "BOOL2INT(False) 0-ს აბრუნებს"
 
 #: functions/conversion.xml:60 functions/conversion.xml:77
 #, kde-format
@@ -571,17 +568,17 @@ msgstr "NUM2STRING(მნიშვნელობა)"
 #: functions/conversion.xml:66
 #, kde-format
 msgid "NUM2STRING(10) returns \"10\""
-msgstr ""
+msgstr "NUM2STRING(10) აბრუნებს \"10\""
 
 #: functions/conversion.xml:67
 #, kde-format
 msgid "NUM2STRING(2.05) returns \"2.05\""
-msgstr ""
+msgstr "NUM2STRING(2.05) აბრუნებს \"2.05\""
 
 #: functions/conversion.xml:68
 #, kde-format
 msgid "=find(\"101\";NUM2STRING(A1)) (A1 = 2.010102) returns True"
-msgstr ""
+msgstr "=find(\"101\";NUM2STRING(A1)) (A1 = 2.010102) 1-ს აბრუნებს"
 
 #: functions/conversion.xml:81
 #, kde-format
@@ -609,7 +606,7 @@ msgstr "CHARTOASCII(მნიშვნელობა)"
 #: functions/conversion.xml:96
 #, kde-format
 msgid "CHARTOASCII(\"v\") returns 118"
-msgstr ""
+msgstr "CHARTOASCII(\"v\") 118-ს აბრუნებს"
 
 #: functions/conversion.xml:97
 #, kde-format
@@ -635,12 +632,12 @@ msgstr "ASCIITOCHAR(მნიშვნელობა)"
 #: functions/conversion.xml:111
 #, kde-format
 msgid "ASCIITOCHAR(118) returns \"v\""
-msgstr ""
+msgstr "ASCIITOCHAR(118) \"v\"-ს აბრუნებს"
 
 #: functions/conversion.xml:112
 #, kde-format
 msgid "ASCIITOCHAR(75; 68; 69) returns \"KDE\""
-msgstr ""
+msgstr "ASCIITOCHAR(75; 68; 69) აბრუნებს \"KDE\""
 
 #: functions/conversion.xml:120 functions/conversion.xml:142
 #, kde-format
@@ -694,7 +691,7 @@ msgstr "POLA(12;12) აბრუნებს 0.78539816"
 #: functions/conversion.xml:153
 #, kde-format
 msgid "POLA(12;0) returns 0"
-msgstr ""
+msgstr "POLA(12;0) 0-ს აბრუნებს"
 
 #: functions/conversion.xml:154
 #, kde-format
@@ -728,12 +725,12 @@ msgstr ""
 #: functions/conversion.xml:174
 #, kde-format
 msgid "CARX(Radius;Angle)"
-msgstr ""
+msgstr "CARX(რადიუსი;კუთხე)"
 
 #: functions/conversion.xml:175
 #, kde-format
 msgid "CARX(12;1.5707) returns 0.00115592"
-msgstr ""
+msgstr "CARX(12;1.5707) აბრუნებს 0.00115592"
 
 #: functions/conversion.xml:176
 #, kde-format
@@ -815,7 +812,7 @@ msgstr ""
 #: functions/conversion.xml:234
 #, kde-format
 msgid "CARY(Radius;Angle)"
-msgstr ""
+msgstr "CARY(რადიუსი;კუთხე)"
 
 #: functions/conversion.xml:235
 #, kde-format
@@ -849,7 +846,7 @@ msgstr "რიცხვი"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:157 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:155 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -871,12 +868,12 @@ msgstr "ROMAN(რიცხვი)"
 #: functions/conversion.xml:257
 #, kde-format
 msgid "ROMAN(99) returns \"XCIX\""
-msgstr ""
+msgstr "ROMAN(99) აბრუნებს \"XCIX\""
 
 #: functions/conversion.xml:258
 #, kde-format
 msgid "ROMAN(-55) returns \"Err\""
-msgstr ""
+msgstr "ROMAN(-55) აბრუნებს \"Err\""
 
 #: functions/conversion.xml:267
 #, kde-format
@@ -896,15 +893,15 @@ msgstr "ARABIC(რიცხვითი)"
 #: functions/conversion.xml:273
 #, kde-format
 msgid "ARABIC(\"IV\") returns 4"
-msgstr ""
+msgstr "ARABIC(\"IV\") აბრუნებს 4"
 
 #: functions/conversion.xml:274
 #, kde-format
 msgid "ARABIC(\"XCIX\") returns 99"
-msgstr ""
+msgstr "ARABIC(\"XCIX\") აბრუნებს 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:258 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:240 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "მონაცემთა ბაზა"
@@ -1206,7 +1203,7 @@ msgstr "WEEKDAY(თარიღი; მეთოდი)"
 #: functions/datetime.xml:21
 #, kde-format
 msgid "WEEKDAY(\"2002-02-22\"; 2) returns 5"
-msgstr ""
+msgstr "WEEKDAY(\"2002-02-22\"; 2) აბრუნებს 5"
 
 #: functions/datetime.xml:30
 #, kde-format
@@ -1239,7 +1236,7 @@ msgstr ""
 #: functions/datetime.xml:44
 #, kde-format
 msgid "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) returns 59"
-msgstr ""
+msgstr "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) აბრუნებს 59"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_8)
 #: functions/datetime.xml:56 functions/datetime.xml:180
@@ -1266,7 +1263,7 @@ msgstr "TIMEVALUE(დრო)"
 #: functions/datetime.xml:62
 #, kde-format
 msgid "TIMEVALUE(\"10:05:02\") returns 0.42"
-msgstr ""
+msgstr "TIMEVALUE(\"10:05:02\") აბრუნებს 0.42"
 
 #: functions/datetime.xml:75
 #, kde-format
@@ -1283,7 +1280,7 @@ msgstr "DATEVALUE(თარიღი)"
 #: functions/datetime.xml:77
 #, kde-format
 msgid "DATEVALUE(\"2/22/2002\") returns 37309"
-msgstr ""
+msgstr "DATEVALUE(\"2/22/2002\") აბრუნებს 37309"
 
 #: functions/datetime.xml:90 functions/datetime.xml:111
 #, kde-format
@@ -1305,12 +1302,12 @@ msgstr "EDATE(თარიღი; თვეები)"
 #: functions/datetime.xml:96
 #, kde-format
 msgid "EDATE(\"2/22/2002\"; 3) returns \"5/22/2002\""
-msgstr ""
+msgstr "EDATE(\"2/22/2002\"; 3) აბრუნებს \"5/22/2002\""
 
 #: functions/datetime.xml:97
 #, kde-format
 msgid "EDATE(\"3/31/2002\"; -1) returns \"2/28/2002\""
-msgstr ""
+msgstr "EDATE(\"3/31/2002\"; -1) აბრუნებს \"2/28/2002\""
 
 #: functions/datetime.xml:115
 #, kde-format
@@ -1327,17 +1324,17 @@ msgstr "EOMONTH(თარიღი; თვეები)"
 #: functions/datetime.xml:117
 #, kde-format
 msgid "EOMONTH(\"2/22/2002\"; 3) returns \"5/31/2002\""
-msgstr ""
+msgstr "EOMONTH(\"2/22/2002\"; 3) აბრუნებს \"5/31/2002\""
 
 #: functions/datetime.xml:118
 #, kde-format
 msgid "EOMONTH(\"3/12/2002\"; -1) returns \"2/28/2002\""
-msgstr ""
+msgstr "EOMONTH(\"3/12/2002\"; -1) აბრუნებს \"2/28/2002\""
 
 #: functions/datetime.xml:119
 #, kde-format
 msgid "EOMONTH(\"3/12/2002\"; 0) returns \"3/31/2002\""
-msgstr ""
+msgstr "EOMONTH(\"3/12/2002\"; 0) აბრუნებს \"3/31/2002\""
 
 #: functions/datetime.xml:133
 #, kde-format
@@ -1376,12 +1373,12 @@ msgstr "MONTH(თარიღი)"
 #: functions/datetime.xml:152
 #, kde-format
 msgid "MONTH(\"2/22/2002\") returns 2"
-msgstr ""
+msgstr "MONTH(\"2/22/2002\") returns 2"
 
 #: functions/datetime.xml:153
 #, kde-format
 msgid "MONTH(2323.1285) returns 5"
-msgstr ""
+msgstr "MONTH(2323.1285) აბრუნებს 5"
 
 #: functions/datetime.xml:167
 #, kde-format
@@ -1398,7 +1395,7 @@ msgstr "DAY(თარიღი)"
 #: functions/datetime.xml:169
 #, kde-format
 msgid "DAY(\"2/22/2002\") returns 22"
-msgstr ""
+msgstr "DAY(\"2/22/2002\") აბრუნებს 22"
 
 #: functions/datetime.xml:170
 #, kde-format
@@ -1420,12 +1417,12 @@ msgstr "HOUR(დრო)"
 #: functions/datetime.xml:186
 #, kde-format
 msgid "HOUR(\"22:10:12\") returns 22"
-msgstr ""
+msgstr "HOUR(\"22:10:12\") აბრუნებს 22"
 
 #: functions/datetime.xml:187
 #, kde-format
 msgid "HOUR(0.1285) returns 3"
-msgstr ""
+msgstr "HOUR(0.1285) აბრუნებს 3"
 
 #: functions/datetime.xml:201
 #, kde-format
@@ -1588,7 +1585,7 @@ msgstr "DAYS(თარიღი2; თარიღი1)"
 #: functions/datetime.xml:310
 #, kde-format
 msgid "DAYS(\"2002-02-22\"; \"2002-02-26\") returns 4"
-msgstr ""
+msgstr "DAYS(\"2002-02-22\"; \"2002-02-26\") აბრუნებს 4"
 
 #: functions/datetime.xml:318 functions/datetime.xml:341
 #: functions/datetime.xml:401 functions/datetime.xml:415
@@ -1623,12 +1620,12 @@ msgstr "DAYOFYEAR (წელი;თვე;თარიღი)"
 #: functions/datetime.xml:332
 #, kde-format
 msgid "DAYOFYEAR(2000;12;1) returns 336"
-msgstr ""
+msgstr "DAYOFYEAR(2000;12;1) აბრუნებს 336"
 
 #: functions/datetime.xml:333
 #, kde-format
 msgid "DAYOFYEAR(2000;2;29) returns 60"
-msgstr ""
+msgstr "DAYOFYEAR(2000;2;29) აბრუნებს 60"
 
 #: functions/datetime.xml:353
 #, kde-format
@@ -1699,7 +1696,7 @@ msgstr "ISLEAPYEAR (წელი)"
 #: functions/datetime.xml:407
 #, kde-format
 msgid "ISLEAPYEAR(2000) returns True"
-msgstr ""
+msgstr "ISLEAPYEAR(2000) 1-ს აბრუნებს"
 
 #: functions/datetime.xml:423
 #, kde-format
@@ -1716,7 +1713,7 @@ msgstr "DAYSINMONTH (წელი;თვე)"
 #: functions/datetime.xml:425
 #, kde-format
 msgid "DAYSINMONTH(2000;2) returns 29"
-msgstr ""
+msgstr "DAYSINMONTH(2000;2) აბრუნებს 29"
 
 #: functions/datetime.xml:437
 #, kde-format
@@ -1731,7 +1728,7 @@ msgstr "DAYSINYEAR (წელი)"
 #: functions/datetime.xml:439
 #, kde-format
 msgid "DAYSINYEAR(2000) returns 366"
-msgstr ""
+msgstr "DAYSINYEAR(2000) აბრუნებს 366"
 
 #: functions/datetime.xml:451
 #, kde-format
@@ -1747,7 +1744,7 @@ msgstr "WEEKSINYEAR (წელი)"
 #: functions/datetime.xml:453
 #, kde-format
 msgid "WEEKSINYEAR(2000) returns 52"
-msgstr ""
+msgstr "WEEKSINYEAR(2000) აბრუნებს 52"
 
 #: functions/datetime.xml:465
 #, kde-format
@@ -1763,7 +1760,7 @@ msgstr "MINUTES(დრო)"
 #: functions/datetime.xml:467
 #, kde-format
 msgid "MINUTES(\"10:5:2\") returns 5"
-msgstr ""
+msgstr "MINUTES(\"10:5:2\") აბრუნებს 5"
 
 #: functions/datetime.xml:479
 #, kde-format
@@ -1779,7 +1776,7 @@ msgstr "SECONDS (დრო)"
 #: functions/datetime.xml:481
 #, kde-format
 msgid "SECONDS(\"10:5:2\") returns 2"
-msgstr ""
+msgstr "SECONDS(\"10:5:2\") აბრუნებს 2"
 
 #: functions/datetime.xml:489
 #, kde-format
@@ -1854,7 +1851,7 @@ msgstr "TODAY()"
 #: functions/datetime.xml:532
 #, kde-format
 msgid "TODAY() returns \"Saturday 13 April 2002\""
-msgstr ""
+msgstr "TODAY() აბრუნებს \"Saturday 13 April 2002\""
 
 #: functions/datetime.xml:542
 #, kde-format
@@ -1871,7 +1868,7 @@ msgstr "NOW()"
 #: functions/datetime.xml:544
 #, kde-format
 msgid "NOW() returns \"Saturday 13 April 2002 19:12:01\""
-msgstr ""
+msgstr "NOW() აბრუნებს \"Saturday 13 April 2002 19:12:01\""
 
 #: functions/datetime.xml:554
 #, kde-format
@@ -1903,7 +1900,7 @@ msgstr "CURRENTTIME()"
 #: functions/datetime.xml:566
 #, kde-format
 msgid "CURRENTTIME() returns \"19:12:01\""
-msgstr ""
+msgstr "CURRENTTIME() აბრუნებს \"19:12:01\""
 
 #: functions/datetime.xml:578
 #, kde-format
@@ -1920,7 +1917,7 @@ msgstr "EASTERSUNDAY (წელი)"
 #: functions/datetime.xml:580
 #, kde-format
 msgid "EASTERSUNDAY(2003) returns \"20th April 2003\""
-msgstr ""
+msgstr "EASTERSUNDAY(2003) აბრუნებს \"20th April 2003\""
 
 #: functions/datetime.xml:592
 #, kde-format
@@ -2120,7 +2117,7 @@ msgstr "DATE2UNIX(თარიღი)"
 #: functions/datetime.xml:723
 #, kde-format
 msgid "DATE2UNIX(\"01/01/2000\") returns 946,684,800"
-msgstr ""
+msgstr "DATE2UNIX(\"01/01/2000\") აბრუნებს 946,684,800"
 
 #: functions/datetime.xml:731
 #, kde-format
@@ -2172,7 +2169,7 @@ msgstr ""
 #: functions/engineering.xml:25
 #, kde-format
 msgid "BASE(128;8) returns \"200\""
-msgstr ""
+msgstr "BASE(128;8) აბრუნებს \"200\""
 
 #: functions/engineering.xml:33 functions/engineering.xml:54
 #: functions/engineering.xml:75 functions/engineering.xml:96
@@ -2199,7 +2196,7 @@ msgstr "BESSELI(X;N)"
 #: functions/engineering.xml:43
 #, kde-format
 msgid "BESSELI(0.7;3) returns 0.007367374"
-msgstr ""
+msgstr "BESSELI(0.7;3) აბრუნებს 0.007367374"
 
 #: functions/engineering.xml:62
 #, kde-format
@@ -2214,7 +2211,7 @@ msgstr "BESSELJ(X;N)"
 #: functions/engineering.xml:64
 #, kde-format
 msgid "BESSELJ(0.89;3) returns 0.013974004"
-msgstr ""
+msgstr "BESSELJ(0.89;3) აბრუნებს 0.013974004"
 
 #: functions/engineering.xml:83
 #, kde-format
@@ -2231,7 +2228,7 @@ msgstr "BESSELK(X;N)"
 #: functions/engineering.xml:85
 #, kde-format
 msgid "BESSELK(3;9) returns 397.95880"
-msgstr ""
+msgstr "BESSELK(3;9) აბრუნებს 397.95880"
 
 #: functions/engineering.xml:104
 #, kde-format
@@ -2248,7 +2245,7 @@ msgstr "BESSELY(X;N)"
 #: functions/engineering.xml:106
 #, kde-format
 msgid "BESSELY(4;2) equals 0.215903595"
-msgstr ""
+msgstr "BESSELY(4;2) აბრუნებს 0.215903595"
 
 #: functions/engineering.xml:121
 #, kde-format
@@ -2396,7 +2393,7 @@ msgstr ""
 #: functions/engineering.xml:163
 #, kde-format
 msgid "ERF(0.4) equals 0.42839236"
-msgstr ""
+msgstr "ERF(0.4) უდრის 0.42839236"
 
 #: functions/engineering.xml:180
 #, kde-format
@@ -2445,12 +2442,12 @@ msgstr "DEC2BIN(მნიშვნელობა)"
 #: functions/engineering.xml:201
 #, kde-format
 msgid "DEC2BIN(12) returns \"1100\""
-msgstr ""
+msgstr "DEC2BIN(12) აბრუნებს \"1100\""
 
 #: functions/engineering.xml:202
 #, kde-format
 msgid "DEC2BIN(55) returns \"110111\""
-msgstr ""
+msgstr "DEC2BIN(55) აბრუნებს \"110111\""
 
 #: functions/engineering.xml:218
 #, kde-format
@@ -2467,12 +2464,12 @@ msgstr "DEC2HEX(მნიშვნელობა)"
 #: functions/engineering.xml:220
 #, kde-format
 msgid "DEC2HEX(12) returns \"c\""
-msgstr ""
+msgstr "DEC2HEX(12) აბრუნებს \"c\""
 
 #: functions/engineering.xml:221
 #, kde-format
 msgid "DEC2HEX(55) returns \"37\""
-msgstr ""
+msgstr "DEC2HEX(55) აბრუნებს \"37\""
 
 #: functions/engineering.xml:237
 #, kde-format
@@ -2488,12 +2485,12 @@ msgstr "DEC2OCT(მნიშვნელობა)"
 #: functions/engineering.xml:239
 #, kde-format
 msgid "DEC2OCT(12) returns \"14\""
-msgstr ""
+msgstr "DEC2OCT(12) აბრუნებს \"14\""
 
 #: functions/engineering.xml:240
 #, kde-format
 msgid "DEC2OCT(55) returns \"67\""
-msgstr ""
+msgstr "DEC2OCT(55) აბრუნებს \"67\""
 
 #: functions/engineering.xml:256
 #, kde-format
@@ -2509,12 +2506,12 @@ msgstr "OCT2BIN(მნიშვნელობა)"
 #: functions/engineering.xml:258
 #, kde-format
 msgid "OCT2BIN(\"12\") returns \"1010\""
-msgstr ""
+msgstr "OCT2BIN(\"12\") აბრუნებს \"1010\""
 
 #: functions/engineering.xml:259
 #, kde-format
 msgid "OCT2BIN(\"55\") returns \"101101\""
-msgstr ""
+msgstr "OCT2BIN(\"55\") აბრუნებს \"101101\""
 
 #: functions/engineering.xml:271
 #, kde-format
@@ -2552,12 +2549,12 @@ msgstr "OCT2HEX(მნიშვნელობა)"
 #: functions/engineering.xml:292
 #, kde-format
 msgid "OCT2HEX(\"12\") returns \"A\""
-msgstr ""
+msgstr "OCT2HEX(\"12\") აბრუნებს \"A\""
 
 #: functions/engineering.xml:293
 #, kde-format
 msgid "OCT2HEX(\"55\") returns \"2D\""
-msgstr ""
+msgstr "OCT2HEX(\"55\") აბრუნებს \"2D\""
 
 #: functions/engineering.xml:305
 #, kde-format
@@ -2594,12 +2591,12 @@ msgstr "BIN2OCT(მნიშვნელობა)"
 #: functions/engineering.xml:326
 #, kde-format
 msgid "BIN2OCT(\"1010\") returns \"12\" "
-msgstr ""
+msgstr "BIN2OCT(\"1010\") აბრუნებს \"12\" "
 
 #: functions/engineering.xml:327
 #, kde-format
 msgid "BIN2OCT(\"11111\") returns \"37\" "
-msgstr ""
+msgstr "BIN2OCT(\"11111\") აბრუნებს \"37\" "
 
 #: functions/engineering.xml:343
 #, kde-format
@@ -2616,12 +2613,12 @@ msgstr "BIN2HEX(მნიშვნელობა)"
 #: functions/engineering.xml:345
 #, kde-format
 msgid "BIN2HEX(\"1010\") returns \"a\""
-msgstr ""
+msgstr "BIN2HEX(\"1010\") აბრუნებს \"a\""
 
 #: functions/engineering.xml:346
 #, kde-format
 msgid "BIN2HEX(\"11111\") returns \"1f\""
-msgstr ""
+msgstr "BIN2HEX(\"11111\") აბრუნებს \"1f\""
 
 #: functions/engineering.xml:358
 #, kde-format
@@ -2660,12 +2657,12 @@ msgstr "HEX2OCT(მნიშვნელობა)"
 #: functions/engineering.xml:375
 #, kde-format
 msgid "HEX2OCT(\"a\") returns \"12\" "
-msgstr ""
+msgstr "HEX2OCT(\"a\") აბრუნებს \"12\" "
 
 #: functions/engineering.xml:376
 #, kde-format
 msgid "HEX2OCT(\"37\") returns \"67\" "
-msgstr ""
+msgstr "HEX2OCT(\"37\") აბრუნებს \"67\" "
 
 #: functions/engineering.xml:388
 #, kde-format
@@ -2682,12 +2679,12 @@ msgstr "HEX2BIN(მნიშვნელობა)"
 #: functions/engineering.xml:390
 #, kde-format
 msgid "HEX2BIN(\"a\") returns \"1010\""
-msgstr ""
+msgstr "HEX2BIN(\"a\") აბრუნებს \"1010\""
 
 #: functions/engineering.xml:391
 #, kde-format
 msgid "HEX2BIN(\"37\") returns \"110111\""
-msgstr ""
+msgstr "HEX2BIN(\"37\") აბრუნებს \"110111\""
 
 #: functions/engineering.xml:399
 #, kde-format
@@ -2712,12 +2709,12 @@ msgstr ""
 #: functions/engineering.xml:409
 #, kde-format
 msgid "COMPLEX(1.2;3.4) returns \"1.2+3.4i\""
-msgstr ""
+msgstr "COMPLEX(1.2;3.4) აბრუნებს \"1.2+3.4i\""
 
 #: functions/engineering.xml:410
 #, kde-format
 msgid "COMPLEX(0;-1) returns \"-i\""
-msgstr ""
+msgstr "COMPLEX(0;-1) აბრუნებს \"-i\""
 
 #: functions/engineering.xml:418 functions/engineering.xml:433
 #: functions/engineering.xml:448 functions/engineering.xml:463
@@ -2757,7 +2754,7 @@ msgstr "IMAGINARY(სტრიქონი)"
 #: functions/engineering.xml:424
 #, kde-format
 msgid "IMAGINARY(\"1.2+3.4i\") returns 3.4"
-msgstr ""
+msgstr "IMAGINARY(\"1.2+3.4i\") აბრუნებს 3.4"
 
 #: functions/engineering.xml:425
 #, kde-format
@@ -2797,12 +2794,12 @@ msgstr "IMCOS(სტრიქონი)"
 #: functions/engineering.xml:454
 #, kde-format
 msgid "IMCOS(\"1+i\") returns \"0.83373-0.988898i\""
-msgstr ""
+msgstr "IMCOS(\"1+i\") აბრუნებს \"0.83373-0.988898i\""
 
 #: functions/engineering.xml:455
 #, kde-format
 msgid "IMCOS(\"12i\") returns 81 377.4 "
-msgstr ""
+msgstr "IMCOS(\"12i\") აბრუნებს 81 377.4 "
 
 #: functions/engineering.xml:467
 #, kde-format
@@ -2817,12 +2814,12 @@ msgstr "IMCOSH(სტრიქონი)"
 #: functions/engineering.xml:469
 #, kde-format
 msgid "IMCOSH(\"1+i\") returns \"0.83373+0.988898i\""
-msgstr ""
+msgstr "IMCOSH(\"1+i\") აბრუნებს \"0.83373+0.988898i\""
 
 #: functions/engineering.xml:470
 #, kde-format
 msgid "IMCOSH(\"12i\") returns 0.84358 "
-msgstr ""
+msgstr "IMCOSH(\"12i\") აბრუნებს 0.84358 "
 
 #: functions/engineering.xml:482
 #, kde-format
@@ -2837,7 +2834,7 @@ msgstr "IMCOT(სტრიქონი)"
 #: functions/engineering.xml:484
 #, kde-format
 msgid "IMCOT(\"1+i\") returns \"0.21762-0.86801i\""
-msgstr ""
+msgstr "IMCOT(\"1+i\") აბრუნებს \"0.21762-0.86801i\""
 
 #: functions/engineering.xml:496
 #, kde-format
@@ -2852,7 +2849,7 @@ msgstr "IMCSC(სტრიქონი)"
 #: functions/engineering.xml:498
 #, kde-format
 msgid "IMCSC(\"1+i\") returns \"0.62151-0.30393i\""
-msgstr ""
+msgstr "IMCSC(\"1+i\") აბრუნებს \"0.62151-0.30393i\""
 
 #: functions/engineering.xml:510
 #, kde-format
@@ -2867,7 +2864,7 @@ msgstr "IMCSCH(სტრიქონი)"
 #: functions/engineering.xml:512
 #, kde-format
 msgid "IMCSCH(\"1+i\") returns \"0.30393-i0.62151\""
-msgstr ""
+msgstr "IMCSCH(\"1+i\") აბრუნებს \"0.30393-i0.62151\""
 
 #: functions/engineering.xml:524
 #, kde-format
@@ -2882,7 +2879,7 @@ msgstr "IMSEC(სტრიქონი)"
 #: functions/engineering.xml:526
 #, kde-format
 msgid "IMSEC(\"1+i\") returns \"0.49833+i0.59108\""
-msgstr ""
+msgstr "IMSEC(\"1+i\") აბრუნებს \"0.49833+i0.59108\""
 
 #: functions/engineering.xml:538
 #, kde-format
@@ -2897,7 +2894,7 @@ msgstr "IMSECH(სტრიქონი)"
 #: functions/engineering.xml:540
 #, kde-format
 msgid "IMSECH(\"1+i\") returns \"0.49833-i0.59108\""
-msgstr ""
+msgstr "IMSECH(\"1+i\") აბრუნებს \"0.49833-i0.59108\""
 
 #: functions/engineering.xml:552
 #, kde-format
@@ -2912,12 +2909,12 @@ msgstr "IMSIN(სტრიქონი)"
 #: functions/engineering.xml:554
 #, kde-format
 msgid "IMSIN(\"1+i\") returns \"1.29846+0.634964i\""
-msgstr ""
+msgstr "IMSIN(\"1+i\") აბრუნებს \"1.29846+0.634964i\""
 
 #: functions/engineering.xml:555
 #, kde-format
 msgid "IMSIN(\"1.2\") returns -0.536573 "
-msgstr ""
+msgstr "IMSIN(\"1.2\") აბრუნებს -0.536573 "
 
 #: functions/engineering.xml:567
 #, kde-format
@@ -2933,7 +2930,7 @@ msgstr "IMSINH(სტრიქონი)"
 #: functions/engineering.xml:569
 #, kde-format
 msgid "IMSINH(\"1+i\") returns \"0.63496+1.29846i\""
-msgstr ""
+msgstr "IMSINH(\"1+i\") აბრუნებს \"0.63496+1.29846i\""
 
 #: functions/engineering.xml:570
 #, kde-format
@@ -2953,12 +2950,12 @@ msgstr "IMTAN(სტრიქონი)"
 #: functions/engineering.xml:584
 #, kde-format
 msgid "IMTAN(\"1+i\") returns \"0.27175+1.08392i\""
-msgstr ""
+msgstr "IMTAN(\"1+i\") აბრუნებს \"0.27175+1.08392i\""
 
 #: functions/engineering.xml:585
 #, kde-format
 msgid "IMTAN(\"1.2\") returns 2.57215"
-msgstr ""
+msgstr "IMTAN(\"1.2\") აბრუნებს 2.57215"
 
 #: functions/engineering.xml:597
 #, kde-format
@@ -2975,12 +2972,12 @@ msgstr "IMTANH(სტრიქონი)"
 #: functions/engineering.xml:599
 #, kde-format
 msgid "IMTANH(\"1+i\") returns \"1.08392+0.27175i\""
-msgstr ""
+msgstr "IMTANH(\"1+i\") აბრუნებს \"1.08392+0.27175i\""
 
 #: functions/engineering.xml:600
 #, kde-format
 msgid "IMTANH(\"1.2\") returns 0.83365"
-msgstr ""
+msgstr "IMTANH(\"1.2\") აბრუნებს 0.83365"
 
 #: functions/engineering.xml:612
 #, kde-format
@@ -2995,12 +2992,12 @@ msgstr "IMEXP(სტრიქონი)"
 #: functions/engineering.xml:614
 #, kde-format
 msgid "IMEXP(\"2-i\") returns \"3.99232-6.21768i\""
-msgstr ""
+msgstr "IMEXP(\"2-i\") აბრუნებს \"3.99232-6.21768i\""
 
 #: functions/engineering.xml:615
 #, kde-format
 msgid "IMEXP(\"12i\") returns \"0.843854-0.536573i\" "
-msgstr ""
+msgstr "IMEXP(\"12i\") აბრუნებს \"0.843854-0.536573i\" "
 
 #: functions/engineering.xml:627
 #, kde-format
@@ -3015,12 +3012,12 @@ msgstr "IMLN(სტრიქონი)"
 #: functions/engineering.xml:629
 #, kde-format
 msgid "IMLN(\"3-i\") returns \"1.15129-0.321751i\""
-msgstr ""
+msgstr "IMLN(\"3-i\") აბრუნებს \"1.15129-0.321751i\""
 
 #: functions/engineering.xml:630
 #, kde-format
 msgid "IMLN(\"12\") returns 2.48491 "
-msgstr ""
+msgstr "IMLN(\"12\") აბრუნებს 2.48491 "
 
 #: functions/engineering.xml:642
 #, kde-format
@@ -3035,7 +3032,7 @@ msgstr "IMLOG2(სტრიქონი)"
 #: functions/engineering.xml:644
 #, kde-format
 msgid "IMLOG2(\"3+4i\") returns \"2.321928+1.337804i\""
-msgstr ""
+msgstr "IMLOG2(\"3+4i\") აბრუნებს \"2.321928+1.337804i\""
 
 #: functions/engineering.xml:656
 #, kde-format
@@ -3050,7 +3047,7 @@ msgstr "IMLOG10(სტრიქონი)"
 #: functions/engineering.xml:658
 #, kde-format
 msgid "IMLOG10(\"3+4i\") returns \"0.69897+0.402719i\""
-msgstr ""
+msgstr "IMLOG10(\"3+4i\") აბრუნებს \"0.69897+0.402719i\""
 
 #: functions/engineering.xml:670
 #, kde-format
@@ -3065,12 +3062,12 @@ msgstr "IMSQRT(სტრიქონი)"
 #: functions/engineering.xml:672
 #, kde-format
 msgid "IMSQRT(\"1+i\") returns \"1.09868+0.45509i\""
-msgstr ""
+msgstr "IMSQRT(\"1+i\") აბრუნებს \"1.09868+0.45509i\""
 
 #: functions/engineering.xml:673
 #, kde-format
 msgid "IMSQRT(\"1.2i\") returns \"0.774597+0.774597i\" "
-msgstr ""
+msgstr "IMSQRT(\"1.2i\") აბრუნებს \"0.774597+0.774597i\" "
 
 #: functions/engineering.xml:685
 #, kde-format
@@ -3090,7 +3087,7 @@ msgstr "IMPOWER(სტრიქონი)"
 #: functions/engineering.xml:691
 #, kde-format
 msgid "IMPOWER(\"4-i\";2) returns \"15-8i\""
-msgstr ""
+msgstr "IMPOWER(\"4-i\";2) აბრუნებს \"15-8i\""
 
 #: functions/engineering.xml:692
 #, kde-format
@@ -3105,17 +3102,17 @@ msgstr ""
 #: functions/engineering.xml:722
 #, kde-format
 msgid "IMSUM(value;value;...)"
-msgstr ""
+msgstr "IMSUM(მნიშვნელობა;მნიშვნელობა;...)"
 
 #: functions/engineering.xml:723
 #, kde-format
 msgid "IMSUM(1.2;\"3.4+5i\") returns \"4.6+5i\""
-msgstr ""
+msgstr "IMSUM(1.2;\"3.4+5i\") აბრუნებს \"4.6+5i\""
 
 #: functions/engineering.xml:724
 #, kde-format
 msgid "IMSUM(1.2;\"1i\") returns \"1.2+i\""
-msgstr ""
+msgstr "IMSUM(1.2;\"1i\") აბრუნებს \"1.2+i\""
 
 #: functions/engineering.xml:752
 #, kde-format
@@ -3126,17 +3123,17 @@ msgstr ""
 #: functions/engineering.xml:753
 #, kde-format
 msgid "IMDIV(value;value;...)"
-msgstr ""
+msgstr "IMDIV(მნიშვნელობა;მნიშვნელობა;...)"
 
 #: functions/engineering.xml:754
 #, kde-format
 msgid "IMDIV(1.2;\"3.4+5i\") returns \"0.111597-0.164114i\""
-msgstr ""
+msgstr "IMDIV(1.2;\"3.4+5i\") აბრუნებს \"0.111597-0.164114i\""
 
 #: functions/engineering.xml:755
 #, kde-format
 msgid "IMDIV(\"12+i\";\"12-i\") returns \"0.986207+0.16551i\""
-msgstr ""
+msgstr "IMDIV(\"12+i\";\"12-i\") აბრუნებს \"0.986207+0.16551i\""
 
 #: functions/engineering.xml:784
 #, kde-format
@@ -3152,12 +3149,12 @@ msgstr "IMSUB(მნიშვნელობა;მნიშვნელობ�
 #: functions/engineering.xml:786
 #, kde-format
 msgid "IMSUB(1.2;\"3.4+5i\") returns \"-2.2-5i\""
-msgstr ""
+msgstr "IMSUB(1.2;\"3.4+5i\") აბრუნებს \"-2.2-5i\""
 
 #: functions/engineering.xml:787
 #, kde-format
 msgid "IMSUB(1.2;\"1i\") returns \"1.2-i\""
-msgstr ""
+msgstr "IMSUB(1.2;\"1i\") აბრუნებს \"1.2-i\""
 
 #: functions/engineering.xml:815
 #, kde-format
@@ -3173,12 +3170,12 @@ msgstr "IMPRODUCT (მნიშვნელობა;მნიშვნელო
 #: functions/engineering.xml:817
 #, kde-format
 msgid "IMPRODUCT(1.2;\"3.4+5i\") returns \"4.08+6i\""
-msgstr ""
+msgstr "IMPRODUCT(1.2;\"3.4+5i\") აბრუნებს \"4.08+6i\""
 
 #: functions/engineering.xml:818
 #, kde-format
 msgid "IMPRODUCT(1.2;\"1i\") returns \"+1.2i\""
-msgstr ""
+msgstr "IMPRODUCT(1.2;\"1i\") აბრუნებს \"+1.2i\""
 
 #: functions/engineering.xml:830
 #, kde-format
@@ -3195,17 +3192,17 @@ msgstr ""
 #: functions/engineering.xml:832
 #, kde-format
 msgid "IMCONJUGATE(\"1.2+5i\") returns \"1.2-5i\""
-msgstr ""
+msgstr "IMCONJUGATE(\"1.2+5i\") აბრუნებს \"1.2-5i\""
 
 #: functions/engineering.xml:833
 #, kde-format
 msgid "IMCONJUGATE(\"-i\") returns \"i\""
-msgstr ""
+msgstr "IMCONJUGATE(\"-i\") აბრუნებს \"i\""
 
 #: functions/engineering.xml:834
 #, kde-format
 msgid "IMCONJUGATE(\"12\") returns \"12\""
-msgstr ""
+msgstr "IMCONJUGATE(\"12\") აბრუნებს \"12\""
 
 #: functions/engineering.xml:846
 #, kde-format
@@ -3222,17 +3219,17 @@ msgstr ""
 #: functions/engineering.xml:848
 #, kde-format
 msgid "IMARGUMENT(\"1.2+5i\") returns 0.6072"
-msgstr ""
+msgstr "IMARGUMENT(\"1.2+5i\") აბრუნებს 0.6072"
 
 #: functions/engineering.xml:849
 #, kde-format
 msgid "IMARGUMENT(\"-i\") returns -1.57079633 "
-msgstr ""
+msgstr "IMARGUMENT(\"-i\") აბრუნებს -1.57079633 "
 
 #: functions/engineering.xml:850
 #, kde-format
 msgid "IMARGUMENT(\"12\") returns \"#Div/0\""
-msgstr ""
+msgstr "IMARGUMENT(\"12\") აბრუნებს \"#Div/0\""
 
 #: functions/engineering.xml:862
 #, kde-format
@@ -3248,7 +3245,7 @@ msgstr ""
 #: functions/engineering.xml:864
 #, kde-format
 msgid "IMABS(\"1.2+5i\") returns 5.1419"
-msgstr ""
+msgstr "IMABS(\"1.2+5i\") აბრუნებს 5.1419"
 
 #: functions/engineering.xml:865
 #, kde-format
@@ -3740,7 +3737,7 @@ msgstr ""
 #: functions/financial.xml:371
 #, kde-format
 msgid "DISC(\"2/28/2001\"; \"8/31/2001\"; 12; 14) returns 0.2841"
-msgstr ""
+msgstr "DISC(\"2/28/2001\"; \"8/31/2001\"; 12; 14) აბრუნებს 0.2841"
 
 #: functions/financial.xml:380
 #, kde-format
@@ -3793,7 +3790,7 @@ msgstr ""
 #: functions/financial.xml:410
 #, kde-format
 msgid "DOLLARFR(1.125; 16) returns 1.02. (1 + 2/16)"
-msgstr ""
+msgstr "DOLLARFR(1.125; 16) აბრუნებს 1.02. (1 + 2/16)"
 
 #: functions/financial.xml:420 functions/financial.xml:559
 #: functions/financial.xml:634 functions/financial.xml:696
@@ -3869,6 +3866,8 @@ msgid ""
 "DURATION_ADD( \"1998-01-01\"; \"2006-01-01\"; 0.08; 0.09; 2; 1 ) returns "
 "5.9937749555"
 msgstr ""
+"DURATION_ADD( \"1998-01-01\"; \"2006-01-01\"; 0.08; 0.09; 2; 1 ) აბრუნებს "
+"5.9937749555"
 
 #: functions/financial.xml:479 functions/financial.xml:499
 #, kde-format
@@ -4025,7 +4024,7 @@ msgstr ""
 #: functions/financial.xml:1192
 #, kde-format
 msgid "Investment"
-msgstr ""
+msgstr "ინვესტიცია"
 
 #: functions/financial.xml:624
 #, kde-format
@@ -4317,17 +4316,17 @@ msgstr ""
 #: functions/financial.xml:860
 #, kde-format
 msgid "NPER(0.1; -100; 1000) equals 11"
-msgstr ""
+msgstr "NPER(0.1; -100; 1000) უდრის 11"
 
 #: functions/financial.xml:861
 #, kde-format
 msgid "NPER(0.06; 0; -10000; 20000 ;0) returns 11.906"
-msgstr ""
+msgstr "NPER(0.06; 0; -10000; 20000 ;0) აბრუნებს 11.906"
 
 #: functions/financial.xml:877
 #, kde-format
 msgid "Values (array)"
-msgstr ""
+msgstr "Values (მასივი)"
 
 #: functions/financial.xml:881
 #, kde-format
@@ -4346,7 +4345,7 @@ msgstr ""
 #: functions/financial.xml:886
 #, kde-format
 msgid "NPV(Rate; Values)"
-msgstr ""
+msgstr "NPV(სიჩქარე; მნიშვნელობები)"
 
 #: functions/financial.xml:887
 #, no-c-format, kde-format
@@ -4876,12 +4875,12 @@ msgstr "ERRORTYPE(მნიშვნელობა)"
 #: functions/information.xml:17
 #, kde-format
 msgid "ERRORTYPE(NA()) returns 7"
-msgstr ""
+msgstr "ERRORTYPE(NA()) აბრუნებს 7"
 
 #: functions/information.xml:18
 #, kde-format
 msgid "ERRORTYPE(0) returns an error"
-msgstr ""
+msgstr "ERRORTYPE(0) შეცდომას დააბრუნებს"
 
 #: functions/information.xml:26 functions/information.xml:222
 #: functions/reference.xml:48 functions/reference.xml:67
@@ -4926,7 +4925,7 @@ msgstr "N(მნიშვნელობა)"
 #: functions/information.xml:46
 #, kde-format
 msgid "N(3.14) returns 3.14"
-msgstr ""
+msgstr "N(3.14) აბრუნებს 3.14"
 
 #: functions/information.xml:47
 #, kde-format
@@ -4936,7 +4935,7 @@ msgstr ""
 #: functions/information.xml:55
 #, kde-format
 msgid "Type of information"
-msgstr ""
+msgstr "ინფორმაციის ტიპი"
 
 #: functions/information.xml:59
 #, kde-format
@@ -4954,7 +4953,7 @@ msgstr ""
 #: functions/information.xml:60
 #, kde-format
 msgid "INFO(type)"
-msgstr ""
+msgstr "INFO(ტიპი)"
 
 #: functions/information.xml:68 functions/information.xml:83
 #: functions/information.xml:98 functions/information.xml:114
@@ -5507,7 +5506,7 @@ msgstr ""
 #: functions/logic.xml:191
 #, kde-format
 msgid "NOT(bool)"
-msgstr ""
+msgstr "NOT(bool)"
 
 #: functions/logic.xml:192
 #, kde-format
@@ -5551,7 +5550,7 @@ msgstr ""
 #: functions/logic.xml:215
 #, kde-format
 msgid "A1=4;A2=6;IF(A1>A2;5;3) returns 3"
-msgstr ""
+msgstr "A1=4;A2=6;IF(A1>A2;5;3) აბრუნებს 3"
 
 #: functions/logic.xml:223 functions/logic.xml:241
 #, kde-format
@@ -5632,22 +5631,22 @@ msgstr ""
 #: functions/math.xml:22
 #, kde-format
 msgid "SUBTOTAL(1; A1:A5) returns 23.8"
-msgstr ""
+msgstr "SUBTOTAL(1; A1:A5) აბრუნებს 23.8"
 
 #: functions/math.xml:23
 #, kde-format
 msgid "SUBTOTAL(4; A1:A5) returns 56"
-msgstr ""
+msgstr "SUBTOTAL(4; A1:A5) აბრუნებს 56"
 
 #: functions/math.xml:24
 #, kde-format
 msgid "SUBTOTAL(9; A1:A5) returns 119"
-msgstr ""
+msgstr "SUBTOTAL(9; A1:A5) აბრუნებს 119"
 
 #: functions/math.xml:25
 #, kde-format
 msgid "SUBTOTAL(11; A1:A5) returns 307.76"
-msgstr ""
+msgstr "SUBTOTAL(11; A1:A5) აბრუნებს 307.76"
 
 #: functions/math.xml:44
 #, kde-format
@@ -5701,17 +5700,17 @@ msgstr "LCM(მნიშვნელობა; მნიშვნელობა
 #: functions/math.xml:81
 #, kde-format
 msgid "LCM(6;4) returns 12"
-msgstr ""
+msgstr "LCM(6;4) აბრუნებს 12"
 
 #: functions/math.xml:82
 #, kde-format
 msgid "LCM(1.5;2.25) returns 4.5"
-msgstr ""
+msgstr "LCM(1.5;2.25) აბრუნებს 4.5"
 
 #: functions/math.xml:83
 #, kde-format
 msgid "LCM(2;3;4) returns 12"
-msgstr ""
+msgstr "LCM(2;3;4) აბრუნებს 12"
 
 #: functions/math.xml:100
 #, kde-format
@@ -5733,17 +5732,17 @@ msgstr "GCD(მნიშვნელობა; მნიშვნელობა
 #: functions/math.xml:106
 #, kde-format
 msgid "GCD(6;4) returns 2"
-msgstr ""
+msgstr "GCD(6;4) აბრუნებს 2"
 
 #: functions/math.xml:107
 #, kde-format
 msgid "GCD(10;20) returns 10"
-msgstr ""
+msgstr "GCD(10;20) აბრუნებს 10"
 
 #: functions/math.xml:108
 #, kde-format
 msgid "GCD(20;15;10) returns 5"
-msgstr ""
+msgstr "GCD(20;15;10) აბრუნებს 5"
 
 #: functions/math.xml:117
 #, kde-format
@@ -5890,17 +5889,17 @@ msgstr "ODD(value)"
 #: functions/math.xml:214
 #, kde-format
 msgid "ODD(1.2) returns 3"
-msgstr ""
+msgstr "ODD(1.2) აბრუნებს 3"
 
 #: functions/math.xml:215
 #, kde-format
 msgid "ODD(2) returns 3"
-msgstr ""
+msgstr "ODD(2) აბრუნებს 3"
 
 #: functions/math.xml:216
 #, kde-format
 msgid "ODD(-2) returns -3"
-msgstr ""
+msgstr "ODD(-2) აბრუნებს -3"
 
 #: functions/math.xml:229
 #, kde-format
@@ -5915,7 +5914,7 @@ msgstr "GAMMA(value)"
 #: functions/math.xml:231
 #, kde-format
 msgid "GAMMA(1) returns 1"
-msgstr ""
+msgstr "GAMMA(1) აბრუნებს 1"
 
 #: functions/math.xml:248
 #, kde-format
@@ -5932,7 +5931,7 @@ msgstr "MOD(მნიშვნელობა;მნიშვნელობა)
 #: functions/math.xml:250
 #, kde-format
 msgid "MOD(12;5) returns 2"
-msgstr ""
+msgstr "MOD(12;5) აბრუნებს 2"
 
 #: functions/math.xml:251
 #, kde-format
@@ -6012,7 +6011,7 @@ msgstr ""
 #: functions/math.xml:299
 #, kde-format
 msgid "COUNT(5) returns 1"
-msgstr ""
+msgstr "COUNT(5) აბრუნებს 1"
 
 #: functions/math.xml:314
 #, kde-format
@@ -6030,12 +6029,12 @@ msgstr "COUNTA(მნიშვნელობა;მნიშვნელობ�
 #: functions/math.xml:316
 #, kde-format
 msgid "COUNTA(-5;\"KSpread\";2) returns 3"
-msgstr ""
+msgstr "COUNTA(-5;\"KSpread\";2) აბრუნებს 3"
 
 #: functions/math.xml:317
 #, kde-format
 msgid "COUNTA(5) returns 1"
-msgstr ""
+msgstr "COUNTA(5) აბრუნებს 1"
 
 #: functions/math.xml:327
 #, kde-format
@@ -6109,12 +6108,12 @@ msgstr "FACT(რიცხვი)"
 #: functions/math.xml:370
 #, kde-format
 msgid "FACT(10) returns 3628800"
-msgstr ""
+msgstr "FACT(10) აბრუნებს 3628800"
 
 #: functions/math.xml:371
 #, kde-format
 msgid "FACT(0) returns 1"
-msgstr ""
+msgstr "FACT(0) აბრუნებს 1"
 
 #: functions/math.xml:383
 #, kde-format
@@ -6131,12 +6130,12 @@ msgstr "FACTDOUBLE(რიცხვი)"
 #: functions/math.xml:385
 #, kde-format
 msgid "FACTDOUBLE(6) returns 48"
-msgstr ""
+msgstr "FACTDOUBLE(6) აბრუნებს 48"
 
 #: functions/math.xml:386
 #, kde-format
 msgid "FACTDOUBLE(7) returns 105"
-msgstr ""
+msgstr "FACTDOUBLE(7) აბრუნებს 105"
 
 #: functions/math.xml:398
 #, kde-format
@@ -6154,7 +6153,7 @@ msgstr "SUM(მნიშვნელობა;მნიშვნელობა;
 #: functions/math.xml:400
 #, kde-format
 msgid "SUM(12;5;7) equals 24"
-msgstr ""
+msgstr "SUM(12;5;7) equals 24"
 
 #: functions/math.xml:401
 #, kde-format
@@ -11805,7 +11804,7 @@ msgstr "აქტივაცია"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:182
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:164
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
@@ -11903,7 +11902,7 @@ msgstr "ბეჭდვის დიაპაზონის განსაზ�
 #: part/commands/PageLayoutCommand.cpp:22 part/dialogs/PageLayoutDialog.cpp:210
 msgctxt "(qtundo-format)"
 msgid "Set Page Layout"
-msgstr ""
+msgstr "გვერდის განლაგების დაყენება"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, FileOptionsWidget)
 #: part/dialogs/FileOptionsWidget.ui:13
@@ -12321,7 +12320,7 @@ msgstr ""
 #: part/dialogs/PreferenceDialog.cpp:327
 #, kde-format
 msgid "Open/Save"
-msgstr ""
+msgstr "გახსნა/შენახვა"
 
 #: part/dialogs/PreferenceDialog.cpp:339
 #, kde-format
@@ -12689,7 +12688,7 @@ msgstr "დიდი ასოს გმრძნობიარე"
 #: part/Find.cpp:35
 #, kde-format
 msgid "Match cases when searching"
-msgstr ""
+msgstr "ძებნისას დიდი და პატარა ასოების სხვაობის დამთხვევა"
 
 #: part/HeaderItems.cpp:161 part/HeaderWidgets.cpp:155
 #, kde-format
@@ -13119,7 +13118,7 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1220
+#: part/View.cpp:1872
 #, kde-format
 msgid "Enter name:"
 msgstr "შეიყვანეთ სახელი:"
@@ -13179,417 +13178,366 @@ msgstr "რაოდენობაA: "
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1294
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1209
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "ტექსტის ფერის შეცვლა"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1317
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1232
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "ფონის ფერის შეცვლა"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:512
+#: ui/CellToolBase_p.cpp:511
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "საზღვრის შეცვლა"
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Cell Format..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Set the cell formatting"
 msgstr ""
 
 #: ui/CellToolBase.cpp:163
 #, kde-format
-msgid "Style Manager..."
-msgstr ""
-
-#: ui/CellToolBase.cpp:166
-#, kde-format
-msgid "Edit and organize cell styles"
-msgstr ""
-
-#: ui/CellToolBase.cpp:168 ui/dialogs/LayoutPage_General.cpp:42
-#: ui/dialogs/StyleManagerDialog.cpp:44
-#, kde-format
-msgid "Style"
-msgstr "სტილი"
-
-#: ui/CellToolBase.cpp:170
-#, kde-format
-msgid "Apply a predefined style to the selected cells"
-msgstr ""
-
-#: ui/CellToolBase.cpp:173
-#, kde-format
-msgid "Create Style From Cell..."
-msgstr ""
-
-#: ui/CellToolBase.cpp:174
-#, kde-format
-msgid "Style From Cell"
-msgstr ""
-
-#: ui/CellToolBase.cpp:177
-#, kde-format
-msgid "Create a new style based on the currently selected cell"
-msgstr ""
-
-#: ui/CellToolBase.cpp:181
-#, kde-format
 msgid "Select Font..."
-msgstr ""
+msgstr "აირჩიეთ ფონტი..."
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:168
 #, kde-format
 msgid "Select Font Size"
 msgstr ""
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Font Size"
 msgstr "ფონტის ზომა"
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:175
 #, kde-format
 msgid "Text Color"
 msgstr "ტექსტის ფერი"
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Set the text color"
 msgstr ""
 
-#: ui/CellToolBase.cpp:202
+#: ui/CellToolBase.cpp:184
 #, kde-format
 msgid "Select a new border color"
 msgstr ""
 
-#: ui/CellToolBase.cpp:203
+#: ui/CellToolBase.cpp:185
 #, kde-format
 msgid "Border Color"
 msgstr "საზღვრის ფერი"
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Set the background color"
 msgstr ""
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:195
 #, kde-format
 msgid "Background Color"
 msgstr "ფონის ფერი"
 
-#: ui/CellToolBase.cpp:219 ui/CellToolBase.cpp:220
+#: ui/CellToolBase.cpp:201 ui/CellToolBase.cpp:202
 #, kde-format
 msgid "Clear All"
 msgstr "ყველას გასუფთავება"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:203
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Contents"
 msgstr "შიგთავსი"
 
-#: ui/CellToolBase.cpp:226
+#: ui/CellToolBase.cpp:208
 #, kde-format
 msgid "Clear Contents"
 msgstr "შემცველობის გასუფთავება"
 
-#: ui/CellToolBase.cpp:227
+#: ui/CellToolBase.cpp:209
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:213
 #, kde-format
 msgid "Conditional Styles..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:232
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr ""
 
-#: ui/CellToolBase.cpp:236 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:218 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr ""
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:219
 #, kde-format
 msgid "Remove Conditional Styles"
 msgstr ""
 
-#: ui/CellToolBase.cpp:238
+#: ui/CellToolBase.cpp:220
 #, kde-format
 msgid "Remove the conditional cell styles"
 msgstr ""
 
-#: ui/CellToolBase.cpp:244
+#: ui/CellToolBase.cpp:226
 #, kde-format
 msgid "&Auto-Filter"
 msgstr ""
 
-#: ui/CellToolBase.cpp:247
+#: ui/CellToolBase.cpp:229
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "&Function..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:236
 #, kde-format
 msgid "Insert math expression"
 msgstr ""
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:239
 #, kde-format
 msgid "From &Database..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:261
+#: ui/CellToolBase.cpp:243
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr ""
 
-#: ui/CellToolBase.cpp:264
+#: ui/CellToolBase.cpp:246
 #, kde-format
 msgid "Custom Lists..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:249
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:251
 #, kde-format
 msgid "&Goal Seek..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:256
 #, kde-format
 msgid "&Pivot Tables..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:259
 #, kde-format
 msgid "Create Pivot Tables"
 msgstr ""
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:261
 #, kde-format
 msgid "Formula Selection"
 msgstr ""
 
-#: ui/CellToolBase.cpp:281
+#: ui/CellToolBase.cpp:263
 #, kde-format
 msgid "Insert a function"
 msgstr ""
 
-#: ui/CellToolBase.cpp:282 ui/CellToolBase.cpp:1435
+#: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:1350
 #, kde-format
 msgid "Others..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:290
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Modify Cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:294
+#: ui/CellToolBase.cpp:276
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:297
+#: ui/CellToolBase.cpp:279
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:283
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:305
+#: ui/CellToolBase.cpp:287
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:308
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "Special Paste..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:311
+#: ui/CellToolBase.cpp:293
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr ""
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:295
 #, kde-format
 msgid "Paste with Insertion"
 msgstr ""
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:298
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr ""
 
-#: ui/CellToolBase.cpp:319
+#: ui/CellToolBase.cpp:301
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr ""
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:319
 #, kde-format
 msgid "Check the spelling"
 msgstr ""
 
-#: ui/CellToolBase.cpp:340
+#: ui/CellToolBase.cpp:322
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:346
+#: ui/CellToolBase.cpp:328
 #, kde-format
 msgid "Show QTableView..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:352
+#: ui/CellToolBase.cpp:334
 #, kde-format
 msgid "Auto-Format..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:355
+#: ui/CellToolBase.cpp:337
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr ""
 
-#: ui/CellToolBase.cpp:357
+#: ui/CellToolBase.cpp:339
 #, kde-format
 msgid "Document Settings..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:360
+#: ui/CellToolBase.cpp:342
 #, kde-format
 msgid "Show document settings dialog"
 msgstr ""
 
-#: ui/CellToolBase.cpp:364
+#: ui/CellToolBase.cpp:346
 #, kde-format
 msgid "Permute reference fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:368
+#: ui/CellToolBase.cpp:350
 #, kde-format
 msgid "Permute fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:369
+#: ui/CellToolBase.cpp:351
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1153
+#: ui/CellToolBase.cpp:1137
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1219
-#, kde-format
-msgid "Create Style From Cell"
-msgstr ""
-
-#: ui/CellToolBase.cpp:1228
-#, kde-format
-msgid "The style name cannot be empty."
-msgstr ""
-
-#: ui/CellToolBase.cpp:1233 ui/dialogs/LayoutPage_General.cpp:90
-#, kde-format
-msgid "A style with this name already exists."
-msgstr ""
-
-#: ui/CellToolBase.cpp:1254 ui/CellToolBase.cpp:1274
+#: ui/CellToolBase.cpp:1169 ui/CellToolBase.cpp:1189
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "ფონტის შეცვლა"
 
-#: ui/CellToolBase.cpp:1341
+#: ui/CellToolBase.cpp:1256
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "ტექსტის გასუფთავება"
 
-#: ui/CellToolBase.cpp:1395
+#: ui/CellToolBase.cpp:1310
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1424
+#: ui/CellToolBase.cpp:1339
 #, kde-format
 msgid "You must select multiple cells."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1899
+#: ui/CellToolBase.cpp:1814
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "გამოცვლა"
 
-#: ui/CellToolBase_p.cpp:481
+#: ui/CellToolBase_p.cpp:480
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr ""
 
-#: ui/CellToolBase_p.cpp:487
+#: ui/CellToolBase_p.cpp:486
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr ""
 
-#: ui/CellToolBase_p.cpp:492
+#: ui/CellToolBase_p.cpp:491
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr ""
 
-#: ui/CellToolBase_p.cpp:497
+#: ui/CellToolBase_p.cpp:496
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "დროის ფორმატი"
 
-#: ui/CellToolBase_p.cpp:502
+#: ui/CellToolBase_p.cpp:501
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "თარიღის ფორმატი"
 
-#: ui/CellToolBase_p.cpp:507
+#: ui/CellToolBase_p.cpp:506
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr ""
 
-#: ui/CellToolBase_p.cpp:911
+#: ui/CellToolBase_p.cpp:910
 #, kde-format
 msgid "Selection List..."
 msgstr ""
@@ -14290,7 +14238,7 @@ msgstr ""
 #: ui/dialogs/DatabaseDialog.cpp:240
 #, kde-format
 msgid "greater"
-msgstr ""
+msgstr "მეტი"
 
 #: ui/dialogs/DatabaseDialog.cpp:206 ui/dialogs/DatabaseDialog.cpp:225
 #: ui/dialogs/DatabaseDialog.cpp:241
@@ -14764,7 +14712,7 @@ msgstr ""
 #: ui/dialogs/FontWidget.ui:142
 #, kde-format
 msgid "Strike out"
-msgstr ""
+msgstr "ხაზის გადასმა"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, size_spinner)
 #: ui/dialogs/FontWidget.ui:149
@@ -15176,6 +15124,11 @@ msgstr ""
 msgid "Dolor Ipse"
 msgstr ""
 
+#: ui/dialogs/LayoutPage_General.cpp:42
+#, kde-format
+msgid "Style"
+msgstr "სტილი"
+
 #: ui/dialogs/LayoutPage_General.cpp:48
 #, kde-format
 msgctxt "Name of the style"
@@ -15185,6 +15138,11 @@ msgstr "სახელი:"
 #: ui/dialogs/LayoutPage_General.cpp:59
 #, kde-format
 msgid "Inherit style:"
+msgstr ""
+
+#: ui/dialogs/LayoutPage_General.cpp:90
+#, kde-format
+msgid "A style with this name already exists."
 msgstr ""
 
 #: ui/dialogs/LayoutPage_General.cpp:94
@@ -15771,46 +15729,6 @@ msgstr "გამრავლება"
 msgid "Division"
 msgstr "დანაყოფი"
 
-#: ui/dialogs/StyleManagerDialog.cpp:33
-#, kde-format
-msgid "Style Manager"
-msgstr ""
-
-#: ui/dialogs/StyleManagerDialog.cpp:48
-#, kde-format
-msgid "All Styles"
-msgstr ""
-
-#: ui/dialogs/StyleManagerDialog.cpp:49
-#, kde-format
-msgid "Custom Styles"
-msgstr ""
-
-#: ui/dialogs/StyleManagerDialog.cpp:50
-#, kde-format
-msgid "Hierarchical"
-msgstr ""
-
-#: ui/dialogs/StyleManagerDialog.cpp:58
-#, kde-format
-msgid "&New..."
-msgstr "&ახალი..."
-
-#: ui/dialogs/StyleManagerDialog.cpp:60
-#, kde-format
-msgid "&Modify..."
-msgstr "&ჩასწორება..."
-
-#: ui/dialogs/StyleManagerDialog.cpp:62
-#, kde-format
-msgid "&Delete..."
-msgstr "&წაშლა..."
-
-#: ui/dialogs/StyleManagerDialog.cpp:206 ui/dialogs/StyleManagerDialog.cpp:209
-#, kde-format
-msgid "style%1"
-msgstr ""
-
 #: ui/ExternalEditor.cpp:56
 #, kde-format
 msgid "Apply"
@@ -15819,7 +15737,7 @@ msgstr "გამოყენება"
 #: ui/ExternalEditor.cpp:57
 #, kde-format
 msgid "Apply changes"
-msgstr ""
+msgstr "ცვლილებების გადატარება"
 
 #: ui/ExternalEditor.cpp:62
 #, kde-format
@@ -15869,6 +15787,15 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr ""
+
+#~ msgid "&New..."
+#~ msgstr "&ახალი..."
+
+#~ msgid "&Modify..."
+#~ msgstr "&ჩასწორება..."
+
+#~ msgid "&Delete..."
+#~ msgstr "&წაშლა..."
 
 #~ msgid "Insert Cells"
 #~ msgstr "უჯრედების ჩასმა"

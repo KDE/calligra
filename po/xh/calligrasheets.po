@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-01 00:57+0000\n"
+"POT-Creation-Date: 2023-01-02 01:02+0000\n"
 "PO-Revision-Date: 2002-10-10 12:25+0200\n"
 "Last-Translator: Lwandle Mgidlana <lwandle@translate.org.za>\n"
 "Language-Team:  <xh@li.org>\n"
@@ -141,21 +141,18 @@ msgstr "Iphepha%1"
 msgid "Validation for cell %1 failed"
 msgstr ""
 
-#: core/StyleManager.cpp:37
+#: core/StyleManager.cpp:38
 #, fuzzy, kde-format
 msgid "Header"
 msgstr "inkulu kune"
 
-#: core/StyleManager.cpp:46
+#: core/StyleManager.cpp:47
 #, fuzzy, kde-format
 msgid "Header1"
 msgstr "inkulu kune"
 
-#: core/StyleManager.cpp:172 ui/dialogs/LayoutPage_General.cpp:127
-#: ui/dialogs/LayoutPage_General.cpp:146 ui/dialogs/StyleManagerDialog.cpp:99
-#: ui/dialogs/StyleManagerDialog.cpp:139 ui/dialogs/StyleManagerDialog.cpp:172
-#: ui/dialogs/StyleManagerDialog.cpp:198 ui/dialogs/StyleManagerDialog.cpp:236
-#: ui/dialogs/StyleManagerDialog.cpp:265 ui/dialogs/StyleManagerDialog.cpp:286
+#: core/StyleManager.cpp:178 ui/dialogs/LayoutPage_General.cpp:127
+#: ui/dialogs/LayoutPage_General.cpp:146
 #, fuzzy, kde-format
 msgid "Default"
 msgstr "Isiphumo"
@@ -930,7 +927,7 @@ msgstr "Inani"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:157 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:155 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -990,7 +987,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") ibuyisela 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:258 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:240 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Isiseko sedata"
@@ -12891,7 +12888,7 @@ msgstr "Fihla Ikhasi"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:182
+#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:164
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
 #, fuzzy, kde-format
 msgid "Font"
@@ -14249,7 +14246,7 @@ msgstr ""
 "Ulungiselela ukususa ikhasi elisebenzayo.\n"
 "Ufuna ukuqubeka?"
 
-#: part/View.cpp:1872 ui/CellToolBase.cpp:1220
+#: part/View.cpp:1872
 #, kde-format
 msgid "Enter name:"
 msgstr "Ngenisa igama:"
@@ -14309,13 +14306,13 @@ msgstr "Bala: %1"
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1294
+#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1209
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Tshintsha Okubhaliweyo"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1317
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1232
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
@@ -14323,368 +14320,316 @@ msgstr "Umbala Wesiqalo"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:512
+#: ui/CellToolBase_p.cpp:511
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Tshintsha Umbala Womda"
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Cell Format..."
 msgstr "Ifomati Yeseli..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Cwangcisa ufomato lweseli."
 
 #: ui/CellToolBase.cpp:163
-#, kde-format
-msgid "Style Manager..."
-msgstr ""
-
-#: ui/CellToolBase.cpp:166
-#, kde-format
-msgid "Edit and organize cell styles"
-msgstr ""
-
-#: ui/CellToolBase.cpp:168 ui/dialogs/LayoutPage_General.cpp:42
-#: ui/dialogs/StyleManagerDialog.cpp:44
-#, fuzzy, kde-format
-msgid "Style"
-msgstr "Uhlobo:"
-
-#: ui/CellToolBase.cpp:170
-#, fuzzy, kde-format
-msgid "Apply a predefined style to the selected cells"
-msgstr "Cwangcisa umphezulu womda kwi ariya ekhethiweyo."
-
-#: ui/CellToolBase.cpp:173
-#, fuzzy, kde-format
-msgid "Create Style From Cell..."
-msgstr "&Yenza i Template Ukusuka Kuxwebhu..."
-
-#: ui/CellToolBase.cpp:174
-#, fuzzy, kde-format
-#| msgid "Style of Cell"
-msgid "Style From Cell"
-msgstr "Uhlobo Lweseli"
-
-#: ui/CellToolBase.cpp:177
-#, fuzzy, kde-format
-msgid "Create a new style based on the currently selected cell"
-msgstr "Cwangcisa umphezulu womda kwi ariya ekhethiweyo."
-
-#: ui/CellToolBase.cpp:181
 #, fuzzy, kde-format
 msgid "Select Font..."
 msgstr "Khetha Ubungakanani begama..."
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:168
 #, kde-format
 msgid "Select Font Size"
 msgstr "Khetha Ubungakanani Bomgca"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:169
 #, fuzzy, kde-format
 #| msgid "Select Font Size"
 msgid "Font Size"
 msgstr "Khetha Ubungakanani Bomgca"
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:175
 #, kde-format
 msgid "Text Color"
 msgstr "Umbala Wokubhaliweyo"
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:176
 #, fuzzy, kde-format
 msgid "Set the text color"
 msgstr "Cwangcisa umbala wesiqalo."
 
-#: ui/CellToolBase.cpp:202
+#: ui/CellToolBase.cpp:184
 #, fuzzy, kde-format
 msgid "Select a new border color"
 msgstr "Khetha umda wesiqalo omtsha."
 
-#: ui/CellToolBase.cpp:203
+#: ui/CellToolBase.cpp:185
 #, kde-format
 msgid "Border Color"
 msgstr "Umbala Womda"
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:194
 #, fuzzy, kde-format
 msgid "Set the background color"
 msgstr "Cwangcisa umbala wesiqalo."
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:195
 #, kde-format
 msgid "Background Color"
 msgstr "Umbala Wesiqalo"
 
-#: ui/CellToolBase.cpp:219 ui/CellToolBase.cpp:220
+#: ui/CellToolBase.cpp:201 ui/CellToolBase.cpp:202
 #, fuzzy, kde-format
 #| msgid "Clear &All"
 msgid "Clear All"
 msgstr "Cacisa &Konke"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:203
 #, fuzzy, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Cima umxholo nokuformata kweseli yangoku."
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 msgid "Contents"
 msgstr "Gqabaza"
 
-#: ui/CellToolBase.cpp:226
+#: ui/CellToolBase.cpp:208
 #, fuzzy, kde-format
 msgid "Clear Contents"
 msgstr "Gqabaza"
 
-#: ui/CellToolBase.cpp:227
+#: ui/CellToolBase.cpp:209
 #, fuzzy, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Susa iimixholo yeseli yangoku."
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:213
 #, fuzzy, kde-format
 #| msgid "Conditional Cell Attributes..."
 msgid "Conditional Styles..."
 msgstr "Iziphumo Zeseli Esendaweni..."
 
-#: ui/CellToolBase.cpp:232
+#: ui/CellToolBase.cpp:214
 #, fuzzy, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr "Cwangcisa i fomati eyenziwe isiseko seseli kwizixhomekeko ezithile."
 
-#: ui/CellToolBase.cpp:236 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:218 ui/dialogs/ConditionalDialog.cpp:242
 #, fuzzy, kde-format
 #| msgid "Conditional Cell Attributes"
 msgid "Conditional Styles"
 msgstr "Iziphumo Zeseli Ezisendaweni"
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:219
 #, fuzzy, kde-format
 msgid "Remove Conditional Styles"
 msgstr "Susa ukufomata kweseli esendaweni."
 
-#: ui/CellToolBase.cpp:238
+#: ui/CellToolBase.cpp:220
 #, fuzzy, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Susa ukufomata kweseli esendaweni."
 
-#: ui/CellToolBase.cpp:244
+#: ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 #| msgid "Autofill"
 msgid "&Auto-Filter"
 msgstr "Gcwalisa ngokuzenzekela ugcwaliso"
 
-#: ui/CellToolBase.cpp:247
+#: ui/CellToolBase.cpp:229
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "&Function..."
 msgstr "&Umsebenzi..."
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:236
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Faka uchazo lwe math."
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:239
 #, kde-format
 msgid "From &Database..."
 msgstr "Ukusuka &Kwisiseko sedata..."
 
-#: ui/CellToolBase.cpp:261
+#: ui/CellToolBase.cpp:243
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Faka i data esuka kwisiseko sedata ye SQL"
 
-#: ui/CellToolBase.cpp:264
+#: ui/CellToolBase.cpp:246
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Lungisa ngendlela Uluhlu..."
 
-#: ui/CellToolBase.cpp:267
+#: ui/CellToolBase.cpp:249
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Yenza uluhlu lwesiko lokukhetha okanye ukugcwalisa ngokuzenzekelayo"
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:251
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Ukhangelo Lwesiphumo..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:254
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Uphindo lobalo ukufumana ixabiso elikhankanyiweyo"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:256
 #, fuzzy, kde-format
 msgid "&Pivot Tables..."
 msgstr "&Khetha..."
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:259
 #, fuzzy, kde-format
 msgid "Create Pivot Tables"
 msgstr "&Khetha..."
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:261
 #, kde-format
 msgid "Formula Selection"
 msgstr "Ukhetho Lwefomula"
 
-#: ui/CellToolBase.cpp:281
+#: ui/CellToolBase.cpp:263
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Faka umsebenzi."
 
-#: ui/CellToolBase.cpp:282 ui/CellToolBase.cpp:1435
+#: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:1350
 #, kde-format
 msgid "Others..."
 msgstr "Ezinye..."
 
-#: ui/CellToolBase.cpp:290
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Modify Cell"
 msgstr "Guqula kancinane Iseli"
 
-#: ui/CellToolBase.cpp:294
+#: ui/CellToolBase.cpp:276
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Hlela iseli ephawulweyo."
 
-#: ui/CellToolBase.cpp:297
+#: ui/CellToolBase.cpp:279
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Hambisa iseli yenjongo kwibhodi eqhotyoshwayo."
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:283
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Khuphela injongo yeseli kwibhodi eqhotyoshwayo."
 
-#: ui/CellToolBase.cpp:305
+#: ui/CellToolBase.cpp:287
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Cola umxholo webhodi eqhotyoshwayo kwisalathisi"
 
-#: ui/CellToolBase.cpp:308
+#: ui/CellToolBase.cpp:290
 #, kde-format
 msgid "Special Paste..."
 msgstr "Ucolo Oluthile..."
 
-#: ui/CellToolBase.cpp:311
+#: ui/CellToolBase.cpp:293
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Cola umxholo webhodi eqhotyoshiweyo ngenkhetho ezikhethekileyo."
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:295
 #, fuzzy, kde-format
 msgid "Paste with Insertion"
 msgstr "Cola Ngofako..."
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:298
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Ifakelela iseli ukusuka kwibodi eqhotyoshwayo kwiphepha elongezekayo."
 
-#: ui/CellToolBase.cpp:319
+#: ui/CellToolBase.cpp:301
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Bala kwakhona ixabiso leseli nganye kwiphepha "
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:319
 #, fuzzy, kde-format
 msgid "Check the spelling"
 msgstr "Khangela upelo."
 
-#: ui/CellToolBase.cpp:340
+#: ui/CellToolBase.cpp:322
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:346
+#: ui/CellToolBase.cpp:328
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Bonisa Ikhasi..."
 
-#: ui/CellToolBase.cpp:352
+#: ui/CellToolBase.cpp:334
 #, fuzzy, kde-format
 msgid "Auto-Format..."
 msgstr "Ifomati Yeseli..."
 
-#: ui/CellToolBase.cpp:355
+#: ui/CellToolBase.cpp:337
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Cwangcisa ufomato lwekhasi lomsebenzi."
 
-#: ui/CellToolBase.cpp:357
+#: ui/CellToolBase.cpp:339
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Iparameters ze Locale"
 
-#: ui/CellToolBase.cpp:360
+#: ui/CellToolBase.cpp:342
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Bonisa isalathiso &sogqabazo"
 
-#: ui/CellToolBase.cpp:364
+#: ui/CellToolBase.cpp:346
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Ugqolo"
 
-#: ui/CellToolBase.cpp:368
+#: ui/CellToolBase.cpp:350
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Ugqolo"
 
-#: ui/CellToolBase.cpp:369
+#: ui/CellToolBase.cpp:351
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Cola umxholo webhodi eqhotyoshwayo kwisalathisi"
 
-#: ui/CellToolBase.cpp:1153
+#: ui/CellToolBase.cpp:1137
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1219
-#, fuzzy, kde-format
-msgid "Create Style From Cell"
-msgstr "&Yenza i Template Ukusuka Kuxwebhu..."
-
-#: ui/CellToolBase.cpp:1228
-#, fuzzy, kde-format
-msgid "The style name cannot be empty."
-msgstr "Igama lephepha alikwazi ukungabinanto."
-
-#: ui/CellToolBase.cpp:1233 ui/dialogs/LayoutPage_General.cpp:90
-#, fuzzy, kde-format
-msgid "A style with this name already exists."
-msgstr "Ifayile sele ikhona"
-
-#: ui/CellToolBase.cpp:1254 ui/CellToolBase.cpp:1274
+#: ui/CellToolBase.cpp:1169 ui/CellToolBase.cpp:1189
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Tshintsha Ubungakanani bamagama"
 
-#: ui/CellToolBase.cpp:1341
+#: ui/CellToolBase.cpp:1256
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Tshintsha Okubhaliweyo"
 
-#: ui/CellToolBase.cpp:1395
+#: ui/CellToolBase.cpp:1310
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14693,54 +14638,54 @@ msgstr ""
 "Akukho mqhubi wesiseko sedata esikhoyo! Kufuneka uqokolele nabaqhubi "
 "abafunwayo."
 
-#: ui/CellToolBase.cpp:1424
+#: ui/CellToolBase.cpp:1339
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Kufuneka ukhethe iiseli ezininzi."
 
-#: ui/CellToolBase.cpp:1899
+#: ui/CellToolBase.cpp:1814
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Septemba"
 
-#: ui/CellToolBase_p.cpp:481
+#: ui/CellToolBase_p.cpp:480
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Inani lovavanyo"
 
-#: ui/CellToolBase_p.cpp:487
+#: ui/CellToolBase_p.cpp:486
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Imali yeloo lizwe"
 
-#: ui/CellToolBase_p.cpp:492
+#: ui/CellToolBase_p.cpp:491
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Ifomati Yepesenti"
 
-#: ui/CellToolBase_p.cpp:497
+#: ui/CellToolBase_p.cpp:496
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Fomati yexesha"
 
-#: ui/CellToolBase_p.cpp:502
+#: ui/CellToolBase_p.cpp:501
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Ifomati yomhla"
 
-#: ui/CellToolBase_p.cpp:507
+#: ui/CellToolBase_p.cpp:506
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Enobunzulu lwazi"
 
-#: ui/CellToolBase_p.cpp:911
+#: ui/CellToolBase_p.cpp:910
 #, kde-format
 msgid "Selection List..."
 msgstr "Uluhlu Lokhetho..."
@@ -16417,6 +16362,11 @@ msgstr "mm"
 msgid "Dolor Ipse"
 msgstr "Dolor Ipse"
 
+#: ui/dialogs/LayoutPage_General.cpp:42
+#, fuzzy, kde-format
+msgid "Style"
+msgstr "Uhlobo:"
+
 #: ui/dialogs/LayoutPage_General.cpp:48
 #, fuzzy, kde-format
 msgctxt "Name of the style"
@@ -16427,6 +16377,11 @@ msgstr "igama"
 #, fuzzy, kde-format
 msgid "Inherit style:"
 msgstr "Uhlobo Lwephetshana"
+
+#: ui/dialogs/LayoutPage_General.cpp:90
+#, fuzzy, kde-format
+msgid "A style with this name already exists."
+msgstr "Ifayile sele ikhona"
 
 #: ui/dialogs/LayoutPage_General.cpp:94
 #, fuzzy, kde-format
@@ -17030,46 +16985,6 @@ msgstr "Uphinda-phindo lwamanani"
 msgid "Division"
 msgstr "Ulwahlulo"
 
-#: ui/dialogs/StyleManagerDialog.cpp:33
-#, kde-format
-msgid "Style Manager"
-msgstr ""
-
-#: ui/dialogs/StyleManagerDialog.cpp:48
-#, fuzzy, kde-format
-msgid "All Styles"
-msgstr "Uhlobo:"
-
-#: ui/dialogs/StyleManagerDialog.cpp:49
-#, fuzzy, kde-format
-msgid "Custom Styles"
-msgstr "Lungisa ngendlela Uluhlu..."
-
-#: ui/dialogs/StyleManagerDialog.cpp:50
-#, fuzzy, kde-format
-msgid "Hierarchical"
-msgstr "Ngokwezimali"
-
-#: ui/dialogs/StyleManagerDialog.cpp:58
-#, fuzzy, kde-format
-msgid "&New..."
-msgstr "&Entsha"
-
-#: ui/dialogs/StyleManagerDialog.cpp:60
-#, fuzzy, kde-format
-msgid "&Modify..."
-msgstr "&Dibanisa/Guqula kancinane ugqabazo..."
-
-#: ui/dialogs/StyleManagerDialog.cpp:62
-#, fuzzy, kde-format
-msgid "&Delete..."
-msgstr "&Ukhangelo Lwesiphumo..."
-
-#: ui/dialogs/StyleManagerDialog.cpp:206 ui/dialogs/StyleManagerDialog.cpp:209
-#, fuzzy, kde-format
-msgid "style%1"
-msgstr "Uhlobo:"
-
 #: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 #| msgid "April"
@@ -17131,6 +17046,59 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Vula Ikhonkco?"
+
+#, fuzzy
+#~ msgid "Apply a predefined style to the selected cells"
+#~ msgstr "Cwangcisa umphezulu womda kwi ariya ekhethiweyo."
+
+#, fuzzy
+#~ msgid "Create Style From Cell..."
+#~ msgstr "&Yenza i Template Ukusuka Kuxwebhu..."
+
+#, fuzzy
+#~| msgid "Style of Cell"
+#~ msgid "Style From Cell"
+#~ msgstr "Uhlobo Lweseli"
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected cell"
+#~ msgstr "Cwangcisa umphezulu womda kwi ariya ekhethiweyo."
+
+#, fuzzy
+#~ msgid "Create Style From Cell"
+#~ msgstr "&Yenza i Template Ukusuka Kuxwebhu..."
+
+#, fuzzy
+#~ msgid "The style name cannot be empty."
+#~ msgstr "Igama lephepha alikwazi ukungabinanto."
+
+#, fuzzy
+#~ msgid "All Styles"
+#~ msgstr "Uhlobo:"
+
+#, fuzzy
+#~ msgid "Custom Styles"
+#~ msgstr "Lungisa ngendlela Uluhlu..."
+
+#, fuzzy
+#~ msgid "Hierarchical"
+#~ msgstr "Ngokwezimali"
+
+#, fuzzy
+#~ msgid "&New..."
+#~ msgstr "&Entsha"
+
+#, fuzzy
+#~ msgid "&Modify..."
+#~ msgstr "&Dibanisa/Guqula kancinane ugqabazo..."
+
+#, fuzzy
+#~ msgid "&Delete..."
+#~ msgstr "&Ukhangelo Lwesiphumo..."
+
+#, fuzzy
+#~ msgid "style%1"
+#~ msgstr "Uhlobo:"
 
 #, fuzzy
 #~| msgid "Cells:"
