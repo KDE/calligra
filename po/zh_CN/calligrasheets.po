@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-02 01:02+0000\n"
-"PO-Revision-Date: 2022-12-24 11:42\n"
+"PO-Revision-Date: 2023-01-02 07:11\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -16189,102 +16189,3 @@ msgstr "打开链接？"
 
 #~ msgid "style%1"
 #~ msgstr "样式 %1"
-
-#~ msgid "Cells..."
-#~ msgstr "单元格..."
-
-#~ msgid "Insert Cells..."
-#~ msgstr "插入单元格..."
-
-#~ msgid "Insert a blank cell into the spreadsheet"
-#~ msgstr "在工作表中插入一个空白单元格"
-
-#~ msgid "Remove Cells..."
-#~ msgstr "删除单元格..."
-
-#~ msgid "Removes the cells from the spreadsheet"
-#~ msgstr "从工作表中删除当前单元格"
-
-#~ msgid "Delete Cells..."
-#~ msgstr "删除单元格..."
-
-#~ msgid "Insert rows"
-#~ msgstr "插入行"
-
-#~ msgid "Insert columns"
-#~ msgstr "插入列"
-
-#~ msgid "Insert Cells"
-#~ msgstr "插入单元格"
-
-#~ msgid "Move towards left"
-#~ msgstr "向左移动"
-
-#~ msgid "Move towards top"
-#~ msgstr "向上移动"
-
-#~ msgid "Remove rows"
-#~ msgstr "删除行"
-
-#~ msgid "Remove columns"
-#~ msgstr "删除列"
-
-#~ msgid "Remove Cells"
-#~ msgstr "删除单元格"
-
-#~ msgid "&Subtotals..."
-#~ msgstr "分类汇总(&S)..."
-
-#~ msgid "Create different kind of subtotals to a list or database"
-#~ msgstr "创建不同类型的分类汇总，保存到列表或数据库中"
-
-#~ msgid "Subtotals"
-#~ msgstr "分类汇总"
-
-#~ msgid "Remove All"
-#~ msgstr "全部删除"
-
-#~ msgid "You need to select at least one column for adding subtotals."
-#~ msgstr "您必须选择至少一列作分类汇总。"
-
-#~ msgid "Grand Total"
-#~ msgstr "分类汇总"
-
-#~ msgid "Column '%1' "
-#~ msgstr "列“%1”"
-
-#~ msgid "StDev"
-#~ msgstr "标准差(StDev)"
-
-#~ msgid "StDevP"
-#~ msgstr "总体标准差(StDevP)"
-
-#~ msgid "Var"
-#~ msgstr "方差(Var)"
-
-#~ msgid "VarP"
-#~ msgstr "总体方差(VarP)"
-
-#~ msgid "&Replace current Subtotals"
-#~ msgstr "替换当前的分类汇总(&R)"
-
-#~ msgid "&Page break between groups"
-#~ msgstr "在组之间分页(&P)"
-
-#~ msgid "&Summary below data"
-#~ msgstr "数据下方显示摘要(&S)"
-
-#~ msgid "Summary &only"
-#~ msgstr "只有摘要(&O)"
-
-#~ msgid "&Ignore empty cells when looking for changes"
-#~ msgstr "寻找更改时忽略空单元格(&I)"
-
-#~ msgid "At each change in:"
-#~ msgstr "每次更改发生在："
-
-#~ msgid "Use function:"
-#~ msgstr "使用函数："
-
-#~ msgid "Add Subtotal to:"
-#~ msgstr "分类汇总累加到："

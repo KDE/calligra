@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2023-01-01 06:39+0100\n"
+"PO-Revision-Date: 2023-01-02 04:45+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -560,7 +560,7 @@ msgstr "ფურცლები"
 
 #: scripts/odfpyexport.py:280
 msgid "No OpenDocument file to write defined."
-msgstr ""
+msgstr "ჩასაწერი OpenDocument ფაილი მითითებული არაა."
 
 #: scripts/pyregexp.py:10
 msgid ""
@@ -1363,7 +1363,7 @@ msgstr "ბრძანება არჩეული არაა."
 
 #: scripts/xmlviewer.py:253
 msgid "The OpenDocument file does not contain any file named \"%1\""
-msgstr ""
+msgstr "OpenDocument ფაილი არ შეიცავს ფაილს სახელად \"%1\""
 
 #: scripts/xmlviewer.py:283
 msgid "<qt>%1</qt>"

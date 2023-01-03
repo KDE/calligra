@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-02 01:02+0000\n"
-"PO-Revision-Date: 2023-01-01 06:38+0100\n"
+"PO-Revision-Date: 2023-01-02 04:45+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -946,7 +946,7 @@ msgstr ""
 #: functions/database.xml:24
 #, kde-format
 msgid "DSUM(Database; \"Header\"; Conditions)"
-msgstr ""
+msgstr "DSUM(ბაზა; \"Header\"; პირობები)"
 
 #: functions/database.xml:25
 #, kde-format
@@ -963,7 +963,7 @@ msgstr ""
 #: functions/database.xml:46
 #, kde-format
 msgid "DAVERAGE(Database; \"Header\"; Conditions)"
-msgstr ""
+msgstr "DAVERAGE(ბაზა; \"Header\"; პირობები)"
 
 #: functions/database.xml:47
 #, kde-format
@@ -980,7 +980,7 @@ msgstr ""
 #: functions/database.xml:68
 #, kde-format
 msgid "DCOUNT(Database; \"Header\"; Conditions)"
-msgstr ""
+msgstr "DCOUNT(ბაზა; \"Header\"; პირობები)"
 
 #: functions/database.xml:69
 #, kde-format
@@ -997,7 +997,7 @@ msgstr ""
 #: functions/database.xml:91
 #, kde-format
 msgid "DCOUNTA(Database; \"Header\"; Conditions)"
-msgstr ""
+msgstr "DCOUNTA(ბაზა; \"Header\"; პირობები)"
 
 #: functions/database.xml:92
 #, kde-format
@@ -1015,7 +1015,7 @@ msgstr ""
 #: functions/database.xml:114
 #, kde-format
 msgid "DGET(Database; \"Header\"; Conditions)"
-msgstr ""
+msgstr "DGET(ბაზა; \"Header\"; პირობები)"
 
 #: functions/database.xml:115
 #, kde-format
@@ -1032,7 +1032,7 @@ msgstr ""
 #: functions/database.xml:136
 #, kde-format
 msgid "DMAX(Database; \"Header\"; Conditions)"
-msgstr ""
+msgstr "DMAX(ბაზა; \"Header\"; პირობები)"
 
 #: functions/database.xml:137
 #, kde-format
@@ -1049,7 +1049,7 @@ msgstr ""
 #: functions/database.xml:159
 #, kde-format
 msgid "DMIN(Database; \"Header\"; Conditions)"
-msgstr ""
+msgstr "DMIN(ბაზა; \"Header\"; პირობები)"
 
 #: functions/database.xml:160
 #, kde-format
@@ -1066,7 +1066,7 @@ msgstr ""
 #: functions/database.xml:182
 #, kde-format
 msgid "DPRODUCT(Database; \"Header\"; Conditions)"
-msgstr ""
+msgstr "DPRODUCT(ბაზა; \"Header\"; პირობები)"
 
 #: functions/database.xml:183
 #, kde-format
@@ -1084,7 +1084,7 @@ msgstr ""
 #: functions/database.xml:204
 #, kde-format
 msgid "DSTDEV(Database; \"Header\"; Conditions)"
-msgstr ""
+msgstr "DSTDEV(ბაზა; \"Header\"; პირობები)"
 
 #: functions/database.xml:205
 #, kde-format
@@ -1120,7 +1120,7 @@ msgstr ""
 #: functions/database.xml:250
 #, kde-format
 msgid "DVAR(Database; \"Header\"; Conditions)"
-msgstr ""
+msgstr "DVAR(ბაზა; \"Header\"; პირობები)"
 
 #: functions/database.xml:251
 #, kde-format
@@ -1138,7 +1138,7 @@ msgstr ""
 #: functions/database.xml:273
 #, kde-format
 msgid "DVARP(Database; \"Header\"; Conditions)"
-msgstr ""
+msgstr "DVARP(ბაზა; \"Header\"; პირობები)"
 
 #: functions/database.xml:274
 #, kde-format
@@ -1163,7 +1163,7 @@ msgstr ""
 #: functions/database.xml:292
 #, kde-format
 msgid "GETPIVOTDATA(Database; \"Sales\")"
-msgstr ""
+msgstr "GETPIVOTDATA(ბაზა; \"Sales\")"
 
 #: functions/datetime.xml:5
 #, kde-format
@@ -1231,7 +1231,7 @@ msgstr ""
 #: functions/datetime.xml:43
 #, kde-format
 msgid "DAYS360(date1; date2; method)"
-msgstr ""
+msgstr "DAYS360(თარიღი1; თარიღი2; მეთოდი)"
 
 #: functions/datetime.xml:44
 #, kde-format
@@ -1498,7 +1498,7 @@ msgstr ""
 #: functions/datetime.xml:244
 #, kde-format
 msgid "WEEKS(date2; date1; mode)"
-msgstr ""
+msgstr "WEEKS(თარიღი2; თარიღი1; რეჟიმი)"
 
 #: functions/datetime.xml:245
 #, kde-format
@@ -1527,7 +1527,7 @@ msgstr ""
 #: functions/datetime.xml:267
 #, kde-format
 msgid "MONTHS(date2; date1; mode)"
-msgstr ""
+msgstr "MONTHS(თარიღი2; თარიღი1; რეჟიმი)"
 
 #: functions/datetime.xml:268
 #, kde-format
@@ -1556,7 +1556,7 @@ msgstr ""
 #: functions/datetime.xml:290
 #, kde-format
 msgid "YEARS(date2; date1; mode)"
-msgstr ""
+msgstr "YEARS(თარიღი2; თარიღი1; რეჟიმი)"
 
 #: functions/datetime.xml:291
 #, kde-format
@@ -1650,7 +1650,7 @@ msgstr ""
 #: functions/datetime.xml:376
 #, kde-format
 msgid "TIME(hours;minutes;seconds)"
-msgstr ""
+msgstr "TIME(საათი;წუთი;წამი)"
 
 #: functions/datetime.xml:377
 #, kde-format
@@ -1819,7 +1819,7 @@ msgstr "MONTHNAME(რიცხვი)"
 #: functions/datetime.xml:510
 #, kde-format
 msgid "MONTHNAME(5) returns May"
-msgstr ""
+msgstr "MONTHNAME(5) აბრუნებს მაისს"
 
 #: functions/datetime.xml:518
 #, kde-format
@@ -2029,7 +2029,7 @@ msgstr ""
 #: functions/datetime.xml:661
 #, kde-format
 msgid "YEARFRAC(start date; end date; basis)"
-msgstr ""
+msgstr "YEARFRAC(საწყისი თარიღი; დასრულების თარიღი; ბაზა)"
 
 #: functions/datetime.xml:669 functions/datetime.xml:692
 #, kde-format
@@ -2063,7 +2063,7 @@ msgstr ""
 #: functions/datetime.xml:683
 #, kde-format
 msgid "WORKDAY(start date; days; holidays)"
-msgstr ""
+msgstr "WORKDAY(საწყისი თარიღი; დღეები; დასვენებები)"
 
 #: functions/datetime.xml:684
 #, kde-format
@@ -2087,7 +2087,7 @@ msgstr ""
 #: functions/datetime.xml:706
 #, kde-format
 msgid "NETWORKDAY(start date; end date; holidays)"
-msgstr ""
+msgstr "NETWORKDAY(საწყისი თარიღი; საბოლოო თარიღი; დასვენებები)"
 
 #: functions/datetime.xml:707
 #, kde-format
@@ -2356,17 +2356,17 @@ msgstr ""
 #: functions/engineering.xml:143
 #, kde-format
 msgid "CONVERT(32;\"C\";\"F\") equals 89.6"
-msgstr ""
+msgstr "CONVERT(32;\"C\";\"F\") უდრის 89.6"
 
 #: functions/engineering.xml:144
 #, kde-format
 msgid "CONVERT(3;\"lbm\";\"kg\") equals 1.3608"
-msgstr ""
+msgstr "CONVERT(3;\"lbm\";\"kg\") უდრის 1.3608"
 
 #: functions/engineering.xml:145
 #, kde-format
 msgid "CONVERT(7.9;\"cal\";\"J\") equals 33.0757"
-msgstr ""
+msgstr "CONVERT(7.9;\"cal\";\"J\") უდრის 33.0757"
 
 #: functions/engineering.xml:153 functions/engineering.xml:172
 #, kde-format
@@ -2388,7 +2388,7 @@ msgstr ""
 #: functions/engineering.xml:162
 #, kde-format
 msgid "ERF(Lower limit; Upper limit)"
-msgstr ""
+msgstr "ERF(ქვედა ზღვარი; ზედა ზღვარი)"
 
 #: functions/engineering.xml:163
 #, kde-format
@@ -2403,12 +2403,12 @@ msgstr ""
 #: functions/engineering.xml:181
 #, kde-format
 msgid "ERFC(Lower limit; Upper limit)"
-msgstr ""
+msgstr "ERFC(ქვედა ზღვარი; ზედა ზღვარი)"
 
 #: functions/engineering.xml:182
 #, kde-format
 msgid "ERFC(0.4) equals 0.57160764"
-msgstr ""
+msgstr "ERFC(0.4) უდრის 0.57160764"
 
 #: functions/engineering.xml:191 functions/engineering.xml:210
 #: functions/engineering.xml:229 functions/engineering.xml:248
@@ -3187,7 +3187,7 @@ msgstr ""
 #: functions/engineering.xml:831
 #, kde-format
 msgid "IMCONJUGATE(complex number)"
-msgstr ""
+msgstr "IMCONJUGATE(კომპლექსური რიცხვი)"
 
 #: functions/engineering.xml:832
 #, kde-format
@@ -3214,7 +3214,7 @@ msgstr ""
 #: functions/engineering.xml:847
 #, kde-format
 msgid "IMARGUMENT(complex number)"
-msgstr ""
+msgstr "IMARGUMENT(კომპლექსური რიცხვი)"
 
 #: functions/engineering.xml:848
 #, kde-format
@@ -3240,7 +3240,7 @@ msgstr ""
 #: functions/engineering.xml:863
 #, kde-format
 msgid "IMABS(complex number)"
-msgstr ""
+msgstr "IMABS(კომპლექსური რიცხვი)"
 
 #: functions/engineering.xml:864
 #, kde-format
@@ -3459,6 +3459,7 @@ msgstr ""
 msgid ""
 "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 ) returns 228"
 msgstr ""
+"AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 ) აბრუნებს 228"
 
 #: functions/financial.xml:107 functions/financial.xml:1214
 #, kde-format
@@ -3485,6 +3486,8 @@ msgid ""
 "AMORLINC( 1000; \"2004-02-01\"; \"2004-12-31\"; 10; 0; 0.1; 1 ) returns "
 "91.256831"
 msgstr ""
+"AMORLINC( 1000; \"2004-02-01\"; \"2004-12-31\"; 10; 0; 0.1; 1 ) აბრუნებს "
+"91.256831"
 
 #: functions/financial.xml:133 functions/financial.xml:159
 #, kde-format
@@ -3526,7 +3529,7 @@ msgstr ""
 #: functions/financial.xml:151
 #, kde-format
 msgid "COMPOUND(5000;0.12;4;5) equals 9030.56"
-msgstr ""
+msgstr "COMPOUND(5000;0.12;4;5) უდრის 9030.56"
 
 #: functions/financial.xml:171
 #, no-c-format, kde-format
@@ -3544,7 +3547,7 @@ msgstr ""
 #: functions/financial.xml:173
 #, kde-format
 msgid "CONTINUOUS(1000;0.1;1) equals 1105.17"
-msgstr ""
+msgstr "CONTINUOUS(1000;0.1;1) უდრის 1105.17"
 
 #: functions/financial.xml:185 functions/financial.xml:353
 #: functions/financial.xml:448 functions/financial.xml:608
