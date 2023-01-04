@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-02 01:02+0000\n"
-"PO-Revision-Date: 2023-01-02 04:45+0100\n"
+"PO-Revision-Date: 2023-01-03 07:49+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7055,27 +7055,27 @@ msgstr ""
 #: functions/math.xml:1120
 #, kde-format
 msgid "ROUND(1.252;2) equals 1.25"
-msgstr ""
+msgstr "ROUND(1.252;2) უდრის 1.25"
 
 #: functions/math.xml:1121
 #, kde-format
 msgid "ROUND(-1.252;2) equals -1.25"
-msgstr ""
+msgstr "ROUND(-1.252;2) უდრის -1.25"
 
 #: functions/math.xml:1122
 #, kde-format
 msgid "ROUND(1.258;2) equals 1.26"
-msgstr ""
+msgstr "ROUND(1.258;2) უდრის 1.26"
 
 #: functions/math.xml:1123
 #, kde-format
 msgid "ROUND(-12.25;-1) equals -10"
-msgstr ""
+msgstr "ROUND(-12.25;-1) უდრის -10"
 
 #: functions/math.xml:1124
 #, kde-format
 msgid "ROUND(-1.252;0) equals -1"
-msgstr ""
+msgstr "ROUND(-1.252;0) უდრის -1"
 
 #: functions/math.xml:1143
 #, kde-format
@@ -7089,27 +7089,27 @@ msgstr ""
 #: functions/math.xml:1144
 #, kde-format
 msgid "ROUNDUP(value;[digits])"
-msgstr ""
+msgstr "ROUNDUP(მნიშვნელობა;[ციფრები])"
 
 #: functions/math.xml:1145
 #, kde-format
 msgid "ROUNDUP(1.252) equals 2"
-msgstr ""
+msgstr "ROUNDUP(1.252) უდრის 2"
 
 #: functions/math.xml:1146
 #, kde-format
 msgid "ROUNDUP(1.252;2) equals 1.26"
-msgstr ""
+msgstr "ROUNDUP(1.252;2) უდრის 1.26"
 
 #: functions/math.xml:1147
 #, kde-format
 msgid "ROUNDUP(-1.252;2) equals -1.26"
-msgstr ""
+msgstr "ROUNDUP(-1.252;2) უდრის -1.26"
 
 #: functions/math.xml:1148
 #, kde-format
 msgid "ROUNDUP(-1.252) equals -2"
-msgstr ""
+msgstr "ROUNDUP(-1.252) უდრის -2"
 
 #: functions/math.xml:1166
 #, kde-format
@@ -7128,22 +7128,22 @@ msgstr ""
 #: functions/math.xml:1168
 #, kde-format
 msgid "ROUNDDOWN(1.252) equals 1"
-msgstr ""
+msgstr "ROUNDDOWN(1.252) უდრის 1"
 
 #: functions/math.xml:1169
 #, kde-format
 msgid "ROUNDDOWN(1.252;2) equals 1.25"
-msgstr ""
+msgstr "ROUNDDOWN(1.252;2) უდრის 1.25"
 
 #: functions/math.xml:1170
 #, kde-format
 msgid "ROUNDDOWN(-1.252;2) equals -1.25"
-msgstr ""
+msgstr "ROUNDDOWN(-1.252;2) უდრის -1.25"
 
 #: functions/math.xml:1171
 #, kde-format
 msgid "ROUNDDOWN(-1.252) equals -1"
-msgstr ""
+msgstr "ROUNDDOWN(-1.252) უდრის -1"
 
 #: functions/math.xml:1181
 #, kde-format
@@ -7196,7 +7196,7 @@ msgstr ""
 #: functions/math.xml:1206
 #, kde-format
 msgid "QUOTIENT(21;4) returns 5"
-msgstr ""
+msgstr "QUOTIENT(21;4) აბრუნებს 5"
 
 #: functions/math.xml:1219
 #, kde-format
@@ -7218,12 +7218,12 @@ msgstr ""
 #: functions/math.xml:1230
 #, kde-format
 msgid "First matrix"
-msgstr ""
+msgstr "პირველი მატრიცა"
 
 #: functions/math.xml:1234
 #, kde-format
 msgid "Second matrix"
-msgstr ""
+msgstr "მეორე მატრიცა"
 
 #: functions/math.xml:1238
 #, kde-format
@@ -7386,27 +7386,27 @@ msgstr ""
 #: functions/reference.xml:36
 #, kde-format
 msgid "ADDRESS(6; 4) returns $D$6"
-msgstr ""
+msgstr "ADDRESS(6; 4) აბრუნებს $D$6"
 
 #: functions/reference.xml:37
 #, kde-format
 msgid "ADDRESS(6; 4; 2) returns D$6"
-msgstr ""
+msgstr "ADDRESS(6; 4; 2) აბრუნებს D$6"
 
 #: functions/reference.xml:38
 #, kde-format
 msgid "ADDRESS(6; 4; 2; FALSE; \"Sheet1\") returns Sheet1!R6C[4]"
-msgstr ""
+msgstr "ADDRESS(6; 4; 2; FALSE; \"Sheet1\") აბრუნებს Sheet1!R6C[4]"
 
 #: functions/reference.xml:39
 #, kde-format
 msgid "ADDRESS(6; 4; 1; FALSE; \"Sheet1\") returns Sheet1!R6C4"
-msgstr ""
+msgstr "ADDRESS(6; 4; 1; FALSE; \"Sheet1\") აბრუნებს Sheet1!R6C4"
 
 #: functions/reference.xml:40
 #, kde-format
 msgid "ADDRESS(6; 4; 4; TRUE; \"Sheet1\") returns Sheet1!D6"
-msgstr ""
+msgstr "ADDRESS(6; 4; 4; TRUE; \"Sheet1\") აბრუნებს Sheet1!D6"
 
 #: functions/reference.xml:52
 #, kde-format
@@ -7423,12 +7423,12 @@ msgstr ""
 #: functions/reference.xml:54
 #, kde-format
 msgid "AREAS(A1) returns 1"
-msgstr ""
+msgstr "AREAS(A1) აბრუნებს 1"
 
 #: functions/reference.xml:55
 #, kde-format
 msgid "AREAS((A1; A2:A4)) returns 2"
-msgstr ""
+msgstr "AREAS((A1; A2:A4)) აბრუნებს 2"
 
 #: functions/reference.xml:71
 #, kde-format
@@ -7444,17 +7444,17 @@ msgstr ""
 #: functions/reference.xml:73
 #, kde-format
 msgid "CELL(\"COL\", C7) returns 3"
-msgstr ""
+msgstr "CELL(\"COL\", C7) აბრუნებს 3"
 
 #: functions/reference.xml:74
 #, kde-format
 msgid "CELL(\"ROW\", C7) returns 7"
-msgstr ""
+msgstr "CELL(\"ROW\", C7) აბრუნებს 7"
 
 #: functions/reference.xml:75
 #, kde-format
 msgid "CELL(\"ADDRESS\", C7) returns $C$7"
-msgstr ""
+msgstr "CELL(\"ADDRESS\", C7) აბრუნებს $C$7"
 
 #: functions/reference.xml:82
 #, kde-format
@@ -7501,12 +7501,12 @@ msgstr ""
 #: functions/reference.xml:106
 #, kde-format
 msgid "COLUMN(A1) returns 1"
-msgstr ""
+msgstr "COLUMN(A1) აბრუნებს 1"
 
 #: functions/reference.xml:107
 #, kde-format
 msgid "COLUMN(D2) returns 4"
-msgstr ""
+msgstr "COLUMN(D2) აბრუნებს 4"
 
 #: functions/reference.xml:121
 #, kde-format
@@ -7521,12 +7521,12 @@ msgstr ""
 #: functions/reference.xml:123
 #, kde-format
 msgid "COLUMNS(A1:C3) returns 3"
-msgstr ""
+msgstr "COLUMNS(A1:C3) აბრუნებს 3"
 
 #: functions/reference.xml:124
 #, kde-format
 msgid "COLUMNS(D2) returns 1"
-msgstr ""
+msgstr "COLUMNS(D2) აბრუნებს 1"
 
 #: functions/reference.xml:137 functions/reference.xml:266
 #, kde-format
@@ -7605,12 +7605,12 @@ msgstr ""
 #: functions/reference.xml:181
 #, kde-format
 msgid "ROW(A1) returns 1"
-msgstr ""
+msgstr "ROW(A1) აბრუნებს 1"
 
 #: functions/reference.xml:182
 #, kde-format
 msgid "ROW(D2) returns 2"
-msgstr ""
+msgstr "ROW(D2) აბრუნებს 2"
 
 #: functions/reference.xml:196
 #, kde-format
@@ -7625,12 +7625,12 @@ msgstr ""
 #: functions/reference.xml:198
 #, kde-format
 msgid "ROWS(A1:C3) returns 3"
-msgstr ""
+msgstr "ROWS(A1:C3) აბრუნებს 3"
 
 #: functions/reference.xml:199
 #, kde-format
 msgid "ROWS(D2) returns 1"
-msgstr ""
+msgstr "ROWS(D2) აბრუნებს 1"
 
 #: functions/reference.xml:213
 #, kde-format
@@ -7647,12 +7647,12 @@ msgstr ""
 #: functions/reference.xml:215
 #, kde-format
 msgid "SHEET(Sheet1!C7) returns 1"
-msgstr ""
+msgstr "SHEET(Sheet1!C7) აბრუნებს 1"
 
 #: functions/reference.xml:216
 #, kde-format
 msgid "SHEET(Sheet2!C7) returns 2"
-msgstr ""
+msgstr "SHEET(Sheet2!C7) აბრუნებს 2"
 
 #: functions/reference.xml:228
 #, kde-format
@@ -7934,7 +7934,7 @@ msgstr "AVEDEV(მნიშვნელობა;მნიშვნელობ�
 #: functions/statistical.xml:33
 #, kde-format
 msgid "AVEDEV(11.4;17.3;21.3;25.9;40.1) returns 7.84"
-msgstr ""
+msgstr "AVEDEV(11.4;17.3;21.3;25.9;40.1) აბრუნებს 7.84"
 
 #: functions/statistical.xml:34
 #, kde-format
@@ -8139,12 +8139,12 @@ msgstr ""
 #: functions/statistical.xml:189
 #, kde-format
 msgid "COMBIN(12;5) returns 792"
-msgstr ""
+msgstr "COMBIN(12;5) აბრუნებს 792"
 
 #: functions/statistical.xml:190
 #, kde-format
 msgid "COMBIN(5;5) returns 1"
-msgstr ""
+msgstr "COMBIN(5;5) აბრუნებს 1"
 
 #: functions/statistical.xml:206
 #, kde-format
@@ -8164,12 +8164,12 @@ msgstr ""
 #: functions/statistical.xml:208
 #, kde-format
 msgid "COMBINA(12;5) returns 4368"
-msgstr ""
+msgstr "COMBINA(12;5) აბრუნებს 4368"
 
 #: functions/statistical.xml:209
 #, kde-format
 msgid "COMBINA(5;5) returns 126"
-msgstr ""
+msgstr "COMBINA(5;5) აბრუნებს 126"
 
 #: functions/statistical.xml:217
 #, kde-format
@@ -8273,7 +8273,7 @@ msgstr "DEVSQ(A1:A5)"
 #: functions/statistical.xml:300
 #, kde-format
 msgid "DEVSQ(21; 33; 54; 23) returns 684.75"
-msgstr ""
+msgstr "DEVSQ(21; 33; 54; 23) აბრუნებს 684.75"
 
 #: functions/statistical.xml:312
 #, kde-format
@@ -8616,12 +8616,12 @@ msgstr ""
 #: functions/statistical.xml:578
 #, kde-format
 msgid "HYPGEOMDIST(x; n; M; N)"
-msgstr ""
+msgstr "HYPGEOMDIST(x; n; M; N)"
 
 #: functions/statistical.xml:579
 #, kde-format
 msgid "HYPGEOMDIST(2; 5; 6; 20) returns 0.3522"
-msgstr ""
+msgstr "HYPGEOMDIST(2; 5; 6; 20) აბრუნებს 0.3522"
 
 #: functions/statistical.xml:587 functions/statistical.xml:1127
 #: functions/statistical.xml:1313
@@ -8668,7 +8668,7 @@ msgstr ""
 #: functions/statistical.xml:627
 #, kde-format
 msgid "KURT(21; 33; 54; 23) returns 1.344239"
-msgstr ""
+msgstr "KURT(21; 33; 54; 23) აბრუნებს 1.344239"
 
 #: functions/statistical.xml:656
 #, kde-format
@@ -8690,7 +8690,7 @@ msgstr ""
 #: functions/statistical.xml:659
 #, kde-format
 msgid "KURTP(21; 33; 54; 23) returns -1.021"
-msgstr ""
+msgstr "KURTP(21; 33; 54; 23) აბრუნებს -1.021"
 
 #: functions/statistical.xml:672
 #, kde-format
@@ -8710,7 +8710,7 @@ msgstr ""
 #: functions/statistical.xml:678
 #, kde-format
 msgid "A1: 3, A2: 1, A3: 5 => LARGE(A1:A3; 2) returns 3"
-msgstr ""
+msgstr "A1: 3, A2: 1, A3: 5 => LARGE(A1:A3; 2) აბრუნებს 3"
 
 #: functions/statistical.xml:698
 #, kde-format
@@ -8847,7 +8847,7 @@ msgstr "MODE(დიაპაზონი)"
 #: functions/statistical.xml:802
 #, kde-format
 msgid "MODE(12; 14; 12; 15) returns 12"
-msgstr ""
+msgstr "MODE(12; 14; 12; 15) აბრუნებს 12"
 
 #: functions/statistical.xml:810 functions/statistical.xml:1805
 #, kde-format
@@ -8877,7 +8877,7 @@ msgstr ""
 #: functions/statistical.xml:824
 #, kde-format
 msgid "NEGBINOMDIST(2;5;0.55) returns 0.152872629"
-msgstr ""
+msgstr "NEGBINOMDIST(2;5;0.55) აბრუნებს 0.152872629"
 
 #: functions/statistical.xml:836
 #, kde-format
@@ -12879,9 +12879,9 @@ msgid "&Create Template From Document..."
 msgstr ""
 
 #: part/View.cpp:314
-#, kde-format
+#, fuzzy, kde-format
 msgid "Anchor"
-msgstr ""
+msgstr "ბმული"
 
 #: part/View.cpp:315 part/View.cpp:1084 part/View.cpp:1544
 #, kde-format

@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2011, 2012, 2013, 2014, 2015, 2017, 2019.
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2013.
-# Vit Pelcak <vpelcak@suse.cz>, 2021, 2022.
+# Vit Pelcak <vit@pelcak.org>, 2021, 2022.
 #
 msgid ""
 msgstr ""
@@ -4617,17 +4617,11 @@ msgid "Save Document"
 msgstr "Uložit dokument"
 
 #: widgets/KoDocumentInfoDlg.cpp:373
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The document has been changed since it was opened. To complete the "
-#| "decryption the document needs to be saved.<p>Do you want to save the "
-#| "document now?</qt>"
+#, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
-"<qt>Dokument byl od otevření změněn. Pro dokončení dešifrování je potřeba "
-"jej uložit.<p>Chcete tento dokument nyní uložit?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
