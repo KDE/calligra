@@ -10,7 +10,7 @@
 # Σπύρος Γεωργαράς <sng@hellug.gr>, 2008.
 # Spiros Georgaras <sngeorgaras@otenet.gr>, 2008.
 # Dimitrios Glentadakis <dglent@gmail.com>, 2011, 2012.
-# Stelios <sstavra@gmail.com>, 2011, 2012, 2020, 2021.
+# Stelios <sstavra@gmail.com>, 2011, 2012, 2020, 2021, 2023.
 # George Stefanakis <george.stefanakis@gmail.com>, 2011.
 # Dimitris Kardarakos <dimkard@gmail.com>, 2014.
 msgid ""
@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-01 00:57+0000\n"
-"PO-Revision-Date: 2021-06-03 12:25+0300\n"
+"PO-Revision-Date: 2023-01-04 11:52+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
 "Language: el\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.04.2\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -585,7 +585,7 @@ msgstr "Πιέστε το B για την διακοπή της διαδρομή
 #: flake/tools/KoPathTool.cpp:628
 #, kde-format
 msgid "Press B to break path at selected segments."
-msgstr "Πιέστε το B για την διακοπή της διαδρομής στα επιλεγμένα τμήματα."
+msgstr "Πιέστε το Β για τη διακοπή της διαδρομής στα επιλεγμένα τμήματα."
 
 #: flake/tools/KoPathToolFactory.cpp:17
 #, kde-format
@@ -4168,7 +4168,7 @@ msgstr "Γίνεται διαμόρφωση"
 #: text/KoTextEditor_p.h:145 text/KoTextEditor_p.h:181
 msgctxt "(qtundo-format)"
 msgid "Format"
-msgstr "Τύπος αποθήκευυσης"
+msgstr "Τύπος αποθήκευσης"
 
 #: text/styles/KoStyleManager.cpp:93 text/styles/KoStyleManager.cpp:98
 #, kde-format
@@ -4719,18 +4719,13 @@ msgid "Save Document"
 msgstr "Αποθήκευση εγγράφου"
 
 #: widgets/KoDocumentInfoDlg.cpp:373
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The document has been changed since it was opened. To complete the "
-#| "decryption the document needs to be saved.<p>Do you want to save the "
-#| "document now?</qt>"
+#, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
-"<qt>Το έγγραφο τροποποιήθηκε από το τελευταίο άνοιγμά του. Για την "
-"ολοκλήρωση της αποκρυπτογράφησης, το έγγραφο πρέπει να αποθηκευτεί."
-"<p>Επιθυμείτε τώρα την αποθήκευση του εγγράφου;</qt>"
+"<qt>Για την ολοκλήρωση της αποκρυπτογράφησης, το έγγραφο πρέπει να "
+"αποθηκευτεί.<p>Επιθυμείτε τώρα την αποθήκευση του εγγράφου;</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
@@ -4916,7 +4911,7 @@ msgstr "Συνολική αδιαφάνεια:"
 #: widgets/KoGradientEditWidget.cpp:171
 #, kde-format
 msgid "Color stop:"
-msgstr "Διαμκοπή χρώματος:"
+msgstr "Διακοπή χρώματος:"
 
 #: widgets/KoGradientEditWidget.cpp:179
 #, kde-format

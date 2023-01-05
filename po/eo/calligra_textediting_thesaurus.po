@@ -1,13 +1,15 @@
-# Translation of thesaurus_tool into esperanto.
+# Translation of calligra_textediting_thesaurus.pot to esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: thesaurus_tool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-04 22:00+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -19,12 +21,12 @@ msgstr ""
 #: Thesaurus.cpp:81
 #, kde-format
 msgid "(No match)"
-msgstr ""
+msgstr "(Neniu kongruo)"
 
 #: Thesaurus.cpp:91
 #, kde-format
 msgid "&Search for:"
-msgstr ""
+msgstr "&Serĉi por:"
 
 #: Thesaurus.cpp:94
 #, kde-format
@@ -46,7 +48,7 @@ msgstr "Antaŭen"
 #: Thesaurus.cpp:108
 #, kde-format
 msgid "Change Language..."
-msgstr ""
+msgstr "Ŝanĝi Lingvon..."
 
 #: Thesaurus.cpp:122
 #, kde-format
@@ -54,15 +56,14 @@ msgid "&Thesaurus"
 msgstr ""
 
 #: Thesaurus.cpp:126
-#, fuzzy, kde-format
-#| msgid "Synonym"
+#, kde-format
 msgid "Synonyms"
 msgstr "Sinonimoj"
 
 #: Thesaurus.cpp:133
 #, kde-format
 msgid "More General Words"
-msgstr ""
+msgstr "Pli Ĝeneralaj Vortoj"
 
 #: Thesaurus.cpp:140
 #, kde-format
@@ -77,7 +78,7 @@ msgstr ""
 #: Thesaurus.cpp:192
 #, kde-format
 msgid "&Replace with:"
-msgstr ""
+msgstr "Anstataŭigi pe&r:"
 
 #: Thesaurus.cpp:255
 #, kde-format
@@ -87,12 +88,12 @@ msgstr "&Anstataŭigi"
 #: Thesaurus.cpp:267
 #, kde-format
 msgid "Replace Word"
-msgstr ""
+msgstr "Anstataŭigi Vorton"
 
 #: Thesaurus.cpp:295
 #, kde-format
 msgid "Related Words - %1"
-msgstr ""
+msgstr "Rilataj Vortoj - %1"
 
 #: Thesaurus.cpp:409
 #, kde-format
@@ -184,73 +185,4 @@ msgstr ""
 #: Thesaurus.cpp:635
 #, kde-format
 msgid "No match for '%1'."
-msgstr ""
-
-#~ msgctxt "@action:button Close thesaurus dialog"
-#~ msgid "&Close"
-#~ msgstr "F&ermi"
-
-#, fuzzy
-#~| msgid "S&earch"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Search for:"
-#~ msgstr "S&erĉi"
-
-#, fuzzy
-#~| msgid "S&earch"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "S&earch"
-#~ msgstr "S&erĉi"
-
-#, fuzzy
-#~| msgctxt "@action:button Go back to the previous word in history"
-#~| msgid "Back"
-#~ msgctxt ""
-#~ "(qtundo-format) @action:button Go back to the previous word in history"
-#~ msgid "Back"
-#~ msgstr "Reen"
-
-#, fuzzy
-#~| msgctxt "@action:button Go forward to the next word in history"
-#~| msgid "Forward"
-#~ msgctxt ""
-#~ "(qtundo-format) @action:button Go forward to the next word in history"
-#~ msgid "Forward"
-#~ msgstr "Antaŭen"
-
-#, fuzzy
-#~| msgid "Synonym"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Synonyms"
-#~ msgstr "Sinonimoj"
-
-#, fuzzy
-#~| msgid "&Replace"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Replace with:"
-#~ msgstr "&Anstataŭigi"
-
-#, fuzzy
-#~| msgctxt "@action:button Close thesaurus dialog"
-#~| msgid "&Close"
-#~ msgctxt "(qtundo-format) @action:button Close thesaurus dialog"
-#~ msgid "&Close"
-#~ msgstr "F&ermi"
-
-#, fuzzy
-#~| msgid "&Replace"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Replace"
-#~ msgstr "&Anstataŭigi"
-
-#, fuzzy
-#~| msgid "&Replace"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Replace Word"
-#~ msgstr "&Anstataŭigi"
-
-#, fuzzy
-#~| msgid "Attributes"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Attributes"
-#~ msgstr "Ecoj"
+msgstr "Neniu kongruo por '%1'."

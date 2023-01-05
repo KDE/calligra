@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-02 01:02+0000\n"
-"PO-Revision-Date: 2023-01-03 07:49+0100\n"
+"PO-Revision-Date: 2023-01-04 08:52+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3630,7 +3630,7 @@ msgstr ""
 #: functions/financial.xml:238
 #, kde-format
 msgid "CUMIPMT( 0.06/12; 5*12; 100000; 5; 12; 0 ) equals -3562,187023"
-msgstr ""
+msgstr "CUMIPMT( 0.06/12; 5*12; 100000; 5; 12; 0 ) უდრის -3562,187023"
 
 #: functions/financial.xml:273
 #, kde-format
@@ -3645,7 +3645,7 @@ msgstr ""
 #: functions/financial.xml:275
 #, kde-format
 msgid "CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 ) equals -11904.054201"
-msgstr ""
+msgstr "CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 ) უდრის -11904.054201"
 
 #: functions/financial.xml:289 functions/financial.xml:322
 #: functions/financial.xml:1245 functions/financial.xml:1269
@@ -3901,7 +3901,7 @@ msgstr ""
 #: functions/financial.xml:489
 #, kde-format
 msgid "EFFECT(0.08;12) equals 0.083"
-msgstr ""
+msgstr "EFFECT(0.08;12) უდრის 0.083"
 
 #: functions/financial.xml:507
 #, kde-format
@@ -3940,7 +3940,7 @@ msgstr ""
 #: functions/financial.xml:523
 #, kde-format
 msgid "EURO(\"DEM\") equals 1.95583"
-msgstr ""
+msgstr "EURO(\"DEM\") უდრის 1.95583"
 
 #: functions/financial.xml:536
 #, kde-format
@@ -3971,7 +3971,7 @@ msgstr ""
 #: functions/financial.xml:546
 #, kde-format
 msgid "EUROCONVERT(1; \"EUR\"; \"DEM\") equals 1.95583"
-msgstr ""
+msgstr "EUROCONVERT(1; \"EUR\"; \"DEM\") უდრის 1.95583"
 
 #: functions/financial.xml:555 functions/financial.xml:1033
 #: functions/financial.xml:1158
@@ -3995,7 +3995,7 @@ msgstr ""
 #: functions/financial.xml:569
 #, kde-format
 msgid "FV(1000;0.08;2) equals 1166.40"
-msgstr ""
+msgstr "FV(1000;0.08;2) უდრის 1166.40"
 
 #: functions/financial.xml:581 functions/financial.xml:1128
 #, kde-format
@@ -4021,7 +4021,7 @@ msgstr ""
 #: functions/financial.xml:595
 #, kde-format
 msgid "FV_ANNUITY(1000;0.05;5) equals 5525.63"
-msgstr ""
+msgstr "FV_ANNUITY(1000;0.05;5) უდრის 5525.63"
 
 #: functions/financial.xml:612 functions/financial.xml:800
 #: functions/financial.xml:1192
@@ -4127,7 +4127,7 @@ msgstr ""
 #: functions/financial.xml:667
 #, kde-format
 msgid "IPMT(0.1;3;3;8000) equals -292.45"
-msgstr ""
+msgstr "IPMT(0.1;3;3;8000) უდრის -292.45"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: functions/financial.xml:678 functions/financial.xml:796
@@ -4190,7 +4190,7 @@ msgstr ""
 #: functions/financial.xml:718
 #, kde-format
 msgid "ISPMT(0.1; 1; 3; 8000000) equals -533333"
-msgstr ""
+msgstr "ISPMT(0.1; 1; 3; 8000000) უდრის -533333"
 
 #: functions/financial.xml:731 functions/financial.xml:1508
 #, kde-format
@@ -4229,7 +4229,7 @@ msgstr ""
 #: functions/financial.xml:753
 #, kde-format
 msgid "LEVEL_COUPON(1000;.13;2;4;.1) equals 1096.95"
-msgstr ""
+msgstr "LEVEL_COUPON(1000;.13;2;4;.1) უდრის 1096.95"
 
 #: functions/financial.xml:785
 #, kde-format
@@ -4270,7 +4270,7 @@ msgstr ""
 #: functions/financial.xml:810
 #, no-c-format, kde-format
 msgid "MIRR({100;200;-50;300;-200}, 5%, 6%) equals 34.2823387842%"
-msgstr ""
+msgstr "MIRR({100;200;-50;300;-200}, 5%, 6%) უდრის 34.2823387842%"
 
 #: functions/financial.xml:819
 #, kde-format
@@ -4294,7 +4294,7 @@ msgstr ""
 #: functions/financial.xml:829
 #, kde-format
 msgid "NOMINAL(0.08;12) equals 0.0772"
-msgstr ""
+msgstr "NOMINAL(0.08;12) უდრის 0.0772"
 
 #: functions/financial.xml:842
 #, kde-format
@@ -4433,7 +4433,7 @@ msgstr ""
 #: functions/financial.xml:1009
 #, kde-format
 msgid "PMT(0.1; 4; 10000) equals -3154.71"
-msgstr ""
+msgstr "PMT(0.1; 4; 10000) უდრის -3154.71"
 
 #: functions/financial.xml:1045
 #, kde-format
@@ -4450,7 +4450,7 @@ msgstr ""
 #: functions/financial.xml:1053
 #, kde-format
 msgid "PPMT(0.0875;1;36;5000;8000;1) equals -18.48"
-msgstr ""
+msgstr "PPMT(0.0875;1;36;5000;8000;1) უდრის -18.48"
 
 #: functions/financial.xml:1072 functions/financial.xml:1479
 #, kde-format
@@ -4537,7 +4537,7 @@ msgstr ""
 #: functions/financial.xml:1120
 #, kde-format
 msgid "PV(1166.4;0.08;2) equals 1000"
-msgstr ""
+msgstr "PV(1166.4;0.08;2) უდრის 1000"
 
 #: functions/financial.xml:1140
 #, no-c-format, kde-format
@@ -4557,7 +4557,7 @@ msgstr ""
 #: functions/financial.xml:1142
 #, kde-format
 msgid "PV_ANNUITY(1000;0.05;5) equals 4329.48"
-msgstr ""
+msgstr "PV_ANNUITY(1000;0.05;5) უდრის 4329.48"
 
 #: functions/financial.xml:1150
 #, kde-format
@@ -4589,7 +4589,7 @@ msgstr ""
 #: functions/financial.xml:1176
 #, kde-format
 msgid "RATE(4*12;-200;8000) equals 0.007701472"
-msgstr ""
+msgstr "RATE(4*12;-200;8000) უდრის 0.007701472"
 
 #: functions/financial.xml:1204
 #, kde-format
@@ -4645,7 +4645,7 @@ msgstr ""
 #: functions/financial.xml:1255
 #, kde-format
 msgid "SLN(10000;700;10) equals 930"
-msgstr ""
+msgstr "SLN(10000;700;10) უდრის 930"
 
 #: functions/financial.xml:1281
 #, kde-format
@@ -4667,7 +4667,7 @@ msgstr ""
 #: functions/financial.xml:1283
 #, kde-format
 msgid "SYD(5000; 200; 5; 2) equals 1280"
-msgstr ""
+msgstr "SYD(5000; 200; 5; 2) უდრის 1280"
 
 #: functions/financial.xml:1305
 #, kde-format
@@ -4839,7 +4839,7 @@ msgstr ""
 #: functions/financial.xml:1522
 #, kde-format
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
-msgstr ""
+msgstr "ZERO_COUPON(1000;.1;20) უდრის 148.64"
 
 #: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:440
 #, kde-format
@@ -5799,12 +5799,12 @@ msgstr "POWER(მნიშვნელობა;მნიშვნელობ�
 #: functions/math.xml:140
 #, kde-format
 msgid "POWER(1.2;3.4) equals 1.8572"
-msgstr ""
+msgstr "POWER(1.2;3.4) უდრის 1.8572"
 
 #: functions/math.xml:141
 #, kde-format
 msgid "POWER(2;3) equals 8"
-msgstr ""
+msgstr "POWER(2;3) უდრის 8"
 
 #: functions/math.xml:158
 #, kde-format
@@ -5821,12 +5821,12 @@ msgstr "POW(მნიშვნელობა;მნიშვნელობა)
 #: functions/math.xml:160
 #, kde-format
 msgid "POW(1.2;3.4) equals 1.8572"
-msgstr ""
+msgstr "POW(1.2;3.4) უდრის 1.8572"
 
 #: functions/math.xml:161
 #, kde-format
 msgid "POW(2;3) equals 8"
-msgstr ""
+msgstr "POW(2;3) უდრის 8"
 
 #: functions/math.xml:174
 #, kde-format
@@ -5956,17 +5956,17 @@ msgstr "SIGN(მნიშვნელობა)"
 #: functions/math.xml:266
 #, kde-format
 msgid "SIGN(5) equals 1"
-msgstr ""
+msgstr "SIGN(5) უდრის 1"
 
 #: functions/math.xml:267
 #, kde-format
 msgid "SIGN(0) equals 0"
-msgstr ""
+msgstr "SIGN(0) უდრის 0"
 
 #: functions/math.xml:268
 #, kde-format
 msgid "SIGN(-5) equals -1"
-msgstr ""
+msgstr "SIGN(-5) უდრის -1"
 
 #: functions/math.xml:280
 #, kde-format
@@ -5981,17 +5981,17 @@ msgstr "INV(მნიშვნელობა)"
 #: functions/math.xml:282
 #, kde-format
 msgid "INV(-5) equals 5"
-msgstr ""
+msgstr "INV(-5) უდრის 5"
 
 #: functions/math.xml:283
 #, kde-format
 msgid "INV(5) equals -5"
-msgstr ""
+msgstr "INV(5) უდრის -5"
 
 #: functions/math.xml:284
 #, kde-format
 msgid "INV(0) equals 0"
-msgstr ""
+msgstr "INV(0) უდრის 0"
 
 #: functions/math.xml:296
 #, kde-format
@@ -6161,7 +6161,7 @@ msgstr "SUM(12;5;7) equals 24"
 #: functions/math.xml:401
 #, kde-format
 msgid "SUM(12.5;2) equals 14.5"
-msgstr ""
+msgstr "SUM(12.5;2) უდრის 14.5"
 
 #: functions/math.xml:416
 #, kde-format
@@ -6176,12 +6176,12 @@ msgstr ""
 #: functions/math.xml:418
 #, kde-format
 msgid "SUMA(12;5; 7) equals 24"
-msgstr ""
+msgstr "SUMA(12;5; 7) უდრის 24"
 
 #: functions/math.xml:419
 #, kde-format
 msgid "SUMA(12.5; 2; TRUE) equals 15.5"
-msgstr ""
+msgstr "SUMA(12.5; 2; TRUE) უდრის 15.5"
 
 #: functions/math.xml:429
 #, kde-format
@@ -6236,12 +6236,12 @@ msgstr "PRODUCT(მნიშვნელობა;მნიშვნელობ
 #: functions/math.xml:460
 #, kde-format
 msgid "PRODUCT(3;5;7) equals 105"
-msgstr ""
+msgstr "PRODUCT(3;5;7) უდრის 105"
 
 #: functions/math.xml:461
 #, kde-format
 msgid "PRODUCT(12.5;2) equals 25"
-msgstr ""
+msgstr "PRODUCT(12.5;2) უდრის 25"
 
 #: functions/math.xml:475
 #, kde-format
@@ -6260,12 +6260,12 @@ msgstr "KPRODUCT(მნიშვნელობა;მნიშვნელო�
 #: functions/math.xml:477
 #, kde-format
 msgid "KPRODUCT(3;5;7) equals 105"
-msgstr ""
+msgstr "KPRODUCT(3;5;7) უდრის 105"
 
 #: functions/math.xml:478
 #, kde-format
 msgid "KPRODUCT(12.5;2) equals 25"
-msgstr ""
+msgstr "KPRODUCT(12.5;2) უდრის 25"
 
 #: functions/math.xml:493
 #, kde-format
@@ -6315,12 +6315,12 @@ msgstr "SUMSQ(მნიშვნელობა;მნიშვნელობ�
 #: functions/math.xml:526
 #, kde-format
 msgid "SUMSQ(12;5;7) equals 218"
-msgstr ""
+msgstr "SUMSQ(12;5;7) უდრის 218"
 
 #: functions/math.xml:527
 #, kde-format
 msgid "SUMSQ(12.5;2) equals 173"
-msgstr ""
+msgstr "SUMSQ(12.5;2) უდრის 173"
 
 #: functions/math.xml:541
 #, kde-format
@@ -6446,12 +6446,12 @@ msgstr "MULTIPLY(მნიშვნელობა;მნიშვნელო�
 #: functions/math.xml:627
 #, kde-format
 msgid "MULTIPLY(12;5;7) equals 420"
-msgstr ""
+msgstr "MULTIPLY(12;5;7) უდრის 420"
 
 #: functions/math.xml:628
 #, kde-format
 msgid "MULTIPLY(12.5;2) equals 25"
-msgstr ""
+msgstr "MULTIPLY(12.5;2) უდრის 25"
 
 #: functions/math.xml:643
 #, kde-format
@@ -6473,7 +6473,7 @@ msgstr "MULTINOMIAL(მნიშვნელობა;მნიშვნელ�
 #: functions/math.xml:646
 #, kde-format
 msgid "MULTINOMIAL(3;4;5) equals 27720"
-msgstr ""
+msgstr "MULTINOMIAL(3;4;5) უდრის 27720"
 
 #: functions/math.xml:658
 #, kde-format
@@ -6490,7 +6490,7 @@ msgstr "SQRT(x)"
 #: functions/math.xml:660
 #, kde-format
 msgid "SQRT(9) equals 3"
-msgstr ""
+msgstr "SQRT(9) უდრის 3"
 
 #: functions/math.xml:661
 #, kde-format
@@ -6512,7 +6512,7 @@ msgstr "SQRTPI(x)"
 #: functions/math.xml:676
 #, kde-format
 msgid "SQRTPI(2) equals 2.506628"
-msgstr ""
+msgstr "SQRTPI(2) უდრის 2.506628"
 
 #: functions/math.xml:688
 #, kde-format
@@ -6527,12 +6527,12 @@ msgstr "LN(x)"
 #: functions/math.xml:690
 #, kde-format
 msgid "LN(0.8) equals -0.22314355"
-msgstr ""
+msgstr "LN(0.8) უდრის -0.22314355"
 
 #: functions/math.xml:691
 #, kde-format
 msgid "LN(0) equals -inf"
-msgstr ""
+msgstr "LN(0) უდრის -inf"
 
 #: functions/math.xml:710
 #, kde-format
@@ -6547,12 +6547,12 @@ msgstr ""
 #: functions/math.xml:712
 #, kde-format
 msgid "LOGn(12;10) equals 1.07918125"
-msgstr ""
+msgstr "LOGn(12;10) უდრის 1.07918125"
 
 #: functions/math.xml:713
 #, kde-format
 msgid "LOGn(12;2) equals 3.5849625"
-msgstr ""
+msgstr "LOGn(12;2) უდრის 3.5849625"
 
 #: functions/math.xml:733
 #, kde-format
@@ -6567,7 +6567,7 @@ msgstr "ROOTN(x;n)"
 #: functions/math.xml:735
 #, kde-format
 msgid "ROOTN(9;2) equals 3"
-msgstr ""
+msgstr "ROOTN(9;2) უდრის 3"
 
 #: functions/math.xml:748
 #, kde-format
@@ -6582,7 +6582,7 @@ msgstr "CUR(x)"
 #: functions/math.xml:750
 #, kde-format
 msgid "CUR(27) equals 3"
-msgstr ""
+msgstr "CUR(27) უდრის 3"
 
 #: functions/math.xml:759
 #, kde-format
@@ -6602,7 +6602,7 @@ msgstr "LOG(x)"
 #: functions/math.xml:765
 #, kde-format
 msgid "LOG(0.8) equals -0.09691001"
-msgstr ""
+msgstr "LOG(0.8) უდრის -0.09691001"
 
 #: functions/math.xml:766
 #, kde-format
@@ -6627,7 +6627,7 @@ msgstr "LOG10(x)"
 #: functions/math.xml:784
 #, kde-format
 msgid "LOG10(10) equals 1."
-msgstr ""
+msgstr "LOG10(10) უდრის 1."
 
 #: functions/math.xml:785
 #, kde-format
@@ -6647,12 +6647,12 @@ msgstr "LOG2(x)"
 #: functions/math.xml:803
 #, kde-format
 msgid "LOG2(0.8) equals -0.32192809"
-msgstr ""
+msgstr "LOG2(0.8) უდრის -0.32192809"
 
 #: functions/math.xml:804
 #, kde-format
 msgid "LOG2(0) equals -inf."
-msgstr ""
+msgstr "LOG2(0) უდრის -inf."
 
 #: functions/math.xml:820
 #, kde-format
@@ -6669,12 +6669,12 @@ msgstr "EXP(x)"
 #: functions/math.xml:822
 #, kde-format
 msgid "EXP(9) equals 8 103.08392758"
-msgstr ""
+msgstr "EXP(9) უდრის 8 103.08392758"
 
 #: functions/math.xml:823
 #, kde-format
 msgid "EXP(-9) equals 0.00012341"
-msgstr ""
+msgstr "EXP(-9) უდრის 0.00012341"
 
 #: functions/math.xml:836
 #, kde-format
@@ -6691,12 +6691,12 @@ msgstr "CEIL(x)"
 #: functions/math.xml:838
 #, kde-format
 msgid "CEIL(12.5) equals 13"
-msgstr ""
+msgstr "CEIL(12.5) უდრის 13"
 
 #: functions/math.xml:839
 #, kde-format
 msgid "CEIL(-12.5) equals -12"
-msgstr ""
+msgstr "CEIL(-12.5) უდრის -12"
 
 #: functions/math.xml:855 functions/math.xml:884
 #, kde-format
@@ -6726,22 +6726,22 @@ msgstr "CEILING(x)"
 #: functions/math.xml:865
 #, kde-format
 msgid "CEILING(12.5) equals 13"
-msgstr ""
+msgstr "CEILING(12.5) უდრის 13"
 
 #: functions/math.xml:866
 #, kde-format
 msgid "CEILING(6.43; 4) equals 8"
-msgstr ""
+msgstr "CEILING(6.43; 4) უდრის 8"
 
 #: functions/math.xml:867
 #, kde-format
 msgid "CEILING(-6.43; -4; 1) equals -8"
-msgstr ""
+msgstr "CEILING(-6.43; -4; 1) უდრის -8"
 
 #: functions/math.xml:868
 #, kde-format
 msgid "CEILING(-6.43; -4; 0) equals -4"
-msgstr ""
+msgstr "CEILING(-6.43; -4; 0) უდრის -4"
 
 #: functions/math.xml:892
 #, kde-format
@@ -6774,22 +6774,22 @@ msgstr "FLOOR(x)"
 #: functions/math.xml:901
 #, kde-format
 msgid "FLOOR(12.5) equals 12"
-msgstr ""
+msgstr "FLOOR(12.5) უდრის 12"
 
 #: functions/math.xml:902
 #, kde-format
 msgid "FLOOR(-12.5) equals -13"
-msgstr ""
+msgstr "FLOOR(-12.5) უდრის -13"
 
 #: functions/math.xml:903
 #, kde-format
 msgid "FLOOR(5; 2) equals 4"
-msgstr ""
+msgstr "FLOOR(5; 2) უდრის 4"
 
 #: functions/math.xml:904
 #, kde-format
 msgid "FLOOR(5; 2.2) equals 4.4"
-msgstr ""
+msgstr "FLOOR(5; 2.2) უდრის 4.4"
 
 #: functions/math.xml:920
 #, kde-format
@@ -6805,12 +6805,12 @@ msgstr "ABS(x)"
 #: functions/math.xml:922
 #, kde-format
 msgid "ABS(12.5) equals 12.5"
-msgstr ""
+msgstr "ABS(12.5) უდრის 12.5"
 
 #: functions/math.xml:923
 #, kde-format
 msgid "ABS(-12.5) equals 12.5"
-msgstr ""
+msgstr "ABS(-12.5) უდრის 12.5"
 
 #: functions/math.xml:935
 #, kde-format
@@ -6825,12 +6825,12 @@ msgstr "INT(x)"
 #: functions/math.xml:937
 #, kde-format
 msgid "INT(12.55) equals 12"
-msgstr ""
+msgstr "INT(12.55) უდრის 12"
 
 #: functions/math.xml:938
 #, kde-format
 msgid "INT(15) equals 15"
-msgstr ""
+msgstr "INT(15) უდრის 15"
 
 #: functions/math.xml:948
 #, kde-format
@@ -7026,12 +7026,12 @@ msgstr ""
 #: functions/math.xml:1100
 #, kde-format
 msgid "MROUND(1.252; 0.5) equals 1.5"
-msgstr ""
+msgstr "MROUND(1.252; 0.5) უდრის 1.5"
 
 #: functions/math.xml:1101
 #, kde-format
 msgid "MROUND(-1.252; -0.5) equals -1.5"
-msgstr ""
+msgstr "MROUND(-1.252; -0.5) უდრის -1.5"
 
 #: functions/math.xml:1114 functions/math.xml:1139 functions/math.xml:1162
 #, kde-format
@@ -7957,12 +7957,12 @@ msgstr "AVERAGE(მნიშვნელობა;მნიშვნელობ
 #: functions/statistical.xml:64
 #, kde-format
 msgid "AVERAGE(12;5;7) equals 8"
-msgstr ""
+msgstr "AVERAGE(12;5;7) უდრის 8"
 
 #: functions/statistical.xml:65
 #, kde-format
 msgid "AVERAGE(12.5;2) equals 7.25"
-msgstr ""
+msgstr "AVERAGE(12.5;2) უდრის 7.25"
 
 #: functions/statistical.xml:77 functions/text.xml:447 functions/text.xml:451
 #: functions/text.xml:455 functions/text.xml:459 functions/text.xml:463
@@ -8041,12 +8041,12 @@ msgstr ""
 #: functions/statistical.xml:118
 #, kde-format
 msgid "BETADIST(0.2859;0.2606;0.8105) equals 0.675444"
-msgstr ""
+msgstr "BETADIST(0.2859;0.2606;0.8105) უდრის 0.675444"
 
 #: functions/statistical.xml:119
 #, kde-format
 msgid "BETADIST(0.2859;0.2606;0.8105;0.2;0.9) equals 0.537856"
-msgstr ""
+msgstr "BETADIST(0.2859;0.2606;0.8105;0.2;0.9) უდრის 0.537856"
 
 #: functions/statistical.xml:147
 #, kde-format
@@ -8070,12 +8070,12 @@ msgstr ""
 #: functions/statistical.xml:150
 #, kde-format
 msgid "BETADIST(BETAINV(0.1;3;4);3;4) equals 0.1"
-msgstr ""
+msgstr "BETADIST(BETAINV(0.1;3;4);3;4) უდრის 0.1"
 
 #: functions/statistical.xml:151
 #, kde-format
 msgid "BETADIST(BETAINV(0.3;3;4);3;4) equals 0.3"
-msgstr ""
+msgstr "BETADIST(BETAINV(0.3;3;4);3;4) უდრის 0.3"
 
 #: functions/statistical.xml:164
 #, kde-format
@@ -8208,7 +8208,7 @@ msgstr ""
 #: functions/statistical.xml:232
 #, kde-format
 msgid "CONFIDENCE(0.05;1.5;100) equals 0.294059"
-msgstr ""
+msgstr "CONFIDENCE(0.05;1.5;100) უდრის 0.294059"
 
 #: functions/statistical.xml:240 functions/statistical.xml:259
 #: functions/statistical.xml:668 functions/statistical.xml:913
@@ -8312,12 +8312,12 @@ msgstr ""
 #: functions/statistical.xml:324
 #, kde-format
 msgid "EXPONDIST(3;0.5;0) equals 0.111565"
-msgstr ""
+msgstr "EXPONDIST(3;0.5;0) უდრის 0.111565"
 
 #: functions/statistical.xml:325
 #, kde-format
 msgid "EXPONDIST(3;0.5;1) equals 0.776870"
-msgstr ""
+msgstr "EXPONDIST(3;0.5;1) უდრის 0.776870"
 
 #: functions/statistical.xml:337 functions/statistical.xml:690
 #, kde-format
@@ -8369,7 +8369,7 @@ msgstr "FINV(რიცხვი; r1; r2)"
 #: functions/statistical.xml:369
 #, kde-format
 msgid "FDIST(FINV(0.1;3;4);3;4) equals 0.1"
-msgstr ""
+msgstr "FDIST(FINV(0.1;3;4);3;4) უდრის 0.1"
 
 #: functions/statistical.xml:381
 #, kde-format
@@ -8386,12 +8386,12 @@ msgstr "FISHER(რიცხვი)"
 #: functions/statistical.xml:383
 #, kde-format
 msgid "FISHER(0.2859) equals 0.294096"
-msgstr ""
+msgstr "FISHER(0.2859) უდრის 0.294096"
 
 #: functions/statistical.xml:384
 #, kde-format
 msgid "FISHER(0.8105) equals 1.128485"
-msgstr ""
+msgstr "FISHER(0.8105) უდრის 1.128485"
 
 #: functions/statistical.xml:396
 #, kde-format
@@ -8408,12 +8408,12 @@ msgstr "FISHERINV(რიცხვი)"
 #: functions/statistical.xml:398
 #, kde-format
 msgid "FISHERINV(0.2859) equals 0.278357"
-msgstr ""
+msgstr "FISHERINV(0.2859) უდრის 0.278357"
 
 #: functions/statistical.xml:399
 #, kde-format
 msgid "FISHERINV(0.8105) equals 0.669866"
-msgstr ""
+msgstr "FISHERINV(0.8105) უდრის 0.669866"
 
 #: functions/statistical.xml:407
 #, kde-format
@@ -8490,12 +8490,12 @@ msgstr ""
 #: functions/statistical.xml:450
 #, kde-format
 msgid "GAMMADIST(0.758;0.1;0.35;1) equals 0.995450"
-msgstr ""
+msgstr "GAMMADIST(0.758;0.1;0.35;1) უდრის 0.995450"
 
 #: functions/statistical.xml:451
 #, kde-format
 msgid "GAMMADIST(0.758;0.1;0.35;0) equals 0.017179"
-msgstr ""
+msgstr "GAMMADIST(0.758;0.1;0.35;0) უდრის 0.017179"
 
 #: functions/statistical.xml:471
 #, kde-format
@@ -8512,12 +8512,12 @@ msgstr ""
 #: functions/statistical.xml:473
 #, kde-format
 msgid "GAMMADIST(GAMMAINV(0.1;3;4);3;4) equals 0.1"
-msgstr ""
+msgstr "GAMMADIST(GAMMAINV(0.1;3;4);3;4) უდრის 0.1"
 
 #: functions/statistical.xml:474
 #, kde-format
 msgid "GAMMADIST(GAMMAINV(0.3;3;4);3;4) equals 0.3"
-msgstr ""
+msgstr "GAMMADIST(GAMMAINV(0.3;3;4);3;4) უდრის 0.3"
 
 #: functions/statistical.xml:483
 #, kde-format
@@ -8541,7 +8541,7 @@ msgstr "GAUSS(მნიშვნელობა)"
 #: functions/statistical.xml:489
 #, kde-format
 msgid "GAUSS(0.25) equals 0.098706"
-msgstr ""
+msgstr "GAUSS(0.25) უდრის 0.098706"
 
 #: functions/statistical.xml:517
 #, kde-format
@@ -8757,7 +8757,7 @@ msgstr ""
 #: functions/statistical.xml:722
 #, kde-format
 msgid "LOGINV(0.1;0;1) equals 0.2776"
-msgstr ""
+msgstr "LOGINV(0.1;0;1) უდრის 0.2776"
 
 #: functions/statistical.xml:730 functions/statistical.xml:863
 #, kde-format
@@ -8780,7 +8780,7 @@ msgstr "LOGNORMDIST(რიცხვი;MV;STD)"
 #: functions/statistical.xml:744
 #, kde-format
 msgid "LOGNORMDIST(0.1;0;1) equals 0.01"
-msgstr ""
+msgstr "LOGNORMDIST(0.1;0;1) უდრის 0.01"
 
 #: functions/statistical.xml:752
 #, kde-format
@@ -8810,12 +8810,12 @@ msgstr "MEDIAN(მნიშვნელობა;მნიშვნელობ�
 #: functions/statistical.xml:774
 #, kde-format
 msgid "MEDIAN(12; 5; 5.5) equals 5.5"
-msgstr ""
+msgstr "MEDIAN(12; 5; 5.5) უდრის 5.5"
 
 #: functions/statistical.xml:775
 #, kde-format
 msgid "MEDIAN(12; 7; 8;2) equals 7.5"
-msgstr ""
+msgstr "MEDIAN(12; 7; 8;2) უდრის 7.5"
 
 #: functions/statistical.xml:783 functions/statistical.xml:787
 #: functions/statistical.xml:791 functions/statistical.xml:795
@@ -8925,12 +8925,12 @@ msgstr "NORMDIST(რიცხვი;MV;STD;K)"
 #: functions/statistical.xml:854
 #, kde-format
 msgid "NORMDIST(0.859;0.6;0.258;0) equals 0.934236"
-msgstr ""
+msgstr "NORMDIST(0.859;0.6;0.258;0) უდრის 0.934236"
 
 #: functions/statistical.xml:855
 #, kde-format
 msgid "NORMDIST(0.859;0.6;0.258;1) equals 0.842281"
-msgstr ""
+msgstr "NORMDIST(0.859;0.6;0.258;1) უდრის 0.842281"
 
 #: functions/statistical.xml:867
 #, kde-format
@@ -8958,7 +8958,7 @@ msgstr "NORMINV(რიცხვი;MV;STD)"
 #: functions/statistical.xml:877
 #, kde-format
 msgid "NORMINV(0.9;63;5) equals 69.41"
-msgstr ""
+msgstr "NORMINV(0.9;63;5) უდრის 69.41"
 
 #: functions/statistical.xml:885
 #, kde-format
@@ -8978,7 +8978,7 @@ msgstr "NORMSDIST(რიცხვი)"
 #: functions/statistical.xml:891
 #, kde-format
 msgid "NORMSDIST(1) equals 0.84"
-msgstr ""
+msgstr "NORMSDIST(1) უდრის 0.84"
 
 #: functions/statistical.xml:903
 #, kde-format
@@ -9035,12 +9035,12 @@ msgstr ""
 #: functions/statistical.xml:942
 #, kde-format
 msgid "PERMUT(8;5) equals 6720"
-msgstr ""
+msgstr "PERMUT(8;5) უდრის 6720"
 
 #: functions/statistical.xml:943
 #, kde-format
 msgid "PERMUT(1;1) equals 1"
-msgstr ""
+msgstr "PERMUT(1;1) უდრის 1"
 
 #: functions/statistical.xml:959
 #, kde-format
@@ -9113,7 +9113,7 @@ msgstr "PHI(მნიშვნელობა)"
 #: functions/statistical.xml:995
 #, kde-format
 msgid "PHI(0.25) equals 0.386668"
-msgstr ""
+msgstr "PHI(0.25) უდრის 0.386668"
 
 #: functions/statistical.xml:1007
 #, kde-format
@@ -9138,12 +9138,12 @@ msgstr ""
 #: functions/statistical.xml:1019
 #, kde-format
 msgid "POISSON(60;50;0) equals 0.020105"
-msgstr ""
+msgstr "POISSON(60;50;0) უდრის 0.020105"
 
 #: functions/statistical.xml:1020
 #, kde-format
 msgid "POISSON(60;50;1) equals 0.927840"
-msgstr ""
+msgstr "POISSON(60;50;1) უდრის 0.927840"
 
 #: functions/statistical.xml:1032
 #, kde-format
@@ -9183,7 +9183,7 @@ msgstr ""
 #: functions/statistical.xml:1045
 #, kde-format
 msgid "RANK (2;{1;2;3}) equals 2"
-msgstr ""
+msgstr "RANK (2;{1;2;3}) უდრის 2"
 
 #: functions/statistical.xml:1053
 #, kde-format
@@ -9331,7 +9331,7 @@ msgstr "STDEV(მნიშვნელობა;მნიშვნელობ�
 #: functions/statistical.xml:1206
 #, kde-format
 msgid "STDEV(6;7;8) equals 1"
-msgstr ""
+msgstr "STDEV(6;7;8) უდრის 1"
 
 #: functions/statistical.xml:1235
 #, kde-format
@@ -9373,7 +9373,7 @@ msgstr "STDEVP(მნიშვნელობა;მნიშვნელობ�
 #: functions/statistical.xml:1270
 #, kde-format
 msgid "STDEVP(6;7;8) equals 0.816497..."
-msgstr ""
+msgstr "STDEVP(6;7;8) უდრის 0.816497..."
 
 #: functions/statistical.xml:1299
 #, kde-format
@@ -9703,17 +9703,17 @@ msgstr "VAR(მნიშვნელობა;მნიშვნელობა;
 #: functions/statistical.xml:1520
 #, kde-format
 msgid "VAR(12;5;7) equals 13"
-msgstr ""
+msgstr "VAR(12;5;7) უდრის 13"
 
 #: functions/statistical.xml:1521
 #, kde-format
 msgid "VAR(15;80;3) equals 1716.333..."
-msgstr ""
+msgstr "VAR(15;80;3) უდრის 1716.333..."
 
 #: functions/statistical.xml:1522
 #, kde-format
 msgid "VAR(6;7;8) equals 1"
-msgstr ""
+msgstr "VAR(6;7;8) უდრის 1"
 
 #: functions/statistical.xml:1554
 #, kde-format
@@ -9733,17 +9733,17 @@ msgstr "VARA(მნიშვნელობა;მნიშვნელობა
 #: functions/statistical.xml:1556
 #, kde-format
 msgid "VARA(12;5;7) equals 13"
-msgstr ""
+msgstr "VARA(12;5;7) უდრის 13"
 
 #: functions/statistical.xml:1557
 #, kde-format
 msgid "VARA(15;80;3) equals 1716.333..."
-msgstr ""
+msgstr "VARA(15;80;3) უდრის 1716.333..."
 
 #: functions/statistical.xml:1558
 #, kde-format
 msgid "VARA(6;7;8) equals 1"
-msgstr ""
+msgstr "VARA(6;7;8) უდრის 1"
 
 #: functions/statistical.xml:1589
 #, kde-format
@@ -9760,17 +9760,17 @@ msgstr "VARIANCE(მნიშვნელობა;მნიშვნელო�
 #: functions/statistical.xml:1591
 #, kde-format
 msgid "VARIANCE(12;5;7) equals 13"
-msgstr ""
+msgstr "VARIANCE(12;5;7) უდრის 13"
 
 #: functions/statistical.xml:1592
 #, kde-format
 msgid "VARIANCE(15;80;3) equals 1716.333..."
-msgstr ""
+msgstr "VARIANCE(15;80;3) უდრის 1716.333..."
 
 #: functions/statistical.xml:1593
 #, kde-format
 msgid "VARIANCE(6;7;8) equals 1"
-msgstr ""
+msgstr "VARIANCE(6;7;8) უდრის 1"
 
 #: functions/statistical.xml:1625
 #, kde-format
@@ -9786,17 +9786,17 @@ msgstr "VARP(მნიშვნელობა;მნიშვნელობა
 #: functions/statistical.xml:1627
 #, kde-format
 msgid "VARP(12;5;7) equals 8.666..."
-msgstr ""
+msgstr "VARP(12;5;7) უდრის 8.666..."
 
 #: functions/statistical.xml:1628
 #, kde-format
 msgid "VARP(15;80;3) equals 1144.22..."
-msgstr ""
+msgstr "VARP(15;80;3) უდრის 1144.22..."
 
 #: functions/statistical.xml:1629
 #, kde-format
 msgid "VARP(6;7;8) equals 0.6666667..."
-msgstr ""
+msgstr "VARP(6;7;8) უდრის 0.6666667..."
 
 #: functions/statistical.xml:1660
 #, kde-format
@@ -9814,17 +9814,17 @@ msgstr "VARPA(მნიშვნელობა;მნიშვნელობ�
 #: functions/statistical.xml:1662
 #, kde-format
 msgid "VARPA(12;5;7) equals 8.666..."
-msgstr ""
+msgstr "VARPA(12;5;7) უდრის 8.666..."
 
 #: functions/statistical.xml:1663
 #, kde-format
 msgid "VARPA(15;80;3) equals 1144.22..."
-msgstr ""
+msgstr "VARPA(15;80;3) უდრის 1144.22..."
 
 #: functions/statistical.xml:1664
 #, kde-format
 msgid "VARPA(6;7;8) equals 0.6666667..."
-msgstr ""
+msgstr "VARPA(6;7;8) უდრის 0.6666667..."
 
 #: functions/statistical.xml:1691
 #, kde-format
@@ -9846,12 +9846,12 @@ msgstr ""
 #: functions/statistical.xml:1695
 #, kde-format
 msgid "WEIBULL(2;1;1;0) equals 0.135335"
-msgstr ""
+msgstr "WEIBULL(2;1;1;0) უდრის 0.135335"
 
 #: functions/statistical.xml:1696
 #, kde-format
 msgid "WEIBULL(2;1;1;1) equals 0.864665"
-msgstr ""
+msgstr "WEIBULL(2;1;1;1) უდრის 0.864665"
 
 #: functions/statistical.xml:1704
 #, kde-format
@@ -11062,12 +11062,12 @@ msgstr ""
 #: functions/trig.xml:16
 #, kde-format
 msgid "COS(0) equals 1.0"
-msgstr ""
+msgstr "COS(0) უდრის 1.0"
 
 #: functions/trig.xml:17
 #, kde-format
 msgid "COS(PI()/2) equals 0"
-msgstr ""
+msgstr "COS(PI()/2) უდრის 0"
 
 #: functions/trig.xml:31
 #, kde-format
@@ -11082,7 +11082,7 @@ msgstr ""
 #: functions/trig.xml:33
 #, kde-format
 msgid "ACOT(0) equals 1.57079633"
-msgstr ""
+msgstr "ACOT(0) უდრის 1.57079633"
 
 #: functions/trig.xml:46
 #, kde-format
@@ -11097,12 +11097,12 @@ msgstr ""
 #: functions/trig.xml:48
 #, kde-format
 msgid "SIN(0) equals 0"
-msgstr ""
+msgstr "SIN(0) უდრის 0"
 
 #: functions/trig.xml:49
 #, kde-format
 msgid "SIN(PI()/2) equals 1"
-msgstr ""
+msgstr "SIN(PI()/2) უდრის 1"
 
 #: functions/trig.xml:63
 #, kde-format
@@ -11118,12 +11118,12 @@ msgstr ""
 #: functions/trig.xml:65
 #, kde-format
 msgid "TAN(0.7) equals 0.84228838"
-msgstr ""
+msgstr "TAN(0.7) უდრის 0.84228838"
 
 #: functions/trig.xml:66
 #, kde-format
 msgid "TAN(0) equals 0"
-msgstr ""
+msgstr "TAN(0) უდრის 0"
 
 #: functions/trig.xml:79
 #, kde-format
@@ -11140,12 +11140,12 @@ msgstr ""
 #: functions/trig.xml:81
 #, kde-format
 msgid "ACOS(0.8) equals 0.6435011"
-msgstr ""
+msgstr "ACOS(0.8) უდრის 0.6435011"
 
 #: functions/trig.xml:82
 #, kde-format
 msgid "ACOS(0) equals 1.57079633"
-msgstr ""
+msgstr "ACOS(0) უდრის 1.57079633"
 
 #: functions/trig.xml:95
 #, kde-format
@@ -11162,12 +11162,12 @@ msgstr ""
 #: functions/trig.xml:97
 #, kde-format
 msgid "ASIN(0.8) equals 0.92729522"
-msgstr ""
+msgstr "ASIN(0.8) უდრის 0.92729522"
 
 #: functions/trig.xml:98
 #, kde-format
 msgid "ASIN(0) equals 0"
-msgstr ""
+msgstr "ASIN(0) უდრის 0"
 
 #: functions/trig.xml:111
 #, kde-format
@@ -11184,12 +11184,12 @@ msgstr ""
 #: functions/trig.xml:113
 #, kde-format
 msgid "ATAN(0.8) equals 0.67474094"
-msgstr ""
+msgstr "ATAN(0.8) უდრის 0.67474094"
 
 #: functions/trig.xml:114
 #, kde-format
 msgid "ATAN(0) equals 0"
-msgstr ""
+msgstr "ATAN(0) უდრის 0"
 
 #: functions/trig.xml:128
 #, kde-format
@@ -11206,12 +11206,12 @@ msgstr ""
 #: functions/trig.xml:130
 #, kde-format
 msgid "COSH(0.8) equals 1.33743495"
-msgstr ""
+msgstr "COSH(0.8) უდრის 1.33743495"
 
 #: functions/trig.xml:131
 #, kde-format
 msgid "COSH(0) equals 1"
-msgstr ""
+msgstr "COSH(0) უდრის 1"
 
 #: functions/trig.xml:144
 #, kde-format
@@ -11228,12 +11228,12 @@ msgstr ""
 #: functions/trig.xml:146
 #, kde-format
 msgid "SINH(0.8) equals 0.88810598"
-msgstr ""
+msgstr "SINH(0.8) უდრის 0.88810598"
 
 #: functions/trig.xml:147
 #, kde-format
 msgid "SINH(0) equals 0"
-msgstr ""
+msgstr "SINH(0) უდრის 0"
 
 #: functions/trig.xml:160
 #, kde-format
@@ -11250,12 +11250,12 @@ msgstr ""
 #: functions/trig.xml:162
 #, kde-format
 msgid "TANH(0.8) equals 0.66403677"
-msgstr ""
+msgstr "TANH(0.8) უდრის 0.66403677"
 
 #: functions/trig.xml:163
 #, kde-format
 msgid "TANH(0) equals 0"
-msgstr ""
+msgstr "TANH(0) უდრის 0"
 
 #: functions/trig.xml:176
 #, kde-format
@@ -11273,12 +11273,12 @@ msgstr ""
 #: functions/trig.xml:178
 #, kde-format
 msgid "ACOSH(5) equals 2.29243167"
-msgstr ""
+msgstr "ACOSH(5) უდრის 2.29243167"
 
 #: functions/trig.xml:179
 #, kde-format
 msgid "ACOSH(0) equals NaN"
-msgstr ""
+msgstr "ACOSH(0) უდრის NaN"
 
 #: functions/trig.xml:192
 #, kde-format
@@ -11295,12 +11295,12 @@ msgstr ""
 #: functions/trig.xml:194
 #, kde-format
 msgid "ASINH(0.8) equals 0.73266826"
-msgstr ""
+msgstr "ASINH(0.8) უდრის 0.73266826"
 
 #: functions/trig.xml:195
 #, kde-format
 msgid "ASINH(0) equals 0"
-msgstr ""
+msgstr "ASINH(0) უდრის 0"
 
 #: functions/trig.xml:208
 #, kde-format
@@ -11318,12 +11318,12 @@ msgstr ""
 #: functions/trig.xml:210
 #, kde-format
 msgid "ATANH(0.8) equals 1.09861229"
-msgstr ""
+msgstr "ATANH(0.8) უდრის 1.09861229"
 
 #: functions/trig.xml:211
 #, kde-format
 msgid "ATANH(0) equals 0"
-msgstr ""
+msgstr "ATANH(0) უდრის 0"
 
 #: functions/trig.xml:228
 #, kde-format
@@ -11341,12 +11341,12 @@ msgstr "ATAN2(მნიშვნელობა;მნიშვნელობ�
 #: functions/trig.xml:230
 #, kde-format
 msgid "ATAN2(0.5;1.0) equals 1.107149"
-msgstr ""
+msgstr "ATAN2(0.5;1.0) უდრის 1.107149"
 
 #: functions/trig.xml:231
 #, kde-format
 msgid "ATAN2(-0.5;2.0) equals 1.815775"
-msgstr ""
+msgstr "ATAN2(-0.5;2.0) უდრის 1.815775"
 
 #: functions/trig.xml:244
 #, kde-format
@@ -11361,12 +11361,12 @@ msgstr ""
 #: functions/trig.xml:246
 #, kde-format
 msgid "DEGREES(0.78) equals 44.69"
-msgstr ""
+msgstr "DEGREES(0.78) უდრის 44.69"
 
 #: functions/trig.xml:247
 #, kde-format
 msgid "DEGREES(1) equals 57.29"
-msgstr ""
+msgstr "DEGREES(1) უდრის 57.29"
 
 #: functions/trig.xml:256
 #, kde-format
@@ -11386,12 +11386,12 @@ msgstr ""
 #: functions/trig.xml:262
 #, kde-format
 msgid "RADIANS(75) equals 1.308"
-msgstr ""
+msgstr "RADIANS(75) უდრის 1.308"
 
 #: functions/trig.xml:263
 #, kde-format
 msgid "RADIANS(90) equals 1.5707"
-msgstr ""
+msgstr "RADIANS(90) უდრის 1.5707"
 
 #: functions/trig.xml:272
 #, kde-format
@@ -11406,7 +11406,7 @@ msgstr ""
 #: functions/trig.xml:274
 #, kde-format
 msgid "PI() equals 3.141592654..."
-msgstr ""
+msgstr "PI() უდრის 3.141592654..."
 
 #: functions/trig.xml:286
 #, kde-format
@@ -11422,7 +11422,7 @@ msgstr ""
 #: functions/trig.xml:288
 #, kde-format
 msgid "CSC(PI()/2) equals 1"
-msgstr ""
+msgstr "CSC(PI()/2) უდრის 1"
 
 #: functions/trig.xml:300
 #, kde-format
@@ -11439,7 +11439,7 @@ msgstr ""
 #: functions/trig.xml:302
 #, kde-format
 msgid "CSCH(PI()/2) equals 0.434537208..."
-msgstr ""
+msgstr "CSCH(PI()/2) უდრის 0.434537208..."
 
 #: functions/trig.xml:314
 #, kde-format
@@ -11455,7 +11455,7 @@ msgstr ""
 #: functions/trig.xml:316
 #, kde-format
 msgid "SEC(0) equals 1"
-msgstr ""
+msgstr "SEC(0) უდრის 1"
 
 #: functions/trig.xml:328
 #, kde-format
@@ -11472,7 +11472,7 @@ msgstr ""
 #: functions/trig.xml:330
 #, kde-format
 msgid "SECH(0) equals 1"
-msgstr ""
+msgstr "SECH(0) უდრის 1"
 
 #: part/AboutData.h:28
 #, kde-format
@@ -12879,7 +12879,7 @@ msgid "&Create Template From Document..."
 msgstr ""
 
 #: part/View.cpp:314
-#, fuzzy, kde-format
+#, kde-format
 msgid "Anchor"
 msgstr "ბმული"
 

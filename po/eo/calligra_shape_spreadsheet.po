@@ -1,13 +1,15 @@
-# Translation of TableShape into esperanto.
+# Translation of calligra_shape_spreadsheet.pot to esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: TableShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-04 22:00+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -19,12 +21,12 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Oliver Kellogg"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "okellogg@users.sourceforge.net"
 
 #: SheetsEditor.cpp:57 SheetsEditor.cpp:121
 #, kde-format
@@ -44,7 +46,7 @@ msgstr "Forigi"
 #: SheetsEditor.cpp:121
 #, kde-format
 msgid "Enter Name:"
-msgstr ""
+msgstr "Enigu Nomon:"
 
 #: TableShape.cpp:288
 #, kde-format
@@ -52,16 +54,18 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
+"Tiu dokumento enhavas eksternan ligon al fora dokumento\n"
+"%1"
 
 #: TableShape.cpp:289
 #, kde-format
 msgid "Confirmation Required"
-msgstr ""
+msgstr "Konfirmo Postulata"
 
 #: TableShape.cpp:289
 #, kde-format
 msgid "Download"
-msgstr ""
+msgstr "Elŝuti"
 
 #: TableShape.cpp:289
 #, kde-format
@@ -76,12 +80,12 @@ msgstr "Kalkultabelo"
 #: TableShapeFactory.cpp:39
 #, kde-format
 msgid "Spreadsheet Shape"
-msgstr ""
+msgstr "Kalkultabela Formo"
 
 #: TableTool.cpp:218
 #, kde-format
 msgid "Import OpenDocument Spreadsheet File"
-msgstr ""
+msgstr "Importi OpenDocument Kalkultabelan Dosieron"
 
 #: TableTool.cpp:219
 #, kde-format
@@ -126,97 +130,24 @@ msgstr ""
 #: ToolHeaders.cpp:286 ToolHeaders.cpp:884
 #, kde-format
 msgid "Area is too large."
-msgstr ""
+msgstr "Areo estas tro granda."
 
 #: ToolHeaders.cpp:429
 #, kde-format
 msgid "Hide Row"
-msgstr ""
+msgstr "Kaŝi Vicon"
 
 #: ToolHeaders.cpp:431
 #, kde-format
 msgid "Height: %1 %2"
-msgstr ""
+msgstr "Alteco: %1 %2"
 
 #: ToolHeaders.cpp:1059
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Hide Column"
-msgstr "Kolumnoj:"
+msgstr "Kaŝi Kolumnon"
 
 #: ToolHeaders.cpp:1061
 #, kde-format
 msgid "Width: %1 %2"
-msgstr ""
-
-#~ msgid "Rows:"
-#~ msgstr "Vicoj:"
-
-#, fuzzy
-#~| msgid "Rename"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rename"
-#~ msgstr "Alinomi"
-
-#, fuzzy
-#~| msgid "Add"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add"
-#~ msgstr "Aldoni"
-
-#, fuzzy
-#~| msgid "Remove"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove"
-#~ msgstr "Forigi"
-
-#, fuzzy
-#~| msgid "Spreadsheet"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spreadsheet"
-#~ msgstr "Kalkultabelo"
-
-#, fuzzy
-#~| msgid "Spreadsheet"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spreadsheet Shape"
-#~ msgstr "Kalkultabelo"
-
-#, fuzzy
-#~| msgid "Import"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Import"
-#~ msgstr "Importi"
-
-#, fuzzy
-#~| msgid "Export"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export"
-#~ msgstr "Eksporti"
-
-#, fuzzy
-#~| msgid "Sheet:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sheets"
-#~ msgstr "Tabelo:"
-
-#, fuzzy
-#~| msgid "Sheet:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sheet:"
-#~ msgstr "Tabelo:"
-
-#, fuzzy
-#~| msgid "Columns:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Columns:"
-#~ msgstr "Kolumnoj:"
-
-#, fuzzy
-#~| msgid "Rows:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rows:"
-#~ msgstr "Vicoj:"
-
-#~ msgid "Table"
-#~ msgstr "Tabelo"
+msgstr "Larĝeco: %1 %2"

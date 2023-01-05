@@ -3,19 +3,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Spiros Georgaras <sng@hellug.gr>, 2007.
+# Stelios <sstavra@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kspreadsolver\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2007-02-09 11:35+0200\n"
-"Last-Translator: Spiros Georgaras <sng@hellug.gr>\n"
-"Language-Team: Greek <i18ngr@lists.hellug.gr>\n"
+"PO-Revision-Date: 2023-01-04 12:03+0200\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: Solver.cpp:66
@@ -24,8 +25,6 @@ msgid "Function Optimizer..."
 msgstr "Βελτιστοποίηση συνάρτησης..."
 
 #: Solver.cpp:103
-#, fuzzy
-#| msgid "Optimization"
 msgctxt "(qtundo-format)"
 msgid "Optimize"
 msgstr "Βελτιστοποίηση"

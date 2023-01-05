@@ -7,14 +7,14 @@
 # Toussis Manolis <manolis@koppermind.homelinux.org>, 2006, 2007, 2008, 2009.
 # Spiros Georgaras <sngeorgaras@otenet.gr>, 2008.
 # Dimitrios Glentadakis <dglent@gmail.com>, 2011, 2012, 2015.
-# Stelios <sstavra@gmail.com>, 2011, 2012, 2020.
+# Stelios <sstavra@gmail.com>, 2011, 2012, 2020, 2023.
 # Dimitris Kardarakos <dimkard@gmail.com>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-02 01:02+0000\n"
-"PO-Revision-Date: 2020-10-01 11:38+0300\n"
+"PO-Revision-Date: 2023-01-04 12:01+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
 "Language: el\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.04.2\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -14871,7 +14871,7 @@ msgstr "Μετάθεση του σταθερού σημείου αναφοράς
 #: ui/CellToolBase.cpp:1137
 #, kde-format
 msgid "Unable to locate action %1"
-msgstr ""
+msgstr "Αδυναμία εντοπισμού ενέργειας %1"
 
 #: ui/CellToolBase.cpp:1169 ui/CellToolBase.cpp:1189
 msgctxt "(qtundo-format)"
@@ -15923,10 +15923,9 @@ msgid "&Use System's Locale Settings"
 msgstr "&Χρήση ρυθμίσεων εντοπιότητας συστήματος"
 
 #: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Language: %1"
+#, kde-format
 msgid "Language: %1 (%2)"
-msgstr "Γλώσσα: %1"
+msgstr "Γλώσσα: %1 (%2)"
 
 #: ui/dialogs/DocumentSettingsDialog.cpp:197
 #, kde-format
@@ -16151,7 +16150,7 @@ msgstr "Επιγράμμιση"
 #: ui/dialogs/FontWidget.ui:149
 #, kde-format
 msgid "Choose the font size."
-msgstr ""
+msgstr "Επιλέξτε το μέγεθος της γραμματοσειράς."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
 #: ui/dialogs/FontWidget.ui:180
@@ -16286,10 +16285,9 @@ msgid "Cell Format"
 msgstr "Μορφή κελιού"
 
 #: ui/dialogs/LayoutDialog.cpp:122
-#, fuzzy, kde-format
-#| msgid "&General"
+#, kde-format
 msgid "General"
-msgstr "&Γενικά"
+msgstr "Γενικά"
 
 #: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
@@ -16297,16 +16295,14 @@ msgid "Border"
 msgstr "Περίγραμμα"
 
 #: ui/dialogs/LayoutDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Back&ground"
+#, kde-format
 msgid "Background"
-msgstr "Φό&ντο"
+msgstr "Φόντο"
 
 #: ui/dialogs/LayoutDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "&Cell Protection"
+#, kde-format
 msgid "Cell Protection"
-msgstr "Προστασία &κελιού"
+msgstr "Προστασία κελιών"
 
 #: ui/dialogs/LayoutPage_Border.cpp:273
 #, kde-format
