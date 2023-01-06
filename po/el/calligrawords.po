@@ -29,7 +29,7 @@ msgstr ""
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
 #, kde-format
 msgid "&File"
-msgstr "&Αρχείο"
+msgstr "&Αrχείο"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
@@ -76,8 +76,7 @@ msgstr "Ορθογραφικός έλεγχος"
 
 #. i18n: ectx: Menu (AutoCorrection)
 #: part/calligrawords.rc:83
-#, fuzzy, kde-format
-#| msgid "Autocorrection"
+#, kde-format
 msgid "AutoCorrection"
 msgstr "Αυτόματη διόρθωση"
 

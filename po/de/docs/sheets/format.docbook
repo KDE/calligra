@@ -1,544 +1,304 @@
 <chapter id="formatspread">
 <chapterinfo>
 <authorgroup>
-<author
-><firstname
->Pamela</firstname
-> <surname
->Robert</surname
-> <affiliation
-> <address
-><email
->pamroberts@blueyonder.co.uk</email
-></address>
+<author>
+<firstname>Pamela</firstname>
+<surname>Robert</surname>
+<affiliation>
+<address><email>pamroberts@blueyonder.co.uk</email></address>
 </affiliation>
 </author>
-<author
-><firstname
->Raphael</firstname
-> <surname
->Langerhorst</surname
-> <affiliation
-> <address
-><email
->raphael.langerhorst@kdemail.net</email
-></address>
+<author>
+<firstname>Raphael</firstname>
+<surname>Langerhorst</surname>
+<affiliation>
+<address><email>raphael.langerhorst@kdemail.net</email></address>
 </affiliation>
 </author>
-<author
-><firstname
->Anne-Marie</firstname
-> <surname
->Mahfouf</surname
-> <affiliation
-> <address
-><email
->annemarie.mahfouf@free.fr</email
-></address>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
 </affiliation>
 </author>
-<othercredit role="translator"
-><firstname
->Hans-Frieder</firstname
-><surname
->Hirsch</surname
-><affiliation
-><address
-><email
->f.hirsch@t-online.de</email
-></address
-></affiliation
-><contrib
->Deutsche Übersetzung</contrib
-></othercredit
-><othercredit role="translator"
-><firstname
->Johannes</firstname
-><surname
->Schwall</surname
-><affiliation
-><address
-><email
->johannes.schwall@gmail.com</email
-></address
-></affiliation
-><contrib
->Deutsche Übersetzung</contrib
-></othercredit
-> 
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
-</chapterinfo
-> 
-<title
->Tabellenformatierung</title>
+</chapterinfo> 
+<title>Spreadsheet Formatting</title>
 
 <sect1 id="formatcells">
-<!--<title
->Fonts, Text, Borders and Colors</title
->-->
-<title
->Zellenformat</title>
-<para
->Um Format und Erscheinungsbild ausgewählter Zellen, Zeilen oder Spalten zu ändern, verwenden Sie die Option <guimenuitem
->Zellenformat ...</guimenuitem
->aus dem Menü <guimenu
->Format</guimenu
-> oder aus dem Kontextmenü, das Sie mit der <mousebutton
->rechten</mousebutton
-> Maustaste öffnen.</para>
+<!--<title>Fonts, Text, Borders and Colors</title>-->
+<title>Cell Format</title>
+<para>To change the format and appearance of selected cell(s), row(s) or column(s) use
+the <guimenuitem>Cell Format...</guimenuitem> option from the <guimenu>Format</guimenu> 
+menu or from the <mousebutton>right</mousebutton> mouse button popup
+menu.</para>
 <para>
 <mediaobject>
 <imageobject>
 <imagedata fileref="cellformat0.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase
->Kontextmenü der rechten Maustaste.</phrase>
+<phrase>Right mouse button context menu.</phrase>
 </textobject>
 </mediaobject>
 </para>
-<para
->Damit öffnen Sie den Dialog <guilabel
->Zellenformat</guilabel
-> mit folgenden Seiten:</para>
+<para>This will bring up the <guilabel>Cell Format</guilabel> dialog box
+which has several tabbed pages:</para>
 <sect2 id="formatdata">
 <!-- beginning of annma writing -->
-<title
->Datenformate und Darstellungen</title>
+<title>Data Formats and Representation</title>
 <para>
 <mediaobject>
 <imageobject>
 <imagedata fileref="cellformat1.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase
->Die Seite <guilabel
->Datenformat</guilabel
->.</phrase>
+<phrase><guilabel>Data Format</guilabel> page.</phrase>
 </textobject>
 </mediaobject>
 </para>
-<para
->Auf der Seite <guilabel
->Datenformat</guilabel
-> des Dialogs <guilabel
->Zellenformat</guilabel
-> können Sie einstellen, wie die Werte in den Zellen angezeigt werden.</para>
-<para
->Im oberen Teil dieser Seite können Sie das Format auswählen, das verwendet wird, um numerische Werte, Daten oder Zeiten anzuzeigen. Eine <guilabel
->Vorschau</guilabel
-> zeigt Ihnen, wie das neue Format dargestellt wird. </para>
-<para
->Für eine Zeile oder Spalte können Sie das gleiche Datenformat einstellen, wenn Sie die Zeile oder Spalte auswählen und mit der &RMBn; den Dialog <guilabel
->Zellenformat</guilabel
-> öffnen.</para>
-<note
-><para
->Die Zahl der Nachkommastellen können Sie für Zahlen im Format <guilabel
->Allgemein</guilabel
->, <guilabel
->Zahl</guilabel
->, <guilabel
->Prozent</guilabel
->, <guilabel
->Währung</guilabel
-> oder <guilabel
->Wissenschaftlich</guilabel
-> mit dem Symbol <guiicon
->Mehr Dezimalstellen</guiicon
-> in der Werkzeugleiste <guilabel
->Format</guilabel
-> vergrößern: <inlinemediaobject
-><imageobject>
+<para>The <guilabel>Data Format</guilabel> page of the <guilabel>Cell Format</guilabel> dialog box 
+lets you control how the values of cells are displayed.</para>
+<para>The top part of this page lets you select the format to be used when 
+displaying numeric values, dates or times. A <guilabel>Preview</guilabel> pane
+allows you to see the effect of the new format.
+</para>
+<para>You can set the same data format for a row or a column by selecting the
+row or column and calling the <guilabel>Cell Format</guilabel> dialog with the &RMB;.</para>
+<note><para>You can increase the precision decimal for any number in <guilabel>Generic</guilabel>,
+<guilabel>Number</guilabel>, <guilabel>Percent</guilabel>, <guilabel>Money</guilabel> or 
+<guilabel>Scientific</guilabel> formats using the <guiicon>Increase 
+precision</guiicon> icon in the <guilabel>Format</guilabel> toolbar: <inlinemediaobject><imageobject>
 <imagedata fileref="increasedecimal.png" format="PNG"/>
-</imageobject
-></inlinemediaobject
-></para>
-<para
->Die Zahl der Nachkommastellen können Sie für Zahlen im Format <guilabel
->Allgemein</guilabel
->, <guilabel
->Zahl</guilabel
->, <guilabel
->Prozent</guilabel
->, <guilabel
->Währung</guilabel
-> oder <guilabel
->Wissenschaftlich</guilabel
-> mit dem Symbol <guiicon
->Weniger Dezimalstellen</guiicon
-> in der Werkzeugleiste <guilabel
->Format</guilabel
-> verringern: <inlinemediaobject
-><imageobject>
+</imageobject></inlinemediaobject></para>
+<para>You can decrease the precision decimal for any number in <guilabel>Generic</guilabel>, 
+<guilabel>Number</guilabel>, <guilabel>Percent</guilabel>, <guilabel>Money</guilabel> or 
+<guilabel>Scientific</guilabel> formats using the <guiicon>Decrease precision</guiicon> icon
+in the <guilabel>Format</guilabel> toolbar: <inlinemediaobject><imageobject>
 <imagedata fileref="decreasedecimal.png" format="PNG"/>
-</imageobject
-></inlinemediaobject
-></para>
+</imageobject></inlinemediaobject></para>
 </note>
 <variablelist>
 <varlistentry>
-<term
-><guilabel
->Allgemein</guilabel
-></term>
-<listitem
-><para
->Dies ist das Standardformat. &sheets; erkennt automatisch den aktuellen Datentyp aus den Zellendaten. Als Standard zeigt &sheets; Zahlen, Daten und Zeiten rechtsbündig und alles andere linksbündig innerhalb der Zellen an.</para>
-<para
->Wenn das Format <guilabel
->Allgemein</guilabel
-> nicht zutreffend ist, wählen Sie eines der hier aufgeführten Formate:</para>
+<term><guilabel>Generic</guilabel></term>
+<listitem><para>This is the default format and &sheets; autodetects the
+actual
+data type depending on the current cell data. By default, &sheets; right
+justifies numbers, dates and times within a cell and left justifies anything
+else.</para>
+<para>If the <guilabel>Generic</guilabel> format does not suit you, you can change to a specific
+format among the choices below.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Zahl</guilabel
-></term>
-<listitem
-><para
->Zahlen werden mit den Einstellungen in den &systemsettings; in <menuchoice
-><guimenu
->Regionales</guimenu
-><guisubmenu
->Land/Region &amp; Sprache</guisubmenu
-> <guimenuitem
->Zahlen</guimenuitem
-></menuchoice
-> dargestellt. Zahlen werden in der Voreinstellung rechtsbündig angezeigt.</para>
+<term><guilabel>Number</guilabel></term>
+<listitem><para>The number notation uses the notation you globally choose in
+&systemsettings; in <menuchoice><guimenu>Locale</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Numbers</guimenuitem></menuchoice>.
+Numbers are right justified by default.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Prozent</guilabel
-></term>
-<listitem
-><para
->Enthält die aktuelle Zelle eine Zahl und Sie ändern das Zellenformat von <guilabel
->Allgemein</guilabel
-> zu <guilabel
->Prozent</guilabel
->, wird die Zahl in der Zelle mit 100 multipliziert.</para>
-<para
->Wenn Sie zum Beispiel ein 2 eingeben und dann als Zellenformat <guilabel
->Prozent</guilabel
-> einstellen, ändert sich der Wert in der Zelle zu 200 %. Setzen Sie die Formatierung wieder auf <guilabel
->Allgemein</guilabel
-> zurück, wird der Wert wieder auf 2 zurückgesetzt.</para>
-<para
->Zusätzlich können Sie das Symbol <guiicon
->Prozent</guiicon
-> in der Werkzeugleiste <guilabel
->Format</guilabel
-> benutzen. <inlinemediaobject
-><imageobject>
+<term><guilabel>Percent</guilabel></term>
+<listitem><para>When you have a number in the current cell and you switch the
+cell format from <guilabel>Generic</guilabel> to <guilabel>Percent</guilabel>, the current cell number will be multiplied
+by 100.</para>
+<para>For example if you enter 2 and set the cell format to <guilabel>Percent</guilabel>, the number
+will then be 200 %. Switching back to <guilabel>Generic</guilabel> cell format will bring it back to
+2.</para>
+<para>You can also use the <guiicon>Percent</guiicon> icon in the <guilabel>Format</guilabel>
+Toolbar: <inlinemediaobject><imageobject>
 <imagedata fileref="percent.png" format="PNG"/>
-</imageobject
-></inlinemediaobject
-></para>
+</imageobject></inlinemediaobject></para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Währung</guilabel
-></term>
-<listitem
-><para
->Mit dem Format <guilabel
->Währung</guilabel
-> wird Ihre Eingabe als Währung mit den Einstellungen aus den &systemsettings; in <menuchoice
-><guimenu
->Regionales</guimenu
-><guisubmenu
->Land/Region &amp; Sprache</guisubmenu
-> <guimenuitem
->Währung</guimenuitem
-></menuchoice
-> mit dem Währungssymbol und der ausgewählten Anzahl der Dezimalstellen dargestellt.</para>
-<para
->Zusätzlich können Sie das Symbol <guiicon
->Währungsformat</guiicon
-> in der Werkzeugleiste <guilabel
->Format</guilabel
-> benutzen, um als Zellenformat die aktuelle Währung einzustellen. <inlinemediaobject
-><imageobject>
+<term><guilabel>Money</guilabel></term>
+<listitem><para>The <guilabel>Money</guilabel> format converts your number into money notation using
+the settings globally fixed in &systemsettings; in <menuchoice><guimenu>Locale</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Money</guimenuitem></menuchoice>. The
+currency symbol will be displayed and the precision will be the one set in
+&systemsettings;.</para>
+<para>You can also use the <guiicon>Money Format</guiicon> icon in the <guilabel>Format</guilabel> toolbar to set the
+cell formatting to look like your current currency:
+<inlinemediaobject><imageobject>
 <imagedata fileref="hi22-action-money.png" format="PNG"/>
-</imageobject
-></inlinemediaobject
-></para>
+</imageobject></inlinemediaobject></para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Wissenschaftlich</guilabel
-></term>
-<listitem
-><para
->Das Format <guilabel
->Wissenschaftlich</guilabel
-> stellt Ihre Zahlen in wissenschaftlicher Schreibweise dar. Die Eingabe von 0,0012 wird zum Beispiel als 1,2E-03 angezeigt. Wechseln Sie wieder zurück zum Format <guilabel
->Allgemein</guilabel
->, wird wieder 0,0012 angezeigt. Um Werte in Zellen in wissenschaftlicher Schreibweise darzustellen, müssen Sie diese Einstellung auswählen, da das Format <guilabel
->Allgemein</guilabel
-> eine Eingabe in wissenschaftlicher Schreibweise nicht automatisch so anzeigt.</para>
+<term><guilabel>Scientific</guilabel></term>
+<listitem><para>The <guilabel>Scientific</guilabel> format changes your number using the scientific
+notation. For example, 0.0012 will be changed to 1.2E-03. Going back using
+<guilabel>Generic</guilabel> cell format will display 0.0012 again. The <guilabel>Generic</guilabel> cell data format does
+not keep scientific notation so if you want this notation, you have to specify
+it using this menu item.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Bruch</guilabel
-></term>
-<listitem
-><para
->Das Format <guilabel
->Bruch</guilabel
-> zeigt die eingegebene Zahl als Bruch an. Zum Beispiel 0,1 kann als 1/8, 2/16, 1/10 &etc; dargestellt werden. Wählen Sie den Nenner des Bruchs im Auswahlfeld auf der rechten Seite des Dialogs. Kann die Zahl nicht als Bruch mit dem gewählten Nenner dargestellt werden, wird die beste Näherung angezeigt. Die Zahl 1,5 zum Beispiel wird mit dem Nenner <guilabel
->Sechzehntel 1/16</guilabel
-> wird als richtig als  <quote
->1 8/16</quote
-> angezeigt. Eine Zelle mit der Zahl 1,4 und dem Format <guilabel
->Bruch</guilabel
-> mit dem Nenner <guilabel
->Sechzehntel 1/16</guilabel
-> wird als  <quote
->1 6/16</quote
->, der besten Näherung, dargestellt.</para>
-</listitem
-><!--TODO formatting of numbers?-->
+<term><guilabel>Fraction</guilabel></term>
+<listitem><para>The <guilabel>Fraction</guilabel> format changes your number into a fraction. For
+example, 0.1 can be changed to 1/8, 2/16, 1/10, &etc; You define the type of
+fraction by choosing it in the field on the right. If the exact fraction is not
+possible in the fraction mode you choose, the nearest closest match is chosen. 
+For example: when we have 1.5 as number, we choose <guilabel>Fraction</guilabel>
+and <guilabel>Sixteenths 1/16</guilabel> the text displayed into cell is "1
+8/16" which is an exact fraction. If you have 1.4 as number in your cell and you
+choose <guilabel>Fraction</guilabel> and <guilabel>Sixteenths 1/16</guilabel>
+then the cell will display "1 6/16" which is the nearest closest Sixteenth
+fraction.</para>
+</listitem><!--TODO formatting of numbers?-->
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Datum</guilabel
-></term>
-<listitem
-><para
->Ein Datum müssen Sie in den Formaten, die in den &systemsettings; in <menuchoice
-><guimenu
->Regionales</guimenu
-><guisubmenu
->Land/Region &amp; Sprache</guisubmenu
-> <guimenuitem
->Datum &amp; Zeit</guimenuitem
-></menuchoice
-> eingestellt sind, eingeben. Hier gibt es das Langformat und das Kurzformat für Datum.</para>
-<para
->Eine beliebige natürliche Zahl N wird in das Datum 30. Dezember 1899 (Beginn der Zählung) plus N Tage übersetzt. Wenn zum Beispiel 100 als Zahl in einer Zelle eingeben ist und Sie das Format <guilabel
->Datum</guilabel
-> einstellen, wird <quote
->9.4.1900</quote
-> in der Zelle angezeigt, das sind 100 Tage nach dem 30. Dezember 1899. Das Startdatum liegt zwei Tage vor dem ersten Tag des Jahrhunderts (ein Fehler in Lotus 123, der auch in Excel übernommen wurde, um kompatibel zu bleiben). Dieser Fehler spielt aber bei den üblichen Berechnung von Daten keine Rolle, wenn Sie zum Beispiel 10 Tage zum 1. November 2000 addieren, erhalten Sie das richtige Ergebnis 10. November 2000.</para>
-<note
-><para
->Eine Zelle mit dem Format <guilabel
->Datum</guilabel
-> können Sie wie Zellen mit Zahlen nach unten ziehen und die folgenden Zellen werden auch als Datum mit aufsteigenden Tagesdaten ausgefüllt.</para
-></note
-><!--TODO explain that
+<term><guilabel>Date</guilabel></term>
+<listitem><para>To enter a date, you should enter it in one of the formats set
+in &systemsettings; in <menuchoice><guimenu>Locale</guimenu>
+<guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Date &amp;
+Time</guimenuitem></menuchoice>. There are two formats set here: the date format
+and the short date format.</para>
+<para>A random natural number NN will be transformed in the date from 30st
+December 1899 (which is 0) with the number of days NN added. For example if you
+have a cell with 100 and you choose <guilabel>Date</guilabel> format, "1900-04-09" will be
+displayed in the cell which is 100 days after 30st December 1899. This starting
+date is two days early as it was a bug in Lotus 123 and then it stayed that way
+in Excel in order to keep compatibility. Few people will need to calculate from
+1st January 1900 anyway and adding 9 days to 1st November 2000 for example will
+give you 10th November 2000 so all normal calculations on dates are
+correct.</para>
+<note><para>When a cell is in the <guilabel>Date</guilabel> format, you can drag this cell down as
+you do with numbers and the next cells will also get
+dates, each date being increased by one day.</para></note><!--TODO explain that
 better-->
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Zeit</guilabel
-></term>
-<listitem
-><para
->Diese Format zeigt den Inhalt der Zelle als Zeit an. Zeiten müssen Sie im <guilabel
->Zeitformat</guilabel
->, das in den &systemsettings; in <menuchoice
-><guimenu
->Regionales</guimenu
-><guisubmenu
->Land/Region &amp; Sprache</guisubmenu
-> <guimenuitem
->Datum &amp; Zeit</guimenuitem
-></menuchoice
-> eingestellt ist, eingeben. Im Dialog <guilabel
->Zellenformat</guilabel
-> können Sie die Darstellung von Zeiten aus einer Liste mit vorgegebenen Formaten wählen. Als Standard wird das Format aus dem &systemsettings; verwendet. Wenn der Wert einer Zelle nicht sinnvoll als Zeitformat dargestellt werden kann, wird 00:00 im allgemeinen Format aus den &systemsettings; angezeigt.</para>
+<term><guilabel>Time</guilabel></term>
+<listitem><para>This formats your cell content as a time. To enter a time, you
+should enter it in the <guilabel>Time format</guilabel> set in &systemsettings; 
+in <menuchoice><guimenu>Locale</guimenu>
+<guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Date &amp;
+Time</guimenuitem></menuchoice>. In the <guilabel>Cell Format</guilabel>
+dialog box you can set how the time should be displayed by choosing one of the
+available time format options. The default format is the system format set in
+&systemsettings;. When the number in the cell does not make sense as a time,
+&sheets; will display 00:00 in the global format you have in
+&systemsettings;.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Datum und Zeit</guilabel
-></term>
-<listitem
-><para
->Diese Format zeigt den Inhalt der Zelle als Datum und Zeit an. Datum und Zeit müssen Sie im <guilabel
->Zeitformat</guilabel
->, das in den &systemsettings; in <menuchoice
-><guimenu
->Regionales</guimenu
-><guisubmenu
->Land/Region &amp; Sprache</guisubmenu
-> <guimenuitem
->Datum &amp; Zeit</guimenuitem
-></menuchoice
-> eingestellt ist, eingeben. Im Dialog <guilabel
->Zellenformat</guilabel
-> können Sie die Darstellung von Datum und Zeit aus einer Liste mit vorgegebenen Formaten wählen. Als Standard wird das Format aus dem &systemsettings; verwendet. Wenn der Wert einer Zelle nicht sinnvoll als Datum und Zeit dargestellt werden kann, wird 00:00 im allgemeinen Format aus den &systemsettings; angezeigt.</para>
+<term><guilabel>Date and Time</guilabel></term>
+<listitem><para>This formats your cell content as date and time. To enter a date and a time, you
+should enter it in the <guilabel>Time format</guilabel> set in &systemsettings; 
+in <menuchoice><guimenu>Locale</guimenu>
+<guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Date &amp;
+Time</guimenuitem></menuchoice>. In the <guilabel>Cell Format</guilabel>
+dialog box you can set how the date and time should be displayed by choosing one of the
+available date and time format options. The default format is the system format set in
+&systemsettings;. When the number in the cell does not make sense as a date and time,
+&sheets; will display 00:00 in the global format you have in
+&systemsettings;.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Text</guilabel
-></term>
-<listitem
-><para
->Diese Einstellung formatiert den Zelleninhalt als Text. Das kann nützlich sein, wenn eine Zahl als Text und nicht als Zahl behandelt werden soll, beispielsweise Postleitzahlen. Eine als Text formatierte Zahl wird linksbündig ausgerichtet. Wenn Zahlen als Text formatiert werden, können sie nicht in Berechnungen oder Formeln verwendet werden. Außerdem ändert sich dadurch die Ausrichtung innerhalb der Zellen.</para>
+<term><guilabel>Text</guilabel></term>
+<listitem><para>This formats your cell content as text. This can be useful if
+you want a number treated as text instead as a number, for example for a ZIP
+code. Setting a number as text format will left justify it. When numbers are
+formatted as text, they cannot be used in calculations or formulas. It also
+change the way the cell is justified.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Benutzerdefiniert</guilabel
-></term>
-<listitem
-><para
->Zurzeit noch nicht verfügbar, erst in der nächsten Version.</para>
+<term><guilabel>Custom</guilabel></term>
+<listitem><para>Does not work yet. To be enabled in the next release.</para>
 </listitem>
 </varlistentry>
 </variablelist>
 
-<para
->Im unteren Teil der Seite <guilabel
->Datenformat</guilabel
->können Sie ein <guilabel
->Präfix</guilabel
-> wie ein $-Symbol am Anfang jeder Zelle oder ein <guilabel
->Postfix</guilabel
-> wie $HK am Ende hinzufügen. Sie können auch einstellen, wieviele Stellen nach dem Dezimalkomma für numerische Werte angezeigt werden, und ob positive Werte mit einem führenden +-Zeichen angezeigt werden und ob negative Werte in Rot angezeigt werden sollen. </para>
-</sect2
-> <!--end of annma writing -->
+<para>The lower part of the <guilabel>Data Format</guilabel> page lets you add 
+a <guilabel>Prefix:</guilabel> such as a $ symbol at the start of each item or 
+a <guilabel>Postfix:</guilabel> such as $HK to the end. You can also control 
+how many digits are displayed after the decimal point for numeric values, 
+whether positive values are displayed with a leading + sign and whether 
+negative values are shown in red.
+</para>
+</sect2> <!--end of annma writing -->
 
 <sect2 id="formattext">
-<title
->Schriften und Texteinstellungen</title>
+<title>Fonts and Text Settings</title>
 <para>
 <mediaobject>
 <imageobject>
 <imagedata fileref="cellformat2.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase
->Die Seite Schriftart.</phrase>
+<phrase>Font page.</phrase>
 </textobject>
 </mediaobject>
 </para>
-<para
->Auf der Seite <guilabel
->Schriftart</guilabel
-> können Sie Schriftfamilie, <guilabel
->Stil:</guilabel
->, <guilabel
->Größe:</guilabel
->, <guilabel
->Stärke:</guilabel
-> und <guilabel
->Farbe:</guilabel
-> der Schrift für die gewählten Zellen einstellen, dazu noch Optionen für unterstrichenen und durchgestrichenen Text. Im unteren Teil der Seite sehen Sie eine <guilabel
->Vorschau</guilabel
-> des ausgewählten Textformats.</para>
-<para
->Die Standardschrift setzen Sie im Menü <menuchoice
-><guimenu
-> Format</guimenu
-><guimenuitem
->Stilverwaltung</guimenuitem
-></menuchoice
-> mit dem Stil Standard.</para>
+<para>The <guilabel>Font</guilabel> page lets you select the font family, <guilabel>Style:</guilabel>,
+<guilabel>Size:</guilabel>,  <guilabel>Weight:</guilabel>
+and <guilabel>Color:</guilabel> for the current cell, including some additional options like
+underlined or striked out text.
+The lower part of the page gives a <guilabel>Preview</guilabel> of the selected text format.</para>
+<para>The default font is set for all cells in the
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Style
+Manager</guimenuitem></menuchoice> menu with the currently used style.</para>
 <!--annma-->
 <variablelist>
 <!--varlistentry>
-<term
-><guilabel
->Family List box</guilabel
-></term>
-<listitem
-><para
->Allows you to choose a new font family.</para>
+<term><guilabel>Family List box</guilabel></term>
+<listitem><para>Allows you to choose a new font family.</para>
 </listitem>
 </varlistentry-->
 <varlistentry>
-<term
-><guilabel
->Stil:</guilabel
-></term>
-<listitem
-><para
->Einstellung des Stils der Schrift für die ausgewählten Zellen. Wenn Sie mehrere Zellen mit unterschiedlichen Stilen ausgewählt haben, wird <guilabel
->Unterschiedlich (Keine Änderung)</guilabel
-> angezeigt. Ohne Änderung behalten alle Zellen den eingestellten Stil. Ändern Sie den Stil zum Beispiel in <guilabel
->Unecht Kursiv (Roman)</guilabel
->, wird diese Einstellung auf alle ausgewählten Zellen angewendet.</para>
+<term><guilabel>Style:</guilabel></term>
+<listitem><para>Choose the style for your font for the currently selected cells.
+When you select several cells with different styles, the displayed style is set
+to <guilabel>Varying (No Change)</guilabel> and leaving it that way will keep
+all your current style settings for each cell. Changing to
+<guilabel>Roman</guilabel> for example will change all the selected cells style
+text to <guilabel>Roman</guilabel>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Größe:</guilabel
-></term>
-<listitem
-><para
->Einstellung der Schriftgröße für die ausgewählten Zellen. Wenn Sie mehrere Zellen mit unterschiedlichen Größen ausgewählt haben, wird <guilabel
-> </guilabel
->, also keine Größe angezeigt. Ohne Änderung behalten alle Zellen die eingestellte Schriftgröße. Ändern Sie die Größe zum Beispiel in <guilabel
->14</guilabel
->, wird diese Einstellung auf alle ausgewählten Zellen angewendet.</para>
+<term><guilabel>Size:</guilabel></term>
+<listitem><para>Choose the size for your font for the currently selected cells.
+When you select several cells with different sizes, the displayed size is set to
+<guilabel> </guilabel> (no number written) and leaving it that way will keep all
+your current size settings for each cell. Changing to <guilabel>14</guilabel>
+for example will change all the selected cells font size to
+<guilabel>14</guilabel>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Stärke:</guilabel
-></term>
-<listitem
-><para
->Einstellung der Schriftstärke für die ausgewählten Zellen. Wenn Sie mehrere Zellen mit unterschiedlichen Schriftstärken ausgewählt haben, wird <guilabel
->Unterschiedlich (Keine Änderung)</guilabel
-> angezeigt. Ohne Änderung behalten alle Zellen die eingestellte Schriftstärke. Ändern Sie die Schriftstärke zum Beispiel in <guilabel
->Fett</guilabel
->, wird diese Einstellung auf alle ausgewählten Zellen angewendet.</para>
+<term><guilabel>Weight:</guilabel></term>
+<listitem><para>Choose the weight for your font for the currently selected
+cells. When you select several cells with different font weight, the displayed
+weight is set to <guilabel>Varying (No Change)</guilabel> and leaving it that
+way will keep all your current weight settings for each cell. Changing to
+<guilabel>Bold</guilabel> for example will change all the selected cells font
+weight to <guilabel>Bold</guilabel>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Farbe:</guilabel
-></term>
-<listitem
-><para
->Einstellung der Farbe für den Text in den ausgewählten Zellen. Klicken Sie auf das Farbfeld, um den KDE-Standarddialog <guilabel
->Farbe auswählen</guilabel
-> zu öffnen, in dem Sie eine neue Farbe auswählen können. </para>
+<term><guilabel>Color:</guilabel></term>
+<listitem><para>Choose the color for the currently selected cells' text.
+Clicking on the color bar will bring you the standard KDE <guilabel>Select Color</guilabel> dialog
+where you will be able to choose the new color. </para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Unterstrichen</guilabel
-></term>
-<listitem
-><para
->Mit dieser Einstellung wird der Text in den ausgewählten Zellen unterstrichen dargestellt. In der Standardeinstellung ist dies nicht aktiviert.</para>
+<term><guilabel>Underline</guilabel></term>
+<listitem><para>Underlines the currently selected cells' text if checked. This
+is
+not checked per default.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Durchgestrichen</guilabel
-></term>
-<listitem
-><para
->Mit dieser Einstellung wird der Text in den ausgewählten Zellen durchgestrichen dargestellt. In der Standardeinstellung ist dies nicht aktiviert.</para>
+<term><guilabel>Strike out</guilabel></term>
+<listitem><para>This will strike out the currently selected cells'  text if this
+is checked. This is not checked per default.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -546,296 +306,191 @@ better-->
 </sect2>
 
 <sect2 id="formatposition">
-<title
->Textposition und -drehung</title>
+<title>Text Position and Rotation</title>
 <para>
 <mediaobject>
 <imageobject>
 <imagedata fileref="cellformat3.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase
->Die Seite Position.</phrase>
+<phrase>Position page.</phrase>
 </textobject>
 </mediaobject>
 </para>
-<para
->Auf der Seite <guilabel
->Position</guilabel
-> können Sie die Position des Textes innerhalb einer Zelle festlegen, indem Sie entsprechende Einstellungen in den Bereichen <guilabel
->Waagerecht</guilabel
-> und <guilabel
->Senkrecht</guilabel
-> vornehmen oder indem Sie den Wert für <guilabel
->Einzug</guilabel
->eingeben. Sie können auch einstellen, dass der Text senkrecht statt waagerecht oder sogar unter einem bestimmten Winkel angezeigt wird.</para>
+<para>From the <guilabel>Position</guilabel> page you can control the position 
+of text within a cell by making suitable selections in the <guilabel>Horizontal
+</guilabel> and <guilabel>Vertical</guilabel> areas or by setting the 
+<guilabel>Indent</guilabel> value. You can also choose to have the text 
+appear vertically rather than horizontally, or even at an angle.</para>
 
 <variablelist>
 <varlistentry>
-<term
-><guilabel
->Waagerecht</guilabel
-></term>
-<listitem
-><para
->Mit dieser Einstellung wird der Inhalt einer Zelle waagerecht angezeigt. Mit der Voreinstellung <guilabel
->Standard</guilabel
-> wird der Inhalt entsprechend dem ausgewählten Datentyp angezeigt. Der Inhalt wird mit der Einstellung <guilabel
->Links</guilabel
-> linksbündig, mit <guilabel
->Zentriert</guilabel
-> waagerecht mittig in der Zelle und mit <guilabel
->Rechts</guilabel
-> rechtsbündig dargestellt.</para>
+<term><guilabel>Horizontal</guilabel></term>
+<listitem><para>Set the content position horizontally in the cell. 
+<guilabel>Standard</guilabel> is default and is set from the data format you choose. 
+<guilabel>Left</guilabel> means the content will be displayed on the left of the cell.
+<guilabel>Center</guilabel> means the content will be in the center horizontally in the cell.
+<guilabel>Right</guilabel> means the content of the cell will be displayed on the right of the
+cell.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Senkrecht</guilabel
-></term>
-<listitem
-><para
->Mit dieser Einstellung wird der Inhalt einer Zelle senkrecht angezeigt. Der Inhalt wird mit der Einstellung <guilabel
->Oben</guilabel
-> oben, mit <guilabel
->Zentriert</guilabel
-> senkrecht mittig in der Zelle und mit <guilabel
->Unten</guilabel
-> unten dargestellt.</para>
+<term><guilabel>Vertical</guilabel></term>
+<listitem><para>Set the content position vertically in the cell. 
+<guilabel>Top</guilabel> means the content will be displayed on top of the cell.
+<guilabel>Middle</guilabel> means the content will be in the middle vertically in the cell.
+<guilabel>Bottom</guilabel> means the content of the cell will be displayed at the bottom of the
+cell.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Text-Einstellungen</guilabel
-></term>
-<listitem
-><para
->Diese Einstellungen sind nur für Zellen mit 0 Grad Drehung möglich. Mit <guilabel
->Text umbrechen</guilabel
-> werden die Zeilen so umgebrochen, das der Text in die vorhandene Zellen passt. Ist diese Einstellung nicht ausgewählt, wird der Text ohne Zeilenumbruch angezeigt. </para>
-<para
->Mit der Einstellung <guilabel
->Senkrechter Text</guilabel
-> wird der Text senkrecht ausgerichtet.</para>
+<term><guilabel>Text Option</guilabel></term>
+<listitem><para>This is only available when the rotation is 0°. 
+<guilabel>Wrap text</guilabel> wraps the text so it fits in the previous cell size. If this is not
+checked, the text will stay on one line.</para>
+<para><guilabel>Vertical text</guilabel> puts your text vertically.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Drehung</guilabel
-></term>
-<listitem
-><para
->Ihr Text wird in dem hier eingestellten Winkel ausgerichtet. Positive Werte drehen den Text im Uhrzeigersinn, negative entgegen dem Uhrzeigersinn.</para>
+<term><guilabel>Rotation</guilabel></term>
+<listitem><para>Your text will appear oriented in the angle you set here.
+Positive values will move it counter-clockwise and negative values will move it
+clockwise.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Zellen verbinden</guilabel
-></term>
-<listitem
-><para
->Diese Einstellung können Sie auch im Menü <menuchoice
-><guimenu
->Format</guimenu
-> <guimenuitem
->Zellen verbinden</guimenuitem
-></menuchoice
-> aktivieren. Sie müssen dazu mindestens zwei benachbarte Zellen ausgewählt haben. Diese Zellen werden dann zu einer großen Zelle zusammengefasst.</para>
-<para
->Wenn sie verbundene Zellen ausgewählt haben und diese Einstellung abschalten, erhalten alle Zellen wieder die ursprüngliche Größe wie vor der Verbindung. Im Menü finden Sie diese Einstellung unter <menuchoice
-><guimenu
->Format</guimenu
-> <guimenuitem
->Zellen trennen</guimenuitem
-></menuchoice
->.</para>
+<term><guilabel>Merge Cells</guilabel></term>
+<listitem><para>When checked, this has the same effect
+as <menuchoice><guimenu>Format</guimenu><guimenuitem>Merge
+Cells</guimenuitem></menuchoice>. You need to have at least two
+consecutive cells selected. Those consecutive cells are then merged into a
+bigger one.</para>
+<para>When a merged cell is selected and when you uncheck this, then all cells
+come back to their original size as before the merging. It has the same effect
+as <menuchoice><guimenu>Format</guimenu><guimenuitem>Dissociate
+Cells</guimenuitem></menuchoice>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Einzug</guilabel
-></term>
-<listitem
-><para
->Legt den Wert den Einzugs des Inhalts der Zellen für die Funktion <guimenu
->Einzug vergrößern</guimenu
-> oder <guimenu
->Einzug verkleinern</guimenu
-> fest. Als Voreinstellung sind diese Aktionen nicht in der Werkzeugleiste.</para>
+<term><guilabel>Indent</guilabel></term>
+<listitem><para>Set the amount of indent that will be used in the cell when you
+choose the <guilabel>Increase Indent</guilabel>/<guilabel>Decrease Indent</guilabel> 
+actions from the toolbar. These actions are not enabled by default in the toolbar.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Zellengröße</guilabel
-></term>
-<listitem
-><para
->Stellen Sie hier die Größe der Zellen ein, entweder mit benutzerdefinierten Werten für Breite und Höhe oder mit den Standardwerten.</para>
+<term><guilabel>Size of Cell</guilabel></term>
+<listitem><para>You set here the size of the cell, either a custom width and
+height or choose the default width and height.</para>
 </listitem>
 </varlistentry>
 </variablelist>
 </sect2>
 
 <sect2 id="formatborder">
-<title
->Zellenumrandung</title>
+<title>Cell Border</title>
 <para>
 <mediaobject>
 <imageobject>
 <imagedata fileref="cellformat4.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase
->Die Seite Umrandung.</phrase>
+<phrase>Border page.</phrase>
 </textobject>
 </mediaobject>
 </para>
-<para
->Auf der Seite <guilabel
->Umrandung</guilabel
-> können Sie das Aussehen der Zellenränder einstellen. Wenn Sie mehr als eine Zelle ausgewählt haben, können Sie unterschiedliche Arten von Rändern zwischen den Zellen und um den ausgewählten Bereich herum angeben. </para>
-<para
->Wählen Sie zuerst das Muster und die Farbe im Abschnitt <guilabel
->Muster</guilabel
-> der Seite <guilabel
->Umrandung</guilabel
-> aus und wenden Sie diese Einstellung dann auf die unterschiedlichen Teile des Randes an, indem Sie auf den passenden Knopf im Abschnitt <guilabel
->Umrandung</guilabel
-> oder auf einen passenden Knopf der <guilabel
->Vorauswahl</guilabel
-> klicken. Der linke Knopf im Abschnitt <guilabel
->Vorauswahl</guilabel
-> löscht die vorher ausgewählten Ränder. Beachten Sie, dass Sie auch diagonale Durchkreuzungslinien zu den Zellen hinzufügen können.</para>
+<para>The <guilabel>Border</guilabel> page lets you set the appearance of the
+cell borders. If you have selected more than one cell you can apply different
+styles to the borders between the cells and that surrounding the selected area.
+</para>
+<para>First select the pattern and color from the <guilabel>Pattern</guilabel>
+section of the <guilabel>Border</guilabel> page then apply that to
+different parts of the border by clicking on the appropriate button in the
+<guilabel>Border</guilabel> section, or on one of the <guilabel>Preselect
+</guilabel> buttons. The left hand button in the <guilabel>Preselect
+</guilabel> section will clear any previously applied border(s). Note that you 
+can also add a diagonal strike-through line to the cell(s).</para>
 </sect2>
 <sect2 id="formatbackground">
-<title
->Zellenhintergrund</title>
+<title>Cell Background</title>
 <para>
 <mediaobject>
 <imageobject>
 <imagedata fileref="cellformat5.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase
->Die Seite Hintergrund.</phrase>
+<phrase>Background page.</phrase>
 </textobject>
 </mediaobject>
 </para>
-<para
->Das Muster und die Farbe des Zellenhintergrundes können Sie auf der Seite <guilabel
->Hintergrund</guilabel
-> auswählen.</para>
-<para
->Wählen Sie das gewünschte <guilabel
->Muster</guilabel
->, dann die Farbe des <guilabel
->Muster</guilabel
->s sowie die <guilabel
->Hintergrundfarbe</guilabel
-> aus.</para>
-<para
->Unten auf dieser Seite können Sie eine <guilabel
->Vorschau</guilabel
-> des eingestellten Zellenhintergrunds sehen.</para>
+<para>The cell background pattern and color can be selected from the 
+<guilabel>Background</guilabel> page.</para>
+<para>Simply choose a desired <guilabel>Pattern</guilabel>, then select the pattern 
+<guilabel>Color</guilabel> and the <guilabel>Background color</guilabel>.</para>
+<para>At the bottom of this page you can see a <guilabel>Preview</guilabel> of the configured
+cell background.</para>
 </sect2>
 <sect2 id="formatprotection">
-<title
->Zellenschutz</title>
+<title>Cell Protection</title>
 <para>
 <mediaobject>
 <imageobject>
 <imagedata fileref="cellformat6.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase
->Die Seite Zellenschutz.</phrase>
+<phrase>Cell protection page.</phrase>
 </textobject>
 </mediaobject>
 </para>
-<para
->Den Schutz für Zellen stellen Sie auf der Seite <guilabel
->Zellenschutz</guilabel
-> ein.</para>
-<para
->Alle Zellen sind in der Standardeinstellung geschützt, d. h. der Inhalt kann nicht geändert werden. Damit dieser Schutz wirksam wird, müssen Sie zusätzlich noch den Schutz der Tabelle mit <menuchoice
-><guimenu
->Extras</guimenu
-> <guimenuitem
->Tabelle schützen ...</guimenuitem
-></menuchoice
-> und der Eingabe eines Passworts einschalten. Sie können zusätzlich auch die Formeln ausblenden, damit die Art der Berechnung nicht erkennbar ist, oder auch die Anzeige des gesamten Inhalts der Zelle mit <guilabel
->Alles ausblenden</guilabel
-> abschalten. Auch dafür ist der Schutz der Tabelle erforderlich. Weitere Einzelheiten über diese Einstellungen finden Sie im Abschnitt <link linkend="protection"
->Schutz in &sheets;</link
->.</para>
+<para>You can change the way the content of a cell is protected in the
+<guilabel>Cell Protection</guilabel> page.</para>
+<para>All cells are protected by default (that means cell content cannot be
+changed) and for the cell protection to be active you also need to protect the
+sheet using the <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
+menu and to provide a password.
+You can also hide the cell formula in order to protect the way you calculate the
+formula. This also needs to enable sheet protection to work.
+You can hide the cell content with <guilabel>Hide all</guilabel> and again this needs sheet
+protection.
+You can learn more about all these settings in the <link
+linkend="protection">Advanced &sheets; chapter, Protection
+section</link>.</para>
 <variablelist>
 <varlistentry>
-<term
-><guilabel
->Alles ausblenden</guilabel
-></term>
-<listitem
-><para
->Damit wird die Anzeige des Inhalts der Zellen ausgeblendet, aber nur, wenn die Tabelle geschützt ist. Die Einstellung <guilabel
->Alles ausblenden</guilabel
-> funktioniert nur dann, wenn die Tabelle geschützt ist. Ob die Zelle geschützt ist oder nicht, spielt dabei keine Rolle.</para>
-<para
->Wenn Sie <guilabel
->Alles ausblenden</guilabel
-> ausgewählt haben, können Sie die Einstellungen <guilabel
->Geschützt</guilabel
-> und <guilabel
->Formel ausblenden</guilabel
-> nicht mehr verändern, genauso wie in einer geschützten Tabelle. Mit <guilabel
->Alles ausblenden</guilabel
-> wird der Wert in der Zelle wie auch die Formeln nicht angezeigt und damit der Inhalt der Zelle geschützt.</para>
+<term><guilabel>Hide all</guilabel></term>
+<listitem><para>This hides the cell content and works only when the sheet is
+protected which means that changing the <guilabel>Hide all</guilabel>
+attribute of a cell has no effect unless the sheet is protected. Whether the
+cell itself is protected or not does not matter.</para>
+<para>When <guilabel>Hide all</guilabel> is selected, <guilabel>Protected</guilabel> 
+and <guilabel>Hide formula</guilabel> are disabled as when the
+sheet is protected <guilabel>Hide all</guilabel> hides the cell content and the
+formula and thus masks and protects the cell content.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Geschützt</guilabel
-></term>
-<listitem
-><para
->Mit dieser Einstellung wird der Inhalt der Zelle geschützt. Das ist die Standardeinstellung. Sie müssen zusätzlich die gesamte Tabelle mit <menuchoice
-><guimenu
->Extras</guimenu
-> <guimenuitem
->Tabelle schützen ...</guimenuitem
-></menuchoice
-> schützen, damit der Schutz für einzelne Zellen eingeschaltet wird. Der Inhalt einer geschützten Zellen kann nicht geändert werden.</para>
+<term><guilabel>Protected</guilabel></term>
+<listitem><para>If checked, the cell content will be protected. This is
+the default behaviour. You need to protect the whole sheet using the
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
+menu for this individual cell protection to work. When a cell is protected, its
+content cannot be changed.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Formel ausblenden</guilabel
-></term>
-<listitem
-><para
->Wenn diese Einstellung aktiviert ist, wird die Zelle immer noch angezeigt, ihr Inhalt erscheint aber nicht in der <guilabel
->Formelleiste</guilabel
->. <quote
->Formel ausblenden</quote
-> funktioniert nur für Zellen mit Formeln. Die gesamte Tabelle muss dafür geschützt werden.</para>
+<term><guilabel>Hide formula</guilabel></term>
+<listitem><para>When this is checked, the cell is still visible. However,
+its contents do not appear in the <guilabel>Formula</guilabel> bar. Hiding formula is only working
+for cells that contain formulae so the user cannot view the formula. And the
+sheet must be protected for this to work.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term
-><guilabel
->Text nicht drucken</guilabel
-></term>
-<listitem
-><para
->Mit dieser Einstellung wird der Text in den ausgewählten Zellen nicht ausgedruckt. In der Standardeinstellung ist dies nicht aktiviert und der Text in Zellen wird immer gedruckt.</para>
+<term><guilabel>Do not print text</guilabel></term>
+<listitem><para>If you check <guilabel>Do not print text</guilabel> then the
+text in the cell will not be printed. This is unchecked per default which means
+that the cell text will always be printed by default.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -843,309 +498,182 @@ better-->
 </sect1>
 
 <sect1 id="conditional">
-<title
->Bedingte Zellenattribute</title>
-<para
->Sie können das Darstellung der Werte in einer Zelle abhängig von dem darin enthaltenen Wert ändern lassen. Das ist z. B. nützlich, wenn Sie &sheets; verwenden, um die Übersicht über Ihre Haushaltungskosten zu behalten und alle Einzelposten größer als tausend Euro hervorheben wollen.</para>
-<para
->Dazu wählen Sie die zunächst die Zellen aus, dann <guimenuitem
->Bedingte Stile ...</guimenuitem
-> im Menü <guimenu
->Format</guimenu
->. Damit öffnen Sie den Dialog <guilabel
->Bedingte Stile</guilabel
->. hier können Sie einstellen, dass sich der Schrifttyp und die Farbe einer Zelle ändern, wenn deren Werte eine oder mehrere Bedingungen erfüllen. Beachten Sie, dass die zweite und dritte Bedingung nur dann angewendet wird, wenn die vorhergehende Bedingung nicht zutrifft.</para>
-<para
->Wählen Sie <menuchoice
-><guisubmenu
->Leeren</guisubmenu
-> <guimenuitem
->Bedingte Stile</guimenuitem
-></menuchoice
-> im Menü <guimenu
->Bearbeiten</guimenu
->, um die bedingten Zellenattribute von ausgewählten Zellen zu löschen.</para>
+<title>Conditional Cell Attributes</title>
+<para>You can make the appearance of a cell change according to the value it 
+contains, useful perhaps if you are using &sheets; to keep track of your 
+household expenses and want to highlight any item greater than, say, one 
+thousand dollars.</para>
+<para>To do this select the cell(s) then choose <guimenuitem>Conditional  
+Styles...</guimenuitem> from the <guimenu>Format</guimenu> menu. This will 
+bring up the <guilabel>Conditional Styles</guilabel> dialog box where 
+you can make the font type and color of a cell change when the value meets 
+one or more conditions. Note that the second and third conditions only apply 
+if the previous condition(s) are not met.</para>
+<para>Use <menuchoice><guisubmenu>Clear</guisubmenu><guimenuitem>Conditional 
+Styles</guimenuitem></menuchoice> from the <guimenu>Edit</guimenu> 
+menu to clear any conditional attributes from selected cells.</para>
 </sect1>
 
 <sect1 id="cellsize">
-<title
->Ändern der Zellengröße</title>
-<para
->Auf der Seite <guilabel
->Position</guilabel
-> im Dialog <guilabel
->Zellenformat</guilabel
-> können Sie die Größe der ausgewählten Zellen ändern. Wenn Sie die Höhe einer einzelnen Zelle ändern, wird die Höhe für alle Zellen in der zugehörigen Zeile ebenfalls geändert. Auch wenn Sie die Breite einer Zelle ändern, gilt das für die ganze Spalte.</para>
-<para
->Sie können auch Zeilen oder Spalten auswählen und dann <guimenuitem
->Zeilenhöhe ändern ...</guimenuitem
-> oder <guimenuitem
->Spaltenbreite ändern ...</guimenuitem
-> aus dem Kontextmenü der <mousebutton
->rechten</mousebutton
-> Maustaste oder im Untermenü <menuchoice
-><guimenu
->Format</guimenu
-> <guisubmenu
->Zeile</guisubmenu
-></menuchoice
-> oder <menuchoice
-> <guimenu
->Format</guimenu
-> <guisubmenu
->Spalte</guisubmenu
-></menuchoice
-> wählen.</para>
-<para
->Wenn Sie den Mauszeiger so über die Zeilenzahlen links von der Tabelle bewegen, dass die Spitze des Mauszeigers genau auf die Linie zwischen zwei Zeilen zeigt, ändert sich der Zeiger zu zwei waagerechten Linien mit zwei Pfeilen, die nach oben und nach unten zeigen. Wenn der Mauszeiger so aussieht, können Sie die &LMB; gedrückt halten und durch eine Auf- oder Abwärtsbewegung des Mauszeigers die Höhe der entsprechenden Zeile verändern. Entsprechend kann man die Spaltenbreiten verändern, indem man den Mauszeiger auf die senkrechte Linie zwischen zwei Spaltenbuchstaben bewegt und die Spaltengrenze hin- und herzieht.</para>
+<title>Changing Cell Sizes</title>
+<para>The <guilabel>Position</guilabel> page in the <guilabel>Cell Format</guilabel> 
+dialog lets you alter the size of the selected cell(s). Note that 
+changing the height of a single cell will change the height for all cells in 
+that row, similarly changing the width will affect the entire column.</para>
+<para>You can also select the row(s) or column(s) to be changed then select 
+<guimenuitem>Resize Row...</guimenuitem> or <guimenuitem>Resize Column...</guimenuitem> 
+from the <mousebutton>right</mousebutton> mouse button pop up 
+menu or from the <menuchoice><guimenu>Format</guimenu><guisubmenu>Row</guisubmenu>
+</menuchoice> or <menuchoice><guimenu>Format</guimenu><guisubmenu>
+Column</guisubmenu></menuchoice> menu.</para>
+<para>If you move the mouse cursor so that its tip is over the line between 
+two of the row numbers at the left of &sheets;'s window the cursor will 
+change to show two parallel lines each with a short arrow headed line coming 
+from it. When the cursor is in this state you can hold the <mousebutton>left
+</mousebutton> mouse button down and drag the border between the two rows, 
+changing the height of the upper row. A similar technique can be used to 
+change the width of a column.</para>
 
-<para
->Um die Zeilenhöhe oder die Spaltenbreite soweit zu verringern, dass noch der gesamte Inhalt angezeigt wird, wählen Sie eine ganze Zeile oder Spalte aus und klicken mit der <mousebutton
->rechten</mousebutton
-> Maustaste auf die Zeilen- oder Spaltenbeschriftung. Wählen Sie im Kontextmenü <guimenuitem
->Zeile anpassen</guimenuitem
-> oder <guimenuitem
->Spalte anpassen</guimenuitem
->. Die Zeile oder Spalte wird dadurch auf die erforderliche Mindestgröße gebracht. Sie können auch eine einzelne Zelle oder einen Zellenbereich auswählen und <guimenuitem
->Zeile und Spalte anpassen</guimenuitem
-> im Kontextmenü der <mousebutton
->rechten</mousebutton
-> Maustaste oder im Menü <guimenu
->Format</guimenu
-> auswählen.</para>
+<para>To set the row height or column width to the minimum needed to
+display the contents, select the whole row or column, and click with the &RMB; 
+on the row or column label. In the menu which appears, select
+<guimenuitem>Adjust Row</guimenuitem> or <guimenuitem>Adjust
+Column</guimenuitem>. The row or column will resize to the minimum
+necessary. You can also select a single cell or range of cells, and
+click <guimenuitem>Adjust Row &amp; Column</guimenuitem> from either
+the &RMB; popup menu or the <guimenu>Format</guimenu> menu.</para>
 
-<para
->Sie können einer Anzahl von nebeneinander liegenden Zeilen oder Spalten die gleiche Breite oder Höhe geben, indem Sie diese auswählen und danach <menuchoice
-><guimenu
->Format</guimenu
-><guisubmenu
->Zeile</guisubmenu
-><guimenuitem
->Zeilen ausgleichen</guimenuitem
-></menuchoice
-> oder <menuchoice
-><guimenu
->Format</guimenu
-><guisubmenu
->Spalte</guisubmenu
-><guimenuitem
->Spalten ausgleichen</guimenuitem
-></menuchoice
-> wählen.</para>
+<para>You can make a number of adjacent rows or columns the same size by 
+selecting them then choosing <menuchoice><guimenu>Format</guimenu><guisubmenu>
+Row</guisubmenu><guimenuitem>Equalize Row</guimenuitem></menuchoice> or 
+<menuchoice><guimenu>Format</guimenu><guisubmenu>Column</guisubmenu>
+<guimenuitem>Equalize Column</guimenuitem></menuchoice>.</para>
 
 </sect1>
 
 <sect1 id="merging">
-<title
->Zellen verbinden</title>
-<para
->Es ist häufig nützlich, eine Zelle zu haben, die über zwei oder mehr Spalten reicht oder mehr als eine Zeile hoch ist. Solche Zellen können erzeugt werden, indem man zwei oder mehr Zellen zu einer einzigen verbindet. Wählen Sie die zu verbindenden Zellen aus und wählen Sie dann <menuchoice
-><guimenu
->Format</guimenu
-><guimenuitem
->Zellen verbinden</guimenuitem
-></menuchoice
->.</para>
-<para
->Um diesen Verbindung aufzuheben, wählen Sie zunächst die verbundenen Zellen aus und wählen dann <guimenuitem
->Zellen trennen</guimenuitem
-> im Menü <guimenu
->Format</guimenu
-> aus.</para>
+<title>Merging Cells</title>
+<para>It is often convenient to have one cell that spreads across two or more 
+columns or down more than one row. This can be done by merging two or more 
+cells into one. Select the cells to be merged than choose <menuchoice><guimenu>
+Format</guimenu><guimenuitem>Merge Cells</guimenuitem></menuchoice>.</para>
+<para>To reverse this process, select the merged cell then choose <guimenuitem>
+Dissociate Cells</guimenuitem> from the <guimenu>Format</guimenu> menu.</para>
 </sect1>
 
 <sect1 id="hiding">
-<title
->Zeilen und Spalten ausblenden</title>
-<para
->Eine fertige Tabelle sieht häufig besser aus, wenn Sie Zellen mit Zwischenberechnungen ausblenden, und wenn nur die Zellen mit wichtigen Daten und Ergebnissen anzeigt werden.</para>
-<para
->In &sheets; können Sie ausgewählte Zeilen oder Spalten ausblenden, indem sie <guimenuitem
->Zeilen ausblenden</guimenuitem
-> oder <guimenuitem
->Spalten ausblenden</guimenuitem
-> im Menü <menuchoice
-><guimenu
->Format</guimenu
-><guisubmenu
->Zeile</guisubmenu
-></menuchoice
-> oder im <menuchoice
-><guimenu
->Format</guimenu
-><guisubmenu
->Spalte</guisubmenu
-></menuchoice
-> oder im Kontextmenü der <mousebutton
->rechten</mousebutton
-> Maustaste wählen. Ausgeblendete Zeilen und Spalten werden nicht auf dem Bildschirm angezeigt und auch nicht ausgedruckt.</para>
-<para
->Das Ausblenden von Zellen bietet auch einen gewissen Schutz vor unbeabsichtigten Änderungen.</para>
-<para
->Um eine Zeile oder Spalte wieder anzuzeigen, wählen Sie <menuchoice
-><guisubmenu
->Zeile</guisubmenu
-> <guimenuitem
->Zeilen anzeigen ...</guimenuitem
-></menuchoice
-> oder <menuchoice
-><guisubmenu
->Spalte</guisubmenu
-> <guimenuitem
->Spalten anzeigen ...</guimenuitem
-></menuchoice
-> im Menü <guimenu
->Format</guimenu
->. Im  Dialogfenster können Sie jede beliebige Zeilenzahl wählen, die angezeigt werden soll.</para>
+<title>Hiding Rows and Columns</title>
+<para>A finished spreadsheet can often be made to look more attractive by 
+hiding the cells containing intermediate calculations so that only the 
+important data input and result areas are shown.</para>
+<para>In &sheets; you can hide selected rows or columns by 
+using the <guimenuitem>Hide Rows</guimenuitem> and <guimenuitem>Hide 
+Columns</guimenuitem> options from the <menuchoice><guimenu>Format</guimenu>
+<guisubmenu>Row</guisubmenu></menuchoice>, <menuchoice><guimenu>Format
+</guimenu><guisubmenu>Column</guisubmenu></menuchoice> or 
+<mousebutton>right</mousebutton> mouse button menus. Hidden rows and columns 
+are not displayed on the screen or included in a print out.</para>
+<para>Hiding cells in this way also makes them slightly less prone to 
+accidental change.</para>
+<para>To un-hide a row or column select <menuchoice><guisubmenu>Row
+</guisubmenu><guimenuitem>Show Rows...</guimenuitem></menuchoice> or 
+<menuchoice><guisubmenu>Column</guisubmenu><guimenuitem>Show Columns...</guimenuitem>
+</menuchoice> from the <guimenu>Format</guimenu>
+menu. In the dialog box which appears, you can select any number of
+rows to show.</para>
 </sect1>
 
 <sect1 id="sheet-properties">
-<title
->Tabellen-Eigenschaften</title>
-<para
->Die Eigenschaften der gewählten Tabelle können Sie entweder mit der Auswahl von <guilabel
->Tabelleneigenschaften</guilabel
-> aus dem Kontextmenü der <mousebutton
->rechten</mousebutton
-> Maustaste oder im Menü <menuchoice
-><guimenu
->Format</guimenu
-> <guisubmenu
->Tabelle</guisubmenu
-> <guimenuitem
->Tabelleneigenschaften</guimenuitem
-></menuchoice
-> bearbeiten. Den Dialog <guilabel
->Tabelleneigenschaften</guilabel
-> können Sie aber nur öffnen, wenn die Tabelle und das Dokument nicht geschützt sind.</para>
-<para
->Hier können Sie alle Eigenschaften der aktuellen Tabelle einstellen. Mit <guibutton
->OK</guibutton
-> werden die Änderungen übernommen, mit <guibutton
->Voreinstellungen</guibutton
-> werden die Standardeinstellungen wieder hergestellt.</para>
+<title>Sheet properties</title>
+<para>You can access the current sheet properties either by right clicking
+on the sheet tab and choosing <guilabel>Sheet Properties</guilabel> or by
+using the <menuchoice><guimenu>Format</guimenu>
+<guisubmenu>Sheet</guisubmenu><guimenuitem>Sheet
+Properties</guimenuitem></menuchoice> menu. Please note that you can only
+access the <guilabel>Sheet Properties</guilabel> when the document or the sheet is not
+protected.</para>
+<para>You can set different properties that will be valid in the current
+sheet. Clicking on <guibutton>OK</guibutton> will validate your changes
+and <guibutton>Defaults</guibutton> will bring back the default settings.</para>
 <para>
 <mediaobject>
 <imageobject>
 <imagedata fileref="sheetproperties.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase
->Der Dialog Tabelleneigenschaften.</phrase>
+<phrase>Sheet Properties dialog.</phrase>
 </textobject>
 </mediaobject>
 </para>
 <variablelist>
 <varlistentry>
-<term
-><guilabel
->Layout-Ausrichtung:</guilabel
-></term>
-<listitem
-><para
->Einstellung der Richtung in der Tabelle. Als Standard liegt die erste Spalte der Tabelle links. Wenn Sie <guilabel
->Rechts nach Links</guilabel
-> einstellen, befindet sich die erste Spalte der Tabelle rechts und alle anderen werden links eingefügt.</para>
+<term><guilabel>Layout direction:</guilabel></term>
+<listitem><para>Let you choose the sheet orientation. Default is that the first
+column of the sheet is on the left. If you choose <guilabel>Right to Left</guilabel>, then the first
+column will be on the right and the others added from right to left.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Nullen ausblenden</guilabel
-></term>
-<listitem
-><para
->Ist diese Einstellung aktiviert, wird jede Zelle mit einer Null als leere Zelle angezeigt.</para>
+<term><guilabel>Hide zero</guilabel></term>
+<listitem><para>If this box is checked any cell containing the value zero will
+appear blank.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Automatische Neuberechnung</guilabel
-></term>
-<listitem
-><para
->Ist diese Einstellung aktiviert, werden Formeln automatisch neu berechnet, wenn sich der Wert einer bezogenen Zelle ändert.</para>
+<term><guilabel>Automatic recalculation</guilabel></term>
+<listitem><para> This setting controls whether formulae are recalculated
+automatically when the value of any cell they refer to changes.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Spalten als Nummern anzeigen</guilabel
-></term>
-<listitem
-><para
->Ist diese Einstellung aktiviert, werden die Spaltenüberschriften als Nummern und nicht als Buchstaben angezeigt. Buchstaben sind die Standardeinstellung.</para>
+<term><guilabel>Show column as numbers</guilabel></term>
+<listitem><para>If this box is checked the column headings will show as numbers
+rather than as letters. Letters are default.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->LC-Modus verwenden</guilabel
-></term>
-<listitem
-><para
->Ist diese Einstellung aktiviert, wird der Zellenverweis am linken Ende der Formelleiste im LC-Modus (z. B. L2C3) und nicht in seiner normalen Form angezeigt. Diese Einstellung wird selten verwendet.</para>
+<term><guilabel>Use LC mode</guilabel></term>
+<listitem><para>If this box is checked the cell reference shown at the left end
+of the Formula Bar will be displayed in LC mode (i.e. L2C3) rather than in its
+normal form B3. This does not seem to be of much use at the moment.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Ersten Buchstaben groß schreiben</guilabel
-></term>
-<listitem
-><para
->Ist diese Einstellung aktiviert, wird der erste Buchstabe jedes Textes automatisch groß geschrieben.</para>
+<term><guilabel>Convert first letter to uppercase</guilabel></term>
+<listitem><para>Check this box and the first letter of any text you type in will
+automatically be converted to uppercase.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Gitter anzeigen</guilabel
-></term>
-<listitem
-><para
->Ist diese Einstellung aktiviert, wird das Gitter (die Ränder der Zellen) angezeigt. Dies ist die Standardeinstellung. Um das Gitter auszublenden, deaktivieren Sie diese Einstellung.</para>
+<term><guilabel>Show grid</guilabel></term>
+<listitem><para>If checked the grid (the cell limits) will be shown. This is
+default. If you uncheck it, the grid will be hidden.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Seitenränder anzeigen</guilabel
-></term>
-<listitem
-><para
->Ist diese Einstellung aktiviert, werden die Seitenränder in Ihrer aktuellen Tabelle angezeigt. Standardmäßig sind sie ausgeblendet. Das Anzeigen der Seitenränder ist nützlich, wenn Sie Ihre Tabelle drucken wollen.</para>
+<term><guilabel>Show page borders</guilabel></term>
+<listitem><para>If you check this option, the page borders will be drawn on your
+current sheet. Per default the page borders are not displayed. It is useful to
+see the page borders if you want to print your sheet.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Formel anzeigen</guilabel
-></term>
-<listitem
-><para
->Ist diese Einstellung aktiviert, werden Formeln anstelle der Ergebnisse in den Zellen angezeigt.</para>
+<term><guilabel>Show formula</guilabel></term>
+<listitem><para>If this box is checked &sheets; will display the actual
+formulae in cells rather than the results.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Formelmarkierung anzeigen</guilabel
-></term>
-<listitem
-><para
->Ist diese Einstellung aktiviert, werden Zellen mit einer Formel mit einem kleinen blauen Dreieck in der linken oberen Ecke markiert. Dies hilft Ihnen, Zellen mit Formeln zu schützen.</para>
+<term><guilabel>Show formula indicator</guilabel></term>
+<listitem><para>If this box is checked &sheets; will display a small blue
+triangle at the bottom left corner of cells containing formulae. This is useful
+if you want to protect cells with formulae.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term
-><guilabel
->Kommentarmarkierung anzeigen</guilabel
-></term>
-<listitem
-><para
->Ist diese Einstellung aktiviert, werden Zellen mit einem Kommentar mit einem kleinen roten Dreieck in der rechten oberen Ecke markiert.</para>
+<term><guilabel>Show comment indicator</guilabel></term>
+<listitem><para>If this box is checked cells containing comments will be marked
+by a small red triangle at the top right corner.</para>
 </listitem>
 </varlistentry>
 </variablelist>

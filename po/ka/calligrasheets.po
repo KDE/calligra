@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-02 01:02+0000\n"
-"PO-Revision-Date: 2023-01-04 08:52+0100\n"
+"PO-Revision-Date: 2023-01-05 05:09+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7988,7 +7988,7 @@ msgstr "AVERAGEA(მნიშვნელობა;მნიშვნელო�
 #: functions/statistical.xml:83
 #, kde-format
 msgid "AVERAGEA(11.4;17.3;\"sometext\";25.9;40.1) equals 18.94"
-msgstr ""
+msgstr "AVERAGEA(11.4;17.3;\"sometext\";25.9;40.1) უდრის 18.94"
 
 #: functions/statistical.xml:95 functions/statistical.xml:131
 #: functions/statistical.xml:434 functions/statistical.xml:463
@@ -14342,32 +14342,32 @@ msgstr ""
 #: ui/dialogs/DatabaseDialog.cpp:535
 msgctxt "(qtundo-format)"
 msgid "Insert Data From Database"
-msgstr ""
+msgstr "მონაცემების ბაზიდან ჩასმა"
 
 #: ui/dialogs/DatabaseDialog.cpp:592
 #, kde-format
 msgid "The port must be a number"
-msgstr ""
+msgstr "პორტი რიცხვი უნდა იყოს"
 
 #: ui/dialogs/DatabaseDialog.cpp:598
 #, kde-format
 msgid "Connecting to database..."
-msgstr ""
+msgstr "ბაზასთან მიერთება..."
 
 #: ui/dialogs/DatabaseDialog.cpp:600
 #, kde-format
 msgid "Connected. Retrieving table information..."
-msgstr ""
+msgstr "მიერთებულია. ცხრილის ინფორმაციის მიღება..."
 
 #: ui/dialogs/DatabaseDialog.cpp:604
 #, kde-format
 msgid "This database contains no tables"
-msgstr ""
+msgstr "ეს ბაზა ცხრილებს არ შეიცავს"
 
 #: ui/dialogs/DatabaseDialog.cpp:639
 #, kde-format
 msgid "Driver could not be loaded"
-msgstr ""
+msgstr "დრაივერის ჩატვირთვის შეცდომა"
 
 #: ui/dialogs/DatabaseDialog.cpp:650
 #, kde-format
@@ -14488,22 +14488,22 @@ msgstr ""
 #: ui/dialogs/DocumentSettingsDialog.cpp:112
 #, kde-format
 msgid "Automatic find labels"
-msgstr ""
+msgstr "ველების ავტომატური პოვნა"
 
 #: ui/dialogs/DocumentSettingsDialog.cpp:118
 #, kde-format
 msgid "String comparison:"
-msgstr ""
+msgstr "სტრიქონების შედარება:"
 
 #: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "Regular Expressions"
-msgstr ""
+msgstr "რეგულარული გამოსახულებები"
 
 #: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "Wildcards"
-msgstr ""
+msgstr "ვაილდკარდები"
 
 #: ui/dialogs/DocumentSettingsDialog.cpp:130
 #, kde-format
@@ -14544,7 +14544,7 @@ msgstr ""
 #: ui/dialogs/DocumentSettingsDialog.cpp:201
 #, kde-format
 msgid "Currency format: %1"
-msgstr ""
+msgstr "ვალუტის ფორმატი: %1"
 
 #: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
 #, kde-format
@@ -14564,7 +14564,7 @@ msgstr "ძებნა:"
 #: ui/dialogs/FindDialog.cpp:43
 #, kde-format
 msgid "Cell Values"
-msgstr ""
+msgstr "უჯრედის მნიშვნელობა"
 
 #: ui/dialogs/FindDialog.cpp:44
 #, kde-format
@@ -14574,7 +14574,7 @@ msgstr "კომენტარები"
 #: ui/dialogs/FindDialog.cpp:48
 #, kde-format
 msgid "Search direction:"
-msgstr ""
+msgstr "ძებნის მიმართულება:"
 
 #: ui/dialogs/FindDialog.cpp:56
 #, kde-format

@@ -1,148 +1,81 @@
 <chapter id="options">
 <chapterinfo>
 <authorgroup>
-<author
-><firstname
->Neil</firstname
-> <surname
->Lucock</surname
-> <affiliation
-> <address
-><email
->neil@nlucock.freeserve.co.uk</email
-></address>
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
 </affiliation>
 </author>
-<author
-><firstname
->Krishna</firstname
-> <surname
->Tateneni</surname
-> <affiliation
-> <address
-><email
->tateneni@pluto.njcc.com</email
-></address>
+<author>
+<firstname>Krishna</firstname>
+<surname>Tateneni</surname>
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
 </affiliation>
 </author>
-<author
-><firstname
->Anne-Marie</firstname
-> <surname
->Mahfouf</surname
-> <affiliation
-> <address
-><email
->annemarie.mahfouf@free.fr</email
-></address>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
 </affiliation>
 </author>
-<othercredit role="translator"
-><firstname
->Hans-Frieder</firstname
-><surname
->Hirsch</surname
-><affiliation
-><address
-><email
->f.hirsch@t-online.de</email
-></address
-></affiliation
-><contrib
->Deutsche Übersetzung</contrib
-></othercredit
-> 
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo>
-<title
->Einrichtung von &stage;</title>
+<title>Configuring &stage;</title>
 
 <sect1 id="configure-dialog">
-<title
->Der Einrichtungsdialog</title>
+<title>The Configure - Stage Dialog</title>
 
 <sect2 id="configure-misc">
-<title
->Verschiedenes</title>
+<title>Misc</title>
 
 <screenshot>
-<screeninfo
->Verschiedenes</screeninfo>
+<screeninfo>Misc</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="configure-misc.png" format="PNG"/>
 </imageobject>
-<textobject
-><phrase
->Verschiedenes</phrase
-></textobject>
+<textobject><phrase>Misc</phrase></textobject>
 </mediaobject>
 </screenshot>
 
 <variablelist>
 <varlistentry>
-<term
-><guilabel
->Einheiten</guilabel
-></term>
-<listitem
-><para
->Wählen Sie die Standardeinheit, die in Ihren Folien verwendet wird.</para
-></listitem>
+<term><guilabel>Units</guilabel></term>
+<listitem><para>Choose the default unit that will be used in your slides.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
-><guilabel
->Radius der Ziehpunkte</guilabel
-></term>
-<listitem
-><para
->Wenn Sie ein Objekt mit dem Standardwerkzeug (Pfeil) auswählen, wird der Umriss mit gelben und roten Quadraten angezeigt. Der Radius dieser Ziehpunkte  (zur Größenänderung, Drehung &etc;) legt die Größe diese Elemente fest, je größer desto einfacher sind sie zu treffen.</para
-></listitem>
+<term><guilabel>Handle radius</guilabel></term>
+<listitem><para>If you select a shape with the default tool (arrow) you see the yellow and
+red rectangles. These are called handles (used for resizing, rotation, ...).
+The handle radius changes the size of the handles. If you make them bigger it
+is easier to hit them.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
-><guilabel
->Empfindlichkeit der Ziehpunkte</guilabel
-></term>
-<listitem
-><para
->Mit dieser Einstellung geben Sie an, wie der Abstand zum Ziehpunkt für die Aktivierung ist.</para
-></listitem>
+<term><guilabel>Grab sensitivity</guilabel></term>
+<listitem><para>This option defines how exactly you need to hit
+a handle to select it.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
-><guilabel
->Versatz beim Einfügen</guilabel
-></term>
-<listitem
-><para
->Dieser Versatz kann nur geändert werden, wenn <guilabel
->Am Cursor einfügen</guilabel
-> abgeschaltet ist. Wenn  Sie mit ein Objekt mit den Kurzbefehlen <keycombo action="simul"
->&Ctrl;<keycap
->C</keycap
-></keycombo
-> kopieren und mit <keycombo action="simul"
->&Ctrl;<keycap
->V</keycap
-></keycombo
-> an einer Stelle einfügen, an der sich bereits ein Objekt befindet, wird das eingefügte Objekt um diesen Wert nach rechts unten versetzt eingefügt.</para
-></listitem>
+<term><guilabel>Paste offset</guilabel></term>
+<listitem><para>This is only active if <guilabel>Paste at Cursor</guilabel> is disabled.
+If you copy a shape with the shortcut <keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo>
+and paste it with <keycombo action="simul">&Ctrl;<keycap>V</keycap></keycombo>,
+and do that at a place where already a shape is this offset is used to paste the
+new shape to the bottom/right.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
-><guilabel
->Am Cursor einfügen</guilabel
-></term>
-<listitem
-><para
->Deaktiviert den Versatz beim Einfügen und fügt ein Objekt immer an der Position des Mauszeigers ein.</para
-></listitem>
+<term><guilabel>Paste at Cursor</guilabel></term>
+<listitem><para>Disables the paste offset and insert a pasted shape at the mouse
+cursor position.</para></listitem>
 </varlistentry>
 
 </variablelist>
@@ -150,154 +83,87 @@
 </sect2>
 
 <sect2 id="configure-grid">
-<title
->Gitter</title>
+<title>Grid</title>
 
 <screenshot>
-<screeninfo
->Gitter</screeninfo>
+<screeninfo>Grid</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="configure-grid.png" format="PNG"/>
 </imageobject>
-<textobject
-><phrase
->Gitter</phrase
-></textobject>
+<textobject><phrase>Grid</phrase></textobject>
 </mediaobject>
 </screenshot>
 
 <variablelist>
-<title
-><guilabel
->Gitter</guilabel
-></title>
+<title><guilabel>Grid</guilabel></title>
 <varlistentry>
-<term
-><guilabel
->Gitter anzeigen</guilabel
-></term>
-<listitem
-><para
->Wenn diese Option aktiviert ist, zeigt &stage; ein Punktgitter an. Diese Punkte repräsentieren die Schnittpunkte eines Gitters aus wagerechten und senkrechten Linien. Sie dienen zur exakten Positionierung von Objekten auf der Folie.</para
-></listitem>
+<term><guilabel>Show grid</guilabel></term>
+<listitem><para>If enabled, &stage; will display a grid of dots
+representing the intersections of imaginary horizontal and vertical
+lines. You can use these dots to precisely position objects on the
+slide.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
-><guilabel
->An Gitter ausrichten</guilabel
-></term>
-<listitem
-><para
->Wenn diese Option markiert ist, werden verschobene oder neu erstellte Objekte mit ihrer linken oberen Ecke auf dem nächstliegenden Gitterpunkt <quote
->einrasten</quote
->.</para>
-<para
->Trotzdem können Sie Objekten auf der Folie beliebig anordnen. Diese Option hilft aber bei der genauen Ausrichtung von Objekten. Bei Bedarf kann diese Funktion schnell ein- oder ausgeschaltet werden.</para
-></listitem>
+<term><guilabel>Snap to grid</guilabel></term>
+<listitem><para>If this is enabled, when dropping or moving objects on the
+slide the top left corner of the object will <quote>snap</quote> or
+move, to the nearest grid point.</para>
+<para>This does reduce your freedom to freely position objects on the
+slide, however it also helps to line up objects precisely. It is
+easily disabled or enabled with this option, allowing you the best
+of both worlds.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
-><guilabel
->Gitterfarbe:</guilabel
-></term>
-<listitem
-><para
->Stellen Sie hier die Gitterfarbe ein, als Standard ist Schwarz vorgegeben.</para
-></listitem>
+<term><guilabel>Grid color:</guilabel></term>
+<listitem><para>You can change here the grid color which is black as default.</para></listitem>
 </varlistentry>
 
 </variablelist>
 
 <variablelist>
-<title
-><guilabel
->Abstände</guilabel
-></title>
-<para
->Mit dem Symbol <inlinemediaobject
-><imageobject
-> <imagedata fileref="link.png" format="PNG"/></imageobject
-></inlinemediaobject
-> bleibt das Verhältnis der unten genannten Abweichungen erhalten, mit dem Symbol <inlinemediaobject
-><imageobject
-> <imagedata fileref="break.png" format="PNG"/></imageobject
-></inlinemediaobject
-> können Sie die beiden unten genannten Werte unabhängig voneinander einstellen.</para>
+<title><guilabel>Spacing</guilabel></title>
+<para>You can choose to keep the same ratio for the two settings below by having the <inlinemediaobject><imageobject>
+<imagedata fileref="link.png" format="PNG"/></imageobject></inlinemediaobject> icon or to separate the two settings by using the <inlinemediaobject><imageobject>
+<imagedata fileref="break.png" format="PNG"/></imageobject></inlinemediaobject> icon.</para>
 <varlistentry>
-<term
-><guilabel
->Waagerecht:</guilabel
-></term>
-<listitem
-><para
->Einstellung des waagerechten Abstandes zwischen Linien des Gitters. Standard ist 0,5 cm.</para
-></listitem>
+<term><guilabel>Horizontal:</guilabel></term>
+<listitem><para>Set the space in centimeters between two points on an horizontal line on the grid. Default is 0.5 centimeter.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
-><guilabel
->Senkrecht:</guilabel
-></term>
-<listitem
-><para
->Einstellung des senkrechten Abstandes zwischen Linien des Gitters. Standard ist 0,5 cm.</para
-></listitem>
+<term><guilabel>Vertical:</guilabel></term>
+<listitem><para>Set the space in centimeters between two points on a vertical line on the grid. Default is 0.5 centimeter.</para></listitem>
 </varlistentry>
 </variablelist>
 
 </sect2>
 
 <sect2 id="configure-document">
-<title
->Dokument</title>
+<title>Document</title>
 
 <screenshot>
-<screeninfo
->Dokument</screeninfo>
+<screeninfo>Document</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="configure-document.png" format="PNG"/>
 </imageobject>
-<textobject
-><phrase
->Dokument</phrase
-></textobject>
+<textobject><phrase>Document</phrase></textobject>
 </mediaobject>
 </screenshot>
 
 <variablelist>
-<title
-><guilabel
->Dokument-Einstellungen</guilabel
-></title>
+<title><guilabel>Document Settings</guilabel></title>
 <varlistentry>
-<term
-><guilabel
->Intervall für automatisches Speichern:</guilabel
-></term>
-<listitem
-><para
->Stellen Sie hier die Zeit für die automatische Sicherung ein. Mit <guilabel
->Keine automatische Sicherung</guilabel
-> schalten Sie die Sicherung aus. Sie können hier einen Zeitraum von 1 bis 60 Minuten eingeben.</para
-></listitem>
+<term><guilabel>Autosave interval:</guilabel></term>
+<listitem><para>You can use this to adjust how often &stage; saves a temporary file. If you set this value to  <guilabel>No autosave</guilabel>, &stage; will not autosave. You can adjust the autosave from 1 minute to 60 minutes.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
-><guilabel
->Sicherungsdatei erstellen:</guilabel
-></term>
-<listitem
-><para
->Ist diese Einstellung aktiviert, wird eine Sicherungsdatei <filename
->.&lt;name&gt;.odp.autosave.odp</filename
-> im Ordner der geöffneten Datei angelegt. Diese Sicherungsdatei können Sie bei Problemen mit dem Original verwenden. Die Sicherungsdatei wird jedesmal neu geschrieben, wenn Sie Ihr Dokument speichern oder wenn eine automatische Sicherung ausgeführt wird.</para
-></listitem>
+<term><guilabel>Create backup file:</guilabel></term>
+<listitem><para>If checked, this will create a <filename>.&lt;name&gt;.odp.autosave.odp</filename> in the folder where your file is. This backup file can then be used in case of a problem. The backup file is updated everytime you save your document or everytime there is an autosave.</para></listitem>
 </varlistentry>
 
 </variablelist>
@@ -305,27 +171,24 @@
 </sect2>
 
 <sect2 id="configure-author">
-<title
->Autor</title>
+<title>Author</title>
 
 <screenshot>
-<screeninfo
->Autor</screeninfo>
+<screeninfo>Author</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="configure-author.png" format="PNG"/>
 </imageobject>
-<textobject
-><phrase
->Dokument</phrase
-></textobject>
+<textobject><phrase>Document</phrase></textobject>
 </mediaobject>
 </screenshot>
 
-<para
->Wählen Sie aus dem Auswahlfeld eine Autorprofil für Ihr Dokument. </para>
-<para
->Um neue Profile hinzuzufügen oder vorhandene zu löschen, benutzen Sie die Knöpfe rechts neben dem Auswahlfeld mit den Autorprofilen. </para>
+<para>
+  Choose an author profile for your document.
+</para>
+<para>
+  You can add a new profile or delete the current profile using the buttons to the right of the profiles drop-down list.
+</para>
 </sect2>
 
 </sect1>
