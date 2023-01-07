@@ -21,7 +21,10 @@ namespace Calligra
 namespace Sheets
 {
 class Validity;
-class ValueConverter;
+class CalculationSettings;
+
+namespace Odf {
+
 class GenValidationStyles;
 
 /**
@@ -31,8 +34,8 @@ class GenValidationStyles;
 class GenValidationStyle
 {
 public:
-    explicit GenValidationStyle(Validity *_val = 0, const ValueConverter *converter = 0) {
-        initVal(_val, converter);
+    explicit GenValidationStyle(Validity *_val = 0, CalculationSettings *cs = nullptr) {
+        initVal(_val, cs);
     }
 
 
@@ -50,14 +53,14 @@ public:
         return false;
     }
 private:
-    QString createValidationCondition(Validity* _val, const ValueConverter *converter);
+    QString createValidationCondition(Validity* _val, CalculationSettings *cs);
     QString createTextValidationCondition(Validity* _val);
-    QString createTimeValidationCondition(Validity* _val, const ValueConverter *converter);
-    QString createDateValidationCondition(Validity* _val, const ValueConverter *converter);
+    QString createTimeValidationCondition(Validity* _val);
+    QString createDateValidationCondition(Validity* _val, CalculationSettings *cs);
     QString createNumberValidationCondition(Validity* _val);
     QString createListValidationCondition(Validity* _val);
 
-    void initVal(Validity *_val, const ValueConverter *converter);
+    void initVal(Validity *_val, CalculationSettings *cs);
 
     QString allowEmptyCell;
     QString condition;
@@ -95,6 +98,9 @@ private:
     NameMap m_names;
 
 };
+
+} // namespace Odf
+
 
 } // namespace Sheets
 } // namespace Calligra

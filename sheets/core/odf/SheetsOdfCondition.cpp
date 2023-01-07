@@ -10,7 +10,6 @@
 #include "SheetsOdfPrivate.h"
 
 #include "engine/Validity.h"
-#include "engine/ValueConverter.h"
 #include "engine/ValueParser.h"
 
 #include "Condition.h"
@@ -25,13 +24,13 @@ namespace Calligra {
 namespace Sheets {
 
 namespace Odf {
-    void loadCondition(QString &valExpression, Conditional &newCondition, const ValueParser *parser);
-    void loadConditionValue(const QString &styleCondition, Conditional &newCondition, const ValueParser *parser);
-    void loadValidationValue(const QStringList &listVal, Conditional &newCondition, const ValueParser *parser);
-    QString saveConditionValue(const Conditional &conditionalStyle, ValueConverter *converter);
+    void loadCondition(QString &valExpression, Conditional &newCondition);
+    void loadConditionValue(const QString &styleCondition, Conditional &newCondition);
+    void loadValidationValue(const QStringList &listVal, Conditional &newCondition);
+    QString saveConditionValue(const Conditional &conditionalStyle, CalculationSettings *cs);
 }
 
-void Odf::saveConditions(const Conditions *conditions, KoGenStyle &currentCellStyle, ValueConverter *converter)
+void Odf::saveConditions(const Conditions *conditions, KoGenStyle &currentCellStyle, CalculationSettings *cs)
 {
     //todo fix me with kspread old format!!!
     if (conditions->isEmpty())
@@ -43,7 +42,7 @@ void Odf::saveConditions(const Conditions *conditions, KoGenStyle &currentCellSt
         Conditional conditional = *it;
         //<style:map style:condition="cell-content()=45" style:apply-style-name="Default" style:base-cell-address="Sheet1.E10"/>
         QMap<QString, QString> map;
-        map.insert("style:condition", saveConditionValue(conditional, converter));
+        map.insert("style:condition", saveConditionValue(conditional, cs));
         map.insert("style:apply-style-name", conditional.styleName);
         if (!conditional.baseCellAddress.isEmpty())
             map.insert("style:base-cell-address", conditional.baseCellAddress);
@@ -51,12 +50,12 @@ void Odf::saveConditions(const Conditions *conditions, KoGenStyle &currentCellSt
     }
 }
 
-QString Odf::saveConditionValue(const Conditional &conditional, ValueConverter* converter)
+QString Odf::saveConditionValue(const Conditional &conditional, CalculationSettings *cs)
 {
-    //we can also compare text value.
-    //todo adapt it.
-    QString v1 = converter->asString(conditional.value1).asStringWithDoubleQuotes();
-    QString v2 = converter->asString(conditional.value2).asStringWithDoubleQuotes();
+    QString v1 = toSaveString(conditional.value1, conditional.value1.format(), cs);
+    QString v2 = toSaveString(conditional.value2, conditional.value2.format(), cs);
+    if (conditional.value1.isString()) v1 = Value(v1).asStringWithDoubleQuotes();
+    if (conditional.value2.isString()) v2 = Value(v2).asStringWithDoubleQuotes();
     QString value;
     switch (conditional.cond) {
     case Validity::None:
@@ -94,11 +93,11 @@ QString Odf::saveConditionValue(const Conditional &conditional, ValueConverter* 
 }
 
 Conditional Odf::loadCondition(Conditions *condition, const QString &conditionValue, const QString &applyStyleName,
-                                         const QString& baseCellAddress, const ValueParser *parser)
+                                         const QString& baseCellAddress)
 {
     //debugSheetsODF << "\tcondition:" << conditionValue;
     Conditional newCondition;
-    loadConditionValue(conditionValue, newCondition, parser);
+    loadConditionValue(conditionValue, newCondition);
     if (!applyStyleName.isNull()) {
         //debugSheetsODF << "\tstyle:" << applyStyleName;
         newCondition.styleName = applyStyleName;
@@ -108,7 +107,7 @@ Conditional Odf::loadCondition(Conditions *condition, const QString &conditionVa
     return newCondition;
 }
 
-void Odf::loadConditions(Conditions *condition, const KoXmlElement &element, const ValueParser *parser, const StyleManager *styleManager)
+void Odf::loadConditions(Conditions *condition, const KoXmlElement &element, const StyleManager *styleManager)
 {
     debugSheetsODF << "Loading conditional styles";
     KoXmlNode node(element);
@@ -125,21 +124,21 @@ void Odf::loadConditions(Conditions *condition, const KoXmlElement &element, con
                 if (!odfStyle.isEmpty()) applyStyleName = odfStyle;
             }
             QString baseCellAddress = elementItem.attributeNS(KoXmlNS::style, "base-cell-address");
-            loadCondition(condition, conditionValue, applyStyleName, baseCellAddress, parser);
+            loadCondition(condition, conditionValue, applyStyleName, baseCellAddress);
         }
         node = node.nextSibling();
     }
 }
 
-void Odf::loadConditionValue(const QString &styleCondition, Conditional &newCondition, const ValueParser *parser)
+void Odf::loadConditionValue(const QString &styleCondition, Conditional &newCondition)
 {
     QString val(styleCondition);
     if (val.contains("cell-content()")) {
         val.remove("cell-content()");
-        loadCondition(val, newCondition, parser);
+        loadCondition(val, newCondition);
     } else if (val.contains("value()")) {
         val.remove("value()");
-        loadCondition(val, newCondition, parser);
+        loadCondition(val, newCondition);
     }
 
     //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
@@ -148,13 +147,13 @@ void Odf::loadConditionValue(const QString &styleCondition, Conditional &newCond
         val.remove("cell-content-is-between(");
         val.remove(')');
         QStringList listVal = val.split(',', QString::SkipEmptyParts);
-        loadValidationValue(listVal, newCondition, parser);
+        loadValidationValue(listVal, newCondition);
         newCondition.cond = Validity::Between;
     } else if (val.contains("cell-content-is-not-between(")) {
         val.remove("cell-content-is-not-between(");
         val.remove(')');
         QStringList listVal = val.split(',', QString::SkipEmptyParts);
-        loadValidationValue(listVal, newCondition, parser);
+        loadValidationValue(listVal, newCondition);
         newCondition.cond = Validity::Different;
     } else if (val.startsWith(QLatin1String("is-true-formula("))) {
         val.remove(0, 16);
@@ -164,7 +163,7 @@ void Odf::loadConditionValue(const QString &styleCondition, Conditional &newCond
     }
 }
 
-void Odf::loadCondition(QString &valExpression, Conditional &newCondition, const ValueParser *parser)
+void Odf::loadCondition(QString &valExpression, Conditional &newCondition)
 {
     QString value;
     if (valExpression.indexOf("<=") == 0) {
@@ -194,15 +193,23 @@ void Odf::loadCondition(QString &valExpression, Conditional &newCondition, const
     if (value.length() > 1 && value[0] == '"' && value[value.length()-1] == '"') {
         newCondition.value1 = Value(value.mid(1, value.length()-2));
     } else {
-        newCondition.value1 = parser->parse(value);
+        bool ok;
+        Value v = Value(value.toDouble(&ok));
+        if (!ok) v = Value(value);
+        newCondition.value1 = v;
     }
 }
 
-void Odf::loadValidationValue(const QStringList &listVal, Conditional &newCondition, const ValueParser *parser)
+void Odf::loadValidationValue(const QStringList &listVal, Conditional &newCondition)
 {
     debugSheetsODF << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
-    newCondition.value1 = parser->parse(listVal[0]);
-    newCondition.value2 = parser->parse(listVal[1]);
+    bool ok;
+    Value v1 = Value(listVal[0].toDouble(&ok));
+    if (!ok) v1 = Value(listVal[0]);
+    Value v2 = Value(listVal[1].toDouble(&ok));
+    if (!ok) v2 = Value(listVal[1]);
+    newCondition.value1 = v1;
+    newCondition.value2 = v2;
 }
 
 

@@ -15,6 +15,7 @@
 #include <QPoint>
 #include <QRect>
 #include <QSharedDataPointer>
+#include <QDebug>
 
 namespace Calligra
 {
@@ -285,9 +286,18 @@ inline uint qHash(const CellBase& cell)
     return (static_cast<uint>(cell.column()) << 16) + static_cast<uint>(cell.row());
 }
 
-
 } // namespace Sheets
 } // namespace Calligra
+
+
+/***************************************************************************
+  QDebug support
+****************************************************************************/
+
+inline QDebug operator<<(QDebug str, const Calligra::Sheets::CellBase& cell)
+{
+    return str << qPrintable(QString("%1%2").arg(Calligra::Sheets::CellBase::columnName(cell.column())).arg(QString::number(cell.row())));
+}
 
 
 #endif

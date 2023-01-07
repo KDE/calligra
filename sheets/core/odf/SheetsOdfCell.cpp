@@ -458,7 +458,7 @@ bool Odf::saveCell(Cell *cell, int &repeated, OdfSavingContext& tableContext)
 
     Validity validity = cell->validity();
     if (!validity.isEmpty()) {
-        GenValidationStyle styleVal(&validity, sheet->map()->converter());
+        GenValidationStyle styleVal(&validity, sheet->map()->calculationSettings());
         xmlwriter.addAttribute("table:validation-name", tableContext.valStyle.insert(styleVal));
     }
     if (cell->isFormula()) {
@@ -872,10 +872,37 @@ QString Odf::saveCellStyle(Cell *cell, KoGenStyle &currentCellStyle, KoGenStyles
     if (!conditions.isEmpty()) {
         // this has to be an automatic style
         currentCellStyle = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
-        saveConditions(&conditions, currentCellStyle, cell->sheet()->map()->converter());
+        saveConditions(&conditions, currentCellStyle, cell->sheet()->map()->calculationSettings());
     }
     Style style = cell->style();
     return saveStyle(&style, currentCellStyle, mainStyles, cell->fullSheet()->fullMap()->styleManager(), cell->sheet()->map()->calculationSettings()->locale());
+}
+
+QString Odf::toSaveString(const Value &value, const Value::Format format, CalculationSettings *cs)
+{
+    switch (format) {
+    case Value::fmt_None: return QString();  //NOTHING HERE
+    case Value::fmt_Boolean:
+        return value.asBoolean() ? "true" : "false";
+    case Value::fmt_Number: {
+        if (value.isInteger())
+            return QString::number(value.asInteger());
+        return QString::number(numToDouble(value.asFloat()), 'g', DBL_DIG);
+    }
+    case Value::fmt_Percent:
+        return QString::number((double) numToDouble(value.asFloat()));
+    case Value::fmt_Money:
+        return QString::number((double) numToDouble(value.asFloat()));
+    case Value::fmt_DateTime: return QString();  //NOTHING HERE
+    case Value::fmt_Date:
+        return value.asDate(cs).toString(Qt::ISODate);
+    case Value::fmt_Time:
+        return value.asTime().toString("'PT'hh'H'mm'M'ss'S'");
+    case Value::fmt_String:
+        return value.asString();
+    default:
+        return value.asString();
+    };
 }
 
 void Odf::saveCellValue(Cell *cell, KoXmlWriter &xmlWriter)
@@ -908,24 +935,22 @@ void Odf::saveCellValue(Cell *cell, KoXmlWriter &xmlWriter)
     else if (shownFormat == Format::Custom)
         saveFormat = valueFormat;
 
+    QString saveString = toSaveString(value, saveFormat, cell->sheet()->map()->calculationSettings());
     switch (saveFormat) {
     case Value::fmt_None: break;  //NOTHING HERE
     case Value::fmt_Boolean: {
         xmlWriter.addAttribute("office:value-type", "boolean");
-        xmlWriter.addAttribute("office:boolean-value", (value.asBoolean() ? "true" : "false"));
+        xmlWriter.addAttribute("office:boolean-value", saveString);
         break;
     }
     case Value::fmt_Number: {
         xmlWriter.addAttribute("office:value-type", "float");
-        if (value.isInteger())
-            xmlWriter.addAttribute("office:value", QString::number(value.asInteger()));
-        else
-            xmlWriter.addAttribute("office:value", QString::number(numToDouble(value.asFloat()), 'g', DBL_DIG));
+        xmlWriter.addAttribute("office:value", saveString);
         break;
     }
     case Value::fmt_Percent: {
         xmlWriter.addAttribute("office:value-type", "percentage");
-        xmlWriter.addAttribute("office:value", QString::number((double) numToDouble(value.asFloat())));
+        xmlWriter.addAttribute("office:value", saveString);
         break;
     }
     case Value::fmt_Money: {
@@ -935,25 +960,23 @@ void Odf::saveCellValue(Cell *cell, KoXmlWriter &xmlWriter)
             Currency currency = style.currency();
             xmlWriter.addAttribute("office:currency", currency.code());
         }
-        xmlWriter.addAttribute("office:value", QString::number((double) numToDouble(value.asFloat())));
+        xmlWriter.addAttribute("office:value", saveString);
         break;
     }
     case Value::fmt_DateTime: break;  //NOTHING HERE
     case Value::fmt_Date: {
         xmlWriter.addAttribute("office:value-type", "date");
-        xmlWriter.addAttribute("office:date-value",
-                               value.asDate(cell->sheet()->map()->calculationSettings()).toString(Qt::ISODate));
+        xmlWriter.addAttribute("office:date-value", saveString);
         break;
     }
     case Value::fmt_Time: {
         xmlWriter.addAttribute("office:value-type", "time");
-        xmlWriter.addAttribute("office:time-value",
-                               value.asTime().toString("'PT'hh'H'mm'M'ss'S'"));
+        xmlWriter.addAttribute("office:time-value", saveString);
         break;
     }
     case Value::fmt_String: {
         xmlWriter.addAttribute("office:value-type", "string");
-        xmlWriter.addAttribute("office:string-value", value.asString());
+        xmlWriter.addAttribute("office:string-value", saveString);
         break;
     }
     };

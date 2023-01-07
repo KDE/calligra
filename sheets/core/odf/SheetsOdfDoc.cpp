@@ -343,9 +343,9 @@ void Odf::loadCalculationSettings(CalculationSettings *settings, const KoXmlElem
             if (value == "true")
                 settings->setUseWildcards(true);
         } else if (element.hasAttributeNS(KoXmlNS::table, "null-year")) {
-            settings->setReferenceYear(1930);
-            QString value = element.attributeNS(KoXmlNS::table, "null-year", "1930");
-            if (!value.isEmpty() && value != "1930") {
+            settings->setReferenceYear(1940);
+            QString value = element.attributeNS(KoXmlNS::table, "null-year", "1940");
+            if (!value.isEmpty() && value != "1940") {
                 bool ok;
                 int refYear = value.toInt(&ok);
                 if (ok)
@@ -395,7 +395,7 @@ bool Odf::saveCalculationSettings(const CalculationSettings *settings, KoXmlWrit
         xmlWriter.addAttribute("table:use-regular-expressions", "false");
     if (settings->useWildcards())
         xmlWriter.addAttribute("table:use-wildcards", "true");
-    if (settings->referenceYear() != 1930)
+    if (settings->referenceYear() != 1940)
         xmlWriter.addAttribute("table:null-year", QString::number(settings->referenceYear()));
     xmlWriter.endElement();
     return true;

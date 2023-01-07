@@ -354,13 +354,4 @@ inline uint qHash(const Cell& cell)
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Cell, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(Calligra::Sheets::Cell)
 
-/***************************************************************************
-  QDebug support
-****************************************************************************/
-
-inline QDebug operator<<(QDebug str, const Calligra::Sheets::Cell& cell)
-{
-    return str << qPrintable(QString("%1%2").arg(Calligra::Sheets::Cell::columnName(cell.column())).arg(QString::number(cell.row())));
-}
-
 #endif  // CALLIGRA_SHEETS_CELL

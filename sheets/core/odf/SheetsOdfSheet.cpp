@@ -938,7 +938,7 @@ int Odf::loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
         // Some spreadsheet programs may support more columns than
         // Calligra Sheets so limit the number of repeated columns.
         const int numberColumns = ok ? qMin(n, KS_colMax - columnIndex + 1) : 1;
-        columnMaximal = qMax(numberColumns, columnMaximal);
+        columnMaximal = qMax(columnIndex + numberColumns, columnMaximal);
 
         // Styles are inserted at the end of the loading process, so check the XML directly here.
         const QString styleName = cellElement.attributeNS(KoXmlNS::table , sStyleName, QString());
@@ -955,6 +955,7 @@ int Odf::loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
         Cell cell(sheet, columnIndex, rowIndex);
         loadCell(&cell, cellElement, tableContext, autoStyles, cellStyleName, shapeData);
 
+        // If comment/conditions/etc are set, copy them to all the cells in range.
         if (!cell.comment().isEmpty())
             sheet->cellStorage()->setComment(Region(columnIndex, rowIndex, numberColumns, number, sheet), cell.comment());
         if (!cell.conditions().isEmpty())

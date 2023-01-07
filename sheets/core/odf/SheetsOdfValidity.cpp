@@ -21,15 +21,15 @@ namespace Calligra {
 namespace Sheets {
 
 namespace Odf {
-    void loadValidationCondition(Validity *validity, QString &valExpression, const ValueParser *parser);
-    void loadValidationValue(Validity *validity, const QStringList &listVal, const ValueParser *parser);
+    void loadValidationCondition(Validity *validity, QString &valExpression, CalculationSettings *cs);
+    void loadValidationValue(Validity *validity, const QStringList &listVal, CalculationSettings *cs);
 }
 
 void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString& validationName,
                                  OdfLoadingContext& tableContext)
 {
-    ValueParser *parser = cell->sheet()->map()->parser();
     KoXmlElement element = tableContext.validities.value(validationName);
+    CalculationSettings *cs = cell->sheet()->map()->calculationSettings();
     if (element.hasAttributeNS(KoXmlNS::table, "condition")) {
         QString valExpression = element.attributeNS(KoXmlNS::table, "condition", QString());
         debugSheetsODF << " element.attribute( table:condition )" << valExpression;
@@ -52,7 +52,7 @@ void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString
             debugSheetsODF << " valExpression = :" << valExpression;
             validity->setRestriction(Validity::TextLength);
 
-            loadValidationCondition(validity, valExpression, parser);
+            loadValidationCondition(validity, valExpression, cs);
         } else if (valExpression.contains("cell-content-is-text()")) {
             validity->setRestriction(Validity::Text);
         }
@@ -64,7 +64,7 @@ void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString
             debugSheetsODF << " valExpression :" << valExpression;
             valExpression.remove(')');
             QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
-            loadValidationValue(validity, listVal, parser);
+            loadValidationValue(validity, listVal, cs);
         } else if (valExpression.contains("cell-content-text-length-is-not-between")) {
             validity->setRestriction(Validity::TextLength);
             validity->setCondition(Validity::Different);
@@ -73,7 +73,7 @@ void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString
             valExpression.remove(')');
             debugSheetsODF << " valExpression :" << valExpression;
             QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
-            loadValidationValue(validity, listVal, parser);
+            loadValidationValue(validity, listVal, cs);
         } else if (valExpression.contains("cell-content-is-in-list(")) {
             validity->setRestriction(Validity::List);
             valExpression.remove("oooc:cell-content-is-in-list(");
@@ -100,7 +100,7 @@ void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString
 
             if (valExpression.contains("cell-content()")) {
                 valExpression.remove("cell-content()");
-                loadValidationCondition(validity, valExpression, parser);
+                loadValidationCondition(validity, valExpression, cs);
             }
             //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
             //for the moment we support just int/double value, not text/date/time :(
@@ -108,14 +108,14 @@ void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString
                 valExpression.remove("cell-content-is-between(");
                 valExpression.remove(')');
                 QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
-                loadValidationValue(validity, listVal, parser);
+                loadValidationValue(validity, listVal, cs);
                 validity->setCondition(Validity::Between);
             }
             if (valExpression.contains("cell-content-is-not-between(")) {
                 valExpression.remove("cell-content-is-not-between(");
                 valExpression.remove(')');
                 QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
-                loadValidationValue(validity, listVal, parser);
+                loadValidationValue(validity, listVal, cs);
                 validity->setCondition(Validity::Different);
             }
         }
@@ -171,17 +171,17 @@ void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString
     }
 }
 
-void Odf::loadValidationValue(Validity *validity, const QStringList &listVal, const ValueParser *parser)
+void Odf::loadValidationValue(Validity *validity, const QStringList &listVal, CalculationSettings *cs)
 {
     bool ok = false;
     debugSheetsODF << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
 
     if (validity->restriction() == Validity::Date) {
-        validity->setMinimumValue(parser->tryParseDate(listVal[0]));
-        validity->setMaximumValue(parser->tryParseDate(listVal[1]));
+        validity->setMinimumValue(Value(QDate::fromString(listVal[0], Qt::ISODate), cs));
+        validity->setMaximumValue(Value(QDate::fromString(listVal[1], Qt::ISODate), cs));
     } else if (validity->restriction() == Validity::Time) {
-        validity->setMinimumValue(parser->tryParseTime(listVal[0]));
-        validity->setMaximumValue(parser->tryParseTime(listVal[1]));
+        validity->setMinimumValue(Value(QTime::fromString(listVal[0], Qt::ISODate)));
+        validity->setMaximumValue(Value(QTime::fromString(listVal[1], Qt::ISODate)));
     } else {
         validity->setMinimumValue(Value(listVal[0].toDouble(&ok)));
         if (!ok) {
@@ -209,7 +209,7 @@ void Odf::loadValidationValue(Validity *validity, const QStringList &listVal, co
     }
 }
 
-void Odf::loadValidationCondition(Validity *validity, QString &valExpression, const ValueParser *parser)
+void Odf::loadValidationCondition(Validity *validity, QString &valExpression, CalculationSettings *cs)
 {
     if (validity->isEmpty()) return;
     QString value;
@@ -235,9 +235,9 @@ void Odf::loadValidationCondition(Validity *validity, QString &valExpression, co
     } else
         debugSheetsODF << " I don't know how to parse it :" << valExpression;
     if (validity->restriction() == Validity::Date) {
-        validity->setMinimumValue(parser->tryParseDate(value));
-    } else if (validity->restriction() == Validity::Date) {
-        validity->setMinimumValue(parser->tryParseTime(value));
+        validity->setMinimumValue(Value(QDate::fromString(value, Qt::ISODate), cs));
+    } else if (validity->restriction() == Validity::Time) {
+        validity->setMinimumValue(Value(QTime::fromString(value, Qt::ISODate)));
     } else {
         bool ok = false;
         validity->setMinimumValue(Value(value.toDouble(&ok)));

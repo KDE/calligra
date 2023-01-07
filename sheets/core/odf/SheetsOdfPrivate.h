@@ -30,6 +30,7 @@
 
 #include "OdfLoadingContext.h"
 #include "OdfSavingContext.h"
+#include "engine/Value.h"
 
 namespace Calligra {
 namespace Sheets {
@@ -47,7 +48,6 @@ class Database;
 class Filter;
 class Validity;
 class AbstractCondition;
-class ValueConverter;
 class ValueParser;
 
 namespace Odf {
@@ -78,6 +78,7 @@ namespace Odf {
     void saveSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);
 
     // SheetsOdfCell
+    QString toSaveString(const Value &value, const Value::Format format, CalculationSettings *cs = nullptr);
     bool loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& tableContext,
             const Styles& autoStyles, const QString& cellStyleName,
             QList<ShapeLoadingData>& shapeData);
@@ -111,9 +112,9 @@ namespace Odf {
 
     // SheetsOdfCondition
     Conditional loadCondition(Conditions *conditions, const QString &conditionValue, const QString &applyStyleName,
-                                 const QString &baseCellAddress, const ValueParser *parser);
-    void loadConditions(Conditions *conditions, const KoXmlElement &element, const ValueParser *parser, const StyleManager* styleManager);
-    void saveConditions(const Conditions *conditions, KoGenStyle &currentCellStyle, ValueConverter *converter);
+                                 const QString &baseCellAddress);
+    void loadConditions(Conditions *conditions, const KoXmlElement &element, const StyleManager* styleManager);
+    void saveConditions(const Conditions *conditions, KoGenStyle &currentCellStyle, CalculationSettings *cs);
 
     // SheetsOdfValidity
     void loadValidation(Validity *validity, CellBase* const cell, const QString& validationName, OdfLoadingContext& tableContext);

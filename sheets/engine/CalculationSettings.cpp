@@ -58,7 +58,7 @@ CalculationSettings::CalculationSettings()
     d->useRegularExpressions    = true;
     d->useWildcards             = false;
     d->automaticCalculation     = true;
-    d->refYear = 1930;
+    d->refYear = 1940;
     d->refDate = QDate(1899, 12, 30);
     d->precision = -1;
 }

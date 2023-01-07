@@ -63,7 +63,7 @@ public:
      * This defines how to convert a two-digit year into a four-digit year. All
      * two-digit year values are interpreted as a year that equals or follows this year.
      *
-     * \return the reference year (default: 1930)
+     * \return the reference year (default: 1940)
      */
     int referenceYear() const;
 

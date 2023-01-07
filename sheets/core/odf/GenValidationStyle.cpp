@@ -8,14 +8,16 @@
 // Local
 #include "GenValidationStyle.h"
 
+#include "SheetsOdf.h"
+#include "SheetsOdfPrivate.h"
+
 // Calligra
 #include <KoXmlWriter.h>
 
 // Sheets
 #include "engine/Validity.h"
-#include "engine/ValueConverter.h"
 
-using namespace Calligra::Sheets;
+using namespace Calligra::Sheets::Odf;
 
 GenValidationStyles::GenValidationStyles()
 {
@@ -94,11 +96,11 @@ void GenValidationStyles::writeStyle(KoXmlWriter& writer) const
     }
 }
 
-void GenValidationStyle::initVal(Validity *validity, const ValueConverter *converter)
+void GenValidationStyle::initVal(Validity *validity, CalculationSettings *cs)
 {
     if (validity) {
         allowEmptyCell = (validity->allowEmptyCell() ? "true" : "false");
-        condition = createValidationCondition(validity, converter);
+        condition = createValidationCondition(validity, cs);
         title = validity->title();
         displayValidationInformation = (validity->displayValidationInformation() ? "true" : "false");
         messageInfo = validity->messageInfo();
@@ -121,7 +123,7 @@ void GenValidationStyle::initVal(Validity *validity, const ValueConverter *conve
     }
 }
 
-QString GenValidationStyle::createValidationCondition(Validity* validity, const ValueConverter *converter)
+QString GenValidationStyle::createValidationCondition(Validity* validity, CalculationSettings *cs)
 {
     QString result;
     switch (validity->restriction()) {
@@ -133,10 +135,10 @@ QString GenValidationStyle::createValidationCondition(Validity* validity, const 
         result = "cell-content-is-text()";
         break;
     case Validity::Time:
-        result = createTimeValidationCondition(validity, converter);
+        result = createTimeValidationCondition(validity);
         break;
     case Validity::Date:
-        result = createDateValidationCondition(validity, converter);
+        result = createDateValidationCondition(validity, cs);
         break;
     case Validity::Integer:
     case Validity::Number:
@@ -222,8 +224,11 @@ QString GenValidationStyle::createNumberValidationCondition(Validity* validity)
 }
 
 
-QString GenValidationStyle::createTimeValidationCondition(Validity* validity, const ValueConverter *converter)
+QString GenValidationStyle::createTimeValidationCondition(Validity* validity)
 {
+    QString minval = toSaveString(validity->minimumValue(), Value::fmt_Time);
+    QString maxval = toSaveString(validity->maximumValue(), Value::fmt_Time);
+
     QString result("oooc:cell-content-is-time() and ");
     switch (validity->condition()) {
     case Validity::None:
@@ -231,55 +236,38 @@ QString GenValidationStyle::createTimeValidationCondition(Validity* validity, co
         //nothing
         break;
     case Validity::Equal:
-        result += "cell-content()"
-                  "=" +
-                  converter->asString(validity->minimumValue()).asString();
+        result += "cell-content()=" + minval;
         break;
     case Validity::Superior:
-        result += "cell-content()"
-                  ">" +
-                  converter->asString(validity->minimumValue()).asString();
+        result += "cell-content()>" + minval;
         break;
     case Validity::Inferior:
-        result += "cell-content()"
-                  "<" +
-                  converter->asString(validity->minimumValue()).asString();
+        result += "cell-content()<" + minval;
         break;
     case Validity::SuperiorEqual:
-        result += "cell-content()"
-                  ">=" +
-                  converter->asString(validity->minimumValue()).asString();
+        result += "cell-content()>=" + minval;
         break;
     case Validity::InferiorEqual:
-        result += "cell-content()"
-                  "<=" +
-                  converter->asString(validity->minimumValue()).asString();
+        result += "cell-content()<=" + minval;
         break;
     case Validity::Different:
-        result += "cell-content()"
-                  "!=" +
-                  converter->asString(validity->minimumValue()).asString();
+        result += "cell-content()!=" + minval;
         break;
     case Validity::Between:
-        result += "cell-content-is-between(" +
-                  converter->asString(validity->minimumValue()).asString() +
-                  ',' +
-                  converter->asString(validity->maximumValue()).asString() +
-                  ')';
+        result += "cell-content-is-between(" + minval + ',' + maxval + ')';
         break;
     case Validity::DifferentTo:
-        result += "cell-content-is-not-between(" +
-                  converter->asString(validity->minimumValue()).asString() +
-                  ',' +
-                  converter->asString(validity->maximumValue()).asString() +
-                  ')';
+        result += "cell-content-is-not-between(" + minval + ',' + maxval + ')';
         break;
     }
     return result;
 }
 
-QString GenValidationStyle::createDateValidationCondition(Validity* validity, const ValueConverter *converter)
+QString GenValidationStyle::createDateValidationCondition(Validity* validity, CalculationSettings *cs)
 {
+    QString minval = toSaveString(validity->minimumValue(), Value::fmt_Date, cs);
+    QString maxval = toSaveString(validity->maximumValue(), Value::fmt_Date, cs);
+
     QString result("oooc:cell-content-is-date() and ");
     switch (validity->condition()) {
     case Validity::None:
@@ -287,48 +275,28 @@ QString GenValidationStyle::createDateValidationCondition(Validity* validity, co
         //nothing
         break;
     case Validity::Equal:
-        result += "cell-content()"
-                  "=" +
-                  converter->asString(validity->minimumValue()).asString();
+        result += "cell-content()=" + minval;
         break;
     case Validity::Superior:
-        result += "cell-content()"
-                  ">" +
-                  converter->asString(validity->minimumValue()).asString();
+        result += "cell-content()>" + minval;
         break;
     case Validity::Inferior:
-        result += "cell-content()"
-                  "<" +
-                  converter->asString(validity->minimumValue()).asString();
+        result += "cell-content()<" + minval;
         break;
     case Validity::SuperiorEqual:
-        result += "cell-content()"
-                  ">=" +
-                  converter->asString(validity->minimumValue()).asString();
+        result += "cell-content()>=" + minval;
         break;
     case Validity::InferiorEqual:
-        result += "cell-content()"
-                  "<=" +
-                  converter->asString(validity->minimumValue()).asString();
+        result += "cell-content()<=" + minval;
         break;
     case Validity::Different:
-        result += "cell-content()"
-                  "!=" +
-                  converter->asString(validity->minimumValue()).asString();
+        result += "cell-content()!=" + minval;
         break;
     case Validity::Between:
-        result += "cell-content-is-between(" +
-                  converter->asString(validity->minimumValue()).asString() +
-                  ',' +
-                  converter->asString(validity->maximumValue()).asString() +
-                  ')';
+        result += "cell-content-is-between(" + minval + ',' + maxval + ')';
         break;
     case Validity::DifferentTo:
-        result += "cell-content-is-not-between(" +
-                  converter->asString(validity->minimumValue()).asString() +
-                  ',' +
-                  converter->asString(validity->maximumValue()).asString() +
-                  ')';
+        result += "cell-content-is-not-between(" + minval + ',' + maxval + ')';
         break;
     }
     return result;

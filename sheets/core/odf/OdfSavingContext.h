@@ -9,6 +9,7 @@
 
 #include "GenValidationStyle.h"
 #include "engine/calligra_sheets_limits.h"
+#include "core/Style.h"
 
 class KoShape;
 

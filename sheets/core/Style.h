@@ -20,6 +20,7 @@
 #include "Format.h"
 #include "Currency.h"
 
+
 static inline uint qHash(const QColor& color)
 { return uint(color.rgb()); }
 
