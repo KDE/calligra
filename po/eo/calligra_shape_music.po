@@ -1,13 +1,15 @@
-# Translation of MusicShape into esperanto.
+# Translation of calligra_shape_music into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: MusicShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-06 10:00+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -19,13 +21,13 @@ msgstr ""
 #: actions/AccidentalAction.cpp:54
 #, kde-format
 msgid "Double flat"
-msgstr ""
+msgstr "Duoble bemola"
 
 #: actions/AccidentalAction.cpp:55
 #, kde-format
 msgctxt "lowered half a step"
 msgid "Flat"
-msgstr "Plata"
+msgstr "Bemola"
 
 #: actions/AccidentalAction.cpp:56
 #, kde-format
@@ -36,27 +38,27 @@ msgstr "Natura"
 #, kde-format
 msgctxt "raised half a step"
 msgid "Sharp"
-msgstr ""
+msgstr "Dieso"
 
 #: actions/AccidentalAction.cpp:58
 #, kde-format
 msgid "Double sharp"
-msgstr ""
+msgstr "Duobla dieso"
 
 #: actions/AccidentalAction.cpp:61 actions/KeySignatureAction.cpp:38
 #, kde-format
 msgid "%1 flats"
-msgstr ""
+msgstr "%1 bemoloj"
 
 #: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:39
 #, kde-format
 msgid "%1 sharps"
-msgstr ""
+msgstr "%1 diesoj"
 
 #: actions/DotsAction.cpp:34
 #, kde-format
 msgid "Dots"
-msgstr ""
+msgstr "Punktoj"
 
 #: actions/EraserAction.cpp:36
 #, kde-format
@@ -66,47 +68,47 @@ msgstr "Skrapgumo"
 #: actions/KeySignatureAction.cpp:28
 #, kde-format
 msgid "Ab Major"
-msgstr ""
+msgstr "Ab Maĵoro"
 
 #: actions/KeySignatureAction.cpp:29
 #, kde-format
 msgid "Eb Major"
-msgstr ""
+msgstr "Eb Maĵoro"
 
 #: actions/KeySignatureAction.cpp:30
 #, kde-format
 msgid "Bb Major"
-msgstr ""
+msgstr "Bb Maĵoro"
 
 #: actions/KeySignatureAction.cpp:31
 #, kde-format
 msgid "F Major"
-msgstr ""
+msgstr "F Maĵoro"
 
 #: actions/KeySignatureAction.cpp:32
 #, kde-format
 msgid "C Major"
-msgstr ""
+msgstr "C Maĵoro"
 
 #: actions/KeySignatureAction.cpp:33
 #, kde-format
 msgid "G Major"
-msgstr ""
+msgstr "G Maĵoro"
 
 #: actions/KeySignatureAction.cpp:34
 #, kde-format
 msgid "D Major"
-msgstr ""
+msgstr "D Maĵoro"
 
 #: actions/KeySignatureAction.cpp:35
 #, kde-format
 msgid "A Major"
-msgstr ""
+msgstr "A Maĵoro"
 
 #: actions/KeySignatureAction.cpp:36
 #, kde-format
 msgid "E Major"
-msgstr ""
+msgstr "E Maĵoro"
 
 #: actions/KeySignatureAction.cpp:49
 #, kde-format
@@ -117,73 +119,72 @@ msgstr "Alia"
 #: actions/NoteEntryAction.cpp:55
 #, kde-format
 msgid "note"
-msgstr ""
+msgstr "noto"
 
 #: actions/NoteEntryAction.cpp:55
 #, kde-format
 msgid "rest"
-msgstr ""
+msgstr "silento"
 
 #: actions/NoteEntryAction.cpp:57
 #, kde-format
 msgid "Double whole "
-msgstr ""
+msgstr "Duoblo "
 
 #: actions/NoteEntryAction.cpp:58
 #, kde-format
 msgid "Whole "
-msgstr ""
+msgstr "Pleno "
 
 #: actions/NoteEntryAction.cpp:59
 #, kde-format
 msgid "Half "
-msgstr ""
+msgstr "Duono "
 
 #: actions/NoteEntryAction.cpp:60
 #, kde-format
 msgid "Quarter "
-msgstr ""
+msgstr "Kvarono "
 
 #: actions/NoteEntryAction.cpp:61
 #, kde-format
 msgid "Eighth "
-msgstr ""
+msgstr "Okono "
 
 #: actions/NoteEntryAction.cpp:62
 #, kde-format
 msgid "16th "
-msgstr ""
+msgstr "16ono "
 
 #: actions/NoteEntryAction.cpp:63
 #, kde-format
 msgid "32nd "
-msgstr ""
+msgstr "32ono "
 
 #: actions/NoteEntryAction.cpp:64
 #, kde-format
 msgid "64th "
-msgstr ""
+msgstr "64ono "
 
 #: actions/NoteEntryAction.cpp:65
 #, kde-format
 msgid "128th "
-msgstr ""
+msgstr "128ono "
 
 #: actions/NoteEntryAction.cpp:67
 #, kde-format
 msgid "Unknown note"
-msgstr ""
+msgstr "Nekonata noto"
 
 #: actions/NoteEntryAction.cpp:67
 #, kde-format
 msgid "Unknown rest"
-msgstr ""
+msgstr "Nekonata silento"
 
 #: actions/RemoveBarAction.cpp:22
-#, fuzzy, kde-format
-#| msgid "Remove part"
+#, kde-format
 msgid "Remove bar"
-msgstr "Forigi parton"
+msgstr "Forigi mezuron"
 
 #: actions/SelectionAction.cpp:32
 #, kde-format
@@ -206,19 +207,19 @@ msgstr "Malaltaj"
 #, kde-format
 msgctxt "Soprano clef"
 msgid "Soprano"
-msgstr ""
+msgstr "Soprano"
 
 #: actions/SetClefAction.cpp:44
 #, kde-format
 msgctxt "Alto clef"
 msgid "Alto"
-msgstr ""
+msgstr "Alto"
 
 #: actions/SetClefAction.cpp:45
 #, kde-format
 msgctxt "Tenor clef"
 msgid "Tenor"
-msgstr "Tenor"
+msgstr "Tenoro"
 
 #: actions/SetClefAction.cpp:46
 #, kde-format
@@ -286,32 +287,24 @@ msgid "Convert chord to rest"
 msgstr ""
 
 #: commands/RemoveBarCommand.cpp:18
-#, fuzzy
-#| msgid "Remove part"
 msgctxt "(qtundo-format)"
 msgid "Remove bar"
-msgstr "Forigi parton"
+msgstr "Forigi mezuron"
 
 #: commands/RemoveChordCommand.cpp:19
-#, fuzzy
-#| msgid "Remove part"
 msgctxt "(qtundo-format)"
 msgid "Remove rest"
-msgstr "Forigi parton"
+msgstr "Forigi silenton"
 
 #: commands/RemoveChordCommand.cpp:21
-#, fuzzy
-#| msgid "Remove part"
 msgctxt "(qtundo-format)"
 msgid "Remove chord"
-msgstr "Forigi parton"
+msgstr "Forigi akordon"
 
 #: commands/RemoveNoteCommand.cpp:19
-#, fuzzy
-#| msgid "Remove part"
 msgctxt "(qtundo-format)"
 msgid "Remove note"
-msgstr "Forigi parton"
+msgstr "Forigi noton"
 
 #: commands/RemovePartCommand.cpp:21
 msgctxt "(qtundo-format)"
@@ -319,11 +312,9 @@ msgid "Remove part"
 msgstr "Forigi parton"
 
 #: commands/RemoveStaffElementCommand.cpp:22
-#, fuzzy
-#| msgid "Remove part"
 msgctxt "(qtundo-format)"
 msgid "Remove clef"
-msgstr "Forigi parton"
+msgstr "Forigi klefon"
 
 #: commands/RemoveStaffElementCommand.cpp:24
 msgctxt "(qtundo-format)"
@@ -553,98 +544,3 @@ msgstr "Eksporti"
 #, kde-format
 msgid "Music editing"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Region"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Region"
-#~ msgstr "Regiono"
-
-#, fuzzy
-#~| msgid "Name:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Name:"
-#~ msgstr "Nomo:"
-
-#, fuzzy
-#~| msgid "..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "..."
-#~ msgstr "..."
-
-#, fuzzy
-#~| msgctxt "lowered half a step"
-#~| msgid "Flat"
-#~ msgctxt "(qtundo-format) lowered half a step"
-#~ msgid "Flat"
-#~ msgstr "Plata"
-
-#, fuzzy
-#~| msgid "Natural"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Natural"
-#~ msgstr "Natura"
-
-#, fuzzy
-#~| msgid "Eraser"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Eraser"
-#~ msgstr "Skrapgumo"
-
-#, fuzzy
-#~| msgctxt "Other key signature"
-#~| msgid "Other"
-#~ msgctxt "(qtundo-format) Other key signature"
-#~ msgid "Other"
-#~ msgstr "Alia"
-
-#, fuzzy
-#~| msgid "Select"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select"
-#~ msgstr "Elekti"
-
-#, fuzzy
-#~| msgctxt "Treble clef"
-#~| msgid "Treble"
-#~ msgctxt "(qtundo-format) Treble clef"
-#~ msgid "Treble"
-#~ msgstr "Altaj"
-
-#, fuzzy
-#~| msgctxt "Bass clef"
-#~| msgid "Bass"
-#~ msgctxt "(qtundo-format) Bass clef"
-#~ msgid "Bass"
-#~ msgstr "Malaltaj"
-
-#, fuzzy
-#~| msgctxt "Tenor clef"
-#~| msgid "Tenor"
-#~ msgctxt "(qtundo-format) Tenor clef"
-#~ msgid "Tenor"
-#~ msgstr "Tenor"
-
-#, fuzzy
-#~| msgid "Import"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Import"
-#~ msgstr "Importi"
-
-#, fuzzy
-#~| msgid "Export"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export"
-#~ msgstr "Eksporti"
-
-#, fuzzy
-#~| msgid "Import"
-#~ msgctxt "(qtundo-format) @title:window"
-#~ msgid "Import"
-#~ msgstr "Importi"
-
-#, fuzzy
-#~| msgid "Export"
-#~ msgctxt "(qtundo-format) @title:window"
-#~ msgid "Export"
-#~ msgstr "Eksporti"

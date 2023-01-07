@@ -1,13 +1,19 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
-  <!ENTITY sheets "<application>Calligra Sheets</application>">
-  <!ENTITY words "<application>Calligra Words</application>">
-  <!ENTITY stage "<application>Calligra Stage</application>">
+  <!ENTITY sheets "<application
+>Calligra Sheets</application
+>">
+  <!ENTITY words "<application
+>Calligra Words</application
+>">
+  <!ENTITY stage "<application
+>Calligra Stage</application
+>">
   <!ENTITY kappname "&sheets;">
   <!ENTITY package "calligra">
   <!ENTITY calligra "Calligra">
   <!ENTITY % addindex "IGNORE">
-  <!ENTITY % English "INCLUDE">
+  <!ENTITY % German "INCLUDE">
   <!ENTITY basics SYSTEM "basics.docbook">
   <!ENTITY format SYSTEM "format.docbook">
   <!ENTITY advanced SYSTEM "advanced.docbook">
@@ -20,85 +26,134 @@
 <book id="sheets" lang="&language;">
 
 <bookinfo>
-<title>The &sheets; Handbook</title>
+<title
+>Das Handbuch zu &sheets;</title>
 
 <!-- MAINTAINED BY raphael.langerhorst@kdemail.net -->
 
 <authorgroup>
-<author>
-&Pamela.Roberts; &Pamela.Roberts.mail;
-</author>
-<author>
-&Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail;
-</author>
-<author>
-<personname>
-<firstname>Gary</firstname>
-<surname>Cramblitt</surname>
-</personname>
-<email>garycramblitt@comcast.net</email>
-</author>
-<!-- TRANS:ROLES_OF_TRANSLATORS -->
+<author
+>&Pamela.Roberts; &Pamela.Roberts.mail; </author>
+<author
+>&Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail; </author>
+<author
+><personname
+> <firstname
+>Gary</firstname
+> <surname
+>Cramblitt</surname
+> </personname
+> <email
+>garycramblitt@comcast.net</email
+> </author>
+<othercredit role="translator"
+><firstname
+>Hans-Frieder</firstname
+><surname
+>Hirsch</surname
+><affiliation
+><address
+><email
+>f.hirsch@t-online.de</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Johannes</firstname
+><surname
+>Schwall</surname
+><affiliation
+><address
+><email
+>johannes.schwall@gmail.com</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+> 
 </authorgroup>
 
 <copyright>
-<year>2002</year>
-<holder>&Pamela.Roberts;</holder>
+<year
+>2002</year>
+<holder
+>&Pamela.Roberts;</holder>
 </copyright>
 
 <copyright>
-<year>2005</year>
-<holder>&Anne-Marie.Mahfouf;</holder>
+<year
+>2005</year>
+<holder
+>&Anne-Marie.Mahfouf;</holder>
 </copyright>
 
 <copyright>
-<year>2006</year>
-<holder>Gary Cramblitt</holder>
+<year
+>2006</year>
+<holder
+>Gary Cramblitt</holder>
 </copyright>
 
 <!-- Translators: put here the copyright notice of the translation -->
 
-<legalnotice>&FDLNotice;</legalnotice>
+<legalnotice
+>&FDLNotice;</legalnotice>
 
-<date>2013-03-11</date>
-<releaseinfo>2.7</releaseinfo>
+<date
+>2013-03-11</date>
+<releaseinfo
+>2.7</releaseinfo>
 
 
 <abstract>
-<para>
-&sheets; is a full featured spreadsheet program.
-</para>
+<para
+>&sheets; ist ein mit allen Funktionen ausgestattetes Tabellenkalkulationsprogramm. </para>
 </abstract>
 
 <keywordset>
-<keyword>KDE</keyword>
-<keyword>Calligra</keyword>
-<keyword>Sheets</keyword>
-<keyword>Spreadsheet</keyword>
+<keyword
+>KDE</keyword>
+<keyword
+>Calligra</keyword>
+<keyword
+>Tabellen</keyword>
+<keyword
+>Tabellenkalkulation</keyword>
 </keywordset>
 
 </bookinfo>
 
 <chapter id="introduction">
-<title>Introduction</title>
+<title
+>Einführung</title>
 
-<para>This handbook is dedicated to the memory of <ulink
-url="http://www.bricklin.com/visicalc.htm">Visicalc.</ulink></para>
+<para
+>Dieses Handbuch wird dem Gedenken an <ulink url="http://www.bricklin.com/visicalc.htm"
+>Visicalc</ulink
+> gewidmet.</para>
 
-<important> <para>Please check <ulink
-url="http://docs.kde.org/development/en/calligra/sheets/index.html">http://docs.kde.org</ulink>
-for updated versions of this document.</para></important>
+<important
+> <para
+>Aktualisierte Versionen dieses Dokuments finden Sie unter <ulink url="http://docs.kde.org/development/en/calligra/sheets/index.html"
+>http://docs.kde.org</ulink
+>.</para
+></important>
 
-<para>
-&sheets; is a full featured spreadsheet program. It is part of the &calligra;
-productivity suite for &kde;.</para>
-<para>Other &calligra; applications include &words;, (word processing),
-&stage; (slide presentation creator) among others.</para>
+<para
+>&sheets; ist ein mit allen Funktionen ausgestattetes Tabellenkalkulationsprogramm. Es ist ein Teil der &calligra;-Büroprogramme für &kde;.</para>
+<para
+>Andere &calligra;-Anwendungen sind unter anderem &words; (Textverarbeitung), &stage; (Präsentationen).</para>
 
-<para>You might care to visit <ulink url="http://www.kde.org">
-http://www.kde.org</ulink> for more information about &kde; in general, or the
-&calligra; web site at <ulink url="http://www.calligra.org">
-http://www.calligra.org</ulink></para>
+<para
+>Besuchen Sie <ulink url="http://www.kde.org"
+>http://www.kde.org</ulink
+> für mehr Information über &kde; im Allgemeinen oder <ulink url="http://www.calligra.org"
+>http://www.calligra.org</ulink
+> für mehr Informationen über &calligra;.</para>
 
 </chapter>
 
@@ -118,65 +173,123 @@ http://www.calligra.org</ulink></para>
 
 <chapter id="credits">
 
-<title>Credits and License</title>
+<title
+>Danksagungen und Lizenz</title>
 
-<para>
-&sheets;
-</para>
-<para>
-Program copyright 1998-2019 The &sheets; Team:
-</para>
+<para
+>&sheets; </para>
+<para
+>Programm Copyright 1998-2019 Das &sheets;-Team: </para>
 <para>
 <itemizedlist>
-<listitem><para>Torben Weis <email>weis@kde.org</email></para>
+<listitem
+><para
+>Torben Weis <email
+>weis@kde.org</email
+></para>
 </listitem>
-<listitem><para>Laurent Montel <email>lmontel@mandrakesoft.com</email></para>
+<listitem
+><para
+>Laurent Montel <email
+>lmontel@mandrakesoft.com</email
+></para>
 </listitem>
-<listitem><para>&David.Faure; &David.Faure.mail;</para>
+<listitem
+><para
+>&David.Faure; &David.Faure.mail;</para>
 </listitem>
-<listitem><para>John Dailey <email>dailey@vt.edu</email></para>
+<listitem
+><para
+>John Dailey <email
+>dailey@vt.edu</email
+></para>
 </listitem>
-<listitem><para>Philipp Müller <email>philipp.mueller@gmx.de</email></para>
+<listitem
+><para
+>Philipp Müller <email
+>philipp.mueller@gmx.de</email
+></para>
 </listitem>
-<listitem><para>Ariya Hidayat <email>ariya@kde.org</email></para>
+<listitem
+><para
+>Ariya Hidayat <email
+>ariya@kde.org</email
+></para>
 </listitem>
-<listitem><para>Norbert Andres <email>nandres@web.de</email></para>
+<listitem
+><para
+>Norbert Andres <email
+>nandres@web.de</email
+></para>
 </listitem>
-<listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para>
+<listitem
+><para
+>Shaheed Haque <email
+>srhaque@iee.org</email
+></para>
 </listitem>
-<listitem><para>Werner Trobin <email>trobin@kde.org</email></para>
+<listitem
+><para
+>Werner Trobin <email
+>trobin@kde.org</email
+></para>
 </listitem>
-<listitem><para>&Nikolas.Zimmermann; &Nikolas.Zimmermann.mail;</para>
+<listitem
+><para
+>&Nikolas.Zimmermann; &Nikolas.Zimmermann.mail;</para>
 </listitem>
-<listitem><para>&Helge.Deller; &Helge.Deller.mail;</para>
+<listitem
+><para
+>&Helge.Deller; &Helge.Deller.mail;</para>
 </listitem>
-<listitem><para>Percy Leonhart <email>percy@eris23.org</email></para>
+<listitem
+><para
+>Percy Leonhart <email
+>percy@eris23.org</email
+></para>
 </listitem>
-<listitem><para>Eva Brucherseifer <email>eva@kde.org</email></para>
+<listitem
+><para
+>Eva Brucherseifer <email
+>eva@kde.org</email
+></para>
 </listitem>
-<listitem><para>Phillip Ezolt <email>phillipezolt@hotmail.com</email></para>
+<listitem
+><para
+>Phillip Ezolt <email
+>phillipezolt@hotmail.com</email
+></para>
 </listitem>
-<listitem><para>Enno Bartels <email>ebartels@nwn.de</email></para>
+<listitem
+><para
+>Enno Bartels <email
+>ebartels@nwn.de</email
+></para>
 </listitem>
-<listitem><para>Graham Short <email>grahshrt@netscape.net</email></para>
+<listitem
+><para
+>Graham Short <email
+>grahshrt@netscape.net</email
+></para>
 </listitem>
 </itemizedlist>
 </para>
 
-<para>
-Documentation copyright 2002 &Pamela.Roberts;
-&Pamela.Roberts.mail;
-</para>
+<para
+>Dokumentation Copyright 2002 &Pamela.Roberts; &Pamela.Roberts.mail; </para>
 
-<para>Minor updates to documentation for KOffice 1.3 by
-&Philip.Rodrigues; &Philip.Rodrigues.mail;.</para>
+<para
+>Kleinere Aktualisierungen zur Dokumentation von KOffice 1.3 von &Philip.Rodrigues; &Philip.Rodrigues.mail;.</para>
 
-<para>Screenshot updates for Calligra 3.1 by
-Carl Schwan <email>carl@carlschwan.eu</email></para>
-<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
-&underFDL;
-&underGPL;
-</chapter>
+<para
+>Aktualisierung der Bildschirmfotos für Calligra 3.1 durch Carl Schwan <email
+>carl@carlschwan.eu</email
+></para>
+<para
+>Deutsche Übersetzung von Holger Schröder <email
+>holger-kde@holgis.net</email
+>.</para
+> &underFDL; &underGPL; </chapter>
 
 &documentation.index;
 </book>

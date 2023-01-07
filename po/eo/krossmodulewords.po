@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: krossmodulekword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 02:41+0200\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
+"PO-Revision-Date: 2023-01-06 10:00+0100\n"
 "Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -32,14 +32,14 @@ msgstr "Importi"
 #: scripts/scripts.rc:7
 #, kde-format
 msgid "Import content"
-msgstr ""
+msgstr "Importi enhavon"
 
 #. i18n: tag script attribute text
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:8 scripts/scripts.rc:26
 #, kde-format
 msgid "Text or HTML File"
-msgstr ""
+msgstr "Teksta aŭ HTML-a Dosiero"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:8
@@ -81,7 +81,7 @@ msgstr "Eksporti"
 #: scripts/scripts.rc:25
 #, kde-format
 msgid "Export content"
-msgstr ""
+msgstr "Eksporti enhavon"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:26
@@ -111,7 +111,7 @@ msgstr "Iloj"
 #: scripts/scripts.rc:40
 #, kde-format
 msgid "Miscellaneous scripts"
-msgstr ""
+msgstr "Diversaj skriptoj"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:41
@@ -131,7 +131,7 @@ msgstr ""
 #: scripts/scripts.rc:45
 #, kde-format
 msgid "Document Tree"
-msgstr ""
+msgstr "Dokumenta Arbo"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:45
@@ -164,13 +164,13 @@ msgstr "Variabloj"
 #: scripts/scripts.rc:60
 #, kde-format
 msgid "Scripting variables for Words"
-msgstr ""
+msgstr "Skriptadvariabloj por Words"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:62
 #, kde-format
 msgid "Read From File..."
-msgstr ""
+msgstr "Legi el Dosiero.."
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:62
@@ -194,7 +194,7 @@ msgstr ""
 #: scripts/scripts.rc:81
 #, kde-format
 msgid "Insert Shape..."
-msgstr ""
+msgstr "Enigi Formon..."
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:81
@@ -206,7 +206,7 @@ msgstr ""
 #: scripts/scripts.rc:85
 #, kde-format
 msgid "Control Cursor..."
-msgstr ""
+msgstr "Stiri Kursoron..."
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:85
@@ -218,7 +218,7 @@ msgstr ""
 #: scripts/scripts.rc:89
 #, kde-format
 msgid "Execute Action..."
-msgstr ""
+msgstr "Plenumigi Agon..."
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:89
@@ -230,7 +230,7 @@ msgstr ""
 #: scripts/scripts.rc:93
 #, kde-format
 msgid "Tool Actions..."
-msgstr ""
+msgstr "Ilaj Agoj..."
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:93
@@ -242,7 +242,7 @@ msgstr ""
 #: scripts/scripts.rc:97
 #, kde-format
 msgid "Progressbar"
-msgstr ""
+msgstr "Progresbreto"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:97
@@ -266,7 +266,7 @@ msgstr ""
 #: scripts/scripts.rc:105
 #, kde-format
 msgid "Lists with HTML"
-msgstr ""
+msgstr "Listoj kun HTML"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:105
@@ -278,7 +278,7 @@ msgstr ""
 #: scripts/scripts.rc:110
 #, kde-format
 msgid "Lists with Cursor"
-msgstr ""
+msgstr "Listoj kun Kursoro"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:110
@@ -308,75 +308,10 @@ msgstr ""
 #: scripts/scripts.rc:122
 #, kde-format
 msgid "All Shapes"
-msgstr ""
+msgstr "Ĉiuj Formoj"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:122
 #, kde-format
 msgid "Python script adds all shapes"
 msgstr ""
-
-#, fuzzy
-#~| msgid "&Tools"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Tools"
-#~ msgstr "&Iloj"
-
-#, fuzzy
-#~| msgid "Import"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Import"
-#~ msgstr "Importi"
-
-#, fuzzy
-#~| msgid "Import"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Import content"
-#~ msgstr "Importi"
-
-#, fuzzy
-#~| msgid "Export"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export"
-#~ msgstr "Eksporti"
-
-#, fuzzy
-#~| msgid "Export"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export content"
-#~ msgstr "Eksporti"
-
-#, fuzzy
-#~| msgid "Tools"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Tools"
-#~ msgstr "Iloj"
-
-#, fuzzy
-#~| msgid "Online Help"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Online Help"
-#~ msgstr "Reta helpo"
-
-#, fuzzy
-#~| msgid "Variables"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Variables"
-#~ msgstr "Variabloj"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Samples"
-#~ msgstr "Helevo"
-
-#, fuzzy
-#~| msgid "Text"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Text"
-#~ msgstr "Teksto"
-
-#, fuzzy
-#~| msgid "Tables"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Tables"
-#~ msgstr "Tabeloj"

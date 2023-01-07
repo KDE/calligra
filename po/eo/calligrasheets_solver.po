@@ -1,13 +1,15 @@
-# Translation of kspreadsolver into esperanto.
+# Translation of calligrasheets_solver into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kspreadsolver\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-06 10:00+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -19,14 +21,12 @@ msgstr ""
 #: Solver.cpp:66
 #, kde-format
 msgid "Function Optimizer..."
-msgstr ""
+msgstr "Funkcia Optimumigilo.."
 
 #: Solver.cpp:103
-#, fuzzy
-#| msgid "Maximize"
 msgctxt "(qtundo-format)"
 msgid "Optimize"
-msgstr "Maksimumigi"
+msgstr "Optimumigi"
 
 #. i18n: ectx: Menu (tools)
 #: solver.rc:4
@@ -44,18 +44,18 @@ msgstr "Precizeco:"
 #: SolverDetailsWidget.ui:74
 #, kde-format
 msgid "Maximum Iterations:"
-msgstr ""
+msgstr "Maksimumaj Iteracioj:"
 
 #: SolverDialog.cpp:18
 #, kde-format
 msgid "Function Optimizer"
-msgstr ""
+msgstr "Funkcia Optimumigilo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: SolverMainWidget.ui:37
 #, kde-format
 msgid "Optimization"
-msgstr ""
+msgstr "Optimumigo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, maximizeButton)
 #: SolverMainWidget.ui:43
@@ -79,47 +79,10 @@ msgstr "Valoro:"
 #: SolverMainWidget.ui:73
 #, kde-format
 msgid "Parameters:"
-msgstr ""
+msgstr "Parametroj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: SolverMainWidget.ui:83
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgid "Function:"
-msgstr "Agoj"
-
-#, fuzzy
-#~| msgid "Precision:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Precision:"
-#~ msgstr "Precizeco:"
-
-#, fuzzy
-#~| msgid "Maximize"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Maximize"
-#~ msgstr "Maksimumigi"
-
-#, fuzzy
-#~| msgid "Minimize"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Minimize"
-#~ msgstr "Minimumigi"
-
-#, fuzzy
-#~| msgid "Value:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Value:"
-#~ msgstr "Valoro:"
-
-#, fuzzy
-#~| msgid "Actions"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Function:"
-#~ msgstr "Agoj"
-
-#, fuzzy
-#~| msgid "&Tools"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Tools"
-#~ msgstr "&Iloj"
+msgstr "Funkcio:"
