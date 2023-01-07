@@ -31,7 +31,6 @@
 #include "engine/CalculationSettings.h"
 #include "engine/Localization.h"
 #include "engine/MapBase.h"
-#include "engine/ValueParser.h"
 #include "Condition.h"
 #include "StyleManager.h"
 
@@ -45,10 +44,10 @@ namespace Odf {
     // Single style loading
     void loadStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlElement& element,
                       Conditions& conditions, const StyleManager* styleManager,
-                      const ValueParser *parser);
+                      const Localization *locale);
     void loadCustomStyle(CustomStyle *style, KoOdfStylesReader& stylesReader, const KoXmlElement& xmlstyle,
                           const QString& name, Conditions& conditions,
-                          const StyleManager* styleManager, const ValueParser *parser);
+                          const StyleManager* styleManager, const Localization *locale);
 
     // Single style saving
     void saveStyle(const Style *style, const QSet<Style::Key>& subStyles, KoGenStyle &xmlstyle,
@@ -88,7 +87,7 @@ namespace Odf {
     QString saveBackgroundStyle(KoGenStyles &mainStyles, const QBrush &brush);
 
     // Helpers
-    Format::Type dateType(const QString&, Localization *locale);
+    Format::Type dateType(const QString&, const Localization *locale);
     Format::Type timeType(const QString&);
     Format::Type fractionType(const QString&);
     Format::Type numberType(const QString&);
@@ -113,7 +112,7 @@ void Odf::loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReade
     if (defStyle) {
         debugSheetsODF << "StyleManager: Loading default cell style";
         Conditions conditions;
-        loadCustomStyle(styles->defaultStyle(), stylesReader, *defStyle, "Default", conditions, styles, map->parser());
+        loadCustomStyle(styles->defaultStyle(), stylesReader, *defStyle, "Default", conditions, styles, map->calculationSettings()->locale());
         styles->defaultStyle()->setType(Style::BUILTIN);
         if (map) {
             // Load the default precision to be used, if the (default) cell style
@@ -158,7 +157,7 @@ void Odf::loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReade
             CustomStyle * style = new CustomStyle(name);
 
             Conditions conditions;
-            loadCustomStyle(style, stylesReader, *styleElem, name, conditions, styles, map->parser());
+            loadCustomStyle(style, stylesReader, *styleElem, name, conditions, styles, map->calculationSettings()->locale());
             // TODO Stefan: conditions
             styles->insertStyle(style);
             // insert it into the map sorted the OpenDocument name
@@ -193,7 +192,7 @@ void Odf::loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReade
 
 Styles Odf::loadAutoStyles(StyleManager *styles, KoOdfStylesReader& stylesReader,
                                        QHash<QString, Conditions>& conditionalStyles,
-                                       const ValueParser *parser)
+                                       const Localization *locale)
 {
     Styles autoStyles;
     foreach(KoXmlElement* element, stylesReader.autoStyles("table-cell")) {
@@ -202,7 +201,7 @@ Styles Odf::loadAutoStyles(StyleManager *styles, KoOdfStylesReader& stylesReader
             debugSheetsODF << "StyleManager: Preloading automatic cell style:" << name;
             autoStyles.remove(name);
             Conditions conditions;
-            loadStyle(&autoStyles[name], stylesReader, *(element), conditions, styles, parser);
+            loadStyle(&autoStyles[name], stylesReader, *(element), conditions, styles, locale);
             if (!conditions.isEmpty()) {
                 debugSheets << "\t\tCONDITIONS";
                 conditionalStyles[name] = conditions;
@@ -247,7 +246,7 @@ void Odf::saveStyles(StyleManager *manager, KoGenStyles &mainStyles, Localizatio
 
 void Odf::loadStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlElement& element,
                   Conditions& conditions, const StyleManager* styleManager,
-                  const ValueParser *parser)
+                  const Localization *locale)
 {
     // NOTE Stefan: Do not fill the style stack with the parent styles!
     KoStyleStack styleStack;
@@ -268,13 +267,13 @@ void Odf::loadStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlEl
             loadConditions(&conditions, e, styleManager);
     }
 
-    loadDataStyle(style, stylesReader, element, conditions, styleManager, parser);
+    loadDataStyle(style, stylesReader, element, conditions, styleManager, locale);
 
 }
 
 void Odf::loadCustomStyle(CustomStyle *style, KoOdfStylesReader& stylesReader, const KoXmlElement& xmlstyle,
                           const QString& name, Conditions& conditions,
-                          const StyleManager* styleManager, const ValueParser *parser)
+                          const StyleManager* styleManager, const Localization *locale)
 {
     style->setName(name);
     if (xmlstyle.hasAttributeNS(KoXmlNS::style, "parent-style-name"))
@@ -282,22 +281,22 @@ void Odf::loadCustomStyle(CustomStyle *style, KoOdfStylesReader& stylesReader, c
 
     style->setType(Style::CUSTOM);
 
-    loadStyle((Style*) style, stylesReader, xmlstyle, conditions, styleManager, parser);
+    loadStyle((Style*) style, stylesReader, xmlstyle, conditions, styleManager, locale);
 }
 
 
 void Odf::loadDataStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlElement& element,
                              Conditions& conditions, const StyleManager* styleManager,
-                             const ValueParser *parser)
+                             const Localization *locale)
 {
     if (element.hasAttributeNS(KoXmlNS::style, "data-style-name")) {
         const QString styleName = element.attributeNS(KoXmlNS::style, "data-style-name", QString());
-        loadDataStyle(style, stylesReader, styleName, conditions, styleManager, parser);
+        loadDataStyle(style, stylesReader, styleName, conditions, styleManager, locale);
     }
 
 }
 
-void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QString &styleName, Conditions &conditions, const StyleManager *styleManager, const ValueParser *parser)
+void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QString &styleName, Conditions &conditions, const StyleManager *styleManager, const Localization *locale)
 {
     if (!stylesReader.dataFormats().contains(styleName)) return;
 
@@ -312,7 +311,7 @@ void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QSt
             const Conditional c = loadCondition(&conditions, it->first, it->second, QString());
             if (styleManager->style(c.styleName) == 0) {
                 CustomStyle* s = new CustomStyle(c.styleName);
-                loadDataStyle(s, stylesReader, c.styleName, conditions, styleManager, parser);
+                loadDataStyle(s, stylesReader, c.styleName, conditions, styleManager, locale);
                 const_cast<StyleManager*>(styleManager)->insertStyle(s);
             }
         }
@@ -366,7 +365,7 @@ void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QSt
         // formatting string
         tmp = dataStyle.formatStr;
         if (!tmp.isEmpty()) {
-            style->setFormatType(dateType(tmp, parser->settings()->locale()));
+            style->setFormatType(dateType(tmp, locale));
         }
         break;
     case KoOdfNumberStyles::Time:
@@ -1274,7 +1273,7 @@ QString Odf::saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type form
 
 // Helpers
 
-Format::Type Odf::dateType(const QString &f, Localization *locale)
+Format::Type Odf::dateType(const QString &f, const Localization *locale)
 {
     if (f == locale->dateFormat(false)) return Format::ShortDate;
     if (f == locale->dateFormat(true)) return Format::TextDate;

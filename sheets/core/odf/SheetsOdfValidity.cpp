@@ -12,7 +12,6 @@
 #include "engine/CellBase.h"
 #include "engine/MapBase.h"
 #include "engine/SheetBase.h"
-#include "engine/ValueParser.h"
 
 #include <KoXmlNS.h>
 

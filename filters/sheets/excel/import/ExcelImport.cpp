@@ -879,6 +879,7 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
 
     int styleId = convertStyle(&ic->format(), formula);
 
+    Calligra::Sheets::Localization* locale = outputDoc->map()->calculationSettings()->locale();
     Value value = ic->value();
     if (value.isBoolean()) {
         oc.setValue(Calligra::Sheets::Value(value.asBoolean()));
@@ -894,7 +895,6 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
         } else if (Calligra::Sheets::Format::isDate(styleList[styleId].formatType())) {
             QDateTime date = convertDate(value.asFloat());
             oc.setValue(Calligra::Sheets::Value(date, outputDoc->map()->calculationSettings()));
-            Calligra::Sheets::Localization* locale = outputDoc->map()->calculationSettings()->locale();
             if (!isFormula) {
                 if (true /* TODO somehow determine if time should be included */) {
                     oc.setRawUserInput(locale->formatDate(date.date()));
@@ -905,7 +905,6 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
         } else if (Calligra::Sheets::Format::isTime(styleList[styleId].formatType())) {
             QTime time = convertTime(value.asFloat());
             oc.setValue(Calligra::Sheets::Value(time));
-            Calligra::Sheets::Localization* locale = outputDoc->map()->calculationSettings()->locale();
             if (!isFormula)
                 oc.setRawUserInput(locale->formatTime(time, true));
         } else /* fraction or normal */ {
@@ -1404,6 +1403,7 @@ void ExcelImport::Private::processNumberFormats()
     KoOdfStylesReader odfStyles;
     odfStyles.createStyleMap(stylesDoc, false);
 
+    Calligra::Sheets::Localization* locale = outputDoc->map()->calculationSettings()->locale();
     for (int i = 0; i < workbook->formatCount(); i++) {
         Format* f = workbook->format(i);
         const QString& styleName = dataStyleMap[f->valueFormat()];
@@ -1411,7 +1411,7 @@ void ExcelImport::Private::processNumberFormats()
             Calligra::Sheets::Style& style = dataStyleCache[f->valueFormat()];
             if (style.isEmpty()) {
                 Calligra::Sheets::Conditions conditions;
-                Calligra::Sheets::Odf::loadDataStyle(&style, odfStyles, styleName, conditions, outputDoc->map()->styleManager(), outputDoc->map()->parser());
+                Calligra::Sheets::Odf::loadDataStyle(&style, odfStyles, styleName, conditions, outputDoc->map()->styleManager(), locale);
 
                 if (!conditions.isEmpty())
                     dataStyleConditions[f->valueFormat()] = conditions;

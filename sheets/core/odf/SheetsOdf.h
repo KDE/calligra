@@ -65,7 +65,7 @@ namespace Odf {
     CALLIGRA_SHEETS_CORE_EXPORT bool paste(QBuffer &buffer, Map *map);
 
     // styles
-    CALLIGRA_SHEETS_CORE_EXPORT void loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QString &styleName, Conditions &conditions, const StyleManager *styleManager, const ValueParser *parser);
+    CALLIGRA_SHEETS_CORE_EXPORT void loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QString &styleName, Conditions &conditions, const StyleManager *styleManager, const Localization *locale);
 
     // regions
     CALLIGRA_SHEETS_CORE_EXPORT QString loadRegion(const QString& expression);

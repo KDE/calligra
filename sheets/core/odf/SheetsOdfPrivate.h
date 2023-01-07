@@ -48,7 +48,6 @@ class Database;
 class Filter;
 class Validity;
 class AbstractCondition;
-class ValueParser;
 
 namespace Odf {
 
@@ -95,20 +94,19 @@ namespace Odf {
      * @param styles the styles
      * @param stylesReader repository of styles
      * @param conditionalStyles the conditional styles
-     * @param parser the parser
+     * @param locale locale - needed for date formats
      * @return a hash of styles with the OpenDocument internal name as key
      */
     Styles loadAutoStyles(StyleManager *styles, KoOdfStylesReader& stylesReader,
                              QHash<QString, Conditions>& conditionalStyles,
-                             const ValueParser *parser);
+                             const Localization *locale);
     void loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReader, MapBase* map = 0);
     void saveStyles(StyleManager *manager, KoGenStyles &mainStyles, Localization *locale);
     QString saveStyle(const Style *style, KoGenStyle& xmlstyle, KoGenStyles& mainStyles,
                        const StyleManager* manager, Localization *locale);
-
     void loadDataStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlElement& element,
                              Conditions& conditions, const StyleManager* styleManager,
-                             const ValueParser *parser);
+                             const Localization *locale);
 
     // SheetsOdfCondition
     Conditional loadCondition(Conditions *conditions, const QString &conditionValue, const QString &applyStyleName,
