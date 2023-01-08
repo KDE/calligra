@@ -863,6 +863,28 @@ private:
     QVector< QPair<QPoint, T> > m_undoData;
 };
 
+
+class CommentStorage : public PointStorage<QString>
+{
+public:
+    CommentStorage()
+            : PointStorage<QString>() {
+    }
+
+    CommentStorage(const PointStorage<QString>& o)  //krazy:exclude=explicit
+            : PointStorage<QString>(o) {
+    }
+
+    CommentStorage& operator=(const PointStorage<QString>& o) {
+        PointStorage<QString>::operator=(o);
+        return *this;
+    }
+};
+
+
+
+
+
 } // namespace Sheets
 } // namespace Calligra
 

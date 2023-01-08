@@ -87,7 +87,7 @@ CommentCommand::CommentCommand(KUndo2Command* parent)
 
 bool CommentCommand::process(Element* element)
 {
-    m_sheet->cellStorage()->setComment(Region(element->rect()), m_comment);
+    m_sheet->cellStorage()->setComment(element->rect().left(), element->rect().top(), m_comment);
     return true;
 }
 

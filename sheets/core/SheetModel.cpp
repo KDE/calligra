@@ -219,6 +219,9 @@ bool SheetModel::setData(const QModelIndex& index, const QVariant& value, int ro
     case LinkRole:
         storage->setLink(column, row, value.toString());
         break;
+    case CommentRole:
+        storage->setComment(column, row, value.toString());
+        break;
     default:
         return false;
     }
@@ -232,9 +235,6 @@ bool SheetModel::setData(const QItemSelectionRange &range, const QVariant &value
     const Region region(_range, d->sheet);
     CellStorage *const storage = d->sheet->fullCellStorage();
     switch (role) {
-    case CommentRole:
-        storage->setComment(region, value.toString());
-        break;
     case ConditionRole:
         storage->setConditions(region, value.value<Conditions>());
         break;

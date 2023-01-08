@@ -146,6 +146,7 @@ void CellStorage::take(int col, int row)
     QWriteLocker(&bigUglyLock);
 #endif
 
+    commentStorage()->take(col, row);
     formulaStorage()->take(col, row);
     d->linkStorage->take(col, row);
     userInputStorage()->take(col, row);
@@ -615,6 +616,7 @@ CellStorage CellStorage::subStorage(const Region& region) const
     CellStorage subStorage(d->sheet);
     *subStorage.formulaStorage() = formulaStorage()->subStorage(region);
     *subStorage.d->linkStorage = d->linkStorage->subStorage(region);
+    *subStorage.commentStorage() = commentStorage()->subStorage(region);
     *subStorage.valueStorage() = valueStorage()->subStorage(region);
     return subStorage;
 }
@@ -682,8 +684,8 @@ void CellStorage::createCommand(KUndo2Command *parent) const
     SheetModel *model = d->sheet->model();
     // inherited
     if (!commentStorage()->undoData().isEmpty()) {
-        RectStorageUndoCommand<QString> *const command
-        = new RectStorageUndoCommand<QString>(model, CommentRole, parent);
+        PointStorageUndoCommand<QString> *const command
+        = new PointStorageUndoCommand<QString>(model, CommentRole, parent);
         command->add(commentStorage()->undoData());
     }
     if (!formulaStorage()->undoData().isEmpty()) {

@@ -342,7 +342,7 @@ QString CellBase::comment() const
 
 void CellBase::setComment(const QString& comment)
 {
-    sheet()->cellStorage()->setComment(Region(cellPosition()), comment);
+    sheet()->cellStorage()->setComment(d->column, d->row, comment);
 }
 
 Validity CellBase::validity() const

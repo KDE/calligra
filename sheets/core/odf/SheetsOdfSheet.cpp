@@ -956,8 +956,6 @@ int Odf::loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
         loadCell(&cell, cellElement, tableContext, autoStyles, cellStyleName, shapeData);
 
         // If comment/conditions/etc are set, copy them to all the cells in range.
-        if (!cell.comment().isEmpty())
-            sheet->cellStorage()->setComment(Region(columnIndex, rowIndex, numberColumns, number, sheet), cell.comment());
         if (!cell.conditions().isEmpty())
             sheet->fullCellStorage()->setConditions(Region(columnIndex, rowIndex, numberColumns, number, sheet), cell.conditions());
         if (!cell.validity().isEmpty())
@@ -973,6 +971,7 @@ int Odf::loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
                     target.setUserInput(cell.userInput());
                     target.setRichText(richText);
                     target.setValue(cell.value());
+                    target.setComment(cell.comment());
                     if (cell.doesMergeCells()) {
                         target.mergeCells(columnIndex + c, r, cell.mergedXCells(), cell.mergedYCells());
                     }

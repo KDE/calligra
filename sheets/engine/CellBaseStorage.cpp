@@ -35,7 +35,7 @@ class Q_DECL_HIDDEN CellBaseStorage::Private : public QSharedData
 public:
     Private(SheetBase* sheet)
             : sheet(sheet)
-            , commentStorage(new CommentStorage(sheet->map()))
+            , commentStorage(new CommentStorage())
             , formulaStorage(new FormulaStorage())
             , matrixStorage(new MatrixStorage(sheet->map()))
             , namedAreaStorage(new NamedAreaStorage(sheet->map()))
@@ -292,15 +292,19 @@ QString CellBaseStorage::comment(int column, int row) const
 #ifdef CALLIGRA_SHEETS_MT
     QReadLocker rl(&bigUglyLock);
 #endif
-    return d->commentStorage->contains(QPoint(column, row));
+    return d->commentStorage->lookup(column, row);
 }
 
-void CellBaseStorage::setComment(const Region& region, const QString& comment)
+void CellBaseStorage::setComment(int column, int row, const QString& comment)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
 #endif
-    d->commentStorage->insert(region, comment);
+    QString old;
+    if (comment.isEmpty())
+        d->commentStorage->take(column, row);
+    else
+        d->commentStorage->insert(column, row, comment);
 }
 
 Validity CellBaseStorage::validity(int column, int row) const
@@ -610,7 +614,7 @@ int CellBaseStorage::columns(bool /*includeStyles*/) const
     QReadLocker rl(&bigUglyLock);
 #endif
     int max = 0;
-    max = qMax(max, d->commentStorage->usedArea().right());
+    max = qMax(max, d->commentStorage->columns());
     max = qMax(max, d->validityStorage->usedArea().right());
     max = qMax(max, d->formulaStorage->columns());
     max = qMax(max, d->valueStorage->columns());
@@ -624,7 +628,7 @@ int CellBaseStorage::rows(bool /*includeStyles*/) const
     QReadLocker rl(&bigUglyLock);
 #endif
     int max = 0;
-    max = qMax(max, d->commentStorage->usedArea().bottom());
+    max = qMax(max, d->commentStorage->rows());
     max = qMax(max, d->validityStorage->usedArea().bottom());
     max = qMax(max, d->formulaStorage->rows());
     max = qMax(max, d->valueStorage->rows());

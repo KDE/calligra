@@ -67,7 +67,6 @@ bool DeleteCommand::process(Element* element)
     }
 
     // the rect storages
-    cs->setComment(Region(range, element->sheet()), QString());
     cs->setConditions(Region(range, element->sheet()), Conditions());
     Style style;
     style.setDefault();

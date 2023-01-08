@@ -622,23 +622,6 @@ QList<QPair<Region, T> > RectStorageLoader<T>::data() const
      return m_data;
 }
 
-class CALLIGRA_SHEETS_ENGINE_EXPORT CommentStorage : public QObject, public RectStorage<QString>
-{
-    Q_OBJECT
-public:
-    explicit CommentStorage(MapBase* map) : QObject(), RectStorage<QString>(map) {}
-    CommentStorage(const CommentStorage& other) : QObject(other.parent()), RectStorage<QString>(other) {}
-
-protected Q_SLOTS:
-    void triggerGarbageCollection() override {
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, &CommentStorage::garbageCollection);
-    }
-    void garbageCollection() override {
-        RectStorage<QString>::garbageCollection();
-    }
-};
-
-
 
 class CALLIGRA_SHEETS_ENGINE_EXPORT FusionStorage : public QObject, public RectStorage<bool>
 {

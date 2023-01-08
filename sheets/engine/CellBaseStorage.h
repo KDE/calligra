@@ -112,7 +112,7 @@ public:
      * \return the comment associated with the Cell at \p column , \p row .
      */
     QString comment(int column, int row) const;
-    void setComment(const Region& region, const QString& comment);
+    void setComment(int column, int row, const QString& comment);
 
     /**
      * \return the validity checks associated with the Cell at \p column , \p row .
