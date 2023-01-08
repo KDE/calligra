@@ -443,15 +443,17 @@ void CellBaseStorage::unlockCells(int column, int row)
     if (pair.second == false)
         return;
     const QRect rect = pair.first.toRect();
-    d->matrixStorage->insert(Region(rect), false);
+    d->matrixStorage->insert(Region(rect, d->sheet), false);
 }
 
 void CellBaseStorage::unlockCells(const QRect& rect)
 {
-    // clear all the existing locks, if any
-    for (int r = rect.top(); r <= rect.bottom(); ++r)
-        for (int c = rect.left(); c <= rect.right(); ++c)
-            unlockCells(c, r);
+#ifdef CALLIGRA_SHEETS_MT
+    QWriteLocker(&bigUglyLock);
+#endif
+    QRect validRect = rect.intersected(d->matrixStorage->usedArea());
+    if (validRect.isEmpty()) return;
+    d->matrixStorage->insert(Region(validRect, d->sheet), false);
 }
 
 QRect CellBaseStorage::lockedCells(int column, int row) const
@@ -612,9 +614,6 @@ int CellBaseStorage::columns(bool /*includeStyles*/) const
     max = qMax(max, d->validityStorage->usedArea().right());
     max = qMax(max, d->formulaStorage->columns());
     max = qMax(max, d->valueStorage->columns());
-
-    // don't include bindings cause the bindingStorage does only listen to all cells in the sheet.
-    //max = qMax(max, d->bindingStorage->usedArea().right());
 
     return max;
 }

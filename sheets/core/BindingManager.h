@@ -36,7 +36,6 @@ public:
      */
     ~BindingManager() override;
 
-    // KoTable::SourceRangeManager interface
     virtual const QAbstractItemModel* createModel(const QString& regionName);
     virtual bool removeModel(const QAbstractItemModel* model);
     virtual bool isCellRegionValid(const QString& regionName) const;
