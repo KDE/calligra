@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-02 01:02+0000\n"
-"PO-Revision-Date: 2023-01-06 07:52+0100\n"
+"PO-Revision-Date: 2023-01-07 10:03+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -12506,7 +12506,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:163
 #, kde-format
 msgid "Show &formula"
-msgstr ""
+msgstr "&ფორმულის ჩვენება"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showColumnAsNumbersCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:170
@@ -12563,7 +12563,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:203
 #, kde-format
 msgid "&Automatic recalculation"
-msgstr ""
+msgstr "&ავტომატური გადათვლა"
 
 #: part/dialogs/SheetSelectPage.cpp:19
 #, kde-format
@@ -13306,7 +13306,7 @@ msgstr ""
 #: ui/CellToolBase.cpp:226
 #, kde-format
 msgid "&Auto-Filter"
-msgstr ""
+msgstr "&ავტომატური გაფილტვრა"
 
 #: ui/CellToolBase.cpp:229
 #, kde-format
@@ -13316,17 +13316,17 @@ msgstr ""
 #: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "&Function..."
-msgstr ""
+msgstr "&ფუნქცია..."
 
 #: ui/CellToolBase.cpp:236
 #, kde-format
 msgid "Insert math expression"
-msgstr ""
+msgstr "მათემატიკური გამოსახულების ჩასმა"
 
 #: ui/CellToolBase.cpp:239
 #, kde-format
 msgid "From &Database..."
-msgstr ""
+msgstr "&ბაზიდან..."
 
 #: ui/CellToolBase.cpp:243
 #, kde-format
@@ -13366,22 +13366,22 @@ msgstr ""
 #: ui/CellToolBase.cpp:261
 #, kde-format
 msgid "Formula Selection"
-msgstr ""
+msgstr "ფორმულის არჩევა"
 
 #: ui/CellToolBase.cpp:263
 #, kde-format
 msgid "Insert a function"
-msgstr ""
+msgstr "ფუნქციის ჩასმა"
 
 #: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:1350
 #, kde-format
 msgid "Others..."
-msgstr ""
+msgstr "სხვები..."
 
 #: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Modify Cell"
-msgstr ""
+msgstr "უჯრედის შეცვლა"
 
 #: ui/CellToolBase.cpp:276
 #, kde-format
@@ -13441,12 +13441,12 @@ msgstr ""
 #: ui/CellToolBase.cpp:328
 #, kde-format
 msgid "Show QTableView..."
-msgstr ""
+msgstr "QTableView-ის ჩვენება..."
 
 #: ui/CellToolBase.cpp:334
 #, kde-format
 msgid "Auto-Format..."
-msgstr ""
+msgstr "ავტომატური ფორმატი.."
 
 #: ui/CellToolBase.cpp:337
 #, kde-format
@@ -13456,7 +13456,7 @@ msgstr ""
 #: ui/CellToolBase.cpp:339
 #, kde-format
 msgid "Document Settings..."
-msgstr ""
+msgstr "დოკუმენტის მორგება..."
 
 #: ui/CellToolBase.cpp:342
 #, kde-format
@@ -13513,17 +13513,17 @@ msgstr "გამოცვლა"
 #: ui/CellToolBase_p.cpp:480
 msgctxt "(qtundo-format)"
 msgid "Number Format"
-msgstr ""
+msgstr "რიცხვის ფორმატი"
 
 #: ui/CellToolBase_p.cpp:486
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
-msgstr ""
+msgstr "ვალუტის ფორმატი"
 
 #: ui/CellToolBase_p.cpp:491
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
-msgstr ""
+msgstr "პროცენტულობის ფორმატი"
 
 #: ui/CellToolBase_p.cpp:496
 msgctxt "(qtundo-format)"
@@ -13538,7 +13538,7 @@ msgstr "თარიღის ფორმატი"
 #: ui/CellToolBase_p.cpp:506
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
-msgstr ""
+msgstr "სამეცნიერო ფორმატი"
 
 #: ui/CellToolBase_p.cpp:910
 #, kde-format
@@ -13561,7 +13561,7 @@ msgstr "საზღვრები"
 #: ui/CellToolOptionWidgets.xml:55
 #, kde-format
 msgid "Number format"
-msgstr ""
+msgstr "რიცხვის ფორმატი"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:65
@@ -13584,7 +13584,7 @@ msgstr ""
 #: ui/commands/ApplyFilterCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Apply Filter"
-msgstr ""
+msgstr "ფილტრის გადატარება"
 
 #: ui/commands/AutoFillCommand.cpp:107 ui/dialogs/ListDialog.cpp:126
 #, kde-format
@@ -13786,17 +13786,17 @@ msgstr "ავტომატური შევსება"
 #: ui/commands/AutoFilterCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Auto-Filter"
-msgstr ""
+msgstr "ავტომატური-გაფილტვრა"
 
 #: ui/commands/AutoFormatCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
-msgstr ""
+msgstr "ავტომატური ფორმატი"
 
 #: ui/commands/BorderColorCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Change Border Color"
-msgstr ""
+msgstr "საზღვრის ფერის შეცვლა"
 
 #: ui/commands/ConditionCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -13866,12 +13866,12 @@ msgstr ""
 #: ui/commands/RowColumnManipulators.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Resize Column"
-msgstr ""
+msgstr "სვეტის ზომის შეცვლა"
 
 #: ui/commands/RowColumnManipulators.cpp:93
 msgctxt "(qtundo-format)"
 msgid "Resize Row"
-msgstr ""
+msgstr "მწკრივის ზომის შეცვლა"
 
 #: ui/commands/RowColumnManipulators.cpp:277
 msgctxt "(qtundo-format)"
@@ -13881,27 +13881,27 @@ msgstr ""
 #: ui/commands/RowColumnManipulators.cpp:279
 msgctxt "(qtundo-format)"
 msgid "Hide Columns"
-msgstr ""
+msgstr "სვეტების დამალვა"
 
 #: ui/commands/RowColumnManipulators.cpp:281
 msgctxt "(qtundo-format)"
 msgid "Hide Rows"
-msgstr ""
+msgstr "მწკრივების დამალვა"
 
 #: ui/commands/RowColumnManipulators.cpp:284
 msgctxt "(qtundo-format)"
 msgid "Show Rows/Columns"
-msgstr ""
+msgstr "მწკრივების/სვეტების ჩვენება"
 
 #: ui/commands/RowColumnManipulators.cpp:286
 msgctxt "(qtundo-format)"
 msgid "Show Columns"
-msgstr ""
+msgstr "სვეტებს ჩვენება"
 
 #: ui/commands/RowColumnManipulators.cpp:288
 msgctxt "(qtundo-format)"
 msgid "Show Rows"
-msgstr ""
+msgstr "წკრივების ჩვენება"
 
 #: ui/commands/RowColumnManipulators.cpp:538
 msgctxt "(qtundo-format)"
