@@ -1,13 +1,16 @@
-# Translation of CalendarTool into esperanto.
+# Translation of calligrasheets_calendar.pot into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligrasheets package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: CalendarTool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-08 21:45+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -66,28 +69,28 @@ msgstr ""
 #: CalendarTool.cpp:102
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
-msgstr ""
+msgstr "Enmeti Kalendaron"
 
 #: CalendarTool.cpp:108
 #, kde-format
 msgid "Calendar from %1 to %2"
-msgstr ""
+msgstr "Kalendaro ekde %1 ĝis %2"
 
 #: CalendarTool.cpp:150
-#, fuzzy, kde-format
+#, kde-format
 msgid "week"
-msgstr "Lee"
+msgstr "semajno"
 
 #: CalendarToolFactory.cpp:24
 #, kde-format
 msgid "Calendar"
-msgstr ""
+msgstr "Kalendaro"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
 #: CalendarToolWidget.ui:14
 #, kde-format
 msgid "Calendar Tool"
-msgstr ""
+msgstr "Kalendara Ilo"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
 #: CalendarToolWidget.ui:20
@@ -97,45 +100,12 @@ msgstr "Enmeti"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: CalendarToolWidget.ui:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "End date:"
-msgstr "Stela nomo"
+msgstr "Fina dato:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: CalendarToolWidget.ui:47
 #, fuzzy, kde-format
 msgid "Start date:"
-msgstr "Stela nomo"
-
-#, fuzzy
-#~| msgid "Insert"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert"
-#~ msgstr "Enmeti"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Start date:"
-#~ msgstr "Stela nomo"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "End date:"
-#~ msgstr "Stela nomo"
-
-#, fuzzy
-#~| msgid "Error"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Error"
-#~ msgstr "Eraro"
-
-#, fuzzy
-#~| msgid "Warning"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Warning"
-#~ msgstr "Averto"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "week"
-#~ msgstr "Lee"
+msgstr "Komenca dato:"
