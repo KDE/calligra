@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Giovanni Sora <g.sora@tiscali.it>, 2013, 2014, 2015, 2017, 2020, 2022.
+# Giovanni Sora <g.sora@tiscali.it>, 2013, 2014, 2015, 2017, 2020, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2022-12-14 12:23+0100\n"
+"PO-Revision-Date: 2023-01-09 11:52+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -141,7 +141,7 @@ msgid "Half "
 msgstr "Medietate"
 
 #: actions/NoteEntryAction.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Quarter "
 msgstr "Quarto"
 
