@@ -47,6 +47,7 @@ int main(int argc, char **argv)
                                      "calligra.*.warning=true");
 
     QApplication app(argc, argv);
+    KLocalizedString::setApplicationDomain("braindump");
 
     // Migrate data from kde4 to kf5 locations
     Calligra2Migration m("braindump");

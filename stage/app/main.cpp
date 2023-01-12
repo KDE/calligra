@@ -27,6 +27,7 @@ extern "C" Q_DECL_EXPORT int kdemain( int argc, char **argv )
                                      "calligra.*.warning=true");
 
     KoApplication app(STAGE_MIME_TYPE, QStringLiteral("calligrastage"), newKPresenterAboutData, argc, argv);
+    KLocalizedString::setApplicationDomain("calligrastage");
 
     // Migrate data from kde4 to kf5 locations
     Calligra2Migration m("calligrastage", "stage");
