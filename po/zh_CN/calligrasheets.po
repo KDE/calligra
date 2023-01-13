@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-02 01:02+0000\n"
-"PO-Revision-Date: 2023-01-02 07:11\n"
+"PO-Revision-Date: 2023-01-12 10:29\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -16141,51 +16141,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "打开链接？"
-
-#~ msgid "Style Manager..."
-#~ msgstr "样式管理器..."
-
-#~ msgid "Edit and organize cell styles"
-#~ msgstr "编辑并组织单元格样式"
-
-#~ msgid "Apply a predefined style to the selected cells"
-#~ msgstr "对选中单元格应用预先定义的样式"
-
-#~ msgid "Create Style From Cell..."
-#~ msgstr "根据单元格创建样式..."
-
-#~ msgid "Style From Cell"
-#~ msgstr "单元格样式"
-
-#~ msgid "Create a new style based on the currently selected cell"
-#~ msgstr "根据当前选中的单元格创建新样式"
-
-#~ msgid "Create Style From Cell"
-#~ msgstr "根据单元格创建样式"
-
-#~ msgid "The style name cannot be empty."
-#~ msgstr "样式名称不能为空。"
-
-#~ msgid "Style Manager"
-#~ msgstr "样式管理器"
-
-#~ msgid "All Styles"
-#~ msgstr "所有样式"
-
-#~ msgid "Custom Styles"
-#~ msgstr "自定义样式"
-
-#~ msgid "Hierarchical"
-#~ msgstr "分级显示"
-
-#~ msgid "&New..."
-#~ msgstr "新建(&N)..."
-
-#~ msgid "&Modify..."
-#~ msgstr "修改(&M)..."
-
-#~ msgid "&Delete..."
-#~ msgstr "删除(&D)..."
-
-#~ msgid "style%1"
-#~ msgstr "样式 %1"
