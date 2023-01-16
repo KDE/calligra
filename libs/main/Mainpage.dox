@@ -30,14 +30,6 @@ which is used to locate the application's own data
 
 
 
-Q: What is the "+[file]" option passed to KCmdLineArgs?
-
-A: KCmdLineOptions describe the KCmdLineArgs. "+[file]" means that the
-command line arguments can be one or more file names, and that these
-arguments are optional.
-
-
-
 Q: What is I18N_NOOP()?
 
 A: I18N_NOOP() marks the options description for translation to other
