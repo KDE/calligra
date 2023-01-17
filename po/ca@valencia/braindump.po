@@ -117,7 +117,7 @@ msgstr "Opcions de l'eina d'estat"
 #: plugins/stateshape/StateToolFactory.cpp:32
 #, kde-format
 msgid "State editing"
-msgstr "Edició d'estats"
+msgstr "Editeu els estats"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/webshape/WebShapeConfigWidget.ui:17

@@ -16258,7 +16258,7 @@ msgid ""
 "formatting to look like your current currency."
 msgstr ""
 "El format Diners convertix el vostre nombre en una notació de diners "
-"utilitzant les configuracions fixades globalment a Configuració del Sistema -"
+"utilitzant les configuracions fixades globalment a Configuració del sistema -"
 "> Aparença i comportament usual -> Configuració regional -> País/Regió i "
 "idioma -> Diners. Es mostrarà el símbol actual de moneda i la precisió serà "
 "l'establida a Configuració del sistema.\n"
@@ -16746,7 +16746,7 @@ msgstr "Etiquetes"
 #: ui/dialogs/pivotmain.ui:46
 #, kde-format
 msgid "Select Option"
-msgstr "Selecció d'opció"
+msgstr "Seleccioneu una opció"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
 #. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
@@ -17248,52 +17248,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Voleu obrir l'enllaç?"
-
-#~ msgid "Style Manager..."
-#~ msgstr "Gestor d'estils..."
-
-#~ msgid "Edit and organize cell styles"
-#~ msgstr "Edita i organitza els estils de les cel·les"
-
-#~ msgid "Apply a predefined style to the selected cells"
-#~ msgstr "Aplica un estil predeterminat a les cel·les seleccionades"
-
-#~ msgid "Create Style From Cell..."
-#~ msgstr "Crea un estil a partir de la cel·la..."
-
-# msgid "Style of Cell"
-#~ msgid "Style From Cell"
-#~ msgstr "Estil des de la cel·la"
-
-#~ msgid "Create a new style based on the currently selected cell"
-#~ msgstr "Crea un estil nou basat en la cel·la seleccionada"
-
-#~ msgid "Create Style From Cell"
-#~ msgstr "Crea un estil a partir de la cel·la"
-
-#~ msgid "The style name cannot be empty."
-#~ msgstr "El nom de l'estil no pot estar buit."
-
-#~ msgid "Style Manager"
-#~ msgstr "Gestor d'estils"
-
-#~ msgid "All Styles"
-#~ msgstr "Tots els estils"
-
-#~ msgid "Custom Styles"
-#~ msgstr "Estils a mida"
-
-#~ msgid "Hierarchical"
-#~ msgstr "Jeràrquic"
-
-#~ msgid "&New..."
-#~ msgstr "&Nou..."
-
-#~ msgid "&Modify..."
-#~ msgstr "&Modifica..."
-
-#~ msgid "&Delete..."
-#~ msgstr "Sup&rimix..."
-
-#~ msgid "style%1"
-#~ msgstr "estil %1"

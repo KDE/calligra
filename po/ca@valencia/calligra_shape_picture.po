@@ -139,4 +139,4 @@ msgstr "Marca d'aigua"
 #: PictureToolFactory.cpp:19
 #, kde-format
 msgid "Picture editing"
-msgstr "Edició d'imatges"
+msgstr "Editeu les imatges"

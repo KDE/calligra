@@ -1740,7 +1740,7 @@ msgstr ""
 #: part/KWView.cpp:407
 #, kde-format
 msgid "Create Header"
-msgstr "Creació d'encapçalament"
+msgstr "Creeu un encapçalament"
 
 #: part/KWView.cpp:413
 #, kde-format

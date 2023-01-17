@@ -555,7 +555,7 @@ msgstr ""
 
 #: scripts/odfpyexport.py:236
 msgid "OdfPy Export"
-msgstr "Exportació a OdfPy"
+msgstr "Exporteu cap a OdfPy"
 
 #: scripts/odfpyexport.py:241
 msgid "Save to OpenDocument File"

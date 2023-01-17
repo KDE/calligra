@@ -100,4 +100,4 @@ msgstr "Propietats de forma"
 #: snapguidedocker/SnapGuideDocker.cpp:39
 #, kde-format
 msgid "Snap Settings"
-msgstr "Configuració de l'ajust"
+msgstr "Configureu l'ajust"
