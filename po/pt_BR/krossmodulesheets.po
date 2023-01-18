@@ -4,13 +4,13 @@
 #
 # Marcus Gama <marcus.gama@gmail.com>, 2007, 2008, 2009.
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2010, 2012, 2013, 2014.
-# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2017.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2017, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: krossmodulesheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2017-10-25 11:50-0300\n"
+"PO-Revision-Date: 2023-01-16 23:21-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #. i18n: ectx: Menu (tools)
 #: scripting.rc:4
@@ -1367,7 +1367,7 @@ msgstr ""
 #: scripts/scripts.rc:60
 #, kde-format
 msgid "Orca Speech"
-msgstr "Sintetizador de Voz do Orca"
+msgstr "Sintetizador de voz do Orca"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:60
